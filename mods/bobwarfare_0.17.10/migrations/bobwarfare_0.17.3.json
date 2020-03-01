@@ -1,0 +1,14 @@
+{
+  "technology":
+  [
+    ["battery-equipment-3", "bob-battery-equipment-3"],
+    ["battery-equipment-4", "bob-battery-equipment-4"],
+    ["battery-equipment-5", "bob-battery-equipment-5"],
+    ["battery-equipment-6", "bob-battery-equipment-6"],
+    ["energy-shield-equipment-3", "bob-energy-shield-equipment-3"],
+    ["energy-shield-equipment-4", "bob-energy-shield-equipment-4"],
+    ["energy-shield-equipment-5", "bob-energy-shield-equipment-5"],
+    ["energy-shield-equipment-6", "bob-energy-shield-equipment-6"]
+  ]
+}
+

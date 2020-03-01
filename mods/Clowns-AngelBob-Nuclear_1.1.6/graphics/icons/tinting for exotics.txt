@@ -1,0 +1,24 @@
+from bobs:
+thorium {r=1, g=1, b=0}
+uranium {r=0, g=1, b=0},
+plutonium {r=1, g=0.7, b=0},
+deuterium {r = 1, g = 0, b = 0.57}
+lithium {r = 0, g = 1, b = 0.85}
+
+inside form (recipe property):
+    crafting_machine_tint =
+    {
+      primary = {r = 1, g = 0, b = 0.57},
+      secondary = {r = 0, g = 1, b = 0.85}, --Lithium
+      tertiary = {r = 1, g = 0, b = 0.57},
+    },
+clowns icon colours
+Caesium 0.75,0.78,0.73
+Strontium 0.89,0.32,0.95
+Protractinium 1,0.38,0.18
+Polonium 0.93,0.24,0.38
+hyperfuel 0.07,0.95,0.70
+thoriumfuel 0.92,0.72,0.09
+ultradadtherfuel 1,0.38,0.18
+superradther 0.92,0.36,0.09
+turbofuel 0.09,0.36,0.92

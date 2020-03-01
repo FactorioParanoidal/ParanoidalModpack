@@ -1,0 +1,123 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+  Bugfixes:
+    - Fixed crash when using ED in map editor
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+  Bugfixes:
+    - Fixed crash with AAI mods
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+  Bugfixes:
+    - Fixed migration crash
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+  Bugfixes:
+    - Update for Factorio 0.17.35
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+  Bugfixes:
+    - Fixed distribution crash after load/save
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+  Changes:
+    - Added changelog
+  Bugfixes:
+    - Fixed rare crash on startup
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+  Bugfixes:
+    - Fixed inventory cleanup crashed
+    - Fixed crash for sandbox players
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+  Changes:
+    - Major refactor of internal code for some upcoming new features
+  Bugfixes:
+    - Fixed distribution to belts
+    - Fixed inventory cleanup hotkey distributed to deconstructed entities
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Bugfixes:
+    - Fixed crash when distributing items in sandbox mode
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+  Changes:
+    - Update for Factorio version 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.2.10
+  Bugfixes:
+    - Fixed biters attacking the blue distribution marker
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+  Changes:
+    - Improved inv. cleanup hotkey support for: SeaBlock, Pyanodons Mods and Science Cost Tweaker mod
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+  Changes:
+    - Added per player mod setting to disable even distributions CTRL Click Drag modification
+    - Improved german translation (thanks to ST-DDT)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+  Changes:
+    - Improved mod description and added usage message at the start of the game for newer players
+    - Improved mod compatibility
+  Bugfixes:
+    - Fixed inventory cleanup hotkey crash in Factorio version 0.16.4
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+  Changes:
+    - Update for Factorio version 0.16
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Changes:
+    - Added ignored entities mod setting
+  Bugfixes:
+    - Fixed distribution to factorissimo 2 helper entities
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+  Bugfixes:
+    - Fixed crash on startup caused by mods that modify item flags
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Changes:
+    - Added proper error checking for custom player trash settings
+  Bugfixes:
+    - Fixed that you could evenly distribute into player corpses
+    - Fixed issues with dead players trying to evenly distribute or use inventory cleanup
+    - Fixed that players in godmode couldn't evenly distribute
+    - Fixed several crashes with inventory cleanup
+    - Fixed that custom player trash settings sometimes wouldn't work
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Changes:
+    - Added inventory cleanup hotkey: Evenly distribute excess trash items into nearby machines (SHIFT + C)
+    - Added distribution text colors: Red = You have insufficient items; Yellow = Target inventory is full
+    - Added fancy distribution fade out animation
+    - Added option to prevent machines from starting to craft immediately upon selection
+  Bugfixes:
+    - Fixed rare crash when evenly distributing
+    - Fixed crash when dead players try to evenly distribute
+    - Other small fixes
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Bugfixes:
+    - Fixed blue markers not disappearing.
+    - Fixed picker dollies not moving blue markers.
+    - Fixed mod would evenly distribute into other players.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Changes:
+    - Added configurable option to include the driven cars inventory when evenly distributing.
+    - Added german translation for mod settings.
+  Bugfixes:
+    - Fixed crash when fast-replacing buildings.
+    - Fixed that ammo was taken from the players gun when evenly distributing.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Bugfixes:
+    - Fixed crash when selecting assembling machines without recipe.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Changes:
+    - Initial release.

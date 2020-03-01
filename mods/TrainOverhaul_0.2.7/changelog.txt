@@ -1,0 +1,80 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 2019-04-15
+  Changes:
+    - removed Realistic Electric Train override, it uses Train Overhaul settings and balances itself
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 2019-03-21
+  Features:
+    - added Locomotive power multiplicator setting
+  Changes:
+    - removed utility science pack from nuclear locomotive tech
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 2019-03-19
+  Changes:
+    - moved functionality to Opteras Library
+  Bugfixes:
+    - added item description to farl
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2019-03-13
+  Changes:
+    - removed debug logging left in 0.2.3
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2019-03-11
+  Features:
+    - rebalances FARL to match weight, power and health
+    - rebalances Realistic Electric Trains to match weight, power and health
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-03-04
+  Changes:
+    - moved fluid wagon color masks to wagon_colors
+    - added dependency for wagon_colors
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-02-28
+  Features:
+    - fixed crash with low quality sprite rotation
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-02-27
+  Features:
+    - updated to Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2019-02-28
+  Features:
+    - fixed crash with low quality sprite rotation
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2018-01-24
+  Changes:
+    - disabled hand crafting for all locomotives and wagons
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2018-01-22
+  Features:
+    - added setting: weight multiplicator
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2018-01-08
+  Changes:
+    - increased breaking force for all locomotives and wagons
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2018-01-06
+  Changes:
+    - sorted High energy fuel cell behind between fuel cell and used fuel cell
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2018-01-05
+  Features:
+    - rebalanced, upgradable locomotives: heavy, express, nuclear (formerly More Locomotives)
+    - rebalanced, upgradable wagons: heavy, express
+    - fluid wagon color mask by Mooncat
+    - changed Nuclear Fuel into a fuel cell with acceleration boost for nuclear locomotives
+    - removed speed bonus from fuels

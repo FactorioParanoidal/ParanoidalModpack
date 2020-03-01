@@ -1,0 +1,12 @@
+{
+	"name": "Natural_Evolution_Enemies",
+	"version": "0.17.19",
+	"factorio_version": "0.17",
+	"title": "Natural Evolution Enemies",
+	"author": "TheSAguy",
+	"contact": "vvwmisc@hotmail.com",
+	"homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=91&t=13562&p",
+	"description": "All things Alien! Adds new Enemies and updates to Biter/Spitters Spawners. If you want a more of a challenge than what Vinalla can offer you... Part of the N.E. Mods, but can be used as Standalone. Please visit home page for more details.",
+	"dependencies": ["base >= 0.17.35"]
+	
+}

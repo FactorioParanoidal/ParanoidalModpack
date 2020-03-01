@@ -1,0 +1,28 @@
+v0.16.22
+-Re-merged separated mods now with a simple checklist for mod changes
+-Fixed/Re-added belt immunity equipment
+v0.16.21
+-Removed removal of angels alien processing
+-Changed Nuclear Power to require tier 4 steam power
+v0.16.20
+-Re added electrolyser but kept petrochem recipe port for pyanodons compatibility.
+v0.16.19
+-Removed prerequisite in Pyanodons to research electrolysis for coal processing 2 since all electrolysis recipes from bobs have been ported to the electrolyser from petrochem
+v0.16.18
+-Removed Bobs Warfare Changes to Separate Mod
+v0.16.17
+- Fixed compatibility issue to add all bob electrolyser recipes to angels electrolyser recipe
+v0.16.16
+- Fixed compatibility issue with Robot Parts enabled
+v0.16.15
+- Fixed crash when bob modules not enabled
+v0.16.14
+- Changed the way that ore generation is blocked by angels refining thanks to angels compatibility fix
+- Moved belt config changes to a separate mod
+- Removed changes to fluid wagons as the way bob does it is better for balancing 25k, 36k, 75k etc.
+
+v0.16.12
+- Changed slag processing recipes to give a higher yield of angels ores like seablock.
+- Added woodbrick to coal production to allow for everything to be theoretically made purely from water and air
+- Added setting to force the use of angels ores (disable all others)
+

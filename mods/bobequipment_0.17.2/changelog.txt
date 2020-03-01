@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 19. 05. 2019
+  Changes:
+    - Recoloured the lights on robot charge pads 2 and 3.
+  Bugfixes:
+    - Fixed that Roboports weren't all supposed to cost steel plates
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 09. 05. 2019
+  Bugfixes:
+    - Added missing beams.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 04. 05. 2019
+  Changes:
+    - Initial release.

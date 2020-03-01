@@ -1,0 +1,4 @@
+Version: 1.0.0
+Date: 07. 03. 2019
+  Info:
+    - Modify to run under 0.17

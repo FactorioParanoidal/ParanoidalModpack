@@ -1,0 +1,11 @@
+{
+  "name": "explosives_are_explosive",
+  "version": "0.1.1",
+  "factorio_version": "0.17",
+  "title": "Explosives are explosive",
+  "author": "MewMew",
+  "contact": "",
+  "homepage": "",
+  "description": "Explosives in containers can explode.",
+  "dependencies": ["base >= 0.17.0"]
+}

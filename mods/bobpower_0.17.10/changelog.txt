@@ -1,0 +1,199 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.10
+Date: 28. 06. 2019
+  Bugfixes:
+    - Removed production science pack from Oil burning heat source 2.
+  Balancing:
+    - Burner electric generator. Reduced power output to 400kW, increased Pollution to 15/m and added stone furnace and iron gear wheels to recipe.
+  Features:
+    - Added heat pipe technology as a gateway to all technologies that use heatpipes (and T2 and T3) if steam power, burner heat sources, or nuclear power are enabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 27. 06. 2019
+  Changes:
+    - Added heat exchanger 1 tech to unlock the heat exchanger, and made it a prerequisite of nuclear power.
+  Features:
+    - Added burner heat sources
+    - Added oil burning heat sources
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 23. 06. 2019
+  Changes:
+    - Adjusted smoke quantities of the fluid generator.
+    - Adjusted min_working_temperature on heat exchangers so they should require a minimum of the temperature to match the steam they produce
+    - Higher tier reactors and heat pipes get hotter to allow the higher tier heat exchangers to more easilly reach their new required temperature.
+  Features:
+    - Added burner generator entity. (Low tier machine. Put in a fuel item, get Electricity)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 21. 05. 2019
+  Changes:
+    - Replaced the green glow graphics of the Reactor with Tintable versions.
+    - The reactor tint is set by the fuel using the new tag use_fuel_glow_color = true
+  Features:
+    - Added nuclear reactor 3 and nuclear power 3 technology.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 17. 05. 2019
+  Changes:
+    - Updated heatpipe colours on nuclear reactor 2.
+    - Added nuclear-reactor as an ingredient to nuclear-reactor-2
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 15. 05. 2019
+  Features:
+    - Added heatpipe 2 and 3 to heat exchanger technologies to steam power option.
+    - Added nuclear reactor 2 to new nuclear power 2 technology, on it's own option.
+    - Added recipe tweak for the nuclear reactor.
+  Changes:
+    - Removed MK from all tiers in favor of just a number.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 22. 04. 2019
+  Changes:
+    - Removed upgrade from all technologies
+    - Updated for 0.17.29 pollution method (Old version of oil burning generators actually produced up to 10x as much pollution as intended)
+  Bugfixes:
+    - Fixed oil generator smoke. It's a bit heavy, but there seems to be a bug where anything less than the current frequency causes it to not show at all.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 29. 03. 2019
+  Bugfixes:
+    - Fixed Factorio 0.17.23 Accumulator technology rename issue.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 16. 03. 2019
+  Changes:
+    - Converted oil power generators to new pollution
+    - Converted oil boilers to new pollution
+    - Converted boilers to new pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 11. 03. 2019
+  Changes:
+    - Updated recipes to use Copper tungsten pipe and Nitinol pipe if available.
+  Bugfixes:
+    - Locale entry for "enable new steam power" was mislabelled as oil refineries.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17
+  Changes:
+    - Added upgrade planner defaults to all entities, except power poles
+    - Split the steam power techs up as to not pair boilers with steam engines, or Heat exchangers with steam turbines.
+  Features:
+    - Added Oil boilers: Boilers powered by fluid fuels. Starts at tier 2, Powers 3 steam engines.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.8
+Date: 14. 09. 2018
+  Features:
+    - Added crude oil fuel value of 3.8MJ, and emissions multiplier of 5. (dirty fuel!)
+---------------------------------------------------------------------------------------------------
+Version: 0.16.7
+Date: 12. 08. 2018
+  Balancing:
+    - Reworked all the steam power numbers again.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.6
+Date: 12. 08. 2018
+  Changes:
+    - Updated solar panel updates to use my library instead of table.insert to update recipes.
+    - Complete overhaul of Boiler, Steam engine, Heat exchanger and Steam turbines.
+    - Substation 2 now costs Brass instead of Aluminium
+  Features:
+    - Added boiler and steam engine T5
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 14. 05. 2018
+  Changes:
+    - Replaced electrum with gold in solar panels MK3
+  Balancing:
+    - Increased maximum fluid usage of Oil Generator to 4 per second
+    - Changed the steam power research to start at science pack 1 and Steel processing
+    - Boiler MK2 now costs 5 steel plates instead of a steel furnace.
+  Bugfixes:
+    - Fixed Steam power technology prerequisites
+    - Fixed fluid-generator-updates crash error
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 03. 04. 2018
+  Bugfixes:
+    - Added extra checks before adding hydrazine generator.
+  Changes:
+    - Given fluid generators their own category (line on the recipe screen)
+    - Boiler and Steam engine research unified into Steam power research (you'll have to research it again)
+  Features:
+    - Added steam engine MK4, and scaled everything to match. (Steam engine tiers now match Boiler tiers)
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 13. 03. 2018
+  Features:
+    - Added new tag emissions_multiplier to all gas venting recipes.
+    - Added new tag emissions_multiplier to all fuel value fluids
+    - Added new tag fuel_emissions_multiplier to fuel items
+  Bugfixes:
+    - Fix steam turbine construction times
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 20. 02. 2018
+  Balancing:
+    - Decreased collision box of substation so it is possible to walk between it and other entities.
+  Changes:
+    - Added fast replace group to medium power poles.
+  Features:
+    - Added fuel value of 4.6MJ to Petroleum Gas. Also made it use gas pipe graphics.
+    - Added fuel value of 3MJ to Light oil.
+    - Added fuel value of 2MJ to Heavy oil.
+    - BETA Fluid generators 40% efficient MK1 55% MK2 70% MK3 and 90% Hydrazine
+  Bugfixes:
+    - Added base_level = 1 to all boiler output fluid boxes.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 19. 12. 2017
+  Bugfixes:
+    - Fixed boilers (and heat exchangers) from outputting water.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 19. 12. 2017
+  Info:
+    - Updated to work with Factorio 0.16
+  Changes:
+    - Updated Accumulator circuit network connections
+    - Updated tags on Steam Generator/turbine
+    - All the icon_size fixes.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.4
+Date: 03. 07. 2017
+  Features:
+    - Added fast replace to boiler mk4.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.3
+Date: 10. 05. 2017
+  Features:
+    - Replace production science pack with Logistics (if it exists) on top tier power poles
+---------------------------------------------------------------------------------------------------
+Version: 0.15.2
+Date: 10. 05. 2017
+  Bugfixes:
+    - Emergancy boiler/steam engine fix to use new factorio v0.15.10 steam (and not crash the game)
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 06. 05. 2017
+  Changes:
+    - Slightly increased new boiler power consumption values. (MK4 boilers should not be 2:1 with MK3 steam engines. Boiler now produces +50% steam and engine consumes +50% steam.)
+  Features:
+    - Added boiler fast replace (and heat exchanger)
+    - Added steam turbine mk 2 and 3
+    - Added heat exchanger MK2 and 3
+    - Added expensive recipe for steam engine and turbine
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 03. 05. 2017
+  Info:
+    - Updated to work with Factorio 0.16
+  Changes:
+    - Increased substation ranges by diameter 2 each (to match base game's +2)
+    - updated all science
+    - updated solar panel healths.
+    - Completely remade boilers and steam engine generators.

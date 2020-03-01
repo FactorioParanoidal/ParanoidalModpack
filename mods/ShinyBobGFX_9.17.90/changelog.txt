@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+	- fix for robochests/tanks that seems to work
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+	- quick fix disabling robochests till I can fix it for realsies
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+	- forgot to save an important change on 17.6 and people managed to download it in the minute it was up - New version!
+	- fixed some powerbar oddness when not using warfare
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+	- Change code to deal with crash related to stuff being moved from bobwarfare to bobequipment/vehicle
+	- Fix icon size issue with Personal roboport when not using bobequipment
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+	- Medium Electric pole colorified
+	- Powerbars and color graphics for many armor equipment
+	- New GFX for reinforced walls
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+	- Decided that maybe it should load without Bob's Equipment too
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+	- Fix problem with icon size
+	- New roboport icons
+	- Added powerbar to roboport in armor
+	- Bob Equipment partial support
+	- Rest of the equipment to follow
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+	- Low res should work now too.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+	- Initial 'I think it works' release. Large drills look the same as regular now, power poles untouched.

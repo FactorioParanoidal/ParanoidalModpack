@@ -1,0 +1,17 @@
+{
+	"name": "Orbital Ion Cannon",
+	"version": "1.7.2",
+	"factorio_version": "0.17",
+	"title": "Orbital Ion Cannon",
+	"author": "Supercheese",
+	"homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=93&t=17910",
+	"dependencies": [
+		"base >= 0.17.17",
+		"stdlib >= 1.0.2",
+		"? bobwarfare >= 0.17.0",
+		"? bobpower >= 0.17.0",
+		"? bobtech >= 0.17.0",
+		"? bobelectronics >= 0.17.0"
+	],
+	"description": "When you need to call down the thunder to deal with those pesky biters, launch a rocket with an ion cannon into orbit and show the bugs who's boss."
+}

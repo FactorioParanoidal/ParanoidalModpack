@@ -1,0 +1,9 @@
+{
+  "name": "Manganese_Chrome_Sorting",
+  "version": "0.17.2",
+  "title": "Pure Manganese/Chrome Sorting",
+  "author": "hexagonhexagon",
+  "description": "Creates pure sorting recipes for manganese and chrome, as by default they do not have pure sorting recipes.",
+  "dependencies": ["base >= 0.17", "angelsrefining >= 0.10.13", "bobplates >= 0.17.10"],
+  "factorio_version": "0.17"
+}

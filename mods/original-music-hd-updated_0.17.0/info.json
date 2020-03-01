@@ -1,0 +1,11 @@
+{
+  "name": "original-music-hd-updated",
+  "version": "0.17.0",
+  "title": "Original Music, in HD - Updated 0.17",
+  "author": "ruhroh & db48x, updated by Damgam",
+  "contact": "db48x+original-music-hd@db48x.net",
+  "homepage": "http://db48x.net/factorio/original-music-hd",
+  "description": "For all it's faults, the music from earlier versions of Factorio was actually quite good. ruhroh took it upon himself to recreate that music at a much higher level of quality; this mod adds it back to the rotation.",
+  "factorio_version": "0.17",
+  "dependencies": ["base >= 0.12.0"]
+}

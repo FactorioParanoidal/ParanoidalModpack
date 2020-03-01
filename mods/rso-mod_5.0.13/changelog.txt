@@ -1,0 +1,532 @@
+---------------------------------------------------------------------------------------------------
+Version: 5.0.13
+Date: 2019.07.09
+  Changes:
+    - fixed changing of enemy base spawn chance during game causing crash
+---------------------------------------------------------------------------------------------------
+Version: 5.0.12
+Date: 2019.07.06
+  Changes:
+    - fixed starting area being created when mod is added to existing save
+---------------------------------------------------------------------------------------------------
+Version: 5.0.11
+Date: 2019.07.05
+  Changes:
+    - added support for Therax's fork of Xander Mod
+---------------------------------------------------------------------------------------------------
+Version: 5.0.10
+Date: 2019.06.27
+  Changes:
+    - added support for Simple Silicon mod
+---------------------------------------------------------------------------------------------------
+Version: 5.0.9
+Date: 2019.06.01
+  Changes:
+    - readded regenerate function that was removed when doing surface upgrade, it will regenerate all known surfaces
+    - removed using of starting locations from map settings, addStartLocation needs to be used explicitly to spawn starting location through RSO
+    - fixed that initial creation of starting areas could bypass the ingored surface filter
+---------------------------------------------------------------------------------------------------
+Version: 5.0.8
+Date: 2019.05.29
+  Changes:
+    - updated starting location spawning to use starting locations from map settings
+    - disabled player prints when adding new starting location (status is logged in game log)
+---------------------------------------------------------------------------------------------------
+Version: 5.0.7
+Date: 2019.05.19
+  Changes:
+    - fixed migration issue that could cause crashes when RSO was added to save with multiple surfaces
+---------------------------------------------------------------------------------------------------
+Version: 5.0.6
+Date: 2019.05.08
+  Changes:
+    - fixed RSO not adopting properly to starting area location being changed by server settings
+---------------------------------------------------------------------------------------------------
+Version: 5.0.5
+Date: 2019.05.08
+  Changes:
+    - added proper fix for crash when running in sandbox mode
+    - fixed crash when spawning player when new surface is created and create surface event doesn't fire
+---------------------------------------------------------------------------------------------------
+Version: 5.0.4
+Date: 2019.05.08
+  Changes:
+    - fixed crash when running in sandbox mode
+---------------------------------------------------------------------------------------------------
+Version: 5.0.3
+Date: 2019.05.07
+  Changes:
+    - fixed crash when adding new starting position
+    - fixed wrong distance calculations with multiple starting positions
+    - added automatic chunk generation for new starting location
+    - adding of new starting location will use nauvis if no player is given
+---------------------------------------------------------------------------------------------------
+Version: 5.0.2
+Date: 2019.05.07
+  Changes:
+    - fixed crash with Delete Empty Chunks mod
+---------------------------------------------------------------------------------------------------
+Version: 5.0.1
+Date: 2019.05.07
+  Changes:
+    - fixed crash if surface was created before RSO had a chance to initialize
+---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+Date: 2019.05.06
+  Changes:
+    - upgraded resource generation to support multiple surfaces
+    - added option to regen only resources without respawning enemies
+    - updated support for Leighzer Science Ores (by Leighzer)
+---------------------------------------------------------------------------------------------------
+Version: 4.1.1
+  Changes:
+    - updated support for PyPetroleum Handling (by TwentyEighty)
+---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+  Changes:
+    - added support for PyPetroleum Handling (by aklesey1)
+    - switched to new collision check for enemy bases and turrets (RSO generated bases will be biter pathing friendly)
+---------------------------------------------------------------------------------------------------
+Version: 4.0.4
+  Changes:
+    - added changelog (big thanks to Pi-C for processing mod portal one)
+    - added support for Leighzer Science Ores (by Leighzer)
+    - added support for Leighzer Science Bottling (by Leighzer)
+    - added support for Krastorio (by Krastor)
+    - added support for AiX Matter (by AlienX)
+    - added support for new enemy bases from Bob's Enemies
+---------------------------------------------------------------------------------------------------
+Version: 4.0.3
+  Changes:
+    - increased starting area resource spread and made it aware of starting area size setting
+    - made few resources more frequent for bobsores (galena, quartz)
+    - reduced minimum ore values to prevent generation of to rich fields (mainly affected very big ore patches close to start)
+---------------------------------------------------------------------------------------------------
+Version: 4.0.2
+  Bugfixes:
+    - fixed issue that could crash the game with to big amount of resource in an oil patch
+  Changes:
+    - added support for Leighzer's Morphite mod
+    - added support for Extended Industries mod
+    - added ignore for Geothermal generator mod since it's spawning it's own resources
+---------------------------------------------------------------------------------------------------
+Version: 4.0.1
+  Bugfixes:
+    - fixed issue with bob enemies mod and behemot turret
+  Changes:
+    - added behemot turret support for vanilla turret
+    - added russian translation (by godOFslaves)
+
+---------------------------------------------------------------------------------------------------
+Version: 4.0.0
+  Info:
+    - inital release for Factorio 0.17
+  Changes:
+    - new map gen settings are handled properly by RSO (values work directly with frequency having caveat as described above and enemy frequency having not much of an effect above 2 since it results in enemy base per region)
+
+---------------------------------------------------------------------------------------------------
+Version: 3.8.3
+  Changes:
+    - tweaked Py Raw Ores config slightly to fix issue with salt rocks
+---------------------------------------------------------------------------------------------------
+Version: 3.8.2
+  Changes:
+    - added prelimiary support for Py Raw Ores (provided by subie)
+---------------------------------------------------------------------------------------------------
+Version: 3.8.1
+  Changes:
+    - added support for Xander Mod v1
+---------------------------------------------------------------------------------------------------
+Version: 3.8.0
+  Changes:
+    - added support for Tiny Overhaul mod
+    - added support for Natural Evolution Enemies new enemy bases
+---------------------------------------------------------------------------------------------------
+Version: 3.7.8
+  Changes:
+    - updated support for DyWorld mod
+---------------------------------------------------------------------------------------------------
+Version: 3.7.7
+  Changes:
+    - added support for Fixed Tiberium mod
+    - updated support for Xander mod (update by Repofme1)
+    - added Fossil Roots mod to be ignored by RSO so that it works with RSO present
+---------------------------------------------------------------------------------------------------
+Version: 3.7.6
+  Changes:
+    - added support for Hardcrafting Plus mod (created by Expresso)
+---------------------------------------------------------------------------------------------------
+Version: 3.7.5
+  Changes:
+    - modified support for Bio Industries to avoid dependency issues - requires Bio Industries 2.6.5 to work
+---------------------------------------------------------------------------------------------------
+Version: 3.7.4
+  Changes:
+    - added support for finite water mod - might need more balancing, requires version at least 0.0.7 to work properly
+---------------------------------------------------------------------------------------------------
+Version: 3.7.3
+  Changes:
+    - added support for KPOT titanium
+    - upgraded support for all minable (needs latest version of the mod)
+    - fixed various issues with resources size being set to none in map settings
+---------------------------------------------------------------------------------------------------
+Version: 3.7.2
+  Bugfixes:
+    - fixed crash in configuration changed event
+---------------------------------------------------------------------------------------------------
+Version: 3.7.1
+  Changes:
+    - added support for Bio Industries mod water option
+    - added support for DP77's Ores mod (created by DiegoPro77)
+    - added support for Cargo Ships mod (suppres the warning only since mod spawns it's resources in code)
+---------------------------------------------------------------------------------------------------
+Version: 3.7.0
+  Changes:
+    - added support for FMRx mod
+    - added option to disable ores from starting area, oil option extended to disable all fluid resources in starting area
+---------------------------------------------------------------------------------------------------
+Version: 3.6.5
+  Bugfixes:
+    - fixed crash when Agnel's and Anonymods are present
+---------------------------------------------------------------------------------------------------
+Version: 3.6.4
+  Changes:
+    - fixed issue with bob's ores thorium when it's forced to be present from settings in certain mod configurations
+    - adjusted how distance and size exponents work to make factors below 1 work properly
+---------------------------------------------------------------------------------------------------
+Version: 3.6.3
+  Bugfixes:
+    - fixed potential issue with detection of disabled ores again
+---------------------------------------------------------------------------------------------------
+Version: 3.6.2
+  Bugfixes:
+    - fixed potential issue with detection of disabled ores
+---------------------------------------------------------------------------------------------------
+Version: 3.6.1
+  Bugfixes:
+    - fixed oil in starting area setting
+---------------------------------------------------------------------------------------------------
+Version: 3.6.0
+  Bugfixes:
+    - fixed size and richness map settings to be applied correctly (thanks to morsk for noticing that something is wrong)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.14
+  Changes:
+    - added support for All Mineable mod
+---------------------------------------------------------------------------------------------------
+Version: 3.5.13
+  Changes:
+    - added support for Cncs sulfur and Dp77s sulfur
+    - added support for low spec version of Darkstar Utilities
+---------------------------------------------------------------------------------------------------
+Version: 3.5.12
+  Changes:
+    - added support for PyHightTech ores
+---------------------------------------------------------------------------------------------------
+Version: 3.5.11
+  Changes:
+    - added support for new ores from PyCoal mod
+---------------------------------------------------------------------------------------------------
+Version: 3.5.10
+  Changes:
+    - updated support for Hard Crafting mod
+---------------------------------------------------------------------------------------------------
+Version: 3.5.9
+  Changes:
+    - added support for Liquid Science mod
+---------------------------------------------------------------------------------------------------
+Version: 3.5.8
+  Bugfixes:
+    - fixed potential desync issues caused by use of global variables (thanks to Mylon for noticing and showing how to find them)
+    - fixed rare case where ore/base could not spawn if it was in same vertical line as different ore/base in same chunk
+---------------------------------------------------------------------------------------------------
+Version: 3.5.7
+  Changes:
+    - added support for MadClown01's Extended AngelBob Minerals
+---------------------------------------------------------------------------------------------------
+Version: 3.5.6
+  Changes:
+    - removed Yaiom support since it doesn't work properly
+---------------------------------------------------------------------------------------------------
+Version: 3.5.5
+  Bugfixes:
+    - fixed Homeworld sand support
+  Changes:
+    - added Yaiom support
+    - removed SigmaOne's Nuclear mod fluorine ore from start area
+---------------------------------------------------------------------------------------------------
+Version: 3.5.4
+  Bugfixes:
+    - fixed regenerate function with bob's mods present
+  Changes:
+    - added support for IceMod (provided by darkfrei)
+    - adjusted XanderMod config (reduced ore density, removed pitchblende from start)
+    - added rso-regenerate command
+---------------------------------------------------------------------------------------------------
+Version: 3.5.3
+  Changes:
+    - added dependencies back to fix issues with bobores
+---------------------------------------------------------------------------------------------------
+Version: 3.5.2
+  Changes:
+    - added support for Factorio Plus Plus
+---------------------------------------------------------------------------------------------------
+Version: 3.5.1
+  Changes:
+    - added option to disable oil in starting area
+    - added support for Napus Mod, Hydraulic Pumpjacks and Drug Lab
+---------------------------------------------------------------------------------------------------
+Version: 3.5.0
+  Info:
+    - first release for 0.16 - increase iron ore richness a bit and removed uranium from starting area (along with 0.16 release notes)
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.8
+  Changes:
+    - added support for DyWorld 0.5.1
+---------------------------------------------------------------------------------------------------
+Version: 3.4.7
+  Changes:
+    - added support for DyWorld 0.5
+---------------------------------------------------------------------------------------------------
+Version: 3.4.6
+  Changes:
+    - added support for DyWorld
+    - added support for PyFusionEnergy
+---------------------------------------------------------------------------------------------------
+Version: 3.4.5
+  Changes:
+    - updated Anonymods config - adds support for new metalurgy changes
+    - updated Xander mod config
+---------------------------------------------------------------------------------------------------
+Version: 3.4.4
+  Bugfixes:
+    - fixed issue that could lead to ore being spawned on water by mistake
+---------------------------------------------------------------------------------------------------
+Version: 3.4.3
+  Changes:
+    - added support for Darkstar utilities
+    - added protection from unrecognized resource settings and additional logging for this case
+---------------------------------------------------------------------------------------------------
+Version: 3.4.2
+  Changes:
+    - modified way in which ore regen is reported (goes to game log now)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.1
+  Changes:
+    - rewrote positional seed generation to prevent overflow issues
+    - added remote resetGeneration method to tell RSO that it should reset it's internals and treat whole map as new
+---------------------------------------------------------------------------------------------------
+Version: 3.3.13
+  Changes:
+    - updated config for Xander mod (provided by Repofme1)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.12
+  Changes:
+    - added support for Xander mod
+---------------------------------------------------------------------------------------------------
+Version: 3.3.11
+  Changes:
+    - added support for SigmaOne Nuclear mod
+---------------------------------------------------------------------------------------------------
+Version: 3.3.10
+  Bugfixes:
+    - fixed angels infinite ore threshold setting range
+  Changes:
+    - added support for portal research mod
+---------------------------------------------------------------------------------------------------
+Version: 3.3.9
+  Bugfixes:
+    - fixed issue with remote interface for disabling of chunk generation again
+---------------------------------------------------------------------------------------------------
+Version: 3.3.7
+  Bugfixes:
+    - fixed issue with remote interface for disabling of chunk generation
+---------------------------------------------------------------------------------------------------
+Version: 3.3.6
+  Changes:
+    - updated fluid generation to make bigger fields possible
+---------------------------------------------------------------------------------------------------
+Version: 3.3.5
+  Bugfixes:
+    - fixed crash when resource landed fully in water
+---------------------------------------------------------------------------------------------------
+Version: 3.3.4
+  Changes:
+    - improved resource collission detection to reduce overlaps
+    - tweaked starting area spawning algorithm
+---------------------------------------------------------------------------------------------------
+Version: 3.3.3
+  Changes:
+    - modified oil spawning to be more grouped in case it landed near water
+---------------------------------------------------------------------------------------------------
+Version: 3.3.2
+  Changes:
+    - removed surprise ore regen on load
+---------------------------------------------------------------------------------------------------
+Version: 3.3.1
+  Bugfixes:
+    - fixed region generation that caused ores to go missing in about 1/7th cases
+    - fixed multiple ore generation that could fail to place new ore properly
+  Changes:
+    - lowered minimums for richness settings
+---------------------------------------------------------------------------------------------------
+Version: 3.3.0
+  Bugfixes:
+    - fixed conflicts with sulfur ore
+    - fixed random generator creation to prevent symmetrical ore generation
+---------------------------------------------------------------------------------------------------
+Version: 3.2.6
+  Changes:
+    - revised spawning of enemy bases to prevent crashes at very long distances and allow them to be bigger
+---------------------------------------------------------------------------------------------------
+Version: 3.2.5
+  Changes:
+    - added support for omnimod (provided by EmperorZelos)
+    - increased search range and amount of tries for spawning of fluids (should help alleviate issues with water spawning)
+---------------------------------------------------------------------------------------------------
+Version: 3.2.4
+  Changes:
+    - added distance exponents to settings
+---------------------------------------------------------------------------------------------------
+Version: 3.2.3
+  Changes:
+    - added thorium ore support for bob's mods
+---------------------------------------------------------------------------------------------------
+Version: 3.2.2
+  Bugfixes:
+    - fixed potential crash if for some reason there are no valid ores to spawn
+---------------------------------------------------------------------------------------------------
+Version: 3.2.1
+  Changes:
+    - added validation to prevent potential rng error
+---------------------------------------------------------------------------------------------------
+Version: 3.2.0
+  Changes:
+    - rewrote handling of resource configuration to make mod compatible with upcoming mod validation
+---------------------------------------------------------------------------------------------------
+Version: 3.1.7
+  Changes:
+    - rebalanced bob's mods ores
+    - added support for primordial ooze mod
+---------------------------------------------------------------------------------------------------
+Version: 3.1.6
+  Changes:
+    - increased limit for region size to 100 and enemy base size to 20
+---------------------------------------------------------------------------------------------------
+Version: 3.1.5
+  Bugfixes:
+    - fixed resource regeneration not ignoring start area
+  Changes:
+    - added Angel's infinite ore integration settings to mod settings system
+---------------------------------------------------------------------------------------------------
+Version: 3.1.4
+  Changes:
+    - update angel's ores config (provided by Arch666Angel) - fixes fluid counts on resources
+    - updated fluids config for bobs ores
+---------------------------------------------------------------------------------------------------
+Version: 3.1.3
+  Bugfixes:
+    - fixed issues with resource regeneration
+---------------------------------------------------------------------------------------------------
+Version: 3.1.2
+  Bugfixes:
+    - fixed issue with multi resource generation
+---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+  Bugfixes:
+    - fixed vanilla biter generation option
+  Changes:
+    - added tree removal option (known issue - some trees might remain and it's not an easy fix)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+  Changes:
+    - added mod settings using new setting system
+    - moved to built in random generator for resource generation
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+  Changes:
+    - tweaked resource generation (more oil wells, uranium a bit less rich)
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+  Info:
+    - first version for 0.15, please use forum for comments/issues - not tested extensively (https://forums.factorio.com/viewtopic.php?f=79&t=44580)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+  Bugfixes:
+    - fixed issue with runTest remote call function
+  Changes:
+    - boosted range scaling for richness and size a bit more to not be very inferior compared to vanilla
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+  Changes:
+    - updated Angels ore config (provided by Arch666Angel)
+    - added fixes to platforms mod integration (provided by Dreadicon)
+    - buffed richness scaling with distance
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+  Changes:
+    - added new RsoMod variable defined in data.lua to allow for RSO detection on data stage
+    - added new remote interface disableStartingArea to disable generation of starting area ores
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+  Changes:
+    - added support for Cnc's Sulfur mod
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+  Bugfixes:
+    - fixed desync with water maze support
+  Changes:
+    - made quartz a bit more rich for AnonyMods
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+  Changes:
+    - added beta support for AnonyMods (might be unbalanced/difficult to play)
+    - added special handling for platforms mod (thanks to Dreadicon)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.9
+  Changes:
+    - added support for Infinium ore mod
+---------------------------------------------------------------------------------------------------
+Version: 2.2.8
+  Changes:
+    - added remote interface that allows other mods to control order of map generation (potential integration with Water Maze mod). Known issue is that ore patches might be a bit cut when this callback is in use - this is not easy to fix atm.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.7
+  Changes:
+    - added support for Andrew's ore 0.14.8, please make sure to also upgrade Andrew's ore
+---------------------------------------------------------------------------------------------------
+Version: 2.2.6
+  Bugfixes:
+    - fixed issue with starting area spawn when RSO is added to running game
+---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+  Bugfixes:
+    - fixed issue with Bukket mod support when it was not present
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+  Changes:
+    - added support for Bukket mod
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+  Changes:
+    - added support for Andrews ores
+    - added support for Beyond
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+  Changes:
+    - added support for HardCrafting 0.5.0
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+  Bugfixes:
+    - fixed starting area resource duplication on upgrade/load
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+  Changes:
+    - added multiple starting location support - for details please see instructions on the forum thread (https://forums.factorio.com/viewtopic.php?f=79&t=12709)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+  Info:
+    - updated for Factorio 0.14

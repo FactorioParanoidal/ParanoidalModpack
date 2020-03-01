@@ -1,0 +1,101 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2019-7-29
+  Bugfixes:
+    - Fixed crash on dying to worm spit
+    - Fixed crash on using cheat mode to give items
+    - Removed debug messages
+  Changes:
+    - Fixed typo in localization files
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2019-6-25
+  Features:
+    - Mod updated to 0.17 by Gangsir.
+  Removed:
+    - Settings to enable and disable external mod support removed.
+    - Support for Bob's mods temporarily removed. These will be returning at a later time, once I can look into how Bob updated his mods to 0.17. For now, I just want the mod to work with 0.17.
+  Changes:
+    - Fixed the "Efficient miner" achievement to be more achievable after the changes to the tech's scaling.
+    - Changelog now uses the ingame system.
+  Added:
+    - Added "Apprentice Slayer" achievement.
+    - Added "Slayer of worlds" achievement.
+    - Added "Encampment" achievement.
+    - Added "Fortress" achievement.
+    - Added "Castle" achievement.
+    - Added "Homewrecker" achievement.
+    - Added "I'm melting" achievement.
+    - Added "Shot down" achievement.
+    - Added "Terraformer" achievement.
+    - Added "If you build it, they will destroy it" achievement.
+    - Added "Turret creeper" achievement.
+    - Added "Apprentice metalsmith" achievement.
+    - Added "Journeyman metalsmith" achievement.
+    - Added "Master metalsmith" achievement.
+    - Added "Buildin' a sentry" achievement.
+    - Added "Kill it with fire" achievement.
+    - Added "Laser beams" achievement.
+    - Added "Wall of guns" achievement.
+    - Added "Gatekeeping" achievement.
+    - Added "Sticky boots" achievement.
+    - Added "Drop the bass" achievement.
+    - Added "Tactical nuke incoming" achievement.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2019-1-1
+  Features:
+    - Mod updated to 0.16 by Bilka. As I wasn't maintaining the mod during this time, this entry is a placeholder to fill the gap.
+  Added:
+    - "Don't Panic" achievement added.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2019-1-1
+  Features:
+    - Some minor fixes
+    - Added support for both Bob's mining, and Bob's assembling machines.
+    - Added settings to disable extra achievements on a per-mod basis, this includes the achievements the mod adds for vanilla.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-1-1
+  Features:
+    - Some minor fixes
+    - `Steampunk` achievement now requires 200GJ of energy per hour
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-1-1
+  Features:
+    - Added support for Bob's logistics. More mods are in the works, patch by patch.
+    - A few fixes to reported bugs
+    - More graphical updates
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-1-1
+  Features:
+    - Some minor fixes
+    - Added a few more achievements
+    - Improved several graphics, courtesy of [Bilka](https://mods.factorio.com/mods/Bilka).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2019-1-1
+  Features:
+    - Fix depleted achievement crashing
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2019-1-1
+  Features:
+    - Quick hotfix
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2019-1-1
+  Features:
+    - Released the mod

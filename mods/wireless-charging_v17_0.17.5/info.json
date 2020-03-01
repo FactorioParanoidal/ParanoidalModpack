@@ -1,0 +1,11 @@
+{
+  "name": "wireless-charging_v17",
+  "version": "0.17.5",
+  "title": "Wireless Charging",
+  "author": "mknejp, GTX2GvO & slindenau",
+  "homepage": "https://github.com/GTX2GvO/wireless_charging",
+  "description": "Induction stations and equipment allowing wireless charging of batteries in vehicles and armor.",
+  "factorio_version": "0.17",
+  "dependencies": ["base >= 0.17", "wireless-charging-lib_v17>=0.17.4"],
+  "license": "MIT"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "TrainOverhaul",
+  "version": "0.2.7",
+  "title": "Train & Fuel Overhaul",
+  "author": "Optera",
+  "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+  "homepage": "https://mods.factorio.com/mod/TrainOverhaul",
+  "description": "Trains have a balanced upgrade system branching between power and top speed. They also are much heavier, plowing through players and biters without slowing down.\nFuels provide no top speed bonus and less acceleration bonus.",
+  "factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.31", "OpteraLib >= 0.1.3", "WagonColors >= 0.1.0", "?FARL >= 3.0.1"]
+}

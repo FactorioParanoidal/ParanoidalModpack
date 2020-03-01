@@ -1,0 +1,11 @@
+{
+    "name": "qol_research",
+    "version": "2.3.1",
+    "title": "Quality of Life research",
+    "author": "Aidiakapi",
+    "contact": "aidiakapi@gmail.com",
+    "homepage": "https://forums.factorio.com/viewtopic.php?t=51002",
+    "description": "The mod adds a bunch of Quality of Life researches/bonuses to the game. You can configure it to cherry pick which ones you want.",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.17.0"]
+}

@@ -1,0 +1,37 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 25. 03. 2019
+  Bugfixes:
+    - Support for Rampant and other mods that may disable AI control of the enemy force
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 16. 03. 2019
+  Changes:
+    - Thumbnail included in the mod
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 16. 03. 2019
+  Changes:
+    - Upgraded to Factorio 0.17
+    - Version numbering scheme changed so that it will be appropriate for when Factorio goes 1.0
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 13. 12. 2018
+  Changes:
+    - Complete rewrite. Removed runtime setting making all tech equal as there is a replacement startup setting.
+  Features:
+    - Technology effects on evolution shown in tech tree.
+    - Startup setting to decide whether evolution effects are weighted to early tech, late tech, or equal. Early tech
+      gives evolution more similar to vanilla where evolution is faster at the beginning of the game and gradually tapers
+      off.
+    - Startup setting to control whether upgrade technologies effect evolution. The default has now changed to include
+      upgrades, giving a smoother evolution change through the tech tree.
+    - Evolution automatically recalculated when technologies or startup settings change.
+    - Disabled technologies are excluded from the evolution calculations, improving compatibility with other mods.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 12. 12. 2018
+  Changes:
+    - "Under new management". Mod adopted by H8UL (credit to admo for original mod).
+  Bugfixes:
+    - Critical fixes to evolution calculation

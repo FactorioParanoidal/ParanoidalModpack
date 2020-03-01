@@ -1,0 +1,213 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-03-06
+
+  Changed:
+    - Buildings now take a reasonable amount of crafting time, instead of only 0.5 seconds (Factorio's default)
+  Translations:
+    - Brazilian Portuguese updated (thanks johmax123)
+    - Dutch added (thanks eregni & TheRealHenkFisher)
+    - Hungarian updated (thanks nagy.karoly)
+    - Korean updated (thanks again, Xagros)
+    - Polish updated (thanks Tomirad)
+    - Ukrainian added (thanks antonus777)
+    - 14 more target languages added (see https://crowdin.com/project/factorio-warehousing to contribute, as always)
+    - Mod name and description are now included in translatable strings
+  Meta:
+    - Warehousing now targets all the languages that Factorio's own Crowdin project does
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-02-26
+
+  Changed:
+    - Factorio target version updated to 0.17
+    - Logistics Warehousing research split into two levels
+    - Warehouse and Storehouse capacities rebalanced
+    - Research costs rebalanced
+    - Crafting recipes rebalanced
+    - Match visual style of Warehouse and Storehouse item icons
+    - Simplified internal entity generation code (thanks to Optera)
+  Added:
+    - Setting to control inventory icon scaling on Warehouse/Storehouse buildings (startup, thanks to Optera)
+    - Setting to use the old inventory sizes from Warehousing 0.1.x / Factorio 0.16 (startup)
+    - Setting to toggle using Logistic System research cost as the base for Logistics Warehousing 2 (startup)
+  Translations:
+    - Brazilian Portuguese updated (thanks vini84200 & artemkiselevvloger)
+    - Chinese (Traditional) added (thanks artemkiselevvloger)
+    - French consistency tweaked
+    - German updated (thanks Optera)
+    - Hungarian added (thanks artemkiselevvloger)
+    - Korean added (thanks Xagros / XMKTP)
+    - Spanish updated (thanks leortegacaudillo)
+    - Removed source strings for "Smart" entities (previously only the translations were deleted)
+    - 18 new target languages added (see https://crowdin.com/project/factorio-warehousing to contribute, as always)
+  Meta:
+    - Added demo screenshot in Readme and a thumbnail image for the Factorio mod browser
+    - Removed empty config.lua file in mod distribution (it was unused)
+    - Source repository moved to Warehousing/Warehousing on GitHub
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2018-07-16
+
+  Changed:
+    - Both technology icons now have the warehouse facing the same way
+    - Improved resilience of code-path responsible for copying cost of Logistic System tech
+  Translations:
+    - French updated (thanks rom5921 & MoiAimeBien)
+    - Russian updated (thanks bjiomspeed & applevine1)
+    - Spanish updated (thanks black.dreicous)
+    - Old "Smart" entity strings removed (it was time)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2018-02-12
+
+  Fixed:
+    - Storage Warehouse and Storage Storehouse gained their missing logistic filter slot
+    - Warehousing's items are now sorted properly in the crafting menu
+  Translations:
+    - Warehousing is now on Crowdin. Contributions and corrections in your language are welcome: https://crowdin.com/project/factorio-warehousing
+    - Afrikaans added (roughed in by dgw)
+    - German updated (thanks honkinator22)
+    - Japanese updated (blame dgw for any new mistakes)
+    - Polish updated (thanks Nalapl3 for consultation work with dgw)
+    - Spanish tweaked (Anoyomouse)
+  Meta:
+    - Changelog filled out as far back as possible from project history
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2018-01-19
+
+  Features:
+    - Logistic Buffer variants of Warehouse and Storehouse added
+  Changed:
+    - Cost of Warehousing research tweaked to be more in line with the base game
+    - Logistics Warehousing research cost is now based on the cost of Logistic System
+  Meta:
+    - Began maintaining changelog.txt for display in-game after updates
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2017-12-19
+
+  Changed:
+    - Factorio version compatibility updated to 0.16
+    - Compatibility tweaks to make the mod work in Factorio 0.16
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2017-07-27
+
+  Translations:
+    - Fixed item name of Passive Provider Warehouse in English locale
+  Meta:
+    - Readme revised
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2017-07-19
+
+  Changed:
+    - Compatibility tweaks for Factorio 0.15 (mostly provided by kingarthur)
+    - Research costs rebalanced
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2017-06-28
+
+  Changed:
+    - Updated compatibility to Factorio 0.15 (thanks Mark42XLII)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2016-07-11
+
+  Changed:
+    - Logistic warehousing research now requires both logistic and construction robots to be researched before it becomes available.
+    - Updated compatibility to Factorio 0.13 (thanks jakimfett)
+  Fixed:
+    - Bugs in migration scripts from version 0.0.8
+    - Red/green circuit wire lengths
+  Removed:
+    - Smart warehouses and associated research. Existing smart warehouses and storehouses in a save (both placed and in inventories) will be replaced with basic versions.
+  Translations:
+    - Brazilian Portuguese added (thanks RaphaelNeumann)
+    - Japanese added (thanks Quifon)
+  Meta:
+    - 0.0.10 was also used as the version number for the first Factorio 0.14 release. Only the factorio_version was changed.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2016-04-22
+
+  Translations:
+    - Spanish fixed
+    - Russian updated (thanks Oceanel)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2016-04-20
+
+  Features:
+    - Added Storehouses, 3x3 entities with 150 slots (300 slots for storage logistic version). Like warehouses, but smaller and cuter. Contributed by Hanniballo.
+  Changed:
+    - Updated warehouse graphics and icons
+  Translations:
+    - German added (thanks apcnc)
+    - Spanish added (thanks frenchiveruti)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2016-04-08
+
+  Translations:
+    - Russian added (thanks apriori)
+    - Polish added (thanks diilmac)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2016-02-16
+
+  Added:
+    - Smart warehouse (like regular warehouses, but smarter!) & associated research
+  Translations:
+    - French added (thanks Hasturcraft)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2015-12-01
+
+  Changed:
+    - Massively increased warehouse inventory slot counts (2000 for storage, 800 for others) now that scrolling inventories are supported in Factorio.
+    - Made logistic warehouses a bit more expensive to craft (added advanced circuits)
+    - Storage warehouse also requires steel chests
+  Graphics:
+    - New technology icons
+  Fixed:
+    - Removed some unused graphics
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2015-11-10
+
+  Changed:
+    - Warehouse entities are now 6x6 (increased from 5x5)
+    - Warehouses now have 220 inventory slots (increased from 159)
+  Added:
+    - More logistic warehouses (active provider and requester)
+  Graphics:
+    - Added shadows
+    - Moved circuit connectors
+  Fixed:
+    - Mining storage warehouse now gives the correct item
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2015-10-25
+
+  Major features:
+    - Warehouses to store lots of things
+    - Logistic versions (passive provider & storage) to use with logistic robots

@@ -1,0 +1,93 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 03. 06. 2019
+  Changes:
+    - Added build_base_evolution_requirement to spawners.
+    - Giant Biters and above can deal fire/poison sticker too.
+  Bugfixes:
+    - Fixed giant worm's hole size.
+  Features:
+    - Added damage type Plasma
+    - Added poison sticker (DOT) to some poison damage weapons
+  Balancing:
+    - Adjusted all biter/spitter resistances a little.
+    - Reduced Liviathan health a fair bit if the health boost option is turned off. (A quater for biters, a fifth for spitters)
+    - Increased small poison cloud damage rate
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 25. 05. 2019
+  Bugfixes:
+    - Fixed odd looking biter and spitter corpses.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 22. 05. 2019
+  Changes:
+    - Changed spawner colours to make them more unique.
+    - Increased my worm turret prepare distance
+  Bugfixes:
+    - Fixed odd looking worms.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 11. 04. 2019
+  Bugfixes:
+    - Fixed crash when health overhaul was enabled and super nest disabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 11. 04. 2019
+  Changes:
+    - Changed Bob's spawner enemy spawns to be more in line with new base game.
+    - Bob's nests spawn further out from the starting area.
+    - Spitters and Worms will now target their spit to a position ahead of you and not home like 0.17 base game spit projectiles.
+  Features:
+    - Added option to choose Leviathan spawn frequency (at Evolution Factor 1.0)
+    - Added option to allow harder enemies to spawn at a lower Evolution Factor level
+    - Added option to increase the health of most bob enemies between huge and behemoth
+    - Added option to add a higher tier spawner
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 14. 03. 2019
+  Bugfixes:
+    - fix for 0.17.12 pollution changes
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 26. 02. 2019
+  Bugfixes:
+    - Colours fix
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17
+  Changes:
+    - Change artifacts to enabled by default
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 19. 12. 2017
+  Info:
+    - Updated to work with Factorio 0.16 
+    - perimeter -> radius on AOE damage
+    - icon_size tags added.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.2
+Date: 09. 05. 2017
+  Changes:
+    - removed conditional require: multiplayer checksum fix
+    - Base game nests should now drop alien artifacts
+    - full stat rebalance to match base game changes
+    - Leviathan health multiplied by 10 to make them more of a boss
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 28. 04. 2017
+  Features:
+    - Added the ability to use 1 coloured artifact and 5 normal to make 5 coloured artifacts.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 27. 04. 2017
+  Info:
+    - Updated to work with Factorio 0.15
+  Changes:
+    - Had to update 1 base game function call.
+    - Re-added base game artifacts.
+    - Artifacts are disabled by default.
+  Features:
+    - Added config option for biters/spitters dropping small artifacts.

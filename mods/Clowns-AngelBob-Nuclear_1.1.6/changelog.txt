@@ -1,0 +1,16 @@
+1.1.6: Added glow to centrifuge recipes
+	thanks to bobingabout for pointing me in the right direction
+1.1.5: More tech tree fixes
+Fixed that kovarex was still active
+Linked atomic bomb tech to enrichment techs
+Added a new recipe to nuclear fuel processing to give more flexibility (hopefully)
+1.1.4: Fixed tech tree to link uranium processing to the tree correctly
+Removed thorium from the regular reprocessing tech's, since they have their own
+1.1.3: Fixed naming convention on tech (0.17.23 change)
+Fixed thorium positive loop
+Changed advanced thorium reprocessing to be 5x to match other processing systems 
+1.1.2: Updated for 0.17
+1.1.1: Rebalanced Nuclear Fuel production chain (x3 for exotics)
+1.1.0: Updated locale
+1.0.1: Who knows
+1.0.0: Initial release.

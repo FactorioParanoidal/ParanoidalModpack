@@ -1,0 +1,13 @@
+{
+    "name": "Subterranean",
+    "version": "0.5.3",
+    "title": "RealVictorPRM's Subterranean",
+    "author": "Gangsir, Bilka, RealVictorPRM",
+    "homepage": "https://forums.factorio.com/55740",
+    "factorio_version": "0.17",
+    "dependencies": [
+        "base >= 0.16",
+        "? boblogistics"
+    ],
+    "description": "Adds a few tiers of underground belt/pipe that can go much farther than standard underground belts/pipes, and charges the player a number of belts/pipes based on the distance between the entrance and exit belt/pipe. When used with Bob's Logistics, it will apply these same effects to it's underground belts and specific pipes.\n Custom version by realvictorprm."
+}

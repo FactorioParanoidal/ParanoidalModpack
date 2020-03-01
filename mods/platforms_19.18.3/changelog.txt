@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------------------------------
+Version: 19.10.3
+Date: 2019-18-3
+  Bugfixes:
+	- Fixed a crash with the Teleporters mod
+---------------------------------------------------------------------------------------------------
+Version: 19.10.3
+Date: 2019-10-3
+  Major Features:
+	- 0.17
+---------------------------------------------------------------------------------------------------
+Version: 18.5.2
+Date: 2018-5-2
+  Bugfixes:
+    - Fixed robots destroying entities causing a crash
+  Minor Features:
+    - Changed the technology to require red science when playing with seablock
+    - Squeezed the last drop of performance out of the mod
+    - Added this changelog to the in-game view
+    - Reduced file size
+    - Increased code readability
+---------------------------------------------------------------------------------------------------
+Version: 18.4.29
+Date: 2018-4-29
+  Bugfixes:
+    - Fixed a crash caused by placing an entity without a size
+---------------------------------------------------------------------------------------------------
+Version: 18.4.19
+Date: 2018-4-19
+  Bugfixes:
+    - Fixed graphical issues on transitions
+    - Fixed a crash when a robot destroyed a platform
+  Minor Features:
+    - Added a low resolution sprite
+    - Improved preformance
+    - Made the item icon more grey
+    - Changed the recipe to use steel instead of wood
+  Major Features:
+    - Added a dedicated technology
+---------------------------------------------------------------------------------------------------
+Version: 18.4.17
+Date: 2018-4-17
+  Major Features:
+    - Initial release

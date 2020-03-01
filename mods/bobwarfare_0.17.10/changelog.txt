@@ -1,0 +1,200 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.10
+Date: 17. 06. 2019
+  Changes:
+    - Plasma turrets are now directional with a 120 degree firing arc (like flamethrower turrets)
+    - increase plasma resistance on some armours.
+    - increased plasma and acid resistances on tanks.
+    - Increased plasma explosion scale to 400% to reflect damage area.
+    - Added solder to robot brain recipes.
+  Bugfixes:
+    - Fixed ammo alien fire fluid quantities.
+  Features:
+    - Added plasma weapons
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 03. 06. 2019
+  Bugfixes:
+    - Increased the max length of laser drone's weapon to stop the at max range beam flicker error.
+    - Fixed power armor MK3's prerequisite of power armor MK2
+    - Added lead_target_for_projectile_speed to plasma turrets.
+  Balancing:
+    - increased small poison cloud damage rate
+    - reduced plasma blast radius from 11 to 8
+    - Sniper turret 2 now costs cobalt-steel gear wheels and bearings.
+  Features:
+    - Changed plasma projectile's laser damage type to new damage type plasma, made it the highest damage type, and creates a plasma sticker.
+    - some fire weapons now deal fire sticker and base game's fire patch.
+    - added poison sticker triggered by some poison damage weapons, including poison capsule/artillery shell.
+    - Added Napalm capsule and Artillery shell.
+    - Added plasma resistances to vehicles
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 27. 05. 2019
+  Changes:
+    - Replaced Glycerol icon.
+    - Increased size of Nitroglycerin icon.
+    - Tank dies into tank remnants, gun and sniper turrets die into gun turret remnants, laser and plasma turrets die into laser turret remnants.
+    - Updated tank colours, purple for MK2, green for MK3.
+    - Replaced robot pew pew lasers with beams.
+    - Updated Tank fuel effectivity.
+  Bugfixes:
+    - Fixed the missing graphics on my Artillery Ammo.
+  Features:
+    - Added Robotic gun drone.
+    - Added Robotic flamethrower drone.
+    - Added Robotic plasma drone.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 12. 05. 2019
+  Bugfixes:
+    - Re-added missing laser beams definitions.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 11. 05. 2019
+  Changes:
+    - Increased my Artillery turret health by 1000.
+    - Removed personal equipment to move them to their own new mod.
+    - Changed icons of Artillery ammo to make them more obvious, and added them to artillery technologies.
+  Features:
+    - Added plasma turrets, similar to the equipment in Vehicle Equipment mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 01. 05. 2019
+  Changes:
+    - updated bob-power-armor-3 prerequisites for 0.17.35 changes
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 22. 04. 2019
+  Bugfixes:
+    - Fixed battery-equipment and energy-shield-equipment technologies locale entries
+    - Removed upgrade from non-effect technologies
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 29. 03. 2019
+  Bugfixes:
+    - Renamed battery-equipment technologies to bob-battery-equipment to fix the Factorio 0.17.23 non-contiguous technology name issue.
+    - Renamed energy-shield-equipment technologies to bob-energy-shield-equipment to fix the Factorio 0.17.23 non-contiguous technology name issue.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 21. 03. 2019
+  Balancing:
+    - Changed ammo stack sizes to 200 to match base game. (Gun, Shotgun, Rocket and Tank ammos)
+  Changes:
+    - Removed armor durability
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 11. 03. 2019
+  Changes:
+    - Adjust exoskeleton equipment tiers
+  Bugfixes:
+    - All laser rifle batteries damage amount fixed.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17
+  Changes:
+    - Personal laser defence now shoot beams
+    - Laser turrets now shoot beams
+    - Laser rifle now shoots beams
+    - My artillery projectiles are now true artillery projectiles.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.7
+Date: 10. 06. 2018
+  Changes:
+    - Added immune_to_tree_impacts to Tank MK2 and 3.
+    - Added water_connection_patch to reinforced concrete wall
+  Bugfixes:
+    - Fixed wall and gate orders.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.6
+Date: 30. 03. 2018
+  Balancing:
+    - Fixed an issue where infinite research for gun turrets has the bonus set too low.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 12. 03. 2018
+  Bugfixes:
+    - removed pushable flags from tanks
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 20. 02. 2018
+  Balancing:
+    - Added darkness_to_turn_on to nightvision. MK3 should come on as it starts to get dark for a never ending daytime feeling.
+  Features:
+    - Added fuel value of 1.46MJ to glycerol. (for future use)
+    - Added Uranium shotgun shells.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 09. 02. 2018
+  Changes:
+    - Added clamp_position = true to all artillery ammo. This should fix the min_range issue.
+    - Also removed artillery projectile smoke from my artillery ammo, and added map reveal mechanics.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 28. 01. 2018
+  Changes:
+    - Decreased collision box of radar so it is possible to walk between it and other entities.
+    - Increased range of radar long range scan by 1 per tier.
+  Features:
+    - Added Artillery wagon 2 and 3 (locale entry auto-translates to the base game artillery wagon of your own locale)
+    - Added Artillery turret 2 and 3 (Same as above)
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 21. 01. 2018
+  Changes:
+    - Removed production science pack from follower robot count 7+
+    - Removed minimum range from artillery ammo
+    - added direction_deviation = 0 and range_deviation = 0 to artillery ammo
+    - Reduced artillery ammo stacksizes to 20
+    - increase base game artillery shell stack size to 20
+    - Increase artillery ammo damage from 400 to 1000 (and robots from 6 to 15)
+    - Increased artillery ammo recipe costs.
+    - Increased artillery turret ammo stack size from 15 to 50
+    - Increase range of tank artillery weapon from 0 to 35 to 8 to 96
+    - Reduced tank artillery firing speed
+    - removed artillery speed upgrades, there's a basegame version now.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 19. 12. 2017
+  Info:
+    - Updated to work with Factorio 0.16
+  Changes:
+    - perimeter -> radius name change for AOE damage
+    - Added icon_size tags
+    - updated tank graphics
+    - updated radar graphics
+    - Changed uranium bullet to be crafted the same as my enhanced bullets.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.3
+Date: 31. 05. 2017
+  Changes:
+    - Added a vehicle flamethrower to tanks MK2+3 (note, order changed, you might need to shuffle ammo)
+---------------------------------------------------------------------------------------------------
+Version: 0.15.2
+Date: 21. 05. 2017
+  Bugfixes:
+    - fixed Tank Artillery Shooting Speed 5
+    - Fixed mines, they no longer crash the game
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 10. 05. 2017
+  Changes:
+    - Added radius_minimap_visualisation_color tag to radars.
+    - Added high tech science pack to combat robotics 4.
+  Bugfixes:
+    - removed conditional require: multiplayer checksum fix
+    - Power armor mk4 now uses the correct grid
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 06. 05. 2017
+  Info:
+    - Updated to work with Factorio 0.15
+  Changes:
+    - All technology files updated, science packs adjusted, some sciences removed as they're now in base game, added infinite damage research to my list of damage research technologies.
+    - Updated all the recipes to remove alien artifacts from the mandatory lists and make them optional with a new fallback of processing units.
+  Balancing:
+    - Updated night vision to be 2x2 and conform to new specification. with MK3 you can barely even tell it's night!
+    - Updated laser defence, 2x2, uses twice the energy and deals 15 times the damage!
+    - Adjusted pretty much all damage values

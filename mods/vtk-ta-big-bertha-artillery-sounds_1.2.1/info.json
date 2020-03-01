@@ -1,0 +1,11 @@
+{
+    "name": "vtk-ta-big-bertha-artillery-sounds",
+    "version": "1.2.1",
+    "title": "VortiK's Big Bertha Artillery Sounds",
+    "author": "VortiK",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.17"],
+    "description": "Artillery sounds change to the nostalgic Total Annihilation ARM Big Bertha (firing and explosion)"
+}

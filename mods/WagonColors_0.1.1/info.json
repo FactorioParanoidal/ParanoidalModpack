@@ -1,0 +1,11 @@
+{
+  "name": "WagonColors",
+  "version": "0.1.1",
+  "title": "Wagon Colors",
+  "author": "Optera",
+  "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+  "homepage": "https://mods.factorio.com/mod/WagonColors",
+  "description": "Forked Color Picker ability to copy colors between locomotive/stop and cargo wagons/fluid wagon.",
+  "factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.4"]
+}

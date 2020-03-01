@@ -1,0 +1,39 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: ??????
+  Features:
+    - Added No Path Penalty Adjustment.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Bugfixes:
+    - Fixed bad perfomance with safe trains.
+  Changes:
+    - Allow 0 multiplier for pathfinder penalty.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Features:
+    - Using movement keys while in automatic mode sets the train to manual.
+    - Friendly trains are somewhat safer (defaults to false).
+    - Default train wait times are adjustable.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Features:
+    - Allow setting penalties to 0.
+    - Better ordering of settings.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Seperated into its own mod.
+    - Customizable train pathfind penalties.
+    - Customizable train horns.
+    - Horns can attract enemies (if enabled).
+    - Horn sounds when a player dies to a train.
+    - Cars and tanks snap to grid slightly when driving.
+    - Wheres my car keybind, draws an arrow and a map alert on your last car.
+    - Rail Tools for decorating rails.
+    - Smart manual train.
+    - Train goto station/next station.

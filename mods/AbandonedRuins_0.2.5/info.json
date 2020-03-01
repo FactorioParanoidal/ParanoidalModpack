@@ -1,0 +1,10 @@
+{
+    "name": "AbandonedRuins",
+    "version": "0.2.5",
+    "title": "The Ruins Mod",
+    "author": "Gangsir, Bilka",
+    "homepage": "https://github.com/Bilka2/Ruins",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.17"],
+    "description": "You weren't the first to come here, and you won't be the last. Every so often, you encounter ruins of past failed bases, some even still have running defenses, strewn across the countryside. Explore them for resources and adventure if you wish, but beware, as within these ruins, defensive machinery still whirrs, and you aren't its master...\nMaintained by Bilka, with permission."
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Turret-Shields",
+  "version": "0.17.35",
+  "title": "Turret Shields",
+  "author": "OwnlyMe",
+  "contact": "",
+  "homepage": "",
+  "description": "Lightweight scripted shields with power consumption (configurable or researchable)",
+  "factorio_version": "0.17"
+}

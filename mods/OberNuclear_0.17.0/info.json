@@ -1,0 +1,9 @@
+{
+	"name":"OberNuclear",
+	"author":"Ober3550",
+	"version":"0.17.0",
+	"title":"Ober Nuclear",
+	"description":"Adds High-Temperature Refining and changes nuclear to be more balanced",
+	"factorio_version":"0.17",
+	"dependencies": ["base"]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "OpteraLib",
+  "version": "0.1.7",
+  "title": "Optera's Library",
+  "author": "Optera",
+  "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+  "homepage": "",
+  "description": "Utilities used in many of my mods bundled into one package.",
+  "factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.31"]
+}

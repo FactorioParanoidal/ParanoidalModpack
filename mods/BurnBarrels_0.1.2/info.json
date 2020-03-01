@@ -1,0 +1,11 @@
+{
+  "name": "BurnBarrels",
+  "version": "0.1.2",
+  
+  "title": "Burn Barrels",
+  "description": "It's possible to use barrels as burning power source",
+
+  "author": "darkfrei",
+  "dependencies": ["base", "? BurntExtractor"],
+  "factorio_version": "0.17"
+}

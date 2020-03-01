@@ -1,0 +1,27 @@
+1.3.3: Fixed bug related to bobs equipment split from bob warfare
+	-added a fix to de-couple from angels bioprocessing (not fully tested)
+	known problem: white phosphorus is used in smelting bronze, phosphoric acid is a dead end (for now)
+1.3.2: Updated for 0.17
+1.3.1: Added magnesium pure processing & a more intricate smelting process. Thanks heaps to Pez for the input!
+1.3.0: Added advanced desalination recipes for collecting magnesium ore
+1.2.8: Fixed cleanup toggles not working.
+1.2.7: Added German locale thanks to Steino. Accidentally released magnesium :P
+1.2.6: Geniunely not sure if anything actually changed...
+1.2.5: Bug fixes.
+1.2.4: Added support for productivity effects.
+1.2.3: Bug fixes, added override to move Bob's Gems & Bob's Fluids into Bob's Materials & Intermediates. Added optional Fortifications and Equipment groups.
+1.2.2: Bug fixes.
+1.2.1: Bug fixes.
+1.2.0: Added new pure processing recipes. Added an override to give SpaceMod components their own subgroup. Added advanced centrifuging. Rebalanced uranium processing. Updated fluorine icon.
+
+1.1.0: Added osmium, depleted uranium & related powder metallurgy. Added optional settings to replace ingredients in military recipes from U-238 to depleted uranium. Updates some vanilla & Angels locale appropriately.
+
+1.0.0: Rebalanced sand sluicing, updated graphics, added some optional general gamedata tweaks, off by default. Rebalanced phosphorus processing, added advanced phosphorus processing. Added an opt-in override to set vanilla tile size to 1000 to match Angel's tile stack sizes. Added mercury processing technology, added dimethylmercury (neurotoxin) refining, added neurotoxin capsule. Fixed phosphorus tech being unlocked from game start. Code brought into line with other MadClown01 mods.
+
+0.1.6: Updated locale, updated phosphorus ore icon.
+0.1.5: Rebalanced crafting times for crushed stone sorting, all intermediate uranium processing.
+0.1.4: Updated locale.
+0.1.3: Added phosphorus processing, added original icons for advanced uranium processing.
+0.1.2: Fixed minor bugs.
+0.1.1: Fixed minor bugs.
+0.1.0: Initial release.

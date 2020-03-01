@@ -1,0 +1,16 @@
+{
+  "name": "ShinyAngelGFX",
+  "version": "9.16.8",
+  "factorio_version": "0.17",
+  "title": "ShinyAngelGFX",
+  "author": "Coloring by Zombiee, nastyslave, all original graphics by Arch666Angel",
+  "dependencies": [ "base >= 0.15.0",
+					"? angelspetrochem >= 0.7.0",
+					"? angelsrefining >= 0.9.2",
+					"? angelssmelting >= 0.4.0",
+					"? angelsinfiniteores >= 0.7.3",
+					"? ShinyBobGFX >= 0.16.1",
+					"? PickerExtended >= 2.7.3"
+  ],
+  "description": "Graphics overlay for Angel's entities so each tier is identified by color.  Original graphics are all created by Arch666Angel, modified with permission."
+}

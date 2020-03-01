@@ -1,0 +1,13 @@
+0.16.6	(2018-11-02)
+- Reduced the base speed multiplier to 1.0 (from 1.3)
+I felt like the acceleration when empty was a bit fast when the train was empty and had nuclear fuel (and really extreme when you had exoskeletons in the train equipment)
+
+0.16.5	(2018-11-02)
+- Fixed an error when a train was abruptly changing the direction
+
+0.16.3	(2018-10-01)
+- Forgot to remove the debug message when crafting...^^
+
+0.16.2	(2018-10-01)
+- No idea how that comma sneaked in there, now it should load^^
+

@@ -1,0 +1,11 @@
+{
+    "name": "ner_intermediatestweak",
+    "version": "1.0.0",
+    "factorio_version": "0.17",
+    "title": "NerArth's Intermediate Tweaks",
+    "author": "NerArth",
+    "contact": "...",
+    "homepage": "https://mods.factorio.com/mod/ner_intermediatestweak",
+    "description": "Aimed at allowing more proliferate use of Productivity modules, including Productivity modules added by mods. Allows you to use them with things like ammunition and belts within the base game; later versions of this mod will allow the optional dependency mods to use productivity modules in more recipes too, like certain Gas recipes and their own mod ammunitions.",
+    "dependencies": ["base >= 0.16", "? boblibrary", "? angelsindustries", "? angelsrefining", "? angelssmelting",  "KaoExtended"]
+}

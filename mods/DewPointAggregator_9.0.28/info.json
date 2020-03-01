@@ -1,0 +1,9 @@
+{
+  "name": "DewPointAggregator",
+  "version": "9.0.28",
+  "factorio_version": "0.17",
+  "title": "Dew Point Aggregator",
+  "author": "Reika, edited by nastyslave",
+  "description": "The machine from the Minecraft mod RotaryCraft - generate water at any time in any place, but at the cost of a great deal of power",
+  "dependencies": ["base"]
+}

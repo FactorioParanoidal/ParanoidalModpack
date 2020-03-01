@@ -1,0 +1,17 @@
+{
+  "name": "angelsbioprocessing",
+  "version": "9.5.61",
+  "factorio_version": "0.17",
+  "title": "Angel's Bio Processing [ALPHA UPDATE]",
+  "author": "Arch666Angel",
+  "contact": "",
+  "homepage": "https://forums.factorio.com/viewforum.php?f=185",
+  "description": "Adds ways to recycle and process waste products through biological means and make use of biological processes and farming. [ALPHA UPDATE]",
+  "dependencies": [
+  "base >= 0.17.0",
+  "angelspetrochem",
+  "angelsrefining",
+  "? angelssmelting",
+  "? bobtech",
+  "? bobenemies"
+  ]}

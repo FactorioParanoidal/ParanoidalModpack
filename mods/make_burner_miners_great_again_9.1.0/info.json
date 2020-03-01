@@ -1,0 +1,11 @@
+{
+    "name": "make_burner_miners_great_again",
+    "version": "9.1.0",
+    "title": "Make burner miners GREAT again!",
+    "author": "jbox1",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.16"],
+    "description": "Ever wanted to mine uranium with a burner miner? How about oil? Well now you can. Enjoy."
+}

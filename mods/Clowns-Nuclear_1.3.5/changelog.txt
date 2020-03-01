@@ -1,0 +1,23 @@
+1.3.5: Fixed graphical but with centrifuges
+1.3.4: Fixed nuke(s) detonating back at player instead of at target... (thanks to shadefang for the quick solution)
+1.3.3: Fixed more locale
+1.3.2: Fixed locale
+1.3.1: Updated for 0.17
+1.3.0: Locale fix, made nuclear fuel unlocked by korovex process again xD
+
+1.2.0: Rewritten to be completely vanilla-compatible. All AngelBob material moved to Clowns-AngelBob-Nuclear. Added German locale (Thanks to Steino)
+
+1.1.3: Bug fixes.
+1.1.3: Renamed, bug fixes. Made the locale override for vanilla uranium items dependent on mod settings.
+1.1.2: More bug fixes, disabled decomposition on cyclic recipes.
+1.1.1: Bug fixes.
+1.1.0: Added optional advanced nuclear centrifuging - a replacement for the Koravex Process. Moved Thorium refining recipe to Clowns-Processing, rewrote code to be more flexible.
+1.0.0: Code brought into line with other MadClown01 mods.
+
+0.1.6: Added tactical nuclear artillery shells with opt-in settings.
+0.1.5: Fixed resource path bug.
+0.1.4: Added thorium ore item in case non was provided, fixed bug where thorium pure processing was always shown, massively restructured code for stability, rebalanced thorium pure processing ingredients from pure ores to ore crystals, changed crotinnium requirement to jivolite.
+0.1.3: Fixed vanilla bug preventing mixed oxide recipes working.
+0.1.2: - Rebalanced recipe costs, eliminated Uranium-235 from Thorium fuel cell reprocessing and instead made the fuel cells 12GJ from 8GJ. Icons updated accordingly.
+0.1.1: Fixed vanilla bug, rebalanced thermonuclear bomb recipe's module requirement from 5 to 3.
+0.1.0: Initial release.

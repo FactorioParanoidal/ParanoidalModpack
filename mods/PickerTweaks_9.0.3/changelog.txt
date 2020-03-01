@@ -1,0 +1,60 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: ??????
+  Bugfixes:
+    - Fix wire tweak typos.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: ??????
+  Bugfixes:
+    - Rolling stock back_light sanity check.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: ??????
+  Bugfixes:
+    - Fix fireproof trains tweak.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: ??????
+  Features:
+    - Add quieter belt sounds modifier options.
+    - Add show alt info options for logistic and construction robots.
+    - Add tree removal on resources option.
+    - Add realistic reactor glow.
+    - Add smaller request proxy image.
+    - Add Show Bots on map option.
+    - Add woodless recipes option.
+    - Add fireproof rolling stock option.
+    - Add legacy belt fast replace option.
+    - Add artillery map reveal option.
+    - Add free circuit wires option.
+    - Add almost invisible wires option.
+    - Add more blueprinty like blueprint option.
+  Removal:
+    - Better Color Lamps (PickerSignals).
+    - More Virtual Signals (PickerSignals).
+    - Entities for Notes (PickerNotes).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Features:
+    - Added EnhancedFlashlight.
+  Bugfixes:
+    - Fixed brighter lights.
+    - Fixed alert icon size.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Prototype Tweaks.
+    - Custom tile stack sizes.
+    - Better color lamps.
+    - More virtual signal icons.
+    - Iondicators.
+    - Smokeless.
+    - Generic Vehicle Grids.
+    - Squeak Through.
+    - Remove decorations.
+    - Small Fixes.
+    - Entities for Picker Notes.
+    - Picker Reacher (adjust prototype reach distances).

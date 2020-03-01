@@ -1,0 +1,12 @@
+{
+	"name": "Bio_Industries",
+	"version": "9.17.1",
+	"factorio_version": "0.17",
+	"title": "Bio Industries",
+	"author": "TheSAguy",
+	"contact": "vvwmisc@hotmail.com",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=17548",
+	"description": "Provides useful buildings and items, like the  Bio Farm for growing trees. Solar Farm and Large Accumulator to make your electric setup easier. Bio Fuel section to produce organic plastic and batteries. Lots of New Wood Products, like the big electric pole, wooden pipes, dart turret. Plant trees using seedlings. Change terrain from deserts to grasslands using Fertilizer - helps trees grow better. And a lot more…  Please visit the homepage on the forums for more information and feedback.",
+	"dependencies": ["base >= 0.17.0", "boblibrary", "? FARL"]
+	
+}

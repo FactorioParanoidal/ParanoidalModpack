@@ -1,0 +1,58 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2019-05-05
+  Features:
+    - added script.misc.format_version
+  Changes:
+    - script.misc.ticks_to_timestring outputs in hh:mm:ss format for time >= 60 minutes
+    - script.misc.ticks_to_timestring uses current tick if called without arguments
+    - script.train.get_train_composition_string has a second return value: a table with wagon and locomotive counts
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2019-04-15
+  Features:
+    - New logger function: script.logger.add_debug_commands
+    - New logger setting: script.logger.settings.read_all_properties
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2019-04-15
+  Changes:
+    - script.logger: changed module import, improved comments
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2019-04-15
+  Features:
+    - data.utilities.get_energy_value
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2019-04-14
+  Features:
+    - script.logger: custom log, print and tostring functions
+    - script.train.open_train_gui: open train GUI
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2019-04-02
+  Features:
+    - script.train.get_train_composition_string
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2019-03-21
+  Features:
+    - script.misc.get_distance
+    - script.misc.get_distance_squared
+    - script.misc.ticks_to_timestring
+    - script.misc.compare_tables
+    - script.train.get_main_locomotive
+    - script.train.get_train_name
+    - script.train.rotate_carriage
+  Changes:
+    - copy_prototype moved to data.utilities.copy_prototype
+    - create_icons moved to data.utilities.create_icons
+    - multiply_energy_value moved to data.utilities.multiply_energy_value
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2019-03-19
+  Features:
+    - function copy_prototype
+    - function create_icons
+    - function multiply_energy_value

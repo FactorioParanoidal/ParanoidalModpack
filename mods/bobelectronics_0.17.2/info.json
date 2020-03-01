@@ -1,0 +1,11 @@
+{
+  "name": "bobelectronics",
+  "version": "0.17.2",
+  "factorio_version": "0.17",
+  "title": "Bob's Electronics",
+  "author": "Bobingabout",
+  "contact": "robertagius@hotmail.com",
+  "homepage": "https://forums.factorio.com/viewforum.php?f=51",
+  "description": "Adds a whole new electronics production chain.",
+  "dependencies": ["base >= 0.17.0", "boblibrary >= 0.17.0", "? bobplates >= 0.17.0"]
+}

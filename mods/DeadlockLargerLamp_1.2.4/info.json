@@ -1,0 +1,11 @@
+{
+	"name": "DeadlockLargerLamp",
+	"version": "1.2.4",
+	"title": "Deadlock's Larger Lamps",
+	"author": "Deadlock989",
+	"contact": "",
+    "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=68765",
+	"dependencies": ["base >= 0.17", "?Dectorio"],
+	"description": "2x2 lamps which cast a wide, soft glow. An electric lamp, fully signal compatible, and a copper lamp which uses solid fuel (4MJ per game day). They line up with rails and large power poles.",
+	"factorio_version": "0.17"
+}

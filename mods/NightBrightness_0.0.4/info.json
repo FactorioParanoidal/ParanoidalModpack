@@ -1,0 +1,13 @@
+{
+  "name": "NightBrightness",
+  "version": "0.0.4",
+  
+  "title": "Night Brightness",
+  "description": "The nights will be darker or lighter or variously",
+  
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base >= 0.17.9", "? LightCone"],
+  "factorio_version": "0.17"
+}

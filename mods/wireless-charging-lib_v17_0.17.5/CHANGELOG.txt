@@ -1,0 +1,39 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: N/A
+  FIXES:
+    - Fixed issue #8: update_equipment: API call on invalid LuaEntity: check entity.valid
+    - Fixed issue #4: multiplayer desyncs: restructure on_tick processing
+    - Fixed issue #2 and #3: deconstructing items: restored on_pre_player_mined_item event
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: N/A
+  CHANGES:
+    - Updated for 0.17 by GTX2GvO
+    - Compatibility fixes by slindenau
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: N/A
+  FIXES:
+    - "Error while running event on_player_placed_equipment (ID 38) LuaEntity API call when LuaEntity was invalid." in multiplayer.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: N/A
+  FIXES:
+    - "Error while running event on_robot_pre_mined (ID 15) wireless-charging-lib/src/main.lua:490: attempt to index field '?' (a nil value)"
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: N/A
+  FIXES:
+    - "LuaEntity API call when LuaEntity was invalid. stack traceback: wireless-charging-lib/src/main.lua:496: in function 'on_entity_removed'." when loading a multiplayer game
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: N/A
+  FIXES:
+    - "Error while running the on_load: LuaEntity API call when LuaEntity was invalid." in rebuild_caches()
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: N/A
+  CHANGES:
+    - Validation scripts now run anytime the mod configuration changes
+    - Add homepage field to info.json

@@ -1,0 +1,188 @@
+---------------------------------------------------------------------------------------------------
+--	TO DO: (EnigmaticAussie)
+--		- Clean up functions
+--		- Optimize
+---------------------------------------------------------------------------------------------------
+
+--log("chromatic-belts.DeadlockLoaders")
+-- DEADLOCK LOADERS --
+-- check if reskinned
+-- if true, reskin the belt parts of all loaders
+--if settings.startup["deadlock-loaders-belt-style"].value == true then
+	-- functions
+	--local function tint_layers(layers, tint_table, tier)
+		--log(serpent.block(tint))
+		--for l, layer in pairs (layers) do
+			--layers[l].tint = table.deepcopy(tint_table[tier])
+			--layers[l].hr_version.tint = table.deepcopy(tint_table[tier])
+		--end
+		--return layers
+	--end
+
+	--local BELT_COMPONENTS = {
+		--"animations",
+		--"belt_horizontal",
+		--"belt_vertical",
+		--"ending_top",
+		--"ending_bottom",
+		--"ending_side",
+		--"starting_top",
+		--"starting_bottom",
+		--"starting_side",
+	--}
+	
+	--local belt_tier_names = {
+		--[0] = "basic-",
+		--[1] = "",
+		--[2] = "fast-",
+		--[3] = "express-",
+		--[4] = "turbo-",
+		--[5] = "ultimate-"
+	--}
+	
+	--local tint = {
+		--[0] = {r=165,g=165,b=165},
+		--[1] = {r=225,g=165,b=10},
+		--[2] = {r=225,g=10,b=10},
+		--[3] = {r=10,g=165,b=225},
+		--[4] = {r=165,g=10,b=225},
+        --[5] = {r=10,g=225,b=25},
+	--}
+	
+    -- get belts, splitters, undergrounds, loaders from data.raw
+	
+	--local belt_prototypes = {
+		--"transport-belt",
+		--"splitter",
+		--"underground-belt"
+	--}
+	
+	--for p,prototype in pairs ( belt_prototypes ) do		
+		--for t,tier in pairs( belt_tier_names ) do
+			--local name = tier..prototype
+			--local entity = table.deepcopy(data.raw[prototype][name])
+			--if entity then
+				--for b, belt_component in pairs( BELT_COMPONENTS ) do
+					--if entity[belt_component] then
+						--for l, layer in pairs ( entity[belt_component]["layers"] ) do
+							--entity[belt_component]["layers"][l].tint = tint[t]
+							--entity[belt_component]["layers"][l].hr_version.tint = tint[t]
+						--end
+					--end
+				--end
+				--data:extend({entity})
+			--end
+		--end
+	--end
+	
+	-- check if deadlock-loader-1 exists
+	-- get deadlock-loader-1 layers
+	-- apply tints
+	-- insert into 0-5
+	
+	--local tinted_loader_componants = {
+		--[0] = {},
+		--[1] = {},
+		--[2] = {},
+		--[3] = {},
+		--[4] = {},
+        --[5] = {}
+	--}
+	--for t = 1, 3, 1 do
+		--local entity = table.deepcopy(data.raw["loader"]["deadlock-loader-"..t])
+		--if entity then
+			-- for each componant get layers
+			--for b, belt_component in pairs( BELT_COMPONENTS ) do
+				--if entity[belt_component] then
+					--if entity[belt_component]["layers"] then
+						--tinted_loader_componants[t][belt_component] = tint_layers(entity[belt_component]["layers"], tint, t)
+						--entity[belt_component]["layers"] = table.deepcopy(tinted_loader_componants[t][belt_component])
+					--end
+				--end
+			--end
+			--data:extend({entity})
+		--end
+	--end
+
+	-- add bob support
+	--if mods["boblogistics"] then
+		--for t = 0, 5 ,1 do
+			--log(t)
+			-- skip tier 1, 2, 3
+			--if t == 1 then
+			--elseif t == 2 then
+			--elseif t == 3 then
+			--else
+				--log(t)
+				--for b, belt_component in pairs( BELT_COMPONENTS ) do
+					--log(belt_component)
+					--if tinted_loader_componants[1][belt_component] then
+						--tinted_loader_componants[t][belt_component] = tint_layers(tinted_loader_componants[1][belt_component], tint, t)
+						--local entity = table.deepcopy(data.raw["loader"]["deadlock-loader-"..t])
+						--if entity then
+							--entity[belt_component]["layers"] = table.deepcopy(tinted_loader_componants[t][belt_component])
+							--data:extend({entity})
+						--end
+					--end
+				--end
+			--end
+		--end
+	--end
+
+	-- LOADER REDUX SUPPORT --
+	-- This is not inside an if, as this will also reskin the vanilla loaders
+	--local redux_loader_names = {
+		--[1] = "loader",
+		--[2] = "fast-loader",
+		--[3] = "express-loader",
+		--[4] = "purple-loader",
+		--[5] = "green-loader"
+	--}
+	--for t = 1, 5, 1 do
+		--for b, belt_component in pairs( BELT_COMPONENTS ) do
+			--if tinted_loader_componants[1][belt_component] then
+				--tinted_loader_componants[t][belt_component] = tint_layers(tinted_loader_componants[1][belt_component], tint, t)
+				--local entity = table.deepcopy(data.raw["loader"][redux_loader_names[t]])
+				--if entity then
+					--entity[belt_component]["layers"] = table.deepcopy(tinted_loader_componants[t][belt_component])
+					--data:extend({entity})
+				--end
+			--end
+		--end
+	--end
+
+	-- MINILOADER SUPPORT --
+	--if mods["miniloader"] then
+		--local miniloader_names = {
+			--[1] = "miniloader-loader",
+			--[2] = "fast-miniloader-loader",
+			--[3] = "express-miniloader-loader",
+			--[4] = "turbo-miniloader-loader",
+			--[5] = "ultimate-miniloader-loader"
+		--}
+		--local filter_miniloader_names = {
+			--[1] = "filter-miniloader-loader",
+			--[2] = "fast-filter-miniloader-loader",
+			--[3] = "express-filter-miniloader-loader",
+			--[4] = "turbo-filter-miniloader-loader",
+			--[5] = "ultimate-filter-miniloader-loader"
+		--}
+		--for t = 1, 5, 1 do
+			--for b, belt_component in pairs( BELT_COMPONENTS ) do
+				--if tinted_loader_componants[1][belt_component] then
+					--tinted_loader_componants[t][belt_component] = tint_layers(tinted_loader_componants[1][belt_component], tint, t)
+					--local entity = table.deepcopy(data.raw["loader"][miniloader_names[t]])
+					--if entity then
+						--entity[belt_component]["layers"] = table.deepcopy(tinted_loader_componants[t][belt_component])
+						--data:extend({entity})
+					--end
+					--local entity = table.deepcopy(data.raw["loader"][filter_miniloader_names[t]])
+					--if entity then
+						--entity[belt_component]["layers"] = table.deepcopy(tinted_loader_componants[t][belt_component])
+						--data:extend({entity})
+					--end
+				--end
+			--end
+		--end
+	--end
+--end

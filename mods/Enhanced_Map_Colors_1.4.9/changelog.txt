@@ -1,0 +1,54 @@
+v1.4.9
+
+
+v1.4.8
+fixed controls hotkey locale, added changelog
+
+v1.4.7
+-update to 0.17.x and added thumbnail
+
+V1.4.6
+-added colors for heatpipes and reactors
+
+v1.4.5
+-fixed one require I missed removing in previous version
+
+v1.4.4(Broken, DO NOT USE)
+-safer sprite checks will help prevent errors with future mod changes
+
+v1.4.3
+-update for boblogistics belt name and tier changes
+
+v1.4.2
+-0.16.x update
+
+v1.4.1
+-Works in 0.15.x
+
+v1.4.0
+-Fixes from 1.3.10
+-Removing DyTech belts
+
+v1.3.10
+-Changed colors for walls, turrets, accumulators, and solar panels as per 0.15. Try out the new colors before 0.15.x is released. :)
+-Added colors for underground belts and splitters for all tiers and mods
+-Updated legend
+-Added config file so 0.15 colors can be turned on or off
+-Added English locale file.
+
+v1.3.9 Removed main button. Open/close legend via custom key press "N"(default for now) changeable in settings.
+*Legend now on gui.left - recommend using Mooncats Vertical left gui mod till 0.15 is released
+
+v1.3.8 Legend should no longer open for all players when any player opens legend or when a technology is researched.
+
+v1.3.6 fixed bad logic using on_configuration_changed, fixed gui legend height.
+
+v1.3.5 GUI update as well as update to factorio version 0.14.x with new colors
+
+v1.3 update for factorio version 0.13.x
+
+v1.2 5dim and DyTech belts are now colored.
+
+v1.1 bobsmods support
+
+v1.0 base release

@@ -1,0 +1,862 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.26
+Date: 5. 14. 2019
+  Contributions:
+    - Choumiko - Added event hooks for script_built and script_destroyed events
+  Optimizations:
+    - Disabled full map scan by default in favor of script_built and script_destroyed events. If a mod does not use these events and creates or destroys entities through scripts, you may need to re-enable this feature in the mod map settings under Compatibility: enable full map scan.
+  Improvements:
+    - Added a check for script created resources in the script_built and script_destroyed events
+    - When a squad is destroyed its last few chunk moves now receive a portion of the death generator pheromone from the chunk they died on
+  Tweaks:
+    - Removed unused mapping tables
+    - Chunk properties now use <= instead of == when checking for minimum allowed values
+    - Increased death pheromone generator amount to 1300
+    - Increased retreat levels by 30%
+    - Increased raiding base activition threshold to 550
+    - Decreased minimum cooldown time for attack waves in aggressive state to 30 seconds
+    - Reduced all player generator values by half
+  Bugfixes:
+    - Memory leak with settlers last tick map
+    - Multiple version of chunks where in the processing queue causing double processing issues with a duplicate context
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.25
+Date: 5. 8. 2019
+  Improvements:
+    - Added lite mode which causes the mod to run with a lower UPS cost by making the ai scan and process the game map slower
+  Tweaks:
+    - Reduced default spitter projectile AOE damage by 25%
+    - Added default spitter projectile direct damage for 1/3 damage of AOE, spitters don't get stopped by trees now with friendly fire disabled
+    - Renamed nest to spawner in unit-spawner prototypes
+    - Normalized player building pheromone generation into six groups 50, 200, 1000, 2000, 3500, 12000
+    - Increased player process tick interval to 63
+  Optimizations:
+    - Refactored player building scoring
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.24
+Date: 5. 3. 2019
+  Improvements:
+    - Added interop functions for getSettlerCooldown and getSettlerWaveSize
+  Tweaks:
+    - Increased spitter projectile acceleration to 0.02
+    - Increased spitter projectile starting speed to 0.6
+    - Added projectile lead with default spitter and worm projectiles
+    - Switched to water-tile collision mask in chunk scanning for surface queries
+    - Added checks to spitter puddles on water so they dont happen
+    - Reduced the settler standard deviation to 1/3 of the wave size
+  Bugfixes:
+    - Fixed settler cooldown increasing with evolution as opposed to decreasing
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.23
+Date: 4. 30. 2019
+  Tweaks:
+    - Added support for lighted-big-poles for safety
+  Bugfixes:
+    - Fixed interop register unit group not actually registering new squad    
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.22
+Date: 4. 24. 2019
+  Tweaks:
+    - Normalized unit 10 tier evolution spawns ((1, 0%) -> (2, 30%) -> (3, 40%) -> (4, 50%) -> (5, 60%) -> (6, 70%) -> (7, 80%) -> (8, 85%) -> (9, 90%) -> (10, 93%))
+    - Normalized unit 5 tier evolution spawns ((1, 0%) -> (2, 40%) -> (3, 60%) -> (4, 70%) -> (5, 90%))
+    - Decreased default new enemy physical decrease for (level, newVal) (1, 1) (3, 3) (7, 8) (8, 10)
+    - Changed default unit tiers to 10
+    - Changed aggressive AI state to spawn unit groups with 1 to 3 minutes between groups, (raid, onslaught, siege, and migration still can mass spawn)
+  Bugfixes:
+    - Fixed random tick generator not being uniform over provided range
+    - Fixed AI migration state not respecting peaceful surfaces
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.21
+Date: 4. 21. 2019
+  Bugfixes:
+    - Fixed 1 and 2 levels of biters instantly spawning due to 0 spawn time modifier
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.20
+Date: 4. 19. 2019
+  Improvements:
+    - Spawner faction spit spawned biters now lose life over time
+    - Added mod setting that causes biter projectiles to no longer collide with other biters but still collides everything else
+  Tweaks:
+    - Doubled all spawner faction spit spawned biters health (30,60,90,120,150,180,220,500,1000,2000)
+  Bugfixes:
+    - Fixed unkillable construction robot settings not clearing and setting new resistance table
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.19
+Date: 4. 08. 2019
+  Bugfixes:
+    - Fixed energy thief faction buildings not being hidden from filter bar
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.18
+Date: 4. 08. 2019
+  Bugfixes:
+    - Fixed missing mod variables due to an internal update not taking place
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.17
+Date: 4. 07. 2019
+  Improvements:
+    - When settlers start building they will clear the immediate area of colliding neutral objects
+    - Added initial pause when forming squads allowing members time to group
+  Bugfixes:
+    - Fixed settlers groups being in a finished state when building
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.16
+Date: 4. 07. 2019
+  Tweaks:
+    - Reduced biter AoE damage by 25%
+    - Added biter direct target damage in the amount of 1/3 of the AoE damage
+    - Reduced the average distance settlers travel by 50%
+  Bugfixes:
+    - Fixed biters not being able to kill neutral objects
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.15
+Date: 4. 06. 2019
+  Tweaks:
+    - Split enable swarm setting and shrink nest + worm
+  Bugfixes:
+    - Fixed mod setting breathing and enable swarm not using correct valueu
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.14
+Date: 4. 05. 2019
+  Improvements:
+    - Added mod setting to directly affect ai aggressiveness
+    - Added mod setting to toggle construction bot and logistic being immune to all damage
+    - Killing spawners cause the ai to gain points to spawn up to 1 squads per nest
+    - Killing worms cause the ai to gain points to spawn up to 0.5 squads per worm
+  Tweaks:
+    - Increased new enemies default scale for levels 7+ by 0.2
+    - Increased new enemies troll and physical scale for levels 6+ by 0.2
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.13
+Date: 3. 28. 2019
+  Bugfixes:
+    - Fixed bobs and NE find non colliding error
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.12
+Date: 3. 27. 2019
+  Improvements:
+    - Changed new enemy unit spawning probabilities to follow a gaussian distribution over the level of the nest, so lower level nest spawn lower level enemies longer.
+    - Increased new enemy building spacing
+  Tweaks:
+    - Added a collision box reduction to all nests and worm turrets of 50% on the mod setting Enable the Swarm.
+  Bugfixes:
+    - Fixed spitter pollution to attack numbers
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.10
+Date: 3. 17. 2019
+  Bugfixes:
+    - Fixed vanilla spawner autoplace requirement
+    - Fixed unit spawner breath setting only working if new enemies is checked
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 3. 16. 2019
+  Improvements:
+    - Updated spit graphics to 0.17 version
+    - Updated spit effects and damages to 0.17 vanilla
+    - Allow mod settings toggle between blockable and unblockable projectiles for vanilla
+    - Switched wasp drones to blockable projectiles
+    - Added AOE to melee attacks based on size
+    - Switch new enemies over to acid splash from vanilla
+    - Updated stickers to work on vehicles
+    - Added lead targeting to inferno biters
+    - Added acid puddle slowdown from vanilla as default spitter attack effect
+    - Added damaging acid puddle slowdown from vanilla as default worm attack effect
+    - Added damaging acid puddle slowdown from vanilla on acid faction
+  Tweaks:
+    - Removed bob blockable projectile logic
+    - Removed force old projectiles setting option
+    - Changed color of spawner egg and wasp drone
+    - Added better explosion effect to troll and physical worms
+    - Increased on wasp range from spitter by 6
+  Bugfixes:
+    - Fixed troll spitters having a homing projectile
+    - Fixed spitters changing color when attacking
+    - Fixed biter attacks getting bonuses from player research    
+    - Fixed suicide biter level 9 and 10 wouldn't die when they attacked
+    - Fixed physical and troll worm turrets having incorrect health values
+    - Fixed physical and troll nests having incorrect health values
+    - Fixed more damage then expected on enemy projectiles
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 3. 14. 2019
+  Improvements:
+    - Added some basic description of the faction to the mod settings description for each faction
+    - Added rough approximation of health per tier to mod settings start and end tiers
+    - Updated enemy variations description to better describe what it does for randomness per tier
+  Tweaks:
+    - Increased spawner egg life 2-10 (100->120, 110->120, 110->170, 120->170, 120->200, 130->200, 130->250, 140->300, 140->350)
+  Bugfixes:
+    - Fixed spelling from 0.17.12 factorio
+    - Fixed upcoming emissions_per_tick to emissions_per_second
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 3. 12. 2019
+  Improvements:
+    - Added setting for unit spawners breathing air to allow poison capsules to affect them
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 3. 12. 2019
+  Improvements:
+    - Reworked base upgrade system
+  Tweaks:
+    - Increased max evolution level for new biters from 95% to 97%
+    - Decreased distance to evolution from 1/7200 to 1/9600
+    - Normalized evolution requirement for Neutral faction 1-9 (0.08->0, 0.16->0.1, 0.24->0.2, 0.35->0.3, 0.4->0.4, 0.45->0.5, 0.55->0.6, 0.65->0.7, 0.75->0.8)
+    - Increased evolution requirement for levels 2+ by 2% per tier on Acid, Electric, Fire, Laser, Physical
+    - Increased evolution requirement for levels 2+ by 5% per tier on Energy Thief, Inferno, Poison, Troll, Wasp
+    - Increased evolution requirement for levels 2+ by 7% per tier on Nuclear, Spawner, Suicide
+    - readded acid splash purple for spitter attacks
+  Bugfixes:
+    - Fixed nest and worms incorrectly being upgraded resulting in lost entities
+    - Fixed NE and Bobs faction alignments being correctly selected
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 3. 10. 2019
+  Improvements:
+    - Added robot on pre cliff destroy to invoke a passability scan on the chunk
+  Bugfixes:
+    - Fixed cliff explosive error due to removed code fragment
+    - Fixed expansion being forced on for testing
+    - Fixed process scan chunk process removing potentially incorrect chunk from processing
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 3. 5. 2019
+  Improvements:
+    - Increased chunk processing from 825 to 1020 chunks
+    - Settler groups now occasionally disregard everything to reach a spot to build a base, instead of attacking player or buildings
+    - Reworked attack move commands and settle move commands
+  Tweaks:
+    - Reduced full chunk scan threshold for water from 0.4 to 0.25
+    - Removed old map path finder settings
+    - Added new find position centered flag to positions searches
+    - Adjusted new enemy worm ranges to vanilla levels
+    - Added kill_all_units on first add with new enemies for nest and worm space
+    - Increased migration ai state to 10%
+    - Removed attack wave message
+    - Decreased max squads from 40 to 35
+    - Increased squad movement penalty from 10000 to 300000
+    - Balanced squad movement distance between straight and diagonals
+    - Increased find path location entity size to 2x2 for better position resolution
+    - Added exponential growth to squad movement penalties    
+  Optimizations:
+    - Improved squad processing and squad cleanup
+    - Refactored chunk utilities
+    - Refactored unit group utilities
+  Bugfixes:
+    - Fixed player pheromone not having highest value on chunk player was on
+    - Fixed settlers not being able to see chunks with resources on them
+    - Fixed retreat command not disengaging biters
+    - Fixed Poison faction poison death cloud crash
+    - Fixed new enemies newly built settlements not creating nests or worms
+    - Fixed find new enemy faction base by distance
+    - Fixed base recycling
+    - Fixed base alignment deadzone ttl and usage
+    - Fixed squad movement penalty lookup
+    - Fixed orphaned unit group recycling
+    - Fixed retreat scoring causing retreat location to be on player buildings
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 2. 28. 2019
+  Bugfixes:
+    - Fixed NE enemies version numbering change
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2. 27. 2019
+  Bugfixes:
+    - Readded renamed or missing assets
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2. 27. 2019
+  Bugfixes:
+    - Fixed bobs enemies integration
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2. 26. 2019
+  Improvements:
+    - Added thumbnail
+  Tweaks:
+    - Updated to 0.17
+    - Synced worm vanilla to worm template
+    - Synced spawner vanilla to spawner template    
+    - Changed ground shakes warning message to off by default
+    - For now, acid-splash-purple replaced explosion
+  Bugfixes:
+    - Require statement path changes
+    - Removed unused chunk scanner entity causing load errors
+    - Removed acid splash spitter and worm decal as it no longer exist
+    - Fixed 0.17.2 hide-from-bonus-gui
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.42
+Date: 2. 18. 2019
+  Improvements:
+    - Reworked how nests are activated by pollution, player, and base pheromone for better nest tracking
+    - Reworked chunk passability to only look for water or cliffs for impassable terrain
+    - Removed use pollution map setting
+    - Removed min and max attack threshold settings
+  Tweaks:
+    - Increased max squad count from 30 to 40
+  Bugfixes:
+    - Reverted pheromone projection
+    - Reverted settings default player threshold to 7
+    - Fixed radial pattern sort not being trigger on map rebuild
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.41
+Date: 2. 18. 2019
+  Note:
+    - Enemy level maxes have changed what was 10 is now roughly equal to 8
+  Tweaks:
+    - Added energy thief crystal and pylon physical resistance 25%
+    - Increased crystal pylon health from 150 to 750
+    - Decreased electric and energy thiefs faction damages (7->6, 15->10, 22.5->15, 35->20, 45->30, 60->45, 75->60, 90->75, 150->90, 200->150)
+    - Decreased energy thief beam width (1.5->1, 1.5->1, 1.6->1.2, 1.6->1.2, 1.7->1.3, 1.7->1.3, 1.8->1.4, 1.8->1.4, 1.9->1.5, 1.9->1.5)
+    - Decreased energy thief range (11->9, 11->9, 12->10, 12->10, 13->11, 13->11, 14->12, 14->12, 15->13, 15->13)
+    - Decreased crystal pylon resistances for fire, electric, laser from 100, 100, 100 to 85, 95, 90
+    - Added energy drain to crystal pylon of 500kW
+    - Increased drain crystal drain amount from 300kW per tier to 1.3MW
+    - Increased drain crystal health from 100 per tier to 400 per tier
+    - Increased all biter default health for levels 5 to 10 (400->1000, 750->2000, 1500->3500, 3000->7500, 5000->15000, 10000->30000)
+    - Increased physical and troll biter default health for levels 5 to 10 (800->1500, 1500->3000, 3000->5000, 6000->12000, 10000->20000, 20000->40000)
+    - Increased all spitter default health for levels 5 to 10 (750->1250, 1000->2250, 1500->3250, 2500->6500, 4500->12500, 7000->25000)
+    - Increased all nests default health for levels 5 to 10 (2500->3500, 3500->7500, 5000->11000, 7000->20000, 10000->30000, 15000->45000)
+    - Increased all worms default health for levels 5 to 10 (750->2000, 1000->3500, 1500->7500, 3000->12000, 5000->20000, 9000->25000)
+    - Increased nuclear and suicide biter faction health for levels 9 to 10 (3000->5000, 5000->10000)
+    - Increased spawner spawned biter faction health for levels 8 to 10 (145->250, 165->500, 180->1000)
+  Bugfixes:
+    - Fixed a chance that connecting wires on entity death has invalid target
+    - Fixed electric turret not being counted for energy thief conversion
+    - Fixed pylons not being targeted by turrets
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.40
+Date: 2. 16. 2019
+  Bugfixes:
+    - Switched to numeric value to represent scoring functions
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.39
+Date: 2. 15. 2019
+  Bugfixes:
+    - Reset squad scoring functions and set default scoring function
+    - Switched to single instance require statements causing multiple sentinel memory objects
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.38
+Date: 2. 14. 2019
+  Bugfixes:
+    - Fixed squad attack being nil due to timing delay in update
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.37
+Date: 2. 10. 2019
+  Improvements:
+    - Added the energy thief faction that will convert powered player structure into electric draining crystals
+    - Added the poison faction that when killed creates a damaging toxic cloud
+    - Removed unnecessary grouping mechanism when spawner eggs produce units
+    - Added individual base faction ai to manage base development
+    - During onslaught ai state player building destroyed by biters credits x10 to the biters
+    - Increased dispersion projection of pheromone by 20% allowing for further pathing
+    - Reworked squad attack scoring to better account for death pheromone
+    - Squads that kamikaze may now occasionally disregard death pheromone
+    - Maintain sorted chunk array for processing in a radial pattern from origin
+    - Hide spawner drones from the bonus gui screen
+  Tweaks:
+    - Increased resource pheromone min from 9000 to 15000
+    - Increased resource pheromone max from 10000 to 20000
+    - Increased retreat pheromone min from 1000 to 10000
+    - Increased retreat pheromone max from 17000 to 170000
+    - Increased player pheromone multipler from 500 to 2500
+    - Increased bad squad movement penalty from 4000 to 10000
+    - Increased death pheromone generator from 125 to 750
+    - Increased victory pheromone by x3
+    - Decreased death pheromone generator persistance from 0.995 to 0.9
+    - Decreased death pheromone persistance from 0.99 to 0.975
+    - Removed arbitrary player gen multipler in retreat scoring function
+    - Increased default setting of player score attack contribution from 7 to 16
+    - Added minor resistance to poison to acid faction
+    - Added minor resistance to laser to electric faction
+    - Added minor resistance to explosion to fast faction
+    - Added minor resistance to electric to laser faction
+    - Added major resistance to explosion to physical faction
+    - Added minor resistance to poison to suicide faction
+    - Added minor resistance to physical to troll faction
+    - Added minor resistance to explosion to troll faction
+    - Added minor weakness to poison to inferno faction
+    - Added minor weakness to laser to physical faction
+    - Added minor weakness to electric to physical faction
+    - Increased general biters physical decrease for levels 7     - 10, (10->11,12->13,14->16,15->17)
+    - Increased general biters physical percent for levels 7     - 10, (13->14,13->16,14->18,15->20)
+    - Increased general biters explosion decrease for levels 6     - 10, (0->10,10->12,12->14,14->16,15->20)
+    - Increased general biters explosion percent for levels 6     - 10, (12->13,13->15,13->16,14->17,15->20)
+    - Added general spitters physical decrease for levels 1     - 10, (0,0,0,0,2,4,6,8,10,12)
+    - Added general spitters physical percent for levels 1     - 10, (0,0,0,10,12,12,14,14,15,15)
+    - Decreased base spawner upgrade from 300 to 250
+    - Decreased base worm upgrade from 250 to 200
+    - Removed evolution requirement rounding for bobs spawners and ne spawners
+  Bugfixes:
+    - Fixed pheromone dispersion when non-cardinal directions receiving pheromone when it shouldn't
+    - Fixed ai states of migrating and seige when expansion is disabled on the map instead onslaught state happens 10% more in place
+    - Fixed retreat score function not using correct player multiplier
+    - Fixed kamikaze flag being removed on merged group if mergee group didn't have kamikaze
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.36
+Date: 2. 5. 2019
+  Improvements:
+    - Integrated nocturnal mode with siege, migration, and raiding states so they work together now.
+    - Swapped scoring function when in siege mode causing the biter lines to actually advance now.
+    - Added Onslaught AI state where ai gets 2x credits per logic cycle
+  Tweaks:
+    - Reverted nest upgrade chance to 0.05%
+    - Increased Biter credits per destroyed building by 10% after fixing 10x credit bug
+    - Increased settler unit groups standard deviation by roughly 30%
+    - Increased death pheromone persistance from 0.975 to 0.995
+  Bugfixes:
+    - Fix for squad movement penalties not be boosted alongside building pheromone causes units to repeat movement into chunks more frequently than needed
+    - Fix for biter getting 10x credits for destroying buildings causing relentless onslaughts.
+    - Fix Siege spelling
+    - Updated retreat chunk scoring function to use negative for player and player base generator
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.35
+Date: 2. 1. 2019
+  Improvements:
+    - Added options to toggle new enemy factions
+    - Randomized base alignment array with map seed so faction distribution changes from map to map
+    - Added a setting to disable siege ai state, which may have been causing extra non pollution biter movements
+  Tweaks:
+    - Added upgrade path for neutral faction to laser resist faction
+    - Removed upgrade path from electric biters to laser resist faction
+    - Increased nest upgrade chance from 0.05% to 1.5%
+  Bugfixes:
+    - Fix for base upgrade framework to leveling nests correctly due to rounding errors in floating percision for lookup
+    - Fix for migration toggle setting not preventing the ai migration state
+    - Fix for entity upgrades allowing for a evolution decrease instead of start from current evolution requirement
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.34
+Date: 10. 19. 2018
+  Improvements:
+    - Reworked dispersion to process pheromone in two phases.
+    - Switch to all adjacent neighbors instead of cardinal neighbors for dispersion
+  Tweaks:
+    - Reduced chunks process per interval from 400 to 300
+    - Increased building pheromone generator by 10x
+    - Reduced Retreat pheromone max level from 20000 to 17000
+    - Reduced Retreat pheromone min level from 1500 to 1000
+    - Increased death generator from 75 to 125
+    - Increased movement persistence from 0.875 to 0.975
+    - Increased player persistence from 0.98 to 0.97
+    - Increased resource persistence from 0.99 to 0.97
+  Bugfixes:
+    - Fix for unit groups not being able to move off of impassable terrain
+    - Fix for incorrect variable name in interop
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.33
+Date: 9. 25. 2018
+  Improvements:
+    - Reworked how death pheromone sticks to terrain and how long it is active for
+  Optimizations:
+    - Reduced in memory map footprint increasing save speed
+  Bugfixes:
+    - Fix for unit groups getting stuck in random locations
+    - Fix for unit retreats causing excessive retreats due to inverted comparison
+    - Fix for unit groups not creating new settlements
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.32
+Date: 8. 1. 2018
+  Improvements:
+    - Raiding AI Toggle     - toggles the ai raiding parties from outside your pollution cloud
+    - Added a check for waterfill to trigger pass ability scan on affected chunks
+  Tweaks:
+    - Lowered base alignment selection threshold from 0.65 to 0.35, causing more variation in the later stages of the game for factions
+    - Lowered upgrade entity selection threshold from 0.65 to 0.35, causing more variation in the later stages of the game for spawners and worms
+  Bugfixes:
+    - Invalid surface index for creative mode blueprinted tiles
+    - Surface tile change event wasn't correctly accounting active surface
+    - Normalized evolution requirements so when starting at a higher enemy level they are placed at the correct starting distances
+    - Fixed NEE compatibility
+    - Version upgrade map rebuild will no longer reapply deadzones
+    - Parenthesis in the wrong spot in pheromone dispersal algorithm
+    - Moved AI toggles to map settings instead of startup settings
+    - Changing new biter settings mid game no longer crashes the saves, still can cause entity loss
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.31
+Date: 7. 19. 2018
+  Bugfixes:
+    - MAJOR BUG: fixed typo in inverted filter for processing player buildings and enemy nests, which eventually lead to all aliens going inactive due to invalid targets [https://mods.factorio.com/mod/Rampant/discussion/5b48e84e1495c8000be8f961]
+    - For changing start and end enemy level in relation to scaling value error [https://mods.factorio.com/mod/Rampant/discussion/5b4e37227ffb42000a2dc40d]
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.30
+Date: 6. 7. 2018
+  Improvements:
+    - Raiding AI state nows requires an evolution of 0.04 before it can trigger
+  Bugfixes:
+    - Fixed fire biter nest size
+    - Fixed Acid spitter resistances to be more inline with vanilla resistances
+    - Fixed laser faction not having in-place evolution path from electric biters
+    - Fixed range of unit levels being off by one, limiting the max units to level 9 only instead of 10
+    - Fixed missing wasp worm drone locale entry
+  Tweaks:
+    - Increased troll units scale +0.2
+    - Increased troll health regeneration for units by ~3x, spawners and worms by ~7x
+    - Increased the lower attribute bound from 0.7 to 0.85
+    - Increased the base distance to evolution index ratio from (1 / 5480) to (1 / 7200)
+    - Increased the chance that initial base alignment picks a lower tier alignment by 0.15
+    - Normalized all enemy faction attributes through the defaults, should be minor unit corrections
+  Framework:
+    - Refactored new enemy modules
+    - Created default attributes for all unit, unit spawner, worms
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.29
+Date: 6. 3. 2018
+  Tweaks:
+    - Increased ai state min time from 1 to 7 minutes
+    - Increased ai state max time from 4 to 17 minutes
+    - Increased ai temperament min time from 5 to 25 minutes
+    - Increased ai temperament max time from 15 to 32 minutes
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.28
+Date: 6. 1. 2018
+  Bugfixes:
+    - Fixed new enemies setting units and worms to different numbers for variations or tiers causing startup crash
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.27
+Date: 5. 23. 2018
+  Tweaks:
+    - Changed spawner faction loot drops from green to orange.
+    - Changed attack prototype for wasps so it doesn't show up in bonuses bullet gui
+  Improvements:
+    - Changes to player accounting to enable multi player forces in a pvp scenario.
+    - Check for battle_surface_1 & 2 used in pvp and store and use discovered surface index.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.26
+Date: 5. 19. 2018
+  Bugfixes:
+    - Fix for combination of NE and Bobs with non-standard mod settings in relation to alien artifacts.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.25
+Date: 5. 19. 2018
+  Improvements:
+    - Configuration options for scaling biter, spitter, worm, and nests stats by a scaler.
+  Optimizations:
+    - Switched passScore per chunk calculation to use the mutli filter query instead of individual calls for tile counts
+  Bugfixes:
+    - Changed how mod settings are set in memory to prevent missing unit crashes (https://forums.factorio.com/viewtopic.php?f=190&t=31445&start=320#p362819)
+    - Cleaned up NE and Bobs detection
+    - Fixed locale typo in deadZoneFrequency description from with to without(https://forums.factorio.com/viewtopic.php?f=190&t=31445&start=320#p363436)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.24
+Date: 4. 14. 2018
+  Tweaks:
+    - Reduced Inferno biters damage at levels 8+
+  Bugfixes:
+    - Removed all conditional requires in data, data-update, and data-update-final
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.23
+Date: 3. 1. 2018
+  Improvements:
+    - Changed nuclear blast damage to scale with tiers and increased explosion count at higher tiers (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=260#p346147)
+  Bugfixes:
+    - Fix for bobs enemies and ne dumb projectiles (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=260#p345778)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.22
+Date: 2. 18. 2018
+  Features:
+    - AI State Migration, where the ai looks for resources patches to setup new bases
+    - AI State Siege, where the ai does a migration event but also builds towards the player and their base
+    - Default is vanilla AI is off by default now
+  Tweaks:
+    - Death pheromone persistance increased from 0.9 to 0.99
+    - Death pheromone per death increased from 600 to 3000
+    - Death Retreat threshold switched to linear interpolation between, 2.5 deaths @ 0%, 400 @ 100% evolution
+    - Increased player pheromone weight for squad movement from 100 to 500
+    - Decreased victory scent multipler from 100000 to 10000
+    - Increased ai max stored points from 10000 to 12500
+  Improvements:
+    - Added splitters to be detected by enemies
+    - Added added a recycle waypoint threshold for paths that the unit seems to be stuck in a cycle
+  Bugfixes:
+    - Nests and worms not getting counted correctly when upgrading
+    - Fixed getEntityOverlapping chunks returning more than it should have
+  Framework:
+    - Fixed exportaistate visualizer
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.21
+Date: 2. 16. 2018
+  Improvements:
+    - All other robots now take damage from biter projectiles and explosions (https://mods.factorio.com/mod/Rampant/discussion/5a81bd380333a5000c939c7f)
+    - Removed unnecessary squad roll during map processing
+  Optimizations:
+    - Switched over to the nth tick functions for logic and processing
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.20
+Date: 2. 11. 2018
+  Improvements:
+    - Removed squad movement penalty before disband
+    - Combat robots now take damage from biter projectiles and explosions
+    - Spawner biters are now put into groups after they are spawned
+    - Changed pheromone spread to no longer take into account water tiles
+    - Added enemy nests to the resource pheromone field as a negative weight
+  Bugfixes:
+    - Removed Deadzone nests and worms from the internal memory map
+    - Fix for unit spawner scaling based on tier (Existing saves will have spawners overlap due to scale increase)
+    - Removed movement from spawner egg sacks
+    - Fixed local of worm spawner eggs
+  Tweaks:
+    - Increased damage spawner spitters take when shooting
+    - Increased resource persistance from 0.9 to 0.99
+    - Increased base and resource dispersal from 0.3 to 0.35
+    - Increased resource generation range from a min of 90 to a min of 900
+    - Adjusted unit spawner collision and selection box
+    - Reduced spawner biter size
+  Optimizations:
+    - Added property garbage collection for certain chunk properties
+  Framework:
+    - Fixed visualizer selection
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.19
+Date: 2. 09. 2018
+  Features:
+    - Blockable projectiles, most projectiles will be stop by walls and other objects
+    - Rocket launches now agitate biters
+    - Added Raiding phase where for a short period of time the ai triggers based on player base proximity for an attack wave to form
+  Improvements:
+    - Switched linear tier generation from rounding using ceiling to nearest number
+    - Spawner faction spitters now degrade when attacking and check buildability for units to prevent infinite biter masses when attacking
+    - Added a random roll to form biters during map processing to cause a more spread out squad formations
+  Bugfixes:
+    - Added check for null group (https://github.com/veden/Rampant/issues/16)
+    - Added check for null alignment table (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=240#p342122)
+    - Fix for adaptive factions only adapting one chunk of each faction instead of the whole faction
+  Tweaks:
+    - Changed Spawner baseline evolution requirement from 60 to 70%
+  Framework:
+    - Added interop function for registering unit groups from other mods for Rampant AI management
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.18
+Date: 2. 05. 2018
+  Bugfixes:
+    - Fixed the enemy naming so the enemy tiers can be changed without losing enemies (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=240#p340944)
+    - Fixed bob enemies load error (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=240#p340897)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.17
+Date: 2. 02. 2018
+  Features:
+    - Added the Wasp faction, an enemy that throws smaller flying enemies
+    - Added the Spawner faction, an enemy that throws egg sack that make biters
+  Improvements:
+    - Added setting to turn off most of the friendly fire for worm and spitter splash damage
+    - Changed electric biters to target multiple entities with their beams at a time
+    - Changed electric worms to shoot a projectile that explodes into an electrical cluster
+    - Added settings for controlling what tier enemies start and end at
+    - Changed laser spitters and worms to shoot a projectile that explodes into an laser cluster
+  Bugfixes:
+    - Added laser resistance to laser worms
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.16
+Date: 1. 31. 2018
+  Improvements:
+    - Added support for NE Buildings artifacts
+    - Switched biter clump scanner to chunk based search for roughly constant performance
+  Bugfixes:
+    - Potential desync fix relating to squads
+    - unitGroup being nil (https://mods.factorio.com/mod/Rampant/discussion/5a72832d3b14f30009910dce)
+    - Squads not being deallocated for chunks when group is no longer valid
+    - Fix for 5 tier of units resulted in only the larva class
+  Tweaks:
+    - Increased player base pheromone generation by 10 times
+    - Increased retreat threshold max from 10000 to 18000
+    - Increased the spread of player base pheromone from 0.25 to 0.30 (this is only for pathfinding)
+    - Increased the generation of player pheromone from 150 to 300
+    - Increased the death pheromone from enemys from 500 to 600
+    - Increased the player aggro distance from 4 chunks to just over 5 chunks
+  Framework:
+    - Changing squads on a chunk to a map instead of an array
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.15
+Date: 1. 29. 2018
+  Bugfixes:
+    - Fixed NE and bobs integration
+  Tweaks:
+    - Increased base processing passes from every 5 to 2 seconds
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.14
+Date: 1. 28. 2018
+  Bugfixes:
+    - Fixed inverted check for bobs and ne (https://mods.factorio.com/mod/Rampant/discussion/5a6ec83c1650e7000ee173b2)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.13
+Date: 1. 28. 2018
+  Bugfixes:
+    - Fixed load error for mod dependencies (https://github.com/veden/Rampant/issues/15)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.12
+Date: 1. 28. 2018
+  Bugfixes:
+    - Fixed an error where item could be nil (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=240#p339033)
+  Improvements:
+    - Added support for bobs and NE artifacts
+    - Added options to include Bobs or NE as factions
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.11
+Date: 1. 27. 2018
+  Bugfixes:
+    - A a null check for nil'ed squad groups (https://mods.factorio.com/mod/Rampant/discussion/5a6d09cb9a95f7000b165865)
+  Improvements:
+    - Added setting options for changing tiers and variations to allow for a smaller memory footprint
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.10
+Date: 1. 27. 2018
+  Bugfixes:
+    - Fixed missing function in surfaceTileChange call (https://mods.factorio.com/mod/Rampant/discussion/5a6cf2ff68436500096b638b)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.9
+Date: 1. 27. 2018
+  Bugfixes:
+    - Fixed uninitialized kamikazeThreshold
+    - Fixed that deadzones wouldn't expire allowing for resettling
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.8
+Date: 1. 26. 2018
+  Bugfixes:
+    - Fixed on_tick empty interval (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=220#p338531)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.7
+Date: 1. 26. 2018
+  Improvements:
+    - Reduced the number of trivial smoke created to 4 from ~20
+  Tweaks:
+    - Turned off new enemies by default
+    - Set default number of enemy variations per tier to 1
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.6
+Date: 1. 25. 2018
+  Features:
+    - Generated enemies for a large variety of things to battle
+    - Evolving bases now get stronger over time and specialize their units
+    - Creates areas clear of biters
+  Bugfixes:
+    - Fixed a cause where squads could get stuck on hard to pass terrain
+  Tweaks:
+    - Increased squad movement penalty before removal from 8000 to 10000
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 1. 24. 2018
+  Bugfixes:
+    - Fix from Pxanych for calculatekamikazethreshold passing table instead of a number
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 1. 23. 2018
+  Bugfixes:
+    - Fix for invalid ai max squad variable reference
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 1. 13. 2018
+  Bugfixes:
+    - Fixed creative mode tile wand robot error (https://forums.factorio.com/viewtopic.php?f=94&t=31445&start=220&hilit=rampant#p335574)
+    - Fix from CyaNox for build tile positions to array of tiles change in factorio 0.16.17
+  Improvements:
+    - Removed squad limit
+    - Squads converted from vanilla control receive immediate kamikaze roll
+    - Units not under a unit group, now get a kamikaze roll before being put into a retreating squad
+  Optimizations:
+    - Reworked squad regrouping to be surrounding chunks instead comparing against master list
+  Framework:
+    - Add squads to chunk map for faster location sensitive lookups
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 1. 2. 2018
+  Bugfixes:
+    - Fixed invalid function call due to a function renaming
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 1. 1. 2018
+  Features:
+    - Artillery shell impacts cause biter squads to form and prevents the single file line of retaliation
+    - Unit spawners now rally troops when they die
+  Improvements:
+    - Cliffs and impassable areas due to object density have been added to the pathfinder
+    - Terrain that is dynamically altered (landfilled, cleared of trees, cleared of cliffs) will be accounted for now
+    - Added artillery turret to buildings that emit pheromones
+    - Increased kamikaze frequency by increasing the chance to roll for Kamikaze from 70% to 100%
+  Optimizations:
+    - Switch scanning for cliffs, resources, and tiles to event based instead of polling
+    - Reduced number of table allocations when working with squads
+  Bugfixes:
+    - fixed changelog so it shows up in-game interface
+    - Added checks for correct surface before processing build events
+  Framework:
+    - Created visualler for viewing internal Rampant ai game state
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 13. 12. 2017
+  Tweaks:
+    - Updated info.json
+  Bugfixes:
+    - Fixed broken icon size prototypes
+    - Fixed create-smoke calls
+    - Fixed perimeter to radius
+    - Fixed smoke
+    - Fixed missing fire tile properties

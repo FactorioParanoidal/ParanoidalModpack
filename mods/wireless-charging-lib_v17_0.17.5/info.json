@@ -1,0 +1,11 @@
+{
+  "name": "wireless-charging-lib_v17",
+  "version": "0.17.5",
+  "title": "Wireless Charging Lib",
+  "author": "mknejp, GTX2GvO & slindenau",
+  "homepage": "https://github.com/GTX2GvO/wireless_charging_lib",
+  "description": "Contains all the support code that allows for wireless charging. The workhorse behind the Wireless Charging mod.",
+  "factorio_version": "0.17",
+  "dependencies": ["base >= 0.17"],
+  "license": "MIT"
+}

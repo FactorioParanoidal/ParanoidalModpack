@@ -1,0 +1,18 @@
+{
+  "name": "CoppermineBobModuleRebalancing",
+  "version": "0.2.1",
+  "factorio_version": "0.17",
+  "title": "Coppermine's Bob's module rebalancing",
+  "author": "Coppermine",
+  "contact": "",
+  "homepage": "https://forums.factorio.com/viewtopic.php?t=54090",
+  "description": "A number of tweaks to Bob's modules intended to rebalance them to more reasonable capabilities and make more of the available options relevant.  Overall, modules and beacons are both made more expensive and less effective.  See mod settings for more details on the changes, which can be enabled individually.  Some graphics derived from those of Bob's mods by bobingabout and Aonova.",
+  "dependencies": [
+    "bobmodules >= 0.16.0",
+    "bobplates >= 0.16.0",
+    "bobelectronics >= 0.16.0",
+    "? bobrevamp >= 0.16.0",
+    "? SpaceMod",
+    "? SpaceMod-bobs"
+  ]
+}

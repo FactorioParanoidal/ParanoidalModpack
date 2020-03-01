@@ -1,0 +1,11 @@
+{
+	"name": "Warehousing",
+	"version": "9.2.1",
+	"factorio_version": "0.17",
+	"title": "Warehousing Mod",
+	"author": "Anoyomouse & dgw",
+	"contact": "https://github.com/Warehousing/Warehousing",
+	"homepage": "https://forums.factorio.com/17295",
+	"description": "Store all the things! Warehousing provides high capacity storage buildings, including logistic network versions.",
+	"dependencies": ["base >= 0.17.0"]
+}

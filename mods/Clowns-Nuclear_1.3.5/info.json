@@ -1,0 +1,13 @@
+{
+  "name": "Clowns-Nuclear",
+  "version": "1.3.5",
+  "factorio_version": "0.17",
+  "title": "MadClown01's Vanilla Nuclear",
+  "author": "MadClown01",
+  "contact": "",
+  "homepage": "",
+  "description": "Adds plutonium as a source of additional fuel cells, or as additional weaponry material. Adds thermonuclear weaponry. Adds a far more intricate & realistic replacement to the Koravex Enrichment Process.",
+  "dependencies": [
+	"base >= 0.17.23"
+	]
+}

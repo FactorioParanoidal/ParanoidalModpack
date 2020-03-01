@@ -1,0 +1,9 @@
+{
+	"name": "Honk",
+	"version": "3.0.1",
+	"title": "Honk",
+	"author": "GotLag",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=21623",
+	"description": "Trains honk when stopping. And starting. And on command.",
+	"factorio_version": "0.17"
+}

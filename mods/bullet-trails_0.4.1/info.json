@@ -1,0 +1,9 @@
+{
+	"name": "bullet-trails",
+	"version": "0.4.1",
+	"title": "Bullet Trails",
+	"author": "Earendel",
+	"dependencies": ["base >= 0.16.0"],
+	"description": "Adds bullet trails to machine gun type bullets. Works with gun turrets, guns, vehicle-mounted guns, and anything else that uses that type of ammo.",
+	"factorio_version": "0.17"
+}

@@ -1,0 +1,10 @@
+replaceASSEMBLERS1("assembling-machine-1", "1")
+replaceASSEMBLERS1("assembling-machine-2", "2")
+replaceASSEMBLERS2("assembling-machine-3", "3")
+replaceASSEMBLERS2("assembling-machine-4", "4")
+replaceASSEMBLERS3("assembling-machine-5", "5")
+replaceASSEMBLERS3("assembling-machine-6", "6")
+
+replaceELECTRONICMACHINES("electronics-machine-1", "1")
+replaceELECTRONICMACHINES("electronics-machine-2", "2")
+replaceELECTRONICMACHINES("electronics-machine-3", "3")

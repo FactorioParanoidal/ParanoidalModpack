@@ -1,0 +1,40 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 12.04.19
+  Changes:
+    - Added radars
+    - Improved color covering on substation, steam engine(still not ideal), boilers, heat-exchangers
+	- Removed ores
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 2.04.19
+  Changes:
+    - Added labs
+    - Added optional HR ores (you can enable/disable them using mod settings)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 27.03.19
+  Changes:
+    - Added chests
+    - Fixed function script 
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 27.03.19
+  Changes:
+    - Added all furnaces
+    - Added robot extending zone made by Zombiee
+    - Added charging pads based on Zombiee model
+    - Added roboports 
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 26.03.19
+  Changes:
+    - Reworked and fixed accumulator charging and discharging animation
+    - Replaced letters on accumulators for those made by Qumojo
+    - Added artillery turrets
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 24.03.19
+  Changes:
+    - RELEASE
+---------------------------------------------------------------------------------------------------

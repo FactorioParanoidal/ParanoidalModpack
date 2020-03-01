@@ -1,0 +1,1 @@
+table.insert(data.raw["technology"]["atomic-bomb"].effects,{type="unlock-recipe",recipe="atomic-artillery-shell"})

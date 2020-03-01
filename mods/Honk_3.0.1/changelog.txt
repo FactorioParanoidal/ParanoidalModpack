@@ -1,0 +1,13 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 13. 03. 2019
+  Bugfixes:
+    - Now only honks when player is on same surface as locomotive
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 13. 03. 2019
+  Changes:
+    - Updated mod to use sound API calls instead of previous hacky method
+    - Added (optional) new algorithm to allow honks to be heard at much greater ranges
+    - Added options to change sound or disable honking for each occasion
+    - Added options to control volume, audible distance and cooldown of honks

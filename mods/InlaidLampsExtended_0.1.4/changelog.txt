@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2019-05-03
+  Changes:
+    - New icon for 2x2 lamp
+    - Changed order in menu
+    - Optional energy consumption calculation. Now, if checked in settings, inlaid lamp consumes energy proportionally to size and intensity
+    - Fixed circuit connection glow position
+    - Changelog (this file) added
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2019-05-02
+  Changes:
+    - Now 2x2 inlaid lamp included. Symmetry rules!
+    - Light size and intensity (separately for color and normal) adjustable in options. Blind your enemies or create moody place with dimmed light!
+    - Fixed some circuit wiring shadows.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2019-05-02
+  Changes:
+    - Port of Kitsunekaze93's Inlaid Lamps (ver 0.1.1) to 0.17

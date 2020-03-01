@@ -1,0 +1,37 @@
+-v0.16.7
+Changed refining ratios with help from Lordktor since most products that are required is petrol and then light oil. Decreased light oil from 50 -> 40 increased petrol from 65 -> 70
+-v0.16.6
+Fixed issue with recipes that have expensive and normal prototypes. Steel now has 1.2 productivity in both normal and marathon mode.
+Boosted nuclear fuel production back up to 5 compared to 10 considering requirements for large bases.
+
+-v0.16.5
+Now should work with all mods ^-^
+Nuclear fuel
+1 u235 = 1.21gj
+
+Uranium fuel cell
+1 u235 = 10 cells or 14 with prod
+1 cell = 8gj
+1 cycle with +300% neighbor bonus = 4x
+1 u235 = 14 * 8 * 4 = 448gj
+
+370x more power per u235 than nuclear fuel.
+
+Reduced uranium fuel output from 10 to 1
+therefore this means its 37x more energy.
+
+It also means that instead of 1 fuel cell crafter producing enough for 140 reactors.
+It produces enough for 14 reactors... (with prod)
+
+-v0.16.4
+
+Added productivity to Oil
+
+-v0.16.3
+
+Made high temperature oil disabled by default (even though the recipe couldn't be used)
+
+-v0.16.2
+
+Changed Ratio of smelting from 4/3 (1.33) to 5/4 (1.25)
+So that with productivity (1.5) ratio of iron to steel is 2 to 3.

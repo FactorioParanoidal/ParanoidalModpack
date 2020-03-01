@@ -1,0 +1,143 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 24. 06. 2019
+  Features:
+    - Added bobmods.lib.safe_insert function. Adds a string to the specified table only if it doesn't already exist.
+    - Added bobmods.lib.recipe.enabled(recipe, bool) and bobmods.lib.recipe.difficulty_enabled(recipe, difficulty, bool) (Bool is actually a string of "true" or "false") to make adding enabled = "false" to recipes easier. (enabled needs to be on the difficulty)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 17. 06. 2019
+  Changes:
+    - Added compatabillity for fluids that have an icons table instead of icon tag.
+    - Adjusted the resource automatic icon generation slightly.
+  Bugfixes:
+    - Fix ore 5 HR glow effect.
+  Features:
+    - Added an icon randomiser for resource generation.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 31. 05. 2019
+  Bugfixes:
+    - Added to try prevent loading errors.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 30. 05. 2019
+  Changes:
+    - Added resource-generation, based on the 0.17 resource autoplace system.
+    - Also added bobmods.lib.resource.generate_autoplace_control(control) function. it creates an autoplace-control with the given name, and adds it to the list of map-gen-presets.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 21. 05. 2019
+  Changes:
+    - Added many missing entries to bobmods.lib.recipe.difficulty_split
+    - Added ingredient/result entry check for table on add and set functions.
+    - Auto-bottle functions will now account for fluids with an icon size not set to 32.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17
+  Changes:
+    - Updated bobmods.lib.belt_speed_ips(ips) for new belt speed items per second.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.6
+Date: 10. 06. 2018
+  Features:
+    - Added bobmods.lib.recipe.set_ingredient(recipe, item). use case is the same as add, but instead of adding an item, it edits the count of an existing item.
+    - Added bobmods.lib.recipe.set_result(recipe, item). Use case same as above, but also allows for complex counts with min, max and probability.
+  Bugfixes:
+    - Fixed error reporting error that caused an error in add_new_science_pack and add_science_pack
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 23. 03. 2018
+  Features:
+    - Added bobmods.lib.belt_speed_ips(). Send it desired Items per second and it will return the tiles per tick value used by the game LUA.
+    - EG: speed = bobmods.lib.belt_speed_ips(60) will create a tiles per tick belt speed that can transport 60 items per second.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 20. 02. 2018
+  Bugfixes:
+    - Tablemerge now functions as intended
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 19. 01. 2018
+  Bugfixes:
+    - Changes to autoplace broke infinite ores.
+  Changes:
+    - Changed gas bottle stack size to 10
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 19. 01. 2018
+  Changes:
+    - updating ore autoplace settings
+    - changed default of state_mult from 1 to 100
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 22. 12. 2017
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 17. 12. 2017
+  Features:
+    - Added icon_size tags to ore-functions.
+    - Added category resource to autoplace functions
+---------------------------------------------------------------------------------------------------
+Version: 0.15.10
+Date: 08. 12. 2017
+  Bugfixes:
+    - Fixed bobmods.lib.machine.type_if_add_resource_category function
+---------------------------------------------------------------------------------------------------
+Version: 0.15.9
+Date: 06. 11. 2017
+  Bugfixes:
+    - Fixed liquid_required lines for ores.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.8
+Date: 31. 05. 2017
+  Bugfixes:
+    - Fixed recipe difficulty split function's enable tag copy
+  Features:
+    - ore create function can now accept stage_counts as an array variable.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.7
+Date: 21. 05. 2017
+  Features:
+    - added function bobmods.lib.recipe.difficulty_split(recipe)
+---------------------------------------------------------------------------------------------------
+Version: 0.15.6
+Date: 11. 05. 2017
+  Features:
+    - Added a function for barrel item/recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.15.5
+Date: 10. 05. 2017
+  Changes:
+    - Changed infinite_depletion_amount default when infinite ores is turned on from 10 to 1.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.4
+Date: 07. 05. 2017
+  Features:
+    - Added dynamic icon generation to resource generation!
+    - Added effect(glow) compatibility to resource generation
+---------------------------------------------------------------------------------------------------
+Version: 0.15.3
+Date: 06. 05. 2017
+  Changes:
+    - Updated ore graphics to the new style, added HD versions too
+    - Updated ore functions to handle this
+---------------------------------------------------------------------------------------------------
+Version: 0.15.2
+Date: 01. 05. 2017
+  Bugfixes:
+    - Edited replace ingredient to handle expensive properly.
+  Features:
+    - Added difficulty specific versions of remove, add and add new ingredient, remove and add recipe functions.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 29. 04. 2017
+  Bugfixes:
+    - Edit to make recipe manipulation functions handle expensive mode recipe variations. Fluids also divide by 10 when transforming into items and vica verca on recipe item replacement.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 25. 04. 2017
+  Info:
+    - Updated to work with Factorio 0.15 without any changes

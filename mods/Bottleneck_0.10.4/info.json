@@ -1,0 +1,10 @@
+{
+	"name":"Bottleneck",
+	"author":"Troels Bjerre Lund",
+	"version":"0.10.4",
+	"factorio_version": "0.17",
+	"title":"Bottleneck",
+	"homepage":"https://forums.factorio.com/viewtopic.php?f=144&t=28817",
+	"description":"A tool for locating input starved machines.",
+	"dependencies": ["base >= 0.17.0"]
+}

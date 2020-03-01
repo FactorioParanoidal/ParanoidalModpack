@@ -1,0 +1,13 @@
+{
+  "name": "zero-fluid-info",
+  "version": "0.0.1",
+  "factorio_version": "0.17",
+  "title": "zero318's Fluid Information",
+  "author": "zero318",
+  "homepage": "https://mods.factorio.com/mod/zero-fluid-info",
+  "description": "Adds additional information to any fluid tooltips, particularly useful when mods have changed fluid properties. Supports any modded fluids and FNEI. Currently includes fuel values/pollution modifiers and will be updated to include flow information once the new fluid system is released.",
+  "dependencies": [
+    "base >= 0.17.0",
+	"? FNEI >= 0.2.1"
+    ]
+}

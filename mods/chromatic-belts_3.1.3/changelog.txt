@@ -1,0 +1,89 @@
+---------------------------------------------------------------------------------------------------
+Version 3.1.3
+Date 2019-03-03
+	Changes:
+		- Fixed an error when using low res sprites that caused the belts
+		  to look very strange and blown up.
+
+---------------------------------------------------------------------------------------------------
+Version 3.1.2
+Date 2019-02-27
+	Changes:
+		- Fixed an error with bobslogistics
+
+---------------------------------------------------------------------------------------------------
+Version 3.1.1
+Date 2019-02-27
+	Changes:
+		- Updated the mod for the 0.17 version of the game.
+		- Added compatibility with bobs mods in 0.17
+		
+---------------------------------------------------------------------------------------------------
+Version 2.1.10
+Date 2019-01-29
+	Changes:
+		- Added support for vanilla loaders, LoaderRedux loaders, and miniloader
+		  loaders while DeadlockLoaders Reskinning was enabled
+		- Added minimum version requirements for other boblogistics, DeadlockLoaders,
+		  LoaderRedux and miniloader
+		
+---------------------------------------------------------------------------------------------------
+Version 2.1.9
+Date 2019-01-28
+	Changes:
+		- Fixed a typo that sometimes caused a fatal error.
+
+---------------------------------------------------------------------------------------------------
+Version 2.1.8
+Date 2019-01-26
+	Changes:
+		- Fixed the same problem as 2.1.7, but did it without breaking other things.
+
+---------------------------------------------------------------------------------------------------
+Version 2.1.7
+Date 2019-01-25
+	Changes:
+		- Deleted Superfluous code that caused a fatal error when the option to enable 
+		  a belt overhaul in bob's logistics was disabled.
+
+---------------------------------------------------------------------------------------------------
+Version 2.1.6
+Date 2019-01-23
+    Changes:
+        - Added DeadlockLoaders support, required version 1.6.0 or greater
+            - Reskinning option compatibility
+            - Known issue of incompatibility with loader-redux
+        
+---------------------------------------------------------------------------------------------------
+Version 2.1.5
+Date 2019-01-22
+    Changes:
+        - Fixed boblogistics sprite sheet error with hr_version corners
+		
+---------------------------------------------------------------------------------------------------
+Version 2.1.4
+Date 2019-01-22
+    Changes:
+        - Reduced file size from 4.1 MB down to 2.1 MB
+		
+---------------------------------------------------------------------------------------------------
+Version 2.1.3
+Date 2019-01-22
+	Changes:
+		- Updated colors of bob tier belts, making the high res and low res versions identical in color
+		- Confirmed compatibility with Loader Redux and Miniloaders
+
+---------------------------------------------------------------------------------------------------
+Version 2.1.2
+Date 2019-01-21
+	Changes:
+		- Fixed a fatal error that would cause the mod to not successfully load.
+		
+---------------------------------------------------------------------------------------------------
+Version 2.1.1
+Date 2019-01-21
+	Changes:
+		- Updated mod from Factorio version 0.15 and published for 0.16
+		- Added high resolution sprites for bobs logistics compatibility
+		
+---------------------------------------------------------------------------------------------------

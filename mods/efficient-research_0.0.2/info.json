@@ -1,0 +1,12 @@
+
+{
+  "name": "efficient-research",
+  "version": "0.0.2",
+  "title": "Efficient Research",
+  "author": "Loren1350",
+  "contact": "Schmendrick on the Factorio Forums",
+  "homepage": "",
+  "description": "Adds a new research line to sacrifice newly researched lab speed for bonus productivity instead.",
+  "dependencies": ["base"],
+  "factorio_version": "0.17"
+}

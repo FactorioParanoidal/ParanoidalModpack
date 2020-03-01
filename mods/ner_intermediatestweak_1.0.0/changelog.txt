@@ -1,0 +1,28 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 30/07/2018
+    Created the mod. Initial release.
+    Changes:
+        - Allows productivity modules from the base game and any mod (hopefully) to work on several different items, as listed:
+            Piercing Rounds
+            Uranium Rounds
+            Flamethrower 
+            Rocket(ammo)
+            Explosive Rocket
+            Atomic Bomb
+            Shotgun Shell
+            Piercing Shotgun Shell
+            Cannon Shell
+            Explosive Cannon Shell
+            Uranium Cannon Shell
+            Explosive Uranium Cannon Shell
+            Artillery Shell
+            Transport Belt
+            Fast Transport Belt
+            Express Transport Belt
+            Underground Belt
+            Fast Underground Belt
+            Express Underground Belt
+            Splitter
+            Fast Splitter
+            Express Splitter

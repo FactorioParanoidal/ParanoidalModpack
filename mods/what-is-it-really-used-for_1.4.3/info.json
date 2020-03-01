@@ -1,0 +1,11 @@
+{
+ "name": "what-is-it-really-used-for",
+ "version": "1.4.3",
+ "factorio_version": "0.17",
+ "title": "What is it really used for?",
+ "author": "Mr Doomah, Coppermine",
+ "contact": "https://forums.factorio.com/viewtopic.php?f=92&t=33269",
+ "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=33269",
+ "description": "A tool to help you find out where items and fluids come from and where they are used.  This is a fork of the original 'What is it used for?' by Mr Doomah, updated for 0.17 and with additional features.  Russian translation by Schmarotzer.  Japanese translation by shiru_tan and shela.",
+ "dependencies": []
+}

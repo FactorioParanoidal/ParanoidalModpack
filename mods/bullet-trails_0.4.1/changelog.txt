@@ -1,0 +1,15 @@
+v0.4.1: Update for Factorio 0.17.
+
+v0.3.1: Update for Factorio 0.16.
+
+v0.2.5: Updated for 0.15.22+
+
+v0.2.3: Added specific trails to bobs ammo.
+
+v0.2.2: Uranium rounds magazine now shoots with green trails! Also a number of other trail colours have been added for other mods to use: bullet-beam-blue, bullet-beam-blue-faint, bullet-beam-cyan, bullet-beam-cyan-faint, bullet-beam-green, bullet-beam-green-faint, bullet-beam-magenta, bullet-beam-magenta-faint, bullet-beam-olive, bullet-beam-olive-faint, bullet-beam-orange, bullet-beam-orange-faint, bullet-beam-purple, bullet-beam-purple-faint, bullet-beam-red, bullet-beam-red-faint, bullet-beam-teal, bullet-beam-teal-faint, bullet-beam-white, bullet-beam-white-faint, bullet-beam-yellow, bullet-beam-yellow-faint.
+
+v0.2.1: Updated for Factorio v0.15.
+
+v0.1.2: Now works with Bobs .
+
+v0.1.1: First release.

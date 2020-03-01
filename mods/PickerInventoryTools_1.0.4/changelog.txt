@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: ??????
+  Bugfixes:
+    - Fix various bugs with auto-deconstruct.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Changes:
+    - Better adjustment pad code.
+    - AutoTrash mod disables picker trash fixes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Bugfixes:
+    - Fixed error when pasting chest contents with no selected chest.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Features:
+    - Added Picker Zapper. Zap unwanted items and trash items.
+    - Added Picker Item Editor. Edit held blueprints with a keybind.
+    - Inventory cleaner empties empty planners from the inventory. Held edit keybind has to be used when using this feature.
+    - Added buffer chests to the filter fill settings.
+    - Remote api set_blacklisted_chests added for chest mover, takes a container name or array of container names.
+    - Remote api get_blacklisted_chests added for chest mover.
+  Changes:
+    - Set the auto stock and releated scripts to off by default.
+    - Chest contents mover uses seperate keybinds for copy and paste.
+    - Chest contents mover changed to use flying text.
+    - Chest contents mover has a map setting to allow moving contents between surfaces.
+    - Chest contents mover has a remote api check for picker_chest_contents_mover_check, passes src and dest entities.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Seperated into its own mod.
+    - Added Filter Fill Toolbar.
+    - Added Requester Fill Toolbar.
+    - Added Inventory Sorting.
+    - Added Chest Limiting.
+    - Added Auto Trash Fix.
+    - Added Auto Stock.
+    - Added Item Count.

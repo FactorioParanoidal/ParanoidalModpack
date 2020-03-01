@@ -1,0 +1,80 @@
+0.17.1
+-made a couple code changes to make mod compatable with 0.17
+-by request created new lab type building for the mod's science. Called the Data Processor.
+  -researchable by its own tech
+-added thumbnail for mod portal
+-removed code that killed 'launched without satellite warning' since its no longer needed. 
+-changed mod's first tech to be prerequisite on the space science pack tech instead of rocket silo. 
+
+---------------------------------------------------------------------------------------------------
+0.16.8
+
+-Reorganized the mod's recipe tab to be a bit cleaner and make more sense.
+-Added code to prevent a crash
+ -caused by different certain scenarios not having silo code the mod was requesting
+-Fixed some spelling errors
+
+---------------------------------------------------------------------------------------------------
+
+0.16.7
+
+Balance:
+-Changed cost forumla for infinite techs. 
+  -Getting basic bonuses from the first few techs will be largely the same as before, some more expensive.
+  -For infinite techs instead of 1 extra data being needed for each new tech it will now be 2.
+-Reduced output of Orbital Fabricator by half to a more sane value, base production should be 15k/min. 
+  -Steel production made to be half that of Iron and Copper, base 7.5k/min
+  -production will still be subject to speed modules
+-Reduced cost of Space Shuttle and Telescope Shuttle refurbishment from 1000 rocket fuel to 500
+-Reduced cost of Mining shuttle refurbishment from 2000 rocket fuel to 1000
+-Because lab productivity is really powerful:
+  -Lowered Lab productivity bonus per tech from 2% to 1%
+  -Lowered Lab productivity bonus gained from Advance Space Station tech (100% -> 25%)
+  -Lowered Lab productivity bonus gained from Orbital AI data core tech (200% -> 50%)
+  -Lowered cost of Advanced Space Station tech from 500 to 400 data.
+
+Other:
+-Cleaned up some code in the shuttle refurbishment and repurposing recipies 
+-Rearranged recipe ingredients and products into alphabetical order in the mod's code
+ -this doesn't appear to have had an effect on their order for the in-game GUI
+---------------------------------------------------------------------------------------------------
+0.16.6
+-added mod's payloads to rocket silo stats gui
+ -initiated by researching new tech Satellite Tracking
+-minor graphics tweak to space telescope uplink
+---------------------------------------------------------------------------------------------------
+0.16.5
+-renamed Telescope Data to Satellite Data
+-fixed collision box bug on Space Telescope Uplink entity
+-added 2 fluid inputs for advanced assembler (north/south sides)
+-enabled advanced assembler to craft items requiring fluids
+-changed shuttle refrurbishment to require 20,000 water instead of 400 water barrels.
+-Mining shuttle changes
+ -Increased Iron production from 200k to 500k per launch
+ -Increased Copper Production from 100k to 375k
+  -minus launch costs it would take 50+ launches to get return on investment, this brings that down to ~17.
+ -Mining shuttle refurbishment time increased from 480 seconds to 2400
+  -holy crap musical_tanks that is 40 minutes!
+  -no, its automatically cut in half by Advanced assembler 2x crafting speed
+  -its still 25k iron per/min even before you beacon it
+  -I expect you to speed beacon the crap out of it
+  -I don't want whole bases run on 1 mining shuttle
+---------------------------------------------------------------------------------------------------
+0.16.4
+-completely rewrote the control.lua file to terminate the 'rocket launched without satellite' warning under several different circumstances:
+ -when mod's first tech is researched
+ -when a rocket is launched without satellite (for the next launch the message shouldn't show up)
+ -when configuration changes (game updates, mods change, etc)
+-changed around the readme file to clean it up and added this changelog at the request of several people
+ -pre-release patchnotes removed
+---------------------------------------------------------------------------------------------------
+0.16.3
+-fixed many spelling errors in the locale file.
+-changed around some descriptions to make more sense.
+---------------------------------------------------------------------------------------------------
+0.16.2
+-changed file name of advanced probe graphic to ensure all letters were lowercase
+---------------------------------------------------------------------------------------------------
+0.16.1 
+-Initial release
+---------------------------------------------------------------------------------------------------

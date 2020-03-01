@@ -1,0 +1,11 @@
+{
+    "name": "PickerVehicles",
+    "version": "1.0.4",
+    "factorio_version": "0.17",
+    "title": "Picker Vehicles",
+    "author": "Nexela",
+    "contact": "nexela@gmail.com",
+    "dependencies": ["base >= 0.17.47", "stdlib >= 1.1.0", "PickerAtheneum >= 1.0.4"],
+    "homepage": "",
+    "description": "Vechicle related tweaks and features."
+  }

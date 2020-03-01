@@ -1,0 +1,45 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 2019-08-04
+  Bugfixes:
+    - Fixed an error with ltn. https://mods.factorio.com/mod/FuelTrainStop/discussion/5d443a22de13a8000b8d6c53
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 2019-07-27
+  Bugfixes:
+    - Fixed an error when pasting settings into a fuel stop. https://mods.factorio.com/mod/FuelTrainStop/discussion/5d3b912a11e5ec000c008a40
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 2019-03-30
+  Bugfixes:
+    - Fixed an error in the interface. https://mods.factorio.com/mod/ElectricTrain/discussion/5c9f8f6d9e7d35000b95c2bb
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2019-03-27
+  Modding:
+    - An interface (exclude_from_fuel_schedule) has been added to remove trains from automatic refueling.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019-03-10
+  Major Features:
+    - Release 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 2019-02-14
+  Bugfixes:
+    - Attempt to fix the error. https://mods.factorio.com/mod/FuelTrainStop/discussion/5c65d77f478aa8000bdc044d
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 2018-12-25
+  Bugfixes:
+    - Attempt to fix the error. https://mods.factorio.com/mod/FuelTrainStop/discussion/5c1fbc78b8fe81000d4ecb15
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 2018-08-06
+  Changes:
+    - Code rework to make it compatible with LTN.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 2018-06-09
+  Major Features:
+    - First release 0.16
