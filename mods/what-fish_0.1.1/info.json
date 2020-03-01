@@ -1,0 +1,11 @@
+{
+    "name": "what-fish",
+    "version": "0.1.1",
+    "title": "What Fish?",
+    "author": "Blank",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.16"],
+    "description": "A mod that removes fish!"
+}

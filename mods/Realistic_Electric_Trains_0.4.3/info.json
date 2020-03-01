@@ -1,0 +1,16 @@
+{
+	"name": "Realistic_Electric_Trains",
+	"version": "0.4.3",
+	"title": "Realistic Electric Trains",
+	"author": "J_Aetherwing",
+	"contact": "",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
+	"factorio_version": "0.17",
+	"dependencies": [
+		"base >= 0.17",
+		"? FuelTrainStop >= 0.17.2",
+		"(?) creative-mode-fix >= 0.0.30",
+		"(?) creative-mod >= 1.0.4"
+	],
+	"description": "This mod adds electric trains which require power delivered by overhead lines."
+}

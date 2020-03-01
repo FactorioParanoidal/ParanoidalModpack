@@ -1,0 +1,37 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 16-03-2019
+  Fixes:
+    - Improved compatibility with mods which have recipes with very large number of output products.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 15-03-2019
+  Fixes:
+    - Update for Factorio 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 21-07-2018
+  New:
+    - Option to display products vertically.
+    - Option to show amounts and probabilities(if present) of products produced.
+  Fixes:
+    - Fixed inconsistency in handling recipes with probabilities involved.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 08-07-2018
+  Fixes:
+    - Expanded optional dependencies to ensure proper load ordering for wider list of mods.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 02-07-2018
+  New:
+    - German locale (by LuziferSenpai)
+  Changes:
+    - Removed dependency on versions of other mods because it is not required for proper load ordering.
+  Fixes:
+    - Fixed Icons->Names order inconsistency. Now names are always shown in same order as icons.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 30-06-2018
+  Changes:
+    - Initial release.

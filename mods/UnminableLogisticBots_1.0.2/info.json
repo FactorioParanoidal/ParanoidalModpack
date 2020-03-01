@@ -1,0 +1,9 @@
+{
+	"name":"UnminableLogisticBots",
+	"version":"1.0.2",
+	"title":"Unminable Logistic Bots",
+	"author":"Timmeri",
+	"description":"Disables ability to right-click flying logistic and construction robots. Works with most modded robots. Config options to disable.",
+	"factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.0"]
+}

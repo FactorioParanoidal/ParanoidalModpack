@@ -1,0 +1,43 @@
+{
+  "item":
+  [
+    ["hydrogen-canister", "hydrogen-barrel"],
+    ["oxygen-canister", "oxygen-barrel"],
+    ["nitrogen-canister", "nitrogen-barrel"],
+    ["chlorine-canister", "chlorine-barrel"],
+    ["hydrogen-chloride-canister", "hydrogen-chloride-barrel"],
+    ["nitrogen-dioxide-canister", "nitrogen-dioxide-barrel"],
+    ["sulfur-dioxide-canister", "sulfur-dioxide-barrel"],
+    ["petroleum-gas-canister", "petroleum-gas-barrel"],
+    ["liquid-fuel-canister", "liquid-fuel-barrel"],
+    ["ferric-chloride-canister", "ferric-chloride-barrel"],
+    ["synthetic-wood", "wood"]
+  ],
+  "recipe":
+  [
+    ["hydrogen-canister", "fill-hydrogen-barrel"],
+    ["empty-hydrogen-canister", "empty-hydrogen-barrel"],
+    ["oxygen-canister", "fill-oxygen-barrel"],
+    ["empty-oxygen-canister", "empty-oxygen-barrel"],
+    ["nitrogen-canister", "fill-nitrogen-barrel"],
+    ["empty-nitrogen-canister", "empty-nitrogen-barrel"],
+    ["chlorine-canister", "fill-chlorine-barrel"],
+    ["empty-chlorine-canister", "empty-chlorine-barrel"],
+    ["hydrogen-chloride-canister", "fill-hydrogen-chloride-barrel"],
+    ["empty-hydrogen-chloride-canister", "empty-hydrogen-chloride-barrel"],
+    ["nitrogen-dioxide-canister", "fill-nitrogen-dioxide-barrel"],
+    ["empty-nitrogen-dioxide-canister", "empty-nitrogen-dioxide-barrel"],
+    ["sulfur-dioxide-canister", "fill-sulfur-dioxide-barrel"],
+    ["empty-sulfur-dioxide-canister", "empty-sulfur-dioxide-barrel"],
+    ["petroleum-gas-canister", "fill-petroleum-gas-barrel"],
+    ["empty-petroleum-gas-canister", "empty-petroleum-gas-barrel"],
+    ["bob-fill-crude-oil-barrel", "fill-crude-oil-barrel"],
+    ["bob-empty-crude-oil-barrel", "empty-crude-oil-barrel"],
+    ["liquid-fuel-canister", "fill-liquid-fuel-barrel"],
+    ["empty-liquid-fuel-canister", "empty-liquid-fuel-barrel"],
+    ["ferric-chloride-canister", "fill-ferric-chloride-solution-barrel"],
+    ["empty-ferric-chloride-canister", "empty-ferric-chloride-solution-barrel"],
+    ["polishing-wheel-synthetic", "polishing-wheel"]
+  ]
+}
+

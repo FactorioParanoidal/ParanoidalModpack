@@ -1,0 +1,136 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.1.12
+Date: 28. 07. 2019
+  Bugfixes:
+    - Fixed error when parsing a blueprint with missing signals
+---------------------------------------------------------------------------------------------------
+Version: 3.1.11
+Date: 19. 06. 2019
+  Changes:
+    - Added tooltips to the "S" and "Read" buttons
+    - removed the "Side of pole" option from the gui, added /farl_flipPoles command to toggle the setting
+  Bugfixes:
+    - Fixed startup error relating to sprite size
+---------------------------------------------------------------------------------------------------
+Version: 3.1.10
+Date: 20. 05. 2019
+  Bugfixes:
+    - Fixed an error related to ghost rails becoming invalid
+    - Fixed unknown key for modded electric poles when reading blueprints
+---------------------------------------------------------------------------------------------------
+Version: 3.1.9
+Date: 15. 05. 2019
+  Changes:
+    - FARL now raises the script_raised_built and script_raised_destroy events when placing/removing entities
+    - the remote calls add_entity_to_trigger, remove_entity_from_trigger and get_trigger_list no longer work
+---------------------------------------------------------------------------------------------------
+Version: 3.1.8
+Date: 01. 05. 2019
+  Changes:
+    - updated for Factorio 0.17.35
+---------------------------------------------------------------------------------------------------
+Version: 3.1.7
+Date: 29. 04. 2019
+  Bugfixes:
+    - fixed FARL creating wrong events when placing landfill/concrete
+    - fixed FARL replacing concrete with wrong tiles
+    - improved signal distance on diagonal tracks
+---------------------------------------------------------------------------------------------------
+Version: 3.1.6
+Date: 18. 04. 2019
+  Bugfixes:
+    - fixed gui conflict with BlueprintExtensions
+---------------------------------------------------------------------------------------------------
+Version: 3.1.5
+Date: 09. 04. 2019
+  Bugfixes:
+    - fixed errors when using Multiple Unit Train Control
+---------------------------------------------------------------------------------------------------
+Version: 3.1.4
+Date: 05. 04. 2019
+  Bugfixes:
+    - fixed crash in certain circumstances when updating to 3.1.3
+    - fixed shallow and mud water from Alien Biomes not being landfilled
+---------------------------------------------------------------------------------------------------
+Version: 3.1.3
+Date: 01. 04. 2019
+  Changes:
+    - added support for Multiple Unit Train Control mod
+  Bugfixes:
+    - fixed some signals being placed in the wrong direction (read blueprints in again)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.2
+Date: 29. 03. 2019
+  Bugfixes:
+    - fixed entities not being added in maintenance/bulldozer mode
+    - fixed coal not being collected when removing stone rocks
+---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 28. 03. 2019
+  Bugfixes:
+    - fixed error with Multiple Unit Train Control mod
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 19. 03. 2019
+  Changes:
+    - added option to remove cliffs, requires cliff explosives (defaults to true)
+    - added console commands to read and clear blueprints, create vertical and diagonal blueprints (you have to be in a FARL for them to work)
+    - /farl_read_bp /farl_clear_bp /farl_vertical_bp /farl_diagonal_bp
+  Bugfixes:
+    - fixed migration error when FARL module was disabled
+    - fixed error when deconstructing an active FARL
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 05. 03. 2019
+  Bugfixes:
+    - fixed tiles being replaced with grass in maintenance mode
+    - fixed error when creating/saving a scenario
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 27. 02. 2019
+  Changes:
+    - Updated for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 04. 06. 2018
+  Changes:
+    - Added mod setting to make red and green wires placed by FARL free (defaults to false)
+  Bugfixes:
+    - Fixed Dectorio landscape tiles being picked up by FARL
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 08. 04. 2018
+  Bugfixes:
+    - Fixed parameter errors for on_built_tile event
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 26. 03. 2018
+  Changes:
+    - Added support for NiceFill mod when using "bridge water" option
+    - Added option to disable the FARL module
+  Bugfixes:
+    - Fixed autopilot not working with ghost driver
+    - Fixed wierd interaction between Alien Biomes, Dectorio and FARL. Only blueprintable tiles will be removed in maintenance mode
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 29. 01. 2018
+  Bugfixes:
+    - Fixed settings not being saved
+    - Fixed some errors in Bulldozer/Maintenance mode
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 19. 01. 2018
+  Bugfixes:
+    - Fixed poles not being placed correctly when driving diagonally
+  Changes:
+    - Added option to display a message when using the hotkey to toggle between automatic and manual mode
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 13. 01. 2018
+  Bugfixes:
+    - Fixed errors with autopilot
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 13. 12. 2017
+  Changes:
+    - Updated for Factorio 0.16

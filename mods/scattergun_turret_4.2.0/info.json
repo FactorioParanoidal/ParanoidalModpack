@@ -1,0 +1,15 @@
+{
+  "name": "scattergun_turret",
+  "version": "4.2.0",
+  "factorio_version": "0.17",
+  "title": "Modular Turrets",
+  "author": "wodzu93",
+  "contact": "",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=45061&p=259731",
+  "description": "Adds 9(16) new turrets for dealing with alien menace. Good compliment to mods that add new biter types, like Rampant or Natural Evolution.",
+  "dependencies": [
+	"base >= 0.17.0",
+	"? bobplates >= 0.17.0",
+	"? Krastorio >= 1.0.17"
+	]
+}

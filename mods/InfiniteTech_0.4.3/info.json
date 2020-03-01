@@ -1,0 +1,11 @@
+{
+  "name": "InfiniteTech",
+  "version": "0.4.3",
+  "title": "Infinite Technologies",
+  "author": "Optera",
+  "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+  "homepage": "",
+  "description": "Adds infinite technologies for bot battery, bot cargo capacity, player logistics slots and inserter capacity research.\nNormalizes infinite tech to 60s and logarithmic formula, these can be disabled in startup settings.",
+  "factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.6", "?boblogistics >= 0.17.0"]
+}

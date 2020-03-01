@@ -1,0 +1,12 @@
+--replaceLOGISTICCHEST(name, name2,picture)
+replaceLOGISTICCHESTS("logistic-chest-passive-provider-2", "logistic-chest-passive-provider", "brass-chest")
+replaceLOGISTICCHESTS("logistic-chest-active-provider-2", "logistic-chest-active-provider", "brass-chest")
+replaceLOGISTICCHESTS("logistic-chest-storage-2", "logistic-chest-storage", "brass-chest")
+replaceLOGISTICCHESTS("logistic-chest-buffer-2", "logistic-chest-buffer", "brass-chest")
+replaceLOGISTICCHESTS("logistic-chest-requester-2", "logistic-chest-requester", "brass-chest")
+
+replaceLOGISTICCHESTS("logistic-chest-passive-provider-3", "logistic-chest-passive-provider", "titanium-chest")
+replaceLOGISTICCHESTS("logistic-chest-active-provider-3", "logistic-chest-active-provider", "titanium-chest")
+replaceLOGISTICCHESTS("logistic-chest-storage-3", "logistic-chest-storage", "titanium-chest")
+replaceLOGISTICCHESTS("logistic-chest-buffer-3", "logistic-chest-buffer", "titanium-chest")
+replaceLOGISTICCHESTS("logistic-chest-requester-3", "logistic-chest-requester", "titanium-chest")

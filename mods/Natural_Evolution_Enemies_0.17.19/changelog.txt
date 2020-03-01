@@ -1,0 +1,111 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.19
+Date: 7. 26. 2019
+  Bugfix:
+    - Scorched Earth: Make sure tile exists
+---------------------------------------------------------------------------------------------------
+Version: 0.17.18
+Date: 7. 2. 2019
+  Features:
+    - Removed all Standard Lib functions
+---------------------------------------------------------------------------------------------------
+Version: 0.17.17
+Date: 7. 1. 2019
+  Features:
+    - Scorched Earth: Removed Decal
+---------------------------------------------------------------------------------------------------
+Version: 0.17.16
+Date: 5. 29. 2019
+  Features:
+    - "Breeder" units won't create new units if there are already 10+ in the area
+    - "Tree Monkeys" (When you chop down trees) now level up.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.15
+Date: 5. 8. 2019
+  Features:
+    - Items on ground will burn if there is fire and Challenge mode Active.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.14
+Date: 5. 3. 2019
+  Features:
+    - Update to Factorio 0.17.35
+---------------------------------------------------------------------------------------------------
+Version: 0.17.13
+Date: 4. 23. 2019
+  Features:
+    - Removed fuel values from Alien Artifacts. Now in NE Buildings.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.12
+Date: 4. 22. 2019
+  Features:
+    - More Tweaked "Fire" that is used by Fire attack or ground catching fire. Help with CPU/FPS
+---------------------------------------------------------------------------------------------------
+Version: 0.17.11
+Date: 4. 18. 2019
+  Features:
+    - Tweaked "Fire" that is used by Fire attack or ground catching fire. Reduced duration help with CPU/FPS
+---------------------------------------------------------------------------------------------------
+Version: 0.17.10
+Date: 4. 17. 2019
+  Features:
+    - Lowered number of units per Spawner
+    - Lowered unit scale from max 2.0 --> 1.6
+    - Lowered unit collision boxes
+    - Scorched Earth: Reduced life time of ground fire
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 4. 15. 2019
+  Features:
+    - Unit Launcher Spitter now launces units that die after some time
+    - Unit Launcher Spitter won't create new units if there are already 20+ in the area
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 4. 2. 2019
+  Features:
+    - Tweaked Unit and Worm Launcher values a bit
+    - Increased Fire Spitter Attack Range
+    - Decreased Unit Launcher Spitter Attack Range
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 3. 25. 2019
+  Features:
+    - Possible solution to attack stalemates
+    - Reduced Alien Artifact drop rates
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 3. 22. 2019
+  Features:
+    - Added Setting for Starting Evolution
+    - Updated Worm Stats
+    - Scorched Earth now causes fire on last level
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 3. 18. 2019
+  Features:
+    - Updated "pollution_to_join_attack" values of units
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 3. 14. 2019
+  Bugfix:
+    - Made Compatible with Factorion 0.17.12
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 3. 14. 2019
+  Features:
+    - Tweaked Unit Sounds
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 3. 12. 2019
+  Features:
+    - Tweaked Tank Biter Health Regen
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2. 28. 2019
+  Bugfix:
+    - Burning Building Fix
+    - Bob's Enemies compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2. 28. 2019
+  Features:
+    - Initial Release of 0.17

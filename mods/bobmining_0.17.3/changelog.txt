@@ -1,0 +1,62 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 22. 04. 2019
+  Changes:
+    - Added upgrade to steel-axe technology
+    - Removed upgrade from non-effect technologies
+    - Updated for 0.17.29 pollution method
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 16. 03. 2019
+  Changes:
+    - Changed mining drill fluid boxes to allow pass through fluid flow
+    - Converted mining drills to new pollution
+    - Converted pump jacks to new pollution
+    - Converted water miners to new pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 11. 03. 2019
+  Balancing:
+    - scaled up mining drill speeds a little. Regular doubles each level
+  Changes:
+    - Updated recipes to use Copper tungsten pipe and Nitinol pipe if available.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17
+  Changes:
+    - Changed mining drills to account for base game removing hardness and mining power.
+    - Replaced Pickaxes with personal mining speed technology
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 19. 12. 2017
+  Info:
+    - Updated to work with Factorio 0.16
+  Changes:
+    - Fixed circuit wire connections
+    - Fixed all the icon_size
+    - Fixed pumpjack graphic error (and added HD version while at it)
+---------------------------------------------------------------------------------------------------
+Version: 0.15.2
+Date: 09. 05. 2017
+  Bugfixes:
+    - removed conditional require: multiplayer checksum fix
+  Balancing:
+    - Pumpjack crafting time reduced
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 01. 05. 2017
+  Bugfixes:
+    - Fixed all pumpjack and water mining entities, they should actually work now.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 30. 04. 2017
+  Info:
+    - Updated to work with Factorio 0.15
+  Changes:
+    - Updated mining drill graphics for new and HD versions.
+    - Mining drills MK3 cost cobalt steel instead of invar.
+    - Adjusted science costs.
+  Features:
+    - Added config options.

@@ -1,0 +1,78 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2019-08-03
+  Changes:
+    - Added AquiferDrill compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2019-07-24
+  Changes:
+    - Added CW-hydrogen-power compatibility
+    - Added trainConstructionSite compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2019-07-24
+  Bugfixes:
+    - Fixed Bobs Plates compatibility (electrolysers)
+    - Yet another Angels compatibility issue (Bio Processing and Smelting)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2019-07-23
+  Changes:
+    - Added Bio Industries compatibility
+    - Added NPUtils compatibility
+    - Added minimum versions for base and mods
+  Bugfixes:
+    - Fixed Angels Smelting compatibility for Chemical Furnaces
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2019-07-22
+  Changes:
+    - Added Angels Bio Processing compatibility
+    - Added Angels Petro Chemical compatibility
+    - Added Bob Plates compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2019-07-21
+  Changes:
+    - Added Geothermal compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2019-07-21
+  Changes:
+    - Added Expanded Rocket Payloads compatibility
+  Bugfixes:
+    - Fixed several typos
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2019-07-20
+  Changes:
+    - Changelog compatibility - thanks PI-C
+    - Utilized blacklist functions for vanilla entities
+    - Added Angels Smelting machines compatibility
+    - Added Bob's Assembling Machine's compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2019-07-19
+  Changes:
+    - Added the ability to blacklist an assembling machine from another mod. See FAQ for more details
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2019-07-19
+  Bugfixes:
+    - Corrected Assembler to Pipe connections (Thanks TheStaplerGun)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2019-07-02
+  Bugfixes:
+    - Added Angels Smelting Support for multi-liquid recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: ?
+  Changes:
+    - Added optional Py support
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2019-04-11
+  Changes:
+    - Initial Release

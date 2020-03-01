@@ -1,0 +1,10 @@
+{
+    "name": "MoreAchievements",
+    "version": "0.5.1",
+    "title": "More Achievements",
+    "author": "Gangsir, Bilka",
+    "homepage": "https://gitlab.com/Sudocode/Achiever",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.17.52"],
+    "description": "Adds many more achievements for players that feel there aren't enough, ranging from progression based to challenge based. See the mod portal page for a full list."
+}

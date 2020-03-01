@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 2019-06-01
+
+  Changed:
+    - Code reformatted.
+    - Use entities' selection_box instead of bounding_box to remove more decorations.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 2019-03-17
+
+  Changed:
+    - Refined concrete didnt't clean decorations. Thanks to jarcionek
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2019-03-01
+
+  Changed:
+    - Bad testing was bad. Should work correctly now. Thanks to TheBB
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019-02-27
+
+  Changed:
+    - Updated to work with Factorio 0.17.x (Tested with 0.17.2)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 2018-07-29
+
+  Changed:
+    - Added changelog and License files for future reference. No functional changes.

@@ -1,0 +1,8 @@
+{
+  "name": "minime",
+  "version": "0.0.9",
+  "title": "More accurate player size compared to vehicles",
+  "author": "DellAquila",
+  "description": "The player stands like a giant near the vehicles. This mod makes him 70% of his size",
+  "factorio_version": "0.17"
+}

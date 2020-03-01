@@ -1,0 +1,12 @@
+{
+  "name": "SchallPickupTower",
+  "version": "0.17.1",
+  "title": "Schall Pickup Tower",
+  "author": "Schallfalke",
+  "email": "",
+  "homepage": "https://mods.factorio.com/mod/SchallPickupTower",
+  "contact": "",
+  "description": "Adds buildings that automatically collect items on ground.",
+  "factorio_version": "0.17",
+  "dependencies": ["base >= 0.17.0"]
+}

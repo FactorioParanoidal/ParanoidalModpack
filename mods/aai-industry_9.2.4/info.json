@@ -1,0 +1,12 @@
+{
+	"name": "aai-industry",
+	"version": "9.2.4",
+	"title": "AAI Industry",
+	"author": "Earendel, reworked by nastyslave",
+	"dependencies": [
+		"base >= 0.17", "boblibrary", "boblogistics", "bobpower"
+	],
+	"description": "The industry part of Advanced Autonomous Industries. Adds motors, powered offshore pumps, burner labs, and more. Alters tech and recipes. Additional features will be added gradually. Works with Bobs and Angels.",
+	"factorio_version": "0.17",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=48232"
+}

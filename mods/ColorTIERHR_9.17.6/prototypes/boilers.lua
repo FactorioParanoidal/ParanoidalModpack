@@ -1,0 +1,5 @@
+replaceBOILERS("boiler","1")
+replaceBOILERS("boiler-2","2")
+replaceBOILERS("boiler-3","3")
+replaceBOILERS("boiler-4","4")
+replaceBOILERS("boiler-5","5")

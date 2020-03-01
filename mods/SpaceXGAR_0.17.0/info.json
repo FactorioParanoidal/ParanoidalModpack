@@ -1,0 +1,9 @@
+{
+	"name":"SpaceXGAR",
+	"author":"Ober3550",
+	"version":"0.17.0",
+	"title":"SpaceX Get a Room",
+	"description":"Puts SpaceX items in their own tab where they belong",
+	"factorio_version":"0.17",
+	"dependencies": ["base", "SpaceMod", "? ShinyIcons"]
+}

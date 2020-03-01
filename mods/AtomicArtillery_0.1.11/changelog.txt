@@ -1,0 +1,61 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 14/05/2019
+  Changes:
+    - The shell now correctly updates the map - Thanks to Adrian Vanderwal (https://github.com/adrianvanderwal)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 14/05/2019
+  Changes:
+    - Russian Localisation - Thanks to JohnTheCoolingFan (https://github.com/JohnTheCoolingFan)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 05/03/2019
+  Changes:
+    - Add changelog.txt
+    - Update thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 04/03/2019
+  Changes:
+    - Add thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 04/03/2019
+  Changes:
+    - Support for Factorio 0.17
+    - Version number was changed and I changed it again not realising - Skipped a version number!
+    - Thanks to Poempelfox (https://github.com/poempelfox) who did the update entirely.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 18/01/2018
+  Changes:
+    - Added optional support for the Mushroom Clouds mod
+    - Rolled back support for the mod (support had been added by Mushroom Clouds 30 minutes prior to pushing the change)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 18/12/2017
+  Changes:
+    - Added migration script
+    - All existing saves with Atomic Bomb already researched should now have the shell unlocked
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 17/12/2017
+  Changes:
+    - Removed separate, redundant technology
+    - Atomic Bomb technology now the only requirement
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 15/12/2017
+  Changes:
+    - Added Atom Bomb as a prerequisite technology
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 15/12/2017
+  Changes:
+    - Recipe Change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 15/12/2017
+  Changes:
+    - Initial Release

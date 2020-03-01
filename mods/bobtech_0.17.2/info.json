@@ -1,0 +1,12 @@
+
+{
+  "name": "bobtech",
+  "version": "0.17.2",
+  "factorio_version": "0.17",
+  "title": "Bob's Tech",
+  "author": "Bobingabout",
+  "contact": "robertagius@hotmail.com",
+  "homepage": "https://forums.factorio.com/viewforum.php?f=51",
+  "description": "Research expansion",
+  "dependencies": ["base >= 0.17.0", "boblibrary >= 0.17.0", "? bobenemies >= 0.17.0"]
+}

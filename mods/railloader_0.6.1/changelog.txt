@@ -1,0 +1,184 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 13.03.2019
+  Changes:
+    - Preserve cargo wagon filters in blueprints, unless there is a BRL in the BP. (https://forums.factorio.com/viewtopic.php?f=190&t=56850&start=200#p411860)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 26.02.2019
+  Changes:
+    - Update to Factorio 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 21.02.2019
+  Localization:
+    - Add Russian localization.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.6
+Date: 02.01.2019
+  Compatibility:
+    - Add support for Pyanadon's Raw Ores.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 23.10.2018
+  Changes:
+    - Use high-res rail and wagon sprites.
+    - Layer unloader platform below belts.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 17.10.2018
+  Changes:
+    - Fix crash bug on changing permitted items setting on an existing map.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 15.10.2018
+  Changes:
+    - Fix crash bug on building BRL.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 14.10.2018
+  Changes:
+    - Interface chest transfer is now stopped when the "Disable rail loader" signal is sent.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 26.08.2018
+  Changes:
+    - Fix crash experienced with PickerTweaks.
+    - Add compatibility recipe for xander-mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 06.08.2018
+  Changes:
+    - Add circuit control via virtual signal.
+    - Replace technology icon.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 30.04.2018
+  Changes:
+    - Update bulk materials list for PyIndustry mods.
+    - Add workaround for Creative Mode's Instant Deconstruction.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 12.04.2018
+  Changes:
+    - Fix rare crash related to on_nth_tick() processing.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 09.04.2018
+  Changes:
+    - Fix crash when marking BRLs for deconstruction.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 04.04.2018
+  Changes:
+    - Major change: BRLs are now placed independently, instead of on top of existing rails.
+    - A best-effort is made to update blueprints in characters inventories, chests, blueprint books, etc.  You will have to re-create any blueprints exported to your library.
+    - Fix use of logistics chests as interface chests.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 31.03.2018
+  Changes:
+    - Add support for plastic bars, Angel's geodes, and MadClown's Extended Minerals.
+    - Fix a rare migration bug from early BRL versions.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 19.03.2018
+  Changes:
+    - Revise unloader graphics.
+    - Improve handling of blueprint circuit connections.
+    - Improve Bluebuild compatibility.
+    - Marking a BRL for deconstruction also marks the underlying rails.
+    - Add support for interface chests of any size.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 16.03.2018
+  Changes:
+    - Change how graphics are rendered.
+    - Fix crash on mining BRLs in Factorio 0.16.29.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 23.02.2018
+  Changes:
+    - Prevent loaders from being built when there is only one rail underneath, which could block connecting rails from being built, particularly when building a blueprint.
+    - Prevent loaders from being built over curved rails, which leads to odd "train driving through a wall" appearance.
+    - Give better messages when a loader can't be built.
+    - Prevent rails blocked by loaders from being damaged, destroyed, or mined, since they cannot be replaced without removing the loader.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 23.02.2018
+  Changes:
+    - Fix configuration on train arrival.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 19.02.2018
+  Changes:
+    - Fix crash when build conditions are not met (colliding entities, rail not present).
+    - Add support for Pyanodons Coal Processing.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 14.02.2018
+  Changes:
+    - Fix crash when building on top of modded rails.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 14.02.2018
+  Changes:
+    - Fix crash when migrating from a save with unconfigured loaders.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 13.02.2018
+  Changes:
+    - New feature for increasing throughput: interface chests.
+    - Loaders no longer lock onto a single item.  Instead they handle up to 5 item types per cargo wagon.
+    - Since this leads to increased message frequency when loaders reconfigure themselves, you can now turn these notifications off.
+    - Add support for Omnimatter's omnite ore.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 09.02.2018
+  Changes:
+    - Fix failure to join multiplayer maps with unconfigured loaders present.
+    - Fix crash when placing loaders set to "any" item type.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 04.02.2018
+  Changes:
+    - Fix bug building new non-locking loaders.
+    - Add partial support for preserving circuit connections in blueprints.
+    - Add alert to map when robots cannot build a loader due to missing rails or an obstruction.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 02.02.2018
+  Changes:
+    - You must now actually research the technology to unlock rail loaders and unloaders.
+    - Fix crash when creating a blueprint with a GUI open in Factorio versions before 0.16.21.
+    - Fix crash after mining a loader under certain circumstances.
+    - Loaders do not lock in an item if set to accept all items.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 23.01.2018
+  Changes:
+    - Enable walking and driving vehicles through loaders.
+    - Enable using the pipette feature (Q) with loaders.
+    - Fix crash when clicking a single point to create a blueprint.
+    - Fix misleading loader placement guide.
+    - Shrink placement collision box.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 21.01.2018
+  Changes:
+    - Fix bad migration.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 21.01.2018
+  Changes:
+    - Add improved graphics.
+    - Fix some blueprinting crashes.
+    - Improve robot handling when trying to build a loader before the rails are
+      built.
+    - Use flying-text instead of console notifications when inserters lock in an
+      item.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 20.01.2018
+  Major Features:
+    - Initial preview release.

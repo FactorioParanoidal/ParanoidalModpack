@@ -1,0 +1,16 @@
+{
+  "name": "PickerPipeTools",
+  "version": "1.0.3",
+  "factorio_version": "0.17",
+  "title": "Picker Pipe Tools",
+  "author": "TheStaplergun, Nexela",
+  "contact": "TheStaplergun 2.0#6920 (DISCORD)",
+  "dependencies": [
+    "base >= 0.17.0",
+    "stdlib >= 1.0.0",
+    "PickerAtheneum >= 1.0.0",
+    "(?) underground-pipe-pack"
+  ],
+  "homepage": "",
+  "description": "Adds tools to make fluid handling with pipes much better. -Orphan finder -Pipe cleaner (In Blueprint Menu) -Underground Pipe Highlighter Press <CTRL SHIFT P>(press again to toggle off) - Pipe Highlighter Verify connections by hovering over pipes. (Configurable in mod settings) -Pipe clamps Press <CTRL + R> on pipes, or use tool from Blueprint Menu (Like flow control but automatic) -Auto clamps (close proximity pipe laying without pipes connecting) toggle with /autoclamp or <CTRL SHIFT C> [Check mod startup settings for disabling certain parts of mod if you want QoL only]"
+}

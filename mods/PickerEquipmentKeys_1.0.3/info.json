@@ -1,0 +1,11 @@
+{
+    "name": "PickerEquipmentKeys",
+    "version": "1.0.3",
+    "factorio_version": "0.17",
+    "title": "Picker Equipment Keys",
+    "author": "Nexela",
+    "contact": "nexela@gmail.com",
+    "dependencies": ["base >= 0.17.47", "stdlib >= 1.1.0", "PickerAtheneum >= 1.0.4", "(?) nanobots >= 1.0.0"],
+    "homepage": "",
+    "description": "Hotkeys for enabling and disabling equipment"
+  }

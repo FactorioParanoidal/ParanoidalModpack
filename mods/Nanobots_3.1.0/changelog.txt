@@ -1,0 +1,83 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: ??????
+  Changes:
+    - Uses the new adjustment pad if picker atheneum is installed.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.10
+Date: ??????
+  Bugfixes:
+    - File tile ghost error.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.9
+Date: ??????
+  Changes:
+    - Update to new STDLIB changes lib.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.8
+Date: ??????
+  Bugfixes:
+    - Fix missing tile event data.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.7
+Date: ??????
+  Bugfixes:
+    - Fix player/character rename.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.6
+Date: ??????
+  Bugfixes:
+    - nil fix again.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.5
+Date: ??????
+  Bugfixes:
+    - Better fix for nil error.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.4
+Date: ??????
+  Bugfixes:
+    - Should fix nil error that shouldn't be nil.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.3
+Date: ??????
+  Bugfixes:
+    - Fix changelog version.
+    - Fix upgrade spam.
+    - Fix underground belt upgrading.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: ??????
+  Features:
+    - Add simple support for upgrade planner.
+  Bugfixes:
+    - Fix constructors endlessly wasting themselves on cliffs.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: ??????
+  Bugfixes:
+    - Fix .inside check.
+    - Add changelog to release.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: ??????
+  Features:
+    - Made ready for 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: ??????
+  Bugfixes:
+    - Added old changelog
+    - 1.8.8 - Fix missing files from release script.
+    - 1.8.7 - Should fix robointerface cell queuing bug.
+    - 1.8.6 - Fixes train check error
+    - 1.8.5 - Removes equipment toggling to picker extended
+    - 1.8.0 - Convert to Mod settings, Fix power icons, fix module insertion, update custom stdlib, Fix network checks, Better MP queuing, Roboport interface can order bots to go fishing!
+    - 1.7.7 - Add in belt immunity equipment
+    - 1.7.6 - Fix termites borked, Log spam
+    - 1.7.5 - Factorio .15 readyish
+    - 1.7.4 - Migration/frozen load issue with entity type change
+    - 1.7.3 - Silly debug message, where did you come from!
+    - 1.7.2 - Revert can place check that I broke :)
+    - 1.7.1 - Beter roboport interface graphics thanks to Arch666Angel, Robointerface deconstruct miners, Many bug fixes, auto feeder also works on shields.
+    - 1.7.0 - Major logic re-write, New enhancements and features added including hotkeys.

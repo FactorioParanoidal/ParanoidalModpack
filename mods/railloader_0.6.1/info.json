@@ -1,0 +1,10 @@
+{
+	"name": "railloader",
+	"version": "0.6.1",
+	"factorio_version": "0.17",
+	"title": "Bulk Rail Loader",
+	"author": "Therax",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=56850",
+	"description": "Bulk train loader/unloader with buffer.",
+	"dependencies": ["? xander-mod >= 1.5.1"]
+}

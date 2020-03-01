@@ -1,0 +1,9 @@
+{
+  "name": "MiningFluids",
+  "version": "9.0.3",
+  "factorio_version": "0.17",
+  "title": "Mining Fluids",
+  "author": "DellAquila,maxZZzzz",
+  "description": "Every Ore needs fluids to mine, and you get offshore pumps and pipes when start the game. Vanilla and BobsOres compatible. You can't mine with hands. Use Steam and Water - in future other new fluids.",
+  "dependencies": ["? angelsinfiniteores"]
+}

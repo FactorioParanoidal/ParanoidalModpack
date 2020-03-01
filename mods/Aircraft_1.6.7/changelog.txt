@@ -1,0 +1,360 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.6.7.
+Date: 25. 6. 2019.
+  Changes:
+    - Added new setting "Disable Acid Splash" to make spitter/worm acid puddles do no damage.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.6.
+Date: 26. 5. 2019.
+  Bugfixes:
+    - Fixed optional mod dependencies not properly assigned.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.5.
+Date: 21. 3. 2019.
+  Locale:
+    - Updated Russian translation, thanks to IgorLutiy
+---------------------------------------------------------------------------------------------------
+Version: 1.6.4
+Date: 2. 3. 2019.
+  Compatibility:
+    - Added optional dependency to fix electric vehicles compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.3
+Date: 28. 2. 2019.
+  Locale:
+    - Updated German translation, thanks to ST-DDT
+---------------------------------------------------------------------------------------------------
+Version: 1.6.2
+Date: 28. 2. 2019.
+  Locale:
+    - Updated Japanese translation, thanks to shelaf.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 26. 2. 2019.
+  Changes:
+    - Hid optional dependencies to reduce potential confusion.
+    - Added thumbnail.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 26. 2. 2019.
+  Changes:
+    - Updated to 0.17
+    - Advanced Aerodynamics now requires the "automobilism" and "robotics" technologies.
+    - Jets no longer requires "Rocket Silo" tech, now instead requires "explosive rocketry".
+    - Jets now requires Production science packs.
+    - Flying Fortress now requires "artillery" and "space science pack" technologies, but no longer requires "tanks".
+    - Flying Fortress now requires all science packs, including space science packs.
+    - High Explosive Cannon Shells now require "artillery", but no longer requires "tanks".
+    - All Aircraft now have a burner efficiency of 100%, to bring it in line with vanilla vehicles.
+    - Added "Inserter Immunity" setting, which gives all Aircraft immune to inserters, except for fuel insertion.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 20. 2. 2019.
+  Locale:
+    - New Korean translation. (Thanks to GimoXagros)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 21. 12. 2018.
+  Bugfixes:
+    - Adjusted selection priority of aircraft so they can be selected while over ore patches and other entities.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 20. 12. 2018.
+  Locale:
+    - Updated German translation. (Thanks to ST-DDT)
+    - Updated Japanese translation. (Thanks to shelaf)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 20. 12. 2018.
+  Changes:
+    - New non-combat mode. Disables the Gunship, Jet, and Flying Fortress from the tech tree.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.15
+Date: 14. 12. 2018.
+  Locale:
+    - New Italian translation. (Thanks to Linver)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.14
+Date: 13. 10. 2018.
+  Locale:
+    - Updated German translation. (Thanks to ST-DDT)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.13
+Date: 13. 10. 2018.
+  Locale:
+    - New Japanese translation. (Thanks to shelaf)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.12
+Date: 3. 10. 2018.
+  Compatibility:
+    - Potential fix for Alternative Oil Processing incompatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.11
+Date: 30. 3. 2018.
+  Changes:
+    - Graphics for Aircraft Afterburner have been updated, thanks to ST-DDT.
+    - Grid size in Jet and Gunship have been widened by 1 to accomadate orientation change to the Aircraft Afterburner.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.10
+Date: 20. 3. 2018.
+  Bugfixes:
+    - Aircraft now show up on the minimap again.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.9
+Date: 30. 1. 2018.
+  Locale:
+    - Minor Russian translation tweaks, thanks to IgorLutiy.
+  Bugfixes:
+    - Fixed that toggling a compatibility setting for a non-installed mod would crash the game on startup.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.8
+Date: 8. 1. 2018.
+  Changes:
+    - Considerably simplified some internal workings, thanks to Yousei9 and ST-DDT.
+    - Re-orders some of the settings, thanks to Yousei9 and ST-DDT.
+    - Made belt immunity a setting, instead of forced, thanks to Yousei9 and ST-DDT.
+  Locale:
+    - Minor German translation tweaks.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.7
+Date: 7. 1. 2018.
+  Changes:
+    - Gave all Aircraft belt immunity.
+    - Updated High-Explosive Cannon Shell graphics, thanks to ST-DDT.
+  Compatibility:
+    - Added Helicopters Equipment Grid setting.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.6
+Date: 6. 1. 2018.
+  Changes:
+    - Updated Aircraft Energy Shield graphics, thanks to ST-DDT.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 3. 1. 2018.
+  Changes:
+    - Significantly increased crafting times for nearly all items.
+    - Significantly reduced damage of High-Explosive Cannon Shell to bring it more in-line to fit inbetween Explosive Cannon Shells and Explosive Uranium Cannon Shells. (AoE still larger than EUCS)
+    - Moderately increased the number of batteries used in the Aircraft Energy Shield recipe.
+    - Added minimum range to High-Explosive Cannon Shells.
+    - Reduced range of High-Explosive Cannon Shells to match other cannon shells.
+    - Doubled stack size of High-Explosive Cannon Shells to match other cannon shells.
+    - Re-ordered High-Explosive Cannon Shells to be in-between Explosive and Uranium Cannon Shells.
+    - Re-ordered all Aircraft to be in Logistics tab along with other vehicles.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 28. 12. 2017
+  Locale:
+    - Updated German translation.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 19. 12. 2017
+  Compatibility:
+    - Re-enabled Bob's mods compatibility.
+    - Updated Bob's mods optional prerequisite version numbers.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 17. 12. 2017
+  Changes:
+    - All technologies now require 1 of each pack instead of the previous setup (e.g. 4 red, 3 green, 2 blue, 1 military).
+    - Mildly increased number of science packs required for research to compensate for above tweak.
+  Compatibility:
+    - Re-enabled Raven compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 17. 12. 2017
+  Compatibility:
+    - Re-enabled Helicopters compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 14. 12. 2017
+  Changes:
+    - Updated to 0.16.
+  Compatibility:
+    - Disabled Helicopters and Raven compatibility settings until they're updated.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+Date: 11. 10. 2017
+  Changes:
+    - Gunship research now requires Rocketry research.
+  Compatibility:
+    - Added compatibility settings for Helicopters and Raven to hide their respective researches behind Advanced Aerodynamics.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+Date: 10. 6. 2017
+  Locale:
+    - Updated German translation.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 21. 5. 2017
+  Changes:
+    - Added setting to switch aircraft sounds to the default car sound.
+    - Added setting for hardmode.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 13. 5. 2017
+  Compatibility:
+    - Hotfix for Bob's mods compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 13. 5. 2017
+  Changes:
+    - Added expensive recipes for all items.
+    - Updated most researches to require some of the new science packs (military/high-tech).
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2. 5. 2017
+  Changes:
+    - Compressed graphics with minimal loss in visual quality.
+  Compatibility:
+    - Updated Bob's mods optional dependencies.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 29. 4. 2017
+  Compatibility:
+    - Fixed Bob's mods compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 29. 4. 2017
+  Changes:
+    - Jet immune to fire damage.
+    - Added Napalm.
+  Locale:
+    - Locale tweaks.
+  Bugfixes:
+    - Vehicle rocket launcher fire rate fixed.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 24. 4. 2017
+  Changes:
+    - 0.15 support.
+    - Jet and Flying Fortress recipes adjusted.
+  Bugfixes:
+    - Aircraft lights fixed.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 24. 4. 2017
+  Changes:
+    - Fire rates globally decreased.
+    - High-Explosive Cannon Shell explosive radius reduced.
+    - Jet fire resistance improved.
+  Compatibility:
+    - Electric Vehicles support.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 25. 2. 2017
+  Changes:
+    - Technology prerequisites tweaked.
+    - Aircraft inventory capacities increased.
+  Compatibility:
+    - Improved Bob's mods support.
+  Locale:
+    - Russian translation updated.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 9. 1. 2017
+  Changes:
+    - Reduced sound effect volume by 50%.
+    - Technology prerequisites tweaked.
+    - Jet recipe tweaked.
+  Locale:
+    - German translation updated.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 5. 9. 2016
+  Changes:
+    - Significant code cleanup/clarification.
+  Bugfixes:
+    - Fixed disappearing equipment when Aircraft were mined.
+    - Fixed Gunship and Flying Fortress recipe mis-match.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 29. 8. 2016
+  Changes:
+    - Flying Fortress recipe now requires processing units instead of advanced circuits.
+    - Technology icons resolutions increased to 128x128.
+  Compatibility:
+    - Bob's mods support.
+    - Shadowless sprite sheets included to support Liftoff add-on.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 28. 8. 2016
+  Bugfixes:
+    - Game-breaking bug fixed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 28. 8. 2016
+  Bugfixes:
+    - Game-breaking bug fixed (not really).
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 28. 8. 2016
+  Changes:
+    - Added aircraft-exclusive equipment.
+    - Unmodified aircraft nerfed.
+    - Other undocumented changes.
+  Locale:
+    - Locale tweaks.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 27. 8. 2016
+  Changes:
+    - Added collision boxes.
+    - Added equipment grids.
+    - Other undocumented changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 26. 8. 2016
+  Changes:
+    - 0.14 update.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 3. 7. 2016
+  Changes:
+    - Flying Fortress buffed.
+    - Added Napalm Launcher to Jet.
+  Locale:
+    - Introduced Russian translation.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 28. 6. 2016
+  Changes:
+    - 0.13 support.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 17. 5. 2016
+  Locale:
+    - Introduced German locale.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 29. 3. 2016
+  Changes:
+    - Cargo plane and Flying Fortress movement speed increased.
+    - Gunship turn speed increased.
+    - Jet braking power increased.
+  Bugfixes:
+    - Fixed headlight mis-alignment.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 19. 3. 2016
+  Changes:
+    - Jet icon added.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 29. 12. 2015
+  Changes:
+    - Aircraft sounds introduced.
+    - Other undocumented changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 25. 12. 2015
+  Changes:
+    - Introduced Jet.
+    - Introduced Cargo Plane.
+    - Introduced Flying Fortress.
+    - Introduced High-Explosive Cannon Shells.
+    - Rebalancing.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 25. 12. 2015
+  Changes:
+    - Initial mod.

@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.09
+  Changes:
+    - Changed entity Player to Character for new 0.17 version
+
+---------------------------------------------------------------------------------------------------
+Version: 0.05
+  Changes:
+    - Changed animation speed for better running (Thanks to mman0385)
+    - Deleted redundant file
+
+---------------------------------------------------------------------------------------------------
+Version: 0.04
+  Bugfixes:
+    - Now doesn't conflict with any mods that modify health, inventory, speed, etc.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.03
+  Changes:
+    - Fixed shadows in Normal Definition
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Info:
+    - Initial Release

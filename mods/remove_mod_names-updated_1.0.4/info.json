@@ -1,0 +1,9 @@
+{
+  "name": "remove_mod_names-updated",
+  "version": "1.0.4",
+  "title": "Remove Mod Names",
+  "author": "DarkNova",
+  "description": "Remove the yellow mod name inside the inspector.",
+  "factorio_version": "0.17",
+  "dependencies": []
+}

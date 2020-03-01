@@ -1,0 +1,10 @@
+{
+ "name": "Flammable_Oils_fix",
+ "version": "0.2.2",
+ "title": "Flammable Oils",
+ "author": "Klonan, OwnlyMe",
+ "contact": "https://mods.factorio.com/mod/fire_department",
+ "homepage": "https://mods.factorio.com/mod/Flammable_Oils/",
+ "description": "Pipes and storage tanks and stuff will catch fire and explode",
+ "factorio_version": "0.17"
+ }

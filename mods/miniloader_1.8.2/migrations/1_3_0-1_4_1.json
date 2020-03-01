@@ -1,0 +1,9 @@
+{
+    "entity": [
+        ["miniloader", "miniloader-legacy-underground"],
+        ["fast-miniloader", "fast-miniloader-legacy-underground"],
+        ["express-miniloader", "express-miniloader-legacy-underground"],
+        ["green-miniloader", "green-miniloader-legacy-underground"],
+        ["purple-miniloader", "purple-miniloader-legacy-underground"]
+    ]
+}

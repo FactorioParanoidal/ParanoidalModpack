@@ -1,0 +1,77 @@
+{
+    "entity": [
+        ["green-miniloader-loader", "turbo-miniloader-loader"],
+        ["green-filter-miniloader-loader", "turbo-filter-miniloader-loader"],
+        ["green-miniloader-inserter", "turbo-miniloader-inserter"],
+        ["green-filter-miniloader-inserter", "turbo-filter-miniloader-inserter"],
+        ["purple-miniloader-loader", "ultimate-miniloader-loader"],
+        ["purple-filter-miniloader-loader", "ultimate-filter-miniloader-loader"],
+        ["purple-miniloader-inserter", "ultimate-miniloader-inserter"],
+        ["purple-filter-miniloader-inserter", "ultimate-filter-miniloader-inserter"],
+
+        ["ultra-fast-miniloader", "ub-ultra-fast-miniloader"],
+        ["ultra-fast-filter-miniloader", "ub-ultra-fast-filter-miniloader"],
+        ["ultra-fast-miniloader-inserter", "ub-ultra-fast-miniloader-inserter"],
+        ["ultra-fast-filter-miniloader-inserter", "ub-ultra-fast-filter-miniloader-inserter"],
+        ["extreme-fast-miniloader", "ub-extreme-fast-miniloader"],
+        ["extreme-fast-filter-miniloader", "ub-extreme-fast-filter-miniloader"],
+        ["extreme-fast-miniloader-inserter", "ub-extreme-fast-miniloader-inserter"],
+        ["extreme-fast-filter-miniloader-inserter", "ub-extreme-fast-filter-miniloader-inserter"],
+        ["ultra-express-miniloader", "ub-ultra-express-miniloader"],
+        ["ultra-express-filter-miniloader", "ub-ultra-express-filter-miniloader"],
+        ["ultra-express-miniloader-inserter", "ub-ultra-express-miniloader-inserter"],
+        ["ultra-express-filter-miniloader-inserter", "ub-ultra-express-filter-miniloader-inserter"],
+        ["extreme-express-miniloader", "ub-extreme-express-miniloader"],
+        ["extreme-express-filter-miniloader", "ub-extreme-express-filter-miniloader"],
+        ["extreme-express-miniloader-inserter", "ub-extreme-express-miniloader-inserter"],
+        ["extreme-express-filter-miniloader-inserter", "ub-extreme-express-filter-miniloader-inserter"],
+        ["ultimate-miniloader", "ub-ultimate-miniloader"],
+        ["ultimate-filter-miniloader", "ub-ultimate-filter-miniloader"],
+        ["ultimate-miniloader-inserter", "ub-ultimate-miniloader-inserter"],
+        ["ultimate-filter-miniloader-inserter", "ub-ultimate-filter-miniloader-inserter"]
+    ],
+    "item": [
+        ["green-miniloader", "turbo-miniloader"],
+        ["green-filter-miniloader", "turbo-filter-miniloader"],
+        ["purple-miniloader", "ultimate-miniloader"],
+        ["purple-filter-miniloader", "ultimate-filter-miniloader"],
+
+        ["ultra-fast-miniloader", "ub-ultra-fast-miniloader"],
+        ["ultra-fast-filter-miniloader", "ub-ultra-fast-filter-miniloader"],
+        ["extreme-fast-miniloader", "ub-extreme-fast-miniloader"],
+        ["extreme-fast-filter-miniloader", "ub-extreme-fast-filter-miniloader"],
+        ["ultra-express-miniloader", "ub-ultra-express-miniloader"],
+        ["ultra-express-filter-miniloader", "ub-ultra-express-filter-miniloader"],
+        ["extreme-express-miniloader", "ub-extreme-express-miniloader"],
+        ["extreme-express-filter-miniloader", "ub-extreme-express-filter-miniloader"],
+        ["ultimate-miniloader", "ub-ultimate-miniloader"],
+        ["ultimate-filter-miniloader", "ub-ultimate-filter-miniloader"]
+    ],
+    "recipe": [
+        ["green-miniloader", "turbo-miniloader"],
+        ["green-filter-miniloader", "turbo-filter-miniloader"],
+        ["purple-miniloader", "ultimate-miniloader"],
+        ["purple-filter-miniloader", "ultimate-filter-miniloader"],
+
+        ["ultra-fast-miniloader", "ub-ultra-fast-miniloader"],
+        ["ultra-fast-filter-miniloader", "ub-ultra-fast-filter-miniloader"],
+        ["extreme-fast-miniloader", "ub-extreme-fast-miniloader"],
+        ["extreme-fast-filter-miniloader", "ub-extreme-fast-filter-miniloader"],
+        ["ultra-express-miniloader", "ub-ultra-express-miniloader"],
+        ["ultra-express-filter-miniloader", "ub-ultra-express-filter-miniloader"],
+        ["extreme-express-miniloader", "ub-extreme-express-miniloader"],
+        ["extreme-express-filter-miniloader", "ub-extreme-express-filter-miniloader"],
+        ["ultimate-miniloader", "ub-ultimate-miniloader"],
+        ["ultimate-filter-miniloader", "ub-ultimate-filter-miniloader"]
+    ],
+    "technology": [
+        ["green-miniloader", "turbo-miniloader"],
+        ["purple-miniloader", "ultimate-miniloader"],
+
+        ["ultra-fast-miniloader", "ub-ultra-fast-miniloader"],
+        ["extreme-fast-miniloader", "ub-extreme-fast-miniloader"],
+        ["ultra-express-miniloader", "ub-ultra-express-miniloader"],
+        ["extreme-express-miniloader", "ub-extreme-express-miniloader"],
+        ["ultimate-miniloader", "ub-ultimate-miniloader"]
+    ]
+}

@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2019-05-30
+  Minor Features:
+    - Added an option to have atomic bomb research require cliff explosives research
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019-04-09
+  Features:
+    - Atomic bombs now destroy cliffs within their blast radius

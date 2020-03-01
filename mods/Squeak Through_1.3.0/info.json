@@ -1,0 +1,10 @@
+{
+	"name": "Squeak Through",
+	"version": "1.3.0",
+	"factorio_version": "0.17",
+	"title": "Squeak Through",
+	"author": "Nommy, Lupin, & Supercheese",
+	"homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=91&t=16476",
+	"dependencies": ["base", "? WideChests"],
+	"description": "Allows you to walk between what used to be obstacles such as directly adjacent solar panels, pipes, steam engines, mining drills, and chests. No more frustration when walking about your base!"
+}

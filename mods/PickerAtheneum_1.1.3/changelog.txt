@@ -1,0 +1,56 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: ??????
+  Bugfixes:
+    - Fix intramod ticker to use events.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: ??????
+  Features:
+    - Added simple intramod ticker script.
+  Changes:
+    - Adjustment Pad is mostly self contained and doesn't require remote calls.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: ??????
+  Bugfixes:
+    - Fix typos.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: ??????
+  Changes:
+    - Updated dependencies.
+  Features:
+    - Added Event Queue Dispatcher, and Remote Queue Dispatcher
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: ??????
+  Changes:
+    - Updated dependencies.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: ??????
+  Features:
+    - Added some Picker.write commands
+  Bugfixes:
+    - Fix prototype loading error with Factorio .17.46
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Bugfixes:
+    - Fix lib.get_planner()
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Changes:
+    - Debug changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Features:
+    - Testing Deploy Script.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Release.

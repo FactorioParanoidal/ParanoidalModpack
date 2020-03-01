@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: ??????
+  Bugfixes:
+    - Made mirror button do work.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: ??????
+  Bugfixes:
+    - Changelog works correctly thanks to EnigmaticAussie.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: ??????
+  Bugfixes:
+    - Migration works correctly.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Features:
+    - Instantly mark selected items for deconstruction with DEL key.
+  Changes:
+    - Removed summon blueprint and deconstruction item hotkeys.
+    - Removed blueprint upgrader and entity picker.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Bugfixes:
+    - Fix rounding error with quick-picker.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Bugfixes:
+    - Fix missing icon when Extended is not installed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Seperated into its own mod.
+    - Add a new blank blueprint to a blueprint book with "+".
+    - Remove all empty blueprints from a blueprint book with "-".
+    - Mirror blueprints with "ALT R" or use the blueprint tools gui.
+    - Upgrade entities in blueprints with the blueprint tools gui.
+    - Create a quick ghost BP using an empty blueprint and the blueprint tools gui.
+    - Snap large blueprints around using the numpad.
+    - Make a ghost bp of any blueprintable entity including recipes/modules with "CTRL Q".
+    - Adds a blueprint updater with a bp in hand "SHIFT U" and the new BP will keep the same icon and name. With optional version increment.
+    - Adds deconstruction planner hot keys for getting a planner, setting to tree mode, adding selected entities, toggling modes.

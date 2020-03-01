@@ -1,0 +1,5 @@
+require ("prototypes.energy_interfaces")
+require ("prototypes.health_bars")
+require ("prototypes.misc")
+require ("prototypes.shield_fx")
+require ("prototypes.technologies")

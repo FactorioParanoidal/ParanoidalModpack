@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 19.3.2019
+  Features:
+    - prevent boblogistics from overwriting infinite character logistics
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 6.3.2019
+  Features:
+    - mining productivity cost tweaks work with 0.17.6
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 27.2.2019
+  Features:
+    - added infinite inserter capacity, adding +1 stack inserter bonus and +0.5 normal inserter
+    - infinite technologies have Space science pack as a pre-requisite
+    - made character logistic slots infinite, for those who want to really mess up their gui
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 27.2.2019
+  Features:
+    - updated to Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 27.11.2018
+  Features:
+    - normalized all infinite techs to take 60s
+    - added mod settings
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 31.10.2017
+  Features:
+    - inifite bot cargo capacity
+    - base and infinite bot battery by Klonan
+    - character logistic slots ranks 7-10
+    - mining productivity and follower count use same formula as all other inf tech

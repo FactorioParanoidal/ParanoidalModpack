@@ -1,0 +1,242 @@
+return function(center, surface)
+    local ce = function(params)
+        params.raise_built = true
+        return surface.create_entity(params)
+    end
+
+    local fN = game.forces.neutral
+    local direct = defines.direction
+
+    ce{name = "stone-wall", position = {center.x + (-2.0), center.y + (-5.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-3.0), center.y + (-5.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (1.0), center.y + (-6.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-7.0), center.y + (-4.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-2.0), center.y + (-4.0)}, force = game.forces.neutral}
+    ce{name = "land-mine", position = {center.x + (-2.78515625), center.y + (-3.04296875)}, force = game.forces.enemy}
+    ce{name = "land-mine", position = {center.x + (1.94140625), center.y + (-4.015625)}, force = game.forces.enemy}
+    ce{name = "stone-wall", position = {center.x + (2.0), center.y + (-3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (3.0), center.y + (-3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (3.0), center.y + (-4.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (6.0), center.y + (-3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-4.0), center.y + (-1.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-3.0), center.y + (-1.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (0.0), center.y + (-2.0)}, force = game.forces.neutral}
+    ce{name = "land-mine", position = {center.x + (6.3515625), center.y + (-0.34375)}, force = game.forces.enemy}
+    ce{name = "stone-wall", position = {center.x + (5.0), center.y + (-1.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-3.0), center.y + (0.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-2.0), center.y + (0.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (1.0), center.y + (1.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (2.0), center.y + (0.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (3.0), center.y + (0.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (5.0), center.y + (1.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-6.0), center.y + (2.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-2.0), center.y + (3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-3.0), center.y + (3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-1.0), center.y + (3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (0.0), center.y + (3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (2.0), center.y + (3.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-6.0), center.y + (5.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (-4.0), center.y + (4.0)}, force = game.forces.neutral}
+    ce{name = "land-mine", position = {center.x + (-2.84375), center.y + (4.43359375)}, force = game.forces.enemy}
+    ce{name = "stone-wall", position = {center.x + (2.0), center.y + (5.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (2.0), center.y + (4.0)}, force = game.forces.neutral}
+    ce{name = "stone-wall", position = {center.x + (5.0), center.y + (4.0)}, force = game.forces.neutral}
+
+    game.surfaces[1].set_tiles({
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-7.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-6.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-5.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-4.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-3.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-2.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (-1.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (0.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (1.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (2.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (3.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (4.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (5.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (6.0), center.y + (6.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-6.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-5.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-4.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-3.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-2.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (-1.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (0.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (1.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (2.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (3.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (4.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (5.0)}},
+            {name = "concrete", position = {center.x + (7.0), center.y + (6.0)}},
+                               }, true)
+end

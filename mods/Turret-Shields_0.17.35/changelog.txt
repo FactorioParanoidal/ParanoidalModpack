@@ -1,0 +1,98 @@
+0.xx.35
+- updated the electric updater (fixed a crash with the new wave defense scenario)
+
+0.xx.34
+- fixed a crash when the passive energy consumption was set to 0
+
+0.xx.32
+- fixed a crash when the penalty was set to 0
+
+0.17.31
+- 0.17 update
+
+0.16.31
+- Added 45 more levels of charging speed (new max level: 59)
+- Fixed a possible crash with manually set shield parameters
+- Added the combinator and selection tool to the technology
+- Added support for the pvp scenario
+
+0.16.30
+- Fixed multiplayer desync
+
+0.16.29
+- Fixed a crash when initializing an attacking flamethrower-turret.
+- Increased damage resistances of shield combinators
+- Updated korean localization by Xagros
+
+0.16.26
+- Better compatibility to other mods
+- Fix for research being unavailable, but it might show up if you have deactivated it.
+(No clue what mod is causing it, I have never experienced that issue.)
+
+0.16.25
+- Combinators now also disable a selected amount of neighboring towers
+
+0.16.24
+- Added a combinator to let you switch shields off automatically
+
+0.16.23
+- Added a selection tool for disabling / enabling shields to save energy
+- Added a setting to change how much energy (percentage of maximum shield points) is consumed every second to keep the shields active
+
+0.16.21
+- Added energy consumption
+When idle, the shields draw power equal to 0.1% of their maximum hitpoints per second.
+If there's not enough power to satisfy this need, the shields will collapse quickly.
+The setting for the energy consumption multiplier can be found under "startup settings".
+Obviously recharging your whole base can hit your energy balance pretty hard.
+If you can't handle it, use the cheat "ts refresh"
+
+0.16.20
+- Added support for multiple surfaces and teams
+
+0.16.19
+- Improved research icons
+- Some people reported that they had to deactivate and reactivate research to make it appear. This should be fixed now.
+If you encounter any problems, you (player[1]) can enter "ts refresh" to refresh everything.
+(but please create a bug report anyway)
+
+0.16.13
+- Optimized textures for low graphics settings
+
+If you were researching one of the technologies before 0.16.12, the game won't display the current progress but is still researching (but it might have resetted the progress). you can check the progress by switching to another technology and switching back.
+
+0.16.12
+- Reduced research cost
+- Added an alternate animated shield effect.
+based on Lux's shield from League of Legends, © Riot Games
+https://jasonkeyser.deviantart.com/art/Star-Guardian-Lux-s-W-Shield-VFX-617744636
+"Turret Shields" isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+
+0.16.10
+- Fixed shieldbar-length of flamethrower-turrets when the turret is attacking
+(when they are oriented vertical, they have shorter healthbars than horizontal)
+
+0.16.8
+- Added seperate graphics for flamethrower-turrets
+
+0.16.7
+- Added localization for korean (thanks to Xagros), russian (thanks to Cheshirrski) and german (by me)
+- Added a visual effect when a turret is hit. The opacity scales with absorbtion.
+(Self-made graphics, maybe I can get permission to add better ones from a real artist soon)
+
+0.16.6
+- Fixed a small mistake in a technology description
+
+0.16.5
+- Fixed a crash when researching
+- Fixed localization
+(sorry i was in a hurry yesterday)
+
+0.16.4
+- Fixed that Turrets were almost unkillable
+- Fixed a crash when deconstructing script-created turrets
+- Added research
+
+0.16.3 Added Shield bars
+
+0.16.2 Fixed that shields didn't work on script created entities

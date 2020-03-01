@@ -1,0 +1,133 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2019-05-19
+  Features:
+    - supports script_raised_built and script_raised_destroy
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2019-03-19
+  Features:
+    - lighted pole versions upgrade similar to unlighted versions
+  Changes:
+    - moved functionality to Opteras Library
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2019-02-28
+  Features:
+    - added support for PickerDollies
+    - recreate hidden lamps whenever LEP is updated, prevent orphan lamps more reliably
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2019-02-27
+  Features:
+    - removed redundant code
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2019-02-26
+  Features:
+    - updated to Factorio 0.17
+    - added thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2018-12-11
+  Changes:
+    - lighted pole recipes are always ordered after their original
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2018-12-09
+  Bugfixes:
+    - handle missing icons.icon_size property
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2018-12-08
+  Changes:
+    - lighted poles are always ordered after their original
+    - blacklisted Bio Industries rail connector and rail poles
+  Bugfixes:
+    - icons with different sizes from 32x32 crashed the game
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2018-10-27
+  Changes:
+    - rewrote technology lookup to accomodate for expensive pole recipes
+    - lighted small electric pole is only added to optics if no tech unlock for small electric pole exists
+    - added optional dependency to AAI Industries
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2018-02-08
+  Features:
+    - added compatibility for qumojo's ShinyBob
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2018-02-01
+  Bugfixes:
+    - Icons are preferred over icon, fixes ShinyBob compatibility
+    - Overlay is no longer applied to original poles using icons
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2017-12-26
+  Features:
+    - in game changelog
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2017-12-13
+  Changes:
+    - updated to Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2017-09-28
+  Features:
+    - korean translation (by Xagros)
+  Bugfixes:
+    - russian translation fix (by vlan0)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2017-09-28
+  Changes:
+    - push to base 0.15.34
+  Features:
+    - german translation
+    - russion translation (by vlan0)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2017-09-04
+  Features:
+    - compatibility to ShinyBobGFX
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2017-06-26
+  Bugfixes:
+    - fast replace was broken in 1.0.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2017-06-18
+  Bugfixes:
+    - entity validation: item placing entity must also be result of mining placed entity
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2017-06-16
+  Bugfixes:
+    - works with differing item, entity and recipe names
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2017-06-07
+  Features:
+    - added support for moving poles with PickerExtended
+  Bugfixes:
+    - reset positions for all lamps of older versions on update
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2017-05-20
+  Features:
+    - made all poles fast replacable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2017-05-05
+  Bugfixes:
+    - unlocks every technology
+    - error on entities without minable attribute
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0 - First public release
+Date: 2017-05-04
+  Features:
+    - adds poles with integrated lamps

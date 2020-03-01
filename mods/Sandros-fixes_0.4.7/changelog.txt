@@ -1,0 +1,136 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+  Bugfixes:
+    - Moved Deuterium
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+  Bugfixes:
+    - Fixed changelog formatting
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+  Bugfixes:
+    - Fixed a crash with "Avatars" and not "Angels Petrochem" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+  Bugfixes:
+    - Moved "BotRecaller" chest
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+  Bugfixes:
+    - Fixed thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+  Bugfixes:
+    - Added thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+  Bugfixes:
+    - Moved "ExtendedAngels" Buffer Warehouses
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+  Bugfixes:
+    - Update to 0.17
+    - Made incompatible with "MoreBobs!"
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+  Bugfixes:
+    - Fixed a crash with newer versions of "MoreBobs!" aka "MoreBobs!:Core". Great transition Xagros. Next time create a new mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+  Bugfixes:
+    - Fixed a crash without the "Sticky expensive" recipe from "Endgame Combat"
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+  Bugfixes:
+    - Fixed a crash without "Extra Bobs!"
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+  Bugfixes:
+    - Fixed a crash with "Avatars" and without "Angel's Refining" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+  Bugfixes:
+    - Fixed a crash with "Bob's Metals, Chemicals and Intermediates" and without "Shiny Icons" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Changes:
+    - Code improvements
+  Bugfixes:
+    - Fixed a crash without "Endgame Combat" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+  Changes:
+    - Moved all items in addition to Recipies
+    - Moved "Modular Turrets" hardened inserter in row when ShinyIcons is installed
+    - Moved "MadClown01's Processing" Centrifuge next to Centrifuge when ShinyIcons is installed
+    - Moved "Quarry" machines right under ShinyIcon Miner when ShinyIcons is installed
+    - Moved "Tatjer Space Station" and "Avatars" at the bottom of production
+    - Combined "Bob's Logistic" valve with "Angel's Petro Chemical Processing" valves
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Changes:
+    - Moved everything out of "Angels enhancement" tab
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+  Bugfixes:
+    - Fixed "Buffer warehouse" categories that I broke with the last version. upsi
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Bugfixes:
+    - Fixed a crash without "Angel's Industries" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Bugfixes:
+    - Fixed a crash without "Bob's Warfare" installed
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Bugfixes:
+    - Hotfix: Don't try to change "MoreBobs!" Walls if "MoreBobs!" is not installed
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+  Changes:
+    - Finally fully fixed "Buffer warehouse" recipie and item groups.
+    - Thanks Dewin for the help with https://mods.factorio.com/mod/ModDeveloperTools
+    - To celebrate that we bumped the version number to 0.2.0
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+  Changes:
+    - Added "Station Data", "Telescope Data" and "Alien Tissue" to Lab MK2
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+  Changes:
+    - Fixed "Endgame Combat" Sticky Recipies landing under Fluids
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+  Changes:
+    - Fixed Boric Acid locale
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Changes:
+    - Fixed "MadClown01's AngelBob Locale Fixes"
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Changes:
+    - Added radioactive-waste-water-purification to locale fixes
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Changes:
+    - Added optional dependencies for "Angel's Smelting" Train and "More Bobs!"
+    - Moved the Storage Tank MK1 back to the first position when "More Science! - BobAngel" is installed
+    - Moved "RampantArsenal" Vehicles under Vehicles when "More Bobs!" is installed
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Changes:
+    - Moved "Angel's Smelting Train" Items into Vehicles
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Changes:
+    - Moved "ExtendedAngels" Warehouse Items into Angel's Logistic tab
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Changes:
+    - Added support for "Taterjr Space Station"
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Changes:
+    - Initial release

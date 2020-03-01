@@ -1,0 +1,127 @@
+Version: 0.17.9
+Date: 15. 07. 2019
+  Bugfixes:
+    - Fixed crash in even more GUI open/close situations.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 15. 07. 2019
+  Bugfixes:
+    - Fixed crash in certain GUI open/close situations.
+  Changes:
+    - Minor GUI update.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 11. 07. 2019
+  Changes:
+    - GUI style update to 0.17 standards (and HR too)
+  Bugfixes:
+    - Fixed GUI close event. (should be able to once again close the inserter GUI by pressing E or ESC)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 03. 07. 2019
+  Bugfixes:
+    - Minor change to improve compatabillity with miniloaders.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 23. 04. 2019
+  Bugfixes:
+    - Fixed some minor GUI errors that could cause a crash in specific situations.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 22. 04. 2019
+  Features:
+    - Removed the option, the GUI now just opens with Shift + E in the center and with the main GUI on the left.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 22. 03. 2019
+  Features:
+    - Added an option to choose if the Inserter configuration GUI opens with Shift + E as of 0.17.1 and older, or with the main GUI as of 0.17.2. Default will be old method.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 21. 03. 2019
+  Changes:
+    - GUI opens on left when you left click an inserter, opening together with base game inserter GUI instead of point to it and press Shift + E
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 26. 02. 2019
+  Bugfixes:
+    - Fixed game breaking error when placing with a ghost inserter in hand.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Info:
+    - Updated to work with Factorio 0.17 without any changes
+---------------------------------------------------------------------------------------------------
+Version: 0.16.8
+Date: 12. 04. 2018
+  Changes:
+    - Changed technology unlocks to the following:
+    - Logistics -> Near/Long
+    - Logistics 2 -> More
+    - Logistics 3 -> Long2/More2
+  Features:
+    - added remote.call("bobinserters", "blacklist_inserter", inserter_name) to prevent inserter configuration from being able to configure this inserter
+    - added remote.call("bobinserters", "blacklist_inserters", table_of_inserter_names) same as above for multiple entries at once.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.7
+Date: 25. 03. 2018
+  Bugfixes:
+    - Added a check to not apply an inserter over-ride if an entity is revived.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.6
+Date: 11. 03. 2018
+  Changes:
+    - Changed hotkey defaults:
+    - Pickup range (SHIFT + P) changes pickup tile range distance.
+    - Drop range (SHIFT + O) changes drop tile range distance.
+    - Drop offset (near) (SHIFT + N) changes drop tile offset distance.
+    - Long range (SHIFT + L) changes both the pickup and drop tile distance to toggle long handed inserter mode.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 03. 02. 2018
+  Changes:
+    - Changed the top-bar button to use the mod-gui standard.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 21. 01. 2018
+  Bugfixes:
+    - Fixed Inserter pre-place GUI not using the right offset location if near isn't researched.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 01. 01. 2018
+  Bugfixes:
+    - Added an extra check to avoid possible crashes in on_gui_checked_state_changed event
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 28. 12. 2017
+  Changes:
+    - Added GUI locale entries from Logistics mod.
+    - Added support for close button to close the GUI
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 20. 12. 2017
+  Bugfixes:
+    - Added missing function set_range
+    - Corrected an offset constant reference to bobmods.inserters.offset
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 19. 12. 2017
+  Changes:
+    - replace colspan with column_count
+    - removed style = "button_style" from the okay button (it's the default, but for some reason setting it manually caused an error)
+  Features:
+    - Added pre-place button from Logistics mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.1
+Date: 01. 06. 2017
+  Changes:
+    - Change rotate default from SHIFT + R to CTRL + R as the former is used for reverse rotate now
+  Bugfixes:
+    - Add fix for Factorio version 0.15.17
+  Features:
+    - Added config options to turn off long2 and more2 research.
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 25. 04. 2017
+  Info:
+    - Updated to work with Factorio 0.15 without any changes

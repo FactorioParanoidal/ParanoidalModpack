@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 02. 03. 2018
+  Features:
+    - Partial matching of entity names, should add sniper support for mods that dynamically extend sniper turrets
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 02. 03. 2018
+  Bugfixes:
+    - Fixed bad sound file paths

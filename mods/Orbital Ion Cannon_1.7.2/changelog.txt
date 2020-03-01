@@ -1,0 +1,277 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.7.2
+Date: 23. 3. 2019
+  Bugfixes:
+    - Fixed a mod crash with Auto-targeting.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.1
+Date: 20. 3. 2019
+  Changes:
+    - Factorio Standard Library is no longer directly bundled with this mod, but rather cross-referenced, and is now a required dependency.
+    - Added the ability to remove ion cannons via cheat.
+  Bugfixes:
+    - Fixed a bug with Bob's mods compatibility (research prereqs).
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 11. 3. 2019
+  Changes:
+    - Updated for Factorio 0.17 (thanks emperorjimmy!)
+    - Updated Russian translation (courtesy of badway)
+    - Show Admin Panel is no longer checked by default.
+    - Show Cheat Menu moved to a Mod Setting rather than a checkbox option in top dialog. Disabled by default, this should reduce the visibility of the cheats significantly, as they were a bit too readily accessible before.
+    - Added a new checkbox in the top dialog to toggle Auto-Targeting. This is exactly the same function as the Mod Setting, just more easily accessible. As with the Mod Setting, only Admins (or single-player, of course) can access this toggle. Toggling this setting takes priority over the Mod Setting.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.3
+Date: 24. 2. 2018
+  Minor Features:
+    - Ion cannon strikes now show up on the minimap akin to vanilla artillery strikes.
+  Changes:
+    - Added an icon to the "Number of times an ion cannon was fired" entry in the Kills graph.
+    - Switch to new "on_nth_tick" event, rather than on_tick.
+  Bugfixes:
+    - Fixed "Select Target" announcement being played much more often than intended if using a "Long Reach"-style mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.2
+Date: 19. 1. 2018
+  Changes:
+    - Added a Cheat Menu accessible in singleplayer or for admins in multiplayer that allows you to cheat ion cannons into orbit. The Cheat Menu selections can be found beneath the Admin Panel.
+    - Removed the "(Compact)" designation from the Compact-type menu. This is a text-only change, so now the GUI merely cycles between closed, open, and full. The Full GUI is still disabled when 40 or more cannons are in orbit (see 1.5.0).
+---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 18. 1. 2018
+  Changes:
+    - Changed map marker icon.
+    - Switch to new play_sound() function rather than spawning "explosion"-type entities to play sounds.
+  Bugfixes:
+    - Fixed error with auto-targeting.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 15. 1. 2018
+  Changes:
+    - Updated for Factorio 0.16.
+    - New icon for the Ion Cannon Targeting Device
+    - New (minor) animation for the ion cannon target location
+    - It is no longer possible to designate a target for an ion cannon in an uncharted region using the zoom-to-map feature. Charted areas that are in the "fog of war" are, however, still valid.
+    - When a new biter base is built in a revealed zone and would normally be auto-targeted immediately, but there are insufficient ion cannons available, it will now be queued up for targeting when the next ion cannon is ready.
+    - Ion cannon alerts & map icons now contain the name of the user who designated the target, if applicable.
+    - An admin panel has been added to restrict ion cannon targeting ability in multiplayer environments. Server admins can find it in the Compact ion cannon details screen.
+    - When cheat mode is enabled, the targeting device can be used at any time, even if there are no ion cannons in orbit.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 24. 8. 2017
+  Bugfixes:
+    - Just some bug fixes.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 29. 6. 2017
+  Changes:
+    - New setting "Minimum Cannons Ready Before Auto-Targeting" that allows you to keep a buffer of ready-to-fire cannons that will always be available for manual targeting.
+    - Removed "Verbose Messaging" option -- It is replaced by the new "Custom Alerts" option.
+    - New custom alerts will trigger (if enabled in the mod options) whenever an ion cannon target is designated. These behave just like the alerts for destroyed structures et al.
+    - Switched from using a train stop to show the ion cannon target location on the map to 0.15's new custom map marker feature.
+    - New setting: "Map Marker Duration". This determines for how long the target map markers will remain after the ion cannon fires.
+    - Reworked some text strings & added descriptions to the mod's technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 22. 5. 2017
+  Changes:
+    - Fixed an error when trying to start a train mini-tutorial.
+    - Reinstated printing the name of the radar that designates an auto-target if Verbose Messaging is enabled.
+    - Fixed a rare bug when both quickbar & inventory slots were completely filled, manually using an ion cannon targeter could cause it to disappear.
+    - Reworded & improved a couple setting names/descriptions.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 14. 5. 2017
+  Changes:
+    - Updated for Factorio 0.15.
+    - Auto-Targeting of ion cannons no longer requires dedicated Auto-Targeting Stations.
+    - Instead, after researching Auto-Targeting, *any* radar scanning activity will scan for nests and target ion cannons as needed.
+    - Additionally, there is a new option to detect any nest expansions within the always-revealed regions of radar coverage and auto-target them accordingly.
+    - Do be cautious with this option enabled, as biter nests expanding in close proximity to your own structures can result in friendly fire.
+    - Disabled the annoying "Rocket launched without satellite!" message.
+    - Added Orbital Ion Cannons as tracked items in the new "Rocket silo stats" frame.
+    - New research costs.
+    - Added support for the new "Expensive" recipes option in Factorio 0.15.
+    - Auto-targeting now fires the custom "on_ion_cannon_targeted" event.
+    - Auto-targeting should no longer leave spurious "target location" markers on the map; they should now properly disappear after the ion blast.
+    - Added custom event "on_ion_cannon_fired", which now properly activates when the ion cannon blast actually occurs. See the Readme for documentation.
+    - Added support for in-game mod options (Options -> Mods).
+    - Added a mod option to toggle auto-targeting.
+    - Removed the "proximity check" option. Be sure to be careful about your target designation, as always.
+    - Removed the "lockout ticks" option; there are now always 10 lockout ticks (1/6 second).
+    - Renamed remote call "fire_ion_cannon" to "target_ion_cannon".
+    - The Ion Cannon Targeting Device is now unlocked upon research of the technology, rather than upon launching the first ion cannon.
+    - It is no longer possible to switch to the "Full" ion cannon gui when there are 40 or more ion cannons in orbit.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.6
+Date: 6. 3. 2017
+  Changes:
+    - The ion cannon GUI hotkey now only works when there is at least one cannon in orbit.
+    - Added config option for adjusting how much area Auto-Targeting Stations permanently reveal around themselves.
+    - Reduced "Ion Cannon Ready" spam when firing several ion cannons -- the minimum duration between announces can be found in config.lua.
+    - Renamed custom "on_ion_cannon_fired" event to "on_ion_cannon_targeted", to better reflect that it fires on target designation rather than actual blast impact.
+    - The "on_ion_cannon_targeted" event position is no longer slightly off-center, and now also passes an event.radius variable.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 21. 10. 2016
+  Changes:
+    - Reduced "Ion Cannon Ready" spam by allowing multiple cannons to become ready in the same second.
+    - Simplify code now that the StdLib print-force function is available in the base game.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 28. 8. 2016
+  Changes:
+    - Updated for Factorio 0.14.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 26. 8. 2016
+  Changes:
+    - Close any instance of the old stats window still open.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 22. 8. 2016
+  Changes:
+    - It is no longer possible to shift+click with the Targeting Device and place useless ghost entities.
+    - Moved the ion cannon status GUI from gui.top to gui.left.
+    - Added an option in the config file to disable the ion cannon blast flames, should you wish to eliminate the chance to cause wildfires with your orbital bombardment.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 9. 8. 2016
+  Changes:
+    - Auto-designated targets within a chunk are now randomized, rather than being biased towards the northwest corner of the chunk.
+    - Added radius visualization to the Ion Cannon Targeting Device. Now you can see just how far away from the blast zone you need to be!
+    - Along with the radius visualization, the Targeting Device acquired new tooltip data; feel free to ignore the "Shooting speed" bit, but the rest should reflect the values from config.lua.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 7. 8. 2016
+  Changes:
+    - The direct damage from the ion cannon blast now only applies within 80% of the full blast radius as defined in the config file. This effectively returns the full damage radius to 20, as it was in version 1.2.3.
+    - All entities within 100% of the blast radius (25 by default) will be instantly set on fire; even if something survives the initial blast, it will continue to burn.
+    - If also playing with my Swarm mod, this makes ion cannon blasts significantly more effective at killing the sub-enemies that spawn after spawners/large enemies die, since they will now catch fire and burn.
+    - Black plumes of smoke will be emitted from ion cannon blast sites, similar to the smoke emitted by forest fires... and indeed, the blast can now ignite forest fires!
+    - (Note: Cheese Orbital Industries™ is not responsible for any property damage and/or pollution caused by rampaging forest fires ignited by ion blasts.)
+    - The "Ion Cannons" text-button at the top of the screen has been changed to an icon-button. Upon first update, the icon will shift position slightly; simply click it a couple times to reset the GUI positions.
+    - Added a custom hotkey that you can press to toggle the Ion Cannon GUI rather than click the button. The keybinding is "I" by default; you can edit this in the game controls options.
+    - Auto-targeting stations now scan for targets on a chunk-by-chunk basis, which should vastly improve performance while also eliminating the tendency for multiple stations to needlessly fire on the same target.
+    - This also makes the auto-targeting stations behave more like vanilla radars; now you can monitor their scanning progress on the map as each chunk is revealed.
+    - The range of the auto-targeting station is now represented in chunks (chunks are 32x32 tiles). The new default range is 10 chunks (for a 20x20 chunk scan region).
+    - Each station now scans a new chunk every 4 seconds.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 13. 7. 2016
+  Changes:
+    - Fixed worm auto-targeting config option.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2. 7. 2016
+  Changes:
+    - Updated for Factorio 0.13 (thanks to Danielv123 for assisting).
+    - 25% more BOOM: Increased default blast radius from 20 to 25.
+    - Add config option to disable printing messages to the console whenever an ion cannon fires or an auto-targeting station acquires a target.
+    - Added a dark_background_icon to the Targeting Device, to improve visibility in some situations.
+    - "Select Target" should now play more promptly upon grabbing a Targeting Device.
+    - The Auto-Targeting Station no longer prints messages when all ion cannons are on cooldown.
+    - Added an option in config.lua to toggle targeting of both worms & spawners or just spawners only (courtesy of madmaxoft).
+    - Performance optimizations.
+    - Increased default Auto-Targeting range to 400.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 31. 5. 2016
+  Changes:
+    - Increase default Auto-Targeter range to 250 tiles.
+    - Add Worms as valid targets for Auto-Targeters; Spawners are primary targets, Worms secondary.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 29. 5. 2016
+  Changes:
+    - Fix compatibility with mods that add an Assembling Machine 4 but don't increase the ingredient_count.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 20. 5. 2016
+  Changes:
+    - Revert use of the Standard Library's event registry function, as it did not behave as I intended.
+    - Use improved graphics for the Auto-Targeting Station, courtesy of the excellent ExtraChests mod by Qumojo (https://forums.factorio.com/viewtopic.php?f=91&t=19970)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 18. 5. 2016
+  Changes:
+    - Added an Auto-Targeting Station, a radar-type entity that periodically scans for enemy spawners, and automatically fires an ion cannon if it detects one.
+    - Reduced the overlap the klaxon sound can have when firing multiple ion cannons in succession.
+    - Extended the remote interface to allow firing an ion cannon. See the readme for more modding details.
+    - Changed the default config.lua settings: Damage increased, heatup time increased, cooldown increased, proximity check disabled, voice style reverted to classic C&C. These are of course just changes to the defaults, you can change them yourself at any time.
+    - Increased the cost of the ion cannon recipe.
+    - The target location for all ion cannons is now shown on the map (when you press M). This is helpful to identify which spawner an Auto-Targeting Station is firing at -- or to detect enemy target locations in PvP!
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 26. 4. 2016
+  Changes:
+    - The mod is now using the Factorio Standard Library (https://github.com/Afforess/Factorio-Stdlib/wiki).
+    - Added German translation (courtesy of bNarFProfCrazy).
+    - Added two new Announcer voice styles to choose from (similar to the Red Alerts mod): Tiberian Sun EVA & Tiberian Sun CABAL. Select your favorite voice in config.lua.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 1. 3. 2016
+  Changes:
+    - Properly fixed the technology to include Bob's Science Pack 4 if bobtech is loaded.
+    - Fixed that the mod's on_tick function wasn't getting re-registered when loading a saved game.
+    - Added a remote interface to allow other mods to detect when an ion cannon is targeted.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 26. 2. 2016
+  Changes:
+    - Added Russian translation (thanks to apriori).
+    - To increase performance, the on_tick function is now only registered upon first launching an ion cannon into orbit - there was no need to run this function in the early game before any ion cannons have been launched.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 20. 2. 2016
+  Changes:
+    - Fixed a bug when another mod created a new force in init.
+    - Updated recipes & technologies to use more new ingredients if Bob's Tech and/or Bob's Electronics mods are installed.
+    - Fixed a rare bug when forces merged.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 6. 1. 2016
+  Changes:
+    - Multiple forces are now supported. Now, each force can only access the ion cannons they have launched.
+      Note that if loading a save where ion cannons have already been launched, these ion cannons will be all assigned to the "player" force when updating.
+    - Moved hard-coded text strings out of control.lua into the locale .cfg files. Now all texts in the mod should be localizable into other languages.
+    - The "Select target" notification and switching between closed/full/compact GUI states are now stored on a player-by-player basis.
+    - Added an option in config.lua to disable the check for friendly characters in close proximity to the target zone. It is recommended to disable this check if you are using the "Long Reach" mod.
+    - Added an option in config.lua that controls the minimum time between targeting multiple ion cannons. By changing this value, you can control how often ion cannons are allowed to be fired.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 11. 12. 2015
+  Changes:
+    - Added an option in config.lua to enable/disable the klaxon sound that plays whenever an ion cannon target is designated.
+    - Added an option in config.lua to adjust ion cannons' heatup time, i.e. the time between target designation and ion cannon blast impact.
+    - Slightly increased the default value of the ion cannon blast radius. (You can of course still change it in config.lua if you want.)
+    - Adjusted minimum base version requirement to >=0.12.17, due to graphical oddities present in lower versions.
+    - Fixed " Unknown key:"entity-name.ion-cannon-target" " in the defeated enemies list; now it explicitly states that this is the number of times an ion cannon was fired.
+    - Both the light generated by an ion cannon blast (best observed at night) and the size of the crater left behind now scale with the blast radius (as set in config.lua).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 23. 11. 2015
+  Minor Features:
+    - Added a third GUI state; now, clicking the main Ion Cannon button cycles through Closed, Open (Full), and Open (Compact).
+      This is helpful if you happen to have lots of ion cannons in orbit and would rather not have the GUI take up half of your screen!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 22. 11. 2015
+  Bugfixes:
+    - Fixed a bug in multiplayer mode.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 22. 11. 2015
+  Changes:
+    - Ion Cannons can now be crafted in vanilla Assembling Machine 3s, if there are no other mods installed which enable higher tiers of assembling machines.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 20. 11. 2015
+  Changes:
+    - "Select Target" no longer plays when all ion cannons are on cooldown.
+    - Added damage amount for each ion cannon blast to config.lua.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0 - First public release
+Date: 20. 11. 2015
+  Major Features:
+    - Initial release, featuring Orbital Ion Cannons that can pretty much obliterate anything you might come across.

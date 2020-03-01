@@ -1,0 +1,9 @@
+{
+    "name": "lightorio",
+    "version": "0.17.1",
+	"factorio_version": "0.17",
+	"title": "Lightorio",
+    "author": "warped_jack",
+    "dependencies": ["base >= 0.17", "? angelssmelting >= 0.4.3", "? bobassembly >=0.16.1", "? angelspetrochem >=0.7.8", "? boblibrary >=0.16.0" ],
+    "description": "Adds a little 'glow' to assembling machines, chem plants and oil refineries, to make the factory more visible at night. Not intended as an complete replacement for lamps."
+}

@@ -1,0 +1,22 @@
+{
+    "name": "assembler-pipe-passthrough",
+    "version": "0.0.13",
+    "date": "2019-04-11",
+    "title": "Assembler Pipe Passthrough",
+    "author": "EnigmaticAussie",
+    "dependencies": [
+        "base >= 0.17.58",
+        "?angelsbioprocessing >= 0.6.2",
+        "?angelspetrochem >= 0.8.6",
+        "?angelssmelting >= 0.5.7",
+        "?bobassembly >= 0.17.6",
+        "?bobplates >= 0.16.10",
+        "?expanded-rocket-payloads >= 0.17.1",
+        "?geothermal >= 1.17.12",
+        "?space-exploration >= 0.1.123",
+        "?pyhightech >= 1.2.8",
+        "?pycoalprocessing >= 1.3.5"
+    ],
+    "description": "Adds more pipe connections to allow assemblers to pass through fluids, like electric miners.",
+    "factorio_version": "0.17"
+}

@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 18. 05. 2019
+  Changes:
+    - Increased the collision box for both kinds of lamp.
+    - Added missing "mined sound" and fire resistance to large electric lamp.
+    - More adjustments to undo collision box shenanigans caused by other mods not minding their own business.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 17. 05. 2019
+  Changes:
+    - Added a check for Squeak Through and undo its breathtaking liberties if detected.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 16. 05. 2019
+  Changes:
+    - Fixed that large fuel values with a decimal place were being herped when they should have been derped.
+    - Fixed that fuel "burnt_result" was being ignored.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 10. 05. 2019
+  Changes:
+    - Build large lamp entity from scratch instead of assuming some other mod hasn't messed with the vanilla lamp.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 10. 05. 2019
+  Changes:
+    - Changed the copper lamp to look more like an ancestor of the electric lamp.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 7. 05. 2019
+  Changes:
+    - Added a copper burner lamp (simulated). Runs on any "chemical" solid fuel it can detect. 4MJ = 1 in-game day of light.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 22. 04. 2019
+  Changes:
+    - Another texture change.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 21. 04. 2019
+  Changes:
+    - Another texture change.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 21. 04. 2019
+  Changes:
+    - Use vanilla's circuit connector generator instead of guessing.
+    - Updated the lamp's textures to match my other mods.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 02. 04. 2019
+  Changes:
+    - Added Dectorio as an optional dependency, so that its extra colours are available.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 30. 03. 2019
+  Changes:
+    - Initial release.

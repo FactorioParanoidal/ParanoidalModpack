@@ -1,0 +1,7 @@
+﻿---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 20. 02. 2018
+  Bugfixes:
+    - Changed Science pack gold item to require alien science to exist. (recipe already required it)
+  Additions:
+    - Added global bobmods.tech

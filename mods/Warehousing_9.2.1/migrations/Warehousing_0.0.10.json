@@ -1,0 +1,12 @@
+{
+  "entity":
+  [
+    ["warehouse-smart", "warehouse-basic"],
+    ["storehouse-smart", "storehouse-basic"]
+  ],
+  "item":
+  [
+    ["warehouse-smart", "warehouse-basic"],
+    ["storehouse-smart", "storehouse-basic"]
+  ]
+}

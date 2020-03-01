@@ -1,0 +1,10 @@
+{
+	"name": "nuke-cliffs",
+	"version": "0.17.2",
+	"factorio_version": "0.17",
+	"title": "Nukes Destroy Cliffs",
+	"author": "calcwizard",
+	"homepage": "",
+	"dependencies": ["base", "?AtomicArtillery"],
+	"description": "Atomic bombs now also destroy cliffs."
+}

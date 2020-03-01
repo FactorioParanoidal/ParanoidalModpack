@@ -1,0 +1,10 @@
+{
+  "name": "Aircraft",
+  "version": "1.6.7",
+  "factorio_version": "0.17",
+  "title": "Aircraft",
+  "author": "SuicidalKid",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=120&t=18714",
+  "dependencies": ["base >= 0.17.0", "? bobplates >= 0.17.0", "? bobelectronics >= 0.17.0", "? boblibrary >= 0.17.0", "? bobwarfare >= 0.17.0", "? bobvehicleequipment >= 0.17.0", "? electric-vehicles-reborn >= 0.1.1"],
+  "description": "Adds 4 aircraft, each with their benefits and drawbacks, to allow for more biter-killing fun!"
+}

@@ -1,0 +1,11 @@
+{
+    "name": "weaponSoundsRedone",
+    "version": "1.3.0",
+    "title": "Weapon Sounds Redone",
+    "author": "M.Cocko",
+    "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=32617",
+    "homepage": "",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.17"],
+    "description": "This is a project to rework some of the weapon sounds. Currently changed are: Pistol, Submachine-Gun, Shotgun, Combat-Shotgun and the Turret. More sounds might be added. Visit mods.factorio.com for a preview!"
+}

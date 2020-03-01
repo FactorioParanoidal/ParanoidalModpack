@@ -1,0 +1,1 @@
+Were made using GIMP, applying hue saturation for the green colour to -68, and lightness to -50 sometimes

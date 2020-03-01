@@ -1,0 +1,20 @@
+{
+  "name": "Clowns-AngelBob-Nuclear",
+  "version": "1.1.6",
+  "factorio_version": "0.17",
+  "title": "MadClown01's AngelBob Nuclear",
+  "author": "MadClown01",
+  "contact": "",
+  "homepage": "",
+  "description": "Adds a thermonuclear bomb and thorium & plutonium fuel cycles. Gives end-game Bob's enemies something to fear. Adds an optional uranium enrichment chain as a far more intricate replacement to the Koravex Enrichment Process.",
+  "dependencies": [
+	"base >= 0.17.23",
+	"bobores >= 0.17.0",
+	"? bobwarfare >= 0.17.0",
+	"? bobelectronics >= 0.17.0",
+	"? bobmodules >= 0.17.1",
+	"angelsrefining >= 0.10.3",
+	"Clowns-Nuclear >= 1.0.0",
+	"Clowns-Processing >= 1.3.2"
+	]
+}

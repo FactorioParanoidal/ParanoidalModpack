@@ -1,0 +1,10 @@
+{
+  "name": "platforms",
+  "version": "19.18.3",
+  "factorio_version": "0.17",
+  "title": "Platforms",
+  "author": "micromario",
+  "contact": "https://discord.gg/5Pwj79Y",
+  "description": "Allows you and your robots to build platforms. Platforms are placed on water, and act like landfill except that you can destroy platforms later to reclaim water tiles. Tile graphics courtesy of kaueNP.",
+  "dependencies": ["base", "?SeaBlock", "?Teleporters"]
+}

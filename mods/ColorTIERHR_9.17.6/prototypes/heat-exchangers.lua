@@ -1,0 +1,5 @@
+replaceHEATEXCHANGERS("heat-exchanger","1")
+replaceHEATEXCHANGERS("heat-exchanger-2","2")
+replaceHEATEXCHANGERS("heat-exchanger-3","3")
+replaceHEATEXCHANGERS("heat-exchanger-4","4")
+replaceHEATEXCHANGERS("heat-exchanger-5","5")

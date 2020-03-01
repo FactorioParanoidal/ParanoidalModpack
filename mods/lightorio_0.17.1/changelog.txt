@@ -1,0 +1,53 @@
+0.17.1
+Fixed non-HR version of assemblerlamp still having 0 width causing a crash on startup
+
+0.17.0
+Updated to 0.17
+The dim "ambient" lamps from buildings now costs a tiny amount of power (seems it can no longer be zero as of 0.17 - I will investigate)
+Rough and ready support for Angel/Bob's buildings impacted by this mod. Might break as mods are updated.
+
+0.16.4
+Added assemblerlights to electric miners. There's now a lamp on the output point! Miners currently DON'T glow when active.
+Fixed an issue with settings not being generated in certain mod configurations.
+
+
+0.16.3
+Fixed an issue where the oil refinery animation flame wasn't playing anymore. This now works alongside the colour modifications.
+Fixed an issue where the chemical plant animation wasn't playing anymore. This now works alongside the colour modifications.
+
+0.16.2
+1) Added an active glow for chemical plants
+- Also supports Bob's chemical plants 2-4
+2) Added an active glow for oil refineries 
+- Also supports Bob's oil refineriers 2-4
+3) Added a Lightorio section to the Mod Settings menu (Available in Options)
+ All of the settings effect prototypes, so are only available on startup on the main menu.
+ The following settings can be configured:
+a) The colour of the idle glow of all assembling machines
+b) The intensity of the idle glow of all assembling machines
+c) The size of the idle glow of all assembling machines
+d) The colour of the active glow for assembling machine 1s
+e) The colour of the active glow for assembling machine 2s
+f) The colour of the active glow for assembling machine 3s
+g) The colour of the active glow for chemical plants
+h) The colour of the active glow for oil refineries
+With Bob's Assemblers:
+i) The colour of the active glow for assembling machine 4s
+j) The colour of the active glow for assembling machine 5s
+k) The colour of the active glow for assembling machine 6s
+l) The colour of the active glow for chemical plant 2s
+m) The colour of the active glow for chemical plant 3s
+n) The colour of the active glow for chemical plant 4s
+o) The colour of the active glow for oil refinery 2s
+p) The colour of the active glow for oil refinery 3s
+q) The colour of the active glow for oil refinery 4s
+
+
+
+With Bob's Electronics:
+r) The colour of the active glow for electronic assembling machine 1s
+s) The colour of the active glow for electronic assembling machine 2s
+t) The colour of the active glow for electronic assembling machine 3s
+
+
+0.16.1 - Renamed internal folder name to be consistent with zip and .json to avoid a crash for anyone who manually unzips their mods.

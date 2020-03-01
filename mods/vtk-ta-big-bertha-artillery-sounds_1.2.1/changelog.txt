@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 06. 04. 2019
+  Changes:
+    - Fixed changelog not being shown ingame, thanks Pi-C and its science : https://forums.factorio.com/viewtopic.php?f=25&t=67140 .
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 02. 03. 2019
+  Changes:
+    - Updated for 0.17. No functionnal changes.
+    - Renamed mod with my name to find them all more easily.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 05. 03. 2018
+  Changes:
+    - Refactor provided by syskill (https://mods.factorio.com/mod/vtk-ta-big-bertha-artillery-sounds/discussion/5a98e0bc84a090000aeb063a) thanks a lot.
+    - Fixes entity triggerspawning and persisting and blocking build path. Changed them from simple entity to explosion type that disapear properly when artillery action is done.
+    - Internal refactor to not rewrite the artillery prototype and properly insert overload new sound trigger actions.
+    - Internal refactor for maintanability.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 06. 01. 2018
+  Changes:
+    - Rumbling
+    - Add sound at a distance on the artillery shooting and explosion with 4 level of attenued sound depending on player distance. Now you can hear with satisfaction the doom of your artillery shooting in the background up to 1 000 tiles away.
+    - Inspiration from https://mods.factorio.com/mods/Arcitos/MushroomCloud and help from Bilka#2444 on Factorio discord
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 06. 01. 2018
+  Changes:
+    - Hotfix crash.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 06. 01. 2018
+  Changes:
+    - Initial release

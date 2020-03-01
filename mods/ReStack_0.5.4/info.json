@@ -1,0 +1,11 @@
+{
+  "name": "ReStack",
+  "version": "0.5.4",
+  "title": "ReStack",
+  "author": "Optera",
+  "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+  "homepage": "",
+  "description": "Adds settings to set stack sizes for ores, plates, barrels, fuel cells, ammo and crafting machines for base and mod added variants.",
+  "factorio_version": "0.17",
+	"dependencies": ["base >= 0.17.18", "?PickerExtended >= 3.0.2", "?Dectorio >= 0.8.0"]
+}

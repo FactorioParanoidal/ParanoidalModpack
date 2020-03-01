@@ -1,0 +1,36 @@
+{
+    "entity": [
+        ["underground-belt-miniloader", "miniloader"],
+        ["fast-underground-belt-miniloader", "fast-miniloader"],
+        ["express-underground-belt-miniloader", "express-miniloader"],
+        ["green-underground-belt-miniloader", "green-miniloader"],
+        ["purple-underground-belt-miniloader", "purple-miniloader"],
+
+        ["underground-belt-miniloader-inserter", "miniloader-inserter"],
+        ["fast-underground-belt-miniloader-inserter", "fast-miniloader-inserter"],
+        ["express-underground-belt-miniloader-inserter", "express-miniloader-inserter"],
+        ["green-underground-belt-miniloader-inserter", "green-miniloader-inserter"],
+        ["purple-underground-belt-miniloader-inserter", "purple-miniloader-inserter"]
+    ],
+    "item": [
+        ["underground-belt-miniloader", "miniloader"],
+        ["fast-underground-belt-miniloader", "fast-miniloader"],
+        ["express-underground-belt-miniloader", "express-miniloader"],
+        ["green-underground-belt-miniloader", "green-miniloader"],
+        ["purple-underground-belt-miniloader", "purple-miniloader"]
+    ],
+    "recipe": [
+        ["underground-belt-miniloader", "miniloader"],
+        ["fast-underground-belt-miniloader", "fast-miniloader"],
+        ["express-underground-belt-miniloader", "express-miniloader"],
+        ["green-underground-belt-miniloader", "green-miniloader"],
+        ["purple-underground-belt-miniloader", "purple-miniloader"]
+    ],
+    "technology": [
+        ["underground-belt-miniloader", "miniloader"],
+        ["fast-underground-belt-miniloader", "fast-miniloader"],
+        ["express-underground-belt-miniloader", "express-miniloader"],
+        ["green-underground-belt-miniloader", "green-miniloader"],
+        ["purple-underground-belt-miniloader", "purple-miniloader"]
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "item":
+  [
+    ["bob-robot-tank", "bob-robot-laser-drone"]
+  ],
+  "entity":
+  [
+    ["bob-robot-tank", "bob-robot-laser-drone"]
+  ],
+  "recipe":
+  [
+    ["bob-robot-tank", "bob-robot-laser-drone"]
+  ],
+  "technology":
+  [
+    ["bob-robot-tanks", "bob-robot-laser-drones"]
+  ]
+}
+

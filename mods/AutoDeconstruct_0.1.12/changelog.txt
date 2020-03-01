@@ -1,0 +1,118 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2019-02-28
+  Changes:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 2018-02-22
+  Changes:
+    - Better label for in-game option
+    - Added in-game changelog
+  Bugfixes:
+    - Fixed that checking resources didn't respect mining hardness
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2017-12-16
+  Compatibility:
+    - Updated Factorio version to 0.16, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2017-06-30
+  Compatibility:
+    - Compatibility fix for mods using mining drills as position markers
+  Workarounds:
+    - Don't deconstruct miners that are hooked up to a circuit network
+  Changes:
+    - In-game option for removal of targets, instead of configuration file
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2017-04-26
+  Workarounds:
+    - Don't deconstruct miners that have fluids, until I have time to make it smarter
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2017-04-24
+  Compatibility:
+    - Updated Factorio version to 0.15, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2017-02-24
+  Compatibility:
+    - Minor compatibility fix for modded drills that are mineable but not deconstructable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2016-08-27
+  Compatibility:
+    - Updated Factorio version to 0.14, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2016-08-06
+  Compatibility:
+    - This release requires factorio version 0.13.14
+  Workarounds:
+    - Removed workaround for drill ranges since factorio now exposes them in the prototype (no more data-final-fixes.lua)
+  Optimizations:
+    - Update search radius as drills are built, not always using the maximum range when not needed.
+  Changes:
+    - Now renews deconstruction orders for drills when they time out
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2016-08-03
+  Bugfixes:
+    - Made finding targeted chests more reliable.
+  Debug:
+    - Added remote calls for debug and init. /c remote.call("ad","init"), /c remote.call("ad","debug")
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2016-07-31
+  Optimizations:
+    - Moved from tick based checking to relying on events.
+    - No longer storing anything in global.
+  Bugfixes:
+    - More reliable check that the resource is not infinite
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2016-06-30
+  Bugfixes:
+    - Fixed a warning where the marked drill inserted into a container that is not minable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2016-06-27
+  Compatibility:
+    - First version for Factorio 0.13.0
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2016-03-04
+  Bugfixes:
+    - fixed config being ignored (chests not getting picked up)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2016-03-01
+  Bugfixes:
+    - fixed init not working properly when upgrading mod version
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2016-02-29
+  Bugfixes:
+    - fixed a desync issue
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2016-02-16
+  Compatibility:
+    - no more hardcoded drill ranges, modded drills now work out of the box
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2015-11-07
+  Bugfixes:
+    - fixed drills being forgotten when game was restarted
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2015-11-05
+  Changes:
+    - now (optionally) removes the chest that the drill outputs to
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2015-11-04
+  Notes:
+    - initial release

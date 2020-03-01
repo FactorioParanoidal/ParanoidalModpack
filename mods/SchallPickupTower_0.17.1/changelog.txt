@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019.04.25
+  Graphics:
+    - Improved graphics of the pickup tower.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2019.03.01
+  Features:
+    - Updated to 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 2019.02.21
+  Features:
+    - Added flying text on item picked up information.
+  Changes:
+    - Added upgradable flags to various tech.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 2019.02.08
+  Bugfixes:
+    - Fixed on_sector_scanned compare with nil bug.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 2019.02.07
+  Features:
+    - Introduced 2 new buildings: pickup tower (range 32 & 64 variants). (Credit to YuokiTani on graphics)
+  Locale:
+    - English, German, traditional Chinese, simplified Chinese are available.
+  License:
+    - Using Bob's Copyright License.  Document included.

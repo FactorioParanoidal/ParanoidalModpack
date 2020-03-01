@@ -1,0 +1,13 @@
+{
+  "name": "SmogVisualPollution",
+  "version": "0.0.1",
+  
+  "title": "Smog Visual Pollution",
+  "description": "Now high pollution makes gray smog",
+  
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base"],
+  "factorio_version": "0.17"
+}

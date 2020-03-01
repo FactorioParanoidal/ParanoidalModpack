@@ -1,0 +1,87 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+  Fixes:
+    - Rocket return chance is now a double setting like it should be
+    - Fix mod setting locale
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+  Fixes:
+    - Make Satellite Communication actually craftable (Thanks Atraxi)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+  Fixes:
+    - Try to fix crash with Bob's Roboports disabled
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Fixes:
+    - Try to fix incompatible with Omni mods (Thanks Pez)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Fixes:
+    - Fixed a crash with "Bobs Warfare" installed but Radars disabled
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Changes:
+    - Changed Shuttle Refurbished setting to be more clear
+    - Added a non default enabled option to let the Random Dropship unboxing give you Angels ores
+  Fixes:
+    - Fixed a crash with "Bobs Logistics" installed but Roboports disabled
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Fixes:
+    - Fixed crash without "Angels Petrochem" installed
+    - Fixed some weird crash with "Angels Bioprosssing" and "SpaceX"
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Fixes:
+    - Tried to fix the refurbish recipe of the Fabricator Shuttle
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Fixes:
+    - Added thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Fixes:
+    - Update to 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+  Fixes:
+    - Fix crash with "SeaBlock"
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+  Changes:
+    - Added an option to not always return Refurbished Space shuttle.
+    - Added compatibility with MoreScience
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+  Changes:
+    - Mod can now be used without Angel's Mods
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Changes:
+    - The Orbital Autonomous Fabricator can now produce Rare Earth Ore from "Py High Tech"
+  Fixes:
+    - Fixed a crash without "Bobs Revamp"
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Changes:
+    - The Advanced Assembler can no longer craft normal recipes cause it is arguable worse than Bobs Assemblers. Thanks for to Viktor.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Fixes:
+    - Fixed Typo in "Tater Space Station" code
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Changes:
+    - Added a new setting to require "SpaceX" tech in "Expanded Rocket Payload" Tech
+    - Added space science and high tech packs to some "SpaceX" techs
+    - "Heat Shielding Tile"-setting now also replaces the "SpaceX" Space Casing
+    - When "Orbital Ion Cannon" is installed it requires Robot Global Pointing System as a prequesite
+    - "Orbital Ion Cannon" are now 20000 and 25000 research times
+    - When "Tater Space Station" is installed it now requires Advanced Space Station Assembly
+    - All "Tater Space Station" recipes and technologies are more expensive.
+    - Switch over to using "boblibrary" instead of doing a custom one. Thank you bobingabout!
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Changes:
+    - Initial release

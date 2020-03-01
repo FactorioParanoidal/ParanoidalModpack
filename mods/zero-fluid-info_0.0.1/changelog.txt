@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 3/2/2019
+  Additions:
+    - 0.17 support and first official release on the mod portal
+  Changes:
+    - Updated localization of fuel value text.
+	- Moved to standalone mod
+  Removals:
+    - Removed references to pressure_to_speed_ratio and flow_to_energy_ratio since those are no longer used in 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2/13/2019
+  Additions:
+    - Added tooltip information display

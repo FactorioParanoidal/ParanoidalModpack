@@ -1,0 +1,11 @@
+{
+    "name": "Oberhaul",
+    "version": "9.16.22",
+    "title": "Ober3550's BobsAngels Overhaul",
+    "author": "Ober3550",
+    "contact": "www.factorioforums.com",
+    "homepage": "",
+    "factorio_version": "0.17",
+    "dependencies": ["base >= 0.16.0", "boblibrary >= 0.16.0", "bobelectronics >= 0.16.0", "bobplates >= 0.16.0"],
+    "description": "This mod nerfs bobs and angels to make the game more balanced throughout. Especially including megabasing"
+}

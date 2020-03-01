@@ -1,0 +1,218 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2.4.2019
+  Features:
+    - added turrets
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 25.3.2019
+  Features:
+    - added walls and gates
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 3.3.2019
+  Bugfixes:
+    - skip over barrel recipes lacking ingredients and results, https://mods.factorio.com/mod/ReStack/discussion/5c7bd343961aa5000cbdc1ae
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 27.2.2019
+  Bugfixes:
+    - accounted for raw-wood having been renamed to wood
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 27.2.2019
+  Features:
+    - updated to Factorio 0.17
+    - setting an option to 0 disables resetting stack size
+    - settings previously defaulting to base stack size now default to 0
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 21.12.2018
+  Features:
+    - barrel settings work on gas bottles and canisters from BobPlates
+    - barrel settings work on DirtyBarrels
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 20.8.2018
+  Features:
+    - added nuclear fuel
+  Bugfixes:
+    - stack size wasn't applied to Used up uranium fuel cell
+    - Description for Reactor fuels
+  Changes:
+    - internal name for reactor fuel mapped to nuclear fuel
+    - new internal name for reactor fuel
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 19.8.2018
+  Features:
+    - added chests
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 11.7.2018
+  Bugfixes:
+    - science packs use improved search logic
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 8.7.2018
+  Features:
+    - added rail signals
+    - added train stops
+    - added locomotives and wagons
+    - added cars (includes tanks, planes, ...)
+  Bugfixes:
+    - rails stack default stack size is 200 as stated in description
+  Changes:
+    - push to 0.16.51 stable
+    - refactored search logic #3
+---------------------------------------------------------------------------------------------------
+Version: 0.3.14
+Date: 20.5.2018
+  Features:
+    - added copper cable to wires
+    - added modules
+---------------------------------------------------------------------------------------------------
+Version: 0.3.13
+Date: 20.5.2018
+  Features:
+    - added bots
+  Changes:
+    - push to 0.16.36 stable
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+Date: 25.1.2018
+  Bugfixes:
+    - fixed null reference for recipe.ingredients #2
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+Date: 25.1.2018
+  Bugfixes:
+    - fixed null reference for recipe.ingredients #1
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 24.1.2018
+  Features:
+    - added solid fuel
+  Changes:
+    - moved all action into data-final-fixes
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 5.1.2018
+  Features:
+    - added electric poles
+    - added arithmetic, decider and constant combinator
+    - added red & green wire
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 31.12.2017
+  Features:
+    - find rocket parts by recipe
+    - find nuclear fuel and burn result by fuel category
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 30.12.2017
+  Features:
+    - barrels updated to changes in 0.16.8
+    - increased default barreling recipes to more ups friendly 10 barrels/2s
+  Removed:
+    - fluid wagon tweaks
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 26.12.2017
+  Features:
+    - barrel capacities < 250l result in barreling recipes processing multiple barrels at once
+    - in game changelog
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 23.12.2017
+  Features:
+    - added science packs
+    - added option to skip rocket launch products
+  Bugfixes:
+    - setting categories should now also work on item types other than "item"
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: ???
+  Features:
+    - added rails
+  Bugfixes:
+    - fixed stone-bricks where overwritten by smelting stack size
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 20.12.2017
+  Features:
+    - added rails, combinators and wires
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 16.12.2017
+  Features:
+    - added magazines, shotgun shells, flamethrower ammo, cannon shells and artillery shells
+  Changes:
+    - split into modules
+    - moved all action from data-final-fixes to data-update
+    - removed fix for recipes with result amount > stack size as it's part of 0.16.x
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 15.12.2017
+  Features:
+    - added barrel stack size and capacity
+    - added toggle for lighter fluid wagons with less capacity
+  Changes:
+    - moved u-235 and u-238 to their own uranium category
+    - removed partial localization of item names from setting description
+  Bugfixes:
+    - fixed plate stack size being applied to nuclear fuel
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 13.12.2017
+  Features:
+    - updated to Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: ???
+  Features:
+    - supported items: inserter
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: ???
+  Features:
+    - supported items: rocket fuel, rocket control unit, low density structure, belt, underground belt, splitter, loader, pipe, pipe to ground
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: ???
+  Features:
+    - supported item: wood
+    - added option to force tile stack size for ore/plate/wood (requires mods adding tiles for those items e.g. Dectorio)
+  Bugfixes:
+    - stone brick will always use tile stack size rather than plate stack size
+    - fixed spelling
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: ???
+  Changes:
+    - apply plate stack size to all smelting and centrifuging results
+  Bugfixes:
+    - recipes with min-amount and max-amount no longer crash recipe fix
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: ???
+  Changes:
+    - apply recipe fix to all recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: ???
+  Features:
+    - supports items added by mods
+    - supported items: tiles
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: ???
+  Features:
+    - grouped similar items under one setting
+    - supported items: assembling machines, chemical plant, centrifuge, beacon, reactor, roboport, ores, plates, uranium
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0 - Initial release
+Date: ???
+  Features:
+    - supported items: uranium-fuel-cell, used-up-uranium-fuel-cell
+    - recipe fix preventing stuck assembler when stack size < result.amount

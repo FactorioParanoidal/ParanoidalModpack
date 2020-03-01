@@ -1,0 +1,11 @@
+{
+  "name": "bobmodules",
+  "version": "0.17.2",
+  "factorio_version": "0.17",
+  "title": "Bob's Modules",
+  "author": "Bobingabout",
+  "contact": "robertagius@hotmail.com",
+  "homepage": "https://forums.factorio.com/viewforum.php?f=51",
+  "description": "Expansion to the Modules system.",
+  "dependencies": ["base >= 0.17.0", "boblibrary >= 0.17.0", "? bobplates >= 0.17.0", "? bobelectronics >= 0.17.0"]
+}

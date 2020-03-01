@@ -1,0 +1,31 @@
+{
+  "name": "marathon",
+  "version": "9.1.17",
+  "factorio_version": "0.17",
+  "title": "Marathon Mod",
+  "author": "Benoit Girard & Afforess",
+  "contributors": ["Wulfson", "KeepOnDigging", "gheift", "nastyslave"],
+  "homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=91&t=13567",
+  "description": "Increases the resource costs of most recipes causing a marathon game. The will require the players to scale a larger factory and use rail to reach the end game.",
+  "dependencies": ["base >= 0.17.0",
+  
+    "bobassembly",
+    "bobelectronics",
+    "bobenemies",
+    "boblibrary",
+    "boblogistics",
+    "bobmining",
+    "bobmodules",
+    "bobores",
+    "bobplates",
+    "bobpower",
+    "bobtech",
+    "bobwarfare",
+	
+  "angelsinfiniteores",
+  "angelsrefining",
+  "angelspetrochem",
+  "angelssmelting",
+  "angelsbioprocessing"
+    ]
+}
