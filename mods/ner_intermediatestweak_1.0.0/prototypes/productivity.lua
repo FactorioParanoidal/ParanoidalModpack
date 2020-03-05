@@ -39,7 +39,17 @@ nit_vanillaproductivity = {
 	"tungsten-gear-wheel",
 	"nitinol-gear-wheel",
 
-	
+
+  "simple-io",
+  "standart-io",
+  "advanced-io",
+  "predictive-io",
+  "intelligent-io",
+  
+  "angels-iron-gear-wheel-stack-converting",
+  "angels-steel-gear-wheel-stack-converting",
+
+
 	
   "condensator",
   "condensator2",
@@ -67,8 +77,5 @@ nit_vanillaproductivity = {
   "stone-brick",
   "angels-concrete",
   "angels-concrete-brick",
-  "angels-reinforced-concrete-brick",
-  
-	
-    "express-splitter"
+  "angels-reinforced-concrete-brick"
 }
