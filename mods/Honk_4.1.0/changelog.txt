@@ -1,0 +1,74 @@
+---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+Date: 03. 02. 2020
+  Changes:
+    - Added new alternate honk key and option to choose its sound
+    - Added option to specify which sound the Honk! key makes (and automatic option to choose based on speed)
+    - Manual honking now works even when train is in auto (scheduled) mode
+---------------------------------------------------------------------------------------------------
+Version: 4.0.0
+Date: 01. 02. 2020
+  Changes:
+    - Rewrote Honk to use new API and prototype features added since this mod was first made
+    - Removed per-locomotive cooldown, hopefully no longer necessary
+    - Added notification text when using hotkey to switch train between automatic and manual
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 23. 01. 2020
+  Changes:
+    - Updated to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 09. 06. 2019
+  Bugfixes:
+    - Now only honks when player is on same surface as locomotive
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 13. 03. 2019
+  Changes:
+    - Updated mod to use sound API calls instead of previous hacky method
+    - Added (optional) new algorithm to allow honks to be heard at much greater ranges
+    - Added options to change sound or disable honking for each occasion
+    - Added options to control volume, audible distance and cooldown of honks
+---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 27. 02. 2019
+  Changes:
+    - Updated to Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 15. 12. 2017
+  Changes:
+    - Updated to Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 26. 04. 2017
+  Changes:
+    - Updated to Factorio 0.15
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 27. 08. 2016
+  Changes:
+    - Updated to Factorio 0.14
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 16. 07. 2016
+  Bugfixes:
+    - Honk now comes from correct end of train.
+  Changes:
+    - Cooldown now per-locomotive.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 13. 07. 2016
+  Changes:
+    - Added hotkeys for manual honking and quick toggling of train control
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 11. 07. 2016
+  Changes:
+    - Added cooldown
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 29. 06. 2016
+  Changes:
+    - Updated to Factorio 0.13

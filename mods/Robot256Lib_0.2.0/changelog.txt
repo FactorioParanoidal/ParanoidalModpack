@@ -1,0 +1,42 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2020-01-23
+  Changes:
+    - Update for Factorio 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-01-23
+  Features:
+    - Added parameter to replaceCarriage to flip the orientation of the wagon during replacement.
+    - Added support to replaceCarriage for copying cargo wagon filters and inventory.
+    - Added support for saving and restoring arbitrary LuaInventory objects.
+    - Added support for saving and restoring Blueprints, Blueprint Books, Deconstruction Planners, and Upgrade Planners stored in inventories.
+    - Added support for saving items with equipment grids, like Modular Armor. Contents of grid is saved alongside the armor (script can't add grid to LuaItemStack that doesn't already have one).
+    - Added basic functions to make event filter lists for a given set of entity names (work in progress).
+  Scripting:
+    - mergeStackLists(stack1,stack2):  Consolidates items in stack2 into stack1, returns stack1.
+    - itemsToStacks(items):  Converts item list stored in name:count dictionary format into StackList.
+    - saveInventoryStacks(source):  Replaces saveInventory.  Returns StackList.
+    - insertStack(target, stack, stack_limit):  Attempts to insert _stack_ into LuaInventory _target_.  Returns SimpleItemStack with any items that could not be inserted.
+    - spillStack(stack, surface, position):  Spills the items in _stack_ onto _surface_ at _position_.
+    - spillStacks(stacks, surface, position):  Spills the given list of stacks.
+    - insertInventoryStacks(target, stacks):  Attempts to insert _stacks_ into LuaInventory _target_.  Returns StackList with any items that could not be inserted.
+    - removeStackFromSavedGrid(savedGrid, stack):  Attempts to subtrack _stack_ from a grid contents structure created by saveGrid.
+    - saveGridStacks(savedGrid):  Converts a saved grid structure into StackList so that it can be disassembled and added to inventories.
+    - saveFilters(source):  Saves all the slot item filters and sizing bar in LuaInventory _source_.
+    - restoreFilters(target, filters):  Sets filters and sizing bar in LuaInventory _target_ according to saved _filters_ structure.
+    - generateNameFilter(<strings and/or lists of strings>):  Returns a list of filter entries for every string in the argument(s) in the form {filter="name", name=<entry>, mode="or"}.
+    - generateGhostFilter(<strings and/or lists of strings>):  Returns a list of filter entries for every string in the argument(s) in the form {filter="ghost_name", name=<entry>, mode="or"}.
+  Changes:
+    - Changed all inventory manipulation to use arrays of SimpleItemStack structures ("StackList" structure).
+    - Added input null checking on all functions.  If target is null, "insert" functions return the entire argument as remainders.
+    - saveBurner, restoreBurner: Uses saveInventoryStacks and insertInventoryStacks to handle fuel inventories.
+    - restoreGrid, restoreBurner: Returns list of any fuel and equipment that could not be inserted.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2019-12-29
+  Scripting:
+    - function replaceCarriage:  sneakily swaps any rolling stock entity with another entity of the same type.
+    - function saveGrid, restoreGrid, saveBurner, restoreBurner:  used transfer equipment grids between entities.
+    - function saveItemRequestProxy:  checks for the Item Request Proxy associated with the given entity (fuel, ammo, or module insertion request) and saves it in a format that can be easily recreated on the new entity.
+    - function mapBlueprint, mapPipette:  checks player cursor, cut/copy blueprint, or blueprint item and swaps entity names per the given map.  Useful to prevent non-craftable items from being created or requested.

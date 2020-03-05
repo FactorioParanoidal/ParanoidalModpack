@@ -4,7 +4,7 @@
   "title": "ColorTIERHR for Bob's Mods",
   "author": "Kamsta99",
   "contact": "kamsta99@gmail.com",
-  "factorio_version": "0.17",
+  "factorio_version": "0.18",
   "homepage": "",
   "description": "This mod adds colors tiering for machines to make it easily see to which is better. This version now support ONLY HR quality!!! Repack.",
   "dependencies": ["base >= 0.17.0", "? ShinyBobGFX"]

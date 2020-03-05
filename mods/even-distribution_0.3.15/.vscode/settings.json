@@ -1,0 +1,22 @@
+{
+    "Lua.diagnostics.globals": [
+        "data",
+        "mods",
+        "settings",
+        "serpent",
+        "script",
+        "game",
+        "log",
+        "defines",
+        "global",
+        "unpack",
+        "rendering",
+        "button_hovered_font_color",
+        "default_dirt",
+        "button_default_font_color"
+    ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "trailing-space"
+    ]
+}

@@ -113,6 +113,7 @@ data.raw["inserter"][purpletier.."-stack-filter-inserter"].platform_picture.shee
 
 
 data.raw.item["inserter"].icon = "__ShinyBobGFX__/graphics/insert-icon/yellow-1.png"
+data.raw.item["inserter"].icon_size = 32
 data.raw.item["long-handed-inserter"].icon = "__ShinyBobGFX__/graphics/insert-icon/red-1.png"
 data.raw.item["long-handed-inserter"].icon = "__ShinyBobGFX__/graphics/insert-icon/red-1.png"
 data.raw.item["fast-inserter"].icon = "__ShinyBobGFX__/graphics/insert-icon/blue-1.png"
@@ -148,6 +149,8 @@ data.raw.item["stack-filter-inserter"].icon_size = 128
 data.raw.item["stack-filter-inserter"].icon_size = 128
 data.raw.item[greentier.."-stack-filter-inserter"].icon_size = 128
 data.raw.item[purpletier.."-stack-filter-inserter"].icon_size = 128
+
+
 
 end
 

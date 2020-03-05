@@ -1,0 +1,8 @@
+{
+	"name": "Renamer",
+	"version": "2.1.4",
+	"title": "Renamer",
+	"author": "GotLag",
+	"description": "Adds hotkey to rename stations, locomotives, labs, roboports and radars.",
+	"factorio_version": "0.18"
+}

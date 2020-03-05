@@ -9,5 +9,5 @@
   "license": "MIT",
   
   "dependencies": ["base >= 0.17.9", "? LightCone"],
-  "factorio_version": "0.17"
+  "factorio_version": "0.18"
 }

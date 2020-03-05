@@ -54,11 +54,6 @@
     },
     
     {
-      "name": "assembler-pipe-passthrough",
-      "enabled": true
-    },
-    
-    {
       "name": "AtomicArtillery",
       "enabled": true
     },
@@ -69,12 +64,22 @@
     },
     
     {
+      "name": "beautiful_straight_bridge_railway",
+      "enabled": true
+    },
+    
+    {
       "name": "BigLab",
       "enabled": true
     },
     
     {
       "name": "Bio_Industries",
+      "enabled": true
+    },
+    
+    {
+      "name": "BlueprintLab_Bud18",
       "enabled": true
     },
     
@@ -224,6 +229,11 @@
     },
     
     {
+      "name": "Cursed-FMD",
+      "enabled": true
+    },
+    
+    {
       "name": "DeadlockLargerLamp",
       "enabled": true
     },
@@ -279,12 +289,32 @@
     },
     
     {
+      "name": "FastRemoveTiles",
+      "enabled": true
+    },
+    
+    {
       "name": "Flammable_Oils_fix",
       "enabled": true
     },
     
     {
       "name": "Flow Control",
+      "enabled": true
+    },
+    
+    {
+      "name": "FluidMustFlow",
+      "enabled": true
+    },
+    
+    {
+      "name": "FluidWagonColorMask",
+      "enabled": true
+    },
+    
+    {
+      "name": "FNEI",
       "enabled": true
     },
     
@@ -354,6 +384,11 @@
     },
     
     {
+      "name": "MilesBobsExpansion",
+      "enabled": true
+    },
+    
+    {
       "name": "miniloader",
       "enabled": true
     },
@@ -410,6 +445,11 @@
     
     {
       "name": "NightBrightness",
+      "enabled": true
+    },
+    
+    {
+      "name": "Noxys_Trees",
       "enabled": true
     },
     
@@ -494,6 +534,11 @@
     },
     
     {
+      "name": "Picks-Inserter",
+      "enabled": true
+    },
+    
+    {
       "name": "platforms",
       "enabled": true
     },
@@ -524,12 +569,12 @@
     },
     
     {
-      "name": "remove_mod_names-updated",
+      "name": "Renamer",
       "enabled": true
     },
     
     {
-      "name": "Renamer",
+      "name": "research-progress",
       "enabled": true
     },
     
@@ -540,6 +585,11 @@
     
     {
       "name": "ReStack",
+      "enabled": true
+    },
+    
+    {
+      "name": "Robot256Lib",
       "enabled": true
     },
     
@@ -569,6 +619,11 @@
     },
     
     {
+      "name": "SchallTankPlatoon",
+      "enabled": true
+    },
+    
+    {
       "name": "Shield-FX",
       "enabled": true
     },
@@ -590,11 +645,6 @@
     
     {
       "name": "Skip Burner Stage",
-      "enabled": true
-    },
-    
-    {
-      "name": "SlightlyBetterSounds",
       "enabled": true
     },
     
@@ -639,6 +689,11 @@
     },
     
     {
+      "name": "train_warner",
+      "enabled": true
+    },
+    
+    {
       "name": "Turret-Shields",
       "enabled": true
     },
@@ -650,21 +705,6 @@
     
     {
       "name": "upgrade-planner-next",
-      "enabled": true
-    },
-    
-    {
-      "name": "VehicleSnap",
-      "enabled": true
-    },
-    
-    {
-      "name": "vtk-ta-big-bertha-artillery-sounds",
-      "enabled": true
-    },
-    
-    {
-      "name": "WagonColors",
       "enabled": true
     },
     
@@ -695,6 +735,11 @@
     
     {
       "name": "wireless-charging_v17",
+      "enabled": true
+    },
+    
+    {
+      "name": "ZCS-Trash-Landfill-Continued-Continued",
       "enabled": true
     },
     

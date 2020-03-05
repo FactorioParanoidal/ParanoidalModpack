@@ -1,0 +1,12 @@
+
+{
+    "name": "Cursed-FMD",
+    "version": "0.1.1",
+    "title": "Cursed Filter Mining Drill",
+    "author": "L0771",
+    "contact": "https://discord.gg/PnQwT8W",
+    "homepage": "https://discord.gg/PnQwT8W",
+    "dependencies": ["base", "?space-exploration", "?bobmining"],
+    "description": "Can filter resource with any mining drill",
+    "factorio_version": "0.18"
+}

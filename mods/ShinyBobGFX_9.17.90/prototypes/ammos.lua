@@ -17,6 +17,7 @@ data.raw.ammo["electric-bullet-magazine"].icon = "__ShinyBobGFX__/graphics/icons
 data.raw.item["magazine"].icon = "__ShinyBobGFX__/graphics/icons/warfare/mag-empty.png"
 
 data.raw.ammo["rocket"].icon = "__ShinyBobGFX__/graphics/icons/warfare/rocket-new.png"
+data.raw.ammo["rocket"].icon_size = 32
 data.raw.ammo["bob-rocket"].icon = "__ShinyBobGFX__/graphics/icons/warfare/rocket-imp.png"
 data.raw.ammo["bob-piercing-rocket"].icon = "__ShinyBobGFX__/graphics/icons/warfare/rocket-ap.png"
 data.raw.ammo["bob-electric-rocket"].icon = "__ShinyBobGFX__/graphics/icons/warfare/rocket-elec.png"
@@ -50,9 +51,12 @@ data.raw.item["poison-bullet-projectile"].icon = "__ShinyBobGFX__/graphics/icons
 data.raw.item["electric-bullet-projectile"].icon = "__ShinyBobGFX__/graphics/icons/warfare/bob-projectile-elec.png"
 
 data.raw.ammo["artillery-shell"].icon = "__ShinyBobGFX__/graphics/icons/warfare/artillery-shell-grey.png"
+data.raw.ammo["artillery-shell"].icon_size = 32
 data.raw.ammo["poison-artillery-shell"].icon = "__ShinyBobGFX__/graphics/icons/warfare/artillery-shell-poison.png"
 data.raw.ammo["explosive-artillery-shell"].icon = "__ShinyBobGFX__/graphics/icons/warfare/artillery-shell-flame.png"
 data.raw.ammo["distractor-artillery-shell"].icon = "__ShinyBobGFX__/graphics/icons/warfare/artillery-shell-distract.png"
+
+
 
 -- if data.raw.item["fusion-reactor-equipment-2"] then
 -- data.raw.item["fusion-reactor-equipment"].icon = "__ShinyBobGFX__/graphics/icons/fusion-reactor-equipment-1.png"

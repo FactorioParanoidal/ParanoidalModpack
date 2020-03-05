@@ -1,0 +1,10 @@
+{
+    "name": "BlueprintLab_Bud18",
+  "version": "0.18.0",
+  "factorio_version": "0.18",
+  "title": "The Blueprint Lab - Schoos",
+  "author": "Bud, Likos, Schoos",
+  "description": "Enter your lab to design your blueprints.",
+  "homepage": "",
+  "dependencies": ["base"]
+}

@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.18.1
+Date: 17.02.2020
+  Changes:
+    - Added a delay of 120 ticks for inserters marked by cleanup planer before it will be cleared again after it was successful cleared
+---------------------------------------------------------------------------------------------------
+Version: 1.18.0
+Date: 22.01.2020
+  Features:
+    - Update for game version 0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 26.12.2019
+  Bugfixes:
+    - Corrected changelog file to show up with game's parser
+    - Fixed: Crafted things are no longer duplicated
+    - Fixed: If not using the inserter cleanup planner the player cursor is not affected anymore (e.g. by crafting something)
+    - Fixed debugging logik
+  Changes:
+    - Due to performance reasons reduced default value of "Selection:  Maximum number per tick" from 25 to 10
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 22.12.2019
+  Info:
+    - Initial release
+  Locale:
+    - English, German are available.
+  License:
+    - GNU GPLv3

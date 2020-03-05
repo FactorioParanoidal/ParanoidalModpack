@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0
+Date: 02.23.2020
+  Features:
+    - made the landfill bigger, changed recipe, and new trashier gfx
+
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 04.05.2019
+  Features:
+    - updated to support Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 18.06.2019
+  Features:
+    - decreased pollution values by the factor of 60 to bring it in line with the 0.17 changes (thanks to YunoAloe for bringing this up)

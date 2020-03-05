@@ -1,0 +1,45 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 27. 01. 2020
+  Info:
+    - Updated for Factorio 0.18.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+  Info:
+    - Update for Factorio 0.17.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Info:
+    - Update for Factorio 0.16.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Info:
+    - Updated for 0.15.22+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Changes:
+    - Added specific trails to bobs ammo.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Changes:
+    - Uranium rounds magazine now shoots with green trails! Also a number of other trail colours have been added for other mods to use: bullet-beam-blue, bullet-beam-blue-faint, bullet-beam-cyan, bullet-beam-cyan-faint, bullet-beam-green, bullet-beam-green-faint, bullet-beam-magenta, bullet-beam-magenta-faint, bullet-beam-olive, bullet-beam-olive-faint, bullet-beam-orange, bullet-beam-orange-faint, bullet-beam-purple, bullet-beam-purple-faint, bullet-beam-red, bullet-beam-red-faint, bullet-beam-teal, bullet-beam-teal-faint, bullet-beam-white, bullet-beam-white-faint, bullet-beam-yellow, bullet-beam-yellow-faint.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Info:
+    - Updated for Factorio v0.15.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Changes:
+    - Now works with Bobs.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Info:
+    - First release.

@@ -1,0 +1,12 @@
+Alternate animated shield effect.
+based on Lux's shield from League of Legends, © Riot Games
+https://jasonkeyser.deviantart.com/art/Star-Guardian-Lux-s-W-Shield-VFX-617744636
+"Turret Shields" isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. 
+League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+
+
+
+Translations:
+- korean (thanks to Xagros)
+- russian (thanks to Cheshirrski)
+- chinese (thanks to xiaolianyy04)

@@ -1,0 +1,10 @@
+{
+  "name": "FluidWagonColorMask",
+  "version": "1.0.1",
+  "title": "Fluid Wagon Color Mask",
+  "author": "yeahtoast",
+  "contact": "",
+  "description": "Adds a color mask for the fluid wagon.",
+  "factorio_version": "0.18",
+	"dependencies": ["base >= 0.17.0"]
+}

@@ -1,0 +1,27 @@
+Version: 0.18.0
+Date: 2020/02/15
+   Major Features
+     - Update for 0.18
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 26.04.2019
+  Fixes:
+    - Fixed issue with LTN - Logistic Train Network.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 25.04.2019
+  Features:
+    - Unlock Infinity Pipe for fluids.
+    - Added recipes for Energy Interface, Infinity Chest and Infinity Pipe to storage group. Their recipes unlocked, when you entering to the Lab
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 10.04.2019
+  Fixes:
+    - Fixed Clear button in lab: Now it destroy all entities/tiles and respawn Big electic pole, Energy interface and Infinity chest
+    - Fixed issue with Miniloades mod. Now in lab miniloaders are destroed correctly.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 10.03.2019
+  Major Features:
+    - Update for 0.17.

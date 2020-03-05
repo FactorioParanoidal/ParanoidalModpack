@@ -196,7 +196,15 @@ if mk == 1 then
 end
 if powerbar == 1 then
 	-- if entity then entity.icons = {{icon = apath..complete..".png"},{icon = ipath.."num-"..mk-off..".png"}} end
-	if item then item.icons = {{icon = apath..complete..".png"},{icon = ipath.."num-"..mk-off..".png"}} end
+	if item then 
+		if item.icon_size == 32 then
+		item.icons = {{icon = apath..complete..".png"},{icon = ipath.."num-"..mk-off..".png"}} 
+		end
+		if item.icon_size == 64 then
+		item.icon_size = 32
+		item.icons = {{icon = apath..complete..".png"},{icon = ipath.."num-"..mk-off..".png"}} 
+		end
+	end
 	-- if recipe then recipe.icons = {{icon = apath..complete..".png"},{icon = ipath.."num-"..mk-off..".png"}} end
 else
 	-- if entity then entity.icon = apath..complete..".png" end
@@ -218,7 +226,10 @@ if not item then item = data.raw["item"][name] end
 -- if not recipe then recipe = data.raw["recipe"][name] end
 	
 	-- if entity then entity.icon = ipath..complete..".png" end
-	if item then item.icon = ipath..complete..".png" end
+	if 	item then 
+	item.icon = ipath..complete..".png" 
+	item.icon_size = 32
+	end
 	-- if recipe then recipe.icon = ipath..complete..".png" end
 end
 end
@@ -234,7 +245,10 @@ if not item then item = data.raw["item"][name] end
 -- if not recipe then recipe = data.raw["recipe"][name] end
 	
 	-- if entity then entity.icon = ipath..complete..".png" end
-	if item then item.icon = ipath..complete.."a.png" end
+	if item then 
+	item.icon = ipath..complete.."a.png" 
+	item.icon_size = 32
+	end
 	-- if recipe then recipe.icon = ipath..complete..".png" end
 end
 end

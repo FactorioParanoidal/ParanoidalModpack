@@ -1,0 +1,12 @@
+{
+  "name": "SchallTankPlatoon",
+  "version": "0.18.2",
+  "title": "Schall Tank Platoon",
+  "author": "Schallfalke",
+  "email": "",
+  "homepage": "https://mods.factorio.com/mod/SchallTankPlatoon",
+  "contact": "",
+  "description": "Adds different classes and tiers of tanks in-par with power armors, having vehicle equipment grid.\nAims to fill the gaps the vanilla game should have.\nNot overhaul nor OP.  Vanilla oriented and balanced.",
+  "factorio_version": "0.18",
+  "dependencies": ["base >= 0.18.7", "? SchallTransportGroup"]
+}
