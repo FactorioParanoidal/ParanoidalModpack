@@ -1,0 +1,9 @@
+{
+	"name": "Flow Control",
+	"version": "3.0.6",
+	"title": "Flow Control",
+	"author": "GotLag",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=20645",
+	"description": "Adds pipes with restricted connections, and several useful valves.",
+	"factorio_version": "0.18"
+}

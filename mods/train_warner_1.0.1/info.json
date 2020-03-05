@@ -1,0 +1,12 @@
+{
+	"name": "train_warner",
+	"version": "1.0.1",
+	"title": "Train warner",
+	"author": "kid2407",
+	"homepage": "https://mods.factorio.com/train_warner",
+	"factorio_version": "0.18",
+	"description": "Warns you when you are going to be run over by a train.",
+	"dependencies": [
+		"base >= 0.18.0"
+	]
+}

@@ -61,50 +61,50 @@ for mk = 1,5 do
         scale = 0.5
       }
     }
-	entity.shadow_idle =
-    {
-      filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 50,
-      height = 24,
-      frame_count = 1,
-      shift = {1.09375, 0.59375},
-      direction_count = 16,
-      hr_version = {
-        filename = "__base__/graphics/entity/construction-robot/hr-construction-robot-shadow.png",
-        priority = "high",
-        line_length = 16,
-        width = 104,
-        height = 49,
-        frame_count = 1,
-        shift = util.by_pixel(33.5, 18.75),
-        direction_count = 16,
-        scale = 0.5
-      }
-    }
-	entity.shadow_in_motion =
-    {
-      filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 50,
-      height = 24,
-      frame_count = 1,
-      shift = {1.09375, 0.59375},
-      direction_count = 16,
-      hr_version = {
-        filename = "__base__/graphics/entity/construction-robot/hr-construction-robot-shadow.png",
-        priority = "high",
-        line_length = 16,
-        width = 104,
-        height = 49,
-        frame_count = 1,
-        shift = util.by_pixel(33.5, 18.75),
-        direction_count = 16,
-        scale = 0.5
-      }
-    }
+	-- entity.shadow_idle =
+    -- {
+      -- filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 50,
+      -- height = 24,
+      -- frame_count = 1,
+      -- shift = {1.09375, 0.59375},
+      -- direction_count = 16,
+      -- hr_version = {
+        -- filename = "__base__/graphics/entity/construction-robot/hr-construction-robot-shadow.png",
+        -- priority = "high",
+        -- line_length = 16,
+        -- width = 104,
+        -- height = 49,
+        -- frame_count = 1,
+        -- shift = util.by_pixel(33.5, 18.75),
+        -- direction_count = 16,
+        -- scale = 0.5
+      -- }
+    -- }
+	-- entity.shadow_in_motion =
+    -- {
+      -- filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 50,
+      -- height = 24,
+      -- frame_count = 1,
+      -- shift = {1.09375, 0.59375},
+      -- direction_count = 16,
+      -- hr_version = {
+        -- filename = "__base__/graphics/entity/construction-robot/hr-construction-robot-shadow.png",
+        -- priority = "high",
+        -- line_length = 16,
+        -- width = 104,
+        -- height = 49,
+        -- frame_count = 1,
+        -- shift = util.by_pixel(33.5, 18.75),
+        -- direction_count = 16,
+        -- scale = 0.5
+      -- }
+    -- }
 	entity.working =
     {
       filename = "__ShinyBobGFX__/graphics/entity/robots/construction-robot-working-"..mk..".png",
@@ -129,23 +129,23 @@ for mk = 1,5 do
         scale = 0.5
       }
     }
-	entity.shadow_working =
-    {
-      stripes = util.multiplystripes(2,
-      {
-        {
-          filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
-          width_in_frames = 16,
-          height_in_frames = 1,
-        }
-      }),
-      priority = "high",
-      width = 50,
-      height = 24,
-      frame_count = 2,
-      shift = {1.09375, 0.59375},
-      direction_count = 16
-    }
+	-- entity.shadow_working =
+    -- {
+      -- stripes = util.multiplystripes(2,
+      -- {
+        -- {
+          -- filename = "__base__/graphics/entity/construction-robot/construction-robot-shadow.png",
+          -- width_in_frames = 16,
+          -- height_in_frames = 1,
+        -- }
+      -- }),
+      -- priority = "high",
+      -- width = 50,
+      -- height = 24,
+      -- frame_count = 2,
+      -- shift = {1.09375, 0.59375},
+      -- direction_count = 16
+    -- }
 	::skip::
 end	
 
@@ -248,52 +248,52 @@ for mk = 1,5 do
         scale = 0.5
       }
     }
-	entity.shadow_idle =
-    {
-      filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 59,
-      height = 23,
-      frame_count = 1,
-      shift = {0.96875, 0.609375},
-      direction_count = 16,
-      y = 23
-    }
-	entity.shadow_idle_with_cargo =
-    {
-      filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 59,
-      height = 23,
-      frame_count = 1,
-      shift = {0.96875, 0.609375},
-      direction_count = 16
-    }
-	entity.shadow_in_motion =
-    {
-      filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 59,
-      height = 23,
-      frame_count = 1,
-      shift = {0.96875, 0.609375},
-      direction_count = 16,
-      y = 23
-    }
-	entity.shadow_in_motion_with_cargo =
-    {
-      filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
-      priority = "high",
-      line_length = 16,
-      width = 59,
-      height = 23,
-      frame_count = 1,
-      shift = {0.96875, 0.609375},
-      direction_count = 16
-    }
+	-- entity.shadow_idle =
+    -- {
+      -- filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 59,
+      -- height = 23,
+      -- frame_count = 1,
+      -- shift = {0.96875, 0.609375},
+      -- direction_count = 16,
+      -- y = 23
+    -- }
+	-- entity.shadow_idle_with_cargo =
+    -- {
+      -- filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 59,
+      -- height = 23,
+      -- frame_count = 1,
+      -- shift = {0.96875, 0.609375},
+      -- direction_count = 16
+    -- }
+	-- entity.shadow_in_motion =
+    -- {
+      -- filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 59,
+      -- height = 23,
+      -- frame_count = 1,
+      -- shift = {0.96875, 0.609375},
+      -- direction_count = 16,
+      -- y = 23
+    -- }
+	-- entity.shadow_in_motion_with_cargo =
+    -- {
+      -- filename = "__base__/graphics/entity/logistic-robot/logistic-robot-shadow.png",
+      -- priority = "high",
+      -- line_length = 16,
+      -- width = 59,
+      -- height = 23,
+      -- frame_count = 1,
+      -- shift = {0.96875, 0.609375},
+      -- direction_count = 16
+    -- }
 
 
 if data.raw["combat-robot"]["bob-laser-robot"] then
@@ -315,26 +315,26 @@ data.raw["combat-robot"]["bob-laser-robot"].idle =
 		scale = 0.5
 		}
 	}
-data.raw["combat-robot"]["bob-laser-robot"].shadow_idle = 
-	{
-	filename = "__ShinyBobGFX__/graphics/entity/robots/combot-shadow.png",
-	priority = "high",
-	width = 44,
-	height = 25,
-	frame_count = 1,
-	direction_count = 1,
-	shift = {0.859375, 0.609375},
-	hr_version = {
-		filename = "__ShinyBobGFX__/graphics/entity/robots/hr-combot-shadow.png",
-		priority = "high",
-		width = 88,
-		height = 50,
-		frame_count = 1,
-		direction_count = 1,
-		shift = util.by_pixel(25.5, 19),
-		scale = 0.5
-		}
-	}
+-- data.raw["combat-robot"]["bob-laser-robot"].shadow_idle = 
+	-- {
+	-- filename = "__ShinyBobGFX__/graphics/entity/robots/combot-shadow.png",
+	-- priority = "high",
+	-- width = 44,
+	-- height = 25,
+	-- frame_count = 1,
+	-- direction_count = 1,
+	-- shift = {0.859375, 0.609375},
+	-- hr_version = {
+		-- filename = "__ShinyBobGFX__/graphics/entity/robots/hr-combot-shadow.png",
+		-- priority = "high",
+		-- width = 88,
+		-- height = 50,
+		-- frame_count = 1,
+		-- direction_count = 1,
+		-- shift = util.by_pixel(25.5, 19),
+		-- scale = 0.5
+		-- }
+	-- }
 data.raw["combat-robot"]["bob-laser-robot"].in_motion = 
 	{
 	filename = "__ShinyBobGFX__/graphics/entity/robots/combot-1.png",
@@ -353,26 +353,26 @@ data.raw["combat-robot"]["bob-laser-robot"].in_motion =
 		scale = 0.5
 		}
 	}
-data.raw["combat-robot"]["bob-laser-robot"].shadow_in_motion = 
-	{
-	filename = "__ShinyBobGFX__/graphics/entity/robots/combot-shadow.png",
-	priority = "high",
-	width = 44,
-	height = 25,
-	frame_count = 1,
-	direction_count = 1,
-	shift = {0.859375, 0.609375},
-	hr_version = {
-		filename = "__ShinyBobGFX__/graphics/entity/robots/hr-combot-shadow.png",
-		priority = "high",
-		width = 88,
-		height = 50,
-		frame_count = 1,
-		direction_count = 1,
-		shift = util.by_pixel(25.5, 19),
-		scale = 0.5
-		}
-	}	
+-- data.raw["combat-robot"]["bob-laser-robot"].shadow_in_motion = 
+	-- {
+	-- filename = "__ShinyBobGFX__/graphics/entity/robots/combot-shadow.png",
+	-- priority = "high",
+	-- width = 44,
+	-- height = 25,
+	-- frame_count = 1,
+	-- direction_count = 1,
+	-- shift = {0.859375, 0.609375},
+	-- hr_version = {
+		-- filename = "__ShinyBobGFX__/graphics/entity/robots/hr-combot-shadow.png",
+		-- priority = "high",
+		-- width = 88,
+		-- height = 50,
+		-- frame_count = 1,
+		-- direction_count = 1,
+		-- shift = util.by_pixel(25.5, 19),
+		-- scale = 0.5
+		-- }
+	-- }	
 end	
 	
 	

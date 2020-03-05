@@ -1,0 +1,9 @@
+{
+  "name": "research-progress",
+  "version": "0.18.0",
+  "title": "Research Progress Frame (0.18)",
+  "author": "Grokzen & JeffS",
+  "description": "Show % progress on the current research",
+  "factorio_version": "0.18",
+  "dependencies": ["base"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "RU-locale",
+  "version": "9.18.0",
+  "title": "RUSSIAN locale for mods",
+  "author": "dest, nastyslave",
+  "factorio_version": "0.18",
+  "description": "RUSSIAN translation for Bob's mods, Angels mods + some others mods",
+  "dependencies": ["base >= 0.14.0", 
+	"? boblogistics",
+	"? bobplates"
+	]
+}

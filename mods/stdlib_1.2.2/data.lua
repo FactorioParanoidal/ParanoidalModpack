@@ -1,1 +1,0 @@
---Empty file to trick Factorio into thinking this mod changes the game.

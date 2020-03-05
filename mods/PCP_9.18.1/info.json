@@ -1,0 +1,10 @@
+{
+  "name": "PCP",
+  "version": "9.18.1",
+  "factorio_version": "0.18",
+  "title": "PetrochemPlus",
+  "author": "Pezzawinkle",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=185&t=40273",
+  "description": "More chemicals to make angel's petrochem even more of a hell.",
+  "dependencies": ["angelspetrochem >= 0.8.0", "? bobplates >= 0.15.0","? angelsbioprocessing >= 0.6.0","? ShinyIcons >=0.17.0"]
+}

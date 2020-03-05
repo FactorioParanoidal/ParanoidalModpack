@@ -1,0 +1,33 @@
+-------------------------------------------------------------------------------
+------------------------------------- Credits ---------------------------------
+-------------------------------------------------------------------------------
+
+L0771 - For his help given to me to start this MOD.
+AlyxDeLunar - For his MOD Dynamic Expansion that I’ve used in my MOD.
+Albatrosv13 - For his MOD Alien Temple that I’ve used in my MOD.
+FreeER - For his MOD Mind Control that I’ve used in my MOD.
+Darkshadow1809  - For his Evolution MOD .
+Rsending91, DOSorDIE and SpeedyBrain - Item/Corpse Collector Mod.
+Orzelek - RSO, Coding help and answering questions!
+Veden - He added some amazing code to my mod and has an amazing AI behavior mod: Rampant. Must have!
+ThaPear, Semvoz,  Billw, Adil, Rseding91, Chlue - Coding help!
+Supercheese - Swarm Mod.
+Afforess - Misanthrope Mod.
+Darkfrei - Help with the solar-mat & tree stuff. Graphics and so much more!
+d3x0r - Wooden Rail Bridge images and rail work in general
+drs9999 - Tree Farm Mod
+S_R_G - Graphics
+Steinio - Use of his "steinios unlasting oil" mod.
+DellAquila - Use of his "FiniteWater" mod
+Eradicator - Lot of help on the forums
+Veni - A lot of help with the Bio-Fuel section
+SpeedDaemon - Greenhouse Mod
+Simdezimon - Wood Floors
+Klonan  - Big Wooden Pole and Wooden Fence
+LukeM212 &  JJtJJ - Tree Mods
+DySoch - DyTech, showing me what was possible
+Bobingabout - Bob's Mods - Learned a lot from looking at your amazing work and am using a lot of your great code!
+YuokiTani - Art!!  Amazing work!
+And everyone else who give feedback/suggestions/help on the forums!
+
+Sorry if I missed anyone! PM me!!

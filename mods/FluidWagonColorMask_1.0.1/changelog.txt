@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-03-02
+  Info:
+    - Removed incompatibility flag for Wagon Colors mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-02-29
+  Features:
+    - New color mask graphics for fluid wagon.
+    - Ported ability to copy and paste colors between wagons, locomotives, and train stops from Wagon Colors mod, per GNU license.

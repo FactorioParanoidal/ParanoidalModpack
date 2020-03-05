@@ -1,0 +1,8 @@
+{
+  "name": "FastRemoveTiles",
+  "version": "0.0.9",
+  "title": "Fast Remove Tiles and Trees",
+  "author": "DellAquila",
+  "description": "When want to remove, a floor tile, it was faster. Now compatible with Dectorio and BioIndustries.",
+  "factorio_version": "0.18"
+}

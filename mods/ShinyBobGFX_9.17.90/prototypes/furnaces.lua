@@ -425,8 +425,10 @@ end
 
 
 if data.raw["assembling-machine"]["chemical-steel-furnace"] then
-    data.raw["item"]["chemical-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/chemical-steel-furnace/icon/steel-furnace-chem.png"
-    data.raw["assembling-machine"]["chemical-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/chemical-steel-furnace/icon/steel-furnace-chem.png"
+	data.raw["item"]["chemical-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/chemical-steel-furnace/icon/steel-furnace-chem.png"
+	data.raw["item"]["chemical-steel-furnace"].icon_size = 32
+	data.raw["assembling-machine"]["chemical-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/chemical-steel-furnace/icon/steel-furnace-chem.png"
+	data.raw["assembling-machine"]["chemical-steel-furnace"].icon_size = 32
     data.raw["assembling-machine"]["chemical-steel-furnace"]["animation"] = {
         layers = {
             {
@@ -472,6 +474,8 @@ end
 if data.raw["assembling-machine"]["mixing-steel-furnace"] then
     data.raw["item"]["mixing-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/mixing-steel-furnace/icon/steel-furnace-mixer.png"
     data.raw["assembling-machine"]["mixing-steel-furnace"].icon = "__ShinyBobGFX__/graphics/entity/mixing-steel-furnace/icon/steel-furnace-mixer.png"
+	data.raw["item"]["mixing-steel-furnace"].icon_size = 32
+    data.raw["assembling-machine"]["mixing-steel-furnace"].icon_size = 32
     data.raw["assembling-machine"]["mixing-steel-furnace"]["animation"] = {
         layers = {
             {

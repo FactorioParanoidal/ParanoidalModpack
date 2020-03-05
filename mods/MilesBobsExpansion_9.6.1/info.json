@@ -1,0 +1,11 @@
+{
+  "name": "MilesBobsExpansion",
+  "version": "9.6.1",
+  "factorio_version": "0.18",
+  "title": "Miles' Bob's Expansion",
+  "author": "TehFocus",
+  "contact": "genaralage on Steam",
+  "homepage": "https://steamcommunity.com/id/genaralage/",
+  "description": "Adds machines of higher tiers than Bob's as well as some other things such as small electric furnaces",
+  "dependencies": ["base >= 0.17.50", "boblibrary >= 0.17.5", "bobmodules >= 0.17.4", "bobassembly >= 0.17.7"]
+}

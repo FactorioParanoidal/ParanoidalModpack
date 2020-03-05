@@ -1,0 +1,10 @@
+Version: 1.0.1
+Date: 24. 01. 2020
+  Info:
+    - Support for version 0.18
+
+
+Version: 1.0.0
+Date: 07. 03. 2019
+  Info:
+    - Modify to run under 0.17

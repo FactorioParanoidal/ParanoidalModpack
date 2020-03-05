@@ -1,9 +1,0 @@
-{
-  "recipe":
-  [
-    ["pmma-plastic", "liquid-plastic-pmma"],
-    ["pc-plastic", "liquid-plastic-pc"],
-    ["abs-synthesis", "liquid-plastic-abs"],
-    ["pvc-synthesis", "liquid-plastic-pvc"]
-  ] 
-}

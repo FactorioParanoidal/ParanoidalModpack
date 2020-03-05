@@ -1,0 +1,8 @@
+0.18.4
+- Added event filter
+
+0.17.3
+- Adjusted to the new damage detection system
+
+0.17.2
+- Updated code to match 0.17.35's change: "Renamed player to character"

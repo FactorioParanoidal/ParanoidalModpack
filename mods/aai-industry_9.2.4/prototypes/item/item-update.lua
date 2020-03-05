@@ -1,6 +1,6 @@
 if data.raw['item']['engine-unit'] then
-	data.raw['item']['engine-unit'].icon = nil
-	data.raw['item']['engine-unit'].icons = {
+	data.raw['item']['engine-unit'].icon = "__aai-industry__/graphics/icons/engine-unit.png"
+	--[[data.raw['item']['engine-unit'].icons = {
     {
       icon = "__aai-industry__/graphics/icons/engine-unit-base.png"
     },
@@ -8,13 +8,13 @@ if data.raw['item']['engine-unit'] then
       icon = "__aai-industry__/graphics/icons/engine-unit-mask.png",
       tint = { r = 1, g = 0, b = 0}
     }
-  }
+  } ]]--
 	data.raw['item']['engine-unit'].order = "g[engine-unit]-c[engine-unit]"
 end
 
 if data.raw['item']['electric-engine-unit'] then
-	data.raw['item']['electric-engine-unit'].icon = nil
-	data.raw['item']['electric-engine-unit'].icons = {
+	data.raw['item']['electric-engine-unit'].icon = "__aai-industry__/graphics/icons/electric-engine-unit.png"
+	--[[data.raw['item']['electric-engine-unit'].icons = {
     {
       icon = "__aai-industry__/graphics/icons/electric-engine-unit-base.png"
     },
@@ -22,7 +22,7 @@ if data.raw['item']['electric-engine-unit'] then
       icon = "__aai-industry__/graphics/icons/electric-engine-unit-mask.png",
       tint = { r = 0, g = 1, b = 0.1}
     }
-  }
+  }]]--
 	data.raw['item']['electric-engine-unit'].order = "g[engine-unit]-d[engine-unit]"
 end
 

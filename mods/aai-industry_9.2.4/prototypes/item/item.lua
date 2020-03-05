@@ -15,7 +15,8 @@ data:extend({
   {
     type = "item",
     name = "motor",
-    icons = {
+	icon = "__aai-industry__/graphics/icons/motor.png",
+    --[[icons = {
       {
         icon = "__aai-industry__/graphics/icons/motor-base.png"
       },
@@ -23,8 +24,8 @@ data:extend({
         icon = "__aai-industry__/graphics/icons/motor-mask.png",
         tint = { r = 1, g = 0.9, b = 0}
       }
-    },
-    icon_size = 32,
+    },]]--
+    icon_size = 64,
     --flags = {},
     subgroup = "intermediate-product",
     order = "g[engine-unit]-a[motor]",
@@ -33,7 +34,8 @@ data:extend({
   {
     type = "item",
     name = "electric-motor",
-    icons = {
+	icon = "__aai-industry__/graphics/icons/electric-motor.png",
+    --[[icons = {
       {
         icon = "__aai-industry__/graphics/icons/electric-motor-base.png"
       },
@@ -41,8 +43,8 @@ data:extend({
         icon = "__aai-industry__/graphics/icons/electric-motor-mask.png",
         tint = { r = 0.4, g = 0.6, b = 1}
       }
-    },
-    icon_size = 32,
+    },]]--
+    icon_size = 64,
     --flags = {},
     subgroup = "intermediate-product",
     order = "g[engine-unit]-b[electric-motor]",
