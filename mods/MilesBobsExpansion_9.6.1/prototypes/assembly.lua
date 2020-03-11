@@ -5,7 +5,7 @@ data:extend(
     type = "item",
     name = "assembling-machine-7",
     icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-7.png",
-    icon_size = 32,
+    icon_size = 64,
     subgroup = "bob-assembly-machine",
     order = "c[assembling-machine-7]",
     place_result = "assembling-machine-7",
@@ -16,7 +16,7 @@ data:extend(
     type = "assembling-machine",
     name = "assembling-machine-7",
     icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-7.png",
-    icon_size = 32,
+    icon_size = 64,
     flags = {"placeable-neutral","placeable-player", "player-creation"},
     minable = {hardness = 0.2, mining_time = 0.5, result = "assembling-machine-7"},
     max_health = 800,
@@ -122,12 +122,12 @@ data:extend(
     enabled = "false",
     ingredients =
     {
-      {"assembling-machine-6", 1},
-      {"processing-unit", 10},
-      {"steel-plate", 10},
-      {"iron-plate", 15},
-      {"iron-gear-wheel", 10},
-	  {"speed-module-5", 5},
+      {"assembling-machine-6", 2},
+      {"processing-unit", 25},
+      {"copper-plate", 2500},
+      --{"iron-plate", 15},
+      {"iron-gear-wheel", 200},
+	  {"speed-module-5", 10},
     },
     result = "assembling-machine-7"
   },
@@ -166,12 +166,12 @@ data:extend(
     enabled = "false",
     ingredients =
     {
-      {"assembling-machine-7", 1},
-      {"processing-unit", 15},
-      {"steel-plate", 15},
-      {"iron-plate", 20},
-      {"iron-gear-wheel", 15},
-	  {"speed-module-6", 5},
+      {"assembling-machine-7", 2},
+      {"processing-unit", 50},
+      {"steel-plate", 5000},
+      --{"iron-plate", 20},
+      {"steel-gear-wheel", 500},
+	  {"speed-module-6", 10},
     },
     result = "assembling-machine-8"
   },
@@ -210,9 +210,9 @@ data:extend(
     enabled = "false",
     ingredients =
     {
-      {"assembling-machine-8", 1},
-      {"processing-unit", 20},
-      {"steel-plate", 20},
+      {"assembling-machine-8", 2},
+      {"processing-unit", 100},
+      {"silver-plate", 10000},
       {"iron-plate", 40},
       {"iron-gear-wheel", 30},
 	  {"speed-module-7", 5},
@@ -247,7 +247,7 @@ data:extend(
 	  },
 	upgrade = true,
   },
-
+--[[
   {
     type = "recipe",
     name = "assembling-machine-10",
@@ -291,6 +291,7 @@ data:extend(
 	  },
 	upgrade = true,
   },
+  ]]--
 }
 )
 		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["assembling-machine-7"])
@@ -328,7 +329,7 @@ data:extend(
 		new_assembler.order="c[assembling-machine-9]"
 		new_assembleritem.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png"
 		data:extend{new_assembleritem}
-		
+		--[[
 		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["assembling-machine-7"])
 		new_assembler.name="assembling-machine-10"
 		new_assembler.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-10.png"
@@ -346,3 +347,4 @@ data:extend(
     	new_assembleritem.order="c[assembling-machine-9+1]"
 		new_assembleritem.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-10.png"
 		data:extend{new_assembleritem}
+		]]--
