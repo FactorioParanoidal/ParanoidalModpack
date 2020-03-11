@@ -88,8 +88,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"plastic-pipe", 14},
-      {"plastic-bar", 5},
+      {"plastic-pipe", 100}, --DrD 14
+      {"plastic-bar", 50}, --DrD 5
     },
     result_count = 2,
     result = "plastic-pipe-to-ground",
