@@ -368,7 +368,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"wood", 1},
+      {"wooden-board", 2}, --DrD wood, 1
       {"resin", 1},
     },
     result = "phenolic-board",
