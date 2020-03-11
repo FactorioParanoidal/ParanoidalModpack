@@ -19,11 +19,6 @@
     },
     
     {
-      "name": "air-filtering-patched",
-      "enabled": true
-    },
-    
-    {
       "name": "Aircraft",
       "enabled": true
     },
@@ -214,6 +209,11 @@
     },
     
     {
+      "name": "comb",
+      "enabled": true
+    },
+    
+    {
       "name": "CoppermineBobModuleRebalancing",
       "enabled": true
     },
@@ -230,6 +230,11 @@
     
     {
       "name": "Cursed-FMD",
+      "enabled": true
+    },
+    
+    {
+      "name": "CW-carbon-capture-reforged",
       "enabled": true
     },
     
@@ -320,6 +325,11 @@
     
     {
       "name": "FuelTrainStop",
+      "enabled": true
+    },
+    
+    {
+      "name": "helmod-optimized",
       "enabled": true
     },
     
@@ -680,6 +690,11 @@
     
     {
       "name": "Subterranean",
+      "enabled": true
+    },
+    
+    {
+      "name": "toxicPollution",
       "enabled": true
     },
     
