@@ -2,9 +2,7 @@ if data.raw.item["basic-circuit-board"] then
   bobmods.lib.recipe.replace_ingredient("electrolyser", "electronic-circuit", "basic-circuit-board")
 end
 
-if data.raw.item["stone-pipe"] then
-  bobmods.lib.recipe.replace_ingredient("electrolyser", "pipe", "stone-pipe")
-end
+-- if data.raw.item["stone-pipe"] then  bobmods.lib.recipe.replace_ingredient("electrolyser", "pipe", "stone-pipe") end --DrD
 
 if data.raw.item["copper-pipe"] then
   bobmods.lib.recipe.replace_ingredient("air-pump", "pipe", "copper-pipe")
