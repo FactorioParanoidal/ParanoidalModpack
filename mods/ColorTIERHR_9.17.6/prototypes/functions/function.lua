@@ -2512,29 +2512,16 @@ if data.raw.container["brass-chest"] then
 data.raw.container["brass-chest"]["picture"]["layers"] =
 {
     {
-      filename = "__boblogistics__/graphics/entity/chest/brass-chest.png",
-      priority = "extra-high",
-      width = 46,
-      height = 32,
-	  hr_version =
-	  {
+     
         filename = ColorTIER_path.."/graphics/high-res/entity/chest/brass-chest.png",
         priority = "extra-high",
         width = 68,
         height = 84,
 		shift = {0, -0.1},
 		scale = 0.5
-	  }
+	  
     },
     {
-      filename = "__base__/graphics/entity/wooden-chest/wooden-chest-shadow.png",
-      priority = "extra-high",
-      width = 52,
-      height = 20,
-      shift = util.by_pixel(10, 6.5),
-      draw_as_shadow = true,
-      hr_version =
-      {
         filename = "__base__/graphics/entity/wooden-chest/hr-wooden-chest-shadow.png",
         priority = "extra-high",
         width = 104,
@@ -2542,7 +2529,6 @@ data.raw.container["brass-chest"]["picture"]["layers"] =
         shift = util.by_pixel(10, 6.5),
         draw_as_shadow = true,
         scale = 0.5
-      }
     }
 }
 end
