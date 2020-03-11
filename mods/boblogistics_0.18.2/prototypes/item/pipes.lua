@@ -10,6 +10,7 @@ data:extend(
   {
     type = "item",
     name = "stone-pipe",
+	hidden = true, --DrD
     icon = "__boblogistics__/graphics/icons/pipe/stone-pipe.png",
     icon_size = 32,
     subgroup = "pipe",
@@ -21,6 +22,7 @@ data:extend(
   {
     type = "item",
     name = "stone-pipe-to-ground",
+	hidden = true, --DrD
     icon = "__boblogistics__/graphics/icons/pipe/stone-pipe-to-ground.png",
     icon_size = 32,
     subgroup = "pipe-to-ground",
