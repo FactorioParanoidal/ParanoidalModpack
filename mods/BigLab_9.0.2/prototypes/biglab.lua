@@ -43,73 +43,14 @@ data:extend({
       layers =
       {
         {
-          filename = "__base__/graphics/entity/lab/lab.png",
-          width = 98,
-          height = 87,
-          frame_count = 33,
-          line_length = 11,
+          filename = "__BigLab__/graphics/lab/biglab.png",
+          width = 320,
+          height = 320,
+          frame_count = 1,
+          line_length = 1,
 		  scale = 6,
-          animation_speed = 1 / 3,
+          animation_speed = 0.01,
           shift = util.by_pixel(0, 1.5),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab.png",
-            width = 194,
-            height = 174,
-            frame_count = 33,
-            line_length = 11,
-            animation_speed = 1 / 3,
-            shift = util.by_pixel(0, 1.5),
-            scale = 3
-          }
-        },
-        {
-          filename = "__base__/graphics/entity/lab/lab-integration.png",
-          width = 122,
-          height = 81,
-          frame_count = 1,
-		  scale = 6,
-          line_length = 1,
-          repeat_count = 33,
-          animation_speed = 1 / 3,
-          shift = util.by_pixel(0, 15.5),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab-integration.png",
-            width = 242,
-            height = 162,
-            frame_count = 1,
-            line_length = 1,
-            repeat_count = 33,
-            animation_speed = 1 / 3,
-            shift = util.by_pixel(0, 15.5),
-            scale = 3
-          }
-        },
-        {
-          filename = "__base__/graphics/entity/lab/lab-shadow.png",
-          width = 122,
-          height = 68,
-          frame_count = 1,
-          line_length = 1,
-          repeat_count = 33,
-		  scale = 6,
-          animation_speed = 1 / 3,
-          shift = util.by_pixel(13, 11),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab-shadow.png",
-            width = 242,
-            height = 136,
-            frame_count = 1,
-            line_length = 1,
-            repeat_count = 33,
-            animation_speed = 1 / 3,
-            shift = util.by_pixel(13, 11),
-            scale = 3,
-            draw_as_shadow = true
-          }
         }
       }
     },
@@ -118,57 +59,12 @@ data:extend({
       layers =
       {
         {
-          filename = "__base__/graphics/entity/lab/lab.png",
-          width = 98,
-          height = 87,
+          filename = "__BigLab__/graphics/lab/biglab.png",
+          width = 320,
+          height = 320,
           frame_count = 1,
-		  scale = 6,
+		  scale = 2,
           shift = util.by_pixel(0, 1.5),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab.png",
-            width = 194,
-            height = 174,
-            frame_count = 1,
-            shift = util.by_pixel(0, 1.5),
-            scale = 3
-          }
-        },
-        {
-          filename = "__base__/graphics/entity/lab/lab-integration.png",
-          width = 122,
-          height = 81,
-		  scale = 6,
-          frame_count = 1,
-          shift = util.by_pixel(0, 15.5),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab-integration.png",
-            width = 242,
-            height = 162,
-            frame_count = 1,
-            shift = util.by_pixel(0, 15.5),
-            scale = 3
-          }
-        },
-        {
-          filename = "__base__/graphics/entity/lab/lab-shadow.png",
-          width = 122,
-          height = 68,
-          frame_count = 1,
-          shift = util.by_pixel(13, 11),
-		  scale = 6,
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/lab/hr-lab-shadow.png",
-            width = 242,
-            height = 136,
-            frame_count = 1,
-            shift = util.by_pixel(13, 11),
-            draw_as_shadow = true,
-            scale = 3
-          }
         }
       }
     },
@@ -197,7 +93,7 @@ data:extend({
 		  "military-science-pack",
 		  "production-science-pack",
 		  "utility-science-pack",
-		  "space-science-pack"		  
+		  "space-science-pack"
 		},
 		module_specification =
 		{
@@ -207,9 +103,6 @@ data:extend({
 		  module_info_icon_shift = {0, 0.9}
 		}
 	},
-	
-	
-	
 })
 
  
