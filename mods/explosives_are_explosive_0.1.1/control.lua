@@ -1,4 +1,4 @@
-local damage_per_explosive = 100
+local damage_per_explosive = 150
 local empty_tile_damage_decay = 100
 local out_of_map_tile_health = 1500
 

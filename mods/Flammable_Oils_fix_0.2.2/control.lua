@@ -94,7 +94,7 @@ function flammable_explosion(entity, fraction)
   local radius = 0.5 * ((entity.bounding_box.right_bottom.x - pos.x) + (entity.bounding_box.right_bottom.y - pos.y))
   local width = radius * 2
   local area = {{pos.x - (radius + 0.5),pos.y - (radius + 0.5)},{pos.x + (radius + 0.5),pos.y + (radius + 0.5)}}
-  local damage = math.random(20, 40) * fraction
+  local damage = math.random(30, 60) * fraction --DrD 20, 40
   
   if width <= 1 then
     entity.surface.create_entity{name = "explosion", position = pos}
