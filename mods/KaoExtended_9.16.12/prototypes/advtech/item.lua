@@ -21,8 +21,8 @@ data:extend(
 	{
     type = "item",
     name = "sci-component-1",
-    icon = "__KaoExtended__/graphics/sci-component-1.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-1-128.png",
+    icon_size = 128,
 
 	subgroup = "techrow1",
     order = "a[tech]",
@@ -31,8 +31,8 @@ data:extend(
 	{
     type = "item",
     name = "sci-component-2",
-    icon = "__KaoExtended__/graphics/sci-component-2.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-2-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "b[tech]",
     stack_size = 100
@@ -67,8 +67,8 @@ data:extend(
 	{
     type = "item",
     name = "sci-component-3",
-    icon = "__KaoExtended__/graphics/sci-component-3.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-3-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "c[tech]",
     stack_size = 100
@@ -85,8 +85,8 @@ data:extend(
 	{
     type = "item",
     name = "sci-component-4",
-    icon = "__KaoExtended__/graphics/sci-component-4.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-4-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "d[tech]",
     stack_size = 100
@@ -103,8 +103,8 @@ data:extend(
 	{
     type = "item",
     name = "sci-component-5",
-    icon = "__KaoExtended__/graphics/sci-component-5.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-5-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "g[tech]",
     stack_size = 100
@@ -112,8 +112,8 @@ data:extend(
     {
     type = "item",
     name = "sci-component-l",
-    icon = "__KaoExtended__/graphics/sci-component-L.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-L-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "f[tech]",
     stack_size = 100
@@ -121,8 +121,8 @@ data:extend(
     {
     type = "item",
     name = "sci-component-m",
-    icon = "__KaoExtended__/graphics/sci-component-M.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-M-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "e1[tech]",
     stack_size = 100
@@ -130,8 +130,8 @@ data:extend(
     {
     type = "item",
     name = "sci-component-o",
-    icon = "__KaoExtended__/graphics/sci-component-O.png",
-    icon_size = 32,
+    icon = "__KaoExtended__/graphics/sci-component-O-128.png",
+    icon_size = 128,
 	subgroup = "techrow1",
     order = "h[tech]",
     stack_size = 100
