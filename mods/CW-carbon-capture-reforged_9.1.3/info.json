@@ -1,0 +1,9 @@
+{
+    "name": "CW-carbon-capture-reforged",
+	"version": "9.1.3",
+    "title": "Carbon Capture REFORGED",
+    "author": "CyberWizard2261",
+    "description": "Reducing polution and regenerate filters. REFORGED version by nastyslave.",
+    "factorio_version": "0.18",
+	"dependencies": ["base >= 0.16.0", "bobplates", "bobelectronics", "angelsrefining"]
+}
