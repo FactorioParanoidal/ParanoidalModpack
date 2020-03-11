@@ -10,7 +10,7 @@ data:extend{
         type = 'bool-setting',
         name = 'picker-tool-pipe-clamps',
         setting_type = 'startup',
-        default_value = true,
+        default_value = false,
         order = 'tool-pipe-cleaner'
     },
     {
