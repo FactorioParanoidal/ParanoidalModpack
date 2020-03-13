@@ -83,7 +83,7 @@ local function InitEntityMaps()
 				end
 			end
 			if settings_debug == "info" then
-				--game.print({"debug-message.mu-mapping-message",mod_name,std,mu}) --DrD
+				game.print({"debug-message.mu-mapping-message",mod_name,std,mu})
 			end
 		end
 	end
@@ -119,7 +119,7 @@ local function ProcessReplacement(r)
 	if r[1] and r[1].valid then
 		-- Replace the locomotive
 		if settings_debug == "info" then
-			--game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]}) --DrD
+			game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]})
 		end
 		local errorString = {"debug-message.mu-replacement-failed",r[1].name,r[1].backer_name,r[1].position.x,r[1].position.y}
 		
@@ -136,7 +136,7 @@ local function ProcessReplacement(r)
 		end
 		-- Make sure it was actually replaced, show error message if not.
 		if not newLoco and (settings_debug == "info" or settings_debug == "error") then
-			-- game.print(errorString) --DrD
+			game.print(errorString)
 		end
 	end
 end
@@ -409,7 +409,7 @@ local function OnNthTick(event)
 			if newVal ~= current_nth_tick then
 				--game.print("Changing MU Control Nth Tick duration to " .. newVal)
 				if settings_debug == "info" then
-					-- game.print({"debug-message.mu-changing-tick-message",newVal}) --DrD
+					game.print({"debug-message.mu-changing-tick-message",newVal})
 				end
 				current_nth_tick = newVal
 				global.current_nth_tick = current_nth_tick
