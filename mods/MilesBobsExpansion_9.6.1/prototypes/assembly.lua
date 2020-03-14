@@ -9,7 +9,7 @@ data:extend(
     subgroup = "bob-assembly-machine",
     order = "c[assembling-machine-7]",
     place_result = "assembling-machine-7",
-    stack_size = 50
+    stack_size = 10
   },
 
   {
@@ -106,7 +106,7 @@ data:extend(
       usage_priority = "secondary-input",
       emissions_per_minute = 0.2
     },
-    energy_usage = "650kW",
+    energy_usage = "1000kW",
     module_specification =
     {
       module_slots = 7,
@@ -300,7 +300,7 @@ data:extend(
 		new_assembler.crafting_speed="4.50"
 		new_assembler.order="c[assembling-machine-8]"
 		--new_assembler.animation.layers[2].tint ={r = 243/255, g = 136/255, b = 213/255}
-		new_assembler.energy_usage="1000kW"
+		new_assembler.energy_usage="1500kW"
 		new_assembler.minable={hardness = 0.2, mining_time = 0.5, result = "assembling-machine-8"}
 		new_assembler.module_specification.module_slots="8"
 		data:extend{new_assembler}
@@ -315,10 +315,10 @@ data:extend(
 		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["assembling-machine-7"])
 		new_assembler.name="assembling-machine-9"
 		new_assembler.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png"
-		new_assembler.crafting_speed="4.70"
+		new_assembler.crafting_speed="5"
 		new_assembler.order="c[assembling-machine-9]"
 		--new_assembler.animation.layers[2].tint={r = 0.9, g = 0.7, b = 0.0}
-		new_assembler.energy_usage="1250kW"
+		new_assembler.energy_usage="2000kW"
 		new_assembler.minable={hardness = 0.2, mining_time = 0.5, result = "assembling-machine-9"}
 		new_assembler.module_specification.module_slots="9"
 		data:extend{new_assembler}
