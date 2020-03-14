@@ -31,13 +31,13 @@ data:extend({
 		icon = "__BigLab__/graphics/icon/biglab.png",
 		icon_size = 32,
 		flags = {"placeable-player", "player-creation"},
-		minable = {mining_time = 1, result = "big-lab"},
+		minable = {mining_time = 5, result = "big-lab"},
 		max_health = 1500,
 		crafting_categories = {"chemistry"},
 		corpse = "big-remnants",
 		dying_explosion = "medium-explosion",
-		collision_box = {{-8.5, -8.5}, {8.5, 8.5}},
-		selection_box = {{-9, -9}, {9, 9}},
+		collision_box = {{-9.5, -9.5}, {9.5, 9.5}},
+		selection_box = {{-10, -10}, {10, 10}},
 		light = {intensity = 0.75, size = 8, color = {r = 1.0, g = 1.0, b = 1.0}},
 		on_animation = {
       layers =
@@ -83,7 +83,7 @@ data:extend({
 		  type = "electric",
 		  usage_priority = "secondary-input"
 		},
-		energy_usage = "1000kW",
+		energy_usage = "2500kW",
 		researching_speed = 100,
 		inputs =
 		{
@@ -105,7 +105,6 @@ data:extend({
 	},
 })
 
- 
 if (mods['bobtech']) then 
 data.raw["lab"]["big-lab"].inputs =
 		{
@@ -126,29 +125,5 @@ data.raw["lab"]["big-lab"].inputs =
 		  "alien-science-pack-yellow",
 		  "alien-science-pack-green",
 		  "alien-science-pack-red"
-		}
-end
-
-
-if (mods['SchallAlienLoot']) then 
-data.raw["lab"]["big-lab"].inputs =
-		{
-		  "automation-science-pack",
-		  "logistic-science-pack",
-		  "chemical-science-pack",
-		  "military-science-pack",
-		  "production-science-pack",
-		  "utility-science-pack",
-		  "space-science-pack",
-		  "alien-science-pack",
-	---	  "logistic-science-pack",
-	---	  "science-pack-gold",
-	---	  "alien-science-pack",
-	---	  "alien-science-pack-blue",
-	---	  "alien-science-pack-orange",
-	---	  "alien-science-pack-purple",
-	---	  "alien-science-pack-yellow",
-	---	  "alien-science-pack-green",
-	---	  "alien-science-pack-red"
 		}
 end
