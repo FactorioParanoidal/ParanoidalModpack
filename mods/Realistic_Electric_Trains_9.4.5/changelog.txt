@@ -1,0 +1,79 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 04.06.2019
+  Features: 
+    - Adding support for the Transport Group Mod
+    - Adding option to remove all wire connections when a pole is placed
+  Changes:
+    - Poles can now be placed on water to support bridge mods
+    - Poles can now reach 17 tiles to bridge the roboport distance more easily
+  Fixes:
+    - Removing double multiplication where only one was correct
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 14.04.2019
+  Fixes:
+    - Fixing a comparison in the remote interface
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 12.04.2019
+  Features:
+    - Adding support for the mods Locomotive Overhaul and Automatic Train Fuel Stop
+    - Adding item description to the locomotives
+  Changes:
+    - Removing the energy consumption cap
+    - Improved the remote interface (unfortunately, not backwards compatible)
+  Fixes:
+    - Fixing modules being deleted when a locomotive is picked up
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 23.03.2019
+  Features:
+    - Adding the modular locomotive
+  Changes:
+    - Removing the positive energy buffer in the powerpoles
+    - Adding a remote interface for other mods to register their own electric trains
+    - Changing the flying text to rendered text using the new rendering API
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 10.03.2019
+  Changes:
+    - Adding support for modified burner effectivity
+    - Reduced electric buffer in powerpoles a lot
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 07.03.2019
+  Info:
+    - Updating to 0.17
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 07.03.2019
+  Fixes:
+    - Fixing crash when parts of the pole get deleted
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 25.02.2019
+  Fixes:
+    - Adding missing translation
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 25.02.2019
+  Fixes:
+    - Enabled the research and recipe for the new locomotive.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 25.02.2019
+  Features:
+    - Electric Locomotive Mk2 added
+    - Adding support for modded rails
+  Changes:
+    - Poles are now blueprintable and work even with circuit wires
+    - Update frequency is now customizable; default is 60 Ticks
+    - Accelerations of the locomotives adjusted
