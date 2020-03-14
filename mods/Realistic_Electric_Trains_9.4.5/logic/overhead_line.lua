@@ -51,15 +51,16 @@ end
 function display_powered_state(rail, powered)
 	local surface = rail.surface
 
-	local e = surface.find_entity("ret-disconnected-particle", rail.position)
-	if e then e.destroy() end
-	e = surface.find_entity("ret-connected-particle", rail.position)
-	if e then e.destroy() end
+  -- The new optimized-particle API does not seem to have a "delete particles" function.
+	--local e = surface.find_entity("ret-disconnected-particle", rail.position)
+	--if e then e.destroy() end
+	--e = surface.find_entity("ret-connected-particle", rail.position)
+	--if e then e.destroy() end
 
 	local particle = "ret-disconnected-particle"
 	if powered then particle = "ret-connected-particle" end
 
-	surface.create_entity {
+	surface.create_particle {
 		name = particle,
 		position = rail.position,
 		movement = {0, 0},
