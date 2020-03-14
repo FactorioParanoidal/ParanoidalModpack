@@ -242,8 +242,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"iron-plate", 3},
-      {"pipe", 1},
+      {"iron-plate", 30}, -- DrD 3
+      {"pipe", 4}, -- DrD 1
     },
     result = "bob-small-inline-storage-tank"
   },
