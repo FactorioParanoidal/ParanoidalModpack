@@ -99,6 +99,16 @@ data:extend(
         type = "unlock-recipe",
         recipe = "carbon"
       },
+	  --DrD start
+      {
+        type = "unlock-recipe",
+        recipe = "bob-small-storage-tank"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bob-small-inline-storage-tank"
+      },
+	  --DrD end
     },
     unit =
     {
