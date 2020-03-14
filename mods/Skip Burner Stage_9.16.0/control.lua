@@ -53,7 +53,7 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="wood", count=9}
   player.insert{name="battery", count=7}
   player.insert{name="silver-zinc-battery", count=1}
-  player.insert{name="unused-air-filter", count=10}
+  --player.insert{name="unused-air-filter", count=10}
   player.insert{name="nuclear-fuel", count=1}
   player.insert{name="intelligent-io", count=1}
   player.insert{name="intergrated-electronics", count=2}
