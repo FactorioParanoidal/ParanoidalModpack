@@ -38,8 +38,10 @@ end
 
 function M.sync_behavior(inserter)
   local inserters = util.get_loader_inserters(inserter)
+  local stack_size_override = settings.global["miniloader-lock-stack-sizes"].value
+    and 1 or inserters[1].inserter_stack_size_override
   for _, target in ipairs(inserters) do
-    target.inserter_stack_size_override = 1
+    target.inserter_stack_size_override = stack_size_override
   end
 
   local template_inserter = inserter_with_control_behavior(inserters)

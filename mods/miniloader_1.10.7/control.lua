@@ -2,12 +2,12 @@ local blueprint = require("lualib.blueprint")
 local circuit = require("circuit")
 local configchange = require("configchange")
 local event = require("lualib.event")
+local miniloader = require("lualib.miniloader")
 local _ = require("gui")
 local snapping = require("snapping")
 local util = require("lualib.util")
 
 local compat_pickerextended = require("compat.pickerextended")
-local compat_upgradeplanner = require("compat.upgradeplanner")
 
 local use_snapping = settings.global["miniloader-snapping"].value
 
@@ -76,55 +76,12 @@ local function on_configuration_changed(configuration_changed_data)
   configchange.fix_inserter_counts()
 end
 
+
 local function on_built_miniloader(entity, orientation)
   if not orientation then
     orientation = {direction = util.opposite_direction(entity.direction), type = "input"}
   end
-
-  local surface = entity.surface
-
-  local loader_name = string.gsub(entity.name, "inserter", "loader")
-  local loader = surface.create_entity{
-    name = loader_name,
-    position = entity.position,
-    direction = orientation.direction,
-    force = entity.force,
-    type = orientation.type,
-  }
-  loader.destructible = false
-
-  entity.inserter_stack_size_override = 1
-  for _ = 2, util.num_inserters(loader) do
-    local inserter = surface.create_entity{
-      name = entity.name,
-      position = entity.position,
-      direction = entity.direction,
-      force = entity.force,
-    }
-    inserter.inserter_stack_size_override = 1
-  end
-
-  -- ensure only primary inserter can be damaged
-  local inserters = surface.find_entities_filtered{
-    position = entity.position,
-    type = "inserter",
-  }
-  for i=2,#inserters do
-    inserters[i].destructible = false
-  end
-
-  local chest = surface.create_entity{
-    name = "miniloader-target-chest",
-    position = entity.position,
-    force = entity.force,
-  }
-  chest.destructible = false
-
-  util.update_inserters(loader)
-  circuit.sync_behavior(entity)
-  circuit.sync_filters(entity)
-
-  return loader
+  return miniloader.fixup(entity, orientation)
 end
 
 local function on_robot_built(ev)
@@ -155,12 +112,8 @@ local function on_player_built(ev)
   if ev.mod_name then
     -- might be circuit connected or have filter settings
     on_robot_built(ev)
-    if ev.mod_name == "upgrade-planner" then
-      compat_upgradeplanner.on_built_entity(ev)
-    end
     return
   end
-
 
   if util.is_miniloader_inserter(entity) then
     local orientation
@@ -197,18 +150,12 @@ local function on_rotated(ev)
   end
 end
 
-local function on_pre_player_mined_item(ev)
-  if ev.mod_name == "upgrade-planner" then
-    return compat_upgradeplanner.on_pre_player_mined_item(ev)
-  end
-end
-
 local function on_miniloader_mined(ev)
   local entity = ev.entity
   local inserters = util.get_loader_inserters(entity)
   if ev.buffer and inserters[1] then
     local _, item_to_place = next(inserters[1].prototype.items_to_place_this)
-    ev.buffer.insert{count=1, name=item_to_place.name}
+    ev.buffer.insert{desired_count=1, name=item_to_place.name}
   end
   for i=1,#inserters do
     -- return items to player / robot if mined
@@ -400,7 +347,6 @@ event.register(defines.events.on_built_entity, on_player_built)
 event.register(defines.events.on_robot_built_entity, on_robot_built)
 event.register(defines.events.on_player_rotated_entity, on_rotated)
 
-event.register(defines.events.on_pre_player_mined_item, on_pre_player_mined_item)
 event.register(defines.events.on_player_mined_entity, on_player_mined_entity)
 event.register(defines.events.on_robot_pre_mined, on_robot_pre_mined)
 event.register(defines.events.on_robot_mined_entity, on_mined)
@@ -416,11 +362,17 @@ event.register(defines.events.on_player_setup_blueprint, on_setup_blueprint)
 event.register(defines.events.on_marked_for_deconstruction, on_marked_for_deconstruction)
 event.register(defines.events.on_canceled_deconstruction, on_canceled_deconstruction)
 
-event.register(defines.events.on_marked_for_upgrade, on_marked_for_upgrade,
-  {{filter = "type", type = "inserter"}})
+event.register(defines.events.on_marked_for_upgrade, on_marked_for_upgrade)
 
 event.register(defines.events.on_runtime_mod_setting_changed, function(ev)
   if ev.setting == "miniloader-snapping" then
     use_snapping = settings.global["miniloader-snapping"].value
+  elseif ev.setting == "miniloader-lock-stack-sizes" then
+    local size = settings.global["miniloader-lock-stack-sizes"].value and 1 or 0
+    miniloader.forall(function(surface, miniloader)
+      for _, inserter in pairs(util.get_loader_inserters(miniloader)) do
+        inserter.inserter_stack_size_override = size
+      end
+    end)
   end
 end)

@@ -64,6 +64,19 @@ if data.raw.item["k-transport-belt"] then
   }
 end
 
+-- Krastorio2 support
+if data.raw.item["kr-superior-transport-belt"] then
+  templates["express-"].next_prefix = "kr-advanced-"
+  templates["kr-advanced-"] = {
+    prerequisite_techs = {"kr-logistic-4", "express-miniloader"},
+    tint = {r=90, g=223, b=89},
+  }
+  templates["kr-superior-"] = {
+    prerequisite_techs = {"kr-logistic-5", "kr-advanced-miniloader"},
+    tint = {r=218, g=63, b=244},
+  }
+end
+
 -- UltimateBelts support
 if data.raw.technology["ultimate-logistics"] then
   templates["ub-ultra-fast-"] = {

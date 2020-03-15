@@ -42,4 +42,11 @@ data:extend{
     setting_type = "startup",
     default_value = false,
   },
+
+  {
+    type = "bool-setting",
+    name = "miniloader-lock-stack-sizes",
+    setting_type = "runtime-global",
+    default_value = true,
+  },
 }
