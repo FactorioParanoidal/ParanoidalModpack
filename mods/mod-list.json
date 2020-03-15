@@ -744,6 +744,11 @@
     },
     
     {
+      "name": "WideChests",
+      "enabled": true
+    },
+    
+    {
       "name": "wireless-charging-lib_v17",
       "enabled": true
     },
