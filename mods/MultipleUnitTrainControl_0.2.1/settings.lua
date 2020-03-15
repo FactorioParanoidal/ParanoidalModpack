@@ -26,7 +26,7 @@ data:extend({
 	name = "multiple-unit-train-control-debug",
 	order = "ac",
 	setting_type = "runtime-global",
-	default_value = "info",
+	default_value = "none",
 	allowed_values = {"none","error","info"}
   },
 })

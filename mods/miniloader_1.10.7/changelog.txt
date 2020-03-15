@@ -1,4 +1,34 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.7
+Date: 14.03.2020
+  Bugfixes:
+    - Change fixup introduced in v1.10.5 to prefer to keep the loader connected to an adjacent belt, when multiples are present.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.6
+Date: 14.03.2020
+  Bugfixes:
+    - Change migration to prevent crahses on loading some (?) maps saved with older versions.
+  Compatibility:
+    - Add Krastorio2 support.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.5
+Date: 14.03.2020
+  Bugfixes:
+    - Fix migration trying to replace miniloaders with themselves, resulting in multiple loaders on the same tile. (https://mods.factorio.com/mod/miniloader/discussion/5e6c7596213254000d67fac2)
+---------------------------------------------------------------------------------------------------
+Version: 1.10.4
+Date: 13.03.2020
+  Bugfixes:
+    - Fix handling of miniloader upgrades performed by Construction Drones.
+  Minor Features:
+    - Removed compatibility support for Klonan's obsolete Upgrade Planner mod.
+    - Add setting to allow miniloader inserters to move items like stack inserters, reducing UPS consumption but disabling balancing behavior and leading to generally bursty item transfer.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.3
+Date: 07.03.2020
+  Bugfixes:
+    - Fix doubled recipes only giving one result. (https://mods.factorio.com/mod/miniloader/discussion/5e63993bc849b1000ce1235c)
+---------------------------------------------------------------------------------------------------
 Version: 1.10.2
 Date: 29.02.2020
   Bugfixes:

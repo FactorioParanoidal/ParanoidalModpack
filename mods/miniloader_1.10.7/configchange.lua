@@ -1,5 +1,6 @@
 local blueprint = require "lualib.blueprint"
 local circuit = require "circuit"
+local miniloader = require "lualib.miniloader"
 local util = require "lualib.util"
 
 local configchange = {}
@@ -12,16 +13,7 @@ local function add_migration(migration)
   all_migrations[#all_migrations+1] = migration
 end
 
-local function forall_miniloaders(f)
-  for _, surface in pairs(game.surfaces) do
-    local miniloaders = util.find_miniloaders{surface = surface}
-    for _, entity in pairs(miniloaders) do
-      if entity.valid then
-        f(surface, entity)
-      end
-    end
-  end
-end
+local forall_miniloaders = miniloader.forall
 
 add_migration{
   name = "v1_1_4_inserter_cleanup",
@@ -298,34 +290,15 @@ end
 
 -- changes in other mods may affect belt speeds, and hence the required number of inserters
 function configchange.fix_inserter_counts()
-  forall_miniloaders(function(surface, miniloader)
-    local inserters = util.get_loader_inserters(miniloader)
+  forall_miniloaders(function(surface, loader)
+    local inserters = util.get_loader_inserters(loader)
     if not next(inserters) then
-      log("Miniloader at "..miniloader.position.x..", "..miniloader.position.y..
+      log("Miniloader at "..loader.position.x..", "..loader.position.y..
         " on surface "..surface.name.." has no inserters.")
+        loader.destroy()
       return
     end
-    local desired_count = util.num_inserters(miniloader)
-
-    -- remove excess inserters
-    for i=desired_count+1,#inserters do
-      inserters[i].destroy()
-    end
-
-    -- create missing inserters
-    for i=#inserters+1,desired_count do
-      local inserter = surface.create_entity{
-        name = inserters[1].name,
-        position = inserters[1].position,
-        direction = inserters[1].direction,
-        force = inserters[1].force,
-      }
-      inserter.inserter_stack_size_override = 1
-    end
-    util.update_inserters(miniloader)
-    circuit.sync_behavior(inserters[1])
-    circuit.sync_filters(inserters[1])
-    circuit.sync_partner_connections(inserters[1])
+    miniloader.fixup(inserters[1])
   end)
 end
 

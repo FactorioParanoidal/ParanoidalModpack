@@ -30,7 +30,7 @@ local function create_loaders(prefix, base_underground_name, tint)
   entity.flags = {"player-creation"}
   entity.localised_name = {"entity-name." .. loader_name}
   entity.minable = nil
-  entity.collision_box = {{-0.2, -0.1}, {0.2, 0.1}}
+  entity.collision_box = {{-0.2, -0.2}, {0.2, 0.2}}
   entity.collision_mask = {}
   entity.selection_box = {{0, 0}, {0, 0}}
   entity.filter_count = 0
@@ -284,8 +284,8 @@ local function create_inserters(prefix, next_prefix, base_underground_name, tint
   end
 
   if settings.startup["miniloader-energy-usage"].value then
-    loader_inserter.energy_per_movement = "7kJ" --DrD 7
-    loader_inserter.energy_per_rotation = "7kJ" --DrD 7
+    loader_inserter.energy_per_movement = "6kJ" --DrD 2
+    loader_inserter.energy_per_rotation = "6kJ" --DrD 2
     loader_inserter.energy_source = {
       type = "electric",
       usage_priority = "secondary-input",
