@@ -1,5 +1,5 @@
 require "util"
-data:extend(
+data:extend( 
 {
   {
     type = "item",
@@ -17,7 +17,7 @@ data:extend(
     name = "assembling-machine-7",
     icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-7.png",
     icon_size = 64,
-    flags = {"placeable-neutral","placeable-player", "player-creation"},
+    flags = {"placeable-neutral","placeable-player","player-creation"},
     minable = {hardness = 0.2, mining_time = 0.5, result = "assembling-machine-7"},
     max_health = 800,
     corpse = "big-remnants",
@@ -64,20 +64,10 @@ data:extend(
           height = 256,
           frame_count = 60,
           line_length = 10,
+		  animation_speed = 0.125,
           --shift = util.by_pixel(0, -0.5),
-          shift = util.by_pixel(0, -0.5),
-          hr_version =
-          {
-		filename = "__MilesBobsExpansion__/graphics/assembling-machine/assembling-machine-7.png",
-          priority = "high",
-          width = 192,
-          height = 256,
-          frame_count = 60,
-          line_length = 10,
-          --shift = util.by_pixel(0, -0.5),
-            shift = util.by_pixel(0, -0.75),
-            scale = 0.5
-          }
+          shift = util.by_pixel(0, -2),
+		  scale = 0.55
         },
       }
     },
@@ -298,6 +288,7 @@ data:extend(
 		new_assembler.name="assembling-machine-8"
 		new_assembler.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-8.png"
 		new_assembler.crafting_speed="4.50"
+		--new_assembler.animation.layers.filename = "__MilesBobsExpansion__/graphics/assembling-machine/assembling-machine-8.png"
 		new_assembler.order="c[assembling-machine-8]"
 		--new_assembler.animation.layers[2].tint ={r = 243/255, g = 136/255, b = 213/255}
 		new_assembler.energy_usage="1500kW"
@@ -315,6 +306,7 @@ data:extend(
 		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["assembling-machine-7"])
 		new_assembler.name="assembling-machine-9"
 		new_assembler.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png"
+		--new_assembler.animation.layers.filename = "__MilesBobsExpansion__/graphics/assembling-machine/assembling-machine-9.png"
 		new_assembler.crafting_speed="5"
 		new_assembler.order="c[assembling-machine-9]"
 		--new_assembler.animation.layers[2].tint={r = 0.9, g = 0.7, b = 0.0}
@@ -329,7 +321,10 @@ data:extend(
 		new_assembler.order="c[assembling-machine-9]"
 		new_assembleritem.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png"
 		data:extend{new_assembleritem}
+		
+		
 		--[[
+		
 		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["assembling-machine-7"])
 		new_assembler.name="assembling-machine-10"
 		new_assembler.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-10.png"
@@ -348,3 +343,38 @@ data:extend(
 		new_assembleritem.icon="__MilesBobsExpansion__/graphics/icons/assembling-machine-10.png"
 		data:extend{new_assembleritem}
 		]]--
+	
+ data.raw["assembling-machine"]["assembling-machine-8"]["animation"] = {
+            layers =
+	{
+        {
+		filename = "__MilesBobsExpansion__/graphics/assembling-machine/assembling-machine-8.png",
+          priority = "high",
+          width = 192,
+          height = 256,
+          frame_count = 60,
+          line_length = 10,
+		  animation_speed = 0.125,
+          --shift = util.by_pixel(0, -0.5),
+          shift = util.by_pixel(0, -1.5),
+		  scale = 0.55
+        }
+    }
+}
+ data.raw["assembling-machine"]["assembling-machine-9"]["animation"] = {
+            layers =
+	{
+        {
+		filename = "__MilesBobsExpansion__/graphics/assembling-machine/assembling-machine-9.png",
+          priority = "high",
+          width = 192,
+          height = 256,
+          frame_count = 60,
+          line_length = 10,
+		  animation_speed = 0.125,
+          --shift = util.by_pixel(0, -0.5),
+          shift = util.by_pixel(0, -1),
+		  scale = 0.55
+        }
+    }
+}
