@@ -694,6 +694,11 @@
     },
     
     {
+      "name": "Texugo_windgenerator",
+      "enabled": true
+    },
+    
+    {
       "name": "toxicPollution",
       "enabled": true
     },
