@@ -339,11 +339,11 @@ end
 --base fluid is methane, all others are based on relative real values
 --==BASED ON VOULMETRIC NUMBERS divided by 10, using methane as the base
 if mods.bobplates then
-  --liquid Naphtha (heavy oil), bobs value is 1MJ (Heavy fuel oil 38.2 MJ/L)(39 MJ/kg)
+ --[[ --liquid Naphtha (heavy oil), bobs value is 1MJ (Heavy fuel oil 38.2 MJ/L)(39 MJ/kg) --DrD begin
   data.raw.fluid["liquid-naphtha"].fuel_value = "244.7kJ"
   data.raw.fluid["liquid-naphtha"].emissions_multiplier = 3
   --liquid Fuel oil (light oil), bobs value 1.5MJ (light fuel oil 39 MJ/L)(40.6 MJ/kg)
-  data.raw.fluid["liquid-fuel-oil"].fuel_value = "24.99kJ"
+ -- data.raw.fluid["liquid-fuel-oil"].fuel_value = "24.99kJ"
   data.raw.fluid["liquid-fuel-oil"].emissions_multiplier = 2
   --gas methane (petrogas), bobs value 2.3MJ (methane 35.9 MJ/L)(49.85 MJ/kg)
   data.raw.fluid["gas-methane"].fuel_value = "230.0kJ"
@@ -372,6 +372,7 @@ if mods.bobplates then
   if mods["angelsbioprocessing"] then
     --liquid ethanol (), - (ethanol(L) 21.1 MJ/L)(26.7 MJ/kg)
     data.raw.fluid["gas-ethanol"].fuel_value = "135.2kJ"
+]]-- DrD end
   end
 end
 --ENABLE PRODUCTIVITY

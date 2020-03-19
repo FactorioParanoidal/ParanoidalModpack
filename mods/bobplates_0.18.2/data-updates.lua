@@ -284,13 +284,15 @@ set_canister("ferric-chloride-solution", {r = 0.5, g = 0.4, b = 0.3})
 data.raw.fluid["petroleum-gas"].gas_temperature = -42
 data.raw.fluid["petroleum-gas"].flow_color = {r=0.6, g=0.2, b=0.6}
 
+--[[ DrD
 data.raw.fluid["crude-oil"].fuel_value = "1.9MJ" --"3.8MJ"
-data.raw.fluid["crude-oil"].emissions_multiplier = 10
 data.raw.fluid["light-oil"].fuel_value = "1.5MJ" --"3MJ"
-data.raw.fluid["light-oil"].emissions_multiplier = 2
 data.raw.fluid["heavy-oil"].fuel_value = "1MJ" --"2MJ"
-data.raw.fluid["heavy-oil"].emissions_multiplier = 3
 data.raw.fluid["petroleum-gas"].fuel_value = "2.3MJ" --"4.6MJ"
+]]--
+data.raw.fluid["crude-oil"].emissions_multiplier = 10
+data.raw.fluid["light-oil"].emissions_multiplier = 2
+data.raw.fluid["heavy-oil"].emissions_multiplier = 3
 
 data.raw.item["coal"].fuel_emissions_multiplier = 2
 data.raw.item["solid-fuel"].fuel_emissions_multiplier = 0.8

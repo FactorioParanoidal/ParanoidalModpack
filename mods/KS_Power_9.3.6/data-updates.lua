@@ -68,9 +68,10 @@ local fuel_values = {
 }
 
 local emissions = {
-  ["crude-oil"] = 1.4,
+  ["liquid-multi-phase-oil"] = 15,
+  ["crude-oil"] = 10,
   ["light-oil"] = 1.2,
-  ["heavy-oil"] = 1.3,
+  ["heavy-oil"] = 3,
   ["petroleum-gas"] = 1,
   ["diesel-fuel"] = 0.8,
   
