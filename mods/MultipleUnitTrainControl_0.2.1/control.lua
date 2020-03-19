@@ -82,9 +82,9 @@ local function InitEntityMaps()
 					mod_name = "Realistic Electric Trains "
 				end
 			end
-			if settings_debug == "info" then
-				game.print({"debug-message.mu-mapping-message",mod_name,std,mu})
-			end
+			--if settings_debug == "info" then
+			--	game.print({"debug-message.mu-mapping-message",mod_name,std,mu})
+			--end
 		end
 	end
 	
@@ -118,9 +118,9 @@ end
 local function ProcessReplacement(r)
 	if r[1] and r[1].valid then
 		-- Replace the locomotive
-		if settings_debug == "info" then
-			game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]})
-		end
+		--if settings_debug == "info" then
+		--	game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]})
+		--end
 		local errorString = {"debug-message.mu-replacement-failed",r[1].name,r[1].backer_name,r[1].position.x,r[1].position.y}
 		
 		local newLoco = replaceCarriage(r[1], r[2])
@@ -135,9 +135,9 @@ local function ProcessReplacement(r)
 			end
 		end
 		-- Make sure it was actually replaced, show error message if not.
-		if not newLoco and (settings_debug == "info" or settings_debug == "error") then
-			game.print(errorString)
-		end
+		--if not newLoco and (settings_debug == "info" or settings_debug == "error") then
+		--	game.print(errorString)
+		--end
 	end
 end
 
@@ -228,8 +228,8 @@ local function OnTrainChangedState(event)
 					ProcessTrain(t)
 					global.moving_trains[id] = nil
 					train_queue_semaphore = false
-				elseif (settings_debug == "info" or settings_debug == "error") then
-					game.print("OnChange Train " .. id .. " event ignored because semaphore is occupied (this is weird!)")
+				--elseif (settings_debug == "info" or settings_debug == "error") then
+					--game.print("OnChange Train " .. id .. " event ignored because semaphore is occupied (this is weird!)")
 				end
 			end
 		end
@@ -408,9 +408,9 @@ local function OnNthTick(event)
 			end
 			if newVal ~= current_nth_tick then
 				--game.print("Changing MU Control Nth Tick duration to " .. newVal)
-				if settings_debug == "info" then
-					game.print({"debug-message.mu-changing-tick-message",newVal})
-				end
+				--if settings_debug == "info" then
+				--	game.print({"debug-message.mu-changing-tick-message",newVal})
+				--end
 				current_nth_tick = newVal
 				global.current_nth_tick = current_nth_tick
 				script.on_nth_tick(nil)
