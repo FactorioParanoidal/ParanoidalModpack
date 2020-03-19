@@ -4,7 +4,7 @@ data:extend(
             type = "recipe",
             name = "subterranean-belt",
             enabled = false,
-            energy_required = 1,
+            energy_required = 10,
             ingredients = {
                 {"iron-plate", 200},
                 {"transport-belt", 250}
@@ -17,6 +17,7 @@ data:extend(
             type = "recipe",
             name = "fast-subterranean-belt",
             enabled = false,
+			energy_required = 10,
             ingredients = {
                 {"steel-gear-wheel", 100},
 				{"fast-transport-belt", 250},
@@ -31,6 +32,7 @@ data:extend(
             name = "express-subterranean-belt",
             category = "crafting-with-fluid",
             enabled = false,
+			energy_required = 10,
             ingredients = {
                 {"titanium-gear-wheel", 100},
 				{"express-transport-belt", 250},
@@ -44,6 +46,7 @@ data:extend(
             type = "recipe",
             name = "subterranean-pipe",
             enabled = false,
+			energy_required = 10,
             ingredients = {
                 {"steel-pipe", 250},
                 {"steel-plate", 200}
