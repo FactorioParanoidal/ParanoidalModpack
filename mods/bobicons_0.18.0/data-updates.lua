@@ -1,5 +1,13 @@
 
+
+if data.raw.item["iron-gear-wheel"]  then data.raw.item["iron-gear-wheel"].icon = "__bobicons__/graphics/icons/other/iron-gear-wheel.png"
+data.raw.item["advanced-circuit"].icon_size = 64 end
 -- CIRCUITS --
+
+if data.raw.item["green-wire"]  then data.raw.item["green-wire"].icon = "__bobicons__/graphics/icons/electronics/green-wire.png"
+data.raw.item["green-wire"].icon_size = 64
+data.raw.item["red-wire"].icon = "__bobicons__/graphics/icons/electronics/red-wire.png"
+data.raw.item["red-wire"].icon_size = 64 end
 
 if data.raw.item["advanced-circuit"]  then data.raw.item["advanced-circuit"].icon = "__bobicons__/graphics/icons/electronics/electronic-circuit-board.png"
 data.raw.item["advanced-circuit"].icon_size = 32 end
