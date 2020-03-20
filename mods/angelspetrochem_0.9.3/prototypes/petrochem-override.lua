@@ -372,8 +372,8 @@ if mods.bobplates then
   if mods["angelsbioprocessing"] then
     --liquid ethanol (), - (ethanol(L) 21.1 MJ/L)(26.7 MJ/kg)
     data.raw.fluid["gas-ethanol"].fuel_value = "135.2kJ"
-]]-- DrD end
   end
+]]-- DrD end
 end
 --ENABLE PRODUCTIVITY
 angelsmods.functions.allow_productivity("liquid-plastic-1")
