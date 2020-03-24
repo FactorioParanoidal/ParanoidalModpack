@@ -1,7 +1,3 @@
-
-
-if data.raw.item["iron-gear-wheel"]  then data.raw.item["iron-gear-wheel"].icon = "__bobicons__/graphics/icons/other/iron-gear-wheel.png"
-data.raw.item["advanced-circuit"].icon_size = 64 end
 -- CIRCUITS --
 
 if data.raw.item["green-wire"]  then data.raw.item["green-wire"].icon = "__bobicons__/graphics/icons/electronics/green-wire.png"
@@ -41,35 +37,50 @@ if data.raw.item["wooden-board"]  then data.raw.item["wooden-board"].icon = "__b
 
 -- PLATES --
 
-if data.raw.item["aluminium-plate"] then data.raw.item["aluminium-plate"].icon = "__bobicons__/graphics/icons/plate/aluminium-plate.png" end
-if data.raw.item["copper-plate"] then data.raw.item["copper-plate"].icon = "__bobicons__/graphics/icons/plate/copper-plate.png" end
+if data.raw.item["aluminium-plate"] then data.raw.item["aluminium-plate"].icon = "__bobicons__/graphics/icons/plate/aluminium-plate.png"
+data.raw.item["aluminium-plate"].icon_size = 64 end
+if data.raw.item["cobalt-plate"] then data.raw.item["cobalt-plate"].icon = "__bobicons__/graphics/icons/plate/cobalt-plate.png"
+data.raw.item["cobalt-plate"].icon_size = 64 end
+if data.raw.item["copper-plate"] then data.raw.item["copper-plate"].icon = "__bobicons__/graphics/icons/plate/copper-plate.png"
+data.raw.item["copper-plate"].icon_size = 64 end
 if data.raw.item["gold-plate"] then data.raw.item["gold-plate"].icon = "__bobicons__/graphics/icons/plate/gold-plate.png" end
-if data.raw.item["lead-plate"] then data.raw.item["lead-plate"].icon = "__bobicons__/graphics/icons/plate/lead-plate.png" end
+if data.raw.item["lead-plate"] then data.raw.item["lead-plate"].icon = "__bobicons__/graphics/icons/plate/lead-plate.png"
+data.raw.item["lead-plate"].icon_size = 64 end
 if data.raw.item["lithium"] then data.raw.item["lithium"].icon = "__bobicons__/graphics/icons/plate/lithium.png" end
-if data.raw.item["iron-plate"] then data.raw.item["iron-plate"].icon = "__bobicons__/graphics/icons/plate/iron-plate.png" end
-if data.raw.item["nickel-plate"]  then data.raw.item["nickel-plate"].icon = "__bobicons__/graphics/icons/plate/nickel-plate.png" end
+if data.raw.item["iron-plate"] then data.raw.item["iron-plate"].icon = "__bobicons__/graphics/icons/plate/iron-plate.png"
+data.raw.item["iron-plate"].icon_size = 64 end
+if data.raw.item["nickel-plate"]  then data.raw.item["nickel-plate"].icon = "__bobicons__/graphics/icons/plate/nickel-plate.png"
+data.raw.item["nickel-plate"].icon_size = 64 end
 if data.raw.item["silicon"] then data.raw.item["silicon"].icon = "__bobicons__/graphics/icons/plate/silicon.png" end
 if data.raw.item["silver-plate"] then data.raw.item["silver-plate"].icon = "__bobicons__/graphics/icons/plate/silver-plate.png" end
-if data.raw.item["steel-plate"] then data.raw.item["steel-plate"].icon = "__bobicons__/graphics/icons/plate/steel-plate.png" end
+if data.raw.item["steel-plate"] then data.raw.item["steel-plate"].icon = "__bobicons__/graphics/icons/plate/steel-plate.png"
+data.raw.item["steel-plate"].icon_size = 64 end
 if data.raw.item["tin-plate"] then data.raw.item["tin-plate"].icon = "__bobicons__/graphics/icons/plate/tin-plate.png" end
 if data.raw.item["titanium-plate"] then data.raw.item["titanium-plate"].icon = "__bobicons__/graphics/icons/plate/titanium-plate.png" end
 if data.raw.item["tungsten-plate"] then data.raw.item["tungsten-plate"].icon = "__bobicons__/graphics/icons/plate/tungsten-plate.png" end
-if data.raw.item["zinc-plate"] then data.raw.item["zinc-plate"].icon = "__bobicons__/graphics/icons/plate/zinc-plate.png" end
+if data.raw.item["zinc-plate"] then data.raw.item["zinc-plate"].icon = "__bobicons__/graphics/icons/plate/zinc-plate.png"
+data.raw.item["zinc-plate"].icon_size = 64 end
 
 
 -- PLATES - Alloys --
 -- name of items: bronze-alloy, brass-alloy, cobalt-steel-alloy, copper-tungsten-alloy, electrum-alloy, gunmetal-alloy, invar-alloy, nitinol-alloy, solder-alloy, tungsten-carbide
 
-if data.raw.item["bronze-alloy"]  then data.raw.item["bronze-alloy"].icon = "__bobicons__/graphics/icons/plate/bronze-alloy.png" end
+if data.raw.item["bronze-alloy"]  then data.raw.item["bronze-alloy"].icon = "__bobicons__/graphics/icons/plate/bronze-alloy.png"
+data.raw.item["bronze-alloy"].icon_size = 64 end
 if data.raw.item["brass-alloy"]  then data.raw.item["brass-alloy"].icon = "__bobicons__/graphics/icons/plate/brass-alloy.png" end
 if data.raw.item["cobalt-steel-alloy"]  then data.raw.item["cobalt-steel-alloy"].icon = "__bobicons__/graphics/icons/plate/cobalt-steel-alloy.png" end
-if data.raw.item["copper-tungsten-alloy"]  then data.raw.item["copper-tungsten-alloy"].icon = "__bobicons__/graphics/icons/plate/copper-tungsten-alloy.png" end
+if data.raw.item["copper-tungsten-alloy"]  then data.raw.item["copper-tungsten-alloy"].icon = "__bobicons__/graphics/icons/plate/copper-tungsten-alloy.png"
+data.raw.item["copper-tungsten-alloy"].icon_size = 64 end
 if data.raw.item["electrum-alloy"] then data.raw.item["electrum-alloy"].icon = "__bobicons__/graphics/icons/plate/electrum-alloy.png" end
-if data.raw.item["gunmetal-alloy"]  then data.raw.item["gunmetal-alloy"].icon = "__bobicons__/graphics/icons/plate/gunmetal-alloy.png" end
-if data.raw.item["invar-alloy"]  then data.raw.item["invar-alloy"].icon = "__bobicons__/graphics/icons/plate/invar-alloy.png" end
-if data.raw.item["nitinol-alloy"] then data.raw.item["nitinol-alloy"].icon = "__bobicons__/graphics/icons/plate/nitinol-alloy.png" end
+if data.raw.item["gunmetal-alloy"]  then data.raw.item["gunmetal-alloy"].icon = "__bobicons__/graphics/icons/plate/gunmetal-alloy.png"
+data.raw.item["gunmetal-alloy"].icon_size = 64 end
+if data.raw.item["invar-alloy"]  then data.raw.item["invar-alloy"].icon = "__bobicons__/graphics/icons/plate/invar-alloy.png"
+data.raw.item["invar-alloy"].icon_size = 64 end
+if data.raw.item["nitinol-alloy"] then data.raw.item["nitinol-alloy"].icon = "__bobicons__/graphics/icons/plate/nitinol-alloy.png"
+data.raw.item["nitinol-alloy"].icon_size = 64 end
 if data.raw.item["solder-alloy"] then data.raw.item["solder-alloy"].icon = "__bobicons__/graphics/icons/plate/solder-alloy.png" end
-if data.raw.item["tungsten-carbide"] then data.raw.item["tungsten-carbide"].icon = "__bobicons__/graphics/icons/plate/tungsten-carbide.png" end
+if data.raw.item["tungsten-carbide"] then data.raw.item["tungsten-carbide"].icon = "__bobicons__/graphics/icons/plate/tungsten-carbide.png"
+data.raw.item["tungsten-carbide"].icon_size = 64 end
 
 
 
@@ -82,6 +93,12 @@ if data.raw.item["gem-ore"] then data.raw.item["gem-ore"].icon = "__bobicons__/g
 if data.raw.item["gilded-copper-cable"]  then data.raw.item["gilded-copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/gilded-copper-cable.png" end 
 if data.raw.item["silver-cable"]  then data.raw.item["silver-cable"].icon = "__bobicons__/graphics/icons/intermediates/silver-cable.png" end 
 if data.raw.item["resin"]  then data.raw.item["resin"].icon = "__bobicons__/graphics/icons/intermediates/resin.png" end 
+if data.raw.item["battery"] then data.raw.item["battery"].icon = "__bobicons__/graphics/icons/intermediates/battery.png"
+data.raw.item["battery"].icon_size = 64 end
+if data.raw.item["lithium-ion-battery"] then data.raw.item["lithium-ion-battery"].icon = "__bobicons__/graphics/icons/intermediates/lithium-ion-battery.png"
+data.raw.item["lithium-ion-battery"].icon_size = 64 end
+if data.raw.item["silver-zinc-battery"] then data.raw.item["silver-zinc-battery"].icon = "__bobicons__/graphics/icons/intermediates/silver-zinc-battery.png"
+data.raw.item["silver-zinc-battery"].icon_size = 64 end
 
 -- SCIENCE --
 data.raw.tool["automation-science-pack"].icon_size = 64
@@ -96,8 +113,8 @@ data.raw.tool["military-science-pack"].icon_size = 64
 data.raw.tool["military-science-pack"].icon = "__bobicons__/graphics/icons/science/military-science-pack.png"
 data.raw.tool["production-science-pack"].icon_size = 64
 data.raw.tool["production-science-pack"].icon = "__bobicons__/graphics/icons/science/production-science-pack.png"
-
---data.raw.tool["logistic-science-pack"].icon = "__bobicons__/graphics/icons/science/logistic-science-pack-2.png"
+if data.raw.tool["logistic-science-pack-2"] then data.raw.tool["logistic-science-pack-2"].icon = "__bobicons__/graphics/icons/science/logistic-science-pack-2.png"
+data.raw.tool["logistic-science-pack-2"].icon_size = 64 end
 data.raw.tool["space-science-pack"].icon_size = 64
 data.raw.tool["space-science-pack"].icon = "__bobicons__/graphics/icons/science/space-science-pack.png"
 
@@ -119,9 +136,22 @@ if data.raw.item["small-alien-artifact-purple"]  then data.raw.item["small-alien
 if data.raw.item["small-alien-artifact-red"]  then data.raw.item["small-alien-artifact-red"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-red.png" end
 if data.raw.item["small-alien-artifact-yellow"]  then data.raw.item["small-alien-artifact-yellow"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-yellow.png" end
 
+-- ALIEN -- (bobplates)
+
+if data.raw.fluid["alien-acid"] then data.raw.fluid["alien-acid"].icon = "__bobicons__/graphics/icons/alien/alien-acid.png" --data.raw.fluid["alien-acid"].icon_size = 32
+end
+if data.raw.fluid["alien-explosive"] then data.raw.fluid["alien-explosive"].icon = "__bobicons__/graphics/icons/alien/alien-explosive.png" --data.raw.fluid["alien-explosive"].icon_size = 32
+end
+if data.raw.fluid["alien-fire"] then data.raw.fluid["alien-fire"].icon = "__bobicons__/graphics/icons/alien/alien-fire.png" --data.raw.fluid["alien-fire"].icon_size = 32
+end
+if data.raw.fluid["alien-poison"] then data.raw.fluid["alien-poison"].icon = "__bobicons__/graphics/icons/alien/alien-poison.png" --data.raw.fluid["alien-poison"].icon_size = 32
+end
+
+if data.raw.item["alien-blue-alloy"] then data.raw.item["alien-blue-alloy"].icon = "__bobicons__/graphics/icons/alien/alien-blue-alloy.png" end
+if data.raw.item["alien-orange-alloy"] then data.raw.item["alien-orange-alloy"].icon = "__bobicons__/graphics/icons/alien/alien-orange-alloy.png" end
+
 
 -- if data.raw.item["XXXXXXXX"]  then data.raw.item["XXXXXXXX"].icon = "__bobicons__/graphics/icons/XXXXXXXX.png" end
-
 
 --bobExtended.getTech("sci-component-1").icon_size = 128
 --bobExtended.getTech("sci-component-2").icon_size = 128
