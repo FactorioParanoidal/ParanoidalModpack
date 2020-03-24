@@ -9,6 +9,7 @@
   "boblibrary >= 0.17.0",
   "bobelectronics >= 0.17.0",
   "bobplates >= 0.17.0",
+  "angelssmelting >= 0.6.0",
   
   "? bobenemies",
   "? angelsbioprocessing",
@@ -17,6 +18,7 @@
   "? ShinyBobGFX",
   "? ShinyBob",
   "? bobmods_gfxtweak",
+
   "? KaoExtended"
   
   ]
