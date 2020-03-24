@@ -3,7 +3,7 @@
     type = "item",
     name = "oil-steam-boiler",
     icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
-    icon_size = 32,
+    icon_size = 64,
     flags = {},
     subgroup = "energy",
     order = "f[oil-steam-boiler]",
@@ -29,7 +29,7 @@
     type = "boiler",
     name = "oil-steam-boiler",
     icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
-    icon_size = 32,
+    icon_size = 64,
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 0.1, result = "oil-steam-boiler"},
     max_health = 200,
@@ -120,7 +120,7 @@
         frame_count = 8,
         animation_speed = 0.4,
         scale = 0.5,
-        run_mode = "forward-then-backward",
+        run_mode = "forward",
       },
       east =
       {
@@ -133,7 +133,7 @@
         frame_count = 4,
         animation_speed = 0.2,
         scale = 0.5,
-        run_mode = "forward-then-backward",
+        run_mode = "forward",
       },
       south =
       {
@@ -146,7 +146,7 @@
         frame_count = 4,
         animation_speed = 0.2,
         scale = 0.5,
-        run_mode = "forward-then-backward",
+        run_mode = "forward",
       },
       west =
       {
@@ -159,7 +159,7 @@
         frame_count = 4,
         animation_speed = 0.2,
         scale = 0.5,
-        run_mode = "forward-then-backward",
+        run_mode = "forward",
       }
     },
     fire = {},
