@@ -18,7 +18,10 @@ data:extend(
     results=
     {
       {type="item", name="processed-platinum", amount=2},
+	  {type="item", name="slag", amount=1, probability=0.1}, --DrD
+	  
     },
+	icon = "__angelssmelting__/graphics/icons/processed-platinum.png", --DrD
     icon_size = 32,
     order = "b[processed-platinum]",
   },

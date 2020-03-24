@@ -18,6 +18,7 @@ data:extend(
     results =
     {
       {type="item", name="processed-zinc", amount=2},
+	  {type="item", name="slag", amount=1, probability=0.3}, --DrD
     },
     main_product= "processed-zinc",
     icon = "__angelssmelting__/graphics/icons/processed-zinc.png",

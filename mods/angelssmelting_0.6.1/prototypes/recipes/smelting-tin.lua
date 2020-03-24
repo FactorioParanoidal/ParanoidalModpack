@@ -18,8 +18,10 @@ data:extend(
     results =
     {
       {type="item", name="processed-tin", amount=2},
+	  {type="item", name="slag", amount=1, probability=0.5}, --DrD
     },
     icon_size = 32,
+	icon = "__angelssmelting__/graphics/icons/processed-tin.png", --DrD
     order = "b[processed-tin]",
   },
   {
