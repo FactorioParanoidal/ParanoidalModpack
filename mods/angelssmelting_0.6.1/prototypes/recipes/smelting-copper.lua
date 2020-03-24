@@ -19,7 +19,9 @@ data:extend(
     results =
     {
       {type="item", name="processed-copper", amount=2},
+	  {type="item", name="slag", amount=1, probability=0.5}, --DrD
     },
+	icon = "__angelssmelting__/graphics/icons/processed-copper.png", --DrD
     icon_size = 32,
     order = "b[processed-copper]",
   },

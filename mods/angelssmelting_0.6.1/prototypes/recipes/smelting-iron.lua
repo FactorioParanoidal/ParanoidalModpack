@@ -18,9 +18,9 @@ data:extend(
     results =
     {
       {type="item", name="processed-iron", amount=2},
-	  --{type="item", name="slag", amount=1, probability=0.5}, --DrD
+	  {type="item", name="slag", amount=1, probability=0.5}, --DrD
     },
-	--icon = "__angelssmelting__/graphics/icons/processed-iron.png", --DrD
+	icon = "__angelssmelting__/graphics/icons/processed-iron.png", --DrD
 	icon_size = 32,
     order = "aa",
     },
