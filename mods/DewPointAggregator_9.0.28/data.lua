@@ -80,7 +80,7 @@ data:extend(
     {
       type = "electric",
       usage_priority = "secondary-input",
-      emissions = 0.01,
+      emissions = -10,
 	  drain = "160kW",
     },
     energy_usage = "1900KW",
