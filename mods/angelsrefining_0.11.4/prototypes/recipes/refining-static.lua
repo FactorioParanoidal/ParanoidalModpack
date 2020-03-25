@@ -906,7 +906,7 @@ data:extend(
       enabled = "false",
       ingredients = {
         {type = "item", name = "slag", amount = 5},
-        {type = "fluid", name = "sulfuric-acid", amount = 15}
+        {type = "fluid", name = "sulfuric-acid", amount = 25} --DrD 15
       },
       results = {
         {type = "fluid", name = "slag-slurry", amount = 50}
