@@ -127,6 +127,7 @@ data.raw["assembling-machine"]["oil-refinery-2"].module_specification = {module_
 data.raw["assembling-machine"]["oil-refinery-3"].module_specification = {module_slots = 3}
 data.raw["assembling-machine"]["oil-refinery-4"].module_specification = {module_slots = 4}
 
+data.raw["furnace"]["angels-flare-stack"].module_specification = {module_slots = 1}
 
 -- MODULE SLOTS CENTRIFUGE+CLOWNS
 
