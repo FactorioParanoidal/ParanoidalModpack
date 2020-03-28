@@ -48,7 +48,7 @@ function smog.pollution_to_color (pollution)
   local mx=settings.global['svp-max-pollution'].value
 	local v=math.min(pollution,mx) 
   local pct=math.max(0,v-mm)/(mx-mm) -- from 0 to 1
-	return {r=pct*0.3,g=pct*0.3,b=pct*0.3,a=pct*0.6} 
+	return {r=pct*0.3,g=pct*0.3,b=pct*0.3,a=pct*0.75}  --DrD 0.6
 end
 
 function smog.on_chunk_generated(ev) 
