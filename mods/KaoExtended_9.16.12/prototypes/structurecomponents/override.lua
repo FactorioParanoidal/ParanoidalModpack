@@ -10,17 +10,26 @@ local function replaceMachine()
     
   KaoExtended.recipe.addtorecipe("salination-plant", {"intermediate-structure-components", 5})
   KaoExtended.recipe.addtorecipe("salination-plant-2", {"advanced-structure-components", 5})
+  KaoExtended.recipe.addtorecipe("salination-plant-2", {"salination-plant", 2})
+  KaoExtended.recipe.addtorecipe("salination-plant-3", {"salination-plant-2", 2})
   
   KaoExtended.recipe.addtorecipe("washing-plant-2", {"intermediate-structure-components", 3})
   
   KaoExtended.recipe.addtorecipe("centrifuge", {"intermediate-structure-components", 3})
+  KaoExtended.recipe.addtorecipe("centrifuge-2", {"advanced-structure-components", 3})
+  KaoExtended.recipe.addtorecipe("centrifuge-3", {"advanced-structure-components", 10})
 
   KaoExtended.recipe.addtorecipe("assembling-machine-2", {"basic-structure-components", 1})
   KaoExtended.recipe.addtorecipe("assembling-machine-3", {"intermediate-structure-components", 2})
-  KaoExtended.recipe.addtorecipe("assembling-machine-4", {"intermediate-structure-components", 4})
+  KaoExtended.recipe.addtorecipe("assembling-machine-4", {"intermediate-structure-components", 5})
   KaoExtended.recipe.addtorecipe("assembling-machine-5", {"advanced-structure-components", 2})
-  KaoExtended.recipe.addtorecipe("assembling-machine-6", {"anotherworld-structure-components", 3})
-  
+  KaoExtended.recipe.addtorecipe("assembling-machine-6", {"advanced-structure-components", 10})
+if data.raw["item"]["assembling-machine-7"] then
+   KaoExtended.recipe.addtorecipe("assembling-machine-7", {"anotherworld-structure-components", 2})
+   KaoExtended.recipe.addtorecipe("assembling-machine-8", {"anotherworld-structure-components", 5})
+   KaoExtended.recipe.addtorecipe("assembling-machine-9", {"anotherworld-structure-components", 10})
+ end
+
   KaoExtended.recipe.addtorecipe("rocket-silo", {"assembling-machine-6", 100})
   
   KaoExtended.recipe.addtorecipe("electronics-machine-1", {"basic-structure-components", 2})
@@ -169,9 +178,9 @@ local function replaceAngelPetro()
     KaoExtended.recipe.addtorecipe("steam-cracker-3", {"intermediate-structure-components", 8})
     KaoExtended.recipe.addtorecipe("steam-cracker-4", {"advanced-structure-components", 2})
 	
-    KaoExtended.recipe.addtorecipe("angels-storage-tank-3", {"basic-structure-components", 2})
-    KaoExtended.recipe.addtorecipe("angels-storage-tank-2", {"intermediate-structure-components", 4})
-    KaoExtended.recipe.addtorecipe("angels-storage-tank-1", {"advanced-structure-components", 4})
+    --KaoExtended.recipe.addtorecipe("angels-storage-tank-3", {"basic-structure-components", 2})
+    KaoExtended.recipe.addtorecipe("angels-storage-tank-2", {"basic-structure-components", 4})
+    KaoExtended.recipe.addtorecipe("angels-storage-tank-1", {"intermediate-structure-components", 6})
 	
 end
 
@@ -203,8 +212,8 @@ local function replaceAngelMe()
 end
 
 local function replaceRobot()
-  KaoExtended.recipe.addtorecipe("bob-roboport-2", {"intermediate-structure-components", 1})
-  KaoExtended.recipe.addtorecipe("bob-roboport-3", {"advanced-structure-components", 1})
+  KaoExtended.recipe.addtorecipe("bob-roboport-2", {"intermediate-structure-components", 2})
+  KaoExtended.recipe.addtorecipe("bob-roboport-3", {"advanced-structure-components", 2})
   KaoExtended.recipe.addtorecipe("bob-roboport-4", {"anotherworld-structure-components", 1})
 end
 
