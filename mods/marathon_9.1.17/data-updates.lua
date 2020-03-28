@@ -98,6 +98,8 @@ function marathon.add_recipe_item(recipe, item)
 	end
 end
 
+    --require("prototypes.bobsmods.recipe-power")
+	
 	--require("prototypes.new") -- DrD
 --[[
 	require("prototypes.bobsmods.item")
@@ -105,7 +107,7 @@ end
 	--require("prototypes.bobsmods.recipe-circuit")
 	require("prototypes.bobsmods.recipe-intermediate")
 	require("prototypes.bobsmods.recipe-logistics")
-	require("prototypes.bobsmods.recipe-power")
+	
 	require("prototypes.bobsmods.recipe-production")
 	require("prototypes.bobsmods.recipe-resource")
 	require("prototypes.bobsmods.recipe-smelting")

@@ -151,7 +151,7 @@ marathon.update_recipe("steam-engine-2",
 {
 	energy_required = 45,
 	ingredients = {
-		{type="item", name="steam-engine", amount=1},
+		{type="item", name="steam-engine", amount=2},
 		{type="item", name="steel-plate", amount=20},
 		{type="item", name="iron-gear-wheel", amount=20},
 	}
@@ -161,10 +161,10 @@ marathon.update_recipe("steam-engine-3",
 {
 	energy_required = 30,
 	ingredients = {
-		{type="item", name="steam-engine-2", amount=1},
+		{type="item", name="steam-engine-2", amount=2},
 		{type="item", name="advanced-circuit", amount=10},
-		{type="item", name="steel-plate", amount=10},
-		{type="item", name="iron-gear-wheel", amount=10},
+		{type="item", name="steel-plate", amount=25},
+		{type="item", name="iron-gear-wheel", amount=20},
 	}
 })
 
@@ -228,8 +228,8 @@ if data.raw.item["steel-gear-wheel"] then
 	marathon.replace_recipe_item("steam-engine-2", "iron-gear-wheel", "steel-gear-wheel")
 end
 
-if data.raw.item["titanium-bearing"] then
-	marathon.add_new_recipe_item("steam-engine-3", {"titanium-bearing", 10})
+if data.raw.item["cobalt-steel-bearing"] then
+	marathon.add_new_recipe_item("steam-engine-3", {"cobalt-steel-bearing", 10})
 else
 	if data.raw.item["steel-bearing"] then
 		marathon.add_new_recipe_item("steam-engine-3", {"steel-bearing", 10})
@@ -238,22 +238,14 @@ else
 	end
 end
 
-if data.raw.item["titanium-gear-wheel"] then
-	marathon.replace_recipe_item("steam-engine-3", "iron-gear-wheel", "titanium-gear-wheel")
+if data.raw.item["cobalt-steel-gear-wheel"] then
+	marathon.replace_recipe_item("steam-engine-3", "iron-gear-wheel", "cobalt-steel-gear-wheel")
 else
-	if data.raw.item["tungsten-gear-wheel"] then
-		marathon.replace_recipe_item("steam-engine-3", "iron-gear-wheel", "tungsten-gear-wheel")
-	else
 		if data.raw.item["steel-gear-wheel"] then
 			marathon.replace_recipe_item("steam-engine-3", "iron-gear-wheel", "steel-gear-wheel")
 		end
-	end
 end
 
-if data.raw.item["titanium-plate"] then
-	marathon.replace_recipe_item("steam-engine-3", "steel-plate", "titanium-plate")
-else
-	if data.raw.item["tungsten-plate"] then
-		marathon.replace_recipe_item("steam-engine-3", "steel-plate", "tungsten-plate")
-	end
+if data.raw.item["cobalt-steel-plate"] then
+	marathon.replace_recipe_item("steam-engine-3", "steel-plate", "cobalt-steel-plate")
 end
