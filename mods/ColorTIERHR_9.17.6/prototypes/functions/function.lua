@@ -235,7 +235,7 @@ function replaceELECTRONICMACHINES(name,type)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceELECTROLYSERS(name,type)
 	if data.raw["assembling-machine"][name] then
 	data.raw["assembling-machine"][name]["animation"] = 
@@ -310,9 +310,9 @@ function replaceELECTROLYSERS(name,type)
     }}
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceSTEAMENGINES(name,type)
 	if data.raw["generator"][name] then
 	data.raw["generator"][name]["horizontal_animation"]["layers"] = 
@@ -399,9 +399,9 @@ function replaceSTEAMENGINES(name,type)
 	}
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceSTEAMTURBINES(name,type)
 	if data.raw["generator"][name] then
 	data.raw["generator"][name]["horizontal_animation"]["layers"] = 
@@ -492,7 +492,7 @@ function replaceSTEAMTURBINES(name,type)
 	}
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
 
 function replaceBEACONS(name,type)
@@ -558,7 +558,7 @@ function replaceBEACONS(name,type)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceSTORAGETANK(name,type)
 	if data.raw["storage-tank"][name] then
 	data.raw["storage-tank"][name]["pictures"]["picture"]["sheets"] =
@@ -604,9 +604,9 @@ function replaceSTORAGETANK(name,type)
     }
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceBOILERS(name,type)
 	if data.raw["boiler"][name] then
 	data.raw["boiler"][name]["structure"] = {
@@ -771,6 +771,8 @@ function replaceBOILERS(name,type)
     }}}
 	end
 end
+]]
+
 
 function replaceHEATEXCHANGERS(name,type)
 	if data.raw["boiler"][name] then
@@ -1260,7 +1262,7 @@ function replaceAIRPUMPS(name,type)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceOILREFINERIES(name,type)
 	if data.raw["assembling-machine"][name] then
 	data.raw["assembling-machine"][name]["animation"] = make_4way_animation_from_spritesheet({ layers =
@@ -1302,9 +1304,9 @@ function replaceOILREFINERIES(name,type)
     }})
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceCHEMICALPLANT(name,type)
 	if data.raw["assembling-machine"][name] then
 	data.raw["assembling-machine"][name]["animation"] = make_4way_animation_from_spritesheet({ layers =
@@ -1346,7 +1348,7 @@ function replaceCHEMICALPLANT(name,type)
     }})
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
 
 function replaceARTILLERYTURRET(name,type)
@@ -1401,7 +1403,7 @@ function replaceARTILLERYTURRET(name,type)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
-
+--[[
 function replaceROBOPORTS(name,type)
 	if data.raw["roboport"][name] then
 	data.raw["roboport"][name]["base"]["layers"] =
@@ -1986,7 +1988,7 @@ function replaceLARGEROBOCHARGER(name,type)
     }
 	end
 end
-
+]]
 ----------------------------------------------------------------------------------------------------------------------
 
 function replaceSTONEFURNACE(name)
@@ -3142,7 +3144,7 @@ function replaceLABS(name,picture)
 	}
 	end
 end
-
+--[[
 function replaceRADARS(name, type)
 		
 	if data.raw["radar"][name] then
@@ -3200,7 +3202,7 @@ function replaceRADARS(name, type)
     }
 	end
 end
-
+]]
 function replaceMINES(name)
 		
 	if data.raw["land-mine"][name] then
