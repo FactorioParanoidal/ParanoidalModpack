@@ -35,6 +35,17 @@ if data.raw.item["superior-circuit-board"]  then data.raw.item["superior-circuit
 data.raw.item["superior-circuit-board"].icon_size = 32 end 
 if data.raw.item["wooden-board"]  then data.raw.item["wooden-board"].icon = "__bobicons__/graphics/icons/electronics/wooden-board.png" data.raw.item["wooden-board"].icon_size = 32 end 
 
+if data.raw.item["simple-io"] then
+data.raw.item["simple-io"].icon = "__bobicons__/graphics/icons/electronics/simple-io-128.png"
+data.raw.item["simple-io"].icon_size = 128
+data.raw.item["standart-io"].icon = "__bobicons__/graphics/icons/electronics/standart-io-128.png"
+data.raw.item["standart-io"].icon_size = 128
+data.raw.item["advanced-io"].icon = "__bobicons__/graphics/icons/electronics/advanced-io-128.png"
+data.raw.item["advanced-io"].icon_size = 128
+data.raw.item["predictive-io"].icon = "__bobicons__/graphics/icons/electronics/predictive-io-128.png"
+data.raw.item["predictive-io"].icon_size = 128 
+end
+
 -- PLATES --
 
 if data.raw.item["aluminium-plate"] then data.raw.item["aluminium-plate"].icon = "__bobicons__/graphics/icons/plate/aluminium-plate.png"
@@ -104,6 +115,7 @@ if data.raw.item["silver-zinc-battery"] then data.raw.item["silver-zinc-battery"
 data.raw.item["silver-zinc-battery"].icon_size = 64 end
 
 -- SCIENCE --
+
 data.raw.tool["automation-science-pack"].icon_size = 64
 data.raw.tool["automation-science-pack"].icon = "__bobicons__/graphics/icons/science/automation-science-pack.png"
 data.raw.tool["logistic-science-pack"].icon_size = 64
@@ -123,21 +135,25 @@ data.raw.tool["space-science-pack"].icon = "__bobicons__/graphics/icons/science/
 
 -- ALIEN -- (bobenemies)
 
-if data.raw.item["alien-artifact"]  then data.raw.item["alien-artifact"].icon = "__bobicons__/graphics/icons/alien/alien-artifact.png" end
-if data.raw.item["alien-artifact-blue"]  then data.raw.item["alien-artifact-blue"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-blue.png" end
-if data.raw.item["alien-artifact-green"]  then data.raw.item["alien-artifact-green"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-green.png" end
-if data.raw.item["alien-artifact-orange"]  then data.raw.item["alien-artifact-orange"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-orange.png" end
-if data.raw.item["alien-artifact-purple"]  then data.raw.item["alien-artifact-purple"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-purple.png" end
-if data.raw.item["alien-artifact-red"]  then data.raw.item["alien-artifact-red"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-red.png" end
-if data.raw.item["alien-artifact-yellow"]  then data.raw.item["alien-artifact-yellow"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-yellow.png" end
+if data.raw.item["alien-artifact"] then data.raw.item["alien-artifact"].icon = "__bobicons__/graphics/icons/alien/alien-artifact.png" end
+if data.raw.item["alien-artifact-blue"] then
+data.raw.item["alien-artifact-blue"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-blue.png"
+data.raw.item["alien-artifact-green"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-green.png"
+data.raw.item["alien-artifact-orange"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-orange.png"
+data.raw.item["alien-artifact-purple"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-purple.png"
+data.raw.item["alien-artifact-red"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-red.png"
+data.raw.item["alien-artifact-yellow"].icon = "__bobicons__/graphics/icons/alien/alien-artifact-yellow.png"
+end
 
 if data.raw.item["small-alien-artifact"]  then data.raw.item["small-alien-artifact"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact.png" end
-if data.raw.item["small-alien-artifact-blue"]  then data.raw.item["small-alien-artifact-blue"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-blue.png" end
-if data.raw.item["small-alien-artifact-green"]  then data.raw.item["small-alien-artifact-green"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-green.png" end
-if data.raw.item["small-alien-artifact-orange"]  then data.raw.item["small-alien-artifact-orange"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-orange.png" end
-if data.raw.item["small-alien-artifact-purple"]  then data.raw.item["small-alien-artifact-purple"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-purple.png" end
-if data.raw.item["small-alien-artifact-red"]  then data.raw.item["small-alien-artifact-red"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-red.png" end
-if data.raw.item["small-alien-artifact-yellow"]  then data.raw.item["small-alien-artifact-yellow"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-yellow.png" end
+if data.raw.item["small-alien-artifact-blue"] then
+data.raw.item["small-alien-artifact-blue"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-blue.png"
+data.raw.item["small-alien-artifact-green"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-green.png"
+data.raw.item["small-alien-artifact-orange"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-orange.png"
+data.raw.item["small-alien-artifact-purple"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-purple.png"
+data.raw.item["small-alien-artifact-red"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-red.png"
+data.raw.item["small-alien-artifact-yellow"].icon = "__bobicons__/graphics/icons/alien/small-alien-artifact-yellow.png"
+end
 
 -- ALIEN -- (bobplates)
 
