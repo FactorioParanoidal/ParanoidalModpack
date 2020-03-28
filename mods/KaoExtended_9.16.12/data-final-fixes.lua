@@ -30,3 +30,4 @@ require("prototypes.recipes.UsedCoolant")
 require("prototypes.technology")
 
 require("prototypes.projectiles")
+require("prototypes.pyramid")

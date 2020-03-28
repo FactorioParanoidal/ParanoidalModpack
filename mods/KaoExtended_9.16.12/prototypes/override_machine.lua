@@ -13,6 +13,8 @@ data.raw["assembling-machine"]["electronics-machine-3"].ingredient_count = 16
 --  data.raw["assembling-machine"]["liquifier"].crafting_speed = 1.5
 --end
 
+
+
 -- ENERGY USAGE
 
 data.raw["assembling-machine"]["angels-electrolyser"].energy_usage= "1500kW"
@@ -24,7 +26,7 @@ data.raw["assembling-machine"]["casting-machine-4"].energy_usage= "350kW"
 -- data.raw["assembling-machine"]["strand-casting-machine-4"].energy_usage= "350kW"
 data.raw["assembling-machine"]["sintering-oven-4"].energy_usage= "350kW"
 
--- MODULE SLOTS
+--     M O D U L E S
 
 data.raw["assembling-machine"]["assembling-machine-2"].module_specification = {module_slots = 1}
 
@@ -133,14 +135,15 @@ data.raw["furnace"]["angels-flare-stack"].module_specification = {module_slots =
 
 data.raw["assembling-machine"]["centrifuge"].module_specification = {module_slots = 1}
 data.raw["assembling-machine"]["centrifuge"].allowed_effects = {"consumption", "speed", "pollution"}
+data.raw["assembling-machine"]["centrifuge"].energy_usage = "650kW"
 
 data.raw["assembling-machine"]["centrifuge-mk2"].crafting_speed = 1.25
-data.raw["assembling-machine"]["centrifuge-mk2"].energy_usage = "550kW"
+data.raw["assembling-machine"]["centrifuge-mk2"].energy_usage = "950kW"
 data.raw["assembling-machine"]["centrifuge-mk2"].module_specification = {module_slots = 2}
 data.raw["assembling-machine"]["centrifuge-mk2"].allowed_effects = {"consumption", "speed", "pollution"}
 
 data.raw["assembling-machine"]["centrifuge-mk3"].crafting_speed = 1.5
-data.raw["assembling-machine"]["centrifuge-mk3"].energy_usage = "750kW"
+data.raw["assembling-machine"]["centrifuge-mk3"].energy_usage = "1550kW"
 data.raw["assembling-machine"]["centrifuge-mk3"].module_specification = {module_slots = 3}
 data.raw["assembling-machine"]["centrifuge-mk3"].allowed_effects = {"consumption", "speed", "pollution"}
 
