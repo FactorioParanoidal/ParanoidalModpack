@@ -8,7 +8,7 @@ data:extend {
     {
         type = 'custom-input',
         name = 'picker-crafter',
-        key_sequence = 'ALT + Q'
+        key_sequence = 'Q'
     },
     {
         type = 'custom-input',
