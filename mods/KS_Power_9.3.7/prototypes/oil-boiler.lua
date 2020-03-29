@@ -1,31 +1,8 @@
- data:extend({
-  {
-    type = "item",
-    name = "oil-steam-boiler",
-    icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
-    icon_size = 64,
-    flags = {},
-    subgroup = "energy",
-    order = "f[oil-steam-boiler]",
-    place_result = "oil-steam-boiler",
-    stack_size = 10
-  },
-  {
-    type = "recipe",
-    name = "oil-steam-boiler",
-    enabled = false,
-    energy_required = 15,
-    ingredients =
-    {
-      {"boiler", 1},
-      {"steel-plate", 12},
-	  {"basic-circuit-board", 5},
-      {"pipe", 10},
-      {"concrete", 6},
-    },
-    result = "oil-steam-boiler"
-  },
-  {
+
+
+ --------------------------------------------------------------
+ data:extend(
+ {
     type = "boiler",
     name = "oil-steam-boiler",
     icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
@@ -82,7 +59,7 @@
     energy_source =
     {
       type = "fluid",
-      emissions = 0.01,
+      emissions_per_minute = 24,
       burns_fluid = true,
       fluid_usage_per_tick = 0,
       scale_fluid_usage = true,
@@ -111,7 +88,9 @@
     {
       north =
       {
-        priority = "extra-high",
+	  layers =
+    {
+        --priority = "extra-high",
         width = 256,
         height = 223,
         line_length = 8,
@@ -121,10 +100,22 @@
         animation_speed = 0.4,
         scale = 0.5,
         run_mode = "forward",
+	},
+	{
+        --priority = "extra-high",
+        width = 256,
+        height = 223,
+        shift = {0.5, 0},
+        filename = "__KS_Power__/graphics/ob_n_sheet-1.png",
+        scale = 0.5,
+	},
       },
+	  
       east =
-      {
-        priority = "extra-high",
+    {
+	  layers =
+		{
+        --priority = "extra-high",
         width = 256,
         height = 175,
         line_length = 4,
@@ -134,10 +125,21 @@
         animation_speed = 0.2,
         scale = 0.5,
         run_mode = "forward",
-      },
+		},
+		{
+        --priority = "extra-high",
+        width = 256,
+        height = 175,
+        shift = {0.45, 0},
+        filename = "__KS_Power__/graphics/ob_w_sheet-1.png",
+        scale = 0.5,
+		},
+	},
       south =
-      {
-        priority = "extra-high",
+	{
+	  layers =
+		{
+        --priority = "extra-high",
         width = 256,
         height = 220,
         line_length = 4,
@@ -147,10 +149,21 @@
         animation_speed = 0.2,
         scale = 0.5,
         run_mode = "forward",
-      },
+		},
+		{
+        --priority = "extra-high",
+        width = 256,
+        height = 220,
+        shift = {0.5, 0},
+        filename = "__KS_Power__/graphics/ob_s_sheet-1.png",
+        scale = 0.5,
+		},
+	},
       west =
-      {
-        priority = "extra-high",
+	{
+	  layers =
+		{
+        --priority = "extra-high",
         width = 256,
         height = 173,
         line_length = 4,
@@ -160,34 +173,87 @@
         animation_speed = 0.2,
         scale = 0.5,
         run_mode = "forward",
-      }
+		},
+		{
+        --priority = "extra-high",
+        width = 256,
+        height = 173,
+        shift = {0.45, 0},
+        filename = "__KS_Power__/graphics/ob_e_sheet-1.png",
+        scale = 0.5,
+		},
+	},
     },
     fire = {},
     fire_glow = {},
     burning_cooldown = 20
-  }
 })
 
-data:extend({{
-  type = "technology",
-  name = "OilBurning",
-  icon = "__KS_Power__/graphics/oil-boiler-tech2.png",
-  icon_size = 128,
-  effects ={
+data:extend({
+util.merge{data.raw.boiler["oil-steam-boiler"],
   {
-    type = "unlock-recipe",
-    recipe = "oil-steam-boiler"
-  }},
-  prerequisites = {"oil-processing","concrete"},
-  unit =
-  {
-    count = 200,
-    ingredients =
+    name = "oil-steam-boiler-2",
+    icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
+    icon_size = 64,
+    minable = {hardness = 0.2, mining_time = 0.5, result = "oil-steam-boiler-2"},
+    max_health = 375,
+    target_temperature = 315,
+    energy_consumption = "5.4MW",
+    next_upgrade = "oil-steam-boiler-3",
+    energy_source =
     {
-      {"automation-science-pack", 1},
-      {"logistic-science-pack", 1}
-    },
-    time = 30
-  },
-  order = "f-b-c",
-}})
+      emissions_per_minute = 18,
+    }
+  }
+},
+
+util.merge{data.raw.boiler["oil-steam-boiler"],
+  {
+    name = "oil-steam-boiler-3",
+    icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
+    icon_size = 64,
+    minable = {hardness = 0.2, mining_time = 0.5, result = "oil-steam-boiler-3"},
+    max_health = 450,
+    target_temperature = 465,
+    energy_consumption = "8.1MW",
+    next_upgrade = "oil-boiler-4",
+    energy_source =
+    {
+      emissions_per_minute = 15,
+    }
+  }
+},
+
+util.merge{data.raw.boiler["oil-steam-boiler"],
+  {
+    name = "oil-boiler-4",
+    icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
+    icon_size = 64,
+    minable = {hardness = 0.2, mining_time = 0.5, result = "oil-boiler-4"},
+    max_health = 525,
+    target_temperature = 615,
+    energy_consumption = "10.8MW",
+	next_upgrade = "oil-boiler-5",
+    energy_source =
+    {
+      emissions_per_minute = 12,
+    }
+  }
+},
+
+util.merge{data.raw.boiler["oil-steam-boiler"],
+  {
+    name = "oil-boiler-5",
+    icon = "__KS_Power__/graphics/icons/oil-steam-boiler.png",
+    icon_size = 64,
+    minable = {hardness = 0.2, mining_time = 0.5, result = "oil-boiler-5"},
+    max_health = 700,
+    target_temperature = 765,
+    energy_consumption = "13.5MW",
+    energy_source =
+    {
+      emissions_per_minute = 6,
+    }
+  }
+}
+})

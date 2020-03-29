@@ -5,5 +5,9 @@
   "author": "Klonan, touched by nastyslave",
   "homepage": "",
   "description": "Adds a range of different power producing options",
-  "factorio_version": "0.18"
+  "factorio_version": "0.18",
+  "dependencies": [
+    "base >= 0.18.0",
+    "boblibrary >= 0.18.0"
+  ]
 }
