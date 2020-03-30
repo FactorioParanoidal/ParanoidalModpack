@@ -5,6 +5,7 @@ data:extend(
   {
     type = "recipe",
     name = "fluid-generator",
+	hidden = true, --DrD
     normal =
     {
       energy_required = 2,
@@ -36,6 +37,7 @@ data:extend(
   {
     type = "recipe",
     name = "fluid-generator-2",
+	hidden = true, --DrD
     normal =
     {
       energy_required = 2,
@@ -67,6 +69,7 @@ data:extend(
   {
     type = "recipe",
     name = "fluid-generator-3",
+	hidden = true, --DrD
     normal =
     {
       energy_required = 2,
@@ -109,7 +112,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"fluid-generator-3", 1},
+        --{"fluid-generator-3", 1}, --DrD
         {"processing-unit", 5},
         {"steel-plate", 5},
         {"iron-gear-wheel", 5},
