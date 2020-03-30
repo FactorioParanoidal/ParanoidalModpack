@@ -36,7 +36,7 @@ data:extend({
     ingredients =
     {
 	  {"boiler-3", 1},
-      {"oil-steam-boiler-2", 2},
+      {"oil-steam-boiler-2", 1},
       {"invar-alloy", 15},
 	  {"brass-pipe", 10},
       {"concrete", 20},
