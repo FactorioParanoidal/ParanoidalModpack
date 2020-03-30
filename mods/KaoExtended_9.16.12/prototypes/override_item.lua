@@ -11,6 +11,12 @@ data.raw["pump"]["bob-pump-2"].hidden = true
 data.raw["pump"]["bob-pump-3"].hidden = true
 data.raw["pump"]["bob-pump-4"].hidden = true
 
+data.raw.boiler["oil-boiler"].hidden = true
+data.raw.boiler["oil-boiler-2"].hidden = true
+data.raw.boiler["oil-boiler-3"].hidden = true
+data.raw.boiler["oil-boiler-4"].hidden = true
+
+
 --bobmods.lib.recipe.replace_ingredient ("fast-underground-belt", "iron-gear-wheel", "steel-gear-wheel")
 
 -- MODULES
