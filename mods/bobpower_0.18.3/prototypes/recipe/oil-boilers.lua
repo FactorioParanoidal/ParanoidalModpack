@@ -6,6 +6,7 @@ data:extend(
     type = "recipe",
     name = "oil-boiler",
     enabled = false,
+	hidden = true, --DrD
     ingredients =
     {
       {"boiler-2", 1},
@@ -18,6 +19,7 @@ data:extend(
     type = "recipe",
     name = "oil-boiler-2",
     enabled = false,
+	hidden = true, --DrD
     ingredients =
     {
       {"oil-boiler", 1},
@@ -30,6 +32,7 @@ data:extend(
     type = "recipe",
     name = "oil-boiler-3",
     enabled = false,
+	hidden = true, --DrD
     ingredients =
     {
       {"oil-boiler-2", 1},
@@ -42,6 +45,7 @@ data:extend(
     type = "recipe",
     name = "oil-boiler-4",
     enabled = false,
+	hidden = true, --DrD
     ingredients =
     {
       {"oil-boiler-3", 1},
