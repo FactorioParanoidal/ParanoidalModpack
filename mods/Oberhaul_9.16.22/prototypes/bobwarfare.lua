@@ -36,7 +36,7 @@ data.raw.recipe["uranium-bullet-projectile"].hidden = true
 data.raw.recipe["uranium-bullet"].hidden = true
 --data.raw.recipe["shot"].hidden = true
 data.raw.recipe["shotgun-shell-casing"].hidden = true
-data.raw.recipe["rocket-engine"].hidden = true
+--data.raw.recipe["rocket-engine"].hidden = true
 
 data.raw.recipe["bullet-magazine"].ingredients = {
     {"piercing-rounds-magazine",1},
