@@ -1,0 +1,55 @@
+[
+    {
+        "name": "CursorUpgradeCarousel",
+        "title": "Cursor Upgrade Carousel",
+        "author": "raiguard",
+        "license": "MIT",
+        "description": [
+            "Shift+scroll to quickly access an item's upgrades or downgrades.",
+            "If you do not have the item, the ghost cursor will be used instead (100% not cheaty!).",
+            "Should be compatible with all mods out of the box, assuming they correctly defined their entities' upgrades.",
+            "Users can also define their own custom upgrade paths in the mod settings."
+        ]
+    },
+    {
+        "name": "packing-tape",
+        "title": "Packing Tape",
+        "author": "calcwizard",
+        "description": [
+            "Mining a chest or wagon allows players to pick it up with all the items inside",
+            "and carry it in their inventory. Now supports cars!"
+        ]
+    },
+    {
+        "author": "ThaPear",
+        "name": "Item Count",
+        "description": "Displays a total inventory count of the item in your hand."
+    },
+    {
+        "title": "Auto Deconstruct",
+        "author": "mindmix",
+        "description": "This mod marks drills that have no more resources to mine for deconstruction."
+    },
+    {
+        "name": "fast-filter-fill",
+        "title": "Fast Filter Fill",
+        "author": "Keryja, SeaRyanC",
+        "contact": "http://github.com/keryja/",
+        "homepage": "https://mods.factorio.com/keryja/fast-filter-fill",
+        "description": "Quickly duplicate filter settings in Cargo Wagons and other filterable containers"
+    },
+    {
+        "name": "AutoTrashFix",
+        "title": "Auto Trash Fix",
+        "author": "Tain",
+        "description": "If you request an item with count > auto trash count, increases auto trash count."
+    },
+    {
+        "name": "auto-stock",
+        "title": "Auto Stock",
+        "author": "canidae",
+        "contact": "canidae@exent.net",
+        "homepage": "http://exent.net",
+        "description": "Automatically stock player with configured items in the in-game auto trash feature when you have less than the specified amount."
+    }
+]

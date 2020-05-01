@@ -5,6 +5,30 @@ data.raw["item"]["solid-coke"].fuel_value = "4.5MJ"
 data.raw["item"]["solid-carbon"].fuel_value = "5.5MJ"
 data.raw["item"]["pellet-coke"].fuel_value = "19MJ"
 
+--Bio-Industries
+data.raw["item"]["wood-charcoal"].fuel_value = "5MJ"
+data.raw["item"]["bi-wooden-chest-large"].fuel_value = "32MJ"
+data.raw["item"]["bi-wooden-chest-huge"].fuel_value = "64MJ"
+data.raw["item"]["bi-wooden-chest-giga"].fuel_value = "128MJ"
+data.raw["item"]["bi-wooden-pole-big"].fuel_value = "7MJ"
+data.raw["item"]["bi-wooden-pole-huge"].fuel_value = "10MJ"
+data.raw["item"]["bi-wood-pipe"].fuel_value = "2MJ"
+data.raw["item"]["bi-wood-pipe-to-ground"].fuel_value = "8MJ"
+
+--ANGELS PETROCHEM
+
+data.raw["item"]["solid-rubber"].fuel_value = "5MJ"
+data.raw["item"]["solid-rubber"].fuel_category = "chemical"
+data.raw["item"]["solid-rubber"].fuel_emissions_multiplier = 3.5
+
+data.raw["storage-tank"]["angels-storage-tank-1"].fluid_box.base_area = 1250 --DrD 2000
+data.raw["storage-tank"]["angels-storage-tank-2"].fluid_box.base_area = 800 --DrD 1500
+
+
+
+
+data.raw["tile"]["bi-solar-mat"].pollution_absorption_per_second = 0.0006  --Bio-Industries
+
 
 data.raw["pump"]["pump"].hidden = true
 data.raw["pump"]["bob-pump-2"].hidden = true

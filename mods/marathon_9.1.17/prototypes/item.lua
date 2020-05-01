@@ -5,5 +5,8 @@ data.raw["item"]["small-electric-pole"].fuel_value = "2MJ"
 data.raw["item"]["coal"].fuel_value = "4MJ"
 data.raw["item"]["solid-fuel"].fuel_value = "25MJ"
 
+--data.raw.item["coal"].fuel_emissions_multiplier = 3
+--data.raw.item["solid-fuel"].fuel_emissions_multiplier = 0.8
+
 data.raw["item"]["basic-electronic-components"].stack_size = 400
 --data.raw["item"]["transport-belt"].stack_size = 200

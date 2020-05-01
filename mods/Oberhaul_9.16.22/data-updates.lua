@@ -10,3 +10,5 @@ data.raw["transport-belt"]["fast-transport-belt"].speed = 2 * base_speed
 data.raw["transport-belt"]["express-transport-belt"].speed = 4 * base_speed
 
 data.raw["transport-belt"]["turbo-transport-belt"].speed = 8 * base_speed
+
+require('prototypes.angelssmelting')

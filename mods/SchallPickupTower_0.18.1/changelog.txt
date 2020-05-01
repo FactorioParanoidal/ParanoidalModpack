@@ -1,0 +1,88 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+Date: 2020.04.02
+  Locale:
+    - Pickup tower description is generated from stats directly.  (was using hard-coded strings.)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 2020.04.02
+  Locale:
+    - Pickup tower description is generated from stats directly.  (was using hard-coded strings.)
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+Date: 2020.02.04
+  Features:
+    - Updated to 0.18.
+  Graphics:
+    - Upgraded mipmap icons to size 128.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 2020.01.19
+  Bugfixes:
+    - Added additional build and revive event calls, solving incomplete construction by script-based build.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 2019.12.30
+  Optimisations:
+    - Rewritten code, to render pickup range better.
+  Features:
+    - Options on force disable pickup range rendering.
+  Locale:
+    - All locale are moved to separate mod "Schall Language Pack".
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 2019.12.05
+  Features:
+    - Added using circuit network signals as filters on each pickup tower, to limit type and amount of item to be picked.
+    - Options on show pickup range.  (Default: on.)
+  Graphics:
+    - Visualize pickup range (like turrets), when a pickup tower is selected.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 2019.11.07
+  Features:
+    - Added 2 new buildings: pickup tower (range 96 & 128 variants).
+    - Options on highest tiers of pickup towers.  (Default: 2.)
+  Balancing:
+    - Reduced energy consumption of pickup tower I to 0.25 MW, or 7.5 MJ per pick.  (Was 0.5 MW, or 15 MJ per pick.)
+  Bugfixes:
+    - Added additional destroy event call, solving remants left by script-based destroy (e.g., instant deconstruction in editor).
+  Graphics:
+    - Updated text style to fit 0.17.75 tooltip changes.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2019.08.01
+  Locale:
+    - Removed redundant strings.
+    - Brazilian Portuguese is available.  (Credit to NickFury23.)
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019.04.25
+  Graphics:
+    - Improved graphics of the pickup tower.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2019.03.01
+  Features:
+    - Updated to 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 2019.02.21
+  Features:
+    - Added flying text on item picked up information.
+  Changes:
+    - Added upgradable flags to various tech.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 2019.02.08
+  Bugfixes:
+    - Fixed on_sector_scanned compare with nil bug.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 2019.02.07
+  Features:
+    - Introduced 2 new buildings: pickup tower (range 32 & 64 variants).  (Credit to YuokiTani on graphics.)
+  Locale:
+    - English, German, traditional Chinese, simplified Chinese are available.
+  License:
+    - Using Bob's Copyright License.  Document included.

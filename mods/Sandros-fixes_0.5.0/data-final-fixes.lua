@@ -297,3 +297,14 @@ if mods["tater_spacestation"] then
     subgroup["space-station"].order = "y4"
   end
 end
+
+--DrD
+
+if mods["angelsrefining"] then
+      sort_item_recipe_order("angelsore7-crystallization-3", "intermediate-product", "aa1")
+      sort_item_recipe_order("angelsore7-crystallization-1", "intermediate-product", "aa2")
+	  sort_item_recipe_order("angelsore7-crystallization-4", "intermediate-product", "aa3")
+	  sort_item_recipe_order("angelsore7-crystallization-5", "intermediate-product", "aa4")
+	  sort_item_recipe_order("angelsore7-crystallization-2", "intermediate-product", "aa5")
+	  sort_item_recipe_order("angelsore7-crystallization-6", "intermediate-product", "aa6")
+end

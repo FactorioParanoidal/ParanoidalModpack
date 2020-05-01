@@ -1,0 +1,60 @@
+[
+    {
+        "name": "Unstoppable Trains",
+        "title": "Increase damage dealt by locomotives",
+        "author": "Skyshrim",
+        "contact": "Skyshrim@gmail.com"
+    },
+    {
+        "name": "trainpath-tweaker",
+        "title": "Train Pathfinder Penalty Tweaker",
+        "author": "MojoD",
+        "license": "MIT",
+        "description": "Simple mod which allows you change various train pathfinder penalties for various conditions.  Check MOD SETTINGS for setting the penalty values"
+    },
+    {
+        "name": "DelticHonk",
+        "title": "Deltic Honk",
+        "author": "Michael Cowgill (ChurchOrganist)",
+        "contact": "jmcowgill@gmail.com",
+        "license": "MIT",
+        "description": "blatant hack of Gotlag's original Honk mod which changes the sounds to Deltic horns. Trains honk when stopping. And starting. And on command."
+    },
+    {
+        "name": "naked-rails",
+        "title": "Naked Rails",
+        "author": "futileohm",
+        "license": "unlicense",
+        "description": "Convert standard rails to naked rails, removing the gravel and/or sleepers. Can also change rails to rail remnants for a destroyed look."
+    },
+    {
+        "name": "Horns",
+        "title": "Horns",
+        "author": "TaxiService",
+        "license": "unlicense",
+        "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=59417",
+        "description": "Adds horns to cars and tanks. Honking can attract enemies in a tweakable radius."
+    },
+    {
+        "name": "Better-TrainHorn",
+        "title": "Better Train Horn",
+        "author": "Luc Mellee",
+        "contact": "melleeluc@gmail.com",
+        "license": "MIT",
+        "description": "This mod is a updated version of Benjamin Lee's TrainHorn mod. Original Description: \n Trains will now blare their horn after killing a player (sound by CrazyWashingtonianTrainNut on freesound)"
+    },
+    {
+        "name": "VehicleSnap",
+        "author": "Zaflis",
+        "license": "MIT",
+        "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
+        "description": "Snaps movement angle when driving cars or tanks."
+    },
+    {
+        "name": "LightCone",
+        "title": "Light Cone",
+        "author": "darkfrei",
+        "license": "MIT",
+        "description": "Changes standart light cone of flashlight"
+    }
+]

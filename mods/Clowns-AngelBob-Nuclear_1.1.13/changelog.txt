@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+  Bugfixes:
+    - Integrated the centrifuge removal script from clowns processing
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+  Features:
+    - Removed redundant settings, integrated thorium setting based on if it exists.
+    - Made advanced nuclear fuels obtainable without the existance of thorium.
+    - Various small fixes and conditional category moves.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+  Features:
+    - Updated to 0.18
+    - Added descriptions for the fuels to help differentiate thermal vs motive fuels
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+  Bugfixes:
+    - Fixed a bug relating to the recipe "advanced nuclear processing" being removed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.09
+  Bugfixes:
+    - Fixed that i "forgot" to remove kovarex enrichment from the bobingabout enrichment tech pre-req
+---------------------------------------------------------------------------------------------------
+Version: 1.1.08
+  Bugfixes:
+    - Replaced electronics with RCU's for the two nuke recipes (to be consistent with vanilla)
+  Features:
+    - Added a setting to revert the following changes:
+  Balance:
+    - Added productivity allowance on the mixed oxide recipes (the plutonium sink recipes)
+    - Changed the lead return to be lead-oxide
+    - Set levels of return to be lower than the feed
+        Has 4 configurations: full AB, OR(modules, assembly), bare minimum mods
+    - Also compensated for lead coiling (pez's smelting extended mod)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.07
+  Features:
+    - Integrated tech tree and recipes to better match Bobs addition of advanced nuclear options
+    - Fixed Changelog format
+    - Removed (now) duplicate recipes
+    - Added water void recipe for radioactive waste water
+  Balance:
+    - Lowered the return count of Thorium in the reprocessing recipes (it is cheap anyway)
+    - Lowered the return of Plutonium in the reprocessing recipes (bob added a plutonium synth method)
+    - Further comments would be appreciated on balance, particularly around this area are welcome...
+---------------------------------------------------------------------------------------------------
+Version: 1.1.06
+  Features:
+    - Added glow to centrifuge recipes
+    - Thanks to bobingabout for pointing me in the right direction
+---------------------------------------------------------------------------------------------------
+Version: 1.1.05
+  Bugfixes:
+    - More tech tree fixes
+    - Fixed that kovarex was still active
+    - Linked atomic bomb tech to enrichment techs
+  Balance:
+    - Added a new recipe to nuclear fuel processing to give more flexibility (hopefully)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.04
+  Bugfixes:
+    - Fixed tech tree to link uranium processing to the tree correctly
+    - Removed thorium from the regular reprocessing tech's, since they have their own
+---------------------------------------------------------------------------------------------------
+Version: 1.1.03
+  Bugfixes:
+    - Fixed naming convention on tech (0.17.23 change)
+  Balance:
+    - Fixed thorium positive loop
+    - Changed advanced thorium reprocessing to be 5x to match other processing systems
+---------------------------------------------------------------------------------------------------
+Version: 1.1.02
+  Features:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 1.1.01
+  Bugfixes:
+    - Rebalanced Nuclear Fuel production chain (x3 for exotics)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.00
+  Features:
+    - Updated locale
+---------------------------------------------------------------------------------------------------
+Version: 1.0.01
+  Bugfixes:
+    - Who knows
+---------------------------------------------------------------------------------------------------
+Version: 1.0.00
+  Features:
+    - Initial release.

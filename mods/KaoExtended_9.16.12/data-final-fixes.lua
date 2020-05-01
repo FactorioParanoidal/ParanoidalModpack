@@ -31,3 +31,7 @@ require("prototypes.technology")
 
 require("prototypes.projectiles")
 require("prototypes.pyramid")
+
+require("prototypes.Mining_fluids_903")
+require("prototypes.Manganese_chrome_sorting_0172")
+

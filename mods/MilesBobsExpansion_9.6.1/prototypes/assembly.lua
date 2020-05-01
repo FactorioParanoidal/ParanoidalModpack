@@ -66,7 +66,7 @@ data:extend(
           line_length = 10,
 		  animation_speed = 0.125,
           --shift = util.by_pixel(0, -0.5),
-          shift = util.by_pixel(0, -2),
+          shift = util.by_pixel(0, -15),
 		  scale = 0.55
         },
       }
@@ -114,7 +114,7 @@ data:extend(
     {
       {"assembling-machine-6", 2},
       {"processing-unit", 25},
-      {"copper-plate", 2500},
+      {"copper-tungsten-alloy", 2500},
       --{"iron-plate", 15},
       {"iron-gear-wheel", 200},
 	  {"speed-module-5", 10},
@@ -158,7 +158,7 @@ data:extend(
     {
       {"assembling-machine-7", 2},
       {"processing-unit", 50},
-      {"steel-plate", 5000},
+      {"cobalt-steel-alloy", 5000},
       --{"iron-plate", 20},
       {"steel-gear-wheel", 500},
 	  {"speed-module-6", 10},
@@ -356,7 +356,7 @@ data:extend(
           line_length = 10,
 		  animation_speed = 0.125,
           --shift = util.by_pixel(0, -0.5),
-          shift = util.by_pixel(0, -1.5),
+          shift = util.by_pixel(0, -15),
 		  scale = 0.55
         }
     }
@@ -373,7 +373,7 @@ data:extend(
           line_length = 10,
 		  animation_speed = 0.125,
           --shift = util.by_pixel(0, -0.5),
-          shift = util.by_pixel(0, -1),
+          shift = util.by_pixel(0, -15),
 		  scale = 0.55
         }
     }

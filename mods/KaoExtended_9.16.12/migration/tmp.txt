@@ -1,0 +1,6 @@
+{
+  "item":
+  [
+    ["bi-charcoal", "wood-charcoal"]
+  ]
+}

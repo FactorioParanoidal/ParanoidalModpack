@@ -10,7 +10,7 @@ function angelsmods.functions.make_seed(plant)
 		energy_required = 0.5,
 		ingredients =
 		{
-		  {type= item, name= plant, amount= 1}
+		  {type="item", name= plant, amount= 1}
 		},
 		results=
 		{
