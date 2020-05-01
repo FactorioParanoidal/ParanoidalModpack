@@ -15,7 +15,7 @@ data:extend({
         type = "bool-setting",
         name = "angels-ores-only",
         setting_type = "startup",
-        default_value = false,
+        default_value = true,
     },
     {
         type = "bool-setting",
@@ -38,18 +38,6 @@ data:extend({
     {
         type = "bool-setting",
         name = "module-slot-nerf",
-        setting_type = "startup",
-        default_value = true,
-    },
-    {
-        type = "bool-setting",
-        name = "beacon-removal-mk2",
-        setting_type = "startup",
-        default_value = true,
-    },
-    {
-        type = "bool-setting",
-        name = "beacon-removal-mk3",
         setting_type = "startup",
         default_value = true,
     },

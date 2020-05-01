@@ -3,6 +3,8 @@ local flammable_types
 init_flammable_types = function()
   global.flammable_types =
   {
+
+--[[
     ["crude-oil"] = true,
     ["heavy-oil"] = true,
     ["light-oil"] = true,
@@ -36,6 +38,50 @@ init_flammable_types = function()
     ["liquid-fuel"] = true,
     ["diesel-fuel"] = true,
     ["petroleum-gas"] = true
+]]--
+
+["gas-hydrogen"] = true,
+["hydrogen"] = true,
+["liquid-multi-phase-oil"] = true,
+["crude-oil"] = true,
+["heavy-oil"] = true,
+["liquid-naphtha"] = true,
+["light-oil"] = true,
+["liquid-fuel"] = true,
+["liquid-fuel-oil"] = true,
+["diesel"] = true,
+["diesel-fuel"] = true,
+["gasoline"] = true,
+["kerosene"] = true,
+["petroleum-gas"] = true,
+["gas-natural-1"] = true,
+["gas-raw-1"] = true,
+["gas-methane"] = true,
+["gas-ethane"] = true,
+["gas-butane"] = true,
+["gas-propene"] = true,
+["gas-ethylene"] = true,
+["gas-benzene"] = true,
+["gas-butadiene"] = true,
+["gas-ethylbenzene"] = true,
+["acetylene"] = true,
+["gas-synthesis"] = true,
+["gas-residual"] = true,
+["gas-methanol"] = true,
+["methanol"] = true,
+["acetone"] = true,
+["coal-gas"] = true,
+["syngas"] = true,
+["liquid-toluene"] = true,
+["gas-hydrazine"] = true,
+["gas-ammonia"] = true,
+["gas-hydrogen-sulfide"] = true,
+["combustion-mixture1"] = true,
+["combustion-mixture2"] = true,
+["diborane"] = true,
+["refsyngas"] = true,
+["xylenol"] = true
+	
   }
   flammable_types = global.flammable_types
 end

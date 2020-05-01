@@ -130,7 +130,7 @@ data:extend(
       usage_priority = "secondary-input",
       emissions = 0.0005
     },
-    energy_usage = "800kW",
+    energy_usage = "1000kW",
     ingredient_count = 6,
     module_specification =
     {
@@ -146,11 +146,11 @@ data:extend(
     enabled = "false",
     ingredients =
     {
-      {"electronics-machine-3", 1},
-      {"processing-unit", 10},
-      {"steel-plate", 10},
-      {"iron-gear-wheel", 10},
-	  {"speed-module-3", 5},
+      {"electronics-machine-3", 4},
+      {"electronic-processing-board", 35},
+      {"copper-tungsten-alloy", 1000},
+      {"nitinol-gear-wheel", 100},
+	  {"speed-module-4", 5},
     },
     result = "electronics-machine-4"
   },
@@ -174,7 +174,7 @@ data:extend(
     },
     unit =
     {
-      count = 200,
+      count = 250,
       time = 150,
       ingredients =
       {
@@ -192,11 +192,11 @@ data:extend(
     enabled = "false",
     ingredients =
     {
-      {"electronics-machine-4", 1},
-      {"processing-unit", 20},
-      {"steel-plate", 20},
-      {"iron-gear-wheel", 20},
-	  {"speed-module-4", 5},
+      {"electronics-machine-4", 4},
+      {"electronic-processing-board", 50},
+      {"silver-plate", 5000},
+      {"gilded-copper-cable", 500},
+	  {"speed-module-6", 5},
     },
     result = "electronics-machine-5"
   },
@@ -220,13 +220,13 @@ data:extend(
     },
     unit =
     {
-      count = 400,
+      count = 500,
       time = 200,
       ingredients =
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
-        {"utility-science-pack", 1},
+        {"utility-science-pack", 2},
         {"production-science-pack", 1},
       },
     },
@@ -240,7 +240,7 @@ data:extend(
 		new_assembler.crafting_speed="8.0"
 		new_assembler.order="d[electronics-machine-5]"
 		new_assembler.animation.layers[2].tint={r = 1.0, g = 1.0, b = 1.0}
-		new_assembler.energy_usage="1000kW"
+		new_assembler.energy_usage="1500kW"
 		new_assembler.energy_source={type = "electric", usage_priority = "secondary-input", emissions = 0.0003}
 		new_assembler.minable={hardness = 0.2, mining_time = 0.5, result = "electronics-machine-5"}
 		new_assembler.module_specification.module_slots="8"

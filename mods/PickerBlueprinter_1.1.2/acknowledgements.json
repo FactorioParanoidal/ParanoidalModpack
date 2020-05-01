@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Foreman",
+        "title": "Foreman",
+        "author": "Choumiko (originally: JamesOFarrell)",
+        "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=14243",
+        "description": "A tool for manipulating blueprints"
+    },
+    {
+        "name": "BlueprintExtensions",
+        "title": "Blueprint Extensions",
+        "author": "Dewin",
+        "contact": "https://github.com/dewiniaid/BlueprintExtensions",
+        "homepage": "https://github.com/dewiniaid/BlueprintExensions",
+        "description": "Adds tools for updating and placing blueprints."
+    }
+]

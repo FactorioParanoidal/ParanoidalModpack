@@ -147,3 +147,7 @@ data.raw["assembling-machine"]["centrifuge-mk3"].energy_usage = "1550kW"
 data.raw["assembling-machine"]["centrifuge-mk3"].module_specification = {module_slots = 3}
 data.raw["assembling-machine"]["centrifuge-mk3"].allowed_effects = {"consumption", "speed", "pollution"}
 
+-- MODULE SLOTS BIO-INDUSTRIES
+
+data.raw["assembling-machine"]["bi-bio-farm"].module_specification = {module_slots = 1}
+data.raw["assembling-machine"]["bi-bio-greenhouse"].module_specification = {module_slots = 1}

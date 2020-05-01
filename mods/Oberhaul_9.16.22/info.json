@@ -6,6 +6,32 @@
     "contact": "www.factorioforums.com",
     "homepage": "",
     "factorio_version": "0.18",
-    "dependencies": ["base >= 0.16.0", "boblibrary >= 0.16.0", "bobelectronics >= 0.16.0", "bobplates >= 0.16.0"],
+    "dependencies": [
+	"base >= 0.16.0",
+  "boblibrary",
+  "bobplates",
+  "bobmodules",
+  "bobtech",
+  "boblogistics",
+  "bobelectronics",
+  "bobassembly",
+  "bobores",
+  "bobinserters",
+  "bobpower",
+  "bobmining",
+  "bobrevamp",
+  "bobvehicleequipment",
+  "bobwarfare",
+  "bobenemies",
+  
+  "? MilesBobsExpansion",
+    
+  "angelsinfiniteores",
+  "angelsrefining",
+  "angelspetrochem",
+  "angelssmelting",
+  "angelsbioprocessing",
+  "? angelsaddons-pressuretanks"	
+	],
     "description": "This mod nerfs bobs and angels to make the game more balanced throughout. Especially including megabasing"
 }

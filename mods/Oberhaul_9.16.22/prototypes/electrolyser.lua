@@ -1,4 +1,3 @@
-
 if mods.bobplates then
 if mods.angelspetrochem then
   for recipeName,_ in pairs(data.raw["recipe"]) do
@@ -11,7 +10,18 @@ data.raw.recipe["electrolyser"].hidden = true
 data.raw["assembling-machine"]["electrolyser"].minable = {hardness = 0.2, mining_time = 0.5, result = "angels-electrolyser"}
 
 data.raw.technology["electrolysis-1"].enabled = false
+data.raw.technology["electrolysis-2"].hidden = true
 data.raw.technology["electrolysis-2"].enabled = false
+data.raw.technology["electrolysis-2"].effects = nil
+
+if data.raw.technology["electrolysis-3"] then
+data.raw.technology["electrolysis-3"].hidden = true
+data.raw.technology["electrolysis-3"].effects = nil
+end
+if data.raw.technology["electrolysis-4"] then
+data.raw.technology["electrolysis-4"].hidden = true
+data.raw.technology["electrolysis-4"].effects = nil
+end
 
 bobmods.lib.tech.remove_prerequisite("steel-processing", "electrolysis-1") --DrD
 --bobmods.lib.tech.remove_prerequisite("steel-processing", "chemical-processing-1") --DrD

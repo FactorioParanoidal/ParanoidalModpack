@@ -1,3 +1,4 @@
+require("prototypes/technology/technology-update")
 require("prototypes/recipe/recipe-final")
 
 -- if another mod has changed labs but not burner lab

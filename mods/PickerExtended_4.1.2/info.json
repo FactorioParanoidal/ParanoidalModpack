@@ -1,0 +1,21 @@
+{
+  "name": "PickerExtended",
+  "version": "4.1.2",
+  "factorio_version": "0.18",
+  "title": "Picker Extended Version",
+  "author": "Nexela, Tinyboss",
+  "contact": "nexela@gmail.com",
+  "dependencies": ["base >= 0.18.0", "stdlib >= 1.0.0", "PickerAtheneum >= 1.0.0"],
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=14695",
+  "description": "Enhances the players pipette tool with features such as quick blueprints, quick planners, ghost reviving, entity moving, orphan finding and more",
+  "package": {
+    "ignore": [],
+    "scripts": {
+      "datestamp": "../PickerAtheneum/.publish/datestamp.sh",
+      "prepackage": "../PickerAtheneum/.publish/prepackage.sh",
+      "prepublish": "../PickerAtheneum/.publish/prepublish.sh",
+      "publish": "../PickerAtheneum/.publish/publish.sh",
+      "version": "../PickerAtheneum/.publish/version.sh"
+    }
+  }
+}

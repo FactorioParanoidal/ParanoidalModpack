@@ -147,3 +147,35 @@ data.raw.recipe["turbo-splitter"].ingredients = {
 end
 end
 end
+
+
+if data.raw.item["stone-pipe"] then  bobmods.lib.recipe.replace_ingredient("electrolyser", "stone-pipe", "pipe") end
+
+data.raw.recipe["mixing-furnace"].ingredients ={
+	  {"stone-furnace", 1}, --DrD
+      {"stone-brick", 5},
+    }
+	
+data.raw.recipe["mixing-steel-furnace"].ingredients ={
+      {"steel-furnace", 1}, --DrD
+      {"steel-plate", 10},
+      {"stone-brick", 10}
+    }
+
+data.raw.recipe["chemical-steel-furnace"].ingredients ={
+	  {"steel-furnace", 1}, --DrD
+      {"steel-plate", 10},
+      {"stone-brick", 10},
+      {"pipe", 10},
+    }
+
+data.raw.recipe["bob-small-inline-storage-tank"].ingredients ={
+      {"iron-plate", 40}, -- DrD 3
+      {"pipe", 8}, -- DrD 1
+    }
+	
+data.raw.recipe["bob-small-storage-tank"].ingredients ={
+      {"iron-plate", 40}, -- DrD 3
+      {"pipe", 4}, -- DrD 1
+    }
+	

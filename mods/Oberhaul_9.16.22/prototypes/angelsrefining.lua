@@ -1,26 +1,21 @@
 if mods.angelsrefining then
-if mods.seablock then
-else
 -- Washing plant sulfur byproduct
 
 local washing_fluid_box = {
- 
 production_type = 'output',
-  
 pipe_covers = pipecoverspictures(),
-  
 base_level = 1,
-  pipe_connections = {{ position = {-3, 0} }}
-
+pipe_connections = {{ position = {-3, 0} }}
 }
 
 table.insert(data.raw['assembling-machine']['washing-plant'].fluid_boxes, washing_fluid_box)
-
 table.insert(data.raw['assembling-machine']['washing-plant-2'].fluid_boxes, washing_fluid_box)
 
-table.insert(data.raw.recipe['washing-1'].results,
-  {type = "fluid", name = "gas-hydrogen-sulfide", amount = 20}
-)
+table.insert(
+	data.raw.recipe['washing-1'].results,
+	{type = "fluid", name = "gas-hydrogen-sulfide", amount = 20})
+
+	
 --Add productivity to special angels processing
 angelsmods.functions.allow_productivity("angelsore8-crushed-processing")
 angelsmods.functions.allow_productivity("angelsore8-powder-processing")
@@ -84,7 +79,7 @@ data:extend({
 },
 })
 
-end
+
 end
 if mods.angelssmelting then
 --Cooling Tower

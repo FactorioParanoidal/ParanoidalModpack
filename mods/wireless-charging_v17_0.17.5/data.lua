@@ -1,6 +1,0 @@
-require("prototypes.entities")
-require("prototypes.entities-interfaces")
-require("prototypes.equipment")
-require("prototypes.items")
-require("prototypes.recipes")
-require("prototypes.technologies")

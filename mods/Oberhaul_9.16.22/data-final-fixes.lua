@@ -25,17 +25,6 @@ if not mods.CircuitProcessing then
         if settings.startup["module-slot-nerf"].value == true then
             require('prototypes.moduleslots')
         end
-        if settings.startup["beacon-removal-mk2"].value == true then
-            data.raw.recipe['beacon-2'].hidden = true
-            data.raw.technology["effect-transmission-2"].enabled = false
-            data.raw.recipe['beacon-3'].hidden = true
-            data.raw.technology["effect-transmission-3"].enabled = false
-	else 
-            if settings.startup["beacon-removal-mk3"].value == true then
-                data.raw.recipe['beacon-3'].hidden = true
-                data.raw.technology["effect-transmission-3"].enabled = false
-            end
-        end
     end
 end
 if settings.startup["bobs-solar-multiply"].value == true then
@@ -70,4 +59,7 @@ end
 require('prototypes.angelsconcrete')
 require('prototypes.misc')
 require('prototypes.angelsrefining')
-
+require('prototypes.gems2')
+require('prototypes.bobtechs')
+--require('prototypes.alloys')
+require('prototypes.bobplates.alloy_recipe')

@@ -218,7 +218,7 @@ if settings.startup["replace-assemblycolors"].value == true then
                     line_length = 8,
                     shift = {0.4, -0.22},
                     hr_version = {
-                        filename = "__base__/graphics/entity/assembling-machine-3/hr-assembling-machine-3.png",
+                        filename = "__ShinyBobGFX__/graphics/entity/assembling-machines/hr-assembling-machine-5-6-core.png",
                         priority = "high",
                         width = 214,
                         height = 237,
@@ -237,7 +237,7 @@ if settings.startup["replace-assemblycolors"].value == true then
                     line_length = 8,
                     shift = {0.4, -0.22},
                     hr_version = {
-                        filename = "__ShinyBobGFX__/graphics/entity/assembling-machines/hr-assembling-machine-5-cap.png",
+                        filename = "__ShinyBobGFX__/graphics/entity/assembling-machines/hr-assembling-machine-5-cap.png", --DrD
                         priority = "high",
                         width = 214,
                         height = 237,
@@ -283,7 +283,7 @@ if settings.startup["replace-assemblycolors"].value == true then
                     line_length = 8,
                     shift = {0.85, -0.15},
                     hr_version = {
-                        filename = "__base__/graphics/entity/assembling-machine-3/hr-assembling-machine-3.png",
+                        filename = "__ShinyBobGFX__/graphics/entity/assembling-machines/hr-assembling-machine-5-6-core.png", --DrD
                         priority = "high",
                         width = 214,
                         height = 237,

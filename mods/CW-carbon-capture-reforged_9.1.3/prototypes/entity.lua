@@ -1,7 +1,7 @@
 local filter_machine_1 = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 filter_machine_1.name = "CW-air-filter-machine-1"
 filter_machine_1.icon = "__CW-carbon-capture-reforged__/graphics/icons/air-filter-machine-1.png"
-filter_machine_1.icon_size = 32
+filter_machine_1.icon_size = 64
 filter_machine_1.minable.result = "CW-air-filter-machine-1"
 filter_machine_1.fast_replaceable_group = "CW-air-filter-machine"
 filter_machine_1.max_health = 300
@@ -123,14 +123,10 @@ filter_machine_6.energy_source.emissions_per_minute = -900
 filter_machine_6.energy_usage = "6900KW"
 filter_machine_6.module_specification =
     {
-      module_slots = 3
+      module_slots = 3,
+      module_info_icon_shift = {0, 0.5},
+      module_info_multi_row_initial_height_modifier = -0.3
     }
 filter_machine_6.allowed_effects = {"consumption", "speed"}
 
-
 data:extend({filter_machine_1,filter_machine_2,filter_machine_3,filter_machine_4,filter_machine_5,filter_machine_6})
-
-
-
-
-

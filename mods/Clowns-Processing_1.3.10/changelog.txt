@@ -1,0 +1,158 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.10
+  Updates:
+    - Updated number icons to reference angels refining not petrochem (in prep for incoming update)
+    - Added a setting to disable the centrifuges (if you want to use bobs instead)
+    - Removed a few group shuffling settings which should be redundant (may put them back in if needed)
+    - Updated armor location back to default if that setting is off
+---------------------------------------------------------------------------------------------------
+Version: 1.3.9
+  Updates:
+    - Updated the neurotoxin capsule to replicate the fog of the poison capsule
+    - Updated fluid icons and recipes to use Angel's(Santa's) new icon scripts
+    - Small fixes and clean-ups
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+  Updates:
+    - Updated to work with angels updates
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+  Bugfixes:
+    - Fixed Missing localisation for the new Sluicer
+    - Fixed the pure sorting recipe times (properly this time)
+    - Updated to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+  Bugfixes:
+    - Fixed an overzealous attempt at fixing setting callbacks in 1.3.5
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+  Bugfixes:
+    - Fixed the pure sorting recipe times (fix thanks to hexagonhexagon)
+      I honestly thought this was already fixed
+    - Fixed setting call checks
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+  Updates:
+    - Added thumbnail
+    - Fixed formatting of changelog
+  Features:
+    - Added T2 Sluicer
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+  Bugfixes:
+    - Fixed bug related to bobs equipment split from bob warfare:
+  Features:
+    - added a fix to de-couple from angels bioprocessing (not fully tested)
+    - known problem: white phosphorus is used in smelting bronze, phosphoric acid is a dead end (for now)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2:
+  Updates:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1:
+  Features:
+    - Added magnesium pure processing & a more intricate smelting process. Thanks heaps to Pez for the input!
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0:
+  Features:
+    - Added advanced desalination recipes for collecting magnesium ore
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+  Bugfixes:
+    - Fixed cleanup toggles not working
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7:
+  Features:
+    - Added German locale thanks to Steino
+    - Accidentally released magnesium :P
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+  Bugfixes:
+    - Geniunely not sure if anything actually changed...
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+  Bugfixes:
+    - Bug fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4:
+  Features:
+    - Added support for productivity effects.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+  Bugfixes:
+    - Bug fixes
+  Updates:
+    - Added override to move Bob's Gems & Bob's Fluids into Bob's Materials & Intermediates
+  Features:
+    - Added optional Fortifications and Equipment groups
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+  Bugfixes:
+    - Bug fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+  Bugfixes:
+    - Bug fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+  Features:
+    - Added new pure processing recipes
+    - Added an override to give SpaceMod components their own subgroup
+    - Added advanced centrifuging
+  Balancing:
+    - Rebalanced uranium processing
+  Updates:
+    - Updated fluorine icon
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Features:
+    - Added osmium, depleted uranium & related powder metallurgy
+    - Added optional settings to replace ingredients in military recipes from U-238 to depleted uranium
+  Updates:
+    - Updated some Vanilla & Angels locale appropriately.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Balancing:
+    - Rebalanced sand sluicing
+    - Rebalanced phosphorus processing
+    - Fixed phosphorus tech being unlocked from game start
+  Features:
+    - Added advanced phosphorus processing
+    - Added an opt-in override to set vanilla tile size to 1000 to match Angel's tile stack sizes
+    - Added mercury processing technology
+    - Added dimethylmercury (neurotoxin) refining
+    - Added neurotoxin capsule
+  Updates:
+    - Updated graphics, added some optional general gamedata tweaks, off by default
+    - Added advanced phosphorus processing
+    - Code brought into line with other MadClown01 mods
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Updates:
+    - Updated locale, updated phosphorus ore icon.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Balancing:
+    - Rebalanced crafting times for crushed stone sorting, all intermediate uranium processing.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Updates:
+    - Updated locale
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Features:
+    - Added phosphorus processing
+    - Added original icons for advanced uranium processing
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Bugfixes:
+    - Fixed minor bugs
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Bugfixes:
+    - Fixed minor bugs
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Updates:
+    - Initial release

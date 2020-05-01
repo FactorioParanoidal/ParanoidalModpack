@@ -136,10 +136,10 @@ data:extend(
       energy_required = 5,
       ingredients = {
         {type = "fluid", name = "petroleum-gas", amount = 20},
-        {type = "fluid", name = "light-oil", amount = 20}
+        {type = "fluid", name = "liquid-fuel", amount = 20}
       },
       results = {
-        {type = "fluid", name = "diesel-fuel", amount = 30, temperature = 25}
+        {type = "fluid", name = "diesel-fuel", amount = 25, temperature = 25}
       },
       main_product = "",
       icon = "__KS_Power__/graphics/diesel-fuel-recipe.png",
