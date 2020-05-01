@@ -74,11 +74,6 @@
     },
     
     {
-      "name": "BlueprintLab_Bud18",
-      "enabled": true
-    },
-    
-    {
       "name": "blueprint_flip_and_turn",
       "enabled": true
     },
@@ -244,6 +239,11 @@
     },
     
     {
+      "name": "DeleteEmptyChunks",
+      "enabled": true
+    },
+    
+    {
       "name": "DewPointAggregator",
       "enabled": true
     },
@@ -284,6 +284,11 @@
     },
     
     {
+      "name": "extendedangels",
+      "enabled": true
+    },
+    
+    {
       "name": "Factorissimo2",
       "enabled": true
     },
@@ -320,11 +325,6 @@
     
     {
       "name": "FNEI",
-      "enabled": true
-    },
-    
-    {
-      "name": "FuelTrainStop",
       "enabled": true
     },
     
@@ -379,12 +379,22 @@
     },
     
     {
-      "name": "make_burner_miners_great_again",
+      "name": "LogisticTrainNetwork",
       "enabled": true
     },
     
     {
-      "name": "Manganese_Chrome_Sorting",
+      "name": "LTN_Combinator",
+      "enabled": true
+    },
+    
+    {
+      "name": "LTN_Tracker",
+      "enabled": true
+    },
+    
+    {
+      "name": "make_burner_miners_great_again",
       "enabled": true
     },
     
@@ -405,11 +415,6 @@
     
     {
       "name": "minime",
-      "enabled": true
-    },
-    
-    {
-      "name": "MiningFluids",
       "enabled": true
     },
     
@@ -654,6 +659,11 @@
     },
     
     {
+      "name": "SingleColorTerrain",
+      "enabled": true
+    },
+    
+    {
       "name": "Skip Burner Stage",
       "enabled": true
     },
@@ -709,11 +719,6 @@
     },
     
     {
-      "name": "train_warner",
-      "enabled": true
-    },
-    
-    {
       "name": "Turret-Shields",
       "enabled": true
     },
@@ -750,16 +755,6 @@
     
     {
       "name": "WideChests",
-      "enabled": true
-    },
-    
-    {
-      "name": "wireless-charging-lib_v17",
-      "enabled": true
-    },
-    
-    {
-      "name": "wireless-charging_v17",
       "enabled": true
     },
     
