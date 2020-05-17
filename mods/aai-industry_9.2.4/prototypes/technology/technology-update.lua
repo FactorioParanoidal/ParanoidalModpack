@@ -49,6 +49,11 @@ util.tech_add_prerequisites("chemical-processing-1", "basic-chemistry") --DrD
 -- util.tech_lock_recipes(    "fuel-processing",  {        "fuel-processor"})
 
 util.tech_lock_recipes(
+    "basic-fluid-handling",  {
+        "bob-small-storage-tank",
+        "bob-small-inline-storage-tank"})
+
+util.tech_lock_recipes(
     "basic-automation",  {
         "burner-assembling-machine",
         "burner-inserter"})
@@ -58,9 +63,23 @@ util.tech_lock_recipes(
         "inserter"})
 
 util.tech_lock_recipes(
+    "phosphorus-processing-1",  {
+        "solid-tetrasodium-pyrophosphate"})
+
+util.tech_lock_recipes(
 --    "automation-2",  { --DrD
     "express-inserters",  {
         "fast-inserter"})
+
+util.tech_lock_recipes(
+    "grinding",  {
+	"bob-ruby-3",
+	"bob-sapphire-3",
+	"bob-emerald-3",
+	"bob-amethyst-3",
+	"bob-topaz-3",
+	"bob-diamond-3"})
+
 
 if data.raw.technology["bob-logistics-0"] and data.raw.recipe["basic-transport-belt"] then
     -- if bob-basic-logistics then use basic logistics to lock tsp-0
