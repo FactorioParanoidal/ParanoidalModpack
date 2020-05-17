@@ -174,7 +174,7 @@
     },
     
     {
-      "name": "BurnBarrels",
+      "name": "BurnerOffshorePump",
       "enabled": true
     },
     
@@ -215,11 +215,6 @@
     
     {
       "name": "CopyPasteModules",
-      "enabled": true
-    },
-    
-    {
-      "name": "creative-mod",
       "enabled": true
     },
     
@@ -279,11 +274,6 @@
     },
     
     {
-      "name": "explosives_are_explosive",
-      "enabled": true
-    },
-    
-    {
       "name": "extendedangels",
       "enabled": true
     },
@@ -329,7 +319,7 @@
     },
     
     {
-      "name": "helmod-optimized",
+      "name": "helmod",
       "enabled": true
     },
     
@@ -384,12 +374,17 @@
     },
     
     {
+      "name": "LtnManager",
+      "enabled": true
+    },
+    
+    {
       "name": "LTN_Combinator",
       "enabled": true
     },
     
     {
-      "name": "LTN_Tracker",
+      "name": "LTN_Content_Reader",
       "enabled": true
     },
     
@@ -445,11 +440,6 @@
     
     {
       "name": "Nanobots",
-      "enabled": true
-    },
-    
-    {
-      "name": "Natural_Evolution_Enemies",
       "enabled": true
     },
     
@@ -565,6 +555,11 @@
     
     {
       "name": "railloader",
+      "enabled": true
+    },
+    
+    {
+      "name": "RaiLuaLib",
       "enabled": true
     },
     
