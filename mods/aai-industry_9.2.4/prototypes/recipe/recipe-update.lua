@@ -96,10 +96,10 @@ util.conditional_modify({
   category = "crafting", -- engine can be hand crafted
   normal = {
     ingredients = {
-      {type="item", name="steel-plate", amount=2},
+      {type="item", name="steel-plate", amount=4}, --DrD 2
       {type="item", name="iron-gear-wheel", amount=4},
       {type="item", name="pipe", amount=4},
-      {type="item", name="motor", amount=1},
+      {type="item", name="motor", amount=2}, --DrD 1
     },
     results= { {type="item", name="engine-unit", amount=1} },
   },
@@ -119,10 +119,10 @@ util.conditional_modify({
   name = "electric-engine-unit",
   normal = {
     ingredients = {
-      {type="fluid", name="lubricant", amount=40},
+      {type="fluid", name="lubricant", amount=60},
       {type="item", name="electronic-circuit", amount=1},
-      {type="item", name="electric-motor", amount=1},
-      {type="item", name="engine-unit", amount=1},
+      {type="item", name="electric-motor", amount=2}, --DrD 1
+      {type="item", name="engine-unit", amount=2}, --DrD 1
     },
     results= { {type="item", name="electric-engine-unit", amount=1} },
   },
@@ -508,14 +508,14 @@ util.conditional_modify({
     ingredients = {
       {type="item", name="electronic-circuit", amount=25},
       {type="item", name="electric-motor", amount=10},
-      {type="item", name="burner-lab", amount=1},
+      {type="item", name="burner-lab", amount=2},
     },
   },
   expensive = {
     ingredients = {
       {type="item", name="electronic-circuit", amount=35},
       {type="item", name="electric-motor", amount=15},
-      {type="item", name="burner-lab", amount=1},
+      {type="item", name="burner-lab", amount=2},
     },
   }
 })
@@ -769,7 +769,7 @@ util.conditional_modify({
   name = "laser-turret",
   normal = {
     ingredients = {
-      {type="item", name="steel-plate", amount=20},
+      {type="item", name="steel-plate", amount=50},
       {type="item", name="electronic-circuit", amount=25},
       {type="item", name="battery", amount=40},
       {type="item", name="electric-motor", amount=4},
@@ -777,7 +777,7 @@ util.conditional_modify({
   },
   expensive = {
     ingredients = {
-      {type="item", name="steel-plate", amount=30},
+      {type="item", name="steel-plate", amount=80},
       {type="item", name="electronic-circuit", amount=30},
       {type="item", name="battery", amount=50},
       {type="item", name="electric-motor", amount=8},
@@ -820,6 +820,9 @@ util.conditional_modify({
 })
 
 -- armour upgrade path
+if data.raw.armor["respirator"] and data.raw.recipe["light-armor"] then
+  util.replace_or_add_ingredient(data.raw.recipe["light-armor"], nil, "respirator", 1)
+end
 if data.raw.armor["light-armor"] and data.raw.recipe["heavy-armor"] then
   util.replace_or_add_ingredient(data.raw.recipe["heavy-armor"], nil, "light-armor", 1)
 end

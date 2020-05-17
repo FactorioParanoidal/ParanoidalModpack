@@ -104,6 +104,7 @@ data:extend({
     order = data.raw.item.lab.order,
     stack_size = data.raw.item.lab.stack_size,
     place_result = "burner-lab",
+	energy_usage = "1000kW",
   },
   {
     type = "item",
