@@ -68,7 +68,10 @@ data:extend({{
   circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites,
   circuit_wire_max_distance = default_circuit_wire_max_distance
 }})]]--
+
+
 local offshore_pump = data.raw["offshore-pump"]["offshore-pump"]
+offshore_pump.hidden = true
 offshore_pump.icon = "__aai-industry__/graphics/icons/offshore-pump.png"
 offshore_pump.icon_size = 32
 --offshore_pump.fluid_box.pipe_connections = { { position = {0, -1} }, }
@@ -109,6 +112,7 @@ offshore_pump.picture = {
 local offshore_pump_output = {
   type = "pump",
   name = "offshore-pump-output",
+  hidden = true,
   --selection_box = {{-1.1, -0.4}, {1.1, 0.4}},
   selectable_in_game = false,
   selection_box = {{-1, -1.5}, {1, 0.5}},

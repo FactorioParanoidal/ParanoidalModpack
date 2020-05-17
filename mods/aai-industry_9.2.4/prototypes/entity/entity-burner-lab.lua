@@ -5,9 +5,11 @@ burner_lab.minable.result = "burner-lab"
 burner_lab.energy_source = {
   type = "burner",
   fuel_category = "chemical",
-  effectivity = 0.9,
+  effectivity = 0.5, --0.9
+  energy_usage = "1000kW",
+  researching_speed = 0.5,
   fuel_inventory_size = 1,
-  emissions = 0.05,
+  emissions = 3, --0.05
   smoke =
   {
     {
