@@ -839,17 +839,17 @@ data:extend(
 )
 
 
-data:extend(
+data:extend( --DrD x10?
 {
   bob_laser_turret{
     name = "bob-plasma-turret-1",
     health = 1000,
     turret_base_has_direction = true,
 
-    drain = "48kW",
-    buffer_capacity = "4200kJ",
-    input_flow_limit = "2000kW",
-    energy_consumption = "4000kJ",
+    drain = "2480kW",
+    buffer_capacity = "420000kJ",
+    input_flow_limit = "20000kW",
+    energy_consumption = "400000kJ",
 
     type = "projectile",
     projectile = "bob-plasma-projectile",
@@ -876,10 +876,10 @@ data:extend(
     health = 1200,
     turret_base_has_direction = true,
 
-    drain = "60kW",
-    buffer_capacity = "10200kJ",
-    input_flow_limit = "3333kW",
-    energy_consumption = "5000kJ",
+    drain = "2600kW",
+    buffer_capacity = "1020000kJ",
+    input_flow_limit = "33333kW",
+    energy_consumption = "500000kJ",
 
     type = "projectile",
     projectile = "bob-plasma-projectile",
@@ -906,10 +906,10 @@ data:extend(
     health = 1400,
     turret_base_has_direction = true,
 
-    drain = "72kW",
-    buffer_capacity = "18200kJ",
-    input_flow_limit = "5000kW",
-    energy_consumption = "6000kJ",
+    drain = "3720kW",
+    buffer_capacity = "1820000kJ",
+    input_flow_limit = "50000kW",
+    energy_consumption = "600000kJ",
 
     type = "projectile",
     projectile = "bob-plasma-projectile",
@@ -936,10 +936,10 @@ data:extend(
     health = 1600,
     turret_base_has_direction = true,
 
-    drain = "84kW",
-    buffer_capacity = "28200kJ",
-    input_flow_limit = "7000kW",
-    energy_consumption = "7000kJ",
+    drain = "4840kW",
+    buffer_capacity = "2820000kJ",
+    input_flow_limit = "700000kW",
+    energy_consumption = "700000kJ",
 
     type = "projectile",
     projectile = "bob-plasma-projectile",
@@ -966,10 +966,10 @@ data:extend(
     health = 2000,
     turret_base_has_direction = true,
 
-    drain = "96kW",
-    buffer_capacity = "40200kJ",
-    input_flow_limit = "9333kW",
-    energy_consumption = "8000kJ",
+    drain = "6960kW",
+    buffer_capacity = "4020000kJ",
+    input_flow_limit = "93330kW",
+    energy_consumption = "800000kJ",
 
     type = "projectile",
     projectile = "bob-plasma-projectile",
