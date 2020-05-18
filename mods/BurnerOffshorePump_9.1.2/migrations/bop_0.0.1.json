@@ -1,0 +1,10 @@
+{
+  "entity": [
+    ["offshore-pump", "burner-offshore-pump"],
+    ["bop-offshore-pump", "burner-offshore-pump"]
+  ],
+"item": [
+    ["offshore-pump", "burner-offshore-pump"],
+    ["bop-offshore-pump", "burner-offshore-pump"]
+  ]
+}
