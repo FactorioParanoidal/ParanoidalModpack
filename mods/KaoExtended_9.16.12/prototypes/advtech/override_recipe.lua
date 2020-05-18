@@ -175,9 +175,10 @@ else
 	
 	KaoExtended.recipe.addtorecipe("module-processor-board", {"condensator", 12})
 	
-	
+	--[[
 	KaoExtended.recipe.addtorecipe("steel-chest", {"iron-chest", 2})
 	KaoExtended.recipe.addtorecipe("brass-chest", {"steel-chest", 2})	
-	KaoExtended.recipe.addtorecipe("titanium-chest", {"brass-chest", 2})		
+	KaoExtended.recipe.addtorecipe("titanium-chest", {"brass-chest", 2})
+	]]--
 	
 end

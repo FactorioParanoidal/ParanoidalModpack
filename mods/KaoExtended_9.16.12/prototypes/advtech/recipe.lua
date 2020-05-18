@@ -113,11 +113,12 @@ data:extend({
     name = "advsci-component-3",
     category = "crafting",
 	enabled = false,
-	energy_required = 15,
+	energy_required = 10,
     ingredients =
     {
 		{"bronze-alloy", 1},
 		{"brass-alloy", 1},
+		{"nickel-plate", 2},
 		{"glass", 2}
     },
     result = "advsci-component-3",
@@ -385,15 +386,17 @@ data:extend(
     icons = {
       {
         icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
+		icon_size = 64,
       },
       {
-        icon = "__angelspetrochem__/graphics/icons/num_1.png",
+        icon = "__KaoExtended__/graphics/num_1-64.png",
+		icon_size = 64,
         tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
+        scale = 0.2,
         shift = {-12, -12},
       }
     },
-    icon_size = 32,
+    icon_size = 64,
     order = "g",
   },
   {
@@ -432,15 +435,17 @@ data:extend(
     icons = {
       {
         icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
+		icon_size = 64,
       },
       {
-        icon = "__angelspetrochem__/graphics/icons/num_2.png",
+        icon = "__KaoExtended__/graphics/num_2-64.png",
+		icon_size = 64,
         tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
+        scale = 0.2,
         shift = {-12, -12},
       }
     },
-    icon_size = 32,
+    icon_size = 64,
     order = "h",
   },
 --STEEL GEAR CASTING
@@ -472,15 +477,17 @@ data:extend(
     icons = {
       {
         icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
+		icon_size = 64,
       },
       {
-        icon = "__angelspetrochem__/graphics/icons/num_1.png",
-        tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
+        icon = "__KaoExtended__/graphics/num_1-64.png",
+		icon_size = 64,
+        tint = {r = 0, g = 1, b = 0, a = 0.2},
+        scale = 0.2,
         shift = {-12, -12},
       }
     },
-    icon_size = 32,
+    icon_size = 64,
     order = "g",
   },
   {
@@ -519,15 +526,17 @@ data:extend(
     icons = {
       {
         icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
+		icon_size = 64,
       },
       {
-        icon = "__angelspetrochem__/graphics/icons/num_2.png",
-        tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
+        icon = "__KaoExtended__/graphics/num_2-64.png",
+		icon_size = 64,
+        tint = {r = 1, g = 1, b = 1, a = 0.8},
+        scale = 0.2,
         shift = {-12, -12},
       }
     },
-    icon_size = 32,
+    icon_size = 64,
     order = "h",
   },  
 --GEAR STACK PROCESSING (converting)
@@ -549,15 +558,15 @@ data:extend(
     },
     icons = {
       {
-        icon = "__base__/graphics/icons/iron-gear-wheel.png"
+        icon = "__bobicons__/graphics/icons/intermediates/iron-gear-wheel-64.png"
       },
       {
         icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
-        scale = 0.4375,
-        shift = { -10, -10},
+        scale = 0.2,
+        shift = { -12, -12},
       }
     },
-    icon_size = 32,
+    icon_size = 64,
     order = "j",
   },
     {
@@ -577,17 +586,18 @@ data:extend(
     },
 	icons = {
 		{
-			icon = "__bobplates__/graphics/icons/steel-gear-wheel.png",
+			icon = "__bobicons__/graphics/icons/bobplates/steel-gear-wheel-64.png", 
+			icon_size = 64,
 		},
 		{
 			icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
-			scale = 0.4375,
-			shift = { -10, -10},
+			scale = 0.2,
+			shift = { -12, -12},
+			icon_size = 64,
 		}
 	},	
-	icon_size = 32,
+	icon_size = 64,
     order = "kc",
     },
-  
 }
 )
