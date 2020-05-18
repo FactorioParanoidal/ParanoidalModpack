@@ -1,0 +1,76 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2020-04-27
+  Changes:
+    - The entire inventory screen will refresh when you select a material, to fix stats inconsistencies
+  Bugfixes:
+    - Band-aided a crash when a material's translation doesn't exist - it will show the internal name instead. Please report any sightings of internal names!
+    - Fixed a crash when a train gets invalidated between LTN station and error processing
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2020-04-19
+  Bugfixes:
+    - Fixed LTN version dependency
+    - Fixed a crash when trying to open a station that no longer exists
+    - Fixed a crash when trying to process old LTN data after a mod configuration change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2020-04-16
+  Changes:
+    - Updated to LTN API v1.13.1
+    - Removed unused dictionary lookup and sorted translation tables from global, vastly speeding up autosave time
+  Bugfixes:
+    - Fixed that inventory search would never match the query to uppercase letters
+    - Fixed that the auto-refresh button state would always be "off" after recreating the GUI
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2020-04-12
+  Bugfixes:
+    - Fixed that translations wouldn't be automatically performed after joining a multiplayer game after a mod change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2020-04-11
+  Bugfixes:
+    - Fixed a crash with the train status function where it would use the train's current status instead of the status stored during iteration
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2020-04-11
+  Bugfixes:
+    - Fixed a crash when an alert is thrown after starting a new game
+    - Fixed that the mod would try to use non-color virtual signals to display the station's status
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2020-04-10
+  Bugfixes:
+    - Fixed a crash when the alert_popups table becomes nil (somehow...)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2020-04-10
+  Features:
+    - Added "/LtnManager" command for various debugging purposes, use "/h LtnManager" to see possible usecases
+  Changes:
+    - Station "control signals" display shows network ID signal
+  Bugfixes:
+    - Fixed a crash when re-opening the GUI to a material that no longer exists in the network
+    - Fixed a crash when setting an LTN reader signal on a station
+    - Fixed logic for "incorrect pickup" alert, and re-enabled the alert
+    - Fixed station ID duplication in depots causing an extra status to be displayed
+    - Fixed that long train compositions were not being clipped
+    - Fixed that the first station in each network would display all materials for that network
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2020-04-10
+  Features:
+    - Added amounts to material button tooltips
+  Changes:
+    - Completely disabled "incorrect pickup" alerts until I find a good way to account for margins of error
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-04-10
+  Changes:
+    - Fluid shipments are now rounded down to account for floating-point imprecision
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2020-04-09
+  Features:
+    - Initial alpha release
