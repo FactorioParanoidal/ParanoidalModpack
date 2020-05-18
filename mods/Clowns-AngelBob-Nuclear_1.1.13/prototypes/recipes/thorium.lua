@@ -3,7 +3,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "thorium-processing",
-		energy_required = 10,
+		energy_required = 60, --DrD10
 		enabled = false,
 		category = "centrifuging",
 		ingredients = {{"thorium-ore", 10}},
@@ -25,11 +25,11 @@ data:extend(
 	{
 		type = "recipe",
 		name = "thorium-mixed-oxide",
-		energy_required = 50,
+		energy_required = 90,
 		enabled = false,
 		ingredients =
 		{
-			{type="item", name="iron-plate", amount=2},
+			{type="item", name="iron-plate", amount=10},
 			{type="item", name="plutonium-239", amount=2},
 			{type="item", name="thorium-232", amount=2}
 		},
@@ -49,7 +49,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "thorium-fuel-cell",
-		energy_required = 10,
+		energy_required = 30,
 		enabled = false,
 		ingredients =
 		{
