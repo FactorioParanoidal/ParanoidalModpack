@@ -1,7 +1,7 @@
 --Misc Changes and Fixes
 data.raw.recipe["red-wire"].ingredients = {{"electronic-circuit", 1}}
 data.raw.recipe["green-wire"].ingredients = {{"electronic-circuit", 1}}
-data.raw.item["beacon"].stack_size = 100
+--data.raw.item["beacon"].stack_size = 100
 data.raw.recipe["lithium-ion-battery"].normal.energy_required = 5
 data.raw.recipe["silver-zinc-battery"].normal.energy_required = 5
 
@@ -24,7 +24,7 @@ if mods["aai-industry"] then
           {"electric-engine-unit", 2},
           {"battery", 2},
           {"electronic-circuit", 2},
-          {"steel-plate", 4},
+          {"nickel-plate", 10},
     }
 end
 if mods.OmegaDrill then
