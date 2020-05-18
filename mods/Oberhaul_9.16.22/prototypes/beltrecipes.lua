@@ -155,6 +155,11 @@ data.raw.recipe["mixing-furnace"].ingredients ={
 	  {"stone-furnace", 1}, --DrD
       {"stone-brick", 5},
     }
+data.raw.recipe["chemical-boiler"].ingredients ={
+	  {"stone-furnace", 1}, --DrD
+      {"stone-brick", 5},
+	  {"pipe", 10},
+    }
 	
 data.raw.recipe["mixing-steel-furnace"].ingredients ={
       {"steel-furnace", 1}, --DrD
