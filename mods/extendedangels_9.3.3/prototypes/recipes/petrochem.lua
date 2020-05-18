@@ -186,10 +186,10 @@ data:extend(
             name = "gas-argon",
             category = "chemistry",
             subgroup = "petrochem-argon",
-            energy_required = 60,
+            energy_required = 30,
             enabled = "false",
             ingredients ={
-                {type="fluid", name="gas-compressed-air", amount=100}
+                {type="fluid", name="gas-compressed-air", amount=1000}
             },
             results=
             {
