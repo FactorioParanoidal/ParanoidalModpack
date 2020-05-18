@@ -1,5 +1,7 @@
 --BOBS + VANILLA
 
+
+
 bobmods.lib.recipe.remove_ingredient ("steam-engine-2", "steam-engine")
 bobmods.lib.recipe.add_new_ingredient ("steam-engine-2", {type="item", name="steam-engine", amount=2})
 bobmods.lib.recipe.remove_ingredient ("steam-engine-3", "steam-engine-2")
@@ -36,6 +38,8 @@ bobmods.lib.recipe.add_new_ingredient ("assembling-machine-5", {type="item", nam
 bobmods.lib.recipe.remove_ingredient ("assembling-machine-6", "assembling-machine-5")
 bobmods.lib.recipe.add_new_ingredient ("assembling-machine-6", {type="item", name="assembling-machine-5", amount=2})
 
+bobmods.lib.recipe.remove_ingredient ("electronics-machine-1", "iron-gear-wheel")
+bobmods.lib.recipe.add_new_ingredient ("electronics-machine-1", {type="item", name="assembling-machine", amount=1})
 bobmods.lib.recipe.remove_ingredient ("electronics-machine-2", "electronics-machine-1")
 bobmods.lib.recipe.add_new_ingredient ("electronics-machine-2", {type="item", name="electronics-machine-1", amount=2})
 bobmods.lib.recipe.remove_ingredient ("electronics-machine-3", "electronics-machine-2")
@@ -91,12 +95,66 @@ bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-5", {type="item", 
 
 --ANGELS
 
+bobmods.lib.recipe.remove_ingredient ("liquifier-2", "liquifier")
+bobmods.lib.recipe.add_new_ingredient ("liquifier-2", {type="item", name="liquifier", amount=2})
+bobmods.lib.recipe.remove_ingredient ("liquifier-3", "liquifier-2")
+bobmods.lib.recipe.add_new_ingredient ("liquifier-3", {type="item", name="liquifier-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("liquifier-4", "liquifier-3")
+bobmods.lib.recipe.add_new_ingredient ("liquifier-4", {type="item", name="liquifier-3", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("ore-crusher-2", "ore-crusher")
+bobmods.lib.recipe.add_new_ingredient ("ore-crusher-2", {type="item", name="ore-crusher", amount=2})
+bobmods.lib.recipe.remove_ingredient ("ore-crusher-3", "ore-crusher-2")
+bobmods.lib.recipe.add_new_ingredient ("ore-crusher-3", {type="item", name="ore-crusher-2", amount=2})
+
 bobmods.lib.recipe.remove_ingredient ("ore-sorting-facility-2", "ore-sorting-facility")
 bobmods.lib.recipe.add_new_ingredient ("ore-sorting-facility-2", {type="item", name="ore-sorting-facility", amount=2})
 bobmods.lib.recipe.remove_ingredient ("ore-sorting-facility-3", "ore-sorting-facility-2")
 bobmods.lib.recipe.add_new_ingredient ("ore-sorting-facility-3", {type="item", name="ore-sorting-facility-2", amount=2})
 bobmods.lib.recipe.remove_ingredient ("ore-sorting-facility-4", "ore-sorting-facility-3")
 bobmods.lib.recipe.add_new_ingredient ("ore-sorting-facility-4", {type="item", name="ore-sorting-facility-3", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("ore-floatation-cell-2", "ore-floatation-cell")
+bobmods.lib.recipe.add_new_ingredient ("ore-floatation-cell-2", {type="item", name="ore-floatation-cell", amount=2})
+bobmods.lib.recipe.remove_ingredient ("ore-floatation-cell-3", "ore-floatation-cell-2")
+bobmods.lib.recipe.add_new_ingredient ("ore-floatation-cell-3", {type="item", name="ore-floatation-cell-2", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-2", "ore-leaching-plant")
+bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-2", {type="item", name="ore-leaching-plant", amount=2})
+bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-3", "ore-leaching-plant-2")
+bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-3", {type="item", name="ore-leaching-plant-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-4", "ore-leaching-plant-3")
+bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-4", {type="item", name="ore-leaching-plant-3", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("ore-refinery-2", "ore-refinery")
+bobmods.lib.recipe.add_new_ingredient ("ore-refinery-2", {type="item", name="ore-refinery", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("filtration-unit-2", "filtration-unit")
+bobmods.lib.recipe.add_new_ingredient ("filtration-unit-2", {type="item", name="filtration-unit", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("crystallizer-2", "crystallizer")
+bobmods.lib.recipe.add_new_ingredient ("crystallizer-2", {type="item", name="crystallizer", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("hydro-plant-2", "hydro-plant")
+bobmods.lib.recipe.add_new_ingredient ("hydro-plant-2", {type="item", name="hydro-plant", amount=2})
+bobmods.lib.recipe.remove_ingredient ("hydro-plant-3", "hydro-plant-2")
+bobmods.lib.recipe.add_new_ingredient ("hydro-plant-3", {type="item", name="hydro-plant-2", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("salination-plant-2", "salination-plant")
+bobmods.lib.recipe.add_new_ingredient ("salination-plant-2", {type="item", name="salination-plant", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("washing-plant-2", "washing-plant")
+bobmods.lib.recipe.add_new_ingredient ("washing-plant-2", {type="item", name="washing-plant", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("ore-powderizer-2", "ore-powderizer")
+bobmods.lib.recipe.add_new_ingredient ("ore-powderizer-2", {type="item", name="ore-powderizer", amount=2})
+bobmods.lib.recipe.remove_ingredient ("ore-powderizer-3", "ore-powderizer-2")
+bobmods.lib.recipe.add_new_ingredient ("ore-powderizer-3", {type="item", name="ore-powderizer-2", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("electro-whinning-cell-2", "electro-whinning-cell")
+bobmods.lib.recipe.add_new_ingredient ("electro-whinning-cell-2", {type="item", name="electro-whinning-cell", amount=2})
+bobmods.lib.recipe.remove_ingredient ("electro-whinning-cell-3", "electro-whinning-cell-2")
+bobmods.lib.recipe.add_new_ingredient ("electro-whinning-cell-3", {type="item", name="electro-whinning-cell-2", amount=2})
 
 bobmods.lib.recipe.remove_ingredient ("ore-processing-machine-2", "ore-processing-machine")
 bobmods.lib.recipe.add_new_ingredient ("ore-processing-machine-2", {type="item", name="ore-processing-machine", amount=2})
@@ -209,7 +267,17 @@ bobmods.lib.recipe.add_new_ingredient ("angels-chemical-plant-3", {type="item", 
 bobmods.lib.recipe.remove_ingredient ("angels-chemical-plant-4", "angels-chemical-plant-3")
 bobmods.lib.recipe.add_new_ingredient ("angels-chemical-plant-4", {type="item", name="angels-chemical-plant-3", amount=2})
 
+bobmods.lib.recipe.remove_ingredient ("angels-electic-boiler-2", "angels-electic-boiler")
+bobmods.lib.recipe.add_new_ingredient ("angels-electic-boiler-2", {type="item", name="angels-electic-boiler", amount=2})
+bobmods.lib.recipe.remove_ingredient ("angels-electic-boiler-3", "angels-electic-boiler-2")
+bobmods.lib.recipe.add_new_ingredient ("angels-electic-boiler-3", {type="item", name="angels-electic-boiler-2", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("sluicer-2", "sluicer")
+bobmods.lib.recipe.add_new_ingredient ("sluicer-2", {type="item", name="sluicer", amount=2})
+
+--[[
 bobmods.lib.recipe.remove_ingredient ("centrifuge-mk2", "centrifuge")
 bobmods.lib.recipe.add_new_ingredient ("centrifuge-mk2", {type="item", name="centrifuge", amount=2})
 bobmods.lib.recipe.remove_ingredient ("centrifuge-mk3", "centrifuge-mk2")
 bobmods.lib.recipe.add_new_ingredient ("centrifuge-mk3", {type="item", name="centrifuge-mk2", amount=2})
+--]]
