@@ -49,7 +49,7 @@ newRecipe("intermediate", 30).ingredients = {
 }
 newRecipe("advanced", 60).ingredients = {
   {"intermediate-structure-components", 2},
-  {"tungsten-plate", 27},
+  {"nickel-plate", 27},
   {"aluminium-plate", 32},
   {"titanium-plate", 52},
   {"cobalt-steel-alloy", 20},
@@ -93,7 +93,10 @@ table.insert( data.raw["recipe"]["brass-alloy"].ingredients, {"zinc-plate", 8})
 
 bobmods.lib.recipe.remove_ingredient("invar-alloy", "iron-plate")
 table.insert( data.raw["recipe"]["invar-alloy"].ingredients, {"lead-plate", 3})
+
+--[[ moved to Oberhaul
 bobmods.lib.recipe.remove_ingredient("cobalt-steel-alloy", "iron-plate")
 bobmods.lib.recipe.remove_ingredient("cobalt-steel-alloy", "cobalt-plate")
-table.insert( data.raw["recipe"]["cobalt-steel-alloy"].ingredients, {"steel-plate", 3})
+table.insert( data.raw["recipe"]["cobalt-steel-alloy"].ingredients, {"steel-plate", 5})
 table.insert( data.raw["recipe"]["cobalt-steel-alloy"].ingredients, {"cobalt-plate", 1})
+--]]
