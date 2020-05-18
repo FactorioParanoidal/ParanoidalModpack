@@ -75,7 +75,7 @@ data:extend({
         },
 
         --- Electric Rail Planner
-        {
+        --[[ DrD {
                 type = "rail-planner",
                 name = "bi-rail-power",
                 icon = ICONPATH .. "rail-concrete-power.png",
@@ -86,7 +86,7 @@ data:extend({
                 stack_size = 100,
                 straight_rail = "bi-straight-rail-power",
                 curved_rail = "bi-curved-rail-power"
-        },
+        },]]--
 
   --- Wood Pipe
         {
@@ -158,6 +158,7 @@ data:extend({
                 stack_size = 16
         },
           ---- Power pole to connect Rail to Power Grid
+--[[ DrD
         {
                 type = "item",
                 name = "bi-power-to-rail-pole",
@@ -169,4 +170,5 @@ data:extend({
                 place_result = "bi-power-to-rail-pole",
                 stack_size = 50
         },
+]]--
 })

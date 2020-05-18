@@ -1088,6 +1088,7 @@ data:extend({
   },
 
   --- Power straight Rail
+  --[[ DrD begin
   {
     type = "straight-rail",
     name = "bi-straight-rail-power",
@@ -1499,7 +1500,7 @@ data:extend({
       priority = "low"
     },
   },
-
+]]--DrD end
         ---- Wood Pipe
  {
     type = "pipe",
@@ -1776,6 +1777,7 @@ data:extend({
 --~ my_pole_2.maximum_wire_distance = 4
 --~ my_pole_2.supply_area_distance = 3
 --~ my_pole_2.pictures.tint = {r = 183/255, g = 125/255, b = 62/255, a = 1}
+--[[ DrD
 local my_pole_2 = util.table.deepcopy(data.raw["electric-pole"]["medium-electric-pole"])
 my_pole_2.name = "bi-power-to-rail-pole"
 my_pole_2.icon = ICONPATH .. "electric-to-rail.png"
@@ -1786,6 +1788,7 @@ my_pole_2.maximum_wire_distance = 4
 my_pole_2.supply_area_distance = 3.5 -- 3 doesn't look right, 2.5 is too small
 my_pole_2.pictures.tint = {r = 183/255, g = 125/255, b = 62/255, a = 1}
 data:extend({my_pole_2})
+]]--
 
 --[[
 ---- Rail Replacement Group settings

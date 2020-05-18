@@ -56,6 +56,7 @@ if BI.Settings.BI_Solar_Additions then
                 },
 
                 -- solar mat
+				--[[
                 {
                         type = "recipe",
                         name = "bi-solar-mat",
@@ -78,7 +79,8 @@ if BI.Settings.BI_Solar_Additions then
                         always_show_made_in = true,
                         allow_decomposition = false,
                 },
-
+				]]--
+				
                 --- BI Accumulator
                 {
                         type = "recipe",
@@ -115,6 +117,7 @@ if BI.Settings.BI_Solar_Additions then
                         {
                           {"steel-plate", 10},
                           {"concrete", 200},
+						  {"copper-plate", 800}, --DrD
                           {"substation", 4}
                         },
                         result = "bi-large-substation",

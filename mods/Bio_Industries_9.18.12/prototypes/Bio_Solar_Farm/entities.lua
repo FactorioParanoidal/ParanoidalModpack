@@ -100,8 +100,8 @@ end
                   type = "electric",
                   buffer_capacity = "300MJ",
                   usage_priority = "tertiary",
-                  input_flow_limit = "20MW",
-                  output_flow_limit = "20MW"
+                  input_flow_limit = "400kW", --DrD 20
+                  output_flow_limit = "1MW" --DrD 20
                 },
                 picture =
                 {
@@ -245,7 +245,7 @@ end
                 },
           },
 
-
+--[[DrD
         ---- Solar Floor
         {
           type = "tile",
@@ -271,14 +271,14 @@ end
                         size = 1,
                         probability = 1,
                   },
---[[
+
                   {
                         picture = ENTITYPATH .. "solar2.png",
                         count = 1,
                         size = 2,
                         probability = 1,
                   },
-        ]]
+
                 },
                 inner_corner =
                 {
@@ -332,6 +332,7 @@ end
 
 
    ------- Hidden Electric pole for Solar Mat
+
   {
     type = "electric-pole",
     name = "bi-musk-mat-pole",
@@ -440,7 +441,7 @@ end
     },
     production = "10kW"
   },
-
+]]--
 
  ------- Solar Panel for Solar Plant / Boiler
   {

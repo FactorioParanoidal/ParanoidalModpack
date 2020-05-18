@@ -241,6 +241,7 @@ data:extend({
         },
 
         --- Power Rail
+		--[[ DrD 
         {
                 type = "recipe",
                 name = "bi-rail-power",
@@ -277,7 +278,7 @@ data:extend({
                 subgroup = "transport",
                 order = "a[train-system]-ab[rail]",
         },
-
+]]--
         --- Wood Pipe
         {
                 type = "recipe",
@@ -360,6 +361,7 @@ data:extend({
         },
 
         --- Rail to Power Pole
+		--[[ DrD
         {
                 type = "recipe",
                 name = "bi-power-to-rail-pole",
@@ -393,7 +395,7 @@ data:extend({
                 subgroup = "transport",
                 order = "a[train-system]-ac[rail]",
         },
-
+]]--DrD
         --- Large Wooden Chest
         {
                 type = "recipe",

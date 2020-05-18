@@ -18,6 +18,7 @@ if BI.Settings.BI_Solar_Additions then
                   },
 
                 --- Solar Mat
+--[[DrD
                   {
                         type = "item",
                         name = "bi-solar-mat",
@@ -33,7 +34,7 @@ if BI.Settings.BI_Solar_Additions then
                                 condition = { "water-tile" }
                         }
                   },
-
+]]--
 
                 --- BI Accumulator
                 {

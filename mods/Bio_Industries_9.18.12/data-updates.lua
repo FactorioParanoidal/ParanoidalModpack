@@ -87,13 +87,13 @@ if data.raw.technology["bob-railway-2"] then
   thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "rail")
   thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-rail-wood-to-concrete")
   thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-rail-wood-bridge")
-  thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-rail-power")
-  thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-power-to-rail-pole")
+  -- DrD thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-rail-power")
+  -- DrD thxbob.lib.tech.add_recipe_unlock("bob-railway-2", "bi-power-to-rail-pole")
 else
   thxbob.lib.tech.add_recipe_unlock("railway", "bi-rail-wood-to-concrete")
   thxbob.lib.tech.add_recipe_unlock("rail-signals", "bi-rail-wood-bridge")
   thxbob.lib.tech.add_recipe_unlock("rail-signals", "bi-rail-power")
-  thxbob.lib.tech.add_recipe_unlock("rail-signals", "bi-power-to-rail-pole")
+  -- DrD thxbob.lib.tech.add_recipe_unlock("rail-signals", "bi-power-to-rail-pole")
 end
 
 -- Damage Bonus to Ammo
@@ -352,31 +352,32 @@ if BI.Settings.BI_Solar_Additions then
   end
 
   -- Solar Farm
-  if data.raw.item["solar-panel-large"] then
+  if data.raw.item["solar-panel-large-2"] then 
     thxbob.lib.recipe.remove_ingredient("bi-bio-solar-farm", "solar-panel")
     thxbob.lib.recipe.add_new_ingredient("bi-bio-solar-farm", {
       type = "item",
-      name = "solar-panel-large",
-      amount = 30}
+      name = "solar-panel-large-2", --DrD solar-panel-large
+      amount = 10} --DrD 30
     )
   end
 
   -- Huge Sub Station
-  if data.raw.item["substation-3"] then
+  if data.raw.item["substation-4"] then --DrD substation-3
     thxbob.lib.recipe.remove_ingredient("bi-large-substation", "substation")
     thxbob.lib.recipe.add_new_ingredient("bi-large-substation", {
       type = "item",
-      name = "substation-3",
-      amount = 6}
+      name = "substation-4", --DrD substation-3
+      amount = 12} -- --DrD 6
     )
   end
 
-  if data.raw.item["electrum-alloy"] then
+
+  if data.raw.item["gold-plate"] then --DrD till end
     thxbob.lib.recipe.remove_ingredient("bi-large-substation", "steel-plate")
     thxbob.lib.recipe.add_new_ingredient("bi-large-substation", {
       type = "item",
-      name = "electrum-alloy",
-      amount = 10}
+      name = "gold-plate",
+      amount = 100}
     )
   end
 
@@ -385,8 +386,8 @@ if BI.Settings.BI_Solar_Additions then
     thxbob.lib.recipe.remove_ingredient("bi-bio-accumulator", "accumulator")
     thxbob.lib.recipe.add_new_ingredient("bi-bio-accumulator", {
       type = "item",
-      name = "large-accumulator",
-      amount = 30}
+      name = "large-accumulator-2",
+      amount = 10}
     )
   end
 
@@ -395,7 +396,7 @@ if BI.Settings.BI_Solar_Additions then
     thxbob.lib.recipe.add_new_ingredient("bi-bio-accumulator", {
       type = "item",
       name = "aluminium-plate",
-      amount = 50}
+      amount = 80} --DrD 50
     )
   end
 
@@ -405,7 +406,7 @@ if BI.Settings.BI_Solar_Additions then
     thxbob.lib.recipe.add_new_ingredient("bi-solar-mat", {
       type = "item",
       name = "aluminium-plate",
-      amount = 1}
+      amount = 5} --DrD 1
     )
   end
 
@@ -414,7 +415,7 @@ if BI.Settings.BI_Solar_Additions then
     thxbob.lib.recipe.add_new_ingredient("bi-solar-mat", {
       type = "item",
       name = "silicon-wafer",
-      amount = 4}
+      amount = 8}  --DrD 4
     )
   end
 
