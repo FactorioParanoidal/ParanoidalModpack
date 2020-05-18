@@ -337,11 +337,9 @@ if mods["Clowns-AngelBob-Nuclear"] then
   )
 end
 
-if mods["Clowns-Processing"] then
-  table.insert(recipe["orbital-fabricator-component"].ingredients, {"centrifuge-mk3", 250})
-else
-  table.insert(recipe["orbital-fabricator-component"].ingredients, {"centrifuge", 250})
-end
+
+table.insert(recipe["orbital-fabricator-component"].ingredients, {"centrifuge-mk3", 250})
+
 
 if mods["extendedangels"] and settings.startup["ERPTbaAB-use-titanium-concrete"].value then
   table.insert(recipe["advanced-assembler"].ingredients, {"titanium-concrete-brick", 400})
