@@ -13,10 +13,32 @@ data:extend({
     enabled = false,
 
     ingredients = {
-	{"steel-plate", 20},
+	{"steel-plate", 32},
 	{"iron-chest", 2}
 	},
     result = "steel-chest",
+  },
+  {
+    type = "recipe",
+    name = "brass-chest",
+    enabled = false,
+
+    ingredients = {
+	{"brass-alloy", 16},
+	{"steel-chest", 2}
+	},
+    result = "brass-chest",
+  },
+  {
+    type = "recipe",
+    name = "titanium-chest",
+    enabled = false,
+
+    ingredients = {
+	{"titanium-plate", 16},
+	{"brass-chest", 2}
+	},
+    result = "titanium-chest",
   },
   {
     type = "recipe",
