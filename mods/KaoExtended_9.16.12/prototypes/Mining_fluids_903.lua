@@ -150,7 +150,7 @@ data.raw.resource["infinite-angels-ore6"].minable.fluid_amount = 100
 
 data.raw["resource"]["infinite-coal"].minable.required_fluid = nil
 data.raw["resource"]["infinite-coal"].minable.fluid_amount = nil
-
+data.raw["resource"]["infinite-coal"].mining_time = 4
 end
 
 
