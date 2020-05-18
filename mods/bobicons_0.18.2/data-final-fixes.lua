@@ -1,4 +1,4 @@
---BASE
+	--BASE
 
 data.raw.item["accumulator"].icon = "__bobicons__/graphics/icons/base/accumulator-64.png"
 data.raw.item["accumulator"].icon_size = 64
@@ -16,6 +16,8 @@ data.raw.car["car"].icon = "__bobicons__/graphics/icons/base/car-128.png"
 data.raw.car["car"].icon_size = 128
 data.raw.item["centrifuge"].icon = "__bobicons__/graphics/icons/base/centrifuge-128.png"
 data.raw.item["centrifuge"].icon_size = 128
+data.raw.item["concrete"].icon = "__bobicons__/graphics/icons/base/concrete-128.png"
+data.raw.item["concrete"].icon_size = 128
 data.raw.item["explosives"].icon = "__bobicons__/graphics/icons/base/explosives-128.png"
 data.raw.item["explosives"].icon_size = 128
 data.raw.item["electric-mining-drill"].icon = "__bobicons__/graphics/icons/base/electric-mining-drill-64.png"
@@ -168,18 +170,51 @@ data.raw.item["personal-roboport-mk2-equipment"].icon = "__base__/graphics/equip
 data.raw.item["personal-roboport-mk2-equipment"].icon_size = 64
 
 --fluid
-data.raw.fluid["crude-oil"].icon = "__bobicons__/graphics/icons/base/crude-oil-128.png"
-data.raw.fluid["crude-oil"].icon_size = 128
+
+if mods["angelspetrochem"] then
+
+data.raw.fluid["crude-oil"].icons = nil
+data.raw.fluid["heavy-oil"].icons = nil
+data.raw.fluid["light-oil"].icons = nil
+--data.raw.fluid["lubricant"].icons = nil
+data.raw.fluid["water"].icons = nil
+else
 data.raw.fluid["heavy-oil"].icon = "__bobicons__/graphics/icons/base/heavy-oil-128.png"
 data.raw.fluid["heavy-oil"].icon_size = 128
 data.raw.fluid["light-oil"].icon = "__bobicons__/graphics/icons/base/light-oil-128.png"
 data.raw.fluid["light-oil"].icon_size = 128
+data.raw.fluid["lubricant"].icon = "__bobicons__/graphics/icons/base/lubricant-128.png"
+data.raw.fluid["lubricant"].icon_size = 128
+end
+
+data.raw.fluid["crude-oil"].icon = "__bobicons__/graphics/icons/base/crude-oil-128.png"
+data.raw.fluid["crude-oil"].icon_size = 128
+
 data.raw.fluid["petroleum-gas"].icon = "__bobicons__/graphics/icons/base/petroleum-gas-128.png"
 data.raw.fluid["petroleum-gas"].icon_size = 128
 data.raw.fluid["sulfuric-acid"].icon = "__bobicons__/graphics/icons/base/sulfuric-acid-128.png"
 data.raw.fluid["sulfuric-acid"].icon_size = 128
 data.raw.fluid["water"].icon = "__bobicons__/graphics/icons/base/water-128.png"
 data.raw.fluid["water"].icon_size = 128
+
+if data.raw.fluid["liquid-fuel-oil"] then
+data.raw.fluid["liquid-fuel-oil"].icons = nil
+data.raw.fluid["liquid-fuel-oil"].icon = "__bobicons__/graphics/icons/base/light-oil-128.png"
+data.raw.fluid["liquid-fuel-oil"].icon_size = 128
+end
+if data.raw.fluid["liquid-mineral-oil"] then
+data.raw.fluid["liquid-mineral-oil"].icons = nil
+data.raw.fluid["liquid-mineral-oil"].icon = "__bobicons__/graphics/icons/base/lubricant-128.png"
+data.raw.fluid["liquid-mineral-oil"].icon_size = 128
+end
+if data.raw.fluid["liquid-naphtha"] then
+data.raw.fluid["liquid-naphtha"].icons = nil
+data.raw.fluid["liquid-naphtha"].icon = "__bobicons__/graphics/icons/base/heavy-oil-128.png"
+data.raw.fluid["liquid-naphtha"].icon_size = 128
+end
+
+data.raw.item["coal"].icon = "__bobicons__/graphics/icons/ores/coal-64.png"
+data.raw.item["coal"].icon_size = 64
 
 
 -- data.raw.item["AAAAAAAA"].icon = "__bobicons__/graphics/icons/base/AAAAAAAA-128.png" data.raw.item["AAAAAAAA"].icon_size = 128
@@ -371,8 +406,6 @@ data.raw.item["tungsten-carbide"].icon_size = 128 end
 
 -- angelsrefining --
 
-data.raw.item["coal"].icon = "__bobicons__/graphics/icons/ores/ore-coal-64.png"
-data.raw.item["coal"].icon_size = 64
 
 if data.raw.fluid["water-purified"] then data.raw.fluid["water-purified"].icon = "__bobicons__/graphics/icons/angelsrefining/water-purified-128.png"
 data.raw.fluid["water-purified"].icon_size = 128
@@ -432,6 +465,9 @@ data.raw.item["fluorite-ore"].icon_size = 64
 end
 
 if mods["bobplates"] then
+data.raw.item["glass"].icon = "__bobicons__/graphics/icons/plate/glass-128.png" 
+data.raw.item["glass"].icon_size = 128
+
 data.raw.item["steel-gear-wheel"].icon = "__bobicons__/graphics/icons/bobplates/steel-gear-wheel-64.png" 
 data.raw.item["steel-gear-wheel"].icon_size = 64
 data.raw.item["steel-bearing-ball"].icon = "__bobicons__/graphics/icons/bobplates/steel-bearing-ball-64.png"
@@ -586,6 +622,13 @@ data.raw.item["emerald-ore"].icon_size = 64 end
 
 if mods["angelsrefining"] then
 
+data.raw.item["angels-ore2"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore2-64.png" 
+data.raw.item["angels-ore2"].icon_size = 64
+data.raw.item["angels-ore4"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore4-64.png" 
+data.raw.item["angels-ore4"].icon_size = 64
+data.raw.item["angels-ore6"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore6-64.png" 
+data.raw.item["angels-ore6"].icon_size = 64
+
 if data.raw.item["geode-blue"] then
 data.raw.item["geode-blue"].icon = "__bobicons__/graphics/icons/angelsrefining/geode-blue-64.png" 
 data.raw.item["geode-blue"].icon_size = 64
@@ -707,6 +750,31 @@ data.raw.item["angels-copper-pebbles"].icon_size = 64
 data.raw.item["angels-copper-slag"].icon = "__bobicons__/graphics/icons/angelsrefining/copper-slag-64.png"
 data.raw.item["angels-copper-slag"].icon_size = 64
 end
+
+if data.raw.item["angels-ore8-crushed"] then
+data.raw.item["angels-ore8-crystal"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore8-crystal-64.png"
+data.raw.item["angels-ore8-crystal"].icon_size = 64
+data.raw.item["angels-ore8-crushed"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore8-crushed-64.png"
+data.raw.item["angels-ore8-crushed"].icon_size = 64
+data.raw.item["angels-ore8-dust"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore8-dust-64.png" 
+data.raw.item["angels-ore8-dust"].icon_size = 64
+data.raw.item["angels-ore8-powder"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore8-powder-64.png" 
+data.raw.item["angels-ore8-powder"].icon_size = 64
+data.raw.fluid["angels-ore8-slime"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore8-slime-64.png" 
+data.raw.fluid["angels-ore8-slime"].icon_size = 64
+
+data.raw.item["angels-ore9-crystal"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore9-crystal-64.png"
+data.raw.item["angels-ore9-crystal"].icon_size = 64
+data.raw.item["angels-ore9-crushed"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore9-crushed-64.png"
+data.raw.item["angels-ore9-crushed"].icon_size = 64
+data.raw.item["angels-ore9-dust"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore9-dust-64.png" 
+data.raw.item["angels-ore9-dust"].icon_size = 64
+data.raw.item["angels-ore9-powder"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore9-powder-64.png" 
+data.raw.item["angels-ore9-powder"].icon_size = 64
+data.raw.fluid["angels-ore9-slime"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore9-slime-64.png" 
+data.raw.fluid["angels-ore9-slime"].icon_size = 64
+end
+
 --OTHER--
 
 data.raw.item["filter-frame"].icon = "__bobicons__/graphics/icons/angelsrefining/filter-frame-64.png"
@@ -1014,15 +1082,8 @@ data.raw.item["angels-wire-coil-platinum"].icon = "__bobicons__/graphics/icons/a
 data.raw.item["angels-wire-coil-platinum"].icon_size = 64
 data.raw.item["angels-wire-coil-silver"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-copper-64.png" 
 data.raw.item["angels-wire-coil-silver"].icon_size = 64
-
---[[
-data.raw.item["angels-wire-copper"].icon = "__bobicons__/graphics/icons/intermediates/copper-cable-128.png"
-data.raw.item["angels-wire-copper"].icon_size = 128
-data.raw.item["angels-wire-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-platinum-64.png" 
-data.raw.item["angels-wire-platinum"].icon_size = 64
-data.raw.item["angels-wire-tin"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
-data.raw.item["angels-wire-tin"].icon_size = 64
-]]--
+data.raw.item["angels-wire-coil-tin"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-tin-64.png" 
+data.raw.item["angels-wire-coil-tin"].icon_size = 64
 
 data.raw.item["copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/copper-cable-128.png"
 data.raw.item["copper-cable"].icon_size = 128
@@ -1222,6 +1283,48 @@ data.raw.item["alien-blue-alloy"].icon_size = 128
 data.raw.item["alien-orange-alloy"].icon = "__bobicons__/graphics/icons/alien/alien-orange-alloy-128.png"
 data.raw.item["alien-orange-alloy"].icon_size = 128
 end
+
+-- boblogistic
+if data.raw["repair-tool"]["repair-pack-2"] then
+data.raw["repair-tool"]["repair-pack-2"].icon = "__bobicons__/graphics/icons/boblogistics/repair-pack-2-128.png"
+data.raw["repair-tool"]["repair-pack-2"].icon_size = 128
+data.raw["repair-tool"]["repair-pack-3"].icon = "__bobicons__/graphics/icons/boblogistics/repair-pack-3-128.png"
+data.raw["repair-tool"]["repair-pack-3"].icon_size = 128
+data.raw["repair-tool"]["repair-pack-4"].icon = "__bobicons__/graphics/icons/boblogistics/repair-pack-4-128.png"
+data.raw["repair-tool"]["repair-pack-4"].icon_size = 128
+data.raw["repair-tool"]["repair-pack-5"].icon = "__bobicons__/graphics/icons/boblogistics/repair-pack-5-128.png"
+data.raw["repair-tool"]["repair-pack-5"].icon_size = 128
+end
+-- bobwarfare
+
+if mods["bobwarfare"] then
+data.raw.item["rocket-engine"].icon = "__bobwarfare__/graphics/icons/technology/rocket-engine.png"
+data.raw.item["rocket-engine"].icon_size = 64
+
+end
+
+-- angelspetrochem
+
+if mods["angelspetrochem"] then
+data.raw.item["solid-carbon"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-carbon-64.png"
+data.raw.item["solid-carbon"].icon_size = 64
+data.raw.item["solid-coke"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-coke-64.png"
+data.raw.item["solid-coke"].icon_size = 64
+data.raw.item["pellet-coke"].icon = "__bobicons__/graphics/icons/angelspetrochem/pellet-coke-64.png"
+data.raw.item["pellet-coke"].icon_size = 64
+data.raw.item["solid-oil-residual"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-oil-residual-64.png"
+data.raw.item["solid-oil-residual"].icon_size = 64
+data.raw.item["solid-sodium-hydroxide"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-sodium-hydroxide-64.png"
+data.raw.item["solid-sodium-hydroxide"].icon_size = 64
+--[[
+data.raw.fluid["crude-oil"].icons = nil
+data.raw.fluid["crude-oil"].icon = nil
+data.raw.fluid["crude-oil"].icon_size = nil
+]]--
+
+
+end
+
 
 -- LIQUIDS
 
