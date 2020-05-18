@@ -5,6 +5,47 @@ data.raw["item"]["solid-coke"].fuel_value = "4.5MJ"
 data.raw["item"]["solid-carbon"].fuel_value = "5.5MJ"
 data.raw["item"]["pellet-coke"].fuel_value = "19MJ"
 
+--bobmodules
+--clean godmodules from low-tier components
+bobmods.lib.recipe.remove_ingredient ("god-module-1", "module-circuit-board")
+bobmods.lib.recipe.remove_ingredient ("god-module-2", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("god-module-2", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("god-module-3", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("god-module-4", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("god-module-4", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("god-module-4", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("god-module-5", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("god-module-5", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("god-module-5", "processing-electronics")
+
+--clean tier-8 modules from low-tier components
+bobmods.lib.recipe.remove_ingredient ("speed-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("effectivity-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("productivity-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("pollution-create-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("pollution-clean-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("raw-speed-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("green-module-8", "electronic-components")
+bobmods.lib.recipe.remove_ingredient ("raw-productivity-module-8", "electronic-components")
+
+bobmods.lib.recipe.remove_ingredient ("speed-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("effectivity-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("productivity-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("pollution-create-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("pollution-clean-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("raw-speed-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("green-module-8", "intergrated-electronics")
+bobmods.lib.recipe.remove_ingredient ("raw-productivity-module-8", "intergrated-electronics")
+
+bobmods.lib.recipe.remove_ingredient ("speed-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("effectivity-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("productivity-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("pollution-create-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("pollution-clean-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("raw-speed-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("green-module-8", "processing-electronics")
+bobmods.lib.recipe.remove_ingredient ("raw-productivity-module-8", "processing-electronics")
+
 --Bio-Industries
 data.raw["item"]["wood-charcoal"].fuel_value = "5MJ"
 data.raw["item"]["bi-wooden-chest-large"].fuel_value = "32MJ"
@@ -25,10 +66,9 @@ data.raw["storage-tank"]["angels-storage-tank-1"].fluid_box.base_area = 1250 --D
 data.raw["storage-tank"]["angels-storage-tank-2"].fluid_box.base_area = 800 --DrD 1500
 
 
-
-
+if (mods['Bio_Industries']) and (data.raw["tile"]["bi-solar-mat"]) then 
 data.raw["tile"]["bi-solar-mat"].pollution_absorption_per_second = 0.0006  --Bio-Industries
-
+end
 
 data.raw["pump"]["pump"].hidden = true
 data.raw["pump"]["bob-pump-2"].hidden = true
@@ -39,6 +79,21 @@ data.raw.boiler["oil-boiler"].hidden = true
 data.raw.boiler["oil-boiler-2"].hidden = true
 data.raw.boiler["oil-boiler-3"].hidden = true
 data.raw.boiler["oil-boiler-4"].hidden = true
+
+data.raw.item["oil-boiler"].hidden = true
+data.raw.item["oil-boiler-2"].hidden = true
+data.raw.item["oil-boiler-3"].hidden = true
+data.raw.item["oil-boiler-4"].hidden = true
+
+data.raw.recipe["oil-boiler"].hidden = true
+data.raw.recipe["oil-boiler-2"].hidden = true
+data.raw.recipe["oil-boiler-3"].hidden = true
+data.raw.recipe["oil-boiler-4"].hidden = true
+
+data.raw.technology["bob-oil-boiler-1"].hidden = true
+data.raw.technology["bob-oil-boiler-2"].hidden = true
+data.raw.technology["bob-oil-boiler-3"].hidden = true
+data.raw.technology["bob-oil-boiler-4"].hidden = true
 
 
 --bobmods.lib.recipe.replace_ingredient ("fast-underground-belt", "iron-gear-wheel", "steel-gear-wheel")
