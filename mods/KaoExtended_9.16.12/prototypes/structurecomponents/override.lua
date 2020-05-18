@@ -16,8 +16,8 @@ local function replaceMachine()
   KaoExtended.recipe.addtorecipe("washing-plant-2", {"intermediate-structure-components", 3})
   
   KaoExtended.recipe.addtorecipe("centrifuge", {"intermediate-structure-components", 3})
-  KaoExtended.recipe.addtorecipe("centrifuge-2", {"advanced-structure-components", 3})
-  KaoExtended.recipe.addtorecipe("centrifuge-3", {"advanced-structure-components", 10})
+  KaoExtended.recipe.addtorecipe("centrifuge-mk2", {"advanced-structure-components", 3})
+  KaoExtended.recipe.addtorecipe("centrifuge-mk3", {"advanced-structure-components", 10})
 
   KaoExtended.recipe.addtorecipe("assembling-machine-2", {"basic-structure-components", 1})
   KaoExtended.recipe.addtorecipe("assembling-machine-3", {"intermediate-structure-components", 2})
@@ -121,7 +121,9 @@ local function replaceAngelRefi()
     KaoExtended.recipe.addtorecipe("thermal-extractor", {"basic-structure-components", 1})
 	
     KaoExtended.recipe.addtorecipe("ore-crusher-2", {"intermediate-structure-components", 1})
+	KaoExtended.recipe.addtorecipe("ore-crusher-2", {"engine-unit", 2})
     KaoExtended.recipe.addtorecipe("ore-crusher-3", {"advanced-structure-components", 2})
+	KaoExtended.recipe.addtorecipe("ore-crusher-3", {"electric-engine-unit", 2})
     
     KaoExtended.recipe.addtorecipe("ore-sorting-facility-2", {"basic-structure-components", 2})
     KaoExtended.recipe.addtorecipe("ore-sorting-facility-3", {"intermediate-structure-components", 3})
