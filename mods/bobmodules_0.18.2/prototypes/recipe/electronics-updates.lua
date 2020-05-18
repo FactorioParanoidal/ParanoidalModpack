@@ -27,9 +27,9 @@ end
 
 if data.raw.fluid["ferric-chloride-solution"] then
   bobmods.lib.recipe.add_ingredient("module-circuit-board", {"ferric-chloride-solution", 5})
-  bobmods.lib.recipe.add_ingredient("module-processor-board", {"ferric-chloride-solution", 5})
-  bobmods.lib.recipe.add_ingredient("module-processor-board-2", {"ferric-chloride-solution", 5})
-  bobmods.lib.recipe.add_ingredient("module-processor-board-3", {"ferric-chloride-solution", 10})
+  bobmods.lib.recipe.add_ingredient("module-processor-board", {"ferric-chloride-solution", 10})
+  bobmods.lib.recipe.add_ingredient("module-processor-board-2", {"ferric-chloride-solution", 15})
+  bobmods.lib.recipe.add_ingredient("module-processor-board-3", {"ferric-chloride-solution", 30})
 end
 
 if data.raw.item["basic-electronic-components"] then
