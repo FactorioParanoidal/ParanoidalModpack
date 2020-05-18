@@ -13,7 +13,7 @@ data:extend({
   {
     type = "recipe",
     name = "zcs-trash-landfill",
-    ingredients = {{"stone-brick",300},{"stone-wall",120}},
+    ingredients = {{"stone-brick",100},{"stone-wall",100}},
     result = "zcs-trash-landfill",
     result_count = 1,
     enabled = "false"
