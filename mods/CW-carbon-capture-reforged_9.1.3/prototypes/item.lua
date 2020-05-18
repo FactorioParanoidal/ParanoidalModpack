@@ -1,73 +1,4 @@
 data:extend({
-	--[[
-	{
-		type = "fluid",
-		name = "CW-polution-sludge",
-		default_temperature = 25,
-		max_temperature = 100,
-		gas_temperature = 100,
-		
-		icon = "__CW-carbon-capture-reforged__/graphics/icons/sludge.png",
-		icon_size = 32,
-			
-		heat_capacity = "0.1KJ",
-		base_color = {r=0.2, g=0.2, b=0.2},
-		flow_color = {r=0.6, g=0, b=0},
-		
-		order = "h[sludge]",
-		auto_barrel = true,
-	},
-	{
-		type = "fluid",
-		name = "CW-methanol",
-		default_temperature = 25,
-		max_temperature = 100,
-		gas_temperature = 100,
-		
-		fuel_value = "1MJ",
-		icon = "__CW-carbon-capture-reforged__/graphics/icons/methanol.png",
-		icon_size = 32,
-			
-		heat_capacity = "0.1KJ",
-		base_color = {r=0.9, g=0.9, b=0.9},
-		flow_color = {r=0.3, g=0.3, b=0.3},
-		
-		order = "h[methanol]",
-		auto_barrel = true,
-	},
-
-	{
-		type = "fluid",
-		name = "CW-carbon-dioxide",
-		default_temperature = 25,
-		max_temperature = 100,
-		gas_temperature = 100,
-		
-		icon = "__CW-carbon-capture-reforged__/graphics/icons/carbon-dioxide.png",
-		icon_size = 32,
-			
-		heat_capacity = "0.1KJ",
-		base_color = {r=0.1, g=0.1, b=0.1},
-		flow_color = {r=0.5, g=0.5, b=0.5},
-		
-		order = "h[carbon]",
-		auto_barrel = true,
-	},
-	
-	{
-		type = "item",
-		name = "CW-dry-ice",
-		icon = "__CW-carbon-capture-reforged__/graphics/icons/pellets.png",
-		icon_size = 32,
-		flags = {},
-		subgroup = "raw-material",
-		order = "f[air-filter]",
-		stack_size = 200
-	},
-	
-	]]--
-	
-
 	{
 		type = "item",
 		name = "CW-air-filter-machine-1",
@@ -166,3 +97,69 @@ data:extend({
 		stack_size = 200
 	},
 })
+--[[
+	{
+		type = "fluid",
+		name = "CW-polution-sludge",
+		default_temperature = 25,
+		max_temperature = 100,
+		gas_temperature = 100,
+		
+		icon = "__CW-carbon-capture-reforged__/graphics/icons/sludge.png",
+		icon_size = 32,
+			
+		heat_capacity = "0.1KJ",
+		base_color = {r=0.2, g=0.2, b=0.2},
+		flow_color = {r=0.6, g=0, b=0},
+		
+		order = "h[sludge]",
+		auto_barrel = true,
+	},
+	{
+		type = "fluid",
+		name = "CW-methanol",
+		default_temperature = 25,
+		max_temperature = 100,
+		gas_temperature = 100,
+		
+		fuel_value = "1MJ",
+		icon = "__CW-carbon-capture-reforged__/graphics/icons/methanol.png",
+		icon_size = 32,
+			
+		heat_capacity = "0.1KJ",
+		base_color = {r=0.9, g=0.9, b=0.9},
+		flow_color = {r=0.3, g=0.3, b=0.3},
+		
+		order = "h[methanol]",
+		auto_barrel = true,
+	},
+
+	{
+		type = "fluid",
+		name = "CW-carbon-dioxide",
+		default_temperature = 25,
+		max_temperature = 100,
+		gas_temperature = 100,
+		
+		icon = "__CW-carbon-capture-reforged__/graphics/icons/carbon-dioxide.png",
+		icon_size = 32,
+			
+		heat_capacity = "0.1KJ",
+		base_color = {r=0.1, g=0.1, b=0.1},
+		flow_color = {r=0.5, g=0.5, b=0.5},
+		
+		order = "h[carbon]",
+		auto_barrel = true,
+	},
+	
+	{
+		type = "item",
+		name = "CW-dry-ice",
+		icon = "__CW-carbon-capture-reforged__/graphics/icons/pellets.png",
+		icon_size = 32,
+		flags = {},
+		subgroup = "raw-material",
+		order = "f[air-filter]",
+		stack_size = 200
+	},
+]]--
