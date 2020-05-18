@@ -130,6 +130,15 @@ if mods["aai-industry"] then
   data.raw.lab["burner-lab"].inputs = {"automation-science-pack"}
 end
 
+if mods["miniloader"] then
+	data.raw.technology["basic-miniloader"].unit = {count=250,ingredients={{"automation-science-pack",1}},time=60}
+	data.raw.technology["miniloader"].unit = {count=500,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 1}},time=60}
+	data.raw.technology["fast-miniloader"].unit = {count=1000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 1},{"chemical-science-pack", 1}},time=60}
+	data.raw.technology["express-miniloader"].unit = {count=2000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1},{"production-science-pack", 1}},time=60}
+	data.raw.technology["turbo-miniloader"].unit = {count=3000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1},{"production-science-pack", 1},{"advanced-logistic-science-pack", 1}},time=60}
+	data.raw.technology["ultimate-miniloader"].unit = {count=5000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 3},{"chemical-science-pack", 1},{"production-science-pack", 1},{"advanced-logistic-science-pack", 2},{"utility-science-pack", 1}},time=60}
+end
+
 if mods.bobelectronics then
 data.raw.technology["advanced-electronics-3"].unit =
 {
@@ -151,6 +160,11 @@ data.raw.lab["lab"].inputs = {"automation-science-pack","logistic-science-pack",
 else
 data.raw.lab["lab"].inputs = {"automation-science-pack","logistic-science-pack","chemical-science-pack","military-science-pack","utility-science-pack","production-science-pack","advanced-logistic-science-pack"}
 end
+if data.raw.lab["burner-lab"] then data.raw.lab["burner-lab"].energy_usage = "1500kW" end
+data.raw.lab["lab"].energy_usage = "2500kW"
+data.raw.lab["lab-2"].energy_usage = "5000kW"
+data.raw.lab["lab-module"].energy_usage = "3500kW"
+--data.raw.lab["big-lab"].energy_usage = "250MW"
 
 --Reorder the dependancies of science packs
 -- bobmods.lib.tech.add_recipe_unlock("advanced-electronics-2", "production-science-pack")
