@@ -4,7 +4,7 @@ data:extend({
 		type = "item",
 		name = "big-lab",
 		icon = "__BigLab__/graphics/icon/biglab.png",
-		icon_size = 32,
+		icon_size = 64,
 		--- flags = {"goes-to-quickbar"},
 		subgroup = "production-machine",
 		order = "h[lab]",
@@ -19,6 +19,7 @@ data:extend({
 		enabled = "false",
 		ingredients =
 		{
+		  {"concrete", 1000},
 		  {"processing-unit", 50},
 		  {"lab-2", 30},
 		},
@@ -29,16 +30,16 @@ data:extend({
 		type = "lab",
 		name = "big-lab",
 		icon = "__BigLab__/graphics/icon/biglab.png",
-		icon_size = 32,
+		icon_size = 64,
 		flags = {"placeable-player", "player-creation"},
 		minable = {mining_time = 5, result = "big-lab"},
 		max_health = 1500,
 		crafting_categories = {"chemistry"},
 		corpse = "big-remnants",
 		dying_explosion = "medium-explosion",
-		collision_box = {{-9.5, -9.5}, {9.5, 9.5}},
-		selection_box = {{-10, -10}, {10, 10}},
-		light = {intensity = 0.75, size = 8, color = {r = 1.0, g = 1.0, b = 1.0}},
+		collision_box = {{-9.5, -7.5}, {9.5, 7.5}},
+		selection_box = {{-10, -8}, {10, 8}},
+		--light = {intensity = 0.75, size = 8, color = {r = 1.0, g = 1.0, b = 1.0}},
 		on_animation = {
       layers =
       {
@@ -83,7 +84,7 @@ data:extend({
 		  type = "electric",
 		  usage_priority = "secondary-input"
 		},
-		energy_usage = "2500kW",
+		energy_usage = "250MW",
 		researching_speed = 100,
 		inputs =
 		{
