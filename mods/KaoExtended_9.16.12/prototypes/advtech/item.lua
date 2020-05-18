@@ -185,7 +185,7 @@ data:extend(
     type = "item",
     name = "angels-iron-gear-wheel-stack",
     icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
-	icon_size = 32,
+	icon_size = 64,
     subgroup = "angels-iron-casting",
     order = "s",
     stack_size = 200
@@ -194,7 +194,7 @@ data:extend(
     type = "item",
     name = "angels-steel-gear-wheel-stack",
     icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
-	icon_size = 32,
+	icon_size = 64,
     subgroup = "angels-steel-casting",
     order = "s",
     stack_size = 200
