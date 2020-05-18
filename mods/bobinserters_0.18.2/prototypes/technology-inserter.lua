@@ -47,11 +47,11 @@ data:extend(
     },
     unit =
     {
-      count = 50,
+      count = 500, --DrD 50
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
+        {"logistic-science-pack", 2}, --DrD 1
         {"chemical-science-pack", 1},
       },
       time = 15
@@ -80,7 +80,7 @@ data:extend(
     },
     unit =
     {
-      count = 25,
+      count = 100, --DrD 25
       ingredients =
       {
         {"automation-science-pack", 1},
@@ -110,11 +110,11 @@ data:extend(
     },
     unit =
     {
-      count = 25,
+      count = 500, --DrD 25
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
+        {"logistic-science-pack", 2}, --DrD 1
       },
       time = 15
     },
@@ -142,11 +142,11 @@ data:extend(
     },
     unit =
     {
-      count = 50,
+      count = 900, --DrD 50
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
+        {"logistic-science-pack", 2}, --DrD 1
         {"chemical-science-pack", 1},
       },
       time = 15
