@@ -45,7 +45,7 @@ data:extend(
     ingredients = {
       {"electronic-circuit", 2},
 	  {"electronic-components", 8},
-	  {"circuit-board", 1},
+	  {"circuit-board", 2},
       {"tinned-copper-cable", 4},
     },
     result = "advanced-circuit"
