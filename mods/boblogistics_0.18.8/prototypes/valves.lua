@@ -12,6 +12,7 @@ data:extend(
   {
     type = "item",
     name = "bob-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/valve.png",
     icon_size = 32,
     subgroup = "energy-pipe-distribution",
@@ -33,6 +34,7 @@ data:extend(
   {
     type = "storage-tank",
     name = "bob-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/valve.png",
     icon_size = 32,
     flags = {"placeable-neutral", "player-creation"},
@@ -216,6 +218,7 @@ data:extend(
   {
     type = "item",
     name = "bob-overflow-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/overflow-valve.png",
     icon_size = 32,
     subgroup = "energy-pipe-distribution",
@@ -238,6 +241,7 @@ data:extend(
   {
     type = "storage-tank",
     name = "bob-overflow-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/overflow-valve.png",
     icon_size = 32,
     flags = {"placeable-neutral", "player-creation"},
@@ -423,6 +427,7 @@ data:extend(
   {
     type = "item",
     name = "bob-topup-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/topup-valve.png",
     icon_size = 32,
     subgroup = "energy-pipe-distribution",
@@ -445,6 +450,7 @@ data:extend(
   {
     type = "storage-tank",
     name = "bob-topup-valve",
+	hidden = true , --DrD
     icon = "__boblogistics__/graphics/icons/pipe/topup-valve.png",
     icon_size = 32,
     flags = {"placeable-neutral", "player-creation"},

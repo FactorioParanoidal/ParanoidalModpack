@@ -41,7 +41,7 @@ data:extend(
     {
       ingredients =
       {
-        {"copper-plate", 1},
+        {"copper-plate", 4}, --DrD 1
       },
       result = "copper-pipe",
     },
@@ -49,7 +49,7 @@ data:extend(
     {
       ingredients =
       {
-        {"copper-plate", 2},
+        {"copper-plate", 8},
       },
       result = "copper-pipe",
     }
@@ -61,7 +61,7 @@ data:extend(
     ingredients =
     {
       {"copper-pipe", 10},
-      {"copper-plate", 5},
+      {"copper-plate", 15}, --DrD 5
     },
     result_count = 2,
     result = "copper-pipe-to-ground",
@@ -76,7 +76,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"steel-plate", 1},
+        {"steel-plate", 4}, --DrD 1
       },
       result = "steel-pipe",
     },
@@ -85,7 +85,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"steel-plate", 2},
+        {"steel-plate", 8},
       },
       result = "steel-pipe",
     }
@@ -97,8 +97,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"steel-pipe", 12},
-      {"steel-plate", 5},
+      {"steel-pipe", 15}, --DrD  12 5
+      {"steel-plate", 15},
     },
     result_count = 2,
     result = "steel-pipe-to-ground",
@@ -113,7 +113,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"plastic-bar", 1},
+        {"plastic-bar", 4}, --DrD 4
       },
       result = "plastic-pipe",
     },
@@ -122,7 +122,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"plastic-bar", 2},
+        {"plastic-bar", 8},
       },
       result = "plastic-pipe",
     }
@@ -134,8 +134,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"plastic-pipe", 14},
-      {"plastic-bar", 5},
+      {"plastic-pipe", 100}, --DrD
+      {"plastic-bar", 80},
     },
     result_count = 2,
     result = "plastic-pipe-to-ground",
@@ -155,7 +155,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"bronze-alloy", 1},
+        {"bronze-alloy", 4}, --DrD 1
       },
       result = "bronze-pipe",
     },
@@ -164,7 +164,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"bronze-alloy", 2},
+        {"bronze-alloy", 8},
       },
       result = "bronze-pipe",
     }
@@ -176,8 +176,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"bronze-pipe", 12},
-      {"bronze-alloy", 5},
+      {"bronze-pipe", 15},
+      {"bronze-alloy", 15},
     },
     result_count = 2,
     result = "bronze-pipe-to-ground",
@@ -198,7 +198,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"brass-alloy", 1},
+        {"brass-alloy", 4}, --DrD 1
       },
       result = "brass-pipe",
     },
@@ -207,7 +207,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"brass-alloy", 2},
+        {"brass-alloy", 8},
       },
       result = "brass-pipe",
     }
@@ -219,8 +219,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"brass-pipe", 14},
-      {"brass-alloy", 5},
+      {"brass-pipe", 20},
+      {"brass-alloy", 15},
     },
     result_count = 2,
     result = "brass-pipe-to-ground",
@@ -241,7 +241,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"silicon-nitride", 1},
+        {"silicon-nitride", 4}, --DrD 1
       },
       result = "ceramic-pipe",
     },
@@ -250,7 +250,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"silicon-nitride", 2},
+        {"silicon-nitride", 8},
       },
       result = "ceramic-pipe",
     }
@@ -262,8 +262,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"ceramic-pipe", 16},
-      {"silicon-nitride", 5},
+      {"ceramic-pipe", 25},
+      {"silicon-nitride", 15},
     },
     result_count = 2,
     result = "ceramic-pipe-to-ground",
@@ -284,7 +284,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"titanium-plate", 1},
+        {"titanium-plate", 2},
       },
       result = "titanium-pipe",
     },
@@ -293,7 +293,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"titanium-plate", 2},
+        {"titanium-plate", 4},
       },
       result = "titanium-pipe",
     }
@@ -305,8 +305,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"titanium-pipe", 16},
-      {"titanium-plate", 5},
+      {"titanium-pipe", 25}, --DrD
+      {"titanium-plate", 10},
     },
     result_count = 2,
     result = "titanium-pipe-to-ground",
@@ -327,7 +327,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"tungsten-plate", 1},
+        {"tungsten-plate", 2}, --DrD
       },
       result = "tungsten-pipe",
     },
@@ -336,7 +336,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"tungsten-plate", 2},
+        {"tungsten-plate", 4},
       },
       result = "tungsten-pipe",
     }
@@ -348,8 +348,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"tungsten-pipe", 16},
-      {"tungsten-plate", 5},
+      {"tungsten-pipe", 25}, --DrD
+      {"tungsten-plate", 10},
     },
     result_count = 2,
     result = "tungsten-pipe-to-ground",
@@ -370,7 +370,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"nitinol-alloy", 1},
+        {"nitinol-alloy", 2},--DrD
       },
       result = "nitinol-pipe",
     },
@@ -379,7 +379,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"nitinol-alloy", 2},
+        {"nitinol-alloy", 4},
       },
       result = "nitinol-pipe",
     }
@@ -391,8 +391,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"nitinol-pipe", 18},
-      {"nitinol-alloy", 5},
+      {"nitinol-pipe", 250},--DrD
+      {"nitinol-alloy", 50},
     },
     result_count = 2,
     result = "nitinol-pipe-to-ground",
@@ -413,7 +413,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-tungsten-alloy", 1},
+        {"copper-tungsten-alloy", 2},--DrD
       },
       result = "copper-tungsten-pipe",
     },
@@ -422,7 +422,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-tungsten-alloy", 2},
+        {"copper-tungsten-alloy", 4},
       },
       result = "copper-tungsten-pipe",
     }
@@ -434,8 +434,8 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"copper-tungsten-pipe", 18},
-      {"copper-tungsten-alloy", 5},
+      {"copper-tungsten-pipe", 250},--DrD
+      {"copper-tungsten-alloy", 50},
     },
     result_count = 2,
     result = "copper-tungsten-pipe-to-ground",
