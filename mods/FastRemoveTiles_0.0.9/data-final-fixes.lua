@@ -44,7 +44,9 @@ end
 
 
 
-if (mods['Bio_Industries']) then 
+if (mods['Bio_Industries'])
+and (data.raw["tile"]["bi-solar-mat"]) --DrD
+ then 
 if BI.Settings.BI_Solar_Additions then
 data.raw["tile"]["bi-solar-mat"].minable = {hardness = 0, mining_time = 0, result = "bi-solar-mat"}
 end
