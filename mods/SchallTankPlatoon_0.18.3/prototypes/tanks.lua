@@ -13,7 +13,7 @@ local VEH_specs =
     scale = 0.8,  --1,
     mining_time = 0.5,
     subcat = "b[tank]-c[conventional]-1-",
-    base_health = 1000, --2000,
+    base_health = 10000, --2000, --DrD x10
     base_braking_power = 200, --400,
     base_consumption = 320, --600,
     effectivity = 0.95, --0.9,
@@ -52,9 +52,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 16},
-            {"steel-plate", 25},
-            {"iron-gear-wheel", 8},
-            {"advanced-circuit", 5}
+            {"steel-plate", 250}, --DrD x10
+            {"iron-gear-wheel", 80}, --DrD x10
+            {"advanced-circuit", 50} --DrD x10
           }
         },
         expensive =
@@ -108,7 +108,7 @@ local VEH_specs =
     scale = 1,
     mining_time = 0.5,
     subcat = "b[tank]-c[conventional]-2-",
-    base_health = 2000,
+    base_health = 20000, --DrD x10
     base_braking_power = 400,
     base_consumption = 600,
     effectivity = 0.9,
@@ -147,9 +147,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 32},
-            {"steel-plate", 50},
-            {"iron-gear-wheel", 15},
-            {"advanced-circuit", 10}
+            {"steel-plate", 500}, --DrD x10
+            {"iron-gear-wheel", 150}, --DrD x10
+            {"advanced-circuit", 100} --DrD x10
           }
         },
         expensive =
@@ -203,7 +203,7 @@ local VEH_specs =
     scale = 1.5, --1,
     mining_time = 1,  --0.5,
     subcat = "b[tank]-c[conventional]-3-",
-    base_health = 3000, --2000,
+    base_health = 30000, --2000,  --DrD x10
     base_braking_power = 660, --400,
     base_consumption = 1000, --600,
     effectivity = 0.75,  --0.9,
@@ -242,9 +242,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 100},
-            {"steel-plate", 150},
-            {"iron-gear-wheel", 50},
-            {"advanced-circuit", 30}
+            {"steel-plate", 1500}, --DrD x10
+            {"iron-gear-wheel", 500}, --DrD x10
+            {"advanced-circuit", 300} --DrD x10
           }
         },
         expensive =
@@ -298,10 +298,10 @@ local VEH_specs =
     scale = 2, --1,
     mining_time = 2,  --0.5,
     subcat = "b[tank]-c[conventional]-4-",
-    base_health = 4000, --2000,
+    base_health = 50000, --2000, --DrD x10
     base_braking_power = 660, --400,
     base_consumption = 1000, --600,
-    effectivity = 0.6,  --0.9,
+    effectivity = 0.5,  --0.9,
     burner_effectivity = 0.666,  --1,
     burner_fuel_inventory_size = 2,
     terrain_friction_modifier = 0.25,  --0.2,
@@ -337,9 +337,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 300},
-            {"steel-plate", 400},
-            {"iron-gear-wheel", 120},
-            {"advanced-circuit", 80},
+            {"steel-plate", 5000}, --DrD x10
+            {"iron-gear-wheel", 500}, --DrD x10
+            {"advanced-circuit", 100}, --DrD x10
             {"military-science-pack", 200}
           }
         },
@@ -395,7 +395,7 @@ local VEH_specs =
     scale = 1,
     mining_time = 0.5,
     subcat = "b[tank]-c[conventional]-5-",
-    base_health = 2000,
+    base_health = 20000,  --DrD x10
     base_braking_power = 400,
     base_consumption = 600,
     effectivity = 0.9,
@@ -434,9 +434,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 32},
-            {"steel-plate", 50},
-            {"iron-gear-wheel", 15},
-            {"advanced-circuit", 10}
+            {"steel-plate", 500}, --DrD x10
+            {"iron-gear-wheel", 150}, --DrD x10
+            {"advanced-circuit", 100} --DrD x10
           }
         },
         expensive =
@@ -490,7 +490,7 @@ local VEH_specs =
     scale = 1,
     mining_time = 0.5,
     subcat = "b[tank]-r[rocket]-1-",
-    base_health = 2000,
+    base_health = 20000, --DrD x10
     base_braking_power = 400,
     base_consumption = 600,
     effectivity = 0.9,
@@ -529,9 +529,9 @@ local VEH_specs =
           ingredients =
           {
             {"engine-unit", 32},
-            {"steel-plate", 50},
-            {"iron-gear-wheel", 15},
-            {"advanced-circuit", 10}
+            {"steel-plate", 500}, --DrD x10
+            {"iron-gear-wheel", 150}, --DrD x10
+            {"advanced-circuit", 100} --DrD x10
           }
         },
         expensive =
