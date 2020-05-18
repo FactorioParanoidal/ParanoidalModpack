@@ -51,9 +51,7 @@ local function On_Init()
   end
 
   -- Global table for power rail
-  if global.bi_power_rail_table == nil then
-    global.bi_power_rail_table = {}
-  end
+  -- DrD if global.bi_power_rail_table == nil then   global.bi_power_rail_table = {}  end
 
   -- Global table for arboretum
   if global.Arboretum_Table == nil then
@@ -122,9 +120,7 @@ local function On_Config_Change()
   end
 
   -- Global table for power rail
-  if global.bi_power_rail_table == nil then
-    global.bi_power_rail_table = {}
-  end
+  -- DrD if global.bi_power_rail_table == nil then global.bi_power_rail_table = {}  end
 
   -- Global table for arboretum
   if global.Arboretum_Table == nil then
@@ -422,7 +418,8 @@ local function On_Built(event)
     -- Remove the "Overlay" Entity
     event.created_entity.destroy()
   end
-
+ 
+--[[ DrD begin
   -- Power Rail
   if (entity.valid and entity.name == "bi-straight-rail-power") or
      (entity.valid and entity.name == "bi-curved-rail-power") then
@@ -479,9 +476,9 @@ local function On_Built(event)
       end
     end
   end
+]]--DrD 
+
 end
-
-
 --------------------------------------------------------------------
 local function On_Remove(event)
   local entity = event.created_entity or event.entity
@@ -514,7 +511,8 @@ local function On_Remove(event)
       global.bi_solar_boiler_table[entity.unit_number] = nil
     end
   end
-
+  
+--[[DrD
   --- Power Rail has been removed
   if (entity.valid and entity.name == "bi-straight-rail-power") or
      (entity.valid and entity.name == "bi-curved-rail-power") then
@@ -524,6 +522,7 @@ local function On_Remove(event)
       global.bi_power_rail_table[entity.unit_number] = nil
     end
   end
+]]--
 
   --- Arboretum has been removed
   if entity.valid and entity.name == "bi-arboretum" then
@@ -642,6 +641,7 @@ local function On_Death(event)
     end
   end
 
+--[[ DrD
   --- Power Rail has been destroyed
   if (entity.valid and entity.name == "bi-straight-rail-power") or
      (entity.valid and entity.name == "bi-curved-rail-power") then
@@ -651,7 +651,7 @@ local function On_Death(event)
       global.bi_power_rail_table[entity.unit_number] = nil
     end
   end
-
+]]--
   --- Arboretum has been removed
   if entity.valid and entity.name == "bi-arboretum" then
     BioInd.writeDebug("Arboretum has been removed")
