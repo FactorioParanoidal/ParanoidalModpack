@@ -36,8 +36,8 @@ data:extend({
             },
          unit =
             {
-               count = 80,
-               ingredients = {{"logistic-science-pack", 1},{"automation-science-pack",1}},
+               count = 200,
+               ingredients = {{"logistic-science-pack", 2},{"automation-science-pack",1}},
                time = 30
             },
          order = "a-f-a",
@@ -57,8 +57,8 @@ data:extend({
             },
          unit =
             {
-               count = 150,
-               ingredients = {{"logistic-science-pack", 1}, {"automation-science-pack",1}},
+               count = 500,
+               ingredients = {{"logistic-science-pack", 2}, {"automation-science-pack",2}, {"chemical-science-pack",1}},
                time = 30
             },
          order = "a-f-a",
@@ -78,7 +78,7 @@ data:extend({
             },
          unit =
             {
-               count = 170,
+               count = 190,
                ingredients = {{"automation-science-pack", 1},{"logistic-science-pack",2}},
                time = 30
             },
