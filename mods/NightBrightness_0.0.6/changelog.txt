@@ -1,0 +1,19 @@
+0.0.6
+ - added mod option to disable this mod, this option restores default values while enabled
+
+ 0.0.5
+ - fixed reset of the year day after any mod settings update
+ 
+0.0.4
+ - fixed crash that comes when dusk, evening, morning and dawn are overwritten in wrong sequence
+ - on every season  starting comes information about it, year period must me bigger than 31 days
+ - default year period is now 64 in-game days; maximum period is now 180 days
+
+0.0.3
+ - now in sommer days are longer, solar panels get more sun light, in winter nights are longer, solar panels are not so effective
+
+0.0.2
+ - removed extra spam
+
+0.0.1
+ - first release
