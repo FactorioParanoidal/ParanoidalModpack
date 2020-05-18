@@ -1,9 +1,3 @@
---data.raw.technology["electrolysis-1"].enabled = false
---data.raw.technology["electrolysis-2"].enabled = false
---data.raw.technology["electrolysis-3"].enabled = false
---data.raw.technology["electrolysis-4"].enabled = false
-
-
 if settings.startup["science-oberhaul"].value == true then
     require('prototypes.scienceoberhaul')
 end
