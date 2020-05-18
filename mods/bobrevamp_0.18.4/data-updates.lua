@@ -78,7 +78,7 @@ if settings.startup["bobmods-revamp-old-oil"].value == true or settings.startup[
 
   if data.raw.fluid.chlorine then
     bobmods.lib.recipe.replace_ingredient("plastic-bar", "coal", "chlorine")
-    bobmods.lib.tech.add_prerequisite("plastics", "electrolysis-2")
+    --bobmods.lib.tech.add_prerequisite("plastics", "electrolysis-2")
   end
   if data.raw.fluid["sulfur-dioxide"] and data.raw.recipe["sulfuric-acid-2"] then
     for i, technology in pairs(data.raw.technology) do
