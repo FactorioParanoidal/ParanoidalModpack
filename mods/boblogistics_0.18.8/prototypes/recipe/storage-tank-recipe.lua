@@ -7,7 +7,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"storage-tank", 1},
+      {"storage-tank", 2}, --DrD 1
       {"steel-plate", 20},
     },
     result= "storage-tank-2"
@@ -20,7 +20,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"storage-tank-2", 1},
+      {"storage-tank-2", 2}, --DrD 1
       {"steel-plate", 20},
     },
     result= "storage-tank-3"
@@ -33,7 +33,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"storage-tank-3", 1},
+      {"storage-tank-3", 2}, --DrD 1
       {"steel-plate", 20},
     },
     result= "storage-tank-4"
@@ -63,7 +63,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"bob-storage-tank-all-corners", 1},
+      {"bob-storage-tank-all-corners", 2}, --DrD 1
       {"steel-plate", 20},
       {"pipe", 4}
     },
@@ -76,7 +76,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"bob-storage-tank-all-corners-2", 1},
+      {"bob-storage-tank-all-corners-2", 2}, --DrD 1
       {"steel-plate", 20},
       {"pipe", 4}
     },
@@ -89,7 +89,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"bob-storage-tank-all-corners-3", 1},
+      {"bob-storage-tank-all-corners-3", 2}, --DrD 1
       {"steel-plate", 20},
       {"pipe", 4}
     },

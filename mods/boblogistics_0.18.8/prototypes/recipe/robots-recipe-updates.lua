@@ -1,10 +1,10 @@
 if settings.startup["bobmods-logistics-robotrequireprevious"].value == true then
-  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-2", {"logistic-robot", 1})
-  bobmods.lib.recipe.add_ingredient("bob-construction-robot-2", {"construction-robot", 1})
-  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-3", {"bob-logistic-robot-2", 1})
-  bobmods.lib.recipe.add_ingredient("bob-construction-robot-3", {"bob-construction-robot-2", 1})
-  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-4", {"bob-logistic-robot-3", 1})
-  bobmods.lib.recipe.add_ingredient("bob-construction-robot-4", {"bob-construction-robot-3", 1})
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-2", {"logistic-robot", 2}) --DrD 1
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-2", {"construction-robot", 2})--DrD 1
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-3", {"bob-logistic-robot-2", 2})--DrD 1
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-3", {"bob-construction-robot-2", 2})--DrD 1
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-4", {"bob-logistic-robot-3", 2})--DrD 1
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-4", {"bob-construction-robot-3", 2})--DrD 1
 end
 
 
