@@ -29,6 +29,9 @@ else
 		if data.raw["lab"]["lab-2"] then
 			table.insert(data.raw["lab"]["lab-2"].inputs, "token-bio")
 		end
+		if data.raw["lab"]["big-lab"] then
+			table.insert(data.raw["lab"]["lab-2"].inputs, "token-bio")
+		end
 		OV.patch_recipes({
 			{ name = "algae-brown-burning", results = {{"lithium-chloride", 1}} },
 			{ name = "temperate-upgrade", ingredients = {{"!!"}, {name="token-bio", 5}, {"electronic-circuit", 2}, {"steel-plate", 2}, {"clay-brick", 2}, {"steel-pipe", 2}, } },
