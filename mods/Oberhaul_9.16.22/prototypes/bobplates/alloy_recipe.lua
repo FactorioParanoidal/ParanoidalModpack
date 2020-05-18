@@ -147,12 +147,12 @@ data:extend(
     energy_required = 32,
     ingredients =
     {
-      {type="item", name="iron-plate", amount=14},
+      {type="item", name="steel-plate", amount=4},
       {type="item", name="cobalt-plate", amount=1},
     },
     results = 
     {
-      {type="item", name="cobalt-steel-alloy", amount=5} --DrD 10
+      {type="item", name="cobalt-steel-alloy", amount=4} --DrD 10
     },
     allow_decomposition = false
   },
