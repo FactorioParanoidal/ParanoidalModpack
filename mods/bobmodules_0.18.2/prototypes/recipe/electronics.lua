@@ -83,7 +83,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 1},
+        {"copper-plate", 3}, --DrD 1
         {"plastic-bar", 1},
       },
       result = "module-processor-board",
@@ -95,7 +95,7 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 1},
+        {"copper-plate", 5},
         {"plastic-bar", 1},
       },
       result = "module-processor-board",
@@ -113,8 +113,8 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 1},
-        {"plastic-bar", 1},
+        {"copper-plate", 5},--DrD 1
+        {"plastic-bar", 2},
       },
       result = "module-processor-board-2",
       result_count = 4,
@@ -125,8 +125,8 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 1},
-        {"plastic-bar", 1},
+        {"copper-plate", 7},
+        {"plastic-bar", 2},
       },
       result = "module-processor-board-2",
       result_count = 2,
@@ -143,8 +143,8 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 2},
-        {"plastic-bar", 1},
+        {"copper-plate", 10},--DrD 1
+        {"plastic-bar", 2},
       },
       result = "module-processor-board-3",
       result_count = 4,
@@ -155,8 +155,8 @@ data:extend(
       enabled = false,
       ingredients =
       {
-        {"copper-plate", 2},
-        {"plastic-bar", 1},
+        {"copper-plate", 20},
+        {"plastic-bar", 2},
       },
       result = "module-processor-board-3",
       result_count = 2,
