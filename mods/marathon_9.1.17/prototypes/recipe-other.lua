@@ -35,4 +35,15 @@ data:extend({
     },
     result = "gun-turret",
   },
+  {
+    type = "recipe",
+    name = "landfill",
+    enabled = false,
+
+    energy_required = 2,
+    ingredients = {
+      {"stone", 100}
+    },
+    result = "landfill",
+  },
 })
