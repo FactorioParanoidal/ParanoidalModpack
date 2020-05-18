@@ -11,7 +11,7 @@ data:extend({
             {type = "fire",         decrease = 0, percent = 0},
             {type = "toxin",        decrease = 0, percent = 5}
         },
-        durability = 500,
+        durability = 100,
         subgroup = "armor",
         order = "f[hazard]",
         stack_size = 10
