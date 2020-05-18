@@ -1,6 +1,6 @@
 require('prototypes/copy-chest')
 require('prototypes/cursor-carousel')
-require('prototypes/filter-fill')
+--require('prototypes/filter-fill')
 require('prototypes/inventory-sort')
 require('prototypes/inventory-tools')
 require('prototypes/item-zapper')
