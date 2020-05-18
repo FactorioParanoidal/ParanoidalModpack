@@ -9,11 +9,11 @@ data:extend(
     {
       enabled = false,
       ingredients =
-      {
+      {  
         {"steam-engine", 1},
-        {"steel-plate", 5},
-        {"pipe", 5},
-        {"iron-gear-wheel", 5},
+        {"steel-plate", 75}, --DrD
+        {"pipe", 25}, --DrD
+        {"iron-gear-wheel", 25},
       },
       result = "steam-engine-2",
     },
@@ -23,8 +23,8 @@ data:extend(
       ingredients =
       {
         {"steam-engine", 1},
-        {"steel-plate", 25},
-        {"pipe", 5},
+        {"steel-plate", 125}, --DrD
+        {"pipe", 25},
         {"iron-gear-wheel", 10},
       },
       result = "steam-engine-2",
@@ -39,9 +39,9 @@ data:extend(
       ingredients =
       {
         {"steam-engine-2", 1},
-        {"pipe", 5},
-        {"steel-plate", 5},
-        {"iron-gear-wheel", 5},
+        {"pipe", 25},--DrD
+        {"steel-plate", 45}, --DrD
+        {"iron-gear-wheel", 25},--DrD
       },
       result = "steam-engine-3",
     },
@@ -51,8 +51,8 @@ data:extend(
       ingredients =
       {
         {"steam-engine-2", 1},
-        {"pipe", 5},
-        {"steel-plate", 25},
+        {"pipe", 25},
+        {"steel-plate", 85},
         {"iron-gear-wheel", 10},
       },
       result = "steam-engine-3",
@@ -67,9 +67,9 @@ data:extend(
       ingredients =
       {
         {"steam-engine-3", 1},
-        {"pipe", 5},
-        {"steel-plate", 5},
-        {"iron-gear-wheel", 5},
+        {"pipe", 25},--DrD
+        {"steel-plate", 25}, --DrD
+        {"iron-gear-wheel", 25},--DrD
       },
       result = "steam-engine-4",
     },
@@ -79,8 +79,8 @@ data:extend(
       ingredients =
       {
         {"steam-engine-3", 1},
-        {"pipe", 5},
-        {"steel-plate", 25},
+        {"pipe", 25},--DrD
+        {"steel-plate", 35},  --DrD
         {"iron-gear-wheel", 10},
       },
       result = "steam-engine-4",
@@ -95,9 +95,9 @@ data:extend(
       ingredients =
       {
         {"steam-engine-4", 1},
-        {"pipe", 5},
-        {"steel-plate", 5},
-        {"iron-gear-wheel", 5},
+        {"pipe", 25},--DrD
+        {"steel-plate", 25},  --DrD
+        {"iron-gear-wheel", 25},--DrD
       },
       result = "steam-engine-5",
     },
