@@ -12,8 +12,8 @@ angelsmods.functions.RB.build({
 	  enabled = "false",
       ingredients =
       {
-		{"hydro-plant-3", 1},
-		{"t5-plate", 4},
+		{"hydro-plant-3", 2},
+		{"t5-plate", 10},
 		{"t5-circuit", 12},
 		{"t5-pipe", 16},	
 		{"titanium-concrete-brick", 12},
@@ -26,7 +26,7 @@ angelsmods.functions.RB.build({
 	  enabled = "false",
       ingredients =
       {
-		{"hydro-plant-3", 1},
+		{"hydro-plant-3", 2},
 		{"t5-plate", 4 * buildingmulti},
 		{"t5-circuit", 12 * buildingmulti},
 		{"t5-pipe", 16 * buildingmulti},	
@@ -42,25 +42,25 @@ angelsmods.functions.RB.build({
     name = "salination-plant-3",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"salination-plant-2", 1},
-		{"t5-plate", 14},
+		{"salination-plant-2", 2},
+		{"t5-plate", 20},
 		{"t5-circuit", 12},
-		{"t5-pipe", 8},	
-		{"titanium-concrete-brick", 15},
+		{"t5-pipe", 20},	
+		{"titanium-concrete-brick", 25},
       },
       result= "salination-plant-3",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"salination-plant-2", 1},
+		{"salination-plant-2", 2},
 		{"t5-plate", 14 * buildingmulti},
 		{"t5-circuit", 12 * buildingmulti},
 		{"t5-pipe", 8 * buildingmulti},	
@@ -76,25 +76,25 @@ angelsmods.functions.RB.build({
     name = "washing-plant-3",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"washing-plant-2", 1},
-		{"t3-plate", 4},
+		{"washing-plant-2", 2},
+		{"t3-plate", 10},
 		{"t3-circuit", 4},
-		{"t3-pipe", 9},	
-		{"t3-brick", 5},
+		{"t3-pipe", 20},	
+		{"t3-brick", 20},
       },
       result="washing-plant-3",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"washing-plant-2", 1},
+		{"washing-plant-2", 2},
 		{"t3-plate", 4 * buildingmulti},
 		{"t3-circuit", 4 * buildingmulti},
 		{"t3-pipe", 9 * buildingmulti},	
@@ -108,25 +108,25 @@ angelsmods.functions.RB.build({
     name = "washing-plant-4",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"washing-plant-3", 1},
-		{"t4-plate", 4},
+		{"washing-plant-3", 2},
+		{"t4-plate", 20},
 		{"t4-circuit", 4},
-		{"t4-pipe", 9},	
-		{"t4-brick", 5},
+		{"t4-pipe", 30},	
+		{"t4-brick", 30},
       },
       result="washing-plant-4",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"washing-plant-2", 1},
+		{"washing-plant-2", 2},
 		{"t4-plate", 4 * buildingmulti},
 		{"t4-circuit", 4 * buildingmulti},
 		{"t4-pipe", 9 * buildingmulti},	
@@ -141,24 +141,24 @@ angelsmods.functions.RB.build({
     name = "ore-crusher-4",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-crusher-3", 1},
-		{"t4-plate", 3},
-		{"t4-brick", 3},
-		{"t4-gears", 2},
+		{"ore-crusher-3", 2},
+		{"t4-plate", 10},
+		{"t4-brick", 16},
+		{"t4-gears", 10},
       },
       result= "ore-crusher-4",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-crusher-3", 1},
+		{"ore-crusher-3", 2},
 		{"t4-plate", 3 * buildingmulti},
 		{"t4-brick", 3 * buildingmulti},
 		{"t4-gears", 2 * buildingmulti},
@@ -174,25 +174,25 @@ angelsmods.functions.RB.build({
     name = "ore-floatation-cell-4",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-floatation-cell-3", 1},
-		{"t5-plate", 4},
+		{"ore-floatation-cell-3", 2},
+		{"t5-plate", 20},
 		{"t5-circuit", 8},
-		{"t5-pipe", 4},	
-		{"titanium-concrete-brick", 8},
+		{"t5-pipe", 20},	
+		{"titanium-concrete-brick", 20},
       },
       result= "ore-floatation-cell-4",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-floatation-cell-3", 1},
+		{"ore-floatation-cell-3", 2},
 		{"t5-plate", 4 * buildingmulti},
 		{"t5-circuit", 8 * buildingmulti},
 		{"t5-pipe", 4 * buildingmulti},	
@@ -209,25 +209,25 @@ angelsmods.functions.RB.build({
     name = "ore-leaching-plant-4",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-leaching-plant-3", 1},
-		{"copper-tungsten-alloy", 8},
+		{"ore-leaching-plant-3", 2},
+		{"copper-tungsten-alloy", 20},
 		{"t5-circuit", 16},
-		{"nitinol-bearing", 8},	
+		{"nitinol-bearing", 16},	
 		{"titanium-concrete-brick", 40},
       },
       result= "ore-leaching-plant-4",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-leaching-plant-3", 1},
+		{"ore-leaching-plant-3", 2},
 		{"copper-tungsten-alloy", 8 * buildingmulti},
 		{"t5-circuit", 16 * buildingmulti},
 		{"nitinol-bearing", 8 * buildingmulti},	
@@ -244,12 +244,12 @@ angelsmods.functions.RB.build({
     name = "ore-refinery-3",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-refinery-2", 1},
-        {"copper-tungsten-alloy", 12},
+		{"ore-refinery-2", 2},
+        {"copper-tungsten-alloy", 50},
         {"nitinol-bearing", 12},
 		{"t5-circuit", 24},
 		{"titanium-concrete-brick", 100},
@@ -258,11 +258,11 @@ angelsmods.functions.RB.build({
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"ore-refinery-2", 1},
+		{"ore-refinery-2", 2},
         {"copper-tungsten-alloy", 12 * buildingmulti},
         {"nitinol-bearing", 12 * buildingmulti},
 		{"t5-circuit", 24 * buildingmulti},
@@ -279,25 +279,25 @@ angelsmods.functions.RB.build({
     name = "crystallizer-3",
 	normal =
     {
-	  energy_required = 5,
+	  energy_required = 20,
 	  enabled = "false",
       ingredients =
       {
-		{"crystallizer-2", 1},
-		{"t5-plate", 10},
+		{"crystallizer-2", 2},
+		{"t5-plate", 40},
 		{"t5-circuit", 5},
-		{"t5-pipe", 5},	
-		{"titanium-concrete-brick", 10},
+		{"t5-pipe", 40},	
+		{"titanium-concrete-brick", 40},
       },
       result="crystallizer-3",
     },
     expensive =
     {
-	  energy_required = 5 * buildingtime,
+	  energy_required = 20 * buildingtime,
 	  enabled = "false",
       ingredients =
       {
-		{"crystallizer-2", 1},
+		{"crystallizer-2", 2},
 		{"t5-plate", 10 * buildingmulti},
 		{"t5-circuit", 5 * buildingmulti},
 		{"t5-pipe", 5 * buildingmulti},	
@@ -312,28 +312,28 @@ angelsmods.functions.RB.build({
         name = "filtration-unit-3",
         normal =
         {
-          energy_required = 5,
+          energy_required = 20,
           enabled = "false",
           ingredients =
           {
-            {"filtration-unit-2", 1},
-            {"t5-plate", 2},
+            {"filtration-unit-2", 2},
+            {"t5-plate", 20},
             {"t5-circuit", 5},
-            {"t5-pipe", 8},	
-            {"titanium-concrete-brick", 5},
+            {"t5-pipe", 20},	
+            {"titanium-concrete-brick", 20},
           },
           result="filtration-unit-3",
         },
         expensive =
         {
-          energy_required = 5 * buildingtime,
+          energy_required = 20 * buildingtime,
           enabled = "false",
           ingredients =
           {
-            {"filtration-unit-2", 1},
+            {"filtration-unit-2", 2},
             {"t5-plate", 2 * buildingmulti},
             {"t5-circuit", 5 * buildingmulti},
-            {"t5-pipe", 8 * buildingmulti},	
+            {"t5-pipe", 20 * buildingmulti},	
             {"titanium-concrete-brick", 5 * buildingmulti},
           },
           result="filtration-unit-3",
