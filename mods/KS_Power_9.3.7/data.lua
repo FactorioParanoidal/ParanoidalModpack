@@ -1,4 +1,3 @@
---require("prototypes.oil-boiler")
 require("prototypes.diesel-generator")
 
 require("prototypes.entity.oil-boilers")

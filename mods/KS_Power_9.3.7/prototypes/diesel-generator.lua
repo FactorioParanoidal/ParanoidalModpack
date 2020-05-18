@@ -27,8 +27,8 @@ data:extend(
     {
       type = "generator",
       name = "petroleum-generator",
-      icon = "__KS_Power__/graphics/diesel-generator-icon.png",
-      icon_size = 64,
+      icon = "__KS_Power__/graphics/diesel-generator-t1.png",
+      icon_size = 128,
       flags = {"placeable-neutral", "player-creation"},
       minable = {mining_time = 2, result = "petroleum-generator"},
       max_power_output = (4 / 60) .. "MJ",
@@ -136,7 +136,8 @@ data:extend(
       energy_required = 5,
       ingredients = {
         {type = "fluid", name = "petroleum-gas", amount = 20},
-        {type = "fluid", name = "liquid-fuel", amount = 20}
+        {type = "fluid", name = "liquid-fuel", amount = 20},
+		{type = "item", name = "catalysator-brown", amount = 1}
       },
       results = {
         {type = "fluid", name = "diesel-fuel", amount = 25, temperature = 25}
@@ -180,7 +181,7 @@ data:extend(
       base_color = {r = 0.8, g = 0.7, b = 0},
       flow_color = {r = 0.5, g = 0.4, b = 0},
       icon = "__KS_Power__/graphics/diesel-fuel.png",
-      icon_size = 32,
+      icon_size = 128,
       order = "a[fluid]-i[diesel-fuel]",
       pressure_to_speed_ratio = 0.4,
       flow_to_energy_ratio = 0.59
