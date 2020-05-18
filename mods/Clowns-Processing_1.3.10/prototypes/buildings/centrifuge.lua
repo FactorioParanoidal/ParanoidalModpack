@@ -42,16 +42,16 @@ local centrifuge_2 = util.table.deepcopy(data.raw["assembling-machine"]["centrif
 centrifuge_2.name = "centrifuge-mk2"
 centrifuge_2.minable.result = "centrifuge-mk2"
 centrifuge_2.fast_replaceable_group = "centrifuge"
-centrifuge_2.crafting_speed = 1.25
-centrifuge_2.energy_usage = "450kW"
+centrifuge_2.crafting_speed = 2.25
+centrifuge_2.energy_usage = "2950kW"
 centrifuge_2.localised_name={"centrifuge","MK2"}
 
 local centrifuge_3 = util.table.deepcopy(data.raw["assembling-machine"]["centrifuge"])
 centrifuge_3.name = "centrifuge-mk3"
 centrifuge_3.minable.result = "centrifuge-mk3"
 centrifuge_3.fast_replaceable_group = "centrifuge"
-centrifuge_3.crafting_speed = 2
-centrifuge_3.energy_usage = "550kW"
+centrifuge_3.crafting_speed = 3.5
+centrifuge_3.energy_usage = "7550kW"
 centrifuge_3.localised_name={"centrifuge","MK3"}
 
 data:extend(
@@ -66,13 +66,13 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{type="item", name="centrifuge", amount=1},
+			{type="item", name="centrifuge", amount=2},
 			{type="item", name="titanium-plate", amount=50},
 			{type="item", name="processing-unit", amount=100},
 			{type="item", name="titanium-gear-wheel", amount=100},
 		},
 		result = "centrifuge-mk2",
-		energy_required = 4,
+		energy_required = 20,
 	},
 	{
 		type = "recipe",
@@ -80,13 +80,13 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{type="item", name="centrifuge-mk2", amount=1},
+			{type="item", name="centrifuge-mk2", amount=2},
 			{type="item", name="copper-tungsten-alloy", amount=50},
 			{type="item", name="advanced-processing-unit", amount=100},
 			{type="item", name="tungsten-gear-wheel", amount=100},
 		},
 		result = "centrifuge-mk3",
-		energy_required = 4,
+		energy_required = 40,
 	},
 
 	}
