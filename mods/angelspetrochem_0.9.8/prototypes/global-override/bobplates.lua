@@ -18,13 +18,13 @@ if bobmods then
           ingredients = {
             {"!!"},
             {name = "bob-small-inline-storage-tank", amount = 1},
-            {name = "pipe", amount = 1}
+            {name = "pipe", amount = 4} --drd 1
           }
         },
         {
           name = "storage-tank",
           ingredients = {
-            {name = "bob-small-inline-storage-tank", amount = 1}
+            {name = "bob-small-inline-storage-tank", amount = 4} --DrD 1
           }
         }
       }
@@ -47,7 +47,7 @@ if bobmods then
             name = "bob-storage-tank-all-corners",
             ingredients = {
               {name = "bob-small-storage-tank", amount = 1},
-              {name = "pipe", amount = 2}
+              {name = "pipe", amount = 8} --drd 2
             }
           },
           {
