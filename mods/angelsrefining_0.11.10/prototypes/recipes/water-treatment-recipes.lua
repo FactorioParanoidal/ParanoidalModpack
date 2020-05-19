@@ -401,7 +401,7 @@ data:extend(
       enabled = "false",
       ingredients =
       {
-        {type = "item", name = "solid-mud", amount = 25}
+        {type = "item", name = "solid-mud", amount = 250}, --DrD 25		
       },
       results =
       {
