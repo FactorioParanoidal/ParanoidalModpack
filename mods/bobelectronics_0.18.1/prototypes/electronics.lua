@@ -454,11 +454,11 @@ data:extend(
     category = "electronics-machine",
     energy_required = 5,
     enabled = false,
-    ingredients =
+    ingredients = --DrD
     {
-      {"phenolic-board", 1},
-      {"copper-plate", 1},
-      {type="fluid", name="ferric-chloride-solution", amount=5}
+      {"phenolic-board", 2},
+      {"copper-plate", 4},
+      {type="fluid", name="ferric-chloride-solution", amount=10}
     },
     result = "circuit-board",
     allow_decomposition = false
@@ -485,11 +485,11 @@ data:extend(
     category = "electronics-machine",
     energy_required = 10,
     enabled = false,
-    ingredients =
+    ingredients = --DrD
     {
-      {"fibreglass-board", 1},
-      {"copper-plate", 1},
-      {type="fluid", name="ferric-chloride-solution", amount=5}
+      {"fibreglass-board", 2},
+      {"copper-plate", 5},
+      {type="fluid", name="ferric-chloride-solution", amount=15}
     },
     result = "superior-circuit-board",
     allow_decomposition = false
