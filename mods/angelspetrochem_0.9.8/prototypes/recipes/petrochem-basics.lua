@@ -485,14 +485,15 @@ data:extend(
       subgroup = "petrochem-coal",
       energy_required = 2,
       enabled = false,
-      ingredients = {
-        {type = "item", name = "solid-coke", amount = 2},
-        {type = "fluid", name = "steam", amount = 30}
-      },
-      results = {
-        {type = "item", name = "solid-carbon", amount = 3}
-      },
-      icons = {
+    ingredients ={
+		{type="item", name="solid-coke", amount=2}, --DrD ???
+		{type="fluid", name="gas-carbon-dioxide", amount=40},
+	},
+    results=
+    {
+		{type="item", name="solid-carbon", amount=3},
+    },
+    icons = {
         {
           icon = "__angelspetrochem__/graphics/icons/solid-carbon.png"
         },
