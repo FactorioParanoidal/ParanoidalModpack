@@ -55,7 +55,7 @@ data:extend(
         usage_priority = "secondary-input",
         emissions_per_minute = 0.03 * 60
       },
-      energy_usage = "125kW",
+      energy_usage = "200kW", --DrD 125
       ingredient_count = 4,
       animation = {
         layers = {
