@@ -136,4 +136,4 @@ data:extend(
 
 data.raw.fluid["crude-oil"].icon = nil
 data.raw.fluid["crude-oil"].icon_size = nil
-data.raw.fluid["crude-oil"].icons = angelsmods.functions.create_liquid_fluid_icon(nil, { {069,069,069}, {054,054,054}, {036,036,036} })
+data.raw.fluid["crude-oil"].icons = angelsmods.functions.create_liquid_fluid_icon(nil, { {000,000,000}, {018,018,018}, {018,018,018} }) --DrD 69-54-36
