@@ -68,7 +68,9 @@ data:extend(
     {
       type = "fluid",
       name = "water-purified",
-      icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil, { {116,140,211}, nil, {122,148,221} }),
+	  icon = "__bobicons__/graphics/icons/angelsrefining/water-purified-128.png", --DrD
+	  icon_size = 128, --DrD
+      --icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil, { {116,140,211}, nil, {122,148,221} }),
       subgroup = "water-treatment-fluid",
       order = "b",
       default_temperature = 25,
