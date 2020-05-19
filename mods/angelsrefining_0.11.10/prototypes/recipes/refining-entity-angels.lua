@@ -647,10 +647,10 @@ angelsmods.functions.RB.build({
 			ingredients =
 			{
 				{"liqui-1", 1},
-				{"t0-plate", 2},
+				{"t0-plate", 20}, --DrD 2
 				{"t0-circuit", 2},
-				{"t0-pipe", 2},
-				{"t0-brick", 2},
+				{"t0-pipe", 16}, --DrD 2
+				{"t0-brick", 8}, --DrD 2
 			},
 			result="liquifier",
 		},
@@ -661,10 +661,10 @@ angelsmods.functions.RB.build({
 			ingredients =
 			{
 				{"liqui-1", 1},
-				{"t0-plate", 2 * buildingmulti},
+				{"t0-plate", 20 * buildingmulti}, --DrD 2
 				{"t0-circuit", 2 * buildingmulti},
-				{"t0-pipe", 2 * buildingmulti},
-				{"t0-brick", 2 * buildingmulti},
+				{"t0-pipe", 16 * buildingmulti}, --DrD 2
+				{"t0-brick", 8 * buildingmulti}, --DrD 2
 			},
 			result="liquifier",
 		},
@@ -777,11 +777,11 @@ angelsmods.functions.RB.build({
 			ingredients =
 			{
 				{"thermal-1", 1},
-				{"t4-plate", 6},
-				{"t4-circuit", 4},
-				{"t4-pipe", 4},
-				{"t4-brick", 4},
-				{"t4-gears", 4},
+				{"t3-plate", 60},   --DrD t4 to t3 
+				{"t3-circuit", 4},
+				{"t3-pipe", 40},
+				{"t3-brick", 50},
+				{"t3-gears", 16},
 			},
 			result="thermal-extractor",
 		},
@@ -792,11 +792,11 @@ angelsmods.functions.RB.build({
 			ingredients =
 			{
 				{"thermal-1", 1},
-				{"t4-plate", 6 * buildingmulti},
-				{"t4-circuit", 4 * buildingmulti},
-				{"t4-pipe", 4 * buildingmulti},
-				{"t4-brick", 4 * buildingmulti},
-				{"t4-gears", 4 * buildingmulti},
+				{"t3-plate", 6 * buildingmulti},
+				{"t3-circuit", 4 * buildingmulti},
+				{"t3-pipe", 4 * buildingmulti},
+				{"t3-brick", 4 * buildingmulti},
+				{"t3-gears", 4 * buildingmulti},
 			},
 			result="thermal-extractor",
 		},
