@@ -18,6 +18,7 @@ bobmods.lib.recipe.add_result("tungsten-ore-processing", (type="item", name="sla
 bobmods.lib.recipe.add_result("manganese-ore-processing", (type="item", name="slag", amount=1, probability=0.3},)
 bobmods.lib.recipe.add_result("chrome-ore-processing", (type="item", name="slag", amount=1, probability=0.3},)
 bobmods.lib.recipe.add_result("platinum-ore-processing", (type="item", name="slag", amount=1, probability=0.1},)
+
 --[[
     {
     type = "recipe",

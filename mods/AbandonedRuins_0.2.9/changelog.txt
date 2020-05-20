@@ -1,0 +1,81 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+Date: 08. 05. 2020
+  Minor Features:
+    - When all spawn chances are set to 1, now all types of ruins will spawn, instead of just small ruins.
+    - Code cleanup.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+Date: 28. 04. 2020
+  Minor Features:
+    - Added license file.
+    - Added changelog file.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 25. 01. 2020
+  Minor Features:
+    - Updated for 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 03. 11. 2019
+  Minor Features:
+    - Better compatibility with mods, including AAI vehicles.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 27. 04. 2019
+  Bugfixes:
+    - Fixed that ruins could spawn in space when using the Space Exploration mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 30. 03. 2019
+  Minor Features:
+    - Added more small ruins.
+    - Changed entity building to raise events.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 12. 03. 2019
+  Minor Features:
+    - Added thumbnail.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 12. 03. 2019
+  Major Features:
+    - Updated to 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 25. 12. 2017
+  Bugfixes:
+    - Fixed crash related to cliffs.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 25. 12. 2017
+  Major Features:
+    - Updated for 0.16
+    - Name changed to AbandonedRuins
+    - Maintenance now done by Bilka (original mod by Gangsir)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 10. 08. 2017
+  Minor Features:
+    - Added polish translation of settings
+    - Ruin spawning is now consistent with map seed
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 13. 06. 2017
+  Minor Features:
+    - Smarter system for spawning ruins, each ruin is in their own file
+    - Made adjustments to code to be a little more cohesive
+    - Added a few more medium ruins and large ruins.
+  Bugfixes:
+    - Removed ruins that spawn biters, as these do not respect "no biters" settings.
+    - Small ruins no longer destroy trees and can be overgrown.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 11. 06. 2017
+  Bugfixes:
+    - Quick update to remove some debug code. I know how to mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 11. 06. 2017
+  Major Features:
+    - Mod created.

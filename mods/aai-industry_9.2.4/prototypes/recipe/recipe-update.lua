@@ -157,6 +157,43 @@ util.conditional_modify({
     results= { {type="item", name="concrete", amount=10} },
   }
 })
+
+util.conditional_modify({
+  type = "recipe",
+  name = "burner-offshore-pump",
+	ingredients =
+    {
+      {"pipe", 6},
+	  {"motor", 1},
+      {"iron-gear-wheel", 4}
+    },
+	result = "burner-offshore-pump"
+})
+util.conditional_modify({
+  type = "recipe",
+  name = "electric-offshore-pump",
+    {
+      {"electronic-circuit", 5},
+      {"pipe", 12},
+      {"electric-motor", 4},
+      {"steel-plate", 8}
+    },
+	result = "electric-offshore-pump"
+})
+util.conditional_modify({
+  type = "recipe",
+  name = "electric-modular-offshore-pump",
+	ingredients =
+    {
+      {"advanced-circuit", 5},
+      {"pipe", 12},
+      {"electric-engine-unit", 4},
+      {"steel-plate", 20}
+    },
+	result = "electric-modular-offshore-pump"
+})
+
+
 --[[
 util.conditional_modify({
   type = "recipe",

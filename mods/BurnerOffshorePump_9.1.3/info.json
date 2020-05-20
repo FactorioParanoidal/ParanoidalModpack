@@ -1,0 +1,13 @@
+{
+  "name": "BurnerOffshorePump",
+  "version": "9.1.3",
+  
+  "title": "Burner Offshore Pump",
+  "description": "The Burner offshore pump needs fuel for working; the Electric offshore pump needs electric energy",
+  
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base"],
+  "factorio_version": "0.18"
+}

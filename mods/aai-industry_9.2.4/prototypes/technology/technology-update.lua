@@ -71,7 +71,7 @@ util.tech_lock_recipes(
     "express-inserters",  {
         "fast-inserter"})
 
-util.tech_lock_recipes(
+util.tech_lock_recipes(	
     "grinding",  {
 	"bob-ruby-3",
 	"bob-sapphire-3",
@@ -79,7 +79,29 @@ util.tech_lock_recipes(
 	"bob-amethyst-3",
 	"bob-topaz-3",
 	"bob-diamond-3"})
+--[[  --DrD not working here
+data.raw.recipe["bob-ruby-3"].enabled = false
+data.raw.recipe["bob-sapphire-3"].enabled = false
+data.raw.recipe["bob-emerald-3"].enabled = false
+data.raw.recipe["bob-amethyst-3"].enabled = false
+data.raw.recipe["bob-topaz-3"].enabled = false
+data.raw.recipe["bob-diamond-3"].enabled = false
+]]--
 
+if data.raw.recipe["electric-offshore-pump"] then
+util.tech_lock_recipes(	
+    "electronics",  {
+	"electric-offshore-pump"})
+util.tech_lock_recipes(	
+    "advanced-electronics",  {
+	"electric-modular-offshore-pump"})
+end
+
+if data.raw.technology["ore-floatation"] and data.raw.recipe["silver-plate"] then
+util.tech_lock_recipes(	
+    "ore-floatation",  {
+	"silver-plate"})
+end
 
 if data.raw.technology["bob-logistics-0"] and data.raw.recipe["basic-transport-belt"] then
     -- if bob-basic-logistics then use basic logistics to lock tsp-0
@@ -132,7 +154,7 @@ else
   util.tech_lock_recipes(
       "electricity",  {
           "electronic-circuit",
-          "electronic-circuit-stone"
+          --"electronic-circuit-stone"
 		  })
 end
 

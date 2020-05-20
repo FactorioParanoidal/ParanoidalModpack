@@ -7,7 +7,7 @@ data:extend(
     type = "custom-input",
     name = "bob-inserter-long",
     key_sequence = "SHIFT + L",
-    consuming = "script-only"
+    consuming = "none"
   }
 }
 )
