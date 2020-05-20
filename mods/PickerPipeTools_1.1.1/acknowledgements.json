@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Orphan Finder",
+        "title": "Orphan Finder",
+        "author": "GotLag",
+        "description": "Adds a hotkey to highlight unconnected undergound pipes/belts near the player."
+    }
+]

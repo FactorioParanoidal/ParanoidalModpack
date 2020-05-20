@@ -34,6 +34,7 @@ end
 
 data.raw['item']["offshore-pump"].place_result = "offshore-pump"
 data.raw['item']["offshore-pump"].icon = "__aai-industry__/graphics/icons/offshore-pump.png"
+data.raw['item']["offshore-pump"].hidden = true
 
 data.raw.item["stone-wall"].icon = "__aai-industry__/graphics/icons/stone-wall.png"
 

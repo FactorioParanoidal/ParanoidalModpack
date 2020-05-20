@@ -1,0 +1,130 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 04/30/2020
+  Changes:
+    - Custom script using "none" instead of "script-only"
+    - Updated on_configuration_changed function
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 02/07/2020
+  Major Features:
+    - Added startup settings to switch between mod and game colors (breaks multi-player)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 01/21/2020
+  Changes:
+    - Game Version 0.18.x Update.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 01/05/2020
+  Changes:
+    - Added colors for all modded pipes, pumps, storage tanks, heatpipes and reactors.
+    - Brought changelog upto standard format.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.9
+Date: 
+  Bugfixes:
+    - Fixed crash due to bobs technology rename.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.8
+Date: 
+  Bugfixes:
+    - Fixed controls hotkey locale.
+  Changes:
+    - Added changelog.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.7
+Date: 
+  Changes:
+    - Update to 0.17.x
+    - Added thumbnail.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.6
+Date: 
+  Changes:
+    - Sdded colors for heatpipes and reactors.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 
+  Bugfixes:
+    - Fixed one require I missed removing in previous version.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 
+  Bugfixes:
+    - (Broken, DO NOT USE)
+    - Safer sprite checks will help prevent errors with future mod changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 
+  Bugfixes:
+    - Update for boblogistics belt name and tier changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 
+  Changes:
+    - 0.16.x update.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 
+  Changes:
+    - Works in 0.15.x
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 
+  Bugfixes:
+    - Fixes from 1.3.10
+  Changes:
+    - Removing DyTech belts.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.10
+Date: 
+  Changes:
+    - Changed colors for walls, turrets, accumulators, and solar panels as per 0.15. Try out the new colors before 0.15.x is released. :)
+    - Added colors for underground belts and splitters for all tiers and mods.
+    - Updated legend.
+    - Added config file so 0.15 colors can be turned on or off.
+    - Added English locale file.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.9
+Date: 
+  Changes:
+    - Removed main button. Open/close legend via custom key press "N"(default for now) changeable in settings.
+    - *Legend now on gui.left - recommend using Mooncats Vertical left gui mod till 0.15 is released.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+Date: 
+  Bugfixes:
+    - Legend should no longer open for all players when any player opens legend or when a technology is researched.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 
+  Bugfixes:
+    - Fixed bad logic using on_configuration_changed.
+    - Fixed gui legend height.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 
+  Changes:
+    - GUI update.
+    - Update to factorio version 0.14.x with new colors
+---------------------------------------------------------------------------------------------------
+Version: 1.3
+Date: 
+  Changes:
+    - Update for factorio version 0.13.x
+---------------------------------------------------------------------------------------------------
+Version: 1.2
+Date: 
+  Minor Features:
+    - 5dim and DyTech belts are now colored.
+---------------------------------------------------------------------------------------------------
+Version: 1.1
+Date: 
+  Minor Features:
+    - Bobsmods support
+---------------------------------------------------------------------------------------------------
+Version: 1.0
+Date: 
+  Features:
+    - Base release

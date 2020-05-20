@@ -125,8 +125,8 @@ end
 --Technology
 --Make Lazy Bastard Possible
 if mods["aai-industry"] then
-  data.raw.technology["basic-automation"].unit = {count=1,ingredients={{"automation-science-pack",1}},time=30}
-  data.raw.technology["basic-logistics"].unit = {count=1,ingredients={{"automation-science-pack",1}},time=30}
+  data.raw.technology["basic-automation"].unit = {count=1,ingredients={{"automation-science-pack",1}},time=60}
+  data.raw.technology["basic-logistics"].unit = {count=10,ingredients={{"automation-science-pack",1}},time=30}
   data.raw.lab["burner-lab"].inputs = {"automation-science-pack"}
 end
 

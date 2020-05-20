@@ -3,6 +3,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-ruby-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =
@@ -15,6 +16,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-sapphire-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =
@@ -27,6 +29,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-emerald-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =
@@ -39,6 +42,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-amethyst-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =
@@ -51,6 +55,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-topaz-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =
@@ -63,6 +68,7 @@ data:extend(
   {
     type = "recipe",
     name = "bob-diamond-3",
+	enabled = false, --DrD
     category = "crafting-machine",
     energy_required = 1,
     ingredients =

@@ -130,7 +130,7 @@ data:extend{
         icon = "__aai-industry__/graphics/technology/electric-lab.png",
         icon_size = 128,
         order = "a",
-        prerequisites = {"electricity"},
+        prerequisites = {"electricity", "optics"},
         unit = {
             count = 100,
             ingredients = {

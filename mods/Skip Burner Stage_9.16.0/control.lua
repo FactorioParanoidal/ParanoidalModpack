@@ -5,10 +5,10 @@ script.on_event({defines.events.on_player_changed_force}, initialization)
 script.on_event(defines.events.on_player_created, function(event)
 	local player = game.players[event.player_index]
 		--player.insert{name="steel-axe", count=1}	
-		player.insert{name="iron-plate", count=200}
-		player.insert{name="copper-plate", count=200}
+		player.insert{name="iron-plate", count=209}
+		player.insert{name="copper-plate", count=187}
 		--player.insert{name="electronic-circuit", count=400}
-		player.insert{name="iron-gear-wheel", count=200}
+		player.insert{name="iron-gear-wheel", count=158}
 		
 		player.insert{name="inserter", count=50}
 		player.insert{name="long-handed-inserter", count=25}
@@ -29,6 +29,7 @@ script.on_event(defines.events.on_player_created, function(event)
 		--player.insert{name="steam-engine", count=20}
 		--player.insert{name="boiler", count=10}
 		player.insert{name="offshore-pump", count=1}
+		player.insert{name="burner-offshore-pump", count=1}
 		player.insert{name="pipe-to-ground", count=10}
 		--player.insert{name="lab", count=6}
 		player.insert{name="basic-splitter", count=10}

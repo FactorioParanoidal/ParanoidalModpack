@@ -23,6 +23,7 @@ data:extend({
         {name="iron-plate", amount = 62},
         {name="copper-plate", amount = 38},
         {name="steel-plate", amount = 7},
+		{name="iron-gear-wheel", amount = 9},
         {name="electronic-circuit", amount = 2}
       }
     },
@@ -55,6 +56,7 @@ data:extend({
         {name="iron-plate", amount = 58},
         {name="copper-plate", amount = 36},
         {name="steel-plate", amount = 3},
+		{name="iron-gear-wheel", amount = 7},
         {name="electronic-circuit", amount = 1}
       }
     },
@@ -87,6 +89,7 @@ data:extend({
         {name="iron-plate", amount = 38},
         {name="copper-plate", amount = 44},
         {name="steel-plate", amount = 2},
+		{name="iron-gear-wheel", amount = 5},
         {name="electronic-circuit", amount = 1}
       }
     },
@@ -116,6 +119,7 @@ data:extend({
       mining_time = 0.5 * 5,
       results={
         {name="iron-plate", amount = 24},
+		{name="iron-gear-wheel", amount = 3},
       }
     },
     resistances = resistances,
@@ -143,6 +147,7 @@ data:extend({
       mining_time = 0.5 * 5,
       results={
         {name="copper-plate", amount = 18},
+		{name="iron-gear-wheel", amount = 2},
       }
     },
     resistances = resistances,
@@ -172,7 +177,8 @@ data:extend({
       mining_time = 0.5 * 3,
       results={
         {name="iron-plate", probability = 0.75, amount_min=5, amount_max=25},
-        {name="copper-plate", probability = 0.25, amount_min=5, amount_max=25}
+        {name="copper-plate", probability = 0.25, amount_min=5, amount_max=25},
+		{name="iron-gear-wheel", probability = 0.5, amount_min=2, amount_max=5}
       }
     },
     resistances = resistances,
