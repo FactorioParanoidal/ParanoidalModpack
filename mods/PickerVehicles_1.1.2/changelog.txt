@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-05-24
+  Changes:
+    - Toggling to automatic mode no longer changes the destination station.
+    - Manual train movement overides are now a per-user setting.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2020-04-24
   Bugfixes:

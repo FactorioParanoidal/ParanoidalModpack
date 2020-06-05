@@ -30,133 +30,132 @@ data:extend {
 }
 
 data:extend {
-     {
-        type = "int-setting",
-        name = "picker-manual-withplayer-penalty",
-        setting_type = "startup",
+    {
+        type = 'int-setting',
+        name = 'picker-manual-withplayer-penalty',
+        setting_type = 'startup',
         default_value = 2000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-a'
-     },
-     {
-        type = "int-setting",
-        name = "picker-manual-noplayer-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-manual-noplayer-penalty',
+        setting_type = 'startup',
         default_value = 7000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-b'
-     },
-     {
-        type = "int-setting",
-        name = "picker-circuit-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-circuit-penalty',
+        setting_type = 'startup',
         default_value = 1000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-c'
-     },
-     {
-        type = "int-setting",
-        name = "picker-trainstop-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-trainstop-penalty',
+        setting_type = 'startup',
         default_value = 2000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-d'
-     },
-     {
-        type = "int-setting",
-        name = "picker-arriving-stop-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-arriving-stop-penalty',
+        setting_type = 'startup',
         default_value = 100,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-e'
-     },
-     {
-        type = "int-setting",
-        name = "picker-train-waitstation-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-train-waitstation-penalty',
+        setting_type = 'startup',
         default_value = 500,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-f'
-     },
-     {
-        type = "int-setting",
-        name = "picker-train-waitstation-nostops-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-train-waitstation-nostops-penalty',
+        setting_type = 'startup',
         default_value = 1000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-g'
-     },
-
-     {
-        type = "int-setting",
-        name = "picker-arriving-signal-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-arriving-signal-penalty',
+        setting_type = 'startup',
         default_value = 100,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-h'
-     },
-     {
-        type = "int-setting",
-        name = "picker-waiting-signal-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-waiting-signal-penalty',
+        setting_type = 'startup',
         default_value = 100,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-i'
-     },
-     {
-        type = "double-setting",
-        name = "picker-waiting-at-signal-multiplier",
-        setting_type = "startup",
+    },
+    {
+        type = 'double-setting',
+        name = 'picker-waiting-at-signal-multiplier',
+        setting_type = 'startup',
         default_value = 0.1,
         minimum_value = 0,
         maximum_value = 100,
         order = '[startup]-a-[penalty]-j'
-      },
-     {
-        type = "int-setting",
-        name = "picker-no-path-penalty",
-        setting_type = "startup",
+    },
+    {
+        type = 'int-setting',
+        name = 'picker-no-path-penalty',
+        setting_type = 'startup',
         default_value = 1000,
         minimum_value = 0,
         maximum_value = 60000,
         order = '[startup]-a-[penalty]-k'
-      },
-      {
-        type = "double-setting",
-        name = "picker-temporary-stop-wait-time",
-        setting_type = "startup",
+    },
+    {
+        type = 'double-setting',
+        name = 'picker-temporary-stop-wait-time',
+        setting_type = 'startup',
         default_value = 60 * 5,
         minimum_value = 0,
         maximum_value = 100000000,
         order = '[startup]-b-[conditon]-a'
-      },
-      {
-        type = "double-setting",
-        name = "picker-wait-condition-default",
-        setting_type = "startup",
+    },
+    {
+        type = 'double-setting',
+        name = 'picker-wait-condition-default',
+        setting_type = 'startup',
         default_value = 60 * 30,
         minimum_value = 0,
         maximum_value = 100000000,
         order = '[startup]-b-[conditon]-b'
-      },
-      {
-        type = "double-setting",
-        name = "picker-inactivity-wait-condition-default",
-        setting_type = "startup",
+    },
+    {
+        type = 'double-setting',
+        name = 'picker-inactivity-wait-condition-default',
+        setting_type = 'startup',
         default_value = 60 * 5,
         minimum_value = 0,
         maximum_value = 100000000,
         order = '[startup]-b-[conditon]-c'
-      },
+    }
 }
 
 data:extend {
@@ -195,7 +194,7 @@ data:extend {
     {
         type = 'bool-setting',
         name = 'picker-manual-train-keys',
-        setting_type = 'startup',
+        setting_type = 'runtime-per-user',
         default_value = true,
         order = '[startup]-e-[automatic-trains]-b'
     },
