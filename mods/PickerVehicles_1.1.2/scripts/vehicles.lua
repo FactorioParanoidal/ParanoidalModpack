@@ -31,7 +31,6 @@
     "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
     "description": "Snaps movement angle when driving cars or tanks.",
 --]]
-
 local Event = require('__stdlib__/stdlib/event/event')
 local Player = require('__stdlib__/stdlib/event/player')
 local interface = require('__stdlib__/stdlib/scripts/interface')
@@ -111,10 +110,11 @@ local function goto_next_station(event)
             else
                 schedule.current = 1
             end
+            local station_name = schedule.records[schedule.current].station
             train.schedule = schedule
             train.manual_mode = false
             player.create_local_flying_text {
-                text = 'Next station',
+                text = {'vehicles.next-station', station_name},
                 position = vehicle and vehicle.position or selected and selected.position,
                 color = defines.color.green
             }
@@ -133,9 +133,6 @@ local function toggle_train_control(event)
     if train and not (selected and selected.type == 'train-stop') then
         train.manual_mode = not train.manual_mode
         local text = train.manual_mode and {'vehicles.manual-mode'} or {'vehicles.automatic-mode'}
-        if not train.manual_mode then
-            goto_next_station(event)
-        end
         player.create_local_flying_text {
             text = text,
             position = vehicle and vehicle.position or selected and selected.position,
@@ -343,23 +340,24 @@ end
 	"author": "Roy Scheerens",
 	"description": "When in a train, using the movement controls will automatically set the train in manual mode.",
 --]]
-if settings.startup['picker-manual-train-keys'].value then
-    local function set_to_manual(event)
-        local player = game.get_player(event.player_index)
-        local vehicle = player.vehicle
+local function set_to_manual(event)
+    local player = game.get_player(event.player_index)
+    local vehicle = player.vehicle
 
-        if vehicle then
-            local train = vehicle.train
-            if train and not train.manual_mode and player.render_mode == defines.render_mode.game then
-                train.manual_mode = true
-                player.create_local_flying_text {
-                    text = {'vehicles.manual-mode'},
-                    position = vehicle.position,
-                    color = defines.color.green
-                }
+    if vehicle then
+        local train = vehicle.train
+        if train and not train.manual_mode and player.render_mode == defines.render_mode.game then
+            if not player.mod_settings['picker-manual-train-keys'].value then
+                return
             end
+            train.manual_mode = true
+            player.create_local_flying_text {
+                text = {'vehicles.manual-mode'},
+                position = vehicle.position,
+                color = defines.color.green
+            }
         end
     end
-    local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
-    Event.register(keys, set_to_manual)
 end
+local keys = {'picker-up-event', 'picker-down-event', 'picker-left-event', 'picker-right-event'}
+Event.register(keys, set_to_manual)
