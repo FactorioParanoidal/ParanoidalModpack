@@ -163,8 +163,8 @@ local function player_upgrade(player, old_entity, upgrade, upgrade_neighbours)
                                                    new_entity_prototype)
     local insert_item = false
 
-    script.raise_event(defines.events.on_pre_player_mined_item,
-                       {player_index = player.index, entity = old_entity})
+    --script.raise_event(defines.events.on_pre_player_mined_item,
+    --                   {player_index = player.index, entity = old_entity})
     new_entity_data.fast_replace = true
     new_entity_data.create_build_effect_smoke = false
 
@@ -290,15 +290,15 @@ local function player_upgrade(player, old_entity, upgrade, upgrade_neighbours)
 
     -- Raise appropriate events
     player.remove_item{name = upgrade.item_to, count = amount}
-    script.raise_event(defines.events.on_player_mined_item, {
-      player_index = player.index,
-      item_stack = {name = upgrade.item_from, count = 1},
-    })
-    script.raise_event(defines.events.on_built_entity, {
-      player_index = player.index,
-      created_entity = new_entity,
-      stack = player.cursor_stack,
-    })
+    --script.raise_event(defines.events.on_player_mined_item, {
+    --  player_index = player.index,
+    --  item_stack = {name = upgrade.item_from, count = 1},
+    --})
+    --script.raise_event(defines.events.on_built_entity, {
+    --  player_index = player.index,
+    --  created_entity = new_entity,
+    --  stack = player.cursor_stack,
+    --})
   else
     global.temporary_ignore[old_entity.name] = true
     surface.create_entity{

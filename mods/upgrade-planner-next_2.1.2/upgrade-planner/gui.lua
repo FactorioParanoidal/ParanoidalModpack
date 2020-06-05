@@ -153,7 +153,7 @@ local function open_frame(player)
     sprite = "utility/confirm_slot",
     tooltip = {"upgrade-planner.confirm-storage-name"},
   }
-  confirm_button.style = "green_slot_button"
+  confirm_button.style = "slot_button"
   confirm_button.style.maximal_width = 24
   confirm_button.style.minimal_width = 24
   confirm_button.style.maximal_height = 24
