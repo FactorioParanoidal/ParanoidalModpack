@@ -4,6 +4,9 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
+
+local get_energy_value = require("__flib__.data_util").get_energy_value
+
 -- Barrel stack and capacity
 -- filled barrels are auto generated from fluids in base\data-updates.lua
 local barrel_stack_size = settings.startup["ReStack-barrel-stack"].value
