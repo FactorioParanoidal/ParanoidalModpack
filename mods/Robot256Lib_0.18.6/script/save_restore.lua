@@ -54,6 +54,7 @@ local function itemsToStacks(items)
     for name, count in pairs(items) do
       table.insert(stacks, {name=name, count=count})
     end
+    if #stacks == 0 then stacks = nil end
     return stacks
   end
 end
@@ -290,7 +291,7 @@ end
 
 local function saveGrid(grid)
   if grid and grid.valid then
-    gridContents = {}
+    local gridContents = {}
     for _,v in pairs(grid.equipment) do
       local item = {name=v.name,position=v.position}
       local burner = saveBurner(v.burner)
@@ -320,6 +321,9 @@ local function restoreGrid(grid, savedGrid, player_index)
     -- Insert as much as possible into this grid, return items not inserted as remainder stacks
     for _,v in pairs(savedGrid) do
       if game.equipment_prototypes[v.item.name] then
+        if player_index then
+          v.item.player_index = game.players[player_index]
+        end
         local e = grid.put(v.item)
         if e then
           if v.energy then
@@ -331,9 +335,6 @@ local function restoreGrid(grid, savedGrid, player_index)
           if v.burner then
             local r1 = restoreBurner(e.burner,v.burner)
             r_stacks = mergeStackLists(r_stacks, r1)
-          end
-          if player_index then
-            script.raise_event(defines.events.on_player_placed_equipment, {player_index = player_index, equipment = e, grid = grid})
           end
         else
           r_stacks = mergeStackLists(r_stacks, {{name=v.item.name, count=1}})
@@ -349,7 +350,7 @@ local function restoreGrid(grid, savedGrid, player_index)
     end
   elseif savedGrid then
     -- If grid is invalid but we have saved items, return the whole grid as a remainder
-    local e,f = saveGridStacks(savedGrid)
+    local e,f = __saveGridStacks__(savedGrid)
     r_stacks = mergeStackLists(r_stacks, e)
     r_stacks = mergeStackLists(r_stacks, f)
     return r_stacks

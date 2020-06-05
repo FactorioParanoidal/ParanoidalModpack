@@ -37,6 +37,11 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
   local health = carriage.health
   local player_driving = carriage.get_driver()
   local last_user = carriage.last_user
+  local minable = carriage.minable
+  local destructible = carriage.destructible
+  local operable = carriage.operable
+  local rotatable = carriage.rotatable
+  local enable_logistics_while_moving = carriage.enable_logistics_while_moving
   
   -- Save deconstruction request by any force
   local deconstruction_request = nil
@@ -49,7 +54,8 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
   
   -- Flip orientation if needed
   if flip then
-    _,orientation = math.modf(orientation + 0.5)
+    local foo
+    foo,orientation = math.modf(orientation + 0.5)
   end
 
   -- Save equipment grid contents
@@ -142,6 +148,12 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
     if backer_name then newCarriage.backer_name = backer_name end
     if last_user then newCarriage.last_user = last_user end
     if kills then newCarriage.kills = kills end
+    newCarriage.minable = minable
+    newCarriage.destructible = destructible
+    newCarriage.operable = operable
+    newCarriage.rotatable = rotatable
+    newCarriage.enable_logistics_while_moving = enable_logistics_while_moving
+    
     
     -- Restore the partially-used burner fuel
     if saved_burner then
@@ -151,7 +163,7 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
 
     -- Restore the ammo inventory
     if ammo_inventory or ammo_filters then
-      newAmmoInventory = newCarriage.get_inventory(defines.inventory.artillery_wagon_ammo)
+      local newAmmoInventory = newCarriage.get_inventory(defines.inventory.artillery_wagon_ammo)
       if newAmmoInventory and newAmmoInventory.valid then
         saveRestoreLib.restoreFilters(newAmmoInventory, ammo_filters)
         local remainders = saveRestoreLib.insertInventoryStacks(newAmmoInventory, ammo_inventory)
@@ -161,7 +173,7 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
 
     -- Restore the cargo inventory
     if cargo_inventory or cargo_filters then
-      newCargoInventory = newCarriage.get_inventory(defines.inventory.cargo_wagon)
+      local newCargoInventory = newCarriage.get_inventory(defines.inventory.cargo_wagon)
       if newCargoInventory and newCargoInventory.valid then
         saveRestoreLib.restoreFilters(newCargoInventory, cargo_filters)
         local remainders = saveRestoreLib.insertInventoryStacks(newCargoInventory, cargo_inventory)
@@ -192,7 +204,7 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
 
     -- Restore item_request_proxy by creating a new one
     if item_requests then
-      newProxy = surface.create_entity{name="item-request-proxy", position=position, force=force, target=newCarriage, modules=item_requests}
+      surface.create_entity{name="item-request-proxy", position=position, force=force, target=newCarriage, modules=item_requests}
     end
 
     -- After all that, fire an event so other scripts can reconnect to it
