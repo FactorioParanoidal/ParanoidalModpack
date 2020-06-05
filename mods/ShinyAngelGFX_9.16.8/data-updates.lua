@@ -3802,18 +3802,13 @@ if data.raw["assembling-machine"]["strand-casting-machine-4"] then
 end
 
 
- 
-if data.raw["assembling-machine"]["oil-refinery-2"] then 
-	iconset("oil-refinery","-2","-2")
-end
-
-if data.raw["assembling-machine"]["oil-refinery-3"] then 
-	iconset("oil-refinery","-3","-3")
-end
-
+ --[[
 if data.raw["assembling-machine"]["oil-refinery-4"] then 
+	iconset("oil-refinery","-2","-2")
+	iconset("oil-refinery","-3","-3")
 	iconset("oil-refinery","-4","-4")
 end
+]]--
 
 if data.raw["assembling-machine"]["chemical-plant-2"] then 
 	iconset("chemical-plant","-2","-2")

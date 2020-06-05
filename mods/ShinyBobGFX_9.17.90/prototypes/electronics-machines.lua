@@ -1,9 +1,9 @@
 if settings.startup["replace-assemblycolors"].value == false then
 if powerbar == 1 then
 if data.raw["assembling-machine"]["assembling-machine-6"] then
-bobiconNA("electronics-machine","assembling-machine",1,1,0)
-bobiconNA("electronics-machine","assembling-machine",2,2,-1)
-bobiconNA("electronics-machine","assembling-machine",3,3,-2)
+--bobiconNA("electronics-machine","assembling-machine",1,1,0)
+--bobiconNA("electronics-machine","assembling-machine",2,2,-1)
+--bobiconNA("electronics-machine","assembling-machine",3,3,-2)
 end
 end
 end
@@ -11,9 +11,9 @@ end
 
 if settings.startup["replace-assemblycolors"].value == true then
     if data.raw["assembling-machine"]["electronics-machine-1"] then
-		bobicon("electronics-machine","assembling-machine",1,1,0)
-		bobicon("electronics-machine","assembling-machine",2,2,-1)
-		bobicon("electronics-machine","assembling-machine",3,3,-2)
+		--bobicon("electronics-machine","assembling-machine",1,1,0)
+		--bobicon("electronics-machine","assembling-machine",2,2,-1)
+		--bobicon("electronics-machine","assembling-machine",3,3,-2)
         data.raw["assembling-machine"]["electronics-machine-1"]["animation"] = {
             layers =
             {

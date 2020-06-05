@@ -1,5 +1,5 @@
 if data.raw["boiler"]["boiler-2"] then
-	bobicon("boiler","boiler",1,5,0)
+	--bobicon("boiler","boiler",1,5,0)
 	
 data.raw["boiler"]["boiler"]["structure"] = {
       north =
