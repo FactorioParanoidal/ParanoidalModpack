@@ -4,8 +4,6 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local get_energy_value = require("__OpteraLib__.data.utilities").get_energy_value
-
 ReStack_Items = {}    -- list of item names to apply new stack size
 Launch_Products = {}  -- launch products should be skipped
 
