@@ -1,4 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.6
+Date: 2020-05-29
+  Bugfixes:
+    - Update for Factorio 0.18.27.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.5
+Date: 2020-05-28
+  Bugfixes:
+    - Empty or invalid inventories return nil instead of empty arrays.
+    - Preserve flags on carriage replacement: minable, destructible, operable, rotatable, enable_logistics_while_moving.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+Date: 2020-05-26
+  Bugfixes:
+    - Should be the last accidental global reference.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+Date: 2020-05-23
+  Bugfixes:
+    - Fixed even more accidental global references.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2020-05-23
+  Bugfixes:
+    - Fixed some accidental global references and dangling variables.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2020-01-23
   Changes:
