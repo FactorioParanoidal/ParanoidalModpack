@@ -122,7 +122,7 @@ data:extend{
 
 local univ = util.table.deepcopy(data.raw["inserter"]["railloader-inserter"])
 univ.name = "railloader-universal-inserter"
-univ.filter_count = 0
+univ.filter_count = nil
 data:extend{univ}
 
 local interface_inserter = util.table.deepcopy(univ)

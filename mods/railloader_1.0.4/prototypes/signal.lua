@@ -8,9 +8,9 @@ data:extend{
         icon_size = 32,
       },
       {
-        icon = "__core__/graphics/clear.png",
-        icon_size = 128,
-        scale = 0.25,
+        icon = "__core__/graphics/no-recipe.png",
+        icon_size = 101,
+        scale = 0.3,
       },
     },
     order = "railloader-enable",

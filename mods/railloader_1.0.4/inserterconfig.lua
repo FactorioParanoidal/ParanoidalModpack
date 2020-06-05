@@ -34,7 +34,7 @@ local function inserter_configuration_changes(inserter, items)
     item_set[v] = true
   end
 
-  for i=1,5 do
+  for i=1,inserter.prototype.filter_count do
     local filter = inserter.get_filter(i)
     if filter then
       if not item_set[filter] then
@@ -65,7 +65,7 @@ local function configure_loader_from_inventory(loader, inventory)
   end
 
   for _, inserter in ipairs(inserters) do
-    for i=1,5 do
+    for i=1,inserter.prototype.filter_count do
       inserter.set_filter(i, items[i])
     end
   end
