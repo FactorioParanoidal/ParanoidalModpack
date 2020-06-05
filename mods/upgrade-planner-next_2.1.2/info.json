@@ -1,10 +1,13 @@
 {
   "name": "upgrade-planner-next",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "title": "Upgrade Builder and Planner",
   "author": "Roang",
   "description": "Automatically upgrade buildings by hand or with construction robots.",
   "homepage": "https://github.com/Roang-zero1/upgrade-planner-next",
-  "dependencies": ["base >= 0.18", "stdlib >= 1.0.7"],
+  "dependencies": [
+    "base >= 0.18",
+    "stdlib >= 1.0.7"
+  ],
   "factorio_version": "0.18"
 }

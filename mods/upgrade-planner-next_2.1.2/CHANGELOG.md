@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.2 (2020-06-01)
+
+- Remove untriggerable event
+- Fix button reference
+
+---
+
 ## 2.1.1 (2020-02-27)
 
 ### Bugfixes
