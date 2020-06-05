@@ -49,7 +49,7 @@ data:extend({
           height = 320,
           frame_count = 1,
           line_length = 1,
-		  scale = 6,
+		  scale = 2,
           animation_speed = 0.01,
           shift = util.by_pixel(0, 1.5),
         }
@@ -74,7 +74,7 @@ data:extend({
 		  sound =
 		  {
 			filename = "__base__/sound/lab.ogg",
-			volume = 0.7
+			volume = 2 --0.7
 		  },
 		  apparent_volume = 1
 		},
