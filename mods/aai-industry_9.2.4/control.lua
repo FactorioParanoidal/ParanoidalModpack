@@ -23,7 +23,7 @@ local function reverse_direction (direction)
   end
   return defines.direction.north
 end
-
+--[[
 local function offshore_pump_setup(entity)
   local direction = entity.direction
   local position = entity.position
@@ -45,6 +45,7 @@ local function offshore_pump_setup(entity)
     force=entity.force
   }
 end
+]]--
 local function burner_turbine_setup (entity)
 
   global.burner_turbines = global.burner_turbines or  {}
@@ -77,9 +78,12 @@ end
 local function on_entity_created(event)
   local entity = event.created_entity or event.entity
   if entity and entity.valid then
-    if entity.name == "offshore-pump" then
+    --[[
+	if entity.name == "offshore-pump" then
       offshore_pump_setup(entity)
-    elseif entity.name == "burner-turbine" then
+    else
+	]]--
+	if entity.name == "burner-turbine" then
       burner_turbine_setup(entity)
     end
   end
@@ -101,11 +105,14 @@ end
 local function on_entity_removed(event)
   if event.entity and event.entity.valid then
     local entity = event.entity
+	--[[
     if entity.name == "offshore-pump-output" then
       remove_entities(entity.surface, {"offshore-pump"}, entity.position, 0.5)
     elseif entity.name == "offshore-pump" then
       remove_entities(entity.surface, {"offshore-pump-output"}, entity.position, 0.5)
-    elseif entity.name == "burner-turbine" then
+    else
+	]]--
+	if entity.name == "burner-turbine" then
       remove_entities(entity.surface, {"burner-turbine-generator"}, entity.position, 2)
     end
   end
@@ -114,6 +121,7 @@ end
 local function on_player_rotated_entity(event)
   if event.entity and event.entity.valid then
     local entity = event.entity
+	--[[
     if entity.name == "offshore-pump-output" then
       local pumps = entity.surface.find_entities_filtered{
         area= {{entity.position.x -0.5, entity.position.y -0.5},{entity.position.x +0.5, entity.position.y +0.5}},
@@ -124,7 +132,9 @@ local function on_player_rotated_entity(event)
         local pump = pumps[1]
         entity.direction = pump.direction
       end
-    elseif entity.name == "burner-turbine" then
+    else
+	]]--
+	if entity.name == "burner-turbine" then
         entity.direction = defines.direction.north
     end
   end
