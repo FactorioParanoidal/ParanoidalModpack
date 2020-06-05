@@ -1,6 +1,6 @@
 if data.raw["generator"]["steam-engine-2"] then
-	bobicon("steam-engine","generator",1,5,0)
-	bobicon("steam-turbine","generator",1,3,0)
+	--bobicon("steam-engine","generator",1,5,0)
+	--bobicon("steam-turbine","generator",1,3,0)
     data.raw["generator"]["steam-engine-2"]["horizontal_animation"] = {
         layers = {{
                 filename = "__base__/graphics/entity/steam-engine/steam-engine-H.png",

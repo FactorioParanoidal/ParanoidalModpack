@@ -1,14 +1,14 @@
 if settings.startup["replace-assemblycolors"].value == false then
 if powerbar == 1 then
 if data.raw["assembling-machine"]["assembling-machine-6"] then
-bobiconNA("assembling-machine","assembling-machine",1,6,1)
+--bobiconNA("assembling-machine","assembling-machine",1,6,1)
 end
 end
 end
 
 if settings.startup["replace-assemblycolors"].value == true then
     if data.raw["assembling-machine"]["assembling-machine-6"] then
-	bobicon("assembling-machine","assembling-machine",1,6,1)
+	--bobicon("assembling-machine","assembling-machine",1,6,1)
 	end	
 	if data.raw["assembling-machine"]["assembling-machine-2"] then
        data.raw["assembling-machine"]["assembling-machine-2"]["animation"] = {

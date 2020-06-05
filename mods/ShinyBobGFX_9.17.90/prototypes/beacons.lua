@@ -8,7 +8,7 @@ if data.raw["beacon"]["beacon"] then
 end
 
 if data.raw["beacon"]["beacon-2"] then
-	bobicon("beacon","beacon",1,3,0)
+	--bobicon("beacon","beacon",1,3,0)
     data.raw["beacon"]["beacon"].fast_replaceable_group = "bacon"
     data.raw["beacon"]["beacon-2"].fast_replaceable_group = "bacon"
     data.raw["beacon"]["beacon-2"]["base_picture"] = {

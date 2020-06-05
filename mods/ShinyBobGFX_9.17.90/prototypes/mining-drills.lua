@@ -1,7 +1,7 @@
 if data.raw["mining-drill"]["bob-mining-drill-1"] then
-bobicon("electric-mining-drill","mining-drill",1,1,1)
-bobicon("bob-mining-drill","mining-drill",1,4,0)
-bobicon("bob-area-mining-drill","mining-drill",1,4,0)
+--bobicon("electric-mining-drill","mining-drill",1,1,1)
+--bobicon("bob-mining-drill","mining-drill",1,4,0)
+--bobicon("bob-area-mining-drill","mining-drill",1,4,0)
 end
 
 

@@ -1,5 +1,5 @@
 if data.raw["boiler"]["heat-exchanger-2"] then
-bobicon("heat-exchanger","boiler",1,3,0)
+--bobicon("heat-exchanger","boiler",1,3,0)
 end
 
 for mk = 2,3 do

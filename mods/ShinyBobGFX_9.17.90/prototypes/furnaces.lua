@@ -1,4 +1,4 @@
-bobicon("electric-furnace","assembling-machine",1,3,0)
+--bobicon("electric-furnace","assembling-machine",1,3,0)
 
 if data.raw["furnace"]["electric-furnace-2"] then
 	data.raw["furnace"]["electric-furnace"]["animation"]["layers"] = {
@@ -177,7 +177,7 @@ end
 
 if settings.startup["new-furnaces"].value == true then
 if data.raw["assembling-machine"]["chemical-furnace"] then
-bobicon("chemical-furnace","assembling-machine",1,1,0)
+--bobicon("chemical-furnace","assembling-machine",1,1,0)
 	data.raw["assembling-machine"]["chemical-furnace"]["animation"]["layers"] = {
       {
         filename = "__ShinyBobGFX__/graphics/entity/electric-furnace/electric-chem.png",
@@ -238,7 +238,7 @@ bobicon("chemical-furnace","assembling-machine",1,1,0)
 end
 
 if data.raw["assembling-machine"]["electric-mixing-furnace"] then
-bobicon("electric-mixing-furnace","assembling-machine",1,1,0)
+--bobicon("electric-mixing-furnace","assembling-machine",1,1,0)
 	data.raw["assembling-machine"]["electric-mixing-furnace"]["animation"]["layers"] = {
       {
         filename = "__ShinyBobGFX__/graphics/entity/electric-furnace/electric-mix.png",
@@ -299,7 +299,7 @@ bobicon("electric-mixing-furnace","assembling-machine",1,1,0)
 end
 
 if data.raw["assembling-machine"]["electric-chemical-mixing-furnace"] then
-bobicon("electric-chemical-mixing-furnace","assembling-machine",1,2,-1)	
+--bobicon("electric-chemical-mixing-furnace","assembling-machine",1,2,-1)	
 	data.raw["assembling-machine"]["electric-chemical-mixing-furnace"]["animation"]["layers"] = {
       {
         filename = "__ShinyBobGFX__/graphics/entity/electric-furnace/electric-multi-1.png",
