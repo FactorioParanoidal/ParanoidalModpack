@@ -5,14 +5,15 @@ local possible_ingredients = {
   {
     {"rail", 3},
     {"mechanism-1", 2},
-    {"forging-steel", 20},
+    {"concrete", 20},
     {"electronic-circuit", 2},
   },
   -- base
   {
-    {"rail", 3},
+    --{"rail", 3}, --DrD
+	{"steel-chest", 4}, --DrD
     {"iron-gear-wheel", 8},
-    {"iron-plate", 40},
+    {"iron-plate", 100}, --DrD
     {"electronic-circuit", 2},
   },
 }
@@ -20,10 +21,10 @@ local possible_ingredients = {
 data:extend{
   {
     type = "recipe",
-    name = "railloader",
+    name = "railunloader",
     enabled = false,
     energy_required = 1,
     ingredients = Recipe.select_ingredients(possible_ingredients),
-    result = "railloader",
+    result = "railunloader",
   },
 }

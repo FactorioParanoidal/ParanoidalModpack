@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2020-05-29
+  Bugfixes:
+    - Fix crash when Krastorio 2 is installed. (https://mods.factorio.com/mod/railloader/discussion/5ed15251c11b79000d48ffbd)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-05-29
+  Bugfixes:
+    - Fix BRLs not working if Krastorio 2 is installed and allowed items is set to 'any'.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-05-26
+  Bugfixes:
+    - Fix crash on startup in Factorio 0.18.27.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2020-05-15
   Minor Features:
