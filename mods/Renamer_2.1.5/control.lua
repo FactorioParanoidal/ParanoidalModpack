@@ -108,7 +108,7 @@ function SpawnGUI(player)
   filler.style.right_margin = 7
   filler.style.left_margin = 7
   filler.drag_target = frame
-  title.add{type = "sprite-button", name = "renamer_cancel", sprite = "utility/close_white", style = "close_button"}
+  title.add{type = "sprite-button", name = "renamer_cancel", sprite = "utility/close_white", style = "frame_action_button"}
   local content = frame.add{type = "flow", name = "renamer_content_flow"}
   content.style.vertical_align = "center"
   local shuffle = content.add{type = "sprite-button", name = "renamer_random", sprite = "utility/shuffle", style = "tool_button", tooltip = {"renamer-gui-tooltips.random"}}
