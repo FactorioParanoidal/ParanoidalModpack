@@ -90,3 +90,91 @@ data:extend(
   },
 }
 )
+
+if data.raw.item["small-alien-artifact"] then
+
+    table.insert(data.raw.unit["small-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } ) --DrD all enemy count_min
+	table.insert(data.raw.unit["small-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	table.insert(data.raw.unit["medium-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+	table.insert(data.raw.unit["medium-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+	table.insert(data.raw.unit["big-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 4,  probability = 0.01 } )
+	table.insert(data.raw.unit["big-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 4,  probability = 0.01 } )
+
+    table.insert(data.raw.unit["behemoth-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 12,  probability = 0.01 } )
+	table.insert(data.raw.unit["behemoth-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 12,  probability = 0.01 } )
+	
+	table.insert(data.raw.unit["bob-big-piercing-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+    table.insert(data.raw.unit["bob-big-piercing-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	
+	table.insert(data.raw.unit["bob-big-electric-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+    table.insert(data.raw.unit["bob-big-electric-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	
+      table.insert(data.raw.unit["bob-huge-acid-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-acid-biter"].loot, {  item = "small-alien-artifact-purple",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-acid-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-huge-explosive-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-explosive-biter"].loot, {  item = "small-alien-artifact-yellow",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-explosive-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-huge-explosive-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-explosive-spitter"].loot, {  item = "small-alien-artifact-yellow",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-explosive-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-huge-acid-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-acid-spitter"].loot, {  item = "small-alien-artifact-purple",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-huge-acid-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 1,  probability = 0.01 } )
+
+      table.insert(data.raw.unit["bob-giant-poison-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-biter"].loot, {  item = "small-alien-artifact-green",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 2,  probability = 0.01 } )
+
+      table.insert(data.raw.unit["bob-giant-fire-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-fire-biter"].loot, {  item = "small-alien-artifact-red",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-fire-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 2,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-giant-fire-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-fire-spitter"].loot, {  item = "small-alien-artifact-red",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-fire-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 2,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact-green",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 2,  probability = 0.01 } )
+	  
+	  table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact-green",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-giant-poison-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 2,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-titan-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-titan-spitter"].loot, {  item = "small-alien-artifact-yellow",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-titan-spitter"].loot, {  item = "small-alien-artifact-red",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-titan-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+
+      table.insert(data.raw.unit["bob-behemoth-biter"].loot, {  item = "small-alien-artifact-blue",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-biter"].loot, {  item = "small-alien-artifact-purple",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-biter"].loot, {  item = "small-alien-artifact-green",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-biter"].loot, {  item = "small-alien-artifact-red",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-biter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+	  
+      table.insert(data.raw.unit["bob-behemoth-spitter"].loot, {  item = "small-alien-artifact-orange",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-spitter"].loot, {  item = "small-alien-artifact-yellow",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-spitter"].loot, {  item = "small-alien-artifact-green",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-spitter"].loot, {  item = "small-alien-artifact-red",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+      table.insert(data.raw.unit["bob-behemoth-spitter"].loot, {  item = "small-alien-artifact",  count_min = 0,  count_max = 3,  probability = 0.01 } )
+	  
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-blue",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-orange",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-purple",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-yellow",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-green",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact-red",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-biter"].loot, {  item = "alien-artifact",  count_min = 1,  count_max = 1,  probability = 0.5 } )
+	
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-blue",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-orange",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-purple",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-yellow",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-green",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact-red",  count_min = 1,  count_max = 2,  probability = 0.5 } )
+    table.insert(data.raw.unit["bob-leviathan-spitter"].loot, {  item = "alien-artifact",  count_min = 1,  count_max = 1,  probability = 0.5 } )
+  end
