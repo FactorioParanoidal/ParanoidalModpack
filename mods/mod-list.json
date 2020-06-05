@@ -299,6 +299,11 @@
     },
     
     {
+      "name": "flib",
+      "enabled": true
+    },
+    
+    {
       "name": "Flow Control",
       "enabled": true
     },
@@ -545,6 +550,11 @@
     
     {
       "name": "platforms",
+      "enabled": true
+    },
+    
+    {
+      "name": "Pollution_Control",
       "enabled": true
     },
     
