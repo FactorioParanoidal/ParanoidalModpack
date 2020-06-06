@@ -913,7 +913,8 @@ ltnc_gui.build = function(parent)
   container.style.horizontally_stretchable = true
   container.style.left_margin = 10
   
-  element = container.add {type="label", caption={"ltnc.ltnc-output"}, style="large_caption_label"}
+  --element = container.add {type="label", caption={"ltnc.ltnc-output"}, style="large_caption_label"}
+  element = container.add {type="label", caption={"ltnc.ltnc-output"}}
   element.style.horizontally_stretchable = true
   checkbuttons[RADIO_ON]  = container.add {type = "radiobutton", name = _prefix .. "radioOn",  caption = {"ltnc.ltnc-on"}, state = true}
   checkbuttons[RADIO_ON].style.horizontally_stretchable = false
