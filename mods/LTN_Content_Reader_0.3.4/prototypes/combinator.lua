@@ -4,13 +4,15 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local provider_reader_entity = optera_lib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-provider-reader")
+local flib = require('__flib__.data_util')
+
+local provider_reader_entity = flib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-provider-reader")
 provider_reader_entity.item_slot_count = 50 -- will be overwritten in final-fixes
 provider_reader_entity.icon = "__LTN_Content_Reader__/graphics/icons/ltn-provider-reader.png"
 provider_reader_entity.icon_size = 32
 provider_reader_entity.icon_mipmaps = nil
 
-local provider_reader_item = optera_lib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-provider-reader")
+local provider_reader_item = flib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-provider-reader")
 provider_reader_item.icon = "__LTN_Content_Reader__/graphics/icons/ltn-provider-reader.png"
 provider_reader_item.icon_size = 32
 provider_reader_item.icon_mipmaps = nil
@@ -18,10 +20,10 @@ provider_reader_item.subgroup = "circuit-network-2"
 provider_reader_item.order = "ltnr-a"
 -- provider_reader_item.order = provider_reader_item.order.."b" -- sort after constant_combinator
 
-local provider_reader_recipe = optera_lib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-provider-reader")
+local provider_reader_recipe = flib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-provider-reader")
 
 
-local requester_reader_entity = optera_lib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-requester-reader")
+local requester_reader_entity = flib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-requester-reader")
 requester_reader_entity.item_slot_count = 50 -- will be overwritten in final-fixes
 requester_reader_entity.icon = "__LTN_Content_Reader__/graphics/icons/ltn-requester-reader.png"
 requester_reader_entity.icon_size = 32
@@ -67,7 +69,7 @@ requester_reader_entity.sprites = make_4way_animation_from_spritesheet(
   })
 
 
-local requester_reader_item = optera_lib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-requester-reader")
+local requester_reader_item = flib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-requester-reader")
 requester_reader_item.icon = "__LTN_Content_Reader__/graphics/icons/ltn-requester-reader.png"
 requester_reader_item.icon_size = 32
 requester_reader_item.icon_mipmaps = nil
@@ -75,10 +77,10 @@ requester_reader_item.subgroup = "circuit-network-2"
 requester_reader_item.order = "ltnr-b"
 -- requester_reader_item.order = requester_reader_item.order.."c" -- sort after constant_combinator
 
-local requester_reader_recipe = optera_lib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-requester-reader")
+local requester_reader_recipe = flib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-requester-reader")
 
 
-local delivery_reader_entity = optera_lib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-delivery-reader")
+local delivery_reader_entity = flib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-delivery-reader")
 delivery_reader_entity.item_slot_count = 50 -- will be overwritten in final-fixes
 delivery_reader_entity.icon = "__LTN_Content_Reader__/graphics/icons/ltn-delivery-reader.png"
 delivery_reader_entity.icon_size = 32
@@ -123,7 +125,7 @@ delivery_reader_entity.sprites = make_4way_animation_from_spritesheet(
     },
   })
 
-local delivery_reader_item = optera_lib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-delivery-reader")
+local delivery_reader_item = flib.copy_prototype(data.raw["item"]["constant-combinator"], "ltn-delivery-reader")
 delivery_reader_item.icon = "__LTN_Content_Reader__/graphics/icons/ltn-delivery-reader.png"
 delivery_reader_item.icon_size = 32
 delivery_reader_item.icon_mipmaps = nil
@@ -131,7 +133,7 @@ delivery_reader_item.subgroup = "circuit-network-2"
 delivery_reader_item.order = "ltnr-c"
 -- delivery_reader_item.order = requester_reader_item.order.."d" -- sort after constant_combinator
 
-local delivery_reader_recipe = optera_lib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-delivery-reader")
+local delivery_reader_recipe = flib.copy_prototype(data.raw["recipe"]["constant-combinator"], "ltn-delivery-reader")
 
 data:extend({
   {
