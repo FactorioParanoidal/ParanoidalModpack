@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.6
+Date: 23. 05. 2020
+  Changes:
+    - Moved Fluid burning boilers and Heat exchangers into their own subgroups (They get their own lines in the crafting menu)
+  Features:
+    - Added recipes to convert between Fluid burning boiler <-> Boiler <-> Heat Exchanger of all tiers.
+  Bugfixes:
+    - Fixed icon mipmap log error messages
+---------------------------------------------------------------------------------------------------
 Version: 0.18.5
 Date: 08. 04. 2020
   Changes:
