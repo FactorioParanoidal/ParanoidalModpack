@@ -18,6 +18,10 @@ data.raw.technology["fluid-handling"].prerequisites = {"basic-fluid-handling", "
 
 data.raw.technology["oil-processing"].prerequisites = {"automation", "fluid-handling"}
 
+data.raw.technology["thermal-water-extraction"].ingredients = --drd
+		{ {"automation-science-pack", 1},
+          {"logistic-science-pack", 1}
+		}
 
 -- effects are added in technology-update
 data:extend{
