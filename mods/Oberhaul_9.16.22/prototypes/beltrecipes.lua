@@ -183,4 +183,8 @@ data.raw.recipe["bob-small-storage-tank"].ingredients ={
       {"iron-plate", 40}, -- DrD 3
       {"pipe", 4}, -- DrD 1
     }
-	
+
+if mods["SchallTankPlatoon"] then
+data.raw.technology["bob-tanks-2"].hidden = true
+data.raw.technology["bob-tanks-3"].hidden = true
+end
