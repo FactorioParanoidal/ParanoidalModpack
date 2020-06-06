@@ -45,6 +45,13 @@ local function save_stack(player, pdata, stack)
     pdata.stored_bp.set_stack(stack)
 end
 
+local rolling_stock = {
+    ['locomotive'] = true,
+    ['cargo-wagon'] = true,
+    ['fluid-wagon'] = true,
+    ['artillery-wagon'] = true
+}
+
 -- Capabilities related to updating blueprints.
 function Updater.clone(event)
     local player, pdata = Player.get(event.player_index)
@@ -56,6 +63,16 @@ function Updater.clone(event)
             icons = bp.blueprint_icons,
             status = nil
         }
+
+        for _, ent in pairs(bp.get_blueprint_entities()) do
+            if rolling_stock[game.entity_prototypes[ent.name].type] then
+                updater.trains = true
+                updater.fuel = ent.items and true or false
+            elseif ent.station and ent.station ~= "" then
+                updater.stations = true
+            end
+        end
+
         -- Create replacer tool, drop orignal back into inventory
         if player.clean_cursor() then
             pdata.updater = updater
@@ -82,6 +99,8 @@ function Updater.on_selected_area(event)
                 surface = player.surface,
                 force = player.force,
                 always_include_tiles = true,
+                include_station_names=pdata.updater.stations,
+                include_trains=pdata.updater.trains,
                 area = area
             }
 
