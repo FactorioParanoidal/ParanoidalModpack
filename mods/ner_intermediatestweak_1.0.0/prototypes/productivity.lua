@@ -40,6 +40,9 @@ nit_vanillaproductivity = {
 	"nitinol-gear-wheel",
 
 
+    "molten-copper-tungsten-smelting-1",
+    "angels-plate-tungsten-carbide",
+
   "simple-io",
   "standart-io",
   "advanced-io",
