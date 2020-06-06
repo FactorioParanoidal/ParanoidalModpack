@@ -50,14 +50,14 @@ end
 
 local function swap_in_place(grid, equipment, disable)
     local name = disable and ('picker-disabled-' .. equipment.name) or equipment.name:gsub('^picker%-disabled%-', '')
-    local new = {name = name, position = equipment.position}
-    local energy = equipment.energy
-    grid.take(equipment)
-    local new_eq = grid.put(new)
-    if new_eq then
-        new_eq.energy = energy
+    local new = {name = name, position = equipment.position, energy = equipment.energy}
+    if grid.take {equipment = equipment} then
+        local new_eq = grid.put(new)
+        if new_eq then
+            new_eq.energy = new.energy
+        end
+        return new_eq
     end
-    return new_eq
 end
 
 -- Toggle all armor modules when toggling the shortcut/keybind
