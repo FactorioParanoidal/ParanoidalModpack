@@ -3,7 +3,7 @@ data:extend(
 	{
 		type = "fluid",
 		name = "liquid-boric-acid",
-		icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 512 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png",
+		icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 128 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png", --Drd to 128
 		--icon_size = 32,
 		default_temperature = 25,
 		heat_capacity = "0.1KJ",

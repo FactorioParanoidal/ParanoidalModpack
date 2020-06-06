@@ -8,8 +8,8 @@ data:extend(
     enabled = false,
     category = "centrifuging",
     ingredients = {{"solid-uranium-hexafluoride", 8}},--20% less ingredients than vanilla
-    icon = "__Clowns-Processing__/graphics/icons/advanced-uranium-processing.png",
-    icon_size = 32,
+	icons = {{icon = "__Clowns-Processing__/graphics/icons/advanced-uranium-processing.png", icon_size = 32,}},
+	icon_size=32,
     subgroup = "raw-material",
     order = "k-a",
     results =

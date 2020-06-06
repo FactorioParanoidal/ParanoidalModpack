@@ -34,7 +34,7 @@ data:extend(
 	{
 		type = "fluid",
 		name = "liquid-phosphoric-acid",
-		icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 512 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png",
+		icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 128 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png", --drd to 128
 		--icon_size = 32,
 		default_temperature = 25,
 		heat_capacity = "0.1KJ",

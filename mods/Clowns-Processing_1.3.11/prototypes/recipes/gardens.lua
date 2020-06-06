@@ -131,13 +131,13 @@ data:extend(
 		},
 		icon = "__angelsbioprocessing__/graphics/icons/temperate-garden.png",
 		icon_size = 32,
-		order = "mc1",
+		order = "mc",
     },
 	{
 		type = "recipe",
 		name = "desert-garden-mutation",
 		category = "seed-extractor",
-		subgroup = "farming-gardens", --DrD "bio-processor-swamp",
+		subgroup = "farming-swamp-seed",
 		enabled = false,
 		energy_required = 600,
 		ingredients =
@@ -152,7 +152,7 @@ data:extend(
 		},
 		icon = "__angelsbioprocessing__/graphics/icons/desert-garden.png",
 		icon_size = 32,
-		order = "mc2",
+		order = "mc",
     },
 	{
 		type = "recipe",
@@ -173,7 +173,7 @@ data:extend(
 		},
 		icon = "__angelsbioprocessing__/graphics/icons/swamp-garden.png",
 		icon_size = 32,
-		order = "mc3",
+		order = "mc",
 	},
 	{
 		type = "recipe",

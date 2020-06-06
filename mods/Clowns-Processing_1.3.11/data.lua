@@ -1,9 +1,8 @@
 require("prototypes.categories")
 
 require("prototypes.buildings.sluicer")
-if settings.startup["MCP_enable_centrifuges"].value then
-  require("prototypes.buildings.centrifuge")
-end
+require("prototypes.buildings.centrifuge")--active if setting
+
 
 require("prototypes.items.phosphorus")
 require("prototypes.items.mercury")
