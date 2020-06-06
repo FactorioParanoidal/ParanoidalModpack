@@ -28,7 +28,7 @@ script.on_event(defines.events.on_player_created, function(event)
 		player.insert{name="iron-chest", count=5}
 		--player.insert{name="steam-engine", count=20}
 		--player.insert{name="boiler", count=10}
-		player.insert{name="offshore-pump", count=1}
+		--player.insert{name="offshore-pump", count=1}
 		player.insert{name="burner-offshore-pump", count=1}
 		player.insert{name="pipe-to-ground", count=10}
 		--player.insert{name="lab", count=6}
@@ -37,10 +37,10 @@ script.on_event(defines.events.on_player_created, function(event)
 		--player.insert{name="coal", count=200}
 		
   --player.insert{name="iron-plate", count=8}
-  player.insert{name="pistol", count=1}
+  --player.insert{name="pistol", count=1} --already 1
   player.insert{name="firearm-magazine", count=10}
   player.insert{name="burner-mining-drill", count = 1}
-  player.insert{name="burner-ore-crusher", count = 1}
+  --player.insert{name="burner-ore-crusher", count = 1} --inserts 1 by angelsrefining/control.lua
   --player.insert{name="stone-furnace", count = 1}
 
   --player.insert{name="pipe-to-ground", count = 50}
@@ -62,4 +62,6 @@ script.on_event(defines.events.on_player_created, function(event)
   player.insert{name="titanium-plate", count=1}
   player.insert{name="repair-pack", count=5}
   --player.insert{name="angels-wire-platinum", count=5}
+  
+  player.insert{name="radar", count=1}
 	end)
