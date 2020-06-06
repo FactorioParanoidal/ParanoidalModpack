@@ -118,7 +118,7 @@ end
 
 local function replaceAngelRefi()
 
-    KaoExtended.recipe.addtorecipe("thermal-extractor", {"basic-structure-components", 1})
+    KaoExtended.recipe.addtorecipe("thermal-extractor", {"basic-structure-components", 1})	
 	
     KaoExtended.recipe.addtorecipe("ore-crusher-2", {"intermediate-structure-components", 1})
 	KaoExtended.recipe.addtorecipe("ore-crusher-2", {"engine-unit", 2})

@@ -558,10 +558,12 @@ data:extend(
     },
     icons = {
       {
-        icon = "__bobicons__/graphics/icons/intermediates/iron-gear-wheel-64.png"
+        icon = data.raw.item["iron-gear-wheel"].icon,
+		icon_size = data.raw.item["iron-gear-wheel"].iconsize,
       },
       {
         icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
+		icon_size = 64,
         scale = 0.2,
         shift = { -12, -12},
       }
@@ -586,14 +588,14 @@ data:extend(
     },
 	icons = {
 		{
-			icon = "__bobicons__/graphics/icons/bobplates/steel-gear-wheel-64.png", 
+			icon = "__bobicons__/graphics/icons/bobplates/steel-gear-wheel-64.png",
 			icon_size = 64,
 		},
 		{
 			icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
+			icon_size = 64,
 			scale = 0.2,
 			shift = { -12, -12},
-			icon_size = 64,
 		}
 	},	
 	icon_size = 64,
