@@ -1,6 +1,6 @@
 local categories = require('categories')
 local data_utils = require('data_utils')
-local config = require('config')
+local config = require('config_data')
 local setting_formats = require('defines.setting_name_formats')
 local technology_formats = require('defines.technology_name_formats')
 

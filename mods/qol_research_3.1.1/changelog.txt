@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 27. 05. 2020
+  Bugfixes:
+    - Fix typo that wrongly switched to Space Exploration configuration.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 27. 05. 2020
+  Features:
+    - Allow modpacks to have the configuration stored in their mod, instead of in QoL Research.
+---------------------------------------------------------------------------------------------------
 Version: 3.0.0
 Date: 11. 04. 2020
   Features:
