@@ -1,26 +1,16 @@
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------
--- ALERTS GUI
--- A tab of the main GUI
+local alerts_tab = {}
 
--- dependencies
-local gui = require("__RaiLuaLib__.lualib.gui")
+local gui = require("__flib__.gui")
 local util = require("scripts.util")
 
--- locals
 local string_find = string.find
 local string_gsub = string.gsub
 
--- object
-local alerts_gui = {}
-
--- -----------------------------------------------------------------------------
--- GUI DATA
-
-gui.templates:extend{
+gui.add_templates{
   alerts = {
     materials_table = function(parent, style, materials, material_translations)
       local table_add = gui.build(parent, {
-        {type="frame", style="ltnm_dark_content_frame_in_light_frame", children={
+        {type="frame", style="deep_frame_in_shallow_frame", children={
           {type="scroll-pane", style="ltnm_train_slot_table_scroll_pane", children={
             {type="table", style="ltnm_small_slot_table", column_count=4, save_as="table"}
           }}
@@ -29,14 +19,16 @@ gui.templates:extend{
       local mi = 0
       for name, count in pairs(materials) do
         mi = mi + 1
-        table_add{type="sprite-button", name="ltnm_material_button_"..mi, style="ltnm_small_slot_button_"..style, sprite=string_gsub(name, ",", "/"),
+        table_add{type="sprite-button", name="ltnm_view_material__"..mi, style="ltnm_small_slot_button_"..style, sprite=string_gsub(name, ",", "/"),
           number=count, tooltip=(material_translations[name] or name).."\n"..util.comma_value(count)}
       end
     end
   }
 }
 
-gui.handlers:extend{
+-- TODO alert muting and management
+
+gui.add_handlers{
   alerts = {
     sort_checkbox = {
       on_gui_checked_state_changed = function(e)
@@ -55,24 +47,32 @@ gui.handlers:extend{
           gui_data["sort_"..clicked_type] = e.element.state
         end
         -- update GUI contents
-        UPDATE_MAIN_GUI(game.get_player(e.player_index), player_table, {alerts=true})
+        alerts_tab.update(game.get_player(e.player_index), player_table, {alerts=true})
       end
     },
     clear_alert_button = {
-      on_gui_click = {handler=function(e)
-        local _,_,alert_id = string_find(e.element.name, "^ltnm_clear_alert_(.-)$")
+      on_gui_click = function(e)
+        local _,_,alert_id = string_find(e.element.name, "^ltnm_clear_alert__(.-)$")
         alert_id = tonumber(alert_id)
         global.data.alerts_to_delete[alert_id] = true
-        UPDATE_MAIN_GUI(game.get_player(e.player_index), global.players[e.player_index], {alerts=true})
-      end, gui_filters="ltnm_clear_alert_", options={match_filter_strings=true}}
+        alerts_tab.update(game.get_player(e.player_index), global.players[e.player_index], {alerts=true})
+      end
+    },
+    clear_alerts_button = {
+      on_gui_click = function(e)
+        local player_table = global.players[e.player_index]
+        local gui_data = player_table.gui.main.alerts
+        gui_data.clear_all = true
+        alerts_tab.update(game.get_player(e.player_index), player_table, { alerts = true })
+      end
     }
   }
 }
 
--- -----------------------------------------------------------------------------
--- FUNCTIONS
-
-function alerts_gui.update(player, player_table, state_changes, gui_data, data, material_translations)
+function alerts_tab.update(player, player_table, state_changes, gui_data, data, material_translations)
+  gui_data = gui_data or player_table.gui.main
+  data = data or global.data
+  material_translations = material_translations or player_table.translations.materials
   if state_changes.alerts then
     local alerts_table = gui_data.alerts.table
     alerts_table.clear()
@@ -80,6 +80,7 @@ function alerts_gui.update(player, player_table, state_changes, gui_data, data, 
     local active_sort = gui_data.alerts.active_sort
     local sort_value = gui_data.alerts["sort_"..active_sort]
     local sorted_alerts = data.sorted_alerts[active_sort]
+    local clear_all = gui_data.alerts.clear_all
 
     -- skip if there are no alerts
     if #sorted_alerts > 0 then
@@ -92,6 +93,10 @@ function alerts_gui.update(player, player_table, state_changes, gui_data, data, 
 
       for i=start,finish,delta do
         local alert_id = sorted_alerts[i]
+        if clear_all then
+          to_be_deleted[alert_id] = true
+        end
+
         -- exclude if the alert is to be deleted
         if not to_be_deleted[alert_id] then
           local alert_data = alerts[alert_id]
@@ -99,11 +104,11 @@ function alerts_gui.update(player, player_table, state_changes, gui_data, data, 
             {type="label", style_mods={width=64}, caption=util.ticks_to_time(alert_data.time)},
             {type="label", style_mods={width=26, horizontal_align="center"}, caption=alert_data.train.network_id},
             {type="flow", style_mods={horizontally_stretchable=true, vertical_spacing=-1, top_padding=-2, bottom_padding=-1}, direction="vertical", children={
-              {type="label", name="ltnm_view_station_"..alert_data.train.from_id, style="hoverable_bold_label", caption=alert_data.train.from,
+              {type="label", name="ltnm_view_station__"..alert_data.train.from_id, style="ltnm_hoverable_bold_label", caption=alert_data.train.from,
                 tooltip={"ltnm-gui.view-station-on-map"}},
               {type="flow", children={
                 {type="label", style="caption_label", caption="->"},
-                {type="label", name="ltnm_view_station_"..alert_data.train.to_id, style="hoverable_bold_label", caption=alert_data.train.to,
+                {type="label", name="ltnm_view_station__"..alert_data.train.to_id, style="ltnm_hoverable_bold_label", caption=alert_data.train.to,
                   tooltip={"ltnm-gui.view-station-on-map"}}
               }}
             }},
@@ -111,12 +116,12 @@ function alerts_gui.update(player, player_table, state_changes, gui_data, data, 
               tooltip={"ltnm-gui.alert-"..alert_data.type.."-description"}},
             {type="flow", style_mods={vertical_spacing=8}, direction="vertical", save_as="tables_flow"},
             {type="flow", children={
-              {type="frame", style="ltnm_dark_content_frame_in_light_frame", style_mods={padding=0}, children={
-                {type="sprite-button", name="ltnm_open_train_"..alert_data.train.id, style="ltnm_inset_tool_button", sprite="utility/preset",
+              {type="frame", style="deep_frame_in_shallow_frame", style_mods={padding=0}, children={
+                {type="sprite-button", name="ltnm_open_train__"..alert_data.train.id, style="ltnm_inset_tool_button", sprite="utility/preset",
                   tooltip={"ltnm-gui.open-train-gui"}},
               }},
-              {type="frame", style="ltnm_dark_content_frame_in_light_frame", style_mods={padding=0}, children={
-                {type="sprite-button", name="ltnm_clear_alert_"..alert_id, style="ltnm_inset_red_icon_button", sprite="utility/trash",
+              {type="frame", style="deep_frame_in_shallow_frame", style_mods={padding=0}, children={
+                {type="sprite-button", name="ltnm_clear_alert__"..alert_id, style="ltnm_inset_tool_button_red", sprite="utility/trash",
                   tooltip={"ltnm-gui.clear-alert"}}
               }}
             }}
@@ -128,14 +133,13 @@ function alerts_gui.update(player, player_table, state_changes, gui_data, data, 
         end
       end
     end
+    gui_data.alerts.clear_all = false
   end
 end
 
--- -----------------------------------------------------------------------------
-
-alerts_gui.base_template = {type="flow", style_mods={horizontal_spacing=12}, mods={visible=false}, save_as="tabbed_pane.contents.alerts", children={
+alerts_tab.base_template = {type="flow", style_mods={horizontal_spacing=12}, elem_mods={visible=false}, save_as="tabbed_pane.contents.alerts", children={
   -- alerts list
-  {type="frame", style="ltnm_light_content_frame", direction="vertical", children={
+  {type="frame", style="inside_shallow_frame", direction="vertical", children={
     {type="frame", style="ltnm_toolbar_frame", children={
       {type="checkbox", name="ltnm_sort_alerts_time", style="ltnm_sort_checkbox_active", style_mods={left_margin=8, width=64}, state=false,
         caption={"ltnm-gui.time"}, handlers="alerts.sort_checkbox", save_as="alerts.time_sort_checkbox"},
@@ -146,7 +150,9 @@ alerts_gui.base_template = {type="flow", style_mods={horizontal_spacing=12}, mod
       {template="pushers.horizontal"},
       {type="checkbox", name="ltnm_sort_alerts_type", style="ltnm_sort_checkbox_inactive", style_mods={width=160}, state=true,
         caption={"ltnm-gui.alert"}, handlers="alerts.sort_checkbox", save_as="alerts.type_sort_checkbox"},
-      {type="empty-widget", style_mods={width=237, height=15}}
+      {type="empty-widget", style_mods={width=196, height=15}},
+      {type="sprite-button", style="tool_button_red", sprite="utility/trash", tooltip={"ltnm-gui.clear-alerts"},
+        handlers="alerts.clear_alerts_button", save_as="alerts.clear_alerts_button"}
     }},
     {type="scroll-pane", style="ltnm_blank_scroll_pane", style_mods={vertically_stretchable=true, horizontally_stretchable=true},
       vertical_scroll_policy="always", children={
@@ -156,4 +162,4 @@ alerts_gui.base_template = {type="flow", style_mods={horizontal_spacing=12}, mod
   }}
 }}
 
-return alerts_gui
+return alerts_tab

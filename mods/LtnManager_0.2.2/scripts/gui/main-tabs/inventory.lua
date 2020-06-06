@@ -1,32 +1,27 @@
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------
--- INVENTORY GUI
--- A tab of the main GUI
+local inventory_tab = {}
 
--- dependencies
-local gui = require("__RaiLuaLib__.lualib.gui")
+local gui = require("__flib__.gui")
 local util = require("scripts.util")
 
--- locals
+local pane_heights = {
+  provided = 6,
+  requested = 3,
+  in_transit = 3
+}
+
 local bit32_btest = bit32.btest
 local string_find = string.find
 local string_gsub = string.gsub
 local string_lower = string.lower
-local string_match = string.match
 
--- object
-local inventory_gui = {}
-
--- -----------------------------------------------------------------------------
--- GUI DATA
-
-gui.templates:extend{
+gui.add_templates{
   inventory = {
     slot_table_with_label = function(name, rows)
       rows = rows or 4
-      return {type="flow", style_mods={vertical_spacing=8, top_padding=4}, direction="vertical", children={
+      return {type="flow", style_mods={vertical_spacing=7, top_padding=3}, direction="vertical", children={
         {type="label", style="caption_label", caption={"ltnm-gui."..string_gsub(name, "_", "-")}},
-        {type="frame", style="ltnm_dark_content_frame_in_light_frame", children={
-          {type="scroll-pane", style="ltnm_slot_table_scroll_pane", style_mods={height=rows*40}, vertical_scroll_policy="always", children={
+        {type="frame", style="deep_frame_in_shallow_frame", save_as="inventory."..name.."_frame", children={
+          {type="scroll-pane", style="ltnm_slot_table_scroll_pane", style_mods={height=rows*40}, children={
             {type="table", style="ltnm_inventory_slot_table", column_count=10, save_as="inventory."..name.."_table"}
           }}
         }}
@@ -43,9 +38,11 @@ gui.templates:extend{
       local elems = gui.build(parent, {
         {type="flow", direction="vertical", children={
           {type="flow", save_as="labels_flow"},
-          {type="frame", style="ltnm_dark_content_frame_in_light_frame", children={
-            {type="scroll-pane", style="ltnm_material_location_slot_table_scroll_pane", vertical_scroll_policy="always", children={
-              {type="table", style="ltnm_materials_in_location_slot_table", column_count=9, save_as="table"}
+          {type="flow", style_mods={margin=0, padding=0, horizontal_align="center", horizontally_stretchable=true}, children={
+            {type="frame", style="deep_frame_in_shallow_frame", children={
+              {type="scroll-pane", style="ltnm_material_location_slot_table_scroll_pane", children={
+                {type="table", style="ltnm_materials_in_location_slot_table", column_count=9, save_as="table"}
+              }}
             }}
           }}
         }}
@@ -65,7 +62,7 @@ gui.templates:extend{
         local style = "ltnm_small_slot_button_"..t[1]
         for name, count in pairs(t[2]) do
           i = i + 1
-          table_add{type="sprite-button", name="ltnm_material_button_"..i, style=style, sprite=string_gsub(name, ",", "/"), number=count,
+          table_add{type="sprite-button", name="ltnm_view_material__"..i, style=style, sprite=string_gsub(name, ",", "/"), number=count,
             tooltip=translations[name].."\n"..util.comma_value(count)}
         end
       end
@@ -74,54 +71,52 @@ gui.templates:extend{
   }
 }
 
-gui.handlers:extend{
+gui.add_handlers{
   inventory = {
-    search_textfield = {
-      on_gui_text_changed = function(e)
-        local player_table = global.players[e.player_index]
-        local gui_data = player_table.gui.main.inventory
-        gui_data.search_query = e.text
-        UPDATE_MAIN_GUI(game.get_player(e.player_index), player_table, {inventory=true})
-      end,
-      on_gui_click = function(e)
-        -- select all text if it is the default
-        if e.element.text == global.players[e.player_index].dictionary.gui.translations.search then
-          e.element.select_all()
+    search = {
+      name_textfield = {
+        on_gui_text_changed = function(e)
+          local player_table = global.players[e.player_index]
+          local gui_data = player_table.gui.main.inventory
+          gui_data.search.query = e.text
+          inventory_tab.update(game.get_player(e.player_index), player_table, {inventory=true})
         end
-      end
-    },
-    network_id_textfield = {
-      on_gui_text_changed = function(e)
-        local player_table = global.players[e.player_index]
-        local gui_data = player_table.gui.main.inventory
-        local input = tonumber(e.text) or -1
-        gui_data.selected_network_id = input
-        UPDATE_MAIN_GUI(game.get_player(e.player_index), player_table, {inventory=true})
-      end
+      },
+      network_id_textfield = {
+        on_gui_text_changed = function(e)
+          local player_table = global.players[e.player_index]
+          local gui_data = player_table.gui.main.inventory
+          local input = tonumber(e.text) or -1
+          gui_data.search.network_id = input
+          inventory_tab.update(game.get_player(e.player_index), player_table, {inventory=true})
+        end
+      }
     }
   }
 }
 
--- -----------------------------------------------------------------------------
--- FUNCTIONS
+function inventory_tab.update(player, player_table, state_changes, gui_data, data, material_translations)
+  gui_data = gui_data or player_table.gui.main
+  data = data or global.data
+  material_translations = material_translations or player_table.translations.materials
 
-function inventory_gui.update(player, player_table, state_changes, gui_data, data, material_translations)
   if state_changes.inventory then
     local inventory = data.inventory
     local inventory_gui_data = gui_data.inventory
-    local selected_network_id = inventory_gui_data.selected_network_id
     inventory_gui_data.material_buttons = {}
     inventory_gui_data.contents = {}
     local buttons = inventory_gui_data.material_buttons
-    local query = string_lower(inventory_gui_data.search_textfield.text)
+    local query = string_lower(gui_data.inventory.search.query)
+    local network_id_query = inventory_gui_data.search.network_id
     for type, color in pairs{provided="green", requested="red", in_transit="blue"} do
       -- combine contents of each matching network
       local combined_materials = {}
       for network_id, materials in pairs(inventory[type]) do
-        if bit32_btest(network_id, selected_network_id) then
+        if bit32_btest(network_id, network_id_query) then
           combined_materials = util.add_materials(materials, combined_materials)
         end
       end
+
       -- filter by material name
       if query ~= "" then
         for name in pairs(combined_materials) do
@@ -130,6 +125,7 @@ function inventory_gui.update(player, player_table, state_changes, gui_data, dat
           end
         end
       end
+
       -- add combined materials to the GUI table (also temporary)
       inventory_gui_data.contents[type] = combined_materials
       -- add to table
@@ -140,11 +136,20 @@ function inventory_gui.update(player, player_table, state_changes, gui_data, dat
       local i = 0
       for name, count in pairs(combined_materials) do
         i = i + 1
-        elems[name] = add{type="sprite-button", name="ltnm_material_button_"..i, style="ltnm_slot_button_"..color, sprite=string_gsub(name, ",", "/"),
+        elems[name] = add{type="sprite-button", name="ltnm_view_material__"..i, style="ltnm_slot_button_"..color, sprite=string_gsub(name, ",", "/"),
           number=count, tooltip=(material_translations[name] or name).."\n"..util.comma_value(count)}
       end
       buttons[type] = elems
+
+      -- set frame style
+      if (i / 10) > pane_heights[type] then
+        inventory_gui_data[type.."_frame"].style.right_margin = 0
+      else
+        inventory_gui_data[type.."_frame"].style.right_margin = 12
+      end
     end
+
+
     -- remove previous selection since the buttons are no longer glowing
     state_changes.inventory = type(state_changes.inventory) == "boolean" and inventory_gui_data.selected or state_changes.inventory
     inventory_gui_data.selected = nil
@@ -198,20 +203,22 @@ function inventory_gui.update(player, player_table, state_changes, gui_data, dat
           local table = locations_pane.add{type="table", style="ltnm_material_locations_table", column_count=1}
           for i=1,#station_ids do
             local station = stations[station_ids[i]]
-            if bit32_btest(station.network_id, selected_network_id) then
-              local materials = {}
-              for mode, color in pairs{provided="green", requested="red"} do
-                local contents = station[mode]
-                if contents then
-                  materials[#materials+1] = {color, contents}
+            if station.entity and station.entity.valid then
+              if bit32_btest(station.network_id, network_id_query) then
+                local materials = {}
+                for mode, color in pairs{provided="green", requested="red"} do
+                  local station_contents = station[mode]
+                  if station_contents then
+                    materials[#materials+1] = {color, station_contents}
+                  end
                 end
+                location_template(
+                  table,
+                  {{"ltnm_hoverable_bold_label", station.entity.backer_name, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station__"..station_ids[i]}},
+                  materials,
+                  material_translations
+                )
               end
-              location_template(
-                table,
-                {{"hoverable_bold_label", station.entity.backer_name, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station_"..station_ids[i]}},
-                materials,
-                material_translations
-              )
             end
           end
           if #table.children == 0 then
@@ -228,13 +235,13 @@ function inventory_gui.update(player, player_table, state_changes, gui_data, dat
           local table = locations_pane.add{type="table", style="ltnm_material_locations_table", column_count=1}
           for i=1,#train_ids do
             local train = trains[train_ids[i]]
-            if bit32_btest(train.network_id, selected_network_id) then
+            if bit32_btest(train.network_id, network_id_query) then
               local materials = {}
               if train.shipment then
                 materials = {{"blue", train.shipment}}
               end
-              location_template(table, {{"hoverable_bold_label", train.from, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station_"..train.from_id},
-                {"caption_label", "->"}, {"hoverable_bold_label", train.to, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station_"..train.to_id}}, materials,
+              location_template(table, {{"ltnm_hoverable_bold_label", train.from, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station__"..train.from_id},
+                {"caption_label", "->"}, {"ltnm_hoverable_bold_label", train.to, {"ltnm-gui.view-station-on-map"}, "ltnm_view_station__"..train.to_id}}, materials,
                 material_translations)
             end
           end
@@ -248,31 +255,19 @@ function inventory_gui.update(player, player_table, state_changes, gui_data, dat
   end
 end
 
--- -----------------------------------------------------------------------------
-
-inventory_gui.base_template = {type="flow", style_mods={horizontal_spacing=12}, mods={visible=false}, save_as="tabbed_pane.contents.inventory", children={
+inventory_tab.base_template = {type="flow", style_mods={horizontal_spacing=12}, elem_mods={visible=false}, save_as="tabbed_pane.contents.inventory", children={
   -- left column
-  {type="frame", style="ltnm_light_content_frame", direction="vertical", children={
-    -- toolbar
-    {type="frame", style="ltnm_toolbar_frame", style_mods={height=nil}, direction="horizontal", children={
-      {type="textfield", lose_focus_on_confirm=true, handlers="inventory.search_textfield",
-        save_as="inventory.search_textfield"},
-      {template="pushers.horizontal"},
-      {type="label", style="caption_label", caption={"ltnm-gui.network-id"}, tooltip={"ltnm-gui.encoded-network-id-tooltip"}},
-      {type="textfield", style="short_number_textfield", text="-1", lose_focus_on_confirm=true, numeric=true,
-        allow_negative=true, handlers="inventory.network_id_textfield", save_as="inventory.network_id_textfield"},
-    }},
-    -- inventory tables
-    {type="flow", style_mods={padding=10, top_padding=4}, direction="vertical", children={
-      gui.templates.inventory.slot_table_with_label("provided", 6),
-      gui.templates.inventory.slot_table_with_label("requested", 3),
-      gui.templates.inventory.slot_table_with_label("in_transit", 2)
+  {type="frame", style="inside_shallow_frame", style_mods={top_padding=1}, direction="vertical", children={
+    {type="flow", style_mods={padding=12, top_padding=4, right_padding=0}, direction="vertical", children={
+      gui.templates.inventory.slot_table_with_label("provided", pane_heights.provided),
+      gui.templates.inventory.slot_table_with_label("requested", pane_heights.requested),
+      gui.templates.inventory.slot_table_with_label("in_transit", pane_heights.in_transit)
     }}
   }},
   -- right column
-  {type="frame", style="ltnm_light_content_frame", direction="vertical", children={
+  {type="frame", style="inside_shallow_frame", direction="vertical", children={
     -- item information
-    {type="frame", style="ltnm_light_content_frame_in_light_frame", style_mods={horizontally_stretchable=true, vertically_stretchable=true},
+    {type="frame", style="ltnm_shallow_frame_in_shallow_frame", style_mods={horizontally_stretchable=true, vertically_stretchable=true},
       direction="vertical", children={
         {type="frame", style="ltnm_item_info_toolbar_frame", direction="vertical", children={
           -- icon and name
@@ -289,8 +284,21 @@ inventory_gui.base_template = {type="flow", style_mods={horizontal_spacing=12}, 
           vertical_scroll_policy="always", save_as="inventory.locations_scroll_pane"}
       }
     }
-
   }}
 }}
 
-return inventory_gui
+inventory_tab.search_template = {
+  {type="textfield", lose_focus_on_confirm=true, handlers="inventory.search.name_textfield", save_as="inventory.search.name_textfield"},
+  {type="label", style="caption_label", style_mods={left_margin=12}, caption={"ltnm-gui.network-id"}},
+  {type="textfield", style_mods={width=80}, lose_focus_on_confirm=true, numeric=true, allow_negative=true, handlers="inventory.search.network_id_textfield",
+    save_as="inventory.search.network_id_textfield"}
+}
+
+function inventory_tab.set_search_initial_state(player, player_table, gui_data)
+  local search_gui_data = gui_data.inventory.search
+  search_gui_data.name_textfield.text = search_gui_data.query
+  search_gui_data.network_id_textfield.text = search_gui_data.network_id
+  search_gui_data.name_textfield.focus()
+end
+
+return inventory_tab
