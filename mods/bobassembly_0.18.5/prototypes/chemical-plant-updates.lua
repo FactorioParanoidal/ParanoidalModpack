@@ -94,8 +94,10 @@ end
 if settings.startup["bobmods-colorupdate"].value == true then
   data.raw.item["chemical-plant"].icon = "__bobassembly__/graphics/icons/chemical-plant-3.png"
   data.raw.item["chemical-plant"].icon_size = 32
+  data.raw.item["chemical-plant"].icon_mipmaps = nil
   data.raw["assembling-machine"]["chemical-plant"].icon = "__bobassembly__/graphics/icons/chemical-plant-3.png"
   data.raw["assembling-machine"]["chemical-plant"].icon_size = 32
+  data.raw["assembling-machine"]["chemical-plant"].icon_mipmaps = nil
   data.raw["assembling-machine"]["chemical-plant"].animation = bob_chemical_plant_animation({r = 0.7, g = 0.2, b = 0.1})
 --  data.raw["assembling-machine"]["chemical-plant"].working_visualisations = bob_chemical_plant_working_visualisations()
 

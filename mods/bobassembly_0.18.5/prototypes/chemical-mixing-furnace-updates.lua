@@ -2,8 +2,8 @@ if settings.startup["bobmods-assembly-multipurposefurnaces"].value and
   data.raw["item-subgroup"]["bob-smelting-machine"] and
   data.raw["recipe-category"]["chemical-furnace"] and
   data.raw["recipe-category"]["mixing-furnace"] and
-  data.raw.technology["alloy-processing-2"] and
-  data.raw.technology["chemical-processing-3"]
+  (data.raw.technology["alloy-processing-2"] or data.raw.technology["electric-mixing-furnace"]) and
+  (data.raw.technology["chemical-processing-3"] or data.raw.technology["electric-chemical-furnace"])
 then
 
 data.raw["assembling-machine"]["chemical-furnace"].next_upgrade = "electric-chemical-mixing-furnace"
