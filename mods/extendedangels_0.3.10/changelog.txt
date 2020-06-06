@@ -1,0 +1,157 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 2020-05-31
+  Changes:
+      - Fixed error on loading save game without Angel's Bioprocessing
+      - Fixed error with tech name change in bio proessiong 0.7.9
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 2020-05-10
+  Changes:
+      - Fixed crafting speed on bio buildings being wrong
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2020-05-09
+  Changes:
+      - Fixed locale for Tungsten Hexachloride Gas
+      - Added stone brick to Titanium Concrete Brick
+      - Fixed Crafting speed on Fish & Biter Refugium
+      - Fixed missing mk icons on arboretum and seed generators
+      - Added Seed Extractor MK2 & MK3
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 2020-04-26
+  Changes:
+      - Fixed Icon Ordering issues with Angels Bio Buildings
+      - Added Hatchery MK2 & MK3
+      - Added Nutrient Extractor MK2 & MK3
+      - Added Biter and Puffer Refugiume MK2 & MK3
+      - Added Mk Icons to Warehouses
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 2020-04-26
+  Changes:
+      - Fixed buildings not generation pollution
+      - Added Press MK2 & MK3
+      - Added Bio Processor MK2 & MK3
+      - Added Butchery MK2 & MK3
+      - Added Composter MK2 & MK3
+      - Added Crop, Desert, Swamp & Temperate Farms MK2 & MK3
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 2020-04-20
+  Changes:
+      - Fixed Titanium Brick not working
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 2020-04-19
+  Changes:
+    - Removed logging for Angels Componets support
+    - Fixed missing Bob's Logistics pack missing from Logistics warehoue 3 & 4
+    - Added tress to Mk2 & Mk3 Seed Generators
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2020-04-05
+  Changes:
+      -The ingredient return on mining was being called no matter the setting thanks to Pezzawinkle
+      -Fixed dependecny checking for angels warehouse to work if no angels addon mods are loaded
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2020-04-04
+  Changes:
+      - Fixed bounding box issues with Warehouse forget to do this
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2020-04-04
+  Changes:
+      - Added Support for Angels Componets in Angels Industiries tanks to Pezzawinkle
+      - Fixed icons issues from lastest angel's update thanks to Pezzawinkle
+      - Fixed Angel's Liquifying recipes not showing up in Adv Chem Plant Mk3
+      - Fixed Warehouse icorn sorting when Angel's Industries present thanks to triktor
+      - Fixed Buffer Mk2-4 appearing before requester when it should be after
+      - Fixed fast replace on some warehouses being container instead of angels-warhouses
+      - Removed Alage Farm Mk3 as Angels has added it
+      - Fixed squeakthrough not working on buildings
+      - Alage Farm mk4 now haves the number 4 icon on it instead of 3
+      - Added upgrade planner support for all buildings
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: N/A
+  Changes:
+      - Update to 0.18
+      - Fixed overwrting Madclown's Processing Water Treament 5 Tech
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: N/A
+  Changes:
+      - Fixed Aboretum missing from tech tree since Bio-Processing 0.6.2 changed the tech name
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: N/A
+  Changes:
+    - Removed Hydro Plank Mk3 as angels added it
+    - Added Aboretum & Seed Generators Mk2 & Mk3
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: N/A
+  Changes:
+    - Fixed floatation Cell mk4 requring itself to make in expensive mode
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: N/A
+  Changes:
+    - Updated to 0.17
+    - Added Buffer Warehouse Mk2-4
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: N/A
+  Changes:
+    - Fixed warehouse icons being the same in the quickbar
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: N/A
+  Changes:
+    - Fixed some more optinal depenecy issues
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: N/A
+  Changes:
+    - Updated some building recipes to use Titanium Reinforced Brick
+    - Fixed a typo
+    - Fixed some issues with adding the mod to an exisiting playthoourgh with recipes not being updated
+    - Reblanced Tungsten Smelting 3
+    - Adjusted Tungsten Powder to use 1 solid and 2 fluids instead of 3 fluids as the chemical furnace has only 2 fluid inputs
+    - Fixed angels warehouse optinal dependecy not working
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: N/A
+  Changes:
+    - Changed Tungsten Hexachloride to use Tungsten Trioxide
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: N/A
+  Changes:
+    - Made it so if you set the icon scaling for Angel's Warehouse in the Mod Settings it works on mk2-mk4 warehouses
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: N/A
+  Changes:
+    - Fixed incorrect recipe with Hydro Plant MK4
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: N/A
+  Changes:
+    - Initial Release
+    - Includes Copper Tungsten and Tungsten Carbide smelting using Angels Smelting
+    - Redone Tungsten Smelting 3
+    - Adds Tetrasodium Pyrophosphate to Tungsten Smelting 3 if MadClown01's processing is present
+    - Added Titanium Reinforced Brick
+    - Added Advanced Chemical Plant MK3
+    - Added Adv Gas Refineray MK4
+    - Added Agle Farm Mk3 & MK4
+    - Added Hydro Plant MK2 & MK3
+    - Added Salation Plant MK3
+    - Added Ore Washing Plant MK3 & MK4
+    - Added Ore Crusher MK4, Floation Cell MK4, Leaching Plant MK4 & Ore Refineray MK3
+    - Added Crystallizer and Filitration Unit MK3
+    - Ported the Warehouse Addon Mod and added MK2-MK4 normal warhouses and tech changes
