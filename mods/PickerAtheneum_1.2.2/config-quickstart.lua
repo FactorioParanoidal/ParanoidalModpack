@@ -23,15 +23,15 @@ return {
     center_map_tag = true,
     setup_power = true,
     items = {
-        ['picker-infinity-chest'] = 50,
-        ['picker-infinity-pipe'] = 50,
-        ['picker-heat-interface'] = 50,
-        ['picker-electric-energy-interface'] = 50,
+        ['infinity-chest'] = 50,
+        ['infinity-pipe'] = 50,
+        ['heat-interface'] = 50,
+        ['infinity-accumulator'] = 50,
         ['construction-robot'] = 50,
         ['assembling-machine-3'] = 50,
         ['pipe'] = 50,
         ['fast-inserter'] = 50,
-        ['picker-note'] = 50,
-        ['picker-sign'] = 50
+        -- ['picker-note'] = 50,
+        -- ['picker-sign'] = 50
     }
 }

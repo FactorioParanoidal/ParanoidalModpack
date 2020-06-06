@@ -83,11 +83,8 @@ style.adjustment_pad_flow_style = {
 
 style.adjustment_pad_text_style = {
     type = 'textbox_style',
-    parent = 'number_input_textbox',
-    maximal_width = 42,
-    minimal_width = 42,
-    maximal_height = 24,
-    minimal_height = 24,
+    width = 42,
+    height = 24,
     font = 'default-small'
 }
 
@@ -98,6 +95,6 @@ style.adjustment_pad_button_flow_style = {
 
 style.adjustment_pad_btn_reset_style = {
     type = 'button_style',
-    parent = 'red_icon_button',
+    parent = 'tool_button_red',
     left_margin = 1
 }

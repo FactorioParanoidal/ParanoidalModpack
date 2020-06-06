@@ -93,7 +93,7 @@ function Pad.get_or_create_adjustment_pad(player, pad_name, flow_name) -- return
         button_flow.add {
             type = 'sprite-button',
             name = pad_name .. '_btn_up',
-            style = 'close_button',
+            style = 'frame_action_button',
             sprite = 'adjustment_pad_button_plus',
             hovered_sprite = 'adjustment_pad_button_plus_dark',
             clicked_sprite = 'adjustment_pad_button_plus_dark'
@@ -101,7 +101,7 @@ function Pad.get_or_create_adjustment_pad(player, pad_name, flow_name) -- return
         button_flow.add {
             type = 'sprite-button',
             name = pad_name .. '_btn_dn',
-            style = 'close_button',
+            style = 'frame_action_button',
             sprite = 'adjustment_pad_button_minus',
             hovered_sprite = 'adjustment_pad_button_minus_dark',
             clicked_sprite = 'adjustment_pad_button_minus_dark'
