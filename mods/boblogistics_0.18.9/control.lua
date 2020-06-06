@@ -367,31 +367,17 @@ script.on_event(defines.events.on_built_entity, function(event)
   local player = game.players[event.player_index]
   local entity = event.created_entity
 
-  local hand_item = nil
-  if player.cursor_stack and player.cursor_stack.valid and player.cursor_stack.valid_for_read and player.cursor_stack.prototype and player.cursor_stack.prototype.place_result then
-    hand_item = player.cursor_stack.prototype.place_result
-  elseif player.cursor_ghost and player.cursor_ghost.valid and player.cursor_ghost.place_result then
-    hand_item = player.cursor_ghost.place_result
+  local entity_name = entity.name
+  if entity.type == "entity-ghost" then
+    entity_name = entity.ghost_name
   end
 
   if
-    hand_item and hand_item.type == "inserter"
-    and not game.active_mods["bobinserters"]
-    and
-    (
-      (
-        entity.type == "inserter"
-        and hand_item.name == entity.name
-        and not global.bobmods.logistics.blacklist[entity.name]
-        and not event.revived
-      )
-      or
-      (
-        entity.type == "entity-ghost" and entity.ghost_type == "inserter"
-        and hand_item.name == entity.ghost_name
-        and not global.bobmods.logistics.blacklist[entity.ghost_name]
-      )
-    )
+    not game.active_mods["bobinserters"] and
+    event.item and event.item.place_result and event.item.place_result.type == "inserter"
+    and (entity.type == "inserter" or (entity.type == "entity-ghost" and entity.ghost_type == "inserter"))
+    and event.item.place_result.name == entity_name --probably don't even need this line anymore.
+    and not global.bobmods.logistics.blacklist[entity_name]
   then
     bobmods.logistics.set_positions(entity, event.player_index)
   end
