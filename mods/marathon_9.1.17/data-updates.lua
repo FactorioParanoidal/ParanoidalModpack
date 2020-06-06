@@ -98,7 +98,7 @@ function marathon.add_recipe_item(recipe, item)
 	end
 end
 
-    --require("prototypes.bobsmods.recipe-power")
+    --require("prototypes.bobsmods.recipe-power2")
 	
 	--require("prototypes.new") -- DrD
 --[[
