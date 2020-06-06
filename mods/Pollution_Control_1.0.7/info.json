@@ -1,0 +1,11 @@
+{
+  "name": "Pollution_Control",
+  "version": "1.0.7",
+  "factorio_version": "0.18",
+  "title": "Pollution Control",
+  "author": "Pavel Krush",
+  "contact": "Private",
+  "homepage": "https://github.com/pavel-krush/pollution-control",
+  "description": "Display global pollution information",
+  "dependencies": ["base"]
+}
