@@ -1,19 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.11
+  Features:
+    - Prepared for updates to angels industries
+  Bugfixes:
+    - Fixed that I was setting require behind mod checks potentially causing CRC fails in multiplayer
+---------------------------------------------------------------------------------------------------
 Version: 1.3.10
-  Updates:
+  Features:
     - Updated number icons to reference angels refining not petrochem (in prep for incoming update)
     - Added a setting to disable the centrifuges (if you want to use bobs instead)
     - Removed a few group shuffling settings which should be redundant (may put them back in if needed)
     - Updated armor location back to default if that setting is off
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.9
-  Updates:
+  Features:
     - Updated the neurotoxin capsule to replicate the fog of the poison capsule
     - Updated fluid icons and recipes to use Angel's(Santa's) new icon scripts
     - Small fixes and clean-ups
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.8
-  Updates:
+  Features:
     - Updated to work with angels updates
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.7
@@ -29,11 +35,11 @@ Version: 1.3.6
 Version: 1.3.5
   Bugfixes:
     - Fixed the pure sorting recipe times (fix thanks to hexagonhexagon)
-      I honestly thought this was already fixed
+      - I honestly thought this was already fixed
     - Fixed setting call checks
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.4
-  Updates:
+  Bugfixes:
     - Added thumbnail
     - Fixed formatting of changelog
   Features:
@@ -47,7 +53,7 @@ Version: 1.3.3
     - known problem: white phosphorus is used in smelting bronze, phosphoric acid is a dead end (for now)
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.2:
-  Updates:
+  Features:
     - Updated for 0.17
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.1:
@@ -82,10 +88,9 @@ Version: 1.2.4:
 Version: 1.2.3
   Bugfixes:
     - Bug fixes
-  Updates:
-    - Added override to move Bob's Gems & Bob's Fluids into Bob's Materials & Intermediates
   Features:
     - Added optional Fortifications and Equipment groups
+    - Added override to move Bob's Gems & Bob's Fluids into Bob's Materials & Intermediates
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
   Bugfixes:
@@ -100,16 +105,15 @@ Version: 1.2.0
     - Added new pure processing recipes
     - Added an override to give SpaceMod components their own subgroup
     - Added advanced centrifuging
+    - Updated fluorine icon
   Balancing:
     - Rebalanced uranium processing
-  Updates:
-    - Updated fluorine icon
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
   Features:
     - Added osmium, depleted uranium & related powder metallurgy
     - Added optional settings to replace ingredients in military recipes from U-238 to depleted uranium
-  Updates:
+  Bugfixes:
     - Updated some Vanilla & Angels locale appropriately.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
@@ -123,13 +127,12 @@ Version: 1.0.0
     - Added mercury processing technology
     - Added dimethylmercury (neurotoxin) refining
     - Added neurotoxin capsule
-  Updates:
     - Updated graphics, added some optional general gamedata tweaks, off by default
     - Added advanced phosphorus processing
     - Code brought into line with other MadClown01 mods
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.6
-  Updates:
+  Features:
     - Updated locale, updated phosphorus ore icon.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
@@ -137,7 +140,7 @@ Version: 0.1.5
     - Rebalanced crafting times for crushed stone sorting, all intermediate uranium processing.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.4
-  Updates:
+  Features:
     - Updated locale
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
@@ -154,5 +157,5 @@ Version: 0.1.1
     - Fixed minor bugs
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
-  Updates:
+  Features:
     - Initial release
