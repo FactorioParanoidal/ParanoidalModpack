@@ -1,45 +1,33 @@
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------
--- LTN DATA MANAGER
--- Takes in data from LTN and parses it for use by the GUI
--- This script is the only place to touch LTN data, the rest of the mod uses the data that this script produces.
+local ltn_data = {}
 
--- dependencies
-local event = require("__RaiLuaLib__.lualib.event")
 local util = require("scripts.util")
 
--- locals
+local alert_popup_gui = require("scripts.gui.alert-popup")
+
 local math_floor = math.floor
 local table_insert = table.insert
 local table_remove = table.remove
 local table_sort = table.sort
 
-local ltn_event_ids = {}
-
--- scripts
-local alert_popup_gui = require("gui.alert-popup")
-
--- object
-local data_manager = {}
-
 -- -----------------------------------------------------------------------------
 -- PROCESSING FUNCTIONS
 
-local function iterate_stations(data)
-  local depots = data.depots
-  local stations = data.stations
-  local station_ids = data.station_ids
-  local num_stations = data.num_stations
-  local trains = data.trains
+local function iterate_stations(working_data)
+  local depots = working_data.depots
+  local stations = working_data.stations
+  local station_ids = working_data.station_ids
+  local num_stations = working_data.num_stations
+  local trains = working_data.trains
 
-  local network_to_stations = data.network_to_stations
-  local material_locations = data.material_locations
+  local network_to_stations = working_data.network_to_stations
+  local material_locations = working_data.material_locations
 
-  local inventory = data.inventory
+  local inventory = working_data.inventory
 
-  local deliveries = data.deliveries
-  local available_trains = data.available_trains
+  local deliveries = working_data.deliveries
+  local available_trains = working_data.available_trains
 
-  local index = data.index
+  local index = working_data.index
   local num_to_iterate = settings.global["ltnm-stations-per-tick"].value
   local end_index = index + num_to_iterate
 
@@ -110,7 +98,7 @@ local function iterate_stations(data)
 
       -- process station materials
       for _, mode in ipairs{"provided", "requested"} do
-        local materials = data[mode.."_by_stop"][station_id]
+        local materials = working_data[mode.."_by_stop"][station_id]
         if materials then
           -- add to station
           station[mode] = table.deepcopy(materials)
@@ -136,18 +124,18 @@ local function iterate_stations(data)
 
     -- end this step if we are done
     if i == num_stations then
-      data.step = 2
+      working_data.step = 2
       return
     end
   end
 
-  data.index = end_index + 1
+  working_data.index = end_index + 1
 end
 
-local function process_in_transit_materials(data)
-  local in_transit = data.inventory.in_transit
-  local material_locations = data.material_locations
-  for id, t in pairs(data.deliveries) do
+local function process_in_transit_materials(working_data)
+  local in_transit = working_data.inventory.in_transit
+  local material_locations = working_data.material_locations
+  for id, t in pairs(working_data.deliveries) do
     -- add to in transit inventory
     in_transit[t.network_id] = util.add_materials(t.shipment, in_transit[t.network_id] or {})
     -- sort materials into locations
@@ -160,13 +148,13 @@ local function process_in_transit_materials(data)
       end
     end
   end
-  data.step = 3
+  working_data.step = 3
 end
 
-local function sort_depot_trains(data)
+local function sort_depot_trains(working_data)
   local players = global.players
-  local trains = data.trains
-  for n, depot in pairs(data.depots) do
+  local trains = working_data.trains
+  for _, depot in pairs(working_data.depots) do
     local depot_trains = {}
 
     -- sort by composition - same for all players
@@ -174,7 +162,7 @@ local function sort_depot_trains(data)
       local sort_lookup = {}
       local sort_values = {}
       for _, train_id in ipairs(depot.trains_temp) do
-        local train = data.trains[train_id]
+        local train = working_data.trains[train_id]
         if train.train.valid then
           local lookup = sort_lookup[train.composition]
           if lookup then
@@ -202,7 +190,7 @@ local function sort_depot_trains(data)
         if player_table.flags.translations_finished then
           local sort_lookup = {}
           local sort_values = {}
-          local translations = player_table.dictionary.gui.translations
+          local translations = player_table.translations.gui
           -- sort trains
           for _, train_id in ipairs(depot.trains_temp) do
             local train = trains[train_id]
@@ -235,19 +223,18 @@ local function sort_depot_trains(data)
   end
 
   -- next step
-  data.step = 4
+  working_data.step = 4
 end
 
-local function sort_stations(data)
+local function sort_stations(working_data)
   -- sorting tables
   local sort = {
     name = {lookup={}, values={}},
-    network_id = {lookup={}, values={}},
     status = {lookup={}, values={}},
   }
 
   -- iterate stations
-  for station_id, station_data in pairs(data.stations) do
+  for station_id, station_data in pairs(working_data.stations) do
     if station_data.entity.valid then
       if not station_data.is_depot then
         -- organize station data
@@ -285,24 +272,23 @@ local function sort_stations(data)
   end
 
   -- save data
-  data.sorted_stations = results
+  working_data.sorted_stations = results
 
   -- next step
-  data.step = 5
+  working_data.step = 5
 end
 
-local function sort_history(data)
+local function sort_history(working_data)
   -- sorting tables
   local sort = {
     depot = {lookup={}, values={}},
     route = {lookup={}, values={}},
-    network_id = {lookup={}, values={}},
     runtime = {lookup={}, values={}},
     finished = {lookup={}, values={}}
   }
 
   -- iterate history to fill sorting tables
-  for i, entry in ipairs(data.history) do
+  for i, entry in ipairs(working_data.history) do
     for sort_type, sort_table in pairs(sort) do
       local value
       if sort_type == "route" then
@@ -334,13 +320,13 @@ local function sort_history(data)
   end
 
   -- save data
-  data.sorted_history = output
+  working_data.sorted_history = output
 
   -- next step
-  data.step = 6
+  working_data.step = 6
 end
 
-local function sort_alerts(data)
+local function sort_alerts(working_data)
   -- sorting tables
   local sort = {
     network_id = {lookup={}, values={}},
@@ -349,7 +335,7 @@ local function sort_alerts(data)
     type = {lookup={}, values={}}
   }
 
-  local alerts = data.alerts
+  local alerts = working_data.alerts
 
   -- remove alerts
   local to_delete = global.data and global.data.alerts_to_delete or {}
@@ -358,7 +344,7 @@ local function sort_alerts(data)
   end
 
   -- iterate history to fill sorting tables
-  for i, entry in pairs(data.alerts) do
+  for i, entry in pairs(working_data.alerts) do
     if i ~= "_index" then
       for sort_type, sort_table in pairs(sort) do
         local value
@@ -394,93 +380,127 @@ local function sort_alerts(data)
   end
 
   -- save data
-  data.sorted_alerts = output
+  working_data.sorted_alerts = output
 
   -- next step
-  data.step = 100
+  working_data.step = 100
+end
+
+local function add_alert(e, alert_type, ...)
+  -- save train data so it will persist after the delivery is through
+  local trains = global.data.trains
+  local train = trains[e.train_id] or trains[global.data.invalidated_trains[e.train_id]]
+  if not train then error("Could not find train of ID: "..e.train_id) end
+
+  -- add common data
+  local alert_data = {
+    time = game.tick,
+    type = alert_type,
+    train = {
+      depot = train.depot,
+      from = train.from,
+      from_id = train.from_id,
+      id = e.train_id,
+      network_id = train.network_id,
+      pickup_done = train.pickupDone or false,
+      to = train.to,
+      to_id = train.to_id
+    }
+  }
+
+  -- add unique data
+  local arg = {...}
+  if alert_type == "incorrect_pickup" then
+    alert_data.actual_shipment = e.actual_shipment
+    alert_data.planned_shipment = e.planned_shipment
+  elseif alert_type == "incomplete_delivery" then
+    alert_data.leftovers = arg[1]
+    alert_data.shipment = e.shipment
+  else
+    alert_data.shipment = arg[1]
+  end
+
+  -- save to data table
+  local alerts = global.data.alerts
+  table.insert(alerts, 1, alert_data)
+  alerts[31] = nil -- limit to 30 entries
+
+  -- set popup flag
+  global.working_data.alert_popup = alert_type
 end
 
 -- -----------------------------------------------------------------------------
 -- HANDLERS
 
 -- called on_tick until data iteration is finished
-local function iterate_data()
-  local data = global.working_data
-  local step = data.step
+function ltn_data.iterate()
+  local working_data = global.working_data
+  local step = working_data.step
 
   if step == 1 then
-    iterate_stations(data)
+    iterate_stations(working_data)
   elseif step == 2 then
-    process_in_transit_materials(data)
+    process_in_transit_materials(working_data)
   elseif step == 3 then
-    sort_depot_trains(data)
+    sort_depot_trains(working_data)
   elseif step == 4 then
-    sort_stations(data)
+    sort_stations(working_data)
   elseif step == 5 then
-    sort_history(data)
+    sort_history(working_data)
   elseif step == 6 then
-    sort_alerts(data)
+    sort_alerts(working_data)
   elseif step == 100 then
     -- output data
     global.data = {
       -- bulk data
-      depots = data.depots,
-      stations = data.stations,
-      inventory = data.inventory,
-      trains = data.trains,
-      history = data.history,
-      alerts = data.alerts,
+      depots = working_data.depots,
+      stations = working_data.stations,
+      inventory = working_data.inventory,
+      trains = working_data.trains,
+      history = working_data.history,
+      alerts = working_data.alerts,
       -- lookup tables
-      sorted_stations = data.sorted_stations,
-      network_to_stations = data.network_to_stations,
-      material_locations = data.material_locations,
-      sorted_history = data.sorted_history,
-      sorted_alerts = data.sorted_alerts,
+      sorted_stations = working_data.sorted_stations,
+      network_to_stations = working_data.network_to_stations,
+      material_locations = working_data.material_locations,
+      sorted_history = working_data.sorted_history,
+      sorted_alerts = working_data.sorted_alerts,
       -- other
-      num_stations = data.num_stations,
+      num_stations = working_data.num_stations,
       alerts_to_delete = {},
       invalidated_trains = {}
     }
 
-    -- avoid crashing
-    if global.working_data.alert_popups == nil then
-      global.working_data.alert_popups = {};
-    end
-
-    -- create alert popups
-    for _, t in pairs(global.working_data.alert_popups) do
-      alert_popup_gui.create_for_all(t)
+    if working_data.alert_popup then
+      alert_popup_gui.create_for_all(working_data.alert_popup)
     end
 
     -- reset working data
     global.working_data = {
       history = global.working_data.history,
-      alerts = global.working_data.alerts,
-      alert_popups = {}
+      alerts = global.working_data.alerts
     }
 
-    -- reset events
-    event.enable("ltn_on_stops_updated")
-    event.enable("ltn_on_dispatcher_updated")
-    event.disable("iterate_ltn_data")
+    -- start updating GUIs
+    global.flags.iterating_ltn_data = false
+    global.flags.updating_guis = true
+    global.next_update_index = next(global.players)
   end
 end
 
-local function on_stops_updated(e)
+function ltn_data.on_stops_updated(e)
+  if global.flags.iterating_ltn_data then return end
   global.working_data.stations = e.logistic_train_stops
 end
 
-local function on_dispatcher_updated(e)
+function ltn_data.on_dispatcher_updated(e)
+  if global.flags.iterating_ltn_data or global.flags.updating_guis then return end
   local stations = global.working_data.stations
   if not stations then
     log("LTN event desync: did not receive stations in time! Skipping iteration.")
     global.working_data.stations = nil
     return
   end
-
-  -- deregister events for this update cycle
-  event.disable("ltn_on_stops_updated")
-  event.disable("ltn_on_dispatcher_updated")
 
   -- set up data tables
   local station_ids = {}
@@ -515,45 +535,29 @@ local function on_dispatcher_updated(e)
   data.index = 1
 
   -- enable data iteration handler
-  event.enable("iterate_ltn_data")
+  global.flags.iterating_ltn_data = true
 end
 
-local function on_delivery_pickup_complete(e)
+function ltn_data.on_delivery_pickup_complete(e)
   if not global.data then return end
 
   -- compare shipments to see if something was loaded incorrectly
   for name, count in pairs(e.actual_shipment) do
     if not e.planned_shipment[name] or math_floor(e.planned_shipment[name]) > math_floor(count) then
-      -- save train data so it will persist after the delivery is through
-      local train = global.data.trains[e.train_id]
-      if not train then error("Could not find train of ID: "..e.train_id) end
-      local alerts = global.working_data.alerts
-      alerts._index = alerts._index + 1
-      alerts[alerts._index] = {
-        time = game.tick,
-        type = "incorrect_pickup",
-        train = {
-          depot = train.depot,
-          from = train.from,
-          from_id = train.from_id,
-          id = e.train_id,
-          network_id = train.network_id,
-          pickup_done = train.pickupDone or false,
-          to = train.to,
-          to_id = train.to_id
-        },
-        planned_shipment = e.planned_shipment,
-        actual_shipment = e.actual_shipment
-      }
-      global.working_data.alert_popups[#global.working_data.alert_popups+1] = {id=alerts._index, type="incorrect_pickup"}
+      add_alert(e, "incorrect_pickup")
     end
   end
 end
 
-local function on_delivery_completed(e)
+function ltn_data.on_delivery_completed(e)
   if not global.data then return end
   local train = global.data.trains[e.train_id]
-  if not train then error("Could not find train of ID: "..e.train_id) end
+  if not train then error("Could not find train of ID ["..e.train_id.."]") end
+
+  if not train.started then
+    log("Shipment of ID ["..e.train_id.."] is missing some data. Skipping!")
+    return
+  end
 
   -- add to delivery history
   table.insert(global.working_data.history, 1, {
@@ -579,67 +583,29 @@ local function on_delivery_completed(e)
     contents["fluid,"..n] = c
   end
   if table_size(contents) > 0 then
-    local alerts = global.working_data.alerts
-    alerts._index = alerts._index + 1
-    alerts[alerts._index] = {
-      time = game.tick,
-      type = "incomplete_delivery",
-      train = {
-        depot = train.depot,
-        from = train.from,
-        from_id = train.from_id,
-        id = e.train_id,
-        network_id = train.network_id,
-        to = train.to,
-        to_id = train.to_id
-      },
-      shipment = e.shipment,
-      leftovers = contents
-    }
-    global.working_data.alert_popups[#global.working_data.alert_popups+1] = {id=alerts._index, type="incomplete_delivery"}
+    add_alert(e, "incomplete_delivery", contents)
   end
 end
 
-local function on_dispatcher_no_train_found(e)
-  local breakpoint
-end
-
-local function on_delivery_failed(e)
+function ltn_data.on_delivery_failed(e)
   if not global.data then return end
 
-  local alerts = global.working_data.alerts
-  alerts._index = alerts._index + 1
-  local alert_type
-
   local trains = global.data.trains
-
   local train = trains[e.train_id] or trains[global.data.invalidated_trains[e.train_id]]
+
   if train then
+    local alert_type
     if train.train.valid then
       alert_type = "delivery_timed_out"
     else
       alert_type = "train_invalidated"
     end
 
-    alerts[alerts._index] = {
-      time = game.tick,
-      type = alert_type,
-      train = {
-        depot = train.depot,
-        from = train.from,
-        from_id = train.from_id,
-        id = e.train_id,
-        network_id = train.network_id,
-        to = train.to,
-        to_id = train.to_id
-      },
-      shipment = train.shipment
-    }
-    global.working_data.alert_popups[#global.working_data.alert_popups+1] = {id=alerts._index, type=alert_type}
+    add_alert(e, alert_type, train.shipment)
   end
 end
 
-local function on_train_created(e)
+function ltn_data.on_train_created(e)
   if not global.data then return end
   local trains = global.data.trains
   local invalidated_trains = global.data.invalidated_trains
@@ -665,48 +631,13 @@ local function on_train_created(e)
 end
 
 -- -----------------------------------------------------------------------------
--- EVENT REGISTRATION
+-- MODULE
 
-local ltn_handlers = {
-  on_stops_updated = on_stops_updated,
-  on_dispatcher_updated = on_dispatcher_updated,
-  on_dispatcher_no_train_found = on_dispatcher_no_train_found,
-  on_delivery_pickup_complete = on_delivery_pickup_complete,
-  on_delivery_completed = on_delivery_completed,
-  on_delivery_failed = on_delivery_failed
-}
+ltn_data.event_ids = {}
 
-function data_manager.setup_events()
-  if not remote.interfaces["logistic-train-network"] then
-    error("Could not establish connection to LTN!")
-  end
-  local events = {}
-  for id, handler in pairs(ltn_handlers) do
-    ltn_event_ids[id] = remote.call("logistic-train-network", id)
-    events["ltn_"..id] = {id=ltn_event_ids[id], handler=handler, group="ltn"}
-  end
-  events.on_train_created = {id=defines.events.on_train_created, handler=on_train_created, group="ltn"}
-  events.iterate_ltn_data = {id=defines.events.on_tick, handler=iterate_data, options={skip_validation=true}}
-  event.register_conditional(events)
-end
-
-function data_manager.reset()
-  -- delete data
+function ltn_data.init()
   global.data = nil
-  global.working_data = {
-    history = global.working_data.history,
-    alerts = global.working_data.alerts,
-    alert_popups = {}
-  }
-
-  -- reset events
-  event.enable("ltn_on_stops_updated")
-  event.enable("ltn_on_dispatcher_updated")
-  event.disable("iterate_ltn_data")
+  global.working_data = {history={}, alerts={}}
 end
 
--- -----------------------------------------------------------------------------
-
-data_manager.ltn_event_ids = ltn_event_ids
-
-return data_manager
+return ltn_data

@@ -1,4 +1,35 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2020-05-28
+  Bugfixes:
+    - Fixed a crash when a station is providing/requesting more than fifteen objects
+    - Fixed a crash when an LTN-controlled train has had its schedule modified
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2020-05-26
+  Bugfixes:
+    - Fixed alignment of "alert" column in alerts tab
+    - Fixed a crash when an alert is raised
+    - Fixed a crash when trying to opening an LTN combinator when the LTNC mod is not enabled
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2020-05-26
+  Features:
+    - Added a new, unified search interface
+    - Added search to the stations tab - you can search by station name or filter by network ID
+    - Added search to the history tab - you can search by route or filter by network ID
+    - Shift + clicking a station name will open that station's LTN combinator, if one exists
+  Changes:
+    - Refactored mod structure to improve performance
+    - Switched from OpteraLib and RaiLuaLib to FLib
+    - History and alerts will be cleared on mod configuration change, to avoid migration issues
+    - The mod will only auto-update one GUI per tick, increasing performance on multiplayer servers
+    - Updated GUI styling for Factorio 0.18.27
+    - The mod will only store the most recent 30 alerts, significantly improving performance
+  Bugfixes:
+    - Fixed a crash when a just-completed shipment is missing its start time
+    - Fixed a crash when updating the GUI after deconstructing a station, but before the next LTN update cycle
+---------------------------------------------------------------------------------------------------
 Version: 0.1.10
 Date: 2020-04-27
   Changes:

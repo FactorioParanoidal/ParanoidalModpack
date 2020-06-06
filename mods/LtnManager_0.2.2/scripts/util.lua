@@ -1,6 +1,3 @@
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------
--- CONTROL STAGE UTILITIES
-
 local util = require("__core__.lualib.util")
 
 -- adds the contents of two material tables together
@@ -48,10 +45,7 @@ function util.ticks_to_time(ticks)
   end
 end
 
-util.train = require("__OpteraLib__/script/train")
-
--- for OCD's sake
-util.train.get_composition_string = util.train.get_train_composition_string
+util.train = require("__flib__.train")
 
 -- create a string naming the status of the train
 -- first return is the string used for sorting, second return is the formatted string data for display
