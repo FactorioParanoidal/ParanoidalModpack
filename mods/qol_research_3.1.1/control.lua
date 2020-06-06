@@ -9,7 +9,7 @@
 ]=]
 
 local categories = require('categories')
-local config = require('config')
+local config = require('config_control')
 local technology_formats = require('defines.technology_name_formats')
 local setting_formats = require('defines.setting_name_formats')
 
@@ -213,7 +213,11 @@ script.on_event(defines.events.on_research_finished, function (event)
     update_for_force_and_category(force, category)
 end)
 
-script.on_event(defines.events.on_runtime_mod_setting_changed, function ()
+script.on_event(defines.events.on_runtime_mod_setting_changed, function (event)
+    if event.setting:find('qol-', 1, true) ~= 1 then
+        return
+    end
+
     log('setting changed')
     update_for_all_forces()
 end)
@@ -223,7 +227,7 @@ end)
 
 script.on_event(defines.events.on_player_created, function (event)
     local player = game.players[event.player_index]
-	--[[ drd spam
+	--[[ drd erase spam
     if player.admin then
         player.print('[qol] Quality of Life Research v3 is installed')
         player.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!')
