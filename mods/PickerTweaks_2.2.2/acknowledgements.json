@@ -1,0 +1,199 @@
+[
+    {
+        "name": "silent-belts-4",
+        "title": "Silent Belts 4",
+        "author": "Azias, Wakaba-chan, GotLag, Alan",
+        "contact": "Mod portal or Github",
+        "homepage": "https://github.com/aziascreations/Factorio-Silent-Belts-4",
+        "description": [
+            "Disables running sound for all belts, including modded ones.",
+            "For those who get annoyed with that squeaking noise chasing you all over the base."
+        ]
+    },
+    {
+        "name": "belt-legacy",
+        "title": "Belt Legacy",
+        "author": "fishycat",
+        "description": [
+            "Tired of accidentally replacing underground-belts and splitters with transport-belts?",
+            "Then this small mod is for you. When activated they can't fast-replace each other anymore.",
+            "For a safer bus building. For Vanilla and for Bob's basic, green and purple belt stuff."
+        ]
+    },
+    {
+        "name": "SmallRobots",
+        "title": "Small Robots - Just make the two robots a little smaller.",
+        "author": "DellAquila, Kryzeth",
+        "description": [
+            "Logistic Robot and Construction Robot are 50% smaller.",
+            "Better with mod More accurate player size compared to vehicles.",
+            "Work with all modded robots. You can set the size you want for your robots Smaller or Bigger."
+        ]
+    },
+    {
+        "name": "SmallFixes",
+        "title": "SmallFixes",
+        "author": "Choumiko",
+        "description": "Small non game changing/breaking fixes"
+    },
+    {
+        "name": "ShowBotsOnMap",
+        "title": "Show Bots On Map",
+        "author": "darkfrei",
+        "description": "Now you can see your robots on the map"
+    },
+    {
+        "name": "Squeak Through",
+        "author": "Nommy, Lupin, & Supercheese",
+        "homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=91&t=16476",
+        "description": [
+            "Allows you to walk between what used to be obstacles such as directly adjacent",
+            "solar panels, pipes, steam engines, mining drills, and chests. No more frustration when walking about your base!"
+        ]
+    },
+    {
+        "name": "disable-decorations",
+        "title": "Disable Decorations",
+        "author": "Pithlit",
+        "description": [
+            "This mod prevents placement of decoration elements at terrain generation.",
+            "Removing decorations will reduce the size of save-games. Other mods may place decoration elements manually.",
+            "Decorations from existing games will not be removed"
+        ]
+    },
+    {
+        "name": "Clean_Tree_Burning",
+        "title": "Clean Tree Burning",
+        "author": "Gegell",
+        "description": "Burnt trees won't be left when burning forests "
+    },
+    {
+        "name": "Noxys_Extra_Settings_Info",
+        "version": "0.0.3",
+        "title": "Noxys Extra Settings Info",
+        "author": "Noxy"
+    },
+    {
+        "name": "Noxys_QuickerStumpFade",
+        "title": "Noxys Fading",
+        "author": "Noxy",
+        "homepage": "https://mods.factorio.com/user/_noxy_",
+        "description": "Configurable fade away times for various corpse entities (like biters, tree stumps, destroyed buildings)."
+    },
+    {
+        "name": "RealisticReactorGlow",
+        "title": "Realistic Reactor Glow",
+        "author": "<NO_NAME>",
+        "description": "The glow of working nuclear reactor has the proper color now!"
+    },
+    {
+        "name": "Dont_lose_in_progress_ingredients",
+        "title": "Don't lose in progress ingredients",
+        "author": "Bilka",
+        "license": "unlicense",
+        "description": "Fixes that ingredients of in-process crafting would be lost when changing recipe/mining the machine."
+    },
+    {
+        "name": "IondicatorsClassic",
+        "title": "\"Iondicators\", Classic",
+        "author": "KingIonTrueLove",
+        "license": "MIT",
+        "homepage": "https://www.reddit.com/r/factorio/comments/6bu03m/since_i_started_playing_this_game_i_realized_that/",
+        "description": "Pretty inserter indicators. Pretty bad name."
+    },
+    {
+        "name": "LessUnplugged",
+        "title": "Ion's UI Tweaks: Less Unplugged",
+        "author": "KingIonTrueLove",
+        "license": "MIT",
+        "description": "Does that giant icon flashing in your face when you are building get annoying? Well I have the solution for you!"
+    },
+    {
+        "name": "EnhancedFlashlight",
+        "title": "Enhanced Flashlight",
+        "author": "grfwoot",
+        "description": "Replaces the default flashlight with a better, more realistic version"
+    },
+    {
+        "name": "LightCone",
+        "title": "Light Cone",
+        "author": "darkfrei",
+        "description": "Changes standart light cone of flashlight"
+    },
+    {
+        "name": "fireproof-trains",
+        "title": "Fireproof Trains",
+        "author": "Alnet",
+        "date": "2018-05-18",
+        "homepage": "http://mods.factorio.com/mods/alnet/fireproof-trains",
+        "description": "Allow trains to drive through fire without taking damage. Should work with modded train types."
+    },
+    {
+        "name": "Shinys-fireproof-signals",
+        "title": "Shinys fireproof signals",
+        "author": "ShinyAfro",
+        "description": "Makes train signals fire-proof"
+    },
+    {
+        "name": "Smokeless",
+        "author": "can00336",
+        "description": "Removes UPS-hogging smoke from the game."
+    },
+    {
+        "name": "MultiConcrete",
+        "title": "MultiConcrete",
+        "license": "MIT",
+        "author": "darkfrei",
+        "description": "Concrete and Hazard Concrete is the same thing, just rotate it before placement"
+    },
+    {
+        "name": "UnGirthyBorders",
+        "title": "Ion's UI Tweaks: Smaller Borders",
+        "author": "KingIonTrueLove",
+        "license": "MIT",
+        "description": "Reduces the size of the borders around menus and the toolbar, giving you more screen space. Also centers those darn arrows on the quickbar!"
+    },
+    {
+        "name": "Brighten cells",
+        "title": "[Z] Brighten cells",
+        "author": "ZlovreD",
+        "homepage": "https://forums.factorio.com/viewtopic.php?f=144&t=45154",
+        "description": "Makes gui cells for inventory, technology, toolbars a little lighter (like as before)"
+    },
+    {
+        "name": "longer-belts-redux",
+        "title": "Longer Underground Belt (Aligned) ",
+        "author": "Peppe",
+        "homepage": "https://www.reddit.com/r/factorio/comments/53wjk1/the_longer_underground_belt_mod_that_gets_it_right/",
+        "description": "Extends underground belt distance based on their speed.  Fixed optional mod bob's logistics.  Credit Schmendrick, Loren1350, for past versions"
+    },
+    {
+        "name": "VehicleGrid",
+        "title": "Vehicle Grid",
+        "author": "Optera",
+        "contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=21729",
+        "description": [
+            "Adds an equipment grid to any base or modded vehicle without grid.",
+            "cars 8x8, tanks 12x10, locomotives 10x8, wagons 10x6"
+        ]
+    },
+    {
+        "name": "NoArtilleryMapReveal",
+        "title": "NoArtilleryMapReveal",
+        "author": "JohnTheCF",
+        "description": "Make artillery projectiles to not reveal map."
+    },
+    {
+        "name": "freenetworkwiring",
+        "title": "Free Network Wiring",
+        "author": "Vas",
+        "homepage": "https://mods.factorio.com/mod/freenetworkwiring",
+        "description": [
+            "With the circuit network already being annoying as is,",
+            "no one wants to have to pay for thousands of wires! Not to mention,",
+            "blueprints give you the wires for free, so this mod makes the red and green wires free,",
+            "and is compatible with nearly any mod that alters those wires.",
+            "I'll add compatibility to other modded wires too if someone ever makes any other color wires."
+        ]
+    }
+]
