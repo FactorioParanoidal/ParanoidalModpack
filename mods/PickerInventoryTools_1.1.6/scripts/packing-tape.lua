@@ -4,7 +4,6 @@
     "author": "calcwizard",
     "description": "Mining a chest or wagon allows players to pick it up with all the items inside and carry it in their inventory. Now supports cars!"
 --]]
-
 local Event = require('__stdlib__/stdlib/event/event')
 local Inventory = require('__stdlib__/stdlib/entity/inventory')
 
@@ -57,53 +56,33 @@ local function container_to_inventory(event)
             local p_inv = player.get_main_inventory()
 
             -- Is there an empty inventory spot?
-            if p_inv.can_insert(item_name) then
-                -- Create an item-with-inventory in an available slot
+            local stack = p_inv.find_empty_stack(item_name)
 
-                local stack  -- 0.18.8 find_empty_stack(item_name)
-                for i = 1, #p_inv do
-                    if not p_inv[i].valid_for_read and p_inv[i].can_set_stack(item_name) then
-                        stack = p_inv[i]
-                        break
+            -- Should have stack since we can insert but check anyway.
+            if stack and stack.set_stack(item_name) then
+                stack.health = chest.get_health_ratio()
+                local proto = chest.prototype
+
+                local source = chest.get_inventory(defines.inventory.chest)
+                local dest = stack.get_inventory(defines.inventory.item_main)
+                Inventory.transfer_inventory(source, dest)
+
+                global.inventory_chest = global.inventory_chest or {}
+                global.inventory_chest[stack.item_number] = {}
+                local data = global.inventory_chest[stack.item_number]
+
+                data.bar = source.supports_bar() and source.get_bar()
+                data.storage_filter = proto.logistic_mode == 'storage' and chest.storage_filter
+                local requester = proto.logistic_mode == 'requester' or proto.logistic_mode == 'buffer'
+                if requester then
+                    data.request_slots = {}
+                    for i = 1, chest.request_slot_count do
+                        data.request_slots[i] = chest.get_request_slot(i)
                     end
+                    data.request_from_buffers = chest.request_from_buffers
                 end
 
-                -- Should have stack since we can insert but check anyway.
-                if stack and stack.set_stack(item_name) then
-                    stack.health = chest.get_health_ratio()
-                    local proto = chest.prototype
-
-                    local source = chest.get_inventory(defines.inventory.chest)
-                    local dest = stack.get_inventory(defines.inventory.item_main)
-                    Inventory.transfer_inventory(source, dest)
-
-                    global.inventory_chest = global.inventory_chest or {}
-                    global.inventory_chest[stack.item_number] = {}
-                    local data = global.inventory_chest[stack.item_number]
-
-                    data.bar = source.supports_bar() and source.get_bar()
-                    data.storage_filter = proto.logistic_mode == 'storage' and chest.storage_filter
-                    local requester = proto.logistic_mode == 'requester' or proto.logistic_mode == 'buffer'
-                    if requester then
-                        data.request_slots = {}
-                        for i = 1, chest.request_slot_count do
-                            data.request_slots[i] = chest.get_request_slot(i)
-                        end
-                        data.request_from_buffers = chest.request_from_buffers
-                    end
-
-                    -- on_player_mined_item
-                    Event.raise_event(
-                        defines.events.on_player_mined_item,
-                        {
-                            item_stack = {name = item_name, count = 1},
-                            player_index = player.index
-                        }
-                    )
-
-                    -- on_player_mined_entity?
-                    chest.destroy({raise_destroy = true})
-                end
+                chest.destroy({raise_destroy = true})
             end
         end
     end

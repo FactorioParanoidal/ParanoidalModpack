@@ -28,7 +28,7 @@ for _, v in pairs(data.raw['active-defense-equipment']) do
         t.movement_bonus = 0
         t.automatic = false
         t.ability_icon = {
-            filename = '__base__/graphics/equipment/discharge-defense-equipment-ability.png',
+            filename = '__PickerInventoryTools__/graphics/discharge-defense-equipment-ability.png',
             height = 32,
             priority = 'medium',
             width = 32

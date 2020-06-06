@@ -305,9 +305,13 @@ local function check_for_filterable_inventory(event)
                 requester = true
             end
         end
+        local settings = player.mod_settings
+        local use_filter_requests = settings['picker-filter-requests'].value
+        local use_filter_filters = settings['picker-filter-filters'].value
 
-        frame['filterfill_requests'].visible = requester
-        frame['filterfill_filters'].visible = inv and inv.supports_filters()
+        frame['filterfill_requests'].visible = use_filter_requests and requester
+        frame['filterfill_filters'].visible = use_filter_filters and (inv and inv.supports_filters())
+
         frame.visible = frame['filterfill_filters'].visible or frame['filterfill_requests'].visible
     else
         frame.visible = false

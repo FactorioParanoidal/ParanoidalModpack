@@ -22,6 +22,9 @@ local function increase_decrease_reprogrammer(event)
     local player, pdata = Player.get(event.player_index)
     local stack = player.cursor_stack
     if get_match(stack) then
+        if not player.mod_settings['picker-use-bar-limit'].value then
+            return
+        end
         pdata.chests = pdata.chests or {}
         local bar = pdata.chests[stack.name] or 0
         local pad = Pad.get_or_create_adjustment_pad(player, 'chestlimit')
@@ -50,7 +53,10 @@ Pad.register_events('chestlimit', increase_decrease_reprogrammer, events)
 --Set the limit when chests are built and data is saved.
 local function on_chest_built(event)
     if containers[event.created_entity.type] then
-        local _, pdata = Player.get(event.player_index)
+        local player, pdata = Player.get(event.player_index)
+        if not player.mod_settings['picker-use-bar-limit'].value then
+            return
+        end
         pdata.chests = pdata.chests or {}
         local entity = event.created_entity
         local bar = pdata.chests[entity.name]

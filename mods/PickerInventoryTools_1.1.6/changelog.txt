@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2020-05-24
+  Features:
+    - Add per player settings for Filter Fill and Bar Limit guis.
+  Changes:
+    - Remove use of script.raise_event.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2020-05-23
+  Bugfixes:
+    - Fix error caused by LuaEquipmentGrid.take API change.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2020-05-02
   Bugfixes:

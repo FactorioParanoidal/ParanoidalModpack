@@ -7,6 +7,27 @@ data:extend {
         order = 'a'
     },
     {
+        type = 'bool-setting',
+        name = 'picker-filter-requests',
+        setting_type = 'runtime-per-user',
+        default_value = true,
+        order = 'ab'
+    },
+    {
+        type = 'bool-setting',
+        name = 'picker-filter-filters',
+        setting_type = 'runtime-per-user',
+        default_value = true,
+        order = 'ac'
+    },
+        {
+        type = 'bool-setting',
+        name = 'picker-use-bar-limit',
+        setting_type = 'runtime-per-user',
+        default_value = true,
+        order = 'ad'
+    },
+    {
         name = 'picker-item-count',
         type = 'bool-setting',
         setting_type = 'runtime-per-user',
