@@ -375,10 +375,6 @@ data:extend(
         type = "unlock-recipe",
         recipe = "hydrogen-peroxide"
       },
-      {
-        type = "unlock-recipe",
-        recipe = "enriched-fuel-from-hydrazine"
-      },
     },
     unit =
     {

@@ -22,6 +22,8 @@ if settings.startup["bobmods-revamp-old-oil"].value == true or settings.startup[
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "chemical-plant")
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "pumpjack")
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "solid-fuel-from-petroleum-gas")
+  bobmods.lib.tech.remove_recipe_unlock("oil-processing", "solid-fuel-from-light-oil")
+  bobmods.lib.tech.remove_recipe_unlock("oil-processing", "solid-fuel-from-heavy-oil")
   bobmods.lib.tech.remove_recipe_unlock("advanced-oil-processing", "solid-fuel-from-light-oil")
   bobmods.lib.tech.remove_recipe_unlock("advanced-oil-processing", "solid-fuel-from-heavy-oil")
   bobmods.lib.tech.remove_prerequisite("oil-processing", "steel-processing")
@@ -78,7 +80,7 @@ if settings.startup["bobmods-revamp-old-oil"].value == true or settings.startup[
 
   if data.raw.fluid.chlorine then
     bobmods.lib.recipe.replace_ingredient("plastic-bar", "coal", "chlorine")
-    --bobmods.lib.tech.add_prerequisite("plastics", "electrolysis-2")
+    bobmods.lib.tech.add_prerequisite("plastics", "electrolysis-2")
   end
   if data.raw.fluid["sulfur-dioxide"] and data.raw.recipe["sulfuric-acid-2"] then
     for i, technology in pairs(data.raw.technology) do
@@ -148,6 +150,16 @@ if settings.startup["bobmods-revamp-oil"].value == true then
   if data.raw["item-subgroup"]["bob-fluid"] then
     data.raw.recipe["petroleum-gas-sweetening"].subgroup = "bob-fluid"
   end
+
+  if data.raw.technology["solid-fuel"] and data.raw.recipe["enriched-fuel-from-liquid-fuel"] then
+    if data.raw.technology["chemical-processing-3"] then
+      bobmods.lib.tech.remove_recipe_unlock("chemical-processing-3", "enriched-fuel-from-liquid-fuel")
+    else
+      bobmods.lib.tech.remove_recipe_unlock("advanced-oil-processing", "enriched-fuel-from-liquid-fuel")
+    end
+    bobmods.lib.tech.add_recipe_unlock("solid-fuel", "enriched-fuel-from-liquid-fuel")
+  end
+
 end
 
 
