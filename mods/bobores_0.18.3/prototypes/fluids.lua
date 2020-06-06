@@ -95,7 +95,7 @@ bobmods.ores.lithia_water =
   resource_patch_search_radius = 12,
   mining_time = 0.1,
   tint = {r = 0.5, g = 0.7, b = 0.8},
-  map_color = {r = 0.5, g = 0.7, b = 0.8},
+  map_color = {r = 0.5, g = 1, b = 0.8},
   collision_box = {{ -1.4, -1.4}, {1.4, 1.4}},
   particle = nil,
   items = 

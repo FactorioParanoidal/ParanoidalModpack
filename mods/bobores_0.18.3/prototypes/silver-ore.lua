@@ -2,7 +2,7 @@ bobmods.ores.silver =
 {
   name = "silver-ore",
   tint = {r = 0.875, g = 0.975, b = 1},
-  map_color = {r=0.578, g=0.684, b=0.695},
+  map_color = {r=0.7, g=0.9, b=0.9},
   mining_time = 0.625,
   enabled = false,
   icon = "__bobores__/graphics/icons/silver-ore.png",

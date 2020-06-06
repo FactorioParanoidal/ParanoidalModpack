@@ -1,7 +1,7 @@
 bobmods.ores.gems =
 {
   name = "gem-ore",
-  map_color = {r = 0, g = 1, b = 0},
+  map_color = {r = 0.25, g = 1, b = 0.25},
   mining_time = 2.5,
   enabled = false,
   icon = "__bobores__/graphics/icons/gem-ore.png",

@@ -2,7 +2,7 @@ bobmods.ores.nickel =
 {
   name = "nickel-ore",
   tint = {r=0.54, g=0.8, b=0.75},
-  map_color = {r=0.380, g=0.560, b=0.515},
+  map_color = {r=0.4, g=0.8, b=0.6},
   mining_time = 1.5,
   enabled = false,
   icon = "__bobores__/graphics/icons/nickel-ore.png",
