@@ -47,28 +47,6 @@ util.conditional_modify({
 
 util.conditional_modify({
   type = "recipe",
-  name = "ore-crusher-2",
-  normal = {
-    ingredients = {
-      {type="item", name="stone-brick", amount=10},
-      {type="item", name="iron-gear-wheel", amount=8},
-      {type="item", name="electric-motor", amount=4},
-      {type="item", name="burner-ore-crusher", amount=2},
-    },
-  },
-  expensive = {
-    ingredients = {
-      {type="item", name="stone-brick", amount=16},
-      {type="item", name="iron-gear-wheel", amount=14},
-      {type="item", name="electric-motor", amount=4},
-      {type="item", name="burner-ore-crusher", amount=2},
-    },
-  }
-})
-
-
-util.conditional_modify({
-  type = "recipe",
   name = "ore-sorting-facility",
   normal = {
     ingredients = {
@@ -130,4 +108,16 @@ util.conditional_modify({
       {type="item", name="electric-motor", amount=10},
     },
   }
+})
+
+util.conditional_modify({
+  type = "recipe",
+  name = "JunkTrain",
+	ingredients = {
+	  {type="item", name="motor", amount=4},
+	  {type="item", name="stone-furnace", amount=1},
+	  {type="item", name="iron-gear-wheel", amount=8},
+	  {type="item", name="pipe", amount=20},
+    },
+
 })
