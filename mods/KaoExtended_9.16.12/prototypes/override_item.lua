@@ -5,6 +5,8 @@ data.raw["item"]["solid-coke"].fuel_value = "4.5MJ"
 data.raw["item"]["solid-carbon"].fuel_value = "5.5MJ"
 data.raw["item"]["pellet-coke"].fuel_value = "19MJ"
 
+data.raw["item"]["wood-bricks"].fuel_value = "28MJ"
+
 --bobmodules
 --clean godmodules from low-tier components
 bobmods.lib.recipe.remove_ingredient ("god-module-1", "module-circuit-board")
@@ -75,6 +77,16 @@ data.raw["pump"]["bob-pump-2"].hidden = true
 data.raw["pump"]["bob-pump-3"].hidden = true
 data.raw["pump"]["bob-pump-4"].hidden = true
 
+data.raw.item["bob-valve"].hidden = true
+data.raw["storage-tank"]["bob-valve"].hidden = true
+data.raw.item["bob-overflow-valve"].hidden = true
+data.raw["storage-tank"]["bob-overflow-valve"].hidden = true
+data.raw.item["bob-topup-valve"].hidden = true
+data.raw["storage-tank"]["bob-topup-valve"].hidden = true
+data.raw.recipe["bob-valve"].hidden = true
+data.raw.recipe["bob-overflow-valve"].hidden = true
+data.raw.recipe["bob-topup-valve"].hidden = true
+
 data.raw.boiler["oil-boiler"].hidden = true
 data.raw.boiler["oil-boiler-2"].hidden = true
 data.raw.boiler["oil-boiler-3"].hidden = true
@@ -94,6 +106,13 @@ data.raw.technology["bob-oil-boiler-1"].hidden = true
 data.raw.technology["bob-oil-boiler-2"].hidden = true
 data.raw.technology["bob-oil-boiler-3"].hidden = true
 data.raw.technology["bob-oil-boiler-4"].hidden = true
+
+bobmods.lib.recipe.remove_ingredient ("module-processor-board", "boiler")
+bobmods.lib.recipe.add_new_ingredient ("module-processor-board", {type="item", name="copper-plate", amount=3})
+bobmods.lib.recipe.remove_ingredient ("module-processor-board-2", "boiler")
+bobmods.lib.recipe.add_new_ingredient ("module-processor-board-2", {type="item", name="copper-plate", amount=5})
+bobmods.lib.recipe.remove_ingredient ("module-processor-board-3", "boiler")
+bobmods.lib.recipe.add_new_ingredient ("module-processor-board-3", {type="item", name="copper-plate", amount=10})
 
 
 --bobmods.lib.recipe.replace_ingredient ("fast-underground-belt", "iron-gear-wheel", "steel-gear-wheel")
