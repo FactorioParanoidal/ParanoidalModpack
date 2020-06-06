@@ -234,7 +234,6 @@ function processTrainBasic(t)
 				-- Found an unpaired MU, downgrade it
 				--game.print("Found back straggler " .. loco2.backer_name)
 				table.insert(upgrade_locos,{loco2, global.downgrade_pairs[loco2.name]})
-				loco1_done = true
 				break
 			end
 			-- record straggler

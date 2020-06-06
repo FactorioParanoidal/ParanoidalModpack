@@ -141,11 +141,10 @@ function processTrainWireless(t)
 			if global.downgrade_pairs[loco2.name] then
 				-- Found an unpaired MU, downgrade it
 				table.insert(upgrade_locos,{loco2, global.downgrade_pairs[loco2.name]})
-				loco1_done = true
 				break
 			end
 			-- record straggler regardless
-			table.insert(unpaired_locos,loco1)
+			table.insert(unpaired_locos,loco2)
 		end
 	end
 	

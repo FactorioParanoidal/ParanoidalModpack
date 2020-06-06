@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2020-05-29
+  Features:
+    - Fixed compatibility with Train Construction Site.
+    - Changed dependency from deprecated OpteraLib to new Factorio Library.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2020-05-24
+  Features:
+    - Change MU assignment to use procedural algorithm to do every locomotive not on the blacklist.
+    - Added startup setting to manually add entities to the blacklist (in case of incompatibility).
+    - Added startup setting to add Yuoki's Steam Era locomotives to blacklist (or allow them to have MUs).
+    - Added compatibility with Steam Train and Diesel Train.
+    - Added compatibility with Luzifer's Electronic Locomotives of all types.
+    - Added debug message option to display entity names instead of localised names.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.2
 Date: 2020-03-23
   Features:
