@@ -577,7 +577,7 @@ util.conditional_modify({
     },
   }
 })
-
+--[[
 util.conditional_modify({
   type = "recipe",
   name = "offshore-pump",
@@ -596,6 +596,7 @@ util.conditional_modify({
     },
   }
 })
+]]--
 
 util.conditional_modify({
   type = "recipe",
@@ -855,6 +856,47 @@ util.conditional_modify({
     },
   }
 })
+
+util.conditional_modify({ --drd
+  type = "recipe",	
+  name = "solid-mud-landfill",
+  ingredients =
+      {
+        {type = "item", name = "solid-mud", amount = 250}, --DrD 25		
+      }
+})
+
+
+-- from angels bioprocessing
+
+util.conditional_modify({ --drd
+	type = "recipe",
+    name = "cellulose-fiber-raw-wood",
+    results=
+    {
+      {type="item", name="cellulose-fiber", amount=3}, --DrD 4
+    }
+})
+util.conditional_modify({ --drd
+    type = "recipe",
+    name = "wood-from-cellulose",
+    ingredients ={
+      {type="item", name="cellulose-fiber", amount=7}, --DrD 4
+      {type="item", name="paste-cellulose", amount=3}, --DrD 2
+	}
+})
+util.conditional_modify({ --drd
+    type = "recipe",
+    name = "wood-pellets",
+    ingredients ={
+      {type="item", name="cellulose-fiber", amount=10}, --DrD 12
+    },
+    results=
+    {
+      {type="item", name="wood-pellets", amount=1}, --DrD 2
+    },
+})
+
 
 -- armour upgrade path
 if data.raw.armor["respirator"] and data.raw.recipe["light-armor"] then
