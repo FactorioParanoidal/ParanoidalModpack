@@ -298,7 +298,7 @@ data:extend(
     {
       type = "fluid",
       effectivity = 1,
-      emissions_per_minute = 10, --fairly sure this scales, so it would be 2 at level 1 speed.
+      emissions_per_minute = 5, --fairly sure this scales, so it would be 1 at level 1 speed.
       fluid_box =
       {
         base_area = 1,

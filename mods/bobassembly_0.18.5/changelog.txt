@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.5
+Date: 23. 05. 2020
+  Changes:
+    - Reduced polution of Steam assembling machine at max power to 5.
+    - Updated to work with MCI 0.18.8
+    - Changed technology icons for fluid powered furnaces and multipurpose furnace.
+    - Reduced cost of electric (and chemical mixing) furnaces to match base game costs.
+  Features:
+    - Added recipes to convert between Chemical <-> Normal <-> Mixing furnaces of fluid burning types.
+    - Added recipes to convert between item fuelled <-> fluid fuelled furnaces of Normal, Chemical and Mixing types.
+  Bugfixes:
+    - Fixed icon mipmap log error messages
+    - Fixed smoke position on fluid burning steel furnaces.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.4
 Date: 26. 03. 2020
   Features:

@@ -223,7 +223,7 @@ data:extend(
     ingredients =
     {
       {"electric-furnace", 1},
-      {"steel-plate", 15},
+      {"steel-plate", 10},
       {"stone-brick", 10},
       {"processing-unit", 5},
     },
@@ -238,7 +238,7 @@ data:extend(
     ingredients =
     {
       {"electric-furnace-2", 1},
-      {"steel-plate", 15},
+      {"steel-plate", 10},
       {"stone-brick", 10},
       {"processing-unit", 5},
     },

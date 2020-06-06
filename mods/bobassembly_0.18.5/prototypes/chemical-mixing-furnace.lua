@@ -2,9 +2,10 @@ if settings.startup["bobmods-assembly-multipurposefurnaces"].value and
   data.raw["item-subgroup"]["bob-smelting-machine"] and
   data.raw["recipe-category"]["chemical-furnace"] and
   data.raw["recipe-category"]["mixing-furnace"] and
-  data.raw.technology["alloy-processing-2"] and
-  data.raw.technology["chemical-processing-3"]
+  (data.raw.technology["alloy-processing-2"] or data.raw.technology["electric-mixing-furnace"]) and
+  (data.raw.technology["chemical-processing-3"] or data.raw.technology["electric-chemical-furnace"])
 then
+
 
 function bob_electric_multipurpose_furnace_working_visualisations()
   return
@@ -87,14 +88,14 @@ data:extend(
   {
     type = "recipe",
     name = "electric-chemical-mixing-furnace",
-    energy_required = 10,
+    energy_required = 5,
     enabled = false,
     ingredients =
     {
       {"chemical-furnace", 1},
-      {"steel-plate", 15},
+      {"steel-plate", 10},
       {"stone-brick", 10},
-      {"processing-unit", 10},
+      {"processing-unit", 5},
       {"pipe", 5},
     },
     result = "electric-chemical-mixing-furnace"
@@ -103,14 +104,14 @@ data:extend(
   {
     type = "recipe",
     name = "electric-chemical-mixing-furnace-2",
-    energy_required = 10,
+    energy_required = 5,
     enabled = false,
     ingredients =
     {
       {"electric-chemical-mixing-furnace", 1},
-      {"steel-plate", 15},
+      {"steel-plate", 10},
       {"stone-brick", 10},
-      {"processing-unit", 10},
+      {"processing-unit", 5},
       {"pipe", 5},
     },
     result = "electric-chemical-mixing-furnace-2"
@@ -268,13 +269,29 @@ data:extend(
   {
     type = "technology",
     name = "multi-purpose-furnace-1",
-    icon = "__bobassembly__/graphics/icons/technology/multi-purpose-furnace.png",
     icon_size = 128,
+--    icon = "__bobassembly__/graphics/icons/technology/multi-purpose-furnace.png",
+    icons =
+    {
+      {
+        icon_size = 128,
+        icon = "__base__/graphics/technology/advanced-material-processing.png",
+      },
+      {
+        icon = "__bobassembly__/graphics/icons/technology/chemistry.png",
+        icon_size = 64,
+        shift = {-32, -32}
+      },
+      {
+        icon = "__bobassembly__/graphics/icons/technology/alloy-processing.png",
+        icon_size = 128,
+        scale = 0.5,
+        shift = {32, -32}
+      }
+    },
     order = "c-c-b-1",
     prerequisites =
     {
-      "alloy-processing-2",
-      "chemical-processing-3",
       "advanced-electronics-2",
       "production-science-pack",
     },
@@ -302,8 +319,26 @@ data:extend(
   {
     type = "technology",
     name = "multi-purpose-furnace-2",
-    icon = "__bobassembly__/graphics/icons/technology/multi-purpose-furnace.png",
     icon_size = 128,
+--    icon = "__bobassembly__/graphics/icons/technology/multi-purpose-furnace.png",
+    icons =
+    {
+      {
+        icon_size = 128,
+        icon = "__base__/graphics/technology/advanced-material-processing.png",
+      },
+      {
+        icon = "__bobassembly__/graphics/icons/technology/chemistry.png",
+        icon_size = 64,
+        shift = {-32, -32}
+      },
+      {
+        icon = "__bobassembly__/graphics/icons/technology/alloy-processing.png",
+        icon_size = 128,
+        scale = 0.5,
+        shift = {32, -32}
+      }
+    },
     order = "c-c-b-2",
     prerequisites =
     {
@@ -333,6 +368,15 @@ data:extend(
   },
 }
 )
-
+if data.raw.technology["electric-chemical-furnace"] then
+  bobmods.lib.tech.add_prerequisite("multi-purpose-furnace-1", "electric-chemical-furnace")
+elseif data.raw.technology["chemical-processing-3"] then
+  bobmods.lib.tech.add_prerequisite("multi-purpose-furnace-1", "chemical-processing-3")
+end
+if data.raw.technology["electric-mixing-furnace"] then
+  bobmods.lib.tech.add_prerequisite("multi-purpose-furnace-1", "electric-mixing-furnace")
+elseif data.raw.technology["alloy-processing-2"] then
+  bobmods.lib.tech.add_prerequisite("multi-purpose-furnace-1", "alloy-processing-2")
+end
 
 end
