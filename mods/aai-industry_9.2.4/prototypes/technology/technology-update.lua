@@ -32,6 +32,14 @@ if data.raw.technology["bob-steam-power-1"] then
   data.raw.technology["bob-steam-power-1"].unit.count = 100
 end
 
+data.raw.technology["inserter-stack-size-bonus-1"].unit.count = 1000
+data.raw.technology["inserter-stack-size-bonus-2"].unit.count = 2000
+data.raw.technology["inserter-stack-size-bonus-3"].unit.count = 4000
+data.raw.technology["inserter-stack-size-bonus-4"].unit.count = 5000
+data.raw.technology["inserter-stack-size-bonus-1"].unit.time = 60
+data.raw.technology["inserter-stack-size-bonus-2"].unit.time = 60
+data.raw.technology["inserter-stack-size-bonus-3"].unit.time = 60
+data.raw.technology["inserter-stack-size-bonus-4"].unit.time = 100
 
 --angels
 util.tech_add_prerequisites("ore-crushing", "electricity")
@@ -45,6 +53,8 @@ util.tech_add_prerequisites("oil-gas-extraction", "basic-fluid-handling")
 util.tech_add_prerequisites("slag-processing-1", "basic-fluid-handling")
 
 util.tech_add_prerequisites("chemical-processing-1", "basic-chemistry") --DrD
+util.tech_add_prerequisites("zcs-trash-landfill", "stone-walls") --DrD
+util.tech_add_prerequisites("military", "armor-absorb-1") --DrD
 
 -- util.tech_lock_recipes(    "fuel-processing",  {        "fuel-processor"})
 
