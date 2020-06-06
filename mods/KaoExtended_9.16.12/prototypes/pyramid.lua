@@ -1,6 +1,51 @@
 --BOBS + VANILLA
 
+bobmods.lib.recipe.add_new_ingredient ("submachine-gun", {type="gun", name="pistol", amount=2})
 
+  bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-2", {"logistic-robot"})
+  bobmods.lib.recipe.remove_ingredient("bob-construction-robot-2", {"construction-robot"})
+  bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-3", {"bob-logistic-robot-2"})
+  bobmods.lib.recipe.remove_ingredient("bob-construction-robot-3", {"bob-construction-robot-2"})
+  bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-4", {"bob-logistic-robot-3"})
+  bobmods.lib.recipe.remove_ingredient("bob-construction-robot-4", {"bob-construction-robot-3"})
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-2", {"logistic-robot", 2})
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-2", {"construction-robot", 2})
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-3", {"bob-logistic-robot-2", 2})
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-3", {"bob-construction-robot-2", 2})
+  bobmods.lib.recipe.add_ingredient("bob-logistic-robot-4", {"bob-logistic-robot-3", 2})
+  bobmods.lib.recipe.add_ingredient("bob-construction-robot-4", {"bob-construction-robot-3", 2})
+
+bobmods.lib.recipe.remove_ingredient ("radar-2", "radar")
+bobmods.lib.recipe.add_new_ingredient ("radar-2", {type="item", name="radar", amount=2})
+bobmods.lib.recipe.remove_ingredient ("radar-3", "radar-2")
+bobmods.lib.recipe.add_new_ingredient ("radar-3", {type="item", name="radar-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("radar-4", "radar-3")
+bobmods.lib.recipe.add_new_ingredient ("radar-4", {type="item", name="radar-3", amount=2})
+bobmods.lib.recipe.remove_ingredient ("radar-5", "radar-4")
+bobmods.lib.recipe.add_new_ingredient ("radar-5", {type="item", name="radar-4", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("storage-tank", "bob-small-inline-storage-tank")
+bobmods.lib.recipe.add_new_ingredient ("storage-tank", {type="item", name="bob-small-inline-storage-tank", amount=4})
+bobmods.lib.recipe.remove_ingredient ("storage-tank-2", "storage-tank")
+bobmods.lib.recipe.add_new_ingredient ("storage-tank-2", {type="item", name="storage-tank", amount=2})
+bobmods.lib.recipe.remove_ingredient ("storage-tank-3", "storage-tank-2")
+bobmods.lib.recipe.add_new_ingredient ("storage-tank-3", {type="item", name="storage-tank-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("storage-tank-4", "storage-tank-3")
+bobmods.lib.recipe.add_new_ingredient ("storage-tank-4", {type="item", name="storage-tank-3", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("storage-tank-all-corners", "bob-small-storage-tank")
+bobmods.lib.recipe.add_new_ingredient ("storage-tank-all-corners", {type="item", name="bob-small-storage-tank", amount=4})
+bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners-2", "bob-storage-tank-all-corners")
+bobmods.lib.recipe.add_new_ingredient ("bob-storage-tank-all-corners-2", {type="item", name="bob-storage-tank-all-corners", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners-3", "bob-storage-tank-all-corners-2")
+bobmods.lib.recipe.add_new_ingredient ("bob-storage-tank-all-corners-3", {type="item", name="bob-storage-tank-all-corners-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners-4", "bob-storage-tank-all-corners-3")
+bobmods.lib.recipe.add_new_ingredient ("bob-storage-tank-all-corners-4", {type="item", name="bob-storage-tank-all-corners-3", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("angels-storage-tank-3", "bob-small-inline-storage-tank")
+bobmods.lib.recipe.add_new_ingredient ("angels-storage-tank-3", {type="item", name="bob-small-inline-storage-tank", amount=4})
+bobmods.lib.recipe.remove_ingredient ("angels-storage-tank-2", "angels-storage-tank-3")
+bobmods.lib.recipe.add_new_ingredient ("angels-storage-tank-2", {type="item", name="angels-storage-tank-3", amount=4})
 
 bobmods.lib.recipe.remove_ingredient ("steam-engine-2", "steam-engine")
 bobmods.lib.recipe.add_new_ingredient ("steam-engine-2", {type="item", name="steam-engine", amount=2})
@@ -93,6 +138,30 @@ bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-4", {type="item", 
 bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-5", "bob-area-mining-drill-4")
 bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-5", {type="item", name="bob-area-mining-drill-4", amount=2})
 
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-1", {type="item", name="laser-turret", amount=4})
+bobmods.lib.recipe.remove_ingredient ("bob-plasma-turret-2", "bob-plasma-turret-1")
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-2", {type="item", name="bob-plasma-turret-1", amount=2})
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-2", {type="item", name="bob-laser-turret-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-plasma-turret-3", "bob-plasma-turret-2")
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-3", {type="item", name="bob-plasma-turret-2", amount=2})
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-3", {type="item", name="bob-laser-turret-3", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-plasma-turret-4", "bob-plasma-turret-3")
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-4", {type="item", name="bob-plasma-turret-3", amount=2})
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-4", {type="item", name="bob-laser-turret-4", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-plasma-turret-5", "bob-plasma-turret-4")
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-5", {type="item", name="bob-plasma-turret-4", amount=2})
+bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-5", {type="item", name="bob-laser-turret-5", amount=2})
+
+bobmods.lib.recipe.remove_ingredient ("bob-laser-turret-2", "laser-turret")
+bobmods.lib.recipe.add_new_ingredient ("bob-laser-turret-2", {type="item", name="laser-turret", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-laser-turret-3", "bob-laser-turret-2")
+bobmods.lib.recipe.add_new_ingredient ("bob-laser-turret-3", {type="item", name="bob-laser-turret-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-laser-turret-4", "bob-laser-turret-3")
+bobmods.lib.recipe.add_new_ingredient ("bob-laser-turret-4", {type="item", name="bob-laser-turret-3", amount=2})
+bobmods.lib.recipe.remove_ingredient ("bob-laser-turret-5", "bob-laser-turret-4")
+bobmods.lib.recipe.add_new_ingredient ("bob-laser-turret-5", {type="item", name="bob-laser-turret-4", amount=2})
+
+
 --ANGELS
 
 bobmods.lib.recipe.remove_ingredient ("liquifier-2", "liquifier")
@@ -106,6 +175,10 @@ bobmods.lib.recipe.remove_ingredient ("ore-crusher-2", "ore-crusher")
 bobmods.lib.recipe.add_new_ingredient ("ore-crusher-2", {type="item", name="ore-crusher", amount=2})
 bobmods.lib.recipe.remove_ingredient ("ore-crusher-3", "ore-crusher-2")
 bobmods.lib.recipe.add_new_ingredient ("ore-crusher-3", {type="item", name="ore-crusher-2", amount=2})
+if data.raw.item["ore-crusher-4"] then
+bobmods.lib.recipe.remove_ingredient ("ore-crusher-4", "ore-crusher-3")
+bobmods.lib.recipe.add_new_ingredient ("ore-crusher-4", {type="item", name="ore-crusher-3", amount=2})
+end
 
 bobmods.lib.recipe.remove_ingredient ("ore-sorting-facility-2", "ore-sorting-facility")
 bobmods.lib.recipe.add_new_ingredient ("ore-sorting-facility-2", {type="item", name="ore-sorting-facility", amount=2})
@@ -118,6 +191,10 @@ bobmods.lib.recipe.remove_ingredient ("ore-floatation-cell-2", "ore-floatation-c
 bobmods.lib.recipe.add_new_ingredient ("ore-floatation-cell-2", {type="item", name="ore-floatation-cell", amount=2})
 bobmods.lib.recipe.remove_ingredient ("ore-floatation-cell-3", "ore-floatation-cell-2")
 bobmods.lib.recipe.add_new_ingredient ("ore-floatation-cell-3", {type="item", name="ore-floatation-cell-2", amount=2})
+if data.raw.item["ore-floatation-cell-4"] then
+bobmods.lib.recipe.remove_ingredient ("ore-floatation-cell-4", "ore-floatation-cell-3")
+bobmods.lib.recipe.add_new_ingredient ("ore-floatation-cell-4", {type="item", name="ore-floatation-cell-3", amount=2})
+end
 
 bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-2", "ore-leaching-plant")
 bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-2", {type="item", name="ore-leaching-plant", amount=2})
@@ -125,15 +202,33 @@ bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-3", "ore-leaching-plan
 bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-3", {type="item", name="ore-leaching-plant-2", amount=2})
 bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-4", "ore-leaching-plant-3")
 bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-4", {type="item", name="ore-leaching-plant-3", amount=2})
+if data.raw.item["ore-leaching-plant-5"] then
+bobmods.lib.recipe.remove_ingredient ("ore-leaching-plant-5", "ore-leaching-plant-4")
+bobmods.lib.recipe.add_new_ingredient ("ore-leaching-plant-5", {type="item", name="ore-leaching-plant-4", amount=2})
+end
+
 
 bobmods.lib.recipe.remove_ingredient ("ore-refinery-2", "ore-refinery")
 bobmods.lib.recipe.add_new_ingredient ("ore-refinery-2", {type="item", name="ore-refinery", amount=2})
+if data.raw.item["ore-refinery-3"] then
+bobmods.lib.recipe.remove_ingredient ("ore-refinery-3", "ore-refinery-2")
+bobmods.lib.recipe.add_new_ingredient ("ore-refinery-3", {type="item", name="ore-refinery-2", amount=2})
+end
+
 
 bobmods.lib.recipe.remove_ingredient ("filtration-unit-2", "filtration-unit")
 bobmods.lib.recipe.add_new_ingredient ("filtration-unit-2", {type="item", name="filtration-unit", amount=2})
+if data.raw.item["filtration-unit-3"] then
+bobmods.lib.recipe.remove_ingredient ("filtration-unit-3", "filtration-unit-2")
+bobmods.lib.recipe.add_new_ingredient ("filtration-unit-3", {type="item", name="filtration-unit-2", amount=2})
+end
 
 bobmods.lib.recipe.remove_ingredient ("crystallizer-2", "crystallizer")
 bobmods.lib.recipe.add_new_ingredient ("crystallizer-2", {type="item", name="crystallizer", amount=2})
+if data.raw.item["crystallizer-3"] then
+bobmods.lib.recipe.remove_ingredient ("crystallizer-3", "crystallizer-2")
+bobmods.lib.recipe.add_new_ingredient ("crystallizer-3", {type="item", name="crystallizer-2", amount=2})
+end
 
 bobmods.lib.recipe.remove_ingredient ("hydro-plant-2", "hydro-plant")
 bobmods.lib.recipe.add_new_ingredient ("hydro-plant-2", {type="item", name="hydro-plant", amount=2})
@@ -145,6 +240,17 @@ bobmods.lib.recipe.add_new_ingredient ("salination-plant-2", {type="item", name=
 
 bobmods.lib.recipe.remove_ingredient ("washing-plant-2", "washing-plant")
 bobmods.lib.recipe.add_new_ingredient ("washing-plant-2", {type="item", name="washing-plant", amount=2})
+if data.raw.item["washing-plant-3"] then
+bobmods.lib.recipe.remove_ingredient ("washing-plant-3", "washing-plant-2")
+bobmods.lib.recipe.add_new_ingredient ("washing-plant-3", {type="item", name="washing-plant-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("washing-plant-4", "washing-plant-3")
+bobmods.lib.recipe.add_new_ingredient ("washing-plant-4", {type="item", name="washing-plant-3", amount=2})
+end
+
+bobmods.lib.recipe.remove_ingredient ("angels-electric-boiler-2", "angels-electric-boiler")
+bobmods.lib.recipe.add_new_ingredient ("angels-electric-boiler-2", {type="item", name="angels-electric-boiler", amount=2})
+bobmods.lib.recipe.remove_ingredient ("angels-electric-boiler-3", "angels-electric-boiler-2")
+bobmods.lib.recipe.add_new_ingredient ("angels-electric-boiler-3", {type="item", name="angels-electric-boiler-2", amount=2})
 
 bobmods.lib.recipe.remove_ingredient ("ore-powderizer-2", "ore-powderizer")
 bobmods.lib.recipe.add_new_ingredient ("ore-powderizer-2", {type="item", name="ore-powderizer", amount=2})
@@ -275,9 +381,17 @@ bobmods.lib.recipe.add_new_ingredient ("angels-electic-boiler-3", {type="item", 
 bobmods.lib.recipe.remove_ingredient ("sluicer-2", "sluicer")
 bobmods.lib.recipe.add_new_ingredient ("sluicer-2", {type="item", name="sluicer", amount=2})
 
+
+--[[
+if data.raw.car["schall-tank-l"] then
+bobmods.lib.recipe.remove_ingredient ("bob-tank-2", "tank")
+bobmods.lib.recipe.add_new_ingredient ("bob-tank-2", {type="car", name="schall-tank-l", amount=1})
+end
+]]--
+
 --[[
 bobmods.lib.recipe.remove_ingredient ("centrifuge-mk2", "centrifuge")
 bobmods.lib.recipe.add_new_ingredient ("centrifuge-mk2", {type="item", name="centrifuge", amount=2})
 bobmods.lib.recipe.remove_ingredient ("centrifuge-mk3", "centrifuge-mk2")
 bobmods.lib.recipe.add_new_ingredient ("centrifuge-mk3", {type="item", name="centrifuge-mk2", amount=2})
---]]
+]]--
