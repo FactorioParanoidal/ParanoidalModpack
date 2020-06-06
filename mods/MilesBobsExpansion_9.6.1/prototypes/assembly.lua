@@ -97,6 +97,7 @@ data:extend(
       emissions_per_minute = 0.2
     },
     energy_usage = "1000kW",
+	ingredient_count = 20,
     module_specification =
     {
       module_slots = 7,
@@ -116,7 +117,7 @@ data:extend(
       {"processing-unit", 25},
       {"copper-tungsten-alloy", 2500},
       --{"iron-plate", 15},
-      {"iron-gear-wheel", 200},
+      {"brass-gear-wheel", 250},
 	  {"speed-module-5", 10},
     },
     result = "assembling-machine-7"
@@ -125,8 +126,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-7",
-    icon = "__base__/graphics/technology/automation.png",
-    icon_size = 128,
+    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-7.png",
+    icon_size = 64,
     effects =
     {
       {
@@ -160,7 +161,7 @@ data:extend(
       {"processing-unit", 50},
       {"cobalt-steel-alloy", 5000},
       --{"iron-plate", 20},
-      {"steel-gear-wheel", 500},
+      {"cobalt-steel-gear-wheel", 500},
 	  {"speed-module-6", 10},
     },
     result = "assembling-machine-8"
@@ -169,8 +170,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-8",
-    icon = "__base__/graphics/technology/automation.png",
-    icon_size = 128,
+    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-8.png",
+    icon_size = 64,
     effects =
     {
       {
@@ -203,8 +204,8 @@ data:extend(
       {"assembling-machine-8", 2},
       {"processing-unit", 100},
       {"silver-plate", 10000},
-      {"iron-plate", 40},
-      {"iron-gear-wheel", 30},
+      {"nitinol-alloy", 1000},
+      --{"iron-gear-wheel", 30},
 	  {"speed-module-7", 5},
     },
     result = "assembling-machine-9"
@@ -213,8 +214,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-9",
-    icon = "__base__/graphics/technology/automation.png",
-    icon_size = 128,
+    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png",
+    icon_size = 64,
     effects =
     {
       {
@@ -225,13 +226,13 @@ data:extend(
     prerequisites = {"automation-8"},
     unit =
     {
-      count = 450,
+      count = 500,
       ingredients =
       {
-        {"automation-science-pack", 1},
+        {"automation-science-pack", 2},
         {"logistic-science-pack", 1},
         {"utility-science-pack", 1},
-        {"production-science-pack", 1},
+        {"production-science-pack", 2},
       },
       time = 200
 	  },

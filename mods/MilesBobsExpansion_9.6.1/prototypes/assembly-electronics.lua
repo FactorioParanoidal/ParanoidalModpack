@@ -1,4 +1,9 @@
 require "util"
+
+local new_assembler=table.deepcopy(data.raw["assembling-machine"]["electronics-machine-3"])
+		new_assembler.name="electronics-machine-4"
+		data:extend{new_assembler}
+
 data:extend(
 {
   {
@@ -131,7 +136,7 @@ data:extend(
       emissions = 0.0005
     },
     energy_usage = "1000kW",
-    ingredient_count = 6,
+    ingredient_count = 16,
     module_specification =
     {
       module_slots = 7,
