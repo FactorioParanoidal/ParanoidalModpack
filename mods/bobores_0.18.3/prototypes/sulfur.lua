@@ -2,7 +2,7 @@ bobmods.ores.sulfur =
 {
   name = "sulfur",
   tint = {r = 0.8, g = 0.75, b = 0.1},
-  map_color = {r=0.8, g=0.75, b=0.1},
+  map_color = {r=1, g=1, b=0},
   mining_time = 0.25,
   enabled = false,
   icon = "__base__/graphics/icons/sulfur.png",

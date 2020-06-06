@@ -2,7 +2,7 @@ bobmods.ores.gold =
 {
   name = "gold-ore",
   tint = {r = 1, g = 0.75, b = 0},
-  map_color = {r=0.9, g=0.63, b=0},
+  map_color = {r=1, g=0.7, b=0},
   mining_time = 0.75,
   enabled = false,
   icon = "__bobores__/graphics/icons/gold-ore.png",

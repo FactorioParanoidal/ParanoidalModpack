@@ -2,7 +2,7 @@ bobmods.ores.thorium =
 {
   name = "thorium-ore",
   tint = {r = 1, g = 1, b = 0.25},
-  map_color = {r = 0.7, g = 0.7, b = 0},
+  map_color = {r = 0.75, g = 1, b = 0.25},
   mining_time = 2.5,
   enabled = false, --because It is controlled by a settings.lua option
 -- notice the icon line is missing! Icon will now be generated!

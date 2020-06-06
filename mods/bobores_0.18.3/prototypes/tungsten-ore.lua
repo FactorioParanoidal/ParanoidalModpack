@@ -2,7 +2,7 @@ bobmods.ores.tungsten =
 {
   name = "tungsten-ore",
   tint = {r = 0.75, g = 0.5, b = 0.25},
-  map_color = {r = 0.375, g = 0.25, b = 0.125},
+  map_color = {r = 0.5, g = 0.0, b = 0.0},
   mining_time = 3,
   enabled = false,
   icon = "__bobores__/graphics/icons/tungsten-ore.png",

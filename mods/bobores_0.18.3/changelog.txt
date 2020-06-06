@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+Date: 23. 05. 2020
+  Changes:
+    - Lead map colour is now a dark blue (grey was too hard to see, and black is coal, so I made it a dark blue)
+    - Tungsten Map colour is now a dark red (Brown was too hard to see, Dark red is kind of close and easier to see)
+    - Gem Ore map colour is now a brighter green. (Easier to distinguish from Uranium)
+    - Thorium map colour is now a bright greeny yellow. (More distinct from Sulfur and Bauxite)
+    - Gold map colour is brighter and slightly more yellow (Somewhere between the red-orange of copper, and Yellow)
+    - Sulfur map colour is now pure yellow. (easier to distinguish from Bauxite, Thorium and Gold)
+    - Lithia water map colour is more a more greeny aqua. (Easier to distinguish from Pure water)
+    - Silver map colour is now a much ligher greyish cyan. (Somewhere between Zinc, tin and Quartz, but easier to distinguish from Tin and Iron)
+    - Nickel map colour is now brighter. (Easier to distinguish from Iron)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.2
 Date: 08. 04. 2020
   Bugfixes:

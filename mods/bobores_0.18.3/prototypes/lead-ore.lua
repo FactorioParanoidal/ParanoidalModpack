@@ -4,7 +4,7 @@ bobmods.ores.lead =
   icon = "__bobores__/graphics/icons/lead-ore.png",
   mining_time = 0.75,
   tint = {r = 0.5, g = 0.5, b = 0.5},
-  map_color = {r=0.250, g=0.250, b=0.250},
+  map_color = {r=0.0, g=0.0, b=0.50},
   item =
   {
     create = true,
