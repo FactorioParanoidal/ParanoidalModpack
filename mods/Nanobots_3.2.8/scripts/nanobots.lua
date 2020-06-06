@@ -372,8 +372,7 @@ function Queue.build_entity_ghost(data)
         if ghost.valid and data.entity.ghost_name == data.entity_name then --item_places_entity(data.item_stack.name, ghost.ghost_name) then
             local item_stacks = get_all_items_on_ground(ghost)
             if player.surface.can_place_entity {name = ghost.ghost_name, position = ghost.position, direction = ghost.direction, force = ghost.force} then
-                local tags = ghost.tags
-                local revived, entity, requests = ghost.revive({return_item_request_proxy = true})
+                local revived, entity, requests = ghost.revive{return_item_request_proxy = true, raise_revive = true}
                 if revived then
                     create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
                     entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
@@ -383,18 +382,6 @@ function Queue.build_entity_ghost(data)
                     if requests then
                         satisfy_requests(requests, entity, player)
                     end
-                    script.raise_event(
-                        -- Raise player built event to coincide with player.mine_entity
-                        defines.events.on_built_entity,
-                        {
-                            player_index = player.index,
-                            created_entity = entity,
-                            revived = true,
-                            item = game.item_prototypes[data.item_stack.name],
-                            tags = tags,
-                            stack = nil
-                        }
-                    )
                 else --not revived, return item
                     insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
                 end --revived
@@ -412,7 +399,6 @@ function Queue.build_tile_ghost(data)
     if (player and player.valid) then
         if ghost.valid then
             local tile, hidden_tile = surface.get_tile(position), surface.get_hidden_tile(position)
-            local tile_name = tile.name
             local force = ghost.force
             local tile_was_mined = false
             local ghost_was_revived = false
@@ -437,28 +423,10 @@ function Queue.build_tile_ghost(data)
                 -- checking if the ghost was revived is likely unnecessary but felt safer.
                 if tile_was_mined and not ghost_was_revived then
                     --local tile_name = ptype.place_as_tile_result['result'].name
-                    surface.set_tiles({{name = tile_ptype.name, position = position}})
+                    surface.set_tiles({{name = tile_ptype.name, position = position}}, true, true, false, true)
                 end
 
                 surface.create_entity {name = 'nano-sound-build-tiles', position = position}
-                script.raise_event(
-                    -- Raise player_built_tile to coincide with the events raised from player.mine_tile
-                    defines.events.on_player_built_tile,
-                    {
-                        player_index = player.index,
-                        positions = {position},
-                        surface_index = surface.index,
-                        item = item_ptype,
-                        tile = tile_ptype,
-                        tiles = {
-                            {
-                                position = position,
-                                old_tile = game.tile_prototypes[tile_name]
-                            }
-                        },
-                        stack = nil
-                    }
-                )
             else --Can't place or revive the tile, give item back.
                 insert_or_spill_items(player, {data.item_stack})
             end --Tile was placed or revived
@@ -480,20 +448,12 @@ function Queue.upgrade_ghost(data)
                 position = position,
                 fast_replace = true,
                 player = player,
-                type = ghost.type == 'underground-belt' and ghost.belt_to_ground_type or nil
+                type = ghost.type == 'underground-belt' and ghost.belt_to_ground_type or nil,
+                raise_built = true
             }
             if entity then
                 create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
                 entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
-                script.raise_event(
-                    defines.events.on_robot_built_entity,
-                    {
-                        robot = player.character,
-                        created_entity = entity,
-                        revived = true,
-                        stack = nil
-                    }
-                )
             else --not revived, return item
                 insert_or_spill_items(player, {data.item_stack})
             end --revived
@@ -635,8 +595,8 @@ end --function
 --Kill the trees! Kill them dead
 local function everyone_hates_trees(player, pos, nano_ammo)
     local radius = get_ammo_radius(player, nano_ammo)
-    local area = Position.expand_to_area(pos, radius)
-    for _, stupid_tree in pairs(player.surface.find_entities_filtered {area = area, type = 'tree', limit = 200}) do
+    --local area = Position.expand_to_area(pos, radius)
+    for _, stupid_tree in pairs(player.surface.find_entities_filtered {position = pos, radius = radius, type = 'tree', limit = 200}) do
         if nano_ammo.valid and nano_ammo.valid_for_read then
             if not stupid_tree.to_be_deconstructed(player.force) then
                 local tree_area = Area.expand(stupid_tree.bounding_box, .5)

@@ -3,7 +3,7 @@ local make_shortcut = require('prototypes/equipment/make_shortcut')
 
 Data {
     type = 'recipe',
-    name = 'equipment-bot-chip-feeder',
+    name = 'equipment-bot-chip-trees',
     enabled = false,
     energy_required = 10,
     ingredients = {
@@ -11,33 +11,33 @@ Data {
         {'battery', 1}
         --bobmods add construction brain
     },
-    result = 'equipment-bot-chip-feeder'
+    result = 'equipment-bot-chip-trees'
 }
 
 Data {
     type = 'item',
-    name = 'equipment-bot-chip-feeder',
-    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-feeder.png',
+    name = 'equipment-bot-chip-trees',
+    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-trees.png',
     icon_size = 32,
-    placed_as_equipment_result = 'equipment-bot-chip-feeder',
+    placed_as_equipment_result = 'equipment-bot-chip-trees',
     subgroup = 'equipment',
-    order = 'e[robotics]-ae[personal-roboport-equipment]',
+    order = 'e[robotics]-ad[personal-roboport-equipment]',
     stack_size = 20
 }
 
 local equipment_chip =
     Data {
     type = 'active-defense-equipment',
-    name = 'equipment-bot-chip-feeder',
-    take_result = 'equipment-bot-chip-feeder',
+    name = 'equipment-bot-chip-trees',
+    take_result = 'equipment-bot-chip-trees',
     ability_icon = {
-        filename = '__base__/graphics/equipment/discharge-defense-equipment-ability.png',
+        filename = '__Nanobots__/graphics/equipment/discharge-defense-equipment-ability.png',
         width = 32,
         height = 32,
         priority = 'medium'
     },
     sprite = {
-        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-feeder.png',
+        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-trees.png',
         width = 32,
         height = 32,
         priority = 'medium'
@@ -49,10 +49,10 @@ local equipment_chip =
     },
     energy_source = {
         type = 'electric',
-        usage_priority = 'primary-input',
-        buffer_capacity = '480J',
-        input_flow_limit = '.5J',
-        drain = '1W'
+        usage_priority = 'secondary-input',
+        buffer_capacity = '1kJ',
+        input_flow_limit = '750W',
+        drain = '50W'
     },
     attack_parameters = {
         type = 'projectile',
@@ -70,7 +70,7 @@ local equipment_chip =
             action = {
                 {
                     type = 'area',
-                    radius = 30,
+                    radius = 50,
                     force = 'enemy',
                     action_delivery = nil
                 }
@@ -84,4 +84,4 @@ local equipment_chip =
 make_shortcut(equipment_chip)
 
 local effects = data.raw.technology['personal-roboport-equipment'].effects
-effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-feeder'}
+effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-trees'}

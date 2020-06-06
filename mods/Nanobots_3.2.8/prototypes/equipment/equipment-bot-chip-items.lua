@@ -3,41 +3,41 @@ local make_shortcut = require('prototypes/equipment/make_shortcut')
 
 Data {
     type = 'recipe',
-    name = 'equipment-bot-chip-launcher',
+    name = 'equipment-bot-chip-items',
     enabled = false,
     energy_required = 10,
     ingredients = {
         {'processing-unit', 1},
         {'battery', 1}
-        --bobmods add combat brain
+        --bobmods add construction brain
     },
-    result = 'equipment-bot-chip-launcher'
+    result = 'equipment-bot-chip-items'
 }
 
 Data {
     type = 'item',
-    name = 'equipment-bot-chip-launcher',
-    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-launcher.png',
+    name = 'equipment-bot-chip-items',
+    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-items.png',
     icon_size = 32,
-    placed_as_equipment_result = 'equipment-bot-chip-launcher',
+    placed_as_equipment_result = 'equipment-bot-chip-items',
     subgroup = 'equipment',
-    order = 'e[robotics]-ac[personal-roboport-equipment]',
+    order = 'e[robotics]-ab[personal-roboport-equipment]',
     stack_size = 20
 }
 
 local equipment_chip =
     Data {
     type = 'active-defense-equipment',
-    name = 'equipment-bot-chip-launcher',
-    take_result = 'equipment-bot-chip-launcher',
+    name = 'equipment-bot-chip-items',
+    take_result = 'equipment-bot-chip-items',
     ability_icon = {
-        filename = '__base__/graphics/equipment/discharge-defense-equipment-ability.png',
+        filename = '__Nanobots__/graphics/equipment/discharge-defense-equipment-ability.png',
         width = 32,
         height = 32,
         priority = 'medium'
     },
     sprite = {
-        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-launcher.png',
+        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-items.png',
         width = 32,
         height = 32,
         priority = 'medium'
@@ -70,7 +70,7 @@ local equipment_chip =
             action = {
                 {
                     type = 'area',
-                    radius = 50,
+                    radius = 30,
                     force = 'enemy',
                     action_delivery = nil
                 }
@@ -84,4 +84,4 @@ local equipment_chip =
 make_shortcut(equipment_chip)
 
 local effects = data.raw.technology['personal-roboport-equipment'].effects
-effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-launcher'}
+effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-items'}
