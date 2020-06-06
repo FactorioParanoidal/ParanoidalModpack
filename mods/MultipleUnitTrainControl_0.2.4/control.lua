@@ -1,4 +1,4 @@
---[[ Copyright (c) 2019 robot256 (MIT License)
+--[[ Copyright (c) 2020 robot256 (MIT License)
  * Project: Multiple Unit Train Control
  * File: control.lua
  * Description: Runtime operation script for replacing locomotives and balancing fuel.
@@ -43,14 +43,35 @@ local train_queue_semaphore = false
 
 -- Interacts with other mods based on what MU locomotives were created
 local function CallRemoteInterface()
-    -- Make sure FuelTrainStop plays nice with ElectricTrain in the MU versions
+
+  -- Make sure FuelTrainStop plays nice with magu's ElectricTrain in the MU versions
 	if remote.interfaces["FuelTrainStop"] then
 		for std,mu in pairs(global.upgrade_pairs) do
-			if std:match("^et%-electric%-locomotive%-%d$") then
+			if std:match("^et%-electric%-locomotive%-%d$") or 
+         std:match("^fusion%-locomotive%-%d$") then
 				remote.call("FuelTrainStop", "exclude_from_fuel_schedule", mu)
 			end
 		end
 	end
+  
+  -- Add MU versions of Electronic Locomotives to the mod's update list
+  if remote.interfaces["AddElectronicLocomotive"] then
+    for std,mu in pairs(global.upgrade_pairs) do
+      if std:match("^[Ee]lectronic%-") then
+        remote.call( "AddElectronicLocomotive", "new", mu )
+      end
+    end
+  end
+
+  -- Add MU versions of Fluid Trains locomotives to the mod's update list
+  if remote.interfaces["fluidTrains_hook"] then
+    if global.upgrade_pairs["SteamTrains-locomotive"] then
+      remote.call("fluidTrains_hook", "addLocomotive", global.upgrade_pairs["SteamTrains-locomotive"], 20000)
+    end
+    if global.upgrade_pairs["Diesel-Locomotive-fluid-locomotive"] then
+      remote.call("fluidTrains_hook", "addLocomotive", global.upgrade_pairs["Diesel-Locomotive-fluid-locomotive"], 1500)
+    end
+  end
 	
 end
 
@@ -69,8 +90,9 @@ local function InitEntityMaps()
 			local mu = recipe.ingredients[1].name
 			global.upgrade_pairs[std] = mu
 			global.downgrade_pairs[mu] = std
-			------------
-			-- RET Compatibility
+			
+      ------------
+			-- RET Compatibility for this Loco
 			local mod_name = ""
 			if remote.interfaces["realistic_electric_trains"] then
 				-- Check if this is an RET loco, and what fuel the std version uses
@@ -83,8 +105,11 @@ local function InitEntityMaps()
 				end
 			end
 			if settings_debug == "info" then
+        game.print({"debug-message.mu-mapping-message",mod_name,game.entity_prototypes[std].localised_name,game.entity_prototypes[mu].localised_name})
+      elseif settings_debug == "debug" then
 				game.print({"debug-message.mu-mapping-message",mod_name,std,mu})
 			end
+      
 		end
 	end
 	
@@ -118,10 +143,14 @@ end
 local function ProcessReplacement(r)
 	if r[1] and r[1].valid then
 		-- Replace the locomotive
+    local errorString = ""
 		if settings_debug == "info" then
-			game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]})
+			game.print({"debug-message.mu-replacement-message",r[1].localised_name,r[1].backer_name,game.entity_prototypes[r[2]].localised_name})
+      errorString = {"debug-message.mu-replacement-failed",r[1].localised_name,r[1].backer_name,r[1].position.x,r[1].position.y}
+    elseif settings_debug == "debug" then
+      game.print({"debug-message.mu-replacement-message",r[1].name,r[1].backer_name,r[2]})
+      errorString = {"debug-message.mu-replacement-failed",r[1].name,r[1].backer_name,r[1].position.x,r[1].position.y}
 		end
-		local errorString = {"debug-message.mu-replacement-failed",r[1].name,r[1].backer_name,r[1].position.x,r[1].position.y}
 		
 		local newLoco = replaceCarriage(r[1], r[2])
 		-- Find which mu_pair the old one was in and put the new one instead
@@ -135,7 +164,7 @@ local function ProcessReplacement(r)
 			end
 		end
 		-- Make sure it was actually replaced, show error message if not.
-		if not newLoco and (settings_debug == "info" or settings_debug == "error") then
+		if not newLoco and (settings_debug ~= "none") then
 			game.print(errorString)
 		end
 	end
@@ -228,7 +257,7 @@ local function OnTrainChangedState(event)
 					ProcessTrain(t)
 					global.moving_trains[id] = nil
 					train_queue_semaphore = false
-				elseif (settings_debug == "info" or settings_debug == "error") then
+				elseif (settings_debug ~= "none") then
 					game.print("OnChange Train " .. id .. " event ignored because semaphore is occupied (this is weird!)")
 				end
 			end
@@ -358,7 +387,7 @@ local function OnNthTick(event)
 		local n = #global.mu_pairs
 		local done = false
 		for i=1,n do
-			entry = global.mu_pairs[i]
+			local entry = global.mu_pairs[i]
 			if (entry[1] and entry[2] and entry[1].valid and entry[2].valid) then
 				-- This pair is good, balance if there are burner fuel inventories (only check one, since they are identical prototypes)
 				if entry[1].burner then
@@ -408,7 +437,7 @@ local function OnNthTick(event)
 			end
 			if newVal ~= current_nth_tick then
 				--game.print("Changing MU Control Nth Tick duration to " .. newVal)
-				if settings_debug == "info" then
+				if settings_debug == "info" or settings_debug == "debug" then
 					game.print({"debug-message.mu-changing-tick-message",newVal})
 				end
 				current_nth_tick = newVal
@@ -611,3 +640,18 @@ script.on_configuration_changed(function(data)
 end)
 
 end
+
+------------------------------------------------------------------------------------
+--                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
+--                              (Thanks to eradicator!)                           --
+------------------------------------------------------------------------------------
+setmetatable(_ENV,{
+  __newindex=function (self,key,value) --locked_global_write
+    error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+      .. serpent.line{key=key or '<nil>',value=value or '<nil>'}..'\n')
+    end,
+  __index   =function (self,key) --locked_global_read
+    error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+      .. serpent.line{key=key or '<nil>'}..'\n')
+    end ,
+  })

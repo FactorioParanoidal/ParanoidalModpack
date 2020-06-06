@@ -7,8 +7,11 @@
 if mods["Realistic_Electric_Trains"] then
 
 	-- Generate an MU version of the Electric and Electric Mk2 Locomotives
+  log("Creating MU version of ret-electric-locomotive")
 	createMuLoco{std="ret-electric-locomotive",mu="ret-electric-locomotive-mu",item="item-with-entity-data",fuel_item="ret-dummy-fuel-1",hasDescription=true}
-	createMuLoco{std="ret-electric-locomotive-mk2",mu="ret-electric-locomotive-mk2-mu",item="item-with-entity-data",fuel_item="ret-dummy-fuel-2",hasDescription=true}
-	createMuLoco{std="ret-modular-locomotive",mu="ret-modular-locomotive-mu",item="item-with-entity-data",hasDescription=true}
+	log("Creating MU version of ret-electric-locomotive-mk2")
+  createMuLoco{std="ret-electric-locomotive-mk2",mu="ret-electric-locomotive-mk2-mu",item="item-with-entity-data",fuel_item="ret-dummy-fuel-2",hasDescription=true}
+	log("Creating MU version of ret-modular-locomotive")
+  createMuLoco{std="ret-modular-locomotive",mu="ret-modular-locomotive-mu",item="item-with-entity-data",hasDescription=true}
 	
 end

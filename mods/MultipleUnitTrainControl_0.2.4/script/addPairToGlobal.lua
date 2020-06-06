@@ -12,7 +12,7 @@ function addPairToGlobal(new_pair)
 	local n = #global.mu_pairs
 	local done = false
 	for i=1,n do
-		entry = global.mu_pairs[i]
+		local entry = global.mu_pairs[i]
 		if (entry[1] == new_pair[1] and entry[2] == new_pair[2]) or
 		   (entry[1] == new_pair[2] and entry[2] == new_pair[1]) then
 			-- This pair is already in the list, don't have to add it

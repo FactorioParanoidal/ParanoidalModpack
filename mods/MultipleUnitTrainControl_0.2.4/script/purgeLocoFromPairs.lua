@@ -7,7 +7,7 @@ function purgeLocoFromPairs(loco)
 	local n = #global.mu_pairs
 	local done = false
 	for i=1,n do
-		entry = global.mu_pairs[i]
+		local entry = global.mu_pairs[i]
 		if (entry[1] == loco or entry[2] == loco) then
 			-- This old pair has the given loco, so it is invalid
 			global.mu_pairs[i] = nil
