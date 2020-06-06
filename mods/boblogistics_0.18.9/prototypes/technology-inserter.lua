@@ -243,13 +243,13 @@ data:extend(
     prerequisites = {"logistics"},
     unit =
     {
-      count = 1000, --DrD 50
+      count = 50,
       ingredients =
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1}
       },
-      time = 60
+      time = 30
     },
     upgrade = true,
     order = "c-o-a",
@@ -269,14 +269,14 @@ data:extend(
     prerequisites = {"inserter-stack-size-bonus-1"},
     unit =
     {
-      count = 2000, --DrD 100
+      count = 100,
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 2}, --DrD 1
+        {"logistic-science-pack", 1},
         {"chemical-science-pack", 1}
       },
-      time = 60 --DrD 30
+      time = 30
     },
     upgrade = true,
     order = "c-o-b",
@@ -296,15 +296,15 @@ data:extend(
     prerequisites = {"inserter-stack-size-bonus-2"},
     unit =
     {
-      count = 4000, --DrD 200
+      count = 200,
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 2}, --DrD 2
+        {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"production-science-pack", 1},
       },
-      time = 60 --DrD 100
+      time = 30
     },
     upgrade = true,
     order = "c-o-c"
@@ -324,16 +324,16 @@ data:extend(
     prerequisites = {"inserter-stack-size-bonus-3"},
     unit =
     {
-      count = 5000, --DrD 300
+      count = 300,
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 2}, --DrD 1
+        {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"production-science-pack", 1},
         {"utility-science-pack", 1}
       },
-      time = 60 --DrD 30
+      time = 30
     },
     upgrade = true,
     order = "c-o-d"
@@ -368,11 +368,11 @@ data:extend{
     unit =
     {
       count_formula = "2^(L-8)*1000",
-      time = 60, --DrD 30
+      time = 30,
       ingredients =
       {
         {"automation-science-pack", 1},
-        {"logistic-science-pack", 2},
+        {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"production-science-pack", 1},
         {"utility-science-pack", 1},

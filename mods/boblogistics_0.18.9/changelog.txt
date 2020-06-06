@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.9
+Date: 30. 04. 2020
+  Bugfixes:
+    - Fixed issue where hand overrides wouldn't be applied to the placed inserter if it was your last inserter (Hand became empty by placing it)
+    - Fixed Factorio 0.18.21 start-up crash
+---------------------------------------------------------------------------------------------------
 Version: 0.18.8
 Date: 16. 04. 2020
   Changes:
