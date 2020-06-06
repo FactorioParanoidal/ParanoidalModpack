@@ -3,41 +3,41 @@ local make_shortcut = require('prototypes/equipment/make_shortcut')
 
 Data {
     type = 'recipe',
-    name = 'equipment-bot-chip-trees',
+    name = 'equipment-bot-chip-launcher',
     enabled = false,
     energy_required = 10,
     ingredients = {
         {'processing-unit', 1},
         {'battery', 1}
-        --bobmods add construction brain
+        --bobmods add combat brain
     },
-    result = 'equipment-bot-chip-trees'
+    result = 'equipment-bot-chip-launcher'
 }
 
 Data {
     type = 'item',
-    name = 'equipment-bot-chip-trees',
-    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-trees.png',
+    name = 'equipment-bot-chip-launcher',
+    icon = '__Nanobots__/graphics/icons/equipment-bot-chip-launcher.png',
     icon_size = 32,
-    placed_as_equipment_result = 'equipment-bot-chip-trees',
+    placed_as_equipment_result = 'equipment-bot-chip-launcher',
     subgroup = 'equipment',
-    order = 'e[robotics]-ad[personal-roboport-equipment]',
+    order = 'e[robotics]-ac[personal-roboport-equipment]',
     stack_size = 20
 }
 
 local equipment_chip =
     Data {
     type = 'active-defense-equipment',
-    name = 'equipment-bot-chip-trees',
-    take_result = 'equipment-bot-chip-trees',
+    name = 'equipment-bot-chip-launcher',
+    take_result = 'equipment-bot-chip-launcher',
     ability_icon = {
-        filename = '__base__/graphics/equipment/discharge-defense-equipment-ability.png',
+        filename = '__Nanobots__/graphics/equipment/discharge-defense-equipment-ability.png',
         width = 32,
         height = 32,
         priority = 'medium'
     },
     sprite = {
-        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-trees.png',
+        filename = '__Nanobots__/graphics/equipment/equipment-bot-chip-launcher.png',
         width = 32,
         height = 32,
         priority = 'medium'
@@ -84,4 +84,4 @@ local equipment_chip =
 make_shortcut(equipment_chip)
 
 local effects = data.raw.technology['personal-roboport-equipment'].effects
-effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-trees'}
+effects[#effects + 1] = {type = 'unlock-recipe', recipe = 'equipment-bot-chip-launcher'}
