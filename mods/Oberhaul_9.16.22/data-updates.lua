@@ -1,7 +1,6 @@
-local base_speed = 1/32
+local base_speed = 0.03125 -- = 1/32
 if settings.startup["bobmods-logistics-ugdistanceoverhaul"].value then
 data.raw["transport-belt"]["basic-transport-belt"].speed = 0.5 * base_speed
-
 end
 data.raw["transport-belt"]["transport-belt"].speed = base_speed
 
