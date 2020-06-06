@@ -83,7 +83,7 @@ data:extend({
 		name = "factory-connection-type-chest",
 		icon = F.."/graphics/technology/factory-connection-type-chest.png",
 		icon_size = 128,
-		prerequisites = {"factory-architecture-t1", "logistics-2"},
+		prerequisites = {"factory-architecture-t1"}, -- "logistics-2" DrD
 		effects = {},
 		unit = {
 			count = easy_research and 20 or 200,
