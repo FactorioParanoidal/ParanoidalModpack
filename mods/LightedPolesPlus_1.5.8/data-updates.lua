@@ -4,7 +4,7 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local optera_lib = require("__OpteraLib__.data.utilities")
+local flib = require('__flib__.data_util')
 
 local light_scale = settings.startup["lepp_light_size_factor"].value
 local light_size_limit = settings.startup["lepp_light_max_size"].value
@@ -14,6 +14,15 @@ local pole_entity_blacklist = {
   -- Bio Industries
   ["bi-power-to-rail-pole"] = true,
   ["bi-rail-hidden-power-pole"] = true,
+  -- Tesseract
+  ["CW-ts-power-leech-pole-1"] = true,
+  ["CW-ts-power-leech-pole-2"] = true,
+  ["CW-ts-power-leech-pole-3"] = true,
+  ["CW-ts-power-leech-pole-4"] = true,
+  ["CW-ts-power-source-pole-1"] = true,
+  ["CW-ts-power-source-pole-2"] = true,
+  ["CW-ts-power-source-pole-3"] = true,
+  ["CW-ts-power-source-pole-4"] = true,
 }
 
 local alternative_technology = "optics"
@@ -78,8 +87,8 @@ for _, item in pairs (data.raw["item"]) do
       local newName = "lighted-"..pole.name
 
       -- log("[LEP+] copying entity "..tostring(pole.name).." to "..tostring(newName))
-      local newPole = optera_lib.copy_prototype(pole, newName, true)
-      newPole.icons = optera_lib.create_icons(pole, lep_icons_layer) or lep_icons_layer
+      local newPole = flib.copy_prototype(pole, newName, true)
+      newPole.icons = flib.create_icons(pole, lep_icons_layer) or lep_icons_layer
       newPole.localised_name = {"entity-name.lighted-pole", {"entity-name." .. pole.name}}
       if newPole.next_upgrade then
         newPole.next_upgrade = "lighted-"..newPole.next_upgrade
@@ -87,8 +96,8 @@ for _, item in pairs (data.raw["item"]) do
 
       -- log("[LEP+] copying item "..tostring(item.name).." to "..tostring(newName))
       pole_names[item.name] = newName --save name for technology lookup
-      local newItem = optera_lib.copy_prototype(item, newName, true)
-      newItem.icons = optera_lib.create_icons(item, lep_icons_layer) or lep_icons_layer
+      local newItem = flib.copy_prototype(item, newName, true)
+      newItem.icons = flib.create_icons(item, lep_icons_layer) or lep_icons_layer
       newItem.localised_name = newPole.localised_name
       newItem.order = item.order.."-0"
       -- log("group: "..tostring(item.subgroup).." order: "..tostring(item.order) )
@@ -96,7 +105,7 @@ for _, item in pairs (data.raw["item"]) do
       newPole.icons = newPole.icons or newItem.icons -- use item icon for lighted pole in case base pole entity had none
 
 
-      local hidden_lamp = optera_lib.copy_prototype(data.raw["lamp"]["small-lamp"], newName.."-lamp", true)
+      local hidden_lamp = flib.copy_prototype(data.raw["lamp"]["small-lamp"], newName.."-lamp", true)
       hidden_lamp.icons = newPole.icons
       hidden_lamp.localised_name = newPole.localised_name
       hidden_lamp.minable = nil
