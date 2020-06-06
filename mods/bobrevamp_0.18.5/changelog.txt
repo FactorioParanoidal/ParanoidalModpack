@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.5
+Date: 23. 05. 2020
+  Changes:
+    - new oil update moves enriched-fuel-from-liquid-fuel unlock onto solid-fuel technology
+    - Updated for MCI 0.18.8
+  Bugfixes:
+    - Fixed solid-fuel-from-light-oil technology migration
+    - Fixed solid-fuel-from-heavy-oil technology migration
+---------------------------------------------------------------------------------------------------
 Version: 0.18.4
 Date: 24. 04. 2020
   Changes:
