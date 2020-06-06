@@ -84,7 +84,7 @@ if updater then
         name = 'picker-bp-updater',
         icon = '__PickerBlueprinter__/graphics/cloned-blueprint.png',
         icon_size = 32,
-        flags = {'hidden'},
+        flags = {'hidden', 'only-in-cursor'},
         subgroup = 'tool',
         order = 'c[automated-construction]-a[blueprint-updater]-no-picker',
         stack_size = 1,

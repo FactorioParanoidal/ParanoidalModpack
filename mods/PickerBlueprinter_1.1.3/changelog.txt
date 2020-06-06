@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-05-24
+  Features:
+    -  Blueprint updater now brings over train and station names. #8
+  Changes:
+    - Remove use of script.raise_event.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2020-04-25
   Changes:

@@ -70,13 +70,11 @@ local function add_empty_bp_to_book(event)
     local stack = player.cursor_stack
     if stack.valid_for_read and stack.is_blueprint_book then
         local inv = stack.get_inventory(defines.inventory.item_main)
-        --insert a dummy print so we have an easy way to find the idx
-        if inv and inv.insert('picker-blueprint-tool') then
-            local slot, idx = inv.find_item_stack('picker-blueprint-tool')
+        if inv then
+            local slot, idx = inv.find_empty_stack('blueprint')
             if slot and idx and slot.set_stack('blueprint') then
                 stack.active_index = idx
-                -- Cycling blueprints in books raises cursor changed event, lets emulate that.
-                script.raise_event(defines.events.on_player_cursor_stack_changed, {player_index = event.player_index})
+                -- Cycling blueprints in books raises cursor changed event, but we can't emulate that anymore.
             end
         end
     end
@@ -101,7 +99,7 @@ local function clean_empty_bps_in_book(event)
             if change_index then
                 local _, idx = inv.find_item_stack('blueprint')
                 stack.active_index = idx or 1
-                script.raise_event(defines.events.on_player_cursor_stack_changed, {player_index = event.player_index})
+                -- Cycling blueprints in books raises cursor changed event, but we can't emulate that anymore.
             end
         end
     end
