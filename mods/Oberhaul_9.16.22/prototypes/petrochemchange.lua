@@ -5,41 +5,40 @@ data:extend({
     name = "crafting-handonly"
 },
 
-{
-    type = "recipe",
-    name = "coke-purification-steam",   --DrD  name = "coke-purification",
-    category = "liquifying",
-	subgroup = "petrochem-coal",
-    energy_required = 2,
-	enabled = "false",
+    {
+      type = "recipe",
+      name = "coke-purification-3",
+      category = "liquifying",
+      subgroup = "petrochem-coal",
+      energy_required = 2,
+      enabled = false,
     ingredients ={
-		{type="item", name="solid-coke", amount=2},
-		{type="fluid", name="steam", amount=30},
+		{type="item", name="solid-coke", amount=2}, --DrD ???
+		{type="fluid", name="gas-carbon-dioxide", amount=40},
 	},
     results=
     {
 		{type="item", name="solid-carbon", amount=3},
     },
     icons = {
-		{
-			icon = "__angelspetrochem__/graphics/icons/solid-carbon.png",
-		},
-		{
-			icon = "__angelspetrochem__/graphics/icons/num_3.png",
-			tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-			scale = 0.32,
-			shift = {-12, -12},
-		}
-	},
-	icon_size = 32,
-    order = "d[coke-purification]",
-	crafting_machine_tint =
-    {
-      primary = {r = 1, g = 0.5, b = 0.5, a = 0},
-      secondary = {r = 1, g = 0.5, b = 0.5, a = 0},
-      tertiary = {r = 167/255, g = 75/255, b = 5/255, a = 0/255},
-    }
-	},
+        {
+          icon = "__angelspetrochem__/graphics/icons/solid-carbon.png"
+        },
+        {
+          icon = "__angelsrefining__/graphics/icons/num_3.png",
+          tint = angelsmods.petrochem.number_tint,
+          scale = 0.32,
+          shift = {-12, -12}
+        }
+      },
+      icon_size = 32,
+      order = "d[coke-purification]",
+      crafting_machine_tint = {
+        primary = {r = 1, g = 0.5, b = 0.5, a = 0},
+        secondary = {r = 1, g = 0.5, b = 0.5, a = 0},
+        tertiary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255}
+      }
+    },
 
 {
 		type = "recipe",
@@ -87,7 +86,7 @@ data:extend({
       },
 	  {
         type = "unlock-recipe",
-        recipe = "coke-purification-steam"  --DrD
+        recipe = "coke-purification-3"  --DrD
 	  },
     },
     unit =
