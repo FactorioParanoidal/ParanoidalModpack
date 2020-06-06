@@ -123,3 +123,14 @@ data.raw.recipe["angels-roll-solder-converting"].results =
 	{
 		{type="item", name="solder", amount=8} --DrD 12
 	}
+
+--remove OV.disable_recipe({ effects
+
+data.raw.recipe["brass-alloy"].hidden = false
+data.raw.recipe["bronze-alloy"].hidden = false
+data.raw.recipe["solder-alloy"].hidden = false
+data.raw.recipe["solder-alloy-lead"].hidden = false
+data.raw.recipe["solder"].hidden = false
+data.raw.recipe["cobalt-plate"].hidden = false
+data.raw.recipe["cobalt-steel-alloy"].hidden = false
+data.raw.recipe["bob-zinc-plate"].hidden = false
