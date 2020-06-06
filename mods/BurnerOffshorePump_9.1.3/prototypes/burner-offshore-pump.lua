@@ -35,7 +35,7 @@ local recipe = {
     {
       --{"electronic-circuit", 2},
       {"pipe", 6},
-	  {"motor", 1},
+	  {"iron-plate", 10},
       {"iron-gear-wheel", 4}
     },
     result = name
