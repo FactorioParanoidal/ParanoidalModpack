@@ -471,10 +471,12 @@ data:extend(
                 type = "damage",
                 damage = { amount = 20 , type = "poison"}
               },
+--[[
               {
                 type = "create-sticker",
                 sticker = "poison-sticker"
               },
+]]--
             }
           }
         }
@@ -603,10 +605,12 @@ data:extend(
                 type = "damage",
                 damage = { amount = 20 , type = "fire"}
               },
+--[[
               {
                 type = "create-sticker",
                 sticker = "fire-sticker"
               },
+]]--
             }
           }
         }
