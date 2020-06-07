@@ -1,0 +1,6 @@
+{
+  "item":
+  [
+    ["copper-cable", "angels-wire-copper"]
+  ]
+}
