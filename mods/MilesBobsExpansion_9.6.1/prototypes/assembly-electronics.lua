@@ -152,8 +152,6 @@ data:extend(
     ingredients =
     {
       {"electronics-machine-3", 4},
-      {"electronic-processing-board", 35},
-      {"copper-tungsten-alloy", 1000},
       {"nitinol-gear-wheel", 100},
 	  {"speed-module-4", 5},
     },
@@ -198,8 +196,6 @@ data:extend(
     ingredients =
     {
       {"electronics-machine-4", 4},
-      {"electronic-processing-board", 50},
-      {"silver-plate", 5000},
       {"gilded-copper-cable", 500},
 	  {"speed-module-6", 5},
     },

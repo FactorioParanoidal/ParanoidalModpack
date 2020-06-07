@@ -1,0 +1,21 @@
+{
+  "name": "zzzparanoidal",
+  "version": "0.18.30",
+  "title": "paranoidal for 0.18",
+  "factorio_version": "0.18",
+  "author": "Sovigod",
+  "contact": "discord : https://discord.gg/",
+  "homepage": "discord : https://discord.gg/",
+  "description": "Paranoidal",
+  "dependencies": [
+    "base >= 0.18.30",
+    "? boblibrary", 
+    "? angelsindustries", 
+    "? angelsrefining", 
+    "? angelssmelting",  
+    "KaoExtended",
+    "expanded-rocket-payloads",
+    "MilesBobsExpansion",
+    "Clowns-Processing"
+    ]
+}
