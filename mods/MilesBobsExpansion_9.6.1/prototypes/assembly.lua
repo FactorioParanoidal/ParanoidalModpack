@@ -114,11 +114,8 @@ data:extend(
     ingredients =
     {
       {"assembling-machine-6", 2},
-      {"processing-unit", 25},
-      {"copper-tungsten-alloy", 2500},
-      --{"iron-plate", 15},
       {"brass-gear-wheel", 250},
-	  {"speed-module-5", 10},
+	    {"speed-module-5", 10},
     },
     result = "assembling-machine-7"
   },
@@ -158,11 +155,8 @@ data:extend(
     ingredients =
     {
       {"assembling-machine-7", 2},
-      {"processing-unit", 50},
-      {"cobalt-steel-alloy", 5000},
-      --{"iron-plate", 20},
       {"cobalt-steel-gear-wheel", 500},
-	  {"speed-module-6", 10},
+      {"speed-module-6", 10},
     },
     result = "assembling-machine-8"
   },
@@ -202,11 +196,7 @@ data:extend(
     ingredients =
     {
       {"assembling-machine-8", 2},
-      {"processing-unit", 100},
-      {"silver-plate", 10000},
-      {"nitinol-alloy", 1000},
-      --{"iron-gear-wheel", 30},
-	  {"speed-module-7", 5},
+  	  {"speed-module-7", 5},
     },
     result = "assembling-machine-9"
   },

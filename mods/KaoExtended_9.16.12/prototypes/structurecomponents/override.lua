@@ -24,11 +24,6 @@ local function replaceMachine()
   KaoExtended.recipe.addtorecipe("assembling-machine-4", {"intermediate-structure-components", 5})
   KaoExtended.recipe.addtorecipe("assembling-machine-5", {"advanced-structure-components", 2})
   KaoExtended.recipe.addtorecipe("assembling-machine-6", {"advanced-structure-components", 10})
-if data.raw["item"]["assembling-machine-7"] then
-   KaoExtended.recipe.addtorecipe("assembling-machine-7", {"anotherworld-structure-components", 2})
-   KaoExtended.recipe.addtorecipe("assembling-machine-8", {"anotherworld-structure-components", 5})
-   KaoExtended.recipe.addtorecipe("assembling-machine-9", {"anotherworld-structure-components", 10})
- end
 
   KaoExtended.recipe.addtorecipe("rocket-silo", {"assembling-machine-6", 100})
   
