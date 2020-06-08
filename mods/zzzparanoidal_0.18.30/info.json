@@ -9,7 +9,7 @@
   "description": "Paranoidal",
   "dependencies": [
     "base >= 0.18.30",
-    "? boblibrary", 
+    "boblibrary", 
     "? angelsindustries", 
     "? angelsrefining", 
     "? angelssmelting",  
@@ -17,6 +17,9 @@
     "expanded-rocket-payloads",
     "MilesBobsExpansion",
     "Clowns-AngelBob-Nuclear",
-    "Clowns-Processing"
+    "Clowns-Processing",
+    "bobwarfare",
+    "bobrevamp",
+    "AtomicArtillery"
     ]
 }
