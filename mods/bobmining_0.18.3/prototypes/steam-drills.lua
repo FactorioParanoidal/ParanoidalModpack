@@ -33,7 +33,6 @@ data:extend({
       icon_mipmaps = 4,
       minable = {mining_time = 0.3, result = "steam-mining-drill"},
       max_health = 200,
-      mining_speed = 0.25,
       energy_usage = "600kW",
       mining_speed = 2,
     }
