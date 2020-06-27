@@ -31,6 +31,12 @@ data:extend({
   },
   {
     type = "custom-input",
+    name = "bob-inserter-drop-rotate",
+    key_sequence = "CONTROL + SHIFT + R",
+    consuming = "none"
+  },
+  {
+    type = "custom-input",
     name = "bob-inserter-open-gui",
     key_sequence = "SHIFT + E",
     consuming = "none"

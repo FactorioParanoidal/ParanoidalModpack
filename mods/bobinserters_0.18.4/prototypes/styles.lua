@@ -108,25 +108,6 @@ local blue_clicked_graphical_set =
 
 
 
-data.raw["gui-style"].default.bob_button_flow = 
-{
-  type = "horizontal_flow_style",
-  parent = "horizontal_flow",
-  horizontally_stretchable = "on",
-}
-
-data.raw["gui-style"].default.bob_button_filler =
-{
-  type = "frame_style",
-  graphical_set = data.raw["gui-style"].default.draggable_space.graphical_set,
-  left_margin = data.raw["gui-style"].default.draggable_space.left_margin,
-  right_margin = data.raw["gui-style"].default.draggable_space.right_margin,
-  height = 32,
-  horizontally_stretchable = "on",
-}
-
-
-
 data.raw["gui-style"].default.bob_table =
 {
   type = "table_style",
@@ -134,6 +115,38 @@ data.raw["gui-style"].default.bob_table =
   horizontal_spacing = 2,
   vertical_spacing = 2
 }
+
+
+data.raw["gui-style"].default.bob_button_flow = 
+{
+  type = "horizontal_flow_style",
+  parent = "horizontal_flow",
+  vertical_align = "center",
+  horizontally_stretchable = "on",
+}
+
+data.raw["gui-style"].default.bob_draggable_header = 
+{
+  type = "empty_widget_style",
+  parent = "draggable_space_header",
+  minimal_width = 0,
+  padding = -8,
+  height = 24,
+  horizontally_stretchable = "on",
+  vertically_stretchable = "on",
+}
+
+data.raw["gui-style"].default.bob_draggable_footer = 
+{
+  type = "empty_widget_style",
+  parent = "draggable_space",
+  minimal_width = 0,
+  padding = -8,
+  height = 32,
+  horizontally_stretchable = "on",
+  vertically_stretchable = "on",
+}
+
 
 
 data.raw["gui-style"].default.bob_inserter_checkbox =
