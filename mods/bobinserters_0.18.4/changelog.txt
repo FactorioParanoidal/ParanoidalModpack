@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+Date: 07. 06. 2020
+  Changes:
+    - Updated header/button filler styles
+    - GUI Style update for 0.18.27
+    - Added inserter preview window to the center GUI.
+    - Updated locale method to display inserter name correctly.
+    - Updated Locale entries to refer to the GUIs as Windows.
+    - Internal code restructure to make things easier to read.
+  Bugfixes:
+    - Fixed issue where the drop offset wouldn't be calculated correctly when using using the top menu in inserter configuration mode to place an inserter before researching near inserters.
+  Features:
+    - Added Drop position rotation key combination CTRL + Shift + R as default. (Made possible by the internal restructure)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.3
 Date: 30. 04. 2020
   Bugfixes:

@@ -12,15 +12,13 @@ data:extend(
     setting_type = "startup",
     default_value = true,
   },
---[[
+
   {
-    type = "bool-setting",
-    name = "bobmods-inserters-dual-mode",
+    type = "string-setting",
+    name = "bobmods-inserters-show-window",
     setting_type = "runtime-per-user",
-    default_value = false,
+    default_value = "off",
+    allowed_values = {"off", "left", "top"}
   },
-]]--
 }
 )
-
-

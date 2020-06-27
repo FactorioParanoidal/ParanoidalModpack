@@ -1,5 +1,17 @@
 require("mod-gui")
 
+function gui_add_title(gui, title, button_name, drag_target)
+  gui.add({type = "flow", name = "title_flow"})
+  gui.title_flow.add({type = "label", name = "title", style = "frame_title", caption = title})
+  gui.title_flow.add({type = "empty-widget", name = "filler", style = "bob_draggable_header"})
+  gui.title_flow.add({type = "sprite-button", name = button_name, style = "frame_action_button", sprite = "utility/close_white"})
+  if drag_target then
+    gui.title_flow.title.drag_target = gui
+    gui.title_flow.filler.drag_target = gui
+  end
+end
+
+
 if not bobmods then bobmods = {} end
 if not bobmods.inserters then bobmods.inserters = {} end
 if not bobmods.logistics then bobmods.logistics = {} end
@@ -363,6 +375,19 @@ script.on_event("bob-inserter-pickup-rotate", function(event)
   end
 end)
 
+script.on_event("bob-inserter-drop-rotate", function(event)
+  local player = game.players[event.player_index]
+  local entity = player.selected
+  if
+    entity
+    and entity.type == "inserter"
+    and player.can_reach_entity(entity)
+    and not global.bobmods.inserters.blacklist[entity.name]
+  then
+    bobmods.inserters.rotate_drop(entity, player)
+  end
+end)
+
 script.on_event("bob-inserter-pickup-range", function(event)
   local player = game.players[event.player_index]
   local entity = player.selected
@@ -474,20 +499,6 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
   local entity = global.bobmods.inserters[event.player_index].entity
 
   if event.element.valid then
-    if entity and entity.valid and player.can_reach_entity(entity) then
-      if event.element.parent.name == "bob_inserter_gui_pickup" then
-        bobmods.inserters.gui_pickup_click(entity, event.element)
-      elseif event.element.parent.name == "bob_inserter_gui_drop" then
-        bobmods.inserters.gui_drop_click(entity, event.element)
-      elseif event.element.parent.name == "bob_inserter_gui_drop_offset" then
-        bobmods.inserters.gui_offset_click(entity, event.element)
-      end
-    else
-      bobmods.inserters.delete_gui(event.player_index)
-    end
-  end
-
-  if event.element.valid then
     if event.element.name == "bob_logistics_inserter_enabled" then
       global.bobmods.logistics[event.player_index].enabled = event.element.state
       if event.element.state then
@@ -507,21 +518,29 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
         global.bobmods.logistics[event.player_index].enabled = false
       end
       bobmods.logistics.create_gui(event.player_index)
+    elseif string.sub(event.element.name, 1, 6) == "button" then
+      local i = string.gsub(event.element.name, "button", "") + 0
 
-
-    elseif remote.interfaces.bobinserters and string.sub(event.element.name, 1, 6) == "button" then
       if event.element.parent.name == "bob_logistics_pickup" then
-        local i = string.gsub(event.element.name, "button", "") + 0
         remote.call("bobinserters", "draw_button_position_check", {gui = event.element.parent, position = i})
         global.bobmods.logistics[event.player_index].pickup = i 
       elseif event.element.parent.name == "bob_logistics_drop" then
-        local i = string.gsub(event.element.name, "button", "") + 0
         remote.call("bobinserters", "draw_button_position_check", {gui = event.element.parent, position = i})
         global.bobmods.logistics[event.player_index].drop = i 
       elseif event.element.parent.name == "bob_logistics_offset" then
-        local i = string.gsub(event.element.name, "button", "") + 0
         remote.call("bobinserters", "draw_button_offset_check", {gui = event.element.parent, position = i})
         global.bobmods.logistics[event.player_index].offset = i 
+
+      elseif entity and entity.valid and player.can_reach_entity(entity) then
+        if event.element.parent.name == "bob_inserter_gui_pickup" then
+          bobmods.inserters.gui_pickup_click(entity, event.element)
+        elseif event.element.parent.name == "bob_inserter_gui_drop" then
+          bobmods.inserters.gui_drop_click(entity, event.element)
+        elseif event.element.parent.name == "bob_inserter_gui_offset" then
+          bobmods.inserters.gui_offset_click(entity, event.element)
+        end
+      else
+        bobmods.inserters.delete_gui(event.player_index)
       end
     end
   end
@@ -649,53 +668,12 @@ end)
 
 
 
-function bobmods.logistics.create_gui_button(player_index)
-  local player = game.players[player_index]
 
-  -- remove legacy GUI
-  if player.gui.top.bob_logistics_inserter_gui then
-    player.gui.top.bob_logistics_inserter_gui.destroy()
-  end
-
-  -- remove legacy button
-  if player.gui.top.bob_logistics_inserter_button then
-    player.gui.top.bob_logistics_inserter_button.destroy()
-  end
-
-  if mod_gui.get_button_flow(player).bob_logistics_inserter_button then
-    mod_gui.get_button_flow(player).bob_logistics_inserter_button.destroy()
-  end
-
-  mod_gui.get_button_flow(player).add{type = "sprite-button", name = "bob_logistics_inserter_button", tooltip = {"gui.bob-inserter-open-gui"}, sprite = "item/fast-inserter", style = "mod_gui_button"}
-end
-
-
-function bobmods.logistics.show_gui_options(player_index)
-  local player = game.players[player_index]
-
-  if player.gui.left.bob_logistics_inserter_gui then
-    player.gui.left.bob_logistics_inserter_gui.destroy()
-  end
-
-  if global.bobmods.logistics[player_index].show then
-    bobmods.logistics.create_gui(player_index)
+function tech_unlocked(force, tech)
+  if force.technologies[tech] then
+    return force.technologies[tech].researched
   end
 end
-
-
-function bobmods.inserters.delete_gui(player_index)
-  local globtable = global.bobmods.inserters[player_index]
-  if globtable then
-    if globtable.gui and globtable.gui.valid then globtable.gui.destroy() end
-    globtable.entity = nil
-    globtable.gui = nil
-    globtable.pickup = nil
-    globtable.drop = nil
-    globtable.offset = nil
-  end
-end
-
-
 
 function get_pickup_position(entity)
   return {x = entity.pickup_position.x - entity.position.x, y = entity.pickup_position.y - entity.position.y}
@@ -705,6 +683,35 @@ function get_drop_position(entity)
   return {x = entity.drop_position.x - entity.position.x, y = entity.drop_position.y - entity.position.y}
 end
 
+function split_drop_position(full_drop_position)
+  local drop_position = {x = bobmods.math.round(full_drop_position.x), y = bobmods.math.round(full_drop_position.y)}
+  local drop_offset = {x = bobmods.math.offset(full_drop_position.x), y = bobmods.math.offset(full_drop_position.y)}
+  return drop_position, drop_offset
+end
+
+function get_split_drop_position(entity)
+  local full_drop_position = get_drop_position(entity)
+  local drop_position = {x = bobmods.math.round(full_drop_position.x), y = bobmods.math.round(full_drop_position.y)}
+  local drop_offset = {x = bobmods.math.offset(full_drop_position.x), y = bobmods.math.offset(full_drop_position.y)}
+  return drop_position, drop_offset
+end
+
+function get_drop_tile_position(entity)
+  local full_drop_position = get_drop_position(entity)
+  return {x = bobmods.math.round(full_drop_position.x), y = bobmods.math.round(full_drop_position.y)}
+end
+
+function get_drop_offset_position(entity)
+  local full_drop_position = get_drop_position(entity)
+  return {x = bobmods.math.offset(full_drop_position.x), y = bobmods.math.offset(full_drop_position.y)}
+end
+
+function combine_drop_position(drop_position, drop_offset)
+  return {x = drop_position.x + drop_offset.x, y = drop_position.y + drop_offset.y}
+end
+
+
+
 function set_pickup_position(entity, newpos)
   local original_positions = {drop_position = entity.drop_position, pickup_position = entity.pickup_position}
   local new_positions = {
@@ -712,6 +719,7 @@ function set_pickup_position(entity, newpos)
     pickup_position = {x = entity.position.x + newpos.x, y = entity.position.y + newpos.y}
   }
   entity.pickup_position = new_positions.pickup_position
+  entity.direction = entity.direction -- set direction to force update
   script.raise_event(changed_position_event, {entity = entity, new_positions = new_positions, original_positions = original_positions}) -- Raise positions changed event.
 end
 
@@ -722,8 +730,14 @@ function set_drop_position(entity, newpos)
     pickup_position = entity.pickup_position
   }
   entity.drop_position = new_positions.drop_position
+  entity.direction = entity.direction -- set direction to force update
   script.raise_event(changed_position_event, {entity = entity, new_positions = new_positions, original_positions = original_positions}) -- Raise positions changed event.
 end
+
+function set_split_drop_position(entity, new_position, new_offset)
+  return set_drop_position(entity, combine_drop_position(new_position, new_offset))
+end
+
 
 function set_both_positions(entity, newpickup, newdrop)
   local original_positions = {drop_position = entity.drop_position, pickup_position = entity.pickup_position}
@@ -761,10 +775,60 @@ function bobmods.inserters.normalise_tile_offset(tile_offset)
 end
 
 
+function bobmods.logistics.set_range(position_in, range)
+  local position = {x = 0, y = 0}
+  if position_in.x > 0.1 then
+    position.x = range
+  elseif position_in.x < -0.1 then
+    position.x = -range
+  else
+    position.x = 0
+  end
+  if position_in.y > 0.1 then
+    position.y = range
+  elseif position_in.y < -0.1 then
+    position.y = -range
+  else
+    position.y = 0
+  end
+  return position
+end
+
+
+function calculate_new_drop_offset(drop_position, drop_offset, new_position)
+  local new_offset = drop_offset
+
+  if (drop_position.x > 0 and new_position.x < 0) or (drop_position.x < 0 and new_position.x > 0) then
+    new_offset.x = 0 - drop_offset.x
+  elseif drop_position.x == 0 and new_position.x ~= 0 then
+    if (new_position.x > 0 and drop_position.y > 0) or (new_position.x < 0 and drop_position.y < 0) then
+      new_offset.x = drop_offset.y
+    else
+      new_offset.x = 0 - drop_offset.y
+    end
+  elseif drop_position.x ~= 0 and new_position.x == 0 then
+    new_offset.x = 0
+  end
+
+  if (drop_position.y > 0 and new_position.y < 0) or (drop_position.y < 0 and new_position.y > 0) then
+    new_offset.y = 0 - drop_offset.y
+  elseif drop_position.y == 0 and new_position.y ~= 0 then
+    if (new_position.y > 0 and drop_position.x > 0) or (new_position.y < 0 and drop_position.x < 0) then
+      new_offset.y = drop_offset.x
+    else
+      new_offset.y = 0 - drop_offset.x
+    end
+  elseif drop_position.y ~= 0 and new_position.y == 0 then
+    new_offset.y = 0
+  end
+  return bobmods.inserters.normalise_tile_offset(new_offset)
+end
+
+
+
 
 function bobmods.logistics.set_positions(entity, player_index)
-  local enabled = global.bobmods.logistics[player_index].enabled
-  if enabled then
+  if global.bobmods.logistics[player_index].enabled then
     local force = game.players[player_index].force
     local direction = (entity.direction / 2) + 1
 
@@ -776,10 +840,8 @@ function bobmods.logistics.set_positions(entity, player_index)
     local long_out = global.bobmods.logistics[player_index].long_out
     local near = global.bobmods.logistics[player_index].near
 
-    local pickup_position = {x = entity.pickup_position.x - entity.position.x, y = entity.pickup_position.y - entity.position.y}
-    local drop_full_position = {x = entity.drop_position.x - entity.position.x, y = entity.drop_position.y - entity.position.y}
-    local drop_position = {x = bobmods.math.round(drop_full_position.x), y = bobmods.math.round(drop_full_position.y)}
-    local drop_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_full_position.x), y = bobmods.math.offset(drop_full_position.y)})
+    local pickup_position = get_pickup_position(entity)
+    local drop_position, drop_offset = get_split_drop_position(entity)
 
     if long_unlocked then
       if more_unlocked then
@@ -811,106 +873,81 @@ function bobmods.logistics.set_positions(entity, player_index)
         drop_offset = bobmods.logistics.set_range(drop_position, bobmods.inserters.offset)
       end
     end
-
-    set_both_positions(entity, pickup_position, {x = drop_position.x + drop_offset.x, y = drop_position.y + drop_offset.y})
+    local full_drop_position = combine_drop_position(drop_position, drop_offset)
+    set_both_positions(entity, pickup_position, full_drop_position)
   end
+
   if global.bobmods.logistics[player_index].enabled2 and remote.interfaces.bobinserters then
     local pickup_position = remote.call("bobinserters", "get_position", {position = global.bobmods.logistics[player_index].pickup})
     local drop_position = remote.call("bobinserters", "get_position", {position = global.bobmods.logistics[player_index].drop})
     local drop_offset = remote.call("bobinserters", "get_offset", {position = global.bobmods.logistics[player_index].offset})
 
--- All the jiggery to make drop offset work right
+    local direction = (entity.direction / 2)
+    if direction == 2 then -- 2 is up, because inserters are backwards.
+      pickup_position = pickup_position
+      drop_position = drop_position
+      drop_offset = drop_offset
+    elseif direction == 3 then -- right
+      pickup_position = {x = -pickup_position.y, y = pickup_position.x}
+      drop_position = {x = -drop_position.y, y = drop_position.x}
+      drop_offset = {x = -drop_offset.y, y = drop_offset.x}
+    elseif direction == 0 then -- down
+      pickup_position = {x = -pickup_position.x, y = -pickup_position.y}
+      drop_position = {x = -drop_position.x, y = -drop_position.y}
+      drop_offset = {x = -drop_offset.x, y = -drop_offset.y}
+    elseif direction == 1 then -- left
+      pickup_position = {x = pickup_position.y, y = -pickup_position.x}
+      drop_position = {x = drop_position.y, y = -drop_position.x}
+      drop_offset = {x = drop_offset.y, y = -drop_offset.x}
+    end
+
     local near_unlocked = tech_unlocked(game.players[player_index].force, bobmods.inserters.near_technology)
-
     if not near_unlocked then
-      local old_drop_full_position = {x = entity.drop_position.x - entity.position.x, y = entity.drop_position.y - entity.position.y}
-      local tile_position = {x = bobmods.math.round(old_drop_full_position.x), y = bobmods.math.round(old_drop_full_position.y)}
-      local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(old_drop_full_position.x), y = bobmods.math.offset(old_drop_full_position.y)})
-
---this part is duplicated from another script, maybe convert to a function?
-      local new_offset = {x = tile_offset.x, y = tile_offset.y}
-
-      if (tile_position.x > 0 and drop_position.x < 0) or (tile_position.x < 0 and drop_position.x > 0) then
-        new_offset.x = 0 - tile_offset.x
-      elseif tile_position.x == 0 and drop_position.x ~= 0 then
-        if (drop_position.x > 0 and tile_position.y > 0) or (drop_position.x < 0 and tile_position.y < 0) then
-          new_offset.x = tile_offset.y
-        else
-          new_offset.x = 0 - tile_offset.y
-        end
-      elseif tile_position.x ~= 0 and drop_position.x == 0 then
-        new_offset.x = 0
-      end
-
-      if (tile_position.y > 0 and drop_position.y < 0) or (tile_position.y < 0 and drop_position.y > 0) then
-        new_offset.y = 0 - tile_offset.y
-      elseif tile_position.y == 0 and drop_position.y ~= 0 then
-        if (drop_position.y > 0 and tile_position.x > 0) or (drop_position.y < 0 and tile_position.x < 0) then
-          new_offset.y = tile_offset.x
-        else
-          new_offset.y = 0 - tile_offset.x
-        end
-      elseif tile_position.y ~= 0 and drop_position.y == 0 then
-        new_offset.y = 0
-      end
-
-      drop_offset = new_offset
+      local old_drop_position, old_drop_offset = get_split_drop_position(entity)
+      drop_offset = calculate_new_drop_offset(old_drop_position, old_drop_offset, drop_position)
     end
--- Jiggery ends here.
-
-    local direction = (entity.direction / 2) + 1
-    local new_positions = {}
-    if direction == 3 then -- 3 is up, because inserters are backwards.
-      new_positions.drop_position = {x = drop_position.x + drop_offset.x, y = drop_position.y + drop_offset.y}
-      new_positions.pickup_position = pickup_position
-    elseif direction == 4 then
-      new_positions.drop_position = {x = -drop_position.y - drop_offset.y, y = drop_position.x + drop_offset.x}
-      new_positions.pickup_position = {x = -pickup_position.y, y = pickup_position.x}
-    elseif direction == 1 then
-      new_positions.drop_position = {x = -drop_position.x - drop_offset.x, y = -drop_position.y - drop_offset.y}
-      new_positions.pickup_position = {x = -pickup_position.x, y = -pickup_position.y}
-    elseif direction == 2 then
-      new_positions.drop_position = {x = drop_position.y + drop_offset.y, y = -drop_position.x - drop_offset.x}
-      new_positions.pickup_position = {x = pickup_position.y, y = -pickup_position.x}
-    end
-    set_both_positions(entity, new_positions.pickup_position, new_positions.drop_position)
+    local full_drop_position = combine_drop_position(drop_position, drop_offset)
+    set_both_positions(entity, pickup_position, full_drop_position)
   end
 end
 
 
-function bobmods.logistics.set_range(position_in, range)
-  local position = {x = 0, y = 0}
-  if position_in.x > 0.1 then
-    position.x = range
-  elseif position_in.x < -0.1 then
-    position.x = -range
-  else
-    position.x = 0
-  end
-  if position_in.y > 0.1 then
-    position.y = range
-  elseif position_in.y < -0.1 then
-    position.y = -range
-  else
-    position.y = 0
-  end
-  return position
+
+
+function  bobmods.inserters.gui_pickup_click(entity, element)
+  local pickup_position = get_pickup_position(entity)
+  local i = string.gsub(element.name, "button", "") + 0
+  pickup_position = bobmods.inserters.positions[i]
+  set_pickup_position(entity, pickup_position)
+  entity.direction = entity.direction -- set direction to force update
+  bobmods.inserters.draw_button_position_check(element.parent, pickup_position)
+end
+
+function  bobmods.inserters.gui_drop_click(entity, element)
+  local i = string.gsub(element.name, "button", "") + 0
+  local new_position = bobmods.inserters.positions[i]
+  local drop_position, drop_offset = get_split_drop_position(entity)
+  local new_offset = calculate_new_drop_offset(drop_position, drop_offset, new_position)
+  set_split_drop_position(entity, new_position, new_offset)
+  entity.direction = entity.direction -- set direction to force update
+  bobmods.inserters.refresh_position_checkboxes(entity, game.players[element.player_index])
+end
+
+function  bobmods.inserters.gui_offset_click(entity, element)
+  local i = string.gsub(element.name, "button", "") + 0
+  new_offset = bobmods.inserters.offset_positions[i]
+  set_split_drop_position(entity, get_drop_tile_position(entity), new_offset)
+  entity.direction = entity.direction -- set direction to force update
+  bobmods.inserters.draw_button_offset_check(element.parent, new_offset)
 end
 
 
-function tech_unlocked(force, tech)
-  if force.technologies[tech] then
-    return force.technologies[tech].researched
-  end
-end
 
-
-function bobmods.inserters.rotate_pickup(entity, player)
-  local more_unlocked = tech_unlocked(player.force, bobmods.inserters.more_technology)
-  local more2_unlocked = tech_unlocked(player.force, bobmods.inserters.more2_technology)
+function bobmods.inserters.rotate_position(force, pickup_position)
+  local more_unlocked = tech_unlocked(force, bobmods.inserters.more_technology)
+  local more2_unlocked = tech_unlocked(force, bobmods.inserters.more2_technology)
   local rotation = 1
   local position = {table = {}, steps = 0}
-  local pickup_position = get_pickup_position(entity)
 
   -- Decide which position table to use
   if pickup_position.x > 2.1 or pickup_position.x < -2.1 or pickup_position.y > 2.1 or pickup_position.y < -2.1 then
@@ -947,13 +984,28 @@ function bobmods.inserters.rotate_pickup(entity, player)
   rotation = rotation + 1
   if rotation > position.steps then rotation = rotation - position.steps end
 
-  set_pickup_position(entity, position.table[rotation])
-  entity.direction = entity.direction -- set direction to force update
+  return position.table[rotation]
+end
 
+function bobmods.inserters.rotate_pickup(entity, player)
+  local pickup_position = get_pickup_position(entity)
+  pickup_position = bobmods.inserters.rotate_position(player.force, pickup_position)
+  set_pickup_position(entity, pickup_position)
   if entity == global.bobmods.inserters[player.index].entity then
     bobmods.inserters.refresh_position_checkboxes(entity, player)
   end
 end
+
+function bobmods.inserters.rotate_drop(entity, player)
+  local drop_position, drop_offset = get_split_drop_position(entity)
+  local new_position = bobmods.inserters.rotate_position(player.force, drop_position)
+  local new_offset = calculate_new_drop_offset(drop_position, drop_offset, new_position)
+  set_split_drop_position(entity, new_position, new_offset)
+  if entity == global.bobmods.inserters[player.index].entity then
+    bobmods.inserters.refresh_position_checkboxes(entity, player)
+  end
+end
+
 
 function bobmods.inserters.pickup_range(entity, player)
   local long_unlocked = tech_unlocked(player.force, bobmods.inserters.long_technology)
@@ -970,22 +1022,17 @@ function bobmods.inserters.pickup_range(entity, player)
 
   if long_unlocked or long2_unlocked then
     if islong2 then
-      pickup_position.x = bobmods.math.floor(pickup_position.x / 3)
-      pickup_position.y = bobmods.math.floor(pickup_position.y / 3)
+      pickup_position = bobmods.logistics.set_range(pickup_position, 1)
     elseif islong then
       if long2_unlocked then
-        pickup_position.x = bobmods.math.floor(pickup_position.x * 1.5)
-        pickup_position.y = bobmods.math.floor(pickup_position.y * 1.5)
+        pickup_position = bobmods.logistics.set_range(pickup_position, 3)
       else
-        pickup_position.x = bobmods.math.floor(pickup_position.x / 2)
-        pickup_position.y = bobmods.math.floor(pickup_position.y / 2)
+        pickup_position = bobmods.logistics.set_range(pickup_position, 1)
       end
     else
-      pickup_position.x = bobmods.math.floor(pickup_position.x * 2)
-      pickup_position.y = bobmods.math.floor(pickup_position.y * 2)
+      pickup_position = bobmods.logistics.set_range(pickup_position, 2)
     end
     set_pickup_position(entity, pickup_position)
-    entity.direction = entity.direction -- set direction to force update
     if entity == global.bobmods.inserters[player.index].entity then
       bobmods.inserters.refresh_position_checkboxes(entity, player)
     end
@@ -996,72 +1043,43 @@ end
 function bobmods.inserters.drop_range(entity, player)
   local long_unlocked = tech_unlocked(player.force, bobmods.inserters.long_technology)
   local long2_unlocked = tech_unlocked(player.force, bobmods.inserters.long2_technology)
-
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
-
+  local drop_position, drop_offset = get_split_drop_position(entity)
   local islong = false
   local islong2 = false
-  local dolong = false
 
-  if tile_position.x > 2.1 or tile_position.x < -2.1 or tile_position.y > 2.1 or tile_position.y < -2.1 then
+  if drop_position.x > 2.1 or drop_position.x < -2.1 or drop_position.y > 2.1 or drop_position.y < -2.1 then
     islong2 = true
-  elseif tile_position.x > 1.1 or tile_position.x < -1.1 or tile_position.y > 1.1 or tile_position.y < -1.1 then
+  elseif drop_position.x > 1.1 or drop_position.x < -1.1 or drop_position.y > 1.1 or drop_position.y < -1.1 then
     islong = true
   end
 
   if long_unlocked or long2_unlocked then
-    if near_unlocked then
-      if tile_position.x > 0 and tile_offset.x > 0 then
-        dolong = true
-      elseif tile_position.x < 0 and tile_offset.x < 0 then
-        dolong = true
-      elseif tile_position.y > 0 and tile_offset.y > 0 then
-        dolong = true
-      elseif tile_position.y < 0 and tile_offset.y < 0 then
-        dolong = true
-      end
-    else
-      dolong = true
-    end
-  end
-
-  if dolong then
     if islong2 then
-      tile_position.x = bobmods.math.floor(tile_position.x / 3)
-      tile_position.y = bobmods.math.floor(tile_position.y / 3)
+      drop_position = bobmods.logistics.set_range(drop_position, 1)
     elseif islong then
       if long2_unlocked then
-        tile_position.x = bobmods.math.floor(tile_position.x * 1.5)
-        tile_position.y = bobmods.math.floor(tile_position.y * 1.5)
+        drop_position = bobmods.logistics.set_range(drop_position, 3)
       else
-        tile_position.x = bobmods.math.floor(tile_position.x / 2)
-        tile_position.y = bobmods.math.floor(tile_position.y / 2)
+        drop_position = bobmods.logistics.set_range(drop_position, 1)
       end
     else
-      tile_position.x = bobmods.math.floor(tile_position.x * 2)
-      tile_position.y = bobmods.math.floor(tile_position.y * 2)
+      drop_position = bobmods.logistics.set_range(drop_position, 2)
     end
   end
 
-  drop_position.x = tile_position.x + tile_offset.x
-  drop_position.y = tile_position.y + tile_offset.y
-  set_drop_position(entity, drop_position)
-  entity.direction = entity.direction -- set direction to force update
+  set_split_drop_position(entity, drop_position, drop_offset)
   if entity == global.bobmods.inserters[player.index].entity then
     bobmods.inserters.refresh_position_checkboxes(entity, player)
   end
 end
+
 
 function bobmods.inserters.long_range(entity, player)
   local long_unlocked = tech_unlocked(player.force, bobmods.inserters.long_technology)
   local long2_unlocked = tech_unlocked(player.force, bobmods.inserters.long2_technology)
 
   local pickup_position = get_pickup_position(entity)
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
+  local drop_position, drop_offset = get_split_drop_position(entity)
 
   local islong = false
   local islong2 = false
@@ -1075,26 +1093,24 @@ function bobmods.inserters.long_range(entity, player)
   if long_unlocked or long2_unlocked then
     if islong2 then
       pickup_position = bobmods.logistics.set_range(pickup_position, 1)
-      tile_position = bobmods.logistics.set_range(tile_position, 1)
+      drop_position = bobmods.logistics.set_range(drop_position, 1)
     elseif islong then
       if long2_unlocked then
         pickup_position = bobmods.logistics.set_range(pickup_position, 3)
-        tile_position = bobmods.logistics.set_range(tile_position, 3)
+        drop_position = bobmods.logistics.set_range(drop_position, 3)
       else
         pickup_position = bobmods.logistics.set_range(pickup_position, 1)
-        tile_position = bobmods.logistics.set_range(tile_position, 1)
+        drop_position = bobmods.logistics.set_range(drop_position, 1)
       end
     else
       pickup_position = bobmods.logistics.set_range(pickup_position, 2)
-      tile_position = bobmods.logistics.set_range(tile_position, 2)
+      drop_position = bobmods.logistics.set_range(drop_position, 2)
     end
   end
 
-  drop_position.x = tile_position.x + tile_offset.x
-  drop_position.y = tile_position.y + tile_offset.y
-  set_both_positions(entity, pickup_position, drop_position)
+  local full_drop_position = combine_drop_position(drop_position, drop_offset)
+  set_both_positions(entity, pickup_position, full_drop_position)
 
-  entity.direction = entity.direction -- set direction to force update
   if entity == global.bobmods.inserters[player.index].entity then
     bobmods.inserters.refresh_position_checkboxes(entity, player)
   end
@@ -1104,38 +1120,69 @@ end
 function bobmods.inserters.near_range(entity, player)
   local near_unlocked = tech_unlocked(player.force, bobmods.inserters.near_technology)
 
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
+  local drop_position, drop_offset = get_split_drop_position(entity)
 
   if near_unlocked then
-    if (tile_offset.x == 0 and tile_offset.y == 0) or
-      (tile_offset.x == 0 and tile_position.x ~= 0) or
-      (tile_offset.y == 0 and tile_position.y ~= 0) then
-      tile_offset = bobmods.inserters.normalise_tile_offset({x = tile_position.x, y = tile_position.y})
+    if (drop_offset.x == 0 and drop_offset.y == 0) or
+      (drop_offset.x == 0 and drop_position.x ~= 0) or
+      (drop_offset.y == 0 and drop_position.y ~= 0) then
+      drop_offset = bobmods.inserters.normalise_tile_offset({x = drop_position.x, y = drop_position.y})
     else
-      if tile_position.x ~= 0 then tile_offset.x = 0 - tile_offset.x end
-      if tile_position.y ~= 0 then tile_offset.y = 0 - tile_offset.y end
+      if drop_position.x ~= 0 then drop_offset.x = 0 - drop_offset.x end
+      if drop_position.y ~= 0 then drop_offset.y = 0 - drop_offset.y end
     end
 
-    if (tile_position.y ~= 0 and tile_position.x ~= 0)
+    if (drop_position.y ~= 0 and drop_position.x ~= 0)
     and (
-      (((tile_position.x > 0 and tile_offset.x < 0) or (tile_offset.x > 0 and tile_position.x < 0)) and  -- x near
-      ((tile_position.y > 0 and tile_offset.y > 0) or (tile_offset.y < 0 and tile_position.y < 0)))   -- y far
+      (((drop_position.x > 0 and drop_offset.x < 0) or (drop_offset.x > 0 and drop_position.x < 0)) and  -- x near
+      ((drop_position.y > 0 and drop_offset.y > 0) or (drop_offset.y < 0 and drop_position.y < 0)))   -- y far
     or
-      (((tile_position.x > 0 and tile_offset.x > 0) or (tile_offset.x < 0 and tile_position.x < 0)) and  -- x far
-      ((tile_position.y > 0 and tile_offset.y < 0) or (tile_offset.y > 0 and tile_position.y < 0))) -- y near
+      (((drop_position.x > 0 and drop_offset.x > 0) or (drop_offset.x < 0 and drop_position.x < 0)) and  -- x far
+      ((drop_position.y > 0 and drop_offset.y < 0) or (drop_offset.y > 0 and drop_position.y < 0))) -- y near
     ) then
-      tile_offset = bobmods.inserters.normalise_tile_offset({x = tile_position.x, y = tile_position.y})
+      drop_offset = bobmods.inserters.normalise_tile_offset({x = drop_position.x, y = drop_position.y})
     end
   end
 
-  drop_position.x = tile_position.x + tile_offset.x
-  drop_position.y = tile_position.y + tile_offset.y
-  set_drop_position(entity, drop_position)
-  entity.direction = entity.direction -- set direction to force update
+  set_split_drop_position(entity, drop_position, drop_offset)
   if entity == global.bobmods.inserters[player.index].entity then
     bobmods.inserters.refresh_position_checkboxes(entity, player)
+  end
+end
+
+
+
+
+function bobmods.logistics.create_gui_button(player_index)
+  local player = game.players[player_index]
+
+  -- remove legacy GUI
+  if player.gui.top.bob_logistics_inserter_gui then
+    player.gui.top.bob_logistics_inserter_gui.destroy()
+  end
+
+  -- remove legacy button
+  if player.gui.top.bob_logistics_inserter_button then
+    player.gui.top.bob_logistics_inserter_button.destroy()
+  end
+
+  if mod_gui.get_button_flow(player).bob_logistics_inserter_button then
+    mod_gui.get_button_flow(player).bob_logistics_inserter_button.destroy()
+  end
+
+  mod_gui.get_button_flow(player).add{type = "sprite-button", name = "bob_logistics_inserter_button", tooltip = {"gui.bob-inserter-open-gui"}, sprite = "item/fast-inserter", style = "mod_gui_button"}
+end
+
+
+function bobmods.logistics.show_gui_options(player_index)
+  local player = game.players[player_index]
+
+  if player.gui.left.bob_logistics_inserter_gui then
+    player.gui.left.bob_logistics_inserter_gui.destroy()
+  end
+
+  if global.bobmods.logistics[player_index].show then
+    bobmods.logistics.create_gui(player_index)
   end
 end
 
@@ -1151,6 +1198,10 @@ function bobmods.logistics.create_gui(player_index)
   end
 
   local gui = player.gui.left.add({type = "frame", name = "bob_logistics_inserter_gui", direction = "vertical"})
+  gui.style.bottom_padding = 8
+  gui.style.vertically_stretchable = false
+  gui.style.horizontally_stretchable = false
+
   gui.add({type = "table", name = "table", column_count = 1, style = "bob_table"})
 
   if long_unlocked or near_unlocked then
@@ -1179,6 +1230,19 @@ function bobmods.logistics.create_gui(player_index)
 end
 
 
+
+function bobmods.inserters.delete_gui(player_index)
+  local globtable = global.bobmods.inserters[player_index]
+  if globtable then
+    if globtable.gui and globtable.gui.valid then globtable.gui.destroy() end
+    globtable.entity = nil
+    globtable.gui = nil
+    globtable.pickup = nil
+    globtable.drop = nil
+    globtable.offset = nil
+  end
+end
+
 function bobmods.inserters.open_gui(entity, player)
   bobmods.inserters.delete_gui(player.index)
 
@@ -1192,10 +1256,55 @@ function bobmods.inserters.open_gui(entity, player)
   local near_unlocked = tech_unlocked(player.force, bobmods.inserters.near_technology)
 
   local pickup_position = get_pickup_position(entity)
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
+  local full_drop_position = get_drop_position(entity)
+  local drop_position = {x = bobmods.math.round(full_drop_position.x), y = bobmods.math.round(full_drop_position.y)}
+  local offset_position = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(full_drop_position.x), y = bobmods.math.offset(full_drop_position.y)})
 
+  local gui
+  local main_table
+
+  if globtable.position == "left" then
+    gui = player.gui.left.add({type = "frame", name = "bob_inserter_gui", direction = "vertical", caption = {"gui.bob-named-inserter-gui", entity.prototype.localised_name}})
+    globtable.pickup, globtable.drop, globtable.offset = bobmods.inserters.draw_inserter_gui_main_table(gui, "bob_inserter_gui", pickup_position, drop_position, offset_position, long_unlocked, long2_unlocked, more_unlocked, more2_unlocked, near_unlocked)
+  else
+    gui = player.gui.screen.add({type = "frame", name = "bob_inserter_gui", direction = "vertical"})
+
+    gui_add_title(gui, {"gui.bob-named-inserter-gui", entity.prototype.localised_name}, "bob_inserter_gui_close", true)
+
+    local main_table_target = gui
+
+    if settings.get_player_settings(player)["bobmods-inserters-show-window"].value ~= "off" then
+      local entity_flow = gui
+
+      if settings.get_player_settings(player)["bobmods-inserters-show-window"].value == "left" then
+        gui.title_flow.title.caption = {"gui.bob-inserter-gui"}
+        main_table_target = gui.add({type = "flow", name = "main_flow", style = "horizontal_flow"})
+        gui.main_flow.style.horizontal_spacing = 12
+        entity_flow = gui.main_flow.add({type = "table", name = "entity_flow", style = "bob_table", column_count = 1})
+        entity_flow.add({type = "label", name = "entity_name", style = "heading_2_label", caption = entity.prototype.localised_name})
+      end
+
+      entity_flow.add({type = "frame", name = "entity_frame", style = "inside_shallow_frame"})
+      entity_flow.entity_frame.style.width = 100
+      entity_flow.entity_frame.style.height = 100
+      entity_flow.entity_frame.style.horizontally_stretchable = "off"
+      entity_flow.entity_frame.add({type = "entity-preview", name = "entity_preview", style = "entity_button_base"})
+      entity_flow.entity_frame.entity_preview.entity = entity
+    end
+
+    globtable.pickup, globtable.drop, globtable.offset = bobmods.inserters.draw_inserter_gui_main_table(main_table_target, "bob_inserter_gui", pickup_position, drop_position, offset_position, long_unlocked, long2_unlocked, more_unlocked, more2_unlocked, near_unlocked)
+
+    gui.auto_center = true
+    player.opened = gui
+  end
+  globtable.gui = gui
+  gui.style.bottom_padding = 8
+  gui.style.vertically_stretchable = false
+  gui.style.horizontally_stretchable = false
+end
+
+
+function bobmods.inserters.draw_inserter_gui_main_table(gui, name, pickup_position, drop_position, offset_position, long_unlocked, long2_unlocked, more_unlocked, more2_unlocked, near_unlocked)
   local isshort = false
   local islong = false
   local islong2 = false
@@ -1207,53 +1316,23 @@ function bobmods.inserters.open_gui(entity, player)
   else
     isshort = true
   end
-  if tile_position.x > 2.1 or tile_position.x < -2.1 or tile_position.y > 2.1 or tile_position.y < -2.1 then
+  if drop_position.x > 2.1 or drop_position.x < -2.1 or drop_position.y > 2.1 or drop_position.y < -2.1 then
     islong2 = true
-  elseif tile_position.x > 1.1 or tile_position.x < -1.1 or tile_position.y > 1.1 or tile_position.y < -1.1 then
+  elseif drop_position.x > 1.1 or drop_position.x < -1.1 or drop_position.y > 1.1 or drop_position.y < -1.1 then
     islong = true
   else
     isshort = true
   end
 
+  local main_table = gui.add({type = "table", name = "main_table", column_count = 2, style = "bob_table"})
+  main_table.style.horizontal_spacing = 12
 
-  if globtable.position == "left" then
-    globtable.gui = player.gui.left.add({type = "frame", name = "bob_inserter_gui", direction = "vertical", caption = {"gui.bob-inserter-gui"}})
-  else
-    globtable.gui = player.gui.screen.add({type = "frame", name = "bob_inserter_gui", direction = "vertical", caption = {"gui.bob-inserter-gui"}})
-    globtable.gui.auto_center = true
-    player.opened = globtable.gui
-  end
-  local gui = globtable.gui
+  main_table.add({type = "label", name = "pickup_label", style = "heading_2_label", caption = {"gui.bob-inserter-pickup"}})
+  main_table.add({type = "label", name = "drop_label", style = "heading_2_label", caption = {"gui.bob-inserter-drop"}})
 
-  if globtable.position == "center" then
-    gui.add({type = "label", name = "entity_name", caption = {"entity-name." .. entity.name}})
-  end
-
-  if near_unlocked then
-    gui.add({type = "table", name = "main_table", column_count = 5, style = "bob_table"})
-  else
-    gui.add({type = "table", name = "main_table", column_count = 3, style = "bob_table"})
-  end
-
-  if globtable.position == "center" then
-    gui.add({type = "flow", name = "button_flow", style = "bob_button_flow"})
-    gui.button_flow.add({type = "frame", name = "filler", style = "bob_button_filler"})
-    gui.button_flow.add({type = "button", name = "bob_inserter_gui_close", style = "confirm_button", caption = {"gui.close"}})
-  end
-
-  gui.main_table.add({type = "table", name = "pickup", column_count = 1, style = "bob_table"})
-  gui.main_table.add({type = "label", name = "spacer1", caption = "     " })
-  gui.main_table.add({type = "table", name = "drop", column_count = 1, style = "bob_table"})
-  if near_unlocked then
-    gui.main_table.add({type = "label", name = "spacer2", caption = "     " })
-    gui.main_table.add({type = "table", name = "drop_offset", column_count = 1, style = "bob_table"})
-    gui.main_table.drop_offset.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-offset"}})
-    globtable.offset = gui.main_table.drop_offset.add({type = "table", name = "bob_inserter_gui_drop_offset", column_count = 3, style = "bob_table"})
-    bobmods.inserters.draw_offset_grid(gui.main_table.drop_offset.bob_inserter_gui_drop_offset, tile_offset)
-  end
-
-  gui.main_table.pickup.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-pickup"}})
-  gui.main_table.drop.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-drop"}})
+  main_table.add({type = "frame", name = "pickup", style = "inside_shallow_frame_with_padding"})
+  main_table.add({type = "frame", name = "drop", style = "inside_shallow_frame_with_padding"})
+  main_table.drop.add({type = "table", name = "table", column_count = 3, style = "bob_table"})
 
   local column_count = 5
 
@@ -1265,13 +1344,22 @@ function bobmods.inserters.open_gui(entity, player)
     column_count = 3
   end
 
-  globtable.pickup = gui.main_table.pickup.add({type = "table", name = "bob_inserter_gui_pickup", column_count = column_count, style = "bob_table"})
-  globtable.drop = gui.main_table.drop.add({type = "table", name = "bob_inserter_gui_drop", column_count = column_count, style = "bob_table"})
+  local gui_pickup = main_table.pickup.add({type = "table", name = name .. "_pickup", column_count = column_count, style = "bob_table"})
+  local gui_drop = main_table.drop.table.add({type = "table", name = name .. "_drop", column_count = column_count, style = "bob_table"})
+  local gui_offset = nil
 
-  bobmods.inserters.draw_button_grid(gui.main_table.pickup.bob_inserter_gui_pickup, pickup_position, "bob_inserter_checkbox_pickup", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
-  bobmods.inserters.draw_button_grid(gui.main_table.drop.bob_inserter_gui_drop, tile_position, "bob_inserter_checkbox_drop", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
+  bobmods.inserters.draw_button_grid(gui_pickup, pickup_position, "bob_inserter_checkbox_pickup", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
+  bobmods.inserters.draw_button_grid(gui_drop, drop_position, "bob_inserter_checkbox_drop", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
+
+  if near_unlocked then
+    main_table.drop.table.add({type = "label", name = "spacer2", caption = "     " })
+    main_table.drop.table.add({type = "table", name = "offset", column_count = 1, style = "bob_table"})
+    main_table.drop.table.offset.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-offset"}, style = "heading_2_label"})
+    gui_offset = main_table.drop.table.offset.add({type = "table", name = name .. "_offset", column_count = 3, style = "bob_table"})
+    bobmods.inserters.draw_offset_grid(gui_offset, offset_position)
+  end
+  return gui_pickup, gui_drop, gui_offset
 end
-
 
 function bobmods.inserters.draw_offset_grid(gui, position)
   gui.add({type = "checkbox", name = "button1", state = false, style = "bob_inserter_checkbox_small"})
@@ -1588,98 +1676,18 @@ end
 
 function bobmods.inserters.refresh_position_checkboxes(entity, player)
   local pickup_position = get_pickup_position(entity)
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
+  local drop_position, drop_offset = get_split_drop_position(entity)
 
   if global.bobmods.inserters[player.index].pickup then
     bobmods.inserters.draw_button_position_check(global.bobmods.inserters[player.index].pickup, pickup_position)
   end
   if global.bobmods.inserters[player.index].drop then
-    bobmods.inserters.draw_button_position_check(global.bobmods.inserters[player.index].drop, tile_position)
+    bobmods.inserters.draw_button_position_check(global.bobmods.inserters[player.index].drop, drop_position)
   end
   if global.bobmods.inserters[player.index].offset then
-    bobmods.inserters.draw_button_offset_check(global.bobmods.inserters[player.index].offset, tile_offset)
+    bobmods.inserters.draw_button_offset_check(global.bobmods.inserters[player.index].offset, drop_offset)
   end
 end
-
-
-
-function  bobmods.inserters.gui_pickup_click(entity, element)
-  local pickup_position = get_pickup_position(entity)
-  for i, new_position in ipairs(bobmods.inserters.positions) do
-    if element.name == "button" .. i then
-      pickup_position = new_position
-      set_pickup_position(entity, pickup_position)
-      entity.direction = entity.direction -- set direction to force update
-    end
-  end
-  bobmods.inserters.draw_button_position_check(element.parent, pickup_position)
-end
-
-function  bobmods.inserters.gui_drop_click(entity, element)
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = {x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)}
-  for i, new_position in ipairs(bobmods.inserters.positions) do
-    if element.name == "button" .. i then
-
-      local new_offset = {x = tile_offset.x, y = tile_offset.y}
-
-      if (tile_position.x > 0 and new_position.x < 0) or (tile_position.x < 0 and new_position.x > 0) then
-        new_offset.x = 0 - tile_offset.x
-      elseif tile_position.x == 0 and new_position.x ~= 0 then
-        if (new_position.x > 0 and tile_position.y > 0) or (new_position.x < 0 and tile_position.y < 0) then
-          new_offset.x = tile_offset.y
-        else
-          new_offset.x = 0 - tile_offset.y
-        end
-      elseif tile_position.x ~= 0 and new_position.x == 0 then
-        new_offset.x = 0
-      end
-
-      if (tile_position.y > 0 and new_position.y < 0) or (tile_position.y < 0 and new_position.y > 0) then
-        new_offset.y = 0 - tile_offset.y
-      elseif tile_position.y == 0 and new_position.y ~= 0 then
-        if (new_position.y > 0 and tile_position.x > 0) or (new_position.y < 0 and tile_position.x < 0) then
-          new_offset.y = tile_offset.x
-        else
-          new_offset.y = 0 - tile_offset.x
-        end
-      elseif tile_position.y ~= 0 and new_position.y == 0 then
-        new_offset.y = 0
-      end
-
-      tile_position = new_position
-      tile_offset = bobmods.inserters.normalise_tile_offset(new_offset)
-
-      drop_position.x = tile_position.x + tile_offset.x
-      drop_position.y = tile_position.y + tile_offset.y
-      set_drop_position(entity, drop_position)
-      entity.direction = entity.direction -- set direction to force update
-    end
-  end
-  bobmods.inserters.refresh_position_checkboxes(entity, game.players[element.player_index])
-end
-
-function  bobmods.inserters.gui_offset_click(entity, element)
-  local drop_position = get_drop_position(entity)
-  local tile_position = {x = bobmods.math.round(drop_position.x), y = bobmods.math.round(drop_position.y)}
-  local tile_offset = bobmods.inserters.normalise_tile_offset({x = bobmods.math.offset(drop_position.x), y = bobmods.math.offset(drop_position.y)})
-
-  for i, new_position in ipairs(bobmods.inserters.offset_positions) do
-    if element.name == "button" .. i then
-      tile_offset = bobmods.inserters.offset_positions[i]
-      drop_position.x = tile_position.x + tile_offset.x
-      drop_position.y = tile_position.y + tile_offset.y
-      set_drop_position(entity, drop_position)
-      entity.direction = entity.direction -- set direction to force update
-    end
-  end
-  bobmods.inserters.draw_button_offset_check(element.parent, tile_offset)
-end
-
-
 
 
 
@@ -1695,71 +1703,20 @@ drop: the index in table bobmods.inserters.positions to define the drop location
 offset: the index in table bobmods.inserters.offset_positions to define the offset location within the drop tile.
 ]]--
   draw_gui = function(data)
-    local long_unlocked = tech_unlocked(game.players[data.player_index].force, bobmods.inserters.long_technology)
-    local long2_unlocked = tech_unlocked(game.players[data.player_index].force, bobmods.inserters.long2_technology)
-    local more_unlocked = tech_unlocked(game.players[data.player_index].force, bobmods.inserters.more_technology)
-    local more2_unlocked = tech_unlocked(game.players[data.player_index].force, bobmods.inserters.more2_technology)
-    local near_unlocked = tech_unlocked(game.players[data.player_index].force, bobmods.inserters.near_technology)
-
-    local isshort = false
-    local islong = false
-    local islong2 = false
-
-    local pickup_position = bobmods.inserters.positions[data.pickup]
-    local drop_position = bobmods.inserters.positions[data.drop]
-    local offset_position = bobmods.inserters.offset_positions[data.offset]
-
-    if pickup_position.x > 2.1 or pickup_position.x < -2.1 or pickup_position.y > 2.1 or pickup_position.y < -2.1 then
-      islong2 = true
-    elseif pickup_position.x > 1.1 or pickup_position.x < -1.1 or pickup_position.y > 1.1 or pickup_position.y < -1.1 then
-      islong = true
-    else
-      isshort = true
-    end
-    if drop_position.x > 2.1 or drop_position.x < -2.1 or drop_position.y > 2.1 or drop_position.y < -2.1 then
-      islong2 = true
-    elseif drop_position.x > 1.1 or drop_position.x < -1.1 or drop_position.y > 1.1 or drop_position.y < -1.1 then
-      islong = true
-    else
-      isshort = true
-    end
-
-
-    if near_unlocked then
-      data.gui.add({type = "table", name = "main_table", column_count = 5, style = "bob_table"})
-    else
-      data.gui.add({type = "table", name = "main_table", column_count = 3, style = "bob_table"})
-    end
-
-    data.gui.main_table.add({type = "table", name = "pickup", column_count = 1, style = "bob_table"})
-    data.gui.main_table.add({type = "label", name = "spacer1", caption = "     " })
-    data.gui.main_table.add({type = "table", name = "drop", column_count = 1, style = "bob_table"})
-
-    data.gui.main_table.pickup.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-pickup"}})
-    data.gui.main_table.drop.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-drop"}})
-
-    local column_count = 5
-    if long2_unlocked or islong2 then
-      column_count = 7
-    elseif long_unlocked or islong then
-      column_count = 5
-    else
-      column_count = 3
-    end
-
-    local gui_pickup = data.gui.main_table.pickup.add({type = "table", name = data.name .. "_pickup", column_count = column_count, style = "bob_table"})
-    local gui_drop = data.gui.main_table.drop.add({type = "table", name = data.name .. "_drop", column_count = column_count, style = "bob_table"})
-
-    bobmods.inserters.draw_button_grid(gui_pickup, pickup_position, "bob_inserter_checkbox_pickup", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
-    bobmods.inserters.draw_button_grid(gui_drop, drop_position, "bob_inserter_checkbox_drop", long_unlocked, more_unlocked, islong, long2_unlocked, more2_unlocked, islong2, isshort)
-
-    if near_unlocked then
-      data.gui.main_table.add({type = "label", name = "spacer2", caption = "     " })
-      data.gui.main_table.add({type = "table", name = "offset", column_count = 1, style = "bob_table"})
-      data.gui.main_table.offset.add({type = "label", name = "entity_name", caption = {"gui.bob-inserter-offset"}})
-      local gui_offset = data.gui.main_table.offset.add({type = "table", name = data.name .. "_offset", column_count = 3, style = "bob_table"})
-      bobmods.inserters.draw_offset_grid(gui_offset, offset_position)
-    end
+    local force = game.players[data.player_index].force
+    bobmods.inserters.draw_inserter_gui_main_table
+    (
+      data.gui,
+      data.name,
+      bobmods.inserters.positions[data.pickup],
+      bobmods.inserters.positions[data.drop],
+      bobmods.inserters.offset_positions[data.offset],
+      tech_unlocked(force, bobmods.inserters.long_technology),
+      tech_unlocked(force, bobmods.inserters.long2_technology),
+      tech_unlocked(force, bobmods.inserters.more_technology),
+      tech_unlocked(force, bobmods.inserters.more2_technology),
+      tech_unlocked(force, bobmods.inserters.near_technology)
+    )
   end,
 
 --[[
