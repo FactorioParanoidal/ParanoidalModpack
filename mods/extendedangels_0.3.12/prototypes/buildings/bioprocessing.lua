@@ -26,7 +26,7 @@ data:extend(
         }
       },
 	    icon_size = 32,
-      subgroup = "bio-processing-buildings-nauvis-a", --DrD bio-processing-buildings-a
+      subgroup = "bio-processing-buildings-nauvis-a",
       order = "a[algae]-d",
       place_result = "algae-farm-4",
       stack_size = 10,
@@ -2750,7 +2750,7 @@ working_sound =
       module_slots = 3
     },
     allowed_effects = {"consumption", "speed", "pollution"},
-    result_inventory_size = 1,
+    result_inventory_size = 3,
     crafting_speed = 3,
     source_inventory_size = 1,
     resistances =
@@ -2854,7 +2854,7 @@ working_sound =
       module_slots = 4
     },
     allowed_effects = {"consumption", "speed", "pollution"},
-    result_inventory_size = 1,
+    result_inventory_size = 3,
     crafting_speed = 4,
     source_inventory_size = 1,
     resistances =

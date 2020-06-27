@@ -11,9 +11,11 @@ for index, force in pairs(game.forces) do
     recipes["angels-air-filter-3"].enabled = technologies["angels-nitrogen-processing-3"].researched
     recipes["angels-air-filter-4"].enabled = technologies["angels-nitrogen-processing-4"].researched
 
-    if technologies["phosphorus-processing-2"].researched then 
-      recipes["solid-disodium-phosphate"].enabled = true
-      recipes["solid-tetrasodium-pyrophosphate"].enabled = true
+    if game.active_mods["Clowns-Processing"] then
+      if technologies["phosphorus-processing-2"].researched then 
+        recipes["solid-disodium-phosphate"].enabled = true
+        recipes["solid-tetrasodium-pyrophosphate"].enabled = true
+      end
     end
     
     if technologies["water-treatment-5"].researched then 
