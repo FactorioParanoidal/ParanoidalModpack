@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.0.10
+Date: 2020.06.21
+  Changes:
+    - added support for Food Industries mod
+    - applied rename of sand to heavy-sand for Xander Mod
+    - added natural gas 1,2,3,4 resources from Py Petroleum Handling to ignored list to suppress warning message
+    - restored support for Geothermal generator mod (base game was updated to spawn resources properly)
+---------------------------------------------------------------------------------------------------
 Version: 6.0.9
 Date: 2020.05.03
   Changes:
