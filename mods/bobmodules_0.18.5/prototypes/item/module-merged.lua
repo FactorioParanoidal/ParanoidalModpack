@@ -14,7 +14,14 @@ data:extend(
     order = "m-rs-1",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,  
   },
 
   {
@@ -28,7 +35,14 @@ data:extend(
     order = "m-rs-2",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 2 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 2 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -42,7 +56,14 @@ data:extend(
     order = "m-rs-3",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 3 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 3 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -56,7 +77,14 @@ data:extend(
     order = "m-rs-4",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 4 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 4 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -70,7 +98,14 @@ data:extend(
     order = "m-rs-5",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 5 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 5 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -84,7 +119,14 @@ data:extend(
     order = "m-rs-6",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 6 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 6 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -98,7 +140,14 @@ data:extend(
     order = "m-rs-7",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 7 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 7 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -112,7 +161,14 @@ data:extend(
     order = "m-rs-8",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { speed = {bonus = 8 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}}
+    effect = { speed = {bonus = 8 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0, g = 0.8, b = 0.8 },
+      secondary = {r = 0.37, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -139,7 +195,14 @@ data:extend(
     {
       pollution = {bonus = -1 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -1 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -157,7 +220,14 @@ data:extend(
     {
       pollution = {bonus = -2 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -2 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -175,7 +245,14 @@ data:extend(
     {
       pollution = {bonus = -3 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -3 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -193,7 +270,14 @@ data:extend(
     {
       pollution = {bonus = -4 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -4 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -211,7 +295,14 @@ data:extend(
     {
       pollution = {bonus = -5 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -5 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -229,7 +320,14 @@ data:extend(
     {
       pollution = {bonus = -6 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -6 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -247,7 +345,14 @@ data:extend(
     {
       pollution = {bonus = -7 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -7 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -265,7 +370,14 @@ data:extend(
     {
       pollution = {bonus = -8 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus},
       consumption = {bonus = -8 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}
-    }
+    },
+    beacon_tint =
+    {
+      primary = { r = 0.8, g = 0.8, b = 0 },
+      secondary = {r = 1, g = 1, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -289,7 +401,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -304,7 +423,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 2 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -319,7 +445,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 3 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -334,7 +467,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 4 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -349,7 +489,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 5 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -364,7 +511,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 6 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -379,7 +533,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 7 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -394,7 +555,14 @@ data:extend(
     stack_size = 100,
     default_request_amount = 10,
     effect = { productivity = {bonus = 8 * bobmods.modules.ProductivityPerLevel + bobmods.modules.ProductivityBonus}},
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0, b = 0 },
+      secondary = {r = 1, g = 0.37, b = 0.37},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   }
 }
 )
@@ -424,7 +592,14 @@ data:extend(
       consumption = {bonus = -2 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus},
       speed = {bonus = 2 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0.5, b = 0.5 },
+      secondary = {r = 1, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -445,7 +620,14 @@ data:extend(
       consumption = {bonus = -4 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus},
       speed = {bonus = 4 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0.5, b = 0.5 },
+      secondary = {r = 1, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -466,7 +648,14 @@ data:extend(
       consumption = {bonus = -6 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus},
       speed = {bonus = 6 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0.5, b = 0.5 },
+      secondary = {r = 1, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -487,7 +676,14 @@ data:extend(
       consumption = {bonus = -8 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus},
       speed = {bonus = 8 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0.5, b = 0.5 },
+      secondary = {r = 1, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -508,7 +704,14 @@ data:extend(
       consumption = {bonus = -10 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus},
       speed = {bonus = 10 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = { r = 0.5, g = 0.5, b = 0.5 },
+      secondary = {r = 1, g = 1, b = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )

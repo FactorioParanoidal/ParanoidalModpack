@@ -11,6 +11,8 @@ data.raw["module"]["speed-module"].effect = (
 })
 data.raw["module"]["speed-module"].subgroup = "speed-module"
 data.raw["module"]["speed-module"].order = "m-s-1"
+data.raw["module"]["speed-module"].default_request_amount = 10
+data.raw["module"]["speed-module"].beacon_tint = {primary = {r = 0, g = 0.34, b = 1, a = 1}, secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000}}
 
 data.raw["module"]["speed-module-2"].stack_size = 100
 data.raw["module"]["speed-module-2"].icon = "__bobmodules__/graphics/icons/speed-module-2.png"
@@ -23,6 +25,8 @@ data.raw["module"]["speed-module-2"].effect = (
 })
 data.raw["module"]["speed-module-2"].subgroup = "speed-module"
 data.raw["module"]["speed-module-2"].order = "m-s-2"
+data.raw["module"]["speed-module-2"].default_request_amount = 10
+data.raw["module"]["speed-module-2"].beacon_tint = {primary = {r = 0, g = 0.34, b = 1, a = 1}, secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000}}
 
 data.raw["module"]["speed-module-3"].stack_size = 100
 data.raw["module"]["speed-module-3"].icon = "__bobmodules__/graphics/icons/speed-module-3.png"
@@ -35,6 +39,9 @@ data.raw["module"]["speed-module-3"].effect = (
 })
 data.raw["module"]["speed-module-3"].subgroup = "speed-module"
 data.raw["module"]["speed-module-3"].order = "m-s-3"
+data.raw["module"]["speed-module-3"].default_request_amount = 10
+data.raw["module"]["speed-module-3"].beacon_tint = {primary = {r = 0, g = 0.34, b = 1, a = 1}, secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000}}
+
 
 data:extend(
 {
@@ -53,7 +60,14 @@ data:extend(
     {
       speed = {bonus = 4 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus},
       consumption = {bonus = 4 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty}
-    }
+    },
+    beacon_tint =
+    {
+      primary = {r = 0, g = 0.34, b = 1, a = 1},
+      secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -71,7 +85,14 @@ data:extend(
     {
       speed = {bonus = 5 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus},
       consumption = {bonus = 5 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty}
-    }
+    },
+    beacon_tint =
+    {
+      primary = {r = 0, g = 0.34, b = 1, a = 1},
+      secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -89,7 +110,14 @@ data:extend(
     {
       speed = {bonus = 6 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus},
       consumption = {bonus = 6 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty}
-    }
+    },
+    beacon_tint =
+    {
+      primary = {r = 0, g = 0.34, b = 1, a = 1},
+      secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -107,7 +135,14 @@ data:extend(
     {
       speed = {bonus = 7 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus},
       consumption = {bonus = 7 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty}
-    }
+    },
+    beacon_tint =
+    {
+      primary = {r = 0, g = 0.34, b = 1, a = 1},
+      secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -125,7 +160,14 @@ data:extend(
     {
       speed = {bonus = 8 * bobmods.modules.SpeedPerLevel + bobmods.modules.SpeedBonus},
       consumption = {bonus = 8 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty}
-    }
+    },
+    beacon_tint =
+    {
+      primary = {r = 0, g = 0.34, b = 1, a = 1},
+      secondary = {r = 0.388, g = 0.976, b = 1.000, a = 1.000},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -140,6 +182,8 @@ data.raw["module"]["effectivity-module"].icon_mipmaps = nil
 data.raw["module"]["effectivity-module"].effect = { consumption = {bonus = -1 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
 data.raw["module"]["effectivity-module"].subgroup = "effectivity-module"
 data.raw["module"]["effectivity-module"].order = "m-e-1"
+data.raw["module"]["effectivity-module"].default_request_amount = 10
+data.raw["module"]["effectivity-module"].beacon_tint = {primary = { r = 0.3, g = 0.6, b = 0.1 }, secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}}
 
 data.raw["module"]["effectivity-module-2"].stack_size = 100
 data.raw["module"]["effectivity-module-2"].icon = "__bobmodules__/graphics/icons/effectivity-module-2.png"
@@ -148,6 +192,8 @@ data.raw["module"]["effectivity-module-2"].icon_mipmaps = nil
 data.raw["module"]["effectivity-module-2"].effect = { consumption = {bonus = -2 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
 data.raw["module"]["effectivity-module-2"].subgroup = "effectivity-module"
 data.raw["module"]["effectivity-module-2"].order = "m-e-2"
+data.raw["module"]["effectivity-module-2"].default_request_amount = 10
+data.raw["module"]["effectivity-module-2"].beacon_tint = {primary = { r = 0.3, g = 0.6, b = 0.1 }, secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}}
 
 data.raw["module"]["effectivity-module-3"].stack_size = 100
 data.raw["module"]["effectivity-module-3"].icon = "__bobmodules__/graphics/icons/effectivity-module-3.png"
@@ -156,6 +202,8 @@ data.raw["module"]["effectivity-module-3"].icon_mipmaps = nil
 data.raw["module"]["effectivity-module-3"].effect = { consumption = {bonus = -3 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
 data.raw["module"]["effectivity-module-3"].subgroup = "effectivity-module"
 data.raw["module"]["effectivity-module-3"].order = "m-e-3"
+data.raw["module"]["effectivity-module-3"].default_request_amount = 10
+data.raw["module"]["effectivity-module-3"].beacon_tint = {primary = { r = 0.3, g = 0.6, b = 0.1 }, secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}}
 
 data:extend(
 {
@@ -170,7 +218,14 @@ data:extend(
     order = "m-e-4",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { consumption = {bonus = -4 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
+    effect = { consumption = {bonus = -4 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.3, g = 0.6, b = 0.1 },
+      secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}, -- #5eff5eff
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -184,7 +239,14 @@ data:extend(
     order = "m-e-5",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { consumption = {bonus = -5 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
+    effect = { consumption = {bonus = -5 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.3, g = 0.6, b = 0.1 },
+      secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}, -- #5eff5eff
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -198,7 +260,14 @@ data:extend(
     order = "m-e-6",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { consumption = {bonus = -6 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
+    effect = { consumption = {bonus = -6 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.3, g = 0.6, b = 0.1 },
+      secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}, -- #5eff5eff
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -212,7 +281,14 @@ data:extend(
     order = "m-e-7",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { consumption = {bonus = -7 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
+    effect = { consumption = {bonus = -7 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.3, g = 0.6, b = 0.1 },
+      secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}, -- #5eff5eff
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -226,7 +302,14 @@ data:extend(
     order = "m-e-8",
     stack_size = 100,
     default_request_amount = 10,
-    effect = { consumption = {bonus = -8 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}}
+    effect = { consumption = {bonus = -8 * bobmods.modules.ConsumptionPerLevel - bobmods.modules.ConsumptionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.3, g = 0.6, b = 0.1 },
+      secondary = {r = 0.370, g = 1.000, b = 0.370, a = 1.000}, -- #5eff5eff
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -253,7 +336,14 @@ data:extend(
       consumption = {bonus = bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -273,7 +363,14 @@ data:extend(
       consumption = {bonus = 2 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 2 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -293,7 +390,14 @@ data:extend(
       consumption = {bonus = 3 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 3 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -313,7 +417,14 @@ data:extend(
       consumption = {bonus = 4 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 4 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -333,7 +444,14 @@ data:extend(
       consumption = {bonus = 5 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 5 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -353,7 +471,14 @@ data:extend(
       consumption = {bonus = 6 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 6 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -373,7 +498,14 @@ data:extend(
       consumption = {bonus = 7 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 7 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -393,7 +525,14 @@ data:extend(
       consumption = {bonus = 8 * bobmods.modules.ConsumptionPenaltyPerLevel + bobmods.modules.ConsumptionPenalty},
       pollution = {bonus = 8 * bobmods.modules.PollutionPenaltyPerLevel + bobmods.modules.PollutionPenalty}
     },
-    limitation_message_key = "production-module-usable-only-on-intermediates"
+    limitation_message_key = "production-module-usable-only-on-intermediates",
+    beacon_tint =
+    {
+      primary = {r = 0.68, g = 0.3, b = 0.8, a = 1},
+      secondary = {r = 1, g = 0.6, b = 0.9, a = 1},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -425,7 +564,14 @@ data:extend(
     order = "m-p-cl-1",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -1 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -1 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -439,7 +585,14 @@ data:extend(
     order = "m-p-cl-2",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -2 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -2 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -453,7 +606,14 @@ data:extend(
     order = "m-p-cl-3",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -3 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -3 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -467,7 +627,14 @@ data:extend(
     order = "m-p-cl-4",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -4 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -4 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -481,7 +648,14 @@ data:extend(
     order = "m-p-cl-5",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -5 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -5 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -495,7 +669,14 @@ data:extend(
     order = "m-p-cl-6",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -6 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -6 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -509,7 +690,14 @@ data:extend(
     order = "m-p-cl-7",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -7 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -7 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -523,7 +711,14 @@ data:extend(
     order = "m-p-cl-8",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = -8 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}}
+    effect = {pollution = {bonus = -8 * bobmods.modules.PollutionPerLevel - bobmods.modules.PollutionBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.2, g = 0.5, b = 0.3 },
+      secondary = {r = 0.4, g = 0.7, b = 0.5},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 }
 )
@@ -544,7 +739,14 @@ data:extend(
     order = "m-p-cr-1",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -558,7 +760,14 @@ data:extend(
     order = "m-p-cr-2",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 2 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 2 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -572,7 +781,14 @@ data:extend(
     order = "m-p-cr-3",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 3 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 3 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -586,7 +802,14 @@ data:extend(
     order = "m-p-cr-4",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 4 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 4 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -600,7 +823,14 @@ data:extend(
     order = "m-p-cr-5",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 5 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 5 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -614,7 +844,14 @@ data:extend(
     order = "m-p-cr-6",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 6 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 6 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -628,7 +865,14 @@ data:extend(
     order = "m-p-cr-7",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 7 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 7 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   },
 
   {
@@ -642,7 +886,14 @@ data:extend(
     order = "m-p-cr-8",
     stack_size = 100,
     default_request_amount = 10,
-    effect = {pollution = {bonus = 8 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}}
+    effect = {pollution = {bonus = 8 * bobmods.modules.PollutionCreatePerLevel + bobmods.modules.PollutionCreateBonus}},
+    beacon_tint =
+    {
+      primary = { r = 0.4, g = 0.3, b = 0.2 },
+      secondary = {r = 1, g = 0.5, b = 0},
+    },
+    art_style = "vanilla",
+    requires_beacon_alt_mode = false,
   }
 }
 )
