@@ -158,7 +158,7 @@ config["iron-ore"].multi_resource =
 		}
 	}
 --Economic Sand
-	config["sand"] =
+	config["sand-heavy"] =
 	{
 		type = "resource-ore",
 		allotment = 100,

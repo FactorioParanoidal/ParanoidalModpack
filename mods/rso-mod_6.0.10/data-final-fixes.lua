@@ -5,8 +5,8 @@ local IgnoredDataResources =
 {
 	["fossil-roots"] = true,
 	["tibGrowthNode"] = true,
-	["termal"] = true,
-	["termal2"] = true
+--	["termal"] = true,
+--	["termal2"] = true
 }
 
 

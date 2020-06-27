@@ -80,6 +80,8 @@ require("resourceconfigs.adamo")
 require("resourceconfigs.industrialrevolution")
 require("resourceconfigs.mobilefactory")
 require("resourceconfigs.enchanted")
+require("resourceconfigs.foodindustries")
+require("resourceconfigs.geothermal")
 -- require("resourceconfigs.yaiom")
 
 function loadResourceConfig()
@@ -429,9 +431,13 @@ function loadResourceConfig()
 		fillMobileFactoryConfig(config)
 	end
 
---	if game.active_mods["geothermalgen"] then
---		fillGeoTermalConfig(config)
---	end
+	if game.active_mods["FoodIndustry"] then
+		fillFoodIndustriesConfig(config)
+	end
+	
+	if game.active_mods["geothermalgen"] then
+		fillGeoTermalConfig(config)
+	end
 
 	if game.active_mods["yaiom"] then
 --		fillYaiomConfig(config)

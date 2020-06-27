@@ -1689,9 +1689,13 @@ local IgnoredResources =
 	["bi-ground-steam"] = true,
 	["bi-ground-sulfuric-acid"] = true,
 	["fossil-roots"] = true,
-	["termal"] = true,
+--	["termal"] = true,
 	["termal2"] = true,
-	["tibGrowthNode"] = true
+	["tibGrowthNode"] = true,
+	["natural-gas-1"] = true,
+	["natural-gas-2"] = true,
+	["natural-gas-3"] = true,
+	["natural-gas-4"] = true
 }
 
 local function IsIgnoreResource(ResourcePrototype)
