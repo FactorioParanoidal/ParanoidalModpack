@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.5
+Date: 16. 06. 2020
+  Bugfixes:
+    - Fixed for older versions of the game.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+Date: 16. 06. 2020
+  Changes:
+    - Updated for Factorio 0.18.32
+  Bugfixes:
+    - Fixed beacon fast_replaceable_group and next_upgrade (To fix the upgrade planner)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.3
 Date: 23. 05. 2020
   Changes:
