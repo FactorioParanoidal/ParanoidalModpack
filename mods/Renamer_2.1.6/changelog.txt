@@ -1,0 +1,54 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 27. 06. 2020
+  Bugfixes:
+    - Compatibility fix for Factorio 0.18.33 and onwards
+---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 28. 05. 2020
+  Bugfixes:
+    - Compatibility fix for Factorio 0.18.27 and onwards
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 23. 02. 2020
+  Changes:
+    - Randomise button now available when Name Lists is not installed, using Factorio backer names
+    - Update of function calls to work with Name Lists 2.1.0
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 08. 02. 2020
+  Changes:
+    - Updated due to changes in Name Lists 2.0.0
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 23. 01. 2020
+  Changes:
+    - Updated to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 23. 09. 2019
+  Bugfixes:
+    - Fixed mod error on Infinity Mode not being present and enabled
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 23. 09. 2019
+  Changes:
+    - Improved appearance again
+    - added support for selecting random names from Namelists
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 21. 09. 2019
+  Changes:
+    - Enter and escape can now be used to save and cancel respectively
+    - Added reset button to undo changes without closing GUI
+    - Improved appearance
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 12. 03. 2019
+  Changes:
+    - Text field is now selected as well as focused when GUI opens
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 27. 02. 2019
+  Changes:
+    - Updated to Factorio 0.17
