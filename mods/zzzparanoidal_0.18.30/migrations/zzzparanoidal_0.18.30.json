@@ -1,0 +1,11 @@
+{
+    "entity":
+    [
+        ["bi-straight-rail-power", "straight-rail"],
+        ["bi-curved-rail-power", "curved-rail"]
+    ],
+    "item":
+    [
+        ["bi-rail-power", "rail"]
+    ]
+}
