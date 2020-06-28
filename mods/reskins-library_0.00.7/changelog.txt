@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.00.7
+Date: 2020.06.24
+  Changes:
+    - Reverted previous change in 0.00.6
+    - Sets icon_size and icon_mipmaps at every entry within an icons table when icons are assigned
+---------------------------------------------------------------------------------------------------
+Version: 0.00.6
+Date: 2020.06.23
+  Changes:
+    - Unbrick mods that depend on icon field being present when icons was set by this mod
+---------------------------------------------------------------------------------------------------
+Version: 0.00.5
+Date: 2020.06.22
+  Features:
+    - Added function "startup_setting" to handle validation of startup settings
+  Changes:
+    - Moved icon assignments to occur immediately, with method to re-apply if necessary
+---------------------------------------------------------------------------------------------------
+Version: 0.00.4
+Date: 2020.06.18
+  Features:
+    - Added functions "construct_technology_icon" and "assign_technology_icon"
+  Changes:
+    - Set minimum version for Base to 0.18.32
+    - Consolidated "setup_masked_icon", "setup_flat_icon", "setup_standard_icon" into "construct_icon"
+    - Added support for "inputs.icon_background" in "construct_icon"
+    - Added support for "item-with-entity-data" to "assign_icons"
+    - Added "storage" parameter to function "store_icons" to allow for more control over where icons are stored
+---------------------------------------------------------------------------------------------------
+Version: 0.00.3
+Date: 2020.06.11
+  Features:
+    - Added function "store_icons" to collate icon setup parameters for later assignment in data-final-fixes by originating mod
+  Changes:
+    - Added "homepage" property to info.json
+---------------------------------------------------------------------------------------------------
+Version: 0.00.2
+Date: 2020.06.08
+  Changes:
+    - Renamed from "Core Library" to "Function Library"
+    - Added means to disable icon mask tinting in setup_masked_icon
+---------------------------------------------------------------------------------------------------
+Version: 0.00.1
+Date: 2020.06.06
+  Features:
+    - Initial Beta Release
