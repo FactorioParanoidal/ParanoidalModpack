@@ -103,7 +103,7 @@ function open_gui(player)
         type = "frame",
         name = "cursed-filter-drills-frame",
         direction = "vertical",
-        style = "dialog_frame"
+        --style = "dialog_frame"     //don't works with factorio 0.18.34
     }
     spend_frame.force_auto_center()
     
