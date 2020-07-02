@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.7
+Date: 29. 06. 2020
+  Bugfixes:
+    - Fixed loading error when Ingredient Limits were turned on.
+  Changes:
+    - Added Ingredient limits to Fluid furnaces
+---------------------------------------------------------------------------------------------------
+Version: 0.18.6
+Date: 29. 06. 2020
+  Changes:
+    - Fixed alignment of multipurpose furnaces
+    - Internally renamed the furnaces to a standard naming scheme.
+    - Updated for MCI 0.18.9 compatabillity.
+    - Added fuel values and polution multipliers to Light/Heavy/Crude oil and Petroleum Gas to match MCI and Power mods. (to fuel the Fluid burning furnaces)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.5
 Date: 23. 05. 2020
   Changes:

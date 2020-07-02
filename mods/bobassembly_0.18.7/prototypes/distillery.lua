@@ -1,6 +1,14 @@
 if settings.startup["bobmods-plates-purewater"] and settings.startup["bobmods-plates-purewater"].value == true and settings.startup["bobmods-assembly-distilleries"].value then
 
 
+local source_entity = {}
+if data.raw.furnace["bob-distillery"] then
+  source_entity = data.raw.furnace["bob-distillery"]
+else
+  source_entity = data.raw["assembling-machine"]["bob-distillery"]
+end
+
+
 data:extend({
   {
     type = "item",
@@ -105,9 +113,7 @@ data:extend({
     result = "bob-distillery-5"
   },
 
-
-
-util.merge{data.raw["assembling-machine"]["bob-distillery"],
+util.merge{source_entity,
   {
     name = "bob-distillery-2",
     icon = "__bobassembly__/graphics/icons/distillery-red.png",
@@ -122,7 +128,7 @@ util.merge{data.raw["assembling-machine"]["bob-distillery"],
     next_upgrade = "bob-distillery-3"
   }
 },
-util.merge{data.raw["assembling-machine"]["bob-distillery"],
+util.merge{source_entity,
   {
     name = "bob-distillery-3",
     icon = "__bobassembly__/graphics/icons/distillery-blue.png",
@@ -137,7 +143,7 @@ util.merge{data.raw["assembling-machine"]["bob-distillery"],
     next_upgrade = "bob-distillery-4"
   }
 },
-util.merge{data.raw["assembling-machine"]["bob-distillery"],
+util.merge{source_entity,
   {
     name = "bob-distillery-4",
     icon = "__bobassembly__/graphics/icons/distillery-purple.png",
@@ -152,7 +158,7 @@ util.merge{data.raw["assembling-machine"]["bob-distillery"],
     next_upgrade = "bob-distillery-5"
   }
 },
-util.merge{data.raw["assembling-machine"]["bob-distillery"],
+util.merge{source_entity,
   {
     name = "bob-distillery-5",
     icon = "__bobassembly__/graphics/icons/distillery-green.png",
