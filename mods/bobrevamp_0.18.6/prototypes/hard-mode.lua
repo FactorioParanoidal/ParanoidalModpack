@@ -63,7 +63,7 @@ data:extend(
     results =
     {
       {type = "item", name = "limestone", amount = 1},
-      {type = "fluid", name = "carbon-dioxide", amount = 25},
+      {type = "fluid", name = "carbon-dioxide", amount = 25, catalyst_amount = 25},
     },
     main_product = "limestone",
     crafting_machine_tint =
@@ -94,7 +94,7 @@ data:extend(
     results =
     {
       {type = "item", name = "sodium-chlorate", amount = 1},
-      {type = "fluid", name = "hydrogen", amount = 60},
+      {type = "fluid", name = "hydrogen", amount = 60, catalyst_amount = 60},
     },
     allow_decomposition = false
   },
@@ -117,7 +117,7 @@ data:extend(
     results =
     {
       {type = "item", name = "sodium-perchlorate", amount = 1},
-      {type = "fluid", name = "hydrogen", amount = 20},
+      {type = "fluid", name = "hydrogen", amount = 20, catalyst_amount = 20},
     },
     allow_decomposition = false
   },
@@ -140,7 +140,7 @@ data:extend(
     results =
     {
       {type = "item", name = "lithium-perchlorate", amount = 1},
-      {type = "item", name = "salt", amount = 1},
+      {type = "item", name = "salt", amount = 1, catalyst_amount = 1},
     },
     allow_decomposition = false
   },

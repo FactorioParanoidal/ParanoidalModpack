@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.6
+Date: 29. 06. 2020
+  Changes:
+    - Changed Rocket Silo recipe, makes use of some Rocket parts, and bob materials.
+    - Updated oil icons
+    - Removed ammonium-chloride-recycling from productivity module list.
+    - Added a lot of byproducts as Catalyst (you don't get this result from Productivity bonus)
+    - Added recipe for ammonia venting
+---------------------------------------------------------------------------------------------------
 Version: 0.18.5
 Date: 23. 05. 2020
   Changes:

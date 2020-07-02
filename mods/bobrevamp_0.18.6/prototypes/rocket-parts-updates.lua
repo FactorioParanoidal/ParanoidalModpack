@@ -63,8 +63,10 @@ then
     bobmods.lib.recipe.add_difficulty_ingredient("rocket-control-unit", "normal", {"multi-layer-circuit-board", 2})
     bobmods.lib.recipe.add_difficulty_ingredient("rocket-control-unit", "expensive", {"multi-layer-circuit-board", 3})
   end
+  bobmods.lib.tech.replace_prerequisite("rocket-control-unit", "speed-module", "advanced-electronics-3")
 elseif data.raw.item["advanced-processing-unit"] then
   bobmods.lib.recipe.replace_ingredient("rocket-control-unit", "speed-module", "advanced-processing-unit")
+  bobmods.lib.tech.replace_prerequisite("rocket-control-unit", "speed-module", "advanced-electronics-3")
 end
 
 

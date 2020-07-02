@@ -5,7 +5,7 @@ end
 if bobmods.plates and settings.startup["bobmods-revamp-hardmode"].value == true then
   bobmods.lib.recipe.replace_ingredient("calcium-chloride", "stone", "limestone")
   bobmods.lib.recipe.set_ingredient("calcium-chloride", {type = "fluid", name = "hydrogen-chloride", amount = 50})
-  bobmods.lib.recipe.add_result("calcium-chloride", {type = "fluid", name = "hydrogen", amount = 20})
+  bobmods.lib.recipe.add_result("calcium-chloride", {type = "fluid", name = "hydrogen", amount = 20, catalyst_amount = 20})
   data.raw.recipe["calcium-chloride"].main_product = "calcium-chloride"
   if data.raw.recipe["calcium-chloride"].normal then
     data.raw.recipe["calcium-chloride"].normal.main_product = "calcium-chloride"
@@ -15,7 +15,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-hardmode"].value == true 
   end
 
   bobmods.lib.recipe.set_ingredient("petroleum-gas-cracking", {type = "fluid", name = "water", amount = 20})
---  bobmods.lib.recipe.add_result("petroleum-gas-cracking", {type = "fluid", name = "carbon-dioxide", amount = 25})
+--  bobmods.lib.recipe.add_result("petroleum-gas-cracking", {type = "fluid", name = "carbon-dioxide", amount = 25, catalyst_amount = 25})
 --  data.raw.recipe["petroleum-gas-cracking"].emissions_multiplier = 0.2
 
   bobmods.lib.tech.add_recipe_unlock("chemical-processing-2", "limestone")

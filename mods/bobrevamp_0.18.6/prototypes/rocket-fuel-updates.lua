@@ -2,7 +2,7 @@ if data.raw.fluid.ammonia and data.raw.fluid.hydrazine and data.raw.fluid["dinit
 
   if data.raw.fluid["pure-water"] then
     bobmods.lib.recipe.remove_result("hydrazine", "water")
-    bobmods.lib.recipe.add_result("hydrazine", {type = "fluid", name = "pure-water", amount = 4})
+    bobmods.lib.recipe.add_result("hydrazine", {type = "fluid", name = "pure-water", amount = 4, catalyst_amount = 4})
   end
 
 
@@ -58,7 +58,7 @@ if data.raw.fluid.ammonia and data.raw.fluid.hydrazine and data.raw.fluid["dinit
   if data.raw.fluid["nitric-oxide"] then
     if data.raw.fluid["pure-water"] then
       bobmods.lib.recipe.remove_result("nitric-oxide", "water")
-      bobmods.lib.recipe.add_result("nitric-oxide", {type = "fluid", name = "pure-water", amount = 12})
+      bobmods.lib.recipe.add_result("nitric-oxide", {type = "fluid", name = "pure-water", amount = 12, catalyst_amount = 12})
     end
 
     if data.raw.technology["nitrogen-processing"] then

@@ -3,22 +3,32 @@ require("prototypes.rocket-parts-updates")
 require("prototypes.hard-mode-updates")
 require("prototypes.rtg-updates")
 
+-- Rocket silo overhaul
+
+bobmods.lib.recipe.set_ingredient("rocket-silo", {"steel-plate", 500})
+bobmods.lib.recipe.set_ingredient("rocket-silo", {"concrete", 200})
+bobmods.lib.recipe.set_ingredient("rocket-silo", {"pipe", 50})
+bobmods.lib.recipe.set_ingredient("rocket-silo", {"processing-unit", 50})
+bobmods.lib.recipe.set_ingredient("rocket-silo", {"electric-engine-unit", 100})
+
+if data.raw.item["titanium-pipe"] then
+  bobmods.lib.recipe.replace_ingredient("rocket-silo", "pipe", "titanium-pipe")
+end
+if data.raw.item["advanced-processing-unit"] then
+  bobmods.lib.recipe.replace_ingredient("rocket-silo", "processing-unit", "advanced-processing-unit")
+  bobmods.lib.tech.add_prerequisite("rocket-silo", "nitinol-processing")
+end
+if data.raw.item["nitinol-alloy"] then
+  bobmods.lib.recipe.replace_ingredient("rocket-silo", "steel-plate", "nitinol-alloy")
+end
+
+bobmods.lib.recipe.add_ingredient("rocket-silo", {"low-density-structure", 50})
+bobmods.lib.recipe.add_ingredient("rocket-silo", {"rocket-control-unit", 25})
+bobmods.lib.recipe.add_ingredient("rocket-silo", {"heat-shield-tile", 100})
+
+
 -- oil overhaul
 if settings.startup["bobmods-revamp-old-oil"].value == true or settings.startup["bobmods-revamp-oil"].value == true then
-  data.raw.recipe["advanced-oil-processing"].icon = "__bobrevamp__/graphics/icons/advanced-oil-processing.png"
-  data.raw.recipe["advanced-oil-processing"].icon_size = 32
-  data.raw.recipe["advanced-oil-processing"].icon_mipmaps = nil
-
-  if data.raw.recipe["bob-oil-processing"] then
-    data.raw.recipe["basic-oil-processing"].icon = "__bobrevamp__/graphics/icons/basic-oil-processing.png"
-    data.raw.recipe["basic-oil-processing"].icon_size = 32
-    data.raw.recipe["basic-oil-processing"].icon_mipmaps = nil
-
-    data.raw.recipe["bob-oil-processing"].icon = "__bobrevamp__/graphics/icons/bob-oil-processing.png"
-    data.raw.recipe["bob-oil-processing"].icon_size = 32
-    data.raw.recipe["bob-oil-processing"].icon_mipmaps = nil
-  end
-
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "chemical-plant")
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "pumpjack")
   bobmods.lib.tech.remove_recipe_unlock("oil-processing", "solid-fuel-from-petroleum-gas")

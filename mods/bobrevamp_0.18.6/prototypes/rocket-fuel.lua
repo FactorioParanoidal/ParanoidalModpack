@@ -164,7 +164,7 @@ data:extend(
     results =
     {
       {type = "fluid", name = "hydrazine", amount = 8},
-      {type = "fluid", name = "water", amount = 4},
+      {type = "fluid", name = "water", amount = 4, catalyst_amount = 4},
     },
     main_product = "hydrazine",
     crafting_machine_tint =
@@ -232,6 +232,10 @@ data:extend(
 }
 )
 
+if bobmods.plates.make_void_fluid_recipe then
+  bobmods.plates.make_void_fluid_recipe("ammonia", 25, 15)
+end
+
 if settings.startup["bobmods-revamp-hardmode"].value == true then
 data:extend(
 {
@@ -268,7 +272,7 @@ data:extend(
     results =
     {
       {type = "fluid", name = "nitric-oxide", amount = 20},
-      {type = "fluid", name = "water", amount = 12},
+      {type = "fluid", name = "water", amount = 12, catalyst_amount = 12},
     },
     main_product = "nitric-oxide",
     crafting_machine_tint =
