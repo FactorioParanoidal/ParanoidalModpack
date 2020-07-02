@@ -92,7 +92,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"chemical-furnace", 1},
+      {"electric-chemical-furnace", 1},
       {"steel-plate", 10},
       {"stone-brick", 10},
       {"processing-unit", 5},
@@ -184,7 +184,7 @@ data:extend(
       width = 129,
       height = 100,
       frame_count = 1,
-      shift = {0.421875, 0}
+      shift = {0.46875, 0}
     },
     working_visualisations = bob_electric_multipurpose_furnace_working_visualisations(),
     fast_replaceable_group = "furnace",
@@ -258,7 +258,7 @@ data:extend(
       width = 129,
       height = 100,
       frame_count = 1,
-      shift = {0.421875, 0}
+      shift = {0.46875, 0}
     },
     working_visualisations = bob_electric_multipurpose_furnace_working_visualisations(),
     fast_replaceable_group = "furnace",

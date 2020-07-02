@@ -1,8 +1,12 @@
 if settings.startup["bobmods-plates-purewater"] and settings.startup["bobmods-plates-purewater"].value == true and settings.startup["bobmods-assembly-distilleries"].value then
 
 
+if data.raw.furnace["bob-distillery"] then
+  data.raw.furnace["bob-distillery"].next_upgrade = "bob-distillery-2"
+else
+  data.raw["assembling-machine"]["bob-distillery"].next_upgrade = "bob-distillery-2"
+end
 
-data.raw["assembling-machine"]["bob-distillery"].next_upgrade = "bob-distillery-2"
 bobmods.lib.recipe.replace_ingredient("bob-distillery", "pipe", "copper-pipe")
 if data.raw.item["glass"] then
   bobmods.lib.recipe.replace_ingredient("bob-distillery", "copper-plate", "glass")
