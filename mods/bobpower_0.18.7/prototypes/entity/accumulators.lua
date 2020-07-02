@@ -1,7 +1,8 @@
+local sounds = require("__base__.prototypes.entity.demo-sounds")
+--local hit_effects = require ("__base__.prototypes.entity.demo-hit-effects")
+
 if settings.startup["bobmods-power-accumulators"].value == true then
 
---local hit_effects = require ("__base__.prototypes.entity.demo-hit-effects")
-local sounds = require("__base__.prototypes.entity.demo-sounds")
 
 data.raw["accumulator"]["accumulator"].fast_replaceable_group = "accumulator"
 data.raw["accumulator"]["accumulator"].next_upgrade = "large-accumulator"

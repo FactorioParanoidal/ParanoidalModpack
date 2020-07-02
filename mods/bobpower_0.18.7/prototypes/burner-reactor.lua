@@ -653,12 +653,12 @@ data:extend(
 {
   {
     type = "recipe",
-    name = "fluid-reactor-from-oil-steel-furnace",
+    name = "fluid-reactor-from-fluid-furnace",
     energy_required = 2,
     enabled = false,
     ingredients =
     {
-      {"oil-steel-furnace", 1},
+      {"fluid-furnace", 1},
       {"heat-pipe", 8},
       {"steel-plate", 6},
       {"pipe", 3}
@@ -668,7 +668,7 @@ data:extend(
 }
 )
 
-bobmods.lib.tech.add_recipe_unlock("fluid-reactor-1", "fluid-reactor-from-oil-steel-furnace")
+bobmods.lib.tech.add_recipe_unlock("fluid-reactor-1", "fluid-reactor-from-fluid-furnace")
 
 end
 
