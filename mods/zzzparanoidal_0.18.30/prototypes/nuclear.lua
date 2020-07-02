@@ -35,3 +35,5 @@ data.raw.recipe["advanced-thorium-nuclear-fuel-reprocessing|b"].results = {
     {type="item", name="strontium-90", amount=8},
     {type="fluid", name="water-radioactive-waste", amount=150}
 }
+
+data.raw.recipe["thorium-processing"].energy_required = 60 --from 10
