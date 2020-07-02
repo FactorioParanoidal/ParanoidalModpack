@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.11.4
+Date: 2020-06-30
+
+  Bugfixes:
+    - Fix Japanese localization by shelaf
+    - Fix English localization by stefprez
+    - Remove signal from new electric mining drill by lstor
+---------------------------------------------------------------------------------------------------
 Version: 0.11.3
 Date: 2020-02-12
 
@@ -8,7 +16,7 @@ Date: 2020-02-12
     - Japanese localization by shelaf
 
   Performance:
-    - Performance improvement: Use a truthy dictionary instead of iteration
+    - Performance improvement: Use a truthy dictionary instead of iteration by Nexela
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.2
 Date: 2020-01-26

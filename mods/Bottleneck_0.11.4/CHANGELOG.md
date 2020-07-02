@@ -1,16 +1,28 @@
 # Changelog
 
+## 0.11.4 (2020-06-30)
+
+### Bugfixes
+
+- Fix Japanese localization by shelaf
+- Fix English localization by stefprez
+- Remove signal from new electric mining drill by lstor
+
+---
+
 ## 0.11.3 (2020-02-12)
 
-### Features:
+### Features
 
-- New default icons by mybuddymichael
+- New default icons by [mybuddymichael](https://github.com/mybuddymichael)
 - Danish localization
 - Japanese localization by shelaf
 
 ### Performance
- 
-- Performance improvement: Use a truthy dictionary instead of iteration
+
+- Performance improvement: Use a truthy dictionary instead of iteration by [Nexela](https://github.com/Nexela)
+
+---
 
 ## 0.11.2 (2020-01-26)
 

@@ -51,7 +51,8 @@ local SUPPORTED_TYPES = {
 }
 
 local BLACKLIST_NAMES = {
-    ["factory-port-marker"] = true
+    ["electric-mining-drill"] = true,
+    ["factory-port-marker"] = true,
 }
 
 --Faster to just change the color than it is to check it first.
