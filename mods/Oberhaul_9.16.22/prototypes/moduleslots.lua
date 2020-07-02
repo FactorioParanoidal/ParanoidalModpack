@@ -135,7 +135,7 @@ data.raw["assembling-machine"]["electric-chemical-mixing-furnace-2"].module_spec
       module_info_icon_shift = {0, 0.5},
       module_info_multi_row_initial_height_modifier = -0.3
 }
-data.raw["assembling-machine"]["chemical-furnace"].module_specification = 
+data.raw["assembling-machine"]["electric-chemical-furnace"].module_specification = 
 {
       module_slots = 1,
       module_info_icon_shift = {0, 0.5},

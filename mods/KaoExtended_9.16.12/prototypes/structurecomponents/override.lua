@@ -60,11 +60,11 @@ local function replaceMachine()
   KaoExtended.recipe.addtorecipe("electric-chemical-mixing-furnace", {"intermediate-structure-components", 2})
   KaoExtended.recipe.addtorecipe("electric-chemical-mixing-furnace-2", {"advanced-structure-components", 2})
   
-  KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"mixing-furnace", 2})
+  KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"electric-chemical-furnace", 2})
   KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"basic-structure-components", 2})
   
-  KaoExtended.recipe.addtorecipe("chemical-furnace", {"chemical-boiler", 2})
-  KaoExtended.recipe.addtorecipe("chemical-furnace", {"basic-structure-components", 2})
+  KaoExtended.recipe.addtorecipe("electric-chemical-furnace", {"stone-chemical-furnace", 2})
+  KaoExtended.recipe.addtorecipe("electric-chemical-furnace", {"basic-structure-components", 2})
 end
 local function replaceMining()
   KaoExtended.recipe.addtorecipe("bob-mining-drill-1", {"basic-structure-components", 1})

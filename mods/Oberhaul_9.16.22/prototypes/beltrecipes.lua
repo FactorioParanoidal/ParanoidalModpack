@@ -151,23 +151,23 @@ end
 
 if data.raw.item["stone-pipe"] then  bobmods.lib.recipe.replace_ingredient("electrolyser", "stone-pipe", "pipe") end
 
-data.raw.recipe["mixing-furnace"].ingredients ={
+data.raw.recipe["stone-mixing-furnace"].ingredients ={
 	  {"stone-furnace", 1}, --DrD
       {"stone-brick", 5},
     }
-data.raw.recipe["chemical-boiler"].ingredients ={
+data.raw.recipe["stone-chemical-furnace"].ingredients ={
 	  {"stone-furnace", 1}, --DrD
       {"stone-brick", 5},
 	  {"pipe", 10},
     }
 	
-data.raw.recipe["mixing-steel-furnace"].ingredients ={
+data.raw.recipe["steel-mixing-furnace"].ingredients ={
       {"steel-furnace", 1}, --DrD
       {"steel-plate", 10},
       {"stone-brick", 10}
     }
 
-data.raw.recipe["chemical-steel-furnace"].ingredients ={
+data.raw.recipe["steel-chemical-furnace"].ingredients ={
 	  {"steel-furnace", 1}, --DrD
       {"steel-plate", 10},
       {"stone-brick", 10},
