@@ -154,6 +154,7 @@ data:extend(
       }
     },
     fast_replaceable_group = "fluid-generator",
+    next_upgrade = "fluid-generator-2",
     collision_box = {{-1.35, -1.35}, {1.35, 1.35}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
     fluid_box =
@@ -243,6 +244,7 @@ data:extend(
       }
     },
     fast_replaceable_group = "fluid-generator",
+    next_upgrade = "fluid-generator-3",
     collision_box = {{-1.35, -1.35}, {1.35, 1.35}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
     fluid_box =

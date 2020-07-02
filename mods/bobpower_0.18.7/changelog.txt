@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.7
+Date: 29. 06. 2020
+  Changes:
+    - Compatabillity for Assembly 0.18.6
+    - Added next_upgrade for fluid-generators 1 to 3. it won't automatically try to upgrade to Hydrazine generator.
+    - Removed a conditional require (could break multiplayer games. Just made it not conditional)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.6
 Date: 23. 05. 2020
   Changes:
