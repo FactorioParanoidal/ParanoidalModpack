@@ -499,6 +499,11 @@
     },
     
     {
+      "name": "paranoidal-tweaks",
+      "enabled": true
+    },
+    
+    {
       "name": "PCP",
       "enabled": true
     },
@@ -600,6 +605,16 @@
     
     {
       "name": "research_causes_evolution",
+      "enabled": true
+    },
+    
+    {
+      "name": "reskins-bobs",
+      "enabled": true
+    },
+    
+    {
+      "name": "reskins-library",
       "enabled": true
     },
     
@@ -770,6 +785,11 @@
     
     {
       "name": "zero-fluid-info",
+      "enabled": true
+    },
+    
+    {
+      "name": "zzzparanoidal",
       "enabled": true
     }
   ]
