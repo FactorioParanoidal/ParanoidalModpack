@@ -1,0 +1,32 @@
+{
+  "name": "reskins-bobs",
+  "version": "0.00.12",
+  "factorio_version": "0.18",
+  "title": "Artisanal Reskins: Bob's Mods",
+  "author": "Kirazy",
+  "contact": "kirazy@live.com",
+  "description": "[BETA] Reskins items, entities, and structures within Bob's mods to add tier coloring with player-customizable colors, high resolution icons, artisanal, hand crafted color masks, and other improvements. Part of the Artisanal Reskins series. May be used with ShinyBobsGFX and ShinyAngelGFX.",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=51&t=85707",
+  "source": "",
+  "dependencies": 
+  [	
+    "base >= 0.18.32",
+    "reskins-library >= 0.00.5",
+    "? bobassembly",
+    "? bobelectronics",
+    "? bobgreenhouse",
+    "? bobinserters",
+    "? boblibrary",
+    "? boblogistics",
+    "? bobmining",
+    "? bobmodules",
+    "? bobplates",
+    "? bobpower",
+    "? bobrevamp",
+    "? bobtech",
+    "? bobwarfare",
+    "(?) vanilla-loaders-hd",
+    "(?) ShinyBobGFX",
+    "(?) ShinyAngelGFX"
+  ]
+}
