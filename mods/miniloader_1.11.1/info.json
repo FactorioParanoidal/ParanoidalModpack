@@ -10,6 +10,7 @@
 		"base >= 0.18.3",
 		"(?) bobinserters >= 0.17.1",
 		"? boblogistics >= 0.17.1",
+		"? paranoidal-tweaks",
 		"? FactorioExtended-Plus-Transport >= 0.1.5",
 		"? Krastorio2 >= 0.9.0",
 		"? UltimateBelts >= 0.16.4",
