@@ -26,7 +26,8 @@ local tier_map = {
     ["assembling-machine-4"] = {3, 3, true},
     ["assembling-machine-5"] = {4, 4, true},
     ["assembling-machine-6"] = {5, 4, true},
-    ["burner-assembling-machine"] = {0, 0, false, util.color("262626")},
+    ["burner-assembling-machine"] = {0, 0, false, util.color("402000")},
+    --["burner-assembling-machine"] = {0, 0, false, util.color("262626")},
     ["steam-assembling-machine"] = {0, 0, true, util.color("d9d9d9")},
 }
 
@@ -389,7 +390,8 @@ for name, map in pairs(tier_map) do
     end
     
     -- Rescale for electronics and burner assembling machines
-    if string.find(name, "electronics") or name == "burner-assembling-machine" then
+    if string.find(name, "electronics") then
+      -- or name == "burner-assembling-machine" then
         reskins.lib.rescale_entity(entity.animation, 2/3)
     end
 
