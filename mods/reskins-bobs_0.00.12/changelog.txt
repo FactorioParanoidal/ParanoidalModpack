@@ -1,0 +1,124 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.00.12
+Date: 2020.06.25
+  Changes:
+    - Moved require for functions from data-updates to data
+---------------------------------------------------------------------------------------------------
+Version: 0.00.11
+Date: 2020.06.25
+  Features:
+    - Added additional module icon colors, 'deep-red', 'gray', 'orange', 'purple', and 'vanilla-red' for optional use by other mods
+    - Exposed module colors, accessible from 'reskins.bobs.module_color_map[color]
+---------------------------------------------------------------------------------------------------
+Version: 0.00.10
+Date: 2020.06.24
+  Features:
+    - Implemented item batteries, personal and vehicle battery equipment, and associated technologies
+    - Implemented night vision equipment and associated technologies
+    - Implemented solar energy technology
+    - Implemented personal and vehicle solar panel equipment, and associated technologies
+    - Implemented personal and vehicle energy shield equipment and associated personal equipment technologies
+    - Implemented personal laser defense equipment and associated technologies
+  Changes:
+    - Adjusted internal naming for clarity
+  Bugfixes:
+    - Fix medium eletric poles having their tint fetched prior to determining tier, resulting in mismatched colors
+    - Fix Mini-Machine compatibility causing startup errors when select Bob's mods are not enabled
+---------------------------------------------------------------------------------------------------
+Version: 0.00.9
+Date: 2020.06.22
+  Features:
+    - Implemented modules
+    - Partial implementation of new beacon slot graphics
+    - Added support for Deadlock's Stacking Beltboxes & Compact Loaders, Deadlock's Crating Machine mods
+  Changes:
+    - Icons are now all assigned by data-updates, with ability to re-apply in data-final-fixes
+    - Set minimum version for Library to 0.00.5
+  Bugfixes:
+    - Revised how settings are fetched to protect against startup errors due to missing settings
+---------------------------------------------------------------------------------------------------
+Version: 0.00.8
+Date: 2020.06.18
+  Features:
+    - Implemented science packs, alien science packs and associated technology
+    - Implemented personal and vehicle roboport equipment and associated technology
+    - Implemented personal and vehicle fusion reactor equipment and associated technology
+    - Implemented vehicle fusion cell equipment and associated technology
+    - Implemented artillery turrets
+    - Implemented automation, logistics technologies
+    - Preliminary implementation of new beacons
+    - Added icon support for locomotives, cargo wagons, fluid wagons, artillery wagons, and tanks
+    - Added support for Classic Mining Drill mod
+    - Added support for Miniloader technologies
+  Changes:
+    - Set minimum version for Base to 0.18.32, Library to 0.00.4
+    - Internal reorganization to handle requires by category
+    - Shifted ingredient-based tiers for logistics chests to tiers 3, 4, and 5 from 2, 3, and 4
+    - Shifted ingredient-based tier for electronics assembling machine 3 to tier 4 from 5
+---------------------------------------------------------------------------------------------------
+Version: 0.00.7
+Date: 2020.06.11
+  Features:
+    - Fully implemented new mining drills
+  Changes:
+    - Icons are now assigned in data-final-fixes, ensuring more robust compatibility with other reskin mods
+  Bugfixes:
+    - Fix mining-drill animation skipping at various playback speeds
+    - Remove dependency on angelspetrochem to reskin Mini-Chemplants icons, for the last time...
+    - Fix startup error related to neglecting to include low-resolution versions of mining drill mask and highlights
+---------------------------------------------------------------------------------------------------
+Version: 0.00.6
+Date: 2020.06.10
+  Features:
+    - Added an option to display a filter symbol on filter-inserter and stack-filter-inserter icons when using Bob's Inserter Overhaul (default on)
+    - Added an option to flip stack inserter icons when using Bob's Inserter Overhaul (default off)
+    - Added support for Loader Redux mod
+    - Added a symbol to large area mining drill icons to better distinguish them from regular mining drill icons
+    - Preliminary implementation of new mining drills
+    - Implemented distilleries
+  Changes:
+    - Improved inserter icon masks
+    - Ensured boilers use vanilla-boiler fire effects
+    - Added "homepage" property to info.json
+  Bugfixes:
+    - Fixed pipe window bounding boxes
+---------------------------------------------------------------------------------------------------
+Version: 0.00.5
+Date: 2020.06.08
+  Features:
+    - Added setting "Hydrazine is Blue!" to control whether the Hydrazine generator is tinted according to tier, or according to fuel (default)
+    - Implemented logistics chests
+  Changes:
+    - Improved behavior of pumpjacks subject to speed module effectivity
+  Bugfixes:
+    - Fixed startup error related to absent Angel's Petrochem; all external mod setting checks now fail quietly
+---------------------------------------------------------------------------------------------------
+Version: 0.00.4
+Date: 2020.06.07
+  Bugfixes:
+    - Fix division by zero error when calculating animation playback speeds for mining drills and pumpjacks
+---------------------------------------------------------------------------------------------------
+Version: 0.00.3
+Date: 2020.06.07
+  Features:
+    - Added remnants for transport belt, underground belt, and splitter entities
+  Changes:
+    - Adjusted starting_vertical_speed for smoke particles for burner electric generator and fluid generators
+  Bugfixes:
+    - Fix mini-machines dependency
+    - Fix sprite-out-of-bounds error with Mini-Machines when Angel's mods disable Bob's mods chemical plants
+---------------------------------------------------------------------------------------------------
+Version: 0.00.2
+Date: 2020.06.06
+  Bugfixes:
+    - Fixed startup error related to bad argument #1 of 4 to string.gsub
+---------------------------------------------------------------------------------------------------
+Version: 0.00.1
+Date: 2020.06.06
+  Features:
+    - Initial Beta Release
+    - Reskins structures in all of Bob's mods to a unified, colored tier system
+    - Option for the way tiers are determined, either through ingredients or order received (default)
+    - Includes appropriate icons for differentiability, with configuration options
+    - Adds remnants and explosive particle effects on structure death to all of Bob's structures
+    - Supports Mini-Machines, Miniloaders, and Vanilla Loaders HD mods
