@@ -1,0 +1,10 @@
+{
+	"name": "Shortcuts-ick",
+	"version": "0.18.0",
+	"factorio_version": "0.18",
+	"title": "Shortcuts for 0.18",
+	"author": "npc_strider(morley376), modified by ickputzdirwech",
+	"contact": "ickputzdirwech@gmx.de",
+	"dependencies": ["base >= 0.18.31"],
+	"description": "Original mod by npc_strider(morley376) mods.factorio.com/mod/Shortcuts . Adds a host of useful shortcuts to improve QOL. Shortcuts for the artillery remote, discharge defense remote, tree deconstructor, and toggles for equipment, rail blocks and the player lamp. Additionally adds in a customizable grid overlay, far zoom and a artillery wagon toggle. See mod portal FAQ page for a full list of shortcuts and supported mods. Suggest any new shortcut ideas to the discussion page."
+}
