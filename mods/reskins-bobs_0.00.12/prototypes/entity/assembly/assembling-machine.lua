@@ -390,7 +390,9 @@ for name, map in pairs(tier_map) do
     end
     
     -- Rescale for electronics and burner assembling machines
-    if string.find(name, "electronics") or name == "burner-assembling-machine" then
+    if string.find(name, "electronics")
+	-- or name == "burner-assembling-machine" --DrD
+	then
         reskins.lib.rescale_entity(entity.animation, 2/3)
     end
 
