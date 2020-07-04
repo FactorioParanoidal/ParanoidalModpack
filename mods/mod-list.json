@@ -54,11 +54,6 @@
     },
     
     {
-      "name": "AutoDeconstruct",
-      "enabled": true
-    },
-    
-    {
       "name": "beautiful_straight_bridge_railway",
       "enabled": true
     },
@@ -479,11 +474,6 @@
     },
     
     {
-      "name": "OpteraLib",
-      "enabled": true
-    },
-    
-    {
       "name": "Orbital Ion Cannon",
       "enabled": true
     },
@@ -675,6 +665,11 @@
     
     {
       "name": "ShinyBob_Techs",
+      "enabled": true
+    },
+    
+    {
+      "name": "Shortcuts-ick",
       "enabled": true
     },
     
