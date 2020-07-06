@@ -22,7 +22,7 @@ local item = {
     icon = icon,
     icon_size = 32,
     subgroup = "extraction-machine",
-    order = "b[fluids]-a3[electric-offshore-pump]",
+    order = "b[fluids]-b[electric-offshore-pump-mk2]",
     place_result = name..'-placeholder',
     stack_size = 20,
     localised_name = {'entity-name.'..name}
@@ -51,7 +51,7 @@ local entity = {
     minable = {mining_time = 0.2, result = name},
     placeable_by = {item = name, count = 1},
     
-    max_health = 800,
+    max_health = 400,
     dying_explosion = "medium-explosion",
     corpse = "medium-remnants",
     alert_icon_shift = util.by_pixel(-3, -12),
@@ -148,15 +148,20 @@ local entity = {
       emissions_per_minute = 3
     },
 
-    energy_usage = "3900kW",
+    energy_usage = "2400kW",
     
     order = "b-o-p",
     trigger_created_entity = true,
+
     module_specification =
     {
       module_slots = 2
     },
     allowed_effects = {"consumption", "speed", "productivity", "pollution"}
   }
+  
+
+
+
 
 data:extend ({placeholder, item, recipe, entity})

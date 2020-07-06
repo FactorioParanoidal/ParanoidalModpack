@@ -7,7 +7,7 @@ local icon = '__BurnerOffshorePump__/graphics/icons/'..name..'.png'
   
 local placeholder = table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
 placeholder.name = name..'-placeholder'
-placeholder.minable = {mining_time = 1, result = name}
+placeholder.minable = {mining_time = 0.1, result = name}
 placeholder.pumping_speed = 5 -- 5 is 300 fluids/s, vanilla has 20 and 1200
 -- placeholder.localised_name = {'burner bop placeholder'}
 placeholder.localised_name = {'entity-name.burner-offshore-pump'}
@@ -22,7 +22,7 @@ local item = {
     icon = icon,
     icon_size = 32,
     subgroup = "extraction-machine",
-    order = "b[fluids]-a1[burner-offshore-pump]",
+    order = "b[fluids]-a[burner-offshore-pump]",
     place_result = name..'-placeholder',
     stack_size = 20,
     localised_name = {'entity-name.'..name}
@@ -33,10 +33,9 @@ local recipe = {
     name = name,
     ingredients =
     {
-      --{"electronic-circuit", 2},
-      {"pipe", 6},
-	  {"iron-plate", 10},
-      {"iron-gear-wheel", 4}
+      {"electronic-circuit", 2},
+      {"pipe", 1},
+      {"iron-gear-wheel", 1}
     },
     result = name
   }
@@ -48,7 +47,7 @@ local entity = {
     icon_size = 32,
     flags = {"placeable-player", "placeable-off-grid"},
     
-    minable = {mining_time = 0.2, result = name},
+    minable = {mining_time = 1, result = name},
     placeable_by = {item = name, count = 1},
     
     max_health = 250,
@@ -138,9 +137,9 @@ local entity = {
       {
         type = "burner",
         fuel_category = "chemical",
-        effectivity = 1,
+        effectivity = 0.75,
         fuel_inventory_size = 1,
-        emissions_per_minute = 3
+        emissions_per_minute = 10
       },
     -- {
       -- type = "electric",
@@ -159,11 +158,7 @@ local entity = {
     -- },
     -- allowed_effects = {"consumption", "speed", "productivity", "pollution"}
   }
-  
-
 
 
 
 data:extend ({placeholder, item, recipe, entity})
-
-

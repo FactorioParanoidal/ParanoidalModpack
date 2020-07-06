@@ -95,7 +95,8 @@ local animation =
 		layers =
 		{
 			{
-				filename = "__base__/graphics/entity/offshore-pump/offshore-pump_east.png",
+				--filename = "__base__/graphics/entity/offshore-pump/offshore-pump_east.png",
+				filename = "__base__/graphics/entity/offshore-pump/offshore-pump_East.png",
 				priority = "high",
 				line_length = 8,
 				frame_count = 32,
@@ -105,7 +106,8 @@ local animation =
 				shift = util.by_pixel(14, -2),
 				hr_version =
 				{
-					filename = "__base__/graphics/entity/offshore-pump/hr-offshore-pump_east.png",
+					--filename = "__base__/graphics/entity/offshore-pump/hr-offshore-pump_east.png",
+					filename = "__base__/graphics/entity/offshore-pump/hr-offshore-pump_East.png",
 					priority = "high",
 					line_length = 8,
 					frame_count = 32,
