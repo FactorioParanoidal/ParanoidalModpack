@@ -22,7 +22,7 @@ local item = {
     icon = icon,
     icon_size = 32,
     subgroup = "extraction-machine",
-    order = "b[fluids]-a2[electric-offshore-pump]",
+    order = "b[fluids]-b[electric-offshore-pump]",
     place_result = name..'-placeholder',
     stack_size = 20,
     localised_name = {'entity-name.'..name}
@@ -33,9 +33,10 @@ local recipe = {
     name = name,
     ingredients =
     {
-      {"electronic-circuit", 5},
-      {"pipe", 12},
-      --{"electric-motor", 4},
+      {"burner-offshore-pump", 2},
+      {"electronic-circuit", 20},
+      {"pipe", 8},
+      {"iron-gear-wheel", 10},
       {"steel-plate", 8}
     },
     result = name
@@ -48,7 +49,7 @@ local entity = {
     icon_size = 32,
     flags = {"placeable-player", "placeable-off-grid"},
     
-    minable = {mining_time = 0.2, result = name},
+    minable = {mining_time = 1, result = name},
     placeable_by = {item = name, count = 1},
     
     max_health = 400,
@@ -133,7 +134,7 @@ local entity = {
     },
     crafting_categories = {"bop-fluids-making"},
     fixed_recipe = "bop-make-water",
-    crafting_speed = 4,
+    crafting_speed = 2,
     energy_source =
       -- {
         -- type = "burner",
@@ -145,7 +146,7 @@ local entity = {
     {
       type = "electric",
       usage_priority = "secondary-input",
-      emissions_per_minute = 3
+      emissions_per_minute = 5
     },
 
     energy_usage = "900kW",

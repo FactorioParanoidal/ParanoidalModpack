@@ -1,7 +1,8 @@
 local replacement_table = {
   ['offshore-pump'] = 'burner-offshore-pump',
   ['burner-offshore-pump-placeholder'] = 'burner-offshore-pump',
-  ['electric-offshore-pump-placeholder'] = 'electric-offshore-pump'
+  ['electric-offshore-pump-placeholder'] = 'electric-offshore-pump',
+  ['electric-modular-offshore-pump-placeholder'] = 'electric-modular-offshore-pump'
   }
 
 
