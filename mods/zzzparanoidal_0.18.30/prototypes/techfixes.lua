@@ -16,3 +16,6 @@ bobmods.lib.tech.add_prerequisite("bob-plasma-rocket", "rocketry")
 --убираем лишние рецепты
 bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-chemical-furnace-from-stone-furnace")
 bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-furnace-from-stone-chemical-furnace")
+
+--разные фиксы зависимостей технологий
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-1", "steel-processing")
