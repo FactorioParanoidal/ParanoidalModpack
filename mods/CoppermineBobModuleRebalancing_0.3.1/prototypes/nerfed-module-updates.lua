@@ -1,5 +1,5 @@
 if settings.startup["coppermine-bob-module-nerfed-modules"].value then
-  -- Search every recipe for the ones we want to modify
+  -- Search every recipe for the ones we want to modify DrD all file
   for name, item in pairs(data.raw.module) do
     local subgroup = item.subgroup
 
@@ -13,7 +13,14 @@ if settings.startup["coppermine-bob-module-nerfed-modules"].value then
     if subgroup == "speed-module" then
       item.effect = {
         speed = {bonus = 0.1 * level},
-        consumption = {bonus = 0.2 * level}
+        consumption = {bonus = 0.175 * level}
+      }
+    end
+
+    if subgroup == "effectivity-module" then
+      item.effect = {
+        speed = {bonus = -0.04 * level},
+        consumption = {bonus = -0.1 * level}
       }
     end
 
@@ -45,7 +52,16 @@ if settings.startup["coppermine-bob-module-nerfed-modules"].value then
     if subgroup == "god-module" then
       item.effect = {
         productivity = {bonus = 0.1 * level},
+        consumption = {bonus = -0.1 * level},
+        pollution = {bonus = -0.1 * level},
+        speed = {bonus = 0.1 * level}
       }
     end
+
+    --if subgroup == "god-module" then
+    --  item.effect = {
+    --    productivity = {bonus = 0.1 * level},
+    --  }
+    --end
   end
 end
