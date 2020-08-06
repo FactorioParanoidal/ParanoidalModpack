@@ -1,35 +1,4 @@
-if not data.raw.technology["long-inserters-1"] then
-data:extend(
-{
-  {
-    type = "technology",
-    name = "long-inserters-1",
-    icon = "__bobinserters__/graphics/icons/technology/long-inserters.png",
-    icon_size = 128,
-    effects =
-    {
-    },
-    prerequisites =
-    {
-      "logistics",
-    },
-    unit =
-    {
-      count = 20,
-      ingredients =
-      {
-        {"automation-science-pack", 1},
-      },
-      time = 15
-    },
-    order = "a-f-a-1",
-  },
-}
-)
-end
 
-
-if settings.startup["bobmods-inserters-long2"].value == true and not data.raw.technology["long-inserters-2"] then
 data:extend(
 {
   {
@@ -60,10 +29,8 @@ data:extend(
   },
 }
 )
-end
 
 
-if not data.raw.technology["near-inserters"] then
 data:extend(
 {
   {
@@ -91,9 +58,7 @@ data:extend(
   },
 }
 )
-end
 
-if not data.raw.technology["more-inserters-1"] then
 data:extend(
 {
   {
@@ -122,9 +87,7 @@ data:extend(
   },
 }
 )
-end
 
-if settings.startup["bobmods-inserters-more2"].value == true and not data.raw.technology["more-inserters-2"] then
 data:extend(
 {
   {
@@ -155,4 +118,3 @@ data:extend(
   },
 }
 )
-end
