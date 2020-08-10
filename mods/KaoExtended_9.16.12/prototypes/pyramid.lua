@@ -230,6 +230,11 @@ bobmods.lib.recipe.remove_ingredient ("crystallizer-3", "crystallizer-2")
 bobmods.lib.recipe.add_new_ingredient ("crystallizer-3", {type="item", name="crystallizer-2", amount=2})
 end
 
+bobmods.lib.recipe.remove_ingredient ("algae-farm-2", "algae-farm")
+bobmods.lib.recipe.add_new_ingredient ("algae-farm-2", {type="item", name="algae-farm", amount=2})
+bobmods.lib.recipe.remove_ingredient ("algae-farm-3", "algae-farm-2")
+bobmods.lib.recipe.add_new_ingredient ("algae-farm-3", {type="item", name="algae-farm-2", amount=2})
+
 bobmods.lib.recipe.remove_ingredient ("hydro-plant-2", "hydro-plant")
 bobmods.lib.recipe.add_new_ingredient ("hydro-plant-2", {type="item", name="hydro-plant", amount=2})
 bobmods.lib.recipe.remove_ingredient ("hydro-plant-3", "hydro-plant-2")
