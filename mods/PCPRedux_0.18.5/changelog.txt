@@ -1,0 +1,195 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.18.5
+  Bugfixes:
+    - Patched a compatibility issue with the wall
+    - Patched an issue with recipes missing, and some that should be under special vanilla
+---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+  Features:
+    - Prepared for updates to angels industries
+  Bugfixes:
+    - Fixed that I was setting require behind mod checks potentially causing CRC fails in multiplayer
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+  Bugfixes:
+    - Updated number icons to call the refining one, not the petrochem one (in prep of upcomning angels)
+    - Fixed that the flask was not adding to the omni-pack if present
+    - Made sure flask is moved to the correct tab if angels components is active
+---------------------------------------------------------------------------------------------------
+Version: 0.18.2
+  Features:
+    - Updated icon scripts to use angels lib variant
+    - Re-arranged some recipes to group better with angels
+    - Started working on a fluid colour script
+      - to work with recipes/chemplant smoke in future
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+  Bugfixes:
+    - Patched Item/Fluid grouping issues from Angels updates
+  Features:
+    - Removed gas bottle system (now integrated into base angels with some improvements)
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+  Features:
+    - Updated to 0.18
+    - Moved to newer versioning system to match the other mods i deal with
+    - Updated the PCP plastic recipe icons to have numeration consistent with angels
+    - Added a duplicate plastic 3 recipe to also make resin
+    - Moved rubber-pelletisation to the pellet press if active
+---------------------------------------------------------------------------------------------------
+Version: 0.0.31
+  Bugfixes:
+    - Fixed that rubber pellet production was missing from a tech unlock
+---------------------------------------------------------------------------------------------------
+Version: 0.0.30
+  Bugfixes:
+    - Fixed that rubber recipes were enabling when no rubber uses could be found
+    - Fixed the Neoprene recipes not enabling correctly (again...)
+    - Initial rebalance of the rubber recipes (not as nasty for bobs ones as in 0.0.22)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.29
+  Features:
+    - Added a recipe chain for crumb rubber from liquid rubber, complex but yields a high amount of rubber from liquid rubber
+    - Accidentally (possibly on purpose) removed the resin/rubber nerf, i will re-visit this later
+  Bugfixes:
+    - re-added the PLA recipe that keeps getting hidden
+---------------------------------------------------------------------------------------------------
+Version: 0.0.28
+  Features:
+    - Added a recipe to create fuel oil from cupric chloride, nitrous and synthesis gas
+---------------------------------------------------------------------------------------------------
+Version: 0.0.27
+  Bugfixes:
+    - Fixed load order (properly this time) issue under certain conditions that would disable the new rubber recipes or have them enabled when angels recipes were disabled
+    - Part of the fix also meant that apm's rubber recipe is compatible (but only works when bobs is active for now)
+      This restriction is due to angels not activating the rubber recipes when apm is installed, id invite someone to make a compatability patch if you would like this feature
+---------------------------------------------------------------------------------------------------
+Version: 0.0.26
+  Bugfixes:
+    - Fixed load order issue under certain conditions that would disable the new rubber recipes
+  Features:
+    - Modified the icon functions to be more flexible
+      you can now use custom chemical graphics (instead of using the auto-table) using the following two functions
+      for fluid recipe icons: gen_custom_fluid_recipe_icons(icon,icon_size,formcode,state)
+      for fluid icons: gen_custom_fluid_icons(icon,icon_size,formcode,state)
+        icon: is the file location of the chemical icon
+        icon_size: is the original icon size, the function auto-scales it.
+        formcode is the colour code for the background drop colours (three letters)
+        state is selecting the icon type
+    - For more colour codes, please let me know to add them. NOTE: i may get this script added to angels mod, in which case i will let you know, or have a carry-through script to not break mods if you use this in the interim
+---------------------------------------------------------------------------------------------------
+Version: 0.0.25
+  Bugfixes:
+    - Fixed issue with rubber overrides being called if rubber didn't exist (game without bobs)
+    - Fixed an mis-communication regarding barrels when omnipermute was homoginising barrel recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.24
+  Bugfixes:
+    - Fixed that dichlorobutene was a little overpowered
+    - Updated other parts of the mod to build icons based on the new function
+    - Fixed the generate_fluid_recipe_icons(fluid,formcode,state) function to work correctly
+    - made the backing icon sizes in the function a little smaller to mesh better
+    - reverted an old change with regards to nitrous-oxide being taken as nitrogen-monoxide (see catalytic phenol)
+      this will only activate if the phenol setting is activated
+    - Fixed the generate_complex_fluid_recipe_icons(product1,formcode,state,product2,product3,input1,input2) function to work correctly
+---------------------------------------------------------------------------------------------------
+Version: 0.0.23
+  Bugfixes:
+    - attempted to fix an apparent error relating to rubber not existing (i could not replicate it)
+    - fixed a case where i was calling solid-rubber instead of rubber
+  Features:
+    - Added 2 new Chloroprene Rubber (Neoprene) pathways, a butane path, and an ethane path
+    - Wrote a function that combines icon parts (the gas and liquid ones work)
+      I have not tested the more complex method yet.
+    - the function also contains a database of icons for each of angels/bobs/pcp gasses and liquids
+      i plan on expanding and integrating this more as i update the mod
+      generate_fluid_icons(fluid,formcode,state)
+        - fluid must not have gas/liquid in front, and must contain _ in place of - (table formatting was a pain, sorry)
+          example: gas-hydrogen-chloride needs to be written as "hydrogen_chloride"
+        - formcode is a 3 letter code that gives colouring for the background icon (see top of function file for code, i may expand this later)
+        - state is either empty (for the oil separation style), "gas" (for the more spaced icons like acid-gas), "liq" (for the most common set)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.22
+  Balancing:
+    - Added Resin overrides to nerf bobs resin and rubber recipes, while boosting angels ones
+  Features:
+    - New bobs recipe results (rubber smelting requires 25 resin, resin requires 8 wood)
+    - New angels yields (liquid rubber 1 gives 40, not 10 rubber, solid rubber yields 8, not 4)
+      While using bobs may still be easier, it should be a bit better balanced
+      this is a prepatory step for further recipes later
+  Bugfixes:
+    - Fixed an edge case conflict with Hexy's AB tweaks mod
+    - Fixed a not so small graphical issue with gas bottles now having double fluid icons on them
+---------------------------------------------------------------------------------------------------
+Version: 0.0.21
+  Bugfixes:
+    - Stopped the glass sink setting from activating with SCT and/or momotweak installed
+    - Fixed conflict with Hexy's AB tweaks mod (may still have some issues, let me know please)
+    - Fixed a small graphical issue with gas bottles not having fluid icons on them
+---------------------------------------------------------------------------------------------------
+Version: 0.0.20
+  Bugfixes:
+    - Fixed that gas canisters tech was locked under certain mod conditions
+      It is now unlocked after fluid handling
+---------------------------------------------------------------------------------------------------
+Version: 0.0.19
+  Features:
+    - Added a setting (Default on) which replaces barrels with Gas cylinders (if bobs lib is on)
+      These gas cylinder filling/emptying still work with angels auto-barreling
+  Bugfixes:
+    - Fixed a bug relating to the glass sink mod not adding the vial to the advanced logistic pack
+    - Added auto-barrel recipe for new fluids (not sure if they could be barreled before)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.18
+  Changes:
+    - Added a setting to keep angels version of the Catalytic Synthesis Phenol recipe
+       (to allow late game addition of this mod)
+  Bugfixes:
+    - Fixed that catalysts were not being added to recipes correctly
+      (Please check your existing recipe builds for phenol, acrylonitrile and vinyl chloride)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+  Bugfixes:
+    - Fixed mod load order issue with shinyicons installed
+---------------------------------------------------------------------------------------------------
+Version: 0.0.16
+  Bugfixes:
+    - Fixed the plastic wall being in own group
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+  Features:
+    - Added PLA (Poly-Lactic Acid) as a new tier of bio-plastic
+      may still need some balance, for now will not allow productivity.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+  Balancing:
+    - Modified a few things (not published)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+  Changes:
+    - Removed duplicates of cumene process and bisphenol-a, integrating angels items to the PCP recipes
+  Features:
+    - Added plastic wall
+      - may still need balance, location is odd, i think other mods are moving the other walls.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+  Bugfixes:
+    - Fixed that mod would not work without bobs plates
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+  Bugfixes:
+    - Fixed naming problems due to renaming mod from PCP to PCPRedux
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+  Bugfixes:
+    - Fixed a few problems
+    - locale fixes
+    - defaulted glass sinc
+  Balancing:
+    - added productivity for recipes
+    - increased yields for glass and plastic recipes to be more competitive
+  Changes:
+    - removed gas shift reactions (base angels duplications)
+    - merged nitrogen monoxide (angels) and nitrous oxide (PCP) into 1 material
+  Locale:
+    - locale fixes
