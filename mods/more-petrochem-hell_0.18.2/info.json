@@ -1,0 +1,11 @@
+{
+    "author": "Claviduck",
+    "factorio_version": "0.18",
+	"dependencies": ["base >=0.18","angelspetrochem","angelssmelting","bobplates"],
+    "description": "Little Expanded Hell for your Angels Petrochem Processing. Producate High Octane Enriched Fuel.",
+    "name": "more-petrochem-hell",
+    "homepage": "",
+    "version": "0.18.2",
+    "contact": "claviduck@googlemail.com",
+    "title": "More Petrochem Hell"
+}
