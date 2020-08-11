@@ -33,3 +33,7 @@ else
 		table.insert(data.raw["technology"]["physical-projectile-damage-7"].effects, {type = "turret-attack", turret_id = "scattergun-turret", modifier = 0.7})
 	end
 end
+
+if se_prodecural_tech_exclusions then
+	table.insert(se_prodecural_tech_exclusions, "w93-modular-turrets")
+end

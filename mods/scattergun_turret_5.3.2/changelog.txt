@@ -215,3 +215,8 @@ Version: 5.3.1
 Date: ?
   Changes:
     - Fixed conditional require error.
+---------------------------------------------------------------------------------------------------
+Version: 5.3.2
+Date: ?
+  Changes:
+    - Fixed Space Exploration adding space science packs to modular turret techs.

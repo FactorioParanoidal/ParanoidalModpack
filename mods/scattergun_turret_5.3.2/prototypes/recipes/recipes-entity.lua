@@ -279,7 +279,8 @@ data:extend({
 		ingredients = {{"copper-plate", 6}, {"steel-plate", 6}},
 		result = "w93-turret-light-cannon-shells",
 		icon = "__scattergun_turret__/graphics/icons/turret-light-cannon-shells.png",
-    		icon_size = 32,
+    		icon_size = 64,
+		icon_mipmaps = 4,
 	}
 })
 
