@@ -2,8 +2,8 @@ data:extend({
 {	type = "ammo",
 	name = "w93-slowdown-magazine",
 	icon = "__scattergun_turret__/graphics/icons/slowdown-magazine.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -60,8 +60,8 @@ data:extend({
 
 	name = "w93-uranium-shotgun-shell",
 	icon = "__scattergun_turret__/graphics/icons/uranium-shotgun-shell.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -129,8 +129,8 @@ data:extend({
 	type = "ammo",
 	name = "w93-turret-slowdown-shells",
 	icon = "__scattergun_turret__/graphics/icons/slowdown-cannon-shells.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -204,8 +204,8 @@ data:extend({
 	type = "ammo",
 	name = "w93-turret-cannon-shells",
 	icon = "__scattergun_turret__/graphics/icons/turret-cannon-shells.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -272,8 +272,8 @@ data:extend({
 	type = "ammo",
 	name = "w93-turret-light-uranium-cannon-shells",
 	icon = "__scattergun_turret__/graphics/icons/turret-light-uranium-cannon-shells.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -327,8 +327,8 @@ data:extend({
 	type = "ammo",
 	name = "w93-turret-uranium-cannon-shells",
 	icon = "__scattergun_turret__/graphics/icons/turret-uranium-cannon-shells.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -395,8 +395,8 @@ data:extend({
 	type = "ammo",
 	name = "w93-turret-rocket",
 	icon = "__scattergun_turret__/graphics/icons/turret-rocket.png",
-	icon_size = 32,
-
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 	ammo_type =
 
@@ -439,7 +439,8 @@ data:extend({
 	name = "w93-turret-explosive-rocket",
 
 	icon = "__scattergun_turret__/graphics/icons/turret-explosive-rocket.png",
-	icon_size = 32,
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 
 	ammo_type =
@@ -478,7 +479,8 @@ data:extend({
 	name = "w93-turret-slowdown-rocket",
 
 	icon = "__scattergun_turret__/graphics/icons/slowdown-turret-rocket.png",
-	icon_size = 32,
+	icon_size = 64,
+	icon_mipmaps = 4,
 	flags = {},
 
 	ammo_type =
