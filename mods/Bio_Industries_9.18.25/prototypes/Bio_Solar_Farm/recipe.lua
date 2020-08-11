@@ -66,7 +66,7 @@ if BI.Settings.BI_Solar_Additions then
                         always_show_made_in = true,
                         allow_decomposition = false,
                 },
-
+--[[ DrD
                 -- solar mat
                 {
                         type = "recipe",
@@ -96,7 +96,7 @@ if BI.Settings.BI_Solar_Additions then
                         always_show_made_in = true,
                         allow_decomposition = false,
                 },
-
+]] --DrD
                 --- BI Accumulator
                 {
                         type = "recipe",
