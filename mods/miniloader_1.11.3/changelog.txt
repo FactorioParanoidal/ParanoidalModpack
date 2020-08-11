@@ -1,7 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.11.3
+Date: 2020-07-30
+  Bugfixes:
+    - Fix crash when blueprinting only tiles. ()
+---------------------------------------------------------------------------------------------------
+Version: 1.11.2
+Date: 2020-07-30
+  Bugfixes:
+    - Fix poor performance when placing blueprints in Factorio 0.18.37+. (https://forums.factorio.com/87261)
+    - Fix snapping setting not affecting snapping when belts are placed. (https://mods.factorio.com/mod/miniloader/discussion/5f1faaa94ab73a606a449c30)
+---------------------------------------------------------------------------------------------------
 Version: 1.11.1
 Date: 2020-04-11
-  Bufixes:
+  Bugfixes:
     - Fix Picker Dollies integration leaving behind an invisible chest. (https://mods.factorio.com/mod/miniloader/discussion/5e90fadfc0f6d0000e6713ba)
     - Remove collision masks from miniloader belt portion again, since it broke the ability to fast replace miniloaders.
     - Make all miniloader inserters max speed again, to hopefully resolve timing issues that cause miniloaders to not keep up with belts in some circumstances. (https://mods.factorio.com/mod/miniloader/discussion/5e8cbf5865e928000cfdd690)
