@@ -1,0 +1,146 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.18
+Date: 2020-08-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that the mod was a UPS hog. (https://mods.factorio.com/mod/minime/discussion/5f2dc36cdc286667cd598a4b)
+
+  TODO:
+    - Toggle God mode (temporarily remove character)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+Date: 2020-08-06
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on starting a new game when no additional characters were available for selection. (https://mods.factorio.com/mod/minime/discussion/5f1fac25c7033af724e62d35)
+    - Fixed crash when trying to initialize player data for unconnected players in multiplayer games. (https://mods.factorio.com/mod/minime/discussion/5f29a853750fdfe9bce0a4ee)
+
+  Changes:
+    - Added startup setting to scale the characters mining distance along with its size (default: false).
+    - Added startup setting to scale the characters tool-attack distance along with its size (default: false).
+    - Added startup setting to toggle the character selector (default: enabled). (https://mods.factorio.com/mod/minime/discussion/5f1fac25c7033af724e62d35)
+    - Added startup setting to toggle if character list should be closed after a character has been selected. (https://mods.factorio.com/mod/minime/discussion/5f26d8ef30424bd81b1bbe0d)
+    - When a character is changed, the status of the "Personal roboport" switch from the Character menu will be transferred to the new character.
+    - Made sure that all corpse images are scaled -- no matter if they are hidden behind picture, pictures, layers, or sheets.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2020-08-02
+  Uploaded by:
+    - Pi-C
+
+  Bug fixes:
+    - Added some checks to data-updates.lua that should prevent crashes caused by trying to access undefined boxes. (https://mods.factorio.com/mod/minime/discussion/5f1f5a613a1a9422db50e780)
+    - Fixed crash with modded characters that have a bigger inventory than the vanilla character. (https://mods.factorio.com/mod/minime/discussion/5f1f5a613a1a9422db50e780)
+    - Fixed crash with characters that use "picture" instead of "pictures".
+
+  Changes:
+    - Added event handler for on_player_respawned. On respawing, you now will get back the character you had when you died.
+    - If the player already has an unknown character (not the default character, and name doesn't contain he required pattern), I assume it's OK to use this character and add it to the top of the GUI as long as it is available in the game. However, if you change from one unknown character to another (e.g. with another character selector mod), the first unknown character will be replaced by the second one in the GUI.
+    - The status of the GUI's character list (visible/hidden) will now be retained across GUI rebuilds and  restored when a saved game is loaded.
+    - If a player changes the character while a GUI (e.g. crafting menu or production statistics) is open, it now will be kept open.
+
+  Locale:
+    - Added French localization. Thanks a lot to Fr_Dae for the translations!
+
+  Modding:
+    - Added remote interface so other mods can put characters on/remove them from the GUI and inform "minime" if they are about to change/have changed a player's character.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2020-07-27
+  Uploaded by:
+    - Pi-C
+
+  Major Features:
+    - If mods that add new characters (e.g. "Gear Girl Character" or "I, Robot") are active, and if more than one character is available in the game, you will get a GUI where you can change your character at any time. This is completely safe even if the mod providing your last active character is removed: your character's inventories, logistic request slots, and auto-trash slots will be kept intact. The character selector has also been tested in multiplayer mode -- successfully! :-)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2020-07-17
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - All changes are also available for Factorio 0.17 (version 0.0.12 of this mod)!
+
+  Major Features:
+    - Completely reworked the code. We don't hardwire the animations anymore, but just change the scaling of the existing images and image shift positions. This should make it possible to use this mod together with other mods that change the character images, e.g. "Gear Girl Character". (https://mods.factorio.com/mod/minime/discussion/5e643dd9ece61c000ce7af30)
+
+  Changes:
+    - Adjusted range of allowed values for character size: new minimum is 10% (at this scale, the character is already so tiny it's hard to see, anything less and it will be invisible), new maximum is 500% (even that seems excessive, and mining ore is hard because the mining range doesn't adapt to character size).
+
+  Locale:
+    - Added localization files for English and German.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2020-07-17
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - This is identical to version 0.0.13, but for Factorio 0.17!
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2020-07-16
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that shadow for idle animation was off and looping if Sprite Resolution was set to "normal". (https://mods.factorio.com/mod/minime/discussion/5e744b0158ecbc000e7ab08a, https://mods.factorio.com/mod/minime/discussion/5acbbce442dca8000d984fc3)
+    - Fixed that animation speed was changing with character size: they would run extremely fast for smaller characters, and extremely slow for larger ones. (https://mods.factorio.com/mod/minime/discussion/5f033d3bf57065842ffb6b10)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+  Uploaded by:
+    - DellAquila
+
+  Info:
+    - Updated for Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Changed entity Player to Character for new 0.17 version
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Changed animation speed for better running (Thanks to mman0385)
+    - Deleted redundant file
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Uploaded by:
+    - DellAquila
+
+  Bugfixes:
+    - Now doesn't conflict with any mods that modify health, inventory, speed, etc.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Fixed shadows in Normal Definition
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Uploaded by:
+    - DellAquila
+
+  Info:
+    - Initial Release
