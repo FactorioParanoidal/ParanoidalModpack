@@ -1,0 +1,43 @@
+Feeling adventurous? Then check out the new Bio Cannon! Due to recent changes 
+in Factorio, it doesn't need any control scripting and should therefore be more 
+UPS friendly. As a bonus, you'll see the range when you hover the cursor over 
+the bio cannon -- just as with any vanilla turret. It also has a longer range 
+(120 instead of 90).
+
+PLEASE NOTE: Factorio >=0.18.33 is required for this! Otherwise, it may happen 
+that you waste your expensive ammo on a single biter/spitter.
+
+  control_bio_cannon.lua.18.33
+  control.lua.18.33
+  data-final-fixes.lua.18.33
+
+  prototypes/Bio_Cannon/entity.lua.18.33
+  prototypes/Bio_Cannon/item-group.lua.18.33
+  prototypes/Bio_Cannon/item.lua.18.33
+  prototypes/Bio_Cannon/recipe.lua.18.33
+
+They make the old, combined entity for the Bio Cannon redundant, but as
+attack_target_mask can't be used to limit what entities will be attacked
+in earlier versions of Factorio, these files aren't officially active yet.
+
+
+
+If you want to try out the new Bio Cannon, replace each of these files:
+
+  control_bio_cannon.lua
+  control.lua
+  data-final-fixes.lua
+
+  prototypes/Bio_Cannon/entity.lua
+  prototypes/Bio_Cannon/item-group.lua
+  prototypes/Bio_Cannon/item.lua
+  prototypes/Bio_Cannon/recipe.lua
+
+with its counterpart listed above! I've already made a backup of the original
+files, so if it doesn't work, just replace the new files with the *.bak version!
+
+Does the new Bio Cannon work as expected? Is the new range OK? (Please keep in 
+mind that this is the "prototype artillery": It should be weaker than the 
+vanilla artillery turrets, so extending the range even more probably is not a 
+good idea.)  Your feedback is very appreciated and will hopefully help to get 
+the new Bio Cannon bug-free in time for Factorio 1.0!
