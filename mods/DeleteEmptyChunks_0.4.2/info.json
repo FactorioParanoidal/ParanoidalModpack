@@ -1,7 +1,7 @@
 {
   "name": "DeleteEmptyChunks",
   "description": "Delete chunks which contain no player entities, configurable chunk radius & paving detection",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "title": "Delete Empty Chunks",
   "author": "Strath",
   "factorio_version": "0.18"

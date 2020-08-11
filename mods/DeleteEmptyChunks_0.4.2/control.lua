@@ -426,14 +426,16 @@ end)
 
 script.on_event(defines.events.on_gui_click, function(event)
 	local gui = event.element
+	if not (gui and gui.valid) then return end
+	if gui.name ~= "DeleteEmptyChunks" then return end
 	if event.player_index then
 		local player = game.players[event.player_index]
-		if not (player and player.valid and gui and gui.valid) then return end
+		if not (player and player.valid) then return end
 		if player.admin then
 			local target_surface = settings.global["DeleteEmptyChunks_surface"].value
 			local radius = settings.global["DeleteEmptyChunks_radius"].value
 			local keep_paving = settings.global["DeleteEmptyChunks_paving"].value
-			if gui.name == "DeleteEmptyChunks" then doit(player.name, target_surface, radius, keep_paving) end
+			doit(player.name, target_surface, radius, keep_paving)
 		else
 			player.print({'DeleteEmptyChunks_adminsonly'})
 		end
