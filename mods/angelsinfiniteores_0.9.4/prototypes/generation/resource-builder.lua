@@ -170,7 +170,6 @@ if not angelsmods.functions.make_resource then
       end
       if input.get then
         stages_copy = table.deepcopy(data.raw.resource[input.get].stages)
-        --log(serpent.block(stages_copy))
         return stages_copy
       else
         --Sheet used for Copper Ore, angels-ore3 (Stiratite)
@@ -486,6 +485,9 @@ if not angelsmods.functions.make_resource then
             }
           }
         end
+        if type(input.sheet) == "table" then
+          return input.sheet --allow custom input ores
+        end
       end
     end
     if input.type == "fluid" then
@@ -527,6 +529,9 @@ if not angelsmods.functions.make_resource then
             variation_count = 1
           }
         }
+      end
+      if type(input.sheet) == "table" then
+        return input.sheet --allow custom input ores
       end
     end
   end
@@ -957,7 +962,7 @@ if not angelsmods.functions.make_resource then
           input.minimum = 300
           input.output_probability = 1
         end
-        --Set defaults for infinite resouces normal and maximum
+        --Set defaults for infinite resources normal and maximum
         if input.infinite then
           input.normal = 1500
           input.maximum = 6000
