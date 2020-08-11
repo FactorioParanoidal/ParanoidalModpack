@@ -1,0 +1,33 @@
+{
+  "name": "reskins-bobs",
+  "version": "0.0.22",
+  "factorio_version": "0.18",
+  "title": "Artisanal Reskins: Bob's Mods",
+  "author": "Kirazy",
+  "contact": "kirazy@live.com",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=51&t=85707",
+  "dependencies": 
+  [	
+    "base >= 0.18.44",
+    "reskins-library >= 0.0.14",
+    "? bobassembly",
+    "? bobelectronics",
+    "? bobgreenhouse",
+    "? bobinserters",
+    "? boblibrary",
+    "? boblogistics",
+    "? bobmining",
+    "? bobmodules",
+    "? bobores",
+    "? bobplates",
+    "? bobpower",
+    "? bobrevamp",
+    "? bobtech",
+    "? bobwarfare",
+    "(?) angelssmelting",
+    "(?) semi-classic-mining-drill",
+    "(?) ShinyBobGFX",
+    "(?) ShinyAngelGFX",
+    "(?) vanilla-loaders-hd"
+  ]
+}
