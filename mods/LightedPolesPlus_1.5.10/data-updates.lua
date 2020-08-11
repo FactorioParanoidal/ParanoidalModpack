@@ -27,7 +27,7 @@ local pole_entity_blacklist = {
 
 local alternative_technology = "optics"
 
-local pole_names = {}  -- dictionary [original pole item name] -> lighted pole entity/item/recipe name
+local pole_names = {} -- dictionary [original pole item name] -> lighted pole entity/item/recipe name
 local lightedPoles = {}
 
 
@@ -81,7 +81,9 @@ for _, item in pairs (data.raw["item"]) do
   if item.place_result and data.raw["electric-pole"][item.place_result] and not pole_entity_blacklist[item.place_result] then
     -- log("[LEP+] found pole "..item.place_result.." in item "..item.name)
     local pole = data.raw["electric-pole"][item.place_result]
-    if pole.minable and pole.minable.result and pole.minable.result == item.name then -- only generate lighted pole if item and entity properly reference another
+    -- if (not pole.draw_copper_wires or pole.draw_copper_wires == true) -- exclude poles without copper wire connection
+    if pole.draw_copper_wires ~= false -- exclude poles without copper wire connection
+    and pole.minable and pole.minable.result and pole.minable.result == item.name then
       pole.fast_replaceable_group = pole.fast_replaceable_group or "electric-pole"
 
       local newName = "lighted-"..pole.name
