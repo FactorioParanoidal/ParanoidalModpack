@@ -4,14 +4,7 @@
 -- @usage local translation = require("__flib__.translation")
 local flib_translation = {}
 
--- TODO implement this in the table module
-local function shallow_copy(tbl)
-  local new_tbl = {}
-  for k, v in pairs(tbl) do
-    new_tbl[k] = v
-  end
-  return new_tbl
-end
+local table = require("__flib__.table")
 
 local math = math
 local next = next
@@ -23,9 +16,9 @@ local type = type
 -- @section
 
 --- Initial setup.
--- Must be called at the **beginning** of `on_init`.
+-- Must be called at the **beginning** of `on_init`, and during `on_configuration_changed` **before** any translations are started.
 --
--- If adding the module to an existing mod, this must be called in `on_configuration_changed` for that version as well.
+-- This function will effectively cancel all running translations, so if that functionality is desired, this function is a good fit for it.
 function flib_translation.init()
   if not global.__flib then
     global.__flib = {}
@@ -166,7 +159,7 @@ function flib_translation.add_requests(player_index, strings)
       player_table.sort.next_index = 1
     else
       player_table.sort = {
-        strings = shallow_copy(strings),
+        strings = table.shallow_copy(strings),
         next_index = 1
       }
     end
@@ -176,7 +169,7 @@ function flib_translation.add_requests(player_index, strings)
       state = "sort",
       -- sort
       sort = {
-        strings = shallow_copy(strings),
+        strings = table.shallow_copy(strings),
         next_index = 1
       },
       -- translate
@@ -202,6 +195,19 @@ function flib_translation.cancel(player_index)
   end
   __translation.players[player_index] = nil
   __translation.translating_players_count = __translation.translating_players_count - 1
+end
+
+--- Check whether a player is actively translating.
+-- @tparam uint player_index
+-- @treturn boolean
+function flib_translation.is_translating(player_index)
+  return global.__flib.translation.players[player_index] and true or false
+end
+
+--- Check the number of players currently translating.
+-- @treturn uint
+function flib_translation.translating_players_count()
+  return global.__flib.translation.translating_players_count
 end
 
 --- Serialise a localised string into a form readable by the API.

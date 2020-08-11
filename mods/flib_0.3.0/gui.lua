@@ -4,7 +4,7 @@
 -- @usage local gui = require("__flib__.gui")
 local flib_gui = {}
 
-local util = require("__core__.lualib.util")
+local table = require("__flib__.table")
 
 local string_gmatch = string.gmatch
 local string_gsub = string.gsub
@@ -19,7 +19,7 @@ local handler_groups = {}
 
 local function generate_template_lookup(t, template_string)
   for k, v in pairs(t) do
-    if k ~= "extend" and type(v) == "table" then
+    if type(v) == "table" then
       local new_string = template_string..k
       if v.type or v.template then
         template_lookup[new_string] = v
@@ -45,7 +45,7 @@ local function generate_handler_lookup(t, event_string, groups)
       if v.handler then
         v.id = v.id or defines.events[k] or k
         v.filters = {}
-        v.groups = table.deepcopy(groups)
+        v.groups = table.deep_copy(groups)
         handler_lookup[new_string] = v
         -- assign handler to groups
         for i=1,#groups do
@@ -71,13 +71,16 @@ local function generate_filter_lookup()
       if player_index ~= "__size" then
         for filter, handler_name in pairs(filters) do
           if filter ~= "__size" then
-            local handler_filters = handler_lookup[handler_name].filters
-            local player_filters = handler_filters[player_index]
-            if player_filters then
-              player_filters[filter] = filter
-              player_filters.__size = player_filters.__size + 1
-            else
-              handler_filters[player_index] = {__size=1, [filter]=filter}
+            local handler_table = handler_lookup[handler_name]
+            if handler_table then
+              local handler_filters = handler_table.filters
+              local player_filters = handler_filters[player_index]
+              if player_filters then
+                player_filters[filter] = filter
+                player_filters.__size = player_filters.__size + 1
+              else
+                handler_filters[player_index] = {__size=1, [filter]=filter}
+              end
             end
           end
         end
@@ -115,6 +118,36 @@ function flib_gui.build_lookup_tables()
   end
 end
 
+--- Purge all filters tied to non-existent handlers from `global`.
+-- Must be called during `on_configuration_changed`.
+-- This function is necessary in order to prevent crashes when a handler was removed between mod versions, but still has
+-- filters assigned to it stored in `global`.
+function flib_gui.check_filter_validity()
+  local filters_table = global.__flib.gui
+  for event_name, event_filters in pairs(filters_table) do
+    for player_index, player_filters in pairs(event_filters) do
+      if player_index ~= "__size" then
+        for filter, handler_name in pairs(player_filters) do
+          if filter ~= "__size" then
+            local handler_data = handler_lookup[handler_name]
+            if not handler_data then
+              player_filters[filter] = nil
+              player_filters.__size = player_filters.__size - 1
+            end
+          end
+        end
+        if player_filters.__size == 0 then
+          event_filters[player_index] = nil
+          event_filters.__size = event_filters.__size - 1
+          if event_filters.__size == 0 then
+            filters_table[event_name] = nil
+          end
+      end
+      end
+    end
+  end
+end
+
 --- Register handlers for all GUI events to pass through the module.
 -- This is completely optional, but saves you having to create handlers for all GUI events simply to call
 -- @{gui.dispatch_handlers}. If custom logic is needed, handlers may be overwritten after calling this.
@@ -140,22 +173,6 @@ function flib_gui.register_handlers()
   end
 end
 
--- merge tables
-local function extend_table(self, t, do_return)
-  for k, v in pairs(t) do
-    if (type(v) == "table") then
-      if (type(self[k] or false) == "table") then
-        self[k] = extend_table(self[k], v, true)
-      else
-        self[k] = table.deepcopy(v)
-      end
-    else
-      self[k] = v
-    end
-  end
-  if do_return then return self end
-end
-
 --- Add content to the @{gui.templates} table.
 -- The table you provide will be merged with the current contents of the table.
 --
@@ -166,7 +183,9 @@ end
 -- @tparam table input
 -- @see gui.templates
 function flib_gui.add_templates(input)
-  extend_table(templates, input)
+  templates = table.deep_merge{templates, input}
+  -- because the reference is lost...
+  flib_gui.templates = templates
 end
 
 --- Add content to the @{gui.handlers} table.
@@ -176,7 +195,9 @@ end
 -- @tparam table input
 -- @see gui.handlers
 function flib_gui.add_handlers(input)
-  extend_table(handlers, input)
+  handlers = table.deep_merge{handlers, input}
+  -- because the reference is lost...
+  flib_gui.handlers = handlers
 end
 
 --- Functions
@@ -341,12 +362,16 @@ end
 -- end)
 function flib_gui.dispatch_handlers(event_data)
   if not event_data.element or not event_data.player_index then return false end
-  local element = event_data.element
-  local element_name = string_gsub(element.name, "__.*", "")
+
   local event_filters = global.__flib.gui[event_data.name]
   if not event_filters then return false end
+
   local player_filters = event_filters[event_data.player_index]
   if not player_filters then return false end
+
+  local element = event_data.element
+  local element_name = string_gsub(element.name, "__.*", "")
+
   local handler_name = player_filters[element.index] or player_filters[element_name]
   if handler_name then
     handler_lookup[handler_name].handler(event_data)
@@ -357,6 +382,8 @@ function flib_gui.dispatch_handlers(event_data)
 end
 
 --- Add or remove GUI filters to or from a handler or group of handlers.
+-- When destroying a GUI element with a filter, be certain to call this function destroying that filter, to avoid
+-- memory leaks.
 -- @tparam string name The handler name, or group name.
 -- @tparam uint player_index
 -- @tparam GuiFilter[]|nil filters An array of filters, or `nil` to clear all filters when in `remove` mode.
@@ -439,15 +466,10 @@ end
 --- Remove all GUI filters for the given player.
 -- @tparam uint player_index
 function flib_gui.remove_player_filters(player_index)
-  local filters_table = global.__flib.gui
-  for event_name, event_filters in pairs(filters_table) do
-    local player_filters = event_filters[player_index]
-    if player_filters then
-      event_filters[player_index] = nil
-      event_filters.__size = event_filters.__size - 1
-      if event_filters.__size == 0 then
-        filters_table[event_name] = nil
-      end
+  for group_name in pairs(handler_groups) do
+    -- check for a level-1 group to minimize calls to update_filters()
+    if not string.find(group_name, "%.") then
+      flib_gui.update_filters(group_name, player_index, nil, "remove")
     end
   end
 end
