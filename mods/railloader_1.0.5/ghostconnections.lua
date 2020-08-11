@@ -28,14 +28,35 @@ local M = {}
 local entity_filter = "railu?n?loader%-placement%-proxy"
 
 local function is_setup_bp(stack)
-  return stack.valid and
-    stack.valid_for_read and
-    (stack.is_blueprint or stack.is_blueprint_book) and
-    stack.is_blueprint_setup()
+  return stack.valid and stack.valid_for_read and stack.is_blueprint and stack.is_blueprint_setup()
 end
 
-local function bp_to_world(position, direction)
+local function bp_center(bp)
+  local left, top = math.huge, math.huge
+  local right, bottom = -math.huge, -math.huge
+
+  local function update_bounds(position)
+    if position.x < left then left = position.x end
+    if position.x > right then right = position.x end
+    if position.y < top then top = position.y end
+    if position.y > bottom then bottom = position.y end
+  end
+
+  for _, bp_entity in pairs(bp.get_blueprint_entities() or {}) do
+    update_bounds(bp_entity.position)
+  end
+  for _, bp_tile in pairs(bp.get_blueprint_tiles() or {}) do
+    update_bounds(bp_tile.position)
+  end
+
+  return (left + right) / 2, (top + bottom) / 2
+end
+
+local function bp_to_world(bp, position, direction)
+  local center_x, center_y = bp_center(bp)
   return function(bp_position)
+    bp_position.x = bp_position.x - center_x
+    bp_position.y = bp_position.y - center_y
     local world_offset
     if direction == defines.direction.north then
       world_offset = bp_position
@@ -87,6 +108,9 @@ local function on_put_item(event)
 
   local player = game.players[event.player_index]
   local bp = player.cursor_stack
+  if bp and bp.valid_for_read and bp.is_blueprint_book then
+    bp = bp.get_inventory(defines.inventory.item_main)[bp.active_index]
+  end
   if not is_setup_bp(bp) then
     return
   end
@@ -95,7 +119,7 @@ local function on_put_item(event)
     return
   end
   local position = gridalign(bp, event.position)
-  local translate = bp_to_world(position, event.direction)
+  local translate = bp_to_world(bp, position, event.direction)
   if not global.ghost_connections then
     global.ghost_connections = {}
   end
