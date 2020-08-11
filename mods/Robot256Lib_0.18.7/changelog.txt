@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.7
+Date: 2020-07-09
+  Bugfixes:
+    - Fixed errors when saving and restoring cargo inventory filters and bars.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.6
 Date: 2020-05-29
   Bugfixes:
     - Update for Factorio 0.18.27.
+    - Removed any attempt to generate on_player_placed_equipment event.
 ---------------------------------------------------------------------------------------------------
 Version: 0.18.5
 Date: 2020-05-28

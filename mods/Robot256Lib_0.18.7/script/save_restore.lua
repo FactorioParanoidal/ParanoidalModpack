@@ -315,15 +315,12 @@ end
 
 __saveGrid__ = saveGrid
 
-local function restoreGrid(grid, savedGrid, player_index)
+local function restoreGrid(grid, savedGrid)
   local r_stacks = {}
   if grid and grid.valid and savedGrid then
     -- Insert as much as possible into this grid, return items not inserted as remainder stacks
     for _,v in pairs(savedGrid) do
       if game.equipment_prototypes[v.item.name] then
-        if player_index then
-          v.item.player_index = game.players[player_index]
-        end
         local e = grid.put(v.item)
         if e then
           if v.energy then
@@ -424,21 +421,25 @@ local function saveFilters(source)
     end
     if source.supports_bar() and source.get_bar() <= #source then
       filters = filters or {}
-      filters.bar = source.getbar()
+      filters.bar = source.get_bar()
     end
   end
   return filters
 end
 
 local function restoreFilters(target, filters)
-  if target and target.valid then
-    if target.supports_filters() and filters then
+  if target and target.valid and filters then
+    if target.supports_filters() then
       for f = 1, #target do
         target.set_filter(f, filters[f])
       end
     end
     if target.supports_bar() then
-      target.set_bar(filters.bar)  -- if filters.bar is nil, will clear bar setting
+      if not filters.bar then
+        target.set_bar()
+      else
+        target.set_bar(filters.bar)  -- if filters.bar is nil, will clear bar setting
+      end
     end
   end
 end
