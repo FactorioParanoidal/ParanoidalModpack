@@ -174,9 +174,7 @@ function loadResourceConfig()
 	end
 
 	-- dark matter replicators
-	if game.entity_prototypes["tenemut"] then
-		fillDarkMatterConfig(config)
-	end
+	fillDarkMatterConfig(config)
 
 	-- spring water
 	if game.entity_prototypes["spring-water"] then
