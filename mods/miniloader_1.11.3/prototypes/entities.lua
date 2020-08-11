@@ -321,8 +321,8 @@ local function create_inserters(prefix, next_prefix, base_underground_name, tint
   end
 
   if settings.startup["miniloader-energy-usage"].value then
-    loader_inserter.energy_per_movement = "8kJ" --DrD 2
-    loader_inserter.energy_per_rotation = "8kJ" --DrD 2
+    loader_inserter.energy_per_movement = "2kJ"
+    loader_inserter.energy_per_rotation = "2kJ"
     loader_inserter.energy_source = {
       type = "electric",
       usage_priority = "secondary-input",

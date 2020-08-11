@@ -100,14 +100,15 @@ function M.is_setup_bp(stack)
     stack.is_blueprint_setup()
 end
 
+local huge = math.huge
 function M.bounding_box(bp)
-  local left = -0.1
-  local top = -0.1
-  local right = 0.1
-  local bottom = 0.1
+  local left = math.huge
+  local top = math.huge
+  local right = -math.huge
+  local bottom = -math.huge
 
   local entities = bp.get_blueprint_entities()
-  if entities then
+  if entities and next(entities) then
     for _, e in pairs(entities) do
       local pos = e.position
       if pos.x < left then left = pos.x - 0.5 end
@@ -115,11 +116,16 @@ function M.bounding_box(bp)
       if pos.x > right then right = pos.x + 0.5 end
       if pos.y > bottom then bottom = pos.y + 0.5 end
     end
+  else
+    left, top, right, bottom = 0, 0, 0, 0
   end
 
+  local center_x = (right - left) / 2
+  local center_y = (bottom - top) / 2
+
   return {
-    left_top = {x=left, y=top},
-    right_bottom = {x=right, y=bottom},
+    left_top = {x = left - center_x, y = top - center_y},
+    right_bottom = {x = right - center_x, y = bottom - center_y},
   }
 end
 

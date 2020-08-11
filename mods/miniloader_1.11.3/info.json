@@ -1,6 +1,6 @@
 {
 	"name": "miniloader",
-	"version": "1.11.1",
+	"version": "1.11.3",
 	"factorio_version": "0.18",
 	"title": "Miniloader",
 	"author": "Therax",
@@ -10,9 +10,9 @@
 		"base >= 0.18.3",
 		"(?) bobinserters >= 0.17.1",
 		"? boblogistics >= 0.17.1",
-		"? paranoidal-tweaks",
 		"? FactorioExtended-Plus-Transport >= 0.1.5",
 		"? Krastorio2 >= 0.9.0",
+        "? RandomFactorioThings >= 1.0.0",
 		"? UltimateBelts >= 0.16.4",
 		"? UltimateBelts_Owoshima_And_Pankeko-Mod >= 0.16.4",
 		"? space-exploration >= 0.1.95",

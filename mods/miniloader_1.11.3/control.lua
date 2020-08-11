@@ -128,7 +128,7 @@ local function on_player_built(ev)
       -- adjusts direction & loader_type
       snapping.snap_loader(loader)
     end
-  else
+  elseif use_snapping then
     snapping.check_for_loaders(ev)
   end
 end

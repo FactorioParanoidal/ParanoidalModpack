@@ -23,6 +23,8 @@ Belts from the following mods are fully supported:
 * Space Exploration
 * Ultimate Belts
 * Xander Mod
+* Random Factorio Things
+* Plutonium Energy
 
 ## Videos and Spotlights
 
@@ -54,6 +56,12 @@ miniloader capable of filtering, you must use filter inserters as ingredients.
 Note that filter miniloaders behave like filter inserters, and not like vanilla
 loaders: if no filters are set then no items will be moved. You must set at
 least one filter.
+
+## Localization
+
+Interested in translating Miniloader to your language? Visit
+[Crowdin](https://crowdin.com/project/factorio-mods-localization) and the changes
+will be integrated into the next release.
 
 ## Known Issues
 
