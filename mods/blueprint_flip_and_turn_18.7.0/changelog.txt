@@ -1,4 +1,70 @@
 ---------------------------------------------------------------------------------------------------
+Version: 18.7.0
+Date: 2020-08-07
+  Changes:
+    - Major refactor of the code, including the new catching error function `safecall`. Split some `control.lua`'s content into separated modules.
+---------------------------------------------------------------------------------------------------
+Version: 17.7.0
+Date: 2020-08-07
+  Changes:
+    - Major refactor of the code, including the new catching error function `safecall`. Split some `control.lua`'s content into separated modules.
+---------------------------------------------------------------------------------------------------
+Version: 18.6.11
+Date: 2020-08-06
+  Bugfixes:
+    - The issue was found: `cursor.is_blueprint_setup` can raise an error "Item is not blueprint" even if everything else said "it is a blueprint or a blueplrint book"
+    - Thanks to pertm, clocksporchi and snakepowa for the ["Item is not blueprint" bug report and feedback](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f27e16e06da6e783975ac05)
+---------------------------------------------------------------------------------------------------
+Version: 18.6.x
+Date: 2020-08-05
+  Bugfixes:
+    - Try to find the issue and workaround...
+---------------------------------------------------------------------------------------------------
+Version: 18.5.4
+Date: 2020-07-30
+  Bugfixes:
+    - Refectoring ... new bug ... fixed.
+---------------------------------------------------------------------------------------------------
+Version: 17.5.4
+Date: 2020-07-30
+  Bugfixes:
+    - Refectoring ... new bug ... fixed.
+---------------------------------------------------------------------------------------------------
+Version: 18.5.3
+Date: 2020-07-30
+  Bugfixes:
+    - Avoid crash where player_index is nil. (Reported by [Ritn](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f20c255b153a0da59a51d89)
+---------------------------------------------------------------------------------------------------
+Version: 17.5.3
+Date: 2020-07-30
+  Bugfixes:
+    - Avoid crash where player_index is nil. (Reported by [Ritn](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f20c255b153a0da59a51d89)
+---------------------------------------------------------------------------------------------------
+Version: 18.5.1
+Date: 2020-07-30
+  Bugfixes:
+    - Still trying to avoid crash...
+---------------------------------------------------------------------------------------------------
+Version: 18.5.0
+Date: 2020-07-29
+  Bugfixes:
+    - Avoid crash where player_index is nil. (Reported by [Ritn](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f20c255b153a0da59a51d89)
+---------------------------------------------------------------------------------------------------
+Version: 17.5.0
+Date: 2020-07-29
+  Bugfixes:
+    - Avoid crash where player_index is nil. (Reported by [Ritn](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f20c255b153a0da59a51d89)
+---------------------------------------------------------------------------------------------------
+Version: 18.4.0
+Date: 2020-07-15
+  Locale:
+    - Add the Russian-language localization. (Reported by [TheLastEagle](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f0a5b4fd622564d149dc855))
+---------------------------------------------------------------------------------------------------
+Version: 17.4.0
+Date: 2020-07-15
+  Locale:
+    - Add the Russian-language localization. (Reported by [TheLastEagle](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f0a5b4fd622564d149dc855))
+---------------------------------------------------------------------------------------------------
 Version: 18.3.7
 Date: 2020-03-04
   Bugfixes:
