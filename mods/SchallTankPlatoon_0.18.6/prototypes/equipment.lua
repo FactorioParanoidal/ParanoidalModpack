@@ -280,6 +280,7 @@ data:extend
     power = "20MW",
     categories = {"vehicle"}
   },
+--[[
   -- Nightvision
   {
     type = "night-vision-equipment",
@@ -324,6 +325,7 @@ data:extend
     darkness_to_turn_on = 0.4, --0.5,
     color_lookup = {{0.5, "__SchallTankPlatoon__/graphics/color_luts/nightvision-mk1.png"}}
   },
+
   {
     type = "night-vision-equipment",
     name = "Schall-night-vision-mk2-equipment",
@@ -367,4 +369,5 @@ data:extend
     darkness_to_turn_on = 0.3, --0.5,
     color_lookup = {{0.5, "__SchallTankPlatoon__/graphics/color_luts/nightvision-mk2.png"}}
   },
+  ]]--
 }

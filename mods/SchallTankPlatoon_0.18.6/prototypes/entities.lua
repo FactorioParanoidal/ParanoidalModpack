@@ -1,4 +1,4 @@
-require("prototypes.entities-walls")
+-- DrD require("prototypes.entities-walls")
 
 
 
