@@ -417,9 +417,7 @@ function bobmods.lib.recipe.add_new_difficulty_ingredient(recipe, difficulty, it
     then
       log(debug.traceback())
       bobmods.lib.error.recipe(recipe)
-      if not (difficulty == "normal" or difficulty == "expensive") then
-        log("Difficulty is invalid.")
-      end
+      bobmods.lib.error.difficulty(difficulty)
     end
   end
 end
@@ -448,9 +446,7 @@ function bobmods.lib.recipe.add_difficulty_ingredient(recipe, difficulty, item_i
     then
       log(debug.traceback())
       bobmods.lib.error.recipe(recipe)
-      if not (difficulty == "normal" or difficulty == "expensive") then
-        log("Difficulty is invalid.")
-      end
+      bobmods.lib.error.difficulty(difficulty)
     end
   end
 end
@@ -471,9 +467,7 @@ function bobmods.lib.recipe.remove_difficulty_ingredient(recipe, difficulty, ite
   else
     log(debug.traceback())
     bobmods.lib.error.recipe(recipe)
-    if not (difficulty == "normal" or difficulty == "expensive") then
-      log("Difficulty is invalid.")
-    end
+    bobmods.lib.error.difficulty(difficulty)
     bobmods.lib.error.item(item)
   end
 end
@@ -504,9 +498,7 @@ function bobmods.lib.recipe.add_difficulty_result(recipe, difficulty, item_in)
     then
       log(debug.traceback())
       bobmods.lib.error.recipe(recipe)
-      if not (difficulty == "normal" or difficulty == "expensive") then
-        log("Difficulty is invalid.")
-      end
+      bobmods.lib.error.difficulty(difficulty)
     end
   end
 end
@@ -526,9 +518,7 @@ function bobmods.lib.recipe.remove_difficulty_result(recipe, difficulty, item)
   else
     log(debug.traceback())
     bobmods.lib.error.recipe(recipe)
-    if not (difficulty == "normal" or difficulty == "expensive") then
-      log("Difficulty is invalid.")
-    end
+    bobmods.lib.error.difficulty(difficulty)
     bobmods.lib.error.item(item)
   end
 end
@@ -572,9 +562,7 @@ function bobmods.lib.recipe.difficulty_enabled(recipe, difficulty, bool)
   else
     log(debug.traceback())
     bobmods.lib.error.recipe(recipe)
-    if not (difficulty == "normal" or difficulty == "expensive") then
-      log("Difficulty " .. difficulty .. " is invalid.")
-    end
+    bobmods.lib.error.difficulty(difficulty)
     if not (type(bool) == "boolean") then
       log("Variable Bool is missing or not of type Boolean")
     end
