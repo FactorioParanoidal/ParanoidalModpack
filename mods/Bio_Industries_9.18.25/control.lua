@@ -639,6 +639,7 @@ BioInd.writeDebug("Rail " .. direction .. " of " ..
   end
   BioInd.writeDebug("End of function On_Built")
 ]]--DrD 
+  end --DrD
 end
 
 

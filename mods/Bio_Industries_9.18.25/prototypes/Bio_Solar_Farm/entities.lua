@@ -320,14 +320,14 @@ end
                         size = 1,
                         probability = 1,
                   },
---[[
+--[
                   {
                         picture = ENTITYPATH .. "solar2.png",
                         count = 1,
                         size = 2,
                         probability = 1,
                   },
-        ]]
+        ]
                 },
                 inner_corner =
                 {
