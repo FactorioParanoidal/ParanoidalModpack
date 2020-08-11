@@ -157,21 +157,21 @@ data:extend
     name = "tankplatoon-night-vision-enable",
     order = "p-b-w-1",
     setting_type = "startup",
-    default_value = true
+    default_value = false --DrD
   },
   {
     type = "bool-setting",
     name = "tankplatoon-concrete-walls-enable",
     order = "p-b-s-1",
     setting_type = "startup",
-    default_value = true
+    default_value = false --DrD
   },
   {
     type = "bool-setting",
     name = "tankplatoon-repair-pack-enable",
     order = "p-b-r-1",
     setting_type = "startup",
-    default_value = true
+    default_value = false --DrD
   },
   -- {
   --   type = "string-setting",

@@ -7,7 +7,8 @@ local FRG = {	-- Default fast_replaceable_group
 local stone_wall = dr.wall["stone-wall"]
 local stone_gate = dr.gate["gate"]
 
-
+tech["Schall-concrete-walls"] = nil --DrD
+--[[ DrD
 
 if not settings.startup["tankplatoon-concrete-walls-enable"].value then
   tech["Schall-concrete-walls"] = nil
@@ -25,3 +26,4 @@ else
 	  stone_gate.next_upgrade = "Schall-concrete-gate"
 	end
 end
+]]--

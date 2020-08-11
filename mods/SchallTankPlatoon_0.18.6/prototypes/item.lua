@@ -6,10 +6,10 @@ local veh_energy_shield_1_icon_layer = {icon = "__base__/graphics/icons/energy-s
 local veh_energy_shield_2_icon_layer = {icon = "__base__/graphics/icons/energy-shield-mk2-equipment.png", icon_size = 64, icon_mipmaps = 4}
 local veh_battery_1_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/vehicle-battery-equipment.png", icon_size = 64, icon_mipmaps = 4}
 local veh_battery_2_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/vehicle-battery-mk2-equipment.png", icon_size = 64, icon_mipmaps = 4}
-local night_vision_icon_layer = {icon = "__base__/graphics/icons/night-vision-equipment.png", icon_size = 64, icon_mipmaps = 4}
-local concrete_wall_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/concrete-wall.png", icon_size = 64, icon_mipmaps = 4}
-local concrete_gate_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/concrete-gate.png", icon_size = 64, icon_mipmaps = 4}
-local repair_pack_icon_layer = {icon = "__base__/graphics/icons/repair-pack.png", icon_size = 64, icon_mipmaps = 4}
+--local night_vision_icon_layer = {icon = "__base__/graphics/icons/night-vision-equipment.png", icon_size = 64, icon_mipmaps = 4}
+--local concrete_wall_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/concrete-wall.png", icon_size = 64, icon_mipmaps = 4}
+--local concrete_gate_icon_layer = {icon = "__SchallTankPlatoon__/graphics/icons/concrete-gate.png", icon_size = 64, icon_mipmaps = 4}
+--local repair_pack_icon_layer = {icon = "__base__/graphics/icons/repair-pack.png", icon_size = 64, icon_mipmaps = 4}
 
 
 local function fusion_reactor_icon_layer(tint)
