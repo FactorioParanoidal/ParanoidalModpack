@@ -573,7 +573,8 @@ FARL.update = function(self, _)
                             if self.path[c - 2].rail.type == "curved-rail" and #rails > 0 then
                                 rails[1].range[1] = -1
                             end
-                            local bestpole, bestrail = self:getBestPole(self.lastPole, rails, "o")
+                            --local bestpole, bestrail = self:getBestPole(self.lastPole, rails, newTravelDir)
+                            local bestpole, bestrail = self:getBestPole(self.lastPole, rails, dir)
                             if bestpole then
                                 --debugLog("--pole: "..Position.tostring(bestpole.p))
                                 self.lastCheckPole = bestpole.p
@@ -916,7 +917,7 @@ FARL.fillWater = function(self, area)
             local dw, w = 0, 0
             local water_tiles = {water = true, deepwater = true, ['water-shallow'] = true, ['water-mud'] = true}
             local place_result = game.item_prototypes["landfill"] and game.item_prototypes["landfill"].place_as_tile_result
-            place_result = place_result and place_result.name or "grass-1"
+            place_result = place_result and place_result.result.name or "landfill"
             local _tile_prototypes = game.tile_prototypes
             local tile_prototypes = {}
             for x = st.x, ft.x, 1 do
@@ -930,7 +931,7 @@ FARL.fillWater = function(self, area)
                             dw = dw + 1
                         end
                         tile_prototypes[tileName] = tile_prototypes[tileName] or _tile_prototypes[tileName]
-                        table.insert(tiles, { old_tile = tile_prototypes[tileName], name = place_result, position = { x=x, y=y } })
+                        table.insert(tiles, { name = place_result, position = { x=x, y=y } })
                     end
                 end
             end
@@ -951,19 +952,9 @@ FARL.replaceWater = function(self, tiles, w, dw)
         lfills = lfills > 20 and 20 or lfills
         -- check to make sure there is enough landfill in the FARL and if there is apply the changes, remove landfill.  if not then show error message
         if self:getCargoCount("landfill") >= lfills then
-            self.surface.set_tiles(tiles)
+            self.surface.set_tiles(tiles, true, true, true, true)
             self:removeItemFromCargo("landfill", lfills)
-            local event = {
-                player_index = ((self.driver and self.driver.valid and self.driver.name ~= "farl_player") and (self.driver.index)) or ((self.startedBy and self.startedBy.valid) and self.startedBy.index),
-                surface_index = self.surface.index,
-                tiles = tiles, --array of {old_tile=.., position={x=..,y=y}}
-                item = game.item_prototypes['landfill'],
-                tile = game.tile_prototypes['landfill'],
-                --stack = nil,
-            }
-            event.player_index = event.player_index or 1
-            --log(serpent.block(event))
-            script.raise_event(defines.events.on_player_built_tile, event)
+            --script.raise_event(defines.events.script_raised_set_tiles, {surface_index = self.surface.index, tiles = tiles,})
         end
     end
 end
@@ -1023,7 +1014,7 @@ FARL.placeConcrete = function(self, dir, rail)
                     dw = dw + 1
                 end
                 tile_prototypes[tileName] = tile_prototypes[tileName] or _tile_prototypes[tileName]
-                table.insert(tiles, { name = place_result, old_tile = tile_prototypes[tileName], position = { x=pos.x, y=pos.y } })
+                table.insert(tiles, { name = place_result, position = { x=pos.x, y=pos.y } })
                 table.insert(pave[name], entity)
             end
         elseif tileName ~= name and tileName ~= "out-of-map" then
@@ -2655,9 +2646,13 @@ FARL.getPolePoints = function(self, rail)
     return checks
 end
 
-FARL.getBestPole = function(self, lastPole, rails)
+FARL.getBestPole = function(self, lastPole, rails, travel_dir)
     local name = self.settings.activeBP.diagonal.pole.name
     local reach = game.entity_prototypes[name].max_wire_distance
+    --if (travel_dir % 2 == 0 and (travel_dir ~= 0 and travel_dir ~= 6)) and reach ~= floor(reach) then
+    if travel_dir % 2 == 0 and reach ~= floor(reach) then
+        reach = floor(reach)
+    end
     local max_distance = -1
     local maxPole, maxRail
     local points = {}
@@ -2710,7 +2705,7 @@ FARL.placePole = function(self, polePos, poleDir)
     --local name = (self.direction % 2 == 1) and self.settings.activeBP.diagonal.pole.name or self.settings.activeBP.straight.pole.name
     --name = is_placer_or_base[name] and "ret-pole-placer" or name
     --local name = self.settings.medium and "medium-electric-pole" or "big-electric-pole"
-    --debugDump(Position.distance(pole.position, self.lastPole.position),true)
+    --debugDump(Position.distance(polePos, self.lastPole.position),true)
     local canPlace = self:prepareArea({ name = name, position = polePos })
     local placed_pole
     if not canPlace then
