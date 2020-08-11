@@ -446,6 +446,15 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "rampant-siegeAIToggle",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "m[total]-c[ai]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
             name = "rampant-removeBloodParticles",
             description = "rampant-reduceBloodParticles",
             setting_type = "startup",
@@ -830,7 +839,7 @@ data:extend({
             type = "bool-setting",
             name = "rampant-suppress-surface-change-warnings",
             setting_type = "runtime-per-user",
-            default_value = true,
+            default_value = false,
             order = "b[modifier]-b[trigger]",
             per_user = true
         },
