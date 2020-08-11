@@ -76,6 +76,9 @@ end)
 
 event.on_configuration_changed(function(e)
   if migration.on_config_changed(e, migrations) then
+    -- migrate flib modules
+    gui.check_filter_validity()
+    translation.init()
     -- update translation data
     global_data.build_translations()
     -- reset LTN data
@@ -125,6 +128,13 @@ event.on_player_joined_game(function(e)
   if player_table.flags.translate_on_join then
     player_table.flags.translate_on_join = false
     player_data.start_translations(e.player_index)
+  end
+end)
+
+event.on_player_left_game(function(e)
+  if translation.is_translating(e.player_index) then
+    translation.cancel(e.player_index)
+    global.players[e.player_index].flags.translate_on_join = true
   end
 end)
 
@@ -187,7 +197,7 @@ event.on_tick(function(e)
     end
   end
 
-  if global.__flib.translation.translating_players_count > 0 then
+  if translation.translating_players_count() > 0 then
     translation.iterate_batch(e)
   end
 end)

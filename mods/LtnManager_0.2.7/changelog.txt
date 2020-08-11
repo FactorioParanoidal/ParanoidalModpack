@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 2020-08-10
+  Bugfixes:
+    - Fixed a crash when a mod would removed while translations were running, but before those translations translated all of that mod's strings
+    - Fixed a desync related to player.connnected being unreliable during on_configuration_changed in multiplayer
+    - Fixed a potential crash if a GUI handler was removed between versions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 2020-07-25
+  Changes:
+    - Added mod description to locale so it can be translated
+  Bugfixes:
+    - Fixed a crash upon botched migration of train IDs
+    - Fixed crashes related to unsanitised search inputs
+---------------------------------------------------------------------------------------------------
 Version: 0.2.5
 Date: 2020-06-24
   Bugfixes:
