@@ -31,7 +31,8 @@ for panel_name, panel in pairs (data.raw["solar-panel"]) do
    
       new_panel.production = (value*(p/100))..unit
       new_panel.order = "r-a-a"
-      new_panel.fast_replaceable_group = "solar-panel"
+--      new_panel.fast_replaceable_group = "solar-panel"
+      new_panel.fast_replaceable_group = panel.fast_replaceable_group or "solar-panel" -- added in 0.2.2
       new_panel.localised_name = {'entity-name.'..panel_name}
       table.insert (new_panels, new_panel)
     end
