@@ -1,0 +1,535 @@
+local BioInd = require('common')('Bio_Industries')
+
+local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
+
+data:extend(
+{
+  ---- Seed
+  {
+    type = "item",
+    name = "bi-seed",
+    icon = ICONPATH .. "bio_seed.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bio_seed.png",
+        icon_size = 64,
+      }
+    },
+    category = "biofarm-mod-greenhouse",
+    subgroup = "bio-bio-farm",
+    order = "x[bi]-a[bi-seed]",
+    fuel_value = "0.5MJ",
+    fuel_category = "chemical",
+    stack_size= 800
+  },
+
+  ---- Seedling
+  {
+    type = "item",
+    name = "seedling",
+    icon = ICONPATH .. "Seedling.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Seedling.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "bio-bio-farm",
+    order = "x[bi]-b[bi-seedling]",
+    place_result = "seedling",
+    fuel_value = "0.5MJ",
+    fuel_category = "chemical",
+    stack_size= 400
+  },
+
+  ----Bio Farm
+  {
+    type= "item",
+    name= "bi-bio-farm",
+    icon = ICONPATH .. "Bio_Farm_Icon.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Bio_Farm_Icon.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "production-machine",
+    order = "x[bi]-ab[bi-bio-farm]",
+    place_result = "bi-bio-farm",
+    stack_size= 10,
+  },
+
+  ----Bio Greenhouse (Nursery)
+  {
+    type= "item",
+    name= "bi-bio-greenhouse",
+    icon = ICONPATH .. "bio_greenhouse.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bio_greenhouse.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "production-machine",
+    order = "x[bi]-aa[bi-bio-greenhouse]",
+    place_result = "bi-bio-greenhouse",
+    stack_size= 10,
+  },
+
+  --- Cokery
+  {
+    type = "item",
+    name = "bi-cokery",
+    icon = ICONPATH .. "cokery.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "cokery.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "production-machine",
+    order = "x[bi]-b[bi-cokery]",
+    place_result = "bi-cokery",
+    stack_size = 10
+  },
+
+  --- Stone Crusher
+  {
+    type = "item",
+    name = "bi-stone-crusher",
+    icon = ICONPATH .. "stone_crusher.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "stone_crusher.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "production-machine",
+    order = "x[bi]-c[bi-stone-crusher]",
+    place_result = "bi-stone-crusher",
+    stack_size = 10
+  },
+
+  --- Wood Pulp
+  {
+    type = "item",
+    name = "bi-woodpulp",
+    icon = ICONPATH .. "woodpulp_64.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "woodpulp_64.png",
+        icon_size = 64,
+      }
+    },
+    fuel_value = "1MJ",
+    fuel_category = "chemical",
+    subgroup = "raw-material",
+    order = "a-b[bi-woodpulp]",
+    stack_size = 800
+  },
+
+  --- Wood Bricks
+  {
+    type = "item",
+    name = "wood-bricks",
+    icon = ICONPATH .. "Fuel_Brick.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Fuel_Brick.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "bio-bio-farm-raw",
+    order = "a[bi]-a-bx[bi-woodbrick]",
+    fuel_category = "chemical",
+    fuel_value = "20MJ",
+    stack_size = 200
+  },
+
+
+  --- Ash
+  {
+    type = "item",
+    name = "bi-ash",
+    icon = ICONPATH .. "ash.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "ash.png",
+        icon_size = 64,
+      }
+    },
+    --~ fuel_value = "1MJ",
+    --~ fuel_category = "chemical",
+    subgroup = "raw-material",
+    order = "a[bi]-a-b[bi-ash]",
+    stack_size = 400
+  },
+
+  --- Charcoal
+  {
+    type = "item",
+    name = "wood-charcoal",
+    icon = ICONPATH .. "charcoal.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "charcoal.png",
+        icon_size = 64,
+      }
+    },
+    fuel_value = "6MJ",
+    fuel_category = "chemical",
+    subgroup = "raw-material",
+    order = "a[bi]-a-c[charcoal]",
+    stack_size = 400
+  },
+
+  --- Coke Coal / Pellet Coke for Angels
+  {
+    type = "item",
+    name = "pellet-coke",
+    icon = ICONPATH .. "coke-coal.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "coke-coal.png",
+        icon_size = 64,
+      }
+    },
+    fuel_value = "28MJ",
+    fuel_category = "chemical",
+    fuel_acceleration_multiplier = 1.2,
+    fuel_top_speed_multiplier = 1.1,
+    subgroup = "raw-material",
+    order = "a[bi]-a-g[bi-coke-coal]",
+    stack_size = 400
+  },
+
+
+  --- Crushed Stone
+  {
+    type = "item",
+    name = "stone-crushed",
+    icon = ICONPATH .. "crushed-stone.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "crushed-stone.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "raw-material",
+    order = "a[bi]-a-z[stone-crushed]",
+    stack_size = 800
+  },
+
+
+  --- Seeb Bomb - Basic
+  {
+    type = "ammo",
+    name = "bi-seed-bomb-basic",
+    icon = ICONPATH .. "Seed_bomb_icon_b.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Seed_bomb_icon_b.png",
+        icon_size = 64,
+      }
+    },
+    ammo_type = {
+      range_modifier = 3,
+      cooldown_modifier = 3,
+      target_type = "position",
+      category = "rocket",
+      action = {
+        type = "direct",
+        action_delivery = {
+          type = "projectile",
+          projectile = "seed-bomb-projectile-1",
+          starting_speed = 0.05,
+        }
+      }
+    },
+    subgroup = "ammo",
+    order = "a[rocket-launcher]-x[seed-bomb]-a",
+    stack_size = 10
+  },
+
+
+  --- Seeb Bomb - Standard
+  {
+    type = "ammo",
+    name = "bi-seed-bomb-standard",
+    icon = ICONPATH .. "Seed_bomb_icon_s.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Seed_bomb_icon_s.png",
+        icon_size = 64,
+      }
+    },
+    ammo_type = {
+      range_modifier = 3,
+      cooldown_modifier = 3,
+      target_type = "position",
+      category = "rocket",
+      action = {
+        type = "direct",
+        action_delivery = {
+          type = "projectile",
+          projectile = "seed-bomb-projectile-2",
+          starting_speed = 0.05,
+        }
+      }
+    },
+    subgroup = "ammo",
+    order = "a[rocket-launcher]-x[seed-bomb]-b",
+    stack_size = 10
+  },
+
+
+  --- Seeb Bomb - Advanced
+  {
+    type = "ammo",
+    name = "bi-seed-bomb-advanced",
+    icon = ICONPATH .. "Seed_bomb_icon_a.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Seed_bomb_icon_a.png",
+        icon_size = 64,
+      }
+    },
+    ammo_type = {
+      range_modifier = 3,
+      cooldown_modifier = 3,
+      target_type = "position",
+      category = "rocket",
+      action = {
+        type = "direct",
+        action_delivery = {
+          type = "projectile",
+          projectile = "seed-bomb-projectile-3",
+          starting_speed = 0.05,
+        }
+      }
+    },
+    subgroup = "ammo",
+    order = "a[rocket-launcher]-x[seed-bomb]-c",
+    stack_size = 10
+  },
+
+   --- Arboretum (Entity)
+  {
+    type= "item",
+    name= "bi-arboretum-area",
+    icon = ICONPATH .. "Arboretum_Icon.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Arboretum_Icon.png",
+        icon_size = 64,
+      }
+    },
+    subgroup = "production-machine",
+    order = "x[bi]-a[bi-arboretum]",
+    place_result = "bi-arboretum-area",
+    stack_size= 10,
+  },
+
+   --- Arboretum Hidden Recipe
+  {
+    type = "item",
+    name = "bi-arboretum-r1",
+    icon = ICONPATH .. "Seedling_b.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "Seedling_b.png",
+        icon_size = 64,
+      }
+    },
+    flags = {"hidden"},
+    subgroup = "terrain",
+    order = "bi-arboretum-r1",
+    stack_size = 1
+  },
+
+  --- Arboretum Hidden Recipe
+  {
+    type = "item",
+    name = "bi-arboretum-r2",
+    icon = ICONPATH .. "bi_change_1.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bi_change_1.png",
+        icon_size = 64,
+      }
+    },
+    flags = {"hidden"},
+    subgroup = "terrain",
+    order = "bi-arboretum-r2",
+    stack_size = 1
+  },
+
+   --- Arboretum Hidden Recipe
+  {
+    type = "item",
+    name = "bi-arboretum-r3",
+    icon = ICONPATH .. "bi_change_2.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bi_change_2.png",
+        icon_size = 64,
+      }
+    },
+    flags = {"hidden"},
+    subgroup = "terrain",
+    order = "bi-arboretum-r3",
+    stack_size = 1
+  },
+
+  --- Arboretum Hidden Recipe
+  {
+    type = "item",
+    name = "bi-arboretum-r4",
+    icon = ICONPATH .. "bi_change_plant_1.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bi_change_plant_1.png",
+        icon_size = 64,
+      }
+    },
+    flags = {"hidden"},
+    subgroup = "terrain",
+    order = "bi-arboretum-r4",
+    stack_size = 1
+  },
+
+  --- Arboretum Hidden Recipe
+  {
+    type = "item",
+    name = "bi-arboretum-r5",
+    icon = ICONPATH .. "bi_change_plant_2.png",
+    icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "bi_change_plant_2.png",
+        icon_size = 64,
+      }
+    },
+     flags = {"hidden"},
+    subgroup = "terrain",
+    order = "bi-arboretum-r5",
+    stack_size = 1
+  },
+
+})
+
+--- Fertilizer can change terrain to better terrain
+if BioInd.AB_tiles() then
+  data:extend({
+    --- Fertiliser
+    {
+      type = "item",
+      name = "fertiliser",
+      icon = ICONPATH .. "fertiliser.png",
+      icon_size = 64,
+    icons = {
+      {
+        icon = ICONPATH .. "fertiliser.png",
+        icon_size = 64,
+      }
+    },
+      subgroup = "intermediate-product",
+      order = "b[fertiliser]",
+      stack_size = 200,
+      place_as_tile = {
+        result = "vegetation-green-grass-3",
+        condition_size = 1,
+        condition = { "water-tile" }
+      },
+    },
+
+    --- Adv Fertiliser
+    {
+      type = "item",
+      name = "bi-adv-fertiliser",
+      icon = ICONPATH .. "advanced_fertiliser.png",
+      icon_size = 64,
+      icons = {
+        {
+          icon = ICONPATH .. "advanced_fertiliser.png",
+          icon_size = 64,
+        }
+      },
+      subgroup = "intermediate-product",
+      order = "b[fertiliser]-b[bi-adv-fertiliser]",
+      stack_size = 200,
+      place_as_tile = {
+        result = "vegetation-green-grass-1",
+        condition_size = 1,
+        condition = { "water-tile" }
+      },
+    },
+  })
+
+else
+  data:extend({
+    --- Fertiliser
+    {
+      type = "item",
+      name = "fertiliser",
+      icon = ICONPATH .. "fertiliser.png",
+      icon_size = 64,
+      icons = {
+        {
+          icon = ICONPATH .. "fertiliser.png",
+          icon_size = 64,
+        }
+      },
+      subgroup = "intermediate-product",
+      order = "b[fertiliser]",
+      stack_size = 200,
+      place_as_tile = {
+        result = "grass-3",
+        condition_size = 1,
+        condition = { "water-tile" }
+      },
+    },
+
+    --- Adv Fertiliser
+    {
+      type = "item",
+      name = "bi-adv-fertiliser",
+      icon = ICONPATH .. "advanced_fertiliser.png",
+      icon_size = 64,
+      icons = {
+        {
+          icon = ICONPATH .. "advanced_fertiliser.png",
+          icon_size = 64,
+        }
+      },
+      subgroup = "intermediate-product",
+      order = "b[fertiliser]-b[bi-adv-fertiliser]",
+      stack_size = 200,
+      place_as_tile = {
+        result = "grass-1",
+        condition_size = 1,
+        condition = { "water-tile" }
+      },
+    },
+  })
+end
