@@ -100,3 +100,29 @@ script.on_event(defines.events.on_tick, function(event)
   
   global.panels[next_panel] = {entity = new_entity, power = power_p, orig_name = panel.orig_name}
 end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
