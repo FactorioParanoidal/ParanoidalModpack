@@ -5,7 +5,7 @@ for _, tweak in pairs
 		health = 2000,
 		drain = "4800kW",
 		buffer_capacity = "420000kJ",
-		input_flow_limit = "200000kW",
+		input_flow_limit = "20000kW",
 		energy_consumption = "400000kJ"
 	},
 	{ 
@@ -13,7 +13,7 @@ for _, tweak in pairs
 		health = 2200,
 		drain = "6000kW",
 		buffer_capacity = "1020000kJ",
-		input_flow_limit = "333000kW",
+		input_flow_limit = "66667kW",
 		energy_consumption = "500000kJ"
 	},
 	{ 
@@ -21,7 +21,7 @@ for _, tweak in pairs
 		health = 2400,
 		drain = "7200kW",
 		buffer_capacity = "1820000kJ",
-		input_flow_limit = "500000kW",
+		input_flow_limit = "150000kW",
 		energy_consumption = "600000kJ"
 	},
 	{
@@ -29,7 +29,7 @@ for _, tweak in pairs
 		health = 2600,
 		drain = "8400kW",
 		buffer_capacity = "2820000kJ",
-		input_flow_limit = "700000kW",
+		input_flow_limit = "280000kW",
 		energy_consumption = "700000kJ"
 	},
 	{
@@ -37,7 +37,7 @@ for _, tweak in pairs
 		health = 4000,
 		drain = "9600kW",
 		buffer_capacity = "4020000kJ",
-		input_flow_limit = "900000kW",
+		input_flow_limit = "400000kW",
 		energy_consumption = "800000kJ"
 	}
   } do
