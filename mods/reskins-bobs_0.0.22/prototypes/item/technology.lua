@@ -16,7 +16,7 @@ local inputs = {
 }
 
 local items = {
-    ["advanced-logistic-science-pack"] = {tint = util.color("FF9900")} --DrD from de00a3
+    ["advanced-logistic-science-pack"] = {tint = util.color("FF6000")} --DrD from de00a3
 }
 
 -- Color overhaul for science packs
