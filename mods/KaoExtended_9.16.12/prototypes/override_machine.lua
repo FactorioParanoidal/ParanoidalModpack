@@ -28,36 +28,6 @@ data.raw["assembling-machine"]["casting-machine-4"].energy_usage= "350kW"
 -- data.raw["assembling-machine"]["strand-casting-machine-4"].energy_usage= "350kW"
 data.raw["assembling-machine"]["sintering-oven-4"].energy_usage= "350kW"
 
-data.raw["electric-turret"]["bob-plasma-turret-1"].health = 2000
-data.raw["electric-turret"]["bob-plasma-turret-1"].drain = "4800kW"
-data.raw["electric-turret"]["bob-plasma-turret-1"].buffer_capacity = "420000kJ"
-data.raw["electric-turret"]["bob-plasma-turret-1"].input_flow_limit = "20000kW"
-data.raw["electric-turret"]["bob-plasma-turret-1"].energy_consumption = "400000kJ"
-	
-	data.raw["electric-turret"]["bob-plasma-turret-2"].health = 2200
-    data.raw["electric-turret"]["bob-plasma-turret-2"].drain = "6000kW"
-    data.raw["electric-turret"]["bob-plasma-turret-2"].buffer_capacity = "1020000kJ"
-    data.raw["electric-turret"]["bob-plasma-turret-2"].input_flow_limit = "66667kW"
-    data.raw["electric-turret"]["bob-plasma-turret-2"].energy_consumption = "500000kJ"
-
-    data.raw["electric-turret"]["bob-plasma-turret-3"].health = 2400
-    data.raw["electric-turret"]["bob-plasma-turret-3"].drain = "7200kW"
-    data.raw["electric-turret"]["bob-plasma-turret-3"].buffer_capacity = "1820000kJ"
-    data.raw["electric-turret"]["bob-plasma-turret-3"].input_flow_limit = "150000kW"
-    data.raw["electric-turret"]["bob-plasma-turret-3"].energy_consumption = "600000kJ"
-	
-    data.raw["electric-turret"]["bob-plasma-turret-4"].health = 2600
-    data.raw["electric-turret"]["bob-plasma-turret-4"].drain = "8400kW"
-    data.raw["electric-turret"]["bob-plasma-turret-4"].buffer_capacity = "2820000kJ"
-    data.raw["electric-turret"]["bob-plasma-turret-4"].input_flow_limit = "280000kW"
-    data.raw["electric-turret"]["bob-plasma-turret-4"].energy_consumption = "700000kJ"
-	
-    data.raw["electric-turret"]["bob-plasma-turret-5"].health = 4000
-    data.raw["electric-turret"]["bob-plasma-turret-5"].drain = "9600kW"
-    data.raw["electric-turret"]["bob-plasma-turret-5"].buffer_capacity = "4020000kJ"
-    data.raw["electric-turret"]["bob-plasma-turret-5"].input_flow_limit = "400000kW"
-    data.raw["electric-turret"]["bob-plasma-turret-5"].energy_consumption = "800000kJ"
-
 
 
 --     M O D U L E S
