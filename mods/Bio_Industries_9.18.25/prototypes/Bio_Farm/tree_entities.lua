@@ -6,7 +6,7 @@ License:  CC BY-SA 4.0
 
 ]]
 
-local OPTIMIZED = tonumber(util.split(mods["base"], '.')[2]) > 17
+local OPTIMIZED = tonumber(util.split(mods["base"], '.')[2]) > 17 or tonumber(util.split(mods["base"], '.')[1]) > 0
 
 local COLLISION_BOX = {{-0.1, -0.1}, {0.1, 0.1}}
 local TREE_LEVELS = 4
