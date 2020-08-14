@@ -1,33 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.18.2
-Date: 2020.08.13
-  Graphics:
-    - Pickup range visualization is now done by prototype definitions.  (Different from 0.17.8.)
-    - Former pickup range visualization (by rendering) is instead applied on neighbouring towers, when holding pickup tower in cursor.  (Different from 0.17.8.)
-    - Reduced brightness on pickup range visualization rendering.
-  Changes:
-    - Options on show pickup range is now changed to show neighbouring pickup range.
-  Balancing:
-    - Pickup tower I costs less and easier to be researched and crafted.
-    - Pickup tower IV costs more and harder to be researched and crafted.
-  Optimisations:
-    - Code refactoring.
-  Changes:
-    - Renamed settings for better consistency.
----------------------------------------------------------------------------------------------------
-Version: 0.17.8
-Date: 2020.08.13
-  Graphics:
-    - Pickup range visualization (by rendering) is also applied on neighbouring towers, when holding pickup tower in cursor.
-    - Reduced brightness on pickup range visualization rendering.
-  Balancing:
-    - Pickup tower I costs less and easier to be researched and crafted.
-    - Pickup tower IV costs more and harder to be researched and crafted.
-  Optimisations:
-    - Code refactoring.
-  Changes:
-    - Renamed settings for better consistency.
----------------------------------------------------------------------------------------------------
 Version: 0.18.1
 Date: 2020.04.02
   Locale:
