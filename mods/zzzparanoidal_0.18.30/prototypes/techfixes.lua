@@ -4,6 +4,9 @@ table.insert(data.raw["lab"]["big-lab"].inputs, "token-bio")
 --включим пластик без электролизиров
 bobmods.lib.tech.remove_prerequisite("plastics", "electrolysis-2")
 
+--фикс атомной бомбы
+bobmods.lib.tech.remove_prerequisite("atomic-bomb", "kovarex-enrichment-process")
+
 --фикс атомной артилерии
 bobmods.lib.tech.add_prerequisite("bob-atomic-artillery-shell", "atomic-bomb")
 bobmods.lib.tech.remove_prerequisite("bob-atomic-artillery-shell", "kovarex-enrichment-process")
