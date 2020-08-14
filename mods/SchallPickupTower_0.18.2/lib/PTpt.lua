@@ -2,22 +2,48 @@ local PTlib = require("lib.PTlib")
 local cfg1 = require("config.config-1")
 
 
-local pickup_tower_icon_layer = {icon = "__SchallPickupTower__/graphics/icons/pickup-tower.png", icon_size = 128, icon_mipmaps = 3}
-local pickup_tower_tech_layer = {icon = "__SchallPickupTower__/graphics/technology/pickup-tower.png", icon_size = 128}
-local tier_icon_layer = {
-  [1] = {icon = "__SchallPickupTower__/graphics/icons/mk1.png", icon_size = 128, icon_mipmaps = 3},
-  [2] = {icon = "__SchallPickupTower__/graphics/icons/mk2.png", icon_size = 128, icon_mipmaps = 3},
-  [3] = {icon = "__SchallPickupTower__/graphics/icons/mk3.png", icon_size = 128, icon_mipmaps = 3},
-  [4] = {icon = "__SchallPickupTower__/graphics/icons/mk4.png", icon_size = 128, icon_mipmaps = 3},
-}
+
+local PTpt = {}
+
+PTpt.debuglog = PTlib.debuglog
 
 
-local dataextendlist = {}
+function PTpt.PT_item_name(tier)
+  return cfg1.pickuptower_name .. "-R" .. cfg1.PT_range(tier)
+end
+
+function PTpt.PT_upper_itemname(tier)
+  return cfg1.pickuptower_name .. "-R" .. cfg1.PT_range(tier) .. cfg1.pickuptower_name_upper_suffix
+end
+
+function PTpt.PT_tech_name(tier)
+  return cfg1.pickuptower_name .. "-" .. tier
+end
+
+function PTpt.PT_item_icons(tier)
+  return
+  {
+    PTlib.PT_icon_layer,
+    PTlib.tier_icon_layer(tier)
+  }
+end
+
+function PTpt.PT_item_name_table_replace(rt)
+  for k, v in pairs(rt) do
+    rt[k][1] = v[1]:gsub("__PT__(%d+)__", PTpt.PT_item_name)
+  end
+end
+
+function PTpt.PT_tech_name_table_replace(rt)
+  for k, v in pairs(rt) do
+    rt[k] = v:gsub("__PT__(%d+)__", PTpt.PT_tech_name)
+  end
+end
 
 
 
 -- Pickup Tower Graphics
-function pickup_tower_sheet(inputs)
+function PTpt.pickup_tower_sheet(inputs)
 return
 {
   layers = 
@@ -40,7 +66,7 @@ return
 end
 
 
-function pickup_tower_base_sheet(inputs)
+function PTpt.pickup_tower_base_sheet(inputs)
 return
 {
   layers =
@@ -66,58 +92,56 @@ end
 
 
 -- Pickup Tower Prototypes
-local function create_tower_item_1(tier)
-  local range = cfg1.PT_range(tier)
+function PTpt.PT_item_1(tier)
+  local name = PTpt.PT_item_name(tier)
   local item =
   {
     type = "item",
-    name = "Schall-pickup-tower-R"..range,
-    icons = { pickup_tower_icon_layer,
-              tier_icon_layer[tier] },
+    name = name,
+    icons = PTpt.PT_item_icons(tier),
     subgroup = "storage",
     -- subgroup = "logistic-network",
     order = "i[pickup]-"..tier,
-    place_result = "Schall-pickup-tower-R"..range,
+    place_result = name,
     stack_size = 20
   }
   return item
 end
 
 
-local function create_tower_item_2(tier)
-  local range = cfg1.PT_range(tier)
+function PTpt.PT_item_2(tier)
+  local name = PTpt.PT_upper_itemname(tier)
   local item =
   {
     type = "item",
-    name = "Schall-pickup-tower-R"..range.."-upper",
-    icons = { pickup_tower_icon_layer,
-              tier_icon_layer[tier] },
+    name = name,
+    icons = PTpt.PT_item_icons(tier),
     flags = {"hidden"},
     subgroup = "storage",
     -- subgroup = "logistic-network",
     order = "i[pickup]-"..tier,
-    place_result = "Schall-pickup-tower-R"..range.."-upper",
+    place_result = name,
     stack_size = 20
   }
   return item
 end
 
 
-local function create_tower_entity_1(tier)
+function PTpt.PT_entity_1(tier)
+  local name = PTpt.PT_item_name(tier)
   local range = cfg1.PT_range(tier)
   local interval = cfg1.PT_interval(tier)
   local energy_usage = cfg1.PT_energy_usage(tier)
   local energy_per_sector = cfg1.PT_energy_per_sector(tier)
-  local entity =
+  local enty =
   {
     type = "container",
     -- type = "logistic-container",
-    name = "Schall-pickup-tower-R"..range,
-    icons = { pickup_tower_icon_layer,
-              tier_icon_layer[tier] },
+    name = name,
+    icons = PTpt.PT_item_icons(tier),
     localised_description = PTlib.PT_localised_description(range, interval, energy_usage),
     flags = {"placeable-player", "player-creation"},
-    minable = {hardness = 0.2, mining_time = 0.5, result = "Schall-pickup-tower-R"..range},
+    minable = {hardness = 0.2, mining_time = 0.5, result = name},
     -- render_layer = "lower-object-above-shadow",
     -- final_render_layer = "decorative",
     -- render_layer = "decorative",
@@ -142,33 +166,44 @@ local function create_tower_entity_1(tier)
     open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
     close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
     vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
-    picture = pickup_tower_base_sheet{chest_type = "steel-chest"},
+    picture = PTpt.pickup_tower_base_sheet{chest_type = "steel-chest"},
     -- picture = data.raw["container"]["steel-chest"].picture,
-    -- picture = pickup_tower_sheet_logistics{filename = "__base__/graphics/entity/logistic-chest/logistic-chest-storage.png"},
-    -- "__base__/graphics/entity/logistic-chest/logistic-chest-passive-provider.png"
     vector_to_place_result = {0.5, -1.35},--{0, -1.85},
+    radius_visualisation_specification =
+    {
+      sprite = 
+      {
+        filename = "__SchallPickupTower__/graphics/entity/pickup-tower-radius.png",
+        priority = "medium",
+        width = 64,
+        height = 64,
+        scale = 0.5
+      },
+      distance = range,
+      -- offset = {0, 0}
+    },
     circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
     circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
   }
-  return entity
+  return enty
 end
 
 
-local function create_tower_entity_2(tier)
+function PTpt.PT_entity_2(tier)
+  local name = PTpt.PT_upper_itemname(tier)
   local range = cfg1.PT_range(tier)
   local interval = cfg1.PT_interval(tier)
   local energy_usage = cfg1.PT_energy_usage(tier)
   local energy_per_sector = cfg1.PT_energy_per_sector(tier)
-  local entity =
+  local enty =
   {
     type = "radar",
-    name = "Schall-pickup-tower-R"..range.."-upper",
-    icons = { pickup_tower_icon_layer,
-              tier_icon_layer[tier] },
+    name = name,
+    icons = PTpt.PT_item_icons(tier),
     localised_description = PTlib.PT_localised_description(range, interval, energy_usage),
     flags = {"not-blueprintable", "not-deconstructable", "placeable-off-grid"},
-    -- minable = {hardness = 0.2, mining_time = 0.5, result = "Schall-pickup-tower-R"..range},
+    -- minable = {hardness = 0.2, mining_time = 0.5, result = PTpt.PT_item_name(tier)},
     create_ghost_on_death = false,
     -- render_layer = "higher-object-above",
     -- final_render_layer = "higher-object-above",
@@ -203,101 +238,49 @@ local function create_tower_entity_2(tier)
       usage_priority = "secondary-input"
     },
     energy_usage = energy_usage.."W", --"250kW",
-    pictures = pickup_tower_sheet{}
+    pictures = PTpt.pickup_tower_sheet{}
   }
-  return entity
+  return enty
 end
 
 
-local function create_tower_recipe(tier)
-  local range = cfg1.PT_range(tier)
-  local rangeprev = (tier-1) * 32
-  local itemname = "Schall-pickup-tower-R"..range
-  local itemnameprev = "Schall-pickup-tower-R"..rangeprev
-  local recipe = {
-    type = "recipe",
-    name = itemname,
-    -- icons = { pickup_tower_icon_layer,
-    --           tier_icon_layer[tier] },
-    -- order = "i[pickup]-"..tier,
-    enabled = false,
-    -- energy_required = 10,
-    -- ingredients = {
-    --   {"radar", 1},
-    --   {"steel-chest", 1},
-    --   {"advanced-circuit", 10}
-    -- },
-    result = itemname
-  }
-  if tier == 1 then
-    recipe.energy_required = 10
-    recipe.ingredients = {
-      {"radar", 1},
-      {"steel-chest", 1},
-      {"advanced-circuit", 10}
-    }
+function PTpt.PT_recipe(tier, specs)
+  local itemname = PTpt.PT_item_name(tier)
+  local itemnameprev = PTpt.PT_item_name(tier-1)
+  local rcp = table.deepcopy(specs.recipe[tier])
+  rcp.type = "recipe"
+  rcp.name = itemname
+  if rcp.normal then
+    rcp.normal.enabled = rcp.normal.enabled or false
+    rcp.normal.result = itemname
+    PTpt.PT_item_name_table_replace(rcp.normal.ingredients)
+    rcp.expensive.enabled = rcp.expensive.enabled or false
+    rcp.expensive.result = itemname
+    PTpt.PT_item_name_table_replace(rcp.expensive.ingredients)
   else
-    recipe.energy_required = 10 + 20 * (tier-1)
-    recipe.ingredients = {
-      {itemnameprev, 4},
-      {"advanced-circuit", 10}
-    }
+    rcp.enabled = rcp.enabled or false
+    rcp.result = itemname
+    PTpt.PT_item_name_table_replace(rcp.ingredients)
   end
-  return recipe
+  return rcp
 end
 
 
-local function create_tower_technology(tier)
-  local range = cfg1.PT_range(tier)
-  local techname = "Schall-pickup-tower-"..tier
-  local technameprev = "Schall-pickup-tower-"..tier-1
-  local itemname = "Schall-pickup-tower-R"..range
-  local tech = {
-    type = "technology",
-    name = techname,
-    icons = { pickup_tower_tech_layer },
-    effects =
-    {
-      {
-        type = "unlock-recipe",
-        recipe = itemname
-      }
-    },
-    -- prerequisites = {"electric-energy-distribution-2"},
-    unit =
-    {
-      count = 150,
-      ingredients =
-      {
-        {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
-        {"chemical-science-pack", 1},
-        {"military-science-pack", 1}
-      },
-      time = 30
-    },
-    upgrade = true,
-    order = "c-e-c"
-  }
-  if tier == 1 then
-    tech.prerequisites = {"electric-energy-distribution-2"}
-    tech.unit.count = 150
-  else
-    tech.prerequisites = {technameprev}
-    tech.unit.count = 150 + 50 * (tier-1)
-  end
+function PTpt.PT_technology(tier, specs)
+  local techname = PTpt.PT_tech_name(tier)
+  local technameprev = PTpt.PT_tech_name(tier-1)
+  local itemname = PTpt.PT_item_name(tier)
+  local tech = table.deepcopy(specs.technology[tier])
+  tech.type = "technology"
+  tech.name = techname
+  tech.icons = { PTlib.PT_tech_icon_layer }
+  tech.effects = { { type = "unlock-recipe", recipe = itemname } }
+  tech.upgrade = true
+  tech.order = "c-e-c"
+  PTpt.PT_tech_name_table_replace(tech.prerequisites)
   return tech
 end
 
-local tier_max = cfg1.tier_max
 
-for tier = 1,tier_max,1 do
-  table.insert( dataextendlist, create_tower_item_1  (tier) )
-  table.insert( dataextendlist, create_tower_item_2  (tier) )
-  table.insert( dataextendlist, create_tower_entity_1(tier) )
-  table.insert( dataextendlist, create_tower_entity_2(tier) )
-  table.insert( dataextendlist, create_tower_recipe  (tier) )
-  table.insert( dataextendlist, create_tower_technology(tier) )
-end
 
-data:extend(dataextendlist)
+return PTpt
