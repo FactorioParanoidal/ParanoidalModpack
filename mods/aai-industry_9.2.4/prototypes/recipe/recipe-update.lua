@@ -163,7 +163,7 @@ util.conditional_modify({
   name = "burner-offshore-pump",
 	ingredients =
     {
-      {"pipe", 6},
+      {"iron-plate", 10},
 	  {"motor", 1},
       {"iron-gear-wheel", 4}
     },
