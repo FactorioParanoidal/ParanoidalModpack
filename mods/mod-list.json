@@ -419,6 +419,11 @@
     },
     
     {
+      "name": "more-petrochem-hell",
+      "enabled": true
+    },
+    
+    {
       "name": "MoreAchievements",
       "enabled": true
     },
@@ -440,6 +445,11 @@
     
     {
       "name": "Nanobots",
+      "enabled": true
+    },
+    
+    {
+      "name": "Natural_Evolution_Enemies",
       "enabled": true
     },
     
@@ -494,7 +504,7 @@
     },
     
     {
-      "name": "PCP",
+      "name": "PCPRedux",
       "enabled": true
     },
     
