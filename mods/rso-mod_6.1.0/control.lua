@@ -899,7 +899,7 @@ local function spawn_entity_helper(surface, prototype, x, y, config)
 	collides = surface.entity_prototype_collides(prototype, position, true)
 	
 	if not collides then
-		surface.create_entity{name=prototype.name, position={x, y}, force=game.forces[config.force]}
+		surface.create_entity{name=prototype.name, position={x, y}, force=game.forces[config.force], spawn_decorations=true}
 	end
 	
 	return not collides
