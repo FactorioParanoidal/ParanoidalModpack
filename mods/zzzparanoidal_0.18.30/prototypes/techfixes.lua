@@ -25,3 +25,13 @@ bobmods.lib.tech.remove_recipe_unlock("alloy-processing-1", "stone-furnace-from-
 
 --разные фиксы зависимостей технологий
 bobmods.lib.tech.add_prerequisite("angels-metallurgy-1", "steel-processing")
+
+--убираем конвертацию между твёрдотопливными и жидкотопливными бойлерами
+bobmods.lib.tech.remove_recipe_unlock("bob-boiler-2", "boiler-2-from-oil-boiler")
+bobmods.lib.tech.remove_recipe_unlock("bob-boiler-3", "boiler-3-from-oil-boiler-2")
+bobmods.lib.tech.remove_recipe_unlock("bob-boiler-4", "boiler-4-from-oil-boiler-3")
+bobmods.lib.tech.remove_recipe_unlock("bob-boiler-5", "boiler-5-from-oil-boiler-4")
+
+bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-2", "oil-boiler-2-from-boiler-3")
+bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-3", "oil-boiler-3-from-boiler-4")
+bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-4", "oil-boiler-4-from-boiler-5")
