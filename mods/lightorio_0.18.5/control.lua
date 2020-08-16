@@ -89,7 +89,7 @@ local function move_lamp(event)
 		-- find the assemblerlamp for the entity
 		local assemblerlamp = global.assemblerlamps[entity.unit_number]
 		--move it to the new output location
-		assemblerlamp.teleport(entity.drop_position)
+		--assemblerlamp.teleport(entity.drop_position)  --sovigod баг при вращении буров. что-то там с лампой ни так.
 	end
 end
 
