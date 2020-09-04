@@ -9,7 +9,7 @@ burner_lab.energy_source = {
   energy_usage = "1000kW",
   researching_speed = 0.5,
   fuel_inventory_size = 1,
-  emissions = 3, --0.05
+  emissions_per_minute = 3, --0.05
   smoke =
   {
     {

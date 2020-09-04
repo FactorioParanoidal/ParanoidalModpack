@@ -1,14 +1,15 @@
 local burner_assembling_machine = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 burner_assembling_machine.name = "burner-assembling-machine"
 burner_assembling_machine.icon = "__aai-industry__/graphics/icons/burner-assembling-machine.png"
+burner_assembling_machine.icon_size = 32
 burner_assembling_machine.minable.result = "burner-assembling-machine"
-burner_assembling_machine.ingredient_count = 4
+burner_assembling_machine.next_upgrade = "assembling-machine-1"
 burner_assembling_machine.energy_source = {
   type = "burner",
   fuel_category = "chemical",
   effectivity = 0.9,
   fuel_inventory_size = 1,
-  emissions = 0.05,
+  emissions_per_minute = 4,
   smoke =
   {
     {

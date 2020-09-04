@@ -46,34 +46,6 @@ local function offshore_pump_setup(entity)
   }
 end
 ]]--
-local function burner_turbine_setup (entity)
-
-  global.burner_turbines = global.burner_turbines or  {}
-  global.burner_turbines_next_id = global.burner_turbines_next_id or 1
-
-  local generator = entity.surface.find_entities_filtered{
-    name="burner-turbine-generator",
-    position=entity.position
-  }[1]
-  if not generator then
-    generator = entity.surface.create_entity{
-      name="burner-turbine-generator",
-      position={entity.position.x, entity.position.y},
-      direction=entity.direction,
-      force=entity.force
-    }
-    generator.destructible = false
-  end
-
-  local struct = {
-    struct_id = global.burner_turbines_next_id,
-    burner = entity,
-    generator = generator
-  }
-  global.burner_turbines[entity.unit_number] = struct
-  global.burner_turbines_next_id = global.burner_turbines_next_id + 1
-
-end
 
 local function on_entity_created(event)
   local entity = event.created_entity or event.entity
@@ -81,11 +53,7 @@ local function on_entity_created(event)
     --[[
 	if entity.name == "offshore-pump" then
       offshore_pump_setup(entity)
-    else
 	]]--
-	if entity.name == "burner-turbine" then
-      burner_turbine_setup(entity)
-    end
   end
 end
 
@@ -153,7 +121,7 @@ local function dump_player_inventory_to_containers(player_index)
   local containers = global.starting_containers or {}
   local player = game.players[player_index]
   if not player then return end
-  player.print({"player-has-crash-landed", get_player_name(player)}, {r=1, g=0.85, b=0})
+  player.print{"player-has-crash-landed", get_player_name(player)}
   local item_data = {} -- stored as [type][name] = {signal = signal, count = count}
   for _, inv_name in pairs({defines.inventory.character_main}) do
       if player.get_inventory(inv_name) then
@@ -262,25 +230,6 @@ local function on_tick(event)
       end
     end
   end
-
-  if global.burner_turbines and game.tick % 60 == 0 then
-    for _, struct in pairs(global.burner_turbines) do
-      if not struct.burner.valid or not struct.generator.valid then global.burner_turbines[_] = nil return end
-      -- fill the burner water slot
-      struct.burner.fluidbox[1] = {name = "water", amount = struct.burner.fluidbox.get_capacity(1), temperature = 15}
-
-      -- get the steam
-      local burner_steam = struct.burner.fluidbox[2] and struct.burner.fluidbox[2].amount or 0
-      local generator_steam = (struct.generator.fluidbox and struct.generator.fluidbox[1]) and struct.generator.fluidbox[1].amount or 0
-      -- buffer transfer to stop stutter
-      local to_transfer = math.max(0, math.min(burner_steam, struct.generator.fluidbox.get_capacity(1) - generator_steam)) / 2
-
-      if to_transfer > 1 then
-        struct.burner.fluidbox[2] = {name = "steam", amount = burner_steam - to_transfer, temperature = 165}
-        struct.generator.fluidbox[1] = {name = "steam", amount = generator_steam + to_transfer, temperature = 165}
-      end
-    end
-  end
 end
 
 script.on_event(defines.events.on_built_entity, on_entity_created)
@@ -307,11 +256,6 @@ local function on_configuration_changed(data)
       end
     end
 
-    -- enable any recipes that should be unlocked.
-    -- mainly required for entity-update-externals as a migration file won't work
-    for _, force in pairs(game.forces) do
-      force.reset_technology_effects()
-    end
 
     global.version = version
 end
@@ -410,6 +354,7 @@ local function on_init()
     local allow = settings.startup["crash-sequence"].value == true
     for _, result in pairs(results) do
       if result.allow ~= nil and (result.weight or 0) >= max_weight then
+        max_weight = result.weight or 0
         allow = result.allow
       end
     end
