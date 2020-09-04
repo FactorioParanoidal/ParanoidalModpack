@@ -61,7 +61,7 @@ data:extend(
       energy_source = {
         type = "electric",
         usage_priority = "secondary-output",
-        emissions = 3 / 1000
+        emissions_per_minute = 3
       },
       vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65},
       horizontal_animation = {
