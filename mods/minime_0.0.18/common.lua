@@ -228,7 +228,7 @@ log("Entered common.lua!")
         error(serpent.line(i) .. " is not a valid inventory!")
       end
     end
-log("SRC: " .. serpent.block(src))
+--log("SRC: " .. serpent.block(src))
     common.dprint("SRC slots: " .. #src)
     common.dprint("DST slots: " .. #dst)
 
