@@ -299,7 +299,7 @@ data:extend(
 
               {
                 type = "technology",
-                name = "bio-refugium-puffer-3",
+                name = "bio-refugium-puffer-3b",    --sbelyakov, bio-refugium-puffer-3
                 icon = "__angelsbioprocessing__/graphics/technology/bio-refugium-puffer-breeding-tech.png",
                 icon_size = 128,
                 order = "c-a",
