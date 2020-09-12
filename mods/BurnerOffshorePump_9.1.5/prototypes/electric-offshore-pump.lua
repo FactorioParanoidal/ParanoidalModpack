@@ -8,7 +8,7 @@ local icon = '__BurnerOffshorePump__/graphics/icons/'..name..'.png'
 local placeholder = table.deepcopy(data.raw["offshore-pump"]["offshore-pump"])
 placeholder.name = name..'-placeholder'
 placeholder.minable = {mining_time = 1, result = name}
-placeholder.pumping_speed = 20 -- 5 is 300 fluids/s, vanilla has 20 and 1200
+placeholder.pumping_speed = 10 -- 5 is 300 fluids/s, vanilla has 20 and 1200
 -- placeholder.localised_name = {'burner bop placeholder'}
 -- placeholder.localised_name = {'entity.burner-offshore-pump'}
 placeholder.localised_name = {'entity-name.electric-offshore-pump'}
