@@ -1,7 +1,7 @@
 --[[ Copyright (c) 2019 - 2020 Picklock
  * Part of Picklocks Inserter
  * selector.lua
- * Version 1.18.1.44
+ * Version 1.18.2.45
  *
  * See LICENSE.MD in the project directory for license information.
 --]]

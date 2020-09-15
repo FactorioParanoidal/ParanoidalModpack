@@ -1,11 +1,11 @@
 {
     "name": "Picks-Inserter",
-    "version": "1.18.1",
+    "version": "1.18.2",
     "title": "Picklocks Inserter",
     "author": "Picklock",
     "contact": "",
     "homepage": "",
-    "factorio_version": "0.18",
-    "dependencies": ["base >= 0.18"],
+    "factorio_version": "1.0",
+    "dependencies": ["base >= 1.0"],
     "description": "This mod prevents Inserters to get stuck holding Items."
 }
