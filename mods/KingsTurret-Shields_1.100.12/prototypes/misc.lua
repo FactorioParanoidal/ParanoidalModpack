@@ -4,7 +4,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
   	{	
 		type = "simple-entity",
 		name = "ts-unplugged",
-		icon = "__Turret-Shields__/graphics/blank.png",	icon_size = 32,
+		icon = "__KingsTurret-Shields__/graphics/blank.png",	icon_size = 32,
 		flags = neutral_flags, --{"not-blueprintable", "placeable-neutral", "placeable-off-grid", "not-on-map"},
 		subgroup = "wrecks",
 		order = "d[remnants]-d[ship-wreck]-b[medium]-a",
@@ -24,7 +24,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	{
         type = "selection-tool",
         name = "ts-shield-disabler",
-        icon = "__Turret-Shields__/graphics/blueprint.png",
+        icon = "__KingsTurret-Shields__/graphics/blueprint.png",
         icon_size = 32,
         --flags = {"goes-to-quickbar"},
         selection_color = {r = 1.0, g = 0.55, b = 0.0, a = 0.2},
@@ -51,7 +51,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	{
 		type = "constant-combinator",
 		name = "turret-shield-combinator",
-		icon = "__Turret-Shields__/graphics/turret-shield-combinator-icon.png",
+		icon = "__KingsTurret-Shields__/graphics/turret-shield-combinator-icon.png",
 		icon_size = 32,
 		flags = {"placeable-neutral", "player-creation"},
 		minable = {hardness = 0.2, mining_time = 0.5, result = "turret-shield-combinator"},
@@ -95,7 +95,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 		{
 			north =
 			{
-				filename = "__Turret-Shields__/graphics/turret-shield-combinator.png",
+				filename = "__KingsTurret-Shields__/graphics/turret-shield-combinator.png",
 				x = 158,
 				width = 79,
 				height = 63,
@@ -104,7 +104,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 			},
 			east =
 			{
-				filename = "__Turret-Shields__/graphics/turret-shield-combinator.png",
+				filename = "__KingsTurret-Shields__/graphics/turret-shield-combinator.png",
 				width = 79,
 				height = 63,
 				frame_count = 1,
@@ -112,7 +112,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 			},
 			south =
 			{
-				filename = "__Turret-Shields__/graphics/turret-shield-combinator.png",
+				filename = "__KingsTurret-Shields__/graphics/turret-shield-combinator.png",
 				x = 237,
 				width = 79,
 				height = 63,
@@ -121,7 +121,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 			},
 			west =
 			{
-				filename = "__Turret-Shields__/graphics/turret-shield-combinator.png",
+				filename = "__KingsTurret-Shields__/graphics/turret-shield-combinator.png",
 				x = 79,
 				width = 79,
 				height = 63,
@@ -236,7 +236,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	  {
     type = "item-with-tags",
     name = "turret-shield-combinator",
-    icon = "__Turret-Shields__/graphics/turret-shield-combinator-icon.png",
+    icon = "__KingsTurret-Shields__/graphics/turret-shield-combinator-icon.png",
     icon_size = 32,
     --flags = { "goes-to-quickbar" },
     subgroup = "tool",
