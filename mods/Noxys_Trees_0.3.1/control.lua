@@ -605,11 +605,28 @@ local function get_trees_in_chunk(surface, chunk)
 end
 
 local function deadening_tree(surface, tree)
+	if noxy_trees.dead[tree.name] and noxy_trees.dead[tree.name] == true then
+		tree.die()
+		global.killedcount = global.killedcount + 1
+		return
+	end
+
+	-- Remove tree if a player entity is near it instead of spawning a dead tree.
+	local rp = config.minimum_distance_to_player_entities
+	if rp > 0 then
+		for _, force in pairs(game.forces) do
+			if #force.players > 0 then
+				if surface.count_entities_filtered{position = tree.position, radius = rp, force = force, limit = 1} > 0 then
+					tree.die()
+					global.deadedcount = global.deadedcount + 1
+					return
+				end
+			end
+		end
+	end
+
 	if noxy_trees.dead[tree.name] then
-		if noxy_trees.dead[tree.name] == true then
-			tree.die()
-			global.killedcount = global.killedcount + 1
-		else
+		if noxy_trees.dead[tree.name] ~= true then
 			surface.create_entity{name = noxy_trees.dead[tree.name], position = tree.position}
 			tree.die()
 			global.deadedcount = global.deadedcount + 1
