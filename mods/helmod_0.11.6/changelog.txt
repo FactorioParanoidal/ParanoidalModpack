@@ -1,0 +1,705 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.11.6
+Date: 2020-09-14
+  Features:
+    - Added rich text tool
+  Changes:
+    - changed fake helmod recipes are now in helmod group (for selector)
+---------------------------------------------------------------------------------------------------
+Version: 0.11.5
+Date: 2020-09-11
+  Bugfixes:
+    - fixed bug model error
+---------------------------------------------------------------------------------------------------
+Version: 0.11.4
+Date: 2020-09-11
+  Changes:
+    - changed translate loop generator (for selector)
+    - changed list loop generator (for selector)
+  Bugfixes:
+    - fixed bug by ingredient mode
+    - fixed main panel close button
+---------------------------------------------------------------------------------------------------
+Version: 0.11.3
+Date: 2020-09-06
+  Bugfixes:
+    - fixed remove new runtime cache that create few empty model
+---------------------------------------------------------------------------------------------------
+Version: 0.11.2
+Date: 2020-09-06
+  Bugfixes:
+    - fixed close form on the main panel
+    - fixed error on tooltip with logistic
+    - fixed wrong fuel value on tooltip
+    - fixed mining-drill speed
+---------------------------------------------------------------------------------------------------
+Version: 0.11.1
+Date: 2020-08-30
+  Changes:
+    - added new option for logistic info row
+    - added beacon config info in the row
+  Bugfixes:
+    - fixed lower value in simplex solver cause bad value
+---------------------------------------------------------------------------------------------------
+Version: 0.11.0
+Date: 2020-08-26
+  Changes:
+    - changed version to Factorio 1.0.0
+    - added preference to sort product
+  Bugfixes:
+    - fixed wrong value in the logistic info for pipe
+    - fixed bug in properties panel
+---------------------------------------------------------------------------------------------------
+Version: 0.10.25
+Date: 30. 06. 2020
+  Bugfixes:
+    - fixed error when buiding info tooltip have a lot of row
+    - fixed error in properties panel
+---------------------------------------------------------------------------------------------------
+Version: 0.10.24
+Date: 13. 06. 2020
+  Changes:
+    - added optionnal buiding info
+    - added Set or Unset linked intermediate product on linked block (click with ctrl or shift on output product)
+  Bugfixes:
+    - fixed error when add technology recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.10.23
+Date: 31. 05. 2020
+  Changes:
+    - added fuel info in tooltip recipe tool
+  Bugfixes:
+    - fixed apply fuel propagation and default
+    - fixed bug with beacon default
+    - fixed rocket recipe allow productivity modules
+---------------------------------------------------------------------------------------------------
+Version: 0.10.22
+Date: 26. 05. 2020
+  Changes:
+    - rollback on computing recipe with same product as ingredient
+  Bugfixes:
+    - fixed bug with properties and prototype filers panels
+    - fixed icon sheets use the width of main panel
+    - fixed translation problem when Real Name setting is On
+---------------------------------------------------------------------------------------------------
+Version: 0.10.21
+Date: 24. 05. 2020
+  Changes:
+    - added base productivity machine consideration
+    - added rocket recipes
+    - added gui list tab in admin panel
+    - added mod list tab in admin panel
+  Bugfixes:
+    - fixed matrix solver input data
+    - fixed recipe count < 0, set count at 0
+    - fixed front panel when reopen
+    - fixed energy cost on pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.10.20
+Date: 17. 05. 2020
+  Changes:
+    - added Set or Unset master or exclude product (click with ctrl or shift on product)
+    - added add or remove max module with crtl key
+  Bugfixes:
+    - fixed critical error: 'polution' (a nil value)
+---------------------------------------------------------------------------------------------------
+Version: 0.10.19
+Date: 09. 05. 2020
+  Bugfixes:
+    - fixed critical error: 'effects' (a nil value)
+---------------------------------------------------------------------------------------------------
+Version: 0.10.18
+Date: 09. 05. 2020
+  Changes:
+    - added fluid information tooltip
+  Bugfixes:
+    - fixed fluid consumption
+    - fixed value near zero in the solver (epsilon)
+---------------------------------------------------------------------------------------------------
+Version: 0.10.17
+Date: 02. 05. 2020
+  Changes:
+    - added information when mod cap a value for factory
+  Bugfixes:
+    - fixed error on rounded value
+    - fixed fuel selection in recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.10.16
+Date: 01. 05. 2020
+  Changes:
+    - added UI glue factor offset (see preferences)
+  Bugfixes:
+    - fixed fluid energy calculation
+    - fixed UI glue
+    - fixed Hotkey type
+---------------------------------------------------------------------------------------------------
+Version: 0.10.15
+Date: 13. 04. 2020
+  Changes:
+    - added Done tag in pin panel
+    - added UI auto close (see preferences)
+    - added UI glue (see preferences)
+  Bugfixes:
+    - fixed error with offshore-pump
+---------------------------------------------------------------------------------------------------
+Version: 0.10.14
+Date: 11. 04. 2020
+  Changes:
+    - added hotkey to open/close Recipe Explorer
+  Bugfixes:
+    - fixed limit values in pin panel
+    - fixed error in Production Block Panel
+---------------------------------------------------------------------------------------------------
+Version: 0.10.13
+Date: 10. 04. 2020
+  Changes:
+    - changed max per bloc by assembler limitation
+    - changed beacon ratio, ax+b where x is factory number
+    - added some unittest
+    - added recipe filter for player crafting
+    - updated help
+  Bugfixes:
+    - fixed void energy source
+    - fixed pause in MP on saved game with actived auto-pause
+    - fixed next_event in MP
+---------------------------------------------------------------------------------------------------
+Version: 0.10.12
+Date: 26. 03. 2020
+  Bugfixes:
+    - fixed computing by factory
+    - fixed power calculation
+---------------------------------------------------------------------------------------------------
+Version: 0.10.11
+Date: 19. 03. 2020
+  Changes:
+    - modified computing by factory
+    - modified solver button by switch
+  Bugfixes:
+    - fixed panel headers
+    - fixed debug tooltip
+---------------------------------------------------------------------------------------------------
+Version: 0.10.10
+Date: 15. 03. 2020
+  Changes:
+    - added burnt in energy recipe
+    - removed obselete debug options (replaced by factorio mod debug)
+    - changed display module in edit recipe
+    - removed hidden module in selector
+    - modified solver class
+  Bugfixes:
+    - fixed power calculation
+    - fixed void recipe when used by factory
+    - fixed slower module selector
+---------------------------------------------------------------------------------------------------
+Version: 0.10.9
+Date: 29. 02. 2020
+  Changes:
+    - added a debug panel when debug is activated
+    - removed command ResetCaches (use administration panel)
+  Bugfixes:
+    - fixed fluid consumption
+    - fixed arithemtic error on pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.10.8
+Date: 25. 02. 2020
+  Bugfixes:
+    - fixed energy source in recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.10.7
+Date: 25. 02. 2020
+  Bugfixes:
+    - fixed energy source in recipe
+    - fixed crash new game
+---------------------------------------------------------------------------------------------------
+Version: 0.10.6
+Date: 25. 02. 2020
+  Changes:
+    - added a new block for energy consumption
+    - added all energy source prototypes
+    - removed energy tab
+    - modified property tab
+    - changed fluid recipe, now there are hidden except water and steam
+    - removed ingredient for ressource recipes and water recipe
+  Bugfixes:
+    - fixed width internal panel of edit recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.10.5
+Date: 17. 02. 2020
+  Bugfixes:
+    - fixed a bug in RecipePrototype
+    - fixed cap negative productivity
+    - fixed iteration end on bluiding user cache
+    - fixed filter on recipe selector
+---------------------------------------------------------------------------------------------------
+Version: 0.10.4
+Date: 16. 02. 2020
+  Changes:
+    - generate user cache on several tick
+    - added error if recursive event 6000
+    - added fluid fuel for factory
+    - change display module of factory
+    - added response on ENTER in the filter input of selector
+  Bugfixes:
+    - fixed recipe not appear in recipe selector when researched
+    - fixed some bug in properties tab
+    - fixed generate user cache when auto pause is activate
+    - fixed crash on new game
+---------------------------------------------------------------------------------------------------
+Version: 0.10.3
+Date: 10. 02. 2020
+  Changes:
+    - generate cache on game initialisation
+    - changed admin panel, but not need use
+    - changed admin panel, now can delete cache by panel
+    - added few tick to generate recipe panel
+  Bugfixes:
+    - fixed switch contain or equal in recipe selector
+---------------------------------------------------------------------------------------------------
+Version: 0.10.2
+Date: 28. 01. 2020
+  Features:
+    - Added inserter in logistic information
+  Bugfixes:
+    - fixed crafting-handonly recipe, player replaced by character
+    - fixed tooltip product in the pinned panel
+    - removed cache variable can MP desync
+    - fixed arithemtic error on pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.10.1
+Date: 24. 01. 2020
+  Features:
+    - Added option to activate or disable pollution information
+  Changes:
+    - Changed preference panel
+    - Moved few mod settings in the preference panel
+    - Modify for factorio 0.18
+    - Changed pollution to display value, per minute in tooltip
+  Bugfixes:
+    - fixed copy past block for fuel and module
+    - fixed default factory from mod setting and the default set at 1
+---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+Date: 22. 01. 2020
+  Changes:
+    - Modify for factorio 0.18
+  Bugfixes:
+    - fixed open selector in properties tab
+---------------------------------------------------------------------------------------------------
+Version: 0.9.24
+Date: 22. 01. 2020
+  Features:
+    - Added pollution information
+    - Added recipe explorer
+  Changes:
+    - Changed all selector variable to global
+    - Changed uri of button element
+  Bugfixes:
+    - Fixed fuel for factory default
+---------------------------------------------------------------------------------------------------
+Version: 0.9.23
+Date: 18. 01. 2020
+  Changes:
+    - Changed pipette tool to bluid a blueprint (machine+recipe+module)
+    - Added button to see summary from pin panel
+---------------------------------------------------------------------------------------------------
+Version: 0.9.22
+Date: 16. 01. 2020
+  Features:
+    - Added set smart pipette when click factory in pin panel
+  Changes:
+    - Added scroll for all choices in the preference
+    - Added user settings: Number of lines for preference
+---------------------------------------------------------------------------------------------------
+Version: 0.9.21
+Date: 05. 01. 2020
+  Changes:
+    - Added scroll for module selector
+    - Changed collision mask for prototype filter tab
+    - Updated Russian locale (by Astorin)
+  Bugfixes:
+    - Fixed help text display
+    - Fixed some tooltip
+---------------------------------------------------------------------------------------------------
+Version: 0.9.20
+Date: 02. 01. 2020
+  Features:
+    - Added logistic preference
+    - Added logistic in element tooltip
+  Changes:
+    - Removed container selector
+  Bugfixes:
+    - Fixed automatic input when block using same product/ingredient
+---------------------------------------------------------------------------------------------------
+Version: 0.9.19
+Date: 01. 01. 2020
+  Bugfixes:
+    - Fixed some tooltip
+    - Fixed product display
+---------------------------------------------------------------------------------------------------
+Version: 0.9.18
+Date: 30. 12. 2019
+  Features:
+    - Added module selection unit (selector or priority)
+    - Added remove button on preference priority
+    - Added summary for block (icon near icon for pin panel)
+  Changes:
+    - Changed caches use global data
+    - Changed some tooltip
+  Bugfixes:
+    - Fixed power of sub-block
+    - Fixed technology recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.9.17
+Date: 24. 11. 2019
+  Bugfixes:
+    - Fixed configuration limit of priority module
+    - Fixed error in matrix solver
+---------------------------------------------------------------------------------------------------
+Version: 0.9.16
+Date: 23. 11. 2019
+  Bugfixes:
+    - Fixed update model version 0.9.12
+    - Fixed translate for recipe selector
+    - Fixed event on button of input/ouput production line
+---------------------------------------------------------------------------------------------------
+Version: 0.9.15
+Date: 22. 11. 2019
+  Changes:
+    - Updated Russian locale (by Astorin)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.14
+Date: 22. 11. 2019
+  Bugfixes:
+    - Fixed event on pin panel
+    - Fixed error with logger
+---------------------------------------------------------------------------------------------------
+Version: 0.9.13
+Date: 20. 11. 2019
+  Bugfixes:
+    - Fixed computing by factory
+---------------------------------------------------------------------------------------------------
+Version: 0.9.12
+Date: 19. 11. 2019
+  Features:
+    - Added switch to choose product/ingredient block input
+    - Added capability to set all product/ingredient input
+  Changes:
+    - Changed product tooltip
+    - Changed sprite button
+    - Changed classes of UI
+  Bugfixes:
+    - Fixed module limitation on factory
+---------------------------------------------------------------------------------------------------
+Version: 0.9.11
+Date: 27. 10. 2019
+  Changes:
+    - Added voider implementation in normal solver
+    - Changed tooltip by standard tooltip in recipe selector
+  Bugfixes:
+    - Fixed error when recipe is lost after mod update
+---------------------------------------------------------------------------------------------------
+Version: 0.9.10
+Date: 20. 10. 2019
+  Changes:
+    - Added default and propagation beacon settings
+    - Added auto scroll when line move up/down
+    - Changed module table of cell when module count > 4 (on 2 row)
+    - Updated Russian locale (by Astorin)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.9
+Date: 19. 10. 2019
+  Features:
+    - Added default and propagation factory/module
+  Bugfixes:
+    - Fixed UI right click
+---------------------------------------------------------------------------------------------------
+Version: 0.9.8
+Date: 01. 10. 2019
+  Features:
+    - Added auto frozen game (Not for MP game)
+  Bugfixes:
+    - Fixed performance (logging.lua)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.7
+Date: 29. 09. 2019
+  Features:
+    - Added selector search with equal or contain option
+  Bugfixes:
+    - Fixed model compute with catalyst_amount
+    - Fixed build translated string
+    - Fixed icon prototype display
+---------------------------------------------------------------------------------------------------
+Version: 0.9.6
+Date: 21. 09. 2019
+  Changes:
+    - Changed power input in Energy Edition
+    - Removed abstractEdition.lua
+    - Fixed selector search with translated string
+---------------------------------------------------------------------------------------------------
+Version: 0.9.5
+Date: 21. 09. 2019
+  Features:
+    - Added selector search with translated string (your language)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.4
+Date: 18. 09. 2019
+  Bugfixes:
+    - Fixed refresh when container change
+    - Removed event on_research_finished (not need)
+    - Fixed recipe selector (collision name)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.3
+Date: 18. 09. 2019
+  Features:
+    - Restored utility for product edition
+    - Added compare in Propeties Tab
+    - Added comparison in Properties Filter Tab
+  Changes:
+    - Changed class.lua
+    - Changed Event Dispatcher
+    - Changed Class Prototype
+    - Changed Class PrototypeFilter
+    - Changed recipe prototype (resource and fluid)
+    - Added new rule extraction-machine (mining-drill)
+    - Added button in production edition to validate
+    - Removed button in production edition to reset (0 or nil reset)
+  Bugfixes:
+    - Fixed fuel for factory
+    - Fixed pumping speed
+    - Fixed cache selector
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 25. 08. 2019
+  Features:
+    - Added calculator
+  Changes:
+    - Changed some input text with formula
+  Bugfixes:
+    - Fixed download/upload panel
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 25. 08. 2019
+  Features:
+    - Added fuel choose for burner factory
+  Changes:
+    - Changed input text responsive
+    - Changed product edition (formula)
+  Bugfixes:
+    - Fixed tooltip in all locale
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 23. 08. 2019
+  Changes:
+    - Changed UI, now draggable
+    - Changed cache operation
+  Bugfixes:
+    - Fixed module limitation
+---------------------------------------------------------------------------------------------------
+Version: 0.8.18
+Date: 19. 08. 2019
+  Features:
+    - Added production block scroll menu
+    - Added icon in recipe selector tooltip
+  Changes:
+    - Changed function to get fatory list
+    - Removed production block tab in tab menu
+    - Added production % value for matrix solver
+  Bugfixes:
+    - Fixed some UI bug
+    - Fixed debug solver mod
+---------------------------------------------------------------------------------------------------
+Version: 0.8.17
+Date: 16. 08. 2019
+  Bugfixes:
+    - Fixed normal solver error with production
+---------------------------------------------------------------------------------------------------
+Version: 0.8.16
+Date: 16. 08. 2019
+  Features:
+    - Added fuel chemical selector for factory
+    - Added response UI on ingredient for input
+    - Added Prototype Filter Tab to try Prototype Filter
+  Changes:
+    - Changed Normal Solver
+    - Modfied Simplex Solver
+    - Modfied required minimal factorio version 0.17.60
+  Bugfixes:
+    - Fixed event on load
+---------------------------------------------------------------------------------------------------
+Version: 0.8.15
+Date: 11. 08. 2019
+  Features:
+    - Added command /helmod ResetUserUI
+  Changes:
+    - Changed Matrix solver
+  Bugfixes:
+    - Fixed UI error for factory tab (screen height < 850)
+---------------------------------------------------------------------------------------------------
+Version: 0.8.14
+Date: 07. 08. 2019
+  Changes:
+    - Changement Energy icon
+    - Changement some UI arrangement
+  Bugfixes:
+    - Fixed reset caches when other mod release research
+---------------------------------------------------------------------------------------------------
+Version: 0.8.13
+Date: 06. 08. 2019
+  Features:
+    - Added scroll down on add recipe
+    - Added command /helmod ResetCaches
+  Changes:
+    - Fixed some UI arrangement
+  Bugfixes:
+    - Fixed MP desync
+---------------------------------------------------------------------------------------------------
+Version: 0.8.12
+Date: 11. 07. 2019
+  Bugfixes:
+    - Rollback for round value (math.ceil)
+    - Fixed error in pin panel
+---------------------------------------------------------------------------------------------------
+Version: 0.8.11
+Date: 07. 05. 2019
+  Bugfixes:
+    - Fixed MP desynch when open selector
+    - Fixed Model.countList for new game
+---------------------------------------------------------------------------------------------------
+Version: 0.8.10
+Date: 07. 05. 2019
+  Changes:
+    - MP Perform fast
+    - Added close button
+    - Fixed a precision of Format.round
+  Bugfixes:
+    - Fixed some panel event
+---------------------------------------------------------------------------------------------------
+Version: 0.8.9
+Date: 13. 04. 2019
+  Bugfixes:
+    - Fixed number cut off
+    - Fixed pin panel display
+---------------------------------------------------------------------------------------------------
+Version: 0.8.8
+Date: 07. 04. 2019
+  Bugfixes:
+    - Fixed recipe selector filter
+    - Fixed changelog
+---------------------------------------------------------------------------------------------------
+Version: 0.8.7
+Date: 30. 03. 2019
+  Features:
+    - Added changelog
+  Changes:
+    - MP Perform 50% fast
+  Bugfixes:
+    - Fixed index menu
+---------------------------------------------------------------------------------------------------
+Version: 0.8.6
+  Bugfixes:
+    - Fixed pin panel
+    - Fixed remember current production block
+    - Fixed event Computing by Factory
+    - Fixed height data section
+---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+  Bugfixes:
+    - Fixed MP desync
+    - Fixed error pin panel
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+  Changes:
+    - Changed UI
+  Bugfixes:
+    - Fixed MP desync
+    - Fixed production line list size
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+  Bugfixes:
+    - Fixed speed belt
+    - Fixed selector filter
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+  Bugfixes:
+    - fixed file name required
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+  Changes:
+    - Upgrade factorio v0.17
+    - removed mining power
+  Bugfixes:
+    - fixed some panel style
+---------------------------------------------------------------------------------------------------
+Version: 0.7.11
+  Bugfixes:
+    - Fixed error in product edition
+---------------------------------------------------------------------------------------------------
+Version: 0.7.10
+  Changes:
+    - Added flare stack/clarifier consumption recipes
+  Bugfixes:
+    - Fixed show assembly for recipe
+    - Fixed product name for resource recipe
+    - Fixed close panel when change location
+---------------------------------------------------------------------------------------------------
+Version: 0.7.9
+  Changes:
+    - Added support for multiple identical products in recipes
+    - Added support for fluid and coal consuption in mining recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.7.8
+  Changes:
+    - Removed display size choose
+    - Added auto display sizing with scale
+  Bugfixes:
+    - Fixed LuaElectricEnergySourcePrototype::effectivity Removal
+---------------------------------------------------------------------------------------------------
+Version: 0.7.7
+  Features:
+    - Added Rules for production machine list
+  Bugfixes:
+    - Fixed Not Multiplayer Compatible
+    - Fixed module limitation
+---------------------------------------------------------------------------------------------------
+Version: 0.7.6
+  Bugfixes:
+    - Fixed event on checkbox
+---------------------------------------------------------------------------------------------------
+Version: 0.7.5
+  Changes:
+    - Completed french help
+    - Added auto update for pin panel
+  Bugfixes:
+    - Fixed count container with base time
+---------------------------------------------------------------------------------------------------
+Version: 0.7.4
+  Features:
+    - Added belt container
+    - Added tool for product edition
+    - Added partial french help
+  Bugfixes:
+    - Fixed desync (tooltip cache)
+---------------------------------------------------------------------------------------------------
+Version: 0.7.3
+  Features:
+    - Added command
+    - Added close hotkey
+  Changes:
+    - Changed compute model
+    - Removed remote control
+  Bugfixes:
+    - Fixed recipe prototype
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+  Features:
+    - Added matrix solver block (optional)
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+  Features:
+    - Added administration tab
+  Changes:
+    - Updated UI
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+  Changes:
+    - Fixed for v0.16
