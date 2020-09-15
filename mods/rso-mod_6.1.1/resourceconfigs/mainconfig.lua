@@ -82,6 +82,7 @@ require("resourceconfigs.mobilefactory")
 require("resourceconfigs.enchanted")
 require("resourceconfigs.foodindustries")
 require("resourceconfigs.geothermal")
+require("resourceconfigs.zombiesextended")
 -- require("resourceconfigs.yaiom")
 
 function loadResourceConfig()
@@ -435,6 +436,10 @@ function loadResourceConfig()
 	
 	if game.active_mods["geothermalgen"] then
 		fillGeoTermalConfig(config)
+	end
+
+	if game.active_mods["zombiesextended-core"] then
+		fillZombiesExtendedConfig(config)
 	end
 
 	if game.active_mods["yaiom"] then
