@@ -57,18 +57,8 @@ data:extend({
 {
     type = "recipe",
     name = "ober-nuclear-oil",
-    icons = {
-        {
-        icon = "__base__/graphics/icons/fluid/advanced-oil-processing.png",
-        scale = 1,
-		},
-		{
-			icon = "__base__/graphics/icons/fluid/steam.png",
-			scale = 0.5,
-			shift = {9, 9},
-		}
-	},
-	icon_size = 32,	
+    icon = "__OberNuclear__/graphics/nuclear-oil-processing.png",
+	icon_size = 64,	
     category = "oil-processing",
     subgroup = "fluid-recipes",
     energy_required = 5,
