@@ -3,7 +3,7 @@ data:extend({
     type = "int-setting",
     name = "max_night_brightness_percent",
     setting_type = "runtime-global",
-    default_value = 0, -- vanilla value is 15
+    default_value = 15, -- vanilla value
     minimum_value = 0,
     maximum_value = 75,
     order = "nb-a",
@@ -12,7 +12,7 @@ data:extend({
     type = "int-setting",
     name = "min_night_brightness_percent",
     setting_type = "runtime-global",
-    default_value = 0,
+    default_value = 5,
     minimum_value = 0,
     maximum_value = 100,
     order = "nb-b",
