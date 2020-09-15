@@ -1,0 +1,14 @@
+{
+  "name": "ElectricResistance",
+  "version": "1.0.3",
+  "date": "2020-09-07",
+  
+  "title": "Electric Resistance",
+  "description": "Every electric pole needs 1 kW of electric power; UPS-free",
+
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base"],
+  "factorio_version": "1.0"
+}

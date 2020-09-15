@@ -1,0 +1,22 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-09-05
+  Changes:
+    - Fixed issue with damage and ghosts
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-09-05
+  Changes:
+    - Update to 1.0
+    - Fixed issue with deconstruction planer
+    - Added settings value; default is 1 kW
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2020-08-14
+  Changes:
+    - Fixed issue with mined entity without entity
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2020-07-20
+  Changes:
+    - First release
