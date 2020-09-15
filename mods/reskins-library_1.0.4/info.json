@@ -1,0 +1,17 @@
+{
+  "name": "reskins-library",
+  "version": "1.0.4",
+  "factorio_version": "1.0",
+  "title": "Artisanal Reskins: Library",
+  "author": "Kirazy",
+  "contact": "kirazy@live.com",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=51&t=85707",
+  "dependencies": 
+  [	
+    "base >= 1.0.0",
+    "(?) bobassembly",
+    "(?) angelspetrochem",
+    "(?) ShinyBobGFX",
+    "(?) ShinyAngelGFX"
+  ]
+}
