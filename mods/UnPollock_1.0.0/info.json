@@ -1,0 +1,12 @@
+
+{
+  "name": "UnPollock",
+  "version": "1.0.0",
+  "title": "UnPollock",
+  "author": "Loren1350",
+  "contact": "Schmendrick on the Factorio Forums",
+  "homepage": "",
+  "description": "Allows customization of decorative density, for a less cluttered map without barren monotony.",
+  "dependencies": ["base"],
+  "factorio_version": "1.0"
+}
