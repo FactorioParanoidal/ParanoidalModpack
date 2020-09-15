@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.4
+Date: 2020-09-13
+  Changes:
+    - pushed FLib to 0.3.3
+---------------------------------------------------------------------------------------------------
+Version: 1.14.3
+Date: 2020-09-04
+  Bugfixes:
+    - increased TrainLeaves debug log verbosity
+    - fluid deliveries sometimes incorrectly detected incomplete pickup due to lsb differences #230
+---------------------------------------------------------------------------------------------------
+Version: 1.14.2
+Date: 2020-08-30
+  Bugfixes:
+    - disabled auto barreling on fluids used for alert icons #228
+---------------------------------------------------------------------------------------------------
+Version: 1.14.1
+Date: 2020-08-28
+  Bugfixes:
+    - added missing delivery check in TrainArrives
+---------------------------------------------------------------------------------------------------
+Version: 1.14.0
+Date: 2020-08-28
+  Features:
+    - updated to Factorio 1.0
+    - use Factorio alert system for common warnings and errors
+    - added cargo alerts
+---------------------------------------------------------------------------------------------------
 Version: 1.13.10
 Date: 2020-07-28
   Features:
