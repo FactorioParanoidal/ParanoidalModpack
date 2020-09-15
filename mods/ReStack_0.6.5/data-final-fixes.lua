@@ -4,6 +4,8 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
+local table = require('__flib__.table')
+
 ReStack_Items = {}    -- list of item names to apply new stack size
 Launch_Products = {}  -- launch products should be skipped
 
@@ -42,7 +44,8 @@ end
 for _, group in pairs(data.raw) do
   for item_name, stack_data in pairs(ReStack_Items) do
     local item = group[item_name]
-    if item and item.stack_size then
+    if item and item.stack_size
+    and (not item.flags or not table.for_each(item.flags, function(v) return v == "not-stackable" end) ) then
       if ReStack_Items[item_name].stack_size > 0 then
         log("[RS] Setting "..tostring(stack_data.type).."."..tostring(item_name)..".stack_size "..item.stack_size.." -> "..stack_data.stack_size)
         item.stack_size = ReStack_Items[item_name].stack_size

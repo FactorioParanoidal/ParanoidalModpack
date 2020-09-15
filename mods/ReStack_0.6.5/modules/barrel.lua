@@ -5,7 +5,7 @@
 --]]
 
 
-local get_energy_value = require("__flib__.data_util").get_energy_value
+local get_energy_value = require("__flib__.data-util").get_energy_value
 
 -- Barrel stack and capacity
 -- filled barrels are auto generated from fluids in base\data-updates.lua
