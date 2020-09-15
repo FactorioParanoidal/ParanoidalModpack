@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.18.6
+  Bugfixes:
+    - Updated fluid names which were named in the recent petrochem update
+    - Updated the ABS plastic recipe (hydrofluoric acid tweak)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.5
   Bugfixes:
     - Patched a compatibility issue with the wall

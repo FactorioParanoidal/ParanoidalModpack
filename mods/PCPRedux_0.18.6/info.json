@@ -1,10 +1,10 @@
 {
   "name": "PCPRedux",
-  "version": "0.18.5",
-  "factorio_version": "0.18",
+  "version": "0.18.6",
+  "factorio_version": "1.0",
   "title": "PetrochemPlus",
   "author": "Pezzawinkle",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=185&t=40273",
   "description": "More chemicals to make angel's petrochem even more of a hell.",
-  "dependencies": ["angelsrefining >=0.11.6","angelspetrochem >= 0.9.4", "? bobplates >= 0.18.0","? angelsbioprocessing >= 0.7.4","? ShinyIcons >=0.17.0"]
+  "dependencies": ["angelsrefining >=0.11.16","angelspetrochem >= 0.9.14", "? bobplates >= 0.18.0","? angelsbioprocessing >= 0.7.4","? ShinyIcons >=0.17.0"]
 }

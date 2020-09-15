@@ -12,7 +12,7 @@ data:extend({
 		enabled = "false",
 		ingredients ={
 			{type="fluid", name="gas-butadiene", amount=20},
-			{type="fluid", name="gas-styrene", amount=50},
+			{type="fluid", name="liquid-styrene", amount=50},
 			{type="fluid", name="liquid-acrylonitrile", amount=30}
 		},
 		results=
@@ -112,7 +112,7 @@ data:extend({
 		energy_required = 1,
 		enabled = "false",
 		ingredients ={
-			{type="fluid", name="gas-bisphenol-a", amount=10},
+			{type="fluid", name="liquid-bisphenol-a", amount=10},
 			{type="fluid", name="gas-phosgene", amount=10},
 		},
 		results=
@@ -375,7 +375,7 @@ data:extend({
 	enabled = "false",
     ingredients ={
 		{type="fluid", name="gas-formaldehyde", amount=20},
-		{type="fluid", name="gas-phenol", amount=20},
+		{type="fluid", name="liquid-phenol", amount=20},
 	},
 	results={{type="fluid", name="liquid-resin", amount=40}},
 	icons = create_icon("liquid-resin", {

@@ -1,12 +1,12 @@
 if settings.startup["pcp-replace-phenol-oxygen"].value then
-	data.raw.recipe["gas-phenol-catalyst"].ingredients= {
+	data.raw.recipe["liquid-phenol-catalyst"].ingredients= {
 		{type="fluid", name="gas-benzene", amount=100},
 		{type="fluid", name="gas-nitrous-oxide", amount=100},
 		{type="item", name="catalyst-metal-yellow", amount=1},
 	}
 end
-angelsmods.functions.OV.remove_unlock("angels-advanced-chemistry-4", "gas-phenol-catalyst")
-angelsmods.functions.OV.add_unlock("k-angels-advanced-chemistry-5", "gas-phenol-catalyst")
+angelsmods.functions.OV.remove_unlock("angels-advanced-chemistry-4", "liquid-phenol-catalyst")
+angelsmods.functions.OV.add_unlock("k-angels-advanced-chemistry-5", "liquid-phenol-catalyst")
 angelsmods.functions.OV.add_unlock("angels-nitrogen-processing-2", "hydrogen-cyanide-synthesis")
 angelsmods.functions.OV.add_unlock("angels-nitrogen-processing-2", "acetone-cyanohydrin-synthesis")
 angelsmods.functions.OV.add_unlock("angels-advanced-chemistry-4", "catalyst-metal-yellow")
@@ -27,12 +27,14 @@ angelsmods.functions.allow_productivity("liquid-plastic-abs")
 angelsmods.functions.allow_productivity("liquid-plastic-pvc")
 angelsmods.functions.allow_productivity("liquid-plastic-pmma")
 angelsmods.functions.allow_productivity("liquid-plastic-pc")
+--[[fallback require for glass
+require("prototypes.bobs-glass-OV")
 if data.raw.item["glass"] then
 	angelsmods.functions.allow_productivity("pc-glass")
 	angelsmods.functions.allow_productivity("pmma-glass")
 	angelsmods.functions.OV.add_unlock("plastic-pmma", "pmma-glass")
 	angelsmods.functions.OV.add_unlock("plastic-pc", "pc-glass")
-end
+end]]
 if data.raw.item["zinc-ore"] and data.raw.item["gold-ore"] then
 	data.raw.recipe["catalyst-metal-cyan"].ingredients ={
 		{type="item", name="catalyst-metal-carrier", amount=10},
@@ -75,12 +77,12 @@ if data.raw.item["ap-bullet-projectile"] then
 end
 
 if angelsmods.functions.is_special_vanilla() then --revert removal settings
-local unhide_rec= {      
+local unhide_rec= {
   {name = "catalyst-steam-cracking-butane", tech = "oil-steam-cracking-1"},
-  {name = "gas-styrene-catalyst", tech = "angels-advanced-chemistry-2"},
-  {name = "gas-ethylbenzene-catalyst", tech ="angels-advanced-chemistry-2"},
+  {name = "liquid-styrene-catalyst", tech = "angels-advanced-chemistry-2"},
+  {name = "liquid-ethylbenzene-catalyst", tech ="angels-advanced-chemistry-2"},
   {name = "cumene-process", tech = "angels-advanced-chemistry-4"},
-  {name = "gas-bisphenol-a", tech = "angels-advanced-chemistry-4"},
+  {name = "liquid-bisphenol-a", tech = "angels-advanced-chemistry-4"},
   {name = "gas-phosgene", tech = "chlorine-processing-3"},
 }
   for _,rec in pairs(unhide_rec) do
