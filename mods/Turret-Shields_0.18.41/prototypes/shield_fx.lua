@@ -26,7 +26,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	  priority = "high",
 	  animation_speed = 0.05,
 	  scale= 0.26,
-	  filename = "__KingsTurret-Shields__/graphics/shield-effect.png",
+	  filename = "__Turret-Shields__/graphics/shield-effect.png",
 	  flags = { "smoke" }
 	  }
 	},-------------------------------------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	  priority = "high",
 	  animation_speed = 0.05,
 	  scale= 0.32,
-	  filename = "__KingsTurret-Shields__/graphics/shield-effect.png",
+	  filename = "__Turret-Shields__/graphics/shield-effect.png",
 	  flags = { "smoke" }
 	  }
 	},-------------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 	animation =
 		{
 		variation_count = 0,
-		filename = "__KingsTurret-Shields__/graphics/shield-effect-alternate.png",
+		filename = "__Turret-Shields__/graphics/shield-effect-alternate.png",
 		line_length = 9,
 		width = 217,
 		height = 217,
@@ -118,7 +118,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 		{
 			
 	  variation_count = 0,
-	  filename = "__KingsTurret-Shields__/graphics/shield-effect-alternate2.png",
+	  filename = "__Turret-Shields__/graphics/shield-effect-alternate2.png",
 		line_length = 9,
 		width = 217,
 		height = 217,
@@ -155,7 +155,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 		{
 			
 	  variation_count = 0,
-	  filename = "__KingsTurret-Shields__/graphics/shield-effect-alternate.png",
+	  filename = "__Turret-Shields__/graphics/shield-effect-alternate.png",
 		line_length = 9,
 		width = 217,
 		height = 217,
@@ -192,7 +192,7 @@ local neutral_flags = {"not-repairable", "not-blueprintable", "not-deconstructab
 		{
 			
 	  variation_count = 0,
-	  filename = "__KingsTurret-Shields__/graphics/shield-effect-alternate2.png",
+	  filename = "__Turret-Shields__/graphics/shield-effect-alternate2.png",
 		line_length = 9,
 		width = 217,
 		height = 217,
