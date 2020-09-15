@@ -3,7 +3,7 @@
 ----------------
 
 function update_gui_frame(player)
-    frame = player.gui.left["research-progress-frame"]
+    frame = player.gui.top["research-progress-frame"]
 
     if frame then
         frame.destroy()
@@ -25,11 +25,12 @@ function update_gui_frame(player)
     -- Build gui
     --------------
 
-    frame = player.gui.left.add{
+    frame = player.gui.top.add{
         type = "frame",
         caption = {""},
         name = "research-progress-frame",
-        direction = "vertical"
+        direction = "horizontal"
+        -- direction = "vertical"
     }
 
     frame.add{
@@ -40,7 +41,7 @@ end
 
 function refresh_gui()
     for _, player in pairs(game.players) do
-        frame = player.gui.left["research-progress-frame"]
+        frame = player.gui.top["research-progress-frame"]
         if frame then
             frame.destroy()
             update_gui_frame(player)
