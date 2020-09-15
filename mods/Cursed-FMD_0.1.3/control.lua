@@ -58,6 +58,8 @@ function changeEntity(entity1, newSufix)
             if game.entity_prototypes[splitName[1]..";"..newSufix] then
                 local tmpHealth = entity1.health
                 newEnt = entity1.surface.create_entity({name=splitName[1]..";"..newSufix, position=entity1.position, force=entity1.force, direction=entity1.direction, fast_replace=true, spill=false, create_build_effect_smoke=false })
+                rendering.draw_sprite{ sprite = "utility/entity_info_dark_background", target = newEnt, surface = newEnt.surface, only_in_alt_mode = true}
+                rendering.draw_sprite{sprite = "item."..newSufix, target = newEnt, surface = newEnt.surface, only_in_alt_mode = true}
                 newEnt.health = tmpHealth
             end
         end
@@ -103,7 +105,7 @@ function open_gui(player)
         type = "frame",
         name = "cursed-filter-drills-frame",
         direction = "vertical",
-        --style = "dialog_frame"     //don't works with factorio 0.18.34
+        style = "frame"
     }
     spend_frame.force_auto_center()
     
