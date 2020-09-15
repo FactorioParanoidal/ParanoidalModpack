@@ -4,7 +4,7 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local flib = require('__flib__.data_util')
+local flib = require('__flib__.data-util')
 
 local base_loco = data.raw["item-with-entity-data"]["locomotive"]
 base_loco.icon = "__TrainOverhaul__/graphics/icons/locomotive.png"
