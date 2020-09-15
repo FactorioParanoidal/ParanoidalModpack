@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 15. 09. 2020
+  Changes:
+    - Made it so that tree deaths don't plant dead trees near player entities.
+    - Added changelog.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 7. 09. 2020
+  Changes:
+    - RU and FR Translation updates.
+    - Factorio 1.0.0!
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 7. 06. 2020
+  Changes:
+    - Add support for various 0.18 tiles (that may not actually have been fully released yet).
+    - Optimized some of the filtered searches with newer methods.
+    - Added "Minimum distance to degradable tiles" setting.
+    - RU and FR Translation updates.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 16. 05. 2020
+  Changes:
+    - Change locale filename for better integration with Factorio mods localization helper.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 21. 01. 2020
+  Changes:
+    - Update to 0.18.
