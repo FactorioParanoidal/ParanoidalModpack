@@ -1,0 +1,5 @@
+require("prototypes.shortcuts-basic")
+require("prototypes.shortcuts-blueprint")
+require("prototypes.shortcuts-mods")
+require("prototypes.shortcuts-remotes")
+require("prototypes.shortcuts-toggles")
