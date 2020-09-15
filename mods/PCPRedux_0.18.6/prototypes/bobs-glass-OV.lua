@@ -34,4 +34,8 @@ if data.raw.item["glass"] then
       order = "c[glass]-a[pc-glass]",
     },
   })
+  	angelsmods.functions.allow_productivity("pc-glass")
+  	angelsmods.functions.allow_productivity("pmma-glass")
+  	angelsmods.functions.OV.add_unlock("plastic-pmma", "pmma-glass")
+  	angelsmods.functions.OV.add_unlock("plastic-pc", "pc-glass")
 end

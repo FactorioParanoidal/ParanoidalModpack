@@ -225,7 +225,7 @@ data:extend({
      {
 	   {
          type = "unlock-recipe",
-         recipe = "gas-phenol-catalyst"
+         recipe = "liquid-phenol-catalyst"
        },
      },
      unit =
