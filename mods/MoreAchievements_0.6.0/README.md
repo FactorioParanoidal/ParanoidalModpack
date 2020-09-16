@@ -1,0 +1,72 @@
+# More Achievements
+More Achievements is a mod for factorio that adds in a large amount of achievements, ranging from simple progression based ones, to ones that will give hours of challenge, like managing to make a base that launches one rocket per minute.
+
+A full list of all achievements added by the mod:
+
+- A brisk walk: Finish the game in less than 24 hours.
+- Accumulating: Place an accumulator, a device \nthat lets you store power for later use.
+- Alien contact: Kill a biter for the first time.
+- Apprentice metalsmith: Produce 10000 steel plates.
+- Apprentice slayer: Kill 1000 biters.
+- Atom smashing: Build a nuclear reactor for powering your factory.
+- Bitten: Get bitten by a biter. That hurt!
+- Blueprinted: Capture a blueprint of a setup.
+- Buildin' a sentry: Build a gun turret.
+- Bulldozed: Destroy 500 trees by running them over.
+- Can't see 'nuthin: Finish the game without placing a radar (can still craft one though).
+- Castle: Place 1000 walls.
+- Convey your ideas: Have 10,000 transport belts placed in the world at once.
+- Copy and pasted: Duplicate the settings of a machine onto another.
+- Crafting manually is too slow: Craft and place your first assembling machine.
+- Dedication: Research an infinite tech to level 50.
+- Deforestation: 100 thousand trees have been destroyed on this planet.
+- Depleted: Completely deplete a resource tile.
+- Don't panic: Launch your car into space.
+- Drop the bass: Build a programmable speaker. If only Skrillex was here...
+- Ecosystem oriented: Produce a tier 3 efficiency module.
+- Efficient miner: Reach mining productivity 3.
+- Encampment: Place 100 walls.
+- Fortress: Place 500 walls.
+- Friendly fire: Destroy one of your own buildings.
+- Fully automatic: Upgrade your gun to a SMG.
+- Gatekeeping: Place a gate.
+- Gear production 1: Produce 10,000 iron gears.
+- Gear production 2: Produce 1,000,000 iron gears.
+- Gear production 3: Produce 20,000,000 iron gears.
+- Ghosted: Place a ghost entity.
+- Hello world: Talk in chat.
+- Homewrecker: Destroy a biter spawner.
+- If you build it they will destroy it: Lose a building to the enemy.
+- I'm melting: Die to a worm's acid spit.
+- Journeyman metalsmith: Produce 50000 steel plates.
+- Kill it with fire: Build a flamethrower turret.
+- Laser beams: Build a laser turret.
+- Let there be light: 200 Lamps placed in the world.
+- Looted: Pick up an item.
+- Maggots: Upgrade your gun to a rocket launcher.
+- Master metalsmith: Produce 150000 steel plates.
+- Mathematical: Build your first arithmetic combinator.
+- On the road again: Craft and place a car.
+- One rocket per minute: Achieve one rocket launched per minute.
+- Praise the sun: Have 10k solar panels placed at once.
+- Productive member of society: Produce a tier 3 productivity module.
+- Shot down: Lose a logistic or construction robot to the enemy.
+- Slavedriver: Have robots deliver 100k items to you.
+- Slayer of worlds: Kill 25k biters.
+- Speed to the max: Produce a tier 3 speed module.
+- Steampunk: Produce 200 GJ of energy per hour with steam only.
+- Sticky boots: Craft a belt immunity equipment module.
+- Tactical nuke inbound: Craft an atomic bomb. All will feel your wrath.
+- Tango down: Have a turret kill a biter.
+- Terraformer: Destroy a cliff.
+- The essence of discovery: Craft your first science pack.
+- The olden days: Win the game without building any fluid wagons.
+- Thomas Edison: Illuminate your factory with a lamp.
+- Trains are too hard: Win the game without building a train system.
+- Turret creeper: Kill a spawner with a turret.
+- Two rockets per minute: Achieve two rockets launched per min.
+- Unending assault: Trigger 100 attacks by pollution.
+- Wall of guns: Finish the game without building any walls.
+- We didn't start the fire: Upgrade your gun to a flamethrower.
+- Well balanced: Make a blueprint containing 10+ splitters.
+- You forgot something: Launch a rocket without a satellite.
