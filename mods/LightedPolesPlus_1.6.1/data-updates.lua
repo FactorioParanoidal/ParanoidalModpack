@@ -4,26 +4,15 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local flib = require('__flib__.data_util')
+local flib = require('__flib__.data-util')
 
 local light_scale = settings.startup["lepp_light_size_factor"].value
 local light_size_limit = settings.startup["lepp_light_max_size"].value
 local lep_icons_layer = { { icon = "__LightedPolesPlus__/graphics/icons/lighted.png", icon_size = 32, tint = {r=1, g=1, b=1, a=0.85} } }
-
-local pole_entity_blacklist = {
-  -- Bio Industries
-  ["bi-power-to-rail-pole"] = true,
-  ["bi-rail-hidden-power-pole"] = true,
-  -- Tesseract
-  ["CW-ts-power-leech-pole-1"] = true,
-  ["CW-ts-power-leech-pole-2"] = true,
-  ["CW-ts-power-leech-pole-3"] = true,
-  ["CW-ts-power-leech-pole-4"] = true,
-  ["CW-ts-power-source-pole-1"] = true,
-  ["CW-ts-power-source-pole-2"] = true,
-  ["CW-ts-power-source-pole-3"] = true,
-  ["CW-ts-power-source-pole-4"] = true,
-}
+local pole_entity_blacklist = {}
+for name in string.gmatch(settings.startup["lepp_pole_blacklist"].value, '([^, *]+)') do
+  pole_entity_blacklist[name] = true
+end
 
 local alternative_technology = "optics"
 
