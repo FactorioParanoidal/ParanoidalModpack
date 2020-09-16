@@ -839,7 +839,7 @@ data:extend({
             type = "bool-setting",
             name = "rampant-suppress-surface-change-warnings",
             setting_type = "runtime-per-user",
-            default_value = false,
+            default_value = true,
             order = "b[modifier]-b[trigger]",
             per_user = true
         },
