@@ -6,12 +6,25 @@
 -- **will not** work with tables.
 -- @module table
 -- @alias flib_table
--- @usage local table = require('__flib__.table')
+-- @usage local table = require("__flib__.table")
 local flib_table = {}
 
 -- import lua table functions
 for name, func in pairs(table) do
   flib_table[name] = func
+end
+
+--- Shallow copy an array's values into a new array.
+--
+-- This function is optimized specifically for arrays, and should be used in place of @{table.shallow_copy} for arrays.
+-- @tparam array arr
+-- @treturn array The copied array.
+function flib_table.array_copy(arr)
+  local new_arr = {}
+  for i = 1, #arr do
+    new_arr[i] = arr[i]
+  end
+  return new_arr
 end
 
 --- Recursively compare two tables for inner equality.
@@ -99,10 +112,10 @@ end
 --- Call the given function for each item in the table, and abort if the function returns truthy.
 --
 -- Calls `callback(value, key, tbl)` for each item in the table, and immediately ceases iteration if the callback
--- returns a truthy value.
+-- returns truthy.
 -- @tparam table tbl
 -- @tparam function callback Receives `value`, `key`, and `tbl` as parameters.
--- @treturn boolean Whether the callback returned true for any one item, and thus halted iteration.
+-- @treturn boolean Whether the callback returned truthy for any one item, and thus halted iteration.
 -- @usage
 -- local tbl = {1, 2, 3, 4, 5}
 -- -- run a function for each item (identical to a standard FOR loop)
@@ -134,8 +147,8 @@ end
 -- return instead.
 ---@tparam table tbl The table to iterate over.
 ---@tparam any|nil from_k The key to start iteration at, or `nil` to start at the beginning of `tbl`. If the key does
--- not exist in `tbl`, it will be treated as `nil`.
----@tparam uint n The number of items to iterate.
+-- not exist in `tbl`, it will be treated as `nil`, _unless_ a custom `_next` function is used.
+---@tparam number n The number of items to iterate.
 ---@tparam function callback Receives `value` and `key` as parameters.
 ---@tparam[opt] function _next A custom `next()` function. If not provided, the default `next()` will be used.
 ---@treturn any|nil Where the iteration ended. Can be any valid table key, or `nil` if the end of `tbl` was reached.
@@ -154,14 +167,16 @@ end
 --   global.from_k = table.for_n_of(extremely_large_table, global.from_k, 10, function(v) game.print(v) end)
 -- end)
 function flib_table.for_n_of(tbl, from_k, n, callback, _next)
-  -- allow non-default `next` function
-  -- use `next` if unspecified
-  if not _next then _next = next end
-
-  -- verify start key exists, else start from scratch
-  if from_k and not tbl[from_k] then
-    from_k = nil
+  -- bypass if a custom `next` function was provided
+  if not _next then
+    -- verify start key exists, else start from scratch
+    if from_k and not tbl[from_k] then
+      from_k = nil
+    end
+    -- use default `next`
+    _next = next
   end
+
   local delete
   local prev
   local result = {}
@@ -256,6 +271,40 @@ function flib_table.map(tbl, mapper)
   return output
 end
 
+local function default_comp(a, b) return a < b end
+--- Partially sort an array.
+--
+-- This function utilitizes [insertion sort](https://en.wikipedia.org/wiki/Insertion_sort), which is _extremely_
+-- inefficient with large data sets. However, you can spread the sorting over multiple ticks, reducing the performance
+-- impact. Only use this function if `table.sort` is too slow.
+-- @tparam array arr
+-- @tparam number from_index The index to start iteration at (inclusive). Pass `nil` or a number less than `2` to begin at
+-- the start of the array.
+-- @tparam number iterations The number of iterations to perform. Higher is more performance-heavy. This number should be
+-- adjusted based on the performance impact of the custom `comp` function (if any) and the size of the array.
+-- @tparam[opt] function comp A comparison function for sorting. Must return truthy if `a < b`.
+-- @treturn number|nil The index to start the next iteration at, or `nil` if the end was reached.
+function flib_table.partial_sort(arr, from_index, iterations, comp)
+  comp = comp or default_comp
+  local start_index = (from_index and from_index > 2) and from_index or 2
+  local end_index = start_index + (iterations - 1)
+
+  for j = start_index, end_index do
+    local key = arr[j]
+    if not key then return nil end
+    local i = j - 1
+
+    while i > 0 and comp(key, arr[i]) do
+      arr[i + 1] = arr[i]
+      i = i - 1
+    end
+
+    arr[i + 1] = key
+  end
+
+  return end_index + 1
+end
+
 --- "Reduce" an array's values into a single output value, using the results of a reducer function.
 --
 -- Calls `reducer(accumulator, value, index)` on each element in the array, returning a single accumulated output value.
@@ -284,7 +333,7 @@ end
 --
 -- Does not copy metatables.
 -- @tparam table tbl
--- @tparam boolean use_rawset Use rawset to set the values (ignores .__index metamethod).
+-- @tparam boolean use_rawset Use rawset to set the values (ignores metamethods).
 -- @treturn table The copied table.
 function flib_table.shallow_copy(tbl, use_rawset)
   local output = {}
@@ -303,7 +352,7 @@ end
 --
 -- Uses Factorio's built-in `table_size` function.
 -- @tparam table tbl
--- @treturn uint Size of the table.
+-- @treturn number Size of the table.
 flib_table.size = table_size
 
 --- Retrieve a shallow copy of a portion of an array, selected from `start` to `end` inclusive.

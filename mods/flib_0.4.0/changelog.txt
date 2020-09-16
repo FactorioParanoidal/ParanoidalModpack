@@ -1,4 +1,37 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-09-13
+  Features:
+    - Added `direction.to_vector_2d`
+    - Additional arguments passed to `migration.run` will be passed on to the version functions within the migrations table
+    - Added `math` module
+  Bugfixes:
+    - Fixed that using `gui.init()` to reset all filters did not update lookup tables
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2020-08-31
+  Features:
+    - Added a map setting to adjust translation speed (avoid multiplayer drops for those with slow internet speeds)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2020-08-30
+  Features:
+    - Added `table.array_copy()`
+    - Added `table.partial_sort()` for sorting an array over multiple ticks
+  Changes:
+    - Passing a custom `next` function to `table.for_n_of()` will bypass the key existence check
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2020-08-24
+  Features:
+    - Added event.register_on_entity_destroyed()
+    - Added flib_naked_scroll_pane_no_padding GUI style
+  Changes:
+    - Updated to Factorio 1.0
+    - Renamed data_util to data-util and reverse_defines to reverse-defines
+      - The old paths will still work until v0.4.0, but will print deprecation warnings
+    - Removed vertically_stretchable from the flib_naked_scroll_pane GUI style to fix zero-height issue in non-fixed-height containers
+---------------------------------------------------------------------------------------------------
 Version: 0.3.0
 Date: 2020-08-11
   Features:

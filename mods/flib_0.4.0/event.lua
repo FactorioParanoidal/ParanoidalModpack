@@ -8,6 +8,7 @@
 -- @module event
 -- @alias flib_event
 -- @usage local event = require("__flib__.event")
+-- @see event.lua
 local flib_event = {}
 
 -- generate syntax shortcuts
@@ -21,55 +22,53 @@ end
 -- @section
 
 --- Register or deregister a handler to be run during mod init.
--- @tparam function handler The handler to register, or `nil` to deregister the registered handler.
+-- @function on_init
+-- @tparam function|nil handler The handler to register, or `nil` to deregister the registered handler.
 -- @usage
 -- -- register a handler to run during mod init
 -- event.on_init(function() log("on_init") end)
 -- -- deregister the registered handler, if one exists
 -- event.on_init(nil)
-function flib_event.on_init(handler)
-  return script.on_init(handler)
-end
+flib_event.on_init = script.on_init
 
 --- Register or deregister a handler to be run during mod load.
--- @tparam function handler The handler to register, or `nil` to deregister the registered handler.
+-- @function on_load
+-- @tparam function|nil handler The handler to register, or `nil` to deregister the registered handler.
 -- @usage
 -- -- register a handler to run during mod load
 -- event.on_load(function() log("on_load") end)
 -- -- deregister the registered handler, if one exists
 -- event.on_load(nil)
-function flib_event.on_load(handler)
-  return script.on_load(handler)
-end
+flib_event.on_load = script.on_load
 
 --- Register or deregister a handler to be run when mod configuration changes.
--- @tparam function handler The handler to register, or `nil` to deregister the registered handler.
+-- @function on_configuration_changed
+-- @tparam function|nil handler The handler to register, or `nil` to deregister the registered handler.
 -- @usage
 -- -- register a handler to run when mod configuration changes
 -- event.on_configuration_changed(function() log("on_configuration_changed") end)
 -- -- deregister the registered handler, if one exists
 -- event.on_configuration_changed(nil)
-function flib_event.on_configuration_changed(handler)
-  return script.on_configuration_changed(handler)
-end
+flib_event.on_configuration_changed = script.on_configuration_changed
 
 --- Register or deregister a handler to run every N ticks.
--- @tparam uint nth_tick
--- @tparam function handler The handler to register, or `nil` to deregister the registered handler.
+-- @function on_nth_tick
+-- @tparam number nth_tick
+-- @tparam function|nil handler The handler to register, or `nil` to deregister the registered handler.
 -- @usage
 -- -- register a handler to run every 30 ticks
 -- event.on_nth_tick(30, function(e) log("30th tick!") end)
 -- -- deregister the registered handler, if one exists
 -- event.on_nth_tick(30, nil)
-function flib_event.on_nth_tick(nth_tick, handler)
-  return script.on_nth_tick(nth_tick, handler)
-end
+flib_event.on_nth_tick = script.on_nth_tick
 
 -- TODO Nexela link EventFilters to https://lua-api.factorio.com/latest/Event-Filters.html
 
 --- Register or deregister a handler to or from an event or group of events.
+-- Unlike `script.on_event`, `event.register` supports adding compatible filters to multiple events at once.
+-- Additionally, `event.register` supports registering to custom-inputs and other events simultaneously.
 -- @tparam EventId|EventId[] ids
--- @tparam function handler The handler to register, or `nil` to deregister the registered handler.
+-- @tparam function|nil handler The handler to register, or `nil` to deregister the registered handler.
 -- @tparam[opt] EventFilters filters
 -- @usage
 -- -- register a handler to a defines.events event that supports filters
@@ -86,8 +85,8 @@ function flib_event.register(ids, handler, filters)
   if type(ids) ~= "table" then
     ids = {ids}
   end
-  for i=1,#ids do
-    -- dumb workaround - the game doesn't like you passing filters, even if it's nil
+  for i = 1, #ids do
+    -- the game doesn't like you passing filters to events that don't support them, even if they're `nil`
     if filters then
       script.on_event(ids[i], handler, filters)
     else
@@ -97,40 +96,52 @@ function flib_event.register(ids, handler, filters)
   return
 end
 
+--- Register an entity to raise `on_entity_destroyed` when it's destroyed.
+-- @function register_on_entity_destroyed
+-- Once an entity is registered it's registered forever (until it's destroyed) and persists through save/load.
+--
+-- Registered is global across all mods: once an entity is registered the event will be fired for all mods when its
+-- destroyed.
+--
+-- An entity registered multiple times will only fire the event once and gives back the same registration number.
+--
+-- Depending on when a given entity is destroyed on_entity_destroyed will be fired at the end of the current tick or end
+-- of the next tick.
+-- @tparam LuaEntity entity The entity to register.
+-- @treturn number The registration number.
+flib_event.register_on_entity_destroyed = script.register_on_entity_destroyed
+
 --- Generate a new, unique event ID.
--- @treturn uint
+-- @function generate_id
+-- @treturn number
 -- @usage
 -- -- generate a new event ID
 -- local my_event = event.generate_id()
 -- -- raise that event with custom parameters
 -- event.raise(my_event, {whatever_you_want=true, ...})
-function flib_event.generate_id()
-  return script.generate_event_name()
-end
+flib_event.generate_id = script.generate_event_name
 
 --- Retrieve the handler for an event, if one exists.
+-- @function get_handler
 -- @tparam EventId id
 -- @treturn function The registered handler, or `nil` if one isn't registered.
-function flib_event.get_handler(id)
-  return script.get_event_handler(id)
-end
+flib_event.get_handler =  script.get_event_handler
 
 -- TODO Nexela link EventData to https://lua-api.factorio.com/latest/events.html
 
 --- Raise an event as if it were actually called.
+-- @function raise
+-- This will only work for events that actually support being raised, and custom mod events.
 -- @tparam EventId id
--- @tparam EventData event_data The event data that will be passed to the handlers.
+-- @tparam table event_data The event data that will be passed to the handlers.
 -- @usage
 -- event.raise(defines.events.on_gui_click, {player_index=e.player_index, element=my_button, ...})
-function flib_event.raise(id, event_data)
-  return script.raise_event(id, event_data)
-end
+flib_event.raise = script.raise_event
 
 --- Retrieve the mod event order.
+-- @function get_order
 -- @treturn string
-function flib_event.get_order()
-  return script.get_event_order()
-end
+flib_event.get_order = script.get_event_order
 
 --- Set the filters for the given event(s).
 -- @tparam EventId|EventId[] ids
@@ -152,18 +163,17 @@ function flib_event.set_filters(ids, filters)
   if type(ids) ~= "table" then
     ids = {ids}
   end
-  for i=1,#ids do
+  for i = 1, #ids do
     script.set_event_filter(ids[i], filters)
   end
   return
 end
 
 --- Retrieve the filters for the given event.
+-- @function get_filters
 -- @tparam EventId id
 -- @treturn EventFilters filters The filters, or `nil` if there are none defined.
-function flib_event.get_filters(id)
-  return script.get_event_filter(id)
-end
+flib_event.get_filter = script.get_event_filter
 
 --- Concepts
 -- @section
@@ -172,7 +182,7 @@ end
 -- One of the following:
 -- <ul>
 --   <li>A member of @{defines.events}.</li>
---   <li>A positive @{uint} corresponding to a custom event ID.</li>
+--   <li>A positive @{number} corresponding to a custom event ID.</li>
 --   <li>A @{string} corresponding to a custom-input name.</li>
 -- </ul>
 
