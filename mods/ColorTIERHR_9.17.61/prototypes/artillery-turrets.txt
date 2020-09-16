@@ -1,1 +1,0 @@
-replaceACCUMULATORS("artillery-turret", "1")

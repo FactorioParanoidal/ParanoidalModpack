@@ -1,5 +1,0 @@
-replaceRADARS("radar","1")
-replaceRADARS("radar-2","2")
-replaceRADARS("radar-3","3")
-replaceRADARS("radar-4","4")
-replaceRADARS("radar-5","5")
