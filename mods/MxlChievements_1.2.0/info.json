@@ -1,0 +1,11 @@
+{
+    "name": "MxlChievements",
+    "version": "1.2.0",
+    "title": "MxlChievements",
+    "author": "Mxlppxl",
+	"contact": "Mxlppxl@hotmail.com",
+    "homepage": "",
+    "factorio_version": "1.0",
+	"dependencies": ["base"],
+    "description": "Adds even more achievements for players that are as crazy as I am."
+}
