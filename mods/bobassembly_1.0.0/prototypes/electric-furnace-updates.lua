@@ -1,4 +1,4 @@
-if settings.startup["bobmods-assembly-furnaces"].value == true then
+if settings.startup["bobmods-assembly-furnaces"].value == true and data.raw.furnace["electric-furnace"] then
 
 data.raw.furnace["electric-furnace"].next_upgrade = "electric-furnace-2"
 data.raw.furnace["electric-furnace-2"].next_upgrade = "electric-furnace-3"

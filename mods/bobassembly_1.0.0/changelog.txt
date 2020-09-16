@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 16. 08. 2020
+  Changes:
+    - Added a check if data.raw.furnace["electric-furnace"] exists to the extra electric furnaces files.
+    - Added an ingredient limit option to burner and steam assembling machines.
+    - Check to make sure fluid-mixing/chemical-furnace exists before trying to add an ingredient limit to them.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.7
 Date: 29. 06. 2020
   Bugfixes:
