@@ -85,9 +85,8 @@ data:extend(
   {
     type = "recipe",
     name = "bob-oil-processing",
-    icon = "__base__/graphics/icons/fluid/basic-oil-processing.png",
+    icon = "__bobelectronics__/graphics/icons/bob-oil-processing.png",
     icon_size = 64,
-    icon_mipmaps = 4,
     subgroup = "fluid-recipes",
     order = "a[oil-processing]-c[bob-oil-processing]",
     category = "oil-processing",

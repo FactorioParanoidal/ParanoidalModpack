@@ -368,7 +368,7 @@ data:extend(
     enabled = false,
     ingredients =
     {
-      {"wooden-board", 2}, --DrD wood, 1
+      {"wood", 1},
       {"resin", 1},
     },
     result = "phenolic-board",
@@ -454,11 +454,11 @@ data:extend(
     category = "electronics-machine",
     energy_required = 5,
     enabled = false,
-    ingredients = --DrD
+    ingredients =
     {
-      {"phenolic-board", 2},
-      {"copper-plate", 4},
-      {type="fluid", name="ferric-chloride-solution", amount=10}
+      {"phenolic-board", 1},
+      {"copper-plate", 1},
+      {type="fluid", name="ferric-chloride-solution", amount=5}
     },
     result = "circuit-board",
     allow_decomposition = false
@@ -485,11 +485,11 @@ data:extend(
     category = "electronics-machine",
     energy_required = 10,
     enabled = false,
-    ingredients = --DrD
+    ingredients =
     {
-      {"fibreglass-board", 2},
-      {"copper-plate", 5},
-      {type="fluid", name="ferric-chloride-solution", amount=15}
+      {"fibreglass-board", 1},
+      {"copper-plate", 1},
+      {type="fluid", name="ferric-chloride-solution", amount=5}
     },
     result = "superior-circuit-board",
     allow_decomposition = false
@@ -646,7 +646,7 @@ data:extend(
       ingredients =
       {
         {"superior-circuit-board", 1},
-        --{"basic-electronic-components", 2},  --DrD
+        {"basic-electronic-components", 2},
         {"electronic-components", 4},
         {"intergrated-electronics", 2},
       },
@@ -660,7 +660,7 @@ data:extend(
       ingredients =
       {
         {"superior-circuit-board", 1},
-        --{"basic-electronic-components", 3},  --DrD
+        {"basic-electronic-components", 3},
         {"electronic-components", 6},
         {"intergrated-electronics", 3},
       },
@@ -696,7 +696,7 @@ data:extend(
       ingredients =
       {
         {"multi-layer-circuit-board", 1},
-        --{"basic-electronic-components", 1},  --DrD
+        {"basic-electronic-components", 1},
         {"electronic-components", 2},
         {"intergrated-electronics", 4},
         {"processing-electronics", 1},
@@ -711,7 +711,7 @@ data:extend(
       ingredients =
       {
         {"multi-layer-circuit-board", 1},
-        --{"basic-electronic-components", 3},  --DrD
+        {"basic-electronic-components", 3},
         {"electronic-components", 3},
         {"intergrated-electronics", 6},
         {"processing-electronics", 3},
