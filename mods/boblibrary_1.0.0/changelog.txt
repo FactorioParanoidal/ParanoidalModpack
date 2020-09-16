@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 15. 08. 2020
+  Features:
+    - Added function bobmods.lib.recipe.clear_ingredients(recipe) that deletes all incredients from a recipe
+    - Added function bobmods.lib.recipe.add_ingredients(recipe, ingredients) that adds multiple ingredients to a recipe with a single instruction
+    - Added function bobmods.lib.recipe.set_ingredients(recipe, ingredients), which calls the clear then add to change the recipe to the specified array of ingredients.
+    - Streamlined function bobmods.lib.recipe.replace_ingredient(recipe, old, new) a bit to remove some of the duplicated code.
+    - Added function bobmods.lib.tech.clear_science_packs(technology) which deletes all science packs from a technology
+    - Added function bobmods.lib.tech.add_science_packs(technology, science_packs) which adds multiple science packs to a technology with a single instruction
+    - Added function bobmods.lib.tech.set_science_packs(technology, science_packs), which calls the clear then add to change the science packs to the specified array.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.10
+Date: 16. 07. 2020
+  Changes:
+    - Added a few more safety checks to Technology prerequisites.
+    - Technology functions now take difficulty into account.
+  Features:
+    - Added function versions for editing a specific difficulty.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.9
 Date: 20. 04. 2020
   Changes:

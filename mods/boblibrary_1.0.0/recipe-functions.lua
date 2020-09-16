@@ -1,6 +1,43 @@
 if not bobmods.lib.recipe then bobmods.lib.recipe = {} end
 
 
+local function quantity_convertion(amount, old, new)
+  if bobmods.lib.item.get_type(old) == "fluid" and bobmods.lib.item.get_type(new) == "item" then
+    amount = math.ceil(amount / 10)
+  end
+  if bobmods.lib.item.get_type(old) == "item" and bobmods.lib.item.get_type(new) == "fluid" then
+    amount = amount * 10
+  end
+  return amount
+end
+
+local function get_old_quantity(ingredients, old)
+  local amount = 0
+  for i, ingredient in pairs(ingredients) do
+    local item = bobmods.lib.item.ingredient_simple(ingredient)
+    if item then
+      if item.name == old then
+        amount = item.amount + amount
+      end
+    else
+      log("recipe " ..  recipe .. " contains an invalid ingredient")
+    end
+  end
+  return amount
+end
+
+local function replace_ingredient(ingredients, old, new)
+  local amount = get_old_quantity(ingredients, old)
+  if amount > 0 then
+    amount = quantity_convertion(amount, old, new)
+    bobmods.lib.item.remove(ingredients, old)
+    bobmods.lib.item.add(ingredients, {new, amount})
+    return true
+  end
+  return false
+end
+
+
 function bobmods.lib.recipe.replace_ingredient(recipe, old, new)
   if
     type(recipe) == "string" and
@@ -10,81 +47,22 @@ function bobmods.lib.recipe.replace_ingredient(recipe, old, new)
 --    bobmods.lib.item.get_type(old) and
     bobmods.lib.item.get_type(new)
   then
-
-    local amount = 0
-    if data.raw.recipe[recipe].ingredients and not data.raw.recipe[recipe].normal and not data.raw.recipe[recipe].expensive then
-      for i, ingredient in pairs(data.raw.recipe[recipe].ingredients) do
-        local item = bobmods.lib.item.ingredient_simple(ingredient)
-        if item then
-          if item.name == old then
-            amount = item.amount + amount
-          end
-        else
-          log("recipe " ..  recipe .. " contains an invalid ingredient")
-        end
-      end
-      if amount > 0 then
-        if bobmods.lib.item.get_type(old) == "fluid" and bobmods.lib.item.get_type(new) == "item" then
-          amount = math.ceil(amount / 10)
-        end
-        if bobmods.lib.item.get_type(old) == "item" and bobmods.lib.item.get_type(new) == "fluid" then
-          amount = amount * 10
-        end
-        bobmods.lib.recipe.remove_ingredient(recipe, old)
-        bobmods.lib.recipe.add_ingredient(recipe, {new, amount})
-        return true
-      else
-        return false
-      end
-    end
-
     local retval = false
-    if data.raw.recipe[recipe].normal then
-      amount = 0
-      for i, ingredient in pairs(data.raw.recipe[recipe].normal.ingredients) do
-        local item = bobmods.lib.item.ingredient_simple(ingredient)
-        if item then
-          if item.name == old then
-            amount = item.amount + amount
-          end
-        else
-          log("recipe " ..  recipe .. " contains an invalid ingredient")
-        end
-      end
-      if amount > 0 then
-        if bobmods.lib.item.get_type(old) == "fluid" and bobmods.lib.item.get_type(new) == "item" then
-          amount = math.ceil(amount / 10)
-        end
-        if bobmods.lib.item.get_type(old) == "item" and bobmods.lib.item.get_type(new) == "fluid" then
-          amount = amount * 10
-        end
-        bobmods.lib.recipe.remove_difficulty_ingredient(recipe, "normal", old)
-        bobmods.lib.recipe.add_difficulty_ingredient(recipe, "normal", {new, amount})
+
+    if data.raw.recipe[recipe].ingredients then
+      if replace_ingredient(data.raw.recipe[recipe].ingredients, old, new) then
         retval = true
       end
     end
 
-    if data.raw.recipe[recipe].expensive then
-      amount = 0
-      for i, ingredient in pairs(data.raw.recipe[recipe].expensive.ingredients) do
-        local item = bobmods.lib.item.ingredient_simple(ingredient)
-        if item then
-          if item.name == old then
-            amount = item.amount + amount
-          end
-        else
-          log("recipe " ..  recipe .. " contains an invalid ingredient")
-        end
+    if data.raw.recipe[recipe].normal and data.raw.recipe[recipe].normal.ingredients then
+      if replace_ingredient(data.raw.recipe[recipe].normal.ingredients, old, new) then
+        retval = true
       end
-      if amount > 0 then
-        if bobmods.lib.item.get_type(old) == "fluid" and bobmods.lib.item.get_type(new) == "item" then
-          amount = math.ceil(amount / 10)
-        end
-        if bobmods.lib.item.get_type(old) == "item" and bobmods.lib.item.get_type(new) == "fluid" then
-          amount = amount * 10
-        end
-        bobmods.lib.recipe.remove_difficulty_ingredient(recipe, "expensive", old)
-        bobmods.lib.recipe.add_difficulty_ingredient(recipe, "expensive", {new, amount})
+    end
+
+    if data.raw.recipe[recipe].expensive and data.raw.recipe[recipe].expensive.ingredients then
+      if replace_ingredient(data.raw.recipe[recipe].expensive.ingredients, old, new) then
         retval = true
       end
     end
@@ -139,6 +117,27 @@ function bobmods.lib.recipe.remove_ingredient(recipe, item)
     bobmods.lib.error.item(item)
   end
 end
+
+function bobmods.lib.recipe.clear_ingredients(recipe)
+  if
+    type(recipe) == "string" and
+    data.raw.recipe[recipe]
+  then
+    if data.raw.recipe[recipe].expensive then
+      data.raw.recipe[recipe].expensive.ingredients = {}
+    end
+    if data.raw.recipe[recipe].normal then
+      data.raw.recipe[recipe].normal.ingredients = {}
+    end
+    if data.raw.recipe[recipe].ingredients then
+      data.raw.recipe[recipe].ingredients = {}
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.recipe(recipe)
+  end
+end
+
 
 function bobmods.lib.recipe.add_new_ingredient(recipe, item_in)
   local item = bobmods.lib.item.ingredient(item_in)
@@ -202,6 +201,21 @@ function bobmods.lib.recipe.add_ingredient(recipe, item_in)
   end
 end
 
+function bobmods.lib.recipe.add_ingredients(recipe, ingredients)
+  if
+    type(recipe) == "string" and
+    data.raw.recipe[recipe] and
+    type(ingredients) == "table"
+  then
+    for i, ingredient in pairs(ingredients) do
+      bobmods.lib.recipe.add_ingredient(recipe, ingredient)
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.recipe(recipe)
+  end
+end
+
 function bobmods.lib.recipe.set_ingredient(recipe, item_in)
   local item = bobmods.lib.item.ingredient(item_in)
   if
@@ -232,6 +246,21 @@ function bobmods.lib.recipe.set_ingredient(recipe, item_in)
     end
   end
 end
+
+function bobmods.lib.recipe.set_ingredients(recipe, ingredients)
+  if
+    type(recipe) == "string" and
+    data.raw.recipe[recipe] and
+    type(ingredients) == "table"
+  then
+    bobmods.lib.recipe.clear_ingredients(recipe)
+    bobmods.lib.recipe.add_ingredients(recipe, ingredients)
+  else
+    log(debug.traceback())
+    bobmods.lib.error.recipe(recipe)
+  end
+end
+
 
 
 function bobmods.lib.recipe.add_result(recipe, item_in)
