@@ -39,7 +39,7 @@ local fuel_values = {
 	["gas-benzene"] = "1210KJ", -- 145 МДж/м3 -- БЕНЗОЛ
 
 	["gas-butadiene"] = "948KJ", -- butilene 113,51
-	["gas-ethylbenzene"] = "1308KJ",
+	["liquid-ethylbenzene"] = "1308KJ",
 
 	
   	["acetylene"] = "468KJ", -- 56,04 МДж/м3 
