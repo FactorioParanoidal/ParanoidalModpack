@@ -16,4 +16,13 @@ data:extend({
     default_value = 75, -- game engine max light radius = 75
     minimum_value = 1,
   },
+  {
+    type = "string-setting",
+    name = "lepp_pole_blacklist",
+    order = "ba",
+    setting_type = "startup",
+    default_value = "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation",
+  },
 })
+
+
