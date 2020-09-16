@@ -1,0 +1,11 @@
+{
+  "name": "InlaidLampsExtended",
+  "version": "0.1.9",
+  "title": "Inlaid Lamps Extended",
+  "author": "Mathematician, CobaltTiger",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "1.0",
+  "description": "This mod adds a lamp that you can embed into the floor!",
+  "dependencies": ["base >= 1.0.0", "(?)Dectorio >= 0.9.11"]
+}
