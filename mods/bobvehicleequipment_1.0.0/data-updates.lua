@@ -76,4 +76,6 @@ end
 
 
 
+data.raw["equipment-grid"]["spidertron-equipment-grid"].equipment_categories = {"spidertron", "vehicle", "armoured-vehicle"}
+
 

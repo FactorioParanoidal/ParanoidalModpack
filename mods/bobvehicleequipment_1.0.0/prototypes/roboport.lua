@@ -158,7 +158,7 @@ data:extend(
     charging_station_count = 2,
     charging_distance = 1.6,
     charging_threshold_distance = 5,
-    categories = {"car", "tank", "cargo-wagon"}
+    categories = {"car", "tank", "spidertron", "cargo-wagon"}
   },
 
   {
@@ -206,7 +206,7 @@ data:extend(
     charging_station_count = 4,
     charging_distance = 1.6,
     charging_threshold_distance = 5,
-    categories = {"car", "tank", "cargo-wagon"}
+    categories = {"car", "tank", "spidertron", "cargo-wagon"}
   },
 
   {
@@ -254,7 +254,7 @@ data:extend(
     charging_station_count = 6,
     charging_distance = 1.6,
     charging_threshold_distance = 5,
-    categories = {"car", "tank", "cargo-wagon"}
+    categories = {"car", "tank", "spidertron", "cargo-wagon"}
   },
   {
     type = "roboport-equipment",
@@ -301,7 +301,7 @@ data:extend(
     charging_station_count = 8,
     charging_distance = 1.6,
     charging_threshold_distance = 5,
-    categories = {"car", "tank", "cargo-wagon"}
+    categories = {"car", "tank", "spidertron", "cargo-wagon"}
   },
 
 
