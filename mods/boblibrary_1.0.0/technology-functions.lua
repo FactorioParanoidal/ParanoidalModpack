@@ -1,35 +1,5 @@
 if not bobmods.lib.tech then bobmods.lib.tech = {} end
 
---[[
-upgrade
-Type: bool
-
-enabled
-Type: bool
-
-hidden
-Type: bool
-
-visible_when_disabled
-Type: bool
-
-unit
-Type: table
-count — double
-count_formula — string
-time — double
-ingredients — table of IngredientPrototype
-
-max_level
-Type: uint32 or string
-
-prerequisites
-Type: table of string
-
-effects
-Type: table of Modifier
-]]
-
 
 local function split_line(technology, tag)
   if data.raw.technology[technology][tag] then
@@ -215,6 +185,22 @@ function bobmods.lib.tech.add_science_pack(technology, pack, amount)
   end
 end
 
+function bobmods.lib.tech.add_science_packs(technology, science_packs)
+  if
+    type(technology) == "string" and
+    type(science_packs) == "table"
+  then
+    for i, science_pack in pairs(science_packs) do
+      if type(science_pack) == "table" and type(science_pack[1]) == "string" and data.raw.tool[science_pack[1]] and type(science_pack[2]) == "number" then
+        bobmods.lib.recipe.add_science_pack(technology, science_pack[1], science_pack[2])
+      end
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.technology(technology)
+  end
+end
+
 function bobmods.lib.tech.remove_science_pack(technology, pack)
   if
     type(technology) == "string" and
@@ -235,6 +221,41 @@ function bobmods.lib.tech.remove_science_pack(technology, pack)
     bobmods.lib.error.technology(technology)
   end
 end
+
+function bobmods.lib.tech.clear_science_packs(technology)
+  if
+    type(technology) == "string" and
+    data.raw.technology[technology]
+  then
+    if data.raw.technology[technology].unit then
+      data.raw.technology[technology].unit.ingredients = {}
+    end
+    if data.raw.technology[technology].normal and data.raw.technology[technology].normal.unit then
+      data.raw.technology[technology].normal.unit.ingredients = {}
+    end
+    if data.raw.technology[technology].expensive and data.raw.technology[technology].expensive.unit then
+      data.raw.technology[technology].expensive.unit.ingredients = {}
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.technology(technology)
+  end
+end
+
+function bobmods.lib.tech.set_science_packs(technology, science_packs)
+  if
+    type(technology) == "string" and
+    data.raw.technology[technology] and
+    type(science_packs) == "table"
+  then
+    bobmods.lib.tech.clear_science_packs(technology)
+    bobmods.lib.tech.add_science_packs(technology, science_packs)
+  else
+    log(debug.traceback())
+    bobmods.lib.error.technology(technology)
+  end
+end
+
 
 
 function bobmods.lib.tech.replace_difficulty_science_pack(technology, difficulty, old, new)
