@@ -1,0 +1,2 @@
+require("internal")
+require("scripted")
