@@ -1,6 +1,7 @@
 if settings.startup["bobmods-power-steam"].value == true then
 
 bobmods.lib.tech.remove_recipe_unlock("nuclear-power", "steam-turbine")
+data.raw.technology["nuclear-power"].icon = "__bobpower__/graphics/icons/technology/nuclear-power.png"
 
 data:extend(
 {
