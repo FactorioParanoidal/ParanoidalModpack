@@ -1,13 +1,13 @@
 {
   "name": "bobwarfare",
-  "version": "0.18.6",
-  "factorio_version": "0.18",
+  "version": "1.0.0",
+  "factorio_version": "1.0",
   "title": "Bob's Warfare mod",
   "author": "Bobingabout",
   "contact": "robertagius@hotmail.com",
   "homepage": "https://forums.factorio.com/viewforum.php?f=51",
   "dependencies": [
-    "base >= 0.18.16",
+    "base >= 1.0.0",
     "boblibrary >= 0.18.0",
     "? bobplates >= 0.18.0",
     "? bobenemies >= 0.18.0"

@@ -14,3 +14,7 @@ if settings.startup["bobmods-warfare-drainlesslaserturrets"].value == true then
 end
 
 table.insert(data.raw.car.tank.resistances, { type = "plasma", decrease = 15, percent = 50 })
+
+table.insert(data.raw["spider-vehicle"]["spidertron"].resistances, { type = "poison", decrease = 15, percent = 80 })
+table.insert(data.raw["spider-vehicle"]["spidertron"].resistances, { type = "plasma", decrease = 0, percent = 90 })
+table.insert(data.raw["spider-vehicle"]["spidertron"].resistances, { type = "bob-pierce", decrease = 0, percent = 50 })
