@@ -1,8 +1,9 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.3.10
-  Changes:
-    - A few cleanups of code and settings
-    - Tweaked advanced uranium processing to give 20% not 80% uranium (if clowns processing exists)
+Version: 1.3.11
+  Bugfixes:
+    - Fixed that the thermonuclear bomb was not giving the correct graphical flair as the vanilla nuke
+    - Fixed that the thermonuclear bomb was not clearing cliffs
+      - This is a temp update, some more work is required to get the old "3-wave" system working
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.9
   Features:
