@@ -1,6 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.0.5
+Date: 2020-09-14
+  Changes:
+    - FARL will now remove Krastorio 2 "biter creep" tiles and collect biomass
+  Bugfixes:
+    - Fixed error when resetting rail types
+---------------------------------------------------------------------------------------------------
+Version: 4.0.4
+Date: 2020-08-28
+  Bugfixes:
+    - Fixed curved rails being sleepy rails with Naked Rails mod active
+    - Fixed error when removing Naked Rails mod
+    - Fixed blueprints created from the settings UI not working
+---------------------------------------------------------------------------------------------------
+Version: 4.0.3
+Date: 2020-08-24
+  Bugfixes:
+    - Fixed FARL clearing/landfilling huge areas unless "Gridsize/Absolute reference point" is checked in the blueprints.
+---------------------------------------------------------------------------------------------------
 Version: 4.0.2
-Date: 05.. 07. 2020
+Date: 05. 07. 2020
   Bugfixes:
     - Fixed error when placing landfill
 ---------------------------------------------------------------------------------------------------

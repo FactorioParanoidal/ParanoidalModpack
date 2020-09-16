@@ -12,15 +12,7 @@ local endsWith = lib.endsWith
 local math = math
 local floor, ceil = math.floor, math.ceil
 local abs, min, max = math.abs, math.min, math.max
--- local is_placer_or_base = {
---     ["ret-pole-placer"] = true,
---     ["ret-signal-pole-placer"] = true,
---     ["ret-chain-pole-placer"] = true,
---     ["ret-pole-base-straight"] = true,
---     ["ret-pole-base-diagonal"] = true,
---     ["ret-signal-pole-base"] = true,
---     ["ret-chain-pole-base"] = true
--- }
+
 local function round(num, idp)
     local mult = 10 ^ (idp or 0)
     return floor(num * mult + 0.5) / mult
@@ -799,13 +791,35 @@ FARL.removeTrees = function(self, area)
     --log(game.tick .. ' removeTrees end')
 end
 
+FARL.removeCreep = function(self, area)
+    if self.surface.count_tiles_filtered{area = area, name = "kr-creep"} > 0 then
+        local tiles = {}
+        local tiles_filtered = self.surface.find_tiles_filtered{area = area, name = "kr-creep"}
+        local collected = 0
+        for _, tile in pairs(tiles_filtered) do
+            table.insert(tiles, {name = "landfill", position = tile.position})
+            collected = collected + 1
+        end
+        if collected > 0 and not self.cheat_mode then
+            collected = round(collected * (math.random(30,80)/100))
+            if collected > 0 then
+                self:addItemToCargo("biomass", collected)
+            end
+        end
+        if #tiles > 0 then
+            self.surface.set_tiles(tiles)
+        end
+    end
+end
+
 FARL.removeStone = function(self, area)
+    self:removeCreep(area)
     local amount, name, proto
     local random = math.random
     for _, entity in pairs(self.surface.find_entities_filtered { area = area, type = "simple-entity", force = "neutral" }) do
         proto = entity.prototype.mineable_properties
         if proto and proto.minable and proto.products then
-            if entity.destroy() and self.settings.collectWood  and not self.cheat_mode then
+            if entity.destroy() and self.settings.collectWood and not self.cheat_mode then
                 local products = proto.products
                 for _, product in pairs(products) do
                     if product.type == "item" then
@@ -1896,6 +1910,7 @@ FARL.parseBlueprints = function(self, blueprints)
         local e = blueprints[j].get_blueprint_entities()
         if e then
             local bpType, rails, poles, box, offsets, original_string = Blueprint.group_entities(blueprints[j])
+            --log(serpent.block(offsets))
             if not bpType then
                 --self:print(rails)
                 return
@@ -2093,6 +2108,9 @@ FARL.parseBlueprints = function(self, blueprints)
                             table.insert(clearance_points, { x = i, y = i })
                         end
                     end
+                    --log("adjusted")
+                    --log(serpent.block({tl=tl, br =br}))
+                    --log(serpent.block(mainRail))
                     --debugDump({tl=tl,br=br},true)
                     local blueprint = {
                         mainRail = mainRail,
