@@ -82,7 +82,7 @@ local function pickup_items(e)
     local stack = enty.stack
     local suc_insert = 0
     if filter_allow(unlimitedmode, filters, stack.name) then
-      if stack.grid or stack.is_blueprint or stack.is_blueprint_book or stack.is_armor or stack.is_item_with_inventory or stack.is_item_with_entity_data or stack.is_deconstruction_item then
+      if stack.grid or stack.is_blueprint or stack.is_blueprint_book or stack.is_armor or stack.is_item_with_inventory or stack.is_item_with_entity_data or stack.is_deconstruction_item or stack.is_upgrade_item then
         while i > 0 and inv[i].valid_for_read do i = i-1 end
         -- if i > 1 then suc_insert = inv[i].set_stack(stack) end
         if i > 1 and inv[i].set_stack(stack) then suc_insert = 1 end
