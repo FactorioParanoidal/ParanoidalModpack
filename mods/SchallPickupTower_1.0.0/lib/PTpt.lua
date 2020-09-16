@@ -9,15 +9,15 @@ PTpt.debuglog = PTlib.debuglog
 
 
 function PTpt.PT_item_name(tier)
-  return cfg1.pickuptower_name .. "-R" .. cfg1.PT_range(tier)
+  return cfg1.PT_name .. "-R" .. cfg1.PT_range(tier)
 end
 
 function PTpt.PT_upper_itemname(tier)
-  return cfg1.pickuptower_name .. "-R" .. cfg1.PT_range(tier) .. cfg1.pickuptower_name_upper_suffix
+  return cfg1.PT_name .. "-R" .. cfg1.PT_range(tier) .. cfg1.PT_upper_suffix
 end
 
 function PTpt.PT_tech_name(tier)
-  return cfg1.pickuptower_name .. "-" .. tier
+  return cfg1.PT_name .. "-" .. tier
 end
 
 function PTpt.PT_item_icons(tier)
@@ -148,7 +148,9 @@ function PTpt.PT_entity_1(tier)
     max_health = 350,
     corpse = "medium-remnants",
     collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
-    selection_box = {{ -1, -1}, {1, 1}},
+    -- selection_box = {{ -1, -1}, {1, 1}},
+    selection_box = {{ -0.7, -0.7}, {0.7, 0.7}},
+    selection_priority = 60,
     resistances =
     {
       {
@@ -177,7 +179,8 @@ function PTpt.PT_entity_1(tier)
         priority = "medium",
         width = 64,
         height = 64,
-        scale = 0.5
+        scale = 0.5,
+        tint = cfg1.PT_range_color
       },
       distance = range,
       -- offset = {0, 0}
@@ -203,6 +206,7 @@ function PTpt.PT_entity_2(tier)
     icons = PTpt.PT_item_icons(tier),
     localised_description = PTlib.PT_localised_description(range, interval, energy_usage),
     flags = {"not-blueprintable", "not-deconstructable", "placeable-off-grid"},
+    -- flags = {"not-blueprintable", "not-deconstructable", "not-selectable-in-game", "placeable-off-grid"},
     -- minable = {hardness = 0.2, mining_time = 0.5, result = PTpt.PT_item_name(tier)},
     create_ghost_on_death = false,
     -- render_layer = "higher-object-above",
@@ -210,13 +214,15 @@ function PTpt.PT_entity_2(tier)
     max_health = 350,
     -- corpse = "medium-remnants",
     collision_mask = {"water-tile"}, --nil,
-    -- collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
-    collision_box = {{0, 0}, {0, 0}},
-    -- selection_box = {{ -1, -1}, {1, 1}},
-    selection_box = {{0, 0}, {0, 0}},
+    collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
+    -- collision_box = {{0, 0}, {0, 0}},
+    selection_box = {{ -1, -1}, {1, 1}},
+    -- selection_box = {{0, 0}, {0, 0}},
     -- selection_box = {{-2, -2}, {0, 0}}, -- For debug only
     drawing_box = {{ -1, -1.01}, {1, 0.99}},
     -- drawing_box = {{ -1, -1}, {1, 1}},
+    -- selectable_in_game = false,
+    selection_priority = 40,
     resistances =
     {
       {

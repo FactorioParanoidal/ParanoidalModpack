@@ -22,4 +22,12 @@ data:extend{
     setting_type = "runtime-per-user",
     default_value = true
   },
+  {
+    type = "string-setting",
+    name = "pickuptower-range-color",
+    order = "pt-b-c",
+    setting_type = "startup",
+    allowed_values = { "red", "yellow", "green", "cyan", "blue", "magenta", "white" },
+    default_value = "red"
+  },
 }

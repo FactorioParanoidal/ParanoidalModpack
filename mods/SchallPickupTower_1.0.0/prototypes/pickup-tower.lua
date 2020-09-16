@@ -38,7 +38,7 @@ local PT_specs =
   },
   technology = {
     [1] = {
-      prerequisites = {"electric-energy-distribution-1"},
+      prerequisites = {"military-science-pack", "electric-energy-distribution-1"},
       unit =
       {
         count = 150,

@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020.09.10
+  Features:
+    - Updated to 1.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+Date: 2020.09.10
+  Features:
+    - Options on pickup range visualization colour.
+  Changes:
+    - Changed prototypes of both upper part (radar) and lower part (chest).
+    - Upper part (radar) can be selected, to show pickup scanning progress.
+    - Tech prerequiste now requires military science pack tech.
+  Bugfixes:
+    - Fixed power connection can be done to any tile of the pickup tower.  (was only lower half.)
+    - Upgrade planner is now considered as special item.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 2020.09.10
+  Features:
+    - Options on pickup range visualization colour.
+  Changes:
+    - Changed prototypes of both upper part (radar) and lower part (chest).
+    - Upper part (radar) can be selected, to show pickup scanning progress.
+    - Tech prerequiste now requires military science pack tech.
+  Bugfixes:
+    - Fixed power connection can be done to any tile of the pickup tower.  (was only lower half.)
+    - Upgrade planner is now considered as special item.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.2
 Date: 2020.08.13
   Graphics:
