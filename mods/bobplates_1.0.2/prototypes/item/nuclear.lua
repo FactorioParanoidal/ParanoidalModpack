@@ -97,7 +97,8 @@ data:extend(
     type = "item",
     name = "deuterium-fuel-cell",
     icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell.png",
-    icon_size = 32,
+    icon_size = 64,
+    icon_mipmaps = 4,
     subgroup = "intermediate-product",
     order = "t[deuterium-processing]-a[deuterium-fuel-cell]",
     fuel_category = "nuclear",
@@ -124,6 +125,20 @@ if settings.startup["bobmods-plates-nuclearupdate"].value == true then
   {
     {
       type = "item",
+      name = "deuterium-fuel-cell-2",
+      icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2.png",
+      icon_size = 64,
+      icon_mipmaps = 4,
+      subgroup = "intermediate-product",
+      order = "t[deuterium-processing]-b[deuterium-fuel-cell-2]",
+      fuel_category = "nuclear",
+      burnt_result = "used-up-deuterium-fuel-cell",
+      fuel_value = "120GJ",
+      fuel_glow_color = {r = 1, g = 0, b = 0.9},
+      stack_size = 50
+    },
+    {
+      type = "item",
       name = "fusion-catalyst",
       icon = "__bobplates__/graphics/icons/nuclear/fusion-catalyst.png",
       icon_size = 64,
@@ -138,5 +153,9 @@ end
 if settings.startup["bobmods-plates-bluedeuterium"].value == true then
   data.raw.item["deuterium-fuel-cell"].fuel_glow_color = {r = 0, g = 0.7, b = 1}
   data.raw.item["deuterium-fuel-cell"].icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-blue.png"
+  if settings.startup["bobmods-plates-nuclearupdate"].value == true then
+    data.raw.item["deuterium-fuel-cell-2"].fuel_glow_color = {r = 0, g = 1, b = 0.85}
+    data.raw.item["deuterium-fuel-cell-2"].icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2-blue.png"
+  end
   data.raw.item["used-up-deuterium-fuel-cell"].icon = "__bobplates__/graphics/icons/nuclear/used-up-deuterium-fuel-cell-blue.png"
 end

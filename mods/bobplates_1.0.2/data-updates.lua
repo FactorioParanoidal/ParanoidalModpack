@@ -23,11 +23,11 @@ if settings.startup["bobmods-colorupdate"].value == true then
 
   data.raw.item["lithium-ion-battery"].icon = "__bobplates__/graphics/icons/battery-blue.png"
   data.raw.item["lithium-ion-battery"].icon_size = 64
-  data.raw.recipe["battery"].crafting_machine_tint.primary = {r = 0.1, g = 0.5, b = 1.0, a = 1.000}
+  data.raw.recipe["lithium-ion-battery"].crafting_machine_tint.primary = {r = 0.1, g = 0.5, b = 1.0, a = 1.000}
 
   data.raw.item["silver-zinc-battery"].icon = "__bobplates__/graphics/icons/battery-purple.png"
   data.raw.item["silver-zinc-battery"].icon_size = 64
-  data.raw.recipe["battery"].crafting_machine_tint.primary = {r = 0.7, g = 0.9, b = 1.0, a = 1.000}
+  data.raw.recipe["silver-zinc-battery"].crafting_machine_tint.primary = {r = 0.7, g = 0.9, b = 1.0, a = 1.000}
 else
   data.raw.item["battery"].icon = "__bobplates__/graphics/icons/battery.png"
   data.raw.item["battery"].icon_size = 64
