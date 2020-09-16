@@ -4,7 +4,7 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local flib = require('__flib__.data_util')
+local flib = require('__flib__.data-util')
 
 local provider_reader_entity = flib.copy_prototype(data.raw["constant-combinator"]["constant-combinator"], "ltn-provider-reader")
 provider_reader_entity.item_slot_count = 50 -- will be overwritten in final-fixes
