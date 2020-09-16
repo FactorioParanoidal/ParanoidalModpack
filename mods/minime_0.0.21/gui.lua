@@ -1,5 +1,5 @@
 --~ require("util")
-log("Entered script gui.lua!")
+--~ log("Entered script gui.lua!")
 local minime = require("__minime__/common")("minime")
 
 local minime_gui = {}
@@ -19,6 +19,15 @@ minime_gui.init_gui = function(player, remove_character)
 
   if not (player and player.valid and player.is_player()) then
     error(tostring(player) .. " is not a valid player!")
+  end
+
+  if not minime.minime_character_selector then
+    minime.dprint("Character selector is disabled -- check if any players have a GUI.")
+    for p, player in pairs(game.players) do
+      minime_gui.remove_gui(player)
+    end
+    minime.dprint("Don't need to create GUI -- returning early!")
+    return
   end
 
   local gui = player.gui.top
@@ -148,8 +157,9 @@ minime_gui.remove_gui = function(player)
   player = player and                                                   -- player exists,
           (type(player) == "number" and game.players[player]) or        -- is a plain player index or
           (type(player) == "table" and
-            game.players[player.player_index] or                        -- a player index in event data or
-            player)                                                     -- an entity
+            player.valid and player.is_player() and player) or          -- a LuaPlayer
+          (player and player.player_index and
+            game.players[player.player_index])                          -- an index in event data
 
   if player and player.valid and player.is_player() and player.gui.top["minime_gui"] then
     player.gui.top["minime_gui"].destroy()
@@ -236,5 +246,5 @@ minime_gui.select_character = function(player, clicked)
 end
 
 
-log("End of script gui.lua!")
+--~ log("End of script gui.lua!")
 return minime_gui

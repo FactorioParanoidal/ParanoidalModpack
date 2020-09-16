@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.21
+Date: 2020-08-26
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that the new cutscene shown at the start of a new game in Factorio 1.0 would mess with player initialization.
+    - Reworked start-up process (on_init, on_configuration_changed, on_load) so that GUI-related event handlers and remote interfaces will be unregistered/removed if they are not needed.
+
+  TODO:
+    - Properly update for Factorio 1.0 (mainly removing code for compatibility with Factorio 0.18, e.g. redundant code for event filtering and falling back to on_init instead of using on_cutscene_cancelled only).
+    - Allow players to turn off their character completely. Currently, there is already code in place to handle "no character" in a way. But it's incomplete and will only allow you to switch to the default character if no other character is available -- leaving you with an inactive button once it has been clicked.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.20
+Date: 2020-08-14
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Removed log spam. (https://mods.factorio.com/mod/minime/discussion/5f36d49f002cac73f73caa6d)
+
+---------------------------------------------------------------------------------------------------
 Version: 0.0.18
 Date: 2020-08-08
   Uploaded by:

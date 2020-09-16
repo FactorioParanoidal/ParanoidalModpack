@@ -1,5 +1,5 @@
 return function (mod_name)
-log("Entered common.lua!")
+--~ log("Entered common.lua!")
 
   local common = {}
 
@@ -92,8 +92,6 @@ log("Entered common.lua!")
   ------------------------------------------------------------------------------------
   -- Debug function
   common.dprint = function(msg)
-      --~ log("Entered function " .. common.modName .. ".dprint(" .. tostring({msg}) .. ")")
-
     if common.debug_in_log then log({"", msg}) end
 
     if game and msg then
@@ -105,7 +103,6 @@ log("Entered common.lua!")
         end
       end
     end
-    --~ log("End of function " .. common.modName .. ".dprint(" .. tostring({msg}) .. ")")
   end
 
   ------------------------------------------------------------------------------------
@@ -122,6 +119,158 @@ log("Entered common.lua!")
       return entity and entity.valid and (entity.localised_name or entity.name) or ""
   end
 
+
+  ------------------------------------------------------------------------------------
+  --                 Get the version of a mod and split the number!                 --
+  ------------------------------------------------------------------------------------
+  local function split_number(version)
+    local ret = {}
+
+    if version then
+      for x in string.gmatch(version, "(%d+)") do
+         ret[#ret + 1] = tonumber(x)
+      end
+    end
+
+    return table_size(ret) == 3 and ret or nil
+  end
+
+  ------------------------------------------------------------------------------------
+  --       Check if a mod has a version greater than or equal to this number!       --
+  ------------------------------------------------------------------------------------
+  common.check_mod_version_ge = function(mod_name, target_version)
+    --~ local f_name = "common.check_mod_version_ge"
+    --~ common.dprint("Entered function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+
+    if not (mod_name and target_version) then
+      error("Missing  arguments!")
+    end
+
+    local mod_version = script and script.active_mods[mod_name] or
+                        game and game.active_mods[mod_name]
+    local ret = false
+--~ common.show(mod_version, "mod_version")
+
+    -- Only continue check if mod is active
+    mod_version = split_number(mod_version)
+--~ common.show(mod_version, "mod_version after split")
+    if mod_version then
+      target_version = split_number(target_version)
+--~ common.show(target_version, "target_version")
+      if mod_version[1] > target_version[1] then
+        ret = true
+      elseif mod_version[1] == target_version[1] then
+        if mod_version[2] > target_version[2] then
+          ret = true
+        elseif (
+            mod_version[2] == target_version[2] and
+            mod_version[3] >= target_version[3]
+        ) then
+          ret = true
+        end
+      end
+    end
+--~ common.show(ret, "Return")
+    --~ common.dprint("End of function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+    return ret
+  end
+
+
+  ------------------------------------------------------------------------------------
+  --         Check if a mod has a version less than or equal to this number!        --
+  ------------------------------------------------------------------------------------
+  common.check_mod_version_le = function(mod_name, target_version)
+    --~ local f_name = "common.check_mod_version_le"
+    --~ common.dprint("Entered function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+
+    if not (mod_name and target_version) then
+      error("Missing  arguments!")
+    end
+
+    local mod_version = script and script.active_mods[mod_name] or
+                        game and game.active_mods[mod_name]
+    local ret = false
+
+    -- Only continue check if mod is active
+    mod_version = split_number(mod_version)
+    if mod_version then
+      target_version = split_number(target_version)
+
+      if mod_version[1] < target_version[1] then
+        ret = true
+      elseif mod_version[1] == target_version[1] then
+        if mod_version[2] < target_version[2] then
+          ret = true
+        elseif (
+            mod_version[2] == target_version[2] and
+            mod_version[3] <= target_version[3]
+        ) then
+          ret = true
+        end
+      end
+    end
+
+    --~ common.dprint("End of function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+    return ret
+  end
+
+  ------------------------------------------------------------------------------------
+  --               Check if a mod has a version less than this number!              --
+  ------------------------------------------------------------------------------------
+  common.check_mod_version_less = function(mod_name, target_version)
+    --~ local f_name = "common.check_mod_version_less"
+    --~ common.dprint("Entered function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+
+    if not (mod_name and target_version) then
+      error("Missing  arguments!")
+    end
+
+    local mod_version = script and script.active_mods[mod_name] or
+                        game and game.active_mods[mod_name]
+
+    local ret = false
+
+    -- Same version isn't less!
+    if mod_version ~= target_version and common.check_mod_version_le(mod_name, target_version) then
+      ret = true
+    end
+
+    --~ common.dprint("End of function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+    return ret
+  end
+
+  ------------------------------------------------------------------------------------
+  --             Check if a mod has a version greater than this number!             --
+  ------------------------------------------------------------------------------------
+  common.check_mod_version_greater = function(mod_name, target_version)
+    --~ local f_name = "common.check_mod_version_greater"
+    --~ common.dprint("Entered function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+
+    if not (mod_name and target_version) then
+      error("Missing  arguments!")
+    end
+
+    local mod_version = script and script.active_mods[mod_name] or
+                        game and game.active_mods[mod_name]
+
+    local ret = false
+
+    -- Same version isn't greater!
+    if mod_version ~= target_version and common.check_mod_version_ge(mod_name, target_version) then
+      ret = true
+    end
+
+    --~ common.dprint("End of function " .. f_name .. "(" .. tostring(mod_name) ..
+                  --~ ", " .. tostring(target_version) .. ")")
+    return ret
+  end
 
   ------------------------------------------------------------------------------------
   --                            Copy character settings!                            --
@@ -228,7 +377,7 @@ log("Entered common.lua!")
         error(serpent.line(i) .. " is not a valid inventory!")
       end
     end
---log("SRC: " .. serpent.block(src))
+common.dprint("SRC: " .. serpent.block(src))
     common.dprint("SRC slots: " .. #src)
     common.dprint("DST slots: " .. #dst)
 
@@ -264,7 +413,7 @@ log("Entered common.lua!")
   end
 
 
-  log("End of common.lua!")
+  --~ log("End of common.lua!")
   return common
 
 end

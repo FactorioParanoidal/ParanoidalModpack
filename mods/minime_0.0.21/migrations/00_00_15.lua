@@ -1,4 +1,4 @@
-log("Entered minime migration script 00_00_15.lua!")
+--~ log("Entered minime migration script 00_00_15.lua!")
 
 local minime = require("__minime__/common")("minime")
 
@@ -29,7 +29,7 @@ if global.player_data then
 
     -- Player is connected and either has no dummy (use current character) or another dummy -- copy it!
     if old and old.name ~= minime.dummy_character_name  then
-      log("Creating new dummy for player " .. player.name .. "!")
+      minime.dprint("Creating new dummy for player " .. player.name .. "!")
 
       new_dummy = minime.make_dummy(p)
 
@@ -74,9 +74,9 @@ if global.player_data then
 
     -- Player is not connected
     elseif not old then
-      log("Player " .. player.name .. " is not connected -- nothing to do!")
+      minime.dprint("Player " .. player.name .. " is not connected -- nothing to do!")
     else
-      log("Player " .. player.name .. " already has the correct dummy: nothing to do!")
+      minime.dprint("Player " .. player.name .. " already has the correct dummy: nothing to do!")
     end
 
   end
@@ -84,4 +84,4 @@ else
   minime.dprint("global.player_data doesn't exist -- nothing to do!")
 end
 
-log("End of minime migration script 00_00_15.lua!")
+--~ log("End of minime migration script 00_00_15.lua!")

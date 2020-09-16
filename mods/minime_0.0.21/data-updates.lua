@@ -28,10 +28,10 @@ local function scale_image(img)
   if not img.scaled then
     -- Set scale (defaults to 1 if not explicitly set)
     img.scale = (img.scale or 1) * scale_factor
-    log("Scaled image " .. tostring(img.filename))
+    minime.dprint("Scaled image " .. tostring(img.filename))
     if img.hr_version then
       img.hr_version.scale = (img.hr_version.scale or 1) * scale_factor
-      log("Scaled HR image " .. tostring(img.hr_version.filename))
+      minime.dprint("Scaled HR image " .. tostring(img.hr_version.filename))
     end
 
     -- Set shift
@@ -74,63 +74,11 @@ minime.dprint("Scaling corpse " .. tostring(corpse.name) .. " (factor: " .. scal
     corpse.selection_box = { scale_position(box[1]), scale_position(box[2]) }
   end
 
-  --~ -- Corpse has property "picture"
-  --~ if corpse.picture then
-    --~ minime.dprint("Found \"picture\"!")
-    --~ -- We have layers
-    --~ if corpse.picture.layers then
-      --~ minime.dprint("Found \"layers\"!")
-      --~ for l, layer in pairs(corpse.picture.layers) do
-        --~ scale_image(layer)
-      --~ end
-    --~ elseif corpse.picture.sheet then
-      --~ minime.dprint("Found \"sheet\"!")
-      --~ scale_image(corpse.picture.sheet)
-    --~ elseif corpse.picture.sheets then
-      --~ minime.dprint("Found \"sheets\"!")
-      --~ for s, sheet in pairs(corpse.picture.sheets) do
-        --~ scale_image(sheet)
-      --~ end
-    --~ -- Single spritesheet
-    --~ else
-      --~ minime.dprint("Assume this is just a single sprite sheet!")
-      --~ scale_image(corpse.picture)
-    --~ end
-  --~ -- Corpse has property "pictures"
-  --~ elseif corpse.pictures then
-    --~ minime.dprint("Found \"pictures\"!")
-    --~ for p, picture in pairs(corpse.pictures) do
---~ log("p: " .. p .. "\ttype(picture):" .. serpent.block(type(picture)))
-      --~ -- Picture has layers
-      --~ if picture.layers then
-        --~ minime.dprint("Found \"layers\"!")
-        --~ for l, layer in pairs(picture.layers) do
-          --~ scale_image(layer)
-        --~ end
-      --~ elseif picture.sheet then
-        --~ minime.dprint("Found \"sheet\"!")
-        --~ scale_image(picture.sheet)
-      --~ elseif picture.sheets then
-        --~ minime.dprint("Found \"sheets\"!")
-        --~ for s, sheet in pairs(picture.sheets) do
-          --~ scale_image(sheet)
-        --~ end
-      --~ if type(picture) == "table" then
---~ log("Found table!")
-        --~ for i = 1, #picture do
-          --~ scale_image(picture[i])
-        --~ end
-      --~ -- Single spritesheet
-      --~ else
-        --~ minime.dprint("Assume this is just a single sprite sheet!")
-        --~ scale_image(picture)
-      --~ end
-    --~ end
-  --~ end
   if corpse.picture then
     minime.dprint("Found \"picture\"!")
     recurse(corpse.picture)
   end
+
   if corpse.pictures then
     minime.dprint("Found \"pictures\"!")
     recurse(corpse.pictures)

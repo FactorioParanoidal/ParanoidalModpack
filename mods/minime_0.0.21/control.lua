@@ -1,10 +1,10 @@
-log("Entered minime control script!")
+--~ log("Entered minime control script!")
 
 require("util")
 local minime = require("__minime__/common")("minime")
 
---~ local minime_gui = require("gui")
-local minime_gui = minime.minime_character_selector and require("gui")
+local minime_gui = require("gui")
+--~ local minime_gui = minime.minime_character_selector and require("gui")
 
 
 ------------------------------------------------------------------------------------
@@ -36,11 +36,7 @@ local function make_character_list()
 
   minime.dprint("global.minime_characters: " .. serpent.block(global.minime_characters))
 
-  --~ local name
-
   for c, char in pairs(chars) do
-      --~ name = string.upper(c or "")
-      --~ if string.find(name, minime.pattern) then
       if string.find( string.upper(c or ""), minime.pattern ) then
         global.minime_characters[c] = minime.loc_name(char)
         minime.dprint("ADDED character " .. serpent.line(c) .. ".")
@@ -54,66 +50,7 @@ end
 
 
 ------------------------------------------------------------------------------------
---                            Copy character settings!                            --
-------------------------------------------------------------------------------------
-local function copy_character(src, dst)
-  local f_name = "copy_character_settings"
-  minime.dprint("Entered function " .. f_name .. "(" .. tostring(src and src.name) .. ", " ..
-                tostring(dst and dst.name) .. ")")
-
-  if not (src and src.valid and src.type == "character") then
-    error(serpent.block(src) .. " is not a valid character!")
-  elseif not (dst and dst.valid and dst.type == "character") then
-    error(serpent.block(dst) .. " is not a valid character!")
-  end
-
-  -- Transfer inventories
-  --~ local inventory_list = { "armor", "ammo", "guns", "main", "trash" }
-  local inventory_list = minime.inventory_list
-  local inventory
-  for i, inv in ipairs(inventory_list) do
-    minime.dprint(i .. ": Transferring items from inventory " .. serpent.line(inv))
-    inventory = defines.inventory["character_" .. inv]
-    minime.transfer_inventory(src.get_inventory(inventory), dst.get_inventory(inventory))
-  end
-
-
-  -- Copy settings/filters from Personal logistic slots
-  local slots = src.character_logistic_slot_count
-  dst.character_logistic_slot_count = slots
-
-  for i = 1, slots do
-    dst.set_personal_logistic_slot(i, src.get_personal_logistic_slot(i))
-  end
-  minime.dprint("Copied ".. slots .. " personal logistic slots from " ..
-                serpent.line(minime.loc_name(src)) .. " to " .. serpent.line(minime.loc_name(dst)) .. ".")
-
-  -- Copy status of switch for personal logistic requests
-  dst.character_personal_logistic_requests_enabled = src.character_personal_logistic_requests_enabled
-  minime.dprint("Personal logistic requests are " ..
-                tostring(src.character_personal_logistic_requests_enabled and "enabled." or "disabled."))
-
-  -- Copy status of switch for personal roboport
-  dst.allow_dispatching_robots = src.allow_dispatching_robots
-  minime.dprint("Personal bots are " ..
-                tostring(src.allow_dispatching_robots and "enabled." or "disabled."))
-
-  -- Copy status of flashlight
-  if src.is_flashlight_enabled() then
-    dst.enable_flashlight()
-    minime.dprint("Flashlight is enabled.")
-  else
-    dst.disable_flashlight()
-    minime.dprint("Flashlight is disabled.")
-  end
-
-
-  minime.dprint("End of function " .. f_name .. "(" .. tostring(src and src.name) .. ", " ..
-                tostring(dst and dst.name) .. ")")
-end
-
-------------------------------------------------------------------------------------
---                               Switch characters!                            --
+--                               Switch characters!                               --
 ------------------------------------------------------------------------------------
 local function switch_characters(player, restore)
   local f_name = "switch_characters"
@@ -165,12 +102,12 @@ local function switch_characters(player, restore)
                       " for player " .. serpent.line(player.name))
 
         -- Copy inventory and settings from old to new character
-        copy_character(old_char, new_char)
+        minime.copy_character(old_char, new_char)
         minime.dprint("Copied inventories and settings from " .. serpent.line(minime.loc_name(old_char)) ..
                       " to " .. serpent.line(minime.loc_name(new_char)))
 
         -- Backup inventory and settings from old character
-        copy_character(old_char, backup)
+        minime.copy_character(old_char, backup)
         minime.dprint("Copied inventories and settings from " .. serpent.line(minime.loc_name(old_char)) ..
                       " to " .. serpent.line(minime.loc_name(backup)))
 
@@ -191,7 +128,7 @@ local function switch_characters(player, restore)
     -- Last character may have had a smaller inventory than the current one, and we
     -- may be able to restore them from the backup
     if backup then
-      copy_character(backup, new_char)
+      minime.copy_character(backup, new_char)
     end
     minime.dprint("Restored character inventories and settings of character " ..
                   serpent.line(minime.loc_name(new_char)) .. " from backup.")
@@ -203,7 +140,6 @@ local function switch_characters(player, restore)
 
   minime.dprint("End of function " .. f_name .. "(" .. player.name .. ")")
 end
-
 
 
 ------------------------------------------------------------------------------------
@@ -309,7 +245,6 @@ local function init_player(event)
 
   -- Check if the character that was used last still exists in the game, otherwise
   -- fall back to the current character, or to god mode
---~ log("Name of current player character: " .. tostring(player.character and player.character.name))
   player_data.last_character =
       -- The character used last time still exists
       (player_data.last_character and global.minime_characters[player_data.last_character] and
@@ -325,8 +260,6 @@ local function init_player(event)
   if not global.minime_characters[player_data.last_character] then
     name_cnt = 1
   end
-
---~ log("Name of last character: " .. serpent.line(player_data.last_character))
 
   player_data.dummy = player_data.dummy or minime.make_dummy(game.players[p])
 
@@ -347,6 +280,9 @@ local function init_player(event)
   if table_size(global.minime_characters) + name_cnt > 1 then
     minime_gui.init_gui(p, remove_character and true or false)
     minime.dprint("Made GUI for player " .. p)
+  else
+    minime.dprint("Only " .. tostring(table_size(global.minime_characters) + name_cnt) ..
+                  " characters are available -- no GUI is needed!")
   end
 
   minime.dprint("Current character: " .. serpent.line(player.character and player.character.name) ..
@@ -366,7 +302,7 @@ local function init_player(event)
   elseif player.character then
     -- Copy inventory and settings from old to new character
     minime.dprint("No need to switch characters, backing up old character!")
-    copy_character(player.character, global.player_data[p].dummy)
+    minime.copy_character(player.character, global.player_data[p].dummy)
   end
 
   minime.dprint("End of function " .. f_name .. "(" .. serpent.line(event) .. ")")
@@ -384,10 +320,22 @@ local function init()
   if game_initialized then
     minime.dprint("Function " .. f_name .. "() has already been run -- nothing to do!")
     return
-  -- Mark game as initialized,
-  else
-    game_initialized = true
   end
+
+  ------------------------------------------------------------------------------------
+  -- Learned that from eradicator: It basically checks that there are no undefined
+  -- global variables
+  setmetatable(_ENV,{
+    __newindex=function (self,key,value) --locked_global_write
+      error('\n\n[ER Global Lock] Forbidden global *write*:\n' ..
+          serpent.line{key=key or '<nil>',value=value or '<nil>'} .. '\n')
+      end,
+    __index   =function (self,key) --locked_global_read
+      error('\n\n[ER Global Lock] Forbidden global *read*:\n' ..
+          serpent.line{key=key or '<nil>'} .. '\n')
+      end
+  })
+  ------------------------------------------------------------------------------------
 
   global = global or {}
   global.player_data = global.player_data or {}
@@ -396,11 +344,6 @@ local function init()
   -- global table so we can access it from gui.lua
   global.minime_characters = {}
   make_character_list()
-
-  -- Unregister handlers for GUI-related events if the game has no more than one character!
-  --~ if table_size(global.minime_characters) < 2 then
-    --~ detach_events()
-  --~ end
 
   -- Create surface for placing dummy characters
   if not game.surfaces[minime.dummy_surface] then
@@ -417,7 +360,10 @@ minime.dprint("Before calling init_player for " .. player.name )
     init_player({ player = p })
   end
 
-  minime.dprint("End of function " .. f_name)
+  -- Mark game as initialized,
+  game_initialized = true
+
+  minime.dprint("End of function "  .. f_name .. "().")
 end
 
 
@@ -434,12 +380,12 @@ local function attach_interfaces()
 
   -- Need to attach interfaces
   if interface_attached then
-    log("Already attached remote interface -- nothing to do!")
+    --~ log("Already attached remote interface -- nothing to do!")
     --~ return
   else
     interface_attached = true
 
-    log("Adding remote interface \"minime\".")
+    --~ log("Adding remote interface \"minime\".")
     remote.add_interface('minime', {
       -- Add a new character to the GUI
       -- name: character.name (string value);
@@ -450,7 +396,7 @@ local function attach_interfaces()
         elseif (loc_name and type(loc_name) ~= "table") then
           error(serpent.line(loc_name) .. " is not a localised name!")
         end
-    log("Registering character " .. name)
+    --~ log("Registering character " .. name)
         global.minime_characters[name] = loc_name or name
         for p, player in pairs(game.players) do
           init_player({ player = player })
@@ -473,7 +419,7 @@ local function attach_interfaces()
           elseif (char.loc_name and type(char.loc_name) ~= "table") then
             error(serpent.line(char.loc_name) .. " is not a localised name!")
           end
-      log("Registering character " .. char.name)
+      minime.dprint("Registering character " .. char.name)
           global.minime_characters[char.name] = char.loc_name or char.name
         end
 
@@ -489,7 +435,7 @@ local function attach_interfaces()
         if not (name and type(name) == "string") then
           error(serpent.line(name) .. " is not a valid name!")
         end
-    log("Removing character " .. name)
+    minime.dprint("Removing character " .. name)
         global.minime_characters[name] = nil
         for p, player in pairs(game.players) do
           init_player({ player = player, remove_character = true })
@@ -529,7 +475,7 @@ local function attach_interfaces()
 
         if char then
           local dummy = global.player_data[player.index].dummy or minime.make_dummy(player.index)
-          copy_character(char, dummy)
+          minime.copy_character(char, dummy)
         end
       end,
 
@@ -577,12 +523,37 @@ local function attach_interfaces()
     })
 
     for f, _ in pairs(remote.interfaces["minime"]) do
-       log("Added function " .. serpent.line(f) .. " to remote interface \"minime\".")
+       --~ log("Added function " .. serpent.line(f) .. " to remote interface \"minime\".")
     end
 
   end
   log("End of function " .. f_name .. "().")
 end
+
+
+------------------------------------------------------------------------------------
+--                          UNREGISTER REMOTE INTERFACES!                         --
+------------------------------------------------------------------------------------
+local function detach_interfaces()
+  local f_name = "detach_interfaces"
+  minime.dprint("Entered function " .. f_name .. "().")
+
+  -- Need to attach interfaces
+  local del = remote.remove_interface('minime')
+  if del then
+    local msg = "Removed remote interface!"
+    if game then
+      minime.dprint(msg)
+    elseif del then
+      log(msg)
+    end
+  end
+
+  interface_attached = false
+
+  minime.dprint("End of function " .. f_name .. "().")
+end
+
 
 ------------------------------------------------------------------------------------
 --                            REGISTER EVENT HANDLERS!                            --
@@ -591,10 +562,8 @@ local function attach_events()
   local f_name = "attach_events"
   log("Entered function " .. f_name .. "().")
 
-log("events_attached: " .. tostring(events_attached))
-log("interface_attached: " .. tostring(interface_attached))
   if events_attached then
-    log("Already attached events -- nothing to do!")
+    --~ log("Already attached events -- nothing to do!")
   else
     events_attached = true
 
@@ -602,7 +571,7 @@ log("interface_attached: " .. tostring(interface_attached))
     -- GUI-related events
     ------------------------------------------------------------------------------------
     -- If a new player joins the game or respawns, initialize GUI and data!
-    log("Registering event handlers \"on_player_joined_game\", \"on_player_respawned\"")
+    --~ log("Registering event handlers \"on_player_joined_game\", \"on_player_respawned\"")
     script.on_event({defines.events.on_player_joined_game,
                      defines.events.on_player_respawned}, function(event)
       local f_name = (event.name == defines.events.on_player_joined_game and "on_player_joined_game") or
@@ -615,8 +584,27 @@ log("interface_attached: " .. tostring(interface_attached))
     end)
 
     ------------------------------------------------------------------------------------
+    -- Before a player dies, make a backup of the character!
+    --~ log("Registering event handlers \"on_pre_player_died\", \"on_pre_player_left_game\"")
+    script.on_event({defines.events.on_pre_player_died,
+                     defines.events.on_pre_player_left_game}, function(event)
+      local f_name = (event.name == defines.events.on_pre_player_died and "on_pre_player_died") or
+                     (event.name == defines.events.on_pre_player_left_game and "on_pre_player_left_game")
+      minime.dprint("Entered event script: " .. f_name .. " (" .. serpent.line(event) .. ").")
+
+      local p = event.player_index
+      local player = game.players[p]
+
+      if player and player.character and global.player_data[p].dummy then
+        minime.copy_character(game.players[p].character, global.player_data[p].dummy)
+        minime.dprint("Made backup of character for player " .. serpent.line(player.name) .. ".")
+      end
+      minime.dprint("End of event script: "  .. f_name .. " (" .. serpent.line(event) .. ").")
+    end)
+
+    ------------------------------------------------------------------------------------
     -- If a player is removed from the game, remove his GUI and data!
-    log("Registering event handler \"on_pre_player_removed\"")
+    --~ log("Registering event handler \"on_pre_player_removed\"")
     script.on_event(defines.events.on_pre_player_removed, function(event)
       local f_name = "on_pre_player_removed"
       minime.dprint("Entered event script: " .. f_name .. " (" .. serpent.line(event) .. ").")
@@ -628,7 +616,7 @@ log("interface_attached: " .. tostring(interface_attached))
 
     ------------------------------------------------------------------------------------
     -- If a player leaves the game, remove just the GUI!
-    log("Registering event handler \"on_player_left_game\"")
+    --~ log("Registering event handler \"on_player_left_game\"")
     script.on_event(defines.events.on_player_left_game, function(event)
       local f_name = "on_player_left_game"
       minime.dprint("Entered event script: " .. f_name .. " (" .. serpent.line(event) .. ").")
@@ -640,46 +628,113 @@ log("interface_attached: " .. tostring(interface_attached))
 
     ------------------------------------------------------------------------------------
     -- React to GUI clicks
-    log("Registering event handler \"on_gui_click\"")
+    --~ log("Registering event handler \"on_gui_click\"")
     script.on_event(defines.events.on_gui_click, function(event)
       local f_name = "on_gui_click"
       minime.dprint("Entered event script: " .. f_name .. " (" .. serpent.line(event) .. ").")
 
       on_gui_click(event)
-      --~ minime_gui.on_gui_click(event)
 
       minime.dprint("End of event script: "  .. f_name .. " (" .. serpent.line(event) .. ").")
     end)
-
-
-    ------------------------------------------------------------------------------------
-    --  Also apply changes of inventory contents to respective inventory of the dummy --
-    ------------------------------------------------------------------------------------
-    --~ for _, inv in ipairs({ "ammo", "armor", "guns", "main", "trash" }) do
-    for _, inv in ipairs(minime.inventory_list) do
-      local reg_event = "on_player_" .. tostring(inv == "guns" and "gun" or inv) .. "_inventory_changed"
-
-      log("Registering event handler " .. serpent.line(reg_event))
-      script.on_event(defines.events[reg_event], function (event)
-        local f_name = reg_event
-        minime.dprint("Entered event script: " .. f_name .. " (" .. serpent.line(event) .. ").")
-
-        local p = game.players[event.player_index]
-        local d = global.player_data[p.index].dummy
-        local i = defines.inventory["character_" .. inv]
-
-        minime.transfer_inventory( p.get_inventory(i), d.get_inventory(i) )
-        minime.dprint("Made backup of inventory " .. serpent.line(inv) ..
-                      " for player " .. serpent.line(p.name)  .. "!")
-
-        minime.dprint("End of event script: "  .. f_name .. " (" .. serpent.line(event) .. ").")
-      end)
-    end
-
   end
   log("End of function " .. f_name .. "().")
 end
 
+
+------------------------------------------------------------------------------------
+--                           UNREGISTER EVENT HANDLERS!                           --
+------------------------------------------------------------------------------------
+local function detach_events()
+  local f_name = "detach_events"
+  minime.dprint("Entered function " .. f_name .. "().")
+
+  local events = {
+    "on_player_joined_game",
+    "on_player_respawned",
+    "on_pre_player_died",
+    "on_pre_player_left_game",
+    "on_player_left_game",
+    "on_gui_click",
+  }
+
+  for e, event in ipairs(events) do
+    script.on_event(defines.events[event], nil)
+    local msg = "Detached event " .. event .. "."
+    if game then
+      minime.dprint(msg)
+    else
+      log(msg)
+    end
+  end
+
+  events_attached = false
+
+  minime.dprint("End of function " .. f_name .. "().")
+end
+
+------------------------------------------------------------------------------------
+--            Check if we need to attach event handlers and interfaces!           --
+------------------------------------------------------------------------------------
+local function must_attach()
+  local f_name = "must_attach"
+  minime.dprint("Entered function " .. f_name .. "()")
+
+  local attach = false
+  -- We have access to 'game', so we can poll players directly -- if they exist yet!
+  -- In that case, they will have been initialized, so we could just check if they
+  -- have a GUI.
+  if game then
+minime.dprint("We've access to 'game' -- polling players directly!")
+    for p, player in pairs(game.players) do
+minime.show(player.name, "Player " .. p)
+      if player.gui.top["minime_gui"] then
+minime.dprint("Player has GUI!")
+        attach = true
+        break
+      end
+    end
+  end
+
+  -- Players may not exist yet if this was called from on_init or on_cutscene_cancelled,
+  -- or this was called from on_load, where we don't have access to 'game'.
+  -- Perhaps we can use stored player data?
+  if not attach then
+    minime.dprint("Using stored player data!")
+
+    -- Check how many characters are registered
+    local char_list = {}
+    for name, char in pairs(global.minime_characters or {}) do
+      char_list[name] = true
+    end
+
+    -- Do we have enough already?
+    if table_size(char_list) > 1 then
+      attach = true
+    else
+minime.dprint("global.minime_characters: " .. serpent.block(global.minime_characters))
+      for p, player in pairs(global.player_data or {}) do
+minime.show(player, "Player " .. p)
+        if player.last_character then
+minime.show(player.last_character, "player.last_character")
+          char_list[player.last_character] = true
+          if table_size(char_list) > 1 then
+minime.dprint("We've " .. table_size(char_list) .. "characters -- attach events!")
+            attach = true
+            break
+          end
+        end
+      end
+    end
+
+minime.show(char_list, "char_list")
+  end
+minime.show(global.player_data, "global.player_data")
+
+  minime.dprint("Must attach events and interfaces: " .. tostring(attach))
+  minime.dprint("End of function " .. f_name .. "()")
+  return attach
+end
 
 ------------------------------------------------------------------------------------
 --                    EVENTS RELATED TO STARTING/LOADING A GAME                   --
@@ -689,17 +744,83 @@ script.on_init(function()
   local f_name = "on_init"
   minime.dprint("Entered script." .. f_name .. "()")
 
-  if minime.minime_character_selector then
-    minime.dprint("Character selector is enabled -- trying to initialize game!")
-    attach_events()
-    attach_interfaces()
-    init()
+  -- Factorio <1.0.0 has no cutscene, so new games must be initialized in on_init
+  if minime.check_mod_version_less("base", "1.0.0") then
+    minime.dprint("Factorio version is less than 1.0.0 -- should try to init game!")
+    -- Only do stuff if the GUI has been requested
+    if minime.minime_character_selector then
+      minime.dprint("Character selector is enabled -- will initialize game!")
+
+      init()
+
+      -- Only listen to events if GUI may be needed
+      if must_attach() then
+        attach_events()
+        attach_interfaces()
+      -- Single player: Explicitly detach events and interfaces again!
+      else
+        detach_events()
+        detach_interfaces()
+      end
+    else
+      minime.dprint("Character selector is disabled -- check if any players have a GUI.")
+      for p, player in pairs(game.players) do
+        minime_gui.remove_gui(player)
+      end
+    end
   else
-    minime.dprint("Character selector is disabled -- nothing to do!")
+minime.dprint("Factorio version should start with a cutscene -- delaying initialization!")
   end
 
   minime.dprint("End of script." .. f_name .. "()")
 end)
+
+------------------------------------------------------------------------------------
+-- While the cutscene introduced with Factorio 1.0 is running, the player is not
+-- connected to a character. So, in factorio 1.0, we'll init the game after the
+-- cutscene has finished!
+------------------------------------------------------------------------------------
+--~ minime.show(minime.check_mod_version_ge("base", "1.0.0"), "minime.check_mod_version_ge(\"base\", \"1.0.0\")")
+if minime.check_mod_version_ge("base", "1.0.0") then
+
+  log("Registering event handler \"on_cutscene_cancelled\"")
+  script.on_event(defines.events.on_cutscene_cancelled, function()
+    local f_name = "on_cutscene_cancelled"
+    minime.dprint("Entered event script: " .. f_name .. " ().")
+
+    -- In vanilla Factorio, the cutscene runs only once. Mods may introduce more cut-
+    -- scenes, though, so we want to make sure this code won't be run repeatedly!
+    if not global.cutscene_cancelled then
+      global.cutscene_cancelled = true
+      -- Only do stuff if the GUI has been requested
+      if minime.minime_character_selector then
+        minime.dprint("Character selector is enabled -- trying to initialize game!")
+
+        init()
+        -- Only listen to events if GUI may be needed.
+        --~ if table_size(global.minime_characters) > 1 then
+        if must_attach() then
+          minime.dprint("Will attach event handlers and interfaces!")
+          attach_events()
+          attach_interfaces()
+        -- Explicitly detach events and interfaces again!
+        else
+          detach_events()
+          detach_interfaces()
+          minime.dprint("Won't attach event handlers and interfaces!")
+        end
+
+      else
+        minime.dprint("Character selector is disabled -- check if any players have a GUI.")
+        for p, player in pairs(game.players) do
+          minime_gui.remove_gui(player)
+        end
+      end
+    end
+    minime.dprint("End of event script: "  .. f_name .. " ().")
+  end)
+  log("Done.")
+end
 
 --------------------------------------------------------------------------------------------
 -- Configuration changed
@@ -707,47 +828,61 @@ script.on_configuration_changed(function(event)
   local f_name = "on_configuration_changed"
   minime.dprint("Entered script." .. f_name .. "(" .. serpent.line(event) .. ")")
 
-  if minime.minime_character_selector then
-    minime.dprint("Character selector is enabled -- check if we need to initialize the game!")
+  -- Check if GUI setting has been changed.
+  if event.mod_startup_settings_changed then
+    minime.minime_character_selector = settings.startup["minime_character-selector"].value
+    minime.dprint("Re-read startup setting. User has " ..
+                  tostring(minime.minime_character_selector and "requested" or "not requested") .. " a GUI.")
+  end
 
-    attach_events()
-    attach_interfaces()
+  if minime.minime_character_selector then
+    minime.dprint("Character selector is enabled -- trying to initialize the game!")
     init()
 
+    minime.dprint("Check if we need to attach events and interfaces!")
+
+
+    -- Attach events and interfaces only if more characters than one are available!
+    if must_attach() then
+      minime.dprint("Attaching event handlers and interfaces!")
+      attach_events()
+      attach_interfaces()
+    -- Explicitly detach events and interfaces again! (Doing this in multiplayer will desync!)
+    elseif not game.is_multiplayer() then
+      detach_events()
+      detach_interfaces()
+    end
+  -- Check if players already have a GUI
   else
-    minime.dprint("Character selector is disabled -- nothing to do!")
+    minime.dprint("Character selector is disabled -- check if any players have a GUI.")
+    for p, player in pairs(game.players) do
+      minime_gui.remove_gui(player)
+      --~ if player.gui.top.minime_gui then
+        --~ minime.dprint("Player " .. player.name .. " (" .. p .. ") has a GUI!")
+        --~ player.gui.top.minime_gui.destroy()
+        --~ minime.dprint("Removed GUI of player " .. p)
+      --~ end
+    end
+    minime.dprint("Done!")
   end
 
   minime.dprint("End of script." .. f_name .. "(" .. serpent.line(event) .. ")")
 end)
 
 
-  --~ minime.dprint("End of function " .. f_name)
---~ end
-
 --------------------------------------------------------------------------------------------
 -- Loaded existing game
 script.on_load(function()
-  log("Entered script.on_load()")
+  --~ log("Entered script.on_load()")
 
-  if minime.minime_character_selector then
+  if minime.minime_character_selector and must_attach() then
     attach_events()
     attach_interfaces()
+  -- Explicitly detach events and interfaces again!
+  else
+    detach_events()
+    detach_interfaces()
   end
 
-  log("End of script.on_load()")
+  --~ log("End of script.on_load()")
 end)
-
-
---------------------------------------------------------------------------------------------
--- Learned that from eradicator: It basically checks that there are no undefined global variables
-setmetatable(_ENV,{
-  __newindex=function (self,key,value) --locked_global_write
-    error('\n\n[ER Global Lock] Forbidden global *write*:\n' ..
-        serpent.line{key=key or '<nil>',value=value or '<nil>'} .. '\n')
-    end,
-  __index   =function (self,key) --locked_global_read
-    error('\n\n[ER Global Lock] Forbidden global *read*:\n' ..
-        serpent.line{key=key or '<nil>'} .. '\n')
-    end
-})
