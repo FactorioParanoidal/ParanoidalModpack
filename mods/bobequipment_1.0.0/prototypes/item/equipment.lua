@@ -56,8 +56,10 @@ data:extend(
 
 data.raw.item["battery-equipment"].icon = "__bobequipment__/graphics/icons/battery-equipment.png"
 data.raw.item["battery-equipment"].icon_size = 64
+data.raw.item["battery-equipment"].icon_mipmaps = nil
 data.raw.item["battery-mk2-equipment"].icon = "__bobequipment__/graphics/icons/battery-mk2-equipment.png"
 data.raw.item["battery-mk2-equipment"].icon_size = 64
+data.raw.item["battery-mk2-equipment"].icon_mipmaps = nil
 
 data:extend(
 {
@@ -110,6 +112,7 @@ data:extend(
 
 data.raw.item["fusion-reactor-equipment"].icon = "__bobequipment__/graphics/icons/fusion-reactor-equipment.png"
 data.raw.item["fusion-reactor-equipment"].icon_size = 32
+data.raw.item["fusion-reactor-equipment"].icon_mipmaps = nil
 
 data:extend(
 {
@@ -184,6 +187,7 @@ data:extend(
 
 data.raw.item["solar-panel-equipment"].icon = "__bobequipment__/graphics/icons/solar-panel-equipment-1.png"
 data.raw.item["solar-panel-equipment"].icon_size = 32
+data.raw.item["solar-panel-equipment"].icon_mipmaps = nil
 
 data:extend(
 {

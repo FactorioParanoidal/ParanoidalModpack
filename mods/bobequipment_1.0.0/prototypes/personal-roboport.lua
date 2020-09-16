@@ -1,11 +1,13 @@
 data.raw.item["personal-roboport-equipment"].icon = "__bobequipment__/graphics/equipment/personal-roboport-mk1-equipment.png"
 data.raw.item["personal-roboport-equipment"].icon_size = 64
+data.raw.item["personal-roboport-equipment"].icon_mipmaps = nil
 data.raw["roboport-equipment"]["personal-roboport-equipment"].sprite.filename = "__bobequipment__/graphics/equipment/personal-roboport-mk1-equipment.png"
 data.raw.technology["personal-roboport-equipment"].icon = "__bobequipment__/graphics/icons/technology/personal-roboport-mk1-equipment.png"
 data.raw.technology["personal-roboport-equipment"].icon_size = 128
 
 data.raw.item["personal-roboport-mk2-equipment"].icon = "__bobequipment__/graphics/equipment/personal-roboport-mk2-equipment.png"
 data.raw.item["personal-roboport-mk2-equipment"].icon_size = 64
+data.raw.item["personal-roboport-mk2-equipment"].icon_mipmaps = nil
 data.raw["roboport-equipment"]["personal-roboport-mk2-equipment"].sprite.filename = "__bobequipment__/graphics/equipment/personal-roboport-mk2-equipment.png"
 data.raw.technology["personal-roboport-mk2-equipment"].icon = "__bobequipment__/graphics/icons/technology/personal-roboport-mk2-equipment.png"
 data.raw.technology["personal-roboport-mk2-equipment"].icon_size = 128
