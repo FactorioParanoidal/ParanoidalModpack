@@ -64,20 +64,20 @@ if data.raw.item["silicon-nitride"] then
 end
 
 if data.raw.item["glass"] then
-  bobmods.lib.recipe.add_ingredient("fibreglass-board", {"glass", 2}) --DrD 1
+  bobmods.lib.recipe.add_ingredient("fibreglass-board", {"glass", 1})
 else
-  bobmods.lib.recipe.add_ingredient("fibreglass-board", {"plastic-bar", 2}) --DrD 1
+  bobmods.lib.recipe.add_ingredient("fibreglass-board", {"plastic-bar", 1})
 end
 
 if data.raw.item["tin-plate"] then
-  bobmods.lib.recipe.add_ingredient("circuit-board", {"tin-plate", 2}) --DrD 1
+  bobmods.lib.recipe.add_ingredient("circuit-board", {"tin-plate", 1})
 else
-  bobmods.lib.recipe.add_ingredient("circuit-board", {"copper-plate", 1}) --DrD 1
+  bobmods.lib.recipe.add_ingredient("circuit-board", {"copper-plate", 1})
 end
 
 if data.raw.item["gold-plate"] then
-  bobmods.lib.recipe.add_ingredient("superior-circuit-board", {"gold-plate", 2}) --DrD 1
-  bobmods.lib.recipe.add_ingredient("multi-layer-circuit-board", {"gold-plate", 3}) --DrD 2
+  bobmods.lib.recipe.add_ingredient("superior-circuit-board", {"gold-plate", 1})
+  bobmods.lib.recipe.add_ingredient("multi-layer-circuit-board", {"gold-plate", 2})
 else
   if data.raw.item["tin-plate"] then
     bobmods.lib.recipe.add_ingredient("superior-circuit-board", {"tin-plate", 1})

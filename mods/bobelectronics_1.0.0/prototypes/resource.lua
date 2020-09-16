@@ -131,7 +131,7 @@ if not data.raw.item["silicon-wafer"] then
         {
         },
         result = "silicon-wafer",
-        result_count = 4, -- 8 DrD
+        result_count = 8
       },
     }
     )
@@ -170,7 +170,7 @@ if data.raw.item["tin-plate"] then
         {"copper-plate", 1},
       },
       result = "solder-alloy",
-      result_count = 5, -- 11 DrD
+      result_count = 11,
       allow_decomposition = false
     },
   }
@@ -194,7 +194,7 @@ if data.raw.item["tin-plate"] then
           {"lead-plate", 7},
         },
         result = "solder-alloy",
-        result_count = 5, -- 11 DrD
+        result_count = 11,
         allow_decomposition = false
       },
     }
