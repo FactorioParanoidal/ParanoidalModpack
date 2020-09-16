@@ -32,14 +32,47 @@ local function getRailTypes()
     global.rails = {}
     global.rails_by_index = {}
     global.rails_localised = {}
-    local rails_by_item = {}
+    local rails_by_item = {
+        rail = {
+            curved = "curved-rail",
+            straight = "straight-rail",
+            item = "rail"
+        }
+    }
+    local curved, straight = game.entity_prototypes["curved-rail"], game.entity_prototypes["straight-rail"]
+    if curved and straight then
+        local vanilla = 0
+        if curved.items_to_place_this then
+            for _, item in pairs(curved.items_to_place_this) do
+                if item.name == "rail" then
+                    vanilla = 1
+                end
+            end
+        end
+        if straight.items_to_place_this then
+            for _, item in pairs(straight.items_to_place_this) do
+                if item.name == "rail" then
+                    vanilla = vanilla + 1
+                end
+            end
+        end
+        if vanilla ~= 2 then
+            rails_by_item = {}
+        end
+    end
+    local items = game.get_filtered_item_prototypes{{filter="place-result", elem_filters={{filter="rail"}}}}
     local railstring = ""
-    for name, proto in pairs(game.entity_prototypes) do
+    local rails = game.get_filtered_entity_prototypes({{filter="rail"}})
+    for name, proto in pairs(rails) do
         if proto.type == "straight-rail" and proto.items_to_place_this then
             for _, item in pairs(proto.items_to_place_this) do
-                rails_by_item[item.name] = rails_by_item[item.name] or {}
-                rails_by_item[item.name].straight = name
-                rails_by_item[item.name].item = item.name
+                if not rails_by_item[item.name] then
+                    rails_by_item[item.name] = {}
+                end
+                if not rails_by_item[item.name].straight then
+                    rails_by_item[item.name].straight = name
+                    rails_by_item[item.name].item = item.name
+                end
             end
         end
         if proto.type == "curved-rail" then
@@ -48,8 +81,12 @@ local function getRailTypes()
                 local item_proto = game.item_prototypes[item.name]
                 --log(serpent.block(item_proto.place_result.name))
                 if item_proto and game.entity_prototypes[item_proto.place_result.name].type == "straight-rail" then
-                    rails_by_item[item.name] = rails_by_item[item.name] or {}
-                    rails_by_item[item.name].curved = name
+                    if not rails_by_item[item.name] then
+                        rails_by_item[item.name] = {}
+                    end
+                    if not rails_by_item[item.name].curved then
+                        rails_by_item[item.name].curved = name
+                    end
                 end
             end
         end
@@ -73,8 +110,9 @@ local function getRailTypes()
         end
     end
     --log(serpent.block(rails_by_item))
+    local rails_encoded = game.encode_string(game.table_to_json(rails_by_item))
     global.rails = rails_by_item
-    return railstring
+    return railstring, rails_encoded
 end
 
 local function on_tick(event)
@@ -187,12 +225,23 @@ local function on_init()
     init_forces()
     init_players()
     setMetatables()
-    getRailTypes()
+    global.railString, global.encoded_rails = getRailTypes()
 end
 
 local function on_load()
     register_events()
     setMetatables()
+end
+
+local function reset_rail_types()
+    for _, player in pairs(game.players) do
+        player.print("Rail types where changed, resetting to vanilla rail.")
+        local psettings = global.players[player.index]
+        if psettings then
+            psettings.railType = 1
+            psettings.rail = global.rails_by_index[1]
+        end
+    end
 end
 
 local function on_configuration_changed(data)
@@ -208,167 +257,11 @@ local function on_configuration_changed(data)
                 global = {}
                 on_init()
             else
-                if oldVersion < v'0.5.13' then
-                    debugDump("Reset settings",true)
+                if oldVersion < v'3.0.0' then
+                    debugDump("FARL: Reset settings",true)
                     global = {}
                 end
                 on_init()
-                if oldVersion > v'0.5.13' then
-                    if oldVersion < v'0.5.19' then
-                        for _, p_settings in pairs(global.players) do
-                            if p_settings.bulldozer == nil then p_settings.bulldozer = false end
-                            if p_settings.maintenance == nil then p_settings.maintenance = false end
-                            if p_settings.root ~= nil then p_settings.root = nil end
-                            if p_settings.flipSignals ~= nil then p_settings.flipSignals = nil end
-                        end
-                        for _, farl in pairs(global.farl) do
-                            if farl.bulldozer ~= nil then farl.bulldozer = nil end
-                            if farl.maintenance ~= nil then farl.maintenance = nil end
-                            farl.protected_tiles = {}
-                            farl.curveBP = nil
-                            farl.name = nil
-                            farl:deactivate()
-                            if farl.driver and farl.driver.valid then
-                                GUI.destroyGui(farl.driver)
-                                GUI.createGui(farl.driver)
-                            end
-                        end
-                    end
-                    if oldVersion < v'0.5.21' then
-                        local tmp = {}
-                        local tmpBps = {}
-                        for _, player in pairs(game.players) do
-                            if global.players[player.name] then
-                                tmp[player.index] = global.players[player.name]
-                                global.players[player.name] = nil
-                            end
-                            if global.savedBlueprints[player.name] then
-                                tmpBps[player.index] = global.savedBlueprints[player.name]
-                                global.savedBlueprints[player.name] = nil
-                            end
-                        end
-                        global.players = tmp
-                        global.savedBlueprints = tmpBps
-                    end
-
-                    if oldVersion < v'0.5.24' then
-                        global.overlayStack = global.overlayStack or {}
-                        for i=#global.farl, 1, -1 do
-                            local farl = global.farl[i]
-                            if not farl.train or (farl.train and not farl.train.valid) then
-                                if farl.driver and farl.driver.valid then
-                                    GUI.destroyGui(farl.driver)
-                                end
-                                farl:deactivate()
-                                table.remove(global.farl, i)
-                            end
-                        end
-                    end
-
-                    if oldVersion < v'0.5.26' then
-                        for _, psettings in pairs(global.players) do
-                            if psettings.mirrorConcrete == nil then
-                                psettings.mirrorConcrete = true
-                            end
-                        end
-                    end
-
-                    if oldVersion < v'0.5.35' then
-                        global.concrete = nil
-                        global.tiles = nil
-                    end
-
-                    if oldVersion < v'0.5.36' then
-                        for _, psettings in pairs(global.players) do
-                            if psettings.wooden == nil then
-                                psettings.wooden = false
-                            end
-                        end
-                    end
-
-                    if oldVersion < v'0.6.1' then
-                        local newFarls = {}
-                        if global.farl then
-                            for _, farl in pairs(global.farl) do
-                                farl = resetMetatable(farl, FARL)
-                                if farl.active then
-                                    farl:deactivate("Updating FARL")
-                                end
-                                if farl.locomotive and farl.locomotive.valid then
-                                    newFarls[farl.locomotive.unit_number] = farl
-                                end
-                            end
-                            global.farl = newFarls
-                        end
-                    end
-
-                    if oldVersion < v'0.7.1' then
-                        if global.destroyNextTick then
-                            for _, pis in pairs(global.destroyNextTick) do
-                                for _, pi in pairs(pis) do
-                                    GUI.destroyGui(game.get_player(pi))
-                                end
-                            end
-                            global.destroyNextTick = nil
-                        end
-                        init_global()
-                        if global.farl then
-                            for id, farl in pairs(global.farl) do
-                                if not farl.driver then
-                                    farl.settings = false
-                                end
-                                farl.openedBy = nil
-                                farl.destroy = nil
-                                if farl.active or farl.driver then
-                                    global.activeFarls[id] = farl
-                                end
-                                saveVar(global)
-                            end
-                        end
-                    end
-                    if oldVersion < v'1.0.6' then
-                        getRailTypes()
-                        for _, psettings in pairs(global.players) do
-                            if psettings.signalEveryPole == nil then
-                                psettings.signalEveryPole = false
-                            end
-                        end
-                    end
-                    if oldVersion < v'1.0.7' then
-                        local railstring = getRailTypes()
-                        global.electricInstalled = nil
-                        for _, psettings in pairs(global.players) do
-                            if not psettings.railType or psettings.railType == nil then
-                                psettings.railType = 1
-                                psettings.rail = global.rails_by_index[1]
-                            end
-                        end
-                        log(serpent.block({railstring = railstring, globalRailString=global.railString}))
-                        log(serpent.block(global.rails, {name="rails"}))
-                        log(serpent.block(global.rails_by_index, {name="rails_by_index"}))
-                        log(serpent.block(global.rails_localised, {name="rails_localised"}))
-                    end
-                    if oldVersion < v'1.0.10' then
-                        global.electric_poles = nil
-                    end
-                    if oldVersion < v'1.1.1' then
-                        for _, psettings in pairs(global.players) do
-                            if psettings.place_ghosts == nil then
-                                psettings.place_ghosts = true
-                            end
-                        end
-                        for _, farl in pairs(global.farl) do
-                            farl.last_message = farl.last_message or {}
-                        end
-                    end
-                    if oldVersion < v'1.1.2' then
-                        for _, farl in pairs(global.farl) do
-                            if farl.locomotive and farl.locomotive.valid then
-                                FARL.setup(farl.locomotive)
-                            end
-                        end
-                    end
-                end
                 if oldVersion < v'3.0.1' then
                     for _, psettings in pairs(global.players) do
                         if psettings.player then
@@ -419,6 +312,36 @@ local function on_configuration_changed(data)
                     end
                 end
                 global.trigger_events = nil
+
+                if oldVersion < v'4.0.3' then
+                    for i, player in pairs(game.players) do
+                        local psettings = global.players[i]
+                        psettings.bp = {diagonal=defaultsDiagonal, straight=defaultsStraight}
+                        psettings.activeBP = psettings.bp
+                        global.savedBlueprints[i] = {}
+                        player.print("FARL: Cleared blueprints")
+                    end
+                    local farl, frame_flow
+                    for _, player in pairs(game.players) do
+                        frame_flow = mod_gui.get_frame_flow(player)
+                        if frame_flow.farl and frame_flow.farl.valid then
+                            FARL.onPlayerLeave(player)
+                            frame_flow.farl.destroy()
+                            farl = FARL.onPlayerEnter(player)
+                            if farl then
+                                farl:deactivate()
+                                GUI.createGui(player)
+                                GUI.updateGui(farl)
+                            end
+                        end
+                    end
+                end
+                if oldVersion < v'4.0.4' then
+                    local railstring, encoded_rails = getRailTypes()
+                    reset_rail_types()
+                    global.railString = railstring
+                    global.encoded_rails = encoded_rails
+                end
             end
         else
             debugDump("FARL version: ".. tostring(newVersion), true)
@@ -444,19 +367,14 @@ local function on_configuration_changed(data)
     --    remote.call("satellite-uplink", "add_item", "rail", 1)
     --  end
 
-    local railstring = getRailTypes()
+    local railstring, encoded_rails = getRailTypes()
     --rails where added/removed, reset to index 1
     --log(string.format("%s == %s", railstring, global.railString))
-    if railstring ~= global.railString then
-        for i, psettings in pairs(global.players) do
-            if psettings.railType ~= 1 then
-                game.get_player(i).print("Rail types where changed, resetting to vanilla rail.")
-            end
-            psettings.railType = 1
-            psettings.rail = global.rails_by_index[1]
-        end
+    if railstring ~= global.railString or encoded_rails ~= global.encoded_rails then
+        reset_rail_types()
     end
     global.railString = railstring
+    global.encoded_rails = encoded_rails
     setMetatables()
     for _,s in pairs(global.players) do
         s:checkMods()
@@ -681,18 +599,6 @@ script.on_event("toggle-train-control", function(event)
         end
     end
 end)
-
--- script.on_event({defines.events.on_player_built_tile,defines.events.on_robot_built_tile}, function(event)
---     --log(serpent.block(event))
---     if event.item then log("item " .. serpent.line({n=event.item.name,t=event.item.type})) end
---     log("tile " .. serpent.line(event.tile.name))
---     if event.stack then log("stack " .. serpent.line{n=event.stack.name,t=event.stack.type}) end
---     log("tiles")
---     log(serpent.block(event.tiles))
---     for _, t in pairs(event.tiles) do
---         log(serpent.line{old_tile = t.old_tile.name, p=t.position})
---     end
--- end)
 
 local command_to_button = {
     farl_read_bp = "blueprint",
