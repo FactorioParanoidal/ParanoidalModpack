@@ -25,6 +25,10 @@ data:extend(
     type = "equipment-category",
     name = "tank"
   },
+  {
+    type = "equipment-category",
+    name = "spidertron"
+  },
 
   {
     type = "equipment-category",
@@ -53,5 +57,3 @@ data:extend(
   },
 }
 )
-
-

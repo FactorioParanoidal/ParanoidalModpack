@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 16. 08. 2020
+  Changes:
+    - Changed Spidertron equipment grid to use vehicle equipment.
+    - Added "spidertron" category to Speed equipment and Roboports (they don't use the generic "vehicle" group, because speed equipment doesn't work on thanks that can't move itself, and roboports don't work in things without an inventory)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.1
 Date: 12. 03. 2020
   Changes:

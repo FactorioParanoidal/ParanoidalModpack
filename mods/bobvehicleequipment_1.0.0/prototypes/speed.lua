@@ -51,7 +51,7 @@ data:extend(
     },
     energy_consumption = "200kW",
     movement_bonus = 0.3,
-    categories = {"car", "tank", "locomotive"}
+    categories = {"car", "tank", "spidertron", "locomotive"}
   },
 
   {
@@ -145,7 +145,7 @@ data:extend(
     },
     energy_consumption = "400kW",
     movement_bonus = 0.6,
-    categories = {"car", "tank", "locomotive"}
+    categories = {"car", "tank", "spidertron", "locomotive"}
   },
 
   {
