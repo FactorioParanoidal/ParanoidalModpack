@@ -892,7 +892,7 @@ if settings.startup["bobmods-logistics-beltoverhaul"].value == true then
       type = "technology",
       name = "logistics-0",
       localised_name = {"technology-name.bob-basic-logistics"},
-      icon = "__base__/graphics/technology/logistics.png",
+      icon = "__boblogistics__/graphics/icons/technology/logistics-0.png",
       icon_size = 128,
       effects =
       {
@@ -914,7 +914,7 @@ if settings.startup["bobmods-logistics-beltoverhaul"].value == true then
         },
         time = 10
       },
-      order = "a-f-d",
+      order = "a-f-0",
     }
   }
   )
@@ -925,7 +925,7 @@ data:extend(
   {
     type = "technology",
     name = "logistics-4",
-    icon = "__base__/graphics/technology/logistics.png",
+      icon = "__boblogistics__/graphics/icons/technology/logistics-4.png",
     icon_size = 128,
     effects =
     {
@@ -963,7 +963,7 @@ data:extend(
   {
     type = "technology",
     name = "logistics-5",
-    icon = "__base__/graphics/technology/logistics.png",
+      icon = "__boblogistics__/graphics/icons/technology/logistics-5.png",
     icon_size = 128,
     effects =
     {

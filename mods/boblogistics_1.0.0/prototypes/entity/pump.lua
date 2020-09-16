@@ -222,6 +222,8 @@ data.raw.pump.pump.energy_usage = "15kW"
 data.raw.pump.pump.pumping_speed = 80
 
 local pump_collision_box = table.deepcopy(data.raw.pump.pump.collision_box)
+local fluid_wagon_connector_graphics = table.deepcopy(data.raw.pump.pump.fluid_wagon_connector_graphics)
+
 
 
 data:extend(
@@ -272,7 +274,7 @@ data:extend(
     vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
     animations = bobmods.logistics.pump_animations({r = 0.8, g = 0.8, b = 0.2, a = 1}),
     fluid_wagon_connector_frame_count = 35,
-    fluid_wagon_connector_graphics = require("prototypes.entity.pump-connector"),
+    fluid_wagon_connector_graphics = fluid_wagon_connector_graphics,
     fluid_animation = pump_fluid_animation,
     glass_pictures = pump_glass_pictures,
     circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
@@ -325,7 +327,7 @@ data:extend(
     vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
     animations = bobmods.logistics.pump_animations({r = 0.6, g = 0.2, b = 0.8, a = 1}),
     fluid_wagon_connector_frame_count = 35,
-    fluid_wagon_connector_graphics = require("prototypes.entity.pump-connector"),
+    fluid_wagon_connector_graphics = fluid_wagon_connector_graphics,
     fluid_animation = pump_fluid_animation,
     glass_pictures = pump_glass_pictures,
     circuit_wire_connection_points = circuit_connector_definitions["pump"].points,
@@ -377,7 +379,7 @@ data:extend(
     vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
     animations = bobmods.logistics.pump_animations({r = 0.2, g = 0.8, b = 0.3, a = 1}),
     fluid_wagon_connector_frame_count = 35,
-    fluid_wagon_connector_graphics = require("prototypes.entity.pump-connector"),
+    fluid_wagon_connector_graphics = fluid_wagon_connector_graphics,
     fluid_animation = pump_fluid_animation,
     glass_pictures = pump_glass_pictures,
     circuit_wire_connection_points = circuit_connector_definitions["pump"].points,

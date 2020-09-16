@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 16. 08. 2020
+  Changes:
+    - Replaced a require (pump tank connection graphics) with a table.deepcopy off the original.
+    - Makes use of new library function bobmods.lib.recipe.set_ingredients if it exists (difficulty-split safe version) for the roboport and construction/logistic robot recipes.
+    - Updated logistics technology icons to match new base game.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.9
 Date: 30. 04. 2020
   Bugfixes:

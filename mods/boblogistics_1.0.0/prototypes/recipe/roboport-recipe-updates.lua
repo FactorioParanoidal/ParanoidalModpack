@@ -1,7 +1,10 @@
 if settings.startup["bobmods-logistics-roboportrecipeupdate"].value == true then
-  data.raw.recipe["roboport"].ingredients = {{"steel-plate", 15}, {"roboport-antenna-1", 5}, {"roboport-chargepad-1", 4}, {"roboport-door-1", 1}}
+  if bobmods.lib.recipe.set_ingredients then
+    bobmods.lib.recipe.set_ingredients("roboport", {{"steel-plate", 15}, {"roboport-antenna-1", 5}, {"roboport-chargepad-1", 4}, {"roboport-door-1", 1}})
+  else
+    data.raw.recipe["roboport"].ingredients = {{"steel-plate", 15}, {"roboport-antenna-1", 5}, {"roboport-chargepad-1", 4}, {"roboport-door-1", 1}}
+  end
 end
-
 
 
 
@@ -27,7 +30,6 @@ if data.raw.item["tinned-copper-cable"] then
   bobmods.lib.recipe.replace_ingredient("roboport-antenna-2", "copper-cable", "tinned-copper-cable")
 end
 
-
 if data.raw.item["steel-bearing"] then
   bobmods.lib.recipe.add_ingredient("roboport-door-2", {"steel-bearing", 20})
 else
@@ -40,8 +42,6 @@ if data.raw.item["brass-gear-wheel"] then
 elseif data.raw.item["steel-gear-wheel"] then
   bobmods.lib.recipe.replace_ingredient("roboport-door-2", "iron-gear-wheel", "steel-gear-wheel")
 end
-
-
 
 
 
@@ -72,7 +72,6 @@ if data.raw.item["titanium-plate"] then
   bobmods.lib.tech.add_prerequisite("bob-robo-modular-3", "titanium-processing")
 end
 
-
 if data.raw.item["titanium-bearing"] then
   bobmods.lib.recipe.add_ingredient("roboport-door-3", {"titanium-bearing", 20})
 else
@@ -84,8 +83,6 @@ end
 if data.raw.item["titanium-gear-wheel"] then
   bobmods.lib.recipe.replace_ingredient("roboport-door-3", "iron-gear-wheel", "titanium-gear-wheel")
 end
-
-
 
 
 
