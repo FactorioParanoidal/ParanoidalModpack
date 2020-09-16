@@ -144,9 +144,9 @@ data:extend(
 )
 
 
-data.raw["technology"]["effectivity-module"].icon = "__bobmodules__/graphics/icons/effectivity-module-1.png"
-data.raw["technology"]["effectivity-module-2"].icon = "__bobmodules__/graphics/icons/effectivity-module-2.png"
-data.raw["technology"]["effectivity-module-3"].icon = "__bobmodules__/graphics/icons/effectivity-module-3.png"
+data.raw["technology"]["effectivity-module"].icon = "__bobmodules__/graphics/icons/yellow-module-1.png"
+data.raw["technology"]["effectivity-module-2"].icon = "__bobmodules__/graphics/icons/yellow-module-2.png"
+data.raw["technology"]["effectivity-module-3"].icon = "__bobmodules__/graphics/icons/yellow-module-3.png"
 
 data.raw["technology"]["effectivity-module"].icon_size = 32
 data.raw["technology"]["effectivity-module-2"].icon_size = 32
@@ -162,7 +162,7 @@ data:extend(
   {
     type = "technology",
     name = "effectivity-module-4",
-    icon = "__bobmodules__/graphics/icons/effectivity-module-4.png",
+    icon = "__bobmodules__/graphics/icons/yellow-module-4.png",
     icon_size = 32,
     effects =
     {
@@ -186,7 +186,7 @@ data:extend(
   {
     type = "technology",
     name = "effectivity-module-5",
-    icon = "__bobmodules__/graphics/icons/effectivity-module-5.png",
+    icon = "__bobmodules__/graphics/icons/yellow-module-5.png",
     icon_size = 32,
     effects =
     {
@@ -212,7 +212,7 @@ data:extend(
   {
     type = "technology",
     name = "effectivity-module-6",
-    icon = "__bobmodules__/graphics/icons/effectivity-module-6.png",
+    icon = "__bobmodules__/graphics/icons/yellow-module-6.png",
     icon_size = 32,
     effects =
     {
@@ -238,7 +238,7 @@ data:extend(
   {
     type = "technology",
     name = "effectivity-module-7",
-    icon = "__bobmodules__/graphics/icons/effectivity-module-7.png",
+    icon = "__bobmodules__/graphics/icons/yellow-module-7.png",
     icon_size = 32,
     effects =
     {
@@ -264,7 +264,7 @@ data:extend(
   {
     type = "technology",
     name = "effectivity-module-8",
-    icon = "__bobmodules__/graphics/icons/effectivity-module-8.png",
+    icon = "__bobmodules__/graphics/icons/yellow-module-8.png",
     icon_size = 32,
     effects =
     {
@@ -291,9 +291,9 @@ data:extend(
 )
 
 
-data.raw["technology"]["productivity-module"].icon = "__bobmodules__/graphics/icons/productivity-module-1.png"
-data.raw["technology"]["productivity-module-2"].icon = "__bobmodules__/graphics/icons/productivity-module-2.png"
-data.raw["technology"]["productivity-module-3"].icon = "__bobmodules__/graphics/icons/productivity-module-3.png"
+data.raw["technology"]["productivity-module"].icon = "__bobmodules__/graphics/icons/red-module-1.png"
+data.raw["technology"]["productivity-module-2"].icon = "__bobmodules__/graphics/icons/red-module-2.png"
+data.raw["technology"]["productivity-module-3"].icon = "__bobmodules__/graphics/icons/red-module-3.png"
 
 data.raw["technology"]["productivity-module"].icon_size = 32
 data.raw["technology"]["productivity-module-2"].icon_size = 32
@@ -309,7 +309,7 @@ data:extend(
   {
     type = "technology",
     name = "productivity-module-4",
-    icon = "__bobmodules__/graphics/icons/productivity-module-4.png",
+    icon = "__bobmodules__/graphics/icons/red-module-4.png",
     icon_size = 32,
     effects =
     {
@@ -333,7 +333,7 @@ data:extend(
   {
     type = "technology",
     name = "productivity-module-5",
-    icon = "__bobmodules__/graphics/icons/productivity-module-5.png",
+    icon = "__bobmodules__/graphics/icons/red-module-5.png",
     icon_size = 32,
     effects =
     {
@@ -359,7 +359,7 @@ data:extend(
   {
     type = "technology",
     name = "productivity-module-6",
-    icon = "__bobmodules__/graphics/icons/productivity-module-6.png",
+    icon = "__bobmodules__/graphics/icons/red-module-6.png",
     icon_size = 32,
     effects =
     {
@@ -385,7 +385,7 @@ data:extend(
   {
     type = "technology",
     name = "productivity-module-7",
-    icon = "__bobmodules__/graphics/icons/productivity-module-7.png",
+    icon = "__bobmodules__/graphics/icons/red-module-7.png",
     icon_size = 32,
     effects =
     {
@@ -411,7 +411,7 @@ data:extend(
   {
     type = "technology",
     name = "productivity-module-8",
-    icon = "__bobmodules__/graphics/icons/productivity-module-8.png",
+    icon = "__bobmodules__/graphics/icons/red-module-8.png",
     icon_size = 32,
     effects =
     {

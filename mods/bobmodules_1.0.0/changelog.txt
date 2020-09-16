@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 16. 08. 2020
+  Bugfixes:
+    - Perform +0.001 on every stat calculation to prevent rounding down issues.
+  Changes:
+    - Renamed (In locale only) Raw speed and Raw productivity modules to Pure speed and Pure productivity.
+    - Swaped colours around for productivity with raw productivity, and green with efficiency.
+    - Productivity is now Red.
+    - Pure Productivity is now Purple.
+    - Green is now Green.
+    - Efficiency is now Yellow.
+---------------------------------------------------------------------------------------------------
 Version: 0.18.5
 Date: 16. 06. 2020
   Bugfixes:
