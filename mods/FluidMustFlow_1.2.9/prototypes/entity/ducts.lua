@@ -394,7 +394,8 @@ duct_underground =
 	two_direction_only = false,
 	fluid_box =
 	{
-		base_area = 2 * settings.startup["fmf-duct-base-level-multiplier"].value,
+		base_area = settings.startup["fmf-duct-base-level-multiplier"].value,
+		height = settings.startup["fmf-duct-base-level-multiplier"].value,
 		base_level = 0,
 		pipe_covers = nil,
 		pipe_connections =
