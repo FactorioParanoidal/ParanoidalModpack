@@ -361,12 +361,19 @@ end
 
 
 
-
 if data.raw.item["robot-brain-logistic"] and data.raw.item["robot-tool-logistic"] then
-  data.raw.recipe["logistic-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-logistic", 1}, {"robot-tool-logistic", 1}}
+  if bobmods.lib.recipe.set_ingredients then
+    bobmods.lib.recipe.set_ingredients("logistic-robot", {{"flying-robot-frame", 1}, {"robot-brain-logistic", 1}, {"robot-tool-logistic", 1}})
+  else
+    data.raw.recipe["logistic-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-logistic", 1}, {"robot-tool-logistic", 1}}
+  end
 end
 if data.raw.item["robot-brain-construction"] and data.raw.item["robot-tool-construction"] then
-  data.raw.recipe["construction-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"robot-tool-construction", 1}}
+  if bobmods.lib.recipe.set_ingredients then
+    bobmods.lib.recipe.set_ingredients("construction-robot", {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"robot-tool-construction", 1}})
+  else
+    data.raw.recipe["construction-robot"].ingredients = {{"flying-robot-frame", 1}, {"robot-brain-construction", 1}, {"robot-tool-construction", 1}}
+  end
 end
 
 if data.raw.item["robot-brain-logistic-2"] and data.raw.item["robot-tool-logistic-2"] then

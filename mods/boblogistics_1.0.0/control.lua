@@ -199,6 +199,10 @@ function bobmods.logistics.create_gui(player_index)
   end
 
   local gui = player.gui.left.add({type = "frame", name = "bob_logistics_inserter_gui", direction = "vertical"})
+  gui.style.bottom_padding = 8
+  gui.style.vertically_stretchable = false
+  gui.style.horizontally_stretchable = false
+  
   gui.add({type = "table", name = "table", column_count = 1})
 
   if long_unlocked then
