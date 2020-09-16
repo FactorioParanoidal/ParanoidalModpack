@@ -248,6 +248,13 @@ if data.raw.item["deuterium-fuel-cell"] and data.raw.reactor["nuclear-reactor-3"
   data.raw.reactor["nuclear-reactor-3"].icon_mipmaps = nil
 
   data.raw.item["deuterium-fuel-cell"].fuel_category = "deuterium"
+  if data.raw.item["deuterium-fuel-cell-2"] then
+    data.raw.item["deuterium-fuel-cell-2"].fuel_category = "deuterium"
+  end
+  if data.raw.technology["deuterium-fuel-cell-2"] then
+    bobmods.lib.tech.replace_prerequisite("deuterium-fuel-cell-2", "deuterium-processing", "bob-nuclear-power-3")
+  end
+
   data.raw.item["nuclear-reactor-3"].localised_name = {"entity-name.deuterium-reactor"}
   data.raw.item["nuclear-reactor-3"].icon_size = 32
   data.raw.item["nuclear-reactor-3"].icon_mipmaps = nil
