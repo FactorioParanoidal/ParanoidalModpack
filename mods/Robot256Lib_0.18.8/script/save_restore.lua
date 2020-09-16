@@ -455,10 +455,16 @@ local function saveItemRequestProxy(target)
   for _, proxy in pairs(proxies) do
     if proxy.proxy_target == target and proxy.valid then
       local items = {}
+      local exists = false
       for k,v in pairs(proxy.item_requests) do
         items[k] = v
+        exists = true
       end
-      return items
+      if exists then
+        return items
+      else
+        return nil
+      end
     else
       return nil
     end
