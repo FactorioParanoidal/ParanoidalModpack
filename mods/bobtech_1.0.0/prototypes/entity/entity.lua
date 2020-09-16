@@ -194,7 +194,7 @@ data:extend(
   {
     type = "lab",
     name = "burner-lab",
-    icon = "__base__/graphics/icons/lab.png",
+    icon = "__bobtech__/graphics/icons/lab-red.png",
     icon_size = 32,
     flags = {"placeable-player", "player-creation"},
     minable = {mining_time = 0.1, result = "burner-lab"},
