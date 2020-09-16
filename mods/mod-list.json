@@ -194,11 +194,6 @@
     },
     
     {
-      "name": "ColorTIERHR",
-      "enabled": true
-    },
-    
-    {
       "name": "comb",
       "enabled": true
     },
@@ -240,6 +235,11 @@
     
     {
       "name": "efficient-research",
+      "enabled": true
+    },
+    
+    {
+      "name": "ElectricResistance",
       "enabled": true
     },
     
@@ -309,11 +309,6 @@
     },
     
     {
-      "name": "FluidWagonColorMask",
-      "enabled": true
-    },
-    
-    {
       "name": "FNEI",
       "enabled": true
     },
@@ -360,11 +355,6 @@
     
     {
       "name": "LightedPolesPlus",
-      "enabled": true
-    },
-    
-    {
-      "name": "lightorio",
       "enabled": true
     },
     
@@ -559,11 +549,6 @@
     },
     
     {
-      "name": "Pollution_Control",
-      "enabled": true
-    },
-    
-    {
       "name": "qol_research",
       "enabled": true
     },
@@ -669,11 +654,6 @@
     },
     
     {
-      "name": "ShinyBobGFX",
-      "enabled": true
-    },
-    
-    {
       "name": "ShinyBob_Techs",
       "enabled": true
     },
@@ -734,6 +714,11 @@
     },
     
     {
+      "name": "Todo-List",
+      "enabled": true
+    },
+    
+    {
       "name": "toxicPollution",
       "enabled": true
     },
@@ -750,6 +735,11 @@
     
     {
       "name": "UnminableLogisticBots",
+      "enabled": true
+    },
+    
+    {
+      "name": "UnPollock",
       "enabled": true
     },
     
