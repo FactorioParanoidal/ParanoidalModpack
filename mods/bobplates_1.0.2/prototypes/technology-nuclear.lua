@@ -287,8 +287,44 @@ data:extend(
 
 
 if settings.startup["bobmods-plates-nuclearupdate"].value == true then
+  data:extend(
+  {
+    {
+      type = "technology",
+      name = "deuterium-fuel-cell-2",
+      icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2.png",
+      icon_size = 64,
+      icon_mipmaps = 4,
+      effects =
+      {
+        {
+          type = "unlock-recipe",
+          recipe = "deuterium-fuel-cell-2"
+        }
+      },
+      prerequisites =
+      {
+        "deuterium-processing"
+      },
+      unit =
+      {
+        ingredients =
+        {
+          {"automation-science-pack", 1},
+          {"logistic-science-pack", 1},
+          {"chemical-science-pack", 1},
+          {"production-science-pack", 1},
+        },
+        time = 30,
+        count = 50
+      },
+      order = "e-p-b-e5"
+    }
+  }
+  )
   if settings.startup["bobmods-plates-bluedeuterium"].value == true then
     data.raw.technology["deuterium-fuel-reprocessing"].icon = "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-blue-new.png"
+    data.raw.technology["deuterium-fuel-cell-2"].icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2-blue.png"
   else
     data.raw.technology["deuterium-fuel-reprocessing"].icon = "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-new.png"
   end

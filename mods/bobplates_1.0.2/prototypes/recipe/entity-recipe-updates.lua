@@ -16,7 +16,7 @@ if data.raw.item["copper-pipe"] then
 end
 
 if data.raw.item["steel-pipe"] then
-  bobmods.lib.recipe.replace_ingredient("chemical-furnace", "pipe", "steel-pipe")
+  bobmods.lib.recipe.replace_ingredient("electric-chemical-furnace", "pipe", "steel-pipe")
   bobmods.lib.recipe.replace_ingredient("steel-chemical-furnace", "pipe", "steel-pipe")
 end
 
@@ -32,11 +32,11 @@ end
 
 if settings.startup["bobmods-plates-convert-recipes"].value == true then
   if data.raw.item["steel-pipe"] then
-    bobmods.lib.recipe.replace_ingredient("chemical-steel-furnace-from-steel-furnace", "pipe", "steel-pipe")
+    bobmods.lib.recipe.replace_ingredient("steel-chemical-furnace-from-steel-furnace", "pipe", "steel-pipe")
     bobmods.lib.recipe.replace_ingredient("electric-chemical-furnace-from-electric-furnace", "pipe", "steel-pipe")
 
-    bobmods.lib.recipe.remove_result("steel-furnace-from-chemical-steel-furnace", "pipe")
-    bobmods.lib.recipe.add_result("steel-furnace-from-chemical-steel-furnace", {"steel-pipe", 5})
+    bobmods.lib.recipe.remove_result("steel-furnace-from-steel-chemical-furnace", "pipe")
+    bobmods.lib.recipe.add_result("steel-furnace-from-steel-chemical-furnace", {"steel-pipe", 5})
 
     bobmods.lib.recipe.remove_result("electric-furnace-from-electric-chemical-furnace", "pipe")
     bobmods.lib.recipe.add_result("electric-furnace-from-electric-chemical-furnace", {"steel-pipe", 5})

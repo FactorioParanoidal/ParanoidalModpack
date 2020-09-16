@@ -227,10 +227,25 @@ if settings.startup["bobmods-plates-nuclearupdate"].value == true then
       ingredients =
       {
         {"lead-plate", 10},
-        {type="item", name="fusion-catalyst", amount=1},
+        {type = "item", name = "fusion-catalyst", amount = 1},
         {type = "fluid", name = "deuterium", amount = 190},
       },
       result = "deuterium-fuel-cell",
+      result_count = 10,
+    },
+    {
+      type = "recipe",
+      name = "deuterium-fuel-cell-2",
+      category = "crafting-with-fluid",
+      energy_required = 10,
+      enabled = false,
+      ingredients =
+      {
+        {"lead-plate", 10},
+        {type = "item", name = "fusion-catalyst", amount = 5},
+        {type = "fluid", name = "deuterium", amount = 250},
+      },
+      result = "deuterium-fuel-cell-2",
       result_count = 10,
     },
     {
