@@ -40,3 +40,6 @@ bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-4", "oil-boiler-4-from-boi
 data.raw.technology["electrolyser-2"].hidden = true
 data.raw.technology["electrolyser-3"].hidden = true
 data.raw.technology["electrolyser-4"].hidden = true
+
+--разблокируем рецепт для упрощенной плавки бронзы в печах
+bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy")
