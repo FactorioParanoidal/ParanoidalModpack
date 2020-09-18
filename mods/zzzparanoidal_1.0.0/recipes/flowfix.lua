@@ -4,7 +4,7 @@ local pack = 1
 
 for k,v in pairs(data.raw.module) do
     if v.effect.productivity then
-        log("use limitation from "..v.name)
+        --log("use limitation from "..v.name)
         for i,r in pairs(v.limitation) do
             -- Простые рецепты
             if not data.raw.recipe[r].normal and not data.raw.recipe[r].energy_required then
@@ -13,7 +13,7 @@ for k,v in pairs(data.raw.module) do
             if data.raw.recipe[r].energy_required and data.raw.recipe[r].energy_required < min_time then
                 t = data.raw.recipe[r].energy_required
                 pack = 1 + (min_time - math.fmod(min_time, t))/t
-                log("fix simple "..data.raw.recipe[r].name .. " scale x"..pack)
+                --log("fix simple "..data.raw.recipe[r].name .. " scale x"..pack)
                 data.raw.recipe[r].energy_required = data.raw.recipe[r].energy_required * pack
                 if data.raw.recipe[r].ingredients then
                     for j,item in pairs(data.raw.recipe[r].ingredients) do
@@ -23,26 +23,28 @@ for k,v in pairs(data.raw.module) do
                             if type(data.raw.recipe[r].ingredients[j][2]) == 'number' then
                                 data.raw.recipe[r].ingredients[j][2] = data.raw.recipe[r].ingredients[j][2]*pack
                             else
-                                log("WARRRING!!! not found ingredients")
+                                log("WARRRING!!! not found ingredients count")
                             end
                         end
                     end
                 else 
                     log("no ingridients in "..data.raw.recipe[r].name)
                 end
-                if type(data.raw.recipe[r].result_count)== 'number' then
+                if data.raw.recipe[r].result then
+                    if not data.raw.recipe[r].result_count then
+                        data.raw.recipe[r].result_count = 1
+                    end
                     data.raw.recipe[r].result_count = data.raw.recipe[r].result_count*pack
-                else
-                    if data.raw.recipe[r].results then
-                        for j,item in pairs(data.raw.recipe[r].results) do
-                            if data.raw.recipe[r].results[j].amount then
-                                data.raw.recipe[r].results[j].amount = data.raw.recipe[r].results[j].amount*pack
+                end
+                if data.raw.recipe[r].results then
+                    for j,item in pairs(data.raw.recipe[r].results) do
+                        if data.raw.recipe[r].results[j].amount then
+                            data.raw.recipe[r].results[j].amount = data.raw.recipe[r].results[j].amount*pack
+                        else
+                            if type(data.raw.recipe[r].results[j][2]) == 'number' then
+                                data.raw.recipe[r].results[j][2] = data.raw.recipe[r].results[j][2]*pack
                             else
-                                if type(data.raw.recipe[r].results[j][2]) == 'number' then
-                                    data.raw.recipe[r].results[j][2] = data.raw.recipe[r].results[j][2]*pack
-                                else
-                                    log("WARRRING!!! not found result")
-                                end
+                                log("WARRRING!!! not found result count")
                             end
                         end
                     end
@@ -55,7 +57,7 @@ for k,v in pairs(data.raw.module) do
                     data.raw.recipe[r].normal.energy_required = 0.5
                 end
                 if data.raw.recipe[r].normal.energy_required and data.raw.recipe[r].normal.energy_required < min_time then
-                    log("fix normal "..data.raw.recipe[r].name .. " scale x"..pack)
+                    --log("fix normal "..data.raw.recipe[r].name .. " scale x"..pack)
                     t = data.raw.recipe[r].normal.energy_required
                     pack = 1 + (min_time - math.fmod(min_time, t))/t
                     data.raw.recipe[r].normal.energy_required = data.raw.recipe[r].normal.energy_required * pack
@@ -74,19 +76,21 @@ for k,v in pairs(data.raw.module) do
                     else
                         log("no ingridients in "..data.raw.recipe[r].name)
                     end
-                    if type(data.raw.recipe[r].normal.result_count)== 'number' then
+                    if data.raw.recipe[r].normal.result then
+                        if not data.raw.recipe[r].normal.result_count then
+                            data.raw.recipe[r].normal.result_count = 1
+                        end
                         data.raw.recipe[r].normal.result_count = data.raw.recipe[r].normal.result_count*pack
-                    else
-                        if data.raw.recipe[r].normal.results then
-                            for j,item in pairs(data.raw.recipe[r].normal.results) do
-                                if data.raw.recipe[r].normal.results[j].amount then
-                                    data.raw.recipe[r].normal.results[j].amount = data.raw.recipe[r].normal.results[j].amount*pack
+                    end
+                    if data.raw.recipe[r].normal.results then
+                        for j,item in pairs(data.raw.recipe[r].normal.results) do
+                            if data.raw.recipe[r].normal.results[j].amount then
+                                data.raw.recipe[r].normal.results[j].amount = data.raw.recipe[r].normal.results[j].amount*pack
+                            else
+                                if type(data.raw.recipe[r].normal.results[j][2]) == 'number' then
+                                    data.raw.recipe[r].normal.results[j][2] = data.raw.recipe[r].normal.results[j][2]*pack
                                 else
-                                    if type(data.raw.recipe[r].normal.results[j][2]) == 'number' then
-                                        data.raw.recipe[r].normal.results[j][2] = data.raw.recipe[r].normal.results[j][2]*pack
-                                    else
-                                        log("WARRRING!!! not found result")
-                                    end
+                                    log("WARRRING!!! not found result")
                                 end
                             end
                         end
@@ -99,7 +103,7 @@ for k,v in pairs(data.raw.module) do
                     data.raw.recipe[r].expensive.energy_required = 0.5
                 end
                 if data.raw.recipe[r].expensive.energy_required and data.raw.recipe[r].expensive.energy_required < min_time then
-                    log("fix expensive "..data.raw.recipe[r].name .. " scale x"..pack)
+                    --log("fix expensive "..data.raw.recipe[r].name .. " scale x"..pack)
                     t = data.raw.recipe[r].expensive.energy_required
                     pack = 1 + (min_time - math.fmod(min_time, t))/t
                     data.raw.recipe[r].expensive.energy_required = data.raw.recipe[r].expensive.energy_required * pack
@@ -118,19 +122,21 @@ for k,v in pairs(data.raw.module) do
                     else
                         log("no ingridients in "..data.raw.recipe[r].name)
                     end
-                    if type(data.raw.recipe[r].expensive.result_count)== 'number' then
+                    if data.raw.recipe[r].expensive.result then
+                        if not data.raw.recipe[r].expensive.result_count then
+                            data.raw.recipe[r].expensive.result_count = 1
+                        end
                         data.raw.recipe[r].expensive.result_count = data.raw.recipe[r].expensive.result_count*pack
-                    else
-                        if data.raw.recipe[r].expensive.results then
-                            for j,item in pairs(data.raw.recipe[r].expensive.results) do
-                                if data.raw.recipe[r].expensive.results[j].amount then
-                                    data.raw.recipe[r].expensive.results[j].amount = data.raw.recipe[r].expensive.results[j].amount*pack
+                    end
+                    if data.raw.recipe[r].expensive.results then
+                        for j,item in pairs(data.raw.recipe[r].expensive.results) do
+                            if data.raw.recipe[r].expensive.results[j].amount then
+                                data.raw.recipe[r].expensive.results[j].amount = data.raw.recipe[r].expensive.results[j].amount*pack
+                            else
+                                if type(data.raw.recipe[r].expensive.results[j][2]) == 'number' then
+                                    data.raw.recipe[r].expensive.results[j][2] = data.raw.recipe[r].expensive.results[j][2]*pack
                                 else
-                                    if type(data.raw.recipe[r].expensive.results[j][2]) == 'number' then
-                                        data.raw.recipe[r].expensive.results[j][2] = data.raw.recipe[r].expensive.results[j][2]*pack
-                                    else
-                                        log("WARRRING!!! not found result")
-                                    end
+                                    log("WARRRING!!! not found result")
                                 end
                             end
                         end
