@@ -31,7 +31,7 @@ end
 if barrel_stack_size > 0 then
   for k, v in pairs(empty_barrels) do
     if data.raw.item[k] then
-      log("[RS] Setting item."..tostring(data.raw.item[k].name)..".stack_size "..data.raw.item[k].stack_size.." -> "..barrel_stack_size)
+      --log("[RS] Setting item."..tostring(data.raw.item[k].name)..".stack_size "..data.raw.item[k].stack_size.." -> "..barrel_stack_size)
       data.raw.item[k].stack_size = barrel_stack_size
     end
   end
@@ -43,7 +43,7 @@ for fluid_name, fluid in pairs(data.raw.fluid) do
   if barrel_item then
     if barrel_stack_size > 0 then
       barrel_item.stack_size = barrel_stack_size
-      log("[RS] Setting item."..tostring(barrel_item.name)..".stack_size "..barrel_stack_size)
+      --log("[RS] Setting item."..tostring(barrel_item.name)..".stack_size "..barrel_stack_size)
     end
 
     -- adjust barrel capacity and recipes
@@ -51,7 +51,7 @@ for fluid_name, fluid in pairs(data.raw.fluid) do
       local fill_recipe = data.raw.recipe["fill-"..barrel_name]
       if fill_recipe then
         if fill_recipe.ingredients and fill_recipe.results then
-          log("[RS] Setting fill recipe."..tostring(fill_recipe.name).." to "..recipe_barrel_multiplier.."x "..barrel_capacity.."L barrel every "..energy_per_recipe)
+          --log("[RS] Setting fill recipe."..tostring(fill_recipe.name).." to "..recipe_barrel_multiplier.."x "..barrel_capacity.."L barrel every "..energy_per_recipe)
           fill_recipe.energy_required = energy_per_recipe
           for _, ingredient in pairs(fill_recipe.ingredients) do
             if empty_barrels[ingredient.name] then
@@ -66,14 +66,14 @@ for fluid_name, fluid in pairs(data.raw.fluid) do
             end
           end
         else
-          log("[RS] ERROR: recipe.ingredients and recipe.results expected: "..serpent.block(fill_recipe) )
+          --log("[RS] ERROR: recipe.ingredients and recipe.results expected: "..serpent.block(fill_recipe) )
         end
       end
 
       local empty_recipe = data.raw.recipe["empty-"..barrel_name]
       if empty_recipe then
         if empty_recipe.ingredients and empty_recipe.results then
-          log("[RS] Setting empty recipe."..tostring(empty_recipe.name).." to "..recipe_barrel_multiplier.."x "..barrel_capacity.."L barrel every "..energy_per_recipe)
+          --log("[RS] Setting empty recipe."..tostring(empty_recipe.name).." to "..recipe_barrel_multiplier.."x "..barrel_capacity.."L barrel every "..energy_per_recipe)
           empty_recipe.energy_required = energy_per_recipe
           for _, ingredient in pairs(empty_recipe.ingredients) do
             if ingredient.name == fluid_name.."-barrel" then
@@ -88,7 +88,7 @@ for fluid_name, fluid in pairs(data.raw.fluid) do
             end
           end
         else
-          log("[RS] ERROR: recipe.ingredients and recipe.results expected: "..serpent.block(empty_recipe) )
+          --log("[RS] ERROR: recipe.ingredients and recipe.results expected: "..serpent.block(empty_recipe) )
         end
       end
     end
@@ -108,7 +108,7 @@ for fluid_name, fluid in pairs(data.raw.fluid) do
             end
           end
           if recipe_fluid_count and recipe_barrel_count then
-            log("[RS] Setting item."..tostring(barrel_item.name)..".fuel_value "..tostring(barrel_item.fuel_value).." --> "..(energy_value * recipe_fluid_count / recipe_barrel_count)..energy_unit )
+            --log("[RS] Setting item."..tostring(barrel_item.name)..".fuel_value "..tostring(barrel_item.fuel_value).." --> "..(energy_value * recipe_fluid_count / recipe_barrel_count)..energy_unit )
             barrel_item.fuel_category = barrel_item.fuel_category or "chemical"
             barrel_item.fuel_value = (energy_value * recipe_fluid_count / recipe_barrel_count)..energy_unit
           end
