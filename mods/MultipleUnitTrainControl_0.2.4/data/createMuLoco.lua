@@ -23,7 +23,7 @@ function createMuLoco(arg)
 	local power_multiplier = arg.power_multiplier or 2
 	local fuel_item = arg.fuel_item
   
-  log("Creating locomotive \""..newName.."\"")
+  --log("Creating locomotive \""..newName.."\"")
 	
 	-- Check that source exists
 	if not data.raw["locomotive"][oldName] then

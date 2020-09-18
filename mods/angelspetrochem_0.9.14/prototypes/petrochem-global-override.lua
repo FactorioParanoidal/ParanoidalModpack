@@ -10,7 +10,7 @@ for _, recipe in pairs(data.raw.recipe) do
       recipe.category == "chemistry" or
       recipe.category == "advanced-chemistry")
   then
-    log(string.format("Recipe '%s' does not have a crafting_machine_tint set!", recipe.name))
+    --log(string.format("Recipe '%s' does not have a crafting_machine_tint set!", recipe.name))
     recipe.crafting_machine_tint = {
       primary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255},
       secondary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255},

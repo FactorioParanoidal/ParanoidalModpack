@@ -151,7 +151,7 @@ data.raw["unit-spawner"]["spitter-spawner"].enemy_map_color = {r = 0.76, g = 0.1
 --spitters
 
 for k,v in pairs(data.raw["unit"]) do
-log("k is "..k)
+--log("k is "..k)
 	if k:find("biter") then
 			v.enemy_map_color = {r = 1.0, g = 0.33, b = 0.22} -- 255, 85, 55
 	elseif k:find("spitter") then
