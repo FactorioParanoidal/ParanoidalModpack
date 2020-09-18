@@ -2,6 +2,41 @@ local target = {}
 local min_time = settings.startup["paranoidal-flowfix-min-time"].value
 local pack = 1
 
+function scaleTable(t, pack)
+    for j,item in pairs(t) do
+        if t[j].amount then
+            t[j].amount = t[j].amount*pack
+        else
+            if type(t[j][2]) == 'number' then
+                t[j][2] = t[j][2]*pack
+            else
+                log("WARRRING!!! not found ingredients count")
+            end
+        end
+    end
+end
+
+
+function scaleRecipe(recipe, pack)
+    --log("fix "..recipe.name .. " scale x"..pack)
+    recipe.energy_required = recipe.energy_required * pack
+    if recipe.ingredients then
+        scaleTable(recipe.ingredients, pack)
+    else
+        log("no ingridients in "..recipe.name)
+    end
+    if recipe.result then
+        if not recipe.result_count then
+            recipe.result_count = 1
+        end
+        recipe.result_count = recipe.result_count*pack
+    end
+    if recipe.results then
+        scaleTable(recipe.results, pack)
+    end
+end
+
+
 for k,v in pairs(data.raw.module) do
     if v.effect.productivity then
         --log("use limitation from "..v.name)
@@ -11,44 +46,8 @@ for k,v in pairs(data.raw.module) do
                 data.raw.recipe[r].energy_required = 0.5
             end
             if data.raw.recipe[r].energy_required and data.raw.recipe[r].energy_required < min_time then
-                t = data.raw.recipe[r].energy_required
-                pack = 1 + (min_time - math.fmod(min_time, t))/t
-                --log("fix simple "..data.raw.recipe[r].name .. " scale x"..pack)
-                data.raw.recipe[r].energy_required = data.raw.recipe[r].energy_required * pack
-                if data.raw.recipe[r].ingredients then
-                    for j,item in pairs(data.raw.recipe[r].ingredients) do
-                        if data.raw.recipe[r].ingredients[j].amount then
-                            data.raw.recipe[r].ingredients[j].amount = data.raw.recipe[r].ingredients[j].amount*pack
-                        else
-                            if type(data.raw.recipe[r].ingredients[j][2]) == 'number' then
-                                data.raw.recipe[r].ingredients[j][2] = data.raw.recipe[r].ingredients[j][2]*pack
-                            else
-                                log("WARRRING!!! not found ingredients count")
-                            end
-                        end
-                    end
-                else 
-                    log("no ingridients in "..data.raw.recipe[r].name)
-                end
-                if data.raw.recipe[r].result then
-                    if not data.raw.recipe[r].result_count then
-                        data.raw.recipe[r].result_count = 1
-                    end
-                    data.raw.recipe[r].result_count = data.raw.recipe[r].result_count*pack
-                end
-                if data.raw.recipe[r].results then
-                    for j,item in pairs(data.raw.recipe[r].results) do
-                        if data.raw.recipe[r].results[j].amount then
-                            data.raw.recipe[r].results[j].amount = data.raw.recipe[r].results[j].amount*pack
-                        else
-                            if type(data.raw.recipe[r].results[j][2]) == 'number' then
-                                data.raw.recipe[r].results[j][2] = data.raw.recipe[r].results[j][2]*pack
-                            else
-                                log("WARRRING!!! not found result count")
-                            end
-                        end
-                    end
-                end
+                pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].energy_required))/data.raw.recipe[r].energy_required
+                scaleRecipe(data.raw.recipe[r], pack)
             end
 
             -- Нормальные рецепты
@@ -57,90 +56,19 @@ for k,v in pairs(data.raw.module) do
                     data.raw.recipe[r].normal.energy_required = 0.5
                 end
                 if data.raw.recipe[r].normal.energy_required and data.raw.recipe[r].normal.energy_required < min_time then
-                    --log("fix normal "..data.raw.recipe[r].name .. " scale x"..pack)
-                    t = data.raw.recipe[r].normal.energy_required
-                    pack = 1 + (min_time - math.fmod(min_time, t))/t
-                    data.raw.recipe[r].normal.energy_required = data.raw.recipe[r].normal.energy_required * pack
-                    if data.raw.recipe[r].normal.ingredients then
-                        for j,item in pairs(data.raw.recipe[r].normal.ingredients) do
-                            if data.raw.recipe[r].normal.ingredients[j].amount then
-                                data.raw.recipe[r].normal.ingredients[j].amount = data.raw.recipe[r].normal.ingredients[j].amount*pack
-                            else
-                                if type(data.raw.recipe[r].normal.ingredients[j][2]) == 'number' then
-                                    data.raw.recipe[r].normal.ingredients[j][2] = data.raw.recipe[r].normal.ingredients[j][2]*pack
-                                else
-                                    log("WARRRING!!! not found ingredients")
-                                end
-                            end
-                        end
-                    else
-                        log("no ingridients in "..data.raw.recipe[r].name)
-                    end
-                    if data.raw.recipe[r].normal.result then
-                        if not data.raw.recipe[r].normal.result_count then
-                            data.raw.recipe[r].normal.result_count = 1
-                        end
-                        data.raw.recipe[r].normal.result_count = data.raw.recipe[r].normal.result_count*pack
-                    end
-                    if data.raw.recipe[r].normal.results then
-                        for j,item in pairs(data.raw.recipe[r].normal.results) do
-                            if data.raw.recipe[r].normal.results[j].amount then
-                                data.raw.recipe[r].normal.results[j].amount = data.raw.recipe[r].normal.results[j].amount*pack
-                            else
-                                if type(data.raw.recipe[r].normal.results[j][2]) == 'number' then
-                                    data.raw.recipe[r].normal.results[j][2] = data.raw.recipe[r].normal.results[j][2]*pack
-                                else
-                                    log("WARRRING!!! not found result")
-                                end
-                            end
-                        end
-                    end
+                    pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].normal.energy_required))/data.raw.recipe[r].normal.energy_required
+                    scaleRecipe(data.raw.recipe[r].normal, pack)
                 end
             end
+
             -- Дорогие рецепты
             if data.raw.recipe[r].expensive then
                 if not data.raw.recipe[r].expensive.energy_required then
                     data.raw.recipe[r].expensive.energy_required = 0.5
                 end
                 if data.raw.recipe[r].expensive.energy_required and data.raw.recipe[r].expensive.energy_required < min_time then
-                    --log("fix expensive "..data.raw.recipe[r].name .. " scale x"..pack)
-                    t = data.raw.recipe[r].expensive.energy_required
-                    pack = 1 + (min_time - math.fmod(min_time, t))/t
-                    data.raw.recipe[r].expensive.energy_required = data.raw.recipe[r].expensive.energy_required * pack
-                    if data.raw.recipe[r].expensive.ingredients then
-                        for j,item in pairs(data.raw.recipe[r].expensive.ingredients) do
-                            if data.raw.recipe[r].expensive.ingredients[j].amount then
-                                data.raw.recipe[r].expensive.ingredients[j].amount = data.raw.recipe[r].expensive.ingredients[j].amount*pack
-                            else
-                                if type(data.raw.recipe[r].expensive.ingredients[j][2]) == 'number' then
-                                    data.raw.recipe[r].expensive.ingredients[j][2] = data.raw.recipe[r].expensive.ingredients[j][2]*pack
-                                else
-                                    log("WARRRING!!! not found ingredients")
-                                end
-                            end
-                        end
-                    else
-                        log("no ingridients in "..data.raw.recipe[r].name)
-                    end
-                    if data.raw.recipe[r].expensive.result then
-                        if not data.raw.recipe[r].expensive.result_count then
-                            data.raw.recipe[r].expensive.result_count = 1
-                        end
-                        data.raw.recipe[r].expensive.result_count = data.raw.recipe[r].expensive.result_count*pack
-                    end
-                    if data.raw.recipe[r].expensive.results then
-                        for j,item in pairs(data.raw.recipe[r].expensive.results) do
-                            if data.raw.recipe[r].expensive.results[j].amount then
-                                data.raw.recipe[r].expensive.results[j].amount = data.raw.recipe[r].expensive.results[j].amount*pack
-                            else
-                                if type(data.raw.recipe[r].expensive.results[j][2]) == 'number' then
-                                    data.raw.recipe[r].expensive.results[j][2] = data.raw.recipe[r].expensive.results[j][2]*pack
-                                else
-                                    log("WARRRING!!! not found result")
-                                end
-                            end
-                        end
-                    end
+                    pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].expensive.energy_required))/data.raw.recipe[r].expensive.energy_required
+                    scaleRecipe(data.raw.recipe[r].expensive, pack)
                 end
             end
         end
