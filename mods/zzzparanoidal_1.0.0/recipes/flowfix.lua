@@ -92,7 +92,7 @@ for k,v in pairs(data.raw.module) do
                         end
                     end
                 end
-
+            end
             -- Дорогие рецепты
             if data.raw.recipe[r].expensive then
                 if not data.raw.recipe[r].expensive.energy_required then
@@ -115,7 +115,7 @@ for k,v in pairs(data.raw.module) do
                                 end
                             end
                         end
-                    else 
+                    else
                         log("no ingridients in "..data.raw.recipe[r].name)
                     end
                     if type(data.raw.recipe[r].expensive.result_count)== 'number' then
@@ -139,5 +139,4 @@ for k,v in pairs(data.raw.module) do
             end
         end
     end
-end
 end
