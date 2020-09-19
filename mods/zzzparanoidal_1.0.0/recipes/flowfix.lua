@@ -38,7 +38,7 @@ end
 
 
 for k,v in pairs(data.raw.module) do
-    if v.effect.productivity then
+    if v.effect.productivity and v.limitation then
         --log("use limitation from "..v.name)
         for i,r in pairs(v.limitation) do
             -- Простые рецепты
