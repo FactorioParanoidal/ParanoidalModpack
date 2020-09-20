@@ -18,7 +18,6 @@ end
 
 
 function scaleRecipe(recipe, pack)
-    --log("fix "..recipe.name .. " scale x"..pack)
     recipe.energy_required = recipe.energy_required * pack
     if recipe.ingredients then
         scaleTable(recipe.ingredients, pack)
@@ -41,34 +40,36 @@ for k,v in pairs(data.raw.module) do
     if v.effect.productivity and v.limitation then
         --log("use limitation from "..v.name)
         for i,r in pairs(v.limitation) do
-            -- Простые рецепты
-            if not data.raw.recipe[r].normal and not data.raw.recipe[r].energy_required then
-                data.raw.recipe[r].energy_required = 0.5
-            end
-            if data.raw.recipe[r].energy_required and data.raw.recipe[r].energy_required < min_time then
-                pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].energy_required))/data.raw.recipe[r].energy_required
-                scaleRecipe(data.raw.recipe[r], pack)
-            end
+            if data.raw.recipe[r].name ~= "rocket-part"  then
+                -- Простые рецепты
+                if not data.raw.recipe[r].normal and not data.raw.recipe[r].energy_required then
+                    data.raw.recipe[r].energy_required = 0.5
+                end
+                if data.raw.recipe[r].energy_required and data.raw.recipe[r].energy_required < min_time then
+                    pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].energy_required))/data.raw.recipe[r].energy_required
+                    scaleRecipe(data.raw.recipe[r], pack)
+                end
 
-            -- Нормальные рецепты
-            if data.raw.recipe[r].normal then
-                if not data.raw.recipe[r].normal.energy_required then
-                    data.raw.recipe[r].normal.energy_required = 0.5
+                -- Нормальные рецепты
+                if data.raw.recipe[r].normal then
+                    if not data.raw.recipe[r].normal.energy_required then
+                        data.raw.recipe[r].normal.energy_required = 0.5
+                    end
+                    if data.raw.recipe[r].normal.energy_required and data.raw.recipe[r].normal.energy_required < min_time then
+                        pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].normal.energy_required))/data.raw.recipe[r].normal.energy_required
+                        scaleRecipe(data.raw.recipe[r].normal, pack)
+                    end
                 end
-                if data.raw.recipe[r].normal.energy_required and data.raw.recipe[r].normal.energy_required < min_time then
-                    pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].normal.energy_required))/data.raw.recipe[r].normal.energy_required
-                    scaleRecipe(data.raw.recipe[r].normal, pack)
-                end
-            end
 
-            -- Дорогие рецепты
-            if data.raw.recipe[r].expensive then
-                if not data.raw.recipe[r].expensive.energy_required then
-                    data.raw.recipe[r].expensive.energy_required = 0.5
-                end
-                if data.raw.recipe[r].expensive.energy_required and data.raw.recipe[r].expensive.energy_required < min_time then
-                    pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].expensive.energy_required))/data.raw.recipe[r].expensive.energy_required
-                    scaleRecipe(data.raw.recipe[r].expensive, pack)
+                -- Дорогие рецепты
+                if data.raw.recipe[r].expensive then
+                    if not data.raw.recipe[r].expensive.energy_required then
+                        data.raw.recipe[r].expensive.energy_required = 0.5
+                    end
+                    if data.raw.recipe[r].expensive.energy_required and data.raw.recipe[r].expensive.energy_required < min_time then
+                        pack = 1 + (min_time - math.fmod(min_time, data.raw.recipe[r].expensive.energy_required))/data.raw.recipe[r].expensive.energy_required
+                        scaleRecipe(data.raw.recipe[r].expensive, pack)
+                    end
                 end
             end
         end
