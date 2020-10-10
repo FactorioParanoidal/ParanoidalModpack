@@ -4,9 +4,9 @@
   "title": "Зaranoidal",
   "factorio_version": "1.0",
   "author": "Sovigod",
-  "contact": "discord : https://discord.gg/",
-  "homepage": "discord : https://discord.gg/",
-  "description": "Paranoidal for 1.0",
+  "contact": "https://discord.gg/MnXGAmC",
+  "homepage": "https://discord.gg/MnXGAmC",
+  "description": "Paranoidal core mod for 1.0",
   "dependencies": [
     "base >= 1.0.0",
     "boblibrary", 
