@@ -4,7 +4,7 @@
  * Description: Add the MU locomotives
 --]]
 
-flib = require('__flib__.data_util')
+flib = require('__flib__.data-util')
 
 -- Copied from Optera's Train Overhaul, because their library is deprecated now
 function multiply_energy_value(energy_string, factor)

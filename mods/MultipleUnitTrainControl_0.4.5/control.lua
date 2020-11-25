@@ -20,6 +20,7 @@
 
 replaceCarriage = require("__Robot256Lib__/script/carriage_replacement").replaceCarriage
 blueprintLib = require("__Robot256Lib__/script/blueprint_replacement")
+filterLib = require("__Robot256Lib__/script/event_filters")
 
 
 require("script.balanceInventories")
@@ -270,6 +271,34 @@ local function OnTrainChangedState(event)
 	--game.print("Train " .. id .. " Exiting OnTrainChangedState")
 end
 
+--== ON_NTH_TICK (longer duration) EVENT ==--
+-- Periodically purges global.moving_trains because some mods make train ids
+-- go invalid while still in motion, that would otherwise never be deleted.
+-- This could probably happen if trains get attacked and partially destroyed as well.
+local function OnNthTickPurgeMovingList(event)
+
+  local purged = 0
+  local saved = 0
+  for id,train in pairs(global.moving_trains) do
+    if not train or not train.valid then
+      global.moving_trains[id] = nil
+      purged = purged + 1
+    else
+      saved = saved + 1
+    end
+  end
+  
+  if settings_debug == "debug" then
+		if purged > 1 then
+      if saved > 0 then
+        game.print("MUTC Purged "..tostring(purged).." dead trains from global.moving_trains. "..tostring(saved).." moving trains are still valid.")
+      else
+        game.print("MUTC Purged "..tostring(purged).." dead trains from global.moving_trains.")
+      end
+    end
+  end
+end
+
 
 -------------
 -- Enables the on_train_changed_state event according to current variables
@@ -277,8 +306,11 @@ local function StartTrainWatcher()
 	if global.moving_trains and next(global.moving_trains) then
 		-- Set up the action to process train after it comes to a stop
 		script.on_event(defines.events.on_train_changed_state, OnTrainChangedState)
+    -- Set up the action to purge the moving_trains list periodically
+    script.on_nth_tick(settings_nth_tick*2, OnNthTickPurgeMovingList)
 	else
 		script.on_event(defines.events.on_train_changed_state, nil)
+    script.on_nth_tick(settings_nth_tick*2, nil)
 	end
 end
 
@@ -294,7 +326,6 @@ local function ProcessTrainQueue()
 		if global.created_trains then
 			--game.print("ProcessTrainQueue has a train in the queue")
 			-- Keep looping until we discard all the invalid intermediate trains
-			local moving_trains = {}
 			while next(global.created_trains) do
 				local t = table.remove(global.created_trains,1)
 				if t and t.valid then
@@ -359,6 +390,24 @@ local function OnTrainCreated(event)
 
 	-- Add this train to the train processing list, wait for it to stop
 	table.insert(global.created_trains, event.train)
+  
+  -- Remove old trains from moving_trains list
+  -- When using Renai transportation Train Jumps, this will take care of 99% of the spurious entries 
+  --   from long trains that get disconnected and reconnected while in motion.
+    if global.moving_trains then
+        if event.old_train_id_1 then
+            if global.moving_trains[event.old_train_id_1] then
+              --game.print("Removed old train "..tostring(event.old_train_id_1).." from moving_trains list")
+              global.moving_trains[event.old_train_id_1] = nil
+            end
+        end
+        if event.old_train_id_2 then
+            if global.moving_trains[event.old_train_id_2] then
+              --game.print("Removed old train "..tostring(event.old_train_id_2).." from moving_trains list")
+              global.moving_trains[event.old_train_id_2] = nil
+            end
+        end
+    end
 	
 	--game.print("Train " .. event.train.id .. " queued.")
 	
@@ -488,8 +537,14 @@ function OnPreMined(event)
     end
   end
 end
-script.on_event(defines.events.on_robot_pre_mined, OnPreMined)
-script.on_event(defines.events.on_pre_player_mined_item, OnPreMined)
+script.on_event( defines.events.on_robot_pre_mined,
+                 OnPreMined,
+                 filterLib.generateNameFilter("item-on-ground")
+               )
+script.on_event( defines.events.on_pre_player_mined_item,
+                 OnPreMined,
+                 filterLib.generateNameFilter("item-on-ground")
+               )
 
 
 
@@ -531,6 +586,31 @@ local function QueueAllTrains()
 	if next(global.created_trains) then
 		script.on_event(defines.events.on_tick, OnTick)
 	end
+end
+
+----------
+-- Shows or hides technologies based on runtime setting
+local function UpdateTechnologyState()
+-- Update technology visible state
+  if settings_mode == "tech-unlock" then
+    for _,force in pairs(game.forces) do
+      if force.technologies["adv-multiple-unit-train-control"] then
+        force.technologies["adv-multiple-unit-train-control"].enabled = true
+      end
+      if force.technologies["multiple-unit-train-control"] then
+        force.technologies["multiple-unit-train-control"].enabled = true
+      end
+    end
+  else
+    for _,force in pairs(game.forces) do
+      if force.technologies["adv-multiple-unit-train-control"] then
+        force.technologies["adv-multiple-unit-train-control"].enabled = false
+      end
+      if force.technologies["multiple-unit-train-control"] then
+        force.technologies["multiple-unit-train-control"].enabled = false
+      end
+    end
+  end
 end
 
 
@@ -581,13 +661,18 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 	--game.print("in mod_settings_changed!")
 	if event.setting == "multiple-unit-train-control-mode" then
 		settings_mode = settings.global["multiple-unit-train-control-mode"].value
-		-- Scrub existing trains according to new settings
+		
+    -- Scrub existing trains according to new settings
 		QueueAllTrains()  -- This will execute some replacements immediately
 		if settings_mode == "disabled" then
 			-- Clean globals when disabled
 			global.mu_pairs = {}
 			global.inventories_to_balance = {}
 		end
+    
+    -- Update technology visible state
+    UpdateTechnologyState()
+    
 		-- Enable or disable events based on setting state
 		init_events()
 	
@@ -596,6 +681,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 		settings_nth_tick = settings.global["multiple-unit-train-control-on_nth_tick"].value
 		global.current_nth_tick = nil
 		StartBalanceUpdates()
+    StartTrainWatcher()
 	
 	elseif event.setting == "multiple-unit-train-control-debug" then
 		settings_debug = settings.global["multiple-unit-train-control-debug"].value
@@ -618,6 +704,7 @@ script.on_init(function()
 	global.mu_pairs = {}
 	global.inventories_to_balance = {}
 	InitEntityMaps()
+  UpdateTechnologyState()
 	init_events()
 	
 end)
@@ -640,6 +727,50 @@ script.on_configuration_changed(function(data)
 end)
 
 end
+
+
+
+------------------------------------------
+-- Debug (print text to player console)
+function print_game(...)
+  local text = ""
+  for _, v in ipairs{...} do
+    if type(v) == "table" then
+      text = text..serpent.block(v)
+    else
+      text = text..tostring(v)
+    end
+  end
+  game.print(text)
+end
+
+function print_file(...)
+  local text = ""
+  for _, v in ipairs{...} do
+    if type(v) == "table" then
+      text = text..serpent.block(v)
+    else
+      text = text..tostring(v)
+    end
+  end
+  log(text)
+end  
+
+-- Debug command
+function cmd_debug(params)
+  local cmd = params.parameter
+  if cmd == "dump" then
+    for v, data in pairs(global) do
+      print_game(v, ": ", data)
+    end
+  elseif cmd == "dumplog" then
+    for v, data in pairs(global) do
+      print_file(v, ": ", data)
+    end
+    print_game("Dump written to log file")
+  end
+end
+commands.add_command("mutc-debug", "Usage: mutc-debug dump|dumplog", cmd_debug)
 
 ------------------------------------------------------------------------------------
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
