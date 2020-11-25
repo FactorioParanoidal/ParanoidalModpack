@@ -1,10 +1,11 @@
 data:extend({
 	{
-     type = "technology",
-     name = "plastic-abs",
-     icon = "__base__/graphics/technology/plastics.png",
-	 icon_size = 128,
-	 prerequisites =
+    type = "technology",
+    name = "plastic-abs",
+    icon = "__base__/graphics/technology/plastics.png",
+    icon_size = 256,
+    icon_mipmaps = 4,
+	  prerequisites =
      {
 	   "plastic-3",
 	   "angels-nitrogen-processing-2",
@@ -34,7 +35,8 @@ data:extend({
      type = "technology",
      name = "plastic-pvc",
      icon = "__base__/graphics/technology/plastics.png",
-	 icon_size = 128,
+     icon_size = 256,
+     icon_mipmaps = 4,
 	 prerequisites =
      {
 	   "plastic-2",
@@ -63,7 +65,8 @@ data:extend({
      type = "technology",
      name = "plastic-pc",
      icon = "__base__/graphics/technology/plastics.png",
-	 icon_size = 128,
+     icon_size = 256,
+     icon_mipmaps = 4,
 	 prerequisites =
      {
 	   "angels-advanced-chemistry-4",
@@ -101,7 +104,8 @@ data:extend({
      type = "technology",
      name = "plastic-pmma",
      icon = "__base__/graphics/technology/plastics.png",
-	 icon_size = 128,
+     icon_size = 256,
+     icon_mipmaps = 4,
 	 prerequisites =
      {
 	   "angels-nitrogen-processing-2",
