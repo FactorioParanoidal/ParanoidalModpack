@@ -36,6 +36,13 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
+		name = "Factorissimo2-hide-recursion-2",
+		setting_type = "runtime-global",
+		default_value = false,
+		order = "a-b-a",
+	},
+	{
+		type = "bool-setting",
 		name = "Factorissimo2-better-recursion-2",
 		setting_type = "runtime-global",
 		default_value = false,
@@ -55,6 +62,20 @@ data:extend({
 		setting_type = "runtime-global",
 		default_value = false,
 		order = "a-e",
+	},
+	{
+		type = "bool-setting",
+		name = "Factorissimo2-allied-players-may-enter",
+		setting_type = "runtime-global",
+		default_value = true,
+		order = "a-f-a",
+	},
+	{
+		type = "bool-setting",
+		name = "Factorissimo2-enemy-players-may-enter",
+		setting_type = "runtime-global",
+		default_value = true,
+		order = "a-f-b",
 	},
 
 	-- Per user
