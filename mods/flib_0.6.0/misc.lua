@@ -34,19 +34,38 @@ local format_string_1 = "%d:%02d"
 local format_string_2 = "%d:%02d:%02d"
 
 --- Convert given tick or game.tick into "[hh:]mm:ss" format.
--- @tparam[opt=game.tick] number tick
+-- @tparam[opt=game.ticks_played] number tick
 -- @treturn string
 function flib_misc.ticks_to_timestring(tick)
-  local total_seconds = math.floor((tick or game.tick)/60)
+  local total_seconds = math.floor((tick or game.ticks_played) / 60)
   local seconds = total_seconds % 60
-  local minutes = math.floor(total_seconds/60)
+  local minutes = math.floor(total_seconds / 60)
   if minutes > 59 then
     minutes = minutes % 60
-    local hours = math.floor(total_seconds/3600)
+    local hours = math.floor(total_seconds / 3600)
     return string.format(format_string_2, hours, minutes, seconds)
   else
     return string.format(format_string_1, minutes, seconds)
   end
+end
+
+--- Split numerical values by a delimiter.
+-- Adapted from [lua-users.org](http://lua-users.org/wiki/FormattingNumbers).
+-- @tparam number number The number to delineate. Will be floored before formatting.
+-- @tparam[opt=","] string delimiter
+-- @treturn string The formatted number.
+function flib_misc.delineate_number(number, delimiter)
+  delimiter = delimiter or ","
+  number = math.floor(number)
+  local formatted = number
+  local k
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", "%1"..delimiter.."%2")
+    if k == 0 then
+      break
+    end
+  end
+  return formatted
 end
 
 return flib_misc
