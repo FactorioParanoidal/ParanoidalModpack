@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.2.0
+Date: 2020.11.24
+  Changes:
+    - initial update for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 6.1.4
+Date: 2020.11.17
+  Changes:
+    - update pypetroleumhandling config (resource fixes from kingarthur)
+---------------------------------------------------------------------------------------------------
+Version: 6.1.3
+Date: 2020.11.16
+  Changes:
+    - update pypetroleumhandling config (add bitumen-seep config by Nuage0)
+---------------------------------------------------------------------------------------------------
+Version: 6.1.2
+Date: 2020.09.20
+  Changes:
+    - added lithium to Darkstar Utilities support
+    - moved Bobs and Angels configs to the end to make them override other mods
+---------------------------------------------------------------------------------------------------
 Version: 6.1.1
 Date: 2020.08.16
   Changes:

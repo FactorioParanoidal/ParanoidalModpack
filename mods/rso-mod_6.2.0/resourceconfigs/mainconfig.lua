@@ -127,13 +127,6 @@ function loadResourceConfig()
 		fillNaturalGasConfig(config)
 	end
 
-	-- BobOres
-	if game.active_mods["bobores"] then
-		fillBoboresConfig(config)
-	elseif game.active_mods["5dim_ores"] then
-		fill5dimConfig(config)
-	end
-
 	-- peace mod
 	if game.entity_prototypes["alien-ore"] then
 		fillPeaceConfig(config)
@@ -199,15 +192,6 @@ function loadResourceConfig()
 		else
 			fillHardCraftingConfig(config)
 		end
-	end
-
-	-- angels ores
-	if game.entity_prototypes["angels-ore1"] then
-		fillAngelsOresConfig(config)
-		-- remove no longer needed ores
-	    config["copper-ore"] = nil
-	    config["iron-ore"] = nil
-		config["stone"] = nil
 	end
 
 	if game.entity_prototypes["monazite-ore"] then
@@ -444,6 +428,22 @@ function loadResourceConfig()
 
 	if game.active_mods["yaiom"] then
 --		fillYaiomConfig(config)
+	end
+
+	-- BobOres
+	if game.active_mods["bobores"] then
+		fillBoboresConfig(config)
+	elseif game.active_mods["5dim_ores"] then
+		fill5dimConfig(config)
+	end
+
+	-- angels ores
+	if game.entity_prototypes["angels-ore1"] then
+		fillAngelsOresConfig(config)
+		-- remove no longer needed ores
+	    config["copper-ore"] = nil
+	    config["iron-ore"] = nil
+		config["stone"] = nil
 	end
 
 	return config
