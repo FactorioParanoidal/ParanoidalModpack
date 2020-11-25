@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 25. 11. 2020
+  Changes:
+    - Update for Factorio 1.1.x.
+    - Reduced the crafting cost of both lamps a little bit.
+    - Reduced the pollution of copper lamps.
+    - Deconstruction time of both lamps reduced to 0.2s.
+    - The large lamp now uses the same kind of signal-coloured glow as vanilla lamps do in Factorio 1.1.0.
+  Fixes:
+    - The copper lamp is now a chemical fuel burner entity. Unnecessary "lamp recipes" removed.
+    - Icons now use mipmap format.
+    - Fixed that the copper lamp entity icon was wrong (e.g. as it appears in upgrade planner).
+    - Set the automatic "next upgrade" of the copper lamp to the large lamp with some misgivings.
+    - Fixed missing destruction effects.
+    - Remnants are a more appropriate size.
+    - Removed global scope from data stage functions.
+    - Copper lamp active recipe is not shown in map overlay (1.1.1).
+---------------------------------------------------------------------------------------------------
 Version: 1.3.1
 Date: 01. 02. 2020
   Changes:
