@@ -47,7 +47,7 @@ if Pad then
             end
             pad['nano_btn_reset'].enabled = radius ~= max_radius
             pdata.ranges[stack.name] = radius ~= max_radius and radius or nil
-            text_field.text = radius
+            text_field.text = tostring(radius)
         else
             Pad.remove_gui(player, 'nano_frame_main')
         end

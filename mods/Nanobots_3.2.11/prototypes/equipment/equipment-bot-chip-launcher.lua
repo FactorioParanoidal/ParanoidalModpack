@@ -66,7 +66,6 @@ local equipment_chip =
             type = 'projectile',
             category = 'electric',
             energy_consumption = '500W',
-            speed = 1,
             action = {
                 {
                     type = 'area',

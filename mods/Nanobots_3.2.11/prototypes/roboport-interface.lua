@@ -24,15 +24,17 @@ Data {
 }
 
 --Main recipe.
+local ingredients = {
+    {'constant-combinator', 1},
+    {'radar', 1},
+    {'roboport', 1}
+}
+
 Recipe {
     type = 'recipe',
     name = 'roboport-interface',
     enabled = false,
-    ingredients = {
-        {'constant-combinator', 1},
-        {'roboport', 1},
-        {'radar', 1}
-    },
+    ingredients = ingredients,
     result = 'roboport-interface',
     energy_required = 30
 }:add_unlock('roboport-interface')
@@ -137,7 +139,7 @@ Data {
     icon_size = 32,
     icon_mipmaps = 1,
     flags = {'placeable-player', 'player-creation'},
-    minable = {hardness = 0.2, mining_time = 0.5, result = 'roboport-interface'},
+    minable = {mining_time = 0.5, result = 'roboport-interface'},
     max_health = 500,
     corpse = 'small-remnants',
     collision_box = {{-0.9, -0.9}, {0.9, 0.9}},
