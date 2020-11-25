@@ -6,7 +6,7 @@ local loc_glow_color_intensity = settings.startup["inlaid-lamps-extended-loc_glo
 local loc_glow_size = settings.startup["inlaid-lamps-extended-loc_glow_size"].value                                                     --6
 local loc_energy_usage = math.ceil(math.max(5*light_intensity*light_size/36,5*light_colored_intensity*light_colored_size/36))
 
-local sounds = require("__base__/prototypes/entity/demo-sounds")["generic_impact"]
+local sounds = require("__base__/prototypes/entity/sounds")["generic_impact"]
 for _, s in ipairs(sounds) do
   s.volume = 0.65
 end
