@@ -1,5 +1,5 @@
 local DLL = require("prototypes.globals")
-require("prototypes.functions")
+local DLLFUNC = require("prototypes.functions")
 
 -- electric large lamp
 
@@ -28,9 +28,10 @@ local lamp = {
     selection_box = { {-1.0,-1.0}, {1.0,1.0} },
     tile_width = 2,
     tile_height = 2,
-    corpse = "medium-remnants",
+    corpse = "small-remnants",
     darkness_for_all_lamps_off = 0.3,
     darkness_for_all_lamps_on = 0.5,
+	dying_explosion = "medium-explosion",
     energy_source = {
         type = "electric",
         usage_priority = "lamp"
@@ -38,10 +39,12 @@ local lamp = {
     energy_usage_per_tick = "20KW",
 	fast_replaceable_group = "large-lamp",
     flags = {"placeable-neutral","player-creation"},
-    glow_color_intensity = 0.125,
+    glow_color_intensity = 1,
     glow_size = 12,
-    icon = string.format("%s/deadlock-large-lamp-64.png", DLL.icon_path),
+    glow_render_mode = "multiplicative",
+    icon = string.format("%s/large-lamp.png", DLL.icon_path),
     icon_size = 64,
+    icon_mipmaps = 4,
     light = {
         color = DLL.glow_colour,
         intensity = 0.75,
@@ -50,13 +53,13 @@ local lamp = {
 		picture = { filename = string.format("%s/light.png", DLL.entity_path), width = 256, height = 256, scale = 0.125 },
     },
     light_when_colored = {
-		color = { b = 1, g = 1, r = 1 },
-        intensity = 1,
-        size = 6,
+		color = DLL.glow_colour,
+        intensity = 0,
+        size = 12,
     },
     max_health = 150,
     minable = {
-        mining_time = 0.5,
+        mining_time = 0.2,
         result = DLL.name,
     },
     mined_sound = {
@@ -126,13 +129,15 @@ local lamp = {
             priority = "high",
             scale = 0.5,
             shift = {0,0},
-			tint = DLL.glow_colour,
-            width = 128
+			tint = DLL.tint_colour,
+            width = 128,
+			draw_as_glow = true,
         },
         priority = "high",
         shift = {0,0},
-		tint = DLL.glow_colour,
-        width = 64
+		tint = DLL.tint_colour,
+        width = 64,
+		draw_as_glow = true,
     },
     resistances = {
         {
@@ -155,24 +160,36 @@ data:extend({lamp})
 
 local lamp = {
     name = DLL.copper_name,
-    type = "furnace",
+    type = "assembling-machine",
     minable = {
-        mining_time = 0.5,
+        mining_time = 0.2,
         result = DLL.copper_name,
     },
-    icon = string.format("%s/deadlock-large-lamp-64.png", DLL.icon_path),
+    icon = string.format("%s/copper-lamp.png", DLL.icon_path),
     icon_size = 64,
+    icon_mipmaps = 4,
     fast_replaceable_group = "large-lamp",
+	next_upgrade = DLL.name,
     crafting_speed = 1,
-    crafting_categories = {"deadlock-lamp-burning"},
+    crafting_categories = {"lamp-burning"},
+	fixed_recipe = DLL.copper_name.."-burning",
+	dying_explosion = "medium-explosion",
     show_recipe_icon = false,
+    show_recipe_icon_on_map = false,
     source_inventory_size = 1,
     result_inventory_size = 1,
     energy_source = {
-        emissions_per_minute = 0.25,
-        type = "void"
+        emissions_per_minute = 0.02,
+        type = "burner",
+		fuel_inventory_size = 1,
+        burnt_inventory_size = 1,
+		fuel_category = "chemical",
+		light_flicker = {
+			color = {0,0,0,0}, -- to remove default burner glow
+		},
+		render_no_power_icon = false, -- to be consistent with previous recipe-based behaviour
     },
-    energy_usage = "9.6kW",
+    energy_usage = "9.6kW", -- 4MJ = 1 coal = 1 Factorio day
     max_health = 100,
     resistances = {
         {
@@ -180,7 +197,7 @@ local lamp = {
             percent = 95
         },
     },
-    corpse = "medium-remnants",
+    corpse = "small-remnants",
     flags = {"placeable-player", "placeable-neutral", "player-creation"},
     collision_box = { {-0.6,-0.6}, {0.6,0.6} },
     selection_box = { {-1.0,-1.0}, {1.0,1.0} },
@@ -188,13 +205,13 @@ local lamp = {
     tile_height = 2,
     animation = {
         layers = {
-            get_layer("copper-lamp-base", nil, nil, false, nil, nil, 128, 128, 0, 0, 128, 128, {0,0}),
-            get_layer("copper-lamp-shadow", nil, nil, true, nil, nil, 128, 128, 0, 0, 128, 128, {0,0}),
+            DLLFUNC.get_layer("copper-lamp-base", nil, nil, nil, nil, nil, 128, 128, 0, 0, 128, 128, {0,0}),
+            DLLFUNC.get_layer("copper-lamp-shadow", nil, nil, "shadow", nil, nil, 128, 128, 0, 0, 128, 128, {0,0}),
         }
     },
     working_visualisations = {
         {
-            animation = get_layer("copper-lamp-working", 30, 6, false, nil, 1, 128, 128, 0, 0, 128, 128, {0,0}, "additive"),
+            animation = DLLFUNC.get_layer("copper-lamp-working", 30, 6, "glow", nil, 1, 128, 128, 0, 0, 128, 128, {0,0}, "additive"),
             light = {
 				color = {1.0,0.75,0.5},
 				intensity = 0.75,
