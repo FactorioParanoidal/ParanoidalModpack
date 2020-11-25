@@ -1,8 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Changes:
+    - Version Bump to version 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Changes:
+    - Added in russian locale, provided by Airat9000
+---------------------------------------------------------------------------------------------------
 Version: 0.18.6
-  Bugfixes:
-    - Updated fluid names which were named in the recent petrochem update
-    - Updated the ABS plastic recipe (hydrofluoric acid tweak)
+  Changes:
+    - minor tweaks and bugfixes relating to angels fluid naming changes
 ---------------------------------------------------------------------------------------------------
 Version: 0.18.5
   Bugfixes:
