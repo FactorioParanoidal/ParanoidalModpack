@@ -13,25 +13,30 @@ local config = require('config')
 local armormods = require('scripts/armor-mods')
 local bot_radius = config.BOT_RADIUS
 local queue_speed = config.QUEUE_SPEED_BONUS
-local AFK_TIME = 4 * defines.time.second
 
 local function unique(tbl)
     return table.keys(table.invert(tbl))
 end
 local inv_list =
     unique {
+    defines.inventory.character_trash,
     defines.inventory.character_main,
     defines.inventory.god_main,
     defines.inventory.chest,
     defines.inventory.character_vehicle,
-    defines.inventory.character_trash,
     defines.inventory.car_trunk,
     defines.inventory.cargo_wagon
 }
 
-local CLIFF_EXPLOSIVE = {
-    name = 'cliff-explosives',
-    count = 1
+local explosives = {
+    {name = 'cliff-explosives', count = 1},
+    {name = 'explosives', count = 10},
+    {name = 'explosive-rocket', count = 4},
+    {name = 'explosive-cannon-shell', count = 4},
+    {name = 'cluster-grenade', count = 2},
+    {name = 'grenade', count = 14},
+    {name = 'land-mine', count = 5},
+    {name = 'artillery-shell', count = 1}
 }
 
 local function update_settings()
@@ -43,7 +48,9 @@ local function update_settings()
         build_tiles = setting['nanobots-nano-build-tiles'].value,
         network_limits = setting['nanobots-network-limits'].value,
         nanobots_auto = setting['nanobots-nanobots-auto'].value,
-        equipment_auto = setting['nanobots-equipment-auto'].value
+        equipment_auto = setting['nanobots-equipment-auto'].value,
+        afk_time = setting['nanobots-afk-time'].value * defines.time.second,
+        do_proxies = setting['nanobots-nano-fullfill-requests'].value
     }
 end
 Event.register(defines.events.on_runtime_mod_setting_changed, update_settings)
@@ -54,10 +61,11 @@ local table_find = table.find
 
 -- return the name of the item found for table.find if we found at least 1 item or cheat_mode is enabled.
 -- Don't return items with inventory
---? Maybe just use same logic as factorio robots {items_that_place_this}[1] instead of a looop.
-local _find_item = function(item_prototype, _, player)
+local _find_item = function(item_prototype, _, player, at_least_one)
     local item, count = item_prototype.name, item_prototype.count
-    if item_prototype.type ~= 'item-with-inventory' then
+    count = at_least_one and 1 or count
+    local prototype = game.item_prototypes[item]
+    if prototype.type ~= 'item-with-inventory' then
         if player.cheat_mode or player.get_item_count(item) >= count then
             return true
         else
@@ -72,7 +80,7 @@ end
 -- @param player: the player object
 -- @return bool: player is connected and ready
 local function is_connected_player_ready(player)
-    return (player.afk_time < AFK_TIME and player.character)
+    return (cfg.afk_time <= 0 or player.afk_time < cfg.afk_time) and player.character
 end
 
 local function has_powered_equipment(character, eq_name)
@@ -110,11 +118,22 @@ local function nano_network_check(character, e)
     end
 end
 
+local moveables = {
+    train = true,
+    car = true,
+    spidertron = true
+}
 -- Can nanobots repair this entity.
 -- @param entity: the entity object
 -- @return bool: repairable by nanobots
 local function nano_repairable_entity(entity)
-    return ((entity.get_health_ratio() or 1) < 1) and not (entity.has_flag('breaths-air') or ((entity.type == 'car' or entity.type == 'train') and entity.speed > 0) or entity.type:find('robot'))
+    if (entity.get_health_ratio() or 1) < 1 then
+        local repairable = not entity.has_flag('breaths-air') or not entity.type:find('robot')
+        local has_mask = table_size(entity.prototype.collision_mask) > 0
+        local moving = moveables[entity.type] and entity.speed ~= 0
+        return repairable and has_mask and not moving
+    end
+    return false
 end
 
 -- Get the gun, ammo and ammo name for the named gun: will return nil
@@ -210,7 +229,7 @@ end
 -- @param entity: the entity object to search
 -- @param item: the item to look for
 -- @return item_stack; SimpleItemStack
-local function get_items_from_inv(entity, item_stack, cheat)
+local function get_items_from_inv(entity, item_stack, cheat, at_least_one)
     if cheat then
         return {name = item_stack.name, count = item_stack.count, health = 1}
     else
@@ -223,15 +242,31 @@ local function get_items_from_inv(entity, item_stack, cheat)
         else
             sources = {entity}
         end
+
+        local new_item_stack = {
+            name = item_stack.name,
+            count = 0,
+            health = 1
+        }
+
+        local count = item_stack.count
+
         for _, source in pairs(sources) do
             for _, inv in pairs(inv_list) do
                 local inventory = source.get_inventory(inv)
-                if inventory and inventory.valid then
-                    local stack = inventory.get_item_count(item_stack.name) > 0 and inventory.find_item_stack(item_stack.name)
-                    if stack and stack.count >= item_stack.count then
-                        local new_item_stack = {name = stack.name, count = item_stack.count, health = stack.health or 1}
-                        stack.count = stack.count - item_stack.count
-                        return new_item_stack
+                if inventory and inventory.valid and inventory.get_item_count(item_stack.name) > 0 then
+                    local stack = inventory.find_item_stack(item_stack.name)
+                    while stack do
+                        local removed = math.min(stack.count, count)
+                        new_item_stack.count = new_item_stack.count + removed
+                        new_item_stack.health = new_item_stack.health * stack.health
+                        stack.count = stack.count - removed
+                        count = count - removed
+
+                        if new_item_stack.count == item_stack.count then
+                            return new_item_stack
+                        end
+                        stack = inventory.find_item_stack(item_stack.name)
                     end
                 end
             end
@@ -239,14 +274,19 @@ local function get_items_from_inv(entity, item_stack, cheat)
         -- If we havn't returned here check the hand!
         if entity.is_player() then
             local stack = entity.cursor_stack
-            if stack and stack.valid_for_read and stack.name == item_stack.name and stack.count >= item_stack.count then
-                local new_stack = {name = stack.name, count = item_stack.count, health = stack.health or 1}
-                stack.count = stack.count - item_stack.count
-                if not stack.valid_for_read then
-                    entity.cursor_ghost = item_stack.name
-                end
-                return new_stack
+            if stack and stack.valid_for_read and stack.name == item_stack.name then
+                local removed = math.min(stack.count, count)
+                new_item_stack.count = new_item_stack.count + removed
+                new_item_stack.health = new_item_stack.health * stack.health
+                stack.count = stack.count - count
             end
+        end
+        if new_item_stack.count == item_stack.count then
+            return new_item_stack
+        elseif new_item_stack.count > 0 and at_least_one then
+            return new_item_stack
+        else
+            return nil
         end
     end
 end
@@ -321,146 +361,176 @@ end
 
 function Queue.cliff_deconstruction(data)
     local entity, player = data.entity, game.get_player(data.player_index)
-    if entity and entity.valid and entity.to_be_deconstructed(player.force) then
-        create_projectile('nano-projectile-deconstructors', entity.surface, entity.force, player.position, entity.position)
-        entity.destroy({do_cliff_correction = true, raise_destroy = true})
-    else
-        insert_or_spill_items(player, {data.item_stack})
+    if not (player and player.valid) then
+        return
     end
+
+    if not (entity and entity.valid and entity.to_be_deconstructed(player.force)) then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
+
+    create_projectile('nano-projectile-deconstructors', entity.surface, entity.force, player.position, entity.position)
+    local exp_name = data.item_stack.name == 'artillery-shell' and 'big-artillery-explosion' or 'big-explosion'
+    entity.surface.create_entity {name = exp_name, position = entity.position}
+    entity.destroy({do_cliff_correction = true, raise_destroy = true})
 end
 
 --Handles all of the deconstruction and scrapper related tasks.
 function Queue.deconstruction(data)
     local entity, player = data.entity, game.get_player(data.player_index)
-    if player and player.valid then
-        if entity and entity.valid and entity.to_be_deconstructed(player.force) then
-            local item_stacks = {}
-            local surface, force = data.surface or entity.surface, data.force or entity.force
-            local ppos, epos = player.position, entity.position
-
-            create_projectile('nano-projectile-deconstructors', surface, force, ppos, epos)
-            create_projectile('nano-projectile-return', surface, force, epos, ppos)
-
-            if entity.type == 'item-entity' then
-                item_stacks[#item_stacks + 1] = {
-                    name = entity.stack.name,
-                    count = entity.stack.count,
-                    health = entity.stack.health,
-                    durability = entity.stack.durability
-                }
-                if #item_stacks > 0 then
-                    insert_or_spill_items(player, item_stacks)
-                end
-                entity.destroy()
-            elseif entity.name == 'deconstructible-tile-proxy' then
-                local tile = surface.get_tile(epos)
-                if tile then
-                    player.mine_tile(tile)
-                end
-            elseif entity.valid then
-                player.mine_entity(entity)
-            end
-        end
-    --Valid entity
+    if not (player and player.valid) then
+        return
     end
-    --Valid player
+
+    if not (entity and entity.valid and entity.to_be_deconstructed(player.force)) then
+        return
+    end
+
+    local surface, force = data.surface or entity.surface, data.force or entity.force
+    local ppos, epos = player.position, entity.position
+
+    create_projectile('nano-projectile-deconstructors', surface, force, ppos, epos)
+    create_projectile('nano-projectile-return', surface, force, epos, ppos)
+
+    if entity.name == 'deconstructible-tile-proxy' then
+        local tile = surface.get_tile(epos)
+        if tile then
+            player.mine_tile(tile)
+            entity.destroy()
+        end
+    else
+        player.mine_entity(entity)
+    end
 end
 
 function Queue.build_entity_ghost(data)
     local ghost, player, ghost_surf, ghost_pos = data.entity, game.get_player(data.player_index), data.surface, data.position
-    if (player and player.valid) then
-        if ghost.valid and data.entity.ghost_name == data.entity_name then --item_places_entity(data.item_stack.name, ghost.ghost_name) then
-            local item_stacks = get_all_items_on_ground(ghost)
-            if player.surface.can_place_entity {name = ghost.ghost_name, position = ghost.position, direction = ghost.direction, force = ghost.force} then
-                local revived, entity, requests = ghost.revive{return_item_request_proxy = true, raise_revive = true}
-                if revived then
-                    create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
-                    entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
-                    if insert_or_spill_items(player, insert_into_entity(entity, item_stacks)) then
-                        create_projectile('nano-projectile-return', ghost_surf, player.force, ghost_pos, player.position)
-                    end
-                    if requests then
-                        satisfy_requests(requests, entity, player)
-                    end
-                else --not revived, return item
-                    insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
-                end --revived
-            else --can't build
-                insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
-            end --can build
-        else --not valid ghost
-            insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
-        end --valid ghost
-    end --valid player
+    if not (player and player.valid) then
+        return
+    end
+
+    if not (ghost.valid and data.entity.ghost_name == data.entity_name) then
+        return insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
+    end
+
+    local item_stacks = get_all_items_on_ground(ghost)
+    if not player.surface.can_place_entity {name = ghost.ghost_name, position = ghost.position, direction = ghost.direction, force = ghost.force} then
+        return insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
+    end
+
+    local revived, entity, requests = ghost.revive {return_item_request_proxy = true, raise_revive = true}
+    if not revived then
+        return insert_or_spill_items(player, {data.item_stack}, player.cheat_mode)
+    end
+
+    create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
+    entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
+    if insert_or_spill_items(player, insert_into_entity(entity, item_stacks)) then
+        create_projectile('nano-projectile-return', ghost_surf, player.force, ghost_pos, player.position)
+    end
+    if requests then
+        satisfy_requests(requests, entity, player)
+    end
 end
 
 function Queue.build_tile_ghost(data)
     local ghost, surface, position, player = data.entity, data.surface, data.position, game.get_player(data.player_index)
-    if (player and player.valid) then
-        if ghost.valid then
-            local tile, hidden_tile = surface.get_tile(position), surface.get_hidden_tile(position)
-            local force = ghost.force
-            local tile_was_mined = false
-            local ghost_was_revived = false
+    if not (player and player.valid) then
+        return
+    end
 
-            -- Is there any existing tile that needs returned
-            if hidden_tile and tile.prototype.can_be_part_of_blueprint and player.mine_tile(tile) then
-                create_projectile('nano-projectile-return', surface, force, position, player.position)
-                tile_was_mined = true
-            end
+    if not ghost.valid then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
 
-            -- Mining the tile causes the ghost to be cleared also
-            if ghost.valid then
-                ghost_was_revived = ghost.revive()
-            end
+    local tile, hidden_tile = surface.get_tile(position), surface.get_hidden_tile(position)
+    local force = ghost.force
+    local tile_was_mined = hidden_tile and tile.prototype.can_be_part_of_blueprint and player.mine_tile(tile)
+    local ghost_was_revived = ghost.valid and ghost.revive() -- Mining tiles invalidates ghosts
+    if not (tile_was_mined or ghost_was_revived) then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
 
-            if tile_was_mined or ghost_was_revived then
-                local item_ptype = data.item_stack and game.item_prototypes[data.item_stack.name]
-                local tile_ptype = item_ptype and item_ptype.place_as_tile_result.result
-                create_projectile('nano-projectile-constructors', surface, force, player.position, position)
-                Position.floored(position)
-                -- if the tile was mined, we need to manually place the tile.
-                -- checking if the ghost was revived is likely unnecessary but felt safer.
-                if tile_was_mined and not ghost_was_revived then
-                    --local tile_name = ptype.place_as_tile_result['result'].name
-                    surface.set_tiles({{name = tile_ptype.name, position = position}}, true, true, false, true)
-                end
+    local item_ptype = data.item_stack and game.item_prototypes[data.item_stack.name]
+    local tile_ptype = item_ptype and item_ptype.place_as_tile_result.result
+    create_projectile('nano-projectile-constructors', surface, force, player.position, position)
+    Position.floored(position)
+    -- if the tile was mined, we need to manually place the tile.
+    -- checking if the ghost was revived is likely unnecessary but felt safer.
+    if tile_was_mined and not ghost_was_revived then
+        create_projectile('nano-projectile-return', surface, force, position, player.position)
+        surface.set_tiles({{name = tile_ptype.name, position = position}}, true, true, false, true)
+    end
 
-                surface.create_entity {name = 'nano-sound-build-tiles', position = position}
-            else --Can't place or revive the tile, give item back.
-                insert_or_spill_items(player, {data.item_stack})
-            end --Tile was placed or revived
-        else --Give the item back ghost isn't valid anymore.
-            insert_or_spill_items(player, {data.item_stack})
-        end --valid ghost
-    end --valid player
+    surface.create_entity {name = 'nano-sound-build-tiles', position = position}
 end
 
 function Queue.upgrade_ghost(data)
     local ghost, player, surface, position = data.entity, game.get_player(data.player_index), data.surface, data.position
-    if (player and player.valid) then
-        if ghost.valid then
-            local entity =
-                surface.create_entity {
-                name = data.item_stack.name,
-                direction = ghost.direction,
-                force = ghost.force,
-                position = position,
-                fast_replace = true,
-                player = player,
-                type = ghost.type == 'underground-belt' and ghost.belt_to_ground_type or nil,
-                raise_built = true
-            }
-            if entity then
-                create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
-                entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
-            else --not revived, return item
-                insert_or_spill_items(player, {data.item_stack})
-            end --revived
-        else --not valid ghost
-            insert_or_spill_items(player, {data.item_stack})
-        end --valid ghost
-    end --valid player
+    if not (player and player.valid) then
+        return
+    end
+
+    if not ghost.valid then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
+
+    local entity =
+        surface.create_entity {
+        name = data.entity_name or data.item_stack.name,
+        direction = ghost.direction,
+        force = ghost.force,
+        position = position,
+        fast_replace = true,
+        player = player,
+        type = ghost.type == 'underground-belt' and ghost.belt_to_ground_type or nil,
+        raise_built = true
+    }
+    if not entity then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
+
+    create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
+    entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
+end
+
+function Queue.item_requests(data)
+    local proxy, player = data.entity, game.get_player(data.player_index)
+    local target = proxy.valid and proxy.proxy_target
+    if not (player and player.valid) then
+        return
+    end
+
+    if not (proxy.valid and target and target.valid) then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
+
+    if not target.can_insert(data.item_stack) then
+        return insert_or_spill_items(player, {data.item_stack})
+    end
+
+    create_projectile('nano-projectile-constructors', proxy.surface, proxy.force, player.position, proxy.position)
+    local item_stack = data.item_stack
+    local requests = proxy.item_requests
+    local inserted = target.insert(item_stack)
+    item_stack.count = item_stack.count - inserted
+
+    if item_stack.count > 0 then
+        insert_or_spill_items(player, {item_stack})
+    end
+
+    requests[item_stack.name] = requests[item_stack.name] - inserted
+    for k, count in pairs(requests) do
+        if count == 0 then
+            requests[k] = nil
+        end
+    end
+
+    if table_size(requests) > 0 then
+        proxy.item_requests = requests
+    else
+        proxy.destroy()
+    end
 end
 
 --[[ Nano Emmitter --]]
@@ -500,12 +570,15 @@ local function queue_ghosts_in_range(player, pos, nano_ammo)
                             if deconstruct then
                                 if ghost.type == 'cliff' then
                                     if player.force.technologies['nanobots-cliff'].researched then
-                                        local explosive = get_items_from_inv(player, CLIFF_EXPLOSIVE, player.cheat_mode)
-                                        if explosive then
-                                            data.item_stack = explosive
-                                            data.action = 'cliff_deconstruction'
-                                            queue:insert(data, next_tick())
-                                            ammo_drain(player, nano_ammo, 1)
+                                        local item_stack = table_find(explosives, _find_item, player)
+                                        if item_stack then
+                                            local explosive = get_items_from_inv(player, item_stack, player.cheat_mode)
+                                            if explosive then
+                                                data.item_stack = explosive
+                                                data.action = 'cliff_deconstruction'
+                                                queue:insert(data, next_tick())
+                                                ammo_drain(player, nano_ammo, 1)
+                                            end
                                         end
                                     end
                                 elseif ghost.minable then
@@ -515,14 +588,14 @@ local function queue_ghosts_in_range(player, pos, nano_ammo)
                                     ammo_drain(player, nano_ammo, 1)
                                 end
                             elseif upgrade then
-                                local proto = ghost.get_upgrade_target()
-                                if proto then
-                                    proto = {{name = proto.name, count = 1}}
-                                    local item_stack = table_find(proto, _find_item, player)
+                                local prototype = ghost.get_upgrade_target()
+                                if prototype then
+                                    local item_stack = table_find(prototype.items_to_place_this, _find_item, player)
                                     if item_stack then
                                         data.action = 'upgrade_ghost'
                                         local place_item = get_items_from_inv(player, item_stack, player.cheat_mode)
                                         if place_item then
+                                            data.entity_name = prototype.name
                                             data.item_stack = place_item
                                             queue:insert(data, next_tick())
                                             ammo_drain(player, nano_ammo, 1)
@@ -576,6 +649,21 @@ local function queue_ghosts_in_range(player, pos, nano_ammo)
                                     queue_count(1)
                                     ammo_drain(player, nano_ammo, 1)
                                 end --repair
+                            elseif ghost.name == 'item-request-proxy' and cfg.do_proxies then
+                                local items = {}
+                                for item, count in pairs(ghost.item_requests) do
+                                    items[#items + 1] = {name = item, count = count}
+                                end
+                                local item_stack = table_find(items, _find_item, player, true)
+                                if item_stack then
+                                    local place_item = get_items_from_inv(player, item_stack, player.cheat_mode, true)
+                                    if place_item and place_item.count > 0 then
+                                        data.action = 'item_requests'
+                                        data.item_stack = place_item
+                                        queue:insert(data, next_tick())
+                                        ammo_drain(player, nano_ammo, 1)
+                                    end
+                                end
                             end -- deconstruct, build or repair
                         end -- hash_check()
                     else
@@ -595,7 +683,6 @@ end --function
 --Kill the trees! Kill them dead
 local function everyone_hates_trees(player, pos, nano_ammo)
     local radius = get_ammo_radius(player, nano_ammo)
-    --local area = Position.expand_to_area(pos, radius)
     for _, stupid_tree in pairs(player.surface.find_entities_filtered {position = pos, radius = radius, type = 'tree', limit = 200}) do
         if nano_ammo.valid and nano_ammo.valid_for_read then
             if not stupid_tree.to_be_deconstructed(player.force) then

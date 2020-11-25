@@ -1,8 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.2.11
+Date: 2020-11-25
+  Changes:
+    - Clean up prototype loading.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.10
+Date: 2020-09-27
+  Changes:
+    - More explody type items are used for nanobot cliff explosives.
+  Features:
+    - AFK time is now a global setting.
+    - Nanobots can now fullfill item request proxies.
+  Bugfixes:
+    - Fix deconstructable-tile-proxy hanging around in some cases.
+    - Fix attempting to heal entities with no collision mask.
+    - Fix unbuildable interface with bobmods logistics.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.9
+Date: 2020-09-21
+  Bugfixes:
+    - Upgrade bots look for the correct item and entity now.
+---------------------------------------------------------------------------------------------------
 Version: 3.2.8
 Date: 2020-06-01
   Bugfixes:
-      - Fix nill error when building roboport interfaces.
+    - Fix nill error when building roboport interfaces.
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.7
 Date: 2020-05-24

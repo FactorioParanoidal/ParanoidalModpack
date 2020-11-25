@@ -3,7 +3,12 @@ local tech1 = {
     name = 'nanobots',
     icon = '__Nanobots__/graphics/technology/tech-nanobots.png',
     icon_size = 128,
-    effects = {},
+    effects = {
+        {
+            type = "ghost-time-to-live",
+            modifier = 60 * 60 * 60 * 24 * 7
+        }
+    },
     prerequisites = {'logistics'},
     unit = {
         count = 30,
