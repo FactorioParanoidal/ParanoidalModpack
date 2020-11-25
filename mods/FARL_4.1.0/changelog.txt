@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+Date: 2020-11-23
+  Changes:
+    - Updated for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 4.0.7
+Date: 2020-10-06
+  Bugfixes:
+    - Changed default hotkey to Start/stop FARL to Control + A, to fix not being able to copy/paste while moving left
+---------------------------------------------------------------------------------------------------
+Version: 4.0.6
+Date: 2020-10-04
+  Changes:
+    - Added hotkeys to start/stop FARL (Shift + A) and toggle cruise control (Shift + C)
+    - Added an option to use maximum speed when in cruise mode
+---------------------------------------------------------------------------------------------------
 Version: 4.0.5
 Date: 2020-09-14
   Changes:

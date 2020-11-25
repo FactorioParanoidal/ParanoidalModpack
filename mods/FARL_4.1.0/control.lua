@@ -600,6 +600,30 @@ script.on_event("toggle-train-control", function(event)
     end
 end)
 
+script.on_event("farl-toggle-cruise-control", function(event)
+    local player = game.get_player(event.player_index)
+    local vehicle = player.vehicle
+    if vehicle and FARL.isFARLLocomotive(vehicle) then
+        local farl = FARL.findByPlayer(player)
+        if farl then farl:toggleCruiseControl() end
+    end
+end)
+
+script.on_event("farl-toggle-active", function(event)
+    local player = game.get_player(event.player_index)
+    local vehicle = player.vehicle
+    if vehicle and FARL.isFARLLocomotive(vehicle) then
+        local farl = FARL.findByPlayer(player)
+        if farl then
+            if farl.active then
+                farl:deactivate()
+            else
+                farl:activate()
+            end
+        end
+    end
+end)
+
 local command_to_button = {
     farl_read_bp = "blueprint",
     farl_clear_bp = "bpClear",
@@ -632,11 +656,11 @@ remote.add_interface("farl",
     {
         railInfo = function(rail)
             rail = rail or game.player.selected
-            debugDump(rail.name.."@ ".. Position.tostring(rail.position).." dir:"..rail.direction.." realPos: "..Position.tostring(FARL.diagonal_to_real_pos(rail)),true)
+            debugDump(rail.name.."@ ".. Position.tostring(rail.position).." dir:"..rail.direction.." realPos: "..Position.tostring(lib.diagonal_to_real_pos(rail)),true)
             if type(global.railInfoLast) == "table" and global.railInfoLast.valid then
                 local pos = global.railInfoLast.position
                 local diff=Position.subtract(rail.position,pos)
-                local rdiff = Position.subtract(FARL.diagonal_to_real_pos(rail),FARL.diagonal_to_real_pos(global.railInfoLast))
+                local rdiff = Position.subtract(lib.diagonal_to_real_pos(rail),lib.diagonal_to_real_pos(global.railInfoLast))
                 debugDump("Offset from last: x="..diff.x..",y="..diff.y,true)
                 debugDump("real Offset: x="..rdiff.x..",y="..rdiff.y,true)
                 debugDump("Distance (util): "..util.distance(pos, rail.position),true)
