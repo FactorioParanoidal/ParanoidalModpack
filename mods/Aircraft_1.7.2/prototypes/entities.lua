@@ -275,6 +275,7 @@ data:extend({
     burner =
     {
       effectivity = 1,
+      fuel_category = "chemical",
       fuel_inventory_size = 2,
       smoke =
       {
@@ -416,6 +417,7 @@ data:extend({
     burner =
     {
       effectivity = 1,
+      fuel_category = "chemical",
       fuel_inventory_size = 6,
       smoke =
       {
@@ -556,6 +558,7 @@ data:extend({
     burner =
     {
       effectivity = 1,
+      fuel_category = "chemical",
       fuel_inventory_size = 3,
       smoke =
       {
@@ -697,6 +700,7 @@ data:extend({
     burner =
     {
       effectivity = 1,
+      fuel_category = "chemical",
       fuel_inventory_size = 4,
       smoke =
       {
