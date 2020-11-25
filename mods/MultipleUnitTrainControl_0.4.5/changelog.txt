@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 2020-11-14
+  Changes:
+    - First release dedicated to Factorio 1.0.
+    - Added event filtering where possible.
+  Bugfixes:
+    - Fixed possible save file bloat when trains are created/destroyed while in motion. Fixes compatibility with Renai Transportation mod. (https://github.com/robot256/MultipleUnitTrainControl/issues/13)
+    - Fixed that MU tech still visible in tech tree even though it was disabled in settings. (https://github.com/robot256/MultipleUnitTrainControl/issues/11)
+    - Fixed deprecated path to flib.data-util.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.4
 Date: 2020-05-29
   Features:
