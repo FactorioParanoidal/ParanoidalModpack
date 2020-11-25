@@ -1,3 +1,5 @@
+local data_util = require("__flib__.data-util")
+
 local styles = data.raw["gui-style"].default
 
 -- SLOT BUTTON STYLES
@@ -103,17 +105,20 @@ end
 styles.flib_selected_frame_action_button = {
   type = "button_style",
   parent = "frame_action_button",
+  default_font_color = button_hovered_font_color,
   default_graphical_set = {
-    base = {position = {272, 169}, corner_size = 8},
-    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"}
+    base = {position = {225, 17}, corner_size = 8},
+    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"},
   },
+  hovered_font_color = button_hovered_font_color,
   hovered_graphical_set = {
     base = {position = {369, 17}, corner_size = 8},
-    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"}
+    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"},
   },
+  clicked_font_color = button_hovered_font_color,
   clicked_graphical_set = {
     base = {position = {352, 17}, corner_size = 8},
-    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"}
+    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"},
   }
 }
 
@@ -130,6 +135,31 @@ styles.flib_selected_tool_button = {
   clicked_graphical_set = btn.selected_clicked_graphical_set
 }
 
+styles.flib_tool_button_light_green = {
+  type = "button_style",
+  parent = "item_and_count_select_confirm",
+  padding = 2,
+  top_margin = 0
+}
+
+styles.flib_tool_button_dark_red = {
+  type = "button_style",
+  parent = "tool_button",
+  default_graphical_set = {
+    base = {filename = data_util.dark_red_button_tileset, position = {0, 0}, corner_size = 8},
+    shadow = default_dirt
+  },
+  hovered_graphical_set = {
+    base = {filename = data_util.dark_red_button_tileset, position = {17, 0}, corner_size = 8},
+    shadow = default_dirt,
+    glow = default_glow({236, 130, 130, 127}, 0.5)
+  },
+  clicked_graphical_set = {
+    base = {filename = data_util.dark_red_button_tileset, position = {34, 0}, corner_size = 8},
+    shadow = default_dirt
+  }
+}
+
 -- EMPTY-WIDGET STYLES
 
 styles.flib_dialog_footer_drag_handle = {
@@ -137,6 +167,12 @@ styles.flib_dialog_footer_drag_handle = {
   parent = "draggable_space",
   height = 32,
   horizontally_stretchable = "on"
+}
+
+styles.flib_dialog_footer_drag_handle_no_right = {
+  type = "empty_widget_style",
+  parent = "flib_dialog_footer_drag_handle",
+  right_margin = 0
 }
 
 styles.flib_dialog_titlebar_drag_handle = {
@@ -162,6 +198,21 @@ styles.flib_titlebar_drag_handle = {
 styles.flib_vertical_pusher = {
   type = "empty_widget_style",
   vertically_stretchable = "on"
+}
+
+-- FLOW STYLES
+
+styles.flib_indicator_flow = {
+  type = "horizontal_flow_style",
+  vertical_align = "center"
+}
+
+-- IMAGE STYLES
+
+styles.flib_indicator = {
+  type = "image_style",
+  size = 16,
+  stretch_image_to_widget_size = true
 }
 
 -- SCROLL-PANE STYLES

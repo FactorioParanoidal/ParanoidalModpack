@@ -1,4 +1,40 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2020-11-23
+  Features:
+    - Added WIP `gui-beta` module
+      - This module is experimental, but is currently relatively stable. Use at your own risk. See the source code for documentation.
+    - Additional arguments may be passed to `migration.on_config_changed()` to be available in the migration functions
+    - Added `data-util.dark_red_button_tileset`
+    - Added `flib_tool_button_dark_red` button style
+  Changes:
+    - Updated to Factorio 1.1
+    - Modified `flib_selected_frame_action_button` style to better match the vanilla buttons
+    - Made `new_layers` argument to `data-util.create_icons()` optional
+    - Removed deprecated require paths for `data-util` and `reverse-defines` modules
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2020-10-22
+  Features:
+    - Added indicator sprites
+    - Added `flib_indicator` image style
+  Changes:
+    - Updated thumbnail
+    - Changed `table.reduce()` to work with non-arrays
+    - Changed `misc.ticks_to_timestring()` to use `game.ticks_played` by default, instead of `game.tick`
+  Bugfixes:
+    - Fixed a crash with serialise_localised_string (credit to dbeckwith)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2020-09-22
+  Features:
+    - Added a third return value to `table.for_n_of` signifying whether or not the end of the table was reached
+    - Added a third return value to the callback of `table.for_n_of`, which is a flag requesting an immediate iteration abort
+    - Added `flib_tool_button_light_green` button style
+  Changes:
+    - `table.for_n_of` now checks against the first (key) return of `next()` rather than the second (value) return
+      - This changes how custom `next()` functions will behave, and brings it into consistency with the rest of Lua
+---------------------------------------------------------------------------------------------------
 Version: 0.4.0
 Date: 2020-09-13
   Features:

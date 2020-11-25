@@ -36,7 +36,7 @@ end
 function flib_table.deep_compare(tbl1, tbl2)
   if tbl1 == tbl2 then return true end
   for k, v in pairs(tbl1) do
-    if  type(v) == "table" and type(tbl2[k]) == "table" then
+    if type(v) == "table" and type(tbl2[k]) == "table" then
       if not flib_table.deep_compare( v, tbl2[k] )  then return false end
     else
       if v ~= tbl2[k] then return false end
@@ -133,8 +133,7 @@ function flib_table.for_each(tbl, callback)
   return false
 end
 
---- Call the given function on a set number of items in a table, returning the next starting key and the results of the
--- callback.
+--- Call the given function on a set number of items in a table, returning the next starting key.
 --
 -- Calls `callback(value, key)` over `n` items from `tbl`, starting after `from_k`.
 --
@@ -143,17 +142,22 @@ end
 --
 -- The second return value of `callback` is a flag requesting deletion of the current item.
 --
+-- The third return value of `callback` is a flag requesting that the iteration be immediately aborted. Use this flag to
+-- early return on some condition in `callback`. When aborted, `for_n_of` will return the previous key as `from_k`, so
+-- the next call to `for_n_of` will restart on the key that was aborted (unless it was also deleted).
+--
 -- **DO NOT** delete entires from `tbl` from within `callback`, this will break the iteration. Use the deletion flag
--- return instead.
----@tparam table tbl The table to iterate over.
----@tparam any|nil from_k The key to start iteration at, or `nil` to start at the beginning of `tbl`. If the key does
+-- instead.
+-- @tparam table tbl The table to iterate over.
+-- @tparam any|nil from_k The key to start iteration at, or `nil` to start at the beginning of `tbl`. If the key does
 -- not exist in `tbl`, it will be treated as `nil`, _unless_ a custom `_next` function is used.
----@tparam number n The number of items to iterate.
----@tparam function callback Receives `value` and `key` as parameters.
----@tparam[opt] function _next A custom `next()` function. If not provided, the default `next()` will be used.
----@treturn any|nil Where the iteration ended. Can be any valid table key, or `nil` if the end of `tbl` was reached.
+-- @tparam number n The number of items to iterate.
+-- @tparam function callback Receives `value` and `key` as parameters.
+-- @tparam[opt] function _next A custom `next()` function. If not provided, the default `next()` will be used.
+-- @treturn any|nil Where the iteration ended. Can be any valid table key, or `nil`.
 -- Pass this as `from_k` in the next call to `for_n_of` for `tbl`.
----@treturn table The results compiled from the first return of `callback`.
+-- @treturn table The results compiled from the first return of `callback`.
+-- @treturn boolean Whether or not the end of the table was reached on this iteration.
 -- @usage
 -- local extremely_large_table = {
 --   [1000] = 1,
@@ -179,6 +183,7 @@ function flib_table.for_n_of(tbl, from_k, n, callback, _next)
 
   local delete
   local prev
+  local abort
   local result = {}
 
   -- run `n` times
@@ -192,21 +197,24 @@ function flib_table.for_n_of(tbl, from_k, n, callback, _next)
       tbl[delete] = nil
     end
 
-    if v then
-      result[from_k], delete = callback(v, from_k)
+    if from_k then
+      result[from_k], delete, abort = callback(v, from_k)
       if delete then
         delete = from_k
       end
+      if abort then break end
     else
-      return from_k, result
+      return from_k, result, true
     end
   end
 
   if delete then
     tbl[delete] = nil
     from_k = prev
+  elseif abort then
+    from_k = prev
   end
-  return from_k, result
+  return from_k, result, false
 end
 
 --- Create a filtered version of a table based on the results of a filter function.
@@ -274,14 +282,14 @@ end
 local function default_comp(a, b) return a < b end
 --- Partially sort an array.
 --
--- This function utilitizes [insertion sort](https://en.wikipedia.org/wiki/Insertion_sort), which is _extremely_
+-- This function utilizes [insertion sort](https://en.wikipedia.org/wiki/Insertion_sort), which is _extremely_
 -- inefficient with large data sets. However, you can spread the sorting over multiple ticks, reducing the performance
 -- impact. Only use this function if `table.sort` is too slow.
 -- @tparam array arr
--- @tparam number from_index The index to start iteration at (inclusive). Pass `nil` or a number less than `2` to begin at
--- the start of the array.
--- @tparam number iterations The number of iterations to perform. Higher is more performance-heavy. This number should be
--- adjusted based on the performance impact of the custom `comp` function (if any) and the size of the array.
+-- @tparam number from_index The index to start iteration at (inclusive). Pass `nil` or a number less than `2` to begin
+-- at the start of the array.
+-- @tparam number iterations The number of iterations to perform. Higher is more performance-heavy. This number should
+-- be adjusted based on the performance impact of the custom `comp` function (if any) and the size of the array.
 -- @tparam[opt] function comp A comparison function for sorting. Must return truthy if `a < b`.
 -- @treturn number|nil The index to start the next iteration at, or `nil` if the end was reached.
 function flib_table.partial_sort(arr, from_index, iterations, comp)
@@ -305,23 +313,27 @@ function flib_table.partial_sort(arr, from_index, iterations, comp)
   return end_index + 1
 end
 
---- "Reduce" an array's values into a single output value, using the results of a reducer function.
+--- "Reduce" a table's values into a single output value, using the results of a reducer function.
 --
--- Calls `reducer(accumulator, value, index)` on each element in the array, returning a single accumulated output value.
--- @tparam array arr
+-- Calls `reducer(accumulator, value, key)` on each element in the table, returning a single accumulated output value.
+-- @tparam table tbl
 -- @tparam function reducer
--- @tparam[opt] any initial_value The initial value for the accumulator. If not provided or is falsy, the first value in
--- the array will be used as the initial `accumulator` value and skipped as `index`. Calling `reduce()` on an empty
--- array without an `initial_value` will cause a crash.
+-- @tparam[opt] any initial_value The initial value for the accumulator. If not provided or is falsy, the first value
+-- in the table will be used as the initial `accumulator` value and skipped as `key`. Calling `reduce()` on an empty
+-- table without an `initial_value` will cause a crash.
 -- @treturn any The accumulated value.
 -- @usage
 -- local tbl = {10, 20, 30, 40, 50}
 -- local sum = table.reduce(tbl, function(acc, v) return acc + v end)
 -- local sum_minus_ten = table.reduce(tbl, function(acc, v) return acc + v end, -10)
-function flib_table.reduce(arr, reducer, initial_value)
-  local accumulator = initial_value or arr[1]
-  for i = (initial_value and 1 or 2), #arr do
-    accumulator = reducer(accumulator, arr[i], i)
+function flib_table.reduce(tbl, reducer, initial_value)
+  local accumulator = initial_value
+  for key, value in pairs(tbl) do
+    if accumulator then
+      accumulator = reducer(accumulator, value, key)
+    else
+      accumulator = value
+    end
   end
   return accumulator
 end

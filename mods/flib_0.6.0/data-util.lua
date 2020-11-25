@@ -42,20 +42,22 @@ function flib_data_util.copy_prototype(prototype, new_name, remove_icon)
   return p
 end
 
---- Add new icon layers to a prototype icon or icons.
+--- Copy prototype.icon/icons to a new fully defined icons array, optionally adds new icon layers.
 -- @tparam PrototypeBase prototype
--- @tparam Types.IconSpecification[] new_layers
+-- @tparam[opt] Types.IconSpecification[] new_layers
 -- @treturn Types.IconSpecification[]|nil
 function flib_data_util.create_icons(prototype, new_layers)
-  for _,new_layer in pairs(new_layers) do
-    if not new_layer.icon or not new_layer.icon_size then
-      return nil
+  if new_layers then
+    for _,new_layer in pairs(new_layers) do
+      if not new_layer.icon or not new_layer.icon_size then
+        return nil
+      end
     end
   end
 
   if prototype.icons then
     local icons ={}
-    for k,v in pairs(prototype.icons) do
+    for _, v in pairs(prototype.icons) do
       -- assume every other mod is lacking full prototype definitions
       icons[#icons+1] = {
         icon = v.icon,
@@ -63,8 +65,10 @@ function flib_data_util.create_icons(prototype, new_layers)
         tint = v.tint
       }
     end
-    for _, new_layer in pairs(new_layers) do
-      icons[#icons+1] = new_layer
+    if new_layers then
+      for _, new_layer in pairs(new_layers) do
+        icons[#icons+1] = new_layer
+      end
     end
     return icons
 
@@ -78,8 +82,10 @@ function flib_data_util.create_icons(prototype, new_layers)
         tint = {r=1, g=1, b=1, a=1}
       },
     }
-    for _, new_layer in pairs(new_layers) do
-      icons[#icons+1] = new_layer
+    if new_layers then
+      for _, new_layer in pairs(new_layers) do
+        icons[#icons+1] = new_layer
+      end
     end
     return icons
 
@@ -162,5 +168,8 @@ flib_data_util.black_image = "__flib__/graphics/black.png"
 
 --- A desaturated planner image. Tint this sprite to easily add your own planners.
 flib_data_util.planner_base_image = "__flib__/graphics/planner.png"
+
+--- A dark red button tileset. Used for the `flib_tool_button_dark_red` style.
+flib_data_util.dark_red_button_tileset = "__flib__/graphics/dark-red-button.png"
 
 return flib_data_util
