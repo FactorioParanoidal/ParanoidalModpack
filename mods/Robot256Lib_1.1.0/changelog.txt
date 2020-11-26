@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-23
+  Changes:
+    - Updated empty book/upgrade/deconstruction item strings in save_restore/spillStack function. (This probably would not have worked in 1.0 either.)
+---------------------------------------------------------------------------------------------------
 Version: 0.18.8
 Date: 2020-09-15
   Bugfixes:
