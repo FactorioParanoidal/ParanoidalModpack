@@ -9,7 +9,9 @@ local patterns = {
     "ore",
     "pebble",
     "powder",
-    "rock",
+    "rock%-",
+    "rock$",
+    "%-rock%-",
     "sand",
     "slag",
     -- angelsrefining

@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-25
+  Changes:
+    - Release for Factorio 1.1.
+  Bugfixes:
+    - Add workaround for Factorio bug when updating a blueprint to include BRLs. (https://mods.factorio.com/mod/railloader/discussion/5f393f48474a043dfaa72a73)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2020-09-27
+  Bugfixes:
+    - Fix rockets being considered bulk items. (https://mods.factorio.com/mod/railloader/discussion/5f08a40fcb64f44c9e8a2e3a)
+    - Fix BRLs built from blueprints losing wire connections. (https://mods.factorio.com/mod/railloader/discussion/5f272e8006da6e78396bb917)
+---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2020-08-03
   Bugfixes:
