@@ -1,4 +1,68 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-11-24
+
+  Changed:
+    - Factorio target version updated to 1.1
+    - Updated logistic request slot property name (changed in Factorio 1.1)
+  Translations:
+    - Finnish added (thanks mikkoku81)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2020-08-15
+
+  Changed:
+    - Buffer & Requester buildings can have 30 logistic request slots, just like base-mod chests
+    - Factorio target version updated to 1.0
+  Translations:
+    - Italian updated (thanks aironenerowork)
+    - Polish updated (thanks tengongcreative)
+    - Slovak updated (thanks 350zipoo)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2020-01-23
+
+  Changed:
+    - Factorio target version updated to 0.18
+  Meta:
+    - Don't worry: We're still working on updated graphics!
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2019-08-15
+
+  Translations:
+    - Chinese (Simplified) updated (thanks plumxing)
+    - Chinese (Traditional) updated (thanks pickuse2013)
+    - Spanish updated (thanks ithan.lara.f)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2019-04-09
+
+  Translations:
+    - Czech updated (thanks Raus)
+    - Chinese (Simplified) started (thanks 621awdrgyjil)
+    - Chinese (Traditional) updated (thanks k98a & willy04wu69)
+    - French updated (thanks alainmonk)
+    - Ukrainian updated (thanks ddayver)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-03-28
+
+  Changed:
+    - Small visual tweaks to circuit wire connection points (from JDOGG88)
+  Translations:
+    - Czech added (thanks kukuc473)
+    - Chinese (Traditional) updated (thanks willy04wu69)
+    - German updated (thanks silentpiranha)
+    - Russian updated (thanks axell2580)
+    - Turkish updated (thanks orya)
+
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 2019-03-06
 

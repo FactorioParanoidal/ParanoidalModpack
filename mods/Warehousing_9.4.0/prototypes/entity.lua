@@ -59,13 +59,13 @@ data:extend({
 		{
 			shadow =
 			{
-				red = {2.01, 0.6},
-				green = {2.52, 0.6}
+				red = {2.52, 0.65},
+				green = {2.01, 0.65}
 			},
 			wire =
 			{
-				red = {1.71, 0.3},
-				green = {2.22, 0.3}
+				red = {2.22, 0.32},
+				green = {1.71, 0.32}
 			}
 		},
 	},
@@ -107,13 +107,13 @@ data:extend({
 		{
 			shadow =
 			{
-				red = {0.26, -0.6},
-				green = {0.36, -0.6}
+				red = {0.56, -0.6},
+				green = {0.26, -0.6}
 			},
 			wire =
 			{
-				red = {-0.16, -0.9},
-				green = {0.16, -0.9}
+				red = {0.16, -0.9},
+				green = {-0.16, -0.9}
 			}
 		},
 	},
@@ -128,6 +128,11 @@ function createLogisticContainer(name, logistic_type)
 	p.picture.filename = "__Warehousing__/graphics/entity/"..p.name..".png"
 	p.type = "logistic-container"
 	p.logistic_mode = logistic_type
+	if logistic_type == "storage" then
+		p.max_logistic_slots = 1
+	elseif logistic_type == "buffer" or logistic_type == "requester" then
+		p.max_logistic_slots = 30
+	end
 	return p
 end
 
@@ -135,20 +140,14 @@ local storehouse_active_provider = createLogisticContainer("storehouse", "active
 local storehouse_passive_provider = createLogisticContainer("storehouse", "passive-provider")
 local storehouse_storage = createLogisticContainer("storehouse", "storage")
 storehouse_storage.inventory_size = storage_storehouse_slots
-storehouse_storage.logistic_slots_count = 1
 local storehouse_buffer = createLogisticContainer("storehouse", "buffer")
-storehouse_buffer.logistic_slots_count = 12
 local storehouse_requester = createLogisticContainer("storehouse", "requester")
-storehouse_requester.logistic_slots_count = 12
 local warehouse_active_provider = createLogisticContainer("warehouse", "active-provider")
 local warehouse_passive_provider = createLogisticContainer("warehouse", "passive-provider")
 local warehouse_storage = createLogisticContainer("warehouse", "storage")
 warehouse_storage.inventory_size = storage_warehouse_slots
-warehouse_storage.logistic_slots_count = 1
 local warehouse_buffer = createLogisticContainer("warehouse", "buffer")
-warehouse_buffer.logistic_slots_count = 12
 local warehouse_requester = createLogisticContainer("warehouse", "requester")
-warehouse_requester.logistic_slots_count = 12
 
 
 data:extend({
