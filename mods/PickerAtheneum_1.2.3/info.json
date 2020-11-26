@@ -1,0 +1,26 @@
+{
+  "name": "PickerAtheneum",
+  "version": "1.2.3",
+  "factorio_version": "1.1",
+  "title": "Picker Atheneum",
+  "author": "Nexela",
+  "contact": "nexela@gmail.com",
+  "dependencies": [
+    "base >= 1.1.0",
+    "stdlib >= 1.4.6",
+    "(?) boblibrary"
+  ],
+  "homepage": "",
+  "description": "Library Files for the Picker family of mods.",
+  "package": {
+    "ignore": [],
+    "scripts": {
+      "datestamp": "../PickerAtheneum/.publish/datestamp.sh",
+      "prepackage": "../PickerAtheneum/.publish/prepackage.sh",
+      "version": "../PickerAtheneum/.publish/version.sh",
+      "prepublish": "../PickerAtheneum/.publish/prepublish.sh",
+      "publish": "../PickerAtheneum/.publish/publish.sh",
+      "postpublish": "../PickerAtheneum/.publish/postpublish.sh"
+    }
+  }
+}

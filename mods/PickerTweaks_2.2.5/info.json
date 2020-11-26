@@ -1,0 +1,25 @@
+{
+  "name": "PickerTweaks",
+  "version": "2.2.5",
+  "factorio_version": "1.1",
+  "title": "Picker Tweaks",
+  "author": "Nexela",
+  "contact": "nexela@gmail.com",
+  "dependencies": [
+    "base >= 1.1.0",
+    "stdlib >= 1.4.6",
+    "(?) long-reach-fix"
+  ],
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=14695",
+  "description": "Picker Tweaks, and Fixes",
+  "package": {
+    "ignore": [],
+    "scripts": {
+      "datestamp": "../PickerAtheneum/.publish/datestamp.sh",
+      "prepackage": "../PickerAtheneum/.publish/prepackage.sh",
+      "prepublish": "../PickerAtheneum/.publish/prepublish.sh",
+      "publish": "../PickerAtheneum/.publish/publish.sh",
+      "version": "../PickerAtheneum/.publish/version.sh"
+    }
+  }
+}

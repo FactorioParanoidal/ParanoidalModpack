@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-11-25
+  Features:
+    - Add Assembler pipe direction copying.
+  Changes:
+    - Clean up prototype loading.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-09-25
+  Changes:
+    - Pipe clamping defaults to off.
+  Bugfixes:
+    - Pipe clamp icons fixed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-04-30
+  Bugfixes:
+    - Remove deprecated custom input type.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: ??????
+  Features:
+    - Update to Factorio 0.18
+  Changes:
+    - script_raised events now pass the entity using both created_entity and entity
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 25. 07. 2019
+  Bugfixes:
+    - Hotfix for new beam stuff
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Bugfixes:
+    - Fix Factorissimo errror
+    - Fix script mismatch
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Bugfixes:
+    - Fix beam errors in .17.46
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Seperated into its own mod.
