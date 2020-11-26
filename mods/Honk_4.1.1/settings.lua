@@ -3,7 +3,7 @@ data:extend({
 		type = "double-setting",
 		name = "honk-sound-volume",
 		setting_type = "startup",
-		default_value = 1,
+		default_value = 1.5,
     minimum_value = 0,
     maximum_value = 10,
     order = "ac"
