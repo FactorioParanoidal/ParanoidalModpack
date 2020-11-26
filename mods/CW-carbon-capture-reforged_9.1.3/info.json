@@ -4,6 +4,6 @@
     "title": "Carbon Capture REFORGED",
     "author": "CyberWizard2261",
     "description": "Reducing polution and regenerate filters. REFORGED version by nastyslave.",
-    "factorio_version": "0.18",
-	"dependencies": ["base >= 0.16.0", "bobplates", "bobelectronics", "angelsrefining"]
+    "factorio_version": "1.1",
+	"dependencies": ["base >= 1.1", "bobplates", "bobelectronics", "angelsrefining"]
 }
