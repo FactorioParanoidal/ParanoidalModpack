@@ -24,7 +24,7 @@ data:extend(
 		prerequisites = { "steel-processing" },
 		unit =
 		{
-			count = 100,
+			count = 50,
 			ingredients =
 			{
 				{ "automation-science-pack", 1 },

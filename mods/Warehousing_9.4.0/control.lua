@@ -4,4 +4,4 @@
  * See License.txt in the project directory for license information.
 --]]
 
-local WAREHOUSING_VERSION = "0.2.1"
+local WAREHOUSING_VERSION = "0.4.0"
