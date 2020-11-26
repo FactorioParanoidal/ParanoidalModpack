@@ -1,0 +1,52 @@
+-- Copyright (c) 2020 Kirazy
+-- Part of Artisanal Reskins: Library
+--
+-- See LICENSE.md in the project directory for license information.
+
+local particles = {}
+
+-- oil-refinery
+-- chemical-plant
+-- assembling-machine
+-- beacon
+-- electric-mining-drill
+-- underground-belt
+-- splitter
+-- centrifuge
+-- steel-furnace
+-- stone-furnace
+-- cargo-wagon
+-- []-chest
+-- construction-robot
+-- fluid-wagon
+-- stack-inserter
+-- inserter
+-- locomotive
+-- logistic-robot
+-- roboport
+-- pipe
+-- pipe-to-ground
+-- pump
+-- storage-tank
+-- transport-belt
+-- pumpjack
+-- accumulator
+-- big-electric-pole
+-- boiler
+-- steam-engine
+-- steam-turbine
+-- heat-exchanger
+-- heat-pipe
+-- medium-electric-pole
+-- nuclear-reactor
+-- solar-panel
+-- substation
+-- lab
+-- artillery-turret
+-- artillery-wagon
+-- gate
+-- gun-turret
+-- laser-turret
+-- radar
+-- tank
+-- wall
