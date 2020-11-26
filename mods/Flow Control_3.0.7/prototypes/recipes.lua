@@ -5,6 +5,7 @@ data:extend(
     name = "check-valve",
     energy_required = 2,
     enabled = false,
+	hidden = true, --drd
     ingredients =
     {
       {"iron-plate", 1},
@@ -18,6 +19,7 @@ data:extend(
     name = "overflow-valve",
     energy_required = 2,
     enabled = false,
+	hidden = true, --drd
     ingredients =
     {
       {"electronic-circuit", 1},
@@ -32,6 +34,7 @@ data:extend(
     name = "underflow-valve",
     energy_required = 2,
     enabled = false,
+	hidden = true, --drd
     ingredients =
     {
       {"electronic-circuit", 1},
