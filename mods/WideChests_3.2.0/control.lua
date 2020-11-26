@@ -327,7 +327,7 @@ end
 function MergingChests.OnShortCut(event)
 	if event.prototype_name == "merge-chest-selector" then
 		local player = game.players[event.player_index]
-		if player.clean_cursor() then
+		if player.clear_cursor() then
 			local stack = player.cursor_stack
 			if player.cursor_stack and stack.can_set_stack({ name = "merge-chest-selector" }) then
 				stack.set_stack({ name = "merge-chest-selector" })
