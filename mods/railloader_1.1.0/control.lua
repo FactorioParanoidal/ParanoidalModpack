@@ -12,8 +12,8 @@ local num_inserters = 2
 local allowed_items_setting = settings.global["railloader-allowed-items"].value
 
 local function on_init()
+  global.previous_opened_blueprint_for = {}
   delaydestroy.on_init()
-  ghostconnections.on_init()
   inserter_config.on_init()
 end
 
@@ -158,7 +158,6 @@ local function create_entities(proxy, tags, rail_poss)
   for _, ccd in ipairs(ghostconnections.get_connections(proxy)) do
     chest.connect_neighbour(ccd)
   end
-  ghostconnections.remove_ghost(proxy)
 
   -- place cargo wagon inserters
   local inserter_name =
@@ -296,67 +295,65 @@ local function on_robot_pre_mined(event)
   end
 end
 
+local function on_gui_closed(event)
+  game.print(serpent.line(event))
+  if event.gui_type == defines.gui_type.item
+  and event.item
+  and event.item.is_blueprint
+  and event.item.is_blueprint_setup()
+  then
+    global.previous_opened_blueprint_for[event.player_index] = {
+      blueprint = event.item,
+      tick = event.tick,
+    }
+  end
+end
+
+local function get_blueprint_to_setup(player_index)
+  local opened_blueprint = global.previous_opened_blueprint_for[player_index]
+  if opened_blueprint and opened_blueprint.tick == game.tick then
+    return opened_blueprint.blueprint
+  end
+
+  local player = game.players[player_index]
+
+  local blueprint_to_setup = player.blueprint_to_setup
+  if blueprint_to_setup
+  and blueprint_to_setup.valid_for_read then
+    return blueprint_to_setup
+  end
+
+  local cursor_stack = player.cursor_stack
+  if cursor_stack
+  and cursor_stack.valid_for_read
+  and cursor_stack.is_blueprint
+  and cursor_stack.is_blueprint_setup() then
+    return cursor_stack
+  end
+end
+
 local function on_blueprint(event)
+  local bp = get_blueprint_to_setup(event.player_index)
+  if not bp then return end
   local player = game.players[event.player_index]
-  local bp = player.blueprint_to_setup
-  if not bp or not bp.valid_for_read then
-    bp = player.cursor_stack
-  end
-  if not bp or not bp.valid_for_read then
-    return
-  end
   local entities = bp.get_blueprint_entities()
-  if not entities then
-    return
-  end
 
-  -- find (un)loaders and their directions
-  local containers
-  if util.is_empty_box(event.area) then
-    containers = player.surface.find_entities_filtered{
-      position = event.area.top_left,
-      type = "container",
-    }
-  else
-    containers = player.surface.find_entities_filtered{
-      area = event.area,
-      type = "container",
-    }
-  end
-
-  local found_railloader = false
-  local meta = {}
-  for _, container in ipairs(containers) do
-    if container.name == "railloader-chest" or container.name == "railunloader-chest" then
-      found_railloader = true
+  for index, entity in pairs(event.mapping.get()) do
+    local bp_entity = entities[index]
+    if bp_entity.name == "railloader-chest" or bp_entity.name == "railunloader-chest" then
       local rail = player.surface.find_entities_filtered{
         type = "straight-rail",
-        area = container.bounding_box,
+        area = entity.bounding_box,
       }[1]
       if rail then
-        meta[#meta+1] = {
-          direction = rail.direction,
-          bar = container.get_inventory(defines.inventory.chest).get_bar(),
-        }
+        bp_entity.name = (bp_entity.name == "railloader-chest")
+          and "railloader-placement-proxy"
+          or "railunloader-placement-proxy"
+        -- base direction on direction of rail
+        bp_entity.direction = rail.direction
+        -- preserve chest limit
+        bp_entity.tags = { bar = entity.get_inventory(defines.inventory.chest).get_bar() }
       end
-    end
-  end
-
-  -- don't call set_blueprint_entities() if there are no BRLs, because that discards cargo-wagon filters
-  if not found_railloader then return end
-
-  local loader_index = 1
-  for _, e in ipairs(entities) do
-    if e.name == "railloader-chest" then
-      e.name = "railloader-placement-proxy"
-      e.direction = meta[loader_index].direction
-      e.tags = { bar = meta[loader_index].bar }
-      loader_index = loader_index + 1
-    elseif e.name == "railunloader-chest" then
-      e.name = "railunloader-placement-proxy"
-      e.direction = meta[loader_index].direction
-      e.tags = { bar = meta[loader_index].bar }
-      loader_index = loader_index + 1
     end
   end
 
@@ -380,7 +377,10 @@ script.on_event({es.on_player_mined_entity, es.on_robot_mined_entity, es.script_
 script.on_event(es.on_robot_pre_mined, on_robot_pre_mined)
 script.on_event(es.on_entity_died, on_mined)
 script.on_event(es.on_post_entity_died, on_post_entity_died, {{filter = "type", type = "container"}})
+
+script.on_event(es.on_gui_closed, on_gui_closed)
 script.on_event(es.on_player_setup_blueprint, on_blueprint)
+
 script.on_event(es.on_train_changed_state, inserter_config.on_train_changed_state)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting_changed)
