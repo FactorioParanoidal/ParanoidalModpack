@@ -1,0 +1,26 @@
+{
+  "name": "PickerInventoryTools",
+  "version": "1.1.9",
+  "factorio_version": "1.1",
+  "title": "Picker Inventory Tools",
+  "author": "Nexela",
+  "contact": "nexela@gmail.com",
+  "dependencies": [
+    "base >= 1.1.0",
+    "stdlib >= 1.4.6",
+    "(?) AutoDeconstruct",
+    "(?) packing-tape"
+  ],
+  "homepage": "",
+  "description": "Quick Inventory filtering and sorting",
+  "package": {
+    "ignore": [],
+    "scripts": {
+      "datestamp": "../PickerAtheneum/.publish/datestamp.sh",
+      "prepackage": "../PickerAtheneum/.publish/prepackage.sh",
+      "prepublish": "../PickerAtheneum/.publish/prepublish.sh",
+      "publish": "../PickerAtheneum/.publish/publish.sh",
+      "version": "../PickerAtheneum/.publish/version.sh"
+    }
+  }
+}
