@@ -12,7 +12,7 @@ data:extend({
   {
     type = "sprite",
     name = "fnei_hand_icon",
-    filename = "__core__/graphics/hand.png",
+    filename = "__FNEI__/graphics/hand.png",
     priority = "extra-high-no-scale",
     width = 32,
     height = 32,
