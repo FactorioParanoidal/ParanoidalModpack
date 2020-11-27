@@ -5,9 +5,9 @@
     "author": "Ober3550, touched by nastyslave",
     "contact": "www.factorioforums.com",
     "homepage": "",
-    "factorio_version": "0.18",
+    "factorio_version": "1.1",
     "dependencies": [
-	"base >= 0.16.0",
+	"base >= 1.1.0",
   "boblibrary",
   "bobplates",
   "bobmodules",

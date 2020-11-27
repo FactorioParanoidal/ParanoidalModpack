@@ -226,22 +226,19 @@ data:extend(
             filename = "__base__/graphics/entity/steel-furnace/steel-furnace-working.png",
             frame_count = 1,
             height = 75,
-            hr_version = {
-              axially_symmetrical = false,
-              blend_mode = "additive",
-              direction_count = 1,
-              filename = "__base__/graphics/entity/steel-furnace/hr-steel-furnace-working.png",
-              frame_count = 1,
-              height = 149,
-              line_length = 8,
-              priority = "high",
-              scale = 0.5,
-              shift = {
-                0,
-                -0.1328125
-              },
-              width = 130
-            },
+	     hr_version =
+		  {
+		    filename = "__base__/graphics/entity/steel-furnace/hr-steel-furnace-working.png",
+		    priority = "high",
+		    line_length = 1,
+		    width = 128,
+		    height = 150,
+		    frame_count = 1,
+		    direction_count = 1,
+		    shift = util.by_pixel(0, -5),
+		    blend_mode = "additive",
+		    scale = 0.5,
+		  },
             line_length = 8,
             priority = "high",
             shift = {
@@ -290,8 +287,8 @@ data:extend(
    {
     type = "technology",
     name = "electric-steel-furnace",
-    icon = "__base__/graphics/technology/automation.png",
-    icon_size = 128,
+    icon = "__base__/graphics/technology/automation-1.png",
+    icon_size = 256, icon_mipmaps = 4,
     effects =
     {
       {
