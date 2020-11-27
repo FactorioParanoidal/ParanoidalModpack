@@ -138,7 +138,7 @@ for _, item in pairs (data.raw["item"]) do
         hidden_lamp.light_when_colored = {intensity = 1, size = light_size * 0.15, color = {r=1.0, g=1.0, b=1.0}}
         hidden_lamp.energy_usage_per_tick = light_size * 0.125 .."kW"
       end
-      --log("[LEP+] Created "..newName.."; light size = "..light_size)
+      log("[LEP+] Created "..newName.."; light size = "..light_size)
 
       local newRecipe =
       {
@@ -183,7 +183,7 @@ for _, tech in pairs(data.raw["technology"]) do
         local base_item = GetItemFromRecipeResult(data.raw["recipe"][effect.recipe])
         if base_item then
           if data.raw["technology"][tech.name].effects then
-            --log("[LEP+] found original pole "..base_item.." in technology "..tech.name..", inserting "..pole_names[base_item].." into technology "..tech.name)
+            log("[LEP+] found original pole "..base_item.." in technology "..tech.name..", inserting "..pole_names[base_item].." into technology "..tech.name)
             table.insert(data.raw["technology"][tech.name].effects, {type="unlock-recipe",recipe=pole_names[base_item]})
           else
             log("[LEP+] found original pole "..base_item.." in technology "..tech.name..", creating new effects table for "..pole_names[base_item].." in technology "..tech.name)
@@ -204,7 +204,7 @@ if tech then
   for original_pole, lighted_pole in pairs(pole_names) do
     if not recipes_found[original_pole] then
       if tech.effects then
-        --log("[LEP+] no technology unlock found for "..original_pole..", inserting "..lighted_pole.." into technology "..tech.name)
+        log("[LEP+] no technology unlock found for "..original_pole..", inserting "..lighted_pole.." into technology "..tech.name)
         table.insert(tech.effects, {type="unlock-recipe", recipe=lighted_pole})
       else
         log("[LEP+] no technology unlock found for "..original_pole..", creating new effects table for "..lighted_pole.." in technology "..tech.name)
