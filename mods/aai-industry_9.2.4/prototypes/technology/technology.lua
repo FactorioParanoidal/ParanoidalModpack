@@ -10,7 +10,7 @@ data.raw.technology["automation-2"].prerequisites = {"automation"}
 data.raw.technology["automation-2"].unit.count = 150
 
 data.raw.technology["optics"].prerequisites = {"electricity"}
-data.raw.technology["turrets"].prerequisites = {"basic-automation", "military"}
+data.raw.technology["gun-turret"].prerequisites = {"basic-automation", "military"}
 
 data.raw.technology["logistics"].unit.count = 10
 
