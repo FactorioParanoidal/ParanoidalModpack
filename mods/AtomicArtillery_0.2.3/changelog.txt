@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 27/11/2020
+  Changes:
+    - Changes were in fact needed, one of the references had been renamed/merged.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 27/11/2020
+  Changes:
+    - Bumped version number to support 1.1, mod seems to work just fine with no changes needed.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 30/09/2020
+  Changes:
+    - Merged patch from Kingdud to re-order effects of artillery shell, making it work with artillery auto-fire correctly.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 25/09/2020
+  Changes:
+    - Updated to the new nuclear explosion effects.
+---------------------------------------------------------------------------------------------------
 Version: 0.1.12
 Date: 10/02/2020
   Changes:
