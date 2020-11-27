@@ -195,7 +195,7 @@
     
     {
       "name": "comb",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -594,6 +594,11 @@
     },
     
     {
+      "name": "reskins-angels",
+      "enabled": true
+    },
+    
+    {
       "name": "reskins-bobs",
       "enabled": true
     },
@@ -624,7 +629,17 @@
     },
     
     {
+      "name": "RussianStations",
+      "enabled": true
+    },
+    
+    {
       "name": "Sandros-fixes",
+      "enabled": true
+    },
+    
+    {
+      "name": "SantasNixieTubeDisplay",
       "enabled": true
     },
     
@@ -645,11 +660,6 @@
     
     {
       "name": "Shield-FX",
-      "enabled": true
-    },
-    
-    {
-      "name": "ShinyAngelGFX",
       "enabled": true
     },
     
@@ -745,7 +755,7 @@
     
     {
       "name": "upgrade-planner-next",
-      "enabled": true
+      "enabled": false
     },
     
     {
