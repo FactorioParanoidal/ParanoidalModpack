@@ -296,7 +296,6 @@ local function on_robot_pre_mined(event)
 end
 
 local function on_gui_closed(event)
-  game.print(serpent.line(event))
   if event.gui_type == defines.gui_type.item
   and event.item
   and event.item.is_blueprint

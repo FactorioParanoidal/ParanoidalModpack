@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-11-26
+  Bugfixes:
+    - Remove stray debug printing. (https://mods.factorio.com/mod/railloader/discussion/5fbf6bc83e5a8fb3b462baaa)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2020-11-25
   Changes:
