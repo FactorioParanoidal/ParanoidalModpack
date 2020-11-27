@@ -5,9 +5,9 @@
 	"author": "J_Aetherwing",
 	"contact": "",
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
-	"factorio_version": "1.1",
+	"factorio_version": "0.18",
 	"dependencies": [
-		"base",
+		"base >= 0.17",
 		"? FuelTrainStop >= 0.17.2",
 		"(?) creative-mode-fix >= 0.0.30",
 		"(?) creative-mod >= 1.0.4"

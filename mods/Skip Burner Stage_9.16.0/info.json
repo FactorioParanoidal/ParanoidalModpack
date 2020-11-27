@@ -5,7 +5,7 @@
   "author": "TheGrover, nastyslave",
   "contact": "",
   "homepage": "",
-  "factorio_version": "1.1",
-  "dependencies": ["base"],
+  "factorio_version": "0.18",
+  "dependencies": ["base >= 0.18"],
   "description": "For those who lack the patience for the burner stage, start with enough material and machines to start a simple factory, from power setup to some automation \n\n 'inspired' by TehRoach's Skip first hour, but without trains - Requires Induction Charging"
 }
