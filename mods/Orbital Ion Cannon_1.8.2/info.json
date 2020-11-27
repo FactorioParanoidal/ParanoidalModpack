@@ -1,12 +1,12 @@
 {
 	"name": "Orbital Ion Cannon",
 	"version": "1.8.2",
-	"factorio_version": "0.18",
+	"factorio_version": "1.1",
 	"title": "Orbital Ion Cannon",
 	"author": "Supercheese",
 	"homepage": "http://www.factorioforums.com/forum/viewtopic.php?f=93&t=17910",
 	"dependencies": [
-		"base >= 0.18",
+		"base",
 		"stdlib >= 1.4.0",
 		"? bobwarfare >= 0.18.0",
 		"? bobpower >= 0.18.0",
