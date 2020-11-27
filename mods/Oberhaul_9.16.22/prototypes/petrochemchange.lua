@@ -55,8 +55,14 @@ data:extend({
 		{
 			{type="fluid", name="gas-nitrogen-monoxide", amount=10},
 		},
-		icon = "__angelspetrochem__/graphics/icons/nitrogen-03.png",
-		icon_size = 32,
+		icons = angelsmods.functions.create_gas_recipe_icon(
+		{
+			{"__angelspetrochem__/graphics/icons/molecules/nitric-oxide.png", 72}
+		},
+		"noo"
+		),
+		--icon = "__angelspetrochem__/graphics/icons/nitrogen-03.png",
+		--icon_size = 32,
 		order = "c[gas-nitrogen-dioxide]",
 	},
 
