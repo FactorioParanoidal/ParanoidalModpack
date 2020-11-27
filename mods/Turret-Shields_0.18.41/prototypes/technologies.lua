@@ -13,7 +13,7 @@ data:extend({
         type = "unlock-recipe",
         recipe = "turret-shield-combinator"
       }},
-		prerequisites = {"military-2", "turrets"},
+		prerequisites = {"military-2", "gun-turret"},
 		unit =
 		{
 			count = 75,
