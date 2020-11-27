@@ -767,10 +767,10 @@ end
 
 function bobmods.inserters.normalise_tile_offset(tile_offset)
   local new_offset = {x = 0, y = 0}
-  if tile_offset.x > 0 then new_offset.x = bobmods.inserters.offset end
-  if tile_offset.x < 0 then new_offset.x = -bobmods.inserters.offset end
-  if tile_offset.y > 0 then new_offset.y = bobmods.inserters.offset end
-  if tile_offset.y < 0 then new_offset.y = -bobmods.inserters.offset end
+  if tile_offset.x > 0.01 then new_offset.x = bobmods.inserters.offset end
+  if tile_offset.x < -0.01 then new_offset.x = -bobmods.inserters.offset end
+  if tile_offset.y > 0.01 then new_offset.y = bobmods.inserters.offset end
+  if tile_offset.y < -0.01 then new_offset.y = -bobmods.inserters.offset end
   return new_offset
 end
 
@@ -796,7 +796,7 @@ end
 
 
 function calculate_new_drop_offset(drop_position, drop_offset, new_position)
-  local new_offset = drop_offset
+  local new_offset = {x = drop_offset.x, y = drop_offset.y}
 
   if (drop_position.x > 0 and new_position.x < 0) or (drop_position.x < 0 and new_position.x > 0) then
     new_offset.x = 0 - drop_offset.x
@@ -821,6 +821,7 @@ function calculate_new_drop_offset(drop_position, drop_offset, new_position)
   elseif drop_position.y ~= 0 and new_position.y == 0 then
     new_offset.y = 0
   end
+
   return bobmods.inserters.normalise_tile_offset(new_offset)
 end
 

@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 13. 10. 2020
+  Bugfixes:
+    - Fixed minor issue where offset could be lost when rotating drop position. (This includes pre-place options with a drop position not in the vertical center line)
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 17. 08. 2020
   Info:
