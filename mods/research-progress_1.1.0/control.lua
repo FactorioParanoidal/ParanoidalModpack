@@ -3,7 +3,7 @@
 ----------------
 
 function update_gui_frame(player)
-    frame = player.gui.top["research-progress-frame"]
+    frame = player.gui.left["research-progress-frame"]
 
     if frame then
         frame.destroy()
@@ -18,30 +18,30 @@ function update_gui_frame(player)
     delta_percentage_value = current_percentage_value - global.last_percentage
     remaining_percentage_value = 1 - current_percentage_value
     remaining_percentage_chunks = remaining_percentage_value / delta_percentage_value
-    remaining_time_seconds = 5 * remaining_percentage_chunks
+    remaining_time_seconds = 2 * remaining_percentage_chunks
 
 
     --------------
     -- Build gui
     --------------
 
-    frame = player.gui.top.add{
+    frame = player.gui.left.add{
         type = "frame",
         caption = {""},
         name = "research-progress-frame",
-        direction = "horizontal"
+        direction = "horizontal" --drd
         -- direction = "vertical"
     }
 
     frame.add{
-        type = "label", 
+        type = "label",
         caption = round(game.forces.player.research_progress * 100, 3) .. "% / " .. build_clock_string(remaining_time_seconds)
     }
 end
 
 function refresh_gui()
     for _, player in pairs(game.players) do
-        frame = player.gui.top["research-progress-frame"]
+        frame = player.gui.left["research-progress-frame"]
         if frame then
             frame.destroy()
             update_gui_frame(player)
@@ -50,11 +50,8 @@ function refresh_gui()
 end
 
 function on_tick()
-    -- Update every 5 seconds to avoid a lot of gui updates
-    if game.tick % 300 == 0 then
-        refresh_gui()
-        global.last_percentage = game.forces.player.research_progress
-    end
+    refresh_gui()
+    global.last_percentage = game.forces.player.research_progress
 end
 
 local function on_player_created(event)
@@ -96,15 +93,15 @@ function isInfinite(value)
     elseif type(value) ~= "number" then
         return nil
     end
-    
-    if value == math.huge then 
+
+    if value == math.huge then
         return 1
     end
-    
+
     if value == -math.huge then
         return -1
     end
-    
+
     return 0
 end
 
@@ -131,6 +128,6 @@ end
 
 script.on_event(defines.events.on_research_started, on_research_started)
 script.on_event(defines.events.on_research_finished, on_research_finished)
-script.on_event(defines.events.on_tick, on_tick)
 script.on_event(defines.events.on_player_created, on_player_created)
+script.on_nth_tick(120, on_tick)
 script.on_init(on_init)

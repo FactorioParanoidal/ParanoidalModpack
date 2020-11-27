@@ -1,0 +1,22 @@
+Version: 1.1.0
+Date: 2020.11.26
+  Info:
+    - Marked as compatible with Factorio v1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020.10.21
+  Info:
+    - Makes a few small tweaks to make the mod compatible with Factorio 1.0
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+Date: 2020-02-23
+  Info:
+    - Upgraded to Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2019-03-02
+  Info:
+    - Upgraded to Factorio 0.17
+    - Should work in multiplayer without desyncs now
+  Known Issues:
+    - Doesn't work if there is more than one "player" force (like PVP scenarios)
