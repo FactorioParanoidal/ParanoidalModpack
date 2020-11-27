@@ -440,7 +440,7 @@
     
     {
       "name": "Natural_Evolution_Enemies",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -655,7 +655,7 @@
     
     {
       "name": "SchallTankPlatoon",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -670,7 +670,7 @@
     
     {
       "name": "Shortcuts-ick",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -724,11 +724,6 @@
     },
     
     {
-      "name": "Todo-List",
-      "enabled": true
-    },
-    
-    {
       "name": "toxicPollution",
       "enabled": true
     },
@@ -756,6 +751,11 @@
     {
       "name": "upgrade-planner-next",
       "enabled": false
+    },
+    
+    {
+      "name": "VehicleSnap",
+      "enabled": true
     },
     
     {

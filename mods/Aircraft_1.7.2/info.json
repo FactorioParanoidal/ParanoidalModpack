@@ -5,6 +5,6 @@
   "title": "Aircraft",
   "author": "SuicidalKid",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=120&t=18714",
-  "dependencies": ["base >= 0.18.2", "? bobplates >= 0.18.0", "? bobelectronics >= 0.18.0", "? boblibrary >= 0.18.0", "? bobwarfare >= 0.18.0", "? bobvehicleequipment >= 0.18.0", "? electric-vehicles-reborn >= 0.1.1"],
+  "dependencies": ["base >= 1.1", "? bobplates >= 1.1.0", "? bobelectronics >= 1.1.0", "? boblibrary >= 1.1.0", "? bobwarfare >= 1.1.0", "? bobvehicleequipment >= 1.1.0", "? electric-vehicles-reborn >= 0.1.1"],
   "description": "Adds 4 aircraft, each with their benefits and drawbacks, to allow for more biter-killing fun!"
 }

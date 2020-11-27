@@ -235,7 +235,7 @@ local technologies_icons = {
 	{"bob-laser-rifle-speed-5",   			"laser-rifle-speed.png",64 	  			}, 		
 	{"bob-laser-rifle-speed-6",   			"laser-rifle-speed.png",64 	  			}, 
 	
-	{"turrets",   							"gun-turrets-1.png",  					}, 		
+	{"gun-turret",   						"gun-turrets-1.png",  					}, 		
 	{"bob-turrets-2",   					"gun-turrets-2.png",   					}, 		
 	{"bob-turrets-3",   					"gun-turrets-3.png",   					}, 		
 	{"bob-turrets-4",   					"gun-turrets-4.png",   					}, 		
@@ -261,7 +261,7 @@ local technologies_icons = {
 	{"bob-sniper-turret-damage-6",   			"sniper-turrets-damage.png", 		 		}, 		
 	{"bob-sniper-turret-damage-7",   			"sniper-turrets-damage.png", 		 		}, 		
 
-	{"laser-turrets",   					"laser-turrets-1.png",   				}, 		
+	{"laser-turret",   					"laser-turrets-1.png",   				}, 		
 	{"bob-laser-turrets-2",   				"laser-turrets-2.png",   				}, 		
 	{"bob-laser-turrets-3",   				"laser-turrets-3.png",   				}, 		
 	{"bob-laser-turrets-4",   				"laser-turrets-4.png",   				}, 		

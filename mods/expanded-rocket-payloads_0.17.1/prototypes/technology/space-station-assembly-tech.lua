@@ -57,7 +57,7 @@ data:extend({
           },
           {
             type = "ammo-damage",
-            ammo_category = "laser-turret",
+            ammo_category = "laser",
             modifier = 1
           },
           {

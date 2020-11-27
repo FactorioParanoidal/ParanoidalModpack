@@ -13,8 +13,8 @@
     "angelssmelting >= 0.6.7",
     "? angelsindustries >= 0.4.0",
     "? angelsbioprocessing >= 0.7.9",
-    "? bobplates >= 0.18.0",
-    "(?) bobwarfare >= 0.18.0",
-    "(?) bobequipment >=0.18.0"
+    "? bobplates >= 1.1.0",
+    "(?) bobwarfare >= 1.1.0",
+    "(?) bobequipment >=1.1.0"
   ]
 }
