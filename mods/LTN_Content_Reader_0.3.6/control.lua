@@ -127,7 +127,7 @@ function Update_Combinator(combinator)
       end
     end
   end
-  combinator.get_control_behavior().parameters = { parameters = signals }
+  combinator.get_control_behavior().parameters = signals
 
 end
 
@@ -139,7 +139,7 @@ function OnEntityCreated(event)
     -- if not set use default network id -1 (any network)
     local first_signal = entity.get_control_behavior().get_signal(1)
     if not (first_signal and first_signal.signal and first_signal.signal.name == "ltn-network-id") then
-      entity.get_or_create_control_behavior().parameters = { parameters = { { index = 1, signal = signal_network_id, count = -1 } } }
+      entity.get_or_create_control_behavior().parameters = {{ index = 1, signal = signal_network_id, count = -1 }}
     end
 
     table.insert(global.content_combinators, entity)
