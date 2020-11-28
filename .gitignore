@@ -4,10 +4,8 @@ Factorio_OLD/
 FACTORIO-2/
 /data/
 doc-html/
-scenarios/
+/scenarios/
 saves/
-mods/_zip-serv/
-mods/_zipnew/
 /config/
 /bin/
 .gitignore
@@ -22,6 +20,6 @@ atlas-cache.dat
 achievements.dat
 TODO.txt
 TODO-method.txt
-mods/_open/
 achievements-modded.dat
-mods/_openold/
+/temp/
+temp_mod/
