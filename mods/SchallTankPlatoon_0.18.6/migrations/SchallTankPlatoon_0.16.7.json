@@ -1,0 +1,14 @@
+{
+  "item":
+  [
+    [ "explosive-rocket-pack", "Schall-explosive-rocket-pack" ],
+    [ "incendiary-rocket", "Schall-incendiary-rocket" ],
+    [ "napalm-bomb", "Schall-napalm-bomb" ]
+  ],
+  "recipe":
+  [
+    [ "explosive-rocket-pack", "Schall-explosive-rocket-pack" ],
+    [ "incendiary-rocket", "Schall-incendiary-rocket" ],
+    [ "napalm-bomb", "Schall-napalm-bomb" ]
+  ]
+}

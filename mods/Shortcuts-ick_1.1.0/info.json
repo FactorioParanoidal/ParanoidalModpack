@@ -1,0 +1,16 @@
+{
+	"name": "Shortcuts-ick",
+	"version": "1.1.0",
+	"factorio_version": "1.1",
+	"title": "Shortcuts for 1.1",
+	"author": "npc_strider(morley376), modified by ickputzdirwech",
+	"contact": "ickputzdirwech@gmx.de",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=88439",
+	"dependencies": ["base >= 1.1.0",
+	"?PersonalLogisticsShortcut >= 0.1.0",
+	"(?)aai-programmable-vehicles >= 0.6.14",
+	"(?)OutpostPlanner >= 1.1.5",
+	"(?)VehicleWagon2 >= 3.1.8",
+	"(?)WellPlanner >= 1.1.7"],
+	"description": "Now supports Spidertron remote. \n\nAdds a host of useful shortcuts to improve QOL. Shortcuts for the artillery remote, discharge defense remote, tree deconstructor, and toggles for equipment, rail blocks and the player lamp. Additionally adds in a customizable grid overlay, far zoom and a artillery wagon toggle. Suggest any new shortcut ideas to the discussion page. Original mod by npc_strider(morley376) mods.factorio.com/mod/Shortcuts."
+}
