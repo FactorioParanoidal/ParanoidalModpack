@@ -1,4 +1,4 @@
-require("mod-gui")
+local mod_gui = require("mod-gui")
 function remote_doit(who, args)
 	--remote.call("DeleteEmptyChunks", "getSurface")
 	--remote.call("DeleteEmptyChunks", "getRadius")
