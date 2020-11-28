@@ -1118,6 +1118,7 @@ Event.register(Event.robo_remove_events, Robot_Tile_Remove)
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
 --                              (Thanks to eradicator!)                           --
 ------------------------------------------------------------------------------------
+--[[
 setmetatable(_ENV, {
   __newindex = function (self, key, value) --locked_global_write
     error('\n\n[ER Global Lock] Forbidden global *write*:\n'
@@ -1128,3 +1129,5 @@ setmetatable(_ENV, {
       .. serpent.line{key = key or '<nil>'} .. '\n')
     end ,
   })
+]]
+
