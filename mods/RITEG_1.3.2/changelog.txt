@@ -1,0 +1,77 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2020-11-28
+  Changes:
+    - Update to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2020-08-25
+  Changes:
+    - Update to 1.0
+    - Fixed crash by "update_ritegs" function
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2020-01-28
+  Changes:
+    - Update to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.2.15
+Date: 2019-12-24
+  Changes:
+    - Mined RITEG returns not damaged results
+---------------------------------------------------------------------------------------------------
+Version: 0.2.14
+Date: earlier
+Changes:
+ - fixed compability with [Simple Silicon]
+
+0.2.13
+ - added support of [Nuclear Fuel] - now you can build new RITEG with 10 breeder fuel cells (40 GJ)
+
+0.2.12
+ - fixed startup bug with mod dependencies 
+
+0.2.11
+ - added night glowing
+
+0.2.10
+ - port to 0.17; not implemented: adding night glowing
+
+0.1.10
+ - first try to add plutonium
+ 
+0.1.9
+ - fixed spam of debug information
+ 
+0.1.8
+ - big optimization, now the mod has idle between updates; fixed possible bug of multiple entity ghosts; RITEGS, marked by the script to deconstruction, don't will be updated anymore
+
+0.1.7
+ - added autodeconstruction and replacing of used RITEGs. Set 0 to disable in mod options. Thanks to m3lk0rrr
+
+0.1.6
+ - now you can deconstruct old RITEGs and 1x get used-up-RITEG and 5x used-up-uranium-fuel-cell, that can be recharged with new 5x uranium-fuel-cell
+ 
+0.1.5
+ - the RITEG will be available for old games too
+
+0.1.4
+ - fixed flag "hidden", now available for signals
+ 
+0.1.3
+ - changed graphics, thanks to Sigma1 https://forums.factorio.com/viewtopic.php?f=190&t=56513&p=361828#p361785
+
+0.1.2
+ - now the RITEG has the same power as health. Not repairable anymore
+ 
+0.1.1
+ - changed collision box
+ 
+0.1.0
+ - now RTG decrease every half life period production energy twice
+ 
+0.0.2
+ - now needs "uranium-fuel-cell"
+ 
+0.0.1
+ - first release
