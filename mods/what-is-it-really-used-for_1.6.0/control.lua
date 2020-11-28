@@ -1,4 +1,4 @@
-require("mod-gui")
+local mod_gui = require("mod-gui")
 
 SHOW_ALL = false  -- Set to true to also display disabled recipes and recipes without technology.
 
@@ -917,7 +917,8 @@ script.on_event(defines.events.on_gui_click, function(event)
       if #player.gui.left.wiiuf_item_flow.wiiuf_item_table.children_names == 1 then
         player.gui.left.wiiuf_item_flow.destroy()
       end
-    else mod_gui.get_frame_flow(player).wiiuf_left_frame.destroy()
+    else
+      mod_gui.get_frame_flow(player).wiiuf_left_frame.destroy()
     end
 
   elseif event.element.name:find("wiiuf_pin_") then
