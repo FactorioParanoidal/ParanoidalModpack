@@ -522,7 +522,7 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 	end
 end)
 
-script.on_event(defines.events.on_put_item, function(event)
+script.on_event(defines.events.on_pre_build, function(event)
 	local current_tick = event.tick
 	if global.tick and global.tick > current_tick then
 		return
