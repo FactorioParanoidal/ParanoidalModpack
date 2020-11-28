@@ -5,7 +5,7 @@
 	"author": "J_Aetherwing",
 	"contact": "",
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64946",
-	"factorio_version": "0.18",
+	"factorio_version": "1.1",
 	"dependencies": [
 		"base >= 0.17",
 		"? FuelTrainStop >= 0.17.2",
