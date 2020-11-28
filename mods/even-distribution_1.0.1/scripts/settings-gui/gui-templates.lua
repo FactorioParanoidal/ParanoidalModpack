@@ -12,7 +12,7 @@ local _ = helpers.on
 
 this.templates.settingsButton = {
 	type = "sprite-button",
-	name = "expand_settings",
+	name = "ed_expand_settings",
 	tooltip = {"settings-gui.open-settings"},
 	sprite = "ed_logo",
 	hovered_sprite = "ed_logo",
@@ -151,7 +151,7 @@ this.templates.settingsWindow = {
 				-- },
 				{
 					type = "sprite-button",
-					name = "close",
+					name = "ed_close",
 					sprite = "utility/close_white",
 					hovered_sprite = "utility/close_black",
 					clicked_sprite = "utility/close_black",
