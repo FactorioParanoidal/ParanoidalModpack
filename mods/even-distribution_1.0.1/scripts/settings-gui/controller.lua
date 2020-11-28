@@ -36,7 +36,6 @@ function this.on_runtime_mod_setting_changed(event)
 end
 
 function this.buildGUI(player)
-	gui.destroy(player, templates.settingsWindow)
 	gui.create(player, templates.settingsWindow, { })
 end
 
@@ -45,7 +44,6 @@ function this.destroyGUI(player)
 end
 
 function this.buildButton(player)
-	gui.destroy(player, templates.settingsButton)
 	gui.create(player, templates.settingsButton, { })
 end
 
