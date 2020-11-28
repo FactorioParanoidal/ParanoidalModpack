@@ -17,7 +17,7 @@ nit_vanillaproductivity = {
     "atomic-bomb",
     "shotgun-shell",
     "piercing-shotgun-shell",
-    "railgun-dart",
+    --"railgun-dart",
     "cannon-shell",
     "explosive-cannon-shell",
     "uranium-cannon-shell",

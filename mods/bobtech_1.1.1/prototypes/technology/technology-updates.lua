@@ -64,7 +64,7 @@ if settings.startup["bobmods-burnerphase"].value == true then
   bobmods.lib.tech.add_prerequisite("automation", "automation-science-pack")
   bobmods.lib.tech.add_prerequisite("optics", "automation-science-pack")
   bobmods.lib.tech.add_prerequisite("turrets", "automation-science-pack")
-  bobmods.lib.tech.add_prerequisite("stone-walls", "automation-science-pack")
+  bobmods.lib.tech.add_prerequisite("stone-wall", "automation-science-pack")
   bobmods.lib.tech.add_prerequisite("military", "automation-science-pack")
 
   bobmods.lib.tech.add_prerequisite("automation", "electricity")

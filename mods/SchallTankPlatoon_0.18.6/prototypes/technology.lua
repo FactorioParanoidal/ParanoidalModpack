@@ -837,7 +837,7 @@ data:extend
   {
     type = "technology",
     name = "Schall-concrete-walls",
-    localised_description = {"technology-description.stone-walls"},
+    localised_description = {"technology-description.stone-wall"},
     icon_size = 128,
     icon = "__SchallTankPlatoon__/graphics/technology/concrete-walls.png",
     effects =

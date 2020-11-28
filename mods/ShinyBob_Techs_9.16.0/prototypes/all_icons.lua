@@ -691,7 +691,7 @@ local technologies_icons = {
    	{"fusion-reactor-equipment-4",   			"fusion-reactor-equipment-4.png",   		}, 		
 
 --   	{"gas-canisters",   					"gas-canisters.png",   					}, 		
---   	{"stone-walls",   						"stone-walls.png",   					}, 		
+--   	{"stone-wall",   						"stone-walls.png",   					}, 		
 --   	{"gates",   							"gates.png",   						}, 		
    	{"reinforced-wall",   					"reinforced-wall.png",   				}, 		
 
