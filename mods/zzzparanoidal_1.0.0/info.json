@@ -1,12 +1,12 @@
 {
   "name": "zzzparanoidal",
   "version": "1.0.0",
-  "title": "Зaranoidal",
+  "title": "Paranoidal",
   "factorio_version": "1.1",
   "author": "Sovigod",
   "contact": "https://discord.gg/MnXGAmC",
   "homepage": "https://discord.gg/MnXGAmC",
-  "description": "Paranoidal core mod for 1.0",
+  "description": "Paranoidal core mod for 1.1",
   "dependencies": [
     "base >= 1.1.0",
     "boblibrary", 
