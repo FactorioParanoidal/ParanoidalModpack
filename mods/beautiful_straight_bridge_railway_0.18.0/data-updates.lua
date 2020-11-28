@@ -4,8 +4,14 @@ table.insert(data.raw["technology"]["railway"].effects, {type = "unlock-recipe",
 table.insert(data.raw["technology"]["railway"].effects, {type = "unlock-recipe", recipe = "bbr-rail-brick"})
 
 -- change default entity to placeable on water
-data.raw["rail-signal"]["rail-signal"].collision_mask = { "object-layer" }
-data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "object-layer" }
+--data.raw["rail-signal"]["rail-signal"].collision_mask = { "object-layer" }             --DrD
+--data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "object-layer" } --DrD
+for _, signal in pairs(data.raw["rail-signal"]) do                                       --DrD
+   signal.collision_mask = { "object-layer" }
+end
+for _, signal in pairs(data.raw["rail-chain-signal"]) do                                  --DrD
+   signal.collision_mask = { "object-layer" }
+end  
 
 -- change big electric pole including other mods (bobs etc.)
 local poles = data.raw["electric-pole"]
