@@ -1,0 +1,109 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2020-07-11
+  Bugfixes:
+    - Logical error would print warning to non-admins when any button was pressed
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2020-04-22
+  Features:
+    - Support for creep introduced by Krastorio2
+    - Recognizes colored refined-concrete added in later versions of 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-02-15
+  Features:
+    - Functionality limited to admins and server console
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 2020-02-02
+  Features:
+    - Added compatibility for Mining Drones
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 2020-01-31
+  Changes:
+    - Updated for 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2019-09-01
+  Features:
+    - Added support for Alien Biome and Space Exploration
+    - Improved console command and remote interface
+  Changes:
+    - Removed unneeded references for Factorismo2 and Surfaces_remake
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 2019-08-25
+  Features:
+    - Added console command and remote interface
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 2019-03-24
+  Changes:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2018-06-17
+  Changes:
+    - New button, cleaner code, eliminate idle CPU usage
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2018-05-02
+  Optimizations:
+    - Surface.count_tiles_filtered now accepts a table of filters in Factorio 0.16.40
+  Bugfixes:
+    - Prevent deleting the chunk a player is in when that chunk has not yet been charted
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2018-03-11
+  Minor Features:
+    - Added support for RSO. Unavoidable side effects: Because of the way RSO handles resource generation, if you've 'pinned' part of a resource, RSO will create an identical resource shifted by a bit within that region. If you delete the starting area chunks, those resources are gone. Otherwise, if RSO is allowed to regenerate them, it will spam the starting area with duplicates as many times as one clicks the button.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2018-03-04
+  Optimizations:
+    - No need to search invisible chunks for player entities or paving (nearly three times faster)
+  Changes:
+    - Removed hard-coded enumeration of tile names from other mods
+    - Now detect all non-vanilla tiles as paving added by other mods except those specifically ignored
+    - Cleaned up log and print messages
+    - Limited to only deleting chunks from a single surface specified by an option. It is not reliably safe to delete chunks from surfaces added by mods
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2018-03-01
+  Minor Features:
+    - Updated for Refined Concrete in Version 0.16.27
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2018-01-01
+  Bugfixes:
+    - Corrected typo causing multiplayer to fail
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2018-01-01
+  Features:
+    - Improved support for localization
+    - Ignore factories from mod Factorissimo2
+    - Added support for mod AsphaltRoads
+  Optimizations:
+    - Refactored code
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2017-12-30
+  Optimizations:
+    - Seven times faster processing paving
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2017-12-29
+  Bugfixes:
+    - Backported bugfixes from DestroyEmptyChunks 0.2.1
+  Features:
+    - Allowed for paving other than concrete.
+  Major Features:
+    - Updated for Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2017-10-03
+  Major Features:
+    - Initial release
