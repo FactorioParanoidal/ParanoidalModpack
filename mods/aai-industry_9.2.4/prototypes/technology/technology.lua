@@ -165,7 +165,7 @@ data:extend{
         icon = "__base__/graphics/technology/stone-walls.png",
         icon_size = 128,
         order = "a",
-        prerequisites = {"stone-walls", "concrete"},
+        prerequisites = {"stone-wall", "concrete"},
         unit = {
             count = 200,
             ingredients = {

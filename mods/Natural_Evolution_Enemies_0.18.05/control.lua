@@ -1874,16 +1874,16 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 25
     end 
 	
-    if research == "turrets" then
+    if research == "turret" then
         global.tech_level = global.tech_level + 5
     end  
   
-    if research == "laser-turrets" then
+    if research == "laser-turret" then
         global.tech_level = global.tech_level + 15
     end  
 
 			
-    if research == "stone-walls" then
+    if research == "stone-wall" then
         global.tech_level = global.tech_level + 5
     end 
 	

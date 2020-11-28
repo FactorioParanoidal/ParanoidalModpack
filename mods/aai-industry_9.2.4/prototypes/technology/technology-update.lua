@@ -53,7 +53,7 @@ util.tech_add_prerequisites("oil-gas-extraction", "basic-fluid-handling")
 util.tech_add_prerequisites("slag-processing-1", "basic-fluid-handling")
 
 util.tech_add_prerequisites("chemical-processing-1", "basic-chemistry") --DrD
-util.tech_add_prerequisites("zcs-trash-landfill", "stone-walls") --DrD
+util.tech_add_prerequisites("zcs-trash-landfill", "stone-wall") --DrD
 --util.tech_add_prerequisites("military", "armor-absorb-1") --DrD
 
 -- util.tech_lock_recipes(    "fuel-processing",  {        "fuel-processor"})
