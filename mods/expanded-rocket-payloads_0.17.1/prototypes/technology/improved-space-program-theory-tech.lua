@@ -3,7 +3,7 @@ data:extend({
       type = "technology",
       name = "improved-space-program-theory",
       icon_size = 128,
-      icon = "__base__/graphics/technology/logistics.png",
+      icon = "__expanded-rocket-payloads__/graphic/logistics.png",
       prerequisites = {"space-science-pack"},
       order = "y-b",
       unit =
