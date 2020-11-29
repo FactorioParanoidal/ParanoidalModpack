@@ -36,7 +36,8 @@ data:extend({
 		"not-on-map",
 		"not-blueprintable",
 		"not-deconstructable",
-		"not-selectable-in-game"
+		"not-selectable-in-game",
+--		"hidden" -- not added in 1.0.4
 	},
 	collision_mask = {}, -- nothing
 	selectable_in_game = false,
