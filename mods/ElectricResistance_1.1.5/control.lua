@@ -8,6 +8,8 @@ script.on_configuration_changed(function(data)
 			local count = surface.count_entities_filtered{position=resistor.position, type="electric-pole"}
 			if count == 0 then
 				resistor.destroy() -- 1.0.2
+			elseif resistor.destructible then
+				resistor.destructible = false
 			end
 		end
 	end
@@ -34,11 +36,12 @@ function add_resistor(entity)
 	local surface = entity.surface
 --	local position = entity.position
 --	create_entity{name=…, position=…, direction=…, force=…, target=…, source=…, fast_replace=…, player=…, spill=…, raise_built=…, create_build_effect_smoke=…}
-	surface.create_entity{name="hidden-electric-resistance",
+	local resistor = surface.create_entity{name="hidden-electric-resistance",
 		position = entity.position,
 		force = entity.force,
 		create_build_effect_smoke=false
-		}
+	}
+	resistor.destructible = false -- added in 1.0.4
 end
 
 function on_built_entity (entity)
@@ -55,6 +58,12 @@ end)
 script.on_event(defines.events.on_robot_built_entity, function(event)
 	on_built_entity (event.created_entity)
 end)
+
+-- added in 1.0.5
+script.on_event(defines.events.script_raised_built, function(event)
+	on_built_entity (event.entity) -- why not created_entity, devs?
+end)
+
 
 function on_mined_entity (entity)
 --	if entity.valid 
@@ -81,4 +90,11 @@ script.on_event(defines.events.on_entity_died, function(event)
 --	game.print('on_entity_died')
 	on_mined_entity (event.entity)
 end)
+
+-- added in 1.0.5
+script.on_event(defines.events.script_raised_destroy, function(event)
+--	game.print('on_entity_died')
+	on_mined_entity (event.entity)
+end)
+
 
