@@ -108,3 +108,5 @@ end
 if #internal_technologies > 0 then
     data:extend(internal_technologies)
 end
+
+require('compatibility.krastorio2')
