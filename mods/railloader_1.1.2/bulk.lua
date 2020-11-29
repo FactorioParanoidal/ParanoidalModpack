@@ -25,6 +25,11 @@ local patterns = {
     "^reduced%-",
     "^sintered%-",
     "%-rejects$",
+    -- pyalienlife
+    "biomass",
+    "%-seeds",
+    "%-spore",
+    "%-leaves$",
   },
   plates = {
     "plate",
@@ -56,10 +61,10 @@ local items = {
   "omnite",
   -- pycoalprocessing
   "active-carbon", "ash", "bonemeal", "borax", "boron-trioxide",
-  "calcium-carbide", "coal-briquette", "coarse", "coke",
-  "fawogae-substrate", "gravel", "iron-oxide", "lime", "limestone",
+  "calcium-carbide", "coal-briquette", "coarse", "coke", "dry-ralesia",
+  "fawogae", "fawogae-substrate", "gravel", "iron-oxide", "lime", "limestone",
   "lithium-peroxide", "niobium-concentrate", "niobium-oxide", "organics",
-  "ppd", "ralesia", "ralesia-seeds", "raw-borax", "rich-clay", "soil",
+  "ppd", "ralesias", "raw-borax", "rich-clay", "soil",
   "zinc-chloride",
   -- pyrawores
   "ammonium-chloride", "clean-nexelit", "coarse-coal", "concentrated-ti",
@@ -71,6 +76,19 @@ local items = {
   "salt", "sl-concentrate", "sodium-aluminate", "sodium-bisulfate",
   "sodium-carbonate", "sodium-hydroxide", "sodium-sulfate", "sponge-iron",
   "starch", "tin-concentrate", "ti-residue", "unslimed-iron", "yellow-cake",
+  -- pyfusionenergy
+  "calcinates", "boron-carbide",
+  -- pypetroleumhandling
+  "carbon-black", "guar", "soot",
+  -- pyhightech
+  "cadaveric-arum", "clay", "moondrop", "urea", "ree-concentrate", "reo",
+  "phenol", "raw-fiber", "lithium-niobate",
+  -- pyalienlife
+  "bonemeal", "bones", "cellulose", "chitin", "cobalt-extract",
+  "cobalt-fluoride", "dried-grod", "grod", "lignin", "manure",
+  "moondrop-diesel", "moondrop-fueloil", "moondrop-gas", "moondrop-kerosene",
+  "moss", "rennea", "saps", "sea-sponge", "seaweed", "shell", "sporopollenin",
+  "sugar", "yaedols", "nisi", "sic", "green-sic",
 }
 
 for i, item in ipairs(items) do

@@ -122,6 +122,7 @@ data:extend{
 
 local univ = util.table.deepcopy(data.raw["inserter"]["railloader-inserter"])
 univ.name = "railloader-universal-inserter"
+univ.localised_name = {"entity-name.railloader-inserter"}
 univ.filter_count = nil
 data:extend{univ}
 

@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-11-29
+  Changes:
+    - Update bulk item list for Pynanodon's Mods. (https://github.com/mspielberg/factorio-railloader/pull/20)
+  Bugfixes:
+    - Fix crash when building BRLs near ghosts that cannot have circuit connections. (https://mods.factorio.com/mod/railloader/discussion/5fc0dadd56705073f5230753)
+    - Fix missing locale for universal and interface inserters.
+  Translation:
+    - Add Polish locale. (https://github.com/mspielberg/factorio-railloader/pull/17)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2020-11-26
   Bugfixes:
