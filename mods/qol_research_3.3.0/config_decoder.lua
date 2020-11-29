@@ -11,21 +11,23 @@
                 prerequisites = {
                     'qol-category-name-1-3',
                     'logistic-science-pack',
-                    ...
+                    ... next prerequisite
                 },
 
                 cycle_count_formula = '100*L',
                 cycle_time = 30, -- seconds
                 cycle_ingredients = {
                     { 'logistic-science-pack', 2 },
-                    ...
+                    ... next ingredient
                 },
-            }
+            },
+            ... next tier
         },
-        ...
+        ... next category
     }
 ]]
 
+local setting_name_formats = require('defines.setting_name_formats')
 local technology_formats = require('defines.technology_name_formats')
 local category_map = require('categories').map
 local default_import_settings = {
@@ -33,6 +35,7 @@ local default_import_settings = {
     min = -1000000,
     max = 1000000,
 }
+local is_infinite_research_enabled = settings.startup[setting_name_formats.infinite_research_enabled].value
 
 -- returns index: number, strings: string[]
 local function decode_string_table(str, index)
@@ -141,14 +144,16 @@ return function (str)
                 end
             end
 
-            tiers[#tiers + 1] = {
-                technology_count = technology_count,
-                bonus_per_technology = bonus_per_technology,
-                prerequisites = prerequisites,
-                cycle_count_formula = cycle_count_formula,
-                cycle_time = cycle_time,
-                cycle_ingredients = cycle_ingredients,
-            }
+            if is_infinite_research_enabled or technology_count ~= 0 then
+                tiers[#tiers + 1] = {
+                    technology_count = technology_count,
+                    bonus_per_technology = bonus_per_technology,
+                    prerequisites = prerequisites,
+                    cycle_count_formula = cycle_count_formula,
+                    cycle_time = cycle_time,
+                    cycle_ingredients = cycle_ingredients,
+                }
+            end
         end
 
         if category_map[name] then
