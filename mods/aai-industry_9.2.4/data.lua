@@ -12,4 +12,5 @@ require("prototypes/entity/entity-burner-assembling-machine")
 --require("prototypes/entity/entity-fuel-processor")
 require("prototypes/technology/technology")
 
-require("prototypes/entity/entity-burner-filter-inserter")
+require("prototypes/entity/entity-burner-filter-inserter") --drd
+require("prototypes.torches") --drd
