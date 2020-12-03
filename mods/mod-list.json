@@ -209,11 +209,6 @@
     },
     
     {
-      "name": "creative-mod",
-      "enabled": true
-    },
-    
-    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -265,6 +260,11 @@
     
     {
       "name": "EvoGUI",
+      "enabled": true
+    },
+    
+    {
+      "name": "expanded-rocket-payloads",
       "enabled": true
     },
     
@@ -590,6 +590,11 @@
     
     {
       "name": "research-progress",
+      "enabled": true
+    },
+    
+    {
+      "name": "research_causes_evolution",
       "enabled": true
     },
     
