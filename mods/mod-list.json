@@ -209,6 +209,11 @@
     },
     
     {
+      "name": "creative-mod",
+      "enabled": true
+    },
+    
+    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -260,11 +265,6 @@
     
     {
       "name": "EvoGUI",
-      "enabled": true
-    },
-    
-    {
-      "name": "expanded-rocket-payloads",
       "enabled": true
     },
     
@@ -340,6 +340,11 @@
     
     {
       "name": "KaoExtended",
+      "enabled": true
+    },
+    
+    {
+      "name": "KingsTurret-Shields",
       "enabled": true
     },
     
@@ -589,11 +594,6 @@
     },
     
     {
-      "name": "research_causes_evolution",
-      "enabled": true
-    },
-    
-    {
       "name": "reskins-angels",
       "enabled": true
     },
@@ -729,17 +729,17 @@
     },
     
     {
+      "name": "Todo-List",
+      "enabled": true
+    },
+    
+    {
       "name": "toxicPollution",
       "enabled": true
     },
     
     {
       "name": "TrainOverhaul",
-      "enabled": true
-    },
-    
-    {
-      "name": "Turret-Shields",
       "enabled": true
     },
     
@@ -786,6 +786,21 @@
     {
       "name": "WideChests",
       "enabled": true
+    },
+    
+    {
+      "name": "yi_engines",
+      "enabled": false
+    },
+    
+    {
+      "name": "Yi_Tech_Tree",
+      "enabled": false
+    },
+    
+    {
+      "name": "Yuoki",
+      "enabled": false
     },
     
     {

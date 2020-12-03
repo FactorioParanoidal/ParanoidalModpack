@@ -16,6 +16,8 @@
 		"? UltimateBelts_Owoshima_And_Pankeko-Mod >= 0.16.4",
 		"? space-exploration >= 0.1.95",
 		"(?) SchallBeltConfiguration",
+		"? chromatic-belts",
+		"reskins-bobs",
 		"? paranoidal-tweaks"
 	]
 }

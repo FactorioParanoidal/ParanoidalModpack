@@ -5,7 +5,7 @@ local graphics =
   layers =
   {
     {
-      filename = "__Torches__/torch.png",
+      filename = "__aai-industry__/torch.png",
       priority = "extra-high",
       width = 91,
       height = 80,
@@ -15,7 +15,7 @@ local graphics =
       scale = 0.5
     },
     {
-      filename = "__Torches__/torch-shadow.png",
+      filename = "__aai-industry__/torch-shadow.png",
       priority = "extra-high",
       width = 91,
       height = 80,
@@ -44,7 +44,7 @@ local idle_graphics =
   layers =
   {
     {
-      filename = "__Torches__/torch.png",
+      filename = "__aai-industry__/torch.png",
       priority = "extra-high",
       width = 91,
       height = 80,
@@ -54,7 +54,7 @@ local idle_graphics =
       scale = 0.5
     },
     {
-      filename = "__Torches__/torch-shadow.png",
+      filename = "__aai-industry__/torch-shadow.png",
       priority = "extra-high",
       width = 91,
       height = 80,
@@ -74,7 +74,7 @@ data:extend{
   {
     type = "item",
     name = "torch",
-    icon = "__Torches__/torch-icon.png",
+    icon = "__aai-industry__/torch-icon.png",
     icon_size = 64,
     subgroup = "energy",
     order = "c-a",
@@ -96,7 +96,7 @@ data:extend{
   {
     type = "burner-generator",
     name = "torch",
-    icon = "__Torches__/torch-icon.png",
+    icon = "__aai-industry__/torch-icon.png",
     icon_size = 64,
     flags = {"placeable-player", "player-creation"},
     fast_replaceable_group = "torches",
