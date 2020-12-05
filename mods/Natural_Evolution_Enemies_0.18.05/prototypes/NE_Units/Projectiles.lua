@@ -4,7 +4,7 @@ local NEEnemies = require('common')('Natural_Evolution_Enemies')
 local ICONPATH = NEEnemies.modRoot .. "/graphics/icons/"
 local ENTITYPATH = NEEnemies.modRoot .. "/graphics/entity/"
 
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 
 NE_Enemies.Settings.NE_Difficulty = settings.startup["NE_Difficulty"].value
@@ -520,7 +520,7 @@ data:extend({
 	name = "Web-Projectile",
 	flags = {"not-on-map"},
 	collision_box =  {{-0.01, -0.01}, {0.01, 0.01}},
-	collision_mask = { "layer-11" },
+	collision_mask = { "rail-layer" },
 	direction_only = true,
 	acceleration = 0.01,
 	force = "enemy",

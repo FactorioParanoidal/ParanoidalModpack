@@ -1,4 +1,4 @@
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 if not NE_Enemies then NE_Enemies = {} end
 if not NE_Enemies.Settings then NE_Enemies.Settings = {} end

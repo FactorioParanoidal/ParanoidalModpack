@@ -1843,7 +1843,7 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 15
     end  
 
-    if research == "tanks" then
+    if research == "tank" then
         global.tech_level = global.tech_level + 15
     end 
 
@@ -1874,7 +1874,7 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 25
     end 
 	
-    if research == "turret" then
+    if research == "gun-turret" then
         global.tech_level = global.tech_level + 5
     end  
   
@@ -1892,16 +1892,16 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 500
     end  
 
-    if research == "combat-robotics" then
+    if research == "defender" then
         global.tech_level = global.tech_level + 15
     end  
 
 	
-    if research == "combat-robotics-2" then
+    if research == "distractor" then
         global.tech_level = global.tech_level + 15
     end  
 
-    if research == "combat-robotics-3" then
+    if research == "destroyer" then
         global.tech_level = global.tech_level + 15
     end  
 	
@@ -2066,31 +2066,31 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 150
     end 
 
-    if research == "laser-turret-speed-1" then
+    if research == "laser-shooting-speed-1" then
         global.tech_level = global.tech_level + 50
     end	
 
-    if research == "laser-turret-speed-2" then
+    if research == "laser-shooting-speed-2" then
         global.tech_level = global.tech_level + 60
     end	
 
-    if research == "laser-turret-speed-3" then
+    if research == "laser-shooting-speed-3" then
         global.tech_level = global.tech_level + 80
     end	
 	
-    if research == "laser-turret-speed-4" then
+    if research == "laser-shooting-speed-4" then
         global.tech_level = global.tech_level + 90
     end		
     
-	if research == "laser-turret-speed-5" then
+	if research == "laser-shooting-speed-5" then
         global.tech_level = global.tech_level + 100
     end	
 	
-	if research == "laser-turret-speed-6" then
+	if research == "laser-shooting-speed-6" then
         global.tech_level = global.tech_level + 150
     end	
 	
-	if research == "laser-turret-speed-7" then
+	if research == "laser-shooting-speed-7" then
         global.tech_level = global.tech_level + 200
     end	
 	

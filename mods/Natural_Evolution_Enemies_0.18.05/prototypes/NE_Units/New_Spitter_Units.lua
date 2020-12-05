@@ -1,5 +1,5 @@
 
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 require ("prototypes.NE_Units.Projectiles")
 
 
