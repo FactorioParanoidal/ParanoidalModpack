@@ -1,4 +1,4 @@
-local sounds = require("__base__.prototypes.entity.demo-sounds")
+local sounds = require("__base__.prototypes.entity.sounds")
 
 local ne_collision_box = {}
 local c1 = 0.0325
