@@ -49,12 +49,14 @@ function On_Init()
 	global.klaxonTick = global.klaxonTick or 0
 	global.auto_tick = global.auto_tick or 0
 	global.readyTick = {}
+--[[	silo script was removed from 1.1 !!
 	if remote.interfaces["silo_script"] then
 		local tracked_items = remote.call("silo_script", "get_tracked_items")
 		if not tracked_items["orbital-ion-cannon"] then
 			remote.call("silo_script", "add_tracked_item", "orbital-ion-cannon")
 		end
 	end
+]]	
 	if not global.permissions then
 		global.permissions = {}
 		global.permissions[-2] = settings.global["ion-cannon-auto-targeting"].value
