@@ -6,6 +6,10 @@ function scaleTable(t, pack)
     for j,item in pairs(t) do
         if t[j].amount then
             t[j].amount = t[j].amount*pack
+            local catalyst_amount = t[j].catalyst_amount
+            if catalyst_amount then 
+                t[j].catalyst_amount = catalyst_amount*pack 
+            end
         else
             if type(t[j][2]) == 'number' then
                 t[j][2] = t[j][2]*pack
