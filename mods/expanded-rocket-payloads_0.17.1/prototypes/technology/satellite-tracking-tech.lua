@@ -1,3 +1,4 @@
+--[[  d'nt supported in 1.1!!
 data:extend({
   {
     type = "technology",
@@ -20,3 +21,4 @@ data:extend({
     },
   }
 })
+]]
