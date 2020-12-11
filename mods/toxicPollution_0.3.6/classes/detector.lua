@@ -15,8 +15,8 @@ end
 function Detector:CheckEntity(entity)
     if entity.type == "constant-combinator" then
         local behavior = entity.get_control_behavior()
-        for i = 1, #behavior.parameters.parameters do
-            local signal = behavior.parameters.parameters[i].signal
+        for i = 1, #behavior.parameters do
+            local signal = behavior.parameters[i].signal
             if signal ~= nil and signal.name == "signal-yellow-more-toxin" then
                 signal.count = math.floor(entity.surface.get_pollution(entity.position))
                 if global.combinators[entity.unit_number] == nil then
