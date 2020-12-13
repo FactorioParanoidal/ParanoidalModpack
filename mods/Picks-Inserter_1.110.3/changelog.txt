@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.110.3
+Date: 06.12.2020
+  Bugfixes:
+    - Fixed a non-recoverable error occouring in some circumstates when starting a new game or loading a savegame.
+---------------------------------------------------------------------------------------------------
+Version: 1.110.2
+Date: 05.12.2020
+  Bugfixes:
+    - Fixed a bug that after loading a game, a mark was not deleted if the associated inserter was destroyed.
+  Info:
+    - With a custom-input (default: CONTROL + ALT + I or AltGr + I) orphaned marks can be removed in the game.
+---------------------------------------------------------------------------------------------------
+Version: 1.110.1
+Date: 30.11.2020
+  Bugfixes:
+    - Fixed mulitplayer desync related to imserters selected with the inserter cleanup planner 
+  Locale:
+    - Updated language files
+  Graphics:
+    - Reworked icons for item and shortcut
+---------------------------------------------------------------------------------------------------
 Version: 1.110.0
 Date: 23.11.2020
   Features:
