@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 2020-12-07
+  Bugfixes:
+    - Fix crash when balancing fuel in a large number of locomotives.
+-------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 2020-12-06
+  Bugfixes:
+    - Fixed compatibility with Electronic Locomotives mods.
+  Changes:
+    - Added ship and boat engines to MU blacklist.
+    - Added Editor Extensions "super locomotive" to MU blacklist (it's too fast already!).
+    - Added BatteryLocomotive by KoharaKazuya to the blacklist (until they implement a remote interface to register new types of locomotives).
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 2020-12-03
+  Bugfixes:
+    - Fixed crash when picking up MU items from the ground.
+---------------------------------------------------------------------------------------------------
 Version: 0.4.6
 Date: 2020-11-27
   Bugfixes:
