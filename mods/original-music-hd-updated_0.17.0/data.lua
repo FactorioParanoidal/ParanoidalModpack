@@ -26,5 +26,14 @@ data:extend(
     {
       filename = "__original-music-hd-updated__/FactorioSepro1.ogg"
     }
+  },
+  {
+    type = "ambient-sound",
+    name = "main-menu-track",
+    track_type = "main-track",
+    sound =
+    {
+      filename = "__original-music-hd-updated__/main-menu.ogg"
+    }
   }
 })
