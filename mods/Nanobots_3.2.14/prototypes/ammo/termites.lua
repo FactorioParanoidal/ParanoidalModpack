@@ -107,8 +107,18 @@ local cloud_small_termites = {
                         action_delivery = {
                             type = 'instant',
                             target_effects = {
-                                type = 'damage',
-                                damage = {amount = 4, type = 'poison'}
+                                {
+                                    type = 'damage',
+                                    damage = {amount = 4, type = 'poison'}
+                                },
+                                {   type = 'play-sound',
+                                    play_on_target_position = true,
+                                    sound = {
+                                        filename = '__Nanobots__/sounds/sawing-wood.ogg',
+                                        volume = 0.15,
+                                        aggregation = {max_count = 1, remove = true, count_already_playing = true}
+                                    }
+                                }
                             }
                         }
                     }

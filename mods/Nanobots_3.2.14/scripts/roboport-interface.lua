@@ -46,28 +46,26 @@ item-on-ground-sig, Scan for items on ground, if found cell will check for items
 networks-sig
 
 parameters ={
-    parameters = {
-        {
-            count = 1,
-            index = 1,
-            signal = {
-                name = "nano-signal-item-on-ground",
-                type = "virtual"
-            }
-        },
-        {
-            count = 1,
-            index = 2,
-            signal = {
-                type = "item"
-            }
-        },
-    }
+    {
+        count = 1,
+        index = 1,
+        signal = {
+            name = "nano-signal-item-on-ground",
+            type = "virtual"
+        }
+    },
+    {
+        count = 1,
+        index = 2,
+        signal = {
+            type = "item"
+        }
+    },
 }
 --]]
 local function get_parameters(params)
     local parameters = {}
-    for _, param in pairs(params.parameters) do
+    for _, param in pairs(params) do
         if param.signal.name then
             parameters[param.signal.name] = param.count
         end

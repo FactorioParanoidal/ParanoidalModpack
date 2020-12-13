@@ -141,8 +141,13 @@ local cloud_small_deconstructors = {
             type = 'instant',
             target_effects = {
                 {
-                    type = 'create-explosion',
-                    entity_name = 'nano-sound-deconstruct'
+                    type = 'play-sound',
+                    play_on_target_position = true,
+                    sound = {
+                        filename = '__core__/sound/deconstruct-small.ogg',
+                        volume = 0.5,
+                        aggregation = {max_count = 3, remove = true, count_already_playing = true}
+                    },
                 }
             }
         }
@@ -203,8 +208,19 @@ local cloud_small_repair = {
                         action_delivery = {
                             type = 'instant',
                             target_effects = {
-                                type = 'damage',
-                                damage = {amount = -1, type = 'physical'}
+                                {
+                                    type = 'damage',
+                                    damage = {amount = -1, type = 'physical'}
+                                },
+                                {
+                                    type = 'play-sound',
+                                    play_on_target_position = true,
+                                    sound = {
+                                        filename = '__core__/sound/manual-repair-advanced-1.ogg',
+                                        volume = 0.15,
+                                        aggregation = {max_count = 1, remove = true, count_already_playing = true}
+                                    }
+                                }
                             }
                         }
                     }
