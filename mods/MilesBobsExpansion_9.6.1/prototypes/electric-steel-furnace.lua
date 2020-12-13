@@ -225,7 +225,7 @@ data:extend(
             direction_count = 1,
             filename = "__base__/graphics/entity/steel-furnace/steel-furnace-working.png",
             frame_count = 1,
-            height = 75,
+            height = 74,
 	     hr_version =
 		  {
 		    filename = "__base__/graphics/entity/steel-furnace/hr-steel-furnace-working.png",
