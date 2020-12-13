@@ -1,7 +1,7 @@
 --[[ Copyright (c) 2019 - 2020 Picklock
  * Part of Picklocks Inserter
  * selector.lua
- * Version 1.110.0.47
+ * Version 1.110.3.51
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -12,10 +12,10 @@
 		{
 			type = "selection-tool",
 			name = "PI_inserter_selector",
-			icon = "__Picks-Inserter__/graphics/icons/PI_selector.png",
-			icon_size = 32,
+			icon = myModName.."/graphics/icons/PI_selector_item.png",
+			icon_size = 64, icon_mipmaps = 4,
 			--flags = {"only-in-cursor", "hidden"}, -- bis V1.0
-			flags = {"only-in-cursor", "hidden", "spawnable"}, -- ab V1.1 testen !!!
+			flags = {"only-in-cursor", "hidden", "spawnable"}, -- ab V1.1
 			stack_size = 10,
 			order = "c[automated-construction]-s[selection-tool]-s[PI]",
 			selection_color = { r = 0, g = 1, b = 0 },
@@ -44,9 +44,8 @@
 				name = "PI_inserter_selector_ui",
 				key_sequence = "SHIFT + I",
 				action = "lua",
-				--action = "create-blueprint-item",
 				--item_to_create="PI_inserter_selector", -- bis V1.0
-				item_to_spawn="PI_inserter_selector", -- ab V1.1 testen !!!
+				item_to_spawn="PI_inserter_selector", -- ab V1.1
 				consuming = "none"
 		}
 	
@@ -57,42 +56,41 @@
 				name = "PI_inserter_selector_ui_sc",
 				order = "a[alt-mode]-b[copy]",
 				action = "lua",
-				--action = "create-blueprint-item",
 				--item_to_create="PI_inserter_selector", -- bis V1.0
-				item_to_spawn="PI_inserter_selector", -- ab V1.1 testen !!!
+				item_to_spawn="PI_inserter_selector", -- ab V1.1
 				localised_name = {"PicksInserter.PI_inserter_selector_ui_sc"},
 				toggleable = true,
 				icon = {
-					filename = "__Picks-Inserter__/graphics/icons/PI_selector_64.png",
+					filename = myModName.."/graphics/icons/shortcut-toolbar/mip/pi_selector_x32.png",
 					priority = "extra-high-no-scale",
-					width = 64,
-					height = 64,
-					scale = 1,
-					flags = {"icon"}
+					size = 32,
+					scale = 0.5,
+					mipmap_count = 2,
+					flags = {"gui-icon"}
 				},
 				small_icon = {
-					filename = "__Picks-Inserter__/graphics/icons/PI_selector.png",
+					filename = myModName.."/graphics/icons/shortcut-toolbar/mip/pi_selector_x24.png",
 					priority = "extra-high-no-scale",
-					width = 32,
-					height = 32,
-					scale = 1,
-					flags = {"icon"}
+					size = 24,
+					scale = 0.5,
+					mipmap_count = 2,
+					flags = {"gui-icon"}
 				},
 				disabled_icon = {
-					filename = "__Picks-Inserter__/graphics/icons/PI_selector_disabled_64.png",
+					filename = myModName.."/graphics/icons/shortcut-toolbar/mip/pi_selector_x32_dis.png",
 					priority = "extra-high-no-scale",
-					width = 64,
-					height = 64,
-					scale = 1,
-					flags = {"icon"}
+					size = 32,
+					scale = 0.5,
+					mipmap_count = 2,
+					flags = {"gui-icon"}
 				},
 				disabled_small_icon = {
-					filename = "__Picks-Inserter__/graphics/icons/PI_selector_disabled_64.png",
+					filename = myModName.."/graphics/icons/shortcut-toolbar/mip/pi_selector_x24_dis.png",
 					priority = "extra-high-no-scale",
-					width = 64,
-					height = 64,
-					scale = 1,
-					flags = {"icon"}
+					size = 24,
+					scale = 0.5,
+					mipmap_count = 2,
+					flags = {"gui-icon"}
 				}
 		}
 	
