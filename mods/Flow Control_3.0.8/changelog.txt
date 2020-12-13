@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.0.8
+Date: 06. 12. 2020
+  Changes:
+    - Custom pipes no longer auto-hide GUI, to match behaviour of standard pipes
+    - Pipes, pumps and valves moved to new line in crafting menu (can be disabled in options)
+---------------------------------------------------------------------------------------------------
 Version: 3.0.7
 Date: 26. 11. 2020
   Changes:
