@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 12. 05. 2019
+  Changes:
+    - Initial release.
+    
+Version: 1.0.1
+Date: 26. 01. 2020
+  Changes:
+    - Updated for .18.
+    
+Version: 1.0.2
+Date: 08. 12. 2020
+  Changes:
+    - Updated for 1.1.
