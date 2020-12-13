@@ -1,11 +1,11 @@
 {
   "name": "blueprint_flip_and_turn",
-  "version": "18.7.0",
+  "version": "101.8.6",
   "title": "Blueprint Flip and Turn",
   "author": "NovaM (original from Marty & GopherAtl, Roktaal, Humpfry)",
   "homepage": "https://github.com/tst2005factorio/blueprint_flip_and_turn",
   "contact": "https://github.com/tst2005factorio/blueprint_flip_and_turn/issues",
   "description": "Mirrors/Flips a blueprint in hand. Input/output priorities fixed",
   "factorio_version": "1.1",
-  "dependencies": ["base >= 1.1", "? boblogistics", "? mini-machines"]
+  "dependencies": ["base >= 1.0", "? boblogistics", "? mini-machines"]
 }

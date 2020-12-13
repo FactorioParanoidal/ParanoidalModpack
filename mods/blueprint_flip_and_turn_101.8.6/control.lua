@@ -114,6 +114,28 @@ local function flip_h(player_index)
 	end
 end
 
+local function reverse_inserters(player_index)
+	local player = game.players[player_index]
+	local cursor = getBlueprintCursorStack(player)
+	if cursor then
+		if cursor.get_blueprint_entities() ~= nil then
+			local ents = cursor.get_blueprint_entities()
+			for i = 1, #ents do
+				local ent = ents[i]
+				if ent.pickup_position and ent.drop_position then
+					local old_drop_y = ent.drop_position.y
+					local old_drop_x = ent.drop_position.x
+					ent.drop_position.y = ent.pickup_position.y
+					ent.drop_position.x = ent.pickup_position.x
+					ent.pickup_position.y = old_drop_y
+					ent.pickup_position.x = old_drop_x
+				end
+			end
+			cursor.set_blueprint_entities(ents)
+		end
+	end
+end
+
 -- remove older mod stuff ? --
 local function oldStrangeStuff(player_index)
 	local gui_top = walk(game, {"players", player_index, "gui", "top"})
@@ -134,6 +156,7 @@ local function doButtons(player_index)
 		local flow = gui_location.add{type = "flow", name = "blpflip_flow", direction = blpflip_flow_direction}
 		flow.add{type = "button", name = "blueprint_flip_horizontal", style = "blpflip_button_horizontal"}
 		flow.add{type = "button", name = "blueprint_flip_vertical", style = "blpflip_button_vertical"}
+--		flow.add{type = "button", name = "blueprint_reverse_inserters", style = "blpflip_button_reverse_inserters"}
 	end
 	oldStrangeStuff(player_index)
 end
@@ -172,6 +195,8 @@ script.on_event(defines.events.on_gui_click,function(event)
 		flip_h(event.player_index)
 	elseif event.element.name == "blueprint_flip_vertical" then
 		flip_v(event.player_index)
+	elseif event.element.name == "blueprint_reverse_inserters" then
+		reverse_inserters(event.player_index)
 	end
 end)
 
@@ -213,3 +238,6 @@ end)
 -- actions by shortcut --
 script.on_event("blueprint_hotkey_flip_horizontal", function(event) flip_h(event.player_index) end)
 script.on_event("blueprint_hotkey_flip_vertical", function(event) flip_v(event.player_index) end)
+--pcall(function()
+--script.on_event("blueprint_hotkey_reverse_inserters", function(event) reverse_inserters(event.player_index) end)
+--end)

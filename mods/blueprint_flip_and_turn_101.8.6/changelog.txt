@@ -1,4 +1,98 @@
 ---------------------------------------------------------------------------------------------------
+Version: 101.8.6
+Date: 2020-12-01
+  Changes:
+    - Try to support Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 100.8.6
+Date: 2020-11-23
+  Bugfixes:
+    - Minor fix to the changelog. (Reported by [Fr_Dae](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5fba29946552126b62dc0db2)
+---------------------------------------------------------------------------------------------------
+Version: 18.8.6
+Date: 2020-11-23
+  Bugfixes:
+    - Minor fix to the changelog. (Reported by [Fr_Dae](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5fba29946552126b62dc0db2)
+---------------------------------------------------------------------------------------------------
+Version: 17.8.6
+Date: 2020-11-23
+  Bugfixes:
+    - Minor fix to the changelog. (Reported by [Fr_Dae](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5fba29946552126b62dc0db2)
+---------------------------------------------------------------------------------------------------
+Version: 100.8.5
+Date: 2020-11-03
+  Bugfixes:
+    - Fix the bugfix to really disable the Reverse Inserter code
+---------------------------------------------------------------------------------------------------
+Version: 18.8.5
+Date: 2020-11-03
+  Bugfixes:
+    - Fix the bugfix to really disable the Reverse Inserter code
+---------------------------------------------------------------------------------------------------
+Version: 17.8.5
+Date: 2020-11-03
+  Bugfixes:
+    - Fix the bugfix to really disable the Reverse Inserter code
+---------------------------------------------------------------------------------------------------
+Version: 100.8.4
+Date: 2020-11-03
+  Bugfixes:
+    - Disable the Reverse Inserter code, integration seems not ready yet.
+---------------------------------------------------------------------------------------------------
+Version: 18.8.4
+Date: 2020-11-03
+  Bugfixes:
+    - Disable the Reverse Inserter code, integration seems not ready yet.
+---------------------------------------------------------------------------------------------------
+Version: 17.8.4
+Date: 2020-11-03
+  Bugfixes:
+    - Disable the Reverse Inserter code, integration seems not ready yet.
+---------------------------------------------------------------------------------------------------
+Version: 100.8.3
+Date: 2020-11-02
+  Bugfixes:
+    - Fix Crash related to the new Reverse Inserter event.
+---------------------------------------------------------------------------------------------------
+Version: 18.8.3
+Date: 2020-11-02
+  Bugfixes:
+    - Fix Crash related to the new Reverse Inserter event.
+---------------------------------------------------------------------------------------------------
+Version: 17.8.3
+Date: 2020-11-02
+  Bugfixes:
+    - Fix Crash related to the new Reverse Inserter event.
+---------------------------------------------------------------------------------------------------
+Version: 100.8.1
+Date: 2020-11-02
+  Changes:
+    - Support factorio 1.00
+---------------------------------------------------------------------------------------------------
+Version: 18.8.1
+Date: 2020-11-02
+  Changes:
+    - Support factorio 1.00
+---------------------------------------------------------------------------------------------------
+Version: 17.8.1
+Date: 2020-11-02
+  Changes:
+    - Support factorio 1.00
+---------------------------------------------------------------------------------------------------
+Version: 18.8.0
+Date: 2020-11-02
+  Changes:
+    - Add MIT License file.
+  Features:
+    - Accept the "Reverse Inserters" button, submitted by [Rycochet](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f831c2a6da5e2a5968ea9eb) see also [on github](https://github.com/tst2005factorio/blueprint_flip_and_turn/pull/2). Thanks!
+---------------------------------------------------------------------------------------------------
+Version: 17.8.0
+Date: 2020-11-02
+  Changes:
+    - Add MIT License file.
+  Features:
+    - Accept the "Reverse Inserters" button, submitted by [Rycochet](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f831c2a6da5e2a5968ea9eb) see also [on github](https://github.com/tst2005factorio/blueprint_flip_and_turn/pull/2). Thanks!
+---------------------------------------------------------------------------------------------------
 Version: 18.7.0
 Date: 2020-08-07
   Changes:
@@ -15,7 +109,7 @@ Date: 2020-08-06
     - The issue was found: `cursor.is_blueprint_setup` can raise an error "Item is not blueprint" even if everything else said "it is a blueprint or a blueplrint book"
     - Thanks to pertm, clocksporchi and snakepowa for the ["Item is not blueprint" bug report and feedback](https://mods.factorio.com/mod/blueprint_flip_and_turn/discussion/5f27e16e06da6e783975ac05)
 ---------------------------------------------------------------------------------------------------
-Version: 18.6.x
+Version: 18.6.0
 Date: 2020-08-05
   Bugfixes:
     - Try to find the issue and workaround...
