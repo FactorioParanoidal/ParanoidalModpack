@@ -1,6 +1,6 @@
 {
   "name": "MultipleUnitTrainControl",
-  "version": "0.4.6",
+  "version": "0.4.9",
   "factorio_version": "1.1",
   "title": "Multiple Unit Train Control",
   "author": "robot256",
@@ -17,9 +17,9 @@
     "(?)FuelTrainStop >= 0.17.3", 
     "(?)FusionTrain >= 0.17.5", 
     "(?)bigger_slower_trains-M",
-	"(?)bobvehicleequipment",
+    "(?)bobvehicleequipment",
     "(?)Krastorio2 >= 0.9.0",
-    "(?)Electronic_Locomotives",
+    "(?)Electronic_Locomotives >= 1.0.0",
     "(?)fluidTrains",
     "(?)electric-vehicles-reborn >= 0.1.2",
     "!Noxys_Multidirectional_Trains"

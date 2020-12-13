@@ -87,6 +87,11 @@ local blacklist = {
   "steam-locomotive",
 -- Train Construction Site (this is a dummy entity used when generating trains)
   "trainassembly-placeable",
+-- Cargo Ship engines can't couple to each other anyways
+  "boat_engine",
+  "cargo_ship_engine",
+-- Editor Extensions overpowered super loco does not need power doubling at all!
+  "ee-super-locomotive",
 }
 
 local yuoki_blacklist = {
@@ -102,6 +107,13 @@ local yuoki_blacklist = {
   "yir_kr_green",
 }
 
+local kazuya_blacklist = {
+-- Battery Locomotive (mod does not have a remote interface yet)
+  "battery-locomotive",
+  "battery-locomotive-mk2",
+  "battery-locomotive-mk3"
+}
+
 -- Convert blacklist to dictionary
 local mu_blacklist = {}
 for _,name in pairs(blacklist) do
@@ -115,6 +127,12 @@ end
 -- Add Yuoki Steam Engines if setting is disabled
 if settings.startup["multiple-unit-train-control-allow_yuoki_steam"].value == false then
   for _,name in pairs(yuoki_blacklist) do
+    mu_blacklist[name] = true
+  end
+end
+-- Add Battery Locomotive if it's present (since the names are generic, don't want to exclude others
+if mods["BatteryLocomotive"] then
+  for _,name in pairs(kazuya_blacklist) do
     mu_blacklist[name] = true
   end
 end
