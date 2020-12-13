@@ -1,0 +1,11 @@
+{
+	"name": "DeadlockResearchNotifications",
+	"version": "1.0.2",
+	"title": "Deadlock's Research Notifications",
+	"author": "Deadlock989",
+	"contact": "",
+    "homepage": "",
+	"dependencies": ["base >= 0.18"],
+	"description": "Displays a \"notification\" in chat when your force completes research. Useful if you want to stay informed about your research queue's progress. Also includes an option to force research queues to be turned on at all times.",
+	"factorio_version": "1.1"
+}
