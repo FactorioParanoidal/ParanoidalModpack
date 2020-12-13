@@ -1,5 +1,5 @@
-require "util"
-local mod_gui = require("mod-gui")
+require ("util")
+local mod_gui = require ("mod-gui")
 
 
 MOD_NAME = "SpaceMod"
@@ -358,7 +358,7 @@ function get_spacex_cb(entity)
 	
 	if satellite > 0 then
 		debugp("spacex satellite")
-		cb.parameters = {parameters = {
+		cb.parameters = {
 			{
 				signal = {
 					type = "item",
@@ -375,10 +375,10 @@ function get_spacex_cb(entity)
 				count = 1,
 				index = 2
 			}
-		}}	
+		}	
 	elseif (dsc > 0) or (dac > 0) then
 		debugp("spacex drydock")
-		cb.parameters = {parameters = {
+		cb.parameters = {
 			{
 				signal = {
 					type = "item",
@@ -403,7 +403,7 @@ function get_spacex_cb(entity)
 				count = 2,
 				index = 3
 			}
-		}}		
+		}		
 	elseif (fusion > 0) or
 			(fuelcell > 0) or
 			(hull > 0) or
@@ -415,7 +415,7 @@ function get_spacex_cb(entity)
 			(astro > 0) or
 			(ftl > 0) then
 		debugp("spacex endphase")
-		cb.parameters = {parameters = {
+		cb.parameters = {
 			{
 				signal = {
 					type = "item",
@@ -504,9 +504,9 @@ function get_spacex_cb(entity)
 				count = 3,
 				index = 11
 			}
-		}}	
+		}	
 	else
-		cb.parameters = {parameters = {}}
+		cb.parameters = {}
 	end
 		
 			-- cb.parameters = {parameters = {
