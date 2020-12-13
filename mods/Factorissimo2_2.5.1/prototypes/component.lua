@@ -324,86 +324,13 @@ data:extend({
 		circuit_connector_sprites = circuit_connector_definitions["lamp"].sprites,
 		circuit_wire_max_distance = 0,
 	},
-	
-	{
-		type = "container",
-		name = "factory-overlay-controller",
-		icon = "__base__/graphics/icons/iron-chest.png",
-		icon_size = 32,
-		flags = {},
-		minable = nil,
-		max_health = 100,
-		corpse = "small-remnants",
-		open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
-		close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
-		resistances = {},
-		collision_box = {{-0.35, -0.35}, {0.35, 0.35}},
-		collision_mask = {},
-		selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
-		inventory_size = 4,
-		vehicle_impact_sound =	{ filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
-		picture = table.deepcopy(data.raw["container"]["iron-chest"].picture),
-		circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
-		circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
-		circuit_wire_max_distance = 0
-	},
+})
 
-	{
-		type = "container",
-		name = "factory-overlay-display",
-		icon = "__base__/graphics/icons/iron-chest.png",
-		icon_size = 32,
-		flags = {"not-on-map"},
-		minable = nil,
-		max_health = 100,
-		corpse = "small-remnants",
-		open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
-		close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
-		resistances = {},
-		collision_box = {{-1.85, -1.85}, {1.85, 1.85}},
-		collision_mask = {},
-		selection_box = {{-2, -2}, {2, 2}},
-		selectable_in_game = false,
-		scale_info_icons = true,
-		inventory_size = 4,
-		vehicle_impact_sound =	{ filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
-		picture = blank(),
-		circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
-		circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
-		circuit_wire_max_distance = 0
-	},
-	{
-		type = "mining-drill",
-		name = "factory-port-marker",
-		icon = "__base__/graphics/icons/electric-mining-drill.png",
-		icon_size = 32,
-		flags = {"not-on-map"},
-		minable = nil,
-		max_health = 40,
-		resource_categories = {"basic-solid"},
-		selection_box = {{-0.4,-0.4},{0.4,0.4}},
-		selectable_in_game = false,
-		collision_box = {{-0.4,-0.4},{0.4,0.4}},
-		collision_mask = {},
-		energy_source = {
-			type = "electric",
-			usage_priority = "secondary-output",
-			render_no_power_icon = false,
-			render_no_network_icon = false,
-		},
-		vehicle_impact_sound = {filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65},
-		animations = {
-			north = ablank(),
-			east = ablank(),
-			south = ablank(),
-			west = ablank(),
-		},
-		mining_speed = 0.0001,
-		energy_usage = "1000MW",
-		mining_power = 3,
-		resource_searching_radius = 0.9,
-		vector_to_place_result = {0,-0.8},
-	},
+local overlay_controller = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"])
+overlay_controller.name = "factory-overlay-controller"
+overlay_controller.circuit_wire_max_distance = 0
+data:extend({
+	overlay_controller
 })
 
 local function create_dummy_connector(dir, dx, dy, pictures)
