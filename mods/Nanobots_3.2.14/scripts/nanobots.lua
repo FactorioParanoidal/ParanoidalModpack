@@ -446,7 +446,7 @@ function Queue.build_tile_ghost(data)
     local tile, hidden_tile = surface.get_tile(position), surface.get_hidden_tile(position)
     local force = ghost.force
     local tile_was_mined = hidden_tile and tile.prototype.can_be_part_of_blueprint and player.mine_tile(tile)
-    local ghost_was_revived = ghost.valid and ghost.revive() -- Mining tiles invalidates ghosts
+    local ghost_was_revived = ghost.valid and ghost.revive({raise_revive=true}) -- Mining tiles invalidates ghosts
     if not (tile_was_mined or ghost_was_revived) then
         return insert_or_spill_items(player, {data.item_stack})
     end
@@ -462,7 +462,7 @@ function Queue.build_tile_ghost(data)
         surface.set_tiles({{name = tile_ptype.name, position = position}}, true, true, false, true)
     end
 
-    surface.create_entity {name = 'nano-sound-build-tiles', position = position}
+    surface.play_sound {path = 'nano-sound-build-tiles', position = position}
 end
 
 function Queue.upgrade_ghost(data)
@@ -491,6 +491,7 @@ function Queue.upgrade_ghost(data)
     end
 
     create_projectile('nano-projectile-constructors', entity.surface, entity.force, player.position, entity.position)
+    surface.play_sound {path = 'utility/build_small', position = entity.position}
     entity.health = (entity.health > 0) and ((data.item_stack.health or 1) * entity.prototype.max_health)
 end
 
@@ -642,10 +643,6 @@ local function queue_ghosts_in_range(player, pos, nano_ammo)
                                         target = ghost.position,
                                         speed = 0.5
                                     }
-                                    ghost.surface.create_entity {
-                                        name = 'nano-sound-repair',
-                                        position = ghost.position
-                                    }
                                     queue_count(1)
                                     ammo_drain(player, nano_ammo, 1)
                                 end --repair
@@ -694,10 +691,6 @@ local function everyone_hates_trees(player, pos, nano_ammo)
                         force = player.force,
                         target = stupid_tree,
                         speed = .5
-                    }
-                    player.surface.create_entity {
-                        name = 'nano-sound-termite',
-                        position = stupid_tree.position
                     }
                     ammo_drain(player, nano_ammo, 1)
                 end
