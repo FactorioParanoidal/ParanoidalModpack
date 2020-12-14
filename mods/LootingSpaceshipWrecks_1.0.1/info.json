@@ -1,0 +1,13 @@
+{
+  "name": "LootingSpaceshipWrecks",
+  "version": "1.0.1",
+  
+  "title": "Looting Spaceship Wrecks",
+  "description": "Drops some exra items from spaceship remants",
+  
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base"],
+  "factorio_version": "1.0"
+}
