@@ -52,6 +52,14 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
     end
   end
   
+  -- Save GUI opened by any player
+  local opened_by_players = {}
+  for _,p in pairs(game.players) do
+    if p.opened == carriage then
+      table.insert(opened_by_players, p)
+    end
+  end
+  
   -- Flip orientation if needed
   if flip then
     local foo
@@ -69,8 +77,10 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
 
   -- Save the kills stat for artillery wagons
   local kills = nil
+  local damage_dealt = nil
   if carriage.type == "artillery-wagon" then
     kills = carriage.kills
+    damage_dealt = carriage.damage_dealt
   end
 
   -- Save the artillery wagon ammunition inventory
@@ -148,6 +158,7 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
     if backer_name then newCarriage.backer_name = backer_name end
     if last_user then newCarriage.last_user = last_user end
     if kills then newCarriage.kills = kills end
+    if damage_dealt then newCarriage.damage_dealt = damage_dealt end
     newCarriage.minable = minable
     newCarriage.destructible = destructible
     newCarriage.operable = operable
@@ -225,8 +236,12 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
       -- If the saved schedule has no stops, do not write to train.schedule.  In 0.17.59, this will cause a script error.
     end
     newCarriage.train.manual_mode = manual_mode
-
-
+    
+    -- Restore the GUI opened by players
+    for _,p in pairs(opened_by_players) do
+      p.opened = newCarriage
+    end
+    
     --game.print("Finished replacing. Used direction "..newDirection..", new orientation: " .. newCarriage.orientation)
     return newCarriage
 
