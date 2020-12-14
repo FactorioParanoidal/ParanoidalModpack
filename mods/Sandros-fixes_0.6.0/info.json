@@ -1,0 +1,14 @@
+{
+  "name": "Sandros-fixes",
+  "version": "0.6.0",
+  "factorio_version": "1.1",
+  "title": "Sandro's Fixes",
+  "author": "SuperSandro2000",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64247",
+  "dependencies": [
+    "? angelsexploration >= 0.3.9",
+    "? angelspetrochem >= 0.9.17",
+    "? PCPRedux >= 1.0.3"
+  ],
+  "description": "Sorts and organizes the crafting menu. Currently supports AngelsBobs with Industries Overhaul and Petrochemical Redux."
+}
