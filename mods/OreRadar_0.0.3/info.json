@@ -1,0 +1,14 @@
+{
+  "name": "OreRadar",
+  "version": "0.0.3",
+  "license": "MIT",
+  
+  "title": "Ore Radar",
+  "description": "New radar, that scans ore patches; needs power to open new ore patches",
+  
+  "author": "darkfrei",
+  
+  "dependencies": ["base","? aai-industry"],
+
+  "factorio_version": "1.1"
+}
