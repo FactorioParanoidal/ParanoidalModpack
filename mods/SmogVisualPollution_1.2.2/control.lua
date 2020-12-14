@@ -29,7 +29,15 @@ function smog.load() end
 
 script.on_load(smog.load)
 
-function smog.migrate() global.smog=global.smog or {} global.smog[1]=global.smog[1] or {} smog.on_surface_created({surface_index=1}) end
+function smog.migrate() 
+--	global.smog=global.smog or {} 
+--	global.smog[1]=global.smog[1] or {} 
+	global.smog={{}} 
+	global.chunk_handlers = nil -- without this thing we get new layer after every configuration change
+	rendering.clear('SmogVisualPollution')
+
+	smog.on_surface_created({surface_index=1})
+end
 
 function smog.on_chunk_deleted(ev) 
   local t=global.smog[ev.surface_index] 
@@ -52,20 +60,27 @@ function smog.pollution_to_color (pollution)
 end
 
 function smog.on_chunk_generated(ev) 
-  local t=global.smog[ev.surface_index] 
+	local surface_index = ev.surface_index or ev.surface.index
+  local t=global.smog[surface_index] 
   
   if (t) then 
-    local surface = game.surfaces[ev.surface_index]
+--	game.print ('ev.surface_index:' .. surface_index)  
+    local surface = game.surfaces[surface_index]
     local x,y=bboxtochunk(ev.area) 
     t[x]=t[x] or {}
     local color = smog.pollution_to_color (surface.get_pollution(ev.area.left_top))
     local rid = rendering.draw_rectangle{color = color, surface=surface,filled=true,visible=true,left_top=ev.area.left_top,right_bottom=ev.area.right_bottom}
+--	rendering.draw_circle{color={r=math.random(), g=math.random(), b=math.random()}, 
+--		radius=32*math.random(), 
+--		width=1, filled=false, target=…, surface=surface, time_to_live=…, forces=…, players=…, visible=…, draw_on_ground=…, only_in_alt_mode=…} → uint64
+
     t[x][y] = rid
-    
     -- handlers for ticks
     if not global.chunk_handlers then global.chunk_handlers = {} end
     local chunk_handlers = global.chunk_handlers
     table.insert (chunk_handlers, {surface=surface, position = {x=x*32,y=y*32}, rid=rid})
+  else
+--	game.print ('no v.surface_index:' .. surface_index)    
   end 
 end
 
@@ -96,7 +111,7 @@ function smog.tick() -- no arguments in tick
         local surface = chunk_handler.surface
         local position = chunk_handler.position
         local rid = chunk_handler.rid -- id of rendering element
-        local valid = smog.tick_chunk(surface, position,rid)
+        local valid = smog.tick_chunk(surface, position,rid, math.floor(#chunk_handlers/chunks_per_tick))
         if not valid then
           -- log ('invalid chunk was deleted')
           if i < #chunk_handlers then
@@ -141,15 +156,24 @@ function smog.tick_surface(surface)
   end 
 end
 
-function smog.tick_chunk(surface, position,rid)
+function smog.tick_chunk(surface, position,rid, ttl)
   if not surface.valid then return false end -- sometimes surfaces are deleted, see https://mods.factorio.com/mod/SmogVisualPollution/discussion/5d4ff40e1d1309000bff3394
   
   local mm=settings.global['svp-min-pollution'].value 
   local mx=settings.global['svp-max-pollution'].value
-	local v=math.min(surface.get_pollution(position),mx) 
+  local v=math.min(surface.get_pollution(position),mx) 
   local pct=math.max(0,v-mm)/(mx-mm) -- from 0 to 1
 	if(pct>0)then
     rendering.set_color(rid, {r=pct*0.3,g=pct*0.3,b=pct*0.3,a=pct*0.6})
+--    rendering.set_color(rid, {r=pct*0.1,g=pct*0.1,b=pct*0.1,a=pct*0.2}) -- was too much by to many layers
+
+	-- here is a way how to get how much layers we have; change false to true
+	if false then
+		rendering.draw_circle{color={r=math.random(), g=math.random(), b=math.random()}, 
+		radius=16*math.random(), 
+		width=1, filled=false, target=position, surface=surface, time_to_live=ttl}
+	end
+	
     if(not rendering.get_visible(rid))then 
       rendering.set_visible(rid, true) 
     end 
