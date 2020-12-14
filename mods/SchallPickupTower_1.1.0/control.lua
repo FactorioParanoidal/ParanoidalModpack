@@ -4,6 +4,12 @@ local PTrender = require("lib.PTrender")
 
 
 
+local function counts_add(t, k, amtadd, processzero)
+  if processzero or amtadd > 0 then
+    t[k] = (t[k] or 0) + amtadd
+  end
+end
+
 local function contain_negative(t, k)
   return t[k] and t[k] < 0
 end
@@ -17,6 +23,7 @@ local function filter_update(unlimitedmode, t, k, chg)
     t[k] = t[k] + chg
   end
 end
+
 
 
 local function add_PT(e)
@@ -95,7 +102,7 @@ local function pickup_items(e)
       end
       if suc_insert > 0 then
         totalcnt = totalcnt + suc_insert
-        item_cnt[stack.name] = (item_cnt[stack.name] or 0) + suc_insert
+        counts_add(item_cnt, stack.name, suc_insert)
         filter_update(unlimitedmode, filters, stack.name, suc_insert)
         stack.clear()
       end

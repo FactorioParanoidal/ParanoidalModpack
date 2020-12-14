@@ -66,7 +66,7 @@ end
 
 
 PTlib.PT_icon_layer = {icon = "__SchallPickupTower__/graphics/icons/pickup-tower.png", icon_size = 128, icon_mipmaps = 3}
-PTlib.PT_tech_icon_layer = {icon = "__SchallPickupTower__/graphics/technology/pickup-tower.png", icon_size = 128}
+PTlib.PT_tech_icon_layer = {icon = "__SchallPickupTower__/graphics/technology/pickup-tower.png", icon_size = 256, icon_mipmaps = 4}
 
 local tier_layer = {
   [1] = {icon = "__SchallPickupTower__/graphics/icons/mk1.png", icon_size = 128, icon_mipmaps = 3},
@@ -91,12 +91,10 @@ function PTlib.create_flying_text_item(surface, position, itempt, amountadd, sou
   if amountadd > 0 then
     sign = "+"
   end
-  -- if counts > 0 then
-    text = "description.Schall-flying-text-item"
-  -- else
-  --   text = "description.Schall-flying-text-item-deplete"
-  -- end
-  surface.create_entity{ name = "flying-text", position = position, text = {text, itempt.localised_name, sign, amountadd, counts} }
+  if counts == 0 then
+    color = {r=1, g=0.14, b=0}
+  end
+  surface.create_entity{ name = "flying-text", position = position, color = color, text = {"description.Schall-flying-text-item", itempt.localised_name, sign, amountadd, counts} }
 end
 
 
