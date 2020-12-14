@@ -120,7 +120,12 @@ local function get_opened_inventory(player)
         if player.opened_self then
             inv = player.get_main_inventory()
         elseif player.opened_gui_type == defines.gui_type.entity then
-            inv = player.opened.get_output_inventory()
+            local opened = player.opened
+            if opened.type == 'spider-vehicle' then
+                inv = opened.get_inventory(defines.inventory.spider_trunk)
+            else
+                inv = opened.get_output_inventory()
+            end
         end
     end
     return inv

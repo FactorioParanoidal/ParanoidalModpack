@@ -5,7 +5,8 @@ local types = {
     ['car'] = defines.inventory.car_trunk,
     ['cargo-wagon'] = defines.inventory.cargo_wagon,
     ['container'] = defines.inventory.chest,
-    ['logistic-container'] = defines.inventory.chest
+    ['logistic-container'] = defines.inventory.chest,
+    ['spider-vehicle'] = defines.inventory.spider_trunk
 }
 
 local function sort_inventory(event)
