@@ -3,8 +3,8 @@ data:extend
   {
     type = "technology",
     name = "inserter-capacity-bonus-8",
-    icon = "__base__/graphics/technology/inserter-capacity.png",
-    icon_size = 128,
+    icons = util.technology_icon_constant_stack_size("__base__/graphics/technology/inserter-capacity.png"),
+    icon_size = 256, icon_mipmaps = 4,
     prerequisites = {"inserter-capacity-bonus-7", "space-science-pack"},
   effects =
   {
