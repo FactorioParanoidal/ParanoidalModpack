@@ -38,8 +38,8 @@ if (mods['Dectorio']) then
 end
 
 if (mods['Bio_Industries']) then 
-	if BI.Settings.BI_Solar_Additions then
-		data.raw["tile"]["bi-solar-mat"].minable = {hardness = 0, mining_time = 0, result = "bi-solar-mat"}
-	end
+	--drd if BI.Settings.BI_Solar_Additions then
+	--	data.raw["tile"]["bi-solar-mat"].minable = {hardness = 0, mining_time = 0, result = "bi-solar-mat"}
+	--end
 	data.raw["tile"]["bi-wood-floor"].minable = {hardness = 0, mining_time = 0, result = "wood"}
 end
