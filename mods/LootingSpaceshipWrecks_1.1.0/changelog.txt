@@ -3,3 +3,7 @@ Version: 1.0.1
 Date: 2020-09-18
   Changes:
     - first release
+Version: 1.1.0
+  Changes:
+    - items added to player, spaceship and debris inventory
+    
