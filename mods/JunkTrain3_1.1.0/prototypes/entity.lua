@@ -129,7 +129,7 @@ data:extend({
         braking_force = 20,
         friction_force = 0.50,
         -- this is a percentage of current speed that will be subtracted
-        air_resistance = 0.0075, --drd from 0.03
+        air_resistance = 0.0075,   --drd 0.03
         energy_per_hit_point = 5,
         resistances =
         {
@@ -142,7 +142,7 @@ data:extend({
         burner =
     {
       fuel_category = "chemical",
-      effectivity = 0.5, --drd from 0.6
+      effectivity = 0.5,    --drd 0.6
       fuel_inventory_size = 2,
       smoke =
       {
@@ -404,14 +404,12 @@ data:extend({
     rail_overlay_animations = make_4way_animation_from_spritesheet(
     {
       filename = "__base__/graphics/entity/train-stop/train-stop-ground.png",
-      line_length = 4,
       width = 194,
       height = 189,
       direction_count = 4,
       shift = util.by_pixel(0, -0.5),
         hr_version = {
           filename = "__base__/graphics/entity/train-stop/hr-train-stop-ground.png",
-          line_length = 4,
           width = 386,
           height = 377,
           direction_count = 4,
@@ -424,14 +422,12 @@ data:extend({
     {
       {
         filename = "__base__/graphics/entity/train-stop/train-stop-bottom.png",
-        line_length = 4,
         width = 71,
         height = 146,
         direction_count = 4,
         shift = util.by_pixel(-0.5, -27),
           hr_version = {
             filename = "__base__/graphics/entity/train-stop/hr-train-stop-bottom.png",
-            line_length = 4,
             width = 140,
             height = 291,
             direction_count = 4,
@@ -441,7 +437,6 @@ data:extend({
       },
       {
         filename = "__base__/graphics/entity/train-stop/train-stop-shadow.png",
-        line_length = 4,
         width = 361,
         height = 304,
         direction_count = 4,
@@ -449,7 +444,6 @@ data:extend({
         draw_as_shadow = true,
           hr_version = {
             filename = "__base__/graphics/entity/train-stop/hr-train-stop-shadow.png",
-            line_length = 4,
             width = 720,
             height = 607,
             direction_count = 4,
@@ -464,14 +458,12 @@ data:extend({
     {
       {
         filename = "__base__/graphics/entity/train-stop/train-stop-top.png",
-        line_length = 4,
         width = 156,
         height = 153,
         direction_count = 4,
         shift = util.by_pixel(0, -50.5),
           hr_version = {
             filename = "__base__/graphics/entity/train-stop/hr-train-stop-top.png",
-            line_length = 4,
             width = 311,
             height = 305,
             direction_count = 4,
@@ -481,7 +473,6 @@ data:extend({
       },
       {
         filename = "__base__/graphics/entity/train-stop/train-stop-top-mask.png",
-        line_length = 4,
         width = 154,
         height = 148,
         direction_count = 4,
@@ -489,7 +480,6 @@ data:extend({
         shift = util.by_pixel(0, -49),
           hr_version = {
             filename = "__base__/graphics/entity/train-stop/hr-train-stop-top-mask.png",
-            line_length = 4,
             width = 306,
             height = 295,
             direction_count = 4,
