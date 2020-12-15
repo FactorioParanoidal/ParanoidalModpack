@@ -4,7 +4,7 @@ local function add(collection, list)
   end 
 end
 script.on_init(function()
-  if remote.interfaces["freeplay"] then
+  if remote.interfaces["freeplay"] and settings.global["lootingspaceshipwrecks-bonus-start-items"].value then
     local created_items = remote.call("freeplay", "get_created_items")
     local ship_items    = remote.call("freeplay", "get_ship_items")
     local debris_items  = remote.call("freeplay", "get_debris_items")
@@ -76,8 +76,6 @@ script.on_init(function()
     add(debris_items, {    
             ["copper-plate"] = 10
          })
-    --local items_to_insert = remote.call("freeplay", "get_created_items")
-    --items_to_insert["burner-ore-crusher"] = (items_to_insert["burner-ore-crusher"] or 0) + 1
     remote.call("freeplay", "set_created_items", created_items)
     remote.call("freeplay", "set_ship_items", ship_items)
     remote.call("freeplay", "set_debris_items", debris_items)
