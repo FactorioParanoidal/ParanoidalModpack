@@ -4,6 +4,7 @@ require("prototypes.techfixes")
 require("prototypes.change-background")
 require("prototypes.warfare")
 require("prototypes.recipefixes")
+require("prototypes.pipes")
 
---должно быть последним. После всем рецептов.
+--должно быть последним. После всех рецептов.
 require("recipes.flowfix")
