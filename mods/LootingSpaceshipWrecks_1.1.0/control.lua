@@ -9,22 +9,22 @@ script.on_init(function()
     local ship_items    = remote.call("freeplay", "get_ship_items")
     local debris_items  = remote.call("freeplay", "get_debris_items")
     add(created_items, { 
-        ["iron-plate"] = 200,
-		["iron-gear-wheel"] =158,
+        --["iron-plate"] = 200,
+		--["iron-gear-wheel"] =158,
 
 		["inserter"]=50,
 		["long-handed-inserter"]=25,
 		["fast-inserter"] =25,
 		--player.insert{name="filter-inserter", count=25}
 		
-		["basic-transport-belt"]=200,
+		["basic-transport-belt"]=100,
 		--player.insert{name="transport-belt", count=200}
 		["medium-electric-pole"]=25,
-		["big-electric-pole"]=10,
+		["big-electric-pole"]=5,
 		--player.insert{name="electric-mining-drill", count=3}
-		["stone-furnace"] =1,
+		--["stone-furnace"] =1,
 		["assembling-machine-2"]=1,
-		["pipe"]=50,
+		
 		["steel-chest"]=5,
 		["wooden-chest"]=5,
 		["iron-chest"] =5,
@@ -60,8 +60,6 @@ script.on_init(function()
   ["nuclear-fuel"]=1,
   ["intelligent-io"]=1,
   ["intergrated-electronics"]=2,
-  ["aluminium-plate"]=16,
-  ["titanium-plate"]=1,
   ["repair-pack"]=5,
   --player.insert{name="angels-wire-platinum", count=5}
   
@@ -70,11 +68,18 @@ script.on_init(function()
 ----------------------------------
     add(ship_items, {
             ["copper-plate"] = 187,
-            ["stone"] = 30
+            ["stone"] = 30,
+        ["medium-electric-pole"] = 1,
+        ["salvaged-assembling-machine"] = 2,
+        ["salvaged-lab"] = 1
+        --["salvaged-generator"] = 1
+			
+			
         })
-------------------------------------
+----------------------------------
     add(debris_items, {    
-            ["copper-plate"] = 10
+            ["copper-plate"] = 10,
+			
          })
     remote.call("freeplay", "set_created_items", created_items)
     remote.call("freeplay", "set_ship_items", ship_items)
