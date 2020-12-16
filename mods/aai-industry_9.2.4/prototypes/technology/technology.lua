@@ -102,7 +102,7 @@ data:extend{
         type = "technology",
         name = "basic-fluid-handling",
         icon = "__base__/graphics/technology/fluid-handling.png",
-        icon_size = 128,
+        icon_size = 256,
         order = "a",
         prerequisites = {"electricity"},
         unit = {
