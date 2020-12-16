@@ -9,7 +9,7 @@ data:extend({
     type = "unlock-recipe",
     recipe = "oil-steam-boiler"
   }},
-  prerequisites = {"oil-processing","concrete"},
+  prerequisites = {"oil-processing"},
   unit =
   {
     count = 200,
@@ -32,7 +32,7 @@ data:extend({
     type = "unlock-recipe",
     recipe = "oil-steam-boiler-2"
   }},
-  prerequisites = {"OilBurning"},
+  prerequisites = {"OilBurning","concrete"},
   unit =
   {
     count = 400,
