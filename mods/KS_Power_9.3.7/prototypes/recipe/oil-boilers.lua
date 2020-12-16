@@ -9,7 +9,7 @@ data:extend({
       {"boiler", 1},
 	  {"basic-circuit-board", 5},
 	  {"copper-plate", 50},
-      {"concrete", 6},
+      {"stone-brick", 10},
     },
     result = "oil-steam-boiler"
  },
