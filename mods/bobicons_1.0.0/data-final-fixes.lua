@@ -469,6 +469,19 @@ data.raw["module"]["speed-module-3"].icon = "__bobicons__/graphics/icons/base/sp
 data.raw["module"]["speed-module-3"].icon_size = 128
 end
 
+if data.raw["module"]["god-module-1"] then
+data.raw["module"]["god-module-1"].icon = "__bobicons__/graphics/icons/bobmodules/god-module-1-128.png"
+data.raw["module"]["god-module-1"].icon_size = 128
+data.raw["module"]["god-module-2"].icon = "__bobicons__/graphics/icons/bobmodules/god-module-2-128.png"
+data.raw["module"]["god-module-2"].icon_size = 128
+data.raw["module"]["god-module-3"].icon = "__bobicons__/graphics/icons/bobmodules/god-module-3-128.png"
+data.raw["module"]["god-module-3"].icon_size = 128
+data.raw["module"]["god-module-4"].icon = "__bobicons__/graphics/icons/bobmodules/god-module-4-128.png"
+data.raw["module"]["god-module-4"].icon_size = 128
+data.raw["module"]["god-module-5"].icon = "__bobicons__/graphics/icons/bobmodules/god-module-5-128.png"
+data.raw["module"]["god-module-5"].icon_size = 128
+end
+
 if mods["ShinyBobGFX"] then
 --[[
 data.raw.item["chemical-plant"].icon = "__ShinyBobGFX__/graphics/icons/chemical-plant.png"
