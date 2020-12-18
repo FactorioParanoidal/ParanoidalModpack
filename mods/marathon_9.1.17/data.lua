@@ -13,7 +13,6 @@ require("prototypes.recipe-weapon")
 require("prototypes.recipe-bob-steam-power")
 require("prototypes.recipe-bob-pipes")
 require("prototypes.recipe-bob-pump")
-require("prototypes.item-fuelvalue")
 
 --require("prototypes.new")
 
