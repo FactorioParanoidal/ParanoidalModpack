@@ -12,7 +12,7 @@ data:extend({
   prerequisites = {"oil-processing"},
   unit =
   {
-    count = 200,
+    count = 20,
     ingredients =
     {
       {"automation-science-pack", 1},
@@ -35,7 +35,7 @@ data:extend({
   prerequisites = {"OilBurning","concrete"},
   unit =
   {
-    count = 400,
+    count = 200,
     ingredients =
     {
       {"automation-science-pack", 1},
@@ -58,7 +58,7 @@ data:extend({
   prerequisites = {"OilBurning-2"},
   unit =
   {
-    count = 500,
+    count = 300,
     ingredients =
     {
       {"automation-science-pack", 1},
