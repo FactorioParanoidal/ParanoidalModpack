@@ -24,6 +24,11 @@
     },
     
     {
+      "name": "angels-smelting-extended",
+      "enabled": true
+    },
+    
+    {
       "name": "angelsbioprocessing",
       "enabled": true
     },
@@ -224,6 +229,11 @@
     },
     
     {
+      "name": "DeadlockResearchNotifications",
+      "enabled": true
+    },
+    
+    {
       "name": "DeleteEmptyChunks",
       "enabled": true
     },
@@ -285,6 +295,11 @@
     
     {
       "name": "FastRemoveTiles",
+      "enabled": true
+    },
+    
+    {
+      "name": "Fe-C-accumulator",
       "enabled": true
     },
     
@@ -369,6 +384,11 @@
     },
     
     {
+      "name": "LootingSpaceshipWrecks",
+      "enabled": true
+    },
+    
+    {
       "name": "LtnManager",
       "enabled": true
     },
@@ -434,6 +454,11 @@
     },
     
     {
+      "name": "music-new",
+      "enabled": true
+    },
+    
+    {
       "name": "MxlChievements",
       "enabled": true
     },
@@ -481,6 +506,11 @@
     {
       "name": "Orbital Ion Cannon",
       "enabled": false
+    },
+    
+    {
+      "name": "OreRadar",
+      "enabled": true
     },
     
     {
@@ -665,7 +695,7 @@
     
     {
       "name": "SchallTankPlatoon",
-      "enabled": false
+      "enabled": true
     },
     
     {
@@ -680,16 +710,11 @@
     
     {
       "name": "Shortcuts-ick",
-      "enabled": false
-    },
-    
-    {
-      "name": "SingleColorTerrain",
       "enabled": true
     },
     
     {
-      "name": "Skip Burner Stage",
+      "name": "SingleColorTerrain",
       "enabled": true
     },
     
@@ -760,7 +785,7 @@
     
     {
       "name": "upgrade-planner-next",
-      "enabled": false
+      "enabled": true
     },
     
     {
