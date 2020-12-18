@@ -396,7 +396,7 @@ function more_shields_than_turrets_fix()
 			remove_energy(force)
 			rescan_for_turrets(force)
 		else
-			kts_print("Shield and turret counts match for " .. force.name .. ". Nothing to fix.")
+			-- drd kts_print("Shield and turret counts match for " .. force.name .. ". Nothing to fix.")
 		end
 		num_shields = 0
 		num_turrets = 0
