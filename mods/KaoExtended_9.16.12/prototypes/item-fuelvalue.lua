@@ -63,3 +63,7 @@ data.raw["item"]["small-electric-pole"].fuel_value = "2MJ"
 data.raw.item["solid-oil-residual"].fuel_value = "8MJ"
 data.raw.item["solid-oil-residual"].fuel_emissions_multiplier = 9
 data.raw.item["solid-oil-residual"].fuel_category = "chemical"
+
+data.raw.item["pellet-coke"].fuel_value = "15MJ"
+
+
