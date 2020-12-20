@@ -19,8 +19,9 @@ data:extend(
       {type="item", name="pipe", amount=4},
     },
     order = "ya",
-  },
-  {
+  }
+  --[[ drd
+  ,{
     type = "recipe",
     name = "angels-iron-pipe-to-ground-casting",
     category = "casting",
@@ -35,8 +36,10 @@ data:extend(
       {type="item", name="pipe-to-ground", amount=2},
     },
     order = "yb",
-  },
+  }
+  ]]-- drd
 })
+
 -- bobs pipe casting
 if mods["boblogistics"] and mods["bobplates"] then
   --call pipe metal types (metal_tab)
@@ -48,7 +51,7 @@ if mods["boblogistics"] and mods["bobplates"] then
     m_pipe.ingredients ={{type="fluid", name="liquid-molten-"..metal, amount=40},}
     m_pipe.results={{type="item", name=metal.."-pipe", amount=4},}
     --metal UG pipes
-    local u_pipe=table.deepcopy(data.raw.recipe["angels-iron-pipe-to-ground-casting"])
+--[[    local u_pipe=table.deepcopy(data.raw.recipe["angels-iron-pipe-to-ground-casting"])
     local ug_multi={
       ["copper"]=150,
       ["stone"]=15,
@@ -60,32 +63,32 @@ if mods["boblogistics"] and mods["bobplates"] then
       ["nitinol"]=230,
       ["tungsten"]=21,
       ["copper-tungsten"]=5 --should be 23
-    }
+    } ]]--
     --iron is 15x for UG
-    u_pipe.name="angels-"..metal.."-pipe-to-ground-casting"
-    u_pipe.subgroup="angels-"..metal.."-casting"
-    u_pipe.ingredients ={{type="fluid", name="liquid-molten-"..metal, amount=ug_multi[metal]},}
-    u_pipe.results={{type="item", name=metal.."-pipe-to-ground", amount=2},}
+    --u_pipe.name="angels-"..metal.."-pipe-to-ground-casting"
+    --u_pipe.subgroup="angels-"..metal.."-casting"
+    --u_pipe.ingredients ={{type="fluid", name="liquid-molten-"..metal, amount=ug_multi[metal]},}
+    --u_pipe.results={{type="item", name=metal.."-pipe-to-ground", amount=2},}
     --tungsten-fixes
     if metal=="tungsten" then
       m_pipe.ingredients[1]={type="item", name="casting-powder-tungsten", amount=4}
       m_pipe.category = "sintering"
-      u_pipe.ingredients[1]={type="item", name="casting-powder-tungsten", amount=ug_multi[metal]}
-      u_pipe.category = "sintering"
+    --u_pipe.ingredients[1]={type="item", name="casting-powder-tungsten", amount=ug_multi[metal]}
+    --u_pipe.category = "sintering"
     end
     --plastic
     if metal=="plastic" then
       m_pipe.ingredients[1]={type="fluid", name="liquid-plastic", amount=4}
       m_pipe.subgroup="angels-alloys-casting"
-      u_pipe.ingredients[1]={type="fluid", name="liquid-plastic", amount=ug_multi[metal]}
-      u_pipe.subgroup="angels-alloys-casting"
+      --u_pipe.ingredients[1]={type="fluid", name="liquid-plastic", amount=ug_multi[metal]}
+      --u_pipe.subgroup="angels-alloys-casting"
     end
     --stone
     if metal=="stone" then
       m_pipe.ingredients[1]={type="item", name="stone", amount=4*5}
       m_pipe.category = "sintering"
-      u_pipe.ingredients[1]={type="item", name="stone", amount=ug_multi[metal]*5}
-      u_pipe.category = "sintering"
+      --u_pipe.ingredients[1]={type="item", name="stone", amount=ug_multi[metal]*5}
+      --u_pipe.category = "sintering"
     end
     --copper-tungsten
     if metal=="copper-tungsten" then
@@ -93,16 +96,19 @@ if mods["boblogistics"] and mods["bobplates"] then
       m_pipe.ingredients[2]={type="item", name="powder-copper", amount=1}
       m_pipe.category = "sintering"
       m_pipe.subgroup="angels-alloys-casting"
-      u_pipe.ingredients[1]={type="item", name="powdered-tungsten", amount=ug_multi[metal]*3}
-      u_pipe.ingredients[2]={type="item", name="powder-copper", amount=ug_multi[metal]*2}
-      u_pipe.category = "sintering"
-      u_pipe.subgroup="angels-alloys-casting"
+      --u_pipe.ingredients[1]={type="item", name="powdered-tungsten", amount=ug_multi[metal]*3}
+      --u_pipe.ingredients[2]={type="item", name="powder-copper", amount=ug_multi[metal]*2}
+      --u_pipe.category = "sintering"
+      --u_pipe.subgroup="angels-alloys-casting"
     end
     --ceramic
     --==NO CERAMICS AT THIS POINT==--
-    data:extend({m_pipe,u_pipe})
+    data:extend({m_pipe
+	--,u_pipe
+	})
   end
 end
+
 --SETTING UP CASTING MOLD ITEMS and RECIPES
 data:extend({
   --expendable mold recipe (want roasted)
@@ -196,8 +202,11 @@ data:extend({
 })
 --SET-UP BASE CASTING RECIPES TO COPY LATER
 --iron gears
+
+
 data:extend(
 {
+
   {
     type = "recipe",
     name = "angels-iron-gear-wheel-casting",
@@ -276,6 +285,8 @@ data:extend(
     order = "ye",
   },
 })
+
+
 if mods["bobplates"] then
 for n,metal in pairs(gears) do
     -- regular casting
