@@ -63,7 +63,7 @@ end
 -- @candidate_neighbour, a neighbour of main_entity
 -- @neighbours, neighbours list where add the calculated data
 function addNeighbourPositionDataOf(main_entity, candidate_neighbour, neighbours)
-	if candidate_neighbour and candidate_neighbour.position then
+	if candidate_neighbour and candidate_neighbour.valid and candidate_neighbour.position then
 		local _horizontal_direction = "same"
 		local _vertical_direction   = "same"
 

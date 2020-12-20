@@ -1,14 +1,14 @@
 {
   "name": "FluidMustFlow",
-  "version": "1.2.10",
+  "version": "1.2.15",
   "title": "Fluid Must Flow",
-  "author": "Linver, Krastor, iicyan",
+  "author": "Linver, Krastor",
   "contact": "Discord: Linver#1135",
   "homepage": "",
   "description": "Add huge ducts to help transport a lot of liquids and gases",
   "dependencies": 
   [
-	"base >= 1.0.0",
+	"base >= 1.1",
 	"(?) Squeak Through >= 1.3.0"
   ],
   "factorio_version": "1.1"

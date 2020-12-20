@@ -28,14 +28,8 @@ local fmf_intermediate_point_part_names =
 }
 local fmf_end_point_part_names          = 
 {
-	["duct-end-point-intake-south"] = true, 
-	["duct-end-point-intake-west"] = true, 
-	["duct-end-point-intake-north"] = true, 
-	["duct-end-point-intake-east"] = true, 
-	["duct-end-point-outtake-south"] = true, 
-	["duct-end-point-outtake-west"] = true, 
-	["duct-end-point-outtake-north"] = true, 
-	["duct-end-point-outtake-east"] = true
+	["duct-end-point-intake"] = true, 
+	["duct-end-point-outtake"] = true, 
 }
 local fmf_part_names = 
 {
@@ -50,14 +44,8 @@ local fmf_part_names =
 	-- Intermediate points
 	["non-return-duct"] = true,
 	-- End points
-	["duct-end-point-intake-south"] = true, 
-	["duct-end-point-intake-west"] = true, 
-	["duct-end-point-intake-north"] = true, 
-	["duct-end-point-intake-east"] = true, 
-	["duct-end-point-outtake-south"] = true, 
-	["duct-end-point-outtake-west"] = true, 
-	["duct-end-point-outtake-north"] = true, 
-	["duct-end-point-outtake-east"] = true
+	["duct-end-point-intake"] = true, 
+	["duct-end-point-outtake"] = true, 
 }
 local fmf_joinable = 
 ({
@@ -79,14 +67,8 @@ local possible_connections=
 	-- Intermediate points
 	["non-return-duct"] = {2, 0},
 	-- End points
-	["duct-end-point-intake-south"] = {1, 6}, 
-	["duct-end-point-intake-west"] = {1, 6}, 
-	["duct-end-point-intake-north"] = {1, 6}, 
-	["duct-end-point-intake-east"] = {1, 6}, 
-	["duct-end-point-outtake-south"] = {1, 6}, 
-	["duct-end-point-outtake-west"] = {1, 6}, 
-	["duct-end-point-outtake-north"] = {1, 6}, 
-	["duct-end-point-outtake-east"] = {1, 6}
+	["duct-end-point-intake"] = {1, 6}, 
+	["duct-end-point-outtake"] = {1, 6}, 
 }
 
 -- -- -- Duct connections control
@@ -342,7 +324,7 @@ function lookingforReverseJoinOfGhostEntity(entity)
 		local de_increment   = nil
 		local on_x           = true
 		
-		if in_direction == 2 or in_direction == 4 then -- horizontal reverse join
+		if in_direction == 2 or in_direction == 6 then -- horizontal reverse join
 			residual_space  = entity_perimenter.height
 			de_increment    = childs_perimenter.height
 			at_position.x   = at_position.x + entity_utils.downDifferenceToSizeCenter(entity_perimenter)
@@ -389,184 +371,6 @@ function ductsJoin(entity)
 	end
 end
 
--- -- -- Endpoint rotating entities
-
--- utils
-function getRightPrefix(end_point_name)
-	if end_point_name:find("intake") then
-		return "duct-end-point-intake"
-	else
-		return "duct-end-point-outtake"
-	end
-end
-
--- -- Callback for entities already placed that are rotating
-function endpointOnRotating(event)
-	local entity = event.entity or nil
-	if entity_utils.isAnEntity(entity) then
-		if isaEndPoint(entity.name) then		
-			local endpoint_prefix = getRightPrefix(entity.name)	
-			local rotated_entity  = nil
-			local contained_fluid = entity.fluidbox[1] or false
-			local with_damage     = entity.prototype.max_health - entity.health
-			local network         = entity.circuit_connection_definitions
-			local energy          = entity.energy or false
-			local pos             = entity.position
-			local force           = entity.force
-			local lastuser        = event.player_index
-			local direction       = entity.direction
-			local surface         = entity.surface
-				
-			if entity then
-				entity.destroy()
-			end
-
-			if direction == defines.direction.west then 
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-west",
-					position    = pos,
-					direction   = defines.direction.west,
-					force       = force,
-					player      = lastuser,
-					create_build_effect_smoke = false
-				}
-			elseif direction == defines.direction.north then
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-north",
-					position    = pos,
-					direction   = defines.direction.north,
-					force       = force,
-					player      = lastuser,
-					create_build_effect_smoke = false
-				}
-			elseif direction == defines.direction.east then
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-east",
-					position    = pos,
-					direction   = defines.direction.east,
-					force       = force,
-					player      = lastuser,
-					create_build_effect_smoke = false
-				}
-			else
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-south",
-					position    = pos,
-					direction   = defines.direction.south,
-					force       = force,
-					player      = lastuser,
-					create_build_effect_smoke = false
-				}
-			end	
-			-- Reinsert in the new entity the fluid of the destroyed entity
-			if contained_fluid then
-				rotated_entity.insert_fluid(contained_fluid)
-			end
-			-- Reinsert in the new entity the energy of the destroyed entity
-			if energy then
-				rotated_entity.energy = energy
-			end
-			-- Set in the new entity the health of the destroyed entity
-			if with_damage > 0 then
-				rotated_entity.damage(with_damage, game.forces.neutral)
-			end
-			-- Set old circuit network (if connected)
-			for c, tbl in pairs(network) do 
-				rotated_entity.connect_neighbour
-				{
-					target_entity     = tbl.target_entity,
-					wire              = tbl.wire,
-					source_circuit_id = tbl.source_circuit_id,
-					target_circuit_id = tbl.target_circuit_id
-				} 
-			end
-			
-			return true		
-		end
-	end
-	return false
-end
-
--- -- Callback for entities before be placed
-function endpointOnBuildRightFacing(entity)	
-	if entity_utils.isAnEntity(entity) then
-		if isaEndPoint(entity.name) then
-			local endpoint_prefix = getRightPrefix(entity.name)	
-			local rotated_entity  = nil
-			local with_damage     = entity.prototype.max_health - entity.health
-			local network         = entity.circuit_connection_definitions
-			local pos             = entity.position
-			local force           = entity.force
-			local lastuser        = entity.last_user
-			local direction       = entity.direction
-			local surface         = entity.surface
-
-			if entity then
-				entity.destroy()
-			end
-
-			if direction == defines.direction.south then 
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-south",
-					position    = pos,
-					direction   = defines.direction.south,
-					force       = force,
-					player      = lastuser
-				}
-			elseif direction == defines.direction.west then
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-west",
-					position    = pos,
-					direction   = defines.direction.west,
-					force       = force,
-					player      = lastuser
-				}
-			elseif direction == defines.direction.north then
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-north",
-					position    = pos,
-					direction   = defines.direction.north,
-					force       = force,
-					player      = lastuser
-				}
-			else
-				rotated_entity  = surface.create_entity
-				{
-					name        = endpoint_prefix .. "-east",
-					position    = pos,
-					direction   = defines.direction.east,
-					force       = force,
-					player      = lastuser
-				}
-			end
-			-- Set in the new entity the health of the entity in the inventory
-			if with_damage > 0 then
-				rotated_entity.damage(with_damage, game.forces.neutral)
-			end
-			-- Set old circuit network (if connected)
-			for c, tbl in pairs(network) do 
-				rotated_entity.connect_neighbour
-				{
-					target_entity     = tbl.target_entity,
-					wire              = tbl.wire,
-					source_circuit_id = tbl.source_circuit_id,
-					target_circuit_id = tbl.target_circuit_id
-				} 
-			end
-			
-			return true
-		end
-	end
-	return false
-end
-
 -- -- -- Adding controls events
 
 function updateSettingVariables()
@@ -586,10 +390,7 @@ function ductControlEvents(event)
 			removed = ductsConnectionsControlCallback(entity)
 		end
 		if not removed and entity_utils.isAnEntity(entity) then	
-			rotated_an_endpoint = endpointOnBuildRightFacing(entity)
-			if global.duct_invariant and not rotated_an_endpoint then
-				ductsJoin(entity)
-			end
+			ductsJoin(entity)
 		end
 	end
 end
@@ -601,8 +402,6 @@ function ductScriptBuiltEvents(event)
 	if entity and entity.valid then
 		if global.auto_join and isaPartofDucts(entity.name) then
 			lookingforDuctJoin(entity)
-		elseif isaEndPoint(entity.name)	then
-			endpointOnBuildRightFacing(entity)
 		end
 	end
 end
@@ -612,5 +411,3 @@ script.on_init(updateSettingVariables)
 script.on_configuration_changed(updateSettingVariables)
 script.on_event(build_events, ductControlEvents)
 script.on_event(script_build_events, ductScriptBuiltEvents)
-script.on_event(defines.events.on_player_rotated_entity, endpointOnRotating)
-
