@@ -13,7 +13,7 @@ data:extend(
     type = "double-setting",
     name = "paranoidal-flowfix-min-time",
     setting_type = "startup",
-    default_value = 5,
+    default_value = 0.5,
     minimum_value = 0.5,
     maximum_value = 100,
     order = "a"
