@@ -86,18 +86,18 @@ if mods["bobplates"] then
     if mods["boblogistics"] then
         for n, metal in pairs(metal_tab) do
             angelsmods.functions.OV.add_unlock("angels-" .. metal .. "-smelting-1", "angels-" .. metal .. "-pipe-casting")
-            angelsmods.functions.OV.add_unlock("angels-" .. metal .. "-smelting-1", "angels-" .. metal .. "-pipe-to-ground-casting")
+            --angelsmods.functions.OV.add_unlock("angels-" .. metal .. "-smelting-1", "angels-" .. metal .. "-pipe-to-ground-casting") --DrD
         end
         --patch non compliants
         --plastic
         angelsmods.functions.OV.add_unlock("plastics", "angels-plastic-pipe-casting")
-        angelsmods.functions.OV.add_unlock("plastics", "angels-plastic-pipe-to-ground-casting")
+        -- angelsmods.functions.OV.add_unlock("plastics", "angels-plastic-pipe-to-ground-casting")  --drd
         --stone
         angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-casting")
-        angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-to-ground-casting")
+        --angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-to-ground-casting") --DrD
         --copper-tungsten
         angelsmods.functions.OV.add_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-casting")
-        angelsmods.functions.OV.add_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-to-ground-casting")
+        --angelsmods.functions.OV.add_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-to-ground-casting") --DrD
     end
 end
 --find activation settings
@@ -118,14 +118,14 @@ if mods["angelsindustries"] and angelsmods.industries.components then
     angelsmods.functions.OV.add_unlock("angels-iron-smelting-3", "girder-stack-casting-fast")
     --if mods["bobplates"] then --replace iron gear icons --activates for all conditions
     
-        data.raw.recipe["angels-iron-gear-wheel-casting"].localised_name={"recipe-name.angels-advanced-regular","Mechanical Parts"}
+        --data.raw.recipe["angels-iron-gear-wheel-casting"].localised_name={"recipe-name.angels-advanced-regular","Mechanical Parts"} --drd
         data.raw.recipe["ASE-iron-gear-casting-expendable"].icons[1]={icon="__angelsindustries__/graphics/icons/mechanical-parts.png",icon_size=32,}
         data.raw.recipe["ASE-iron-gear-casting-expendable"].localised_name={"recipe-name.angels-advanced-expendable","Mechanical Parts"}
         data.raw.recipe["ASE-iron-gear-casting-advanced"].icons[1]={icon="__angelsindustries__/graphics/icons/mechanical-parts.png",icon_size=32,}
         data.raw.recipe["ASE-iron-gear-casting-advanced"].localised_name={"recipe-name.angels-advanced-crafting","Mechanical Parts"}
     --end
     --disable the recipes for iron gear wheels since they convert to recipes for mechanical parts
-    angelsmods.functions.OV.disable_recipe("angels-iron-gear-wheel-casting")
+    --angelsmods.functions.OV.disable_recipe("angels-iron-gear-wheel-casting") --drd
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-expendable")
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-advanced")
 end

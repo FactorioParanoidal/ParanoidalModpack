@@ -14,18 +14,18 @@ data:extend(
     },
     effects =
     {
-      {
-        type = "unlock-recipe",
-        recipe = "angels-iron-gear-wheel-casting"
-      },
+      -- {
+        -- type = "unlock-recipe",
+        -- recipe = "angels-iron-gear-wheel-casting"
+      -- },
       {
         type = "unlock-recipe",
         recipe = "angels-iron-pipe-casting"
       },
-      {
-        type = "unlock-recipe",
-        recipe = "angels-iron-pipe-to-ground-casting"
-      },
+      -- {
+        -- type = "unlock-recipe",
+        -- recipe = "angels-iron-pipe-to-ground-casting"
+      -- },
     },
     unit =
     {
