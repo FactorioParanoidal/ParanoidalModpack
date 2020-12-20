@@ -28,7 +28,7 @@ function _pipes_overlay.getDuctFixedPipePictures()
     sprites_builder.getEmptySprite()
   )
 end
-
+--[[
 function _pipes_overlay.getDuctFixedPipeCoversPictures(direction)
 	duct_cover = pipecoverspictures()
 	if     direction == defines.direction.east then
@@ -43,5 +43,5 @@ function _pipes_overlay.getDuctFixedPipeCoversPictures(direction)
 	
 	return duct_cover
 end
-
+--]]
 return _pipes_overlay

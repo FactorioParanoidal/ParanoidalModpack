@@ -153,75 +153,112 @@ local duct_underground_picture =
 --Initializing entities
 
 -- Duct Small
---base setting
-duct_small = util.table.deepcopy(data.raw["storage-tank"]["storage-tank"])
-duct_small.name = "duct-small"
-duct_small.fast_replaceable_group = "ducts"
-duct_small.next_upgrade = nil
-duct_small.icon = fmf_icons_path .. "duct-small.png"
-duct_small.icon_size = 64
-duct_small.minable = {mining_time = 0.4, result = "duct-small"}
-duct_small.max_health = 100 * settings.startup["fmf-duct-health-multiplier"].value
-duct_small.resistances = data.raw["pipe"]["pipe"].resistances
-duct_small.corpse = "small-remnants"
--- boxes (collision, selection, fluid)
-duct_small.collision_box = {{-0.77, -0.45}, {0.77, 0.45}}
-duct_small.selection_box = {{-1.2, -0.6}, {1.2, 0.6}}
-duct_small.fluid_box =
+duct_small =
 {
-	base_area = settings.startup["fmf-duct-base-level-multiplier"].value / 4,
-	height = settings.startup["fmf-duct-base-level-multiplier"].value / 2, 
-	base_level = 0,
-	pipe_covers = nil,
-	pipe_connections =
+	type = "storage-tank",
+	name = "duct-small",
+	icon = fmf_icons_path .. "duct-small.png",
+	icon_size = 64,
+	flags = {"placeable-player", "player-creation"},
+	minable = {mining_time = 0.4, result = "duct-small"},
+	fast_replaceable_group = "ducts",
+	next_upgrade = nil,
+	max_health = 100 * settings.startup["fmf-duct-health-multiplier"].value,
+	resistances = data.raw["pipe"]["pipe"].resistances,
+	corpse = "small-remnants",
+	dying_explosion = "storage-tank-explosion",
+	collision_box = {{-0.77, -0.45}, {0.77, 0.45}},
+	selection_box = {{-1.2, -0.6}, {1.2, 0.6}},
+	window_bounding_box = {{0,0},{0,0}},
+	flow_length_in_ticks = 360,
+	fluid_box =
 	{
-		{ position = {0.6, -1.1} },
-		{ position = {-0.6, -1.1} },
-		{ position = {-0.6, 1.1} },
-		{ position = {0.6, 1.1} }
-	}
-}
-duct_small.pictures =
-{
-	picture = duct_small_picture,
-	gas_flow = empty_sprite,
-	fluid_background = empty_sprite,
-	window_background = empty_sprite,
-	flow_sprite = empty_sprite
-}
-duct_small.circuit_wire_max_distance = 0
-duct_small.working_sound =
-{
-	sound = 
-	{
+		base_area = settings.startup["fmf-duct-base-level-multiplier"].value / 4,
+		height = settings.startup["fmf-duct-base-level-multiplier"].value / 2, 
+		base_level = 0,
+		pipe_covers = nil,
+		pipe_connections =
 		{
-			filename = "__base__/sound/pipe.ogg",
-			volume = 1
+			{ position = {0.6, -1.1}, max_underground_distance = 1 },
+			{ position = {-0.6, -1.1}, max_underground_distance = 1  },
+			{ position = {-0.6, 1.1}, max_underground_distance = 1  },
+			{ position = {0.6, 1.1}, max_underground_distance = 1  }
 		}
 	},
-	match_volume_to_activity = true,
-	max_sounds_per_type = 3
+	pictures =
+	{
+		picture = duct_small_picture,
+		gas_flow = empty_sprite,
+		fluid_background = empty_sprite,
+		window_background = empty_sprite,
+		flow_sprite = empty_sprite
+	},
+	working_sound =
+	{
+		sound = {{filename = "__base__/sound/pipe.ogg",volume = 0.25}},
+		match_volume_to_activity = true,
+		max_sounds_per_type = 3
+	},
+	vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
 }
-duct_small.vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 }
+-- underground duct
+duct_underground = 
+{
+	type = "pipe-to-ground",
+	name = "duct-underground",
+	fast_replaceable_group = "ducts",
+	icon = fmf_icons_path .. "duct-to-ground.png",
+	icon_size = 64,
+	flags = {"placeable-neutral", "player-creation"},
+	minable = {mining_time = 0.4, result = "duct-underground"},
+	max_health = 200 * settings.startup["fmf-duct-health-multiplier"].value,
+	corpse = "small-remnants",
+	resistances = data.raw["pipe"]["pipe"].resistances,
+	collision_box = {{-0.80, -0.95}, {0.63, 0.85}},
+	selection_box = {{-1.0, -1.2}, {1.1, 0.9}},
+	fluid_box =
+	{
+		base_area = settings.startup["fmf-duct-base-level-multiplier"].value,
+		height = settings.startup["fmf-duct-base-level-multiplier"].value,
+		base_level = 0,
+		pipe_covers = nil,
+		pipe_connections =
+		{
+			{ position = {0.6, -1.6}, max_underground_distance = 1 },
+			{
+				position = {0.6, 0.9},
+				max_underground_distance = settings.startup["fmf-underground-duct-max-length"].value + 3 -- we shifted the positioning a bit so as not to collide with the 1 underground distance we use for 'regular' connections
+			},
+
+			{ position = {-0.6, -1.6}, max_underground_distance = 1 },
+			{
+				position = {-0.6, 0.9},
+				max_underground_distance = settings.startup["fmf-underground-duct-max-length"].value + 3
+			},
+		}
+	},
+	underground_sprite =
+	{
+		filename = "__core__/graphics/arrows/underground-lines.png",
+		priority = "high",
+		width = 64,
+		height = 64,
+		scale = 0.5,
+	},
+	pictures = duct_underground_picture,
+}
 
 -- Duct
-
---base setting
-duct = util.table.deepcopy(data.raw["storage-tank"]["storage-tank"])
+duct = util.table.deepcopy(duct_small)
 duct.name = "duct"
-duct.fast_replaceable_group = "ducts"
-duct.next_upgrade = nil
 duct.icon = fmf_icons_path .. "duct.png"
-duct.icon_size = 64
 if settings.startup["fmf-enable-duct-auto-join"].value then
 	duct.minable = {mining_time = 0.6, result = "duct-small", count = 2}
 else
 	duct.minable = {mining_time = 0.6, result = "duct", count = 1}
 end
-duct.max_health = 200 * settings.startup["fmf-duct-health-multiplier"].value
-duct.resistances = data.raw["pipe"]["pipe"].resistances
-duct.corpse = "small-remnants"
---duct.fast_replaceable_group = No
+
+duct.max_health = duct.max_health * 2
 -- boxes (collision, selection, fluid)
 duct.collision_box = {{-0.77, -0.95}, {0.77, 0.95}}
 duct.selection_box = {{-1.1, -1.1}, {1.1, 1.1}}
@@ -233,10 +270,10 @@ duct.fluid_box =
 	pipe_covers = nil, -- for debug: pipecoverspictures()
 	pipe_connections =
 	{
-		{ position = {0.6, -1.6} },
-		{ position = {-0.6, -1.6} },
-		{ position = {0.6, 1.6} },
-		{ position = {-0.6, 1.6} }
+		{ position = {0.6, -1.6}, max_underground_distance = 1  },
+		{ position = {-0.6, -1.6}, max_underground_distance = 1  },
+		{ position = {0.6, 1.6}, max_underground_distance = 1  },
+		{ position = {-0.6, 1.6}, max_underground_distance = 1  }
 	}
 }
 duct.pictures =
@@ -247,23 +284,8 @@ duct.pictures =
 	window_background = empty_sprite,
 	flow_sprite = empty_sprite
 }
-duct.circuit_wire_max_distance = 0
-duct.working_sound =
-{
-	sound = 
-	{
-		{
-			filename = "__base__/sound/pipe.ogg",
-			volume = 1
-		}
-	},
-	match_volume_to_activity = true,
-	max_sounds_per_type = 3
-}
-duct.vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 }
 
 -- Duct Long
-
 duct_long = util.table.deepcopy(duct)
 duct_long.name = "duct-long"
 duct_long.icon = fmf_icons_path .. "duct-long.png"
@@ -272,7 +294,7 @@ if settings.startup["fmf-enable-duct-auto-join"].value then
 else
 	duct_long.minable = {mining_time = 0.8, result = "duct-long", count = 1}
 end
-duct_long.max_health = 400 * settings.startup["fmf-duct-health-multiplier"].value
+duct_long.max_health = duct_long.max_health * 2
 duct_long.collision_box = {{-0.77, -1.95}, {0.77, 1.95}}
 duct_long.selection_box = {{-1.1, -2.2}, {1.1, 2.2}}
 duct_long.fluid_box =
@@ -283,10 +305,10 @@ duct_long.fluid_box =
 	pipe_covers = nil, -- for debug pipecoverspictures()
 	pipe_connections =
 	{
-		{ position = {0.6, -2.6} },
-		{ position = {-0.6, -2.6} },
-		{ position = {0.6, 2.6} },
-		{ position = {-0.6, 2.6} }
+		{ position = {0.6, -2.6}, max_underground_distance = 1  },
+		{ position = {-0.6, -2.6}, max_underground_distance = 1  },
+		{ position = {0.6, 2.6}, max_underground_distance = 1  },
+		{ position = {-0.6, 2.6}, max_underground_distance = 1  }
 	}
 }
 duct_long.pictures =
@@ -299,21 +321,19 @@ duct_long.pictures =
 }
 
 -- Duct T junction
-
 duct_t_junction = util.table.deepcopy(duct)
 duct_t_junction.name = "duct-t-junction"
 duct_t_junction.icon = fmf_icons_path .. "duct-t-junction.png"
 duct_t_junction.minable = {mining_time = 0.4, result = "duct-t-junction"}
-duct_t_junction.two_direction_only = false
 duct_t_junction.collision_box = {{-0.8, -0.9}, {0.8, 0.7}}
 duct_t_junction.fluid_box.pipe_connections =
 {
-	{ position = {0.6, -1.6} },
-	{ position = {-0.6, -1.6} },
-	{ position = {1.6, -0.6} },
-	{ position = {1.6, 0.6} },
-	{ position = {-1.6, -0.6} },
-	{ position = {-1.6, 0.6} }
+	{ position = {0.6, -1.6}, max_underground_distance = 1  },
+	{ position = {-0.6, -1.6}, max_underground_distance = 1  },
+	{ position = {1.6, -0.6}, max_underground_distance = 1  },
+	{ position = {1.6, 0.6}, max_underground_distance = 1  },
+	{ position = {-1.6, -0.6}, max_underground_distance = 1  },
+	{ position = {-1.6, 0.6}, max_underground_distance = 1  }
 }
 duct_t_junction.pictures =
 {
@@ -325,7 +345,6 @@ duct_t_junction.pictures =
 }
 
 -- Curved duct
-
 duct_curve = util.table.deepcopy(duct_t_junction)
 duct_curve.name = "duct-curve"
 duct_curve.icon = fmf_icons_path .. "duct-curve.png"
@@ -333,10 +352,10 @@ duct_curve.minable.result = "duct-curve"
 duct_curve.collision_box = {{-0.9, -0.9}, {0.75, 0.75}}
 duct_curve.fluid_box.pipe_connections =
 {
-	{ position = {0.6, -1.6} },
-	{ position = {-0.6, -1.6} },
-	{ position = {-1.6, -0.6} },
-	{ position = {-1.6, 0.6} }
+	{ position = {0.6, -1.6}, max_underground_distance = 1  },
+	{ position = {-0.6, -1.6}, max_underground_distance = 1  },
+	{ position = {-1.6, -0.6}, max_underground_distance = 1  },
+	{ position = {-1.6, 0.6}, max_underground_distance = 1  }
 }
 duct_curve.pictures =
 {
@@ -348,7 +367,6 @@ duct_curve.pictures =
 }
 
 -- Cross duct
-
 duct_cross = util.table.deepcopy(duct_t_junction)
 duct_cross.name = "duct-cross"
 duct_cross.fast_replaceable_group = "ducts"
@@ -357,14 +375,14 @@ duct_cross.minable.result = "duct-cross"
 duct_cross.collision_box = {{-0.85, -0.85}, {0.85, 0.85}}
 duct_cross.fluid_box.pipe_connections =
 {
-		{ position = {0.6, -1.6} },
-		{ position = {-0.6, -1.6} },
-		{ position = {0.6, 1.6} },
-		{ position = {-0.6, 1.6} },
-		{ position = {1.6, -0.6} },
-		{ position = {1.6, 0.6} },
-		{ position = {-1.6, -0.6} },
-		{ position = {-1.6, 0.6} }
+		{ position = {0.6, -1.6}, max_underground_distance = 1  },
+		{ position = {-0.6, -1.6}, max_underground_distance = 1  },
+		{ position = {0.6, 1.6}, max_underground_distance = 1  },
+		{ position = {-0.6, 1.6}, max_underground_distance = 1  },
+		{ position = {1.6, -0.6}, max_underground_distance = 1  },
+		{ position = {1.6, 0.6}, max_underground_distance = 1  },
+		{ position = {-1.6, -0.6}, max_underground_distance = 1  },
+		{ position = {-1.6, 0.6}, max_underground_distance = 1  }
 }
 duct_cross.pictures =
 {
@@ -373,54 +391,6 @@ duct_cross.pictures =
 	fluid_background = empty_sprite,
 	window_background = empty_sprite,
 	flow_sprite = empty_sprite
-}
-
--- Underground duct
-
-duct_underground =
-{
-	type = "pipe-to-ground",
-	name = "duct-underground",
-	fast_replaceable_group = "ducts",
-	icon = fmf_icons_path .. "duct-to-ground.png",
-	icon_size = 64,
-	flags = {"placeable-neutral", "player-creation"},
-	minable = {mining_time = 0.4, result = "duct-underground"},
-	max_health = 200 * settings.startup["fmf-duct-health-multiplier"].value,
-	corpse = "small-remnants",
-	resistances = data.raw["pipe"]["pipe"].resistances,
-	collision_box = {{-0.80, -0.95}, {0.63, 0.80}},
-	selection_box = {{-1.0, -1.2}, {1.1, 0.9}},
-	two_direction_only = false,
-	fluid_box =
-	{
-		base_area = settings.startup["fmf-duct-base-level-multiplier"].value,
-		height = settings.startup["fmf-duct-base-level-multiplier"].value,
-		base_level = 0,
-		pipe_covers = nil,
-		pipe_connections =
-		{
-			{ position = {0.6, -1.6} },
-			{
-				position = {0.6, 1.6},
-				max_underground_distance = settings.startup["fmf-underground-duct-max-length"].value
-			},
-			{ position = {-0.6, -1.6} },
-			{
-				position = {-0.6, 1.6},
-				max_underground_distance = settings.startup["fmf-underground-duct-max-length"].value
-			}
-		}
-	},
-	underground_sprite =
-	{
-		filename = "__core__/graphics/arrows/underground-lines.png",
-		priority = "high",
-		width = 64,
-		height = 64,
-		scale = 0.5,
-	},
-	pictures = duct_underground_picture
 }
 
 -- Adding entities

@@ -37,22 +37,18 @@ if mods["Squeak Through"] then
 		},
 		["pump"] =
 		{
-			"duct-end-point-intake-south",
-			"duct-end-point-intake-west",
-			"duct-end-point-intake-north",
-			"duct-end-point-intake-east",
-			"duct-end-point-outtake-south",
-			"duct-end-point-outtake-west",
-			"duct-end-point-outtake-north",
-			"duct-end-point-outtake-east",
+			"duct-end-point-intake",
+			"duct-end-point-outtake",
 			"non-return-duct"
 		}
 	}
 	
 	for category_name, items in pairs(exclusions_to_add) do
 		for _, item_name in pairs(items) do
-			addExcludedEntityToSqueakThrough(item_name, category_name)
-			data.raw[category_name][item_name].squeak_behaviour = false
+			if data.raw[category_name] and data.raw[category_name][item_name] then
+				addExcludedEntityToSqueakThrough(item_name, category_name)
+				data.raw[category_name][item_name].squeak_behaviour = false
+			end
 		end
 	end	
 	

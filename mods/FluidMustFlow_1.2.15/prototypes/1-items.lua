@@ -90,7 +90,7 @@ data:extend
         name = "duct-end-point-intake",
         icon = fmf_icons_path .. "duct-end-point-intake.png",
 		icon_size = 64,
-	    place_result = "duct-end-point-intake-south",
+	    place_result = "duct-end-point-intake",
 		subgroup = "energy-pipe-distribution",
 		order = "c[pipe]-b[pump]-i[duct-end-point-intake]a",
         stack_size = 10
@@ -100,7 +100,7 @@ data:extend
         name = "duct-end-point-outtake",
         icon = fmf_icons_path .. "duct-end-point-outtake.png",
 		icon_size = 64,
-	    place_result = "duct-end-point-outtake-south",
+	    place_result = "duct-end-point-outtake",
 		subgroup = "energy-pipe-distribution",
 		order = "c[pipe]-b[pump]-l[duct-end-point-outtake]a",
         stack_size = 10

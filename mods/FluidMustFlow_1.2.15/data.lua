@@ -15,4 +15,6 @@ require("prototypes.4-tecnologies")
 -- -- Apply compatibility scripts (data stage)
 ----------------------------------------------------------
 require("__FluidMustFlow__/compatibility-scripts/data/squeak_through_fix")
+require("__FluidMustFlow__/compatibility-scripts/data/ab_fix")
+
 ----------------------------------------------------------
