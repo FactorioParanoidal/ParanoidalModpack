@@ -1,0 +1,46 @@
+return
+{
+  entities =
+  {
+    {"bob-gun-turret-5", {x = -0.5, y = -3}, {force = "enemy", dir = "east", items = {["firearm-magazine"] = 600}, }},
+    {"reinforced-wall", {x = 2, y = -3.5}, {}},
+    {"reinforced-wall", {x = 1, y = -3.5}, {}},
+    {"reinforced-wall", {x = 1, y = -2.5}, {}},
+    {"reinforced-wall", {x = 2, y = -1.5}, {}},
+    {"reinforced-wall", {x = 2, y = -2.5}, {}},
+    {"reinforced-wall", {x = -2, y = 0.5}, {}},
+    {"reinforced-wall", {x = -2, y = -0.5}, {}},
+    {"bi-wooden-chest-large", {x = -0.5, y = 0}, {items = {["bob-construction-robot-5"] = 2, ["express-miniloader"] = 1, ["gold-plate"] = 19, ["ground-water-pump"] = 1, ["laser-turret"] = 1}, }},
+    {"reinforced-gate", {x = 2, y = 0.5}, {}},
+    {"reinforced-gate", {x = 2, y = -0.5}, {}},
+    {"bob-gun-turret-5", {x = -0.5, y = 3}, {force = "enemy", dir = "east", items = {["firearm-magazine"] = 600}, }},
+    {"reinforced-wall", {x = 1, y = 2.5}, {}},
+    {"reinforced-wall", {x = 2, y = 2.5}, {}},
+    {"reinforced-wall", {x = 2, y = 1.5}, {}},
+    {"reinforced-wall", {x = 2, y = 3.5}, {}},
+    {"reinforced-wall", {x = 1, y = 3.5}, {}},
+  },
+  tiles =
+  {
+    {"hazard-concrete-right", {x = -2.5, y = -3}},
+    {"hazard-concrete-right", {x = -2.5, y = -2}},
+    {"hazard-concrete-right", {x = -1.5, y = -3}},
+    {"hazard-concrete-right", {x = -1.5, y = -2}},
+    {"hazard-concrete-right", {x = -1.5, y = -1}},
+    {"hazard-concrete-right", {x = -1.5, y = 0}},
+    {"hazard-concrete-right", {x = -1.5, y = 1}},
+    {"hazard-concrete-right", {x = -1.5, y = 2}},
+    {"hazard-concrete-right", {x = -0.5, y = -3}},
+    {"hazard-concrete-right", {x = -0.5, y = -2}},
+    {"hazard-concrete-right", {x = -0.5, y = -1}},
+    {"hazard-concrete-right", {x = -0.5, y = 0}},
+    {"hazard-concrete-right", {x = -0.5, y = 1}},
+    {"hazard-concrete-right", {x = -0.5, y = 2}},
+    {"hazard-concrete-right", {x = 0.5, y = -3}},
+    {"hazard-concrete-right", {x = 0.5, y = -2}},
+    {"hazard-concrete-right", {x = 0.5, y = -1}},
+    {"hazard-concrete-right", {x = 0.5, y = 0}},
+    {"hazard-concrete-right", {x = 0.5, y = 1}},
+    {"hazard-concrete-right", {x = 0.5, y = 2}},
+  }
+}
