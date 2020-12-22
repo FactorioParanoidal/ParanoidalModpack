@@ -1,0 +1,15 @@
+return
+{
+  entities =
+  {
+    {"stack-inserter", {x = -0.5, y = -2.5}, {dir = "west", dmg = {dmg = {type = "random", min = 1, max = 75}}, dead = 0.2}},
+    {"steel-chest", {x = -1.5, y = -2.5}, {dmg = {dmg = {type = "random", min = 1, max = 75}}, dead = 0.2}},
+    {"medium-electric-pole", {x = 1.5, y = -3.5}, {dmg = {dmg = {type = "random", min = 1, max = 75}}, dead = 0.2}},
+    {"stack-inserter", {x = 2.5, y = -3.5}, {dir = "south", dmg = {dmg = {type = "random", min = 1, max = 75}}, dead = 0.2}},
+    {"stack-inserter", {x = 3.5, y = -2.5}, {dir = "east", dmg = {dmg = {type = "random", min = 1, max = 75}}, dead = 0.2}},
+    {"beacon-remnants", {x = -2.5, y = -0.5}, {}},
+    {"assembling-machine-3-remnants", {x = 1.5, y = -1.5}, {}},
+    {"beacon-remnants", {x = -2.5, y = 2.5}, {}},
+    {"beacon-remnants", {x = 0.5, y = 2.5}, {}},
+  },
+}
