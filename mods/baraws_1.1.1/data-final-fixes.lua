@@ -1,5 +1,6 @@
+--need to add check if type is a number because.... I have no idea why. someone had a set of mods where result_count was a string apparently.
 function checkResults(recipe)
-	if recipe.result_count and recipe.result_count > 1 then
+	if recipe.result_count and type(recipe.result_count) == "number" and recipe.result_count > 1 then
 		return true
 	end
 
@@ -7,11 +8,11 @@ function checkResults(recipe)
 		local resultCount = 0
 		for _,v in pairs(recipe.results) do
 			resultCount = resultCount +1
-			if v.amount and v.amount > 1 then
+			if v.amount and type(v.amount) == "number" and v.amount > 1 then
 				return true
 			end
 
-			if v.probability and v.probability ~= 1 then
+			if v.probability and type(v.probability) == "number" and v.probability ~= 1 then
 				return true
 			end
 		end
