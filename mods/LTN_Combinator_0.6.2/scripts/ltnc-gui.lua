@@ -155,7 +155,7 @@ ltnc_gui.open = function(player_index, combinator, registered)
       if window.ltn.entries[name].element.type == "checkbox" then
         window.ltn.entries[name].element.state = value > 0 or false
       else
-        window.ltn.entries[name].element.text = value
+        window.ltn.entries[name].element.text = tostring(value)
       end
     end
   end
@@ -304,7 +304,7 @@ ltnc_gui.ltn_toggle_provider = function(event)
   if bit32.band(new_stop_type, config.LTN_STOP_PROVIDER) then
     local threshold = window.ltn.entries["ltn-provider-threshold"].element.text
     if threshold == tostring(config.high_threshold_count) then
-      window.ltn.entries["ltn-provider-threshold"].element.text = config.ltn_signals["ltn-provider-threshold"].default
+      window.ltn.entries["ltn-provider-threshold"].element.text = tostring(config.ltn_signals["ltn-provider-threshold"].default)
     end
   end
   
@@ -359,7 +359,7 @@ ltnc_gui.ltn_text_changed = function(event)
   
   local value = tointeger(strip_input(element.text), min, max)
   if value ~= tonumber(element.text) and element.text ~= "" and element.text ~= "-" then
-    element.text = value
+    element.text = tostring(value)
   end
   
   if value ~= nil then
@@ -528,7 +528,7 @@ ltnc_gui.network_button_clicked = function(event)
   
   -- apply 
   window.combinator:set("ltn-network-id", encoded_id)
-  window.ltn.entries["ltn-network-id"].element.text = encoded_id
+  window.ltn.entries["ltn-network-id"].element.text = tostring(encoded_id)
 end
 
 ltnc_gui.network_update_buttons = function(event)
@@ -553,7 +553,7 @@ ltnc_gui.network_select_all = function(event)
   local window = global.gui[event.player_index]
 
   window.combinator:set("ltn-network-id", -1)
-  window.ltn.entries["ltn-network-id"].element.text = -1
+  window.ltn.entries["ltn-network-id"].element.text = "-1"
   
   ltnc_gui.network_update_buttons(event)
 end
@@ -562,7 +562,7 @@ ltnc_gui.network_select_none = function(event)
   local window = global.gui[event.player_index]
 
   window.combinator:set("ltn-network-id", 0)
-  window.ltn.entries["ltn-network-id"].element.text = 0
+  window.ltn.entries["ltn-network-id"].element.text = "0"
   
   ltnc_gui.network_update_buttons(event)
 end
@@ -730,7 +730,7 @@ ltnc_gui.misc_slider_changed = function(event)
   end
   
   window.selected_elem.number = value
-  window.misc.text.text = value
+  window.misc.text.text = tostring(value)
   window.combinator:set_slot_value(slot, value)
   window.element_focus = true
 end
@@ -748,7 +748,7 @@ ltnc_gui.misc_text_changed = function(event)
   -- validate input
   local value = tointeger(strip_input(event.element.text), -2000000000, 2000000000)
   if value ~= tonumber(event.element.text) and event.element.text ~= "" and event.element.text ~= "-" then
-    event.element.text = value
+    event.element.text = tostring(value)
   end
   
   if value > 10 then
@@ -778,7 +778,7 @@ ltnc_gui.misc_update_inputs = function(window, value)
   
   window.misc.slider.visible = true
   window.misc.text.visible = true
-  window.misc.text.text    = value
+  window.misc.text.text    = tostring(value)
 end
 
 ltnc_gui.on_tab_key = function(event)
@@ -913,7 +913,6 @@ ltnc_gui.build = function(parent)
   container.style.horizontally_stretchable = true
   container.style.left_margin = 10
   
-  --element = container.add {type="label", caption={"ltnc.ltnc-output"}, style="large_caption_label"}
   element = container.add {type="label", caption={"ltnc.ltnc-output"}}
   element.style.horizontally_stretchable = true
   checkbuttons[RADIO_ON]  = container.add {type = "radiobutton", name = _prefix .. "radioOn",  caption = {"ltnc.ltnc-on"}, state = true}
