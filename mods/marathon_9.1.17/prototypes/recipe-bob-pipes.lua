@@ -1,42 +1,6 @@
 data:extend(
 {
-  {
-    type = "recipe",
-    name = "stone-pipe",
-	hidden = true,
-    normal =
     {
-      ingredients =
-      {
-        {"stone-brick", 1}
-      },
-      result = "stone-pipe",
-    },
-    expensive =
-    {
-      ingredients =
-      {
-        {"stone-brick", 2}
-      },
-      result = "stone-pipe",
-    }
-  },
-
-  {
-    type = "recipe",
-    name = "stone-pipe-to-ground",
-	hidden = true,
-    ingredients =
-    {
-      {"stone-pipe", 10},
-      {"stone-brick", 5},
-    },
-    result_count = 2,
-    result = "stone-pipe-to-ground",
-  },
-
-
-  {
     type = "recipe",
     name = "copper-pipe",
     normal =
