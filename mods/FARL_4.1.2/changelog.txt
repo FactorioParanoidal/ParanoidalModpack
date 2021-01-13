@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.2
+Date: 2020-12-24
+  Bugfixes:
+    - Fixed loading error with Industrial Revolution 2
+---------------------------------------------------------------------------------------------------
+Version: 4.1.1
+Date: 2020-12-18
+  Bugfixes:
+    - Fixed FARL not being able to start in Bulldozer/Maintenance mode when no custom blueprint was used
+---------------------------------------------------------------------------------------------------
 Version: 4.1.0
 Date: 2020-11-23
   Changes:
