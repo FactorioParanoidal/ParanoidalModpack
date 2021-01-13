@@ -1848,7 +1848,6 @@ local function updateConfig()
 	end
 
 	checkForBobEnemies()
-	
 	log("RSO: Updated resource configurations")
 end
 
