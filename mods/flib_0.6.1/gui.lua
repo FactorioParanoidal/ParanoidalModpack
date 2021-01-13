@@ -1,4 +1,5 @@
 --- GUI structuring tools and event handling.
+-- **NOTICE: This module will be deprecated when Factorio 1.2 releases. Use the @{gui-beta} module instead.**
 -- @module gui
 -- @alias flib_gui
 -- @usage local gui = require("__flib__.gui")
