@@ -16,6 +16,7 @@ if upgradable == nil then
   upgradable = true
 end
 
+
 if upgradable == true then
   -- make vanilla combinator upgradable to ltn-combinator
   data.raw["constant-combinator"]["constant-combinator"].next_upgrade = "ltn-combinator"
