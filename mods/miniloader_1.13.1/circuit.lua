@@ -90,6 +90,9 @@ end
 
 local function partner_connections_need_sync(inserters, connections)
   local master_inserter = inserters[1]
+  if not master_inserter then
+    return false
+  end
   for wire_type, wire_connections in pairs(connections) do
     local network = master_inserter.get_circuit_network(wire_type)
     if network then

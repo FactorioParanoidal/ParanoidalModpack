@@ -240,9 +240,7 @@ local function on_placed_blueprint(ev, player, bp)
     }
     for _, e in pairs(inserter_entities) do
       if util.is_miniloader_inserter(e) then
-        circuit.sync_behavior(e)
-        circuit.sync_filters(e)
-        circuit.sync_partner_connections(e)
+        miniloader.fixup(e, util.orientation_from_inserters(e))
       end
     end
   end)

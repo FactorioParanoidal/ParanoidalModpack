@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.13.1
+Date: 2021-01-04
+  Bugfixes:
+    - Fix crash when building over a circuit-connected miniloader ghost with a different miniloader. (https://mods.factorio.com/mod/miniloader/discussion/5ff20f700e315442e937bc9b)
+    - Fix inserter configuration getting scrambled when placing a blueprint over an existing miniloader. (https://mods.factorio.com/mod/miniloader/discussion/5fefa9afe794fa476bd15418)
+---------------------------------------------------------------------------------------------------
 Version: 1.13.0
 Date: 2020-11-24
   Changes:
