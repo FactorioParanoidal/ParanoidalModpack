@@ -230,7 +230,7 @@ local function highlight_pipeline(starter_entity, player_index)
             name = pipe_highlight_markers.beam[type],
             position = entity_position,
             source_position = {entity_position.x, entity_position.y - 0.1},
-            target_position = {neighbour_position.x, neighbour_position.y - 0.1},
+            target_position = {neighbour_position.x, neighbour_position.y + 0.4},
             duration = 2000000000
         }
     end
