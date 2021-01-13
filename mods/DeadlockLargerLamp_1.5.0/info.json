@@ -1,0 +1,11 @@
+{
+	"name": "DeadlockLargerLamp",
+	"version": "1.5.0",
+	"title": "Larger Lamps",
+	"author": "Deadlock989",
+	"contact": "",
+    "homepage": "",
+	"dependencies": ["base >= 1.1.0", "(?)Dectorio"],
+	"description": "2x2 lamps which cast a wide, soft glow. An electric lamp, fully signal compatible; a copper lamp which burns solid fuel; and a floor lamp which can be walked over. They line up with rails and large power poles.",
+	"factorio_version": "1.1"
+}
