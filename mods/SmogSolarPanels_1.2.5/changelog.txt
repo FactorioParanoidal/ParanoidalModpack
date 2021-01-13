@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2020-12-17
+  Changes:
+    - Data stage moved to data-final-fixes; vanilla solar panel prototypes was updated in data-updates by other mod
+    - Added 50% solar panel
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2020-12-16
+  Changes:
+    - Added setting to disable mod
+    - Added effectivity of solar panels to LuaRendering
+---------------------------------------------------------------------------------------------------
 Version: 1.2.3
 Date: 2020-12-14
   Changes:
