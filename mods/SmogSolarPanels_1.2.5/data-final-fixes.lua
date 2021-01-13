@@ -2,7 +2,7 @@
 
 -- local powers = {80, 60, 40, 30, 20, 10, 0}
 -- local powers = {90, 70, 30, 10, 0} -- no 0 in factorio 0.17.44
-local powers = {90, 70, 30, 10, 1} -- no 0 in factorio 0.17.44
+local powers = {90, 70, 50, 30, 10, 1} -- added 50% by 1.2.5
 
 local new_panels = {}
 for panel_name, panel in pairs (data.raw["solar-panel"]) do
