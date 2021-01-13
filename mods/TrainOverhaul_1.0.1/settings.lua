@@ -26,6 +26,13 @@ data:extend({
   },
   {
     type = "bool-setting",
+    name = "train-overhaul-hand-crafting",
+    order = "ad",
+    setting_type = "startup",
+    default_value = false
+  },
+  {
+    type = "bool-setting",
     name = "train-overhaul-nuclear-loco-explosion",
     order = "ba",
     setting_type = "runtime-global",

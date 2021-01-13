@@ -11,9 +11,15 @@ local base_recipes = {
   ["artillery-wagon"] = 20,
 }
 
+local crafting_category = "advanced-crafting"
+-- log("Hand crafting: "..tostring(settings.startup["train-overhaul-hand-crafting"].value))
+if settings.startup["train-overhaul-hand-crafting"].value == true then
+  crafting_category = nil
+end
+
 for name, energy in pairs(base_recipes) do
   local recipe = data.raw.recipe[name]
-  recipe.category = "advanced-crafting"
+  recipe.category = crafting_category
   recipe.energy_required = energy
 end
 
@@ -21,7 +27,7 @@ data:extend({
   {
     type = "recipe",
     name = "heavy-locomotive",
-    category = "advanced-crafting",
+    category = crafting_category,
     energy_required = 10,
     enabled = false,
     ingredients =
@@ -35,7 +41,7 @@ data:extend({
   {
     type = "recipe",
     name = "express-locomotive",
-    category = "advanced-crafting",
+    category =crafting_category,
     energy_required = 10,
     enabled = false,
     ingredients =
@@ -81,7 +87,7 @@ data:extend({
   {
     type = "recipe",
     name = "heavy-cargo-wagon",
-    category = "advanced-crafting",
+    category = crafting_category,
     energy_required = 8,
     enabled = false,
     ingredients =
@@ -94,7 +100,7 @@ data:extend({
   {
     type = "recipe",
     name = "express-cargo-wagon",
-    category = "advanced-crafting",
+    category = crafting_category,
     energy_required = 8,
     enabled = false,
     ingredients =
@@ -107,7 +113,7 @@ data:extend({
   {
     type = "recipe",
     name = "heavy-fluid-wagon",
-    category = "advanced-crafting",
+    category = crafting_category,
     energy_required = 8,
     enabled = false,
     ingredients =
@@ -120,7 +126,7 @@ data:extend({
   {
     type = "recipe",
     name = "express-fluid-wagon",
-    category = "advanced-crafting",
+    category = crafting_category,
     energy_required = 8,
     enabled = false,
     ingredients =
