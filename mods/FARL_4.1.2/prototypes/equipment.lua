@@ -44,15 +44,15 @@ if not mods["IndustrialRevolution"] then
 else
     farlRoboportRecipe.ingredients = {
         {"iron-gear-wheel", 5},
-        {"controller-mk1", 1},
+        {"electronic-circuit", 5},
         {"iron-plate-heavy", 5},
     }
 end
 
 
 local farlRoboportItem = copyPrototype("item", "personal-roboport-equipment", "farl-roboport", true)
-farlRoboportItem.subgroup = "transport"
-farlRoboportItem.order = "a[train-system]-fc[farl]"
+farlRoboportItem.subgroup = "train-transport"
+farlRoboportItem.order = "a[train-system]-j[farl]"
 farlRoboportItem.icon = "__FARL__/graphics/icons/farl-roboport.png"
 farlRoboportItem.icon_size = 32
 farlRoboportItem.icon_mipmaps = 0
