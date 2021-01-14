@@ -35,5 +35,7 @@ require("prototypes.pyramid")
 require("prototypes.Mining_fluids_903")
 require("prototypes.Manganese_chrome_sorting_0172")
 require("prototypes.LandmineGridlock_102")
+require("prototypes.BlackTrainSmokeRevised010")
+
 
 require("prototypes.item-fuelvalue")

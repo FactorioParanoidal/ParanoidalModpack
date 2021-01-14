@@ -1,0 +1,131 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 2021-01-02
+  Features:
+    - Added proper documentation for the `gui-beta` module
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2020-11-23
+  Features:
+    - Added WIP `gui-beta` module
+      - This module is experimental, but is currently relatively stable. Use at your own risk. See the source code for documentation.
+    - Additional arguments may be passed to `migration.on_config_changed()` to be available in the migration functions
+    - Added `data-util.dark_red_button_tileset`
+    - Added `flib_tool_button_dark_red` button style
+  Changes:
+    - Updated to Factorio 1.1
+    - Modified `flib_selected_frame_action_button` style to better match the vanilla buttons
+    - Made `new_layers` argument to `data-util.create_icons()` optional
+    - Removed deprecated require paths for `data-util` and `reverse-defines` modules
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2020-10-22
+  Features:
+    - Added indicator sprites
+    - Added `flib_indicator` image style
+  Changes:
+    - Updated thumbnail
+    - Changed `table.reduce()` to work with non-arrays
+    - Changed `misc.ticks_to_timestring()` to use `game.ticks_played` by default, instead of `game.tick`
+  Bugfixes:
+    - Fixed a crash with serialise_localised_string (credit to dbeckwith)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2020-09-22
+  Features:
+    - Added a third return value to `table.for_n_of` signifying whether or not the end of the table was reached
+    - Added a third return value to the callback of `table.for_n_of`, which is a flag requesting an immediate iteration abort
+    - Added `flib_tool_button_light_green` button style
+  Changes:
+    - `table.for_n_of` now checks against the first (key) return of `next()` rather than the second (value) return
+      - This changes how custom `next()` functions will behave, and brings it into consistency with the rest of Lua
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-09-13
+  Features:
+    - Added `direction.to_vector_2d`
+    - Additional arguments passed to `migration.run` will be passed on to the version functions within the migrations table
+    - Added `math` module
+  Bugfixes:
+    - Fixed that using `gui.init()` to reset all filters did not update lookup tables
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2020-08-31
+  Features:
+    - Added a map setting to adjust translation speed (avoid multiplayer drops for those with slow internet speeds)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2020-08-30
+  Features:
+    - Added `table.array_copy()`
+    - Added `table.partial_sort()` for sorting an array over multiple ticks
+  Changes:
+    - Passing a custom `next` function to `table.for_n_of()` will bypass the key existence check
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2020-08-24
+  Features:
+    - Added event.register_on_entity_destroyed()
+    - Added flib_naked_scroll_pane_no_padding GUI style
+  Changes:
+    - Updated to Factorio 1.0
+    - Renamed data_util to data-util and reverse_defines to reverse-defines
+      - The old paths will still work until v0.4.0, but will print deprecation warnings
+    - Removed vertically_stretchable from the flib_naked_scroll_pane GUI style to fix zero-height issue in non-fixed-height containers
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2020-08-11
+  Features:
+    - Added "grey" and "orange" colored slot button styles
+    - Added two new scroll-pane GUI styles
+    - Added "table" module for working with tables
+  Changes:
+    - translation.init() is now required to be run during on_configuration_changed, in addition to on_init
+      - This is to prevent the module translating and returning strings for things that may not exist anymore
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2020-07-26
+  Features:
+    - Added gui.check_filter_validity(), which is a new REQUIRED setup function for the GUI module
+    - Added translation.is_translating(), which checks whether the given player is actively translating
+    - Added translation.translating_players_count(), which returns the number of players that are actively translating
+    - Added several button and empty-widget styles, see "styles.md" topic in docs
+  Changes:
+    - The base mod is now marked as optional, to allow compatibility with total overhaul mods
+  Bugfixes:
+    - Fixed a crash with the GUI module when a handler was removed between mod versions while being registered in global
+    - Fixed that gui.remove_player_filters() would not update lookup tables
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2020-06-30
+  Changes:
+    - Moved styles into prototypes/styles
+  Bugfixes:
+    - Fixed nonexistent sound file error by inheriting from parent #13
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2020-06-18
+  Bugfixes:
+    - Fixed a crash with the translation module related to old code having incorrect variable names
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2020-06-18
+  Features:
+    - Added a myriad of colored slot styles; see "slot-styles.md" topic in docs
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2020-06-10
+  Bugfixes:
+    - get_energy_value didn't parse energy strings with no SI prefix or deka
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-06-10
+  Features:
+    - get_energy_value supports exponents from 10^-24 to 10^24
+  Bugfixes:
+    - get_energy_value returned string, string instead of nil when unable to parse exponent
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2020-05-24
+  Features:
+    - Initial release
