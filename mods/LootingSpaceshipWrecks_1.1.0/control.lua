@@ -30,40 +30,40 @@ script.on_init(function()
   --player.insert{name="small-electric-pole", count = 30}
   --player.insert{name="unused-air-filter", count=10}
   
-  ["firearm-magazine"] = 8,
-  ["silver-zinc-battery"] = 4,
-  ["repair-pack"] = 5,
+  ["firearm-magazine"] = math.random(5,19),
+  ["silver-zinc-battery"] = math.random(2,9),
+  ["repair-pack"] = math.random(2,9),
   ["intelligent-io"] = 1
   --player.insert["angels-wire-platinum", count=5}
         } )
 ----------------------------------
     add(ship_items, {
-        ["salvaged-assembling-machine"] = 2,
+        ["salvaged-assembling-machine"] = math.random(2,3),
         ["salvaged-lab"] = 1,
 		
-		["copper-plate"] = 100,
-        ["inserter"] = 50,
-        ["long-handed-inserter"] = 25,
-        ["fast-inserter"] = 25,
-        ["basic-transport-belt"] = 100,
-        ["medium-electric-pole"] = 25,
-        ["big-electric-pole"] = 5,
-        ["steel-chest"] = 1,
+		["copper-plate"] = math.random(50,150),
+        ["inserter"] = math.random(15,75),
+        ["long-handed-inserter"] = math.random(5,35),
+        ["fast-inserter"] = math.random(5,35),
+        ["basic-transport-belt"] = math.random(50,150),
+        ["medium-electric-pole"] = math.random(5,35),
+        ["big-electric-pole"] = math.random(2,9),
+        ["steel-chest"] = math.random(1,2),
         --["iron-chest"] = 2,
         ["assembling-machine-2"] = 1,
         ["burner-offshore-pump"] = 1,
-        ["pipe-to-ground"] = 10,
-        ["basic-splitter"] = 10,
+        ["pipe-to-ground"] = math.random(5,15),
+        ["basic-splitter"] = math.random(5,15),
         ["basic-underground-belt"] = 10,
-        ["slag"] = 28,
-        ["stone-crushed"] = 31,
-        ["stone"] = 16,
-        ["wood"] = 10,
-        ["battery"] = 10,
-        ["nuclear-fuel"] = 1,
-        ["intergrated-electronics"] = 16,
-        ["radar"] = 1,
-        ["burner-mining-drill"] = 1
+        ["slag"] = math.random(5,35),
+        ["stone-crushed"] = math.random(5,35),
+        ["stone"] = math.random(5,35),
+        ["wood"] = math.random(5,35),
+        ["battery"] = math.random(2,19),
+        ["nuclear-fuel"] = math.random(1,3),
+        ["intergrated-electronics"] = math.random(5,35),
+        ["radar"] = math.random(1,3),
+        ["burner-mining-drill"] = math.random(1,3),
         --["salvaged-generator",  1
         })
 ----------------------------------
