@@ -31,7 +31,7 @@ script.on_init(function()
   --player.insert{name="unused-air-filter", count=10}
   ["firearm-magazine"] = {type = "random", min = 5, max = 20},
   ["silver-zinc-battery"] = {type = "random", min = 1, max = 10},
-  ["repair-pack"] = {type = "random", min = 2, max = 10}
+  ["repair-pack"] = {type = "random", min = 2, max = 10},
   ["intelligent-io"] = 1,
   --player.insert{name="angels-wire-platinum", count=5}
         } )
@@ -66,11 +66,11 @@ script.on_init(function()
         --["salvaged-generator"] = 1
         })
 ----------------------------------
-    add(debris_items, {    
-            ["copper-plate"] = {type = "random", min = 1, max = 25},
-			["iron-plate"] = {type = "random", min = 1, max = 25}
-			
-         })
+    add(debris_items,
+		{    
+            ["copper-plate"] = 20,
+			["iron-plate"] = 25
+        })
     remote.call("freeplay", "set_created_items", created_items)
     remote.call("freeplay", "set_ship_items", ship_items)
     remote.call("freeplay", "set_debris_items", debris_items)
