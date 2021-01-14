@@ -29,41 +29,42 @@ script.on_init(function()
 --player.insert{name="boiler", count = 1}
   --player.insert{name="small-electric-pole", count = 30}
   --player.insert{name="unused-air-filter", count=10}
-  ["firearm-magazine"] = {type = "random", min = 5, max = 20},
-  ["silver-zinc-battery"] = {type = "random", min = 1, max = 10},
-  ["repair-pack"] = {type = "random", min = 2, max = 10},
-  ["intelligent-io"] = 1,
-  --player.insert{name="angels-wire-platinum", count=5}
+  
+  ["firearm-magazine"] = 8,
+  ["silver-zinc-battery"] = 4,
+  ["repair-pack"] = 5,
+  ["intelligent-io"] = 1
+  --player.insert["angels-wire-platinum", count=5}
         } )
 ----------------------------------
     add(ship_items, {
-        ["salvaged-assembling-machine"] = {type = "random", min = 2, max = 4},
-        ["salvaged-lab"] = {type = "random", min = 1, max = 2},
+        ["salvaged-assembling-machine"] = 2,
+        ["salvaged-lab"] = 1,
 		
-		["copper-plate"] = {type = "random", min = 50, max = 200},
-        ["inserter"] = {type = "random", min = 15, max = 35},
-        ["long-handed-inserter"] = {type = "random", min = 15, max = 35},
-        ["fast-inserter"] = {type = "random", min = 15, max = 35},
-        ["basic-transport-belt"] = {type = "random", min = 50, max = 150},
-        ["medium-electric-pole"] = {type = "random", min = 15, max = 35},
-        ["big-electric-pole"] = {type = "random", min = 2, max = 10},
-        ["steel-chest"] = {type = "random", min = 1, max = 3},
-        ["iron-chest"] = {type = "random", min = 1, max = 4},
-        ["assembling-machine-2"] = {type = "random", min = 1, max = 3},
-        ["burner-offshore-pump"] = {type = "random", min = 1, max = 3},
-        ["pipe-to-ground"] = {type = "random", min = 5, max = 15},
-        ["basic-splitter"] = {type = "random", min = 5, max = 15},
-        ["basic-underground-belt"] = {type = "random", min = 5, max = 40},
-        ["slag"] = {type = "random", min = 5, max = 60},
-        ["stone-crushed"] = {type = "random", min = 5, max = 60},
-        ["stone"] = {type = "random", min = 5, max = 60},
-        ["wood"] = {type = "random", min = 5, max = 15},
-        ["battery"] = {type = "random", min = 5, max = 15},
-        ["nuclear-fuel"] = {type = "random", min = 1, max = 3},
-        ["intergrated-electronics"] = {type = "random", min = 1, max = 4},
-        ["radar"] = {type = "random", min = 1, max = 3},
-        ["burner-mining-drill"] = {type = "random", min = 1, max = 3}
-        --["salvaged-generator"] = 1
+		["copper-plate"] = 100,
+        ["inserter"] = 50,
+        ["long-handed-inserter"] = 25,
+        ["fast-inserter"] = 25,
+        ["basic-transport-belt"] = 100,
+        ["medium-electric-pole"] = 25,
+        ["big-electric-pole"] = 5,
+        ["steel-chest"] = 1,
+        --["iron-chest"] = 2,
+        ["assembling-machine-2"] = 1,
+        ["burner-offshore-pump"] = 1,
+        ["pipe-to-ground"] = 10,
+        ["basic-splitter"] = 10,
+        ["basic-underground-belt"] = 10,
+        ["slag"] = 28,
+        ["stone-crushed"] = 31,
+        ["stone"] = 16,
+        ["wood"] = 10,
+        ["battery"] = 10,
+        ["nuclear-fuel"] = 1,
+        ["intergrated-electronics"] = 16,
+        ["radar"] = 1,
+        ["burner-mining-drill"] = 1
+        --["salvaged-generator",  1
         })
 ----------------------------------
     add(debris_items,
