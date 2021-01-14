@@ -1,0 +1,152 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 2021-1-10
+  Feature:
+    - Added tooltips to signal table
+    - Added description to the "Upgrade constant combinator" setting
+  Change:
+    - Reodered Entity Preview and Network ID.  Looks better...
+    - Moved the Network ID to the Encoding panel.
+  Bugfix:
+    - Fix some crashes on invalid data entry
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2020-12-24
+  Change:
+    - Items marked with '[9.0]' should have been included in previous version notes
+    - [9.0] GUI can be moved around on the screen by dragging the title bar
+    - [9.0] Slider increments by stack size of the selected outut signal
+    - [9.0] Slider increments absolute value.  Actually applied value is negative
+  Bugfix:
+    - Missing 'x' on Close button, a missing '✓' on confirm button 
+    - Normalize tab headings in Changelog
+    - Crash when combinator is destroyed while GUI is open
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2020-12-23
+  Feature:
+    - Complete GUI rewite to modernize interface
+    - Network ID UI not created yet.  Need to modify manually
+    - Still a beta release, please notifiy of issues
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 2020-12-13
+  Feature:
+    - Updated for 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 2020-05-01
+  Bugfix:
+    - Fixed /ltncopen would crash on non-circuit-network entities
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 2020-03-17
+  Bugfix:
+    - Fixed style definitions to match changes in 0.18.13
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2020-01-21
+  Feature:
+    - Update to Factorio version 0.18 - no changes
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 2019-12-21
+  Bugfix:
+    - Fixed crash in Multiplayer, probably
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2019-12-20
+  Feature:
+    - Upgrade feature (Constant C. -> LTN-C) can now be toggled via Mod Settings
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2019-09-19
+  Feature:
+    - LTN-C will now consider default network ID set in LTN mod settings
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 2019-08-28
+  Bugfix:
+    - Fixed a crash when using /ltncopen command
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2019-08-18
+  Bugfix:
+    - Fixed a crash when trying to set values on a destroyed or invalid combinator
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2019-08-10
+  Feature:
+    - Added assistant for LTNs Encoded Network ID. 
+    - Added more localization options
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2019-07-20
+  Bugfix:
+    - fixed crash related to numeric input fields
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2019-07-20
+  Change:
+    - Switched to numeric input fields introduced in 0.17.56
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 2019-05-08
+  Bugfix:
+    - Fixed a crash when using scrollwheel
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2019-04-28
+  Bugfix:
+    - Fixed: depot input fields are now hidden properly
+    - Fixed: provider threshold will no longer show high provide threshold, if not necessary  
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2019-04-06
+  Bugfix:
+    - Improved logic to determine station type
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2019-04-06
+  Bugfix:
+    - Fixed checkboxes only reacting to second click
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2019-04-06
+  Feature:
+    - LTN-C now allows stations to be setup as Requester and Provider
+  Change:
+    - Changed next_upgrade to be applied in data-final-fixes. This should fix isses with Nanobots and Squeak through
+    - In some cases LTN-Cs GUI gets destroyed. It will now be automatically rebuild.
+  Bugfix:
+    - Corrected bounds on Priorities, Encoded Network ID and Thresholds
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2019-03-31
+  Bugfix:
+    - Fixed that LTN-T could not find any LTN-Cs connected with a red circuit wire (for real this time)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-03-31
+  Bugfix:
+    - Fixed setting suppress gui not working
+    - The whole range of encoded network ids are now possible
+    - Fixed that LTN-T could not find any LTN-Cs connected with a red circuit wire
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-03-28
+  Bugfix:
+    - Fixed crash in Multiplayer (on_player_joined)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-03-27
+  Feature:
+    - output signals now show the current output value
+  Bugfix:
+    - under rare circumstances the window wasn't closed properly
+    - remote interface now finds red or green connected combinators
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2019-03-23
+  Feature:
+    - initial release

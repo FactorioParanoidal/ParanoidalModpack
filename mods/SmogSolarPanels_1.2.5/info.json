@@ -1,0 +1,9 @@
+{
+  "name": "SmogSolarPanels",
+  "version": "1.2.5",
+  "title": "Smog: Solar Panels",
+  "author": "darkfrei",
+  "description": "Solar panels working by pollution smog not so effective",
+  "dependencies": ["base"],
+  "factorio_version": "1.1"
+}
