@@ -1,5 +1,7 @@
 if data.raw['item']['engine-unit'] then
 	data.raw['item']['engine-unit'].icon = "__aai-industry__/graphics/icons/engine-unit.png"
+	data.raw['item']['engine-unit'].icon_size = 64
+	data.raw['item']['engine-unit'].icon_mipmaps = 1
 	--[[data.raw['item']['engine-unit'].icons = {
     {
       icon = "__aai-industry__/graphics/icons/engine-unit-base.png"
@@ -14,6 +16,8 @@ end
 
 if data.raw['item']['electric-engine-unit'] then
 	data.raw['item']['electric-engine-unit'].icon = "__aai-industry__/graphics/icons/electric-engine-unit.png"
+	data.raw['item']['electric-engine-unit'].icon_size = 64
+	data.raw['item']['electric-engine-unit'].icon_mipmaps = 1
 	--[[data.raw['item']['electric-engine-unit'].icons = {
     {
       icon = "__aai-industry__/graphics/icons/electric-engine-unit-base.png"
@@ -37,5 +41,7 @@ end
 --data.raw['item']["offshore-pump"].hidden = true
 
 data.raw.item["stone-wall"].icon = "__aai-industry__/graphics/icons/stone-wall.png"
+data.raw.item["stone-wall"].icon_size = 64
+data.raw.item["stone-wall"].icon_mipmaps = 1
 
 data.raw.gun.pistol.attack_parameters.damage_modifier = 1.5
