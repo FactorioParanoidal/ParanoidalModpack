@@ -135,11 +135,17 @@ data.raw["resource"]["angels-ore6"].minable.fluid_amount = 100
 end
 
 data.raw.resource["infinite-angels-ore1"].minable.required_fluid = "liquid-sulfuric-acid"
+data.raw.resource["infinite-angels-ore1"].mining_time = 7
 data.raw.resource["infinite-angels-ore2"].minable.required_fluid = "liquid-hydrofluoric-acid"
+data.raw.resource["infinite-angels-ore2"].mining_time = 14
 data.raw.resource["infinite-angels-ore3"].minable.required_fluid = "liquid-sulfuric-acid"
+data.raw.resource["infinite-angels-ore3"].mining_time = 7
 data.raw.resource["infinite-angels-ore4"].minable.required_fluid = "liquid-hydrochloric-acid"
+data.raw.resource["infinite-angels-ore4"].mining_time = 12
 data.raw.resource["infinite-angels-ore5"].minable.required_fluid = "liquid-nitric-acid"
+data.raw.resource["infinite-angels-ore5"].mining_time = 10
 data.raw.resource["infinite-angels-ore6"].minable.required_fluid = "liquid-nitric-acid"
+data.raw.resource["infinite-angels-ore6"].mining_time = 10
 
 data.raw.resource["infinite-angels-ore1"].minable.fluid_amount = 100
 data.raw.resource["infinite-angels-ore2"].minable.fluid_amount = 100
@@ -150,7 +156,7 @@ data.raw.resource["infinite-angels-ore6"].minable.fluid_amount = 100
 
 data.raw["resource"]["infinite-coal"].minable.required_fluid = nil
 data.raw["resource"]["infinite-coal"].minable.fluid_amount = nil
-data.raw["resource"]["infinite-coal"].mining_time = 4
+data.raw["resource"]["infinite-coal"].mining_time = 15 --4?
 end
 
 
