@@ -46,12 +46,13 @@ local SUPPORTED_TYPES = {
     ["assembling-machine"] = true,
     ["lab"] = true,
     ["furnace"] = true,
-    ["mining-drill"] = true,
+    ["mining-drill"] = false, --drd true
     ["rocket-silo"] = true,
 }
 
 local BLACKLIST_NAMES = {
     ["factory-port-marker"] = true,
+	["electric-mining-drill"] = true, --drd added
 }
 
 --Faster to just change the color than it is to check it first.
