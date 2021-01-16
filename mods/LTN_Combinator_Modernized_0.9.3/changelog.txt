@@ -1,4 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.9.3
+Date: 2021-1-15
+  Bugfix:
+    - Element Choose Buttons are not locked after initial selection
+    - Missing framing around Network ID config
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 2021-1-15
+  Feature:
+    - First release backported to Factorio 1.0 (based on 0.9.2 for Factorio 1.1)
+    - Complete GUI rewite to modernize interface
+    - Added tooltips to signal table
+    - Added description to the "Upgrade constant combinator" setting
+  Change:
+    - Items marked with '[9.0]' should have been included in previous version notes
+    - GUI can be moved around on the screen by dragging the title bar
+    - Slider increments by stack size of the selected outut signal
+    - Slider increments absolute value.  Actually applied value is negative
+  Bugfix:
+    - Element Choose Buttons are not locked after initial selection
+    - Missing framing around Network ID config
+---------------------------------------------------------------------------------------------------
 Version: 0.9.2
 Date: 2021-1-10
   Feature:
