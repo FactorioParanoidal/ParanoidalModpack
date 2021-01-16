@@ -8,6 +8,11 @@
 Здесь внедрено порядка 160 отдельных модов, тесно и нетесно переплетённых между собой в удивительную игру.
 
 > Ванильная Factorio по сравнению с этим - безалкогольная водка.
+</td></tr>
+<tr><td align="center" width="9999">
+
+<a href="https://crowdin.com/project/factorio-paranoidal?utm_source=badge&utm_medium=referral&utm_campaign=badge-add-on" rel="nofollow"><img style="width:140;height:40px" src="https://badges.crowdin.net/badge/light/crowdin-on-dark.png" srcset="https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x,https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x" alt="Crowdin | Agile localization for tech companies" /></a>
+
 </td></tr></table>
 
 ## Ссылки
