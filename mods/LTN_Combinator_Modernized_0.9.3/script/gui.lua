@@ -257,6 +257,7 @@ function ltnc_gui.RegisterHandlers()
           ltnc.selected_slot = slot
           local signal = {signal=e.element.elem_value, count=0}
           ltnc.combinator:set_slot(slot, signal)
+          e.element.locked = true
           change_signal_count(ltnc, {button=defines.mouse_button_type.left,
                                       element={number=0},
                                       player_index=e.player_index})
@@ -424,10 +425,11 @@ function create_window(player_index, unit_number)
       }},
       {type="frame", style="inside_shallow_frame_with_padding", style_mods={padding=8}, children={
         -- Network ID Configurator pane
-        {type="flow", direction="vertical", save_as="net_id_flow", visible=false, style_mods={horizontal_align="center", padding=2, right_padding=6}, children={
+        {type="flow", direction="vertical", save_as="net_id_flow", visible=false, style_mods={horizontal_align="center", padding=2, right_padding=8}, children={
+          {type="frame", direction="vertical", style="inside_shallow_frame_with_padding", style_mods={padding=8}, children={
             gui.templates.network_id_table(32),
-            {type="line", style_mods={top_margin=5}},
-            {type="button", name="net_id_all", handlers="ltnc_handlers.net_id_toggle", caption={"ltnc.btn-all"}},
+          }},
+            {type="button", name="net_id_all", handlers="ltnc_handlers.net_id_toggle", style_mods={top_margin=8}, caption={"ltnc.btn-all"}},
             {type="button", name="net_id_none", handlers="ltnc_handlers.net_id_toggle", caption={"ltnc.btn-none"}},
         }},
         -- Combinator Main Pane
@@ -491,7 +493,7 @@ function create_window(player_index, unit_number)
           }},
         }},
        -- LTN Signal Pane,
-        {type="flow", direction="vertical", save_as="signal_pane", style_mods={left_padding=12, width=300, horizontal_align="center"}, children={
+        {type="flow", direction="vertical", save_as="signal_pane", style_mods={left_padding=8, width=300, horizontal_align="center"}, children={
           {type="frame", direction="vertical", style="container_inside_shallow_frame",
           style_mods={padding=8}, children={
             {type="table", save_as="ltn_signals_common", column_count=3,
