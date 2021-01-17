@@ -1,0 +1,6 @@
+files:
+  - source: '**/locale/en/**'
+    ignore:
+      - '*Rampant*'
+      - '*KingTurret*'
+    translation: /**/locale/%two_letters_code%/%file_name%.%file_extension%

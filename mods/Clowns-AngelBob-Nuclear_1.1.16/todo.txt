@@ -1,0 +1,3 @@
+Plutonium processing rebalance
+RTGs (1 utraradiothermal fuel+1 strontium-90+others)
+--This gives an opportunity to start using more of the thermal side, and give the option to be much more flexible with ratios
