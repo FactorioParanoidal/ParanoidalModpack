@@ -18,6 +18,17 @@ data:extend(
     maximum_value = 100,
     order = "a"
   }
-
 }
 )
+if mods.research_evolution_factor then
+  data:extend
+  {
+    {
+      type = "bool-setting",
+      name = "paranoidal-disable-vanilla-evolution",
+      setting_type = "runtime-global",
+      default_value = true,
+      order = "a"
+    }
+  }
+end
