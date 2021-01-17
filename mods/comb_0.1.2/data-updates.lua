@@ -1,8 +1,8 @@
 local util = require "util"
 
 
-data.raw["technology"]["circuit-network"].icon = "__comb__/graphics/icons/thumbnail_issled_128.png"
-data.raw["technology"]["circuit-network"].iconsize = 128
+data.raw["technology"]["circuit-network"].icon = "__comb__/graphics/icons/thumbnail_issled_256.png"
+data.raw["technology"]["circuit-network"].iconsize = 256
 ------------------------------------------------------------------------
 --====================== АРИФМЕТИЧЕСКИЙ КОМБИНАТОР ============================================================================================================================--
 ------------------------------------------------------------------------
