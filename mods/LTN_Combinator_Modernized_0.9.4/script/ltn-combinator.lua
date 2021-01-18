@@ -69,36 +69,48 @@ function ltn_combinator:_parse_entity()
   end
 
   -- determine ltn stop type (requester, provider or depot)
-  self.ltn_stop_type = 0
+  -- By default we will at least be a provider
+  self.ltn_stop_type = config.LTN_STOP_PROVIDER
+
+  -- The Depot signal makes LTN ignore all all ther signals.  If we're a depot, that's it.
   if control.get_signal(config.ltn_signals["ltn-depot"].slot).signal ~= nil then
     self.ltn_stop_type = config.LTN_STOP_DEPOT
   else
-    -- requester
-    if   control.get_signal(config.ltn_signals["ltn-requester-threshold"].slot).signal ~= nil 
-      or control.get_signal(config.ltn_signals["ltn-requester-stack-threshold"].slot).signal ~= nil then
-
-      self.ltn_stop_type = config.LTN_STOP_REQUESTER
+    -- requester -- If a requester threshold is set, add the requester flag
+    if (settings.global["high-provide-threshold"].value and
+        control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).count == config.high_threshold_count) or
+       (control.get_signal(config.ltn_signals["ltn-requester-threshold"].slot).signal ~= nil or
+         control.get_signal(config.ltn_signals["ltn-requester-stack-threshold"].slot).signal ~= nil or
+         control.get_signal(config.ltn_signals["ltn-requester-priority"].slot).signal ~= nil or
+         control.get_signal(config.ltn_signals["ltn-disable-warnings"].slot).signal ~= nil) or
+        (self:_has_requests()) then
+      self.ltn_stop_type = bit32.bor(self.ltn_stop_type, config.LTN_STOP_REQUESTER)
     end
 
-    -- provider
-    if control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).signal ~= nil 
-       and (control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).count == config.high_threshold_count
-            or control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).count == 5000000)
-       then
-
-      self.ltn_stop_type = config.LTN_STOP_REQUESTER 
-    elseif  control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).signal ~= nil
-         or control.get_signal(config.ltn_signals["ltn-provider-stack-threshold"].slot).signal ~= nil then
-      self.ltn_stop_type = bit32.bor(config.LTN_STOP_PROVIDER, self.ltn_stop_type)
+    -- provider - Remove the provider flag if the provide threshhold equals the high_provide_threshold and
+    -- provider-stack-threshhold == 0
+    if control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).signal ~= nil
+       and control.get_signal(config.ltn_signals["ltn-provider-threshold"].slot).count == config.high_threshold_count then
+      self.ltn_stop_type = bit32.band(self.ltn_stop_type, bit32.bnot(config.LTN_STOP_PROVIDER))
     end
-  end
-
-  if self.ltn_stop_type == 0 then
-    self.ltn_stop_type = config.LTN_STOP_DEFAULT
   end
 
   -- validate ltn signals to match stop type
   self:_validate_signals()
+end
+
+-- ltn_combinator:_has_requests
+-- returns true if there are item or fluid signals with negative values indicatind a request for materials
+function ltn_combinator:_has_requests()
+  if not self.entity or not self.entity.valid then return end
+  local control = self.entity.get_or_create_control_behavior()
+  for i = 1 + config.ltnc_ltn_slot_count, config.ltnc_item_slot_count do
+    local signal = control.get_signal(i)
+    if signal.signal ~= nil and (signal.signal.type == "item" or signal.signal.type == "fluid") and signal.count < 0 then
+       return true
+    end
+  end
+  return false
 end
 
 -- ltn_combinator:_sort_signal_slots
@@ -175,10 +187,12 @@ function ltn_combinator:set_stop_type(stop_type)
   if stop_type < 0 or stop_type > 7 then return end
 
   dlog("new stop type set: " .. stop_type)
-  if settings.global["high-provide-threshold"].value  and stop_type == config.LTN_STOP_REQUESTER then
+  if bit32.btest(stop_type, config.LTN_STOP_PROVIDER) then
+    if settings.global["high-provide-threshold"].value and self:get("ltn-provider-threshold") == config.high_threshold_count then
+      self.entity.get_or_create_control_behavior().set_signal(9, nil)
+    end
+  elseif settings.global["high-provide-threshold"].value then
     self:set("ltn-provider-threshold", config.high_threshold_count)
-  elseif stop_type == config.LTN_STOP_PROVIDER and self:get("ltn-provider-threshold") == config.high_threshold_count then
-    self.entity.get_or_create_control_behavior().set_signal(9, nil)
   end
 
   -- if new stop type is depot apply signal

@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.9.4
+Date: 2021-1-17
+  Change:
+    - Use provider threshhold default settings from LTN
+  Bugfix:
+    - Doesn't reliably detect combined Requester/Provider condfiguration
+      It will still show up as a provider only if no requests are configured and all the requester
+      signals are still default.
+    - Fixed some LTN signal values not updating in UI as they are changed. 
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 2021-1-17
+  Change:
+    - Use provider threshhold default settings from LTN
+  Bugfix:
+    - Doesn't reliably detect combined Requester/Provider condfiguration
+      It will still show up as a provider only if no requests are configured and all the requester
+      signals are still default.
+    - Fixed some LTN signal values not updating in UI as they are changed. 
+---------------------------------------------------------------------------------------------------
 Version: 0.9.3
 Date: 2021-1-15
   Bugfix:
