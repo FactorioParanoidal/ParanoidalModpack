@@ -1958,7 +1958,7 @@ data:extend{
 }	
 data:extend{
 	{
-	type = "produce-achievement",
+		type = "produce-achievement",
 		name = "satellite-production",
 		order = "u",
 		item_product = "satellite",
@@ -1970,7 +1970,7 @@ data:extend{
 }	
 data:extend{
 	{
-	type = "produce-achievement",
+		type = "produce-achievement",
 		name = "steam-production",
 		order = "u",
 		fluid_product = "steam",
@@ -1979,4 +1979,526 @@ data:extend{
 		icon = "__MxlChievements__/graphics/satellite.png",
 		icon_size = 128
 	}
+}
+
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-1",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-2",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-3",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-4",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-5",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-6",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 6000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-7",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 7000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-8",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 8000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-9",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 9000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "copper-madness-10",
+		order = "u",
+		item_product = "copper-plate",
+		amount = 10000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/copper-bar-1.png",
+		icon_size = 128
+    	}
+}
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-1",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-2",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-3",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-4",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-5",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-6",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 6000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-7",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 7000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-8",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 8000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-9",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 9000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "iron-madness-10",
+		order = "u",
+		item_product = "iron-plate",
+		amount = 10000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/iron-bar-1.png",
+		icon_size = 128
+    	}
+}
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "steel-madness-1",
+		order = "u",
+		item_product = "steel-plate",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Steel-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "steel-madness-2",
+		order = "u",
+		item_product = "steel-plate",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Steel-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "steel-madness-3",
+		order = "u",
+		item_product = "steel-plate",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Steel-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "steel-madness-4",
+		order = "u",
+		item_product = "steel-plate",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Steel-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "steel-madness-5",
+		order = "u",
+		item_product = "steel-plate",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Steel-1.png",
+		icon_size = 128
+    },
+}	
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "green-machine-1",
+		order = "u",
+		item_product = "electronic-circuit",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Green-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "green-machine-2",
+		order = "u",
+		item_product = "electronic-circuit",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Green-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "green-machine-3",
+		order = "u",
+		item_product = "electronic-circuit",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Green-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "green-machine-4",
+		order = "u",
+		item_product = "electronic-circuit",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Green-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "green-machine-5",
+		order = "u",
+		item_product = "electronic-circuit",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Green-Card-1.png",
+		icon_size = 128
+    },
+}	
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "big-red-machine-1",
+		order = "u",
+		item_product = "advanced-circuit",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Red-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "big-red-machine-2",
+		order = "u",
+		item_product = "advanced-circuit",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Red-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "big-red-machine-3",
+		order = "u",
+		item_product = "advanced-circuit",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Red-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "big-red-machine-4",
+		order = "u",
+		item_product = "advanced-circuit",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Red-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "big-red-machine-5",
+		order = "u",
+		item_product = "advanced-circuit",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Red-Card-1.png",
+		icon_size = 128
+    },
+}	
+data:extend{
+	{
+		type = "produce-per-hour-achievement",
+        name = "keep-on-smurfin-1",
+		order = "u",
+		item_product = "processing-unit",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Blue-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "keep-on-smurfin-2",
+		order = "u",
+		item_product = "processing-unit",
+		amount = 2000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Blue-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "keep-on-smurfin-3",
+		order = "u",
+		item_product = "processing-unit",
+		amount = 3000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Blue-Card-1.png",
+		icon_size = 128
+    },
+    {
+		type = "produce-per-hour-achievement",
+        name = "keep-on-smurfin-4",
+		order = "u",
+		item_product = "processing-unit",
+		amount = 4000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Blue-Card-1.png",
+		icon_size = 128
+    },
+	{
+		type = "produce-per-hour-achievement",
+        name = "keep-on-smurfin-5",
+		order = "u",
+		item_product = "processing-unit",
+		amount = 5000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Blue-Card-1.png",
+		icon_size = 128
+    },
+}	
+data:extend{
+    {
+		type = "train-path-achievement",
+		name = "train-madness-1",
+		order = "u",
+		minimum_distance = 10000,
+		steam_stats_name = "longest-train-path",
+		icon = "__MxlChievements__/graphics/rails-1.png",
+		icon_size = 128
+    },
+	{
+		type = "train-path-achievement",
+		name = "train-madness-2",
+		order = "u",
+		minimum_distance = 50000,
+		steam_stats_name = "longest-train-path",
+		icon = "__MxlChievements__/graphics/rails-1.png",
+		icon_size = 128
+    },
+	{
+		type = "train-path-achievement",
+		name = "train-madness-3",
+		order = "u",
+		minimum_distance = 100000,
+		steam_stats_name = "longest-train-path",
+		icon = "__MxlChievements__/graphics/rails-1.png",
+		icon_size = 128
+    },
+	{
+		type = "train-path-achievement",
+		name = "train-madness-4",
+		order = "u",
+		minimum_distance = 250000,
+		steam_stats_name = "longest-train-path",
+		icon = "__MxlChievements__/graphics/rails-1.png",
+		icon_size = 128
+    },
+	{
+		type = "train-path-achievement",
+		name = "train-madness-5",
+		order = "u",
+		minimum_distance = 1000000,
+		steam_stats_name = "longest-train-path",
+		icon = "__MxlChievements__/graphics/rails-1.png",
+		icon_size = 128
+    },
+}
+data:extend{
+	{
+		type = "produce-achievement",
+		name = "red-science-6",
+		order = "u",
+		item_product = "automation-science-pack",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Red-1.png",
+		icon_size = 128
+	},
+		{
+		type = "produce-achievement",
+		name = "green-science-6",
+		order = "u",
+		item_product = "logistic-science-pack",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Green-1.png",
+		icon_size = 128
+	},
+	{
+		type = "produce-achievement",
+		name = "black-science-6",
+		order = "u",
+		item_product = "uranium-235",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Black-1.png",
+		icon_size = 128
+	},
+	{
+		type = "produce-achievement",
+		name = "blue-science-6",
+		order = "u",
+		item_product = "chemical-science-pack",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Blue-1.png",
+		icon_size = 128
+	},
+	{
+		type = "produce-achievement",
+		name = "yellow-science-6",
+		order = "u",
+		item_product = "utility-science-pack",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Yellow-1.png",
+		icon_size = 128
+	},
+{
+		type = "produce-achievement",
+		name = "purple-science-6",
+		order = "u",
+		item_product = "production-science-pack",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/Sci-Purple-1.png",
+		icon_size = 128
+	},		
 }
