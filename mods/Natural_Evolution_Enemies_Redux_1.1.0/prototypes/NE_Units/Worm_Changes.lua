@@ -12,6 +12,7 @@ if NE_Enemies.Settings.NE_Adjust_Vanilla_Worms then
 							range = 29 + NE_Enemies.Settings.NE_Difficulty,
 							cooldown = 8 - NE_Enemies.Settings.NE_Difficulty,
 							damage_modifier = 4,
+							ammo_type = data.raw["turret"]["medium-worm-turret"].attack_parameters.ammo_type
 						})
 	data.raw["turret"]["medium-worm-turret"].max_health = 200 + 200 * NE_Enemies.Settings.NE_Difficulty
 	data.raw["turret"]["medium-worm-turret"].resistances = Resistances.Medium_Worm

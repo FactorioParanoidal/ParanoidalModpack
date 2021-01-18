@@ -1,6 +1,6 @@
 if not NE_Enemies then NE_Enemies = {} end
 if not NE_Enemies.Settings then NE_Enemies.Settings = {} end
-local NEEnemies = require('common')('Natural_Evolution_Enemies')
+local NEEnemies = require('common')('Natural_Evolution_Enemies_Redux')
 local ICONPATH = NEEnemies.modRoot .. "/graphics/icons/"
 local ENTITYPATH = NEEnemies.modRoot .. "/graphics/entity/"
 
@@ -181,42 +181,41 @@ function Worm_Attack_Stream(data)
   return
   {
     type = "stream",
-	force = "enemy",
-    ammo_category = "flamethrower",
+	  --force = "enemy",
+    --ammo_category = "flamethrower",
     cooldown = data.cooldown,
     range = data.range,
     projectile_creation_distance = 1.9,
     damage_modifier = data.damage_modifier or 1.0,
     warmup = data.range * 1.5,
-	min_range = 2,
+	  min_range = 2,
     turn_range = 1.0,
-	fire_penalty = 15,	
-	gun_barrel_length = 0.5,
-	gun_center_shift = {
+	  fire_penalty = 15,
+	  gun_barrel_length = 0.5,
+	  gun_center_shift = {
 	    north = {0, -1.2},
 	    east = {1.2, 0},
 	    south = {0, -1.2},
 	    west = {-1.2, 0}
-	},
-    ammo_type =
-	    {
-        category = "flamethrower",
-        action =
-		    {
-			type = "direct",
-			force = "enemy",
-			action_delivery =
-			    {
-				type = "stream",
-				force = "enemy",
-				stream = "ne-fire-stream",
-				source_offset = {0.15, -0.5},
-				max_length = data.range,
-				duration = 200,
-			    }
-		    }
-	    },
-      cyclic_sound =
+    },
+    ammo_type=data.ammo_type,
+    --ammo_type =
+	  --  {
+    --    category = "flamethrower",
+    --    action =
+		--    {
+    --      type = "direct",
+    --      --force = "enemy",
+    --      action_delivery =
+		--	    {
+    --        type = "stream",
+    --        --force = "enemy",
+    --        stream = "ne-fire-stream",
+    --        source_offset = {0.15, -0.5},
+		--	    }
+		--    }
+	  --  },
+    cyclic_sound =
       {
         begin_sound =
         {
@@ -249,7 +248,6 @@ data:extend({
   {
     type = "stream",
     name = "ne-fire-stream",
-	force = "enemy",
     flags = {"not-on-map"},
     stream_light = {intensity = 1, size = 4},
     ground_light = {intensity = 0.8, size = 4},
@@ -287,7 +285,7 @@ data:extend({
             {
               type = "create-fire",
               entity_name = "ne-fire-flame-2",
-			  trigger_created_entity = true,
+			        trigger_created_entity = true,
 			  
             },
           }
@@ -303,17 +301,16 @@ data:extend({
           {
             {
               type = "create-sticker",
-			  force = "enemy",
               sticker = "ne-fire-sticker-2"
             },
             {
               type = "damage",
-              damage = { amount = 3, type = "ne_fire", force = "enemy" },
+              damage = { amount = 3, type = "fire", force = "enemy" },
               apply_damage_to_trees = true
             },
             {
               type = "damage",
-              damage = { amount = 0.5, type = "physical", force = "enemy"  },
+              damage = { amount = 2, type = "physical", force = "enemy"  },
               apply_damage_to_trees = false
             }
           }
@@ -464,29 +461,29 @@ data:extend({
     name = "Worm-Unit-Projectile",
     flags = {"not-on-map"},
     acceleration = 0.005,
-	--force = "enemy",
+	  force = "enemy",
     action =
     {
       type = "direct",
-	  --force = "enemy",
+	    force = "enemy",
       action_delivery =
       {
         type = "instant",
-		--force = "enemy",
+		    force = "enemy",
         target_effects =
         {		  
           {
             type = "create-entity",
-			--force = "enemy",
-			entity_name = "ne_worm_launcher_trigger_1",			
+			      force = "enemy",
+			      entity_name = "ne_worm_launcher_trigger_1",			
           },
-		  {
-			type = "damage",
-			damage = { amount = 3 , type = "physical"}
-		  },
-		  {
-			type = "create-sticker",
-			sticker = "slowdown-sticker"
+		      {
+			      type = "damage",
+			      damage = { amount = 3 , type = "physical"}
+		      },
+		      {
+			      type = "create-sticker",
+			      sticker = "slowdown-sticker"
           },
         }
       }
@@ -520,7 +517,7 @@ data:extend({
 	name = "Web-Projectile",
 	flags = {"not-on-map"},
 	collision_box =  {{-0.01, -0.01}, {0.01, 0.01}},
-	collision_mask = { "rail-layer" },
+	collision_mask = { "layer-48" },
 	direction_only = true,
 	acceleration = 0.01,
 	force = "enemy",

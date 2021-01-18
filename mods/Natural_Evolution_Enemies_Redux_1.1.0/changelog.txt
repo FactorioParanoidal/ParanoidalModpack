@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 7. 31. 2020
+  Bugfix:
+    - Removed Fire effects from unit and buildings deaths (resulting in Massive UPS jump)
+    - Reverted Medium Worm's custom attack type as it was not doing any damage.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.18.05
 Date: 7. 31. 2020
   Bugfix:
