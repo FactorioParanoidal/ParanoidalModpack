@@ -24,7 +24,7 @@ local tier_map = {
     ["assembling-machine-4"] = {tier = 3, shadow = 3, has_fluids = true},
     ["assembling-machine-5"] = {tier = 4, shadow = 4, has_fluids = true},
     ["assembling-machine-6"] = {tier = 5, shadow = 4, has_fluids = true},
-    ["burner-assembling-machine"] = {tier = 0, shadow = 0, tint = util.color("262626")},
+    ["burner-assembling-machine"] = {tier = 0, shadow = 0, tint = util.color("402000")}, --drd 262626
     ["steam-assembling-machine"] = {tier = 0, shadow = 0, has_fluids = true, tint = util.color("d9d9d9")},
 }
 
@@ -495,7 +495,9 @@ for name, map in pairs(tier_map) do
     local test = reskins.bobs.triggers.assembly.burner_assembling_machine_is_small
 
     -- Rescale for electronics and burner assembling machines
-    if string.find(name, "electronics") or (reskins.bobs.triggers.assembly.burner_assembling_machine_is_small and name == "burner-assembling-machine") then
+    if string.find(name, "electronics") 
+--	or (reskins.bobs.triggers.assembly.burner_assembling_machine_is_small and name == "burner-assembling-machine")  --drd
+	then
         reskins.lib.rescale_entity(entity.animation, 2/3)
         reskins.lib.rescale_remnant(entity, 2/3)
     end
