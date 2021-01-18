@@ -26,6 +26,25 @@ local function update_signal_table(ltnc, slot, signal)
   end
 end -- update_signal_table()
 
+local function update_ltn_signals(ltnc)
+  for name, details in pairs(config.ltn_signals) do 
+    local value = ltnc.combinator:get(name)
+    local elem = nil
+    if name == "ltn-network-id" then
+      elem = ltnc["net_id_flow"]["ltnc-element__"..name]
+    else
+      elem = ltnc["ltn_signals_"..details.stop_type]["ltnc-element__"..name]
+    end
+    if  elem then
+      if elem.type == "checkbox" then
+        elem.state = (value > 0 and true or false)
+      else
+        elem.text = tostring(value)
+      end
+    end
+  end
+end -- update_ltn_signals()
+
 local function update_net_id_buttons(ltnc, networkid)
   for i=1,32 do
     local bit = 2^(i-1)
@@ -91,22 +110,7 @@ function ltnc_gui.Open(player_index, entity)
   update_visible_components(ltnc)
 
   -- read and apply ltn signals
-  for name, details in pairs(config.ltn_signals) do 
-    local value = ltnc.combinator:get(name)
-    local elem = nil
-    if name == "ltn-network-id" then
-      elem = ltnc["net_id_flow"]["ltnc-element__"..name]
-    else
-      elem = ltnc["ltn_signals_"..details.stop_type]["ltnc-element__"..name]
-    end
-    if  elem then
-      if elem.type == "checkbox" then
-        elem.state = (value > 0 and true or false)
-      else
-        elem.text = tostring(value)
-      end
-    end
-  end
+  update_ltn_signals(ltnc)
 
   -- read on/off switch
   ltnc.on_off.switch_state = ltnc.combinator:is_enabled() and "right" or "left"
@@ -296,6 +300,7 @@ function ltnc_gui.RegisterHandlers()
           end
           dlog("Current stop type: "..stop_type.." - shift: ".. (e.shift and "true" or "false"))
           if e.element.name == "chk-depot" then
+            dlog("chk-depot")
             if e.element.state == true then
               ltnc.combinator:set_stop_type(config.LTN_STOP_DEPOT)
             else
@@ -313,6 +318,7 @@ function ltnc_gui.RegisterHandlers()
               end
             end
           elseif e.element.name == "chk-requester" then
+            dlog("chk-requester")
             if e.element.state == false then
               ltnc.combinator:set_stop_type(bit32.bxor(stop_type, config.LTN_STOP_REQUESTER))
             else
@@ -324,6 +330,7 @@ function ltnc_gui.RegisterHandlers()
             end
           end
           update_visible_components(ltnc)
+          update_ltn_signals(ltnc)
         end
       },
       ltn_signal_entries = {
