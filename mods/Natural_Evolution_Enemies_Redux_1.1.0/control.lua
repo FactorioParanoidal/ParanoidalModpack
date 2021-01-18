@@ -1164,24 +1164,24 @@ local function On_Death(event)
 	------writeDebug("Fire Unit killed")
 		if math.floor(UnitNumber(entity)) < 5 then
 		
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})		
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})		
 			--writeDebug("Smaller than 5")
-			Look_and_Burn(spawn_fire, 0.25)
+			--Look_and_Burn(spawn_fire, 0.25)
 			
 		elseif math.floor(UnitNumber(entity)) < 10 then
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
 			--writeDebug("Smaller than 10")			
-			Look_and_Burn(spawn_fire, 0.25)
+			--Look_and_Burn(spawn_fire, 0.25)
 			
 		elseif math.floor(UnitNumber(entity)) < 15 then
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
 			--writeDebug("Smaller than 15")
-			Look_and_Burn(spawn_fire, 0.375)
+			--Look_and_Burn(spawn_fire, 0.375)
 			
 		else
-			local spawn_fire = surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
+			--local spawn_fire = surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
 			--writeDebug("Bigger than 15")
-			Look_and_Burn(spawn_fire, 0.5)
+			--Look_and_Burn(spawn_fire, 0.5)
 		end
 		
 	end
@@ -1196,11 +1196,11 @@ local function On_Death(event)
 		if (force == game.forces.enemy) then
 		-- do nothing
 		elseif e_corpse == "medium-remnants" then
-			surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-2", position = pos, force = "enemy"})
 		elseif e_corpse == "big-remnants" then
-			surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-3", position = pos, force = "enemy"})
 		else
-			surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
+			--surface.create_entity({name="ne-fire-flame-1", position = pos, force = "enemy"})
 		end	
 		
 	end	
@@ -1239,7 +1239,7 @@ local function On_Death(event)
 					local new_position = {x = pos.x + xxx,y = pos.y + yyy}
 				
 				
-						surface.create_entity({name="ne-fire-flame-3", position = new_position, force = "enemy"})
+						--surface.create_entity({name="ne-fire-flame-3", position = new_position, force = "enemy"})
 					end
 					end
 
@@ -1555,8 +1555,8 @@ function Scorched_Earth(surface, pos, size)
 			if game.active_mods["alien-biomes"] then
 			
 				if currentTilename == "volcanic-orange-heat-4" then
-					local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})
-					Look_and_Burn(spawn_fire, 0.25)
+					--local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})
+					--Look_and_Burn(spawn_fire, 0.25)
 					Remove_Decal(surface, new_position, 1.5, 5)
 					
 				elseif replaceableTiles_alien[currentTilename] then
@@ -1571,8 +1571,8 @@ function Scorched_Earth(surface, pos, size)
 			else				
 
 				if currentTilename == "red-desert-1" then
-					local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})
-					Look_and_Burn(spawn_fire, 0.25)
+					--local spawn_fire = surface.create_entity({name="ne-fire-flame-0", position = pos, force = "enemy"})
+					--Look_and_Burn(spawn_fire, 0.25)
 					Remove_Decal(surface, new_position, 1.5, 5)
 					
 				elseif replaceableTiles[currentTilename] then
@@ -1631,7 +1631,7 @@ local function on_tick()
 		--- Every 10min, increase the evo factor by 5% of remaining evo, if a silo is build. 
 		if global.number_or_rocketsilos >= 1 and settings.startup["NE_Challenge_Mode"].value then
 		
-			game.forces.enemy.evolution_factor = game.forces.enemy.evolution_factor + (1 - game.forces.enemy.evolution_factor)/5
+			--game.forces.enemy.evolution_factor = game.forces.enemy.evolution_factor + (1 - game.forces.enemy.evolution_factor)/5
 			if game.forces.enemy.evolution_factor > 1 then game.forces.enemy.evolution_factor = 1 end
 			----writeDebug("Increase Evo")
 		
@@ -1843,7 +1843,7 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 15
     end  
 
-    if research == "tank" then
+    if research == "tanks" then
         global.tech_level = global.tech_level + 15
     end 
 
@@ -1874,16 +1874,16 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 25
     end 
 	
-    if research == "gun-turret" then
+    if research == "turrets" then
         global.tech_level = global.tech_level + 5
     end  
   
-    if research == "laser-turret" then
+    if research == "laser-turrets" then
         global.tech_level = global.tech_level + 15
     end  
 
 			
-    if research == "stone-wall" then
+    if research == "stone-walls" then
         global.tech_level = global.tech_level + 5
     end 
 	
@@ -1892,16 +1892,16 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 500
     end  
 
-    if research == "defender" then
+    if research == "combat-robotics" then
         global.tech_level = global.tech_level + 15
     end  
 
 	
-    if research == "distractor" then
+    if research == "combat-robotics-2" then
         global.tech_level = global.tech_level + 15
     end  
 
-    if research == "destroyer" then
+    if research == "combat-robotics-3" then
         global.tech_level = global.tech_level + 15
     end  
 	
@@ -2066,31 +2066,31 @@ script.on_event(defines.events.on_research_finished, function(event)
         global.tech_level = global.tech_level + 150
     end 
 
-    if research == "laser-shooting-speed-1" then
+    if research == "laser-turret-speed-1" then
         global.tech_level = global.tech_level + 50
     end	
 
-    if research == "laser-shooting-speed-2" then
+    if research == "laser-turret-speed-2" then
         global.tech_level = global.tech_level + 60
     end	
 
-    if research == "laser-shooting-speed-3" then
+    if research == "laser-turret-speed-3" then
         global.tech_level = global.tech_level + 80
     end	
 	
-    if research == "laser-shooting-speed-4" then
+    if research == "laser-turret-speed-4" then
         global.tech_level = global.tech_level + 90
     end		
     
-	if research == "laser-shooting-speed-5" then
+	if research == "laser-turret-speed-5" then
         global.tech_level = global.tech_level + 100
     end	
 	
-	if research == "laser-shooting-speed-6" then
+	if research == "laser-turret-speed-6" then
         global.tech_level = global.tech_level + 150
     end	
 	
-	if research == "laser-shooting-speed-7" then
+	if research == "laser-turret-speed-7" then
         global.tech_level = global.tech_level + 200
     end	
 	
