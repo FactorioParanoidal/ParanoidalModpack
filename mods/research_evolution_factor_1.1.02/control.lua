@@ -22,8 +22,10 @@ local function tech_cost(tech)
   end
   local unit_count = tech.research_unit_count
   if tech.research_unit_count_formula then
-    unit_count = global.infinite_research_units[tech.name]
-    global.infinite_research_units[tech.name] = nil       --erasing unusial record
+    if tech.name then
+      unit_count = global.infinite_research_units[tech.name]
+      global.infinite_research_units[tech.name] = nil       --erasing unusial record
+    end   
     --local level = tech.level
     --if formula and level ~= nil then
     --  level = math.max(0, (tech.level or 1)-1)
@@ -48,6 +50,8 @@ end)
 script.on_event(defines.events.on_research_started, function(event)
   local tech = event.research
   if tech.research_unit_count_formula  then  --is infinite tech?
+    if not tech.name then return end
+    if global.infinite_research_units == nil then global.infinite_research_units = {} end
     global.infinite_research_units[tech.name] = tech.research_unit_count -- save researched technology units count for later use
     --log("saving "..tech.name.." units count "..tech.research_unit_count)
   end   
