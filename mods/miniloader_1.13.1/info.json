@@ -15,6 +15,7 @@
 		"? UltimateBelts >= 0.16.4",
 		"? UltimateBelts_Owoshima_And_Pankeko-Mod >= 0.16.4",
 		"? space-exploration >= 0.1.95",
-		"(?) SchallBeltConfiguration"
+		"(?) SchallBeltConfiguration",
+		"? paranoidal-tweaks"
 	]
 }
