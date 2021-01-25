@@ -1,9 +1,11 @@
 <table align="center"><tr><td align="center" width="9999">
-![ICON](https://cdn.discordapp.com/icons/569536773701500928/8df51b553f826280000ce8f7d1fc7f45.png?size=128)
+<!-- ![ICON](https://cdn.discordapp.com/icons/569536773701500928/8df51b553f826280000ce8f7d1fc7f45.png?size=128) -->
 ![LOGO](https://i107.fastpic.ru/big/2018/1219/42/82dca31e722dda962a4550df5138bb42.png?r=1)
 
-# Factorio PARANOIDAL
+для Factorio 1.1.8 (на данный момент)
 
+
+------------
 **PARANOIDAL** - наиболее хардкорная и интересная сборка для **Factorio**.  
 Здесь внедрено порядка 160 отдельных модов, тесно и нетесно переплетённых между собой в удивительную игру.
 
@@ -47,7 +49,7 @@
   3. Играть
   - *В раздаче на rutracker'e, вполне возможно не самая последняя версия сборки. Если вам нужны последние изменения то для вас следующий путь*
 - Ручной
-  1. Установить Factorio Stable 1.0.0. [Скачать с официального сайта](https://factorio.com/download/archive)
+  1. Установить Factorio ***1.1.8***. [Скачать с официального сайта](https://factorio.com/download/archive)
   2. Склонировать репозиторий (или скачать, кнопка Download вверху)
   3. Удалить все уже установленные моды
   3. Поместить содержимое скачанной папки `mods` в папку `mods` для Factorio
