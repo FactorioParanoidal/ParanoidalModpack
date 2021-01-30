@@ -7,63 +7,66 @@ local fuel_values = {
 
 -- coefficient *8.35 above natural;  8.35*x (kg/liquid , m3/gas)
 
-["gas-hydrogen"] = "90KJ", -- 10,78 МДж/м3 
-["hydrogen"] = "90KJ", -- 10,78 МДж/м3 
+  ["gas-hydrogen"] = "150KJ", -- 10,78 МДж/м3 
+["hydrogen"] = "150KJ", -- 10,78 МДж/м3 
 
-["liquid-multi-phase-oil"] = "180KJ", --21,5MДж/кг
-["crude-oil"] = "367KJ",-- 44 MДж/кг
+["liquid-multi-phase-oil"] = "360KJ", --21,5MДж/кг
+["crude-oil"] = "734KJ",-- 44 MДж/кг
   
-  ["heavy-oil"] = "330KJ", -- МАЗУТ
-  ["liquid-naphtha"] = "330KJ",
+  ["heavy-oil"] = "660KJ", -- МАЗУТ
+  ["liquid-naphtha"] = "660KJ",
   
-  ["light-oil"] = "345KJ",
- 	["liquid-fuel"] = "350KJ", 
-	["liquid-fuel-oil"] = "375KJ",  --Gas oil	38MДж/кг
-	["diesel"] = "775KJ", -- 44,8-43,5 MДж/кг
-	["diesel-fuel"] = "775KJ", --375KJ
-	["gasoline"] = "384KJ", -- 46 МДж/кг, 32,7 МДж/литр
-	["kerosene"] = "359KJ", -- 43 МДж/кг	
+  ["light-oil"] = "690KJ",
+ 	["liquid-fuel"] = "1340KJ", 
+	["liquid-fuel-oil"] = "1340KJ",  --Gas oil	38MДж/кг
+	["diesel"] = "2250KJ", -- 44,8-43,5 MДж/кг
+	["diesel-fuel"] = "2250KJ", --375KJ
+	["gasoline"] = "768KJ", -- 46 МДж/кг, 32,7 МДж/литр
+	["kerosene"] = "718KJ", -- 43 МДж/кг	
 
-  ["petroleum-gas"] = "350KJ",
-
-	
-	["gas-natural-1"] = "280KJ",  -- 33,5 МДж/м3 
-	["gas-raw-1"] = "250KJ",
-
-	["gas-methane"] = "279KJ", -- 33,41 МДж/м3 
-	["gas-ethane"] = "500KJ",  -- 59,85 МДж/м3 
-	["gas-butane"] = "950KJ", -- 113,81 МДж/м3 
-	
-	["gas-propene"] = "380KJ", -- 45,6 МДж/м3 
-	["gas-ethylene"] = "400KJ",  -- 48 Мдж/м3
-	["gas-benzene"] = "1210KJ", -- 145 МДж/м3 -- БЕНЗОЛ
-
-	["gas-butadiene"] = "948KJ", -- butilene 113,51
-	["liquid-ethylbenzene"] = "1308KJ",
+  ["petroleum-gas"] = "700KJ",
 
 	
-  	["acetylene"] = "468KJ", -- 56,04 МДж/м3 
+	["gas-natural-1"] = "560KJ",  -- 33,5 МДж/м3 
+	["gas-raw-1"] = "500KJ",
+	["liquid-ngl"] =  "780KJ",  -- 46,8 МДж/кг
 
-
-["gas-synthesis"] = "96KJ", -- 11,5 Мдж/м3
-["gas-residual"] = "350KJ", -- 42 Мдж/м3	
-
-    ["gas-methanol"] = "180KJ", -- 21,1-22 MДж/кг
-	["methanol"] = "180KJ", -- 21,1-22 MДж/кг
-    ["acetone"] = "262KJ", -- 31,4 МДж/кг
-	["coal-gas"] = "146KJ", -- 17,5 Мдж/м3
-	["syngas"] = "12KJ", -- 11,5 Мдж/м3	
-	["liquid-toluene"] = "1308KJ", --156,71 Мдж/м3
-	["gas-hydrazine"] = "380KJ", --fuel_value = "380KJ", 14644 кДж/кг
+	["gas-methane"] = "558KJ", -- 33,41 МДж/м3 
+	["gas-ethane"] = "1000KJ",  -- 59,85 МДж/м3 
+	["gas-butane"] = "1900KJ", -- 113,81 МДж/м3 
 	
-	["gas-ammonia"] = "155KJ",  --18,6  Мдж/м3
-	["gas-hydrogen-sulfide"] = "182KJ",  --21,75  Мдж/м3
+	["gas-propene"] = "760KJ", -- 45,6 МДж/м3 
+	["gas-ethylene"] = "800KJ",  -- 48 Мдж/м3
+	["gas-benzene"] = "2420KJ", -- 145 МДж/м3 -- БЕНЗОЛ
+
+	["gas-butadiene"] = "1896KJ", -- butilene 113,51
+	["liquid-ethylbenzene"] = "2616KJ",
+
 	
-	["combustion-mixture1"] = "300KJ",
-	["combustion-mixture2"] = "300KJ",
-	["diborane"] = "300KJ",	
-	["refsyngas"] = "300KJ",
-	["xylenol"] = "300KJ"
+  	["acetylene"] = "936KJ", -- 56,04 МДж/м3 
+
+
+["gas-synthesis"] = "192KJ", -- 11,5 Мдж/м3
+["gas-residual"] = "700KJ", -- 42 Мдж/м3	
+
+    ["gas-methanol"] = "360KJ", -- 21,1-22 MДж/кг
+	["methanol"] = "360KJ", -- 21,1-22 MДж/кг
+    ["acetone"] = "524KJ", -- 31,4 МДж/кг
+	["coal-gas"] = "292KJ", -- 17,5 Мдж/м3
+	["syngas"] = "240KJ", -- 11,5 Мдж/м3	
+	["liquid-toluene"] = "2616KJ", --156,71 Мдж/м3
+	["gas-hydrazine"] = "760KJ", --fuel_value = "380KJ", 14644 кДж/кг
+	
+	["gas-ammonia"] = "310KJ",  --18,6  Мдж/м3
+	["gas-hydrogen-sulfide"] = "364KJ",  --21,75  Мдж/м3
+	["sour-gas"] = "304KJ",
+	
+	
+	["combustion-mixture1"] = "600KJ",
+	["combustion-mixture2"] = "600KJ",
+	["diborane"] = "600KJ",	
+	["refsyngas"] = "600KJ",
+	["xylenol"] = "600KJ"
  
 }
 
@@ -75,7 +78,7 @@ local emissions = {
   ["petroleum-gas"] = 1,
   ["diesel-fuel"] = 0.8,
   
-  ["gas-hydrogen"] = 0.05,
+  ["gas-hydrogen"] = -2,
 }
 
 local parse_energy = function(energy)
