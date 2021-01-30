@@ -8,9 +8,8 @@ global.messages = {}
 local function mod_print(message)
   if not game or #game.players <= 0 then
     global.messages = global.messages or {}
-    table.insert(global.messages, message)
   else
-    game.print(MOD_STRING .. ": " .. message)
+    game.print({"", MOD_STRING, ": ", message})
   end
 end
 
