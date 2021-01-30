@@ -1,6 +1,6 @@
 {
 	"name": "Shortcuts-ick",
-	"version": "1.1.6",
+	"version": "1.1.7",
 	"factorio_version": "1.1",
 	"title": "Shortcuts for 1.1",
 	"author": "npc_strider(morley376), modified by ickputzdirwech",
@@ -13,7 +13,7 @@
 	"(?)OutpostPlannerUpdated >= 1.1.6",
 	"(?)OutpostPlanner1-1 >= 1.2.1",
 	"(?)northifytool >= 1.1.2",
-	"(?)VehicleWagon2 >= 3.1.8",
+	"(?)VehicleWagon2 >= 3.1.15",
 	"(?)WellPlanner >= 0.18.7"],
 	"description": "Adds a host of useful shortcuts to improve QOL. Shortcuts for:\n\n- Toggles for equipment and personal logistic requests\n- artillery remote and an artillery cannon fire toggle\n- deconstruction planner trees/rocks only and cliff/fish/item-on-ground\n- Spidertron settings, spidertron remote and train manual mode\n- rail block visualisation, player lamp, customizable grid overlay and far zoom\n- Shortcuts for various other mods\n\nOriginal mod by npc_strider(morley376) mods.factorio.com/mod/Shortcuts."
 }

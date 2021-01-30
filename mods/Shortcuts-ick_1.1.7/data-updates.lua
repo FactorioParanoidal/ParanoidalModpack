@@ -95,7 +95,7 @@ if mods["WellPlanner"] and data.raw["selection-tool"]["well-planner"] and settin
 end
 
 if mods["VehicleWagon2"] and settings.startup["winch"].value == true then
-	hide_the_remote("winch", "vehicle-wagons", data.raw.capsule["winch"])
+	hide_the_remote("winch", "vehicle-wagons", data.raw["selection-tool"]["winch"])
 end
 
 -- OTHER MODS
