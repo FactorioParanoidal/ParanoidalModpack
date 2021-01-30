@@ -90,7 +90,7 @@ data:extend( --DrD
   },
   {
     type = "recipe",
-    name = "steam-engine-5",
+    name = "steam-engine-5", 
     normal =
     {
 	  enabled = false,
@@ -119,3 +119,57 @@ data:extend( --DrD
   },
 }
 )
+
+-- TIME TO BUILD REQUIRED --
+
+data.raw.recipe["steam-engine-2"].normal.energy_required = 50
+data.raw.recipe["steam-engine-2"].expensive.energy_required = 50
+data.raw.recipe["steam-engine-3"].normal.energy_required = 40
+data.raw.recipe["steam-engine-3"].expensive.energy_required = 40
+data.raw.recipe["steam-engine-4"].normal.energy_required = 30
+data.raw.recipe["steam-engine-4"].expensive.energy_required = 30
+data.raw.recipe["steam-engine-5"].normal.energy_required = 20
+data.raw.recipe["steam-engine-5"].expensive.energy_required = 20
+
+data.raw.recipe["steam-turbine"].normal.energy_required = 120
+data.raw.recipe["steam-turbine"].expensive.energy_required = 120
+data.raw.recipe["steam-turbine-2"].normal.energy_required = 90
+data.raw.recipe["steam-turbine-2"].expensive.energy_required = 90
+data.raw.recipe["steam-turbine-3"].normal.energy_required = 60
+data.raw.recipe["steam-turbine-3"].expensive.energy_required = 60
+
+data.raw.recipe["boiler-2"].energy_required = 10
+data.raw.recipe["boiler-3"].energy_required = 15
+data.raw.recipe["boiler-4"].energy_required = 20
+data.raw.recipe["boiler-5"].energy_required = 30
+
+data.raw.recipe["nuclear-reactor"].energy_required = 60
+data.raw.recipe["nuclear-reactor-2"].energy_required = 120
+data.raw.recipe["nuclear-reactor-3"].energy_required = 180
+
+data.raw.recipe["heat-exchanger"].energy_required = 10
+data.raw.recipe["heat-exchanger-2"].energy_required = 20
+data.raw.recipe["heat-exchanger-3"].energy_required = 30
+
+data.raw.recipe["centrifuge"].energy_required = 50
+data.raw.recipe["centrifuge-mk2"].energy_required = 75
+data.raw.recipe["centrifuge-mk3"].energy_required = 100
+
+data.raw.recipe["assembling-machine-1"].energy_required = 5
+
+data.raw.recipe["assembling-machine-2"].energy_required = 10
+data.raw.recipe["assembling-machine-3"].energy_required = 15
+data.raw.recipe["assembling-machine-4"].energy_required = 20
+data.raw.recipe["assembling-machine-5"].energy_required = 30
+data.raw.recipe["assembling-machine-6"].energy_required = 40
+data.raw.recipe["assembling-machine-7"].energy_required = 50
+data.raw.recipe["assembling-machine-8"].energy_required = 60
+data.raw.recipe["assembling-machine-9"].energy_required = 60
+
+data.raw.recipe["electronics-machine-1"].energy_required = 5
+data.raw.recipe["electronics-machine-2"].energy_required = 10
+data.raw.recipe["electronics-machine-3"].energy_required = 15
+data.raw.recipe["electronics-machine-4"].energy_required = 20
+data.raw.recipe["electronics-machine-5"].energy_required = 30
+
+data.raw.recipe["burner-lab"].energy_required = 5
