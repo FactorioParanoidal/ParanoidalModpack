@@ -1,4 +1,8 @@
 local ion_cannon_targeter = util.table.deepcopy(data.raw["ammo-turret"]["gun-turret"])
+--local ion_cannon_targeter = util.table.deepcopy(data.raw["capsule"]["artillery-targeting-remote"])
+-- artillery-wagon-cannon (item)
+-- artillery-turret (entity)
+-- artillery-targeting-remote
 
 ion_cannon_targeter.name = "ion-cannon-targeter"
 ion_cannon_targeter.icon = modFolder.."/graphics/crosshairs64.png"
@@ -344,7 +348,7 @@ data:extend({
 			filename = modFolder.."/graphics/IonBeam.png",
 			priority = "low",
 			width = 110,
-			height = 1280, --drd 1871
+			height = 1280, --drd
 			frame_count = 1,
 			animation_speed = 0.01,
 			line_length = 1,
@@ -502,3 +506,5 @@ if not settings.startup["ion-cannon-flames"].value then
 		}
 	}
 end
+
+
