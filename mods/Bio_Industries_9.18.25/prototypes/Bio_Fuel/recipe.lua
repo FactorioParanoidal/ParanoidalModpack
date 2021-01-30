@@ -38,7 +38,7 @@ if BI.Settings.BI_Bio_Fuel then
       main_product = ""
     },
 
-    --- Bio Boiler (ENTITY) ---
+    --- Bio Boiler (ENTITY) --- --drd
     {
       type = "recipe",
       name = "bi-bio-boiler",
@@ -54,9 +54,10 @@ if BI.Settings.BI_Bio_Fuel then
         enabled = false,
         energy_required = 10,
         ingredients = {
-          {"boiler", 1},
-          {"steel-plate", 5},
-          {"concrete", 5},
+          {"boiler", 2},
+          {"steel-plate", 20},
+          {"concrete", 20},
+          {"electronic-circuit", 5},		  
         },
         result = "bi-bio-boiler",
         result_count = 1,
@@ -67,8 +68,9 @@ if BI.Settings.BI_Bio_Fuel then
         energy_required = 15,
         ingredients = {
           {"boiler", 2},
-          {"steel-plate", 5},
-          {"concrete", 5},
+          {"steel-plate", 30},
+          {"concrete", 30},
+          {"electronic-circuit", 10},	
         },
         result = "bi-bio-boiler",
         result_count = 1,
