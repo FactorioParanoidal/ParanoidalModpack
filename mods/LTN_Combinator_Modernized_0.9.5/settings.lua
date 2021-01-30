@@ -67,6 +67,13 @@ data:extend({
     },
     {
         type = "bool-setting",
+        name = "show-all-panels",
+        setting_type = "runtime-per-user",
+        order = "ab",
+        default_value = false
+    },
+    {
+        type = "bool-setting",
         name = "ltnc-upgradable",
         order = "sg",
         setting_type = "startup",
