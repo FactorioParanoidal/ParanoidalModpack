@@ -67,7 +67,7 @@ An array:
 
 A table with the following optional key/value pairs:
 * force - string - Optional. - Name of the force of the entity. Defaults to "neutral", use "enemy" for base defenses.
-* dir - string - Optional. - Direction of the entity. Defaults to "north".
+* dir - [Direction](#Direction) - Optional. - Direction of the entity. Defaults to "north".
 * items - [Items](#Items) - Optional. - Items inserted into the entity after spawning. Defaults to no items.
 * dmg - [Damage](#Damage) - Optional. - Damage the entity takes after spawning. Defaults to 0 physical damage from the neutral force.
 * recipe - string - Optional. - Name of the recipe of this assembling machine. Defaults to no recipe.

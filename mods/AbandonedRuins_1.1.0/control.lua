@@ -36,6 +36,13 @@ script.on_init(init)
 script.on_configuration_changed(init)
 script.on_event(defines.events.on_runtime_mod_setting_changed, init)
 
+script.on_event(defines.events.on_force_created,
+  function()
+    -- Sets up the diplomacy for all forces, not just the newly created one.
+    util.set_enemy_force_diplomacy(util.get_enemy_force(), not settings.global["AbandonedRuins-enemy-not-cease-fire"].value)
+  end
+)
+
 script.on_event(defines.events.on_tick,
   function(event)
     local ruins = global.ruin_queue[event.tick]
@@ -55,6 +62,20 @@ local function queue_ruin(tick, ruin)
   table.insert(global.ruin_queue[processing_tick], ruin)
 end
 
+local function check_ruin_spawn(size, min_distance, center, surface, tick)
+  min_distance = min_distance * util.ruin_min_distance_multiplier[size]
+  if math.abs(center.x) < min_distance and math.abs(center.y) < min_distance then return end -- too close to spawn
+
+  -- random variance so they aren't always chunk aligned
+  local variance = -(util.ruin_half_sizes[size] * 0.75) + 12 -- 4 -> 9, 8 -> 6, 16 -> 0. Was previously 4 -> 10, 8 -> 5, 16 -> 0
+  if variance > 0 then
+    center.x = center.x + math.random(-variance, variance)
+    center.y = center.y + math.random(-variance, variance)
+  end
+
+  queue_ruin(tick, {size = size, center = center, surface = surface})
+end
+
 script.on_event(defines.events.on_chunk_generated,
   function (e)
     if global.spawn_ruins == false then return end -- ruin spawning is disabled
@@ -62,27 +83,19 @@ script.on_event(defines.events.on_chunk_generated,
     if util.str_contains_any_from_table(e.surface.name, global.excluded_surfaces) then return end
 
     local center = util.get_center_of_chunk(e.position)
-    if math.abs(center.x) < settings.global["ruins-min-distance-from-spawn"].value and math.abs(center.y) < settings.global["ruins-min-distance-from-spawn"].value then return end --too close to spawn
+    local min_distance = settings.global["ruins-min-distance-from-spawn"].value
 
     local spawn_type = math.random()
-    if spawn_type <= global.spawn_table.small then --spawn small ruin
-      --random variance so they aren't always chunk aligned
-      center.x = center.x + math.random(-10,10)
-      center.y = center.y + math.random(-10,10)
-
-      queue_ruin(e.tick, {size = "small", center = center, surface = e.surface})
-    elseif spawn_type <= global.spawn_table.medium then --spawn medium ruin
-      --random variance so they aren't always chunk aligned
-      center.x = center.x + math.random(-5,5)
-      center.y = center.y + math.random(-5,5)
-
-      queue_ruin(e.tick, {size = "medium", center = center, surface = e.surface})
-    elseif spawn_type <= global.spawn_table.large then --spawn large ruin
-      queue_ruin(e.tick, {size = "large", center = center, surface = e.surface})
+    if spawn_type <= global.spawn_table["small"] then
+      check_ruin_spawn("small", min_distance, center, e.surface, e.tick)
+    elseif spawn_type <= global.spawn_table["medium"] then
+      check_ruin_spawn("medium", min_distance, center, e.surface, e.tick)
+    elseif spawn_type <= global.spawn_table["large"] then
+      check_ruin_spawn("large", min_distance, center, e.surface, e.tick)
     end
   end
 )
---[[
+
 script.on_event({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, function(event)
   if event.item ~= "AbandonedRuins-claim" then return end
 
@@ -100,7 +113,7 @@ script.on_event({defines.events.on_player_selected_area, defines.events.on_playe
     end
   end
 end)
-]]--
+
 remote.add_interface("AbandonedRuins",
 {
   -- Set whether ruins should be spawned at all

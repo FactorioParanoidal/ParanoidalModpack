@@ -1,7 +1,0 @@
-Changes:
-  - Replaced un-minable non-terrain tiles in ruins with minable tiles.
-  - Hold Shift while using the "Claim ruin" tool to remove all remnants (corpses of structures) in the area.
-
-Bugfixes:
-  - Fixed a crash when a ruin was spawned with a invalid recipe.
-  - Fixed that the claim ruin control had no locale.

@@ -15,7 +15,7 @@ return
     {"stone-wall", {x = -3.5, y = 2.5}, {}},
     {"stone-wall", {x = -0.5, y = 3.5}, {dmg = {dmg = {type = "random", min = 20, max = 150}}, }},
     {"stone-wall", {x = -1.5, y = 3.5}, {dmg = {dmg = {type = "random", min = 20, max = 150}}, }},
-    {"wooden-chest", {x = 0.5, y = 2.5}, {items = {coal = {type = "random", min = 10, max = 70}}, }},
+    {"wooden-chest", {x = 0.5, y = 2.5}, {items = {["solid-fuel"] = {type = "random", min = 10, max = 70}}, }},
     {"stone-wall", {x = 1.5, y = 3.5}, {dmg = {dmg = {type = "random", min = 20, max = 150}}, }},
     {"stone-wall", {x = 0.5, y = 3.5}, {}},
     {"stone-wall", {x = 3.5, y = 2.5}, {dmg = {dmg = {type = "random", min = 20, max = 150}}, }},

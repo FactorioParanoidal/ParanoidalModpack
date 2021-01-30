@@ -3,7 +3,7 @@ return
   entities =
   {
     {"straight-rail", {x = -1, y = -3}, {dead = 0.4}},
-    {"wooden-chest", {x = 1.5, y = -2.5}, {items = {coal = {type = "random", min = 19, max = 53}, ["solid-fuel"] = {type = "random", min = 3, max = 18}}, }},
+    {"wooden-chest", {x = 1.5, y = -2.5}, {items = {["solid-fuel"] = {type = "random", min = 19, max = 38}}, }},
     {"fast-inserter", {x = 2.5, y = -2.5}, {dir = "west", dead = 0.4}},
     {"transport-belt", {x = 3.5, y = -2.5}, {dir = "south", dead = 0.4}},
     {"transport-belt", {x = 3.5, y = -3.5}, {dir = "south", dead = 0.4}},
