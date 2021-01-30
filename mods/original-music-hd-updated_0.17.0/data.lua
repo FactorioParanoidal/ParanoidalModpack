@@ -29,7 +29,7 @@ data:extend(
   },
   {
     type = "ambient-sound",
-    name = "main-menu-track",
+    name = "main-menu-track1",
     track_type = "main-track",
     sound =
     {
