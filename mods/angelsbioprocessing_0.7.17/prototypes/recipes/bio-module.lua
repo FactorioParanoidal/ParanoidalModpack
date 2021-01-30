@@ -8,6 +8,7 @@ data:extend(
       {
         {type = "item", name = "crystal-splinter-green", amount = 1},
         {type = "item", name = "advanced-circuit", amount = 5},
+        {type = "item", name = "alien-artifact", amount = 5}, --drd
         {type = "item", name = "electronic-circuit", amount = 5},
         {type = "item", name = "token-bio", amount = 1}
       },
@@ -23,6 +24,7 @@ data:extend(
         {type = "item", name = "angels-bio-yield-module", amount = 4},
         {type = "item", name = "crystal-shard-green", amount = 1},
         {type = "item", name = "advanced-circuit", amount = 5},
+        {type = "item", name = "alien-artifact", amount = 10}, --drd
         {type = "item", name = "processing-unit", amount = 5},
         {type = "item", name = "token-bio", amount = 2}
       },
@@ -38,8 +40,9 @@ data:extend(
         {type = "item", name = "angels-bio-yield-module-2", amount = 5},
         {type = "item", name = "crystal-full-green", amount = 1},
         {type = "item", name = "advanced-circuit", amount = 5},
+        {type = "item", name = "alien-artifact", amount = 20}, --drd
         {type = "item", name = "processing-unit", amount = 5},
-        {type = "item", name = "token-bio", amount = 3}
+        {type = "item", name = "token-bio", amount = 4}
       },
       energy_required = 60,
       result = "angels-bio-yield-module-3"
