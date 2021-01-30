@@ -178,6 +178,14 @@ function handleDamageEvent(event)
 		return
 	end
 	
+	--Take no damage if immune.
+	if global.immuneUntil[event.entity.unit_number] and global.immuneUntil[event.entity.unit_number] > event.tick then
+		event.entity.health = event.entity.health + event.final_damage_amount
+		return
+	elseif global.immuneUntil[event.entity.unit_number] and global.immuneUntil[event.entity.unit_number] <= event.tick then
+		global.immuneUntil[event.entity.unit_number] = nil
+	end
+	
 	--Now we figure out if we should apply hull damage due to the shield having been broken.
 	if global.turrets[event.entity.unit_number].disabled_until and event.tick <= global.turrets[event.entity.unit_number].disabled_until then
 		-- kts_print("Turret took Hull dmg " .. event.final_damage_amount .. " Current HP " .. event.entity.health .. " to " .. event.entity.unit_number)

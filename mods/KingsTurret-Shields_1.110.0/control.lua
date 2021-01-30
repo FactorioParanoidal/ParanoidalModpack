@@ -19,6 +19,7 @@ require "prototypes.functions"
 
 -- global.turrets[turretkey][7].<property> || https://lua-api.factorio.com/latest/LuaEntity.html#LuaEntity.electric_buffer_size
 -- global.needsGFXUpdate[TURRET_ID] || Notes that this unit needs a graphics update next ontick() cycle.
+-- global.immuneUntil[TURRET_ID] || Mostly an empty list. Contains the tickID when the turret can take damage after being placed. Immune until then.
 
 -- global.research_size_steps || How many levels of size research per order of magnutide of shield size
 -- global.research_speed_steps || How many levels of speed research per order of magnutide of recharge rate
@@ -56,6 +57,7 @@ script.on_init(function()
 	
 	--Used by ontick to update shield graphics.
 	global.needsGFXUpdate = {}
+	global.immuneUntil = {}
 	
 	global.disabled_turrets={}
 	global.combinators={}
@@ -165,6 +167,11 @@ script.on_configuration_changed(function()
 			value[HP_BAR] = nil
 		end
 		global.version = 34
+	end
+	
+	if global.version < 35 then
+		global.immuneUntil = {}
+		global.version = 35
 	end
 
 	more_shields_than_turrets_fix()
@@ -319,6 +326,7 @@ script.on_event({defines.events.on_robot_built_entity,defines.events.on_built_en
 		or entity.type == "fluid-turret"
 		or entity.type == "electric-turret" then
 			init_turret(entity,true)
+			global.immuneUntil[entity.unit_number] = event.tick+60
 		end
 	end
 	if entity.name=="turret-shield-combinator" then
