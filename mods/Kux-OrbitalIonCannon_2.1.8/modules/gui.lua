@@ -51,7 +51,9 @@ end
 function init_GUI(player)
 	--print("init_GUI")
 	--TODO is called every 60 seconds!
-	if #global.forces_ion_cannon_table[player.force.name] == 0 and not player.cheat_mode then
+
+	local ict = global.forces_ion_cannon_table[player.force.name]
+	if ict == nil or #ict == 0 and not player.cheat_mode then
 		local frame = player.gui.left["ion-cannon-stats"]
 		if frame then frame.destroy() end
 		if player.gui.top["ion-cannon-button"] then player.gui.top["ion-cannon-button"].destroy() end

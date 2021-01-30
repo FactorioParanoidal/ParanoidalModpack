@@ -1,10 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2021-01-28
+  Bugfixes:
+    - fix for: gui.lua:54: attempt to get length of field '?' (a nil value)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2021-01-22
+  Bugfixes:
+    - backward compatibily for 1.0
+---------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2021-01-13
   Changes:
     - filter overview of ion cannons for current surface
     - refactoring, starting use of mod-gui
     - move top button into mod-gui frame
+    - implment shortcuts for the targeter
   Bugfixes:
     - Fix crash with Rampant Arsenal if rampant-arsenal-technology-energy-weapons-damage-6 is not present
 ---------------------------------------------------------------------------------------------------

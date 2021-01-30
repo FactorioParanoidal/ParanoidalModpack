@@ -1,4 +1,5 @@
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
+require "tools"
 
 require "util"
 -- require("__stdlib__/stdlib/core")
@@ -225,10 +226,10 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 			if not global.permissions[index] then
 				player.print({"ion-permission-denied"})
 				playSoundForPlayer("unable-to-comply", player)
-				if player.clear_cursor then --COMPATIBILITY 1.1.0
-					return player.clear_cursor()
+				if Version.baseVersionGreaterOrEqual1d1() then
+					player.clear_cursor() --COMPATIBILITY 1.1
 				else
-					return player.clean_cursor() -- factorio version < 1.1.0
+					player.clean_cursor() --Factorio < 1.1
 				end
 			end
 		end
@@ -430,7 +431,10 @@ script.on_event(defines.events.on_trigger_created_entity, function(event)
 	end
 end)
 
-script.on_event(defines.events.on_pre_build, function(event) --COMPATIBILITY 1.1 'on_put_item' renamed to 'on_pre_build'
+local c_on_pre_build = defines.events.on_pre_build --COMPATIBILITY 1.1 'on_put_item' renamed to 'on_pre_build'
+if not c_on_pre_build then c_on_pre_build = defines.events.on_put_item end
+
+script.on_event(c_on_pre_build, function(event)
 	local current_tick = event.tick
 	if global.tick and global.tick > current_tick then
 		return
@@ -475,7 +479,7 @@ local allowed_items = {"ion-cannon-targeter"}
 local function give_shortcut_item(player, prototype_name)
 	if game.item_prototypes[prototype_name] then
 		local cc = false
-		if player.clear_cursor then
+		if Version.baseVersionGreaterOrEqual1d1() then
 			cc = player.clear_cursor() --COMPATIBILITY 1.1
 		else
 			cc = player.clean_cursor() --Factorio < 1.1
