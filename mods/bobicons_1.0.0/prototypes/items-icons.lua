@@ -1794,6 +1794,42 @@ data.raw.fluid["crude-oil"].icon_size = nil
 
 end
 
+-- angelsbioprocessing
+
+if mods["angelsbioprocessing"] then
+data.raw.item["crystal-splinter-blue"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-splinter-blue.png"
+data.raw.item["crystal-splinter-blue"].icon_size = 128
+data.raw.item["crystal-splinter-red"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-splinter-red.png"
+data.raw.item["crystal-splinter-red"].icon_size = 128
+data.raw.item["crystal-splinter-green"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-splinter-green.png"
+data.raw.item["crystal-splinter-green"].icon_size = 128
+data.raw.item["crystal-shard-blue"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-shard-blue.png"
+data.raw.item["crystal-shard-blue"].icon_size = 128
+data.raw.item["crystal-shard-red"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-shard-red.png"
+data.raw.item["crystal-shard-red"].icon_size = 128
+data.raw.item["crystal-shard-green"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-shard-green.png"
+data.raw.item["crystal-shard-green"].icon_size = 128
+data.raw.item["crystal-full-blue"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-full-blue.png"
+data.raw.item["crystal-full-blue"].icon_size = 128
+data.raw.item["crystal-full-red"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-full-red.png"
+data.raw.item["crystal-full-red"].icon_size = 128
+data.raw.item["crystal-full-green"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-full-green.png"
+data.raw.item["crystal-full-green"].icon_size = 128
+
+data.raw.item["crystal-splinter-raw"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-splinter-raw.png"
+data.raw.item["crystal-splinter-raw"].icon_size = 128
+data.raw.item["crystal-shard-raw"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-shard-raw.png"
+data.raw.item["crystal-shard-raw"].icon_size = 128
+data.raw.item["crystal-full-raw"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-full-raw.png"
+data.raw.item["crystal-full-raw"].icon_size = 128
+
+data.raw.item["crystal-splinter-harmonic"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-splinter-harmonic.png"
+data.raw.item["crystal-splinter-harmonic"].icon_size = 128
+data.raw.item["crystal-shard-harmonic"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-shard-harmonic.png"
+data.raw.item["crystal-shard-harmonic"].icon_size = 128
+data.raw.item["crystal-full-harmonic"].icon = "__bobicons__/graphics/icons/angelsbioprocessing/crystal-full-harmonic.png"
+data.raw.item["crystal-full-harmonic"].icon_size = 128
+end
 
 if mods["extendedangels"] then
 data.raw.item["powder-tungsten-carbide"].icon = "__bobicons__/graphics/icons/extendedangels/powder-tungsten-carbide-64.png"
