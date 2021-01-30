@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.110.0
+Date: 1/19/2021
+  Change:
+    - Version bump for 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.100.17
+Date: 10/22/2020
+  Change:
+    - Newly placed turrets will be immune to all damage for 1 second. This prevents mods like Hero Turrets from getting your turrets killed when the turret is promoted during combat.
+---------------------------------------------------------------------------------------------------
 Version: 1.100.16
 Date: 10/20/2020
   Bugfix:
