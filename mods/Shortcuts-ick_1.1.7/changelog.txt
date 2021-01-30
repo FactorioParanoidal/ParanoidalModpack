@@ -243,3 +243,9 @@ Version: 1.1.6
 Date: 2021-01-09
   Bugfixes:
     - Fixed that auto generating shortcuts for modded selection tools wouldn't work if the selection tools were created in data-final-fixes.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2021-01-14
+  Bugfixes:
+    - Fixed that "winch" from "Vehicle Wagon 2" wasn't hidden from inventory.
