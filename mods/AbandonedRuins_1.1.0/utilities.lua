@@ -1,11 +1,19 @@
 local base_util = require("__core__/lualib/util")
 
 local util = {}
+
 util.ruin_half_sizes =
 {
   small = 8 / 2,
   medium = 16 / 2,
   large = 32 / 2
+}
+
+util.ruin_min_distance_multiplier =
+{
+  small = 1,
+  medium = 2.5,
+  large = 5
 }
 
 util.debugprint = __DebugAdapter and __DebugAdapter.print or function() end
@@ -40,28 +48,34 @@ util.safe_die = function(entity, chance)
   if math.random() <= chance then entity.die() end
 end
 
-util.set_enemy_force_cease_fire = function(enemy, cease_fire)
+-- Set cease_fire status for all forces.
+util.set_enemy_force_cease_fire = function(enemy_force, cease_fire)
   for _, force in pairs(game.forces) do
-    if force ~= enemy then
-      force.set_cease_fire(enemy, cease_fire)
-      enemy.set_cease_fire(force, cease_fire)
+    if force ~= enemy_force then
+      force.set_cease_fire(enemy_force, cease_fire)
+      enemy_force.set_cease_fire(force, cease_fire)
     end
   end
 end
 
-local function setup_enemy_force()
-  local enemy = game.forces["AbandonedRuins:enemy"] or game.create_force("AbandonedRuins:enemy")
-
+-- Set cease_fire status for all forces and friend = true for all biter forces.
+util.set_enemy_force_diplomacy = function(enemy_force, cease_fire)
   for _, force in pairs(game.forces) do
     if force.ai_controllable then
-      force.set_friend(enemy, true)
-      enemy.set_friend(force, true)
+      force.set_friend(enemy_force, true)
+      enemy_force.set_friend(force, true)
     end
   end
-  util.set_enemy_force_cease_fire(enemy, false)
+  util.set_enemy_force_cease_fire(enemy_force, cease_fire)
+end
 
-  global.enemy_force = enemy
-  return enemy
+local function setup_enemy_force()
+  local enemy_force = game.forces["AbandonedRuins:enemy"] or game.create_force("AbandonedRuins:enemy")
+
+  util.set_enemy_force_diplomacy(enemy_force, false)
+
+  global.enemy_force = enemy_force
+  return enemy_force
 end
 
 util.get_enemy_force = function()
