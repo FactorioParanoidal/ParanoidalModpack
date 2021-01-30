@@ -76,7 +76,7 @@ local fuel_values = {
 }
 
 for k, fluid in pairs (data.raw.fluid) do
-  if not fluid.fuel_value then
+  --if not fluid.fuel_value then
     fluid.fuel_value = fuel_values[fluid.name]
-  end
+  --end
 end
