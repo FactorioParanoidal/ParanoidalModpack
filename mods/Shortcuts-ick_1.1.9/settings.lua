@@ -249,7 +249,7 @@ data:extend(
   },
 })
 
-if mods["Orbital Ion Cannon"] or mods["Kux-OrbitalIonCannon"] then
+if mods["Orbital Ion Cannon"] then
   data:extend({{
     setting_type = "startup",
 		name = "ion-cannon-targeter",

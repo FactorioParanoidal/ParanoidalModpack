@@ -8,7 +8,7 @@
 	* Ion cannon targeter shortcut and custom input
 ]]
 
-if (mods["Orbital Ion Cannon"] or mods["Kux-OrbitalIonCannon"]) and data.raw.item["ion-cannon-targeter"] and settings.startup["ion-cannon-targeter"].value == true then
+if mods["Orbital Ion Cannon"] and data.raw.item["ion-cannon-targeter"] and settings.startup["ion-cannon-targeter"].value == true then
 	if data.raw.item["ion-cannon-targeter"].flags then
 		table.insert(data.raw.item["ion-cannon-targeter"].flags, "only-in-cursor")
 		table.insert(data.raw.item["ion-cannon-targeter"].flags, "spawnable")
