@@ -179,6 +179,7 @@ local names = {}
 
 for k, fluid in pairs (data.raw.fluid) do
   --if not fluid.fuel_value then
+	fluid.fuel_value = nil
     fluid.fuel_value = fuel_values[fluid.name]
   --end
   --if not fluid.emissions_multiplier then
