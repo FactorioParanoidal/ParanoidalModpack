@@ -1,86 +1,3 @@
-local ion_cannon_targeter = util.table.deepcopy(data.raw["ammo-turret"]["gun-turret"])
---local ion_cannon_targeter = util.table.deepcopy(data.raw["capsule"]["artillery-targeting-remote"])
--- artillery-wagon-cannon (item)
--- artillery-turret (entity)
--- artillery-targeting-remote
-
-ion_cannon_targeter.name = "ion-cannon-targeter"
-ion_cannon_targeter.icon = modFolder.."/graphics/crosshairs64.png"
-ion_cannon_targeter.icon_size = 64
-ion_cannon_targeter.icon_mipmaps = 0
-ion_cannon_targeter.flags = {"placeable-off-grid", "not-on-map"}
-ion_cannon_targeter.collision_mask = {}
-ion_cannon_targeter.max_health = 1
-ion_cannon_targeter.inventory_size = 0
-ion_cannon_targeter.collision_box = {{0, 0}, {0, 0}}
-ion_cannon_targeter.selection_box = {{0, 0}, {0, 0}}
-ion_cannon_targeter.folded_animation =
-{
-	layers =
-	{
-		{
-			filename = "__core__/graphics/empty.png",
-			priority = "low",
-			width = 1,
-			height = 1,
-			frame_count = 1,
-			line_length = 1,
-			run_mode = "forward",
-			axially_symmetrical = false,
-			direction_count = 1,
-			shift = {0, 0}
-		}
-	}
-}
-ion_cannon_targeter.base_picture =
-{
-	layers =
-	{
-		{
-			filename = modFolder.."/graphics/crosshairs64.png",
-			line_length = 1,
-			width = 64,
-			height = 64,
-			frame_count = 1,
-			axially_symmetrical = false,
-			direction_count = 1,
-			shift = {0, 0}
-		}
-	}
-}
-ion_cannon_targeter.attack_parameters =
-{
-	type = "projectile",
-	ammo_category = "melee",
-	cooldown = 1,
-	projectile_center = {0, 0},
-	projectile_creation_distance = 1.4,
-	range = settings.startup["ion-cannon-radius"].value,
-	damage_modifier = 1,
-	ammo_type =
-	{
-		type = "projectile",
-		category = "melee",
-		energy_consumption = "0J",
-		action =
-		{
-			{
-				type = "direct",
-				action_delivery =
-				{
-					{
-						type = "projectile",
-						projectile = "dummy-crosshairs",
-						starting_speed = 0.28
-					}
-				}
-			}
-		}
-	}
-}
-
-data:extend({ion_cannon_targeter})
-
 data:extend({
 	{
 		type = "projectile",
@@ -269,7 +186,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/Klaxon.ogg",
+				filename = ModPath.."sound/Klaxon.ogg",
 				volume = 0.75
 			},
 		},
@@ -278,7 +195,7 @@ data:extend({
 	{
 		type = "simple-entity",
 		name = "ion-cannon-target",
-		icon = modFolder.."/graphics/crosshairs64.png",
+		icon = ModPath.."graphics/crosshairs64.png",
 		icon_size = 64,
 		flags = {"placeable-off-grid", "not-on-map"},
 		max_health = 1,
@@ -290,7 +207,7 @@ data:extend({
 		animations =
 		{
 			{
-				filename = modFolder.."/graphics/crosshairs_anim.png",
+				filename = ModPath.."graphics/crosshairs_anim.png",
 				priority = "low",
 				width = 64,
 				height = 64,
@@ -304,7 +221,7 @@ data:extend({
 		-- pictures =
 		-- {
 			-- {
-				-- filename = modFolder.."/graphics/crosshairsEntity.png",
+				-- filename = ModPath.."graphics/crosshairsEntity.png",
 				-- priority = "low",
 				-- width = 64,
 				-- height = 64,
@@ -322,7 +239,7 @@ data:extend({
 		show_when_smoke_off = true,
 		animation =
 		{
-			filename = modFolder.."/graphics/explosion.png",
+			filename = ModPath.."graphics/explosion.png",
 			priority = "low",
 			width = 192,
 			height = 192,
@@ -345,10 +262,10 @@ data:extend({
 		show_when_smoke_off = true,
 		animation =
 		{
-			filename = modFolder.."/graphics/IonBeam.png",
+			filename = ModPath.."graphics/IonBeam.png",
 			priority = "low",
 			width = 110,
-			height = 1280, --drd
+			height = 1280, --drd saves vram
 			frame_count = 1,
 			animation_speed = 0.01,
 			line_length = 1,
@@ -385,7 +302,7 @@ data:extend({
 		sound =
 		{
 			{
-				filename = modFolder.."/sound/OrbitalIonCannon.ogg",
+				filename = ModPath.."sound/OrbitalIonCannon.ogg",
 				volume = 2.0
 			},
 		},

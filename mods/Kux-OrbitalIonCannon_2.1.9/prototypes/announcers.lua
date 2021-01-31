@@ -1,4 +1,3 @@
-local modFolder="__Kux-OrbitalIonCannon__" -- Orbital Ion Cannon
 data:extend({
 	{
 		type = "sound",
@@ -6,7 +5,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/CommandAndConquer/IonCannonReady.ogg",
+				filename = ModPath.."sound/CommandAndConquer/IonCannonReady.ogg",
 				volume = 0.75
 			},
 		},
@@ -17,7 +16,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/CommandAndConquer/IonCannonCharging.ogg",
+				filename = ModPath.."sound/CommandAndConquer/IonCannonCharging.ogg",
 				volume = 0.75
 			},
 		},
@@ -28,7 +27,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/CommandAndConquer/SelectTarget.ogg",
+				filename = ModPath.."sound/CommandAndConquer/SelectTarget.ogg",
 				volume = 0.75
 			},
 		},
@@ -39,7 +38,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/CommandAndConquer/UnableToComply.ogg",
+				filename = ModPath.."sound/CommandAndConquer/UnableToComply.ogg",
 				volume = 0.75
 			},
 		},
@@ -53,7 +52,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunCABAL/IonCannonReady.ogg",
+				filename = ModPath.."sound/TiberianSunCABAL/IonCannonReady.ogg",
 				volume = 0.75
 			},
 		},
@@ -64,7 +63,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunCABAL/IonCannonCharging.ogg",
+				filename = ModPath.."sound/TiberianSunCABAL/IonCannonCharging.ogg",
 				volume = 0.75
 			},
 		},
@@ -75,7 +74,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunCABAL/SelectTarget.ogg",
+				filename = ModPath.."sound/TiberianSunCABAL/SelectTarget.ogg",
 				volume = 0.75
 			},
 		},
@@ -86,7 +85,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunCABAL/UnableToComply.ogg",
+				filename = ModPath.."sound/TiberianSunCABAL/UnableToComply.ogg",
 				volume = 0.75
 			},
 		},
@@ -100,7 +99,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunEVA/IonCannonReady.ogg",
+				filename = ModPath.."sound/TiberianSunEVA/IonCannonReady.ogg",
 				volume = 0.75
 			},
 		},
@@ -111,7 +110,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunEVA/IonCannonCharging.ogg",
+				filename = ModPath.."sound/TiberianSunEVA/IonCannonCharging.ogg",
 				volume = 0.75
 			},
 		},
@@ -122,7 +121,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunEVA/SelectTarget.ogg",
+				filename = ModPath.."sound/TiberianSunEVA/SelectTarget.ogg",
 				volume = 0.75
 			},
 		},
@@ -133,7 +132,7 @@ data:extend({
 		variations =
 		{
 			{
-				filename = modFolder.."/sound/TiberianSunEVA/UnableToComply.ogg",
+				filename = ModPath.."sound/TiberianSunEVA/UnableToComply.ogg",
 				volume = 0.75
 			},
 		},

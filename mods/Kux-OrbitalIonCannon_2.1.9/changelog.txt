@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.9
+Date: 2021-01-31
+  Bugfixes:
+    - add missing shortcut translation
+---------------------------------------------------------------------------------------------------
 Version: 2.1.8
 Date: 2021-01-28
   Bugfixes:
@@ -15,7 +20,7 @@ Date: 2021-01-13
     - filter overview of ion cannons for current surface
     - refactoring, starting use of mod-gui
     - move top button into mod-gui frame
-    - implment shortcuts for the targeter
+    - implement shortcuts for the targeter (thanks to ickputzdirwech)
   Bugfixes:
     - Fix crash with Rampant Arsenal if rampant-arsenal-technology-energy-weapons-damage-6 is not present
 ---------------------------------------------------------------------------------------------------

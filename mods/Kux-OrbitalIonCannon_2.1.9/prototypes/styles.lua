@@ -1,4 +1,3 @@
-local modFolder="__Kux-OrbitalIonCannon__" -- Orbital Ion Cannon
 data.raw["gui-style"].default["ion-cannon-button-style"] =
 {
 	type = "button_style",
@@ -10,7 +9,7 @@ data.raw["gui-style"].default["ion-cannon-button-style"] =
 	font = "default",
 	default_graphical_set =
 	{
-			filename = modFolder.."/graphics/Button.png",
+			filename = ModPath.."graphics/Button.png",
 			priority = "extra-high-no-scale",
 			width = 64,
 			height = 64,
@@ -19,7 +18,7 @@ data.raw["gui-style"].default["ion-cannon-button-style"] =
 	},
 	hovered_graphical_set =
 	{
-			filename = modFolder.."/graphics/Button.png",
+			filename = ModPath.."graphics/Button.png",
 			priority = "extra-high-no-scale",
 			width = 64,
 			height = 64,
@@ -28,7 +27,7 @@ data.raw["gui-style"].default["ion-cannon-button-style"] =
 	},
 	clicked_graphical_set =
 	{
-			filename = modFolder.."/graphics/Button.png",
+			filename = ModPath.."graphics/Button.png",
 			width = 64,
 			height = 64,
 			x = 0,
@@ -51,7 +50,7 @@ data.raw["gui-style"].default["ion-cannon-remove-button-style"] =
 	font = "default",
 	default_graphical_set =
 	{
-			filename = modFolder.."/graphics/RemoveButton.png",
+			filename = ModPath.."graphics/RemoveButton.png",
 			priority = "extra-high-no-scale",
 			width = 64,
 			height = 64,
@@ -60,7 +59,7 @@ data.raw["gui-style"].default["ion-cannon-remove-button-style"] =
 	},
 	hovered_graphical_set =
 	{
-			filename = modFolder.."/graphics/RemoveButton.png",
+			filename = ModPath.."graphics/RemoveButton.png",
 			priority = "extra-high-no-scale",
 			width = 64,
 			height = 64,
@@ -69,7 +68,7 @@ data.raw["gui-style"].default["ion-cannon-remove-button-style"] =
 	},
 	clicked_graphical_set =
 	{
-			filename = modFolder.."/graphics/RemoveButton.png",
+			filename = ModPath.."graphics/RemoveButton.png",
 			width = 64,
 			height = 64,
 			x = 0,

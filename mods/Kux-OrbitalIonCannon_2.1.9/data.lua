@@ -1,6 +1,10 @@
-modFolder="__Kux-OrbitalIonCannon__" -- Orbital Ion Cannon
-LoadState="data"
+ModPath="__Kux-OrbitalIonCannon__/" -- Orbital Ion Cannon
+
 require "tools"
+
+require "prototypes.ion-cannon-targeter"
+require "prototypes.orbital-ion-cannon"
+
 require("prototypes.items")
 require("prototypes.entities")
 require("prototypes.recipes")
@@ -8,6 +12,7 @@ require("prototypes.technologies").init()
 require("prototypes.announcers")
 require("prototypes.styles")
 require("prototypes.shortcuts")
+
 data:extend({
 	{
 		type = "custom-input",
