@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2021-01-31
+  Changes:
+    - removed requirement for Advanced Electronics
+    - moved group after base circuits once again
+---------------------------------------------------------------------------------------------------
 Version: 0.3.7
 Date: 2021-01-24
   Bugfixes:
