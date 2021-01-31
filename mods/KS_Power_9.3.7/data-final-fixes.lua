@@ -118,8 +118,8 @@ local emissions = {
 	
 	["liquid-naphtha"] = 3,
 	["gas-propene"] = 5,
-	["gas-hydrogen"] = -2,
-	["gas-hydrazine"] = -1,
+	["gas-hydrogen"] = 0.1,
+	["gas-hydrazine"] = 0.2,
 	
 	["sour-gas"] = 7,
 	["gas-acid"] = 7,
