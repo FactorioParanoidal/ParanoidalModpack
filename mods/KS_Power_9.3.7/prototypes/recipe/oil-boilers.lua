@@ -39,7 +39,7 @@ data:extend({
       {"oil-steam-boiler-2", 1},
       {"invar-alloy", 15},
 	  {"brass-pipe", 10},
-      {"concrete", 20},
+      {"electronic-circuit", 10},
     },
     result = "oil-steam-boiler-3"
  },
