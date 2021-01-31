@@ -77,7 +77,7 @@ if mods["AdvArtilleryRemotes"] then
 	end
 end
 
-if (mods["Orbital Ion Cannon"] or mods["Kux-OrbitalIonCannon"]) and data.raw.item["ion-cannon-targeter"] and data.raw.technology["orbital-ion-cannon"] and settings.startup["ion-cannon-targeter"].value == true then
+if mods["Orbital Ion Cannon"] and data.raw.item["ion-cannon-targeter"] and data.raw.technology["orbital-ion-cannon"] and settings.startup["ion-cannon-targeter"].value == true then
 	hide_the_remote("ion-cannon-targeter", "orbital-ion-cannon", data.raw.item["ion-cannon-targeter"])
 end
 
@@ -90,8 +90,8 @@ if (mods["OutpostPlanner"] or mods["OutpostPlannerUpdated"] or mods["OutpostPlan
 	hide_the_remote("outpost-builder", nil, data.raw["selection-tool"]["outpost-builder"])
 end
 
-if mods["WellPlanner"] and data.raw["selection-tool"]["well-planner"] and settings.startup["well-planner"].value == true then
-	hide_the_remote("well-planner", nil, data.raw["selection-tool"]["well-planner"])
+if settings.startup["well-planner"] and settings.startup["well-planner"].value == true then
+	hide_the_remote("well-planner")
 end
 
 if mods["VehicleWagon2"] and settings.startup["winch"].value == true then
@@ -144,10 +144,10 @@ if mods["RailSignalPlanner"] and data.raw.shortcut["give-rail-signal-planner"] t
 	data.raw.shortcut["give-rail-signal-planner"].action = "lua"
 	data.raw.shortcut["give-rail-signal-planner"].item_to_spawn = nil
 end
-if mods["ModuleInserter"] and data.raw.shortcut["module-inserter"] then
+--[[if mods["ModuleInserter"] and data.raw.shortcut["module-inserter"] then
 	data.raw.shortcut["module-inserter"].action = "lua"
 	data.raw.shortcut["module-inserter"].item_to_spawn = nil
-end
+end]]
 
 
 ---------------------------------------------------------------------------------------------------

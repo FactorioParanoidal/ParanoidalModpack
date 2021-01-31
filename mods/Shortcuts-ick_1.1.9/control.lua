@@ -465,14 +465,10 @@ local function toggle_rail(player)
 	end
 	if global.toggle_rail[player.index] == true then
 		player.game_view_settings.show_rail_block_visualisation = false
-		--player.map_view_settings = {["show-rail-signal-states"] = false}
-		--player.map_view_settings = {["show-non-standard-map-info"] = {["show-rail-signal-states"] = false}}
 		global.toggle_rail[player.index] = false
 		player.set_shortcut_toggled("rail-block-visualization-toggle", false)
 	elseif global.toggle_rail[player.index] == false then
 		player.game_view_settings.show_rail_block_visualisation = true
-		--player.map_view_settings = {["show-rail-signal-states"] = true}
-		--player.map_view_settings = {["show-non-standard-map-info"] = {["show-rail-signal-states"] = true}}
 		global.toggle_rail[player.index] = true
 		player.set_shortcut_toggled("rail-block-visualization-toggle", true)
 	end
@@ -498,7 +494,6 @@ local allowed_items = {
 	"discharge-defense-remote",
 	"ion-cannon-targeter",
 	"mirv-targeting-remote",
-	"module-inserter",
 	"path-remote-control",
 	"unit-remote-control",
 	"spidertron-remote",
@@ -509,6 +504,9 @@ local allowed_items = {
 
 local function give_shortcut_item(player, prototype_name)
 	if game.item_prototypes[prototype_name] and player.clear_cursor() then
+		if prototype_name == "well-planner" and player.get_main_inventory().find_item_stack("well-planner") then
+			player.get_main_inventory().find_item_stack("well-planner").clear()
+		end
 		player.cursor_stack.set_stack({name = prototype_name})
 		if prototype_name == "tree-killer" then
 			player.cursor_stack.trees_and_rocks_only = true
@@ -988,9 +986,9 @@ script.on_event(defines.events.on_player_created, function(event)
 		end
 	end
 
-	if (mods["Orbital Ion Cannon"] or mods["Kux-OrbitalIonCannon"]) and tech["orbital-ion-cannon"].researched == false and setting["ion-cannon-targeter"].value == true then
+	--[[if (mods["Orbital Ion Cannon"] or mods["Kux-OrbitalIonCannon"]) and tech["orbital-ion-cannon"].researched == false and setting["ion-cannon-targeter"].value == true then
 		player.set_shortcut_available("ion-cannon-targeter", false)
-	end
+	end]]
 
 	--[[if tech["logistic-robotics"].researched == false and setting["toggle-personal-logistic-requests"].value == true then
 		player.set_shortcut_available("toggle-personal-logistic-requests", false)
@@ -1109,9 +1107,9 @@ script.on_event(defines.events.on_research_finished, function(event)
 			end
 		end
 
-		if research == "orbital-ion-cannon" and (mods["Orbital Ion Cannon"]or mods["Kux-OrbitalIonCannon"]) and setting["ion-cannon-targeter"].value == true then
+		--[[if research == "orbital-ion-cannon" and (mods["Orbital Ion Cannon"]or mods["Kux-OrbitalIonCannon"]) and setting["ion-cannon-targeter"].value == true then
 			player.set_shortcut_available("ion-cannon-targeter", true)
-		end
+		end]]
 
 
 		--[[if research == "logistic-robotics" and setting["toggle-personal-logistic-requests"].value == true then

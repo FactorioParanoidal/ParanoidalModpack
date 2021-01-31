@@ -249,3 +249,18 @@ Version: 1.1.7
 Date: 2021-01-14
   Bugfixes:
     - Fixed that "winch" from "Vehicle Wagon 2" wasn't hidden from inventory.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2021-01-30
+  Changes:
+    - Improved compatibility with "Orbital Ion Cannon (SE Edition)".
+  Bugfixes:
+    - Fixed that it was impossible to access the well planner settings.
+    - Fixed that you would get a new module inserter in your inventory if you clicked the shortcut.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2021-01-30
+  Bugfixes:
+    - Hotfix: Fixed that game wouldn't load if "Well Planner" mod wasn't active.
