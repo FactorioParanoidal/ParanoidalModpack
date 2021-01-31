@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.9.8
+Date: 2021-1-30
+  Bugfix:
+    - So I fixed the crash if you're starting a new game.  Didn't fix the crash for people that
+      already started a new game with 9.5 and now had a broken save.  This should fix ya.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.7
+Date: 2021-1-30
+  Bugfix:
+    - Crash when openining a combinator if the Mod was already enable when a new game was created
+---------------------------------------------------------------------------------------------------
 Version: 0.9.5
 Date: 2021-1-25
   Feature:

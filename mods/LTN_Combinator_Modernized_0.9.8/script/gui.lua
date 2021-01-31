@@ -688,7 +688,7 @@ ltnc_gui.RegisterTemplates()
 event.on_init(function()
   gui.init()
   gui.build_lookup_tables()
-  --global.network_icons = global.network_icons or {}
+  global.network_icons = global.network_icons or {}
 end)
 
 event.on_load(function()
