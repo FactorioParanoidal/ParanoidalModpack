@@ -140,7 +140,7 @@ data:extend({
     type = "item-subgroup",
     name = "circuit-network-2",
     group = "logistics",
-    order = "g-b"
+    order = data.raw["item-subgroup"]["circuit-network"].order.."2"
   },
   provider_reader_entity,
   provider_reader_item,
@@ -165,7 +165,7 @@ else
       name = "circuit-network-2",
       icon = "__base__/graphics/technology/circuit-network.png",
       icon_size = 256, icon_mipmaps = 4,
-      prerequisites = {"circuit-network", "advanced-electronics"},
+      prerequisites = {"circuit-network"},
       effects =
       {
         { type = "unlock-recipe", recipe = "ltn-provider-reader" },
