@@ -17,7 +17,12 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
     util.debugprint("entity " .. entity .. " does not exist")
     return
   end
-
+  --drd begin (AbandonedRuins: теперь не будет падать при спауне руин с призраками. --by sbeljakov)
+  if entity == 'entity-ghost' then
+    util.debugprint("ghost entity could not be spawned")
+    return
+  end
+  --drd end
   local force = extra_options.force or "neutral"
   if extra_options.force == "enemy" then
     force = util.get_enemy_force()
