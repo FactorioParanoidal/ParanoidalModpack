@@ -25,7 +25,7 @@ tech.init = function ()
 		{
 			type = "technology",
 			name = "orbital-ion-cannon",
-			icon = modFolder.."/graphics/icon64.png",
+			icon = ModPath.."graphics/icon64.png",
 			icon_size = 64,
 			prerequisites = {"rocket-silo", prerequision2name..prerequision2level},
 			effects =
@@ -50,7 +50,7 @@ tech.init = function ()
 		{
 			type = "technology",
 			name = "auto-targeting",
-			icon = modFolder.."/graphics/AutoTargetingTech.png",
+			icon = ModPath.."graphics/AutoTargetingTech.png",
 			icon_size = 64,
 			prerequisites = {"orbital-ion-cannon"},
 			effects = {},

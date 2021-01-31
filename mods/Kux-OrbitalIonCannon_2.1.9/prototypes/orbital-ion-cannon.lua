@@ -1,5 +1,17 @@
 data:extend({
 	{
+		type = "item",
+		name = "orbital-ion-cannon",
+		icon = ModPath.."graphics/icon64.png",
+		icon_size = 64,
+		subgroup = "defensive-structure",
+		order = "e[orbital-ion-cannon]",
+		stack_size = 1
+	},
+})
+
+data:extend({
+	{
 		type = "recipe",
 		name = "orbital-ion-cannon",
 		energy_required = 60,
@@ -35,20 +47,6 @@ data:extend({
 			},
 			result = "orbital-ion-cannon"
 		},
-	},
-	{
-		type = "recipe",
-		name = "ion-cannon-targeter",
-		energy_required = 0.5,
-		enabled = false,
-		category = "crafting",
-		ingredients =
-		{
-			{"processing-unit", 1},
-			{"plastic-bar", 2},
-			{"battery", 1}
-		},
-		result = "ion-cannon-targeter"
 	},
 })
 
