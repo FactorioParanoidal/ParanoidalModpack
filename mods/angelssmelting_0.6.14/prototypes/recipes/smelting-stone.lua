@@ -188,7 +188,7 @@ data:extend(
         {type = "fluid", name = "liquid-concrete", amount = 40}
       },
       results = {
-        {type = "item", name = "concrete", amount = 4}
+        {type = "item", name = "concrete", amount = 10} --drd 4
       },
       icons = {
         {
