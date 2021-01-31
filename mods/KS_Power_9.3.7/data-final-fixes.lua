@@ -17,8 +17,8 @@ local fuel_values = {
   ["liquid-naphtha"] = "660KJ",
   
   ["light-oil"] = "690KJ",
- 	["liquid-fuel"] = "1340KJ", 
-	["liquid-fuel-oil"] = "1340KJ",  --Gas oil	38MДж/кг
+ 	["liquid-fuel"] = "1140KJ", 
+	["liquid-fuel-oil"] = "890KJ",  --Gas oil	38MДж/кг
 	["diesel"] = "2250KJ", -- 44,8-43,5 MДж/кг
 	["diesel-fuel"] = "2250KJ", --375KJ
 	["gasoline"] = "1540KJ", -- 46 МДж/кг, 32,7 МДж/литр
@@ -39,7 +39,6 @@ local fuel_values = {
 	["gas-ethylene"] = "800KJ",  -- 48 Мдж/м3
 	["gas-benzene"] = "2420KJ", -- 40.45 МДж/кг -- БЕНЗОЛ 
 
-	
 
 	["gas-butadiene"] = "1896KJ", -- butilene 113,51
 	["liquid-ethylbenzene"] = "2616KJ",
@@ -48,33 +47,30 @@ local fuel_values = {
 	["liquid-phenol"] = "1716KJ", --32.24МДж/кг
 
 	
-	
   	["acetylene"] = "936KJ", -- 56,04 МДж/м3 
-	["liquid-polyethylene"] = "2896KJ", --47,2 МДж/кг
+	["liquid-polyethylene"] = "1796KJ", --47,2 МДж/кг
 	
-	["liquid-resin"] = "2896KJ", --44,7 МДж/кг
+	["liquid-resin"] = "1896KJ", --44,7 МДж/кг
 	["liquid-rubber-masterbatch"] = "1850KJ",
 	["liquid-rubber-pre"] = "2150KJ", --33,52 МДж/кг
 	["liquid-plastic"] = "1920KJ",  --41,87 МДж/кг
 
-["gas-synthesis"] = "192KJ", -- 11,5 Мдж/м3
+["gas-synthesis"] = "240KJ", -- 11,5 Мдж/м3
 ["gas-residual"] = "700KJ", -- 42 Мдж/м3	
 
     ["gas-methanol"] = "360KJ", -- 21,1-22 MДж/кг
 	["methanol"] = "360KJ", -- 21,1-22 MДж/кг
-	["gas-ethanol"] = "510kJ", --30,6 MДж/кг
+	["gas-ethanol"] = "510KJ", --30,6 MДж/кг
     ["acetone"] = "524KJ", -- 31,4 МДж/кг
 	["coal-gas"] = "292KJ", -- 17,5 Мдж/м3
-	["syngas"] = "240KJ", -- 11,5 Мдж/м3	
-	
+
+	["gas-formaldehyde"] = "280KJ", --17,26 МДж/кг
 
 	["gas-hydrazine"] = "760KJ", --fuel_value = "380KJ", 14644 кДж/кг
 	
 	["gas-ammonia"] = "310KJ",  --18,6  Мдж/м3
 	["gas-hydrogen-sulfide"] = "364KJ",  --21,75  Мдж/м3
 	
-
-
 	
 	["sour-gas"] = "304KJ",
 	["gas-acid"] = "304KJ",
@@ -84,7 +80,16 @@ local fuel_values = {
 	["combustion-mixture2"] = "600KJ",
 	["diborane"] = "600KJ",	
 	["refsyngas"] = "600KJ",
-	["xylenol"] = "600KJ"
+	["xylenol"] = "600KJ",
+	
+	
+	["solid-paper"] = "0.8MJ",
+	["wooden-board"] = "1MJ",
+	["phenolic-board"] = "4MJ",
+	["resin"] = "3.8MJ",
+	["plastic-bar"] = "5MJ",
+	["rubber"] = "5MJ"
+	
  
 }
 
@@ -95,6 +100,7 @@ local emissions = {
   ["light-oil"] = 2,
   
   ["heavy-oil"] = 3,
+  ["liquid-fuel-oil"] = 1.9,
   ["petroleum-gas"] = 1,
   
 
@@ -108,25 +114,38 @@ local emissions = {
 	["gas-ethane"] = 1.5,
     ["gas-butane"] = 1.8,
 	
+	["gas-residual"] = 4.5,
+	
 	["liquid-naphtha"] = 3,
 	["gas-propene"] = 5,
-	["gas-hydrogen"] = -0.2,
-	["gas-hydrazine"] = -0.2,
+	["gas-hydrogen"] = -2,
+	["gas-hydrazine"] = -1,
 	
 	["sour-gas"] = 7,
 	["gas-acid"] = 7,
 	
-	["syngas"] = 0.7,
-	["ethylene"] = 7,
-	["benzene"] = 6.5,
+	["gas-synthesis"] = 0.8,
+	["gas-ethylene"] = 2.8,
+	["gas-butadiene"] = 3,
+
+	["gas-benzene"] = 6.5,
 	["liquid-phenol"] = 6.5,
-	["butadiene"] = 3,
-	["ethanol"] = 0.7,
+	["liquid-toluene"] = 6.5,
+
+	
+	["gas-ethanol"] = 0.7,
 	["liquid-ngl"] = 1.2,
-	["liquid-resin"] = 6,
-	["liquid-rubber-masterbatch"] = 6,
-	["liquid-rubber-pre"] = 8,
-	["liquid-plastic"] = 7
+	["liquid-resin"] = 6.5,
+	["liquid-rubber-masterbatch"] = 7,
+	["liquid-rubber-pre"] = 9,
+	["liquid-polyethylene"] = 6.5,
+	["liquid-plastic"] = 8,
+
+	["wooden-board"] = 1.1,
+	["phenolic-board"] = 4.9,
+	["resin"] = 7,
+	["plastic-bar"] = 10,
+	["rubber"] = 15
 
 }
 
