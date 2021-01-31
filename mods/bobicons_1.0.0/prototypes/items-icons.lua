@@ -1561,8 +1561,9 @@ data.raw.item["copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/
 data.raw.item["copper-cable"].icon_size = 128
 data.raw.item["angels-wire-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-platinum-64.png" 
 data.raw.item["angels-wire-platinum"].icon_size = 64
-data.raw.item["tinned-copper-cable"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
-data.raw.item["tinned-copper-cable"].icon_size = 64
+
+ if not mods["reskins-bobs"] then data.raw.item["tinned-copper-cable"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
+data.raw.item["tinned-copper-cable"].icon_size = 64 end
 
 data.raw.item["solder"].icon = "__bobicons__/graphics/icons/angelssmelting/solder-64.png" 
 data.raw.item["solder"].icon_size = 64
@@ -1649,8 +1650,9 @@ end
 --if data.raw.item["solid-cement"]  then data.raw.item["solid-cement"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cement-128.png"
 --data.raw.item["solid-cement"].icon_size = 128 end
 
-if data.raw.item["gilded-copper-cable"] and if not mods["reskins-library"] then  data.raw.item["gilded-copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/gilded-copper-cable-128.png"
+if data.raw.item["gilded-copper-cable"] and not mods["reskins-library"] then  data.raw.item["gilded-copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/gilded-copper-cable-128.png"
 data.raw.item["gilded-copper-cable"].icon_size = 128 end
+
 if data.raw.item["silver-cable"]  then data.raw.item["silver-cable"].icon = "__bobicons__/graphics/icons/intermediates/silver-cable-128.png"
 data.raw.item["silver-cable"].icon_size = 128 end
 if data.raw.item["resin"]  then data.raw.item["resin"].icon = "__bobicons__/graphics/icons/intermediates/resin-128.png"
