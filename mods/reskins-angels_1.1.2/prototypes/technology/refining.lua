@@ -1,0 +1,4 @@
+-- Copyright (c) 2021 Kirazy
+-- Part of Artisanal Reskins: Angel's Mods
+--
+-- See LICENSE.md in the project directory for license information.
