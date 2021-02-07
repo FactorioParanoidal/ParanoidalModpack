@@ -1,0 +1,3 @@
+Bugfixes:
+  - Fixed desync when spawning ruins that had already been spawned previously.
+  - Fixed crash when claiming ruins due to weird mod interaction.

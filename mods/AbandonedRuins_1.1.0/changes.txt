@@ -1,7 +1,0 @@
-Features:
-  - Updated to Factorio 1.1.
-  - Added Finnish translation (by Sigma-One).
-  - Larger ruins can only be found at a larger distance from spawn (minimum distance multiplied by 2.5 and 5 respectively).
-
-Bugfixes:
-  - Fixed that the ruins cease_fire status for forces that were created during gameplay was missing.
