@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2020 Picklock
+--[[ Copyright (c) 2019 - 2021 Picklock
  * Part of Picklocks Inserter
  * control.lua
- * Version 1.110.3.51
+ * Version 1.110.4.52
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -15,7 +15,7 @@
 		
 		local PI_general ={
 			name = "Picklocks Inserter",
-			version = "1.110.3",
+			version = "1.110.4",
 			selector = "PI_inserter_selector",
 			isControlSet = false,
 			isAdmin = false,
@@ -201,6 +201,7 @@
 				--if PI_debug then print_debug("entity.type: car or lab") end
 				stack.count = stack.count - entity.get_inventory(2).insert(stack)
 			end
+			--if PI_debug then print_debug("PI_PutStackBack - stack.count: " ..tostring(stack.count)) end
 			if stack.valid_for_read then
 				--if PI_debug then print_debug("Stack could not be set back complete: " ..stack.count.. " " ..stack.name) end
 				if PI_clear_inserter then
@@ -222,7 +223,7 @@
 			local myPickupTarget = myInserter.pickup_target
 			if myPickupTarget == nil then return end
 			if myInserter.held_stack.valid_for_read and myInserter.drop_position.x == myInserter.held_stack_position.x and myInserter.drop_position.y == myInserter.held_stack_position.y then
-				--if PI_debug then print_debug("To be cleared: " ..myInserter.name.. "(" ..myInserter.type.. "/" ..myInserter.held_stack.count.. " " ..myInserter.held_stack.name.. ")") end
+				--if PI_debug then print_debug("To be cleared: " ..myInserter.name.. "(" ..myInserter.type..  "/Pos:" ..myInserter.position.x.."/" ..myInserter.position.y.. "/Stack:" ..myInserter.held_stack.count.. " " ..myInserter.held_stack.name.. ")") end
 				PI_PutStackBack(myInserter.held_stack, myPickupTarget)
 			end
 		end
@@ -496,11 +497,27 @@
 		end)
 
 	--train state
+		-- 0 = defines.train_state.on_the_path	Normal state -- following the path.
+		-- 1 = defines.train_state.path_lost	Had path and lost it -- must stop.
+		-- 2 = defines.train_state.no_schedule	Doesn't have anywhere to go.	
+		-- 3 = defines.train_state.no_path	Has no path and is stopped.
+		-- 4 = defines.train_state.arrive_signal	Braking before a rail signal.
+		-- 5 = defines.train_state.wait_signal	Waiting at a signal.
+		-- 6 = defines.train_state.arrive_station	Braking before a station.
+		-- 7 = defines.train_state.wait_station	Waiting at a station.
+		-- 8 = defines.train_state.manual_control_stop	Switched to manual control and has to stop.
+		-- 9 = defines.train_state.manual_control	Can move if user explicitly sits in and rides the train.
+		--1ß = defines.train_state.destination_full	Same as no_path but all candidate train stops are full 
 		script.on_event(defines.events.on_train_changed_state, function(event, old_state)
-			--if PI_debug then print_debug("raised event: on_train_changed_state") end
+			--if PI_debug then 
+			--	print_debug("raised event: on_train_changed_state fired by train " ..tostring(event.train.id))
+			--	print_debug("train.state: " ..tostring(event.train.state))
+			--	print_debug("old_state: " ..tostring(event.old_state))
+			--end
 			if PI_target_train_stop then
 				--if PI_debug then print_debug("settings: PI_target_train_stop enabled") end
-				if event.train.state == 0 then
+				--if event.train.state == 0 then
+				if event.train.state == 0 or event.train.state == 3 or event.train.state == 5 or event.train.state == 10 then
 					if event.old_state == 7 then
 						if next(event.train.get_contents()) then
 							--if PI_debug then print_debug("Detect cargo_wagons connected to train") end

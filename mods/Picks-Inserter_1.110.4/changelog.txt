@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.110.4
+Date: 03.02.2021
+  Bugfixes:
+    - Fixed a bug that prevented the cleaning of the inserters if the train was in the "destination_full" status after leaving the station.
+    - Fixed a bug that prevented the cleaning of the inserters if the train was in the "wait_signal" status after leaving the station.
+---------------------------------------------------------------------------------------------------
 Version: 1.110.3
 Date: 06.12.2020
   Bugfixes:
