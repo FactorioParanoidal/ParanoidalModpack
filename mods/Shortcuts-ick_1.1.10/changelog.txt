@@ -264,3 +264,9 @@ Version: 1.1.9
 Date: 2021-01-30
   Bugfixes:
     - Hotfix: Fixed that game wouldn't load if "Well Planner" mod wasn't active.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2021-02-06
+  Bugfixes:
+    - Fixed that disabling belt immunity equipment didn't work.
