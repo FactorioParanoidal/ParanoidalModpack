@@ -1,0 +1,17 @@
+{
+  "entity":
+  [
+    ["bi-bio-farm-electric-pole",       "bi-bio-farm-hidden-pole"],
+    ["bi-rail-hidden-power-pole",       "bi-rail-power-hidden-pole"],
+    ["bi-musk-mat-pole",                "bi-musk-mat-hidden-pole"],
+
+    ["bi-bio-farm-solar-panel",         "bi-bio-farm-hidden-panel"],
+    ["bi-musk-mat-solar-panel",         "bi-musk-mat-hidden-panel"],
+    ["bi-solar-boiler-panel",           "bi-solar-boiler-hidden-panel"],
+
+    ["bi-arboretum-radar",              "bi-arboretum-hidden-radar"],
+    ["Bio-Cannon-r",                    "bi-bio-cannon-hidden-radar"]
+  ]
+
+}
+    --~ ["bi-bio-farm-light",           "bi-arboretum-hidden-lamp"],

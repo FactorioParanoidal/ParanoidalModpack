@@ -1,0 +1,569 @@
+[mod-setting-name]
+BI_Bio_Cannon=Enable: Prototype Artillery
+BI_Bio_Fuel=Enable: Bio fuel production
+BI_Game_Tweaks_Bot=Game tweaks: Bots
+BI_Game_Tweaks_Disassemble=Game tweaks: Disassemble recipes
+BI_Game_Tweaks_Emissions_Multiplier=Game tweaks: Fuel emission multipliers
+BI_Game_Tweaks_Player=Game tweaks: Player
+BI_Game_Tweaks_Recipe=Game tweaks: Recipe
+BI_Game_Tweaks_Stack_Size=Game tweaks: Stack size
+BI_Game_Tweaks_Tree=Game tweaks: Tree yield
+BI_Game_Tweaks_Small_Tree_Collisionbox=Game tweaks: Smaller collision boxes for trees
+BI_Game_Tweaks_Production_Science=Game tweaks: Alternative recipe for __ITEM__production-science-pack__
+#~ BI_Hide_musk_floor_in_mapview=Hide electric grid overlay for Musk floor in map view
+BI_Show_musk_floor_in_mapview=Enable: Electric grid overlay for __ENTITY__bi-solar-mat__ in map view
+BI_Solar_Additions=Enable: Bio solar additions
+BI_Enable_gvv_support=Compatibility: Add support for GVV
+
+
+[mod-setting-description]
+BI_Bio_Cannon=The Prototype artillery is very powerful, but will only fire at spawners
+BI_Bio_Fuel=Enables the production of oil products using bio fuels
+BI_Game_Tweaks_Bot=Bots can't be mined or catch fire
+BI_Game_Tweaks_Disassemble=Allow some disassemble recipes. You get about 50% of the resources back
+BI_Game_Tweaks_Emissions_Multiplier=Bob started this. The general idea is that unprocessed fuels cause more pollution than more refined fules. Thus coal would produce 200% pollution, while solid fuel would produce only 85%. Please see "Fuel Values.xlsx" in mod folder for more info!
+#~ BI_Game_Tweaks_Player=Build, drop & reach distance: 6 => 20; Reach for item pickup 1 => 4; Resource reach distance: 2.7 => 4; Loot pickup distance: 2 => 5
+BI_Game_Tweaks_Player=Build, drop & reach distance: 6 => 20\nReach distance for item pickup 1 => 4\nResource reach distance: 2.7 => 4\nLoot pickup distance: 2 => 5
+#~ BI_Game_Tweaks_Recipe=Recipes Affected: CONCRETE Remove: Iron Ore Add: Iron Stick, STONE-WALL Add: Iron Stick, RAIL Remove: stone Add: crushed-stone and Concrete, STEEL-AXE Remove: Iron-Stick Add: Iron-Axe
+BI_Game_Tweaks_Recipe=Affected recipes:\nConcrete (Iron ore => Iron stick)\nStone wall(Iron stick added)\nRail (stone => crushed-stone + concrete)
+BI_Game_Tweaks_Stack_Size=Affects stack sizes of wood, stone, crushed-stone, concrete & slag
+BI_Game_Tweaks_Tree=Game tweaks - trees randomly provide 1 to 6 wood when chopped down. Vanilla = 4
+BI_Game_Tweaks_Small_Tree_Collisionbox=EXPERIMENTAL: This setting is enabled per default. If it isn't, trees will have the bigger vanilla collision box, making forests more likely to block players, vehicles, and biters. Not sure if this will have any side effects!
+BI_Game_Tweaks_Production_Science=If this is enabled, an alternative recipe for Production science packs will be available.\n(Default: on)
+#~ BI_Hide_musk_floor_in_mapview=In map view, the electric grid overlay will be hidden for Musk floor if this setting is enabled. This shouldn't be changed in a running game as applying the setting to every Musk floor tile may take some time!
+BI_Show_musk_floor_in_mapview=Show the electric grid overlay for __ENTITY__bi-solar-mat__ in map view. This shouldn't be changed in a running game as applying the setting to every __ENTITY__bi-solar-mat__ tile may take some time!\n(Default: on)
+BI_Solar_Additions=Enables solar items like the solar farm, solar power plant, bio accumulator and huge substation
+BI_Enable_gvv_support=The "Lua API global Variable Viewer" (gvv) allows you to inspect the global table of other mods. If you want to help debugging "Bio Industries", enable this and type "\gvv" at the chat console to open the GUI of gvv.\n(Default: off)
+
+[technology-name]
+bi-tech-advanced-biotechnology=Advanced biotechnology
+bi-tech-bio-cannon=Prototype artillery
+bi-tech-bio-farming=Bio farm
+bi-tech-coal-processing-1=Coal processing 1
+bi-tech-coal-processing-2=Coal processing 2
+bi-tech-coal-processing-3=Coal processing 3
+bi-tech-fertiliser=Fertilizer
+bi-tech-organic-plastic=Organic plastic
+
+[technology-description]
+bi-tech-advanced-biotechnology=Unlock higher tiered recipes
+bi-tech-bio-cannon=Prototype artillery turret technology. - Not yet capable of manual targeting
+bi-tech-bio-farming=Learn how to grow trees -- the first step towards unlocking other wood products
+bi-tech-coal-processing-1=Burn wood to get charcoal and ash
+bi-tech-coal-processing-2=Process charcoal to coal and solid fuel to pellet-coke
+bi-tech-coal-processing-3=Process charcoal more efficiently and produce pellet-coke from coal
+bi-tech-fertiliser=Using fertilisers you can get much more output from recipes
+bi-tech-organic-plastic=Produce plastics using organic materials
+
+[entity-name]
+bi-arboretum-area=Terraformer
+bi-arboretum-radar=Terraformer radar
+bi-arboretum=Terraformer
+bi-bio-accumulator=Huge accumulator
+bi-bio-boiler=Bio boiler
+bi-bio-cannon-area=Prototype artillery
+bi-bio-cannon=Prototype artillery
+bi-bio-farm-electric-pole=Bio farm cabling
+bi-bio-farm-light=Bio farm heat lamps
+bi-bio-farm-solar-panel=Bio farm solar
+bi-bio-farm=Bio farm
+bi-bio-garden-light=Bio garden light
+bi-bio-garden=Bio garden
+bi-bio-greenhouse=Bio nursery
+bi-bio-reactor=Bioreactor
+bi-bio-solar-farm=Bio solar farm
+bi-burner-pump=Burner fluid pump
+bi-cokery=Cokery
+#~ These strings are obsolete!
+#~ bi-curved-rail-power=Powered rail
+#~ bi-curved-rail-wood-bridge=Wooden curved rail used for bridges
+#~ bi-curved-rail-wood=Wooden curved rail
+bi-dart-magazine-basic=Basic dart ammo
+bi-dart-magazine-enhanced=Enhanced dart ammo
+bi-dart-magazine-poison=Poison dart ammo
+bi-dart-magazine-standard=Standard dart ammo
+bi-dart-turret=Dart turret
+#~ These strings seem to be obsolete!
+#~ bi-ground-steam=Natural steam
+#~ bi-ground-sulfuric-acid=Natural sulfuric acid
+#~ bi-ground-water=Water
+bi-large-substation=Huge substation
+bi-musk-mat-pole=Hidden power pole for Musk mat
+bi-musk-mat-solar-panel=Musk floor
+bi-power-to-rail-pole=Rail to power connector
+# Obsolete
+#~ bi-solar-boiler-panel=Solar power plant & boiler
+bi-solar-boiler=Solar power plant & boiler
+bi-solar-mat=Musk floor
+bi-stone-crusher=Stone crusher
+#~ bi-straight-rail-power=Powered rail
+bi-rail-power=Powered rail
+#~ bi-straight-rail-wood-bridge=Wooden straight rail used for bridges
+bi-rail-wood-bridge=Wooden rail used for bridges
+#~ bi-straight-rail-wood=Wooden straight rail
+bi-rail-wood=Wooden rail
+bi-wood-pipe-to-ground=Wood pipe to ground
+bi-wood-pipe=Wood pipe
+bi-wooden-chest-giga=Huge wooden chest
+bi-wooden-chest-huge=Large wooden chest
+bi-wooden-chest-large=Medium wooden chest
+bi-wooden-fence=Wooden fence
+bi-wooden-pole-big=Big wooden pole
+bi-wooden-pole-huge=Huge wooden pole
+seedling-2=Sapling
+seedling-3=Sapling
+seedling=Sapling
+wooden-chest=Small wooden chest
+
+rail-remnants-wood=Remnants of wooden rails
+rail-remnants-wood-bridge=Remnants of a wooden bridge
+
+
+[entity-description]
+bi-arboretum-area=Terraformer to change the terrain or plant trees around the building
+bi-arboretum-radar=Terraformer radar
+bi-arboretum=Terraformer to change the terrain or plant trees around the building
+bi-bio-accumulator=Can store very large amounts of energy, because size matters...
+bi-bio-boiler=These boilers are as efficient as normal ones, but produce 75% less pollution!
+#~ bi-bio-cannon-area=Can ONLY fire at spawners and worms! - Range 90 - Not yet capable of manual targeting
+bi-bio-cannon=Can ONLY fire at spawners and worms! (Range: 90)\nThis prototype isn't capable of manual targeting.
+#~ bi-bio-farm-electric-pole=Bio farm cabling (Hidden)
+#~ bi-bio-farm-light=Bio farm heat lamps, so trees can grow at night (Hidden)
+#~ bi-bio-farm-solar-panel=Bio farm solar (Hidden)
+#~ bi-bio-farm=Bio farm, turn saplings into raw wood. Consumes more electricity at night
+bi-bio-farm=Bio farms are where saplings grow into trees that are processed to raw wood and wood pulp. An integrated solar panel provides some of the energy during the day.
+bi-bio-garden-light=The garden also acts as a lamp at night. (Hidden)
+bi-bio-garden=The bio garden scrubs air, removing pollution. (One bio garden can absorb 45 pollution units per second -- as much as 1500 trees!)
+bi-bio-greenhouse=Use a nursery to grow saplings
+bi-bio-reactor=Bio-reactors are used to produce and process biomass.
+bi-bio-solar-farm=Bio solar farm save space by condensing your solar panels into a compact unit. They create a lot of power!\Using Bio solar farms instead of the original solar panels will also improve performance because less entities require less updates per second (UPS).
+bi-burner-pump=Burner fluid pump
+bi-cokery=Wood and wood pulp are processed to charcoal and other fuels in the cokery.
+#~ These strings are obsolete!
+#~ bi-curved-rail-power=Rail that also conducts electricity. Connect to power grid using "power to rail" connector
+#~ bi-curved-rail-wood-bridge=Wooden curved rail used for bridges.\nNote: You can't walk on this!
+#~ bi-curved-rail-wood=Wooden curved rail
+bi-dart-magazine-basic=Basic wooden projectiles
+bi-dart-magazine-enhanced=Enhanced wooden projectiles
+bi-dart-magazine-poison=Poisoned wooden projectiles
+bi-dart-magazine-standard=Standard wooden projectiles
+#~ These strings seem to be obsolete!
+#~ bi-ground-steam=Natural steam
+#~ bi-ground-sulfuric-acid=Natural sulfuric acid
+#~ bi-ground-water=Water
+bi-large-substation=Huge substation
+bi-musk-mat-pole=Hidden power pole for Musk mat
+bi-musk-mat-solar-panel=Power from Musk floor
+bi-power-to-rail-pole=Connect your power rail to the power grid!\nATTENTION: When you place a connector in reach of two powered rails that are running parallel or crossing each other, you will connect these networks!
+#~ Remove?
+bi-solar-boiler-panel=A boiler that uses solar energy or electricity (also produces electricity).
+#~ Changed
+#~ bi-solar-boiler=A boiler that uses solar energy or electricity (also produces electricity).
+bi-solar-boiler=This boiler uses solar energy or electricity to produce electricity.
+#~ bi-solar-mat=A solar panel/floor that can be used as a pavement, generates 10kW electricity and fast movement. (Thanks Elon Musk!)
+bi-solar-mat=This special pavement contains solar panels. Each tile will generate 10kW of electricity and grant you fast movement speed. (Thanks, Elon Musk!)
+#~ bi-stone-crusher=Machine to break stone into crushed stone
+bi-stone-crusher=These machines crush stone and concrete. If necessary, you can also use them to make sand from crushed stone.
+#~ bi-straight-rail-wood-bridge=Wooden straight rail used for bridges.\nNote: You can't walk on this!
+bi-rail-wood-bridge=Wooden straight rail used for bridges.\nNote: You can't walk on this!
+#~ bi-straight-rail-wood=Wooden straight rail
+bi-rail-wood=Wooden straight rail
+#~ bi-straight-rail-power=Rail that also conducts electricity. Connect to power grid using "power to rail" connector
+bi-rail-power=Rail that also conducts electricity. Connect to power grid using "power to rail" connector
+bi-wood-pipe-to-ground=Wood pipe to ground
+bi-wood-pipe=Wooden pipe
+bi-wooden-chest-giga=A HUGE wooden chest
+bi-wooden-chest-huge=A very large wooden chest
+bi-wooden-chest-large=A medium wooden chest
+#~ bi-wooden-fence=A defensive wall made from wood
+bi-wooden-fence=Though not very strong, wooden fences help you right from the start to keep enemies out of your factory.
+bi-wooden-pole-big=Big wooden power pole. Will auto heal if you play with NE enemies
+bi-wooden-pole-huge=A huge wooden pole for spanning vast distances (64 tiles) with copper cable or circuit network wires
+seedling-2=A young tree, perfect for planting. You can also plant this in the ground and it will grow into a tree. Remember to first fertilize the ground to improve the chances of it growing
+seedling-3=A young tree, perfect for planting. You can also plant this in the ground and it will grow into a tree. Remember to first fertilize the ground to improve the chances of it growing
+seedling=A young tree, perfect for planting. You can also plant this in the ground and it will grow into a tree. Remember to first fertilize the ground to improve the chances of it growing
+
+rail-remnants-wood=Remnants of wooden rails
+rail-remnants-wood-bridge=Remnants of a wooden bridge
+
+[item-name]
+bi-adv-fertiliser=Advanced fertiliser
+bi-arboretum-area=Terraformer
+bi-arboretum-r1=Plant trees
+bi-arboretum-r2=Change terrain (basic)
+bi-arboretum-r3=Change terrain (advanced)
+bi-arboretum-r4=Change terrain & plant trees (basic)
+bi-arboretum-r5=Change terrain & plant trees (advanced)
+bi-arboretum=Terraformer
+bi-ash=Ash
+bi-bio-accumulator=Huge accumulator
+bi-bio-boiler=Bio boiler
+bi-bio-cannon-area=Prototype artillery
+bi-bio-cannon-basic-ammo=Prototype artillery - rocket ammo
+bi-bio-cannon-biological-ammo=Prototype artillery - biological ammo
+bi-bio-cannon-poison-ammo=Prototype artillery - poison ammo
+bi-bio-cannon-proto-ammo=Prototype artillery - basic ammo
+bi-bio-cannon=Prototype artillery
+bi-bio-farm=Bio farm
+bi-bio-reactor=Bioreactor
+bi-bio-solar-farm=Bio solar farm
+bi-burner-pump=Burner fluid pump
+bi-cellulose=Cellulose
+bi-cokery=Cokery
+bi-dart-magazine-basic=Basic dart ammo
+bi-dart-magazine-enhanced=Enhanced dart ammo
+bi-dart-magazine-poison=Poison dart ammo
+bi-dart-magazine-standard=Standard dart ammo
+bi-dart-rifle=Dart rifle
+bi-dart-turret=Dart turret
+bi-ground-water=Water
+bi-large-substation=Huge substation
+#~ Obsolete
+#~ bi-medicine=Medicine
+#~ Do we need localizations for hidden entities?
+#~ bi-musk-mat-pole=Hidden power pole for Musk mat
+#~ bi-musk-mat-solar-panel=Musk floor
+#~ Obsolete?
+#~ bi-nutrients=Nutrients
+bi-power-to-rail-pole=Rail to power connector
+bi-purified-air=Purified air
+bi-rail-power=Power rail
+bi-rail-wood-bridge=Wooden rail bridge
+bi-rail-wood=Wooden rail
+bi-seed-bomb-advanced=Advanced seed bomb
+bi-seed-bomb-basic=Basic seed bomb
+bi-seed-bomb-standard=Standard seed bomb
+bi-seed=Seed
+bi-solar-boiler=Solar power plant & boiler
+bi-solar-boiler-panel=Solar power plant & boiler
+bi-solar-mat=Musk floor
+bi-stone-crusher=Stone crusher
+bi-wood-pipe-to-ground=Wooden pipe to ground
+bi-wood-pipe=Wooden pipe
+bi-wooden-chest-giga=Huge wooden chest
+bi-wooden-chest-huge=Large wooden chest
+bi-wooden-chest-large=Medium wooden chest
+bi-wooden-fence=Wooden fence
+bi-wooden-pole-big=Big wooden power pole. Will auto heal if you play with NE enemies
+bi-wooden-pole-huge=Huge wooden pole
+bi-woodpulp=Wood pulp
+fertiliser=Fertilizer
+pellet-coke=Pellet coke
+resin=Resin
+seedling=Sapling
+stone-crushed=Crushed stone
+#~ Obsolete? This is only used in a compatibility recipe for bi-slag-slurry if angelsrefining is active!
+water-saline=Saline water
+wood-bricks=Wood bricks
+wood-charcoal=Charcoal
+
+[item-description]
+bi-adv-fertiliser=Improved fertilizer for growing stuff even faster or changing terrain quality
+bi-arboretum-area=Terraformer to change the terrain or plant trees around the building
+bi-arboretum-r1=Plant trees around the building
+bi-arboretum-r2=Change terrain around the building (basic)
+bi-arboretum-r3=Change terrain around the building (advanced)\nNote: Use advanced instead of basic fertiliser to make the ground more fertile.
+bi-arboretum-r4=Change terrain & plant trees around the building (basic)
+bi-arboretum-r5=Change terrain around the building (advanced)\nNote: Use advanced instead of basic fertiliser to make the ground more fertile, so that trees will grow faster.
+bi-arboretum=Terraformer to change the terrain or plant trees around the building
+bi-ash=Even ash can be used!
+bi-bio-accumulator=Can store very large amounts of energy, because size matters...
+#~ bi-bio-boiler=High efficiency boiler
+bi-bio-boiler=These boilers are as efficient as normal ones, but produce 75% less pollution!
+bi-bio-cannon-area=This early prototype of artillery can ONLY fire at spawners (maximum range: 90) and is not yet capable of manual targeting.
+bi-bio-cannon-basic-ammo=Rocket powered, low physical damage
+bi-bio-cannon-biological-ammo=Rocket powered, high biological damage
+bi-bio-cannon-poison-ammo=Rocket powered, medium poison damage
+bi-bio-cannon-proto-ammo=Low damage, most of the TNT is used for propulsion
+bi-bio-cannon=This early prototype of artillery can ONLY fire at spawners (maximum range: 90) and is not yet capable of manual targeting.
+bi-bio-farm=A greenhouse with powerful artificial lighting for growing saplings into trees (Wood)
+bi-bio-solar-farm=Save space, by condensing your solar panels into a compact unit. Create a lot of power!
+#~ Obsolete?
+bi-burner-pump=Burner fluid pump
+bi-dart-magazine-basic=Basic wooden projectiles
+bi-dart-magazine-enhanced=Enhanced wooden projectiles
+bi-dart-magazine-poison=Poisoned wooden projectiles
+bi-dart-magazine-standard=Standard wooden projectiles
+#~ bi-ground-water=Water
+bi-large-substation=Huge substation
+bi-musk-mat-pole=Hidden power pole for Musk mat
+bi-musk-mat-solar-panel=Power from Musk floor
+bi-power-to-rail-pole=Connect your power rail to the power grid
+bi-purified-air=Clean air, pollution removed!
+bi-rail-power=Rail that also conducts electricity (connect rails to the power grid with the "rail to power connector")
+bi-rail-wood-bridge=Wooden rail bridge that can cross water.\nNote: You can't walk on this!
+bi-rail-wood=Cheap rails made with wood
+bi-seed-bomb-advanced=Plant trees in a large area, with advanced fertiliser via a seed bomb!
+bi-seed-bomb-basic=Plant trees in a large area via a seed bomb!
+bi-seed-bomb-standard=Plant trees in a large area, with fertiliser via a seed bomb!
+bi-seed=Seed to grow a sapling from
+bi-solar-boiler=A boiler that uses solar energy or electricity (also produces electricity).
+bi-solar-boiler-panel=A boiler that uses solar energy or electricity (also produces electricity).
+bi-solar-mat=A solar panel/floor that can be used as a pavement, generates 10kW electricity and fast movement. (Thanks Elon Musk!)
+bi-stone-crusher=Machine to break stone into crushed stone
+bi-wood-pipe-to-ground=A wood pipe to ground
+bi-wood-pipe=A pipe made from wood
+bi-wooden-chest-giga=A HUGE wooden chest
+bi-wooden-chest-huge=A very large wooden chest
+bi-wooden-chest-large=A medium wooden chest
+bi-wooden-fence=A defensive wall made from wood
+bi-wooden-pole-big=Big wooden power pole
+bi-wooden-pole-huge=A huge wooden pole for spanning vast distances (64 tiles) with copper cable or circuit network wires
+bi-woodpulp=Burn it to ash or charcoal, or convert it to wood bricks!
+fertiliser=Fertilizer for growing stuff faster or changing terrain quality
+pellet-coke=Pellet coke is a great train fuel
+resin=Resin
+seedling=A young tree, perfect for planting. You can also plant this in the ground and it will grow into a tree. Remember to first fertilize the ground to improve the chances of it growing!
+stone-crushed=Crushed stone
+#~ Obsolete? This is only used in a compatibility recipe for bi-slag-slurry if angelsrefining is active!
+water-saline=Saline water
+wood-bricks=Great processed fuel source with low emissions
+
+[fluid-name]
+bi-biomass=Algae biomass
+#~ bi-ground-water=Water
+liquid-air=Liquid air
+nitrogen=Nitrogen
+#~ Obsolete? This is only used in a compatibility recipe for bi-slag-slurry if angelsrefining is active!
+water-saline=Saline water
+
+[recipe-name]
+bi-acid=Bio-acid
+bi-adv-fertiliser-1=Advanced fertiliser
+bi-adv-fertiliser-2=Advanced fertiliser
+bi-arboretum-r1=Plant trees
+bi-arboretum-r2=Change terrain (basic)
+bi-arboretum-r3=Change terrain (advanced)
+bi-arboretum-r4=Change terrain & plant trees (basic)
+bi-arboretum-r5=Change terrain & plant trees (advanced)
+bi-arboretum=Terraformer
+bi-ash-1=Ash from wood
+bi-ash-2=Ash from wood pulp
+# Added bi-basic-petroleum-gas-processing (0.17.49/0.18.17)
+# Renamed bi-basic-petroleum-gas-processing to bi-basic-gas-processing (0.17.51/0.18.20)
+bi-basic-gas-processing=Basic gas processing
+bi-battery=Bio battery
+bi-bio-accumulator=Huge accumulator
+bi-bio-boiler=Bio boiler
+bi-bio-cannon-area=Prototype artillery
+bi-bio-cannon-basic-ammo=Prototype artillery (rocket ammo)
+bi-bio-cannon-biological-ammo=Prototype artillery (biological ammo)
+bi-bio-cannon-poison-ammo=Prototype artillery (poison ammo)
+bi-bio-cannon-proto-ammo=Prototype artillery (basic ammo)
+bi-bio-cannon=Prototype artillery
+bi-bio-farm=Bio farm
+bi-bio-garden=Bio garden
+bi-bio-greenhouse=Bio nursery
+bi-bio-reactor=Bioreactor
+bi-bio-solar-farm=Bio solar farm
+bi-biomass-1=Algae biomass production with fertiliser
+bi-biomass-2=Algae biomass production with algae biomass (basic)
+bi-biomass-3=Algae biomass production with algae biomass (advanced)
+bi-biomass-conversion-1=Bio fuel conversion 1: Cellulose, light oil
+bi-biomass-conversion-2=Bio fuel conversion 2: Petroleum gas
+bi-biomass-conversion-3=Bio fuel conversion 3: Lubricant
+bi-biomass-conversion-4=Bio fuel conversion 4: Crude oil, water/sulfuric waste water
+bi-burner-inserter-disassemble=Disassemble burner inserter
+bi-burner-mining-drill-disassemble=Disassemble burner miner
+bi-cellulose-1=Basic cellulose production
+bi-cellulose-2=Advanced cellulose production
+bi-charcoal-1=Charcoal from wood pulp
+bi-charcoal-2=Charcoal from wood
+bi-coal-1=Basic coal production
+bi-coal-2=Advanced coal production
+bi-coke-coal=Pellet coke
+bi-cokery=Cokery
+bi-crushed-stone-1=Crushed stone from stone
+bi-crushed-stone-2=Crushed stone from concrete
+bi-crushed-stone-3=Crushed stone from hazard concrete
+bi-crushed-stone-4=Crushed stone from refined concrete
+bi-crushed-stone-5=Crushed stone from refined hazard concrete
+bi-dart-magazine-basic=Basic dart ammo
+bi-dart-magazine-enhanced=Enhanced dart ammo
+bi-dart-magazine-poison=Poison dart ammo
+bi-dart-magazine-standard=Standard dart ammo
+bi-dart-rifle=Dart rifle
+bi-dart-turret=Dart turret
+bi-fertiliser-1=Fertilizer
+bi-fertiliser-2=Fertilizer
+bi-large-substation=Huge substation
+bi-liquid-air=Liquid air
+bi-logs-1=Basic wood production
+bi-logs-2=Improved wood production with ash
+bi-logs-3=Advanced wood production with fertiliser
+bi-logs-4=Super wood production with advanced fertiliser
+bi-long-handed-inserter-disassemble=Disassemble long handed inserter
+bi-mineralized-sulfuric-waste=Mineralized water & sulfuric waste
+bi-nitrogen=Nitrogen
+bi-pellet-coke=Pellet coke from solid fuel
+bi-pellete-coal-2=Pellet-coal from carbon
+bi-plastic-1=Bio plastic from wood
+bi-plastic-2=Bio plastic from cellulose
+bi-power-to-rail-pole=Rail to power connector
+bi-press-wood=Press wood
+bi-production-science-pack=Production science pack
+bi-purified-air-1=Clean air (basic)
+bi-purified-air-2=Clean air (advanced)
+bi-rail-power=Power rail
+bi-rail-wood-bridge=Wooden rail bridge
+bi-rail-wood-to-concrete=Upgrade wooden rail
+bi-rail-wood=Wooden rail
+bi-resin-pulp=Resin from wood pulp
+bi-resin-wood=Resin from wood
+bi-sand=Sand from crushed stone
+bi-seed-1=Basic tree seed production
+bi-seed-2=Improved tree seed production with ash
+bi-seed-3=Advanced tree seed production with fertiliser
+bi-seed-4=Super tree seed production with advanced fertiliser
+bi-seed-bomb-advanced=Advanced seed bomb
+bi-seed-bomb-basic=Basic seed bomb
+bi-seed-bomb-standard=Standard seed bomb
+#~ bi-seedling=Sapling
+bi-seedling-1=Basic sapling production
+bi-seedling-2=Improved sapling production with ash
+bi-seedling-3=Advanced sapling production with fertiliser
+bi-seedling-4=Super sapling production with advanced fertiliser
+bi-slag-slurry=Slag slurry
+#~ bi-solar-boiler=Solar power plant & boiler (boiler)
+bi-solar-boiler-panel=Solar power plant & boiler
+bi-solar-boiler=Solar power plant & boiler
+bi-solar-mat=Musk floor
+bi-solid-fuel=Solid fuel from wood bricks
+bi-steel-furnace-disassemble=Disassemble steel furnace
+bi-stone-brick=Bio stone brick
+bi-stone-crusher=Stone crusher
+bi-stone-furnace-disassemble=Disassemble stone furnace
+bi-sulfur-angels=Bio-sulfur
+bi-sulfur=Bio-sulfur
+bi-wood-from-pulp=Wood from wood pulp
+bi-wood-fuel-brick=Wood bricks
+bi-wood-pipe-to-ground=Wooden pipe to ground
+bi-wood-pipe=Wood pipe
+bi-wooden-chest-giga=Huge wooden chest
+bi-wooden-chest-huge=Large wooden chest
+bi-wooden-chest-large=Medium wooden chest
+bi-wooden-fence=Wooden fence
+bi-wooden-pole-big=Big wooden pole
+bi-wooden-pole-huge=Huge wooden pole
+bi-woodpulp=Wood pulp from wood
+wooden-chest=Small wooden chest
+
+[recipe-description]
+bi-acid=Use algae biomass and cellulose to produce sulfuric acid!
+bi-adv-fertiliser-1=Better than normal fertiliser
+bi-adv-fertiliser-2=Better than normal fertiliser
+bi-arboretum-r1=Note: The recipe will never complete, trees are planted on sector scan.
+bi-arboretum-r2=Note: The recipe will never complete, trees are planted on sector scan.
+bi-arboretum-r3=Note: The recipe will never complete, trees are planted on sector scan.
+bi-arboretum-r4=Note: The recipe will never complete, trees are planted on sector scan.
+bi-arboretum-r5=Note: The recipe will never complete, trees are planted on sector scan.
+bi-arboretum=Plant trees or change the terrain around the building
+bi-ash-1=Burn wood, get ash!
+bi-ash-2=Burn lots of wood pulp, get lots of ash!
+# Added bi-basic-petroleum-gas-processing (0.17.49/0.18.17)
+# Renamed bi-basic-petroleum-gas-processing to bi-basic-gas-processing (0.17.51/0.18.20)
+bi-basic-gas-processing=Inefficient gas extraction
+bi-basic-pumpjack-disassemble=Dissasemble burner fluid pump at a small loss of materials
+bi-bio-cannon-area=This early prototype of artillery can ONLY fire at spawners (maximum range: 90) and is not yet capable of manual targeting.
+bi-bio-cannon-basic-ammo=Rocket powered, low physical damage
+bi-bio-cannon-biological-ammo=Rocket powered, high biological damage
+bi-bio-cannon-poison-ammo=Rocket powered, medium poison damage
+bi-bio-cannon-proto-ammo=Low damage, most of the TNT is used for propulsion
+bi-bio-cannon=This early prototype of artillery can ONLY fire at spawners (maximum range: 90) and is not yet capable of manual targeting.
+bi-bio-farm=Bio farm to produce wood and wood pulp
+bi-bio-greenhouse=Bio nursery to produce seeds and saplings
+bi-biomass-1=Start up your algae biomass production by using fertiliser!
+bi-biomass-2=Feed back some of the produced algae biomass to produce more of it!\nNote: This will yield less (and take longer) than using the start-up recipe, but you will save on fertiliser.
+bi-biomass-3=Feed back some of the produced algae biomass and add ash to produce lots of it!\nNote: This will yield considerably more than the other recipes in a fraction of the time.
+bi-biomass-conversion-1=Use algae biomass to produce light oil and cellulose!
+bi-biomass-conversion-2=Use algae biomass to produce petroleum gas!
+bi-biomass-conversion-3=Use algae biomass to produce lubricant!
+bi-biomass-conversion-4=Use algae biomass to produce crude oil and water!
+bi-burner-inserter-disassemble=Disassemble burner inserter at a small loss of materials
+bi-burner-mining-drill-disassemble=Disassemble burner miner at a small loss of materials
+bi-charcoal-1=Burn wood pulp to make charcoal
+bi-charcoal-2=Burn wood to make charcoal
+bi-coal-1=Process charcoal to make coal
+bi-coal-2=Advanced processing of charcoal will let you make more coal!
+bi-coke-coal=Turn coal into pellet-coke
+bi-crushed-stone-1=Get crushed stone from crushing stone in the stone crusher :-)
+bi-crushed-stone-2=Having mastered advanced material processing, you now can also get crushed stone from concrete!
+bi-crushed-stone-3=Having mastered advanced material processing, you now can also get crushed stone from hazard concrete!
+bi-crushed-stone-4=You will get twice as much crushed stone from processing refined instead of normal concrete, but it takes twice as long!
+bi-crushed-stone-5=You will get twice as much crushed stone from processing refined instead of normal hazard concrete, but it takes twice as long!
+bi-dart-magazine-basic=Basic wooden projectiles
+bi-dart-magazine-enhanced=Enhanced wooden projectiles
+bi-dart-magazine-poison=Poisoned wooden projectiles
+bi-dart-magazine-standard=Standard wooden projectiles
+bi-fertiliser-1=Lets stuff grow faster
+bi-fertiliser-2=Lets stuff grow faster (sodium-hydroxide)
+bi-logs-1=Grow wood the old-fashioned way by watering saplings!
+bi-logs-2=Improve your wood production by using ash as a cheap fertiliser!
+bi-logs-3=Grow even more wood by using fertiliser instead of ash!
+bi-logs-4=Using advanced fertiliser will yield you insane amounts of wood and wood pulp!
+bi-long-handed-inserter-disassemble=Disassemble long handed inserter at a small loss of materials
+bi-mineralized-sulfuric-waste=Mineralized water & sulfuric waste from crushed stone, charcoal and pure water
+bi-pellet-coke=Turn solid fuel into pellet-coke
+bi-power-to-rail-pole=Connect your power rail to the power grid
+bi-production-science-pack=Use more, but cheaper wooden rails to make production science packs!
+bi-rail-power=Rail that also conducts electricity (connect to power grid using "power to rail" connector)
+bi-rail-wood-bridge=Rail that can bridge water\nNote: You can't walk on this!
+bi-rail-wood-to-concrete=Upgrade wooden rails to default rails
+bi-rail-wood=Cheap rails made with wood
+bi-resin-pulp=Process wood pulp to get resin
+bi-resin-wood=Process wood to get resin
+bi-sand=Sand from crushed stone
+#~ bi-seedling=A young tree, perfect for planting. (You can also plant this in the ground and it will grow into a tree. Remember to first fertilize the ground to improve the chances of it growing!)
+bi-seed-1=Use wood and water to produce tree seeds!
+bi-seed-2=Improve your tree seed production by using ash as a cheap fertiliser!
+bi-seed-3=Improve your tree seed production even more by using fertiliser instead of ash!
+bi-seed-4=Increase your tree seed production dramatically with advanced fertiliser!
+bi-seed-bomb-advanced=Plant trees in a large area, with advanced fertiliser via a seed bomb!
+bi-seed-bomb-basic=Plant trees in a large area via a seed bomb!
+bi-seed-bomb-standard=Plant trees in a large area, with fertiliser via a seed bomb!
+bi-seedling-1=Use tree seeds and water to grow saplings!
+bi-seedling-2=Grow more saplings by using ash as a cheap fertiliser!
+bi-seedling-3=Grow even more saplings by using fertiliser instead of ash!
+bi-seedling-4=Use advanced fertiliser to grow still more saplings in less time!
+bi-slag-slurry=Slag slurry from ash, crushed stone and saline water
+bi-solar-boiler=A boiler that uses solar energy or electricity (also produces electricity).
+bi-solar-boiler-panel=A boiler that uses solar energy or electricity (also produces electricity).
+bi-solid-fuel=Turning wood bricks into solid fuel is a great way to get rid of excess wood pulp!
+bi-steel-furnace-disassemble=Disassemble steel furnace at a small loss of materials
+bi-stone-brick=Stone brick from crushed stone and ash
+bi-stone-crusher=Machine to break stone into crushed stone
+bi-stone-furnace-disassemble=Disassemble stone furnace at a small loss of materials
+bi-sulfur=Bio-sulfur
+bi-wood-from-pulp=Regain wood by compressing wood pulp and resin
+bi-wood-fuel-brick=Compress wood pulp for easier handling!
+bi-wooden-pole-huge=A huge wooden pole for spanning vast distances (64 tiles) with copper cable or circuit network wires
+bi-woodpulp=Process wood to wood pulp
+
+[tile-name]
+bi-solar-mat=Solar mat
+bi-wood-floor=Wood floor
+
+[item-group-name]
+bio-industries=Bio-Industries
+
+[ammo-category-name]
+Bio_Cannon_Ammo=Bio cannon ammo
+Bio_Turret_Ammo=Bio turret ammo
+
+[damage-type-name]
+Biological=Biological
+bob-pierce=Pierce
+
+[bi-misc]
+growing-tree=Growing tree
+growing-tree-desc=Given some time, a big tree will grow from this sapling.
+young-tree=Young tree
+young-tree-desc=This tree is still young and won't yield much wood yet. Better wait until it's fully grown before you chop it down!
+
+[modifier-description]
+Bio_Cannon_Ammo-damage-bonus=Prototype artillery damage: +__1__
+Bio_Cannon_Ammo-shooting-speed-bonus=Prototype artillery shooting speed: +__1__
+Bio_Turret_Ammo-damage-bonus=Dart turret ammo damage bonus: +__1__
+Bio_Turret_Ammo-shooting-speed-bonus=Dart turret ammo shooting speed bonus: +__1__
+bi-dart-turret-attack-bonus=Dart turret damage bonus: +__1__
+bi-dart-turret-damage-bonus=Dart turret damage bonus: +__1__
