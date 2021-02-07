@@ -144,28 +144,21 @@ if mods["RailSignalPlanner"] and data.raw.shortcut["give-rail-signal-planner"] t
 	data.raw.shortcut["give-rail-signal-planner"].action = "lua"
 	data.raw.shortcut["give-rail-signal-planner"].item_to_spawn = nil
 end
---[[if mods["ModuleInserter"] and data.raw.shortcut["module-inserter"] then
-	data.raw.shortcut["module-inserter"].action = "lua"
-	data.raw.shortcut["module-inserter"].item_to_spawn = nil
-end]]
 
 
 ---------------------------------------------------------------------------------------------------
 -- GENERATION OF DISABLED EQUIPMENT
 ---------------------------------------------------------------------------------------------------
-
-local disabled_equipment = {}
-local disabled_equipment_item = {}
 local equipment_list = {}
 
 if settings.startup["night-vision-equipment"].value == true then
-	equipment_list[#equipment_list+1] = "night-vision-equipment"
+	table.insert(equipment_list, "night-vision-equipment")
 end
 if settings.startup["belt-immunity-equipment"].value == true then
-	equipment_list[#equipment_list+1] = "belt-immunity-equipment"
+	table.insert(equipment_list, "belt-immunity-equipment")
 end
 if settings.startup["active-defense-equipment"].value == true then
-	equipment_list[#equipment_list+1] = "active-defense-equipment"
+	table.insert(equipment_list, "night-vision-equipment")
 end
 
 --[[if mods["GunEquipment"] then
@@ -182,42 +175,34 @@ end
 end]]
 
 
-for i, e in pairs(equipment_list) do
+for i, type in pairs(equipment_list) do
+	for _, equipment in pairs(data.raw[type]) do
+		local name = equipment.name
+		-- make it compatible with NightvisionToggles, GunEquipment and Nanobots
+		if string.sub(name,1,9) ~= "disabled-" and name ~= "nvt-night-vision-equipment" and string.sub(name,1,16) ~= "personal-turret-" and string.sub(name,1,7) ~= "picker-" then
 
-	for _, equipment in pairs(data.raw[equipment_list[i]]) do
-		local i = #disabled_equipment+1
-		disabled_equipment[i] = util.table.deepcopy(equipment)
+			local disabled_equipment = util.table.deepcopy(equipment)
 
-		--make it compatible with NightvisionToggles, GunEquipment and Nanobots
-		if disabled_equipment[i].name ~= "nvt-night-vision-equipment" and string.sub(disabled_equipment[i].name,1,16) ~= "personal-turret-" then
-			if string.sub(disabled_equipment[i].name,1,7) ~= "picker-" then
-				local name = equipment.name
-
-				if (equipment.type == "active-defense-equipment" and equipment.automatic == true) or equipment.type ~= "active-defense-equipment" then
-					disabled_equipment[i].name = "disabled-" .. name
-					disabled_equipment[i].localised_name = {"", {"equipment-name." .. name}, " (", {"gui-constant.off"}, ")"}
-				elseif (equipment.type == "active-defense-equipment" and equipment.automatic == false) then
-					disabled_equipment[i].name = "disabledinactive-" .. name
-					disabled_equipment[i].localised_name = {"equipment-name." .. name}
-				end
-
-				disabled_equipment[i].energy_input = "0kW"
-				disabled_equipment[i].take_result = name
-				disabled_equipment[i].flags = {"hidden"}
-				disabled_equipment[i].sprite.tint = {0.5, 0.5, 0.5}
-
-				if equipment_list[i] == "belt-immunity-equipment" or (equipment.type == "active-defense-equipment" and equipment.automatic == true) then
-					disabled_equipment[i].energy_source.input_flow_limit = "0kW"
-					disabled_equipment[i].energy_source.buffer_capacity = "0kJ"
-					disabled_equipment[i].energy_source.drain = "1kW"
-				end
-
+			if (equipment.type == "active-defense-equipment" and equipment.automatic == true) or equipment.type ~= "active-defense-equipment" then
+				disabled_equipment.name = "disabled-" .. name
+				disabled_equipment.localised_name = {"", {"equipment-name." .. name}, " (", {"gui-constant.off"}, ")"}
+			elseif (equipment.type == "active-defense-equipment" and equipment.automatic == false) then
+				disabled_equipment.name = "disabledinactive-" .. name
+				disabled_equipment.localised_name = {"equipment-name." .. name}
 			end
+
+			disabled_equipment.energy_input = "0kW"
+			disabled_equipment.take_result = name
+			disabled_equipment.flags = {"hidden"}
+			disabled_equipment.sprite.tint = {0.5, 0.5, 0.5}
+
+			if type == "belt-immunity-equipment" or (equipment.type == "active-defense-equipment" and equipment.automatic == true) then
+				disabled_equipment.energy_source.input_flow_limit = "0kW"
+				disabled_equipment.energy_source.buffer_capacity = "0kJ"
+				disabled_equipment.energy_source.drain = "1kW"
+			end
+
+			data:extend({disabled_equipment})
 		end
 	end
-
-end
-
-for i=1,(#disabled_equipment),1 do
-	data:extend({disabled_equipment[i]})
 end
