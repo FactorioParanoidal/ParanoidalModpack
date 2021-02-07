@@ -1,0 +1,20 @@
+{
+  "item":
+  [
+    ["fertiliser", "fertilizer"],
+    ["bi-adv-fertiliser", "bi-adv-fertilizer"]
+ ],
+
+  "recipe":
+  [
+    ["bi-adv-fertiliser-1", "bi-adv-fertilizer-1"],
+    ["bi-adv-fertiliser-2", "bi-adv-fertilizer-2"],
+    ["bi-fertiliser-1", "bi-fertilizer-1"],
+    ["bi-fertiliser-2", "bi-fertilizer-2"]
+  ],
+
+  "technology":
+  [
+    ["bi-tech-fertiliser", "bi-tech-fertilizer"]
+  ]
+}

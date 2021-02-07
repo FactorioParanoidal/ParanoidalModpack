@@ -1,0 +1,107 @@
+
+[ammo-category-name]
+Bio_Cannon_Ammo=Bio cannon ammo
+Bio_Turret_Ammo=Bio turret ammo
+
+[bi-misc]
+growing-tree=Растущее дерево
+growing-tree-desc=Если подождать, из этого саженца вырастет большое дерево
+young-tree=Молодое дерево
+young-tree-desc=Это дерево ещё молодое, из него выйдет не так много древесины. Лучше подождать, пока оно полностью вырастет, прежде, чем рубить его!
+
+[entity-description]
+# Changed for 0.17.60/0.18.29!
+#~ bi-bio-boiler=These boilers are as efficient as normal ones, but produce 75% less pollution!
+bi-solar-boiler=Бойлер с нагревом от солнечного тепла или электричества (также производит электричество).
+
+[item-description]
+bi-adv-fertiliser=Улучшенное Удобрение для ещё более быстрого выращивания, либо изменения качества поверхности
+bi-arboretum=Терраформер, позволяющий изменять поверхность и сажать вокруг себя деревья
+bi-arboretum-area=Терраформер, позволяющий изменять поверхность и сажать вокруг себя деревья
+bi-ash=Даже пепел пойдёт в дело!
+bi-stone-crusher=Завод для перемалывания камня в Измельчённый камень
+
+[item-name]
+bi-bio-reactor=Биореактор
+bi-solar-boiler=Солнечная электростанция и бойлер
+
+[mod-setting-description]
+BI_Game_Tweaks_Small_Tree_Collisionbox=ЭКСПЕРИМЕНТАЛЬНО: настройка включена по умолчани. Если отключить, вокруг деревья получат большую область столкновений из немодифицированной игры. Такие деревья будут создавать больше препятствий для игроков, транспорта и кусак. Могут возникнуть побочные эффекты!
+# This setting has been inverted for 1.0! While activating this setting would HIDE the overlay before, it will SHOW the overlay now. I'll leave the old translation in for reference (commented out). This line can be removed once the new string has been translated!
+#~ BI_Hide_musk_floor_in_mapview=В режиме карты пол Илона Маска не будет отображаться в слое Электрических сетей, если эта настройка включена. Не рекомендуется изменять при загруженной игре, поскольку применение настройки к каждой клетке пола Илона Маска может занять длительное время!
+BI_Show_musk_floor_in_mapview=Show the electric grid overlay for __ENTITY__bi-solar-mat__ in map view. This shouldn't be changed in a running game as applying the setting to every __ENTITY__bi-solar-mat__ tile may take some time!
+
+[mod-setting-name]
+BI_Game_Tweaks_Small_Tree_Collisionbox=Твики игры: Маленькая область столкновений у деревьев
+# This setting has been inverted for 1.0! While activating this setting would HIDE the overlay before, it will SHOW the overlay now. I'll leave the old translation in for reference (commented out). This line can be removed once the new string has been translated!
+#~ BI_Hide_musk_floor_in_mapview=Скрыть пол Илона Маска в слое Электросетей
+BI_Show_musk_floor_in_mapview=Enable: Electric grid overlay for __ENTITY__bi-solar-mat__ in map view
+
+[recipe-description]
+bi-acid=Используйте Биомассу из водорослей и Целлюлозу, чтобы производить Серную кислоту!
+bi-adv-fertiliser-1=Лучше, чем обычное Удобрение
+bi-adv-fertiliser-2=Лучше, чем обычное Удобрение
+bi-ash-1=Сжигайте Древесину, получайте Пепел!
+bi-ash-2=Сжигайте много Древесных опилков, получайте много Пепла!
+# Added bi-basic-petroleum-gas-processing (0.17.49/0.18.17)
+# Renamed bi-basic-petroleum-gas-processing to bi-basic-gas-processing (0.17.51/0.18.20)
+bi-basic-gas-processing=Inefficient gas extraction
+bi-bio-cannon=Этот ранний прототип артиллерии умеет стрелять ТОЛЬКО по гнёздам (максимальный радиус: 90) и пока не может быть наведён вручную.
+bi-bio-cannon-area=Этот ранний прототип артиллерии умеет стрелять ТОЛЬКО по гнёздам (максимальный радиус: 90) и пока не может быть наведён вручную.
+bi-bio-cannon-basic-ammo=Ракетный, небольшой физический урон
+bi-bio-cannon-biological-ammo=Ракетный, высокий высокий биологический урон
+bi-bio-cannon-poison-ammo=Ракетный, средний урон ядом
+bi-bio-cannon-proto-ammo=Низкий урон, большая часть взрывчатки используется для придания движения
+bi-bio-farm=Биоферма для производства Древесины и Древесных опилок
+bi-biomass-1=Начните производство Биомассы из водорослей, применив Удобрение!
+bi-biomass-2=Верните в производственный цикл часть произведённой Биомассы из водорослей, чтобы получить ещё больше её!\nПримечание: выход продукта будет меньше и дольше, чем даже в базовом рецепте, но вы сэкономите на удобрениях.
+bi-biomass-3=Верните в производственный цикл часть произведённой Биомассы из водорослей и добавьте Пепел, чтобы получить ещё больше её!\nПримечание: выход продукта будет существенно больше и быстрее, чем по другим рецептам.
+bi-charcoal-1=Сжигайте Древесные опилки чтобы получать Древесный уголь
+bi-charcoal-2=Сжигайте Древесину чтобы получать Древесный уголь
+bi-coal-1=Переработайте Древесный уголь на Уголь
+bi-coal-2=Продвинутая обработка Древесного угля позволяет получать больше Угля!
+bi-coke-coal=Переработайте Уголь в Коксовый уголь
+bi-crushed-stone-1=Получайте Измельченный камень путём измельчения камня в Измельчителе камня :-)
+bi-crushed-stone-2=Постигнув продвинутую переработку материалов, вы можете получать Измельчённый камень из Бетона!
+bi-crushed-stone-3=Постигнув продвинутую переработку материалов, вы можете получать Измельчённый камень из Бетона "Опасность"!
+bi-crushed-stone-4=Вы получите в два раза больше Измельчённого камня из Железобетона, чем из Бетона, но и займёт это в два раза дольше!
+bi-crushed-stone-5=Вы получите в два раза больше Измельчённого камня из Железобетона "Опасность", чем из Бетона "Опасность", но и займёт это в два раза дольше!
+bi-dart-magazine-basic=Базовый дротиковый снаряд
+bi-dart-magazine-enhanced=Магазин с продвинутыми дротиками
+bi-dart-magazine-poison=Магазин с ядовитыми дротиками
+bi-dart-magazine-standard=Магазин с дротиками
+bi-logs-1=Выращивайте лес по-старинке, поливая Саженцы!
+bi-logs-2=Улучшите производство древесины, используя Пепел как дешёвое удобрение!
+bi-logs-3=Выращивайте ещё больше леса, используя полноценное Удобрение вместо Пепла!
+bi-logs-4=Применение Продвинутого удобрения даст вам бешеное количество Древесины и Древесных опилок!
+bi-pellet-coke=Переработайте Твёрдое топливо в Коксовый уголь
+bi-production-science-pack=Используйте большое количество Деревянных рельсов для производства Производственных исследовательских пакетов!
+bi-rail-power=Рельс, который может проводить электричество. Подключите к электрической сети используя коннектор "Электро-рельсы"
+bi-rail-wood=Дешёвые рельсы, сделанные с применением дерева
+bi-rail-wood-to-concrete=Улучшить Деревянные рельсы до обычных Рельсов
+bi-resin-pulp=Переработайте Древесные опилки на Смолу
+bi-resin-wood=Переработайте Древесину на Смолу
+bi-solar-boiler=Бойлер с нагревом от солнечного тепла или электричества (также производит электричество).
+bi-solar-boiler-panel=Бойлер с нагревом от солнечного тепла или электричества (также производит электричество).
+bi-solid-fuel=Переработка Деревянных топливных брикетов в Твёрдое топливо - отличный способ избавиться от избытка Древесных опилков!
+bi-stone-crusher=Устройство для дробления Камня в Измельчённый камень
+bi-sulfur=Био-сера
+bi-wood-from-pulp=Получите обратно Древесину, прессуя Древесные опилки со Смолой
+bi-wood-fuel-brick=Прессуйте Древесные опилки для удобства в обращении!
+bi-wooden-pole-huge=Огромный деревянный столб, позволяющий прокидывать Медный кабель или Сигнальный провод на протяжённые расстояния (64 клетки)
+bi-woodpulp=Переработать Древесину в Древесные опилки
+
+[recipe-name]
+bi-bio-cannon=Прототип артиллерии
+bi-bio-cannon-area=Прототип артиллерии
+bi-bio-cannon-basic-ammo=Прототип артиллерии (ракетный боеприпас)
+bi-bio-cannon-biological-ammo=Прототип артиллерии (биологический боеприпас)
+bi-bio-cannon-poison-ammo=Прототип артиллерии (ядовитый боеприпас)
+bi-bio-cannon-proto-ammo=Прототип артиллерии (базовый боеприпас)
+bi-crushed-stone-4=Измельчённый камень из Железобетона
+bi-crushed-stone-5=Измельчённый камень из Железобетона "Опасность"
+bi-production-science-pack=Производственный научный пакет
+bi-wood-from-pulp=Дерево из Древесных опилок
+# Added bi-basic-petroleum-gas-processing (0.17.49/0.18.17)
+# Renamed bi-basic-petroleum-gas-processing to bi-basic-gas-processing (0.17.51/0.18.20)
+bi-basic-gas-processing=Basic gas processing

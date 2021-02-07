@@ -1,0 +1,122 @@
+log("Entered migration script 1_00_04.lua of \"" .. script.mod_name .. "\".")
+
+-- Add functions that are also used in other files (debugging output etc.)
+local BioInd = require("__" .. script.mod_name .. "__.common")(script.mod_name)
+
+------------------------------------------------------------------------------------
+-- Make sure that all compound entities have all the hidden entities they need!
+------------------------------------------------------------------------------------
+
+-- Compile a list of the entities we need to consider (we can ignore overlay entities)
+local check_entities = {}
+for name, data in pairs(BioInd.compound_entities) do
+  if not name:match("^.+%-area$") then
+    check_entities[name] = data
+  end
+end
+
+
+local function add_hidden_entity(tab, base, hidden_entity)
+  local optional, pos
+
+  local entity_name = check_entities[base.name].hidden[hidden_entity]
+
+  ------------------------------------------------------------------------------------
+  -- Pre-processing
+  ------------------------------------------------------------------------------------
+  pos = BioInd.normalize_position(base.position)
+
+  -- Bio cannon
+  if tab == "bi_bio_cannon_table" then
+    optional = {delay = 0}
+
+  -- Arboretum
+  elseif tab == "bi_arboretum_table" and hidden_entity == "radar" then
+    -- Radar position is off!
+    pos = {pos.x - 3.5, pos.y + 3.5}
+  end
+BioInd.show("base.unit_number", base.unit_number)
+BioInd.show("size of global[tab]", table_size(global[tab]))
+
+
+  ------------------------------------------------------------------------------------
+  -- Create hidden entity
+  ------------------------------------------------------------------------------------
+  --~ BioInd.create_entities(global[tab], base, {[hidden_entity] = entity_name}, pos, optional)
+  BioInd.create_entities(global[tab], base, {[hidden_entity] = entity_name},  optional)
+
+  ------------------------------------------------------------------------------------
+  -- Post-processing
+  ------------------------------------------------------------------------------------
+  -- Arboretum
+  if tab == "bi_arboretum_table" and hidden_entity == "radar" then
+    local radar = global[tab][base.unit_number].radar
+    global.bi_arboretum_radar_table[radar.unit_number] = base.unit_number
+
+  -- Power Rail
+  elseif tab == "bi_power_rail_table" then
+    BioInd.connect_power_rail(base)
+  end
+
+end
+
+
+local entity, entities
+
+-- Find all compound entities
+for s_name, surface in pairs(game.surfaces) do
+BioInd.show("Looking for compound entities on surface", s_name)
+
+  for entity_name, entity_data in pairs(check_entities) do
+BioInd.show("Looking for", entity_name)
+    -- Get list of all base entities
+    entities = surface.find_entities_filtered({name = entity_name})
+BioInd.show("Number of found entities", #entities)
+
+    -- Check the base entity is in the global table
+    global[entity_data.tab] = global[entity_data.tab] or {}
+
+    for b, base in ipairs(entities) do
+      -- The base entity has been registered
+      if global[entity_data.tab][base.unit_number] then
+      entity = global[entity_data.tab][base.unit_number]
+BioInd.writeDebug("%s is a registered entity. Checking hidden entities: %s", {BioInd.print_name_id(base), entity})
+        -- Check hidden entities
+        for h_key, h_name in pairs(entity_data.hidden) do
+          -- Must add hidden entity
+          if not (entity[h_key] and entity[h_key].valid) then
+BioInd.writeDebug("Adding hidden %s to %s", {h_key, BioInd.print_name_id(base)})
+            add_hidden_entity(entity_data.tab, base, h_key)
+          -- Nothing to do
+          else
+BioInd.writeDebug("%s is OK!", {BioInd.print_name_id(entity[h_key])})
+          end
+        end
+
+      -- Found unregistered entity!
+      else
+BioInd.writeDebug("%s has not been registered. Adding hidden entities: %s", {BioInd.print_name_id(base), entity})
+        -- Register base entity
+        global[entity_data.tab][base.unit_number] = {base = base}
+BioInd.writeDebug("Added %s to global[%s]", {BioInd.print_name_id(base), entity_data.tab})
+        -- Add hidden entities
+        for h_key, h_name in pairs(entity_data.hidden) do
+BioInd.writeDebug("Adding hidden %s for %s", {h_key, BioInd.print_name_id(base)})
+            add_hidden_entity(entity_data.tab, base, h_key)
+        end
+      end
+
+    end
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Reset effects of researched technologies!
+------------------------------------------------------------------------------------
+for force_name, force in pairs(game.forces) do
+  force.reset_technology_effects()
+  BioInd.show("Reset technology effects for force", force_name)
+end
+
+log("End of migration script 1_00_04.lua of \"" .. script.mod_name .. "\".")

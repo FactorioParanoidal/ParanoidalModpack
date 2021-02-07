@@ -1,0 +1,29 @@
+prototypes/Bio_Cannon/recipe.lua
+prototypes/Bio_Cannon/projectiles-recipe.lua
+
+
+prototypes/Bio_Farm/recipe.lua
+prototypes/Bio_Farm/compatible_recipes.lua
+prototypes/Bio_Farm/technology.lua
+
+
+prototypes/Bio_Fuel/recipe.lua
+prototypes/Bio_Garden/recipe.lua
+
+prototypes/Bio_Solar_Farm/recipe.lua
+
+
+prototypes/Bio_Turret/recipe.lua
+prototypes/Wood_Products/recipe.lua
+
+
+data-updates.lua:
+  - Moved disassemble recipes and recipe tweaks to this file
+  - Moved require("prototypes.Wood_Products.rail_updates") to this file
+
+data-final-fixes.lua:
+  - Removed disassemble recipes and recipe tweaks!
+  - Removed require("prototypes.Wood_Products.rail_updates") s
+
+prototypes/Bio_Solar_Farm/entities.lua:
+  - Increased supply_area_distance from 50 to 50.5 to fix that half tiles would be covered at the edge of the radius visualisation
