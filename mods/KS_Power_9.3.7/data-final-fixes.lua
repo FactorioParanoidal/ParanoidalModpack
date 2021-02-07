@@ -61,7 +61,7 @@ local fuel_values = {
     ["gas-methanol"] = "360KJ", -- 21,1-22 MДж/кг
 	["methanol"] = "360KJ", -- 21,1-22 MДж/кг
 	["gas-ethanol"] = "510KJ", --30,6 MДж/кг
-    ["acetone"] = "524KJ", -- 31,4 МДж/кг
+    ["gas-acetone"] = "524KJ", -- 31,4 МДж/кг
 	["coal-gas"] = "292KJ", -- 17,5 Мдж/м3
 
 	["gas-formaldehyde"] = "280KJ", --17,26 МДж/кг
