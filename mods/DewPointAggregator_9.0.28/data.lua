@@ -44,8 +44,8 @@ data:extend(
   {
     type = "assembling-machine",
     name = "dpa",
-    icon = "__DewPointAggregator__/graphics/icon2.png",
-    icon_size = 32,
+    icon = "__DewPointAggregator__/graphics/icon128.png",
+    icon_size = 128,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 1, result = "dpa"},
     max_health = 200,
@@ -115,9 +115,10 @@ data:extend(
 		ingredients =
 		{
 			{"iron-plate", 56},
-			{"iron-gear-wheel", 30},
+			{"iron-gear-wheel", 20},
+			{"basic-circuit-board", 15},
 			{"engine-unit", 16},
-			{"pipe", 25},
+			{"pipe", 40},
 		},
 		result = "dpa"
 	},
