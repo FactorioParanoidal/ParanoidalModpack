@@ -38,9 +38,9 @@ end
 
 util.safe_insert = base_util.insert_safe -- (entity, item_dict: {name = count})
 
-util.safe_damage = function(entity, damage)
+util.safe_damage = function(entity, damage_info, damage_amount)
   if not (entity and entity.valid) then return end
-  entity.damage(damage.dmg, damage.force or "neutral", damage.type or "physical")
+  entity.damage(damage_amount, damage_info.force or "neutral", damage_info.type or "physical")
 end
 
 util.safe_die = function(entity, chance)

@@ -101,7 +101,7 @@ script.on_event({defines.events.on_player_selected_area, defines.events.on_playe
 
   local claimants_force = game.get_player(event.player_index).force
   for _, entity in pairs(event.entities) do
-    if entity.force.name == "neutral" then
+    if entity.valid and entity.force.name == "neutral" then
       entity.force = claimants_force
     end
   end

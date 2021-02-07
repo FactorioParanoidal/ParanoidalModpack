@@ -11,10 +11,10 @@ local function no_corpse_fade(half_size, center, surface)
 end
 
 local function spawn_entity(entity, relative_position, center, surface, extra_options, vars, prototypes)
-  entity = expressions.entity(entity, vars)
+  local entity_name = expressions.entity(entity, vars)
 
-  if not prototypes[entity] then
-    util.debugprint("entity " .. entity .. " does not exist")
+  if not prototypes[entity_name] then
+    util.debugprint("entity " .. entity_name .. " does not exist")
     return
   end
   --drd begin (AbandonedRuins: теперь не будет падать при спауне руин с призраками. --by sbeljakov)
@@ -24,7 +24,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   end
   --drd end
   local force = extra_options.force or "neutral"
-  if extra_options.force == "enemy" then
+  if force == "enemy" then
     force = util.get_enemy_force()
   end
 
@@ -39,7 +39,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
 
   local e = surface.create_entity
   {
-    name = entity,
+    name = entity_name,
     position = {center.x + relative_position.x, center.y + relative_position.y},
     direction = defines.direction[extra_options.dir] or defines.direction.north,
     force = force,
@@ -49,8 +49,7 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   }
 
   if extra_options.dmg then
-    extra_options.dmg.dmg = expressions.number(extra_options.dmg.dmg, vars)
-    util.safe_damage(e, extra_options.dmg)
+    util.safe_damage(e, extra_options.dmg, expressions.number(extra_options.dmg.dmg, vars))
   end
   if extra_options.dead then
     util.safe_die(e, extra_options.dead)
