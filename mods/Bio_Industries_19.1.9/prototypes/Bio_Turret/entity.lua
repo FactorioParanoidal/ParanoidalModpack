@@ -269,7 +269,7 @@ data:extend({
     attack_parameters = {
       type = "projectile",
       ammo_category = "Bio_Turret_Ammo",
-      cooldown = 3.6,  -- cooldown = 6 -- darkfrei: means cooldown 6/60 sec or 10 shoots at second; = 60 is one shoot/sec
+      cooldown = 4,  -- cooldown = 6 -- darkfrei: means cooldown 6/60 sec or 10 shoots at second; = 60 is one shoot/sec --drd 3.4
       projectile_creation_distance = 1.41,
       projectile_center = {-0.0625, 0.55},
       -- darkfrei: darts haven't shells :)
@@ -283,7 +283,7 @@ data:extend({
   starting_frame_speed = 0.2,
   starting_frame_speed_deviation = 0.1
       }, ]]
-      range = 20,
+      range = 13, --drd 20
       sound = {
         filename = "__Bio_Industries__/sound/dart-turret.ogg",
         volume = 0.85
