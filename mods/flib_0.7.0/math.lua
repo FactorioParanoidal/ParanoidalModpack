@@ -24,6 +24,11 @@ flib_math.deg_to_rad = flib_math.pi / 180
 -- local deg = rad x flib_math.rad_to_deg -- 57.2958
 flib_math.rad_to_deg = 180 / flib_math.pi
 
+--- Max double
+flib_math.max_double = 0X1.FFFFFFFFFFFFFP+1023
+--- Min double
+flib_math.min_double = -0X1.FFFFFFFFFFFFFP+1023
+
 --- 127
 flib_math.max_int8 = 127
 --- -128
@@ -42,14 +47,13 @@ flib_math.max_uint16 = 65535
 flib_math.max_int = 2147483647
 --- -2,147,483,648
 flib_math.min_int = -2147483648
---- 4,294,967,296
-flib_math.max_uint = 4294967296
+--- 4,294,967,295
+flib_math.max_uint = 4294967295
 
 --- 9,007,199,254,740,991
 flib_math.max_int53 = 0x1FFFFFFFFFFFFF
 --- -9,007,199,254,740,992
 flib_math.min_int53 = -0x20000000000000
-
 
 --- Functions
 -- @section
@@ -59,10 +63,15 @@ flib_math.min_int53 = -0x20000000000000
 --
 -- From [lua-users.org](http://lua-users.org/wiki/SimpleRound).
 -- @tparam number num
+-- @tparam[opt=1] number divisor `num` will be rounded to the nearest multiple of `divisor`.
 -- @treturn number
-function flib_math.round(num)
-  if num >= 0 then return flib_math.floor(num + 0.5)
-  else return flib_math.ceil(num - 0.5) end
+function flib_math.round(num, divisor)
+  divisor = divisor or 1
+  if num >= 0 then
+    return flib_math.floor((num / divisor) + 0.5) * divisor
+  else
+    return flib_math.ceil((num / divisor) + 0.5) * divisor
+  end
 end
 
 --- Round a number to the nearest N decimal places.
