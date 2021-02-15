@@ -153,6 +153,14 @@ local function reset_state(event, toggle) -- verifies placement of equipment and
 	local player = game.players[event.player_index]
 	local grid = global.shortcuts_armor[game.players[event.player_index].index]
 	if grid and grid.valid then
+		if settings.startup["discharge-defense-remote"].value == true then
+			player.set_shortcut_available("discharge-defense-remote", false)
+			for _, equipment in pairs(grid.equipment) do
+				if equipment.name == "discharge-defense-equipment" then
+					player.set_shortcut_available("discharge-defense-remote", true)
+				end
+			end
+		end
 		local equipment = event.equipment
 		if equipment and toggle == 1 then --place
 			local type = equipment.type
@@ -204,6 +212,9 @@ local function reset_state(event, toggle) -- verifies placement of equipment and
 		end
 	else
 		false_shortcuts(player)
+		if settings.startup["discharge-defense-remote"].value == true then
+			player.set_shortcut_available("discharge-defense-remote", false)
+		end
 	end
 end
 
@@ -268,10 +279,10 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-turret" or artil
 	local function artillery_swap(entity,new_name)
 		local shellname = {}
 		local shellcount = {}
-		local inventory
-		if entity.type == "artillery-wagon" then
+		local inventory = {}
+		if entity.type == "artillery-wagon" and entity.name ~= "entity-ghost" then
 			inventory = entity.get_inventory(defines.inventory.artillery_wagon_ammo)
-		elseif entity.type == "artillery-turret" then
+		elseif entity.type == "artillery-turret" and entity.name ~= "entity-ghost" then
 			inventory = entity.get_inventory(defines.inventory.artillery_turret_ammo)
 		end
 
@@ -282,7 +293,6 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-turret" or artil
 			end
 		end
 
-		local name = entity.name
 		local surface = entity.surface.name
 		local position = entity.position
 		local direction = entity.direction
@@ -290,25 +300,42 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-turret" or artil
 		local kills = entity.kills
 		local damage = entity.damage_dealt
 		local health = entity.health
-		entity.destroy()
-		local new_entity = game.surfaces[surface].create_entity{
-			name = new_name,
-			position = position,
-			direction = direction,
-			force = force,
-			create_build_effect_smoke = false
-		}
-		if new_entity then
+		local new_entity = {}
+		
+		if entity.name == "entity-ghost" then
+			local ghost = string.sub(entity.ghost_name,10)
+			if string.sub(entity.ghost_name,1,9) ~= "disabled-" then
+				ghost = "disabled-"..entity.ghost_name
+			end
+			entity.destroy()
+			new_entity = game.surfaces[surface].create_entity{
+				name = "entity-ghost",
+				ghost_name = ghost,
+				position = position,
+				direction = direction,
+				force = force,
+			}
+		else
+			entity.destroy()
+			new_entity = game.surfaces[surface].create_entity{
+				name = new_name,
+				position = position,
+				direction = direction,
+				force = force,
+				create_build_effect_smoke = false
+			}
+		end
+		if new_entity and new_entity.name ~= "entity-ghost" then
 			new_entity.kills = kills
 			new_entity.damage_dealt = damage
 			new_entity.health = health
-			for i=1,(#shellcount) do
-				if new_entity.can_insert({name=shellname[i],count=shellcount[i]}) == true then
-					new_entity.insert({name=shellname[i],count=shellcount[i]})
+			for i, stack in pairs(shellcount) do
+				if new_entity.can_insert({name = shellname[i], count = shellcount[i]}) == true then
+					new_entity.insert({name = shellname[i], count = shellcount[i]})
 				end
 			end
-		else
-			game.print("[img=utility.danger_icon] ERROR: Artillery wagon failed to convert. Please report this to the author of the Shortcuts mod")
+		elseif new_entity.name ~= "entity-ghost" then
+			game.print("[img=utility.danger_icon] ERROR 1: Artillery turret/wagon failed to convert. Please report this to the author of the Shortcuts mod")
 		end
 		return new_entity
 	end
@@ -321,19 +348,19 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-turret" or artil
 				local name = entity.name
 				local type = entity.type
 				if entity.valid then
-					if string.sub(name,1,9) ~= "disabled-" then
+					if string.sub(name,1,9) == "disabled-" or (name == "entity-ghost" and string.sub(entity.ghost_name,1,9) == "disabled-") then
+						j=j+1
+						local new_name = string.sub(name,10,#name)
+						artillery_swap(entity,new_name)
+					else
 						local new_name = "disabled-" .. name
-						if game.entity_prototypes[new_name] then
+						if game.entity_prototypes[new_name] or (name == "entity-ghost" and game.entity_prototypes["disabled-"..entity.ghost_name]) then
 							i=i+1
 							local new_entity = artillery_swap(entity,new_name)
 							draw_warning_icon(new_entity)
 						else
-							game.print("[img=utility.danger_icon] ERROR: Artillery wagon failed to convert. Please report this to the author of the Shortcuts mod")
+							game.print("[img=utility.danger_icon] ERROR 2: Artillery turret/wagon failed to convert. Please report this to the author of the Shortcuts mod")
 						end
-					else
-						j=j+1
-						local new_name = string.sub(name,10,#name)
-						artillery_swap(entity,new_name)
 					end
 				end
 			end
@@ -357,6 +384,13 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-turret" or artil
 			draw_warning_icon(entity)
 		end
 	end, entity_type_filter)
+
+	script.on_event(defines.events.on_built_entity, function(event)
+		local entity = event.created_entity
+		if string.sub(entity.ghost_name,1,9) == "disabled-" then
+			draw_warning_icon(entity)
+		end
+	end, {{filter="ghost"}})
 
 end
 
@@ -932,6 +966,9 @@ script.on_event(defines.events.on_player_created, function(event)
 	if setting["night-vision-equipment"].value == true then
 		player.set_shortcut_available("night-vision-equipment", false)
 	end
+	if setting["discharge-defense-remote"].value == true then
+		player.set_shortcut_available("discharge-defense-remote", false)
+	end
 	if setting["spidertron-logistics"].value == true then
 		player.set_shortcut_available("spidertron-logistics", false)
 	end
@@ -965,9 +1002,9 @@ script.on_event(defines.events.on_player_created, function(event)
 		player.set_shortcut_available("check-circuit", false)
 	end
 
-	if tech["discharge-defense-equipment"].researched == false and setting["discharge-defense-remote"].value == true then
-		player.set_shortcut_available("discharge-defense-remote", false)
-	end
+	--if tech["discharge-defense-equipment"].researched == false and setting["discharge-defense-remote"].value == true then
+	--	player.set_shortcut_available("discharge-defense-remote", false)
+	--end
 
 	if mods["MIRV"] and tech["mirv-technology"].researched == false and setting["mirv-targeting-remote"].value == true then
 		player.set_shortcut_available("mirv-targeting-remote", false)
@@ -1086,9 +1123,9 @@ script.on_event(defines.events.on_research_finished, function(event)
 			player.set_shortcut_available("check-circuit", true)
 		end
 
-		if research == "discharge-defense-equipment" and setting["discharge-defense-remote"].value == true then
-			player.set_shortcut_available("discharge-defense-remote", true)
-		end
+		--if research == "discharge-defense-equipment" and setting["discharge-defense-remote"].value == true then
+		--	player.set_shortcut_available("discharge-defense-remote", true)
+		--end
 
 		if research == "mirv-technology" and mods["MIRV"] and setting["mirv-targeting-remote"].value == true then
 			player.set_shortcut_available("mirv-targeting-remote", true)

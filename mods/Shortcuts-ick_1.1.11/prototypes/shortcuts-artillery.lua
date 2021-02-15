@@ -175,12 +175,14 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-wagon" or artill
 			stackable = false,
 			selection_color = { r = 1, g = 0, b = 0 },
 			alt_selection_color = { r = 1, g = 0, b = 0 },
-			selection_mode = {"entity-with-health"},
-			alt_selection_mode = {"entity-with-health"},
+			selection_mode = {"blueprint"},
+			alt_selection_mode = {"blueprint"},
 			selection_cursor_box_type = "not-allowed",
 			alt_selection_cursor_box_type = "not-allowed",
 			entity_type_filters = disable_turret_list,
 			alt_entity_type_filters = disable_turret_list,
+			tile_filters = {"tile-unknown"},
+			alt_tile_filters = {"tile-unknown"},
 		},
 	})
 end

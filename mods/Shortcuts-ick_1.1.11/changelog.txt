@@ -270,3 +270,16 @@ Version: 1.1.10
 Date: 2021-02-06
   Bugfixes:
     - Fixed that disabling belt immunity equipment didn't work.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2021-02-07
+  Features:
+    - Ghosts of artillery turrets and waggons can now be selected and enabled/disabled with the artillery cannon fire toggle.
+  Bugfixes:
+    - Fixed that disabling active defense equipment didn't work.
+    - Fixed that discharge defense remote shortcut was available if none was equipped.
+    - Fixed that tints weren't applied to high resolution equipment sprites.
+    - Fixed that ghosts of disabled artillery turrets and waggons didn't have an alert icon.
+    - Fixed that disabled artillery wagons couldn't be blueprinted and build by robots.
+    - Fixed that disabled artillery turrets and wagons weren't ordered properly.
