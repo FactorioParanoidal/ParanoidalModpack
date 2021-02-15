@@ -10,3 +10,15 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
 		game.surfaces[1].destroy_decoratives{area=event.created_entity.selection_box}
 	end
 end)
+
+script.on_event(defines.events.script_raised_built, function(event)
+	if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" then
+		game.surfaces[1].destroy_decoratives{area=event.entity.selection_box}
+	end
+end)
+
+script.on_event(defines.events.script_raised_revive, function(event)
+	if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" then
+		game.surfaces[1].destroy_decoratives{area=event.entity.selection_box}
+	end
+end)
