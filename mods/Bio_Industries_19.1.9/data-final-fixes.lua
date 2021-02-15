@@ -272,14 +272,14 @@ end
 if BI.Settings.BI_Game_Tweaks_Stack_Size then
   -- Changed for 0.18.34/1.1.4
   local tweaks = {
-    ["wood"]            = 400,
-    ["stone"]           = 400,
-    ["stone-crushed"]   = 800,
-    ["concrete"]        = 400,
-    ["slag"]            = 800,
+    ["wood"]            = 200,
+    ["stone"]           = 200,
+    ["stone-crushed"]   = 400,
+    ["concrete"]        = 500,
+    ["slag"]            = 400,
   }
   local item
-
+--[[drd
   for tweak_name, tweak in pairs(tweaks) do
     item = data.raw.item[tweak_name]
     if item and item.stack_size < tweak then
@@ -287,18 +287,19 @@ if BI.Settings.BI_Game_Tweaks_Stack_Size then
       item.stack_size = 800
     end
   end
+]]--
 end
 
 
 --- Update fuel_emissions_multiplier values DrD
 if BI.Settings.BI_Game_Tweaks_Emissions_Multiplier then
   for item, factor in pairs({
-	["pellet-coke"] = 1,
+	["pellet-coke"] = 1.05,
     ["enriched-fuel"] = 0.75,
     ["solid-fuel"] = 1.2,
     ["solid-carbon"] = 0.9,
     ["carbon"] = 0.9,
-    ["wood-bricks"] = 1,
+    ["wood-bricks"] = 1.05,
     ["rocket-fuel"] = 2,
     ["bi-seed"] = 1.30,
     ["seedling"] = 1.30,
