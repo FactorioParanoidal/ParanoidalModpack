@@ -39,9 +39,17 @@ if artillery_toggle == "both" or artillery_toggle == "artillery-wagon" or artill
               else
                 disabled_turret.localised_name = {"", {"entity-name." .. entity.name}, " (", {"gui-constant.off"}, ")"}
               end
-              if data.raw.item[entity.name] then
+							if data.raw.item[entity.name] or data.raw["item-with-entity-data"][entity.name] then
                 disabled_turret.placeable_by = {item = entity.name, count = 1}
               end
+							if data.raw.recipe[entity.name] then
+								if entity.subgroup == nil and data.raw.recipe[entity.name].subgroup then
+									disabled_turret.subgroup = data.raw.recipe[entity.name].subgroup
+								end
+								if entity.order == nil and data.raw.recipe[entity.name].order then
+									disabled_turret.order = data.raw.recipe[entity.name].order
+								end
+							end
               if disabled_turret.icon then
                 disabled_turret.icons = {{icon = entity.icon, tint = {0.5, 0.5, 0.5}}}
                 disabled_turret.icon = nil
