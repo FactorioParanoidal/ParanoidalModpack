@@ -1,0 +1,11 @@
+{
+	"name":"Rocket-Silo-Construction",
+	"author":"MFerrari",
+	"version":"1.0.28",
+	"title":"Rocket-Silo Construction",
+	"description":"",
+	"homepage":"Discord: MFerrari#6561 and Cobaia#6897",
+	"contact": "Discord: MFerrari#6561 and Cobaia#6897",
+	"factorio_version":"1.1",
+	"dependencies": ["base >= 1.1.0","? space-exploration >= 0.4.1", "(?) bobplates", "(?) bobelectronics", "(?) angelssmelting", "(?) angelsrefining", "(?) bobores", "(?) SpaceXGAR"]
+}
