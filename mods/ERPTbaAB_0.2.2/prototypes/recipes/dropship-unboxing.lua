@@ -17,21 +17,21 @@ data:extend(
         {"random-dropship", 1}
       },
       results = {
-        {name = "iron-ore", amount = 30, probability = 0.50},
-        {name = "iron-ore", amount = 10, probability = 0.30},
-        {name = "iron-ore", amount = 40, probability = 0.05},
-        {name = "copper-ore", amount = 20, probability = 0.35},
-        {name = "copper-ore", amount = 50, probability = 0.05},
-        {name = "nickel-ore", amount = 30, probability = 0.20},
-        {name = "nickel-ore", amount = 50, probability = 0.05},
-        {name = "bauxite-ore", amount = 20, probability = 0.25}, -- aluminium ore
-        {name = "bauxite-ore", amount = 40, probability = 0.05}, -- aluminium ore
-        {name = "cobalt-ore", amount = 10, probability = 0.10},
-        {name = "cobalt-ore", amount = 30, probability = 0.05},
-        {name = "gold-ore", amount = 15, probability = 0.15},
-        {name = "gold-ore", amount = 30, probability = 0.01},
-        mods["angelssmelting"] and {name = "platinum-ore", amount = 1, probability = 0.01},
-        mods["angelssmelting"] and {name = "platinum-ore", amount = 5, probability = 0.001}
+        {name = "iron-ore", amount = 3000, probability = 0.50},
+        {name = "iron-ore", amount = 1000, probability = 0.30},
+        {name = "iron-ore", amount = 4000, probability = 0.05},
+        {name = "copper-ore", amount = 2000, probability = 0.35},
+        {name = "copper-ore", amount = 5000, probability = 0.05},
+        {name = "nickel-ore", amount = 3000, probability = 0.20},
+        {name = "nickel-ore", amount = 5000, probability = 0.05},
+        {name = "bauxite-ore", amount = 2000, probability = 0.25}, -- aluminium ore
+        {name = "bauxite-ore", amount = 4000, probability = 0.05}, -- aluminium ore
+        {name = "cobalt-ore", amount = 1000, probability = 0.10},
+        {name = "cobalt-ore", amount = 3000, probability = 0.05},
+        {name = "gold-ore", amount = 1500, probability = 0.15},
+        {name = "gold-ore", amount = 3000, probability = 0.10},
+        mods["angelssmelting"] and {name = "platinum-ore", amount = 500, probability = 0.10},
+        mods["angelssmelting"] and {name = "platinum-ore", amount = 2500, probability = 0.02}
       },
       subgroup = "space-mining"
     }

@@ -10,7 +10,7 @@ data:extend({
             {"iron-dropship", 1},
           },
         result = "iron-ore",
-        result_count = 50,
+        result_count = 5000,
         subgroup = "space-mining",
     }
 })
