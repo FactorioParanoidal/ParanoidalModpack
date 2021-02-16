@@ -283,7 +283,7 @@ data:extend({
   starting_frame_speed = 0.2,
   starting_frame_speed_deviation = 0.1
       }, ]]
-      range = 13, --drd 20
+      range = 15, --drd 20
       sound = {
         filename = "__Bio_Industries__/sound/dart-turret.ogg",
         volume = 0.85
