@@ -921,6 +921,10 @@ data.raw.item["zinc-ore"].icon_size = 64
 	data.raw.item["chrome-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-chrome-64.png"
 	data.raw.item["chrome-ore"].icon_size = 64
 	end
+	if data.raw.item["platinum-ore"] then
+	data.raw.item["chrome-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-platinum-64.png"
+	data.raw.item["chrome-ore"].icon_size = 64
+	end
 	if data.raw.item["fluorite-ore"] then
 	data.raw.item["fluorite-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-fluorite-64.png"
 	data.raw.item["fluorite-ore"].icon_size = 64
