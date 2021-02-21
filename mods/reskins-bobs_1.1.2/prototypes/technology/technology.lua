@@ -24,7 +24,7 @@ local technologies = {
     ["bob-steam-engine-1"] = {group = "power", tier = 1, icon_name = "steam-engine"},
 
     -- Science Packs
-    ["advanced-logistic-science-pack"] = {icon_name = "science-pack", tint = util.color("de00a3")}
+    ["advanced-logistic-science-pack"] = {icon_name = "science-pack", tint = util.color("FF6000")} --DrD from de00a3
 }
 
 -- Color overhaul for science packs
