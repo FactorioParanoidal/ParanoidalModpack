@@ -726,7 +726,7 @@ data:extend({
         enabled = true,
         ingredients = {
             {"wood", 10},
-			--{"electronic-circuit", 1},
+			{"small-electric-pole", 4},
             {"copper-cable", 20},
             {"iron-stick", 20},
 			{"iron-gear-wheel", 4},
@@ -740,6 +740,7 @@ data:extend({
         enabled = false,
         ingredients = {
             --{"advanced-circuit", 25},
+			{"big-electric-pole-2", 4},
 			{"electronic-circuit", 10},
             --{"electric-engine-unit", 15},
             {"iron-gear-wheel", 50},
@@ -789,7 +790,7 @@ data:extend({
         name = "texugo-wind-turbine2",
         icon = "__Texugo_windgenerator__/graphics/winds_tec.png",
         icon_size = 128,
-        prerequisites = {"electric-engine","electric-energy-distribution-2"},
+        prerequisites = {"advanced-material-processing","electric-pole-2"},
         effects = {
             {
                 type = "unlock-recipe",
