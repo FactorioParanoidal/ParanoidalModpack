@@ -67,4 +67,9 @@ data.raw.item["solid-oil-residual"].fuel_category = "chemical"
 data.raw.item["pellet-coke"].fuel_value = "15MJ"
 
 data.raw.item["bi-dart-turret"].fuel_value = "20MJ"
-data.raw.item["bi-dart-rifle"].fuel_value = "15MJ"
+data.raw.item["bi-dart-turret"].fuel_category = "chemical"
+data.raw.item["bi-dart-turret"].fuel_emissions_multiplier = 1.5
+
+data.raw.gun["bi-dart-rifle"].fuel_value = "15MJ"
+data.raw.gun["bi-dart-rifle"].fuel_category = "chemical"
+data.raw.gun["bi-dart-rifle"].fuel_emissions_multiplier = 1.5
