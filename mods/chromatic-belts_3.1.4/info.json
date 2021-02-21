@@ -1,9 +1,0 @@
-{
-	"name": "chromatic-belts",
-	"title": "Chromatic Belts",
-	"factorio_version": "1.1",
-	"author": "Mel1646, EnigmaticAussie",
-	"version": "3.1.4",
-	"dependencies": ["base >= 1.1", "?boblogistics >= 0.17.1"],
-	"description": "Changes belt graphics so that their type is more obvious."
-}
