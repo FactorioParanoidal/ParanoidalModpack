@@ -21,8 +21,8 @@ end)
 )]]
 
 script.on_event(defines.events.on_cutscene_cancelled, function(event)
+  do return end              --drd  remove angels welcome screen
   if game.active_mods['angelsexploration'] then return end
-
   local player = game.players[event.player_index]
 
   local welcomeFrame = player.gui.screen.add(
