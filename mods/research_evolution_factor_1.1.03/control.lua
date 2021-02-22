@@ -33,14 +33,17 @@ local function tech_cost(tech)
     --end
     --log("calculate unit count by formula "..formula.." with level "..(level or "NAN").." and result value "..unit_count)
   end    
-  --log("new tech "..tech.name.." researched for "..(unit_count or 0))
+  --log("new tech "..tech.name.." researched for "..(unit_count or 0).." in force "..tech.force.name)
   sum = sum * (unit_count or 0)
   return sum*0.00001*linear_factor+constant_factor*0.01
 end
 
-script.on_event(defines.events.on_research_finished, function(event)
-  local inc = tech_cost(event.research)
-  --log("adding "..inc.." to evolution factor")
+script.on_event(defines.events.on_research_finished, function(event, by_script)
+  local tech = event.research
+  if tech.force.name ~= "player" then return end
+  local inc = tech_cost(tech)
+  --log("adding "..inc.." to evolution factor "..(by_script or "FALSE"))
+  if by_script==true then return end
   for _,force in pairs(game.forces) do
     if force.ai_controllable or force == game.forces.enemy then
       force.evolution_factor = 1-(1-force.evolution_factor)*math.exp(-inc)
@@ -49,10 +52,11 @@ script.on_event(defines.events.on_research_finished, function(event)
 end)
 script.on_event(defines.events.on_research_started, function(event)
   local tech = event.research
+  if tech.force.name ~= "player" then return end
   if tech.research_unit_count_formula  then  --is infinite tech?
     if not tech.name then return end
     if global.infinite_research_units == nil then global.infinite_research_units = {} end
     global.infinite_research_units[tech.name] = tech.research_unit_count -- save researched technology units count for later use
     --log("saving "..tech.name.." units count "..tech.research_unit_count)
-  end   
+  end
 end)
