@@ -39,9 +39,16 @@ local function tech_cost(tech)
   return sum*0.00001*linear_factor+constant_factor*0.01
 end
 
+local ignore_qol=settings.startup["research-evolution-factor-ignore-qol"].value
+local ignore_infinite=settings.startup["research-evolution-factor-ignore-inf"].value
+
+local function ignored_tech(tech)
+  return tech.force.name ~= "player" or tech.prototype.hidden or (ignore_qol and string.sub(tech.name,1,4)=="qol-") or (ignore_infinite and tech.research_unit_count_formula)
+end
+
 script.on_event(defines.events.on_research_finished, function(event, by_script)
   local tech = event.research
-  if tech.force.name ~= "player" or tech.prototype.hidden then return end
+  if ignored_tech(tech) then return end
   local inc = tech_cost(tech)
   --log("adding "..inc.." to evolution factor "..(by_script or "FALSE"))
   if by_script==true then return end
@@ -51,9 +58,10 @@ script.on_event(defines.events.on_research_finished, function(event, by_script)
     end
   end
 end)
+
 script.on_event(defines.events.on_research_started, function(event)
   local tech = event.research
-  if tech.force.name ~= "player" or tech.prototype.hidden then return end
+  if ignored_tech(tech) then return end
   if tech.research_unit_count_formula  then  --is infinite tech?
     if not tech.name then return end
     if global.infinite_research_units == nil then global.infinite_research_units = {} end
