@@ -25,16 +25,24 @@ local function proto_tech_cost(tech)
 end
 
 for _,tech in pairs(data.raw.technology) do
-  local inc = proto_tech_cost(tech)
-  if inc then 
-    local effect = {
-      type  = "nothing",
-      effect_description = {"research-evolution-factor-effect", math.floor((1-math.exp(-inc))*100000+0.5)*0.001}
-    }
+  if not tech.hidden then
+    local inc = proto_tech_cost(tech)
+    local effect
+    if inc then 
+      effect = {
+        type  = "nothing",
+        effect_description = {"research-evolution-factor-effect", math.floor((1-math.exp(-inc))*100000+0.5)*0.001}
+      }
+    else
+      effect = {
+        type  = "nothing",
+        effect_description = {"research-evolution-factor-effect-unknown"}
+      }
+    end
     if tech.effects then
       table.insert(tech.effects, effect)
     else
       tech.effects = {effect}
     end
-  end  
-end  
+  end
+end
