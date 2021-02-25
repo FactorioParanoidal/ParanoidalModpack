@@ -23,9 +23,11 @@ local function proto_tech_cost(tech)
   if not tech.unit.count then return nil end
   return tech.unit.count*sum*0.00001*linear_factor+constant_factor*0.01
 end
+local ignore_qol      = settings.startup["research-evolution-factor-ignore-qol"].value
+local ignore_infinite = settings.startup["research-evolution-factor-ignore-inf"].value
 
 for _,tech in pairs(data.raw.technology) do
-  if not tech.hidden then
+  if not (tech.hidden or (ignore_qol and string.sub(tech.name,1,4)=="qol-") or (ignore_infinite and tech.research_unit_count_formula)) then
     local inc = proto_tech_cost(tech)
     local effect
     if inc then 
