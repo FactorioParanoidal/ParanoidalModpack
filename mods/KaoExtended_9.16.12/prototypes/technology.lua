@@ -37,7 +37,7 @@ bobmods.lib.tech.add_recipe_unlock("advanced-electronics", "sci-component-o")
 
 -- стало
 bobmods.lib.tech.add_recipe_unlock("advanced-electronics", "advsci-component-3")
---bobmods.lib.tech.add_recipe_unlock("advanced-electronics-2", "advsci-component-4")
+bobmods.lib.tech.add_recipe_unlock("advanced-electronics-2", "advsci-component-4")
 
 --[[
   data.raw.technology["water-miner-1"] = nil
