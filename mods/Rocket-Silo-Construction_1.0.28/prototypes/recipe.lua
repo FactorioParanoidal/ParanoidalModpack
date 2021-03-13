@@ -22,17 +22,17 @@ stone = CheckItem('sand',stone)
 
 local res_stone1,res_stone2
 if stone=='stone' then
-	res_stone1 = { {type="item", name="stone", amount=1000} }
+	res_stone1 = { {type="item", name="stone", amount=100} }
 	res_stone2 = {
-		  {type="item", name="stone", amount=900}, 
+		  {type="item", name="stone", amount=90}, 
 		  {type="item", name="coal", amount=5,probability=0.15},
 		  {type="item", name="iron-ore", amount=5,probability=0.15},
 		  {type="item", name="copper-ore", amount=5,probability=0.15}}
 	else
-	res_stone1 = { {type="item", name="stone", amount=200,probability=0.15}, 
-					{type="item", name=stone, amount=900}}
-	res_stone2 =  { {type="item", name="stone", amount=200,probability=0.10}, 
-					{type="item", name=stone, amount=900}}
+	res_stone1 = { {type="item", name="stone", amount=20,probability=0.15}, 
+					{type="item", name=stone, amount=90}}
+	res_stone2 =  { {type="item", name="stone", amount=20,probability=0.10}, 
+					{type="item", name=stone, amount=90}}
 	end
 	
 
@@ -40,15 +40,15 @@ local build_result = {{type="item", name="rsc-building-stage2", amount=1,probabi
 
 	
 if data.raw.item['stone-crushed'] then 
-	table.insert(res_stone1,{type="item", name="stone-crushed", amount=100})
-	table.insert(res_stone2,{type="item", name="stone-crushed", amount=150})
+	table.insert(res_stone1,{type="item", name="stone-crushed", amount=10})
+	table.insert(res_stone2,{type="item", name="stone-crushed", amount=15})
 	end
 if data.raw.item['slag'] then 
-	table.insert(res_stone1,{type="item", name="slag", amount=400})
-	table.insert(res_stone2,{type="item", name="slag", amount=600})
-	table.insert(build_result,{type="item", name="slag", amount=400, probability=0.25})
+	table.insert(res_stone1,{type="item", name="slag", amount=40})
+	table.insert(res_stone2,{type="item", name="slag", amount=60})
+	table.insert(build_result,{type="item", name="slag", amount=40, probability=0.25})
 	else
-	table.insert(build_result,{type="item", name="stone", amount=400, probability=0.25})
+	table.insert(build_result,{type="item", name="stone", amount=40, probability=0.25})
 	end 
 	
 	
@@ -69,29 +69,29 @@ local steel  = CheckItem('cobalt-steel-alloy','steel-plate')
 
 local ing_stage2 = 
 		{
-		  {"refined-concrete", 500*mp},
-		  {brick, 100*mp},
-		  {steel, ifthen(steel=='steel-plate',200,5)*mp},
-		  {stick, ifthen(stick=='iron-stick',300,5)*mp},
+		  {"refined-concrete", 50*mp},
+		  {brick, 10*mp},
+		  {steel, ifthen(steel=='steel-plate',20,5)*mp},
+		  {stick, ifthen(stick=='iron-stick',50,5)*mp},
 		}
 
 local ing_stage4 = table.deepcopy(ing_stage2)
 local pipe  = 'pipe'           --CheckItem('copper-tungsten-pipe','pipe')   --tungsten not compatible with SE
 local pipe2 = 'pipe-to-ground' --CheckItem('copper-tungsten-pipe-to-ground','pipe-to-ground')
-table.insert(ing_stage4,{pipe,  200*mp})
-table.insert(ing_stage4,{pipe2, 100*mp})
+table.insert(ing_stage4,{pipe,  20*mp})
+table.insert(ing_stage4,{pipe2, 10*mp})
 
 local copper = CheckItem('angels-wire-coil-copper','copper-plate') --seok   algels smelting
 local cable  = CheckItem('gilded-copper-cable','copper-cable') --seok
 
 local ing_stage5 = 
 		{
-		  {brick2, 100*mp},
-		  {cable, 1000*mp},
-		  {"green-wire", 200*mp},
-		  {"red-wire", 200*mp},
-		  {copper, 400*mp},
-		  {steel, 100*mp},
+		  {brick2, 20*mp},
+		  {cable, 10*mp},
+		  {"green-wire", 20*mp},
+		  {"red-wire", 20*mp},
+		  {copper, 40*mp},
+		  {steel, 10*mp},
 		}
 	
 
@@ -315,11 +315,11 @@ if enable_se_probe then
 		energy_required = 5,
 		ingredients =
 		{
-		  {"processing-unit", 100*mp},
-		  {"electric-engine-unit", 100*mp},
-		  {"se-heat-shielding", 100*mp},
-		  {"se-holmium-cable", 100*mp},
-		  {"se-heavy-girder", 50*mp},
+		  {"processing-unit", 10*mp},
+		  {"electric-engine-unit", 10*mp},
+		  {"se-heat-shielding", 10*mp},
+		  {"se-holmium-cable", 10*mp},
+		  {"se-heavy-girder", 10*mp},
 		  {"se-aeroframe-scaffold", 50*mp},
 		  
 		},
@@ -342,12 +342,12 @@ if enable_se_probe then
 		hidden = true,		
 		energy_required = 5,
 		ingredients = 		{
-		  {"green-wire", 200*mp},
-		  {"red-wire", 200*mp},
-		  {"se-holmium-cable", 100*mp},
-		  {"se-heat-shielding", 100*mp},
-		  {"se-heavy-girder", 50*mp},
-		  {"se-aeroframe-pole", 100*mp},
+		  {"green-wire", 20*mp},
+		  {"red-wire", 20*mp},
+		  {"se-holmium-cable", 10*mp},
+		  {"se-heat-shielding", 10*mp},
+		  {"se-heavy-girder", 5*mp},
+		  {"se-aeroframe-pole", 10*mp},
 		  
 		},
 		results=
