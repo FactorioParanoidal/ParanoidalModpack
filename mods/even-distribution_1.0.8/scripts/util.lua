@@ -33,7 +33,12 @@ function util.isValidStack(stack)
 end
 
 function util.isValidPlayer(player) -- valid, connected and alive player
-	return util.isValid(player) and player.connected and player.controller_type ~= defines.controllers.ghost -- FIXME: new controller types
+	return util.isValid(player) and 
+		   player.connected and (
+		       player.controller_type == defines.controllers.character or
+		       player.controller_type == defines.controllers.god or
+		       player.controller_type == defines.controllers.editor
+		   )
 end
 
 function util.isCraftingMachine(entity)

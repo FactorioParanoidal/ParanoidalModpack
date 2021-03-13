@@ -126,10 +126,10 @@ end
 function helpers:destroyTransferText() -- remove flying text from stack transfer
 	local surface = self.surface
 	local pos = self.position
-	
+
 	util.destroyIfValid(surface.find_entities_filtered{
 		name = "flying-text",
-		area = {{pos.x, pos.y - 1}, {pos.x, pos.y}},
+		area = {{pos.x, pos.y-1}, {pos.x, pos.y+0.5}},
 		limit = 1
 	}[1])
 end

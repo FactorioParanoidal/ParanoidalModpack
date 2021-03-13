@@ -265,14 +265,16 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 		if collected < cache.cursorStackCount then
 			collected = collected + player:inventory().remove{ name = item, count = cache.cursorStackCount - collected }
 		end
-
-		if collected < cache.cursorStackCount then
-			cursor_stack.set_stack{ name = item, count = collected }
-		else
-			cursor_stack.set_stack{ name = item, count = cache.cursorStackCount }
-			collected = collected - cache.cursorStackCount
-			if collected > 0 then
-				player:inventory().insert{ name = item, count = collected }
+		
+		if collected > 0 then
+			if collected < cache.cursorStackCount then
+				cursor_stack.set_stack{ name = item, count = collected }
+			else
+				cursor_stack.set_stack{ name = item, count = cache.cursorStackCount }
+				collected = collected - cache.cursorStackCount
+				if collected > 0 then
+					player:inventory().insert{ name = item, count = collected }
+				end
 			end
 		end
 	end

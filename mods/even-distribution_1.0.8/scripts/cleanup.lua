@@ -203,8 +203,8 @@ function this.insert(player, entity, item, amount)
 		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
 			fuel     = true,
 			ammo     = false,
-			input    = true,
-			output   = dropToOutput and entity.type ~= "rocket-silo",
+			input    = entity:recipe():hasIngredient(item),
+			output   = dropToOutput and entity.type ~= "rocket-silo" and entity:recipe():hasProduct(item),
 			modules  = false,
 			roboport = false,
 			main     = false,
@@ -281,7 +281,9 @@ function this.filterEntities(entities, item, dropToChests, dropToOutput)
 			elseif (entity.type == "car" or entity.type == "spider-vehicle") and prototype.type == "ammo" then
 				result[entity] = entity
 			end
-		elseif dropToOutput and (entity.type == "furnace" or entity.type == "assembling-machine") and entity:recipe():hasProduct(item) then
+		end
+		
+		if not result[entity] and dropToOutput and (entity.type == "furnace" or entity.type == "assembling-machine") and entity:recipe():hasProduct(item) then
 			result[entity] = entity
 		end
 	end)
