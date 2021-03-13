@@ -34,7 +34,7 @@ local function createRecipe(name, factor)
 		enabled = true,
 		category = "dpa",
 		ingredients = {},
-		results = {{type = "fluid", name = "water", amount = math.floor(100/smooth*factor+0.5)}},
+		results = {{type = "fluid", name = "water", amount = math.floor(200/smooth*factor+0.5)}},
 		hidden = true,
 	}
 end
