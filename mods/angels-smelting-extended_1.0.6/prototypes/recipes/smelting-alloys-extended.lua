@@ -3,7 +3,7 @@ if mods["bobplates"] then
   {
       --ALLOYS CASTING This needs serious balancing
       --Look at having the triple fluid recipes being really high yield
-      --[[{
+      {
       type = "recipe",
       name = "angels-bronze-smelting-1",
       category = "induction-smelting",
@@ -168,7 +168,7 @@ if mods["bobplates"] then
         {type="item", name="angels-plate-nitinol", amount=4},
       },
       order = "yf",
-    },]]
+    },
       {
       type = "recipe",
       name = "angels-plate-cobalt-steel-1",

@@ -214,6 +214,11 @@ local function replaceRobot()
   KaoExtended.recipe.addtorecipe("bob-roboport-4", {"anotherworld-structure-components", 1})
 end
 
+local function addtoRailloader()
+  KaoExtended.recipe.addtorecipe("railloader", {"miniloader", 8})
+  KaoExtended.recipe.addtorecipe("railunloader", {"miniloader", 8})
+end
+
 replaceMachine()
 replaceMining()
 replacePower()
@@ -221,3 +226,4 @@ replaceAngelRefi()
 replaceAngelPetro()
 replaceAngelMe()
 replaceRobot()
+addtoRailloader()
