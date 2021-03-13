@@ -14,8 +14,6 @@ function setup.on_init()
 	global.distrEvents = global.distrEvents or {}
 	global.settings = global.settings or {}
 	global.defaultTrash = setup.generateTrashItemList()
-	global.lastCharts = {}
-	global.lastCharacters = {}
 
 	global.allowedEntities = _(game.entity_prototypes)
 								:where(function(prototype)
@@ -138,27 +136,34 @@ function setup.migrateSettings(player)
 		settings.distributionDelay      = player.mod_settings["distribution-delay"].value
 		settings.cleanupDropRange       = player.mod_settings["max-inventory-cleanup-drop-range"].value
 
-		-- move custom trash to logistic slots
-		if settings.customTrash and character:is("valid") then
+		if character:is("valid") then
+			-- move custom trash to logistic slots
+			if settings.customTrash and character:is("valid") then
 
-			local slotCount = character.request_slot_count
-			local slots = character:logisticSlots()
-			if _(slots):is("empty") then slotCount = 0 end
-			
-			_(settings.customTrash)
-				:wherepair(function(item) -- {item,count}
-							return slots[item[1]] == nil and global.defaultTrash[item[1]] ~= item[2]
-						end, 
-						function(item,count)
-							character.set_personal_logistic_slot(slotCount + 1, {
-								name = item,
-								min = 0,
-								max = count,
-							})
-							slotCount = slotCount + 1
-						end)
+				local slotCount = character.request_slot_count
+				local slots = character:logisticSlots()
+				if _(slots):is("empty") then slotCount = 0 end
+				
+				_(settings.customTrash)
+					:wherepair(function(item) -- {item,count}
+								return slots[item[1]] == nil and global.defaultTrash[item[1]] ~= item[2]
+							end, 
+							function(item,count)
+								character.set_personal_logistic_slot(slotCount + 1, {
+									name = item,
+									min = 0,
+									max = count,
+								})
+								slotCount = slotCount + 1
+							end)
 
-			settings.customTrash = nil
+				settings.customTrash = nil
+			end
+
+			-- add default logistic slots
+			if player:setting("enableInventoryCleanupHotkey") and _(character:logisticSlots()):is("empty") then 
+				setup.addDefaultLogisticSlots(character)
+			end
 		end
 
 		dlog("Player ("..player.name..") settings migrated from none to 1.0.0")
@@ -179,12 +184,16 @@ function setup.migrateSettings(player)
 		end
 		settings.dropTrashTFueloChests = nil
 
-		global.lastCharacters[player.index] = character:toPlain()
-		if character:is("valid") then 
-			setup.addDefaultLogisticSlots(player, character, character:logisticSlots())
-		end
-
 		dlog("Player ("..player.name..") settings migrated from 1.0.2 to 1.0.3")
+	end
+
+	if settings.version == "1.0.3" then
+		settings.version = "1.0.8"
+
+		global.lastCharts = nil
+		global.lastCharacters = nil
+
+		dlog("Player ("..player.name..") settings migrated from 1.0.3 to 1.0.8")
 	end
 
 	--if settings.version == "0.3.x" then
@@ -192,58 +201,18 @@ function setup.migrateSettings(player)
 	-- end
 end
 
--- Detects when player gets new character assigned (hacky but works)
-function setup.on_chunk_charted(event)
-	local force          = event.force
-	local lastCharts     = global.lastCharts
-	local lastChart      = lastCharts[force.index]
-	local lastCharacters = global.lastCharacters
+function setup.addDefaultLogisticSlots(character)
+	local slotCount = 0
+	local slots = {}
 
-	if lastChart == nil or lastChart ~= event.tick  then
-		lastCharts[force.index] = event.tick
-
-		for __,player in pairs(force.players) do
-			player = _(player)
-			local character = _(player.character or player.cutscene_character)
-			-- dlog("char",lastCharacters[player.index],character:toPlain(), "same:",lastCharacters[player.index] == character:toPlain())
-
-			if player:is("valid player") and player:setting("enableInventoryCleanupHotkey") and
-			   character:is("valid") and lastCharacters[player.index] ~= character:toPlain() then
-				
-				local slots = character:logisticSlots()
-				if _(slots):is("empty") then
-					setup.addDefaultLogisticSlots(player, character, slots)
-				end
-			end
-			global.lastCharacters[player.index] = character:toPlain()
-		end
-	end
-end
-
-function setup.on_player_respawned(event)
-	local player = game.players[event.player_index]
-	global.lastCharacters[event.player_index] = player.character or player.cutscene_character
-end
-
-function setup.addDefaultLogisticSlots(player, character, slots)
-	local slotCount = character.request_slot_count
-	if _(slots):is("empty") then slotCount = 0 end
+	character.character_personal_logistic_requests_enabled = false
 	
-	_({
-		["wood"]               = 1,
-		["coal"]               = 0,
-		["stone"]              = 1,
-		["iron-plate"]         = 4,
-		["copper-plate"]       = 4,
-		["steel-plate"]        = 4,
-		["electronic-circuit"] = 2,
-		["advanced-circuit"]   = 2,
-	})
+	_(config.defaultLogisticSlots)
 		:wherepair(
 			function(item) -- {item,count}
 				return slots[item[1]] == nil and 
-						global.defaultTrash[item[1]] ~= item[2] and
-						game.item_prototypes[item[1]]
+					   global.defaultTrash[item[1]] ~= item[2] and
+					   game.item_prototypes[item[1]]
 			end, 
 			function(item,count)
 				character.set_personal_logistic_slot(slotCount + 1, {
@@ -253,25 +222,6 @@ function setup.addDefaultLogisticSlots(player, character, slots)
 				})
 				slotCount = slotCount + 1
 			end)
-
-	settings.customTrash = nil
-
-	if not util.hasRobotsEnabled(character.force) then
-		character.character_personal_logistic_requests_enabled = false
-	end
-end
-
-function setup.on_research_finished(event)
-	if util.enablesRobots(event.research) then
-		for __,player in pairs(event.research.force.players) do
-			if _(player):is("valid player") then
-				local character = _(player.character or player.cutscene_character)
-				if character:is("valid") then
-					character.character_personal_logistic_requests_enabled = true
-				end
-			end
-		end
-	end
 end
 
 function setup.on_force_created(event)
@@ -281,10 +231,55 @@ end
 setup.on_forces_merged = setup.on_force_created
 setup.on_technology_effects_reset = setup.on_force_created
 
+function setup.on_runtime_mod_setting_changed(event)
+	if event.setting == "disable-inventory-cleanup" then
+
+		for _,force in pairs(game.forces) do
+			setup.enableLogisticsTab(force) 
+		end
+
+		-- add default logistic slots when enabling shift+c (if all slots are empty)
+		if settings.global["disable-inventory-cleanup"].value == false then
+			
+			for __,player in pairs(game.players) do
+				local character = _(player.character or player.cutscene_character)
+				if character:is("valid") and 
+				   _(player):setting("enableInventoryCleanupHotkey") and 
+				   _(character:logisticSlots()):is("empty") then 
+
+					setup.addDefaultLogisticSlots(character)
+				end
+			end
+		end
+	end
+end
+
+function setup.on_research_finished(event)
+	setup.enableLogisticsTab(event.research.force)
+end
+
+setup.on_research_reversed = setup.on_research_finished
+setup.on_research_started  = setup.on_research_finished
+
 function setup.enableLogisticsTab(force)
- if force.technologies["enable-logistics-tab"] then
-        force.technologies["enable-logistics-tab"].researched = true
+ 	if force.technologies["enable-logistics-tab"] and not setup.hasLogisticSlots(force) then
+		local enabled = not settings.global["disable-inventory-cleanup"].value
+        force.technologies["enable-logistics-tab"].researched = enabled
     end
+end
+
+function setup.hasLogisticSlots(force)
+	for _,tech in pairs(force.technologies) do
+		if tech.researched and tech.name ~= "enable-logistics-tab" then
+			for _,effect in pairs(tech.effects) do
+				if effect.type == "character-logistic-requests" then
+					if effect.modifier then return true end
+				end
+			end
+		end
+	end
+
+	return false
 end
 
 function setup.generateTrashItemList()

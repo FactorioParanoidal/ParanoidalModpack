@@ -9,9 +9,9 @@ local helpers = scripts.helpers
 local _ = helpers.on
 
 function this.on_init()
-	for player_index,player in pairs(game.players) do
+	for __,player in pairs(game.players) do
 		player = _(player)
-		if player:is("valid player") then 
+		if player:is("valid") then 
 			this.destroyGUI(player)
 			this.buildButton(player)
 		end
@@ -23,7 +23,7 @@ this.on_configuration_changed = this.on_init
 function this.on_player_created(event)
 	local player = _(game.players[event.player_index])
 	
-	if player:is("valid player") then 
+	if player:is("valid") then 
 		this.destroyGUI(player)
 		this.buildButton(player)
 	end
@@ -34,7 +34,7 @@ function this.on_runtime_mod_setting_changed(event)
 	   event.setting == "disable-inventory-cleanup" then
 
 		local player = _(game.players[event.player_index])
-		if player:is("valid player") then
+		if player:is("valid player") and gui.get(player, templates.settingsWindow) then
 			this.buildGUI(player)
 		end
 	end

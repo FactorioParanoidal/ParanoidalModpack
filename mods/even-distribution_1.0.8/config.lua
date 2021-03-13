@@ -1,5 +1,17 @@
 local config = {}
 
+config.defaultLogisticSlots = 
+{
+    ["wood"]               = 1,
+    ["coal"]               = 0,
+    ["stone"]              = 1,
+    ["iron-plate"]         = 4,
+    ["copper-plate"]       = 4,
+    ["steel-plate"]        = 4,
+    ["electronic-circuit"] = 2,
+    ["advanced-circuit"]   = 2,
+}
+
 config.colors = -- flying text colors
 {
 	insufficientItems = { r = 1, g = 0, b = 0 }, -- red
