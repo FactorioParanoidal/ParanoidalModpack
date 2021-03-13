@@ -240,3 +240,13 @@ util.tech_lock_recipes( -- DrD
     "bi-dart-turret",  {
         "bi-dart-turret","bi-dart-magazine-basic","bi-dart-rifle"}) 
 ]]--
+
+util.tech_lock_recipes(
+    "alloy-processing",  {
+        "nickel-piercing-rounds-magazine"
+		--,"copper-nickel-firearm-magazine"
+		})
+		
+util.tech_lock_recipes(
+    "plastics",  {
+        "hazmat-suit"})
