@@ -27,6 +27,8 @@ util.tech_add_prerequisites("bob-steam-engine-2", "steam-power")
 util.tech_add_prerequisites("steam-engine-generator-1", "steam-power")
 util.tech_add_prerequisites("gas-canisters", "fluid-handling")
 
+util.tech_add_prerequisites("military", "bio-turret")
+
 util.tech_add_prerequisites("bob-steam-power-1", "steam-power")
 if data.raw.technology["bob-steam-power-1"] then
   data.raw.technology["bob-steam-power-1"].unit.count = 100
@@ -38,8 +40,8 @@ data.raw.technology["inserter-stack-size-bonus-3"].unit.count = 4000
 data.raw.technology["inserter-stack-size-bonus-4"].unit.count = 5000
 data.raw.technology["inserter-stack-size-bonus-1"].unit.time = 60
 data.raw.technology["inserter-stack-size-bonus-2"].unit.time = 60
-data.raw.technology["inserter-stack-size-bonus-3"].unit.time = 60
-data.raw.technology["inserter-stack-size-bonus-4"].unit.time = 100
+data.raw.technology["inserter-stack-size-bonus-3"].unit.time = 100
+data.raw.technology["inserter-stack-size-bonus-4"].unit.time = 120
 
 --angels
 util.tech_add_prerequisites("ore-crushing", "electricity")
@@ -232,3 +234,7 @@ util.tech_lock_recipes(
 util.tech_lock_recipes(
     "circuit-network",  {
         "pushbutton"})
+		
+util.tech_lock_recipes( -- DrD
+    "bio-turret",  {
+        "bio-turret"}) 

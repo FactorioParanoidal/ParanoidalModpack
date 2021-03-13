@@ -158,6 +158,20 @@ data:extend{
             time = 10
         },
     },
+    {
+        type = "technology",
+        name = "bio-turret",
+        icon = "__aai-industry__/graphics/technology/bio-turret.png",
+        icon_size = 128,
+        order = "a",
+        unit = {
+            count = 1,
+            ingredients = {
+                {"automation-science-pack", 1},
+            },
+            time = 30
+        },
+    },
 	--[[
     {
         type = "technology",
