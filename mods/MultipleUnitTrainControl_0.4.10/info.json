@@ -1,6 +1,6 @@
 {
   "name": "MultipleUnitTrainControl",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "factorio_version": "1.1",
   "title": "Multiple Unit Train Control",
   "author": "robot256",
@@ -13,7 +13,9 @@
     "Robot256Lib >= 0.1.0",
     "(?)FARL >= 3.1.3", 
     "(?)boblogistics >= 0.17.0", 
-    "(?)Realistic_Electric_Trains >= 0.4.2", 
+    "(?)Realistic_Electric_Trains >= 0.4.2",
+    "(?)Realistic_Electric_Trains_Fork",
+    "(?)Realistic_Electric_Trains_fix",
     "(?)FuelTrainStop >= 0.17.3", 
     "(?)FusionTrain >= 0.17.5", 
     "(?)bigger_slower_trains-M",
