@@ -1,0 +1,11 @@
+{
+  "name": "TimedSpawnControl",
+  "version": "1.0.1",
+  "factorio_version": "1.1",
+  "title": "Spawn Control with cooldown",
+  "author": "Maxikaaz",
+  "contact": "",
+  "homepage": "",
+  "dependencies": ["base >= 1.1"],
+  "description": "Orginal mod was 'Spawn Control' (by Fentus), which adds a button to set your spawn point. My fork adds map setting 'set spawn cooldown' which can be used to force setting spawn at most once per time. It also now keeps information about surface where spawn point was set."
+}
