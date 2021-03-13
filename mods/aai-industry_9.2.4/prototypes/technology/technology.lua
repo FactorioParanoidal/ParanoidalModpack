@@ -160,10 +160,25 @@ data:extend{
     },
     {
         type = "technology",
-        name = "bio-turret",
-        icon = "__aai-industry__/graphics/technology/bio-turret.png",
+        name = "bi-dart-turret",
+        icon = "__aai-industry__/graphics/technology/bi-dart-turret.png",
         icon_size = 128,
         order = "a",
+		effects =
+    {
+      {
+        type = "unlock-recipe",
+        recipe = "bi-dart-turret"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bi-dart-magazine-basic"
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bi-dart-rifle"
+      },
+    },
         unit = {
             count = 1,
             ingredients = {
