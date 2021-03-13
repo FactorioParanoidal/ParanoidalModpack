@@ -1,0 +1,10 @@
+{
+    "name": "QueueToFrontNG",
+    "version": "0.18.3",
+    "title": "Queue To Front",
+    "author": "invisus",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "1.1",
+    "description": "ALT+Q to toggle the queuing mode between back queueing(default) and front queueing"
+}
