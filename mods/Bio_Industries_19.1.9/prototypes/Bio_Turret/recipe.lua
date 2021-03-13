@@ -18,7 +18,7 @@ data:extend({
       }
     },
     normal = {
-      enabled = true,
+      enabled = false,
       energy_required = 4,
       ingredients = {
         {"wood", 10},
@@ -31,7 +31,7 @@ data:extend({
       allow_decomposition = true,       -- Added for 0.18.34/1.1.4
     },
     expensive = {
-      enabled = true,
+      enabled = false,
       energy_required = 6,
       ingredients = {
         {"wood", 10},
@@ -223,7 +223,7 @@ data:extend({
       }
     },
     normal = {
-      enabled = true,
+      enabled = false,
       energy_required = 8,
       ingredients = {
         {"iron-gear-wheel", 5},
@@ -237,7 +237,7 @@ data:extend({
       allow_decomposition = true,       -- Added for 0.18.34/1.1.4
     },
     expensive = {
-      enabled = true,
+      enabled = false,
       energy_required = 16,
       ingredients = {
         {"iron-gear-wheel", 10},
@@ -277,7 +277,7 @@ data:extend({
       }
     },
     normal = {
-      enabled = true,
+      enabled = false,
       energy_required = 8,
       ingredients = {
         {"copper-plate", 5},
@@ -291,7 +291,7 @@ data:extend({
       allow_decomposition = true,       -- Added for 0.18.34/1.1.4
     },
     expensive = {
-      enabled = true,
+      enabled = false,
       energy_required = 16,
       ingredients = {
         {"copper-plate", 10},

@@ -234,7 +234,9 @@ util.tech_lock_recipes(
 util.tech_lock_recipes(
     "circuit-network",  {
         "pushbutton"})
-		
+
+--[[
 util.tech_lock_recipes( -- DrD
-    "bio-turret",  {
-        "bio-turret"}) 
+    "bi-dart-turret",  {
+        "bi-dart-turret","bi-dart-magazine-basic","bi-dart-rifle"}) 
+]]--
