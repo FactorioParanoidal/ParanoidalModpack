@@ -27,7 +27,7 @@ util.tech_add_prerequisites("bob-steam-engine-2", "steam-power")
 util.tech_add_prerequisites("steam-engine-generator-1", "steam-power")
 util.tech_add_prerequisites("gas-canisters", "fluid-handling")
 
-util.tech_add_prerequisites("military", "bio-turret")
+util.tech_add_prerequisites("military", "bi-dart-turret")
 
 util.tech_add_prerequisites("bob-steam-power-1", "steam-power")
 if data.raw.technology["bob-steam-power-1"] then
