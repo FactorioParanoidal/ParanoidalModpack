@@ -148,7 +148,7 @@ for id, param in pairs(bridges) do
 		{ icon = ptype.icon },
 		{
 			icon = "__base__/graphics/icons/"..param.overlay_icon ,
-			scale = 0.7,
+			scale = 0.4,
 			shift = {6, -6},
 			tint = param.tint
 		}
@@ -169,12 +169,11 @@ for id, param in pairs(bridges) do
 		{ icon = ptype.icon },
 		{
 			icon = "__base__/graphics/icons/"..param.overlay_icon ,
-			scale = 0.7,
+			scale = 0.4,
 			shift = {6, -6},
 			tint = param.tint
 		}
 	}
-	
 	table.insert(holder, ptype)
 
 -- curved-rail
@@ -188,7 +187,7 @@ for id, param in pairs(bridges) do
 		{ icon = ptype.icon },
 		{
 			icon = "__base__/graphics/icons/"..param.overlay_icon ,
-			scale = 0.7,
+			scale = 0.4,
 			shift = {6, -6},
 			tint = param.tint
 		}
@@ -202,8 +201,8 @@ data:extend(holder)
 -- move to data-updates.lua because will not be overwritten by other mods
 --[[
 -- change default entity to placeable on water
-data.raw["rail-signal"]["rail-signal"].collision_mask = { "object-layer" }
-data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "object-layer" }
+data.raw["rail-signal"]["rail-signal"].collision_mask = { "rail-layer" }
+data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "rail-layer" }
 
 -- data.raw["electric-pole"]["small-electric-pole"].collision_mask = { "object-layer" }
 -- data.raw["electric-pole"]["medium-electric-pole"].collision_mask = { "object-layer" }

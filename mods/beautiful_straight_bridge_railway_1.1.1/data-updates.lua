@@ -4,8 +4,8 @@ table.insert(data.raw["technology"]["railway"].effects, {type = "unlock-recipe",
 table.insert(data.raw["technology"]["railway"].effects, {type = "unlock-recipe", recipe = "bbr-rail-brick"})
 
 -- change default entity to placeable on water
---data.raw["rail-signal"]["rail-signal"].collision_mask = { "object-layer" }             --DrD
---data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "object-layer" } --DrD
+--data.raw["rail-signal"]["rail-signal"].collision_mask = { "rail-layer" } --DrD
+--data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "rail-layer" } --DrD
 for _, signal in pairs(data.raw["rail-signal"]) do                                       --DrD
    signal.collision_mask = { "object-layer" }
 end
@@ -40,7 +40,8 @@ if data.raw["technology"]["rail-power-system"] then
 		ptype.localised_name = {"entity-name."..ptype.name}
 		ptype.order = string.format("%s[%s]", order, ptype.name)
 		table.insert(ptype.icons, {
-			icon = "__beautiful_bridge_railway__/graphics/icons/electric.png",
+			icon = "__beautiful_straight_bridge_railway__/graphics/icons/electric.png",
+			icon_size = 32,
 			scale = 0.7,
 			shift = {-6, -6},
 		})
@@ -54,7 +55,8 @@ if data.raw["technology"]["rail-power-system"] then
 		ptype.name = "bbr-straight-rail-electric-"..id
 		ptype.minable.result = "bbr-rail-electric-"..id
 		table.insert(ptype.icons, {
-			icon = "__beautiful_bridge_railway__/graphics/icons/electric.png",
+			icon = "__beautiful_straight_bridge_railway__/graphics/icons/electric.png",
+			icon_size = 32,
 			scale = 0.7,
 			shift = {-6, -6},
 		})
@@ -66,7 +68,8 @@ if data.raw["technology"]["rail-power-system"] then
 		ptype.minable.result = "bbr-rail-electric-"..id
 		ptype.placeable_by.item="bbr-rail-electric-"..id
 		table.insert(ptype.icons, {
-			icon = "__beautiful_bridge_railway__/graphics/icons/electric.png",
+			icon = "__beautiful_straight_bridge_railway__/graphics/icons/electric.png",
+			icon_size = 32,
 			scale = 0.7,
 			shift = {-6, -6},
 		})

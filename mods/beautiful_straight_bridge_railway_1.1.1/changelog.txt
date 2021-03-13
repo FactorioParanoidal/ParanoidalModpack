@@ -1,0 +1,95 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-12-01
+  Bugfixes:
+    - fix rail-signal error with other mods (CargoShips, Renai Transportation etc,)
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-26
+  Bugfixes:
+    - fix blueprint replacing was not working
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-11-26
+  Info:
+    - change version number to stable release
+
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+Date: 2020-02-07
+  Bugfixes:
+    - fix icon_size error when using with RailPowerSystem Mod
+
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+Date: 2020-01-22
+  Features:
+    - support Factorio version 0.18.x
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 2019-11-08
+  Bugfixes:
+    - fix collision mask error after Factorio ver.0.17.75
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 2019-05-31
+  Bugfixes:
+    - fix crash replace hotkey when holding non-blueprint items.
+    - fix key-config name is missing.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2019-05-08
+  Features:
+    - support RailPowerSystem
+    - add rail-replace hotkey in blueprint.
+      hold blueprint in hands and press "Ctrl+Shift+R"(default),
+      rail-type changes cyclically.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2019-05-08
+  Features:
+    - for factorio ver.0.16
+    - support RailPowerSystem
+    - add rail-replace hotkey in blueprint.
+      hold blueprint in hands and press "Ctrl+Shift+R"(default),
+      rail-type changes cyclically.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2019-04
+  Bugfixes:
+    - fix item name was wrong
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2019-03
+  Changes:
+    - support Factorio v0.17
+    - increase Iron-bridge cost sightly
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Bugfixes:
+    - fix conflict with other mods which overwrite default Railway technology (Junk Rails etc.)
+      If you have already researched Railway technology but no recipe found, please disable this mod, load&save , re-enabled.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Features:
+    - support Rail Block Visualization
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Changes:
+    - support Factorio v0.16
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Features:
+    - initial release
