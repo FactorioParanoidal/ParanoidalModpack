@@ -657,13 +657,13 @@ if BI.Settings.BI_Bio_Fuel then
         }
       },
       category = "chemistry",
-      energy_required = 10,
+      energy_required = 12, --drd from 10
       ingredients = {
         {type = "fluid", name = "sulfuric-acid", amount = 50},
         {type = "item", name = "bi-ash", amount = 10},
       },
       results = {
-        {type = "item", name = "sulfur", amount = 10}
+        {type = "item", name = "sulfur", amount = 8} --drd from 10
       },
       main_product = "",
       enabled = false,

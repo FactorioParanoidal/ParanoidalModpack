@@ -363,11 +363,11 @@ if data.raw.item["wooden-board"] and mods["bobelectronics"] then
       allow_decomposition = false,
       allow_as_intermediate = false,
       ingredients = {
-        {type = "item", name = "bi-woodpulp", amount = 3},
+        {type = "item", name = "bi-woodpulp", amount = 7},
         {type = "item", name = "resin", amount = 1},
       },
       results = {
-        {type = "item", name = "wooden-board", amount = 6}
+        {type = "item", name = "wooden-board", amount = 2}
       },
       -- This is a custom property for use by "Krastorio 2" (it will change
       -- ingredients/results; used for wood/wood pulp)
