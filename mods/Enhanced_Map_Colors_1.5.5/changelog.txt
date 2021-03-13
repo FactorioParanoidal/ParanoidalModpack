@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.5
+Date: 2/18/2021
+  Major Features:
+    - Added RandomFactorioThings/PlutoniumEnergy belts.
+    - Added Bob's basic belt.
+    - Added Krastorio2 Belts.
+    - Fixed 5Dim belts as they were renamed.
+    - Added the rest of 5Dim belts.
+    - Added Loaders
+---------------------------------------------------------------------------------------------------
 Version: 1.5.4
 Date: 11/24/2020
   Changes:
