@@ -1,0 +1,8 @@
+{
+	"name": "Namelists",
+	"version": "2.1.3",
+	"title": "Name Lists",
+	"author": "GotLag",
+	"description": "Provides interface to replace backer names with custom lists.",
+	"factorio_version": "1.1"
+}
