@@ -6,7 +6,8 @@ local rtg_names_list = {'RITEG-1', 'RITEG-cyan'}
 local RTG_prop = 
   {
     ['RITEG-1'] = {energy = 40*10^9}, -- 40 GJ
-    ['RITEG-cyan'] = {energy = 200*10^9} -- 200 GJ
+    ['RITEG-cyan'] = {energy = 200*10^9}, -- 200 GJ
+    ['RITEG-breeder'] = {energy = 40*10^9} -- 40GJ
   }
 
 function add_glow (entity)
@@ -94,7 +95,7 @@ function make_rtg_prototype (data)
   first_tick = data.tick,
   first_energy = RTG_prop[data.name].energy, -- 40 GJ
   entity = entity,
-  first_power = entity.health*10^3, -- 600 kW
+  first_power = entity.health*2500, -- 600 kW if *10^3  --drd
   health_threshold = max_health * global.threshold/100,
   pause_to_tick = data.tick+120
   
