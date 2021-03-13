@@ -23,7 +23,9 @@ if angelsmods.trigger.smelting_products["cobalt"].ingot then
   if mods['bobplates'] then
     OV.global_replace_item("solid-cobalt-oxide", "cobalt-oxide")
     angelsmods.functions.add_flag("solid-cobalt-oxide", "hidden")
-    OV.disable_recipe({ "cobalt-oxide", "cobalt-oxide-from-copper", "cobalt-plate", "cobalt-steel-alloy" })
+    OV.disable_recipe({ "cobalt-oxide",
+	--"cobalt-oxide-from-copper", --drd
+	"cobalt-plate", "cobalt-steel-alloy" })
   end
 
   if angelsmods.trigger.smelting_products["cobalt"].plate then

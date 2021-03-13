@@ -32,7 +32,7 @@ data:extend({
     type = "unlock-recipe",
     recipe = "oil-steam-boiler-2"
   }},
-  prerequisites = {"OilBurning","oil-gas-extraction","concrete"},
+  prerequisites = {"OilBurning", "oil-gas-extraction", "concrete"},
   unit =
   {
     count = 200,
