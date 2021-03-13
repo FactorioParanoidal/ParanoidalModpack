@@ -1,11 +1,17 @@
 data:extend({
-    --[[
     {
         type = "bool-setting",
         name = "suppress-custom-gui",
         setting_type = "runtime-global",
         order = "aa",
         default_value = false
+    },
+    {
+        type = "bool-setting",
+        name = "high-provide-threshold",
+        setting_type = "runtime-global",
+        order = "ab",
+        default_value = true
     },
     {
         type = "string-setting",
@@ -57,22 +63,7 @@ data:extend({
         setting_type = "runtime-global",
         default_value = true
     },
-    ]]
-    {
-        type = "bool-setting",
-        name = "high-provide-threshold",
-        setting_type = "runtime-global",
-        order = "ab",
-        default_value = true
-    },
-    {
-        type = "bool-setting",
-        name = "show-all-panels",
-        setting_type = "runtime-per-user",
-        order = "ab",
-        default_value = false
-    },
-    {
+        {
         type = "bool-setting",
         name = "ltnc-upgradable",
         order = "sg",
