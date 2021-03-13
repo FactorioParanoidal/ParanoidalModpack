@@ -566,7 +566,7 @@ data:extend({
     },
     collision_box = {{-4.2, -4.2}, {4.2, 4.2}},
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    target_temperature = 235,
+    target_temperature = 165, --drd from 235
     fluid_box = {
       base_area = 1,
       height = 2,
@@ -591,7 +591,7 @@ data:extend({
       production_type = "output",
       filter = "steam"
     },
-    energy_consumption = "1.799MW",
+    energy_consumption = "950KW", -- drd from 1799
     energy_source = {
       type = "electric",
       input_priority = "primary",

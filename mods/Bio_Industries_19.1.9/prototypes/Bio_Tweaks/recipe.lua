@@ -177,16 +177,18 @@ local SET = settings.startup["BI_Game_Tweaks_Production_Science"].value
 if SET and not KRAS then
   data:extend({
     {
-      type = "recipe",
+      type = "recipe", --drd redone
       name = "bi-production-science-pack",
       enabled = false,
       energy_required = 21,
       ingredients = {
         {"electric-furnace", 1},
         {"productivity-module", 1},
+		{"effectivity-module", 1},
+		{"speed-module", 1},
         {"bi-rail-wood", 40}
       },
-      result_count = 3,
+      result_count = 2,
       result = "production-science-pack"
     },
   })
