@@ -43,7 +43,6 @@ data:extend({
     },
     target_temperature = 165,
 	energy_consumption = "2.7MW",
-	effectivity= 0.5,
     fluid_box =
     {
       base_area = 1,
@@ -71,6 +70,7 @@ data:extend({
     {
       type = "fluid",
       emissions_per_minute = 24,
+	  effectivity = 0.5,
 	  fluid_box =
       {
       base_area = 1,
@@ -260,7 +260,6 @@ data:extend({
     },
 	target_temperature = 315,
     energy_consumption = "5.4MW",
-	effectivity= 0.67,
     fluid_box =
     {
       base_area = 1,
@@ -288,6 +287,7 @@ data:extend({
     {
       type = "fluid",
       emissions_per_minute = 20,
+	  effectivity= 0.67,
 	  fluid_box =
       {
       base_area = 1,
@@ -478,7 +478,6 @@ data:extend({
     },
     target_temperature = 465,
     energy_consumption = "8.1MW",
-	effectivity= 0.8,
     fluid_box =
     {
       base_area = 1,
@@ -506,6 +505,7 @@ data:extend({
     {
       type = "fluid",
       emissions_per_minute = 18,
+	  effectivity= 0.8,
 	  fluid_box =
       {
       base_area = 1,
@@ -719,11 +719,11 @@ data:extend({
     },
     target_temperature = 615,
     energy_consumption = "10.8MW",
-	effectivity= 0.9,
     energy_source =
     {
       type = "fluid",
       emissions_per_minute = 12,
+	  effectivity= 0.9,
 	  fluid_box =
       {
       base_area = 1,
@@ -937,11 +937,11 @@ data:extend({
     },
     target_temperature = 765,
     energy_consumption = "13.5MW",
-	effectivity= 0.98,
     energy_source =
     {
       type = "fluid",
       emissions_per_minute = 6,
+	  effectivity= 0.98,
 	  fluid_box =
       {
       base_area = 1,
