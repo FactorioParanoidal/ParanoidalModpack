@@ -1,3 +1,18 @@
+Version: 1.1.1
+  Bugfixes:
+    - hot-fixed a crash on load for Space Exploration users
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Changes:
+    - Update by snouz
+    - New stages graphics
+    - Low res entities
+    - Proper shadows on last two stages
+    - Fixed bad shift
+    - New icons for each stage
+    - Mipmaps on icons
+    - New Silo icon + custom icons for Space Exploration
+    - New mod icon
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.28
   Changes:

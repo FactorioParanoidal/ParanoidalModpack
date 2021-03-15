@@ -1,3 +1,5 @@
+local ICONPATH = "__Rocket-Silo-Construction__/graphics/icon/"
+
 require 'utils'
 
 local mp = settings.startup["rsc-st-cost-mp"].value
@@ -24,19 +26,20 @@ local res_stone1,res_stone2
 if stone=='stone' then
 	res_stone1 = { {type="item", name="stone", amount=100} }
 	res_stone2 = {
-		  {type="item", name="stone", amount=90}, 
+		  {type="item", name="stone", amount=100}, 
 		  {type="item", name="coal", amount=5,probability=0.15},
 		  {type="item", name="iron-ore", amount=5,probability=0.15},
 		  {type="item", name="copper-ore", amount=5,probability=0.15}}
 	else
 	res_stone1 = { {type="item", name="stone", amount=20,probability=0.15}, 
-					{type="item", name=stone, amount=90}}
+					{type="item", name=stone, amount=100}}
 	res_stone2 =  { {type="item", name="stone", amount=20,probability=0.10}, 
-					{type="item", name=stone, amount=90}}
+					{type="item", name=stone, amount=100}}
 	end
 	
 
-local build_result = {{type="item", name="rsc-building-stage2", amount=1,probability=0}}     
+local build_result2 = {{type="item", name="rsc-building-stage2", amount=1,probability=0}}
+local build_result4 = {{type="item", name="rsc-building-stage4", amount=1,probability=0}}
 
 	
 if data.raw.item['stone-crushed'] then 
@@ -46,9 +49,11 @@ if data.raw.item['stone-crushed'] then
 if data.raw.item['slag'] then 
 	table.insert(res_stone1,{type="item", name="slag", amount=40})
 	table.insert(res_stone2,{type="item", name="slag", amount=60})
-	table.insert(build_result,{type="item", name="slag", amount=40, probability=0.25})
+	table.insert(build_result2,{type="item", name="slag", amount=40, probability=0.25})
+	table.insert(build_result4,{type="item", name="slag", amount=40, probability=0.25})
 	else
-	table.insert(build_result,{type="item", name="stone", amount=40, probability=0.25})
+	table.insert(build_result2,{type="item", name="stone", amount=40, probability=0.25})
+	table.insert(build_result4,{type="item", name="stone", amount=40, probability=0.25})
 	end 
 	
 	
@@ -72,7 +77,7 @@ local ing_stage2 =
 		  {"refined-concrete", 50*mp},
 		  {brick, 10*mp},
 		  {steel, ifthen(steel=='steel-plate',20,5)*mp},
-		  {stick, ifthen(stick=='iron-stick',50,5)*mp},
+		  {stick, ifthen(stick=='iron-stick',30,5)*mp},
 		}
 
 local ing_stage4 = table.deepcopy(ing_stage2)
@@ -86,14 +91,14 @@ local cable  = CheckItem('gilded-copper-cable','copper-cable') --seok
 
 local ing_stage5 = 
 		{
-		  {brick2, 20*mp},
-		  {cable, 10*mp},
+		  {brick2, 10*mp},
+		  {cable, 100*mp},
 		  {"green-wire", 20*mp},
 		  {"red-wire", 20*mp},
 		  {copper, 40*mp},
 		  {steel, 10*mp},
 		}
-	
+		  		  
 
 local ing = table.deepcopy(data.raw.recipe['rocket-silo'].ingredients)
 for i=1,#ing do 
@@ -114,8 +119,7 @@ data:extend({
 		enabled = false,   
 		energy_required = 100,
 		ingredients = ing,
-		results=
-		{
+		results={
 		  {type="item", name="rsc-excavation-site", amount=1},
 		},     
 	},
@@ -125,8 +129,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "rsc-construction-stage1",
-		icon = "__Rocket-Silo-Construction__/graphics/excavator.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage1.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage1",
 		category = "rsc-stage1",
 		subgroup = "defensive-structure",
@@ -141,8 +145,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "rsc-construction-stage2",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage2.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage2",
 		category = "rsc-stage2",
 		subgroup = "defensive-structure",
@@ -150,14 +154,14 @@ data:extend({
 		hidden = true,			
 		energy_required = 5,
 		ingredients = ing_stage2,
-		results=build_result,
+		results=build_result2,
 	},
 	
 	{
 		type = "recipe",
 		name = "rsc-construction-stage3",
-		icon = "__Rocket-Silo-Construction__/graphics/excavator.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage3.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage3",
 		category = "rsc-stage3",
 		subgroup = "defensive-structure",
@@ -172,8 +176,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "rsc-construction-stage4",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage4.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage4",
 		category = "rsc-stage4",
 		subgroup = "defensive-structure",
@@ -181,7 +185,7 @@ data:extend({
 		hidden = true,		
 		energy_required = 5,
 		ingredients = ing_stage4,
-		results=build_result,
+		results=build_result4,
     
 	},
 
@@ -189,8 +193,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "rsc-construction-stage5",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage5.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage5",
 		category = "rsc-stage5",
 		subgroup = "defensive-structure",
@@ -200,7 +204,7 @@ data:extend({
 		ingredients = ing_stage5,
 		results=
 		{
-		  {type="item", name="rsc-building-stage2", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage5", amount=1,probability=0},
 		},     
 	},
 	
@@ -209,8 +213,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "rsc-construction-stage6",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
-		icon_size = 64,
+		icon = ICONPATH .. "stage6.png",
+		icon_size = 64, icon_mipmaps = 3,
 		order = "rsc-stage6",
 		category = "rsc-stage6",
 		subgroup = "defensive-structure",
@@ -229,7 +233,7 @@ data:extend({
 		},
 		results=
 		{
-		  {type="item", name="rsc-building-stage2", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage6", amount=1,probability=0},
 		},     
 	},
 	
@@ -305,7 +309,7 @@ if enable_se_probe then
 	{
 		type = "recipe",
 		name = "rsc-construction-stage6-sesprs",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
+		icon = ICONPATH .. "stage6.png",
 		icon_size = 64,
 		order = "rsc-stage6",
 		category = "rsc-stage6",
@@ -319,8 +323,8 @@ if enable_se_probe then
 		  {"electric-engine-unit", 10*mp},
 		  {"se-heat-shielding", 10*mp},
 		  {"se-holmium-cable", 10*mp},
-		  {"se-heavy-girder", 10*mp},
-		  {"se-aeroframe-scaffold", 50*mp},
+		  {"se-heavy-girder", 5*mp},
+		  {"se-aeroframe-scaffold", 5*mp},
 		  
 		},
 		results=
@@ -333,7 +337,7 @@ if enable_se_probe then
 	{
 		type = "recipe",
 		name = "rsc-construction-stage5-sesprs",
-		icon = "__Rocket-Silo-Construction__/graphics/concrete.png",
+		icon = ICONPATH .. "stage5.png",
 		icon_size = 64,
 		order = "rsc-stage5",
 		category = "rsc-stage5",
