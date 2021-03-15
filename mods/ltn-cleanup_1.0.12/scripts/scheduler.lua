@@ -115,7 +115,13 @@ end
 function scheduler.build(train, request_stop_id)
     local trash = trains.get_all_trash(train)
 
-    local stops = train_stops.get_all_cleanup(ltn.get_network(request_stop_id), trains.count_carriages(train))
+    local surface = trains.get_surface(train)
+    if surface == nil then
+        format.warning("Failed to determine train's surface")
+        return
+    end
+
+    local stops = train_stops.get_all_cleanup(ltn.get_network(request_stop_id), trains.count_carriages(train), surface)
 
     if not train_stops.found_any_stops(stops) then
         format.warning("No cleanup stops found")

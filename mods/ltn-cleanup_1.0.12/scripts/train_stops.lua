@@ -11,7 +11,7 @@ function train_stops.found_any_stops(stops)
     return next(stops.stops) ~= nil and next(stops.reverse_lookup) ~= nil
 end
 
-function train_stops.get_all_cleanup(network, carriages)
+function train_stops.get_all_cleanup(network, carriages, surface)
     local stops = {}
 
     local reverse_lookup = {
@@ -20,7 +20,7 @@ function train_stops.get_all_cleanup(network, carriages)
         fluids = {}
     }
 
-    for _, stop in pairs(game.get_train_stops()) do
+    for _, stop in pairs(game.get_train_stops({surface=surface})) do
         if stop.valid and train_stops.is_cleanup(stop.backer_name) then
             if network == nil or not ltn.is_ltn_stop(stop.unit_number) or
                 (bit32.band(ltn.get_network(stop.unit_number), network) ~= 0 and ltn.is_carriage_in_limit(stop.unit_number, carriages)) then
