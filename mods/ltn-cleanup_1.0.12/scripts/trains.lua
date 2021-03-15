@@ -65,4 +65,10 @@ function trains.count_carriages(train)
     return #train.carriages
 end
 
+function trains.get_surface(train)
+    if #train.carriages ~= 0 then
+        return train.carriages[1].surface
+    end
+end
+
 return trains
