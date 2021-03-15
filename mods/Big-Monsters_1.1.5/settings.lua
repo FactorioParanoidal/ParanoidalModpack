@@ -4,9 +4,9 @@ data:extend({
     type = "int-setting",
     name = "bm-event-days",
     setting_type = "runtime-global",
-	default_value = 6,
+	default_value = 100,
 	minimum_value = 0,
-	maximum_value = 20,
+	maximum_value = 365,
 	order = "a"
   },  
   
