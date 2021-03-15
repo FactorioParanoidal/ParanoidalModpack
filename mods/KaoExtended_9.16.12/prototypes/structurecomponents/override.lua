@@ -219,6 +219,12 @@ local function addtoRailloader()
   KaoExtended.recipe.addtorecipe("railunloader", {"miniloader", 8})
 end
 
+local function addtoRocketsilo()
+  KaoExtended.recipe.addtorecipe("rsc-construction-stage2", {"intermediate-structure-components", 5})
+  KaoExtended.recipe.addtorecipe("rsc-construction-stage5", {"advanced-structure-components", 5})
+end
+
+
 replaceMachine()
 replaceMining()
 replacePower()
@@ -227,3 +233,4 @@ replaceAngelPetro()
 replaceAngelMe()
 replaceRobot()
 addtoRailloader()
+addtoRocketsilo()
