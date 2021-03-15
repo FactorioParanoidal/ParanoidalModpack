@@ -1,9 +1,9 @@
 {
 	"name":"Rocket-Silo-Construction",
 	"author":"MFerrari",
-	"version":"1.0.28",
+	"version":"1.1.1",
 	"title":"Rocket-Silo Construction",
-	"description":"",
+	"description":"Building a Rocket Silo is now a 6 stages process. Each silo needs to be excavated, filled and built, while requiring a lot of power, materials and generating pollution.\n\nSpace Exploration/Bob&Angels compatible.",
 	"homepage":"Discord: MFerrari#6561 and Cobaia#6897",
 	"contact": "Discord: MFerrari#6561 and Cobaia#6897",
 	"factorio_version":"1.1",
