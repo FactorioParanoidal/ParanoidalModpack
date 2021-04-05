@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-04-01
+  Minor Features:
+    - Added custom on_entity_force_changed_event for mod compatibility, see end of control.lua. 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-02-25
+  Minor Features:
+    - Added support for fluid spawning.
+  Bugfixes:
+    - Fixed inserting items with 0 count.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-02-15
+  Changes:
+    - Added minimum and maximum values to the "Minimum distance from spawn" setting.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2021-02-01
   Bugfixes:

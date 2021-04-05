@@ -16,4 +16,4 @@ Check out the [ruin maker mod](https://github.com/Bilka2/ruin-maker), the [contr
 Want to make your own ruin set?<br>
 Check out the links above, the [ruin set](docs/ruin_sets.md) documentation and [The Ruins Mod - Krastorio2](https://github.com/Bilka2/AbandonedRuins-Krastorio2) as an example mod.
 
-The remote interfaces that this mod provides are described with comments at the end of [control.lua](control.lua#L104).
+The remote interfaces that this mod provides are described with comments at the end of [control.lua](control.lua#L124).

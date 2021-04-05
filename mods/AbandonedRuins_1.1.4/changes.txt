@@ -1,0 +1,2 @@
+Minor Features:
+  - Added custom on_entity_force_changed_event for mod compatibility, see end of control.lua. 

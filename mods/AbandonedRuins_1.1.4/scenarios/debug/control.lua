@@ -1,5 +1,3 @@
-if __DebugAdapter then __DebugAdapter.levelPath("AbandonedRuins","scenarios/debug/") end
-
 local util = require("__AbandonedRuins__/utilities")
 local spawning = require("__AbandonedRuins__/spawning")
 

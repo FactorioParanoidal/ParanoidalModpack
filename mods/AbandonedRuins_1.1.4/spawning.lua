@@ -54,10 +54,23 @@ local function spawn_entity(entity, relative_position, center, surface, extra_op
   if extra_options.dead then
     util.safe_die(e, extra_options.dead)
   end
+  if extra_options.fluids then
+    local fluids = {}
+    for name, amount_expression in pairs(extra_options.fluids) do
+      local amount = expressions.number(amount_expression, vars)
+      if amount > 0 then
+        fluids[name] = amount
+      end
+    end
+    util.safe_insert_fluid(e, fluids)
+  end
   if extra_options.items then
     local items = {}
-    for name, count in pairs(extra_options.items) do
-      items[name] = expressions.number(count, vars)
+    for name, count_expression in pairs(extra_options.items) do
+      local count = expressions.number(count_expression, vars)
+      if count > 0 then
+        items[name] = count
+      end
     end
     util.safe_insert(e, items)
   end
