@@ -61,7 +61,9 @@ An array:
 `{"transport-belt", {x = 0, y = 0}, {dmg = {dmg = 30}, dir = "east"}}`<br>
 `{"assembling-machine-1", {x = 4, y = 0}, {dmg = {dmg = {type = "random", min = 50, max = 190}}, recipe = "copper-cable"}}`<br>
 `{"gun-turret", {x = 1, y = 6}, {force = "enemy"}}`<br>
-`{"wooden-chest", {x = 1.5, y = 1.5}, {items = {["piercing-rounds-magazine"] = {type = "random", min = 5, max = 50}}}}`
+`{"wooden-chest", {x = 1.5, y = 1.5}, {items = {["piercing-rounds-magazine"] = {type = "random", min = 5, max = 50}}}}`<br>
+`{"storage-tank", {x = -2, y = -3}, {force = "enemy", fluids = {["water"] = 5000}}}`<br>
+`{"oil-refinery", {x = -1.5, y = -0.5}, {recipe = "basic-oil-processing", fluids = {["petroleum-gas"] = 200, ["crude-oil"] = 100}}}`
 
 ## Entity_options
 
@@ -69,6 +71,7 @@ A table with the following optional key/value pairs:
 * force - string - Optional. - Name of the force of the entity. Defaults to "neutral", use "enemy" for base defenses.
 * dir - [Direction](#Direction) - Optional. - Direction of the entity. Defaults to "north".
 * items - [Items](#Items) - Optional. - Items inserted into the entity after spawning. Defaults to no items.
+* fluids - [Fluids](#Fluids) - Optional. - Fluids inserted into the entity after spawning. Defaults to no fluids.
 * dmg - [Damage](#Damage) - Optional. - Damage the entity takes after spawning. Defaults to 0 physical damage from the neutral force.
 * recipe - string - Optional. - Name of the recipe of this assembling machine. Defaults to no recipe.
 * dead - float in range [0, 1] - Optional. - Chance that the entity spawns as dead.
@@ -243,7 +246,7 @@ A table with the following key/value pairs:
 ## Items
 
 A dictionary of items names (strings) to [number expressions](#Number-expression).
-Numbers of items must be unsigned intergers.
+Numbers of items must be unsigned integers.
 
 ### Examples
 
@@ -251,3 +254,14 @@ Numbers of items must be unsigned intergers.
 `{stone = {type = "random", min = 0, max = 12}}`<br>
 `{["iron-plate"] = 14, ["coal"] = 98, ["firearm-magazine"] = {type = "random", min = 100, max = 500}}`<br>
 `{["wood"] = {type = "random", min = 5, max = 50}, ["raw-fish"] = 20, ["copper-plate"] = {type = "random", min = 100, max = 300}}`
+
+## Fluids
+
+A dictionary of fluid names (strings) to [number expressions](#Number-expression).
+Note that most entities, e.g. storage tanks or pipes, accept only one fluid.
+
+### Examples
+
+`{water = 700}`<br>
+`{["crude-oil"] = {type = "random", min = 0, max = 5000}}`<br>
+`{["heavy-oil"] = 4000, water = 300}`

@@ -38,6 +38,19 @@ end
 
 util.safe_insert = base_util.insert_safe -- (entity, item_dict: {name = count})
 
+util.safe_insert_fluid = function(entity, fluid_dict)
+  if not (entity and entity.valid and fluid_dict) then return end
+  local fluids = game.fluid_prototypes
+  local insert = entity.insert_fluid
+  for name, amount in pairs (fluid_dict) do
+    if fluids[name] then
+      insert{name = name, amount = amount}
+    else
+      log("Fluid to insert not valid: " .. name)
+    end
+  end
+end
+
 util.safe_damage = function(entity, damage_info, damage_amount)
   if not (entity and entity.valid) then return end
   entity.damage(damage_amount, damage_info.force or "neutral", damage_info.type or "physical")

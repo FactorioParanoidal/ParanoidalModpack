@@ -3,6 +3,8 @@ local spawning = require("spawning")
 local ruin_sets = {}
 ruin_sets.base = require("ruins/base_ruin_set")
 
+local on_entity_force_changed_event = script.generate_event_name()
+
 local function spawn_chances()
   local smallChance = settings.global["ruins-small-ruin-chance"].value
   local mediumChance = settings.global["ruins-medium-ruin-chance"].value
@@ -99,10 +101,15 @@ script.on_event(defines.events.on_chunk_generated,
 script.on_event({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, function(event)
   if event.item ~= "AbandonedRuins-claim" then return end
 
+  local neutral_force = game.forces["neutral"]
+
   local claimants_force = game.get_player(event.player_index).force
   for _, entity in pairs(event.entities) do
-    if entity.valid and entity.force.name == "neutral" then
+    if entity.valid and entity.force == neutral_force then
       entity.force = claimants_force
+      if entity.valid then
+        script.raise_event(on_entity_force_changed_event, {entity = entity, force = neutral_force})
+      end
     end
   end
 
@@ -116,6 +123,13 @@ end)
 
 remote.add_interface("AbandonedRuins",
 {
+  get_on_entity_force_changed_event = function() return on_entity_force_changed_event end,
+  -- Contains: event.entity = The entity that had its force changed.
+  -- Contains: event.force = LuaForce that the entity had previously.
+  -- The current force can be gotten from event.entity.
+  -- This is raised after the force is changed.
+  -- Mod event subscription explanation can be found lower in this file.
+
   -- Set whether ruins should be spawned at all
   set_spawn_ruins = function(spawn_ruins)
     if type(spawn_ruins) ~= "boolean" then
@@ -171,3 +185,34 @@ remote.add_interface("AbandonedRuins",
     return ruin_sets[settings.global["AbandonedRuins-set"].value]
   end
 })
+
+--[[ How to: Subscribe to mod events
+  Basics: Get the event id from a remote interface. Subscribe to the event in on_init and on_load.
+
+  Example:
+
+  script.on_load(function()
+    if remote.interfaces["AbandonedRuins"] then
+      script.on_event(remote.call("AbandonedRuins", "get_on_entity_force_changed_event"), function(event)
+        -- An entity changed force, let's handle that
+        local entity = event.entity
+        local old_force = event.force
+        local new_force = entity.force
+        -- handle the force change
+      end)
+    end
+  end)
+
+  script.on_init(function()
+    if remote.interfaces["AbandonedRuins"] then
+      script.on_event(remote.call("AbandonedRuins", "get_on_entity_force_changed_event"), function(event)
+        -- An entity changed force, let's handle that
+        local entity = event.entity
+        local old_force = event.force
+        local new_force = entity.force
+        -- handle the force change
+      end)
+    end
+  end)
+
+--]]
