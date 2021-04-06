@@ -122,4 +122,6 @@ data.raw.recipe["bob-resin-wood"].energy_required = 4
 table.insert(data.raw.character.character.crafting_categories, "crafting-handonly")
 
 --Remove smelting resin to rubber
-data.raw.recipe["bob-rubber"].hidden = true
+--data.raw.recipe["bob-rubber"].hidden = true --drd
+data.raw.recipe["bob-rubber"].energy_required = 12
+data.raw.recipe["bob-rubber"].ingredients[1] = {name = "resin", type = "item", amount = 40}
