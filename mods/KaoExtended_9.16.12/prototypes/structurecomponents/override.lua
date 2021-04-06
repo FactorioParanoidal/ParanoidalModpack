@@ -219,6 +219,12 @@ local function addtoRailloader()
   KaoExtended.recipe.addtorecipe("railunloader", {"miniloader", 8})
 end
 
+local function addtoPowerarmor()
+  KaoExtended.recipe.addtorecipe("bob-power-armor-mk3", {"space-science-pack", 100})
+  KaoExtended.recipe.addtorecipe("bob-power-armor-mk4", {"planetary-data", 1})
+  KaoExtended.recipe.addtorecipe("bob-power-armor-mk5", {"station-science", 1})
+end
+
 replaceMachine()
 replaceMining()
 replacePower()
@@ -227,3 +233,4 @@ replaceAngelPetro()
 replaceAngelMe()
 replaceRobot()
 addtoRailloader()
+addtoPowerarmor()
