@@ -67,10 +67,8 @@ data.raw.recipe["steel-bearing-ball"].result_count = 8
 data.raw.recipe["titanium-bearing-ball"].result_count = 8
 data.raw.recipe["nitinol-bearing-ball"].result_count = 8
 data.raw.recipe["ceramic-bearing-ball"].result_count = 8
-
-bobmods.lib.recipe.remove_ingredient("rocket-silo","processing-unit")
-bobmods.lib.recipe.add_ingredient("rocket-silo",{"advanced-processing-unit",400})
-
+		--bobmods.lib.recipe.remove_ingredient("rocket-silo","processing-unit")
+		--bobmods.lib.recipe.add_ingredient("rocket-silo",{"advanced-processing-unit",400})
 --bobmods.lib.recipe.remove_ingredient("rocket-silo","concrete")
 --bobmods.lib.recipe.add_ingredient("rocket-silo",{"refined-concrete",1000})
 end
