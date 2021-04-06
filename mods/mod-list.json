@@ -59,12 +59,27 @@
     },
     
     {
+      "name": "baraws",
+      "enabled": true
+    },
+    
+    {
       "name": "beautiful_straight_bridge_railway",
       "enabled": true
     },
     
     {
+      "name": "Big-Monsters",
+      "enabled": true
+    },
+    
+    {
       "name": "BigLab",
+      "enabled": true
+    },
+    
+    {
+      "name": "BigLightElectricMiningDrill",
       "enabled": true
     },
     
@@ -179,11 +194,6 @@
     },
     
     {
-      "name": "chromatic-belts",
-      "enabled": true
-    },
-    
-    {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": true
     },
@@ -200,7 +210,7 @@
     
     {
       "name": "comb",
-      "enabled": false
+      "enabled": true
     },
     
     {
@@ -369,6 +379,11 @@
     },
     
     {
+      "name": "Kux-OrbitalIonCannon",
+      "enabled": true
+    },
+    
+    {
       "name": "laser_fix",
       "enabled": true
     },
@@ -389,12 +404,17 @@
     },
     
     {
+      "name": "ltn-cleanup",
+      "enabled": true
+    },
+    
+    {
       "name": "LtnManager",
       "enabled": true
     },
     
     {
-      "name": "LTN_Combinator",
+      "name": "LTN_Combinator_Fix",
       "enabled": true
     },
     
@@ -424,8 +444,8 @@
     },
     
     {
-      "name": "minime",
-      "enabled": false
+      "name": "ModuleInserter",
+      "enabled": true
     },
     
     {
@@ -464,17 +484,22 @@
     },
     
     {
+      "name": "Namelists",
+      "enabled": true
+    },
+    
+    {
       "name": "Nanobots",
       "enabled": true
     },
     
     {
-      "name": "Natural_Evolution_Enemies",
-      "enabled": false
+      "name": "ner_intermediatestweak",
+      "enabled": true
     },
     
     {
-      "name": "ner_intermediatestweak",
+      "name": "newtrainsfx",
       "enabled": true
     },
     
@@ -501,11 +526,6 @@
     {
       "name": "OberNuclear",
       "enabled": true
-    },
-    
-    {
-      "name": "Orbital Ion Cannon",
-      "enabled": false
     },
     
     {
@@ -584,7 +604,27 @@
     },
     
     {
+      "name": "prismatic-belts",
+      "enabled": true
+    },
+    
+    {
       "name": "qol_research",
+      "enabled": true
+    },
+    
+    {
+      "name": "QueueToFrontNG",
+      "enabled": true
+    },
+    
+    {
+      "name": "QuickItemSearch",
+      "enabled": true
+    },
+    
+    {
+      "name": "RadioactiveDamage",
       "enabled": true
     },
     
@@ -624,7 +664,7 @@
     },
     
     {
-      "name": "research_causes_evolution",
+      "name": "research_evolution_factor",
       "enabled": true
     },
     
@@ -635,6 +675,11 @@
     
     {
       "name": "reskins-bobs",
+      "enabled": true
+    },
+    
+    {
+      "name": "reskins-compatibility",
       "enabled": true
     },
     
@@ -655,6 +700,21 @@
     
     {
       "name": "Robot256Lib",
+      "enabled": true
+    },
+    
+    {
+      "name": "robotarmy",
+      "enabled": true
+    },
+    
+    {
+      "name": "Rocket-Silo-Construction",
+      "enabled": true
+    },
+    
+    {
+      "name": "RocketExplosions",
       "enabled": true
     },
     
@@ -700,6 +760,11 @@
     
     {
       "name": "Shield-FX",
+      "enabled": true
+    },
+    
+    {
+      "name": "ShinyAngelGFX",
       "enabled": true
     },
     
@@ -755,6 +820,11 @@
     
     {
       "name": "Texugo_windgenerator",
+      "enabled": true
+    },
+    
+    {
+      "name": "TimedSpawnControl",
       "enabled": true
     },
     
@@ -816,21 +886,6 @@
     {
       "name": "WideChests",
       "enabled": true
-    },
-    
-    {
-      "name": "yi_engines",
-      "enabled": false
-    },
-    
-    {
-      "name": "Yi_Tech_Tree",
-      "enabled": false
-    },
-    
-    {
-      "name": "Yuoki",
-      "enabled": false
     },
     
     {
