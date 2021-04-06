@@ -1,0 +1,14 @@
+{
+  "name": "RocketExplosions",
+  "version": "1.1.4",
+  "date": "2021-02-01",
+  
+  "title": "RocketExplosions",
+  "description": "First rocket launches are totally not safe",
+
+  "author": "darkfrei",
+  "license": "MIT",
+  
+  "dependencies": ["base"],
+  "factorio_version": "1.1"
+}
