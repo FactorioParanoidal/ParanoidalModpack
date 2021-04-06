@@ -4,12 +4,80 @@ data:extend({
     type = "int-setting",
     name = "bm-event-days",
     setting_type = "runtime-global",
-	default_value = 100,
+	default_value = 100, --drd
 	minimum_value = 0,
-	maximum_value = 365,
+	maximum_value = 365, --drd
 	order = "a"
   },  
+
+
+
+{
+	type = "double-setting",
+	name = "bm-invasion-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.1,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b2"
+},
+{
+	type = "double-setting",
+	name = "bm-soldiers-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.05,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b3"
+},
+{
+	type = "double-setting",
+	name = "bm-brutals-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.2,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b4"
+},
+{
+	type = "double-setting",
+	name = "bm-worms-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.7,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b5"
+},
+{
+	type = "double-setting",
+	name = "bm-biterzilla-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.3,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b6"
+},
+{
+	type = "double-setting",
+	name = "bm-spidertron-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.8,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b7"
+},
+{
+	type = "double-setting",
+	name = "bm-volcano-min_evo",
+	setting_type = "runtime-global",
+	default_value = 0.65,
+	minimum_value = 0,
+	maximum_value = 0.9,
+	order = "b8"
+},
   
+
+
 
    {
     type = "int-setting",
@@ -185,8 +253,16 @@ data:extend({
 	default_value = 1,
 	minimum_value = 1,
 	maximum_value = 10,
-	order = "z"
+	order = "u"
   },  
   
-    
+{
+	type = "double-setting",
+	name = "bm-tree-events-chance",
+	setting_type = "runtime-global",
+	default_value = 0.0, --drd
+	minimum_value = 0.0,
+	maximum_value = 100,
+	order = "w"
+},    
 })

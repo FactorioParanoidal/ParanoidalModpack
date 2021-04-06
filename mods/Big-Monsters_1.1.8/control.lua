@@ -9,13 +9,13 @@ require "stdlib/area/area"
 
 function ReadRunTimeSettings(event)
 global.chances = global.chances or {}  -- in priority order of danger
-global.chances.volcano    = {min_evo=0.65,chance=settings.global["bm-volcano-chance"].value}
-global.chances.spidertron = {min_evo=0.8, chance=settings.global["bm-spidertron-chance"].value}
-global.chances.biterzilla = {min_evo=0.3, chance=settings.global["bm-biterzilla-chance"].value}
-global.chances.worms      = {min_evo=0.70,chance=settings.global["bm-worms-chance"].value}
-global.chances.brutals    = {min_evo=0.2, chance=settings.global["bm-brutals-chance"].value}
-global.chances.soldiers   = {min_evo=0.05,chance=settings.global["bm-soldiers-chance"].value}
-global.chances.invasion   = {min_evo=0.1, chance=settings.global["bm-invasion-chance"].value}
+global.chances.volcano    = {min_evo=settings.global["bm-volcano-min_evo"].value  ,chance=settings.global["bm-volcano-chance"].value}
+global.chances.spidertron = {min_evo=settings.global["bm-spidertron-min_evo"].value  , chance=settings.global["bm-spidertron-chance"].value}
+global.chances.biterzilla = {min_evo=settings.global["bm-biterzilla-min_evo"].value  , chance=settings.global["bm-biterzilla-chance"].value}
+global.chances.worms      = {min_evo=settings.global["bm-worms-min_evo"].value  ,chance=settings.global["bm-worms-chance"].value}
+global.chances.brutals    = {min_evo=settings.global["bm-brutals-min_evo"].value  , chance=settings.global["bm-brutals-chance"].value}
+global.chances.soldiers   = {min_evo=settings.global["bm-soldiers-min_evo"].value  ,chance=settings.global["bm-soldiers-chance"].value}
+global.chances.invasion   = {min_evo=settings.global["bm-invasion-min_evo"].value  , chance=settings.global["bm-invasion-chance"].value}
 global.chances.swarm      = {min_evo=0,   chance=settings.global["bm-swarm-chance"].value}
 
 global.enable_silo_attack = settings.global["bm-enable-silo-attack"].value
@@ -25,6 +25,7 @@ global.days = settings.global["bm-event-days"].value
 global.allow_nuker = settings.global["bm-allow-nuker"].value
 global.difficulty_level = settings.global["bm-difficulty-level"].value
 global.spidertron_nuke = settings.global["bm-spidertron-nuke"].value
+global.tree_events_chance = settings.global["bm-tree-events-chance"].value/100
 end
 script.on_event(defines.events.on_runtime_mod_setting_changed, ReadRunTimeSettings)
 
@@ -70,12 +71,15 @@ script.on_event(defines.events.on_tick, on_tick )
 ------------------------------------------------------------------------------------------
 
 
-function pick_event()
+function pick_event(excludes)
 local the_event
+if not excludes then excludes={} end
 for event, chances in pairs (global.chances) do
+	if not in_list(excludes,event) then 
     if game.forces.enemy.evolution_factor >= chances.min_evo and math.random(100) <= chances.chance then 
 		the_event = event
 		break
+		end
 		end
 	end
 return the_event
@@ -225,23 +229,11 @@ end
 
 
 
-
-function Create_Silo_Attack(the_event)
-if not the_event then the_event=pick_event() end
-if the_event then 
-for s=#global.rocket_silos,1,-1 do
-	local silo=global.rocket_silos[s]
-	if not (silo and silo.valid) then table.remove(global.rocket_silos,s)
-		else
-
-		local pforce = silo.force
-		local pcount = #pforce.connected_players 
-		local surface = silo.surface
-		
-		if pcount>0 then 
+function Create_Position_Event(the_event, surface, position, pforce)
+local pcount = #pforce.connected_players  
 			
 			if the_event=='swarm' then 
-					CallFrenzyAttack(surface,silo)
+					CallFrenzyAttack(surface,position)
 					if global.show_alerts then 
 						pforce.print({"bm-txt-alert"},colors.lightred)
 						pforce.print({"bm-txt-swarm"},colors.lightred)
@@ -249,7 +241,7 @@ for s=#global.rocket_silos,1,-1 do
 						end
 						
 				elseif the_event=='invasion' then 
-					local target = get_random_pos_near(silo.position,150)
+					local target = get_random_pos_near(position,150)
 					target = surface.find_non_colliding_position('rocket-silo', target, 60, 1)
 					if target then 
 						create_invasion(surface,target,pcount)
@@ -263,7 +255,7 @@ for s=#global.rocket_silos,1,-1 do
 					
 					
 				elseif the_event=='volcano' then
-					local target = get_random_pos_near(silo.position,150)
+					local target = get_random_pos_near(position,150)
 					target = surface.find_non_colliding_position('rocket-silo', target, 50, 1)
 					if target then 
 						local volcano = create_volcano(surface, target, pcount)
@@ -279,7 +271,7 @@ for s=#global.rocket_silos,1,-1 do
 
 				
 				elseif the_event=='worms' then
-					local target = get_random_pos_near(silo.position,150)
+					local target = get_random_pos_near(position,150)
 					target = surface.find_non_colliding_position('rocket-silo', target, 50, 1)
 					if target then 
 						local bigworm = create_bigworm(surface,target,pcount)
@@ -295,10 +287,10 @@ for s=#global.rocket_silos,1,-1 do
 
 
 				elseif the_event=='soldiers' then
-					local spawn = surface.find_nearest_enemy{position=silo.position, max_distance=500, force=silo.force}
+					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, humie = create_soldiers_group(surface,spawn,pcount,silo.position)
+						local group, humie = create_soldiers_group(surface,spawn,pcount,position)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-human_soldiers"},colors.lightred)
@@ -309,10 +301,10 @@ for s=#global.rocket_silos,1,-1 do
 
 
 				elseif the_event=='brutals' then
-					local spawn = surface.find_nearest_enemy{position=silo.position, max_distance=500, force=silo.force}
+					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, brutal = create_brutals_group(surface,spawn,pcount,silo.position)
+						local group, brutal = create_brutals_group(surface,spawn,pcount,position)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-brutals"},colors.lightred)
@@ -322,10 +314,10 @@ for s=#global.rocket_silos,1,-1 do
 						end
 
 				elseif the_event=='biterzilla' then
-					local spawn = surface.find_nearest_enemy{position=silo.position, max_distance=500, force=silo.force}
+					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, zilla = create_biterzilla(surface,spawn,pcount,silo.position)
+						local group, zilla = create_biterzilla(surface,spawn,pcount,position)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-biterzilla"},colors.lightred)
@@ -335,7 +327,22 @@ for s=#global.rocket_silos,1,-1 do
 						end
 
 				end
-			end
+
+end 
+
+function Create_Silo_Attack(the_event)
+if not the_event then the_event=pick_event() end
+if the_event then 
+for s=#global.rocket_silos,1,-1 do
+	local silo=global.rocket_silos[s]
+	if not (silo and silo.valid) then table.remove(global.rocket_silos,s)
+		else
+
+		local pforce = silo.force
+		local pcount = #pforce.connected_players 
+		local surface = silo.surface
+		
+		if pcount>0 then Create_Position_Event(the_event, surface, silo.position, pforce) end
 		end
 	end
 end
@@ -346,7 +353,7 @@ end
 script.on_nth_tick(60*60, function (event)
 if global.next_event<game.tick and global.days>0 then 
 	CreateNewEvent()
-	global.next_event = game.tick + (global.days * (7 + math.random(-1,1)) * 60 * 60)
+	global.next_event = game.tick + (global.days * (7 + math.random(-2,2)) * 60 * 60)
 	end
 
 if global.next_silo_event < game.tick and global.enable_silo_attack then 
@@ -816,7 +823,7 @@ end)
 
 
 function create_volcano(surface, target, pcount)
-local duration = math.ceil (60 * 60) + ((pcount + global.difficulty_level - 1) * 60 * 10)
+local duration = (60 * 60) + ((pcount + global.difficulty_level) * 60 * 20)
 local volcano
 local position = surface.find_non_colliding_position("bm-volcano", target, 200, 1)
 	if position ~= nil then
@@ -944,6 +951,23 @@ script.on_event(defines.events.script_raised_built, On_Built, filters)
 
 
 
+function player_mined_entity(event)
+local player = game.players[event.player_index]	
+if not player.valid then return end
+local ent = event.entity
+if ent.type=='tree' then 
+	if math.random()<=global.tree_events_chance then
+		local the_event=pick_event({'biterzilla','volcano'})
+		if the_event then 
+			local pforce = player.force
+			local surface = ent.surface
+			Create_Position_Event(the_event, surface, ent.position, pforce)	
+			end
+		end
+	end
+end
+local filters = {{filter = "type", type = "tree"}}
+script.on_event(defines.events.on_player_mined_entity, player_mined_entity, filters) 
 
 
 
