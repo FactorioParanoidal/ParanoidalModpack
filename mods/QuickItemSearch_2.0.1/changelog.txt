@@ -1,0 +1,213 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2021-02-21
+  Bugfixes:
+    - Fixed a crash when pressing E with nothing in the search textfield
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2021-02-17
+  Features:
+    - All-new GUI
+      - Results are shown in a list instead of a grid
+      - Each result is only shown once for both inventory and logistics
+      - The current logistic request / infinity filter for each item is shown
+    - Added infinity filter GUI with the ability to set temporary infinity filters
+    - All GUIs can be confirmed with E
+  Changes:
+    - Completely rewrote the mod from scratch
+    - Significant performance improvements to quick-trash-all and search functionality
+    - Changed the default hotkey to Shift + F to avoid conflicts
+    - Removed search location settings
+---------------------------------------------------------------------------------------------------
+Version: 1.5.15
+Date: 2020-11-23
+  Changes:
+    - Updated to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.5.14
+Date: 2020-11-10
+  Bugfixes:
+    - Fixed the request sliders not working whatsoever
+---------------------------------------------------------------------------------------------------
+Version: 1.5.13
+Date: 2020-11-01
+  Bugfixes:
+    - Added workaround for inconsistent request setting behavior
+---------------------------------------------------------------------------------------------------
+Version: 1.5.12
+Date: 2020-10-02
+  Bugfixes:
+    - Fixed temporary request amount being rounded when using keyboard navigation
+    - Fixed that temporary requests would not update if the items were inserted into the ammo, armor, or gun inventories
+---------------------------------------------------------------------------------------------------
+Version: 1.5.11
+Date: 2020-09-14
+  Changes:
+    - The ghost cursor will always be set for items you don't have, whether or not they place an entity
+---------------------------------------------------------------------------------------------------
+Version: 1.5.10
+Date: 2020-08-29
+  Changes:
+    - QIS will automatically disable item spawning if in the Space Exploration navigation satellite
+---------------------------------------------------------------------------------------------------
+Version: 1.5.9
+Date: 2020-08-29
+  Features:
+    - Added setting to spawn items when cheating (to allow for disabling it)
+      - This fixes QIS spawning items on the ground when in Space Exploration's satellite view
+---------------------------------------------------------------------------------------------------
+Version: 1.5.8
+Date: 2020-08-15
+  Changes:
+    - Updated to Factorio 1.0
+    - Marked the base mod as optional to allow compatibility with total overhaul mods
+    - Added mod name and description to locale
+---------------------------------------------------------------------------------------------------
+Version: 1.5.7
+Date: 2020-08-10
+  Changes:
+    - Logistic results now have the same actions as everything else, instead of being reversed
+  Bugfixes:
+    - Fixed a crash when a mod would removed while translations were running, but before those translations translated all of that mod's strings
+    - Fixed a crash when using the hotkey while the Space Exploration Universe Explorer window is open
+    - Fixed a crash when trying to set a personal logistic request when in a non-character controller
+    - Properly fixed desync related to a player's connected status in multiplayer during a mod change
+---------------------------------------------------------------------------------------------------
+Version: 1.5.6
+Date: 2020-07-26
+  Bugfixes:
+    - Fixed that the GUI would never become available because of a botched fix in v1.5.5
+    - Fixed a potential crash if a GUI handler was removed between versions
+---------------------------------------------------------------------------------------------------
+Version: 1.5.5
+Date: 2020-07-26
+  Bugfixes:
+    - Fixed several crashes related to tabbing into the search textfield at inappropriate times
+    - Fixed a crash when an item has no localised name
+    - Fixed a desync related to player.connected being unreliable during on_configuration_changed on multiplayer servers
+---------------------------------------------------------------------------------------------------
+Version: 1.5.4
+Date: 2020-06-24
+  Bugfixes:
+    - Fixed a crash related to GUI style changes in Factorio 0.18.33
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2020-06-20
+  Features:
+    - Added ability to edit logistic request for every type of item (inventory, logistics, and unavailable)
+    - Added ability to place tile ghosts when none of the item is available
+  Changes:
+    - Adjusted slot button colors, now using styles provided by FLib
+    - Changed quick-trash action from shift+click to control+click
+    - Unified set_cursor logic to pick from inventory first, else spawn items if cheating, else set cursor ghost
+  Bugfixes:
+    - Fixed that a character's own inventory contents would be included in logistics results in certain circumstances
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2020-05-27
+  Bugfixes:
+    - Fixed that quick-trash logic would not count ammo and guns, and would not check every request every time
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2020-05-26
+  Bugfixes:
+    - Fixed that the GUI wouldn't close when picking an item in the map editor
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2020-05-26
+  Features:
+    - Added a search button to the shortcut bar that will toggle the GUI
+    - Added a shift-action to inventory slots that will quick-trash the item if it is greater than its minimum request amount
+    - Added the ability to permanently edit a logistic request, instead of just making a temporary request
+    - Added the ability to edit the minimum and maximum amounts for a request
+    - Added quick-trash-all hotkey that will reduce all items in your inventory to their minimum request amounts
+  Changes:
+    - Completely rewrote the mod from the ground up to improve performance and code structure
+    - Switched from RaiLuaLib to FLib
+    - General GUI style improvements
+    - Searching unavailable items is now enabled by default
+    - Items that contain entity data, inventories, or tags will be excluded from the results, as retrieving them would destroy their data
+    - Removed setting that required logistic results to be unique
+    - Removed "request-a-stack" functionality - the new request screen defaults to a stack instead
+    - Removed Death Markers incompatibility
+  Bugfixes:
+    - Fixed that the GUI would force-open itself in a lot of cases, even when a different window was already open
+    - Fixed a crash related to a player's translation table not existing
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2020-04-04
+  Features:
+    - Shift + selecting an unavailable item while in cheat mode will spawn that item into your cursor
+    - Added option to still show a logistics item even if it's already in your inventory
+  Changes:
+    - Default location setting is now the center of the screen for both play modes
+    - Default number of rows is now four, up from three
+    - Removed lualib and made it a separate mod, RaiLuaLib
+    - Marked Death Markers as an incompatible mod, since it somehow causes this mod to desync in multiplayer
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2020.02-15
+  Bugfixes:
+    - Fixed a crash when a translation was canceled after the translation requests had been made, but before they all had been sorted
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2020-02-12
+  Features:
+    - Added custom logistic request GUI (control + select a logistics item to access it)
+  Changes:
+    - Significantly optimised search logic
+    - Improved GUI navigation. Pressing escape while selecting a result with keyboard shortcuts will return to the search bar. Pressing escape again will close the GUI
+  Bugfixes:
+    - Fixed that the mod would continue to track your items forever if you canceled a temporary logistics request
+    - Fixed more issues with the translation module duplicating keys
+    - Fixed a crash if a multiplayer save were to be upgraded from 1.1.0 while other players had the GUI open
+    - Fixed some leftover migration issues
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2020-01-28
+  Bugfixes:
+    - Fixed the "unfixable migration" that prevented a direct upgrade to 1.2
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2020-01-25
+  Features:
+    - Updated to Factorio 0.18
+    - When using keyboard navigation, the selected item's name will be shown in the text box
+    - Shift + selecting an item while in the editor will create an infinity inventory filter for that item
+  Optimizations:
+    - Significant optimizations to translation library (again!)
+    - Optimized text search loop
+  Bugfixes:
+    - Fixed error when joining a game in the middle of a translation
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2019-12-27
+  Features:
+    - Added option to make the GUI appear in the center of the screen
+  Changes:
+    - Significant optimizations to translation library
+    - The cursor is now cleaned before items or ghosts are placed in it
+    - The GUI will not open until dictionary translation is finished
+  Bugfixes:
+    - Fixed a crash on inventory change when requesting more than one item from the logistics network at once
+    - Fixed a crash when a mod hardcodes an item's localised name
+    - Fixed broken translation of any items that have non-basic localised names
+    - Fixed missing locale
+    - Fixed not being able to use the mouse to pick a result until after pressing enter
+    - Fixed several incorrectly handled edge cases with the GUI navigation
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2019-12-23
+  Bugfixes:
+    - ACTUALLY fixed a crash when an item has no localised name
+    - Fixed missing controls locale
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2019-12-23
+  Bugfixes:
+    - Fixed a crash when an item has no localised name
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2019-12-23
+  Features:
+    - Initial release
