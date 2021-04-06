@@ -1,8 +1,8 @@
 --FUEL VALUES ANGELS CARBON
 
---data.raw["item"]["coal-crushed"].fuel_value = "3.5MJ"
---data.raw["item"]["solid-coke"].fuel_value = "4.5MJ"
---data.raw["item"]["solid-carbon"].fuel_value = "5.5MJ"
+data.raw["item"]["coal-crushed"].fuel_value = "2.5MJ" --3.5
+data.raw["item"]["solid-coke"].fuel_value = "3MJ" --4.5
+data.raw["item"]["solid-carbon"].fuel_value = "4MJ" --5.5
 --data.raw["item"]["pellet-coke"].fuel_value = "19MJ"
 
 --data.raw["item"]["wood-bricks"].fuel_value = "28MJ"
