@@ -1,0 +1,17 @@
+{
+  "name": "ModuleInserter",
+  "version": "5.2.5",
+  "factorio_version": "1.1",
+  "title": "Module Inserter",
+  "author": "Choumiko",
+  "homepage": "https://github.com/Choumiko/ModuleInserter",
+  "contact": "Discord: Choumiko#6179",
+  "description": "Mass insert/remove modules into machines with construction robots",
+  "dependencies": ["flib >= 0.6.0"],
+  "package":{
+    "scripts": {
+        "prepackage": "luacheck . --config '../.luacheckrc'"
+    },
+    "ignore":[ "*.zip", "*.xcf" ]
+  }
+}

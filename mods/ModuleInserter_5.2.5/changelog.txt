@@ -1,0 +1,266 @@
+---------------------------------------------------------------------------------------------------
+Version: 5.2.5
+Date: ????
+  Changes:
+---------------------------------------------------------------------------------------------------
+Version: 5.2.4
+Date: 2021-01-06
+  Changes:
+    - The gui will stretch when using mods that add a lot of module slots to entities. Up to 10 slots are displayed per row.
+---------------------------------------------------------------------------------------------------
+Version: 5.2.3
+Date: 2021-01-06
+  Changes:
+    - Pressing E while the gui is open and not pinned will apply the changes, to be in line with vanilla behaviour
+    - Don't show Space Exploration's grounded versions of buildings in the gui
+---------------------------------------------------------------------------------------------------
+Version: 5.2.2
+Date: 2020-12-05
+  Changes:
+    - Added mod setting to change the background of the button between dark and light grey
+  Bugfixes:
+    - Fixed sprite not updating when toggling the pin button
+    - Fixed window closing when toggling the pin button
+---------------------------------------------------------------------------------------------------
+Version: 5.2.0
+Date: 2020-11-23
+  Changes:
+    - Updated for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 5.1.14
+Date: 2020-11-15
+  Bugfixes:
+    - Fixed assembler selection not showing all machines when a mod gets added
+---------------------------------------------------------------------------------------------------
+Version: 5.1.13
+Date: 2020-10-19
+  Changes:
+    - Using the shortcut or hotkey to get a module inserter takes one from the inventory before creating a new one
+---------------------------------------------------------------------------------------------------
+Version: 5.1.12
+Date: 2020-10-17
+  Changes:
+    - Added an entry when an entity is removed from ModuleInserter configurations due to mod changes
+  Bugfixes:
+    - Fixed crash when updating to a new version and at the same time another mod changes/removes entities
+---------------------------------------------------------------------------------------------------
+Version: 5.1.11
+Date: 2020-09-30
+  Bugfixes:
+    - Fixed GUI not updating when loading a preset and "Close GUI after loading" is active
+---------------------------------------------------------------------------------------------------
+Version: 5.1.10
+Date: 2020-09-28
+  Bugfixes:
+    - Fixed tooltips not being updated correctly
+---------------------------------------------------------------------------------------------------
+Version: 5.1.9
+Date: 2020-09-28
+  Changes:
+    - Pressing E or Escape closes the gui
+    - Added a pin button to the gui, to keep it open when pressing E/Escape
+---------------------------------------------------------------------------------------------------
+Version: 5.1.8
+Date: 2020-09-20
+  Changes:
+    - Added mod setting to keep the gui open after loading a preset
+    - Highlight the button of the last loaded preset.
+  Bugfixes:
+    - Fixed the button showing up when starting a new game even when "Hide button" is enabled
+---------------------------------------------------------------------------------------------------
+Version: 5.1.7
+Date: 2020-09-15
+  Bugfixes:
+    - Fixed entities being upgraded when removing modules
+---------------------------------------------------------------------------------------------------
+Version: 5.1.6
+Date: 2020-09-13
+  Bugfixes:
+    - Fixed unreproducible error when editing a scenario in the map editor
+    - Fixed error when removing a machine that requested multiple modules to be inserted
+---------------------------------------------------------------------------------------------------
+Version: 5.1.5
+Date: 2020-09-09
+  Features:
+    - The gui can be opened by right-clicking a Module Inserter
+    - Added hotkey to toggle the gui (Default: Ctrl + I)
+    - Added mod setting to hide the button in the top left corner
+  Changes:
+    - Upgrading/changing modules uses the upgrade planner functionality in most cases,
+      so that modules only get dropped when the new modules are delivered.
+---------------------------------------------------------------------------------------------------
+Version: 5.1.4
+Date: 19. 08. 2020
+  Bugfixes:
+    - Fixed error when using ModuleInserter with an empty configuration
+---------------------------------------------------------------------------------------------------
+Version: 5.1.3
+Date: 16. 08. 2020
+  Bugfixes:
+    - Fixed some errors when updating from old versions
+---------------------------------------------------------------------------------------------------
+Version: 5.1.2
+Date: 15. 08. 2020
+  Bugfixes:
+    - Added missing migrations for older versions
+---------------------------------------------------------------------------------------------------
+Version: 5.1.1
+Date: 11. 08. 2020
+  Bugfixes:
+    - Fixed error with latest version of flib
+---------------------------------------------------------------------------------------------------
+Version: 5.1.0
+Date: 28. 07. 2020
+  Features:
+    - You can now configure the same machine multiple times: If the first configuration can't be inserted (e.g. due to productivity not being allows),
+      ModuleInserter will try the next one
+    - Import/Export for configurations. They are a blueprint/blueprint book, so they can be stored in the blueprint library
+    - Added a mod setting to fill all empty slots when selecting the first module for a machine (Should help with modded machines that have a lot of module slots)
+  Changes:
+    - Updated the gui to be draggable and look more like the vanilla gui
+    - Module restrictions are now checked for every entity, not only beacons
+    - Allow inserting modules into assemblers without a recipe
+---------------------------------------------------------------------------------------------------
+Version: 5.0.8
+Date: 28. 07. 2020
+  Bugfixes:
+    - Fixed crash when removing an entity in editor mode for real this time
+    - Fixed module requests not being removed when they came from a blueprint
+---------------------------------------------------------------------------------------------------
+Version: 5.0.7
+Date: 18. 06. 2020
+  Bugfixes:
+    - Fixed crash when removing an entity in editor mode
+---------------------------------------------------------------------------------------------------
+Version: 5.0.6
+Date: 29. 05. 2020
+  Changes:
+    - Added filtering to the config gui, so that only entities with modules slots and modules are shown
+---------------------------------------------------------------------------------------------------
+Version: 5.0.5
+Date: 26. 05. 2020
+  Bugfixes:
+    - Fixed startup errors with Factorio 0.18.27
+---------------------------------------------------------------------------------------------------
+Version: 5.0.4
+Date: 15. 04. 2020
+  Changes:
+    - added remote interface "get_module_config" to get the players module configuration (remote.call("mi", "get_module_config", player_index))
+---------------------------------------------------------------------------------------------------
+Version: 5.0.3
+Date: 15. 04. 2020
+  Bugfixes:
+    - Fixed productivity modules not being accepted for modded beacons
+---------------------------------------------------------------------------------------------------
+Version: 5.0.2
+Date: 05. 03. 2020
+  Changes:
+    - Added command: /module-inserter to get the selection tool (use with an empty cursor)
+  Bugfixes:
+    - Fixed unknown sprite error
+---------------------------------------------------------------------------------------------------
+Version: 5.0.1
+Date: 08. 02. 2020
+  Bugfixes:
+    - Fixed startup warnings
+---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+Date: 26. 01. 2020
+  Changes:
+    - Updated for Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 4.1.9
+Date: 26. 01. 2020
+  Bugfixes:
+    - Fixed keybinding not giving the module inserter tool
+---------------------------------------------------------------------------------------------------
+Version: 4.1.8
+Date: 19. 09. 2019
+  Changes:
+    - Added a shortcut to get the module inserter and removed the recipe to craft it
+---------------------------------------------------------------------------------------------------
+Version: 4.1.7
+Date: 19. 09. 2019
+  Changes:
+    - Added compatibility with IndustrialRevolution
+---------------------------------------------------------------------------------------------------
+Version: 4.1.6
+Date: 06. 08. 2019
+  Bugfixes:
+    - Fixed error when item and entity names of machines didn't match
+---------------------------------------------------------------------------------------------------
+Version: 4.1.5
+Date: 03. 07. 2019
+  Bugfixes:
+    - Fixed possible crash when loading a scenario in the map editor
+---------------------------------------------------------------------------------------------------
+Version: 4.1.4
+Date: 02. 07. 2019
+  Bugfixes:
+    - Fixed YARM gui not minimizing when opening the gui
+---------------------------------------------------------------------------------------------------
+Version: 4.1.3
+Date: 02. 07. 2019
+  Bugfixes:
+    - Fixed crash when a gui element became invalid
+---------------------------------------------------------------------------------------------------
+Version: 4.1.2
+Date: 29. 06. 2019
+  Changes:
+    - Reworked the gui
+    - Added mod setting to allow overwriting presets
+    - Added mod setting to change how many item requests are created per tick
+---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+Date: 20. 06. 2019
+  Changes:
+    - Modules are now requested vanilla style with item-request-proxy
+    - Removed modules are placed in a chest at the assemblers location that will be deconstructed,
+      no more teleporting the modules to the player immediately
+    - Selecting assemblers that already have all requested modules will sort them in the defined order
+    - Moved gui button and frames to mod_gui flows
+---------------------------------------------------------------------------------------------------
+Version: 4.0.5
+Date: 01. 05. 2019
+  Changes:
+    - cleanup and update for 0.17.35
+---------------------------------------------------------------------------------------------------
+Version: 4.0.4
+Date: 12. 03. 2019
+  Changes:
+    - added mod setting to adjust the number of assemblers you can configure per profile
+    - added scroll-pane for configuration and storage
+  Bugfixes:
+    - fixed possible error with modded machines
+---------------------------------------------------------------------------------------------------
+Version: 4.0.3
+Date: 10. 03. 2019
+  Bugfixes:
+    - fixed error with mods that use LuaGuiElement::choose-elem-button
+---------------------------------------------------------------------------------------------------
+Version: 4.0.2
+Date: 07. 03. 2019
+  Bugfixes:
+    - fixed loading error when a mod enabled productivity modules in beacons
+---------------------------------------------------------------------------------------------------
+Version: 4.0.1
+Date: 06. 03. 2019
+  Changes:
+    - Updated for Factorio 0.17
+    - Replaced buttons in the UI with filter-like buttons (like in the logistics request, autotrash windows)
+    - To set a filter use left click, to reset use right click
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 26. 03. 2018
+  Bugfixes:
+    - Fixed productivity module insertion not working for legal recipes
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 13. 01. 2018
+  Bugfixes:
+    - Fixed insertion not working with mining drills
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 06. 01. 2018
+  Changes:
+    - Updated for Factorio 0.16
