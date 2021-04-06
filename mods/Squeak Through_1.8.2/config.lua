@@ -58,6 +58,16 @@ exclusions =
 		}
 	},
 
+	{  -- Industrial Revolution 2
+		apply_when_object_exists = {
+			type = "assembling-machine",
+			name = "steel-cleaner"
+		},
+		excluded_prototype_names = {
+			"steel-cleaner"
+		}
+	},
+
 	{  -- UraniumPower mod    (some test-entities display errors if altered so are excluded below)
 		apply_when_object_exists = {
 			type = "storage-tank",
