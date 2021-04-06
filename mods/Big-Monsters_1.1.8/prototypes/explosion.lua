@@ -153,6 +153,18 @@ data:extend({
           width = 1675/5,
           height = 2044/7,
           priority = "extra-high",
+          hr_version = {
+            scale = 1.5,
+            axially_symmetrical = false,
+            direction_count = 1,
+            filename = "__Big-Monsters__/graphics/hr-electroshock-pulse-explosion.png",
+            animation_speed = 1,
+            frame_count = 7*5,
+            line_length = 5,
+            width = 3350/5,
+            height = 4088/7,
+            priority = "extra-high",
+          }
         }
       },
       flags = {
@@ -218,6 +230,15 @@ data:extend({
         width = 800/16,
         height = 240/6,
        -- priority = "extra-high",
+        hr_version = {
+          scale = 0.5,
+          filename = "__Big-Monsters__/graphics/hr-electroshock-pulse-sticker.png",
+          animation_speed = 3.14,
+          frame_count = 16*6,
+          line_length = 16,
+          width = 1600/16,
+          height = 480/6,
+        }
       },
       duration_in_ticks = 60*5, --75
       --flags ={"not-on-map"},
@@ -246,6 +267,15 @@ data:extend({
 			width = 800/16,
 			height = 240/6,
 			-- priority = "extra-high",
+      hr_version = {
+        scale = 0.5,
+        filename = "__Big-Monsters__/graphics/hr-electroshock-pulse-sticker.png",
+        animation_speed = 3.14,
+        frame_count = 16*6,
+        line_length = 16,
+        width = 1600/16,
+        height = 480/6,
+      }
 			}},
 		working_sound =
 		{

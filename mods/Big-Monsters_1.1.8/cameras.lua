@@ -3,8 +3,9 @@
 
 			C A M E R A S
 
-v 1.06  16/02/2021	 
+v 1.07  30/03/2021	 (fix active cam limits)
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  
   
 ** Usage: 
 Add this file to mod root, and this to your control.lua events:
@@ -33,6 +34,7 @@ Zoom = nil or Camera Zoon value
 
 
 --default values. May be changed by your mod
+mod_name="Big-Monsters"
 Camera_Default_Zoon   = 0.25
 Camera_Default_Size   = 230
 Camera_Default_Text   = 'Camera'
@@ -43,8 +45,10 @@ Camera_Count_Limit = 5
 
 -- Object may be an entity or a fixed position, if entity, camera will follow it
 function CreateCameraForPlayer(player,Object,Surface,Text,size,AutoCloseTick,Zoom)
-local count = global.active_player_cameras[player.name] or 0
-if count<Camera_Count_Limit then 
+
+global.active_player_cameras[player.name] = global.active_player_cameras[player.name] or {}
+local cams = global.active_player_cameras[player.name] 
+if #cams<Camera_Count_Limit then 
 	if Zoom==nil then Zoom=Camera_Default_Zoon end
 	if size==nil then size=Camera_Default_Size end
 	local tick=game.tick
@@ -101,7 +105,7 @@ if count<Camera_Count_Limit then
 		  cam.style.height = size
 
 
-	global.active_player_cameras[player.name] = count +1
+	table.insert (global.active_player_cameras[player.name],frname)
 end
 end
 
@@ -146,7 +150,7 @@ if #global.mf_frame_cameras>0 then
 		end
 	global.mf_frame_cameras = {}
 	end
-if global.active_player_cameras[player.name] then global.active_player_cameras[player.name] = 0 end
+if global.active_player_cameras[player.name] then global.active_player_cameras[player.name] = {} end
 end
 
 
@@ -157,14 +161,19 @@ r=r..']'
 return r
 end
 
+
+
 -- Gui click
 function CameraClose(player,num)
+local fname = "mf_framecam"..num
 if player.gui.left.mf_flow_cameras then
-if player.gui.left.mf_flow_cameras["mf_framecam"..num] then
-   player.gui.left.mf_flow_cameras["mf_framecam"..num].destroy() 
-   if global.active_player_cameras[player.name] then global.active_player_cameras[player.name] = math.max(global.active_player_cameras[player.name]-1,0) end
-   end end
+	if player.gui.left.mf_flow_cameras[fname] then
+	   player.gui.left.mf_flow_cameras[fname].destroy() 
+	   end 
+	cam_player_list_validate_cams(player)
+	end
 end
+
 function CameraZoomIn(player,num)
 if player.gui.left.mf_flow_cameras then
 if player.gui.left.mf_flow_cameras["mf_framecam"..num] then
@@ -198,6 +207,7 @@ end
 
 function cam_on_gui_click(event)
 if event and event.element and event.element.valid and event.player_index and game.players[event.player_index] then 
+if event.element.get_mod()==mod_name then
 local player = game.players[event.player_index]
 local name = event.element.name
 	if string.sub(name,1,17)=="mf_bt_cameraclose" then CameraClose(player,string.sub(name,18,string.len(name)))
@@ -205,7 +215,7 @@ local name = event.element.name
 	elseif string.sub(name,1,19)=="mf_bt_camerazoomout" then CameraZoomOut(player,string.sub(name,20,string.len(name)))
 	elseif string.sub(name,1,9)=="mf_camera" then ClickCamera(player,string.sub(name,10,string.len(name))) 
 	end
-	
+end	
 end
 end
 
@@ -215,7 +225,6 @@ function cam_on_tick(event)
 if #global.mf_frame_cameras>0 then
 local kill=false
 	for K=#global.mf_frame_cameras,1,-1 do
-	
 		local frame = global.mf_frame_cameras[K].camframe
 		local tick  = global.mf_frame_cameras[K].tick
 		local entity= global.mf_frame_cameras[K].entity
@@ -228,9 +237,7 @@ local kill=false
 			else table.remove(global.mf_frame_cameras,K) end
 		if kill then 
 			if frame and frame.valid then frame.destroy() end
-			if player and player.valid and global.active_player_cameras[player.name] then 
-				global.active_player_cameras[player.name] = math.max(global.active_player_cameras[player.name]-1,0) 
-				end
+			cam_player_list_validate_cams(player)
 			table.remove(global.mf_frame_cameras,K) 
 			end
 		end
@@ -240,7 +247,17 @@ end
 
 function cam_on_init()
 global.mf_frame_cameras = global.mf_frame_cameras or {}
-global.active_player_cameras = global.active_player_cameras or {}
+global.active_player_cameras = {} --global.active_player_cameras or {}
 global.disabled_player_camera = global.disabled_player_camera or {}
 end
 
+function cam_player_list_validate_cams(player)
+if player and player.valid then
+	global.active_player_cameras[player.name] = global.active_player_cameras[player.name] or {}
+	for c=#global.active_player_cameras[player.name],1,-1 do
+		if not (player.gui.left.mf_flow_cameras and player.gui.left.mf_flow_cameras[global.active_player_cameras[player.name][c]]) then
+			table.remove(global.active_player_cameras[player.name],c)
+			end
+		end
+	end
+end

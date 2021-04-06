@@ -2,9 +2,9 @@
 	 * * * FAKE HUMAN PROTOTYPES * * * 
 								by MFerrari 
 
-v 1.4 22/02/2021
+v 1.5 30/03/2021 - grenade projectile - resistances
 ]]
-
+local sounds = require("__base__/prototypes/entity/sounds.lua")
 require "utils"
 
 if not data.raw.unit.tc_fake_human_machine_gunner then 
@@ -283,6 +283,52 @@ return   {
 end
 
 
+local function make_grenade_attack(damage_modifier,range,cooldown,projectile,min_range)
+return   {
+      type = "projectile",
+      ammo_category = "grenade",
+      warmup = 20,
+      cooldown = cooldown,
+      range = range,
+	  min_range = min_range,
+	  damage_modifier = damage_modifier,
+	  projectile_creation_distance = 0.6,	  
+      ammo_type =
+      {
+         category = "grenade",
+         target_type = "position",
+		 activation_type = "throw",
+          action =
+          {
+            {
+              type = "direct",
+              action_delivery =
+              {
+                type = "projectile",
+                projectile = projectile,
+                starting_speed = 0.3
+              }
+            },
+            {
+              type = "direct",
+              action_delivery =
+              {
+                type = "instant",
+                target_effects =
+                {
+                  {
+                    type = "play-sound",
+                    sound = sounds.throw_projectile
+                  }
+                }
+              }
+            }
+          }
+      }
+    }
+end
+
+
 local function make_melee_attack(damage)
  return   {
       type = "projectile",
@@ -314,8 +360,8 @@ local name = base_name..surname
   fake_human.map_color = color
   fake_human.enemy_map_color = {r = 1}
   fake_human.max_health = 200*level*hp_mp*hp_multiplier
-  fake_human.resistances = nil
---  fake_human.move_while_shooting = true  --- se ativar ele foge do alvo -flee
+  fake_human.resistances = {}
+ --fake_human.move_while_shooting = true  --- se ativar ele foge do alvo -flee
   fake_human.affected_by_tiles = true
   fake_human.can_open_gates = true
   fake_human.attack_parameters = attack_parameters
@@ -389,6 +435,8 @@ local name = base_name..surname
     corpse
   }
 
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[fake_human.name], level)
+
 end
 
 
@@ -404,8 +452,8 @@ create_fake_human('laser',k,armor,colors.purple,scale,make_beam_attack(1 + k/5,"
 create_fake_human('electric',k,armor,colors.blue,scale,make_beam_attack(1+ k/4,'electric-beam')) -- damage,range,cooldown
 create_fake_human('rocket',k,armor,colors.yellow,scale, make_rocket_attack(1+ k/5,30+k,60-k,"rocket")) -- damage,range,cooldown
 create_fake_human('erocket',k,armor,colors.red,scale, make_rocket_attack(1+ k/5,30+k,60-k,"explosive-rocket",30)) -- damage,range,cooldown
-create_fake_human('grenade',k,armor,colors.lightgrey,scale, make_rocket_attack(1+ k/5,30+k,120-k,"grenade",30)) -- damage,range,cooldown
-create_fake_human('cluster_grenade',k,armor,colors.brown,scale, make_rocket_attack(1+ k/5,35+k,120-k,"cluster-grenade",30)) -- damage,range,cooldown
+create_fake_human('grenade',k,armor,colors.lightgrey,scale, make_grenade_attack(1+ k/5,30+k,120-k,"grenade",30)) -- damage,range,cooldown
+create_fake_human('cluster_grenade',k,armor,colors.brown,scale, make_grenade_attack(1+ k/5,35+k,120-k,"cluster-grenade",30)) -- damage,range,cooldown
 create_fake_human('nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(1+ k/5,40+k,60*10,"bm-small-atomic-rocket",30)) -- damage,range,cooldown
 end
 
@@ -432,8 +480,8 @@ create_fake_human('boss_electric',k,armor,colors.blue,scale,make_beam_attack(10 
 create_fake_human('boss_rocket',k,armor,colors.yellow,scale, make_rocket_attack(2+ k/2,40+k,60-k,"rocket"),boss_hpmp) -- damage,range,cooldown
 create_fake_human('boss_erocket',k,armor,colors.red,scale, make_rocket_attack(1+ k/2,40+k,60-k,"explosive-rocket"),boss_hpmp) -- damage,range,cooldown
 
-create_fake_human('boss_grenade',k,armor,colors.lightgrey,scale, make_rocket_attack(3+ k/5,50+k,120-k,"grenade",35),boss_hpmp) -- damage,range,cooldown
-create_fake_human('boss_cluster_grenade',k,armor,colors.brown,scale, make_rocket_attack(3+ k/5,55+k,120-k,"cluster-grenade",35),boss_hpmp) -- damage,range,cooldown
+create_fake_human('boss_grenade',k,armor,colors.lightgrey,scale, make_grenade_attack(3+ k/5,50+k,120-k,"grenade",35),boss_hpmp) -- damage,range,cooldown
+create_fake_human('boss_cluster_grenade',k,armor,colors.brown,scale, make_grenade_attack(3+ k/5,55+k,120-k,"cluster-grenade",35),boss_hpmp) -- damage,range,cooldown
 create_fake_human('boss_nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(3+ k/5,50+k,60*10,"bm-small-atomic-rocket",35),boss_hpmp) -- damage,range,cooldown
 
 local res=5+k*2

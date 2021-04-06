@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+  Bugfixes:
+    - Fixed new tree event chance
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+  Bugfixes:
+    - Fixed limit for active cameras
+  Changes:
+    - If a player mines a tree, there is a chance of something bad happens
+    - Added mod options to set minimal evolution for each event
+    - Added small resistances for human soldiers
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+  Changes:
+    - Changes by snouz:
+    - Higher resolution for effects
+    - New mod icon
+---------------------------------------------------------------------------------------------------
 Version: 1.1.5
   Bugfixes:
     - Fixed a reported crash on missing nuke
