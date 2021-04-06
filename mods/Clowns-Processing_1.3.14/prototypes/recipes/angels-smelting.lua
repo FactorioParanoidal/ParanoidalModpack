@@ -219,8 +219,8 @@ if angelsmods.trigger.smelting_products["titanium"].plate then
 		},
 		results=
 		{
-			{type="item", name="ingot-titanium", amount=24},
-			{type="item", name="magnesium-ore", amount=6}
+			{type="item", name="ingot-titanium", amount=30}, --drd 24
+			--{type="item", name="magnesium-ore", amount=6} --drd
 		},
     main_product= "ingot-titanium",
     icons = {
