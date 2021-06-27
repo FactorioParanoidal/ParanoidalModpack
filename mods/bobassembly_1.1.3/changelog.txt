@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 09. 04. 2021
+  Changes:
+    - Fluid burning metal mixing to/from fluid burning no longer cost/return pipes.
+  Bugfixes:
+    - Steam power local fix
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 06. 12. 2020
   Changes:
