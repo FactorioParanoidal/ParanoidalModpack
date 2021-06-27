@@ -18,7 +18,7 @@ Circuit.recheck = function(conn)
 end
 
 local DELAYS = {1, 10, 60, 180, 600}
-local DEFAULT_DELAY = 600 --DrD 60
+local DEFAULT_DELAY = 60
 
 Circuit.indicator_settings = {"d0", "b0"}
 

@@ -55,7 +55,7 @@ Fluid.recheck = function (conn)
 end
 
 local DELAYS = {1, 4, 10, 30, 120}
-local DEFAULT_DELAY = 120 --DrD 10
+local DEFAULT_DELAY = 10
 
 Fluid.indicator_settings = {"d0", "b0"}
 
