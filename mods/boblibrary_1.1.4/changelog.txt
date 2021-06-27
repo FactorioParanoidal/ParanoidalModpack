@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 09. 05. 2021
+  Features:
+    - Put the duplicate ingredient checking on an option.
+    - Put the Technology prerequisite checking on an option too.
+  Changes:
+    - Added new item types to the valid item checklist (to fix the error of it removing "rail" from production science pack)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 09. 04. 2021
+  Features:
+    - Added a duplicate prerequsites check to the Technology prerequisites cleanup. (Handles split difficulty too)
+    - Added a duplicate ingredient checking to library final fixes. (Handles split difficulty too)
+  Changes:
+    - Added icon_mipmaps to item/resource icon in ore-functions
+    - Added icon embedded locale entry for created autoplace-controls
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 06. 12. 2020
   Features:

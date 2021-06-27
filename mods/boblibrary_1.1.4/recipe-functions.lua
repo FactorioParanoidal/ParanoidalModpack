@@ -643,3 +643,59 @@ function bobmods.lib.recipe.set_difficulty_energy_required(recipe, difficulty, t
     end
   end
 end
+
+
+
+local function duplicate_ingredient_check(recipe_name, ingredients)
+  local new_ingredients = {}
+  local items = {}
+  local rebuild = false
+  for i, ingredient in ipairs(ingredients) do
+    local item = bobmods.lib.item.ingredient(ingredient)
+    if item then -- duplicate value
+      if items[item.name] then
+        rebuild = true
+log("Duplicate item " .. item.name .. " found on recipe " .. recipe_name .. ".")
+      else
+        items[item.name] = true
+        bobmods.lib.item.add(new_ingredients, ingredient)
+      end
+    else --invalid value
+      rebuild = true
+log("Invalid item found on recipe " .. recipe_name .. ".")
+    end
+  end
+  if rebuild == true then
+    return new_ingredients
+  end
+end
+
+local function duplicate_ingredient_check_full(recipe)
+  if
+    type(recipe) == "string" and
+    data.raw.recipe[recipe]
+  then
+    if data.raw.recipe[recipe].ingredients then
+      local ingredients = duplicate_ingredient_check(recipe, data.raw.recipe[recipe].ingredients)
+      if ingredients then data.raw.recipe[recipe].ingredients = ingredients end
+    end
+    if data.raw.recipe[recipe].normal and data.raw.recipe[recipe].normal.ingredients then
+      local ingredients = duplicate_ingredient_check(recipe, data.raw.recipe[recipe].normal.ingredients)
+      if ingredients then data.raw.recipe[recipe].normal.ingredients = ingredients end
+    end
+    if data.raw.recipe[recipe].expensive and data.raw.recipe[recipe].expensive.ingredients then
+      local ingredients = duplicate_ingredient_check(recipe, data.raw.recipe[recipe].expensive.ingredients)
+      if ingredients then data.raw.recipe[recipe].expensive.ingredients = ingredients end
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.recipe(recipe)
+  end
+end
+
+function bobmods.lib.recipe.ingredients_cleanup()
+  log("Running recipe ingredients cleanup...")
+  for recipe_name, recipe in pairs(data.raw.recipe) do
+    duplicate_ingredient_check_full(recipe_name)
+  end
+end

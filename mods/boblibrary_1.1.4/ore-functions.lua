@@ -301,6 +301,7 @@ function bobmods.lib.resource.create_item(inputs)
   if inputs.icon then
     data.raw.item[inputs.name].icon = inputs.icon
     data.raw.item[inputs.name].icon_size = inputs.icon_size or 32
+    data.raw.item[inputs.name].icon_mipmaps = inputs.icon_mipmaps
   elseif inputs.icons then
     data.raw.item[inputs.name].icon = inputs.icons
   else
@@ -386,6 +387,7 @@ function bobmods.lib.resource.create(inputs)
   if inputs.icon then
     data.raw.resource[inputs.name].icon = inputs.icon
     data.raw.resource[inputs.name].icon_size = inputs.icon_size or 32
+    data.raw.resource[inputs.name].icon_mipmaps = inputs.icon_mipmaps
   else
     data.raw.resource[inputs.name].icons = bobmods.lib.resource.create_icon(inputs)
   end
@@ -634,6 +636,7 @@ function bobmods.lib.resource.generate_updates_stage(inputs)
 log(inputs.autoplace.control)
     end
     bobmods.lib.resource.generate_autoplace_control(control)
+    data.raw["autoplace-control"][control].localised_name = {"", "[entity=" .. inputs.name .. "] ", {"entity-name." .. inputs.name}}
     if not data.raw["noise-layer"][inputs.name] and inputs.autoplace ~= "control-only" then
       data:extend(
       {
