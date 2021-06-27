@@ -5,7 +5,7 @@ data:extend(
 		name = "thorium-232",
 		icon = mods["angelsindustries"] and "__angelsindustries__/graphics/icons/thorium-232.png" or "__Clowns-AngelBob-Nuclear__/graphics/icons/thorium-232.png",
 		icon_size = mods["angelsindustries"] and 64 or 32,
-		subgroup = "clowns-nuclear-isotopes",
+		subgroup = "clowns-thorium",
 		order = "b",
 		stack_size = 100
 	},

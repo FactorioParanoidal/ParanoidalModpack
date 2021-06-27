@@ -17,11 +17,35 @@ data:extend(
 		order = "c-b-a",
 		results =
 		{
-			{type="item", name="uranium-238", amount=3},
+			{type="item", name="uranium-238", amount=4},
 			{type="item", name="plutonium-239", amount=2},
-			{type="item", name="strontium-90", amount=3},--1
+			{type="item", name="strontium-90", amount=1},--1
 			{type="item", name="caesium-137", amount=3},--1
 			{type="fluid", name="water-radioactive-waste", amount=300}--100 (matching the waste liq)
+		},
+	},
+	{
+		type = "recipe",
+		name = "advanced-nuclear-fuel-reprocessing|b",
+		energy_required = 50,
+		enabled = false,
+		category = "chemistry",
+		ingredients =
+		{
+			{type="item", name="used-up-uranium-fuel-cell", amount=5},
+			{type="fluid", name="liquid-nitric-acid", amount=350}--20
+		},
+		icons = {{icon = "__Clowns-Nuclear__/graphics/icons/nuclear-fuel-reprocessing.png", icon_size = 32,}},
+		icon_size=32,
+		subgroup = "clowns-nuclear-cells",
+		order = "c-b-a",
+		results =
+		{
+			{type="item", name="uranium-238", amount=3},
+			{type="item", name="plutonium-239", amount=2},
+			{type="item", name="strontium-90", amount=1},--1
+			{type="item", name="caesium-137", amount=5},--1
+			{type="fluid", name="water-radioactive-waste", amount=350}--100 (matching the waste liq)
 		},
 	},
 	{
@@ -102,29 +126,6 @@ data:extend(
 	},
 	{
 		type = "recipe",
-		name = "advanced-thorium-nuclear-fuel-reprocessing",
-		energy_required = 50,
-		enabled = false,
-		category = "chemistry",
-		ingredients =
-		{
-			{type="item", name="used-up-thorium-fuel-cell", amount=5},
-			{type="fluid", name="liquid-nitric-acid", amount=300}--20 (matching the waste liq)
-		},
-		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
-		icon_size=32,
-		subgroup = "clowns-nuclear-cells",
-		order = "c-b-b",
-		results =
-		{
-			{type="item", name="thorium-232", amount=3},--3 (needs to be less than 19/10)
-			{type="item", name="plutonium-239", amount=3},--1
-			{type="item", name="protactinium-231", amount=15},--1--3
-			{type="fluid", name="water-radioactive-waste", amount=300}--20--60
-		},
-	},
-	{
-		type = "recipe",
 		name = "advanced-thorium-nuclear-fuel-reprocessing|b",
 		energy_required = 50,
 		enabled = false,
@@ -148,4 +149,90 @@ data:extend(
 	},
 }
 )
+end
+----------------------------------------
+-- for helmod testing purposes only
+---------------------------------------
+data:extend({
+	{
+		type = "recipe",
+		name = "thorium-fuel-burning",
+		energy_required = 50000,
+		enabled = false,
+		category = "chemistry",
+		ingredients =
+		{
+			{type="item", name = (mods["angelsindustries"] and angelsmods.industries.overhaul) and "angels-thorium-fuel-cell" or "thorium-fuel-cell", amount=1},
+		},
+		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
+		icon_size=32,
+		subgroup = "clowns-nuclear-cells",
+		order = "c-b-b",
+		results =
+		{
+			{type="item", name = (mods["angelsindustries"] and angelsmods.industries.overhaul) and "used-up-angels-thorium-fuel-cell" or "used-up-thorium-fuel-cell", amount=1}
+		},
+	},
+	{
+		type = "recipe",
+		name = "uranium-fuel-burning",
+		energy_required = 2000,
+		enabled = false,
+		category = "chemistry",
+		ingredients =
+		{
+			{type="item", name="uranium-fuel-cell", amount=1},
+		},
+		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
+		icon_size=32,
+		subgroup = "clowns-nuclear-cells",
+		order = "c-b-b",
+		results =
+		{
+			{type="item", name="used-up-uranium-fuel-cell", amount=1}
+		},
+	},
+}
+)
+if mods["angelsindustries"] and angelsmods.industries.overhaul then
+	data:extend({
+	{
+		type = "recipe",
+		name = "amox-fuel-burning",
+		energy_required = 8000,
+		enabled = false,
+		category = "chemistry",
+		ingredients =
+		{
+			{type="item", name="AMOX-cell", amount=1},
+		},
+		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
+		icon_size=32,
+		subgroup = "clowns-nuclear-cells",
+		order = "c-b-b",
+		results =
+		{
+			{type="item", name="used-up-AMOX-cell", amount=1}
+		},
+	},
+	{
+		type = "recipe",
+		name = "uranium-234-fuel-burning",
+		energy_required = 1500,
+		enabled = false,
+		category = "chemistry",
+		ingredients =
+		{
+			{type="item", name="angels-uranium-fuel-cell", amount=1},
+		},
+		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
+		icon_size=32,
+		subgroup = "clowns-nuclear-cells",
+		order = "c-b-b",
+		results =
+		{
+			{type="item", name="used-up-uranium-fuel-cell", amount=1}
+		},
+	}
+})
 end

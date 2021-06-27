@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2021-06-14
+  Features:
+    - corrected a recipe oversight
+    - More angels industries changes
+    - Added a thorium ore processing chain
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+  Features:
+    - Substantial angels industries integration
+    - moved lead plate from an ingredient to a result on thorium reprocessing
+    - various fixes, added a new reprocessing variant for more flexibility
+---------------------------------------------------------------------------------------------------
 Version: 1.1.16
 Date: 2020-11-24
   Changes:
