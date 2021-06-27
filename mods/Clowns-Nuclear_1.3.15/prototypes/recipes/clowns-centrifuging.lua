@@ -16,7 +16,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "a",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="uranium-ore", amount=10},
@@ -34,7 +34,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "j",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="uranium-235", amount=2},
@@ -54,7 +54,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "i",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="75%-uranium", amount=2},
@@ -74,7 +74,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "h",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="70%-uranium", amount=2},
@@ -94,7 +94,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "g",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="65%-uranium", amount=2},
@@ -114,7 +114,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "f",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="55%-uranium", amount=2},
@@ -134,7 +134,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "e",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="45%-uranium", amount=2},
@@ -154,7 +154,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "d",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="35%-uranium", amount=2},
@@ -188,7 +188,7 @@ data:extend(
 		icon_size = 32,
 		subgroup = "clowns-uranium-centrifuging",
 		order = "b",
-		main_product = "",
+		--main_product = "",
 		results=
 		{
 			{type="item", name="20%-uranium", amount=2},

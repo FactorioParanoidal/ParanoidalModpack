@@ -1,5 +1,21 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.3.8
+Version: 1.3.15
+Date: 2021-06-14
+  Bugfixes:
+    - Fixed load order for library issues
+---------------------------------------------------------------------------------------------------
+Version: 1.3.14
+Date: 2021-06-14
+  Features:
+    - Added function library and patch for IR2 to be more consistent.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.13
+Date: 2021-06-11
+  Features:
+    - Patched to work with IR2 (recipe unlock crawler detected uncraftable fuel cell)
+      - I should have clobbered this anyway
+---------------------------------------------------------------------------------------------------
+Version: 1.3.12
 Date: 2020-11-24
   Features:
     - Updated to version 1.1

@@ -1,3 +1,4 @@
+local CF=clowns.functions
 data.raw.recipe["atomic-bomb"].icons =
 {
 	{
@@ -14,56 +15,25 @@ data.raw.recipe["atomic-bomb"].icons =
 
 }
 data.raw.recipe["atomic-bomb"].icon_size = 32
-data.raw["assembling-machine"]["centrifuge"].ingredient_count = 3
+data.raw["assembling-machine"]["centrifuge"].ingredient_count = 5
 
-
-data.raw.recipe["nuclear-fuel-reprocessing"].results =
-{
-	{type="item", name = "plutonium-239", amount = 2},
-	{type="item", name = "uranium-238", amount = 3}
-}
+CF.add_to_table("nuclear-fuel-reprocessing",{"plutonium-239",5},"res")
+CF.replace_ing("nuclear-fuel-reprocessing","uranium-238",{type="item", name = "uranium-238", amount = 3},"res")
 
 data.raw.recipe["nuclear-fuel-reprocessing"].icons = {{icon= "__Clowns-Nuclear__/graphics/icons/nuclear-fuel-reprocessing.png",icon_size = 32}}
 data.raw.recipe["nuclear-fuel-reprocessing"].icon_size = 32
 data.raw.recipe["nuclear-fuel-reprocessing"].icon = nil
 
 --REBUILD NUCLEAR POWER TECHNOLOGY
-
-data.raw.technology["nuclear-power"].effects =
-{
-	{
-		type = "unlock-recipe",
-		recipe = "nuclear-reactor"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "centrifuge"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "clowns-centrifuging-20%-ore"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "clowns-centrifuging-35%"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "uranium-fuel-cell"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "heat-exchanger"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "heat-pipe"
-	},
-	{
-		type = "unlock-recipe",
-		recipe = "steam-turbine"
-	}
-}
+CF.add_unlock("nuclear-power","nuclear-reactor")
+CF.add_unlock("nuclear-power","centrifuge")
+CF.add_unlock("nuclear-power","clowns-centrifuging-20%-ore")
+CF.add_unlock("nuclear-power","clowns-centrifuging-35%")
+CF.add_unlock("nuclear-power","uranium-fuel-cell")
+CF.add_unlock("nuclear-power","heat-exchanger")
+CF.add_unlock("nuclear-power","heat-pipe")
+CF.add_unlock("nuclear-power","steam-turbine")
+CF.remove_unlock("uranium-processing","uranium-fuel-cell")
 
 --CHANGE FEATURES OF URANIUM-238 AND URANIUM-235
 
@@ -101,20 +71,15 @@ data.raw.item["uranium-235"].icons =
 		shift = {-5, -12},
 	},
 }
-
-data.raw.recipe["uranium-fuel-cell"].ingredients =
-{
-	{type="item", name="iron-plate", amount=10},
-	{type="item", name="35%-uranium", amount=20}
-}
-
+CF.replace_ing("uranium-fuel-cell","uranium-235",{type="item", name="35%-uranium", amount=20},"ing")
+CF.remove_res("uranium-fuel-cell","uranium-238","ing")
 --ADD ARTILLERY SHELL RECIPES TO APPROPRIATE TECHS
 
 if settings.startup["artillery-shells"].value == true then
-	table.insert(data.raw["technology"]["atomic-bomb"].effects, {type = "unlock-recipe", recipe = "artillery-shell-nuclear"})
-	table.insert(data.raw["technology"]["thermonuclear-bomb"].effects, {type = "unlock-recipe", recipe = "artillery-shell-thermonuclear"})
+	CF.add_unlock("atomic-bomb","artillery-shell-nuclear")
+	CF.add_unlock("thermonuclear-bomb","artillery-shell-thermonuclear")
 end
-table.insert(data.raw["technology"]["atomic-bomb"].effects, {type = "unlock-recipe", recipe = "plutonium-atomic-bomb"})
+CF.add_unlock("atomic-bomb","plutonium-atomic-bomb")
 
 data.raw.item["used-up-uranium-fuel-cell"].subgroup = "clowns-nuclear-cells"
 data.raw.item["used-up-uranium-fuel-cell"].order = "b-a"
@@ -125,11 +90,7 @@ data.raw.item["uranium-fuel-cell"].order = "a-a"
 data.raw.recipe["nuclear-fuel-reprocessing"].subgroup = "clowns-nuclear-cells"
 data.raw.recipe["nuclear-fuel-reprocessing"].order = "c-a-a"
 
-data.raw.recipe["nuclear-fuel"].ingredients =
-{
-   {"rocket-fuel", 1},
-   {"55%-uranium", 1},
-}
+CF.replace_ing("nuclear-fuel","uranium-235",{"55%-uranium", 1},"ing")
 
 data.raw.item["nuclear-fuel"].order = "a-a"
 data.raw.item["nuclear-fuel"].subgroup = "clowns-nuclear-fuels"
