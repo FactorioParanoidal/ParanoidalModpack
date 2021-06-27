@@ -944,10 +944,58 @@ local function get_redundant_prerequisites_smart_cached(technology)
 end
 
 
+local function duplicate_prerequisites_check_inner(technology_name, prerequisites)
+  local prerequisites_list = {}
+  local rebuild = false
+  for i, prerequisite in ipairs(prerequisites) do
+    if type(prerequisite) == "string" then
+      if prerequisites_list[prerequisite] then -- duplicate value
+        rebuild = true
+      else
+        prerequisites_list[prerequisite] = true
+      end
+    else --invalid value
+      rebuild = true
+    end
+  end
+  if rebuild == true then
+    prerequisites = {}
+    for prerequisite, _ in pairs(prerequisites_list) do
+      table.insert(prerequisites, prerequisite)
+    end
+    return prerequisites
+  end
+end
+
+local function duplicate_prerequisites_check(technology_name)
+  if
+    type(technology_name) == "string" and
+    data.raw.technology[technology_name]
+  then
+    if data.raw.technology[technology_name].prerequisites then
+      local prerequisites = duplicate_prerequisites_check_inner(technology_name, data.raw.technology[technology_name].prerequisites)
+      if prerequisites then data.raw.technology[technology_name].prerequisites = prerequisites end
+    end
+    if data.raw.technology[technology_name].normal and data.raw.technology[technology_name].normal.prerequisites then
+      local prerequisites = duplicate_prerequisites_check_inner(technology_name, data.raw.technology[technology_name].normal.prerequisites)
+      if prerequisites then data.raw.technology[technology_name].normal.prerequisites = prerequisites end
+    end
+    if data.raw.technology[technology_name].expensive and data.raw.technology[technology_name].expensive.prerequisites then
+      local prerequisites = duplicate_prerequisites_check_inner(technology_name, data.raw.technology[technology_name].expensive.prerequisites)
+      if prerequisites then data.raw.technology[technology_name].expensive.prerequisites = prerequisites end
+    end
+  else
+    log(debug.traceback())
+    bobmods.lib.error.technology(technology_name)
+  end
+end
+
+
 
 function bobmods.lib.tech.prerequisite_cleanup()
   log("Running technology prerequisite cleanup...")
   for technology_name, technology in pairs(data.raw.technology) do
+    duplicate_prerequisites_check(technology_name)
     for i, prerequisite in pairs(get_redundant_prerequisites_smart_cached(technology_name)) do
       bobmods.lib.tech.remove_prerequisite(technology_name, prerequisite)
 --      log("removed " .. prerequisite .. " from " .. technology_name)

@@ -4,7 +4,30 @@ if not bobmods.lib.item then bobmods.lib.item = {} end
 function bobmods.lib.item.get_type(name) --returns actual item type
   local item_type = nil
   if type(name) == "string" then
-    local item_types = {"ammo", "armor", "capsule", "fluid", "gun", "item", "mining-tool", "module", "tool", "item-with-entity-data"}
+    local item_types = {
+      "ammo",
+      "armor",
+      "capsule",
+      "fluid",
+      "gun",
+      "item",
+      "mining-tool",
+      "repair-tool",
+      "module",
+      "tool",
+      "item-with-entity-data",
+      "rail-planner",
+      "item-with-label",
+      "item-with-inventory",
+      "blueprint-book",
+      "item-with-tags",
+      "selection-tool",
+      "blueprint",
+      "copy-paste-tool",
+      "deconstruction-item",
+      "upgrade-item",
+      "spidertron-remote"
+    }
     for i, type_name in pairs(item_types) do
       if data.raw[type_name][name] then item_type = type_name end
     end
@@ -13,6 +36,11 @@ function bobmods.lib.item.get_type(name) --returns actual item type
   end
   return item_type
 end
+
+
+
+
+
 
 function bobmods.lib.item.get_basic_type(name) --returns fluid for fluid, item for all other types.
   local item_type = bobmods.lib.item.get_type(name)
