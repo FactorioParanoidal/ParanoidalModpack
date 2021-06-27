@@ -201,7 +201,7 @@ data:extend({
         stack_size = 10,
     },
 
-    util.merge{data.raw["assembling-machine"]["filtration-unit"], {
+    util.merge{data.raw["assembling-machine"]["filtration-unit-2"], {
         name = "filtration-unit-3",
         minable = {result = "filtration-unit-3"},
         module_specification = {module_slots = 3},

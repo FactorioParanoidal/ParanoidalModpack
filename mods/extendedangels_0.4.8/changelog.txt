@@ -1,13 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 2021-06-13
+  Changes:
+    - Angel's Smelting minimum version set to 0.6.15
+    - Angel's Bioprocessing minimum version set to 0.7.18
+    - Removed now-redundant code bits related to supporting older versions of Angel's Smelting and Angel's Bioprocessing
+  Locale:
+    - Renamed Press 2 and Press 3 to Oil press 2 and Oil press 3 reflecting changes in Angel's Bioprocessing
+    - Updated German localization
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 2021-05-28
+  Bugfixes:
+    - Fixed that Filtration unit 3 was missing a crafting category available in Filtration unit 2
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 2021-05-28
+  Bugfixes:
+    - Fixed inconsistent sorting of Warehouses in interface
+    - Fixed overwrite clash in Puffer refugium 3 technology with Angel's Bioprocessing
+  Locale:
+    - Added localization for German, partial localization for Vietnamese
+---------------------------------------------------------------------------------------------------
 Version: 0.4.5
 Date: 2021-04-04
   Changes:
-    - Doubled the Tungsten carbide powder mixture output from 12 to 24 units, of the second tier of Tungsten cvarbide powder mixture recipe, and increased the processing time from 8 to 16 seconds to bring it into line with the first and third tier recipes; also added tier numerals
+    - Doubled the Tungsten carbide powder mixture output from 12 to 24 units, of the second tier of tungsten carbide powder mixture recipe, and increased the processing time from 8 to 16 seconds to bring it into line with the first and third tier recipes; also added tier numerals
     - Adjusted item and recipe sorting to correct a few issues with tungsten carbide, copper tungsten and a few miscellaneous items
     - Added an input fluid port on induction furnaces, and moved the recipes for molten copper-tungsten from the chemical furnace to the induction furnace
     - Added high-res versions of copper tungsten and tungsten carbide items, recipes, and technologies, active when using the upcoming release of Angel's mods
   Bugfixes:
-    - Fixed that the recipe for Zinc powder did not have ingredients; it is now properly crafted from 1 zinc ingot
+    - Fixed that the recipe for zinc powder did not have ingredients; it is now properly crafted from 1 zinc ingot
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.4
 Date: 2021-03-26
