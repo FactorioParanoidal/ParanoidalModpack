@@ -6,6 +6,8 @@ bobmods.ores.sulfur =
   mining_time = 0.25,
   enabled = false,
   icon = "__base__/graphics/icons/sulfur.png",
+  icon_size = 64,
+  icon_mipmaps = 4,
   stage_mult = 100,
   items =
   {
