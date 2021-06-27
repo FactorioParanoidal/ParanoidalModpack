@@ -1,3 +1,6 @@
+if not clowns then clowns={} end
+if not clowns.functions then clowns.functions={} end
+require("prototypes.functions")
 require("prototypes.categories")
 
 require("prototypes.items.items")
