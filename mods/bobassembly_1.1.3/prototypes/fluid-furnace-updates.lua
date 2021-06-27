@@ -33,9 +33,6 @@ if settings.startup["bobmods-assembly-oilfurnaces"].value == true then
 
         bobmods.lib.recipe.remove_result("steel-mixing-furnace-from-fluid-mixing-furnace", "pipe")
         bobmods.lib.recipe.add_result("steel-mixing-furnace-from-fluid-mixing-furnace", {"steel-pipe", 2})
-
-        bobmods.lib.recipe.remove_result("fluid-furnace-from-fluid-mixing-furnace", "pipe")
-        bobmods.lib.recipe.add_result("fluid-furnace-from-fluid-mixing-furnace", {"steel-pipe", 5})
       end
     end
     if data.raw.recipe["fluid-chemical-furnace"] then

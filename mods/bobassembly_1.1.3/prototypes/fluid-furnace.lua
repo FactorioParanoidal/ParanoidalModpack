@@ -112,7 +112,7 @@ data:extend(
   {
     type = "recipe",
     name = "steel-furnace-from-fluid-furnace",
-    energy_required = 2,
+    energy_required = 0.1,
     enabled = false,
     ingredients =
     {
@@ -246,7 +246,7 @@ data:extend(
     type = "recipe",
     name = "steel-mixing-furnace-from-fluid-mixing-furnace",
     subgroup = "bob-smelting-machine-convert",
-    energy_required = 2,
+    energy_required = 0.1,
     enabled = false,
     ingredients =
     {
@@ -269,9 +269,9 @@ data:extend(
     ingredients =
     {
       {"fluid-furnace", 1},
-      {"pipe", 5},
     },
     result = "fluid-mixing-furnace",
+    allow_as_intermediate = false,
   },
   {
     type = "recipe",
@@ -283,12 +283,7 @@ data:extend(
     {
       {"fluid-mixing-furnace", 1},
     },
-    results =
-    {
-      {"fluid-furnace", 1},
-      {"pipe", 5},
-    },
-    main_product = "fluid-furnace",
+    result = "fluid-furnace",
     allow_as_intermediate = false,
   },
 }
@@ -424,7 +419,7 @@ data:extend(
     type = "recipe",
     name = "steel-chemical-furnace-from-fluid-chemical-furnace",
     subgroup = "bob-smelting-machine-convert",
-    energy_required = 2,
+    energy_required = 0.1,
     enabled = false,
     ingredients =
     {
@@ -442,7 +437,7 @@ data:extend(
     type = "recipe",
     name = "fluid-chemical-furnace-from-fluid-furnace",
     subgroup = "bob-smelting-machine-convert",
-    energy_required = 0.1,
+    energy_required = 2,
     enabled = false,
     ingredients =
     {
@@ -450,6 +445,7 @@ data:extend(
       {"pipe", 5},
     },
     result = "fluid-chemical-furnace",
+    allow_as_intermediate = false,
   },
   {
     type = "recipe",
