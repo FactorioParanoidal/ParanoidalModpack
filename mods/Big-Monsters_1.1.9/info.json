@@ -1,10 +1,10 @@
 {
 	"name":"Big-Monsters",
 	"author":"MFerrari",
-	"version":"1.1.8",
+	"version":"1.1.9",
 	"title":"Big-Monsters",
 	"description":"Be prepared for the big monsters from this planet!",
-	"homepage":"Discord: MFerrari#6561",
+	"homepage":"https://discord.gg/vDfm5tNEqK",
 	"contact": "Discord: MFerrari#6561",
 	"factorio_version":"1.1",
 	"dependencies": ["base >= 1.1.0", "(?) RPGsystem", "? ArmouredBiters", "(?) Explosive_biters"]
