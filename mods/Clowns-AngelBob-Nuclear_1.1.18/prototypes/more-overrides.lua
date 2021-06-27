@@ -45,6 +45,9 @@ if mods["angelsindustries"] and angelsmods.industries.overhaul then
   OV.remove_unlock("thorium-mixed-oxide", "thorium-fuel-reprocessing")
   OV.disable_technology("thorium-fuel-reprocessing")
   angelsmods.functions.add_flag("used-up-thorium-fuel-cell", "hidden")
+  --use angels version
+  OV.global_replace_item("thorium-fuel-cell","angels-thorium-fuel-cell")
+  OV.global_replace_item("used-up-thorium-fuel-cell","used-up-angels-thorium-fuel-cell")
 end
 
 --updates to the plutonium bomb
@@ -111,9 +114,12 @@ if mods["angelsindustries"] then
 	data.raw["item-subgroup"]["clowns-uranium-centrifuging"].group = "angels-power"
 	data.raw["item-subgroup"]["clowns-uranium-centrifuging"].order = "d[clowns]-ac[centrifuging]"
 	data.raw["item-subgroup"]["clowns-nuclear-fuels"].group = "angels-power"
-	data.raw["item-subgroup"]["clowns-nuclear-fuels"].order = "d[clowns]-ad[fuels]"
+	data.raw["item-subgroup"]["clowns-nuclear-fuels"].order = "d[clowns]-ab[fuels]"
 	data.raw["item-subgroup"]["clowns-nuclear-cells"].group = "angels-power"
-  data.raw["item-subgroup"]["clowns-nuclear-cells"].order = "d[clowns]-ab[cells]"
+  data.raw["item-subgroup"]["clowns-nuclear-cells"].order = "d[clowns]-ad[cells]"
+  data.raw["item-subgroup"]["clowns-nuclear-isotopes"].group = "angels-power"
+  data.raw["item-subgroup"]["clowns-nuclear-isotopes"].order = "d[clowns]-ae[isotopes]"
+
   --set ingedient limit higher...
   data.raw["assembling-machine"]["centrifuge"].ingredient_count=5
   if mods["bobassembly"] and settings.startup["bobmods-assembly-centrifuge"].value then
@@ -127,6 +133,9 @@ if mods["angelsindustries"] then
   --thermal/train fuel updates
   data.raw["item-subgroup"]["clowns-nuclear-fuels"].group = "angels-power"
   data.raw["item-subgroup"]["clowns-nuclear-fuels"].order = "d[clowns]-ac[centrifuging]"
+  OV.patch_recipes({
+      {name = "thorium-purification",results = {{type = "item", name = "plutonium-239", amount = 1, probability=0.15}}},
+  })
 end
 --fix odd interactions
 data.raw.recipe["uranium-fuel-cell"].ingredients =
@@ -140,6 +149,7 @@ data.raw.recipe["mixed-oxide"].ingredients =
   {type="item", name="uranium-238", amount=2},
   {type="item", name="plutonium-239", amount=2}
 }
+
 --globally override plutonium to be consistent 
 OV.global_replace_item("plutonium-240","plutonium-239")
 --execute functions after being called

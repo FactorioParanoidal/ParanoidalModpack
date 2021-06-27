@@ -47,6 +47,10 @@ data:extend(
 				type = "unlock-recipe",
 				recipe = "advanced-thorium-nuclear-fuel-reprocessing|b"
 			},
+			{
+				type = "unlock-recipe",
+				recipe = "thorium-nuclear-fuel-reprocessing"
+			},
 		},
 		prerequisites = {"nuclear-fuel-reprocessing-2"}, --temp
 		unit =

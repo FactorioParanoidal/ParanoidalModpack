@@ -20,10 +20,12 @@ if data.raw.technology["advanced-centrifuging-2"] then
   data.raw["technology"]["atomic-bomb"].prerequisites = {"advanced-centrifuging-2"}
 end
 --if thorium ore add thorium mox fuel cell recipe, or move advanced uranium to nuclear 2 to allow all fuels
-if data.raw.item["thorium-fuel-cell"] then
+if data.raw.item["thorium-fuel-cell"] or data.raw.item["angels-thorium-fuel-cell"] then
   --table.insert(data.raw["technology"]["mixed-oxide-fuel"].effects, {type = "unlock-recipe", recipe = "thorium-mixed-oxide"})
+	OV.disable_recipe("angels-thorium-processing")
+	OV.add_prereq("angels-thorium-power","thorium-ore-processing")
 else
-	table.insert(data.raw["technology"]["nuclear-fuel-reprocessing-2"].effects, {type = "unlock-recipe", recipe = "advanced-nuclear-fuel-reprocessing-2"})
+	clowns.functions.add_unlock("nuclear-fuel-reprocessing-2","advanced-nuclear-fuel-reprocessing-2")
 end
 --remove kovarex and remove it from bobingabout prereq
 data.raw.technology["kovarex-enrichment-process"].enabled = false
@@ -43,11 +45,11 @@ elseif mods["bobassembly"] and mods["bobassembly"] and settings.startup["bobmods
 	centri_2="centrifuge-3"
 end
 
-table.insert(data.raw["technology"][centri_1].effects, {type = "unlock-recipe", recipe = "depleted-uranium-reprocessing"})
-table.insert(data.raw["technology"][centri_1].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-45%"})
-table.insert(data.raw["technology"][centri_1].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-55%"})
-table.insert(data.raw["technology"][centri_2].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-65%"})
-table.insert(data.raw["technology"][centri_2].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-70%"})
-table.insert(data.raw["technology"][centri_2].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-75%"})
-table.insert(data.raw["technology"][centri_2].effects, {type = "unlock-recipe", recipe = "clowns-centrifuging-80%"})
-table.insert(data.raw["technology"]["water-treatment-4"].effects, {type = "unlock-recipe", recipe = "radioactive-waste-water-purification"})
+clowns.functions.add_unlock(centri_1,"depleted-uranium-reprocessing")
+clowns.functions.add_unlock(centri_1,"clowns-centrifuging-45%")
+clowns.functions.add_unlock(centri_1,"clowns-centrifuging-55%")
+clowns.functions.add_unlock(centri_2,"clowns-centrifuging-65%")
+clowns.functions.add_unlock(centri_2,"clowns-centrifuging-70%")
+clowns.functions.add_unlock(centri_2,"clowns-centrifuging-75%")
+clowns.functions.add_unlock(centri_2,"clowns-centrifuging-80%")
+clowns.functions.add_unlock("water-treatment-4","radioactive-waste-water-purification")

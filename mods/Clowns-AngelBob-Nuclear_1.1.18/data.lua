@@ -1,7 +1,3 @@
-if not clowns then clowns={} end
-if not clowns.functions then clowns.functions={} end
-require("prototypes.functions")
-
 require("prototypes.items.thorium") --if thorium ore
 require("prototypes.items.isotopes")
 require("prototypes.items.fuels")
@@ -16,5 +12,5 @@ require("prototypes.recipes.water-treatment")
 
 require("prototypes.technology.fuels")
 require("prototypes.technology.nuclear-reprocessing")
-
+require("prototypes.technology.thorium-processing")
 require("prototypes.overrides")

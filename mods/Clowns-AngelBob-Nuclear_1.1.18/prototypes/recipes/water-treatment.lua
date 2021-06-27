@@ -16,8 +16,7 @@ data:extend(
 			{type="fluid", name="water-red-waste", amount=100},
 			{type="item", name="polonium-210", amount=1},
 		},
-		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/water-radioactive-waste-purification.png",
-		icon_size = 32,
+		icons = angelsmods.functions.create_liquid_recipe_icon({"polonium-210","water-red-waste"}, "wcl"),
 		order = "k",
 	},
 }
