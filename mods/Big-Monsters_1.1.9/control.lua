@@ -786,7 +786,7 @@ for z=#global.biterzillas,1,-1 do
 				end
 		end	
 		
-	if 	zilla.type == 'spider-vehicle' and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla) end 
+	if zilla.valid and zilla.type == 'spider-vehicle' and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla) end 
 		
 	end
 end
