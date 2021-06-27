@@ -19,7 +19,7 @@ Chest.recheck = function(conn)
 end
 
 local DELAYS = {10, 20, 60, 180, 600}
-local DEFAULT_DELAY = 600 --DrD 60
+local DEFAULT_DELAY = 60
 Chest.indicator_settings = {"d0", "b0"}
 
 for _,v in pairs(DELAYS) do
