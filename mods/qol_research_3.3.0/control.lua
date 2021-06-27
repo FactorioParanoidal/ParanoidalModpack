@@ -228,8 +228,8 @@ end)
 script.on_event(defines.events.on_player_created, function (event)
     local player = game.players[event.player_index]
     if player.admin then
-        player.print('[qol] Quality of Life Research v3 is installed')
-        player.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!')
+        --player.print('[qol] Quality of Life Research v3 is installed') --drd
+        --player.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!') --drd
     end
 end)
 
