@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 29.05.2021
+  Changes:
+    - Fixed trigger to enable shielding recipes (angels components) to be consistent (16)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 27/05/2021
+  Changes:
+    - Updated graphics to reference angels new ones (and new internals) by Kirazy
+      - Thanks a heap for doing those, you are a champ.
+    - Fixed graphical inconsistencies with angels smelting overlays
+    - Fixed that icons for recipes and items were swapped for molds (13)
+---------------------------------------------------------------------------------------------------
 Version: 1.0.6
 Date: 01/12/2020
   Changes:

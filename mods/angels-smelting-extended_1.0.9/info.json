@@ -1,6 +1,6 @@
 {
   "name": "angels-smelting-extended",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "factorio_version": "1.1",
   "title": "Angel's Extended Smelting and Compression",
   "author": "pezzawinkle",
@@ -9,8 +9,8 @@
   "description": "Extension to Angel's Smelting providing all metal mixing recipes to metallurgy (Brass, Bronze, etc) and compression on metal casting (eg. Iron Sheet) as well as casting gear wheels and pipes",
   "dependencies": [
 	"angelspetrochem >= 0.9.4",
-	"angelsrefining >= 0.11.6",
-	"angelssmelting >= 0.6.2",
+	"angelsrefining >= 0.11.20",
+	"angelssmelting >= 0.6.15",
   "? angelsindustries >=0.3.5",
 	"? bobplates >= 0.18.0",
   "(?) boblogistics >= 0.18.0",

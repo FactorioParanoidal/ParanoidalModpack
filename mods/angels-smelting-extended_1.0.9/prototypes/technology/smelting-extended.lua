@@ -14,18 +14,18 @@ data:extend(
     },
     effects =
     {
-      -- {
-        -- type = "unlock-recipe",
-        -- recipe = "angels-iron-gear-wheel-casting"
-      -- },
+      {
+        type = "unlock-recipe",
+        recipe = "angels-iron-gear-wheel-casting"
+      },
       {
         type = "unlock-recipe",
         recipe = "angels-iron-pipe-casting"
       },
-      -- {
-        -- type = "unlock-recipe",
-        -- recipe = "angels-iron-pipe-to-ground-casting"
-      -- },
+      {
+        type = "unlock-recipe",
+        recipe = "angels-iron-pipe-to-ground-casting"
+      },
     },
     unit =
     {
@@ -45,7 +45,7 @@ if mods["bobplates"] then
     {
       type = "technology",
       name = "angels-alloys-smelting-1",
-      icon = "__angelssmelting__/graphics/technology/smelting-bronze.png",
+      icon = "__angelssmelting__/graphics/technology/casting-bronze-tech.png",
       icon_size = 128,
       upgrade = true,
       prerequisites =
@@ -88,7 +88,7 @@ if mods["bobplates"] then
     {
       type = "technology",
       name = "angels-alloys-smelting-2",
-      icon = "__angelssmelting__/graphics/technology/smelting-gunmetal.png",
+      icon = "__angelssmelting__/graphics/technology/casting-gunmetal-tech.png",
       icon_size = 128,
       upgrade = true,
       prerequisites =
@@ -136,7 +136,7 @@ if mods["bobplates"] then
     {
       type = "technology",
       name = "angels-alloys-smelting-3",
-      icon = "__angelssmelting__/graphics/technology/smelting-cobalt-steel.png",
+      icon = "__angelssmelting__/graphics/technology/casting-cobalt-steel-tech.png",
       icon_size = 128,
       upgrade = true,
       prerequisites =
