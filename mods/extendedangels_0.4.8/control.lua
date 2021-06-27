@@ -59,6 +59,10 @@ script.on_configuration_changed(function(config)
                 recipes["bio-refugium-puffer-2"].enabled = true
             end
 
+            if technologies["bio-refugium-puffer-3"].researched then
+                recipes["bio-refugium-puffer-3"].enabled = true
+            end
+
             if technologies["bio-refugium-biter-2"].researched then
                 recipes["bio-refugium-biter-2"].enabled = true
             end

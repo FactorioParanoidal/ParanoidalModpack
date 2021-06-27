@@ -52,17 +52,6 @@ data:extend({
         stack_size = 200
     },
 
-    -- Zinc powder
-    {
-        type = "item",
-        name = "powder-zinc",
-        icon = "__angelssmelting__/graphics/icons/powder-zinc.png",
-        icon_size = 32,
-        subgroup = "angels-zinc",
-        order = "i",
-        stack_size = 200
-    },
-
     -- Tungsten carbide powder mixture
     {
         type = "item",
