@@ -7,8 +7,6 @@ require("prototypes.technologies").updates()
 	-- data.raw["technology"]["auto-targeting"].unit.ingredients[5] = {"science-pack-4", 1}
 -- end
 
-if not data.raw["assembling-machine"]["assembling-machine-4"] then
-	data.raw["assembling-machine"]["assembling-machine-3"].ingredient_count = 8
-else
-	data.raw["assembling-machine"]["assembling-machine-4"].ingredient_count = 8
-end
+local am = data.raw["assembling-machine"]["assembling-machine-4"]
+if not am then am = data.raw["assembling-machine"]["assembling-machine-3"] end
+if type(am.ingredient_count)=="number" and am.ingredient_count < 8 then am.ingredient_count = 8 end

@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.15
+Date: 2021-05-06
+  Bugfixes:
+    - fix the "Area not found" log message. (at least I hope so)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.13
+Date: 2021-05-05
+  Bugfixes:
+    - 5dim compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2.1.12
+Date: 2021-05-05
+  Changes:
+	- refactoring / code cleanup for permissions
+	- refactoring / code cleanup for GUI
+  Bugfixes:
+    - try to fix restore permissions for multiplayer
+---------------------------------------------------------------------------------------------------
+Version: 2.1.11
+Date: 2021-04-09
+  Bugfixes:
+    - fix ingredient_count
+---------------------------------------------------------------------------------------------------
 Version: 2.1.9
 Date: 2021-01-31
   Bugfixes:

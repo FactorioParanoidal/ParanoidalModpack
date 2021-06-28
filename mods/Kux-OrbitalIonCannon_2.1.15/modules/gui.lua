@@ -1,9 +1,93 @@
 require "modules.tools"
+require "modules.luaext"
 local mod_gui = require("mod-gui")
 
 UiElementDefinitions = {
 	["ion-cannon-button"] = {type="button", style = "ion-cannon-button-style"}
 }
+
+ModGui = {}
+
+local on_gui_checked_state_changed = function(event)
+	local checkbox = event.element
+	if checkbox.name == "show" then
+		global.goToFull[event.player_index] = false
+		global.permissions[-1] = checkbox.state
+		open_GUI(game.players[event.player_index])
+	elseif checkbox.name == "ion-cannon-auto-target-enabled" then
+		global.goToFull[event.player_index] = false
+		global.permissions[-2] = checkbox.state
+		open_GUI(game.players[event.player_index])
+	else
+		local index = tonumber(checkbox.name)
+		if checkbox.parent.name == "ion-cannon-admin-panel-table" then
+			Permissions.setPermission(index, checkbox.state)
+			if index == 0 then
+				Permissions.setAll(checkbox.state)
+				global.goToFull[event.player_index] = false
+				open_GUI(game.players[event.player_index])
+			end
+		end
+	end
+end
+
+--- Called when LuaGuiElement is clicked.
+-- element :: LuaGuiElement: The clicked element.
+-- player_index :: uint: The player who did the clicking.
+-- button :: defines.mouse_button_type: The mouse button used if any.
+-- alt :: boolean: If alt was pressed.
+-- control :: boolean: If control was pressed.
+-- shift :: boolean: If shift was pressed.
+local on_gui_click = function(event)
+	local player = game.players[event.element.player_index]
+	local force = player.force
+	local name = event.element.name
+	local surfaceName = player.surface.name
+	if name == "ion-cannon-button" then
+		open_GUI(player)
+		return
+	elseif name == "add-ion-cannon" then
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		global.IonCannonLaunched = true
+		script.on_nth_tick(60, process_60_ticks)
+		for i, player in pairs(force.connected_players) do
+			init_GUI(player)
+			playSoundForPlayer("ion-cannon-charging", player)
+		end
+		force.print({"ion-cannons-in-orbit" , #global.forces_ion_cannon_table[force.name]})
+		return
+	elseif name == "add-five-ion-cannon" then
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
+		global.IonCannonLaunched = true
+		script.on_nth_tick(60, process_60_ticks)
+		for i, player in pairs(force.connected_players) do
+			init_GUI(player)
+			playSoundForPlayer("ion-cannon-charging", player)
+		end
+		force.print({"ion-cannons-in-orbit" , #global.forces_ion_cannon_table[force.name]})
+		return
+	elseif name == "remove-ion-cannon" then
+		if #global.forces_ion_cannon_table[force.name] > 0 then
+			table.remove(global.forces_ion_cannon_table[force.name])
+			for i, player in pairs(force.connected_players) do
+				update_GUI(player)
+			end
+			force.print({"ion-cannon-removed"})
+		else
+			player.print({"no-ion-cannons"})
+		end
+		return
+	end
+end
+
+ModGui.initEvents = function ()
+	script.on_event(defines.events.on_gui_checked_state_changed, on_gui_checked_state_changed)
+	script.on_event(defines.events.on_gui_click, on_gui_click)
+end
 
 function getUiElement(parent, name, createIfNotExist)
 	--print("getUiElement",name)
@@ -62,6 +146,30 @@ function init_GUI(player)
 	findUiElementByName(player, "ion-cannon-button", true)
 end
 
+local createAdminPanel =function(parent)
+	-- parent: frame
+	local adminPanel = parent.add{type = "table", column_count = 3, name = "ion-cannon-admin-panel-table"}
+
+	-- 1st row
+	adminPanel.add{type = "label", caption = {"player-names"}}
+	adminPanel.add{type = "label", caption = {"allowed"}}
+	adminPanel.add{type = "label", caption = ""}
+
+	-- 2nd row
+	adminPanel.add{type = "label", caption = {"toggle-all"}}
+	adminPanel.add{type = "checkbox", state = global.permissions[0], name = "0"}
+	adminPanel.add{type = "label", caption = ""}
+
+	-- player rows
+	for _, player in pairs(game.players) do
+		adminPanel.add{type = "label", caption = player.name }
+		adminPanel.add{type = "checkbox", state = Permissions.getPermission(player.index), name = player.index .. ""}
+		adminPanel.add{type = "label", caption = iif(player.admin," [Admin]","") }
+	end
+
+	return adminPanel
+end
+
 function open_GUI(player)
 	local frame = player.gui.left["ion-cannon-stats"]
 	local force = player.force
@@ -98,18 +206,10 @@ function open_GUI(player)
 				frame["ion-cannon-admin-panel-header"].add{type = "label", caption = {"ion-cannon-admin-panel-show"}}
 				frame["ion-cannon-admin-panel-header"].add{type = "checkbox", state = global.permissions[-1], name = "show"}
 				-- frame["ion-cannon-admin-panel-header"].add{type = "label", caption = {"ion-cannon-cheat-menu-show"}}
-				if global.permissions[-2] == nil then global.permissions[-2] = settings.global["ion-cannon-auto-targeting"].value end
+				--TODO WTF? if global.permissions[-2] == nil then global.permissions[-2] = settings.global["ion-cannon-auto-targeting"].value end
 				-- frame["ion-cannon-admin-panel-header"].add{type = "checkbox", state = global.permissions[-2], name = "cheats"}
 				if frame["ion-cannon-admin-panel-header"]["show"].state then
-					frame.add{type = "table", column_count = 2, name = "ion-cannon-admin-panel-table"}
-					frame["ion-cannon-admin-panel-table"].add{type = "label", caption = {"player-names"}}
-					frame["ion-cannon-admin-panel-table"].add{type = "label", caption = {"allowed"}}
-					frame["ion-cannon-admin-panel-table"].add{type = "label", caption = {"toggle-all"}}
-					frame["ion-cannon-admin-panel-table"].add{type = "checkbox", state = global.permissions[0], name = "0"}
-					for i, player in pairs(game.players) do
-						frame["ion-cannon-admin-panel-table"].add{type = "label", caption = player.name}
-						frame["ion-cannon-admin-panel-table"].add{type = "checkbox", state = global.permissions[player.index], name = player.index .. ""}
-					end
+					createAdminPanel(frame)
 				end
 				-- if frame["ion-cannon-admin-panel-header"]["cheats"].state then
 				if settings.global["ion-cannon-cheat-menu"].value then
