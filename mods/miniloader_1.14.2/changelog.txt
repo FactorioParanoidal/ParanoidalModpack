@@ -1,4 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.2
+Date: 2021-05-27
+  Bugfixes:
+    - Fix crash when placing blueprint with no entities. (https://mods.factorio.com/mod/miniloader/discussion/60afed6b3b5d1012994e3b1d)
+---------------------------------------------------------------------------------------------------
+Version: 1.14.1
+Date: 2021-05-27
+  Bugfixes:
+    - Fix miniloaders being reset to input during save game migration. (https://mods.factorio.com/mod/miniloader/discussion/60afa0accd95c9c1f1597447)
+---------------------------------------------------------------------------------------------------
+Version: 1.14.0
+Date: 2021-05-26
+  Minor Features:
+    - Add support for Space Exploration's Deep Space belts. (https://github.com/mspielberg/factorio-miniloader/pull/54)
+  Changes:
+    - Adjust colors for RandomFactorioThings. (https://github.com/mspielberg/factorio-miniloader/pull/57)
+  Bugfixes:
+    - Possible fix for rare multiplayer desyncs related to placing blueprints.
+    - Fix Bob's Adjustable Inserters not being disabled for miniloaders on a new game. (https://mods.factorio.com/mod/miniloader/discussion/5f40fee0e296bbca10d15315)
+    - Fix crash when creating a blueprint using a blueprint book with a blank blueprint in the active slot, and holding Shift to bypass the configuration dialog. (https://mods.factorio.com/mod/miniloader/discussion/60a412070a985520b1abd862)
+    - Fix miniloader orientation not being used when instant building blueprint in editor mode. (https://mods.factorio.com/mod/miniloader/discussion/605c918a8618fe16b0713f8c)
+---------------------------------------------------------------------------------------------------
 Version: 1.13.1
 Date: 2021-01-04
   Bugfixes:

@@ -1,8 +1,6 @@
 local circuit = require 'circuit'
 local util = require 'util'
 
-local M = {}
-
 local function fast_replace_loader(loader_name, existing_loader)
   local last_user = existing_loader.last_user
   local new_loader = existing_loader.surface.create_entity{
@@ -57,9 +55,13 @@ local function ensure_loader(inserter, orientation)
   local loader_name = inserter.name:gsub("inserter$", "loader")
   local existing_loaders = util.find_miniloaders{surface=surface, position=position}
   local existing_loader = select_connected_loader(existing_loaders)
-  if existing_loader and existing_loader.name ~= loader_name then
-    return fast_replace_loader(loader_name, existing_loader)
-  elseif not existing_loader then
+  if existing_loader then
+    if existing_loader.name ~= loader_name then
+      return fast_replace_loader(loader_name, existing_loader)
+    else
+      existing_loader.loader_type = orientation.type
+    end
+  else
     return create_new_loader(loader_name, inserter, orientation)
   end
   return existing_loader
@@ -132,7 +134,12 @@ end
 
 local function fixup(main_inserter, orientation)
   if not orientation then
-    orientation = {direction = util.opposite_direction(main_inserter.direction), type = "input"}
+    local existing_loader = util.find_miniloaders{surface = main_inserter.surface, position = main_inserter.position}[1]
+    if existing_loader then
+      orientation = {direction = existing_loader.direction, type = existing_loader.loader_type}
+    else
+      orientation = {direction = util.opposite_direction(main_inserter.direction), type = "input"}
+    end
   end
   local loader = ensure_loader(main_inserter, orientation)
   ensure_inserters(util.num_inserters(loader), main_inserter)

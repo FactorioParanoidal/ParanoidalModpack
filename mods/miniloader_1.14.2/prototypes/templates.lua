@@ -84,12 +84,12 @@ end
 if mods["RandomFactorioThings"] then
   templates["nuclear-"] = {
     prerequisite_techs = {"nuclear-logistics", "express-miniloader"},
-    tint = {r=0, g=1, b=0}
+    tint = util.color("00ff00")
   }
   if mods["PlutoniumEnergy"] then
     templates["plutonium-"] = {
       prerequisite_techs = {"plutonium-logistics", "nuclear-miniloader"},
-      tint = {r=0.1,g=0.9,b=0.7}
+      tint = util.color("00e1ffde")
     }
   end
 end
@@ -152,6 +152,15 @@ if data.raw.item["se-space-transport-belt"] then
     prerequisite_techs = {"se-space-platform-scaffold"},
     base_underground_name = "se-space-underground-belt",
   }
+end
+
+if data.raw.item["se-deep-space-transport-belt-black"] then
+  templates["deep-space-"] = {
+    prerequisite_techs = {"se-deep-space-transport-belt"},
+    tint = {r=0,g=0,b=0},
+    base_underground_name = "se-deep-space-underground-belt-black",
+  }
+  templates["space-"]["next_prefix"] = "deep-space-"
 end
 
 return templates

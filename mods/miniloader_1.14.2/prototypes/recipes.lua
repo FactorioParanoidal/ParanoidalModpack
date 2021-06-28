@@ -164,6 +164,12 @@ local ingredient_sets = {
       {"stack-inserter", 4},
     },
   },
+  ["deep-space-miniloader"] = {
+    {
+      {"se-deep-space-underground-belt-black", 1},
+      {"stack-inserter", 6},
+    },
+  },
 
   -- Random Factorio Things
   ["nuclear-miniloader"] = {

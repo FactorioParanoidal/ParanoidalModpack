@@ -316,7 +316,8 @@ local function create_inserters(prefix, next_prefix, base_underground_name, tint
     next_upgrade = next_upgrade,
   }
 
-  if prefix == "space-" then
+  --Space Exploration
+  if (prefix == "space-") or (prefix == "deep-space-") then
     loader_inserter.collision_mask = {"floor-layer", "item-layer", "object-layer", "water-tile"}
   end
 
