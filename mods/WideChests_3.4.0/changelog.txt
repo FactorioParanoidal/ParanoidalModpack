@@ -1,4 +1,11 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 3.4.0
+Date: 19.6.2021
+  Major features:
+    - Implemented blueprint rotation that supports rotating merged chests within them. Key binding is unbound by default.
+  Feature:
+    - Added support for copying item requests when requester chest is split (mod configuration in WideChestsLogistic).
+---------------------------------------------------------------------------------------------------
 Version: 3.3.0
 Date: 30.12.2020
   Major features:

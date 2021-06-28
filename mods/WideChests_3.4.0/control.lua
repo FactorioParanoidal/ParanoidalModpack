@@ -19,6 +19,18 @@ function MergingChests.GetChestSize(data, entity)
 	end
 end
 
+function MergingChests.GetChestName(data, width, height)
+	if height == 1 then
+		return "wide-"..data.type.."-chest-"..width
+	elseif width == 1 then
+		return "high-"..data.type.."-chest-"..height
+	elseif width <= settings.startup["warehouse-threshold"].value or height <= settings.startup["warehouse-threshold"].value then
+		return data.type.."-warehouse-"..width.."x"..height
+	else
+		return data.type.."-trashdump-"..width.."x"..height
+	end
+end
+
 function MergingChests.MoveInventories(from, to)
 	local j = 1
 	local l = 1
@@ -64,17 +76,30 @@ function MergingChests.MoveInventories(from, to)
 	end
 end
 
-function MergingChests.MoveLogisticRequests(from, to)
-	local to_index = 1
-	
-	for _, entity_from in ipairs(from) do
-		for from_slot_index = 1, entity_from.request_slot_count do
-			local request = entity_from.get_request_slot(from_slot_index)
-			if request then
-				to[to_index].set_request_slot(request, to[to_index].request_slot_count + 1)
-				to_index = to_index + 1
-				if to_index > #to then
-					to_index = 1
+function MergingChests.MoveLogisticRequests(player_index, from, to)
+	if game.players[player_index].mod_settings["WideChestsLogistic_copy-requests-on-split"].value and #to > #from then
+		-- copy requests from "from" entities to all "to" entities (don"t split them up)
+		for _, entity_to in ipairs(to) do
+			for _, entity_from in ipairs(from) do
+				for from_slot_index = 1, entity_from.request_slot_count do
+					local request = entity_from.get_request_slot(from_slot_index)
+					if request then
+						entity_to.set_request_slot(request, entity_to.request_slot_count + 1)
+					end
+				end
+			end
+		end
+	else
+		local to_index = 1
+		for _, entity_from in ipairs(from) do
+			for from_slot_index = 1, entity_from.request_slot_count do
+				local request = entity_from.get_request_slot(from_slot_index)
+				if request then
+					to[to_index].set_request_slot(request, to[to_index].request_slot_count + 1)
+					to_index = to_index + 1
+					if to_index > #to then
+						to_index = 1
+					end
 				end
 			end
 		end
@@ -224,12 +249,12 @@ function MergingChests.FindLargestAreaUnderHistogram(chestData, row, min, max)
 	local maxY = 0
 	local maxWidth = 0
 	local maxHeight = 0
-	
+
 	local stack = { }
 	local top = 0
 	local y = 0
 	local n = max - min + 1
-	
+
 	local function CalculateAreaAndUpdate()
 		local peak = stack[top]
 		top = top - 1
@@ -307,7 +332,7 @@ function MergingChests.OnPlayerSelectedArea(event)
 					
 					MergingChests.MoveInventories(group.entities, { newChest })
 					if data.logistic then
-						MergingChests.MoveLogisticRequests(group.entities, { newChest })
+						MergingChests.MoveLogisticRequests(event.player_index, group.entities, { newChest })
 					end
 					MergingChests.ReconnectCircuits(group.entities, { newChest })
 					
@@ -335,7 +360,7 @@ function MergingChests.OnPlayerAltSelectedArea(event)
 					
 					MergingChests.MoveInventories({ entity }, newEntities)
 					if data.logistic then
-						MergingChests.MoveLogisticRequests({ entity }, newEntities)
+						MergingChests.MoveLogisticRequests(event.player_index, { entity }, newEntities)
 					end
 					MergingChests.ReconnectCircuits({ entity }, newEntities)
 					
@@ -359,6 +384,105 @@ function MergingChests.OnShortCut(event)
 	end
 end
 
+function MergingChests.RotateEntityClockwise(entity)
+	entity.position = {
+		x = -entity.position.y,
+		y = entity.position.x
+	}
+
+	entity.direction = ((entity.direction or 0) + 2) % 8
+end
+
+function MergingChests.RotateEntityCounterclockwise(entity)
+	entity.position = {
+		x = entity.position.y,
+		y = -entity.position.x
+	}
+
+	entity.direction = ((entity.direction or 0) - 2 + 8) % 8
+end
+
+function MergingChests.RotateTileClockwise(tile)
+	tile.position = {
+		x = -tile.position.y - 1,
+		y = tile.position.x
+	}
+end
+
+function MergingChests.RotateTileCounterclockwise(tile)
+	tile.position = {
+		x = tile.position.y,
+		y = -tile.position.x - 1
+	}
+end
+
+function MergingChests.GetBlueprintInHand(player_index)
+	player = game.players[player_index]
+	local cursor = player.cursor_stack
+	if player.is_cursor_blueprint() and cursor.valid_for_read then
+		if cursor.is_blueprint_book and cursor.active_index then
+			local blueprint_inventory = cursor.get_inventory(defines.inventory.item_main)
+			if blueprint_inventory.get_item_count() == 0 then
+				return nil
+			end
+			cursor = blueprint_inventory[cursor.active_index]
+		end
+
+		for _, entity in ipairs(cursor.get_blueprint_entities()) do
+			for _, data in pairs(MergingChests.MergableChestIdToData) do
+				local width, height = MergingChests.GetChestSize(data, entity)
+				if math.max(width, height) > 1 and not MergingChests.CheckWhitelist(data.id, height, width) then
+					return nil
+				end
+			end
+		end
+		return cursor
+	end
+	return nil
+end
+
+function MergingChests.HandleBlueprintRotate(player_index, rotate_entity, rotate_tile)
+	local blueprint = MergingChests.GetBlueprintInHand(player_index)
+	if blueprint ~= nil then
+		local entities = blueprint.get_blueprint_entities()
+		for _, entity in ipairs(entities) do
+			local is_merged_chest = false
+			for _, data in pairs(MergingChests.MergableChestIdToData) do
+				local width, height = MergingChests.GetChestSize(data, entity)
+				if width ~= height then
+					entity.name = MergingChests.GetChestName(data, height, width)
+					rotate_entity(entity)
+					is_merged_chest = true
+					break
+				end
+			end
+
+			if not is_merged_chest then
+				rotate_entity(entity)
+			end
+		end
+		blueprint.set_blueprint_entities(entities)
+
+		local tiles = blueprint.get_blueprint_tiles()
+		if tiles ~= nil then
+			for _, tile in ipairs(tiles) do
+				rotate_tile(tile)
+			end
+			blueprint.set_blueprint_tiles(tiles)
+		end
+	end
+end
+
+function MergingChests.OnRotateBlueprintClockwise(event)
+	MergingChests.HandleBlueprintRotate(event.player_index, MergingChests.RotateEntityClockwise, MergingChests.RotateTileClockwise)
+end
+
+function MergingChests.OnRotateBlueprintCounterClockwise(event)
+	MergingChests.HandleBlueprintRotate(event.player_index, MergingChests.RotateEntityCounterclockwise, MergingChests.RotateTileCounterclockwise)
+end
+
 script.on_event(defines.events.on_player_selected_area, MergingChests.OnPlayerSelectedArea)
 script.on_event(defines.events.on_player_alt_selected_area, MergingChests.OnPlayerAltSelectedArea)
 script.on_event(defines.events.on_lua_shortcut, MergingChests.OnShortCut)
+script.on_event("WideChests_rotate-blueprint-clockwise", MergingChests.OnRotateBlueprintClockwise)
+script.on_event("WideChests_rotate-blueprint-couterclockwise", MergingChests.OnRotateBlueprintCounterClockwise)
