@@ -1,25 +1,25 @@
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
 require "tools"
-
 require "util"
 -- require("__stdlib__/stdlib/core")
 local Chunk = require("__stdlib__/stdlib/area/chunk")
 local Position = require("__stdlib__/stdlib/area/position")
 require "modules.autotargeter"
 require "modules.gui"
+require "modules.Permissions"
+
+local fLog = function (functionName)
+	print("control."..functionName)
+end
+
+local this = {}
 
 _G.when_ion_cannon_targeted = nil
-
-script.on_init(function() On_Init() end)
-script.on_configuration_changed(function() On_Init() end)
-script.on_load(function() On_Load() end)
 
 remote.add_interface("orbital_ion_cannon",
 	{
 		on_ion_cannon_targeted = function() return getIonCannonTargetedEventID() end,
-
 		on_ion_cannon_fired = function() return getIonCannonFiredEventID() end,
-
 		target_ion_cannon = function(force, position, surface, player) return targetIonCannon(force, position, surface, player) end -- Player is optional
 	}
 )
@@ -43,7 +43,9 @@ function getIonCannonFiredEventID()
 	return when_ion_cannon_fired
 end
 
-function On_Init()
+this.initialize = function()
+	fLog("initialize")
+	-- on_init, on_configuration_changed, on_force_created
 	generateEvents()
 	if not global.forces_ion_cannon_table then
 		global.forces_ion_cannon_table = {}
@@ -76,13 +78,8 @@ function On_Init()
 --			remote.call("silo_script", "add_tracked_item", "orbital-ion-cannon") --COMPATIBILITY 1.1 add_tracked_item removed
 --		end
 --	end
-	if not global.permissions then
-		global.permissions = {}
-		global.permissions[-2] = settings.global["ion-cannon-auto-targeting"].value
-		global.permissions[-1] = false
-		global.permissions[0] = false
-	end
-	for i, player in pairs(game.players) do
+	if not global.permissions then Permissions.initialize() end
+	for _, player in pairs(game.players) do
 		global.readyTick[player.index] = 0
 		global.forces_ion_cannon_table[player.force.name] = global.forces_ion_cannon_table[player.force.name] or {}
 		if global.goToFull[player.index] == nil then
@@ -94,7 +91,6 @@ function On_Init()
 		if player.gui.top["ion-cannon-stats"] then
 			player.gui.top["ion-cannon-stats"].destroy()
 		end
-		global.permissions[player.index] = player.admin
 	end
 	for i, force in pairs(game.forces) do
 		force.reset_recipes()
@@ -106,7 +102,8 @@ function On_Init()
 	global.forces_ion_cannon_table["Queue"] = global.forces_ion_cannon_table["Queue"] or {}
 end
 
-function On_Load()
+this.onLoad = function()
+	fLog("onLoad")
 	generateEvents()
 	if global.IonCannonLaunched then
 		script.on_nth_tick(60, process_60_ticks)
@@ -115,74 +112,22 @@ end
 
 script.on_event(defines.events.on_force_created, function(event)
 	if not global.forces_ion_cannon_table then
-		On_Init()
+		this.initialize()
 	end
 	global.forces_ion_cannon_table[event.force.name] = {}
 end)
 
 script.on_event(defines.events.on_forces_merging, function(event)
+	fLog("on_forces_merging")
 	global.forces_ion_cannon_table[event.source.name] = nil
 	-- for i, player in pairs(game.players) do
 		-- init_GUI(player)
 	-- end
 end)
 
---- Called when LuaGuiElement is clicked.
--- element :: LuaGuiElement: The clicked element.
--- player_index :: uint: The player who did the clicking.
--- button :: defines.mouse_button_type: The mouse button used if any.
--- alt :: boolean: If alt was pressed.
--- control :: boolean: If control was pressed.
--- shift :: boolean: If shift was pressed.
-script.on_event(defines.events.on_gui_click, function(event)
-	local player = game.players[event.element.player_index]
-	local force = player.force
-	local name = event.element.name
-	local surfaceName = player.surface.name
-	if name == "ion-cannon-button" then
-		open_GUI(player)
-		return
-	elseif name == "add-ion-cannon" then
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		global.IonCannonLaunched = true
-		script.on_nth_tick(60, process_60_ticks)
-		for i, player in pairs(force.connected_players) do
-			init_GUI(player)
-			playSoundForPlayer("ion-cannon-charging", player)
-		end
-		force.print({"ion-cannons-in-orbit" , #global.forces_ion_cannon_table[force.name]})
-		return
-	elseif name == "add-five-ion-cannon" then
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		table.insert(global.forces_ion_cannon_table[force.name], {settings.global["ion-cannon-cooldown-seconds"].value, 0, surfaceName})
-		global.IonCannonLaunched = true
-		script.on_nth_tick(60, process_60_ticks)
-		for i, player in pairs(force.connected_players) do
-			init_GUI(player)
-			playSoundForPlayer("ion-cannon-charging", player)
-		end
-		force.print({"ion-cannons-in-orbit" , #global.forces_ion_cannon_table[force.name]})
-		return
-	elseif name == "remove-ion-cannon" then
-		if #global.forces_ion_cannon_table[force.name] > 0 then
-			table.remove(global.forces_ion_cannon_table[force.name])
-			for i, player in pairs(force.connected_players) do
-				update_GUI(player)
-			end
-			force.print({"ion-cannon-removed"})
-		else
-			player.print({"no-ion-cannons"})
-		end
-		return
-	end
-end)
-
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 	if event.player_index then
-		--[[ why we should open the GUI always? KUX MODIFACTION
+		--[[ why we should open the GUI always? KUX MODIFICATION
 		local player = game.players[event.player_index]
 		if global.IonCannonLaunched or player.cheat_mode or player.admin then
 			open_GUI(player)
@@ -199,31 +144,16 @@ script.on_event("ion-cannon-hotkey", function(event)
 end)
 
 script.on_event(defines.events.on_player_created, function(event)
+	fLog("on_player_created")
 	init_GUI(game.players[event.player_index])
 	global.readyTick[event.player_index] = 0
-	local player = game.players[event.player_index]
-	if not global.permissions then
-		global.permissions = {}
-		global.permissions[0] = false
-		global.permissions[event.player_index] = player.admin
-	else
-		global.permissions[event.player_index] = player.admin or global.permissions[0]
-	end
 end)
 
 script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
-	if not global.permissions then
-		global.permissions = {}
-		global.permissions[0] = false
-		for i, p in pairs(game.players) do
-			global.permissions[p.index] = p.admin --TODO check. changed from `= player.admin`
-		end
-	end
-	local index = event.player_index
-	local player = game.players[index]
+	local player = game.players[event.player_index]
 	if isHolding({name = "ion-cannon-targeter", count = 1}, player) then
 		if player.character then
-			if not global.permissions[index] then
+			if not Permissions.hasPermission(player.index) then
 				player.print({"ion-permission-denied"})
 				playSoundForPlayer("unable-to-comply", player)
 				if Version.baseVersionGreaterOrEqual1d1() then
@@ -237,7 +167,7 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
 			playSoundForPlayer("select-target", player)
 		end
 	else
-		global.holding_targeter[index] = false
+		global.holding_targeter[player.index] = false
 	end
 end)
 
@@ -318,12 +248,14 @@ end
 function targetIonCannon(force, position, surface, player)
 	local cannonNum = 0
 	local targeterName = "Auto"
+
 	for i, cooldown in pairs(global.forces_ion_cannon_table[force.name]) do
 		if cooldown[2] == 1 and cooldown[3] == surface.name then
 			cannonNum = i
 			break
 		end
 	end
+
 	if player then
 		targeterName = player.name
 		if player.cheat_mode == true then
@@ -449,30 +381,7 @@ script.on_event(c_on_pre_build, function(event)
 	end
 end)
 
-script.on_event(defines.events.on_gui_checked_state_changed, function(event)
-	local checkbox = event.element
-	if checkbox.name == "show" then
-		global.goToFull[event.player_index] = false
-		global.permissions[-1] = checkbox.state
-		open_GUI(game.players[event.player_index])
-	elseif checkbox.name == "ion-cannon-auto-target-enabled" then
-		global.goToFull[event.player_index] = false
-		global.permissions[-2] = checkbox.state
-		open_GUI(game.players[event.player_index])
-	else
-		local index = tonumber(checkbox.name)
-		if checkbox.parent.name == "ion-cannon-admin-panel-table" then
-			global.permissions[index] = checkbox.state
-			if index == 0 then
-				for i = 1, #game.players do
-					global.permissions[i] = global.permissions[0]
-				end
-				global.goToFull[event.player_index] = false
-				open_GUI(game.players[event.player_index])
-			end
-		end
-	end
-end)
+ModGui.initEvents()
 
 local allowed_items = {"ion-cannon-targeter"}
 
@@ -500,3 +409,7 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
 		end
 	end
 end)
+
+script.on_init(this.initialize)
+script.on_configuration_changed(this.initialize)
+script.on_load(this.onLoad)
