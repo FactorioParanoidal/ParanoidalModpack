@@ -47,7 +47,7 @@ function handler.on_requester_remaining_cargo(event)
 
     format.info("Cleaning train " .. format.train(train))
 
-    trains.update_schedule(train, records)
+    trains.update_schedule(train, records, true)
 end
 
 function handler.on_delivery_failed(event)
@@ -57,12 +57,13 @@ function handler.on_delivery_failed(event)
 
     local train = trains.find_train(event.train_id)
 
-    if train == nil or not trains.has_trash(train) then
+    if not handler.is_train_valid(train) then
         return
     end
 
-    if not handler.is_train_valid(train) then
-        return
+    if train == nil or not trains.has_trash(train) then
+        trains.go_to_depot(train)
+        format.info("Sending empty failed train " .. format.train(train) .. " to depot")
     end
 
     local records = scheduler.build(train)
@@ -70,9 +71,13 @@ function handler.on_delivery_failed(event)
         return
     end
 
-    format.info("Cleaning failed train " .. format.train(train))
-
-    trains.update_schedule(train, records)
+    if trains.was_at_requester(train) then
+        trains.update_schedule(train, records, true)
+        format.info("Cleaning failed train " .. format.train(train))
+    else
+        trains.update_schedule(train, records, false)
+        format.info("Adding mandatory cleanup to failed train " .. format.train(train))
+    end
 end
 
 function handler.on_stops_updated(event)
