@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-05-27
+  Bugfixes:
+    - Fix crash in call to create_entities. (https://mods.factorio.com/mod/railloader/discussion/60af46dfd33bab4dbb65ab0a)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-05-26
+  Minor Features:
+    - Add setting for BRL inventory capacity. (https://mods.factorio.com/mod/railloader/discussion/5fed0ae5ae469395d491dfc5)
+  Bugfixes:
+    - Fix blueprinting when another mod mutates created blueprints (e.g. Miniloader). (https://mods.factorio.com/mod/railloader/discussion/604fe0bdeaf2f133c6113193)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2020-11-29
   Changes:
