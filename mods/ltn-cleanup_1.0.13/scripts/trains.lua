@@ -26,7 +26,7 @@ function trains.get_all_trash(train)
     return trash
 end
 
-function trains.update_schedule(train, records)
+function trains.update_schedule(train, records, change_target)
 
     local schedule = train.schedule
     local last = #train.schedule.records + 1
@@ -35,7 +35,9 @@ function trains.update_schedule(train, records)
         table.insert(schedule.records, record)
     end
 
-    schedule.current = last
+    if change_target then
+        schedule.current = last
+    end
     train.schedule = schedule
 end
 
@@ -69,6 +71,16 @@ function trains.get_surface(train)
     if #train.carriages ~= 0 then
         return train.carriages[1].surface
     end
+end
+
+function trains.go_to_depot(train)
+    local schedule = train.schedule
+    schedule.current = 1
+    train.schedule = schedule
+end
+
+function trains.was_at_requester(train)
+    return train.schedule.current == 1
 end
 
 return trains
