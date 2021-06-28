@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+  Bugfixes:
+    - Fixed a bug on upgrading a silo stage when using automated_forces
+---------------------------------------------------------------------------------------------------
 Version: 1.2.1
   Bugfixes:
     - Corrected compatibility for Space Exploration's Launch Pad (code + graphics, it's 10x10 tiles and not 9x9)

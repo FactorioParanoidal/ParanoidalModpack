@@ -244,7 +244,7 @@ stages[2] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000
+        emissions_per_minute = 200
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -324,7 +324,7 @@ stages[3] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000
+        emissions_per_minute = 200
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -367,7 +367,7 @@ stages[4] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000
+        emissions_per_minute = 200
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -411,7 +411,7 @@ stages[5] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000
+        emissions_per_minute = 200
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -455,7 +455,7 @@ stages[6] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000
+        emissions_per_minute = 200
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},

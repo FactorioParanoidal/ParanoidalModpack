@@ -175,22 +175,21 @@ end
 
 
 function check_construction_site(silo_data)
-
 local entity=silo_data.silo
 local progress=entity.products_finished 
 local max_progress=silo_data.work_value
 
 if progress>=max_progress then 
 	entity.active  = false
-	if entity.get_output_inventory().get_item_count()<1 then
+	if entity.get_output_inventory().get_item_count()<1 or in_list(global.automated_forces,entity.force.name) then
 		upgrade_construction_site(silo_data) 
 		return 
 		end
+		
 	end
 
 local visible_to
 if not in_list(global.automated_forces,entity.force.name) then visible_to = {entity.force} end
-
 	
 
 local background = silo_data.bar_back

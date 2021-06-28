@@ -231,7 +231,7 @@ data:extend({
 		energy_required = 5,
 		ingredients =
 		{
-		  {"refined-concrete", 25*mp},
+		  {"refined-concrete", 10*mp},
 		  {"electric-engine-unit", 5*mp},
 		  {"processing-unit", 5*mp},
 		  {"advanced-circuit", 10*mp},
