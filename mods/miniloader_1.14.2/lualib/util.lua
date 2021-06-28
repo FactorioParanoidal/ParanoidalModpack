@@ -254,11 +254,23 @@ function util.update_inserters(entity)
   end
 end
 
+function util.select_main_inserter(surface, position)
+  local inserters = surface.find_entities_filtered{type = "inserter", position = position}
+  if not next(inserters) then
+    inserters = surface.find_entities_filtered{ghost_type = "inserter", position = position}
+  end
+
+  if not next(inserters) then return nil end
+  for _, inserter in ipairs(inserters) do
+    if inserter.pickup_target == nil and inserter.drop_target == nil then
+      return inserter
+    end
+  end
+  return inserters[1]
+end
+
 function util.orientation_from_inserters(entity)
-  local find_entities_filtered = entity.surface.find_entities_filtered
-  local inserter =
-    find_entities_filtered{type = "inserter", position = entity.position}[1] or
-    find_entities_filtered{ghost_type = "inserter", position = entity.position}[1]
+  local inserter = util.select_main_inserter(entity.surface, entity.position)
   if inserter.drop_position.x > inserter.position.x + 0.5 then
     return {direction=defines.direction.east, type="input"}
   elseif inserter.drop_position.x < inserter.position.x - 0.5 then
