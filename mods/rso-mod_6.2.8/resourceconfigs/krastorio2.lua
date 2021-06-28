@@ -31,6 +31,10 @@ function fillKrastorio2Config(config)
         size={min=2, max=5},
     }
 
+	if game.active_mods["bztungsten"] then
+		config["mineral-water"].starting = {richness=150000, size=1, probability=1}
+	end
+
     config["imersite"] = 
     {
         type="resource-liquid",

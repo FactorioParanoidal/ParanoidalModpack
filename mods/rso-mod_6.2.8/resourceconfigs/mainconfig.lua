@@ -41,7 +41,6 @@ require("resourceconfigs.darkstar")
 require("resourceconfigs.dyworld")
 require("resourceconfigs.pyfusion")
 require("resourceconfigs.pypetroleumhandling")
-require("resourceconfigs.bitumen")
 require("resourceconfigs.hydraulicpumpjacks")
 require("resourceconfigs.napus")
 require("resourceconfigs.fpp")
@@ -77,6 +76,7 @@ require("resourceconfigs.bztitanium")
 require("resourceconfigs.bottledscience")
 require("resourceconfigs.zzzmodderssciencepack")
 require("resourceconfigs.adamo")
+require("resourceconfigs.apm")
 require("resourceconfigs.industrialrevolution")
 require("resourceconfigs.mobilefactory")
 require("resourceconfigs.enchanted")
@@ -87,6 +87,10 @@ require("resourceconfigs.bzlead")
 require("resourceconfigs.coldbiters")
 require("resourceconfigs.explosivebiters")
 require("resourceconfigs.dualores")
+require("resourceconfigs.enhancedrecipes")
+require("resourceconfigs.bztungsten")
+require("resourceconfigs.bzzirconium")
+require("resourceconfigs.nullius")
 -- require("resourceconfigs.yaiom")
 
 function loadResourceConfig()
@@ -275,10 +279,6 @@ function loadResourceConfig()
 		fillPyPetroleumHandlingConfig(config)
 	end
 
-	if game.active_mods["bitumen"] then
-		fillBitumenConfig(config)
-	end
-
 	if game.active_mods["HydraulicPumpjacks"] then
 		fillHydraulicPumpjacksConfig(config)
 	end
@@ -401,6 +401,7 @@ function loadResourceConfig()
 
 	-- multiple mods support in one file
 	fillAdamoConfig(config)
+	fillApmConfig(config)
 
 	if game.active_mods["IndustrialRevolution"] then
 		fillIndustrialRevolutionConfig(config)
@@ -446,10 +447,25 @@ function loadResourceConfig()
 		fillExplosiveBitersEnemies(config)
 	end
 
+	if game.active_mods["bztungsten"] then
+		fillBztungstenConfig(config)
+	end
+	
+	if game.active_mods["bzzirconium"] then
+		fillBzzirconiumConfig(config)
+	end
+	
+	if game.active_mods["nullius"] then
+		fillNulliusConfig(config)
+		config["enemy-base"] = nil
+	end
+	
 	if game.active_mods["yaiom"] then
 --		fillYaiomConfig(config)
 	end
 
+	fillEnhancedRecipesConfig(config)
+	
 	-- BobOres
 	if game.active_mods["bobores"] then
 		fillBoboresConfig(config)
