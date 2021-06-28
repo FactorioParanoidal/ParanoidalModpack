@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.2.8
+Date: 2021.06.19
+  Changes:
+    - added support for nullius mod (by Anachrony)
+    - added support for Zirconium mod (by brevven)
+---------------------------------------------------------------------------------------------------
+Version: 6.2.7
+Date: 2021.06.13
+  Changes:
+    - when Krastorio 2 and Tungsten mods are present there will be mineral water spawn in starting area
+    - add suport for starting ore settings from Angel's Refining
+---------------------------------------------------------------------------------------------------
+Version: 6.2.6
+Date: 2021.05.22
+  Changes:
+    - added support for Tungsten mod (by brevven)
+---------------------------------------------------------------------------------------------------
+Version: 6.2.5
+Date: 2021.04.18
+  Changes:
+    - marked Bitumen mod as incompatible
+    - added support for Idinc's fork of Amathor Phasma's Nuclear mod
+    - added support for Enhanced Recipes mod
+---------------------------------------------------------------------------------------------------
 Version: 6.2.4
 Date: 2021.04.04
   Changes:

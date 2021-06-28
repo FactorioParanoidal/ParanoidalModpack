@@ -1049,7 +1049,7 @@ local function spawn_starting_resources( surface, index )
 			debug("starting resource probability rolled "..prob)
 			if resConfig.starting.probability > 0 and prob <= resConfig.starting.probability then
 				local total = 0
-				local radius = 75
+				local radius = 50
 				local maxRadius = 301
 				maxRadius = maxRadius * surface.map_gen_settings.starting_area
 				local min_threshold = 0
@@ -1062,6 +1062,9 @@ local function spawn_starting_resources( surface, index )
 				end
 				
 				while (radius < maxRadius) and (total < min_threshold) do
+				
+					radius = radius + 25
+				
 					local angle = rng() * pi * 2
 					local dist = radius / 2 + rng(radius / 2)
 --					debug("Starting offset "..dist.." at "..angle)
@@ -1071,8 +1074,6 @@ local function spawn_starting_resources( surface, index )
 					elseif resConfig.type == "resource-liquid" then
 						total = total + spawn_resource_liquid(surface, resName, pos, resConfig.starting.size, richness, true, null, rng)
 					end
-					
-					radius = radius + 25
 					
 					if richness == resConfig.starting.richness and total > 0 then
 						richness = resConfig.starting.richness / 4

@@ -9,13 +9,16 @@ function fillAngelsOresConfig(config)
       size={min=20, max=25},
       min_amount = 150,
       
-      starting={richness=12000, size=20, probability=1},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore2"] = 3,
       }
    }
+   
+	if settings.startup["angels-starting-resource-ore1"].value then
+      config["angels-ore1"].starting={richness=12000, size=20, probability=1}
+	end
+   
       config["angels-ore2"] = {
       type="resource-ore",
       
@@ -25,13 +28,16 @@ function fillAngelsOresConfig(config)
       size={min=15, max=20},
       min_amount = 150,
       
-      starting={richness=4000, size=15, probability=0},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore3"] = 3,
       }
    }
+
+   	if settings.startup["angels-starting-resource-ore2"].value then
+      config["angels-ore2"].starting={richness=10000, size=15, probability=1}
+	end
+
       config["angels-ore3"] = {
       type="resource-ore",
       
@@ -41,13 +47,16 @@ function fillAngelsOresConfig(config)
       size={min=20, max=25},
       min_amount = 150,
       
-      starting={richness=12000, size=20, probability=1},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore4"] = 3,
       }
    }
+   
+   	if settings.startup["angels-starting-resource-ore3"].value then
+      config["angels-ore3"].starting={richness=12000, size=20, probability=1}
+	end
+   
       config["angels-ore4"] = {
       type="resource-ore",
       
@@ -57,13 +66,16 @@ function fillAngelsOresConfig(config)
       size={min=15, max=20},
       min_amount = 150,
       
-      starting={richness=4000, size=15, probability=0},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore5"] = 3,
       }
    }
+   
+   	if settings.startup["angels-starting-resource-ore4"].value then
+      config["angels-ore4"].starting={richness=10000, size=15, probability=1}
+	end
+   
       config["angels-fissure"] = {
       type="resource-liquid",
       minimum_amount=100000,
@@ -84,13 +96,16 @@ function fillAngelsOresConfig(config)
       size={min=15, max=20},
       min_amount = 150,
       
-      starting={richness=8000, size=20, probability=1},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore6"] = 3,
       }
    }
+
+   	if settings.startup["angels-starting-resource-ore5"].value then
+      config["angels-ore5"].starting={richness=8000, size=20, probability=1}
+	end
+   
       config["angels-ore6"] = {
       type="resource-ore",
       
@@ -100,13 +115,16 @@ function fillAngelsOresConfig(config)
       size={min=15, max=20},
       min_amount = 150,
       
-      starting={richness=8000, size=20, probability=1},
-      
       multi_resource_chance=0.30,
       multi_resource={
          ["angels-ore1"] = 3,
       }
    }
+   
+   	if settings.startup["angels-starting-resource-ore6"].value then
+      config["angels-ore6"].starting={richness=8000, size=20, probability=1}
+	end
+   
    end
    
    if game.entity_prototypes["angels-natural-gas"] then
