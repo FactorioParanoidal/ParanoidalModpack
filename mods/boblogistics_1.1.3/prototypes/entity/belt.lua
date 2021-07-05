@@ -65,6 +65,7 @@ data:extend(
     animation_speed_coefficient = 32,
     belt_animation_set = black_belt_animation_set,
     fast_replaceable_group = "transport-belt",
+    related_underground_belt = "basic-underground-belt",
     next_upgrade = "transport-belt",
     speed = 0.5/32,
     connector_frame_sprites = transport_belt_connector_frame_sprites,
@@ -389,6 +390,7 @@ data:extend(
     animation_speed_coefficient = 32,
     belt_animation_set = purple_belt_animation_set,
     fast_replaceable_group = "transport-belt",
+    related_underground_belt = "turbo-underground-belt",
     next_upgrade = "ultimate-transport-belt",
     speed = 0.125,
     connector_frame_sprites = transport_belt_connector_frame_sprites,
@@ -712,6 +714,7 @@ data:extend(
     animation_speed_coefficient = 32,
     belt_animation_set = green_belt_animation_set,
     fast_replaceable_group = "transport-belt",
+    related_underground_belt = "ultimate-underground-belt",
     speed = 0.15625,
     connector_frame_sprites = transport_belt_connector_frame_sprites,
     circuit_wire_connection_points = circuit_connector_definitions["belt"].points,
@@ -1000,30 +1003,52 @@ data:extend(
 )
 
 
-if settings.startup["bobmods-logistics-beltoverhaul"].value == true and settings.startup["bobmods-logistics-beltoverhaulspeed"].value == true then
-  bobmods.logistics.set_belt_speed("splitter", "basic-splitter", 1)
-  bobmods.logistics.set_belt_speed("transport-belt", "basic-transport-belt", 1)
-  bobmods.logistics.set_belt_speed("underground-belt", "basic-underground-belt", 1)
+if settings.startup["bobmods-logistics-beltoverhaulspeed"].value == true then
+  if settings.startup["bobmods-logistics-beltoverhaul"].value == true then 
+    bobmods.logistics.set_belt_speed("splitter", "basic-splitter", 1)
+    bobmods.logistics.set_belt_speed("transport-belt", "basic-transport-belt", 1)
+    bobmods.logistics.set_belt_speed("underground-belt", "basic-underground-belt", 1)
 
-  bobmods.logistics.set_belt_speed("splitter", "splitter", 2)
-  bobmods.logistics.set_belt_speed("transport-belt", "transport-belt", 2)
-  bobmods.logistics.set_belt_speed("underground-belt", "underground-belt", 2)
+    bobmods.logistics.set_belt_speed("splitter", "splitter", 2)
+    bobmods.logistics.set_belt_speed("transport-belt", "transport-belt", 2)
+    bobmods.logistics.set_belt_speed("underground-belt", "underground-belt", 2)
 
-  bobmods.logistics.set_belt_speed("splitter", "fast-splitter", 3)
-  bobmods.logistics.set_belt_speed("transport-belt", "fast-transport-belt", 3)
-  bobmods.logistics.set_belt_speed("underground-belt", "fast-underground-belt", 3)
+    bobmods.logistics.set_belt_speed("splitter", "fast-splitter", 3)
+    bobmods.logistics.set_belt_speed("transport-belt", "fast-transport-belt", 3)
+    bobmods.logistics.set_belt_speed("underground-belt", "fast-underground-belt", 3)
 
-  bobmods.logistics.set_belt_speed("splitter", "express-splitter", 4)
-  bobmods.logistics.set_belt_speed("transport-belt", "express-transport-belt", 4)
-  bobmods.logistics.set_belt_speed("underground-belt", "express-underground-belt", 4)
+    bobmods.logistics.set_belt_speed("splitter", "express-splitter", 4)
+    bobmods.logistics.set_belt_speed("transport-belt", "express-transport-belt", 4)
+    bobmods.logistics.set_belt_speed("underground-belt", "express-underground-belt", 4)
 
-  bobmods.logistics.set_belt_speed("splitter", "turbo-splitter", 5)
-  bobmods.logistics.set_belt_speed("transport-belt", "turbo-transport-belt", 5)
-  bobmods.logistics.set_belt_speed("underground-belt", "turbo-underground-belt", 5)
+    bobmods.logistics.set_belt_speed("splitter", "turbo-splitter", 5)
+    bobmods.logistics.set_belt_speed("transport-belt", "turbo-transport-belt", 5)
+    bobmods.logistics.set_belt_speed("underground-belt", "turbo-underground-belt", 5)
 
-  bobmods.logistics.set_belt_speed("splitter", "ultimate-splitter", 6)
-  bobmods.logistics.set_belt_speed("transport-belt", "ultimate-transport-belt", 6)
-  bobmods.logistics.set_belt_speed("underground-belt", "ultimate-underground-belt", 6)
+    bobmods.logistics.set_belt_speed("splitter", "ultimate-splitter", 6)
+    bobmods.logistics.set_belt_speed("transport-belt", "ultimate-transport-belt", 6)
+    bobmods.logistics.set_belt_speed("underground-belt", "ultimate-underground-belt", 6)
+  else
+    bobmods.logistics.set_belt_speed("splitter", "splitter", 1)
+    bobmods.logistics.set_belt_speed("transport-belt", "transport-belt", 1)
+    bobmods.logistics.set_belt_speed("underground-belt", "underground-belt", 1)
+
+    bobmods.logistics.set_belt_speed("splitter", "fast-splitter", 2)
+    bobmods.logistics.set_belt_speed("transport-belt", "fast-transport-belt", 2)
+    bobmods.logistics.set_belt_speed("underground-belt", "fast-underground-belt", 2)
+
+    bobmods.logistics.set_belt_speed("splitter", "express-splitter", 3)
+    bobmods.logistics.set_belt_speed("transport-belt", "express-transport-belt", 3)
+    bobmods.logistics.set_belt_speed("underground-belt", "express-underground-belt", 3)
+
+    bobmods.logistics.set_belt_speed("splitter", "turbo-splitter", 4)
+    bobmods.logistics.set_belt_speed("transport-belt", "turbo-transport-belt", 4)
+    bobmods.logistics.set_belt_speed("underground-belt", "turbo-underground-belt", 4)
+
+    bobmods.logistics.set_belt_speed("splitter", "ultimate-splitter", 5)
+    bobmods.logistics.set_belt_speed("transport-belt", "ultimate-transport-belt", 5)
+    bobmods.logistics.set_belt_speed("underground-belt", "ultimate-underground-belt", 5)
+  end
 end
 
 
