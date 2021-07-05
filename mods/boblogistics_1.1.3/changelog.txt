@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 09. 04. 2021
+  Changes:
+    - Belt speed overhaul can be used even if Belt overhaul is turned off.
+    - Added "related_underground_belt" to belts for smart dragging feature.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 06. 12. 2020
   Changes:
