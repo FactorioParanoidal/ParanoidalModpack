@@ -59,6 +59,7 @@ end
 
 local function on_init()
   global.player_placed_blueprint = {}
+  global.previous_opened_blueprint_for = {}
   circuit.on_init()
   compat_pickerextended.on_load()
   register_bobs_blacklist()
@@ -107,28 +108,11 @@ local function on_script_revive(ev)
   end
 end
 
-local miniloader_mined
-
 local function on_player_built(ev)
   local entity = ev.created_entity
-  if ev.mod_name then
-    -- might be circuit connected or have filter settings
-    on_robot_built(ev)
-    return
-  end
 
   if util.is_miniloader_inserter(entity) then
-    local orientation
-    if miniloader_mined and
-       miniloader_mined.tick == ev.tick and
-       miniloader_mined.player_index == ev.player_index then
-      orientation = miniloader_mined.orientation
-    elseif global.player_placed_blueprint[ev.player_index] == ev.tick then
-      -- Editor instant blueprint construction fires as on_player_built during same tick as blueprint being placed
-      -- No ghost is placed at all.
-      orientation = util.orientation_from_inserters(entity)
-    end
-
+    local orientation = util.orientation_from_inserters(entity)
     local loader = on_built_miniloader(entity, orientation)
     if use_snapping and not orientation then
       -- adjusts direction & loader_type
@@ -136,9 +120,21 @@ local function on_player_built(ev)
     end
   elseif use_snapping
   and entity.type == "entity-ghost"
-  and util.is_miniloader_inserter_name(entity.ghost_name)
-  and global.player_placed_blueprint[ev.player_index] ~= ev.tick then
-    snapping.snap_loader(entity)
+  and util.is_miniloader_inserter_name(entity.ghost_name) then
+    if global.player_placed_blueprint[ev.player_index] == ev.tick then
+      -- ghost placed as part of blueprint
+      -- remove duplicate ghosts
+      local colocated_ghosts = entity.surface.find_entities_filtered{
+        position = entity.position,
+        ghost_name = entity.ghost_name,
+      }
+      for i=1,#colocated_ghosts-1 do
+        colocated_ghosts[i].destroy()
+      end
+    else
+      -- single ghost placed with shift click
+      snapping.snap_loader(entity)
+    end
   elseif use_snapping then
     snapping.check_for_loaders(ev)
   end
@@ -286,37 +282,14 @@ local function on_pre_build(ev)
   if cursor_stack and blueprint.is_setup_bp(cursor_stack) then
     return on_placed_blueprint(ev, player, cursor_stack)
   end
-  local entities = player.surface.find_entities_filtered{position = ev.position}
-  for _, entity in ipairs(entities) do
-    if entity.name == "entity-ghost" and util.is_miniloader_inserter_name(entity.ghost_name) then
-      -- building over a ghost
-      miniloader_mined = {
-        tick = ev.tick,
-        player_index = player_index,
-        orientation = util.orientation_from_inserters(entity),
-      }
-      return
-    end
-  end
 end
 
 local function on_player_mined_entity(ev)
-  local entity = ev.entity
-  if util.is_miniloader_inserter(entity) then
-    -- might be a fast replace, so store current orientation
-    miniloader_mined = {
-      tick = ev.tick,
-      player_index = ev.player_index,
-      orientation = util.orientation_from_inserters(entity),
-    }
-  end
   on_mined(ev)
 end
 
 local function on_robot_pre_mined(ev)
-  if ev.instant_deconstruction then
-    on_mined(ev)
-  end
+  on_mined(ev)
 end
 
 local function on_entity_settings_pasted(ev)
@@ -335,15 +308,21 @@ local function on_entity_settings_pasted(ev)
   end
 end
 
+local function on_gui_closed(event)
+  if event.gui_type == defines.gui_type.item
+  and event.item
+  and event.item.is_blueprint
+  and event.item.is_blueprint_setup()
+  then
+    global.previous_opened_blueprint_for[event.player_index] = {
+      blueprint = event.item,
+      tick = event.tick,
+    }
+  end
+end
+
 local function on_setup_blueprint(ev)
-  local player = game.players[ev.player_index]
-  local bp = player.blueprint_to_setup
-  if not bp or not bp.valid_for_read then
-    bp = player.cursor_stack
-  end
-  while bp.is_blueprint_book do
-    bp = bp.get_inventory(defines.inventory.item_main)[bp.active_index]
-  end
+  local bp = blueprint.get_blueprint_to_setup(ev.player_index)
   blueprint.filter_miniloaders(bp)
 end
 
@@ -408,6 +387,8 @@ event.register(defines.events.on_marked_for_deconstruction, on_marked_for_decons
 event.register(defines.events.on_canceled_deconstruction, on_canceled_deconstruction)
 
 event.register(defines.events.on_marked_for_upgrade, on_marked_for_upgrade)
+
+event.register(defines.events.on_gui_closed, on_gui_closed)
 
 event.register(defines.events.on_runtime_mod_setting_changed, function(ev)
   if ev.setting == "miniloader-snapping" then

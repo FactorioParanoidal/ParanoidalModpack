@@ -129,6 +129,33 @@ function M.bounding_box(bp)
   }
 end
 
+function M.get_blueprint_to_setup(player_index)
+  local opened_blueprint = global.previous_opened_blueprint_for[player_index]
+  if opened_blueprint and opened_blueprint.tick == game.tick then
+    return opened_blueprint.blueprint
+  end
+
+  local player = game.players[player_index]
+
+  local blueprint_to_setup = player.blueprint_to_setup
+  if blueprint_to_setup
+  and blueprint_to_setup.valid_for_read then
+    return blueprint_to_setup
+  end
+
+  local cursor_stack = player.cursor_stack
+  if cursor_stack
+  and cursor_stack.valid_for_read
+  and cursor_stack.is_blueprint
+  and cursor_stack.is_blueprint_setup() then
+    local bp = cursor_stack
+    while bp.is_blueprint_book do
+      bp = bp.get_inventory(defines.inventory.item_main)[bp.active_index]
+    end
+    return bp
+  end
+end
+
 function M.filter_miniloaders(bp)
   local bp_entities = bp.get_blueprint_entities()
   if not bp_entities then

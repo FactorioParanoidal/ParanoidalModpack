@@ -206,6 +206,7 @@ end
 
 local function on_built_entity(ev)
   local entity = ev.created_entity
+  if not entity.valid then return end
   local ccds = entity.circuit_connection_definitions or {}
   for _, ccd in ipairs(ccds) do
     raise_on_wire_added(entity, ccd)
