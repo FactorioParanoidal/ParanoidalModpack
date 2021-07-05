@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.3
+Date: 2021-XX-XX
+  Minor Features:
+    - Enhance snapping to support snapping to belt ghosts. (https://mods.factorio.com/mod/miniloader/discussion/60128a9dba88bde39b6bb0cb)
+  Bugfixes:
+    - Prevent Select New Contents button from creating blueprints with multiple miniloaders in the same position. (https://mods.factorio.com/mod/miniloader/discussion/60b12ec417dbea783f0ec190)
+    - Add workaround when placing blueprints with multiple miniloaders in the same position. (https://mods.factorio.com/mod/miniloader/discussion/60b12ec417dbea783f0ec190)
+    - Fix configuration of miniloaders placed in editor from blueprints while time is frozen. (https://mods.factorio.com/mod/miniloader/discussion/605c918a8618fe16b0713f8c)
+---------------------------------------------------------------------------------------------------
 Version: 1.14.2
 Date: 2021-05-27
   Bugfixes:

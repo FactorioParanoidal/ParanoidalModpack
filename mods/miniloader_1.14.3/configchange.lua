@@ -95,6 +95,15 @@ add_migration{
   end,
 }
 
+add_migration{
+  name = "v1_14_3_add_global_previous_opened_blueprint_for",
+  low = {0,0,0},
+  high = {1,14,3},
+  task = function()
+    global.previous_opened_blueprint_for = {}
+  end,
+}
+
 function configchange.on_mod_version_changed(old)
   old = version.parse(old)
   for _, migration in ipairs(all_migrations) do

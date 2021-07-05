@@ -2,13 +2,17 @@ local snapping = {}
 
 local util = require("lualib.util")
 
-local beltTypes = {
+local belt_types = {
   ["loader"] = true,
   ["loader-1x1"] = true,
   ["splitter"] = true,
   ["underground-belt"] = true,
   ["transport-belt"] = true
 }
+
+local function is_belt(entity)
+  return belt_types[entity.type] or entity.type == "entity-ghost" and belt_types[entity.ghost_type]
+end
 
 -- set loader direction according to adjacent belts
 -- returns true if the loader and entity are directionally aligned
@@ -140,7 +144,7 @@ local function find_loader_by_underground_belt(ug_belt)
 end
 
 local function is_snapping_target(entity)
-  local prototype = entity.prototype
+  local prototype = entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype
   return prototype.has_flag("player-creation") and not prototype.has_flag("placeable-off-grid")
 end
 
@@ -169,7 +173,7 @@ end
 -- called when entity was rotated or non loader was built
 function snapping.check_for_loaders(event)
   local entity = event.created_entity or event.entity
-  if not beltTypes[entity.type] then
+  if not is_belt(entity) then
     return
   end
 
@@ -194,12 +198,12 @@ end
 function snapping.snap_loader(loader)
   local entities = find_entity_by_loader(loader)
   for _, ent in ipairs(entities) do
-    if beltTypes[ent.type] and snap_loader_to_target(loader, ent) then
+    if is_belt(ent) and snap_loader_to_target(loader, ent) then
       return
     end
   end
   for _, ent in ipairs(entities) do
-    if not beltTypes[ent.type] and idiot_snap(loader, ent) then
+    if not is_belt(ent) and idiot_snap(loader, ent) then
       return
     end
   end
