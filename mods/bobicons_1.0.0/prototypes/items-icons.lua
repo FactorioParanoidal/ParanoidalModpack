@@ -1587,8 +1587,8 @@ data.raw.item["angels-silicon-wafer"].icon_size = 128
 
 --data.raw.item["angels-rod-aluminium"].icon = "__bobicons__/graphics/icons/angelssmelting/rod-aluminium-64.png" 
 --data.raw.item["angels-rod-aluminium"].icon_size = 64
-data.raw.item["angels-rod-iron"].icon = "__bobicons__/graphics/icons/angelssmelting/rod-iron-64.png"
-data.raw.item["angels-rod-iron"].icon_size = 64
+data.raw.item["iron-stick"].icon = "__bobicons__/graphics/icons/angelssmelting/rod-iron-64.png"
+data.raw.item["iron-stick"].icon_size = 64
 data.raw.item["angels-rod-steel"].icon = "__bobicons__/graphics/icons/angelssmelting/rod-steel-64.png" 
 data.raw.item["angels-rod-steel"].icon_size = 64
 

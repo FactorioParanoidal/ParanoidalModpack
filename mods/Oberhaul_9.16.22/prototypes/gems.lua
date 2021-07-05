@@ -24,7 +24,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "a-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 {
@@ -47,7 +47,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "b-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 {
@@ -70,7 +70,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "c-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 {
@@ -93,7 +93,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "d-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 {
@@ -116,7 +116,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "e-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 {
@@ -139,7 +139,7 @@ data:extend({
 	icon_size = 32,	
     subgroup = "bob-gems-ore",
     order = "f-0",
-    category = "ore-sorting-t1",
+    category = "ore-sorting",
     enabled = "false",
 },
 })

@@ -19,9 +19,8 @@ data:extend(
       { type = "item", name = "pipe", amount = 4},
     },
     order = "ya",
-  }
---[[ drd
-  ,{
+  },
+  {
     type = "recipe",
     name = "angels-iron-pipe-to-ground-casting",
     category = "casting",
@@ -37,7 +36,6 @@ data:extend(
     },
     order = "yb",
   }
-  ]]-- drd
 })
 -- bobs pipe casting
 if mods["boblogistics"] and mods["bobplates"] then
@@ -55,7 +53,7 @@ if mods["boblogistics"] and mods["bobplates"] then
 
     local ug_multi = {
       ["copper"] = 150,
-      ["stone"] = 15,
+      --["stone"] = 15, --drd
       ["steel"] = 170,
       ["plastic"] = 170,
       ["titanium"] = 210,
@@ -85,12 +83,14 @@ if mods["boblogistics"] and mods["bobplates"] then
       u_pipe.subgroup = "angels-alloys-casting"
     end
     --stone
+	--[[ --drd
     if metal == "stone" then
       m_pipe.ingredients[1] = { type = "item", name = "stone", amount = 4*5}
       m_pipe.category = "sintering"
       u_pipe.ingredients[1] = { type = "item", name = "stone", amount = ug_multi[metal]*5}
       u_pipe.category = "sintering"
     end
+	]]--drd
     --copper-tungsten
     if metal == "copper-tungsten" then
       m_pipe.ingredients[1] = { type = "item", name = "powdered-tungsten", amount = 3}
