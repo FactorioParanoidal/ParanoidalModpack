@@ -245,9 +245,10 @@ end
 
 local function on_pre_build(ev)
   local player = game.players[ev.player_index]
-  if not blueprint.is_setup_bp(player.cursor_stack) then return end
+  local bp_entities = player.get_blueprint_entities()
+  if not bp_entities or not next(bp_entities) then return end
   local bp = player.cursor_stack
-  local bp_area = blueprint.bounding_box(bp)
+  local bp_area = blueprint.bounding_box(bp_entities)
   local surface_area = util.expand_box(
     util.move_box(
       util.rotate_box(bp_area, ev.direction),

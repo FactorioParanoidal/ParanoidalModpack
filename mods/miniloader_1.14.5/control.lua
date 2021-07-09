@@ -224,18 +224,20 @@ local function on_mined(ev)
   end
 end
 
-local function on_placed_blueprint(ev, player, bp)
+local function on_placed_blueprint(ev, player, bp_entities)
+  if not next(bp_entities) then return end
+
   global.player_placed_blueprint[ev.player_index] = ev.tick
 
   local surface = player.surface
-  local bp_area = blueprint.bounding_box(bp)
+  local bp_area = blueprint.bounding_box(bp_entities)
   local surface_area = util.move_box(
     util.rotate_box(bp_area, ev.direction),
     ev.position
   )
 
   local blueprint_contained_miniloader = false
-  for _, bp_entity in pairs(bp.get_blueprint_entities() or {}) do
+  for _, bp_entity in pairs(bp_entities) do
     if util.is_miniloader_inserter_name(bp_entity.name) then
       blueprint_contained_miniloader = true
       break
@@ -278,9 +280,9 @@ end
 local function on_pre_build(ev)
   local player_index = ev.player_index
   local player = game.players[player_index]
-  local cursor_stack = player.cursor_stack
-  if cursor_stack and blueprint.is_setup_bp(cursor_stack) then
-    return on_placed_blueprint(ev, player, cursor_stack)
+  local bp_entities = player.get_blueprint_entities()
+  if bp_entities then
+    return on_placed_blueprint(ev, player, bp_entities)
   end
 end
 
@@ -323,6 +325,7 @@ end
 
 local function on_setup_blueprint(ev)
   local bp = blueprint.get_blueprint_to_setup(ev.player_index)
+  if not bp then return end
   blueprint.filter_miniloaders(bp)
 end
 

@@ -1,6 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.5
+Date: 2021-07-05
+  Bugfixes:
+    - Fix crash in on_pre_build.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.4
+Date: 2021-07-05
+  Bugfixes:
+    - Fix snapping being incorrectly applied to blueprint ghosts when blueprints are placed directly from the blueprint library. (https://mods.factorio.com/mod/miniloader/discussion/60b12ec417dbea783f0ec190)
+    - Avoid crash when updating blueprints from inside blueprint books or the blueprint library. (https://mods.factorio.com/mod/miniloader/discussion/60e0ee0d3277109b8056f5d4)
+----------------------------------------------------------------------------------------------------
 Version: 1.14.3
-Date: 2021-XX-XX
+Date: 2021-07-03
   Minor Features:
     - Enhance snapping to support snapping to belt ghosts. (https://mods.factorio.com/mod/miniloader/discussion/60128a9dba88bde39b6bb0cb)
   Bugfixes:
