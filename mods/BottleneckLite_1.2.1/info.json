@@ -1,0 +1,14 @@
+{
+  "name": "BottleneckLite",
+  "version": "1.2.1",
+  "title": "Bottleneck Lite",
+  "author": "raiguard",
+  "contact": "Discord: raiguard#7402",
+  "homepage": "https://github.com/raiguard/Factorio-BottleneckLite",
+  "factorio_version": "1.1",
+  "dependencies": ["? base >= 1.1.34", "flib >= 0.7.0", "(?) space-exploration-postprocess"],
+  "description": "A tool for locating bottlenecks in your factory, with zero runtime overhead and instant response to changes in status.",
+  "package": {
+    "git_publish_branch": "main"
+  }
+}
