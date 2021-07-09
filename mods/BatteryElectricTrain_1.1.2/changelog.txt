@@ -1,0 +1,24 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-06-17
+  Features:
+    - Return a discharged battery pack when mining or deconstructing a battery-electric locomotive with a partially discharged battery pack inside, instead of losing it.
+  Locale:
+    - German locale added.
+  Modding:
+    - Industrial Revolution 2 is now compatible.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-06-15
+  Bugfixes:
+    - Cheatsy wagon top speed takes fuel bonus into account.
+    - Reduced dependency on vanilla electric furnace, in case another mod removed it.
+  Ease of use:
+    - Cheatsy speed and power settings mention min and max values in the description tooltip.
+  Modding:
+    - Space Exploration: Chargers can be placed in space.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-06-09
+  Info:
+    - Initial release for Factorio 1.1

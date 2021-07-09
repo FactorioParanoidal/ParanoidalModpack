@@ -1,0 +1,8 @@
+{
+	"name":			"BatteryElectricTrain",
+	"version":		"1.1.2",
+	"title":		"Battery-Electric Train",
+	"author":		"CatWEax",
+	"factorio_version":	"1.1",
+	"description":		"Electric trains, but UPS-friendly. Adds battery-powered trains, reusable battery packs and charging facilities."
+}
