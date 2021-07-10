@@ -275,9 +275,9 @@ end
 
 -- Adds a resistance of ALL damage types to an item type
 function JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(Raw, Percent,weaknesstype)
-	if Raw ~= nil then	
+	--if Raw ~= nil then	
 		for k, v in pairs(data.raw["damage-type"]) do
 				Add_Damage_Resists_to_Units(v.name, Raw, Percent, weaknesstype)
 		end
-	end
+	--end
 end

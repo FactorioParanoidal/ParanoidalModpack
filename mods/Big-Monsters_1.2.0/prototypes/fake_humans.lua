@@ -2,7 +2,7 @@
 	 * * * FAKE HUMAN PROTOTYPES * * * 
 								by MFerrari 
 
-v 1.5 30/03/2021 - grenade projectile - resistances
+v 1.61 10/07/2021 - hidden from bonus gui
 ]]
 local sounds = require("__base__/prototypes/entity/sounds.lua")
 require "utils"
@@ -203,6 +203,53 @@ end
 
 
 
+
+
+-- cool 90 range 25   "explosive-cannon-projectile",
+local function make_cannon_attack(projectile,damage_modifier,range,cooldown)
+ return   {
+      type = "projectile",
+	  sound = sounds.tank_gunshot,
+      cooldown = cooldown, 
+      range = range,
+	  flags = {"not-on-map"},
+	  ammo_category = "cannon-shell",
+      warmup = 10,
+	  min_range = 10,
+	  damage_modifier = damage_modifier,
+      ammo_type =
+      {
+        category = "cannon-shell",
+        target_type = "entity",
+        action =
+        {
+          type = "direct",
+          action_delivery =
+          {
+            {
+          type = "projectile",
+          projectile = projectile,
+          starting_speed = 1,
+		  source_offset = {0, -10},
+          source_effects =
+          {
+            type = "create-entity",
+            entity_name = "explosion-hit",
+          },
+            }
+          }
+        }
+      },
+    }
+
+end
+
+
+
+
+
+
+
 local function make_smg_attack(damage,range,cooldown)
 return   {
       type = "projectile",
@@ -350,13 +397,15 @@ if attack_parameters.ammo_category and attack_parameters.ammo_category == "melee
 
 local name = base_name..surname
   local fake_human = table.deepcopy(data.raw.unit["medium-biter"])
+  fake_human.flags = {"hidden", "placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"}
   fake_human.name=name..'_'..level
   fake_human.localised_name = {"",{"entity-name.fake_human_" ..surname},' '..level}
   fake_human.selection_box = scale_box(table.deepcopy(character.selection_box),scale)
   fake_human.sticker_box   = scale_box(table.deepcopy(character.sticker_box),scale)
-  fake_human.icon=character.icon
-  fake_human.icon_size=character.icon_size
-  fake_human.icons=character.icons
+	fake_human.icon = path.. "graphics/fake_human.png"
+	fake_human.icon_size = 64
+    fake_human.icon_mipmaps = 4 
+
   fake_human.map_color = color
   fake_human.enemy_map_color = {r = 1}
   fake_human.max_health = 200*level*hp_mp*hp_multiplier
@@ -367,12 +416,12 @@ local name = base_name..surname
   fake_human.attack_parameters = attack_parameters
   fake_human.attack_parameters.animation = att_anim
   fake_human.run_animation = table.deepcopy(character.animations[armor].running)
-  fake_human.pollution_to_join_attack = 500 * level
+  fake_human.pollution_to_join_attack = 10 + level * 10
   fake_human.corpse = fake_human.name.."-corpse"
   fake_human.has_belt_immunity = true
   fake_human.rotation_speed = 0.05
   fake_human.vision_distance = 100
-  fake_human.movement_speed = 0.05 + level/30
+  fake_human.movement_speed = 0.05 + level/100
  -- fake_human.dying_sound = nil
   fake_human.working_sound = nil 
   fake_human.destroy_when_commands_fail = false
@@ -435,7 +484,8 @@ local name = base_name..surname
     corpse
   }
 
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[fake_human.name], level)
+--if not string.find(surname, "boss") then 
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[fake_human.name], level) 
 
 end
 
@@ -455,6 +505,9 @@ create_fake_human('erocket',k,armor,colors.red,scale, make_rocket_attack(1+ k/5,
 create_fake_human('grenade',k,armor,colors.lightgrey,scale, make_grenade_attack(1+ k/5,30+k,120-k,"grenade",30)) -- damage,range,cooldown
 create_fake_human('cluster_grenade',k,armor,colors.brown,scale, make_grenade_attack(1+ k/5,35+k,120-k,"cluster-grenade",30)) -- damage,range,cooldown
 create_fake_human('nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(1+ k/5,40+k,60*10,"bm-small-atomic-rocket",30)) -- damage,range,cooldown
+
+create_fake_human('cannon',k,armor,colors.orange,scale, make_cannon_attack("cannon-projectile",1+ k/5,30+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
+create_fake_human('cannon_explosive',k,armor,colors.orange,scale, make_cannon_attack("explosive-cannon-projectile",1+ k/5,35+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
 end
 
 
@@ -477,15 +530,20 @@ create_fake_human('boss_pistol_gunner',k,armor,colors.yellow,scale,make_smg_atta
 create_fake_human('boss_sniper',k,armor,colors.green,scale,make_sniper_attack(200+k*30,89+k,60*5,'sniper-beam'),boss_hpmp) -- damage,range,cooldown
 create_fake_human('boss_laser',k,armor,colors.purple,scale,make_beam_attack(8 + k*2,"laser-beam"),boss_hpmp) -- damage,range,cooldown
 create_fake_human('boss_electric',k,armor,colors.blue,scale,make_beam_attack(10 + k*2,'electric-beam'),boss_hpmp) -- damage,range,cooldown
-create_fake_human('boss_rocket',k,armor,colors.yellow,scale, make_rocket_attack(2+ k/2,40+k,60-k,"rocket"),boss_hpmp) -- damage,range,cooldown
-create_fake_human('boss_erocket',k,armor,colors.red,scale, make_rocket_attack(1+ k/2,40+k,60-k,"explosive-rocket"),boss_hpmp) -- damage,range,cooldown
+create_fake_human('boss_rocket',k,armor,colors.yellow,scale, make_rocket_attack(2+ k/2,40+k,60-k,"rocket"),boss_hpmp) -- (damage_modifier,range,cooldown,projectile,min_range)
+create_fake_human('boss_erocket',k,armor,colors.red,scale, make_rocket_attack(1+ k/2,40+k,60-k,"explosive-rocket"),boss_hpmp) -- (damage_modifier,range,cooldown,projectile,min_range)
 
 create_fake_human('boss_grenade',k,armor,colors.lightgrey,scale, make_grenade_attack(3+ k/5,50+k,120-k,"grenade",35),boss_hpmp) -- damage,range,cooldown
 create_fake_human('boss_cluster_grenade',k,armor,colors.brown,scale, make_grenade_attack(3+ k/5,55+k,120-k,"cluster-grenade",35),boss_hpmp) -- damage,range,cooldown
-create_fake_human('boss_nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(3+ k/5,50+k,60*10,"bm-small-atomic-rocket",35),boss_hpmp) -- damage,range,cooldown
+create_fake_human('boss_nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(3+ k/5,50+k,60*10,"bm-small-atomic-rocket",35),boss_hpmp) -- (damage_modifier,range,cooldown,projectile,min_range)
+
+create_fake_human('boss_cannon_explosive',k,armor,colors.orange,scale, make_cannon_attack("explosive-cannon-projectile", 3+ k/5,50+k,60-k),boss_hpmp) -- (projectile,damage_modifier,range,cooldown)
+
+
+
 
 local res=5+k*2
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_melee_'..k], res,weakness[x])
+--JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_melee_'..k], res,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_machine_gunner_'..k], res,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_pistol_gunner_'..k], res,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_sniper_'..k], res,weakness[x])
@@ -493,9 +551,14 @@ JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_electric_'..k], res,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_rocket_'..k], res,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_erocket_'..k], res,weakness[x])
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_grenade'..k], res,weakness[x])
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_cluster_grenade'..k], res,weakness[x])
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_nuke_rocket'..k], res,weakness[x])
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_grenade_'..k], res,weakness[x])
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_cluster_grenade_'..k], res,weakness[x])
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_nuke_rocket_'..k], res,weakness[x])
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'boss_cannon_explosive_'..k], res,weakness[x])
 end
+
+-- ultimates
+create_fake_human('ultimate_boss_cannon',20,3,colors.white,3, make_cannon_attack("explosive-cannon-projectile", 5,80,20),4000) -- (projectile,damage_modifier,range,cooldown)
+JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'ultimate_boss_cannon_20'], 35)
 
 end

@@ -1,5 +1,6 @@
 util = require("util")
 colors = require("colors")
+path = '__Big-Monsters__/'
 require "unit_functions"
 require("utils")
 require "prototypes.brutals"
