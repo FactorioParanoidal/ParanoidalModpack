@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+  Changes:
+    - Made human enemies hidden from bonus tab
+    - Added new humans/boss equipped with cannon
+    - Added new ultimate boss, called by remote command only
+    - Raised HP: evil spidertron
+  Bugfixes:
+    - Fixed human boss resistances
+---------------------------------------------------------------------------------------------------
 Version: 1.1.9
   Bugfixes:
     - Fixed a reported crash

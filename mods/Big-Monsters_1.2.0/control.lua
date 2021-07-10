@@ -217,6 +217,20 @@ for p=1,#global.player_forces do
 						end
 
 
+				elseif the_event=='ultimate_boss' then
+					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,10)
+					local rchunk = player_chunks[math.random(#player_chunks)]
+					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
+					if spawn then
+						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,'tc_fake_human_ultimate_boss_cannon_20')
+						if global.show_alerts then 
+							pforce.print({"bm-txt-alert"},colors.lightred)
+							pforce.print({"bm-txt-biterzilla"},colors.lightred)
+							pforce.play_sound{path='tc_sound_siren'}
+							end	
+						if global.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
+						end
+
 				end
 			
 			end --pcount>0
@@ -351,18 +365,18 @@ end
 
 
 script.on_nth_tick(60*60, function (event)
-if global.next_event<game.tick and global.days>0 then 
-	CreateNewEvent()
-	global.next_event = game.tick + (global.days * (7 + math.random(-2,2)) * 60 * 60)
-	end
+if global.days>0 then 
+	if global.next_event<game.tick then 
+		CreateNewEvent()
+		global.next_event = game.tick + (global.days * (7 + math.random(-2,2)) * 60 * 60)
+		end
 
-if global.next_silo_event < game.tick and global.enable_silo_attack then 
-	Create_Silo_Attack()
-	global.next_silo_event = game.tick + (global.days * (7 + math.random(-4,-2)) * 60 * 60)
+	if global.next_silo_event < game.tick and global.enable_silo_attack then 
+		Create_Silo_Attack()
+		global.next_silo_event = game.tick + (global.days * (7 + math.random(-4,-2)) * 60 * 60)
+		end
 	end
 end)
-
-
 
 
 
@@ -485,8 +499,8 @@ if evolution>0.17 then
 	table.insert(list,'tc_fake_human_pistol_gunner')
 	end
 if evolution>0.3 then table.insert(list,'tc_fake_human_grenade') end
-if evolution>0.60 then table.insert(list,'tc_fake_human_rocket') end
-if evolution>0.75 then table.insert(list,'tc_fake_human_erocket') table.insert(list,'tc_fake_human_cluster_grenade') end
+if evolution>0.60 then table.insert(list,'tc_fake_human_rocket') table.insert(list,'tc_fake_human_cannon')  end
+if evolution>0.75 then table.insert(list,'tc_fake_human_erocket') table.insert(list,'tc_fake_human_cluster_grenade') table.insert(list,'tc_fake_human_cannon_explosive') end
 if global.allow_nuker and evolution>0.96 then table.insert(list,'tc_fake_human_nuke_rocket') end
 
 local n=math.min(10, math.max(math.ceil(evolution*10),1))
@@ -507,6 +521,7 @@ if evolution>0.96 then
 if evolution>0.98 then 
 	table.insert(list,'tc_fake_human_boss_erocket')
 	table.insert(list,'tc_fake_human_boss_cluster_grenade') 
+	table.insert(list,'tc_fake_human_boss_cannon_explosive') 
 	end
 local n=math.min(10, math.max(math.ceil((evolution - 0.9) *100),1))
 return list[math.random(#list)] ..'_'..n
@@ -629,14 +644,12 @@ end
 
 --------------------------------------------------------
 
-
-function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3)
+function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3,specific_zilla)
 local zilla, name, group
 
 local evo = game.forces.enemy.evolution_factor
-if evo<0.9 then 
+if evo<0.9 and (not specific_event) then 
 	name = get_random_lesser_boss()
-
 	else
 
 	local list = {"biterzilla1","biterzilla2","biterzilla3","maf-giant-acid-spitter","maf-giant-fire-spitter","bm-motherbiterzilla"}
@@ -654,6 +667,8 @@ if evo<0.9 then
 		end 
 	end
 
+if specific_zilla then name=specific_zilla end
+
 local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 	if position then
 		group = surface.create_unit_group{position = position, force = game.forces.enemy}
@@ -663,8 +678,9 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		group.add_member(zilla)
 		
 		local effect 
-		if evo>0.6 and math.random (3)==1 then effect='defender_capsules' end 
-		if evo>0.85 and math.random (3)==1 then effect='grenade_launcher' end
+		if specific_zilla then effect='all_buff' 
+			elseif (evo>0.6 and math.random (3)==1) then effect='defender_capsules' 
+			elseif (evo>0.85 and math.random (3)==1) then effect='grenade_launcher' end
 		table.insert (global.biterzillas, {entity=zilla, effect = effect})
 
 		if evo>=0.9 then 
@@ -677,7 +693,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		   if math.random(1,2)==1 then
 		      CallFrenzyAttack(surface,attack1)
 		      else
-		      create_invasion(surface,attack1,pcount)
+		      if global.chances.invasion.chance>=math.random(100) then create_invasion(surface,attack1,pcount) end
 		      end
 			end   
 		end
@@ -772,16 +788,21 @@ for z=#global.biterzillas,1,-1 do
 			zilla.surface.create_entity{name ="maf-cluster-fire-projectile", target_position={x=xx,y=yy}, position={x=xx,y=yy}, source=zilla, force=zilla.force, speed=1}
 			end	
 		elseif string.find(zilla.name, "biterzilla2") then 
-				if math.random(1,3)==1 then  zilla.surface.create_entity{name="electric-shock2", position=zilla.position, force=zilla.force}  end
+				if math.random(3)==1 then  zilla.surface.create_entity{name="electric-shock2", position=zilla.position, force=zilla.force}  end
 		elseif string.find(zilla.name, "motherbiterzilla") then if math.random(1,4)==1 then Brood(zilla) end
-		elseif string.find(zilla.name, "tc_fake_human_boss") and math.random(1,40)==1 then BroodHumans(zilla) 
-		elseif effect and effect=='defender_capsules' then 
+		elseif string.find(zilla.name, "boss") and math.random(1,40)==1 then BroodHumans(zilla) 
+		end
+		if effect and (effect=='defender_capsules' or effect=='all_buff') then 
 			local ent = {'destroyer','defender'}
-				if math.random(3)==1 then zilla.surface.create_entity{name=ent[math.random(#ent)],  position=zilla.position,target=zilla,force=zilla.force} end
-		elseif effect and effect=='grenade_launcher' and math.random(5)==1 then
-			local enemy = zilla.surface.find_nearest_enemy{position=zilla.position, max_distance=35, force=zilla.force} --zilla.force
+			if math.random(3)==1 then zilla.surface.create_entity{name=ent[math.random(#ent)],  position=zilla.position,target=zilla,force=zilla.force} end
+			end
+		if effect and (effect=='grenade_launcher' or effect=='all_buff') and math.random(5)==1 then
+			local d=35
+			if effect=='all_buff' then d=60 end
+			local enemy = zilla.surface.find_nearest_enemy{position=zilla.position, max_distance=d, force=zilla.force} --zilla.force
 			if enemy and enemy.valid and enemy.name~='entity-ghost' and enemy.type~='entity-ghost' and enemy.destructible and enemy.health then
 				local weap = {'explosive-rocket','grenade'}
+				if string.find(zilla.name, "ultimate") then table.insert(weap,'bm-small-atomic-rocket') table.insert(weap,'cluster-grenade') end
 				zilla.surface.create_entity{name=weap[math.random(#weap)], target=enemy, position=zilla.position, force=zilla.force, speed=0.4}
 				end
 		end	
@@ -1003,7 +1024,7 @@ for _, e in pairs(global.other_enemies) do if e and e.valid then e.destroy() end
 global.other_enemies = {}
 end
 
-local event_names = {'biterzilla','brutals','soldiers','worms','volcano','invasion','swarm','spidertron'}
+local event_names = {'biterzilla','brutals','soldiers','worms','volcano','invasion','swarm','spidertron','ultimate_boss'}
 
 function interface.create_event(the_event,surfacename,forcename)
 if (not the_event) or in_list(event_names, the_event) then
@@ -1051,6 +1072,8 @@ remote.add_interface( "bigmonster", interface )
  /c remote.call( "bigmonster", "create_event", "invasion")
  /c remote.call( "bigmonster", "create_event", "swarm")
  /c remote.call( "bigmonster", "create_event", "spidertron")
+
+ /c remote.call( "bigmonster", "create_event", "ultimate_boss")
 
 
  Call specific event for nauvis surface only, to all player forces

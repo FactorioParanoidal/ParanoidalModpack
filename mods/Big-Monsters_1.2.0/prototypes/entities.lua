@@ -589,7 +589,7 @@ data:extend(
 
 local spider_droid = table.deepcopy(data.raw["spider-vehicle"].spidertron)
 spider_droid.name="bm-spidertron_"..L 
-spider_droid.max_health=(20000 + L*2000) * BIGHPMult
+spider_droid.max_health=(50000 + L*5000) * BIGHPMult
 spider_droid.localised_name = {"",{"entity-name.spidertron"},' '..L}
 spider_droid.hide_resistances = false
 spider_droid.inventory_size=1
