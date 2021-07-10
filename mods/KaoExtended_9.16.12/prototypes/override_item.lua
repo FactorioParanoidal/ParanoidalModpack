@@ -1,12 +1,3 @@
---FUEL VALUES ANGELS CARBON
-
-data.raw["item"]["coal-crushed"].fuel_value = "2.5MJ" --3.5
-data.raw["item"]["solid-coke"].fuel_value = "3MJ" --4.5
-data.raw["item"]["solid-carbon"].fuel_value = "4MJ" --5.5
---data.raw["item"]["pellet-coke"].fuel_value = "19MJ"
-
---data.raw["item"]["wood-bricks"].fuel_value = "28MJ"
-
 --bobmodules
 --clean godmodules from low-tier components
 bobmods.lib.recipe.remove_ingredient ("god-module-1", "module-circuit-board")
@@ -48,21 +39,9 @@ bobmods.lib.recipe.remove_ingredient ("raw-speed-module-8", "processing-electron
 bobmods.lib.recipe.remove_ingredient ("green-module-8", "processing-electronics")
 bobmods.lib.recipe.remove_ingredient ("raw-productivity-module-8", "processing-electronics")
 
---Bio-Industries
-data.raw["item"]["wood-charcoal"].fuel_value = "5MJ"
-data.raw["item"]["bi-wooden-chest-large"].fuel_value = "32MJ"
-data.raw["item"]["bi-wooden-chest-huge"].fuel_value = "64MJ"
-data.raw["item"]["bi-wooden-chest-giga"].fuel_value = "128MJ"
-data.raw["item"]["bi-wooden-pole-big"].fuel_value = "7MJ"
-data.raw["item"]["bi-wooden-pole-huge"].fuel_value = "10MJ"
-data.raw["item"]["bi-wood-pipe"].fuel_value = "2MJ"
-data.raw["item"]["bi-wood-pipe-to-ground"].fuel_value = "8MJ"
 
 --ANGELS PETROCHEM
 
-data.raw["item"]["solid-rubber"].fuel_value = "5MJ"
-data.raw["item"]["solid-rubber"].fuel_category = "chemical"
-data.raw["item"]["solid-rubber"].fuel_emissions_multiplier = 3.5
 
 data.raw["storage-tank"]["angels-storage-tank-1"].fluid_box.base_area = 1250 --DrD 2000
 data.raw["storage-tank"]["angels-storage-tank-2"].fluid_box.base_area = 800 --DrD 1500
