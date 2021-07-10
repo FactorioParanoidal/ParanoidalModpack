@@ -90,7 +90,7 @@ data.raw.recipe["coolant-used-filtration-1"].ingredients =
 }
 data.raw.recipe["coolant-used-filtration-1"].results =
 {	  
-    {type="fluid", name="liquid-coolant", amount=97, temperature = 25}, --DrD 99
+    {type="fluid", name="liquid-coolant", amount=90, temperature = 25}, --DrD 99
     {type="item", name="filter-frame", amount=1},
 }
 data.raw.recipe["coolant-used-filtration-2"].ingredients =
@@ -100,7 +100,7 @@ data.raw.recipe["coolant-used-filtration-2"].ingredients =
 }
 data.raw.recipe["coolant-used-filtration-2"].results =
 {
-    {type="fluid", name="liquid-coolant", amount=99, temperature = 25}, --DrD 100
+    {type="fluid", name="liquid-coolant", amount=97, temperature = 25}, --DrD 100
     {type="item", name="filter-ceramic-used", amount=1},
 }
 data.raw.recipe["coolant-cool-200"].hidden = true
