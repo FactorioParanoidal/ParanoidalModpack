@@ -63,15 +63,20 @@ You can download the mod on the [mod portal](https://mods.factorio.com/mod/Short
 
 
 # Compatible mods
-**Selection tools from these mods are hidden from the inventory.**
+**Duplicate selection tools from these mods are removed from the inventory:**
+
+* Rail Signal Planner
+* Well Planner
+
+
+**Selection tools from these mods are hidden from the inventory:**
 
 * Circuit Checker
 * Orbital Ion Cannon (SE Edition)
 * Ore Eraser (continued)
-* Rail Signal Planner
 
 
-**Shortcuts from these mods are only available if a specific technology has been researched.**
+**Shortcuts from these mods are only available if a specific technology has been researched:**
 
 * Car/Tank/Spidertron Locator Button
 * Circuit Checker

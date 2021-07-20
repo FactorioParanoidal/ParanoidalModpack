@@ -104,10 +104,6 @@ if mods["Kux-OrbitalIonCannon"] and data.raw.item["ion-cannon-targeter"] and dat
 	hide_the_remote("ion-cannon-targeter", "orbital-ion-cannon", data.raw.item["ion-cannon-targeter"])
 end
 
-if mods["RailSignalPlanner"] and data.raw["selection-tool"]["rail-signal-planner"] then
-	hide_the_remote(nil, nil, data.raw["selection-tool"]["rail-signal-planner"])
-end
-
 if mods["OreEraser"] and data.raw["selection-tool"]["Ore Eraser"] then
 	hide_the_remote(nil, nil, data.raw["selection-tool"]["Ore Eraser"])
 end
