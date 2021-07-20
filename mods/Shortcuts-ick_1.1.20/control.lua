@@ -527,10 +527,20 @@ local allowed_items = {
 	"well-planner",
 	"winch"}
 
+local function remove_duplicate_tools(player, prototype_name)
+	for i=1, #player.get_main_inventory() do
+		if player.get_main_inventory()[i].valid_for_read and player.get_main_inventory()[i].name == prototype_name then
+			player.get_main_inventory()[i].clear()
+		end
+	end
+end
+
 local function give_shortcut_item(player, prototype_name)
 	if game.item_prototypes[prototype_name] and player.clear_cursor() then
-		if prototype_name == "well-planner" and player.get_main_inventory().find_item_stack("well-planner") then
-			player.get_main_inventory().find_item_stack("well-planner").clear()
+		if prototype_name == "well-planner" then
+			remove_duplicate_tools(player, "well-planner")
+		elseif prototype_name == "rail-signal-planner" then
+			remove_duplicate_tools(player, "rail-signal-planner")
 		elseif prototype_name == "spidertron-remote" then
 			for i=1, #player.get_main_inventory() do
 				if player.get_main_inventory()[i].valid_for_read and player.get_main_inventory()[i].name == "spidertron-remote" and player.get_main_inventory()[i].connected_entity == nil then
@@ -552,26 +562,26 @@ local function give_tree_killer(player, entity_types)
 	if player.cursor_stack.name == "tree-killer" then
 		player.cursor_stack.trees_and_rocks_only = false
 		local filters = {}
-			for _, type in pairs(entity_types) do
-				for _, entity in pairs(game.get_filtered_entity_prototypes({{filter = "type", type = type}})) do
-					if entity.has_flag("not-deconstructable") == false then
-						if #filters < 255 then
-							if type == "simple-entity" then
-								if game.entity_prototypes[entity.name].count_as_rock_for_filtered_deconstruction then
-									table.insert(filters, entity.name)
-								end
-							else
+		for _, type in pairs(entity_types) do
+			for _, entity in pairs(game.get_filtered_entity_prototypes({{filter = "type", type = type}})) do
+				if entity.has_flag("not-deconstructable") == false then
+					if #filters < 255 then
+						if type == "simple-entity" then
+							if game.entity_prototypes[entity.name].count_as_rock_for_filtered_deconstruction then
 								table.insert(filters, entity.name)
 							end
 						else
-							game.print("[img=utility.warning_icon] [color=yellow]Shortcuts for 1.1:[/color] Failed to ad a filter for all " .. type .. " prototypes (max. 255).")
-							break
+							table.insert(filters, entity.name)
 						end
+					else
+						game.print("[img=utility.warning_icon] [color=yellow]Shortcuts for 1.1:[/color] Failed to ad a filter for all " .. type .. " prototypes (max. 255).")
+						break
 					end
-			 end
+				end
+			end
 		end
 		player.cursor_stack.entity_filters = filters
- end
+	end
 end
 
 
