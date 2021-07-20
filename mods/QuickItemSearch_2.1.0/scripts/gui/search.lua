@@ -4,7 +4,6 @@ local math = require("__flib__.math")
 local constants = require("constants")
 local cursor = require("scripts.cursor")
 local search = require("scripts.search")
-local shared = require("scripts.shared")
 
 local infinity_filter_gui = require("scripts.gui.infinity-filter")
 local logistic_request_gui = require("scripts.gui.logistic-request")
@@ -159,17 +158,16 @@ function search_gui.open(player, player_table)
   search_gui.perform_search(player, player_table)
 
   global.update_search_results[player.index] = true
-  shared.register_on_tick()
 end
 
-function search_gui.close(player, player_table)
+function search_gui.close(player, player_table, force_close)
   local gui_data = player_table.guis.search
   local refs = gui_data.refs
   local state = gui_data.state
 
-  if state.selected_item_tick == game.ticks_played then
+  if not force_close and state.selected_item_tick == game.ticks_played then
     player.opened = refs.window
-  elseif not state.subwindow_open then
+  elseif force_close or not state.subwindow_open then
     refs.window.visible = false
     state.visible = false
     player.set_shortcut_toggled("qis-search", false)
@@ -204,10 +202,13 @@ function search_gui.reopen_after_subwindow(e)
 
     search_gui.perform_search(player, player_table)
 
-    player.opened = gui_data.refs.window
+    if player_table.settings.auto_close and player_table.confirmed_tick == game.ticks_played then
+      search_gui.close(player, player_table)
+    else
+      player.opened = gui_data.refs.window
+    end
 
     global.update_search_results[player.index] = true
-    shared.register_on_tick()
   end
 end
 
@@ -395,6 +396,10 @@ function search_gui.select_item(player, player_table, modifiers, index)
       state.selected_item_tick = game.ticks_played
       cursor.set_stack(player, player.cursor_stack, player_table, result.name)
       player.play_sound{path = "utility/confirm"}
+      -- Close the window after selection if desired
+      if player_table.settings.auto_close then
+        search_gui.close(player, player_table, true)
+      end
     end
   end
 end

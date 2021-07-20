@@ -9,7 +9,6 @@ local migrations = require("scripts.migrations")
 local player_data = require("scripts.player-data")
 local logistic_request = require("scripts.logistic-request")
 local search = require("scripts.search")
-local shared = require("scripts.shared")
 
 local infinity_filter_gui = require("scripts.gui.infinity-filter")
 local logistic_request_gui = require("scripts.gui.logistic-request")
@@ -63,6 +62,9 @@ end)
 event.register({"qis-confirm", "qis-shift-confirm", "qis-control-confirm"}, function(e)
   local player = game.get_player(e.player_index)
   local player_table = global.players[e.player_index]
+
+  -- HACK: This makes it easy to check if we should close the search GUI or not
+  player_table.confirmed_tick = game.ticks_played
 
   local is_shift = e.input_name == "qis-shift-confirm"
   local is_control = e.input_name == "qis-control-confirm"
@@ -272,32 +274,15 @@ end)
 
 -- TICK
 
-local function on_tick(e)
-  local deregister = true
-
+event.on_tick(function(e)
   if translation.translating_players_count() > 0 then
-    deregister = false
     translation.iterate_batch(e)
   end
 
   if next(global.update_search_results) then
-    deregister = false
     search_gui.update_for_active_players()
   end
-
-  if deregister then
-    event.on_tick(nil)
-  end
-end
-
-shared.register_on_tick = function()
-  if
-    translation.translating_players_count() > 0
-    or next(global.update_search_results)
-  then
-    event.on_tick(on_tick)
-  end
-end
+end)
 
 -- TRANSLATIONS
 

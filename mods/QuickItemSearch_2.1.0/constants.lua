@@ -84,9 +84,10 @@ constants.logistic_point_data = {
 constants.results_limit = 50
 
 constants.settings = {
-  show_hidden = "qis-show-hidden",
+  auto_close = "qis-auto-close-window",
   fuzzy_search = "qis-fuzzy-search",
-  spawn_items_when_cheating = "qis-spawn-items-when-cheating"
+  show_hidden = "qis-show-hidden",
+  spawn_items_when_cheating = "qis-spawn-items-when-cheating",
 }
 
 return constants
