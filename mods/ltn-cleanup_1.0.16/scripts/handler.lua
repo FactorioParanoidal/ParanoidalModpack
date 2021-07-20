@@ -3,6 +3,7 @@ local scheduler = require("scheduler")
 local trains = require("trains")
 local ltn = require("ltn")
 local config = require("config")
+local gui = require("gui")
 
 local handler = {}
 
@@ -110,12 +111,44 @@ function handler.error_handler(callable, event)
     end
 end
 
+function handler.register_callbacks_init()
+    if global.last_ltn_update == nil then
+        global.last_ltn_update = {}
+    end
+
+    if global.delta_at_limit == nil then
+        global.delta_at_limit = {}
+    end
+
+    if global.delta_below_limit == nil then
+        global.delta_below_limit = {}
+    end
+
+    if global.gui_players == nil then
+        global.gui_players = {}
+        for index, _ in pairs(game.players) do
+            global.gui_players[index] = { elements = {} }
+        end
+    end
+
+    handler.register_callbacks()
+end
+
 function handler.register_callbacks()
     if remote.interfaces["logistic-train-network"] then
         script.on_event(remote.call("logistic-train-network", "on_requester_remaining_cargo"), function (event) handler.error_handler(handler.on_requester_remaining_cargo, event) end)
         script.on_event(remote.call("logistic-train-network", "on_delivery_failed"), function (event) handler.error_handler(handler.on_delivery_failed, event) end)
         script.on_event(remote.call("logistic-train-network", "on_stops_updated"), function (event) handler.error_handler(handler.on_stops_updated, event) end)
         script.on_event(defines.events.on_train_changed_state, function (event) handler.error_handler(handler.on_train_changed_state, event) end)
+
+        -- gui
+
+        script.on_event(defines.events.on_player_created, function (event) handler.error_handler(gui.on_player_created, event) end)
+        script.on_event(defines.events.on_player_removed, function (event) handler.error_handler(gui.on_player_removed, event) end)
+        --script.on_event(defines.events.on_gui_closed, function (event) handler.error_handler(gui.on_gui_closed, event) end)
+        script.on_event("ltn-cleanup-toggle-summary", function (event) handler.error_handler(gui.toggle_summary, event) end)
+        script.on_nth_tick(60 * 5, function (event) handler.error_handler(gui.update_data, event) end)
+        script.on_event(defines.events.on_gui_click, function (event) handler.error_handler(gui.on_gui_click, event) end)
     end
 end
 
