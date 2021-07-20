@@ -95,6 +95,53 @@ data:extend({
 data:extend({
 	{
 		type = "sound",
+		name = "ion-cannon-ready-TiberianSunCABAL-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunCABAL-FR/IonCannonReady.wav",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "ion-cannon-charging-TiberianSunCABAL-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunCABAL-FR/IonCannonCharging.wav",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "select-target-TiberianSunCABAL-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunCABAL-FR/SelectTarget.wav",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "unable-to-comply-TiberianSunCABAL-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunCABAL-FR/UnableToComply.wav",
+				volume = 0.75
+			},
+		},
+	},
+})
+
+data:extend({
+	{
+		type = "sound",
 		name = "ion-cannon-ready-TiberianSunEVA",
 		variations =
 		{
@@ -133,6 +180,53 @@ data:extend({
 		{
 			{
 				filename = ModPath.."sound/TiberianSunEVA/UnableToComply.ogg",
+				volume = 0.75
+			},
+		},
+	},
+})
+
+data:extend({
+	{
+		type = "sound",
+		name = "ion-cannon-ready-TiberianSunEVA-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunEVA-FR/IonCannonReady.wav",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "ion-cannon-charging-TiberianSunEVA-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunEVA-FR/IonCannonCharging.ogg",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "select-target-TiberianSunEVA-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunEVA-FR/SelectTarget.wav",
+				volume = 0.75
+			},
+		},
+	},
+	{
+		type = "sound",
+		name = "unable-to-comply-TiberianSunEVA-FR",
+		variations =
+		{
+			{
+				filename = ModPath.."sound/TiberianSunEVA-FR/UnableToComply.wav",
 				volume = 0.75
 			},
 		},
