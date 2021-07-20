@@ -263,6 +263,8 @@ function infinity_filter_gui.handle_action(e, msg)
     -- invoke `on_gui_closed` so the search GUI will be refocused
     player.opened = nil
   elseif msg.action == "set_filter" then
+    -- HACK: Makes it easy for the search GUI to tell that this was confirmed
+    player_table.confirmed_tick = game.ticks_played
     infinity_filter.set(player, player_table, filter_data, msg.temporary)
     -- invoke `on_gui_closed` so the search GUI will be refocused
     player.opened = nil

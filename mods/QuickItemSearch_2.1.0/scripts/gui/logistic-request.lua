@@ -346,6 +346,8 @@ function logistic_request_gui.handle_action(e, msg)
     -- invoke `on_gui_closed` so the search GUI will be refocused
     player.opened = nil
   elseif msg.action == "set_request" then
+    -- HACK: Makes it easy for the search GUI to tell that this was confirmed
+    player_table.confirmed_tick = game.ticks_played
     logistic_request_gui.set_request(player, player_table, msg.temporary, true)
     -- invoke `on_gui_closed` if the above function did not
     if not msg.temporary then

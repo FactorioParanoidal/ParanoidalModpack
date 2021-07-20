@@ -26,5 +26,12 @@ data:extend{
     default_value = true,
     order = "af",
     localised_description = spawn_item_tooltip
+  },
+  {
+    type = "bool-setting",
+    name = "qis-auto-close-window",
+    setting_type = "runtime-per-user",
+    default_value = false,
+    order = "ag"
   }
 }
