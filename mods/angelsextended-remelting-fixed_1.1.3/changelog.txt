@@ -1,0 +1,65 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.17.10
+Date: 29.09.2019
+  Bugfixes:
+    - Fixed Induction Furnace recipes. The Induction Furnace was using the hidden angels items instead of the override ones.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.9
+Date: 07.09.2019
+  Features:
+    - Added ShinyAngelGFX support.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.8
+Date: 07.09.2019
+  Bugfixes:
+    - Fixed Alloy Mixer bounding box and image.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.7
+Date: 07.09.2019
+  Major Features:
+    - Added Alloy Mixer. It adds the ability to mix molten metals into alloys directly.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.6
+Date: 06.09.2019
+  Bugfixes:
+    - Fixed MadClown01's Processing Magnesium icon path.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.5
+Date: 06.09.2019
+  Info:
+    - Changelog is using the standard format now.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+Date: 06.09.2019
+  Balancing:
+    - Marked Better_Strand_Casting as incompatible as it can lead to infinite resource abuse.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 06.09.2019
+  Translation:
+    - Added Russian translation.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 06.09.2019
+  Info:
+    - Added thumbnail.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 06.09.2019
+  Major Features:
+    - Added support for MadClown01's Processing.
+  Bugfixes:
+    - Fixed Bob's Mods recipes.
+  Balancing:
+    - Decreased output of molten liquid. Still debatable. Not sure if I should reduce the output at all. Not reducing will give the ability to increase the liquid count without limit when mixing metals.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 06.09.2019
+  Info:
+    - Initial release.
+    - Using MIT License. Document included.
+  Major Features:
+    - Metal plates remelting added.
+    - Added support for Bob's Mods.
+  Translation:
+    - English is available.
