@@ -1,0 +1,72 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2020-11-28
+  Changes:
+    - Make re-blacklisting entities less spammy.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2020-11-25
+  Changes:
+    - Code cleanup and optimizations.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2020-10-10
+  Bugfixes:
+    - Make sure to actually require the interface. #10
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-09-22
+  Features:
+    - Oblong pumps can now be rotated.
+  Changes:
+    - Removed rotate ghost since ghosts can't be rotated.
+    - Players with cheat_mode enabled can move more things including from different forces.
+    - Players with cheat_mode enabled bypass any can_reach checks.
+    - Blacklist interface now also writes to log when not silent.
+  Bugfixes:
+    - Fixed (hopefully) wire distance for circuit connectables.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-08-02
+  Bugfixes:
+    - Fix for building grid changes. Maybe Possibly.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-03-19
+  Changes:
+    - Remove Picker Atheneum Hard Dependency.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: ??????
+  Features:
+    - Update to Factorio 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: ??????
+  Features:
+    - Changed all error messages to local flying text to be consistent with base game.
+  Bugfixes:
+    - Fixed some logic checks.
+    - Fixed miners not correctly checking target spot for same ore type.
+    - Fixed some missing error messages.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: ??????
+  Bugfixes:
+    - Added sanity checks to remote API.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: ??????
+  Features:
+    - Added remote interfaces for adding/removing/checking the blacklist 'add_blacklist_name', 'remove_blacklist_name', 'get_blacklist_names'.
+  Bugfixes:
+    - Fixed tile ghost bug by adding tile ghosts to the blacklist.
+    - Small fixes and code improvements.
+    - Fixed rotating ghosts while using ghost cursor.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: ??????
+  Features:
+    - Seperated into its own mod.
+  Changes:
+    - Interface name has been changed to 'PickerDollies', Mod authors will need to update their scripts that use this.
