@@ -23,7 +23,7 @@ data:extend(
     name = "sci-component-1",
     icon = "__KaoExtended__/graphics/sci-component-1-128.png",
     icon_size = 128,
-
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "a[tech]",
     stack_size = 100
@@ -33,6 +33,7 @@ data:extend(
     name = "sci-component-2",
     icon = "__KaoExtended__/graphics/sci-component-2-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "b[tech]",
     stack_size = 100
@@ -69,6 +70,7 @@ data:extend(
     name = "sci-component-3",
     icon = "__KaoExtended__/graphics/sci-component-3-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "c[tech]",
     stack_size = 100
@@ -87,6 +89,7 @@ data:extend(
     name = "sci-component-4",
     icon = "__KaoExtended__/graphics/sci-component-4-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "d[tech]",
     stack_size = 100
@@ -105,6 +108,7 @@ data:extend(
     name = "sci-component-5",
     icon = "__KaoExtended__/graphics/sci-component-5-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "g[tech]",
     stack_size = 100
@@ -114,6 +118,7 @@ data:extend(
     name = "sci-component-l",
     icon = "__KaoExtended__/graphics/sci-component-L-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "f[tech]",
     stack_size = 100
@@ -123,6 +128,7 @@ data:extend(
     name = "sci-component-m",
     icon = "__KaoExtended__/graphics/sci-component-M-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "e1[tech]",
     stack_size = 100
@@ -132,6 +138,7 @@ data:extend(
     name = "sci-component-o",
     icon = "__KaoExtended__/graphics/sci-component-O-128.png",
     icon_size = 128,
+	icon_mipmaps = 4,
 	subgroup = "techrow1",
     order = "h[tech]",
     stack_size = 100
@@ -186,6 +193,7 @@ data:extend(
     name = "angels-iron-gear-wheel-stack",
     icon = "__KaoExtended__/graphics/smelting/iron-gear-wheel-stack.png",
 	icon_size = 64,
+	icon_mipmaps = 4,
     subgroup = "angels-iron-casting",
     order = "s",
     stack_size = 200
@@ -195,6 +203,7 @@ data:extend(
     name = "angels-steel-gear-wheel-stack",
     icon = "__KaoExtended__/graphics/smelting/steel-gear-wheel-stack.png",
 	icon_size = 64,
+	icon_mipmaps = 4,
     subgroup = "angels-steel-casting",
     order = "s",
     stack_size = 200

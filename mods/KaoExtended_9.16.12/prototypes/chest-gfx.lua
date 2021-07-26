@@ -24,3 +24,4 @@ data.raw["container"]["titanium-chest"].picture =
     }
 data.raw["item"]["titanium-chest"].icon = "__KaoExtended__/graphics/chest/hr-titanium-chest-icon.png"
 data.raw["item"]["titanium-chest"].icon_size = 64
+data.raw["item"]["titanium-chest"].icon_mipmaps = 4
