@@ -55,7 +55,7 @@ data:extend({
 		{"sci-component-2", 5},
 		{"sci-component-3", 2},
 		
-		{"cobalt-plate", 9},
+		{"cobalt-steel-alloy", 9},
 		{"invar-alloy", 6},
 		{"gold-plate", 10},
 		{"titanium-plate", 12},
