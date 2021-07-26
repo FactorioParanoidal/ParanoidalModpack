@@ -19,7 +19,7 @@ local item = {
 		subgroup = "defensive-structure",
 		order = "d[radar]-a[radar]",
 		place_result = name,
-		stack_size = 50
+		stack_size = 10
 	}
 	
 	
@@ -28,10 +28,10 @@ local recipe = {
 		name = name,
 		ingredients =
 		{
-			{"electronic-circuit", 5},
-			{"iron-gear-wheel", 5},
-			{"iron-plate", 10},
-			{"radar", 10},
+			{"basic-circuit-board", 10},
+			{"iron-gear-wheel", 10},
+			{"iron-plate", 50},
+			{"radar", 1},
 		},
 		result = name
 	}	
