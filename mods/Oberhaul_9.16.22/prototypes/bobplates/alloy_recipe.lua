@@ -8,8 +8,8 @@ data:extend(
     energy_required = 16,
     ingredients =
     {
-      {type="item", name="copper-plate", amount=3},
-      {type="item", name="tin-plate", amount=2},
+      {type="item", name="copper-plate", amount=5},
+      {type="item", name="tin-plate", amount=3},
     },
     results = 
     {
@@ -25,8 +25,8 @@ data:extend(
     energy_required = 16,
     ingredients =
     {
-      {type="item", name="copper-plate", amount=3},
-      {type="item", name="zinc-plate", amount=2},
+      {type="item", name="copper-plate", amount=5},
+      {type="item", name="zinc-plate", amount=3},
     },
     results = 
     {
@@ -39,11 +39,11 @@ data:extend(
     name = "copper-tungsten-alloy",
     enabled = false,
     category = "mixing-furnace",
-    energy_required = 16,
+    energy_required = 32,
     ingredients =
     {
-      {type="item", name="copper-plate", amount=2},
-      {type="item", name="powdered-tungsten", amount=3},
+      {type="item", name="copper-plate", amount=8},
+      {type="item", name="powdered-tungsten", amount=5},
     },
     results = 
     {
@@ -56,11 +56,11 @@ data:extend(
     name = "tungsten-carbide",
     enabled = false,
     category = "mixing-furnace",
-    energy_required = 6.4,
+    energy_required = 24,
     ingredients =
     {
-      {type="item", name="carbon", amount=1},
-      {type="item", name="tungsten-oxide", amount=3}, --DrD 1
+      {type="item", name="carbon", amount=5},
+      {type="item", name="tungsten-oxide", amount=5}, --DrD 1
     },
     results = 
     {
@@ -73,11 +73,11 @@ data:extend(
     name = "tungsten-carbide-2",
     enabled = false,
     category = "mixing-furnace",
-    energy_required = 12.8,
+    energy_required = 16,
     ingredients =
     {
-      {type="item", name="carbon", amount=1},
-      {type="item", name="powdered-tungsten", amount=2}, --DrD 1
+      {type="item", name="carbon", amount=4},
+      {type="item", name="powdered-tungsten", amount=4}, --DrD 1
     },
     results = 
     {
@@ -94,12 +94,12 @@ data:extend(
     ingredients =
     {
       {type="item", name="copper-plate", amount=8},
-      {type="item", name="tin-plate", amount=1},
-      {type="item", name="zinc-plate", amount=1},
+      {type="item", name="tin-plate", amount=2},
+      {type="item", name="zinc-plate", amount=2},
     },
     results = 
     {
-      {type="item", name="gunmetal-alloy", amount=5} --DrD 10
+      {type="item", name="gunmetal-alloy", amount=4} --DrD 10
     },
     allow_decomposition = false
   },
@@ -112,8 +112,8 @@ data:extend(
     energy_required = 16,
     ingredients =
     {
-      {type="item", name="nickel-plate", amount=2},
-      {type="item", name="iron-plate", amount=3},
+      {type="item", name="nickel-plate", amount=4},
+      {type="item", name="iron-plate", amount=6},
     },
     results = 
     {
@@ -126,11 +126,11 @@ data:extend(
     name = "nitinol-alloy",
     enabled = false,
     category = "mixing-furnace",
-    energy_required = 16,
+    energy_required = 32,
     ingredients =
     {
-      {type="item", name="nickel-plate", amount=3},
-      {type="item", name="titanium-plate", amount=2},
+      {type="item", name="nickel-plate", amount=6},
+      {type="item", name="titanium-plate", amount=4},
     },
     results = 
     {
@@ -147,12 +147,12 @@ data:extend(
     energy_required = 32,
     ingredients =
     {
-      {type="item", name="steel-plate", amount=4},
-      {type="item", name="cobalt-plate", amount=1},
+      {type="item", name="steel-plate", amount=6},
+      {type="item", name="cobalt-oxide", amount=3},
     },
     results = 
     {
-      {type="item", name="cobalt-steel-alloy", amount=4} --DrD 10
+      {type="item", name="cobalt-steel-alloy", amount=3} --DrD 10
     },
     allow_decomposition = false
   },
