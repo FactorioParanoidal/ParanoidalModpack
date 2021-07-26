@@ -2633,7 +2633,7 @@ data.raw.item["ingot-magnesium"].icon_mipmaps = 4
 data.raw.item["clowns-plate-magnesium"].icon = "__bobicons__/graphics/icons/clowns-processing/plate-magnesium.png"
 data.raw.item["clowns-plate-magnesium"].icon_size = 64
 data.raw.item["clowns-plate-magnesium"].icon_mipmaps = 4
-                                                                              
+
 data.raw.item["osmium-ore"].icon = "__bobicons__/graphics/icons/clowns-processing/osmium-ore.png"
 data.raw.item["osmium-ore"].icon_size = 64
 data.raw.item["osmium-ore"].icon_mipmaps = 4
