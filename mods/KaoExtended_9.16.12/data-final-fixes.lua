@@ -40,3 +40,4 @@ require("prototypes.BlackTrainSmokeRevised010")
 
 require("prototypes.item-fuelvalue")
 require("prototypes.chest-gfx")
+require("prototypes.labs-gfx")

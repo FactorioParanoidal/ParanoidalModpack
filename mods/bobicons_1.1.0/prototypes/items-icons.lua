@@ -2691,6 +2691,17 @@ data.raw.fluid["liquid-dimethylmercury"].icon_size = 32
 --data.raw.fluid["liquid-dimethylmercury"].icon_mipmaps = 4
 end
 
+if data.raw.item["lab-2"] then
+data.raw.item["lab-2"].icon = "__bobicons__/graphics/icons/bobtech/lab-2.png"
+data.raw.item["lab-2"].icon_size = 64
+data.raw.item["lab-2"].icon_mipmaps = 4
+end
+if data.raw.item["lab-module"] then
+data.raw.item["lab-module"].icon = "__bobicons__/graphics/icons/bobtech/lab-module.png"
+data.raw.item["lab-module"].icon_size = 64
+data.raw.item["lab-module"].icon_mipmaps = 4
+end
+
 
 local	red = table.deepcopy(data.raw["virtual-signal"]["signal-red"])
 		red.icon = "__bobicons__/graphics/icons/signals/signal_red.png"
@@ -2711,6 +2722,7 @@ local	grey = table.deepcopy(data.raw["virtual-signal"]["signal-grey"])
 local	black = table.deepcopy(data.raw["virtual-signal"]["signal-black"])
 		black.icon = "__bobicons__/graphics/icons/signals/signal_black.png"
 data:extend{ red, green, blue, yellow, pink, cyan, white, grey, black }
+
 
 
 
