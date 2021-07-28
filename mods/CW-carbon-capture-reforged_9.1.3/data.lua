@@ -1,7 +1,7 @@
 require("prototypes.entity")
 require("prototypes.item")
 require("prototypes.recipe")
-require("prototypes.recipe-updates") --DrD
+--require("prototypes.recipe-updates") --DrD
 require("prototypes.technology")
 
 --[[
