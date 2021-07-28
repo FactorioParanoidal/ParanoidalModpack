@@ -252,6 +252,7 @@ data.raw.technology["god-module-5"].icon_size = 128
 data.raw.technology["god-module-5"].icon = "__bobicons__/graphics/technology/modules/god-module-5.png"
 
 -- SCIENCE --
-
+data.raw.technology["advanced-logistic-science-pack"].icons = nil
 data.raw.technology["advanced-logistic-science-pack"].icon = "__bobicons__/graphics/icons/science/logistic-science-pack-2-128.png"
 data.raw.technology["advanced-logistic-science-pack"].icon_size = 128
+data.raw.technology["advanced-logistic-science-pack"].icon_mipmaps = 4
