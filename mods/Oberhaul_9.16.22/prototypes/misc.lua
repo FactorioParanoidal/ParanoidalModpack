@@ -91,5 +91,5 @@ data:extend({
     result = "belt-immunity-equipment",   
   },
 })
-bobmods.lib.tech.add_recipe_unlock("bob-logistics-4", "ober-belt-immunity-equipment")
+bobmods.lib.tech.add_recipe_unlock("logistics-3", "ober-belt-immunity-equipment")
 data.raw["belt-immunity-equipment"]["belt-immunity-equipment"].shape = {width=2,height=2,type="full"}

@@ -377,8 +377,8 @@ local technologies_icons = {
 	{"logistics",   						"logistics-1.png",   					}, 		
 	{"logistics-2",   						"logistics-2.png",   					}, 		
 	{"logistics-3",   						"logistics-3.png",   					}, 		
-	{"bob-logistics-4",   					"logistics-4.png",   					}, 		
-	{"bob-logistics-5",   					"logistics-5.png",   					}, 
+	{"logistics-4",   						"logistics-4.png",   					}, 		
+	{"logistics-5",   						"logistics-5.png",   					}, 
 	
 	
 	{"modular-armor",   					"armor-making.png",   					}, 		
