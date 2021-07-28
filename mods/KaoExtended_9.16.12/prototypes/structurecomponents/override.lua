@@ -1,6 +1,6 @@
 local function replaceMachine()
 
-  KaoExtended.recipe.addtorecipe("bi_recipe_giga_wooden_chest", {"basic-structure-components", 5})
+  --KaoExtended.recipe.addtorecipe("bi_recipe_giga_wooden_chest", {"basic-structure-components", 5})
   KaoExtended.recipe.addtorecipe("warehouse-basic", {"basic-structure-components", 5})
   
   KaoExtended.recipe.addtorecipe("factory-2", {"basic-structure-components", 50})

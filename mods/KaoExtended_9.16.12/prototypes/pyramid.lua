@@ -33,8 +33,8 @@ bobmods.lib.recipe.add_new_ingredient ("storage-tank-3", {type="item", name="sto
 bobmods.lib.recipe.remove_ingredient ("storage-tank-4", "storage-tank-3")
 bobmods.lib.recipe.add_new_ingredient ("storage-tank-4", {type="item", name="storage-tank-3", amount=2})
 
-bobmods.lib.recipe.remove_ingredient ("storage-tank-all-corners", "bob-small-storage-tank")
-bobmods.lib.recipe.add_new_ingredient ("storage-tank-all-corners", {type="item", name="bob-small-storage-tank", amount=4})
+bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners", "bob-small-storage-tank")
+bobmods.lib.recipe.add_new_ingredient ("bob-storage-tank-all-corners", {type="item", name="bob-small-storage-tank", amount=4})
 bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners-2", "bob-storage-tank-all-corners")
 bobmods.lib.recipe.add_new_ingredient ("bob-storage-tank-all-corners-2", {type="item", name="bob-storage-tank-all-corners", amount=2})
 bobmods.lib.recipe.remove_ingredient ("bob-storage-tank-all-corners-3", "bob-storage-tank-all-corners-2")
@@ -124,8 +124,8 @@ bobmods.lib.recipe.remove_ingredient ("bob-mining-drill-3", "bob-mining-drill-2"
 bobmods.lib.recipe.add_new_ingredient ("bob-mining-drill-3", {type="item", name="bob-mining-drill-2", amount=2})
 bobmods.lib.recipe.remove_ingredient ("bob-mining-drill-4", "bob-mining-drill-3")
 bobmods.lib.recipe.add_new_ingredient ("bob-mining-drill-4", {type="item", name="bob-mining-drill-3", amount=2})
-bobmods.lib.recipe.remove_ingredient ("bob-mining-drill-5", "bob-mining-drill-4")
-bobmods.lib.recipe.add_new_ingredient ("bob-mining-drill-5", {type="item", name="bob-mining-drill-4", amount=2})
+--bobmods.lib.recipe.remove_ingredient ("bob-mining-drill-5", "bob-mining-drill-4")
+--bobmods.lib.recipe.add_new_ingredient ("bob-mining-drill-5", {type="item", name="bob-mining-drill-4", amount=2})
 
 bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-1", "electric-mining-drill")
 bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-1", {type="item", name="electric-mining-drill", amount=2})
@@ -135,8 +135,8 @@ bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-3", "bob-area-minin
 bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-3", {type="item", name="bob-area-mining-drill-2", amount=2})
 bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-4", "bob-area-mining-drill-3")
 bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-4", {type="item", name="bob-area-mining-drill-3", amount=2})
-bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-5", "bob-area-mining-drill-4")
-bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-5", {type="item", name="bob-area-mining-drill-4", amount=2})
+--bobmods.lib.recipe.remove_ingredient ("bob-area-mining-drill-5", "bob-area-mining-drill-4")
+--bobmods.lib.recipe.add_new_ingredient ("bob-area-mining-drill-5", {type="item", name="bob-area-mining-drill-4", amount=2})
 
 bobmods.lib.recipe.add_new_ingredient ("bob-plasma-turret-1", {type="item", name="laser-turret", amount=4})
 bobmods.lib.recipe.remove_ingredient ("bob-plasma-turret-2", "bob-plasma-turret-1")
@@ -388,10 +388,10 @@ bobmods.lib.recipe.add_new_ingredient ("angels-chemical-plant-3", {type="item", 
 bobmods.lib.recipe.remove_ingredient ("angels-chemical-plant-4", "angels-chemical-plant-3")
 bobmods.lib.recipe.add_new_ingredient ("angels-chemical-plant-4", {type="item", name="angels-chemical-plant-3", amount=2})
 
-bobmods.lib.recipe.remove_ingredient ("angels-electic-boiler-2", "angels-electic-boiler")
-bobmods.lib.recipe.add_new_ingredient ("angels-electic-boiler-2", {type="item", name="angels-electic-boiler", amount=2})
-bobmods.lib.recipe.remove_ingredient ("angels-electic-boiler-3", "angels-electic-boiler-2")
-bobmods.lib.recipe.add_new_ingredient ("angels-electic-boiler-3", {type="item", name="angels-electic-boiler-2", amount=2})
+bobmods.lib.recipe.remove_ingredient ("angels-electric-boiler-2", "angels-electric-boiler")
+bobmods.lib.recipe.add_new_ingredient ("angels-electric-boiler-2", {type="item", name="angels-electric-boiler", amount=2})
+bobmods.lib.recipe.remove_ingredient ("angels-electric-boiler-3", "angels-electric-boiler-2")
+bobmods.lib.recipe.add_new_ingredient ("angels-electric-boiler-3", {type="item", name="angels-electric-boiler-2", amount=2})
 
 bobmods.lib.recipe.remove_ingredient ("sluicer-2", "sluicer")
 bobmods.lib.recipe.add_new_ingredient ("sluicer-2", {type="item", name="sluicer", amount=2})
