@@ -219,3 +219,18 @@ if false then -- disabled, but works for vanilla radar technology
 	data:extend({radar_technology})
 	log ("added radar technology")
 end
+
+--drd next
+if mods["OreRadar"] then
+data.raw["radar"]["ore-radar"].pictures =
+		{
+			filename = "__Yuoki__/graphics/entity/radar_sheet.png",
+			priority = "low",
+			width = 160,
+			height = 160,
+			apply_projection = false,
+			direction_count = 64,
+			line_length = 8,
+			shift = {0.875, -1}
+		}
+end
