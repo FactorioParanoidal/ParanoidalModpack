@@ -12,15 +12,15 @@ bobmods.lib.tech.add_prerequisite("bob-atomic-artillery-shell", "atomic-bomb")
 bobmods.lib.tech.remove_prerequisite("bob-atomic-artillery-shell", "kovarex-enrichment-process")
 bobmods.lib.tech.remove_recipe_unlock("atomic-bomb", "atomic-artillery-shell")
 
---фикс плазменных рокет
+--фикс плазменных ракет
 bobmods.lib.tech.remove_prerequisite("bob-plasma-rocket", "bob-rocket" )
 bobmods.lib.tech.add_prerequisite("bob-plasma-rocket", "rocketry")
 
 --убираем лишние рецепты
 bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-chemical-furnace-from-stone-furnace")
 bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-furnace-from-stone-chemical-furnace")
-bobmods.lib.tech.remove_recipe_unlock("alloy-processing-1", "stone-mixing-furnace-from-stone-furnace")
-bobmods.lib.tech.remove_recipe_unlock("alloy-processing-1", "stone-furnace-from-stone-mixing-furnace")
+bobmods.lib.tech.remove_recipe_unlock("alloy-processing", "stone-mixing-furnace-from-stone-furnace")
+bobmods.lib.tech.remove_recipe_unlock("alloy-processing", "stone-furnace-from-stone-mixing-furnace")
 
 
 --разные фиксы зависимостей технологий

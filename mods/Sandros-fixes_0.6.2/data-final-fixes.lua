@@ -61,7 +61,7 @@ if mods["angelsexploration"] and mods["PCPRedux"] then
 end
 
 if mods["angelspetrochem"] and mods["PCPRedux"] then
-  sort_recipe_order("carbon-dioxide", "petrochem-basics", "d[carbon-separation-3]")
+  sort_recipe_order("gas-carbon-dioxide", "petrochem-basics", "d[carbon-separation-3]") --drd carbon-dioxide
 end
 
 --DrD
