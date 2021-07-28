@@ -9,7 +9,7 @@ data.raw["lab"]["lab-2"].on_animation =
           frame_count = 32,
           line_length = 8,
 		  scale = 0.6,
-          --animation_speed = 0.5,
+          animation_speed = 1/3,
           shift = util.by_pixel(7, -10)
         }
       }
