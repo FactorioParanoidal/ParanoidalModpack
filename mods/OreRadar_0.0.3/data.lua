@@ -221,7 +221,7 @@ if false then -- disabled, but works for vanilla radar technology
 end
 
 --drd next
-if mods["OreRadar"] then
+if mods["Yuoki"] then
 data.raw["radar"]["ore-radar"].pictures =
 		{
 			filename = "__Yuoki__/graphics/entity/radar_sheet.png",
