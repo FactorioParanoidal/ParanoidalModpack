@@ -30,8 +30,6 @@ if angelsmods and angelsmods.smelting then
     require("prototypes.recipes.angelssmelting.remelting-titanium")
     require("prototypes.recipes.angelssmelting.remelting-tungsten")
     require("prototypes.recipes.angelssmelting.remelting-zinc")
-
-    require("prototypes.remelting-override-angelssmelting")
 end
 
 require("prototypes.recipes.remelting-entity")
@@ -47,14 +45,10 @@ if bobmods and bobmods.plates then
     require("prototypes.recipes.bobplates.remelting-gunmetal")
     require("prototypes.recipes.bobplates.remelting-invar")
     require("prototypes.recipes.bobplates.remelting-nitinol")
-
-    require("prototypes.remelting-override-bobplates")
 end
 
 if mods["Clowns-Processing"] then
     require("prototypes.recipes.clowns.remelting-magnesium")
-
-    require("prototypes.remelting-override-clowns")
 end
 
 if mods["ShinyAngelGFX"] and iconset then -- Check if iconset exist as it could be edited in the future
