@@ -1,0 +1,159 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.14
+Date: 2021-07-28
+  Features:
+    - Some excellent new sprites for the artillery shells by wretlaw120 (https://mods.factorio.com/user/wretlaw120) who actually contributed all these changes! Thanks!
+    - A small rearangement moving 4t and 8t rockets behind Very dangerous high-yield atomic weapons
+  Bugfixes:
+    - Fixed an internal spelling error (well spotted)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.13
+Date: 2021-07-22
+  Features:
+    - Increased range on small rocket-nukes
+    - Changed icons for 20t, 500t and 1kt artillery nukes
+    - The mod now changes the rocket to grey if there any small atomic-rockets (2t, 4t, 8t) enabled - to avoid confusion  
+  Bugfixes:
+    - Fixed wrong ranges on cannon shells
+    - Fixed ordering issues on 20t atomic artillery shell
+  Optimisations:
+    - Fixed massive inefficiencies for crater system - not as likely to crash for really big nukes (1Mt, 100kt)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2021-07-20
+  Features:
+    - Added glow effects to all nukes and nuke-related items (e.g. Californium, Tritium)
+    - Changes to graphics for small atomic artillery shell
+    - Added new smaller atomic artillery shell (20t)
+    - Added new smaller atomic rockets (2t, 4t, 8t) - sorry that the 2t looks like the basic rocket, I couldn't think of anything else
+    - Added option for a more aggressively optimised detonation system, but this might not actually save all that much, so is off by default (in Settings->Mod settings->Map Settings->Use more optimised detonation system (BETA))
+  Bugfixes:
+    - Fixed wrong pictures for items on ground
+    - Increased range of cannon shells to full intended range
+    - Decreased stack size of High yield atomic cannon shells to intended levels
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 2021-07-17
+  Bugfixes:
+    - Made weapon disablement options more compatible with other mods (again)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2021-07-16
+  Bugfixes:
+    - Made weapon disablement options more compatible with other mods
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2021-07-14
+  Features:
+    - Added settings to disable catagories of weapons (I haven't been able to test every combination, so bugs may be lurking here - please report them if you find them)
+    - Added pollution output to Nukes
+    - Updated technology icons
+    - Added nuke related menu simulations (there is an option to disable these, as they may be slow/annoying)
+  Bugfixes:
+    - Fixed Crater Mound transitions
+    - Fixed unfinished localisations for some settings
+    - Fixed Changelog (again)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2021-04-25
+  Features:
+    - Added setting to preserve resources in craters - this might not be too pretty depending on how the tile transitions happen.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2021-04-06
+  Features:
+    - Added new crater system (and option to go back to old system, which may be signifacntly higher performance, old system enhanced by mandelbrodt on github - thanks)
+    - Added crater filling with more dynamic water, so that it flows in from lakes etc.
+    - Also made the nukes vapourise any water inside their fireball
+    - Added new tiles to allow new crater system - this may break other mods, so there is an option to remove these, but this will make maps with them in not load properly
+  Bugfixes:
+    - Removed use-tritium setting, as this was never implemented (and, presumably, never used, as I never got a bug report!!!)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2021-02-24
+  Features:
+    - Added Megaton nukes
+    - Added nuclear weapon building
+    - Added tritium production chain
+  Optimisations:
+    - Made the game pre-load the map where the nuke will hit, so as to reduce the time the game is frozen for
+    - Made the game time-slice the blast wave, so that it can slow down to maintain frame-rate
+    - Increased the jump radius of the blast wave, to compensate for the slower proccessing rate
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2020-12-31
+  Bugfixes:
+    - Fixed crash for entities with resistances, but without fire resistance (properly this time)
+    - Removed other explosion effect from thermobaric rocket
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2020-12-30
+  Bugfixes:
+    - Fixed crash for entities with resistances, but without fire resistance
+    - Fixed Changelog
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2020-12-29
+  Bugfixes:
+    - Fixed crash for entities without position
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2020-12-28
+  Features:
+    - Removed collision boxes for the cannon shells, meaning they never detonate early
+    - Made atomic ammo clamp firing distance, so it can be easily fired at full range
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-11-29
+  Features:
+    - Enabled 100kt nukes
+    - Added significant performance optimisations when destroying large numbers of trees
+    - Added Bob's compatable recipies (electronics and plates/intermediates)
+    - Incorperated MushroomCloud graphics and sounds into the mod, so that they work by default
+    - Moved to factorio 1.1
+    - Added different flash effects for the different nukes, and added them to all nukes
+    - Added different sound ranges for different nukes, adding sounds to those that didn't have it before
+    - Added better graphics to thermobaric weapons.
+    - Disabled 'lots of small fires' for both 15kt and 100kt nukes
+    - Added ordering to mod settings.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2020-11-24
+  Features:
+    - Added extra nukes for compatability with Schall's Tank Platoon
+    - Added californium, and smaller nuclear weapons
+    - Added fire shield
+    - Added high yield rockets
+    - Added upgraded versions of atomic tank shells and ammunition
+    - Increased range of most nuclear weapons, and decreased fire-rate in some cases
+    - Added more performance settings
+    - Fixed migration script
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2020-11-08
+  Features:
+    - Fixed issue regarding incompatibility with Make Artillery Great Again
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2020-08-24
+  Features:
+    - Fixed version error in Changelog (oops...)
+    - Changed crater to use nuclear ground
+    - Added thermobaric weaponry
+    - Made fires around nuclear detonations last longer
+    - Added short lived fires after nuclear detonations
+    - Fixed spelling error in Atomic Bomb description
+    - Changed graphics for technologies
+    - Added descriptions to settings, and more settings
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2020-08-16
+  Features:
+    - Updated to use Factorio 1.0.0
+    - Updated graphics to use nuke-explosion if MushroomCloud not present, and to use it anyway for the tank shell.
+    - Made Spidertron 'immune' to thermal element of nuclear blast (by not applying it)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Features:
+    - Fixed crash on spidertron being destroyed by nuclear weapon.
+
