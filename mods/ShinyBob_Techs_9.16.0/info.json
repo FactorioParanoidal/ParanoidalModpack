@@ -28,7 +28,8 @@
 				"? longer-belts-redux >= 0.16.0",
 				"? Laser_Beam_Turrets >= 0.2.0",
 				"? angelspetrochem",
-				"? ShinyBobGraphics >= 0.16.0"
+				"? ShinyBobGraphics >= 0.16.0",
+				"? Oberhaul"
   			   ],
   "description": "Tech Icons and order/sort update for Bob's mods, no revamp, nor graphic game objects changes. "
 }
