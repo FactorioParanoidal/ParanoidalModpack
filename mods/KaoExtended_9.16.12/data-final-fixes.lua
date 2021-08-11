@@ -25,7 +25,7 @@ require("prototypes.structurecomponents.override")
 require("prototypes.recipes.UsedCoolant")
 
 --require("prototypes.angelextended.slag")
---require("prototypes.angelextended.bio")
+require("prototypes.angelextended.angelsbioprocessing")
 
 require("prototypes.technology")
 
@@ -34,6 +34,7 @@ require("prototypes.pyramid")
 
 require("prototypes.Mining_fluids_903")
 require("prototypes.Manganese_chrome_sorting_0172")
+require("prototypes.Platinum_sorting_172")
 require("prototypes.LandmineGridlock_102")
 require("prototypes.BlackTrainSmokeRevised010")
 

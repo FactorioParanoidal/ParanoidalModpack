@@ -59,7 +59,7 @@ data:extend({
             },
             results=
             {
-                {type="item", name="chrome-ore", amount=6},
+                {type="item", name="chrome-ore", amount=4},
             },
         },
         expensive =
@@ -74,7 +74,7 @@ data:extend({
             },
             results=
             {
-                {type="item", name="chrome-ore", amount=6},
+                {type="item", name="chrome-ore", amount=4},
             },
         },
         icon = "__KaoExtended__/graphics/Manganese_Chrome_Sorting/chrome-sorting.png",
