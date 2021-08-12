@@ -26,6 +26,7 @@ require("prototypes.recipes.UsedCoolant")
 
 --require("prototypes.angelextended.slag")
 require("prototypes.angelextended.angelsbioprocessing")
+require("prototypes.angelextended.angelssmelting")
 
 require("prototypes.technology")
 
