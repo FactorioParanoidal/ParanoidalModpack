@@ -39,7 +39,7 @@ data:extend({
             },
         },
         icon_size = 32,
-        icon = "__Platinum_Sorting__/graphics/icons/platinum-sorting.png",
+        icon = "__KaoExtended__/graphics/Platinum_Sorting/platinum-sorting.png",
         order = "p-a",
 	},
 })
