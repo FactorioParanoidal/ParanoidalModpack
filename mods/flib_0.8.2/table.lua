@@ -109,9 +109,25 @@ function flib_table.deep_merge(tables)
   return output
 end
 
+--- Find the value in the table.
+-- @tparam table tbl The table to search.
+-- @tparam any value The value to match. Must have an `eq` metamethod set, otherwise will error.
+-- @treturn any|nil The key that matches the value, or `nil` if it was not found.
+-- @usage
+-- local tbl = {"foo", "bar"}
+-- local contains_foo = table.search(tbl, "foo") -- true
+-- local contains_baz = table.search(tbl, "baz") -- false
+function flib_table.find(tbl, value)
+  for k, v in pairs(tbl) do
+    if v == value then
+      return k
+    end
+  end
+end
+
 --- Call the given function for each item in the table, and abort if the function returns truthy.
 --
--- Calls `callback(value, key, tbl)` for each item in the table, and immediately ceases iteration if the callback
+-- Calls `callback(value, key)` for each item in the table, and immediately ceases iteration if the callback
 -- returns truthy.
 -- @tparam table tbl
 -- @tparam function callback Receives `value`, `key`, and `tbl` as parameters.
@@ -126,7 +142,7 @@ end
 -- local all_values_less_than_six = not table.for_each(tbl, function(v) return not (v < 6) end)
 function flib_table.for_each(tbl, callback)
   for k, v in pairs(tbl) do
-    if callback(v, k, tbl) then
+    if callback(v, k) then
       return true
     end
   end
@@ -219,7 +235,7 @@ end
 
 --- Create a filtered version of a table based on the results of a filter function.
 --
--- Calls `filter(value, key, tbl)` on each element in the table, returning a new table with only pairs for which
+-- Calls `filter(value, key)` on each element in the table, returning a new table with only pairs for which
 -- `filter` returned a truthy value.
 -- @tparam table tbl
 -- @tparam function filter Takes in `value`, `key`, and `tbl` as parameters.
@@ -264,7 +280,7 @@ end
 
 --- Create a transformed table using the output of a mapper function.
 --
--- Calls `mapper(value, key, tbl)` on each element in the table, using the return as the new value for the key.
+-- Calls `mapper(value, key)` on each element in the table, using the return as the new value for the key.
 -- @tparam table tbl
 -- @tparam function mapper Takes in `value`, `key`, and `tbl` as parameters.
 -- @treturn table A new table containing the transformed values.
@@ -354,6 +370,18 @@ function flib_table.shallow_copy(tbl, use_rawset)
       rawset(output, k, v)
     else
       output[k] = v
+    end
+  end
+  return output
+end
+
+--- Shallowly merge two or more tables.
+-- Unlike @{table.deep_merge}, this will only combine the top level of the tables.
+function flib_table.shallow_merge(tables)
+  local output = {}
+  for _, tbl in pairs(tables) do
+    for key, value in pairs(tbl) do
+      output[key] = value
     end
   end
   return output

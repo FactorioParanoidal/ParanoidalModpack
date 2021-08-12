@@ -1,4 +1,4 @@
---- Functions for maniuplating areas.
+--- Functions for manipulating areas.
 -- **NOTE:** All functions assume that `BoundingBox` and `Position` objects contain named keys - `x` and `y` for
 -- `Position`, and `left_top` and `right_bottom` for `BoundingBox`. Attempting to use these functions with the
 -- shorthand forms of these objects will result in a crash.
@@ -96,7 +96,8 @@ end
 
 --- Find the distance between a point and the nearest edge of the given area.
 -- @tparam Concepts.BoundingBox self The area to check against.
--- @treturn double The distance to the nearest edge of the area.
+-- @tparam Concepts.Position position The position to check.
+-- @treturn double The distance to the nearest edge of the area from the given position.
 function flib_area.distance_to_nearest_edge(self, position)
   local x_distance = math.min(math.abs(self.left_top.x - position.x), math.abs(self.right_bottom.x - position.x))
   local y_distance = math.min(math.abs(self.left_top.y - position.y), math.abs(self.right_bottom.y - position.y))
@@ -169,10 +170,29 @@ end
 
 --- Create a 1x1 tile area from the given position.
 -- @tparam Concepts.Position position
-function flib_area.from_position(position)
+-- @tparam[opt] boolean snap If true, snap the created area to the tile edges the position is contained in
+function flib_area.from_position(position, snap)
+  if snap then
+    local floored_position = {x = math.floor(position.x), y = math.floor(position.y)}
+    return {
+      left_top = {x = floored_position.x, y = floored_position.y},
+      right_bottom = {x = floored_position.x + 1, y = floored_position.y + 1}
+    }
+  else
+    return {
+      left_top = {x = position.x - 0.5, y = position.y - 0.5},
+      right_bottom = {x = position.x + 0.5, y = position.y + 0.5}
+    }
+  end
+end
+
+--- Create a proper area from a shorthanded area.
+-- @tparam Concepts.BoundingBox area
+-- @treturn Concepts.BoundingBox The converted area.
+function flib_area.from_shorthand(area)
   return {
-    left_top = {x = position.x, y = position.y},
-    right_bottom = {x = position.x, y = position.y}
+    left_top = {x = area[1][1], y = area[1][2]},
+    right_bottom = {x = area[2][1], y = area[2][2]},
   }
 end
 
@@ -237,6 +257,8 @@ end
 --
 -- Metatables do not persist across save/load, so when using area objects, this function must be called on them whenever
 -- they are retrieved from `global` or during `on_load`.
+--
+-- This function will also call @{area.from_shorthand} if needed, to ensure that the returned area is properly defined.
 -- @tparam Concepts.BoundingBox area The plain area to convert.
 -- @treturn Concepts.BoundingBox The converted area.
 -- @usage
@@ -248,6 +270,10 @@ end
 --   log(serpent.line(position))
 -- end
 function flib_area.load(area)
+  local area = area
+  if not area.left_top then
+    area = flib_area.from_shorthand(area)
+  end
   return setmetatable(area, {__index = flib_area})
 end
 
@@ -298,6 +324,16 @@ function flib_area.strip(self)
       x = self.right_bottom.x,
       y = self.right_bottom.y
     }
+  }
+end
+
+--- Remove keys from the area to create a shorthanded area.
+-- @tparam Concepts.BoundingBox self The area to convert.
+-- @treturn Concepts.BoundingBox The converted area.
+function flib_area.to_shorthand(self)
+  return {
+    {self.left_top.x, self.left_top.y},
+    {self.right_bottom.x, self.right_bottom.y},
   }
 end
 

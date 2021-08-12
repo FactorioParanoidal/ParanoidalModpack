@@ -13,16 +13,16 @@ local function gen_slot(x, y, default_offset)
     parent = "slot",
     size = 40,
     default_graphical_set = {
-      base = {border=4, position={x + default_offset , y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset , y}, size = 80, filename = slot_tileset},
     },
     hovered_graphical_set = {
-      base = {border=4, position={x + 80, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + 80, y}, size = 80, filename = slot_tileset},
     },
     clicked_graphical_set = {
-      base = {border=4, position={x + 160, y}, size=80, filename=slot_tileset},
     },
+      base = {border = 4, position={x + 160, y}, size = 80, filename = slot_tileset},
     disabled_graphical_set = { -- identical to default graphical set
-      base = {border=4, position={x + default_offset, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset, y}, size = 80, filename = slot_tileset},
     }
   }
 end
@@ -34,20 +34,20 @@ local function gen_slot_button(x, y, default_offset, glow)
     parent = "slot_button",
     size = 40,
     default_graphical_set = {
-      base = {border=4, position={x + default_offset , y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset , y}, size = 80, filename = slot_tileset},
       shadow = offset_by_2_rounded_corners_glow(default_dirt_color),
     },
     hovered_graphical_set = {
-      base = {border=4, position={x + 80, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + 80, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_2_rounded_corners_glow(default_dirt_color),
       glow = offset_by_2_rounded_corners_glow(glow)
     },
     clicked_graphical_set = {
-      base = {border=4, position={x + 160, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + 160, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_2_rounded_corners_glow(default_dirt_color),
     },
     disabled_graphical_set = { -- identical to default graphical set
-      base = {border=4, position={x + default_offset, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_2_rounded_corners_glow(default_dirt_color),
     }
   }
@@ -60,19 +60,19 @@ local function gen_standalone_slot_button(x, y, default_offset)
     parent = "slot_button",
     size = 40,
     default_graphical_set = {
-      base = {border=4, position={x + default_offset , y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset , y}, size = 80, filename = slot_tileset},
       shadow = offset_by_4_rounded_corners_subpanel_inset
     },
     hovered_graphical_set = {
-      base = {border=4, position={x + 80, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + 80, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_4_rounded_corners_subpanel_inset
     },
     clicked_graphical_set = {
-      base = {border=4, position={x + 160, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + 160, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_4_rounded_corners_subpanel_inset
     },
     disabled_graphical_set = { -- identical to default graphical set
-      base = {border=4, position={x + default_offset, y}, size=80, filename=slot_tileset},
+      base = {border = 4, position={x + default_offset, y}, size = 80, filename = slot_tileset},
       shadow = offset_by_4_rounded_corners_subpanel_inset
     }
   }
@@ -212,6 +212,26 @@ styles.flib_titlebar_flow = {
   horizontal_spacing = 8
 }
 
+-- FRAME STYLES
+
+styles.flib_shallow_frame_in_shallow_frame = {
+  type = "frame_style",
+  parent = "frame",
+  padding = 0,
+  graphical_set = {
+    base = {
+      position = {85, 0}, corner_size = 8,
+      center = {position = {76, 8}, size = {1, 1}},
+      draw_type = "outer"
+    },
+    shadow = default_inner_shadow
+  },
+  vertical_flow_style = {
+    type = "vertical_flow_style",
+    vertical_spacing = 0
+  }
+}
+
 -- IMAGE STYLES
 
 styles.flib_indicator = {
@@ -247,4 +267,47 @@ styles.flib_naked_scroll_pane_no_padding = {
   type = "scroll_pane_style",
   parent = "flib_naked_scroll_pane",
   padding = 0
+}
+
+styles.flib_shallow_scroll_pane = {
+  type = "scroll_pane_style",
+  padding = 0,
+  graphical_set = {
+    base = {position = {85, 0}, corner_size = 8, draw_type = "outer"},
+    shadow = default_inner_shadow,
+  },
+}
+
+-- TABBED PANE STYLES
+
+styles.flib_tabbed_pane_with_no_padding = {
+  type = "tabbed_pane_style",
+  tab_content_frame = {
+    type = "frame_style",
+    top_padding = 0,
+    bottom_padding = 0,
+    left_padding = 0,
+    right_padding = 0,
+    graphical_set = {
+      base = {
+        -- Same as tabbed_pane_graphical_set - but without bottom
+        top = {position = {76, 0}, size = {1, 8}},
+        center = {position = {76, 8}, size = {1, 1}}
+      },
+      shadow = top_shadow,
+    },
+  },
+}
+
+-- TEXTFIELD STYLES
+
+styles.flib_widthless_textfield = {
+  type = "textbox_style",
+  width = 0
+}
+
+styles.flib_widthless_invalid_textfield = {
+  type = "textbox_style",
+  parent = "invalid_value_textfield",
+  width = 0
 }
