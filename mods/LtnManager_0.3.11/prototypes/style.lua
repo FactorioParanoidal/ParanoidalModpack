@@ -115,23 +115,6 @@ styles.ltnm_depot_button_for_scrollbar = {
   width = 194
 }
 
-styles.ltnm_active_frame_action_button = {
-  type = "button_style",
-  parent = "frame_action_button",
-  default_graphical_set = {
-    base = {position = {272, 169}, corner_size = 8},
-    shadow = {position = {440, 24}, corner_size = 8, draw_type = "outer"}
-  },
-  hovered_graphical_set = {
-    base = {position = {369, 17}, corner_size = 8},
-    shadow = default_dirt
-  },
-  clicked_graphical_set = {
-    base = {position = {352, 17}, corner_size = 8},
-    shadow = default_dirt
-  }
-}
-
 styles.ltnm_inset_tool_button = {
   type = "button_style",
   parent = "tool_button",
@@ -236,7 +219,7 @@ styles.ltnm_titlebar_drag_handle = {
   height = 24,
   minimal_width = 24,
   left_margin = -1,
-  right_margin = 7
+  right_margin = 2
 }
 
 -- -----------------------------------------------------------------------------
@@ -323,9 +306,10 @@ styles.ltnm_titlebar_right_frame = {
       draw_type = "outer"
     }
   },
-  -- horizontal_flow_style = {
-  --   type = "horizontal_flow_style",
-  -- }
+  horizontal_flow_style = {
+    type = "horizontal_flow_style",
+    horizontal_spacing = 8,
+  }
 }
 
 styles.ltnm_main_content_frame = {
@@ -439,18 +423,6 @@ styles.ltnm_material_icon = {
   stretch_image_to_widget_size = true,
   size = 28,
   padding = 2,
-  left_margin = 2
-}
-
-styles.ltnm_status_icon = {
-  type = "image_style",
-  stretch_image_to_widget_size = true,
-  size = 14
-}
-
-styles.ltnm_station_status_icon = {
-  type = "image_style",
-  parent = "ltnm_status_icon",
   left_margin = 2
 }
 
