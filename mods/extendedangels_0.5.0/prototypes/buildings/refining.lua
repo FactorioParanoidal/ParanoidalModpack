@@ -1,13 +1,3 @@
---drd
-
-local new_washing3=table.deepcopy(data.raw["assembling-machine"]["washing-plant-2"])
-		new_washing3.name="washing-plant-3"
-		data:extend{new_washing3}
-local new_washing4=table.deepcopy(data.raw["assembling-machine"]["washing-plant-2"])
-		new_washing4.name="washing-plant-4"
-		data:extend{new_washing4}
---drdend
-
 data:extend({
     -- Hydro plant 4
     {

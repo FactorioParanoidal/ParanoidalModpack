@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2021-08-13
+  Features:
+    - Recipes have been reworked to be in-line with current Angel's recipes, and make use of higher tier materials where appropriate
+    - Technologies have had their time requirements updated to be more in-line with current Angel's technologies (15s -> 30s)
+    - Angel's Bioprocessing minimum required version now 0.7.20
+  Changes:
+    - Angel's Bioprocessing 0.7.20 adds an Algae farm 4; as such the Algae farm 4 added by this mod has been changed to the Algae farm 5
+      - No migration of existing algae farm 4s will be attempted to avoid collisions with Angel's Bioprocessing
+  Bugfixes:
+    - Updated the API call to Angel's Industries for `add_minable_results`, fixing a startup error
+---------------------------------------------------------------------------------------------------
 Version: 0.4.8
 Date: 2021-06-13
   Changes:

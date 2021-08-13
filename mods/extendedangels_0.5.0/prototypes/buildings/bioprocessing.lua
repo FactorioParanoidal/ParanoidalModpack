@@ -5,17 +5,17 @@ local tint = angelsmods.bioprocessing.number_tint
 
 -- Create list of buildings with parameters different from source entity
 local bioprocessing_buildings = {
-    -- Algae Farm
-    ["algae-farm-4"] = {
-        source = "algae-farm-3",
+    -- Algae farms
+    ["algae-farm-5"] = {
+        source = "algae-farm-4",
         icon = "__angelsbioprocessing__/graphics/icons/algae-farm.png",
-        tier = 4,
-        order = "a[algae]-d",
+        tier = 5,
+        order = "a[algae]-e",
         subgroup = "bio-processing-buildings-nauvis-a",
         -- module_slots = 4,
         crafting_speed = 3,
         emissions_per_minute = -100/3 * 3,
-        energy_usage = "250kW",
+        energy_usage = "225kW",
     },
 
     -- Arboretums
@@ -530,6 +530,7 @@ local buildings = {
     ["algae-farm"] = {prototype = "assembling-machine", tier = 1},
     ["algae-farm-2"] = {prototype = "assembling-machine", tier = 2},
     ["algae-farm-3"] = {prototype = "assembling-machine", tier = 3},
+    ["algae-farm-4"] = {prototype = "assembling-machine", tier = 4},
     ["bio-arboretum-1"] = {prototype = "assembling-machine", tier = 1},
     ["bio-generator-temperate-1"] = {prototype = "assembling-machine", tier = 1},
     ["bio-generator-swamp-1"] = {prototype = "assembling-machine", tier = 1},

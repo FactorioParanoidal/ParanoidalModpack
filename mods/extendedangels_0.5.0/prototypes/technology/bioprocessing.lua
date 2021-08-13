@@ -8,12 +8,12 @@ data:extend({
         icon = "__angelsbioprocessing__/graphics/technology/algae-farm-tech.png",
         icon_size = 128,
         prerequisites = {
-            "bio-processing-red",
+            "bio-processing-blue",
         },
         effects = {
             {
                 type = "unlock-recipe",
-                recipe = "algae-farm-4"
+                recipe = "algae-farm-5"
             },
         },
         unit = {
@@ -25,7 +25,7 @@ data:extend({
                 {"production-science-pack", 1},
                 {"utility-science-pack", 1},
             },
-            time = 15
+            time = 30
         },
     },
 
@@ -59,7 +59,7 @@ data:extend({
                 {"logistic-science-pack", 1},
                 {"chemical-science-pack", 1},
             },
-            time = 15
+            time = 30
         },
     },
 
