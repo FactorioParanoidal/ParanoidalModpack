@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.15
+Date: 2021-08-12
+  Features:
+    - Added some hopefully performance saving changes, including spreading some calculations across a few ticks after the initial blast
+  Bugfixes:
+    - Added migration scripts for new weapons
+---------------------------------------------------------------------------------------------------
 Version: 0.1.14
 Date: 2021-07-28
   Features:

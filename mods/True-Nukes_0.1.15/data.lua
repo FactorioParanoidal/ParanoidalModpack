@@ -44,8 +44,9 @@ require("prototypes.nukes.data-nuke-terrain")
 
 if(settings.startup["enable-atomic-ammo"].value or settings.startup["enable-big-atomic-ammo"].value
     	or settings.startup["enable-atomic-cannons"].value or settings.startup["enable-big-atomic-cannons"].value
+    	or settings.startup["enable-small-atomic-bomb"].value or settings.startup["enable-very-small-atomic-bomb"].value or settings.startup["enable-really-very-small-atomic-bomb"].value
     	or settings.startup["enable-atomic-bomb"].value or settings.startup["enable-big-atomic-bomb"].value or settings.startup["enable-very-big-atomic-bomb"].value
-    	or settings.startup["enable-small-atomic-artillery"].value or settings.startup["enable-atomic-artillery"].value
+    	or settings.startup["enable-very-small-atomic-artillery"].value or settings.startup["enable-small-atomic-artillery"].value or settings.startup["enable-atomic-artillery"].value
     	or settings.startup["enable-big-atomic-artillery"].value or settings.startup["enable-very-big-atomic-artillery"].value
     	or settings.startup["enable-fusion-building"].value or settings.startup["enable-mega-fusion-building"].value) then
 	require("prototypes.nukes.data-nukes")
