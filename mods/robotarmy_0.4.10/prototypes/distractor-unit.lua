@@ -2,66 +2,62 @@ require("config.config")
 data:extend({
 {
     type = "unit",
-    name = "defender-unit",
+    name = "distractor-unit",
     icon_size = 32,
-    icon = "__base__/graphics/icons/defender.png",
+    icon = "__base__/graphics/icons/distractor.png",
 	flags = {"placeable-player", "player-creation", "placeable-off-grid"},
     subgroup="creatures",
     has_belt_immunity = true,
-    max_health = 65 * HEALTH_SCALAR,
-	minable = {hardness = 0.1, mining_time = 0.1, result = "defender-unit"},
+    max_health = 85 * HEALTH_SCALAR,
+	minable = {hardness = 0.1, mining_time = 0.1, result = "distractor-unit"},
 	alert_when_damaged = false,
-    order="b-b-a",
+    order="b-b-b",
     resistances =
     {
       {
         type = "physical",
         decrease = 4,
-      }
+      },
+      {
+        type = "acid",
+        decrease = 1,
+        percent = 30
+      },
     },
     healing_per_tick = 0,
-    collision_box = nil,
-    collision_mask = { "ghost-layer"},
+    collision_box = {{0, 0}, {0, 0}},
     selection_box = {{-0.3, -0.3}, {0.3, 0.3}},
     sticker_box = {{-0.1, -0.1}, {0.1, 0.1}},
     distraction_cooldown = 300,
-    
+
+    ai_settings =
+    {
+      allow_destroy_when_commands_fail = false,
+      do_separation = true
+    },
     
     attack_parameters =
     {
       type = "projectile",
-      ammo_category = "bullet",
+      ammo_category = "laser",
       cooldown = 20,
-      projectile_center = {0, 1},
+      damage_modifier = 0.7,
+      projectile_center = {0, 0.6},
       projectile_creation_distance = 0.6,
-      range = 12,
-      min_attack_distance = 8,
-      sound = make_light_gunshot_sounds(),
+      range = 18,
+      min_attack_distance = 12,
+      sound = make_laser_sounds(),
       ammo_type =
       {
-        category = "bullet",
+        category = "laser",
         action =
         {
           type = "direct",
           action_delivery =
           {
-            type = "instant",
-            source_effects =
-            {
-              type = "create-explosion",
-              entity_name = "explosion-gunshot-small"
-            },
-            target_effects =
-            {
-              {
-                type = "create-entity",
-                entity_name = "explosion-hit"
-              },
-              {
-                type = "damage",
-                damage = { amount = 5 * DAMAGE_SCALAR , type = "physical"}
-              }
-            }
+            type = "projectile",
+            projectile = "laser",
+            starting_speed = 1
           }
         }
       },
@@ -77,35 +73,35 @@ data:extend({
       layers =
       {
         {
-          filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
+          filename = "__base__/graphics/entity/distractor-robot/distractor-robot.png",
           priority = "high",
           line_length = 16,
-          width = 32,
+          width = 38,
           height = 33,
           frame_count = 1,
           direction_count = 16,
-          shift = {0, 0.015625}
+          shift = {0, -0.078125}
         },
         {
-          filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
+          filename = "__base__/graphics/entity/distractor-robot/distractor-robot-mask.png",
           priority = "high",
           line_length = 16,
-          width = 18,
-          height = 16,
+          width = 24,
+          height = 21,
           frame_count = 1,
           direction_count = 16,
-          shift = {0, -0.125},
+          shift = {0, -0.203125},
           apply_runtime_tint = true
         },
         {
-      filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
+      filename = "__base__/graphics/entity/distractor-robot/distractor-robot-shadow.png",
       priority = "high",
       line_length = 16,
-      width = 43,
-      height = 23,
+      width = 40,
+      height = 25,
       frame_count = 1,
       direction_count = 16,
-      shift = {0.859375, 0.609375}
+      shift = {0.9375, 0.609375}
     },
       }
      }
@@ -149,39 +145,38 @@ data:extend({
       layers =
       {
         {
-          filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
+          filename = "__base__/graphics/entity/distractor-robot/distractor-robot.png",
           priority = "high",
           line_length = 16,
-          width = 32,
+          width = 38,
           height = 33,
           frame_count = 1,
           direction_count = 16,
-          shift = {0, 0.015625}
+          shift = {0, -0.078125}
         },
         {
-          filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
+          filename = "__base__/graphics/entity/distractor-robot/distractor-robot-mask.png",
           priority = "high",
           line_length = 16,
-          width = 18,
-          height = 16,
+          width = 24,
+          height = 21,
           frame_count = 1,
           direction_count = 16,
-          shift = {0, -0.125},
+          shift = {0, -0.203125},
           apply_runtime_tint = true
         },
         {
-      filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
+      filename = "__base__/graphics/entity/distractor-robot/distractor-robot-shadow.png",
       priority = "high",
       line_length = 16,
-      width = 43,
-      height = 23,
+      width = 40,
+      height = 25,
       frame_count = 1,
       direction_count = 16,
-      shift = {0.859375, 0.609375}
+      shift = {0.9375, 0.609375}
     },
       }
     },
       },
-        
+      
 })
-
