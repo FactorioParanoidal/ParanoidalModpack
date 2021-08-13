@@ -370,14 +370,17 @@ function tickForces(forces, tick)
                 processDroidAssemblers(force)
                 processDroidGuardStations(force)
             end
-            processDroidAssemblersForTick(force, tick)
-            processSquadUpdatesForTick(force.name, tick % 60 + 1)
-                        
+
+            if not game.active_mods["Unit_Control"] then 
+                processDroidAssemblersForTick(force, tick)
+                processSquadUpdatesForTick(force.name, tick % 60 + 1)
+                updateSelectionCircles(force)
+            end
             if tick % 1200 == 0 then
                 log_session_statistics(force)
             end
 
-			updateSelectionCircles(force)
+			
 
         end
     end

@@ -18,3 +18,8 @@ changes from 0.4.8 to 0.4.9:
  - fixes to how the mod uses the new Unit Control API for raising unit events from known deployers. 
  - adding Guard Station to deployer supported for Unit Control
  - reducing how/when the guard and assembler stations try to run logic when spawning units while Unit Control is active. Basically all droid processing is halted.
+
+ changes from 0.4.9 to 0.4.10:
+  - if unit control is active, don't run the runtime logic for assemblers squad management/merging/retreat and assembler-centric targetting, 
+  and don't run the squad logic at all. This should help in-progress games which add unit control halfway through. 
+  - added ai_settings to all droid units and flying units to try to prevent units from being deleted if they fail a command, and for them to attempt to spread out from eachother and not stack up.
