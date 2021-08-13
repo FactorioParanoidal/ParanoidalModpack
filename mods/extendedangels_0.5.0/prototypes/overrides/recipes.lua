@@ -3,6 +3,7 @@ local bioprocessing_recipes = {
     "algae-farm",
     "algae-farm-2",
     "algae-farm-3",
+    "algae-farm-4",
     "bio-arboretum-1",
     "bio-generator-temperate-1",
     "bio-generator-swamp-1",

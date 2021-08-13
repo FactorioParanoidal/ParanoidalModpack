@@ -23,7 +23,7 @@ end
 
 -- Component/Tech overhaul recipe corrections
 local previous_building = {
-    "algae-farm-4",
+    "algae-farm-5",
     "bio-generator-temperate-2",
     "bio-generator-temperate-3",
     "bio-generator-swamp-2",
@@ -91,7 +91,11 @@ if mods["angelsindustries"] then
         end
 
         if settings.startup["angels-return-ingredients"].value then
-            add_minable_results()
+            if not extangels.migration.is_newer_version("0.14.13", mods["angelsindustries"]) then
+                angelsmods.functions.AI.add_minable_results()
+            else
+                add_minable_results()
+            end
             OV.execute()
         end
     end

@@ -1,3 +1,6 @@
+-- Fallbacks
+require("prototypes.recipe-builder-fallbacks")
+
 -- Recipes
 require("prototypes.recipes.bioprocessing")
 require("prototypes.recipes.petrochem")

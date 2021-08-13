@@ -1,5 +1,5 @@
 if angelsmods.bioprocessing then
-	data.raw["assembling-machine"]["algae-farm-3"].next_upgrade = "algae-farm-4"
+	data.raw["assembling-machine"]["algae-farm-4"].next_upgrade = "algae-farm-5"
 	data.raw["assembling-machine"]["bio-arboretum-1"].next_upgrade = "bio-arboretum-2"
 	data.raw["assembling-machine"]["bio-generator-temperate-1"].next_upgrade = "bio-generator-temperate-2"
 	data.raw["assembling-machine"]["bio-generator-swamp-1"].next_upgrade = "bio-generator-swamp-2"
