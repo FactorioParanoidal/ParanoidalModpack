@@ -6,8 +6,8 @@ OV.add_unlock("angels-solder-smelting-3", "molten-solder-alloy-mixing-3")
 
 OV.add_unlock("angels-steel-smelting-1", "molten-steel-alloy-mixing")
 OV.add_unlock("angels-steel-smelting-2", "molten-steel-alloy-mixing-2")
-OV.add_unlock("angels-steel-smelting-3", "molten-steel-alloy-mixing-3")
-OV.add_unlock("angels-steel-smelting-4", "molten-steel-alloy-mixing-4")
+OV.add_unlock("angels-steel-smelting-2", "molten-steel-alloy-mixing-3")
+OV.add_unlock("angels-steel-smelting-3", "molten-steel-alloy-mixing-4")
 
 if settings.startup["remelting-smooth-integration"].value then
 	--ALUMINIUM
