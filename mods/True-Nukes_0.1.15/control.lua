@@ -2,6 +2,7 @@ local mushroomFunctions = require("MushroomCloudInBuilt.control")
 local createBlastSoundsAndFlash = mushroomFunctions[1]
 script.on_init(function()
 	global.waitingNukeCratersBasic = {}		-- a simple array of the craters, {t = the number minutes it has been waiting for, pos = centre of crater, d = diameter too fill, s = surface index}
+	global.thermalBlasts = {}				-- a simple array, with elements: {surface_index, position, force, thermal_max_r, initialDamage, fireball_r, x, y}, each as a key of the map
 	global.blastWaves = {}					-- a simple array, with elements:
 	--{r = currrent explosion radius, pos = centre position, pow = initial blast multiplier (usually initial r*r)
 	-- , max = maximum radius, s = surface index, fire = leave fires (true for thermobarics, false for nukes), damage_init = starting damage, speed = how far to jump every round, fire_rad = the radius to which the fire wave is solid
@@ -241,6 +242,8 @@ local function doFastCraterFilling(event)
 end
 
 local function moveBlast(i,blast,pastEHits)
+
+	local efficientDamage = settings.global["use-efficient-thermal"].value
 	-- Compute the number of regions we move the blast in
 	local regNum = 8
 	if(blast.r<=500 or not blast.doItts) then
@@ -345,13 +348,15 @@ local function moveBlast(i,blast,pastEHits)
 	local entities = surface.find_entities(area)
 	eHits = eHits + #entities
 	--game.players[1].print(math.floor(blast.itt/6) .. " {" .. area[1][1] .. ", " .. area[1][2] .. "}, {" .. area[2][1] .. ", " .. area[2][2] .. "}")
+	local blastInnerSq = (blast.r - blast.speed)*(blast.r - blast.speed)
+	local blastSq = blast["r"]*blast["r"]
 	for _,entity in pairs(entities) do
 		-- do blast damage - reduced for rails, belts, land mines and flying vehicles, as this makes some sense, and trees in order to leave some alive
 		if (entity.valid and entity.position) then
 			local xdif = entity.position.x-center.x
 			local ydif = entity.position.y-center.y
 			local distSq = xdif*xdif + ydif*ydif
-			if((not (entity.prototype.max_health == 0)) and distSq > (blast.r - blast.speed)*(blast.r - blast.speed) and distSq <= blast["r"]*blast["r"]) then 
+			if((not (entity.prototype.max_health == 0)) and distSq > blastInnerSq and distSq <= blastSq) then 
 				local dist = math.sqrt(xdif*xdif + ydif*ydif)
 				local damage = blast.pow/distSq*blast.damage_init+blast.blast_min_damage
 				local t = entity.type
@@ -373,27 +378,32 @@ local function moveBlast(i,blast,pastEHits)
 						surface.create_entity{name="fire-flame-on-tree",position=entity.position, initial_ground_flame_count=255}
 					end
 					damage = math.random(damage/10, damage)
-				else
-					damage = math.random(damage/2, damage*2)
-				end
-				if(t=="tree") then
+
+					if(entity.prototype.resistances and entity.prototype.resistances.explosion) then
+						damage = (damage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent)
+					end
 					-- If a tree is destroyed, don't bother doing particle effects, just destroy it - huge performance savings
-					if((((not entity.prototype.resistances) or not entity.prototype.resistances.fire) and entity.health<damage) or (entity.prototype.resistances and entity.prototype.resistances.fire and entity.health<(damage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent))) then
+					if(entity.health<damage) then
 						local destPos = entity.position
 						entity.destroy()
 						surface.create_entity{name="tree-01-stump",position=destPos}
 					else
-						if(cause and cause.valid) then
-							entity.damage(damage, blast.force,"explosion", blast.cause)
-						else
-							entity.damage(damage, blast.force,"explosion")
-						end
+						entity.health = entity.health-damage
 					end
 				else
-					if(cause and cause.valid) then
-						entity.damage(damage, blast.force, "explosion", blast.cause)
+					damage = math.random(damage/2, damage*2)
+					local calcDamage = damage;
+					if(efficientDamage and entity.prototype.resistances and entity.prototype.resistances.explosion) then
+						calcDamage = (calcDamage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent)
+					end
+					if(efficientDamage and entity.health>calcDamage) then
+						entity.health = entity.health-calcDamage
 					else
-						entity.damage(damage, blast.force, "explosion")
+						if(cause and cause.valid) then
+							entity.damage(damage, blast.force, "explosion", blast.cause)
+						else
+							entity.damage(damage, blast.force, "explosion")
+						end
 					end
 				end
 				-- For thermobarics, with the blast wave carrying the fire
@@ -482,6 +492,149 @@ local function moveBlast(i,blast,pastEHits)
 	end
 end
 
+local function atomic_thermal_blast_internal(surface_index, position, force, thermal_max_r, initialDamage, fireball_r, initial_x, initial_y)
+	 -- do thermal heat-wave damage
+	 local corpseMap = {}
+	 corpseMap["biter-spawner"] = "biter-spawner-corpse"
+	 corpseMap["spitter-spawner"] = "spitter-spawner-corpse"
+	 
+	 corpseMap["small-biter"] = "small-biter-corpse"
+	 corpseMap["medium-biter"] = "medium-biter-corpse"
+	 corpseMap["big-biter"] = "big-biter-corpse"
+	 corpseMap["behemoth-biter"] = "behemoth-biter-corpse"
+	 
+	 corpseMap["small-spitter"] = "small-spitter-corpse"
+	 corpseMap["medium-spitter"] = "medium-spitter-corpse"
+	 corpseMap["big-spitter"] = "big-spitter-corpse"
+	 corpseMap["behemoth-spitter"] = "behemoth-spitter-corpse"
+	 
+	 corpseMap["small-worm"] = "small-worm-corpse"
+	 corpseMap["medium-worm"] = "medium-worm-corpse"
+	 corpseMap["big-worm"] = "big-worm-corpse"
+	 corpseMap["behemoth-worm"] = "behemoth-worm-corpse"
+	 local thermSq = thermal_max_r*thermal_max_r;
+	 local areas = {}
+	 local y = -1;
+	 local x = -1;
+	 if(thermal_max_r<500) then
+	 	areas = {{{position.x-thermal_max_r, position.y-thermal_max_r}, {position.x+thermal_max_r, position.y+thermal_max_r}}}
+	 else
+	 	local i = 0;
+	 	y = initial_y;
+ 		x = initial_x;
+	 	while(y+100<=position.y+thermal_max_r) do
+	 		initial_x = position.x-thermal_max_r;
+	 		while(x+100<=position.x +thermal_max_r) do
+				local distSq1 = (x-position.x)*(x-position.x)        +(y-position.y)*(y-position.y)
+				local distSq2 = (x+100-position.x)*(x+100-position.x)+(y-position.y)*(y-position.y)
+				local distSq3 = (x-position.x)*(x-position.x)        +(y+100-position.y)*(y+100-position.y)
+				local distSq4 = (x+100-position.x)*(x+100-position.x)+(y+100-position.y)*(y+100-position.y)
+				if(distSq1<thermSq or distSq2<thermSq or distSq3<thermSq or distSq4<thermSq) then
+	 				i = i+1;
+ 					table.insert(areas, {{x, y}, {x+100, y+100}});
+ 				end
+	 			x = x+100
+	 		end
+	 		if(x ~= position.x +thermal_max_r) then
+				if(distSq1<thermSq or distSq2<thermSq or distSq3<thermSq or distSq4<thermSq) then
+	 				i = i+1;
+					table.insert(areas, {{x, y}, {position.x +thermal_max_r, y+100}});
+				end
+ 			end
+			y = y+100
+ 			x = initial_x;
+			if(i>=100) then
+				break;
+			end
+	 	end
+ 		if(i<100 and y ~= position.y +thermal_max_r) then
+	 		while(x+100<=position.x +thermal_max_r) do
+				if(distSq1<thermSq or distSq2<thermSq or distSq3<thermSq or distSq4<thermSq) then
+					table.insert(areas, {{x, y}, {x+100, position.y+thermal_max_r}});
+				end
+	 			x = x+100
+	 		end
+	 		if(x ~= position.x +thermal_max_r) then
+				if(distSq1<thermSq or distSq2<thermSq or distSq3<thermSq or distSq4<thermSq) then
+					table.insert(areas, {{x, y}, {position.x +thermal_max_r, position.y+thermal_max_r}});
+				end
+ 			end
+		end
+	 end
+	 for _,a in pairs(areas) do
+		 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{area=a}) do
+			if(v.valid and not (v.prototype.max_health == 0)) then
+				local distSq = (v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)
+				if(distSq>fireball_r*fireball_r and distSq<=thermSq) then
+					local damage = fireball_r*fireball_r*initialDamage/distSq
+					if(v.type=="tree") then
+		 				-- efficient tree handling
+						if(math.random(0, 100)<1) then
+							game.surfaces[surface_index].create_entity{name="fire-flame-on-tree",position=v.position, initial_ground_flame_count=1+math.min(254,thermal_max_r*thermal_max_r/distSq)}
+						end
+						local damage = math.random(damage/10, damage)
+						if((((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health<damage) or (v.prototype.resistances and v.prototype.resistances.fire and v.health<(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent))) then
+							local surface = v.surface
+							local destPos = v.position
+							v.destroy()
+							surface.create_entity{name="tree-01-stump",position=destPos}
+						else
+							if((not v.prototype.resistances) or not v.prototype.resistances.fire) then
+								v.health = v.health-damage
+							else
+								v.health = v.health-(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)
+							end
+						end
+					else
+						local damage = math.random(damage/2, damage*2)
+						if(v.grid) then
+							if(cause and cause.valid) then
+								v.damage(damage, force, "fire", cause)
+							else
+								v.damage(damage, force, "fire")
+							end
+							if(v.valid and(v.type == "unit" or v.type == "car" or v.type == "spider-vehicle")) then
+								local fireShield = nil
+								for _,e in pairs(v.grid.equipment) do
+									if(e.name=="fire-shield-equipment" and e.energy>=1000000) then
+										fireShield = e;
+										break;
+									end	
+								end
+								if fireShield then
+									fireShield.energy = fireShield.energy-1000000
+								else
+									game.surfaces[surface_index].create_entity{name="fire-sticker", position=v.position, target=v}
+								end
+							end
+						else
+							if(((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health>damage) then
+								v.health = v.health-damage
+							elseif(v.prototype.resistances and v.prototype.resistances.fire and v.health>(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)) then
+								v.health = v.health-(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)
+							else
+								if(corpseMap[v.name]) then
+									local vPos = v.position
+									local corpseName = corpseMap[v.name]
+									v.destroy()
+									game.surfaces[surface_index].create_entity{name=corpseName, position=vPos}
+								else
+									if(cause and cause.valid) then
+										v.damage(damage, force, "fire", cause)
+									else
+										v.damage(damage, force, "fire")
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		 end
+	 end
+	 return {x = x, y = y};
+end
+
 local function nukeBuildingDetonate(building)
 	-- A nuke building just launches an artillery shell at itself, much easier than an entire seperate detonation system
 	if(building.get_recipe().name == "megaton-detonation") then
@@ -503,11 +656,26 @@ local function tickHandler(event)
 	if(global.nukeBuildings ==nil) then
 		global.nukeBuildings = {}
 	end
+	if(global.thermalBlasts ==nil) then
+		global.thermalBlasts = {}
+	end
 	if(#global.blastWaves>0) then
 		for i,blast in ipairs(global.blastWaves) do
 			moveBlast(i,blast,0)
 		end
 	end
+	
+	if (#global.thermalBlasts>0) then
+		for i,therm in pairs(global.thermalBlasts) do
+			local pos = atomic_thermal_blast_internal(therm.surface_index, therm.position, therm.force, therm.thermal_max_r, therm.initialDamage, therm.fireball_r, therm.x, therm.y);
+			therm.x = pos.x
+			therm.y = pos.y
+			if((pos.x == therm.position.x+therm.thermal_max_r and pos.y == therm.position.y+therm.thermal_max_r) or (pos.x == -1 and pos.y == -1)) then
+				global.thermalBlasts[i]=nil
+			end
+		end
+	end
+	
 	doFastCraterFilling(event)
 	if(#global.nukeBuildings>0) then
 		for i,building in ipairs(global.nukeBuildings) do
@@ -643,8 +811,20 @@ local function nukeTileChangesHeightAwareHuge(position, check_craters, surface_i
 	end
 	-- add noise
 	tileNoise(game.surfaces[surface_index], tileTable, position, crater_internal_r/3, 1, {default = depthsForCrater[-3]}, 3);
+	if(#tileTable >=1000) then
+		game.surfaces[surface_index].set_tiles(tileTable)
+		tileTable = {};
+	end
 	tileNoise(game.surfaces[surface_index], tileTable, position, crater_internal_r*2/3, 1, {default = depthsForCrater[-2]}, 3);
+	if(#tileTable >=1000) then
+		game.surfaces[surface_index].set_tiles(tileTable)
+		tileTable = {};
+	end
 	tileNoise(game.surfaces[surface_index], tileTable, position, crater_internal_r, 2, {default = depthsForCrater[0]}, 3);
+	if(#tileTable >=1000) then
+		game.surfaces[surface_index].set_tiles(tileTable)
+		tileTable = {};
+	end
 	tileNoise(game.surfaces[surface_index], tileTable, position, crater_internal_r, 1, {default = depthsForCrater[-1]}, 3);
 	game.surfaces[surface_index].set_tiles(tileTable)
 	-- ensure noise for crater goes on top of lakes
@@ -1005,107 +1185,27 @@ local function nukeTileChanges(position, check_craters, surface_index, crater_in
 	 game.surfaces[surface_index].set_tiles(tileTable)
 end
 
-local function atomic_thermal_blast(surface_index, position, force, thermal_max_r, fireball_r)
-	 -- do thermal heat-wave damage
-	 local corpseMap = {}
-	 corpseMap["biter-spawner"] = "biter-spawner-corpse"
-	 corpseMap["spitter-spawner"] = "spitter-spawner-corpse"
-	 
-	 corpseMap["small-biter"] = "small-biter-corpse"
-	 corpseMap["medium-biter"] = "medium-biter-corpse"
-	 corpseMap["big-biter"] = "big-biter-corpse"
-	 corpseMap["behemoth-biter"] = "behemoth-biter-corpse"
-	 
-	 corpseMap["small-spitter"] = "small-spitter-corpse"
-	 corpseMap["medium-spitter"] = "medium-spitter-corpse"
-	 corpseMap["big-spitter"] = "big-spitter-corpse"
-	 corpseMap["behemoth-spitter"] = "behemoth-spitter-corpse"
-	 
-	 corpseMap["small-worm"] = "small-worm-corpse"
-	 corpseMap["medium-worm"] = "medium-worm-corpse"
-	 corpseMap["big-worm"] = "big-worm-corpse"
-	 corpseMap["behemoth-worm"] = "behemoth-worm-corpse"
-	 
-	 
-	 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=thermal_max_r}) do
-		if(v.valid and not (v.prototype.max_health == 0)) then
-			local distSq = (v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)
-			if(distSq>fireball_r) then
-				local damage = thermal_max_r*thermal_max_r/distSq*10	
-				if(v.type=="tree") then
-	 				-- efficient tree handling
-					if(math.random(0, 100)<1) then
-						game.surfaces[surface_index].create_entity{name="fire-flame-on-tree",position=v.position, initial_ground_flame_count=1+math.min(254,thermal_max_r*thermal_max_r/distSq)}
-					end
-					local damage = math.random(damage/10, damage)
-					if((((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health<damage) or (v.prototype.resistances and v.prototype.resistances.fire and v.health<(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent))) then
-						local surface = v.surface
-						local destPos = v.position
-						v.destroy()
-						surface.create_entity{name="tree-01-stump",position=destPos}
-					else
-						if(cause and cause.valid) then
-							v.damage(damage, force, "fire", cause)
-						else
-							v.damage(damage, force, "fire")
-						end
-					end
-				else
-					local damage_caused = math.random(damage/2, damage*2)
-					if(v.grid) then
-						if(cause and cause.valid) then
-							v.damage(damage_caused, force, "fire", cause)
-						else
-							v.damage(damage_caused, force, "fire")
-						end
-						if(v.valid and(v.type == "unit" or v.type == "car" or v.type == "spider-vehicle")) then
-							local fireShield = nil
-							for _,e in pairs(v.grid.equipment) do
-								if(e.name=="fire-shield-equipment" and e.energy>=1000000) then
-									fireShield = e;
-									break;
-								end	
-							end
-							if fireShield then
-								fireShield.energy = fireShield.energy-1000000
-							else
-								game.surfaces[surface_index].create_entity{name="fire-sticker", position=v.position, target=v}
-							end
-						end
-					else
-						if(((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health>damage) then
-							v.health = v.health-damage
-						elseif(v.prototype.resistances and v.prototype.resistances.fire and v.health>(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)) then
-							v.health = v.health-(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)
-						else
-							if(corpseMap[v.name]) then
-								local vPos = v.position
-								local corpseName = corpseMap[v.name]
-								v.destroy()
-								game.surfaces[surface_index].create_entity{name=corpseName, position=vPos}
-							else
-								if(cause and cause.valid) then
-									v.damage(damage, force, "fire", cause)
-								else
-									v.damage(damage, force, "fire")
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	 end
+
+
+local function atomic_thermal_blast(surface_index, position, force, thermal_max_r, initialDamage, fireball_r)
+	if not global.thermalBlasts then
+		global.thermalBlasts = {}
+	end
+	
+	local pos = atomic_thermal_blast_internal(surface_index, position, force, thermal_max_r, initialDamage, fireball_r, position.x-thermal_max_r, position.y-thermal_max_r);
+	if((pos.x ~= position.x+thermal_max_r or pos.y ~= position.y+thermal_max_r) and (pos.x ~= -1 or pos.y ~= -1)) then
+		table.insert(global.thermalBlasts, {surface_index=surface_index, position=position, force=force, thermal_max_r=thermal_max_r, initialDamage=initialDamage, fireball_r=fireball_r, x=pos.x, y=pos.y})
+	end
 end
 
-local function old_atomic_thermal_blast(surface_index, position, force, thermal_max_r, fireball_r)
+local function old_atomic_thermal_blast(surface_index, position, force, thermal_max_r, initialDamage, fireball_r)
 	 -- do thermal heat-wave damage
 	 
 	 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=thermal_max_r}) do
 		if(v.valid and not (v.prototype.max_health == 0)) then
 			local distSq = (v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)
 			if(distSq>fireball_r) then
-				local damage = thermal_max_r*thermal_max_r/distSq*10	
+				local damage = fireball_r*fireball_r*initialDamage/distSq	
 				if(v.type=="tree") then
 	 				-- efficient tree handling
 					if(math.random(0, 100)<1) then
@@ -1256,9 +1356,9 @@ local function atomic_weapon_hit(event, crater_internal_r, crater_external_r, fi
 		end
 	 end
 	 if(settings.global["use-efficient-thermal"].value) then
-	 	atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, fireball_r)
+	 	atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, 5000, fireball_r)
 	 else
-	 	old_atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, fireball_r)
+	 	old_atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, 5000, fireball_r)
  	end
 	 table.insert(global.blastWaves, {r = fireball_r, pos = position, pow = fireball_r*fireball_r, max = blast_max_r, s = event.surface_index, fire = false, damage_init = 5000.0, speed = 8, fire_rad = 0, blast_min_damage = 0, itt = 1, doItts = true, ittframe = 1, force = force, cause = cause})
 end

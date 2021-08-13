@@ -191,7 +191,7 @@ data:extend({
 		name = "enable-small-atomic-bomb",
 		setting_type = "startup",
 		default_value = true,
-		order = "f7"
+		order = "f9"
 	},
 	
 	{
@@ -207,7 +207,7 @@ data:extend({
 		name = "enable-really-very-small-atomic-bomb",
 		setting_type = "startup",
 		default_value = true,
-		order = "f9"
+		order = "f7"
 	},
 	
 	{
