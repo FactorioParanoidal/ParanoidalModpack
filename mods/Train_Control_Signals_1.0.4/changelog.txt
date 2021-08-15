@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2021-01-07
+  Changes:
+    - Fix migration script error for trains with temporary targets.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2021-01-07
+  Changes:
+    - Update for 1.1.7 new train state.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2021-01-05
+  Changes:
+    - Fix setting depot destination out of order from schedule.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-12-27
+  Changes:
+    - Change from specific disabled signals, to a generic 'Skip' signal, which will be used.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-12-25
+  Changes:
+    - Initial release
