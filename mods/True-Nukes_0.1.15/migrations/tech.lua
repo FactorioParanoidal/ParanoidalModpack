@@ -1,3 +1,4 @@
+--[[
 for index, force in pairs(game.forces) do
   local technologies = force.technologies
   local recipes = force.recipes
@@ -18,3 +19,4 @@ for index, force in pairs(game.forces) do
     recipes["enable-small-atomic-bomb"].enabled = technologies["scary-atomic-weapons"].researched
   end
 end
+]]-- drd
