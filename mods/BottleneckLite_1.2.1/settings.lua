@@ -19,7 +19,7 @@ data:extend{
     type = "bool-setting",
     name = "bnl-include-mining-drills",
     setting_type = "startup",
-    default_value = true,
+    default_value = false,
     order = "ac",
   },
   {
