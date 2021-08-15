@@ -1,0 +1,11 @@
+{
+	"name": "steinios_research_sensor",
+	"version": "1.1.1",
+	"title": "steinio's research sensor",
+	"author": "steinio",
+	"contact": "steinio @ https://forums.factorio.com/",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=26034",
+	"description": "Additional EvoGUI Sensor which shows the research progress and estimated time of completion. ETC-calculation by Grokzen.",
+	"dependencies": ["base", "EvoGUI"],
+	"factorio_version": "1.1"
+}
