@@ -31,8 +31,8 @@ script.on_init(function()
   --player.insert{name="unused-air-filter", count=10}
   
   ["firearm-magazine"] = math.random(5,19),
-  ["silver-zinc-battery"] = math.random(2,9),
   ["repair-pack"] = math.random(2,9),
+  ["titanium-bearing-ball"] = 2,
   ["intelligent-io"] = 1
   --player.insert["angels-wire-platinum", count=5}
         } )
@@ -64,6 +64,7 @@ script.on_init(function()
         ["intergrated-electronics"] = math.random(5,35),
         ["radar"] = math.random(1,3),
         ["burner-mining-drill"] = math.random(1,3),
+		["silver-zinc-battery"] = math.random(2,9),
         --["salvaged-generator",  1
         })
 ----------------------------------
