@@ -19,7 +19,7 @@ local ingredients = {
 	{"logistic-science-pack", 1},
 	{"chemical-science-pack", 1},
 	{"production-science-pack", 1},
---	{"military-science-pack", 1},
+	{"military-science-pack", 1},
 	{"utility-science-pack", 1},
 }
 
@@ -259,8 +259,10 @@ data:extend(
 	{
 		type = "technology",
 		name = tech_name .. "-7",
-		icon_size = icon_size, icon_mipmaps = 4,
-		icons = icons,
+		icon_size = 128, icon_mipmaps = 4,
+		icons = {
+					{icon = mod_name .. '/icons/' .. tech_name .. '2.png', icon_size = 128, icon_mipmaps = 4},
+				},
 --		effects =
 --		{
 --			{
@@ -293,7 +295,7 @@ data:extend(
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
---				{"military-science-pack", 1},
+				{"military-science-pack", 1},
 				{"production-science-pack", 1},
 				{"utility-science-pack", 1},
 				{"space-science-pack", 1}
