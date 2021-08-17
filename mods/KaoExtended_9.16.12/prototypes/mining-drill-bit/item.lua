@@ -2,8 +2,8 @@ local order = 15
 local function createBIT(name)
   data:extend({
   { type = "item",
-    name = "mining-drill-bit-"..name,
-    icon = "__KaoExtended__/graphics/mining-drill-bit-" .. name .. ".png",
+    name = "mining-drill-bit-".. name,
+    icon = "__KaoExtended__/graphics/mining-drill-bit-".. name ..".png",
     --flags = {},
     subgroup = "mining-drill-bit",
     order = "a-" .. string.char(order),
@@ -23,48 +23,56 @@ data:extend({{
   }})
 local function newRecipe(item, time)
   local rec = { type = "recipe",
-      name = "mining-drill-bit-"..item,
+      name = "mining-drill-bit-".. item,
       category = "crafting-machine",
       enabled = false,
       energy_required = time,
       ingredients = {},
-      result = "mining-drill-bit-"..item,
+      result = "mining-drill-bit-".. item,
     }
     data:extend({rec})
     return rec
 end
-createBIT("MK0")
-createBIT("MK1")
-createBIT("MK2")
-createBIT("MK3")
-createBIT("MK4")
-createBIT("MK5")
+createBIT("mk0")
+createBIT("mk1")
+createBIT("mk2")
+createBIT("mk3")
+createBIT("mk4")
+createBIT("mk5")
 
 newRecipe("mk0", 2).ingredients = {
-  {"iron-plate", 8}
+  {"iron-plate", 8},
+  {"iron-stick", 3},
 }
+data.raw.recipe["mining-drill-bit-mk0"].enabled = true
+
 newRecipe("mk1", 5).ingredients = {
   {"mining-drill-bit-mk0", 2},
   {"iron-plate", 15}
 }
+bobmods.lib.tech.add_recipe_unlock("electric-mining", "mining-drill-bit-mk0")
+
 newRecipe("mk2", 7).ingredients = {
   {"mining-drill-bit-mk1", 2},
-  {"steel-plate", 15},
-  {"aluminium-plate", 32},
-  {"titanium-plate", 52},
-  {"cobalt-steel-alloy", 20},
-  {"plastic-bar", 40}
+  {"steel-plate", 15}
 }
+bobmods.lib.tech.add_recipe_unlock("steel-processing", "mining-drill-bit-mk2")
+
 newRecipe("mk3", 12).ingredients = {
   {"mining-drill-bit-mk2", 2},
   {"cobalt-steel-alloy", 20}
 }
+bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "mining-drill-bit-mk3")
+
 newRecipe("mk4", 15).ingredients = {
   {"mining-drill-bit-mk3", 2},
   {"titanium-plate", 20}
 }
+bobmods.lib.tech.add_recipe_unlock("bob-drills-3", "mining-drill-bit-mk4")
+
 newRecipe("mk5", 15).ingredients = {
   {"mining-drill-bit-mk4", 2},
   {"nitinol-gear-wheel", 4},
   {"tungsten-carbide", 20}
 }
+bobmods.lib.tech.add_recipe_unlock("bob-drills-3", "mining-drill-bit-mk5")

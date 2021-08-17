@@ -22,8 +22,8 @@ require("prototypes.advtech.override_recipe")
 require("prototypes.structurecomponents.item")
 require("prototypes.structurecomponents.override")
 
---require("prototypes.mining-drill-bit.item")
---require("prototypes.mining-drill-bit.override")
+require("prototypes.mining-drill-bit.item")
+require("prototypes.mining-drill-bit.override")
 
 require("prototypes.recipes.UsedCoolant")
 
