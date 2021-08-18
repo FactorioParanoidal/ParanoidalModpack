@@ -45,12 +45,13 @@ newRecipe("mk0", 2).ingredients = {
   {"iron-stick", 3},
 }
 data.raw.recipe["mining-drill-bit-mk0"].enabled = true
+data.raw.recipe["mining-drill-bit-mk0"].category = "crafting"
 
 newRecipe("mk1", 5).ingredients = {
   {"mining-drill-bit-mk0", 2},
   {"iron-plate", 15}
 }
-bobmods.lib.tech.add_recipe_unlock("electric-mining", "mining-drill-bit-mk0")
+bobmods.lib.tech.add_recipe_unlock("electric-mining", "mining-drill-bit-mk1")
 
 newRecipe("mk2", 7).ingredients = {
   {"mining-drill-bit-mk1", 2},
