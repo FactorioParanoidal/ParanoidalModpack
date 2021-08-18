@@ -27,7 +27,7 @@ artillery_turret_prototype.minable = {mining_time = 0.1, result = "artillery-tur
 artillery_turret_prototype.icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret.png"
 artillery_turret_prototype.gun = "artillery-gun-prototype"
 artillery_turret_prototype.ammo_stack_limit = "5"
-artillery_turret_prototype.max_health = "1000"
+artillery_turret_prototype.max_health = 1000
 artillery_turret_prototype.turret_rotation_speed = "0.0003"
 artillery_turret_prototype.turn_after_shooting_cooldown = "100"
 artillery_turret_prototype.manual_range_modifier = "1"
