@@ -463,6 +463,23 @@ function handleOnRobotBuiltEntity(event)
     end
 end -- handleOnRobotBuiltEntity
 
+function handleOnScriptRaisedBuilt(event)
+    local entity = event.entity
+    event.created_entity = event.entity
+    if(entity.name == "droid-assembling-machine") then
+        handleDroidAssemblerPlaced(event)
+    elseif(entity.name == "droid-guard-station") then
+        handleGuardStationPlaced(event)
+    elseif(entity.name == "droid-counter") then
+        handleBuiltDroidCounter(event)
+    elseif(entity.name == "droid-settings") then
+        handleBuiltDroidSettings(event)
+    elseif entity.name == "rally-beacon" then
+        handleBuiltRallyBeacon(event)
+    elseif entity.name == "loot-chest" then
+        handleBuiltLootChest(event)
+    end
+end -- handleOnScriptRaisedBuilt
 
 -- MAIN ENTRY POINT IN-GAME
 -- during the on-tick event, lets check if we need to update squad AI, spawn droids from assemblers, or update bot counters, etc
