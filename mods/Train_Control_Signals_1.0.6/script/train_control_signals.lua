@@ -13,6 +13,8 @@ local train_needs_refueling = function(train)
   for k, movers in pairs (locomotives) do
     for k, locomotive in pairs (movers) do
       local fuel_inventory = locomotive.get_fuel_inventory()
+      if not fuel_inventory then return false end
+      if #fuel_inventory == 0 then return false end
       fuel_inventory.sort_and_merge()
       if #fuel_inventory > 1 then
         if not fuel_inventory[2].valid_for_read then
@@ -123,25 +125,31 @@ local on_train_changed_state = function(event)
     end
   end
 
-  if changed then
-    if needs_depot then
+  if not changed then return end
 
-      -- We are able to go to a depot, but we only want to do that if it is in the schedule in the correct order
-      -- What that means, is we just check if the previous station in the schedule is a depot, if so, go there, if not, we stay with destination full.
+  if needs_depot then
 
-      local current = schedule.current
-      local previous_index = current - 1
-      if previous_index <= 0 then
-        previous_index = #schedule.records
+    -- We are able to go to a depot, but we only want to do that if it is in the schedule in the correct order
+    -- What that means, is we just check if the previous station in the schedule is a depot, if so, go there, if not, we stay with destination full.
+
+    local current = schedule.current
+    local index = current
+    while true do
+      index = index - 1
+      if index == 0 then index = #schedule.records end
+      if index == current then break end
+      if station_is_open_depot(schedule.records[index].station) then
+        schedule.current = index
+        break
       end
-
-      if station_is_open_depot(schedule.records[previous_index].station) then
-        schedule.current = previous_index
+      if not station_is_disabled(schedule.records[index].station) then
+        break
       end
-
     end
-    train.schedule = schedule
+
   end
+
+  train.schedule = schedule
 
 end
 
