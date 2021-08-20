@@ -14,7 +14,8 @@ function setup.on_init()
 	global.distrEvents = global.distrEvents or {}
 	global.settings = global.settings or {}
 	global.defaultTrash = setup.generateTrashItemList()
-
+	
+	global.remoteIgnoredEntities = global.remoteIgnoredEntities or {}
 	global.allowedEntities = _(game.entity_prototypes)
 								:where(function(prototype)
 									return util.hasInventory(prototype) and 
