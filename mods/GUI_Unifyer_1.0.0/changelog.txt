@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021.08.18
+  Changes:
+    - Initial release based on Better_Modicons by Dr_Pepper (with permission) but with new icons.
+    - Supports factoryplanner.
+    - Supports helmod.
+    - Supports ModuleInserter.
+    - Supports Placeables.
+    - Supports Todo-List.
+    - (new) Supports what-is-it-really-used-for.
+---------------------------------------------------------------------------------------------------

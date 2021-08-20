@@ -1,0 +1,19 @@
+{
+	"name": "GUI_Unifyer",
+	"version": "1.0.0",
+	"title": "GUI Unifyer",
+	"description": "Make mod buttons look uniform and aligned.\nContinuation of Better_Modbuttons by Dr_Pepper.\nSupports Factory Planner, Helmod, Module Inserter, Placeables, Todo List, What Is It Really Used For, and more soon.",
+	"author": "snouz, Dr_Pepper",
+	"homepage": "https://mods.factorio.com/mod/GUI_Unifyer",
+	"factorio_version": "1.1",
+	"dependencies": [ 
+		"base >= 1.1.0",
+		"?factoryplanner",
+		"?helmod",
+		"?ModuleInserter",
+		"?Placeables",
+		"?Todo-List",
+		"?what-is-it-really-used-for"
+	]
+}
+
