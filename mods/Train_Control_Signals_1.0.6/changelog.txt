@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2021-07-31
+  Changes:
+    - More precise fix for skipping depot stations in some circumstances.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2021-07-25
+  Changes:
+    - Fix crash with electric locomotives.
+    - Fix case of train not heading to depot station when it should.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2021-01-07
   Changes:
