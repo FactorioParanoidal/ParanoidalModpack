@@ -62,30 +62,6 @@ local function MakeChargingRecipe(name)
 end
 
 
-local function MakeRecyclingRecipe(name)
-	local level = tonumber(name:sub(-1))
-
-	return {
-		type = "recipe",
-		name = name.."-recycling",
-		icon = graphics_path..name.."-recycling-icon.png",
-		icon_size = 64, icon_mipmaps = 4,
-		subgroup = name_group_batteries,
-		order = "c",
-		category = "advanced-crafting",
-		enabled = false,
-		energy_required = 5*level,
-		ingredients = {{name.."-empty", 1}},
-		result = "battery",
-		result_count = math.floor(get_fuel_value(name)/battery_capacity*0.9),
-		hide_from_stats = true,
-		allow_as_intermediate = false, -- don't allow as intermediate, hand-crafting not allowed anyway (fixes incompatibility with Industrial Revolution 2)
-		allow_decomposition = false,
-		main_product = "",
-	}
-end
-
-
 local function MakeTertiaryCharger(basename, tname)
 	return {
 		type = "recipe",
@@ -167,8 +143,36 @@ data:extend({
 	MakeChargingRecipe(name_fuel2),
 	MakeChargingRecipe(name_fuel3),
 	MakeChargingRecipe(name_fuel4),
-	MakeRecyclingRecipe(name_fuel1),
-	MakeRecyclingRecipe(name_fuel2),
-	MakeRecyclingRecipe(name_fuel3),
-	MakeRecyclingRecipe(name_fuel4),
 })
+
+if settings.startup[setting_recycling].value then
+	local function MakeRecyclingRecipe(name)
+		local level = tonumber(name:sub(-1))
+
+		return {
+			type = "recipe",
+			name = name.."-recycling",
+			icon = graphics_path..name.."-recycling-icon.png",
+			icon_size = 64, icon_mipmaps = 4,
+			subgroup = name_group_batteries,
+			order = "c",
+			category = "advanced-crafting",
+			enabled = false,
+			energy_required = 5*level,
+			ingredients = {{name.."-empty", 1}},
+			result = "battery",
+			result_count = math.floor(get_fuel_value(name)/battery_capacity*0.9),
+			hide_from_stats = true,
+			allow_as_intermediate = false, -- don't allow as intermediate, hand-crafting not allowed anyway (fixes incompatibility with Industrial Revolution 2)
+			allow_decomposition = false,
+			main_product = "",
+		}
+	end
+
+	data:extend({
+		MakeRecyclingRecipe(name_fuel1),
+		MakeRecyclingRecipe(name_fuel2),
+		MakeRecyclingRecipe(name_fuel3),
+		MakeRecyclingRecipe(name_fuel4),
+	})
+end

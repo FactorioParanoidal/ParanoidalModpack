@@ -62,8 +62,11 @@ name_tech_fuel3 = name_fuel3
 name_tech_fuel4 = name_fuel4
 
 -- Settings
+setting_cheatsy_braking	= "bet-cheatsy-braking"
 setting_cheatsy_locs	= "bet-cheatsy-locs"
 setting_cheatsy_power	= "bet-cheatsy-power"
 setting_cheatsy_speed	= "bet-cheatsy-speed"
 setting_cheatsy_wagons	= "bet-cheatsy-wagons"
+setting_recycling	= "bet-recycling"
 setting_return_partial_batteries = "bet-return-partial-batteries"
+
