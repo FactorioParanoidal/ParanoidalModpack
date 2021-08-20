@@ -30,6 +30,9 @@ local function MakeLocomotive()
 	if settings.startup[setting_cheatsy_locs].value then
 		loc.max_speed = settings.startup[setting_cheatsy_speed].value / 216 -- 1/216 = * 1000 / 3600 / 60
 		loc.max_power = settings.startup[setting_cheatsy_power].value.."kW"
+		local braking_factor = settings.startup[setting_cheatsy_braking].value
+		if loc.braking_force then loc.braking_force = loc.braking_force * braking_factor end
+		if loc.braking_power then loc.braking_power = loc.braking_power * braking_factor end
 	end
 
 	loc.working_sound = {

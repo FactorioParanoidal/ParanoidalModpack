@@ -24,29 +24,6 @@ data:extend({
 	},
 	{
 		type = "technology",
-		name = name_tech_recycling,
-		icon = graphics_path..name_tech_recycling.."-tech.png",
-		icon_size = 128, icon_mipmaps = 4,
-		effects = {
-			{type = "unlock-recipe", recipe = name_fuel1.."-recycling"},
-			{type = "unlock-recipe", recipe = name_fuel2.."-recycling"},
-			{type = "unlock-recipe", recipe = name_fuel3.."-recycling"},
-			{type = "unlock-recipe", recipe = name_fuel4.."-recycling"},
-		},
-		prerequisites = {name_tech_bet},
-		unit = {
-			count = 300,
-			ingredients = {
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-			},
-			time = 30
-		},
-		order = "g-j-b"
-	},
-	{
-		type = "technology",
 		name = name_tech_chg2,
 		icon = graphics_path..name_tech_chg2.."-tech.png",
 		icon_size = 128,
@@ -177,3 +154,29 @@ data:extend({
 		order = "i-j-b-4"
 	},
 })
+
+if settings.startup[setting_recycling].value then
+	data:extend({{
+		type = "technology",
+		name = name_tech_recycling,
+		icon = graphics_path..name_tech_recycling.."-tech.png",
+		icon_size = 128, icon_mipmaps = 4,
+		effects = {
+			{type = "unlock-recipe", recipe = name_fuel1.."-recycling"},
+			{type = "unlock-recipe", recipe = name_fuel2.."-recycling"},
+			{type = "unlock-recipe", recipe = name_fuel3.."-recycling"},
+			{type = "unlock-recipe", recipe = name_fuel4.."-recycling"},
+		},
+		prerequisites = {name_tech_bet},
+		unit = {
+			count = 300,
+			ingredients = {
+				{"automation-science-pack", 1},
+				{"logistic-science-pack", 1},
+				{"chemical-science-pack", 1},
+			},
+			time = 30
+		},
+		order = "g-j-b"
+	}})
+end

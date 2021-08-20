@@ -34,6 +34,22 @@ data:extend({
 		maximum_value = 100000,
 		order = "d",
 	},
+	{
+		type = "int-setting",
+		name = setting_cheatsy_braking,
+		setting_type = "startup",
+		default_value = 1,
+		minimum_value = 0.1,
+		maximum_value = 1000,
+		order = "e",
+	},
+	{
+		type = "bool-setting",
+		name = setting_recycling,
+		setting_type = "startup",
+		default_value = true,
+		order = "f",
+	},
 	-- runtime-global settings
 	{
 		type = "bool-setting",

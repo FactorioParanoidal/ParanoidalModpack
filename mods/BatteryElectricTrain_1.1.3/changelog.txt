@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-08-14
+  Features:
+    - Battery pack recycling can be disabled to improve compatibility with other (recycling) mods or just to make things more difficult.
+    - Braking force multiplier for cheatsy wagons and locomotives. Makes higher acceleration and top speed settings actually useful.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2021-06-17
   Features:
