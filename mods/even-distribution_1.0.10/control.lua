@@ -6,6 +6,7 @@ require("framework"){
 		"util",
 		"helpers",	
 		"setup",
+		"remote",
 		"visuals",
 		"gui-tools",
 		"drag",

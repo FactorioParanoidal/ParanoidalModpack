@@ -55,7 +55,8 @@ end
 
 function entity:isIgnored(player)
 	return not global.allowedEntities[self.name] or
-		   global.settings[player.index].ignoredEntities[self.name]
+		   global.settings[player.index].ignoredEntities[self.name] or
+		   global.remoteIgnoredEntities[self.name]
 end
 
 function entity:recipe()
