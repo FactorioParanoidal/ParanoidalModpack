@@ -19,6 +19,11 @@
     },
     
     {
+      "name": "AbandonedRuins-Silly",
+      "enabled": true
+    },
+    
+    {
       "name": "Aircraft",
       "enabled": true
     },
@@ -30,6 +35,11 @@
     
     {
       "name": "angelsbioprocessing",
+      "enabled": true
+    },
+    
+    {
+      "name": "angelsextended-remelting-fixed",
       "enabled": true
     },
     
@@ -60,6 +70,11 @@
     
     {
       "name": "baraws",
+      "enabled": true
+    },
+    
+    {
+      "name": "BatteryElectricTrain",
       "enabled": true
     },
     
@@ -179,17 +194,17 @@
     },
     
     {
-      "name": "Bottleneck",
+      "name": "BottleneckLite",
+      "enabled": true
+    },
+    
+    {
+      "name": "Building_Time",
       "enabled": true
     },
     
     {
       "name": "bullet-trails",
-      "enabled": true
-    },
-    
-    {
-      "name": "BurnerOffshorePump",
       "enabled": true
     },
     
@@ -224,6 +239,11 @@
     },
     
     {
+      "name": "creative-mod",
+      "enabled": true
+    },
+    
+    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -240,6 +260,11 @@
     
     {
       "name": "DeadlockResearchNotifications",
+      "enabled": true
+    },
+    
+    {
+      "name": "deep-storage-unit",
       "enabled": true
     },
     
@@ -299,11 +324,6 @@
     },
     
     {
-      "name": "FARL",
-      "enabled": true
-    },
-    
-    {
       "name": "FastRemoveTiles",
       "enabled": true
     },
@@ -339,7 +359,17 @@
     },
     
     {
+      "name": "GUI_Unifyer",
+      "enabled": true
+    },
+    
+    {
       "name": "helmod",
+      "enabled": true
+    },
+    
+    {
+      "name": "heroturrets",
       "enabled": true
     },
     
@@ -369,11 +399,6 @@
     },
     
     {
-      "name": "KingsTurret-Shields",
-      "enabled": true
-    },
-    
-    {
       "name": "KS_Power",
       "enabled": true
     },
@@ -385,6 +410,11 @@
     
     {
       "name": "laser_fix",
+      "enabled": true
+    },
+    
+    {
+      "name": "liborio",
       "enabled": true
     },
     
@@ -440,6 +470,16 @@
     
     {
       "name": "miniloader",
+      "enabled": true
+    },
+    
+    {
+      "name": "minime_temp",
+      "enabled": true
+    },
+    
+    {
+      "name": "MIRV",
       "enabled": true
     },
     
@@ -544,6 +584,11 @@
     },
     
     {
+      "name": "P-U-M-P-S",
+      "enabled": true
+    },
+    
+    {
       "name": "paranoidal-tweaks",
       "enabled": true
     },
@@ -560,6 +605,11 @@
     
     {
       "name": "PickerBlueprinter",
+      "enabled": true
+    },
+    
+    {
+      "name": "PickerDollies",
       "enabled": true
     },
     
@@ -649,17 +699,7 @@
     },
     
     {
-      "name": "Realistic_Electric_Trains",
-      "enabled": true
-    },
-    
-    {
       "name": "Renamer",
-      "enabled": true
-    },
-    
-    {
-      "name": "research-progress",
       "enabled": true
     },
     
@@ -709,6 +749,11 @@
     },
     
     {
+      "name": "robot_attrition",
+      "enabled": true
+    },
+    
+    {
       "name": "Rocket-Silo-Construction",
       "enabled": true
     },
@@ -739,11 +784,6 @@
     },
     
     {
-      "name": "SantasNixieTubeDisplay",
-      "enabled": true
-    },
-    
-    {
       "name": "scattergun_turret",
       "enabled": true
     },
@@ -760,11 +800,6 @@
     
     {
       "name": "Shield-FX",
-      "enabled": true
-    },
-    
-    {
-      "name": "ShinyAngelGFX",
       "enabled": true
     },
     
@@ -814,6 +849,21 @@
     },
     
     {
+      "name": "steam-filter-inserter",
+      "enabled": true
+    },
+    
+    {
+      "name": "steam-inserter-patch",
+      "enabled": true
+    },
+    
+    {
+      "name": "steinios_research_sensor",
+      "enabled": true
+    },
+    
+    {
       "name": "Subterranean",
       "enabled": true
     },
@@ -840,6 +890,16 @@
     
     {
       "name": "TrainOverhaul",
+      "enabled": true
+    },
+    
+    {
+      "name": "Train_Control_Signals",
+      "enabled": true
+    },
+    
+    {
+      "name": "True-Nukes",
       "enabled": true
     },
     
@@ -885,6 +945,21 @@
     
     {
       "name": "WideChests",
+      "enabled": true
+    },
+    
+    {
+      "name": "yi_engines",
+      "enabled": true
+    },
+    
+    {
+      "name": "Yi_Tech_Tree",
+      "enabled": true
+    },
+    
+    {
+      "name": "Yuoki",
       "enabled": true
     },
     
