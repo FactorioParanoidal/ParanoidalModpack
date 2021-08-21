@@ -88,6 +88,26 @@ local function fix_buttons(player)
 		set_button_sprite(beastfinder_button, "beastfinder_button")
 	end
 
+	-- blueprint-request
+	local blueprint_request_button = button_flow["blueprint-request-button"]
+	if blueprint_request_button then
+		blueprint_request_button.style = "slot_button"
+		set_button_sprite(blueprint_request_button, "blueprint_request_button")
+	end
+
+	-- bobclasses
+	local bobclasses_button = button_flow["bob_avatar_toggle_gui"]
+	if bobclasses_button then
+		bobclasses_button.style = "slot_button"
+		set_button_sprite(bobclasses_button, "bobclasses_button")
+	end
+
+	-- bobinserters
+	local bobinserters_button = button_flow["bob_logistics_inserter_button"]
+	if bobinserters_button then
+		bobinserters_button.style = "slot_button"
+		set_button_sprite(bobinserters_button, "bobinserters_button")
+	end
 end
 
 
