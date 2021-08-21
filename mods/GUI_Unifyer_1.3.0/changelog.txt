@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2021.08.21
+  Changes:
+    - Supports Blueprint-request
+    - Supports Bob's Inserters / Bob's Logistics
+    - Supports Bob's Character classes
+---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2021.08.20
   Changes:
