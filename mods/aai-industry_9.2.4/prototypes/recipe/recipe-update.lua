@@ -157,7 +157,7 @@ util.conditional_modify({
     results= { {type="item", name="concrete", amount=10} },
   }
 })
-
+--[[
 util.conditional_modify({
   type = "recipe",
   name = "burner-offshore-pump",
@@ -192,7 +192,7 @@ util.conditional_modify({
     },
 	result = "electric-modular-offshore-pump"
 })
-
+]]--
 
 --[[
 util.conditional_modify({
