@@ -94,13 +94,18 @@ function functions.assign_icon_tier(name, type, map, mask, highlights)
 	-- Parse map
 	local tier = map[1]
 
+	-- Determine what tint we're using
+    local tint = reskins.lib.tint_index[tier]
+	local icon = data.raw.item[name].icon
+	
 	-- Make icon inputs
 	local icon_input
+
 	if mask ~= nil and highlights ~= nil then
 		icon_input =
 		{
 			{
-				icon = data.raw.item[name].icon,
+				icon = icon,
 				icon_size = 64,
 				icon_mipmaps = 4
 			},
@@ -108,7 +113,7 @@ function functions.assign_icon_tier(name, type, map, mask, highlights)
 				icon = mask,
 				icon_size = 64,
 				icon_mipmaps = 4,
-				tint = inputs.tint
+				tint = tint
 			},
 			{
 				icon = highlights,
@@ -121,17 +126,17 @@ function functions.assign_icon_tier(name, type, map, mask, highlights)
 		icon_input =
 		{
 			{
-				icon = data.raw.item[name].icon,
+				icon = icon,
 				icon_size = 64,
 				icon_mipmaps = 4
 			}
 		}
 	end
 
-	inputs =
+	local inputs =
 	{
 		tint = reskins.lib.tint_index[tier],
-		tier_labels = reskins.lib.setting("reskins-bobs-do-pipe-tier-labeling"),
+		tier_labels = reskins.lib.setting("reskins-bobs-do-bobmining"),
 		icon = icon_input
 	}
 
