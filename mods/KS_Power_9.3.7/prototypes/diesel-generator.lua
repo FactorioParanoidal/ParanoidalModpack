@@ -182,6 +182,7 @@ data:extend(
       flow_color = {r = 0.5, g = 0.4, b = 0},
       icon = "__KS_Power__/graphics/diesel-fuel.png",
       icon_size = 128,
+      icon_mipmaps = 4,
       order = "a[fluid]-i[diesel-fuel]",
       pressure_to_speed_ratio = 0.4,
       flow_to_energy_ratio = 0.59
