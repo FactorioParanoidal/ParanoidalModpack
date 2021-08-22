@@ -100,13 +100,13 @@ data.raw.recipe["bob-topaz-3"].enabled = false
 data.raw.recipe["bob-diamond-3"].enabled = false
 ]]--
 
-if data.raw.recipe["electric-offshore-pump"] then
+if data.raw.recipe["offshore-pump-1"] then
 util.tech_lock_recipes(	
     "electronics",  {
-	"electric-offshore-pump"})
+	"offshore-pump-1"})
 util.tech_lock_recipes(	
     "advanced-electronics",  {
-	"electric-modular-offshore-pump"})
+	"offshore-pump-3"})
 end
 
 if data.raw.technology["ore-floatation"] and data.raw.recipe["silver-plate"] then

@@ -40,8 +40,8 @@ end
 --data.raw['item']["offshore-pump"].icon = "__aai-industry__/graphics/icons/offshore-pump.png"
 --data.raw['item']["offshore-pump"].hidden = true
 
-data.raw.item["stone-wall"].icon = "__aai-industry__/graphics/icons/stone-wall.png"
-data.raw.item["stone-wall"].icon_size = 64
-data.raw.item["stone-wall"].icon_mipmaps = 1
+--data.raw.item["stone-wall"].icon = "__aai-industry__/graphics/icons/stone-wall.png"
+--data.raw.item["stone-wall"].icon_size = 64
+--data.raw.item["stone-wall"].icon_mipmaps = 1
 
 data.raw.gun.pistol.attack_parameters.damage_modifier = 1.5
