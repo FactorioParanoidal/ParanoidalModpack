@@ -1233,32 +1233,109 @@ end
 -- BOB ORES --
 if mods["bobores"] then
 
+data.raw.item["bauxite-ore"].icons = nil
 data.raw.item["bauxite-ore"].icon = "__bobicons__/graphics/icons/ores/bauxite-ore-64.png"
 data.raw.item["bauxite-ore"].icon_size = 64 
 data.raw.item["bauxite-ore"].icon_mipmaps = 4
+data.raw.item["bauxite-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/bauxite-ore/bauxite-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/bauxite-ore/bauxite-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/bauxite-ore/bauxite-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/bauxite-ore/bauxite-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["cobalt-ore"].icons = nil
 data.raw.item["cobalt-ore"].icon = "__bobicons__/graphics/icons/ores/cobalt-ore-64.png"
 data.raw.item["cobalt-ore"].icon_size = 64 
 data.raw.item["cobalt-ore"].icon_mipmaps = 4
+data.raw.item["cobalt-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/cobalt-ore/cobalt-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/cobalt-ore/cobalt-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/cobalt-ore/cobalt-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/cobalt-ore/cobalt-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["gold-ore"].icons = nil
 data.raw.item["gold-ore"].icon = "__bobicons__/graphics/icons/ores/gold-ore-64.png"
 data.raw.item["gold-ore"].icon_size = 64 
 data.raw.item["gold-ore"].icon_mipmaps = 4
+data.raw.item["gold-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/gold-ore/gold-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/gold-ore/gold-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/gold-ore/gold-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/gold-ore/gold-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["lead-ore"].icons = nil
 data.raw.item["lead-ore"].icon = "__bobicons__/graphics/icons/ores/lead-ore-64.png"
 data.raw.item["lead-ore"].icon_size = 64 
 data.raw.item["lead-ore"].icon_mipmaps = 4
+data.raw.item["lead-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/lead-ore/lead-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/lead-ore/lead-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/lead-ore/lead-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/lead-ore/lead-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["nickel-ore"].icons = nil
 data.raw.item["nickel-ore"].icon = "__bobicons__/graphics/icons/ores/nickel-ore-64.png"
 data.raw.item["nickel-ore"].icon_size = 64 
 data.raw.item["nickel-ore"].icon_mipmaps = 4
+data.raw.item["nickel-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/nickel-ore/nickel-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/nickel-ore/nickel-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/nickel-ore/nickel-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/nickel-ore/nickel-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
 
+
+data.raw.item["quartz"].icons = nil
 data.raw.item["quartz"].icon = "__bobicons__/graphics/icons/ores/quartz-64.png"
 data.raw.item["quartz"].icon_size = 64 
 data.raw.item["quartz"].icon_mipmaps = 4
+data.raw.item["quartz"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/quartz/quartz-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/quartz/quartz-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/quartz/quartz-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/quartz/quartz-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
 
+
+data.raw.item["rutile-ore"].icons = nil
 data.raw.item["rutile-ore"].icon = "__bobicons__/graphics/icons/ores/rutile-ore-64.png"
 data.raw.item["rutile-ore"].icon_size = 64 
 data.raw.item["rutile-ore"].icon_mipmaps = 4
+data.raw.item["rutile-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/rutile-ore/rutile-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/rutile-ore/rutile-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/rutile-ore/rutile-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/rutile-ore/rutile-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["silver-ore"].icons = nil
 data.raw.item["silver-ore"].icon = "__bobicons__/graphics/icons/ores/silver-ore-64.png"
 data.raw.item["silver-ore"].icon_size = 64 
 data.raw.item["silver-ore"].icon_mipmaps = 4
+data.raw.item["silver-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/silver-ore/silver-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/silver-ore/silver-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/silver-ore/silver-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/silver-ore/silver-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
 
 --data.raw.item["solid-sulfur"].icon = "__bobicons__/graphics/icons/ores/sulfur-64.png"
 --data.raw.item["solid-sulfur"].icon_size = 64 
@@ -1266,15 +1343,47 @@ data.raw.item["silver-ore"].icon_mipmaps = 4
 data.raw.item["thorium-ore"].icon = "__bobicons__/graphics/icons/ores/thorium-ore-64.png"
 data.raw.item["thorium-ore"].icon_size = 64
 data.raw.item["thorium-ore"].icon_mipmaps = 4
+
+
+data.raw.item["tin-ore"].icons = nil
 data.raw.item["tin-ore"].icon = "__bobicons__/graphics/icons/ores/tin-ore-64.png"
 data.raw.item["tin-ore"].icon_size = 64 
 data.raw.item["tin-ore"].icon_mipmaps = 4
+data.raw.item["tin-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tin-ore/tin-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tin-ore/tin-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tin-ore/tin-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tin-ore/tin-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["tungsten-ore"].icons = nil
 data.raw.item["tungsten-ore"].icon = "__bobicons__/graphics/icons/ores/tungsten-ore-64.png"
 data.raw.item["tungsten-ore"].icon_size = 64 
 data.raw.item["tungsten-ore"].icon_mipmaps = 4
+data.raw.item["tungsten-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tungsten-ore/tungsten-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tungsten-ore/tungsten-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tungsten-ore/tungsten-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/tungsten-ore/tungsten-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+
+
+data.raw.item["zinc-ore"].icons = nil
 data.raw.item["zinc-ore"].icon = "__bobicons__/graphics/icons/ores/zinc-ore-64.png"
 data.raw.item["zinc-ore"].icon_size = 64 
 data.raw.item["zinc-ore"].icon_mipmaps = 4
+data.raw.item["zinc-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-1-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-2-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-3-64.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-4-64.png", scale = 0.25, mipmap_count = 4}
+    }
+	
+
 	if data.raw.item["chrome-ore"] then
 	data.raw.item["chrome-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-chrome-64.png"
 	data.raw.item["chrome-ore"].icon_size = 64
@@ -1790,7 +1899,7 @@ end
 
 if mods["angelssmelting"] then
 
-	if mods["reskins-angels"] then
+	if not mods["reskins-angels"] then
 
 	data.raw.item["processed-aluminium"].icon = "__bobicons__/graphics/icons/angelssmelting/processed-aluminium-64.png" 
 	data.raw.item["processed-aluminium"].icon_size = 64
@@ -1964,7 +2073,7 @@ if mods["angelssmelting"] then
 	data.raw.item["angels-roll-zinc"].icon_size = 64
 	data.raw.item["angels-roll-zinc"].icon_mipmaps = 4
 
-	end
+--end
 
 data.raw.item["ingot-aluminium"].icon = "__bobicons__/graphics/icons/angelssmelting/ingot-aluminium-64.png" 
 data.raw.item["ingot-aluminium"].icon_size = 64
@@ -2075,6 +2184,38 @@ data.raw.item["powder-zinc"].icon_size = 64
 data.raw.item["powder-zinc"].icon_mipmaps = 4
 
 
+data.raw.item["angels-wire-coil-copper"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-copper-64.png" 
+data.raw.item["angels-wire-coil-copper"].icon_size = 64
+data.raw.item["angels-wire-coil-copper"].icon_mipmaps = 4
+data.raw.item["angels-coil-glass-fiber"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-glass-64.png" 
+data.raw.item["angels-coil-glass-fiber"].icon_size = 64
+data.raw.item["angels-coil-glass-fiber"].icon_mipmaps = 4
+data.raw.item["angels-wire-coil-gold"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-gold-64.png" 
+data.raw.item["angels-wire-coil-gold"].icon_size = 64
+data.raw.item["angels-wire-coil-gold"].icon_mipmaps = 4
+data.raw.item["angels-wire-coil-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-platinum-64.png" 
+data.raw.item["angels-wire-coil-platinum"].icon_size = 64
+data.raw.item["angels-wire-coil-platinum"].icon_mipmaps = 4
+data.raw.item["angels-wire-coil-silver"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-copper-64.png" 
+data.raw.item["angels-wire-coil-silver"].icon_size = 64
+data.raw.item["angels-wire-coil-silver"].icon_mipmaps = 4
+data.raw.item["angels-wire-coil-tin"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-tin-64.png" 
+data.raw.item["angels-wire-coil-tin"].icon_size = 64
+data.raw.item["angels-wire-coil-tin"].icon_mipmaps = 4
+
+ if not mods["reskins-bobs"] then data.raw.item["tinned-copper-cable"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
+data.raw.item["tinned-copper-cable"].icon_size = 64
+data.raw.item["tinned-copper-cable"].icon_mipmaps = 4 
+ end
+end
+
+data.raw.item["copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/copper-cable-128.png"
+data.raw.item["copper-cable"].icon_size = 128
+data.raw.item["copper-cable"].icon_mipmaps = 4
+data.raw.item["angels-wire-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-platinum-64.png" 
+data.raw.item["angels-wire-platinum"].icon_size = 64
+data.raw.item["angels-wire-platinum"].icon_mipmaps = 4
+
 data.raw.item["anode-copper"].icon = "__bobicons__/graphics/icons/angelssmelting/anode-copper-64.png" 
 data.raw.item["anode-copper"].icon_size = 64
 data.raw.item["anode-copper"].icon_mipmaps = 4
@@ -2097,104 +2238,6 @@ data.raw.item["cathode-silver"].icon_mipmaps = 4
 data.raw.item["cathode-zinc"].icon = "__bobicons__/graphics/icons/angelssmelting/cathode-zinc-64.png"
 data.raw.item["cathode-zinc"].icon_size = 64
 data.raw.item["cathode-zinc"].icon_mipmaps = 4
-
-data.raw.item["solid-aluminium-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-aluminium-hydroxide-64.png" 
-data.raw.item["solid-aluminium-hydroxide"].icon_size = 64
-data.raw.item["solid-aluminium-hydroxide"].icon_mipmaps = 4
-data.raw.item["solid-aluminium-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-aluminium-oxide-64.png"
-data.raw.item["solid-aluminium-oxide"].icon_size = 64
-data.raw.item["solid-aluminium-oxide"].icon_mipmaps = 4
-data.raw.item["solid-ammonium-chloroplatinate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-ammonium-chloroplatinate-64.png"
-data.raw.item["solid-ammonium-chloroplatinate"].icon_size = 64
-data.raw.item["solid-ammonium-chloroplatinate"].icon_mipmaps = 4
-data.raw.item["solid-ammonium-paratungstate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-ammonium-paratungstate-64.png" 
-data.raw.item["solid-ammonium-paratungstate"].icon_size = 64
-data.raw.item["solid-ammonium-paratungstate"].icon_mipmaps = 4
-data.raw.item["solid-cement"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cement-128.png" 
-data.raw.item["solid-cement"].icon_size = 128
-data.raw.item["solid-cement"].icon_mipmaps = 4
-data.raw.item["solid-chromate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-chromate-64.png"
-data.raw.item["solid-chromate"].icon_size = 64
-data.raw.item["solid-chromate"].icon_mipmaps = 4
-data.raw.item["solid-chrome-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-chrome-oxide-64.png" 
-data.raw.item["solid-chrome-oxide"].icon_size = 64
-data.raw.item["solid-chrome-oxide"].icon_mipmaps = 4
-data.raw.item["solid-cobalt-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cobalt-hydroxide-64.png"
-data.raw.item["solid-cobalt-hydroxide"].icon_size = 64
-data.raw.item["solid-cobalt-hydroxide"].icon_mipmaps = 4
-data.raw.item["solid-cobalt-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cobalt-oxide-64.png"
-data.raw.item["solid-cobalt-oxide"].icon_size = 64
-data.raw.item["solid-cobalt-oxide"].icon_mipmaps = 4
-data.raw.item["solid-dichromate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-dichromate-64.png"
-data.raw.item["solid-dichromate"].icon_size = 64
-data.raw.item["solid-dichromate"].icon_mipmaps = 4
-data.raw.item["solid-iron-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-iron-hydroxide-64.png" 
-data.raw.item["solid-iron-hydroxide"].icon_size = 64
-data.raw.item["solid-iron-hydroxide"].icon_mipmaps = 4
-data.raw.item["solid-lead-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-lead-oxide-64.png" 
-data.raw.item["solid-lead-oxide"].icon_size = 64
-data.raw.item["solid-lead-oxide"].icon_mipmaps = 4
-data.raw.item["solid-lime"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-lime-64.png" 
-data.raw.item["solid-lime"].icon_size = 64
-data.raw.item["solid-lime"].icon_mipmaps = 4
-data.raw.item["solid-manganese-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-manganese-oxide-64.png" 
-data.raw.item["solid-manganese-oxide"].icon_size = 64
-data.raw.item["solid-manganese-oxide"].icon_mipmaps = 4
-data.raw.item["solid-nickel-carbonyl"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-nickel-carbonyl-64.png"
-data.raw.item["solid-nickel-carbonyl"].icon_size = 64
-data.raw.item["solid-nickel-carbonyl"].icon_mipmaps = 4
-data.raw.item["solid-silver-nitrate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-silver-nitrate-64.png" 
-data.raw.item["solid-silver-nitrate"].icon_size = 64
-data.raw.item["solid-silver-nitrate"].icon_mipmaps = 4
-data.raw.item["silver-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-silver-oxide-64.png"
-data.raw.item["silver-oxide"].icon_size = 64
-data.raw.item["silver-oxide"].icon_mipmaps = 4
-data.raw.item["solid-sodium-aluminate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-aluminate-64.png"
-data.raw.item["solid-sodium-aluminate"].icon_size = 64
-data.raw.item["solid-sodium-aluminate"].icon_mipmaps = 4
-data.raw.item["solid-sodium-gold-cyanide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-gold-cyanide-64.png" 
-data.raw.item["solid-sodium-gold-cyanide"].icon_size = 64
-data.raw.item["solid-sodium-gold-cyanide"].icon_mipmaps = 4
-data.raw.item["solid-sodium-silver-cyanide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-silver-cyanide-64.png"
-data.raw.item["solid-sodium-silver-cyanide"].icon_size = 64
-data.raw.item["solid-sodium-silver-cyanide"].icon_mipmaps = 4
-data.raw.item["solid-tungsten-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-tungsten-oxide-64.png"
-data.raw.item["solid-tungsten-oxide"].icon_size = 64
-data.raw.item["solid-tungsten-oxide"].icon_mipmaps = 4
-data.raw.item["solid-zinc-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-zinc-oxide-64.png" 
-data.raw.item["solid-zinc-oxide"].icon_size = 64
-data.raw.item["solid-zinc-oxide"].icon_mipmaps = 4
-
-data.raw.item["angels-wire-coil-copper"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-copper-64.png" 
-data.raw.item["angels-wire-coil-copper"].icon_size = 64
-data.raw.item["angels-wire-coil-copper"].icon_mipmaps = 4
-data.raw.item["angels-coil-glass-fiber"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-glass-64.png" 
-data.raw.item["angels-coil-glass-fiber"].icon_size = 64
-data.raw.item["angels-coil-glass-fiber"].icon_mipmaps = 4
-data.raw.item["angels-wire-coil-gold"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-gold-64.png" 
-data.raw.item["angels-wire-coil-gold"].icon_size = 64
-data.raw.item["angels-wire-coil-gold"].icon_mipmaps = 4
-data.raw.item["angels-wire-coil-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-platinum-64.png" 
-data.raw.item["angels-wire-coil-platinum"].icon_size = 64
-data.raw.item["angels-wire-coil-platinum"].icon_mipmaps = 4
-data.raw.item["angels-wire-coil-silver"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-copper-64.png" 
-data.raw.item["angels-wire-coil-silver"].icon_size = 64
-data.raw.item["angels-wire-coil-silver"].icon_mipmaps = 4
-data.raw.item["angels-wire-coil-tin"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-tin-64.png" 
-data.raw.item["angels-wire-coil-tin"].icon_size = 64
-data.raw.item["angels-wire-coil-tin"].icon_mipmaps = 4
-
-data.raw.item["copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/copper-cable-128.png"
-data.raw.item["copper-cable"].icon_size = 128
-data.raw.item["copper-cable"].icon_mipmaps = 4
-data.raw.item["angels-wire-platinum"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-platinum-64.png" 
-data.raw.item["angels-wire-platinum"].icon_size = 64
-data.raw.item["angels-wire-platinum"].icon_mipmaps = 4
-
- if not mods["reskins-bobs"] then data.raw.item["tinned-copper-cable"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
-data.raw.item["tinned-copper-cable"].icon_size = 64
-data.raw.item["tinned-copper-cable"].icon_mipmaps = 4 
- end
 
 data.raw.item["solder"].icon = "__bobicons__/graphics/icons/angelssmelting/solder-64.png" 
 data.raw.item["solder"].icon_size = 64
@@ -2301,6 +2344,73 @@ data.raw.fluid["liquid-trichlorosilane"].icon_mipmaps = 4
 data.raw.fluid["liquid-tungstic-acid"].icon = "__bobicons__/graphics/icons/angelssmelting/liquid-tungstic-acid-64.png"
 data.raw.fluid["liquid-tungstic-acid"].icon_size = 64
 data.raw.fluid["liquid-tungstic-acid"].icon_mipmaps = 4
+
+data.raw.item["solid-aluminium-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-aluminium-hydroxide-64.png" 
+data.raw.item["solid-aluminium-hydroxide"].icon_size = 64
+data.raw.item["solid-aluminium-hydroxide"].icon_mipmaps = 4
+data.raw.item["solid-aluminium-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-aluminium-oxide-64.png"
+data.raw.item["solid-aluminium-oxide"].icon_size = 64
+data.raw.item["solid-aluminium-oxide"].icon_mipmaps = 4
+data.raw.item["solid-ammonium-chloroplatinate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-ammonium-chloroplatinate-64.png"
+data.raw.item["solid-ammonium-chloroplatinate"].icon_size = 64
+data.raw.item["solid-ammonium-chloroplatinate"].icon_mipmaps = 4
+data.raw.item["solid-ammonium-paratungstate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-ammonium-paratungstate-64.png" 
+data.raw.item["solid-ammonium-paratungstate"].icon_size = 64
+data.raw.item["solid-ammonium-paratungstate"].icon_mipmaps = 4
+data.raw.item["solid-cement"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cement-128.png" 
+data.raw.item["solid-cement"].icon_size = 128
+data.raw.item["solid-cement"].icon_mipmaps = 4
+data.raw.item["solid-chromate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-chromate-64.png"
+data.raw.item["solid-chromate"].icon_size = 64
+data.raw.item["solid-chromate"].icon_mipmaps = 4
+data.raw.item["solid-chrome-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-chrome-oxide-64.png" 
+data.raw.item["solid-chrome-oxide"].icon_size = 64
+data.raw.item["solid-chrome-oxide"].icon_mipmaps = 4
+data.raw.item["solid-cobalt-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cobalt-hydroxide-64.png"
+data.raw.item["solid-cobalt-hydroxide"].icon_size = 64
+data.raw.item["solid-cobalt-hydroxide"].icon_mipmaps = 4
+data.raw.item["solid-cobalt-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-cobalt-oxide-64.png"
+data.raw.item["solid-cobalt-oxide"].icon_size = 64
+data.raw.item["solid-cobalt-oxide"].icon_mipmaps = 4
+data.raw.item["solid-dichromate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-dichromate-64.png"
+data.raw.item["solid-dichromate"].icon_size = 64
+data.raw.item["solid-dichromate"].icon_mipmaps = 4
+data.raw.item["solid-iron-hydroxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-iron-hydroxide-64.png" 
+data.raw.item["solid-iron-hydroxide"].icon_size = 64
+data.raw.item["solid-iron-hydroxide"].icon_mipmaps = 4
+data.raw.item["solid-lead-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-lead-oxide-64.png" 
+data.raw.item["solid-lead-oxide"].icon_size = 64
+data.raw.item["solid-lead-oxide"].icon_mipmaps = 4
+data.raw.item["solid-lime"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-lime-64.png" 
+data.raw.item["solid-lime"].icon_size = 64
+data.raw.item["solid-lime"].icon_mipmaps = 4
+data.raw.item["solid-manganese-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-manganese-oxide-64.png" 
+data.raw.item["solid-manganese-oxide"].icon_size = 64
+data.raw.item["solid-manganese-oxide"].icon_mipmaps = 4
+data.raw.item["solid-nickel-carbonyl"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-nickel-carbonyl-64.png"
+data.raw.item["solid-nickel-carbonyl"].icon_size = 64
+data.raw.item["solid-nickel-carbonyl"].icon_mipmaps = 4
+data.raw.item["solid-silver-nitrate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-silver-nitrate-64.png" 
+data.raw.item["solid-silver-nitrate"].icon_size = 64
+data.raw.item["solid-silver-nitrate"].icon_mipmaps = 4
+data.raw.item["silver-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-silver-oxide-64.png"
+data.raw.item["silver-oxide"].icon_size = 64
+data.raw.item["silver-oxide"].icon_mipmaps = 4
+data.raw.item["solid-sodium-aluminate"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-aluminate-64.png"
+data.raw.item["solid-sodium-aluminate"].icon_size = 64
+data.raw.item["solid-sodium-aluminate"].icon_mipmaps = 4
+data.raw.item["solid-sodium-gold-cyanide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-gold-cyanide-64.png" 
+data.raw.item["solid-sodium-gold-cyanide"].icon_size = 64
+data.raw.item["solid-sodium-gold-cyanide"].icon_mipmaps = 4
+data.raw.item["solid-sodium-silver-cyanide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-sodium-silver-cyanide-64.png"
+data.raw.item["solid-sodium-silver-cyanide"].icon_size = 64
+data.raw.item["solid-sodium-silver-cyanide"].icon_mipmaps = 4
+data.raw.item["solid-tungsten-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-tungsten-oxide-64.png"
+data.raw.item["solid-tungsten-oxide"].icon_size = 64
+data.raw.item["solid-tungsten-oxide"].icon_mipmaps = 4
+data.raw.item["solid-zinc-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-zinc-oxide-64.png" 
+data.raw.item["solid-zinc-oxide"].icon_size = 64
+data.raw.item["solid-zinc-oxide"].icon_mipmaps = 4
 end
 
 -- INTERMEDIATES --
