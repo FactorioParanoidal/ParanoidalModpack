@@ -1,6 +1,6 @@
 {
  "name": "P-U-M-P-S",
- "version": "9.1.30",
+ "version": "9.1.32",
  "factorio_version": "1.1",
  "title": "Offshore P.U.M.P.S. and ground water",
  "author": "OldSkoolMatt",
@@ -12,7 +12,10 @@
 	  "? boblogistics >= 1.1.2",
 	  "? bobplates >= 1.1.2",
 	  "! higher-tier-offshore-pumps",
-	  "! BurnerOffshorePump"
+	  "! BurnerOffshorePump",
+	  "! PumpAnywhere",
+	  "! WaterWell",
+	  "! StoneWaterWell"
 	],
  "description":"[color=orange][font=default-bold]P[/font][/color]umping\n[color=orange][font=default-bold]U[/font][/color]nits\n[color=orange][font=default-bold]M[/font][/color]eeting\n[color=orange][font=default-bold]P[/font][/color]hysics\n[color=orange][font=default-bold]S[/font][/color]tandards\n\nFeatures three extra tiers of offshore pumps, a ground water pumpjack and powering options"
 }

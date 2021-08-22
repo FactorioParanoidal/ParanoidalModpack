@@ -12,6 +12,11 @@ require("prototypes.recipes")
 require("prototypes.items")
 require("prototypes.technology")
 
+-- Load bob water miners for later pumpjack gen
+if mods ["bobmining"] then
+	require("prototypes.override.bob-water-miner")
+end
+
 -- Assign correct descriptions and names
 if settings.startup ["enable-power"].value == true then
 	

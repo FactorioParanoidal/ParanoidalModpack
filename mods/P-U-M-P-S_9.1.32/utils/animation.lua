@@ -686,7 +686,6 @@ function animation_set.sprite_recolor()
 		end
 	end
 end
---[[
 function animation_set.pumpjack_tiering()
 
 	-- Set input parameters
@@ -873,7 +872,6 @@ function animation_set.pumpjack_tiering()
 		::continue::
 	end
 end
-]]--
 
 -- Make animation sets
 function animation_set.template_unpowered_animation() return
@@ -1189,7 +1187,6 @@ function animation_set.template_powered_animation() return
 	}
 }
 end
---[[
 function animation_set.water_pumpjack_animation() return
 {
 	north =
@@ -1554,5 +1551,5 @@ function animation_set.water_pumpjack_animation() return
 	}
 }
 end
-]]--
+
 return animation_set
