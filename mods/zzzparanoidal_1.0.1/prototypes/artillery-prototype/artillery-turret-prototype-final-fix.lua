@@ -1,11 +1,3 @@
 -------------------------------------------------------------------------------------------------
---добавляем к рецепту базовой артиллерии прототип. 
-data.raw["recipe"]["artillery-turret"].ingredients = 
-{
-  {"artillery-turret-prototype", 1},
-  {"steel-plate", 60},
-  {"concrete", 60},
-  {"iron-gear-wheel", 40},
-  {"advanced-circuit", 20}
-}
--------------------------------------------------------------------------------------------------
+--добавляем к рецепту базовой артиллерии прототип.
+bobmods.lib.recipe.add_ingredient("artillery-turret", {"artillery-turret-prototype", 2})
