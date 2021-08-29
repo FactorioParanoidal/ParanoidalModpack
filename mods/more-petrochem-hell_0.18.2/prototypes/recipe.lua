@@ -66,7 +66,7 @@ data:extend({
 		type = "recipe",
 		name = "high-octane-enriched-fuel",
 		category = "chemistry",
-		subgroup = "petrochem-solids",
+		subgroup = "petrochem-fuel", --drd petrochem-solids
 		energy_required = 4,
 		enabled = "false",
 		ingredients ={
@@ -81,7 +81,7 @@ data:extend({
 		},
 		icon = "__more-petrochem-hell__/graphics/high-octane-enriched-fuel.png",
 		icon_size = 32,
-		order = "c",
+		order = "h", --drd
 	},
 	
 	
