@@ -1,5 +1,6 @@
--- био пакет в гигалабу
+-- био пакет в гиг-лабу и гипер-лабу
 table.insert(data.raw["lab"]["big-lab"].inputs, "token-bio")
+table.insert(data.raw["lab"]["hyper-lab"].inputs, "token-bio")
 
 --включим пластик без электролизиров
 bobmods.lib.tech.remove_prerequisite("plastics", "electrolysis-2")
@@ -36,12 +37,12 @@ bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-2", "oil-boiler-2-from-boi
 bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-3", "oil-boiler-3-from-boiler-4")
 bobmods.lib.tech.remove_recipe_unlock("bob-oil-boiler-4", "oil-boiler-4-from-boiler-5")
 
---скрываем неиспользуемые технологии электролиза боба, которые ничено не открывают
+--скрываем неиспользуемые технологии электролиза боба, которые ничего не открывают
 data.raw.technology["electrolyser-2"].hidden = true
 data.raw.technology["electrolyser-3"].hidden = true
 data.raw.technology["electrolyser-4"].hidden = true
 
---скрываем имбовую технологию боба
+--скрываем имбалансную технологию боба
 data.raw.technology["bob-robot-plasma-drones"].hidden = true
 
 --разблокируем рецепт для упрощенной плавки бронзы в печах
