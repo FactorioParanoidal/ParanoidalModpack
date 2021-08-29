@@ -139,3 +139,5 @@ data:extend({
         order = "a-a-a1"
     },
 })
+--bobmods.lib.tech.add_recipe_unlock("angelsore-crushed-manganese-processing", "manganese-ore-refining")
+--bobmods.lib.tech.add_recipe_unlock("angelsore-pure-chrome-processing", "chrome-ore-refining")
