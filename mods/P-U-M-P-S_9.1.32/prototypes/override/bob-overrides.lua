@@ -188,9 +188,10 @@ if data.raw.item["titanium-plate"] and data.raw.item["nitinol-alloy"] then
 		add_tech_prerequisite("offshore-pump-tech_4", "nitinol-processing")
 	end
 end
-
+--[[
 if data.raw.technology["advanced-electronics-2"] and data.raw.technology["advanced-electronics-3"] then
 	add_tech_prerequisite("offshore-pump-tech_2", "advanced-electronics")
 	replace_tech_prerequisite ("offshore-pump-tech_3", "advanced-electronics", "advanced-electronics-2")
 	replace_tech_prerequisite ("offshore-pump-tech_4", "advanced-electronics-2", "advanced-electronics-3")
 end
+]]--
