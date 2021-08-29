@@ -42,6 +42,7 @@ require("prototypes.Platinum_sorting_172")
 require("prototypes.LandmineGridlock_102")
 require("prototypes.BlackTrainSmokeRevised010")
 require("prototypes.BobLogisticZoneExpanderRadius010")
+require("prototypes.custom_production_ui_100")
 
 
 require("prototypes.item-fuelvalue")
