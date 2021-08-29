@@ -63,7 +63,7 @@ newRecipe("mk3", 12).ingredients = {
   {"mining-drill-bit-mk2", 2},
   {"cobalt-steel-alloy", 20}
 }
-bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "mining-drill-bit-mk3")
+bobmods.lib.tech.add_recipe_unlock("bob-drills-2", "mining-drill-bit-mk3")
 
 newRecipe("mk4", 15).ingredients = {
   {"mining-drill-bit-mk3", 2},
@@ -76,4 +76,4 @@ newRecipe("mk5", 15).ingredients = {
   {"nitinol-gear-wheel", 4},
   {"tungsten-carbide", 20}
 }
-bobmods.lib.tech.add_recipe_unlock("bob-drills-3", "mining-drill-bit-mk5")
+bobmods.lib.tech.add_recipe_unlock("bob-drills-4", "mining-drill-bit-mk5")
