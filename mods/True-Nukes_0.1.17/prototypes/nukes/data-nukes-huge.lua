@@ -308,7 +308,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		type = "recipe",
 		name = "100kiloton-detonation",
 		category = "nuclear-detonation",
-		enabled = true,
+		enabled = false, --drd
 		energy_required = 120,
 		ingredients =
 		{
@@ -320,7 +320,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		type = "recipe",
 		name = "15kiloton-detonation",
 		category = "nuclear-detonation",
-		enabled = true,
+		enabled = false, --drd
 		energy_required = 120,
 		ingredients =
 		{
