@@ -100,14 +100,20 @@ data.raw.recipe["bob-topaz-3"].enabled = false
 data.raw.recipe["bob-diamond-3"].enabled = false
 ]]--
 
-if data.raw.recipe["offshore-pump-1"] then
+
+if data.raw.recipe["angelsore7-crystallization-5"] then --drd all
 util.tech_lock_recipes(	
-    "electronics",  {
-	"offshore-pump-1"})
+    "geode-crystallization-2",  {
+	"angelsore7-crystallization-2"})
 util.tech_lock_recipes(	
-    "advanced-electronics",  {
-	"offshore-pump-3"})
+    "geode-crystallization-2",  {
+	"angelsore7-crystallization-5"})
+util.tech_lock_recipes(	
+    "geode-crystallization-2",  {
+	"angelsore7-crystallization-6"})
+	
 end
+
 
 if data.raw.technology["ore-floatation"] and data.raw.recipe["silver-plate"] then
 util.tech_lock_recipes(	

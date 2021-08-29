@@ -62,7 +62,7 @@ local offshore_technology_pump_3 =
 	icon_mipmaps = 4,
 	icon = "__P-U-M-P-S__/graphics/technology/offshore-pump-3.png",
 	effects = {{type = "unlock-recipe", recipe = "offshore-pump-3"}},
-	prerequisites = {"offshore-pump-tech_2", "advanced-electronics"},
+	prerequisites = {"offshore-pump-tech_2", "electronics"},
 	unit =
 	{
 		count = 100,
@@ -86,7 +86,7 @@ local offshore_technology_pump_4 =
 	icon_mipmaps = 4,
 	icon = "__P-U-M-P-S__/graphics/technology/offshore-pump-4.png",
 	effects = {{type = "unlock-recipe", recipe = "offshore-pump-4"}},
-	prerequisites = {"offshore-pump-tech_3", "advanced-electronics-2"},
+	prerequisites = {"offshore-pump-tech_3", "advanced-electronics"},
 	unit =
 	{
 		count = 200,
