@@ -2,54 +2,55 @@ data:extend({
 --Item
    {
 		type = "item",
-		name = "big-lab",
-		icon = "__BigLab__/graphics/icon/biglab.png",
+		name = "hyper-lab",
+		icon = "__BigLab__/graphics/icon/hyper-lab.png",
 		icon_size = 64,
 		--- flags = {"goes-to-quickbar"},
 		subgroup = "production-machine",
 		order = "h[lab]",
-		place_result = "big-lab",
+		place_result = "hyper-lab",
 		stack_size = 1
 	},
 --Recipe
 	{
 		type = "recipe",
-		name = "big-lab",
-		energy_required = 20,
+		name = "hyper-lab",
+		energy_required = 1000,
 		enabled = "false",
 		ingredients =
 		{
-		  {"concrete", 1000},
-		  {"processing-unit", 50},
-		  {"lab-2", 30},
+		  {"refined-concrete", 10000},
+		  {"nitinol-alloy", 1000},
+		  {"advanced-processing-unit", 500},
+		  {"big-lab", 10},
 		},
-		result = "big-lab"
+		result = "hyper-lab"
 	},
 --Entity
 	{
 		type = "lab",
-		name = "big-lab",
-		icon = "__BigLab__/graphics/icon/biglab.png",
+		name = "hyper-lab",
+		icon = "__BigLab__/graphics/icon/hyper-lab.png",
 		icon_size = 64,
 		flags = {"placeable-player", "player-creation"},
-		minable = {mining_time = 5, result = "big-lab"},
-		max_health = 1500,
+		minable = {mining_time = 5, result = "hyper-lab"},
+		max_health = 5000,
 		crafting_categories = {"chemistry"},
 		corpse = "big-remnants",
 		dying_explosion = "huge-explosion",
-		collision_box = {{-9.5, -7.5}, {9.5, 7.5}},
-		selection_box = {{-10, -8}, {10, 8}},
+		collision_box = {{-49, -39}, {49, 39}},
+		selection_box = {{-50, -40}, {50, 40}},
 		--light = {intensity = 0.75, size = 8, color = {r = 1.0, g = 1.0, b = 1.0}},
 		on_animation = {
       layers =
       {
         {
-          filename = "__BigLab__/graphics/lab/biglab.png",
+          filename = "__BigLab__/graphics/lab/hyper-lab.png",
           width = 320,
           height = 320,
           frame_count = 1,
           line_length = 1,
-		  scale = 2,
+		  scale = 10,
           animation_speed = 0.01,
           shift = util.by_pixel(0, 1.5),
         }
@@ -60,11 +61,11 @@ data:extend({
       layers =
       {
         {
-          filename = "__BigLab__/graphics/lab/biglab.png",
+          filename = "__BigLab__/graphics/lab/hyper-lab.png",
           width = 320,
           height = 320,
           frame_count = 1,
-		  scale = 2,
+		  scale = 10,
           shift = util.by_pixel(0, 1.5),
         }
       }
@@ -74,7 +75,7 @@ data:extend({
 		  sound =
 		  {
 			filename = "__base__/sound/lab.ogg",
-			volume = 2 --0.7
+			volume = 5 --0.7
 		  },
 		  apparent_volume = 1
 		},
@@ -84,8 +85,8 @@ data:extend({
 		  type = "electric",
 		  usage_priority = "secondary-input"
 		},
-		energy_usage = "250MW",
-		researching_speed = 100,
+		energy_usage = "1GW",
+		researching_speed = 128,
 		inputs =
 		{
 		  "automation-science-pack",
@@ -98,7 +99,7 @@ data:extend({
 		},
 		module_specification =
 		{
-		  module_slots = 6,
+		  module_slots = 8,
 		  max_entity_info_module_icons_per_row = 3,
 		  max_entity_info_module_icon_rows = 1,
 		  module_info_icon_shift = {0, 0.9}
@@ -107,7 +108,7 @@ data:extend({
 })
 
 if (mods['bobtech']) then 
-data.raw["lab"]["big-lab"].inputs =
+data.raw["lab"]["hyper-lab"].inputs =
 		{
 		  "automation-science-pack",
 		  "logistic-science-pack",
