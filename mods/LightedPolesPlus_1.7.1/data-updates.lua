@@ -100,6 +100,7 @@ for _, item in pairs (data.raw["item"]) do
       hidden_lamp.icons = newPole.icons
       hidden_lamp.localised_name = newPole.localised_name
       hidden_lamp.minable = nil
+      hidden_lamp.next_upgrade = nil
       hidden_lamp.flags = {"not-blueprintable", "not-deconstructable", "placeable-off-grid", "not-on-map"}
       hidden_lamp.selectable_in_game = false
       hidden_lamp.collision_box = {{-0.1, -0.1}, {0.1, 0.1}}
