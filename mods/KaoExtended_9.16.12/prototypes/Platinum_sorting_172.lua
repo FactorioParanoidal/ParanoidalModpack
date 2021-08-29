@@ -3,17 +3,17 @@ local rawmulti = angelsmods.marathon.rawmulti
 data:extend({
 	{
         type = "recipe",
-        name = "angelsore-pure-chrome-processing",
+        name = "angelsore-pure-platinum-processing",
         category = "ore-sorting",
         subgroup = "ore-sorting-advanced",
-        enabled = "false",
+        enabled = false,
         allow_decomposition = false,
         normal =
         {
             energy_required = 1.5,
             ingredients =
             {
-                {type="item", name="angels-ore1-pure", amount=2},
+                {type="item", name="angels-ore2-pure", amount=2},
                 {type="item", name="angels-ore4-pure", amount=2},
                 {type="item", name="angels-ore5-pure", amount=2},
                 {type="item", name="catalysator-orange", amount=1},
@@ -28,7 +28,7 @@ data:extend({
             energy_required = 1.5,
             ingredients =
             {
-                {type="item", name="angels-ore1-pure", amount=3 * rawmulti},
+                {type="item", name="angels-ore2-pure", amount=3 * rawmulti},
                 {type="item", name="angels-ore4-pure", amount=3 * rawmulti},
                 {type="item", name="angels-ore5-pure", amount=3 * rawmulti},
                 {type="item", name="catalysator-orange", amount=1},
@@ -48,5 +48,5 @@ local tech_unlocks = data.raw["technology"]["advanced-ore-refining-4"].effects
 tech_unlocks[#tech_unlocks+1] =
 {
     type = "unlock-recipe",
-    recipe = "angelsore-pure-chrome-processing",
+    recipe = "angelsore-pure-platinum-processing",
 }
