@@ -121,15 +121,15 @@ data:extend({
 		selection_box = {lefttop={-1, -3}, rightbottom={1, 3}},
 		vertical_selection_shift = -0.5,
         drawing_box = {{-1, -4}, {1, 3}},
-        weight = 2500,
+        weight = 50000, --drd 2500
         max_speed = 0.3,
 		wheels = empty_loco_wheel,
-        max_power = "300kW",
+        max_power = "3000kW", --drd 300
         reversing_power_modifier = 0.8,
-        braking_force = 20,
+        braking_force = 10, --drd 20
         friction_force = 0.50,
         -- this is a percentage of current speed that will be subtracted
-        air_resistance = 0.0075,   --drd 0.03
+        air_resistance = 0.01,   --drd 0.03 0.0075
         energy_per_hit_point = 5,
         resistances =
         {
@@ -143,7 +143,7 @@ data:extend({
     {
       fuel_category = "chemical",
       effectivity = 0.5,    --drd 0.6
-      fuel_inventory_size = 2,
+      fuel_inventory_size = 3, --drd 2
       smoke =
       {
         {
@@ -337,7 +337,7 @@ data:extend({
 	collision_box = {{-0.6, -2.4}, {0.6, 2.4}},
 	selection_box = {{-0.7, -2.7}, {1, 3.2}},	
 	vertical_selection_shift = -0.796875,
-    weight = 1500,
+    weight = 8000, --drd 1500
     max_speed = 0.5,
 	wheels = empty_loco_wheel,
     braking_force = 3,
