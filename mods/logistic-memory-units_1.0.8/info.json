@@ -1,0 +1,10 @@
+{
+	"name": "logistic-memory-units",
+	"version": "1.0.8",
+	"title": "Logistic Memory Storage",
+	"author": "notnotmelon",
+	"description": "An addon to memory storage. This mod adds a new type of memory unit for every type of logistic chest",
+	"contact": "discord.gg/sbs",
+	"factorio_version": "1.1",
+	"dependencies": ["base", "deep-storage-unit"]
+}
