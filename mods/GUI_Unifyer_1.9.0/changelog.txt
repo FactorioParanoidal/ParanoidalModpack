@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.9.0
+Date: 2021.08.30
+  Changes:
+    - Supports Blueprint Flip and Turn (displays only when blueprint is in hand)
+    - Supports Commu Guide Mod
+    - French locale added
+    - Fixed another crash on new games
+    - Handle Space Exploration (without replacing images)
+---------------------------------------------------------------------------------------------------
+Version: 1.8.1
+Date: 2021.08.29
+  Changes:
+    - Fixed crash when Factorissimo2 wasn't installed
+---------------------------------------------------------------------------------------------------
+Version: 1.8.0
+Date: 2021.08.29
+  Changes:
+    - Supports Black Market 2
+    - Added per-player setting to choose between 2 button styles
+    - LandfillEverthing only shows when blueprint is selected
+    - Code simplified
+    - Handle Informatron (without replacing image)
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 2021.08.28
+  Changes:
+    - Supports Schall Railway Controller
+    - Supports Picks Rocket Stats
+---------------------------------------------------------------------------------------------------
 Version: 1.6.1
 Date: 2021.08.27
   Changes:
