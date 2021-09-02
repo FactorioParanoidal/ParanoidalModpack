@@ -1,0 +1,19 @@
+## Adds additional paste settings in the game (Shift+Right Click entity then Shift+Left Click another).
+
+## See it in action here: https://gfycat.com/BonyBlissfulElephantbeetle
+
+ - **Copy from Machine -> Paste into Inserter**: Sets the inserter's condition to be less than the stack's multiplier of the item being produced by the assembling machine. If it's connected to ANY wire network, it sets the condition to the circuit condition. If not connected to a wire network, set it based on the logistics condition.
+ - **Copy from Machine -> Paste into Logistic Chest**: Allows you to choose how the requests is set. It can be: the item output Stack Size; by a multiplier of the Items Produced; or by Time Spent crafting the item. Has an option to invert logic for Buffer chests, to paste products instead of ingredients.
+ - **Copy and paste into SAME Inserter**: Clears the logistics and circuit condition.
+ - **Copy and paste into SAME Requester/Buffer Chest**: Clears the requests for that chest.
+ - **Copy from Machine -> Paste into Constant Combinator**: Sets the signals of the constant combinators based on the recipe ingredients of the assembling machine.
+ 
+You have the option for the pasting to be additive. That means, instead of replacing the contents of the logistic chest/inserter, it will merge and/or add the amount of items. This allows for easy setup of multiple recipes into the same requester chest, or to easily increase the request/filter amount.
+
+The Configuration is found in Settings -> Mod Settings. Please configure it to your liking.
+
+--------------
+
+
+### Note to hotkey changing
+- The default paste settings of this mod is Shift+Left Click. If you changed **your vanilla** "Paste entity settings" on your hotkeys, it should match whatever configuration you are using there.
