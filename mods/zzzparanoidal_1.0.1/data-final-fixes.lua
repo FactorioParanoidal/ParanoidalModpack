@@ -16,6 +16,8 @@ require("prototypes.tile-concrete-brick-fix") --фикс tile для бетон�
 require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") --фикс добавляющий прототип арты в обычную арту
 
 require("recipes.gemfix")
+require("recipes.module-contactfix")
+
 if mods["yuoki"] then
     require("prototypes.yuoki")
 end -- при наличии yuoki
