@@ -2188,7 +2188,7 @@ end
 if mods["angelssmelting"] then
 
 	if not mods["reskins-angels"] then
-
+	
 	data.raw.item["processed-aluminium"].icon = "__bobicons__/graphics/icons/angelssmelting/processed-aluminium-64.png" 
 	data.raw.item["processed-aluminium"].icon_size = 64
 	data.raw.item["processed-aluminium"].icon_mipmaps = 4
@@ -2254,7 +2254,6 @@ if mods["angelssmelting"] then
 	data.raw.item["processed-zinc"].icon_size = 64
 	data.raw.item["processed-zinc"].icon_mipmaps = 4
 	--data.raw.recipe["zinc-ore-processing"].icon_size = 64
-
 
 	data.raw.item["pellet-aluminium"].icon = "__bobicons__/graphics/icons/angelssmelting/pellet-aluminium-64.png" 
 	data.raw.item["pellet-aluminium"].icon_size = 64
@@ -2490,12 +2489,16 @@ data.raw.item["angels-wire-coil-silver"].icon_mipmaps = 4
 data.raw.item["angels-wire-coil-tin"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-coil-tin-64.png" 
 data.raw.item["angels-wire-coil-tin"].icon_size = 64
 data.raw.item["angels-wire-coil-tin"].icon_mipmaps = 4
+end
 
  if not mods["reskins-bobs"] then data.raw.item["tinned-copper-cable"].icon = "__bobicons__/graphics/icons/angelssmelting/wire-tin-64.png" 
 data.raw.item["tinned-copper-cable"].icon_size = 64
 data.raw.item["tinned-copper-cable"].icon_mipmaps = 4 
  end
-end
+data.raw.item["ingot-gold"].icons = nil
+data.raw.item["ingot-gold"].icon = "__bobicons__/graphics/icons/angelssmelting/ingot-gold-64.png" 
+data.raw.item["ingot-gold"].icon_size = 64
+data.raw.item["ingot-gold"].icon_mipmaps = 4
 
 data.raw.item["copper-cable"].icon = "__bobicons__/graphics/icons/intermediates/copper-cable-128.png"
 data.raw.item["copper-cable"].icon_size = 128
@@ -2699,6 +2702,19 @@ data.raw.item["solid-tungsten-oxide"].icon_mipmaps = 4
 data.raw.item["solid-zinc-oxide"].icon = "__bobicons__/graphics/icons/angelssmelting/solid-zinc-oxide-64.png" 
 data.raw.item["solid-zinc-oxide"].icon_size = 64
 data.raw.item["solid-zinc-oxide"].icon_mipmaps = 4
+
+data.raw.item["manganese-ore"].icons = nil
+data.raw.item["manganese-ore"].icon = "__bobicons__/graphics/icons/ores/manganese-ore/manganese-ore-1.png"
+data.raw.item["manganese-ore"].icon_size = 64
+data.raw.item["manganese-ore"].icon_mipmaps = 4
+data.raw.item["manganese-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/manganese-ore/manganese-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/manganese-ore/manganese-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/manganese-ore/manganese-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/manganese-ore/manganese-ore-4.png", scale = 0.25, mipmap_count = 4}
+    }
+
 end
 
 -- INTERMEDIATES --
