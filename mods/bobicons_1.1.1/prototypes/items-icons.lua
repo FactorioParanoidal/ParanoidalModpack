@@ -1573,10 +1573,17 @@ data.raw.item["silver-ore"].pictures =
 --data.raw.item["solid-sulfur"].icon = "__bobicons__/graphics/icons/ores/sulfur-64.png"
 --data.raw.item["solid-sulfur"].icon_size = 64 
 
+data.raw.item["thorium-ore"].icons = nil
 data.raw.item["thorium-ore"].icon = "__bobicons__/graphics/icons/ores/thorium-ore-64.png"
-data.raw.item["thorium-ore"].icon_size = 64
+data.raw.item["thorium-ore"].icon_size = 64 
 data.raw.item["thorium-ore"].icon_mipmaps = 4
-
+data.raw.item["thorium-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/thorium-ore/thorium-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/thorium-ore/thorium-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/thorium-ore/thorium-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/thorium-ore/thorium-ore-4.png", scale = 0.25, mipmap_count = 4}
+    }
 
 data.raw.item["tin-ore"].icons = nil
 data.raw.item["tin-ore"].icon = "__bobicons__/graphics/icons/ores/tin-ore-64.png"
@@ -1615,18 +1622,36 @@ data.raw.item["zinc-ore"].pictures =
       { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-3-64.png", scale = 0.25, mipmap_count = 4},
       { size = 64, filename = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-4-64.png", scale = 0.25, mipmap_count = 4}
     }
-	
 
 	if data.raw.item["chrome-ore"] then
-	data.raw.item["chrome-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-chrome-64.png"
-	data.raw.item["chrome-ore"].icon_size = 64
-	data.raw.item["chrome-ore"].icon_mipmaps = 4
+		data.raw.item["chrome-ore"].icons = nil
+		data.raw.item["chrome-ore"].icon = "__bobicons__/graphics/icons/ores/chrome-ore/chrome-ore-1.png"
+		data.raw.item["chrome-ore"].icon_size = 64 
+		data.raw.item["chrome-ore"].icon_mipmaps = 4
+		data.raw.item["chrome-ore"].pictures =
+		{
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/chrome-ore/chrome-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/chrome-ore/chrome-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/chrome-ore/chrome-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/chrome-ore/chrome-ore-4.png", scale = 0.25, mipmap_count = 4}
+		}
+		
 	end
+	
 	if data.raw.item["platinum-ore"] then
-	data.raw.item["platinum-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-platinum-64.png"
-	data.raw.item["platinum-ore"].icon_size = 64
-	data.raw.item["platinum-ore"].icon_mipmaps = 4
+		data.raw.item["platinum-ore"].icons = nil
+		data.raw.item["platinum-ore"].icon = "__bobicons__/graphics/icons/ores/platinum-ore/platinum-ore-1.png"
+		data.raw.item["platinum-ore"].icon_size = 64 
+		data.raw.item["platinum-ore"].icon_mipmaps = 4
+		data.raw.item["platinum-ore"].pictures =
+		{
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/platinum-ore/platinum-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/platinum-ore/platinum-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/platinum-ore/platinum-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/platinum-ore/platinum-ore-4.png", scale = 0.25, mipmap_count = 4}
+		}
 	end
+
 	if data.raw.item["fluorite-ore"] then
 	data.raw.item["fluorite-ore"].icon = "__bobicons__/graphics/icons/angelsrefining/ore-fluorite-64.png"
 	data.raw.item["fluorite-ore"].icon_size = 64
@@ -1858,15 +1883,41 @@ data.raw.item["emerald-ore"].icon_mipmaps = 4
 
 if mods["angelsrefining"] then
 
-data.raw.item["angels-ore2"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore2-64.png" 
+data.raw.item["angels-ore2"].icons = nil
+data.raw.item["angels-ore2"].icon = "__bobicons__/graphics/icons/ores/angels-ore2/angels-ore2-1.png"
 data.raw.item["angels-ore2"].icon_size = 64
 data.raw.item["angels-ore2"].icon_mipmaps = 4
-data.raw.item["angels-ore4"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore4-64.png" 
+data.raw.item["angels-ore2"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore2/angels-ore2-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore2/angels-ore2-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore2/angels-ore2-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore2/angels-ore2-4.png", scale = 0.25, mipmap_count = 4}
+    }
+
+data.raw.item["angels-ore4"].icons = nil
+data.raw.item["angels-ore4"].icon = "__bobicons__/graphics/icons/ores/angels-ore4/angels-ore4-1.png"
 data.raw.item["angels-ore4"].icon_size = 64
 data.raw.item["angels-ore4"].icon_mipmaps = 4
-data.raw.item["angels-ore6"].icon = "__bobicons__/graphics/icons/angelsrefining/angels-ore6-64.png" 
+data.raw.item["angels-ore4"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore4/angels-ore4-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore4/angels-ore4-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore4/angels-ore4-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore4/angels-ore4-4.png", scale = 0.25, mipmap_count = 4}
+    }
+
+data.raw.item["angels-ore6"].icons = nil
+data.raw.item["angels-ore6"].icon = "__bobicons__/graphics/icons/ores/angels-ore6/angels-ore6-1.png"
 data.raw.item["angels-ore6"].icon_size = 64
 data.raw.item["angels-ore6"].icon_mipmaps = 4
+data.raw.item["angels-ore6"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore6/angels-ore6-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore6/angels-ore6-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore6/angels-ore6-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/angels-ore6/angels-ore6-4.png", scale = 0.25, mipmap_count = 4}
+    }
 
 if data.raw.item["geode-blue"] then
 data.raw.item["geode-blue"].icon = "__bobicons__/graphics/icons/angelsrefining/geode-blue-64.png" 
@@ -2127,6 +2178,10 @@ data.raw.item["nodule-crushed"].icon_mipmaps = 4
  end
 
 end
+
+
+
+
 
 -- ANGELS SMELTING
 
@@ -2851,6 +2906,36 @@ data.raw.item["solid-oil-residual"].icon_mipmaps = 4
 data.raw.item["solid-sodium-hydroxide"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-sodium-hydroxide-64.png"
 data.raw.item["solid-sodium-hydroxide"].icon_size = 64
 data.raw.item["solid-sodium-hydroxide"].icon_mipmaps = 4
+
+if data.raw.item["catalyst-metal"] then
+data.raw.item["catalyst-metal"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-64.png"
+data.raw.item["catalyst-metal"].icon_size = 64
+data.raw.item["catalyst-metal"].icon_mipmaps = 4
+end
+
+data.raw.item["catalyst-metal-carrier"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-carrier-64.png"
+data.raw.item["catalyst-metal-carrier"].icon_size = 64
+data.raw.item["catalyst-metal-carrier"].icon_mipmaps = 4
+data.raw.item["catalyst-metal-blue"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-blue-64.png"
+data.raw.item["catalyst-metal-blue"].icon_size = 64
+data.raw.item["catalyst-metal-blue"].icon_mipmaps = 4
+data.raw.item["catalyst-metal-green"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-green-64.png"
+data.raw.item["catalyst-metal-green"].icon_size = 64
+data.raw.item["catalyst-metal-green"].icon_mipmaps = 4
+data.raw.item["catalyst-metal-red"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-red-64.png"
+data.raw.item["catalyst-metal-red"].icon_size = 64
+data.raw.item["catalyst-metal-red"].icon_mipmaps = 4
+data.raw.item["catalyst-metal-yellow"].icon = "__bobicons__/graphics/icons/angelspetrochem/catalyst-metal-yellow-64.png"
+data.raw.item["catalyst-metal-yellow"].icon_size = 64
+data.raw.item["catalyst-metal-yellow"].icon_mipmaps = 4
+
+data.raw.item["angels-electrode"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-electrode-64.png"
+data.raw.item["angels-electrode"].icon_size = 64
+data.raw.item["angels-electrode"].icon_mipmaps = 4
+data.raw.item["angels-electrode-used"].icon = "__bobicons__/graphics/icons/angelspetrochem/solid-electrode-used-64.png"
+data.raw.item["angels-electrode-used"].icon_size = 64
+data.raw.item["angels-electrode-used"].icon_mipmaps = 4
+
 --[[
 data.raw.fluid["crude-oil"].icons = nil
 data.raw.fluid["crude-oil"].icon = nil
@@ -2961,9 +3046,6 @@ data.raw.item["phosphorus-ore"].icon_mipmaps = 4
 data.raw.item["solid-white-phosphorus"].icon = "__bobicons__/graphics/icons/clowns-processing/solid-white-phosphorus.png"
 data.raw.item["solid-white-phosphorus"].icon_size = 64
 data.raw.item["solid-white-phosphorus"].icon_mipmaps = 4
-data.raw.item["magnesium-ore"].icon = "__bobicons__/graphics/icons/clowns-processing/magnesium-ore.png"
-data.raw.item["magnesium-ore"].icon_size = 64
-data.raw.item["magnesium-ore"].icon_mipmaps = 4
 data.raw.item["processed-magnesium"].icon = "__bobicons__/graphics/icons/clowns-processing/processed-magnesium.png"
 data.raw.item["processed-magnesium"].icon_size = 64
 data.raw.item["processed-magnesium"].icon_mipmaps = 4
@@ -2977,9 +3059,30 @@ data.raw.item["clowns-plate-magnesium"].icon = "__bobicons__/graphics/icons/clow
 data.raw.item["clowns-plate-magnesium"].icon_size = 64
 data.raw.item["clowns-plate-magnesium"].icon_mipmaps = 4
 
+data.raw.item["magnesium-ore"].icons = nil
+data.raw.item["magnesium-ore"].icon = "__bobicons__/graphics/icons/clowns-processing/magnesium-ore.png"
+data.raw.item["magnesium-ore"].icon_size = 64
+data.raw.item["magnesium-ore"].icon_mipmaps = 4
+data.raw.item["magnesium-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/magnesium-ore/magnesium-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/magnesium-ore/magnesium-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/magnesium-ore/magnesium-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/magnesium-ore/magnesium-ore-4.png", scale = 0.25, mipmap_count = 4}
+    }
+
+data.raw.item["osmium-ore"].icons = nil
 data.raw.item["osmium-ore"].icon = "__bobicons__/graphics/icons/clowns-processing/osmium-ore.png"
 data.raw.item["osmium-ore"].icon_size = 64
 data.raw.item["osmium-ore"].icon_mipmaps = 4
+data.raw.item["osmium-ore"].pictures =
+    {
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/osmium-ore/osmium-ore-1.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/osmium-ore/osmium-ore-2.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/osmium-ore/osmium-ore-3.png", scale = 0.25, mipmap_count = 4},
+      { size = 64, filename = "__bobicons__/graphics/icons/ores/osmium-ore/osmium-ore-4.png", scale = 0.25, mipmap_count = 4}
+    }
+
 data.raw.item["processed-osmium"].icon = "__bobicons__/graphics/icons/clowns-processing/processed-osmium.png"
 data.raw.item["processed-osmium"].icon_size = 64
 data.raw.item["processed-osmium"].icon_mipmaps = 4
@@ -3032,6 +3135,16 @@ data.raw.fluid["liquid-molten-magnesium"].icon_mipmaps = 4
 data.raw.fluid["liquid-dimethylmercury"].icon = "__bobicons__/graphics/icons/clowns-processing/liquid-dimethylmercury.png"
 data.raw.fluid["liquid-dimethylmercury"].icon_size = 32
 --data.raw.fluid["liquid-dimethylmercury"].icon_mipmaps = 4
+end
+
+if mods["PCPRedux"] then
+data.raw.item["catalyst-metal-cyan"].icon = "__bobicons__/graphics/icons/PCPRedux/catalyst-metal-cyan-64.png"
+data.raw.item["catalyst-metal-cyan"].icon_size = 64
+data.raw.item["catalyst-metal-cyan"].icon_mipmaps = 4
+
+--data.raw.item["poly-lactic-acid-plastic"].icon = "__bobicons__/graphics/icons/PCPRedux/poly-lactic-acid-plastic-64.png"
+--data.raw.item["poly-lactic-acid-plastic"].icon_size = 64
+--data.raw.item["poly-lactic-acid-plastic"].icon_mipmaps = 4
 end
 
 if data.raw.item["lab-2"] then
