@@ -87,11 +87,12 @@ data:extend({
 		effects = {},
 		unit = {
 			count = easy_research and 20 or 200,
-			ingredients = {{"automation-science-pack", 1}
+			ingredients = {{"automation-science-pack", 1}},
 			--,{"logistic-science-pack", 1} --DrD
 			time = 30
-		},
+			},
 		order = pf.."b-b",
+
 	},
 	{
 		type = "technology",
@@ -105,7 +106,7 @@ data:extend({
 		},
 		unit = {
 			count = easy_research and 30 or 300,
-			ingredients = {{"automation-science-pack", 1},{"logistic-science-pack", 1}
+			ingredients = {{"automation-science-pack", 1},{"logistic-science-pack", 1}},
 			--,{"chemical-science-pack", 1} --DrD
 			time = 30
 		},
@@ -137,7 +138,7 @@ data:extend({
 		effects = {},
 		unit = {
 			count = easy_research and 10 or 100,
-			ingredients = {{"automation-science-pack", 1}
+			ingredients = {{"automation-science-pack", 1}},
 			--,{"logistic-science-pack", 1} --DrD
 			time = 30
 		},
