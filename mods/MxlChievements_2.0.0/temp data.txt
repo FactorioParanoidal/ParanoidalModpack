@@ -1,0 +1,75 @@
+Burner Inserter  		 burner-inserter
+Long Handled Inserter   long-handed-inserter
+Filter Inserter			filter-inserter
+Stack Inserter			stack-inserter
+Filter Stack Inserter	stack-filter-inserter
+Firearm Magazine		firearm-magazine
+Piercing Magazine		piercing-rounds-magazine
+Uranium Magazine		uranium-rounds-magazine
+Turret					gun-turret
+Laser Turret			laser-turret
+Flamethrower Turret		flamethrower-turret
+Artillery Turret		artillery-turret
+Pipe to Ground			pipe-to-ground
+Rail Signal				rail-signal
+Rail Chain Signal		rail-chain-signal
+Storage Tank			storage-tank
+Pumpjacks				pumpjack
+Stone Furnace			stone-furnace
+Steel Furnace			steel-furnace
+Oil Refinery			oil-refinery
+Chemical Plant			chemical-plant
+Centrifuge				centrifuge
+Heat Pipe				heat-pipe
+Heat Exchanger			heat-exchanger
+Boiler					boiler
+Steam Turbine			steam-turbine
+Steam Engine			steam-engine
+Nuclear Reactor 		nuclear-reactor
+Empty Barrel			barrel?
+Low Density Structure	low-density-structure
+Rocket Control Unit		rocket-control-unit
+Batteries 				battery
+Solid Fuel				solid-fuel
+Rocket Fuel				rocket-fuel
+Nuclear Fuel			nuclear-fuel
+Walls					stone-wall
+Artillery Shell			artillery-shell
+Explosives				explosives
+Uranium Fuel Cell		uranium-fuel-cell
+Sulphur					sulphur
+
+
+
+data:extend{
+	{
+		type = "produce-achievement",
+		name = "-1",
+		order = "u",
+		item_product = "",
+		amount = 1000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/.png",
+		icon_size = 128
+	},
+	{
+		type = "produce-achievement",
+		name = "-2",
+		order = "u",
+		item_product = "",
+		amount = 1000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/.png",
+		icon_size = 128
+	},
+	{
+		type = "produce-achievement",
+		name = "-3",
+		order = "u",
+		item_product = "",
+		amount = 1000000000000,
+		limited_to_one_game = false,
+		icon = "__MxlChievements__/graphics/.png",
+		icon_size = 128
+	},
+}
