@@ -14,6 +14,7 @@ Factorio Mod forcing mod buttons to look uniform and aligned, harmonizes most ic
 ![tooltips](https://i.imgur.com/IXbqUlR.png)
 - Per-player setting to switch to grey square buttons.
 ![greybuttons](https://i.imgur.com/kcSHyzX.png)
+- Per-player setting to switch the style of the top left frame.
 - Blueprint related buttons only show when one is selected:
 ![blueprint](https://i.imgur.com/jUbwLoX.png)
 

@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.1
+Date: 2021.09.05
+  Changes:
+    - Added option for removing or simplifying top frame
+    - Supports Pyanodon
+    - Supports Homeworld Redux
+    - Supports Lawful Evil (Added custom scripts in laws)
+    - Supports Trashcan
+    - Supports Usage Detector
+    - Supports RPG
+    - Supports Spawn Control
+    - Supports Spawn Control with cooldown
+    - Supports What Is Missing
+---------------------------------------------------------------------------------------------------
 Version: 1.10.0
 Date: 2021.09.03
   Changes:
