@@ -1,6 +1,6 @@
 {
 	"name": "GUI_Unifyer",
-	"version": "1.10.0",
+	"version": "1.10.1",
 	"title": "GUI Unifyer",
 	"description": "Forces mod buttons to look uniform and aligned, harminizes icons.\n\nSupports (so far) : Factory Planner, Helmod, Module Inserter, Placeables, Todo List, What Is It Really Used For, Creative Mod, BeastFinder, Bob's mods, Blueprint-request, CleanMap, DeleteEmptyChunks, Death Counter, Ingame Technology Browser, Outpost Planner, Quickbar Import/Export, Rocket Silo Stats, Schall Satellite Controller, Actual Craft Times Remade, Attila Zoom Mod, Auto Trash, Better Bots Technologies, Change Map Settings, Doing Things By Hand, Kill Lost Bots, Markers, Screenshot Toolkit, Factorissimo2, Kraskaska's Technology Total Raw Resources Calc, Crafting Tools, Orbital Ion Cannon (SE Edition), Landfill Everything, Not Enough Todo, OSHA Hot Swap, Picker Inventory Tools, Powered Entities, Research Counter, Rich Text Helper, RitnTeleportation, Solar Calculator, Solar Ratio Calculator, Space Extension Mod (SpaceX), The Fat Controller, Toggle Peaceful Mode, Train Log, Train Supply Manager (TSM), Upgrade Builder and Planner, What's Missing?",
 	"author": "snouz, Dr_Pepper",
@@ -92,6 +92,15 @@
 		"?Shuttle_Train_Continued",
 		"?Simple_Circuit_Trains",
 		"?smartchest",
-		"?TeamCoop"
+		"?TeamCoop",
+		"?homeworld_redux",
+		"?m-lawful-evil",
+		"?Trashcan",
+		"?pycoalprocessing",
+		"?inserter-throughput",
+		"?RPG",
+		"?SpawnControl",
+		"?TimedSpawnControl",
+		"?what-is-missing"
 	]
 }
