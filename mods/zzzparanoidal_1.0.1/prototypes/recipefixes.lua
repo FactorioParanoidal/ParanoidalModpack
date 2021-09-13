@@ -16,3 +16,15 @@ data.raw.recipe["bob-nickel-plate"].hidden = false
 
 data.raw.recipe["invar-alloy"].hidden = false
 data.raw.recipe["brass-alloy"].hidden = false
+
+--правильно добавлять ингриды в рецепт
+--[[
+  if data.raw.recipe["advanced-logistic-science-pack"] then
+    if data.raw.recipe["advanced-logistic-science-pack"].ingredients then
+      table.insert(data.raw.recipe["advanced-logistic-science-pack"].ingredients,{type="item",name="flask",amount=1})
+    elseif data.raw.recipe["advanced-logistic-science-pack"].normal.ingredients then
+      table.insert(data.raw.recipe["advanced-logistic-science-pack"].normal.ingredients,{type="item",name="flask",amount=1})
+      table.insert(data.raw.recipe["advanced-logistic-science-pack"].expensive.ingredients,{type="item",name="flask",amount=2})
+    end
+  end
+]]--
