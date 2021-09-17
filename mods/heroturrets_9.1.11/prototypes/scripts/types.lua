@@ -333,12 +333,12 @@ local local_create_turret = function(turret,rank,rank_string,mod)
         if entity.turret_rotation_speed ~= nil then entity.turret_rotation_speed = entity.turret_rotation_speed*mod end
         if entity.manual_range_modifier ~= nil then entity.manual_range_modifier = entity.manual_range_modifier*mod end
         if entity.turn_after_shooting_cooldown ~= nil then 
-            entity.turn_after_shooting_cooldown = entity.turn_after_shooting_cooldown*(1-(mod-1))
+            entity.turn_after_shooting_cooldown = entity.turn_after_shooting_cooldown / mod
             entity.turn_after_shooting_cooldown = math.min(180,math.max(entity.turn_after_shooting_cooldown,10))
         end
         local m_range = nil
         if entity.attack_parameters ~= nil then
-            if entity.attack_parameters.cooldown ~= nil then entity.attack_parameters.cooldown = entity.attack_parameters.cooldown * (1-(mod-1)) end
+            if entity.attack_parameters.cooldown ~= nil then entity.attack_parameters.cooldown = entity.attack_parameters.cooldown / mod end
             if entity.attack_parameters.range ~= nil then entity.attack_parameters.range = entity.attack_parameters.range * mod end
             --if entity.attack_parameters.min_range ~= nil then entity.attack_parameters.min_range = entity.attack_parameters.min_range * (1-(mod-1)) end
 			if entity.attack_parameters.ammo_type ~= nil and entity.attack_parameters.ammo_type.action ~= nil then
@@ -405,7 +405,7 @@ local local_create_turret = function(turret,rank,rank_string,mod)
             local gun = table.deepcopy(data.raw["gun"][entity.gun])
             if gun.attack_parameters ~= nil then
                 local gun_name = "hero-turret-gun-"..rank.."-for-" ..entity.gun
-                if gun.attack_parameters.cooldown ~= nil then gun.attack_parameters.cooldown = gun.attack_parameters.cooldown * (1-(mod-1)) end
+                if gun.attack_parameters.cooldown ~= nil then gun.attack_parameters.cooldown = gun.attack_parameters.cooldown / mod end
                 if gun.attack_parameters.range ~= nil then gun.attack_parameters.range = gun.attack_parameters.range * mod end
                 gun.name = gun_name
                 gun.localised_name = localised_name
