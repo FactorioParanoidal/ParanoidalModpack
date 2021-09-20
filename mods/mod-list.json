@@ -24,6 +24,11 @@
     },
     
     {
+      "name": "AdditionalPasteSettings",
+      "enabled": true
+    },
+    
+    {
       "name": "Aircraft",
       "enabled": true
     },
@@ -199,11 +204,6 @@
     },
     
     {
-      "name": "Building_Time",
-      "enabled": true
-    },
-    
-    {
       "name": "bullet-trails",
       "enabled": true
     },
@@ -235,11 +235,6 @@
     
     {
       "name": "CopyPasteModules",
-      "enabled": true
-    },
-    
-    {
-      "name": "creative-mod",
       "enabled": true
     },
     
@@ -349,6 +344,11 @@
     },
     
     {
+      "name": "fluid-memory-storage",
+      "enabled": true
+    },
+    
+    {
       "name": "FluidMustFlow",
       "enabled": true
     },
@@ -420,6 +420,11 @@
     
     {
       "name": "LightedPolesPlus",
+      "enabled": true
+    },
+    
+    {
+      "name": "logistic-memory-units",
       "enabled": true
     },
     
@@ -554,11 +559,6 @@
     },
     
     {
-      "name": "nuke-cliffs",
-      "enabled": true
-    },
-    
-    {
       "name": "Oberhaul",
       "enabled": true
     },
@@ -585,11 +585,6 @@
     
     {
       "name": "P-U-M-P-S",
-      "enabled": true
-    },
-    
-    {
-      "name": "paranoidal-tweaks",
       "enabled": true
     },
     
@@ -744,11 +739,6 @@
     },
     
     {
-      "name": "robotarmy",
-      "enabled": true
-    },
-    
-    {
       "name": "robot_attrition",
       "enabled": true
     },
@@ -819,6 +809,11 @@
     },
     
     {
+      "name": "slower-trains",
+      "enabled": true
+    },
+    
+    {
       "name": "SmogSolarPanels",
       "enabled": true
     },
@@ -845,16 +840,6 @@
     
     {
       "name": "stdlib",
-      "enabled": true
-    },
-    
-    {
-      "name": "steam-filter-inserter",
-      "enabled": true
-    },
-    
-    {
-      "name": "steam-inserter-patch",
       "enabled": true
     },
     
