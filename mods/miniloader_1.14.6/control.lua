@@ -311,21 +311,28 @@ local function on_entity_settings_pasted(ev)
 end
 
 local function on_gui_closed(event)
+  local player = game.get_player(event.player_index)
   if event.gui_type == defines.gui_type.item
   and event.item
   and event.item.is_blueprint
   and event.item.is_blueprint_setup()
+  and player.cursor_stack
+  and player.cursor_stack.valid_for_read
+  and player.cursor_stack.is_blueprint
+  and not player.cursor_stack.is_blueprint_setup()
   then
     global.previous_opened_blueprint_for[event.player_index] = {
       blueprint = event.item,
       tick = event.tick,
     }
+  else
+    global.previous_opened_blueprint_for[event.player_index] = nil
   end
 end
 
 local function on_setup_blueprint(ev)
   local bp = blueprint.get_blueprint_to_setup(ev.player_index)
-  if not bp then return end
+  if not (bp and bp.valid_for_read) then return end
   blueprint.filter_miniloaders(bp)
 end
 
