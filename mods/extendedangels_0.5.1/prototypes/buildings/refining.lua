@@ -224,6 +224,6 @@ data.raw["assembling-machine"]["filtration-unit-3"].icons = extangels.numeral_ti
 data.raw["assembling-machine"]["hydro-plant-3"].animation.layers[2].tint = {r = 0.50, g = 0.1, b = 0.05} -- Red
 data.raw["assembling-machine"]["hydro-plant-4"].animation.layers[2].tint = {r = 0.70, g = 0.50, b = 0} -- Yellow
 data.raw["assembling-machine"]["ore-crusher-4"].animation.layers[2].tint = {r = 0.70, g = 0.50, b = 0} -- Yellow
-data.raw["assembling-machine"]["ore-floatation-cell-4"].animation.layers[2].tint = {r = 0.70, g = 0.50, b = 0} -- Yellow
+--data.raw["assembling-machine"]["ore-floatation-cell-4"].animation.layers[2].tint = {r = 0.70, g = 0.50, b = 0} -- Yellow
 data.raw["assembling-machine"]["ore-leaching-plant-4"].animation.layers[2].tint = {r = 0.70, g = 0.50, b = 0} -- Yellow
 data.raw["assembling-machine"]["ore-refinery-3"].animation.layers[2].tint = {r = 0.50, g = 0.1, b = 0.05} -- Red
