@@ -1,3 +1,8 @@
+local gu_todolist_style_setting_hidden = true
+if mods["Todo-List"] then
+    gu_todolist_style_setting_hidden = false
+end
+
 data:extend({
     {
         type = "string-setting",
@@ -32,5 +37,24 @@ data:extend({
         },
         order = "b"
     },
-
+    {
+        type = "string-setting",
+        name = "gu_todolist_style_setting",
+        setting_type = "runtime-per-user",
+        default_value = "icon",
+        allowed_values = {
+            "icon",
+            "longtext",
+        },
+        order = "c",
+        hidden = gu_todolist_style_setting_hidden,
+    },
+    {
+        type = "bool-setting",
+        name = "gu_mod_enabled_perplayer",
+        setting_type = "runtime-per-user",
+        default_value = true,
+        hidden = true,
+        order = "d",
+    },
 })

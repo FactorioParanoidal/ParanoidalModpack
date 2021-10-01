@@ -1,4 +1,84 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.11.12
+Date: 2021.09.28
+  Changes:
+    - Supports Clock
+    - Supports Avatars
+    - Supports Delete Adjacent Chunk
+    - Made EvoGUI display on the right of the main buttons
+    - Better Creative Mod support
+---------------------------------------------------------------------------------------------------
+Version: 1.11.11
+Date: 2021.09.27
+  Changes:
+    - Fixed a crash with Hive Mind
+---------------------------------------------------------------------------------------------------
+Version: 1.11.10
+Date: 2021.09.27
+  Changes:
+    - Fixed a crash with changing surface (e.g. Factorissimo)
+---------------------------------------------------------------------------------------------------
+Version: 1.11.9
+Date: 2021.09.26
+  Changes:
+    - Fixed a crash
+---------------------------------------------------------------------------------------------------
+Version: 1.11.8
+Date: 2021.09.26
+  Changes:
+    - Fixed a crash with new games
+    - Buttons of: Module Inserter, Factory Planner, Rich Text Helper, Not Enough Todo and Train Log are now underlined when their window is open
+---------------------------------------------------------------------------------------------------
+Version: 1.11.7
+Date: 2021.09.26
+  Changes:
+    - Fixed crash
+---------------------------------------------------------------------------------------------------
+Version: 1.11.6
+Date: 2021.09.26
+  Changes:
+    - Code cleaned and improved (uses less resources)
+    - Supports LandfillEverythingAndPumps
+    - Supports Automatic Belt Direction
+    - Buttons of Pyanodon, Solar Ratio and Cities of Earth now close their main window
+---------------------------------------------------------------------------------------------------
+Version: 1.11.5
+Date: 2021.09.20
+  Changes:
+    - Supports base scenarios (PVP, Supply Challenge, Team Production...)
+    - Supports Cities Of Earth
+    - Supports Oarc Multiplayer Spawn
+    - Supports Decu
+    - Supports Rd's Space Exploration Multiplayer Compat
+    - Supports Spiderissmo
+    - Removed some debug text
+---------------------------------------------------------------------------------------------------
+Version: 1.11.4
+Date: 2021.09.19
+  Changes:
+    - Fixed a potential crash with 1.11.3
+    - Supports Dana: crafting tree/graph explorer
+    - Supports Factorio Tweaks by billbo99
+    - Supports Remote Switch
+    - Supports Spider sentinel
+    - Supports TSM Outpost Builder Addon
+    - Supports Credo Time Lapse Mod 1.1
+    - Supports Non-Wave Defense 2
+    - Supports Sky Wave Defense 3
+---------------------------------------------------------------------------------------------------
+Version: 1.11.3
+Date: 2021.09.17
+  Changes:
+    - Better support for Todo-List (dynamic hover text + option to use full text button)
+---------------------------------------------------------------------------------------------------
+Version: 1.11.2
+Date: 2021.09.16
+  Changes:
+    - Fixed crash when placing teleporters (Teleporter Redux and Personal Teleporter)
+    - Supports Recipe Explorer
+    - Supports The Blueprint Designer Lab
+    - Re-added Black Market 2 hover credit
+---------------------------------------------------------------------------------------------------
 Version: 1.11.1
 Date: 2021.09.15
   Changes:

@@ -1,20 +1,21 @@
+require('scripts/debug')
+
 local mod_gui = require("mod-gui")
 local gui_button_style = "slot_button_notext"
 local gui_button_style_whitetext = "slot_button_whitetext"
-local checknexttick = true
 local activedebug = false
 
 local iconlist = {
 	--modname					--sprite 						button									tooltip 					dontreplacesprite	buttonpath (array)	windowtocheck (array)
 	{"helmod",					"helmod_button", 				"helmod_planner-command", 				{'guiu.helmod_button'}, 			nil,		nil,				{"screen", "HMProductionPanel"}},
-	{"factoryplanner",			"factoryplanner_button", 		"fp_button_toggle_interface", 			{'guiu.factoryplanner_button'}, 	nil,		nil,				nil},
-	{"ModuleInserter",			"moduleinserter_button", 		"module_inserter_config_button", 		{'guiu.moduleinserter_button'}, 	nil,		nil,				nil},
+	{"factoryplanner",			"factoryplanner_button", 		"fp_button_toggle_interface", 			{'guiu.factoryplanner_button'}, 	nil,		nil,				{"screen", "factoryplanner_mainframe"}},
+	{"ModuleInserter",			"moduleinserter_button", 		"module_inserter_config_button", 		{'guiu.moduleinserter_button'}, 	nil,		nil,				{"screen", "moduleinserter_mainframe"}},
 	{"Placeables",				"placeables_button", 			"buttonPlaceablesVisible", 				nil,								nil,		nil,				{"screen", "framePlaceablesOuter"}},
-	{"Todo-List",				"todolist_button", 				"todo_maximize_button", 				{'guiu.todolist_button'}, 			nil,		nil,				{"screen", "todo_main_frame"}},
 	{"creative-mod",			"creativemod_button", 			"creative-mod_main-menu-open-button", 	nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "creative-mod_main-menu-container"}},
 	{"BeastFinder",				"beastfinder_button", 			"beastfinder-menu-button", 				{'guiu.beastfinder_button'}, 		nil,		nil,				{"screen", "frame_BeastFinder_main"}},
 	{"bobclasses",				"bobclasses_button", 			"bob_avatar_toggle_gui", 				nil,								nil,		nil,				{"left", "bob_avatar_gui"}},
-	{nil,						"bobinserters_button", 			"bob_logistics_inserter_button", 		nil,								nil,		nil,				{"left", "bob_logistics_inserter_gui"}},
+	{"bobinserters",			"bobinserters_button", 			"bob_logistics_inserter_button", 		nil,								nil,		nil,				{"left", "bob_logistics_inserter_gui"}},
+	{"boblogistics",			"bobinserters_button", 			"bob_logistics_inserter_button", 		nil,								nil,		nil,				{"left", "bob_logistics_inserter_gui"}},
 	{"CleanMap",				"cleanmap_button", 				"CleanMap", 							nil,								nil,		nil,				nil},
 	{"DeleteEmptyChunks",		"cleanmap_button", 				"DeleteEmptyChunks", 					nil,								nil,		nil,				nil},
 	{"Death_Counter",			"deathcounter_button", 			"DeathCounterMainButton", 				{'guiu.deathcounter_button'}, 		nil,		nil,				{"left", "DeathCounterMain"}},
@@ -31,18 +32,18 @@ local iconlist = {
 	{"kraskaska-total-raw-resources-calc","kttrrc_button", 		"ttrrc_main_frame_button", 				{'guiu.kttrrc_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "ttrrc_main_frame"}},
 	{"Kux-CraftingTools",		"kuxcraftingtools_button", 		"CraftNearbyGhostItemsButton", 			nil,								nil,		nil,				nil},
 	{"Kux-OrbitalIonCannon",	"kuxorbitalioncannon_button", 	"ion-cannon-button", 					{'guiu.kuxorbitalioncannon_button'},nil,		nil,				{"left", "ion-cannon-stats"}},
-	{"LandfillEverything",		"markers_button", 				"markers_gui_toggle", 					{'guiu.markers_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "markers_gui"}},
-	{"Not_Enough_Todo",			"notenoughtodo_button", 		"TODO_CLICK01_", 						{'guiu.notenoughtodo_button'}, 		nil,		nil,				nil},
+	{"markers",					"markers_button", 				"markers_gui_toggle", 					{'guiu.markers_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "markers_gui"}},
+	{"Not_Enough_Todo",			"notenoughtodo_button", 		"TODO_CLICK01_", 						{'guiu.notenoughtodo_button'}, 		nil,		nil,				{"screen", "notenoughtodo_mainframe"}},
 	{"osha_hot_swap",			"oshahotswap_button", 			"hotswap-menu-button", 					{'guiu.oshahotswap_button'}, 		nil,		nil,				{"left", "hotswap-main-container"}},
 	{"PickerInventoryTools",	"pickerinventorytools_button", 	"filterfill_requests", 					nil,								nil,		nil,				nil},
 	{"Powered_Entities",		"poweredentities_button", 		"poweredEntitiesRecalculateButton", 	{'guiu.poweredentities_button'}, 	nil,		nil,				nil},
 	{"research-counter",		"researchcounter_button", 		"research-counter-button", 				{'guiu.researchcounter_button'}, 	nil,		nil,				{"screen", "research-counter-base"}},
-	{"Rich_Text_Helper",		"richtexthelper_button", 		"RICH_CLICK_20_player01", 				{'guiu.richtexthelper_button'}, 	nil,		nil,				nil},
+	{"Rich_Text_Helper",		"richtexthelper_button", 		"RICH_CLICK_20_player01", 				{'guiu.richtexthelper_button'}, 	nil,		nil,				{"screen", "richtexthelper_mainframe"}},
 	{"RitnTeleportation",		"ritnteleportation_button", 	"ritn-button-main", 					{'guiu.ritnteleportation_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "menu-flow-common", "main_menu-frame-menu"}},
 	{"solar-calc",				"solarcalc_button", 			"kaktusbot-sc-open-calc-button", 		{'guiu.solarcalc_button'}, 			nil,		nil,				{"screen", "kaktusbot-sc-main-gui"}},
 	{"SolarRatio",				"solarcalc_button", 			"niet-sr-guibutton", 					nil,								nil,		nil,				{"center", "niet-sr-guiframe"}},
 	{"SpaceMod",				"spacemod_button", 				"space_toggle_button", 					{'guiu.spacemod_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "space_progress_frame"}},
-	{"train-log",				"trainlog_button", 				"train_log", 							nil,								nil,		nil,				nil},
+	{"train-log",				"trainlog_button", 				"train_log", 							nil,								nil,		nil,				{"screen", "trainlog_mainframe"}},
 	{"train-pubsub",			"trainpubsub_button", 			"tm_sprite_button", 					nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "tm_button_frame"}},
 	{"upgrade-planner-next",	"upgradeplannernext_button", 	"upgrade_planner_config_button", 		nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "upgrade_planner_config_frame"}},
 	{"whats-missing",			"whatsmissing_button", 			"whats-missing-button", 				nil,								nil,		nil,				{"screen", "whats-missing-gui"}},
@@ -74,8 +75,10 @@ local iconlist = {
 	{"diplomacy",				"diplomacy_button", 			"diplomacy_button",						nil,								nil,		nil,				{"screen", "diplomacy_frame"}},
 	{"Electronic_Locomotives",	"electronic_locomotives_button","ELECTRONIC_CLICK01",					{'guiu.electronic_locomotives_button'},nil,		nil,				{"screen", "ELECTRONIC_LOCATION"}},
 	{"forces",					"forces_button", 				"forcesMenu",							nil,								nil,		nil,				{"center", "inviteDialogue"}},
-	{nil,						"hive_mind_button1", 			"join-hive-button",						nil,								nil,		nil,				nil},
-	{nil,						"hive_mind_button2", 			"leave-hive-button",					nil,								nil,		nil,				nil},
+	{"Hive_Mind",				"hive_mind_button1", 			"join-hive-button",						nil,								nil,		nil,				nil},
+	{"Hive_Mind",				"hive_mind_button2", 			"leave-hive-button",					nil,								nil,		nil,				nil},
+	{"Hive_Mind_Remastered",	"hive_mind_button1", 			"join-hive-button",						nil,								nil,		nil,				nil},
+	{"Hive_Mind_Remastered",	"hive_mind_button2", 			"leave-hive-button",					nil,								nil,		nil,				nil},
 	{"howfardiditgo",			"howfardiditgo_button", 		"train_distance_button",				{'guiu.howfardiditgo_button'},		nil,		nil,				{"top", "mod_gui_top_frame", "mod_gui_inner_frame", "train_filtertextbox"}},
 	{"Kux-BlueprintEditor",		"kuxblueprinteditor_button", 	"mod-blueprint-editor-toolbar-button",	nil,								nil,		nil,				{"screen", "blueprint-editor-modal"}},
 	{"Kux-HandcraftGhosts",		"kuxcraftingtools_button", 		"PlayerGhostCraft",						nil,								nil,		nil,				nil},
@@ -94,7 +97,8 @@ local iconlist = {
 	{"pycoalprocessing",		"pycoalprocessing_button", 		"pywiki",								{'guiu.pycoalprocessing_button'},	nil,		nil,				{"screen", "wiki_frame"}},
 	{"usage-detector",			"usagedetector_button", 		"usage_detector",						{'guiu.usagedetector_button'},		nil,		nil,				{"center", "usage_detector_center"}},
 	{"RPG",						"rpg_button", 					"104",									{'guiu.rpg_button'},				nil,		nil,				{"screen", "105"}},
-	{nil,						"spawncontrol_button", 			"spawn",								{'guiu.spawncontrol_button'},		nil,		nil,				nil},
+	{"SpawnControl",			"spawncontrol_button", 			"spawn",								{'guiu.spawncontrol_button'},		nil,		nil,				nil},
+	{"TimedSpawnControl",		"spawncontrol_button", 			"spawn",								{'guiu.spawncontrol_button'},		nil,		nil,				nil},
 	{"TimedSpawnControl",		"spawncontrol_random_button", 	"random",								{'guiu.spawncontrol_random_button'},nil,		nil,				nil},
 	{"what-is-missing",			"whatsmissing_button", 			"what_is_missing",						{'guiu.whatismissing_button'},		nil,		nil,				{"left", "what_is_missing"}},
 	{"advanced-logistics-system-fork","logisticssystemfork_button","logistics-view-button",				{'guiu.logisticssystemfork_button'},nil,		nil,				{"center", "logisticsFrame"}},
@@ -106,20 +110,72 @@ local iconlist = {
 	{"SchallEndgameEvolution",	"schallendgameevolution_button","Schall-EE-mod-button",					nil,								1,			nil,				{"screen", "Schall-EE-frame-main"}},
 	{"NewGamePlus",				"newgameplus_button",			"new-game-plus-toggle-config",			nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "new-game-plus-config-frame"}},
 	{"Nullius",					"nullius_button",				"nullius_mission_button",				nil,								nil,		nil,				{"left", "nullius_mission_panel"}},
+	{"RecExplo",				"recexplo_button",				"b_recexplo",							{'guiu.recexplo_button'},			nil,		nil,				{"left", "recexplo_flow", "recexplo_gui_frame", "recexplo_gui_table"}},
+	{"BlueprintLab_design",		"blueprintlabdesign_button",	"BPL_LabButton",						{'guiu.blueprintlabdesign_button'},	nil,		nil,				{"left", "BPL_Flow", "BPL_ClearButton"}},
+	{"NonWaveDefense2",			"nonwavedefense2_button",		"nwd2_main_gui_button",					{'guiu.nonwavedefense2_button'},	nil,		nil,				nil},
+	{"SkyWaveDefense",			"nonwavedefense2_button",		"swd3_main_gui_button",					nil,								nil,		nil,				nil},
+	{"dana",					"dana_button",					"dana_main_gui_button",					nil,								nil,		nil,				nil},
+	{"billbo99_factorio_tweaks","factorio_tweaks_button",		"admin_button",							{'guiu.factorio_tweaks_button'},	nil,		nil,				{"left", "admin_panel", "tabbed_pane"}},
+	{"remote-switch",			"remoteswitch_button",			"toggle_remote_switch_popup",			{'guiu.remoteswitch_button'},		nil,		nil,				{"screen", "switch_gui_panel", "mainframe"}},
+	{"TSM-outpost-builder",		"tsmoutpostbuilder_button",		"crane_sprite_button",					{'guiu.tsmoutpostbuilder_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "crane_button_frame"}},
+	{"CredoTimeLapseModByGalapagon","credotimelapse_button",	"CTLM_mainbutton",						{'guiu.credotimelapse_button'},		nil,		nil,				{"center", "CTLM_settings_main"}},
+	{"spidersentinel",			"spidersentinel_button",		"spidersentinel_onoff",					nil,								nil,		nil,				{"left", "spidersentinel_frame"}},
+	{"CitiesOfEarth",			"citiesofearth_button",			"coe_button_show_targets",				{'guiu.citiesofearth_button'},		nil,		nil,				{"center", "coe_choose_target"}},
+	{"enemyracemanager",		"enemyracemanager_button",		"erm_toggle",							{'guiu.enemyracemanager_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "races_manager"}},
+	{"oarc-mod",				"oarcmod_button",				"oarc_button",							{'guiu.oarcmod_button'},			nil,		nil,				{"left", "mod_gui_frame_flow", "oarc_gui"}},
+	{"Decu",					"decu_button",					"market_button",						{'guiu.decu_button'},				nil,		nil,				{"center", "market"}},
+	{"rd-se-multiplayer-compat","forces_button",				"toggle_forces",						{'guiu.compatforce_button'},		nil,		nil,				{"screen", "rd_forces_ui"}},
+	{"rd-se-multiplayer-compat","spawncontrol_button",			"toggle_spawn_gui",						{'guiu.compatspawn_button'},		nil,		nil,				{"screen", "spawn_gui"}},
+	{"base",					"leaderboard_button",			"toggle_leaderboard_button",			{'guiu.leaderboard_button'},		nil,		nil,				{"screen", "leaderboard", "inner"}},
+	{"base",					"teamcoop_button1",				"base_pvp_teams_button",				{'guiu.base_pvp_teams_button'},		nil,		nil,				nil},
+	{"base",					"picksrocketstats_button",		"base_pvp_space_race_button",			{'guiu.base_pvp_space_race_button'},nil,		nil,				nil},
+	{"base",					"factorio_tweaks_button",		"base_pvp_admin_button",				{'guiu.base_pvp_admin_button'},		nil,		nil,				nil},
+	{"Spiderissmo",				"item/spidertron",				"108",									{'guiu.Spiderissmo_spider_button'},	nil,		nil,				{"screen", "105"}},
+	{"Spiderissmo",				"credotimelapse_button",		"minimap_button",						{'guiu.Spiderissmo_minimap_button'},nil,		nil,				{"left", "minimap_toggle_frame"}},
+	{"PickerInventoryTools",	"filterfill_requests_btn_bp",	"filterfill_requests_btn_bp",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_requests_btn_2x",	"filterfill_requests_btn_2x",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_requests_btn_5x",	"filterfill_requests_btn_5x",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_requests_btn_10x",	"filterfill_requests_btn_10x",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_requests_btn_max",	"filterfill_requests_btn_max",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_requests_btn_0x",	"filterfill_requests_btn_0x",			nil,								1,	 {"filterfill_requests"},	nil},
+	{"PickerInventoryTools",	"filterfill_filters_btn_all",	"filterfill_filters_btn_all",			nil,								1,	 {"filterfill_filters"},	nil},
+	{"PickerInventoryTools",	"filterfill_filters_btn_down",	"filterfill_filters_btn_down",			nil,								1,	 {"filterfill_filters"},	nil},
+	{"PickerInventoryTools",	"filterfill_filters_btn_right",	"filterfill_filters_btn_right",			nil,								1,	 {"filterfill_filters"},	nil},
+	{"PickerInventoryTools",	"filterfill_filters_btn_set_all","filterfill_filters_btn_set_all",		nil,								1,	 {"filterfill_filters"},	nil},
+	{"PickerInventoryTools",	"filterfill_filters_btn_clear_all","filterfill_filters_btn_clear_all",	nil,								1,	 {"filterfill_filters"},	nil},
+	{"automatic-belt-direction","abd_on_button",				"abdgui",								nil,								1,			nil,				nil},
+	{"Bluegistics",				"bluegistics_button",			"toggle_saved_logistics_layouts",		nil,								1,			nil,				nil},
+	{"Avatars",					"avatars_button",				"avatar_disc",							nil,								nil,		nil,				nil},
+	{"creative-mod",			"creativemod_button",			"creative-mod_creative-chest-open-button",nil,								1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame"}},
+	{"creative-mod",			"creativemod_button",			"creative-mod_duplicating-chest-open-button",nil,							1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame"}},
+	{"creative-mod",			"creativemod_button",			"creative-mod_configurable-super-boiler-open-button",nil,					1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame"}},
+	{"creative-mod",			"creativemod_button",			"creative-mod_item-source-open-button",	nil,								1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame-container"}},
+	{"creative-mod",			"creativemod_button",			"creative-mod_duplicator-open-button",	nil,								1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame-container"}},
+	{"creative-mod",			"creativemod_button",			"creative-mod_item-void-open-button",	nil,								1,	{"creative-mod_entity-gui-button-container"},	{"left", "mod_gui_frame_flow", "creative-mod_entity-gui-container", "creative-mod_entity-gui-frame-container"}},
 
+
+
+
+	--{"",		"",	"",						nil,		nil,		nil,				nil},
 	--{"trainschedulesignals_button", "TSS=open-close",						nil,								nil,		nil}, 		??
 	--{"attachnotes_button", 			"attach-note-button",					nil,								1,			nil} 	-- too complex
 	--{"avatars_button", ""},																												??
 	--{"modmashsplinterboom_button", "landmine-toggle-button"},																				??
 	--{"modmashsplinternewworlds_button", "planets-toggle-button"},																			??
-	--{"dana_button", 				"dana-shortcut",				nil, nil,		nil}, 												-- can't button name!
-	--{"deleteadjacentchunk_button", ""},																								-- too complex
 	--timeline							timeline				hard
 	--controllinator				["controllinator-toggle"]			button created from
-	--automatic-belt-direction			abdgui						toggle button comment changer images?
 	--RPGsystem						205992
 	--Bluegistics
 }
+
+local function setup_player(player)
+	if not global.player then global.player = {} end
+	if not global.player[player.index] then
+		global.player[player.index] = {
+			checknexttick = 0
+		}
+	end
+end
 
 local function set_button_sprite(button, spritepath)
 	if spritepath == nil then
@@ -127,7 +183,6 @@ local function set_button_sprite(button, spritepath)
 	end
 
 	if button.type == "button" then
-		-- normal button, we need to add a sprite as child
 		if spritepath == "" then
 			if button["button_sprite"] then
 				button["button_sprite"].destroy()
@@ -144,7 +199,6 @@ local function set_button_sprite(button, spritepath)
 	end
 
 	if button.type == "sprite-button" then
-		-- sprite button, no special handling
 		button.sprite = spritepath
 		button.hovered_sprite = spritepath
 		button.clicked_sprite = spritepath
@@ -154,9 +208,9 @@ end
 local function change_one_icon(player, sprite, button, tooltip, dontreplacesprite, buttonpath, windowtocheck)
 	if not player or not player.valid or not sprite or not button then return end
 	local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
+	local isselected = true
 	if windowtocheck then
 		local windowtocheckpath = player.gui
-		local isselected = true
 		for i, k in pairs(windowtocheck) do
 			if windowtocheckpath[k] and windowtocheckpath[k].visible then
 				windowtocheckpath = windowtocheckpath[k]
@@ -191,10 +245,21 @@ end
 local function fix_buttons(player)
 	if not player or not player.valid then return end
 	local button_flow = mod_gui.get_button_flow(player)
-	--local blackmarketvalue = button_flow.flw_blkmkt and button_flow.flw_blkmkt.but_blkmkt_credits and button_flow.flw_blkmkt.but_blkmkt_credits.caption or ""
-	--"Credit: ".. blackmarketvalue,
+
 	for _, k in pairs(iconlist) do
-		change_one_icon(player, k[2], k[3], k[4], k[5], k[6], k[7])
+		if k[1] == nil or game.active_mods[k[1]] then
+			change_one_icon(player, k[2], k[3], k[4], k[5], k[6], k[7])
+		end
+	end
+
+	--BlackMarket2 tooltip fix
+	if game.active_mods["BlackMarket2"] then
+		if button_flow.flw_blkmkt and button_flow.flw_blkmkt.but_blkmkt_credits then
+			local blackmarketvalue = button_flow.flw_blkmkt.but_blkmkt_credits.caption
+			if blackmarketvalue then
+				button_flow.flw_blkmkt.but_blkmkt_credits.tooltip = "Credit: ".. blackmarketvalue
+			end
+		end
 	end
 
 	-- AttilaZoomMod
@@ -211,6 +276,45 @@ local function fix_buttons(player)
 			end
 		end
 	end
+
+	if game.active_mods["Todo-List"] then
+		settings.get_player_settings(player)["gu_todolist_style_setting"].hidden = false
+		local todolist_button = button_flow.todo_maximize_button
+		local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
+		if todolist_button then
+			if settings.get_player_settings(player)["gu_todolist_style_setting"].value == "icon" then
+				set_button_sprite(todolist_button, "todolist_button")
+				if todolist_button.caption then
+					todolist_button.tooltip = todolist_button.caption
+				end
+			elseif settings.get_player_settings(player)["gu_todolist_style_setting"].value == "longtext" then
+				set_button_sprite(todolist_button)
+				gu_button_style_setting = "todo_button_default_snouz"
+				if todolist_button.caption then
+					todolist_button.tooltip = todolist_button.caption
+					--if todolist_button.caption[4] and todolist_button.caption[3] == ": " then
+					--	todolist_button.caption = todolist_button.caption[4]
+					--end
+				end
+			end
+			if player.gui.screen.todo_main_frame and player.gui.screen.todo_main_frame.visible == true then
+				gu_button_style_setting = gu_button_style_setting .. "_selected"
+			end
+			todolist_button.style = gu_button_style_setting
+		end
+	else
+		settings.get_player_settings(player)["gu_todolist_style_setting"].hidden = true
+	end
+
+	if game.active_mods["DeleteAdjacentChunk"] and button_flow.DeleteAdjacentChunk_table then
+		local dac_buttons_list = {"DeleteAdjacentChunk_nw", "DeleteAdjacentChunk_n", "DeleteAdjacentChunk_ne", "DeleteAdjacentChunk_w", "DeleteAdjacentChunk_e", "DeleteAdjacentChunk_sw", "DeleteAdjacentChunk_s", "DeleteAdjacentChunk_se"}
+		for _,k in pairs(dac_buttons_list) do
+			if button_flow.DeleteAdjacentChunk_table[k] then
+				button_flow.DeleteAdjacentChunk_table[k].style = "adjacentchunks_button"
+				button_flow.DeleteAdjacentChunk_table[k].sprite = nil
+			end
+		end
+	end
 end
 
 local function create_new_buttons(player)
@@ -218,96 +322,77 @@ local function create_new_buttons(player)
 	local button_flow = mod_gui.get_button_flow(player)
 	local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
 
-	if game.active_mods["FJEI"] then
-		if not button_flow.fjei_toggle_button then
-			button_flow.add {
-				type = "sprite-button",
-				name = "fjei_toggle_button",
-				sprite = "fjei_button",
-				style = gu_button_style_setting,
-				tooltip = {'guiu.fjei_button'},
-			}
+	local function create_buttons_from_list(mod, button, sprite, tooltip, optionon)
+		if game.active_mods[mod] and optionon then
+			if not button_flow[button] then
+				button_flow.add {
+					type = "sprite-button",
+					name = button,
+					sprite = sprite,
+					style = gu_button_style_setting,
+					tooltip = tooltip,
+				}
+				if button == "YARM_filter_none" then button_flow.YARM_filter_none.visible = false end
+				if button == "YARM_filter_warnings" then button_flow.YARM_filter_warnings.visible = false end
+			end
+		elseif button_flow[button] then
+			button_flow[button].destroy()
 		end
-	elseif button_flow["fjei_toggle_button"] then
-		button_flow["fjei_toggle_button"].destroy()
 	end
 
-	if game.active_mods["homeworld_redux"] then
-		if not button_flow.Homeworld_btn then
-			button_flow.add {
-				type = "sprite-button",
-				name = "Homeworld_btn",
-				style = gu_button_style_setting,
-				sprite = "homeworld_redux_button",
-			}
-		end
-	elseif button_flow["Homeworld_btn"] then
-		button_flow["Homeworld_btn"].destroy()
+	local abdshowgui = settings.get_player_settings(player)["abd-showgui"] and settings.get_player_settings(player)["abd-showgui"].value or false
+
+	local newbuttonlist = {
+		{"FJEI",				"fjei_toggle_button",						"fjei_button",					{'guiu.fjei_button'},						true},
+		{"homeworld_redux",		"Homeworld_btn",							"homeworld_redux_button",		{'guiu.homeworld_redux_button'},			true},
+		{"m-lawful-evil",		"lawful_evil_button",						"mlawfulevil_button",			{'guiu.mlawfulevil_button'},				true},
+		{"Trashcan",			"trashbinguibutton",						"trashcan_button",				{'guiu.trashcan_button'},					true},
+		{"pycoalprocessing",	"pywiki",									"pycoalprocessing_button",		{'guiu.pycoalprocessing_button'},			true},
+		{"usage-detector",		"usage_detector",							"usagedetector_button",			{'guiu.usagedetector_button'},				true},
+		{"RPG",					"104",										"rpg_button",					{'guiu.rpg_button'},						true},
+		{"TimedSpawnControl",	"random",									"spawncontrol_random_button",	{'guiu.spawncontrol_random_button'},		true},
+		{"what-is-missing",		"what_is_missing",							"whatsmissing_button",			{'guiu.whatsmissing_button'},				true},
+		{"some-zoom",			"but_zoom_zout",							"somezoom_out_button",			{'guiu.somezoom_out_button'},				true},
+		{"some-zoom",			"but_zoom_zin",								"somezoom_in_button",			{'guiu.somezoom_in_button'},				true},
+		{"production-monitor",	"stats_show_settings",						"productionmonitor_button",		{'guiu.productionmonitor_button'},			true},
+		{"Teleportation_Redux",	"teleportation_main_button",				"teleportation_button",			{'guiu.teleportation_button'},				true},
+		{"PersonalTeleporter",	"personalTeleporter_PersonalTeleportTool",	"teleportation_button",			{'guiu.teleportation_button'},				true},
+		{"inserter-throughput",	"inserter-throughput-toggle",				"inserterthroughput_off_button",{'guiu.inserterthroughput_off_button'},		true},
+		{"YARM",				"YARM_filter_none",							"yarm_all_button",				{'guiu.yarm_all_button'},					true},
+		{"YARM",				"YARM_filter_warnings",						"yarm_none_button",				{'guiu.yarm_none_button'},					true},
+		{"YARM",				"YARM_filter_all",							"yarm_warnings_button",			{'guiu.yarm_warnings_button'},				true},
+		{"RecExplo",			"b_recexplo",								"recexplo_button",				{'guiu.recexplo_button'},					true},
+		{"BlueprintLab_design",	"BPL_LabButton",							"blueprintlabdesign_button",	{'guiu.blueprintlabdesign_button'},			true},
+		{"CredoTimeLapseModByGalapagon","CTLM_mainbutton",					"credotimelapse_button",		{'guiu.credotimelapse_button'},				true},
+		{"Decu",				"market_button",							"decu_button",					{'guiu.decu_button'},						true},
+		{"rd-se-multiplayer-compat","toggle_forces",						"forces_button",				{'guiu.compatforce_button'},				true},
+		{"rd-se-multiplayer-compat","toggle_spawn_gui",						"spawncontrol_button",			{'guiu.compatspawn_button'},				true},
+		{"Spiderissmo",			"108",										"item/spidertron",				{'guiu.Spiderissmo_spider_button'},			true},
+		{"Spiderissmo",			"minimap_button",							"credotimelapse_button",		{'guiu.Spiderissmo_minimap_button'},		true},
+		{"automatic-belt-direction","abdgui",								"abd_on_button",				{'guiu.abd_on_button'},						abdshowgui},
+		--automatic-belt-direction
+		--{"warptorio2",		"warptorio_warpbutton",						"credotimelapse_button",		{'guiu.credotimelapse_button'}},
+	}
+
+	for _, k in pairs(newbuttonlist) do
+		create_buttons_from_list(k[1], k[2], k[3], k[4], k[5])
 	end
 
-	if game.active_mods["m-lawful-evil"] then
-		if not button_flow.lawful_evil_button then
-			button_flow.add {
-				type = "sprite-button",
-				name = "lawful_evil_button",
-				style = gu_button_style_setting,
-				sprite = "mlawfulevil_button",
-			}
-		end
-	elseif button_flow["lawful_evil_button"] then
-		button_flow["lawful_evil_button"].destroy()
+	if player.force and player.force.technologies["advanced-logistics-systems"] and player.force.technologies["advanced-logistics-systems"].researched then
+		create_buttons_from_list("advanced-logistics-system-fork", "logistics-view-button", "logisticssystemfork_button", {'guiu.logisticssystemfork_button'}, true)
 	end
 
-	if game.active_mods["Trashcan"] then
-		if not button_flow.trashbinguibutton then
+	if game.active_mods["clock"] then
+		if not button_flow.clockGUI then
 			button_flow.add {
-				type = "sprite-button",
-				name = "trashbinguibutton",
-				style = gu_button_style_setting,
-				sprite = "trashcan_button",
+				type = "button",
+				name = "clockGUI",
+				style = "todo_button_default_snouz",
+				caption = "",
 			}
 		end
-	elseif button_flow["trashbinguibutton"] then
-		button_flow["trashbinguibutton"].destroy()
-	end
-
-	if game.active_mods["pycoalprocessing"] then
-		if not button_flow.pywiki then
-			button_flow.add {
-				type = "sprite-button",
-				name = "pywiki",
-				style = gu_button_style_setting,
-				sprite = "pycoalprocessing_button",
-			}
-		end
-	elseif button_flow["pywiki"] then
-		button_flow["pywiki"].destroy()
-	end
-
-	if game.active_mods["usage-detector"] then
-		if not button_flow.usage_detector then
-			button_flow.add {
-				type = "sprite-button",
-				name = "usage_detector",
-				style = gu_button_style_setting,
-				sprite = "usagedetector_button",
-			}
-		end
-	elseif button_flow["usage_detector"] then
-		button_flow["usage_detector"].destroy()
-	end
-
-	if game.active_mods["RPG"] then
-		if not button_flow["104"] then
-			button_flow.add {
-				type = "sprite-button",
-				name = "104",
-				style = gu_button_style_setting,
-				sprite = "rpg_button",
-			}
-		end
-	elseif button_flow["104"] then
-		button_flow["104"].destroy()
+	elseif button_flow.clockGUI then
+		button_flow.clockGUI.destroy()
 	end
 
 	if game.active_mods["SpawnControl"] or game.active_mods["TimedSpawnControl"] then
@@ -323,144 +408,7 @@ local function create_new_buttons(player)
 		button_flow["spawn"].destroy()
 	end
 
-	if game.active_mods["TimedSpawnControl"] then
-		if not button_flow.random then
-			button_flow.add {
-				type = "sprite-button",
-				name = "random",
-				style = gu_button_style_setting,
-				sprite = "spawncontrol_random_button",
-			}
-		end
-	elseif button_flow["random"] then
-		button_flow["random"].destroy()
-	end
-
-	if game.active_mods["what-is-missing"] then
-		if not button_flow.what_is_missing then
-			button_flow.add {
-				type = "sprite-button",
-				name = "what_is_missing",
-				style = gu_button_style_setting,
-				sprite = "whatsmissing_button",
-			}
-		end
-	elseif button_flow["what_is_missing"] then
-		button_flow["what_is_missing"].destroy()
-	end
-
-
-	if game.active_mods["advanced-logistics-system-fork"] then
-		if player.force and player.force.technologies["advanced-logistics-systems"] and player.force.technologies["advanced-logistics-systems"].researched then
-			if not button_flow["logistics-view-button"] then
-				button_flow.add {
-					type = "sprite-button",
-					name = "logistics-view-button",
-					style = gu_button_style_setting,
-					sprite = "logisticssystemfork_button",
-					tooltip = {'guiu.logisticssystemfork_button'},
-				}
-			end
-		end
-	elseif button_flow["logistics-view-button"] then
-		button_flow["logistics-view-button"].destroy()
-	end
-
-	--[[if game.active_mods["timeline"] then
-		if not button_flow["timeline"] then
-			button_flow.add {
-				type = "sprite-button",
-				name = "timeline",
-				style = gu_button_style_setting,
-				sprite = "timeline_button",
-			}
-		end
-	end]]
-
-	if game.active_mods["some-zoom"] then
-		if not button_flow.but_zoom_zout then
-			button_flow.add {
-				type = "sprite-button",
-				name = "but_zoom_zout",
-				style = gu_button_style_setting,
-				sprite = "somezoom_out_button",
-				tooltip = {'guiu.somezoom_out_button'},
-			}
-		end
-		if not button_flow.but_zoom_zin then
-			button_flow.add {
-				type = "sprite-button",
-				name = "but_zoom_zin",
-				style = gu_button_style_setting,
-				sprite = "somezoom_in_button",
-				tooltip = {'guiu.somezoom_in_button'},
-			}
-		end
-	else
-		if button_flow["but_zoom_zout"] then
-			button_flow["but_zoom_zout"].destroy()
-		end
-		if button_flow["but_zoom_zin"] then
-			button_flow["but_zoom_zin"].destroy()
-		end
-	end
-
-	if game.active_mods["production-monitor"] then
-		if not button_flow.stats_show_settings then
-			button_flow.add {
-				type = "sprite-button",
-				name = "stats_show_settings",
-				style = gu_button_style_setting,
-				sprite = "productionmonitor_button",
-				tooltip = {'guiu.productionmonitor_button'},
-			}
-		end
-	elseif button_flow["stats_show_settings"] then
-		button_flow["stats_show_settings"].destroy()
-	end
-
-	if game.active_mods["Teleportation_Redux"] then
-		if global.Teleportation_Redux_built then
-			if not button_flow.teleportation_main_button then
-				button_flow.add {
-					type = "sprite-button",
-					name = "teleportation_main_button",
-					style = gu_button_style_setting,
-					sprite = "teleportation_button",
-					tooltip = {'guiu.teleportation_button'},
-				}
-			end
-		end
-	elseif button_flow["teleportation_main_button"] then
-		button_flow["teleportation_main_button"].destroy()
-	end
-
-	if game.active_mods["PersonalTeleporter"] then
-		if global.PersonalTeleporter_built then
-			if not button_flow.personalTeleporter_PersonalTeleportTool then
-				button_flow.add {
-					type = "sprite-button",
-					name = "personalTeleporter_PersonalTeleportTool",
-					style = gu_button_style_setting,
-					sprite = "teleportation_button",
-					tooltip = {'guiu.teleportation_button'},
-				}
-			end
-		end
-	elseif button_flow["personalTeleporter_PersonalTeleportTool"] then
-		button_flow["personalTeleporter_PersonalTeleportTool"].destroy()
-	end
-
 	if game.active_mods["inserter-throughput"] then
-		if not button_flow["inserter-throughput-toggle"] then
-			button_flow.add {
-				type = "sprite-button",
-				name = "inserter-throughput-toggle",
-				style = gu_button_style_setting,
-				sprite = "inserterthroughput_off_button",
-				tooltip = {'guiu.inserterthroughput_off_button'},
-			}
-		end
 		if button_flow["inserter-throughput-toggle"] and settings.get_player_settings(player)["inserter-throughput-enabled"] then
 			if settings.get_player_settings(player)["inserter-throughput-enabled"].value == true then
 				button_flow["inserter-throughput-toggle"].sprite = "inserterthroughput_on_button"
@@ -470,55 +418,9 @@ local function create_new_buttons(player)
 				button_flow["inserter-throughput-toggle"].tooltip = {'guiu.inserterthroughput_off_button'}
 			end
 		end
-	elseif button_flow["inserter-throughput-toggle"] then
-		button_flow["inserter-throughput-toggle"].destroy()
-	end
-
-	if game.active_mods["YARM"] then
-		if not button_flow["YARM_filter_none"] then --current mode all
-			button_flow.add {
-				type = "sprite-button",
-				name = "YARM_filter_none",
-				style = gu_button_style_setting,
-				sprite = "yarm_all_button",
-				tooltip = {'guiu.yarm_all_button'},
-				visible = false,
-			}
-		end
-		if not button_flow["YARM_filter_warnings"] then --current mode none
-			button_flow.add {
-				type = "sprite-button",
-				name = "YARM_filter_warnings",
-				style = gu_button_style_setting,
-				sprite = "yarm_none_button",
-				tooltip = {'guiu.yarm_none_button'},
-				visible = false,
-			}
-		end
-		if not button_flow["YARM_filter_all"] then --current mode warnings
-			button_flow.add {
-				type = "sprite-button",
-				name = "YARM_filter_all",
-				style = gu_button_style_setting,
-				sprite = "yarm_warnings_button",
-				tooltip = {'guiu.yarm_warnings_button'},
-				visible = true,
-			}
-		end
-	else
-		if button_flow["YARM_filter_none"] then
-			button_flow["YARM_filter_none"].destroy()
-		end
-		if button_flow["YARM_filter_warnings"] then
-			button_flow["YARM_filter_warnings"].destroy()
-		end
-		if button_flow["YARM_filter_all"] then
-			button_flow["YARM_filter_all"].destroy()
-		end
 	end
 end
 
---Factorissimo2
 local function update_factorissimo(event)
 	if event then
 		local player = game.players[event.player_index]
@@ -536,7 +438,7 @@ local function update_factorissimo(event)
 			end
 		end
 	else
-		for idx, player in pairs(game.players) do
+		for _,player in pairs(game.players) do
 			if player and player.valid then
 				local button_flow = mod_gui.get_button_flow(player)
 				local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
@@ -594,79 +496,28 @@ local function destroy_obsolete_buttons(player)
 		if button_flow.blueprint_flip_vertical then button_flow.blueprint_flip_vertical.destroy() end
 	end
 
-	-- blueprint_flip_and_turn
-	if top.blpflip_flow then
-		top.blpflip_flow.destroy()
+	if game.active_mods["automatic-belt-direction"] and button_flow.abdgui and settings.get_player_settings(player)["abd-showgui"] and settings.get_player_settings(player)["abd-showgui"].value == false then
+		button_flow.abdgui.destroy()
 	end
 
-	if top.fjei_toggle_button then
-		top.fjei_toggle_button.destroy()
-	end
+	local topelems_tokill = {
+		"blpflip_flow", "fjei_toggle_button", "Homeworld_btn", "lawful_evil_button", "trashbingui", "pywiki_frame", "usage_detector", "104",
+		"spawn", "random", "what_is_missing", "logistics-view-button", "flw_zoom", "stats_show_settings", "teleportation_main_button",
+		"personalTeleporter_PersonalTeleportTool", "inserter-throughput-toggle", "b_recexplo", "CTLM_mainbutton", "market_button", "rd_container", "abdgui", "clockGUI",
+	}
 
-	if top.Homeworld_btn then
-		top.Homeworld_btn.destroy()
-	end
-
-	if top.lawful_evil_button then
-		top.lawful_evil_button.destroy()
-	end
-
-	if top.trashbingui then
-		top.trashbingui.destroy()
-	end
-
-	if top.pywiki_frame then
-		top.pywiki_frame.destroy()
-	end
-
-	if top.usage_detector then
-		top.usage_detector.destroy()
-	end
-
-	if top["104"] then
-		top["104"].destroy()
-	end
-
-	if top.spawn then
-		top.spawn.destroy()
-	end
-
-	if top.random then
-		top.random.destroy()
-	end
-
-	if top.what_is_missing then
-		top.what_is_missing.destroy()
-	end
-
-	if top["logistics-view-button"] then
-		top["logistics-view-button"].destroy()
-	end
-
-	--if top.timeline then
-	--	top.timeline.destroy()
-	--end
-
-	if top.flw_zoom then
-		top.flw_zoom.destroy()
-	end
-
-	if top.stats_show_settings then
-		top.stats_show_settings.destroy()
-	end
-
-	--Teleportation_Redux checks that top.teleportation_main_button exists, so we replace with invisible frame.
-	if top.teleportation_main_button and top.teleportation_main_button.type == "button" then
-		top.teleportation_main_button.destroy()
-		top.add {
-			type = "frame",
-			name = "teleportation_main_button",
-			style = "invisible_frame",
-		}
-	end
-
-	if top.personalTeleporter_PersonalTeleportTool then
-		top.personalTeleporter_PersonalTeleportTool.destroy()
+	if settings.get_player_settings(player)["gu_mod_enabled_perplayer"].value == true then
+		for _, e in pairs(topelems_tokill) do
+			if top[e] and top[e].visible == true then
+				top[e].visible = false
+			end
+		end
+	elseif settings.get_player_settings(player)["gu_mod_enabled_perplayer"].value == false then
+		for _, e in pairs(topelems_tokill) do
+			if top[e] and top[e].visible == false then
+				top[e].visible = true
+			end
+		end
 	end
 
 	if game.active_mods["production-monitor"] then
@@ -691,10 +542,6 @@ local function destroy_obsolete_buttons(player)
 		end
 	end
 
-	if top["inserter-throughput-toggle"] and top["inserter-throughput-toggle"].visible == true then
-		top["inserter-throughput-toggle"].visible = false
-	end
-
 	if game.active_mods["YARM"] then
 		local ff = mod_gui.get_frame_flow(player)
 		if ff and ff.YARM_root and ff.YARM_root.buttons then
@@ -702,6 +549,26 @@ local function destroy_obsolete_buttons(player)
 			if yarmbuttons.YARM_filter_none then yarmbuttons.YARM_filter_none.visible = false end
 			if yarmbuttons.YARM_filter_warnings then yarmbuttons.YARM_filter_warnings.visible = false end
 			if yarmbuttons.YARM_filter_all then yarmbuttons.YARM_filter_all.visible = false end
+		end
+	end
+
+	if player.gui.left.BPL_Flow and player.gui.left.BPL_Flow.BPL_LabButton and player.gui.left.BPL_Flow.BPL_LabButton.visible == true then
+		player.gui.left.BPL_Flow.BPL_LabButton.visible = false
+	end
+
+	if game.active_mods["Spiderissmo"] then
+		if top.minimap_button and top.minimap_button.visible == true then
+			top.minimap_button.visible = false
+		end
+		if top["108"] and top["108"].visible == true then
+			top["108"].visible = false
+		end
+		if player.surface and player.surface.name and player.surface.name == "nauvis" then
+			if button_flow.minimap_button then button_flow.minimap_button.visible = false end
+			if button_flow["108"] then button_flow["108"].visible = false end
+		else
+			if button_flow.minimap_button then button_flow.minimap_button.visible = true end
+			if button_flow["108"] then button_flow["108"].visible = true end
 		end
 	end
 end
@@ -712,22 +579,63 @@ local function update_frame_style(player)
 		if gu_frame_style_setting == "snouz_normal_frame_style" then
 			player.gui.top.mod_gui_top_frame.style = "quick_bar_window_frame"
 			player.gui.top.mod_gui_top_frame.mod_gui_inner_frame.style = "mod_gui_inside_deep_frame"
-			--player.gui.top.mod_gui_top_frame.visible = true
 		elseif gu_frame_style_setting == "snouz_barebone_frame_style" then
 			player.gui.top.mod_gui_top_frame.style = "snouz_invisible_frame"
 			player.gui.top.mod_gui_top_frame.mod_gui_inner_frame.style = "snouz_barebone_frame"
-			--player.gui.top.mod_gui_top_frame.visible = true
 		elseif gu_frame_style_setting == "snouz_large_barebone_frame_style" then
 			player.gui.top.mod_gui_top_frame.style = "snouz_invisible_frame"
 			player.gui.top.mod_gui_top_frame.mod_gui_inner_frame.style = "snouz_large_barebone_frame"
-			--player.gui.top.mod_gui_top_frame.visible = true
 		elseif gu_frame_style_setting == "snouz_invisible_frame_style" then
 			player.gui.top.mod_gui_top_frame.style = "snouz_invisible_frame"
 			player.gui.top.mod_gui_top_frame.mod_gui_inner_frame.style = "snouz_invisible_frame"
 		end
 	end
+end
 
+local function cycle_buttons_to_rename(player)
+	local button_flow = mod_gui.get_button_flow(player)
+	if button_flow.children then
+		for i, k in pairs(button_flow.children) do
+			if not k.name or k.name == "" then
+				if k.caption and k.caption[1] and k.caption[1] == "nwd2.upgrade-button" then
+					k.name = "nwd2_main_gui_button"
+				end
+				if k.tooltip and k.tooltip[1] and k.tooltip[1] == "upgrade-button-tooltip" then
+					k.name = "swd3_main_gui_button"
+				end
+				if k.tooltip and k.tooltip[1] and k.tooltip[1] == "dana.longName" then
+					k.name = "dana_main_gui_button"
+				end
+				if k.caption and k.caption[1] and k.caption[1] == "teams" then
+					k.name = "base_pvp_teams_button"
+				end
+				if k.caption and k.caption[1] and k.caption[1] == "space_race" then
+					k.name = "base_pvp_space_race_button"
+				end
+				if k.caption and k.caption[1] and k.caption[1] == "admin" then
+					k.name = "base_pvp_admin_button"
+				end
+			end
+		end
+	end
+end
 
+local function cycle_frames_to_rename(player)
+	if player.gui.screen.children then
+		for i, k in pairs(player.gui.screen.children) do
+			if game.active_mods["factoryplanner"] and k.tags and k.tags.mod and k.tags.mod == "fp" and not player.gui.screen.factoryplanner_mainframe then
+				k.name = "factoryplanner_mainframe"
+			elseif game.active_mods["train-log"] and k.tags and k.tags["train-log"] and not player.gui.screen.trainlog_mainframe then
+				k.name = "trainlog_mainframe"
+			elseif game.active_mods["ModuleInserter"] and k.tags and k.tags.ModuleInserter and not player.gui.screen.moduleinserter_mainframe then
+				k.name = "moduleinserter_mainframe"
+			elseif game.active_mods["Rich_Text_Helper"] and k.name and k.name == "RICH_LOCATION_23_player01" and not player.gui.screen.richtexthelper_mainframe then
+				k.name = "richtexthelper_mainframe"
+			elseif game.active_mods["Not_Enough_Todo"] and k.children and k.children[1] and k.children[1].children and k.children[1].children[1] and k.children[1].children[1].children and k.children[1].children[1].children[1] and k.children[1].children[1].children[1].caption and k.children[1].children[1].children[1].caption[1] and k.children[1].children[1].children[1].caption[1] == "Todo.GuiTitle" and not player.gui.screen.notenoughtodo_mainframe then
+				k.name = "notenoughtodo_mainframe"
+			end
+		end
+	end
 end
 
 local function on_player_cursor_stack_changed(event)
@@ -749,7 +657,7 @@ local function on_player_cursor_stack_changed(event)
 		end
 
 		-- landfilleverythingu
-		if game.active_mods["LandfillEverythingU"] or game.active_mods["LandfillEverything"] or game.active_mods["LandfillEverythingButTrains"] then
+		if game.active_mods["LandfillEverythingU"] or game.active_mods["LandfillEverything"] or game.active_mods["LandfillEverythingButTrains"] or game.active_mods["LandfillEverythingAndPumps"] then
 			if not button_flow.le_button then
 				button_flow.add {
 					type = "sprite-button",
@@ -798,157 +706,141 @@ local function on_player_cursor_stack_changed(event)
 	end
 end
 
-
-
-local function on_gui_opened(event)
-	local player = game.players[event.player_index]
-	fix_buttons(player)
-	if not player or not player.valid then return end
-	local button_flow = mod_gui.get_button_flow(player)
-
-	-- PickerInventoryTools
-	local requests = button_flow["filterfill_requests"]
-	if requests then
-		local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
-		if requests.filterfill_requests_btn_bp then requests.filterfill_requests_btn_bp.style = gu_button_style_setting end
-		if requests.filterfill_requests_btn_2x then requests.filterfill_requests_btn_2x.style = gu_button_style_setting end
-		if requests.filterfill_requests_btn_5x then requests.filterfill_requests_btn_5x.style = gu_button_style_setting end
-		if requests.filterfill_requests_btn_10x then requests.filterfill_requests_btn_10x.style = gu_button_style_setting end
-		if requests.filterfill_requests_btn_max then requests.filterfill_requests_btn_max.style = gu_button_style_setting end
-		if requests.filterfill_requests_btn_0x then requests.filterfill_requests_btn_0x.style = gu_button_style_setting end
-	end
-	local filters = button_flow["filterfill_filters"]
-	if filters then
-		local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
-		if filters.filterfill_filters_btn_all then filters.filterfill_filters_btn_all.style = gu_button_style_setting end
-		if filters.filterfill_filters_btn_down then filters.filterfill_filters_btn_down.style = gu_button_style_setting end
-		if filters.filterfill_filters_btn_right then filters.filterfill_filters_btn_right.style = gu_button_style_setting end
-		if filters.filterfill_filters_btn_set_all then filters.filterfill_filters_btn_set_all.style = gu_button_style_setting end
-		if filters.filterfill_filters_btn_clear_all then filters.filterfill_filters_btn_clear_all.style = gu_button_style_setting end
-	end
-end
-
 local function on_init()
-	for idx, player in pairs(game.players) do
-		destroy_obsolete_buttons(player)
-		--create_new_buttons(player)
-		fix_buttons(player)
+	for _,player in pairs(game.players) do
+		if not global.player or not global.player[player.index] then setup_player(player) end
+		global.player[player.index].checknexttick = global.player[player.index].checknexttick + 2
+		local button_flow = mod_gui.get_button_flow(player)
 	end
 	if game.active_mods["Factorissimo2"] then update_factorissimo() end
-	checknexttick = true
 end
 
 local function on_configuration_changed()
-	for idx, player in pairs(game.players) do
-		destroy_obsolete_buttons(player)
-		--create_new_buttons(player)
-		fix_buttons(player)
-		update_frame_style(player)
+	for _,player in pairs(game.players) do
+		if player and player.valid then
+			if not global.player or not global.player[player.index] then setup_player(player) end
+			--destroy evoGUI to let it recreate and display on the right of main gui.
+			if game.active_mods["EvoGUI"] then
+				if player.gui.top.evogui_root then
+					player.gui.top.evogui_root.destroy()
+				end
+			end
+			update_frame_style(player)
+			global.player[player.index].checknexttick = global.player[player.index].checknexttick + 2
+		end
 	end
+
 	if game.active_mods["Factorissimo2"] then update_factorissimo() end
-	checknexttick = true
+
+
 end
 
 local function on_research_finished(event)
-	for idx, player in pairs(game.players) do
-		fix_buttons(player)
-	end
-
-	-- advanced-logistics-system-fork
-	if event.research.name == "advanced-logistics-systems" then
-        for idx, player in pairs(game.players) do
-        	destroy_obsolete_buttons(player)
-			create_new_buttons(player)
+	for _,player in pairs(game.players) do
+		if player and player.valid then
+			if not global.player or not global.player[player.index] then setup_player(player) end
+			global.player[player.index].checknexttick = global.player[player.index].checknexttick + 1
 		end
-    end
-
+	end
 	if game.active_mods["Factorissimo2"] then update_factorissimo() end
 end
 
 local function on_rocket_launched()
-	for idx, player in pairs(game.players) do
-		destroy_obsolete_buttons(player)
-		--create_new_buttons(player)
-		fix_buttons(player)
-		update_frame_style(player)
+	for _,player in pairs(game.players) do
+		if player and player.valid then
+			if not global.player or not global.player[player.index] then setup_player(player) end
+			global.player[player.index].checknexttick = global.player[player.index].checknexttick + 1
+		end
 	end
-	checknexttick = true
 end
 
-local function debug_button(event)
-	--debug
-	if event and event.element then
-		local player = game.players[event.player_index]
-		--player.print(game.active_mods["usage-detector"])
-		for name, version in pairs(game.active_mods) do
-		  player.print(name .. " version " .. version)
+local function on_gui_click(event)
+	local player = game.players[event.player_index]
+	if not player or not player.valid then return end
+	local button_flow = mod_gui.get_button_flow(player)
+	if game.active_mods["Factorissimo2"] then update_factorissimo(event) end
+	if game.active_mods["YARM"] then update_yarm_button(event) end
+
+	global.player[player.index].checknexttick = global.player[player.index].checknexttick + 2
+
+	--force closed if button clicked
+	if game.active_mods["pycoalprocessing"] then
+		if event.element and event.element.name and event.element.name == "pywiki" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+			player.gui.screen.wiki_frame.destroy()
 		end
-		player.print(event.element.name)
-		if event.element.parent then
-			player.print("parent1: " .. event.element.parent.name)
-			if event.element.parent.parent then
-				player.print("parent2: " .. event.element.parent.parent.name)
-				if event.element.parent.parent.parent then
-					player.print("parent3: " .. event.element.parent.parent.parent.name)
-					if event.element.parent.parent.parent.parent then
-						player.print("parent4: " .. event.element.parent.parent.parent.parent.name)
-						if event.element.parent.parent.parent.parent.parent then
-							player.print("parent5: " .. event.element.parent.parent.parent.parent.parent.name)
-							if event.element.parent.parent.parent.parent.parent.parent then
-								player.print("parent6: " .. event.element.parent.parent.parent.parent.parent.parent.name)
-								if event.element.parent.parent.parent.parent.parent.parent.parent then
-									player.print("parent7: " .. event.element.parent.parent.parent.parent.parent.parent.parent.name)
-								end
-							end
-						end
-					end
-				end
+	end
+	if game.active_mods["SolarRatio"] then
+		if event.element and event.element.name and event.element.name == "niet-sr-guibutton" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+			player.gui.center["niet-sr-guiframe"].destroy()
+		end
+	end
+	if game.active_mods["CitiesOfEarth"] then
+		if event.element and event.element.name and event.element.name == "coe_button_show_targets" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+			player.gui.center["coe_choose_target"].destroy()
+		end
+	end
+
+	if game.active_mods["automatic-belt-direction"] then
+		if event.element and event.element.name and event.element.name == "abdgui" then
+			--local button_flow = mod_gui.get_button_flow(player)
+			if player.gui.top.abdgui and player.gui.top.abdgui.sprite == "abd-gui-on" then
+				event.element.sprite = "abd_on_button"
+				event.element.tooltip = {'guiu.abd_on_button'}
+			else
+				event.element.sprite = "abd_off_button"
+				event.element.tooltip = {'guiu.abd_off_button'}
 			end
 		end
 	end
 
+	if game.active_mods["clock"] then
+		if button_flow.clockGUI then
+			if player.gui.left.mod_gui_frame_flow and player.gui.left.mod_gui_frame_flow.clock_gui and player.gui.left.mod_gui_frame_flow.clock_gui.visible then
+				button_flow.clockGUI.style = "todo_button_default_snouz_selected"
+			else
+				button_flow.clockGUI.style = "todo_button_default_snouz"
+			end
+		end
+	end
+
+	if activedebug or player == game.players["snouz"] then debug_button(event) end
 end
 
-local function on_gui_click(event)
-	--local player = game.players[event.player_index]
-	--destroy_obsolete_buttons(player)
-	--fix_buttons(player)
-	if game.active_mods["Factorissimo2"] then update_factorissimo(event) end
-	if game.active_mods["YARM"] then update_yarm_button(event) end
-
-	checknexttick = true
-
-	if activedebug then debug_button(event) end
-end
-
-local function on_gui_closed(event)
-	checknexttick = true
+local function on_gui_opened(event)
+	global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 1
 end
 
 local function on_player_created(event)
 	local player = game.players[event.player_index]
-	destroy_obsolete_buttons(player)
-	--create_new_buttons(player)
-	fix_buttons(player)
-	checknexttick = true
+	setup_player(player)
+	local button_flow = mod_gui.get_button_flow(player)
+
+	--destroy evoGUI to let it recreate and display on the right of main gui.
+	if game.active_mods["EvoGUI"] then
+		if player.gui.top.evogui_root then
+			player.gui.top.evogui_root.destroy()
+		end
+	end
+
+	global.player[player.index].checknexttick = global.player[player.index].checknexttick + 2
 end
 
 local function on_player_changed_surface(event)
-	fix_buttons(game.players[event.player_index])
+	global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 1
 end
 
 local function on_hivemindchange(event)
 	if game.active_mods["Hive_Mind"] or game.active_mods["Hive_Mind_Remastered"] then
-		fix_buttons(game.players[event.player_index])
+		if not global.player or not global.player[event.player_index] then setup_player(game.players[event.player_index]) end
+		global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 2
 	end
-	checknexttick = true
 end
 
 local function on_built(event)
 	if game.active_mods["Teleportation_Redux"] then
 		if not global.Teleportation_Redux_built then
 			if event and event.created_entity and event.created_entity.name == "teleportation-beacon" then
-				for idx, player in pairs(game.players) do
+				for _,player in pairs(game.players) do
 					local button_flow = mod_gui.get_button_flow(player)
 					local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
 					if not button_flow.teleportation_main_button then
@@ -956,12 +848,12 @@ local function on_built(event)
 							type = "sprite-button",
 							name = "teleportation_main_button",
 							style = gu_button_style_setting,
-							sprite = "teleportation_redux_button",
-							tooltip = {'guiu.teleportation_redux_button'},
+							sprite = "teleportation_button",
+							tooltip = {'guiu.teleportation_button'},
 						}
 					end
+					global.player[player.index].checknexttick = global.player[player.index].checknexttick + 1
 				end
-				checknexttick = true
 				global.Teleportation_Redux_built = true
 			end
 		end
@@ -970,7 +862,7 @@ local function on_built(event)
 	if game.active_mods["PersonalTeleporter"] then
 		if not global.PersonalTeleporter_built then
 			if event and event.created_entity and event.created_entity.name == "Teleporter_Beacon" then
-				for idx, player in pairs(game.players) do
+				for _,player in pairs(game.players) do
 					local button_flow = mod_gui.get_button_flow(player)
 					local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
 					if not button_flow.personalTeleporter_PersonalTeleportTool then
@@ -978,46 +870,76 @@ local function on_built(event)
 							type = "sprite-button",
 							name = "personalTeleporter_PersonalTeleportTool",
 							style = gu_button_style_setting,
-							sprite = "teleportation_redux_button",
-							tooltip = {'guiu.teleportation_redux_button'},
+							sprite = "teleportation_button",
+							tooltip = {'guiu.teleportation_button'},
 						}
 					end
+					global.player[player.index].checknexttick = global.player[player.index].checknexttick + 1
 				end
-				checknexttick = true
 				global.PersonalTeleporter_built = true
 			end
 		end
 	end
 end
 
-local function on_second_tick()
-	if checknexttick then
-		-- happens on the tick after a function makes checknexttick = true, to be sure to pass after
-		for idx, player in pairs(game.players) do
+local function on_tick()
+	for _,player in pairs(game.players) do
+		if not global.player then
+			setup_player(player)
+		end
+
+		if global.player[player.index].checknexttick > 1 then
+			global.player[player.index].checknexttick = global.player[player.index].checknexttick - 1
+		elseif global.player[player.index].checknexttick == 1 then
+			cycle_buttons_to_rename(player)
+			cycle_frames_to_rename(player)
 			create_new_buttons(player)
 			fix_buttons(player)
 			destroy_obsolete_buttons(player)
+			global.player[player.index].checknexttick = 0
 		end
-		checknexttick = false
+
+		if game.active_mods["clock"] then
+			local button_flow = mod_gui.get_button_flow(player)
+			if player.gui.top.clockGUI and button_flow.clockGUI then
+				button_flow.clockGUI.caption = player.gui.top.clockGUI.caption
+			end
+		end
+
+		if game.active_mods["Avatars"] then
+			local button_flow = mod_gui.get_button_flow(player)
+			if button_flow.avatar_disc and not button_flow.avatar_disc["button_sprite"] then
+				fix_buttons(player)
+			end
+		end
+
+		if game.active_mods["creative-mod"] then
+			local button_flow = mod_gui.get_button_flow(player)
+			if button_flow["creative-mod_main-menu-open-button"] and not button_flow["creative-mod_main-menu-open-button"]["button_sprite"] then
+				fix_buttons(player)
+			end
+		end
 	end
+end
+
+local function on_entity_destroyed(event)
+	global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 2
 end
 
 script.on_init(on_init)
 script.on_configuration_changed(on_configuration_changed)
-script.on_event(defines.events.on_tick, on_second_tick)
+script.on_event(defines.events.on_tick, on_tick)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_configuration_changed)
 script.on_event(defines.events.on_game_created_from_scenario, on_init)
 script.on_event({defines.events.on_player_created, defines.events.on_player_joined_game}, on_player_created)
 script.on_event({defines.events.on_player_gun_inventory_changed, defines.events.on_player_died}, on_hivemindchange)
 script.on_event(defines.events.on_gui_click, on_gui_click)
-script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed}, on_gui_closed)
+script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed, defines.events.on_gui_opened}, on_gui_opened)
 script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
-script.on_event(defines.events.on_gui_opened, on_gui_opened)
 script.on_event(defines.events.on_research_finished, on_research_finished)
 script.on_event(defines.events.on_rocket_launched, on_rocket_launched)
 script.on_event(defines.events.on_player_display_resolution_changed, on_gui_click)
 script.on_event(defines.events.on_player_changed_surface, on_player_changed_surface)
 script.on_event({defines.events.on_built_entity, defines.events.on_entity_cloned, defines.events.on_robot_built_entity}, on_built)
-
 
 --game.print(serpent.block())
