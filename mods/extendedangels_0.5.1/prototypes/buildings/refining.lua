@@ -144,7 +144,7 @@ data:extend({
     {
         type = "item",
         name = "ore-refinery-3",
-        icons = extangels.numeral_tier({icon = "__extendedangels__/graphics/icons/ore-refinery-3.png", icon_size = 32}, 3, angelsmods.refining.number_tint),
+        icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/ore-refinery.png", icon_size = 32}, 3, angelsmods.refining.number_tint),
         subgroup = "ore-refining",
         order = "c[ore-refinery-3]",
         place_result = "ore-refinery-3",
