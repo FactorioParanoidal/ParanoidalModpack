@@ -21,6 +21,7 @@ require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") -
 
 require("recipes.gemfix")
 require("recipes.module-contactfix")
+require("prototypes.stone-pipe-fix") --фикс скрывающий каменные трубы (tnx KiRiK)
 
 if mods["yuoki"] then
     require("prototypes.yuoki")
