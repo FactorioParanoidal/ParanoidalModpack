@@ -6,6 +6,7 @@
 
 -- localize often used functions and strings
 local match = string.match
+local format = string.format
 local match_string = "([^,]+),([^,]+)"
 local btest = bit32.btest
 local signal_network_id = {type="virtual", name="ltn-network-id"}
@@ -15,6 +16,14 @@ local content_readers = {
   ["ltn-delivery-reader"] = {table_name = "ltn_deliveries"},
 }
 
+-- get default network from LTN
+local default_network = settings.global["ltn-stop-default-network"].value
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if not event then return end
+  if event.setting == "ltn-stop-default-network" then
+    default_network = settings.global["ltn-stop-default-network"].value
+  end
+end)
 
 -- LTN interface event functions
 function OnStopsUpdated(event)
@@ -88,12 +97,12 @@ function Update_Combinator(combinator)
   -- get network id from combinator parameters
   local first_signal = combinator.get_control_behavior().get_signal(1)
   local max_signals = combinator.get_control_behavior().signals_count
-  local selected_network_id = -1
+  local selected_network_id = default_network
 
   if first_signal and first_signal.signal and first_signal.signal.name == "ltn-network-id" then
     selected_network_id = first_signal.count
   else
-    log("Error: combinator must have ltn-network-id set at index 1. Setting network id to -1 (any).")
+    log(format("Error: combinator must have ltn-network-id set at index 1. Setting network id to %s.", default_network) )
   end
 
   local signals = { { index = 1, signal = signal_network_id, count = selected_network_id } }
@@ -136,10 +145,10 @@ end
 function OnEntityCreated(event)
   local entity = event.created_entity
   if content_readers[entity.name] then
-    -- if not set use default network id -1 (any network)
+    -- if not set use default network id
     local first_signal = entity.get_control_behavior().get_signal(1)
     if not (first_signal and first_signal.signal and first_signal.signal.name == "ltn-network-id") then
-      entity.get_or_create_control_behavior().parameters = {{ index = 1, signal = signal_network_id, count = -1 }}
+      entity.get_or_create_control_behavior().parameters = {{ index = 1, signal = signal_network_id, count = default_network }}
     end
 
     table.insert(global.content_combinators, entity)
