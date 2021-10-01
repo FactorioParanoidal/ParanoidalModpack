@@ -9,7 +9,27 @@ if(settings.startup["enable-very-big-atomic-artillery"].value) then
 	very_big_atomic_artillery_projectile.name = "TN-really-huge-atomic-artillery-projectile"
 	very_big_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N1Mt_detonation
 
-	data:extend{very_big_atomic_artillery_projectile}
+	local M5_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
+	M5_atomic_artillery_projectile.name = "TN-5Mt-atomic-artillery-projectile"
+	M5_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N5Mt_detonation
+	
+	local M10_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
+	M10_atomic_artillery_projectile.name = "TN-10Mt-atomic-artillery-projectile"
+	M10_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N10Mt_detonation
+	
+	local M50_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
+	M50_atomic_artillery_projectile.name = "TN-50Mt-atomic-artillery-projectile"
+	M50_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N50Mt_detonation
+
+	local M100_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
+	M100_atomic_artillery_projectile.name = "TN-100Mt-atomic-artillery-projectile"
+	M100_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N100Mt_detonation
+	
+	local G1_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
+	G1_atomic_artillery_projectile.name = "TN-1Gt-atomic-artillery-projectile"
+	G1_atomic_artillery_projectile.action.action_delivery.target_effects = nuke_explosions.N1Gt_detonation
+	
+	data:extend{very_big_atomic_artillery_projectile, M5_atomic_artillery_projectile, M10_atomic_artillery_projectile, M50_atomic_artillery_projectile, M100_atomic_artillery_projectile, G1_atomic_artillery_projectile}
 	data:extend{
 	  {
 		type = "item",
@@ -220,6 +240,17 @@ elseif(settings.startup["enable-small-atomic-artillery"].value or settings.start
 else 
 	table.insert(data.raw.technology["fusion-weapons"].prerequisites, "atomic-bomb");
 end
+if(settings.startup["enable-very-big-atomic-artillery"].value) then
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "FOGBANK"
+	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "TN-very-big-atomic-artillery-shell"
+	  })
 if(settings.startup["enable-fusion-building"].value or settings.startup["enable-mega-fusion-building"].value) then
 	table.insert(data.raw.technology["fusion-weapons"].effects, 
 	  {
@@ -243,18 +274,32 @@ if(settings.startup["enable-mega-fusion-building"].value) then
 	    type = "unlock-recipe",
 	    recipe = "megaton-detonation"
 	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "5megaton-detonation"
+	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "10megaton-detonation"
+	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "50megaton-detonation"
+	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "100megaton-detonation"
+	  })
+	table.insert(data.raw.technology["fusion-weapons"].effects, 
+	  {
+	    type = "unlock-recipe",
+	    recipe = "1gigaton-detonation"
+	  })
 end
-if(settings.startup["enable-very-big-atomic-artillery"].value) then
-	table.insert(data.raw.technology["fusion-weapons"].effects, 
-	  {
-	    type = "unlock-recipe",
-	    recipe = "FOGBANK"
-	  })
-	table.insert(data.raw.technology["fusion-weapons"].effects, 
-	  {
-	    type = "unlock-recipe",
-	    recipe = "TN-very-big-atomic-artillery-shell"
-	  })
 end
 if(settings.startup["enable-mega-fusion-building"].value) then
 	data:extend{
@@ -262,7 +307,7 @@ if(settings.startup["enable-mega-fusion-building"].value) then
 		type = "recipe",
 		name = "megaton-detonation",
 		category = "nuclear-detonation",
-		enabled = true,
+		enabled = false,
 		energy_required = 120,
 		ingredients =
 		{
@@ -277,7 +322,127 @@ if(settings.startup["enable-mega-fusion-building"].value) then
 		icon_size = 64, icon_mipmaps = 1,
 		enabled = false,
 		subgroup = "ammo",
-		order = "a[nuke]-b[1Mt]",
+		order = "a[nuke]-ba[1Mt]",
+		stack_size = 1
+	  }}
+	  
+	data:extend{
+	  {
+		type = "recipe",
+		name = "5megaton-detonation",
+		category = "nuclear-detonation",
+		enabled = false,
+		energy_required = 120,
+		ingredients =
+		{
+		  {"tritium-canister", 250}
+		},
+		result = "5megaton-detonation"
+	  },
+	  {
+		type = "item",
+		name = "5megaton-detonation",
+		icon = "__True-Nukes__/graphics/5megaton-detonation.png",
+		icon_size = 64, icon_mipmaps = 1,
+		enabled = false,
+		subgroup = "ammo",
+		order = "a[nuke]-bb[5Mt]",
+		stack_size = 1
+	  }}
+	  
+	data:extend{
+	  {
+		type = "recipe",
+		name = "10megaton-detonation",
+		category = "nuclear-detonation",
+		enabled = false,
+		energy_required = 300,
+		ingredients =
+		{
+		  {"tritium-canister", 500}
+		},
+		result = "10megaton-detonation"
+	  },
+	  {
+		type = "item",
+		name = "10megaton-detonation",
+		icon = "__True-Nukes__/graphics/10megaton-detonation.png",
+		icon_size = 64, icon_mipmaps = 1,
+		enabled = false,
+		subgroup = "ammo",
+		order = "a[nuke]-bc[10Mt]",
+		stack_size = 1
+	  }}
+	  
+	data:extend{
+	  {
+		type = "recipe",
+		name = "50megaton-detonation",
+		category = "nuclear-detonation",
+		enabled = false,
+		energy_required = 300,
+		ingredients =
+		{
+		  {"tritium-canister", 2500}
+		},
+		result = "50megaton-detonation"
+	  },
+	  {
+		type = "item",
+		name = "50megaton-detonation",
+		icon = "__True-Nukes__/graphics/50megaton-detonation.png",
+		icon_size = 64, icon_mipmaps = 1,
+		enabled = false,
+		subgroup = "ammo",
+		order = "a[nuke]-bd[50Mt]",
+		stack_size = 1
+	  }}
+	  
+	data:extend{
+	  {
+		type = "recipe",
+		name = "100megaton-detonation",
+		category = "nuclear-detonation",
+		enabled = false,
+		energy_required = 600,
+		ingredients =
+		{
+		  {"tritium-canister", 5000}
+		},
+		result = "100megaton-detonation"
+	  },
+	  {
+		type = "item",
+		name = "100megaton-detonation",
+		icon = "__True-Nukes__/graphics/100megaton-detonation.png",
+		icon_size = 64, icon_mipmaps = 1,
+		enabled = false,
+		subgroup = "ammo",
+		order = "a[nuke]-be[100Mt]",
+		stack_size = 1
+	  }}
+	  
+	data:extend{
+	  {
+		type = "recipe",
+		name = "1gigaton-detonation",
+		category = "nuclear-detonation",
+		enabled = false,
+		energy_required = 600,
+		ingredients =
+		{
+		  {"tritium-canister", 50000}
+		},
+		result = "1gigaton-detonation"
+	  },
+	  {
+		type = "item",
+		name = "1gigaton-detonation",
+		icon = "__True-Nukes__/graphics/1gigaton-detonation.png",
+		icon_size = 64, icon_mipmaps = 1,
+		enabled = false,
+		subgroup = "ammo",
+		order = "a[nuke]-bf[1Gt]",
 		stack_size = 1
 	  }}
 end
@@ -308,7 +473,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		type = "recipe",
 		name = "100kiloton-detonation",
 		category = "nuclear-detonation",
-		enabled = false, --drd
+		enabled = false,
 		energy_required = 120,
 		ingredients =
 		{
@@ -320,7 +485,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		type = "recipe",
 		name = "15kiloton-detonation",
 		category = "nuclear-detonation",
-		enabled = false, --drd
+		enabled = false,
 		energy_required = 120,
 		ingredients =
 		{

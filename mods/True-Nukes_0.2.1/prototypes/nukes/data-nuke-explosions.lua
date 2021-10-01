@@ -896,7 +896,7 @@ local N100kt_detonation = table.deepcopy(N1kt_detonation)
 N100kt_detonation[1].effect_id = "Atomic Weapon hit 100kt"
 N100kt_detonation[4].radius = 500
 N100kt_detonation[5].radius = 100
-N100kt_detonation[6].action.radius = 1000
+N100kt_detonation[6].action.radius = 200
 N100kt_detonation[7].action.radius = 100
 N100kt_detonation[7].action.repeat_count = 100
 N100kt_detonation[8].action.radius = 100
@@ -906,19 +906,20 @@ N100kt_detonation[9].action.repeat_count = 300
 N100kt_detonation[10].action.radius = 250
 N100kt_detonation[10].action.repeat_count = 100
 
-local N1Mt_detonation = table.deepcopy(N1kt_detonation)
+local N1Mt_detonation = table.deepcopy(N100kt_detonation)
 N1Mt_detonation[1].effect_id = "Atomic Weapon hit 1Mt"
-N1Mt_detonation[4].radius = 1000
-N1Mt_detonation[5].radius = 1000
-N1Mt_detonation[6].action.radius = 2000
-N1Mt_detonation[7].action.radius = 200
-N1Mt_detonation[7].action.repeat_count = 100
-N1Mt_detonation[8].action.radius = 200
-N1Mt_detonation[8].action.repeat_count = 100
-N1Mt_detonation[9].action.radius = 300
-N1Mt_detonation[9].action.repeat_count = 100
-N1Mt_detonation[10].action.radius = 500
-N1Mt_detonation[10].action.repeat_count = 100
+
+local N5Mt_detonation = table.deepcopy(N1Mt_detonation)
+N5Mt_detonation[1].effect_id = "Atomic Weapon hit 5Mt"
+local N10Mt_detonation = table.deepcopy(N1Mt_detonation)
+N10Mt_detonation[1].effect_id = "Atomic Weapon hit 10Mt"
+local N50Mt_detonation = table.deepcopy(N1Mt_detonation)
+N50Mt_detonation[1].effect_id = "Atomic Weapon hit 50Mt"
+local N100Mt_detonation = table.deepcopy(N1Mt_detonation)
+N100Mt_detonation[1].effect_id = "Atomic Weapon hit 100Mt"
+
+local N1Gt_detonation = table.deepcopy(N1Mt_detonation)
+N1Gt_detonation[1].effect_id = "Atomic Weapon hit 1Gt"
 
 add_mushroom_cloud_effect(N8t_detonation, "small-")
 add_mushroom_cloud_effect(N20t_detonation, "small-")
@@ -938,6 +939,11 @@ return {
 	N1kt_detonation = N1kt_detonation,
 	N15kt_detonation = N15kt_detonation,
 	N100kt_detonation = N100kt_detonation,
-	N1Mt_detonation = N1Mt_detonation
+	N1Mt_detonation = N1Mt_detonation,
+	N5Mt_detonation = N5Mt_detonation,
+	N10Mt_detonation = N10Mt_detonation,
+	N50Mt_detonation = N50Mt_detonation,
+	N100Mt_detonation = N100Mt_detonation,
+	N1Gt_detonation = N1Gt_detonation
 }
 

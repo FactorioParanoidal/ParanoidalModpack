@@ -2,7 +2,11 @@ if(settings.startup["enable-new-craters"]) then
 	data.raw["tile"]["sand-1"].layer = 11
 	data.raw["tile"]["sand-2"].layer = 12
 	data.raw["tile"]["sand-3"].layer = 13
-
+	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep");
+	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep-shallow-fill");
+	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep-fill");
+	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-crater");
+	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-crater-shallow-fill");
 
 
 	local function make_tile_transition_from_template_variation(src_x, src_y, cnt_, line_len_, is_tall, normal_res_transition, high_res_transition)
@@ -165,9 +169,10 @@ if(settings.startup["enable-new-craters"]) then
 		  -- Not sure what other side effects could different combinations of tile masks cause.
 		  "water-tile",
 		  --"ground-tile",
+		  "resource-layer",
 		  "item-layer",
-		  "object-layer"
-		  --"doodad-layer"
+		  "object-layer",
+		  "doodad-layer"
 		}
 	nuclear_shallow.transition_merges_with_tile = "water"
 	nuclear_shallow.walking_speed_modifier = 0.7
@@ -182,6 +187,7 @@ if(settings.startup["enable-new-craters"]) then
 	nuclear_crater.collision_mask =
 		{
 		  "water-tile",
+		  "resource-layer",
 		  "item-layer",
 		  "player-layer",
 		  "doodad-layer"
@@ -200,6 +206,7 @@ if(settings.startup["enable-new-craters"]) then
 	nuclear_shallow_water_in_crater.collision_mask =
 		{
 		  "water-tile",
+		  "resource-layer",
 		  "item-layer",
 		  "player-layer",
 		  "doodad-layer"
@@ -214,6 +221,7 @@ if(settings.startup["enable-new-craters"]) then
 	nuclear_deep.collision_mask =
 		{
 		  "water-tile",
+		  "resource-layer",
 		  "item-layer",
 		  "player-layer",
 		  "doodad-layer"
@@ -233,6 +241,7 @@ if(settings.startup["enable-new-craters"]) then
 	nuclear_shallow_water_in_deep.collision_mask =
 		{
 		  "water-tile",
+		  "resource-layer",
 		  "item-layer",
 		  "player-layer",
 		  "doodad-layer"
@@ -245,6 +254,7 @@ if(settings.startup["enable-new-craters"]) then
 	nuclear_water_in_deep.collision_mask =
 		{
 		  "water-tile",
+		  "resource-layer",
 		  "item-layer",
 		  "player-layer",
 		  "doodad-layer"

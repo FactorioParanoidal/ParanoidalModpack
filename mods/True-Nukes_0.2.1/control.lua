@@ -10,6 +10,9 @@ script.on_init(function()
 	-- , force = force of the cause of the explosion - allows allocating kills correctly, cause = allows allocating kills to the originator})
 
 	global.nukeBuildings = {} 				-- array of the LuaEntities for any nukeBuildings
+	global.optimisedNukes = {} 				-- has keys: 
+	    --position, surface_index, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, check_craters
+	    --used for doing chunk-by-chunk loading of detonation results
 
 	global.cratersFast = {} 				-- map: cratersFast[surface index][xposition][yposition] = the highest water height in that area (x, y in units of 10)
 	global.cratersFastData = {}				-- map: cratersFastData[surface index] = 
@@ -24,6 +27,7 @@ end)
 local waterAndCraterTypes = {"nuclear-deep", "nuclear-crater", "nuclear-shallow", "nuclear-crater-shallow-fill", "nuclear-deep-shallow-fill", "nuclear-deep-fill", "deepwater", "water", "water-shallow", "water-mud"}
 
 local waterTypes = {"water-shallow", "water-mud", "nuclear-crater-shallow-fill", "water", "nuclear-deep-shallow-fill", "nuclear-deep-fill", "deepwater"}
+
 
 local craterTypes0 = {"nuclear-deep", "nuclear-crater", "nuclear-shallow", "nuclear-crater-shallow-fill", "nuclear-deep-shallow-fill", "nuclear-deep-fill"}
 local craterTypes1 = {"nuclear-deep", "nuclear-crater", "nuclear-deep-shallow-fill"}
@@ -62,7 +66,7 @@ waterInCraterGoingOutDepths["deepwater"] = 0
 -- these are the waters for different heights, so that we can find the water height in any given area
 local waterInCraterGoingOutDepth0Only = {"deepwater", "water", "water-shallow", "water-mud"}
 local waterInCraterGoingOutDepth1Only = {"nuclear-crater-shallow-fill", "nuclear-deep-fill"}
-local waterInCraterGoingOutDepth2Only = {"nuclear-deep-fill"}
+local waterInCraterGoingOutDepth2Only = {"nuclear-deep-shallow-fill"}
 
 -- these are the height of water given a tile, for whether that tile will be filled with water
 local waterInCraterGoingInDepths = {}
@@ -100,6 +104,84 @@ depthsForCraterWater[-1] = {}
 depthsForCraterWater[-1][-1] = "nuclear-shallow"
 depthsForCraterWater[-1][0] = "water-mud"
 
+local corpseMap = {}
+corpseMap["biter-spawner"] = "biter-spawner-corpse"
+corpseMap["spitter-spawner"] = "spitter-spawner-corpse"
+
+corpseMap["small-biter"] = "small-biter-corpse"
+corpseMap["medium-biter"] = "medium-biter-corpse"
+corpseMap["big-biter"] = "big-biter-corpse"
+corpseMap["behemoth-biter"] = "behemoth-biter-corpse"
+
+corpseMap["small-spitter"] = "small-spitter-corpse"
+corpseMap["medium-spitter"] = "medium-spitter-corpse"
+corpseMap["big-spitter"] = "big-spitter-corpse"
+corpseMap["behemoth-spitter"] = "behemoth-spitter-corpse"
+
+corpseMap["small-worm-turret"] = "small-worm-corpse"
+corpseMap["medium-worm-turret"] = "medium-worm-corpse"
+corpseMap["big-worm-turret"] = "big-worm-corpse"
+corpseMap["behemoth-worm-turret"] = "behemoth-worm-corpse"
+
+local decorativeMap = {}
+decorativeMap["brown-asterisk"] = {"rock-tiny", 1/4}
+decorativeMap["green-asterisk"] = {"brown-asterisk", 1/4}
+decorativeMap["green-asterisk-mini"] = {"brown-asterisk", 1/10}
+decorativeMap["brown-asterisk-mini"] = {"brown-asterisk", 1/20}
+decorativeMap["red-asterisk"] = {"brown-asterisk", 1/4}
+
+decorativeMap["green-pita"] = {"rock-tiny", 1/10}
+decorativeMap["red-pita"] = {"rock-small", 1/10}
+decorativeMap["green-croton"] = {"sand-rock-small", 1/10}
+decorativeMap["red-croton"] = {"red-desert-decal", 1/10}
+decorativeMap["green-pita-mini"] = {"enemy-decal-transparent", 1/20}
+
+decorativeMap["brown-fluff"] = {"rock-tiny", 1/10}
+decorativeMap["brown-fluff-dry"] = {"brown-asterisk", 1/10}
+decorativeMap["garballo"] = {"brown-fluff", 1/10}
+decorativeMap["garballo-mini-dry"] = {"brown-fluff-dry", 1/10}
+
+decorativeMap["green-bush-mini"] = {"brown-fluff", 1/10}
+decorativeMap["green-hairy-grass"] = {"brown-hairy-grass", 1/10}
+decorativeMap["muddy-stump"] = nil
+
+decorativeMap["green-carpet-grass"] = {"sand-decal", 1/2}
+
+decorativeMap["green-desert-bush"] = {"red-desert-bush", 1/2}
+decorativeMap["white-desert-bush"] = {"white-desert-bush", 1/4}
+
+decorativeMap["red-desert-bush"] = {"red-desert-bush", 1/2}
+decorativeMap["green-small-grass"] = {"brown-asterisk", 1/10}
+decorativeMap["brown-carpet-grass"] = {"brown-carpet-grass", 1/2}
+decorativeMap["brown-hairy-grass"] = {"brown-hairy-grass", 1/2}
+
+decorativeMap["rock-medium"] = {}
+decorativeMap["rock-small"] = {}
+decorativeMap["rock-tiny"] = {}
+decorativeMap["sand-rock-medium"] = {}
+decorativeMap["sand-rock-small"] = {}
+
+decorativeMap["red-desert-decal"] = {}
+decorativeMap["dark-mud-decal"] = {}
+decorativeMap["puberty-decal"] = {}
+decorativeMap["light-mud-decal"] = {}
+decorativeMap["sand-decal"] = {}
+
+decorativeMap["sand-dune-decal"] = {}
+decorativeMap["big-ship-wreck-grass"] = nil
+decorativeMap["small-ship-wreck-grass"] = nil
+
+decorativeMap["enemy-decal"] = {}
+decorativeMap["enemy-decal-transparent"] = {}
+
+decorativeMap["nuclear-ground-patch"] = {}
+decorativeMap["shroom-decal"] = nil
+decorativeMap["worms-decal"] = nil
+decorativeMap["lichen-decal"] = nil
+
+
+
+	 
 local function doFastCraterFilling(event) 
 	-- fast crater filling
 	if(global.cratersFast==nil) then
@@ -136,103 +218,149 @@ local function doFastCraterFilling(event)
 					local ghostChanges = {}
 
 					local targetTiles
-					local chunkH = foundChunkH
+					local chunkH = foundChunkH					
+					
 					if(chunkH >= 0 and global.cratersFastData[surface].synch==1) then
-						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*10, y*10}, {x*10+10, y*10+10}}, name=craterTypes0}
+						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8, y*8}, {x*8+8, y*8+8}}, name=craterTypes0}
 					elseif(chunkH >= -1 and (global.cratersFastData[surface].synch == 3 or global.cratersFastData[surface].synch == 1)) then
-						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*10, y*10}, {x*10+10, y*10+10}}, name=craterTypes1}
+						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8, y*8}, {x*8+8, y*8+8}}, name=craterTypes1}
 					else
-						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*10, y*10}, {x*10+10, y*10+10}}, name=craterTypes2}
+						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8, y*8}, {x*8+8, y*8+8}}, name=craterTypes2}
 					end
-					local hasHeightDiff = false;
-					for _,t in pairs(targetTiles) do
-						local heightDiff = 0;
-						local currentH = waterInCraterGoingInDepths[t.name];
-						chunkH = math.max(chunkH, currentH)
-						local h1 = waterInCraterGoingOutDepths[game.surfaces[surface].get_tile(t.position.x, t.position.y+1).name];
-						local h2 = waterInCraterGoingOutDepths[game.surfaces[surface].get_tile(t.position.x, t.position.y-1).name];
-						local h3 = waterInCraterGoingOutDepths[game.surfaces[surface].get_tile(t.position.x+1, t.position.y).name];
-						local h4 = waterInCraterGoingOutDepths[game.surfaces[surface].get_tile(t.position.x-1, t.position.y).name];
-						if((not (h1 == nil)) and h1>currentH)then
-							heightDiff = heightDiff+h1-currentH;
-							chunkH = math.max(chunkH, h1)
+					if(#targetTiles>0) then
+						local relevantTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8-1, y*8-1}, {x*8+9, y*8+9}}, name=waterTypes}
+						
+						local tileH = {}
+						local existsChunks = {};
+						if(existsChunks[math.floor(x/4)] == nil) then
+							existsChunks[math.floor(x/4)] = {}
 						end
-						if((not (h2 == nil)) and h2>currentH)then
-							heightDiff = heightDiff+h2-currentH;
-							chunkH = math.max(chunkH, h2)
+						existsChunks[math.floor(x/4)][math.floor(y/4)] = game.surfaces[surface].is_chunk_generated({math.floor(x/4), math.floor(y/4)});
+						existsChunks[math.floor(x/4)][math.floor((y+1)/4)] = game.surfaces[surface].is_chunk_generated({math.floor(x/4), math.floor((y+1)/4)});
+						existsChunks[math.floor(x/4)][math.floor((y-1)/4)] = game.surfaces[surface].is_chunk_generated({math.floor(x/4), math.floor((y-1)/4)});
+						
+						if(existsChunks[math.floor((x-1)/4)] == nil) then
+							existsChunks[math.floor((x-1)/4)] = {}
 						end
-						if((not (h3 == nil)) and h3>currentH)then
-							heightDiff = heightDiff+h3-currentH;
-							chunkH = math.max(chunkH, h3)
+						existsChunks[math.floor((x-1)/4)][math.floor(y/4)] = game.surfaces[surface].is_chunk_generated({math.floor((x-1)/4), math.floor(y/4)});
+						
+						if(existsChunks[math.floor((x+1)/4)] == nil) then
+							existsChunks[math.floor((x+1)/4)] = {}
 						end
-						if((not (h4 == nil)) and h4>currentH)then
-							heightDiff = heightDiff+h4-currentH;
-							chunkH = math.max(chunkH, h4)
+						existsChunks[math.floor((x+1)/4)][math.floor(y/4)] = game.surfaces[surface].is_chunk_generated({math.floor((x+1)/4), math.floor(y/4)});
+						
+						
+						
+						for _,t in pairs(relevantTiles) do
+							if(tileH[t.position.x] == nil) then
+								tileH[t.position.x] = {}
+							end
+							if(existsChunks[math.floor(t.position.x/32)][math.floor(t.position.y/32)]) then
+								tileH[t.position.x][t.position.y] = waterInCraterGoingOutDepths[t.name];
+							end 
 						end
-						if(heightDiff>0) then
-							hasHeightDiff = true;
-						end
-						if(heightDiff>0 and (heightDiff>=3 or math.random()*3<heightDiff))then
-							if(currentH == waterDepths[t.name]) then
-								for _,f in pairs(game.surfaces[surface].find_entities_filtered{area={{t.position.x, t.position.y}, {t.position.x+1, t.position.y+1}}, type="fire"}) do
-									f.destroy();
+						local hasHeightDiff = false;
+						for _,t in pairs(targetTiles) do
+							local heightDiff = 0;
+							local currentH = waterInCraterGoingInDepths[t.name];
+							chunkH = math.max(chunkH, currentH)
+							local h1
+							local h2
+							if(tileH[t.position.x] ~=nil) then
+								h1 = tileH[t.position.x][t.position.y+1];
+								h2 = tileH[t.position.x][t.position.y-1];
+							end
+							
+							local h3
+							if(tileH[t.position.x+1] ~=nil) then
+								h3 = tileH[t.position.x+1][t.position.y];
+							end
+							local h4
+							if(tileH[t.position.x-1] ~=nil) then
+								h4 = tileH[t.position.x-1][t.position.y];
+							end
+							
+							if((not (h1 == nil)) and h1>currentH)then
+								heightDiff = heightDiff+h1-currentH;
+								chunkH = math.max(chunkH, h1)
+							end
+							if((not (h2 == nil)) and h2>currentH)then
+								heightDiff = heightDiff+h2-currentH;
+								chunkH = math.max(chunkH, h2)
+							end
+							if((not (h3 == nil)) and h3>currentH)then
+								heightDiff = heightDiff+h3-currentH;
+								chunkH = math.max(chunkH, h3)
+							end
+							if((not (h4 == nil)) and h4>currentH)then
+								heightDiff = heightDiff+h4-currentH;
+								chunkH = math.max(chunkH, h4)
+							end
+							if(heightDiff>0) then
+								hasHeightDiff = true;
+							end
+							if(heightDiff>0 and (heightDiff>=3 or math.random()*3<heightDiff))then
+								if(currentH == waterDepths[t.name]) then
+									for _,f in pairs(game.surfaces[surface].find_entities_filtered{area={{t.position.x, t.position.y}, {t.position.x+1, t.position.y+1}}, type="fire"}) do
+										f.destroy();
+									end
+								end
+								chunkH = math.max(chunkH, currentH+1)
+								table.insert(tileChanges, {name=depthsForCraterWater[waterDepths[t.name]][currentH+1], position = t.position})
+								for _,tileGhost in pairs(game.surfaces[surface].find_entities_filtered{position = {t.position.x+0.5, t.position.y+0.5}, name = "tile-ghost"}) do
+									table.insert(ghostChanges, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = {t.position.x+0.5, t.position.y+0.5}})
+								end
+								if(t.position.x == x*8) then
+									if(chunks[x-1]==nil) then
+										chunks[x-1] = {};
+										global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount + 1
+									end
+									if(chunks[x-1][y]==nil) then
+										chunks[x-1][y] = currentH+1
+									else
+										chunks[x-1][y] = math.max(currentH+1, chunks[x-1][y])
+									end
+								elseif(t.position.x == x*8+7) then
+									if(chunks[x+1]==nil) then
+										chunks[x+1] = {};
+										global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount + 1
+									end
+									if(chunks[x+1][y]==nil) then
+										chunks[x+1][y] = currentH+1
+									else
+										chunks[x+1][y] = math.max(currentH+1, chunks[x+1][y]);
+									end
+								end
+								if(t.position.y == y*8) then
+									if(xchunks[y-1]==nil) then
+										xchunks[y-1] = currentH+1
+									else
+										xchunks[y-1] = math.max(currentH+1, xchunks[y-1]);
+									end
+								elseif(t.position.y == y*8+7) then
+									if(xchunks[y+1]==nil) then
+										xchunks[y+1] = currentH+1
+									else
+										xchunks[y+1] = math.max(currentH+1, xchunks[y+1]);
+									end
 								end
 							end
-							chunkH = math.max(chunkH, currentH+1)
-							table.insert(tileChanges, {name=depthsForCraterWater[waterDepths[t.name]][currentH+1], position = t.position})
-							for _,tileGhost in pairs(game.surfaces[surface].find_entities_filtered{position = {t.position.x+0.5, t.position.y+0.5}, name = "tile-ghost"}) do
-								table.insert(ghostChanges, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = {t.position.x+0.5, t.position.y+0.5}})
-							end
-							if(t.position.x == x*10) then
-								if(chunks[x-1]==nil) then
-									chunks[x-1] = {};
-									global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount + 1
-								end
-								if(chunks[x-1][y]==nil) then
-									chunks[x-1][y] = currentH+1
-								else
-									chunks[x-1][y] = math.max(currentH+1, chunks[x-1][y])
-								end
-							elseif(t.position.x == x*10+9) then
-								if(chunks[x+1]==nil) then
-									chunks[x+1] = {};
-									global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount + 1
-								end
-								if(chunks[x+1][y]==nil) then
-									chunks[x+1][y] = currentH+1
-								else
-									chunks[x+1][y] = math.max(currentH+1, chunks[x+1][y]);
-								end
-							end
-							if(t.position.y == y*10) then
-								if(xchunks[y-1]==nil) then
-									xchunks[y-1] = currentH+1
-								else
-									xchunks[y-1] = math.max(currentH+1, xchunks[y-1]);
-								end
-							elseif(t.position.y == y*10+9) then
-								if(xchunks[y+1]==nil) then
-									xchunks[y+1] = currentH+1
-								else
-									xchunks[y+1] = math.max(currentH+1, xchunks[y+1]);
-								end
-							end
 						end
-					end
-					game.surfaces[surface].set_tiles(tileChanges)
-					for _,ghost in pairs(ghostChanges) do
-						game.surfaces[surface].create_entity{name="tile-ghost",position=ghost.pos,inner_name=ghost.ghost_name,force=ghost.force}
-					end
-					xchunks[y] = chunkH; -- just to set the height back to being correct, in case it has changed (e.g. a new, higher water level has been found)
-					if global.cratersFastData[surface].synch==1 and not hasHeightDiff then
-						xchunks[y] = nil
-						if next(xchunks) == nil then
-							global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount-1
-							chunks[x] = nil
+						game.surfaces[surface].set_tiles(tileChanges)
+						for _,ghost in pairs(ghostChanges) do
+							game.surfaces[surface].create_entity{name="tile-ghost",position=ghost.pos,inner_name=ghost.ghost_name,force=ghost.force}
 						end
-						if next(chunks) == nil then
-							global.cratersFast[surface] = nil
-							global.cratersFastData[surface] = nil
+						xchunks[y] = chunkH; -- just to set the height back to being correct, in case it has changed (e.g. a new, higher water level has been found)
+						if global.cratersFastData[surface].synch==1 and not hasHeightDiff then
+							xchunks[y] = nil
+							if next(xchunks) == nil then
+								global.cratersFastData[surface].xCount = global.cratersFastData[surface].xCount-1
+								chunks[x] = nil
+							end
+							if next(chunks) == nil then
+								global.cratersFast[surface] = nil
+								global.cratersFastData[surface] = nil
+							end
 						end
 					end
 				end
@@ -396,7 +524,7 @@ local function moveBlast(i,blast,pastEHits)
 					if(efficientDamage and entity.prototype.resistances and entity.prototype.resistances.explosion) then
 						calcDamage = (calcDamage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent)
 					end
-					if(efficientDamage and entity.health>calcDamage) then
+					if((not entity.grid) and efficientDamage and entity.health>calcDamage) then
 						entity.health = entity.health-calcDamage
 					else
 						if(cause and cause.valid) then
@@ -492,26 +620,8 @@ local function moveBlast(i,blast,pastEHits)
 	end
 end
 
-local function atomic_thermal_blast_internal(surface_index, position, force, thermal_max_r, initialDamage, fireball_r, initial_x, initial_y)
+local function atomic_thermal_blast_internal(surface_index, position, force, cause, thermal_max_r, initialDamage, fireball_r, initial_x, initial_y)
 	 -- do thermal heat-wave damage
-	 local corpseMap = {}
-	 corpseMap["biter-spawner"] = "biter-spawner-corpse"
-	 corpseMap["spitter-spawner"] = "spitter-spawner-corpse"
-	 
-	 corpseMap["small-biter"] = "small-biter-corpse"
-	 corpseMap["medium-biter"] = "medium-biter-corpse"
-	 corpseMap["big-biter"] = "big-biter-corpse"
-	 corpseMap["behemoth-biter"] = "behemoth-biter-corpse"
-	 
-	 corpseMap["small-spitter"] = "small-spitter-corpse"
-	 corpseMap["medium-spitter"] = "medium-spitter-corpse"
-	 corpseMap["big-spitter"] = "big-spitter-corpse"
-	 corpseMap["behemoth-spitter"] = "behemoth-spitter-corpse"
-	 
-	 corpseMap["small-worm"] = "small-worm-corpse"
-	 corpseMap["medium-worm"] = "medium-worm-corpse"
-	 corpseMap["big-worm"] = "big-worm-corpse"
-	 corpseMap["behemoth-worm"] = "behemoth-worm-corpse"
 	 local thermSq = thermal_max_r*thermal_max_r;
 	 local areas = {}
 	 local y = -1;
@@ -643,6 +753,17 @@ local function nukeBuildingDetonate(building)
 		building.surface.create_entity{name="TN-very-big-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
 	elseif(building.get_recipe().name == "15kiloton-detonation") then
 		building.surface.create_entity{name="TN-big-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
+		
+	elseif(building.get_recipe().name == "5megaton-detonation") then
+		building.surface.create_entity{name="TN-5Mt-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
+	elseif(building.get_recipe().name == "10megaton-detonation") then
+		building.surface.create_entity{name="TN-10Mt-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
+	elseif(building.get_recipe().name == "50megaton-detonation") then
+		building.surface.create_entity{name="TN-50Mt-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
+	elseif(building.get_recipe().name == "100megaton-detonation") then
+		building.surface.create_entity{name="TN-100Mt-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
+	elseif(building.get_recipe().name == "1gigaton-detonation") then
+		building.surface.create_entity{name="TN-1Gt-atomic-artillery-projectile", position={building.position.x-1, building.position.y}, target=building, speed=100, max_range=1, force=building.force}
 	end
 	building.get_output_inventory().clear();
 	building.destroy();
@@ -667,7 +788,7 @@ local function tickHandler(event)
 	
 	if (#global.thermalBlasts>0) then
 		for i,therm in pairs(global.thermalBlasts) do
-			local pos = atomic_thermal_blast_internal(therm.surface_index, therm.position, therm.force, therm.thermal_max_r, therm.initialDamage, therm.fireball_r, therm.x, therm.y);
+			local pos = atomic_thermal_blast_internal(therm.surface_index, therm.position, therm.force, therm.cause, therm.thermal_max_r, therm.initialDamage, therm.fireball_r, therm.x, therm.y);
 			therm.x = pos.x
 			therm.y = pos.y
 			if((pos.x == therm.position.x+therm.thermal_max_r and pos.y == therm.position.y+therm.thermal_max_r) or (pos.x == -1 and pos.y == -1)) then
@@ -685,11 +806,19 @@ local function tickHandler(event)
 				elseif (building.crafting_progress > 0 and building.crafting_progress < 0.01) then
 					-- Force map loading when a nuke is set up
 					if(building.get_recipe().name == "megaton-detonation") then
-	 					building.surface.request_to_generate_chunks(building.position, 3200/32)
+						if (not settings.global["optimise-1Mt"].value) then
+	 						building.surface.request_to_generate_chunks(building.position, 3200/32)
+	 					else
+	 						building.surface.request_to_generate_chunks(building.position, 400/32)
+	 					end
 					elseif(building.get_recipe().name == "100kiloton-detonation") then
-	 					building.surface.request_to_generate_chunks(building.position, 2000/32)
+						if (not settings.global["optimise-100kt"].value) then
+	 						building.surface.request_to_generate_chunks(building.position, 1500/32)
+	 					else
+	 						building.surface.request_to_generate_chunks(building.position, 200/32)
+	 					end
 					elseif(building.get_recipe().name == "15kiloton-detonation") then
-	 					building.surface.request_to_generate_chunks(building.position, 1500/32)
+	 					building.surface.request_to_generate_chunks(building.position, 1000/32)
 					end
 				end
 			else
@@ -725,17 +854,24 @@ end
 
 local function tileNoise(surface, tableTarget, position, radius, depthMult, tileMap, sliceCount)
 	if (settings.global["nuke-crater-noise"].value) then
+		local defaultOnly = true
+		for k,v in pairs (tileMap) do
+			if(k~="default") then
+				defaultOnly=false;
+				break;
+			end
+		end
 		for num=0,sliceCount do
 			local slice_w = (math.floor(radius*depthMult/50)+1)
 			for ang=0,math.ceil(3.1416*2*radius*slice_w*4/(num*num+1)) do
 				local dist = math.floor(math.random(num*slice_w, slice_w+num*slice_w))
 				local offset = math.random()
 
-				noise_pos = {x = math.floor(position.x+(dist+radius-1)*math.sin(ang+offset)+0.5), y = math.floor(position.y+(dist+radius-1)*math.cos(ang+offset)+0.5)}
-				cur_tile = surface.get_tile(noise_pos)
+				local noise_pos = {x = math.floor(position.x+(dist+radius-1)*math.sin(ang+offset)+0.5), y = math.floor(position.y+(dist+radius-1)*math.cos(ang+offset)+0.5)}
+				local cur_tile = defaultOnly or surface.get_tile(noise_pos)
 				if((position.x-noise_pos.x)*(position.x-noise_pos.x)+(position.y-noise_pos.y)*(position.y-noise_pos.y)<=radius+0.5) then
 					--Do nothing - used to remove rounding errors and prevent hitting the same tile twice
-				elseif (tileMap[cur_tile.name] == nil) then
+				elseif (defaultOnly or tileMap[cur_tile.name] == nil) then
 					if(not(tileMap["default"] ==nil)) then
 						table.insert(tableTarget, {name = tileMap["default"], position = noise_pos})
 					end
@@ -746,6 +882,56 @@ local function tileNoise(surface, tableTarget, position, radius, depthMult, tile
 		end
 	end
 end
+
+
+local function tileNoiseLimited(surface, tableTarget, position, radius, depthMult, tileMap, sliceCount, lesserAngle, greaterAngle, minR, maxR, boundaryBox)
+	if (settings.global["nuke-crater-noise"].value) then
+		local defaultOnly = true
+		for k,v in pairs (tileMap) do
+			if(k~="default") then
+				defaultOnly=false;
+				break;
+			end
+		end
+		local startAngle = lesserAngle
+		local endAngle = greaterAngle
+		local angleDiff = (endAngle-startAngle)
+		if(angleDiff>5) then
+			angleDiff = 6.283185307-angleDiff
+			local tmp = startAngle;
+			startAngle = endAngle;
+			endAngle = tmp+6.283185307;
+		end
+		local slice_w = (math.floor(radius*depthMult/50)+1)
+		for num=0,sliceCount do
+			if(minR<=slice_w+num*slice_w+radius and maxR>=num*slice_w+radius-1) then
+				for ang=0,math.ceil(angleDiff*radius*slice_w*4/(num*num+1)) do
+					local dist = math.floor(math.random(num*slice_w, slice_w+num*slice_w))
+					local offset = math.random()+sliceCount
+					local angle = (ang+offset)%angleDiff+startAngle
+					local noise_pos = {x = math.floor(position.x+(dist+radius-1)*math.cos(angle)+0.5), y = math.floor(position.y+(dist+radius-1)*math.sin(angle)+0.5)}
+					if(boundaryBox.left_top.x<=noise_pos.x and boundaryBox.right_bottom.x>=noise_pos.x 
+							and boundaryBox.left_top.y<=noise_pos.y and boundaryBox.right_bottom.y>=noise_pos.y) then
+						local cur_tile = defaultOnly or surface.get_tile(noise_pos)
+						if(defaultOnly or cur_tile.valid) then
+							if((position.x-noise_pos.x)*(position.x-noise_pos.x)+(position.y-noise_pos.y)*(position.y-noise_pos.y)<=radius+0.5) then
+								--Do nothing - used to remove rounding errors and prevent hitting the same tile twice
+							elseif (defaultOnly or tileMap[cur_tile.name] == nil) then
+								if(not(tileMap["default"] == nil)) then
+									table.insert(tableTarget, {name = tileMap["default"], position = noise_pos})
+								end
+							else
+								table.insert(tableTarget, {name = tileMap[cur_tile.name], position = noise_pos})
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+
 
 local function nukeTileChangesHeightAwareHuge(position, check_craters, surface_index, crater_internal_r, crater_external_r, fireball_r)
 	local buildingForces = {}
@@ -761,9 +947,8 @@ local function nukeTileChangesHeightAwareHuge(position, check_craters, surface_i
 	end
 	--fireball boils water...
 	for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=fireball_r+0.5, name=waterTypes}) do
-		local cur_tile = game.surfaces[surface_index].get_tile(v.position)
-		if(waterDepths[cur_tile.name]) then
-			table.insert(tileTable, {name = depthsForCrater[waterDepths[cur_tile.name]], position = v.position})
+		if(waterDepths[v.name]) then
+			table.insert(tileTable, {name = depthsForCrater[waterDepths[v.name]], position = v.position})
 			for _,tileGhost in pairs(game.surfaces[surface_index].find_entities_filtered{position = {v.position.x+0.5, v.position.y+0.5}, name = "tile-ghost"}) do
 				table.insert(tileGhosts, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = tileGhost.position})
 			end
@@ -777,8 +962,9 @@ local function nukeTileChangesHeightAwareHuge(position, check_craters, surface_i
 	circularNoise(groundNoise, position, fireball_r, 1, 3)
 	for x,xtiles in pairs(groundNoise) do
 		for y,_ in pairs(xtiles) do
-			if not(waterDepths[game.surfaces[surface_index].get_tile(x, y).name] == nil) then
-				table.insert(tileTable, {name = depthsForCrater[waterDepths[game.surfaces[surface_index].get_tile(x, y).name]], position = {x = x, y = y}})
+			local tile = game.surfaces[surface_index].get_tile(x, y)
+			if not(waterDepths[tile.name] == nil) then
+				table.insert(tileTable, {name = depthsForCrater[waterDepths[tile.name]], position = {x = x, y = y}})
 				for _,tileGhost in pairs(game.surfaces[surface_index].find_entities_filtered{position = {x = x+0.5, y = y+0.5}, name = "tile-ghost"}) do
 					table.insert(tileGhosts, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = tileGhost.position})
 				end
@@ -863,15 +1049,13 @@ local function nukeTileChangesHeightAwareHuge(position, check_craters, surface_i
 	end
 
 	-- setup craters to fill with water
-	for xChunkPos = math.floor((position.x-fireball_r*1.1)/10-1),math.floor((position.x+fireball_r*1.1)/10+1) do
-		for yChunkPos = math.floor((position.y-fireball_r*1.1)/10-1),math.floor((position.y+fireball_r*1.1)/10+1) do
-			if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterTypes, limit = 1} == 0)) and 
-				(not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = craterTypes0, limit = 1} == 0)) then
+	for xChunkPos = math.floor((position.x-fireball_r*1.1)/8-1),math.floor((position.x+fireball_r*1.1)/8+1) do
+		for yChunkPos = math.floor((position.y-fireball_r*1.1)/8-1),math.floor((position.y+fireball_r*1.1)/8+1) do
+			if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = waterTypes, limit = 1} == 0)) and 
+				(not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = craterTypes0, limit = 1} == 0)) then
 				local height = -2;
-				if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
+				if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
 					height = 0;
-				elseif (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
-					height = -1;
 				end
 				-- have both water and crater
 				if(global.cratersFast[surface_index]==nil)then
@@ -964,16 +1148,15 @@ local function nukeTileChangesHeightAware(position, check_craters, surface_index
 	end
 	for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=fireball_r+0.5}) do
 		local distSq = (v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)
-		local cur_tile = game.surfaces[surface_index].get_tile(v.position)
 		if(distSq>crater_external_r*crater_external_r and (noiseTables[1][v.position.x]==nil or noiseTables[1][v.position.x][v.position.y]==nil)) then
-			if(waterDepths[cur_tile.name]) then
-				table.insert(tileTable, {name = depthsForCrater[waterDepths[cur_tile.name]], position = v.position})
+			if(waterDepths[v.name]) then
+				table.insert(tileTable, {name = depthsForCrater[waterDepths[v.name]], position = v.position})
 				for _,tileGhost in pairs(game.surfaces[surface_index].find_entities_filtered{position = {v.position.x+0.5, v.position.y+0.5}, name = "tile-ghost"}) do
 					table.insert(tileGhosts, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = tileGhost.position})
 				end
 			end
 		else
-			local curr_height = waterDepths[cur_tile.name]
+			local curr_height = waterDepths[v.name]
 			if(curr_height==nil) then
 				curr_height = 0;
 			end
@@ -984,7 +1167,7 @@ local function nukeTileChangesHeightAware(position, check_craters, surface_index
 			elseif (crater_internal_r<10) then
 				if(distSq<=crater_internal_r*crater_internal_r) then
 					curr_height = math.min(curr_height, -1)
-				elseif (noiseTables[2][cur_tile.position.x]==nil or noiseTables[2][cur_tile.position.x][cur_tile.position.y]==nil)then
+				elseif (noiseTables[2][v.position.x]==nil or noiseTables[2][v.position.x][v.position.y]==nil)then
 					-- any tile not hit by the noise does this, otherwise we leave it
 					curr_height = curr_height+1;
 				end
@@ -992,45 +1175,45 @@ local function nukeTileChangesHeightAware(position, check_craters, surface_index
 				if(distSq<=crater_internal_r*crater_internal_r/4) then
 					curr_height = math.min(curr_height, -2)
 				elseif(distSq<=crater_internal_r*crater_internal_r) then
-					if (noiseTables[4][cur_tile.position.x]==nil or noiseTables[4][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if (noiseTables[4][v.position.x]==nil or noiseTables[4][v.position.x][v.position.y]==nil)then
 						curr_height = math.min(curr_height, -1)
 					else
 						curr_height = math.min(curr_height, -2)
 					end
-				elseif not (noiseTables[3][cur_tile.position.x]==nil or noiseTables[3][cur_tile.position.x][cur_tile.position.y]==nil)then
+				elseif not (noiseTables[3][v.position.x]==nil or noiseTables[3][v.position.x][v.position.y]==nil)then
 					curr_height = math.min(curr_height, -1)
-				elseif (noiseTables[2][cur_tile.position.x]==nil or noiseTables[2][cur_tile.position.x][cur_tile.position.y]==nil)then
+				elseif (noiseTables[2][v.position.x]==nil or noiseTables[2][v.position.x][v.position.y]==nil)then
 					curr_height = curr_height+1;
 				end
 			else
 				if(distSq<=crater_internal_r*crater_internal_r/9) then
 					curr_height = math.min(curr_height, -3)
 				elseif(distSq<=crater_internal_r*crater_internal_r*4/9) then
-					if  (noiseTables[7][cur_tile.position.x]==nil or noiseTables[7][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if  (noiseTables[7][v.position.x]==nil or noiseTables[7][v.position.x][v.position.y]==nil)then
 						curr_height = math.min(curr_height, -2)
 					else
 						curr_height = math.min(curr_height, -3)
 					end
 				elseif(distSq<=crater_internal_r*crater_internal_r) then
-					if  (noiseTables[6][cur_tile.position.x]==nil or noiseTables[6][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if  (noiseTables[6][v.position.x]==nil or noiseTables[6][v.position.x][v.position.y]==nil)then
 						curr_height = math.min(curr_height, -1)
 					else
 						curr_height = math.min(curr_height, -2)
 					end
 				elseif(distSq<=(crater_external_r*1/3+crater_internal_r*2/3)*(crater_external_r*1/3+crater_internal_r*2/3)) then
-					if  not (noiseTables[5][cur_tile.position.x]==nil or noiseTables[5][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if  not (noiseTables[5][v.position.x]==nil or noiseTables[5][v.position.x][v.position.y]==nil)then
 						curr_height = math.min(curr_height, -1)
-					elseif  (noiseTables[4][cur_tile.position.x]==nil or noiseTables[4][cur_tile.position.x][cur_tile.position.y]==nil)then
+					elseif  (noiseTables[4][v.position.x]==nil or noiseTables[4][v.position.x][v.position.y]==nil)then
 						curr_height = curr_height+1;
 					end
 				elseif(distSq<=(crater_external_r*2/3+crater_internal_r*1/3)*(crater_external_r*2/3+crater_internal_r*1/3)) then
-					if  (noiseTables[3][cur_tile.position.x]==nil or noiseTables[3][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if  (noiseTables[3][v.position.x]==nil or noiseTables[3][v.position.x][v.position.y]==nil)then
 						curr_height = curr_height+2;
 					else
 						curr_height = curr_height+1;
 					end
 				else
-					if  (noiseTables[2][cur_tile.position.x]==nil or noiseTables[2][cur_tile.position.x][cur_tile.position.y]==nil)then
+					if  (noiseTables[2][v.position.x]==nil or noiseTables[2][v.position.x][v.position.y]==nil)then
 						curr_height = curr_height+1;
 					else
 						curr_height = curr_height+2;
@@ -1054,8 +1237,9 @@ local function nukeTileChangesHeightAware(position, check_craters, surface_index
 		circularNoise(groundNoise, position, fireball_r, 1, 3)
 		for x,xtiles in pairs(groundNoise) do
 			for y,_ in pairs(xtiles) do
-				if not(waterDepths[game.surfaces[surface_index].get_tile(x, y).name] == nil) then
-					table.insert(tileTable, {name = depthsForCrater[waterDepths[game.surfaces[surface_index].get_tile(x, y).name]], position = {x = x, y = y}})
+				local tileDepth = waterDepths[game.surfaces[surface_index].get_tile(x, y)];
+				if not(tileDepth == nil) then
+					table.insert(tileTable, {name = depthsForCrater[tileDepth], position = {x = x, y = y}})
 					for _,tileGhost in pairs(game.surfaces[surface_index].find_entities_filtered{position = {x = x+0.5, y = y+0.5}, name = "tile-ghost"}) do
 						table.insert(tileGhosts, {ghost_name = tileGhost.ghost_name, force = tileGhost.force, pos = tileGhost.position})
 					end
@@ -1089,15 +1273,14 @@ local function nukeTileChangesHeightAware(position, check_craters, surface_index
 	end
 
 	-- setup craters to fill with water
-	for xChunkPos = math.floor((position.x-fireball_r*1.1)/10-1),math.floor((position.x+fireball_r*1.1)/10+1) do
-		for yChunkPos = math.floor((position.y-fireball_r*1.1)/10-1),math.floor((position.y+fireball_r*1.1)/10+1) do
-			if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterTypes, limit = 1} == 0)) and 
-				(not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = craterTypes0, limit = 1} == 0)) then
+	for xChunkPos = math.floor((position.x-fireball_r*1.1)/8-1),math.floor((position.x+fireball_r*1.1)/8+1) do
+		for yChunkPos = math.floor((position.y-fireball_r*1.1)/8-1),math.floor((position.y+fireball_r*1.1)/8+1) do
+			if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = waterTypes, limit = 1} == 0)) and 
+				(not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = craterTypes0, limit = 1} == 0)) then
 				local height = -2;
-				if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
+				if (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*8, yChunkPos*8}, {xChunkPos*8+8, yChunkPos*8+8}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
 					height = 0;
-				elseif (not (game.surfaces[surface_index].count_tiles_filtered{area={{xChunkPos*10, yChunkPos*10}, {xChunkPos*10+10, yChunkPos*10+10}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
-					height = -1;
+
 				end
 				-- have both water and crater
 				if(global.cratersFast[surface_index]==nil)then
@@ -1134,9 +1317,8 @@ local function nukeTileChanges(position, check_craters, surface_index, crater_in
 		local edge_water_threshold = 0.1 -- Threshold of proportion of crater edge touching water for crater to fill with water
 
 		for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=crater_external_r}) do
-			local cur_tile = game.surfaces[surface_index].get_tile(v.position)
-			if math.sqrt((cur_tile.position.x - position.x) ^ 2 + (cur_tile.position.y - position.y) ^ 2) > crater_external_r - 1 then
-				if cur_tile.name == "water" or cur_tile.name == "deepwater" then
+			if math.sqrt((v.position.x - position.x) ^ 2 + (v.position.y - position.y) ^ 2) > crater_external_r - 1 then
+				if v.name == "water" or v.name == "deepwater" then
 					edge_water_count = edge_water_count + 1
 				end
 			end
@@ -1162,8 +1344,7 @@ local function nukeTileChanges(position, check_craters, surface_index, crater_in
 	else
 		-- mandelbrodt - If crater touches (non-shallow/mud) water, fill crater with "water" tiles
 		for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=crater_external_r}) do
-			local cur_tile = game.surfaces[surface_index].get_tile(v.position)
-			if not (cur_tile.name == "water" or cur_tile.name == "deepwater") then
+			if not (v.name == "water" or v.name == "deepwater") then
 				if((v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y) <= crater_internal_r*crater_internal_r) then
 					table.insert(tileTable, {name = "water", position = v.position})
 				else
@@ -1187,18 +1368,18 @@ end
 
 
 
-local function atomic_thermal_blast(surface_index, position, force, thermal_max_r, initialDamage, fireball_r)
+local function atomic_thermal_blast(surface_index, position, force, cause, thermal_max_r, initialDamage, fireball_r)
 	if not global.thermalBlasts then
 		global.thermalBlasts = {}
 	end
 	
-	local pos = atomic_thermal_blast_internal(surface_index, position, force, thermal_max_r, initialDamage, fireball_r, position.x-thermal_max_r, position.y-thermal_max_r);
+	local pos = atomic_thermal_blast_internal(surface_index, position, force, cause, thermal_max_r, initialDamage, fireball_r, position.x-thermal_max_r, position.y-thermal_max_r);
 	if((pos.x ~= position.x+thermal_max_r or pos.y ~= position.y+thermal_max_r) and (pos.x ~= -1 or pos.y ~= -1)) then
-		table.insert(global.thermalBlasts, {surface_index=surface_index, position=position, force=force, thermal_max_r=thermal_max_r, initialDamage=initialDamage, fireball_r=fireball_r, x=pos.x, y=pos.y})
+		table.insert(global.thermalBlasts, {surface_index=surface_index, position=position, force=force, cause=cause, thermal_max_r=thermal_max_r, initialDamage=initialDamage, fireball_r=fireball_r, x=pos.x, y=pos.y})
 	end
 end
 
-local function old_atomic_thermal_blast(surface_index, position, force, thermal_max_r, initialDamage, fireball_r)
+local function old_atomic_thermal_blast(surface_index, position, force, cause, thermal_max_r, initialDamage, fireball_r)
 	 -- do thermal heat-wave damage
 	 
 	 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=thermal_max_r}) do
@@ -1255,135 +1436,564 @@ end
 
 
 
-
-
-
-local function atomic_weapon_hit(event, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters)
-	 -- find forces, positions, etc.
-	 local force
+local function find_event_position(event)
 	 local position = event.target_position
 	 if(not position) then
 	 	position = event.source_position
 	 end
-	 if(settings.global["nukes-cause-pollution"].value) then
-	 	game.surfaces[event.surface_index].pollute(position, polution)
-	 end
-	 if(not (event.source_entity==nil)) then
-	 	force = event.source_entity.force
-	 else
-		force = "enemy"
-	 end
-	 local cause = event.source_entity;
-	 if(global.waitingNukeCratersBasic ==nil) then
-		global.waitingNukeCratersBasic = {}
-	 end
+	 return position
+end
 
-	 -- force the map to generate (should be reasonably quick as it is pre-loaded)
-	 game.surfaces[event.surface_index].request_to_generate_chunks(position, load_r/32)
-	 game.surfaces[event.surface_index].force_generate_chunk_requests()
+--chunkLoaderStruct: surface_index, blastIndex, blastId, force, source, position, crater_internal_r, crater_external_r, fireball_r, blast_max_r, init_blast, blast_min_damage, thermal_max_r, init_thermal
+local function optimisedChunkLoadHandler(chunkPosAndArea, chunkLoaderStruct, killPlanes)
+	local x = chunkPosAndArea.x*32
+	local y = chunkPosAndArea.y*32
+	local originPos = chunkLoaderStruct.position 
+	local surface_index = chunkLoaderStruct.surface_index
+	local r1 = math.sqrt((x-originPos.x)*(x-originPos.x) + (y-originPos.y)*(y-originPos.y))
+	local r2 = math.sqrt((x+32-originPos.x)*(x+32-originPos.x) + (y-originPos.y)*(y-originPos.y))
+	local r3 = math.sqrt((x-originPos.x)*(x-originPos.x) + (y+32-originPos.y)*(y+32-originPos.y))
+	local r4 = math.sqrt((x+32-originPos.x)*(x+32-originPos.x) + (y+32-originPos.y)*(y+32-originPos.y))
+	local minR = math.min(r1, r2, r3, r4)
+	local maxR = math.max(r1, r2, r3, r4)
+	if  ((minR<chunkLoaderStruct.blast_max_r) or (minR<chunkLoaderStruct.thermal_max_r)) then
+      
 
-	 for _,f in pairs(game.forces) do
-		f.chart(game.surfaces[event.surface_index], {{position.x-visable_r,position.y-visable_r},{position.x+visable_r,position.y+visable_r}})
-	 end
-	 -- kill things in the fireball
-	 for _,v in pairs(game.surfaces[event.surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
-		if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
-			if v.type=="tree" then
-				v.destroy()
-			elseif cause and cause.valid then
-				if not v.die(force, cause) then
-					v.destroy()
-				end
-			elseif not v.die(nil) then
-				v.destroy()
-			end
-		end
-	 end
-	 if(settings.global["destroy-resources-in-crater"].value) then
-		 -- destroy resources in crater (a bit more to account for the noise on crater edge)
-		 for _,v in pairs(game.surfaces[event.surface_index].find_entities_filtered{position=position, radius=crater_external_r*1.1+4, type="resource"}) do
-			if(v.valid) then
-				v.destroy()
-			end
-		 end
-	 end
-	 -- destroy decoratives in the fireball
-	 for _,v in pairs(game.surfaces[event.surface_index].find_decoratives_filtered{area = {{position.x-fireball_r, position.y-fireball_r}, {position.x+fireball_r, position.y+fireball_r}}}) do
-		if((v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)<=fireball_r*fireball_r) then
-			game.surfaces[event.surface_index].destroy_decoratives{position = v.position};
-		end
-	 end
-	 -- make sure everything is dead in the fireball
-	 for _,v in pairs(game.surfaces[event.surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
-		if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
-			if(cause and cause.valid) then
-				v.die(force, cause);
-			else
-				v.die(nil);
-			end
-			if(v.valid) then
-				v.destroy();
-			end
-		end
-	 end
-	 if(settings.global["use-height-for-craters"].value and settings.startup["enable-new-craters"].value) then
-		if(crater_external_r>200) then --use efficient crater generator (ignores height for lakes)
-			nukeTileChangesHeightAwareHuge(position, check_craters, event.surface_index, crater_internal_r, crater_external_r, fireball_r)
+		
+		
+		local cause = chunkLoaderStruct.source;
+		local force = chunkLoaderStruct.force;
+		local blastR = 0
+		if(global.blastWaves == nil or global.blastWaves[blastIndex] == nil or global.blastWaves[blastIndex].blastId ~= blastId) then
+			blastR = -1
 		else
-		 	nukeTileChangesHeightAware(position, check_craters, event.surface_index, crater_internal_r, crater_external_r, fireball_r)
-	 	end
-	 else
-	 	nukeTileChanges(position, check_craters, event.surface_index, crater_internal_r, crater_external_r, fireball_r)
-	 end
-	 -- light fires as nessesary
-	 if(flame_proportion>0) then
-		 for _,v in pairs(game.surfaces[event.surface_index].find_tiles_filtered{position=position, radius=fire_outer_r}) do
-			local rand = math.random(0, fire_outer_r)
-			if(math.random(0, flame_proportion)<1 and rand*rand>(v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)) then 
-				if((not(waterInCraterGoingOutDepths[v.name] == nil)) and waterInCraterGoingOutDepths[v.name] > -10) then
-					game.surfaces[event.surface_index].create_entity{name="thermobaric-wave-fire",position=v.position}
-				else
-					game.surfaces[event.surface_index].create_entity{name="nuclear-fire",position=v.position}
+			blastR = global.blastWaves[blastIndex].r
+		end
+		--fireball
+		if(minR<chunkLoaderStruct.fireball_r) then
+			local entities = game.surfaces[surface_index].find_entities_filtered{area = chunkPosAndArea.area}
+			local fireballSq = chunkLoaderStruct.fireball_r*chunkLoaderStruct.fireball_r;
+			for _,e in pairs(entities) do
+				if(e.valid and (not (string.match(e.type, "ghost"))) and ((e.type ~= "resource") and (killPlanes or (e.type ~= "car"))) 
+				    and e.position.x>=x and e.position.x<x+32 and e.position.y>=y and e.position.y<y+32 and 
+					(e.position.x-originPos.x)*(e.position.x-originPos.x) + (e.position.y-originPos.y)*(e.position.y-originPos.y)<=fireballSq) then
+
+					if e.type=="tree" then
+						e.destroy()
+					elseif(corpseMap[e.name]) then
+						e.destroy()
+					elseif(cause ~= nil and cause.valid) then
+						e.die(force, cause)
+					else
+						e.die(force)
+					end
+					
+					if(e.valid) then
+						e.destroy();
+					end
 				end
 			end
-		 end
-	 end
-	 if (settings.global["nuke-random-fires"].value and create_small_fires) then
-		for i=0,(tree_fire_max_r*tree_fire_max_r/10) do
-			local dist = math.random(0, math.random(0, tree_fire_max_r))
-			local angle = math.random()*3.1416*2
-			game.surfaces[event.surface_index].create_entity{name="thermobaric-wave-fire",position={position.x+dist*math.cos(angle), position.y+dist*math.sin(angle)}}
+			entities = game.surfaces[surface_index].find_entities_filtered{area = chunkPosAndArea.area}
+			for _,e in pairs(entities) do
+				if(e.valid and (not (string.match(e.type, "ghost"))) and ((e.type ~= "resource")) and (killPlanes or e.type ~= "car") 
+				    and e.position.x>=x and e.position.x<x+32 and e.position.y>=y and e.position.y<y+32 and 
+					(e.position.x-originPos.x)*(e.position.x-originPos.x) + (e.position.y-originPos.y)*(e.position.y-originPos.y)<=fireballSq) then
+					if e.type=="tree" then
+						e.destroy()
+					elseif(corpseMap[e.name]) then
+						e.destroy()
+					elseif(cause ~= nil and cause.valid) then
+						e.die(force, cause)
+					else
+						e.die(force)
+					end
+					
+					if(e.valid) then
+						e.destroy();
+					end
+				end
+			end
+			-- destroy decoratives in the fireball
+			local craterEdgeSq = (chunkLoaderStruct.crater_external_r*1.1+4)*(chunkLoaderStruct.crater_external_r*1.1+4)
+			for _,v in pairs(game.surfaces[surface_index].find_decoratives_filtered{area = chunkPosAndArea.area}) do
+				local distSq = (v.position.x-originPos.x)*(v.position.x-originPos.x)+(v.position.y-originPos.y)*(v.position.y-originPos.y);
+				if(distSq<=fireballSq) then
+					local tmpPos = v.position;
+					local result = decorativeMap[v.decorative.name]
+					if(result == nil or distSq<craterEdgeSq) then
+						game.surfaces[surface_index].destroy_decoratives{position = v.position};
+					elseif(result[1] == v.decorative.name) then
+						local rnd = math.random();
+						if(rnd<=result[2]) then
+							game.surfaces[surface_index].destroy_decoratives{position = v.position};
+						end
+					elseif(result[1] ~=nil) then
+						local rnd = math.random();
+						game.surfaces[surface_index].destroy_decoratives{position = v.position};
+						if(rnd<=result[2]) then
+							game.surfaces[surface_index].create_decoratives{decoratives={{name=result[1], position=tmpPos, amount=1}}}
+						end
+					end
+				end
+			end
 		end
-	 end
-	 if(settings.global["use-efficient-thermal"].value) then
-	 	atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, 5000, fireball_r)
-	 else
-	 	old_atomic_thermal_blast(event.surface_index, position, force, thermal_max_r, 5000, fireball_r)
- 	end
-	 table.insert(global.blastWaves, {r = fireball_r, pos = position, pow = fireball_r*fireball_r, max = blast_max_r, s = event.surface_index, fire = false, damage_init = 5000.0, speed = 8, fire_rad = 0, blast_min_damage = 0, itt = 1, doItts = true, ittframe = 1, force = force, cause = cause})
+		
+		-- thermal
+		if(minR<chunkLoaderStruct.thermal_max_r) then
+			local thermSq = chunkLoaderStruct.thermal_max_r*chunkLoaderStruct.thermal_max_r;
+			local fireballSq = chunkLoaderStruct.fireball_r*chunkLoaderStruct.fireball_r;
+			
+			for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{area=chunkPosAndArea.area}) do
+				if(v.valid and (not (v.prototype.max_health == 0)) and (killPlanes or v.type ~= "car")) then
+					local distSq = (v.position.x-originPos.x)*(v.position.x-originPos.x)+(v.position.y-originPos.y)*(v.position.y-originPos.y)
+					if(distSq>fireballSq and distSq<=thermSq and v.position.x>=x and v.position.x<x+32 and v.position.y>=y and v.position.y<y+32) then
+						local damage = fireballSq*chunkLoaderStruct.init_thermal/distSq
+						if(v.type=="tree") then
+							if(math.random(0, 100)<1) then
+								game.surfaces[surface_index].create_entity{name="fire-flame-on-tree",position=v.position, initial_ground_flame_count=1+math.min(254,thermSq/distSq)}
+							end
+							-- efficient tree handling
+							damage = math.random(damage/10, damage)
+							if((((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health<damage) or (v.prototype.resistances and v.prototype.resistances.fire and v.health<(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent))) then
+								local surface = v.surface
+								local destPos = v.position
+								v.destroy()
+								surface.create_entity{name="tree-01-stump",position=destPos}
+							else
+								if((not v.prototype.resistances) or not v.prototype.resistances.fire) then
+									v.health = v.health-damage
+								else
+									v.health = v.health-(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)
+								end
+							end
+						else
+							damage = math.random(damage/2, damage*2)
+							if(v.grid) then
+								if(cause and cause.valid) then
+									v.damage(damage, force, "fire", cause)
+								else
+									v.damage(damage, force, "fire")
+								end
+								if(v.valid and(v.type == "unit" or v.type == "car" or v.type == "spider-vehicle")) then
+									local fireShield = nil
+									for _,e in pairs(v.grid.equipment) do
+										if(e.name=="fire-shield-equipment" and e.energy>=1000000) then
+											fireShield = e;
+											break;
+										end	
+									end
+									if fireShield then
+										fireShield.energy = fireShield.energy-1000000
+									else
+										game.surfaces[surface_index].create_entity{name="fire-sticker", position=v.position, target=v}
+									end
+								end
+							else
+								if(((not v.prototype.resistances) or not v.prototype.resistances.fire) and v.health>damage) then
+									v.health = v.health-damage
+								elseif(v.prototype.resistances and v.prototype.resistances.fire and v.health>(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)) then
+									v.health = v.health-(damage-v.prototype.resistances.fire.decrease)*(1-v.prototype.resistances.fire.percent)
+								else
+									if(corpseMap[v.name]) then
+										local vPos = v.position
+										local corpseName = corpseMap[v.name]
+										v.destroy()
+										game.surfaces[surface_index].create_entity{name=corpseName, position=vPos}
+									else
+										if(cause and cause.valid) then
+											v.damage(damage, force, "fire", cause)
+										else
+											v.damage(damage, force, "fire")
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		
+		-- blast
+		if(minR<chunkLoaderStruct.blast_max_r) then
+			local blastSq = blastR*blastR
+		    if(blastR == -1) then
+		    	blastSq = math.max(r1*r1, r2*r2, r3*r3, r4*r4)+1
+		    end
+			local efficientDamage = settings.global["use-efficient-thermal"].value
+			local fireballSq = chunkLoaderStruct.fireball_r*chunkLoaderStruct.fireball_r;
+			for _,entity in pairs(game.surfaces[surface_index].find_entities_filtered{area=chunkPosAndArea.area}) do
+				-- do blast damage - reduced for rails, belts, land mines and flying vehicles, as this makes some sense, and trees in order to leave some alive
+				if (entity.valid and entity.position and entity.position.x>=x and entity.position.x<x+32 and entity.position.y>=y and entity.position.y<y+32 and (killPlanes or entity.type ~= "car")) then
+					local xdif = entity.position.x-originPos.x
+					local ydif = entity.position.y-originPos.y
+					local distSq = xdif*xdif + ydif*ydif
+					if((not (entity.prototype.max_health == 0)) and distSq <= blastSq and distSq>=fireballSq) then 
+						local dist = math.sqrt(xdif*xdif + ydif*ydif)
+						local damage = fireballSq / distSq*chunkLoaderStruct.init_blast + chunkLoaderStruct.blast_min_damage
+						local t = entity.type
+						if(t=="curved-rail") then
+							damage = damage/10
+						elseif (t=="straight-rail") then
+							damage = damage/10
+						elseif (t=="transport-belt") then
+							damage = damage/10
+						elseif (t=="land-mine") then
+							damage = damage/10
+						elseif(t=="car" or t=="spider-vehicle") then
+							if (next(entity.prototype.collision_mask)==nil)then
+								damage = damage/5
+							end
+						end
+						if(t=="tree") then
+							damage = math.random(damage/10, damage)
+							if(entity.prototype.resistances and entity.prototype.resistances.explosion) then
+								damage = (damage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent)
+							end
+							-- If a tree is destroyed, don't bother doing particle effects, just destroy it - huge performance savings
+							if(entity.health<damage) then
+								local destPos = entity.position
+								entity.destroy()
+								game.surfaces[surface_index].create_entity{name="tree-01-stump",position=destPos}
+							else
+								entity.health = entity.health-damage
+							end
+						else
+							damage = math.random(damage/2, damage*2)
+							local calcDamage = damage;
+							if(entity.prototype.resistances and entity.prototype.resistances.explosion) then
+								calcDamage = (calcDamage-entity.prototype.resistances.explosion.decrease)*(1-entity.prototype.resistances.explosion.percent)
+							end
+							if(efficientDamage and (not entity.grid) and entity.health>calcDamage) then
+								entity.health = entity.health-calcDamage
+							else
+								if((not entity.grid) and corpseMap[entity.name]) then
+									local entityPos = entity.position
+									local corpseName = corpseMap[entity.name]
+									entity.destroy()
+									game.surfaces[surface_index].create_entity{name=corpseName, position=entityPos}
+								else
+									if(cause and cause.valid) then
+										entity.damage(damage, force, "explosion", cause)
+									else
+										entity.damage(damage, force, "explosion")
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		
+		local ang1 = math.atan2(y-originPos.y, x-originPos.x)
+		local ang2 = math.atan2(y-originPos.y, x+32-originPos.x)
+		local ang3 = math.atan2(y+32-originPos.y, x-originPos.x)
+		local ang4 = math.atan2(y+32-originPos.y, x+32-originPos.x)
+		if((ang1<-1.5 or ang2<-1.5 or ang3<-1.5 or ang4<-1.5) and (ang1>1.5 or ang2>1.5 or ang3>1.5 or ang4>1.5))then
+			if(ang1<0) then
+				ang1 = ang1+6.283185307
+			end
+			if(ang2<0) then
+				ang2 = ang2+6.283185307
+			end
+			if(ang3<0) then
+				ang3 = ang3+6.283185307
+			end
+			if(ang4<0) then
+				ang4 = ang4+6.283185307
+			end
+		end	
+		-- crater
+		if((minR<chunkLoaderStruct.fireball_r*1.1+4) and (maxR>chunkLoaderStruct.crater_external_r-4) ) then
+			local tiles = game.surfaces[surface_index].find_tiles_filtered{area=chunkPosAndArea.area, name=waterTypes};
+			if(#tiles ~=0) then
+				local startAngle = math.min(ang1, ang2, ang3, ang4)
+				local endAngle = math.max(ang1, ang2, ang3, ang4)
+				local tileTable = {};
+
+				local fireballSq = chunkLoaderStruct.fireball_r*chunkLoaderStruct.fireball_r;
+				for _,v in pairs(tiles) do
+					if((v.position.x-originPos.x)*(v.position.x-originPos.x)+(v.position.y-originPos.y)*(v.position.y-originPos.y)<=fireballSq) then
+						local depth = waterDepths[v.name]
+						if(depth) then
+							if (depth == -2 and (v.position.x == x or v.position.x == x+31))then
+								--depth = -3;
+							elseif (depth == -2 and (v.position.y == y or v.position.y == y+31))then
+								--depth = -3
+							end
+							table.insert(tileTable, {name = depthsForCrater[depth], position = v.position})
+						end
+					end
+				end
+				game.surfaces[surface_index].set_tiles(tileTable)
+				if(maxR>chunkLoaderStruct.fireball_r-4) then
+					tileTable = {};
+					local waterMapping = {}
+					for t,h in pairs(waterDepths) do
+						waterMapping[t] = depthsForCrater[h]
+					end
+					tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, chunkLoaderStruct.fireball_r, 1, waterMapping, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+					game.surfaces[surface_index].set_tiles(tileTable)
+				end
+			end	
+		end
+		if(minR<chunkLoaderStruct.crater_external_r*1.1+4) then
+			if(settings.global["destroy-resources-in-crater"].value) then
+				-- destroy resources in crater (a bit more to account for the noise on crater edge)
+				local craterEdgeSq = (chunkLoaderStruct.crater_external_r*1.1+4)*(chunkLoaderStruct.crater_external_r*1.1+4)
+				for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{area = chunkPosAndArea.area, type="resource"}) do
+					if(v.valid and (v.position.x-originPos.x)*(v.position.x-originPos.x) + (v.position.y-originPos.y)*(v.position.y-originPos.y)<=craterEdgeSq) then
+						v.destroy()
+					end
+				end
+			end
+			local startAngle = math.min(ang1, ang2, ang3, ang4)
+			local endAngle = math.max(ang1, ang2, ang3, ang4)
+			local crater_internal_r = chunkLoaderStruct.crater_internal_r
+			local crater_external_r = chunkLoaderStruct.crater_external_r
+			local tileTable = {};
+			for xoffset = 0, 32 do
+				for yoffset = 0, 32 do
+					local tilepos = {x + xoffset, y + yoffset}
+					local xdiff = x+xoffset-originPos.x
+					local ydiff = y+yoffset-originPos.y
+					local distSq = xdiff*xdiff+ydiff*ydiff
+					if(distSq<crater_internal_r*crater_internal_r/9) then
+						table.insert(tileTable, {name = depthsForCrater[-3], position = tilepos})
+					elseif(distSq<crater_internal_r*crater_internal_r*4/9) then
+						table.insert(tileTable, {name = depthsForCrater[-2], position = tilepos})
+					elseif(distSq<crater_internal_r*crater_internal_r) then
+						table.insert(tileTable, {name = depthsForCrater[-1], position = tilepos})
+					elseif(distSq<crater_external_r*crater_external_r) then
+						table.insert(tileTable, {name = depthsForCrater[1], position = tilepos})
+					end
+				end
+			end
+			game.surfaces[surface_index].set_tiles(tileTable)
+			tileTable = {};
+			-- add noise
+			if(minR<crater_internal_r*1.1/3+10 and maxR> crater_internal_r/3-10) then
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_internal_r/3, 1, {default = depthsForCrater[-3]}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+			end
+			if(minR<crater_internal_r*1.1*2/3+10 and maxR> crater_internal_r*2/3-10) then
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_internal_r*2/3, 1, {default = depthsForCrater[-2]}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+			end
+			if(minR<crater_internal_r*1.15+10 and maxR> crater_internal_r-10) then
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_internal_r, 2, {default = depthsForCrater[0]}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_internal_r, 1, {default = depthsForCrater[-1]}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+			end
+			game.surfaces[surface_index].set_tiles(tileTable)
+			tileTable={};
+			-- ensure noise for crater goes on top of lakes
+			
+			--noise around the crater
+			if(minR<crater_external_r*1.1+10 and maxR> crater_external_r-10) then
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_external_r, 1, {default = "nuclear-ground"}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+			end
+			--high noise around crater
+			if(minR<crater_external_r*1.1+6 and maxR> crater_external_r-14) then
+				tileNoiseLimited(game.surfaces[surface_index], tileTable, originPos, crater_external_r-4, 1, {default = "nuclear-high"}, 3, startAngle, endAngle, minR, maxR, chunkPosAndArea.area);
+			end
+			
+			game.surfaces[surface_index].set_tiles(tileTable)
+			for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{area=chunkPosAndArea.area, name="nuclear-high"}) do
+				game.surfaces[surface_index].set_hidden_tile(v.position, "nuclear-ground")
+			end
+		end
+		if (not (game.surfaces[surface_index].count_tiles_filtered{area={{x=chunkPosAndArea.area.left_top.x+1, y=chunkPosAndArea.area.left_top.y+1},{x=chunkPosAndArea.area.right_bottom.x-1, y=chunkPosAndArea.area.right_bottom.y-1}} , name = craterTypes0, limit = 1} == 0)) then
+			table.insert(global.cratersSlow, {t = 0, x = chunkPosAndArea.x, y = chunkPosAndArea.y, surface = surface_index});
+			
+			for xChunkPos = 0,4 do
+				for yChunkPos = 0,4 do
+					if (not (game.surfaces[surface_index].count_tiles_filtered{area={{x+xChunkPos*8, y+yChunkPos*8}, {x+xChunkPos*8+8, y+yChunkPos*8+8}}, name = waterTypes, limit = 1} == 0)) and 
+						(not (game.surfaces[surface_index].count_tiles_filtered{area={{x+xChunkPos*8, y+yChunkPos*8}, {x+xChunkPos*8+8, y+yChunkPos*8+8}}, name = craterTypes0, limit = 1} == 0)) then
+						local height = -2;
+						if (not (game.surfaces[surface_index].count_tiles_filtered{area={{x+xChunkPos*8, y+yChunkPos*8}, {x+xChunkPos*8+8, y+yChunkPos*8+8}}, name = waterInCraterGoingOutDepth0Only, limit = 1} == 0)) then
+							height = 0;
+						end
+						-- have both water and crater
+						if(global.cratersFast[surface_index]==nil)then
+							global.cratersFast[surface_index] = {}
+							global.cratersFastData[surface_index] = {synch = 0, xCount = 0, xCountSoFar = 0, xDone = {}}
+						end
+						if(global.cratersFast[surface_index][chunkPosAndArea.x*4+xChunkPos]==nil)then
+							global.cratersFast[surface_index][chunkPosAndArea.x*4+xChunkPos] = {}
+							global.cratersFastData[surface_index].xCount = global.cratersFastData[surface_index].xCount + 1
+						end
+						global.cratersFast[surface_index][chunkPosAndArea.x*4+xChunkPos][chunkPosAndArea.y*4+yChunkPos] = height
+					end
+				end
+			end
+		end
+	end
 end
 
 
-
-local function thermobaric_weapon_hit(event, explosion_r, blast_max_r, fire_r, load_r, visable_r)
+local function atomic_weapon_hit(surface_index, source, position, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, small_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters, optimise_load)
+	 -- find forces, positions, etc.
 	 local force
-	 local cause = event.source_entity;
-	 local position = event.target_position
-	 if(not (event.source_entity==nil)) then
-	 	force = event.source_entity.force
+	 if(settings.global["nukes-cause-pollution"].value) then
+	 	game.surfaces[surface_index].pollute(position, polution)
+	 end
+	 if(not (source==nil)) then
+	 	force = source.force
+	 else
+		force = "neutral"
+	 end
+	 local cause = source;
+	 if(global.waitingNukeCratersBasic ==nil) then
+		global.waitingNukeCratersBasic = {}
+	 end
+	 if optimise_load then
+	 	if(not global.blastWaves) then
+	 		global.blastWaves = {};
+ 		end
+	 	local blastId = math.random();
+ 		table.insert(global.blastWaves, {r = fireball_r, pos = position, blastId=blastId, pow = fireball_r*fireball_r, max = blast_max_r, s = surface_index, fire = false, damage_init = 5000.0, speed = 8, fire_rad = 0, blast_min_damage = 0, itt = 1, doItts = true, ittframe = 1, force = force, cause = cause})
+	 	local index = #global.blastWaves
+	 	local chunkData = {surface_index=surface_index, blastIndex=index, blastId=blastId, force=force, source=cause, position=position, crater_internal_r=crater_internal_r, 
+	 				crater_external_r=crater_external_r, fireball_r=fireball_r, blast_max_r=blast_max_r, init_blast=5000.0, blast_min_damage=0, thermal_max_r=thermal_max_r, init_thermal=5000.0};
+	 	local chunks = {}
+	 	for chunk in game.surfaces[surface_index].get_chunks() do
+	 		if(game.surfaces[surface_index].is_chunk_generated(chunk)) then
+				table.insert(chunks, chunk);
+			end
+		end
+		for _,chunk in pairs(chunks) do
+	 		--local xdiff = chunk.x*32+16-position.x
+	 		--local ydiff = chunk.y*32+16-position.y
+	 		--log(math.sqrt(xdiff*xdiff+ydiff*ydiff));
+		  	optimisedChunkLoadHandler(chunk, chunkData, true);
+	  	end
+		if(not global.optimisedNukes) then
+			global.optimisedNukes = {}
+		end
+		table.insert(global.optimisedNukes, chunkData);
+	else
+	 	-- force the map to generate (should be reasonably quick as it is pre-loaded)
+	 	game.surfaces[surface_index].request_to_generate_chunks(position, load_r/32)
+	 	game.surfaces[surface_index].force_generate_chunk_requests()
+	 	
+	 
+		 for _,f in pairs(game.forces) do
+			f.chart(game.surfaces[surface_index], {{position.x-visable_r,position.y-visable_r},{position.x+visable_r,position.y+visable_r}})
+		 end
+		 -- kill things in the fireball
+		 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
+			if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
+				if v.type=="tree" then
+					v.destroy()
+				elseif(corpseMap[v.name]) then
+					v.destroy()
+				elseif cause and cause.valid then
+					if not v.die(force, cause) then
+						v.destroy()
+					end
+				elseif not v.die(force) then
+					v.destroy()
+				end
+			end
+		 end
+		 if(settings.global["destroy-resources-in-crater"].value) then
+			 -- destroy resources in crater (a bit more to account for the noise on crater edge)
+			 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=crater_external_r*1.1+4, type="resource"}) do
+				if(v.valid) then
+					v.destroy()
+				end
+			 end
+		 end
+		 -- destroy decoratives in the fireball
+		 for _,v in pairs(game.surfaces[surface_index].find_decoratives_filtered{area = {{position.x-fireball_r, position.y-fireball_r}, {position.x+fireball_r, position.y+fireball_r}}}) do
+				if((v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)<=fireball_r*fireball_r) then
+					local tmpPos = v.position;
+					local result = decorativeMap[v.decorative.name]
+					if(result == nil) then
+						game.surfaces[surface_index].destroy_decoratives{position = v.position};
+					elseif(result[1] == v.decorative.name) then
+						local rnd = math.random();
+						if(rnd<=result[2]) then
+							game.surfaces[surface_index].destroy_decoratives{position = v.position};
+						end
+					elseif(result[1] ~=nil) then
+						local rnd = math.random();
+						game.surfaces[surface_index].destroy_decoratives{position = v.position};
+						if(rnd<=result[2]) then
+							game.surfaces[surface_index].create_decoratives{decoratives={{name=result[1], position=tmpPos, amount=1}}}
+						end
+					end
+				end
+		 end
+		 -- make sure everything is dead in the fireball
+		 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
+			if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
+				if(cause and cause.valid) then
+					v.die(force, cause);
+				else
+					v.die(force);
+				end
+				if(v.valid) then
+					v.destroy();
+				end
+			end
+		 end
+		 if(settings.global["use-height-for-craters"].value and settings.startup["enable-new-craters"].value) then
+			if(crater_external_r>150) then --use efficient crater generator (ignores height for lakes)
+				nukeTileChangesHeightAwareHuge(position, check_craters, surface_index, crater_internal_r, crater_external_r, fireball_r)
+			else
+			 	nukeTileChangesHeightAware(position, check_craters, surface_index, crater_internal_r, crater_external_r, fireball_r)
+		 	end
+		 else
+		 	nukeTileChanges(position, check_craters, surface_index, crater_internal_r, crater_external_r, fireball_r)
+		 end
+		 -- light fires as nessesary
+		 if(flame_proportion>0) then
+			 for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=fire_outer_r}) do
+				local rand = math.random(0, fire_outer_r)
+				if(math.random(0, flame_proportion)<1 and rand*rand>(v.position.x-position.x)*(v.position.x-position.x)+(v.position.y-position.y)*(v.position.y-position.y)) then 
+					if((not(waterInCraterGoingOutDepths[v.name] == nil)) and waterInCraterGoingOutDepths[v.name] > -10) then
+						game.surfaces[surface_index].create_entity{name="thermobaric-wave-fire",position=v.position}
+					else
+						game.surfaces[surface_index].create_entity{name="nuclear-fire",position=v.position}
+					end
+				end
+			 end
+		 end
+		 if (settings.global["nuke-random-fires"].value and create_small_fires) then
+			for i=0,(small_fire_max_r*small_fire_max_r/10) do
+				local dist = math.random(0, math.random(0, small_fire_max_r))
+				local angle = math.random()*3.1416*2
+				game.surfaces[surface_index].create_entity{name="thermobaric-wave-fire",position={position.x+dist*math.cos(angle), position.y+dist*math.sin(angle)}}
+			end
+		 end
+		 if(settings.global["use-efficient-thermal"].value) then
+		 	atomic_thermal_blast(surface_index, position, force, cause, thermal_max_r, 5000, fireball_r)
+		 else
+		 	old_atomic_thermal_blast(surface_index, position, force, cause, thermal_max_r, 5000, fireball_r)
+	 	 end
+		 table.insert(global.blastWaves, {r = fireball_r, pos = position, pow = fireball_r*fireball_r, max = blast_max_r, s = surface_index, fire = false, damage_init = 5000.0, speed = 8, fire_rad = 0, blast_min_damage = 0, itt = 1, doItts = true, ittframe = 1, force = force, cause = cause})
+	 end
+end
+
+
+local function thermobaric_weapon_hit(surface_index, source, position, explosion_r, blast_max_r, fire_r, load_r, visable_r)
+	 local force
+	 local cause = source;
+	 if(not (source==nil)) then
+	 	force = source.force
 	 else
 		force = "enemy"
 	 end
-	 game.surfaces[event.surface_index].request_to_generate_chunks(position, load_r/32)
-	 game.surfaces[event.surface_index].force_generate_chunk_requests()
+	 game.surfaces[surface_index].request_to_generate_chunks(position, load_r/32)
+	 game.surfaces[surface_index].force_generate_chunk_requests()
 
 	 for _,f in pairs(game.forces) do
-		f.chart(game.surfaces[event.surface_index], {{position.x-visable_r,position.y-visable_r},{position.x+visable_r,position.y+visable_r}})
+		f.chart(game.surfaces[surface_index], {{position.x-visable_r,position.y-visable_r},{position.x+visable_r,position.y+visable_r}})
 	 end
-	 for _,v in pairs(game.surfaces[event.surface_index].find_tiles_filtered{position=position, radius=explosion_r}) do
-		game.surfaces[event.surface_index].create_entity{name="fire-flame",position=v.position}
+	 for _,v in pairs(game.surfaces[surface_index].find_tiles_filtered{position=position, radius=explosion_r}) do
+		game.surfaces[surface_index].create_entity{name="fire-flame",position=v.position}
 	 end
-	 table.insert(global.blastWaves, {r = explosion_r, pos = position, pow = explosion_r*explosion_r, max = blast_max_r, s = event.surface_index, fire = true, damage_init = 600.0, speed = 1, fire_rad = fire_r, blast_min_damage = 30, itt = 1, doItts = false, ittframe = 1, force = force, cause = cause})
+	 table.insert(global.blastWaves, {r = explosion_r, pos = position, pow = explosion_r*explosion_r, max = blast_max_r, s = surface_index, fire = true, damage_init = 600.0, speed = 1, fire_rad = fire_r, blast_min_damage = 30, itt = 1, doItts = false, ittframe = 1, force = force, cause = cause})
 end
 
 
@@ -1398,9 +2008,13 @@ local function nukeFiredScan(event)
 	if (entity) then
 		local position = event.target_entity.position 
 		if(entity.prototype.name == "TN-very-big-atomic-artillery-projectile") then
-	 		game.surfaces[event.surface_index].request_to_generate_chunks(position, 2000/32)
+			if (not settings.global["optimise-100kt"].value) then
+				game.surfaces[event.surface_index].request_to_generate_chunks(position, 1500/32)
+			else
+				game.surfaces[event.surface_index].request_to_generate_chunks(position, 200/32)
+			end
 		elseif(entity.prototype.name == "TN-big-atomic-artillery-projectile") then
-	 		game.surfaces[event.surface_index].request_to_generate_chunks(position, 1500/32)
+	 		game.surfaces[event.surface_index].request_to_generate_chunks(position, 1000/32)
 		elseif(entity.prototype.name == "TN-atomic-artillery-projectile" or entity.prototype.name == "big-atomic-bomb-projectile") then
 	 		game.surfaces[event.surface_index].request_to_generate_chunks(position, 800/32)
 		elseif(entity.prototype.name == "TN-small-atomic-artillery-projectile" or entity.prototype.name == "very-big-atomic-bomb-projectile") then
@@ -1410,53 +2024,72 @@ local function nukeFiredScan(event)
 end
 
  -- calculate polution as 1*tonnage + 1000*uranium input + 100*californium input + 10000*tritium input
---local function atomic_weapon_hit(event, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters)
+--local function atomic_weapon_hit(surface_index, source_entity, position, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters, optimise)
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if(event.effect_id=="Thermobaric Weapon hit small-") then
-	 thermobaric_weapon_hit(event, 1, 15, 10, 10, 10);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1, 15, 10, 10, 10);
   elseif(event.effect_id=="Thermobaric Weapon hit small") then
-	 thermobaric_weapon_hit(event, 3, 30, 20, 30, 15);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 3, 30, 20, 30, 15);
   elseif(event.effect_id=="Thermobaric Weapon hit small+") then
-	 thermobaric_weapon_hit(event, 4, 45, 30, 45, 25);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 4, 45, 30, 45, 25);
   elseif(event.effect_id=="Thermobaric Weapon hit medium-") then
-	 thermobaric_weapon_hit(event, 5, 60, 40, 60, 35);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 5, 60, 40, 60, 35);
   elseif(event.effect_id=="Thermobaric Weapon hit medium") then
-	 thermobaric_weapon_hit(event, 6, 80, 50, 80, 50);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 6, 80, 50, 80, 50);
   elseif(event.effect_id=="Thermobaric Weapon hit large") then
-	 thermobaric_weapon_hit(event, 9, 120, 100, 120, 100);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 9, 120, 100, 120, 100);
   elseif(event.effect_id=="Atomic Weapon hit 0.1t") then
-	 atomic_weapon_hit(event, 0, 1, 1, 3, 30, 15, 30, 15, 15, 300.1, 1, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 1, 1, 3, 30, 15, 30, 15, 15, 300.1, 1, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 60, 100, 200, 700, 10, 0.06);
   elseif(event.effect_id=="Atomic Weapon hit 0.5t") then
-	 atomic_weapon_hit(event, 0, 3, 3, 5, 50, 25, 30, 30, 20, 700.5, 1, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 3, 3, 5, 50, 25, 30, 30, 20, 700.5, 1, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 80, 150, 300, 1000, 20, 0.12);
   elseif(event.effect_id=="Atomic Weapon hit 2t") then
-	 atomic_weapon_hit(event, 0, 5, 5, 15, 80, 50, 100, 100, 50, 1302, 2, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 5, 5, 15, 80, 50, 100, 100, 50, 1302, 2, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 100, 250, 500, 2000, 40, 0.25);
   elseif(event.effect_id=="Atomic Weapon hit 4t") then
-	 atomic_weapon_hit(event, 1, 6, 7, 20, 130, 120, 150, 180, 80, 4004, 1, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1, 6, 7, 20, 130, 120, 150, 180, 80, 4004, 1, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 120, 300, 900, 4000, 70, 0.4);
   elseif(event.effect_id=="Atomic Weapon hit 8t") then
-	 atomic_weapon_hit(event, 3, 8, 14, 25, 200, 200, 200, 180, 100, 9008, 1, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 3, 8, 14, 25, 200, 200, 200, 180, 100, 9008, 1, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 150, 400, 1250, 10000, 100, 0.6);
   elseif(event.effect_id=="Atomic Weapon hit 20t") then
-	 atomic_weapon_hit(event, 5, 10, 20, 30, 320, 320, 320, 180, 150, 30020, 1, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 5, 10, 20, 30, 320, 320, 320, 180, 150, 30020, 1, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 250, 600, 1800, 15000, 160, 1);
   elseif(event.effect_id=="Atomic Weapon hit 500t") then
-	 atomic_weapon_hit(event, 10, 20, 40, 35, 400, 400, 600, 400, 300, 75500, 1*settings.global["large-nuke-fire-scaledown"].value, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 10, 20, 40, 35, 400, 400, 600, 400, 300, 75500, 1*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 400, 800, 2500, 25000, 300, 2);
   elseif(event.effect_id=="Atomic Weapon hit 1kt") then
-	 atomic_weapon_hit(event, 20, 40, 80, 75, 800, 800, 1200, 800, 300, 101000, 2*settings.global["large-nuke-fire-scaledown"].value, true, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 20, 40, 80, 75, 800, 800, 1200, 800, 300, 101000, 2*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 600, 1200, 8000, 60000, 600, 4);
   elseif(event.effect_id=="Atomic Weapon hit 15kt") then
-	 atomic_weapon_hit(event, 50, 100, 200, 150, 2000/settings.global["large-nuke-blast-range-scaledown"].value, 1000, 4000, 1000, 500, 315000, settings.global["huge-nuke-fire-scaledown"].value, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 50, 100, 200, 150, 2000/settings.global["large-nuke-blast-range-scaledown"].value, 1000, 4000, 1000, 500, 315000, settings.global["huge-nuke-fire-scaledown"].value, false, true, false);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 1500, 3000, 20000, 100000, 1500, 8);
   elseif(event.effect_id=="Atomic Weapon hit 100kt") then
-	 atomic_weapon_hit(event, 90, 180, 500, 400, 5500/settings.global["really-huge-nuke-blast-range-scaledown"].value, 2500, 9000, 1500, 1000, 450000, 2*settings.global["really-huge-nuke-fire-scaledown"].value, false, false);
+  	 local blastD = 5500;
+  	 if not settings.global["optimise-100kt"].value then
+  	 	blastD = blastD/settings.global["really-huge-nuke-blast-range-scaledown"].value
+  	 end
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 90, 180, 500, 400, blastD, 2500, 10000, 1500, 1000, 450000, 2*settings.global["really-huge-nuke-fire-scaledown"].value, false, false, settings.global["optimise-100kt"].value);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 2700, 5400, 36000, 200000, 2700, 16);
   elseif(event.effect_id=="Atomic Weapon hit 1Mt") then
-	 atomic_weapon_hit(event, 190, 390, 1200, 1000, 12000/settings.global["mega-nuke-blast-range-scaledown"].value, 5000, 10000, 3200, 2500, 1800000, 0, false, false);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 190, 390, 1200, 1000, 12000, 5000, 24000, 3200, 2000, 1800000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 6000, 10000, 60000, 400000, 5000, 32);
+  elseif(event.effect_id=="Atomic Weapon hit 5Mt") then
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 330, 660, 2400, 2000, 24000, 10000, 48000, 3200, 2000, 7800000, 0, false, false, true);
+	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 12000, 20000, 120000, 800000, 10000, 64);
+  elseif(event.effect_id=="Atomic Weapon hit 10Mt") then
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 420, 830, 3150, 4000, 36000, 15000, 72000, 3200, 2000, 15300000, 0, false, false, true);
+	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 18000, 30000, 180000, 1200000, 15000, 96);
+  elseif(event.effect_id=="Atomic Weapon hit 50Mt") then
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 710, 1420, 6000, 8000, 72000, 30000, 144000, 3200, 2000, 75300000, 0, false, false, true);
+	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 36000, 60000, 360000, 2400000, 30000, 192);
+  elseif(event.effect_id=="Atomic Weapon hit 100Mt") then
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 900, 1800, 8000, 12000, 96000, 40000, 192000, 3200, 2000, 150000000, 0, false, false, true);
+	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 48000, 80000, 480000, 3200000, 40000, 256);
+  elseif(event.effect_id=="Atomic Weapon hit 1Gt") then
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1800, 3600, 16000, 24000, 192000, 80000, 384000, 3200, 2000, 1500000000, 0, false, false, true);
+	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 96000, 160000, 960000, 6400000, 80000, 512);
   elseif(event.effect_id=="Nuke firing") then
 	 nukeFiredScan(event);
   elseif(event.effect_id=="Mega-nuke built") then
@@ -1539,20 +2172,32 @@ script.on_nth_tick(1207, function(event)
 					global.cratersFast[chunk.surface] = {}
 					global.cratersFastData[chunk.surface] = {synch = 0, xCount = 0, xCountSoFar = 0, xDone = {}}
 				end
-				local xChunkPos = math.floor(pos.x/10)
+				local xChunkPos = math.floor(pos.x/8)
 				if(global.cratersFast[chunk.surface][xChunkPos]==nil)then
 					global.cratersFast[chunk.surface][xChunkPos] = {}
 					global.cratersFastData[chunk.surface].xCount = global.cratersFastData[chunk.surface].xCount + 1
 				end
-				if(global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/10)] == nil) then
-					global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/10)] = h
+				if(global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/8)] == nil) then
+					global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/8)] = h
 				else
-					global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/10)] = math.max(global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/10)], h)
+					global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/8)] = math.max(global.cratersFast[chunk.surface][xChunkPos][math.floor((pos.y)/8)], h)
 				end
 			end
 		end
 	end
 	
+end)
+script.on_event(defines.events.on_chunk_generated, function(event)
+	if(global.optimisedNukes ==nil) then
+		global.optimisedNukes = {}
+	end
+	if(#global.optimisedNukes>0) then
+		for _,chunkData in pairs(global.optimisedNukes) do
+			if(chunkData.surface_index == event.surface.index) then
+		  		optimisedChunkLoadHandler({x=event.position.x, y=event.position.y, area=event.area}, chunkData, false);
+		  	end
+		end
+	end
 end)
 
 script.on_nth_tick(3601, function(event)
@@ -1596,3 +2241,11 @@ script.on_nth_tick(3601, function(event)
 		end
 	end
 end)
+remote.add_interface("True-Nukes Scripts", {
+	thermobaricWeaponHit = thermobaric_weapon_hit,
+	atomicWeaponHit = atomic_weapon_hit,
+	createBlastSoundsAndFlash = createBlastSoundsAndFlash,
+	nukeTileChangesHeightAware = nukeTileChangesHeightAware,
+	nukeTileChangesHeightAwareHuge = nukeTileChangesHeightAwareHuge,
+	nukeTileChanges = nukeTileChanges,
+});
