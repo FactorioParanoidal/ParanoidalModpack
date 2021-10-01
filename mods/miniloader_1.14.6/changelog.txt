@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.6
+Date: 2021-09-10
+  Bugfixes:
+    - Fix crash in on_player_setup_blueprint when creating multiple blueprints in the same tick, e.g. when the game is paused in editor mode. (https://mods.factorio.com/mod/miniloader/discussion/612ba304fcd55c0271ea233a)
+---------------------------------------------------------------------------------------------------
 Version: 1.14.5
 Date: 2021-07-05
   Bugfixes:

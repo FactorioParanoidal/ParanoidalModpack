@@ -125,19 +125,17 @@ function M.bounding_box(bp_entities)
 end
 
 function M.get_blueprint_to_setup(player_index)
-  local opened_blueprint = global.previous_opened_blueprint_for[player_index]
-  if opened_blueprint and opened_blueprint.tick == game.tick then
-    return opened_blueprint.blueprint
-  end
-
   local player = game.players[player_index]
 
+  -- normal drag-select
   local blueprint_to_setup = player.blueprint_to_setup
   if blueprint_to_setup
-  and blueprint_to_setup.valid_for_read then
+  and blueprint_to_setup.valid_for_read
+  and blueprint_to_setup.is_blueprint_setup() then
     return blueprint_to_setup
   end
 
+  -- alt drag-select (skips configuration dialog)
   local cursor_stack = player.cursor_stack
   if cursor_stack
   and cursor_stack.valid_for_read
@@ -148,6 +146,16 @@ function M.get_blueprint_to_setup(player_index)
       bp = bp.get_inventory(defines.inventory.item_main)[bp.active_index]
     end
     return bp
+  end
+
+  -- update of existing blueprint
+  local opened_blueprint = global.previous_opened_blueprint_for[player_index]
+  if  opened_blueprint
+  and opened_blueprint.tick == game.tick
+  and opened_blueprint.blueprint
+  and opened_blueprint.blueprint.valid_for_read
+  and opened_blueprint.blueprint.is_blueprint_setup() then
+    return opened_blueprint.blueprint
   end
 end
 
