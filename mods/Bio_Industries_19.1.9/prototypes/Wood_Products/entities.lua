@@ -620,6 +620,7 @@ data:extend({
         percent = 20
       }
     },
+	--[[
     pictures = {
       single = {
         layers = {
@@ -854,6 +855,102 @@ data:extend({
         }
       }
     }
+	]]--
+      pictures = { --wood wall from YUOKI drd
+        single = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        straight_vertical = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_u.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          },
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_u1.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        straight_horizontal = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_we.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          },
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_we1.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          },
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_we2.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        corner_right_down = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_cru.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        corner_left_down = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_clu.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        t_up = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_tu.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        ending_right = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_el.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        },
+        ending_left = {
+          {
+            filename = WOODPATH .. "wood_fence/wood_wall_er.png",
+            priority = "extra-high",
+            width = 64,
+            height = 64,
+            shift = {0.40625, 0}
+          }
+        }
+      }
   },
 })
 
