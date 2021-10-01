@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-09-09
+  Modding:
+    - Bob's Vehicle Equipment: Add equipment grids to battery-electric locomotives.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-08-14
+  Features:
+    - Battery pack recycling can be disabled to improve compatibility with other (recycling) mods or just to make things more difficult.
+    - Braking force multiplier for cheatsy wagons and locomotives. Makes higher acceleration and top speed settings actually useful.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-06-17
+  Features:
+    - Return a discharged battery pack when mining or deconstructing a battery-electric locomotive with a partially discharged battery pack inside, instead of losing it.
+  Locale:
+    - German locale added.
+  Modding:
+    - Industrial Revolution 2 is now compatible.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-06-15
+  Bugfixes:
+    - Cheatsy wagon top speed takes fuel bonus into account.
+    - Reduced dependency on vanilla electric furnace, in case another mod removed it.
+  Ease of use:
+    - Cheatsy speed and power settings mention min and max values in the description tooltip.
+  Modding:
+    - Space Exploration: Chargers can be placed in space.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-06-09
+  Info:
+    - Initial release for Factorio 1.1
