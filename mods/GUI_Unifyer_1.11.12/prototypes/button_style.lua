@@ -171,3 +171,84 @@ make_button_style("gui_unifyer_gui_08", GUIPATH .. "gui_unifyer_gui_08.png", 80,
 --data.raw["gui-style"].default["attach-notes-add-button"]
 --data.raw["gui-style"].default["attach-notes-edit-button"]
 --data.raw["gui-style"].default["attach-notes-view-button"]
+
+data:extend({
+  {
+    type = "font",
+    name = "default-semibold-snouz",
+    from = "default-semibold",
+    size = 12,
+  },
+})
+
+data.raw["gui-style"].default["todo_button_default_snouz"] = {
+  type = "button_style",
+  font = "default-semibold-snouz",
+  horizontal_align = "center",
+  vertical_align = "center",
+  icon_horizontal_align = "center",
+  ignored_by_search = true,
+  top_padding = 0,
+  bottom_padding = 0,
+  left_padding = 2,
+  right_padding = 2,
+  minimal_width = 40,
+  height = 40,
+  default_font_color = white,
+  default_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {0, 0}, corner_size = 12, scale = 0.5},
+  },
+  hovered_font_color = white,
+  hovered_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {25, 0}, corner_size = 12, scale = 0.5},
+  },
+  clicked_font_color = white,
+  clicked_vertical_offset = 1, -- text/icon goes down on click
+  clicked_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {50, 0}, corner_size = 12, scale = 0.5},
+  },
+  disabled_font_color = {179, 179, 179},
+  disabled_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {0, 0}, corner_size = 12, scale = 0.5},
+  },
+  selected_font_color = white,
+  selected_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {50, 0}, corner_size = 12, scale = 0.5},
+  },
+  selected_hovered_font_color = white,
+  selected_hovered_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {25, 0}, corner_size = 12, scale = 0.5},
+  },
+  selected_clicked_font_color = white,
+  selected_clicked_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {50, 0}, corner_size = 12, scale = 0.5},
+  },
+  strikethrough_color = {0.5, 0.5, 0.5},
+  pie_progress_color = {1, 1, 1},
+  left_click_sound = {{ filename = "__core__/sound/gui-click.ogg", volume = 1 }}
+}
+
+data.raw["gui-style"].default["todo_button_default_snouz_selected"] = {
+  type = "button_style",
+  parent = "todo_button_default_snouz",
+  default_graphical_set =
+  {
+    base = {filename = GUIPATH .. "gui_unifyer_gui_default_recreated.png", position = {50, 0}, corner_size = 12, scale = 0.5},
+  },
+}
+
+data.raw["gui-style"].default["adjacentchunks_button"] = {
+  type = "button_style",
+  parent = "todo_button_default_snouz",
+  width = 20,
+  height = 13,
+  left_padding = 0,
+  right_padding = 0,
+}

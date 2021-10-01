@@ -16,6 +16,8 @@ local sprites = {
 "schalloreconversion_button", "shuttle_train_button", "simple_circuit_trains_button", "smartchest_button", "solarcalc_button", "somezoom_in_button", "somezoom_out_button", "spacemod_button", "spawncontrol_button",
 "spawncontrol_random_button", "teamcoop_button1", "teamcoop_button2", "teleportation_button", "thefatcontroller_button", "todolist_button", "trainlog_button", "trainpubsub_button",
 "trashcan_button", "upgradeplannernext_button", "usagedetector_button", "whatsmissing_button", "wiiuf_button", "yarm_all_button", "yarm_none_button", "yarm_warnings_button",
+"blueprintlabdesign_button", "recexplo_button", "nonwavedefense2_button", "dana_button", "factorio_tweaks_button", "remoteswitch_button", "tsmoutpostbuilder_button", "credotimelapse_button", "spidersentinel_button",
+"citiesofearth_button", "enemyracemanager_button", "oarcmod_button", "decu_button", "leaderboard_button", "abd_on_button", "abd_off_button", "avatars_button",
 }
 
 for _, i in pairs(sprites) do
@@ -90,5 +92,18 @@ if mods["SchallEndgameEvolution"] then
 	end
 end
 
+data:extend({
+	{
+    type = "sprite",
+    name = "DeleteAdjacentChunk_player",
+    filename = "__GUI_Unifyer__/graphics/gui/deleteadjacentchunks_center.png",
+    priority = "extra-high-no-scale",
+    width = 40,
+    height = 26,
+    scale = 0.5,
+	},
+})
+
 require('prototypes/button_style')
 require('prototypes/frame_style')
+
