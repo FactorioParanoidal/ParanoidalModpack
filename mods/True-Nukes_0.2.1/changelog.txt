@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2021-09-26
+  Optimisations:
+    - Reduced redundant API calls in water flow code - about 2x faster now
+  Bugfixes:
+    - Fixed edge-of-crater problem for larger nukes in water
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2021-09-24
+  Optimisations:
+    - Added chunk-based damage loading, so the bigger nukes (>=100kt) don't load any map, instead apply damage to map as it is generated. This reduces memory usage to near-zero, and is only slow for big factories. Inspired by the changes made by RealisticFusionWeaponry.
+  Features:
+    - Even bigger nukes: 5Mt, 10Mt, 50Mt, 100Mt and 1Gt (and to be honest, the potential for unlimited yield - these are only the ones I have implemented).
+    - Added remote call interface for useful functions
+    - Instead of removing decoratives in the fireball, it now replaces them with more dead looking ones
+---------------------------------------------------------------------------------------------------
+Version: 0.1.17
+Date: 2021-08-18
+  Bugfixes:
+    - Fixed migration scripts (I hope again)
+    - Fixed missing locale entries
+---------------------------------------------------------------------------------------------------
+Version: 0.1.16
+Date: 2021-08-15
+  Bugfixes:
+    - Fixed migration scripts (I hope)
+---------------------------------------------------------------------------------------------------
 Version: 0.1.15
 Date: 2021-08-12
   Features:
