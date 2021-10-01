@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2021-09-14
+  Changes:
+    - Changed icon for Oil refinery 3 to align with changes in Angel's Refining
+  Locale:
+    - Fixed that Flotation cell 4 was spelled incorrectly
+    - Added partial localization for Brazilian Portuguese
+---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2021-08-13
   Features:
@@ -10,6 +18,8 @@ Date: 2021-08-13
       - No migration of existing algae farm 4s will be attempted to avoid collisions with Angel's Bioprocessing
   Bugfixes:
     - Updated the API call to Angel's Industries for `add_minable_results`, fixing a startup error
+  Locale:
+    - Added localization for Russian
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.8
 Date: 2021-06-13
