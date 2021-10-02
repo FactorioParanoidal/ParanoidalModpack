@@ -26,7 +26,7 @@ local tier_map = {
     ["assembling-machine-4"] = {tier = 3, shadow = 3, has_fluids = true},
     ["assembling-machine-5"] = {tier = 4, shadow = 4, has_fluids = true},
     ["assembling-machine-6"] = {tier = 5, shadow = 4, has_fluids = true},
-    ["burner-assembling-machine"] = {tier = 0, shadow = 0, tint = util.color("262626")},
+    ["burner-assembling-machine"] = {tier = 0, shadow = 0, tint = util.color("402000")}, --drd
     ["steam-assembling-machine"] = {tier = 0, shadow = 0, has_fluids = true, tint = util.color("d9d9d9")},
 }
 
