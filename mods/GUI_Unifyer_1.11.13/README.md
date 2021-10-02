@@ -149,3 +149,4 @@ https://mods.factorio.com/mod/ToggleSpeedBoost
 - Delete Adjacent Chunk
 - EvoGUI
 - Avatars
+- ModMash Splinter, New Worlds
