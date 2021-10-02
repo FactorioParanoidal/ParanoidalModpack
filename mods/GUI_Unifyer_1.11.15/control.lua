@@ -173,6 +173,7 @@ local iconlist_Picker = {
 }
 
 local function setup_player(player)
+	if not player or not player.valid then return end
 	if not global.player then global.player = {} end
 	if not global.player[player.index] then
 		global.player[player.index] = {
@@ -699,6 +700,9 @@ local function general_update()
 end
 
 local function general_update_event(event)
+	local player = game.players[event.player_index]
+	if not player or not player.valid then return end
+	if not global.player or not global.player[event.player_index] then setup_player(player) end
 	global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 1
 end
 
@@ -875,7 +879,7 @@ script.on_event({defines.events.on_research_finished, defines.events.on_rocket_l
 script.on_nth_tick(6, on_tick)
 script.on_configuration_changed(on_configuration_changed)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_player_configuration_changed)
-script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed, defines.events.on_gui_opened, on_player_display_resolution_changed, defines.events.on_player_changed_surface, defines.events.on_game_created_from_scenario, defines.events.on_player_created}, general_update_event)
+script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed, defines.events.on_gui_opened, on_player_display_resolution_changed, defines.events.on_player_changed_surface, defines.events.on_player_created}, general_update_event)
 script.on_event(defines.events.on_player_joined_game, on_player_joined)
 script.on_event(defines.events.on_gui_click, on_gui_click)
 script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
