@@ -443,13 +443,23 @@ for _, name in pairs(beacons) do
 
     if module_slots == 2 then
         -- 8 light modules
+        entity.graphics_set.module_visualisations[1] = {
+            art_style = "vanilla",
+            use_for_empty_slots = true,
+            tier_offset = 0,
+            slots = {
+                setup_vanilla_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+            }
+        }
+
         table.insert(entity.graphics_set.module_visualisations, {
             art_style = "artisan-reskin-8-lights",
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({}),
-                setup_module_slot({is_slot_2 = true}),
+                setup_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
             }
         })
 
@@ -459,8 +469,8 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({lights = 5}),
-                setup_module_slot({lights = 5, is_slot_2 = true}),
+                setup_module_slot({lights = 5, shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
             }
         })
     elseif module_slots == 4 then
@@ -470,10 +480,10 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = true,
             tier_offset = 0,
             slots = {
-                setup_vanilla_module_slot({shift = {-3, -2.5}}), -- Slot 1, shifted left and up, below other module slot
-                setup_vanilla_module_slot({shift = {-8.5, -5.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, below other module slot
-                setup_vanilla_module_slot({shift = {12, 5}}), -- Slot 1, shifted right and down, above other module slot
-                setup_vanilla_module_slot({shift = {2, 5}, is_slot_2 = true}), -- Slot 2, shifted right and down, above other module slot
+                setup_vanilla_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
             }
         }
 
@@ -483,10 +493,10 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({shift = {-3, -2.5}}), -- Slot 1, shifted left and up, below other module slot
-                setup_module_slot({shift = {-8.5, -5.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, below other module slot
-                setup_module_slot({shift = {12, 5}}), -- Slot 1, shifted right and down, above other module slot
-                setup_module_slot({shift = {2, 5}, is_slot_2 = true}), -- Slot 2, shifted right and down, above other module slot
+                setup_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
             }
         })
 
@@ -496,10 +506,10 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({lights = 5, shift = {-3, -2.5}}), -- Slot 1, shifted left and up, below other module slot
-                setup_module_slot({lights = 5, shift = {-8.5, -5.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, below other module slot
-                setup_module_slot({lights = 5, shift = {12, 5}}), -- Slot 1, shifted right and down, above other module slot
-                setup_module_slot({lights = 5, shift = {2, 5}, is_slot_2 = true}), -- Slot 2, shifted right and down, above other module slot
+                setup_module_slot({lights = 5, shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
             }
         })
     elseif module_slots == 6 then
@@ -509,12 +519,12 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = true,
             tier_offset = 0,
             slots = {
-                setup_vanilla_module_slot({shift = {-10.5, -11}}), -- Slot 1, shifted left and up, below all
-                setup_vanilla_module_slot({shift = {7.5, -2}, is_slot_2 = true}), -- Slot 2, shifted right and up, below all
-                setup_vanilla_module_slot({shift = {-1.5, 7}}), -- Slot 1, shifted left and down, middle
-                setup_vanilla_module_slot({shift = {-11, -6.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, middle
-                setup_vanilla_module_slot({shift = {17, 3}}), -- Slot 1, shifted right and down, above all
-                setup_vanilla_module_slot({shift = {4.5, 8}, is_slot_2 = true, needs_padding = true}), -- Slot 2, shifted right and down, above all
+                setup_vanilla_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {-16, -7}}), -- левый, MOP3E, 2021-10-02
+                setup_vanilla_module_slot({shift = {-16, 41}}), -- правый, MOP3E, 2021-10-02
             }
         }
 
@@ -524,12 +534,12 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({shift = {-10.5, -11}}), -- Slot 1, shifted left and up, below all
-                setup_module_slot({shift = {7.5, -2}, is_slot_2 = true}), -- Slot 2, shifted right and up, below all
-                setup_module_slot({shift = {-1.5, 7}}), -- Slot 1, shifted left and down, middle
-                setup_module_slot({shift = {-11, -6.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, middle
-                setup_module_slot({shift = {17, 3}}), -- Slot 1, shifted right and down, above all
-                setup_module_slot({shift = {4.5, 8}, is_slot_2 = true, needs_padding = true}), -- Slot 2, shifted right and down, above all
+                setup_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
+                setup_module_slot({shift = {-16, -7}}), -- левый, MOP3E, 2021-10-02
+                setup_module_slot({shift = {-16, 41}}), -- правый, MOP3E, 2021-10-02
             }
         })
 
@@ -539,12 +549,12 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_module_slot({lights = 5, shift = {-10.5, -11}}), -- Slot 1, shifted left and up, below all
-                setup_module_slot({lights = 5, shift = {7.5, -2}, is_slot_2 = true}), -- Slot 2, shifted right and up, below all
-                setup_module_slot({lights = 5, shift = {-1.5, 7}}), -- Slot 1, shifted left and down, middle
-                setup_module_slot({lights = 5, shift = {-11, -6.5}, is_slot_2 = true}), -- Slot 2, shifted left and up, middle
-                setup_module_slot({lights = 5, shift = {17, 3}}), -- Slot 1, shifted right and down, above all
-                setup_module_slot({lights = 5, shift = {4.5, 8}, is_slot_2 = true, needs_padding = true}), -- Slot 2, shifted right and down, above all
+                setup_module_slot({lights = 5, shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {-11, -39}}), -- левый верхний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {46, 7}}), -- правый нижний, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {-16, -7}}), -- левый, MOP3E, 2021-10-02
+                setup_module_slot({lights = 5, shift = {-16, 41}}), -- правый, MOP3E, 2021-10-02
             }
         })
     end

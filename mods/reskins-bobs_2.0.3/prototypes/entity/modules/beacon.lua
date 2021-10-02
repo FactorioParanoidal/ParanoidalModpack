@@ -219,20 +219,20 @@ for name, map in pairs(tier_map) do
             render_layer = "object",
             always_draw = true,
             animation = {
-                filename = reskins.bobs.directory.."/graphics/entity/modules/beacon/beacon-"..beacon_base.."-top.png",
-                width = 48,
-                height = 70,
+                filename = reskins.bobs.directory.."/graphics/entity/modules/beacon/beacon-top.png", --MOP3E 2021-10-02
+                width = 113, --MOP3E 2021-10-02
+                height = 106, --MOP3E 2021-10-02
                 repeat_count = 45,
                 animation_speed = 0.5,
-                shift = util.by_pixel(3, -19),
+                shift = util.by_pixel(0, -3), --MOP3E 2021-10-02
                 hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/modules/beacon/hr-beacon-"..beacon_base.."-top.png",
-                    width = 96,
-                    height = 140,
+                    filename = reskins.bobs.directory.."/graphics/entity/modules/beacon/hr-beacon-top.png", --MOP3E 2021-10-02
+                    width = 226, --MOP3E 2021-10-02
+                    height = 212, --MOP3E 2021-10-02
                     scale = 0.5,
                     repeat_count = 45,
                     animation_speed = 0.5,
-                    shift = util.by_pixel(3, -19),
+                    shift = util.by_pixel(0, -3), --MOP3E 2021-10-02
                 }
             }
         },
