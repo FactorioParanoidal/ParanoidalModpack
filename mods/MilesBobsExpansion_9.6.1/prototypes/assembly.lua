@@ -123,8 +123,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-7",
-    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-7.png",
-    icon_size = 64,
+    icon = "__MilesBobsExpansion__/graphics/technology/assembling-machine-7.png",
+    icon_size = 128,
     effects =
     {
       {
@@ -164,8 +164,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-8",
-    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-8.png",
-    icon_size = 64,
+    icon = "__MilesBobsExpansion__/graphics/technology/assembling-machine-8.png",
+    icon_size = 128,
     effects =
     {
       {
@@ -204,8 +204,8 @@ data:extend(
   {
     type = "technology",
     name = "automation-9",
-    icon = "__MilesBobsExpansion__/graphics/icons/assembling-machine-9.png",
-    icon_size = 64,
+    icon = "__MilesBobsExpansion__/graphics/technology/assembling-machine-9.png",
+    icon_size = 128,
     effects =
     {
       {
