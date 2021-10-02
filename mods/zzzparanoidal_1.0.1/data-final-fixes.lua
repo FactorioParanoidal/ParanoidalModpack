@@ -20,7 +20,9 @@ require("prototypes.tile-concrete-brick-fix") --фикс tile для бетон�
 require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") --фикс добавляющий прототип арты в обычную арту
 
 require("recipes.gemfix")
+require("recipes.warehousing")
 require("recipes.module-contactfix")
+
 require("prototypes.stone-pipe-fix") --фикс скрывающий каменные трубы (tnx KiRiK)
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
