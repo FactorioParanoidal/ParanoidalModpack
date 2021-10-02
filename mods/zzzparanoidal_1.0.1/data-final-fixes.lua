@@ -22,6 +22,7 @@ require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") -
 require("recipes.gemfix")
 require("recipes.module-contactfix")
 require("prototypes.stone-pipe-fix") --фикс скрывающий каменные трубы (tnx KiRiK)
+require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
 if mods["yuoki"] then
     require("prototypes.yuoki")
