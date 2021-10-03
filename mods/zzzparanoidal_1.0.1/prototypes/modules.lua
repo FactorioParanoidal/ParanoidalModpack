@@ -1,4 +1,6 @@
-if mods["Transport_Drones"] then  -- фикс совместимости с модом
+--Удаляем из игры имбовые сельскохозяйственные модули, их рецепты и технологии
+
+if mods["Transport_Drones"] then  -- фикс совместимости с модом (скрываем, а не удаляем)
 
     if data.raw.module["angels-bio-yield-module"] then
 
@@ -38,7 +40,7 @@ if mods["Transport_Drones"] then  -- фикс совместимости с мо
     end
     end
 
-else 
+else -- удаляем всё
 
     if data.raw.module["angels-bio-yield-module"] then
         
