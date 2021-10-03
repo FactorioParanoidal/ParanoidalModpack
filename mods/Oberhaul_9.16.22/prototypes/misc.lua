@@ -79,7 +79,7 @@ data.raw.technology["nitinol-processing"].unit.ingredients = {
 	  {"chemical-science-pack", 1},
           {"utility-science-pack", 1}}
 end
-
+--[[
 data:extend({
   {
     type = "recipe",
@@ -93,3 +93,4 @@ data:extend({
 })
 bobmods.lib.tech.add_recipe_unlock("logistics-3", "ober-belt-immunity-equipment")
 data.raw["belt-immunity-equipment"]["belt-immunity-equipment"].shape = {width=2,height=2,type="full"}
+]]--
