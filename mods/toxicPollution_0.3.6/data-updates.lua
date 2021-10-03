@@ -11,8 +11,8 @@ local armorsToxin = {
     {name = "power-armor-mk4",      decrease = 0, percent = 90, durability = 40000},
 
     -- Bob Warface
-    {name = "heavy-armor-2",        decrease = 0, percent = 35, durability = 6500},
-    {name = "heavy-armor-3",        decrease = 0, percent = 43, durability = 8500},
+    {name = "heavy-armor-2",        decrease = 0, percent = 35, durability = 30000}, --drd
+    {name = "heavy-armor-3",        decrease = 0, percent = 43, durability = 40000}, --drd
     {name = "bob-power-armor-mk3",  decrease = 0, percent = 30, durability = 30000},
     {name = "bob-power-armor-mk4",  decrease = 0, percent = 40, durability = 40000},
     {name = "bob-power-armor-mk5",  decrease = 0, percent = 50, durability = 50000}
