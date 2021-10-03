@@ -396,6 +396,16 @@ bobmods.lib.recipe.add_new_ingredient ("angels-electric-boiler-3", {type="item",
 bobmods.lib.recipe.remove_ingredient ("sluicer-2", "sluicer")
 bobmods.lib.recipe.add_new_ingredient ("sluicer-2", {type="item", name="sluicer", amount=2})
 
+bobmods.lib.recipe.add_new_ingredient ("memory-unit", {type="item", name="warehouse-basic", amount=2})
+bobmods.lib.tech.add_prerequisite ("memory-unit", "tungsten-alloy-processing")
+bobmods.lib.recipe.remove_ingredient ("fluid-memory-unit", "warehouse-research")
+bobmods.lib.recipe.add_new_ingredient ("fluid-memory-unit", {type="item", name="angels-storage-tank-1", amount=2})
+bobmods.lib.tech.add_prerequisite ("fluid-memory-storage", "gas-processing")
+
+bobmods.lib.recipe.add_new_ingredient ("large-accumulator", {type="item", name="electronic-circuit", amount=4})
+
+bobmods.lib.recipe.add_new_ingredient ("heavy-armor-2", {type="item", name="heavy-armor", amount=1})
+bobmods.lib.recipe.add_new_ingredient ("heavy-armor-3", {type="item", name="heavy-armor-2", amount=1})
 
 --[[
 if data.raw.car["schall-tank-l"] then
