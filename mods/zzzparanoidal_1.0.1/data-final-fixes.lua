@@ -26,7 +26,7 @@ require("recipes.module-contactfix")
 require("prototypes.stone-pipe-fix") --фикс скрывающий каменные трубы (tnx KiRiK)
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
-require("prototypes.KiRiK") -- фиксы от Кирика
+require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
 
 
 if mods["yuoki"] then
