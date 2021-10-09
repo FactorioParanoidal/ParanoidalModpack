@@ -27,6 +27,7 @@ require("prototypes.stone-pipe-fix") --фикс скрывающий камен�
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
 require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
+require("prototypes.Angels_RBOS") --Angels_RBOS Angel's Re-enabled Basic Ore Smelting
 
 
 if mods["yuoki"] then
