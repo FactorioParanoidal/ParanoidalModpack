@@ -1,5 +1,3 @@
-
-
 bobmods.lib.tech.replace_science_pack("electricity", "angels-science-pack-red", "angels-science-pack-grey")
 bobmods.lib.tech.replace_science_pack("basic-automation", "angels-science-pack-red", "angels-science-pack-grey")
 bobmods.lib.tech.replace_science_pack("basic-fluid-handling", "angels-science-pack-red", "angels-science-pack-grey")
@@ -22,3 +20,11 @@ angelsmods.functions.OV.disable_recipe("condensator")
 angelsmods.functions.OV.execute()
 bobmods.lib.recipe.replace_ingredient("fast-belt", "angels-gear", "steel-bearing")
 bobmods.lib.recipe.replace_ingredient("fast-splitter", "angels-gear", "steel-bearing")
+
+--меняем рецепт у прототипа артилерии
+bobmods.lib.recipe.clear_ingredients("artillery-turret-prototype")
+bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"block-construction-2", 10})
+bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"block-mechanical-1", 5})
+bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"block-electronics-2", 2})
+bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"block-warfare-2", 2})
+bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"concrete-brick", 100})

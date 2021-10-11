@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------------------------
 --скрываем био-пушку и снаряды для нее
-
-data.raw["technology"]["bi-tech-bio-cannon"].hidden = "true"
+if mods["Bio_Industries"] then
+data.raw["technology"]["bi-tech-bio-cannon"].hidden = true
 
 data.raw["item"]["bi-bio-cannon-area"].flags = {"hidden"}
 
@@ -9,15 +9,11 @@ data.raw["ammo"]["bi-bio-cannon-proto-ammo"].flags = {"hidden"}
 data.raw["ammo"]["bi-bio-cannon-basic-ammo"].flags = {"hidden"}
 data.raw["ammo"]["bi-bio-cannon-poison-ammo"].flags = {"hidden"}
 
-data.raw["recipe"]["bi-bio-cannon"].hidden = "true"
-data.raw["recipe"]["bi-bio-cannon-proto-ammo"].hidden = "true"
-data.raw["recipe"]["bi-bio-cannon-basic-ammo"].hidden = "true"
-data.raw["recipe"]["bi-bio-cannon-poison-ammo"].hidden = "true"
-
--------------------------------------------------------------------------------------------------
---привязываем базовую артиллерию к новому прототипу
-data.raw["technology"]["artillery"].prerequisites = {"artillery-prototype", "tank"}
-
+data.raw["recipe"]["bi-bio-cannon"].hidden = true
+data.raw["recipe"]["bi-bio-cannon-proto-ammo"].hidden = true
+data.raw["recipe"]["bi-bio-cannon-basic-ammo"].hidden = true
+data.raw["recipe"]["bi-bio-cannon-poison-ammo"].hidden = true
+end
 -------------------------------------------------------------------------------------------------
 --копируем базовую артиллерию и меняем ей параметры
 local artillery_turret_prototype = table.deepcopy(data.raw["artillery-turret"]["artillery-turret"])
@@ -312,7 +308,8 @@ data:extend({
         stack_size = 1
       },
 --------------------------------------------------------------------------------------------------
-      {
+--рецепт еще будет добалансен      
+{
         type = "recipe",
         name = "artillery-turret-prototype",
         icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret.png",
@@ -321,11 +318,10 @@ data:extend({
         energy_required = 20,
         ingredients =
         {
-          {"block-construction-2", 10},
-          {"block-mechanical-1", 5},
-          {"block-electronics-2", 2},
-          {"block-warfare-2", 2},
-          {"concrete-brick", 100},
+          {"electronic-circuit", 10},
+          {"engine-unit", 15},
+          {"steel-plate", 120},
+          {"concrete", 100},
         },
         result = "artillery-turret-prototype"
       },
@@ -335,20 +331,17 @@ data:extend({
         name = "artillery-prototype",
         icon_size = 256, icon_mipmaps = 4,
         icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery.png",
-        effects = {
-          {
-            type = "unlock-recipe",
-            recipe = "artillery-turret-prototype"
-          },
-          {
-            type = "unlock-recipe",
-            recipe = "artillery-shell-prototype"
-          },  
+        effects = 
+        {
+          {type = "unlock-recipe", recipe = "artillery-turret-prototype"},
+          {type = "unlock-recipe", recipe = "artillery-shell-prototype"},  
         },
         prerequisites = {"military-2", "explosives"},
-        unit = {
+        unit = 
+        {
           count = 300,
-          ingredients = {
+          ingredients = 
+          {
             {"automation-science-pack", 1},
             {"logistic-science-pack", 1},
             {"military-science-pack", 1},
