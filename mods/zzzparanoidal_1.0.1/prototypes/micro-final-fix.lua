@@ -23,6 +23,10 @@ bobmods.lib.tech.add_prerequisite("transport-system", "basic-chemistry-2")
 
 bobmods.lib.tech.remove_science_pack("transport-system", "logistic-science-pack")
 -------------------------------------------------------------------------------------------------
+--поправка технологий
+bobmods.lib.tech.add_prerequisite ("transport-drone-speed-1", "logistic-science-pack")
+bobmods.lib.tech.add_prerequisite ("transport-drone-capacity-1", "logistic-science-pack")
+-------------------------------------------------------------------------------------------------
 --подкрутка рецептов
 --депо
 bobmods.lib.recipe.add_ingredient("fuel-depot", {"angels-storage-tank-3", 4})
@@ -236,6 +240,10 @@ data.raw["technology"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/
 data.raw["container"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
 --data.raw["technology"]["zcs-trash-landfill"].icon_size = 64
 --data.raw["technology"]["zcs-trash-landfill"].icon_mipmaps = 4
+
+data.raw["item"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+--data.raw["item"]["zcs-trash-landfill"].icon_size = 64
+--data.raw["item"]["zcs-trash-landfill"].icon_mipmaps = 4
 --###############################################################################################
 -- подкрутка чтобы сборщик1 мог собирать сам себя
 data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 5
@@ -316,3 +324,20 @@ bobmods.lib.recipe.set_result("angelsore6-crushed-processing", {name = "quartz",
 bobmods.lib.recipe.set_energy_required("slag-processing-stone", 2)
 bobmods.lib.recipe.set_ingredient("slag-processing-stone", {"slag", 5})
 bobmods.lib.recipe.set_result("slag-processing-stone", {"stone-crushed", 10})
+-------------------------------------------------------------------------------------------------
+--крутим рельсы
+--data.raw.recipe["bi-rail-wood"].type = "recipe"
+data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "bi-straight-rail-wood"
+data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "bi-curved-rail-wood"
+
+data.raw["straight-rail"]["straight-scrap-rail"].fast_replaceable_group = "rail"
+data.raw["curved-rail"]["curved-scrap-rail"].fast_replaceable_group = "rail"
+
+data.raw["straight-rail"]["bi-straight-rail-wood"].fast_replaceable_group = "rail"
+data.raw["curved-rail"]["bi-curved-rail-wood"].fast_replaceable_group = "rail"
+
+data.raw["straight-rail"]["straight-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+
+data.raw["straight-rail"]["bi-straight-rail-wood"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["curved-rail"]["bi-curved-rail-wood"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
