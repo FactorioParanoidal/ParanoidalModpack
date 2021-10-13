@@ -333,7 +333,7 @@ data.raw["rail-planner"]["bi-rail-wood"].flags = {"hidden"}
 data.raw["recipe"]["bi-rail-wood"].hidden = true
 end
 -------------------------------------------------------------------------------------------------
---делаем возможность обновления рельс штатным путем
+--делаем возможность обновления рельс и светофоров штатным путем
 if mods["JunkTrain3"] then
 data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "straight-rail"
 data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "curved-rail"
@@ -349,6 +349,26 @@ data.raw["curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "ob
 
 data.raw["straight-rail"]["straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["curved-rail"]["curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+
+data.raw["rail-signal"]["rail-signal-scrap"].next_upgrade = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].next_upgrade = "rail-chain-signal"
+data.raw["train-stop"]["train-stop-scrap"].next_upgrade = "train-stop"
+
+data.raw["rail-signal"]["rail-signal-scrap"].fast_replaceable_group = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].fast_replaceable_group = "rail-signal"
+data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "rail-stop"
+
+data.raw["rail-signal"]["rail-signal"].fast_replaceable_group = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal"].fast_replaceable_group = "rail-signal"
+data.raw["train-stop"]["train-stop"].fast_replaceable_group = "rail-stop"
+
+data.raw["rail-signal"]["rail-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+
+data.raw["rail-signal"]["rail-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
 end
 -------------------------------------------------------------------------------------------------
 --меняем рецепт примитивных рельс
@@ -370,4 +390,10 @@ bobmods.lib.tech.remove_recipe_unlock("railway", "bi-rail-wood")
 bobmods.lib.tech.add_recipe_unlock("railway", "rail")
 
 bobmods.lib.tech.remove_recipe_unlock("bob-railway-2", "rail")
+-------------------------------------------------------------------------------------------------
+--добавляем рецепты обновления примитивов в технологию
+bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
+bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
+bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
+bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
 -------------------------------------------------------------------------------------------------
