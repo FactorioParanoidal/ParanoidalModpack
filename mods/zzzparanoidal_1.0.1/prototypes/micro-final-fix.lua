@@ -257,8 +257,8 @@ data.raw["furnace"]["electric-furnace-3"].result_inventory_size = 2
 data.raw["furnace"]["electric-steel-furnace"].result_inventory_size = 2
 -------------------------------------------------------------------------------------------------
 -- подкрутка рецепта погрузчика/разгрузчика
-bobmods.lib.recipe.replace_ingredient("railloader", "rail", "bi-rail-wood")
-bobmods.lib.recipe.replace_ingredient("railunloader", "rail", "bi-rail-wood")
+--bobmods.lib.recipe.replace_ingredient("railloader", "rail", "bi-rail-wood")
+--bobmods.lib.recipe.replace_ingredient("railunloader", "rail", "bi-rail-wood")
 --###############################################################################################
 --нерфим плавку дробленки в печах 
 --сапфирит
@@ -324,20 +324,50 @@ bobmods.lib.recipe.set_result("angelsore6-crushed-processing", {name = "quartz",
 bobmods.lib.recipe.set_energy_required("slag-processing-stone", 2)
 bobmods.lib.recipe.set_ingredient("slag-processing-stone", {"slag", 5})
 bobmods.lib.recipe.set_result("slag-processing-stone", {"stone-crushed", 10})
--------------------------------------------------------------------------------------------------
+--###############################################################################################
 --крутим рельсы
---data.raw.recipe["bi-rail-wood"].type = "recipe"
-data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "bi-straight-rail-wood"
-data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "bi-curved-rail-wood"
+
+--убираем био-рельсы
+if mods["Bio_Industries"] then
+data.raw["rail-planner"]["bi-rail-wood"].flags = {"hidden"}
+data.raw["recipe"]["bi-rail-wood"].hidden = true
+end
+-------------------------------------------------------------------------------------------------
+--делаем возможность обновления рельс штатным путем
+if mods["JunkTrain3"] then
+data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "straight-rail"
+data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "curved-rail"
 
 data.raw["straight-rail"]["straight-scrap-rail"].fast_replaceable_group = "rail"
 data.raw["curved-rail"]["curved-scrap-rail"].fast_replaceable_group = "rail"
 
-data.raw["straight-rail"]["bi-straight-rail-wood"].fast_replaceable_group = "rail"
-data.raw["curved-rail"]["bi-curved-rail-wood"].fast_replaceable_group = "rail"
+data.raw["straight-rail"]["straight-rail"].fast_replaceable_group = "rail"
+data.raw["curved-rail"]["curved-rail"].fast_replaceable_group = "rail"
 
 data.raw["straight-rail"]["straight-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 
-data.raw["straight-rail"]["bi-straight-rail-wood"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["curved-rail"]["bi-curved-rail-wood"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["straight-rail"]["straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["curved-rail"]["curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+end
+-------------------------------------------------------------------------------------------------
+--меняем рецепт примитивных рельс
+if mods["JunkTrain3"] then
+data.raw.recipe["scrap-rail"].ingredients = 
+{   
+    {name = "stone-crushed", type = "item", amount = 10},
+    {name = "iron-stick", type = "item", amount = 2},
+    {name = "wood", type = "item", amount = 10},
+    {name = "steel-plate", type = "item", amount = 2},
+}
+end
+-------------------------------------------------------------------------------------------------
+--подкручиваем рецепт стандартных рельс
+bobmods.lib.recipe.set_ingredient("rail", {"stone-crushed", 10})
+-------------------------------------------------------------------------------------------------
+--переставляем рецепты рельс в технологиях
+bobmods.lib.tech.remove_recipe_unlock("railway", "bi-rail-wood")
+bobmods.lib.tech.add_recipe_unlock("railway", "rail")
+
+bobmods.lib.tech.remove_recipe_unlock("bob-railway-2", "rail")
+-------------------------------------------------------------------------------------------------
