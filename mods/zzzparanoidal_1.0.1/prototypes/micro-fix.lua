@@ -65,16 +65,19 @@ data:extend({
         {name = "slag", type = "item", amount = 1}
     },
 },
+})
 -------------------------------------------------------------------------------------------------
+if mods["JunkTrain3"] then
+data:extend({
 --добавляем рецепт для модернизации рельс
 {
   type = "recipe",
   name = "scrap-rail-to-rail",
   icons = {
     {
-      icon = "__base__/graphics/icons/rail.png",
-      icon_size = 64,
-      icon_mipmaps = 4
+      icon = "__JunkTrain3__/graphics/icons/rail.png",
+      icon_size = 32,
+      --icon_mipmaps = 4
     },
     {
       icon = "__zzzparanoidal__/graphics/upgrade-icon.png",
@@ -85,8 +88,8 @@ data:extend({
     }
   },
   category = "crafting",
-  group = "logistics",
-  subgroup = "transport",
+  group = "transport",
+  subgroup = "transport-rail",
   order = "aa",
   energy_required = 0.5,
   enabled = false,
@@ -119,9 +122,9 @@ data:extend({
     }
   },
   category = "crafting",
-  group = "logistics",
-  subgroup = "transport",
-  order = "ab",
+  group = "transport",
+  subgroup = "transport-rail-other",
+  order = "aa",
   energy_required = 0.5,
   enabled = false,
   allow_decomposition = false,
@@ -153,9 +156,9 @@ data:extend({
     }
   },
   category = "crafting",
-  group = "logistics",
-  subgroup = "transport",
-  order = "ac",
+  group = "transport",
+  subgroup = "transport-rail-other",
+  order = "ba",
   energy_required = 0.5,
   enabled = false,
   allow_decomposition = false,
@@ -187,9 +190,9 @@ data:extend({
     }
   },
   category = "crafting",
-  group = "logistics",
-  subgroup = "transport",
-  order = "ad",
+  group = "transport",
+  subgroup = "transport-rail-other",
+  order = "ca",
   energy_required = 0.5,
   enabled = false,
   allow_decomposition = false,
@@ -201,6 +204,88 @@ data:extend({
       {type = "item", name = "steel-plate", amount = 10}
     },
   results = {{type = "item", name = "train-stop", amount = 1}},
+},
+})
+end
+
+data:extend({
+
+--###############################################################################################
+--добавляем новые группы и сабгруппы для рецептов
+    {
+        type = "item-group",
+        name = "circuit",
+        order = "ab",
+        icon = "__base__/graphics/technology/circuit-network.png",
+        icon_size = 256, icon_mipmaps = 4,
+    },
+    {
+        type = "item-subgroup",
+        name = "circuit-connection",
+        group = "circuit",
+        order = "b",
+    },
+    {
+        type = "item-subgroup",
+        name = "circuit-combinator",
+        group = "circuit",
+        order = "c",
+    },
+    --[[{
+      type = "item-subgroup",
+      name = "circuit-combinator-arithmetic",
+      group = "circuit",
+      order = "c-1",
+    },
+    {
+      type = "item-subgroup",
+      name = "circuit-combinator-decider",
+      group = "circuit",
+      order = "c-2",
+    },
+    {
+      type = "item-subgroup",
+      name = "circuit-combinator-constant",
+      group = "circuit",
+      order = "c-3",
+    },]]
+    {
+        type = "item-subgroup",
+        name = "circuit-input",
+        group = "circuit",
+        order = "d",
+    },
+    {
+        type = "item-subgroup",
+        name = "circuit-visual",
+        group = "circuit",
+        order = "e",
+    },
+    {
+        type = "item-subgroup",
+        name = "circuit-auditory",
+        group = "circuit",
+        order = "f",
+    },
+-------------------------------------------------------------------------------------------------
+{
+  type = "item-group",
+  name = "transport",
+  order = "ac",
+  icon = "__base__/graphics/technology/railway.png",
+  icon_size = 256, icon_mipmaps = 4,
+},
+{
+  type = "item-subgroup",
+  name = "transport-rail",
+  group = "transport",
+  order = "a",
+},
+{
+  type = "item-subgroup",
+  name = "transport-rail-other",
+  group = "transport",
+  order = "b",
 },
 
 })

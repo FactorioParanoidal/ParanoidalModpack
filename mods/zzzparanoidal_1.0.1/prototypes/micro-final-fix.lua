@@ -42,7 +42,7 @@ bobmods.lib.recipe.remove_ingredient("fuel-depot", "iron-gear-wheel")
 --депо запроса
 bobmods.lib.recipe.add_ingredient("request-depot", {"basic-structure-components", 1})
 bobmods.lib.recipe.add_ingredient("request-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("request-depot", {"steel-chest", 2})
+bobmods.lib.recipe.add_ingredient("request-depot", {"steel-chest", 1})
 bobmods.lib.recipe.add_ingredient("request-depot", {"steel-plate", 10})
 
 bobmods.lib.recipe.remove_ingredient("request-depot", "iron-plate")
@@ -52,7 +52,7 @@ bobmods.lib.recipe.remove_ingredient("request-depot", "iron-stick")
 --депо снабжения
 bobmods.lib.recipe.add_ingredient("supply-depot", {"basic-structure-components", 1})
 bobmods.lib.recipe.add_ingredient("supply-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-chest", 5})
+bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-chest", 2})
 bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-plate", 10})
 
 bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-plate")
@@ -62,7 +62,7 @@ bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-stick")
 --депо буфер
 bobmods.lib.recipe.add_ingredient("buffer-depot", {"basic-structure-components", 1})
 bobmods.lib.recipe.add_ingredient("buffer-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-chest", 3})
+bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-chest", 1})
 bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-plate", 10})
 
 bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-plate")
@@ -396,4 +396,121 @@ bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
 bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
 bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
 bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
+--###############################################################################################
+--переносим рецепты в новые вкладки
+--перенос в логику
+data.raw["item-subgroup"]["circuit-network"] = {type = "item-subgroup", name = "circuit-network", group = "circuit", order = "a"}
+data.raw["item-subgroup"]["circuit-network-2"] = {type = "item-subgroup", name = "circuit-network-2", group = "circuit", order = "h2"}
+
+data.raw["recipe"]["power-switch"].group = "circuit"
+data.raw["recipe"]["power-switch"].subgroup = "circuit-connection"
+
+data.raw["recipe"]["arithmetic-combinator"].group = "circuit"
+data.raw["recipe"]["arithmetic-combinator"].subgroup = "circuit-combinator"
+data.raw["recipe"]["decider-combinator"].group = "circuit"
+data.raw["recipe"]["decider-combinator"].subgroup = "circuit-combinator"
+data.raw["recipe"]["constant-combinator"].group = "circuit"
+data.raw["recipe"]["constant-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["small-lamp"].group = "circuit"
+data.raw["recipe"]["small-lamp"].subgroup = "circuit-visual"
+
+data.raw["recipe"]["programmable-speaker"].group = "circuit"
+data.raw["recipe"]["programmable-speaker"].subgroup = "circuit-auditory"
 -------------------------------------------------------------------------------------------------
+if mods["InlaidLampsExtended"] then
+data.raw["recipe"]["flat-lamp-c"].group = "circuit"
+data.raw["recipe"]["flat-lamp-c"].subgroup = "circuit-visual"
+data.raw["recipe"]["flat-lamp-big"].group = "circuit"
+data.raw["recipe"]["flat-lamp-big"].subgroup = "circuit-visual"
+end
+
+if mods["DeadlockLargerLamp"] then
+data.raw["recipe"]["deadlock-copper-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-copper-lamp"].subgroup = "circuit-visual"
+data.raw["recipe"]["deadlock-large-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-large-lamp"].subgroup = "circuit-visual"
+data.raw["recipe"]["deadlock-floor-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-floor-lamp"].subgroup = "circuit-visual"
+end
+
+if mods["capacity-combinator"] then
+data.raw["recipe"]["capacity-combinator"].group = "circuit"
+data.raw["recipe"]["capacity-combinator"].subgroup = "circuit-combinator"
+data.raw["recipe"]["capacity-combinator-MK2"].group = "circuit"
+data.raw["recipe"]["capacity-combinator-MK2"].subgroup = "circuit-combinator"
+end
+
+if mods["power-combinator"] then
+data.raw["recipe"]["power-combinator"].group = "circuit"
+data.raw["recipe"]["power-combinator"].subgroup = "circuit-combinator"
+data.raw["recipe"]["power-combinator-MK2"].group = "circuit"
+data.raw["recipe"]["power-combinator-MK2"].subgroup = "circuit-combinator"
+end
+
+if mods["Biter_Detector_Sentinel_Combinator"] then
+data.raw["recipe"]["sentinel-combinator"].group = "circuit"
+data.raw["recipe"]["sentinel-combinator"].subgroup = "circuit-input"
+data.raw["recipe"]["sentinel-alarm"].group = "circuit"
+data.raw["recipe"]["sentinel-alarm"].subgroup = "circuit-input"
+end
+-------------------------------------------------------------------------------------------------
+--перенос в транспорт
+data.raw["item-subgroup"]["train-transport"] = {type = "item-subgroup", name = "train-transport", group = "transport", order = "e"}
+data.raw["item-subgroup"].transport = {type = "item-subgroup", name = "transport", group = "transport", order = "f"}
+--data.raw["item-subgroup"]["bob-transport"] = {type = "item-subgroup", name = "bob-transport", group = "bob-logistics", order = "e-a"}
+data.raw["item-subgroup"]["bob-locomotive"] = {type = "item-subgroup", name = "bob-locomotive", group = "transport", order = "e-a1"}
+data.raw["item-subgroup"]["bob-cargo-wagon"] = {type = "item-subgroup", name = "bob-cargo-wagon", group = "transport", order = "e-a2"}
+data.raw["item-subgroup"]["bob-fluid-wagon"] = {type = "item-subgroup", name = "bob-fluid-wagon", group = "transport", order = "e-a3"}
+data.raw["item-subgroup"]["transport-drones"] = {type = "item-subgroup", name = "transport-drones", group = "transport", order = "ez"}
+data.raw["item-subgroup"]["bet-logistics"] = {type = "item-subgroup", name = "bet-logistics", group = "transport", order = "ez"}
+
+--[[
+if mods["JunkTrain3"] then
+data.raw["recipe"]["scrap-rail"].group = "transport"
+data.raw["recipe"]["scrap-rail"].subgroup = "transport-rail"
+data.raw["recipe"]["scrap-rail"].order = "a"
+end
+
+data.raw["recipe"]["rail"].group = "transport"
+data.raw["recipe"]["rail"].subgroup = "transport-rail"
+data.raw["recipe"]["rail"].order = "b"
+
+if mods["JunkTrain3"] then
+data.raw["recipe"]["rail-signal-scrap"].group = "transport"
+data.raw["recipe"]["rail-signal-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-signal-scrap"].order = "a"
+
+data.raw["recipe"]["rail-chain-signal-scrap"].group = "transport"
+data.raw["recipe"]["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-chain-signal-scrap"].order = "b"
+
+data.raw["recipe"]["train-stop-scrap"].group = "transport"
+data.raw["recipe"]["train-stop-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["train-stop-scrap"].order = "c"
+end
+
+data.raw["recipe"]["rail-signal"].group = "transport"
+data.raw["recipe"]["rail-signal"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-signal"].order = "d"
+
+data.raw["recipe"]["rail-chain-signal"].group = "transport"
+data.raw["recipe"]["rail-chain-signal"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-chain-signal"].order = "i"
+
+data.raw["recipe"]["train-stop"].group = "transport"
+data.raw["recipe"]["train-stop"].subgroup = "transport-rail-other"
+data.raw["recipe"]["train-stop"].order = "f"
+--[[
+data.raw["recipe"]["power"].group = "transport"
+data.raw["recipe"]["power"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail"].order = "b"
+
+data.raw["recipe"]["power"].group = "transport"
+data.raw["recipe"]["power"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail"].order = "b"
+
+data.raw["recipe"]["power"].group = "transport"
+data.raw["recipe"]["power"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail"].order = "b"
+]]
