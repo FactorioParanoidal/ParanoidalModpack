@@ -231,24 +231,6 @@ data:extend({
         group = "circuit",
         order = "c",
     },
-    --[[{
-      type = "item-subgroup",
-      name = "circuit-combinator-arithmetic",
-      group = "circuit",
-      order = "c-1",
-    },
-    {
-      type = "item-subgroup",
-      name = "circuit-combinator-decider",
-      group = "circuit",
-      order = "c-2",
-    },
-    {
-      type = "item-subgroup",
-      name = "circuit-combinator-constant",
-      group = "circuit",
-      order = "c-3",
-    },]]
     {
         type = "item-subgroup",
         name = "circuit-input",
@@ -286,6 +268,67 @@ data:extend({
   name = "transport-rail-other",
   group = "transport",
   order = "b",
+},
+{
+  type = "item-subgroup",
+  name = "junk-train",
+  group = "transport",
+  order = "ddd",
+},
+{
+  type = "item-subgroup",
+  name = "artillery-wagon",
+  group = "transport",
+  order = "eg",
+},
+{
+  type = "item-subgroup",
+  name = "spider",
+  group = "transport",
+  order = "x",
+},
+{
+  type = "item-subgroup",
+  name = "aircraft",
+  group = "transport",
+  order = "y",
+},
+-------------------------------------------------------------------------------------------------
+{
+  type = "item-subgroup",
+  name = "FluidMustFlow",
+  group = "bob-logistics",
+  order = "d-a-3",
+},
+{
+  type = "item-subgroup",
+  name = "FlowControl",
+  group = "bob-logistics",
+  order = "d-a-4",
+},
+{
+  type = "item-subgroup",
+  name = "wooden-pole",
+  group = "logistics",
+  order = "d-1",
+},
+{
+  type = "item-subgroup",
+  name = "medium-electric-pole",
+  group = "logistics",
+  order = "d-2",
+},
+{
+  type = "item-subgroup",
+  name = "big-electric-pole",
+  group = "logistics",
+  order = "d-3",
+},
+{
+  type = "item-subgroup",
+  name = "substation",
+  group = "logistics",
+  order = "d-4",
 },
 
 })
