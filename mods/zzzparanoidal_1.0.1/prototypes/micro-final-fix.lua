@@ -12,6 +12,52 @@
 --bobmods.lib.recipe.set_ingredient("recipe", {"item", 20})
 --bobmods.lib.recipe.set_result("recipe", {name = "item", type = "item", amount = 5})
 --###############################################################################################
+--замена tile для concrete-brick
+local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
+
+concrete_brick_fix.name = "concrete-brick-fix"
+concrete_brick_fix.minable = {mining_time = 0.1, result = "concrete-brick"}
+--concrete_brick_fix.layer = "100"
+concrete_brick_fix.variants.material_background = 
+{
+    picture = "__SingleColorTerrain__/graphics/concrete/concrete.png",
+    count = 8,
+    hr_version =
+    {
+      picture = "__SingleColorTerrain__/graphics/concrete/hr-concrete.png",
+      count = 8,
+      scale = 0.5
+    }
+}
+
+data:extend{concrete_brick_fix}
+
+data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
+-------------------------------------------------------------------------------------------------
+--[[
+--замена tile для concrete-brick
+local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
+
+concrete_brick_fix.name = "concrete-brick-fix"
+concrete_brick_fix.minable = {mining_time = 0.1, result = "concrete-brick"}
+--concrete_brick_fix.layer = "100"
+concrete_brick_fix.variants.material_background = 
+{
+    picture = "__SingleColorTerrain__/graphics/concrete/concrete.png",
+    count = 8,
+    hr_version =
+    {
+      picture = "__SingleColorTerrain__/graphics/concrete/hr-concrete.png",
+      count = 8,
+      scale = 0.5
+    }
+}
+
+data:extend{concrete_brick_fix}
+
+data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
+]]
+--###############################################################################################
 --подкрутка мода для интеграции в параноидал
 if mods["Transport_Drones"] then
 --подкрутка технологий
@@ -331,6 +377,7 @@ bobmods.lib.recipe.set_result("slag-processing-stone", {"stone-crushed", 10})
 if mods["Bio_Industries"] then
 data.raw["rail-planner"]["bi-rail-wood"].flags = {"hidden"}
 data.raw["recipe"]["bi-rail-wood"].hidden = true
+data.raw["rail-planner"]["bi-rail-wood-bridge"].flags = {"hidden"}
 end
 -------------------------------------------------------------------------------------------------
 --делаем возможность обновления рельс и светофоров штатным путем
@@ -404,113 +451,349 @@ data.raw["item-subgroup"]["circuit-network-2"] = {type = "item-subgroup", name =
 
 data.raw["recipe"]["power-switch"].group = "circuit"
 data.raw["recipe"]["power-switch"].subgroup = "circuit-connection"
+data.raw.item["power-switch"].subgroup = "circuit-connection"
 
 data.raw["recipe"]["arithmetic-combinator"].group = "circuit"
 data.raw["recipe"]["arithmetic-combinator"].subgroup = "circuit-combinator"
+data.raw.item["arithmetic-combinator"].subgroup = "circuit-combinator"
+
 data.raw["recipe"]["decider-combinator"].group = "circuit"
 data.raw["recipe"]["decider-combinator"].subgroup = "circuit-combinator"
+data.raw.item["decider-combinator"].subgroup = "circuit-combinator"
+
 data.raw["recipe"]["constant-combinator"].group = "circuit"
 data.raw["recipe"]["constant-combinator"].subgroup = "circuit-combinator"
+data.raw.item["constant-combinator"].subgroup = "circuit-combinator"
 
 data.raw["recipe"]["small-lamp"].group = "circuit"
 data.raw["recipe"]["small-lamp"].subgroup = "circuit-visual"
+data.raw.item["small-lamp"].subgroup = "circuit-visual"
 
 data.raw["recipe"]["programmable-speaker"].group = "circuit"
 data.raw["recipe"]["programmable-speaker"].subgroup = "circuit-auditory"
--------------------------------------------------------------------------------------------------
+data.raw.item["programmable-speaker"].subgroup = "circuit-auditory"
+
 if mods["InlaidLampsExtended"] then
 data.raw["recipe"]["flat-lamp-c"].group = "circuit"
 data.raw["recipe"]["flat-lamp-c"].subgroup = "circuit-visual"
+data.raw.item["flat-lamp"].subgroup = "circuit-visual"
+
 data.raw["recipe"]["flat-lamp-big"].group = "circuit"
 data.raw["recipe"]["flat-lamp-big"].subgroup = "circuit-visual"
+data.raw.item["flat-lamp-big"].subgroup = "circuit-visual"
 end
 
 if mods["DeadlockLargerLamp"] then
 data.raw["recipe"]["deadlock-copper-lamp"].group = "circuit"
 data.raw["recipe"]["deadlock-copper-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-copper-lamp"].subgroup = "circuit-visual"
+
 data.raw["recipe"]["deadlock-large-lamp"].group = "circuit"
 data.raw["recipe"]["deadlock-large-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-large-lamp"].subgroup = "circuit-visual"
+
 data.raw["recipe"]["deadlock-floor-lamp"].group = "circuit"
 data.raw["recipe"]["deadlock-floor-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-floor-lamp"].subgroup = "circuit-visual"
 end
 
 if mods["capacity-combinator"] then
 data.raw["recipe"]["capacity-combinator"].group = "circuit"
 data.raw["recipe"]["capacity-combinator"].subgroup = "circuit-combinator"
+data.raw.item["capacity-combinator"].subgroup = "circuit-combinator"
+
 data.raw["recipe"]["capacity-combinator-MK2"].group = "circuit"
 data.raw["recipe"]["capacity-combinator-MK2"].subgroup = "circuit-combinator"
+data.raw.item["capacity-combinator-MK2"].subgroup = "circuit-combinator"
 end
 
 if mods["power-combinator"] then
 data.raw["recipe"]["power-combinator"].group = "circuit"
 data.raw["recipe"]["power-combinator"].subgroup = "circuit-combinator"
+data.raw.item["power-combinator"].subgroup = "circuit-combinator"
+
 data.raw["recipe"]["power-combinator-MK2"].group = "circuit"
 data.raw["recipe"]["power-combinator-MK2"].subgroup = "circuit-combinator"
+data.raw.item["power-combinator-MK2"].subgroup = "circuit-combinator"
 end
 
 if mods["Biter_Detector_Sentinel_Combinator"] then
 data.raw["recipe"]["sentinel-combinator"].group = "circuit"
 data.raw["recipe"]["sentinel-combinator"].subgroup = "circuit-input"
+data.raw.item["sentinel-combinator"].subgroup = "circuit-input"
+
 data.raw["recipe"]["sentinel-alarm"].group = "circuit"
 data.raw["recipe"]["sentinel-alarm"].subgroup = "circuit-input"
+data.raw.item["sentinel-alarm"].subgroup = "circuit-input"
+end
+
+if mods["LTN_Combinator_Fix"] then
+data.raw["recipe"]["ltn-combinator"].subgroup = "circuit-combinator"
+data.raw.item["ltn-combinator"].subgroup = "circuit-combinator"
+end
+if mods["LTN_Content_Reader"] then
+data.raw["recipe"]["ltn-provider-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-provider-reader"].subgroup = "circuit-combinator"
+data.raw["recipe"]["ltn-requester-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-requester-reader"].subgroup = "circuit-combinator"
+data.raw["recipe"]["ltn-delivery-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-delivery-reader"].subgroup = "circuit-combinator"
 end
 -------------------------------------------------------------------------------------------------
 --перенос в транспорт
+if not mods["angelsindustries"] then
 data.raw["item-subgroup"]["train-transport"] = {type = "item-subgroup", name = "train-transport", group = "transport", order = "e"}
 data.raw["item-subgroup"].transport = {type = "item-subgroup", name = "transport", group = "transport", order = "f"}
---data.raw["item-subgroup"]["bob-transport"] = {type = "item-subgroup", name = "bob-transport", group = "bob-logistics", order = "e-a"}
 data.raw["item-subgroup"]["bob-locomotive"] = {type = "item-subgroup", name = "bob-locomotive", group = "transport", order = "e-a1"}
 data.raw["item-subgroup"]["bob-cargo-wagon"] = {type = "item-subgroup", name = "bob-cargo-wagon", group = "transport", order = "e-a2"}
 data.raw["item-subgroup"]["bob-fluid-wagon"] = {type = "item-subgroup", name = "bob-fluid-wagon", group = "transport", order = "e-a3"}
 data.raw["item-subgroup"]["transport-drones"] = {type = "item-subgroup", name = "transport-drones", group = "transport", order = "ez"}
 data.raw["item-subgroup"]["bet-logistics"] = {type = "item-subgroup", name = "bet-logistics", group = "transport", order = "ez"}
 
---[[
+--жд дороги
 if mods["JunkTrain3"] then
-data.raw["recipe"]["scrap-rail"].group = "transport"
 data.raw["recipe"]["scrap-rail"].subgroup = "transport-rail"
 data.raw["recipe"]["scrap-rail"].order = "a"
+data.raw["rail-planner"]["scrap-rail"].subgroup = "transport-rail"
+data.raw["rail-planner"]["scrap-rail"].order = "a"
 end
 
-data.raw["recipe"]["rail"].group = "transport"
 data.raw["recipe"]["rail"].subgroup = "transport-rail"
 data.raw["recipe"]["rail"].order = "b"
+data.raw["rail-planner"].rail.subgroup = "transport-rail"
+data.raw["rail-planner"].rail.order = "b"
 
+if mods["PickerVehicles"] then
+data.raw["rail-planner"]["picker-naked-rail"].flags = {"hidden"}
+data.raw["rail-planner"]["picker-sleepy-rail"].flags = {"hidden"}
+end
+-------------------------------------------------------------------------------------------------
+--жд светофоры, станции и тп
 if mods["JunkTrain3"] then
-data.raw["recipe"]["rail-signal-scrap"].group = "transport"
 data.raw["recipe"]["rail-signal-scrap"].subgroup = "transport-rail-other"
 data.raw["recipe"]["rail-signal-scrap"].order = "a"
+data.raw.item["rail-signal-scrap"].subgroup = "transport-rail-other"
+data.raw.item["rail-signal-scrap"].order = "a"
 
-data.raw["recipe"]["rail-chain-signal-scrap"].group = "transport"
 data.raw["recipe"]["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
 data.raw["recipe"]["rail-chain-signal-scrap"].order = "b"
+data.raw.item["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
+data.raw.item["rail-chain-signal-scrap"].order = "b"
 
-data.raw["recipe"]["train-stop-scrap"].group = "transport"
 data.raw["recipe"]["train-stop-scrap"].subgroup = "transport-rail-other"
 data.raw["recipe"]["train-stop-scrap"].order = "c"
+data.raw.item["train-stop-scrap"].subgroup = "transport-rail-other"
+data.raw.item["train-stop-scrap"].order = "c"
+
+data.raw["recipe"]["JunkTrain"].subgroup = "junk-train"
+data.raw["recipe"]["JunkTrain"].order = "a"
+data.raw.item["JunkTrain"].subgroup = "junk-train"
+data.raw.item["JunkTrain"].order = "a"
+
+data.raw["recipe"]["ScrapTrailer"].subgroup = "junk-train"
+data.raw["recipe"]["ScrapTrailer"].order = "b"
+data.raw.item["ScrapTrailer"].subgroup = "junk-train"
+data.raw.item["ScrapTrailer"].order = "b"
 end
 
-data.raw["recipe"]["rail-signal"].group = "transport"
 data.raw["recipe"]["rail-signal"].subgroup = "transport-rail-other"
 data.raw["recipe"]["rail-signal"].order = "d"
+data.raw.item["rail-signal"].subgroup = "transport-rail-other"
+data.raw.item["rail-signal"].order = "d"
 
-data.raw["recipe"]["rail-chain-signal"].group = "transport"
 data.raw["recipe"]["rail-chain-signal"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail-chain-signal"].order = "i"
+data.raw["recipe"]["rail-chain-signal"].order = "e"
+data.raw.item["rail-chain-signal"].subgroup = "transport-rail-other"
+data.raw.item["rail-chain-signal"].order = "e"
 
-data.raw["recipe"]["train-stop"].group = "transport"
 data.raw["recipe"]["train-stop"].subgroup = "transport-rail-other"
 data.raw["recipe"]["train-stop"].order = "f"
---[[
-data.raw["recipe"]["power"].group = "transport"
-data.raw["recipe"]["power"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail"].order = "b"
+data.raw.item["train-stop"].subgroup = "transport-rail-other"
+data.raw.item["train-stop"].order = "f"
 
-data.raw["recipe"]["power"].group = "transport"
-data.raw["recipe"]["power"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail"].order = "b"
+if mods["LogisticTrainNetwork"] then
+data.raw["recipe"]["logistic-train-stop"].subgroup = "transport-rail-other"
+data.raw["recipe"]["logistic-train-stop"].order = "g"
+data.raw.item["logistic-train-stop"].subgroup = "transport-rail-other"
+data.raw.item["logistic-train-stop"].order = "g"
+end
 
-data.raw["recipe"]["power"].group = "transport"
-data.raw["recipe"]["power"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail"].order = "b"
-]]
+if mods["railloader"] then
+data.raw["recipe"]["railloader"].subgroup = "transport-rail-other"
+data.raw["recipe"]["railloader"].order = "h"
+data.raw.item["railloader"].subgroup = "transport-rail-other"
+data.raw.item["railloader"].order = "h"
+
+data.raw["recipe"]["railunloader"].subgroup = "transport-rail-other"
+data.raw["recipe"]["railunloader"].order = "i"
+data.raw.item["railunloader"].subgroup = "transport-rail-other"
+data.raw.item["railunloader"].order = "i"
+end
+-------------------------------------------------------------------------------------------------
+--артиллерийские вагоны
+data.raw["recipe"]["artillery-wagon"].subgroup = "artillery-wagon"
+data.raw["recipe"]["artillery-wagon"].order = "a"
+data.raw["item-with-entity-data"]["artillery-wagon"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["artillery-wagon"].order = "a"
+
+data.raw["recipe"]["bob-artillery-wagon-2"].subgroup = "artillery-wagon"
+data.raw["recipe"]["bob-artillery-wagon-2"].order = "b"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-2"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-2"].order = "b"
+
+data.raw["recipe"]["bob-artillery-wagon-3"].subgroup = "artillery-wagon"
+data.raw["recipe"]["bob-artillery-wagon-3"].order = "c"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-3"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-3"].order = "c"
+-------------------------------------------------------------------------------------------------
+--павуки
+data.raw["recipe"]["antron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["antron"].subgroup = "spider"
+data.raw["recipe"]["spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["spidertron"].subgroup = "spider"
+data.raw["recipe"]["tankotron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["tankotron"].subgroup = "spider"
+data.raw["recipe"]["logistic-spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["logistic-spidertron"].subgroup = "spider"
+data.raw["recipe"]["heavy-spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["heavy-spidertron"].subgroup = "spider"
+-------------------------------------------------------------------------------------------------
+--самолеты
+if mods["Aircraft"] then
+data.raw["recipe"]["gunship"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["gunship"].subgroup = "aircraft"
+data.raw["recipe"]["cargo-plane"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["cargo-plane"].subgroup = "aircraft"
+data.raw["recipe"]["jet"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["jet"].subgroup = "aircraft"
+data.raw["recipe"]["flying-fortress"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["flying-fortress"].subgroup = "aircraft"
+end
+
+end
+--###############################################################################################
+--переносим трубы
+if mods["FluidMustFlow"] then
+data.raw["recipe"]["duct-small"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-small"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-t-junction"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-t-junction"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-curve"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-curve"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-cross"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-cross"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-underground"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-underground"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["non-return-duct"].subgroup = "FluidMustFlow"
+data.raw["item"]["non-return-duct"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
+end
+-------------------------------------------------------------------------------------------------
+if mods["Bio_Industries"] then
+data.raw["recipe"]["bi-wood-pipe"].subgroup = "pipe"
+data.raw["recipe"]["bi-wood-pipe"].order = "a"
+data.raw["item"]["bi-wood-pipe"].subgroup = "pipe"
+data.raw["item"]["bi-wood-pipe"].order = "a"
+
+data.raw["recipe"]["bi-wood-pipe-to-ground"].subgroup = "pipe-to-ground"
+data.raw["recipe"]["bi-wood-pipe-to-ground"].order = "a"
+data.raw["item"]["bi-wood-pipe-to-ground"].subgroup = "pipe-to-ground"
+data.raw["item"]["bi-wood-pipe-to-ground"].order = "a"
+end
+-------------------------------------------------------------------------------------------------
+--if mods["FlowControl"] then
+data.raw["recipe"]["pipe-junction"].group = "bob-logistics"
+data.raw["recipe"]["pipe-junction"].subgroup = "FlowControl"
+data.raw["item"]["pipe-junction"].group = "bob-logistics"
+data.raw["item"]["pipe-junction"].subgroup = "FlowControl"
+
+data.raw["recipe"]["pipe-straight"].group = "bob-logistics"
+data.raw["recipe"]["pipe-straight"].subgroup = "FlowControl"
+data.raw["item"]["pipe-straight"].group = "bob-logistics"
+data.raw["item"]["pipe-straight"].subgroup = "FlowControl"
+
+data.raw["recipe"]["pipe-elbow"].group = "bob-logistics"
+data.raw["recipe"]["pipe-elbow"].subgroup = "FlowControl"
+data.raw["item"]["pipe-elbow"].group = "bob-logistics"
+data.raw["item"]["pipe-elbow"].subgroup = "FlowControl"
+--end
+--###############################################################################################
+--переносим рецепты и предметы куда следует
+--бронированный манипулятор
+if mods["scattergun_turret"] then
+data.raw["recipe"]["w93-hardened-inserter"].group = "bob-logistics"
+data.raw["recipe"]["w93-hardened-inserter"].subgroup = "bob-logistic-tier-1"
+data.raw["recipe"]["w93-hardened-inserter"].order = "z"
+data.raw["item"]["w93-hardened-inserter"].group = "bob-logistics"
+data.raw["item"]["w93-hardened-inserter"].subgroup = "bob-logistic-tier-1"
+data.raw["item"]["w93-hardened-inserter"].order = "z"
+end
+-------------------------------------------------------------------------------------------------
+--деревянные столбы
+data.raw["recipe"]["small-electric-pole"].subgroup = "wooden-pole"
+data.raw["item"]["small-electric-pole"].subgroup = "wooden-pole"
+
+if mods["Bio_Industries"] then
+data.raw["recipe"]["bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["item"]["bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["recipe"]["bi-wooden-pole-huge"].subgroup = "wooden-pole"
+data.raw["item"]["bi-wooden-pole-huge"].subgroup = "wooden-pole"
+end
+
+data.raw["recipe"]["medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-4"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-4"].subgroup = "medium-electric-pole"
+
+data.raw["recipe"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+
+data.raw["recipe"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+
+if mods["LightedPolesPlus"] then
+data.raw["recipe"]["lighted-small-electric-pole"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-small-electric-pole"].subgroup = "wooden-pole"
+data.raw["recipe"]["lighted-bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["recipe"]["lighted-bi-wooden-pole-huge"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-bi-wooden-pole-huge"].subgroup = "wooden-pole"
+
+data.raw["recipe"]["lighted-medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-4"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-4"].subgroup = "medium-electric-pole"
+
+data.raw["recipe"]["lighted-big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
+
+end

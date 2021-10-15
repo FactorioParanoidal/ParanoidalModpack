@@ -16,7 +16,6 @@ if mods["angelsbioprocessing"] then
 	require("prototypes.modules")
 end -- при наличии angelsbioprocessing
 
-require("prototypes.tile-concrete-brick-fix") --фикс tile для бетонного кирпича
 require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") --фикс добавляющий прототип арты в обычную арту
 
 require("recipes.gemfix")

@@ -7,5 +7,9 @@
     "item":
     [
         ["bi-rail-wood", "rail"]
+    ],
+    "tile":
+    [
+        ["tile-concrete-brick", "concrete-brick-fix"]
     ]
 }
