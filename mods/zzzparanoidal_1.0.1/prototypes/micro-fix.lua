@@ -330,5 +330,23 @@ data:extend({
   group = "logistics",
   order = "d-4",
 },
+{
+  type = "item-subgroup",
+  name = "logistic-chests-1",
+  group = "logistics",
+  order = "f-1",
+},
+{
+  type = "item-subgroup",
+  name = "logistic-chests-4",
+  group = "logistics",
+  order = "f-4",
+},
+{
+  type = "item-subgroup",
+  name = "logistic-chests-5",
+  group = "logistics",
+  order = "f-5",
+},
 
 })

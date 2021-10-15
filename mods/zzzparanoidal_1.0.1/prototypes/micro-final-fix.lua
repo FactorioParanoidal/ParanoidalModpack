@@ -761,14 +761,14 @@ data.raw["item"]["big-electric-pole-3"].subgroup = "big-electric-pole"
 data.raw["recipe"]["big-electric-pole-4"].subgroup = "big-electric-pole"
 data.raw["item"]["big-electric-pole-4"].subgroup = "big-electric-pole"
 
-data.raw["recipe"]["big-electric-pole"].subgroup = "big-electric-pole"
-data.raw["item"]["big-electric-pole"].subgroup = "big-electric-pole"
-data.raw["recipe"]["big-electric-pole-2"].subgroup = "big-electric-pole"
-data.raw["item"]["big-electric-pole-2"].subgroup = "big-electric-pole"
-data.raw["recipe"]["big-electric-pole-3"].subgroup = "big-electric-pole"
-data.raw["item"]["big-electric-pole-3"].subgroup = "big-electric-pole"
-data.raw["recipe"]["big-electric-pole-4"].subgroup = "big-electric-pole"
-data.raw["item"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["recipe"]["substation"].subgroup = "substation"
+data.raw["item"]["substation"].subgroup = "substation"
+data.raw["recipe"]["substation-2"].subgroup = "substation"
+data.raw["item"]["substation-2"].subgroup = "substation"
+data.raw["recipe"]["substation-3"].subgroup = "substation"
+data.raw["item"]["substation-3"].subgroup = "substation"
+data.raw["recipe"]["substation-4"].subgroup = "substation"
+data.raw["item"]["substation-4"].subgroup = "substation"
 
 if mods["LightedPolesPlus"] then
 data.raw["recipe"]["lighted-small-electric-pole"].subgroup = "wooden-pole"
@@ -796,4 +796,54 @@ data.raw["item"]["lighted-big-electric-pole-3"].subgroup = "big-electric-pole"
 data.raw["recipe"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
 data.raw["item"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
 
+data.raw["recipe"]["lighted-substation"].subgroup = "substation"
+data.raw["item"]["lighted-substation"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-2"].subgroup = "substation"
+data.raw["item"]["lighted-substation-2"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-3"].subgroup = "substation"
+data.raw["item"]["lighted-substation-3"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-4"].subgroup = "substation"
+data.raw["item"]["lighted-substation-4"].subgroup = "substation"
+end
+-------------------------------------------------------------------------------------------------
+--сундуки и склады
+data.raw["item"]["steel-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-passive-provider"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-storage"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-active-provider"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-requester"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-buffer"].subgroup = "logistic-chests-1"
+
+data.raw["item"]["brass-chest"].subgroup = "logistic-chests-2"
+
+data.raw["item"]["titanium-chest"].subgroup = "logistic-chests-3"
+
+if mods["Warehousing"] then
+data.raw["item"]["storehouse-basic"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-passive-provider"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-storage"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-active-provider"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-requester"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-buffer"].subgroup = "logistic-chests-4"
+
+data.raw["item"]["storehouse-basic"].order = "1"
+data.raw["item"]["storehouse-passive-provider"].order = "4"
+data.raw["item"]["storehouse-storage"].order = "6"
+data.raw["item"]["storehouse-active-provider"].order = "2"
+data.raw["item"]["storehouse-requester"].order = "5"
+data.raw["item"]["storehouse-buffer"].order = "3"
+
+data.raw["item"]["warehouse-basic"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-passive-provider"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-storage"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-active-provider"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-requester"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-buffer"].subgroup = "logistic-chests-5"
+
+data.raw["item"]["warehouse-basic"].order = "1"
+data.raw["item"]["warehouse-passive-provider"].order = "4"
+data.raw["item"]["warehouse-storage"].order = "6"
+data.raw["item"]["warehouse-active-provider"].order = "2"
+data.raw["item"]["warehouse-requester"].order = "5"
+data.raw["item"]["warehouse-buffer"].order = "3"
 end
