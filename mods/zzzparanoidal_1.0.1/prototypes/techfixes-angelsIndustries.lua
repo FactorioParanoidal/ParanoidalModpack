@@ -61,3 +61,16 @@ bobmods.lib.recipe.add_ingredient("artillery-turret-prototype", {"concrete-brick
     bobmods.lib.recipe.add_ingredient("alloy-mixer", {"t4-pipe", 4})
     bobmods.lib.recipe.add_ingredient("alloy-mixer", {"t4-gears", 2})
     bobmods.lib.recipe.add_ingredient("alloy-mixer", {"t4-brick", 2})
+
+--доработка атомных снарядов
+data.raw.projectile["atomic-bomb-wave"].action[1].action_delivery.target_effects.damage.amount=5000
+data.raw.projectile["atomic-bomb-wave"].action[1].action_delivery.target_effects.upper_distance_threshold=100
+data.raw["artillery-projectile"]["artillery-projectile-nuclear"].action.action_delivery.target_effects[5].action.radius = 66
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[7].damage.amount = 666666
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[10].radius = 240
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[13].action.radius = 78
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[13].action.repeat_count = 4000
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[14].action.radius = 103
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[14].action.repeat_count = 4000
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[15].action.radius = 132
+data.raw["artillery-projectile"]["artillery-projectile-thermonuclear"].action.action_delivery.target_effects[15].action.repeat_count = 4000
