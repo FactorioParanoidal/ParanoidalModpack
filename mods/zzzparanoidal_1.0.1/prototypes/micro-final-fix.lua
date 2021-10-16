@@ -58,6 +58,12 @@ data:extend{concrete_brick_fix}
 data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
 ]]
 --###############################################################################################
+--сокрытие каменных труб
+data.raw["item"]["stone-pipe"].flags = {"hidden"}
+data.raw["recipe"]["angels-stone-pipe-casting"].hidden = true
+data.raw["item"]["stone-pipe-to-ground"].flags = {"hidden"}
+data.raw["recipe"]["angels-stone-pipe-to-ground-casting"].hidden = true
+--###############################################################################################
 --подкрутка мода для интеграции в параноидал
 if mods["Transport_Drones"] then
 --подкрутка технологий

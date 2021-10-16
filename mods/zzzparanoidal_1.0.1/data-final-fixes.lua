@@ -22,7 +22,6 @@ require("recipes.gemfix")
 require("recipes.warehousing")
 require("recipes.module-contactfix")
 
-require("prototypes.stone-pipe-fix") --фикс скрывающий каменные трубы (tnx KiRiK)
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
 require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
