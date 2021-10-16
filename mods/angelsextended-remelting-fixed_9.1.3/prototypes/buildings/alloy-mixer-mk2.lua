@@ -15,9 +15,9 @@ data:extend({
       {icon = "__reskins-angels__/graphics/icons/smelting/induction-furnace/induction-furnace-icon-highlights.png",
       icon_size = 64, icon_mipmaps = 4, blend_mode = "additive",},
       {icon = "__angelsextended-remelting-fixed__/graphics/icons/num_2.png",
-			  tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5}, scale = 0.32, shift = {-12, -12},}
+			tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5}, scale = 0.32, shift = {-12, -12},}
     },
-		icon_size = 64, icon_mipmaps = 4,
+    icon_size = 64, icon_mipmaps = 4,
 		subgroup = "aragas-molten-alloy-mixer",
     order = "b[alloy-mixer-2]", 
     place_result = "alloy-mixer-2",
@@ -33,13 +33,13 @@ data:extend({
         enabled = false,
         ingredients =
 			{
-				{"alloym-2", 1},
-				{"t2-plate", 3},
-				{"t2-circuit", 3},
-				{"t2-pipe", 4},
-				{"t2-gears", 2},
-				{"t2-brick", 2},
-			},
+        {type = "item", name = "alloy-mixer", amount = 1},
+        {type = "item", name = "steel-plate", amount = 25},
+        {type = "item", name = "electronic-circuit", amount = 5},
+        {type = "item", name = "clay-brick", amount = 25},
+        {type = "item", name = "steel-gear-wheel", amount = 9},
+        {type = "item", name = "steel-pipe", amount = 12},
+      },
         result="alloy-mixer-2",
     },
     expensive =
@@ -48,13 +48,13 @@ data:extend({
         enabled = false,
         ingredients =
 			{
-				{"alloym-2", 1},
-				{"t2-plate", 3 * buildingmulti},
-				{"t2-circuit", 3 * buildingmulti},
-				{"t2-pipe", 4 * buildingmulti},
-				{"t2-gears", 2 * buildingmulti},
-				{"t2-brick", 2 * buildingmulti},
-			},
+        {type = "item", name = "alloy-mixer", amount = 1},
+        {type = "item", name = "steel-plate", amount = 125},
+        {type = "item", name = "electronic-circuit", amount = 25},
+        {type = "item", name = "clay-brick", amount = 125},
+        {type = "item", name = "steel-gear-wheel", amount = 45},
+        {type = "item", name = "steel-pipe", amount = 60},
+      },
         result="alloy-mixer-2",
     },
 },
@@ -71,9 +71,9 @@ data:extend({
       {icon = "__reskins-angels__/graphics/icons/smelting/induction-furnace/induction-furnace-icon-highlights.png",
       icon_size = 64, icon_mipmaps = 4, blend_mode = "additive",},
       {icon = "__angelsextended-remelting-fixed__/graphics/icons/num_2.png",
-			  tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5}, scale = 0.32, shift = {-12, -12},}
+			tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5}, scale = 0.32, shift = {-12, -12},}
     },
-		icon_size = 64, icon_mipmaps = 4,
+    icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-neutral","player-creation"},
     minable = {mining_time = 1, result = "alloy-mixer-2"},
     fast_replaceable_group = "alloy-mixer",

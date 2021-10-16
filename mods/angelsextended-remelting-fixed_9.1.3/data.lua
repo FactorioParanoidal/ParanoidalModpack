@@ -8,13 +8,10 @@ end
 
 require("prototypes.remelting-category")
 
---require("prototypes.buildings.alloy-mixer")
-
 require("prototypes.buildings.alloy-mixer-mk1")
 require("prototypes.buildings.alloy-mixer-mk2")
 require("prototypes.buildings.alloy-mixer-mk3")
 require("prototypes.buildings.alloy-mixer-mk4")
-
 
 
 if angelsmods and angelsmods.smelting then
@@ -38,8 +35,6 @@ if angelsmods and angelsmods.smelting then
     require("prototypes.recipes.angelssmelting.remelting-tungsten")
     require("prototypes.recipes.angelssmelting.remelting-zinc")
 end
-
-require("prototypes.recipes.remelting-entity")
 
 require("prototypes.technology.remelting-technology")
 

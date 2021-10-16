@@ -9,3 +9,19 @@ require("prototypes.artillery-prototype.artillery-turret-prototype") --фикс 
 require("prototypes.beltentities") --переехало из paranoidal-tweaks_0.18.34 (sbelyakov)
 
 require("prototypes.micro-fix") --доработка напильником всего подряд -- фиксы от Кирика
+
+--перенаправляем функцию ангела на функцию боба
+if not mods["angelsindustries"] then
+
+function angelsmods.functions.OV.add_unlock(technology, recipe)
+    if
+      type(technology) == "string" and
+      type(recipe) == "string" and
+      data.raw.technology[technology] and
+      data.raw.recipe[recipe]
+    then
+        bobmods.lib.tech.add_recipe_unlock(technology, recipe)
+    end
+end
+
+end
