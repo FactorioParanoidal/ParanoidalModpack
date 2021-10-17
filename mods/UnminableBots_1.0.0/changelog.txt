@@ -1,0 +1,44 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-11-27
+  Features:
+    - updated to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2020-01-21
+  Features:
+    - updated to Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-05-27
+  Features:
+    - startup setting click-through bots
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2019-05-19
+  Features:
+    - unminable bots don't obstruct clicking on entities beneath (by dyonisos)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2019-03-07
+  Features:
+    - updated to Factorio 0.17
+    - new thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2018-12-10
+  Bugfixes:
+    - bots where going to toolbelt with Lock Toolbelt for bots enabled
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2018-05-20
+  Changes:
+    - compatibility patch for ReStack
+    - push to 0.16.36 stable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2017-12-16
+  Features:
+    - startup setting unminable logistic robots
+    - startup setting unminable construction robots
+    - startup setting prevent bots going to toolbelt
