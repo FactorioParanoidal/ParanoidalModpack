@@ -48,13 +48,14 @@ for name, map in pairs(tier_map) do
         layers = {
             -- Base
             {
-                filename = "__angelsrefining__/graphics/entity/liquifier/liquifier.png",
-                priority = "extra-high",
-                width = 160,
-                height = 160,
-                repeat_count = 30,
-                shift = {0, 0},
-                animation_speed = 0.5,
+				filename = "__angelsrefining__/graphics/entity/liquifier/liquifier.png",
+				priority = "extra-high",
+				width = 160,
+				height = 160,
+				line_length = 10,
+				frame_count = 30,
+				shift = {0, 0},
+				animation_speed = 0.5,
             },
             -- Mask
             {
