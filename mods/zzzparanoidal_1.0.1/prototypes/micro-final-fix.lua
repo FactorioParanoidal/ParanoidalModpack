@@ -14,147 +14,52 @@
 --###############################################################################################
 --замена tile для concrete-brick
 local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
-
 concrete_brick_fix.name = "concrete-brick-fix"
 concrete_brick_fix.minable = {mining_time = 0.1, result = "concrete-brick"}
---concrete_brick_fix.layer = "100"
+concrete_brick_fix.layer = "225"
 concrete_brick_fix.variants.material_background = 
-{
-    picture = "__SingleColorTerrain__/graphics/concrete/concrete.png",
-    count = 8,
-    hr_version =
-    {
-      picture = "__SingleColorTerrain__/graphics/concrete/hr-concrete.png",
-      count = 8,
-      scale = 0.5
-    }
-}
-
+  {
+    picture = "__zzzparanoidal__/graphics/grid/concrete.png", count = 8,
+    hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-concrete.png", count = 8, scale = 0.5}
+  }
 data:extend{concrete_brick_fix}
-
 data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
 -------------------------------------------------------------------------------------------------
---[[
---замена tile для concrete-brick
-local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
-
-concrete_brick_fix.name = "concrete-brick-fix"
-concrete_brick_fix.minable = {mining_time = 0.1, result = "concrete-brick"}
---concrete_brick_fix.layer = "100"
-concrete_brick_fix.variants.material_background = 
-{
-    picture = "__SingleColorTerrain__/graphics/concrete/concrete.png",
-    count = 8,
-    hr_version =
-    {
-      picture = "__SingleColorTerrain__/graphics/concrete/hr-concrete.png",
-      count = 8,
-      scale = 0.5
-    }
-}
-
-data:extend{concrete_brick_fix}
-
-data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
-]]
+--замена tile для reinforced-concrete-brick
+local reinforced_concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
+reinforced_concrete_brick_fix.name = "reinforced-concrete-brick-fix"
+reinforced_concrete_brick_fix.minable = {mining_time = 0.1, result = "reinforced-concrete-brick"}
+reinforced_concrete_brick_fix.layer = "230"
+reinforced_concrete_brick_fix.variants.material_background = 
+  {
+    picture = "__zzzparanoidal__/graphics/smooth/concrete.png", count = 8, 
+    hr_version = {picture = "__zzzparanoidal__/graphics/smooth/hr-concrete.png", count = 8,scale = 0.5}
+  }
+data:extend{reinforced_concrete_brick_fix}
+data.raw["item"]["reinforced-concrete-brick"].place_as_tile.result = "reinforced-concrete-brick-fix"
+-------------------------------------------------------------------------------------------------
+--подмена графики стандартного кирпича
+if settings.startup["stone-path-concrete"].value then
+  local stone_variants = util.table.deepcopy(data.raw.tile["refined-concrete"].variants)
+  stone_variants.material_background.picture = "__zzzparanoidal__/graphics/patches/concrete.png"
+  stone_variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/patches/hr-concrete.png", count = 8, scale = 0.5}
+  data.raw.tile["stone-path"].variants = stone_variants
+end
+-------------------------------------------------------------------------------------------------
+--замена текстуры для "бетон с разметкой опасности"
+data.raw.tile["hazard-concrete-left"].variants.material_background.picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-left.png"
+data.raw.tile["hazard-concrete-left"].variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png", count = 8, scale = 0.5}
+data.raw.tile["hazard-concrete-right"].variants.material_background.picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-right.png"
+data.raw.tile["hazard-concrete-right"].variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png", count = 8, scale = 0.5}
+-------------------------------------------------------------------------------------------------
+--отбираем возможность размещения у "титаново-бетонный кирпич", ибо нету графики для него
+data.raw.item["titanium-concrete-brick"].place_as_tile = nil
 --###############################################################################################
 --сокрытие каменных труб
 data.raw["item"]["stone-pipe"].flags = {"hidden"}
 data.raw["recipe"]["angels-stone-pipe-casting"].hidden = true
 data.raw["item"]["stone-pipe-to-ground"].flags = {"hidden"}
 data.raw["recipe"]["angels-stone-pipe-to-ground-casting"].hidden = true
---###############################################################################################
---подкрутка мода для интеграции в параноидал
-if mods["Transport_Drones"] then
---подкрутка технологий
-bobmods.lib.tech.remove_prerequisite("transport-system", "engine")
-bobmods.lib.tech.remove_prerequisite("transport-system", "angels-oil-processing")
-bobmods.lib.tech.add_prerequisite("transport-system", "steel-processing")
-bobmods.lib.tech.add_prerequisite("transport-system", "angels-fluid-control")
-bobmods.lib.tech.add_prerequisite("transport-system", "basic-chemistry-2")
-
-bobmods.lib.tech.remove_science_pack("transport-system", "logistic-science-pack")
--------------------------------------------------------------------------------------------------
---поправка технологий
-bobmods.lib.tech.add_prerequisite ("transport-drone-speed-1", "logistic-science-pack")
-bobmods.lib.tech.add_prerequisite ("transport-drone-capacity-1", "logistic-science-pack")
--------------------------------------------------------------------------------------------------
---подкрутка рецептов
---депо
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"angels-storage-tank-3", 4})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"valve-underflow", 1})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"basic-structure-components", 5})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"electronic-circuit", 10})
-
-bobmods.lib.recipe.set_ingredient("fuel-depot", {"steel-plate", 30})
-
-bobmods.lib.recipe.remove_ingredient("fuel-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("fuel-depot", "iron-gear-wheel")
--------------------------------------------------------------------------------------------------
---депо запроса
-bobmods.lib.recipe.add_ingredient("request-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("request-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("request-depot", {"steel-chest", 1})
-bobmods.lib.recipe.add_ingredient("request-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо снабжения
-bobmods.lib.recipe.add_ingredient("supply-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-chest", 2})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо буфер
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-chest", 1})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо жидкость
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"angels-storage-tank-3", 1})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---дорога
-bobmods.lib.recipe.add_ingredient("road", {"stone", 20})
-bobmods.lib.recipe.add_ingredient("road", {"coal-crushed", 10})
-bobmods.lib.recipe.add_ingredient("road", {"resin", 10})
-
-bobmods.lib.recipe.remove_ingredient("road", "stone-brick")
-bobmods.lib.recipe.remove_ingredient("road", "coal")
-
-data.raw.recipe.road.energy_required = 5
-data.raw.recipe.road.category = "smelting"
--------------------------------------------------------------------------------------------------
---машинка
-bobmods.lib.recipe.add_ingredient("transport-drone", {"steel-bearing", 4})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"electronic-circuit", 3})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"simple-io", 1})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"motor", 3})
-
-bobmods.lib.recipe.set_ingredient("transport-drone", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("transport-drone", "engine-unit")
-bobmods.lib.recipe.remove_ingredient("transport-drone", "iron-gear-wheel")
--------------------------------------------------------------------------------------------------
---settings.startup["fuel-fluid"].value = "gas-hydrogen"
-end
 --###############################################################################################
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite ("electronics-machine-1", "steel-processing")
@@ -452,6 +357,8 @@ bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-
 --###############################################################################################
 --переносим рецепты в новые вкладки
 --перенос в логику
+if not mods["angelsindustries"] then
+
 data.raw["item-subgroup"]["circuit-network"] = {type = "item-subgroup", name = "circuit-network", group = "circuit", order = "a"}
 data.raw["item-subgroup"]["circuit-network-2"] = {type = "item-subgroup", name = "circuit-network-2", group = "circuit", order = "h2"}
 
@@ -547,7 +454,6 @@ data.raw.item["ltn-delivery-reader"].subgroup = "circuit-combinator"
 end
 -------------------------------------------------------------------------------------------------
 --перенос в транспорт
-if not mods["angelsindustries"] then
 data.raw["item-subgroup"]["train-transport"] = {type = "item-subgroup", name = "train-transport", group = "transport", order = "e"}
 data.raw["item-subgroup"].transport = {type = "item-subgroup", name = "transport", group = "transport", order = "f"}
 data.raw["item-subgroup"]["bob-locomotive"] = {type = "item-subgroup", name = "bob-locomotive", group = "transport", order = "e-a1"}
@@ -675,8 +581,6 @@ data.raw["item-with-entity-data"]["jet"].subgroup = "aircraft"
 data.raw["recipe"]["flying-fortress"].subgroup = "aircraft"
 data.raw["item-with-entity-data"]["flying-fortress"].subgroup = "aircraft"
 end
-
-end
 --###############################################################################################
 --переносим трубы
 if mods["FluidMustFlow"] then
@@ -710,7 +614,7 @@ data.raw["item"]["bi-wood-pipe-to-ground"].subgroup = "pipe-to-ground"
 data.raw["item"]["bi-wood-pipe-to-ground"].order = "a"
 end
 -------------------------------------------------------------------------------------------------
---if mods["FlowControl"] then
+if mods["Flow Control"] then
 data.raw["recipe"]["pipe-junction"].group = "bob-logistics"
 data.raw["recipe"]["pipe-junction"].subgroup = "FlowControl"
 data.raw["item"]["pipe-junction"].group = "bob-logistics"
@@ -725,7 +629,7 @@ data.raw["recipe"]["pipe-elbow"].group = "bob-logistics"
 data.raw["recipe"]["pipe-elbow"].subgroup = "FlowControl"
 data.raw["item"]["pipe-elbow"].group = "bob-logistics"
 data.raw["item"]["pipe-elbow"].subgroup = "FlowControl"
---end
+end
 --###############################################################################################
 --переносим рецепты и предметы куда следует
 --бронированный манипулятор
@@ -853,3 +757,5 @@ data.raw["item"]["warehouse-active-provider"].order = "2"
 data.raw["item"]["warehouse-requester"].order = "5"
 data.raw["item"]["warehouse-buffer"].order = "3"
 end
+
+end --конец mods["angelsindustries"]

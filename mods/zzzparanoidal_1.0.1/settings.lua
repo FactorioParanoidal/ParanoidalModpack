@@ -17,7 +17,15 @@ data:extend(
     minimum_value = 0.5,
     maximum_value = 100,
     order = "a"
-  }
+  },
+  {
+    type = "bool-setting",
+    name = "stone-path-concrete",
+    setting_type = "startup",
+    default_value = false,
+    order = "a"
+  },
+
 }
 )
 if mods.research_evolution_factor then
