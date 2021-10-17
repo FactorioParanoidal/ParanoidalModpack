@@ -1,15 +1,19 @@
 {
     "entity":
     [
+        ["bi-straight-rail-power", "straight-rail"],
+        ["bi-curved-rail-power", "curved-rail"],
         ["bi-straight-rail-wood", "straight-rail"],
         ["bi-curved-rail-wood", "curved-rail"]      
     ],
     "item":
     [
-        ["bi-rail-wood", "rail"]
+        ["bi-rail-wood", "rail"],
+        ["bi-rail-power", "rail"]
     ],
     "tile":
     [
-        ["tile-concrete-brick", "concrete-brick-fix"]
+        ["tile-concrete-brick", "concrete-brick-fix"],
+        ["reinforced-concrete-brick", "reinforced-concrete-brick-fix"]
     ]
 }

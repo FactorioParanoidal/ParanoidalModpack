@@ -207,48 +207,22 @@ data:extend({
 },
 })
 end
-
-data:extend({
-
 --###############################################################################################
 --добавляем новые группы и сабгруппы для рецептов
-    {
-        type = "item-group",
-        name = "circuit",
-        order = "ab",
-        icon = "__base__/graphics/technology/circuit-network.png",
-        icon_size = 256, icon_mipmaps = 4,
-    },
-    {
-        type = "item-subgroup",
-        name = "circuit-connection",
-        group = "circuit",
-        order = "b",
-    },
-    {
-        type = "item-subgroup",
-        name = "circuit-combinator",
-        group = "circuit",
-        order = "c",
-    },
-    {
-        type = "item-subgroup",
-        name = "circuit-input",
-        group = "circuit",
-        order = "d",
-    },
-    {
-        type = "item-subgroup",
-        name = "circuit-visual",
-        group = "circuit",
-        order = "e",
-    },
-    {
-        type = "item-subgroup",
-        name = "circuit-auditory",
-        group = "circuit",
-        order = "f",
-    },
+if not mods["angelsindustries"] then
+data:extend({
+{
+  type = "item-group",
+  name = "circuit",
+  order = "ab",
+  icon = "__base__/graphics/technology/circuit-network.png",
+  icon_size = 256, icon_mipmaps = 4,
+},
+{type = "item-subgroup", name = "circuit-connection", group = "circuit", order = "b",},
+{type = "item-subgroup", name = "circuit-combinator", group = "circuit", order = "c",},
+{type = "item-subgroup", name = "circuit-input", group = "circuit", order = "d",},
+{type = "item-subgroup", name = "circuit-visual", group = "circuit", order = "e",},
+{type = "item-subgroup", name = "circuit-auditory", group = "circuit", order = "f",},
 -------------------------------------------------------------------------------------------------
 {
   type = "item-group",
@@ -257,96 +231,93 @@ data:extend({
   icon = "__base__/graphics/technology/railway.png",
   icon_size = 256, icon_mipmaps = 4,
 },
-{
-  type = "item-subgroup",
-  name = "transport-rail",
-  group = "transport",
-  order = "a",
-},
-{
-  type = "item-subgroup",
-  name = "transport-rail-other",
-  group = "transport",
-  order = "b",
-},
-{
-  type = "item-subgroup",
-  name = "junk-train",
-  group = "transport",
-  order = "ddd",
-},
-{
-  type = "item-subgroup",
-  name = "artillery-wagon",
-  group = "transport",
-  order = "eg",
-},
-{
-  type = "item-subgroup",
-  name = "spider",
-  group = "transport",
-  order = "x",
-},
-{
-  type = "item-subgroup",
-  name = "aircraft",
-  group = "transport",
-  order = "y",
-},
+{type = "item-subgroup", name = "transport-rail", group = "transport", order = "a",},
+{type = "item-subgroup", name = "transport-rail-other", group = "transport", order = "b",},
+{type = "item-subgroup", name = "junk-train", group = "transport", order = "ddd",},
+{type = "item-subgroup", name = "artillery-wagon", group = "transport", order = "eg",},
+{type = "item-subgroup", name = "spider", group = "transport", order = "x",},
+{type = "item-subgroup", name = "aircraft", group = "transport", order = "y",},
 -------------------------------------------------------------------------------------------------
-{
-  type = "item-subgroup",
-  name = "FluidMustFlow",
-  group = "bob-logistics",
-  order = "d-a-3",
-},
-{
-  type = "item-subgroup",
-  name = "FlowControl",
-  group = "bob-logistics",
-  order = "d-a-4",
-},
-{
-  type = "item-subgroup",
-  name = "wooden-pole",
-  group = "logistics",
-  order = "d-1",
-},
-{
-  type = "item-subgroup",
-  name = "medium-electric-pole",
-  group = "logistics",
-  order = "d-2",
-},
-{
-  type = "item-subgroup",
-  name = "big-electric-pole",
-  group = "logistics",
-  order = "d-3",
-},
-{
-  type = "item-subgroup",
-  name = "substation",
-  group = "logistics",
-  order = "d-4",
-},
-{
-  type = "item-subgroup",
-  name = "logistic-chests-1",
-  group = "logistics",
-  order = "f-1",
-},
-{
-  type = "item-subgroup",
-  name = "logistic-chests-4",
-  group = "logistics",
-  order = "f-4",
-},
-{
-  type = "item-subgroup",
-  name = "logistic-chests-5",
-  group = "logistics",
-  order = "f-5",
-},
+{type = "item-subgroup", name = "FluidMustFlow", group = "bob-logistics", order = "d-a-3",},
+{type = "item-subgroup", name = "FlowControl", group = "bob-logistics", order = "d-a-4",},
+{type = "item-subgroup", name = "wooden-pole", group = "logistics", order = "d-1",},
+{type = "item-subgroup", name = "medium-electric-pole", group = "logistics", order = "d-2",},
+{type = "item-subgroup", name = "big-electric-pole", group = "logistics", order = "d-3",},
+{type = "item-subgroup", name = "substation", group = "logistics", order = "d-4",},
+{type = "item-subgroup", name = "logistic-chests-1", group = "logistics", order = "f-1",},
+{type = "item-subgroup", name = "logistic-chests-4", group = "logistics", order = "f-4",},
+{type = "item-subgroup", name = "logistic-chests-5", group = "logistics", order = "f-5",},
 
+})
+end
+-------------------------------------------------------------------------------------------------
+--создаем предмет для hazard-concrete-brick
+data:extend({
+{
+  type = "item",
+  name = "hazard-concrete-brick",
+  icons = {
+    {
+      icon = "__angelssmelting__/graphics/icons/brick-concrete.png",
+      icon_size = 32,
+      --icon_mipmaps = 4
+    },
+    {
+      icon = "__base__/graphics/icons/refined-hazard-concrete.png",
+      icon_size = 64,
+      icon_mipmaps = 4,
+      scale = 0.3,
+      shift = {-10, -10}
+    }
+  },
+  icon_size = 32,
+  subgroup = "angels-stone-casting",
+  order = "ia",
+  stack_size = angelsmods.trigger.pavement_stack_size,
+  place_as_tile = {result = "hazard-concrete-brick-left", condition_size = 1, condition = {"water-tile"}}
+} 
+})
+-------------------------------------------------------------------------------------------------
+--создаем hazard-tile-left для hazard-concrete-brick
+local hazard_tile_left = table.deepcopy(data.raw["tile"]["refined-hazard-concrete-left"])
+hazard_tile_left.name = "hazard-concrete-brick-left"
+hazard_tile_left.minable = {mining_time = 0.1, result = "hazard-concrete-brick"}
+hazard_tile_left.layer = "225"
+hazard_tile_left.next_direction = "hazard-concrete-brick-right"
+hazard_tile_left.variants.material_background = 
+  {
+    picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-left.png", count = 8,
+    hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png", count = 8, scale = 0.5}
+  }
+data:extend{hazard_tile_left}
+-------------------------------------------------------------------------------------------------
+--создаем hazard-tile-right для hazard-concrete-brick
+local hazard_tile_right = table.deepcopy(data.raw["tile"]["refined-hazard-concrete-right"])
+hazard_tile_right.name = "hazard-concrete-brick-right"
+hazard_tile_right.minable = {mining_time = 0.1, result = "hazard-concrete-brick"}
+hazard_tile_right.layer = "225"
+hazard_tile_right.next_direction = "hazard-concrete-brick-left"
+hazard_tile_right.variants.material_background = 
+  {
+    picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-right.png", count = 8,
+    hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png", count = 8, scale = 0.5}
+  }
+data:extend{hazard_tile_right}
+-------------------------------------------------------------------------------------------------
+--добавляем рецепт для бетонного кирпича с полосами
+data:extend({
+{
+  type = "recipe",
+  name = "hazard-concrete-brick",
+  category = "crafting",
+  group = "angels-casting",
+  subgroup = "angels-stone-casting",
+  order = "ia",
+  energy_required = 1,
+  enabled = false,
+  allow_decomposition = false,
+  always_show_products = true,
+  ingredients = {{type = "item", name = "concrete-brick", amount = 10},},
+  results = {{type = "item", name = "hazard-concrete-brick", amount = 10}},
+},
 })
