@@ -12,93 +12,54 @@
 --bobmods.lib.recipe.set_ingredient("recipe", {"item", 20})
 --bobmods.lib.recipe.set_result("recipe", {name = "item", type = "item", amount = 5})
 --###############################################################################################
---подкрутка мода для интеграции в параноидал
-if mods["Transport_Drones"] then
---подкрутка технологий
-bobmods.lib.tech.remove_prerequisite("transport-system", "engine")
-bobmods.lib.tech.remove_prerequisite("transport-system", "angels-oil-processing")
-bobmods.lib.tech.add_prerequisite("transport-system", "steel-processing")
-bobmods.lib.tech.add_prerequisite("transport-system", "angels-fluid-control")
-bobmods.lib.tech.add_prerequisite("transport-system", "basic-chemistry-2")
-
-bobmods.lib.tech.remove_science_pack("transport-system", "logistic-science-pack")
+--замена tile для concrete-brick
+local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
+concrete_brick_fix.name = "concrete-brick-fix"
+concrete_brick_fix.minable = {mining_time = 0.1, result = "concrete-brick"}
+concrete_brick_fix.layer = "225"
+concrete_brick_fix.variants.material_background = 
+  {
+    picture = "__zzzparanoidal__/graphics/grid/concrete.png", count = 8,
+    hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-concrete.png", count = 8, scale = 0.5}
+  }
+data:extend{concrete_brick_fix}
+data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
 -------------------------------------------------------------------------------------------------
---подкрутка рецептов
---депо
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"angels-storage-tank-3", 4})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"valve-underflow", 1})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"basic-structure-components", 5})
-bobmods.lib.recipe.add_ingredient("fuel-depot", {"electronic-circuit", 10})
-
-bobmods.lib.recipe.set_ingredient("fuel-depot", {"steel-plate", 30})
-
-bobmods.lib.recipe.remove_ingredient("fuel-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("fuel-depot", "iron-gear-wheel")
+--замена tile для reinforced-concrete-brick
+local reinforced_concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
+reinforced_concrete_brick_fix.name = "reinforced-concrete-brick-fix"
+reinforced_concrete_brick_fix.minable = {mining_time = 0.1, result = "reinforced-concrete-brick"}
+reinforced_concrete_brick_fix.layer = "230"
+reinforced_concrete_brick_fix.variants.material_background = 
+  {
+    picture = "__zzzparanoidal__/graphics/smooth/concrete.png", count = 8, 
+    hr_version = {picture = "__zzzparanoidal__/graphics/smooth/hr-concrete.png", count = 8,scale = 0.5}
+  }
+data:extend{reinforced_concrete_brick_fix}
+data.raw["item"]["reinforced-concrete-brick"].place_as_tile.result = "reinforced-concrete-brick-fix"
 -------------------------------------------------------------------------------------------------
---депо запроса
-bobmods.lib.recipe.add_ingredient("request-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("request-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("request-depot", {"steel-chest", 2})
-bobmods.lib.recipe.add_ingredient("request-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("request-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо снабжения
-bobmods.lib.recipe.add_ingredient("supply-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-chest", 5})
-bobmods.lib.recipe.add_ingredient("supply-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("supply-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо буфер
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-chest", 3})
-bobmods.lib.recipe.add_ingredient("buffer-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("buffer-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---депо жидкость
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"basic-structure-components", 1})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"electronic-circuit", 10})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"angels-storage-tank-3", 1})
-bobmods.lib.recipe.add_ingredient("fluid-depot", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-plate")
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-gear-wheel")
-bobmods.lib.recipe.remove_ingredient("fluid-depot", "iron-stick")
--------------------------------------------------------------------------------------------------
---дорога
-bobmods.lib.recipe.add_ingredient("road", {"stone", 20})
-bobmods.lib.recipe.add_ingredient("road", {"coal-crushed", 10})
-bobmods.lib.recipe.add_ingredient("road", {"resin", 10})
-
-bobmods.lib.recipe.remove_ingredient("road", "stone-brick")
-bobmods.lib.recipe.remove_ingredient("road", "coal")
-
-data.raw.recipe.road.energy_required = 5
-data.raw.recipe.road.category = "smelting"
--------------------------------------------------------------------------------------------------
---машинка
-bobmods.lib.recipe.add_ingredient("transport-drone", {"steel-bearing", 4})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"electronic-circuit", 3})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"simple-io", 1})
-bobmods.lib.recipe.add_ingredient("transport-drone", {"motor", 3})
-
-bobmods.lib.recipe.set_ingredient("transport-drone", {"steel-plate", 10})
-
-bobmods.lib.recipe.remove_ingredient("transport-drone", "engine-unit")
-bobmods.lib.recipe.remove_ingredient("transport-drone", "iron-gear-wheel")
--------------------------------------------------------------------------------------------------
---settings.startup["fuel-fluid"].value = "gas-hydrogen"
+--подмена графики стандартного кирпича
+if settings.startup["stone-path-concrete"].value then
+  local stone_variants = util.table.deepcopy(data.raw.tile["refined-concrete"].variants)
+  stone_variants.material_background.picture = "__zzzparanoidal__/graphics/patches/concrete.png"
+  stone_variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/patches/hr-concrete.png", count = 8, scale = 0.5}
+  data.raw.tile["stone-path"].variants = stone_variants
 end
+-------------------------------------------------------------------------------------------------
+--замена текстуры для "бетон с разметкой опасности"
+data.raw.tile["hazard-concrete-left"].variants.material_background.picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-left.png"
+data.raw.tile["hazard-concrete-left"].variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png", count = 8, scale = 0.5}
+data.raw.tile["hazard-concrete-right"].variants.material_background.picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-right.png"
+data.raw.tile["hazard-concrete-right"].variants.material_background.hr_version = {picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png", count = 8, scale = 0.5}
+-------------------------------------------------------------------------------------------------
+--отбираем возможность размещения у "титаново-бетонный кирпич", ибо нету графики для него
+data.raw.item["titanium-concrete-brick"].place_as_tile = nil
+--###############################################################################################
+--сокрытие каменных труб
+data.raw["item"]["stone-pipe"].flags = {"hidden"}
+data.raw["recipe"]["angels-stone-pipe-casting"].hidden = true
+data.raw["item"]["stone-pipe-to-ground"].flags = {"hidden"}
+data.raw["recipe"]["angels-stone-pipe-to-ground-casting"].hidden = true
 --###############################################################################################
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite ("electronics-machine-1", "steel-processing")
@@ -236,6 +197,10 @@ data.raw["technology"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/
 data.raw["container"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
 --data.raw["technology"]["zcs-trash-landfill"].icon_size = 64
 --data.raw["technology"]["zcs-trash-landfill"].icon_mipmaps = 4
+
+data.raw["item"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+--data.raw["item"]["zcs-trash-landfill"].icon_size = 64
+--data.raw["item"]["zcs-trash-landfill"].icon_mipmaps = 4
 --###############################################################################################
 -- подкрутка чтобы сборщик1 мог собирать сам себя
 data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 5
@@ -249,8 +214,8 @@ data.raw["furnace"]["electric-furnace-3"].result_inventory_size = 2
 data.raw["furnace"]["electric-steel-furnace"].result_inventory_size = 2
 -------------------------------------------------------------------------------------------------
 -- подкрутка рецепта погрузчика/разгрузчика
-bobmods.lib.recipe.replace_ingredient("railloader", "rail", "bi-rail-wood")
-bobmods.lib.recipe.replace_ingredient("railunloader", "rail", "bi-rail-wood")
+--bobmods.lib.recipe.replace_ingredient("railloader", "rail", "bi-rail-wood")
+--bobmods.lib.recipe.replace_ingredient("railunloader", "rail", "bi-rail-wood")
 --###############################################################################################
 --нерфим плавку дробленки в печах 
 --сапфирит
@@ -316,3 +281,481 @@ bobmods.lib.recipe.set_result("angelsore6-crushed-processing", {name = "quartz",
 bobmods.lib.recipe.set_energy_required("slag-processing-stone", 2)
 bobmods.lib.recipe.set_ingredient("slag-processing-stone", {"slag", 5})
 bobmods.lib.recipe.set_result("slag-processing-stone", {"stone-crushed", 10})
+--###############################################################################################
+--крутим рельсы
+
+--убираем био-рельсы
+if mods["Bio_Industries"] then
+data.raw["rail-planner"]["bi-rail-wood"].flags = {"hidden"}
+data.raw["recipe"]["bi-rail-wood"].hidden = true
+data.raw["rail-planner"]["bi-rail-wood-bridge"].flags = {"hidden"}
+end
+-------------------------------------------------------------------------------------------------
+--делаем возможность обновления рельс и светофоров штатным путем
+if mods["JunkTrain3"] then
+data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "straight-rail"
+data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "curved-rail"
+
+data.raw["straight-rail"]["straight-scrap-rail"].fast_replaceable_group = "rail"
+data.raw["curved-rail"]["curved-scrap-rail"].fast_replaceable_group = "rail"
+
+data.raw["straight-rail"]["straight-rail"].fast_replaceable_group = "rail"
+data.raw["curved-rail"]["curved-rail"].fast_replaceable_group = "rail"
+
+data.raw["straight-rail"]["straight-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+
+data.raw["straight-rail"]["straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["curved-rail"]["curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+
+data.raw["rail-signal"]["rail-signal-scrap"].next_upgrade = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].next_upgrade = "rail-chain-signal"
+data.raw["train-stop"]["train-stop-scrap"].next_upgrade = "train-stop"
+
+data.raw["rail-signal"]["rail-signal-scrap"].fast_replaceable_group = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].fast_replaceable_group = "rail-signal"
+data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "rail-stop"
+
+data.raw["rail-signal"]["rail-signal"].fast_replaceable_group = "rail-signal"
+data.raw["rail-chain-signal"]["rail-chain-signal"].fast_replaceable_group = "rail-signal"
+data.raw["train-stop"]["train-stop"].fast_replaceable_group = "rail-stop"
+
+data.raw["rail-signal"]["rail-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+
+data.raw["rail-signal"]["rail-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+end
+-------------------------------------------------------------------------------------------------
+--меняем рецепт примитивных рельс
+if mods["JunkTrain3"] then
+data.raw.recipe["scrap-rail"].ingredients = 
+{   
+    {name = "stone-crushed", type = "item", amount = 10},
+    {name = "iron-stick", type = "item", amount = 2},
+    {name = "wood", type = "item", amount = 10},
+    {name = "steel-plate", type = "item", amount = 2},
+}
+end
+-------------------------------------------------------------------------------------------------
+--подкручиваем рецепт стандартных рельс
+bobmods.lib.recipe.set_ingredient("rail", {"stone-crushed", 10})
+-------------------------------------------------------------------------------------------------
+--переставляем рецепты рельс в технологиях
+bobmods.lib.tech.remove_recipe_unlock("railway", "bi-rail-wood")
+bobmods.lib.tech.add_recipe_unlock("railway", "rail")
+
+bobmods.lib.tech.remove_recipe_unlock("bob-railway-2", "rail")
+-------------------------------------------------------------------------------------------------
+--добавляем рецепты обновления примитивов в технологию
+bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
+bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
+bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
+bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
+--###############################################################################################
+--переносим рецепты в новые вкладки
+--перенос в логику
+if not mods["angelsindustries"] then
+
+data.raw["item-subgroup"]["circuit-network"] = {type = "item-subgroup", name = "circuit-network", group = "circuit", order = "a"}
+data.raw["item-subgroup"]["circuit-network-2"] = {type = "item-subgroup", name = "circuit-network-2", group = "circuit", order = "h2"}
+
+data.raw["recipe"]["power-switch"].group = "circuit"
+data.raw["recipe"]["power-switch"].subgroup = "circuit-connection"
+data.raw.item["power-switch"].subgroup = "circuit-connection"
+
+data.raw["recipe"]["arithmetic-combinator"].group = "circuit"
+data.raw["recipe"]["arithmetic-combinator"].subgroup = "circuit-combinator"
+data.raw.item["arithmetic-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["decider-combinator"].group = "circuit"
+data.raw["recipe"]["decider-combinator"].subgroup = "circuit-combinator"
+data.raw.item["decider-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["constant-combinator"].group = "circuit"
+data.raw["recipe"]["constant-combinator"].subgroup = "circuit-combinator"
+data.raw.item["constant-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["small-lamp"].group = "circuit"
+data.raw["recipe"]["small-lamp"].subgroup = "circuit-visual"
+data.raw.item["small-lamp"].subgroup = "circuit-visual"
+
+data.raw["recipe"]["programmable-speaker"].group = "circuit"
+data.raw["recipe"]["programmable-speaker"].subgroup = "circuit-auditory"
+data.raw.item["programmable-speaker"].subgroup = "circuit-auditory"
+
+if mods["InlaidLampsExtended"] then
+data.raw["recipe"]["flat-lamp-c"].group = "circuit"
+data.raw["recipe"]["flat-lamp-c"].subgroup = "circuit-visual"
+data.raw.item["flat-lamp"].subgroup = "circuit-visual"
+
+data.raw["recipe"]["flat-lamp-big"].group = "circuit"
+data.raw["recipe"]["flat-lamp-big"].subgroup = "circuit-visual"
+data.raw.item["flat-lamp-big"].subgroup = "circuit-visual"
+end
+
+if mods["DeadlockLargerLamp"] then
+data.raw["recipe"]["deadlock-copper-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-copper-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-copper-lamp"].subgroup = "circuit-visual"
+
+data.raw["recipe"]["deadlock-large-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-large-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-large-lamp"].subgroup = "circuit-visual"
+
+data.raw["recipe"]["deadlock-floor-lamp"].group = "circuit"
+data.raw["recipe"]["deadlock-floor-lamp"].subgroup = "circuit-visual"
+data.raw.item["deadlock-floor-lamp"].subgroup = "circuit-visual"
+end
+
+if mods["capacity-combinator"] then
+data.raw["recipe"]["capacity-combinator"].group = "circuit"
+data.raw["recipe"]["capacity-combinator"].subgroup = "circuit-combinator"
+data.raw.item["capacity-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["capacity-combinator-MK2"].group = "circuit"
+data.raw["recipe"]["capacity-combinator-MK2"].subgroup = "circuit-combinator"
+data.raw.item["capacity-combinator-MK2"].subgroup = "circuit-combinator"
+end
+
+if mods["power-combinator"] then
+data.raw["recipe"]["power-combinator"].group = "circuit"
+data.raw["recipe"]["power-combinator"].subgroup = "circuit-combinator"
+data.raw.item["power-combinator"].subgroup = "circuit-combinator"
+
+data.raw["recipe"]["power-combinator-MK2"].group = "circuit"
+data.raw["recipe"]["power-combinator-MK2"].subgroup = "circuit-combinator"
+data.raw.item["power-combinator-MK2"].subgroup = "circuit-combinator"
+end
+
+if mods["Biter_Detector_Sentinel_Combinator"] then
+data.raw["recipe"]["sentinel-combinator"].group = "circuit"
+data.raw["recipe"]["sentinel-combinator"].subgroup = "circuit-input"
+data.raw.item["sentinel-combinator"].subgroup = "circuit-input"
+
+data.raw["recipe"]["sentinel-alarm"].group = "circuit"
+data.raw["recipe"]["sentinel-alarm"].subgroup = "circuit-input"
+data.raw.item["sentinel-alarm"].subgroup = "circuit-input"
+end
+
+if mods["LTN_Combinator_Fix"] then
+data.raw["recipe"]["ltn-combinator"].subgroup = "circuit-combinator"
+data.raw.item["ltn-combinator"].subgroup = "circuit-combinator"
+end
+if mods["LTN_Content_Reader"] then
+data.raw["recipe"]["ltn-provider-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-provider-reader"].subgroup = "circuit-combinator"
+data.raw["recipe"]["ltn-requester-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-requester-reader"].subgroup = "circuit-combinator"
+data.raw["recipe"]["ltn-delivery-reader"].subgroup = "circuit-combinator"
+data.raw.item["ltn-delivery-reader"].subgroup = "circuit-combinator"
+end
+-------------------------------------------------------------------------------------------------
+--перенос в транспорт
+data.raw["item-subgroup"]["train-transport"] = {type = "item-subgroup", name = "train-transport", group = "transport", order = "e"}
+data.raw["item-subgroup"].transport = {type = "item-subgroup", name = "transport", group = "transport", order = "f"}
+data.raw["item-subgroup"]["bob-locomotive"] = {type = "item-subgroup", name = "bob-locomotive", group = "transport", order = "e-a1"}
+data.raw["item-subgroup"]["bob-cargo-wagon"] = {type = "item-subgroup", name = "bob-cargo-wagon", group = "transport", order = "e-a2"}
+data.raw["item-subgroup"]["bob-fluid-wagon"] = {type = "item-subgroup", name = "bob-fluid-wagon", group = "transport", order = "e-a3"}
+data.raw["item-subgroup"]["transport-drones"] = {type = "item-subgroup", name = "transport-drones", group = "transport", order = "ez"}
+data.raw["item-subgroup"]["bet-logistics"] = {type = "item-subgroup", name = "bet-logistics", group = "transport", order = "ez"}
+
+--жд дороги
+if mods["JunkTrain3"] then
+data.raw["recipe"]["scrap-rail"].subgroup = "transport-rail"
+data.raw["recipe"]["scrap-rail"].order = "a"
+data.raw["rail-planner"]["scrap-rail"].subgroup = "transport-rail"
+data.raw["rail-planner"]["scrap-rail"].order = "a"
+end
+
+data.raw["recipe"]["rail"].subgroup = "transport-rail"
+data.raw["recipe"]["rail"].order = "b"
+data.raw["rail-planner"].rail.subgroup = "transport-rail"
+data.raw["rail-planner"].rail.order = "b"
+
+if mods["PickerVehicles"] then
+data.raw["rail-planner"]["picker-naked-rail"].flags = {"hidden"}
+data.raw["rail-planner"]["picker-sleepy-rail"].flags = {"hidden"}
+end
+-------------------------------------------------------------------------------------------------
+--жд светофоры, станции и тп
+if mods["JunkTrain3"] then
+data.raw["recipe"]["rail-signal-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-signal-scrap"].order = "a"
+data.raw.item["rail-signal-scrap"].subgroup = "transport-rail-other"
+data.raw.item["rail-signal-scrap"].order = "a"
+
+data.raw["recipe"]["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-chain-signal-scrap"].order = "b"
+data.raw.item["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
+data.raw.item["rail-chain-signal-scrap"].order = "b"
+
+data.raw["recipe"]["train-stop-scrap"].subgroup = "transport-rail-other"
+data.raw["recipe"]["train-stop-scrap"].order = "c"
+data.raw.item["train-stop-scrap"].subgroup = "transport-rail-other"
+data.raw.item["train-stop-scrap"].order = "c"
+
+data.raw["recipe"]["JunkTrain"].subgroup = "junk-train"
+data.raw["recipe"]["JunkTrain"].order = "a"
+data.raw.item["JunkTrain"].subgroup = "junk-train"
+data.raw.item["JunkTrain"].order = "a"
+
+data.raw["recipe"]["ScrapTrailer"].subgroup = "junk-train"
+data.raw["recipe"]["ScrapTrailer"].order = "b"
+data.raw.item["ScrapTrailer"].subgroup = "junk-train"
+data.raw.item["ScrapTrailer"].order = "b"
+end
+
+data.raw["recipe"]["rail-signal"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-signal"].order = "d"
+data.raw.item["rail-signal"].subgroup = "transport-rail-other"
+data.raw.item["rail-signal"].order = "d"
+
+data.raw["recipe"]["rail-chain-signal"].subgroup = "transport-rail-other"
+data.raw["recipe"]["rail-chain-signal"].order = "e"
+data.raw.item["rail-chain-signal"].subgroup = "transport-rail-other"
+data.raw.item["rail-chain-signal"].order = "e"
+
+data.raw["recipe"]["train-stop"].subgroup = "transport-rail-other"
+data.raw["recipe"]["train-stop"].order = "f"
+data.raw.item["train-stop"].subgroup = "transport-rail-other"
+data.raw.item["train-stop"].order = "f"
+
+if mods["LogisticTrainNetwork"] then
+data.raw["recipe"]["logistic-train-stop"].subgroup = "transport-rail-other"
+data.raw["recipe"]["logistic-train-stop"].order = "g"
+data.raw.item["logistic-train-stop"].subgroup = "transport-rail-other"
+data.raw.item["logistic-train-stop"].order = "g"
+end
+
+if mods["railloader"] then
+data.raw["recipe"]["railloader"].subgroup = "transport-rail-other"
+data.raw["recipe"]["railloader"].order = "h"
+data.raw.item["railloader"].subgroup = "transport-rail-other"
+data.raw.item["railloader"].order = "h"
+
+data.raw["recipe"]["railunloader"].subgroup = "transport-rail-other"
+data.raw["recipe"]["railunloader"].order = "i"
+data.raw.item["railunloader"].subgroup = "transport-rail-other"
+data.raw.item["railunloader"].order = "i"
+end
+-------------------------------------------------------------------------------------------------
+--артиллерийские вагоны
+data.raw["recipe"]["artillery-wagon"].subgroup = "artillery-wagon"
+data.raw["recipe"]["artillery-wagon"].order = "a"
+data.raw["item-with-entity-data"]["artillery-wagon"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["artillery-wagon"].order = "a"
+
+data.raw["recipe"]["bob-artillery-wagon-2"].subgroup = "artillery-wagon"
+data.raw["recipe"]["bob-artillery-wagon-2"].order = "b"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-2"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-2"].order = "b"
+
+data.raw["recipe"]["bob-artillery-wagon-3"].subgroup = "artillery-wagon"
+data.raw["recipe"]["bob-artillery-wagon-3"].order = "c"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-3"].subgroup = "artillery-wagon"
+data.raw["item-with-entity-data"]["bob-artillery-wagon-3"].order = "c"
+-------------------------------------------------------------------------------------------------
+--павуки
+data.raw["recipe"]["antron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["antron"].subgroup = "spider"
+data.raw["recipe"]["spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["spidertron"].subgroup = "spider"
+data.raw["recipe"]["tankotron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["tankotron"].subgroup = "spider"
+data.raw["recipe"]["logistic-spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["logistic-spidertron"].subgroup = "spider"
+data.raw["recipe"]["heavy-spidertron"].subgroup = "spider"
+data.raw["item-with-entity-data"]["heavy-spidertron"].subgroup = "spider"
+-------------------------------------------------------------------------------------------------
+--самолеты
+if mods["Aircraft"] then
+data.raw["recipe"]["gunship"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["gunship"].subgroup = "aircraft"
+data.raw["recipe"]["cargo-plane"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["cargo-plane"].subgroup = "aircraft"
+data.raw["recipe"]["jet"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["jet"].subgroup = "aircraft"
+data.raw["recipe"]["flying-fortress"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["flying-fortress"].subgroup = "aircraft"
+end
+--###############################################################################################
+--переносим трубы
+if mods["FluidMustFlow"] then
+data.raw["recipe"]["duct-small"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-small"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-t-junction"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-t-junction"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-curve"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-curve"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-cross"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-cross"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-underground"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-underground"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["non-return-duct"].subgroup = "FluidMustFlow"
+data.raw["item"]["non-return-duct"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
+end
+-------------------------------------------------------------------------------------------------
+if mods["Bio_Industries"] then
+data.raw["recipe"]["bi-wood-pipe"].subgroup = "pipe"
+data.raw["recipe"]["bi-wood-pipe"].order = "a"
+data.raw["item"]["bi-wood-pipe"].subgroup = "pipe"
+data.raw["item"]["bi-wood-pipe"].order = "a"
+
+data.raw["recipe"]["bi-wood-pipe-to-ground"].subgroup = "pipe-to-ground"
+data.raw["recipe"]["bi-wood-pipe-to-ground"].order = "a"
+data.raw["item"]["bi-wood-pipe-to-ground"].subgroup = "pipe-to-ground"
+data.raw["item"]["bi-wood-pipe-to-ground"].order = "a"
+end
+-------------------------------------------------------------------------------------------------
+if mods["Flow Control"] then
+data.raw["recipe"]["pipe-junction"].group = "bob-logistics"
+data.raw["recipe"]["pipe-junction"].subgroup = "FlowControl"
+data.raw["item"]["pipe-junction"].group = "bob-logistics"
+data.raw["item"]["pipe-junction"].subgroup = "FlowControl"
+
+data.raw["recipe"]["pipe-straight"].group = "bob-logistics"
+data.raw["recipe"]["pipe-straight"].subgroup = "FlowControl"
+data.raw["item"]["pipe-straight"].group = "bob-logistics"
+data.raw["item"]["pipe-straight"].subgroup = "FlowControl"
+
+data.raw["recipe"]["pipe-elbow"].group = "bob-logistics"
+data.raw["recipe"]["pipe-elbow"].subgroup = "FlowControl"
+data.raw["item"]["pipe-elbow"].group = "bob-logistics"
+data.raw["item"]["pipe-elbow"].subgroup = "FlowControl"
+end
+--###############################################################################################
+--переносим рецепты и предметы куда следует
+--бронированный манипулятор
+if mods["scattergun_turret"] then
+data.raw["recipe"]["w93-hardened-inserter"].group = "bob-logistics"
+data.raw["recipe"]["w93-hardened-inserter"].subgroup = "bob-logistic-tier-1"
+data.raw["recipe"]["w93-hardened-inserter"].order = "z"
+data.raw["item"]["w93-hardened-inserter"].group = "bob-logistics"
+data.raw["item"]["w93-hardened-inserter"].subgroup = "bob-logistic-tier-1"
+data.raw["item"]["w93-hardened-inserter"].order = "z"
+end
+-------------------------------------------------------------------------------------------------
+--деревянные столбы
+data.raw["recipe"]["small-electric-pole"].subgroup = "wooden-pole"
+data.raw["item"]["small-electric-pole"].subgroup = "wooden-pole"
+
+if mods["Bio_Industries"] then
+data.raw["recipe"]["bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["item"]["bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["recipe"]["bi-wooden-pole-huge"].subgroup = "wooden-pole"
+data.raw["item"]["bi-wooden-pole-huge"].subgroup = "wooden-pole"
+end
+
+data.raw["recipe"]["medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["medium-electric-pole-4"].subgroup = "medium-electric-pole"
+data.raw["item"]["medium-electric-pole-4"].subgroup = "medium-electric-pole"
+
+data.raw["recipe"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["recipe"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["item"]["big-electric-pole-4"].subgroup = "big-electric-pole"
+
+data.raw["recipe"]["substation"].subgroup = "substation"
+data.raw["item"]["substation"].subgroup = "substation"
+data.raw["recipe"]["substation-2"].subgroup = "substation"
+data.raw["item"]["substation-2"].subgroup = "substation"
+data.raw["recipe"]["substation-3"].subgroup = "substation"
+data.raw["item"]["substation-3"].subgroup = "substation"
+data.raw["recipe"]["substation-4"].subgroup = "substation"
+data.raw["item"]["substation-4"].subgroup = "substation"
+
+if mods["LightedPolesPlus"] then
+data.raw["recipe"]["lighted-small-electric-pole"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-small-electric-pole"].subgroup = "wooden-pole"
+data.raw["recipe"]["lighted-bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-bi-wooden-pole-big"].subgroup = "wooden-pole"
+data.raw["recipe"]["lighted-bi-wooden-pole-huge"].subgroup = "wooden-pole"
+data.raw["item"]["lighted-bi-wooden-pole-huge"].subgroup = "wooden-pole"
+
+data.raw["recipe"]["lighted-medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-2"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-3"].subgroup = "medium-electric-pole"
+data.raw["recipe"]["lighted-medium-electric-pole-4"].subgroup = "medium-electric-pole"
+data.raw["item"]["lighted-medium-electric-pole-4"].subgroup = "medium-electric-pole"
+
+data.raw["recipe"]["lighted-big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-2"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-3"].subgroup = "big-electric-pole"
+data.raw["recipe"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
+data.raw["item"]["lighted-big-electric-pole-4"].subgroup = "big-electric-pole"
+
+data.raw["recipe"]["lighted-substation"].subgroup = "substation"
+data.raw["item"]["lighted-substation"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-2"].subgroup = "substation"
+data.raw["item"]["lighted-substation-2"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-3"].subgroup = "substation"
+data.raw["item"]["lighted-substation-3"].subgroup = "substation"
+data.raw["recipe"]["lighted-substation-4"].subgroup = "substation"
+data.raw["item"]["lighted-substation-4"].subgroup = "substation"
+end
+-------------------------------------------------------------------------------------------------
+--сундуки и склады
+data.raw["item"]["steel-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-passive-provider"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-storage"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-active-provider"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-requester"].subgroup = "logistic-chests-1"
+data.raw["item"]["logistic-chest-buffer"].subgroup = "logistic-chests-1"
+
+data.raw["item"]["brass-chest"].subgroup = "logistic-chests-2"
+
+data.raw["item"]["titanium-chest"].subgroup = "logistic-chests-3"
+
+if mods["Warehousing"] then
+data.raw["item"]["storehouse-basic"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-passive-provider"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-storage"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-active-provider"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-requester"].subgroup = "logistic-chests-4"
+data.raw["item"]["storehouse-buffer"].subgroup = "logistic-chests-4"
+
+data.raw["item"]["storehouse-basic"].order = "1"
+data.raw["item"]["storehouse-passive-provider"].order = "4"
+data.raw["item"]["storehouse-storage"].order = "6"
+data.raw["item"]["storehouse-active-provider"].order = "2"
+data.raw["item"]["storehouse-requester"].order = "5"
+data.raw["item"]["storehouse-buffer"].order = "3"
+
+data.raw["item"]["warehouse-basic"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-passive-provider"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-storage"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-active-provider"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-requester"].subgroup = "logistic-chests-5"
+data.raw["item"]["warehouse-buffer"].subgroup = "logistic-chests-5"
+
+data.raw["item"]["warehouse-basic"].order = "1"
+data.raw["item"]["warehouse-passive-provider"].order = "4"
+data.raw["item"]["warehouse-storage"].order = "6"
+data.raw["item"]["warehouse-active-provider"].order = "2"
+data.raw["item"]["warehouse-requester"].order = "5"
+data.raw["item"]["warehouse-buffer"].order = "3"
+end
+
+end --конец mods["angelsindustries"]

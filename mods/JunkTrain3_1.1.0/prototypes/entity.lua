@@ -828,14 +828,14 @@ data:extend({
     orange_light = {intensity = 0.2, size = 4, color={r=1, g=0.5}},
     red_light = {intensity = 0.2, size = 4, color={r=1}},
 
-    circuit_wire_connection_points = circuit_connector_definitions["rail-signal"].points,
-    circuit_connector_sprites = circuit_connector_definitions["rail-signal"].sprites,
-    circuit_wire_max_distance = default_circuit_wire_max_distance,
+    --circuit_wire_connection_points = circuit_connector_definitions["rail-signal"].points,
+    --circuit_connector_sprites = circuit_connector_definitions["rail-signal"].sprites,
+    --circuit_wire_max_distance = default_circuit_wire_max_distance,
 
-    circuit_wire_max_distance = 9,
-    default_red_output_signal = {type = "virtual", name = "signal-red"},
-    default_orange_output_signal = {type = "virtual", name = "signal-yellow"},
-    default_green_output_signal = {type = "virtual", name = "signal-green"}
+    --circuit_wire_max_distance = 9,
+    --default_red_output_signal = {type = "virtual", name = "signal-red"},
+    --default_orange_output_signal = {type = "virtual", name = "signal-yellow"},
+    --default_green_output_signal = {type = "virtual", name = "signal-green"}
   },
   {
     type = "rail-chain-signal",
