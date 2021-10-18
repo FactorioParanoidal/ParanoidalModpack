@@ -249,6 +249,11 @@ data:extend({
 {type = "item-subgroup", name = "logistic-chests-5", group = "logistics", order = "f-5",},
 
 })
+else
+data:extend({
+{type = "item-subgroup", name = "transport-rail", group = "angels-vehicles", order = "a",},
+{type = "item-subgroup", name = "transport-rail-other", group = "angels-vehicles", order = "b",},
+})
 end
 -------------------------------------------------------------------------------------------------
 --создаем предмет для hazard-concrete-brick
