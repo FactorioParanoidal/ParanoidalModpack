@@ -3,3 +3,5 @@ bobmods.lib.recipe.add_ingredient("artillery-turret", {"artillery-turret-prototy
 -------------------------------------------------------------------------------------------------
 --привязываем базовую артиллерию к новому прототипу
 bobmods.lib.tech.add_prerequisite("artillery", "artillery-prototype")
+--удаляем лишние зависимости
+bobmods.lib.tech.remove_prerequisite("artillery", "bi-tech-bio-cannon")
