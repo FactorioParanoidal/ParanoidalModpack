@@ -354,6 +354,47 @@ bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
 bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
 bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
 bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
+-------------------------------------------------------------------------------------------------
+--подкрашиваем примитивы
+--иконки итемов
+if mods["JunkTrain3"] then
+  data.raw.item["rail-signal-scrap"].icons =
+  {{
+      icon = "__base__/graphics/icons/rail-signal.png",
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
+  }}
+  data.raw.item["rail-chain-signal-scrap"].icons =
+  {{
+      icon = "__base__/graphics/icons/rail-chain-signal.png",
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
+  }}
+  data.raw.item["train-stop-scrap"].icons =
+  {{
+      icon = "__base__/graphics/icons/train-stop.png",
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
+  }}
+--энтити
+data.raw["rail-signal"]["rail-signal-scrap"].icons = 
+{{
+  icon = "__base__/graphics/icons/rail-signal.png",
+  icon_size = 64, icon_mipmaps = 4,
+  tint = {r=170, g=130, b=1}
+}}
+data.raw["rail-signal"]["rail-signal-scrap"].animation.tint = {r=170, g=130, b=1}
+data.raw["rail-signal"]["rail-signal-scrap"].animation.hr_version.tint = {r=170, g=130, b=1}
+
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].icons = 
+{{
+  icon = "__base__/graphics/icons/rail-chain-signal.png",
+  icon_size = 64, icon_mipmaps = 4,
+  tint = {r=170, g=130, b=1}
+}}
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.tint = {r=170, g=130, b=1}
+data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.hr_version.tint = {r=170, g=130, b=1}
+end
 --###############################################################################################
 --переносим рецепты в новые вкладки
 --перенос в логику
