@@ -110,8 +110,8 @@ data:extend({
   icons = {
     {
       icon = "__base__/graphics/icons/rail-signal.png",
-      icon_size = 64,
-      icon_mipmaps = 4
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
     },
     {
       icon = "__zzzparanoidal__/graphics/upgrade-icon.png",
@@ -144,8 +144,8 @@ data:extend({
   icons = {
     {
       icon = "__base__/graphics/icons/rail-chain-signal.png",
-      icon_size = 64,
-      icon_mipmaps = 4
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
     },
     {
       icon = "__zzzparanoidal__/graphics/upgrade-icon.png",
@@ -178,8 +178,8 @@ data:extend({
   icons = {
     {
       icon = "__base__/graphics/icons/train-stop.png",
-      icon_size = 64,
-      icon_mipmaps = 4
+      icon_size = 64, icon_mipmaps = 4,
+      tint = {r=170, g=130, b=1}
     },
     {
       icon = "__zzzparanoidal__/graphics/upgrade-icon.png",
