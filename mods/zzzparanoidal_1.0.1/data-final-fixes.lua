@@ -24,11 +24,15 @@ require("recipes.module-contactfix")
 
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
 
-require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
+require("graphics.train.train_reskin")
 
+require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
+-------------------------------------------------------------------------------------------------
 --фиксы совместимости для модов
 require("prototypes.mod_compatibility.Transport_Drones")
+require("prototypes.mod_compatibility.JunkTrain")
 
+-------------------------------------------------------------------------------------------------
 require("prototypes.Angels_RBOS") --Angels_RBOS Angel's Re-enabled Basic Ore Smelting
 
 

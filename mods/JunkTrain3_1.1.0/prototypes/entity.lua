@@ -104,7 +104,7 @@ end
 
 
 data:extend({
-    {
+    --[[{
         type = "locomotive",
         name = "JunkTrain",
         icon = "__JunkTrain3__/graphics/junk-train-icon.png",
@@ -274,7 +274,7 @@ data:extend({
         open_sound = { filename = "__base__/sound/car-door-open.ogg", volume=0.7 },
         close_sound = { filename = "__base__/sound/car-door-close.ogg", volume = 0.7 },
         sound_minimum_speed = 0.5;
-    },
+    },]]
   {
     type = "straight-rail",
     name = "straight-scrap-rail",
@@ -320,7 +320,7 @@ data:extend({
     pictures = scrap_rail_pictures(),
     placeable_by = { item="scrap-rail", count = 4}
   },
-  {
+  --[[{
     type = "cargo-wagon",
     name = "ScrapTrailer",
     icon = "__JunkTrain3__/graphics/junk-wagon-icon.png",
@@ -377,7 +377,7 @@ data:extend({
                 }
             }
     }
-	},
+	},]]
 
 
   {

@@ -1,7 +1,3 @@
-local BioInd = require('common')('Bio_Industries')
-
-local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
-
 if not mods["Natural_Evolution_Buildings"] then
   -- Simplified code in 0.17.39/0.18.6
   local techs = data.raw.technology

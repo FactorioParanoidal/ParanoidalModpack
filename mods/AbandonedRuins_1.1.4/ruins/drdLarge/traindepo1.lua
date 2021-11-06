@@ -11,7 +11,7 @@ return
     {"ScrapTrailer", {x = 2.5, y = 6.48}, {dmg = {dmg = 2}, }},
     {"straight-scrap-rail", {x = 2.5, y = 6.5}, {dir = "east", }},
     {"straight-scrap-rail", {x = 4.5, y = 6.5}, {dir = "east", }},
-    {"JunkTrain", {x = 9.5, y = 6.5}, {}},
+    --{"JunkTrain", {x = 9.5, y = 6.5}, {}},
     {"straight-scrap-rail", {x = 6.5, y = 6.5}, {dir = "east", }},
     {"straight-scrap-rail", {x = 8.5, y = 6.5}, {dir = "east", }},
     {"straight-scrap-rail", {x = 10.5, y = 6.5}, {dir = "east", }},

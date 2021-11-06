@@ -73,6 +73,7 @@ data:extend({
 {
   type = "recipe",
   name = "scrap-rail-to-rail",
+  main_product = "",
   icons = {
     {
       icon = "__JunkTrain3__/graphics/icons/rail.png",
@@ -107,6 +108,7 @@ data:extend({
 {
   type = "recipe",
   name = "rail-signal-scrap-to-rail-signal",
+  main_product = "",
   icons = {
     {
       icon = "__base__/graphics/icons/rail-signal.png",
@@ -141,6 +143,7 @@ data:extend({
 {
   type = "recipe",
   name = "rail-chain-signal-scrap-to-rail-chain-signal",
+  main_product = "",
   icons = {
     {
       icon = "__base__/graphics/icons/rail-chain-signal.png",
@@ -175,6 +178,7 @@ data:extend({
 {
   type = "recipe",
   name = "train-stop-scrap-to-train-stop",
+  main_product = "",
   icons = {
     {
       icon = "__base__/graphics/icons/train-stop.png",
@@ -233,7 +237,7 @@ data:extend({
 },
 {type = "item-subgroup", name = "transport-rail", group = "transport", order = "a",},
 {type = "item-subgroup", name = "transport-rail-other", group = "transport", order = "b",},
-{type = "item-subgroup", name = "junk-train", group = "transport", order = "ddd",},
+--{type = "item-subgroup", name = "junk-train", group = "transport", order = "ddd",},
 {type = "item-subgroup", name = "artillery-wagon", group = "transport", order = "eg",},
 {type = "item-subgroup", name = "spider", group = "transport", order = "x",},
 {type = "item-subgroup", name = "aircraft", group = "transport", order = "y",},

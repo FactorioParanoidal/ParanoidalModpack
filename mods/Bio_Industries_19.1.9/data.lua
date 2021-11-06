@@ -12,7 +12,6 @@ if not thxbob then thxbob = {} end
 if not thxbob.lib then thxbob.lib = {} end
 
 for var, name in pairs({
-  Bio_Cannon = "BI_Bio_Cannon",
   BI_Bio_Fuel = "BI_Bio_Fuel",
   BI_Easy_Bio_Gardens = "BI_Easy_Bio_Gardens",
   BI_Bigger_Wooden_Chests = "BI_Bigger_Wooden_Chests",
@@ -21,15 +20,11 @@ for var, name in pairs({
   BI_Game_Tweaks_Tree = "BI_Game_Tweaks_Tree",
   BI_Game_Tweaks_Small_Tree_Collisionbox = "BI_Game_Tweaks_Small_Tree_Collisionbox",
   BI_Game_Tweaks_Player = "BI_Game_Tweaks_Player",
-  BI_Game_Tweaks_Disassemble = "BI_Game_Tweaks_Disassemble",
-  BI_Game_Tweaks_Bot = "BI_Game_Tweaks_Bot",
   BI_Solar_Additions = "BI_Solar_Additions"
 }) do
   BI.Settings[var] = BioInd.get_startup_setting(name)
 end
 
---~ BioInd.show("BI.Settings.BI_Easy_Bio_Gardens", BI.Settings.BI_Easy_Bio_Gardens)
---~ BioInd.show("BI.Settings.BI_Game_Tweaks_Disassemble", BI.Settings.BI_Game_Tweaks_Disassemble)
 --- Help Files
 require ("libs.item-functions") -- From Bob's Libary
 require ("libs.recipe-functions") -- From Bob's Libary
@@ -43,17 +38,12 @@ require ("prototypes.category")
 -- Create the hidden entities
 require("prototypes.compound_entities.hidden_entities")
 
---~ BioInd.show("BioInd.compound_entities", BioInd.compound_entities)
---~ error("Break!")
-
-
 --- Bio Farm
 require ("prototypes.Bio_Farm.entities")
 require ("prototypes.Bio_Farm.item")
 require ("prototypes.Bio_Farm.recipe")
 require ("prototypes.Bio_Farm.liquids")
 require ("prototypes.Bio_Farm.recipe-categories")
-require ("prototypes.Bio_Farm.pipeConnectors")
 require ("prototypes.Bio_Farm.technology")
 require ("prototypes.Bio_Farm.tree_entities")
 
@@ -86,42 +76,14 @@ require ("prototypes.Bio_Turret.item")
 require ("prototypes.Bio_Turret.recipe")
 require ("prototypes.Bio_Turret.entity")
 
-
---- Bio Cannon
--- Items Groups
-require ("prototypes.Bio_Cannon.item-group")
-
--- Cannon
-require ("prototypes.Bio_Cannon.item")
-require ("prototypes.Bio_Cannon.recipe")
-require ("prototypes.Bio_Cannon.entity")
-require ("prototypes.Bio_Cannon.technology")
-
--- Projectiles
-require ("prototypes.Bio_Cannon.projectiles-item")
-require ("prototypes.Bio_Cannon.projectiles-recipe")
-require ("prototypes.Bio_Cannon.projectiles-entity")
-
-
 ---- Add Bio Fuel & Plastic, etc.
 require("prototypes.Bio_Fuel.item")
 require("prototypes.Bio_Fuel.recipe")
 require("prototypes.Bio_Fuel.entities")
-require("prototypes.Bio_Fuel.technology")
 
-
-------------------------------------------------------------------------------------
--- Alien Biomes will degrade tiles to "landfill" if more than 255 tiles are defined
--- in the game. We can register the musk-floor tiles with Alien Biomes so it will
--- try to prioritize the tiles if they exist.
-alien_biomes_priority_tiles = alien_biomes_priority_tiles or {}
-table.insert(alien_biomes_priority_tiles, "bi-solar-mat")
-
---~ for i, item in pairs(data.raw.item) do
---~ BioInd.show("Item", i)
---~ end
-
-
+--###############################################################################################
+require("prototypes.new_tech")
+--###############################################################################################
 ------------------------------------------------------------------------------------
 -- Add icons to our prototypes
 BioInd.BI_add_icons()
