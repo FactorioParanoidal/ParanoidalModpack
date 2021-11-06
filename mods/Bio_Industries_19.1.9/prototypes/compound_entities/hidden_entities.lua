@@ -235,7 +235,3 @@ end
 require(HIDDENPATH .. "hidden_lamps")
 require(HIDDENPATH .. "hidden_panels")
 require(HIDDENPATH .. "hidden_poles")
-require(HIDDENPATH .. "hidden_radars")
-
---~ BioInd.show("BI.hidden_entities.types", BI.hidden_entities.types)
---~ error("Break!")

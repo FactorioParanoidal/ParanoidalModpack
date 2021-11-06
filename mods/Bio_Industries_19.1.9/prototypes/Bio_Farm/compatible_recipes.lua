@@ -4,16 +4,16 @@ local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
 local ICONPATHMIPS = BioInd.modRoot .. "/graphics/icons/mips/"
 
 data:extend({
-  {
+--###############################################################################################
+{
     type = "recipe",
     name = "bi-pellet-coke-2",
-    icon = ICONPATH .. "pellet_coke_b.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "pellet_coke_b.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/pellet_coke.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__angelspetrochem__/graphics/icons/solid-carbon.png",
+      icon_size = 32, icon_mipmaps = 1, scale = 0.5, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -23,45 +23,40 @@ data:extend({
     result = "pellet-coke",
     result_count = 1,
     always_show_made_in = true,
-    allow_decomposition = false,
+    allow_decomposition = true,
     allow_as_intermediate = false,
     enabled = false,
-  },
-
-  -- fertilizer from sodium-hydroxide--
+},
+--###############################################################################################
+-- fertilizer from sodium-hydroxide
   {
     type = "recipe",
     name = "bi-fertilizer-2",
-    icon = ICONPATH .. "fertilizer_sodium_hydroxide.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "fertilizer_sodium_hydroxide.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__angelspetrochem__/graphics/icons/solid-sodium-hydroxide.png",
+      icon_size = 32, icon_mipmaps = 1, scale = 0.25, shift = {-8, 8}},
     },
-    category = "chemistry",
+  category = "chemistry",
     energy_required = 5,
-    ingredients = {
+    ingredients = 
+    {
       {type = "fluid", name = "nitrogen", amount = 10},
       {type = "item", name = "bi-ash", amount = 10}
     },
-    results = {
-      {type = "item", name = "fertilizer", amount = 5}
-    },
+    results = {{type = "item", name = "fertilizer", amount = 5}},
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = true,         -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = true,  
+    always_show_made_in = true,    
+    allow_decomposition = true,    
     subgroup = "bio-bio-farm-intermediate-product",
     order = "b[bi-fertilizer]",
   },
 })
-
----- Resin
+--###############################################################################################
+-- Resin
 if not data.raw.item["resin"] then
 
   data:extend({
@@ -71,87 +66,21 @@ if not data.raw.item["resin"] then
       name = "resin",
       icon = ICONPATH .. "bi_resin.png",
       icon_size = 64,
-      icons = {
-        {
-          icon = ICONPATH .. "bi_resin.png",
-          icon_size = 64,
-        }
-      },
       icon_mipmaps = 4,
-      pictures = {
-        --~ { size = 64, filename = ICONPATHMIPS.."Resin_1.png", scale = 0.2, mipmap_count = 1 },
-        --~ { size = 64, filename = ICONPATHMIPS.."Resin_2.png", scale = 0.2, mipmap_count = 1 },
-        --~ { size = 64, filename = ICONPATHMIPS.."Resin_3.png", scale = 0.2, mipmap_count = 1 },
-        --~ { size = 64, filename = ICONPATHMIPS.."Resin_4.png", scale = 0.2, mipmap_count = 1 }
+      pictures = 
+      {
         { size = 64, filename = ICONPATHMIPS.."Resin_1.png", scale = 0.2 },
         { size = 64, filename = ICONPATHMIPS.."Resin_2.png", scale = 0.2 },
         { size = 64, filename = ICONPATHMIPS.."Resin_3.png", scale = 0.2 },
         { size = 64, filename = ICONPATHMIPS.."Resin_4.png", scale = 0.2 }
       },
       subgroup = "bio-bio-farm-raw",
-      --~ order = "a[bi]-a-b[bi-resin]",
       order = "a[bi]-a-bb[bi-resin]",
       stack_size = 200
     },
-
-    --- Resin recipe - Wood
-    {
-      type = "recipe",
-      name = "bi-resin-wood",
-      localised_name = {"recipe-name.bi-resin-wood"},
-      localised_description = {"recipe-description.bi-resin-wood"},
-      icon = ICONPATH .. "bi_resin_wood.png",
-      icon_size = 64,
-      icons = {
-        {
-          icon = ICONPATH .. "bi_resin_wood.png",
-          icon_size = 64,
-        }
-      },
-      --~ subgroup = "bio-bio-farm-raw",
-      --~ order = "a[bi]-a-ab[bi-resin2]",
-      subgroup = "bio-bio-farm-raw",
-      --~ order = "a[bi]-a-aa[bi-2-resin-1-wood]",
-      order = "a[bi]-a-bb[bi-2-resin-2-wood]",
-      enabled = true, --DrD false 
-      --~ allow_as_intermediate = false,
-      --~ always_show_made_in = true,
-      --~ allow_decomposition = false,
-      allow_as_intermediate = true,     -- Changed for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Changed for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Changed for 0.18.34/1.1.4
-
-      energy_required = 1,
-      ingredients = {
-         {type = "item", name = "wood", amount = 1}
-      },
-      result = "resin",
-      result_count = 1,
-      main_procuct = "",
-      -- This is a custom property for use by "Krastorio 2" (it will change
-      -- ingredients/results; used for wood/wood pulp)
-      mod = "Bio_Industries",
-    },
   })
-  -- Order in table reflects order in display (Tech tree), so we remove the last
-  -- recipes, add the new one, and re-add the removed recipes where they belong.
-  for _, recipe in ipairs({"bi-woodpulp", "bi-resin-pulp", "bi-wood-from-pulp"}) do
-    thxbob.lib.tech.remove_recipe_unlock("bi-tech-bio-farming", recipe)
-  end
-  for _, recipe in ipairs({"bi-woodpulp", "bi-resin-wood", "bi-resin-pulp", "bi-wood-from-pulp"}) do
-    thxbob.lib.tech.add_recipe_unlock("bi-tech-bio-farming", recipe)
-  end
-
-elseif data.raw.recipe["bob-resin-wood"] then
-  data.raw.recipe["bob-resin-wood"].icon = ICONPATH .. "bi_resin_wood.png"
-  data.raw.recipe["bob-resin-wood"].icon_size = 64
 end
-
-
---~ --update crushed stone icon
---~ data.raw.item["stone-crushed"].icon = ICONPATH .. "crushed-stone.png"
---~ data.raw.item["stone-crushed"].icon_size = 64
-
+--###############################################################################################
  -- Pellet-Coke from Carbon - Bobs & Angels
 if data.raw.item["solid-carbon"] and mods["angelspetrochem"] then
   thxbob.lib.recipe.add_new_ingredient("bi-pellet-coke-2", {type = "item", name = "solid-carbon", amount = 5}) --DrD 10
@@ -172,22 +101,6 @@ elseif data.raw.item["carbon"] and mods["bobplates"] then
   data.raw.recipe["bi-pellet-coke"].icon_size = 64
   thxbob.lib.tech.add_recipe_unlock("bi-tech-coal-processing-2", "bi-pellet-coke-2")
 end
-
-
--- Update Wood Bricks icon to Angels
-if data.raw.item["wood-bricks"] and mods["angelsbioprocessing"] then
-  data.raw.recipe["bi-wood-fuel-brick"].icon = "__angelsbioprocessing__/graphics/icons/wood-bricks.png"
-  data.raw.recipe["bi-wood-fuel-brick"].icon_size = 32
-  data.raw.recipe["bi-wood-fuel-brick"].icons = {
-      {
-        icon = "__angelsbioprocessing__/graphics/icons/wood-bricks.png",
-        icon_size = 32,
-      }
-    }
-  data.raw.item["wood-bricks"].icon = "__angelsbioprocessing__/graphics/icons/wood-bricks.png"
-  data.raw.item["wood-bricks"].icon_size = 32
-end
-
 
 --- Add fertilizer recipes if bob's or Angels
 if data.raw.item["solid-sodium-hydroxide"] and mods["angelspetrochem"] then
@@ -214,20 +127,6 @@ if data.raw.fluid["gas-nitrogen"] and data.raw.fluid["gas-compressed-air"] and m
   thxbob.lib.recipe.replace_ingredient("bi-biomass-3", "liquid-air", "gas-compressed-air")
 end
 
--- If Angels, replace icons for biomass-conversion-2 and bi_basic_gas_processing
-if mods["angelspetrochem"] then
-  local conversion = data.raw.recipe["bi-biomass-conversion-2"]
-  conversion.icon = ICONPATH .. "bio_conversion_2_angels.png"
-  conversion.icons[1].icon = ICONPATH .. "bio_conversion_2_angels.png"
-  conversion.localised_name = {"recipe-name.bi-biomass-conversion-2-methane"}
-  conversion.localised_description = {"recipe-description.bi-biomass-conversion-2-methane"}
-
-  local gas_processing = data.raw.recipe["bi-basic-gas-processing"]
-  gas_processing.icon = ICONPATH .. "bi_basic_gas_processing_angels.png"
-  gas_processing.icons[1].icon = ICONPATH .. "bi_basic_gas_processing_angels.png"
-
-end
-
 -- If Angels, replace water with water-yellow-waste
 if data.raw.fluid["water-yellow-waste"] and mods["angelspetrochem"] then
   -- Replace water with water-yellow-waste in Algae Biomass conversion 4
@@ -237,37 +136,12 @@ if data.raw.fluid["water-yellow-waste"] and mods["angelspetrochem"] then
     name = "water-yellow-waste",
     amount = 40
   })
-  -- Change recipe localizations
-  data.raw.recipe["bi-biomass-conversion-4"].localised_name =
-    {"recipe-name.bi-biomass-conversion-4-yellow-waste"}
-  data.raw.recipe["bi-biomass-conversion-4"].localised_description =
-    {"recipe-description.bi-biomass-conversion-4-yellow-waste"}
 end
-
--- Krastorio
-if mods["Krastorio"] then
-  -- Replace liquid air with oxygen in Algae Biomass conversion 2 and 3
-  thxbob.lib.recipe.replace_ingredient("bi-fertilizer-1", "nitrogen", "k-nitrogen")
-  thxbob.lib.recipe.replace_ingredient("bi-fertilizer-2", "nitrogen", "k-nitrogen")
-
-  thxbob.lib.recipe.replace_ingredient("bi-biomass-2", "liquid-air", "k-oxygen")
-  thxbob.lib.recipe.replace_ingredient("bi-biomass-3", "liquid-air", "k-oxygen")
-end
-
-
--- Krastorio2
-if mods["Krastorio2"] then
-  -- Replace liquid air with oxygen in Algae Biomass conversion 2 and 3
-  thxbob.lib.recipe.replace_ingredient("bi-biomass-2", "liquid-air", "oxygen")
-  thxbob.lib.recipe.replace_ingredient("bi-biomass-3", "liquid-air", "oxygen")
-end
-
 
 --- Make Bio Farm use glass if Bob's
 if data.raw.item.glass  then
   thxbob.lib.recipe.replace_ingredient("bi-bio-farm", "copper-cable", "glass")
 end
-
 
 --- Adding in some recipe's to use up Wood Pulp (Ash and Charcoal) and Crushed Stone
 if mods["angelsrefining"] then
@@ -348,12 +222,6 @@ if data.raw.item["wooden-board"] and mods["bobelectronics"] then
       localised_name = {"recipe-name.bi-press-wood"},
       icon = ICONPATH .. "bi_wooden_board.png",
       icon_size = 64,
-      icons = {
-        {
-          icon = ICONPATH .. "bi_wooden_board.png",
-          icon_size = 64,
-        }
-      },
       subgroup = "bob-boards",
       order = "c-a1[wooden-board]",
       category = "electronics",
@@ -369,9 +237,6 @@ if data.raw.item["wooden-board"] and mods["bobelectronics"] then
       results = {
         {type = "item", name = "wooden-board", amount = 2}
       },
-      -- This is a custom property for use by "Krastorio 2" (it will change
-      -- ingredients/results; used for wood/wood pulp)
-      mod = "Bio_Industries",
     },
   })
   thxbob.lib.tech.add_recipe_unlock("electronics", "bi-press-wood")
@@ -394,25 +259,23 @@ if data.raw.recipe["wood-charcoal"] then
 end
 
 
-
+--###############################################################################################
 -- Add recipe for sand from crushed stone if any other mod provides sand
-
 if data.raw.item["sand"] or
    data.raw.item["biotech-sand"] or
    data.raw.item["solid-sand"] then
 
-BioInd.writeDebug("Generating recipe for sand from crushed stone!")
-  -- General recipe for sand (will be adjusted later if necessary)
+-- General recipe for sand (will be adjusted later if necessary)
   data:extend({
     {
       type = "recipe",
       name = "bi-sand",
-      icons = {
-        {
-          icon = ICONPATH .. "sand-aai.png",
-          icon_size = 64,
-          mip_maps = 1,
-        }
+      icons = 
+      {
+        {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/sand.png",
+        icon_size = 64, icon_mipmaps = 1},
+        {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/crushed-stone.png",
+        icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
       },
       category = "biofarm-mod-crushing",
       subgroup = "bio-bio-farm-raw",
@@ -421,18 +284,15 @@ BioInd.writeDebug("Generating recipe for sand from crushed stone!")
       ingredients = {{"stone-crushed", 2}},
       result = "sand",
       result_count = 5,
-      main_product = "",
       enabled = false,
-      --~ always_show_made_in = true,
-      --~ allow_decomposition = false,
-      --~ allow_as_intermediate = false,
-      allow_as_intermediate = true,     -- Changed for 0.18.34/1.1.4
-      always_show_made_in = true,       -- Changed for 0.18.34/1.1.4
-      allow_decomposition = true,               -- Changed for 0.18.34/1.1.4
+      allow_as_intermediate = true,
+      always_show_made_in = true,
+      allow_decomposition = true,
     },
   })
+--###############################################################################################
 
-  local recipe = data.raw.recipe["bi-sand"]
+local recipe = data.raw.recipe["bi-sand"]
   -- Adjust result for BioTech
   if mods["BioTech"] then
 BioInd.writeDebug("Adjusting result for \"BioTech\" …")
@@ -443,16 +303,7 @@ BioInd.writeDebug("Adjusting result for \"BioTech\" …")
     -- Adjust result
 BioInd.writeDebug("Adjusting result for \"angelsrefining\" …")
     recipe.result = "solid-sand"
-
-  -- Adjust icon for Krastorio
-  elseif mods["Krastorio2"] or mods["Krastorio"] then
-BioInd.writeDebug("Using Krastorio icon …")
-    recipe.icons[1].icon = ICONPATH .. "sand-Krastorio.png"
-  end
-
-  -- Add recipe to technology
-BioInd.writeDebug("Add unlock for recipe bi-sand")
-  thxbob.lib.tech.add_recipe_unlock("steel-processing", "bi-sand")
+end
 
   -- Use alternative descriptions for stone crusher!
 BioInd.writeDebug("Using alternative descriptions for \"bi-stone-crusher\"!")

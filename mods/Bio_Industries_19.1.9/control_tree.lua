@@ -308,12 +308,6 @@ function seed_planted_trigger(event)
   plant_seed(event, 2000, 6000, true)
 end
 
-function seed_planted_arboretum(event, entity)
-  event.created_entity = entity
-  plant_seed(event, 2000, 6000, false)
-end
-
-
 function summ_weight(tabl)
   local summ = 0
   for i, tree_weights in pairs(tabl or {}) do

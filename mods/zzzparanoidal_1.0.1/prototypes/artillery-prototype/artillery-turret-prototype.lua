@@ -1,4 +1,5 @@
 -------------------------------------------------------------------------------------------------
+--[[
 --скрываем био-пушку и снаряды для нее
 if mods["Bio_Industries"] then
 data.raw["technology"]["bi-tech-bio-cannon"].hidden = true
@@ -14,6 +15,7 @@ data.raw["recipe"]["bi-bio-cannon-proto-ammo"].hidden = true
 data.raw["recipe"]["bi-bio-cannon-basic-ammo"].hidden = true
 data.raw["recipe"]["bi-bio-cannon-poison-ammo"].hidden = true
 end
+]]
 -------------------------------------------------------------------------------------------------
 --копируем базовую артиллерию и меняем ей параметры
 local artillery_turret_prototype = table.deepcopy(data.raw["artillery-turret"]["artillery-turret"])

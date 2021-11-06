@@ -4,12 +4,17 @@
         ["bi-straight-rail-power", "straight-rail"],
         ["bi-curved-rail-power", "curved-rail"],
         ["bi-straight-rail-wood", "straight-rail"],
-        ["bi-curved-rail-wood", "curved-rail"]      
+        ["bi-curved-rail-wood", "curved-rail"],
+        ["stone-pipe", "pipe"],
+        ["stone-pipe-to-ground", "pipe-to-ground"]
+
     ],
     "item":
     [
         ["bi-rail-wood", "rail"],
-        ["bi-rail-power", "rail"]
+        ["bi-rail-power", "rail"],
+        ["stone-pipe", "pipe"],
+        ["stone-pipe-to-ground", "pipe-to-ground"]
     ],
     "tile":
     [

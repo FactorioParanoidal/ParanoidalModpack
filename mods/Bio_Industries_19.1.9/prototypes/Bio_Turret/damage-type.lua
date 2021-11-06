@@ -1,10 +1,6 @@
 data:extend({
-
---- Damage for Dart Turret Ammo
-
-  {
-    type = "damage-type",
-    name = "bob-pierce"
-  },
+  
+-- Damage for Dart Turret Ammo
+{type = "damage-type", name = "bob-pierce"},
   
 })

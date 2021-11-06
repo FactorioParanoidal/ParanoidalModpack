@@ -60,11 +60,6 @@ h_entity.energy_source = {
 -- Compile a list of the hidden entities we'll need
 BI.make_hidden_entity_list(h_key)
 
--- Musk floor is not an entity, but a tile, so we don't have a compound-entity table
--- for it and must add it manually!
-local Musk_name = "bi-musk-mat-hidden-pole"
-BI.hidden_entities.types[h_key][Musk_name] = "bi-solar-mat"
-
 -- We only have one "connector" at the moment. No need to add another file just for that,
 -- so let's add this connector manually to the list!
 BI.hidden_entities.types[h_key]["bi-bio-farm-hidden-connector_pole"] = "bi-bio-farm"
@@ -150,24 +145,6 @@ BioInd.show("locale_name", locale_name)
     end
 
   ------------------------------------------------------------------------------------
-  -- Adjust properties for hidden power-rail pole
-  ------------------------------------------------------------------------------------
-  elseif (c_entities["bi-straight-rail-power"] and
-            c_entities["bi-straight-rail-power"].hidden[h_key] and
-            pole_name == c_entities["bi-straight-rail-power"].hidden[h_key].name) or
-          (c_entities["bi-curved-rail-power"] and
-            c_entities["bi-curved-rail-power"].hidden[h_key] and
-            pole_name == c_entities["bi-curved-rail-power"].hidden[h_key].name) then
-  --~ elseif pole_name == c_entities["bi-straight-rail-power"].hidden[h_key].name then
-
-    --~ pole.localised_name = {"entity-name.bi-rail-power"}
-    --~ pole.localised_description = {"entity-description.bi-rail-power"}
-    pole.maximum_wire_distance = 9
-    pole.supply_area_distance = 2
-    shift_picture(pole)
-    BioInd.show("Adjusted properties of", pole_name)
-
-  ------------------------------------------------------------------------------------
   -- Adjust properties for hidden pole of bio gardens
   ------------------------------------------------------------------------------------
   elseif c_entities["bi-bio-garden"] and
@@ -178,25 +155,8 @@ BioInd.show("locale_name", locale_name)
     pole.supply_area_distance = 1
     shift_picture(pole)
     BioInd.show("Adjusted properties of", pole_name)
-
-  ------------------------------------------------------------------------------------
-  -- Adjust properties for hidden pole of Musk floor
-  ------------------------------------------------------------------------------------
-  elseif pole_name == Musk_name then
-    pole.icon = ICONPATH .. "solar-mat.png"
-    pole.icon_size = 64
-    pole.maximum_wire_distance = 1
-    pole.supply_area_distance = 3
-    BioInd.show("Adjusted properties of", pole_name)
   end
 
   data:extend({pole})
   BioInd.show("Created", pole_name)
 end
-
-
-------------------------------------------------------------------------------------
---~ -- Testing
---~ for k, v in pairs(data.raw[h_entity.type]) do
-  --~ BioInd.writeDebug("%s: %s", {k, v})
---~ end
