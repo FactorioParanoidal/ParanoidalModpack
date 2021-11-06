@@ -1,7 +1,3 @@
---~ local BioInd = require('common')('Bio_Industries')
-
---~ local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
-
 local pipes_sheet = {
   straight_vertical_single = {
     number = 11,
@@ -134,7 +130,7 @@ local pipes_sheet = {
   }
 }
 
-local sheet_path = "__Bio_Industries__/graphics/entities/wood_products/wood_pipe/"
+local sheet_path = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/wood_pipe/" 
 local sheet_name = "pipe_sheet.png"
 
 function change_graphics (was_picture, sheet_element, quality)

@@ -24,9 +24,9 @@ data.raw["item"]["wooden-chest"].fuel_value = "3MJ"
 
 --Bio-Industries
 data.raw["item"]["wood-charcoal"].fuel_value = "5MJ"
-data.raw["item"]["bi-wooden-chest-large"].fuel_value = "32MJ"
-data.raw["item"]["bi-wooden-chest-huge"].fuel_value = "64MJ"
-data.raw["item"]["bi-wooden-chest-giga"].fuel_value = "128MJ"
+--data.raw["item"]["bi-wooden-chest-large"].fuel_value = "32MJ"
+--data.raw["item"]["bi-wooden-chest-huge"].fuel_value = "64MJ"
+--data.raw["item"]["bi-wooden-chest-giga"].fuel_value = "128MJ"
 data.raw["item"]["bi-wooden-pole-big"].fuel_value = "7MJ"
 data.raw["item"]["bi-wooden-pole-huge"].fuel_value = "10MJ"
 data.raw["item"]["bi-wood-pipe"].fuel_value = "2MJ"

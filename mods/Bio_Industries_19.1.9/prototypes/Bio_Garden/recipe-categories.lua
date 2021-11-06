@@ -1,9 +1,3 @@
 data:extend({
-
-  -- Bio Garden
-  {
-    type = "recipe-category",
-    name = "clean-air"
-  }
-
+{type = "recipe-category", name = "clean-air"}
 })

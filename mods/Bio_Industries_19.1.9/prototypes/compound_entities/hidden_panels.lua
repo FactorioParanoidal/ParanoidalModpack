@@ -34,12 +34,6 @@ h_entity.energy_source = {
 -- Compile a list of the hidden entities we'll need
 BI.make_hidden_entity_list(h_key)
 
--- Musk floor is not an entity, but a tile, so we don't have a compound-entity table
--- for it and must add it manually!
-local Musk_name = "bi-musk-mat-hidden-panel"
-BI.hidden_entities.types[h_key][Musk_name] = "bi-solar-mat"
-
-
 ------------------------------------------------------------------------------------
 -- Make the copies!
 local tmp, panel
@@ -84,13 +78,6 @@ for panel_name, locale_name in pairs(BI.hidden_entities.types[h_key]) do
     panel.production = "100kW"
     BioInd.show("Adjusted properties of", panel_name)
 
-  -- Adjust properties for hidden panel of Musk floor
-  elseif panel_name == Musk_name then
-    panel.icon = ICONPATH .. "solar-mat.png"
-    panel.icon_size = 64
-    panel.BI_add_icon = true
-    panel.production = "10kW"
-    BioInd.show("Adjusted properties of", panel_name)
   end
 
   data:extend({panel})
