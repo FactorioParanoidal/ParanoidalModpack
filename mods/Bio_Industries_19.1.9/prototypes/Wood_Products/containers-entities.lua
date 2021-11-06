@@ -1,158 +1,151 @@
-if not BI.Settings.BI_Bigger_Wooden_Chests then
-  return
-end
-
-local BioInd = require('common')('Bio_Industries')
-
-
-BioInd.writeDebug("Creating bigger wooden chests!")
-
-
-local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
-local WOODPATH = BioInd.modRoot .. "/graphics/entities/wood_products/"
-
-local ENTITYPATH = "__base__/graphics/entity/"
-local PIPEPATH = ENTITYPATH .. "pipe/"
-
-local SNDPATH = "__base__/sound/"
---~ local BIGICONS = BioInd.check_base_version("0.18.0")
-
-
-require("prototypes.Wood_Products.demo-remnants-wood")
-
--- demo-sounds has been removed in Factorio 1.1, so we need to check the game version!
-local sound_def = BioInd.check_version("base", "<", "1.1.0") and
-                    require("__base__.prototypes.entity.demo-sounds") or
-                    require("__base__.prototypes.entity.sounds")
-local sounds = {}
-sounds.car_wood_impact = sound_def.car_wood_impact(0.8)
-sounds.generic_impact = sound_def.generic_impact
-for _, sound in ipairs(sounds.generic_impact) do
-  sound.volume = 0.65
-end
-sounds.open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" }
-sounds.close_sound = { filename = SNDPATH .. "wooden-chest-close.ogg" }
-
-sounds.walking_sound = {}
-for i = 1, 11 do
-  sounds.walking_sound[i] = {
-    filename = SNDPATH .. "walking/concrete-" .. (i < 10 and "0" or "")  .. i ..".ogg",
-    volume = 1.2
-  }
-end
-
-
-------------------------------------------------------------------------------------
---                         Rename the vanill wooden chest!                        --
-------------------------------------------------------------------------------------
-data.raw.container["wooden-chest"].localised_name = {"entity-name.bi-wooden-chest"}
-
-
-------------------------------------------------------------------------------------
---                        Create the bigger wooden chests!                        --
-------------------------------------------------------------------------------------
-
-------- Large Wooden Chest
 data:extend({
-  {
+-- Large Wooden Chest
+{
     type = "container",
     name = "bi-wooden-chest-large",
-    icon = ICONPATH .. "large_wooden_chest_icon.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "large_wooden_chest_icon.png",
-        icon_size = 64,
-      }
-    },
-    -- This is necessary for "Space Exploration" (if not true, the entity can only be
-    -- placed on Nauvis)!
+    icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_large.png",
+    icon_size = 64, icon_mipmaps = 4,
+    scale_info_icons = true,
     se_allow_in_space = true,
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 1, result = "bi-wooden-chest-large"},
     max_health = 200,
+    --corpse = "bi-wooden-chest-large-remnant",
     corpse = "small-remnants",
     collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
     selection_box = {{-1.0, -1.0}, {1.0, 1.0}},
     fast_replaceable_group = "container",
-    inventory_size = 128, -- 64
-    open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
-    close_sound = { filename = "__base__/sound/wooden-chest-close.ogg" },
-    --~ vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
-    vehicle_impact_sound = sounds.car_wood_impact,
+    inventory_size = 128,
+    open_sound = {filename = "__base__/sound/wooden-chest-open.ogg"},
+    close_sound = {filename = "__base__/sound/wooden-chest-close.ogg"},
+    vehicle_impact_sound = 
+    {
+      {filename = "__base__/sound/car-wood-impact.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-02.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-03.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-04.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-05.ogg", volume = 0.65},
+    },  
     picture = {
-      filename = WOODPATH .. "large_wooden_chest.png",
-      priority = "extra-high",
-      width = 184,
-      height = 132,
-      shift = {0.5, 0},
-      scale = 0.5,
+      layers = {
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/large_wooden_chest.png",
+          priority = "extra-high",
+          width = 64,
+          height = 64,
+          shift = {0, 0},
+          scale = 1,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_large_wooden_chest.png",
+            priority = "extra-high",
+            width = 128,
+            height = 128,
+            shift = {0, 0},
+            scale = 0.5,
+          }
+        },
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/large_wooden_chest_shadow.png",
+          priority = "extra-high",
+          width = 64,
+          height = 64,
+          shift = {1, 0},
+          scale = 1,
+          draw_as_shadow = true,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_large_wooden_chest_shadow.png",
+            priority = "extra-high",
+            width = 128,
+            height = 128,
+            shift = {1, 0},
+            scale = 0.5,
+            draw_as_shadow = true,
+          }
+        },
+      },
     },
     circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
     circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
   },
-})
-
-------- Huge Wooden Chest
-data:extend({
-  {
+--###############################################################################################
+-- Huge Wooden Chest
+{
     type = "container",
     name = "bi-wooden-chest-huge",
-    icon = ICONPATH .. "huge_wooden_chest_icon.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "huge_wooden_chest_icon.png",
-        icon_size = 64,
-      }
-    },
+    icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_huge.png",
+    icon_size = 64, icon_mipmaps = 4,
     scale_info_icons = true,
-    -- This is necessary for "Space Exploration" (if not true, the entity can only be
-    -- placed on Nauvis)!
     se_allow_in_space = true,
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 1.5, result = "bi-wooden-chest-huge"},
     max_health = 350,
+    --corpse = "bi-wooden-chest-huge-remnant",
     corpse = "small-remnants",
     collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
     fast_replaceable_group = "container",
-    inventory_size = 432, --144
+    inventory_size = 432,
     open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
     close_sound = { filename = "__base__/sound/wooden-chest-close.ogg" },
-    --~ vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
-    vehicle_impact_sound = sounds.car_wood_impact,
+    vehicle_impact_sound = 
+    {
+      {filename = "__base__/sound/car-wood-impact.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-02.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-03.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-04.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-05.ogg", volume = 0.65},
+    },  
     picture = {
-      filename = WOODPATH .. "huge_wooden_chest.png",
-      priority = "extra-high",
-      width = 184,
-      height = 132,
-      shift = {0.5, 0},
-      scale = 0.75,
+      layers = {
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/huge_wooden_chest.png",
+          priority = "extra-high",
+          width = 112,
+          height = 112,
+          shift = {0, 0},
+          scale = 1,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_huge_wooden_chest.png",
+            priority = "extra-high",
+            width = 224,
+            height = 224,
+            shift = {0, 0},
+            scale = 0.5,
+          }
+        },
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/huge_wooden_chest_shadow.png",
+          priority = "extra-high",
+          width = 112,
+          height = 112,
+          shift = {1, 0},
+          scale = 1,
+          draw_as_shadow = true,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_huge_wooden_chest_shadow.png",
+            priority = "extra-high",
+            width = 224,
+            height = 224,
+            shift = {1, 0},
+            scale = 0.5,
+            draw_as_shadow = true,
+          }
+        },
+      },
     },
     circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
     circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
-  },
-})
-
-------- Giga Wooden Chest
-data:extend({
-  {
+},
+--###############################################################################################
+-- Giga Wooden Chest
+{
     type = "container",
     name = "bi-wooden-chest-giga",
-    icon = ICONPATH .. "giga_wooden_chest_icon.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "giga_wooden_chest_icon.png",
-        icon_size = 64,
-      }
-    },
+    icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_giga.png",
+    icon_size = 64, icon_mipmaps = 4,
     scale_info_icons = true,
-    -- This is necessary for "Space Exploration" (if not true, the entity can only be
-    -- placed on Nauvis)!
     se_allow_in_space = true,
     flags = {"placeable-neutral", "player-creation"},
     minable = {mining_time = 3.5, result = "bi-wooden-chest-giga"},
@@ -161,18 +154,54 @@ data:extend({
     collision_box = {{-2.8, -2.8}, {2.8, 2.8}},
     selection_box = {{-3, -3}, {3, 3}},
     fast_replaceable_group = "container",
-    inventory_size = 1728, --576
+    inventory_size = 1728,
     open_sound = { filename = "__base__/sound/wooden-chest-open.ogg" },
     close_sound = { filename = "__base__/sound/wooden-chest-close.ogg" },
-    --~ vehicle_impact_sound =  { filename = "__base__/sound/car-wood-impact.ogg", volume = 1.0 },
-    vehicle_impact_sound = sounds.car_wood_impact,
+    vehicle_impact_sound = 
+    {
+      {filename = "__base__/sound/car-wood-impact.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-02.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-03.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-04.ogg", volume = 0.65},
+      {filename = "__base__/sound/car-wood-impact-05.ogg", volume = 0.65},
+    },  
     picture = {
-      filename = WOODPATH .. "giga_wooden_chest.png",
-      priority = "extra-high",
-      width = 501,
-      height = 366,
-      shift = {0.88, -0.170},
-      scale = 0.5,
+      layers = {
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/giga_wooden_chest.png",
+          priority = "extra-high",
+          width = 192,
+          height = 224,
+          shift = {0, -0.5},
+          scale = 1,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_giga_wooden_chest.png",
+            priority = "extra-high",
+            width = 384,
+            height = 448,
+            shift = {0, -0.5},
+            scale = 0.5,
+          }
+        },
+        {
+          filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/giga_wooden_chest_shadow.png",
+          priority = "extra-high",
+          width = 96,
+          height = 192,
+          shift = {3.5, 0},
+          scale = 1,
+          draw_as_shadow = true,
+          hr_version = {
+            filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/wood_products/chests/hr_giga_wooden_chest_shadow.png",
+            priority = "extra-high",
+            width = 192,
+            height = 384,
+            shift = {3.5, 0},
+            scale = 0.5,
+            draw_as_shadow = true,
+          }
+        }
+      },
     },
     circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
     circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,

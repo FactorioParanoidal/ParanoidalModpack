@@ -142,62 +142,6 @@ ret.compound_entities = {
       },
     }
   },
-  ["bi-straight-rail-power"] = {
-    tab = "bi_power_rail_table",
-    base = {
-      name = "bi-straight-rail-power",
-      type = "straight-rail",
-    },
-    hidden = {
-      pole = {
-        name = "bi-rail-power-hidden-pole",
-        localize_entity = "bi-rail-power"
-        -- type = ret.HE_map.pole,
-      },
-    }
-  },
-  -- Built from blueprint
-  ["bi-arboretum"] = {
-    tab = "bi_arboretum_table",
-    base = {
-      name = "bi-arboretum",
-      type = ret.HE_map.assembler,
-    },
-    hidden = {
-      radar = {
-        -- name = "bi-arboretum-hidden-radar",
-        -- type = ret.HE_map.radar,
-        base_offset = {x = -3.5, y = 3.5},
-      },
-      pole = {
-        -- name = "bi-arboretum-hidden-pole",
-        -- type = ret.HE_map.pole,
-      },
-      lamp = {
-        -- name = "bi-arboretum-hidden-lamp",
-        -- type = ret.HE_map.lamp,
-      },
-    },
-    add_global_tables = {"bi_arboretum_radar_table", "bi_arboretum_recipe_table"},
-    new_base_name = "bi-arboretum",
-  },
-  -- Built from blueprint
-  ["bi-bio-cannon"] = {
-    tab = "bi_bio_cannon_table",
-    base = {
-      name = "bi-bio-cannon",
-      type = "ammo-turret",
-    },
-    hidden = {
-      radar = {
-        -- name = "bi-bio-cannon-hidden-radar",
-        -- type = ret.HE_map.radar,
-      },
-    },
-    add_global_values = { Bio_Cannon_Counter = 0 },
-    optional = {delay = 0},
-    new_base_name = "bi-bio-cannon",
-  },
 }
 
 ------------------------------------------------------------------------------------
@@ -228,14 +172,6 @@ ret.get_HE_list = function(get_complete_list)
       return settings[name] and settings[name].value
     end
 
-    -- Bio Cannon
-    --~ if not BI.Settings.Bio_Cannon then
-    if not get_settings("BI_Bio_Cannon") then
-      --~ log("Bio cannon has been disabled!")
-      ret.compound_entities["bi-bio-cannon"] = nil
-      --~ log("Removed \"bi-bio-cannon\" from compound_entity list!")
-    end
-
     -- Solar additions
     --~ if not BI.Settings.BI_Solar_Additions then
     if not get_settings("BI_Solar_Additions") then
@@ -253,24 +189,6 @@ ret.get_HE_list = function(get_complete_list)
       --~ log("\"Easy Bio gardens\" are disabled!")
       ret.compound_entities["bi-bio-garden"].hidden.pole = nil
       --~ log("Removed hidden pole from list of hidden entities!")
-    end
-  end
-
-
-  -- Some entities share almost the same data, so we can copy them
-  local make_copies = {
-    -- Rails
-    ["bi-straight-rail-power"] = { name = "bi-curved-rail-power", type = "curved-rail" },
-    -- Overlay entities
-    ["bi-arboretum"] = { name = "bi-arboretum-area", type = ret.HE_map.ammo_turret },
-    ["bi-bio-cannon"] = { name = "bi-bio-cannon-area", type = ret.HE_map.ammo_turret },
-  }
-  for old, new in pairs(make_copies) do
-    if ret.compound_entities[old] then
-      ret.compound_entities[new.name] = util.table.deepcopy(ret.compound_entities[old])
-      ret.compound_entities[new.name].base.type = new.type
-      ret.compound_entities[new.name].base.name = new.name
-      --~ log("Added " .. new.name .. " to list of compound entities!")
     end
   end
 

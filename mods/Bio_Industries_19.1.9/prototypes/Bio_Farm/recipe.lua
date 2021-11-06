@@ -1,22 +1,16 @@
-local BioInd = require('common')('Bio_Industries')
-
-local ICONPATH = BioInd.modRoot .. "/graphics/icons/"
-
 data:extend({
-
-
-
-  --- Seeds from Water (BASIC)
-  {
+--###############################################################################################
+-- Seeds from Water (BASIC)
+{
     type = "recipe",
     name = "bi-seed-1",
-    icon = ICONPATH .. "bio_seed1.png",
     icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bio_seed1.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/tree_seed.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/fluid/water.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 200,
@@ -24,32 +18,26 @@ data:extend({
       {type = "fluid", name = "water", amount = 100},
       {type = "item", name = "wood", amount = 20},
     },
-    results = {
-      {type = "item", name = "bi-seed", amount = 40},
-    },
-    main_product = "",
+    results = {{type = "item", name = "bi-seed", amount = 40}},
     enabled = false,
+    show_amount_in_title = true,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-1",
     order = "a[bi]-ssw-a1[bi-seed-1]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Seeds from Water & Ash
+    allow_as_intermediate = false,
+},
+--###############################################################################################
+-- Seeds from Water & Ash
   {
     type = "recipe",
     name = "bi-seed-2",
-    icon = ICONPATH .. "bio_seed2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bio_seed2.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/tree_seed.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/ash.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 150,
@@ -58,32 +46,26 @@ data:extend({
       {type = "item", name = "wood", amount = 20},
       {type = "item", name = "bi-ash", amount = 10},
     },
-    results = {
-      {type = "item", name = "bi-seed", amount = 50},
-    },
-    main_product = "",
+    results = {{type = "item", name = "bi-seed", amount = 50}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-1",
     order = "a[bi]-ssw-a1[bi-seed-2]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
+    allow_as_intermediate = false,
   },
-
-
-  --- Seeds from Water & fertilizer
+--###############################################################################################
+-- Seeds from Water & fertilizer
   {
     type = "recipe",
     name = "bi-seed-3",
-    icon = ICONPATH .. "bio_seed3.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bio_seed3.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/tree_seed.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 100,
@@ -92,32 +74,32 @@ data:extend({
       {type = "item", name = "wood", amount = 20},
       {type = "item", name = "fertilizer", amount = 10},
     },
-    results = {
-      {type = "item", name = "bi-seed", amount = 60},
-    },
-    main_product = "",
+    results = {{type = "item", name = "bi-seed", amount = 60}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-1",
     order = "a[bi]-ssw-a1[bi-seed-3]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = { r = 0.43, g = 0.73, b = 0.37, a = 0.60},
+      secondary = { r = 0, g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g = 0, b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
   },
-
-
-  --- Seeds from Water & Adv-fertilizer
+--###############################################################################################
+-- Seeds from Water & Adv-fertilizer
   {
     type = "recipe",
     name = "bi-seed-4",
-    icon = ICONPATH .. "bio_seed4.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bio_seed4.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/tree_seed.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer_advanced.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 50,
@@ -126,32 +108,32 @@ data:extend({
       {type = "item", name = "bi-adv-fertilizer", amount = 10},
       {type = "fluid", name = "water", amount = 40},
     },
-    results = {
-      {type = "item", name = "bi-seed", amount = 80},
-    },
-    main_product = "",
+    results = {{type = "item", name = "bi-seed", amount = 80}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-1",
     order = "a[bi]-ssw-a1[bi-seed-4]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Seedlings from Water (BASIC)
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = { r = 0.73, g = 0.37, b = 0.52, a = 0.60},
+      secondary = {r = 0, g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g = 0, b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
+},
+--###############################################################################################
+-- Seedlings from Water (BASIC)
   {
     type = "recipe",
     name = "bi-seedling-1",
-    icon = ICONPATH .. "Seedling1.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seedling1.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/seedling.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/fluid/water.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 400,
@@ -159,32 +141,25 @@ data:extend({
       {type = "item", name = "bi-seed", amount = 20},
       {type = "fluid", name = "water", amount = 100},
     },
-    results = {
-      {type = "item", name = "seedling", amount = 40},
-    },
-    main_product = "",
+    results = {{type = "item", name = "seedling", amount = 40}},
     enabled = false,
+    show_amount_in_title = true,
     always_show_made_in = true,
-    allow_decomposition = false,
+    allow_decomposition = true,
     subgroup = "bio-bio-farm-fluid-2",
     order = "b[bi]-ssw-b1[bi-Seedling_Mk1]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
   },
-
-
-  --- Seedlings from Water & Ash
+--###############################################################################################
+-- Seedlings from Water & Ash
   {
     type = "recipe",
     name = "bi-seedling-2",
-    icon = ICONPATH .. "Seedling2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seedling2.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/seedling.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/ash.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 300,
@@ -193,32 +168,26 @@ data:extend({
       {type = "item", name = "bi-ash", amount = 10},
       {type = "fluid", name = "water", amount = 100},
     },
-    results = {
-      {type = "item", name = "seedling", amount = 60},
-    },
-    main_product = "",
+    results = {{type = "item", name = "seedling", amount = 60}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-2",
     order = "b[bi]-ssw-b1[bi-Seedling_Mk2]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
+    allow_as_intermediate = false,
   },
-
-
-  --- Seedlings from Water & fertilizer
+--###############################################################################################
+-- Seedlings from Water & fertilizer
   {
     type = "recipe",
     name = "bi-seedling-3",
-    icon = ICONPATH .. "Seedling3.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seedling3.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/seedling.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 200,
@@ -227,31 +196,31 @@ data:extend({
       {type = "item", name = "fertilizer", amount = 10},
       {type = "fluid", name = "water", amount = 100},
     },
-    results = {
-      {type = "item", name = "seedling", amount = 90},
-    },
-    main_product = "",
+    results = {{type = "item", name = "seedling", amount = 90}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     subgroup = "bio-bio-farm-fluid-2",
     order = "b[bi]-ssw-b1[bi-Seedling_Mk3]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Seedlings from Water & Adv-fertilizer
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = {r = 0.43, g = 0.73, b = 0.37, a = 0.60},
+      secondary = {r = 0, g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g = 0, b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
+},
+--###############################################################################################
+-- Seedlings from Water & Adv-fertilizer
   {
     type = "recipe",
     name = "bi-seedling-4",
-    icon = ICONPATH .. "Seedling4.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seedling4.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/seedling.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer_advanced.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-greenhouse",
     energy_required = 100,
@@ -260,32 +229,32 @@ data:extend({
       {type = "fluid", name = "water", amount = 100},
       {type = "item", name = "bi-adv-fertilizer", amount = 10},
     },
-    results = {
-      {type = "item", name = "seedling", amount = 160},
-    },
-    main_product = "",
+    results = {{type = "item", name = "seedling", amount = 160}},
+    show_amount_in_title = true,
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     subgroup = "bio-bio-farm-fluid-2",
     order = "b[bi]-ssw-b1[bi-Seedling_Mk4]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Raw Wood from Water (BASIC)
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = {r = 0.73, g = 0.37, b = 0.52, a = 0.60},
+      secondary = {r = 0 , g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g = 0, b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
+},
+--###############################################################################################
+-- Raw Wood from Water (BASIC)
   {
     type = "recipe",
     name = "bi-logs-1",
-    icon = ICONPATH .. "raw-wood-mk1.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "raw-wood-mk1.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/fluid/water.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-farm",
     enabled = false,
@@ -300,26 +269,21 @@ data:extend({
       {type = "item", name = "wood", amount = 40},
       {type = "item", name = "bi-woodpulp", amount = 80},
     },
-    main_product = "",
     subgroup = "bio-bio-farm-fluid-3",
     order = "c[bi]-ssw-c1[raw-wood1]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
+    allow_as_intermediate = false,
   },
-
-
-  --- Raw Wood from Water & Ash
+--###############################################################################################
+-- Raw Wood from Water & Ash
   {
     type = "recipe",
     name = "bi-logs-2",
-    icon = ICONPATH .. "raw-wood-mk2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "raw-wood-mk2.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/ash.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-farm",
     enabled = false,
@@ -335,26 +299,21 @@ data:extend({
       {type = "item", name = "wood", amount = 75},
       {type = "item", name = "bi-woodpulp", amount = 150},
     },
-    main_product = "",
     subgroup = "bio-bio-farm-fluid-3",
     order = "c[bi]-ssw-c1[raw-wood2]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
+    allow_as_intermediate = false,
   },
-
-
-  --- Raw Wood from Water & fertilizer
+--###############################################################################################
+-- Raw Wood from Water & fertilizer
   {
     type = "recipe",
     name = "bi-logs-3",
-    icon = ICONPATH .. "raw-wood-mk3.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "raw-wood-mk3.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-farm",
     enabled = false,
@@ -370,26 +329,27 @@ data:extend({
       {type = "item", name = "wood", amount = 135},
       {type = "item", name = "bi-woodpulp", amount = 270},
     },
-    main_product = "",
     subgroup = "bio-bio-farm-fluid-3",
     order = "c[bi]-ssw-c1[raw-wood3]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Raw Wood from adv-fertilizer
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = {r = 0.43, g = 0.73, b = 0.37, a = 0.60},
+      secondary = {r = 0, g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g = 0, b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
+},
+--###############################################################################################
+-- Raw Wood from adv-fertilizer
   {
     type = "recipe",
     name = "bi-logs-4",
-    icon = ICONPATH .. "raw-wood-mk4.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "raw-wood-mk4.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer_advanced.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-farm",
     enabled = false,
@@ -405,32 +365,23 @@ data:extend({
       {type = "item", name = "wood", amount = 160},
       {type = "item", name = "bi-woodpulp", amount = 320},
     },
-    main_product = "",
     subgroup = "bio-bio-farm-fluid-3",
     order = "c[bi]-ssw-c1[raw-wood4]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Bio Greenhouse (ENTITY)
+    allow_as_intermediate = false,
+    crafting_machine_tint = {
+      primary = {r = 0.73, g = 0.37, b = 0.52, a = 0.60},
+      secondary = {r = 0, g = 0, b = 0, a = 0},
+      tertiary = {r = 0, g =0 , b = 0, a = 0},
+      quaternary = {r = 0, g = 0, b = 0, a = 0}
+    },
+},
+--###############################################################################################
+-- Bio Greenhouse (ENTITY)
   {
     type = "recipe",
     name = "bi-bio-greenhouse",
-    localised_name = {"entity-name.bi-bio-greenhouse"},
-    localised_description = {"entity-description.bi-bio-greenhouse"},
-    icon = ICONPATH .. "bio_greenhouse.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bio_greenhouse.png",
-        icon_size = 64,
-      }
-    },
     normal = {
       enabled = false,
-      --~ energy_required = 5,
       energy_required = 2.5,
       ingredients = {
         {"iron-stick", 10},
@@ -439,14 +390,12 @@ data:extend({
       },
       result = "bi-bio-greenhouse",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = true,     -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = false,      -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = true,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     expensive = {
       enabled = false,
-      --~ energy_required = 8,
       energy_required = 4,
       ingredients = {
         {"iron-stick", 15},
@@ -455,159 +404,121 @@ data:extend({
       },
       result = "bi-bio-greenhouse",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = true,     -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = false,      -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = true,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     subgroup = "bio-bio-farm-fluid-entity",
     order = "a[bi]",
-    allow_as_intermediate = true,       -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = true,
+    always_show_made_in = false,
+    allow_decomposition = true,
   },
-
-
-  --- Bio Farm (ENTITY)
+--###############################################################################################
+-- Bio Farm (ENTITY)
   {
     type = "recipe",
     name = "bi-bio-farm",
-    localised_name = {"entity-name.bi-bio-farm"},
-    localised_description = {"entity-description.bi-bio-farm"},
-    icon = ICONPATH .. "Bio_Farm_Icon.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Bio_Farm_Icon.png",
-        icon_size = 64,
-      }
-    },
     normal = {
       enabled = false,
-      --~ energy_required = 10,
       energy_required = 5,
       ingredients = {
         {"bi-bio-greenhouse", 4},
-        {"stone-crushed", 10},
+        {"stone-brick", 8}, -- Removed crushed stone, added stonebrick + wood
+        {"wood", 12},
         {"copper-cable", 10},
       },
       result = "bi-bio-farm",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     expensive = {
       enabled = false,
-      --~ energy_required = 15,
       energy_required = 7.5,
       ingredients = {
         {"bi-bio-greenhouse", 8},
-        {"stone-crushed", 20},
+        {"stone-brick", 16},
+        {"wood", 24},
         {"copper-cable", 20},
       },
       result = "bi-bio-farm",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     subgroup = "bio-bio-farm-fluid-entity",
     order = "b[bi]",
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = false,
+    always_show_made_in = false,
+    allow_decomposition = true,
   },
-
-
-  -- Woodpulp--
+--###############################################################################################
+-- Woodpulp
   {
     type = "recipe",
     name = "bi-woodpulp",
-    icon = ICONPATH .. "Woodpulp_raw-wood.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Woodpulp_raw-wood.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/woodpulp.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-a[bi-1-woodpulp]",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
     energy_required = 2,
     ingredients = {{"wood", 2}},
     result = "bi-woodpulp",
     result_count = 4,
-    main_product = "",
-    allow_as_intermediate = true,       -- Added for 0.18.34/1.1.4
-    allow_intermediates = true,         -- Added for 0.18.35/1.1.5
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = false,        -- Added for 0.18.34/1.1.4
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  --- Resin recipe Pulp
+    allow_as_intermediate = true,
+    allow_intermediates = true,
+    always_show_made_in = false,
+    allow_decomposition = false,
+},
+--###############################################################################################
+-- Resin recipe Pulp
   {
     type = "recipe",
     name = "bi-resin-pulp",
-    icon = ICONPATH .. "bi_resin_pulp.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_resin_pulp.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__reskins-bobs__/graphics/icons/plates/items/resin.png",
+      icon_size = 64, scale = 0.25, shift = {-8, 8}}
     },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-ba[bi-2-resin-2-pulp]",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
     energy_required = 1,
-    ingredients = {
-       {type = "item", name = "bi-woodpulp", amount = 3},
-    },
+    ingredients = {{type = "item", name = "bi-woodpulp", amount = 3}},
     result = "resin",
     result_count = 1,
-    main_product = "",
-    allow_as_intermediate = true,       -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = false,        -- Added for 0.18.34/1.1.4
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-
-  -- Wood from pulp--
+    allow_as_intermediate = true,
+    always_show_made_in = false,
+    allow_decomposition = false,
+},
+--###############################################################################################
+-- Wood from pulp
   {
     type = "recipe",
     name = "bi-wood-from-pulp",
-    icon = ICONPATH .. "wood_from_pulp.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "wood_from_pulp.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__reskins-bobs__/graphics/icons/plates/items/resin.png",
+      icon_size = 64, scale = 0.25, shift = {-8, 8}},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/woodpulp.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {8, 8}}
     },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-c[bi-3-wood_from_pulp]",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
     energy_required = 2.5,
     ingredients = {
        {type = "item", name = "bi-woodpulp", amount = 8},
@@ -615,131 +526,85 @@ data:extend({
     },
     result = "wood",
     result_count = 4,
-    main_product = "",
-    --~ allow_as_intermediate = true,       -- Added for 0.18.34/1.1.4
-    allow_as_intermediate = false,       -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = false,        -- Added for 0.18.34/1.1.4
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-
-  -- Wood Fuel Brick
+    allow_as_intermediate = false,
+    always_show_made_in = false,
+    allow_decomposition = false,
+},
+--###############################################################################################
+-- Wood Fuel Brick
   {
     type = "recipe",
     name = "bi-wood-fuel-brick",
-    --~ localised_name = {"item-name.wood-bricks"},
-    --~ localised_description = {"item-description.wood-bricks"},
-    icon = ICONPATH .. "Fuel_Brick.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Fuel_Brick.png",
-        icon_size = 64,
-      }
-    },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-bx[bi-4-woodbrick]",
     energy_required = 2,
     ingredients = {{"bi-woodpulp", 24}},
     result = "wood-bricks",
     result_count = 1,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  -- ASH --
+    allow_as_intermediate = true,
+    always_show_made_in = false,
+    allow_decomposition = true,
+},
+--###############################################################################################
+-- ASH
   {
     type = "recipe",
     name = "bi-ash-1",
-    icon = ICONPATH .. "ash_raw-wood.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "ash_raw-wood.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/ash.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-cb[bi-5-ash-1]",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
     energy_required = 3,
     ingredients = {{"wood", 5}},
     result = "bi-ash",
     result_count = 5,
-    main_product = "",
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  -- ASH 2--
+    allow_as_intermediate = true,
+    always_show_made_in = false,
+    allow_decomposition = true,
+},
+--###############################################################################################
+-- ASH 2
   {
     type = "recipe",
     name = "bi-ash-2",
-    icon = ICONPATH .. "ash_woodpulp.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "ash_woodpulp.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/ash.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/woodpulp.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-ca[bi-5-ash-2]",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
+    allow_as_intermediate = true,
+    always_show_made_in = false,
+    allow_decomposition = true,
     energy_required = 2.5,
     ingredients = {{"bi-woodpulp", 12}},
     result = "bi-ash",
     result_count = 6,
-    main_product = "",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  -- CHARCOAL 1
+},
+--###############################################################################################
+-- CHARCOAL 1
   {
     type = "recipe",
     name = "bi-charcoal-1",
-    icon = ICONPATH .. "charcoal_woodpulp.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "charcoal_woodpulp.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/charcoal.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/woodpulp.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -748,28 +613,22 @@ data:extend({
     ingredients = {{"bi-woodpulp", 24}},
     result = "wood-charcoal",
     result_count = 5,
-    main_product = "",
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     allow_as_intermediate = false,
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  -- CHARCOAL 2
+},
+--###############################################################################################
+-- CHARCOAL 2
   {
     type = "recipe",
     name = "bi-charcoal-2",
-    icon = ICONPATH .. "charcoal_raw-wood.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "charcoal_raw-wood.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/charcoal.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/wood.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-d[bi-6-charcoal-2]",
@@ -778,28 +637,22 @@ data:extend({
     ingredients = {{"wood", 20}},
     result = "wood-charcoal",
     result_count = 8,
-    main_product = "",
     enabled = false,
     always_show_made_in = true,
     allow_decomposition = false,
     allow_as_intermediate = false,
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
-
-
-  -- COAL 1 --
+},
+--###############################################################################################
+-- COAL 1
   {
     type = "recipe",
     name = "bi-coal-1",
-    icon = ICONPATH .. "coal_mk1.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "coal_mk1.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/coal.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/charcoal.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -808,29 +661,24 @@ data:extend({
     ingredients = {{"wood-charcoal", 10}},
     result = "coal",
     result_count = 12,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
+    allow_as_intermediate = false,
+    always_show_made_in = true,
+    allow_decomposition = true,
   },
-
-
-  -- COAL 2 --
+--###############################################################################################
+-- COAL 2
   {
     type = "recipe",
     name = "bi-coal-2",
-    icon = ICONPATH .. "coal_mk2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "coal_mk2.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/coal.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/charcoal.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/signal/bi_signal_plus.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -839,29 +687,22 @@ data:extend({
     ingredients = {{"wood-charcoal", 10}},
     result = "coal",
     result_count = 16,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
+    allow_as_intermediate = false,
+    always_show_made_in = true,
+    allow_decomposition = true,
   },
-
-
-  -- Solid Fuel
-  {
+--###############################################################################################
+-- Solid Fuel
+  --[[{
     type = "recipe",
     name = "bi-solid-fuel",
-    icon = ICONPATH .. "bi_solid_fuel_wood_brick.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_solid_fuel_wood_brick.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__base__/graphics/icons/solid-fuel.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/Fuel_Brick.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     subgroup = "bio-bio-farm-raw",
     order = "a[bi]-a-fa[bi-7-solid_fuel]",
@@ -870,31 +711,22 @@ data:extend({
     ingredients = {{"wood-bricks", 3}},
     result = "solid-fuel",
     result_count = 2,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = true, -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
-  },
-
-
-  -- Pellet-Coke from Coal -- Used to be Coke-Coal
+    allow_as_intermediate = true,
+    always_show_made_in = true,
+    allow_decomposition = true,
+},]]
+--###############################################################################################
+-- Pellet-Coke from Coal -- Used to be Coke-Coal
     {
     type = "recipe",
     name = "bi-coke-coal",
-    --~ localised_name = {"item-name.pellet-coke"},
-    --~ localised_description = {"item-description.pellet-coke"},
-    icon = ICONPATH .. "pellet_coke_coal.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "pellet_coke_coal.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/pellet_coke.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/coal.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -903,31 +735,22 @@ data:extend({
     ingredients = {{"coal", 12}},
     result = "pellet-coke",
     result_count = 2,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
+    allow_as_intermediate = false,
+    always_show_made_in = true,
+    allow_decomposition = true,
   },
-
-
-    -- Pellet-Coke from Solid Fuel -- Used to be Coke-Coal
-    {
+--###############################################################################################
+-- Pellet-Coke from Solid Fuel -- Used to be Coke-Coal
+{
     type = "recipe",
     name = "bi-pellet-coke",
-    --~ localised_name = {"item-name.pellet-coke"},
-    --~ localised_description = {"item-description.pellet-coke"},
-    icon = ICONPATH .. "pellet_coke_solid.png",
-    --icon = "__Bio_Industries__/graphics/icons/pellet_coke_c.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "pellet_coke_solid.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/pellet_coke.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/solid-fuel.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-smelting",
     subgroup = "bio-bio-farm-raw",
@@ -936,26 +759,22 @@ data:extend({
     ingredients = {{"solid-fuel", 5}},
     result = "pellet-coke",
     result_count = 3,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
- -- CRUSHED STONE from stone --
+    allow_as_intermediate = false,
+    always_show_made_in = true,
+    allow_decomposition = true,
+},
+--###############################################################################################
+-- CRUSHED STONE from stone --
   {
     type = "recipe",
     name = "bi-crushed-stone-1",
-    icon = ICONPATH .. "crushed-stone-stone.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "crushed-stone-stone.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/crushed-stone.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/stone.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "biofarm-mod-crushing",
     subgroup = "bio-bio-farm-raw",
@@ -964,186 +783,16 @@ data:extend({
     ingredients = {{"stone", 1}},
     result = "stone-crushed",
     result_count = 2,
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
+    allow_as_intermediate = true,
+    always_show_made_in = true,
+    allow_decomposition = true,
   },
-
- -- CRUSHED STONE from concrete --
-  {
-    type = "recipe",
-    name = "bi-crushed-stone-2",
-    localised_description = {"recipe-description.bi-crushed-stone"},
-    icon = ICONPATH .. "crushed-stone-concrete.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "crushed-stone-concrete.png",
-        icon_size = 64,
-      }
-    },
-    category = "biofarm-mod-crushing",
-    subgroup = "bio-bio-farm-raw",
-    order = "a[bi]-a-z[bi-9-stone-crushed-2]",
-    energy_required = 2.5,  -- Increased crafting time
-    ingredients = {{"concrete", 1}},
-    result = "stone-crushed",
-    result_count = 2,
-    main_product = "",
-    enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
- -- CRUSHED STONE from hazard concrete --
-  {
-    type = "recipe",
-    name = "bi-crushed-stone-3",
-    localised_description = {"recipe-description.bi-crushed-stone"},
-    icon = ICONPATH .. "crushed-stone-hazard-concrete.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "crushed-stone-hazard-concrete.png",
-        icon_size = 64,
-      }
-    },
-    category = "biofarm-mod-crushing",
-    subgroup = "bio-bio-farm-raw",
-    order = "a[bi]-a-z[bi-9-stone-crushed-3]",
-    energy_required = 2.5,  -- Increased crafting time
-    ingredients = {{"hazard-concrete", 1}},
-    result = "stone-crushed",
-    result_count = 2,
-    main_product = "",
-    enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-
-  },
-
- -- CRUSHED STONE from refined concrete --
-  {
-    type = "recipe",
-    name = "bi-crushed-stone-4",
-    localised_description = {"recipe-description.bi-crushed-stone"},
-    icon = ICONPATH .. "crushed-stone-refined-concrete.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "crushed-stone-refined-concrete.png",
-        icon_size = 64,
-      }
-    },
-    category = "biofarm-mod-crushing",
-    subgroup = "bio-bio-farm-raw",
-    order = "a[bi]-a-z[bi-9-stone-crushed-4]",
-    energy_required = 5,    -- Increased crafting time
-    ingredients = {{"refined-concrete", 1}},
-    result = "stone-crushed",
-    result_count = 4,
-    main_product = "",
-    enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
- -- CRUSHED STONE from refined hazard concrete --
-  {
-    type = "recipe",
-    name = "bi-crushed-stone-5",
-    localised_description = {"recipe-description.bi-crushed-stone"},
-    icon = ICONPATH .. "crushed-stone-refined-hazard-concrete.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "crushed-stone-refined-hazard-concrete.png",
-        icon_size = 64,
-      }
-    },
-    category = "biofarm-mod-crushing",
-    subgroup = "bio-bio-farm-raw",
-    order = "a[bi]-a-z[bi-9-stone-crushed-5]",
-    energy_required = 5,    -- Increased crafting time
-    ingredients = {{"refined-hazard-concrete", 1}},
-    result = "stone-crushed",
-    result_count = 4,
-    main_product = "",
-    enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
- -- STONE Brick--
-  {
-    type = "recipe",
-    name = "bi-stone-brick",
-    icon = ICONPATH .. "bi_stone_brick.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_stone_brick.png",
-        icon_size = 64,
-      }
-    },
-    --category = "smelting",
-    category = "chemistry",
-    subgroup = "bio-bio-farm-raw",
-    order = "a[bi]-a-z2[bi-9-stone-brick]",
-    energy_required = 5,
-    ingredients = {
-      {type = "item", name = "stone-crushed", amount = 6},
-      {type = "item", name = "bi-ash", amount = 2},
-    },
-    results = {
-      {type = "item", name = "stone-brick", amount = 2},
-    },
-    enabled = false,
-    main_product = "",
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = true,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
-  -- COKERY (ENTITY)--
+--###############################################################################################
+-- COKERY (ENTITY)
   {
     type = "recipe",
     name = "bi-cokery",
-    localised_name = {"entity-name.bi-cokery"},
-    localised_description = {"entity-description.bi-cokery"},
-    icon = ICONPATH .. "cokery.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "cokery.png",
-        icon_size = 64,
-      }
-    },
     normal = {
       enabled = false,
       energy_required = 8,
@@ -1153,10 +802,9 @@ data:extend({
       },
       result = "bi-cokery",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,         -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false, 
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     expensive = {
       enabled = false,
@@ -1167,35 +815,21 @@ data:extend({
       },
       result = "bi-cokery",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,         -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     subgroup = "bio-bio-farm-raw-entity",
     order = "a[bi]",
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = false,
+    always_show_made_in = false,
+    allow_decomposition = true,
   },
-
-
+--###############################################################################################
   -- STONE CRUSHER (ENTITY) --
   {
     type = "recipe",
     name = "bi-stone-crusher",
-    localised_name = {"entity-name.bi-stone-crusher"},
-    localised_description = {"entity-description.bi-stone-crusher"},
-    icon = ICONPATH .. "stone_crusher.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "stone_crusher.png",
-        icon_size = 64,
-      }
-    },
     normal = {
       enabled = false,
       energy_required = 3,
@@ -1206,10 +840,9 @@ data:extend({
       },
       result = "bi-stone-crusher",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,         -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     expensive = {
       enabled = false,
@@ -1221,90 +854,27 @@ data:extend({
       },
       result = "bi-stone-crusher",
       result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,         -- Added for 0.18.34/1.1.4
+      allow_as_intermediate = false,
+      always_show_made_in = false,
+      allow_decomposition = true,
     },
     subgroup = "bio-bio-farm-raw-entity",
     order = "b[bi]",
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,        -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,          -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,           -- Added for 0.18.34/1.1.4
-  },
-
-
-  -- LIQUID-AIR --
-  {
-    type = "recipe",
-    name = "bi-liquid-air",
-    icon = ICONPATH .. "liquid-air.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "liquid-air.png",
-        icon_size = 64,
-      }
-    },
-    category = "chemistry",
-    energy_required = 1,
-    ingredients = {},
-    results = {
-      {type = "fluid", name = "liquid-air", amount = 10}
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
     allow_as_intermediate = false,
-    subgroup = "bio-bio-farm-intermediate-product",
-    order = "aa",
+    always_show_made_in = false,
+    allow_decomposition = true,
   },
-
-  ---NITROGEN --
-  {
-    type = "recipe",
-    name = "bi-nitrogen",
-    icon = ICONPATH .. "nitrogen.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "nitrogen.png",
-        icon_size = 64,
-      }
-    },
-    category = "chemistry",
-    energy_required = 10,
-    ingredients = {
-      {type = "fluid", name = "liquid-air", amount = 20}
-    },
-    results = {
-      {type = "fluid", name = "nitrogen", amount = 20},
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    --main_product= "nitrogen",
-    subgroup = "bio-bio-farm-intermediate-product",
-    order = "ab",
-  },
-
-
-  -- fertilizer- Sulfur-
+--###############################################################################################
+-- fertilizer- Sulfur
   {
     type = "recipe",
     name = "bi-fertilizer-1",
-    icon = ICONPATH .. "fertilizer_sulfur.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "fertilizer_sulfur.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__base__/graphics/icons/sulfur.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "chemistry",
     energy_required = 5,
@@ -1313,68 +883,63 @@ data:extend({
       {type = "fluid", name = "nitrogen", amount = 10},
       {type = "item", name = "bi-ash", amount = 10}
     },
-    results = {
-      {type = "item", name = "fertilizer", amount = 5}
-    },
-    main_product = "",
+    results = {{type = "item", name = "fertilizer", amount = 5}},
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = true,         -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = true,
+    always_show_made_in = true,
+    allow_decomposition = true,
     subgroup = "bio-bio-farm-intermediate-product",
     order = "b[bi-fertilizer]",
-  },
-
-
-  -- Advanced fertilizer 1 --
+    crafting_machine_tint = {
+      primary = util.color("5e9347"),
+      secondary = util.color("72be51"),
+      tertiary = util.color("63ae42"),
+      quaternary = util.color("bfba21")
+    },
+},
+--###############################################################################################
+-- Advanced fertilizer 1
   {
     type = "recipe",
     name = "bi-adv-fertilizer-1",
-    icon = ICONPATH .. "advanced_fertilizer_64.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "advanced_fertilizer_64.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer_advanced.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__reskins-bobs__/graphics/icons/enemies/artifacts/alien-artifact.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "chemistry",
     energy_required = 50,
     ingredients = {
       {type = "item", name = "fertilizer", amount = 25},
-      {type = "fluid", name = "bi-biomass", amount = 10}, -- <== Need to add during Data Updates
-      --{type = "fluid", name = "NE_enhanced-nutrient-solution", amount = 5}, -- Will be added if you have Natural Evolution Buildings Mod installed.
+      {type = "item", name = "alien-artifact", amount = 5},
     },
-    results = {
-      {type = "item", name = "bi-adv-fertilizer", amount = 50}
-    },
-    main_product = "",
+    results = {{type = "item", name = "bi-adv-fertilizer", amount = 50}},
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = true,         -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = true,
+    always_show_made_in = true,
+    allow_decomposition = true,
     subgroup = "bio-bio-farm-intermediate-product",
     order = "b[bi-fertilizer]-b[bi-adv-fertilizer-1]",
-  },
-
-
-  -- Advanced fertilizer 2--
+    crafting_machine_tint = {
+      primary = util.color("FF528E"),
+      secondary = util.color("EB75BF"),
+      tertiary = util.color("EB737C"),
+      quaternary = util.color("FF7CF1")
+    },
+},
+--###############################################################################################
+-- Advanced fertilizer 2
   {
     type = "recipe",
     name = "bi-adv-fertilizer-2",
-    icon = ICONPATH .. "advanced_fertilizer_64.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "advanced_fertilizer_64.png",
-        icon_size = 64,
-      }
+    icons = 
+    {
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fertilizer_advanced.png",
+      icon_size = 64, icon_mipmaps = 4},
+      {icon = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/fluid_biomass.png",
+      icon_size = 64, icon_mipmaps = 4, scale = 0.25, shift = {-8, 8}}
     },
     category = "chemistry",
     energy_required = 50,
@@ -1386,383 +951,36 @@ data:extend({
     results = {
       {type = "item", name = "bi-adv-fertilizer", amount = 20}
     },
-    main_product = "",
     enabled = false,
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    --~ allow_as_intermediate = false,
-    allow_as_intermediate = true,       -- Changed for 0.18.34/1.1.4
-    always_show_made_in = true,         -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
+    allow_as_intermediate = true,
+    always_show_made_in = true,
+    allow_decomposition = true,
     subgroup = "bio-bio-farm-intermediate-product",
     order = "b[bi-fertilizer]-b[bi-adv-fertilizer-2]",
-    -- This is a custom property for use by "Krastorio 2" (it will change
-    -- ingredients/results; used for wood/wood pulp)
-    mod = "Bio_Industries",
-  },
+    crafting_machine_tint = {
+      primary = util.color("FF528E"),
+      secondary = util.color("EB75BF"),
+      tertiary = util.color("EB737C"),
+      quaternary = util.color("FF7CF1")
+    },
+},
+--###############################################################################################
+})
 
-
-  --- Seed Bomb - Basic
+data:extend({
   {
-    type = "recipe",
-    name = "bi-seed-bomb-basic",
-    --~ localised_name = {"item-name.bi-seed-bomb-basic"},
-    --~ localised_description = {"item-description.bi-seed-bomb-basic"},
-    icon = ICONPATH .. "Seed_bomb_icon_b.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seed_bomb_icon_b.png",
-        icon_size = 64,
-      }
-    },
-    normal = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-      {"bi-seed", 400},
-      {"rocket", 1},
-      },
-      result = "bi-seed-bomb-basic",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    expensive = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-        {"bi-seed", 400},
-        {"rocket", 2},
-      },
-      result = "bi-seed-bomb-basic",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,      -- Changed for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Added for 0.18.34/1.1.4
-    subgroup = "bi-ammo",
-    order = "a[rocket-launcher]-x[seed-bomb]-a",
-  },
-
-
-  --- Seed Bomb - Standard
-  {
-    type = "recipe",
-    name = "bi-seed-bomb-standard",
-    --~ localised_name = {"item-name.bi-seed-bomb-standard"},
-    --~ localised_description = {"item-description.bi-seed-bomb-standard"},
-    icon = ICONPATH .. "Seed_bomb_icon_s.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seed_bomb_icon_s.png",
-        icon_size = 64,
-      }
-    },
-    normal = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-        {"bi-seed", 400},
-        {"fertilizer", 200},
-        {"rocket", 1},
-      },
-      result = "bi-seed-bomb-standard",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    expensive = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-        {"bi-seed", 400},
-        {"fertilizer", 200},
-        {"rocket", 2},
-      },
-      result = "bi-seed-bomb-standard",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,      -- Changed for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Added for 0.18.34/1.1.4
-    subgroup = "bi-ammo",
-    order = "a[rocket-launcher]-x[seed-bomb]-b",
-  },
-
-
-  --- Seed Bomb - Advanced
-  {
-    type = "recipe",
-    name = "bi-seed-bomb-advanced",
-    --~ localised_name = {"item-name.bi-seed-bomb-advanced"},
-    --~ localised_description = {"item-description.bi-seed-bomb-advanced"},
-    icon = ICONPATH .. "Seed_bomb_icon_a.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seed_bomb_icon_a.png",
-        icon_size = 64,
-      }
-    },
-    normal = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-        {"bi-seed", 400},
-        {"bi-adv-fertilizer", 200},
-        {"rocket", 1},
-      },
-      result = "bi-seed-bomb-advanced",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    expensive = {
-      enabled = false,
-      energy_required = 8,
-      ingredients = {
-        {"bi-seed", 400},
-        {"bi-adv-fertilizer", 200},
-        {"rocket", 2},
-      },
-      result = "bi-seed-bomb-advanced",
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,      -- Changed for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Added for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Added for 0.18.34/1.1.4
-    subgroup = "bi-ammo",
-    order = "a[rocket-launcher]-x[seed-bomb]-c",
-    },
-
-
-  --- Arboretum (ENTITY)
-  {
-    type = "recipe",
-    name = "bi-arboretum",
-    localised_name = {"entity-name.bi-arboretum"},
-    localised_description = {"entity-description.bi-arboretum"},
-    icon = ICONPATH .. "Arboretum_Icon.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Arboretum_Icon.png",
-        icon_size = 64,
-      }
-    },
-    normal = {
-      enabled = false,
-      energy_required = 10,
-      ingredients = {
-        {"bi-bio-greenhouse", 4},
-        {"assembling-machine-2", 2},
-        {"stone-brick", 10},
-      },
-      result = "bi-arboretum-area",
-      result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    expensive = {
-      enabled = false,
-      energy_required = 15,
-      ingredients = {
-        {"bi-bio-greenhouse", 4},
-        {"assembling-machine-2", 4},
-        {"stone-brick", 20},
-      },
-      result = "bi-arboretum-area",
-      result_count = 1,
-      main_product = "",
-      allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
-      always_show_made_in = false,      -- Added for 0.18.34/1.1.4
-      allow_decomposition = true,       -- Added for 0.18.34/1.1.4
-    },
-    subgroup = "bio-arboretum-fluid",
-    order = "1-a[bi]",
-    --~ always_show_made_in = true,
-    --~ allow_decomposition = false,
-    allow_as_intermediate = false,      -- Added for 0.18.34/1.1.4
-    always_show_made_in = false,        -- Changed for 0.18.34/1.1.4
-    allow_decomposition = true,         -- Changed for 0.18.34/1.1.4
-  },
-
-
-  ---     Arboretum -  Plant Trees
-  {
-    type = "recipe",
-    name = "bi-arboretum-r1",
-    icon = ICONPATH .. "Seedling_b.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "Seedling_b.png",
-        icon_size = 64,
-      }
-    },
-    category = "bi-arboretum",
-    energy_required = 10000,
-    ingredients = {
-      {type = "item", name = "seedling", amount = 1},
-      {type = "fluid", name = "water", amount = 100},
-    },
-    results = {
-      {type = "item", name = "bi-arboretum-r1", amount = 1, probability = 0},
-    },
-    main_product = "",
+    type = "recipe", --drd redone
+    name = "bi-production-science-pack",
     enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    subgroup = "bio-arboretum-fluid",
-    order = "a[bi]-ssw-a1[bi-arboretum-r1]",
-  },
-
-
-  ---     Arboretum - Change Terrain
-  {
-    type = "recipe",
-    name = "bi-arboretum-r2",
-    icon = ICONPATH .. "bi_change_1.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_change_1.png",
-        icon_size = 64,
-      }
+    energy_required = 21,
+    ingredients = 
+    {
+      {"electric-furnace", 1},
+      {"productivity-module", 1},
+      {"effectivity-module", 1},
+      {"speed-module", 1},
     },
-    category = "bi-arboretum",
-    energy_required = 10000,
-    ingredients = {
-      {type = "item", name = "fertilizer", amount = 1},
-      {type = "fluid", name = "water", amount = 100},
-    },
-    results = {
-      {type = "item", name = "bi-arboretum-r2", amount = 1, probability = 0},
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    subgroup = "bio-arboretum-fluid",
-    order = "a[bi]-ssw-a1[bi-arboretum-r2]",
-  },
-
-
-  ---     Arboretum -  Change Terrain - Advanced
-  {
-    type = "recipe",
-    name = "bi-arboretum-r3",
-    icon = ICONPATH .. "bi_change_2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_change_2.png",
-        icon_size = 64,
-      }
-    },
-    category = "bi-arboretum",
-    energy_required = 10000,
-    ingredients = {
-      {type = "item", name = "bi-adv-fertilizer", amount = 1},
-      {type = "fluid", name = "water", amount = 100},
-    },
-    results = {
-      {type = "item", name = "bi-arboretum-r3", amount = 1, probability = 0},
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    subgroup = "bio-arboretum-fluid",
-    order = "a[bi]-ssw-a1[bi-arboretum-r3]",
-  },
-
-
-  ---     Arboretum -  Plant Trees & Change Terrain
-  {
-    type = "recipe",
-    name = "bi-arboretum-r4",
-    icon = ICONPATH .. "bi_change_plant_1.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_change_plant_1.png",
-        icon_size = 64,
-      }
-    },
-    category = "bi-arboretum",
-    energy_required = 10000,
-    ingredients = {
-      {type = "item", name = "seedling", amount = 1},
-      {type = "item", name = "fertilizer", amount = 1},
-      {type = "fluid", name = "water", amount = 100},
-    },
-    results = {
-      {type = "item", name = "bi-arboretum-r4", amount = 1, probability = 0},
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    subgroup = "bio-arboretum-fluid",
-    order = "a[bi]-ssw-a1[bi-arboretum-r4]",
-  },
-
-
-  ---     Arboretum -  Plant Trees & Change Terrain Advanced
-  {
-    type = "recipe",
-    name = "bi-arboretum-r5",
-    icon = ICONPATH .. "bi_change_plant_2.png",
-    icon_size = 64,
-    icons = {
-      {
-        icon = ICONPATH .. "bi_change_plant_2.png",
-        icon_size = 64,
-      }
-    },
-    category = "bi-arboretum",
-    energy_required = 10000,
-    ingredients = {
-      {type = "item", name = "seedling", amount = 1},
-      {type = "item", name = "bi-adv-fertilizer", amount = 1},
-      {type = "fluid", name = "water", amount = 100},
-    },
-    results = {
-      {type = "item", name = "bi-arboretum-r5", amount = 1, probability = 0},
-    },
-    main_product = "",
-    enabled = false,
-    always_show_made_in = true,
-    allow_decomposition = false,
-    allow_as_intermediate = false,
-    subgroup = "bio-arboretum-fluid",
-    order = "a[bi]-ssw-a1[bi-arboretum-r5]",
+    result_count = 2,
+    result = "production-science-pack"
   },
 })

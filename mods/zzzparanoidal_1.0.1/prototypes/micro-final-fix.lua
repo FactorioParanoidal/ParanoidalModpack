@@ -66,7 +66,7 @@ bobmods.lib.tech.add_prerequisite ("electronics-machine-1", "steel-processing")
 bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "electronics")
 bobmods.lib.tech.add_prerequisite ("radar", "electronics")
 bobmods.lib.tech.add_prerequisite ("electric-lab", "electronics")
-bobmods.lib.tech.add_prerequisite ("bi-tech-bio-farming", "ore-crushing")
+--bobmods.lib.tech.add_prerequisite ("bi-tech-bio-farming", "ore-crushing")
 bobmods.lib.tech.add_prerequisite ("logistic-science-pack", "electronics")
 bobmods.lib.tech.add_prerequisite ("logistic-science-pack", "angels-bronze-smelting-1")
 bobmods.lib.tech.add_prerequisite ("bio-wood-processing", "bi-tech-bio-farming")
@@ -283,118 +283,13 @@ bobmods.lib.recipe.set_ingredient("slag-processing-stone", {"slag", 5})
 bobmods.lib.recipe.set_result("slag-processing-stone", {"stone-crushed", 10})
 --###############################################################################################
 --крутим рельсы
-
+--[[
 --убираем био-рельсы
 if mods["Bio_Industries"] then
 data.raw["rail-planner"]["bi-rail-wood"].flags = {"hidden"}
 data.raw["recipe"]["bi-rail-wood"].hidden = true
 data.raw["rail-planner"]["bi-rail-wood-bridge"].flags = {"hidden"}
-end
--------------------------------------------------------------------------------------------------
---делаем возможность обновления рельс и светофоров штатным путем
-if mods["JunkTrain3"] then
-data.raw["straight-rail"]["straight-scrap-rail"].next_upgrade = "straight-rail"
-data.raw["curved-rail"]["curved-scrap-rail"].next_upgrade = "curved-rail"
-
-data.raw["straight-rail"]["straight-scrap-rail"].fast_replaceable_group = "rail"
-data.raw["curved-rail"]["curved-scrap-rail"].fast_replaceable_group = "rail"
-
-data.raw["straight-rail"]["straight-rail"].fast_replaceable_group = "rail"
-data.raw["curved-rail"]["curved-rail"].fast_replaceable_group = "rail"
-
-data.raw["straight-rail"]["straight-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-
-data.raw["straight-rail"]["straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["curved-rail"]["curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-
-data.raw["rail-signal"]["rail-signal-scrap"].next_upgrade = "rail-signal"
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].next_upgrade = "rail-chain-signal"
-data.raw["train-stop"]["train-stop-scrap"].next_upgrade = "train-stop"
-
-data.raw["rail-signal"]["rail-signal-scrap"].fast_replaceable_group = "rail-signal"
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "rail-stop"
-
-data.raw["rail-signal"]["rail-signal"].fast_replaceable_group = "rail-signal"
-data.raw["rail-chain-signal"]["rail-chain-signal"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop"].fast_replaceable_group = "rail-stop"
-
-data.raw["rail-signal"]["rail-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
-
-data.raw["rail-signal"]["rail-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
-end
--------------------------------------------------------------------------------------------------
---меняем рецепт примитивных рельс
-if mods["JunkTrain3"] then
-data.raw.recipe["scrap-rail"].ingredients = 
-{   
-    {name = "stone-crushed", type = "item", amount = 10},
-    {name = "iron-stick", type = "item", amount = 2},
-    {name = "wood", type = "item", amount = 10},
-    {name = "steel-plate", type = "item", amount = 2},
-}
-end
--------------------------------------------------------------------------------------------------
---подкручиваем рецепт стандартных рельс
-bobmods.lib.recipe.set_ingredient("rail", {"stone-crushed", 10})
--------------------------------------------------------------------------------------------------
---переставляем рецепты рельс в технологиях
-bobmods.lib.tech.remove_recipe_unlock("railway", "bi-rail-wood")
-bobmods.lib.tech.add_recipe_unlock("railway", "rail")
-
-bobmods.lib.tech.remove_recipe_unlock("bob-railway-2", "rail")
--------------------------------------------------------------------------------------------------
---добавляем рецепты обновления примитивов в технологию
-bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
-bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
-bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
-bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
--------------------------------------------------------------------------------------------------
---подкрашиваем примитивы
---иконки итемов
-if mods["JunkTrain3"] then
-  data.raw.item["rail-signal-scrap"].icons =
-  {{
-      icon = "__base__/graphics/icons/rail-signal.png",
-      icon_size = 64, icon_mipmaps = 4,
-      tint = {r=170, g=130, b=1}
-  }}
-  data.raw.item["rail-chain-signal-scrap"].icons =
-  {{
-      icon = "__base__/graphics/icons/rail-chain-signal.png",
-      icon_size = 64, icon_mipmaps = 4,
-      tint = {r=170, g=130, b=1}
-  }}
-  data.raw.item["train-stop-scrap"].icons =
-  {{
-      icon = "__base__/graphics/icons/train-stop.png",
-      icon_size = 64, icon_mipmaps = 4,
-      tint = {r=170, g=130, b=1}
-  }}
---энтити
-data.raw["rail-signal"]["rail-signal-scrap"].icons = 
-{{
-  icon = "__base__/graphics/icons/rail-signal.png",
-  icon_size = 64, icon_mipmaps = 4,
-  tint = {r=170, g=130, b=1}
-}}
-data.raw["rail-signal"]["rail-signal-scrap"].animation.tint = {r=170, g=130, b=1}
-data.raw["rail-signal"]["rail-signal-scrap"].animation.hr_version.tint = {r=170, g=130, b=1}
-
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].icons = 
-{{
-  icon = "__base__/graphics/icons/rail-chain-signal.png",
-  icon_size = 64, icon_mipmaps = 4,
-  tint = {r=170, g=130, b=1}
-}}
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.tint = {r=170, g=130, b=1}
-data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.hr_version.tint = {r=170, g=130, b=1}
-end
+end]]
 --###############################################################################################
 --переносим рецепты в новые вкладки
 --перенос в логику
@@ -503,51 +398,12 @@ data.raw["item-subgroup"]["bob-fluid-wagon"] = {type = "item-subgroup", name = "
 data.raw["item-subgroup"]["transport-drones"] = {type = "item-subgroup", name = "transport-drones", group = "transport", order = "ez"}
 data.raw["item-subgroup"]["bet-logistics"] = {type = "item-subgroup", name = "bet-logistics", group = "transport", order = "ez"}
 
---жд дороги
-if mods["JunkTrain3"] then
-data.raw["recipe"]["scrap-rail"].subgroup = "transport-rail"
-data.raw["recipe"]["scrap-rail"].order = "a"
-data.raw["rail-planner"]["scrap-rail"].subgroup = "transport-rail"
-data.raw["rail-planner"]["scrap-rail"].order = "a"
-end
-
 data.raw["recipe"]["rail"].subgroup = "transport-rail"
 data.raw["recipe"]["rail"].order = "b"
 data.raw["rail-planner"].rail.subgroup = "transport-rail"
 data.raw["rail-planner"].rail.order = "b"
-
-if mods["PickerVehicles"] then
-data.raw["rail-planner"]["picker-naked-rail"].flags = {"hidden"}
-data.raw["rail-planner"]["picker-sleepy-rail"].flags = {"hidden"}
-end
 -------------------------------------------------------------------------------------------------
 --жд светофоры, станции и тп
-if mods["JunkTrain3"] then
-data.raw["recipe"]["rail-signal-scrap"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail-signal-scrap"].order = "a"
-data.raw.item["rail-signal-scrap"].subgroup = "transport-rail-other"
-data.raw.item["rail-signal-scrap"].order = "a"
-
-data.raw["recipe"]["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
-data.raw["recipe"]["rail-chain-signal-scrap"].order = "b"
-data.raw.item["rail-chain-signal-scrap"].subgroup = "transport-rail-other"
-data.raw.item["rail-chain-signal-scrap"].order = "b"
-
-data.raw["recipe"]["train-stop-scrap"].subgroup = "transport-rail-other"
-data.raw["recipe"]["train-stop-scrap"].order = "c"
-data.raw.item["train-stop-scrap"].subgroup = "transport-rail-other"
-data.raw.item["train-stop-scrap"].order = "c"
-
-data.raw["recipe"]["JunkTrain"].subgroup = "junk-train"
-data.raw["recipe"]["JunkTrain"].order = "a"
-data.raw.item["JunkTrain"].subgroup = "junk-train"
-data.raw.item["JunkTrain"].order = "a"
-
-data.raw["recipe"]["ScrapTrailer"].subgroup = "junk-train"
-data.raw["recipe"]["ScrapTrailer"].order = "b"
-data.raw.item["ScrapTrailer"].subgroup = "junk-train"
-data.raw.item["ScrapTrailer"].order = "b"
-end
 
 data.raw["recipe"]["rail-signal"].subgroup = "transport-rail-other"
 data.raw["recipe"]["rail-signal"].order = "d"
@@ -800,3 +656,13 @@ data.raw["item"]["warehouse-buffer"].order = "3"
 end
 
 end --конец mods["angelsindustries"]
+
+--###############################################################################################
+if settings.startup["fitolamps"].value then
+data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].tint = {r=230, g=20, b=190}
+data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=20, b=190}
+
+data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].animation.layers[1].tint = {r=230, g=130, b=210}
+data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=130, b=210}
+end
+--###############################################################################################

@@ -134,25 +134,6 @@ return function (mod_name)
     return ignore
   end
 
-
-
-
-  -- 0.17.42/0.18.09 fixed a bug where musk floor was created for the force "enemy".
-  -- Because it didn't belong to any player, in map view the electric grid overlay wasn't
-  -- shown for musk floor. Somebody complained about seeing it now, so starting with version
-  -- 0.17.45/0.18.13, there is a setting to hide the overlay again. If it is set to "true",
-  -- a new force will be created that the hidden electric poles of musk floor belong to.
-  -- (UPDATE: 0.18.29 reversed the setting -- if active, tiles will now be visible in map
-  -- view, not hidden. The definition of UseMuskForce has been changed accordingly.)
-  common.MuskForceName = "BI-Musk_floor_general_owner"
-  common.UseMuskForce = not settings.startup["BI_Show_musk_floor_in_mapview"].value
-
-  --~ ------------------------------------------------------------------------------------
-  --~ -- Set some values for Musk floor tiles (bi-solar-mat), so we can use these with
-  --~ -- confidence when filtering for the prototype
-  --~ common.MUSK_FLOOR_walking_speed_modifier = 1.45
-  --~ common.MUSK_FLOOR_decorative_removal_probability = 1
-
   ------------------------------------------------------------------------------------
   -- Enable writing to log file until startup options are set, so debugging output
   -- from the start of a game session can be logged. This depends on a locally
@@ -689,8 +670,6 @@ common.writeDebug("\"Easy gardens\": Compiling list of poles they can connect to
         {filter = "type", type = "electric-pole"},
         {filter = "name", name = {
             -- Poles named here will be ignored!
-            "bi-rail-power-hidden-pole",
-            "bi-musk-mat-hidden-pole",
             "bi-bio-garden-hidden-pole"
             }, invert = "true", mode = "and"
         }
