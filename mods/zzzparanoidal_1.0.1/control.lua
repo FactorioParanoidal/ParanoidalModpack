@@ -1,3 +1,5 @@
+require("prototypes.mod_compatibility.heroturrets_script") --скрипт разжалования турелей
+
 -- from some corpse marker
 script.on_event(defines.events.on_pre_player_died, function(event)
     local player = game.players[event.player_index]
