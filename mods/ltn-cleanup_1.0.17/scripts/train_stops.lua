@@ -4,7 +4,8 @@ local ltn = require("ltn")
 local train_stops = {}
 
 function train_stops.is_cleanup(name)
-    return name ~= nil and string.find(name, "%[virtual%-signal=ltn%-cleanup%-station%]")
+    return name ~= nil and (string.find(name, "%[virtual%-signal=ltn%-cleanup%-station%]")
+                                or string.find(name, "%[img=virtual%-signal/ltn%-cleanup%-station%]"))
 end
 
 function train_stops.found_any_stops(stops)
@@ -68,6 +69,14 @@ function train_stops.get_all_cleanup(network, carriages, surface)
         stops = stops,
         reverse_lookup = reverse_lookup
     }
+end
+
+function train_stops.find_depot(name, surface)
+    for _, stop in pairs(game.get_train_stops({name=name, surface=surface})) do
+        if stop.valid and ltn.is_ltn_stop(stop.unit_number) then
+            return stop
+        end
+    end
 end
 
 function train_stops.find_generic_item(stops)
