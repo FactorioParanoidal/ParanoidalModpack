@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.12.0
+Date: 2021.10.26
+  Changes:
+    - Most buttons can be hidden in the settings
+    - Fixed crash with LTN's shortcut "CTRL-MAJ-D"
+    - Fixed support of Outpost Planner
+    - Improved performances (only checks buttons from installed mod)
+---------------------------------------------------------------------------------------------------
 Version: 1.11.15
 Date: 2021.10.02
   Changes:

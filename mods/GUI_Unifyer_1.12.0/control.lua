@@ -5,147 +5,7 @@ local gui_button_style = "slot_button_notext"
 local gui_button_style_whitetext = "slot_button_whitetext"
 local activedebug = false
 
-local iconlist = {
-	--modname					--sprite 						button									tooltip 					dontreplacesprite	buttonpath (array)	windowtocheck (array)
-	{"helmod",					"helmod_button", 				"helmod_planner-command", 				{'guiu.helmod_button'}, 			nil,		nil,				{"screen", "HMProductionPanel"}},
-	{"factoryplanner",			"factoryplanner_button", 		"fp_button_toggle_interface", 			{'guiu.factoryplanner_button'}, 	nil,		nil,				{"screen", "factoryplanner_mainframe"}},
-	{"ModuleInserter",			"moduleinserter_button", 		"module_inserter_config_button", 		{'guiu.moduleinserter_button'}, 	nil,		nil,				{"screen", "moduleinserter_mainframe"}},
-	{"Placeables",				"placeables_button", 			"buttonPlaceablesVisible", 				nil,								nil,		nil,				{"screen", "framePlaceablesOuter"}},
-	{"BeastFinder",				"beastfinder_button", 			"beastfinder-menu-button", 				{'guiu.beastfinder_button'}, 		nil,		nil,				{"screen", "frame_BeastFinder_main"}},
-	{"bobclasses",				"bobclasses_button", 			"bob_avatar_toggle_gui", 				nil,								nil,		nil,				{"left", "bob_avatar_gui"}},
-	{"bobinserters",			"bobinserters_button", 			"bob_logistics_inserter_button", 		nil,								nil,		nil,				{"left", "bob_logistics_inserter_gui"}},
-	{"boblogistics",			"bobinserters_button", 			"bob_logistics_inserter_button", 		nil,								nil,		nil,				{"left", "bob_logistics_inserter_gui"}},
-	{"CleanMap",				"cleanmap_button", 				"CleanMap", 							nil,								nil,		nil,				nil},
-	{"DeleteEmptyChunks",		"cleanmap_button", 				"DeleteEmptyChunks", 					nil,								nil,		nil,				nil},
-	{"Death_Counter",			"deathcounter_button", 			"DeathCounterMainButton", 				{'guiu.deathcounter_button'}, 		nil,		nil,				{"left", "DeathCounterMain"}},
-	{"ingteb",					"ingteb_button", 				"ingteb", 								nil,								nil,		nil,				{"screen", "Selector"}},
-	{"OutpostPlanner",			"outpostplanner_button", 		"OutpostBuilder", 						nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "OutpostBuilderWindow"}},
-	{"rocket-silo-stats",		"rocketsilostats_button", 		"rocket-silo-stats-toggle", 			{'guiu.rocketsilostats_button'}, 	nil,		nil,				{"left", "mod_gui_frame_flow", "rocket-silo-stats"}},
-	{"SchallSatelliteController","schall_sc_button", 			"Schall-SC-mod-button", 				nil,								nil,		nil,				{"screen", "Schall-SC-frame-main"}},
-	{"actual-craft-times-remade","actr_button", 				"ACTR_mod_button", 						nil,								nil,		nil,				{"left", "ACTR_Calculator_Frame"}},
-	{"BetterBotsFixed",			"betterbotsfixed_button", 		"betterbots_top_btn", 					{'guiu.betterbotsfixed_button'}, 	nil,		nil,				{"left", "mod_gui_frame_flow", "betterbots_left"}},
-	{"ChangeMapSettings",		"changemapsettings_button", 	"change-map-settings-toggle-config", 	{'guiu.changemapsettings_button'}, 	nil,		nil,				{"screen", "change-map-settings-main-flow"}},
-	{"DoingThingsByHand",		"doingthingsbyhand_button", 	"DoingThingsByHandMainButton", 			{'guiu.doingthingsbyhand_button'},	nil,		nil,				{"left", "DoingThingsByHandMain"}},
-	{"FacAutoScreenshot",		"facautoscreenshot_button", 	"togglegui", 							{'guiu.facautoscreenshot_button'}, 	nil,		nil,				{"screen", "guiFrame", "content_frame", "auto_frame"}},
-	{"KillLostBots",			"killlostbots_button", 			"KillLostBots", 						nil,								nil,		nil,				nil},
-	{"kraskaska-total-raw-resources-calc","kttrrc_button", 		"ttrrc_main_frame_button", 				{'guiu.kttrrc_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "ttrrc_main_frame"}},
-	{"Kux-CraftingTools",		"kuxcraftingtools_button", 		"CraftNearbyGhostItemsButton", 			nil,								nil,		nil,				nil},
-	{"Kux-OrbitalIonCannon",	"kuxorbitalioncannon_button", 	"ion-cannon-button", 					{'guiu.kuxorbitalioncannon_button'},nil,		nil,				{"left", "ion-cannon-stats"}},
-	{"markers",					"markers_button", 				"markers_gui_toggle", 					{'guiu.markers_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "markers_gui"}},
-	{"Not_Enough_Todo",			"notenoughtodo_button", 		"TODO_CLICK01_", 						{'guiu.notenoughtodo_button'}, 		nil,		nil,				{"screen", "notenoughtodo_mainframe"}},
-	{"osha_hot_swap",			"oshahotswap_button", 			"hotswap-menu-button", 					{'guiu.oshahotswap_button'}, 		nil,		nil,				{"left", "hotswap-main-container"}},
-	{"Powered_Entities",		"poweredentities_button", 		"poweredEntitiesRecalculateButton", 	{'guiu.poweredentities_button'}, 	nil,		nil,				nil},
-	{"research-counter",		"researchcounter_button", 		"research-counter-button", 				{'guiu.researchcounter_button'}, 	nil,		nil,				{"screen", "research-counter-base"}},
-	{"Rich_Text_Helper",		"richtexthelper_button", 		"RICH_CLICK_20_player01", 				{'guiu.richtexthelper_button'}, 	nil,		nil,				{"screen", "richtexthelper_mainframe"}},
-	{"RitnTeleportation",		"ritnteleportation_button", 	"ritn-button-main", 					{'guiu.ritnteleportation_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "menu-flow-common", "main_menu-frame-menu"}},
-	{"solar-calc",				"solarcalc_button", 			"kaktusbot-sc-open-calc-button", 		{'guiu.solarcalc_button'}, 			nil,		nil,				{"screen", "kaktusbot-sc-main-gui"}},
-	{"SolarRatio",				"solarcalc_button", 			"niet-sr-guibutton", 					nil,								nil,		nil,				{"center", "niet-sr-guiframe"}},
-	{"SpaceMod",				"spacemod_button", 				"space_toggle_button", 					{'guiu.spacemod_button'}, 			nil,		nil,				{"left", "mod_gui_frame_flow", "space_progress_frame"}},
-	{"train-log",				"trainlog_button", 				"train_log", 							nil,								nil,		nil,				{"screen", "trainlog_mainframe"}},
-	{"train-pubsub",			"trainpubsub_button", 			"tm_sprite_button", 					nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "tm_button_frame"}},
-	{"upgrade-planner-next",	"upgradeplannernext_button", 	"upgrade_planner_config_button", 		nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "upgrade_planner_config_frame"}},
-	{"whats-missing",			"whatsmissing_button", 			"whats-missing-button", 				nil,								nil,		nil,				{"screen", "whats-missing-gui"}},
-	{"PicksRocketStats",		"picksrocketstats_button", 		"pi_rss_but_toggle", 					{'guiu.picksrocketstats_button'}, 	nil,		nil,				{"left", "mod_gui_frame_flow", "pi_rss_rocket-silo-stats"}},
-	{"SchallRailwayController",	"schall_rc_button", 			"Schall-RC-mod-button", 				{'guiu.schall_rc_button'}, 			nil,		nil,				{"screen", "Schall-RC-frame-main"}},
-	{"BlackMarket2",			"blackmarket1_button", 			"but_blkmkt_main", 						{'guiu.blackmarket1_button'},		nil,		{"flw_blkmkt"},		{"left", "mod_gui_frame_flow", "frm_blkmkt_gen"}},
-	{"BlackMarket2",			"blackmarket2_button", 			"but_blkmkt_credits", 					nil,								nil,		{"flw_blkmkt"},		{"left", "mod_gui_frame_flow", "frm_blkmkt_itml"}},
-	{"AutoTrash",				"autotrash_button",				"at_config_button",						nil,								1,			nil,				nil},
-	{"TogglePeacefulMode",		"togglepeacefulmode_button",	"tpm-button",							{'guiu.togglepeacefulmode_button'},	1,			nil,				nil},
-	{"what-is-it-really-used-for","wiiuf_button",				"looking-glass",						{'guiu.wiiuf_button'}, 				nil, {"wiiuf_flow", "search_flow"},{"screen", "wiiuf_center_frame"}},
-	{"TheFatController",		"thefatcontroller_button",		"toggleTrainInfo",						{'guiu.thefatcontroller_button'}, 	nil, {"fatControllerButtons"},	{"left", "fatController", "trainInfo"}},
-	{"quickbarimportexport",	"quickbarimportexport_button", 	"qbie_button_show_options", 			nil,								nil, {"qbie_flow_choose_action"},{"left", "mod_gui_frame_flow", "qbie_frame_main_window"}},
-	{"quickbarimportexport",	"quickbarimport_button", 		"qbie_button_import", 					nil,								nil, {"qbie_flow_choose_action"},nil},
-	{"quickbarimportexport",	"quickbarexport_button", 		"qbie_button_export", 					nil,								nil, {"qbie_flow_choose_action"},nil},
-	{"informatron",				"informatron_button", 			"informatron_overhead",					nil,								1,			nil,				{"screen", "informatron_main"}},
-	{"space-exploration",		"se_interstellar_button", 		"se-overhead_interstellar",				nil,								1,			nil,				{"left", "se-remote-view", "system_toggles_table", "map_view_toggles", "show_danger_zones"}},
-	{"space-exploration",		"se_satellite_button", 			"se-overhead_satellite",				nil,								1,			nil,				{"left", "se-remote-view"}},
-	{"space-exploration",		"se_explorer_button", 			"se-overhead_explorer",					nil,								1,			nil,				{"screen", "se-zonelist_main"}},
-	{"CommuGuideMod",			"commuguidemod_guide_button", 	"main_menu_guide_button",				{'guiu.commuguidemod_guide_button'},nil,		nil,				nil},
-	{"CommuGuideMod",			"commuguidemod_pupil_button", 	"main_menu_player_button",				{'guiu.commuguidemod_pupil_button'},nil,		nil,				nil},
-	{"FJEI",					"fjei_toggle_button", 			"fjei_toggle_button",					nil,								1,			nil,				{"left", "fjei_main_window","fjei_main_window_control_table"}}, -- {"", ""}
-	{"ToggleSpeedBoost",		"togglespeedboost_button", 		"togglespeedboost_button",				nil,								1,			nil,				nil},
-	{"248k",					"248k_button", 					"top248kbutton",						{'guiu.248k_button'},				nil,		nil,				{"left", "main248kframe"}},
-	{"BlueprintAlignment",		"blueprintalignment_button", 	"BlueprintAlignment_Button",			nil,								nil,		nil,				nil},
-	{"CargoTrainManager",		"cargotrainmanager_button", 	"ctm_toolbutton",						nil,								nil,		nil,				{"screen", "ctm_main_dialog"}},
-	{"clusterio",				"clusterio_button", 			"clusterio-main-config-gui-toggle-button",{'guiu.clusterio_button'},		nil,		nil,				{"top", "clusterio-main-config-gui"}},
-	{"Cursed-Exp",				"cursedexp_button", 			"openMain",								{'guiu.cursedexp_button'},			nil,		{"openMainFlow"},	{"left", "flowMainOut", "frameMain"}},
-	{"default-wait-conditions",	"defaultwaitconditions_button",	"default-wait-conditions-main-button",	nil,								nil,		nil,				{"screen", "default-wait-conditions-main-frame"}},
-	{"diplomacy",				"diplomacy_button", 			"diplomacy_button",						nil,								nil,		nil,				{"screen", "diplomacy_frame"}},
-	{"Electronic_Locomotives",	"electronic_locomotives_button","ELECTRONIC_CLICK01",					{'guiu.electronic_locomotives_button'},nil,		nil,				{"screen", "ELECTRONIC_LOCATION"}},
-	{"forces",					"forces_button", 				"forcesMenu",							nil,								nil,		nil,				{"center", "inviteDialogue"}},
-	{"Hive_Mind",				"hive_mind_button1", 			"join-hive-button",						nil,								nil,		nil,				nil},
-	{"Hive_Mind",				"hive_mind_button2", 			"leave-hive-button",					nil,								nil,		nil,				nil},
-	{"Hive_Mind_Remastered",	"hive_mind_button1", 			"join-hive-button",						nil,								nil,		nil,				nil},
-	{"Hive_Mind_Remastered",	"hive_mind_button2", 			"leave-hive-button",					nil,								nil,		nil,				nil},
-	{"howfardiditgo",			"howfardiditgo_button", 		"train_distance_button",				{'guiu.howfardiditgo_button'},		nil,		nil,				{"top", "mod_gui_top_frame", "mod_gui_inner_frame", "train_filtertextbox"}},
-	{"Kux-BlueprintEditor",		"kuxblueprinteditor_button", 	"mod-blueprint-editor-toolbar-button",	nil,								nil,		nil,				{"screen", "blueprint-editor-modal"}},
-	{"Kux-HandcraftGhosts",		"kuxcraftingtools_button", 		"PlayerGhostCraft",						nil,								nil,		nil,				nil},
-	{"Logistic-Machines",		"logisticmachines_button", 		"lm_default_circuit_button",			{'guiu.logisticmachines_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "ld_default_circuit_window"}},
-	{"LogisticRequestManager",	"logisticrequestmanager_button","logistic-request-manager-gui-button",	{'guiu.logisticrequestmanager_button'},nil,		nil,				{"screen", "logistic-request-manager-gui-master"}},
-	{"region-cloner",			"regioncloner_button", 			"region-cloner_main-button",			nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "region-cloner_control-window"}},
-	{"ResetEvolutionPollution",	"resetevolpol_button",			"ResetEvolutionPollution",				nil,								nil,		nil,				nil},
-	{"Shuttle_Train_Continued",	"shuttle_train_button",			"shuttle_lite_button",					nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "shuttle_lite_frame"}},
-	{"Simple_Circuit_Trains",	"simple_circuit_trains_button",	"SIMPLE_CLICK_01",						{'guiu.simple_circuit_trains_button'},nil,		nil,				{"screen", "SIMPLE_LOCATION"}},
-	{"TeamCoop",				"teamcoop_button1", 			"spwn_ctrls",							{'guiu.teamcoop_button1'},			nil,		nil,				{"left", "spwn_ctrl_panel"}},
-	{"TeamCoop",				"teamcoop_button2", 			"spwn_admin_ctrls",						{'guiu.teamcoop_button2'},			nil,		nil,				{"left", "spwn_admin_ctrl_panel"}},
-	{"smartchest",				"smartchest_button", 			"sc_button",							nil,								nil,		nil,				{"left", "sc_filter_panel"}},
-	{"homeworld_redux",			"homeworld_redux_button", 		"Homeworld_btn",						{'guiu.homeworld_redux_button'},	nil,		nil,				{"left", "homeworld"}},
-	{"m-lawful-evil",			"mlawfulevil_button", 			"lawful_evil_button",					{'guiu.mlawfulevil_button'},		nil,		nil,				{"center", "lawful_evil_gui"}},
-	{"Trashcan",				"trashcan_button", 				"trashbinguibutton",					{'guiu.trashcan_button'},			nil,		nil,				nil},
-	{"pycoalprocessing",		"pycoalprocessing_button", 		"pywiki",								{'guiu.pycoalprocessing_button'},	nil,		nil,				{"screen", "wiki_frame"}},
-	{"usage-detector",			"usagedetector_button", 		"usage_detector",						{'guiu.usagedetector_button'},		nil,		nil,				{"center", "usage_detector_center"}},
-	{"RPG",						"rpg_button", 					"104",									{'guiu.rpg_button'},				nil,		nil,				{"screen", "105"}},
-	{"SpawnControl",			"spawncontrol_button", 			"spawn",								{'guiu.spawncontrol_button'},		nil,		nil,				nil},
-	{"TimedSpawnControl",		"spawncontrol_button", 			"spawn",								{'guiu.spawncontrol_button'},		nil,		nil,				nil},
-	{"TimedSpawnControl",		"spawncontrol_random_button", 	"random",								{'guiu.spawncontrol_random_button'},nil,		nil,				nil},
-	{"what-is-missing",			"whatsmissing_button", 			"what_is_missing",						{'guiu.whatismissing_button'},		nil,		nil,				{"left", "what_is_missing"}},
-	{"advanced-logistics-system-fork","logisticssystemfork_button","logistics-view-button",				{'guiu.logisticssystemfork_button'},nil,		nil,				{"center", "logisticsFrame"}},
-	{"some-zoom",				"somezoom_out_button", 			"but_zoom_zout",						{'guiu.somezoom_out_button'},		nil,		nil,				nil},
-	{"some-zoom",				"somezoom_in_button", 			"but_zoom_zin",							{'guiu.somezoom_in_button'},		nil,		nil,				nil},
-	{"production-monitor",		"productionmonitor_button", 	"stats_show_settings",					{'guiu.productionmonitor_button'},	nil,		nil,				{"center", "stats_center"}},
-	{"Teleportation_Redux",		"teleportation_button", 		"teleportation_main_button",			{'guiu.teleportation_button'},		nil,		nil,				{"left", "teleportation_main_window"}},
-	{"PersonalTeleporter",		"teleportation_button", 		"personalTeleporter_PersonalTeleportTool",{'guiu.teleportation_button'},	nil,		nil,				{"left", "personlaTeleportWindow"}},
-	{"SchallEndgameEvolution",	"schallendgameevolution_button","Schall-EE-mod-button",					nil,								1,			nil,				{"screen", "Schall-EE-frame-main"}},
-	{"NewGamePlus",				"newgameplus_button",			"new-game-plus-toggle-config",			nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "new-game-plus-config-frame"}},
-	{"Nullius",					"nullius_button",				"nullius_mission_button",				nil,								nil,		nil,				{"left", "nullius_mission_panel"}},
-	{"RecExplo",				"recexplo_button",				"b_recexplo",							{'guiu.recexplo_button'},			nil,		nil,				{"left", "recexplo_flow", "recexplo_gui_frame", "recexplo_gui_table"}},
-	{"BlueprintLab_design",		"blueprintlabdesign_button",	"BPL_LabButton",						{'guiu.blueprintlabdesign_button'},	nil,		nil,				{"left", "BPL_Flow", "BPL_ClearButton"}},
-	{"NonWaveDefense2",			"nonwavedefense2_button",		"nwd2_main_gui_button",					{'guiu.nonwavedefense2_button'},	nil,		nil,				nil},
-	{"SkyWaveDefense",			"nonwavedefense2_button",		"swd3_main_gui_button",					nil,								nil,		nil,				nil},
-	{"dana",					"dana_button",					"dana_main_gui_button",					nil,								nil,		nil,				nil},
-	{"billbo99_factorio_tweaks","factorio_tweaks_button",		"admin_button",							{'guiu.factorio_tweaks_button'},	nil,		nil,				{"left", "admin_panel", "tabbed_pane"}},
-	{"remote-switch",			"remoteswitch_button",			"toggle_remote_switch_popup",			{'guiu.remoteswitch_button'},		nil,		nil,				{"screen", "switch_gui_panel", "mainframe"}},
-	{"TSM-outpost-builder",		"tsmoutpostbuilder_button",		"crane_sprite_button",					{'guiu.tsmoutpostbuilder_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "crane_button_frame"}},
-	{"CredoTimeLapseModByGalapagon","credotimelapse_button",	"CTLM_mainbutton",						{'guiu.credotimelapse_button'},		nil,		nil,				{"center", "CTLM_settings_main"}},
-	{"spidersentinel",			"spidersentinel_button",		"spidersentinel_onoff",					nil,								nil,		nil,				{"left", "spidersentinel_frame"}},
-	{"CitiesOfEarth",			"citiesofearth_button",			"coe_button_show_targets",				{'guiu.citiesofearth_button'},		nil,		nil,				{"center", "coe_choose_target"}},
-	{"enemyracemanager",		"enemyracemanager_button",		"erm_toggle",							{'guiu.enemyracemanager_button'},	nil,		nil,				{"left", "mod_gui_frame_flow", "races_manager"}},
-	{"oarc-mod",				"oarcmod_button",				"oarc_button",							{'guiu.oarcmod_button'},			nil,		nil,				{"left", "mod_gui_frame_flow", "oarc_gui"}},
-	{"Decu",					"decu_button",					"market_button",						{'guiu.decu_button'},				nil,		nil,				{"center", "market"}},
-	{"rd-se-multiplayer-compat","forces_button",				"toggle_forces",						{'guiu.compatforce_button'},		nil,		nil,				{"screen", "rd_forces_ui"}},
-	{"rd-se-multiplayer-compat","spawncontrol_button",			"toggle_spawn_gui",						{'guiu.compatspawn_button'},		nil,		nil,				{"screen", "spawn_gui"}},
-	{"base",					"leaderboard_button",			"toggle_leaderboard_button",			{'guiu.leaderboard_button'},		nil,		nil,				{"screen", "leaderboard", "inner"}},
-	{"base",					"teamcoop_button1",				"base_pvp_teams_button",				{'guiu.base_pvp_teams_button'},		nil,		nil,				nil},
-	{"base",					"picksrocketstats_button",		"base_pvp_space_race_button",			{'guiu.base_pvp_space_race_button'},nil,		nil,				nil},
-	{"base",					"factorio_tweaks_button",		"base_pvp_admin_button",				{'guiu.base_pvp_admin_button'},		nil,		nil,				nil},
-	{"Spiderissmo",				"item/spidertron",				"108",									{'guiu.Spiderissmo_spider_button'},	nil,		nil,				{"screen", "105"}},
-	{"Spiderissmo",				"credotimelapse_button",		"minimap_button",						{'guiu.Spiderissmo_minimap_button'},nil,		nil,				{"left", "minimap_toggle_frame"}},
-	{"automatic-belt-direction","abd_on_button",				"abdgui",								nil,								1,			nil,				nil},
-	{"Bluegistics",				"bluegistics_button",			"toggle_saved_logistics_layouts",		nil,								1,			nil,				nil},
-	{"Avatars",					"avatars_button",				"avatar_disc",							nil,								nil,		nil,				nil},
-	{"modmashsplinternewworlds","newworlds_button",				"planets-toggle-button",				nil,								nil,		nil,				{"screen", "planets-main-frame"}},
-
-
-	--{"",		"",	"",						nil,		nil,		nil,				nil},
-	--{"trainschedulesignals_button", "TSS=open-close",						nil,								nil,		nil}, 		??
-	--{"attachnotes_button", 			"attach-note-button",					nil,								1,			nil} 	-- too complex
-	--{"avatars_button", ""},																												??
-	--{"modmashsplinterboom_button", "landmine-toggle-button"},																				??
-	--timeline							timeline				hard
-	--controllinator				["controllinator-toggle"]			button created from
-	--RPGsystem						205992
-	--Bluegistics
-}
+local iconlist = require('iconlist')
 
 local iconlist_creativemod = {
 	{"creative-mod",			"creativemod_button", 			"creative-mod_main-menu-open-button", 	nil,								nil,		nil,				{"left", "mod_gui_frame_flow", "creative-mod_main-menu-container"}},
@@ -171,6 +31,26 @@ local iconlist_Picker = {
 	{"PickerInventoryTools",	"filterfill_filters_btn_set_all","filterfill_filters_btn_set_all",		nil,								1,	 {"filterfill_filters"},	nil},
 	{"PickerInventoryTools",	"filterfill_filters_btn_clear_all","filterfill_filters_btn_clear_all",	nil,								1,	 {"filterfill_filters"},	nil},
 }
+
+local function build_button_array()
+
+	global.gubuttonarray = {}
+
+	for k, icon in pairs(iconlist) do
+	    if game.active_mods[icon[1]] then
+	        local alreadyexists = false
+	        for _, addedalready in pairs(global.gubuttonarray) do
+	            if addedalready[1] == icon[1] then
+	                alreadyexists = true
+	            end
+	        end
+	        if not alreadyexists then
+	            table.insert(global.gubuttonarray, icon)
+	        end
+	    end
+	end
+	if global.gubuttonarray == {} then global.gubuttonarray = {{}} end
+end
 
 local function setup_player(player)
 	if not player or not player.valid then return end
@@ -212,6 +92,12 @@ end
 
 local function change_one_icon(player, sprite, button, tooltip, dontreplacesprite, buttonpath, windowtocheck)
 	if not player or not player.valid or not sprite or not button then return end
+	local settingname = "gu_button_" .. button
+	local is_button_true = true
+	if settings.get_player_settings(player)[settingname] then
+		is_button_true = settings.get_player_settings(player)[settingname].value
+	end
+	--game.print(is_button_true)
 	local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
 	local isselected = true
 	if windowtocheck then
@@ -236,13 +122,19 @@ local function change_one_icon(player, sprite, button, tooltip, dontreplacesprit
 		end
 	end
 	local modbutton = button_flow[button]
-	if modbutton and modbutton.type == "button" or modbutton and modbutton.type == "sprite-button" then
+	if modbutton and (modbutton.type == "button" or modbutton.type == "sprite-button") then
+
 		modbutton.style = gu_button_style_setting
 		if not dontreplacesprite then
 			set_button_sprite(modbutton, sprite)
 		end
 		if tooltip then
 			modbutton.tooltip = tooltip
+		end
+		if is_button_true == false then
+			modbutton.visible = false
+		else
+			modbutton.visible = true
 		end
 	end
 end
@@ -251,7 +143,8 @@ local function fix_buttons(player)
 	if not player or not player.valid then return end
 	local button_flow = mod_gui.get_button_flow(player)
 
-	for _, k in pairs(iconlist) do
+	if not global.gubuttonarray then build_button_array() end
+	for _, k in pairs(global.gubuttonarray) do
 		if k[1] == nil or game.active_mods[k[1]] then
 			change_one_icon(player, k[2], k[3], k[4], k[5], k[6], k[7])
 		end
@@ -367,6 +260,7 @@ local function create_new_buttons(player)
 	local abdshowgui = settings.get_player_settings(player)["abd-showgui"] and settings.get_player_settings(player)["abd-showgui"].value or false
 
 	local newbuttonlist = {
+		--mod					button name 								sprite 							tooltip 									show button (for some there's already a setting to toggle button)
 		{"FJEI",				"fjei_toggle_button",						"fjei_button",					{'guiu.fjei_button'},						true},
 		{"homeworld_redux",		"Homeworld_btn",							"homeworld_redux_button",		{'guiu.homeworld_redux_button'},			true},
 		{"m-lawful-evil",		"lawful_evil_button",						"mlawfulevil_button",			{'guiu.mlawfulevil_button'},				true},
@@ -400,6 +294,14 @@ local function create_new_buttons(player)
 	for _, k in pairs(newbuttonlist) do
 		create_buttons_from_list(k[1], k[2], k[3], k[4], k[5])
 	end
+
+	--[[local buttons_for_shortcuts = {
+		{"LtnManager", 			"gu_ltnm-toggle-gui", 							"forces_button", 				{'guiu.ltnmanager'}, 						true},
+	}
+
+	for _, k in pairs(buttons_for_shortcuts) do
+		create_buttons_from_list(k[1], k[2], k[3], k[4], k[5])
+	end]]
 
 	if player.force and player.force.technologies["advanced-logistics-systems"] and player.force.technologies["advanced-logistics-systems"].researched then
 		create_buttons_from_list("advanced-logistics-system-fork", "logistics-view-button", "logisticssystemfork_button", {'guiu.logisticssystemfork_button'}, true)
@@ -447,7 +349,7 @@ end
 local function update_yarm_button(event)
 	if event and event.element then
 		if event.element.name == "YARM_filter_all" or event.element.name == "YARM_filter_none" or event.element.name == "YARM_filter_warnings" then
-			local player = game.players[event.player_index]
+			local player = event.player_index and game.players[event.player_index]
 			if not player or not player.valid then return end
 			local button_flow = mod_gui.get_button_flow(player)
 			local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
@@ -559,7 +461,8 @@ local function destroy_obsolete_buttons(player)
 end
 
 local function update_frame_style(event)
-	local player = game.players[event.player_index]
+	local player = event.player_index and game.players[event.player_index]
+	if not player or not player.valid then return end
 	local gu_frame_style_setting = settings.get_player_settings(player)["gu_frame_style_setting"].value or "normal_frame_style"
 	if player.gui and player.gui.top and player.gui.top.mod_gui_top_frame and player.gui.top.mod_gui_top_frame.mod_gui_inner_frame then
 		if gu_frame_style_setting == "snouz_normal_frame_style" then
@@ -624,8 +527,15 @@ local function cycle_frames_to_rename(player)
 	end
 end
 
+local function check_buttons_disabled(event)
+	local player = event.player_index and game.players[event.player_index]
+	if not player or not player.valid then return end
+
+	local gu_button_style_setting = settings.get_player_settings(player)["gu_button_style_setting"].value or "slot_button_notext"
+end
+
 local function on_player_cursor_stack_changed(event)
-	local player = game.players[event.player_index]
+	local player = event.player_index and game.players[event.player_index]
 	if not player or not player.valid then return end
 	local button_flow = mod_gui.get_button_flow(player)
 
@@ -700,23 +610,25 @@ local function general_update()
 end
 
 local function general_update_event(event)
-	local player = game.players[event.player_index]
+	local player = event.player_index and game.players[event.player_index]
 	if not player or not player.valid then return end
 	if not global.player or not global.player[event.player_index] then setup_player(player) end
 	global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 1
 end
 
 local function on_configuration_changed()
+	build_button_array()
 	general_update()
 end
 
 local function on_player_configuration_changed(event)
+	check_buttons_disabled(event)
 	general_update_event(event)
 	update_frame_style(event)
 end
 
 local function on_player_joined(event)
-	local player = game.players[event.player_index]
+	local player = event.player_index and game.players[event.player_index]
 	local button_flow = mod_gui.get_button_flow(player)
 	general_update_event(event)
 
@@ -728,34 +640,48 @@ local function on_player_joined(event)
 	end
 end
 
-
 local function on_gui_click(event)
-	local player = game.players[event.player_index]
+	local player = event.player_index and game.players[event.player_index]
 	if not player or not player.valid then return end
 	local button_flow = mod_gui.get_button_flow(player)
 	if game.active_mods["YARM"] then update_yarm_button(event) end
 
 	global.player[player.index].checknexttick = global.player[player.index].checknexttick + 1
 
+	if game.active_mods["clock"] and button_flow.clockGUI then
+		if player.gui.left.mod_gui_frame_flow and player.gui.left.mod_gui_frame_flow.clock_gui and player.gui.left.mod_gui_frame_flow.clock_gui.visible then
+			button_flow.clockGUI.style = "todo_button_default_snouz_selected"
+		else
+			button_flow.clockGUI.style = "todo_button_default_snouz"
+		end
+	end
+
+	local buttname = ""
+	if event.element and event.element.name then
+		buttname = event.element.name
+	else
+		return
+	end
+
 		--force closed if button clicked
 	if game.active_mods["pycoalprocessing"] then
-		if event.element and event.element.name and event.element.name == "pywiki" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+		if buttname == "pywiki" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
 			player.gui.screen.wiki_frame.destroy()
 		end
 	end
 	if game.active_mods["SolarRatio"] then
-		if event.element and event.element.name and event.element.name == "niet-sr-guibutton" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+		if buttname == "niet-sr-guibutton" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
 			player.gui.center["niet-sr-guiframe"].destroy()
 		end
 	end
 	if game.active_mods["CitiesOfEarth"] then
-		if event.element and event.element.name and event.element.name == "coe_button_show_targets" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
+		if buttname == "coe_button_show_targets" and event.element.style and event.element.style.name and event.element.style.name == settings.get_player_settings(player)["gu_button_style_setting"].value .. "_selected" then
 			player.gui.center["coe_choose_target"].destroy()
 		end
 	end
 
 	if game.active_mods["automatic-belt-direction"] then
-		if event.element and event.element.name and event.element.name == "abdgui" then
+		if buttname == "abdgui" then
 			if player.gui.top.abdgui and player.gui.top.abdgui.sprite == "abd-gui-on" then
 				event.element.sprite = "abd_on_button"
 				event.element.tooltip = {'guiu.abd_on_button'}
@@ -766,21 +692,20 @@ local function on_gui_click(event)
 		end
 	end
 
-	if game.active_mods["clock"] then
-		if button_flow.clockGUI then
-			if player.gui.left.mod_gui_frame_flow and player.gui.left.mod_gui_frame_flow.clock_gui and player.gui.left.mod_gui_frame_flow.clock_gui.visible then
-				button_flow.clockGUI.style = "todo_button_default_snouz_selected"
-			else
-				button_flow.clockGUI.style = "todo_button_default_snouz"
-			end
+	--[[if buttname == "gu_ltnm-toggle-gui" then
+		--game.print("11111111")
+		if game.shortcut_prototypes["ltnm-toggle-gui"] then
+			--game.print(game.shortcut_prototypes["ltnm-toggle-gui"])
+			player.set_shortcut_toggled("ltnm-toggle-gui", not player.is_shortcut_toggled("ltnm-toggle-gui"))
 		end
-	end
+	end]]
 
 	if activedebug or player == game.players["snouz"] then debug_button(event) end
 end
 
 local function on_hivemindchange(event)
 	if game.active_mods["Hive_Mind"] or game.active_mods["Hive_Mind_Remastered"] then
+		if not event.player_index then return end
 		if not global.player or not global.player[event.player_index] then setup_player(game.players[event.player_index]) end
 		global.player[event.player_index].checknexttick = global.player[event.player_index].checknexttick + 1
 	end
