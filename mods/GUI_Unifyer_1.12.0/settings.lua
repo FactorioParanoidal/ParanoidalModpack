@@ -58,3 +58,36 @@ data:extend({
         order = "d",
     },
 })
+
+
+--Hide icons
+
+local iconlist = require('iconlist')
+
+local settingslist = {}
+
+for k, icon in pairs(iconlist) do
+    if mods[icon[1]] and icon[1] ~= "base" then
+        local alreadyexists = false
+        for _, i in pairs(settingslist) do
+            if icon[3] == i then
+                alreadyexists = true
+            end
+        end
+        if not alreadyexists then
+            table.insert(settingslist, icon[3])
+        end
+    end
+end
+
+for _, setting in pairs(settingslist) do
+    data:extend({
+        {
+            type = "bool-setting",
+            name = "gu_button_" .. setting,
+            setting_type = "runtime-per-user",
+            default_value = true,
+            order = "e",
+        },
+    })
+end
