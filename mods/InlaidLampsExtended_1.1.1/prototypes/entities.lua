@@ -12,15 +12,21 @@ for _, s in ipairs(sounds) do
 end
 
 -- Copy base lamp's staggering parameters, falling back to a sensible default
-local loc_darkness_for_all_lamps_on = 0.7
-local loc_darkness_for_all_lamps_off = 0.5
+--~ local loc_darkness_for_all_lamps_on = 0.7
+--~ local loc_darkness_for_all_lamps_off = 0.5
+--~ local lamp = data.raw["lamp"]["small-lamp"]
+--~ if lamp.darkness_for_all_lamps_on then
+    --~ loc_darkness_for_all_lamps_on = lamp.darkness_for_all_lamps_on
+--~ end
+--~ if lamp.darkness_for_all_lamps_off then
+    --~ loc_darkness_for_all_lamps_off = lamp.darkness_for_all_lamps_off
+--~ end
+
 local lamp = data.raw["lamp"]["small-lamp"]
-if lamp.darkness_for_all_lamps_on then
-    loc_darkness_for_all_lamps_on = lamp.darkness_for_all_lamps_on
-end
-if lamp.darkness_for_all_lamps_off then
-    loc_darkness_for_all_lamps_off = lamp.darkness_for_all_lamps_off
-end
+local loc_darkness_for_all_lamps_on = lamp.darkness_for_all_lamps_on or 0.7
+local loc_darkness_for_all_lamps_off = lamp.darkness_for_all_lamps_off or 0.5
+
+local biglamp_factor = 4
 
 
 local IMGPATH = "__InlaidLampsExtended__/graphics/"
@@ -192,6 +198,7 @@ data:extend({
       type = "electric",
       usage_priority = "lamp"
     },
+    --~ energy_usage_per_tick = "10KW",
     energy_usage_per_tick = "10KW",
     -- RGB Red (251, 30, 10)
     light = {
@@ -326,6 +333,15 @@ if settings.startup["inlaid_lamps_extended_change_energy_usage"].value then
         local flat_lamp = data.raw.lamp["flat-lamp"]
         flat_lamp.energy_usage_per_tick = loc_energy_usage.."KW"
         local flat_lamp_big = data.raw.lamp["flat-lamp-big"]
-        flat_lamp_big.energy_usage_per_tick = 2 * loc_energy_usage.."KW"
+        --~ flat_lamp_big.energy_usage_per_tick = 2 * loc_energy_usage.."KW"
+        flat_lamp_big.energy_usage_per_tick = biglamp_factor * loc_energy_usage.."KW"
 end
 -- ==============================================================
+
+local inlaid = data.raw.lamp["flat-lamp"]
+local inlaid_big = data.raw.lamp["flat-lamp-big"]
+
+inlaid_big.minable.hardness = inlaid.minable.hardness * biglamp_factor
+inlaid_big.minable.mining_time = inlaid.minable.mining_time * biglamp_factor
+
+inlaid_big.max_health = inlaid.max_health * biglamp_factor * 0.75

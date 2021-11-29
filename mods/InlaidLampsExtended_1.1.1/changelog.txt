@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-11-13
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Inlaid lamps are a good protection against driving accidents. They are not really necessary before you've researched automobilism. With this update, inlaid lamps will be available much later than before, and use an entirely different recipe. So beware: updating may break existing games!
+
+  Changes:
+    - The recipes now require a lamp, stone bricks, and steel plates.
+    - Added "steel-processing" to the technology prerequisites.
+    - Add a simple prerequisite check to on_configuration_changed. If a prerequisite tech has not been researched yet, inlaid lamps will be un-researched.
+    - The big lamp takes up four times as much space than the small one. Therefore, it should require more ingredients, have more health points, and consume more energy than the small version -- and it does now!
+
+---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2020-11-25
   Uploaded by:
