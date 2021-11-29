@@ -171,6 +171,56 @@ function Smarts.assembly_to_logistic_chest(from, to, player, special)
     end
 end
 
+function Smarts.assembly_to_transport_belt(from, to, player, special)
+    local ctrl = to.get_or_create_control_behavior()
+    local c1 = ctrl.get_circuit_network(defines.wire_type.red)
+    local c2 = ctrl.get_circuit_network(defines.wire_type.green)
+
+    local fromRecipe = from.get_recipe()
+
+    if fromRecipe == nil then
+        if c1 == nil and c2 == nil then
+            ctrl.logistic_condition = nil
+            ctrl.connect_to_logistic_network = false
+        else
+            ctrl.circuit_condition = nil
+            ctrl.circuit_mode_of_operation = defines.control_behavior.transport_belt.circuit_mode_of_operation.none
+        end
+    else
+        local product = fromRecipe.products[1].name
+        local item = game.item_prototypes[product]
+
+        if item ~= nil then
+            local comparator = settings.get_player_settings(player)["additional-paste-settings-options-comparator-value"].value
+            local multiplier = settings.get_player_settings(player)["additional-paste-settings-options-transport_belt-multiplier-value"].value
+            local mtype = settings.get_player_settings(player)["additional-paste-settings-options-transport_belt-multiplier-type"].value
+            local additive = settings.get_player_settings(player)["additional-paste-settings-options-sumup"].value
+            local amount = update_stack(mtype, multiplier, item, nil, fromRecipe, from.crafting_speed, additive, special)
+            if c1 == nil and c2 == nil then
+                if ctrl.connect_to_logistic_network and ctrl.logistic_condition["condition"]["first_signal"]["name"] == product then
+                    if ctrl.logistic_condition["condition"]["constant"] ~= nil then
+                        amount = update_stack(mtype, multiplier, item, ctrl.logistic_condition["condition"]["constant"], fromRecipe, from.crafting_speed, additive, special)
+                    end
+                else
+                    ctrl.connect_to_logistic_network = true
+                end
+                ctrl.logistic_condition = {condition = {comparator = comparator, first_signal = {type = "item", name = product}, constant = amount}}
+                to.surface.create_entity {name = "flying-text", position = to.position, text = "[img=item." .. product .. "] " .. comparator .. " " .. math.floor(amount), color = colors.white}
+            else
+                if ctrl.enable_disable and ctrl.circuit_condition["condition"]["first_signal"]["name"] == product then
+                    if ctrl.logistic_condition["condition"]["constant"] ~= nil then
+                        amount = update_stack(mtype, multiplier, item, ctrl.circuit_condition["condition"]["constant"], fromRecipe, from.crafting_speed, additive, special)
+                    end
+                else
+                    ctrl.enable_disable = true
+                end
+                ctrl.circuit_condition = {condition = {comparator = comparator, first_signal = {type = "item", name = product}, constant = amount}}
+                to.surface.create_entity {name = "flying-text", position = to.position, text = "[img=item." .. product .. "] " .. comparator .. " " .. math.floor(amount), color = colors.white}
+            end
+        end
+    end
+end
+
 function Smarts.assembly_to_inserter(from, to, player, special)
     local ctrl = to.get_or_create_control_behavior()
     local c1 = ctrl.get_circuit_network(defines.wire_type.red)
@@ -319,10 +369,12 @@ function Smarts.on_vanilla_paste(event)
         end
 
         if invertPaste and recipe then
-            if result[recipe.name] ~= nil then
-                result[recipe.name].count = update_stack(mtype, multiplier, result[recipe.name], result[recipe.name].count, recipe, speed, additive)
-            else
-                result[recipe.name] = {name = recipe.name, count = update_stack(mtype, multiplier, {name = recipe.name}, recipe, speed, additive)}
+            for k, product in pairs(recipe.products) do
+                if result[product.name] ~= nil then
+                    result[product.name].count = update_stack(mtype, multiplier, result[product.name], result[product.name].count, recipe, speed, additive)
+                else
+                    result[product.name] = {name = product.name, count = update_stack(mtype, multiplier, {name = product.name}, recipe, speed, additive)}
+                end
             end
         end
 
@@ -358,6 +410,7 @@ function Smarts.on_vanilla_paste(event)
 end
 
 Smarts.actions = {
+    ["assembling-machine|transport-belt"] = Smarts.assembly_to_transport_belt,
     ["assembling-machine|inserter"] = Smarts.assembly_to_inserter,
     ["assembling-machine|logistic-container"] = Smarts.assembly_to_logistic_chest,
     ["assembling-machine|constant-combinator"] = Smarts.assembly_to_constant_combinator,
