@@ -29,7 +29,7 @@ function nuclear_category(input,output)
 		
 		else
 			if oldRecipe.category == "smelting" and oldRecipe.normal then
-				--log(serpent.block(oldRecipe))
+				log(serpent.block(oldRecipe))
 				local newRecipe = oldRecipe
 				newRecipe.category = "nuclear-smelting"
 				newRecipe.name = "nuclear-smelting-"..oldRecipe.name
@@ -47,7 +47,7 @@ function nuclear_category(input,output)
 				table.insert(data.raw.technology["ober-nuclear-processing"].effects,{type="unlock-recipe",recipe = newRecipe.name})
 			end
 			if oldRecipe.category == "smelting" then
-				--log(serpent.block(oldRecipe))
+				log(serpent.block(oldRecipe))
 				local newRecipe = oldRecipe
 				newRecipe.category = "nuclear-smelting"
 				newRecipe.name = "nuclear-smelting-"..oldRecipe.name
