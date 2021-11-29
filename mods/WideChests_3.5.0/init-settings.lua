@@ -112,3 +112,33 @@ if MergingChests.CheckMod(MergingChests.BobLogisticModName) and MergingChests.Ch
 		}
 	}
 end
+
+if MergingChests.CheckMod("DyWorld-Dynamics") then
+	MergingChests.MergableChestIdToData["small-storage"] = {
+		id = "small-storage",
+		name = "DyWorld Wood Storage Chest",
+		type = "wood",
+		additional_properties = {
+			icon = "__base__/graphics/entity/wooden-chest/wooden-chest.png",
+			icon_size = 32
+		}
+	}
+	MergingChests.MergableChestIdToData["small-storage-2"] = {
+		id = "small-storage-2",
+		name = "DyWorld Iron Storage Chest",
+		type = "iron",
+		additional_properties = {
+			icon = "__base__/graphics/entity/iron-chest/iron-chest.png",
+			icon_size = 32
+		}
+	}
+	MergingChests.MergableChestIdToData["small-storage-3"] = {
+		id = "small-storage-3",
+		name = "DyWorld Steel Storage Chest",
+		type = "steel",
+		additional_properties = {
+			icon = "__base__/graphics/entity/steel-chest/steel-chest.png",
+			icon_size = 32
+		}
+	}
+end
