@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 2021-11-18
+  Bugfixes:
+    - Fixed the dictionary module not separating dictionaries from separate mods properly
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2021-11-16
+  Bugfixes:
+    - Fixed a crash when calling dictionary.load() before dictionary.init() has been able to fire
+    - Fixed table.slice() and table.splice() stop-n-from-end being one position off
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2021-11-11
+  Features:
+    - Added `queue` module
+    - Added `table.array_merge()` and `table.retrieve()`
+    - Added `flib_pin` and `flib_settings` sprites in black, white, and disabled variants
+      - These are for use with frame action buttons
+    - Added `gui.flib-keep-open` and `gui.flib-settings` locales for use with the aforementioned sprites
+---------------------------------------------------------------------------------------------------
 Version: 0.8.4
 Date: 2021-09-19
   Features:
@@ -45,7 +65,7 @@ Date: 2021-08-08
     - Deprecated the `translation` module, replaced by the new `dictionary` module
       - The `translation` module still exists and can be used, but is no longer documented and its use is recommended against
   Bugfixes:
-    - Fixed a crash when calling `gui-beta.read_action()` when the element was invalid
+    - Fixed a crash when calling `gui.read_action()` when the element was invalid
     - Fixed `area.from_position` not actually creating a 1x1 area
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.0

@@ -127,7 +127,7 @@ end
 -- If using @{dictionary.set_use_local_storage}, your dictionaries must be re-generated **after** this function is
 -- called.
 function flib_dictionary.load()
-  if not use_local_storage then
+  if not use_local_storage and global.__flib and global.__flib.dictionary then
     raw = global.__flib.dictionary.raw
   end
 end
@@ -177,6 +177,7 @@ local function request_translation(player_data)
 
   player_data.player.request_translation{
     "",
+    kv("FLIB_DICTIONARY_MOD", script.mod_name),
     kv("FLIB_DICTIONARY_NAME", player_data.dictionary),
     kv("FLIB_DICTIONARY_LANGUAGE", player_data.language),
     kv("FLIB_DICTIONARY_STRING_INDEX", player_data.i),
@@ -209,7 +210,8 @@ function flib_dictionary.check_skipped()
   end
 end
 
-local dictionary_match_string = kv("^FLIB_DICTIONARY_NAME", "(.-)")
+local dictionary_match_string = kv("^FLIB_DICTIONARY_MOD", script.mod_name)
+  ..kv("FLIB_DICTIONARY_NAME", "(.-)")
   ..kv("FLIB_DICTIONARY_LANGUAGE", "(.-)")
   ..kv("FLIB_DICTIONARY_STRING_INDEX", "(%d-)")
   .."(.*)$"
@@ -222,7 +224,7 @@ local dictionary_match_string = kv("^FLIB_DICTIONARY_NAME", "(.-)")
 function flib_dictionary.process_translation(event_data)
   if not event_data.translated then return end
   local script_data = global.__flib.dictionary
-  if string.find(event_data.result, "^FLIB_DICTIONARY_NAME") then
+  if string.find(event_data.result, "FLIB_DICTIONARY_NAME") then
     local _, _, dict_name, dict_lang, string_index, translation = string.find(
       event_data.result,
       dictionary_match_string
