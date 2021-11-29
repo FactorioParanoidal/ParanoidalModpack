@@ -166,13 +166,49 @@ end
 -- Read train state and determine if it is safe to replace
 local function isTrainStopped(train)
   local state = train.state
-  return train.speed==0 and (
+  local state_ok = train.speed==0 and (
               (state == defines.train_state.wait_station) or 
               (state == defines.train_state.wait_signal) or 
               (state == defines.train_state.no_path) or 
               (state == defines.train_state.no_schedule) or 
               (state == defines.train_state.manual_control)
       )
+  if state_ok then
+    -- Do an additional checks to make sure the train isn't currently being manipulated by another mod
+    ----------------------
+    -- ** Compatibility with Space Exploration Space Elevators **
+    if game.entity_prototypes["se-space-elevator-energy-interface"] then
+      local space_elevator_hypertrain_radius = 12
+      local front_pos = train.front_stock.position
+      local front_structs = train.front_stock.surface.find_entities_filtered{position=front_pos, radius=space_elevator_hypertrain_radius, name="se-space-elevator-energy-interface"}
+      if front_structs and #front_structs>0 then
+        state_ok = false
+      else
+        local back_pos = train.back_stock.position
+        local back_structs = train.back_stock.surface.find_entities_filtered{position=back_pos, radius=space_elevator_hypertrain_radius, name="se-space-elevator-energy-interface"}
+        if back_structs and #back_structs>0 then
+          state_ok = false
+        end
+      end
+    end
+    -- ** Compatibility with Train Tunnels **
+    if game.entity_prototypes["traintunnel"] then
+      local tunnel_radius = game.entity_prototypes["traintunnel"].radius
+      local front_structs = train.front_stock.surface.find_entities_filtered{position=train.front_stock.position, radius=tunnel_radius+train.front_stock.get_radius()+3, name={"traintunnel","traintunnelup"}}
+      if front_structs and #front_structs>0 then
+        game.print("skipping tunnel "..tostring(game.tick))
+        state_ok = false
+      else
+        local back_structs = train.back_stock.surface.find_entities_filtered{position=train.back_stock.position, radius=tunnel_radius+train.back_stock.get_radius()+3, name={"traintunnel","traintunnelup"}}
+        if back_structs and #back_structs>0 then
+          game.print("skipping tunnel "..tostring(game.tick))
+          state_ok = false
+        end
+      end
+    end
+    ----------------------
+  end
+  return state_ok
 end
 
 

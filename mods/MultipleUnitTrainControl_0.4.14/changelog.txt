@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.14
+Date: 2021-11-11
+  Features:
+    -- Added Railway Motor Cars to blacklist.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.13
+Date: 2021-11-05
+  Features:
+    - Added Degraine's Electric Train to blacklist.
+    - Added Railway Motor Car to blacklist.
+    - Added compatibility with future Space Elevators from Space Exploration.
+    - Added beta compatibility with Train Tunnels mod.
+  Bugfixes:
+    - Actually added Real Shuttle Trains to the blacklist this time.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+Date: 2021-10-27
+  Bugfixes:
+    - Added Real Shuttle Trains mod to the blacklist for compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+Date: 2021-09-20
+  Bugfixes:
+    - Fixed failure to load when Electronic Locomotives is installed without any additional Electronic Locomotive mods.
+---------------------------------------------------------------------------------------------------
 Version: 0.4.10
 Date: 2021-02-28
   Features:
@@ -8,7 +33,7 @@ Version: 0.4.9
 Date: 2020-12-07
   Bugfixes:
     - Fix crash when balancing fuel in a large number of locomotives.
--------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 0.4.8
 Date: 2020-12-06
   Bugfixes:

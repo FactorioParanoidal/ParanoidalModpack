@@ -35,7 +35,9 @@ if mods["Electronic_Locomotives"] then
     end
   end
   
-  data:extend(new_settings)
+  if table_size(new_settings) > 0 then
+    data:extend(new_settings)
+  end
   
   -- Register MU Electronic Locomotives from the base mod
   data:extend{
