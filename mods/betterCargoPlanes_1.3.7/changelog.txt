@@ -1,0 +1,100 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+Date: 14. 11. 2021
+  Compatability:
+    - Fix Krastorio 2 compatability
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 13. 11. 2021
+  Changes:
+    - Changes by snouz:
+    - New mod icon
+    - Improved entity / icon color
+    - Added proper tech icons
+    - Optimized all PNG
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 13. 11. 2021
+  Changes:
+    - Refactored entity creation logic. (Thanks `snouz` for the recommendation)
+    - Updated Entity, Item, and technology icons.
+    - Now uses the same sounds as the default cargo plane.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 10. 10. 2021
+  Changes:
+    - Slightly adjust rotation speed values.
+    - Added an option for adjusting rotation speed. (One for each tier; Three in total)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 29. 12. 2020
+  Compatability:
+    - Krastorio 2 no longer overwrites the Cargo Plane's Equipment Grid
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 20. 12. 2020
+  Fixes:
+    - Fixed a bug introduced in 1.3.0 where it fails to load if Bob's Mods are installed
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 20. 12. 2020
+  Fixes:
+    - Potentially fixed a bug that caused it to not show up in the Mod Browser
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 20. 12. 2020
+  Changes:
+    - Ported to 1.1.0
+  Compatability:
+    - Added Support for Krastorio 2 (Thanks 'Sodyaler' for the request)
+    - Cargo planes now properly works as Haulers in AAI.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 02. 09. 2020
+  Changes:
+    - Updated to 1.0.0
+    - Added configuration for inventory size - including the default plane. Thanks to 'CreativeAnarchy' for the suggestion
+    - Both new Cargo Planes now respects the 'Inserter Immunity' option in the Aircraft mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 14. 04. 2020
+  Changes:
+    - Ported to 0.18.18.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 24. 03. 2019
+  Locale:
+    - Added Russian Localization (Thanks IgorLutiy)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 23. 03. 2019
+  Balance:
+    - Added Space Science Pack as Prerequisite for Even Better Cargo Planes research.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 21. 03. 2019
+  Changes:
+    - Better Cargo Plane now uses Vehicle-Mounted Machine Gun.
+    - Even Better Cargo Plane now uses Flying Fortress Machine Gun.
+      - This was done to avoid potential breaking of license on Bob's Mods as well as to remove the need for Military Science Packs
+    - Moved all Cargo Planes to be inline in the Recipe window. This means that all 3 Cargo Planes are now before any other aircraft.
+  Graphics:
+    - New graphics for:
+      - Better Cargo Plane
+      - Even Better Cargo Plane
+  Balance:
+    - Reverted recipe change from previous update. Recipe now requires Submachine guns again.
+    - Rebalanced movement speed of:
+      - Better Cargo Plane
+      - Even Better Cargo Plane
+    - Added Vehicle Overdrive Motor research as prerequisites for Better Cargo Plane if Bob's Mods are installed.
+    - Added Vehicle Overdrive Engine research as prerequisites for Even Better Cargo Plane if Bob's Mods are installed.
+    - Removed Utility Science Pack cost from Better Cargo Planes research as I felt the gap between the two upgraded planes were too short, as the only difference was Space Science.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 21. 03. 2019
+  Features:
+    - Added Rifle for Better Cargo Plane and Sniper Rifle for Even Better Cargo Plane.
+      These are based on Bob's Warfare, both stats and art
+  Changes:
+    - Renamed the mod to "Better Cargo Planes" (from "Aircraft - Cargo Plane Equipment Slots") to make it more concise, and better reflect the features of the mod.
