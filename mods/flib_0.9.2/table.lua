@@ -27,6 +27,22 @@ function flib_table.array_copy(arr)
   return new_arr
 end
 
+--- Merge all of the given arrays into a single array.
+-- @tparam array arrays An array of arrays to merge.
+-- @treturn array The merged array.
+function flib_table.array_merge(arrays)
+  local output = {}
+  local i = 0
+  for j = 1, #arrays do
+    local arr = arrays[j]
+    for k = 1, #arr do
+      i = i + 1
+      output[i] = arr[k]
+    end
+  end
+  return output
+end
+
 --- Recursively compare two tables for inner equality.
 --
 -- Does not compare metatables.
@@ -115,8 +131,8 @@ end
 -- @treturn any|nil The key that matches the value, or `nil` if it was not found.
 -- @usage
 -- local tbl = {"foo", "bar"}
--- local contains_foo = table.search(tbl, "foo") -- true
--- local contains_baz = table.search(tbl, "baz") -- false
+-- local key_of_foo = table.find(tbl, "foo") -- 1
+-- local key_of_baz = table.find(tbl, "baz") -- nil
 function flib_table.find(tbl, value)
   for k, v in pairs(tbl) do
     if v == value then
@@ -354,6 +370,18 @@ function flib_table.reduce(tbl, reducer, initial_value)
   return accumulator
 end
 
+--- Remove and return a value from the table.
+-- @tparam table tbl
+-- @tparam any key The key to retrieve.
+-- @treturn any|nil The value stored at that key, if any.
+function flib_table.retrieve(tbl, key)
+  local value = tbl[key]
+  if value ~= nil then
+    tbl[key] = nil
+    return value
+  end
+end
+
 --- Shallowly copy the contents of a table into a new table.
 --
 -- The parent table will have a new table reference, but any subtables within it will still have the same table
@@ -400,7 +428,7 @@ flib_table.size = table_size
 -- The original array **will not** be modified.
 -- @tparam array arr
 -- @tparam[opt=1] int start
--- @tparam[opt=#arr] int stop Stop at this index. If negative, will stop `n` items from the end of the array.
+-- @tparam[opt=#arr] int stop Stop at this index. If zero or negative, will stop `n` items from the end of the array.
 -- @treturn array A new array with the copied values.
 -- @usage
 -- local arr = {10, 20, 30, 40, 50, 60, 70, 80, 90}
@@ -412,7 +440,7 @@ function flib_table.slice(arr, start, stop)
 
   start = start or 1
   stop = stop or n
-  stop = stop < 0 and (n + stop + 1) or stop
+  stop = stop <= 0 and (n + stop) or stop
 
   if start < 1 or start > n then
     return {}
@@ -431,7 +459,7 @@ end
 -- The original array **will** be modified.
 -- @tparam array arr
 -- @tparam[opt=1] int start
--- @tparam[opt=#arr] int stop Stop at this index. If negative, will stop `n` items from the end of the array.
+-- @tparam[opt=#arr] int stop Stop at this index. If zero or negative, will stop `n` items from the end of the array.
 -- @treturn array A new array with the extracted values.
 -- @usage
 -- local arr = {10, 20, 30, 40, 50, 60, 70, 80, 90}
@@ -443,7 +471,7 @@ function flib_table.splice(arr, start, stop)
 
   start = start or 1
   stop = stop or n
-  stop = stop < 0 and (n + stop + 1) or stop
+  stop = stop <= 0 and (n + stop) or stop
 
   if start < 1 or start > n then
     return {}
