@@ -94,17 +94,17 @@ end
 
 bobmods.lib.tech.add_prerequisite("space-construction", "bob-robo-modular-4")	
 -- data.raw.technology["space-construction"].prerequisites = {"space-assembly","bob-robo-modular-4"}
---bobmods.lib.tech.add_prerequisite("protection-fields", "energy-shield-equipment-6")
+bobmods.lib.tech.add_prerequisite("protection-fields", "bob-energy-shield-equipment-6")
 -- data.raw.technology["protection-fields"].prerequisites = {"space-construction","energy-shield-equipment-6"}
 bobmods.lib.tech.add_prerequisite("fusion-reactor", "fusion-reactor-equipment-4")
 -- data.raw.technology["fusion-reactor"].prerequisites = {"space-construction","fusion-reactor-equipment-4"}
 
 bobmods.lib.tech.add_prerequisite("rocket-silo", "titanium-processing")
 bobmods.lib.tech.add_prerequisite("rocket-silo", "nitinol-processing")
---bobmods.lib.tech.add_prerequisite("rocket-silo", "electric-energy-accumulators-4")
+bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-electric-energy-accumulators-4")
 bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-solar-energy-4")
 bobmods.lib.tech.add_prerequisite("rocket-silo", "advanced-electronics-3")
-bobmods.lib.tech.add_prerequisite("rocket-silo", "radars-4")
+-- bobmods.lib.tech.add_prerequisite("rocket-silo", "radars-4")
 
 -- alternate protection field recipe enabler
 bobmods.lib.tech.add_recipe_unlock("protection-fields", "protection-field-goopless")

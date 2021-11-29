@@ -184,6 +184,7 @@ data:extend(
     name = "spacex-combinator",
     icon = "__SpaceMod__/graphics/icons/spacex-combinator.png",
     icon_size = 32,
+    icon_mipmaps = 1,
     flags = {"placeable-neutral", "player-creation"},
     minable = {hardness = 0.2, mining_time = 0.5, result = "spacex-combinator"},
     max_health = 120,

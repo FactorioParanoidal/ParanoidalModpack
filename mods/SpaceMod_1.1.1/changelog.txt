@@ -1,4 +1,7 @@
 v1.1.0
+- Minor corrections to the technology pre-requisites when using Bobs mods courtesy of KiwiHawk.
+
+v1.1.0
 - Version 1.1 compatibility
 
 v1.0.0
