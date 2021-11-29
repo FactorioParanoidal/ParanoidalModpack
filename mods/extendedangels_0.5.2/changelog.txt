@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 2021-10-16
+  Bugfixes:
+    - Fixed that tint assignment for Angel's Refining structures did not validate the existence of the field being called leading to a startup error when Artisanal Reskins: Angel's mods is enabled
+  Locale:
+    - Updated Russian localization
+---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2021-09-14
   Changes:
