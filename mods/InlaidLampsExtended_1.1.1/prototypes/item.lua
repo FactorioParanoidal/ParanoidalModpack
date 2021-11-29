@@ -9,7 +9,8 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     subgroup = "circuit-network",
-    order = "a[InlaidLampsExtended]-u[flat-lamp]",
+    --~ order = "a[InlaidLampsExtended]-u[flat-lamp]",
+    order = "a[light-InlaidLampsExtended]-u[flat-lamp]",
     place_result = "flat-lamp",
     stack_size = 50
   },
@@ -21,7 +22,8 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 4,
     subgroup = "circuit-network",
-    order = "a[InlaidLampsExtended]-v[flat-lamp-big]",
+    --~ order = "a[InlaidLampsExtended]-v[flat-lamp-big]",
+    order = "a[light-InlaidLampsExtended]-v[flat-lamp-big]",
     place_result = "flat-lamp-big",
     stack_size = 50
   }

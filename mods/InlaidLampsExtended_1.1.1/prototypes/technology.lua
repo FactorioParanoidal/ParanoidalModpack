@@ -5,7 +5,8 @@ data:extend({
     icon = "__InlaidLampsExtended__/graphics/flat-lamp-technology.png",
     icon_size = 128,
     icon_mipmaps = 1,
-    prerequisites = { "optics" },
+    --~ prerequisites = { "optics" },
+    prerequisites = { "optics", "steel-processing" },
     effects = {
       {
         type = "unlock-recipe",
@@ -16,12 +17,20 @@ data:extend({
         recipe = "flat-lamp-big"
       }
     },
+    --~ unit = {
+      --~ count = 20,
+      --~ ingredients = {
+        --~ { "automation-science-pack", 1 }
+      --~ },
+      --~ time = 15
+    --~ },
     unit = {
-      count = 20,
+      count = 150,
       ingredients = {
-        { "automation-science-pack", 1 }
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1}
       },
-      time = 15
+      time = 30
     },
     order = "a-h-a"
   }
