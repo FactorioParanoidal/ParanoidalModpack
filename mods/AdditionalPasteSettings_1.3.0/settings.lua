@@ -44,6 +44,27 @@ data:extend(
         },
         {
             type = "string-setting",
+            name = "additional-paste-settings-options-transport_belt-multiplier-type",
+            setting_type = "runtime-per-user",
+            allow_blank = false,
+            allowed_values = {
+                "additional-paste-settings-per-stack-size",
+                "additional-paste-settings-per-recipe-size",
+                "additional-paste-settings-per-time-size"
+            },
+            default_value = "additional-paste-settings-per-recipe-size",
+            order = "cc"
+        },
+        {
+            type = "double-setting",
+            name = "additional-paste-settings-options-transport_belt-multiplier-value",
+            setting_type = "runtime-per-user",
+            minimum_value = 0,
+            default_value = 1,
+            order = "cd"
+        },
+        {
+            type = "string-setting",
             name = "additional-paste-settings-options-combinator-multiplier-type",
             setting_type = "runtime-per-user",
             allow_blank = false,
