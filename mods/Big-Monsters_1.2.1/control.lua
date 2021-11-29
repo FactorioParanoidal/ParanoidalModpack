@@ -792,6 +792,10 @@ for z=#global.biterzillas,1,-1 do
 		elseif string.find(zilla.name, "motherbiterzilla") then if math.random(1,4)==1 then Brood(zilla) end
 		elseif string.find(zilla.name, "boss") and math.random(1,40)==1 then BroodHumans(zilla) 
 		end
+
+		if string.find(zilla.name, "tc_fake_human_ultimate_boss") then 
+		   if math.random(1,10)==1 then BroodHumans(zilla, 2) end end
+		
 		if effect and (effect=='defender_capsules' or effect=='all_buff') then 
 			local ent = {'destroyer','defender'}
 			if math.random(3)==1 then zilla.surface.create_entity{name=ent[math.random(#ent)],  position=zilla.position,target=zilla,force=zilla.force} end
@@ -910,13 +914,14 @@ for k=1,num do
 end
 
 
-function BroodHumans(mother)
+function BroodHumans(mother, extra)
+extra=extra or 0
 local x = mother.position.x
 local y = mother.position.y 
 local r = 10
 local Units = mother.surface.find_entities_filtered({force= mother.force, area={{x-r,y-r},{x+r,y+r}}})
-if #Units>2 then return end
-local num = math.random(3) + global.difficulty_level - 1
+if #Units>5 + global.difficulty_level + extra*3 then return end
+local num = math.random(3+ extra)  + global.difficulty_level - 1
 
 local group = mother.unit_group 
 for k=1,num do
