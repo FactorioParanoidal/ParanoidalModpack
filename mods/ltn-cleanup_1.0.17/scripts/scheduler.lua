@@ -121,6 +121,17 @@ function scheduler.build(train, request_stop_id)
         return
     end
 
+    if request_stop_id == nil then
+        local depot_record = train.schedule.records[1]
+        local depot_name = depot_record.station
+        if depot_name ~= nil then
+            local depot_stop = train_stops.find_depot(depot_name, surface)
+            if depot_stop ~= nil then
+                request_stop_id = depot_stop.unit_number
+            end
+        end
+    end
+
     local stops = train_stops.get_all_cleanup(ltn.get_network(request_stop_id), trains.count_carriages(train), surface)
 
     if not train_stops.found_any_stops(stops) then

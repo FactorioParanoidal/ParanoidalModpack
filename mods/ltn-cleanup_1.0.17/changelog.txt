@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2021-10-31
+  Bugfixes:
+    - Remove experimental GUI
+    - Try to determine stop id for failed deliveries
+  Features:
+    - Add support for [img=] rich text
+---------------------------------------------------------------------------------------------------
 Version: 1.0.16
 Date: 2021-07-10
   Bugfixes:

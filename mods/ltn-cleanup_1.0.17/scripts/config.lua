@@ -16,8 +16,4 @@ function config.failed_trains()
     return config.get_me("failed-trains")
 end
 
-function config.calculate_delta()
-    return config.get_me("calculate-delta")
-end
-
 return config
