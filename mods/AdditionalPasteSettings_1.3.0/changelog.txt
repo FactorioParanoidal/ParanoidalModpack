@@ -1,0 +1,32 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2021.10.30
+  Changes:
+    - Added method to paste to transport belts
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2021.10.28
+  Changes:
+    - Fixed inverse buffer box bug
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2021.07.28
+  Changes:
+    - Added per player setting to allow the choice of default Comparator used on inserters
+    - Added flying-text being displayed on settings being applied to give positive feedback
+    - Key combo added (SHIFT+ALT+Left mouse) to cut the current inserter amount in half
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020.12.22
+  Changes:
+    - Protect against crashes when recipes are copied from machines with nothing set
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020.12.22
+  Changes:
+    - Fixed __AdditionalPasteSettings__/smarts.lua:234: attempt to index local 'stack' (a nil value)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020.12.10
+  Changes:
+    - Fixed, original version would not allow me to merge two or more recipes into a requester chest.
