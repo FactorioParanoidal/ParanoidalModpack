@@ -317,15 +317,8 @@ BioInd.show("Base entity", BioInd.print_name_id(base))
     local h_key = BioInd.HE_map_reverse[entity.type]
     BioInd.show("h_key", h_key or "nil")
 
-    -- Arboretum radar -- we need to add it to the table!
-    if entity.type == "radar" and
-      entity.name == entities["bi-arboretum-area"].hidden[h_key].name and base then
-      global.bi_arboretum_radar_table[entity.unit_number] = base.unit_number
-      entity.backer_name = ""
-      BioInd.writeDebug("Added %s to global.bi_arboretum_radar_table", {BioInd.print_name_id(entity)})
-
     -- Electric poles -- we need to take care that they don't hook up to hidden poles!
-    elseif entity.type == "electric-pole" then
+    if entity.type == "electric-pole" then
       local pole = entity
       -- Make sure hidden poles of the Bio gardens are connected correctly!
       if pole.name == entities["bi-bio-garden"].hidden[h_key].name and base then
