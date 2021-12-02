@@ -1,0 +1,160 @@
+v1.1.0
+- Minor corrections to the technology pre-requisites when using Bobs mods courtesy of KiwiHawk.
+
+v1.1.0
+- Version 1.1 compatibility
+
+v1.0.0
+- Correction to assembly robot icon size
+
+v0.5.1
+- Russian language translation update
+
+v0.5.0
+- Version 0.18 compatibility
+
+v0.4.4
+- Changes dependencies to accomodate Bob;s new Personnal Equipment Mod.  You now need Personnal Equipment.  You now do not need Warfare.  If personnal equipment mod is missing, then the Bob;s mods recipes will not be activated.
+
+v0.4.3
+- Adds new map mod settings (ie change while playing) to allow for the suppression of the narrative messages.  Suppress narrative Popups will remove the message after completion of the satellite network and completion of the drydock.  Auto continue will suppress the final message and automatically choose to continue with another launch (Ie Bring it on).
+
+v0.4.2
+- Fixed the missing descriptions on technologies ftl D1 and ftl D2
+- Added thumbnail
+
+v0.4.1
+- Compatibility for 0.17 extended for bob's mods
+
+v0.4.0
+- Compatibility for v0.17 (not including bob's mods)
+
+v0.3.18 
+- Fixes invalid entity error on spacex combinator 
+- Fixes text on the Habitation component description
+
+v0.3.15
+- technology icon resolution upgrade coutesy of drd_avel
+
+v0.3.14
+- Fixes a crash if spacex combinator is placed prior to launching a single rocket.
+- Adds command "Get_log_file" which will write your SpaceX log out to the script-output folder.
+
+v0.3.13 Redacted
+
+v0.3.12
+- Fixes a rare crash on rocket launch event.
+
+v0.3.11
+- Fixes an error on game close out
+
+v0.3.10
+- Added Russian language support courtesy of Zerggurat
+- Performance issues with the SpaceX combinator resolved
+
+v0.3.9 Redacted
+
+v0.3.8
+- Remove spacex combinator debug information
+
+v0.3.7
+- improved grammar in flavour text
+- SpaceX Combinator introduced - will give accurate signal for current components needed to complete the current SpaceX phase. Current SpaceX phase given through virtual signal S - 1,2 or 3. Can be used to set filters/requester chests etc
+
+v0.3.6
+- under the Bob's mods integration, the technology price for faster than light theory D was incorrectly priced
+- under some circumstances the tech and recipe price multipliers were not working correctly
+- the data handling has been reduced with the removal of data-updates script
+
+v0.3.5
+- the mod now works correctly in conjunction with scenarios that do not use silo script
+- the mod now allows for multiple launching of SpaceX rockets - when the final SpaceX component is launched the player (or admin player in multiplayer scenario) is presented with an option to reset the SpaceX production counter, or end the game (latter option still offers the standard vanilla end game screen with options that include continue game, but in this case the SpaceX counter will not reset)
+- the command "/resetSpaceX" will allow you to resume SpaceX launches on a map that has previously completed the full process (eg under an earlier version of this mod, or even on this version by mistake for example)
+- multiple SpaceX launches are logged with playtime stamp and ability to name/describe the launch event
+- Flavour text added to SpaceX milestones courtesy of JD-Plays
+- Oh, yes, Bob's mod integration is back baby!
+- New mod setting allows for switching off bobs mods integration in case it causes any issues
+- Bob coefficient inflates the cost of end game research under Bob mods integration to partially offset extreme over powered nature of end game Bobs mods. Currently, this coefficient is set to 10. In the hands of a good player, the highest tier bobs mods machines, modules, beacons and other easily provide 150 -250+ times the power of vanilla equivalents, so the coefficient at 10 is a very conservative clawback.
+
+v0.3.4 
+- launches after completing the spaceship victory will not spam victory message
+- mod now supports mod_gui (refer ff#174)
+- colour and alignment added to Space Progress Summary
+
+v0.3.3 redacted
+
+v0.3.2
+- v0.16 compatibility
+- fix for headless server issue on configuration changed
+
+v0.3.1
+- Adds space science packs to last research (Faster than light propulsion systems)
+- Minor update to mod start conditions
+- In the start conditions, can opt out of having space science requirement in last SpaceX research
+- In the start conditions can adjust the cost of the fusion reactor to 40 portable fusion reactors - this reduces the cost of the component so that it is equivalent to the cost it was under v0.14 (10k processing units instead of 25k processing units)
+- In the start conditions can discount the tech costs by 4x to compensate for the marathon mode tech cost increases (at the default level). ie players can choose to use marathon costs for the vanilla game, and still use the standard tech costs once they start the SpaceX researches.
+
+v0.3.0
+
+- v0.15 compatibility
+- suppressed launch without satellite message
+- SpaceX components can be auto launched with "auto launch with satellite setting" in rocket silo
+- ftl drive moved to last position of Space Progress Summary
+- In space progress summary Hull sections renamed to Hull components to match name of item
+- item icons all changed to 32x32 square to conform with v0.15 standards
+- Mod configuration added - research costs and production costs can be independently increased by multiples of 2 upto 16x classic cost. Required number of launches can be increased by 5x or by 25x - note all these launches require the base item, so effectively production cost and extended launches multiply together. These options are available from the mod settings menu.
+
+v0.2.3
+
+- Corrected size of technology graphics so now they all look as intended rather than just left top corner
+- Bob's mods technology/recipes will not be activated unless the following minimum Bob's modules are in use -
+Bob's library
+Bob's modules
+Bob's warfare
+Bob'e electronics
+- this should fix any issues with "unusual" combinations of Bob's mods
+
+v0.2.2
+
+Graphics update courtesy of Steinerrr
+- New technology icons for all 15 techs (counting ftl as 4 techs)
+- New item icons for Assembly robot, Drydock Structural Component, Drydock Assembly Component, Hull Component, Protection Field, Fusion Reactor, Spaceship Thruster, Fuel Cell, Command Center, FTL Drive 
+
+
+v0.2.1
+
+- Fixed an issue where the Drydock completed message could be prematurely generated
+- Fixed an issue where Angels infinite ores used without Bobs mods caused an error on loading factorio
+- Bob's mods integration - added an alternate recipe for the spaceship protection field to remove the (excessive) multi-colored alien goo farming required
+
+v0.2.0
+
+- Fixed space progress reference to Drydock Command - this is now identified as the Drydock assembly component (like the item that needs to be launched
+- Corrected endgame console victory message for minor spelling error in "achieved"
+- Fixed the graphic for the life support icon
+
+- Added Bob's Mod integration based on bob's mod configuration:
+- Satellite recipe uses radar 5s, advanced processing unit, large solar panel mk 3s,large accumulator mk 3s
+- Low density structure uses titanium and nitinol in the place of steel and copper
+- Habitation component uses titanium and advanced processing unit to replace steel and processing unit
+- Fuel cell component uses titanium and advanced processing unit to replace steel and processing unit
+- Protection field component uses energy shield mk 6 to replace energy shield mk 2
+- Hull component uses titanium in place of steel
+- Fusion Reactor component uses fusion reactor mk 4 in place of fusion reactor equipment
+- Drydock assembly component uses large solar panel mk3, roboport mk 4, and advanced processing units in place of vanila items
+- All module requirements become god module 5s if god modules employed, otherwise the lvl 8 module version is used in the following -
+- Assembly robot which also uses construction robot mk 4
+- Space thruster which also uses titanium pipe and advanced processing unit
+- Life support which also uses titanium pipe and advanced processing unit
+- Command Centre which also uses advanced processing unit
+- Astrometrics which also uses advanced processing unit
+- FTL drive which also uses advanced processing unit
+- Bob's mods technology changes
+- if the dark blue science pack is available then all SpaceX techs that required the 4 vanilla sciences now also require dark blue
+- in addition, the ftl drive becomes 5 parts of 200k research each
+- SpaceX research is adjusted to include pre-requisites to the appropriate bob's mods techs
+- Space Assembly technology has the module pre-requisites added
+- Rocket silo now also requires titanium process, nitinol processing, electric energy accumulators mk4 , solar energy mk 4, advanced electronics 3, and radars 4
+- Space Construction additionally needs Modular robo ports 4
+- Protection fields needs Energy shield equipment mk 6
+- Fusion reactor needs Fusion Reactor equipment mk 4
