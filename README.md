@@ -2,7 +2,7 @@
 <!-- ![ICON](https://cdn.discordapp.com/icons/569536773701500928/8df51b553f826280000ce8f7d1fc7f45.png?size=128) -->
 ![LOGO](https://i107.fastpic.ru/big/2018/1219/42/82dca31e722dda962a4550df5138bb42.png?r=1)
 
-для Factorio 1.1.38 (протестировано) и выше
+для Factorio 1.1.48 (протестировано) и выше
 
 
 ------------
