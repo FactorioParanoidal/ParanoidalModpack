@@ -213,7 +213,8 @@ local function doFastCraterFilling(event)
 				end
 				global.cratersFastData[surface].xDone[x] = 1
 				global.cratersFastData[surface].xCountSoFar = global.cratersFastData[surface].xCountSoFar + 1
-				for y,foundChunkH in pairs(xchunks) do
+				local count = 0;
+				for y,foundChunkH in pairs(xchunks) do	
 					local tileChanges = {}
 					local ghostChanges = {}
 
@@ -228,6 +229,7 @@ local function doFastCraterFilling(event)
 						targetTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8, y*8}, {x*8+8, y*8+8}}, name=craterTypes2}
 					end
 					if(#targetTiles>0) then
+						count = count+1;
 						local relevantTiles = game.surfaces[surface].find_tiles_filtered{area={{x*8-1, y*8-1}, {x*8+9, y*8+9}}, name=waterTypes}
 						
 						local tileH = {}
@@ -362,7 +364,14 @@ local function doFastCraterFilling(event)
 								global.cratersFastData[surface] = nil
 							end
 						end
+					elseif(global.cratersFastData[surface].synch ~= 1) then
+						count = count+1;
+					else
+						xchunks[y] = nil;
 					end
+				end
+				if (count==0) then
+					chunks[x] = nil;
 				end
 			end
 		end
@@ -2024,6 +2033,7 @@ local function nukeFiredScan(event)
 end
 
  -- calculate polution as 1*tonnage + 1000*uranium input + 100*californium input + 10000*tritium input
+ -- polution is capped at 500000
 --local function atomic_weapon_hit(surface_index, source_entity, position, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters, optimise)
 script.on_event(defines.events.on_script_trigger_effect, function(event)
   if(event.effect_id=="Thermobaric Weapon hit small-") then
@@ -2073,22 +2083,22 @@ script.on_event(defines.events.on_script_trigger_effect, function(event)
 	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 90, 180, 500, 400, blastD, 2500, 10000, 1500, 1000, 450000, 2*settings.global["really-huge-nuke-fire-scaledown"].value, false, false, settings.global["optimise-100kt"].value);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 2700, 5400, 36000, 200000, 2700, 16);
   elseif(event.effect_id=="Atomic Weapon hit 1Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 190, 390, 1200, 1000, 12000, 5000, 24000, 3200, 2000, 1800000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 190, 390, 1200, 1000, 12000, 5000, 24000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 6000, 10000, 60000, 400000, 5000, 32);
   elseif(event.effect_id=="Atomic Weapon hit 5Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 330, 660, 2400, 2000, 24000, 10000, 48000, 3200, 2000, 7800000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 330, 660, 2400, 2000, 24000, 10000, 48000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 12000, 20000, 120000, 800000, 10000, 64);
   elseif(event.effect_id=="Atomic Weapon hit 10Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 420, 830, 3150, 4000, 36000, 15000, 72000, 3200, 2000, 15300000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 420, 830, 3150, 4000, 36000, 15000, 72000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 18000, 30000, 180000, 1200000, 15000, 96);
   elseif(event.effect_id=="Atomic Weapon hit 50Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 710, 1420, 6000, 8000, 72000, 30000, 144000, 3200, 2000, 75300000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 710, 1420, 6000, 8000, 72000, 30000, 144000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 36000, 60000, 360000, 2400000, 30000, 192);
   elseif(event.effect_id=="Atomic Weapon hit 100Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 900, 1800, 8000, 12000, 96000, 40000, 192000, 3200, 2000, 150000000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 900, 1800, 8000, 12000, 96000, 40000, 192000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 48000, 80000, 480000, 3200000, 40000, 256);
   elseif(event.effect_id=="Atomic Weapon hit 1Gt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1800, 3600, 16000, 24000, 192000, 80000, 384000, 3200, 2000, 1500000000, 0, false, false, true);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1800, 3600, 16000, 24000, 192000, 80000, 384000, 3200, 2000, 500000, 0, false, false, true);
 	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 96000, 160000, 960000, 6400000, 80000, 512);
   elseif(event.effect_id=="Nuke firing") then
 	 nukeFiredScan(event);
@@ -2241,6 +2251,23 @@ script.on_nth_tick(3601, function(event)
 		end
 	end
 end)
+local function clearAllCraters(surface)
+	local l = {};
+	for _,t in pairs(surface.find_tiles_filtered({name={"nuclear-deep", "nuclear-deep-shallow-fill", "nuclear-deep-fill"}})) do
+		table.insert(l, {position=t.position, name = "deepwater"});
+	end
+	for _,t in pairs(surface.find_tiles_filtered({name={"nuclear-crater", "nuclear-crater-fill"}})) do
+		table.insert(l, {position=t.position, name = "water"});
+	end
+	for _,t in pairs(surface.find_tiles_filtered({name={"nuclear-shallow"}})) do
+		table.insert(l, {position=t.position, name = "water-shallow"});
+	end
+	surface.set_tiles(l);
+end 
+
+local function getGlobal()
+	return global;
+end
 remote.add_interface("True-Nukes Scripts", {
 	thermobaricWeaponHit = thermobaric_weapon_hit,
 	atomicWeaponHit = atomic_weapon_hit,
@@ -2248,4 +2275,5 @@ remote.add_interface("True-Nukes Scripts", {
 	nukeTileChangesHeightAware = nukeTileChangesHeightAware,
 	nukeTileChangesHeightAwareHuge = nukeTileChangesHeightAwareHuge,
 	nukeTileChanges = nukeTileChanges,
+	clearAllCraters = clearAllCraters
 });
