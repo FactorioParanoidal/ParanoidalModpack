@@ -1,0 +1,110 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.1.3
+Date: 13. 12. 2021
+  Changes:
+    - Quickfix for One More Tier removed (change was acted on the mod).
+---------------------------------------------------------------------------------------------------
+Version: 3.1.2
+Date: 13. 12. 2021
+  Changes:
+    - Fixed crash with One More Tier (will submit a cleaner patch to One More Tier itself)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 12. 12. 2021
+  Changes:
+    - Fixed crash with Space Exploration.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 12. 12. 2021
+  Info:
+    - Updated by snouz
+  Changes:
+    - Valves visuals redone (in HD).
+    - New icons.
+    - New technology for valves.
+    - Bots can now use normal pipes to place restricted pipes.
+    - Added a setting to let you pick up each type of restricted pipe instead of reverting back to normal pipes.
+    - Refreshed thumbnail.
+    - Fixed shadows.
+    - Fixed entities getting properties from storage tank (water reflection, explosion, map color, mining time).
+    - Fixed wires positions on valves.
+    - Adapted selection boxes to direction.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.8
+Date: 06. 12. 2020
+  Changes:
+    - Custom pipes no longer auto-hide GUI, to match behaviour of standard pipes
+    - Pipes, pumps and valves moved to new line in crafting menu (can be disabled in options)
+---------------------------------------------------------------------------------------------------
+Version: 3.0.7
+Date: 26. 11. 2020
+  Changes:
+    - Updated to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 3.0.6
+Date: 23. 01. 2020
+  Changes:
+    - Updated to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 3.0.5
+Date: 19. 09. 2019
+  Changes:
+    - Changed valve recipes to use iron plates for simplicity and IndustrialRevolution compatibility
+---------------------------------------------------------------------------------------------------
+Version: 3.0.4
+Date: 27. 02. 2019
+  Changes:
+    - Updated to Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 3.0.3
+Date: 15. 12. 2017
+  Changes:
+    - Updated to Factorio 0.16
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 11. 05. 2017
+  Bugfixes:
+    - Fixed pipes and valves having only two rotations in Factorio 0.15.10
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 26. 04. 2017
+  Changes:
+    - Pipes now have HD option
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 26. 04. 2017
+  Changes:
+    - Release for Factorio 0.15
+    - Removed express pump as no longer necessary
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 06. 02. 2017
+  Changes:
+    - Renamed float valve to top-up valve for clarity
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 05. 02. 2017
+  Changes:
+    - Added float valve, allowing low-priority fluid input
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 01. 11. 2016
+  Bugfixes:
+    - Pipes placed by bots from now on will no longer open a GUI on clicking
+    - No more annoying echo and drip sounds
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 27. 08. 2016
+  Changes:
+    - 0.14 release
+    - Pipes now use tank prototype again thanks to bugfixes
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 26. 08. 2016
+  Changes:
+    - Small pump now cheaper and unlocked at game start - they're not fast enough to justify the electric motor's expense
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 28. 06. 2016
+  Changes:
+    - Released for 0.13
