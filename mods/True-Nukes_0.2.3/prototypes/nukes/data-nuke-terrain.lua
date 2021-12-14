@@ -1,4 +1,4 @@
-if(settings.startup["enable-new-craters"]) then
+if(settings.startup["enable-new-craters"].value) then
 	data.raw["tile"]["sand-1"].layer = 11
 	data.raw["tile"]["sand-2"].layer = 12
 	data.raw["tile"]["sand-3"].layer = 13

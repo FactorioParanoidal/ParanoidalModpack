@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2021-12-14
+  Features:
+    - Limited max polution from nukes to 500000, as more is just excess lag. 
+  Bugfixes:
+    - Fixed performance leak - I wasn't clearing a table properly
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2021-12-05
+  Features:
+    - Added command to finalise all flowing water by filling all craters with water: /c remote.call("True-Nukes Scripts", "clearAllCraters", game.player.surface) 
+  Bugfixes:
+    - Made code to not use new tiles actually work.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 2021-09-26
   Optimisations:
