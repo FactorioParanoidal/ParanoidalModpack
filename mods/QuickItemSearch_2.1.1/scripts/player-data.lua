@@ -18,9 +18,9 @@ function player_data.init(player_index)
       translate_on_join = false,
     },
     guis = {},
-    infinity_filters = {by_index = {}, by_name = {}, temporary = {}},
-    logistic_requests = {by_index = {}, by_name = {}, temporary = {}},
-    settings = {}
+    infinity_filters = { by_index = {}, by_name = {}, temporary = {} },
+    logistic_requests = { by_index = {}, by_name = {}, temporary = {} },
+    settings = {},
   }
 end
 

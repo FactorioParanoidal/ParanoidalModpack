@@ -26,7 +26,7 @@ function infinity_filter.set(player, player_table, filter, is_temporary)
   -- set on player
   player.set_infinity_inventory_filter(
     filter_index,
-    {name = filter.name, mode = filter.mode, count = filter.count, index = filter_index}
+    { name = filter.name, mode = filter.mode, count = filter.count, index = filter_index }
   )
 
   -- update stored requests
@@ -58,7 +58,7 @@ function infinity_filter.refresh(player, player_table)
   local infinity_filters = {
     by_index = {},
     by_name = {},
-    temporary = {}
+    temporary = {},
   }
   for i, existing_filter in pairs(player.infinity_inventory_filters) do
     infinity_filters.by_index[i] = existing_filter
@@ -96,9 +96,9 @@ function infinity_filter.quick_trash_all(player, player_table)
   if main_inventory and main_inventory.valid then
     local infinity_filters = player_table.infinity_filters
     for name, count in pairs(search.get_combined_inventory_contents(player, main_inventory)) do
-      local existing_filter = infinity_filters.by_name[name] or {mode = "at-least", count = 0}
+      local existing_filter = infinity_filters.by_name[name] or { mode = "at-least", count = 0 }
       if existing_filter.mode == "at-least" and count > existing_filter.count then
-        infinity_filter.set(player, player_table, {name = name, mode = "exactly", count = 0}, true)
+        infinity_filter.set(player, player_table, { name = name, mode = "exactly", count = 0 }, true)
       end
     end
   end

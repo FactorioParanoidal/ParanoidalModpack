@@ -13,7 +13,7 @@ function global_data.build_strings()
     strings[i] = {
       dictionary = "items",
       internal = name,
-      localised = prototype.localised_name
+      localised = prototype.localised_name,
     }
   end
 

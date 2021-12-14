@@ -15,36 +15,36 @@ function search_gui.build(player, player_table)
     {
       type = "frame",
       style = "qis_window_dimmer",
-      style_mods = {size = {448, 390}},
+      style_mods = { size = { 448, 390 } },
       visible = false,
-      ref = {"window_dimmer"}
+      ref = { "window_dimmer" },
     },
     {
       type = "frame",
       name = "qis_search_window",
       direction = "vertical",
       visible = false,
-      ref = {"window"},
+      ref = { "window" },
       actions = {
-        on_closed = {gui = "search", action = "close"},
-        on_location_changed = {gui = "search", action = "update_dimmer_location"}
+        on_closed = { gui = "search", action = "close" },
+        on_location_changed = { gui = "search", action = "update_dimmer_location" },
       },
       children = {
         {
           type = "flow",
           style = "flib_titlebar_flow",
-          ref = {"titlebar_flow"},
+          ref = { "titlebar_flow" },
           actions = {
-            on_click = {gui = "search", action = "recenter"}
+            on_click = { gui = "search", action = "recenter" },
           },
           children = {
             {
               type = "label",
               style = "frame_title",
-              caption = {"mod-name.QuickItemSearch"},
-              ignored_by_interaction = true
+              caption = { "mod-name.QuickItemSearch" },
+              ignored_by_interaction = true,
             },
-            {type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true},
+            { type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true },
             {
               type = "sprite-button",
               style = "frame_action_button",
@@ -52,75 +52,75 @@ function search_gui.build(player, player_table)
               hovered_sprite = "utility/close_black",
               clicked_sprite = "utility/close_black",
               actions = {
-                on_click = {gui = "search", action = "close"}
-              }
-            }
-          }
+                on_click = { gui = "search", action = "close" },
+              },
+            },
+          },
         },
         {
           type = "frame",
           style = "inside_shallow_frame_with_padding",
-          style_mods = {top_padding = -2},
+          style_mods = { top_padding = -2 },
           direction = "vertical",
           children = {
             {
               type = "textfield",
               style = "qis_disablable_textfield",
-              style_mods = {width = 400, top_margin = 9},
+              style_mods = { width = 400, top_margin = 9 },
               clear_and_focus_on_right_click = true,
               lose_focus_on_confirm = true,
-              ref = {"search_textfield"},
+              ref = { "search_textfield" },
               actions = {
-                on_confirmed = {gui = "search", action = "enter_result_selection"},
-                on_text_changed = {gui = "search", action = "update_search_query"}
-              }
+                on_confirmed = { gui = "search", action = "enter_result_selection" },
+                on_text_changed = { gui = "search", action = "update_search_query" },
+              },
             },
             {
               type = "frame",
               style = "deep_frame_in_shallow_frame",
-              style_mods = {top_margin = 10, height = 28 * 10},
+              style_mods = { top_margin = 10, height = 28 * 10 },
               direction = "vertical",
               children = {
                 {
                   type = "frame",
                   style = "negative_subheader_frame",
-                  style_mods = {left_padding = 12, height = 28, horizontally_stretchable = true},
+                  style_mods = { left_padding = 12, height = 28, horizontally_stretchable = true },
                   visible = false,
-                  ref = {"warning_subheader"},
+                  ref = { "warning_subheader" },
                   children = {
                     {
                       type = "label",
                       style = "bold_label",
-                      caption = {"", "[img=utility/warning_white]  ", {"gui.qis-not-connected-to-logistic-network"}}
-                    }
-                  }
+                      caption = { "", "[img=utility/warning_white]  ", { "gui.qis-not-connected-to-logistic-network" } },
+                    },
+                  },
                 },
                 {
                   type = "scroll-pane",
                   style = "qis_list_box_scroll_pane",
-                  style_mods = {vertically_stretchable = true, bottom_padding = 2},
-                  ref = {"results_scroll_pane"},
+                  style_mods = { vertically_stretchable = true, bottom_padding = 2 },
+                  ref = { "results_scroll_pane" },
                   children = {
                     {
                       type = "table",
                       style = "qis_list_box_table",
                       column_count = 3,
-                      ref = {"results_table"},
+                      ref = { "results_table" },
                       children = {
                         -- dummy elements for the borked first row
-                        {type = "empty-widget"},
-                        {type = "empty-widget"},
-                        {type = "empty-widget"}
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+                        { type = "empty-widget" },
+                        { type = "empty-widget" },
+                        { type = "empty-widget" },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   })
 
   refs.window.force_auto_center()
@@ -134,8 +134,8 @@ function search_gui.build(player, player_table)
       raw_query = "",
       selected_index = 1,
       subwindow_open = false,
-      visible = false
-    }
+      visible = false,
+    },
   }
 end
 
@@ -233,15 +233,13 @@ function search_gui.perform_search(player, player_table, updated_query, combined
 
   local result_tooltip = {
     "",
-    {"gui.qis-result-click-tooltip"},
+    { "gui.qis-result-click-tooltip" },
     "\n",
-    {"gui.qis-shift-click"},
+    { "gui.qis-shift-click" },
     " ",
-    (
-      player.controller_type == defines.controllers.character
-      and {"gui.qis-edit-logistic-request"}
-      or {"gui.qis-edit-infinity-filter"}
-    )
+    (player.controller_type == defines.controllers.character and { "gui.qis-edit-logistic-request" } or {
+      "gui.qis-edit-infinity-filter",
+    }),
   }
 
   if #state.raw_query > 1 then
@@ -263,11 +261,11 @@ function search_gui.perform_search(player, player_table, updated_query, combined
             type = "label",
             style = "qis_clickable_item_label",
             actions = {
-              on_click = {gui = "search", action = "select_item", index = i}
-            }
+              on_click = { gui = "search", action = "select_item", index = i },
+            },
           },
-          {type = "label"},
-          {type = "label"}
+          { type = "label" },
+          { type = "label" },
         })
         -- update our copy of the table
         children = results_table.children
@@ -276,30 +274,30 @@ function search_gui.perform_search(player, player_table, updated_query, combined
       -- item label
       local item_label = children[i3 + 1]
       local hidden_abbrev = row.hidden and "[font=default-semibold](H)[/font]  " or ""
-      item_label.caption = hidden_abbrev.."[item="..row.name.."]  "..row.translation
+      item_label.caption = hidden_abbrev .. "[item=" .. row.name .. "]  " .. row.translation
       item_label.tooltip = result_tooltip
       -- item counts
       if player.controller_type == defines.controllers.character and connected_to_network then
         children[i3 + 2].caption = (
-          (row.inventory or 0)
-          .." / [color="
-          ..constants.colors.logistic_str
-          .."]"
-          ..(row.logistic or 0)
-          .."[/color]"
-        )
+            (row.inventory or 0)
+            .. " / [color="
+            .. constants.colors.logistic_str
+            .. "]"
+            .. (row.logistic or 0)
+            .. "[/color]"
+          )
       else
         children[i3 + 2].caption = (row.inventory or 0)
       end
       -- request / infinity filter
       local request_label = children[i3 + 3]
       if player.controller_type == defines.controllers.editor then
-          local filter = row.infinity_filter
-          if filter then
-            request_label.caption = constants.infinity_filter_mode_to_symbol[filter.mode].." "..filter.count
-          else
-            request_label.caption = "--"
-          end
+        local filter = row.infinity_filter
+        if filter then
+          request_label.caption = constants.infinity_filter_mode_to_symbol[filter.mode] .. " " .. filter.count
+        else
+          request_label.caption = "--"
+        end
       else
         if logistic_requests_available then
           local request = row.request
@@ -308,9 +306,9 @@ function search_gui.perform_search(player, player_table, updated_query, combined
             if max == math.max_uint then
               max = constants.infinity_rep
             end
-            request_label.caption = request.min.." / "..max
+            request_label.caption = request.min .. " / " .. max
             if request.is_temporary then
-              request_label.caption = "(T) "..request_label.caption
+              request_label.caption = "(T) " .. request_label.caption
             end
             request_label.style.font_color = constants.colors[row.request_color or "normal"]
           else
@@ -346,14 +344,14 @@ function search_gui.perform_search(player, player_table, updated_query, combined
     end
     -- add to state
     state.results = results
-  -- clear table if it has contents
+    -- clear table if it has contents
   elseif #results_table.children > 3 then
     -- clear results
     results_table.clear()
     state.results = {}
     -- add new dummy elements
     for _ = 1, 3 do
-      results_table.add{type = "empty-widget"}
+      results_table.add({ type = "empty-widget" })
     end
   end
 end
@@ -365,7 +363,9 @@ function search_gui.select_item(player, player_table, modifiers, index)
 
   local i = index or state.selected_index
   local results = state.results
-  if not results then return end
+  if not results then
+    return
+  end
 
   local result = state.results[i]
   if modifiers.shift then
@@ -382,24 +382,26 @@ function search_gui.select_item(player, player_table, modifiers, index)
         logistic_request_gui.open(player, player_table, result)
       end
 
-      player.play_sound{path = "utility/confirm"}
+      player.play_sound({ path = "utility/confirm" })
     else
-      player.play_sound{path = "utility/cannot_build"}
+      player.play_sound({ path = "utility/cannot_build" })
     end
   else
     -- make sure we're not already holding this item
     local cursor_stack = player.cursor_stack
     if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == result.name then
-      player.play_sound{path = "utility/cannot_build"}
-      player.create_local_flying_text{text = {"message.qis-already-holding-item"}, create_at_cursor = true}
+      player.play_sound({ path = "utility/cannot_build" })
+      player.create_local_flying_text({ text = { "message.qis-already-holding-item" }, create_at_cursor = true })
     else
-      state.selected_item_tick = game.ticks_played
-      cursor.set_stack(player, player.cursor_stack, player_table, result.name)
-      player.play_sound{path = "utility/confirm"}
       -- Close the window after selection if desired
       if player_table.settings.auto_close then
         search_gui.close(player, player_table, true)
+        -- Or prevent the window from closing
+      else
+        state.selected_item_tick = game.ticks_played
       end
+      cursor.set_stack(player, player.cursor_stack, player_table, result.name)
+      player.play_sound({ path = "utility/confirm" })
     end
   end
 end
@@ -466,7 +468,7 @@ function search_gui.handle_action(e, msg)
     results_table.children[new_selected_index * 3 + 1].style.font_color = constants.colors.hovered
     refs.results_scroll_pane.scroll_to_element(results_table.children[new_selected_index * 3 + 1], "top-third")
   elseif msg.action == "select_item" then
-    search_gui.select_item(player, player_table, {shift = e.shift, control = e.control}, msg.index)
+    search_gui.select_item(player, player_table, { shift = e.shift, control = e.control }, msg.index)
   elseif msg.action == "update_dimmer_location" then
     refs.window_dimmer.location = refs.window.location
   end

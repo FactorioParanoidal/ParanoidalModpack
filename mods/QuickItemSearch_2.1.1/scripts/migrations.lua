@@ -10,5 +10,5 @@ return {
     for i in pairs(game.players) do
       player_data.init(i)
     end
-  end
+  end,
 }

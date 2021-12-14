@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2021-12-06
+  Changes:
+    - Blueprints, upgrade planners, deconstruction planners, and selection tools are ignored when using quick-trash-all (#25)
+  Bugfixes:
+    - Fixed that selecting an item to cursor with E would re-mark the QIS window as "opened", causing some strange behaviors
+---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2021-07-18
   Features:
