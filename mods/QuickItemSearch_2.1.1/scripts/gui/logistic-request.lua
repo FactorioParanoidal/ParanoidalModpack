@@ -9,44 +9,44 @@ local logistic_request_gui = {}
 function logistic_request_gui.build(player, player_table)
   local resolution = player.display_resolution
   local scale = player.display_scale
-  local focus_frame_size = {resolution.width / scale, resolution.height / scale}
+  local focus_frame_size = { resolution.width / scale, resolution.height / scale }
 
   local refs = gui.build(player.gui.screen, {
     {
       type = "frame",
       style = "invisible_frame",
-      style_mods = {size = focus_frame_size},
-      ref = {"focus_frame"},
+      style_mods = { size = focus_frame_size },
+      ref = { "focus_frame" },
       visible = false,
       actions = {
-        on_click = {gui = "request", action = "close", reopen_after_subwindow = true}
-      }
+        on_click = { gui = "request", action = "close", reopen_after_subwindow = true },
+      },
     },
     {
       type = "frame",
       name = "qis_request_window",
       direction = "vertical",
       visible = false,
-      ref = {"window"},
+      ref = { "window" },
       actions = {
-        on_closed = {gui = "request", action = "close", reopen_after_subwindow = true}
+        on_closed = { gui = "request", action = "close", reopen_after_subwindow = true },
       },
       children = {
         {
           type = "flow",
           style = "flib_titlebar_flow",
-          ref = {"titlebar_flow"},
+          ref = { "titlebar_flow" },
           actions = {
-            on_click = {gui = "request", action = "recenter"}
+            on_click = { gui = "request", action = "recenter" },
           },
           children = {
             {
               type = "label",
               style = "frame_title",
-              caption = {"gui.qis-edit-logistic-request"},
-              ignored_by_interaction = true
+              caption = { "gui.qis-edit-logistic-request" },
+              ignored_by_interaction = true,
             },
-            {type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true},
+            { type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true },
             {
               type = "sprite-button",
               style = "frame_action_button",
@@ -54,114 +54,127 @@ function logistic_request_gui.build(player, player_table)
               hovered_sprite = "utility/close_black",
               clicked_sprite = "utility/close_black",
               actions = {
-                on_click = {gui = "request", action = "close", reopen_after_subwindow = true}
-              }
-            }
-          }
-        },
-        {type = "frame", style = "inside_shallow_frame", direction = "vertical", children = {
-          {type = "frame", style = "subheader_frame", children = {
-            {type = "label", style = "subheader_caption_label", ref = {"item_label"}},
-            {type = "empty-widget", style = "flib_horizontal_pusher"}
-          }},
-          {
-            type = "flow",
-            style_mods = {vertical_align = "center", horizontal_spacing = 8, padding = 12},
-            children = {
-              {
-                type = "textfield",
-                style = "slider_value_textfield",
-                numeric = true,
-                clear_and_focus_on_right_click = true,
-                text = "0",
-                tags = {bound = "min"},
-                ref = {"logistic_setter", "min", "textfield"},
-                actions = {
-                  on_confirmed = {gui = "request", action = "update_request"}
-                }
+                on_click = { gui = "request", action = "close", reopen_after_subwindow = true },
               },
-              {type = "flow", direction = "vertical", children = {
+            },
+          },
+        },
+        {
+          type = "frame",
+          style = "inside_shallow_frame",
+          direction = "vertical",
+          children = {
+            {
+              type = "frame",
+              style = "subheader_frame",
+              children = {
+                { type = "label", style = "subheader_caption_label", ref = { "item_label" } },
+                { type = "empty-widget", style = "flib_horizontal_pusher" },
+              },
+            },
+            {
+              type = "flow",
+              style_mods = { vertical_align = "center", horizontal_spacing = 8, padding = 12 },
+              children = {
                 {
-                  type = "slider",
-                  style = "notched_slider",
-                  style_mods = {horizontally_stretchable = true},
-                  minimum_value = 0,
-                  maximum_value = 500,
-                  value_step = 50,
-                  value = 0,
-                  discrete_slider = true,
-                  discrete_values = true,
-                  tags = {bound = "max"},
-                  ref = {"logistic_setter", "max", "slider"},
+                  type = "textfield",
+                  style = "slider_value_textfield",
+                  numeric = true,
+                  clear_and_focus_on_right_click = true,
+                  text = "0",
+                  tags = { bound = "min" },
+                  ref = { "logistic_setter", "min", "textfield" },
                   actions = {
-                    on_value_changed = {gui = "request", action = "update_request"}
-                  }
+                    on_confirmed = { gui = "request", action = "update_request" },
+                  },
                 },
                 {
-                  type = "slider",
-                  style = "notched_slider",
-                  style_mods = {horizontally_stretchable = true},
-                  minimum_value = 0,
-                  maximum_value = 500,
-                  value_step = 50,
-                  value = 500,
-                  discrete_slider = true,
-                  discrete_values = true,
-                  tags = {bound = "min"},
-                  ref = {"logistic_setter", "min", "slider"},
+                  type = "flow",
+                  direction = "vertical",
+                  children = {
+                    {
+                      type = "slider",
+                      style = "notched_slider",
+                      style_mods = { horizontally_stretchable = true },
+                      minimum_value = 0,
+                      maximum_value = 500,
+                      value_step = 50,
+                      value = 0,
+                      discrete_slider = true,
+                      discrete_values = true,
+                      tags = { bound = "max" },
+                      ref = { "logistic_setter", "max", "slider" },
+                      actions = {
+                        on_value_changed = { gui = "request", action = "update_request" },
+                      },
+                    },
+                    {
+                      type = "slider",
+                      style = "notched_slider",
+                      style_mods = { horizontally_stretchable = true },
+                      minimum_value = 0,
+                      maximum_value = 500,
+                      value_step = 50,
+                      value = 500,
+                      discrete_slider = true,
+                      discrete_values = true,
+                      tags = { bound = "min" },
+                      ref = { "logistic_setter", "min", "slider" },
+                      actions = {
+                        on_value_changed = { gui = "request", action = "update_request" },
+                      },
+                    },
+                  },
+                },
+                {
+                  type = "textfield",
+                  style = "slider_value_textfield",
+                  numeric = true,
+                  clear_and_focus_on_right_click = true,
+                  text = constants.infinity_rep,
+                  tags = { bound = "max" },
+                  ref = { "logistic_setter", "max", "textfield" },
                   actions = {
-                    on_value_changed = {gui = "request", action = "update_request"}
-                  }
-                }
-              }},
-              {
-                type = "textfield",
-                style = "slider_value_textfield",
-                numeric = true,
-                clear_and_focus_on_right_click = true,
-                text = constants.infinity_rep,
-                tags = {bound = "max"},
-                ref = {"logistic_setter", "max", "textfield"},
-                actions = {
-                  on_confirmed = {gui = "request", action = "update_request"}
-                }
+                    on_confirmed = { gui = "request", action = "update_request" },
+                  },
+                },
+                {
+                  type = "sprite-button",
+                  style = "item_and_count_select_confirm",
+                  sprite = "utility/check_mark",
+                  tooltip = { "", { "gui.qis-set-request" }, { "gui.qis-confirm" } },
+                  ref = { "logistic_setter", "set_request_button" },
+                  actions = {
+                    on_click = { gui = "request", action = "set_request" },
+                  },
+                },
+                {
+                  type = "sprite-button",
+                  style = "flib_tool_button_light_green",
+                  style_mods = { top_margin = 1 },
+                  sprite = "qis_temporary_request",
+                  tooltip = { "", { "gui.qis-set-temporary-request" }, { "gui.qis-shift-confirm" } },
+                  ref = { "logistic_setter", "set_temporary_request_button" },
+                  actions = {
+                    on_click = { gui = "request", action = "set_request", temporary = true },
+                  },
+                },
+                {
+                  type = "sprite-button",
+                  style = "tool_button_red",
+                  style_mods = { top_margin = 1 },
+                  sprite = "utility/trash",
+                  tooltip = { "", { "gui.qis-clear-request" }, { "gui.qis-control-confirm" } },
+                  actions = {
+                    on_click = { gui = "request", action = "clear_request" },
+                  },
+                },
               },
-              {
-                type = "sprite-button",
-                style = "item_and_count_select_confirm",
-                sprite = "utility/check_mark",
-                tooltip = {"", {"gui.qis-set-request"}, {"gui.qis-confirm"}},
-                ref = {"logistic_setter", "set_request_button"},
-                actions = {
-                  on_click = {gui = "request", action = "set_request"}
-                }
-              },
-              {
-                type = "sprite-button",
-                style = "flib_tool_button_light_green",
-                style_mods = {top_margin = 1},
-                sprite = "qis_temporary_request",
-                tooltip = {"", {"gui.qis-set-temporary-request"}, {"gui.qis-shift-confirm"}},
-                ref = {"logistic_setter", "set_temporary_request_button"},
-                actions = {
-                  on_click = {gui = "request", action = "set_request", temporary = true}
-                }
-              },
-              {
-                type = "sprite-button",
-                style = "tool_button_red",
-                style_mods = {top_margin = 1},
-                sprite = "utility/trash",
-                tooltip = {"", {"gui.qis-clear-request"}, {"gui.qis-control-confirm"}},
-                actions = {
-                  on_click = {gui = "request", action = "clear_request"}
-                }
-              }
-            }
-          }
-        }}
-      }
-    }
+            },
+          },
+        },
+      },
+    },
   })
 
   refs.window.force_auto_center()
@@ -171,8 +184,8 @@ function logistic_request_gui.build(player, player_table)
     refs = refs,
     state = {
       item_data = nil,
-      visible = false
-    }
+      visible = false,
+    },
   }
 end
 
@@ -190,16 +203,16 @@ function logistic_request_gui.open(player, player_table, item_data)
   local stack_size = game.item_prototypes[item_data.name].stack_size
   item_data.stack_size = stack_size
   state.item_data = item_data
-  local request_data = item_data.request or {min = 0, max = math.max_uint}
+  local request_data = item_data.request or { min = 0, max = math.max_uint }
   state.request = request_data
   state.visible = true
 
   -- update item label
-  refs.item_label.caption = "[item="..item_data.name.."]  "..item_data.translation
+  refs.item_label.caption = "[item=" .. item_data.name .. "]  " .. item_data.translation
 
   -- update logistic setter
   local logistic_setter = refs.logistic_setter
-  for _, type in ipairs{"min", "max"} do
+  for _, type in ipairs({ "min", "max" }) do
     local elems = logistic_setter[type]
     local count = request_data[type]
     elems.textfield.enabled = true
@@ -242,14 +255,14 @@ function logistic_request_gui.update_focus_frame_size(player, player_table)
   if gui_data then
     local resolution = player.display_resolution
     local scale = player.display_scale
-    local size = {resolution.width / scale, resolution.height / scale}
+    local size = { resolution.width / scale, resolution.height / scale }
     gui_data.refs.focus_frame.style.size = size
   end
 end
 
 function logistic_request_gui.set_request(player, player_table, is_temporary, skip_sound)
   if not skip_sound then
-    player.play_sound{path = "utility/confirm"}
+    player.play_sound({ path = "utility/confirm" })
   end
 
   local gui_data = player_table.guis.request
@@ -270,7 +283,7 @@ function logistic_request_gui.set_request(player, player_table, is_temporary, sk
 end
 
 function logistic_request_gui.clear_request(player, player_table)
-  player.play_sound{path = "utility/confirm"}
+  player.play_sound({ path = "utility/confirm" })
   logistic_request.clear(player, player_table, player_table.guis.request.state.item_data.name)
   player.opened = nil
 end
@@ -331,7 +344,6 @@ function logistic_request_gui.handle_action(e, msg)
   local gui_data = player_table.guis.request
   local refs = gui_data.refs
   local state = gui_data.state
-
 
   if msg.action == "close" then
     logistic_request_gui.close(player, player_table)

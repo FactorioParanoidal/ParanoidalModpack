@@ -31,7 +31,7 @@ function search.run(player, player_table, query, combined_contents)
       inbound = {},
       inventory = combined_contents,
       logistic = {},
-      outbound = {}
+      outbound = {},
     }
 
     local controller_type = player.controller_type
@@ -75,7 +75,7 @@ function search.run(player, player_table, query, combined_contents)
             -- add logistic request, if one exists
             local request = requests_by_name[name]
             if request then
-              result.request = {min = request.min, max = request.max}
+              result.request = { min = request.min, max = request.max }
               if requests.temporary[name] then
                 result.request.is_temporary = true
               end
@@ -96,7 +96,7 @@ function search.run(player, player_table, query, combined_contents)
             -- add infinity filter, if one exists
             local filter = filters_by_name[name]
             if filter then
-              result.infinity_filter = {mode = filter.mode, count = filter.count}
+              result.infinity_filter = { mode = filter.mode, count = filter.count }
             end
           end
 
@@ -104,7 +104,9 @@ function search.run(player, player_table, query, combined_contents)
           results[i] = result
         end
       end
-      if i > constants.results_limit then break end
+      if i > constants.results_limit then
+        break
+      end
     end
 
     return results, connected_to_network, logistic_requests_available
@@ -121,12 +123,12 @@ function search.get_combined_inventory_contents(player, main_inventory)
     combined_contents[cursor_stack.name] = (combined_contents[cursor_stack.name] or 0) + cursor_stack.count
   end
   -- other
-  for _, inventory_def in ipairs{
+  for _, inventory_def in ipairs({
     -- for some reason, the character_ammo and character_guns inventories work in the editor as well
     defines.inventory.character_ammo,
     defines.inventory.character_guns,
     -- defines.inventory.character_trash
-  } do
+  }) do
     local inventory = player.get_inventory(inventory_def)
     if inventory and inventory.valid then
       for name, count in pairs(inventory.get_contents() or {}) do

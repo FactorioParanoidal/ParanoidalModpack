@@ -17,13 +17,13 @@ local search_gui = require("scripts.gui.search")
 -- -----------------------------------------------------------------------------
 -- COMMANDS
 
-commands.add_command("QuickItemSearch", {"command-help.QuickItemSearch"}, function(e)
+commands.add_command("QuickItemSearch", { "command-help.QuickItemSearch" }, function(e)
   if e.parameter == "refresh-player-data" then
     local player = game.get_player(e.player_index)
-    player.print{"message.qis-refreshing-player-data"}
+    player.print({ "message.qis-refreshing-player-data" })
     player_data.refresh(player, global.players[e.player_index])
   else
-    game.get_player(e.player_index).print{"message.qis-invalid-parameter"}
+    game.get_player(e.player_index).print({ "message.qis-invalid-parameter" })
   end
 end)
 
@@ -59,7 +59,7 @@ end)
 
 -- CUSTOM INPUT
 
-event.register({"qis-confirm", "qis-shift-confirm", "qis-control-confirm"}, function(e)
+event.register({ "qis-confirm", "qis-shift-confirm", "qis-control-confirm" }, function(e)
   local player = game.get_player(e.player_index)
   local player_table = global.players[e.player_index]
 
@@ -72,7 +72,7 @@ event.register({"qis-confirm", "qis-shift-confirm", "qis-control-confirm"}, func
   local opened = player.opened
   if opened and player.opened_gui_type == defines.gui_type.custom then
     if opened.name == "qis_search_window" then
-      search_gui.select_item(player, player_table, {shift = is_shift, control = is_control})
+      search_gui.select_item(player, player_table, { shift = is_shift, control = is_control })
     elseif opened.name == "qis_request_window" then
       if is_control then
         logistic_request_gui.clear_request(player, player_table)
@@ -107,17 +107,17 @@ event.register("qis-search", function(e)
     search_gui.toggle(player, player_table)
   else
     player_table.flags.show_message_after_translation = true
-    player.print{"message.qis-cannot-open-gui"}
+    player.print({ "message.qis-cannot-open-gui" })
   end
 end)
 
-event.register({"qis-nav-up", "qis-nav-down"}, function(e)
+event.register({ "qis-nav-up", "qis-nav-down" }, function(e)
   local player_table = global.players[e.player_index]
   if player_table.flags.can_open_gui then
     local gui_data = player_table.guis.search
     if gui_data.state.visible then
       local offset = string.find(e.input_name, "down") and 1 or -1
-      search_gui.handle_action({player_index = e.player_index}, {action = "update_selected_index", offset = offset})
+      search_gui.handle_action({ player_index = e.player_index }, { action = "update_selected_index", offset = offset })
     end
   end
 end)
@@ -194,61 +194,55 @@ event.on_player_removed(function(e)
   global.players[e.player_index] = nil
 end)
 
-event.register(
-  {
-    defines.events.on_player_display_resolution_changed,
-    defines.events.on_player_display_scale_changed
-  },
-  function(e)
-    local player = game.get_player(e.player_index)
-    local player_table = global.players[e.player_index]
-    logistic_request_gui.update_focus_frame_size(player, player_table)
-  end
-)
+event.register({
+  defines.events.on_player_display_resolution_changed,
+  defines.events.on_player_display_scale_changed,
+}, function(e)
+  local player = game.get_player(e.player_index)
+  local player_table = global.players[e.player_index]
+  logistic_request_gui.update_focus_frame_size(player, player_table)
+end)
 
-event.register(
-  {
-    defines.events.on_player_ammo_inventory_changed,
-    defines.events.on_player_armor_inventory_changed,
-    defines.events.on_player_gun_inventory_changed,
-    defines.events.on_player_main_inventory_changed
-  },
-  function(e)
-    local player = game.get_player(e.player_index)
-    local player_table = global.players[e.player_index]
+event.register({
+  defines.events.on_player_ammo_inventory_changed,
+  defines.events.on_player_armor_inventory_changed,
+  defines.events.on_player_gun_inventory_changed,
+  defines.events.on_player_main_inventory_changed,
+}, function(e)
+  local player = game.get_player(e.player_index)
+  local player_table = global.players[e.player_index]
 
-    local main_inventory = player.get_main_inventory()
-    if main_inventory and main_inventory.valid then
-      -- avoid getting the contents until they're actually needed
-      local combined_contents
-      local function get_combined_contents()
-        if not combined_contents then
-          combined_contents = search.get_combined_inventory_contents(player, main_inventory)
-        end
-        return combined_contents
+  local main_inventory = player.get_main_inventory()
+  if main_inventory and main_inventory.valid then
+    -- avoid getting the contents until they're actually needed
+    local combined_contents
+    local function get_combined_contents()
+      if not combined_contents then
+        combined_contents = search.get_combined_inventory_contents(player, main_inventory)
       end
+      return combined_contents
+    end
 
-      if player.controller_type == defines.controllers.editor then
-        if next(player_table.infinity_filters.temporary) then
-          infinity_filter.update_temporaries(player, player_table)
-        end
-        infinity_filter.update(player, player_table)
-      elseif player.controller_type == defines.controllers.character then
-        if next(player_table.logistic_requests.temporary) then
-          logistic_request.update_temporaries(player, player_table, get_combined_contents())
-        end
+    if player.controller_type == defines.controllers.editor then
+      if next(player_table.infinity_filters.temporary) then
+        infinity_filter.update_temporaries(player, player_table)
       end
+      infinity_filter.update(player, player_table)
+    elseif player.controller_type == defines.controllers.character then
+      if next(player_table.logistic_requests.temporary) then
+        logistic_request.update_temporaries(player, player_table, get_combined_contents())
+      end
+    end
 
-      local gui_data = player_table.guis.search
-      if gui_data then
-        local state = gui_data.state
-        if state.visible and not state.subwindow_open then
-          search_gui.perform_search(player, player_table, false, get_combined_contents())
-        end
+    local gui_data = player_table.guis.search
+    if gui_data then
+      local state = gui_data.state
+      if state.visible and not state.subwindow_open then
+        search_gui.perform_search(player, player_table, false, get_combined_contents())
       end
     end
   end
-)
+end)
 
 -- SETTINGS
 
@@ -302,7 +296,7 @@ event.on_string_translated(function(e)
     local player_table = global.players[e.player_index]
     -- show message if needed
     if player_table.flags.show_message_after_translation then
-      player.print{"message.qis-can-open-gui"}
+      player.print({ "message.qis-can-open-gui" })
     end
     -- update flags
     player_table.flags.can_open_gui = true
