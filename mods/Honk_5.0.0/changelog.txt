@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+Date: 12. 18. 2021
+  Changes:
+    - First release by robot256.
+    - Incorporated new sounds for steam trains, boats and ships. Currently supports Yuoki Industries, Steam Locomotive, and Cargo Ships.
+    - More settings to control sound triggers based on type of vehicle.  NOTE: Existing settings will be erased when upgrading.
+    - Other mods to add custom locomotive sounds during the data stage.
+    - Train sounds can now be used in the Programmable Speaker.
+    - Please report any bugs, incompatibilities, or ideas for more sounds!
+  Credits:
+    - honk-single-steam-train.ogg remixed from original by Bidone https://freesound.org/people/Bidone/sounds/71778/ (CC0 Public Domain)
+    - honk-double-steam-train.ogg remixed from original by boteman https://freesound.org/people/boteman/sounds/57196/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-single-boat.ogg remixed from original by arnaud coutancier https://freesound.org/people/arnaud%20coutancier/sounds/417695/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-double-boat.ogg remixed from original by tim.kahn https://freesound.org/people/tim.kahn/sounds/265977/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-single-ship.ogg remixed from original by milo https://freesound.org/people/milo/sounds/23722/ (CC-BY 3.0 https://creativecommons.org/licenses/by/3.0/)
+    - honk-double-ship.ogg remixed from original by inchadney https://freesound.org/people/inchadney/sounds/135825/ (CC-BY 3.0 https://creativecommons.org/licenses/by/3.0/)
+---------------------------------------------------------------------------------------------------
 Version: 4.1.1
 Date: 26. 11. 2020
   Changes:
