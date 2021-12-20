@@ -206,12 +206,8 @@ local condition_wait_empty = {type = "empty", compare_type = "and" }
 local condition_finish_loading = {type = "inactivity", compare_type = "and", ticks = 120 }
 -- local condition_stop_timeout -- set in settings.lua to capture changes
 
-function NewScheduleRecord(stationName, condType, condComp, itemlist, countOverride, rail)
-  local record = {station = stationName, wait_conditions = {}, rail = rail}
-
-  if rail then
-    record.temporary = true
-  end
+function NewScheduleRecord(stationName, condType, condComp, itemlist, countOverride)
+  local record = {station = stationName, wait_conditions = {} }
 
   if condType == "time" then
     record.wait_conditions[#record.wait_conditions+1] = {type = condType, compare_type = "and", ticks = condComp }
@@ -223,7 +219,7 @@ function NewScheduleRecord(stationName, condType, condComp, itemlist, countOverr
       local condFluid = nil
       if itemlist[i].type == "fluid" then
         condFluid = "fluid_count"
-        -- workaround for leaving with fluid residue, can time out trains
+        -- workaround for leaving with fluid residue due to Factorio rounding down to 0
         if condComp == "=" and countOverride == 0 then
           waitEmpty = true
         end
@@ -270,6 +266,13 @@ function NewScheduleRecord(stationName, condType, condComp, itemlist, countOverr
   return record
 end
 
+local temp_wait_condition = {{type = "time", compare_type = "and", ticks = 0}}
+
+-- NewScheduleRecord: returns new schedule_record for waypoints
+function NewTempScheduleRecord(rail, rail_direction)
+  local record = {wait_conditions = temp_wait_condition, rail = rail, rail_direction = rail_direction, temporary = true}
+  return record
+end
 
 ---- ProcessRequest ----
 
@@ -288,7 +291,7 @@ local function getProviders(requestStation, item, req_count, min_length, max_len
     local stop = global.LogisticTrainStops[stopID]
     if stop and stop.entity.valid then
       local matched_networks = band(requestStation.network_id, stop.network_id)
-      -- log("DEBUG: comparing 0x"..string.format("%x", band(requestStation.network_id)).." & 0x"..string.format("%x", band(stop.network_id)).." = 0x"..string.format("%x", band(matched_networks)) )
+      -- log("DEBUG: comparing 0x"..format("%x", band(requestStation.network_id)).." & 0x"..format("%x", band(stop.network_id)).." = 0x"..format("%x", band(matched_networks)) )
 
       if stop.entity.force == force
       and stop.entity.surface == surface
@@ -433,7 +436,8 @@ function ProcessRequest(reqIndex, request)
 
   local surface_name = requestStation.entity.surface.name
   local to = requestStation.entity.backer_name
-  local toRail = requestStation.entity.connected_rail
+  local to_rail = requestStation.entity.connected_rail
+  local to_rail_direction = requestStation.entity.connected_rail_direction
   local to_gps = MakeGpsString(requestStation.entity, to)
   local to_network_id_string = format("0x%x", band(requestStation.network_id))
   local item = request.item
@@ -500,7 +504,8 @@ function ProcessRequest(reqIndex, request)
 
   local providerData = providers[1] -- only one delivery/request is created so use only the best provider
   local fromID = providerData.entity.unit_number
-  local fromRail = providerData.entity.connected_rail
+  local from_rail = providerData.entity.connected_rail
+  local from_rail_direction = providerData.entity.connected_rail_direction
   local from = providerData.entity.backer_name
   local from_gps = MakeGpsString(providerData.entity, from)
   local matched_network_id_string = format("0x%x", band(providerData.network_id))
@@ -622,15 +627,18 @@ function ProcessRequest(reqIndex, request)
   local schedule = {current = 1, records = {}}
   schedule.records[#schedule.records + 1] = NewScheduleRecord(depot.entity.backer_name, "inactivity", depot_inactivity)
 
-  -- force train to go to the station we pick by setting a temporary waypoint on the rail that the station is connected to
-  if fromRail then
-    -- wait time 0 is interpreted as waypoint without stopping by Factorio
-    schedule.records[#schedule.records + 1] = NewScheduleRecord(nil, "time", 0, nil, 0, fromRail)
+  -- make train go to specific stations by setting a temporary waypoint on the rail the station is connected to
+  if from_rail and from_rail_direction then
+    schedule.records[#schedule.records + 1] = NewTempScheduleRecord(from_rail, from_rail_direction)
+  else
+    if debug_log then log("(ProcessRequest) Warning: creating schedule without temporary stop for provider.") end
   end
   schedule.records[#schedule.records + 1] = NewScheduleRecord(from, "item_count", "≥", loadingList)
 
-  if toRail then
-    schedule.records[#schedule.records + 1] = NewScheduleRecord(nil, "time", 0, nil, 0, toRail)
+  if to_rail and to_rail_direction then
+    schedule.records[#schedule.records + 1] = NewTempScheduleRecord(to_rail, to_rail_direction)
+  else
+    if debug_log then log("(ProcessRequest) Warning: creating schedule without temporary stop for requester.") end
   end
   schedule.records[#schedule.records + 1] = NewScheduleRecord(to, "item_count", "=", loadingList, 0)
 
