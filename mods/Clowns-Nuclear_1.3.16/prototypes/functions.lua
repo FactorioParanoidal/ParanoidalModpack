@@ -141,30 +141,38 @@ clowns.functions.pre_req_repl = function(techname, old_tech, new_tech1, new_tech
 end
 
 clowns.functions.remove_res = function(name, to_rem, kind)
+  --convert shorthand to long-form
+  if kind == "res" then
+    kind = "results"
+  elseif kind == "ing" then
+    kind = "ingredients"
+  end
   local temp = data.raw.recipe[name]
   if temp then --terminate if recipe does not exist
     local keys, list = {},{}
-    if temp.kind then
-      keys[#keys+1] = temp.kind
+    if temp[kind] then
+      keys["reg"] = temp[kind]
     end
-    if temp.normal and temp.normal.kind then
-      keys[#keys+1] = temp.normal.kind
+    if temp.normal and temp.normal[kind] then
+      keys["normal"] = temp.normal[kind]
     end
-    if temp.expensive and temp.expensive.kind then
-      keys[#keys+1] = temp.expensive.kind
+    if temp.expensive and temp.expensive[kind] then
+      keys["expensive"] = temp.expensive[kind]
     end
-    --local list=data.raw.recipe[name].kind or data.raw.recipe[name].normal.kind
-    for i,list in pairs(keys) do
+    for q,list in pairs(keys) do
       index=""
       if list then
         for i,ing in pairs(list) do
-          if ing.name == to_rem or (ing.name and ing[1] == to_rem) then
-            index=i
+          if ing.name == to_rem or ing[1] == to_rem then
+            --index=i
+            if q=="reg" then 
+              table.remove(temp[kind],i)
+            else
+              table.remove(temp[q][kind],i)
+            end
           end
         end
-        
       end
     end
-    table.remove(list,index) -- remove after loop, not while in it.
   end
 end

@@ -14,4 +14,4 @@ require("prototypes.recipes.clowns-centrifuging")
 
 require("prototypes.technology.technology")
 
-require("prototypes.overrides")
+require("prototypes.overrides.overrides")
