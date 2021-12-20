@@ -97,8 +97,6 @@ data:extend(
       base_color = {r = 0.957, g = 0.49, b = 0},
       flow_color = {r = 0.957, g = 0.49, b = 0},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
     },
     ------------------------
     -- Mercury processing --
@@ -114,8 +112,6 @@ data:extend(
       base_color = {r = 0.75, g = 0.75, b = 0.75},
       flow_color = {r = 0.8, g = 0.8, b = 0},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
     },
     --liquid-dmm
     {
@@ -128,8 +124,6 @@ data:extend(
       base_color = {r = 0.1, g = 0.8, b = 0.7},
       flow_color = {r = 0.1, g = 0.8, b = 0.7},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
     },
     --neurotixin-capsule
     {
@@ -183,8 +177,6 @@ data:extend(
       base_color = {r = 1, g = 0.6, b = 0.6},
       flow_color = {r = 1, g = 0.6, b = 0.6},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
     },
     --------------------------
     -- Magnesium processing --
@@ -240,8 +232,6 @@ data:extend(
       base_color = {r = 242/255, g = 212/255, b = 194/255},
       flow_color = {r = 242/255, g = 212/255, b = 194/255},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
       auto_barrel = false
     },
     --plate
@@ -381,20 +371,26 @@ data:extend(
       base_color = {r = 0.71, g = 0.816, b = 0},
       flow_color = {r = 0.71, g = 0.816, b = 0},
       max_temperature = 100,
-      pressure_to_speed_ratio = 0.4,
-      flow_to_energy_ratio = 0.59,
     },
     --Osmium Bullets
   }
 )
 osmiumbullet=table.deepcopy(data.raw.ammo["uranium-rounds-magazine"])
 osmiumbullet.name="osmium-rounds-magazine"
-osmiumbullet.ammo_type.action.action_delivery.target_effects[2].damage = {amount = 20, type = "physical"}
-osmiumbullet.ammo_type.action.action_delivery.target_effects[3] = {type = "damage",damage = { amount = 6, type = "explosion"}}
+if osmiumbullet.ammo_type.action and osmiumbullet.ammo_type.action.action_delivery then
+  osmiumbullet.ammo_type.action.action_delivery.target_effects[2].damage = {amount = 20, type = "physical"}
+  osmiumbullet.ammo_type.action.action_delivery.target_effects[3] = {type = "damage",damage = { amount = 6, type = "explosion"}}
+else
+  table.insert(osmiumbullet.ammo_type.action,{action_delivery={target_effects={{damage = {amount = 20, type = "physical"}},{type = "damage", damage = { amount = 6, type = "explosion"}}}}})
+end
 osmiumbullet.order = "a[basic-clips]-d[osmium-rounds-magazine]"
 osmiumbullet.icon = nil
 osmiumbullet.icons = {
   {icon = "__Clowns-Processing__/graphics/icons/osmium-rounds-magazine.png", icon_size = 64, icon_mipmaps = 4--[[, tint = {95,56,75}]]}
 }
-osmiumbullet.pictures.layers[1].filename = "__Clowns-Processing__/graphics/icons/osmium-rounds-magazine.png"
+if not osmiumbullet.pictures then
+  osmiumbullet.pictures = {layers={}}
+else
+    osmiumbullet.pictures.layers[1].filename = "__Clowns-Processing__/graphics/icons/osmium-rounds-magazine.png"
+end
 data:extend({osmiumbullet})
