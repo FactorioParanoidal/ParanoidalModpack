@@ -3,15 +3,15 @@ local constants = {}
 constants.additional_vertical_offset = 0.1
 
 constants.colors = {
-  off = {a = 0},
-  blue = {b = 1},
-  cyan = {g = 1, b = 1},
-  green = {g = 1},
-  orange = {r = 1, g = 0.5},
-  purple = {r = 1, b = 1},
-  red = {r = 1},
-  white = {r = 1, g = 1, b = 1},
-  yellow = {r = 1, g = 1},
+  off = { a = 0 },
+  blue = { b = 1 },
+  cyan = { g = 1, b = 1 },
+  green = { g = 1 },
+  orange = { r = 1, g = 0.5 },
+  purple = { r = 1, b = 1 },
+  red = { r = 1 },
+  white = { r = 1, g = 1, b = 1 },
+  yellow = { r = 1, g = 1 },
 }
 
 local color_settings = {}
@@ -29,6 +29,7 @@ constants.ignored_entities = {
   ["mining-depot"] = true,
   -- Space Exploration
   ["se-core-miner"] = true,
+  ["se-rocket-launch-pad-silo"] = true,
   -- Transport Drones
   ["fuel-depot"] = true,
   ["request-depot"] = true,
@@ -49,14 +50,14 @@ end
 constants.size_settings = size_settings
 
 constants.status_settings = {
-  disabled = {color = "red", order = "ba"},
-  full_output = {color = "yellow", order = "bb"},
-  idle = {color = "red", order = "bc"},
-  insufficient_input = {color = "red", order = "bd"},
-  low_power = {color = "yellow", order = "be"},
-  no_minable_resources = {color = "red", order = "bf"},
-  no_power = {color = "red", order = "bg"},
-  working = {color = "green", order = "bh"},
+  disabled = { color = "red", order = "ba" },
+  full_output = { color = "yellow", order = "bb" },
+  idle = { color = "red", order = "bc" },
+  insufficient_input = { color = "red", order = "bd" },
+  low_power = { color = "yellow", order = "be" },
+  no_minable_resources = { color = "red", order = "bf" },
+  no_power = { color = "red", order = "bg" },
+  working = { color = "green", order = "bh" },
 }
 
 return constants

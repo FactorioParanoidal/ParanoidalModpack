@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2021-12-09
+  Bugfixes:
+    - Fixed indicators only drawing on entities that were supposed to be ignored (oops)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2021-12-09
+  Changes:
+    - Added antialiasing to the indicators (#2) (credit to snouz)
+    - Removed indicator from the Space Exploration cargo rocket silo
+---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 2021-07-09
   Bugfixes:
