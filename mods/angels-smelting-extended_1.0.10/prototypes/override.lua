@@ -84,7 +84,7 @@ if mods["bobplates"] then
     data.raw.recipe["angels-plate-gunmetal"].order = "i"
     data.raw.recipe["gunmetal-alloy"].order = "k"
     if mods["boblogistics"] then
-        for n, metal in pairs(metal_tab) do
+        for n, metal in pairs(ASE.tables.metal_tab) do
             angelsmods.functions.OV.add_unlock("angels-" .. metal .. "-smelting-1", "angels-" .. metal .. "-pipe-casting")
             angelsmods.functions.OV.add_unlock("angels-" .. metal .. "-smelting-1", "angels-" .. metal .. "-pipe-to-ground-casting")
         end
@@ -102,12 +102,12 @@ if mods["bobplates"] then
 end
 --find activation settings
 if mods["angelsindustries"] and angelsmods.industries.components then
-    for item, i in pairs(a_inters) do
+    for item, i in pairs(ASE.tables.a_inters) do
         angelsmods.functions.OV.add_unlock(i.tech, item .. "-casting")
         angelsmods.functions.OV.add_unlock(i.tech, "ASE-" .. item .. "-casting-expendable")
         angelsmods.functions.OV.add_unlock(i.tech, "ASE-" .. item .. "-casting-advanced")
     end
-    for n, item in pairs(shielding) do
+    for n, item in pairs(ASE.tables.shielding) do
         angelsmods.functions.OV.add_unlock("angels-" .. item.metal .. "-smelting-2", "angels-shielding-coil-" .. item.metal .. "-casting")
         angelsmods.functions.OV.add_unlock("angels-" .. item.metal .. "-smelting-2", "angels-shielding-coil-" .. item.metal .. "-converting")
         angelsmods.functions.OV.add_unlock("angels-" .. item.metal .. "-smelting-3", "angels-shielding-coil-" .. item.metal .. "-casting-fast")
@@ -128,6 +128,13 @@ if mods["angelsindustries"] and angelsmods.industries.components then
     --angelsmods.functions.OV.disable_recipe("angels-iron-gear-wheel-casting") --drd
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-expendable")
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-advanced")
+end
+if data.raw.item["insulated-cable"] then
+    angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-casting")
+    angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-converting")
+    angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-casting-fast")
+    angelsmods.functions.allow_productivity("angels-wire-coil-insulated-converting")
+    angelsmods.functions.allow_bio_productivity("angels-wire-coil-insulated-converting")--only because the competing chain has access :(
 end
 -- EXECUTE OVERRIDES
 angelsmods.functions.OV.execute()

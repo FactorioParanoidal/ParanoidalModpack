@@ -46,7 +46,7 @@ if mods["bobplates"] then
       type = "technology",
       name = "angels-alloys-smelting-1",
       icon = "__angelssmelting__/graphics/technology/casting-bronze-tech.png",
-      icon_size = 128,
+      icon_size = 256,
       upgrade = true,
       prerequisites =
       {
@@ -89,7 +89,7 @@ if mods["bobplates"] then
       type = "technology",
       name = "angels-alloys-smelting-2",
       icon = "__angelssmelting__/graphics/technology/casting-gunmetal-tech.png",
-      icon_size = 128,
+      icon_size = 256,
       upgrade = true,
       prerequisites =
       {
@@ -137,7 +137,7 @@ if mods["bobplates"] then
       type = "technology",
       name = "angels-alloys-smelting-3",
       icon = "__angelssmelting__/graphics/technology/casting-cobalt-steel-tech.png",
-      icon_size = 128,
+      icon_size = 256,
       upgrade = true,
       prerequisites =
       {

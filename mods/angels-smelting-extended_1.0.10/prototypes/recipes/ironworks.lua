@@ -1,4 +1,3 @@
-require("prototypes.data-tables")
 -- IRONWORKS
 
 --SET-UP BASE CASTING RECIPES TO COPY LATER
@@ -27,20 +26,20 @@ data:extend(
     subgroup = "angels-iron-casting",
     energy_required = 2,
     enabled = "false",
-    ingredients ={
-      {type="fluid", name="liquid-molten-iron", amount=150},
+    ingredients = {
+      { type = "fluid", name = "liquid-molten-iron", amount = 150},
     },
     results=
     {
-      {type="item", name="pipe-to-ground", amount=2},
+      { type = "item", name = "pipe-to-ground", amount = 2},
     },
     order = "yb",
-  }
+  },
 })
 -- bobs pipe casting
 if mods["boblogistics"] and mods["bobplates"] then
   --call pipe metal types (metal_tab)
-  for n,metal in pairs(metal_tab) do
+  for n,metal in pairs(ASE.tables.metal_tab) do
     --metal straight pipes
     local m_pipe = table.deepcopy(data.raw.recipe["angels-iron-pipe-casting"])
 
@@ -124,6 +123,12 @@ data:extend({
         icon_mipmaps = 1
       },
       {
+        icon = "__angelssmelting__/graphics/icons/expendable-mold.png",
+        icon_size = 32,
+        icon_mipmaps = 1,
+        tint = {.91, .89, .79, .5}
+      },
+      {
         icon = "__angelsrefining__/graphics/icons/solid-sand.png",
         icon_size = 32,
         scale = 0.4375,
@@ -146,26 +151,26 @@ data:extend({
     name = "ASE-metal-die",
     category = "sintering",
     subgroup = "angels-mold-casting",
-    icons = {
+    icons = angelsmods.functions.add_number_icon_layer(
       {
-        icon = "__angelssmelting__/graphics/icons/non-expendable-mold.png",
-        icon_size = 32,
-        icon_mipmaps = 1
-      },
-      {
-        icon = "__angelssmelting__/graphics/icons/powder-steel.png",
-        icon_size = 32,
-        scale = 0.4375,
-        shift = {10, -10},
-      },     
-      {
-        icon = "__angelsrefining__/graphics/icons/num_1.png",
-        tint = { r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
-        shift = {-12, -12}
-      },
-    },
-    icon_size = 32,
+        {
+          icon = "__angelssmelting__/graphics/icons/non-expendable-mold.png",
+          icon_size = 32,
+          icon_mipmaps = 1
+        },
+        {
+          icon = "__angelssmelting__/graphics/icons/non-expendable-mold.png",
+          icon_size = 32,
+          icon_mipmaps = 1,
+          tint = {.91, .89, .79, .5}
+        },
+        {
+          icon = "__angelssmelting__/graphics/icons/powder-steel.png",
+          icon_size = 64,
+          scale = 0.4375*0.5,
+          shift = {10, -10},
+        },
+      }, 1, angelsmods.smelting.number_tint),
     energy_required = 8,
     enabled = "false",
     ingredients = {
@@ -186,25 +191,9 @@ data:extend({
     subgroup = "angels-mold-casting",
     energy_required = 8,
     enabled ="false",
-    icons = {
-      {
-        icon = "__angelssmelting__/graphics/icons/non-expendable-mold.png",
-        icon_size = 32,
-      },
-      {
-        icon = "__angelsrefining__/graphics/icons/slag.png",
-        icon_size = 32,
-        scale = 0.6
-      },
-      {
-        icon = "__angelsrefining__/graphics/icons/num_2.png",
-        icon_size = 32,
-        tint = { r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-        scale = 0.32,
-        shift = { -12, -12}
-      },
-    },
-    icon_size = 32,
+    icons = angelsmods.functions.add_number_icon_layer(
+      angelsmods.functions.get_object_icons("ASE-spent-metal-die"),
+      2, angelsmods.smelting.number_tint),
     ingredients = {
       { type = "item", name = "ASE-spent-metal-die", amount = 3},
       { type = "fluid", name = "liquid-nitric-acid", amount = 20}
@@ -251,7 +240,14 @@ data:extend(
         icon = "__angelssmelting__/graphics/icons/expendable-mold.png",
         icon_size = 32,
         scale = 0.4375,
+        shift = {-10, -10}
+      },
+      { 
+        icon = "__angelssmelting__/graphics/icons/expendable-mold.png",
+        icon_size = 32,
+        scale = 0.4375,
         shift = {-10, -10},
+        tint = {.91, .89, .79, .5}
       },
     },
     ingredients = {
@@ -281,6 +277,13 @@ data:extend(
         scale = 0.4375,
         shift = {-10, -10},
       },
+      {
+        icon = "__angelssmelting__/graphics/icons/non-expendable-mold.png",
+        icon_size = 32,
+        scale = 0.4375,
+        shift = {-10, -10},
+        tint = {.91, .89, .79, .5}
+      },
     },
     ingredients = {
       { type = "fluid", name = "liquid-molten-iron", amount = 80},
@@ -295,7 +298,7 @@ data:extend(
   },
 })
 if mods["bobplates"] then
-for n,metal in pairs(gears) do
+for n,metal in pairs(ASE.tables.gears) do
     -- regular casting
     local m_gear1 = table.deepcopy(data.raw.recipe["angels-iron-gear-wheel-casting"])
 
@@ -351,7 +354,7 @@ end
 --ANGELS COMPONENT PARTS
 if mods["angelsindustries"] and (settings.startup["angels-enable-components"].value or settings.startup["angels-enable-tech"].value) then
 
-  for item,i in pairs(a_inters) do
+  for item,i in pairs(ASE.tables.a_inters) do
     local ico_name = {}
     if i.icon then
       ico_name = i.icon

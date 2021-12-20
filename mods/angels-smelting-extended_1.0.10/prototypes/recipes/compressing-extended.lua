@@ -1,21 +1,21 @@
 require("prototypes.data-tables")
 -- Plates (rolls)
-for metal,properties in pairs(coil_metals) do
+for metal,properties in pairs(ASE.tables.coil_metals) do
   --pull unique properties
   if properties.ing_1 then
-    ing_1=properties.ing_1
+    ing_1 = properties.ing_1
     --adjust amount for tier 2 recipe
-    ing_2=table.deepcopy(ing_1)
+    ing_2 = table.deepcopy(ing_1)
   else
-    ing_1={type="fluid", name="liquid-molten-"..metal, amount=80}
-    ing_2=table.deepcopy(ing_1)
+    ing_1 = {type = "fluid", name = "liquid-molten-"..metal, amount = 80}
+    ing_2 = table.deepcopy(ing_1)
   end
-  ing_2.amount=ing_2.amount*1.75 --140/80 7/4
+  ing_2.amount = ing_2.amount*1.75 --140/80 7/4
   
-  if metal=="gunmetal" then
-    sgrp="angels-alloys-casting"
+  if metal == "gunmetal" then
+    sgrp = "angels-alloys-casting"
   else
-    sgrp="angels-"..metal.."-casting"
+    sgrp = "angels-"..metal.."-casting"
   end
   --casting recipe
   data:extend({
@@ -26,28 +26,20 @@ for metal,properties in pairs(coil_metals) do
       subgroup = sgrp,
       energy_required = 4,
       enabled = "false",
-      localised_name={"recipe-name.casting",{"lookup."..metal}},
-      icons={
+      localised_name = {"recipe-name.casting", {"lookup."..metal}},
+      icons = angelsmods.functions.add_number_icon_layer({
         {
           icon = "__angels-smelting-extended__/graphics/icons/roll-blank.png",
           tint = properties.tint,
-          icon_size=32
-        },
-        {
-          icon = "__angelsrefining__/graphics/icons/num_1.png",
-          --tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-          scale = 0.32,
-          shift = {-12, -12},
-        },
-      },
-      icon_size=32,
-      ingredients ={
+          icon_size = 32
+        }}, 1 , angelsmods.smelting.number_tint),
+      ingredients = {
         ing_1,
-        {type="fluid",name="water",amount=10}
+        {type = "fluid", name = "water", amount = 10}
       },
-      results=
+      results =
       {
-        {type="item", name="angels-roll-"..metal, amount=2},
+        {type = "item", name = "angels-roll-"..metal, amount = 2},
       },
       order = "g",
     },
@@ -59,12 +51,12 @@ for metal,properties in pairs(coil_metals) do
       subgroup = sgrp,
       energy_required = 0.5,
       enabled = "false",
-      ingredients ={
-        {type="item", name="angels-roll-"..metal, amount=1}
+      ingredients = {
+        {type = "item", name = "angels-roll-"..metal, amount = 1}
       },
-      results=
+      results =
       {
-        {type="item", name="angels-plate-"..metal, amount=4},
+        {type = "item", name = "angels-plate-"..metal, amount = 4},
       },
       icons = {
         {
@@ -88,30 +80,22 @@ for metal,properties in pairs(coil_metals) do
       subgroup = sgrp,
       energy_required = 2,
       enabled = "false",
-      localised_name={"recipe-name.casting",{"lookup."..metal}},
-      ingredients ={
+      localised_name = {"recipe-name.casting", {"lookup."..metal}},
+      ingredients = {
         ing_2,
-        {type="fluid",name="liquid-coolant",amount=40},
+        {type = "fluid", name = "liquid-coolant", amount = 40},
       },
-      results=
+      results =
       {
-        {type="item", name="angels-roll-"..metal, amount=4},
-        {type="fluid",name="liquid-coolant-used",amount=40, temperature = 300,catalyst_amount=40}
+        {type = "item", name = "angels-roll-"..metal, amount = 4},
+        {type = "fluid", name = "liquid-coolant-used", amount = 40, temperature = 300, catalyst_amount = 40}
       },
-      icons={
+      icons = angelsmods.functions.add_number_icon_layer({
         {
           icon = "__angels-smelting-extended__/graphics/icons/roll-blank.png",
           tint = properties.tint,
-          icon_size=32
-        },
-        {
-          icon = "__angelsrefining__/graphics/icons/num_2.png",
-          --tint = {r = 0.8, g = 0.8, b = 0.8, a = 0.5},
-          scale = 0.32,
-          shift = {-12, -12},
-        },
-      },
-      icon_size=32,
+          icon_size = 32
+        }}, 2 , angelsmods.smelting.number_tint),
       order = "h",
     },
   })
