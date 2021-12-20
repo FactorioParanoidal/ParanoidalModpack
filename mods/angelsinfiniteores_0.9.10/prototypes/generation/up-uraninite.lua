@@ -1,9 +1,9 @@
 if angelsmods.ores.enableinfiniteuraniumpower then
-	data.raw["resource"]["fluorite"].stages={sheet=
+	data.raw["resource"]["uraninite"].stages={sheet=
 			{
-			filename = "__angelsinfiniteores__/graphics/entity/ores/ore-7.png",
-			--tint = {r=0.60, g=0.28, b=0.34},
-			tint = {r=0.80, g=0.50, b=0.60},
+			filename = "__angelsinfiniteores__/graphics/entity/ores/ore-6.png",
+			--tint = {r=0.000, g=0.238, b=0.118},
+			tint = {r=0.1, g=0.40, b=0.2},
 			priority = "extra-high",
 			width = 38,
 			height = 38,
@@ -12,41 +12,41 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 			}
 	}
 
-	data.raw["resource"]["fluorite"].map_color={r=0.80, g=0.50, b=0.60}
-	data.raw["item"]["fluorite"].icon="__angelsinfiniteores__/graphics/icons/up-fluorite.png"
+	data.raw["resource"]["uraninite"].map_color={r=0.1, g=0.40, b=0.2}
+	data.raw["item"]["uraninite"].icon="__angelsinfiniteores__/graphics/icons/up-uraninite.png"
 
 	if not angelsmods.ores.enablersomode then
 	data:extend(
 	{
 		{
 		type = "autoplace-control",
-		name = "infinite-fluorite",
+		name = "infinite-uraninite",
 		richness = true,
-		order = "b-f"
+		order = "b-e"
 		},
 		{
 		type = "noise-layer",
-		name = "infinite-fluorite"
+		name = "infinite-uraninite"
 		},
 		{
 		type = "resource",
-		name = "infinite-fluorite",
-		icon = "__angelsinfiniteores__/graphics/icons/up-fluorite.png",
+		name = "infinite-uraninite",
+		icon = "__angelsinfiniteores__/graphics/icons/up-uraninite.png",
 		flags = {"placeable-neutral"},
-		order="a-b-f",
+		order="a-b-e",
 		infinite=true,
 		minimum=angelsmods.ores.yield,
 		normal=1500,
 		maximum=6000,
 		minable =
 		{
-		  hardness = 0.4,
+		  --hardness = 0.4,
 		  mining_particle = "stone-particle",
 		  mining_time = 2,
 		  results = {
 				{
 					type = "item",
-					name = "fluorite",
+					name = "uraninite",
 					amount_min = 1,
 					amount_max = 1,
 					probability = angelsmods.ores.loweryield
@@ -57,7 +57,7 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 		selection_box = {{ -0.5, -0.5}, {0.5, 0.5}},
 		autoplace =
 		{
-			control = "infinite-fluorite",
+			control = "infinite-uraninite",
 			sharpness = 1,
 			richness_multiplier = 5000,
 			richness_multiplier_distance_bonus = 20,
@@ -65,7 +65,7 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 			coverage = 0.01,
 			peaks = {
 				{
-					noise_layer = "infinite-fluorite",
+					noise_layer = "infinite-uraninite",
 					noise_octaves_difference = -2.5,
 					noise_persistence = 0.3,
 					starting_area_weight_optimal = 0,
@@ -73,7 +73,7 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 					starting_area_weight_max_range = 2,
 				},
 				{
-					noise_layer = "infinite-fluorite",
+					noise_layer = "infinite-uraninite",
 					noise_octaves_difference = -2,
 					noise_persistence = 0.3,
 					starting_area_weight_optimal = 1,
@@ -91,42 +91,42 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 		stage_counts = {1},
 		stages =
 		{
-		  sheet =
+			sheet =
 		  {
-			filename = "__angelsinfiniteores__/graphics/entity/ores-inf/ore-7-inf.png",
-			tint = {r=0.80, g=0.50, b=0.60},
+			filename = "__angelsinfiniteores__/graphics/entity/ores-inf/ore-6-inf.png",
 			priority = "extra-high",
+			tint = {r=0.1, g=0.40, b=0.2},
 			width = 38,
 			height = 38,
 			frame_count = 8,
 			variation_count = 1
 		  }
 		},
-		map_color = {r=0.80, g=0.50, b=0.60},
-	  }
+		map_color = {r=0.1, g=0.40, b=0.2},
+	  },
 	})
 	else
 	data:extend(
 	{
 		{
 		type = "resource",
-		name = "infinite-fluorite",
-		icon = "__angelsinfiniteores__/graphics/icons/up-fluorite.png",
+		name = "infinite-uraninite",
+		icon = "__angelsinfiniteores__/graphics/icons/up-uraninite.png",
 		flags = {"placeable-neutral"},
-		order="a-b-f",
+		order="a-b-e",
 		infinite=true,
 		minimum=angelsmods.ores.yield,
 		normal=1500,
 		maximum=6000,
 		minable =
 		{
-		  hardness = 0.4,
+		  --hardness = 0.4,
 		  mining_particle = "stone-particle",
 		  mining_time = 2,
 		  results = {
 				{
 					type = "item",
-					name = "fluorite",
+					name = "uraninite",
 					amount_min = 1,
 					amount_max = 1,
 					probability = angelsmods.ores.loweryield
@@ -140,17 +140,17 @@ if angelsmods.ores.enableinfiniteuraniumpower then
 		{
 			sheet =
 		  {
-			filename = "__angelsinfiniteores__/graphics/entity/ores-inf/ore-7-inf.png",
-			tint = {r=0.80, g=0.50, b=0.60},
+			filename = "__angelsinfiniteores__/graphics/entity/ores-inf/ore-6-inf.png",
 			priority = "extra-high",
+			tint = {r=0.1, g=0.40, b=0.2},
 			width = 38,
 			height = 38,
 			frame_count = 8,
 			variation_count = 1
 		  }
 		},
-		map_color = {r=0.80, g=0.50, b=0.60},
-	  }
+		map_color = {r=0.1, g=0.40, b=0.2},
+	  },
 	})
 	end
 end
