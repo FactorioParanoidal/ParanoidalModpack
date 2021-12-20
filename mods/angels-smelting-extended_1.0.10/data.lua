@@ -1,4 +1,8 @@
+if not ASE then ASE = {} end
+if not ASE.functions then ASE.functions = {} end
+if not ASE.tables then ASE.tables = {} end
 require("prototypes.alloys-category-extended")
+require("prototypes.data-tables")
 
 angelsmods.trigger.smelting_products["steel"].powder = true -- enforce steel powder on for molds
 if mods["boblogistics"] and mods["bobplates"] then
