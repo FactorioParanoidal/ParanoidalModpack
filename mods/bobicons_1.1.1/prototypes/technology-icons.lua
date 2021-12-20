@@ -18,8 +18,8 @@ data.raw.technology["nitinol-processing"].icon = "__bobicons__/graphics/technolo
 data.raw.technology["nitinol-processing"].icon_size = 128
 data.raw.technology["silicon-processing"].icon = "__bobicons__/graphics/technology/silicon-processing.png"
 data.raw.technology["silicon-processing"].icon_size = 128
-data.raw.technology["sodium-processing"].icon = "__bobicons__/graphics/technology/sodium-processing.png"
-data.raw.technology["sodium-processing"].icon_size = 128
+--data.raw.technology["sodium-processing"].icon = "__bobicons__/graphics/technology/sodium-processing.png"
+--data.raw.technology["sodium-processing"].icon_size = 128
 data.raw.technology["titanium-processing"].icon = "__bobicons__/graphics/technology/titanium-processing.png"
 data.raw.technology["titanium-processing"].icon_size = 128
 data.raw.technology["tungsten-processing"].icon = "__bobicons__/graphics/technology/tungsten-processing.png"
@@ -31,7 +31,7 @@ data.raw.technology["zinc-processing"].icon_size = 128
 
 
 --CHEMISTRY--
-
+--[[
 data.raw.technology["basic-chemistry"].icons = nil
 data.raw.technology["basic-chemistry"].icon = "__bobicons__/graphics/technology/basic-chemistry.png"
 data.raw.technology["basic-chemistry"].icon_size = 128
@@ -52,6 +52,8 @@ data.raw.technology["angels-coal-processing-2"].icon_size = 128
 data.raw.technology["angels-coal-processing-3"].icons = nil
 data.raw.technology["angels-coal-processing-3"].icon = "__bobicons__/graphics/technology/coal-tech.png"
 data.raw.technology["angels-coal-processing-3"].icon_size = 128
+
+
 data.raw.technology["angels-coal-cracking"].icons = nil
 data.raw.technology["angels-coal-cracking"].icon = "__bobicons__/graphics/technology/coal-tech.png"
 data.raw.technology["angels-coal-cracking"].icon_size = 128
@@ -91,7 +93,7 @@ data.raw.technology["chlorine-processing-2"].icon_size = 128
 data.raw.technology["chlorine-processing-3"].icons = nil
 data.raw.technology["chlorine-processing-3"].icon = "__bobicons__/graphics/technology/chlorine-tech.png"
 data.raw.technology["chlorine-processing-3"].icon_size = 128
-
+]]--
 
 --MODULES--
 
