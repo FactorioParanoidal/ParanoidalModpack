@@ -1,6 +1,6 @@
 local constants = require("constants")
 
-data:extend{
+data:extend({
   {
     type = "bool-setting",
     name = "bnl-enable",
@@ -19,7 +19,7 @@ data:extend{
     type = "bool-setting",
     name = "bnl-include-mining-drills",
     setting_type = "startup",
-    default_value = false,
+    default_value = true,
     order = "ac",
   },
   {
@@ -30,14 +30,14 @@ data:extend{
     allowed_values = constants.size_settings,
     order = "ad",
   },
-}
+})
 
 local color_settings = {}
 for name, spec in pairs(constants.status_settings) do
   color_settings[#color_settings + 1] = {
     type = "string-setting",
-    name = "bnl-color-"..name,
-    localised_name = {"mod-setting-name.bnl-color-setting", {"mod-setting-name.bnl-status-"..name}},
+    name = "bnl-color-" .. name,
+    localised_name = { "mod-setting-name.bnl-color-setting", { "mod-setting-name.bnl-status-" .. name } },
     setting_type = "startup",
     default_value = spec.color,
     allowed_values = constants.color_settings,
