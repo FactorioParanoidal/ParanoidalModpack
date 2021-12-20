@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 15. 12. 2021
+  Tweaks:
+    - Added explosions to crystal pylon death
+  Bugfixes:
+    - Fixed typo in require import for upgrade on setChunkBase (Thanks Eerrikki for reporting)
+    - Fixed upgradeEntity could return a nil name which failed in a surface.create_entity call (Thanks SimplyData for reporting)
+    - Fixed energyThief crystal pylons turning into radar corpses when they died
+    - Fixed energyThief crystal pylon hover picture not displaying
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 15. 12. 2021
+  Bugfixes:
+    - Fixed base missing in unregisteredEnemyStructure with Rampant already active in a save before enabling new enemies (Thanks Biviho for the report)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 23. 11. 2021
+  Contributions:
+    - RealSimplyData fixed missing map parameter in onUnitGroupCreated (Thanks illiander42 for reporting)
+  Bugfixes:
+    - Fixed chunkPassScanning not checking for enemy structures when determining passability
+    - Fixed chunks that become impassable not being properly removed from all tables and iterators (Thanks ZwerOxotnik for reporting)
+    - Potential bugfix for evolutionTable being nil, still need a save to verify (Thanks ZwerOxotnik for reporting)
+    - Corrected Krastorio2 position parameter wanting xy pair. (Krastorio2 1.1.6 that is currently published at the time of this update is broken still, see thread https://mods.factorio.com/mod/Rampant/discussion/5f44980455e55634147d01f4)
+    - Fixed vengence squad queue could get stuck if the surface it was about to process was invalidated
+
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 23. 11. 2021
   Contributions:
