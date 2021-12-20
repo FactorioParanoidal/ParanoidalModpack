@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Changes:
+    - Update to comply with angels library changes
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
   Changes:
     - Fixed bug relating to the flask without bobs glass

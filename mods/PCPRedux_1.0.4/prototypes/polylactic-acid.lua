@@ -38,7 +38,8 @@ if data.raw.item["temperate-garden"] then
         {type="item", name="solid-compost", amount=1},
       },
       order = "h",
-      icons =angelsmods.functions.create_liquid_recipe_icon({"liquid-lactic-acid"},"coh"),--generate_fluid_recipe_icons("lactic_acid","coh","liq"),
+      icons =angelsmods.functions.create_liquid_recipe_icon({"liquid-lactic-acid"},"COH"),--generate_fluid_recipe_icons("lactic_acid","coh","liq"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-lactic-acid"),
     },
     {
       type = "recipe",
@@ -61,6 +62,7 @@ if data.raw.item["temperate-garden"] then
           icon = "__PCPRedux__/graphics/icons/poly-lactic-acid-plastic.png",
         },
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-plastic"),
       icon_size = 32,
     },
     {
@@ -84,6 +86,7 @@ if data.raw.item["temperate-garden"] then
           icon_size=64,
         },
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-fermentation-raw"),
       icon_size=32,
     },
     {
@@ -116,6 +119,7 @@ if data.raw.item["temperate-garden"] then
           icon_size=64,
         },
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("bacterial-growth-seed" or "liquid-lactic-acid"),
       icon_size=32,
     },
     {

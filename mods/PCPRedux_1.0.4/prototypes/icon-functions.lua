@@ -1,7 +1,27 @@
---Sourced from:
+CL = --[[colorLib--]]require("prototypes.colorLib")
+
+local element_colours= {
+  c = {{044, 044, 044}, {140, 000, 000}, {140, 000, 000}}, -- Carbon
+  k = {{069, 069, 069}, {054, 054, 054}, {036, 036, 036}}, -- Coal/Oil
+  h = {{255, 255, 255}, {243, 243, 243}, {242, 242, 242}}, -- Hydrogen
+  o = {{249, 013, 013}, {214, 012, 012}, {198, 011, 011}}, -- Oxygen
+  d = {{224, 244, 202}, {206, 206, 173}, {196, 196, 156}}, -- Deuterium
+  n = {{045, 075, 180}, {045, 076, 175}, {038, 063, 150}}, -- Nitrogen
+  l = {{031, 229, 031}, {057, 211, 040}, {075, 195, 045}}, -- Chlorine
+  s = {{225, 210, 000}, {216, 196, 017}, {210, 187, 030}}, -- Sulfur
+  g = {{105, 135, 090}, {096, 122, 082}, {088, 113, 075}}, -- Natural Gas
+  f = {{181, 208, 000}, {181, 208, 000}, {181, 208, 000}}, -- Fluoride
+  i = {{142, 148, 148}, {142, 148, 148}, {142, 148, 148}}, -- Silicon
+  t = {{135, 090, 023}, {nil, nil, nil}, {nil, nil, nil}}, -- Tungsten
+  w = {{094, 114, 174}, {088, 104, 163}, {088, 101, 155}}, -- Water/Steam
+  m = {{041, 041, 180}}, -- Complex
+  a = {{115, 063, 163}}, -- Sodium
+  p = {{244, 125, 001}}, -- Phosphorus
+  y = {{255, 105, 180}}, -- Syngas
+}
+	--Sourced from:
 --https://sciencenotes.org/molecule-atom-colors-cpk-colors/
-local element_colours={
-H={r=255,g=255,b=255},
+--[[H={r=255,g=255,b=255,a=1},
 Hd={r=255,g=255,b=192},--Deuterium
 --Ht={r=255,g=255,b=160},--Tritium
 He={r=217,g=255,b=255},
@@ -114,20 +134,20 @@ Db={r=209,g=0,b=79},
 Sg={r=217,g=0,b=69},
 Bh={r=224,g=0,b=56},
 Hs={r=230,g=0,b=46},
-Mt={r=235,g=0,b=38}}
+Mt={r=235,g=0,b=38}}]]
 
-function formula_extraction_1(chemical_formula)
+local function formula_extraction_1(chemical_formula)
 local rgb={}
 	for n,form in pairs(chemical_formula) do
 		local _,_,elem=string.find(form,"(%a+)%d+")
 		if not elem then
 			elem=form
 		end
-		table.insert(rgb,element_colours[elem])
+		table.insert(rgb,element_colours[elem][1])
 		end
 	return rgb
 end
-function formula_extraction_2(chemical_formula)
+local function formula_extraction_2(chemical_formula)
 	local multi={}
 	for n,form in pairs(chemical_formula) do
 		local _,_,elem=string.find(form,"%a+(%d+)")
@@ -135,67 +155,39 @@ function formula_extraction_2(chemical_formula)
 	end
 	return multi
 end
-function fluid_flow_colour(chemical_formula)--parse as label number, label number (example H2,O3,C5, not C5O3H2)
-	local rgb=formula_extraction_1(chemical_formula)
-	local multi=formula_extraction_2(chemical_formula)
-	--should only consist of the first 3 items, with an optional 4th
-	local colour_1=rgb[1]
-	local ct_1=tonumber(multi[1])
-	local colour_2=rgb[2]
-	local ct_2=tonumber(multi[2])
-	local colour_3=rgb[3]
-	local ct_3=tonumber(multi[3])
-	local colour_4=rgb[4]
-	local ct_4=tonumber(multi[4])
-	local colour_5=rgb[5]
-	local ct_5=tonumber(multi[5])
-	local red=0
-	local green=0
-	local blue=0
-	local alpha=0
-	local ave_denom=(ct_1+(ct_2 or 0)+(ct_3 or 0)+(ct_4 or 0)+(ct_5 or 0))
-	if colour_1 then
-		red=(colour_1.r/255*ct_1/ave_denom)*ct_1
-		green=(colour_1.g/255*ct_1/ave_denom)*ct_1
-		blue=(colour_1.b/255*ct_1/ave_denom)*ct_1
-		alpha=(colour_1.a or 1)*ct_1/ave_denom
-		if colour_2 then
-			red=red+(colour_2.r/255*ct_2/ave_denom)
-			green=green+(colour_2.g/255*ct_2/ave_denom)
-			blue=blue+(colour_2.b/255*ct_2/ave_denom)
-			alpha=alpha+(colour_2.a or 1)*ct_2/ave_denom
-			if colour_3 then
-				red=red+(colour_3.r/255*ct_3/ave_denom)
-				green=green+(colour_3.g/255*ct_3/ave_denom)
-				blue=blue+(colour_3.b/255*ct_3/ave_denom)
-				alpha=alpha+(colour_3.a or 1)*ct_3/ave_denom
-				if colour_4 then
-					red=red+(colour_4.r/255*ct_4/ave_denom)
-					green=green+(colour_4.g/255*ct_4/ave_denom)
-					blue=blue+(colour_4.b/255*ct_4/ave_denom)
-					alpha=alpha+(colour_4.a or 1)*ct_4/ave_denom
-					if colour_5 then
-						red=red+(colour_5.r/255*ct_5/ave_denom)
-						green=green+(colour_5.g/255*ct_5/ave_denom)
-						blue=blue+(colour_5.b/255*ct_5/ave_denom)
-						alpha=alpha+(colour_5.a or 1)*ct_5/ave_denom
-					end
-				end
-			end
-		end
-	else
-		--some kind of error, throw default
-		log("fail")
-		log(serpent.block(chemical_formula))
-		red=1
-		green=1
-		blue=1
-		alpha=1
-	end
-	red=math.sqrt(red)
-	green=math.sqrt(green)
-	blue=math.sqrt(blue)
-	--using averaging
-	Blends={r=red/ave_denom,g=green/ave_denom,b=blue/ave_denom}--,a=alpha/(ave_denom/1.5)}
-	return Blends
+if not mods["angelsrefining"] then --use angels if avail
+
+  function angelsmods.functions.fluid_color(chemical_formula)--parse as label number, label number (example H2,O3,C5, not C5O3H2)
+    local color = {}
+    local rgb = formula_extraction_1(chemical_formula)
+    local multi = formula_extraction_2(chemical_formula)
+    --should only consist of the first 3 items, with an optional 4th
+    local red, green, blue, alpha, comb = 0,0,0,0,0
+    local ave_denom = #rgb
+    if ave_denom == 2 and rgb[1]==element_colours["c"][1] and rgb[2]==element_colours["h"][1] then
+      --Hydrocarbon only
+      m_c = tonumber(multi[1])
+      m_h = tonumber(multi[2])
+      m_t = m_c+m_h
+      for i,j in pairs({"r", "g", "b"}) do
+        --if multi[1]>=8 then multi[1] = 8 end
+        color[j] = ((m_h-m_c)*0.899+m_c*0.01)/(m_h)--maxreader proposed:(6-multi[1])/6*255+10*(multi[2]/multi[1])
+      end 
+    else --everything else
+      for i,colour in pairs(rgb) do
+        alpha = colour[4] or 1
+        red = red + ((colour[1]/255)^2 * tonumber(multi[i])*alpha)
+        green = green + ((colour[2]/255)^2 * tonumber(multi[i])*alpha)
+        blue = blue + ((colour[3]/255)^2 * tonumber(multi[i])*alpha)
+        comb = comb + tonumber(multi[i]*alpha)
+      end
+      color = {r = math.sqrt(red/comb), g = math.sqrt(green/comb), b = math.sqrt(blue/comb), a = 1}
+        --normalise
+      HSV = CL.RGBtoHSV(color)
+      HSV.v = 0.8*HSV.v
+      HSV.s = 1-0.60*(1-HSV.s)
+      color = CL.HSVtoRGB(HSV)
+    end
+    return color
+  end
 end

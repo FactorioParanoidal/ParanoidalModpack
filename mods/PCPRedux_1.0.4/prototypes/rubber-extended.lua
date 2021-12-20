@@ -69,7 +69,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
         {type="fluid", name="gas-residual", amount=10},
         {type="item", name="catalyst-metal-carrier", amount=1},
       },
-      icons =angelsmods.functions.create_gas_recipe_icon({{ "__angelspetrochem__/graphics/icons/molecules/butadiene.png", 72 }}, "cht"),
+      icons =angelsmods.functions.create_gas_recipe_icon({{ "__angelspetrochem__/graphics/icons/molecules/butadiene.png", 72 }}, "CHSg"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("gas-butadiene"),
       order = "d[catalyst-steam-cracking-butane-2]",
     },
     {
@@ -87,7 +88,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       {
         {type="fluid", name="liquid-dichlorobutene", amount=120},
       },
-      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/dichlorobutene.png",icon_size=72}}, "clh"),
+      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/dichlorobutene.png",icon_size=72}}, "CClH"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-dichlorobutene"),
       order = "d[butadiene-chlorination]",
     },
     {
@@ -106,7 +108,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
         {type="fluid", name="liquid-chlorobutadiene", amount=100},
         {type="fluid", name="water-saline", amount=100},
       },
-      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/chloroprene.png",icon_size=72}}, "clh"),
+      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/chloroprene.png",icon_size=72}}, "CClH"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-chlorobutadiene"),
       order = "d[dichlorbutene-dechlorination]",
     },
     {
@@ -130,6 +133,7 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
         scale = 0.32,
         shift = {-12, -12},
       }),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-rubber"),
       order = "b[rubber]-a[liquid]-a",
     },
   })--[[
@@ -156,7 +160,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
         {type="fluid", name="gas-residual", amount=10},
         {type="item", name="catalyst-metal-carrier", amount=1},
       },
-      icons =angelsmods.functions.create_gas_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/acetylene.png",icon_size=72}}, "cht"),
+      icons =angelsmods.functions.create_gas_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/acetylene.png",icon_size=72}}, "CHSg"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("gas-acetylene"),
       order = "d[catalyst-steam-cracking-acetylene]",
     },
     {
@@ -173,7 +178,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       {
         {type="fluid", name="gas-vinyl-acetylene", amount=30},
       },
-      icons =angelsmods.functions.create_gas_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/vinyl-acetylene.png",icon_size=72}}, "cch"),
+      icons =angelsmods.functions.create_gas_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/vinyl-acetylene.png",icon_size=72}}, "CCH"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("gas-vinyl-acetylene"),
       order = "d[acetylene-diomerisation]",
     },
     {
@@ -191,7 +197,8 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       {
         {type="fluid", name="liquid-chlorobutadiene", amount=50},
       },
-      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/chloroprene.png",icon_size=72}}, "clh"),
+      icons =angelsmods.functions.create_liquid_recipe_icon({{icon="__PCPRedux__/graphics/icons/raw/chloroprene.png",icon_size=72}}, "CClH"),
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-chlorobutadiene"),
       order = "d[acetylene-diomerisation]",
     },
   })--[[
@@ -234,6 +241,7 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
           shift = {-12, -12},
         },
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-rubber"),
       order = "f[rubber-additive]",
     },
     --rubber additive 2 (2 carbon+4 spent rubber->3rubber additive) 0.5
@@ -399,6 +407,7 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       {
         {type="item", name="solid-rubber-block", amount=5},
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-rubber-pre"),
       order = "ya",
     },
     --25Liquid Rubber + 2rubber additive -> 35masterbatch rubber(liquid) - 2chemplant 1
@@ -419,6 +428,7 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       },
       order = "ya",
     },
+    crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-rubber-masterbatch"),
     --70masterbatch rubber+4sulfur -> 90pre-rubber (liquid) -1chemplant 1
     {
       type = "recipe",
@@ -435,6 +445,7 @@ add chlorobutadiene polymerisation chlorobutadiene-->liquid rubber]]
       {
         {type="fluid", name="liquid-rubber-pre", amount=90},
       },
+      crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-rubber-pre"),
       order = "ya",
     },
     {
