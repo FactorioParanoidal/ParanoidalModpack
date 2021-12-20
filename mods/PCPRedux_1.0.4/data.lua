@@ -1,4 +1,5 @@
 --data:extend({{type = "damage-type",name = "pcp-chemical"}})
+--require("prototypes.colorLib")
 require("prototypes.icon-functions")
 require("prototypes.items")
 require("prototypes.fluids")
