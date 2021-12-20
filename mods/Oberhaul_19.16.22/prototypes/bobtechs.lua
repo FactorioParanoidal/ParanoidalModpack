@@ -47,7 +47,7 @@ data.raw.technology["water-bore-2"]= nil
 data.raw.technology["water-bore-3"]= nil
 data.raw.technology["water-bore-4"]= nil
 
-if data.raw["generator"]["fluid-generator"] then
+--[[if data.raw["generator"]["fluid-generator"] then
 data.raw.recipe["fluid-generator"].hidden = true
 data.raw.recipe["fluid-generator-2"].hidden = true
 data.raw.recipe["fluid-generator-3"].hidden = true
@@ -55,7 +55,7 @@ data.raw.recipe["fluid-generator-3"].hidden = true
 data.raw["generator"]["fluid-generator"].minable = {hardness = 0.1, mining_time = 0.3, result = "oil-steam-boiler"}
 data.raw["generator"]["fluid-generator-2"].minable = {hardness = 0.1, mining_time = 0.3, result = "oil-steam-boiler"}
 data.raw["generator"]["fluid-generator-3"].minable = {hardness = 0.1, mining_time = 0.3, result = "oil-steam-boiler"}
-end
+end]]
 
 if data.raw["generator"]["hydrazine-generator"] then
 data.raw.recipe["hydrazine-generator"].normal.ingredients =
