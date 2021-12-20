@@ -74,52 +74,7 @@ if settings.startup["fluid-cleanup"].value == true and data.raw["item-group"]["b
 		data.raw["item-subgroup"]["bob-fluid-pump"].group = "bob-resource-products"
 	end
 end
---[[
-if settings.startup["fortifications-group"].value == true then
-	data.raw.item["gun-turret"].subgroup = "gun-turrets"
-	data.raw.item["flamethrower-turret"].subgroup = "fluid-turrets"
-	data.raw.item["laser-turret"].subgroup = "laser-turrets"
-	data.raw.item["artillery-turret"].subgroup = "artillery"
-	data.raw.item["radar"].subgroup = "radar"
-	data.raw.item["stone-wall"].subgroup = "walls"
-	data.raw.item["gate"].subgroup = "walls"
-	data.raw.item["land-mine"].subgroup = "mines"
-	data.raw.item["rocket-silo"].subgroup = "rocket"
 
-
-	if mods["Clowns-Defences"] then
-		data.raw.item["mortar-turret"].subgroup = "artillery"
-		data.raw.item["gattling-bunker"].subgroup = "gun-turrets"
-		data.raw.item["rocket-turret"].subgroup = "rocket-turrets"
-		data.raw.item["cannon-turret"].subgroup = "cannon-turrets"
-	end
-
-	if mods["bobwarfare"] then
-		data.raw.item["bob-gun-turret-2"].subgroup = "gun-turrets"
-		data.raw.item["bob-gun-turret-3"].subgroup = "gun-turrets"
-		data.raw.item["bob-gun-turret-4"].subgroup = "gun-turrets"
-		data.raw.item["bob-gun-turret-5"].subgroup = "gun-turrets"
-		data.raw.item["bob-sniper-turret-1"].subgroup = "sniper-turrets"
-		data.raw.item["bob-sniper-turret-2"].subgroup = "sniper-turrets"
-		data.raw.item["bob-sniper-turret-3"].subgroup = "sniper-turrets"
-		data.raw.item["bob-laser-turret-2"].subgroup = "laser-turrets"
-		data.raw.item["bob-laser-turret-3"].subgroup = "laser-turrets"
-		data.raw.item["bob-laser-turret-4"].subgroup = "laser-turrets"
-		data.raw.item["bob-laser-turret-5"].subgroup = "laser-turrets"
-		data.raw.item["reinforced-wall"].subgroup = "walls"
-		data.raw.item["reinforced-gate"].subgroup = "walls"
-		data.raw.item["bob-artillery-turret-2"].subgroup = "artillery"
-		data.raw.item["bob-artillery-turret-3"].subgroup = "artillery"
-		data.raw.item["radar-2"].subgroup = "radar"
-		data.raw.item["radar-3"].subgroup = "radar"
-		data.raw.item["radar-4"].subgroup = "radar"
-		data.raw.item["radar-5"].subgroup = "radar"
-		data.raw.item["poison-mine"].subgroup = "mines"
-		data.raw.item["slowdown-mine"].subgroup = "mines"
-		data.raw.item["distractor-mine"].subgroup = "mines"
-	end
-end
-]]
 if settings.startup["equipment-group"].value then
 	data.raw.armor["light-armor"].subgroup = "armor"
 	data.raw.armor["heavy-armor"].subgroup = "armor"

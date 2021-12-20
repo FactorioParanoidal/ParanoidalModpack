@@ -15,7 +15,6 @@ data:extend(
 		type = "item-group",
 		name = "equipment",
 		order = "k",
-		inventory_order = "k",
 		icon = "__base__/graphics/technology/armor-making.png",
 		icon_size = 256,
         icon_mipmaps = 4
@@ -24,7 +23,6 @@ data:extend(
 		type = "item-group",
 		name = "fortifications",
 		order = "k",
-		inventory_order = "k",
 		icon = "__base__/graphics/technology/gate.png",
 		icon_size = 256,
 		icon_mipmaps = 4

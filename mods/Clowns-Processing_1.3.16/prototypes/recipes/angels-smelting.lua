@@ -1,5 +1,4 @@
 local recipe={}
-log(serpent.block(angelsmods.functions.get_object_icons("liquid-molten-brass")))
 --set required triggers
 angelsmods.trigger.smelting_products["iron"].plate = true
 angelsmods.trigger.smelting_products["iron"].ingot = true
@@ -111,7 +110,6 @@ if angelsmods.trigger.smelting_products["aluminium"].plate then
 end
 --brass ingot recipes
 if angelsmods.trigger.smelting_products["brass"].plate then
-  log("beepClownsABS4")
     recipe[#recipe+1]=
     {
       type = "recipe",

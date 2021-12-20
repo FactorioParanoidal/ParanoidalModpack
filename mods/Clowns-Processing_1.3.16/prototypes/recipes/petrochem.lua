@@ -18,7 +18,7 @@ data:extend(
 			{type = "fluid", name = "gas-oxygen", amount = 800},
 			{type = "item", name = "catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "ooh",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "OOH",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 		crafting_machine_tint =
 		{
 			primary = {r = 1, g = 0, b = 0, a = 0},
@@ -44,7 +44,7 @@ data:extend(
 			{type = "fluid", name = "gas-hydrogen", amount = 1200},
 			{type = "item", name = "catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-hydrogen"}, "hho",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-hydrogen"}, "HHO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 		crafting_machine_tint =
 		{
 			primary = {r = 1, g = 0, b = 0, a = 0},
@@ -71,7 +71,7 @@ data:extend(
 			{type = "fluid", name = "gas-nitrogen", amount = 1000},
 			{type = "item", name = "catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-nitrogen"}, "nno",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-nitrogen"}, "NNO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 	},
 	{
 		type = "recipe",
@@ -91,7 +91,7 @@ data:extend(
 			{type = "fluid", name = "gas-oxygen", amount = 1000},
 			{type = "item", name = "catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "oon",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "OON",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 	},
 	{
 		type = "recipe",
@@ -110,7 +110,7 @@ data:extend(
 			{type = "fluid", name = "gas-chlorine", amount = 40},
 			{type = "fluid", name = "gas-hydrogen", amount = 60}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-chlorine","gas-hydrogen"}, "cho"),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-chlorine","gas-hydrogen"}, "CHOc"),
 	},
 	{
 		type = "recipe",
@@ -129,7 +129,7 @@ data:extend(
 			{type = "fluid", name = "gas-fluorine", amount = 40},
 			{type = "fluid", name = "gas-hydrogen", amount = 60}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-fluorine","gas-hydrogen"}, "fhh",{"liquid-hydrofluoric-acid"}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"gas-fluorine","gas-hydrogen"}, "FHH",{"liquid-hydrofluoric-acid"}),
 	},
 	{
 		type = "recipe",
