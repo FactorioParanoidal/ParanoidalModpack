@@ -364,7 +364,8 @@ data:extend(
     {
       type = "fluid",
       name = "gas-fluorine",
-      icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "fff"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png", --DrD 216 to 128
+      --icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "fff"),-- --"__Clowns-Processing__/graphics/icons/gas-fluorine.png", --DrD 216 to 128
+	  icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "FFF"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png",
       --icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",
