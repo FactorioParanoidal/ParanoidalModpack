@@ -16,10 +16,6 @@ require("prototypes.overrides.smelting")
 require("prototypes.overrides.technology")
 require("prototypes.overrides.warehouses")
 
--- Ore crusher 4
-data.raw.item["ore-crusher-4"].icons = extangels.numeral_tier({icon = "__extendedangels__/graphics/icons/ore-crusher-4.png", icon_size = 32}, 4, angelsmods.refining.number_tint)
-data.raw["assembling-machine"]["ore-crusher-4"].icons = extangels.numeral_tier({icon = "__extendedangels__/graphics/icons/ore-crusher-4.png", icon_size = 32}, 4, angelsmods.refining.number_tint)
-
 -- Tungsten carbide powder
 data.raw.item["powder-tungsten-carbide"].icon = "__extendedangels__/graphics/icons/powder-tungsten-carbide-hr.png"
 data.raw.item["powder-tungsten-carbide"].icon_size = 64
