@@ -1,8 +1,8 @@
 {
     "name": "Oberhaul",
-    "version": "9.16.22",
+    "version": "19.16.22",
     "title": "Ober3550's BobsAngels Overhaul",
-    "author": "Ober3550, touched by nastyslave",
+    "author": "Ober3550, touched by nastyslave, fixed by Dr pez#2787",
     "contact": "www.factorioforums.com",
     "homepage": "",
     "factorio_version": "1.1",
@@ -21,6 +21,7 @@
   "bobmining",
   "bobrevamp",
   "bobvehicleequipment",
+  "bobequipment",
   "bobwarfare",
   "bobenemies",
   

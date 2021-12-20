@@ -59,7 +59,7 @@ data:extend({
 		{
 			{"__angelspetrochem__/graphics/icons/molecules/nitric-oxide.png", 72}
 		},
-		"noo"
+		"NOO"
 		),
 		--icon = "__angelspetrochem__/graphics/icons/nitrogen-03.png",
 		--icon_size = 32,
@@ -69,7 +69,7 @@ data:extend({
 {
     type = "technology",
     name = "angels-coal-processing-2",
-    icon = "__angelspetrochem__/graphics/technology/coal-tech.png",
+    icons = angelsmods.functions.create_gas_tech_icon({{067, 067, 067}, {056, 056, 056}, {045, 045, 045}}),
     icon_size = 128,
     prerequisites =
     {
@@ -110,9 +110,9 @@ data:extend({
 
 })
 
-if data.raw.recipe["gas-nitrogen-monoxide"] then
-data.raw.recipe["gas-nitrogen-monoxide"].icon = "__angelspetrochem__/graphics/icons/nitrogen-03-2.png"
-end
+--if data.raw.recipe["gas-nitrogen-monoxide"] then
+--data.raw.recipe["gas-nitrogen-monoxide"].icon = "__angelspetrochem__/graphics/icons/nitrogen-03-2.png"
+--end
 
 
 data.raw.recipe["bob-resin-wood"].category = "crafting-handonly"
