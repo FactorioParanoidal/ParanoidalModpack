@@ -7,11 +7,13 @@ local chunkProcessor = {}
 
 local chunkUtils = require("ChunkUtils")
 local queryUtils = require("QueryUtils")
+local mapUtils = require("MapUtils")
 
 -- constants
 
 -- imported functions
 
+local removeChunkFromMap = mapUtils.removeChunkFromMap
 local setPositionInQuery = queryUtils.setPositionInQuery
 local registerEnemyBaseStructure = chunkUtils.registerEnemyBaseStructure
 local unregisterEnemyBaseStructure = chunkUtils.unregisterEnemyBaseStructure
@@ -102,8 +104,7 @@ function chunkProcessor.processPendingChunks(universe, tick, flush)
                 local chunk = initialScan(oldChunk, map, tick)
                 if (chunk == -1) then
                     removeProcessQueueChunk(map.processQueue, oldChunk)
-                    universe.chunkIdToChunk[oldChunk.id] = nil
-                    map[x][y] = nil
+                    removeChunkFromMap(map, x, y, oldChunk.id)
                 end
             else
                 local initialChunk = createChunk(map, x, y)
@@ -117,8 +118,8 @@ function chunkProcessor.processPendingChunks(universe, tick, flush)
                         chunk
                     )
                 else
-                    universe.chunkIdToChunk[initialChunk.id] = nil
                     map[x][y] = nil
+                    universe.chunkIdToChunk[initialChunk.id] = nil
                 end
             end
 
@@ -149,7 +150,8 @@ function chunkProcessor.processPendingUpgrades(universe, tick)
             universe.pendingUpgrades[entityId] = nil
             local surface = entity.surface
             local query = universe.ppuUpgradeEntityQuery
-            setPositionInQuery(query, entityData.position or entity.position)
+            local position = entityData.position or entity.position
+            setPositionInQuery(query, position)
             query.name = entityData.name
             unregisterEnemyBaseStructure(entityData.map, entity, nil, true)
             entity.destroy()
@@ -157,7 +159,7 @@ function chunkProcessor.processPendingUpgrades(universe, tick)
             if createdEntity and createdEntity.valid then
                 registerEnemyBaseStructure(entityData.map, createdEntity, tick, entityData.base, true)
                 if remote.interfaces["kr-creep"] then
-                    remote.call("kr-creep", "spawn_creep_at_position", surface, query.position)
+                    remote.call("kr-creep", "spawn_creep_at_position", surface, position)
                 end
             end
         else
@@ -194,8 +196,7 @@ function chunkProcessor.processScanChunks(universe)
 
         if (chunkPassScan(chunk, map) == -1) then
             removeProcessQueueChunk(map.processQueue, chunk)
-            map[chunk.x][chunk.y] = nil
-            map.universe.chunkIdToChunk[chunk.id] = nil
+            removeChunkFromMap(map, chunk.x, chunk.y, chunk.id)
         end
     end
 end
