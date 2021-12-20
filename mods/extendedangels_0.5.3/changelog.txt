@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2021-12-19
+  Changes:
+    - Minimum versions of Angel's Bioprocessing and Angel's Smelting have been incremeneted to the latest versions
+  Bugfixes:
+    - Fixed startup errors related to changed icon definitions for several buildings to account for graphics changes in Angel's Refinings 0.12.1
+---------------------------------------------------------------------------------------------------
 Version: 0.5.2
 Date: 2021-10-16
   Bugfixes:
