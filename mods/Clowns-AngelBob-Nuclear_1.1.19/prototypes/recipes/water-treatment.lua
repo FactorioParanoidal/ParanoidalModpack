@@ -16,7 +16,7 @@ data:extend(
 			{type="fluid", name="water-red-waste", amount=100},
 			{type="item", name="polonium-210", amount=1},
 		},
-		icons = angelsmods.functions.create_liquid_recipe_icon({"polonium-210","water-red-waste"}, "wcl"),
+		icons = angelsmods.functions.create_liquid_recipe_icon({"polonium-210","water-red-waste"}, "WsCCl"),
 		order = "k",
 	},
 }

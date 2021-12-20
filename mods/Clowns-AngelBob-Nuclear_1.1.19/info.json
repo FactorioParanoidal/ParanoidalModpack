@@ -1,6 +1,6 @@
 {
   "name": "Clowns-AngelBob-Nuclear",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "factorio_version": "1.1",
   "title": "MadClown01's AngelBob Nuclear",
   "author": "MadClown01,Pezzawinkle",
@@ -11,10 +11,10 @@
 	"(?) bobwarfare >= 0.18.0",
 	"(?) bobelectronics >= 0.18.0",
   "(?) bobmodules >= 0.18.0",
-  "(?) angelsindustries >= 0.4.2",
+  "(?) angelsindustries >= 0.4.14",
   "(?) bobplates >= 0.18.8",
-	"angelsrefining >= 0.11.20",
-	"Clowns-Nuclear >= 1.3.9",
-	"Clowns-Processing >= 1.3.11"
+	"angelsrefining >= 0.12.1",
+	"Clowns-Nuclear >= 1.3.16",
+	"Clowns-Processing >= 1.3.16"
 	]
 }
