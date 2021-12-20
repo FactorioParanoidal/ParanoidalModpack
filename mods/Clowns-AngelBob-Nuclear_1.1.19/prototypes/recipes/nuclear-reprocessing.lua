@@ -153,7 +153,7 @@ end
 ----------------------------------------
 -- for helmod testing purposes only
 ---------------------------------------
-data:extend({
+--[[data:extend({
 	{
 		type = "recipe",
 		name = "thorium-fuel-burning",
@@ -235,4 +235,4 @@ if mods["angelsindustries"] and angelsmods.industries.overhaul then
 		},
 	}
 })
-end
+end]]
