@@ -4,7 +4,10 @@ local sounds = require("__base__/prototypes/entity/sounds.lua")
 
 local boss_scale = 3.5
 local boss_hp_multiplier =  settings.startup["bm-big-enemy-hp-multiplier"].value
+local boss_hp_variant =  settings.startup["bm-big-enemy-hp-variant"].value
 local boss_dmg_multiplier = settings.startup["bm-enemy-damage-multiplier"].value
+ 
+ 
  
 local Loot = {} 
 if data.raw.capsule['rpg_level_up_potion'] then
@@ -74,7 +77,7 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 		    icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = 40000 * k * boss_hp_multiplier,
+			max_health = (40000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant,   --max_health = 40000 * k * boss_hp_multiplier,
 			subgroup="enemies",
 			resistances = {},
 			call_for_help_radius = 100,
@@ -156,7 +159,7 @@ data:extend(
     icon = "__base__/graphics/icons/behemoth-spitter.png",
     icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-    max_health = 30000*k * boss_hp_multiplier,
+    max_health = (30000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant,
     order="b-b-g",
     subgroup="enemies",
     resistances = {},

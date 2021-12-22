@@ -5,6 +5,7 @@ local dying_s = {{filename = "__Big-Monsters__/sound/death-z.wav",volume = 2}}
 local HPMult   = settings.startup["bm-enemy-hp-multiplier"].value 
 local BIGHPMult= settings.startup["bm-big-enemy-hp-multiplier"].value 
 local DMGMult  = settings.startup["bm-enemy-damage-multiplier"].value
+local boss_hp_variant =  settings.startup["bm-big-enemy-hp-variant"].value
  
 
 
@@ -219,7 +220,7 @@ data:extend(
     icon = "__base__/graphics/icons/behemoth-spitter.png",
 	icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-    max_health = (1000000 + L*500000) * BIGHPMult,
+    max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, --    (1000000 + L*500000) * BIGHPMult,
     order="b-b-g",
     subgroup="enemies",
     resistances = fire_resistances,
@@ -273,7 +274,8 @@ data:extend(
     icon = "__base__/graphics/icons/behemoth-spitter.png",
 	icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-    max_health = (1000000 + L*500000) * BIGHPMult,
+    --max_health = (1000000 + L*500000) * BIGHPMult,
+	max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
     order="b-b-g",
     subgroup="enemies",
     resistances = acid_resistances,
@@ -326,7 +328,7 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L*500000) * BIGHPMult,
+			max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
 			subgroup="enemies",
 			resistances = fire_resistances,
 			call_for_help_radius = 80+ L*3,
@@ -392,7 +394,7 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L*500000) * BIGHPMult,
+			max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
 			subgroup="enemies",
 			resistances = acidweak_resistances,
 			call_for_help_radius = 100,
@@ -460,7 +462,7 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L*200000) * BIGHPMult,
+			max_health = (1000000 + L^boss_hp_variant * 200000) * BIGHPMult / boss_hp_variant, 				
 			subgroup="enemies",
 			resistances = energy_resistances,
 			call_for_help_radius = 80,
@@ -527,7 +529,8 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1600000 + L*400000) * BIGHPMult,
+			--max_health = (1600000 + L*400000) * BIGHPMult,
+			max_health = (1600000 + L^boss_hp_variant * 400000) * BIGHPMult / boss_hp_variant, 				
 			subgroup="enemies",
 			resistances = strong_resistances,
 			call_for_help_radius = 80+L,
@@ -589,7 +592,8 @@ data:extend(
 
 local spider_droid = table.deepcopy(data.raw["spider-vehicle"].spidertron)
 spider_droid.name="bm-spidertron_"..L 
-spider_droid.max_health=(50000 + L*5000) * BIGHPMult
+--spider_droid.max_health=(50000 + L*5000) * BIGHPMult
+spider_droid.max_health = (50000 + L^boss_hp_variant * 5000) * BIGHPMult / boss_hp_variant
 spider_droid.localised_name = {"",{"entity-name.spidertron"},' '..L}
 spider_droid.hide_resistances = false
 spider_droid.inventory_size=1

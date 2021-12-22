@@ -70,13 +70,22 @@ data:extend({
 	type = "double-setting",
 	name = "bm-volcano-min_evo",
 	setting_type = "runtime-global",
-	default_value = 0.65,
+	default_value = 0.5,
 	minimum_value = 0,
 	maximum_value = 0.9,
 	order = "b8"
 },
-  
 
+
+{
+	type = "double-setting",
+	name = "bm-volcano-max_evo",
+	setting_type = "runtime-global",
+	default_value = 1,
+	minimum_value = 0,
+	maximum_value = 1,
+	order = "b8b"
+},
 
 
    {
@@ -88,6 +97,17 @@ data:extend({
 	maximum_value = 100,
 	order = "c1"
   },
+
+{
+	type = "double-setting",
+	name = "bm-swarm-max_evo",
+	setting_type = "runtime-global",
+	default_value = 1,
+	minimum_value = 0.5,
+	maximum_value = 1,
+	order = "c1b"
+},
+
   
   {
     type = "int-setting",
@@ -179,9 +199,8 @@ data:extend({
 	default_value = 1,
 	minimum_value = 0.2,
 	maximum_value = 10,
-	order = "m1"
+	order = "m1a"
 },
-
 
 {
 	type = "double-setting",
@@ -190,8 +209,19 @@ data:extend({
 	default_value = 1,
 	minimum_value = 0.2,
 	maximum_value = 10,
-	order = "m1"
+	order = "m1b"
 },
+
+{
+    type = "double-setting",
+    name = "bm-big-enemy-hp-variant",
+    setting_type = "startup",
+    default_value = 1,
+    minimum_value = 0.2,
+    maximum_value = 4,
+    order = "m1c"
+},
+
 {
 	type = "double-setting",
 	name = "bm-worm-enemy-hp-multiplier",
@@ -199,8 +229,10 @@ data:extend({
 	default_value = 1,
 	minimum_value = 0.2,
 	maximum_value = 10,
-	order = "m1"
+	order = "m1d"
 },
+
+
 {
 	type = "double-setting",
 	name = "bm-enemy-damage-multiplier",

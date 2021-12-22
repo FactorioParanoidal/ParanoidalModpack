@@ -9,14 +9,14 @@ require "stdlib/area/area"
 
 function ReadRunTimeSettings(event)
 global.chances = global.chances or {}  -- in priority order of danger
-global.chances.volcano    = {min_evo=settings.global["bm-volcano-min_evo"].value  ,chance=settings.global["bm-volcano-chance"].value}
+global.chances.volcano    = {min_evo=settings.global["bm-volcano-min_evo"].value  ,chance=settings.global["bm-volcano-chance"].value, max_evo=settings.global["bm-volcano-max_evo"].value}
 global.chances.spidertron = {min_evo=settings.global["bm-spidertron-min_evo"].value  , chance=settings.global["bm-spidertron-chance"].value}
 global.chances.biterzilla = {min_evo=settings.global["bm-biterzilla-min_evo"].value  , chance=settings.global["bm-biterzilla-chance"].value}
 global.chances.worms      = {min_evo=settings.global["bm-worms-min_evo"].value  ,chance=settings.global["bm-worms-chance"].value}
 global.chances.brutals    = {min_evo=settings.global["bm-brutals-min_evo"].value  , chance=settings.global["bm-brutals-chance"].value}
 global.chances.soldiers   = {min_evo=settings.global["bm-soldiers-min_evo"].value  ,chance=settings.global["bm-soldiers-chance"].value}
 global.chances.invasion   = {min_evo=settings.global["bm-invasion-min_evo"].value  , chance=settings.global["bm-invasion-chance"].value}
-global.chances.swarm      = {min_evo=0,   chance=settings.global["bm-swarm-chance"].value}
+global.chances.swarm      = {min_evo=0,   chance=settings.global["bm-swarm-chance"].value, max_evo=settings.global["bm-swarm-max_evo"].value}
 
 global.enable_silo_attack = settings.global["bm-enable-silo-attack"].value
 global.show_cameras = settings.global["bm-show-cameras"].value
@@ -73,12 +73,15 @@ script.on_event(defines.events.on_tick, on_tick )
 
 function pick_event(excludes)
 local the_event
+local evo = game.forces.enemy.evolution_factor
 if not excludes then excludes={} end
 for event, chances in pairs (global.chances) do
 	if not in_list(excludes,event) then 
-    if game.forces.enemy.evolution_factor >= chances.min_evo and math.random(100) <= chances.chance then 
-		the_event = event
-		break
+    if evo >= chances.min_evo and math.random(100) <= chances.chance then 
+		if (not chances.max_evo) or (chances.max_evo>=evo) then 
+			the_event = event
+			break
+			end
 		end
 		end
 	end
