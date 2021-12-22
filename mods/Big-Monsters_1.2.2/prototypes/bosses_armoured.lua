@@ -15,6 +15,7 @@ if data.raw.capsule['rpg_level_up_potion'] then
 
 local wpe_boss_hp_multiplier = settings.startup["bm-big-enemy-hp-multiplier"].value
 local wpe_boss_dmg_multiplier = settings.startup["bm-enemy-damage-multiplier"].value
+local boss_hp_variant =  settings.startup["bm-big-enemy-hp-variant"].value
 local wpe_boss_resist_multiplier = 1
 
 
@@ -68,7 +69,8 @@ data:extend(
             icon = "__ArmouredBiters__/graphics/icons/behemoth-armoured-biter.png",
             icon_size = 32,
             flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-            max_health = 60000 * k * wpe_boss_hp_multiplier,
+            --max_health = 60000 * k * wpe_boss_hp_multiplier,
+			max_health = (60000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant,
             subgroup="enemies",
             resistances = {},
             spawning_time_modifier = 12,

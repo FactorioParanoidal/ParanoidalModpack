@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+  Changes:
+    - Added new mod setting variable: "big enemy HP variant" for low or high HP variance each enemy level
+    - Other new mod settings: volcanoes and swarm max evolution (if evo is higher, does not happen anymore)
+  Localization:
+    - Added PL localization strings thanks to Ziomek24
+---------------------------------------------------------------------------------------------------
 Version: 1.2.1
   Changes:
     - Ultimate boss spawns some small humies 
