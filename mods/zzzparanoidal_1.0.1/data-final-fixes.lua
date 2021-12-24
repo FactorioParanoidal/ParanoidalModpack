@@ -23,9 +23,10 @@ require("recipes.warehousing")
 require("recipes.module-contactfix")
 
 require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
-
-require("graphics.train.train_reskin")
-
+-------------------------------------------------------------------------------------------------
+require("graphics.train.train_reskin") -- рескин поездов
+require("graphics.ore_radar.ore_radar_reskin") -- рескин радара руды
+-------------------------------------------------------------------------------------------------
 require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика
 -------------------------------------------------------------------------------------------------
 --фиксы совместимости для модов
