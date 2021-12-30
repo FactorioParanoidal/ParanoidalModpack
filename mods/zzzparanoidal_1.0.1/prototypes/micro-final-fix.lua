@@ -478,6 +478,13 @@ data.raw["item-with-entity-data"]["jet"].subgroup = "aircraft"
 data.raw["recipe"]["flying-fortress"].subgroup = "aircraft"
 data.raw["item-with-entity-data"]["flying-fortress"].subgroup = "aircraft"
 end
+
+if mods["betterCargoPlanes"] then
+data.raw["recipe"]["better-cargo-plane"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["better-cargo-plane"].subgroup = "aircraft"
+data.raw["recipe"]["even-better-cargo-plane"].subgroup = "aircraft"
+data.raw["item-with-entity-data"]["even-better-cargo-plane"].subgroup = "aircraft"
+end
 --###############################################################################################
 --переносим трубы
 if mods["FluidMustFlow"] then
@@ -497,6 +504,14 @@ data.raw["recipe"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
 data.raw["item"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
 data.raw["recipe"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
 data.raw["item"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct"].subgroup = "FluidMustFlow"
+data.raw["item"]["duct-long"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["check-valve"].subgroup = "FluidMustFlow"
+data.raw["item"]["check-valve"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["overflow-valve"].subgroup = "FluidMustFlow"
+data.raw["item"]["overflow-valve"].subgroup = "FluidMustFlow"
+data.raw["recipe"]["underflow-valve"].subgroup = "FluidMustFlow"
+data.raw["item"]["underflow-valve"].subgroup = "FluidMustFlow"
 end
 -------------------------------------------------------------------------------------------------
 if mods["Bio_Industries"] then
@@ -654,6 +669,10 @@ data.raw["item"]["warehouse-active-provider"].order = "2"
 data.raw["item"]["warehouse-requester"].order = "5"
 data.raw["item"]["warehouse-buffer"].order = "3"
 end
+if mods["Nanobots"] then
+data.raw["item"]["roboport-interface"].subgroup = "bob-logistic-roboport"
+data.raw["item"]["roboport-interface-cc"].subgroup = "bob-logistic-roboport"
+end
 
 end --конец mods["angelsindustries"]
 
@@ -666,3 +685,214 @@ data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].an
 data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=130, b=210}
 end
 --###############################################################################################
+-- твики из TrainOverhaul
+data.raw.item["solid-fuel"].fuel_acceleration_multiplier = 1.05 --base 1.2
+data.raw.item["solid-fuel"].fuel_top_speed_multiplier = 1 -- base 1.05
+
+data.raw.item["rocket-fuel"].fuel_acceleration_multiplier = 1.2 -- base 1.8
+data.raw.item["rocket-fuel"].fuel_top_speed_multiplier = 1 -- base 1.5
+
+--###############################################################################################
+-- баланс электрички
+if mods["BatteryElectricTrain"] then
+
+data.raw.locomotive["bet-locomotive"].max_health = 2000
+data.raw.locomotive["bet-locomotive"].max_speed = 2
+data.raw.locomotive["bet-locomotive"].max_power = "1000kW"
+data.raw.locomotive["bet-locomotive"].reversing_power_modifier = 1
+data.raw.locomotive["bet-locomotive"].braking_force = 20
+data.raw.locomotive["bet-locomotive"].friction_force = 0.25
+data.raw.locomotive["bet-locomotive"].air_resistance = 0.004
+data.raw.locomotive["bet-locomotive"].resistances[1] = {type = "fire", decrease = 50, percent = 70}
+data.raw.locomotive["bet-locomotive"].resistances[2] = {type = "physical", decrease = 30, percent = 50}
+data.raw.locomotive["bet-locomotive"].resistances[3] = {type = "impact", decrease = 100, percent = 80}
+data.raw.locomotive["bet-locomotive"].resistances[4] = {type = "explosion", decrease = 30, percent = 50}
+data.raw.locomotive["bet-locomotive"].resistances[5] = {type = "acid", decrease = 70, percent = 80}
+--[[
+data.raw.locomotive["bet-locomotive"].minimap_representation.filename = "__base__/graphics/entity/diesel-locomotive/diesel-locomotive-minimap-representation.png"
+data.raw.locomotive["bet-locomotive"].minimap_representation.flags = {"icon"}
+data.raw.locomotive["bet-locomotive"].minimap_representation.size = {20, 40}
+data.raw.locomotive["bet-locomotive"].minimap_representation.scale = 0.5
+
+data.raw.locomotive["bet-locomotive"].selected_minimap_representation.filename = "__base__/graphics/entity/diesel-locomotive/diesel-locomotive-selected-minimap-representation.png"
+data.raw.locomotive["bet-locomotive"].selected_minimap_representation.flags = {"icon"}
+data.raw.locomotive["bet-locomotive"].selected_minimap_representation.size = {20, 40}
+data.raw.locomotive["bet-locomotive"].selected_minimap_representation.scale = 0.5
+]]
+-------------------------------------------------------------------------------------------------
+--баланс акб
+data.raw.item["bet-fuel-1-full"].fuel_acceleration_multiplier = 1.5
+data.raw.item["bet-fuel-1-full"].fuel_top_speed_multiplier = 1
+
+data.raw.item["bet-fuel-2-full"].fuel_acceleration_multiplier = 2
+data.raw.item["bet-fuel-2-full"].fuel_top_speed_multiplier = 1.5
+
+data.raw.item["bet-fuel-3-full"].fuel_acceleration_multiplier = 2.5
+data.raw.item["bet-fuel-3-full"].fuel_top_speed_multiplier = 2
+
+data.raw.item["bet-fuel-4-full"].fuel_acceleration_multiplier = 3.5
+data.raw.item["bet-fuel-4-full"].fuel_top_speed_multiplier = 3
+
+bobmods.lib.tech.add_prerequisite("bet-fuel-2", "battery-2")
+bobmods.lib.recipe.replace_ingredient("bet-fuel-2-empty", "battery", "lithium-ion-battery")
+
+bobmods.lib.tech.add_prerequisite("bet-fuel-3", "battery-3")
+bobmods.lib.recipe.replace_ingredient("bet-fuel-3-empty", "battery", "silver-zinc-battery")
+
+bobmods.lib.tech.add_prerequisite("bet-fuel-4", "raw-speed-module-4")
+bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "battery", "silver-zinc-battery")
+bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "effectivity-module-3", "raw-speed-module-4")
+bobmods.lib.recipe.add_ingredient("bet-fuel-4-empty", {"advanced-processing-unit", 3})
+-------------------------------------------------------------------------------------------------
+--зарядные
+data.raw.furnace["bet-charger-1"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_1_icon.png"
+data.raw.item["bet-charger-1"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_1_icon.png"
+data.raw.recipe["bet-charger-1"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_1_icon.png"
+data.raw.recipe["bet-charger-1"].icon_size = 32
+
+data.raw.furnace["bet-charger-1"].working_visualisations.animation =
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av1_sheet.png",			
+  width = 320,
+  height = 320,			
+  shift = {1.0, -1.0},
+  frame_count = 16,
+  line_length = 4,			
+  animation_speed = 0.3,			
+  scale = 0.5,
+}
+
+data.raw.furnace["bet-charger-1"].animation = 
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av1_sheet.png",			
+  width = 320,
+  height = 320,			
+  shift = {1.0, -1.0},
+  frame_count = 16,
+  line_length = 4,			
+  animation_speed = 0.3,			
+  scale = 0.5,
+}
+-------------------------------------------------------------------------------------------------
+data.raw.furnace["bet-charger-2"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_2_icon.png"
+data.raw.item["bet-charger-2"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_2_icon.png"
+data.raw.recipe["bet-charger-2"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_2_icon.png"
+data.raw.recipe["bet-charger-2"].icon_size = 32
+data.raw.technology["bet-charger-2"].icon = "__zzzparanoidal__/graphics/train/electric/bet-charger-2_tech.png"
+data.raw.technology["bet-charger-2"].icon_size = 256
+data.raw.technology["bet-charger-2"].icon_mipmaps = 4
+data.raw.furnace["bet-charger-2"].working_visualisations.animation =
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av2_sheet.png",			
+  width = 256,
+  height = 256,			
+  shift = {0.5, -0.5},
+  frame_count = 36,
+  line_length = 6,			
+  animation_speed = 0.1,			
+  scale = 0.5,
+}
+
+data.raw.furnace["bet-charger-2"].animation =
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av2_sheet.png",			
+  width = 256,
+  height = 256,			
+  shift = {0.5, -0.5},
+  frame_count = 36,
+  line_length = 6,			
+  animation_speed = 0.1,			
+  scale = 0.5,
+}
+-------------------------------------------------------------------------------------------------
+data.raw.furnace["bet-charger-3"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_3_icon.png"
+data.raw.item["bet-charger-3"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_3_icon.png"
+data.raw.recipe["bet-charger-3"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_3_icon.png"
+data.raw.recipe["bet-charger-3"].icon_size = 32
+data.raw.technology["bet-charger-3"].icon = "__zzzparanoidal__/graphics/train/electric/bet-charger-3_tech.png"
+data.raw.technology["bet-charger-3"].icon_size = 256
+data.raw.technology["bet-charger-3"].icon_mipmaps = 4
+
+data.raw.furnace["bet-charger-3"].working_visualisations.animation =
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av3_sheet.png",			
+  width = 256,
+  height = 256,
+  shift = {0.4, -0.5},
+  frame_count = 25,
+  line_length = 5,			
+  animation_speed = 0.05,
+  scale = 0.5,
+}
+
+data.raw.furnace["bet-charger-3"].animation =
+{			
+  filename = "__zzzparanoidal__/graphics/train/electric/av3_sheet.png",			
+  width = 256,
+  height = 256,
+  shift = {0.4, -0.5},
+  frame_count = 25,
+  line_length = 5,			
+  animation_speed = 0.05,
+  scale = 0.5,
+}
+end
+--###############################################################################################
+--баланс поездов
+--локомотив мк1
+data.raw.locomotive.locomotive.max_health = 1200
+data.raw.locomotive.locomotive.weight = 2000
+data.raw.locomotive.locomotive.max_speed = 1.2
+data.raw.locomotive.locomotive.max_power = "600kW"
+data.raw.locomotive.locomotive.reversing_power_modifier = 0.5
+data.raw.locomotive.locomotive.braking_force = 14
+data.raw.locomotive.locomotive.friction_force = 0.27
+data.raw.locomotive.locomotive.air_resistance = 0.008
+data.raw.locomotive.locomotive.energy_per_hit_point = 5
+data.raw.locomotive.locomotive.burner.effectivity = 0.8
+-------------------------------------------------------------------------------------------------
+data.raw.locomotive["bob-locomotive-2"].air_resistance = 0.0065
+-------------------------------------------------------------------------------------------------
+--вагон мк1
+data.raw["cargo-wagon"]["cargo-wagon"].weight = 1000
+data.raw["cargo-wagon"]["cargo-wagon"].max_speed = 1.5
+data.raw["cargo-wagon"]["cargo-wagon"].braking_force = 3
+data.raw["cargo-wagon"]["cargo-wagon"].friction_force = 0.3
+data.raw["cargo-wagon"]["cargo-wagon"].air_resistance = 0.007
+-------------------------------------------------------------------------------------------------
+data.raw["cargo-wagon"]["bob-cargo-wagon-3"].max_speed = 10
+-------------------------------------------------------------------------------------------------
+--вагон-цистерна мк1
+data.raw["fluid-wagon"]["fluid-wagon"].weight = 1000
+data.raw["fluid-wagon"]["fluid-wagon"].max_speed = 1.5
+data.raw["fluid-wagon"]["fluid-wagon"].braking_force = 3
+data.raw["fluid-wagon"]["fluid-wagon"].friction_force = 0.3
+data.raw["fluid-wagon"]["fluid-wagon"].air_resistance = 0.007
+-------------------------------------------------------------------------------------------------
+data.raw["fluid-wagon"]["bob-fluid-wagon-3"].max_speed = 10
+-------------------------------------------------------------------------------------------------
+--артиллерийский вагон мк1
+data.raw["artillery-wagon"]["artillery-wagon"].weight = 4000
+data.raw["artillery-wagon"]["artillery-wagon"].max_speed = 1.5
+data.raw["artillery-wagon"]["artillery-wagon"].braking_force = 3
+data.raw["artillery-wagon"]["artillery-wagon"].friction_force = 0.5
+data.raw["artillery-wagon"]["artillery-wagon"].air_resistance = 0.0065
+-------------------------------------------------------------------------------------------------
+data.raw["artillery-wagon"]["bob-artillery-wagon-3"].max_speed = 5
+--###############################################################################################
+--баланс мостовых рельс
+if mods["beautiful_straight_bridge_railway"] then
+data.raw["rail-planner"]["bbr-rail-brick"].subgroup = "transport-rail"
+data.raw["rail-planner"]["bbr-rail-brick"].order = "d"
+data.raw["rail-planner"]["bbr-rail-brick"].icons = {{icon = "__zzzparanoidal__/graphics/train/bbr-rail-brick-icon.png", size = 64, icon_mipmaps = 4},}
+bobmods.lib.recipe.clear_ingredients("bbr-rail-brick")
+bobmods.lib.recipe.add_ingredient("bbr-rail-brick", {"iron-stick", 2})
+bobmods.lib.recipe.add_ingredient("bbr-rail-brick", {"concrete", 20})
+bobmods.lib.recipe.add_ingredient("bbr-rail-brick", {"steel-plate", 2})
+bobmods.lib.recipe.add_ingredient("bbr-rail-brick", {"stone-crushed", 10})
+bobmods.lib.recipe.set_energy_required("bbr-rail-brick", 2)
+end
+--###############################################################################################
+--убираем рецепт бетона из бетона
+data.raw["recipe"]["angels-concrete"].hidden = true
+bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-2", "angels-concrete")

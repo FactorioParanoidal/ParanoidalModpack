@@ -199,7 +199,7 @@ local function wheres_my_car(event)
     end
 end
 Event.register({'picker-dude-wheres-my-car', defines.events.on_player_driving_changed_state}, wheres_my_car)
-
+--[[
 -- Trains honk when in automatic mode when starting or stopping.
 local function attempt_honk(event)
     if honk_states[event.train.state] and settings.global['picker-train-honk'].value then
@@ -225,7 +225,7 @@ local function attempt_honk(event)
     end
 end
 Event.register(defines.events.on_train_changed_state, attempt_honk)
-
+]]
 -- Hotkey for manually honking a vehicle train.
 local function manual_honk(event)
     local player = game.players[event.player_index]
