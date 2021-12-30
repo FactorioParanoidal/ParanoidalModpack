@@ -1,0 +1,14 @@
+{
+    "entity":
+    [
+        ["bbr-straight-rail-iron", "bbr-straight-rail-brick"],
+        ["bbr-curved-rail-iron", "bbr-curved-rail-brick"],
+        ["bbr-straight-rail-wood", "bbr-straight-rail-brick"],
+        ["bbr-curved-rail-wood", "bbr-curved-rail-brick"]
+    ],
+    "item":
+    [
+        ["bbr-rail-iron", "bbr-rail-brick"],
+        ["bbr-rail-wood", "bbr-rail-brick"]
+    ]
+}

@@ -9,19 +9,19 @@ data:extend({
 		flags = {"placeable-neutral", "player-creation", "placeable-off-grid"},
 		minable = {mining_time = 1, result = "JunkTrain"},
 		mined_sound = {filename = "__core__/sound/deconstruct-medium.ogg"},
-		max_health = 1400,
+		max_health = 1000,
 		corpse = "medium-remnants",
 		dying_explosion = "medium-explosion",
 		collision_box = {{-0.6, -1.5}, {0.6, 1.1}},
 		selection_box = {{-0.7, -1.6}, {1, 1.2}},
-		weight = 50000, --500
-		max_speed = 0.3, --0.6
-		max_power = "3000kW", --200
-		reversing_power_modifier = 0.8,
+		weight = 1000,
+		max_speed = 0.3,
+		max_power = "200kW",
+		reversing_power_modifier = 0.5,
 		braking_force = 10,
 		friction_force = 0.5,
 		-- this is a percentage of current speed that will be subtracted
-		air_resistance = 0.01, --0.00225
+		air_resistance = 0.005,
 		vertical_selection_shift = -0.5,
 		connection_distance = 2.2,
         joint_distance = 1.1,
@@ -29,7 +29,7 @@ data:extend({
         tie_distance = 50,
 		resistances =
 		{
-			{type = "physical", decrease = 15, percent = 30 },
+			{type = "physical", decrease = 30, percent = 50 },
 			{type = "impact",decrease = 50,percent = 60},
 		},
     burner =
@@ -118,7 +118,7 @@ data:extend({
     },
 working_sound =
 {
-    sound = {filename = "__TrainOverhaul__/sound/train-engine.ogg", volume = 0.4},
+    sound = {filename = "__zzzparanoidal__/graphics/train/train-engine.ogg", volume = 0.4},
     match_speed_to_activity = true, max_sounds_per_type = 2
 },
 open_sound = {filename = "__base__/sound/train-door-open.ogg", volume = 0.5},
@@ -220,17 +220,17 @@ back_light = {
     dying_explosion = "medium-explosion",
     collision_box = {{-0.6, -1.5}, {0.6, 1.1}},
     selection_box = {{-0.7, -1.6}, {1, 1.2}},
-    weight = 8000, --500
-    max_speed = 0.5, --1.2
-    braking_force = 3, --2
-    friction_force = 0.5, --0.0015
-    air_resistance = 0.004, --0.002
+    weight = 500,
+    max_speed = 0.5,
+    braking_force = 2,
+    friction_force = 0.0015,
+    air_resistance = 0.002,
     connection_distance = 2.2,
     joint_distance = 1.1,
     energy_per_hit_point = 5,    
     resistances =
     {
-        {type = "physical", decrease = 15, percent = 30 },
+        {type = "physical", decrease = 30, percent = 50 },
         {type = "impact",decrease = 50,percent = 60},
         {type = "acid",decrease = 10,percent = 20}
     },
@@ -302,7 +302,7 @@ drive_over_tie_trigger =
 }, 
 working_sound =
 {
-    sound = {filename = "__TrainOverhaul__/sound/train-wheels.ogg", volume = 0.6},
+    sound = {filename = "__zzzparanoidal__/graphics/train/train-wheels.ogg", volume = 0.6},
     match_speed_to_activity = true, max_sounds_per_type = 2
 },
 -------------------------------------------------------------------------------------------------
@@ -497,6 +497,8 @@ data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].icons = {{icon = "__bas
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.tint = {r=170, g=130, b=1}
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].animation.hr_version.tint = {r=170, g=130, b=1}
 
+data.raw["train-stop"]["train-stop-scrap"].icons = {{icon = "__base__/graphics/icons/train-stop.png", icon_size = 64, icon_mipmaps = 4, tint = {r=170, g=130, b=1}}}
+
 data.raw["train-stop"]["train-stop-scrap"].animations.north.layers[1].hr_version.filename = "__zzzparanoidal__/graphics/train/hr-train-stop-bottom.png"
 data.raw["train-stop"]["train-stop-scrap"].animations.east.layers[1].hr_version.filename = "__zzzparanoidal__/graphics/train/hr-train-stop-bottom.png"
 data.raw["train-stop"]["train-stop-scrap"].animations.south.layers[1].hr_version.filename = "__zzzparanoidal__/graphics/train/hr-train-stop-bottom.png"
@@ -518,19 +520,3 @@ data.raw["train-stop"]["train-stop-scrap"].rail_overlay_animations.south.filenam
 data.raw["train-stop"]["train-stop-scrap"].rail_overlay_animations.west.filename = "__zzzparanoidal__/graphics/train/train-stop-ground.png"
 
 end
---[[
-data.raw.locomotive.locomotive.icons[1] = {icon = "__reskins-bobs__/graphics/icons/logistics/locomotive/locomotive-icon-base.png", icon_size = 64, icon_mipmaps = 4}
-data.raw.locomotive.locomotive.icons[2].icon = "__reskins-bobs__/graphics/icons/logistics/locomotive/locomotive-icon-mask.png"
-data.raw.locomotive.locomotive.icons[2].tint = {r = 1, g = 0.71764705882352944, b = 0.14901960784313726}
-data.raw.locomotive.locomotive.icons[2].icon_size = 64
-data.raw.locomotive.locomotive.icons[2].icon_mipmaps = 4
-data.raw.locomotive.locomotive.icons[3].icon = "__reskins-bobs__/graphics/icons/logistics/locomotive/locomotive-icon-highlights.png"
-data.raw.locomotive.locomotive.icons[3].tint = {1, 1, 1, 0}
-data.raw.locomotive.locomotive.icons[3].icon_size = 64
-data.raw.locomotive.locomotive.icons[3].icon_mipmaps = 4
-data.raw.locomotive.locomotive.icons[4] = {icon = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/1.png", icon_size = 64, icon_mipmaps = 4}
-data.raw.locomotive.locomotive.icons[5].icon = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/1.png"
-data.raw.locomotive.locomotive.icons[5].icon_size = 64
-data.raw.locomotive.locomotive.icons[5].icon_mipmaps = 4
-data.raw.locomotive.locomotive.icons[5].tint = {r = 1, g = 0.71764705882352944, b = 0.14901960784313726, a = 0.75}
-]]
