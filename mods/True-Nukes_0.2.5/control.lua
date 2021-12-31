@@ -815,11 +815,7 @@ local function tickHandler(event)
 				elseif (building.crafting_progress > 0 and building.crafting_progress < 0.01) then
 					-- Force map loading when a nuke is set up
 					if(building.get_recipe().name == "megaton-detonation") then
-						if (not settings.global["optimise-1Mt"].value) then
-	 						building.surface.request_to_generate_chunks(building.position, 3200/32)
-	 					else
-	 						building.surface.request_to_generate_chunks(building.position, 400/32)
-	 					end
+ 						building.surface.request_to_generate_chunks(building.position, 400/32)
 					elseif(building.get_recipe().name == "100kiloton-detonation") then
 						if (not settings.global["optimise-100kt"].value) then
 	 						building.surface.request_to_generate_chunks(building.position, 1500/32)

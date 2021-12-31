@@ -433,7 +433,7 @@ data:extend{
     icon_size = 256, icon_mipmaps = 4,
     icon = "__True-Nukes__/graphics/californium-processing-tech.png",
     effects = {},
-    prerequisites = { "kovarex-enrichment-process", "atomic-bomb"},
+    prerequisites = { "atomic-bomb"},
     unit =
     {
       ingredients =
@@ -450,6 +450,13 @@ data:extend{
     order = "e-a-d"
   }
 }
+
+if mods["apm_nuclear_ldinc"] then
+	table.insert(data.raw.technology["californium-processing"].prerequisites, "apm_nuclear_breeder");
+else
+	table.insert(data.raw.technology["californium-processing"].prerequisites, "kovarex-enrichment-process");
+end
+
 if(settings.startup["enable-atomic-ammo"].value or settings.startup["enable-big-atomic-ammo"].value) then
 	table.insert(data.raw.technology["californium-processing"].effects, 
 	  {
