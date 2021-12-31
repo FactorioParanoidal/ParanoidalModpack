@@ -26,12 +26,12 @@ data:extend({
     type = "technology",
     name = "platinum-ore-refining",
     icon = "__angelsrefining__/graphics/technology/ore-sorting.png",
-    icon_size = 128,
+    icon_size = 256, icon_mipmaps = 4,
     order = "a-a-a1",
     prerequisites = 
         {
             "advanced-ore-refining-3",
-            "ore-electro-whinning-cell"
+            "ore-refining"
         },
     effects = {{type = "unlock-recipe", recipe = "angelsore-pure-platinum-processing"}},
     unit =
@@ -72,7 +72,7 @@ data:extend({
     type = "technology",
     name = "manganese-ore-refining",
     icon = "__angelsrefining__/graphics/technology/ore-sorting.png",
-    icon_size = 128,
+    icon_size = 256, icon_mipmaps = 4,
     order = "a-a-a1",
     prerequisites = 
         {
@@ -118,7 +118,7 @@ data:extend({
     type = "technology",
     name = "chrome-ore-refining",
     icon = "__angelsrefining__/graphics/technology/ore-sorting.png",
-    icon_size = 128,
+    icon_size = 256, icon_mipmaps = 4,
     order = "a-a-a1",
     prerequisites = 
         {
