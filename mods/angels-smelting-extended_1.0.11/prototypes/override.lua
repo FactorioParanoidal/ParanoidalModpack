@@ -93,8 +93,8 @@ if mods["bobplates"] then
         angelsmods.functions.OV.add_unlock("plastics", "angels-plastic-pipe-casting")
         angelsmods.functions.OV.add_unlock("plastics", "angels-plastic-pipe-to-ground-casting")
         --stone
-        --angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-casting") --DrD
-        --angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-to-ground-casting") --DrD
+        --angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-casting") --drd
+        --angelsmods.functions.OV.add_unlock("powder-metallurgy-1", "angels-stone-pipe-to-ground-casting") --drd
         --copper-tungsten
         angelsmods.functions.OV.add_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-casting")
         angelsmods.functions.OV.add_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-to-ground-casting")

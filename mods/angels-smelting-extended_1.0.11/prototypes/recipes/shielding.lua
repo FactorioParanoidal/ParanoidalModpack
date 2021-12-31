@@ -158,10 +158,10 @@ if data.raw.item["insulated-cable"] then
       energy_required = 4,
       enabled = false,
       ingredients = {
-        { type = "fluid", name = "liquid-rubber", amount = 10 },
-        { type = "fluid", name = "liquid-molten-tin", amount = count * 8 },
-        { type = "fluid", name = "liquid-molten-copper", amount = count * 8 },
-        { type = "fluid", name = "water", amount = 40 }
+        { type = "fluid", name = "liquid-rubber", amount = 10, fluidbox_index = 4},
+        { type = "fluid", name = "liquid-molten-tin", amount = count * 8, fluidbox_index = 1},
+        { type = "fluid", name = "liquid-molten-copper", amount = count * 8, fluidbox_index = 2},
+        { type = "fluid", name = "water", amount = 40, fluidbox_index = 3}
       },
       results =
       {
@@ -177,19 +177,20 @@ if data.raw.item["insulated-cable"] then
       energy_required = 2,
       enabled = false,
       ingredients = {
-        { type = "fluid", name = "liquid-rubber", amount = 18 },
-        { type = "fluid", name = "liquid-molten-tin", amount = count*14 },
-        { type = "fluid", name = "liquid-molten-copper", amount = count*14 },
-        { type = "fluid", name = "liquid-coolant", amount = 40 }
+        { type = "fluid", name = "liquid-rubber", amount = 18, fluidbox_index = 4},
+        { type = "fluid", name = "liquid-molten-tin", amount = count*14, fluidbox_index = 1},
+        { type = "fluid", name = "liquid-molten-copper", amount = count*14, fluidbox_index = 2},
+        { type = "fluid", name = "liquid-coolant", amount = 40, fluidbox_index = 3}
       },
       results =
       {
         { type = "item", name = "angels-wire-coil-insulated", amount = count*2 },
-        { type = "fluid", name = "liquid-coolant-used", amount = 40, temperature = 300 }
+        { type = "fluid", name = "liquid-coolant-used", amount = 40, temperature = 300, fluidbox_index = 1}
       },
       main_product = "angels-wire-coil-insulated",
       icons = angelsmods.functions.add_number_icon_layer(angelsmods.functions.get_object_icons("angels-wire-coil-insulated"), 2 , angelsmods.smelting.number_tint),
-    },            {
+    },
+    {
       type = "recipe",
       name = "angels-wire-coil-insulated-converting",
       category = mods["bobelectronics"] and "electronics" or "crafting",
@@ -207,4 +208,19 @@ if data.raw.item["insulated-cable"] then
       icons = angelsmods.functions.add_icon_layer(angelsmods.functions.get_object_icons("insulated-cable"), angelsmods.functions.get_object_icons("angels-wire-coil-insulated"), {-10, -10}, 0.4375*0.5),
     }
   })
+  --add additional fluid box on one side
+  if data.raw.item["strand-casting-machine"] then
+    local box = {
+      production_type = "input",
+      pipe_covers = pipecoverspictures(),
+      base_area = 10,
+      base_level = -1,
+      filter = "liquid-rubber",
+      pipe_connections = {{type = "input-output", position = {-3, 1}}, {type = "input-output", position = {3, 1}}}
+    }
+    table.insert(data.raw["assembling-machine"]["strand-casting-machine"].fluid_boxes, box)
+    for i=2,4 do
+      table.insert(data.raw["assembling-machine"]["strand-casting-machine-"..i].fluid_boxes, box)
+    end
+  end
 end

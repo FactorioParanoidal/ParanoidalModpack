@@ -82,14 +82,12 @@ if mods["boblogistics"] and mods["bobplates"] then
       u_pipe.subgroup = "angels-alloys-casting"
     end
     --stone
-	--[[ --drd
-    if metal == "stone" then
+    --[[ if metal == "stone" then 
       m_pipe.ingredients[1] = { type = "item", name = "stone", amount = 4*5}
       m_pipe.category = "sintering"
       u_pipe.ingredients[1] = { type = "item", name = "stone", amount = ug_multi[metal]*5}
       u_pipe.category = "sintering"
-    end
-	]]--drd
+    end ]]-- drd
     --copper-tungsten
     if metal == "copper-tungsten" then
       m_pipe.ingredients[1] = { type = "item", name = "powdered-tungsten", amount = 3}
