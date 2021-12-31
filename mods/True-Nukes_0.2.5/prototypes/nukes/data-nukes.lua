@@ -2,6 +2,10 @@
 local fireutil = require("__base__.prototypes.fire-util")
 local nuke_explosions = require("data-nuke-explosions")
 
+local bigBoomMaterial = "uranium-235";
+if mods["apm_nuclear_ldinc"] then
+	bigBoomMaterial = "apm_oxide_pellet_pu239";
+end
 if settings.startup["enable-atomic-bomb"].value then
 	data.raw.projectile["atomic-rocket"].action = 
 	{
@@ -21,7 +25,7 @@ if settings.startup["enable-atomic-bomb"].value then
 			  {"plastic-bar", 20},
 			  {"superior-circuit-board", 5},
 			  {"explosives", 10},
-			  {"uranium-235", 30},
+			  {bigBoomMaterial, 30},
 			}
 	else
 		data.raw.recipe["atomic-bomb"].ingredients=
@@ -29,7 +33,7 @@ if settings.startup["enable-atomic-bomb"].value then
 			  {"rocket-control-unit", 10},
 			  {"processing-unit", 5},
 			  {"explosives", 10},
-			  {"uranium-235", 30},
+			  {bigBoomMaterial, 30},
 			}
 	end
 end
@@ -189,7 +193,7 @@ local big_atomic_bomb_recipe = {
     {
       {"atomic-bomb", 1},
       {"processing-unit", 10},
-      {"uranium-235", 75},
+      {bigBoomMaterial, 75},
       {"explosives", 10},
       {"rocket-fuel", 20}
     },
@@ -249,7 +253,7 @@ local very_big_atomic_bomb_recipe = {
     {
       {"atomic-bomb", 1},
       {"processing-unit", 20},
-      {"uranium-235", 100},
+      {bigBoomMaterial, 100},
       {"explosives", 10},
       {"rocket-fuel", 50}
     },

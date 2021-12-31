@@ -1,6 +1,8 @@
 local fireutil = require("__base__.prototypes.fire-util")
 local nuke_explosions = require("data-nuke-explosions")
 
+
+
 local circuit_type;
 local upgrade_circuit_mult = 4
 if not mods["bobelectronics"] then

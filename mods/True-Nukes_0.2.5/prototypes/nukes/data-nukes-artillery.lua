@@ -2,6 +2,10 @@ local fireutil = require("__base__.prototypes.fire-util")
 local nuke_explosions = require("data-nuke-explosions")
 
 
+local bigBoomMaterial = "uranium-235";
+if mods["apm_nuclear_ldinc"] then
+	bigBoomMaterial = "apm_oxide_pellet_pu239";
+end
 
 local atomic_artillery_recipe = {
     type = "recipe",
@@ -12,7 +16,7 @@ local atomic_artillery_recipe = {
     {
       {"artillery-shell", 1},
       {"processing-unit", 20},
-      {"uranium-235", 100},
+      {bigBoomMaterial, 100},
       {"explosives", 10}
     },
     result = "TN-atomic-artillery-shell"
@@ -99,7 +103,7 @@ if(settings.startup["enable-big-atomic-artillery"].value or settings.startup["en
 		{
 		  {"TN-atomic-artillery-shell", 1},
 		  {"processing-unit", 100},
-		  {"uranium-235", 200},
+		  {bigBoomMaterial, 200},
 		  {"explosives", 100}
 		},
 		result = "TN-big-atomic-artillery-shell"
@@ -208,7 +212,7 @@ local small_atomic_artillery_recipe = {
     {
       {"artillery-shell", 1},
       {"processing-unit", 10},
-      {"uranium-235", 75},
+      {bigBoomMaterial, 75},
       {"explosives", 10}
     },
     result = "TN-small-atomic-artillery-shell"
@@ -261,7 +265,7 @@ local very_small_atomic_artillery_recipe = {
     {
       {"artillery-shell", 1},
       {"processing-unit", 5},
-      {"uranium-235", 30},
+      {bigBoomMaterial, 30},
       {"explosives", 10}
     },
     result = "TN-very-small-atomic-artillery-shell"

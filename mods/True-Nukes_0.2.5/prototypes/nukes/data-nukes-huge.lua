@@ -4,6 +4,11 @@ local nuke_explosions = require("data-nuke-explosions")
 local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 
+local bigBoomMaterial = "uranium-235";
+if mods["apm_nuclear_ldinc"] then
+	bigBoomMaterial = "apm_oxide_pellet_pu239";
+end
+
 if(settings.startup["enable-very-big-atomic-artillery"].value) then
 	local very_big_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
 	very_big_atomic_artillery_projectile.name = "TN-really-huge-atomic-artillery-projectile"
@@ -138,7 +143,7 @@ data:extend{
     ingredients =
     {
       {"iron-plate", 10},
-      {"uranium-235", 1},
+      {bigBoomMaterial, 1},
       {"uranium-238", 19},
       {type="fluid", name="water", amount=100}
     },
@@ -206,6 +211,12 @@ data:extend{
 	},
 	order = "e-a-b"
   }}
+  
+if mods["apm_nuclear_ldinc"] then
+	data.raw.item["tritium-breeder-fuel-cell"].fuel_category = "apm_nuclear_breeder";
+	table.insert(data.raw.technology["tritium-proccessing"].prerequisites, "apm_nuclear_breeder");
+end
+  
   
 data:extend{{
 	type = "technology",
@@ -458,7 +469,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		  {"steel-plate", 1000},
 		  {"refined-concrete", 1000},
 		  {"processing-unit", 150},
-		  {"uranium-235", 300},
+		  {bigBoomMaterial, 300},
 		  {"explosives", 150},
 		  {"plastic-bar", 50},
 		  {"red-wire", 50},
