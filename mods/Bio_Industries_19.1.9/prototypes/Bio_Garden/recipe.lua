@@ -88,6 +88,7 @@ data:extend({
     always_show_made_in = true,
     allow_decomposition = false,
     show_amount_in_title = false,
+    emissions_multiplier = 0.5,
     energy_required = 40,
     ingredients = 
     {
@@ -126,6 +127,7 @@ data:extend({
     always_show_made_in = true,
     allow_decomposition = false,
     show_amount_in_title = false,
+    emissions_multiplier = 1.0,
     energy_required = 100,
     ingredients = 
     {
@@ -165,6 +167,7 @@ data:extend({
   allow_decomposition = false,
   show_amount_in_title = false,
   energy_required = 10,
+  emissions_multiplier = 0.25,
   ingredients = 
   {
     {type = "fluid", name = "water", amount = 50},

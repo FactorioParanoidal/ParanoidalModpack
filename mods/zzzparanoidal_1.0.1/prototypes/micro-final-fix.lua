@@ -896,3 +896,50 @@ end
 --убираем рецепт бетона из бетона
 data.raw["recipe"]["angels-concrete"].hidden = true
 bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-2", "angels-concrete")
+-------------------------------------------------------------------------------------------------
+--графические фиксы
+data.raw.technology["plutonium-fuel-cell"].icon_size = 64
+data.raw.technology["plutonium-fuel-cell"].icon_mipmaps = 4
+
+data.raw.technology["thorium-plutonium-fuel-cell"].icon_size = 64
+data.raw.technology["thorium-plutonium-fuel-cell"].icon_mipmaps = 4
+
+data.raw.technology["effect-transmission"].icon = "__base__/graphics/technology/effect-transmission.png"
+data.raw.technology["effect-transmission"].icon_size = 256
+
+data.raw.technology["effect-transmission-2"].icon = "__base__/graphics/technology/effect-transmission.png"
+data.raw.technology["effect-transmission-2"].icon_size = 256
+
+data.raw.technology["effect-transmission-3"].icon = "__base__/graphics/technology/effect-transmission.png"
+data.raw.technology["effect-transmission-3"].icon_size = 256
+
+data.raw.technology["electric-energy-distribution-2"].icon = "__base__/graphics/technology/electric-energy-distribution-2.png"
+data.raw.technology["electric-energy-distribution-2"].icon_size = 256
+
+data.raw.technology["electric-substation-2"].icon = "__base__/graphics/technology/electric-energy-distribution-2.png"
+data.raw.technology["electric-substation-2"].icon_size = 256
+
+data.raw.technology["electric-substation-3"].icon = "__base__/graphics/technology/electric-energy-distribution-2.png"
+data.raw.technology["electric-substation-3"].icon_size = 256
+
+data.raw.technology["electric-substation-4"].icon = "__base__/graphics/technology/electric-energy-distribution-2.png"
+data.raw.technology["electric-substation-4"].icon_size = 256
+
+data.raw.technology["electric-energy-distribution-1"].icon = "__base__/graphics/technology/electric-energy-distribution-1.png"
+data.raw.technology["electric-energy-distribution-1"].icon_size = 256
+
+data.raw.technology["electric-pole-2"].icon = "__base__/graphics/technology/electric-energy-distribution-1.png"
+data.raw.technology["electric-pole-2"].icon_size = 256
+
+data.raw.technology["electric-pole-3"].icon = "__base__/graphics/technology/electric-energy-distribution-1.png"
+data.raw.technology["electric-pole-3"].icon_size = 256
+
+data.raw.technology["electric-pole-4"].icon = "__base__/graphics/technology/electric-energy-distribution-1.png"
+data.raw.technology["electric-pole-4"].icon_size = 256
+
+data.raw.technology["angels-advanced-gas-processing"].icons = {{icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2}}
+data.raw.technology["angels-advanced-gas-processing-2"].icons = {{icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2}}
+
+data.raw.technology["advanced-ore-refining-5"].icon_size = 256
+data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
+-------------------------------------------------------------------------------------------------
