@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+  Bugfixes:
+    - Fixed a crash caused by previous version if playing with Armoured Biters
+---------------------------------------------------------------------------------------------------
 Version: 1.2.2
   Changes:
     - Added new mod setting variable: "big enemy HP variant" for low or high HP variance each enemy level

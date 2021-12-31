@@ -13,7 +13,7 @@ if data.raw.capsule['rpg_level_up_potion'] then
 	table.insert ( Loot , {item = "rpg_big_xp_potion",  count_min = 1,  count_max = 2,  probability = 0.20})
 	end
 
-local wpe_boss_hp_multiplier = settings.startup["bm-big-enemy-hp-multiplier"].value
+local boss_hp_multiplier = settings.startup["bm-big-enemy-hp-multiplier"].value
 local wpe_boss_dmg_multiplier = settings.startup["bm-enemy-damage-multiplier"].value
 local boss_hp_variant =  settings.startup["bm-big-enemy-hp-variant"].value
 local wpe_boss_resist_multiplier = 1
