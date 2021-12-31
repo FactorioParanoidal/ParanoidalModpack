@@ -89,6 +89,11 @@
     },
     
     {
+      "name": "betterCargoPlanes",
+      "enabled": true
+    },
+    
+    {
       "name": "Big-Monsters",
       "enabled": true
     },
@@ -370,11 +375,6 @@
     
     {
       "name": "heroturrets",
-      "enabled": true
-    },
-    
-    {
-      "name": "Honk",
       "enabled": true
     },
     
@@ -809,11 +809,6 @@
     },
     
     {
-      "name": "slower-trains",
-      "enabled": true
-    },
-    
-    {
       "name": "SmogSolarPanels",
       "enabled": true
     },
@@ -874,11 +869,6 @@
     },
     
     {
-      "name": "TrainOverhaul",
-      "enabled": true
-    },
-    
-    {
       "name": "Train_Control_Signals",
       "enabled": true
     },
@@ -889,7 +879,7 @@
     },
     
     {
-      "name": "UnminableLogisticBots",
+      "name": "UnminableBots",
       "enabled": true
     },
     
