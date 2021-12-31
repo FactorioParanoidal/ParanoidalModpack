@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 29.12.2021
+  Changes:
+    - Fixed that Insulated wire casting was not craftable
+      - by adding a passthrough fluidbox to the casting machines
+---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: 19.12.2021
   Changes:
-    - Added Insulate wire casting
+    - Added Insulated wire casting
     - Updated icons and overlays to match angels
     - Changed the tint on the molds to not conflict with angels versions.
     - Added overlays to shielding coils so they are not confusd with the wire coils
