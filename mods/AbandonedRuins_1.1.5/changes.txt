@@ -1,0 +1,13 @@
+Features:
+  - Added 9 small ruins.
+  - Added 9 medium ruins.
+  - Added 5 large ruins.
+
+Changes:
+  - Reduced the amount of power poles in ruins.
+  - Removed 4 small ruins that were broken.
+  - Updated russian translation (by Shadow_Man).
+  - Decreased default spawn changes of small ruins to 4% (from 5%).
+
+Bugfixes:
+  - Fixed that oil pumpjack ruins would spawn oil patches.
