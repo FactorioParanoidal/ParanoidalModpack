@@ -82,7 +82,7 @@ data.raw.recipe.road.energy_required = 5
 data.raw.recipe.road.category = "smelting"
 
 --замена графики на асфальт
-data.raw.tile["transport-drone-proxy-tile"].variants = 
+--[[data.raw.tile["transport-drone-proxy-tile"].variants = 
 {
     main = 
     {
@@ -96,7 +96,7 @@ data.raw.tile["transport-drone-proxy-tile"].variants =
     u_transition = {picture = "__zzzparanoidal__/graphics/asphalt/asphalt-u.png", count = 8},
     o_transition = {picture = "__zzzparanoidal__/graphics/asphalt/asphalt-o.png", count = 1}
 }
-
+]]
 data.raw.tile["transport-drone-road"].variants = 
 {
     main = 
@@ -116,6 +116,9 @@ data.raw.tile["transport-drone-road"].map_color = {r = 10, g = 10, b = 10} --{r 
 data.raw.tile["transport-drone-road"].vehicle_friction_modifier = 1
 data.raw.tile["transport-drone-road"].tint = {0.5, 0.5, 0.5}
 data.raw.tile["transport-drone-road"].layer = 250
+-------------------------------------------------------------------------------------------------
+--fast road
+bobmods.lib.recipe.replace_ingredient("fast-road", "concrete", "refined-concrete")
 -------------------------------------------------------------------------------------------------
 --машинка
 bobmods.lib.recipe.add_ingredient("transport-drone", {"steel-bearing", 4})
