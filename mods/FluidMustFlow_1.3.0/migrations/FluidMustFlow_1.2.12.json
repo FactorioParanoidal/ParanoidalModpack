@@ -1,0 +1,13 @@
+{
+    "entity":
+    [
+        ["duct-end-point-intake-south", "duct-end-point-intake"],
+        ["duct-end-point-intake-west", "duct-end-point-intake"],
+        ["duct-end-point-intake-north", "duct-end-point-intake"],
+        ["duct-end-point-intake-east", "duct-end-point-intake"],
+        ["duct-end-point-outtake-south", "duct-end-point-outtake"],
+        ["duct-end-point-outtake-west", "duct-end-point-outtake"],
+        ["duct-end-point-outtake-north", "duct-end-point-outtake"],
+        ["duct-end-point-outtake-east", "duct-end-point-outtake"]
+    ]
+}
