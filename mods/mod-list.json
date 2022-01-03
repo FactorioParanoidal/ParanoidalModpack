@@ -684,11 +684,6 @@
     },
     
     {
-      "name": "Rampant",
-      "enabled": true
-    },
-    
-    {
       "name": "RealisticDecorationCleanup",
       "enabled": true
     },
