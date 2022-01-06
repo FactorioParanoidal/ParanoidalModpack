@@ -49,7 +49,13 @@ script.on_event({ defines.events.on_pre_build },
       return
     end
 
-    local blueprint_entities = process_blueprint(blueprint_item.get_blueprint_entities(), event)
+    local original_entities = blueprint_item.get_blueprint_entities()
+    if not original_entities then
+      -- blueprint has no entities - probably a tiles only blueprint
+      return
+    end
+
+    local blueprint_entities = process_blueprint(original_entities, event)
 
     for _,entity in pairs(blueprint_entities) do
       local found_entities = player.surface.find_entities_filtered({
