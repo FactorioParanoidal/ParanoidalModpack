@@ -3,6 +3,10 @@
 
 ## Factorio version 1.1
 
+### 0.1.1 (2022-01-04)
+Bugfixes:
+* Fixed crashing bug when placing a blueprint with only tiles
+
 ### 0.1.0 (2022-01-02)
 Features:
 * Copy modules when building over an entity with a blueprint (no support for snapping blueprints yet)
