@@ -244,6 +244,11 @@
     },
     
     {
+      "name": "creative-mod",
+      "enabled": true
+    },
+    
+    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -681,6 +686,11 @@
     {
       "name": "RaiLuaLib",
       "enabled": true
+    },
+    
+    {
+      "name": "Rampant",
+      "enabled": false
     },
     
     {
