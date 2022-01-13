@@ -15,7 +15,7 @@ data:extend({
 		collision_box = {{-0.6, -1.5}, {0.6, 1.1}},
 		selection_box = {{-0.7, -1.6}, {1, 1.2}},
 		weight = 1000,
-		max_speed = 0.3,
+		max_speed = 0.25,
 		max_power = "200kW",
 		reversing_power_modifier = 0.5,
 		braking_force = 10,
