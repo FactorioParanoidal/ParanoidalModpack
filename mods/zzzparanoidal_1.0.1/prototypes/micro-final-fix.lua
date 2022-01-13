@@ -946,4 +946,16 @@ data.raw.technology["angels-advanced-gas-processing-2"].icons = {{icon = "__resk
 
 data.raw.technology["advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
--------------------------------------------------------------------------------------------------
+--###############################################################################################
+--будет вшито в биоиндустрию
+--дробление камня в ангеловских дробилках руды
+data.raw["assembling-machine"]["burner-ore-crusher"].crafting_categories = {"ore-refining-t1", "biofarm-mod-crushing"}
+data.raw["assembling-machine"]["ore-crusher"].crafting_categories = {"ore-refining-t1", "biofarm-mod-crushing"}
+data.raw["assembling-machine"]["ore-crusher-2"].crafting_categories = {"ore-refining-t1", "biofarm-mod-crushing"}
+data.raw["assembling-machine"]["ore-crusher-3"].crafting_categories = {"ore-refining-t1", "biofarm-mod-crushing"}
+data.raw["assembling-machine"]["ore-crusher-4"].crafting_categories = {"ore-refining-t1", "biofarm-mod-crushing"}
+--коксование в доменке
+data.raw["assembling-machine"]["blast-furnace"].crafting_categories = {"blast-smelting", "biofarm-mod-smelting"}
+data.raw["assembling-machine"]["blast-furnace-2"].crafting_categories = {"blast-smelting", "blast-smelting-2", "biofarm-mod-smelting"}
+data.raw["assembling-machine"]["blast-furnace-3"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "biofarm-mod-smelting"}
+data.raw["assembling-machine"]["blast-furnace-4"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "blast-smelting-4", "biofarm-mod-smelting"}
