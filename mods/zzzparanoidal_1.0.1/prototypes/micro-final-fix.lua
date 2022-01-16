@@ -87,6 +87,37 @@ bobmods.lib.tech.add_prerequisite ("bi-tech-bio-farming-2", "logistic-science-pa
 bobmods.lib.tech.add_prerequisite ("adv-seed-extraction", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("nanobots-cliff", "logistic-science-pack")
+--синие банки
+bobmods.lib.tech.add_prerequisite ("remelting-alloy-mixer-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bio-nutrient-paste-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bio-refugium-fish-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bio-refugium-hatchery-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("worker-robots-speed-1", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("Rubber-Processing", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("worker-robots-battery-1", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bet-tech", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("roboport-interface", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bio-farm-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("toolbelt-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("worker-robots-storage-1", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("steel-axe-4", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("research-speed-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("inserter-capacity-bonus-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("OilBurning-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("advanced-aerodynamics", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("mining-productivity-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("CW-air-filter-cleaning-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("CW-air-filtering-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("fast-miniloader", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("inserter-stack-size-bonus-2", "chemical-science-pack")
+
+--bobmods.lib.tech.add_prerequisite ("xxx", "chemical-science-pack")
+
+--фиолетовые
+bobmods.lib.tech.add_prerequisite ("water-washing-3", "production-science-pack")
+
+--bobmods.lib.tech.add_prerequisite ("xxx", "production-science-pack")
+
 --убираем некоторые зависимости
 bobmods.lib.tech.remove_prerequisite("angels-metallurgy-1", "electricity")
 bobmods.lib.tech.remove_prerequisite("angels-nickel-smelting-1", "ore-crushing")

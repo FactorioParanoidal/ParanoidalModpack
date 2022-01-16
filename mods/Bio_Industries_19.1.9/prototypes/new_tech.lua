@@ -318,7 +318,7 @@ data:extend({
     {type = "unlock-recipe", recipe = "bi-bio-boiler"},
   },
   order = "[bi-bio-boiler]",
-  prerequisites = {"steam-power", "concrete"},
+  prerequisites = {"steam-power", "concrete", "chemical-science-pack"},
   unit = {
     count = 100,
     ingredients = 
@@ -344,7 +344,7 @@ data:extend({
       {type = "unlock-recipe", recipe = "bi-purified-air-0"}
     },
   order = "[bi-bio-garden]-a-[garden-1]",
-  prerequisites = {"bi-tech-fertilizer"},
+  prerequisites = {"concrete"},
   unit = {
     count = 50,
     ingredients = 
@@ -365,7 +365,7 @@ data:extend({
   icon_size = 256, icon_mipmaps = 4,
   effects = {{type = "unlock-recipe", recipe = "bi-bio-garden-large"}},
   order = "[bi-bio-garden]-a-[garden-2]",
-  prerequisites = {"bi-tech-garden-1"},
+  prerequisites = {"bi-tech-garden-1", "angels-stone-smelting-2"},
   unit = {
     count = 200,
     ingredients = 
@@ -387,7 +387,7 @@ data:extend({
   icon_size = 256, icon_mipmaps = 4,
   effects = {{type = "unlock-recipe", recipe = "bi-bio-garden-huge"}},
   order = "[bi-bio-garden]-a-[garden-3]",
-  prerequisites = {"bi-tech-garden-2"},
+  prerequisites = {"bi-tech-garden-2", "angels-stone-smelting-4"},
   unit = {
     count = 270,
     ingredients = 
