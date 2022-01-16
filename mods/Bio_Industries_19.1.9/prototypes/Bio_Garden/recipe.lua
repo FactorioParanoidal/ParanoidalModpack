@@ -9,8 +9,8 @@ data:extend({
     energy_required = 10,
     ingredients = 
     {
-      {"stone-wall", 10},
-      {"stone-crushed", 50},
+      {"concrete", 50},
+      {"stone-crushed", 100},
       {"seedling", 30}
     },
     result = "bi-bio-garden",
@@ -31,9 +31,9 @@ data:extend({
   energy_required = 25,
   ingredients = 
   {
-    {"bi-bio-garden", 9},
-    {"seedling", 10},
-    {"concrete", 10}
+    {"bi-bio-garden", 10},
+    {"seedling", 100},
+    {"reinforced-concrete-brick", 100}
   },
   result = "bi-bio-garden-large",
   subgroup = "bio-bio-gardens-fluid",
@@ -53,10 +53,10 @@ data:extend({
   energy_required = 60,
   ingredients = 
   {
-    {"bi-bio-garden-large", 9},
-    {"iron-plate", 30},
-    {"concrete", 40},
-    {"seedling", 100}
+    {"bi-bio-garden-large", 10},
+    {"iron-plate", 50},
+    {"titanium-concrete-brick", 500},
+    {"seedling", 200}
   },
   result = "bi-bio-garden-huge",
   subgroup = "bio-bio-gardens-fluid",
