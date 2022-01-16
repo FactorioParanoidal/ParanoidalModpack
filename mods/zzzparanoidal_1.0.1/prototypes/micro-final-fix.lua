@@ -72,6 +72,7 @@ bobmods.lib.tech.add_prerequisite ("logistic-science-pack", "angels-bronze-smelt
 bobmods.lib.tech.add_prerequisite ("bio-wood-processing", "bi-tech-bio-farming")
 bobmods.lib.tech.add_prerequisite ("angels-metallurgy-1", "ore-crushing")
 bobmods.lib.tech.add_prerequisite ("angels-lead-smelting-1", "basic-chemistry-2")
+bobmods.lib.tech.add_prerequisite ("JunkTrain_tech", "steel-processing")
 --зеленые банки к зеленым банкам
 bobmods.lib.tech.add_prerequisite ("warehouse-research", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("OilBurning", "logistic-science-pack")
@@ -110,6 +111,7 @@ bobmods.lib.tech.add_prerequisite ("CW-air-filter-cleaning-3", "chemical-science
 bobmods.lib.tech.add_prerequisite ("CW-air-filtering-3", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("fast-miniloader", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("inserter-stack-size-bonus-2", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("bio-refugium-butchery-3", "chemical-science-pack")
 
 --bobmods.lib.tech.add_prerequisite ("xxx", "chemical-science-pack")
 
