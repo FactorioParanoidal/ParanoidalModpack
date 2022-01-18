@@ -95,7 +95,7 @@ function make_rtg_prototype (data)
   first_tick = data.tick,
   first_energy = RTG_prop[data.name].energy, -- 40 GJ
   entity = entity,
-  first_power = entity.health*2500, -- 600 kW if *10^3  --drd
+  first_power = entity.health*10^3, -- 600 kW
   health_threshold = max_health * global.threshold/100,
   pause_to_tick = data.tick+120
   
