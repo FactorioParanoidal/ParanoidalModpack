@@ -205,7 +205,7 @@ local function on_player_cursor_stack_changed(ev)
 end
 
 local function on_built_entity(ev)
-  local entity = ev.created_entity
+  local entity = ev.created_entity or ev.entity or ev.destination
   if not entity.valid then return end
   local ccds = entity.circuit_connection_definitions or {}
   for _, ccd in ipairs(ccds) do
@@ -283,9 +283,23 @@ function M.on_load()
   end
 
   event.register(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
-  event.register({defines.events.on_built_entity, defines.events.on_robot_built_entity}, on_built_entity)
   event.register(
-    {defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity, defines.events.on_entity_died},
+    {
+      defines.events.on_built_entity,
+      defines.events.on_entity_cloned,
+      defines.events.on_robot_built_entity,
+      defines.events.script_raised_built,
+      defines.events.script_raised_revive,
+    },
+    on_built_entity
+  )
+  event.register(
+    {
+      defines.events.on_entity_died,
+      defines.events.on_player_mined_entity,
+      defines.events.on_robot_mined_entity,
+      defines.events.script_raised_destroy,
+    },
     on_entity_mined
   )
   event.register(defines.events.on_pre_build, on_pre_build)
