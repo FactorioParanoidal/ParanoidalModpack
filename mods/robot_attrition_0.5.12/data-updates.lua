@@ -32,6 +32,9 @@ if settings.startup["robot-attrition-repair"].value == "Repair75" then
       table.insert(item.icons, {icon="__core__/graphics/icons/alerts/destroyed-icon.png", icon_size = 64, scale = 0.25})
       table.insert(recipe_repair.icons, {icon="__core__/graphics/icons/alerts/destroyed-icon.png", icon_size = 64, scale = 0.25})
       table.insert(recipe_recombine.icons, {icon="__core__/graphics/icons/alerts/destroyed-icon.png", icon_size = 64, scale = 0.25})
+      item.icon_size = o_item.icon_size
+      recipe_repair.icon_size = o_item.icon_size
+      recipe_recombine.icon_size = o_item.icon_size
     else
       item.icons = {
         {icon = o_item.icon, icon_size = o_item.icon_size},
