@@ -18,7 +18,10 @@ data:extend({
     order = "a"
   },
 -------------------------------------------------------------------------------------------------
+--рескин покрытия кирпичем
 {type = "bool-setting", name = "stone-path-concrete", setting_type = "startup", default_value = true, order = "2"},
+-------------------------------------------------------------------------------------------------
+--фитолампы в биофермах
 {type = "bool-setting", name = "fitolamps", setting_type = "startup", default_value = true, order = "1"},
 -------------------------------------------------------------------------------------------------
 --рескин поездов
@@ -27,6 +30,9 @@ data:extend({
 {type = "bool-setting", name = "res_loc_3", setting_type = "startup", default_value = true, order = "5"},
 {type = "bool-setting", name = "res_loc_e", setting_type = "startup", default_value = true, order = "6"},
 -------------------------------------------------------------------------------------------------
+--рескин проводов
+{type = "bool-setting", name = "wire", setting_type = "startup", default_value = true, order = "7"},
+{type = "bool-setting", name = "copper_wire", setting_type = "startup", default_value = true, order = "8"},
 })
 
 if mods.research_evolution_factor then

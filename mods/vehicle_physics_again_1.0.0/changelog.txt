@@ -1,0 +1,24 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-09-01
+  Features:
+    - Light tire marks on non-concrete surfaces
+  Bugfixes:
+    - Fixed dirt driving sound position
+  Other:
+    - Mod adopted by Sparr
+    - Mod name changed from vehicle_physics to vehicle-physics
+    - Changelog reformatted
+    - Code cleanup
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+  Changes:
+    - Reduced volume
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+  Features:
+    - Added sounds
+  Bugfixes:
+    - Fixed a bug when a tank was destroyed
