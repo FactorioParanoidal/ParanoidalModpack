@@ -121,18 +121,15 @@ local function on_player_built(ev)
   elseif use_snapping
   and entity.type == "entity-ghost"
   and util.is_miniloader_inserter_name(entity.ghost_name) then
-    if global.player_placed_blueprint[ev.player_index] == ev.tick then
-      -- ghost placed as part of blueprint
-      -- remove duplicate ghosts
-      local colocated_ghosts = entity.surface.find_entities_filtered{
-        position = entity.position,
-        ghost_name = entity.ghost_name,
-      }
-      for i=1,#colocated_ghosts-1 do
-        colocated_ghosts[i].destroy()
-      end
-    else
-      -- single ghost placed with shift click
+    -- remove duplicate ghosts
+    local colocated_ghosts = entity.surface.find_entities_filtered{
+      position = entity.position,
+      ghost_name = entity.ghost_name,
+    }
+    for i=1,#colocated_ghosts-1 do
+      colocated_ghosts[i].destroy()
+    end
+    if util.orientation_from_inserters(entity) == nil then
       snapping.snap_loader(entity)
     end
   elseif use_snapping then
@@ -290,10 +287,6 @@ local function on_player_mined_entity(ev)
   on_mined(ev)
 end
 
-local function on_robot_pre_mined(ev)
-  on_mined(ev)
-end
-
 local function on_entity_settings_pasted(ev)
   local src = ev.source
   local dst = ev.destination
@@ -382,7 +375,6 @@ event.register(defines.events.on_robot_built_entity, on_robot_built)
 event.register(defines.events.on_player_rotated_entity, on_rotated)
 
 event.register(defines.events.on_player_mined_entity, on_player_mined_entity)
-event.register(defines.events.on_robot_pre_mined, on_robot_pre_mined)
 event.register(defines.events.on_robot_mined_entity, on_mined)
 event.register(defines.events.on_entity_died, on_mined)
 event.register(defines.events.script_raised_built, on_script_built)
