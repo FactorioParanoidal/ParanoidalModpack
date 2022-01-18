@@ -1,0 +1,12 @@
+{
+    "name": "1000sounds",
+    "version": "0.1.12",
+    "title": "1000 Sounds to die for",
+    "author": "vralfy",
+    "contact": "vralfy@fooflenail.com",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base >= 0.18"
+    ],
+    "description": "Plays a specific sound based cause of death of the player .. based on TrainHorn by Benjamin Lee"
+}

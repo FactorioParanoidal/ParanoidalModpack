@@ -6,7 +6,7 @@ local util = require "util"
 
 -- constants
 
-local num_inserters = 2
+local num_inserters = 6
 
 local allowed_items_setting = settings.global["railloader-allowed-items"].value
 

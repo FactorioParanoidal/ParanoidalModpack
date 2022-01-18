@@ -1,0 +1,14 @@
+{
+    "name": "vehicle_physics_again",
+    "version": "1.0.0",
+    "title": "Vehicle Physics Again",
+    "description": "Realistic driving physics... Supports airplanes",
+    "author": "Sparr",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "base >= 1.0",
+        "(?)Hovercrafts",
+        "(?)Raven",
+        "(?)raven_mk2"
+    ]
+}

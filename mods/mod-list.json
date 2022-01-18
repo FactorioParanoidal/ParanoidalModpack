@@ -9,6 +9,11 @@
     },
     
     {
+      "name": "1000sounds",
+      "enabled": true
+    },
+    
+    {
       "name": "aai-industry",
       "enabled": true
     },
@@ -30,6 +35,11 @@
     
     {
       "name": "Aircraft",
+      "enabled": true
+    },
+    
+    {
+      "name": "AlertsList2",
       "enabled": true
     },
     
@@ -240,11 +250,6 @@
     
     {
       "name": "CopyPasteModules",
-      "enabled": true
-    },
-    
-    {
-      "name": "creative-mod",
       "enabled": true
     },
     
@@ -524,11 +529,6 @@
     },
     
     {
-      "name": "music-new",
-      "enabled": true
-    },
-    
-    {
       "name": "MxlChievements",
       "enabled": true
     },
@@ -580,6 +580,11 @@
     
     {
       "name": "original-music-hd-updated",
+      "enabled": true
+    },
+    
+    {
+      "name": "osm-lib",
       "enabled": true
     },
     
@@ -904,6 +909,11 @@
     },
     
     {
+      "name": "vehicle_physics_again",
+      "enabled": true
+    },
+    
+    {
       "name": "Warehousing",
       "enabled": true
     },
@@ -925,21 +935,6 @@
     
     {
       "name": "WideChests",
-      "enabled": true
-    },
-    
-    {
-      "name": "yi_engines",
-      "enabled": true
-    },
-    
-    {
-      "name": "Yi_Tech_Tree",
-      "enabled": true
-    },
-    
-    {
-      "name": "Yuoki",
       "enabled": true
     },
     

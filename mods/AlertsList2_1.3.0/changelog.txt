@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+  Changes:
+    - setting for update interval is now exposed in startup settings UI
+    - does now use on_nth_tick 
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+  Bugfixes:
+    - fixed crash on deconstruction of speakers in certain circumstances
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+  Changes:
+    - setting for rows in compact mode is now exposed in settings UI
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Changes:
+    - works now with Factorio 1.1
+  Bugfixes:
+    - fixed crash when a mod updates a setting
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Bugfixes:
+    - now works with Factorio 1.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Info:
+    - forked from original repo
