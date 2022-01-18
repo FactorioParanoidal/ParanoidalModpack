@@ -116,7 +116,11 @@ local function rng_for_reg_pos(surfaceIndex, pos)
 	rng.re_seed(normalize(y * 32768))
 	local valY = rng(32768)
 	
-	local seed = normalize( valX * valY * global.surfaces[surfaceIndex].seed )
+	local mapSeed = global.surfaces[surfaceIndex].seed
+	if global.mapSeedOverride then
+		mapSeed = global.mapSeedOverride
+	end
+	local seed = normalize( valX * valY * mapSeed )
 	rng.re_seed( seed )
 	
 	debug("Generator for " .. pos.x .. "," .. pos.y .. " created with seed " .. seed .. " x:" .. valX .. " y:" .. valY)
@@ -270,7 +274,7 @@ local function isInStartingArea( surfaceIndex, tileX, tileY )
 
 	local surfaceData = global.surfaces[surfaceIndex]
 
-	if surfaceData.startingAreas then
+	if surfaceData and surfaceData.startingAreas then
 		for idx, data in pairs( surfaceData.startingAreas ) do
 			
 			local adjustedX = ( tileX - data.x ) / REGION_TILE_SIZE
@@ -911,6 +915,14 @@ local function spawn_entity(surface, ent, r_config, x, y, rng)
 	
 	local _total = 0
 	local r_distance = distanceFromStartingAreas(global.surfaces[surface.index], x/REGION_TILE_SIZE, y/REGION_TILE_SIZE)  
+	local surfaceData = global.surfaces[surface.index]
+	
+	if surfaceData and surfaceData.starting_area_size then
+		r_distance = r_distance - surfaceData.starting_area_size
+		if r_distance < 0.5 then
+			r_distance = 0.5
+		end
+	end
 	
 	local distanceMultiplier = math.min(r_distance^r_config.size_per_region_factor, 5)
 	if r_config.size_per_region_factor then
@@ -919,7 +931,7 @@ local function spawn_entity(surface, ent, r_config, x, y, rng)
 	
 	size = size * settings.global["rso-enemy-base-size"].value
 	
-	debug("Entering spawn_entity "..ent.." "..x..","..y.." "..size)
+	debug("Entering spawn_entity "..ent.." "..x..","..y.." size:"..size.." dist:"..r_distance)
 	
 	local maxAttemptCount = 16
 	local distancePerBatch = 0.25
@@ -1993,8 +2005,20 @@ function clearCommand(parameters)
 	regenerate_everything(true, skipEnemies)
 end
 
+function seedCommand(parameters)
+
+	global.mapSeedOverride = nil
+
+	if parameters and parameters.parameter then
+		global.mapSeedOverride = tonumber(parameters.parameter)
+	end
+end
+
+
 commands.add_command("rso-regenerate", "", regenerateCommand)
 commands.add_command("rso-clear", "", clearCommand)
+commands.add_command("rso-override-seed", "", seedCommand)
+
 
 remote.add_interface("RSO", {
 	-- remote.call("RSO", "regenerate", true/false, surface)
@@ -2125,6 +2149,10 @@ remote.add_interface("RSO", {
 		if game.player.force.technologies["resource-monitoring"] then
 			game.player.force.technologies["resource-monitoring"].researched = true
 		end
+	end,
+	
+	isInStartingArea = function(surfaceIndex, tileX, tileY)
+		return isInStartingArea(surfaceIndex, tileX, tileY)
 	end,
 })
 

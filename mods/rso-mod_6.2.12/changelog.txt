@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 6.2.12
+Date: 2022.01.08
+  Changes:
+    - added support for RitnGlass
+    - add /rso-override-seed command - can be used to pass fixed seed to rso to be used for ore generation
+    - add isInStartingArea to external interface - passing game surface index and tile X, Y will check if it's in one of starting areas
+    - fix RSO enemy base spawning to take into account bigger starting area when calculating enemy base composition
+    - added mod thumbnail by snouz
+---------------------------------------------------------------------------------------------------
+Version: 6.2.11
+Date: 2021.10.28
+  Changes:
+    - added fix of carbon adamo mod to resource generation
+---------------------------------------------------------------------------------------------------
+Version: 6.2.10
+Date: 2021.10.26
+  Changes:
+    - added support for Qatmore mod (by Qatavin)
+---------------------------------------------------------------------------------------------------
+Version: 6.2.9
+Date: 2021.09.09
+  Changes:
+    - added support for SpFuMaterialPack mod
+---------------------------------------------------------------------------------------------------
 Version: 6.2.8
 Date: 2021.06.19
   Changes:

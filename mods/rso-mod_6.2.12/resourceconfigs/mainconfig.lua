@@ -91,6 +91,9 @@ require("resourceconfigs.enhancedrecipes")
 require("resourceconfigs.bztungsten")
 require("resourceconfigs.bzzirconium")
 require("resourceconfigs.nullius")
+require("resourceconfigs.spfumaterials")
+require("resourceconfigs.qatmore")
+require("resourceconfigs.ritnglass")
 -- require("resourceconfigs.yaiom")
 
 function loadResourceConfig()
@@ -460,6 +463,14 @@ function loadResourceConfig()
 		config["enemy-base"] = nil
 	end
 	
+	if game.active_mods["SpFuMaterialPack"] then
+		fillSpFuMaterialsConfig(config)
+	end
+
+	if game.active_mods["RitnGlass"] then
+		fillRitnGlassConfig(config)
+	end
+
 	if game.active_mods["yaiom"] then
 --		fillYaiomConfig(config)
 	end
@@ -473,6 +484,9 @@ function loadResourceConfig()
 		fill5dimConfig(config)
 	end
 
+    if game.active_mods["qatmore"] then
+        fillQatmoreConfig(config)
+    end
 	-- angels ores
 	if game.entity_prototypes["angels-ore1"] then
 		fillAngelsOresConfig(config)
