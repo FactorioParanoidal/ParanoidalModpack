@@ -1,0 +1,41 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 06. 01. 2022
+  Info:
+    - Added an option for viewing prototypes internal names
+    - Code cleanup
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 06. 10. 2021
+  Info:
+    - Fixed a crash on startup caused by a missing item
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 30. 09. 2021
+  Info:
+    - Added some more safety checks in recipe functions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 30. 09. 2021
+  Info:
+    - New index system for disabling prototypes
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 20. 09. 2021
+  Info:
+    - General code tidy up
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 15. 09. 2021
+  Info:
+    - Added force_enable-setting, force_disable-setting and void-setting functions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 13. 09. 2021
+  Bugfixes:
+    - Added schall recipe scaling check in disable prototype function (REDUNDANT, REMOVED IN 1.1.12)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 12. 09. 2021
+  Info:
+    - Initial release
