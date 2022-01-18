@@ -1,0 +1,27 @@
+{
+  "item":
+  [
+    ["offshore-pump", "offshore-pump-1"]
+  ],
+  "entity":
+  [
+    ["offshore-pump", "offshore-pump-1"]
+  ],
+  "recipe":
+  [
+    ["offshore-pump", "offshore-pump-1"]
+  ],
+  "technology":
+  [
+	["water-pumpjack", "water-pumpjack-1"],
+	["water-miner_2", "water-pumpjack-2"],
+	["water-miner_3", "water-pumpjack-3"],
+	["water-miner_4", "water-pumpjack-4"],
+	["water-miner_5", "water-pumpjack-5"],
+	
+	["offshore-pump-tech_2", "offshore-pump-2"],
+	["offshore-pump-tech_3", "offshore-pump-3"],
+	["offshore-pump-tech_4", "offshore-pump-4"]
+  ]
+}
+
