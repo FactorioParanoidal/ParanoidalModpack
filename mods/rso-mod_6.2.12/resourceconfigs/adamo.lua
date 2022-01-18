@@ -1,6 +1,6 @@
 function fillAdamoConfig(config)
 
-	if game.active_mods["adamo-carbon"] then
+	if game.active_mods["adamo-carbon"] or game.active_mods["fixadamo-carbon"] then
 		config["adamo-carbon-natural-gas"] = {
 			type="resource-liquid",
 			minimum_amount=500000,
