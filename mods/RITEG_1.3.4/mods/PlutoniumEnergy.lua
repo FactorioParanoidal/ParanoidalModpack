@@ -120,8 +120,8 @@ table.insert (tech_effects, {recipe = RTG, type = "unlock-recipe"})
 table.insert (tech_effects, {recipe = RTG.."-from-"..used_up_RTG, type = "unlock-recipe"})
 
 
-if data.raw.item["MOX-fuel"].icon then
+--if data.raw.item["MOX-fuel"].icon then
   -- data.raw.item["MOX-fuel"].icons = {{icon = data.raw.item["MOX-fuel"].icon, tint = {r=0,g=1,b=1}}}
   -- data.raw.item["MOX-fuel"].icon = nil
-  data.raw.item["MOX-fuel"].icon = mod_name.."/graphics/icons/MOX-fuel.png"
-end
+  --data.raw.item["MOX-fuel"].icon = mod_name.."/graphics/icons/MOX-fuel.png"
+--end
