@@ -114,6 +114,7 @@ bobmods.lib.tech.add_prerequisite ("inserter-stack-size-bonus-2", "chemical-scie
 bobmods.lib.tech.add_prerequisite ("bio-refugium-butchery-3", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("physical-projectile-damage-5", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("refined-flammables-3", "chemical-science-pack")
+bobmods.lib.tech.add_prerequisite ("weapon-shooting-speed-5", "chemical-science-pack")
 
 --bobmods.lib.tech.add_prerequisite ("xxx", "chemical-science-pack")
 
