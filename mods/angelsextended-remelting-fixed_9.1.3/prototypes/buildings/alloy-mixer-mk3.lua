@@ -33,7 +33,7 @@ data:extend({
     enabled = false,
     ingredients =
     {
-      {type = "item", name = "alloy-mixer-3", amount = 1},
+      {type = "item", name = "alloy-mixer-2", amount = 1},
       {type = "item", name = "aluminium-plate", amount = 20},
       {type = "item", name = "advanced-circuit", amount = 5},
       {type = "item", name = "concrete-brick", amount = 25},
