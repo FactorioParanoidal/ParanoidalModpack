@@ -784,6 +784,19 @@ bobmods.lib.tech.add_prerequisite("bet-fuel-4", "raw-speed-module-4")
 bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "battery", "silver-zinc-battery")
 bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "effectivity-module-3", "raw-speed-module-4")
 bobmods.lib.recipe.add_ingredient("bet-fuel-4-empty", {"advanced-processing-unit", 3})
+
+--recycling battery
+--исправление переработки батарей
+--в моде на электро-батарейковый поезд какая-то зубодробительная хрень с расчетом поэтому просто ввел количество
+
+bobmods.lib.recipe.remove_result("bet-fuel-2-recycling", "battery")
+bobmods.lib.recipe.set_result("bet-fuel-2-recycling", {"lithium-ion-battery", 405})
+
+bobmods.lib.recipe.remove_result("bet-fuel-3-recycling", "battery")
+bobmods.lib.recipe.set_result("bet-fuel-3-recycling", {"silver-zinc-battery", 675})
+
+bobmods.lib.recipe.remove_result("bet-fuel-4-recycling", "battery")
+bobmods.lib.recipe.set_result("bet-fuel-4-recycling", {"silver-zinc-battery", 816})
 -------------------------------------------------------------------------------------------------
 --зарядные
 data.raw.furnace["bet-charger-1"].icon = "__zzzparanoidal__/graphics/train/electric/factory_var_1_icon.png"
