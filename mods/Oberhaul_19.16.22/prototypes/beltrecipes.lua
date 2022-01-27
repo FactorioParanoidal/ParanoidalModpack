@@ -114,14 +114,14 @@ data.raw.recipe["turbo-underground-belt"].expensive.ingredients = {
     {"nitinol-gear-wheel",40},
     {"nitinol-bearing",10}
 }
-data.raw.recipe["turbo-underground-belt"].normal.result_count = 3
+data.raw.recipe["turbo-underground-belt"].normal.result_count = 2
 else
 data.raw.recipe["turbo-underground-belt"].ingredients = {
     {"express-underground-belt",4},
     {"nitinol-gear-wheel",20},
     {"nitinol-bearing",10}
 }
-data.raw.recipe["turbo-underground-belt"].result_count = 3
+data.raw.recipe["turbo-underground-belt"].result_count = 2
 end
 -- Turbo Splitter
 if data.raw.recipe["turbo-splitter"].normal then
