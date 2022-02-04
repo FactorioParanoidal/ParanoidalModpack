@@ -1,6 +1,7 @@
 require("prototypes.miniloaders")
 require("prototypes.generators")
 require("prototypes.fluid-void")
+require("prototypes.gas-void")
 require("prototypes.ThickerLines")
 
 if mods.bobequipment then
