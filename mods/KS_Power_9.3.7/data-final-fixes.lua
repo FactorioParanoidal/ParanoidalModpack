@@ -7,11 +7,13 @@ local fuel_values = {
 
 -- coefficient *8.35 above natural;  8.35*x (kg/liquid , m3/gas)
 
-  ["gas-hydrogen"] = "150KJ", -- 10,78 МДж/м3 
-["hydrogen"] = "150KJ", -- 10,78 МДж/м3 
+	["gas-hydrogen"] = "150KJ", -- 10,78 МДж/м3 
+	["hydrogen"] = "150KJ", -- 10,78 МДж/м3 
+	["deuterium"] = "150KJ",
+	["gas-deuterium"] = "150KJ",
 
 ["liquid-multi-phase-oil"] = "360KJ", --21,5MДж/кг
-["crude-oil"] = "734KJ",-- 44 MДж/кг
+["crude-oil"] = "734KJ",-- 44 МДж/кг
   
   ["heavy-oil"] = "660KJ", -- МАЗУТ  40
   ["liquid-naphtha"] = "660KJ",
@@ -19,7 +21,7 @@ local fuel_values = {
   ["light-oil"] = "690KJ",
  	["liquid-fuel"] = "1140KJ", 
 	["liquid-fuel-oil"] = "890KJ",  --Gas oil	38MДж/кг
-	["diesel"] = "2250KJ", -- 44,8-43,5 MДж/кг
+	["diesel"] = "2250KJ", -- 44,8-43,5 МДж/кг
 	["diesel-fuel"] = "2250KJ", --375KJ
 	["gasoline"] = "1540KJ", -- 46 МДж/кг, 32,7 МДж/литр
 	["kerosene"] = "1436KJ", -- 43 МДж/кг	
@@ -39,7 +41,8 @@ local fuel_values = {
 	["gas-ethylene"] = "800KJ",  -- 48 Мдж/м3
 	["gas-benzene"] = "2420KJ", -- 40.45 МДж/кг -- БЕНЗОЛ 
 
-
+	["gas-chlor-methane"] = "432KJ",
+	
 	["gas-butadiene"] = "1896KJ", -- butilene 113,51
 	["liquid-ethylbenzene"] = "2616KJ",
 	["liquid-styrene"] = "2600KJ", --42,6 МДж/кг
@@ -53,18 +56,65 @@ local fuel_values = {
 	["liquid-resin"] = "1896KJ", --44,7 МДж/кг
 	["liquid-rubber-masterbatch"] = "1850KJ",
 	["liquid-rubber-pre"] = "2150KJ", --33,52 МДж/кг
+	["liquid-rubber"] = "2450KJ",
 	["liquid-plastic"] = "1920KJ",  --41,87 МДж/кг
 
 ["gas-synthesis"] = "240KJ", -- 11,5 Мдж/м3
 ["gas-residual"] = "700KJ", -- 42 Мдж/м3	
 
-    ["gas-methanol"] = "360KJ", -- 21,1-22 MДж/кг
-	["methanol"] = "360KJ", -- 21,1-22 MДж/кг
-	["gas-ethanol"] = "510KJ", --30,6 MДж/кг
+    ["gas-methanol"] = "360KJ", -- 21,1-22 МДж/кг
+	["methanol"] = "360KJ", -- 21,1-22 МДж/кг
+	["gas-ethanol"] = "510KJ", --30,6 МДж/кг
     ["gas-acetone"] = "524KJ", -- 31,4 МДж/кг
 	["coal-gas"] = "292KJ", -- 17,5 Мдж/м3
 
+
+["gas-chloroethane"] = "155KJ", -- 9,850 кДж/кг
+
+["gas-hydrogen-cyanide"] = "410KJ", --24,53  Энтальпия сгорания 
+["gas-nitrous-oxide"] = "500KJ", --не горит не выпускается  - и иконка странная с зеленью хлора
+["gas-vinyl-acetylene"] = "550KJ",  --33,04 = 44 МДж/кг 1198,1 кДж/моль.
+["gas-vinyl-chloride"] = "310KJ",  --18,1 не горит не выпускается  1198,1 кДж/моль.  62,498 г/моль  18,1 МДж/кг
+["liquid-acetone-cyanohydrin"] = "300KJ", --не горит не выпускается
+["liquid-acrylonitrile"] = "550KJ",  --33,21МДж/кг не горит не выпускается    Теплота сгорания стирола 43,64МДж/кг
+["liquid-dichlorobutene"] = "500KJ", --не горит не выпускается
+
+
+["liquid-methyl-methacrylate"] = "450KJ", -- 25,52 МДж/кг
+["liquid-cellulose-acetate"] = "310KJ", -- 18,75 МДж/кг
+["liquid-acetic-anhydride"] = "255KJ", --   15,3 МДж/кг
+["liquid-raw-vegetable-oil"] = "1600KJ", -- 30 МДж/кг
+["liquid-vegetable-oil"] = "2100KJ", -- 39,6 МДж/кг
+
+
+["gas-enriched-hydrogen-sulfide"] = "364KJ", -- не горит не выпускается  как сероводород
+
+
+["gas-allylchlorid"] = "360KJ", -- 22500
+["liquid-raw-fish-oil"] = "1400KJ", --26025 кДж/кг)
+["liquid-fish-oil"] = "1900KJ", --36025 кДж/кг
+["gas-epichlorohydrin"] = "325KJ", -- 18940 kj/kg
+["liquid-glycerol"] = "310KJ", -- 17957 kj/kg
+["liquid-bisphenol-a"] = "505KJ", --  31000
+["gas-ethylene-oxide"] = "430KJ", --  27649 kJ/kg
+["liquid-ethylene-carbonate"] = "250KJ", -- 14900
+["gas-urea"] = "167KJ", --10550)
+["gas-melamine"] = "262KJ", -- 15670
+["liquid-tetraethyllead"] = "335KJ", -- 19500
+
+
+
+
+
+
+
 	["gas-formaldehyde"] = "280KJ", --17,26 МДж/кг
+
+	["nitroglycerin"] = "730KJ", --13,5 
+
+["gas-methylamine"] = "575KJ",  --34,900 
+["gas-dimethylamine"] = "620KJ",  --38,800
+["gas-dimethylhydrazine"] = "550KJ", --33,000
 
 	["gas-hydrazine"] = "760KJ", --fuel_value = "380KJ", 14644 кДж/кг
 	
@@ -118,7 +168,10 @@ local emissions = {
 	
 	["liquid-naphtha"] = 3,
 	["gas-propene"] = 5,
+	
 	["gas-hydrogen"] = 0.1,
+	["deuterium"] = 0.1,
+	["gas-deuterium"] = 0.1,
 	["gas-hydrazine"] = 0.2,
 	
 	["sour-gas"] = 7,
@@ -138,6 +191,7 @@ local emissions = {
 	["liquid-resin"] = 6.5,
 	["liquid-rubber-masterbatch"] = 7,
 	["liquid-rubber-pre"] = 9,
+	["liquid-rubber"] = 15,
 	["liquid-polyethylene"] = 6.5,
 	["liquid-plastic"] = 8,
 
