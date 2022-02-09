@@ -152,6 +152,11 @@ function util.is_miniloader_inserter_name(name)
   return name:find("miniloader%-inserter$") ~= nil
 end
 
+function util.is_output_miniloader_inserter(inserter)
+  local orientation = util.orientation_from_inserter(inserter)
+  return orientation and orientation.type == "output"
+end
+
 -- 60 items/second / 60 ticks/second / 8 items/tile = X tiles/tick
 local BELT_SPEED_FOR_60_PER_SECOND = 60/60/8
 function util.num_inserters(entity)
@@ -271,9 +276,36 @@ function util.select_main_inserter(surface, position)
   return inserters[1]
 end
 
-function util.orientation_from_inserters(entity)
-  local inserter = util.select_main_inserter(entity.surface, entity.position)
-  if inserter.drop_position.x == inserter.position.x or inserter.drop_position.y == inserter.position.y then
+function util.orientation_from_bp_inserter(bp_inserter)
+  local position_x = bp_inserter.position.x
+  local position_y = bp_inserter.position.y
+  local drop_position_x = bp_inserter.drop_position.x + position_x
+  local drop_position_y = bp_inserter.drop_position.y + position_y
+  local pickup_position_x = bp_inserter.pickup_position.x + position_x
+  local pickup_position_y = bp_inserter.pickup_position.y + position_y
+  if drop_position_x == position_x or drop_position_y == position_y then
+    return nil -- freshly placed with no inherited positions
+  elseif drop_position_x > position_x + 0.5 then
+    return {direction=defines.direction.east, type="input"}
+  elseif drop_position_x < position_x - 0.5 then
+    return {direction=defines.direction.west, type="input"}
+  elseif drop_position_y > position_y + 0.5 then
+    return {direction=defines.direction.south, type="input"}
+  elseif drop_position_y < position_y - 0.5 then
+    return {direction=defines.direction.north, type="input"}
+  elseif pickup_position_x > position_x + 0.5 then
+    return {direction=defines.direction.west, type="output"}
+  elseif pickup_position_x < position_x - 0.5 then
+    return {direction=defines.direction.east, type="output"}
+  elseif pickup_position_y > position_y + 0.5 then
+    return {direction=defines.direction.north, type="output"}
+  elseif pickup_position_y < position_y - 0.5 then
+    return {direction=defines.direction.south, type="output"}
+  end
+end
+
+function util.orientation_from_inserter(inserter)
+  if inserter.drop_position.x == inserter.position.x and inserter.drop_position.y == inserter.position.y then
     return nil -- freshly placed with no inherited positions
   elseif inserter.drop_position.x > inserter.position.x + 0.5 then
     return {direction=defines.direction.east, type="input"}
@@ -284,14 +316,19 @@ function util.orientation_from_inserters(entity)
   elseif inserter.drop_position.y < inserter.position.y - 0.5 then
     return {direction=defines.direction.north, type="input"}
   elseif inserter.pickup_position.x > inserter.position.x + 0.5 then
-    return {direction=defines.direction.west, type="output"}
+    return {direction=defines.direction.west, type="output", is_secondary=inserter.drop_position.y < inserter.position.y}
   elseif inserter.pickup_position.x < inserter.position.x - 0.5 then
-    return {direction=defines.direction.east, type="output"}
+    return {direction=defines.direction.east, type="output", is_secondary=inserter.drop_position.y > inserter.position.y}
   elseif inserter.pickup_position.y > inserter.position.y + 0.5 then
-    return {direction=defines.direction.north, type="output"}
+    return {direction=defines.direction.north, type="output", is_secondary=inserter.drop_position.x > inserter.position.x}
   elseif inserter.pickup_position.y < inserter.position.y - 0.5 then
-    return {direction=defines.direction.south, type="output"}
+    return {direction=defines.direction.south, type="output", is_secondary=inserter.drop_position.x < inserter.position.x}
   end
+end
+
+function util.orientation_from_inserters(entity)
+  local inserter = util.select_main_inserter(entity.surface, entity.position)
+  return util.orientation_from_inserter(inserter)
 end
 
 function util.rebuild_belt(entity)
@@ -331,5 +368,40 @@ function util.rebuild_belt(entity)
     return false
   end
 end
+
+local control_behavior_keys = {
+  "circuit_condition", "logistic_condition", "connect_to_logistic_network",
+  "circuit_read_hand_contents", "circuit_mode_of_operation", "circuit_hand_read_mode", "circuit_set_stack_size", "circuit_stack_control_signal",
+}
+
+function util.capture_settings(ghost)
+  local control_behavior = ghost.get_or_create_control_behavior()
+  local control_behavior_state = {}
+  for _, key in pairs(control_behavior_keys) do
+    control_behavior_state[key] = control_behavior[key]
+  end
+
+  local filters = {}
+  for i=1,ghost.filter_slot_count do
+    filters[i] = ghost.get_filter(i)
+  end
+
+  return {
+    control_behavior = control_behavior_state,
+    filters = filters,
+  }
+end
+
+function util.apply_settings(settings, inserter)
+  local limit = math.min(inserter.filter_slot_count, #settings.filters)
+  for i = 1, limit do
+    inserter.set_filter(i, settings.filters[i])
+  end
+  local control_behavior = inserter.get_or_create_control_behavior()
+  for k, v in pairs(settings.control_behavior) do
+    control_behavior[k] = v
+  end
+end
+
 
 return util

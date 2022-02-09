@@ -117,6 +117,8 @@ local function ensure_inserters(desired_count, main_inserter)
   for i=2,#inserters do
     inserters[i].destructible = false
   end
+
+  return inserters
 end
 
 local function ensure_chest(main_inserter)
@@ -132,7 +134,7 @@ local function ensure_chest(main_inserter)
   return chest
 end
 
-local function fixup(main_inserter, orientation)
+local function fixup(main_inserter, orientation, tags)
   if not orientation then
     local existing_loader = util.find_miniloaders{surface = main_inserter.surface, position = main_inserter.position}[1]
     if existing_loader then
@@ -142,10 +144,14 @@ local function fixup(main_inserter, orientation)
     end
   end
   local loader = ensure_loader(main_inserter, orientation)
-  ensure_inserters(util.num_inserters(loader), main_inserter)
+  local inserters = ensure_inserters(util.num_inserters(loader), main_inserter)
+  circuit.copy_inserter_settings(main_inserter, inserters[1])
   ensure_chest(main_inserter)
 
   util.update_inserters(loader)
+  if tags and tags.right_lane_settings then
+    util.apply_settings(tags.right_lane_settings, inserters[2])
+  end
   circuit.sync_behavior(main_inserter)
   circuit.sync_filters(main_inserter)
   circuit.sync_partner_connections(main_inserter)

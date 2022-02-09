@@ -247,8 +247,8 @@ local function create_inserters(prefix, next_prefix, base_underground_name, tint
     extension_speed = 1,
     rotation_speed = 0.5,
     fast_replaceable_group = "miniloader-inserter",
-    pickup_position = {0, -0.2},
-    insert_position = {0, 0.8},
+    pickup_position = {0, 0},
+    insert_position = {0, 0},
     draw_held_item = false,
     draw_inserter_arrow = false,
     platform_picture = {

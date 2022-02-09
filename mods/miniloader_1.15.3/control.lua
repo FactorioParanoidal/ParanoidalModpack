@@ -3,7 +3,7 @@ local circuit = require("circuit")
 local configchange = require("configchange")
 local event = require("lualib.event")
 local miniloader = require("lualib.miniloader")
-local _ = require("gui")
+local gui = require("gui")
 local snapping = require("snapping")
 local util = require("lualib.util")
 
@@ -62,35 +62,53 @@ local function on_init()
   global.previous_opened_blueprint_for = {}
   circuit.on_init()
   compat_pickerextended.on_load()
+  gui.on_init()
   register_bobs_blacklist()
 end
 
 local function on_load()
   circuit.on_load()
   compat_pickerextended.on_load()
+  gui.on_load()
 end
 
 local function on_configuration_changed(configuration_changed_data)
   local mod_change = configuration_changed_data.mod_changes["miniloader"]
   if mod_change and mod_change.old_version and mod_change.old_version ~= mod_change.new_version then
     configchange.on_mod_version_changed(mod_change.old_version)
+    circuit.on_configuration_changed()
+    gui.on_configuration_changed()
   end
   register_bobs_blacklist()
   configchange.fix_inserter_counts()
 end
 
+local fast_replace_miniloader_state
 
-local function on_built_miniloader(entity, orientation)
+local function on_built_miniloader(entity, orientation, tags)
   if not orientation then
     orientation = {direction = util.opposite_direction(entity.direction), type = "input"}
   end
-  return miniloader.fixup(entity, orientation)
+  if not tags
+  and util.is_output_miniloader_inserter(entity)
+  and fast_replace_miniloader_state
+  and fast_replace_miniloader_state.tick == game.tick
+  and fast_replace_miniloader_state.surface == entity.surface
+  and fast_replace_miniloader_state.position.x == entity.position.x
+  and fast_replace_miniloader_state.position.y == entity.position.y
+  then
+    tags = {
+      right_lane_settings = fast_replace_miniloader_state.settings,
+    }
+    fast_replace_miniloader_state = nil
+  end
+  return miniloader.fixup(entity, orientation, tags)
 end
 
 local function on_robot_built(ev)
   local entity = ev.created_entity
   if util.is_miniloader_inserter(entity) then
-    on_built_miniloader(entity, util.orientation_from_inserters(entity))
+    on_built_miniloader(entity, util.orientation_from_inserters(entity), ev.tags)
   end
 end
 
@@ -104,7 +122,7 @@ end
 local function on_script_revive(ev)
   local entity = ev.entity
   if entity and util.is_miniloader_inserter(entity) then
-    on_built_miniloader(entity, util.orientation_from_inserters(entity))
+    on_built_miniloader(entity, util.orientation_from_inserters(entity), ev.tags)
   end
 end
 
@@ -113,7 +131,7 @@ local function on_player_built(ev)
 
   if util.is_miniloader_inserter(entity) then
     local orientation = util.orientation_from_inserters(entity)
-    local loader = on_built_miniloader(entity, orientation)
+    local loader = on_built_miniloader(entity, orientation, ev.tags)
     if use_snapping and not orientation then
       -- adjusts direction & loader_type
       snapping.snap_loader(loader)
@@ -126,8 +144,10 @@ local function on_player_built(ev)
       position = entity.position,
       ghost_name = entity.ghost_name,
     }
-    for i=1,#colocated_ghosts-1 do
-      colocated_ghosts[i].destroy()
+    for _, ghost in pairs(colocated_ghosts) do
+      if ghost ~= entity then
+        ghost.destroy()
+      end
     end
     if util.orientation_from_inserters(entity) == nil then
       snapping.snap_loader(entity)
@@ -196,6 +216,14 @@ local function on_miniloader_inserter_mined(ev)
   end
 
   local inserters = util.get_loader_inserters(entity)
+  if util.is_output_miniloader_inserter(entity) then
+    fast_replace_miniloader_state = {
+      position = entity.position,
+      settings = util.capture_settings(inserters[2]),
+      surface = entity.surface,
+      tick = ev.tick,
+    }
+  end
   for i=1,#inserters do
     if inserters[i] ~= entity then
       -- return items in inserter hand to player / robot if mined
@@ -283,6 +311,18 @@ local function on_pre_build(ev)
   end
 end
 
+local function on_pre_player_mined_item(ev)
+  local entity = ev.entity
+  if entity.name == "entity-ghost" and entity.tags and entity.tags.right_lane_settings then
+    fast_replace_miniloader_state = {
+      position = entity.position,
+      settings = entity.tags.right_lane_settings,
+      surface = entity.surface,
+      tick = ev.tick,
+    }
+  end
+end
+
 local function on_player_mined_entity(ev)
   on_mined(ev)
 end
@@ -292,14 +332,21 @@ local function on_entity_settings_pasted(ev)
   local dst = ev.destination
   if util.is_miniloader_inserter(src) and util.is_miniloader_inserter(dst)
   or util.is_miniloader(src) and util.is_miniloader(dst) then
-    circuit.sync_behavior(dst)
-    circuit.sync_filters(dst)
     local src_loader = src.surface.find_entities_filtered{type="loader-1x1",position=src.position}[1]
     local dst_loader = dst.surface.find_entities_filtered{type="loader-1x1",position=dst.position}[1]
     if src_loader and dst_loader then
       dst_loader.loader_type = src_loader.loader_type
       util.update_inserters(dst_loader)
     end
+    if util.is_output_miniloader_inserter(src) then
+      local right_src = util.get_loader_inserters(src)[2]
+      local right_dst = util.get_loader_inserters(dst)[2]
+      if right_src and right_dst then
+        circuit.copy_inserter_settings(right_src, right_dst)
+      end
+    end
+    circuit.sync_behavior(dst)
+    circuit.sync_filters(dst)
   end
 end
 
@@ -326,7 +373,7 @@ end
 local function on_setup_blueprint(ev)
   local bp = blueprint.get_blueprint_to_setup(ev.player_index)
   if not (bp and bp.valid_for_read) then return end
-  blueprint.filter_miniloaders(bp)
+  blueprint.filter_miniloaders(bp, ev.surface)
 end
 
 local function on_marked_for_deconstruction(ev)
@@ -374,6 +421,7 @@ event.register(defines.events.on_built_entity, on_player_built)
 event.register(defines.events.on_robot_built_entity, on_robot_built)
 event.register(defines.events.on_player_rotated_entity, on_rotated)
 
+event.register(defines.events.on_pre_player_mined_item, on_pre_player_mined_item)
 event.register(defines.events.on_player_mined_entity, on_player_mined_entity)
 event.register(defines.events.on_robot_mined_entity, on_mined)
 event.register(defines.events.on_entity_died, on_mined)
