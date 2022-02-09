@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.15.3
+Date: 2022-02-08
+  Bugfixes:
+    - Fix crash replacing a miniloader without a configured circuit condition.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.2
+Date: 2022-02-08
+  Bugfixes:
+    - Fix crash when mining a circuit-connected miniloader. (https://mods.factorio.com/mod/miniloader/discussion/620310a56e7833117189b7e9)
+    - Fix chutes being able to connect to circuit networks, contrary to the intended design.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.1
+Date: 2022-02-08
+  Major features:
+    - Miniloaders in output mode can have filters and circuit conditions set for individual lanes.  Blueprinting and copy-paste mostly work but some issues may remain.
+  Bugfixes:
+    - Fix a potential source of event desyncs when joining a multiplayer server.
+    - Fix miniloaders being left in a bad state when the last entity connected to a miniloader with circuit wires is mined.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.9
+Date: 2022-02-05
+  Bugfixes:
+    - Fix saves broken by 1.15.0 release.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.0
+Date: 2022-02-02
+  Major Features:
+    - WITHDRAWN
+---------------------------------------------------------------------------------------------------
 Version: 1.14.8
 Date: 2022-01-17
   Bugfixes:
@@ -27,7 +56,7 @@ Date: 2021-07-05
   Bugfixes:
     - Fix snapping being incorrectly applied to blueprint ghosts when blueprints are placed directly from the blueprint library. (https://mods.factorio.com/mod/miniloader/discussion/60b12ec417dbea783f0ec190)
     - Avoid crash when updating blueprints from inside blueprint books or the blueprint library. (https://mods.factorio.com/mod/miniloader/discussion/60e0ee0d3277109b8056f5d4)
-----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 1.14.3
 Date: 2021-07-03
   Minor Features:

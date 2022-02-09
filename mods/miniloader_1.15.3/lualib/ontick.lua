@@ -9,8 +9,8 @@ local M = {}
 
 local on_tick_handlers = {}
 local function on_tick_meta_handler(e)
-  for handler, config in pairs(on_tick_handlers) do
-    if (e.tick - config[2]) % config[1] == 0 then
+  for handler, interval in pairs(on_tick_handlers) do
+    if e.tick % interval == 0 then
       handler(e)
     end
   end
@@ -23,9 +23,7 @@ function M.register(f, interval)
   if interval < 0 then
     error("invalid interval")
   end
-  math.randomseed(game.tick)
-  local offset = math.random(interval) - 1
-  on_tick_handlers[f] = { interval, offset }
+  on_tick_handlers[f] = interval
   event.register(defines.events.on_tick, on_tick_meta_handler)
 end
 

@@ -222,25 +222,34 @@ local function on_entity_mined(ev)
   end
 end
 
-local function setup_after_blueprint_placed(preexisting_entities)
-  local before_ccd_set_for = {}
-  for i=1,#preexisting_entities do
-    local entity = preexisting_entities[i]
-    before_ccd_set_for[i] = ccd_set(entity)
+local bp_overplace
+
+local function check_after_blueprint_placed()
+  for unit_number, data in pairs(bp_overplace) do
+    local entity = data.entity
+      -- any of the entities may have become invalid due to other scripting
+    if entity.valid then
+      local new = ccd_set(entity)
+      check_for_circuit_changes(entity, data.before_ccd_set, new)
+    end
+    bp_overplace[unit_number] = nil
   end
 
-  local function handler(_)
-    for i=1,#preexisting_entities do
-      local entity = preexisting_entities[i]
-      -- any of the entities may have become invalid due to other scripting
-      if entity.valid then
-        local new = ccd_set(entity)
-        check_for_circuit_changes(entity, before_ccd_set_for[i], new)
-      end
+  event.unregister(defines.events.on_tick, check_after_blueprint_placed)
+end
+
+local function setup_after_blueprint_placed(preexisting_entities)
+  for i=1,#preexisting_entities do
+    local entity = preexisting_entities[i]
+    if entity.unit_number then
+      bp_overplace[entity.unit_number] = {
+        entity = entity,
+        before_ccd_set = ccd_set(entity),
+      }
     end
-    event.unregister(defines.events.on_tick, handler)
   end
-  event.register(defines.events.on_tick, handler)
+
+  event.register(defines.events.on_tick, check_after_blueprint_placed)
 end
 
 local function on_pre_build(ev)
@@ -262,23 +271,37 @@ local function on_pre_build(ev)
 end
 
 function M.on_init()
-  global.monitored_players = {}
-  global.selected_ccd_set_for = {}
+  global.onwireplaced = {
+    monitored_players = {},
+    selected_ccd_set_for = {},
+    bp_overplace = {},
+  }
   M.on_load()
 end
 
 function M.on_load()
-  if global.monitored_players then
-    monitored_players = global.monitored_players
+  if not global.onwireplaced then
+    return -- expect on_configuration_changed to be called
+  end
+
+  if global.onwireplaced.monitored_players then
+    monitored_players = global.onwireplaced.monitored_players
     if next(monitored_players) then
       event.register(defines.events.on_selected_entity_changed, on_selected_entity_changed)
     end
   end
 
-  if global.selected_ccd_set_for then
-    selected_ccd_set_for = global.selected_ccd_set_for
+  if global.onwireplaced.selected_ccd_set_for then
+    selected_ccd_set_for = global.onwireplaced.selected_ccd_set_for
     if next(selected_ccd_set_for) then
       event.register(defines.events.on_tick, check_selection_for_all)
+    end
+  end
+
+  if global.onwireplaced.bp_overplace  then
+    bp_overplace = global.onwireplaced.bp_overplace
+    if next(bp_overplace) then
+      event.register(defines.events.on_tick, check_after_blueprint_placed)
     end
   end
 
@@ -303,6 +326,19 @@ function M.on_load()
     on_entity_mined
   )
   event.register(defines.events.on_pre_build, on_pre_build)
+end
+
+function M.on_configuration_changed()
+  if not global.onwireplaced then
+    global.onwireplaced = {
+      monitored_players = global.monitored_players or {},
+      selected_ccd_set_for = global.selected_ccd_set_for or {},
+      bp_overplace = {},
+    }
+    global.monitored_players = nil
+    global.selected_ccd_set_for = nil
+  end
+  M.on_load()
 end
 
 return M

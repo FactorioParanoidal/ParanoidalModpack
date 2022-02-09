@@ -10,43 +10,26 @@ local function inserters_in_position(bp_entities, starting_index)
     local ent = bp_entities[i]
     if ent.position.x == x and ent.position.y == y and util.is_miniloader_inserter(ent) then
       out[#out+1] = ent
+    else
+      break
     end
   end
   return out
 end
 
-local function count_connections(bp_entity)
-  local out = 0
-  if not bp_entity.connections then
-    return 0
+local function tag_with_configuration(surface, bp_entity)
+  local right_lane_inserter = surface.find_entities_filtered{type = "inserter", position = bp_entity.position}[2]
+  if right_lane_inserter and util.is_output_miniloader_inserter(right_lane_inserter) then
+    bp_entity.tags = {
+      right_lane_settings = util.capture_settings(right_lane_inserter),
+    }
   end
-  for _, circuit in pairs(bp_entity.connections) do
-    for _, wire_connections in pairs(circuit) do
-      out = out + #wire_connections
-    end
-  end
-  return out
 end
 
--- Expects a list of miniloader-inserter blueprint entities in a single position.
--- Only the miniloader-inserter with the most circuit connections is retained,
--- the others are added to to_remove.
 local function find_slaves(miniloader_inserters, to_remove)
-  local most_connected_inserter
-  local most_connections
-  for _, inserter in ipairs(miniloader_inserters) do
-    local num_connections = count_connections(inserter)
-    if not most_connected_inserter or num_connections > most_connections then
-      most_connected_inserter = inserter
-      most_connections = num_connections
-    end
-  end
-
-  -- iterate back over and record slaves
-  for _, inserter in ipairs(miniloader_inserters) do
-    if inserter ~= most_connected_inserter then
-      to_remove[inserter.entity_number] = true
-    end
+  for i = 2, #miniloader_inserters do
+    local inserter = miniloader_inserters[i]
+    to_remove[inserter.entity_number] = true
   end
 end
 
@@ -159,16 +142,22 @@ function M.get_blueprint_to_setup(player_index)
   end
 end
 
-function M.filter_miniloaders(bp)
+function M.filter_miniloaders(bp, surface)
   local bp_entities = bp.get_blueprint_entities()
   if not bp_entities then
     return
   end
   local to_remove = {}
-  for i, ent in ipairs(bp_entities) do
+  local i = 1
+  while i <= #bp_entities do
+    local ent = bp_entities[i]
     if util.is_miniloader_inserter(ent) then
       local overlapping = inserters_in_position(bp_entities, i)
+      tag_with_configuration(surface, overlapping[1])
       find_slaves(overlapping, to_remove)
+      i = i + #overlapping
+    else
+      i = i + 1
     end
   end
   if next(to_remove) then

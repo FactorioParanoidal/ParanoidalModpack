@@ -34,6 +34,7 @@ if settings.startup["miniloader-enable-chute"].value then
   inserter.energy_source = {type="void"}
   inserter.energy_per_movement = ".0000001J"
   inserter.energy_per_rotation = ".0000001J"
+  inserter.circuit_wire_max_distance = 0
   if not data.raw.inserter[inserter.next_upgrade] then
     inserter.next_upgrade = nil
   end
