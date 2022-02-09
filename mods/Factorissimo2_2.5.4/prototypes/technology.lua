@@ -83,16 +83,15 @@ data:extend({
 		name = "factory-connection-type-chest",
 		icon = F.."/graphics/technology/factory-connection-type-chest.png",
 		icon_size = 128,
-		prerequisites = {"factory-architecture-t1"}, -- "logistics-2" DrD
+		prerequisites = {"factory-architecture-t1"},   -- "logistics-2" DrD
 		effects = {},
 		unit = {
 			count = easy_research and 20 or 200,
 			ingredients = {{"automation-science-pack", 1}},
 			--,{"logistic-science-pack", 1} --DrD
 			time = 30
-			},
+		},
 		order = pf.."b-b",
-
 	},
 	{
 		type = "technology",
