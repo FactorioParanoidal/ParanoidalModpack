@@ -35,15 +35,35 @@ local recipe_category =
     name = "OSM-removed"
 }	data:extend({recipe_category})
 
+-- Make item group [placeholder items]
+local item_group =
+{
+	type = "item-group",
+	name = "OSM-placeholder",
+	icon = "__osm-lib__/graphics/lsd.png",
+	icon_size = 128,
+	inventory_order = "zzzz",
+	order = "zzzz",
+	localised_name = {"", "Placeholders"}
+}	data:extend({item_group})
+
+local item_subgroup =
+{
+	group = "OSM-placeholder",
+	type = "item-subgroup",
+	name = "OSM-placeholder",
+	order = "a"
+}	data:extend({item_subgroup})
+
 local OSM_void =
 {
 	type = "item",
 	name = "OSM_void",
 	icon = "__core__/graphics/empty.png",
 	icon_size = 1,
-	subgroup = "OSM-removed",
+	subgroup = "OSM-placeholder",
 	flags = {"hidden"},
-	order = "zzzz",
+	order = "8==D",
 	stack_size = 1
 }	data:extend({OSM_void})
 

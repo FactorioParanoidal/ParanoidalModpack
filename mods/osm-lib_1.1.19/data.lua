@@ -13,7 +13,7 @@ OSM.mod_name = "osm-lib"
 require("core")
 
 -- load utils
-require("utils.misc")
+require("utils.utils")
 
 -- Load functions
 require("functions.technology")
