@@ -8,7 +8,7 @@ data.raw.locomotive.locomotive.drive_over_tie_trigger.sound = stuk_sounds
 data.raw["fluid-wagon"]["fluid-wagon"].working_sound.sound = working_sound
 data.raw["fluid-wagon"]["fluid-wagon"].drive_over_tie_trigger.sound = stuk_sounds
 --Артеллерийский вагон
---data.raw["artillery-wagon"]["artillery-wagon"].working_sound.sound = working_sound --drd tweak from Naylok#4293
+--data.raw["artillery-wagon"]["artillery-wagon"].working_sound.sound = working_sound
 data.raw["artillery-wagon"]["artillery-wagon"].drive_over_tie_trigger.sound = stuk_sounds
 --Грузовой вагон
 data.raw["cargo-wagon"]["cargo-wagon"].working_sound.sound = working_sound
