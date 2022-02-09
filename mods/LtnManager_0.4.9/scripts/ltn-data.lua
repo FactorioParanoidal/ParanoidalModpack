@@ -747,7 +747,8 @@ local function update_history(working_data)
       end
     end
     -- sometimes LTN will forget to include `started`, in which case, skip this one
-    if train.started then
+    -- Also check for an invalid or nonexistent main locomotive
+    if train.started and train.main_locomotive and train.main_locomotive.valid then
       -- add remaining info
       entry.from = train.from
       entry.to = train.to
@@ -764,8 +765,8 @@ local function update_history(working_data)
       end, 0)
       -- add to history
       queue.push_right(active_history, entry)
-      -- limit to 50 entries
-      if queue.length(active_history) > 50 then
+      -- limit number of entries
+      for _ = 1, queue.length(active_history) - settings.global["ltnm-history-length"].value do
         queue.pop_left(active_history)
       end
     end
@@ -870,6 +871,7 @@ local function update_alerts(working_data)
 
   -- delete alerts if necessary
   if flags.deleted_all_alerts then
+    flags.deleted_all_alerts = false
     active_data.alerts = queue.new()
     active_alerts = active_data.alerts
   else
