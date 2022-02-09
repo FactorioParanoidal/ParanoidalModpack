@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 24. 01. 2022
+  Bugfixes:
+    - Restored data-updates.lua (erased by mistake)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 24. 01. 2022
+  Changes:
+    - OSM.lib.setting.force_disable and OSM.lib.setting.force_enable are for boolean settings only
+  Info:
+    - Added a placeholder tab
+    - Added a function for forcing non-boolean setting state
+---------------------------------------------------------------------------------------------------
 Version: 1.1.17
 Date: 06. 01. 2022
   Info:
