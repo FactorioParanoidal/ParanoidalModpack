@@ -11,5 +11,4 @@ stages:
 launch-ability:
   stage: launchability
   script:
-    - chmod +x build.sh
     - ./build.sh EnsureLaunchability
