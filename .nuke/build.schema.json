@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Build Schema",
   "$ref": "#/definitions/build",
@@ -30,8 +30,8 @@
             "TeamCity",
             "Terminal",
             "TravisCI",
-            "VisualStudio",
-            "VSCode"
+            "VSCode",
+            "VisualStudio"
           ]
         },
         "NoLogo": {
