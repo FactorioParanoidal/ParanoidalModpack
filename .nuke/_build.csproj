@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace></RootNamespace>
+    <NoWarn>CS0649;CS0169</NoWarn>
+    <NukeRootDirectory>..</NukeRootDirectory>
+    <NukeScriptDirectory>..</NukeScriptDirectory>
+    <NukeTelemetryVersion>0</NukeTelemetryVersion>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nuke.Common" Version="6.0.1" />
+    <PackageReference Include="SharpCompress" Version="0.30.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="temp\**" />
+  </ItemGroup>
+
+</Project>
