@@ -1,0 +1,14 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", ".nuke\_build.csproj", "{C4D88538-9E75-49FB-AC7D-8A7B6C09628A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4D88538-9E75-49FB-AC7D-8A7B6C09628A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D88538-9E75-49FB-AC7D-8A7B6C09628A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
