@@ -861,7 +861,11 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
 		power_pole_placed(entity)
 	elseif entity.type == "solar-panel" then
 		if global.surface_factory_counters[entity.surface.name] then
-			cancel_creation(entity, event.player_index, {"factory-connection-text.invalid-placement"})
+			-- FIX FOR Bio Industries // ADD check if it bio farm
+			if ( entity.name ~= "bi-bio-farm-hidden-panel" ) then -- ADDED
+				cancel_creation(entity, event.player_index, {"factory-connection-text.invalid-placement"})
+			end -- ADDED
+			-- FIX FOR Bio Industries
 		else
 			entity.force.technologies["factory-interior-upgrade-lights"].researched = true
 		end
