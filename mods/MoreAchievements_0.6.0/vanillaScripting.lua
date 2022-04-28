@@ -114,8 +114,11 @@ function onConsoleChat(e)
 end
 script.on_event(defines.events.on_console_chat, onConsoleChat)
 
+-- game.print(e.item_stack.count) -- work \ water have 0 count
 function onPlayerCrafted(e)
-    -- check if this call is valid, as this triggers with cheat mode (for some reason)
+    ------------------------------------------ Custom code | ADD check for fluid
+    if e.item_stack.count == 0 then return end
+    ------------------------------------------
     if not e.item_stack or not e.item_stack.valid then return end
 
     local item = e.item_stack.name
