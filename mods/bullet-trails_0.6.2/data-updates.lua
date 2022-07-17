@@ -10,7 +10,7 @@ function add_trail_to_ammo(ammo_name, trail_name)
     action_delivery1.target_effects = {action_delivery1.target_effects}
   end
   local target_effects = action_delivery1.target_effects
-  if target_effects[#target_effects].entity_name
+  if #target_effects > 0 and target_effects[#target_effects].entity_name
     and string.find(target_effects[#target_effects].entity_name, "bullet-beam-", 1, true) then
       target_effects[#target_effects].entity_name = trail_name
   else

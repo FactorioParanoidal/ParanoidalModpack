@@ -1,6 +1,6 @@
 {
 	"name": "bullet-trails",
-	"version": "0.6.1",
+	"version": "0.6.2",
 	"title": "Bullet Trails",
 	"author": "Earendel",
 	"dependencies": ["base >= 1.1.0"],
