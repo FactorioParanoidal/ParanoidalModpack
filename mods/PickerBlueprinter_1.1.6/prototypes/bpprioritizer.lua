@@ -1,7 +1,7 @@
 -- Shortcut with keybind
 local Data = require('__stdlib__/stdlib/data/data')
-
-if not mods['BotPrioritizer'] and settings.get_startup('picker-bp-prioritizer') then
+local key = 'picker-bp-prioritizer'
+if not mods['BotPrioritizer'] and settings["startup"][key] and settings["startup"][key].value then
     Data{
         type = 'shortcut',
         name = 'picker-bp-prioritizer-shortcut',

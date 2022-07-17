@@ -1,5 +1,6 @@
 local Event = require('__stdlib__/stdlib/event/event')
-local use_bp_prio = not script.active_mods['BotPrioritizer'] and settings.get_startup('picker-bp-prioritizer')
+local key = 'picker-bp-prioritizer'
+local use_bp_prio = not script.active_mods['BotPrioritizer'] and settings["startup"][key] and settings["startup"][key].value
 
 local sc = {shortcut = defines.events.on_lua_shortcut, proto_name = 'picker-bp-prioritizer-shortcut'}
 local entity_names = {
