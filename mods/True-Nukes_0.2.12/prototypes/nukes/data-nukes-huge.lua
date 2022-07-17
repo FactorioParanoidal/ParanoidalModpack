@@ -4,10 +4,9 @@ local nuke_explosions = require("data-nuke-explosions")
 local hit_effects = require ("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 
-local bigBoomMaterial = "uranium-235";
-if mods["apm_nuclear_ldinc"] then
-	bigBoomMaterial = "apm_oxide_pellet_pu239";
-end
+local nuke_materials = require("data-nukes-material")
+
+
 
 if(settings.startup["enable-very-big-atomic-artillery"].value) then
 	local very_big_atomic_artillery_projectile = table.deepcopy(data.raw["artillery-projectile"]["TN-atomic-artillery-projectile"])
@@ -143,7 +142,7 @@ data:extend{
     ingredients =
     {
       {"iron-plate", 10},
-      {bigBoomMaterial, 1},
+      {"uranium-235", 1},
       {"uranium-238", 19},
       {type="fluid", name="water", amount=100}
     },
@@ -469,7 +468,7 @@ if(settings.startup["enable-fusion-building"].value or settings.startup["enable-
 		  {"steel-plate", 1000},
 		  {"refined-concrete", 1000},
 		  {"processing-unit", 150},
-		  {bigBoomMaterial, 300},
+		  {nuke_materials.boomMaterial, 300},
 		  {"explosives", 150},
 		  {"plastic-bar", 50},
 		  {"red-wire", 50},

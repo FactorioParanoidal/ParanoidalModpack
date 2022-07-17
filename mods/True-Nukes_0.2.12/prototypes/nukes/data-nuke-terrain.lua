@@ -2,11 +2,6 @@ if(settings.startup["enable-new-craters"].value) then
 	data.raw["tile"]["sand-1"].layer = 11
 	data.raw["tile"]["sand-2"].layer = 12
 	data.raw["tile"]["sand-3"].layer = 13
-	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep");
-	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep-shallow-fill");
-	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-deep-fill");
-	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-crater");
-	table.insert(data.raw["tile"]["deepwater"].allowed_neighbors, "nuclear-crater-shallow-fill");
 
 
 	local function make_tile_transition_from_template_variation(src_x, src_y, cnt_, line_len_, is_tall, normal_res_transition, high_res_transition)
@@ -308,5 +303,11 @@ if(settings.startup["enable-new-craters"].value) then
 			}
 		}
 	  }}
+	data.raw["tile"]["nuclear-deep"].allowed_neighbors = {};
+	data.raw["tile"]["nuclear-deep-shallow-fill"].allowed_neighbors = {};
+	data.raw["tile"]["nuclear-deep-fill"].allowed_neighbors = {};
+	data.raw["tile"]["nuclear-crater"].allowed_neighbors = {};
+	data.raw["tile"]["nuclear-crater-shallow-fill"].allowed_neighbors = {};
+	data.raw["tile"]["nuclear-shallow"].allowed_neighbors = {};
 end
 

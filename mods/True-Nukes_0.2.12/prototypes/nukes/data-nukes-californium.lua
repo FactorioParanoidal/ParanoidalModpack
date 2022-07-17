@@ -1,6 +1,8 @@
 local fireutil = require("__base__.prototypes.fire-util")
 local nuke_explosions = require("data-nuke-explosions")
 
+local nuke_materials = require("data-nukes-material")
+
 local circuit_type;
 local upgrade_circuit_mult = 5
 if not mods["bobelectronics"] then
@@ -10,9 +12,8 @@ else
 	upgrade_circuit_mult = 1
 end
 
-local material;
-if(settings.startup["use-californium"].value) then
-	material = "californium"
+local material = nuke_materials.smallBoomMaterial;
+if(material == "californium") then
 	data:extend({
 	  {
 	    type = "item",
@@ -50,19 +51,17 @@ if(settings.startup["use-californium"].value) then
 	    energy_required = 120,
 	    enabled = false,
 	    category = "centrifuging",
-	    ingredients = {{"uranium-235", 10}, {"uranium-238", 1}},
+	    ingredients = {{nuke_materials.boomMaterial, 10}, {nuke_materials.deadMaterial, 1}},
 	    icon = "__True-Nukes__/graphics/californium-processing.png",
 	    icon_size = 64, icon_mipmaps = 4,
 	    subgroup = "intermediate-product",
 	    order = "r[uranium-processing]-d[californium-processing]",
 	    main_product = "californium",
-	    results = {{"uranium-235", 9}, {"californium", 1}},
+	    results = {{nuke_materials.boomMaterial, 9}, {"californium", 1}},
 	    allow_decomposition = false
 	  },
 
 	});
-else
-	material = "uranium-235"
 end
 
 
@@ -453,6 +452,10 @@ data:extend{
 
 if mods["apm_nuclear_ldinc"] then
 	table.insert(data.raw.technology["californium-processing"].prerequisites, "apm_nuclear_breeder");
+elseif mods["Nuclear Fuel"] then
+	table.insert(data.raw.technology["californium-processing"].prerequisites, "plutonium-breeding");
+elseif mods["Clowns-AngelBob-Nuclear"] then
+	table.insert(data.raw.technology["californium-processing"].prerequisites, "nuclear-fuel-reprocessing-2");
 else
 	table.insert(data.raw.technology["californium-processing"].prerequisites, "kovarex-enrichment-process");
 end
@@ -490,7 +493,7 @@ if(settings.startup["enable-small-atomic-bomb"].value) then
 	        recipe = "small-atomic-bomb"
  	     })
 end
-if(settings.startup["use-californium"].value) then
+if(material == "californium") then
 	table.insert(data.raw.technology["californium-processing"].effects, {
 	        type = "unlock-recipe",
 	        recipe = "californium-processing"

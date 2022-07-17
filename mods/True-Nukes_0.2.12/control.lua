@@ -1446,11 +1446,17 @@ end
 
 
 local function find_event_position(event)
-	 local position = event.target_position
-	 if(not position) then
-	 	position = event.source_position
-	 end
-	 return position
+	if(event.target_position)then
+		return event.target_position;
+	elseif(event.target_entity and event.target_entity.position) then
+		return event.target_entity.position;
+	elseif(event.source_position)then
+		return event.source_position;
+	elseif(event.source_entity and event.source_entity.position) then
+		return event.source_entity.position
+	else
+		return nil;
+	end
 end
 
 --chunkLoaderStruct: surface_index, blastIndex, blastId, force, source, position, crater_internal_r, crater_external_r, fireball_r, blast_max_r, init_blast, blast_min_damage, thermal_max_r, init_thermal
@@ -1466,10 +1472,6 @@ local function optimisedChunkLoadHandler(chunkPosAndArea, chunkLoaderStruct, kil
 	local minR = math.min(r1, r2, r3, r4)
 	local maxR = math.max(r1, r2, r3, r4)
 	if  ((minR<chunkLoaderStruct.blast_max_r) or (minR<chunkLoaderStruct.thermal_max_r)) then
-      
-
-		
-		
 		local cause = chunkLoaderStruct.source;
 		local force = chunkLoaderStruct.force;
 		local blastR = 0
@@ -1492,13 +1494,13 @@ local function optimisedChunkLoadHandler(chunkPosAndArea, chunkLoaderStruct, kil
 					elseif(corpseMap[e.name]) then
 						e.destroy()
 					elseif(cause ~= nil and cause.valid) then
-						e.die(force, cause)
+						if not e.die(force, cause) then
+							e.destroy{raise_destroy = true};
+						end
 					else
-						e.die(force)
-					end
-					
-					if(e.valid) then
-						e.destroy();
+						if not e.die(force) then
+							e.destroy{raise_destroy = true};
+						end
 					end
 				end
 			end
@@ -1512,13 +1514,13 @@ local function optimisedChunkLoadHandler(chunkPosAndArea, chunkLoaderStruct, kil
 					elseif(corpseMap[e.name]) then
 						e.destroy()
 					elseif(cause ~= nil and cause.valid) then
-						e.die(force, cause)
+						if not e.die(force, cause) then
+							e.destroy{raise_destroy = true};
+						end
 					else
-						e.die(force)
-					end
-					
-					if(e.valid) then
-						e.destroy();
+						if not e.die(force) then
+							e.destroy{raise_destroy = true};
+						end
 					end
 				end
 			end
@@ -1897,10 +1899,10 @@ local function atomic_weapon_hit(surface_index, source, position, crater_interna
 					v.destroy()
 				elseif cause and cause.valid then
 					if not v.die(force, cause) then
-						v.destroy()
+						v.destroy{raise_destroy = true}
 					end
 				elseif not v.die(force) then
-					v.destroy()
+					v.destroy{raise_destroy = true}
 				end
 			end
 		 end
@@ -1937,12 +1939,13 @@ local function atomic_weapon_hit(surface_index, source, position, crater_interna
 		 for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
 			if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
 				if(cause and cause.valid) then
-					v.die(force, cause);
+					if not v.die(force, cause) then
+						v.destroy{raise_destroy = true};
+					end
 				else
-					v.die(force);
-				end
-				if(v.valid) then
-					v.destroy();
+					if not v.die(force) then
+						v.destroy{raise_destroy = true};
+					end
 				end
 			end
 		 end
@@ -2036,70 +2039,71 @@ end
  -- polution is capped at 500000
 --local function atomic_weapon_hit(surface_index, source_entity, position, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters, optimise)
 script.on_event(defines.events.on_script_trigger_effect, function(event)
+  local position = find_event_position(event);
   if(event.effect_id=="Thermobaric Weapon hit small-") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1, 15, 10, 10, 10);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 1, 15, 10, 10, 10);
   elseif(event.effect_id=="Thermobaric Weapon hit small") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 3, 30, 20, 30, 15);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 3, 30, 20, 30, 15);
   elseif(event.effect_id=="Thermobaric Weapon hit small+") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 4, 45, 30, 45, 25);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 4, 45, 30, 45, 25);
   elseif(event.effect_id=="Thermobaric Weapon hit medium-") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 5, 60, 40, 60, 35);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 5, 60, 40, 60, 35);
   elseif(event.effect_id=="Thermobaric Weapon hit medium") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 6, 80, 50, 80, 50);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 6, 80, 50, 80, 50);
   elseif(event.effect_id=="Thermobaric Weapon hit large") then
-	 thermobaric_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 9, 120, 100, 120, 100);
+	 thermobaric_weapon_hit(event.surface_index, event.source_entity, position, 9, 120, 100, 120, 100);
   elseif(event.effect_id=="Atomic Weapon hit 0.1t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 1, 1, 3, 30, 15, 30, 15, 15, 300.1, 1, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 60, 100, 200, 700, 10, 0.06);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 0, 1, 1, 3, 30, 15, 30, 15, 15, 300.1, 1, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 60, 100, 200, 700, 10, 0.06);
   elseif(event.effect_id=="Atomic Weapon hit 0.5t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 3, 3, 5, 50, 25, 30, 30, 20, 700.5, 1, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 80, 150, 300, 1000, 20, 0.12);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 0, 3, 3, 5, 50, 25, 30, 30, 20, 700.5, 1, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 80, 150, 300, 1000, 20, 0.12);
   elseif(event.effect_id=="Atomic Weapon hit 2t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 0, 5, 5, 15, 80, 50, 100, 100, 50, 1302, 2, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 100, 250, 500, 2000, 40, 0.25);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 0, 5, 5, 15, 80, 50, 100, 100, 50, 1302, 2, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 100, 250, 500, 2000, 40, 0.25);
   elseif(event.effect_id=="Atomic Weapon hit 4t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1, 6, 7, 20, 130, 120, 150, 180, 80, 4004, 1, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 120, 300, 900, 4000, 70, 0.4);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 1, 6, 7, 20, 130, 120, 150, 180, 80, 4004, 1, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 120, 300, 900, 4000, 70, 0.4);
   elseif(event.effect_id=="Atomic Weapon hit 8t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 3, 8, 14, 25, 200, 200, 200, 180, 100, 9008, 1, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 150, 400, 1250, 10000, 100, 0.6);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 3, 8, 14, 25, 200, 200, 200, 180, 100, 9008, 1, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 150, 400, 1250, 10000, 100, 0.6);
   elseif(event.effect_id=="Atomic Weapon hit 20t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 5, 10, 20, 30, 320, 320, 320, 180, 150, 30020, 1, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 250, 600, 1800, 15000, 160, 1);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 5, 10, 20, 30, 320, 320, 320, 180, 150, 30020, 1, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 250, 600, 1800, 15000, 160, 1);
   elseif(event.effect_id=="Atomic Weapon hit 500t") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 10, 20, 40, 35, 400, 400, 600, 400, 300, 75500, 1*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 400, 800, 2500, 25000, 300, 2);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 10, 20, 40, 35, 400, 400, 600, 400, 300, 75500, 1*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 400, 800, 2500, 25000, 300, 2);
   elseif(event.effect_id=="Atomic Weapon hit 1kt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 20, 40, 80, 75, 800, 800, 1200, 800, 300, 101000, 2*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 600, 1200, 8000, 60000, 600, 4);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 20, 40, 80, 75, 800, 800, 1200, 800, 300, 101000, 2*settings.global["large-nuke-fire-scaledown"].value, true, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 600, 1200, 8000, 60000, 600, 4);
   elseif(event.effect_id=="Atomic Weapon hit 15kt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 50, 100, 200, 150, 2000/settings.global["large-nuke-blast-range-scaledown"].value, 1000, 4000, 1000, 500, 315000, settings.global["huge-nuke-fire-scaledown"].value, false, true, false);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 1500, 3000, 20000, 100000, 1500, 8);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 50, 100, 200, 150, 2000/settings.global["large-nuke-blast-range-scaledown"].value, 1000, 4000, 1000, 500, 315000, settings.global["huge-nuke-fire-scaledown"].value, false, true, false);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 1500, 3000, 20000, 100000, 1500, 8);
   elseif(event.effect_id=="Atomic Weapon hit 100kt") then
   	 local blastD = 5500;
   	 if not settings.global["optimise-100kt"].value then
   	 	blastD = blastD/settings.global["really-huge-nuke-blast-range-scaledown"].value
   	 end
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 90, 180, 500, 400, blastD, 2500, 10000, 1500, 1000, 450000, 2*settings.global["really-huge-nuke-fire-scaledown"].value, false, false, settings.global["optimise-100kt"].value);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 2700, 5400, 36000, 200000, 2700, 16);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 90, 180, 500, 400, blastD, 2500, 10000, 1500, 1000, 450000, 2*settings.global["really-huge-nuke-fire-scaledown"].value, false, false, settings.global["optimise-100kt"].value);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 2700, 5400, 36000, 200000, 2700, 16);
   elseif(event.effect_id=="Atomic Weapon hit 1Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 190, 390, 1200, 1000, 12000, 5000, 24000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 6000, 10000, 60000, 400000, 5000, 32);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 190, 390, 1200, 1000, 12000, 5000, 24000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 6000, 10000, 60000, 400000, 5000, 32);
   elseif(event.effect_id=="Atomic Weapon hit 5Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 330, 660, 2400, 2000, 24000, 10000, 48000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 12000, 20000, 120000, 800000, 10000, 64);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 330, 660, 2400, 2000, 24000, 10000, 48000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 12000, 20000, 120000, 800000, 10000, 64);
   elseif(event.effect_id=="Atomic Weapon hit 10Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 420, 830, 3150, 4000, 36000, 15000, 72000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 18000, 30000, 180000, 1200000, 15000, 96);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 420, 830, 3150, 4000, 36000, 15000, 72000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 18000, 30000, 180000, 1200000, 15000, 96);
   elseif(event.effect_id=="Atomic Weapon hit 50Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 710, 1420, 6000, 8000, 72000, 30000, 144000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 36000, 60000, 360000, 2400000, 30000, 192);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 710, 1420, 6000, 8000, 72000, 30000, 144000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 36000, 60000, 360000, 2400000, 30000, 192);
   elseif(event.effect_id=="Atomic Weapon hit 100Mt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 900, 1800, 8000, 12000, 96000, 40000, 192000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 48000, 80000, 480000, 3200000, 40000, 256);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 900, 1800, 8000, 12000, 96000, 40000, 192000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 48000, 80000, 480000, 3200000, 40000, 256);
   elseif(event.effect_id=="Atomic Weapon hit 1Gt") then
-	 atomic_weapon_hit(event.surface_index, event.source_entity, find_event_position(event), 1800, 3600, 16000, 24000, 192000, 80000, 384000, 3200, 2000, 500000, 0, false, false, true);
-	 createBlastSoundsAndFlash(event.target_position, game.surfaces[event.surface_index], 96000, 160000, 960000, 6400000, 80000, 512);
+	 atomic_weapon_hit(event.surface_index, event.source_entity, position, 1800, 3600, 16000, 24000, 192000, 80000, 384000, 3200, 2000, 500000, 0, false, false, true);
+	 createBlastSoundsAndFlash(position, game.surfaces[event.surface_index], 96000, 160000, 960000, 6400000, 80000, 512);
   elseif(event.effect_id=="Nuke firing") then
 	 nukeFiredScan(event);
   elseif(event.effect_id=="Mega-nuke built") then
