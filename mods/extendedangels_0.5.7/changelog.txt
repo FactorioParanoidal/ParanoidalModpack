@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 2022-04-03
+  Locale:
+    - Updated localization for Ukrainian
+---------------------------------------------------------------------------------------------------
+Version: 0.5.6
+Date: 2022-03-30
+  Locale:
+    - Updated localization for Ukrainian
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 2022-03-19
+  Locale:
+    - Added partial localization for Ukrainian
+    - Updated localization for French
+---------------------------------------------------------------------------------------------------
 Version: 0.5.4
 Date: 2022-01-04
   Bugfixes:
@@ -178,7 +194,7 @@ Date: 2020-04-20
 Version: 0.3.4
 Date: 2020-04-19
   Changes:
-    - Removed logging for Angels Componets support
+    - Removed logging for Angels Components support
     - Fixed missing Bob's Logistics pack missing from Logistics warehoue 3 & 4
     - Added tress to Mk2 & Mk3 Seed Generators
 ---------------------------------------------------------------------------------------------------
