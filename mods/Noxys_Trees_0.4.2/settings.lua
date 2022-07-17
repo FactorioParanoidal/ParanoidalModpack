@@ -185,5 +185,12 @@ data:extend({
 		maximum_value = 64,
 		order = "a-k",
 	},
+	{
+		type = "string-setting",
+		name = "Noxys_Trees-surfaces",
+		setting_type = "runtime-global",
+		default_value = "1",
+		order = "a-l",
+	},
 	-- Per user
 })
