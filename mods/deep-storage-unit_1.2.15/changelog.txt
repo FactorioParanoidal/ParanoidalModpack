@@ -1,8 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.15
+Date: 7.11.2022
+  Features:
+    - Fixed memory units going into "dumb chest mode" when they were placed
+    - Fixed a crash involving empty memory elements
+    - Fixed circuit signals still being sent out after being blueprinted
+	- Removed k2 warehouses setting
+    - Massive performance optimizations
+    - You can now place multiple empty elements in a memory unit to extract an even amount into all elements
+---------------------------------------------------------------------------------------------------
 Version: 1.2.14
 Date: 3.25.2021
   Features:
-    - Preformance optimizations
+    - performance optimizations
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.10
 Date: 10.10.2020
@@ -18,7 +28,7 @@ Date: 10.9.2020
 Version: 1.2.8
 Date: 10.9.2020
   Features:
-    - Fixed a killer bug
+    - Fixed a bug
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 10.9.2020

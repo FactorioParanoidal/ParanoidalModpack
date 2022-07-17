@@ -1,7 +1,9 @@
 local shared = require 'shared'
 local update_rate = shared.update_rate
+local update_slots = shared.update_slots
 
-local floor = math.floor
+local min = math.min
+local floor, ceil = math.floor, math.ceil
 local function compactify(n)
 	local suffix = 1
 	local new
@@ -31,7 +33,6 @@ local unit_types = {
 
 local function setup()
 	global.units = global.units or {}
-	global.smooth_ups = global.smooth_ups or 0
 	
 	if remote.interfaces['PickerDollies'] then
 		for type, _ in pairs(unit_types) do
@@ -78,6 +79,8 @@ local function on_created(event)
 			}
 			combinator.operable = false
 			combinator.destructible = false
+		else
+			combinator.get_or_create_control_behavior().parameters = nil
 		end
 		
 		local powersource = surface.create_entity{
@@ -95,7 +98,7 @@ local function on_created(event)
 			inventory = entity.get_inventory(defines.inventory.chest),
 			can_accept_elements = true,
 			communications_enabled = true,
-			lag_id = math.random(0, update_rate)
+			lag_id = math.random(0, update_slots - 1)
 		}
 	end
 end
@@ -150,7 +153,7 @@ script.on_event(defines.events.on_entity_cloned, function(event)
 		stack_size = unit_data.stack_size,
 		can_accept_elements = true,
 		communications_enabled = true,
-		lag_id = math.random(0, update_rate - 1)
+		lag_id = math.random(0, update_slots - 1)
 	}
 end)
 
@@ -207,9 +210,8 @@ script.on_event(defines.events.on_pre_player_mined_item, pre_mined)
 script.on_event(defines.events.on_robot_pre_mined, pre_mined)
 script.on_event(defines.events.on_marked_for_deconstruction, pre_mined)
 
-script.on_event(defines.events.on_tick, function(event)
-	local smooth_ups = event.tick % update_rate
-	global.smooth_ups = smooth_ups
+script.on_nth_tick(update_rate, function(event)
+	local smooth_ups = event.tick % update_slots
 	
 	for unit_number, unit_data in pairs(global.units) do
 		if unit_data.lag_id ~= smooth_ups then
@@ -236,10 +238,11 @@ script.on_event(defines.events.on_tick, function(event)
 		
 		local item = unit_data.item
 		local inventory = unit_data.inventory
+		local has_items = not inventory.is_empty()
 		local changed = false
 		local sort = true
 		
-		if item == nil then
+		if has_items and item == nil then
 			for i = 1, #inventory do
 				local stack = inventory[i]
 				if stack.valid_for_read then
@@ -292,6 +295,13 @@ script.on_event(defines.events.on_tick, function(event)
 		
 		local communicator_found = false
 		local element_found, empty_element_found = false, false
+		local empty_count = inventory.get_item_count('empty-memory-element')
+		local empty_memory_element_itemstacks = {}
+		local total_count = inventory_count + unit_data.count
+		if not has_items or (empty_count == 0 and inventory.get_item_count('memory-element') == 0 and inventory.get_item_count('memory-communicator') == 0) then
+			goto no_elements
+		end
+		
 		for i = 1, #inventory do
 			local stack = inventory[i]
 			if stack.valid_for_read then
@@ -309,25 +319,36 @@ script.on_event(defines.events.on_tick, function(event)
 					communicator_found = true
 					shared.toggle_communications(unit_data, entity, stack, {type = 'item', name = item})
 				else
-					local total_count = inventory_count + unit_data.count
 					if total_count ~= 0 and name == 'empty-memory-element' then
-						stack.set_stack{name = 'memory-element', count = 1}
-						stack.tags = {name = item, count = total_count}
-						stack.custom_description = {'item-description.memory-element-active', compactify(total_count), item}
-						
-						inventory.remove{name = item, count = inventory_count}
-						inventory_count = 0
-						unit_data.count = 0
-						
-						sort = false
-						changed = true
-						
+						empty_memory_element_itemstacks[#empty_memory_element_itemstacks + 1] = stack
 						empty_element_found = true
-						unit_data.can_accept_elements = false
 					end
 				end
 			end
 		end
+		
+		if empty_element_found then
+			local average, remainder = floor(total_count / empty_count), total_count % empty_count
+			for i, stack in ipairs(empty_memory_element_itemstacks) do
+				local count = average
+				if i <= remainder then count = count + 1 end
+				if count == 0 then break end
+                  
+				stack.set_stack{name = 'memory-element', count = 1}
+				stack.tags = {name = item, count = count}
+				stack.custom_description = {'item-description.memory-element-active', compactify(count), item}
+			end
+                  
+			if inventory_count ~= 0 then inventory.remove{name = item, count = inventory_count} end
+			inventory_count = 0
+			unit_data.count = 0
+				
+			sort = false
+			changed = true
+			unit_data.can_accept_elements = false
+		end
+		
+		::no_elements::
 		
 		if not element_found and not empty_element_found then
 			unit_data.can_accept_elements = true
