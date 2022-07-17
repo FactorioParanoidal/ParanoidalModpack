@@ -1,6 +1,19 @@
 require("names")
 require("util")
 
+local grids = {"none"}
+local grid_default = grids[1]
+
+if mods['bobvehicleequipment'] then
+	grids = table_merge(grids, {"bob-locomotive", "bob-locomotive-2", "bob-locomotive-3", "bob-armoured-locomotive", "bob-armoured-locomotive-2"})
+	grid_default = "bob-locomotive-3"
+end
+
+if mods['Krastorio2'] then
+	grids = table_merge(grids, {"kr-locomotive-grid"})
+	grid_default = "kr-locomotive-grid"
+end
+
 data:extend({
 	-- startup settings
 	{
@@ -36,7 +49,7 @@ data:extend({
 		order = "d",
 	},
 	{
-		type = "int-setting",
+		type = "double-setting",
 		name = setting_cheatsy_braking,
 		setting_type = "startup",
 		default_value = 1,
@@ -51,6 +64,15 @@ data:extend({
 		default_value = true,
 		order = "f",
 	},
+	{
+		type = "string-setting",
+		name = setting_equipment_grid,
+		setting_type = "startup",
+		default_value = grid_default,
+		allowed_values = grids,
+		hidden = #grids <= 1,
+		order = "n",
+	},
 	-- runtime-global settings
 	{
 		type = "bool-setting",
@@ -60,25 +82,3 @@ data:extend({
 		order = "a",
 	},
 })
-
-local grids = {"none"}
-local grid_default = grids[1]
-
-if mods['bobvehicleequipment'] then
-	grids = table_merge(grids, {"bob-locomotive", "bob-locomotive-2", "bob-locomotive-3", "bob-armoured-locomotive", "bob-armoured-locomotive-2"})
-	grid_default = "bob-locomotive-3"
-end
-
-if #grids > 1 then
-	data:extend({
-		-- startup settings
-		{
-			type = "string-setting",
-			name = setting_equipment_grid,
-			setting_type = "startup",
-			default_value = grid_default,
-			allowed_values = grids,
-			order = "n",
-		},
-	})
-end
