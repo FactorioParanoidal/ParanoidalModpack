@@ -121,6 +121,49 @@ data:extend(
             },
             default_value = "<",
             order = "fa"
-        }
+        },
+        {
+            type = "bool-setting",
+            name = "additional-paste-settings-paste-to-belt-enabled",
+            setting_type = "runtime-per-user",
+            default_value = false,
+            order = "eb"
+        },
+        {
+            type = "bool-setting",
+            name = "additional-paste-settings-paste-clear-inserter-filter-on-paste-over",
+            setting_type = "runtime-per-user",
+            default_value = true,
+            order = "ec"
+        },
+        {
+            type = "string-setting",
+            name = "additional-paste-settings-station_name_load",
+            setting_type = "runtime-global",
+            allow_blank = false,
+            default_value = "Load __1__ (__2__)",
+            order = "za"
+        },
+        {
+            type = "string-setting",
+            name = "additional-paste-settings-station_name_unload",
+            setting_type = "runtime-global",
+            allow_blank = false,
+            default_value = "Unload __1__ (__2__)",
+            order = "zb"
+        },
     }
 )
+
+if mods["space-exploration-postprocess"] then
+    data:extend({
+        {
+            type = "string-setting",
+            name = "additional-paste-settings-se-rocket-landing-pad-name",
+            setting_type = "runtime-global",
+            allow_blank = false,
+            default_value = "__1__ (__2__)",
+            order = "zc"
+        },
+    })
+end
