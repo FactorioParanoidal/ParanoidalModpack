@@ -104,7 +104,7 @@ event.register("qis-search", function(e)
   local player = game.get_player(e.player_index)
   local player_table = global.players[e.player_index]
   if player_table.flags.can_open_gui then
-    search_gui.toggle(player, player_table)
+    search_gui.toggle(player, player_table, false)
   else
     player_table.flags.show_message_after_translation = true
     player.print({ "message.qis-cannot-open-gui" })
@@ -261,7 +261,7 @@ event.on_lua_shortcut(function(e)
     local player = game.get_player(e.player_index)
     local player_table = global.players[e.player_index]
     if player_table.flags.can_open_gui then
-      search_gui.toggle(player, player_table)
+      search_gui.toggle(player, player_table, true)
     end
   end
 end)

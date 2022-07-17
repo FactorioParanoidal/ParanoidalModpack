@@ -30,7 +30,13 @@ function logistic_request.set(player, player_table, name, counts, is_temporary)
 
   -- save previous request if this one is temporary
   if is_temporary then
-    requests.temporary[name] = table.deep_copy(request_data)
+    -- Do not overwrite previously stored request.
+    if not requests.temporary[name] then
+      requests.temporary[name] = table.deep_copy(request_data)
+      -- Store age of temporary request in order to allow player to
+      -- persist changes after temporary requests have been fulfilled.
+      requests.temporary[name].age = game.tick
+    end
   else
     -- delete temporary request for this item if there is one
     requests.temporary[name] = nil
@@ -47,6 +53,9 @@ end
 
 function logistic_request.clear(player, player_table, name)
   local requests = player_table.logistic_requests
+  if not requests then
+    return
+  end
   local request_data = requests.by_name[name]
   if request_data then
     player.clear_personal_logistic_slot(request_data.index)
@@ -55,6 +64,9 @@ end
 
 function logistic_request.update(player, player_table, slot_index)
   local requests = player_table.logistic_requests
+  if not requests then
+    return
+  end
   local existing_request = player.get_personal_logistic_slot(slot_index)
   if existing_request then
     local request_data = requests.by_index[slot_index]
@@ -79,6 +91,22 @@ function logistic_request.update(player, player_table, slot_index)
       requests.by_index[slot_index] = existing_request
       requests.by_name[existing_request.name] = existing_request
     end
+
+    -- Update previous request's quantities if affected. Allows player
+    -- to make changes to logistic requests that are affected by
+    -- temporary requests or quick-trashing, and still preserve those
+    -- (manual) changes after temporary requests are fullfilled.
+    if existing_request.name then
+      local temporary_request = requests.temporary[existing_request.name]
+      local current_age = game.tick
+
+      if temporary_request and temporary_request.age < current_age then
+        temporary_request.age = current_age
+        temporary_request.min = existing_request.min
+        temporary_request.max = existing_request.max
+      end
+    end
+
   end
 end
 
@@ -111,6 +139,9 @@ end
 
 function logistic_request.update_temporaries(player, player_table, combined_contents)
   local requests = player_table.logistic_requests
+  if not requests then
+    return
+  end
   local temporary_requests = requests.temporary
 
   for name, old_request_data in pairs(temporary_requests) do
@@ -132,25 +163,29 @@ end
 
 function logistic_request.quick_trash_all(player, player_table)
   local main_inventory = player.get_main_inventory()
-  if main_inventory and main_inventory.valid then
-    local requests = player_table.logistic_requests
-    local prototypes = game.item_prototypes
-    for name, count in pairs(search.get_combined_inventory_contents(player, main_inventory)) do
-      if not constants.ignored_item_types[prototypes[name].type] then
-        local existing_request = requests.by_name[name]
-        if existing_request then
-          if count > existing_request.min then
-            logistic_request.set(
-              player,
-              player_table,
-              name,
-              { min = existing_request.min, max = existing_request.min },
-              true
-            )
-          end
-        else
-          logistic_request.set(player, player_table, name, { min = 0, max = 0 }, true)
+  if not main_inventory or not main_inventory.valid then
+    return
+  end
+  local requests = player_table.logistic_requests
+  if not requests then
+    return
+  end
+  local prototypes = game.item_prototypes
+  for name, count in pairs(search.get_combined_inventory_contents(player, main_inventory)) do
+    if not constants.ignored_item_types[prototypes[name].type] then
+      local existing_request = requests.by_name[name]
+      if existing_request then
+        if count > existing_request.min then
+          logistic_request.set(
+            player,
+            player_table,
+            name,
+            { min = existing_request.min, max = existing_request.min },
+            true
+          )
         end
+      else
+        logistic_request.set(player, player_table, name, { min = 0, max = 0 }, true)
       end
     end
   end

@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 2022-07-11
+  Bugfixes:
+    - Fixed loss of original logistics requests configuration when using temporary requests or trashing of all items multiple times in a row without the previous requests being cleared.
+    - Logistic request changes done while a temporary request is still in effect are now persisted even after the temporary request has expired/been fullfilled.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2022-07-03
+  Changes:
+    - The QIS hotkey will only open the GUI if no other windows are marked as "opened"
+      - This allows you to use the same hotkey for QIS and focusing search boxes
+      - The shortcut button's behavior is unchanged
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2022-05-26
+  Bugfixes:
+    - Fixed a crash when another mod updates logistic slots before QIS can fully initialize
+    - Fixed a crash when pressing E with no search results
+    - Fixed a crash when the mod tries to update the GUI right after mod configuration changes
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2022-04-14
+  Bugfixes:
+    - Fixed that search would not work if you used capital letters (#27)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2021-12-06
   Changes:

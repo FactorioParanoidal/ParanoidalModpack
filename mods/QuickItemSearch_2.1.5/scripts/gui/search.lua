@@ -91,7 +91,11 @@ function search_gui.build(player, player_table)
                     {
                       type = "label",
                       style = "bold_label",
-                      caption = { "", "[img=utility/warning_white]  ", { "gui.qis-not-connected-to-logistic-network" } },
+                      caption = {
+                        "",
+                        "[img=utility/warning_white]  ",
+                        { "gui.qis-not-connected-to-logistic-network" },
+                      },
                     },
                   },
                 },
@@ -178,11 +182,11 @@ function search_gui.close(player, player_table, force_close)
   global.update_search_results[player.index] = nil
 end
 
-function search_gui.toggle(player, player_table)
+function search_gui.toggle(player, player_table, force_open)
   local gui_data = player_table.guis.search
   if gui_data.state.visible then
     search_gui.close(player, player_table)
-  else
+  elseif force_open or player.opened_gui_type and player.opened_gui_type == defines.gui_type.none then
     search_gui.open(player, player_table)
   end
 end
@@ -219,7 +223,7 @@ function search_gui.perform_search(player, player_table, updated_query, combined
 
   state.last_search_update = game.ticks_played
 
-  local query = state.query
+  local query = string.lower(state.query)
   local results_table = refs.results_table
   local children = results_table.children
 
@@ -368,6 +372,9 @@ function search_gui.select_item(player, player_table, modifiers, index)
   end
 
   local result = state.results[i]
+  if not result then
+    return
+  end
   if modifiers.shift then
     local player_controller = player.controller_type
     if player_controller == defines.controllers.editor or player_controller == defines.controllers.character then
@@ -412,10 +419,11 @@ function search_gui.update_for_active_players()
     local player = game.get_player(player_index)
     local player_table = global.players[player_index]
     local gui_data = player_table.guis.search
-    local state = gui_data.state
-
-    if tick - state.last_search_update > 120 then
-      search_gui.perform_search(player, player_table)
+    if gui_data then
+      local state = gui_data.state
+      if tick - state.last_search_update > 120 then
+        search_gui.perform_search(player, player_table)
+      end
     end
   end
 end
