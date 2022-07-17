@@ -1,7 +1,7 @@
 require("names")
 
-local function player_print(player, msg)
-	local printer = game.players[player] or game
+local function player_print(player_index, msg)
+	local printer = game.players[player_index] or game
 	printer.print(msg)
 end
 

@@ -1,8 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-03-13
+  Bugfixes:
+    - Fix game unable to start with a fractional breaking force multiplier.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-02-24
+  Bugfixes:
+    - Krastorio 2 integration should always work now, independent of mod load order.
+  Locale:
+    - Ukrainian locale added, provided by Met_en_Bouldry (https://mods.factorio.com/user/Met_en_Bouldry).
+  Modding:
+    - Always add the equipment grid setting but hide it if there are none available; allows other mods to add equipment grids and unhide the setting.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022-02-13
+  Modding:
+    - EvenMoreLight: More light for battery-electric locomotives too.
+    - Krastorio 2: Add Krastorio 2 locomotive equipment grid to battery-electric locomotives.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-09-09
   Modding:
-    - Bob's Vehicle Equipment: Add equipment grids to battery-electric locomotives.
+    - Bob's Vehicle Equipment: Add Bob's equipment grids to battery-electric locomotives.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2021-08-14

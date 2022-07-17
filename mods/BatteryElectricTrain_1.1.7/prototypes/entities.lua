@@ -48,11 +48,9 @@ local function MakeLocomotive()
 		max_sounds_per_type = 2,
 	}
 
-	if settings.startup[setting_equipment_grid] then
-		local grid = settings.startup[setting_equipment_grid].value
-		if grid ~= "none" then
-			loc.equipment_grid = grid
-		end
+	local grid = settings.startup[setting_equipment_grid].value
+	if grid ~= "none" then
+		loc.equipment_grid = grid
 	end
 
 	return loc
