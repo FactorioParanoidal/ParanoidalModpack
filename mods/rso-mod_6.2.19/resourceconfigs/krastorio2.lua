@@ -24,7 +24,7 @@ function fillKrastorio2Config(config)
     config["mineral-water"] = 
     {
         type="resource-liquid",
-        minimum_amount=200000,
+        minimum_amount=100000,
         allotment=60,
         spawns_per_region={min=1, max=2},
         richness={min=100000, max=200000},

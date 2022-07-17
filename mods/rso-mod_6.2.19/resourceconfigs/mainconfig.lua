@@ -39,16 +39,12 @@ require("resourceconfigs.xander")
 require("resourceconfigs.xander1")
 require("resourceconfigs.darkstar")
 require("resourceconfigs.dyworld")
-require("resourceconfigs.pyfusion")
-require("resourceconfigs.pypetroleumhandling")
 require("resourceconfigs.hydraulicpumpjacks")
 require("resourceconfigs.napus")
 require("resourceconfigs.fpp")
 require("resourceconfigs.iceore")
 require("resourceconfigs.clownsores")
 require("resourceconfigs.liquidscience")
-require("resourceconfigs.pycoal")
-require("resourceconfigs.pyhightech")
 require("resourceconfigs.cncssulfur")
 require("resourceconfigs.dp77sulfur")
 require("resourceconfigs.allminable")
@@ -61,8 +57,6 @@ require("resourceconfigs.mutabor")
 require("resourceconfigs.tiberium")
 require("resourceconfigs.tinyoverhaul")
 require("resourceconfigs.neenemies")
-require("resourceconfigs.pyrawores")
-require("resourceconfigs.pyalienlife")
 require("resourceconfigs.leighzermorphite")
 require("resourceconfigs.leighzerscienceores")
 require("resourceconfigs.leighzersciencebottling")
@@ -90,13 +84,53 @@ require("resourceconfigs.dualores")
 require("resourceconfigs.enhancedrecipes")
 require("resourceconfigs.bztungsten")
 require("resourceconfigs.bzzirconium")
+require("resourceconfigs.bzcarbon")
+require("resourceconfigs.bzaluminum")
+require("resourceconfigs.bztin")
 require("resourceconfigs.nullius")
 require("resourceconfigs.spfumaterials")
 require("resourceconfigs.qatmore")
 require("resourceconfigs.ritnglass")
 -- require("resourceconfigs.yaiom")
 
+require("resourceconfigs.pyalienlife")
+require("resourceconfigs.pyalienlife194")
+require("resourceconfigs.pyalternativeenergy194")
+require("resourceconfigs.pycoal")
+require("resourceconfigs.pycoal194")
+require("resourceconfigs.pyfusion")
+require("resourceconfigs.pyfusion194")
+require("resourceconfigs.pyhightech")
+require("resourceconfigs.pyhightech194")
+require("resourceconfigs.pypetroleumhandling")
+require("resourceconfigs.pypetroleumhandling194")
+require("resourceconfigs.pyrawores")
+require("resourceconfigs.pyrawores194")
+
+local logger = require 'libs/logger'
+local l = logger.new_logger()
+
+function versionValue(version)
+	local mult = 1e7
+	local value = 0
+	
+	if version == nil then
+		return value
+	end	
+	
+	for token in string.gmatch(version, "[^%.]+") do
+		value = value + tonumber(token) * mult
+		mult = mult / 100
+	end	
+	
+	return value
+end
+
 function loadResourceConfig()
+
+	local version194 = versionValue("1.9.4")
+	local pyModsVersion = versionValue(game.active_mods["pycoalprocessing"])
+	local use194Configs = pyModsVersion >= version194
 
 	local config={}
 
@@ -275,11 +309,19 @@ function loadResourceConfig()
 	end
 
 	if game.active_mods["pyfusionenergy"] then
-		fillPyFusionConfig(config)
+		if use194Configs then
+			fillPyFusionConfig194(config)
+		else
+			fillPyFusionConfig(config)
+		end
 	end
 
 	if game.active_mods["pypetroleumhandling"] then
-		fillPyPetroleumHandlingConfig(config)
+		if use194Configs then
+			fillPyPetroleumHandlingConfig194(config)
+		else
+			fillPyPetroleumHandlingConfig(config)
+		end
 	end
 
 	if game.active_mods["HydraulicPumpjacks"] then
@@ -303,13 +345,27 @@ function loadResourceConfig()
 	end
 
 	if game.active_mods["pycoalprocessing"] then
-		fillPyCoalConfig(config)
+		if use194Configs then
+			fillPyCoalConfig194(config)
+		else
+			fillPyCoalConfig(config)
+		end
 	end
 
 	if game.active_mods["pyhightech"] then
-		fillPyHighTechConfig(config)
+		if use194Configs then
+			fillPyHighTechConfig194(config)
+		else
+			fillPyHighTechConfig(config)
+		end
 	end
 
+	if game.active_mods["pyalternativeenergy"] then
+		if use194Configs then
+			fillPyAlternativeEnergyConfig194(config)
+		end
+	end
+	
 	if game.active_mods["cncs_Sulfur_Mod"] then
 		fillCncsSulfurConfig(config)
 	end
@@ -355,11 +411,19 @@ function loadResourceConfig()
 	end
 
 	if game.active_mods["pyrawores"] then
-		fillPyRawOresConfig(config)
+		if use194Configs then
+			fillPyRawOresConfig194(config)
+		else
+			fillPyRawOresConfig(config)
+		end
 	end
 
 	if game.active_mods["pyalienlife"] then
-		fillPyalienlifeConfig(config)
+		if use194Configs then
+			fillPyalienlifeConfig194(config)
+		else
+			fillPyalienlifeConfig(config)
+		end
 	end
 
 	if game.active_mods["leighzermorphite"] then
@@ -457,6 +521,14 @@ function loadResourceConfig()
 	if game.active_mods["bzzirconium"] then
 		fillBzzirconiumConfig(config)
 	end
+
+	if game.active_mods["bzaluminum"] then
+		fillBzaluminumConfig(config)
+	end
+
+	if game.active_mods["bzcarbon"] then
+		fillBzcarbon(config)
+	end
 	
 	if game.active_mods["nullius"] then
 		fillNulliusConfig(config)
@@ -469,6 +541,10 @@ function loadResourceConfig()
 
 	if game.active_mods["RitnGlass"] then
 		fillRitnGlassConfig(config)
+	end
+
+	if game.active_mods["bztin"] then
+		fillBztinConfig(config)
 	end
 
 	if game.active_mods["yaiom"] then
