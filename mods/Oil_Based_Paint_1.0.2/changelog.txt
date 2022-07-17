@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-07-17
+  Bugfixes:
+    - Fixed crash when fields like animation, layers, or hr_version can't be found.
+    - Fixed crash when looking for spidertron patrol remote.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022-07-17
+  Changes:
+    - Changed thumbnail.png to feature a red car.
