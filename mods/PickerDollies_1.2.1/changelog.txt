@@ -1,4 +1,34 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022-05-07
+  Bugfixes:
+    - Workaround for mods that don't have PickerDollies as optional dependency. #15
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-05-05
+  Changes:
+    - Correctly increase minor version because of api changes and additions.
+    - Added sound when moving entities.
+    - Save last entity can now be adjusted with a custom save time.
+  Bugfixes:
+    - Fix oblong rotation.
+    - Fix oblong failed rotation.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022-05-04
+  Features:
+    - Added remote interface add_oblong_name->boolean, remove_oblong_name->boolean for registering and removing oblong entities.
+    - Added remote interface get_oblong_names to return a dictionary = true mapping of oblong names.
+  Changes:
+    - Removed silent from add_blacklist_name, remove_blacklist_name, get_blacklist_names, get/add return true/false.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-04-08
+  Changes:
+    - Add settings to ignore collision checks.
+  Bugfixes:
+    - Saved dollies don't get unsaved when selection changes to a blacklisted entity. (i.e. moving pole on resource patches)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2020-11-28
   Changes:
