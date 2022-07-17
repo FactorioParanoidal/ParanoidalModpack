@@ -1,6 +1,8 @@
 --- Additional lua globals
 -- @module Utils.Globals
 
+_ENV = _ENV or _G
+
 local config = require('__stdlib__/stdlib/config')
 
 local Table = require('__stdlib__/stdlib/utils/table')
@@ -54,18 +56,15 @@ rawset(_ENV, 'inspect', inspect)
 
 -- Set up faketorio for local testing, defines will already be available in an active mod or busted specs
 if not _ENV.defines then
+    --- @diagnostic disable-next-line: deprecated
     _ENV.table.unpack = _ENV.table.unpack or _ENV.unpack
-    if _ENV.os and _ENV.os.getenv('LOCAL_LUA_DEBUGGER_VSCODE') == '1' then
-        require('__stdlib__/faketorio/require')
-        _ENV.package.strip_indentifier()
-    end
     if config.control or config.game then
-        local world = require('__stdlib__/faketorio/world').bootstrap()
+        local world = require('faketorio/world').bootstrap()
         if config.game then
             world.init()
         end
     else
-        require('__stdlib__/faketorio/dataloader')
+        require('faketorio/dataloader')
     end
     _ENV.log = function(msg)
         print(msg)
@@ -77,42 +76,6 @@ require('__stdlib__/stdlib/utils/defines/color')
 require('__stdlib__/stdlib/utils/defines/anticolor')
 require('__stdlib__/stdlib/utils/defines/lightcolor')
 require('__stdlib__/stdlib/utils/defines/time')
-
--- Settings Mutates
-if _ENV.settings then
-    function _ENV.settings.get(cat, key)
-        return _ENV.settings[cat][key] and _ENV.settings[cat][key].value
-    end
-    function _ENV.settings.get_startup(key)
-        return _ENV.settings.get('startup', key)
-    end
-end
-
--- Dubug Adapter Mutates
-if _ENV.__DebugAdapter then
-    if _ENV.__DebugAdapter.attach then
-        -- Add our custom mutate info to the debugadapter.
-        if _ENV.settings and _ENV.settings.get then
-            local object_info = require('__debugadapter__/luaobjectinfo.lua')
-            object_info.expandKeys['LuaSettings']['get'] = {}
-            object_info.expandKeys['LuaSettings']['get_startup'] = {}
-        end
-    end
-else
-    _ENV.__DebugAdapter = {
-        print = function()
-        end,
-        stepIgnoreAll = function()
-        end,
-        stepIgnore = function()
-        end,
-        breakpoint = function()
-        end,
-        levelPath = function()
-        end
-    }
-    _ENV.__Profiler = _ENV.DebugAdapter
-end
 
 --- Require a file that may not exist
 -- @tparam string module path to the module
