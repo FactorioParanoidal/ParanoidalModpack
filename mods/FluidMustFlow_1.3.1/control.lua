@@ -3,12 +3,12 @@ if not settings.startup["fmf-enable-duct-auto-join"].value then
   return
 end
 
--- NOTE: The entire file below this point is copied in src/prototypes/tips-and-tricks.lua for the drag building simulation
+-- The entire file below this point is copied in src/prototypes/tips-and-tricks.lua for the drag building simulation
 
 --- Calculates the midpoint between two positions.
---- @param pos_1 Position
---- @param pos_2 Position
---- @return Position
+--- @param pos_1 MapPosition
+--- @param pos_2 MapPosition
+--- @return MapPosition
 local function get_midpoint(pos_1, pos_2)
   return {
     x = (pos_1.x + pos_2.x) / 2,

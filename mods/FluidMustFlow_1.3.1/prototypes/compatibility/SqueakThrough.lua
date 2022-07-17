@@ -1,5 +1,5 @@
 if mods["Squeak Through"] then
-  require("__Squeak Through__/config")
+  require("__Squeak Through__.config")
 
   function addExcludedEntityToSqueakThrough(name, category)
     table.insert(exclusions, {
