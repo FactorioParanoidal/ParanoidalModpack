@@ -91,18 +91,13 @@ data:extend{
 			'energy-shield-mk2-equipment'
 		},
 		unit = {
-			count = 10000,
-			ingredients = { --drd
-        {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
-        {"chemical-science-pack", 1},
-        {"military-science-pack", 1},
-        {"production-science-pack", 2},
-        {"utility-science-pack", 2},
-        {"advanced-logistic-science-pack", 2},
-        {"space-science-pack", 1}
+			count = 200,
+			ingredients = {
+				{'automation-science-pack', 1},
+				{'logistic-science-pack', 1},
+				{'chemical-science-pack', 1},
 			},
-			time = 60
+			time = 30
 		}
 	},
 	{
@@ -238,32 +233,6 @@ data:extend{
 		placeable_by = {item = 'memory-unit', count = 0}
 	}
 }
-
-if mods['Krastorio2'] and settings.startup['remove-krastorio-warehouses'].value == true then
-	local warehouses = {
-		['kr-big-container'] = 'container',
-		['kr-big-active-provider-container'] = 'logistic-container',
-		['kr-big-passive-provider-container'] = 'logistic-container',
-		['kr-big-buffer-container'] = 'logistic-container',
-		['kr-big-storage-container'] = 'logistic-container',
-		['kr-big-requester-container'] = 'logistic-container',
-	}
-	
-	for _, tech in ipairs{'kr-containers', 'kr-logistic-containers-1', 'kr-logistic-containers-2'} do
-		tech = data.raw.technology[tech]
-		local new_effects = {}
-		for _, effect in ipairs(tech.effects) do
-			if effect.type ~= 'unlock-recipe' or not warehouses[effect.recipe] then
-				new_effects[#new_effects + 1] = effect
-			end
-		end
-		tech.effects = new_effects
-	end
-	
-	for recipe, _ in pairs(warehouses) do
-		data.raw.recipe[recipe].hidden = true
-	end
-end
 
 for _, module in pairs(data.raw.module) do
 	if module.effect.productivity and module.effect.productivity.bonus and module.effect.productivity.bonus > 0 and module.limitation then
