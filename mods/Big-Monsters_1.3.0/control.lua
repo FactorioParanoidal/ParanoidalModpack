@@ -18,14 +18,16 @@ global.chances.soldiers   = {min_evo=settings.global["bm-soldiers-min_evo"].valu
 global.chances.invasion   = {min_evo=settings.global["bm-invasion-min_evo"].value  , chance=settings.global["bm-invasion-chance"].value}
 global.chances.swarm      = {min_evo=0,   chance=settings.global["bm-swarm-chance"].value, max_evo=settings.global["bm-swarm-max_evo"].value}
 
-global.enable_silo_attack = settings.global["bm-enable-silo-attack"].value
-global.show_cameras = settings.global["bm-show-cameras"].value
-global.show_alerts = settings.global["bm-show-alerts"].value
-global.days = settings.global["bm-event-days"].value
-global.allow_nuker = settings.global["bm-allow-nuker"].value
-global.difficulty_level = settings.global["bm-difficulty-level"].value
-global.spidertron_nuke = settings.global["bm-spidertron-nuke"].value
-global.tree_events_chance = settings.global["bm-tree-events-chance"].value/100
+global.enable_silo_attack  = settings.global["bm-enable-silo-attack"].value
+global.show_cameras 	   = settings.global["bm-show-cameras"].value
+global.show_alerts 		   = settings.global["bm-show-alerts"].value
+global.play_sound_alert    = settings.global["bm-play-sound-alert"].value
+global.days 			   = settings.global["bm-event-days"].value
+global.allow_nuker  	   = settings.global["bm-allow-nuker"].value
+global.difficulty_level    = settings.global["bm-difficulty-level"].value
+global.spidertron_nuke     = settings.global["bm-spidertron-nuke"].value
+global.tree_events_chance  = settings.global["bm-tree-events-chance"].value/100
+global.spawn_near_nests    = settings.global["bm-spawn_near_nests"].value 
 end
 script.on_event(defines.events.on_runtime_mod_setting_changed, ReadRunTimeSettings)
 
@@ -38,7 +40,7 @@ global.biterzillas      = global.biterzillas or {}
 global.invasions        = global.invasions or {}
 global.rocket_silos     = global.rocket_silos or {}
 global.other_enemies    = global.other_enemies or {}
-
+global.next_wave        = global.next_wave or {}
 
 ReadRunTimeSettings()
 global.next_event       = global.next_event or (game.tick + (global.days * 7 * 60 * 60))
@@ -88,15 +90,45 @@ for event, chances in pairs (global.chances) do
 return the_event
 end
 
+
+
+
+
+
+
+function Play_sound_alert(force,id)
+if global.play_sound_alert then
+local sound 
+if id==1 then
+		if game.active_mods['mferrari-mod-sounds'] then sound = 'mferrari_tense_music_1m' else sound='tc_sound_alarm_1' end
+	elseif id==2 then
+		if game.active_mods['mferrari-mod-sounds'] then sound = 'mferrari_tense_music_2m' else sound='tc_sound_alarm_2' end
+	elseif id==3 then	
+		if game.active_mods['mferrari-mod-sounds'] then sound = 'mferrari_tense_music_3m' else sound='tc_sound_siren' end
+	end
+if game.active_mods['mferrari-mod-sounds'] then force.play_sound{path=sound,override_sound_type='ambient' } else force.play_sound{path=sound} end  
+end
+end
+
+
+
+
+
+
 --the_event = biterzilla,soldiers,worms,volcano,invasion,swarm
 function CreateNewEvent(the_event,surfacename, forcename)
 
 local sufaces_tab = table.deepcopy(global.surfaces)
 if surfacename then add_list(sufaces_tab, surfacename) end
 
+local next_waves={}
+
 for s=1,#sufaces_tab do
 local surface = game.surfaces[sufaces_tab[s]]
 if not the_event then the_event=pick_event() end
+
+
+
 
 for p=1,#global.player_forces do
 	local pforce = game.forces[global.player_forces[p]]
@@ -110,12 +142,14 @@ for p=1,#global.player_forces do
 			
 			if the_event=='swarm' then 
 					local last_building = FindTeamAttackCorner(surface, pforce, player_spawn,1)
-					CallFrenzyAttack(surface,last_building)
+					local attack = {surface=surface,target=last_building}   --(at.surface,at.target,at.limit,at.multiplier)
+					table.insert (next_waves,attack) 	
+					--CallFrenzyAttack(surface,last_building)
 					if global.show_alerts then 
 						pforce.print({"bm-txt-alert"},colors.lightred)
 						pforce.print({"bm-txt-swarm"},colors.lightred)
-						pforce.play_sound{path='tc_sound_alarm_1'}
 						end
+					Play_sound_alert(pforce,1)	
 						
 				elseif the_event=='invasion' then 
 					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
@@ -125,8 +159,8 @@ for p=1,#global.player_forces do
 					if global.show_alerts then 
 						pforce.print({"bm-txt-alert"},colors.lightred)
 						pforce.print({"bm-txt-invasion"},colors.lightred)
-						pforce.play_sound{path='tc_sound_alarm_1'}
 						end	
+					Play_sound_alert(pforce,1)	
 					if global.show_cameras then CreateCameraForForce(pforce,target,surface,nil,nil,120,0.15) end
 					
 					
@@ -139,8 +173,8 @@ for p=1,#global.player_forces do
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-volcano"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
 							end	
+						Play_sound_alert(pforce,2)		
 						if global.show_cameras then CreateCameraForForce(pforce,volcano,surface,nil,nil,120,0.15) end
 						end
 
@@ -154,23 +188,24 @@ for p=1,#global.player_forces do
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-worm"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
 							end	
+						Play_sound_alert(pforce,2)	
 						if global.show_cameras then CreateCameraForForce(pforce,bigworm,surface,nil,nil,120,0.15) end
 						end
 
 
-				elseif the_event=='soldiers' then
+				elseif the_event=='soldiers' then  
 					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,4)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
+						if global.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, humie = create_soldiers_group(surface,spawn,pcount,attack1, attack2, player_spawn)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-human_soldiers"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
 							end	
+						Play_sound_alert(pforce,2)
 						if global.show_cameras then CreateCameraForForce(pforce,humie,surface,nil,nil,120,0.15) end
 						end
 
@@ -180,12 +215,13 @@ for p=1,#global.player_forces do
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
+						if global.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, brutal = create_brutals_group(surface,spawn,pcount,attack1, attack2, player_spawn)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-brutals"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
-							end	
+							end
+						Play_sound_alert(pforce,2)	
 						if global.show_cameras then CreateCameraForForce(pforce,brutal,surface,nil,nil,120,0.15) end
 						end
 
@@ -195,12 +231,13 @@ for p=1,#global.player_forces do
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
+						if global.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-biterzilla"},colors.lightred)
-							pforce.play_sound{path='tc_sound_siren'}
 							end	
+						Play_sound_alert(pforce,3)
 						if global.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
 						end
 
@@ -210,12 +247,13 @@ for p=1,#global.player_forces do
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
+						if global.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local spider = create_spidertron(surface,spawn,pcount)
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-biterzilla"},colors.lightred)
-							pforce.play_sound{path='tc_sound_siren'}
-							end	
+							end
+						Play_sound_alert(pforce,3)	
 						if global.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
 
@@ -225,12 +263,13 @@ for p=1,#global.player_forces do
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
+						if global.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,'tc_fake_human_ultimate_boss_cannon_20')
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-biterzilla"},colors.lightred)
-							pforce.play_sound{path='tc_sound_siren'}
-							end	
+							end
+						Play_sound_alert(pforce,3)	
 						if global.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
 						end
 
@@ -242,9 +281,32 @@ for p=1,#global.player_forces do
 	end -- p
 
 end
+
+if #next_waves>0 then 
+	local waves = 2 + math.ceil(global.difficulty_level) + math.floor (game.forces.enemy.evolution_factor * 6)
+	for w=1,waves do
+		local tick = game.tick + ((w-1)*60*40 )
+		local new_wave = {tick=tick, event_name=the_event, attacks=next_waves}
+		table.insert(global.next_wave,new_wave)
+		end
+	end
+
 end
 
 
+
+function get_pos_near_enemy_nest(surface,spawn,pforce)
+local enemy = surface.find_nearest_enemy{position=spawn, max_distance=500, force=pforce}
+if enemy then
+	local f = enemy.force
+	local nests = surface.find_entities_filtered{type='unit-spawner', position=enemy.position, radius=300, force=f, limit=5}
+	if #nests>0 then 
+		spawn = get_random_pos_near(nests[math.random(#nests)].position,30)
+		spawn = surface.find_non_colliding_position('assembling-machine-1', spawn, 0, 1)
+		end
+	end
+return spawn 
+end
 
 function Create_Position_Event(the_event, surface, position, pforce)
 local pcount = #pforce.connected_players  
@@ -254,7 +316,6 @@ local pcount = #pforce.connected_players
 					if global.show_alerts then 
 						pforce.print({"bm-txt-alert"},colors.lightred)
 						pforce.print({"bm-txt-swarm"},colors.lightred)
-						pforce.play_sound{path='tc_sound_alarm_1'}
 						end
 						
 				elseif the_event=='invasion' then 
@@ -265,8 +326,8 @@ local pcount = #pforce.connected_players
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-invasion"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_1'}
 							end	
+						Play_sound_alert(pforce,1)	
 						if global.show_cameras then CreateCameraForForce(pforce,target,surface,nil,nil,120,0.15) end
 						end
 					
@@ -280,8 +341,8 @@ local pcount = #pforce.connected_players
 							if global.show_alerts then 
 								pforce.print({"bm-txt-alert"},colors.lightred)
 								pforce.print({"bm-txt-volcano"},colors.lightred)
-								pforce.play_sound{path='tc_sound_alarm_2'}
 								end	
+							Play_sound_alert(pforce,2)	
 							if global.show_cameras then CreateCameraForForce(pforce,volcano,surface,nil,nil,120,0.15) end
 							end
 						end
@@ -296,8 +357,8 @@ local pcount = #pforce.connected_players
 							if global.show_alerts then 
 								pforce.print({"bm-txt-alert"},colors.lightred)
 								pforce.print({"bm-txt-worm"},colors.lightred)
-								pforce.play_sound{path='tc_sound_alarm_2'}
 								end	
+							Play_sound_alert(pforce,2)	
 							if global.show_cameras then CreateCameraForForce(pforce,bigworm,surface,nil,nil,120,0.15) end
 							end
 						end
@@ -311,8 +372,8 @@ local pcount = #pforce.connected_players
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-human_soldiers"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
 							end	
+						Play_sound_alert(pforce,2)	
 						if global.show_cameras then CreateCameraForForce(pforce,humie,surface,nil,nil,120,0.15) end
 						end
 
@@ -325,8 +386,8 @@ local pcount = #pforce.connected_players
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-brutals"},colors.lightred)
-							pforce.play_sound{path='tc_sound_alarm_2'}
 							end	
+						Play_sound_alert(pforce,2)	
 						if global.show_cameras then CreateCameraForForce(pforce,brutal,surface,nil,nil,120,0.15) end
 						end
 
@@ -338,8 +399,8 @@ local pcount = #pforce.connected_players
 						if global.show_alerts then 
 							pforce.print({"bm-txt-alert"},colors.lightred)
 							pforce.print({"bm-txt-biterzilla"},colors.lightred)
-							pforce.play_sound{path='tc_sound_siren'}
 							end	
+						Play_sound_alert(pforce,3)	
 						if global.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
 						end
 
@@ -368,7 +429,8 @@ end
 
 
 script.on_nth_tick(60*60, function (event)
-if global.days>0 then 
+if global.days>0 then
+
 	if global.next_event<game.tick then 
 		CreateNewEvent()
 		global.next_event = game.tick + (global.days * (7 + math.random(-2,2)) * 60 * 60)
@@ -578,8 +640,21 @@ return list[math.random(#list)] ..n
 end
 
 
+function Call_next_wave(event)
+local event_name = event.event_name 
+if event_name == 'swarm' then 
+	local attacks = event.attacks
+	for a=1,#attacks do
+		local at = attacks[a]
+		CallFrenzyAttack(at.surface,at.target,at.limit,at.multiplier)
+		end
+	end
+end
+
 
 function CallFrenzyAttack(surface,target,limit,multiplier)
+if not (surface and surface.valid) then return end
+
 if surface.map_gen_settings.autoplace_controls and surface.map_gen_settings.autoplace_controls["enemy-base"] 
    and surface.map_gen_settings.autoplace_controls["enemy-base"].size>0 then
 
@@ -682,8 +757,8 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		
 		local effect 
 		if specific_zilla then effect='all_buff' 
-			elseif (evo>0.6 and math.random (3)==1) then effect='defender_capsules' 
-			elseif (evo>0.85 and math.random (3)==1) then effect='grenade_launcher' end
+			elseif (string.find(name, "human") and evo>0.6 and math.random (3)==1) then effect='defender_capsules' 
+			elseif (string.find(name, "human") and evo>0.85 and math.random (3)==1) then effect='grenade_launcher' end
 		table.insert (global.biterzillas, {entity=zilla, effect = effect})
 
 		if evo>=0.9 then 
@@ -793,7 +868,7 @@ for z=#global.biterzillas,1,-1 do
 		elseif string.find(zilla.name, "biterzilla2") then 
 				if math.random(3)==1 then  zilla.surface.create_entity{name="electric-shock2", position=zilla.position, force=zilla.force}  end
 		elseif string.find(zilla.name, "motherbiterzilla") then if math.random(1,4)==1 then Brood(zilla) end
-		elseif string.find(zilla.name, "boss") and math.random(1,40)==1 then BroodHumans(zilla) 
+		elseif string.find(zilla.name, "human") and math.random(1,40)==1 then BroodHumans(zilla) 
 		end
 
 		if string.find(zilla.name, "tc_fake_human_ultimate_boss") then 
@@ -824,6 +899,12 @@ end)
 
 
 script.on_nth_tick(60*3, function (event)
+
+	if #global.next_wave>0 and global.next_wave[1].tick < game.tick  then 
+		Call_next_wave(global.next_wave[1])
+		table.remove(global.next_wave,1)
+		end
+
 for k=#global.bm_volcano,1,-1 do
 	local V=global.bm_volcano[k]
 	local volcano = V.volcano

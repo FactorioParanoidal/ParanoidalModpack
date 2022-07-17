@@ -11,7 +11,7 @@ data:extend({
   },  
 
 
-
+  
 {
 	type = "double-setting",
 	name = "bm-invasion-min_evo",
@@ -252,6 +252,14 @@ data:extend({
 	order = "s1"
   },
 
+  {
+    type = "bool-setting",
+    name = "bm-play-sound-alert",
+    setting_type = "runtime-global",
+    default_value = true,
+	order = "s1"
+  },
+
  
   {
     type = "bool-setting",
@@ -296,5 +304,16 @@ data:extend({
 	minimum_value = 0.0,
 	maximum_value = 100,
 	order = "w"
-},    
+},  
+
+
+
+  {
+    type = "bool-setting",
+    name = "bm-spawn_near_nests",
+    setting_type = "runtime-global",
+    default_value = false,
+	order = "z"
+  }, 
+  
 })
