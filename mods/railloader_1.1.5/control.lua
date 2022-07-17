@@ -6,7 +6,7 @@ local util = require "util"
 
 -- constants
 
-local num_inserters = 6
+local num_inserters = 2
 
 local allowed_items_setting = settings.global["railloader-allowed-items"].value
 
@@ -329,40 +329,24 @@ local function get_blueprint_to_setup(player_index)
   end
 end
 
-local function find_railloaders_in_area(surface, area)
-  local containers = surface.find_entities_filtered{
-    area = area,
-    type = "container",
-  }
-  local out = {}
-  for _, container in ipairs(containers) do
-    if container.name == "railloader-chest" or container.name == "railunloader-chest" then
-      out[#out+1] = container
-    end
-  end
-  return out
-end
-
 local function on_blueprint(event)
   local bp = get_blueprint_to_setup(event.player_index)
   if not bp then return end
   local player = game.players[event.player_index]
   local entities = bp.get_blueprint_entities()
+  if not entities then return end
 
-  local railloader_chests = find_railloaders_in_area(player.surface, event.area)
-  if not next(railloader_chests) then return end
-
-  local chest_index = 1
   for _, bp_entity in pairs(entities) do
     if bp_entity.name == "railloader-chest" or bp_entity.name == "railunloader-chest" then
-      local chest_entity = railloader_chests[chest_index]
-      chest_index = chest_index + 1
-
+      local chest_entity = player.surface.find_entities_filtered{
+        type = "container",
+        position = bp_entity.position,
+      }[1]
       local rail = player.surface.find_entities_filtered{
         type = "straight-rail",
         area = chest_entity.bounding_box,
       }[1]
-      if rail then
+      if chest_entity and rail then
         bp_entity.name = (bp_entity.name == "railloader-chest")
           and "railloader-placement-proxy"
           or "railunloader-placement-proxy"
