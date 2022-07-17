@@ -1,10 +1,14 @@
+local config = require('config')
 local Smarts = require("smarts")
 
 local function on_init()
     global.event_backup = global.event_backup or {}
+    global.enity_deta_data = global.enity_deta_data or {}
 end
 
 local function on_configuration_changed()
+    global.event_backup = global.event_backup or {}
+    global.enity_deta_data = global.enity_deta_data or {}
 end
 
 -- Event register
