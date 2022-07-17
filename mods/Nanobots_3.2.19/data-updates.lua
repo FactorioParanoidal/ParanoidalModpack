@@ -5,7 +5,8 @@ require('prototypes/technology/shortcuts')
 -- bobmods recipe changes
 if mods['boblibrary'] then
 
-    if settings.get_startup('bobmods-logistics-disableroboports') then
+    local key = 'bobmods-logistics-disableroboports'
+    if settings["startup"][key] and settings["startup"][key].value then
         Recipe('roboport-interface'):replace_ingredient('roboport', 'bob-logistic-zone-expander')
     end
     Recipe('gun-nano-emitter'):replace_ingredient('electronic-circuit', 'basic-circuit-board')

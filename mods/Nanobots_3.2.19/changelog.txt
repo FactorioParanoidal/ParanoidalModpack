@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.2.19
+Date: 2022-04-16
+  Bugfixes:
+    - Don't crash when gun is empty.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.18
+Date: 2022-04-16
+  Features:
+    - Added option to allow nanobots to work without the emitter being the selected weapon.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.17
+Date: 2022-03-06
+  Bugfixes:
+    - Fix nanobots being consumed trying to repair tracks with trains on them. #131
+    - Fix nanobot and item consumption on upgrade planner rotations. #129
+---------------------------------------------------------------------------------------------------
 Version: 3.2.16
 Date: 2021-11-07
   Changes:
