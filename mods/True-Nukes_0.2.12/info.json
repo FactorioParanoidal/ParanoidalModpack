@@ -1,11 +1,11 @@
 {
  "name": "True-Nukes",
- "version": "0.2.6",
+ "version": "0.2.12",
  "title": "True Nukes",
  "author": "BicycleEater",
  "description": "Adds realistic nuclear blasts, and more nuclear options.",
  "homepage": "https://github.com/More-Wrong/Factorio-True-Nukes",
  "factorio_version": "1.1",
- "dependencies": ["? SchallTankPlatoon", "? Aircraft", "? bobelectronics", "? bobwarfare", "? bobplates", "? True-Nukes-Graphics", "? apm_nuclear_ldinc"]
+ "dependencies": ["? SchallTankPlatoon", "? Aircraft", "? bobelectronics", "? bobwarfare", "? bobplates", "? True-Nukes-Graphics", "? apm_nuclear_ldinc", "? Nuclear Fuel", "? Clowns-AngelBob-Nuclear"]
 }
 

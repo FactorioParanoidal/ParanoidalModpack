@@ -1,6 +1,7 @@
 local fireutil = require("__base__.prototypes.fire-util")
 local nuke_explosions = require("data-nuke-explosions")
 
+local nuke_materials = require("data-nukes-material")
 
 
 local circuit_type;
@@ -11,12 +12,8 @@ else
 	circuit_type = "superior-circuit-board"
 	upgrade_circuit_mult = 1
 end
+
 local material;
-if(settings.startup["use-californium"].value) then
-	material = "californium"
-else
-	material = "uranium-235"
-end
 
 local atomic_autocannon_recipe = {
     type = "recipe",
@@ -27,8 +24,8 @@ local atomic_autocannon_recipe = {
     {
       {"explosive-autocannon-shell", 1},
       {"explosives", 10},
-      {material, 20},
-      {"uranium-238", 5},
+      {nuke_materials.smallBoomMaterial, 20},
+      {nuke_materials.deadMaterial, 5},
       {circuit_type, 20}
     },
     result = "atomic-autocannon-shell"
@@ -84,7 +81,7 @@ local atomic_cannon_H1_recipe = {
     {
       {"explosive-uranium-cannon-H1-shell", 1},
       {"explosives", 5},
-      {material, 15},
+      {nuke_materials.smallBoomMaterial, 15},
       {circuit_type, 5}
     },
     result = "atomic-cannon-H1-shell"
@@ -145,7 +142,7 @@ local atomic_cannon_H2_recipe = {
     {
       {"explosive-uranium-cannon-H2-shell", 1},
       {"explosives", 5},
-      {material, 20},
+      {nuke_materials.smallBoomMaterial, 20},
       {circuit_type, 10}
     },
     result = "atomic-cannon-H2-shell"
@@ -210,7 +207,7 @@ local big_atomic_autocannon_recipe = {
     ingredients =
     {
       {"atomic-autocannon-shell", 1},
-      {material, 30},
+      {nuke_materials.smallBoomMaterial, 30},
       {"low-density-structure", 40},
       {"processing-unit", 5*upgrade_circuit_mult}
     },
@@ -267,7 +264,7 @@ local big_atomic_cannon_H1_recipe = {
     ingredients =
     {
       {"atomic-cannon-H1-shell", 1},
-      {material, 25},
+      {nuke_materials.smallBoomMaterial, 25},
       {"low-density-structure", 15},
       {"processing-unit", 2*upgrade_circuit_mult}
     },
@@ -330,7 +327,7 @@ local big_atomic_cannon_H2_recipe = {
     {
       {"atomic-cannon-H2-shell", 1},
       {"low-density-structure", 20},
-      {material, 30},
+      {nuke_materials.smallBoomMaterial, 30},
       {"processing-unit", 3*upgrade_circuit_mult}
     },
     result = "big-atomic-cannon-H2-shell"

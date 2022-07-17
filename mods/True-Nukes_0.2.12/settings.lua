@@ -101,11 +101,49 @@ data:extend({
 		order = "c4"
 	},
 	{
-		type = "bool-setting",
-		name = "use-californium",
+		type = "string-setting",
+		name = "small-boom-material",
 		setting_type = "startup",
-		default_value = true,
+		default_value = "mod-dependant",
+		allowed_values = {"same-as-boom","true-nukes-default", "mod-dependant", "custom"},
 		order = "b0"
+	},
+	{
+		type = "string-setting",
+		name = "small-boom-material-name",
+		setting_type = "startup",
+		default_value = "californium",
+		order = "b1"
+	},
+	{
+		type = "string-setting",
+		name = "boom-material",
+		setting_type = "startup",
+		default_value = "mod-dependant",
+		allowed_values = { "true-nukes-default", "mod-dependant", "custom"},
+		order = "b2"
+	},
+	{
+		type = "string-setting",
+		name = "boom-material-name",
+		setting_type = "startup",
+		default_value = "uranium-235",
+		order = "b3"
+	},
+	{
+		type = "string-setting",
+		name = "dead-material",
+		setting_type = "startup",
+		default_value = "mod-dependant",
+		allowed_values = { "default", "mod-dependant", "custom"},
+		order = "b4"
+	},
+	{
+		type = "string-setting",
+		name = "dead-material-name",
+		setting_type = "startup",
+		default_value = "uranium-238",
+		order = "b5"
 	},
 	{
 		type = "bool-setting",
