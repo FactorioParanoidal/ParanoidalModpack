@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022-07-08
+  Changes:
+    - Add support for Fluidless Mining and Ore Washing.
+    - Add bulk item list for BZ mods.
+    - Update bulk item list for Krastorio 2.
+    - Update bulk item list for Space Exploration.
+    - Add bulk item list for Rich Rocks Requiem.
+  Bugfixes:
+    - Fix crash when blueprinting BRLs that are owned by a different force. (https://mods.factorio.com/mod/railloader/discussion/62c87c9c7308a6dee94d4d60)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-05-27
   Bugfixes:
