@@ -2,6 +2,8 @@ local noxy_trees = {}
 
 local mathfloor = math.floor
 local mathceil = math.ceil
+local config = {}
+
 
 noxy_trees.disabled = { -- Disables the spreading of these specific entities.
 	["dead-dry-hairy-tree"] = true,
@@ -550,7 +552,7 @@ end
 local function initialize()
 	global.chunks           = {}
 	global.chunkindex       = 0
-	global.surfaces         = {1}
+	global.surfaces         = {}
 	global.last_surface     = nil
 	global.forces           = {}
 	global.tick             = 0
@@ -564,10 +566,18 @@ local function initialize()
 	global.lastdebugmessage = 0
 	global.lasttotalchunks  = 0
 
+	for s in string.gmatch(config.surfaces, '([^,;]+)') do
+		local su = game.get_surface(s)
+		if su and su.valid then
+			table.insert(global.surfaces, su.index)
+		end
+	end
+	if (#global.surfaces < 1) then
+		global.surfaces = {1}
+	end
+
 	cache_forces()
 end
-
-local config = {}
 
 local function cache_settings()
 	config.enabled                             = settings.global["Noxys_Trees-enabled"].value
@@ -590,6 +600,7 @@ local function cache_settings()
 	config.trees_to_grow_per_chunk_percentage  = settings.global["Noxys_Trees-trees-to-grow-per-chunk-percentage"].value
 	config.maximum_trees_per_chunk             = settings.global["Noxys_Trees-maximum-trees-per-chunk"].value
 	config.expansion_distance                  = settings.global["Noxys_Trees-expansion-distance"].value
+	config.surfaces                            = settings.global["Noxys_Trees-surfaces"].value
 end
 
 cache_settings()
@@ -735,7 +746,7 @@ local function process_chunk(surface, chunk)
 				if tree and tree.valid == true then
 					deadening_tree(surface, tree)
 				end
-        tokill = tokill - 1
+				tokill = tokill - 1
 			until tokill < 1
 		end
 	elseif trees_count > 0 then
