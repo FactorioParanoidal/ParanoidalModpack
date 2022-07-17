@@ -1,15 +1,16 @@
 local shared = require 'shared'
 local update_rate = shared.update_rate
+local update_slots = shared.update_slots
 
 local min = math.min
-local floor, ceil = math.ceil, math.floor
+local floor, ceil = math.floor, math.ceil
 local function compactify(n)
-	n = ceil(n)
+	n = floor(n)
 	
 	local suffix = 1
 	local new
-	while n >= 1000000 do
-		new = n / 1000
+	while n >= 1000 do
+		new = floor(n / 100) / 10
 		if n == new then
 			return {'big-numbers.infinity'}
 		else
@@ -17,18 +18,11 @@ local function compactify(n)
 		end
 		suffix = suffix + 1
 	end
-	
-	if n >= 1000 then
-		n = floor(n / 100) / 10
-		suffix = suffix + 1
-	end
-	
 	return {'big-numbers.' .. suffix, n}
 end
 
 local function setup()
 	global.units = global.units or {}
-	global.smooth_ups = global.smooth_ups or 0
 	
 	if remote.interfaces['PickerDollies'] then
 		remote.call('PickerDollies', 'add_blacklist_name', 'fluid-memory-unit-container', true)
@@ -100,6 +94,8 @@ local function on_created(event)
 			}
 			combinator.operable = false
 			combinator.destructible = false
+		else
+			combinator.get_or_create_control_behavior().parameters = nil
 		end
 		
 		local powersource = surface.create_entity{
@@ -119,7 +115,7 @@ local function on_created(event)
 			count = 0,
 			can_accept_elements = true,
 			communications_enabled = true,
-			lag_id = math.random(0, update_rate)
+			lag_id = math.random(0, update_slots - 1)
 		}
 	end
 end
@@ -193,7 +189,7 @@ script.on_event(defines.events.on_entity_cloned, function(event)
 		comfortable = unit_data.comfortable,
 		can_accept_elements = true,
 		communications_enabled = true,
-		lag_id = math.random(0, update_rate)
+		lag_id = math.random(0, update_slots - 1)
 	}
 end)
 
@@ -266,9 +262,8 @@ script.on_event(defines.events.on_pre_player_mined_item, pre_mined)
 script.on_event(defines.events.on_robot_pre_mined, pre_mined)
 script.on_event(defines.events.on_marked_for_deconstruction, pre_mined)
 
-script.on_event(defines.events.on_tick, function(event)
-	local smooth_ups = event.tick % update_rate
-	global.smooth_ups = smooth_ups
+script.on_nth_tick(update_rate, function(event)
+	local smooth_ups = event.tick % update_slots
 	
 	for unit_number, unit_data in pairs(global.units) do
 		if unit_data.lag_id ~= smooth_ups then

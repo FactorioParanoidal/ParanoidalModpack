@@ -103,7 +103,8 @@ local function update_power_usage(unit_data, powersource, count)
 	powersource.electric_buffer_size = power_usage
 end
 
-local update_rate = 1 * 60
+local update_rate = 15
+local update_slots = 4
 
 local function has_power(powersource, entity)
 	if powersource.energy < powersource.electric_buffer_size * 0.9 then
@@ -132,5 +133,6 @@ return {
 	update_combinator = update_combinator,
 	has_power = has_power,
 	update_power_usage = update_power_usage,
-	update_rate = update_rate
+	update_rate = update_rate,
+	update_slots = update_slots
 }
