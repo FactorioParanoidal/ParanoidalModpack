@@ -8,7 +8,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-small",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-a[duct-small]a",
+    order = "d[pipe]-a[duct-small]",
     stack_size = 50,
   },
   {
@@ -18,7 +18,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-b[duct]a",
+    order = "d[pipe]-b[duct]",
     stack_size = 50,
   },
   {
@@ -28,7 +28,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-long",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-c[duct-long]a",
+    order = "d[pipe]-c[duct-long]",
     stack_size = 50,
   },
   {
@@ -38,7 +38,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-t-junction",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-e[duct-t-junction]a",
+    order = "d[pipe]-e[duct-t-junction]",
     stack_size = 50,
   },
   {
@@ -48,7 +48,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-curve",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-f[duct-curve]a",
+    order = "d[pipe]-f[duct-curve]",
     stack_size = 50,
   },
   {
@@ -58,7 +58,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-cross",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-g[duct-cross]a",
+    order = "d[pipe]-g[duct-cross]",
     stack_size = 50,
   },
   {
@@ -68,7 +68,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-underground",
     subgroup = "energy-pipe-distribution",
-    order = "b[pipe]-b[duct]-d[duct-underground]a",
+    order = "d[pipe]-d[duct-underground]",
     stack_size = 50,
   },
   {
@@ -78,7 +78,7 @@ data:extend({
     icon_size = 64,
     place_result = "non-return-duct",
     subgroup = "energy-pipe-distribution",
-    order = "c[pipe]-b[pump]-h[non-return-duct]a",
+    order = "d[pipe]-h[non-return-duct]",
     stack_size = 10,
   },
   {
@@ -88,7 +88,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-end-point-intake",
     subgroup = "energy-pipe-distribution",
-    order = "c[pipe]-b[pump]-i[duct-end-point-intake]a",
+    order = "d[pipe]-i[duct-end-point-intake]",
     stack_size = 10,
   },
   {
@@ -98,7 +98,7 @@ data:extend({
     icon_size = 64,
     place_result = "duct-end-point-outtake",
     subgroup = "energy-pipe-distribution",
-    order = "c[pipe]-b[pump]-l[duct-end-point-outtake]a",
+    order = "d[pipe]-l[duct-end-point-outtake]",
     stack_size = 10,
   },
 })

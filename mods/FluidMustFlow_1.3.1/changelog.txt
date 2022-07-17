@@ -1,11 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2022-03-12
+  Compatibility:
+    - [Space Exploration] Moved duct items to the pipe subgroup (#5)
+---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2022-01-03
   Features:
     - Added tips and tricks with simulations
     - Ducts can be connected to the circuit network to read their contents
   Changes:
-    - Connecing regular pipes directly to ducts is now entirely impossible, and the setting has been removed
+    - Connecting regular pipes directly to ducts is now entirely impossible, and the setting has been removed
     - Improved circuit connector positioning
     - Placing regular or long duct ghosts will no longer replace them with small ducts - bots will place the larger ducts directly
     - Removed base area and health multiplier options
