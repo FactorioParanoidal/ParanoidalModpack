@@ -1,43 +1,54 @@
-local Event = require('__stdlib__/stdlib/event/event')
+local Event = require('__stdlib__/stdlib/event/event').set_protected_mode(true)
 local Area = require('__stdlib__/stdlib/area/area')
 local Position = require('__stdlib__/stdlib/area/position')
-__DebugAdapter.levelPath('PickerAtheneum', 'scenarios/testing/')
+local Color = require('__stdlib__/stdlib/utils/color')
 
 local config = require('__PickerAtheneum__/scenarios/testing/config')
-local area = Area():expand(7 * 32)
+
+local map_area = Area():adjust({config.width / 2, config.height / 2})
+local center_chunk_position = Position()
+local initial_area = Area()
+local initial_chunks = Area()
+local water_chunks = {Position(-1, 2), Position(0, 2)}
+
 local rolling_stock = {
     ['locomotive'] = true,
     ['cargo-wagon'] = true,
     ['artillery-wagon'] = true,
     ['fluid-wagon'] = true
 }
+local color = {r = 1, g = 1, b = 1}
 
-local water1 = Position(-1, 2)
-local water2 = Position(0, 2)
 
-local function map_gen_settings(surface)
+local function set_map_gen_settings(surface)
     local mgs = surface.map_gen_settings
-    local _, width, height = area:size()
+    local _, width, height = map_area:size()
     -- width :: uint: Width in tiles. If 0, the map has infinite width.
     -- height :: uint: Height in tiles. If 0, the map has infinite height.
     -- starting_area :: MapGenSize: Size of the starting area.
     -- peaceful_mode :: boolean: Whether peaceful mode is enabled for this map.
 
-    if mgs.width ~= 0 and (mgs.width < width or mgs.height < height) then
-        mgs.width = width
-        mgs.height = height
-        mgs.default_enable_all_autoplace_controls = false
+    initial_area = initial_area:adjust({mgs.width / 2, mgs.height / 2})
+    initial_chunks = initial_area:to_chunk_coords():expand(1)
 
-        for _, resource in pairs(mgs.autoplace_controls) do
-            resource.frequency = 0
-            resource.size = 0
-            resource.richness = 0
-        end
+    global.initial_chunk_count = #initial_chunks:positions()
+    global.water_count = #water_chunks
+    mgs.width = width
+    mgs.height = height
+    mgs.default_enable_all_autoplace_controls = false
 
-        mgs.cliff_settings.richness = 0
-
-        surface.map_gen_settings = mgs
+    for _, resource in pairs(mgs.autoplace_controls) do
+        resource.frequency = 0
+        resource.size = 0
+        resource.richness = 0
     end
+
+    mgs.cliff_settings.richness = 0
+
+    surface.map_gen_settings = mgs
+    surface.generate_with_lab_tiles = true
+    surface.always_day = true
+    surface.force_generate_chunk_requests()
 end
 
 local function create_bp_from_string(surface, force)
@@ -47,7 +58,7 @@ local function create_bp_from_string(surface, force)
     local revive = bp.stack.build_blueprint{
         surface = surface,
         force = force,
-        position = {0, 2},
+        position = {0, 0},
         force_build = true,
         skip_fog_of_war = false
     }
@@ -59,14 +70,17 @@ local function create_bp_from_string(surface, force)
         else
             if ent.ghost_type == 'locomotive' then
                 local _, loco = ent.revive()
-                loco.burner.currently_burning = 'rocket-fuel'
-                loco.burner.remaining_burning_fuel = 222222222
+                if loco then
+                    loco.burner.currently_burning = 'rocket-fuel'
+                    loco.burner.remaining_burning_fuel = 222222222
+                end
             else
                 ent.revive()
             end
         end
     end
     bp.destroy()
+
     if game.entity_prototypes['debug-energy-interface'] then
         local es = surface.create_entity{
             name = 'debug-energy-interface',
@@ -87,12 +101,12 @@ local function create_bp_from_string(surface, force)
     end
 end
 
-local function get_lab_tile_grid()
+local function generate_lab_tile_grid(surface, chunk_area)
     local tiles = {}
     local floor_tile = 'lab-dark-1'
     local floor_tile_alt = 'lab-dark-2'
-    for x = area.left_top.x, area.right_bottom.x - 1 do
-        for y = area.left_top.y, area.right_bottom.y - 1 do
+    for x = chunk_area.left_top.x, chunk_area.right_bottom.x - 1 do
+        for y = chunk_area.left_top.y, chunk_area.right_bottom.y - 1 do
             if y % 2 == 0 then
                 if x % 2 == 0 then
                     tiles[#tiles + 1] = {name = floor_tile, position = {x = x, y = y}}
@@ -108,99 +122,55 @@ local function get_lab_tile_grid()
             end
         end
     end
-    return tiles
+    surface.set_tiles(tiles, false)
 end
 
-local function create_grid(surface)
-    local black = {r = 0, g = 0, b = 0}
-    for x = 32, area.right_bottom.x, 32 do
-        for y = 32, area.right_bottom.y, 32 do
-            -- Horizontal
-            rendering.draw_line{
-                width = 2,
-                color = black,
-                from = {x = x, y = -y},
-                to = {x = -x, y = -y},
-                surface = surface,
-                only_in_alt_mode = true
-            }
-            rendering.draw_line{
-                width = 2,
-                color = black,
-                from = {x = x, y = y},
-                to = {x = -x, y = y},
-                surface = surface,
-                only_in_alt_mode = true
-            }
-            -- Vertical
-            rendering.draw_line{
-                width = 2,
-                color = black,
-                from = {x = -x, y = y},
-                to = {x = -x, y = -y},
-                surface = surface,
-                only_in_alt_mode = true
-            }
-            rendering.draw_line{
-                width = 2,
-                color = black,
-                from = {x = x, y = y},
-                to = {x = x, y = -y},
-                surface = surface,
-                only_in_alt_mode = true
-            }
-        end
-    end
-    -- Center
-    rendering.draw_line{
-        width = 2,
-        color = black,
-        from = {x = area.right_bottom.x, y = 0},
-        to = {x = area.left_top.x, y = 0},
-        surface = surface,
-        only_in_alt_mode = true
-    }
-    rendering.draw_line{
-        width = 2,
-        color = black,
-        from = {x = 0, y = area.right_bottom.y},
-        to = {x = 0, y = area.left_top.y},
-        surface = surface,
-        only_in_alt_mode = true
-    }
+local function render_center_point(surface)
     rendering.draw_circle{
         width = 2,
-        color = black,
+        color = color,
         surface = surface,
         radius = 1,
         filled = false,
         target = {x = 0, y = 0},
         only_in_alt_mode = true
     }
-
-    for chunk in surface.get_chunks() do
-        rendering.draw_text{
-            text = chunk.x .. ', ' .. chunk.y,
-            surface = surface,
-            target = chunk.area.left_top,
-            -- target_offset=,
-            color = defines.color.white,
-            scale = 1.25,
-            -- font=,
-            -- time_to_live=,
-            -- forces=,
-            -- players=,
-            -- visible=,
-            draw_on_ground = true,
-            orientation = 0,
-            -- alignment=,
-            scale_with_zoom = true,
-            only_in_alt_mode = true
-        }
-    end
 end
 
-local function create_starting_resources(surface)
+local function render_chunk_grid(surface, chunk_area, chunk_position)
+    local left_top = chunk_area.left_top
+    local right_bottom = chunk_area.right_bottom
+
+    local function render_chunk_boundries(from, to)
+        rendering.draw_line{width = 2, color = color, from = from, to = to, surface = surface, only_in_alt_mode = true}
+    end
+
+    render_chunk_boundries({left_top.x, left_top.y}, {right_bottom.x, left_top.y})
+    render_chunk_boundries({left_top.x, right_bottom.y}, {right_bottom.x, right_bottom.y})
+    render_chunk_boundries({left_top.x, left_top.y}, {left_top.x, right_bottom.y})
+    render_chunk_boundries({right_bottom.x, left_top.y}, {right_bottom.x, right_bottom.y})
+
+    rendering.draw_text{
+        text = chunk_position.x .. ', ' .. chunk_position.y,
+        surface = surface,
+        target = left_top,
+        color = Color.color.white,
+        scale = 1.25,
+        draw_on_ground = true,
+        orientation = 0,
+        scale_with_zoom = true,
+        only_in_alt_mode = true
+        -- target_offset=,
+        -- font=,
+        -- alignment=,
+        -- time_to_live=,
+        -- forces=,
+        -- players=,
+        -- visible=,
+    }
+end
+
+local function generate_starting_resources(surface)
     -- Top left
     for pos in Area{{-37.5, -27.5}, {-32.5, -4.5}}:iterate(true) do
         surface.create_entity{name = 'coal', position = pos, amount = 2500}
@@ -231,68 +201,70 @@ local function create_starting_resources(surface)
     surface.create_entity{name = 'crude-oil', position = {35.5, -1.5}, amount = 32000}
 end
 
-local function chart_area(surface, starting_area, force)
-    local chart = starting_area()
+local function chart_area(surface, force)
+    local chart = map_area()
     chart.right_bottom.x = chart.right_bottom.x - 32
     chart.right_bottom.y = chart.right_bottom.y - 32
     force.chart(surface, chart)
 end
 
-local function conditional_on_chunk_generated(event)
-    local chunk_pos = Position(event.position)
-    local surface = event.surface
-    if surface == game.surfaces[1] and (chunk_pos == water1 or chunk_pos == water2) then
-        local water_tiles = {}
-        for pos in Area(event.area):shrink(1):iterate(true, true) do
-            water_tiles[#water_tiles + 1] = {name = 'water', position = pos}
-        end
-        surface.set_tiles(water_tiles, false)
-        global.water1_generated = global.water1_generated or chunk_pos == water1
-        global.water2_generated = global.water2_generated or chunk_pos == water2
+local function generate_water(surface, chunk_area)
+    local water_tiles = {}
+    for pos in chunk_area:shrink(1):iterate(true, true) do
+        water_tiles[#water_tiles + 1] = {name = 'water', position = pos}
     end
-    if global.water1_generated and global.water2_generated then
-        Event.remove(defines.events.on_chunk_generated, conditional_on_chunk_generated)
-    end
+    surface.set_tiles(water_tiles, false)
 end
 
 local function on_init()
     local force = game.forces['player']
     local surface = game.surfaces['nauvis']
 
-    surface.generate_with_lab_tiles = true
-    surface.always_day = true
+    set_map_gen_settings(surface)
 
-    map_gen_settings(surface)
-
-    for _, entity in pairs(surface.find_entities_filtered{area = area, type = 'character', invert = true}) do
-        entity.destroy()
-    end
-
-    surface.set_tiles(get_lab_tile_grid(), true)
-    surface.destroy_decoratives(area)
-
-    create_grid(surface)
-
-    chart_area(surface, area, force)
-
-    create_starting_resources(surface)
-
+    generate_starting_resources(surface)
     create_bp_from_string(surface, force)
 
-    if surface.is_chunk_generated(water1) and surface.is_chunk_generated(water2) then
-        global.water1_generated, global.water2_generated = true, true
-    else
-        Event.register(defines.events.on_chunk_generated, conditional_on_chunk_generated)
-    end
+    chart_area(surface, force)
 end
 Event.on_init(on_init)
 
-local function on_load()
-    if not (global.water1_generated and global.water2_generated) then
-        Event.register(defines.events.on_chunk_generated, conditional_on_chunk_generated)
+local function on_chunk_generated(event)
+    local surface = event.surface
+    local chunk_area = Area.load(event.area)
+    local chunk_position = Position.load(event.position)
+
+    surface.destroy_decoratives(chunk_area)
+    for _, entity in pairs(surface.find_entities_filtered{area = chunk_area, type = 'character', invert = true}) do
+        entity.destroy()
     end
+
+    -- Generate water
+    if global.water_count > 0 then
+        for _, pos in pairs(water_chunks) do
+            if pos == chunk_position then generate_water(surface, chunk_area) end
+        end
+    end
+
+    -- Generate initial grid tiles
+    if global.initial_chunk_count > 0 and chunk_position:inside(initial_chunks) then
+        generate_lab_tile_grid(surface, chunk_area)
+        global.initial_chunk_count = global.initial_chunk_count - 1
+    end
+
+
+    -- Generate resources
+    if global.initial_chunk_count == 0 and not global.resources_generated then
+        generate_starting_resources(surface)
+        create_bp_from_string(surface, game.forces['player'])
+        global.resources_generated = true
+    end
+
+    -- Renderings
+    if chunk_position == center_chunk_position then render_center_point(surface) end
+    render_chunk_grid(surface, chunk_area, chunk_position)
 end
-Event.on_load(on_load)
+Event.on_event(defines.events.on_chunk_generated, on_chunk_generated)
 
 local function on_player_created(event)
     local player = game.get_player(event.player_index)
