@@ -27,11 +27,12 @@ Event.register(defines.events.on_built_entity, revive_it)
 
 local function picker_revive_selected(event)
     local player = game.players[event.player_index]
-    if player.selected and player.controller_type ~= defines.controllers.ghost then
-        if player.selected.name == 'item-on-ground' then
-            return player.mine_entity(player.selected)
-        elseif player.selected.name == 'item-request-proxy' and not player.cursor_stack.valid_for_read then
-            lib.satisfy_requests(player, player.selected)
+    local selected = player.selected
+    if selected and player.controller_type ~= defines.controllers.ghost then
+        if selected.name == 'item-on-ground' then
+            return player.mine_entity(selected)
+        elseif selected.name == 'item-request-proxy' and not player.cursor_stack.valid_for_read then
+            lib.satisfy_requests(player, selected)
         end
     end
 end
@@ -50,16 +51,17 @@ local function picker_revive_selected_ghosts(event)
                     local position = selected.position
                     -- API build_from_cursor to no do flip logic
                     if selected.ghost_type == 'underground-belt' then
+                        if selected.belt_to_ground_type == 'output' then
+                            direction = (direction + 4) % 8
+                        end
                         local name = selected.ghost_name
                         local belt_type = selected.belt_to_ground_type
                         player.build_from_cursor {position = position, direction = direction}
-
                         local ent = player.surface.find_entity(name, position)
                         if ent then
                             if ent.belt_to_ground_type ~= belt_type then
                                 ent.rotate()
                             end
-                            ent.direction = direction
                         end
                     elseif selected.ghost_type == 'pipe-to-ground' then
                         local name = selected.ghost_name

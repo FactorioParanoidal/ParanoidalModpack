@@ -47,7 +47,7 @@ local function paparazzi(event)
         local _path = 'Screenshots/' .. (_alt_info and 'Alt/' or '') .. event.tick .. '.png'
 
         local pix_per_tile = 32 * _zoom
-        local max_dist = (_aa and 256 / _zoom) or 512 / _zoom
+        local max_dist = (_aa and 256 / _zoom) or (512 / _zoom)
 
         local area = Area(event.area):ceil()
         local diffx = area.right_bottom.x - area.left_top.x
