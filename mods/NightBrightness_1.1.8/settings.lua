@@ -49,10 +49,11 @@ data:extend({
 	},
 	
 	{
-		type = "bool-setting",
-		name = "nb_black_night",
+		type = "string-setting",
+		name = "nb_black_night_darkness",
 		setting_type = "startup",
-		default_value = true,
+		default_value = "black-night",
 		order = "nb-d",
+		allowed_values = {"normal-night", "dark-night", "very-dark-night", "black-night"},
 	}
 })
