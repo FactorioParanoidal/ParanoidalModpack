@@ -6,7 +6,7 @@
 --]]
 local Event = require('__stdlib__/stdlib/event/event')
 
-if script.active_mods['CursorUpgradeCarousel'] then
+if script.active_mods['CursorUpgradeCarousel'] or script.active_mods['CursorEnhancements'] then
     return
 end
 

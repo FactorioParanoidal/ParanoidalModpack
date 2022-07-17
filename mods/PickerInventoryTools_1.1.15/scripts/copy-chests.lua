@@ -1,8 +1,6 @@
 --(( Copy Chest ))--
 local Event = require('__stdlib__/stdlib/event/event')
 local Player = require('__stdlib__/stdlib/event/player')
-
-local table = require('__stdlib__/stdlib/utils/table')
 local interface = require('__stdlib__/stdlib/scripts/interface')
 
 local chest_types = {
@@ -56,7 +54,7 @@ local function copy_chest(event)
             ent = chest,
             tick = event.tick
         }
-       return flying_text(player, {'chest.copy-src'}, chest.position)
+        return flying_text(player, {'chest.copy-src'}, chest.position)
     else
         return flying_text(player, {'chest.empty-src'}, chest.position)
     end
@@ -150,5 +148,5 @@ end
 
 function interface.get_blacklisted_chests()
     global.blacklisted_chests = global.blacklisted_chests or {}
-    return table.keys(global.blacklisted_chests)
+    return global.blacklisted_chests
 end

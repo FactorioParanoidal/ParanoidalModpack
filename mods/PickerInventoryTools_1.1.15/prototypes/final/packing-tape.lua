@@ -13,7 +13,8 @@ local Entity = require('__stdlib__/stdlib/data/entity')
 local Item = require('__stdlib__/stdlib/data/item')
 local Table = require('__stdlib__/stdlib/utils/table')
 
-if mods['packing-tape'] or not settings.get_startup('picker-moveable-chests') then return end
+local key = 'picker-moveable-chests'
+if mods['packing-tape'] or not (settings["startup"][key] and settings["startup"][key].value) then return end
 
 local chest_types = {'container', 'logistic-container'}
 
@@ -54,4 +55,7 @@ for _, container_type in pairs(chest_types) do
         end
     end
 end
-__DebugAdapter.print('Created ' .. count .. ' moveable chests.')
+
+if __DebugAdapter then
+    __DebugAdapter.print('Created ' .. count .. ' moveable chests.')
+end
