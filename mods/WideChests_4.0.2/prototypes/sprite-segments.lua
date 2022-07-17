@@ -121,6 +121,58 @@ MergingChests.SpriteSegmentsData =
 			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
 			"__WideChests__/graphics/entity/wide-chest-shadow.png"
 		),
+
+		["nullius-small-supply-chest-1"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-supply-chest-2"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-dispatch-chest-1"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-dispatch-chest-2"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-storage-chest-1"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/storage-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/storage-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-storage-chest-2"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/storage-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/storage-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-buffer-chest-1"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/buffer-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/buffer-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-buffer-chest-2"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/buffer-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/buffer-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-demand-chest-1"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/requester-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+		["nullius-small-demand-chest-2"] = CreateWideLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/requester-wide-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
+			"__WideChests__/graphics/entity/wide-chest-shadow.png"
+		),
+
 		[MergingChests.OTHER] = {
 			entity =
 			{
@@ -184,6 +236,58 @@ MergingChests.SpriteSegmentsData =
 			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
 			"__WideChests__/graphics/entity/high-chest-shadow.png"
 		),
+
+		["nullius-small-supply-chest-1"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-supply-chest-2"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/passive-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-dispatch-chest-1"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-dispatch-chest-2"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/active-provider-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-storage-chest-1"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/storage-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/storage-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-storage-chest-2"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/storage-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/storage-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-buffer-chest-1"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/buffer-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/buffer-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-buffer-chest-2"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/buffer-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/buffer-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-demand-chest-1"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/requester-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+		["nullius-small-demand-chest-2"] = CreateHighLogisticChestSegments(
+			"__WideChests__/graphics/entity/logistic-chest/requester-high-chest.png",
+			"__WideChests__/graphics/entity/logistic-chest/requester-hatch-door.png",
+			"__WideChests__/graphics/entity/high-chest-shadow.png"
+		),
+
 		[MergingChests.OTHER] = {
 			entity =
 			{
