@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+  Bugfixes:
+    - Fixed hiding SE cargo launch pad recipe when it shouldn't
+  Compatibility:
+    - Made compatible with SeaBlock pack (thanks to TP97)
+---------------------------------------------------------------------------------------------------
 Version: 1.2.2
   Bugfixes:
     - Fixed a bug on upgrading a silo stage when using automated_forces

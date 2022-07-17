@@ -16,7 +16,13 @@ if data.raw.item[item] then
 end
 
 
-local drill = CheckItem('bob-area-mining-drill-3','electric-mining-drill')
+
+local drill 
+if mods['SeaBlock'] then
+	drill = 'thermal-extractor'
+	else
+	drill = CheckItem('bob-area-mining-drill-3','electric-mining-drill')
+	end
 local stone = CheckItem('solid-sand','stone')
 stone = CheckItem('sand',stone)
 
@@ -249,7 +255,10 @@ data:extend({
   }
 )
 
-
+if data.raw.item['advanced-processing-unit'] then --bobs
+	table.insert (data.raw.recipe["rsc-construction-stage6"].ingredients,{"advanced-processing-unit", 5*mp})
+	table.insert (data.raw.recipe["rsc-excavation-site"].ingredients,{"advanced-processing-unit", 10*mp})
+	end
 		  
 if data.raw.item['se-rocket-launch-pad'] then
 local enable_se_cargo = settings.startup["rsc-st-enable-se-cargo-silo"].value 
