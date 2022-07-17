@@ -41,5 +41,12 @@ if mods["yuoki"] then
     require("prototypes.yuoki")
 end -- при наличии yuoki
 
+-- Uniform recipe mod
+for _,r in pairs(data.raw["recipe"]) do
+	r.always_show_products=true;
+	r.show_amount_in_title=false;
+end
+-- Uniform recipe end
+
 --должно быть последним. После всех рецептов.
 require("recipes.flowfix")
