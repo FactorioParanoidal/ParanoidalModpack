@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+Date: 2022-04-19
+  Compatibility:
+    - Added a remote interface to toggle the GUI and read if it is currently open
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+Date: 2022-04-14
+  Bugfixes:
+    - Fixed that text search was case-sensitive on the inventory screen (#178)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.10
+Date: 2022-03-01
+  Bugfixes:
+    - Fixed unexpected load not showing in the alerts panel (credit to Gorfiend) (#176)
+    - Fixed a crash when a surface is deleted while the LTN data iterator is working (#177)
+---------------------------------------------------------------------------------------------------
 Version: 0.4.9
 Date: 2022-01-23
   Features:
