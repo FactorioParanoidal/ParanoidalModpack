@@ -3,12 +3,12 @@ ASE.tables.coil_metals = {
     ["tungsten"] = { tint = { r = 136 / 255, g = 98 / 255, b = 65 / 255 }, ing_1 = { type = "fluid", name = "gas-tungsten-hexafluoride", amount = 20 } },
 }
 if mods["bobplates"] then
-    ASE.tables.coil_metals["brass"] = { tint = { r = 204 / 256, g = 153 / 256, b = 102 / 256 } }
-    ASE.tables.coil_metals["bronze"] = { tint = { r = 224 / 256, g = 155 / 256, b = 58 / 256 } }
-    ASE.tables.coil_metals["nitinol"] = { tint = { r = 106 / 256, g = 92 / 256, b = 153 / 256 } }
-    ASE.tables.coil_metals["invar"] = { tint = { r = 95 / 256, g = 125 / 256, b = 122 / 256 } }
-    ASE.tables.coil_metals["cobalt-steel"] = { tint = { r = 61 / 256, g = 107 / 256, b = 153 / 256 } }
-    ASE.tables.coil_metals["gunmetal"] = { tint = { r = 224 / 256, g = 103 / 256, b = 70 / 256 } }
+    ASE.tables.coil_metals["brass"] = angelsmods.trigger.smelting_products["brass"] and { tint = { r = 204 / 256, g = 153 / 256, b = 102 / 256 } } or nil
+    ASE.tables.coil_metals["bronze"] = angelsmods.trigger.smelting_products["bronze"] and { tint = { r = 224 / 256, g = 155 / 256, b = 58 / 256 } } or nil
+    ASE.tables.coil_metals["nitinol"] = angelsmods.trigger.smelting_products["nitinol"] and { tint = { r = 106 / 256, g = 92 / 256, b = 153 / 256 } } or nil
+    ASE.tables.coil_metals["invar"] = angelsmods.trigger.smelting_products["invar"] and { tint = { r = 95 / 256, g = 125 / 256, b = 122 / 256 } } or nil
+    ASE.tables.coil_metals["cobalt-steel"] = angelsmods.trigger.smelting_products["cobalt-steel"] and { tint = { r = 61 / 256, g = 107 / 256, b = 153 / 256 } } or nil
+    ASE.tables.coil_metals["gunmetal"] = angelsmods.trigger.smelting_products["gunmetal"] and { tint = { r = 224 / 256, g = 103 / 256, b = 70 / 256 } } or nil
 end
 ASE.tables.metal_tab = {
     --as much as i would love to do the commented out ones... id need to think on how to do the powder systems

@@ -57,22 +57,9 @@ if mods["bobplates"] then
       },
       effects =
       {
-        {
-          type = "unlock-recipe",
-          recipe = "angels-bronze-smelting-1"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-bronze"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-brass-smelting-1"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-brass"
-        },
+        --smelting 1 and plate
+        --bronze 
+        --brass
       },
       unit =
       {
@@ -100,26 +87,10 @@ if mods["bobplates"] then
       },
       effects =
       {
-        {
-          type = "unlock-recipe",
-          recipe = "angels-gunmetal-smelting-1"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-gunmetal"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-invar-smelting-1"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-invar"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-cobalt-steel-1"
-        },
+        --gunmetal
+        --invar
+        --cobalt-steel
+        --smelting 1 and plate
       },
       unit =
       {
@@ -148,18 +119,8 @@ if mods["bobplates"] then
       },
       effects =
       {
-        {
-          type = "unlock-recipe",
-          recipe = "angels-nitinol-smelting-1"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-nitinol"
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "angels-plate-cobalt-steel-2"
-        },
+        --nitinol
+        --cobalt-steel 2
       },
       unit =
       {
