@@ -38,7 +38,7 @@ for f=1, #game.forces do
 			end
 		if force.technologies['se-space-probe'] and force.technologies['se-space-probe'].researched then 
 			if global.st_enable_se_probe then force.recipes['rsc-sesprs-excavation-site'].enabled=true end
-			force.recipes['se-rocket-launch-pad'].enabled = not global.st_enable_se_probe
+			force.recipes['se-space-probe-rocket-silo'].enabled = not global.st_enable_se_probe
 			end
 		end
 	end
