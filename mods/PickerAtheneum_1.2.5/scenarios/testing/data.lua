@@ -1,5 +1,5 @@
 local Data = require('__stdlib__/stdlib/data/data')
-local config = require('scenarios/testing/config')
+local config = require('__PickerAtheneum__/scenarios/testing/config')
 
 local function make_no_controls()
     local controls = {}
@@ -13,16 +13,16 @@ local function make_no_controls()
     return controls
 end
 
-Data('electric-energy-interface', 'electric-energy-interface'):copy('debug-energy-interface'):set_fields {
+Data('electric-energy-interface', 'electric-energy-interface'):copy('debug-energy-interface'):set_fields{
     flags = {'placeable-off-grid'},
     localised_name = 'Debug source',
     icon = data.raw['item']['electric-energy-interface'].icon,
     collision_mask = {},
     selection_box = {{0.0, -0.5}, {0.5, 0.5}},
     picture = Data.Sprites.empty_picture()
-}:remove_fields {'minable', 'collision_box', 'vehicle_impact_sound', 'working_sound', 'next_upgrade'}
+}:remove_fields{'minable', 'collision_box', 'vehicle_impact_sound', 'working_sound', 'next_upgrade'}
 
-Data('substation', 'electric-pole'):copy('debug-substation'):set_fields {
+Data('substation', 'electric-pole'):copy('debug-substation'):set_fields{
     localised_name = 'Debug power substation',
     flags = {'placeable-off-grid'},
     icon = data.raw['item']['substation'].icon,
@@ -32,14 +32,14 @@ Data('substation', 'electric-pole'):copy('debug-substation'):set_fields {
     maximum_wire_distance = 64,
     supply_area_distance = 64,
     connection_points = Data.Sprites.empty_connection_points(1)
-}:remove_fields {'minable', 'collision_box', 'vehicle_impact_sound', 'working_sound', 'next_upgrade'}
+}:remove_fields{'minable', 'collision_box', 'vehicle_impact_sound', 'working_sound', 'next_upgrade'}
 
 local gen = data.raw['map-gen-presets']
 gen['default']['debug'] = {
     order = 'z',
     basic_settings = {
-        terrain_segmentation = 'very-low',
-        water = 'none',
+        terrain_segmentation =  0, --'very-low',
+        water = 0,
         autoplace_controls = make_no_controls(),
         height = config.height,
         width = config.width
