@@ -685,7 +685,8 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 					surface.create_entity{name = spawnName,
 						position = {spawnX, spawnY},
 						force = game.forces.neutral,
-						amount = amount}
+						amount = amount,
+						raise_built = true}
 
 					if removeTrees then
 						remove_trees(surface, spawnX, spawnY, 1, 1)
@@ -806,7 +807,8 @@ local function spawn_resource_liquid(surface, rname, pos, size, richness, starti
 							position = {x,y},
 							force = game.forces.neutral,
 							amount = amount,
-							direction = rng(4)}
+							direction = rng(4),
+							raise_built = true}
 						if removeTrees then
 							remove_trees(surface, x, y, 4, 4)
 						end
@@ -903,7 +905,7 @@ local function spawn_entity_helper(surface, prototype, x, y, config)
 	collides = surface.entity_prototype_collides(prototype, position, true)
 	
 	if not collides then
-		surface.create_entity{name=prototype.name, position={x, y}, force=game.forces[config.force], spawn_decorations=true}
+		surface.create_entity{name=prototype.name, position={x, y}, force=game.forces[config.force], spawn_decorations=true, raise_built = true}
 	end
 	
 	return not collides
