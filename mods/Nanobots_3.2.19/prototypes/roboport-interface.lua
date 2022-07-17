@@ -58,6 +58,7 @@ Data {
     name = 'roboport-interface-cc',
     icon = '__Nanobots__/graphics/icons/roboport-interface-cc.png',
     icon_size = 64,
+    icon_mipmaps = 1,
     flags = {'hidden'},
     subgroup = 'logistic-network',
     order = 'c[signal]-a[roboport]-interface-cc',
@@ -73,6 +74,7 @@ Constant-Combinator interface for setting the signals.
 --]]
 local ri_cc = Data('constant-combinator', 'constant-combinator'):copy('roboport-interface-cc')
 ri_cc.icon = '__Nanobots__/graphics/icons/roboport-interface-cc.png'
+ri_cc.icon_mipmaps = 1
 ri_cc.icon_size = 64
 ri_cc.item_slot_count = 5
 ri_cc.flags = {'not-deconstructable', 'player-creation', 'placeable-off-grid'}
@@ -114,6 +116,7 @@ local ri_radar = Data('radar', 'radar'):copy('roboport-interface-scanner')
 ri_radar.flags = {'not-deconstructable', 'player-creation', 'placeable-off-grid'}
 ri_radar.icon = '__Nanobots__/graphics/icons/roboport-interface.png'
 ri_radar.icon_size = 64
+ri_radar.icon_mipmaps = 1
 ri_radar.minable = nil
 ri_radar.next_upgrade = nil
 ri_radar.collision_mask = {}
@@ -131,6 +134,7 @@ Data {
     name = 'roboport-interface-main',
     icon = '__Nanobots__/graphics/icons/roboport-interface.png',
     icon_size = 64,
+    icon_mipmaps = 1,
     flags = {'placeable-player', 'player-creation'},
     minable = {mining_time = 0.5, result = 'roboport-interface'},
     max_health = 500,

@@ -8,6 +8,13 @@ data:extend{
     },
     {
         type = "bool-setting",
+        name = "nanobots-active-emitter-mode",
+        setting_type = "runtime-per-user",
+        default_value = true,
+        order = "nanobots-aa[mode]"
+    },
+    {
+        type = "bool-setting",
         name = "nanobots-equipment-auto",
         setting_type = "runtime-global",
         default_value = true,
