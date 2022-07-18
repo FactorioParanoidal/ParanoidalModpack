@@ -13,7 +13,7 @@ if data.raw.technology["logistics-4"] then
   bobmods.lib.tech.replace_prerequisite("logistic-spidertron", "logistics-3", "logistics-4")
 end
 if data.raw.tool["advanced-logistic-science-pack"] then
-  bobmods.lib.tech.replace_science_pack("logistic-spidertron", "production-science-pack", "advanced-logistic-science-pack")
+  bobmods.lib.tech.replace_science_pack("logistic-spidertron", "utility-science-pack", "advanced-logistic-science-pack")
   bobmods.lib.tech.add_prerequisite("logistic-spidertron", "advanced-logistic-science-pack")
 end
 
@@ -163,7 +163,7 @@ if settings.startup["bobmods-warfare-spidertron-overhaul"].value == true then
   bobmods.lib.tech.add_recipe_unlock("walking-vehicle", "mech-frame")
   bobmods.lib.tech.add_recipe_unlock("walking-vehicle", "mech-brain")
   bobmods.lib.tech.add_recipe_unlock("tankotron", "mech-armor-plate")
-
+  bobmods.lib.tech.add_prerequisite("walking-vehicle", "low-density-structure")
 
   bobmods.lib.recipe.add_ingredient("antron", {"mech-leg", 6})
   bobmods.lib.recipe.add_ingredient("antron", {"mech-frame", 1})
@@ -234,9 +234,10 @@ if settings.startup["bobmods-warfare-spidertron-overhaul"].value == true then
       bobmods.lib.recipe.add_ingredient("mech-brain", {"module-case", 2})
       bobmods.lib.tech.add_prerequisite("walking-vehicle", "modules")
     elseif data.raw.item["aluminium-plate"] then
-      bobmods.lib.recipe.replace_ingredient("mech-brain", {"aluminium-plate", 10})
+      bobmods.lib.recipe.add_ingredient("mech-brain", {"aluminium-plate", 10})
+      bobmods.lib.tech.add_prerequisite("walking-vehicle", "aluminium-processing")
     else
-      bobmods.lib.recipe.replace_ingredient("mech-brain", {"steel-plate", 10})
+      bobmods.lib.recipe.add_ingredient("mech-brain", {"steel-plate", 10})
     end
   end
 
@@ -282,8 +283,6 @@ else
     bobmods.lib.recipe.remove_ingredient("spidertron", "effectivity-module-3")
     bobmods.lib.tech.remove_prerequisite("spidertron", "effectivity-module-3")
     bobmods.lib.recipe.add_ingredient("spidertron", {"advanced-processing-unit", 10})
-
-
 
     bobmods.lib.recipe.add_ingredient("antron", {"advanced-processing-unit", 8})
     bobmods.lib.tech.add_prerequisite("walking-vehicle", "advanced-electronics-3")
