@@ -6,6 +6,7 @@
 local top_priority_enabled = OSM.lib.get_setting_boolean("osm-pumps-power-priority")
 local power_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-power")
 local water_pumpjack_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-ground-water-pumpjacks")
+local burner_enabled = OSM.lib.get_setting_boolean("osm-pumps-burner-offshore-pump")
 
 -- Local functions host
 local OSM_local = require("utils.lib")
@@ -206,6 +207,7 @@ if power_enabled then
 	local offshore_pump_0 = table.deepcopy(powered_pump_template) -- Offshore pump 0
 	offshore_pump_0.name = "offshore-pump-0"
 	offshore_pump_0.subgroup = "other"
+	offshore_pump_0.next_upgrade = "offshore-pump-1-placeholder"
 	offshore_pump_0.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-0.png"
 	offshore_pump_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_pump_0.placeable_by = {item = "offshore-pump-0", count = 1}
@@ -213,6 +215,11 @@ if power_enabled then
 	offshore_pump_0.crafting_speed = 1
 	offshore_pump_0.animation = animation(0.25)
 	offshore_pump_0.energy_usage = "900kW" --drd 400
+	if burner_enabled then
+		offshore_pump_0.energy_source = burner_source
+		offshore_pump_0.allowed_effects = burner_effects
+		offshore_pump_0.energy_usage = "900kW" --drd 400
+	end
 	data:extend({offshore_pump_0})
 
 	-- Make offshore pump 1
@@ -227,6 +234,7 @@ if power_enabled then
 	local offshore_pump_1 = table.deepcopy(powered_pump_template) -- Offshore pump 1
 	offshore_pump_1.name = "offshore-pump-1"
 	offshore_pump_1.subgroup = "other"
+	offshore_pump_1.next_upgrade = "offshore-pump-2-placeholder"
 	offshore_pump_1.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-1.png"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
@@ -248,6 +256,7 @@ if power_enabled then
 	local offshore_pump_2 = table.deepcopy(powered_pump_template) -- Offshore pump 2
 	offshore_pump_2.name = "offshore-pump-2"
 	offshore_pump_2.subgroup = "other"
+	offshore_pump_2.next_upgrade = "offshore-pump-3-placeholder"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_pump_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
 	offshore_pump_2.placeable_by = {item = "offshore-pump-2", count = 1}
@@ -269,6 +278,7 @@ if power_enabled then
 	local offshore_pump_3 = table.deepcopy(powered_pump_template) -- Offshore pump 3
 	offshore_pump_3.name = "offshore-pump-3"
 	offshore_pump_3.subgroup = "other"
+	offshore_pump_3.next_upgrade = "offshore-pump-4-placeholder"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_pump_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
 	offshore_pump_3.placeable_by = {item = "offshore-pump-3", count = 1}
@@ -304,6 +314,7 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 0
 	local offshore_pump_0 = table.deepcopy(unpowered_pump_template)
 	offshore_pump_0.name = "offshore-pump-0"
+	offshore_pump_0.next_upgrade = "offshore-pump-1"
 	offshore_pump_0.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-0.png"
 	offshore_pump_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_pump_0.max_health = 100
@@ -313,6 +324,7 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 1
 	local offshore_pump_1 = table.deepcopy(unpowered_pump_template)
 	offshore_pump_1.name = "offshore-pump-1"
+	offshore_pump_1.next_upgrade = "offshore-pump-2"
 	offshore_pump_1.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-1.png"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
@@ -323,6 +335,7 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 2
 	local offshore_pump_2 = table.deepcopy(unpowered_pump_template)
 	offshore_pump_2.name = "offshore-pump-2"
+	offshore_pump_2.next_upgrade = "offshore-pump-3"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_pump_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
 	offshore_pump_2.placeable_by = {item = "offshore-pump-2", count = 1}
@@ -333,6 +346,7 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 3
 	local offshore_pump_3 = table.deepcopy(unpowered_pump_template)
 	offshore_pump_3.name = "offshore-pump-3"
+	offshore_pump_3.next_upgrade = "offshore-pump-4"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_pump_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
 	offshore_pump_3.placeable_by = {item = "offshore-pump-3", count = 1}
@@ -349,33 +363,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	offshore_pump_4.pumping_speed = 80
 	offshore_pump_4.max_health = 300
 	data:extend({offshore_pump_4})
-end
-
--- Assign locales
-local offshore_pumps =
-{
-	"offshore-pump-0",
-	"offshore-pump-1",
-	"offshore-pump-2",
-	"offshore-pump-3",
-	"offshore-pump-4"
-}
-
-if power_enabled then
-	for _, offshore_pump in pairs (offshore_pumps) do
-		if settings.startup["osm-pumps-burner-offshore-pump"].value == true then -- Burner check
-			data.raw["assembling-machine"]["offshore-pump-0"].energy_source = burner_source
-			data.raw["assembling-machine"]["offshore-pump-0"].allowed_effects = burner_effects
-			data.raw["assembling-machine"]["offshore-pump-0"].energy_usage = "600kW"
-		
-			data.raw["assembling-machine"][offshore_pump].localised_name = {"entity-name."..offshore_pump.."-brn"}
-			data.raw["offshore-pump"][offshore_pump.."-placeholder"].localised_name = {"entity-name."..offshore_pump.."-placeholder-brn"}
-			data.raw["offshore-pump"]["offshore-pump-0-placeholder"].localised_description = {"entity-description.offshore-pump-0-placeholder-brn"}
-		else
-			data.raw["assembling-machine"][offshore_pump].localised_name = {"entity-name."..offshore_pump.."-pwr"}
-			data.raw["offshore-pump"][offshore_pump.."-placeholder"].localised_name = {"entity-name."..offshore_pump.."-placeholder-pwr"}
-		end
-	end
 end
 
 -- Water pumpjacks
@@ -512,6 +499,7 @@ if water_pumpjack_enabled then
 	-- Make water pumpjack 1
 	local water_pumpjack_1 = table.deepcopy(pumpjack_template)
 	water_pumpjack_1.name = "water-pumpjack-1"
+	water_pumpjack_1.next_upgrade = "water-pumpjack-2"
 	water_pumpjack_1.icon = "__P-U-M-P-S__/graphics/icons/water-pumpjack.png"
 	water_pumpjack_1.minable = {mining_time = 1, result = "water-pumpjack-1"}
 	water_pumpjack_1.animation = animation(0.5)
@@ -520,12 +508,11 @@ if water_pumpjack_enabled then
 	water_pumpjack_1.energy_usage = "300kW"
 	water_pumpjack_1.order = "8==D" -- yeah, it's a dick bitch!
 	data:extend({water_pumpjack_1})
-	
-
 
 	-- Make water pumpjack 2
 	local water_pumpjack_2 = table.deepcopy(pumpjack_template)
 	water_pumpjack_2.name = "water-pumpjack-2"
+	water_pumpjack_2.next_upgrade = "water-pumpjack-3"
 	water_pumpjack_2.icon = "__P-U-M-P-S__/graphics/icons/water-pumpjack.png"
 	water_pumpjack_2.minable = {mining_time = 1, result = "water-pumpjack-2"}
 	water_pumpjack_2.animation = animation(0.25)
@@ -538,6 +525,7 @@ if water_pumpjack_enabled then
 	-- Make water pumpjack 3
 	local water_pumpjack_3 = table.deepcopy(pumpjack_template)
 	water_pumpjack_3.name = "water-pumpjack-3"
+	water_pumpjack_3.next_upgrade = "water-pumpjack-4"
 	water_pumpjack_3.icon = "__P-U-M-P-S__/graphics/icons/water-pumpjack.png"
 	water_pumpjack_3.minable = {mining_time = 1, result = "water-pumpjack-3"}
 	water_pumpjack_3.animation = animation(0.16)
@@ -550,6 +538,7 @@ if water_pumpjack_enabled then
 	-- Make water pumpjack 4
 	local water_pumpjack_4 = table.deepcopy(pumpjack_template)
 	water_pumpjack_4.name = "water-pumpjack-4"
+	water_pumpjack_4.next_upgrade = "water-pumpjack-5"
 	water_pumpjack_4.icon = "__P-U-M-P-S__/graphics/icons/water-pumpjack.png"
 	water_pumpjack_4.minable = {mining_time = 1, result = "water-pumpjack-4"}
 	water_pumpjack_4.animation = animation(0.125)
@@ -570,23 +559,4 @@ if water_pumpjack_enabled then
 	water_pumpjack_5.energy_usage = "1250kW"
 	water_pumpjack_5.order = "8==D" -- yeah, it's a dick bitch!
 	data:extend({water_pumpjack_5})
-
-	-- Make water pumpjacks upgradable
-	local water_pumpjacks =
-	{
-		
-		["water-pumpjack-1"] = "water-pumpjack-2",
-		["water-pumpjack-2"] = "water-pumpjack-3",
-		["water-pumpjack-3"] = "water-pumpjack-4",
-		["water-pumpjack-4"] = "water-pumpjack-5",
-		["water-pumpjack-5"] = ""
-	}
-	
-	for water_pumpjack, upgrade in pairs(water_pumpjacks) do
-		if data.raw.item[water_pumpjack] and (not data.raw.item[water_pumpjack].OSM_removed or data.raw.item[water_pumpjack].OSM_removed == false) then
-			if data.raw["assembling-machine"][water_pumpjack] and data.raw["assembling-machine"][upgrade] then
-				data.raw["assembling-machine"][water_pumpjack].next_upgrade = upgrade
-			end
-		end
-	end
 end

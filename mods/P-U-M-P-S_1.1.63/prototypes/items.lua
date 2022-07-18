@@ -6,15 +6,6 @@
 local power_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-power")
 local water_pumpjack_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-ground-water-pumpjacks")
 
-local offshore_pumps =
-{
-	"offshore-pump-0",
-	"offshore-pump-1",
-	"offshore-pump-2",
-	"offshore-pump-3",
-	"offshore-pump-4",
-}
-
 -- Sets entity place results
 local place_result_0 = "offshore-pump-0"
 local place_result_1 = "offshore-pump-1"
@@ -99,23 +90,6 @@ local offshore_pump_4 =
 	place_result = place_result_4,
 	stack_size = 20,
 }	data:extend({offshore_pump_4})
-
--- Assign locales
-for _, offshore_pump in pairs (offshore_pumps) do
-	if data.raw.item[offshore_pump] then
-		if settings.startup["osm-pumps-enable-power"].value == true then
-			if settings.startup["osm-pumps-burner-offshore-pump"].value == true then -- Burner check
-				data.raw.item[offshore_pump].localised_name = {"entity-name."..offshore_pump.."-brn"}
-				data.raw.item[offshore_pump].localised_description = {"item-description."..offshore_pump.."-brn"}
-			else
-				data.raw.item[offshore_pump].localised_name = {"entity-name."..offshore_pump.."-pwr"}
-				data.raw.item[offshore_pump].localised_description = {"item-description."..offshore_pump.."-pwr"}
-			end
-		else
-			data.raw.item[offshore_pump].localised_description = {"item-description."..offshore_pump}
-		end
-	end
-end
 
 
 -- Water pumpjacks
