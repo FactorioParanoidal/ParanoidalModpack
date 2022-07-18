@@ -20,7 +20,7 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
-		name = "osm-pumps-burner-offshore-pump", -- enable/disable ground water pumpjacks
+		name = "osm-pumps-burner-offshore-pump", -- enable/disable burner offshore pump pumpjacks
 		setting_type = "startup",
 		default_value = true,
 		order = "c-8==D"
@@ -34,7 +34,7 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
-		name = "osm-pumps-landfill-goes-boom", -- enable/disable ground water pumpjacks
+		name = "osm-pumps-landfill-goes-boom",
 		setting_type = "startup",
 		default_value = true,
 		order = "e-8==D"

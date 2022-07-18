@@ -13,6 +13,7 @@ local OSM_anim = require("utils.animation")
 require("prototypes.override.angel-overrides")
 require("prototypes.override.bob-updates")
 require("prototypes.override.bob-overrides")
+require("locale.locale")
 
 -- Ground water pumpjacks
 if mods["reskins-bobs"] and reskins.bobs and reskins.bobs.triggers.mining.entities then

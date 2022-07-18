@@ -17,12 +17,16 @@ function OSM_local.fix_collision_mask()
 		"offshore-pump-4"
 	}
 
-	for _, offshore_pump in pairs(offshore_pumps) do
-		if data.raw["assembling-machine"][offshore_pump] then
+	for _, pump in pairs(offshore_pumps) do
+		if data.raw["assembling-machine"][pump] then
 		
-			local fixed_mask = data.raw["assembling-machine"][offshore_pump].collision_mask
+			local offshore_pump = data.raw["assembling-machine"][pump]
+			local offshore_placeholder = data.raw["offshore-pump"][pump.."-placeholder"]
 			
-			data.raw["offshore-pump"][offshore_pump.."-placeholder"].collision_mask = fixed_mask
+			offshore_placeholder.collision_mask = offshore_pump.collision_mask
+			offshore_placeholder.collision_box = offshore_pump.collision_box
+			offshore_placeholder.selection_box = offshore_pump.selection_box
+			offshore_placeholder.adjacent_tile_collision_box = offshore_pump.adjacent_tile_collision_box
 		end
 	end
 end

@@ -1,8 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.63
+Date: 16. 07. 2022
+  Bugfixes:
+    - Added a missing string for pumpjacks name
+    - Corrected a wrong index that caused a crash on startup with "Angels Refining"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.62
+Date: 15. 07. 2022
+  Bugfixes:
+    - Corrected a nasty compatibility issue with mods editing bounding boxes
+    - Corrected a crucial typo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.61
+Date: 14. 07. 2022
+  Info:
+    - Better script for tiles detection below offshore pumps
+  Bugfixes:
+    - Placing water right under an offshore pump now destroys it
+---------------------------------------------------------------------------------------------------
 Version: 1.1.60
 Date: 05. 05. 2022
   Features:
-    - Placing landfill under offshore pumps destroys them (optional, does not affect already placed offshore pumps)
+    - Placing landfill under offshore pumps destroys them (optional, does not affect already landfilled offshore pumps)
   Changes:
     - Water pumpjacks now use a single recipe (does NOT change water outputs)
   Info:

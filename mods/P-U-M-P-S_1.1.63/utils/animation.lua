@@ -120,6 +120,36 @@ function animation_set.assign_tier_color()
 end
 
 -- Make animation sets
+function animation_set.animation_void()
+	return
+	{
+		north =
+		{
+			filename = "__core__/graphics/empty.png",
+			width = 1,
+			height = 1,
+		},
+		east =
+		{
+			filename = "__core__/graphics/empty.png",
+			width = 1,
+			height = 1,
+		},
+		south =
+		{
+			filename = "__core__/graphics/empty.png",
+			width = 1,
+			height = 1,
+		},
+		west =
+		{
+			filename = "__core__/graphics/empty.png",
+			width = 1,
+			height = 1,
+		}
+	}
+end
+
 function animation_set.template_unpowered_animation()
 	return
 	{

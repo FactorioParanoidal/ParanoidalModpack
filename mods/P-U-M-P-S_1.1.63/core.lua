@@ -52,20 +52,23 @@ local water_ground =
 	allow_decomposition = false
 }	data:extend({water_ground})
 
-
--- Offshore pump goes boom
-local pump_boom =
+local entity_void =
 {
-	type = "sound",
-	name = "osm-pump-boom",
-	category = "alert",
-	filename = "__base__/sound/small-explosion-1.ogg",
-	volume = 0.75,
-	audible_distance_modifier = 2.0,
-	aggregation =
-	{
-		max_count = 1,
-		remove = true,
-		count_already_playing = true,
-	}
-}	data:extend({pump_boom})
+	type = "simple-entity-with-force",
+	name = "OSM-offshore-pump-collision-layer",
+	subgroup = "OSM-placeholder",
+	collision_mask = {"water-tile"},
+	icon = "__osm-lib__/graphics/icons/utils/collision-layer.png",
+	icon_size = 64,
+	icon_mipmaps = 4,
+	flags = {"not-repairable", "not-on-map", "not-blueprintable", "not-deconstructable", "hidden"},
+	order = "offshore-pump-collision-placeholder",
+	max_health = 100,
+	collision_box = {{0, 0}, {0, 0}},
+	selection_box = {{0, 0}, {0, 0}},
+	tile_width = 1,
+	tile_height = 1,
+	picture = require("utils.animation").animation_void(),
+	selectable_in_game =  false,
+	squeak_behaviour = false
+}	data:extend({entity_void})
