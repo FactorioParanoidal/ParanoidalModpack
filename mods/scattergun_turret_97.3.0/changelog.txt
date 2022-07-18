@@ -1,0 +1,323 @@
+---------------------------------------------------------------------------------------------------
+Version: 7.3.0
+Date: 15.07.2022
+  Changes:
+    - Added HR sprites.
+    - Slowdown rounds magazine debuff now slows movement to 75% and lasts 5 seconds (was 25% and 15).
+    - Slowdown cannon shells debuff now slows movement to 50% and lasts 10 seconds (was 25% and 15).
+    - Slowdown rocket pack debuff now slows movement to 50% and lasts 10 seconds (was 25% and 15).
+    - Heavy cannon shells reduces firing rate to 80% (was 100%).
+    - Heavy uranium cannon shells reduces firing rate to 80% (was 100%).
+    - Explosive rocket pack reduces firing rate to 80% (was 100%).
+    - All cannon shells contain 6 shots per item (was 5).
+    - Light cannon shells recipe is cheaper by 1 Steel plate (from 4 to 3).
+    - Both uranium cannon shells cost 1 more uranium to make (from 1 to 2).
+    - Removed main menu simulation.
+---------------------------------------------------------------------------------------------------
+Version: 7.2.1
+Date: 17.05.2022
+  Bugfixes:
+    - Fixed beam on Frontline Beam Turret being invisible.
+---------------------------------------------------------------------------------------------------
+Version: 7.2.0
+Date: 11.01.2021
+  Changes:
+    - Added main menu simulation.
+    - Reduced sound volume of Scattergun Turret by half.
+    - Increased sound volume of remaining turrets by 10-20%.
+---------------------------------------------------------------------------------------------------
+Version: 7.1.2
+Date: 04.01.2021
+  Bugfixes:
+    - Pulse Laser Turret (Frontline)'s laser beam now has correct range of 40.
+---------------------------------------------------------------------------------------------------
+Version: 7.1.1
+Date: 23.12.2020
+  Bugfixes:
+    - HMG Turret (Backline) fire arc reduced to 180 dergrees - wider arcs are unsupported by Factorio and turret with more will only have a 90 degree arc, despite range preview showing otherwise.
+---------------------------------------------------------------------------------------------------
+Version: 7.1.0
+Date: 14.12.2020
+  Changes:
+    - HMG Turret (Frontline) fire arc reduced from 360 to 120 degrees.
+    - HMG Turret (Backline) fire arc increased from 360 to 240 degrees. Added 5 minimum range.
+    - Gatling Turret (Backline) fire arc increased from 45 to 90 degrees. Added 15 minimum range.
+    - Light Cannon Turret (Frontline) fire arc reduced from 90 to 45 degrees.
+    - Light Cannon Turret (Backline) minimum range increased from 20 to 30.
+    - Dual Cannon Turret (Frontline) fire arc reduced from 45 to 30 degrees. Minimum range reduced from 35 to 25. Range increased from 55 to 60.
+    - Dual Cannon Turret (Backline) fire arc reduced from 90 to 60 degrees. Minimum range increased from 30 to 45. Range increased from 60 to 65.
+    - Heavy Cannon Turret (Frontline) fire arc reduced from 72 to 20 degrees. Minimum range reduced from 50 to 35.
+    - Heavy Cannon Turret (Backline) fire arc reduced from 72 to 40 degrees. Minimum range increased from 45 to 60.
+    - Rocket Turret (Frontline) fire arc reduced from 90 to 30 degrees. Minimum range reduced from 65 to 45.
+    - Rocket Turret (Backline) fire arc reduced from 90 to 45 degrees. Minimum range reduced from 65 to 75. Range reduced from 100 to 95.
+    - Pulse Laser Turret (Frontline) fire arc reduced from 72 to 60 degrees. Range increased from 35 to 40. Rotation speed increased from 32.4 to 43.2.
+    - Pulse Laser Turret (Backline) fire arc increased from 36 to 120 degrees. Minimum range increased from 5 to 25. Rotation speed increased from 64.8 to 86.4.
+    - Thermal Laser Turret (Frontline) fire arc decreased from 360 to 30 degrees. Minimum range decreased from 20 to 15. Range increased from 45 to 55.
+    - Thermal Laser Turret (Backline) fire arc decreased from 360 to 60 degrees. Minimum range increased from 25 to 35.
+---------------------------------------------------------------------------------------------------
+Version: 7.0.0
+Date: 24.11.2020
+  Changes:
+    - Updated to Factorio 1.1.
+    - Added "Enable pretargeting" mod setting.
+---------------------------------------------------------------------------------------------------
+Version: 6.2.0
+Date: 26.10.2020
+  Changes:
+    - Added Pulse Laser Turrets.
+    - Thermal Laser Turrets tech now requires Pulse Laser Turrets and Efficiency Module technologies.
+    - Thermal Laser head now requires Efficiency Module 1 to craft.
+---------------------------------------------------------------------------------------------------
+Version: 6.1.2
+Date: 14.10.2020
+  Bugfixes:
+    - Fixed crash when Custom Modules, Krastorio 2 and Space Exploration are enabled. Again.
+---------------------------------------------------------------------------------------------------
+Version: 6.1.1
+Date: 12.10.2020
+  Bugfixes:
+    - Fixed crash when Custom Modules, Krastorio 2 and Space Exploration are enabled.
+---------------------------------------------------------------------------------------------------
+Version: 6.1.0
+Date: 11.10.2020
+  Changes:
+    - Reduced damage of Beam Turret (Frontline) from 150 to 50.
+    - Reduced power per shot of Beam Turret (Frontline) from 10 MJ to 4.5 MJ.
+    - Reworked Beam Turret (Backline) to fire a low-damage, slowing electric beam.
+    - Uranium Ammo recipe for Krastorio 2 changed to 1 Shotgun Shell, 2 Uranium 238, 6 seconds.
+  Bugfixes:
+    - Fixed modular turrets being gated behind end-game science packs when playing with both Space Exploration and Krastorio 2.
+---------------------------------------------------------------------------------------------------
+Version: 6.0.0
+Date: 01.09.2020
+  Changes:
+    - Updated to Factorio 1.0.
+    - Improved Krastorio 2 integration, removed Krastorio 1 integration.
+    - Removed Modular Turret Damage techs.
+    - Backline Turret Mount recipe changed to 2 Low Density Structures, 20 Plastic Bars, 1 Electric Engines, 4 Advanced Circuits.
+    - Light Cannon Shells cost reduced by 2 Steel Plate.
+    - Slowdown Rounds Magazine recipe changed to 9 Piercing Round Magazines and 1 Slowdown Capsule. Takes 8 seconds instead of 24.
+    - Slowdown Cannon Shells now produce 2x products. Cost increased by 1 Steel Plate, 1 Plastic Bar and 2 Explosives.
+    - Heavy Cannon Shells recipe changed to 1 Light Cannon Shell and 6 Explosives.
+    - Slowdown Rockets recipe changed to 8 Rockets, 2 Solid Fuel, 1 Slowdown Capsule. Takes 32 seconds.
+    - Slowdown Rockets damage type changed to Explosive and damage increased from 120 to 200.
+    - Scattergun Turret Damage Bonus removed.
+    - HMG weapon cost increased by 2 Electronic Circuits and 1 Iron Gear Wheel.
+    - HMG fire rate increased from 4/s to 6/s.
+    - HMG Frontline Turret range increased from 28 to 30.
+    - HMG Backline Turret range increased from 33 to 35.
+    - Gatling Turrets Damage Bonus increased from 0% to 100% and firing arc decreased from 120 to 45 degrees.
+    - Gatling Frontline Turret range increased from 20 to 25.
+    - Gatling Backline Turret range increased from 24 to 30.
+    - Light Cannon Turrets fire rate reduced from 0.67/s to 0.5/s.
+    - Light Cannon Frontline Turret range increased from 30 to 45 and minimal range increased from 12 to 15.
+    - Light Cannon Backline Turret range increased from 36 to 50 and minimal range increased from 18 to 20.
+    - Dual Cannon Turrets fire rate reduced from 1/s to 0.67/s.
+    - Dual Cannon Frontline Turret range increased from 30 to 55 and minimal range increased from 12 to 35.
+    - Dual Cannon Backline Turret range increased from 36 to 60 and minimal range increased from 18 to 30.
+    - Heavy Cannon weapon recipe changed to 2 Low Density Structures, 5 Steel Plates, 2 Advanced Circuits, 50 Lubricant
+    - Heavy Cannon Frontline Turret range increased from 60 to 75 and minimal range increased from 30 to 50.
+    - Heavy Cannon Backline Turret range increased from 72 to 80 and minimal range increased from 36 to 45.
+    - Rocket Turrets fire rate reduced from 0.17/s to 0.1/s.
+    - Rocket Frontline Turret range increased from 80 to 90 and minimal range increased from 60 to 65.
+    - Rocket Backline Turret range increased from 88 to 100 and minimal range reduced from 66 to 65.
+    - Thermal Lasers damage reduced from 120 to 40 and reduced energy per shot from 4 MW to 3 MW.
+    - Thermal Lasers now create fire at impact point and set target on fire.
+    - Thermal Laser Frontline Turret range increased from 35 to 45 and minimal range increased from 17 to 20.
+    - Thermal Laser Backline Turret range increased from 42 to 60 and minimal range increased from 17 to 25.
+  Bugfixes:
+    - Fixed red tinting of team color mask.
+    - Fixed that all modular turret tech required Optimizaton Tech Cards when playing with Krastorio 2 and Space Exploration at the same time.
+---------------------------------------------------------------------------------------------------
+Version: 5.3.2
+  Changes:
+    - Fixed Space Exploration adding space science packs to modular turret techs.
+---------------------------------------------------------------------------------------------------
+Version: 5.3.1
+  Changes:
+    - Fixed conditional require error.
+---------------------------------------------------------------------------------------------------
+Version: 5.3.0
+  Changes:
+    - Updated Krastorio 2 compatibility to version 0.9.11.
+    - Adjusted damage bonuses for Scattergun Turrets and Modular Turrets to match vanilla, Krastorio and Krastorio 2 values.
+---------------------------------------------------------------------------------------------------
+Version: 5.2.0
+  Changes:
+    - Improved Krastorio 2 compatibility.
+    - Adjusted research costs of Modular Turret Damage techs.
+---------------------------------------------------------------------------------------------------
+Version: 5.1.0
+  Changes:
+    - Added Krastorio 2 compatibility.
+    - Readded Krastorio Legacy compatibility.
+    - Fixed missing Scattergun Turred Damage Bonus from 5.0.0.
+    - Normalized turret firing sounds to match vanilla Factorio.
+---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+  Changes:
+    - Updated to Factorio version 0.18.0.
+    - Removed Krastorio and Bobs integration. Will be added again if those mods update to 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 4.4.0
+  Changes:
+    - Reduced cost of Light Cannon Shells and Heavy Cannon Shells by 40%.
+---------------------------------------------------------------------------------------------------
+Version: 4.3.3
+  Changes:
+    - Fixed Krastorio compatibility for latest Krastrio version.
+---------------------------------------------------------------------------------------------------
+Version: 4.3.2
+  Changes:
+    - Fixed Scattergun Turrets shooting backwards through themselves when enemies are adjacent.
+---------------------------------------------------------------------------------------------------
+Version: 4.3.1
+  Changes:
+    - Fixed infinite range cannon projectiles with "Disable cannon ammo range limit" on.
+---------------------------------------------------------------------------------------------------
+Version: 4.3.0
+  Changes:
+    - Added "Disable cannon ammo range limit" startup mod setting.
+---------------------------------------------------------------------------------------------------
+Version: 4.2.1
+  Changes:
+    - Fixed crash on load.
+---------------------------------------------------------------------------------------------------
+Version: 4.2.0
+  Changes:
+    - Fixed load error when using Bob's mods while extra ammo option is disabled.
+---------------------------------------------------------------------------------------------------
+Version: 4.1.0
+  Changes:
+    - Fixed up research prerequisites for techs.
+    - Added startup settings for people that do not want stuff other than turrets.
+    - Thermal Laser Turrets now have minimum range, slightly reduced tracking speed.
+    - Tweaked AOE range of cannon and rocket ammo to match vanilla counterparts.
+    - Removed resistances information on turrets placed (you can still read them when in inventory).
+    - Re-added support for Bob's Intermediates.
+---------------------------------------------------------------------------------------------------
+Version: 4.0.0
+  Changes:
+    - Ported to 0.17.X.
+    - Added 8-way placing for turrets.
+    - Added remaining technology descriptions.
+    - Fixed old names in modifier descriptions.
+    - Reduced damage of all Turret Cannon Shells variants.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.0
+  Changes:
+    - Renamed 'Modular Turret Mount' to 'Frontline Turret Mount'.
+    - Renamed 'Advanced Turret Mount' to 'Backline Turret Mount'.
+    - Updated names of turrets according to above changes.
+    - Added technology descriptions for all turret techs.
+    - Slowdown rounds magazine recipe changed.
+    - Light Cannon Turrets fire rate reduced (1 -> 0.67).
+    - Dual Cannon Turrets fire rate reduced (2 -> 1).
+    - Heavy Cannon damage bonus increased (+75% -> +100%).
+    - Heavy Cannon Turret range and minimal range increased (both variants).
+    - Rocket Turrets range and minimal range increased (both variants).
+    - Rocket Turrets fire rate reduced (0.25 -> 0.17).
+    - Thermal Laser Turrets damage increased (80 -> 120).
+    - Thermal Laser Turrets fire rate reduced (1 -> 0.67).
+    - Gamma Beam Turrets damage increased (100 -> 150).
+    - Gamma Beam Turrets fire rate increased (0.25 -> 0.5).
+    - Gamma Beam Turrets power consumption per shot decreased (15 MW -> 10 MW).
+---------------------------------------------------------------------------------------------------
+Version: 3.9.1
+  Bugfixes:
+    - Fixed few recipes that had their data corrupted in previous update.
+---------------------------------------------------------------------------------------------------
+Version: 3.9.0
+  Changes:
+    - Added Hardened inserter. More health and resistances, to withstand frontline conditions.
+    - Reduced crafting time of Slowdown rocket packs to 16 seconds.
+    - Increased base damage of Uranium shotgun shells to 20.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.0
+  Changes:
+    - Heavy MG (item) can now be used as a handheld gun.
+    - Added Uranium Shotgun Shells to Uranium Ammo technology.
+    - reduced passive power draw of Thermal and Beam turrets.
+---------------------------------------------------------------------------------------------------
+Version: 3.7.0
+  Changes:
+    - Reduced rotation range of Rocket Turrets.
+    - Added slowdown ammo variants for bullets, cannon shells and rockets. Units affected move slower.
+    - Thermal Laser item can now be equipped in power armor.
+
+---------------------------------------------------------------------------------------------------
+Version: 3.6.0
+  Changes:
+    - Added Scanning Radar, fast sector scanning.
+    - Increased cost of Advanced Radar Stations tech to 75 from 50.
+    - Changed graphical effect of thermal laser, now it looks like actual lasers.
+    - Shiftted sprite of all Advanced Turrets to look better.
+    - Clarified description of Sentry Radar.
+    - Added Rocket Pack and Explosive Rocket Pack items, unlocked with Rocket Turrets tech.
+    - Changed location of modded ammunition in crafting menu.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.0
+  Changes:
+    - Fixed a bug that made turrets fire slower than says in tooltip, particuraly noticeable with HMG and Gatling turrets with high bullet fire rate researched.
+    - Reduced Gatling Turret range to 20/24 (regular/advanced mount).
+    - Added 2 Advanced Circuits to Gatling Gun item recipe.
+    - Gatling Turrets research cost increased to 200 (from 100), added blue science pots and requirement of Military 3 tech.
+    - Added Gamma Beam Turrets.
+    - Added note to Scattergun and Gamma Beam Turrets research about them requiring unobstructed LoS.
+    - Moved uranium turret ammo to Uranium Ammo research.
+    - Fixed wrong colors for Advanced Turret's color mask.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.0
+  Changes:
+    - HMG Turret damage bonus increased to +100% (from +50%).
+    - Gatling Turret fire rate increased to 24/s (from 15/s).
+    - Dual Cannon fire rate increased to 2/s (from 1.5/s).
+    - Heavy Cannon damage bonus increased to +75% (from +25%).
+    - Thermal Laser Turret fire rate increased to 1/s (from 0.67/s).
+    - Thermal Laser Turret energy cost per shot reduced to 4 MJ (from 12 MJ).
+    - Sentry Radar range increased to 9 chunks (from 7), equal to 9 regular radars arranged in a square.
+    - Increased energy usage of Sentry Radar to 1.2 MW (from 500 kW).
+    - Almost all recipes are now cheaper.
+    - Reduced research costs of most technologies, green + military techs available earlier.
+    - Added resistances to Modular Turrets and Advanced Turrets.
+    - Added tooltips for resistances and tracking speed to all turrets.
+    - Added uranium variants of turret cannon ammo.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.0
+  Changes:
+    - Added simple integration with Bob's mods.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.0
+  Changes:
+    - Added Dual Cannon Turrets.
+    - Added Advanced Turret Mount and variants of all modular turrets for it.
+    - Shortened modular turret components craft time from 30 to 10 seconds.
+    - Added new radar building.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+  Changes:
+    - Added 3 new turrets (Light Cannon, Heavy Cannon, Gatling) along with new techs that unlock them.
+    - Added Modular Turret Damage techs, increases damage of all modular turrets (except Thermal Laser, regular Laser Damage upgrades apply to them).
+    - Removed MG damage buff from Turret Damage tech.
+    - Added Light and Heavy Cannon Turret Ammo. Hits instantly, allowing cannon turrets to fire over walls.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+  Changes:
+    - Added 3 new turrets (Heavy MG, Rocket, Thermal Laser) along with new techs that unlock them.
+    - Changed mod name to 'Modular Turrets' from 'Scattergun Turrets'.
+---------------------------------------------------------------------------------------------------
+Verions: 2.0.0
+  Changes:
+    - Updated to Factorio version 0.16.x.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Changes:
+    - Changed recipe to be more mass-production friendly.
+    - Increased explosion resistance and added acid resist.
+    - Changed visuals to use tank turret as a gun.
+    - Added custom firing sound.
+    - Changed damage bonus from Gun Turret Damage research to match those of Gun Turret's.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Changes:
+    - Initial Release.
