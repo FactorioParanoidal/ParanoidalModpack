@@ -69,7 +69,6 @@ data:extend(
     prerequisites =
     {
       "radars-2",
-      "military-3",
       "advanced-electronics-2"
     },
     effects =
@@ -101,7 +100,7 @@ data:extend(
     prerequisites =
     {
       "radars-3",
-      "military-4",
+      "production-science-pack"
     },
     effects =
     {
@@ -118,7 +117,7 @@ data:extend(
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
-        {"military-science-pack", 1},
+        {"production-science-pack", 1}
       },
       time = 30
     },

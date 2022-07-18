@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 06.06.2022
+  Changes:
+    - Tidied up technology prerequisites #12
+    - Added tungsten gear wheel to rocket engine #12
+    - Adjusted tech costs #18
+    - Added mushroom cloud to atomic artillery shells #29
+  Bugfixes:
+    - Fixed mech brain ingredient fallback: Module case > Aluminium plate > Steel plate #4
+---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 09. 04. 2021
   Changes:

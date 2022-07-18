@@ -10,8 +10,7 @@ data:extend(
     prerequisites =
     {
       "gun-turret",
-      "steel-processing",
-      "logistic-science-pack"
+      "military-2"
     },
     effects =
     {
@@ -74,6 +73,7 @@ data:extend(
     prerequisites =
     {
       "bob-turrets-3",
+      "military-3"
     },
     effects =
     {
@@ -90,6 +90,7 @@ data:extend(
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
+        {"military-science-pack", 1},
         {"chemical-science-pack", 1},
       },
     },
@@ -105,6 +106,7 @@ data:extend(
     prerequisites =
     {
       "bob-turrets-4",
+      "production-science-pack"
     },
     effects =
     {
@@ -121,8 +123,9 @@ data:extend(
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
-        {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"chemical-science-pack", 1},
+        {"production-science-pack", 1}
       },
     },
   },
@@ -149,7 +152,7 @@ data:extend(
     },
     unit =
     {
-      count = 75,
+      count = 150,
       time = 30,
       ingredients =
       {
@@ -170,15 +173,17 @@ data:extend(
     prerequisites =
     {
       "bob-laser-turrets-2",
+      "military-3"
     },
     unit =
     {
-      count = 75,
+      count = 200,
       time = 30,
       ingredients =
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
+        {"military-science-pack", 1},
         {"chemical-science-pack", 1},
       },
     },
@@ -201,11 +206,12 @@ data:extend(
     prerequisites =
     {
       "bob-laser-turrets-3",
-      "advanced-electronics-2"
+      "advanced-electronics-2",
+      "production-science-pack"
     },
     unit =
     {
-      count = 100,
+      count = 250,
       time = 30,
       ingredients =
       {
@@ -213,6 +219,7 @@ data:extend(
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"production-science-pack", 1}
       },
     },
     effects =
@@ -234,11 +241,11 @@ data:extend(
     prerequisites =
     {
       "bob-laser-turrets-4",
-      "utility-science-pack",
+      "military-4",
     },
     unit =
     {
-      count = 100,
+      count = 300,
       time = 30,
       ingredients =
       {
@@ -246,6 +253,7 @@ data:extend(
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"production-science-pack", 1},
         {"utility-science-pack", 1}
       },
     },
@@ -300,8 +308,7 @@ data:extend(
     prerequisites =
     {
       "bob-sniper-turrets-1",
-      "steel-processing",
-      "chemical-science-pack",
+      "military-3"
     },
     effects =
     {
@@ -333,7 +340,7 @@ data:extend(
     prerequisites =
     {
       "bob-sniper-turrets-2",
-      "utility-science-pack",
+      "military-4",
     },
     effects =
     {
@@ -350,8 +357,9 @@ data:extend(
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
-        {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"chemical-science-pack", 1},
+        {"production-science-pack", 1},
         {"utility-science-pack", 1}
       },
     },
@@ -432,6 +440,7 @@ data:extend(
     prerequisites =
     {
       "bob-plasma-turrets-2",
+      "military-3"
     },
     unit =
     {
@@ -441,6 +450,7 @@ data:extend(
       {
         {"automation-science-pack", 1},
         {"logistic-science-pack", 1},
+        {"military-science-pack", 1},
         {"chemical-science-pack", 1},
       },
     },
@@ -463,7 +473,7 @@ data:extend(
     {
       "bob-plasma-turrets-3",
       "advanced-electronics-2",
-      "chemical-science-pack"
+      "production-science-pack"
     },
     unit =
     {
@@ -475,6 +485,7 @@ data:extend(
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"production-science-pack", 1}
       },
     },
     effects =
@@ -495,7 +506,7 @@ data:extend(
     prerequisites =
     {
       "bob-plasma-turrets-4",
-      "utility-science-pack"
+      "military-4"
     },
     unit =
     {
@@ -507,6 +518,7 @@ data:extend(
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"production-science-pack", 1},
         {"utility-science-pack", 1}
       },
     },
@@ -585,6 +597,7 @@ data:extend(
         {"logistic-science-pack", 1},
         {"chemical-science-pack", 1},
         {"military-science-pack", 1},
+        {"production-science-pack", 1},
         {"utility-science-pack", 1},
       },
     },
