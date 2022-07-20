@@ -801,7 +801,7 @@ end
 
 script.on_init(general_update)
 script.on_event({defines.events.on_research_finished, defines.events.on_rocket_launched}, general_update)
-script.on_nth_tick(6, on_tick)
+-- script.on_nth_tick(120, on_tick) --drd 6
 script.on_configuration_changed(on_configuration_changed)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_player_configuration_changed)
 script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed, defines.events.on_gui_opened, on_player_display_resolution_changed, defines.events.on_player_changed_surface, defines.events.on_player_created}, general_update_event)
