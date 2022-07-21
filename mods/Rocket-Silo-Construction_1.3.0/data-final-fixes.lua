@@ -1,3 +1,5 @@
+local mp = settings.startup["rsc-st-cost-mp"].value
+
 -- allow rocket silos to be built on space platforms
 if data.raw.item['se-rocket-launch-pad'] then
 for s=1,6 do 
@@ -45,3 +47,15 @@ if enable_se_probe then
 	data.raw.recipe["se-space-probe-rocket-silo"].hidden = enable_se_probe
 	end
 end
+
+
+if mods['space-exploration'] then 
+	-- se v.0.6???
+	remove_raw_ingredient(data.raw.recipe["rsc-construction-stage6"].ingredients, "processing-unit")
+	remove_raw_ingredient(data.raw.recipe["rsc-excavation-site"].ingredients, "processing-unit")
+	remove_raw_ingredient(data.raw.recipe["rsc-serlp-excavation-site"].ingredients, "processing-unit")
+
+	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {"se-heat-shielding", 10*mp} )
+	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {"rocket-control-unit", 5*mp} )
+
+	end
