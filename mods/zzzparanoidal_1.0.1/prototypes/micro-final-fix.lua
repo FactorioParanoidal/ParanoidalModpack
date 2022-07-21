@@ -63,7 +63,6 @@ data.raw["recipe"]["angels-stone-pipe-to-ground-casting"].hidden = true
 --###############################################################################################
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite ("electronics-machine-1", "steel-processing")
-bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "electronics")
 bobmods.lib.tech.add_prerequisite ("radar", "electronics")
 bobmods.lib.tech.add_prerequisite ("electric-lab", "electronics")
 --bobmods.lib.tech.add_prerequisite ("bi-tech-bio-farming", "ore-crushing")
@@ -86,7 +85,6 @@ bobmods.lib.tech.add_prerequisite ("chemical-processing-2", "logistic-science-pa
 bobmods.lib.tech.add_prerequisite ("angels-ironworks-1", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("bi-tech-bio-farming-2", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("adv-seed-extraction", "logistic-science-pack")
-bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("nanobots-cliff", "logistic-science-pack")
 --синие банки
 bobmods.lib.tech.add_prerequisite ("remelting-alloy-mixer-2", "chemical-science-pack")
@@ -364,6 +362,8 @@ data.raw["recipe"]["programmable-speaker"].subgroup = "circuit-auditory"
 data.raw.item["programmable-speaker"].subgroup = "circuit-auditory"
 
 if mods["InlaidLampsExtended"] then
+bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "electronics")
+bobmods.lib.tech.add_prerequisite ("flat-lamp-t", "logistic-science-pack")
 data.raw["recipe"]["flat-lamp-c"].group = "circuit"
 data.raw["recipe"]["flat-lamp-c"].subgroup = "circuit-visual"
 data.raw.item["flat-lamp"].subgroup = "circuit-visual"
