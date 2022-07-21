@@ -1,9 +1,4 @@
 require('connections.lib')
-require('connections.belt')
-require('connections.chest')
-require('connections.fluid')
-require('connections.circuit')
-require('connections.heat')
 Connections = {}
 
 -- Connection types --
@@ -41,11 +36,11 @@ local function register_connection_type(ctype, class)
 	end
 end
 
-register_connection_type('belt', Belt)
-register_connection_type('chest', Chest)
-register_connection_type('fluid', Fluid)
-register_connection_type('circuit', Circuit)
-register_connection_type('heat', Heat)
+register_connection_type('belt', require('connections.belt'))
+register_connection_type('chest', require('connections.chest'))
+register_connection_type('fluid', require('connections.fluid'))
+register_connection_type('circuit', require('connections.circuit'))
+register_connection_type('heat', require('connections.heat'))
 
 local function is_connectable(entity)
 	return type_map[entity.type] or type_map[entity.name]

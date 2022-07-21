@@ -1,4 +1,19 @@
-require('layout')
+require 'util'
+
+local remote_api = require('lib')
+local get_factory_by_entity = remote_api.get_factory_by_entity
+local get_factory_by_building = remote_api.get_factory_by_building
+local find_factory_by_building = remote_api.find_factory_by_building
+local find_surrounding_factory = remote_api.find_surrounding_factory
+local power_middleman_surface = remote_api.power_middleman_surface
+local cancel_creation = remote_api.cancel_creation
+local BUILDING_TYPE = BUILDING_TYPE
+
+local prepare_gui = 0  -- Function stub
+local update_hidden_techs = 0 -- Function stub
+local activate_factories = 0 -- Function stub
+
+local Layout = require('layout')
 local HasLayout = HasLayout
 
 require('connections')
@@ -12,56 +27,13 @@ require('compat.factoriomaps')
 local mod_gui = require('mod-gui')
 
 local Blueprint = require('blueprint')
--- DATA STRUCTURE --
 
--- Factory buildings are entities of type 'storage-tank' internally, because reasons
-local BUILDING_TYPE = 'storage-tank'
-
---[[
-factory = {
-	+id = *,
-	(+)inactive = *,
-
-	+outside_surface = *,
-	+outside_x = *,
-	+outside_y = *,
-	+outside_door_x = *,
-	+outside_door_y = *,
-
-	+inside_surface = *,
-	+inside_x = *,
-	+inside_y = *,
-	+inside_door_x = *,
-	+inside_door_y = *,
-
-	+force = *,
-	+layout = *,
-	+building = *,
-	+outside_energy_receiver = *,
-	+outside_overlay_displays = {*},
-	+outside_port_markers = {*},
-	(+)outside_other_entities = {*},
-
-	+inside_overlay_controller = *,
-	+inside_power_poles = {*},
-	(+)outside_power_pole = *,
-
-	(+)middleman_id = *,
-	(+)direct_connection = *,
-
-	+stored_pollution = *,
-
-	+connections = {*},
-	+connection_settings = {{*}*},
-	+connection_indicators = {*},
-
-	+upgrades = {},
-}
-]]--
+remote.add_interface('factorissimo', remote_api)
 
 -- INITIALIZATION --
 
 local function init_globals()
+	Layout.init()
 	-- List of all factories
 	global.factories = global.factories or {}
 	-- Map: Id from item-with-tags -> Factory
@@ -83,12 +55,6 @@ local function init_globals()
 	-- List of all factory power pole middlemen
 	global.middleman_power_poles = global.middleman_power_poles or {}
 end
-
-local prepare_gui = 0  -- Function stub
-local update_hidden_techs = 0 -- Function stub
-local power_middleman_surface = 0 -- Function stub
-local cancel_creation = 0 -- Function stub
-local activate_factories = 0 -- Function stub
 
 local function init_gui()
 	for _, player in pairs(game.players) do
@@ -125,60 +91,7 @@ script.on_configuration_changed(function(config_changed_data)
 	end
 end)
 
--- DATA MANAGEMENT --
-
-local function get_factory_by_entity(entity)
-	if entity == nil then return nil end
-	return global.factories_by_entity[entity.unit_number]
-end
-
-local function get_factory_by_building(entity)
-	local factory = global.factories_by_entity[entity.unit_number]
-	if factory == nil then
-		game.print('ERROR: Unbound factory building: ' .. entity.name .. '@' .. entity.surface.name .. '(' .. entity.position.x .. ', ' .. entity.position.y .. ')')
-	end
-	return factory
-end
-
-local function find_factory_by_building(surface, area)
-	local candidates = surface.find_entities_filtered{area=area, type=BUILDING_TYPE}
-	for _,entity in pairs(candidates) do
-		if HasLayout(entity.name) then return get_factory_by_building(entity) end
-	end
-	return nil
-end
-
-function find_surrounding_factory(surface, position)
-	local factories = global.surface_factories[surface.name]
-	if factories == nil then return nil end
-	local x = math.floor(0.5+position.x/(16*32))
-	local y = math.floor(0.5+position.y/(16*32))
-	if (x > 7 or x < 0) then return nil end
-	return factories[8*y+x+1]
-end
-
 -- POWER MANAGEMENT --
-
-function power_middleman_surface()
-	if game.surfaces['factory-power-connection'] then
-		return game.surfaces['factory-power-connection']
-	end
-	
-	local map_gen_settings = {height=1, width=1, property_expression_names={}}
-	map_gen_settings.autoplace_settings = {
-		['decorative'] = {treat_missing_as_default=false, settings={}},
-		['entity'] = {treat_missing_as_default=false, settings={}},
-		['tile'] = {treat_missing_as_default=false, settings={['out-of-map']={}}},
-	}
-	
-	local surface = game.create_surface('factory-power-connection', map_gen_settings)
-	surface.set_chunk_generated_status({0, 0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({-1, 0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({0, -1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({-1, -1}, defines.chunk_generated_status.entities)
-	
-	return surface
-end
 
 local function remove_direct_connection(factory)
 	local dc = factory.direct_connection
@@ -742,7 +655,7 @@ end
 local function handle_factory_placed(entity, tags)
 	if not tags or not tags.id then
 		-- This is a fresh factory, we need to create it
-		local layout = CreateLayout(entity.name)
+		local layout = Layout.create_layout(entity.name)
 		local factory = create_factory_interior(layout, entity.force)
 		create_factory_exterior(factory, entity)
 		factory.inactive = not can_place_factory_here(layout.tier, entity.surface, entity.position)
@@ -774,7 +687,7 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
 		local _, _, pipe_name_input = entity.name:find('^factory%-(.*)%-input$')
 		local _, _, pipe_name_output = entity.name:find('^factory%-(.*)%-output$')
 		local pipe_name = pipe_name_input or pipe_name_output
-		if pipe_name then entity = Fluid.replace_entity(entity, pipe_name) end
+		if pipe_name then entity = remote_api.replace_entity(entity, pipe_name) end
 
 		recheck_nearby_connections(entity)
 	elseif entity.type == 'electric-pole' then
@@ -1143,6 +1056,7 @@ local function teleport_players()
 		local walking_state = player.walking_state
 		local driving = player.driving
 		if not walking_state.walking and not driving then goto continue end
+		if driving and not player.vehicle then goto continue end -- if the player is riding a rocket silo
 		
 		if (driving and player.vehicle.type == 'spider-vehicle')
 			or walking_state.direction == defines.direction.north
@@ -1223,7 +1137,7 @@ script.on_nth_tick(6, teleport_players)
 script.on_event(defines.events.on_player_rotated_entity, function(event)
 	local entity = event.entity
 	if Connections.indicator_names[entity.name] then
-		-- Skip
+		entity.direction = event.previous_direction
 	elseif Connections.is_connectable(entity) then
 		recheck_nearby_connections(entity)
 		if entity.valid and entity.type == 'underground-belt' then
@@ -1275,38 +1189,6 @@ script.on_event('factory-decrease', function(event)
 end)
 
 -- MISC --
-
-function cancel_creation(entity, player_index, message)
-	local inserted = 0
-	local item_to_place = entity.prototype.items_to_place_this[1]
-	local surface = entity.surface
-	local position = entity.position
-	local force = entity.force
-	
-	if player_index then
-		local player = game.get_player(player_index)
-		if player.mine_entity(entity, false) then
-			inserted = 1
-		elseif item_to_place then
-			inserted = player.insert(item_to_place)
-		end
-	end
-	
-	entity.destroy{raise_destroy = true}
-	
-	if inserted == 0 and item_to_place then
-		surface.spill_item_stack(position, item_to_place, true, force, false)
-	end
-	
-	if message then
-		surface.create_entity{
-			name = 'flying-text',
-			position = position,
-			text = message,
-			render_player_index = player_index
-		}
-	end
-end
 
 update_hidden_techs = function(force)
 	if settings.global['Factorissimo2-hide-recursion'] and settings.global['Factorissimo2-hide-recursion'].value then
