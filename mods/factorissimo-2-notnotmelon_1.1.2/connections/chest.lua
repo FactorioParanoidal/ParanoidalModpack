@@ -1,4 +1,4 @@
-Chest = {}
+local Chest = {}
 
 Chest.color = {r = 200/255, g = 110/255, b = 38/255}
 Chest.entity_types = {"container", "logistic-container", "infinity-container", "linked-container"}
@@ -141,3 +141,5 @@ end
 
 Chest.destroy = function(conn)
 end
+
+return Chest

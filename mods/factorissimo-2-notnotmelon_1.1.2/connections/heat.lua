@@ -1,4 +1,4 @@
-Heat = {}
+local Heat = {}
 
 Heat.color = {r = 228/255, g = 236/255, b = 0}
 Heat.entity_types = {"heat-pipe"}
@@ -113,3 +113,5 @@ Heat.destroy = function(conn)
     if conn.outside_link.valid then conn.outside_link.destroy() end
     if conn.inside_link.valid then conn.inside_link.destroy() end
 end
+
+return Heat

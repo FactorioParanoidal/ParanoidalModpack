@@ -1,4 +1,4 @@
-Fluid = {}
+local Fluid = {}
 
 Fluid.color = {r = 167/255, g = 229/255, b = 255/255}
 Fluid.entity_types = {'pipe', 'pipe-to-ground', 'pump', 'storage-tank', 'infinity-pipe', 'offshore-pump'}
@@ -48,6 +48,7 @@ Fluid.replace_entity = function(original, new_name)
 
 	return new
 end
+remote_api.replace_entity = Fluid.replace_entity
 
 Fluid.connect = function(factory, cid, cpos, outside_entity, inside_entity, settings)
 	if not (outside_entity.fluidbox.get_capacity(1) > 0 and inside_entity.fluidbox.get_capacity(1) > 0) then return nil end
@@ -228,3 +229,5 @@ Fluid.destroy = function(conn)
 	if conn.outside.valid then Fluid.replace_entity(conn.outside, conn.names.original_outside) end
 	if conn.inside.valid then Fluid.replace_entity(conn.inside, conn.names.original_inside) end
 end
+
+return Fluid

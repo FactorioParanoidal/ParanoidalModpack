@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022.7.19
+  Info:
+    - Fixed that you could rotate connection indicators
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022.7.19
+  Info:
+    - Fixed that you couldn't enter factory buildings after running /c game.reload_mods()
+    - Fixed a crash when riding a car inside a rocket silo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022.7.19
+  Info:
+    - Added a remote API
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2022.7.18
+  Info:
+    - Fixed circuit connections not working across the same surface
+---------------------------------------------------------------------------------------------------
 Version: 1.0.12
 Date: 2022.7.17
   Info:

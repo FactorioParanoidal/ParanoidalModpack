@@ -62,7 +62,7 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
 		if factory and HasLayout(entity.name) then
 			blueprint.set_blueprint_entity_tag(i, 'id', factory.id)
 		elseif Connections.indicator_names[entity.name] then
-			local factory = find_surrounding_factory(entity.surface, entity.position)
+			local factory = remote_api.find_surrounding_factory(entity.surface, entity.position)
 			if factory then
 				for cid, indicator in pairs(factory.connection_indicators) do
 					if indicator.valid and indicator.unit_number == entity.unit_number then
@@ -91,7 +91,7 @@ local function unpack_connection_settings_from_blueprint(entity)
 	if not entity.tags or not next(entity.tags) then return end
 	local surface = entity.surface
 	local position = entity.position
-	local factory = find_surrounding_factory(surface, position)
+	local factory = remote_api.find_surrounding_factory(surface, position)
 	if not factory then return end
 	
 	local ctype = Connections.indicator_names[entity.ghost_name]
