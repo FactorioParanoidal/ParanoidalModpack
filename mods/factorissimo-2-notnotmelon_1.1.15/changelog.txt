@@ -1,0 +1,230 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2022.7.30
+  Info:
+    - Fixed that you could create a circuit connection without proper research
+    - Connection snapping code was rewritten to use selection boxes instead of bounding boxes. Fixes issues with the squeak through mod and certian modded entities.
+    - Fixed some unknown key issues while using space exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2022.7.28
+  Info:
+    - Added error message when building a factory building with companion drones. was causing save corruption before
+    - Fixed that destroying a pole with a pistol/biter would cause the pole's ghost to not have wire connections
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2022.7.27
+  Info:
+    - Fixed chat spam
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2022.7.27
+  Info:
+    - Fixed that destroying factory buildings from another mod removed connection indicators and factory overlays
+    - Fixed an issue with the spidertron engineer mod
+    - Fixed that companion drones could enter factory buildings
+    - Construction robots will now travel with the player even if the player is riding a spidertron
+    - Fixed that the factory overlay would show incorrectly in spefic scenarios
+    - Fixed an incompatibility with Building Time mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2022.7.25
+  Info:
+    - New HR graphics from drd_avel
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2022.7.24
+  Info:
+    - Fixed a crash with the power-grid-comb mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2022.7.24
+  Info:
+    - Chest connections will now point towards provider chests by default
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022.7.24
+  Info:
+    - Fixed that connection settings was obtainable
+    - Spidertrons will now only enter a factory building without a driver if their autopilot destination is above a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022.7.24
+  Info:
+    - Added Russian translation from Eldrinn Elantey
+    - Belt connections now work with splitters
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022.7.24
+  Info:
+    - Added flying text when trying to create a connection without proper research
+    - New graphics for circuit connection research
+    - Circuit connection and chest connection research is now gated behind Arcitechure 2
+    - Added high-res pipe connection graphics
+    - Removed cancel_creation() from remote api
+    - Added crowdin https://crowdin.com/project/factorissimo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022.7.23
+  Info:
+    - Fixed a crash with companion drones
+    - Added sound effects while creating factory connections
+    - Fixed several issues with editor mode
+    - Reverted the change from 1.0.11: "Fixed that you could rotate a factory building when you had something in your cursor"
+    - Fixed a crash when destroying a factory building that was near a power switch but not connected to it
+    - Fixed several compatiblity issues with bio industries
+    - Robots are now indestructable after picking up a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022.7.21
+  Info:
+    - Fixed a crash when destroying an entity without a unit number
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022.7.21
+  Info:
+    - Spidertrons can now enter a factory without a driver
+    - Removed the factory-1-overlay entity
+    - Fixed crashes involving having a factory building inside itself
+    - Tech tree changes
+    - Removed remnants
+    - Fixed that clicking the camera toggle button with a factory in your cursor could cause the overlay to never disappear
+    - The camera now works for factory items on the floor
+    - New heat connection tech graphics
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022.7.19
+  Info:
+    - Fixed that you could rotate connection indicators
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022.7.19
+  Info:
+    - Fixed that you couldn't enter factory buildings after running /c game.reload_mods()
+    - Fixed a crash when riding a car inside a rocket silo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022.7.19
+  Info:
+    - Added a remote API
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2022.7.18
+  Info:
+    - Fixed circuit connections not working across the same surface
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2022.7.17
+  Info:
+    - Fixed hovering a factory pole in the map viewer would show the wrong factory exterior
+    - Fixed an incompatibility with Companion Drones and similar mods
+    - Fixed issues with defines.events.script_raised_built and defines.events.script_raised_revive
+    - Made it easier to migrate from the unforked version
+    - Added localisation to dummy pipe connections
+    - Removed bulk pipes for dummy pipe connections
+    - Fixed blueprinting a invalid factory building causing a crash
+    - Factory buildings are now a high priority military target
+    - Factory buildings now drop themselves on the ground when killed. (Instead of being voided)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2022.7.16
+  Info:
+    - Added a setting that allows you to toggle number graphics on factory buildings (default: off)
+    - Fixed that you could rotate a factory building when you had something in your cursor
+    - New graphics for factory item icons
+    - Fixed that fluid would not flow past hidden bulk pipes
+    - Removed out-of-factory tiles. Replaced with out-of-map
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2022.7.15
+  Info:
+    - Greatly improved spidertron teleportation
+    - Fixed some localisation issues in the custom hotkeys gui
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2022.7.15
+  Info:
+    - Fixed a crash when creating a blueprint without any entities
+    - Changed belt spilling mechanics  https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d18f8d8dcfa2a515e77f2a
+    - You can now blueprint connection settings
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2022.7.15
+  Info:
+    - Fixed a crash with the copy and cut blueprint tools
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022.7.14
+  Info:
+    - priority electric pole mechanics were removed  https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62ce7014bb9d8bc591641649
+    - blueprinting system was improved (still more work to do)
+    - Fixed https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d02ea6c3132d49100acef7
+    - Fixed https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d0762d0731c7acf8048c54
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022.7.13
+  Info:
+    - fluid connections now support 'offshore-pump'
+    - changed factory building default surface from "Factory floor 1" to "factory-floor-1"
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022.7.13
+  Info:
+    - fixed a crash when picking up invalid factory buildings
+    - fixed that trying to use recursion without the research would cause an unbound building
+    - inactive factory buildings no longer have overlay cameras
+    - fixed high-speed gui flashing when selecting a factory and a factory camera at the same time
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022.7.12
+  Info:
+    - factory buildings are now stored as item-with-tags
+    - factory items will now show their config settings on their item form
+    - removed the limit of 99 factory items
+    - removed factory requester chests. they are unnecessary with this new system
+    - researching recursion 1 or recursion 2 will now auto enable inactive buildings
+    - personal robots will now teleport with the player when they change buildings
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022.7.12
+  Info:
+    - belt connections now support 'loader', 'loader-1x1', 'linked-belt'
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022.7.11
+  Info:
+    - fixed a bug involving picking up a factory building with a full inventory
+    - added pipe connections for pumps, storage-tank, infinity-pipe
+    - fixed a crash involving belts registered in final-fixes stage
+    - fixed a crash involving rotatable fluid entities
+    - fixed crash with mobile factory mod
+    - fixed an issue with blueprinting factory fluid connections
+    - reduced mod tile usage
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022.7.9
+  Info:
+    - fixed a crash involving solar panels and robots
+    - you can now use a spidertron to enter a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022.7.8
+  Info:
+    - factory lamp upgrade overhaul
+    - acculumulators function properly in factory buildings
+    - improved electric interface gui
+    - factorio api now allows for unlimited surfaces. updated the mod to reflect this
+    - new mod setting Factorissimo2-same-surface
+    - added linked-container and infinity-container to chest connections
+    - Optimized electric network using cross surface wiring
+    - Optimized factorissimo pollution handling
+    - Optimized players entering and exiting factorissimo buildings
+    - Optimized circuit connections to use cross surface electric pole wiring
+    - Optimized belt connections using the new linked-belt prototype
+    - All electric network connections are now bidirectional
+    - Adjusted factorissimo-1 recipe to use more copper
+    - New setting allows all buildings to be on the same surface. You will be able to see all your factories from the map view
+    - Removed cheaper technology and recipe settings
+    - Heat pipe connections
+    - Dummy pipe connections only form when pipes are connected on both sides
+    - Removed bulk input and output fluid pipes. Fluid transfer is now always fast with any pipe connection
