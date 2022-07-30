@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2022.07.30
+  Changes:
+    - Code clean up
+    - Worked out how to live with "attach-notes"
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2022.07.26
+  Changes:
+    - Marked "attach-notes" as incompatible with this mod.  Both mods capture the same event "on_entity_settings_pasted" and this can results in the actions taken by "AdditionalPasteSettings" being reverted by the other mod.
+---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: 2022.07.13
   Changes:
