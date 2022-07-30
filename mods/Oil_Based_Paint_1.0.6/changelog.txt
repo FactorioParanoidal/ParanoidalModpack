@@ -1,0 +1,38 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022-07-21
+  Changes:
+    - Major rewrite.
+    - Mod-added versions of entities (including characters) supported.
+    - New glow mask for the AAI Warden. Does NOT re-upload the base image, as per Earendel's request, but instead adds glow to headlights, wires, power-pack, and on highlights (sun/moon reflections).
+  Bugfixes:
+    - Fixed Cargo wagon appearing half-shut when vertical, at the cost of some saturation.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022-07-19
+  Changes:
+    - New thumbnail features a red Car, and Engineer in pitch black garb.
+    - Warden base animation is slightly darkened to mimic the effect previously achieved with a custom base graphic.
+  Bugfixes:
+    - Rewrote animation layer sorting to ensure that shadows would always be the last layer. Only affects compatibility, does not change visuals in-game.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022-07-17
+  Changes:
+    - Upon Earendel's request, removed the warden base graphics. The tires will be a bit lighter and the wires on the vehicle won't be as saturated, but the color mask is still present and provides 90% of the effect.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022-07-17
+  Bugfixes:
+    - Fixed crash when hovercraft was found, but assault hovercraft was not.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-07-17
+  Bugfixes:
+    - Fixed crash when fields like animation, layers, or hr_version can't be found.
+    - Fixed crash when looking for spidertron patrol remote.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022-07-17
+  Changes:
+    - Changed thumbnail.png to feature a red car.
