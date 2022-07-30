@@ -152,6 +152,13 @@ data:extend(
             default_value = "Unload __1__ (__2__)",
             order = "zb"
         },
+        {
+            type = "bool-setting",
+            name = "additional-paste-settings-use_flib",
+            setting_type = "runtime-global",
+            default_value = false,
+            order = "zc"
+        },
     }
 )
 
