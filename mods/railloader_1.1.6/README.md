@@ -71,6 +71,17 @@ The following mods and mod sets have specific additional support:
 * Py's Mods (pycoalprocessing, pyrawores)
 * Xander-Mod
 
+Mod authors can add their own items or classes of items to be handled
+by Bulk Rail Loaders using the remote interface:
+
+```lua
+-- call either of these during your mod's on_init and on_load event handlers
+-- takes the exact name of an item
+remote.call("railloader", "add_bulk_item", item_name)
+-- takes a Lua pattern (https://www.lua.org/manual/5.2/manual.html#6.4.1)
+remote.call("railloader", "add_bulk_item_pattern", lua_pattern)
+```
+
 If you feel something that meets the above generic description is not
 included, let me know.  You can also edit `bulk.lua` if you would like
 to change the set of supported items for your own use, or change the

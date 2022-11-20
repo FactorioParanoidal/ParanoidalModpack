@@ -49,8 +49,8 @@ local function inserter_configuration_changes(inserter, items)
   return next(item_set) ~= nil
 end
 
-local function configure_loader_from_inventory(loader, inventory)
-  local items = bulk.acceptable_items(inventory, 5)
+local function configure_loader_from_inventories(loader, inventories)
+  local items = bulk.acceptable_items(inventories, 5)
   if not next(items) then
     return false
   end
@@ -74,19 +74,19 @@ local function configure_loader_from_inventory(loader, inventory)
 end
 
 local function configure_loader(loader)
-  local inventory = loader.get_inventory(defines.inventory.chest)
+  local inventories = { loader.get_inventory(defines.inventory.chest) }
   if loader.name == "railunloader-chest" then
-    local wagon = loader.surface.find_entities_filtered{
+    local wagons = loader.surface.find_entities_filtered{
       type = "cargo-wagon",
       area = util.box_centered_at(loader.position, 0.6),
       force = loader.force,
-    }[1]
-    if wagon then
-      inventory = wagon.get_inventory(defines.inventory.cargo_wagon)
+    }
+    for i=1,#wagons do
+      inventories[i] = wagons[i].get_inventory(defines.inventory.cargo_wagon)
     end
   end
-  if inventory then
-    return configure_loader_from_inventory(loader, inventory)
+  if next(inventories) then
+    return configure_loader_from_inventories(loader, inventories)
   end
   return false
 end

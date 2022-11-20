@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-07-20
+  Minor Features:
+    - Add support for loading two half-size Pyanodons cargo wagons from one BRL.
+  Scripting:
+    - Add remote interface to allow other mods to add to the list of allowed items.
+  Bugfixes:
+    - Fix crash when blueprinting and a BRL cannot be located. (https://mods.factorio.com/mod/railloader/discussion/62d5bd0bd0ad17fb9c31f7e5)
+---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2022-07-08
   Changes:
@@ -25,7 +34,7 @@ Date: 2021-05-26
 Version: 1.1.2
 Date: 2020-11-29
   Changes:
-    - Update bulk item list for Pynanodon's Mods. (https://github.com/mspielberg/factorio-railloader/pull/20)
+    - Update bulk item list for Pyanodons Mods. (https://github.com/mspielberg/factorio-railloader/pull/20)
   Bugfixes:
     - Fix crash when building BRLs near ghosts that cannot have circuit connections. (https://mods.factorio.com/mod/railloader/discussion/5fc0dadd56705073f5230753)
     - Fix missing locale for universal and interface inserters.
@@ -128,7 +137,7 @@ Date: 21.02.2019
 Version: 0.5.6
 Date: 02.01.2019
   Compatibility:
-    - Add support for Pyanadon's Raw Ores.
+    - Add support for Pyanodons Raw Ores.
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.5
 Date: 23.10.2018

@@ -163,17 +163,31 @@ local function is_acceptable_item(item_name)
   return acceptable_item_cache[item_name]
 end
 
-function M.acceptable_items(inventory, limit)
+function M.acceptable_items(inventories, limit)
+  local seen = {}
   local out = {}
-  for name in pairs(inventory.get_contents()) do
-    if is_acceptable_item(name) then
-      out[#out+1] = name
-      if #out >= limit then
-        return out
+  for _, inventory in pairs(inventories) do
+    for name in pairs(inventory.get_contents()) do
+      if is_acceptable_item(name) and not seen[name] then
+        seen[name] = true -- prevent the same item from taking two slots
+        out[#out+1] = name
+        if #out >= limit then
+          return out
+        end
       end
     end
   end
   return out
+end
+
+function M.add_bulk_item(item)
+  items[item] = true
+  acceptable_item_cache = {}
+end
+
+function M.add_bulk_item_pattern(pattern)
+  patterns.ore[#patterns+1] = pattern
+  acceptable_item_cache = {}
 end
 
 function M.on_setting_changed()

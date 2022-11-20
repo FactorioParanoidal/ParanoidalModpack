@@ -1,3 +1,4 @@
+local bulk = require "bulk"
 local configchange = require "configchange"
 local delaydestroy = require "delaydestroy"
 local ghostconnections = require "ghostconnections"
@@ -119,7 +120,7 @@ local function create_entities(proxy, tags, rail_poss)
   local type = util.railloader_type(proxy.name)
   local surface = proxy.surface
   local direction = proxy.direction
-  if direction > 4 then
+  if direction >= 4 then
     direction = direction - 4
   end
   local position = proxy.position
@@ -161,10 +162,12 @@ local function create_entities(proxy, tags, rail_poss)
   local inserter_name =
     "rail" .. type .. (allowed_items_setting == "any" and "-universal" or "") .. "-inserter"
   for i=1,num_inserters do
+    -- alternate direction to support half-size wagons sticking out both sides of the (un)loader
+    local inserter_direction = (direction + (i-1) * 4) % 8
     local inserter = surface.create_entity{
       name = inserter_name,
       position = position,
-      direction = direction,
+      direction = inserter_direction,
       force = force,
     }
     inserter.destructible = false
@@ -342,20 +345,23 @@ local function on_blueprint(event)
         type = "container",
         position = bp_entity.position,
       }[1]
+      if not chest_entity then goto continue end
+
       local rail = player.surface.find_entities_filtered{
         type = "straight-rail",
         area = chest_entity.bounding_box,
       }[1]
-      if chest_entity and rail then
-        bp_entity.name = (bp_entity.name == "railloader-chest")
-          and "railloader-placement-proxy"
-          or "railunloader-placement-proxy"
-        -- base direction on direction of rail
-        bp_entity.direction = rail.direction
-        -- preserve chest limit
-        bp_entity.tags = { bar = chest_entity.get_inventory(defines.inventory.chest).get_bar() }
-      end
+      if not rail then goto continue end
+
+      bp_entity.name = (bp_entity.name == "railloader-chest")
+        and "railloader-placement-proxy"
+        or "railunloader-placement-proxy"
+      -- base direction on direction of rail
+      bp_entity.direction = rail.direction
+      -- preserve chest limit
+      bp_entity.tags = { bar = chest_entity.get_inventory(defines.inventory.chest).get_bar() }
     end
+    ::continue::
   end
 
   bp.set_blueprint_entities(entities)
@@ -365,6 +371,13 @@ local function on_setting_changed(event)
   allowed_items_setting = settings.global["railloader-allowed-items"].value
   inserter_config.on_setting_changed(event)
 end
+
+-- setup remotes
+
+remote.add_interface("railloader", {
+  add_bulk_item = bulk.add_bulk_item,
+  add_bulk_item_pattern = bulk.add_bulk_item_pattern,
+})
 
 -- setup event handlers
 
