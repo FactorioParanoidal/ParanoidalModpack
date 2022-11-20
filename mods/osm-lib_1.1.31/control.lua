@@ -40,15 +40,14 @@ local function remove_disabled_items(event)
 
 	if debug_mode then return end
 	
-	local player = game.connected_players[event.player_index]
-	local item_count = 0
+	local player = game.get_player(event.player_index)
 	
 	if player and player.valid then
 		for _, item in pairs(global.disabled_item_index) do
 
-			item_count = player.get_item_count(item.name)
+			local item_count = player.get_item_count(item.name)
 
-			if item_count > 0 then
+			if item_count and item_count > 0 then
 				player.remove_item({name=item.name, count=item_count})
 			end
 		end

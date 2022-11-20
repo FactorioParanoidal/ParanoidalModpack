@@ -2,6 +2,11 @@
 ---- data.lua ----
 ------------------
 
+if not OSM then OSM = {} end
+
+-- Define code stage
+OSM.data_stage = 1
+
 -- Load core
 require("core.host-tables")
 require("core.data-core")

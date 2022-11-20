@@ -1,11 +1,9 @@
 -- Main hosts
-if not OSM then OSM = {} end
 if not OSM.lib then OSM.lib = {} end
 if not OSM.mod then OSM.mod = {} end
 if not OSM.log then OSM.log = {} end
 if not OSM.utils then OSM.utils = {} end
 if not OSM.table then OSM.table = {} end
-if not OSM.data_stage then OSM.data_stage = 1 end
 
 -- Disabled prototype host table
 if not OSM.table.disabled_prototypes then OSM.table.disabled_prototypes = {} end
@@ -46,6 +44,10 @@ OSM.data_types = require("utils.data-types")			--[[contains all data.raw prototy
 OSM.entity_types = require("utils.entity-types") 		--[[contains all entity subtypes]]
 OSM.item_types = require("utils.item-types")			--[[contains all item subtypes]]
 OSM.selection_tools = require("utils.selection-tools")	--[[contains all selection tools subtypes]]
+
+-- Base game references
+OSM.hit_effects = require("__base__.prototypes.entity.hit-effects")
+OSM.sounds = require("__base__.prototypes.entity.sounds")
 
 -- Graphics paths
 OSM.lib.graphics_path = "__osm-lib__/graphics/"

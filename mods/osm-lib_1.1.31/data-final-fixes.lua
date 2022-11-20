@@ -2,6 +2,7 @@
 ---- data-final-fixes.lua ----
 ------------------------------
 
+-- Define code stage
 OSM.data_stage = 3
 
 -- Setup local host
@@ -9,6 +10,9 @@ local OSM_core = require("core.script-core")
 
 -- Index properties
 OSM_core.index_properties()
+
+-- Get additional mod prototypes
+OSM_core.get_additional_prototypes()
 
 -- Check for disabled prototypes
 OSM_core.disable_prototypes()

@@ -1,6 +1,6 @@
 {
 	"name": "osm-lib",
-	"version": "1.1.30",
+	"version": "1.1.31",
 	"factorio_version": "1.1",
 	"title": "OSM-Lib",
 	"author": "OldSkoolMatt",
@@ -8,7 +8,14 @@
 	[
 		"base >= 1.1",
 		"(?) Transport_Drones",
-		"(?) space-exploration"
+		"(?) space-exploration",
+
+		"(?) deadlock-beltboxes-loaders",
+		"(?) DeadlockStackingForVanilla",
+		"(?) DeadlockStackingForBobs",
+		"(?) DeadlockStackingForAngels",
+		"(?) DeadlocksStackingForPyanadon",
+		"(?) deadlock_stacked_recipes"
 	],
 	"description": "I finally decided to rely on my own function library,\nYES! THAT'S CORRECT! MY OWN FUNCTION LIBRARY!"
 }
