@@ -1,0 +1,254 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.67
+Date: 21.10.2022
+  Bugfixes:
+    - Fixed a case where a collision layer was left behind after pump removal
+---------------------------------------------------------------------------------------------------
+Version: 1.1.66
+Date: 29.07.2022
+  Bugfixes:
+    - Fixed a crash caused by a function pointing at a wrong index
+---------------------------------------------------------------------------------------------------
+Version: 1.1.65
+Date: 21.07.2022
+  Bugfixes:
+    - Corrected a typo in a localization string
+---------------------------------------------------------------------------------------------------
+Version: 1.1.64
+Date: 21.07.2022
+  Bugfixes:
+    - Added a missing code block that caused a placeholder to keep populating the surface
+    - Added a missing gate that could cause a crash
+---------------------------------------------------------------------------------------------------
+Version: 1.1.63
+Date: 16.07.2022
+  Bugfixes:
+    - Added a missing string for pumpjacks name
+    - Corrected a wrong index that caused a crash on startup with "Angels Refining"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.62
+Date: 15.07.2022
+  Bugfixes:
+    - Corrected a nasty compatibility issue with mods editing bounding boxes
+    - Corrected a crucial typo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.61
+Date: 14.07.2022
+  Info:
+    - Better script for tiles detection below offshore pumps
+  Bugfixes:
+    - Placing water right under an offshore pump now destroys it
+---------------------------------------------------------------------------------------------------
+Version: 1.1.60
+Date: 05.05.2022
+  Features:
+    - Placing landfill under offshore pumps destroys them (optional, does not affect already landfilled offshore pumps)
+  Changes:
+    - Water pumpjacks now use a single recipe (does NOT change water outputs)
+  Info:
+    - New control code
+  Bugfixes:
+    - Fixed a crash on load with "Angels Exploration" (THANKS TO @LOVELY_SANTA)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.53
+Date: 19.04.2022
+  Info:
+    - Conform with new library version
+---------------------------------------------------------------------------------------------------
+Version: 1.1.52
+Date: 17.01.2022
+  Info:
+    - Ground water pumpjack animations changed to forcibly go at 60fps (high tier animations looked ridiculously fast)
+  Bugfixes:
+    - Tech, item and entity names now show up accordingly to settings
+---------------------------------------------------------------------------------------------------
+Version: 1.1.51
+Date: 12.01.2022
+  Info:
+    - Changed some internal names to make them unique
+  Bugfixes:
+    - Changelog is working again
+---------------------------------------------------------------------------------------------------
+Version: 1.1.50
+Date: 12.01.2022
+  Features:
+    - Angel's seafloor pump is now affected by powering options
+    - Angel's ground water pump is now affected by powering options
+  Changes:
+    - Ground water pumpjacks can now be enabled/disabled from startup options regardless of bob mining settings
+    - Ground water pumpjacks will output Mud Water if "Angels Refining" is installed
+    - Tier 1 offshore pump can be set to use electricity or burnable fuel from options
+  Info:
+    - Locale file rework
+    - Code clean up and general optimization
+  Bugfixes:
+    - Technology requirements now show up as they should
+    - Technology descriptions now show up as they should
+    - Mining a ground pumpjack will return the correct pumpjack
+---------------------------------------------------------------------------------------------------
+Version: 1.1.47
+Date: 06.01.2022
+  Bugfixes:
+    - Fixed a crash caused by a badly declared variable
+---------------------------------------------------------------------------------------------------
+Version: 1.1.46
+Date: 05.01.2022
+  Changes:
+    - Changed an internal name to match Kirazy's references to prevent a crash on startup
+---------------------------------------------------------------------------------------------------
+Version: 1.1.45
+Date: 30.09.2021
+  Info:
+    - Changed internal structure to conform with library update and better compatibility
+  Bugfixes:
+    - Fixed a crash with "Omni Compression"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.44
+Date: 27.09.2021
+  Changes:
+    - If "boilers start with water" is turned on, the script will check that the boiler is meant to contain water before inserting any water inside of it
+  Bugfixes:
+    - Autorotate on pump placement now works as it should
+---------------------------------------------------------------------------------------------------
+Version: 1.1.42
+Date: 20.09.2021
+  Bugfixes:
+    - Added another condition check in migration script (prevents crashes on load)
+    - Fixed a migration crash with "Angels Refining"
+    - No more duplicate ground water techs when using "Angels Refining"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.41
+Date: 13.09.2021
+  Changes:
+    - Lowered prototype removal to data-updates for better compatibility
+  Bugfixes:
+    - Osm lib is now required (i mistakenly put it as optional dependency)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.40
+Date: 12.09.2021
+  Changes:
+    - Rebuilt internal structure, now requires my function library to work
+---------------------------------------------------------------------------------------------------
+Version: 1.1.33
+Date: 31.08.2021
+  Bugfixes:
+    - Fixed a crash on startup related to a missing IF check
+---------------------------------------------------------------------------------------------------
+Version: 1.1.32
+Date: 21.08.2021
+  Changes:
+    - Removed parts of the reskin code as it's been implemented in "Artisanal Reskins: Compatibility" (thanks to Kirazy)
+  Bugfixes:
+    - Fixed a crash on startup related to bob's settings
+---------------------------------------------------------------------------------------------------
+Version: 1.1.31
+Date: 20.08.2021
+  Bugfixes:
+    - Fixed an incompatibility with "AAI industry" (due to latest code update)
+    - Fixed an incompatibility if "Bob Ores" was missing
+    - Fixed a crash related to "Artisanal Reskins Bob"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.30
+Date: 28.07.2021
+  Features:
+    - Implemented a ground water pumpjack with relative tech, ground water pumpjacks are land based pumps (Offshore pumps will still be the real deal though)
+        - If bob's mining is installed there will be 5 tiers of ground water pumpjacks
+            - If Kirazy's "Artisanal Reskin" is installed ground water pumpjacks will have tiered sprites and icons
+  Changes:
+    - Bob's ground water patches are removed to keep up the balance (lithia water is NOT affected, only ground water is removed)
+  Info:
+    - Ground water pumpkjack will always require electricity regardless of the settings (price to pay for pumping wherever you like)
+    - The new features balance are is not throughly tested with angel's mods, consider it an early version if you decide to give it a shot and report any issues
+  Bugfixes:
+    - Recipes requiring the vanilla offshore pump as ingredient will now use my version of it
+    - Fixed an issue where custom boilers with different fluid inputs than water started with water placed inside if "boilers start with water" option was turned on
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 05.05.2021
+  Info:
+    - Added an internal function for tech ingredients replacement
+  Bugfixes:
+    - Restored an entity wrong icon
+    - Offshore pumps now showing in correct tabs while in /editor
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 04.05.2021
+  Changes:
+    - Edited some tech requirements to better fit previously researched techs
+  Bugfixes:
+    - Fixed an incompatibility with "AAI industry" and "Angels Refining"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 01.05.2021
+  Features:
+    - Implemented a low efficiency basic offshore pump unlocked from the beginning:
+        - Max. pumping speed 300/s
+        - Optional power requirements:
+            - Energy required 600kW/s (burnable fuel)
+            - Generates pullution
+  Changes:
+    - Reworked tech requirements and recipes ingredients for a better unlock curve
+    - Vanilla offshore pump is now locked behind "fluid handling" technology
+    - Added icon tiering for "Artisanal Reskin" (based on traditional tier mapping)
+    - Recolored offshore pumps to match Kirazy's "Artisanal Reskin" (does not support custom colors)
+    - Better tech icons
+    - Added an option to have boilers being placed with 10 water inside (ingame options)
+    - If power requirements are turned on, offshore pumps will be renamed to accordingly to their power source (electric/burner)
+  Info:
+    - Major code clean-up, polishing and consolidation
+    - Mod size greatly reduced
+    - Added source code to GitHub repository
+  Bugfixes:
+    - Fixed a bug where certain parameters from other mods didn't allow pump placement
+    - Electric offshore pumps do not generate pollution
+    - If "AAI industry" is installed "Basic Fluid Handling" unlocks the tier 1 offshore pump (instead of the vanilla offshore pump)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 10.04.2021
+  Bugfixes:
+    - Fixed an incompatibility with "Don't Build on Ores"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 10.04.2021
+  Bugfixes:
+    - Fixed a crash caused by a wrong technology name
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 10.04.2021
+  Bugfixes:
+    - Fixed an incompatibility with "AAI Industry"
+    - Offshore pumps now have correct health points
+    - Unpowered offshore pumps can now be upgraded
+    - Added some missing locales for entities and techs
+    - Corrected some descriptions related to power usage (if turned on)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 31.03.2021
+  Bugfixes:
+    - Fixed an incompatibility with "Squeak Through"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 30.03.2021
+  Info:
+    - Moved alert icon
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 29.03.2021
+  Features:
+    - Adds three more tiers of offshore pumps:
+        - Offshore Pump 1 = Max. pumping speed 1200/s (vanilla)
+        - Offshore Pump 2 = Max. pumping speed 2400/s
+        - Offshore Pump 3 = Max. pumping speed 3600/s
+        - Offshore Pump 4 = Max. pumping speed 4800/s
+        - Optional power requirements:
+            - Offshore Pump 1 = 1200 kW
+            - Offshore Pump 2 = 2000 kW
+            - Offshore Pump 3 = 2800 kW
+            - Offshore Pump 4 = 3600 kW
+    - All offshore pumps are blueprintable and upgradable
+    - Powered offshore pumps can benefit from "Efficiency Modules" on nearby Beacons to lower power consumption
+    - Powered offshore pumps do not generate pollution
+    - Boilers are placed with 10 water inside to jumpstart power production
+    - Adds new techs to unlock offshore pumps
+    - Supports Bob's Mods
+    - Backwards compatibility with "Higher Tier Offshore Pumps"
