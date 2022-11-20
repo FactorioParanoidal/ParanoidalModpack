@@ -12,3 +12,15 @@ require "prototypes.turrets"
 require "prototypes.fake_humans"
 require "prototypes.bosses_armoured"
 require "prototypes.sounds"
+
+
+
+data.raw["gui-style"]["default"]["ic_title_frame"] = {
+  type = "frame_style",
+  graphical_set = {},
+  horizontally_stretchable = "on",
+  padding = 0,
+  right_margin = 6,
+  top_margin = 4,
+  vertical_align = "center"
+}
