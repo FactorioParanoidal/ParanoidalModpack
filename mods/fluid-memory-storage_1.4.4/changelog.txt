@@ -1,4 +1,42 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 11.19.2022
+  Features:
+    - Gui updates every 2ed tick instead of every tick
+    - Fixed that a fluid with a custom localised name would create an unknown key error
+    - Reduced power usage
+    - With memory units installed, the tech prereq will be the memory unit technology
+    - Fixed that a blueprint ghost of a FMU combinator could still output signals
+    - Fixed a crash when another mod updates and deletes a fluid contained in a unit
+    - Fixed that the power gui was displaying a lower number than normal
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 11.18.2022
+  Features:
+    - Fixed that robots could not place a blueprint with a FMU
+    - Changed recipe and technology
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 11.18.2022
+  Features:
+    - Fixed an issue with the packing tape mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 11.18.2022
+  Features:
+    - Changed fmu item subgroup to "storage" (with the rest of the chests)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 11.17.2022
+  Features:
+    - Memory units now have a custom gui
+    - Fixed that units would connect to power poles 1 tile closer than they should be
+    - Memory units no longer give memory elements when destroyed. Instead, the fluids are saved directly to the unit's item
+    - Removed memory elements and memory communicators
+    - se_allow_in_space = true
+    - Fixed entity.clone() not working
+    - Reduced power usage
+---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 7.11.2022
   Features:
