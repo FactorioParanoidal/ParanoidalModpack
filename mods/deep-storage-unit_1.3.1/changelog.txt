@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 11.19.2022
+  Features:
+    - Fixed a crash when another mod updates and deletes an item contained in a unit
+    - Fixed a crash when blueprinting the memory unit combinator
+    - Fixed that a blueprint ghost of a MU combinator could still output signals
+    - Fixed that the power gui was displaying a lower number than normal
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 11.19.2022
+  Features:
+    - Memory units now have a custom gui
+    - Memory units no longer give memory elements when destroyed. Instead, the items are saved directly to the unit's item
+    - Removed memory elements and memory communicators
+    - se_allow_in_space = true
+    - Fixed entity.clone() not working
+    - Reduced power usage
+    - Changed recipe and technology
+    - Fixed an issue with the packing tape mod.
+    - Changed fmu item subgroup to "storage" (with the rest of the chests)
+    - Items with additional data, such as blueprints or items-with-tags can no longer be stored
+    - Fixed an bug that would freeze units whenever an item's stack size was changed
+---------------------------------------------------------------------------------------------------
 Version: 1.2.15
 Date: 7.11.2022
   Features:
