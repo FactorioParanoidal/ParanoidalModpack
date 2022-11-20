@@ -53,26 +53,28 @@ function util.slot_table_update(table, sources)
   for _, source_data in pairs(sources) do
     if source_data.entries then
       for name, count in pairs(source_data.entries) do
-        i = i + 1
-        local button = children[i]
-        if not button then
-          button = gui.add(table, { type = "sprite-button", enabled = false })
-        end
         local sprite
         if source_data.type then
           sprite = source_data.type .. "/" .. name
         else
           sprite = string.gsub(name, ",", "/")
         end
-        button.style = "ltnm_small_slot_button_" .. source_data.color
-        button.sprite = sprite
-        button.tooltip = "[img="
-          .. sprite
-          .. "]  [font=default-semibold]"
-          .. source_data.translations[name]
-          .. "[/font]\n"
-          .. misc.delineate_number(count)
-        button.number = count
+        if game.is_valid_sprite_path(sprite) then
+          i = i + 1
+          local button = children[i]
+          if not button then
+            button = gui.add(table, { type = "sprite-button", enabled = false })
+          end
+          button.style = "ltnm_small_slot_button_" .. source_data.color
+          button.sprite = sprite
+          button.tooltip = "[img="
+            .. sprite
+            .. "]  [font=default-semibold]"
+            .. source_data.translations[name]
+            .. "[/font]\n"
+            .. misc.delineate_number(count)
+          button.number = count
+        end
       end
     end
   end
@@ -95,6 +97,11 @@ function util.sorted_iterator(arr, src_tbl, sort_state)
     end
   end,
     arr
+end
+
+local MAX_INT = 2147483648 -- math.pow(2, 31)
+function util.signed_int32(val)
+  return (val >= MAX_INT and val - (2 * MAX_INT)) or val
 end
 
 return util
