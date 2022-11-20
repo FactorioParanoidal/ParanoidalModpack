@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+  Bugfixes:
+    - added checks for existing entities when clicking an alert, possibly preventing a crash
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+  Changes:
+    - alerts are only shown in list when "Show alert" in speaker settings is enabled (credits go to jkugelman)
+---------------------------------------------------------------------------------------------------
 Version: 1.3.0
   Changes:
     - setting for update interval is now exposed in startup settings UI
