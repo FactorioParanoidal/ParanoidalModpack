@@ -124,7 +124,7 @@ function Update_Combinator(combinator)
   -- generate signals from aggregated item list
   for item, count in pairs(items) do
     local itype, iname = match(item, match_string)
-    if itype and iname and (game.item_prototypes[iname] or game.fluid_prototypes[iname]) then
+    if itype and iname and (itype == "item" and game.item_prototypes[iname] or itype == "fluid" and game.fluid_prototypes[iname]) then
       if max_signals >= index then
         if count >  2147483647 then count =  2147483647 end
         if count < -2147483648 then count = -2147483648 end
