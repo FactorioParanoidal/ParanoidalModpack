@@ -1,4 +1,38 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.8.0
+Date: 2022-10-04
+  Changes:
+    - only create lighted variant for poles with maximum_wire_distance > 0
+    - removed blacklist entries for poles with 0 wire reach
+---------------------------------------------------------------------------------------------------
+Version: 1.7.6
+Date: 2022-10-02
+  Bugfixes:
+    - handle order string nil values (shouldn't happen according to wiki)
+    - blacklist biotech-biosolarpanel-pole
+---------------------------------------------------------------------------------------------------
+Version: 1.7.5
+Date: 2022-07-23
+  Bugfixes:
+    - skip over recipe sorting when no recipes are found
+---------------------------------------------------------------------------------------------------
+Version: 1.7.4
+Date: 2022-07-22
+  Bugfixes:
+    - copy-paste error in expensive recipe handling #9
+  Changes:
+    - code cleanup
+---------------------------------------------------------------------------------------------------
+Version: 1.7.3
+Date: 2022-07-21
+  Bugfixes:
+    - support list in recipe.results, 1.7.2 expected dictionary #8
+---------------------------------------------------------------------------------------------------
+Version: 1.7.2
+Date: 2022-07-21
+  Bugfixes:
+    - support recipe.results for poles #8
+---------------------------------------------------------------------------------------------------
 Version: 1.7.1
 Date: 2021-08-26
   Bugfixes:
