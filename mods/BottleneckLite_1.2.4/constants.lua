@@ -41,6 +41,7 @@ constants.sizes = {
   small = 0.15,
   medium = 0.2,
   large = 0.25,
+  huge = 0.5,
 }
 
 local size_settings = {}
