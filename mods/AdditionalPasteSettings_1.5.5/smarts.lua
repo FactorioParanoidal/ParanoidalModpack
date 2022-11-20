@@ -134,8 +134,8 @@ local function update_se_landing_pad_name(landing_pad_entity, cycle)
     if (not item) then return end
 
     local item_name
-    if config['use_flib'] then
-        item_name = lib.find_name_in_flib_dictonary(item.name, item.type)
+    if config['use_Babelfish'] then
+        item_name = lib.find_name_in_babelfish_dictonary(item.name, item.type)
     else
         item_name = item.name
     end
@@ -360,14 +360,15 @@ end
 function Smarts.assembly_to_logistic_chest(from, to, player, special)
     -- this needs additional logic from events on_vanilla_pre_paste and on_vanilla_paste to correctly set the filter
     if to.prototype.logistic_mode == "requester" or to.prototype.logistic_mode == "buffer" then
-        global.event_backup[from.position.x .. "-" .. from.position.y .. "-" .. to.position.x .. "-" .. to.position.y] = { gamer = player
-            .index, stacks = {} }
+        global.event_backup[from.position.x .. "-" .. from.position.y .. "-" .. to.position.x .. "-" .. to.position.y] = { gamer = player.index, stacks = {} }
     elseif to.prototype.logistic_mode == "storage" then
         if from.get_recipe() ~= nil then
             local msg
             local proto = game.item_prototypes[from.get_recipe().name]
             if proto then
+                to.storage_filter = proto
                 msg = "Filter applied [img=item." .. from.get_recipe().name .. "]"
+                to.surface.create_entity { name = "flying-text", position = to.position, text = msg, color = lib.colors.white }
             else
                 local products = from.get_recipe().products
                 for _, product in pairs(products) do
@@ -377,12 +378,11 @@ function Smarts.assembly_to_logistic_chest(from, to, player, special)
                     end
                 end
                 if proto then
+                    to.storage_filter = proto
                     msg = "Filter applied [img=item." .. proto.name .. "]"
+                    to.surface.create_entity { name = "flying-text", position = to.position, text = msg, color = lib.colors.white }
                 end
             end
-            global.event_backup[
-                from.position.x .. "-" .. from.position.y .. "-" .. to.position.x .. "-" .. to.position.y] = { proto = proto,
-                msg = msg, target = to }
         end
     end
 end
@@ -395,8 +395,8 @@ local function rename_train_stop(station)
     if (not item) then return end
 
     local item_name
-    if config['use_flib'] then
-        item_name = lib.find_name_in_flib_dictonary(item.name, item.type)
+    if config['use_Babelfish'] then
+        item_name = lib.find_name_in_babelfish_dictonary(item.name, item.type)
     else
         item_name = item.name
     end
@@ -659,19 +659,11 @@ end
 function Smarts.on_vanilla_paste(event)
     local evt = global.event_backup[event.source.position.x .. "-" .. event.source.position.y .. "-" .. event.destination.position.x .. "-" .. event.destination.position.y]
 
-    -- Deal with two mods catching the same event
-    if evt ~= nil and event.source.type == "assembling-machine" and event.destination.type == "logistic-container" and
-        event.destination.prototype.logistic_mode == "storage" then
-        evt.target.storage_filter = evt.proto
-        evt.target.surface.create_entity { name = "flying-text", position = evt.target.position, text = evt.msg, color = lib.colors.white }
-        global.event_backup[event.source.position.x .. "-" .. event.source.position.y .. "-" .. event.destination.position.x .. "-" .. event.destination.position.y] = nil
-    end
-
     if evt ~= nil and event.source.type == "assembling-machine" and event.destination.type == "logistic-container" and (event.destination.prototype.logistic_mode == "requester" or event.destination.prototype.logistic_mode == "buffer") then
         local result = {}
         local multiplier = settings.get_player_settings(event.player_index)["additional-paste-settings-options-requester-multiplier-value"].value ---@cast multiplier double
         local mtype = settings.get_player_settings(event.player_index)["additional-paste-settings-options-requester-multiplier-type"].value
-        local recipe = event.source.get_recipe()
+        local recipe = event.source.get_recipe() ---@cast recipe LuaRecipe
         local speed = event.source.crafting_speed
         local additive = settings.get_player_settings(event.player_index)["additional-paste-settings-options-sumup"].value
         local invertPaste = settings.get_player_settings(event.player_index)["additional-paste-settings-options-invert-buffer"].value and event.destination.prototype.logistic_mode == "buffer"
@@ -698,6 +690,7 @@ function Smarts.on_vanilla_paste(event)
 
             if prior ~= {} then
                 if result[prior.name] ~= nil then
+                    -- update_stack(mtype, multiplier, stack, previous_value, recipe, speed, additive, special)
                     result[prior.name].count = update_stack(mtype, multiplier, prior, result[prior.name].count, recipe, speed, additive)
                 else
                     result[prior.name] = { name = prior.name, count = prior.count }
@@ -707,15 +700,13 @@ function Smarts.on_vanilla_paste(event)
             if post ~= nil then
                 if invertPaste then
                     if result[post.name] ~= nil then
-                        result[post.name].count = update_stack(mtype, -1 * multiplier, post, result[post.name].count,
-                            recipe, speed, additive)
+                        result[post.name].count = update_stack(mtype, -1 * multiplier, post, result[post.name].count, recipe, speed, additive)
                     else
                         result[post.name] = { name = post.name, count = 0 }
                     end
                 else
                     if result[post.name] ~= nil then
-                        result[post.name].count = update_stack(mtype, multiplier, post, result[post.name].count, recipe,
-                            speed, additive)
+                        result[post.name].count = update_stack(mtype, multiplier, post, result[post.name].count, recipe, speed, additive)
                     else
                         result[post.name] = { name = post.name,
                             count = update_stack(mtype, multiplier, post, nil, recipe, speed, additive) }
@@ -728,6 +719,11 @@ function Smarts.on_vanilla_paste(event)
             for k, product in pairs(recipe.products) do
                 if result[product.name] ~= nil then
                     result[product.name].count = update_stack(mtype, multiplier, result[product.name], result[product.name].count, recipe, speed, additive)
+                else
+                    result[product.name] = {
+                        name = product.name,
+                        count = update_stack(mtype, multiplier, { name = product.name }, game.item_prototypes[product.name].stack_size, recipe, speed, additive)
+                    }
                 end
             end
         end
@@ -750,6 +746,10 @@ function Smarts.on_vanilla_paste(event)
         event.destination.surface.create_entity { name = "flying-text", position = event.destination.position, text = msg, color = lib.colors.white }
         global.event_backup[event.source.position.x .. "-" .. event.source.position.y .. "-" .. event.destination.position.x .. "-" .. event.destination.position.y] = nil
     end
+end
+
+function Smarts.get_translations()
+    global.locale_dictionaries = remote.call("Babelfish", "get_translations")
 end
 
 -- ---@type table<string, fun(name:string, value: number)>

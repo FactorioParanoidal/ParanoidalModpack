@@ -154,13 +154,25 @@ data:extend(
         },
         {
             type = "bool-setting",
-            name = "additional-paste-settings-use_flib",
+            name = "additional-paste-settings-switch_icon_format",
             setting_type = "runtime-global",
             default_value = false,
-            order = "zc"
+            order = "zza"
         },
     }
 )
+
+if mods["Babelfish"] then
+    data:extend({
+        {
+            type = "bool-setting",
+            name = "additional-paste-settings-use_Babelfish",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "zzb"
+        },
+    })
+end
 
 if mods["space-exploration-postprocess"] then
     data:extend({
