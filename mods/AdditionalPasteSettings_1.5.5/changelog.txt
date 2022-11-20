@@ -1,9 +1,25 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.5.1
-Date: 2022.07.30
+Version: 1.5.5
+Date: 2022.08.20
   Changes:
-    - Code clean up
-    - Worked out how to live with "attach-notes"
+    - Changed so Babelfish is an optional mod, not everyone needs/wants translated names
+    - Added an option to change the RICHTEXT formatter .. Default is [ img=class/name ], enabling the option switches to [ class=name ]
+
+---------------------------------------------------------------------------------------------------
+Version: 1.5.4
+Date: 2022.08.16
+  Changes:
+    - Replaced flib translation parser with my own Babelfish mod
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2022.08.03
+  Bugfixes:
+    - Reverted change that I thought I had got "attach-notes" working using.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2022.08.02
+  Bugfixes:
+    - Wrong behaviour when inverse pasting to buffer chest
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.5
 Date: 2022.07.26
