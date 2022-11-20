@@ -21,22 +21,21 @@
 --- end)
 --- ```
 --- If you are using the remote interface for adding/removing entity names make sure to add PickerDollies as an optional dependency.
---- @class PickerDollies.dolly_moved_event: EventData
+--- @class EventData.PickerDollies.dolly_moved_event: EventData
 --- @field player_index uint
 --- @field moved_entity LuaEntity
 --- @field start_pos MapPosition
-local event --luacheck: ignore 211/event
 
-local interface = require('__stdlib__/stdlib/scripts/interface')
-local Event = require('__stdlib__/stdlib/event/event')
+local interface = require("__stdlib__/stdlib/scripts/interface")
+local Event = require("__stdlib__/stdlib/event/event")
 
-interface['dolly_moved_entity_id'] = function()
-    return Event.generate_event_name('dolly_moved')
+interface["dolly_moved_entity_id"] = function()
+    return Event.generate_event_name("dolly_moved")
 end
 
 --- @param entity_name string
 --- @return boolean
-interface['add_oblong_name'] = function(entity_name)
+interface["add_oblong_name"] = function(entity_name)
     global.oblong_names = global.oblong_names or {}
     local proto = game.entity_prototypes[entity_name]
     if proto then
@@ -48,7 +47,7 @@ end
 
 --- @param entity_name string
 --- @return boolean
-interface['remove_oblong_name'] = function(entity_name)
+interface["remove_oblong_name"] = function(entity_name)
     global.oblong_names = global.oblong_names or {}
     if global.oblong_names[entity_name] then
         global.oblong_names[entity_name] = nil
@@ -58,14 +57,14 @@ interface['remove_oblong_name'] = function(entity_name)
 end
 
 --- @return {[string]: true}
-interface['get_oblong_names'] = function()
+interface["get_oblong_names"] = function()
     global.oblong_names = global.oblong_names or {}
     return global.oblong_names
 end
 
 --- @param entity_name string
 --- @return boolean
-interface['add_blacklist_name'] = function(entity_name)
+interface["add_blacklist_name"] = function(entity_name)
     global.blacklist_names = global.blacklist_names or {}
     local proto = game.entity_prototypes[entity_name]
     if proto then
@@ -77,7 +76,7 @@ end
 
 --- @param entity_name string
 --- @return boolean
-interface['remove_blacklist_name'] = function(entity_name)
+interface["remove_blacklist_name"] = function(entity_name)
     global.blacklist_names = global.blacklist_names or {}
     if global.blacklist_names[entity_name] then
         global.blacklist_names[entity_name] = nil
@@ -87,7 +86,7 @@ interface['remove_blacklist_name'] = function(entity_name)
 end
 
 --- @return {[string]: true}
-interface['get_blacklist_names'] = function()
+interface["get_blacklist_names"] = function()
     global.blacklist_names = global.blacklist_names or {}
     return global.blacklist_names
 end
