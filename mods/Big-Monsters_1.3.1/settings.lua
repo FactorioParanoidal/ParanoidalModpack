@@ -316,4 +316,25 @@ data:extend({
 	order = "z"
   }, 
   
+  
+  
+  -- per player  
+   {
+    type = "bool-setting",
+    name = "bm_draggable_camera",
+    setting_type = "runtime-per-user",
+    default_value = false,
+	order = "c"
+  },  
+   
+   {
+    type = "int-setting",
+    name = "bm_camera_size",
+    setting_type = "runtime-per-user",
+	minimum_value = 230,
+	maximum_value = 700,
+    default_value = 230,
+	order = "c"
+  },
+  
 })

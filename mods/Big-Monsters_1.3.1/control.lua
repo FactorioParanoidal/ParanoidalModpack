@@ -28,6 +28,18 @@ global.difficulty_level    = settings.global["bm-difficulty-level"].value
 global.spidertron_nuke     = settings.global["bm-spidertron-nuke"].value
 global.tree_events_chance  = settings.global["bm-tree-events-chance"].value/100
 global.spawn_near_nests    = settings.global["bm-spawn_near_nests"].value 
+
+
+
+if event and event.setting_type=='runtime-per-user' then
+	local player = game.players[event.player_index]
+	if event.setting=='bm_draggable_camera' then
+		global.enable_drag_camera[player.name] = settings.get_player_settings(player)["ic_draggable_camera"].value
+	elseif event.setting=='bm_camera_size' then
+		global.camera_size[player.name] = settings.get_player_settings(player)["ic_camera_size"].value	
+		end
+	end
+	
 end
 script.on_event(defines.events.on_runtime_mod_setting_changed, ReadRunTimeSettings)
 
@@ -50,6 +62,7 @@ end
 function on_init()
 cam_on_init()
 setup_mod_vars()
+RegisterModEvents()
 end
 script.on_init(on_init)
 
@@ -59,16 +72,17 @@ setup_mod_vars()
 end
 script.on_configuration_changed(on_configuration_changed)
 
+function on_load()
+RegisterModEvents()
+end
+script.on_load(on_load)
+
+
 -- camera events
 local function on_gui_click(event)
 cam_on_gui_click(event)
 end
 script.on_event(defines.events.on_gui_click, on_gui_click)
-
-local function on_tick(event)
-cam_on_tick(event)
-end
-script.on_event(defines.events.on_tick, on_tick )
 
 ------------------------------------------------------------------------------------------
 
@@ -832,8 +846,10 @@ end
 
 
 
-local tick_zillas = 61
+local tick_zillas = 60
 script.on_nth_tick(tick_zillas, function (event)
+cam_on_tick(event)
+
 for i=#global.invasions,1,-1 do
 	local inv =global.invasions[i] 
 	local surface = inv.surface
@@ -1078,6 +1094,29 @@ if ent.type=='tree' then
 end
 local filters = {{filter = "type", type = "tree"}}
 script.on_event(defines.events.on_player_mined_entity, player_mined_entity, filters) 
+
+
+-- warptorio
+function on_warptorio_warp(event)
+global.surfaces = {}
+local newsurface = event.newsurface
+local planet     = event.newplanet
+if planet and newsurface then 
+	local flags      = planet.flags
+	if (not flags) or (not in_list(flags,"rest")) then
+		add_list(global.surfaces, newsurface.name)
+		end
+	end
+end
+
+function RegisterModEvents()
+if remote.interfaces["warptorio2"] then 
+  local warp_event = remote.call("warptorio2","get_event", "on_post_warp")
+  script.on_event(warp_event, function(event)
+    on_warptorio_warp(event)
+  end)	
+end
+end
 
 
 
