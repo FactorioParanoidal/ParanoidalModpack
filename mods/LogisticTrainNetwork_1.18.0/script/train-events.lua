@@ -41,7 +41,8 @@ function TrainArrives(train)
     end
     local is_provider = false
 
-    if message_level >= 3 then printmsg({"ltn-message.train-arrived", tostring(trainName), stop_name}, trainForce, false) end
+    -- if message_level >= 3 then printmsg({"ltn-message.train-arrived", tostring(trainName), stop_name}, trainForce, false) end
+    if message_level >= 3 then printmsg({"ltn-message.train-arrived", Make_Train_RichText(train, nil), format("[train-stop=%d]", stopID)}, trainForce, false) end
     if debug_log then log(format("(TrainArrives) Train [%d] \"%s\": arrived at LTN-stop [%d] \"%s\"; train_faces_stop: %s", train.id, trainName, stopID, stop_name, stop.parked_train_faces_stop )) end
 
     if stop.error_code == 0 then
@@ -52,8 +53,8 @@ function TrainArrives(train)
           if message_level >= 1 then
             printmsg({
               "ltn-message.delivery-removed-depot",
-              MakeGpsString(from_entity, delivery.from),
-              MakeGpsString(to_entity, delivery.to)
+              Make_Stop_RichText(from_entity) or delivery.from,
+              Make_Stop_RichText(to_entity) or delivery.to
             }, delivery.force, false)
           end
           if debug_log then log(format("(TrainArrives) Train [%d] \"%s\": Entered Depot with active Delivery. Failing Delivery and reseting train.", train.id, trainName)) end
@@ -260,18 +261,33 @@ function TrainLeaves(trainID)
 
         if provider_missing_cargo then
           create_alert(stop.entity, "cargo-alert", {"ltn-message.provider_missing_cargo", stoppedTrain.name, stop_name}, stoppedTrain.force)
-          script.raise_event(on_provider_missing_cargo_alert, {train = train, station = stop.entity, planned_shipment = delivery.shipment, actual_shipment = actual_load})
+          script.raise_event(on_provider_missing_cargo_alert, {
+            train = train,
+            station = stop.entity,
+            planned_shipment = delivery.shipment,
+            actual_shipment = actual_load
+          })
         end
         if provider_unscheduled_cargo then
           create_alert(stop.entity, "cargo-alert", {"ltn-message.provider_unscheduled_cargo", stoppedTrain.name, stop_name}, stoppedTrain.force)
-          script.raise_event(on_provider_unscheduled_cargo_alert, {train = train, station = stop.entity, planned_shipment = delivery.shipment, unscheduled_load = unscheduled_load})
+          script.raise_event(on_provider_unscheduled_cargo_alert, {
+            train = train,
+            station = stop.entity,
+            planned_shipment = delivery.shipment,
+            unscheduled_load = unscheduled_load
+          })
         end
-        script.raise_event(on_delivery_pickup_complete_event, {train_id = trainID, planned_shipment = delivery.shipment, actual_shipment = actual_load})
+        script.raise_event(on_delivery_pickup_complete_event, {
+          train_id = trainID,
+          train = train,
+          planned_shipment = delivery.shipment,
+          actual_shipment = actual_load
+        })
         delivery.shipment = actual_load
 
       elseif delivery.to_id == stop.entity.unit_number then
         -- reset schedule before API events
-        if requester_delivery_reset then
+        if requester_delivery_reset and train.schedule then
           local schedule = {current = 1, records = {}}
           schedule.records[1] = NewScheduleRecord(train.schedule.records[1].station, "inactivity", depot_inactivity)
           train.schedule = schedule
@@ -298,9 +314,16 @@ function TrainLeaves(trainID)
         -- signal completed delivery and remove it
         if requester_left_over_cargo then
           create_alert(stop.entity, "cargo-alert", {"ltn-message.requester_left_over_cargo", stoppedTrain.name, stop_name}, stoppedTrain.force)
-          script.raise_event(on_requester_remaining_cargo_alert, {train = train, station = stop.entity, remaining_load = remaining_load})
+          script.raise_event(on_requester_remaining_cargo_alert, {
+            train = train,
+            station = stop.entity,
+            remaining_load = remaining_load
+          })
         end
-        script.raise_event(on_delivery_completed_event, {train_id = trainID, shipment = delivery.shipment})
+        script.raise_event(on_delivery_completed_event, {
+          train_id = trainID,
+          train = train,
+          shipment = delivery.shipment})
         RemoveDelivery(trainID)
       else
         if debug_log then log(format("(TrainLeaves) Train [%d] \"%s\": left LTN-stop [%d] \"%s\".", trainID, stoppedTrain.name, stopID, stop.entity.backer_name)) end
@@ -318,7 +341,8 @@ function TrainLeaves(trainID)
   -- remove train reference
   stop.parked_train = nil
   stop.parked_train_id = nil
-  if message_level >= 3 then printmsg({"ltn-message.train-left", tostring(stoppedTrain.name), stop.entity.backer_name}, stoppedTrain.force) end
+  -- if message_level >= 3 then printmsg({"ltn-message.train-left", tostring(stoppedTrain.name), stop.entity.backer_name}, stoppedTrain.force) end
+  if message_level >= 3 then printmsg({"ltn-message.train-left", Make_Train_RichText(train, stoppedTrain.name), format("[train-stop=%d]", stopID)}, stoppedTrain.force, false) end
   UpdateStopOutput(stop)
 
   global.StoppedTrains[trainID] = nil
@@ -337,7 +361,7 @@ function OnTrainStateChanged(event)
 end
 
 -- updates or removes delivery references
-local function update_delivery(old_train_id, new_train)
+function Update_Delivery(old_train_id, new_train)
   local delivery = global.Dispatcher.Deliveries[old_train_id]
 
   -- expanded RemoveDelivery(old_train_id) to also update
@@ -372,6 +396,8 @@ local function update_delivery(old_train_id, new_train)
     TrainLeaves(old_train_id) -- removal only, new train is added when on_train_state_changed fires with wait_station afterwards
   end
   global.Dispatcher.Deliveries[old_train_id] = nil
+
+  return delivery
 end
 
 function OnTrainCreated(event)
@@ -379,10 +405,10 @@ function OnTrainCreated(event)
   -- on_train_created always sets train.state to 9 manual, scripts have to set the train back to its former state.
 
   if event.old_train_id_1 then
-    update_delivery(event.old_train_id_1, event.train)
+    Update_Delivery(event.old_train_id_1, event.train)
   end
 
   if event.old_train_id_2 then
-    update_delivery(event.old_train_id_2, event.train)
+    Update_Delivery(event.old_train_id_2, event.train)
   end
 end
