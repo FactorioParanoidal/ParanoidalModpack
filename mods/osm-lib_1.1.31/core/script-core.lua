@@ -6,87 +6,105 @@ function OSM_core.index_properties()
 	-- Index icons
 	local function index_icons()
 		
+		local no_icon_index =
+		{
+			["arrow"] = true,
+			["artillery-projectile"] = true,
+			["beam"] = true,
+			["deconstructible-tile-proxy"] = true,
+			["explosion"] = true,
+			["fire"] = true,
+			["flame-thrower-explosion"] = true,
+			["flying-text"] = true,
+			["projectile orrocket-silo-rocket"] = true,
+			["rocket-silo-rocket-shadow"] = true,
+			["smoke-with-trigger"] = true,
+			["speech-bubble"] = true,
+			["sticker"] = true,
+			["stream"] = true,
+		}
+		
 		if not OSM.log.missing_icons then OSM.log.missing_icons = {} end
 	
 		local function index_icon(prototype, external_prototype)
 		
 		local icons_index = {}
-
-		local icon_size = false
-		local icon_mipmaps = false
-		local scale = false
-		local tint = false
-		local shift = false
-
-		if prototype.icon_size or (external_prototype and external_prototype.icon_size) then icon_size = prototype.icon_size or external_prototype.icon_size end
-		if prototype.icon_mipmaps or (external_prototype and external_prototype.icon_mipmaps) then icon_mipmaps = prototype.icon_mipmaps or external_prototype.icon_mipmaps end
-		if prototype.scale or (external_prototype and external_prototype.scale) then scale = prototype.scale or external_prototype.scale end
-		if prototype.tint or (external_prototype and external_prototype.tint) then tint = prototype.tint or external_prototype.tint end
-		if prototype.shift or (external_prototype and external_prototype.shift) then shift = prototype.shift or external_prototype.shift end
-		
-		if prototype.icons then
-			icons_index = prototype.icons
-		elseif prototype.icon then
-			icons_index =
-			{
-				{
-					icon=prototype.icon,
-					scale=prototype.scale,
-					icon_size=prototype.icon_size,
-					icon_mipmaps=prototype.icon_mipmaps,
-					tint=prototype.tint,
-					shift=prototype.shift
-				}
-			}
-		end
-		
-		if external_prototype and not prototype.icons and not prototype.icon then
-			if external_prototype.icons then
-				icons_index = external_prototype.icons
-			elseif external_prototype.icon then
+	
+			local icon_size = false
+			local icon_mipmaps = false
+			local scale = false
+			local tint = false
+			local shift = false
+	
+			if prototype.icon_size or (external_prototype and external_prototype.icon_size) then icon_size = prototype.icon_size or external_prototype.icon_size end
+			if prototype.icon_mipmaps or (external_prototype and external_prototype.icon_mipmaps) then icon_mipmaps = prototype.icon_mipmaps or external_prototype.icon_mipmaps end
+			if prototype.scale or (external_prototype and external_prototype.scale) then scale = prototype.scale or external_prototype.scale end
+			if prototype.tint or (external_prototype and external_prototype.tint) then tint = prototype.tint or external_prototype.tint end
+			if prototype.shift or (external_prototype and external_prototype.shift) then shift = prototype.shift or external_prototype.shift end
+			
+			if prototype.icons then
+				icons_index = prototype.icons
+			elseif prototype.icon then
 				icons_index =
 				{
 					{
-						icon=external_prototype.icon,
-						scale=external_prototype.scale,
-						icon_size=external_prototype.icon_size,
-						icon_mipmaps=external_prototype.icon_mipmaps,
-						tint=external_prototype.tint,
-						shift=external_prototype.shift
+						icon=prototype.icon,
+						scale=prototype.scale,
+						icon_size=prototype.icon_size,
+						icon_mipmaps=prototype.icon_mipmaps,
+						tint=prototype.tint,
+						shift=prototype.shift
 					}
 				}
 			end
-		end
-		
-		for i, _ in pairs(icons_index) do
-			if icon_size and not icons_index[i].icon_size then
-				icons_index[i].icon_size = icon_size
-			end
-			if icon_mipmaps and not icons_index[i].icon_mipmaps then
-				icons_index[i].icon_mipmaps = icon_mipmaps
-			end
-			if scale and not icons_index[i].scale then
-				icons_index[i].scale = scale
-			end
-			if tint and not icons_index[i].tint then
-				icons_index[i].tint = tint
-			end
-			if shift and not icons_index[i].shift then
-				icons_index[i].shift = shift
-			end
-		end
-		
-		if icons_index[1] then
 			
-			if not OSM.table.prototype_index[prototype.type] then OSM.table.prototype_index[prototype.type] = {} end
-			if not OSM.table.prototype_index[prototype.type][prototype.name] then OSM.table.prototype_index[prototype.type][prototype.name] = {} end
+			if external_prototype and not prototype.icons and not prototype.icon then
+				if external_prototype.icons then
+					icons_index = external_prototype.icons
+				elseif external_prototype.icon then
+					icons_index =
+					{
+						{
+							icon=external_prototype.icon,
+							scale=external_prototype.scale,
+							icon_size=external_prototype.icon_size,
+							icon_mipmaps=external_prototype.icon_mipmaps,
+							tint=external_prototype.tint,
+							shift=external_prototype.shift
+						}
+					}
+				end
+			end
 			
-			OSM.table.prototype_index[prototype.type][prototype.name].icons = icons_index
-
-		else
-			table.insert(OSM.log.missing_icons, "Could not index icon for: ("..prototype.type..") "..'"'..prototype.name..'"')
+			for i, _ in pairs(icons_index) do
+				if icon_size and not icons_index[i].icon_size then
+					icons_index[i].icon_size = icon_size
+				end
+				if icon_mipmaps and not icons_index[i].icon_mipmaps then
+					icons_index[i].icon_mipmaps = icon_mipmaps
+				end
+				if scale and not icons_index[i].scale then
+					icons_index[i].scale = scale
+				end
+				if tint and not icons_index[i].tint then
+					icons_index[i].tint = tint
+				end
+				if shift and not icons_index[i].shift then
+					icons_index[i].shift = shift
+				end
+			end
+			
+			if icons_index[1] then
+				
+				if not OSM.table.prototype_index[prototype.type] then OSM.table.prototype_index[prototype.type] = {} end
+				if not OSM.table.prototype_index[prototype.type][prototype.name] then OSM.table.prototype_index[prototype.type][prototype.name] = {} end
+				
+				OSM.table.prototype_index[prototype.type][prototype.name].icons = icons_index
+	
+			elseif OSM.table.prototype_index[prototype.type] and not no_icon_index[prototype.type] then
+				table.insert(OSM.log.missing_icons, "Could not index icon for: ("..prototype.type..") "..'"'..prototype.name..'"')
+			end
 		end
-	end
 	
 		for _, fluid in pairs(data.raw.fluid) do
 			index_icon(fluid)
@@ -253,6 +271,39 @@ function OSM_core.index_properties()
 	end
 end
 
+-- Get additional mod prototypes
+function OSM_core.get_additional_prototypes()
+
+	-- Deadlock stacking
+	if settings.startup["deadlock-stack-size"] then
+		for _, item in pairs(OSM.table.disabled_prototypes["item"]) do
+			if data.raw[item.type]["deadlock-stack-"..item.name] and not OSM.table.enabled_prototypes["item"][item.name] then
+				OSM.table.disabled_prototypes["item"]["deadlock-stack-"..item.name] = {}
+				OSM.table.disabled_prototypes["item"]["deadlock-stack-"..item.name].name = "deadlock-stack-"..item.name
+				OSM.table.disabled_prototypes["item"]["deadlock-stack-"..item.name].mod_name = item.mod_name
+				OSM.table.disabled_prototypes["item"]["deadlock-stack-"..item.name].type = item.type
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-stack-"..item.name] = {}
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-stack-"..item.name].name = "deadlock-stacks-stack-"..item.name
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-stack-"..item.name].mod_name = item.mod_name
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-unstack-"..item.name] = {}
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-unstack-"..item.name].name = "deadlock-stacks-unstack-"..item.name
+				OSM.table.disabled_prototypes["recipe"]["deadlock-stacks-unstack-"..item.name].mod_name = item.mod_name
+			end
+		end
+		
+		-- Stacked recipes
+		if mods["deadlock_stacked_recipes"] then
+			for _, recipe in pairs(OSM.table.disabled_prototypes["recipe"]) do
+				if data.raw.recipe["StackedRecipe-"..recipe.name] and not OSM.table.enabled_prototypes["recipe"][recipe.name] then
+					OSM.table.disabled_prototypes["recipe"]["StackedRecipe-"..recipe.name] = {}
+					OSM.table.disabled_prototypes["recipe"]["StackedRecipe-"..recipe.name].name = "StackedRecipe-"..recipe.name
+					OSM.table.disabled_prototypes["recipe"]["StackedRecipe-"..recipe.name].mod_name = recipe.mod_name
+				end
+			end
+		end
+	end
+end
+
 -- Disable prototypes
 function OSM_core.disable_prototypes()
 
@@ -295,7 +346,7 @@ function OSM_core.disable_prototypes()
 				end
 			end
 		end
-		table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled technology: "..'"'..technology.name..'"')
+		table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled technology: "..'"'..technology.name..'"')
 	end
 
 	local function disable_recipe(recipe)
@@ -343,7 +394,7 @@ function OSM_core.disable_prototypes()
 					for i, effect in pairs(technology.effects) do
 						if effect.type == "unlock-recipe" and effect.recipe == recipe.name then
 							technology.effects[i] = nil
-							table.insert(OSM.log.technology, '"OSM-Lib Core Script"'..": Successfully removed unlock from technologies for: "..'"'..recipe.name..'"'.." because it was disabled by: "..'"'..mod_name..'"')
+							table.insert(OSM.log.technology, '"OSM-Lib Core Script"'..": Info: removed unlock from technologies for: "..'"'..recipe.name..'"'.." because it was disabled by: "..'"'..mod_name..'"')
 						end
 					end
 				end
@@ -355,13 +406,13 @@ function OSM_core.disable_prototypes()
 					for i, limitation in pairs(module.limitation) do
 						if limitation == recipe.name then
 							module.limitation[i] = nil
-							table.insert(OSM.log.technology, '"OSM-Lib Core Script"'..": Successfully removed: "..'"'..recipe.name..'"'.." from module limitation list because it was disabled by: "..'"'..mod_name..'"')
+							table.insert(OSM.log.technology, '"OSM-Lib Core Script"'..": Info: removed: "..'"'..recipe.name..'"'.." from module limitation list because it was disabled by: "..'"'..mod_name..'"')
 						end
 					end
 				end
 			end
 			
-			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled recipe: "..'"'..recipe.name..'"')
+			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled recipe: "..'"'..recipe.name..'"')
 		end
 	end
 
@@ -382,7 +433,7 @@ function OSM_core.disable_prototypes()
 			
 			if not OSM.debug_mode then item.flags = {"hidden"} end
 			
-			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled item: ("..item.type..") "..'"'..item.name..'"')
+			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled item: ("..item.type..") "..'"'..item.name..'"')
 		end
 	end
 	
@@ -402,7 +453,7 @@ function OSM_core.disable_prototypes()
 			
 			if not OSM.debug_mode then fluid.hidden = true end
 
-			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled fluid: "..'"'..fluid.name..'"')
+			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled fluid: "..'"'..fluid.name..'"')
 		end
 	end
 
@@ -431,7 +482,7 @@ function OSM_core.disable_prototypes()
 			
 			if not OSM.debug_mode then entity.flags = {"hidden"} end
 			
-			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled entity: ("..entity.type..") "..'"'..entity.name..'"')
+			table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled entity: ("..entity.type..") "..'"'..entity.name..'"')
 		end
 	end
 
@@ -456,7 +507,7 @@ function OSM_core.disable_prototypes()
 					table.insert(OSM.table.disabled_prototypes.resources, {prototype_name=resource.name, mod_name=mod_name})
 				end
 				
-				table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Successfully disabled resource: "..'"'..resource_name..'"')
+				table.insert(OSM.log.disabled_prototypes, '"'..mod_name..'"'..": Info: disabled resource: "..'"'..resource_name..'"')
 			end
 		end
 	end
@@ -761,29 +812,29 @@ function OSM_core.regenerate_properties()
 		-- Log warnings and errors
 		if prototype.OSM_soft_removed and not prototype.OSM_removed then
 			if prototype.OSM_type == "fluid" then
-				table.insert(OSM.log.warnings, "WARNING!!! Fluid: "..'"'..prototype.name..'"'.." had its "..'"place_result"'.." disabled by another mod")
+				table.insert(OSM.log.warnings, "Warning: Fluid: "..'"'..prototype.name..'"'.." had its "..'"place_result"'.." disabled by another mod")
 			
 			elseif prototype.OSM_type == "item" then
-				table.insert(OSM.log.warnings, "WARNING!!! Item: ("..prototype.type..") "..'"'..prototype.name..'"'.." had its "..'"place_result"'.." disabled by another mod")
+				table.insert(OSM.log.warnings, "Warning: Item: ("..prototype.type..") "..'"'..prototype.name..'"'.." had its "..'"place_result"'.." disabled by another mod")
 				
 			elseif prototype.OSM_type == "entity" then
-				table.insert(OSM.log.warnings, "WARNING!!! Entity: ("..prototype.type..") "..'"'..prototype.name..'"'.." had its "..'"placeable_by"'.." disabled by another mod")
+				table.insert(OSM.log.warnings, "Warning: Entity: ("..prototype.type..") "..'"'..prototype.name..'"'.." had its "..'"placeable_by"'.." disabled by another mod")
 
 			elseif prototype.OSM_type == "recipe" then
-				table.insert(OSM.log.warnings, "WARNING!!! Recipe: "..'"'..prototype.name..'"'.." had ALL of its "..'"ingredients"'.." and/or "..'"results"'.." disabled by another mod")
+				table.insert(OSM.log.warnings, "Warning: Recipe: "..'"'..prototype.name..'"'.." had ALL of its "..'"ingredients"'.." and/or "..'"results"'.." disabled by another mod")
 			end
 		end
 		
 		if prototype.OSM_ingredient_warning and not prototype.OSM_soft_removed then
-			table.insert(OSM.log.warnings, "WARNING!!! Recipe: "..'"'..prototype.name..'"'.." had one or more of its "..'"ingredients"'.." disabled by another mod")
+			table.insert(OSM.log.warnings, "Warning: Recipe: "..'"'..prototype.name..'"'.." had one or more of its "..'"ingredients"'.." disabled by another mod")
 		end
 		
 		if prototype.OSM_result_warning and not prototype.OSM_soft_removed then
-			table.insert(OSM.log.warnings, "WARNING!!! Recipe: "..'"'..prototype.name..'"'.." had one or more of its "..'"results"'.." disabled by another mod")
+			table.insert(OSM.log.warnings, "Warning: Recipe: "..'"'..prototype.name..'"'.." had one or more of its "..'"results"'.." disabled by another mod")
 		end
 		
 		if prototype.OSM_unlock_warning then
-			table.insert(OSM.log.warnings, "WARNING!!! Recipe: "..'"'..prototype.name..'"'.." had the only technology unlocking it disabled by another mod")
+			table.insert(OSM.log.warnings, "Warning: Recipe: "..'"'..prototype.name..'"'.." had the only technology unlocking it disabled by another mod")
 		end
 
 		-- Add tooltips to faulty prototypes
