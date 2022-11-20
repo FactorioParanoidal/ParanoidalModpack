@@ -40,12 +40,35 @@ function GetTrainCapacity(train)
   return inventorySize, fluidCapacity
 end
 
--- returns gps string from entity or just string if entity is invalid
-function MakeGpsString(entity, name)
-  if message_include_gps and entity and entity.valid then
-    return format("%s [gps=%s,%s,%s]", name, entity.position["x"], entity.position["y"], entity.surface.name)
+-- returns rich text string for train stops, or nil if entity is invalid
+function Make_Stop_RichText(entity)
+  if entity and entity.valid then
+    if message_include_gps then
+      return format("[train-stop=%d] [gps=%s,%s,%s]", entity.unit_number, entity.position["x"], entity.position["y"], entity.surface.name)
+    else
+      return format("[train-stop=%d]", entity.unit_number)
+    end
   else
-    return name
+    return nil
   end
 end
 
+-- returns rich text string for trains, or nil if entity is invalid
+function Make_Train_RichText(train, train_name)
+  local loco = Get_Main_Locomotive(train)
+  if loco and loco.valid then
+    return format("[train=%d] %s", loco.unit_number, train_name or loco.backer_name)
+  else
+    return format("[train=] %s", train_name)
+  end
+end
+
+-- same as flib.get_or_insert(a_table, key, {}) but avoids the garbage collector overhead of passing an empty table that isn't used when the key exists
+function Get_Or_Create(a_table, key)
+  local subtable = a_table[key]
+  if not subtable then
+    subtable = {}
+    a_table[key] = subtable
+  end
+  return subtable
+end
