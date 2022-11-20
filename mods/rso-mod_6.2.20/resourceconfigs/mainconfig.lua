@@ -91,6 +91,7 @@ require("resourceconfigs.nullius")
 require("resourceconfigs.spfumaterials")
 require("resourceconfigs.qatmore")
 require("resourceconfigs.ritnglass")
+require("resourceconfigs.bzgas")
 -- require("resourceconfigs.yaiom")
 
 require("resourceconfigs.pyalienlife")
@@ -545,6 +546,10 @@ function loadResourceConfig()
 
 	if game.active_mods["bztin"] then
 		fillBztinConfig(config)
+	end
+
+	if game.active_mods["bzgas"] then
+		fillBzgasConfig(config)
 	end
 
 	if game.active_mods["yaiom"] then
