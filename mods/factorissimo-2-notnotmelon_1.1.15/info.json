@@ -1,9 +1,0 @@
-{
-  "name": "factorissimo-2-notnotmelon",
-  "version": "1.1.15",
-  "title": "Factorissimo 2 - notnotmelon fork",
-  "author": "MagmaMcFry, notnotmelon",
-  "description": "A fork of Factorissimo 2 focused on improving performance by implementing several 1.1 features. Can improve performance by 10X or higher. Also fixes several bugs from the original version.",
-  "factorio_version": "1.1",
-  "dependencies": ["base", "! Factorissimo2", "(?) Bio_Industries", "(?) power-grid-comb"]
-}
