@@ -13,6 +13,7 @@ local on_silo_stage_finished = script.generate_event_name() --uint  returns even
 
 
 function ModSetup()
+ReadRunTimeSettings(event)
 if global.rsc_silo_under_construction==nil then global.rsc_silo_under_construction={} end
 global.automated_forces = global.automated_forces or {}
 global.st_insert_material_work = settings.startup["rsc-st-work-for-insert-material"].value
@@ -44,6 +45,11 @@ for f=1, #game.forces do
 	end
 end
 
+
+function ReadRunTimeSettings(event)
+global.st_only_in_alt_mode = settings.global["rsc-only-in-alt-mode"].value
+end
+script.on_event(defines.events.on_runtime_mod_setting_changed, ReadRunTimeSettings)
 
 function On_Init() 
 ModSetup()
@@ -203,7 +209,8 @@ local background = silo_data.bar_back
       to = entity,
       to_offset = {33/32, 1},
       surface = entity.surface,
-      forces = visible_to
+      forces = visible_to,
+	  only_in_alt_mode = global.st_only_in_alt_mode
     }
     silo_data.bar_back = background
   end
@@ -219,7 +226,8 @@ local background = silo_data.bar_back
       to = entity,
       to_offset = {1, 1},
       surface = entity.surface,
-      forces = visible_to
+      forces = visible_to,
+	  only_in_alt_mode = global.st_only_in_alt_mode
     }
     silo_data.progress_bar = progress_bar
   end
