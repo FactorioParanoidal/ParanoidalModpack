@@ -10,6 +10,8 @@ require("prototypes.beltentities") --переехало из paranoidal-tweaks_0
 
 require("prototypes.micro-fix") --доработка напильником всего подряд -- фиксы от Кирика
 
+require("prototypes.BetterAlertArrows_100") --мод BetterAlertArrows
+
 require("prototypes.mod_compatibility.heroturrets")
 
 --перенаправляем функцию ангела на функцию боба

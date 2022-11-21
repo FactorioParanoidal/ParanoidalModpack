@@ -33,6 +33,22 @@ data:extend({
 --рескин проводов
 {type = "bool-setting", name = "wire", setting_type = "startup", default_value = true, order = "7"},
 {type = "bool-setting", name = "copper_wire", setting_type = "startup", default_value = true, order = "8"},
+-------------------------------------------------------------------------------------------------
+--стрелки атаки
+  {
+    type = "double-setting",
+    name = "baa-arrow-scale",
+    setting_type = "startup",
+    minimum_value = 0,
+    maximum_value = 1,
+    default_value = 0.2
+  },
+  {
+    type = "string-setting",
+    name = "baa-arrow-tint",
+    setting_type = "startup",
+    default_value = "FF9F1C"
+  }
 })
 
 if mods.research_evolution_factor then
