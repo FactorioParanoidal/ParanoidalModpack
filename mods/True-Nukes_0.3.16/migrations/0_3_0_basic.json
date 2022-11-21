@@ -1,0 +1,56 @@
+{
+  "entity":
+  [
+    ["megaton-nuke", "fusion-test-site"]
+  ],
+  "technology":
+  [
+    ["scary-atomic-weapons", "compact-full-fission-weapons"],
+    ["atomic-artillery-shells", "artillery-atomics"]
+  ],
+  "item":
+  [
+    ["atomic-rounds-magazine", "rounds-magazine-atomic-0_1t"],
+    ["big-atomic-rounds-magazine", "rounds-magazine-atomic-0_5t"],
+    
+    ["atomic-cannon-shell", "cannon-shell-atomic-2t"],
+    ["big-atomic-cannon-shell", "cannon-shell-atomic-4t"],
+    
+    ["really-very-atomic-bomb", "big-rocket-atomic-2t"],
+    ["very-small-atomic-bomb", "big-rocket-atomic-4t"],
+    ["small-atomic-bomb", "big-rocket-atomic-8t"],
+    ["big-atomic-bomb", "big-rocket-atomic-500t"],
+    ["very-big-atomic-bomb", "big-rocket-atomic-1kt"],
+    
+    ["TN-very-small-atomic-artillery-shell", "artillery-shell-atomic-20t"],
+    ["TN-small-atomic-artillery-shell", "artillery-shell-atomic-500t"],
+    ["TN-atomic-artillery-shell", "artillery-shell-atomic-1kt"],
+    ["TN-big-atomic-artillery-shell", "artillery-shell-atomic-15kt"],
+    ["TN-very-big-atomic-artillery-shell", "artillery-shell-atomic-2-stage-100kt"],
+    
+    
+    ["15kiloton-detonation", "detonation-atomic-2-stage-15kt-1"],
+    ["100kiloton-detonation", "detonation-atomic-2-stage-100kt-1"],
+    ["15kiloton-detonation", "detonation-atomic-2-stage-15kt-1"],
+    ["megaton-detonation", "detonation-atomic-2-stage-1Mt-1"],
+    ["5megaton-detonation", "detonation-atomic-2-stage-5Mt-1"],
+    ["10megaton-detonation", "detonation-atomic-2-stage-10Mt-1"],
+    ["50megaton-detonation", "detonation-atomic-2-stage-50Mt-1"],
+    ["100megaton-detonation", "detonation-atomic-2-stage-100Mt-1"],
+    ["1gigaton-detonation", "detonation-atomic-2-stage-1Gt-1"],
+    
+    
+    ["atomic-autocannon-shell", "autocannon-shell-atomic-0_5t"],
+    ["atomic-cannon-H1-shell", "cannon-shell-88-atomic-4t"],
+    ["atomic-cannon-H2-shell", "cannon-shell-128-atomic-8t"],
+    ["big-atomic-autocannon-shell", "autocannon-shell-atomic-2t"],
+    ["big-atomic-cannon-H1-shell", "cannon-shell-88-atomic-8t"],
+    ["big-atomic-cannon-H2-shell", "cannon-shell-128-atomic-20t"],
+    
+    ["thermobaric-cannon-shell", "cannon-shell-thermobaric-1"],
+    ["thermobaric-cannon-H1-shell", "cannon-shell-88-thermobaric-2"],
+    ["thermobaric-cannon-H2-shell", "cannon-shell-128-thermobaric-2"],
+    ["thermobaric-rocket", "big-rocket-thermobaric-2"],
+    ["thermobaric-artillery", "artillery-shell-thermobaric-3"]
+  ]
+}
