@@ -1,0 +1,15 @@
+weaponTypes["rampant-mortar"]= {
+  type = "stream",
+  max_size = "medium",
+  min_size = "tiny",
+  baseName = "rampant-mortar",
+  baseOrder = "e[mortar]-c",
+  base_item = "grenade-capsule-ammo-rampant-arsenal",
+  energy_required = 1,
+  icons = {},
+  lights = {},
+  image_base_shift = {4, 2},
+  image_warhead_shift = {0, -8},
+  item = table.deepcopy(data.raw.ammo["grenade-capsule-ammo-rampant-arsenal"]),
+  stream = table.deepcopy(data.raw.stream["grenade-capsule-stream-rampant-arsenal"]),
+}
