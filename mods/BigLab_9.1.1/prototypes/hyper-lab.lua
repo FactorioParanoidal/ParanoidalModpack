@@ -37,7 +37,7 @@ data:extend({
 		max_health = 5000,
 		crafting_categories = {"chemistry"},
 		corpse = "big-remnants",
-		dying_explosion = "huge-explosion",
+		dying_explosion = "massive-explosion",
 		collision_box = {{-49, -39}, {49, 39}},
 		selection_box = {{-50, -40}, {50, 40}},
 		--light = {intensity = 0.75, size = 8, color = {r = 1.0, g = 1.0, b = 1.0}},
