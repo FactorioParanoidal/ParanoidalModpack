@@ -32,5 +32,13 @@ end
 for _,r in pairs(data.raw["recipe"]) do
 	r.always_show_products=true;
 	r.show_amount_in_title=false;
+	if r.normal ~= nil then
+  		r.normal.always_show_products = true;
+  		r.normal.show_amount_in_title = false;
+	end
+	if r.expensive ~= nil then
+ 	 	r.expensive.always_show_products = true;
+  		r.expensive.show_amount_in_title = false;
+	end
 end
 -- Uniform recipe end
