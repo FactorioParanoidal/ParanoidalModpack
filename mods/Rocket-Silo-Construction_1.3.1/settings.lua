@@ -1,5 +1,5 @@
 data:extend({
-
+--startup
   {
     type = "int-setting",
     name = "rsc-st-work-for-remove-stone",
@@ -49,6 +49,14 @@ data:extend({
     default_value = false,
  },
 
+
+{
+	type = "bool-setting",
+	name = "rsc-only-in-alt-mode",
+	setting_type = "runtime-global",
+	default_value = false,
+	order = "e"
+},
 
 
 
