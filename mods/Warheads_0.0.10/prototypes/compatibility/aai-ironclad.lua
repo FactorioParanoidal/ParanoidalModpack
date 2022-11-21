@@ -1,0 +1,15 @@
+weaponTypes["aai-ironclad-mortar"]= {
+  type = "stream",
+  max_size = "medium",
+  min_size = "tiny",
+  baseName = "aai-ironclad-mortar",
+  baseOrder = "d[cannon-shell]-cz",
+  base_item = "mortar-bomb",
+  energy_required = 1,
+  icons = {},
+  lights = {},
+  image_base_shift = {4, 2},
+  image_warhead_shift = {-8, -8},
+  item = table.deepcopy(data.raw.ammo["mortar-bomb"]),
+  stream = table.deepcopy(data.raw.stream["mortar-bomb-projectile-stream"]),
+}
