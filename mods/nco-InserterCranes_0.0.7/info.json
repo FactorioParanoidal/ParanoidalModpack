@@ -1,0 +1,17 @@
+{
+	"name": "nco-InserterCranes",
+	"version": "0.0.7",
+	"title": "Inserter Cranes",
+	"author": "Karoschl",
+	"contact": "",
+	"homepage": "https://github.com/nicolas-lang/factorio.InserterCranes",
+	"description": "Faster, larger inserters to reduce UPS/FPS issues",
+	"factorio_version": "1.1",
+	"dependencies": [
+		"base >= 1.0",
+		"?Krastorio2",
+		"?boblogistics",
+		"?bobinserters",
+		"?reskins-bobs"
+	]
+}
