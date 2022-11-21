@@ -1,0 +1,105 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.4.48
+Date: 2020-11-26
+  Changes:
+    - Factorio 1.1.0 compatibility
+    - Boiler rates now correct for vanilla (but wrong for Krastorio2 :( )
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.47
+Date: 2020-10-11
+  Changes:
+    - Fixed crash with Space Exploration mod when creating tool
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.46
+  Changes:
+    - Fixes mostly for Kras2
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.39
+  Changes:
+    - Mining/pumpjack calculation improvements
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.38
+  Changes:
+    - Defensive coding against global debug not a lua table
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.37
+  Changes:
+    - Mining and pumpjack calculations
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.36
+  Changes:
+    - Belts and their speeds pulled from game tables rather than being hardcoded, now supports mods with faster belts
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.34
+  Changes:
+    - Fixed issue with Factorio 0.18.22 and hotkeys prototypes
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.33
+  Changes:
+    - Fixed issue with small beacons not seen next to large assemblers (Krastorio 2)
+    - Honor allowed_effects consumption flag or not
+    - Don't allow productivity to drop below zero
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.32
+  Changes:
+    - Use catalyst_amount for prod calcs.  Fixes issue with kovarex recipe
+
+---------------------------------------------------------------------------------------------------
+Version: 3.4.31
+  Changes:
+    - Factorio 0.18 support
+
+---------------------------------------------------------------------------------------------------
+Version: 3.2.29
+  Changes:
+    - Save window location
+
+---------------------------------------------------------------------------------------------------
+Version: 3.2.28
+  Changes:
+    - Fix no recipe crash
+
+---------------------------------------------------------------------------------------------------
+Version: 3.2.27
+  Changes:
+    - Use most recent recipe if furnace has no current recipe
+
+---------------------------------------------------------------------------------------------------
+Version: 3.2.25
+  Changes:
+    - Window is moveable
+
+---------------------------------------------------------------------------------------------------
+Version: 3.1.24
+  Changes:
+    - Use only-in-cursor flag to keep selection tool out of inventory.  Attempt at thumbnail.
+
+---------------------------------------------------------------------------------------------------
+Version: 3.1.23
+  Changes:
+    - Fix old-style probablistic calculations (Bob's Greenhouse)
+
+---------------------------------------------------------------------------------------------------
+Version: 3.1.22
+  Changes:
+    - Fix probablistic calculations (uranium processing)
+
+---------------------------------------------------------------------------------------------------
+Version: 3.1.21
+  Changes:
+    - Max Rate Calculator selection tool and 4 function calculator available on the quickbar
+
+---------------------------------------------------------------------------------------------------
+Version: 3.0.20
+  Changes:
+    - 0.17 support.  Removed mining calculations.  Needs general rate re-testing
+
