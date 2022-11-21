@@ -1,0 +1,46 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2022-06-23
+  Changes:
+    - Added crowdin for collaborative/international translations
+    - Added 'ru' translation provided by Eldrinn-Elantey
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2022-02-03
+  Bugfixes:
+    - Fixed generation of crushing recipe if ingredient data-model is not uniform (https://github.com/nicolas-lang/factorio.InserterCranes/issues/3)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2021-12-19
+  Bugfixes:
+    - Fixed recipe generation for normal/expensive recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2021-12-19
+  Changes:
+    - Added additional cranes if bob's logistics is installed
+    - Initial "bob's inserters" compatibility (just blacklisting for now)
+    - Added bob's inserters and logistic as optional dependancy
+    - Remove speed limit if bob's inserters are installed
+    - Normalized pick up and drop-off points
+    - Moved inserter generation to data-updates
+  Bugfixes:
+    - Reset next upgrade and localized names
+    - Fixed handling of keyed ingredient tables
+    - Fixed icon size priority
+    - Fixed energy calculation
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2021-12-05
+  Changes:
+    - Removed log outputs
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2021-12-05
+  Changes:
+    - First public release
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2021-11-22
+  Major Features:
+    - Initial release.
