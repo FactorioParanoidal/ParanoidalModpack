@@ -1,0 +1,1 @@
+require("prototypes.smog_animations")
