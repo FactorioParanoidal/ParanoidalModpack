@@ -22,7 +22,7 @@ script.on_configuration_changed(function()
                                
 	for unit_number, unit_data in pairs(global.units) do
 		if unit_data.item and not validity_check(unit_number, unit_data) then
-			if not game.fluid_prototypes[unit_data.item] then shared.memory_unit_corruption(unit_data) end
+			if not game.fluid_prototypes[unit_data.item] then shared.memory_unit_corruption(unit_number, unit_data) end
 		end
 	end
 end)
