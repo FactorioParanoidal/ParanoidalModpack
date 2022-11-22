@@ -26,7 +26,7 @@ script.on_configuration_changed(function()
 				unit_data.stack_size = prototype.stack_size
 				unit_data.comfortable = unit_data.stack_size * #unit_data.inventory / 2
 			else
-				shared.memory_unit_corruption(unit_data)
+				shared.memory_unit_corruption(unit_number, unit_data)
 			end
 		end
 	end

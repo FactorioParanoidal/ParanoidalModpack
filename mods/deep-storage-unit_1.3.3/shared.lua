@@ -114,7 +114,7 @@ local function check_for_basic_item(item)
 	return not items_with_metadata[item]
 end
 
-local function memory_unit_corruption(unit_data)
+local function memory_unit_corruption(unit_number, unit_data)
 	local entity = unit_data.entity
 	local powersource = unit_data.powersource
 	local combinator = unit_data.combinator
@@ -129,7 +129,7 @@ end
 
 local function validity_check(unit_number, unit_data, force)
 	if not unit_data.entity.valid or not unit_data.powersource.valid or not unit_data.combinator.valid then
-		memory_unit_corruption(unit_data)
+		memory_unit_corruption(unit_number, unit_data)
 		return true
 	end
 	
