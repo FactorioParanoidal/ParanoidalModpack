@@ -341,6 +341,9 @@ local function add_chunk(chunk)
     local y = chunk.position.y
     local surface = chunk.surface
 
+    if global.is_setup == false then
+        setup()
+    end
     global.all_chunks[surface.index..":"..x..":"..y] = {position = {x=x,y=y}, surface=surface.index}
 end
 
