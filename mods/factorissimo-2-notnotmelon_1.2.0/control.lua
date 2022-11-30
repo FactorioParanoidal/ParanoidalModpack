@@ -619,19 +619,28 @@ local function recheck_nearby_connections(entity, delayed)
 	end
 end
 
+local function create_fresh_factory(entity)
+	local layout = Layout.create_layout(entity.name)
+	local factory = create_factory_interior(layout, entity.force)
+	create_factory_exterior(factory, entity)
+	factory.inactive = not can_place_factory_here(layout.tier, entity.surface, entity.position)
+	return factory
+end
+
 local function handle_factory_placed(entity, tags)
 	if not tags or not tags.id then
-		-- This is a fresh factory, we need to create it
-		local layout = Layout.create_layout(entity.name)
-		local factory = create_factory_interior(layout, entity.force)
-		create_factory_exterior(factory, entity)
-		factory.inactive = not can_place_factory_here(layout.tier, entity.surface, entity.position)
+		create_fresh_factory(entity)
 	elseif global.saved_factories[tags.id] then
 		-- This is a saved factory, we need to unpack it
 		local factory = global.saved_factories[tags.id]
 		global.saved_factories[tags.id] = nil
 		create_factory_exterior(factory, entity)
 		factory.inactive = not can_place_factory_here(factory.layout.tier, entity.surface, entity.position)
+	elseif global.factories[tags.id] then
+		-- This factory was copied from somewhere else. Clone all contained entities
+		local factory = create_fresh_factory(entity)
+		Blueprint.copy_entity_ghosts(global.factories[tags.id], factory)
+		Overlay.update_overlay(factory)
 	else
 		entity.surface.create_entity{name='flying-text', position=entity.position, text={'factory-connection-text.invalid-factory-data'}}
 		entity.destroy()
@@ -642,13 +651,8 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
 	local entity = event.created_entity or event.entity
 	if has_layout(entity.name) then
 		local stack = event.stack
-		if stack then
-			if stack.valid_for_read and stack.type == 'item-with-tags' then
-				if event.robot then Blueprint.swap_factory_item_tags(event.robot, event.tags, stack) end
-				handle_factory_placed(entity, stack.tags)
-			else -- entity was built in the editor with an entity item
-				handle_factory_placed(entity, nil)
-			end
+		if stack and stack.valid_for_read and stack.type == 'item-with-tags' then
+			handle_factory_placed(entity, stack.tags)
 		else
 			handle_factory_placed(entity, event.tags)
 		end
@@ -674,7 +678,7 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
 	elseif entity.type == 'entity-ghost' and Connections.indicator_names[entity.ghost_name] then
 		Blueprint.unpack_connection_settings_from_blueprint(entity)
 		entity.destroy()
-	elseif entity.type == 'entity-ghost' and entity.ghost_name == 'factory-overlay-controller' then
+	elseif entity.type == 'entity-ghost' and (entity.ghost_name == 'factory-overlay-controller' or entity.ghost_name == 'factory-blueprint-anchor') then
 		entity.destroy()
 	elseif entity.type == 'spider-vehicle' and entity.name ~= 'companion' then
 		global.spidertrons[entity.unit_number] = entity

@@ -130,8 +130,9 @@ local function move_item(item, count, input_inv, output_inv)
 		-- not safe to "split" the stack here, may result in some item sloshing
 		while count > 0 do
 			local stack = input_inv.find_item_stack(item)
-			local empty_slot = output_inv.find_empty_stack(item)
+			local empty_slot, i = output_inv.find_empty_stack(item)
 			if not stack or not empty_slot then break end
+			if output_inv.supports_bar() and output_inv.get_bar() == i then break end
 			if not stack.swap_stack(empty_slot) then break end
 			count = count - stack.count
 		end

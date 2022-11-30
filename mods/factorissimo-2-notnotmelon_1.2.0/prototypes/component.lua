@@ -249,8 +249,18 @@ create_indicator('circuit', 'b0', 'red-dot')
 
 -- Other auxiliary entities
 
+data:extend{{
+	type = 'simple-entity-with-force',
+	name = 'factory-blueprint-anchor',
+	flags = {'player-creation', 'hidden', 'placeable-off-grid'},
+	collision_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+	picture = blank(),
+	placeable_by = {item = 'simple-entity-with-force', count = 1}
+}}
+
 local j = 0.99
-data:extend({
+data:extend{
 	{
 		type = 'electric-pole',
 		name = 'factory-power-pole',
@@ -302,7 +312,7 @@ data:extend({
 		radius_visualisation_picture = blank(),
 		localised_name = '',
 	},
-})
+}
 
 data:extend{{
 	type = 'item',
@@ -322,30 +332,28 @@ overlay_controller.collision_mask = {}
 data:extend{overlay_controller}
 
 local function create_dummy_connector(dir, dx, dy, pictures)
-	data:extend({
-		{
-			type = 'pipe',
-			name = 'factory-fluid-dummy-connector-' .. dir,
-			flags = {'not-on-map', 'hide-alt-info'},
-			minable = nil,
-			max_health = 500,
-			selection_box = {{-0.4,-0.4},{0.4,0.4}},
-			selectable_in_game = false,
-			collision_box = {{-0.4,-0.4},{0.4,0.4}},
-			collision_mask = {},
-			fluid_box = {
-				base_area = 1, -- Heresy
-				pipe_connections = {
-					{position = {dx, dy}, type = 'output'},
-				},
+	data:extend{{
+		type = 'pipe',
+		name = 'factory-fluid-dummy-connector-' .. dir,
+		flags = {'not-on-map', 'hide-alt-info'},
+		minable = nil,
+		max_health = 500,
+		selection_box = {{-0.4,-0.4},{0.4,0.4}},
+		selectable_in_game = false,
+		collision_box = {{-0.4,-0.4},{0.4,0.4}},
+		collision_mask = {},
+		fluid_box = {
+			base_area = 1, -- Heresy
+			pipe_connections = {
+				{position = {dx, dy}, type = 'output'},
 			},
-			horizontal_window_bounding_box = {{0,0},{0,0}},
-			vertical_window_bounding_box = {{0,0},{0,0}},
-			pictures = pictures,
-			vehicle_impact_sound = {filename = '__base__/sound/car-metal-impact.ogg', volume = 0.65},
-			localised_name = {'entity-name.pipe'}
 		},
-	})
+		horizontal_window_bounding_box = {{0,0},{0,0}},
+		vertical_window_bounding_box = {{0,0},{0,0}},
+		pictures = pictures,
+		vehicle_impact_sound = {filename = '__base__/sound/car-metal-impact.ogg', volume = 0.65},
+		localised_name = {'entity-name.pipe'}
+	}}
 end
 
 -- Connectors are named by the direction they are facing,
