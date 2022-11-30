@@ -83,6 +83,17 @@ data:extend{
 		order = 'a-a',
 		place_result = 'factory-1',
 		stack_size = 1
+	},
+	{
+		type = 'item',
+		name = 'factory-1-raw',
+		icon = F..'/graphics/icon/factory-1.png',
+		icon_size = 64,
+		subgroup = 'factorissimo2',
+		order = 'a-a',
+		place_result = 'factory-1',
+		stack_size = 1,
+		flags = {'primary-place-result'}
 	}
 }
 
@@ -143,6 +154,17 @@ data:extend{
 		order = 'a-b',
 		place_result = 'factory-2',
 		stack_size = 1
+	},
+	{
+		type = 'item',
+		name = 'factory-2-raw',
+		icon = F..'/graphics/icon/factory-2.png',
+		icon_size = 64,
+		subgroup = 'factorissimo2',
+		order = 'a-b',
+		place_result = 'factory-2',
+		stack_size = 1,
+		flags = {'primary-place-result'}
 	}
 }
 
@@ -203,5 +225,16 @@ data:extend{
 		order = 'a-c',
 		place_result = 'factory-3',
 		stack_size = 1
+	},
+	{
+		type = 'item',
+		name = 'factory-3-raw',
+		icon = F..'/graphics/icon/factory-3.png',
+		icon_size = 64,
+		subgroup = 'factorissimo2',
+		order = 'a-c',
+		place_result = 'factory-3',
+		stack_size = 1,
+		flags = {'primary-place-result'}
 	}
 }

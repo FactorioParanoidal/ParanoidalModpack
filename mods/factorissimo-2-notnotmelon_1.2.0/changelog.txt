@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022.11.30
+  Info:
+    - Blueprinting a factory exterior will now preserve all interior entities as ghosts
+---------------------------------------------------------------------------------------------------
+Version: 1.1.27
+Date: 2022.11.22
+  Info:
+    - Fixed chest connections ignoring bars in some cases https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/637aa5d3c2757b81f497a4de
+---------------------------------------------------------------------------------------------------
 Version: 1.1.26
 Date: 2022.11.12
   Info:
