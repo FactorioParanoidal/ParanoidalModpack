@@ -6,15 +6,10 @@ require "math.SolverSimplex"
 ---Description of the module.
 ---@class ModelCompute
 local ModelCompute = {
-  ---single-line comment
   classname = "HMModelCompute",
   capEnergy = -0.8,
   capSpeed = -0.8,
   capPollution = -0.8,
-  ---15°c
-  initial_temp = 15,
-  ---200J/unit/°c
-  fluid_energy_per_unit = 200,
   waste_value = 0.00001,
 
   cap_reason = {
@@ -123,7 +118,6 @@ function ModelCompute.update(model)
             end
           end
         end
-
         ---prepare bloc
         local block_products, block_ingredients = ModelCompute.prepareBlock(block)
         block.products = block_products
@@ -698,7 +692,7 @@ function ModelCompute.prepareBlock(block)
     for i, block_product in pairs(block_products) do
       local product_key = Product(block_product):getTableKey()
       ---recopie la valeur input
-      if block.products[product_key] ~= nil then
+      if block.by_factory ~= true and block.products[product_key] ~= nil then
         block_product.input = block.products[product_key].input
       end
       ---pose le status
@@ -712,7 +706,7 @@ function ModelCompute.prepareBlock(block)
     for i, block_ingredient in pairs(block_ingredients) do
       local ingredient_key = Product(block_ingredient):getTableKey()
       ---recopie la valeur input
-      if block.ingredients[ingredient_key] ~= nil then
+      if block.by_factory ~= true and block.ingredients[ingredient_key] ~= nil then
         block_ingredient.input = block.ingredients[ingredient_key].input
       end
       ---pose le status
@@ -1067,7 +1061,7 @@ function ModelCompute.computeEnergyFactory(recipe)
   
   ---compte le nombre de machines necessaires
   ---[ratio recipe] * [effort necessaire du recipe] / ([la vitesse de la factory]
-  local count = recipe.count*recipe_energy/recipe.factory.speed
+  local count = recipe.count*recipe_energy/(recipe.factory.speed * recipe.time)
   if recipe.factory.speed == 0 then count = 0 end
   recipe.factory.count = count
   ---calcul des totaux
