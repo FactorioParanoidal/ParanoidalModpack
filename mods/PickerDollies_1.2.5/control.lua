@@ -6,7 +6,7 @@ local Area = require("__stdlib__/stdlib/area/area")
 local Position = require("__stdlib__/stdlib/area/position")
 local Direction = require("__stdlib__/stdlib/area/direction")
 local Time = require("__stdlib__/stdlib/utils/defines/time")
-require("__stdlib__/stdlib/event/player").register_events(true)
+local Player = require("__stdlib__/stdlib/event/player").register_events(true)
 require("interface")
 assert(remote.interfaces[script.mod_name]["dolly_moved_entity_id"])
 Event.generate_event_name("dolly_moved")
@@ -117,7 +117,9 @@ end
 
 --- @param event EventData.PickerDollies.CustomInputEvent
 local function move_entity(event)
-    local player, pdata = game.get_player(event.player_index), global.players[event.player_index] ---@cast player -?
+    ---@type LuaPlayer?, PickerDollies.pdata
+    local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index)
+    if not player then return end
     local save_time = event.save_time or player.mod_settings["dolly-save-entity"].value --[[@as uint]]
     local entity = get_saved_entity(player, pdata, event.tick, save_time)
 
@@ -258,8 +260,9 @@ Event.register({ "dolly-move-north", "dolly-move-east", "dolly-move-south", "dol
 
 --- @param event EventData.CustomInputEvent
 local function try_rotate_oblong_entity(event)
-    local player, pdata = game.get_player(event.player_index), global.players[event.player_index]
-    ---@cast player -?
+    ---@type LuaPlayer?, PickerDollies.pdata
+    local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index)
+    if not player then return end
     if player.cursor_stack.valid_for_read or player.cursor_ghost then return end
 
     local save_time = player.mod_settings["dolly-save-entity"].value --[[@as uint]]
@@ -283,7 +286,7 @@ Event.register("dolly-rotate-rectangle", try_rotate_oblong_entity)
 --- @param event CustomInputEvent
 local function rotate_saved_dolly(event)
     ---@type LuaPlayer?, PickerDollies.pdata
-    local player, pdata = game.get_player(event.player_index), global.players[event.player_index] ---@cast player -?
+    local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index) ---@cast player -?
     if player.cursor_stack.valid_for_read or player.cursor_ghost or player.selected then return end
 
     local save_time = player.mod_settings["dolly-save-entity"].value --[[@as uint]]
@@ -305,7 +308,6 @@ end
 
 local function on_init()
     global = {} ---@type PickerDollies.global
-    global.players = {} ---@type PickerDollies.pdata
     global.blacklist_names = init_blacklist_names()
     global.oblong_names = init_oblong_names()
 end
@@ -313,7 +315,6 @@ Event.register(Event.core_events.on_init, on_init)
 
 local function on_configuration_changed()
     -- Make sure the blacklists exist.
-    global.players = global.players or {}
     global.blacklist_names = global.blacklist_names or init_blacklist_names()
     global.oblong_names = global.oblong_names or init_oblong_names()
 
