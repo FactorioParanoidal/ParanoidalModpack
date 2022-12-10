@@ -8,8 +8,17 @@ data:extend({
 	minimum_value = 0,
 	maximum_value = 365, --drd
 	order = "a"
-  },  
+  },
 
+   -- skp, drd
+   {
+	   type = "bool-setting",
+	   name = "bm-events-when-peaceful",
+	   setting_type = "runtime-global",
+	   default_value = false,
+	   order = "a"
+   },
+   -- skp, drd
 
   
 {
