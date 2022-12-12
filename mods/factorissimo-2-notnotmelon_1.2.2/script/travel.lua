@@ -6,7 +6,7 @@ local has_layout = Layout.has_layout
 
 local function find_connected_spidertron_remotes(player, e)
 	local inventory = player.get_main_inventory()
-	result = {}
+	local result = {}
 	for i = 0, #inventory do
 		local stack; if i == 0 then stack = player.cursor_stack else stack = inventory[i] end
 		if stack and stack.valid_for_read and stack.type == 'spidertron-remote' and stack.connected_entity == e then

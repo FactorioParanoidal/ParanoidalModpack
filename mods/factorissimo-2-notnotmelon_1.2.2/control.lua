@@ -19,8 +19,8 @@ require 'script.overlay'
 require 'script.pollution'
 require 'compat.factoriomaps'
 
-local update_hidden_techs = 0 -- Function stub
-local activate_factories = 0 -- Function stub
+local update_hidden_techs = nil -- Function stub
+local activate_factories = nil -- Function stub
 
 -- INITIALIZATION --
 
@@ -48,7 +48,7 @@ local function init_globals()
 	global.middleman_power_poles = global.middleman_power_poles or {}
 	-- Map: Surface name -> Whether radars are active
 	global.hidden_radars = global.hidden_radars or {}
-	
+
 	-- List of all spidertrons
 	global.spidertrons = {}
 	for _, surface in pairs(game.surfaces) do
@@ -97,7 +97,7 @@ end)
 local function remove_direct_connection(factory)
 	local dc = factory.direct_connection
 	if not dc or not dc.valid then return end
-	
+
 	for _, pole in pairs(factory.inside_power_poles) do
 		for _, neighbour in pairs(pole.neighbours.copper) do
 			if neighbour == dc then
@@ -142,11 +142,11 @@ local function available_pole(factory)
 			next.connect_neighbour(pole)
 		end
 	end
-	
+
 	for i, pole in ipairs(poles) do
 		if #pole.neighbours.copper < (i == #poles and 4 or 5) then return pole end
 	end
-	
+
 	local layout = factory.layout
 	local pole = factory.inside_surface.create_entity{name='factory-overflow-pole', position=poles[1].position, force=poles[1].force}
 	pole.destructible = false
@@ -162,27 +162,27 @@ local function connect_power(factory, pole)
 		return
 	end
 	factory.outside_power_pole = pole
-	
+
 	if factory.inside_surface.name ~= pole.surface.name then
 		available_pole(factory).connect_neighbour(pole)
 		factory.direct_connection = pole
 		return
 	end
-	
+
     local n
 	for i, pole in ipairs(global.middleman_power_poles) do
 		if pole == 0 then n = i break end
 	end
 	n = n or #global.middleman_power_poles + 1
-    
+
 	local surface = power_middleman_surface()
 	local middleman = surface.create_entity{name = 'factory-power-connection', position = {2*(n%32), 2*math.floor(n/32)}, force = 'neutral'}
 	middleman.destructible = false
 	global.middleman_power_poles[n] = middleman
-	
+
 	middleman.connect_neighbour(available_pole(factory))
 	middleman.connect_neighbour(pole)
-	
+
 	factory.middleman_id = n
 end
 
@@ -192,7 +192,7 @@ function update_power_connection(factory, pole) -- pole parameter is optional
 	local surface = factory.outside_surface
 	local x = factory.outside_x
 	local y = factory.outside_y
-	
+
     if not script.active_mods['factorissimo-power-pole-addon'] and global.surface_factory_counters[surface.name] then
 		local surrounding = find_surrounding_factory(surface, {x = x, y = y})
 		if surrounding then
@@ -200,7 +200,7 @@ function update_power_connection(factory, pole) -- pole parameter is optional
 			return
 		end
 	end
-	
+
 	-- find the nearest connected power pole
 	local D = game.max_electric_pole_supply_area_distance + factory.layout.outside_size / 2
 	local candidates = {}
@@ -209,7 +209,7 @@ function update_power_connection(factory, pole) -- pole parameter is optional
 			candidates[#candidates+1] = entity
 		end
 	end
-	
+
 	if #candidates == 0 then return end
 	connect_power(factory, surface.get_closest({x, y}, candidates))
 end
@@ -221,7 +221,7 @@ local function get_factories_near_pole(pole)
 	local position = pole.position
 	local x = position.x
 	local y = position.y
-	
+
 	local result = {}
 	for _, candidate in ipairs(pole.surface.find_entities_filtered{type=BUILDING_TYPE, area={{x-D, y-D}, {x+D,y+D}}}) do
 		if has_layout(candidate.name) then result[#result + 1] = get_factory_by_building(candidate) end
@@ -236,7 +236,7 @@ local function power_pole_placed(pole)
 		if not factory.inside_power_poles[1].valid then goto continue end
 		if electric_network == factory.inside_power_poles[1].electric_network_id then goto continue end
 		connect_power(factory, pole)
-		
+
 		::continue::
 	end
 end
@@ -248,13 +248,13 @@ local function power_pole_destroyed(pole)
 			old_neighbours[#old_neighbours + 1] = neighbour
 		end
 	end
-	
+
 	pole.disconnect_neighbour()
 	for _, factory in ipairs(get_factories_near_pole(pole)) do
 		update_power_connection(factory, pole)
 	end
 	cleanup_middlemen()
-	
+
 	for _, neighbour in pairs(old_neighbours) do
 		pole.connect_neighbour(neighbour)
 	end
@@ -281,7 +281,7 @@ script.on_event({defines.events.on_selected_entity_changed, defines.events.on_pl
 			permission = game.permissions.create_group()
 			player.permission_group = permission
 		end
-		
+
 		local has_cross_surface_connections = false
 		for _, neighbour in pairs(pole.neighbours.copper) do
 			if neighbour.surface ~= pole.surface then
@@ -291,7 +291,7 @@ script.on_event({defines.events.on_selected_entity_changed, defines.events.on_pl
 		end
 		permission.set_allows_action(defines.input_action.remove_cables, not has_cross_surface_connections)
 	end
-	
+
 	Camera.update_camera(player) -- also update camera here
 end)
 
@@ -311,13 +311,13 @@ local function update_destructible(factory)
 	end
 end
 
-local function create_factory_position()
+local function create_factory_position(layout)
 	global.next_factory_surface = global.next_factory_surface + 1
 	if (settings.global['Factorissimo2-same-surface'].value) then
 		global.next_factory_surface = 1
 	end
 	local surface_name = 'factory-floor-' .. global.next_factory_surface
-	local surface = game.surfaces[surface_name]
+	local surface = game.surfaces[layout.surface_override or surface_name]
 	if surface == nil then
         surface = game.create_surface(surface_name, {width = 2, height = 2})
         surface.daytime = 0.5
@@ -389,7 +389,7 @@ local function add_tile_mosaic(tiles, tile_name, xmin, ymin, xmax, ymax, pattern
 end
 
 local function create_factory_interior(layout, force)
-	local factory = create_factory_position()
+	local factory = create_factory_position(layout)
 	factory.layout = layout
 	factory.force = force
 	factory.inside_door_x = layout.inside_door_x + factory.inside_x
@@ -413,7 +413,7 @@ local function create_factory_interior(layout, force)
     }
 	power_pole.destructible = false
 	factory.inside_power_poles = {power_pole}
-    
+
     local radar = factory.inside_surface.create_entity{
         name = 'factory-hidden-radar',
         position = {factory.inside_x, factory.inside_y},
@@ -436,7 +436,7 @@ local function create_factory_interior(layout, force)
 	factory.connections = {}
 	factory.connection_settings = {}
 	factory.connection_indicators = {}
-	
+
 	return factory
 end
 
@@ -494,7 +494,7 @@ local function cleanup_factory_exterior(factory, building)
 	factory.outside_energy_receiver.destroy()
 	if factory.middleman_id then delete_middleman(factory.middleman_id) end
 	remove_direct_connection(factory)
-	
+
 	Connections.disconnect_factory(factory)
 	for _, render_id in pairs(factory.outside_overlay_displays) do rendering.destroy(render_id) end
 	factory.outside_overlay_displays = {}
@@ -530,7 +530,7 @@ local function cancel_creation(entity, player_index, message)
 	local surface = entity.surface
 	local position = entity.position
 	local force = entity.force
-	
+
 	if player_index then
 		local player = game.get_player(player_index)
 		if player.mine_entity(entity, false) then
@@ -539,13 +539,13 @@ local function cancel_creation(entity, player_index, message)
 			inserted = player.insert(item_to_place)
 		end
 	end
-	
+
 	entity.destroy{raise_destroy = true}
-	
+
 	if inserted == 0 and item_to_place then
 		surface.spill_item_stack(position, item_to_place, true, force, false)
 	end
-	
+
 	if message then
 		surface.create_entity{
 			name = 'flying-text',
@@ -577,7 +577,7 @@ end
 local function recheck_nearby_connections(entity, delayed)
 	local surface = entity.surface
     local pos = entity.position
-	
+
 	local sbox = table.deepcopy(entity.prototype.selection_box)
 	local orientation = entity.orientation
 	if orientation == 0 then -- north
@@ -590,13 +590,13 @@ local function recheck_nearby_connections(entity, delayed)
 		sbox.left_top.y, sbox.right_bottom.y = -sbox.right_bottom.y, -sbox.left_top.y
 		sbox.left_top.y, sbox.left_top.x, sbox.right_bottom.x, sbox.right_bottom.y = -sbox.right_bottom.x, -sbox.right_bottom.y, -sbox.left_top.y, -sbox.left_top.x
 	end
-	
+
 	-- Expand box to catch factories and also avoid illegal zero-area finds
 	local bbox = {
 		left_top = {x = pos.x - 0.3 + sbox.left_top.x, y = pos.y - 0.3 + sbox.left_top.y},
 		right_bottom = {x = pos.x + 0.3 + sbox.right_bottom.x, y = pos.y + 0.3 + sbox.right_bottom.y}
 	}
-	
+
 	for _, candidate in pairs(surface.find_entities_filtered{area = bbox, type = BUILDING_TYPE}) do
 		if candidate ~= entity and has_layout(candidate.name) then
 			local factory = get_factory_by_building(candidate)
@@ -665,7 +665,7 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
 			local pipe_name = pipe_name_input or pipe_name_output
 			if pipe_name then entity = remote_api.replace_entity(entity, pipe_name) end
 		end
-		
+
 		recheck_nearby_connections(entity)
 	elseif entity.type == 'electric-pole' then
 		power_pole_placed(entity)
@@ -771,7 +771,7 @@ script.on_event(defines.events.on_entity_died, function(event)
 		if not factory then return end
 		global.saved_factories[factory.id] = factory
 		cleanup_factory_exterior(factory, entity)
-		
+
 		local item = entity.surface.create_entity{
 			name = 'item-on-ground',
 			position = entity.position,
@@ -856,7 +856,7 @@ script.on_nth_tick(180, function(event)
 			has_players[player.surface.name] = true
 		end
 	end
-	
+
 	for surface, _ in pairs(global.surface_factory_counters) do
 		surface = game.get_surface(surface)
 		local players = not not has_players[surface.name]
@@ -973,7 +973,7 @@ end)
 
 activate_factories = function()
 	for _, factory in pairs(global.factories) do
-		factory.inactive = not can_place_factory_here(
+		factory.inactive = factory.outside_surface.valid and not can_place_factory_here(
 			factory.layout.tier,
 			factory.outside_surface,
 			{x = factory.outside_x, y = factory.outside_y}
