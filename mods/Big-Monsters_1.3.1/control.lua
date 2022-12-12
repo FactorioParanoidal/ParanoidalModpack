@@ -146,7 +146,12 @@ if not the_event then the_event=pick_event() end
 
 for p=1,#global.player_forces do
 	local pforce = game.forces[global.player_forces[p]]
-	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then 
+	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then
+		--DRD
+		if surface.peaceful_mode and not settings.global["bm-events-when-peaceful"].value then
+			break
+		end
+		--DRD
 		local player_spawn = pforce.get_spawn_position(surface)
 		local pcount = #pforce.connected_players 
 	    
@@ -323,6 +328,11 @@ return spawn
 end
 
 function Create_Position_Event(the_event, surface, position, pforce)
+	--DRD
+	if surface.peaceful_mode and not settings.global["bm-events-when-peaceful"].value then
+		return
+	end
+	--DRD
 local pcount = #pforce.connected_players  
 			
 			if the_event=='swarm' then 

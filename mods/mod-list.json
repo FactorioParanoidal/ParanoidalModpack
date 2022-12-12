@@ -9,11 +9,6 @@
     },
     
     {
-      "name": "1000sounds",
-      "enabled": true
-    },
-    
-    {
       "name": "aai-industry",
       "enabled": true
     },
@@ -329,7 +324,7 @@
     },
     
     {
-      "name": "Factorissimo2",
+      "name": "factorissimo-2-notnotmelon",
       "enabled": true
     },
     
@@ -389,12 +384,12 @@
     },
     
     {
-      "name": "InfiniteTech",
+      "name": "immersive-sounds",
       "enabled": true
     },
     
     {
-      "name": "InlaidLampsExtended",
+      "name": "InfiniteTech",
       "enabled": true
     },
     
@@ -414,11 +409,6 @@
     },
     
     {
-      "name": "Kux-OrbitalIonCannon",
-      "enabled": true
-    },
-    
-    {
       "name": "laser_fix",
       "enabled": true
     },
@@ -430,11 +420,6 @@
     
     {
       "name": "LightedPolesPlus",
-      "enabled": true
-    },
-    
-    {
-      "name": "logistic-memory-units",
       "enabled": true
     },
     
@@ -475,6 +460,11 @@
     
     {
       "name": "marathon",
+      "enabled": true
+    },
+    
+    {
+      "name": "MaxRateCalculator",
       "enabled": true
     },
     
@@ -524,11 +514,6 @@
     },
     
     {
-      "name": "MultipleUnitTrainControl",
-      "enabled": true
-    },
-    
-    {
       "name": "MxlChievements",
       "enabled": true
     },
@@ -540,6 +525,11 @@
     
     {
       "name": "Nanobots",
+      "enabled": true
+    },
+    
+    {
+      "name": "nco-InserterCranes",
       "enabled": true
     },
     
@@ -570,6 +560,11 @@
     
     {
       "name": "OberNuclear",
+      "enabled": true
+    },
+    
+    {
+      "name": "Oil_Based_Paint",
       "enabled": true
     },
     
@@ -654,7 +649,17 @@
     },
     
     {
+      "name": "PipeVisualizer",
+      "enabled": true
+    },
+    
+    {
       "name": "platforms",
+      "enabled": true
+    },
+    
+    {
+      "name": "pollution-visuals",
       "enabled": true
     },
     
@@ -824,11 +829,6 @@
     },
     
     {
-      "name": "SmogVisualPollution",
-      "enabled": true
-    },
-    
-    {
       "name": "SpaceMod",
       "enabled": true
     },
@@ -915,6 +915,11 @@
     
     {
       "name": "Warehousing",
+      "enabled": true
+    },
+    
+    {
+      "name": "Warheads",
       "enabled": true
     },
     
