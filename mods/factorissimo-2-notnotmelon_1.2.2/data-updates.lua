@@ -41,6 +41,7 @@ local function factory_pipe(pipe, base_level, suffix)
 	if mods['space-exploration'] and not pipe.localised_description then new.localised_description = {'entity-description.' .. pipe.name} end
 	new.fluid_box.height = (pipe.fluid_box.height or 1) * 25
 	new.fluid_box.base_level = new.fluid_box.height * base_level
+	new.next_upgrade = nil
 
 	local mine = new.minable
 	if mine and not new.placeable_by then

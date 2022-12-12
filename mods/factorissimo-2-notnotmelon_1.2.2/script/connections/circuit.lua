@@ -15,7 +15,7 @@ Circuit.connect = function(factory, cid, cpos, outside_entity, inside_entity)
 		for i, pole in ipairs(middle) do if pole == 0 then n = i end end
 		
 		local surface = remote_api.power_middleman_surface()
-		middleman = surface.create_entity{name = 'factory-power-connection', position = {-2*(n%32)-2, 2*math.floor(n/32)}, force = 'neutral'}
+		local middleman = surface.create_entity{name = 'factory-power-connection', position = {-2*(n%32)-2, 2*math.floor(n/32)}, force = 'neutral'}
 		middleman.destructible = false
 		middle[n] = middleman
 		

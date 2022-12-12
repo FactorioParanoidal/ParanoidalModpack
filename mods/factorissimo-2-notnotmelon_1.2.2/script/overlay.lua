@@ -4,7 +4,7 @@ local function build_display_upgrade(factory)
 	if not factory.force.technologies['factory-interior-upgrade-display'].researched then return end
 	if factory.inside_overlay_controller and factory.inside_overlay_controller.valid then return end
 
-	pos = factory.layout.overlays
+	local pos = factory.layout.overlays
 	local controller = factory.inside_surface.create_entity{
 		name = 'factory-overlay-controller',
 		position = {
@@ -70,7 +70,7 @@ local function get_nice_overlay_arrangement(width, height, amount)
 		end
 	end
 	-- Adjust scale to ensure that sprites do not become too big
-	opt_scale = math.pow(opt_scale, 0.8) * math.pow(1.5, 0.8 - 1)
+	opt_scale = (opt_scale ^ 0.8) * (1.5 ^ (0.8 - 1))
 	-- Create evenly spaced coordinates
 	local result = {}
 	for i = 0, amount-1 do

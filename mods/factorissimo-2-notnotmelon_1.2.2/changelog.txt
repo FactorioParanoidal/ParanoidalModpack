@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022.12.9
+  Info:
+    - Fixed a crash with K2+SE
+    - Added layout.surface_override to layout API https://mods.factorio.com/mod/space-factorissimo-updated/discussion/62f24d587d4d88d0f006c738
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022.12.9
+  Info:
+    - Fixed a crash with SE https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/638a256cb94c53001f98940f
+---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022.11.30
   Info:
