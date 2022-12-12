@@ -1,13 +1,12 @@
 {
   "name": "pollution-visuals",
-  "version": "0.2.6",
-  
+  "version": "0.2.7",
   "title": "pollution visuals",
   "description": "heavilly polluted areas will now contain clouds of smog, (please report bugs to me)",
-  
   "author": "Downey",
   "license": "MIT",
-  
-  "dependencies": ["base"],
+  "dependencies": [
+    "base"
+  ],
   "factorio_version": "1.1"
 }

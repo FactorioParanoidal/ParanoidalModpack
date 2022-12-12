@@ -32,7 +32,7 @@ Date: 15-08-2022
 Version: 0.2.2
 Date: 16-08-2022
   Changes:
-    - changed the pollution thresholds to a exponential funtion insteat of a linear one
+    - changed the pollution thresholds to a exponential funtion instead of a linear one
     - added configurable settings like chunks per tick and parameters for smog thickness.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.3
@@ -54,4 +54,9 @@ Date: 20-08-2022
 Version: 0.2.6
 Date: 21-08-2022
   Changes:
-    - fix crash caused by assinging the wrong index on setup phase
+    - fix crash caused by assigning the wrong index on setup phase
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 08-12-2022
+  Changes:
+    - fix compatability issue with RSO (made possible by SKProCH)
