@@ -566,7 +566,7 @@
 	--tick
 		script.on_event(defines.events.on_tick, function(event)
 			--Set controls
-			if not PI_general.isControlSet then 
+			if game.players[1] ~= nil and not PI_general.isControlSet then
 				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
 				PI_general.isAdmin = true
 				PI_set_controls(game.players[1])
