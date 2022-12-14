@@ -329,6 +329,11 @@
     },
     
     {
+      "name": "FactorySearch",
+      "enabled": true
+    },
+    
+    {
       "name": "FastRemoveTiles",
       "enabled": true
     },
