@@ -1,0 +1,16 @@
+{
+  "name": "m_WhereIsMyBody",
+  "version": "2.7.1",
+  "title": "Where Is My Body",
+  "description": "see locale/*",
+  "author": "ZwerOxotnik",
+  "contact": "zweroxotnik@gmail.com, Discord:ZwerOxotnik#7117",
+	"homepage": "reddit.com/r/ZwerOxotnik/",
+  "license": "MIT",
+  "dependencies": [
+		"? zk-lib >= 0.10.0",
+		"? gvv",
+		"base"
+	],
+  "factorio_version": "1.1"
+}
