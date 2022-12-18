@@ -36,10 +36,9 @@ local blacklist_types = {
     ["fluid-wagon"]        = true,
 }
 
-local copper_wire_types = {
-    ["electric-pole"] = true,
-    ["power-switch"]  = true
-}
+local blacklist_names = { ["pumpjack"] = true }
+local oblong_names = { ["arithmetic-combinator"] = true, ["decider-combinator"] = true, ["pump"] = true }
+local copper_wire_types = { ["electric-pole"] = true, ["power-switch"] = true }
 
 local input_to_direction = {
     ["dolly-move-north"] = defines.direction.north,
@@ -54,6 +53,14 @@ local oblong_diags = {
     [defines.direction.west]  = defines.direction.southwest,
     [defines.direction.east]  = defines.direction.southwest
 }
+
+--- @param t table
+--- @return table
+local function table_copy(t)
+    local t2 = {}
+    for k, v in pairs(t) do t2[k] = v end
+    return t2
+end
 
 --- @param player LuaPlayer
 --- @param position MapPosition
@@ -120,9 +127,9 @@ local function move_entity(event)
     ---@type LuaPlayer?, PickerDollies.pdata
     local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index)
     if not player then return end
+
     local save_time = event.save_time or player.mod_settings["dolly-save-entity"].value --[[@as uint]]
     local entity = get_saved_entity(player, pdata, event.tick, save_time)
-
     if entity then
         local cheat_mode = player.cheat_mode
 
@@ -141,11 +148,15 @@ local function move_entity(event)
             return flying_text(player, text, entity.position)
         end
 
-        local prototype = entity.prototype
         local surface = entity.surface
+        local start_pos = Position(event.start_pos or entity.position) -- Where we started from in case we have to return it
+        if surface.find_entity("rocket-silo-rocket", start_pos) then
+            return flying_text(player, { "picker-dollies.rocket-present", entity.localised_name }, start_pos)
+        end
+
+        local prototype = entity.prototype
         local direction = event.direction or input_to_direction[event.input_name] -- Direction to move the source
         local distance = (event.distance or 1) * prototype.building_grid_bit_shift -- Distance to move the source, defaults to 1
-        local start_pos = Position(event.start_pos or entity.position) -- Where we started from in case we have to return it
         local target_direction = event.target_direction or entity.direction
         local target_pos = start_pos:translate(direction, distance) -- Where we want to go too
         local target_box = Area(entity.selection_box):translate(direction, distance) -- Target selection box location
@@ -177,10 +188,9 @@ local function move_entity(event)
         --- @param raise boolean Teleportation was successfull raise event
         --- @param reason? LocalisedString
         local function teleport_and_update(pos, raise, reason)
-            -- - @cast start_pos MapPosition
             if entity.last_user then entity.last_user = player end
 
-            -- Final teleport into position. Ignore final_teloportation if we are not raising
+            -- Final teleport into position. Ignore final_teleportation if we are not raising
             if not (raise and final_teleportation) then
                 if event.start_direction then
                     entity.direction = event.start_direction
@@ -210,6 +220,8 @@ local function move_entity(event)
             local proxy = surface.find_entity("item-request-proxy", start_pos)
             if proxy and proxy.valid then proxy.teleport(entity.position) end
 
+            ---@todo Move any rocket-silo-rockets instead of blocking
+
             -- Update all connections
             local updateable_entities = surface.find_entities_filtered { area = target_box:expand(32), force = entity_force }
             for _, updateable in pairs(updateable_entities) do updateable.update_connections() end
@@ -229,6 +241,7 @@ local function move_entity(event)
             inner_name = entity.name == "entity-ghost" and entity.ghost_name
         }
 
+        ---@todo Check for ghosts marked for deconstruction
         local allow_collisions = settings.global["dolly-allow-ignore-collisions"].value
         if not (allow_collisions and player.mod_settings["dolly-ignore-collisions"].value) and
             not (surface.can_place_entity(can_place_params) and not surface.find_entity("entity-ghost", target_pos)) then
@@ -245,7 +258,7 @@ local function move_entity(event)
         if entity.type == "mining-drill" then
             if not final_teleportation then entity.teleport(target_pos) end
             final_teleportation = true
-            local area = target_pos:expand_to_area(prototype.mining_drill_radius)
+            local area = target_pos:expand_to_area(prototype.mining_drill_radius) --[[@as BoundingBox]]
             local resource_name = entity.mining_target and entity.mining_target.name or nil
             local count = entity.surface.count_entities_filtered { area = area, type = "resource", name = resource_name }
             if count == 0 then
@@ -258,12 +271,11 @@ local function move_entity(event)
 end
 Event.register({ "dolly-move-north", "dolly-move-east", "dolly-move-south", "dolly-move-west" }, move_entity)
 
---- @param event EventData.CustomInputEvent
+--- @param event EventData.PickerDollies.CustomInputEvent
 local function try_rotate_oblong_entity(event)
     ---@type LuaPlayer?, PickerDollies.pdata
     local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index)
-    if not player then return end
-    if player.cursor_stack.valid_for_read or player.cursor_ghost then return end
+    if not player or (player and (player.cursor_stack.valid_for_read or player.cursor_ghost)) then return end
 
     local save_time = player.mod_settings["dolly-save-entity"].value --[[@as uint]]
     local entity = get_saved_entity(player, pdata, event.tick, save_time)
@@ -271,7 +283,6 @@ local function try_rotate_oblong_entity(event)
     if not (global.oblong_names[entity.name] and not is_blacklisted(entity)) then return end
     if not (player.cheat_mode or player.can_reach_entity(entity)) then return end
 
-    ---@cast event EventData.PickerDollies.CustomInputEvent
     save_entity(pdata, entity, event.tick, save_time)
     event.save_time = save_time
     event.start_pos = entity.position
@@ -283,7 +294,7 @@ local function try_rotate_oblong_entity(event)
 end
 Event.register("dolly-rotate-rectangle", try_rotate_oblong_entity)
 
---- @param event CustomInputEvent
+--- @param event EventData.PickerDollies.CustomInputEvent
 local function rotate_saved_dolly(event)
     ---@type LuaPlayer?, PickerDollies.pdata
     local player, pdata = game.get_player(event.player_index), Player.pdata(event.player_index) ---@cast player -?
@@ -298,25 +309,16 @@ local function rotate_saved_dolly(event)
 end
 Event.register({ "dolly-rotate-saved", "dolly-rotate-saved-reverse" }, rotate_saved_dolly)
 
-local function init_blacklist_names()
-    return { ["pumpjack"] = true }
-end
-
-local function init_oblong_names()
-    return { ["arithmetic-combinator"] = true, ["decider-combinator"] = true, ["pump"] = true }
-end
-
 local function on_init()
-    global = {} ---@type PickerDollies.global
-    global.blacklist_names = init_blacklist_names()
-    global.oblong_names = init_oblong_names()
+    global.blacklist_names = table_copy(blacklist_names)
+    global.oblong_names = table_copy(oblong_names)
 end
 Event.register(Event.core_events.on_init, on_init)
 
 local function on_configuration_changed()
     -- Make sure the blacklists exist.
-    global.blacklist_names = global.blacklist_names or init_blacklist_names()
-    global.oblong_names = global.oblong_names or init_oblong_names()
+    global.blacklist_names = global.blacklist_names or table_copy(blacklist_names)
+    global.oblong_names = global.oblong_names or table_copy(oblong_names)
 
     -- Remove any invalid prototypes from the blacklists.
     for name in pairs(global.blacklist_names) do
