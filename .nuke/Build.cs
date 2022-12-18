@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
 using Serilog;
-using Serilog.Events;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-class Build : NukeBuild {
+partial class Build : NukeBuild {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -20,7 +21,8 @@ class Build : NukeBuild {
     [GitRepository] public GitRepository GitRepo;
 
     Target PrintInfo => _ => _
-        .Executes(() => {
+        .Executes(() =>
+        {
             Log.Information(RootDirectory);
             Log.Information("Branch: {BranchName}", GitRepo.Branch);
             Log.Information("Commit: {CommitHash}", GitRepo.Commit);
@@ -36,7 +38,8 @@ class Build : NukeBuild {
         });
 
     Target PrepareHeadless => _ => _
-        .Executes(async () => {
+        .Executes(async () =>
+        {
             if (!OperatingSystem.IsLinux()) {
                 Log.Warning("Seems like you are running on non-linux os");
                 Log.Warning("Factorio headless server will only available for linux!");
@@ -71,7 +74,7 @@ class Build : NukeBuild {
         {
             var requiredFactorioVersion = GetRequiredFactorioVersion();
             var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion.ToString(), "factorio");
-            
+
             // Linking mods
             if (!Directory.Exists(Path.Combine(headlessPath, "mods"))) {
                 Directory.CreateSymbolicLink(Path.Combine(headlessPath, "mods"), Path.Combine(RootDirectory, "mods"));
@@ -81,14 +84,37 @@ class Build : NukeBuild {
             await EnsureFactorioServerCanLaunch(headlessPath);
         });
 
+    Target ZipMods => _ => _
+        .Executes(() =>
+        {
+            var targetDirectory = RootDirectory / "zipped-mods";
+            Log.Information("Zipping mods to {targetDirectory}", targetDirectory);
+            FileSystemTasks.EnsureCleanDirectory(targetDirectory);
+
+            var mods = Directory.EnumerateDirectories(RootDirectory / "mods");
+            Parallel.ForEach(mods, (modPath, _) =>
+            {
+                var modName = Path.GetFileName(modPath).Split("_").First();
+                try {
+                    var modVersion = new FactorioMod(modPath).GetModVersion();
+                    var modZipPath = targetDirectory / $"{modName}_{modVersion}.zip";
+                    Log.Information("Zipping {modName} to {modZipPath}", modName, modZipPath);
+                    Zip(modZipPath, modPath);
+                }
+                catch (Exception e) {
+                    Log.Error("Failed to get version of mod {modName}, due to {reason}", modName, e.Message);
+                }
+            });
+        });
+
     async Task EnsureFactorioServerCanLaunch(string factorioServerLocation) {
         Assert.True(OperatingSystem.IsLinux(), "Factorio can be started only on linux");
-        
+
         File.Delete(Path.Combine(factorioServerLocation, "non-existent-save"));
-        
+
         var serverFile = Path.Combine(factorioServerLocation, "bin/x64/factorio");
         Utils.Chmod(serverFile);
-        
+
         Log.Information("Starting factorio server");
         var processStartInfo = new ProcessStartInfo() {
             UseShellExecute = false,
@@ -98,7 +124,7 @@ class Build : NukeBuild {
         };
         using var process = Process.Start(processStartInfo).NotNull("Process.Start(processStartInfo) != null");
         process!.BeginOutputReadLine();
-        
+
         var factorioInitialized = false;
         Log.Debug("Redirection Factorio output:");
         process!.OutputDataReceived += (sender, args) =>
@@ -111,7 +137,7 @@ class Build : NukeBuild {
                 process.Kill(true);
             }
         };
-        
+
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(15));
         try {
             await process.WaitForExitAsync(cancellationTokenSource.Token);

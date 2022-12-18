@@ -5,7 +5,6 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Nuke.Common;
 using Nuke.Common.Utilities;
-
 public class FactorioMod {
     private string _modPath;
     public FactorioMod(string path) {
@@ -19,9 +18,15 @@ public class FactorioMod {
         return JObject.Parse(infoText);
     }
 
+    public Version GetModVersion() {
+        var info = GetModInfo();
+        var version = info["version"];
+        return new Version(version!.ToString());
+    }
+
     public IEnumerable<string> GetDependencies() {
         var modInfo = GetModInfo();
-        return modInfo.Property("dependencies").First().ToObject<List<string>>();
+        return modInfo.Property("dependencies")!.First().ToObject<List<string>>()!;
     }
 
     public Version GetDependsOnFactorioVersion() {

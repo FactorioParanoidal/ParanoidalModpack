@@ -65,7 +65,8 @@
             "enum": [
               "EnsureLaunchability",
               "PrepareHeadless",
-              "PrintInfo"
+              "PrintInfo",
+              "ZipMods"
             ]
           }
         },
@@ -77,7 +78,8 @@
             "enum": [
               "EnsureLaunchability",
               "PrepareHeadless",
-              "PrintInfo"
+              "PrintInfo",
+              "ZipMods"
             ]
           }
         },
