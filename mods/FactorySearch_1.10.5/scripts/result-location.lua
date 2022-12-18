@@ -152,7 +152,7 @@ function ResultLocation.open(player, data)
     end
   if not remote_view_used then
     if surface_name == player.surface.name then
-      player.zoom_to_world(position, zoom_level)
+      player.zoom_to_world(position, zoom_level * player.display_resolution.width / 1920)
     else
       player.play_sound{path = "utility/cannot_build"}
       player.create_local_flying_text{text = {"search-gui.wrong-surface"}, create_at_cursor = true}

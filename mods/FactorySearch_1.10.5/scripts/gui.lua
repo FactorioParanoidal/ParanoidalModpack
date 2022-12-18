@@ -279,7 +279,6 @@ function Gui.build(player)
       style_mods = { maximal_height = 800 },
       actions = {
         on_closed = { gui = "search", action = "close" },
-        on_location_changed = { gui = "search", action = "update_dimmer_location" },
       },
       children = {
         {

@@ -6,8 +6,8 @@ local search_shortcut = {
   toggleable = true,
   order = "a",
   icon = {
-    filename = "__core__/graphics/icons/search-black.png",
-    size = 32,
+    filename = "__FactorySearch__/graphics/search-black.png",
+    size = 26,
     flags = {"gui-icon"}
   },
   --[[small_icon = {
@@ -16,8 +16,8 @@ local search_shortcut = {
     flags = {"gui-icon"}
   },]]
   disabled_icon = {
-    filename = "__core__/graphics/icons/search-white.png",
-    size = 32,
+    filename = "__FactorySearch__/graphics/search-white.png",
+    size = 26,
     flags = {"gui-icon"}
   },
   --[[disabled_small_icon =
