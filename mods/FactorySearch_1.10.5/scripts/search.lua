@@ -23,8 +23,12 @@ local mod_placeholder_entities = {
   ['sp-spidertron-dock'] =  -- SpidertronPatrols
     {'sp-spidertron-dock-0', 'sp-spidertron-dock-30', 'sp-spidertron-dock-80', 'sp-spidertron-dock-100'},
 
-  ['raw-rare-metals'] = 'rare-metals',
-  ['raw-imersite'] = 'imersite',
+  ['po-interface'] =  -- PowerOverload
+    {'po-interface', 'po-interface-north', 'po-interface-east', 'po-interface-south'},
+
+  ['raw-rare-metals'] = 'rare-metals',  -- Krastorio2
+  ['raw-imersite'] = 'imersite',  -- Krastorio2
+  ['bitumen'] = 'bitumen-seep',  -- Pyanodons
 
   ['offshore-pump-0'] = 'offshore-pump-0',  -- P-U-M-P-S
   ['offshore-pump-1'] = 'offshore-pump-1',
@@ -509,7 +513,8 @@ function Search.on_tick()
     return
   end
   local chunks_processed = 0
-  while chunks_processed < 20 do
+  local chunks_per_tick = settings.global["fs-chunks-per-tick"].value
+  while chunks_processed < chunks_per_tick do
     local chunk = chunk_iterator()
     if not chunk then
       -- Surface is complete

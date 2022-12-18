@@ -24,7 +24,7 @@ Check out Xterminator's mod spotlight [here](https://youtu.be/_60XPAT3uas).
     - Storage: Search for containers that contain this item or fluid
     - Logistics: Search for logistics entities that are transporting this item
     - Module: Search for machines that are using this module
-    - Entity: Search for built entities of this item
+    - Entity: Search for built entities of this item, including resource patches
     - Ground: Search for this item on the ground
     - Request: Search for logistic containers that are requesting this item
     - Signal: Search for entities that are sending this signal (due to API limitations, some types of entity can't be searched for by signal)
