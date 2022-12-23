@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Nuke.Common;
@@ -94,15 +93,14 @@ partial class Build : NukeBuild {
             var mods = Directory.EnumerateDirectories(RootDirectory / "mods");
             Parallel.ForEach(mods, (modPath, _) =>
             {
-                var modName = Path.GetFileName(modPath).Split("_").First();
+                var mod = new FactorioMod(modPath);
                 try {
-                    var modVersion = new FactorioMod(modPath).GetModVersion();
-                    var modZipPath = targetDirectory / $"{modName}_{modVersion}.zip";
-                    Log.Information("Zipping {modName} to {modZipPath}", modName, modZipPath);
+                    var modZipPath = targetDirectory / $"{mod.GetInternalName()}_{mod.GetModVersion()}.zip";
+                    Log.Information("Zipping {modName} to {modZipPath}", mod.GetInternalName(), modZipPath);
                     Zip(modZipPath, modPath);
                 }
                 catch (Exception e) {
-                    Log.Error("Failed to get version of mod {modName}, due to {reason}", modName, e.Message);
+                    Log.Error("Failed to get version of mod {modName}, due to {reason}", mod.GetInternalName(), e.Message);
                 }
             });
         });
