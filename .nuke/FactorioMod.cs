@@ -7,15 +7,18 @@ using Nuke.Common;
 using Nuke.Common.Utilities;
 public class FactorioMod {
     private string _modPath;
+    JObject? _cachedModInfo;
     public FactorioMod(string path) {
         Assert.DirectoryExists(path, "Required mod directory does not exists");
         _modPath = path;
     }
 
     private JObject GetModInfo() {
+        if (_cachedModInfo != null) return _cachedModInfo;
         var infoPath = Path.Combine(_modPath, "info.json");
         var infoText = File.ReadAllText(infoPath);
-        return JObject.Parse(infoText);
+        _cachedModInfo = JObject.Parse(infoText);
+        return _cachedModInfo;
     }
 
     public Version GetModVersion() {
@@ -34,5 +37,9 @@ public class FactorioMod {
         var versionString = GetDependencies().FirstOrDefault(s => s.StartsWith("base"))?[8..]
                          ?? GetModInfo().GetPropertyStringValue("factorio_version");
         return Version.Parse(versionString);
+    }
+    public string GetInternalName() {
+        var modInfo = GetModInfo();
+        return modInfo.Property("name")!.ToObject<string>()!;
     }
 }
