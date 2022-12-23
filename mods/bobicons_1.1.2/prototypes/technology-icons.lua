@@ -242,6 +242,7 @@ data.raw.technology["raw-productivity-module-7"].icon = "__bobicons__/graphics/t
 data.raw.technology["raw-productivity-module-8"].icon_size = 128
 data.raw.technology["raw-productivity-module-8"].icon = "__bobicons__/graphics/technology/modules/productivity-module-8.png"
 
+if data.raw["module"]["god-module-1"] then
 data.raw.technology["god-module-1"].icon_size = 128
 data.raw.technology["god-module-1"].icon = "__bobicons__/graphics/technology/modules/god-module-1.png"
 data.raw.technology["god-module-2"].icon_size = 128
@@ -252,6 +253,7 @@ data.raw.technology["god-module-4"].icon_size = 128
 data.raw.technology["god-module-4"].icon = "__bobicons__/graphics/technology/modules/god-module-4.png"
 data.raw.technology["god-module-5"].icon_size = 128
 data.raw.technology["god-module-5"].icon = "__bobicons__/graphics/technology/modules/god-module-5.png"
+end
 
 -- SCIENCE --
 data.raw.technology["advanced-logistic-science-pack"].icons = nil
