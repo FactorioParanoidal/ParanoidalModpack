@@ -45,6 +45,21 @@ local function sanitseWarhead(key, warhead)
   result.warhead.recipe.ingredients = warhead.ingredients
   result.warhead.recipe.results = {{type="item", name=key, amount = warhead.recipe_result_count or 1}}
 
+  local recipeIngreds = {}
+  for _,i in pairs(result.warhead.recipe.ingredients) do
+    local ingName = (i.name or i[1])
+    local ingAmount = (i.amount or i[2])
+    
+    if(recipeIngreds[ingName]~=nil)then
+      recipeIngreds[ingName] = recipeIngreds[ingName] + ingAmount
+    else
+      recipeIngreds[ingName] = ingAmount
+    end
+  end
+  result.warhead.recipe.ingredients = {}
+  for ingName,ingAmount in pairs(recipeIngreds) do
+    table.insert(result.warhead.recipe.ingredients, {ingName,ingAmount})
+  end
   if warhead.tint then
     result.warhead.recipe.crafting_machine_tint = warhead.tint
   end
