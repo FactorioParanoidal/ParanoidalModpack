@@ -3,7 +3,7 @@
 ------------------
 
 -- Host local variables
-local icons_path = OSM.lib.icons_path.."core/"
+local icons_path = OSM.lib.graphics.."/icons/core/"
 
 -- Make item group [removed items]
 local item_group =

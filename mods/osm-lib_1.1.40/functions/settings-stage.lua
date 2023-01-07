@@ -1,7 +1,8 @@
 ----------------------
 ---- settings.lua ----
 ----------------------
-
+if not OSM then OSM = {} end
+if not OSM.lib then OSM.lib = {} end
 if not OSM.lib.setting then OSM.lib.setting = {} end
 
 -- Hide setting

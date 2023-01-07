@@ -1,0 +1,12 @@
+{
+	"name": "osm-lib",
+	"version": "1.1.40",
+	"factorio_version": "1.1",
+	"title": "OSM-Lib",
+	"author": "OldSkoolMatt",
+	"dependencies":
+	[
+		"base >= 1.1"
+	],
+	"description": "I finally decided to rely on my own function library,\nYES! THAT'S CORRECT! MY OWN FUNCTION LIBRARY!\n\nREQUIRES Osm-Lib PostProcess"
+}
