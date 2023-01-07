@@ -16,5 +16,15 @@ function fillPyalienlifeConfig194(config)
 		--              0 = resource is not in starting area
 		starting={richness=8000, size=25, probability=1}
 	}
+
+	config["ore-nexelit"] = {
+		type="resource-ore",
+		
+		allotment=80,
+		spawns_per_region={min=1, max=1},
+		richness=25000,
+		size={min=20, max=30},
+		min_amount=250,
+	}
 	
 end
