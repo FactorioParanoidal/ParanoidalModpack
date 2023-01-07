@@ -18,8 +18,9 @@ local function gen_slot(x, y, default_offset)
     hovered_graphical_set = {
       base = { border = 4, position = { x + 80, y }, size = 80, filename = slot_tileset },
     },
-    clicked_graphical_set = {},
-    base = { border = 4, position = { x + 160, y }, size = 80, filename = slot_tileset },
+    clicked_graphical_set = {
+      base = { border = 4, position = { x + 160, y }, size = 80, filename = slot_tileset },
+    },
     disabled_graphical_set = { -- identical to default graphical set
       base = { border = 4, position = { x + default_offset, y }, size = 80, filename = slot_tileset },
     },
@@ -119,6 +120,9 @@ styles.flib_selected_frame_action_button = {
     base = { position = { 352, 17 }, corner_size = 8 },
     shadow = { position = { 440, 24 }, corner_size = 8, draw_type = "outer" },
   },
+  -- Simulate clicked-vertical-offset
+  top_padding = 1,
+  bottom_padding = -1,
 }
 
 local btn = styles.button
@@ -132,6 +136,9 @@ styles.flib_selected_tool_button = {
   hovered_graphical_set = btn.selected_hovered_graphical_set,
   clicked_font_color = btn.selected_clicked_font_color,
   clicked_graphical_set = btn.selected_clicked_graphical_set,
+  -- Simulate clicked-vertical-offset
+  top_padding = 1,
+  bottom_padding = -1,
 }
 
 styles.flib_tool_button_light_green = {
