@@ -1,9 +1,9 @@
-local math = require("__flib__.math")
-local table = require("__flib__.table")
+local math = require("__flib__/math")
+local table = require("__flib__/table")
 
-local constants = require("constants")
+local constants = require("__QuickItemSearch__/constants")
 
-local search = require("scripts.search")
+local search = require("__QuickItemSearch__/scripts/search")
 
 local logistic_request = {}
 

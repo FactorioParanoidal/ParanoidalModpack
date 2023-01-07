@@ -1,6 +1,6 @@
-local table = require("__flib__.table")
+local table = require("__flib__/table")
 
-local search = require("scripts.search")
+local search = require("__QuickItemSearch__/scripts/search")
 
 local infinity_filter = {}
 

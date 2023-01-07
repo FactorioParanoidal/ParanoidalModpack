@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2022-12-26
+  Information:
+    - Quick Item Search is now soft-deprecated, and will receive no further updates unless a crash is found
+  Changes:
+    - Cleaned up the code a bit
+    - Updated to Factorio 1.1.74 and flib 0.12
+---------------------------------------------------------------------------------------------------
 Version: 2.1.5
 Date: 2022-07-11
   Bugfixes:

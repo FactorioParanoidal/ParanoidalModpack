@@ -1,8 +1,8 @@
-local gui = require("__flib__.gui-beta")
-local math = require("__flib__.math")
+local gui = require("__flib__/gui")
+local math = require("__flib__/math")
 
-local constants = require("constants")
-local infinity_filter = require("scripts.infinity-filter")
+local constants = require("__QuickItemSearch__/constants")
+local infinity_filter = require("__QuickItemSearch__/scripts/infinity-filter")
 
 local infinity_filter_gui = {}
 

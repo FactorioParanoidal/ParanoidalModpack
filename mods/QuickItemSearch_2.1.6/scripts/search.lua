@@ -1,4 +1,6 @@
-local constants = require("constants")
+local dictionary = require("__flib__/dictionary-lite")
+
+local constants = require("__QuickItemSearch__/constants")
 
 local search = {}
 
@@ -11,7 +13,7 @@ function search.run(player, player_table, query, combined_contents)
     local filters = player_table.infinity_filters
     local filters_by_name = filters.by_name
     local settings = player_table.settings
-    local translations = player_table.translations
+    local translations = dictionary.get(player.index, "item")
 
     local item_prototypes = game.item_prototypes
     local character = player.character
