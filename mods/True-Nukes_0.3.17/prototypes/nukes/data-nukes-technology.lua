@@ -1,4 +1,5 @@
 local appearance = require("__Warheads__.prototypes.appearance-util")
+local nuke_materials = require("data-nukes-material")
 
 specialTechForWarheadWeapon["artillery-shell-atomic-4t"] = "artillery-atomics"
 specialTechForWarheadWeapon["artillery-shell-atomic-8t"] = "artillery-atomics"
@@ -265,80 +266,101 @@ if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-l
 end
 
 
-if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value ) then
-  data:extend{
-    {
-      type = "technology",
-      name = "californium-processing",
-      icon_size = 256, icon_mipmaps = 4,
-      icon = "__True-Nukes__/graphics/californium-processing-tech.png",
-      effects =
+if(nuke_materials.smallBoomMaterial == "californium") then
+  if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value ) then
+    data:extend{
       {
+        type = "technology",
+        name = "californium-processing",
+        icon_size = 256, icon_mipmaps = 4,
+        icon = "__True-Nukes__/graphics/californium-processing-tech.png",
+        effects =
         {
-          type = "unlock-recipe",
-          recipe = "californium-processing"
+          {
+            type = "unlock-recipe",
+            recipe = "californium-processing"
+          },
         },
-      },
-      prerequisites = {"kovarex-enrichment-process"},
-      unit =
-      {
-        count = 500,
-        ingredients = {
-          {"automation-science-pack", 2},
-          {"logistic-science-pack", 2},
-          {"chemical-science-pack", 1},
-          {"production-science-pack", 1},
-        },
-        time = 30
-      },
-      order = "e-p-b-d"
-    },
-    {
-      type = "technology",
-      name = "californium-weapons",
-      icon_size = 256, icon_mipmaps = 4,
-      icon = "__True-Nukes__/graphics/small-atomic-tech.png",
-      effects = {},
-      prerequisites = {"expanded-atomics", "californium-processing"},
-      unit =
-      {
-        count = 500,
-        ingredients = no_prod,
-        time = 45
-      },
-      order = "e-a-g"
-    },
-  }
-elseif settings.startup["enable-compact-large-atomics"].value then
-  data:extend{
-    {
-      type = "technology",
-      name = "californium-processing",
-      icon_size = 256, icon_mipmaps = 4,
-      icon = "__True-Nukes__/graphics/californium-processing-tech.png",
-      effects =
-      {
+        prerequisites = {"kovarex-enrichment-process"},
+        unit =
         {
-          type = "unlock-recipe",
-          recipe = "californium-processing"
+          count = 500,
+          ingredients = {
+            {"automation-science-pack", 2},
+            {"logistic-science-pack", 2},
+            {"chemical-science-pack", 1},
+            {"production-science-pack", 1},
+          },
+          time = 30
         },
+        order = "e-p-b-d"
       },
-      prerequisites = {"kovarex-enrichment-process"},
-      unit =
       {
-        count = 500,
-        ingredients = {
-          {"automation-science-pack", 2},
-          {"logistic-science-pack", 2},
-          {"chemical-science-pack", 1},
-          {"production-science-pack", 1},
+        type = "technology",
+        name = "californium-weapons",
+        icon_size = 256, icon_mipmaps = 4,
+        icon = "__True-Nukes__/graphics/small-atomic-tech.png",
+        effects = {},
+        prerequisites = {"expanded-atomics", "californium-processing"},
+        unit =
+        {
+          count = 500,
+          ingredients = no_prod,
+          time = 45
         },
-        time = 30
+        order = "e-a-g"
       },
-      order = "e-p-b-d"
-    },
-  }
+    }
+  elseif settings.startup["enable-compact-large-atomics"].value then
+    data:extend{
+      {
+        type = "technology",
+        name = "californium-processing",
+        icon_size = 256, icon_mipmaps = 4,
+        icon = "__True-Nukes__/graphics/californium-processing-tech.png",
+        effects =
+        {
+          {
+            type = "unlock-recipe",
+            recipe = "californium-processing"
+          },
+        },
+        prerequisites = {"kovarex-enrichment-process"},
+        unit =
+        {
+          count = 500,
+          ingredients = {
+            {"automation-science-pack", 2},
+            {"logistic-science-pack", 2},
+            {"chemical-science-pack", 1},
+            {"production-science-pack", 1},
+          },
+          time = 30
+        },
+        order = "e-p-b-d"
+      },
+    }
+  end
+else
+    data:extend{
+      {
+        type = "technology",
+        name = "californium-weapons",
+        icon_size = 256, icon_mipmaps = 4,
+        icon = "__True-Nukes__/graphics/small-atomic-tech.png",
+        effects = {},
+        prerequisites = {"expanded-atomics"},
+        unit =
+        {
+          count = 500,
+          ingredients = no_prod,
+          time = 45
+        },
+        order = "e-a-g"
+      },
+    }
 end
+
 if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
   data:extend{
     {
@@ -401,7 +423,9 @@ if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-com
       table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-20t-3", 1})
     end
   elseif(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value or settings.startup["enable-compact-large-atomics"].value) then
-    table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "californium-processing")
+    if(nuke_materials.smallBoomMaterial == "californium") then
+      table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "californium-processing")
+    end
     table.insert(data.raw.technology["compact-full-fission-weapons"].effects, 
       {
         type = "unlock-recipe",
