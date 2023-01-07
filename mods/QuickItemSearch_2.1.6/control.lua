@@ -1,42 +1,25 @@
-local event = require("__flib__.event")
-local gui = require("__flib__.gui-beta")
-local migration = require("__flib__.migration")
-local translation = require("__flib__.translation")
+local dictionary = require("__flib__/dictionary-lite")
+local gui = require("__flib__/gui")
+local migration = require("__flib__/migration")
 
-local global_data = require("scripts.global-data")
-local infinity_filter = require("scripts.infinity-filter")
-local migrations = require("scripts.migrations")
-local player_data = require("scripts.player-data")
-local logistic_request = require("scripts.logistic-request")
-local search = require("scripts.search")
+local global_data = require("__QuickItemSearch__/scripts/global-data")
+local infinity_filter = require("__QuickItemSearch__/scripts/infinity-filter")
+local migrations = require("__QuickItemSearch__/scripts/migrations")
+local player_data = require("__QuickItemSearch__/scripts/player-data")
+local logistic_request = require("__QuickItemSearch__/scripts/logistic-request")
+local search = require("__QuickItemSearch__/scripts/search")
 
-local infinity_filter_gui = require("scripts.gui.infinity-filter")
-local logistic_request_gui = require("scripts.gui.logistic-request")
-local search_gui = require("scripts.gui.search")
+local infinity_filter_gui = require("__QuickItemSearch__/scripts/gui/infinity-filter")
+local logistic_request_gui = require("__QuickItemSearch__/scripts/gui/logistic-request")
+local search_gui = require("__QuickItemSearch__/scripts/gui/search")
 
--- -----------------------------------------------------------------------------
--- COMMANDS
+-- Bootstrap
 
-commands.add_command("QuickItemSearch", { "command-help.QuickItemSearch" }, function(e)
-  if e.parameter == "refresh-player-data" then
-    local player = game.get_player(e.player_index)
-    player.print({ "message.qis-refreshing-player-data" })
-    player_data.refresh(player, global.players[e.player_index])
-  else
-    game.get_player(e.player_index).print({ "message.qis-invalid-parameter" })
-  end
-end)
-
--- -----------------------------------------------------------------------------
--- EVENT HANDLERS
-
--- BOOTSTRAP
-
-event.on_init(function()
-  translation.init()
+script.on_init(function()
+  dictionary.on_init()
 
   global_data.init()
-  global_data.build_strings()
+  global_data.build_dictionary()
 
   for i in pairs(game.players) do
     player_data.init(i)
@@ -44,23 +27,23 @@ event.on_init(function()
   end
 end)
 
-event.on_configuration_changed(function(e)
-  if migration.on_config_changed(e, migrations) then
-    -- reset running translations
-    translation.init()
+migration.handle_on_configuration_changed(migrations, function()
+  dictionary.on_configuration_changed()
 
-    global_data.build_strings()
+  global_data.build_dictionary()
 
-    for i, player_table in pairs(global.players) do
-      player_data.refresh(game.get_player(i), player_table)
-    end
+  for i, player_table in pairs(global.players) do
+    player_data.refresh(game.get_player(i), player_table)
   end
 end)
 
--- CUSTOM INPUT
+-- Custom input
 
-event.register({ "qis-confirm", "qis-shift-confirm", "qis-control-confirm" }, function(e)
+script.on_event({ "qis-confirm", "qis-shift-confirm", "qis-control-confirm" }, function(e)
   local player = game.get_player(e.player_index)
+  if not player then
+    return
+  end
   local player_table = global.players[e.player_index]
 
   -- HACK: This makes it easy to check if we should close the search GUI or not
@@ -89,7 +72,7 @@ event.register({ "qis-confirm", "qis-shift-confirm", "qis-control-confirm" }, fu
   end
 end)
 
-event.register("qis-cycle-infinity-filter-mode", function(e)
+script.on_event("qis-cycle-infinity-filter-mode", function(e)
   local player_table = global.players[e.player_index]
   local gui_data = player_table.guis.infinity_filter
   if gui_data then
@@ -100,8 +83,11 @@ event.register("qis-cycle-infinity-filter-mode", function(e)
   end
 end)
 
-event.register("qis-search", function(e)
+script.on_event("qis-search", function(e)
   local player = game.get_player(e.player_index)
+  if not player then
+    return
+  end
   local player_table = global.players[e.player_index]
   if player_table.flags.can_open_gui then
     search_gui.toggle(player, player_table, false)
@@ -111,7 +97,7 @@ event.register("qis-search", function(e)
   end
 end)
 
-event.register({ "qis-nav-up", "qis-nav-down" }, function(e)
+script.on_event({ "qis-nav-up", "qis-nav-down" }, function(e)
   local player_table = global.players[e.player_index]
   if player_table.flags.can_open_gui then
     local gui_data = player_table.guis.search
@@ -122,8 +108,11 @@ event.register({ "qis-nav-up", "qis-nav-down" }, function(e)
   end
 end)
 
-event.register("qis-quick-trash-all", function(e)
+script.on_event("qis-quick-trash-all", function(e)
   local player = game.get_player(e.player_index)
+  if not player then
+    return
+  end
   local player_table = global.players[e.player_index]
   if player.controller_type == defines.controllers.character and player.force.character_logistic_requests then
     logistic_request.quick_trash_all(player, player_table)
@@ -132,9 +121,37 @@ event.register("qis-quick-trash-all", function(e)
   end
 end)
 
--- ENTITY
+-- Dictionaries
 
-event.on_entity_logistic_slot_changed(function(e)
+dictionary.handle_events()
+
+script.on_event(dictionary.on_player_dictionaries_ready, function(e)
+    local player = game.get_player(e.player_index)
+    if not player then
+      return
+    end
+    if not player then
+      return
+    end
+    local player_table = global.players[e.player_index]
+    -- show message if needed
+    if player_table.flags.show_message_after_translation then
+      player.print({ "message.qis-can-open-gui" })
+    end
+    -- update flags
+    player_table.flags.can_open_gui = true
+    player_table.flags.show_message_after_translation = false
+    -- create GUIs
+    infinity_filter_gui.build(player, player_table)
+    logistic_request_gui.build(player, player_table)
+    search_gui.build(player, player_table)
+    -- enable shortcut
+    player.set_shortcut_available("qis-search", true)
+end)
+
+-- Entity
+
+script.on_event(defines.events.on_entity_logistic_slot_changed, function(e)
   local entity = e.entity
   if entity and entity.valid and entity.type == "character" then
     local player = entity.player -- event does not provide player_index every time
@@ -167,49 +184,39 @@ gui.hook_events(function(e)
   end
 end)
 
--- PLAYER
+-- Player
 
-event.on_player_created(function(e)
+script.on_event(defines.events.on_player_created, function(e)
   player_data.init(e.player_index)
   player_data.refresh(game.get_player(e.player_index), global.players[e.player_index])
 end)
 
-event.on_player_joined_game(function(e)
-  local player_table = global.players[e.player_index]
-  if player_table.flags.translate_on_join then
-    player_table.flags.translate_on_join = false
-    player_data.start_translations(e.player_index)
-  end
-end)
-
-event.on_player_left_game(function(e)
-  local player_table = global.players[e.player_index]
-  if translation.is_translating(e.player_index) then
-    translation.cancel(e.player_index)
-    player_table.flags.translate_on_join = true
-  end
-end)
-
-event.on_player_removed(function(e)
+script.on_event(defines.events.on_player_removed, function(e)
   global.players[e.player_index] = nil
 end)
 
-event.register({
+script.on_event({
   defines.events.on_player_display_resolution_changed,
   defines.events.on_player_display_scale_changed,
 }, function(e)
   local player = game.get_player(e.player_index)
+  if not player then
+    return
+  end
   local player_table = global.players[e.player_index]
   logistic_request_gui.update_focus_frame_size(player, player_table)
 end)
 
-event.register({
+script.on_event({
   defines.events.on_player_ammo_inventory_changed,
   defines.events.on_player_armor_inventory_changed,
   defines.events.on_player_gun_inventory_changed,
   defines.events.on_player_main_inventory_changed,
 }, function(e)
   local player = game.get_player(e.player_index)
+  if not player then
+    return
+  end
   local player_table = global.players[e.player_index]
 
   local main_inventory = player.get_main_inventory()
@@ -244,21 +251,27 @@ event.register({
   end
 end)
 
--- SETTINGS
+-- Settings
 
-event.on_runtime_mod_setting_changed(function(e)
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(e)
   if string.sub(e.setting, 1, 4) == "qis-" and e.setting_type == "runtime-per-user" then
     local player = game.get_player(e.player_index)
+    if not player then
+      return
+    end
     local player_table = global.players[e.player_index]
     player_data.update_settings(player, player_table)
   end
 end)
 
--- SHORTCUT
+-- Shortcut
 
-event.on_lua_shortcut(function(e)
+script.on_event(defines.events.on_lua_shortcut, function(e)
   if e.prototype_name == "qis-search" then
     local player = game.get_player(e.player_index)
+    if not player then
+      return
+    end
     local player_table = global.players[e.player_index]
     if player_table.flags.can_open_gui then
       search_gui.toggle(player, player_table, true)
@@ -266,47 +279,12 @@ event.on_lua_shortcut(function(e)
   end
 end)
 
--- TICK
+-- Tick
 
-event.on_tick(function(e)
-  if translation.translating_players_count() > 0 then
-    translation.iterate_batch(e)
-  end
+script.on_event(defines.events.on_tick, function()
+  dictionary.on_tick()
 
   if next(global.update_search_results) then
     search_gui.update_for_active_players()
-  end
-end)
-
--- TRANSLATIONS
-
-event.on_string_translated(function(e)
-  local names, finished = translation.process_result(e)
-  if names then
-    local player_table = global.players[e.player_index]
-    local translations = player_table.translations
-    local internal_names = names.items
-    for i = 1, #internal_names do
-      local internal_name = internal_names[i]
-      translations[internal_name] = e.translated and e.result or internal_name
-    end
-  end
-  if finished then
-    local player = game.get_player(e.player_index)
-    local player_table = global.players[e.player_index]
-    -- show message if needed
-    if player_table.flags.show_message_after_translation then
-      player.print({ "message.qis-can-open-gui" })
-    end
-    -- update flags
-    player_table.flags.can_open_gui = true
-    player_table.flags.translate_on_join = false
-    player_table.flags.show_message_after_translation = false
-    -- create GUIs
-    infinity_filter_gui.build(player, player_table)
-    logistic_request_gui.build(player, player_table)
-    search_gui.build(player, player_table)
-    -- enable shortcut
-    player.set_shortcut_available("qis-search", true)
   end
 end)

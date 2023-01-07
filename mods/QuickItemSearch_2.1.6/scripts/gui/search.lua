@@ -1,12 +1,12 @@
-local gui = require("__flib__.gui-beta")
-local math = require("__flib__.math")
+local gui = require("__flib__/gui")
+local math = require("__flib__/math")
 
-local constants = require("constants")
-local cursor = require("scripts.cursor")
-local search = require("scripts.search")
+local constants = require("__QuickItemSearch__/constants")
+local cursor = require("__QuickItemSearch__/scripts/cursor")
+local search = require("__QuickItemSearch__/scripts/search")
 
-local infinity_filter_gui = require("scripts.gui.infinity-filter")
-local logistic_request_gui = require("scripts.gui.logistic-request")
+local infinity_filter_gui = require("__QuickItemSearch__/scripts/gui/infinity-filter")
+local logistic_request_gui = require("__QuickItemSearch__/scripts/gui/logistic-request")
 
 local search_gui = {}
 

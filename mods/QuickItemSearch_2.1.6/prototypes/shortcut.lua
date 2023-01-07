@@ -1,4 +1,4 @@
-local data_util = require("__flib__.data-util")
+local data_util = require("__flib__/data-util")
 
 local shortcut_file = "__QuickItemSearch__/graphics/shortcut.png"
 

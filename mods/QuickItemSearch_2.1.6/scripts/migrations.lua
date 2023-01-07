@@ -1,5 +1,5 @@
-local global_data = require("scripts.global-data")
-local player_data = require("scripts.player-data")
+local global_data = require("__QuickItemSearch__/scripts/global-data")
+local player_data = require("__QuickItemSearch__/scripts/player-data")
 
 return {
   ["2.0.0"] = function()
@@ -19,6 +19,11 @@ return {
           request.age = current_age
         end
       end
+    end
+  end,
+  ["2.1.6"] = function()
+    if global.__flib then
+      global.__flib.translation = nil
     end
   end
 }

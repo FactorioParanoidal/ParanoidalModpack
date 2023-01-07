@@ -1,8 +1,8 @@
-local gui = require("__flib__.gui-beta")
-local math = require("__flib__.math")
+local gui = require("__flib__/gui")
+local math = require("__flib__/math")
 
-local constants = require("constants")
-local logistic_request = require("scripts.logistic-request")
+local constants = require("__QuickItemSearch__/constants")
+local logistic_request = require("__QuickItemSearch__/scripts/logistic-request")
 
 local logistic_request_gui = {}
 
