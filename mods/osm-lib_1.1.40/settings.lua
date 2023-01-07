@@ -1,6 +1,6 @@
--- Setup hosts
-if not OSM then OSM = {} end
-if not OSM.lib then OSM.lib = {} end
+----------------------
+---- settings.lua ----
+----------------------
 
 require("functions.settings-stage")
 
