@@ -5,17 +5,22 @@
 --]]
 
 local format = string.format
+local gmatch = string.gmatch
 local flib = require('__flib__.data-util')
 
 local light_scale = settings.startup["lepp_light_size_factor"].value
 local light_size_limit = settings.startup["lepp_light_max_size"].value
 local lep_icons_layer = { { icon = "__LightedPolesPlus__/graphics/icons/lighted.png", icon_size = 32, tint = {r=1, g=1, b=1, a=0.85} } }
 local pole_entity_blacklist = {}
-for name in string.gmatch(settings.startup["lepp_pole_blacklist"].value, '([^, *]+)') do
+for name in gmatch(settings.startup["lepp_pole_blacklist"].value, '([^, *]+)') do
   pole_entity_blacklist[name] = true
 end
+local tech_blacklist = {}
+for name in gmatch(settings.startup["lepp_tech_blacklist"].value, '([^, *]+)') do
+  tech_blacklist[name] = true
+end
 
-local alternative_technology = "optics"
+local fallback_technology = settings.startup["lepp_tech_fallback"].value
 
 local pole_names = {} -- dictionary [original pole item name] -> lighted pole entity/item/recipe name
 local lightedPoles = {}
@@ -172,21 +177,25 @@ local recipe_lookup = find_recipe_by_results(pole_names)
 local techs_found = {}
 -- add to technology
 for _, tech in pairs(data.raw["technology"]) do
-  if tech.effects then
+  if tech.effects and not tech_blacklist[tech.name] then
     for _, effect in pairs(tech.effects) do
       if effect.recipe and recipe_lookup[effect.recipe] then
         local base_item = recipe_lookup[effect.recipe].product
-        log("[LEP+] found original pole "..base_item.." in technology "..tech.name..", inserting "..pole_names[base_item].." into technology "..tech.name)
-        table.insert(data.raw["technology"][tech.name].effects, {type="unlock-recipe",recipe=pole_names[base_item]})
-        -- multiple techs may unlock the same recipe
-        techs_found[base_item] = techs_found[base_item] and techs_found[base_item] + 1 or 1
+        if not (techs_found[base_item] and techs_found[base_item][tech.name]) then
+          -- don't insert multiple times in same technology (nullius)
+          log("[LEP+] found original pole "..base_item.." in technology "..tech.name..", inserting "..pole_names[base_item].." into technology "..tech.name)
+          table.insert(data.raw["technology"][tech.name].effects, {type="unlock-recipe",recipe=pole_names[base_item]})
+          -- multiple techs may unlock the same recipe
+          techs_found[base_item] = techs_found[base_item] or {}
+          techs_found[base_item][tech.name] = true
+        end
       end
     end
   end
 end
 
--- add unassigned recipes to backup technology (optics)
-local tech = data.raw.technology[alternative_technology]
+-- add unassigned recipes to fallback technology (optics)
+local tech = data.raw.technology[fallback_technology]
 if tech then
   for original_pole, lighted_pole in pairs(pole_names) do
     if not techs_found[original_pole] then
@@ -200,5 +209,5 @@ if tech then
     end
   end
 else
-  error("[LEP+] ERROR: Technology "..alternative_technology.." not found")
+  error("[LEP+] ERROR: Technology "..fallback_technology.." not found")
 end

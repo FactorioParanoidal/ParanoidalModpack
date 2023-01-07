@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.9.0
+Date: 2022-12-31
+  Bugfixes:
+    - lighted pole recipes where added multiple times to same technology
+  Changes:
+    - added startup setting "Technology Blacklist"
+    - added startup setting "Fallback Technology"
+---------------------------------------------------------------------------------------------------
 Version: 1.8.0
 Date: 2022-10-04
   Changes:
