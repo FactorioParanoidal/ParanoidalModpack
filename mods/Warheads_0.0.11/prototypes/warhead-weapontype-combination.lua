@@ -166,7 +166,7 @@ local function combine(weapontype, warheadWeapon)
   for _,r in pairs(warheadWeapon.recipe.additional_results) do
     table.insert(recipe.results, r)
   end
-
+  
   if(warheadsUsed ~= 0 and warheadWeapon.recipe.warhead_count_per_item ~= 1) then
     local batch_size = 1
     for i = 1,warheadWeapon.recipe.warhead_count_per_item do
@@ -188,6 +188,21 @@ local function combine(weapontype, warheadWeapon)
       r.amount = (r.amount or r[2])*batch_size
       r[2] = nil
     end
+  end
+  local recipeIngreds = {}
+  for _,i in pairs(recipe.ingredients) do
+    local ingName = (i.name or i[1])
+    local ingAmount = (i.amount or i[2])
+    
+    if(recipeIngreds[ingName]~=nil)then
+      recipeIngreds[ingName] = recipeIngreds[ingName] + ingAmount
+    else
+      recipeIngreds[ingName] = ingAmount
+    end
+  end
+  recipe.ingredients = {}
+  for ingName,ingAmount in pairs(recipeIngreds) do
+    table.insert(recipe.ingredients, {ingName,ingAmount})
   end
   result.recipe = recipe
 
