@@ -64,28 +64,27 @@ if(nuke_materials.smallBoomMaterial == "californium") then
       results = {{nuke_materials.boomMaterial, 4}, {nuke_materials.deadMaterial, 1}, {nuke_materials.reflector, 1}, {name = nuke_materials.reflector, amount = 1, probability = 0.6}, {"californium", 1}},
       allow_decomposition = false
     },
-
-    {
-      type = "recipe",
-      name = "advanced-kovarex-enrichment-process",
-      energy_required = 10,
-      enabled = false,
-      category = "centrifuging",
-      ingredients = {{"uranium-235", 20}, {"uranium-238", 5}, {nuke_materials.reflector, 2}},
-      icons = {
-        {icon = "__base__/graphics/icons/kovarex-enrichment-process.png", icon_size = 64, icon_mipmaps = 4},
-        {icon = "__True-Nukes__/graphics/plus-red.png", icon_size = 32, scale = 0.333, shift = {10, -10}}
-      },
-      subgroup = "intermediate-product",
-      order = "r[uranium-processing]-cc[kovarex-enrichment-process]",
-      main_product = "",
-      results = {{"uranium-235", 21}, {"uranium-238", 2}, {nuke_materials.reflector, 1}, {name = nuke_materials.reflector, amount = 1, probability = 0.6}},
-      allow_decomposition = false
-    },
   });
 end
 
 data:extend{
+  {
+    type = "recipe",
+    name = "advanced-kovarex-enrichment-process",
+    energy_required = 10,
+    enabled = false,
+    category = "centrifuging",
+    ingredients = {{"uranium-235", 20}, {"uranium-238", 5}, {nuke_materials.reflector, 2}},
+    icons = {
+      {icon = "__base__/graphics/icons/kovarex-enrichment-process.png", icon_size = 64, icon_mipmaps = 4},
+      {icon = "__True-Nukes__/graphics/plus-red.png", icon_size = 32, scale = 0.333, shift = {10, -10}}
+    },
+    subgroup = "intermediate-product",
+    order = "r[uranium-processing]-cc[kovarex-enrichment-process]",
+    main_product = "",
+    results = {{"uranium-235", 21}, {"uranium-238", 2}, {nuke_materials.reflector, 1}, {name = nuke_materials.reflector, amount = 1, probability = 0.6}},
+    allow_decomposition = false
+  },
   {
     type = "item",
     name = "FOGBANK",
@@ -354,24 +353,32 @@ if(nuke_materials.fusionMaterial == "tritium-canister") then
 end
 for i = 0,100 do
   if(data.raw.module["productivity-module-" .. i] and data.raw.module["productivity-module-" .. i].limitation) then
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "californium-processing")
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-californium-processing")
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "tritium-breeder-fuel-cell")
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-tritium-breeder-fuel-cell")
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "tritium-extraction")
-    table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-tritium-extraction")
+    if(nuke_materials.smallBoomMaterial == "californium") then
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "californium-processing")
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-californium-processing")
+    end
+    if(nuke_materials.fusionMaterial == "tritium-canister") then
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "tritium-breeder-fuel-cell")
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-tritium-breeder-fuel-cell")
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "tritium-extraction")
+      table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-tritium-extraction")
+    end
     table.insert(data.raw.module["productivity-module-" .. i].limitation, "advanced-kovarex-enrichment-process")
     table.insert(data.raw.module["productivity-module-" .. i].limitation, "FOGBANK")
     table.insert(data.raw.module["productivity-module-" .. i].limitation, "neutron-reflector")
   end
 end
 if(data.raw.module["productivity-module"] and data.raw.module["productivity-module"].limitation) then
-  table.insert(data.raw.module["productivity-module"].limitation, "californium-processing")
-  table.insert(data.raw.module["productivity-module"].limitation, "advanced-californium-processing")
-  table.insert(data.raw.module["productivity-module"].limitation, "tritium-breeder-fuel-cell")
-  table.insert(data.raw.module["productivity-module"].limitation, "advanced-tritium-breeder-fuel-cell")
-  table.insert(data.raw.module["productivity-module"].limitation, "tritium-extraction")
-  table.insert(data.raw.module["productivity-module"].limitation, "advanced-tritium-extraction")
+  if(nuke_materials.smallBoomMaterial == "californium") then
+    table.insert(data.raw.module["productivity-module"].limitation, "californium-processing")
+    table.insert(data.raw.module["productivity-module"].limitation, "advanced-californium-processing")
+  end
+  if(nuke_materials.fusionMaterial == "tritium-canister") then
+    table.insert(data.raw.module["productivity-module"].limitation, "tritium-breeder-fuel-cell")
+    table.insert(data.raw.module["productivity-module"].limitation, "advanced-tritium-breeder-fuel-cell")
+    table.insert(data.raw.module["productivity-module"].limitation, "tritium-extraction")
+    table.insert(data.raw.module["productivity-module"].limitation, "advanced-tritium-extraction")
+  end
   table.insert(data.raw.module["productivity-module"].limitation, "advanced-kovarex-enrichment-process")
   table.insert(data.raw.module["productivity-module"].limitation, "FOGBANK")
   table.insert(data.raw.module["productivity-module"].limitation, "neutron-reflector")
