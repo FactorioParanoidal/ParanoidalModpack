@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.7
+Date: 5 January 2022
+  Bugfixes:
+    - Fixed incorrect result counts when using background search on entities that cross chunk boundaries
+---------------------------------------------------------------------------------------------------
+Version: 1.10.6
+Date: 28 December 2022
+  Compatibility:
+    - [IR3] Fixed searching for steam fissures using 'Entity' search mode not working
+    - [IR3] Filtered out hidden "IR-limbo" surface from 'All surfaces' search
+---------------------------------------------------------------------------------------------------
 Version: 1.10.5
 Date: 14 December 2022
   Changes:
