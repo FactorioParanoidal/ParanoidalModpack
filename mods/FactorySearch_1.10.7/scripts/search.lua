@@ -29,6 +29,7 @@ local mod_placeholder_entities = {
   ['raw-rare-metals'] = 'rare-metals',  -- Krastorio2
   ['raw-imersite'] = 'imersite',  -- Krastorio2
   ['bitumen'] = 'bitumen-seep',  -- Pyanodons
+  ['steam'] = 'steam-fissure',  -- IR3
 
   ['offshore-pump-0'] = 'offshore-pump-0',  -- P-U-M-P-S
   ['offshore-pump-1'] = 'offshore-pump-1',
@@ -97,6 +98,7 @@ local function generate_distance_data(surface_data, player_position)
 end
 
 function Search.process_found_entities(entities, state, surface_data, target_item)
+  -- Not used for Entity and Tag search modes
   local target_name = target_item.name
   local target_type = target_item.type
   local target_is_item = target_type == "item"
@@ -560,6 +562,12 @@ function Search.on_tick()
       extend(entities, neutral_entities)
     end
 
+    for i, entity in pairs(entities) do
+      if not math2d.bounding_box.contains_point(chunk_area, entity.position) then
+        entities[i] = nil
+      end
+    end
+
     Search.process_found_entities(entities, state, surface_data, target_item)
 
     -- Map tags
@@ -596,6 +604,11 @@ function Search.on_tick()
         name = target_entity_name,
         force = { force, "neutral" },
       }
+      for i, entity in pairs(entities) do
+        if not math2d.bounding_box.contains_point(chunk_area, entity.position) then
+          entities[i] = nil
+        end
+      end
       for _, entity in pairs(entities) do
         if is_resource then
           local amount

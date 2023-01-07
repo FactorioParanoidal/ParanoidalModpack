@@ -118,7 +118,7 @@ end
 function ResultLocation.open(player, data)
   local surface_name = data.surface
   local position = data.position
-  local zoom_level = player.mod_settings["fs-initial-zoom"].value
+  local zoom_level = player.mod_settings["fs-initial-zoom"].value * player.display_resolution.width / 1920
 
   -- If using factorissimo-2-notnotmelon, take the player to the outer position of the factory
   if surface_name ~= player.surface.name and surface_name:sub(1, 14) == "factory-floor-" and remote.interfaces["factorissimo"] then
@@ -152,7 +152,7 @@ function ResultLocation.open(player, data)
     end
   if not remote_view_used then
     if surface_name == player.surface.name then
-      player.zoom_to_world(position, zoom_level * player.display_resolution.width / 1920)
+      player.zoom_to_world(position, zoom_level)
     else
       player.play_sound{path = "utility/cannot_build"}
       player.create_local_flying_text{text = {"search-gui.wrong-surface"}, create_at_cursor = true}
