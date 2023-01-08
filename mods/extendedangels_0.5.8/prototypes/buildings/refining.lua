@@ -160,45 +160,45 @@ data:extend({
         energy_usage = "400kW",
     }},
 
-    -- Crystallizer 3
-    {
-        type = "item",
-        name = "crystallizer-3",
-        icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/crystallizer.png", icon_size = 64, icon_mipmaps = 4}, 3, angelsmods.refining.number_tint),
-        subgroup = "refining-buildings",
-        order = "c[crystallizer]-c[mk3]",
-        place_result = "crystallizer-3",
-        stack_size = 10,
-    },
+    -- -- Crystallizer 3
+    -- {
+    --     type = "item",
+    --     name = "crystallizer-3",
+    --     icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/crystallizer.png", icon_size = 64, icon_mipmaps = 4}, 3, angelsmods.refining.number_tint),
+    --     subgroup = "refining-buildings",
+    --     order = "c[crystallizer]-c[mk3]",
+    --     place_result = "crystallizer-3",
+    --     stack_size = 10,
+    -- },
 
-    util.merge{data.raw["assembling-machine"]["crystallizer"], {
-        name = "crystallizer-3",
-        minable = {result = "crystallizer-3"},
-        module_specification = {module_slots = 3},
-        crafting_speed = 3,
-        energy_source = {emissions_per_minute = 0.05 * 60},
-        energy_usage = "350kW",
-    }},
+    -- util.merge{data.raw["assembling-machine"]["crystallizer"], {
+    --     name = "crystallizer-3",
+    --     minable = {result = "crystallizer-3"},
+    --     module_specification = {module_slots = 3},
+    --     crafting_speed = 3,
+    --     energy_source = {emissions_per_minute = 0.05 * 60},
+    --     energy_usage = "350kW",
+    -- }},
 
-    -- Filtration unit 3
-    {
-        type = "item",
-        name = "filtration-unit-3",
-        icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/filtration-unit.png", icon_size = 32}, 3, angelsmods.refining.number_tint),
-        subgroup = "refining-buildings",
-        order = "b[filtration-unit]-c[mk3]",
-        place_result = "filtration-unit-3",
-        stack_size = 10,
-    },
+    -- -- Filtration unit 3
+    -- {
+    --     type = "item",
+    --     name = "filtration-unit-3",
+    --     icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/filtration-unit.png", icon_size = 32}, 3, angelsmods.refining.number_tint),
+    --     subgroup = "refining-buildings",
+    --     order = "b[filtration-unit]-c[mk3]",
+    --     place_result = "filtration-unit-3",
+    --     stack_size = 10,
+    -- },
 
-    util.merge{data.raw["assembling-machine"]["filtration-unit-2"], {
-        name = "filtration-unit-3",
-        minable = {result = "filtration-unit-3"},
-        module_specification = {module_slots = 3},
-        crafting_speed = 3,
-        energy_source = {emissions_per_minute = 0.05 * 60},
-        energy_usage = "200kW",
-    }},
+    -- util.merge{data.raw["assembling-machine"]["filtration-unit-2"], {
+    --     name = "filtration-unit-3",
+    --     minable = {result = "filtration-unit-3"},
+    --     module_specification = {module_slots = 3},
+    --     crafting_speed = 3,
+    --     energy_source = {emissions_per_minute = 0.05 * 60},
+    --     energy_usage = "200kW",
+    -- }},
 })
 
 -- Item order fixes
@@ -218,5 +218,5 @@ data.raw["assembling-machine"]["ore-crusher-4"].icons = extangels.numeral_tier({
 data.raw["assembling-machine"]["ore-floatation-cell-4"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/ore-floatation-cell.png", icon_size = 64, icon_mipmaps = 4}, 4, angelsmods.refining.number_tint)
 data.raw["assembling-machine"]["ore-leaching-plant-4"].icons = extangels.numeral_tier({icon = "__extendedangels__/graphics/icons/ore-leaching-plant-4.png", icon_size = 32}, 4, angelsmods.refining.number_tint)
 data.raw["assembling-machine"]["ore-refinery-3"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/ore-refinery.png", icon_size = 64, icon_mipmaps = 4}, 3, angelsmods.refining.number_tint)
-data.raw["assembling-machine"]["crystallizer-3"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/crystallizer.png", icon_size = 64, icon_mipmaps = 4}, 3, angelsmods.refining.number_tint)
-data.raw["assembling-machine"]["filtration-unit-3"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/filtration-unit.png", icon_size = 32}, 3, angelsmods.refining.number_tint)
+-- data.raw["assembling-machine"]["crystallizer-3"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/crystallizer.png", icon_size = 64, icon_mipmaps = 4}, 3, angelsmods.refining.number_tint)
+-- data.raw["assembling-machine"]["filtration-unit-3"].icons = extangels.numeral_tier({icon = "__angelsrefining__/graphics/icons/filtration-unit.png", icon_size = 32}, 3, angelsmods.refining.number_tint)

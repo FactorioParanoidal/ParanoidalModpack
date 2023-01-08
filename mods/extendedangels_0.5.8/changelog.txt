@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.8
+Date: 2023-01-01
+  Changes:
+    - Adjusted the ingredients tiers for the following structures to align with changes to Angel's Bioprocessing in version 0.7.23
+      - Oil press 2/3 ingredients increased from tiers 2/3 to tiers 3/4
+      - Butchery 2/3 ingredients increased from tiers 2/3 to tiers 3/4
+      - Basic farm 2/3 ingredients increased from tiers 1/2 to tiers 2/3
+      - Desert, Swamp, and Temperate farm 2/3 ingredients increased from tiers 3/4 to tiers 4/5
+      - Hatchery 2/3 ingredients increased from tiers 2/3 to tiers 4/5
+      - Nutrient extractor 2/3 ingredients increased from tiers 2/3 to tiers 3/4
+      - Fish tank 2/3 ingredients increased from tiers 2/3 to tiers 3/4
+    - Moved Seed extractor 2 and 3 unlocks into technologies Garden Processing 2 and 3 respectively
+    - Moved Desert, Swamp, and Temperate farm 2 unlocks into their respective Farming 2 technologies
+    - Removed technology "Advanced farm upgrades 2", and moved Desert, Swamp and Temperate farm 3 unlocks into "Advanced farm upgrades"
+    - Minimum version of Angel's Bioprocessing has been incremented to version 0.7.23
+    - Removed Air filter 3, Crystallizer 3 and Filtration Unit 3 as added by this mod; buildings are now native to Angel's Petrochem and Angel's Refining
+    - Minimum version of Angel's Smelting has been incremented to version 0.6.20
+  Locale:
+    - Added partial localization for Korean
+---------------------------------------------------------------------------------------------------
 Version: 0.5.7
 Date: 2022-04-03
   Locale:
@@ -23,7 +43,7 @@ Date: 2022-01-04
 Version: 0.5.3
 Date: 2021-12-19
   Changes:
-    - Minimum versions of Angel's Bioprocessing and Angel's Smelting have been incremeneted to the latest versions
+    - Minimum versions of Angel's Bioprocessing and Angel's Smelting have been incremented to the latest versions
   Bugfixes:
     - Fixed startup errors related to changed icon definitions for several buildings to account for graphics changes in Angel's Refinings 0.12.1
 ---------------------------------------------------------------------------------------------------
