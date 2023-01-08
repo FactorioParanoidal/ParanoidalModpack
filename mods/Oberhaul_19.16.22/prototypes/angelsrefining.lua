@@ -85,22 +85,22 @@ if mods.angelssmelting then
 --Cooling Tower
 data.raw.recipe["coolant-used-filtration-1"].ingredients =
 {
-    {type="fluid", name="liquid-coolant-used", amount=100, maximum_temperature = 200},
+    {type="fluid", name="liquid-coolant-used", amount=100},
     {type="item", name="filter-coal", amount=1},
 }
 data.raw.recipe["coolant-used-filtration-1"].results =
 {	  
-    {type="fluid", name="liquid-coolant", amount=90, temperature = 25}, --DrD 99
+    {type="fluid", name="liquid-coolant", amount=90}, --DrD 99
     {type="item", name="filter-frame", amount=1},
 }
 data.raw.recipe["coolant-used-filtration-2"].ingredients =
 {
-    {type="fluid", name="liquid-coolant-used", amount=100, maximum_temperature = 200},
+    {type="fluid", name="liquid-coolant-used", amount=100},
     {type="item", name="filter-ceramic", amount=1},
 }
 data.raw.recipe["coolant-used-filtration-2"].results =
 {
-    {type="fluid", name="liquid-coolant", amount=97, temperature = 25}, --DrD 100
+    {type="fluid", name="liquid-coolant", amount=97}, --DrD 100
     {type="item", name="filter-ceramic-used", amount=1},
 }
 data.raw.recipe["coolant-cool-200"].hidden = true

@@ -481,7 +481,7 @@ for _, name in pairs(beacons) do
                 setup_vanilla_module_slot({shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02 drd
                 setup_vanilla_module_slot({shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02 drd
             }
-        }
+        })
 
         table.insert(entity.graphics_set.module_visualisations, {
             art_style = "artisan-reskin-8-lights",
@@ -499,8 +499,8 @@ for _, name in pairs(beacons) do
             use_for_empty_slots = false,
             tier_offset = 0,
             slots = {
-                setup_reskins_slot({lights = 5, shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
-                setup_reskins_slot({lights = 5, shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
+                setup_reskins_module_slot({lights = 5, shift = {-10, 7}}), -- левый нижний, MOP3E, 2021-10-02
+                setup_reskins_module_slot({lights = 5, shift = {45, -38}}), -- правый верхний, MOP3E, 2021-10-02
             }
         })
     elseif module_slots == 4 then

@@ -664,7 +664,7 @@ data:extend({
     type = "technology",
     name = "fluid-canister-processing",
     icon = "__bobplates__/graphics/icons/technology/fluid-canister.png",
-    icon_size = 720,
+    icon_size = 128, --drd saves VRAM
     prerequisites = {
       "water-bore-1",
       "plastics",
