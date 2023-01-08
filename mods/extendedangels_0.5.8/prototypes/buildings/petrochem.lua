@@ -19,26 +19,26 @@ data:extend({
         energy_usage = "500kW",
     }},
 
-    -- Air filter 3
-    {
-        type = "item",
-        name = "angels-air-filter-3",
-        icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/air-filter.png", icon_size = 32}, 3, angelsmods.petrochem.number_tint),
-        subgroup = "petrochem-buildings-electrolyser",
-        order = "b[angels-air-filter]-c",
-        place_result = "angels-air-filter-3",
-        stack_size = 10,
-    },
+    -- -- Air filter 3
+    -- {
+    --     type = "item",
+    --     name = "angels-air-filter-3",
+    --     icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/air-filter.png", icon_size = 32}, 3, angelsmods.petrochem.number_tint),
+    --     subgroup = "petrochem-buildings-electrolyser",
+    --     order = "b[angels-air-filter]-c",
+    --     place_result = "angels-air-filter-3",
+    --     stack_size = 10,
+    -- },
 
-    util.merge{data.raw["assembling-machine"]["angels-air-filter"], {
-        name = "angels-air-filter-3",
-        minable = {result = "angels-air-filter-3"},
-        next_upgrade = "angels-air-filter-4",
-        module_specification = {module_slots = 3},
-        crafting_speed = 3,
-        energy_source = {emissions_per_minute = -0.14 * 60},
-        energy_usage = "250kW",
-    }},
+    -- util.merge{data.raw["assembling-machine"]["angels-air-filter"], {
+    --     name = "angels-air-filter-3",
+    --     minable = {result = "angels-air-filter-3"},
+    --     next_upgrade = "angels-air-filter-4",
+    --     module_specification = {module_slots = 3},
+    --     crafting_speed = 3,
+    --     energy_source = {emissions_per_minute = -0.14 * 60},
+    --     energy_usage = "250kW",
+    -- }},
 
     -- Air filter 4
     {
@@ -63,5 +63,5 @@ data:extend({
 
 -- Entity icon adjustments
 data.raw["assembling-machine"]["advanced-chemical-plant-3"].icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/advanced-chemical-plant.png", icon_size = 32}, 3, angelsmods.petrochem.number_tint)
-data.raw["assembling-machine"]["angels-air-filter-3"].icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/air-filter.png", icon_size = 32}, 3, angelsmods.petrochem.number_tint)
+-- data.raw["assembling-machine"]["angels-air-filter-3"].icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/air-filter.png", icon_size = 32}, 3, angelsmods.petrochem.number_tint)
 data.raw["assembling-machine"]["angels-air-filter-4"].icons = extangels.numeral_tier({icon = "__angelspetrochem__/graphics/icons/air-filter.png", icon_size = 32}, 4, angelsmods.petrochem.number_tint)

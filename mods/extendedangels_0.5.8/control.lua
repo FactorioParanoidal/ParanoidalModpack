@@ -10,7 +10,7 @@ script.on_configuration_changed(function(config)
         recipes["advanced-chemical-plant-3"].enabled = technologies["angels-advanced-chemistry-4"].researched
         recipes["powder-zinc"].enabled = technologies["angels-zinc-smelting-2"].researched
         recipes["gas-argon"].enabled = technologies["angels-nitrogen-processing-1"].researched
-        recipes["angels-air-filter-3"].enabled = technologies["angels-nitrogen-processing-3"].researched
+        -- recipes["angels-air-filter-3"].enabled = technologies["angels-nitrogen-processing-3"].researched
         recipes["angels-air-filter-4"].enabled = technologies["angels-nitrogen-processing-4"].researched
 
         if game.active_mods["Clowns-Processing"] then

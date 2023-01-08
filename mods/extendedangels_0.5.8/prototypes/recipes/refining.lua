@@ -244,65 +244,65 @@ angelsmods.functions.RB.build({
         subgroup = "ore-refining",
     },
 
-    -- Crystallizer 3
-    {
-        type = "recipe",
-        name = "crystallizer-3",
-        normal = {
-        energy_required = 5,
-        enabled = "false",
-        ingredients = {
-            {"crystallizer-2", 1},
-            {"t5-plate", 10},
-            {"t5-circuit", 5},
-            {"t5-pipe", 5},
-            {"t6-brick", 10},
-        },
-        result = "crystallizer-3",
-        },
-        expensive = {
-        energy_required = 5 * buildingtime,
-        enabled = "false",
-        ingredients = {
-            {"crystallizer-2", 1},
-            {"t5-plate", 10 * buildingmulti},
-            {"t5-circuit", 5 * buildingmulti},
-            {"t5-pipe", 5 * buildingmulti},
-            {"t6-brick", 10 * buildingmulti},
-        },
-        result = "crystallizer-3",
-        },
-    },
+    -- -- Crystallizer 3
+    -- {
+    --     type = "recipe",
+    --     name = "crystallizer-3",
+    --     normal = {
+    --     energy_required = 5,
+    --     enabled = "false",
+    --     ingredients = {
+    --         {"crystallizer-2", 1},
+    --         {"t5-plate", 10},
+    --         {"t5-circuit", 5},
+    --         {"t5-pipe", 5},
+    --         {"t6-brick", 10},
+    --     },
+    --     result = "crystallizer-3",
+    --     },
+    --     expensive = {
+    --     energy_required = 5 * buildingtime,
+    --     enabled = "false",
+    --     ingredients = {
+    --         {"crystallizer-2", 1},
+    --         {"t5-plate", 10 * buildingmulti},
+    --         {"t5-circuit", 5 * buildingmulti},
+    --         {"t5-pipe", 5 * buildingmulti},
+    --         {"t6-brick", 10 * buildingmulti},
+    --     },
+    --     result = "crystallizer-3",
+    --     },
+    -- },
 
-    -- Filtration unit 3
-    {
-        type = "recipe",
-        name = "filtration-unit-3",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"filtration-unit-2", 1},
-                {"t5-plate", 2},
-                {"t5-circuit", 5},
-                {"t5-pipe", 8},
-                {"t6-brick", 5},
-            },
-            result = "filtration-unit-3",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"filtration-unit-2", 1},
-                {"t5-plate", 2 * buildingmulti},
-                {"t5-circuit", 5 * buildingmulti},
-                {"t5-pipe", 8 * buildingmulti},
-                {"t6-brick", 5 * buildingmulti},
-            },
-            result = "filtration-unit-3",
-        },
-    },
+    -- -- Filtration unit 3
+    -- {
+    --     type = "recipe",
+    --     name = "filtration-unit-3",
+    --     normal = {
+    --         energy_required = 5,
+    --         enabled = "false",
+    --         ingredients = {
+    --             {"filtration-unit-2", 1},
+    --             {"t5-plate", 2},
+    --             {"t5-circuit", 5},
+    --             {"t5-pipe", 8},
+    --             {"t6-brick", 5},
+    --         },
+    --         result = "filtration-unit-3",
+    --     },
+    --     expensive = {
+    --         energy_required = 5 * buildingtime,
+    --         enabled = "false",
+    --         ingredients = {
+    --             {"filtration-unit-2", 1},
+    --             {"t5-plate", 2 * buildingmulti},
+    --             {"t5-circuit", 5 * buildingmulti},
+    --             {"t5-pipe", 8 * buildingmulti},
+    --             {"t6-brick", 5 * buildingmulti},
+    --         },
+    --         result = "filtration-unit-3",
+    --     },
+    -- },
 })
 
 -- Order fixes
