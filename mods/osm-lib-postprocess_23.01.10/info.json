@@ -1,0 +1,17 @@
+{
+	"name": "osm-lib-postprocess",
+	"version": "23.01.10",
+	"title": "OSM-Lib PostProcess",
+	"factorio_version": "1.1",
+	"author": "OldSkoolMatt",
+	"description": "Postprocess extension of my library",
+
+	"dependencies":
+	[
+		"base",
+		"osm-lib >= 1.1.41",
+
+		"(?) zzzparanoidal"
+	]
+
+}

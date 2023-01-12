@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 23.01.10
+Date: 11.01.2023
+  Info:
+    - Stable version
+    - Code tidy up
+    - Added more entries to info file
+  Bugfixes:
+    - Fixed a desync in MP
+    - Fixed a crash on startup caused by a wrong variable
+---------------------------------------------------------------------------------------------------
+Version: 23.01.03
+Date: 03.01.2023
+  Info:
+    - OSM LIB EXTENSION
