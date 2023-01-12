@@ -471,7 +471,7 @@ function loadResourceConfig()
 	fillAdamoConfig(config)
 	fillApmConfig(config)
 
-	if game.active_mods["IndustrialRevolution"] then
+	if game.active_mods["IndustrialRevolution"] or game.active_mods["IndustrialRevolution3"] then
 		fillIndustrialRevolutionConfig(config)
 	end
 
