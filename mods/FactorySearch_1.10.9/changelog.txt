@@ -1,6 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.9
+Date: 15 January 2023
+  Changes:
+    - Search results from undiscovered chunks are no longer shown
+    - Searching for a recipe signal from Crafting Combinator now gives a warning that you need to select an item or fluid instead
+---------------------------------------------------------------------------------------------------
+Version: 1.10.8
+Date: 13 January 2023
+  Bugfixes:
+    - Fixed many modded resources (including most from Pyanodons) not being searchable ('Entity' search mode)
+  Locale:
+    - Added complete Chinese translations (thanks Plexpt!)
+
+---------------------------------------------------------------------------------------------------
 Version: 1.10.7
-Date: 5 January 2022
+Date: 5 January 2023
   Bugfixes:
     - Fixed incorrect result counts when using background search on entities that cross chunk boundaries
 ---------------------------------------------------------------------------------------------------

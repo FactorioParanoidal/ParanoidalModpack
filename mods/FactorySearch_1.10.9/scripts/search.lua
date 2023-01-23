@@ -1,4 +1,4 @@
-math2d = require "__core__.lualib.math2d"
+math2d = require "math2d"
 search_signals = require "__FactorySearch__.scripts.search-signals"
 
 local Search = {}
@@ -20,16 +20,13 @@ end
 -- Some entities are secretly swapped around by their mod. This allows all entities associated
 -- with an item to be found by 'Entity' search
 local mod_placeholder_entities = {
+  ['rail'] = {'straight-rail', 'curved-rail'},
+
   ['sp-spidertron-dock'] =  -- SpidertronPatrols
     {'sp-spidertron-dock-0', 'sp-spidertron-dock-30', 'sp-spidertron-dock-80', 'sp-spidertron-dock-100'},
 
   ['po-interface'] =  -- PowerOverload
     {'po-interface', 'po-interface-north', 'po-interface-east', 'po-interface-south'},
-
-  ['raw-rare-metals'] = 'rare-metals',  -- Krastorio2
-  ['raw-imersite'] = 'imersite',  -- Krastorio2
-  ['bitumen'] = 'bitumen-seep',  -- Pyanodons
-  ['steam'] = 'steam-fissure',  -- IR3
 
   ['offshore-pump-0'] = 'offshore-pump-0',  -- P-U-M-P-S
   ['offshore-pump-1'] = 'offshore-pump-1',
@@ -39,6 +36,8 @@ local mod_placeholder_entities = {
 
   ['burner-offshore-pump'] = 'burner-offshore-pump',  -- BurnerOffshorePump
   ['electric-offshore-pump'] = 'electric-offshore-pump',
+
+  ['se-space-rail'] = {'se-space-straight-rail', 'se-space-curved-rail'},  -- space-exploration
   ['se-core-fragment-omni'] = {'se-core-fragment-omni', 'se-core-fragment-omni-sealed'},
   ['se-core-fragment-iron-ore'] = {'se-core-fragment-iron-ore', 'se-core-fragment-iron-ore-sealed'},
   ['se-core-fragment-copper-ore'] = {'se-core-fragment-copper-ore', 'se-core-fragment-copper-ore-sealed'},
@@ -93,6 +92,22 @@ local function generate_distance_data(surface_data, player_position)
         group.distance = distance(group.avg_position, player_position)
       end
       table.sort(groups, function (k1, k2) return k1.distance < k2.distance end)
+    end
+  end
+end
+
+local function to_chunk_position(map_position)
+  return { math.floor(map_position.x / 32), math.floor(map_position.y / 32) }
+end
+
+local function remove_uncharted_groups(surface_data, surface, force)
+  for _, entity_groups in pairs(surface_data) do
+    for _, groups in pairs(entity_groups) do
+      for i, group in pairs(groups) do
+        if not force.is_chunk_charted(surface, to_chunk_position(group.avg_position)) then
+          table.remove(groups, i)
+        end
+      end
     end
   end
 end
@@ -411,18 +426,21 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
     if (target_is_item or target_is_fluid) and state.entities then
       local target_entity_name = mod_placeholder_entities[target_name]
 
-      if not target_entity_name then
-        local item_prototype = game.item_prototypes[target_name]
-        target_entity_name = target_name
-        if item_prototype and item_prototype.place_result then
-          target_entity_name = item_prototype.place_result.name
-        end
-      end
-
-      local entity_prototype = game.entity_prototypes[target_entity_name]
       local is_resource = false
-      if entity_prototype and (entity_prototype.infinite_resource ~= nil) then
-        is_resource = true
+      if not target_entity_name then
+        -- Try as a resource
+        target_entity_name = global.items_from_resources[target_name]
+        if target_entity_name then
+          is_resource = true
+        else
+          -- Otherwise, check for the item's place_result
+          local item_prototype = game.item_prototypes[target_name]
+          target_entity_name = target_name
+          if item_prototype and item_prototype.place_result then
+            target_entity_name = item_prototype.place_result.name
+          end
+          -- Or just try an entity with the same name as the item
+        end
       end
 
       entities = surface.find_entities_filtered{
@@ -446,6 +464,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
     if surface == player.surface then
       generate_distance_data(surface_data, player.position)
     end
+    remove_uncharted_groups(surface_data, surface, force)
     data[surface.name] = surface_data
   end
   return data
@@ -514,6 +533,8 @@ function Search.on_tick()
     search_data.current_surface = nil
     return
   end
+
+  local force = search_data.force
   local chunks_processed = 0
   local chunks_per_tick = settings.global["fs-chunks-per-tick"].value
   while chunks_processed < chunks_per_tick do
@@ -525,7 +546,7 @@ function Search.on_tick()
       return
     end
 
-    if current_surface.is_chunk_generated(chunk) then
+    if force.is_chunk_charted(current_surface, chunk) then
       chunks_processed = chunks_processed + 1
     else
       goto continue
@@ -540,7 +561,6 @@ function Search.on_tick()
 
     local state = search_data.state
     local surface_data = search_data.surface_data
-    local force = search_data.force
 
     local chunk_area = chunk.area
 
@@ -585,18 +605,21 @@ function Search.on_tick()
     if (target_is_item or target_is_fluid) and state.entities then
       local target_entity_name = mod_placeholder_entities[target_name]
 
-      if not target_entity_name then
-        local item_prototype = game.item_prototypes[target_name]
-        target_entity_name = target_name
-        if item_prototype and item_prototype.place_result then
-          target_entity_name = item_prototype.place_result.name
-        end
-      end
-
-      local entity_prototype = game.entity_prototypes[target_entity_name]
       local is_resource = false
-      if entity_prototype and (entity_prototype.infinite_resource ~= nil) then
-        is_resource = true
+      if not target_entity_name then
+        -- Try as a resource
+        target_entity_name = global.items_from_resources[target_name]
+        if target_entity_name then
+          is_resource = true
+        else
+          -- Otherwise, check for the item's place_result
+          local item_prototype = game.item_prototypes[target_name]
+          target_entity_name = target_name
+          if item_prototype and item_prototype.place_result then
+            target_entity_name = item_prototype.place_result.name
+          end
+          -- Or just try an entity with the same name as the item
+        end
       end
 
       entities = current_surface.find_entities_filtered{
@@ -636,6 +659,17 @@ function Search.find_machines(target_item, force, state, player, override_surfac
     -- 'Unknown signal selected'
     return data
   end
+
+  -- Crafting Combinator adds signals for recipes, which players sometimes mistake for items/fluids
+  if target_item.type == "virtual" and not state.signals
+    and (game.active_mods["crafting_combinator"] or game.active_mods["crafting_combinator_xeraph"]) then
+    local recipe = game.recipe_prototypes[target_name]
+    if recipe then
+      player.print("[Factory Search] It looks like you selected a recipe from the \"Crafting combinator recipes\" tab. Instead select an item or fluid from a different tab.")
+      return data
+    end
+  end
+
   local target_type = target_item.type
   local target_is_item = target_type == "item"
   local target_is_fluid = target_type == "fluid"
