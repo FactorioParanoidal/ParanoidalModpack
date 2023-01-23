@@ -92,7 +92,7 @@ script.on_event(defines.events.on_gui_opened, function(event)
 	local player = game.get_player(event.player_index)
 	local entity = event.entity
                 
-	if event.gui_type ~= defines.gui_type.entity or entity.name ~= 'fluid-memory-unit' then return end
+	if event.gui_type ~= defines.gui_type.entity or not entity or entity.name ~= 'fluid-memory-unit' then return end
 	
 	local main_frame = player.gui.screen.add{type = 'frame', name = 'fluid_memory_unit_gui', caption = {'entity-name.fluid-memory-unit'}, direction = 'vertical'}
 	main_frame.style.width = 448
