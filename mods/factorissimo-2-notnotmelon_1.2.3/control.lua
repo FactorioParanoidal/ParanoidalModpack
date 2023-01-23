@@ -59,6 +59,12 @@ local function init_globals()
 			end
 		end
 	end
+	
+	if remote.interfaces['PickerDollies'] then
+		remote.call('PickerDollies', 'add_blacklist_name', 'factory-1', true)
+		remote.call('PickerDollies', 'add_blacklist_name', 'factory-2', true)
+		remote.call('PickerDollies', 'add_blacklist_name', 'factory-3', true)
+	end
 end
 
 script.on_init(function()

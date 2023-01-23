@@ -8,13 +8,6 @@ local function cleanup_entities_for_factoriomaps()
 		remote.call("factoriomaps", "surface_set_hidden", surface, true)
 
 		for _, factory in pairs(factoryList) do
-			for _, entity in pairs(factory.inside_other_entities) do
-				if entity.valid and entity.name == "factory-power-pole" then
-					-- Move power pole to bottom left corner to hide it
-					entity.teleport({x = factory.inside_x - 32, y = factory.inside_y + 32})
-				end
-			end
-
 			if factory.built then
 				for _, id in pairs(factory.outside_overlay_displays) do
 					rendering.destroy(id)
