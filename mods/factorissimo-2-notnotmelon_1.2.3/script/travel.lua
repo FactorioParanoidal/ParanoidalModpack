@@ -71,45 +71,9 @@ local function leave_factory(e, factory, player)
 	teleport_safely(e, factory.outside_surface, {factory.outside_door_x, factory.outside_door_y}, player, true)
 end
 
-local function teleport_spiders()
-	local copy = {}
-	for k, spider in pairs(global.spidertrons) do
-		if not spider.valid or spider.get_driver() then goto continue end
-		--if not spider.autopilot_destination then goto continue end
-		if game.tick - (global.last_player_teleport[spider.unit_number] or 0) < 45 then goto continue end
-		copy[k] = spider
-		::continue::
-	end
-	
-	for _, spider in pairs(copy) do
-		local factory = find_surrounding_factory(spider.surface, spider.position)
-		if factory and spider.position.y > factory.inside_door_y + 1 then
-			if math.abs(spider.position.x - factory.inside_door_x) < 4 then
-				leave_factory(spider, factory, nil)
-				goto continue
-			end
-		end
-		
-		if spider.autopilot_destination then
-			for _, building in pairs(spider.surface.find_entities_filtered{type = BUILDING_TYPE, position = spider.position}) do
-				if has_layout(building.name) then
-					local factory = get_factory_by_building(building)
-					if factory and #spider.surface.find_entities_filtered{type = BUILDING_TYPE, position = spider.autopilot_destination, limit = 1} == 1 then
-						enter_factory(spider, factory, nil)
-					end
-					goto continue
-				end
-			end
-		end
-			
-		::continue::
-	end
-end
-script.on_nth_tick(30, teleport_spiders)
-
 script.on_event(defines.events.on_spider_command_completed, function(event)
 	local spider = event.vehicle
-	if not global.spidertrons[spider.unit_number] then return end
+	if not spider.get_driver() then return end
 	for _, building in pairs(spider.surface.find_entities_filtered{type = BUILDING_TYPE, position = spider.position}) do
 		if has_layout(building.name) then
 			local factory = get_factory_by_building(building)
@@ -139,8 +103,8 @@ end
 local function teleport_players()
 	local tick = game.tick
 	local jetpacks = get_jetpacks()
-	for player_index, player in pairs(game.players) do
-		if not player.connected or tick - (global.last_player_teleport[player_index] or 0) < 45 then goto continue end
+	for player_index, player in pairs(game.connected_players) do
+		if tick - (global.last_player_teleport[player_index] or 0) < 45 then goto continue end
 		local walking_state = player.walking_state
 		local driving = player.driving
 		if not walking_state.walking and not driving then goto continue end
@@ -184,7 +148,3 @@ local function teleport_players()
 	end
 end
 script.on_nth_tick(6, teleport_players)
-
-script.on_event(defines.events.on_entity_destroyed, function(event)
-	if event.unit_number then global.spidertrons[event.unit_number] = nil end
-end) 

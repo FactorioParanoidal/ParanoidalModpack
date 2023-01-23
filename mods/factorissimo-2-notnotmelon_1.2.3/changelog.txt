@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2023.1.17
+  Info:
+    - Spidertrons now must have a driver for teleportation
+    - Fixed crash with picker dollies
+    - Fixed crash with adv fluid handling for pY
+    - Fixed crash with factoriomaps
+---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 2022.12.9
   Info:
