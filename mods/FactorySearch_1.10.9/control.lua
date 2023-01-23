@@ -47,12 +47,37 @@ end
 
 script.on_event({defines.events.on_surface_created, defines.events.on_surface_deleted}, update_surface_count)
 
+local function update_resource_names()
+  local resources = game.get_filtered_entity_prototypes({{filter = "type", type = "resource"}})
+  local item_to_resources = {}
+  for _, resource in pairs(resources) do
+    local properties = resource.mineable_properties
+    if properties.minable and properties.products then
+      for _, item in pairs(resource.mineable_properties.products) do
+        local associated_resources = item_to_resources[item.name] or {}
+        table.insert(associated_resources, resource.name)
+        item_to_resources[item.name] = associated_resources
+      end
+    end
+  end
+
+  -- Hardcode some Pyanodons associations
+  if game.active_mods["pypetroleumhandling"] then
+    table.insert(item_to_resources["raw-gas"], "bitumen-seep")
+    table.insert(item_to_resources["tar"], "bitumen-seep")
+    table.insert(item_to_resources["crude-oil"], "bitumen-seep")
+  end
+
+  global.items_from_resources = item_to_resources
+end
+
 script.on_init(
   function()
     global.players = {}
     global.current_searches = {}
     global.multiple_surfaces = false
     update_surface_count()
+    update_resource_names()
   end
 )
 
@@ -73,5 +98,6 @@ script.on_configuration_changed(
 
     global.multiple_surfaces = false
     update_surface_count()
+    update_resource_names()
   end
 )
