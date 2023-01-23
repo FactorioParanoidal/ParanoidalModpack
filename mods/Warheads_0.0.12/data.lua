@@ -8,6 +8,9 @@ end
 if mods["space-exploration"] then
   require("prototypes.compatibility.SE-weapontypes")
 end
+if mods["lightArtillery"] then
+  require("prototypes.compatibility.LightArtillery-weapontypes")
+end
 
 
 if mods["bobwarfare"] then

@@ -1,6 +1,6 @@
 {
 	"name": "Warheads",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"title": "Warheads",
 	"author": "BicycleEater",
 	"description": "Acts as a super-cross mod for weapons, allowing mods adding warheads to avoid working to support every different mod.",
@@ -12,7 +12,8 @@
 		"? space-exploration",
 		"? Krastorio2",
 		"? RampantArsenal",
-		"? aai-vehicles-ironclad"
+		"? aai-vehicles-ironclad",
+		"? lightArtillery"
 	]
 }
 
