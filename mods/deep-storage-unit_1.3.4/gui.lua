@@ -90,7 +90,7 @@ script.on_event(defines.events.on_player_changed_surface, function(event)
 end)
 
 script.on_event(defines.events.on_gui_opened, function(event)                
-	if event.gui_type ~= defines.gui_type.entity or event.entity.name ~= 'memory-unit' then return end
+	if event.gui_type ~= defines.gui_type.entity or not event.entity or event.entity.name ~= 'memory-unit' then return end
 	
 	local player = game.get_player(event.player_index)
 	local entity = event.entity
