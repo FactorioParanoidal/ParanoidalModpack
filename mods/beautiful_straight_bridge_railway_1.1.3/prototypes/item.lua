@@ -107,6 +107,21 @@ end
 local ptype
 local holder = {}
 local bridges = {
+	wood = {
+		order = "a[train-system]-az-a",
+		ingredients = {
+			{"wood", 1}, {"iron-stick", 1}, {"steel-plate", 1}
+		},
+		overlay_icon = "wood.png"
+	},
+	iron = {
+		order = "a[train-system]-az-b",
+		ingredients = {
+			{"iron-plate", 1}, {"iron-stick", 1}, {"steel-plate", 1}
+		},
+		overlay_icon = "steel-plate.png",
+		tint = {r=0.7, g=0.3, b=0.3, a=1}
+	},
 	brick = {
 		order = "a[train-system]-az-c",
 		ingredients = {
@@ -164,7 +179,7 @@ for id, param in pairs(bridges) do
 -- curved-rail
 	ptype = table.deepcopy(data.raw["curved-rail"]["curved-rail"])
 	ptype.name = "bbr-curved-rail-"..id
-	ptype.collision_mask = { "object-layer" }
+	-- ptype.collision_mask = { "object-layer" }
 	ptype.minable.result = "bbr-rail-"..id
 	ptype.placeable_by.item="bbr-rail-"..id
 	ptype.pictures = bbr_rail_pictures(id)
@@ -181,3 +196,15 @@ for id, param in pairs(bridges) do
 end
 
 data:extend(holder)
+
+
+-- move to data-updates.lua because will not be overwritten by other mods
+--[[
+-- change default entity to placeable on water
+data.raw["rail-signal"]["rail-signal"].collision_mask = { "rail-layer" }
+data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = { "rail-layer" }
+
+-- data.raw["electric-pole"]["small-electric-pole"].collision_mask = { "object-layer" }
+-- data.raw["electric-pole"]["medium-electric-pole"].collision_mask = { "object-layer" }
+data.raw["electric-pole"]["big-electric-pole"].collision_mask = { "object-layer" }
+]]--
