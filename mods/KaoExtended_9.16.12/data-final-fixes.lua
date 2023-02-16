@@ -49,3 +49,5 @@ require("prototypes.custom_production_ui_100")
 require("prototypes.item-fuelvalue")
 require("prototypes.chest-gfx")
 require("prototypes.labs-gfx")
+
+require("prototypes.Bobs-alloy-recipe") --Re-enabled Alloy Smelting as bob's mods
