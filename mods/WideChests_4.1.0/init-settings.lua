@@ -8,6 +8,8 @@ MergingChests.BobLogisticModName = "boblogistics"
 MergingChests.BobPlatesModName = "bobplates"
 MergingChests.DyWorldModName = "DyWorld-Dynamics"
 MergingChests.NulliusModName = "nullius"
+MergingChests.PaperChestModName = "paperchest"
+MergingChests.AngelsBioProcessingModName = "angelsbioprocessing"
 
 function MergingChests.CheckMod(mod)
 	return (mods or script.active_mods)[mod]
@@ -279,4 +281,25 @@ if MergingChests.CheckMod(MergingChests.NulliusModName) then
 			}
 		}
 	end
+end
+
+if MergingChests.CheckMod(MergingChests.PaperChestModName) and MergingChests.CheckMod(MergingChests.AngelsBioProcessingModName) then
+	MergingChests.MergableChestIdToData["cellulose-fiber-chest"] = {
+		id = "cellulose-fiber-chest",
+		name = "PaperChest Cellulose Fiber Chest",
+		type = "paper-chest-cellulose-fiber",
+		additional_properties = {
+			icon = "__paperchest__/graphics/icons/cellulose-fiber-chest.png",
+			icon_size = 64
+		}
+	}
+	MergingChests.MergableChestIdToData["paper-chest"] = {
+		id = "paper-chest",
+		name = "PaperChest Paper Chest",
+		type = "paper-chest-paper",
+		additional_properties = {
+			icon = "__paperchest__/graphics/icons/paper-chest.png",
+			icon_size = 64
+		}
+	}
 end
