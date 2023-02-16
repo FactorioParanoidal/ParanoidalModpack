@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2021 Picklock
+--[[ Copyright (c) 2019 - 2023 Picklock
  * Part of Picklocks Inserter
  * data.lua
- * Version 1.110.4.52
+ * Version 1.110.5.53
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
