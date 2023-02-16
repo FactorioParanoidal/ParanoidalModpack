@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2021 Picklock
+--[[ Copyright (c) 2019 - 2023 Picklock
  * Part of Picklocks Inserter
  * control.lua
- * Version 1.110.4.52
+ * Version 1.110.5.53
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -200,6 +200,18 @@
 			elseif entity.type == PI_type.car or entity.type == PI_type.lab then
 				--if PI_debug then print_debug("entity.type: car or lab") end
 				stack.count = stack.count - entity.get_inventory(2).insert(stack)
+			elseif entity.type == PI_type.cargo or entity.type == PI_type.log_chest then
+				--if PI_debug then print_debug("entity.type: cargo-wagon") end
+				if PI_temp_unlock then
+					--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
+					local entityInv = entity.get_inventory(1)
+					local entityInvBar = entityInv.get_bar()
+					entityInv.set_bar()
+					stack.count = stack.count - entity.insert(stack)
+					entityInv.set_bar(entityInvBar)
+				else
+					stack.count = stack.count - entity.insert(stack)
+				end
 			end
 			--if PI_debug then print_debug("PI_PutStackBack - stack.count: " ..tostring(stack.count)) end
 			if stack.valid_for_read then
@@ -566,7 +578,7 @@
 	--tick
 		script.on_event(defines.events.on_tick, function(event)
 			--Set controls
-			if game.players[1] ~= nil and not PI_general.isControlSet then
+			if not PI_general.isControlSet then 
 				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
 				PI_general.isAdmin = true
 				PI_set_controls(game.players[1])
