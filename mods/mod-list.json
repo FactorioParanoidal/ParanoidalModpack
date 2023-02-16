@@ -249,11 +249,6 @@
     },
     
     {
-      "name": "creative-mod",
-      "enabled": true
-    },
-    
-    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -524,17 +519,7 @@
     },
     
     {
-      "name": "music-new",
-      "enabled": true
-    },
-    
-    {
       "name": "MxlChievements",
-      "enabled": true
-    },
-    
-    {
-      "name": "m_WhereIsMyBody",
       "enabled": true
     },
     
@@ -600,11 +585,6 @@
     
     {
       "name": "osm-lib",
-      "enabled": true
-    },
-    
-    {
-      "name": "osm-lib-postprocess",
       "enabled": true
     },
     
@@ -900,11 +880,6 @@
     
     {
       "name": "toxicPollution",
-      "enabled": true
-    },
-    
-    {
-      "name": "TrainSpeeds",
       "enabled": true
     },
     
