@@ -63,9 +63,10 @@ local function update_resource_names()
 
   -- Hardcode some Pyanodons associations
   if game.active_mods["pypetroleumhandling"] then
-    table.insert(item_to_resources["raw-gas"], "bitumen-seep")
-    table.insert(item_to_resources["tar"], "bitumen-seep")
-    table.insert(item_to_resources["crude-oil"], "bitumen-seep")
+    --  or {} in case something removed those items or playing an older version of Py
+    table.insert(item_to_resources["raw-gas"] or {}, "bitumen-seep")
+    table.insert(item_to_resources["tar"] or {}, "bitumen-seep")
+    table.insert(item_to_resources["crude-oil"] or {}, "bitumen-seep")
   end
 
   global.items_from_resources = item_to_resources

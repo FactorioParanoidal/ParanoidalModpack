@@ -25,7 +25,14 @@ script.on_event("open-search-prototype",
           name = ghost.ghost_name
         end
       end
-      if game.item_prototypes[name] then
+      if event.selected_prototype.derived_type == "resource" then
+        -- If we know it is a resource, then ensure we treat it as one first
+        local products = game.entity_prototypes[name].mineable_properties.products
+        if products then
+          name = products[1].name
+          type = products[1].type
+        end
+      elseif game.item_prototypes[name] then
         type = "item"
       elseif game.fluid_prototypes[name] then
         type = "fluid"

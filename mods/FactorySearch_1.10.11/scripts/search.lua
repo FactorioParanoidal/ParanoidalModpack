@@ -248,8 +248,13 @@ function Search.process_found_entities(entities, state, surface_data, target_ite
         end
       elseif entity_type == "mining-drill" then
         local mining_target = entity.mining_target
-        if mining_target and mining_target.name == target_name then
-          SearchResults.add_entity(entity, surface_data.producers)
+        if mining_target then
+          local mineable_properties = mining_target.prototype.mineable_properties
+          for _, product in pairs(mineable_properties.products or {}) do
+            if product.name == target_name then
+              SearchResults.add_entity(entity, surface_data.producers)
+            end
+          end
         end
       elseif target_is_fluid and entity_type == "offshore-pump" then
         if entity.get_fluid_count(target_name) > 0 then
@@ -456,7 +461,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
             amount = entity.amount
           end
           SearchResults.add_entity_resource(entity, surface_data.entities, amount)
-        else
+        elseif entity.type ~= "resource" then
           SearchResults.add_entity(entity, surface_data.entities)
         end
       end
@@ -641,7 +646,7 @@ function Search.on_tick()
             amount = entity.amount
           end
           SearchResults.add_entity_resource(entity, surface_data.entities, amount)
-        else
+        elseif entity.type ~= "resource" then
           SearchResults.add_entity(entity, surface_data.entities)
         end
       end
