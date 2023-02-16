@@ -46,4 +46,4 @@ data.raw.technology["electrolyser-4"].hidden = true
 data.raw.technology["bob-robot-plasma-drones"].hidden = true
 
 --разблокируем рецепт для упрощенной плавки бронзы в печах
-bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy")
+--bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy")
