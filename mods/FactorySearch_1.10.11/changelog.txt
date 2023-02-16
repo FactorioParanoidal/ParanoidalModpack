@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.11
+Date: 11 February 2023
+  Bugfixes:
+    - Fixed crash on load with older versions of Pyanodons mods
+---------------------------------------------------------------------------------------------------
+Version: 1.10.10
+Date: 26 January 2023
+  Bugfixes:
+    - Fixed searching for K2 rare metals would return mining drills that are mining raw rare metals
+    - Fixed 'Control + Shift + Click' on K2 rare metals ore searching for raw metals rather than raw rare matels
+---------------------------------------------------------------------------------------------------
 Version: 1.10.9
 Date: 15 January 2023
   Changes:
