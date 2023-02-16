@@ -10,3 +10,5 @@
 .nuke/bin
 .nuke/obj
 .nuke/temp
+mods/music-new_0.1.5/
+mods/*.zip
