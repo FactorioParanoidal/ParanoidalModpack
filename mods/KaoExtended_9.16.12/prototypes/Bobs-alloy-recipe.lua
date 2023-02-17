@@ -179,6 +179,73 @@ data:extend({
     },
   ]]--
   
+  {
+    type = "recipe",
+    name = "nickel-electrolysis-x",
+	icons = {
+				{
+					icon = "__bobicons__/graphics/icons/plate/nickel-plate-128.png",
+					icon_size = 128,
+					icon_mipmaps = 4
+				},
+				{
+					icon = "__bobicons__/graphics/icons/ores/nickel-ore/nickel-ore-1-64.png",
+					icon_size = 64,
+					icon_mipmaps = 4,
+					scale = 0.2,
+					shift = { -12, -12}
+				}
+			},
+    subgroup = "angels-smelting",
+    order = "f[ingot-nickel]-d",
+    category = "petrochem-electrolyser",
+    enabled = false,
+    energy_required = 12,
+    ingredients = {
+      { type = "item", name = "nickel-ore", amount = 10 },
+      { type = "fluid", name = "water", amount = 100 },
+    },
+    results = {
+      { type = "item", name = "nickel-plate", amount = 1 },
+      { type = "fluid", name = "oxygen", amount = 20 },
+    },
+    allow_decomposition = false,
+  },  
+  
+  {
+    type = "recipe",
+    name = "zinc-electrolysis-x",
+	icons = {
+				{
+					icon = "__bobicons__/graphics/icons/plate/zinc-plate-128.png",
+					icon_size = 128,
+					icon_mipmaps = 4
+				},
+				{
+					icon = "__bobicons__/graphics/icons/ores/zinc-ore/zinc-ore-1-64.png",
+					icon_size = 64,
+					icon_mipmaps = 4,
+					scale = 0.2,
+					shift = { -12, -12}
+				}
+			},
+    subgroup = "angels-smelting",
+    order = "f[ingot-zinc]-d",
+    category = "petrochem-electrolyser",
+    enabled = false,
+    energy_required = 14,
+    ingredients = {
+      { type = "item", name = "zinc-ore", amount = 10 },
+      { type = "fluid", name = "water", amount = 100 },
+    },
+    results = {
+      { type = "item", name = "zinc-plate", amount = 1 },
+      { type = "fluid", name = "oxygen", amount = 25 },
+    },
+    allow_decomposition = false,
+  },
+  
+  
 })
 
 bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy-x")
@@ -190,3 +257,5 @@ bobmods.lib.tech.add_recipe_unlock("angels-gunmetal-smelting-1", "gunmetal-alloy
 bobmods.lib.tech.add_recipe_unlock("angels-invar-smelting-1", "invar-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "cobalt-steel-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-nickel-smelting-1", "nickel-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
