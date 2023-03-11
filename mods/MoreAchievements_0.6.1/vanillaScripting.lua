@@ -1,7 +1,22 @@
+local function validate_player(player)
+    if not player then
+        return false
+    end
+    if not player.valid then
+        return false
+    end
+    if not player.connected then
+        return false
+    end
+    if not game.players[player.name] then
+        return false
+    end
+    return true
+end
+
 script.on_init(function(e)
     global.trees_destroyed = 0
-end
-)
+end)
 
 function treeDestroyed(e)
     if e.entity.type == "tree" then
@@ -21,11 +36,8 @@ function onEntityDied(e)
     local cause = e.cause
     local causeForce = e.force
 
-    --Friendly fire - destroy your own building
-    if cause and causeForce and cause.type == "character" and entity.force == causeForce then
-        cause.player.unlock_achievement("friendly-fire")
-        --tango down - have a turret kill a biter
-    elseif cause and causeForce and cause.name == "gun-turret" and entity.type == "unit" then
+    --tango down - have a turret kill a biter
+    if cause and causeForce and cause.name == "gun-turret" and entity.type == "unit" then
         for index, player in pairs(causeForce.players) do
             player.unlock_achievement("tango-down")
         end
@@ -197,9 +209,17 @@ script.on_event(defines.events.on_player_died, function(e)
     -- Check for validity, since worm turrets are annoying
     if not causeEntity then return end
     local player = game.players[e.player_index]
+    if not validate_player(player) then
+        return
+    end
 
     if causeEntity.name == "small-worm-turret" or causeEntity.name == "medium-worm-turret" or causeEntity.name == "big-worm-turret" then
         player.unlock_achievement("im-melting")
+    end
+
+    --Friendly fire - destroy your own building
+    if causeEntity.name == "character" then
+        player.unlock_achievement("friendly-fire")
     end
 end)
 
