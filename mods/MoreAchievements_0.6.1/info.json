@@ -1,8 +1,8 @@
 {
     "name": "MoreAchievements",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "title": "More Achievements",
-    "author": "Gangsir, Bilka",
+    "author": "SerhiiS, Gangsir, Bilka",
     "homepage": "https://github.com/Carbonify/Achiever",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1.0"],
