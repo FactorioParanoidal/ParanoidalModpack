@@ -1,0 +1,10 @@
+{"name": "BobPipesThroughput",
+ "version": "0.1.0",
+ "title": "Bob Pipes Throughput",
+ "contact": "https://mods.factorio.com/mod/BobPipesThroughput/discussion",
+ "author": "SerhiiS",
+ "homepage": "https://github.com/Serheynix/BobPipesThroughput",
+ "description": "Change throughput depending per pipe tier",
+ "dependencies": ["boblogistics >= 1.0"],
+ "factorio_version": "1.1"
+}
