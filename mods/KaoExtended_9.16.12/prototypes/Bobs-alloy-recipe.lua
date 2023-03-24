@@ -207,7 +207,7 @@ data:extend({
     },
     results = {
       { type = "item", name = "nickel-plate", amount = 1 },
-      { type = "fluid", name = "oxygen", amount = 20 },
+      { type = "fluid", name = "gas-oxygen", amount = 20 },
     },
     allow_decomposition = false,
   },  
@@ -240,7 +240,7 @@ data:extend({
     },
     results = {
       { type = "item", name = "zinc-plate", amount = 1 },
-      { type = "fluid", name = "oxygen", amount = 25 },
+      { type = "fluid", name = "gas-oxygen", amount = 25 },
     },
     allow_decomposition = false,
   },
