@@ -19,19 +19,19 @@ partial class Build : NukeBuild {
     ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.PrintInfo);
 
-    [GitRepository] public GitRepository GitRepo;
+    [GitRepository] public GitRepository GitRepo = null!;
 
     Target PrintInfo => _ => _
         .Executes(() =>
         {
-            Log.Information(RootDirectory);
+            Log.Information("Root directory: {RootDirectory}", RootDirectory);
             Log.Information("Branch: {BranchName}", GitRepo.Branch);
             Log.Information("Commit: {CommitHash}", GitRepo.Commit);
 
             try {
                 var requiredFactorioVersion = GetRequiredFactorioVersion();
-                Log.Information("For Factorio: {factorioVersion} and higher", requiredFactorioVersion);
-                Log.Information("Download Factorio {factorioVersion}: {factorioDownloading}", requiredFactorioVersion, Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString()));
+                Log.Information("For Factorio: {FactorioVersion} and higher", requiredFactorioVersion);
+                Log.Information("Download Factorio {FactorioVersion}: {FactorioDownloading}", requiredFactorioVersion, Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString()));
             }
             catch (Exception e) {
                 Log.Error(e, "Failed to determine Factorio version");
@@ -66,7 +66,7 @@ partial class Build : NukeBuild {
                 }
             }
 
-            Log.Information("Factorio {requiredVersion} server downloaded!", requiredFactorioVersion);
+            Log.Information("Factorio {RequiredVersion} server downloaded!", requiredFactorioVersion);
         });
 
     Target EnsureLaunchability => _ => _
@@ -89,7 +89,7 @@ partial class Build : NukeBuild {
         .Executes(() =>
         {
             var targetDirectory = RootDirectory / "zipped-mods";
-            Log.Information("Zipping mods to {targetDirectory}", targetDirectory);
+            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
             FileSystemTasks.EnsureCleanDirectory(targetDirectory);
 
             var mods = Directory.EnumerateDirectories(RootDirectory / "mods");
@@ -98,11 +98,11 @@ partial class Build : NukeBuild {
                 var mod = new FactorioMod(modPath);
                 try {
                     var modZipPath = targetDirectory / $"{mod.GetInternalName()}_{mod.GetModVersion()}.zip";
-                    Log.Information("Zipping {modName} to {modZipPath}", mod.GetInternalName(), modZipPath);
+                    Log.Information("Zipping {ModName} to {ModZipPath}", mod.GetInternalName(), modZipPath);
                     Zip(modZipPath, modPath);
                 }
                 catch (Exception e) {
-                    Log.Error("Failed to get version of mod {modName}, due to {reason}", mod.GetInternalName(), e.Message);
+                    Log.Error("Failed to get version of mod {ModName}, due to {Reason}", mod.GetInternalName(), e.Message);
                 }
             });
         });
