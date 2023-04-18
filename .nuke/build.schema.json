@@ -66,6 +66,7 @@
               "EnsureLaunchability",
               "PrepareHeadless",
               "PrintInfo",
+              "PullLocalization",
               "ZipMods"
             ]
           }
@@ -79,6 +80,7 @@
               "EnsureLaunchability",
               "PrepareHeadless",
               "PrintInfo",
+              "PullLocalization",
               "ZipMods"
             ]
           }

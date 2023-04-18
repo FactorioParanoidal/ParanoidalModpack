@@ -7,8 +7,21 @@ variables:
 
 stages:
   - launchability
+  - updateLocalization
 
 launch-ability:
+  only:
+    - pushes
   stage: launchability
   script:
     - ./build.sh EnsureLaunchability
+
+pull-localization:
+  only:
+    - triggers
+  stage: updateLocalization
+  script:
+    - git checkout --track remotes/origin/$CI_COMMIT_BRANCH
+    - ./build.sh  PullLocalization
+    - git config --global user.email 'skproch@yandex.ru'
+    - git diff --quiet && git diff --staged --quiet || (git add . && git commit -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && git push https://paranoidal:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git main)

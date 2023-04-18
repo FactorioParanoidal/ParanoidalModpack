@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Nuke.Common;
@@ -103,6 +105,24 @@ partial class Build : NukeBuild {
                     Log.Error("Failed to get version of mod {modName}, due to {reason}", mod.GetInternalName(), e.Message);
                 }
             });
+        });
+
+    Target PullLocalization => _ => _
+        .Executes(async () =>
+        {
+            var stream = await Utils.HttpClient.GetStreamAsync(Utils.LocalizationModFolderPullAddress);
+            using var reader = new ZipArchive(stream);
+
+            var paranoidalLocaleFolder = RootDirectory / "mods" / "ParanoidalLocale";
+            FileSystemTasks.EnsureCleanDirectory(paranoidalLocaleFolder);
+            var zipArchiveEntries = reader.Entries.Where(entry => entry.Length != 0).ToList();
+            foreach (var entry in zipArchiveEntries) {
+                var filePath = paranoidalLocaleFolder / entry.FullName[46..];
+                FileSystemTasks.EnsureExistingParentDirectory(filePath);
+                entry.ExtractToFile(filePath);
+            }
+
+            Log.Information("Extracted {Count} files", zipArchiveEntries.Count);
         });
 
     async Task EnsureFactorioServerCanLaunch(string factorioServerLocation) {
