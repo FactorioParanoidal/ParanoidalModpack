@@ -212,6 +212,7 @@ data:extend({
     allow_decomposition = false,
   },  
   
+     
   {
     type = "recipe",
     name = "zinc-electrolysis-x",
@@ -240,11 +241,85 @@ data:extend({
     },
     results = {
       { type = "item", name = "zinc-plate", amount = 1 },
+      { type = "fluid", name = "oxygen", amount = 25 },
+    },
+    allow_decomposition = false,
+  },
+
+   {
+    type = "recipe",
+    name = "cobalat-electrolysis-x",
+	icons = {
+				{
+					icon = "__bobicons__/graphics/icons/plate/cobalt-plate-128.png", 
+					icon_size = 128,
+					icon_mipmaps = 4
+				},
+				{
+					icon = "__bobicons__/graphics/icons/ores/cobalt-ore-64.png",
+					icon_size = 64,
+					icon_mipmaps = 4,
+					scale = 0.2,
+					shift = { -12, -12}
+				}
+			},
+    subgroup = "angels-smelting",
+    order = "f[ingot-zinc]-d",
+    category = "petrochem-electrolyser",
+    enabled = false,
+    energy_required = 17,
+    ingredients = {
+      { type = "item", name = "cobalt-ore", amount = 14 },
+	  { type = "item", name = "angels-electrode", amount = 1 },
+      { type = "fluid", name = "water-purified", amount = 100 },
+	  
+    },
+    results = {
+      { type = "item", name = "cobalt-plate", amount = 1 },
       { type = "fluid", name = "gas-oxygen", amount = 25 },
+      { type = "fluid", name = "gas-hydrogen", amount = 35 },
+      { type = "item", name = "slag", amount = 8 },
+	  { type = "item", name = "angels-electrode-used", amount = 1, catalyst_amount = 1 },
     },
     allow_decomposition = false,
   },
   
+   {
+    type = "recipe",
+    name = "titanium-electrolysis-x",
+	icons = {
+				{
+					icon = "__bobicons__/graphics/icons/plate/titanium-plate-128.png", 
+					icon_size = 128,
+					icon_mipmaps = 4
+				},
+				{
+					icon = "__bobicons__/graphics/icons/ores/rutile-ore-64.png",
+					icon_size = 64,
+					icon_mipmaps = 4,
+					scale = 0.2,
+					shift = { -12, -12}
+				}
+			},
+    subgroup = "angels-smelting",
+    order = "f[ingot-zinc]-d",
+    category = "petrochem-electrolyser",
+    enabled = false,
+    energy_required = 22,
+    ingredients = {
+      { type = "item", name = "rutile-ore", amount = 14 },
+      { type = "item", name = "angels-electrode", amount = 1 },
+      { type = "fluid", name = "water-purified", amount = 100 },
+    },
+    results = {
+      { type = "item", name = "titanium-plate", amount = 1 },
+      { type = "fluid", name = "gas-oxygen", amount = 30 },
+      { type = "fluid", name = "gas-hydrogen", amount = 40 },
+      { type = "item", name = "slag", amount = 9 },
+	  { type = "item", name = "angels-electrode-used", amount = 1, catalyst_amount = 1 },
+    },
+    allow_decomposition = false,
+  },
   
 })
 
@@ -258,4 +333,5 @@ bobmods.lib.tech.add_recipe_unlock("angels-invar-smelting-1", "invar-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "cobalt-steel-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nickel-smelting-1", "nickel-electrolysis-x")
-bobmods.lib.tech.add_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
