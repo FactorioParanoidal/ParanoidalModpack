@@ -19,17 +19,21 @@ partial class Build : NukeBuild {
     ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.PrintInfo);
 
-    [GitRepository] public GitRepository GitRepo = null!;
+    [GitRepository]
+    GitRepository GitRepo = null!;
+
+    [Parameter("Sets target factorio version to use if required. Specify target version, or null to use minimal required for modpack, or latest for latest factorio version available.")]
+    readonly string? TargetFactorioVersion;
 
     Target PrintInfo => _ => _
-        .Executes(() =>
+        .Executes(async () =>
         {
             Log.Information("Root directory: {RootDirectory}", RootDirectory);
             Log.Information("Branch: {BranchName}", GitRepo.Branch);
             Log.Information("Commit: {CommitHash}", GitRepo.Commit);
 
             try {
-                var requiredFactorioVersion = GetRequiredFactorioVersion();
+                var requiredFactorioVersion = await GetRequiredFactorioVersion();
                 Log.Information("For Factorio: {FactorioVersion} and higher", requiredFactorioVersion);
                 Log.Information("Download Factorio {FactorioVersion}: {FactorioDownloading}", requiredFactorioVersion, Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString()));
             }
@@ -45,7 +49,7 @@ partial class Build : NukeBuild {
                 Log.Warning("Seems like you are running on non-linux os");
                 Log.Warning("Factorio headless server will only available for linux!");
             }
-            var requiredFactorioVersion = GetRequiredFactorioVersion();
+            var requiredFactorioVersion = await GetRequiredFactorioVersion();
             var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion.ToString());
             if (!Directory.Exists(headlessPath)) {
                 try {
@@ -53,7 +57,7 @@ partial class Build : NukeBuild {
                     await using var stream = await Utils.HttpClient.GetStreamAsync(Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString(), "headless", "linux64"));
                     using var reader = ReaderFactory.Open(stream);
                     Directory.CreateDirectory(headlessPath);
-                    reader.WriteAllToDirectory(headlessPath, new ExtractionOptions() { ExtractFullPath = true });
+                    reader.WriteAllToDirectory(headlessPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
 
                     Log.Information("Factorio extracted");
                     Log.Information("Testing factorio launchability");
@@ -73,7 +77,7 @@ partial class Build : NukeBuild {
         .DependsOn(PrepareHeadless)
         .Executes(async () =>
         {
-            var requiredFactorioVersion = GetRequiredFactorioVersion();
+            var requiredFactorioVersion = await GetRequiredFactorioVersion();
             var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion.ToString(), "factorio");
 
             // Linking mods
@@ -171,11 +175,19 @@ partial class Build : NukeBuild {
         }
     }
 
-    Version GetRequiredFactorioVersion() {
-        RootDirectory.NotNull("Git repository not found");
-        var paranoidalRepository = new ParanoidalRepository(RootDirectory);
-        var coreModPath = paranoidalRepository.LocateMod(ParanoidalRepository.CoreModeName).NotNull("Cannot locate core mod")!;
-        var coreMod = new FactorioMod(coreModPath);
-        return coreMod.GetDependsOnFactorioVersion();
+    async Task<Version> GetRequiredFactorioVersion() {
+        Log.Information("Resolving factorio version. Parameter TargetFactorioVersion is {TargetFactorioVersion}", TargetFactorioVersion);
+        if (TargetFactorioVersion == null) {
+            RootDirectory.NotNull("Git repository not found");
+            var paranoidalRepository = new ParanoidalRepository(RootDirectory);
+            var coreModPath = paranoidalRepository.LocateMod(ParanoidalRepository.CoreModeName).NotNull("Cannot locate core mod")!;
+            var coreMod = new FactorioMod(coreModPath);
+            return coreMod.GetDependsOnFactorioVersion();
+        }
+        if (TargetFactorioVersion.Trim().ToLower() == "latest") {
+            Log.Information("Resolving latest version");
+            return Version.Parse(await Utils.GetLatestVersion());
+        }
+        return Version.Parse(TargetFactorioVersion);
     }
 }

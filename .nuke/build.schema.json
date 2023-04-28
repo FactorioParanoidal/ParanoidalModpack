@@ -85,6 +85,10 @@
             ]
           }
         },
+        "TargetFactorioVersion": {
+          "type": "string",
+          "description": "Sets target factorio version to use if required. Specify target version, or null to use minimal required for modpack, or latest for latest factorio version available"
+        },
         "Verbosity": {
           "type": "string",
           "description": "Logging verbosity during build execution. Default is 'Normal'",

@@ -15,6 +15,7 @@ launch-ability:
   stage: launchability
   script:
     - ./build.sh EnsureLaunchability
+    - ./build.sh EnsureLaunchability --TargetFactorioVersion latest
 
 pull-localization:
   rules:
