@@ -145,8 +145,8 @@ local function replaceAngelRefi()
     KaoExtended.recipe.addtorecipe("hydro-plant-2", {"intermediate-structure-components", 2})
 	KaoExtended.recipe.addtorecipe("hydro-plant-3", {"advanced-structure-components", 2})
 	
-	--KaoExtended.recipe.addtorecipe("algae-farm", {"basic-structure-components", 5})
-	KaoExtended.recipe.addtorecipe("algae-farm-2", {"intermediate-structure-components", 4})
+	KaoExtended.recipe.addtorecipe("algae-farm-2", {"basic-structure-components", 5})
+	KaoExtended.recipe.addtorecipe("algae-farm-3", {"intermediate-structure-components", 5})
 	
 end
 
