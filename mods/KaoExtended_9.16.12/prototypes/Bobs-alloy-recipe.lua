@@ -105,8 +105,8 @@ data:extend({
     category = "mixing-furnace",
     energy_required = 32,
     ingredients = {
-      { type = "item", name = "nickel-plate", amount = 2 },
-      { type = "item", name = "iron-plate", amount = 3 },
+       { type = "item", name = "steel-plate", amount = 4 },
+	  { type = "item", name = "nickel-plate", amount = 2 },
     },
     results = {
       { type = "item", name = "invar-alloy", amount = 1 },
@@ -241,7 +241,7 @@ data:extend({
     },
     results = {
       { type = "item", name = "zinc-plate", amount = 1 },
-      { type = "fluid", name = "oxygen", amount = 25 },
+      { type = "fluid", name = "gas-oxygen", amount = 25 },
     },
     allow_decomposition = false,
   },
@@ -333,5 +333,6 @@ bobmods.lib.tech.add_recipe_unlock("angels-invar-smelting-1", "invar-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "cobalt-steel-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nickel-smelting-1", "nickel-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
