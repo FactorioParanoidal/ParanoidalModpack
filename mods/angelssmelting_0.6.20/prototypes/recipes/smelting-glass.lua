@@ -9,13 +9,13 @@ data:extend({
     name = "glass-mixture-1",
     category = "powder-mixing",
     subgroup = "angels-glass",
-    energy_required = 4,
+    energy_required = 10,
     enabled = false,
     ingredients = {
-      { type = "item", name = "quartz", amount = 1 },
+      { type = "item", name = "quartz", amount = 3 },
     },
     results = {
-      { type = "item", name = "solid-glass-mixture", amount = 1 },
+      { type = "item", name = "solid-glass-mixture", amount = 4 },
     },
     icons = angelsmods.functions.add_number_icon_layer(
       angelsmods.functions.get_object_icons("solid-glass-mixture"),
@@ -148,7 +148,7 @@ data:extend({
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
       },
       results = {
-        { type = "item", name = "angels-plate-glass", amount = 3 },
+        { type = "item", name = "angels-plate-glass", amount = 4 },
       },
     },
     expensive = {
