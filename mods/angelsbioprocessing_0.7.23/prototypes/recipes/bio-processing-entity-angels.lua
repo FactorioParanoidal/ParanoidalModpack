@@ -199,8 +199,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "cropfarm-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 8 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 9 },
+        { type = "item", name = "t0-circuit", amount = 2 },
+        { type = "item", name = "t0-brick", amount = 9 },
         { type = "item", name = "t1-pipe", amount = 3 },
       },
       result = "crop-farm",
@@ -211,8 +211,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "cropfarm-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 8 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 9 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-brick", amount = 9 * buildingmulti },
         { type = "item", name = "t1-pipe", amount = 3 * buildingmulti },
       },
       result = "crop-farm",
