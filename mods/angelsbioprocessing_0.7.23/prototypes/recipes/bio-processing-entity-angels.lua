@@ -85,10 +85,10 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "algaefarm-1", amount = 1 },
-        { type = "item", name = "t0-plate", amount = 11 },
-        { type = "item", name = "t0-circuit", amount = 4 },
-        { type = "item", name = "t0-brick", amount = 11 },
-        { type = "item", name = "t0-pipe", amount = 18 },
+        { type = "item", name = "t0-plate", amount = 11 }, --drd
+        { type = "item", name = "t0-circuit", amount = 4 }, --drd
+        { type = "item", name = "t0-brick", amount = 11 }, --drd
+        { type = "item", name = "t0-pipe", amount = 18 }, --drd
       },
       result = "algae-farm",
     },
@@ -97,10 +97,10 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "algaefarm-1", amount = 1 },
-        { type = "item", name = "t0-plate", amount = 11 * buildingmulti },
-        { type = "item", name = "t0-circuit", amount = 4 * buildingmulti },
-        { type = "item", name = "t0-brick", amount = 11 * buildingmulti },
-        { type = "item", name = "t0-pipe", amount = 18 * buildingmulti },
+        { type = "item", name = "t0-plate", amount = 11 * buildingmulti }, --drd
+        { type = "item", name = "t0-circuit", amount = 4 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 11 * buildingmulti }, --drd
+        { type = "item", name = "t0-pipe", amount = 18 * buildingmulti }, --drd
       },
       result = "algae-farm",
     },
@@ -199,8 +199,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "cropfarm-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 8 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 9 },
+        { type = "item", name = "t0-circuit", amount = 2 },
+        { type = "item", name = "t0-brick", amount = 9 },
         { type = "item", name = "t1-pipe", amount = 3 },
       },
       result = "crop-farm",
@@ -211,8 +211,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "cropfarm-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 8 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 9 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 9 * buildingmulti }, --drd
         { type = "item", name = "t1-pipe", amount = 3 * buildingmulti },
       },
       result = "crop-farm",
@@ -318,8 +318,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "compo-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 2 },
+        { type = "item", name = "t0-circuit", amount = 2 }, --drd
+        { type = "item", name = "t0-brick", amount = 2 }, --drd
         { type = "item", name = "t1-gears", amount = 2 },
       },
       result = "composter",
@@ -330,8 +330,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "compo-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 2 * buildingmulti }, --drd
         { type = "item", name = "t1-gears", amount = 2 * buildingmulti },
       },
       result = "composter",
@@ -346,11 +346,11 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "seedex-1", amount = 1 },
-        { type = "item", name = "t1-plate", amount = 1 },
-        { type = "item", name = "t1-circuit", amount = 4 },
-        { type = "item", name = "t1-brick", amount = 1 },
-        { type = "item", name = "t1-gears", amount = 2 },
-      },
+        { type = "item", name = "t0-plate", amount = 1 }, --drd
+        { type = "item", name = "t0-circuit", amount = 4 }, --drd
+        { type = "item", name = "t0-brick", amount = 1 }, --drd
+        { type = "item", name = "t0-gears", amount = 2 }, --drd
+      }, 
       result = "seed-extractor",
     },
     expensive = {
@@ -358,10 +358,10 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "seedex-1", amount = 1 },
-        { type = "item", name = "t1-plate", amount = 1 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 4 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 1 * buildingmulti },
-        { type = "item", name = "t1-gears", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-plate", amount = 1 * buildingmulti }, --drd
+        { type = "item", name = "t0-circuit", amount = 4 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 1 * buildingmulti }, --drd
+        { type = "item", name = "t0-gears", amount = 2 * buildingmulti }, --drd
       },
       result = "seed-extractor",
     },
@@ -407,8 +407,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "biopro-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 5 },
-        { type = "item", name = "t1-circuit", amount = 8 },
-        { type = "item", name = "t1-brick", amount = 5 },
+        { type = "item", name = "t0-circuit", amount = 8 }, --drd
+        { type = "item", name = "t0-brick", amount = 5 }, --drd
         { type = "item", name = "t1-gears", amount = 4 },
       },
       result = "bio-processor",
@@ -419,8 +419,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "biopro-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 5 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 8 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 5 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 8 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 5 * buildingmulti }, --drd
         { type = "item", name = "t1-gears", amount = 4 * buildingmulti },
       },
       result = "bio-processor",
@@ -467,8 +467,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "temperate-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 1 },
+        { type = "item", name = "t0-circuit", amount = 2 }, --drd
+        { type = "item", name = "t0-brick", amount = 1 }, --drd
         { type = "item", name = "t1-pipe", amount = 3 },
       },
       result = "bio-generator-temperate-1",
@@ -479,8 +479,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "temperate-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 1 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 1 * buildingmulti }, --drd
         { type = "item", name = "t1-pipe", amount = 3 * buildingmulti },
       },
       result = "bio-generator-temperate-1",
@@ -495,8 +495,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "swamp-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 1 },
+        { type = "item", name = "t0-circuit", amount = 2 }, --drd
+        { type = "item", name = "t0-brick", amount = 1 }, --drd
         { type = "item", name = "t1-pipe", amount = 3 },
       },
       result = "bio-generator-swamp-1",
@@ -507,8 +507,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "swamp-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 1 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 1 * buildingmulti }, --drd
         { type = "item", name = "t1-pipe", amount = 3 * buildingmulti },
       },
       result = "bio-generator-swamp-1",
@@ -523,8 +523,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "desert-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 1 },
+        { type = "item", name = "t0-circuit", amount = 2 }, --drd
+        { type = "item", name = "t0-brick", amount = 1 }, --drd
         { type = "item", name = "t1-pipe", amount = 3 },
       },
       result = "bio-generator-desert-1",
@@ -535,8 +535,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "desert-tree", amount = 1 },
         { type = "item", name = "t1-plate", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 1 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-brick", amount = 1 * buildingmulti },
         { type = "item", name = "t1-pipe", amount = 3 * buildingmulti },
       },
       result = "bio-generator-desert-1",
@@ -552,8 +552,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "arboretum-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 6 },
-        { type = "item", name = "t1-circuit", amount = 2 },
-        { type = "item", name = "t1-brick", amount = 6 },
+        { type = "item", name = "t0-circuit", amount = 2 }, --drd
+        { type = "item", name = "t0-brick", amount = 6 }, --drd
         { type = "item", name = "t1-pipe", amount = 8 },
       },
       result = "bio-arboretum-1",
@@ -564,8 +564,8 @@ angelsmods.functions.RB.build({
       ingredients = {
         { type = "item", name = "arboretum-1", amount = 1 },
         { type = "item", name = "t1-plate", amount = 6 * buildingmulti },
-        { type = "item", name = "t1-circuit", amount = 2 * buildingmulti },
-        { type = "item", name = "t1-brick", amount = 6 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti }, --drd
+        { type = "item", name = "t0-brick", amount = 6 * buildingmulti }, --drd
         { type = "item", name = "t1-pipe", amount = 8 * buildingmulti },
       },
       result = "bio-arboretum-1",
