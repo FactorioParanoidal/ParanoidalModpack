@@ -1009,3 +1009,20 @@ data.raw["assembling-machine"]["blast-furnace"].crafting_categories = {"blast-sm
 data.raw["assembling-machine"]["blast-furnace-2"].crafting_categories = {"blast-smelting", "blast-smelting-2", "biofarm-mod-smelting"}
 data.raw["assembling-machine"]["blast-furnace-3"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "biofarm-mod-smelting"}
 data.raw["assembling-machine"]["blast-furnace-4"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "blast-smelting-4", "biofarm-mod-smelting"}
+
+--SEO fix
+--убираем неправильные зависимости
+bobmods.lib.tech.remove_prerequisite("cement-mixture-1", "concrete") --бетон
+bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
+bobmods.lib.tech.remove_prerequisite("plastic-1", "plastics") --пластик
+
+-- добавляем зависимости в техологии для последовательности развития
+bobmods.lib.tech.add_prerequisite ("concrete", "angels-stone-smelting-2") --бетон
+bobmods.lib.tech.add_prerequisite ("bi-tech-wooden-storage-1", "bi-tech-resin-extraction") --деревянный ящик
+bobmods.lib.tech.add_prerequisite ("angels-steel-smelting-1", "angels-nitrogen-processing-1") --сталь
+bobmods.lib.tech.add_prerequisite ("angels-steel-smelting-1", "angels-flare-stack") --сталь
+bobmods.lib.tech.add_prerequisite ("angels-invar-smelting-1", "zinc-processing") --сталь
+bobmods.lib.tech.add_prerequisite ("plastics", "plastic-1") --пластик
+
+--Фикс огромных аккумуляторов
+bobmods.lib.recipe.add_ingredient("bi-bio-accumulator", {"accumulator", 30})
