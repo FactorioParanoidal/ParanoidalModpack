@@ -12,6 +12,7 @@ if (settings.global["paranoidal-disable-vanilla-evolution"] or {}).value then
 end
 --###############################################################################################
 --код из SpilledItems
+if settings.startup["item-drop"].value == true then
 script.on_event(defines.events.on_entity_died, function (event)
 --	on_entity_died
 --	Called when an entity dies. Can be filtered using LuaEntityDiedEventFilters
@@ -81,4 +82,5 @@ script.on_event(defines.events.on_entity_died, function (event)
 		inventory.clear() -- not for other mods
 	end
 end)
+end
 --###############################################################################################
