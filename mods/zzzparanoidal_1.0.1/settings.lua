@@ -17,6 +17,7 @@ data:extend({
     maximum_value = 100,
     order = "a"
   },
+ {type = "bool-setting", name = "item-drop", setting_type = "startup", default_value = true, order = "a"},
 -------------------------------------------------------------------------------------------------
 --рескин покрытия кирпичем
 {type = "bool-setting", name = "stone-path-concrete", setting_type = "startup", default_value = true, order = "2"},
