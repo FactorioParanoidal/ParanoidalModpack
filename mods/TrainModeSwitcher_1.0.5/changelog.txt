@@ -1,0 +1,33 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022-09-18
+  Changes:
+    - Add 'No Toggling' setting.  When enabled the selection tool will always swap trains
+      to automatic when dragging normally, and manually when dragging and holding shift
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2021-12-01
+  Changes:
+    - Add filtering so we only trigger on the tms selection tool
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-03-01
+  Changes:
+    - Add filtering to shortcut handling so we don't trigger on other mods events
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-02-24
+  Changes:
+    - Mark the selection tool as "only-in-cursor" so it doesn't go to inventory
+    - Add a shortcut bar item to provide the selection tool
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-01-30
+  Changes:
+    - Extend the hotkey so if no trains selected, it provides a
+      selection tool which can be dragged across multiple trains
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-12-21
+  Changes:
+    - Initial release
