@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "factorio_version": "1.1",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -139,6 +139,8 @@
     "? angelsbioprocessing",
     "? DeadlockResearchNotifications",
     "? TrainSpeeds",
-    "? BobPipesThroughput"
+    "? BobPipesThroughput",
+    "? belt-visualizer",
+    "? TrainModeSwitcher"
   ]
 }
