@@ -1,0 +1,80 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022-5-14
+  Bugfixes:
+    - Fixed live refresh activating on modifying previously highlighted belt
+    - Fixed live refresh not activating on underground belts and linked belts
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2023-05-05
+  Features:
+    - Added Hover Mode
+  Optimizations:
+    - Looped belts no longer get duplicate lines drawn
+  Bugfixes:
+    - Fixed underground belts not highlighting the dash under rare conditions
+    - Fixed linked belts not highlighting backwards
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2023-02-03
+  Bugfixes:
+    - Fixed changelog version number
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2023-02-03
+  Bugfixes:
+    - Fixed crash when highlighting with blueprint library item in cursor
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2023-01-31
+  Changes:
+    - Highlighting with an empty cursor will now highlight both sides of a filter splitter
+  Bugfixes:
+    - Fixed splitters getting queued twice when highlighted from both sides
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022-12-14
+  Bugfixes:
+    - Fixed crash when clearing highlights before a live refresh
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022-12-14
+  Bugfixes:
+    - Fixed highlighting consecutive splitters causing massive lag
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022-12-02
+  Bugfixes:
+    - Fixed usage of on_entity_cloned
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022-12-02
+  Features:
+    - Introduced live refresh when highlighted belt has been modified
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022-11-14
+  Features:
+    - Added functionality for highlighting through specific sides of filter splitters
+  Optimizations:
+    - Refactored most of the code for performance improvements
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022-11-02
+  Bugfixes:
+    - Fixed highlights not being removed when a player leaves and rejoins the game
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-11-02
+  Bugfixes:
+    - Belt Visualizer now visualizes belts once more
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022-11-02
+  Bugfixes:
+    - Fixed crash when mining belts queued for highlighting
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022-11-02
+  Features:
+    - Initial release
