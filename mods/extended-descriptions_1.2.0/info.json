@@ -1,0 +1,9 @@
+{
+  "name": "extended-descriptions",
+  "version": "1.2.0",
+  "factorio_version": "1.1",
+  "title": "Extended Descriptions",
+  "author": "notnotmelon",
+  "description": "Adds critical information onto the tooltip of items, recipes, and entites",
+  "dependencies": ["base >= 1.1.74", "(?) pypostprocessing", "(?) deadlock-beltboxes-loaders", "(?) angelsrefining", "(?) angelspetrochem", "(?) pyindustry", "(?) Flare Stack", "(?) space-exploration", "(?) nullius"]
+}
