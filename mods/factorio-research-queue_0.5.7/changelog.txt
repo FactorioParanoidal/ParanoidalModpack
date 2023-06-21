@@ -1,0 +1,224 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 2022-09-09
+  Bugfixes:
+    - Fix multi-level researches without prerequisites not showing up in mod UI
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 2022-09-06
+  Bugfixes:
+    - Fix crash in sync mode
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2022-09-03
+  Bugfixes:
+    - Fix crash due to merge issue
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2022-08-31
+  Bugfixes:
+    - Fix crash when previous_research is nil.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2022-08-30
+  Changes:
+    - Rebased additions to 1.1 version of sonaxaton-research-queue.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2022-08-28
+  Features:
+    - The vanilla UI now remembers the most recently researched technology, instead of always showing the first one in the list on opening
+    - Compatability with vanilla research queue!
+    - 'sync' mode: first 7 items in mod queue are kept synchronized with vanilla queue. Modifications to the vanilla queue carry over to the extended queue, except when the extended queue has more than 7 items - in that case, *replacing* a tech with another in the vanilla UI only *adds* the new one, bumping the replaced one further down the queue
+    - 'hybrid' mode: first 4 items are kept synced between queues, and the last 3 slots of the vanilla queue can be used to add new techs into the extended queue no matter how many techs are queued in total
+    - 'wait' mode: the extended queue waits for the vanilla queue to be empty before becoming active
+    - 'freeze' mode: the vanilla queue is frozen until the extended queue is empty
+    - 'move-head' mode: technologies queued in the vanilla UI are moved to the head of the extended queue
+    - 'move-tail' mode: same as above, except that newly queued techs are appended to the extended queue at the bottom
+    - 'disabled' mode: locks the vanilla queue
+---------------------------------------------------------------------------------------------------
+Version: 0.4.21
+Date: 2021-02-16
+  Minor Changes:
+    - Hide description in tooltip for technologies without a description translation.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.20
+Date: 2021-02-15
+  Bugfixes:
+    - Fix crash in some scenarios when research events are triggered before a player is initialized.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.19
+Date: 2021-02-14
+  Bugfixes:
+    - Fix crash when a technology has an infinite technology with no max level as a prerequisite. A technology like this would be impossible to research anyway, but at least now Improved Research Queue will just log a warning instead of crashing.
+    - Fix layout issue in technology list at UI scales other than 100%.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.18
+Date: 2021-01-15
+  Bugfixes:
+    - Fix desync related to translation handler.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.17
+Date: 2021-01-15
+  Bugfixes:
+    - Fix desync related to translation handler.
+  Minor Changes:
+    - Clean up legacy flib data
+---------------------------------------------------------------------------------------------------
+Version: 0.4.16
+Date: 2021-01-05
+  Minor Changes:
+    - Significant performance improvements when using large mods
+---------------------------------------------------------------------------------------------------
+Version: 0.4.15
+Date: 2020-12-26
+  Bugfixes:
+    - Fix crash on Factorio 1.0 when auto-selecting science packs due to using API added in Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.4.14
+Date: 2020-12-24
+  Minor Changes:
+    - Releasing Factorio 1.0-compatible version
+---------------------------------------------------------------------------------------------------
+Version: 0.4.13
+Date: 2020-12-17
+  Bugfixes:
+    - Fix crash when loading certain modded infinite technologies
+---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+Date: 2020-12-17
+  Bugfixes:
+    - Fix crash when researching certain modded infinite technologies
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+Date: 2020-12-16
+  Features:
+    - Better support for multi-level and infinite technologies. If a technology has multiple levels or is infinite, you can now queue up individual levels as separate items in the queue.
+  Minor Changes:
+    - Performance improvements
+---------------------------------------------------------------------------------------------------
+Version: 0.4.10
+Date: 2020-12-14
+  Features:
+    - Added technology description to tooltip
+    - Added button to clear the queue
+  Changes:
+    - Infinite technologies will now be removed from the queue once researched instead of staying as the current research until you removed it manually. It's currently not possible to queue up more than one level of an infinite research at a time. I'm working on making this possible but it's quite a big change to make to the code so it might take a while.
+  Bugfixes:
+    - Fixed that science packs created by rocket launches wouldn't be auto-selected once researched
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 2020-12-12
+  Features:
+    - Added total number of science packs needed to research a technology in the queue to the ETC tooltip
+  Bugfixes:
+    - Fixed crash on load while saving queue for forces created by other mods
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 2020-12-04
+  Bugfixes:
+    - Fixed crash on new map when another completes a research while creating a force
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 2020-11-30
+  Bugfixes:
+    - Fixed crash when opening Krastorio2 wiki
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 2020-11-29
+  Minor Changes:
+    - Updated to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 2020-11-09
+  Features:
+    - Added mod setting to pause the game while the window is open like the vanilla GUI does (off by default)
+  Changes:
+    - Made the window bigger
+  Minor Changes:
+    - Translate all terms used for search on mod startup instead of on-demand
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 2020-11-05
+  Bugfixes:
+    - Fix associated keybinding for shortcut button
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2020-11-05
+  Bugfixes:
+    - Fix crash when a player is removed
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2020-11-04
+  Bugfixes:
+    - Fix that some technologies were incorrectly considered "upgrade" technologies and hidden by default
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2020-11-04
+  Bugfixes:
+    - Disable debug features accidentally left on
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-11-03
+  Features:
+    - Multiplayer is now officially supported! Players on the same team share the same research queue.
+    - `on_force_reset` is now handled properly
+  Bugfixes:
+    - Fixed crash when a player changes teams
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2020-10-21
+  Minor Changes:
+    - Update flib version
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2020-10-21
+  Features:
+    - Will disable the vanilla research queue if it is enabled whenever the modded queue updates and warn the user about it
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2020-10-20
+  Features:
+    - Added chat notifications when research finishes
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2020-10-19
+  Features:
+    - Queue will now automatically scroll to the technology that was just added
+  Changes:
+    - Changed click behavior for technology buttons, now documented in tooltips
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2020-10-18
+  Bugfixes:
+    - Fixed error on startup checking item availability
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2020-10-16
+  Bugfixes:
+    - Fixed queue migration when mods change
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2020-10-16
+  Bugfixes:
+    - Fixed technology search for locales that don't use Roman letters.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2020-10-15
+  Features:
+    - Added estimated time to completion for technologies in the queue
+    - Added progress bars on technologies like in the vanilla GUI
+  Changes:
+    - Changed how the Enqueue and Research Now buttons work when the queue is paused. Enqueue will move the tech as close as possible to the top of the queue instead of second-to-the-top, and Research Now will unpause the queue.
+  Minor Changes:
+    - Small adjustments to colors and layout
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-10-15
+  Minor Changes:
+    - Small adjustments to styling
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2020-10-14
+  Features:
+    - Improved Research Queue GUI
