@@ -334,6 +334,32 @@ function deleteChunks(surface, coordinates, radius)
 	return {adjacent=count_adjacent, deleted=count_deleted, kept=count_keep}
 end
 
+
+
+
+
+
+remote.add_interface('DeleteEmptyChunks', {
+	getSurface = function() return settings.global["DeleteEmptyChunks_surface"].value end,
+	getRadius = function() return settings.global["DeleteEmptyChunks_radius"].value end,
+	getPaving = function() return settings.global["DeleteEmptyChunks_paving"].value end,
+	DeleteEmptyChunks = remote_doit
+})
+
+do---- Init ----
+script.on_init(function()
+	for _, player in pairs(game.players) do
+		if player and player.valid then 
+			if player.admin then
+				show_gui(player)
+			else
+				hide_gui(player)
+			end
+		end
+	end
+end)
+
+
 function show_gui(player)
 	if not (player and player.valid) then return end
 	local gui = mod_gui.get_button_flow(player)
@@ -378,12 +404,7 @@ commands.add_command("DeleteEmptyChunks", {'DeleteEmptyChunks_command'}, functio
 	end
 end)
 
-remote.add_interface('DeleteEmptyChunks', {
-	getSurface = function() return settings.global["DeleteEmptyChunks_surface"].value end,
-	getRadius = function() return settings.global["DeleteEmptyChunks_radius"].value end,
-	getPaving = function() return settings.global["DeleteEmptyChunks_paving"].value end,
-	DeleteEmptyChunks = remote_doit
-})
+
 
 do---- Init ----
 script.on_init(function()
@@ -424,23 +445,6 @@ script.on_event({defines.events.on_player_created, defines.events.on_player_join
 	end
 end)
 
-script.on_event(defines.events.on_gui_click, function(event)
-	local gui = event.element
-	if not (gui and gui.valid) then return end
-	if gui.name ~= "DeleteEmptyChunks" then return end
-	if event.player_index then
-		local player = game.players[event.player_index]
-		if not (player and player.valid) then return end
-		if player.admin then
-			local target_surface = settings.global["DeleteEmptyChunks_surface"].value
-			local radius = settings.global["DeleteEmptyChunks_radius"].value
-			local keep_paving = settings.global["DeleteEmptyChunks_paving"].value
-			doit(player.name, target_surface, radius, keep_paving)
-		else
-			player.print({'DeleteEmptyChunks_adminsonly'})
-		end
-	end
-end)
 
 script.on_event(defines.events.on_player_promoted, function(event)
 	if event.player_index then
@@ -454,3 +458,32 @@ script.on_event(defines.events.on_player_demoted, function(event)
 	end
 end)
 end
+
+
+
+-------------------------------------------
+local function on_gui_click(event)
+    local player = game.players[event.player_index]
+    local element = event.element
+
+    if element.name == "DeleteEmptyChunks" then
+        player.gui.screen.add{type = "frame", name = "delete_chunks_frame", caption = "Удалить чанки?", direction = "vertical"}
+        player.gui.screen.delete_chunks_frame.add{type = "button", name = "delete_chunks_yes", caption = "Да"}
+        player.gui.screen.delete_chunks_frame.add{type = "button", name = "delete_chunks_no", caption = "Нет"}
+    elseif element.name == "delete_chunks_yes" then
+        local target_surface = settings.global["DeleteEmptyChunks_surface"].value
+			local radius = settings.global["DeleteEmptyChunks_radius"].value
+			local keep_paving = settings.global["DeleteEmptyChunks_paving"].value
+			doit(player.name, target_surface, radius, keep_paving)
+			player.gui.screen.delete_chunks_frame.destroy()
+    elseif element.name == "delete_chunks_no" then
+        player.gui.screen.delete_chunks_frame.destroy()
+    end
+end
+
+script.on_event(defines.events.on_gui_click, on_gui_click)
+
+-------------------------------------------
+
+end
+

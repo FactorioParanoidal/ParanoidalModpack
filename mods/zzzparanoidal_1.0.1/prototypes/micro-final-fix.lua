@@ -897,7 +897,7 @@ end
 data.raw.locomotive.locomotive.max_health = 1200
 data.raw.locomotive.locomotive.weight = 2000
 data.raw.locomotive.locomotive.max_speed = 1.2
-data.raw.locomotive.locomotive.max_power = "600kW"
+data.raw.locomotive.locomotive.max_power = "800kW"
 data.raw.locomotive.locomotive.reversing_power_modifier = 0.5
 data.raw.locomotive.locomotive.braking_force = 14
 data.raw.locomotive.locomotive.friction_force = 0.27
@@ -1016,6 +1016,7 @@ bobmods.lib.tech.remove_prerequisite("cement-mixture-1", "concrete") --бето�
 bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
 bobmods.lib.tech.remove_prerequisite("plastic-1", "plastics") --пластик
 
+
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite ("concrete", "angels-stone-smelting-2") --бетон
 bobmods.lib.tech.add_prerequisite ("bi-tech-wooden-storage-1", "bi-tech-resin-extraction") --деревянный ящик
@@ -1026,3 +1027,12 @@ bobmods.lib.tech.add_prerequisite ("plastics", "plastic-1") --пластик
 
 --Фикс огромных аккумуляторов
 bobmods.lib.recipe.add_ingredient("bi-bio-accumulator", {"accumulator", 30})
+
+--Фикс магния
+bobmods.lib.tech.remove_prerequisite("advanced-magnesium-smelting", "powder-metallurgy-1") --удаляем лишнюю
+bobmods.lib.tech.add_prerequisite ("advanced-magnesium-smelting", "ore-processing-4") --добавить пресс гранулятор мк4
+bobmods.lib.tech.add_prerequisite ("advanced-magnesium-smelting", "angels-metallurgy-4") --добавить доменки мк4
+
+
+
+
