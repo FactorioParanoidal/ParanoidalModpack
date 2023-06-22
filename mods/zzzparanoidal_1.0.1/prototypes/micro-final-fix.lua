@@ -1033,6 +1033,21 @@ bobmods.lib.tech.remove_prerequisite("advanced-magnesium-smelting", "powder-meta
 bobmods.lib.tech.add_prerequisite ("advanced-magnesium-smelting", "ore-processing-4") --добавить пресс гранулятор мк4
 bobmods.lib.tech.add_prerequisite ("advanced-magnesium-smelting", "angels-metallurgy-4") --добавить доменки мк4
 
+--Фикс техи турбины
+bobmods.lib.tech.remove_recipe_unlock("bob-steam-turbine-1", "steam-turbine") --удаляем вторую турбину мк1
+bobmods.lib.tech.add_prerequisite ("bob-steam-turbine-1", "nuclear-power") --добавить теху в ядерку
+
+--Добавляем осмий в лейт гейм рецепты
+bobmods.lib.recipe.add_ingredient("hull-component", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("space-thruster", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("fuel-cell", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("habitation", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("life-support", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("command", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("astrometrics", {"clowns-plate-osmium", 100})
+bobmods.lib.recipe.add_ingredient("ftl-drive", {"clowns-plate-osmium", 100})
+
+
 
 
 
