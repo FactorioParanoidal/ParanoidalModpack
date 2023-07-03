@@ -15,7 +15,7 @@ data:extend{
   {
     type = "int-setting",
     name = "railloader-capacity",
-    default_value = 320,
+    default_value = 2000,
     minimum_value = 1,
     setting_type = "startup",
   },

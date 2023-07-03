@@ -64,8 +64,8 @@ local function sync_interface_inserters(loader)
       inserter.pickup_position = type == "loader" and interface_chest.position or main_chest_position
       inserter.drop_position = type == "unloader" and interface_chest.position or main_chest_position
       inserter.direction = inserter.direction
-      inserter_config.connect_and_configure_inserter_control_behavior(inserter, loader)
     end
+      inserter_config.connect_and_configure_inserter_control_behavior(inserter, loader)
   end
 end
 
@@ -151,12 +151,12 @@ local function create_entities(proxy, tags, rail_poss)
   end
 
   -- recreate circuit connections
-  for _, ccd in ipairs(proxy.circuit_connection_definitions) do
+  --[[for _, ccd in ipairs(proxy.circuit_connection_definitions) do
     chest.connect_neighbour(ccd)
   end
   for _, ccd in ipairs(ghostconnections.get_connections(proxy)) do
     chest.connect_neighbour(ccd)
-  end
+  end]]
 
   -- place cargo wagon inserters
   local inserter_name =
@@ -171,7 +171,13 @@ local function create_entities(proxy, tags, rail_poss)
       force = force,
     }
     inserter.destructible = false
-    inserter_config.connect_and_configure_inserter_control_behavior(inserter, chest)
+    sync_interface_inserters(inserter)
+    if i==1 then
+      temp = inserter,
+    inserter_config.connect_and_configure_inserter_control_behavior(inserter, temp, true)
+    else
+    inserter_config.connect_and_configure_inserter_control_behavior(inserter, temp, false)
+    end
   end
 
   inserter_config.configure_or_register_loader(chest)
@@ -189,7 +195,7 @@ local function create_entities(proxy, tags, rail_poss)
   placed.destructible = false
 
   -- place interface inserters for pre-existing chests
-  sync_interface_inserters(chest)
+  --sync_interface_inserters(chest)
 end
 
 local function on_railloader_proxy_built(event)

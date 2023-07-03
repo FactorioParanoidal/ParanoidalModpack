@@ -1,7 +1,29 @@
 local circuitconnectors = require "prototypes.entity.circuitconnectors"
 local pictures = require "prototypes.entity.pictures"
+local control_connection_points = {
+  red = util.by_pixel(-30, 34),
+  green = util.by_pixel(-34, 30)
+}
+local shad_wire = {
+  shadow = control_connection_points,
+  wire = control_connection_points
+}
+local connector_definitions = circuit_connector_definitions.create(
+  universal_connector_template,
+  {
+    { variation = 24, main_offset = util.by_pixel(-1, 1), shadow_offset = util.by_pixel(5, -5), show_shadow = false },
+    { variation = 24, main_offset = util.by_pixel(-1, 1), shadow_offset = util.by_pixel(5, -5), show_shadow = false },
+    { variation = 24, main_offset = util.by_pixel(-1, 1), shadow_offset = util.by_pixel(-5, 5), show_shadow = false },
+    { variation = 31, main_offset = util.by_pixel(1, 1), shadow_offset = util.by_pixel(5, -5), show_shadow = false },
+  }
+)
 
-data:extend{
+--local function inser()
+  --local ins = 
+  --return ins
+--end
+
+data:extend{ --inser(),
   -- buildable entity, immediately replaced by scripting
   {
     type = "pump",
@@ -49,6 +71,7 @@ data:extend{
     picture = pictures.railloader_structure_vertical,
   },
 
+
   {
     type = "inserter",
     name = "railloader-inserter",
@@ -57,6 +80,7 @@ data:extend{
     flags = {"hide-alt-info"},
     collision_box = {{-1, -1}, {1, 1}},
     collision_mask = {},
+    selection_box = {{0.5, 0.5}, {2, 2}},
     stack = true,
     max_health = 800,
     filter_count = 5,
@@ -76,12 +100,20 @@ data:extend{
     hand_base_picture = pictures.empty_sheet,
     hand_open_picture = pictures.empty_sheet,
     hand_closed_picture = pictures.empty_sheet,
-    -- circuit_wire_connection_points = circuitconnectors["railloader-inserter"].points,
-    -- circuit_connector_sprites = circuitconnectors["railloader-inserter"].sprites,
-    circuit_wire_max_distance = 0.5,
-    draw_circuit_wires = false,
+    circuit_wire_connection_points =
+    {
+      shad_wire,
+      shad_wire,
+      shad_wire,
+      shad_wire,
+    },
+    circuit_connector_sprites = connector_definitions.sprites,
+    circuit_wire_max_distance = default_circuit_wire_max_distance + 1.5,
+    draw_circuit_wires = true,
   },
-
+  
+  
+  
   -- interactable inventory
   {
     type = "container",
@@ -107,7 +139,7 @@ data:extend{
       }
     },
     collision_box = {{-2, -2}, {2, 2}},
-    selection_box = {{-2, -2}, {2, 2}},
+    selection_box = {{-1, -1}, {1, 1}},
     collision_mask = {"item-layer", "object-layer", "water-tile"},
     selection_priority = 255,
     fast_replaceable_group = "railloader",
@@ -117,13 +149,13 @@ data:extend{
     -- circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
     -- circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance
-  },
+  }
 }
 
 local univ = util.table.deepcopy(data.raw["inserter"]["railloader-inserter"])
 univ.name = "railloader-universal-inserter"
 univ.localised_name = {"entity-name.railloader-inserter"}
-univ.filter_count = nil
+univ.filter_count = 2
 data:extend{univ}
 
 local interface_inserter = util.table.deepcopy(univ)

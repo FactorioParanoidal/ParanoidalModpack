@@ -16,7 +16,7 @@ local empty_connector_template = {
   light_offsets = universal_connector_template.light_offsets,
 }
 
-local chest_definition = { variation = 26, main_offset = {0,-1}, shadow_offset = util.by_pixel(7.5, 2), show_shadow = true }
+local chest_definition = { variation = 6, main_offset = {0,-1}, shadow_offset = util.by_pixel(7.5, 2), show_shadow = true }
 
 M["railloader-placement-proxy"] = circuit_connector_definitions.create(
   universal_connector_template,

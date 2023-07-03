@@ -146,12 +146,14 @@ local function configure_inserter_control_behavior(inserter)
   }
 end
 
-function M.connect_and_configure_inserter_control_behavior(inserter, chest)
-  for _, wire_type in ipairs{"red", "green"} do
-    inserter.connect_neighbour{
-      target_entity = chest,
-      wire = defines.wire_type[wire_type],
-    }
+function M.connect_and_configure_inserter_control_behavior(inserter, chest, pass)
+  if pass==false then
+    for _, wire_type in ipairs{"red", "green"} do
+      inserter.connect_neighbour{
+        target_entity = chest,
+        wire = defines.wire_type[wire_type],
+      }
+    end
   end
   configure_inserter_control_behavior(inserter)
 end
