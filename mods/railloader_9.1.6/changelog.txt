@@ -1,3 +1,8 @@
+Version: 1.1.7
+Date: 2023-03-06
+Author: ocolbot
+  Scripting:
+    - Changed visible of loaders and wiring. For filtering of resources.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2022-07-20
