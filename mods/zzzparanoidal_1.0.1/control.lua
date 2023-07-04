@@ -84,3 +84,34 @@ script.on_event(defines.events.on_entity_died, function (event)
 end)
 end
 --###############################################################################################
+--############################## Все ресурсы х5 на дефолт настройках
+
+-- Список имен ресурсов, которые вы хотите изменить
+local resourceNames = {"angels-ore1", "angels-ore2", "coal", "angels-ore3","angels-ore4","angels-ore5","angels-ore6","angels-natural-gas", "crude-oil" }
+
+if settings.startup["newbie_resourse"].value == true then
+-- Обработчик события on_chunk_generated
+script.on_event(defines.events.on_chunk_generated, function(event)
+    -- Проверяем, что это именно генерация ресурсов
+    if event.surface.name == "nauvis" then
+        -- Изменяем настройки генерации ресурсов в чанках
+        for _, entity in pairs(event.surface.find_entities_filtered{area = event.area}) do
+            -- Проверяем, является ли сущность ресурсом
+            if isResource(entity.name, resourceNames) then
+                entity.amount = entity.amount * 5  -- Увеличьте количество ресурсов в чанке
+            end
+        end
+    end
+end)
+
+-- Функция для проверки, является ли имя сущности ресурсом
+function isResource(name, resourceNames)
+    for _, resourceName in ipairs(resourceNames) do
+        if name == resourceName then
+            return true
+        end
+    end
+    return false
+end
+end
+--###############################################################################################
