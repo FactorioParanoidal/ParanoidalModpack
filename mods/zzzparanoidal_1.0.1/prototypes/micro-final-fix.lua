@@ -1054,5 +1054,7 @@ data.raw["assembling-machine"]["water-pumpjack-3"].energy_usage = "1350kW"
 data.raw["assembling-machine"]["water-pumpjack-4"].energy_usage = "1700kW"
 data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 
-
+--Синие фильтрующие манипуляторы встают на место
+data.raw.technology["filter-inserters"].hidden = true
+bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
