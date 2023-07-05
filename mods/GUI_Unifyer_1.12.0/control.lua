@@ -267,7 +267,7 @@ local function create_new_buttons(player)
 		{"Trashcan",			"trashbinguibutton",						"trashcan_button",				{'guiu.trashcan_button'},					true},
 		{"pycoalprocessing",	"pywiki",									"pycoalprocessing_button",		{'guiu.pycoalprocessing_button'},			true},
 		{"usage-detector",		"usage_detector",							"usagedetector_button",			{'guiu.usagedetector_button'},				true},
-		{"RPG",					"104",										"rpg_button",					{'guiu.rpg_button'},						true},
+		{"RPGsystem",					"btcharxp",										"rpg_button",					{'guiu.rpg_button'},						true},
 		{"TimedSpawnControl",	"unstuck",									"spawncontrol_random_button",	{'guiu.spawncontrol_unstuck'},		true},
 		{"what-is-missing",		"what_is_missing",							"whatsmissing_button",			{'guiu.whatsmissing_button'},				true},
 		{"some-zoom",			"but_zoom_zout",							"somezoom_out_button",			{'guiu.somezoom_out_button'},				true},

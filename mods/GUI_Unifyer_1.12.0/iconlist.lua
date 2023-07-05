@@ -88,7 +88,7 @@ return {
     {"Trashcan",                "trashcan_button",              "trashbinguibutton",                    {'guiu.trashcan_button'},           nil,        nil,                nil},
     {"pycoalprocessing",        "pycoalprocessing_button",      "pywiki",                               {'guiu.pycoalprocessing_button'},   nil,        nil,                {"screen", "wiki_frame"}},
     {"usage-detector",          "usagedetector_button",         "usage_detector",                       {'guiu.usagedetector_button'},      nil,        nil,                {"center", "usage_detector_center"}},
-    {"RPG",                     "rpg_button",                   "104",                                  {'guiu.rpg_button'},                nil,        nil,                {"screen", "105"}},
+    {"RPGsystem",                     "rpg_button",                   "btcharxp",                                  {'guiu.rpg_button'},                nil,        nil,                {"screen", "105"}},
     {"SpawnControl",            "spawncontrol_button",          "spawn",                                {'guiu.spawncontrol_button'},       nil,        nil,                nil},
     {"TimedSpawnControl",       "spawncontrol_button",          "spawn",                                {'guiu.spawncontrol_button'},       nil,        nil,                nil},
     {"TimedSpawnControl",       "spawncontrol_random_button",   "unstuck",                               {'guiu.spawncontrol_unstuck'},nil,        nil,                nil},

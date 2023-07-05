@@ -259,6 +259,11 @@
     },
     
     {
+      "name": "creative-mod",
+      "enabled": true
+    },
+    
+    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -805,6 +810,11 @@
     
     {
       "name": "RocketExplosions",
+      "enabled": true
+    },
+    
+    {
+      "name": "RPGsystem",
       "enabled": true
     },
     
