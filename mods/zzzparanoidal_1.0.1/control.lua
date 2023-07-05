@@ -128,28 +128,3 @@ script.on_event(defines.events.on_built_entity, function(event)
 	  end
     end
 end)
---###############################################################################################
-
--- local function removeGui(player)
-    -- -- Проверяем наличие GUI
-    -- if player.gui.top.mod_gui_top_frame.children[1] then
-        -- -- Удаляем окно GUI
-        -- player.gui.top.mod_gui_top_frame.children[1].random.destroy()
-    -- end
--- end
-
-
--- -- Регистрируем функцию на событие "on_tick"
--- script.on_event(defines.events.on_tick, function(event)
-    -- -- Увеличиваем счетчик тиков
-    -- tickCounter = tickCounter + 1
-    
-    -- -- Проверяем, не превышено ли значение 60
-    -- if tickCounter <= 60 then
-        -- -- Обходим всех игроков
-        -- for _, player in pairs(game.players) do
-            -- -- Вызываем функцию для удаления GUI для каждого игрока
-            -- removeGui(player)
-        -- end
-    -- end
--- end)

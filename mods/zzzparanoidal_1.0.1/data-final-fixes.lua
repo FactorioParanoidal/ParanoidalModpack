@@ -38,6 +38,7 @@ require("prototypes.mod_compatibility.JunkTrain")
 -------------------------------------------------------------------------------------------------
 require("prototypes.Angels_RBOS") --Angels_RBOS Angel's Re-enabled Basic Ore Smelting
 
+require("prototypes.landfill-pump") --Установка насосов на отсыпку
 
 if mods["yuoki"] then
     require("prototypes.yuoki")

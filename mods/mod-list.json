@@ -699,11 +699,6 @@
     },
     
     {
-      "name": "platforms",
-      "enabled": true
-    },
-    
-    {
       "name": "pollution-visuals",
       "enabled": true
     },
