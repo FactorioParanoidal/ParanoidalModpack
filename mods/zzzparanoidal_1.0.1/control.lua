@@ -115,15 +115,17 @@ function isResource(name, resourceNames)
 end
 end
 --###############################################################################################
+
 --############################## Скрипт для удаления лишнего окна в Gui Unifer
 local tickCounter = 0
-script.on_event(defines.events.on_tick, function(event)
+script.on_event(defines.events.on_built_entity, function(event)
       tickCounter = tickCounter + 1
-           if tickCounter <= 180 then
-		   local player = game.get_player(1)
+   if tickCounter <= 10 then
+	 for _, player in pairs(game.players) do
        if player.gui.top.mod_gui_top_frame.children[1].random then
         player.gui.top.mod_gui_top_frame.children[1].random.destroy()
+       end
+	  end
     end
-	 end
 end)
 --###############################################################################################
