@@ -94,6 +94,11 @@
     },
     
     {
+      "name": "belt-visualizer",
+      "enabled": true
+    },
+    
+    {
       "name": "betterCargoPlanes",
       "enabled": true
     },
@@ -175,6 +180,11 @@
     
     {
       "name": "bobores",
+      "enabled": true
+    },
+    
+    {
+      "name": "BobPipesThroughput",
       "enabled": true
     },
     
@@ -315,6 +325,11 @@
     
     {
       "name": "expanded-rocket-payloads",
+      "enabled": true
+    },
+    
+    {
+      "name": "extended-descriptions",
       "enabled": true
     },
     
@@ -479,6 +494,11 @@
     },
     
     {
+      "name": "Milestones",
+      "enabled": true
+    },
+    
+    {
       "name": "miniloader",
       "enabled": true
     },
@@ -520,6 +540,11 @@
     
     {
       "name": "MxlChievements",
+      "enabled": true
+    },
+    
+    {
+      "name": "m_WhereIsMyBody",
       "enabled": true
     },
     
@@ -584,7 +609,17 @@
     },
     
     {
+      "name": "osha_mini_containers",
+      "enabled": true
+    },
+    
+    {
       "name": "osm-lib",
+      "enabled": true
+    },
+    
+    {
+      "name": "osm-lib-postprocess",
       "enabled": true
     },
     
@@ -595,6 +630,11 @@
     
     {
       "name": "P-U-M-P-S",
+      "enabled": true
+    },
+    
+    {
+      "name": "ParanoidalLocale",
       "enabled": true
     },
     
@@ -880,6 +920,11 @@
     
     {
       "name": "toxicPollution",
+      "enabled": true
+    },
+    
+    {
+      "name": "TrainModeSwitcher",
       "enabled": true
     },
     
