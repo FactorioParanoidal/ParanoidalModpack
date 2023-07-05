@@ -1060,4 +1060,3 @@ bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
 --Отсыпка по 50
 bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50})
-
