@@ -1058,3 +1058,6 @@ data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 data.raw.technology["filter-inserters"].hidden = true
 bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
+--Отсыпка по 50
+bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50})
+
