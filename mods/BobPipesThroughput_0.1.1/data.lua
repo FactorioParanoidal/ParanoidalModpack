@@ -25,8 +25,8 @@ local material_map = {
   local pipe_entity = data.raw["pipe"]["pipe"]
   local underground_pipe_entity =  data.raw["pipe-to-ground"]["pipe-to-ground"]
   if pipe_entity then
-    pipe_entity["fluid_box"].base_area = throughputBase
-    underground_pipe_entity["fluid_box"].base_area = throughputBase
+    pipe_entity["fluid_box"].height = throughputBase
+    underground_pipe_entity["fluid_box"].height = throughputBase
   end
 
 for material, map in pairs(material_map) do
@@ -36,8 +36,8 @@ for material, map in pairs(material_map) do
 
   -- Check if entity exists, if not, skip this iteration; assume if we have one we have both
   if pipe_entity then
-    pipe_entity["fluid_box"].base_area = throughputBase + (map - 1) * throughputPerTier
-    underground_pipe_entity["fluid_box"].base_area = throughputBase + (map - 1) * throughputPerTier
+    pipe_entity["fluid_box"].height = throughputBase + (map - 1) * throughputPerTier
+    underground_pipe_entity["fluid_box"].height = throughputBase + (map - 1) * throughputPerTier
   end
 
 end
