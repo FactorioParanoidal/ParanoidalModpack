@@ -91,7 +91,7 @@ return {
     {"RPG",                     "rpg_button",                   "104",                                  {'guiu.rpg_button'},                nil,        nil,                {"screen", "105"}},
     {"SpawnControl",            "spawncontrol_button",          "spawn",                                {'guiu.spawncontrol_button'},       nil,        nil,                nil},
     {"TimedSpawnControl",       "spawncontrol_button",          "spawn",                                {'guiu.spawncontrol_button'},       nil,        nil,                nil},
-    {"TimedSpawnControl",       "spawncontrol_random_button",   "random",                               {'guiu.spawncontrol_random_button'},nil,        nil,                nil},
+    {"TimedSpawnControl",       "spawncontrol_random_button",   "unstuck",                               {'guiu.spawncontrol_unstuck'},nil,        nil,                nil},
     {"what-is-missing",         "whatsmissing_button",          "what_is_missing",                      {'guiu.whatismissing_button'},      nil,        nil,                {"left", "what_is_missing"}},
     {"advanced-logistics-system-fork","logisticssystemfork_button","logistics-view-button",             {'guiu.logisticssystemfork_button'},nil,        nil,                {"center", "logisticsFrame"}},
     {"some-zoom",               "somezoom_out_button",          "but_zoom_zout",                        {'guiu.somezoom_out_button'},       nil,        nil,                nil},
