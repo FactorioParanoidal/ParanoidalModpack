@@ -4,6 +4,7 @@ require("prototypes.fluid-void")
 require("prototypes.gas-void")
 require("prototypes.ThickerLines")
 require("prototypes.ColorCodedPlanners_101") -- мод ColorCodedPlanners_1.0.1
+require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 
 if mods.bobequipment then
 	data.raw.item["personal-roboport-mk3-equipment"].subgroup = "misc1"
