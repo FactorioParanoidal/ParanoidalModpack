@@ -1,4 +1,5 @@
 --data.raw["technology"]["xxx"].prerequisites = {"xxx", "xxx"}
+--data.raw.technology["xxx"].hidden = true
 
 --bobmods.lib.tech.add_recipe_unlock("technology", "recipe")
 --bobmods.lib.tech.remove_recipe_unlock("technology", "recipe")
@@ -1010,7 +1011,7 @@ data.raw["assembling-machine"]["blast-furnace-2"].crafting_categories = {"blast-
 data.raw["assembling-machine"]["blast-furnace-3"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "biofarm-mod-smelting"}
 data.raw["assembling-machine"]["blast-furnace-4"].crafting_categories = {"blast-smelting", "blast-smelting-2", "blast-smelting-3", "blast-smelting-4", "biofarm-mod-smelting"}
 
---SEO fix
+----------------SEO fix----------------
 --убираем неправильные зависимости
 bobmods.lib.tech.remove_prerequisite("cement-mixture-1", "concrete") --бетон
 bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
@@ -1058,5 +1059,7 @@ data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 data.raw.technology["filter-inserters"].hidden = true
 bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
---Отсыпка по 50
-bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50})
+
+bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50}) --Отсыпка по 50
+data.raw["technology"]["radars-1"].hidden = true --Убираем лишнее исследование на радар
+bobmods.lib.tech.add_prerequisite ("radars-2", "radar") --Добавим радар1 к радару2
