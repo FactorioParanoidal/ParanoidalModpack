@@ -5,13 +5,11 @@ require "util"
 require "particles"
 --local modsprites = require("prototypes.sprites")
 
-
 local format_number = util.format_number
-local stg_magic_interval = 10
 local stg_critical_interval = 1.5
 --[[  
   ** RPG SYSTEM **
-by MFerrari  
+by ProjectMakers (Fork from MFerrari)  
 ]]
 
 function shortnumberstring(number)
@@ -242,7 +240,6 @@ function XPModSetup()
 global.handle_respawn = global.handle_respawn or {}
 global.potion_effects = global.potion_effects or {}
 global.last_critical_effect_from = global.last_critical_effect_from or {}
-global.last_magical_effect_from = global.last_magical_effect_from or {}
 
 global.Player_Attributes = {
 	"LV_Health_Bonus",
@@ -250,7 +247,6 @@ global.Player_Attributes = {
 	"LV_Damage_Bonus",
 	"LV_Damage_Critical",
 	"LV_Run_Speed",
-	"LV_Magic",
 	"LV_Craft_Speed",
 	"LV_Mining_Speed",
 	"LV_Inv_Bonus",
@@ -803,7 +799,7 @@ local Level = global.personalxp.Level[player.name]
 local pbvalue = CalculateXP_PB(player.name)
 
 txtlv.caption={'actual_lv',Level}
-TopXPbar.value=pbvalue or 0
+TopXPbar.value=pbvalue
 
 local frame = player.gui.center["char-panel"] or player.gui.screen["char-panel"] 
 if frame then expand_char_gui(player) end
@@ -1215,7 +1211,6 @@ script.on_event(defines.events.on_gui_click, on_gui_click)
 
 
 
-
 script.on_event(defines.events.on_player_respawned, function(event)
 local player = game.players[event.player_index]
 global.handle_respawn[player.name]=false
@@ -1295,14 +1290,7 @@ if entity.type == 'character' then XP = XP * 4
 				global.personalxp.XP[plname] = global.personalxp.XP[plname] + XP
 				printXP(player,XP)
 				teamxp = false
-				end
-			
-			
-			
-			if (not global.last_magical_effect_from[player.name]) or global.last_magical_effect_from[player.name]+60*stg_magic_interval<game.tick then
-				CheckRPGMagic(player,entity)
-				end
-			
+				end			
 			end
 
 		if teamxp and global.XP_KILL_HP[nforce] then
@@ -1318,57 +1306,6 @@ end
 global.last_overkill=nil
 end
 end
-
-
-function distance( pos1, pos2 )
-	local dx = pos2.x - pos1.x
-	local dy = pos2.y - pos1.y
-	return( math.sqrt(dx*dx+dy*dy) )
-end
-
-function CheckRPGMagic(player,entity)
-if player.character and player.character.valid then
-	local LV = global.personalxp.LV_Magic[player.name]
-	if LV > 0 then
-		local chance = 10 + (global.RPG_Bonus.LV_Magic * LV)
-		if math.random(100)<=chance then 
-			global.last_magical_effect_from[player.name]=game.tick - (LV*60/2)
-			local weap = {'rpg-magic-shock'} --,,'explosive-rocket','grenade
-			if LV>3 then table.insert(weap,'slowdown-capsule') end
-			if LV>6 then table.insert(weap,'poison-capsule') end
-			if LV>9 then table.insert(weap,'cluster-grenade') end
-			--[[if LV>9 then table.insert(weap,'defender-capsule') end
-			if LV>9 then table.insert(weap,'distractor-capsule') end
-			if LV>9 then table.insert(weap,'destroyer-capsule') end]]
-			local w=weap[math.random(#weap)]
-			if w=='rpg-magic-shock' then ShockNear(entity,player,LV)
-				else
-				if distance(entity.position,player.position)<15 then w='distractor-capsule' end
-				player.surface.create_entity{name=w, target=entity, target_position=entity.position,  position=player.position, force=player.force, speed=2.0}  --0.4
-				end
-			end
-		end
-	end
-end
-
-
-function ShockNear(entity,player,LV)
-local others = entity.surface.find_entities_filtered{position=entity.position,radius=15,limit=30, force=entity.force}
-for k=#others,1,-1 do 
-	if ((others[k].name=='entity-ghost') or (others[k].type=='entity-ghost') or (not others[k].destructible)) or (not others[k].health) then table.remove(others,k) end
-	end
-if #others>0 then
-for x=1,math.random(math.min(LV,20))+1 do
-	local target = others[math.random(#others)]
-	if entity.valid then
-		if target.type=='unit' then target.surface.create_entity{name='stun-sticker', target = target, position=target.position, duration=35+LV} end
-		target.surface.create_entity{name = 'electric-beam', position=entity.position, source = entity.position,target=target, duration=35+LV}
-		if entity.valid then entity.damage(5 + LV*5,player.force , 'electric', player.character) end
-		end
-	end
-end
-end
-
 
 
 --- XP FOR KILL
@@ -1752,14 +1689,14 @@ end
 
 
 
-commands.add_command('rpg-reset-points', 'Reconstruct XP table and reset all habilities to zero. Players can spent all points again', function(event)
+commands.add_command('rpg-reset-all', 'Reconstruct XP table and reset all habilities to zero. Players can spent all points again', function(event)
 local player = game.players[event.player_index]
 if player.admin then 
 	ResetPointSpent()
 	game.print({'xp_reset_altert'})
 	end
 end)
-commands.add_command('rpg-reset-all', 'Reconstruct XP table and reset everything to zero, as a new game', function(event)
+commands.add_command('rpg-reset-points', 'Reconstruct XP table and reset everything to zero, as a new game', function(event)
 local player = game.players[event.player_index]
 if player.admin then
 	ResetAll()
@@ -1813,8 +1750,7 @@ end
 
 
 --other mods
---jetpack 
---[[
+--jetpack
 function interface.on_character_swapped(event)
 --local new_unit_number = event.new_unit_number
 --local old_unit_number = event.old_unit_number
@@ -1833,9 +1769,6 @@ if new_character and new_character.valid then
 	end
 end
 
-removed: Toggling the jetpack will now preserve any character bonuses set by other mods (e.g. running speed, mining speed, crafting speed, reach, inventory slots...)
-​ ​Previously, only the health bonus was preserved.
-]]
 
 function interface.get_potions_list()
 local pot_table = {"rpg_amnesia_potion","rpg_level_up_potion","rpg_small_xp_potion","rpg_big_xp_potion","rpg_crafting_potion","rpg_speed_potion","rpg_small_healing_potion","rpg_big_healing_potion"}

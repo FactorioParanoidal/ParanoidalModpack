@@ -699,6 +699,11 @@
     },
     
     {
+      "name": "PMRPGsystem",
+      "enabled": true
+    },
+    
+    {
       "name": "pollution-visuals",
       "enabled": true
     },
@@ -805,11 +810,6 @@
     
     {
       "name": "RocketExplosions",
-      "enabled": true
-    },
-    
-    {
-      "name": "RPGsystem",
       "enabled": true
     },
     
