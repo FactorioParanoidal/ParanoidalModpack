@@ -14,7 +14,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Health_Bonus",
 	setting_type = "startup",
-	default_value = 30,
+	default_value = 10,
 	minimum_value = 0,
 	maximum_value = 100,
 	order = "aa"
@@ -25,7 +25,7 @@ data:extend({
 	type = "double-setting",
 	name = "charxpmod_LV_Armor_Bonus",
 	setting_type = "startup",
-	default_value = 2,
+	default_value = 1,
 	minimum_value = 0,
 	maximum_value = 4.0,
 	order = "ab"
@@ -35,7 +35,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Run_Speed",
 	setting_type = "startup",
-	default_value = 10,
+	default_value = 3,
 	minimum_value = 0,
 	maximum_value = 100,
 	order = "ac"
@@ -45,7 +45,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Damage_Bonus",
 	setting_type = "startup",
-	default_value = 4,
+	default_value = 1,
 	minimum_value = 0,
 	maximum_value = 50,
 	order = "ad"
@@ -62,19 +62,9 @@ data:extend({
 
 {
 	type = "int-setting",
-	name = "charxpmod_LV_Magic",
-	setting_type = "startup",
-	default_value = 1,
-	minimum_value = 0,
-	maximum_value = 3,
-	order = "ae2"
-}, 
-
-{
-	type = "int-setting",
 	name = "charxpmod_LV_Craft_Speed",
 	setting_type = "startup",
-	default_value = 15,
+	default_value = 5,
 	minimum_value = 0,
 	maximum_value = 50,
 	order = "af"
@@ -83,7 +73,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Mining_Speed",
 	setting_type = "startup",
-	default_value = 10,
+	default_value = 3,
 	minimum_value = 0,
 	maximum_value = 50,
 	order = "ag"
@@ -101,7 +91,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Inv_Bonus",
 	setting_type = "startup",
-	default_value = 5,
+	default_value = 2,
 	minimum_value = 0,
 	maximum_value = 20,
 	order = "ai"
@@ -111,7 +101,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_InvTrash_Bonus",
 	setting_type = "startup",
-	default_value = 5,
+	default_value = 2,
 	minimum_value = 0,
 	maximum_value = 20,
 	order = "ak"
@@ -120,7 +110,7 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_LV_Robot_Bonus",
 	setting_type = "startup",
-	default_value = 5,
+	default_value = 2,
 	minimum_value = 0,
 	maximum_value = 20,
 	order = "al"
@@ -137,9 +127,9 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_xp_maxlevel",
 	setting_type = "startup",
-	default_value = 100,
+	default_value = 200,
 	minimum_value = 40,
-	maximum_value = 200,
+	maximum_value = 300,
 	order = "ba"
 }, 
 
@@ -148,9 +138,9 @@ data:extend({
 	type = "int-setting",
 	name = "charxpmod_xp_maxlevel_ability",
 	setting_type = "startup",
-	default_value = 20,
+	default_value = 50,
 	minimum_value = 10,
-	maximum_value = 30,
+	maximum_value = 100,
 	order = "bb"
 },
 
@@ -169,8 +159,8 @@ data:extend({
 	type = "double-setting",
 	name = "charxpmod_xpmult",
 	setting_type = "startup",
-	default_value = 1.61,
-	minimum_value = 1.5,
+	default_value = 1.2,
+	minimum_value = 1.0,
 	maximum_value = 2,
 	order = "bd"
 }, 
@@ -179,7 +169,7 @@ data:extend({
 	type = "double-setting",
 	name = "charxpmod_xp_mp_reductor",
 	setting_type = "startup",
-	default_value = 0.023,
+	default_value = 0.001,
 	minimum_value = 0,
 	maximum_value = 1,
 	order = "be"
@@ -190,14 +180,11 @@ data:extend({
 	type = "double-setting",
 	name = "charxpmod_xp_multiplier_bonus",
 	setting_type = "startup",
-	default_value = 1,
-	minimum_value = 0.2,
+	default_value = 0.5,
+	minimum_value = 0.01,
 	maximum_value = 100,
 	order = "bf"
 }, 
-
-
-
 
 
 {
@@ -232,8 +219,6 @@ data:extend({
 	order = "bp"
 }, 
 
-
-
 {
 	type = "bool-setting",
 	name = "charxpmod_enable_potion_loot",
@@ -241,9 +226,6 @@ data:extend({
 	default_value = false,
 	order = "loot"
 }, 
-
-
-
 
  -- RUNTIME
   {
@@ -260,7 +242,7 @@ data:extend({
     type = "int-setting",
     name = "charxpmod_death_penal",
     setting_type = "runtime-global",
-	default_value = 10,
+	default_value = 50,
 	minimum_value = 0,
 	maximum_value = 100,
 	order = "bb"
@@ -290,7 +272,7 @@ data:extend({
     type = "bool-setting",
     name = "charxpmod_print_xp_user",
     setting_type = "runtime-per-user",
-    default_value = false,
+    default_value = true,
 	order = "ba"
   },  
    

@@ -1,7 +1,6 @@
 require("prototypes.fonts")
 require("prototypes.sprites")
 require("prototypes.potions")
---require("prototypes.magic")
 require("controls")
 
 

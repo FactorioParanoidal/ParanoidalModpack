@@ -1,7 +1,7 @@
 --local mod_gui = require("mod-gui")
 --local playercolor = game.players[event.player_index].color
 
-ICONPATH = "__RPGsystem__/graphics/"
+ICONPATH = "__PMRPGsystem__/graphics/"
 
 local attributesList = {
   "LV_Health_Bonus",
@@ -9,7 +9,6 @@ local attributesList = {
   "LV_Damage_Bonus",
   "LV_Damage_Critical",
   "LV_Run_Speed",
-  "LV_Magic",
   "LV_Craft_Speed",
   "LV_Mining_Speed",
   "LV_Inv_Bonus",

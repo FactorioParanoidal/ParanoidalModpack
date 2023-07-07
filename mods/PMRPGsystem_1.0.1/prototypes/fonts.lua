@@ -3,7 +3,7 @@ data:extend({
 	{
 		type = "sound",
 		name = "player_level_up",
-		filename = "__RPGsystem__/sound/level_up.ogg",
+		filename = "__PMRPGsystem__/sound/level_up.ogg",
 		volume = 1.25
 	},   
    
