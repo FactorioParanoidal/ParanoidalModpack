@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.2.0",
+  "version": "1.6.1",
   "factorio_version": "1.1",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -141,6 +141,12 @@
     "? TrainSpeeds",
     "? BobPipesThroughput",
     "? belt-visualizer",
-    "? TrainModeSwitcher"
+    "? TrainModeSwitcher",
+    "? factorio-research-queue",
+    "? osha_mini_containers",
+    "? extended-descriptions",
+    "? RPGsystem",
+    "? zzzparanoidal",
+    "? PMRPGsystem"
   ]
 }
