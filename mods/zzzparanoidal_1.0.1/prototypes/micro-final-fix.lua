@@ -1059,7 +1059,26 @@ data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 data.raw.technology["filter-inserters"].hidden = true
 bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
-
 bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50}) --Отсыпка по 50
 data.raw["technology"]["radars-1"].hidden = true --Убираем лишнее исследование на радар
 bobmods.lib.tech.add_prerequisite ("radars-2", "radar") --Добавим радар1 к радару2
+
+--Фикс пластин вольфрама и дешевых труб
+bobmods.lib.recipe.set_ingredients("tungsten-carbide-x", { { "solid-carbon", 8 }, { "tungsten-oxide", 12 } }) 
+
+bobmods.lib.tech.remove_recipe_unlock("tungsten-alloy-processing", "tungsten-carbide-2x")
+data.raw["recipe"]["tungsten-carbide-2x"].hidden = true
+
+data.raw["recipe"]["angels-copper-tungsten-pipe-casting"].hidden = true
+data.raw["recipe"]["angels-copper-tungsten-pipe-to-ground-casting"].hidden = true
+data.raw["recipe"]["angels-tungsten-pipe-casting"].hidden = true
+data.raw["recipe"]["angels-tungsten-pipe-to-ground-casting"].hidden = true
+
+bobmods.lib.tech.remove_recipe_unlock("angels-copper-tungsten-smelting-1", "angels-copper-tungsten-pipe-casting")
+bobmods.lib.tech.remove_recipe_unlock("angels-copper-tungsten-smelting-1", "angels-copper-tungsten-pipe-to-ground-casting")
+bobmods.lib.tech.remove_recipe_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-casting")
+bobmods.lib.tech.remove_recipe_unlock("tungsten-alloy-processing", "angels-copper-tungsten-pipe-to-ground-casting")
+bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-casting")
+bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-to-ground-casting")
+
+
