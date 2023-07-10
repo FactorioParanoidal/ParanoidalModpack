@@ -639,7 +639,7 @@ data:extend({
       "angels-metallurgy-3",
       "angels-cooling",
       "angels-oil-processing",
-      "slag-processing-1",
+      "slag-processing-2",
     },
     effects = {
       {
