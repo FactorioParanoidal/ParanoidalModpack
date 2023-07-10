@@ -153,7 +153,7 @@ if data.raw.item["insulated-cable"] then
     {
       type = "recipe",
       name = "angels-wire-coil-insulated-casting",
-      category = "strand-casting",
+      category = "strand-casting-2",
       subgroup = "angels-alloys-casting",
       energy_required = 4,
       enabled = false,
@@ -172,7 +172,7 @@ if data.raw.item["insulated-cable"] then
     {
       type = "recipe",
       name = "angels-wire-coil-insulated-casting-fast",
-      category = "strand-casting",
+      category = "strand-casting-3",
       subgroup = "angels-alloys-casting",
       energy_required = 2,
       enabled = false,
@@ -215,7 +215,6 @@ if data.raw.item["insulated-cable"] then
       pipe_covers = pipecoverspictures(),
       base_area = 10,
       base_level = -1,
-      filter = "liquid-rubber",
       pipe_connections = {{type = "input-output", position = {-3, 1}}, {type = "input-output", position = {3, 1}}}
     }
     table.insert(data.raw["assembling-machine"]["strand-casting-machine"].fluid_boxes, box)
