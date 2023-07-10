@@ -33,7 +33,17 @@ end
 for a=1,#attributesList do
   createSprite(attributesList[a])
 end
-
+data:extend({
+  {
+    type = "sprite",
+    name = "info11",
+    filename = "__PMRPGsystem__/graphics/LV_Info_icon1.png",
+    width = 110,
+    height = 110,
+    scale = 0.5,
+    
+  },
+})
 
 data:extend({
     {
