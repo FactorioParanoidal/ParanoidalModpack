@@ -1,6 +1,5 @@
 local mod_gui = require("mod-gui")
-local potion_duration    = 5*60*60
-local potion_speed_bonus = 1.5
+
 require "util"
 require "particles"
 --local modsprites = require("prototypes.sprites")
@@ -92,10 +91,10 @@ end
 
 
 function ResetXPTables()
-local xp = settings.startup["charxpmod_xpinilevel"].value
+local xp = 1500
 global.xp_table = {[1] = xp}
-local mp = settings.startup["charxpmod_xpmult"].value
-local red = settings.startup["charxpmod_xp_mp_reductor"].value
+local mp = 1.6
+local red = 0.018
 --local maxL = settings.startup["charxpmod_xp_maxlevel"].value
 
 local maxi = global.setting_max_player_level
@@ -183,7 +182,6 @@ local name= player.name
 		end
 
 	global.personalxp.Level[name] = 1
-	global.potion_effects[name] = {}
 	Reset_Character_Bonuses(player.character)
 
 	for k=1,#global.Player_Attributes do
@@ -222,10 +220,10 @@ end
 
 
 function ReadRunTimeSettings(event)
-global.setting_print_critical   =  settings.global["charxpmod_print_critical"].value	
-global.setting_afk_time         =  settings.global["charxpmod_afk"].value
-global.setting_time_ratio_xp    =  settings.global["charxpmod_time_ratio_xp"].value
-global.setting_death_penal      =  settings.global["charxpmod_death_penal"].value
+global.setting_print_critical   =  false	
+global.setting_afk_time         =  15
+global.setting_time_ratio_xp    =  true
+global.setting_death_penal      =  30
 
 if event and event.setting_type=='runtime-per-user' and event.setting=='charxpmod_hide_xp_panel' then
 	local player = game.players[event.player_index]
@@ -238,7 +236,6 @@ end
 	
 function XPModSetup()
 global.handle_respawn = global.handle_respawn or {}
-global.potion_effects = global.potion_effects or {}
 global.last_critical_effect_from = global.last_critical_effect_from or {}
 
 global.Player_Attributes = {
@@ -255,14 +252,14 @@ global.Player_Attributes = {
 	"LV_Reach_Dist",	
 	}
 
-global.setting_allow_xp_by_tech   =  settings.startup["charxpmod_allow_xp_by_tech"].value	
-global.setting_allow_xp_by_kill   =  settings.startup["charxpmod_allow_xp_by_kill"].value	
-global.setting_allow_xp_by_rocket =  settings.startup["charxpmod_allow_xp_by_rocket"].value	
-global.setting_allow_xp_by_mining =  settings.startup["charxpmod_allow_xp_by_mining"].value	
-global.XP_Mult                    =  settings.startup["charxpmod_xp_multiplier_bonus"].value
-global.setting_allow_damage_attribs =  settings.startup["charxpmod_enable_damage_attribs"].value	
-global.setting_max_player_level   =  settings.startup["charxpmod_xp_maxlevel"].value	
-global.setting_max_level_ability  =  settings.startup["charxpmod_xp_maxlevel_ability"].value	
+global.setting_allow_xp_by_tech   =  true	
+global.setting_allow_xp_by_kill   =  true	
+global.setting_allow_xp_by_rocket =  true
+global.setting_allow_xp_by_mining =  true
+global.XP_Mult                    =  1
+global.setting_allow_damage_attribs =  false	
+global.setting_max_player_level   =  200	
+global.setting_max_level_ability  =  50
 
 
 
@@ -306,10 +303,48 @@ if global.CharXPMOD == nil then
 	
 ResetXPTables()
 
+
+mySettingsrpg = {
+	charxpmod_LV_Health_Bonus = {
+	  value = 10, 
+	},
+	charxpmod_LV_Armor_Bonus = {
+	  value = 1, 
+	},
+	charxpmod_LV_Run_Speed = {
+	  value = 3, 
+	},
+	charxpmod_LV_Damage_Bonus = {
+		value = 2, 
+	  },
+	  charxpmod_LV_Damage_Critical = {
+		value = 1, 
+	  },
+	  charxpmod_LV_Craft_Speed = {
+		value = 5, 
+	  },
+	  charxpmod_LV_Mining_Speed = {
+		value = 5, 
+	  },
+	  charxpmod_LV_Reach_Dist = {
+		value = 1, 
+	  },
+	  charxpmod_LV_Inv_Bonus = {
+		value = 1, 
+	  },
+	  charxpmod_LV_InvTrash_Bonus = {
+		value = 1, 
+	  },
+	  charxpmod_LV_Robot_Bonus = {
+		value = 1, 
+	  },
+	 
+  }
+
 global.RPG_Bonus = {}
 	for k=1,#global.Player_Attributes do
 		local attrib = global.Player_Attributes[k]
-		global.RPG_Bonus[attrib]= settings.startup["charxpmod_"..attrib].value
+		global.RPG_Bonus[attrib]= mySettingsrpg ["charxpmod_"..attrib].value
 		CheckAddPlayerStatus(attrib)
 		end
 	
@@ -606,6 +641,13 @@ local flowXP = frame.add{type = "flow", direction="horizontal"}
 
 		
 ----------------XP BAR
+
+local btAttribute2 = frame.add{type="sprite-button", sprite = "info11", name="info22", tooltip = { "xp_hint_global.personalxp.LV_Info" } }
+
+btAttribute2.style.width = 70
+btAttribute2.style.height = 70
+btAttribute2.style.margin = {0,0,0,0}
+btAttribute2.style.padding = {0,0,0,0}
 
 local tabBar = frame.add{type = "table", column_count = 1}
 	
@@ -1071,26 +1113,10 @@ end
 script.on_nth_tick(60 * 5,function (event)
 XP_UPDATE_tick()
 check_respawned_players()
-check_potion_effect()
 end)
 
 
 
-function check_potion_effect()
-for _,player in pairs (game.players) do
-
-	if global.potion_effects[player.name] and player.character and player.character.valid then 
-		if global.potion_effects[player.name]['craft'] and global.potion_effects[player.name]['craft']<game.tick then 
-			player.character.character_crafting_speed_modifier = math.max (0,player.character.character_crafting_speed_modifier - potion_speed_bonus)
-			global.potion_effects[player.name]['craft'] = nil
-			end
-		if global.potion_effects[player.name]['speed'] and global.potion_effects[player.name]['speed']<game.tick then 
-			player.character.character_running_speed_modifier = math.max (0,player.character.character_running_speed_modifier - potion_speed_bonus)
-			global.potion_effects[player.name]['speed'] = nil
-			end
-		end	
-	end
-end
 
 function check_respawned_players()
 for name,died in pairs (global.handle_respawn) do
@@ -1221,7 +1247,6 @@ end)
 script.on_event(defines.events.on_pre_player_died, function(event)
 local player = game.players[event.player_index]
 local name = player.name
-global.potion_effects[name] = {}
 local XP = global.personalxp.XP[name] 
 local Level = global.personalxp.Level[name] 
 local NextLevel = global.xp_table[Level]
@@ -1361,8 +1386,8 @@ entity.surface.create_entity{name = "flying-text", position = entity.position, t
 end
 end
 
-
-if settings.startup["charxpmod_enable_damage_attribs"].value then 
+local crit = false
+if crit == true then 
 -- damage bonus,  criticals , natural armor
 script.on_event(defines.events.on_entity_damaged, function(event)
 local entity = event.entity
@@ -1521,64 +1546,6 @@ end,
 
 
 
--- Potions
-script.on_event(defines.events.on_player_used_capsule, function(event)
-local player = game.players[event.player_index]
-local item = event.item
-
-
-	if item.name=='rpg_small_xp_potion' then
-	   --remote.call("RPG","PlayerXPPerc",player.name,15)
-	    remote.call("RPG","PlayerXPPercCurrentBar",player.name,0.3)
-		player.print({'feel_better'}, colors.yellow)
-
-	elseif item.name=='rpg_big_xp_potion' then
-	    remote.call("RPG","PlayerXPPercCurrentBar",player.name,0.6)
-
-	  -- remote.call("RPG","PlayerXPPerc",player.name,25)
-		player.print({'feel_better'}, colors.yellow)
-
-	elseif item.name=='rpg_level_up_potion' then
-	   remote.call("RPG","PlayerGainLevel",player.name)
-		player.print({'feel_better'}, colors.yellow)	   
-
-	elseif item.name=='rpg_amnesia_potion' then
-		local XP = math.ceil(global.personalxp.XP[player.name] * 0.7)
-		SetupPlayer(player)
-		global.personalxp.XP[player.name] = XP
-		XP_UPDATE_tick()
-		player.print({'feel_strange'}, colors.lightgreen)
-
-
-	elseif item.name=='rpg_speed_potion' then 
-		player.print({'feel_faster'}, colors.lightgreen)
-		global.potion_effects[player.name] = global.potion_effects[player.name] or {}
-		if global.potion_effects[player.name]['speed'] then
-			global.potion_effects[player.name]['speed'] = global.potion_effects[player.name]['speed'] + potion_duration
-			else
-			global.potion_effects[player.name]['speed'] = game.tick + potion_duration
-			player.character.character_running_speed_modifier = player.character.character_running_speed_modifier + potion_speed_bonus
-			end
-			
-
-	elseif item.name=='rpg_crafting_potion' then 
-		player.print({'feel_faster'}, colors.lightgreen)
-		global.potion_effects[player.name] = global.potion_effects[player.name] or {}
-		if global.potion_effects[player.name]['craft'] then
-			global.potion_effects[player.name]['craft'] = global.potion_effects[player.name]['craft'] + potion_duration
-			else
-			global.potion_effects[player.name]['craft'] = game.tick + potion_duration
-			player.character.character_crafting_speed_modifier = player.character.character_crafting_speed_modifier + potion_speed_bonus
-			end
-	
-	elseif item.name=='rpg_curse_cure_potion' then
-	   remote.call('death_curses','RemoveCurse',player.name)
-
-	
-	end
-						
-
-end)
 
 
 
@@ -1689,14 +1656,14 @@ end
 
 
 
-commands.add_command('rpg-reset-all', 'Reconstruct XP table and reset all habilities to zero. Players can spent all points again', function(event)
+commands.add_command('rpg-reset-points', 'Reconstruct XP table and reset all habilities to zero. Players can spent all points again', function(event)
 local player = game.players[event.player_index]
 if player.admin then 
 	ResetPointSpent()
 	game.print({'xp_reset_altert'})
 	end
 end)
-commands.add_command('rpg-reset-points', 'Reconstruct XP table and reset everything to zero, as a new game', function(event)
+commands.add_command('rpg-reset-all', 'Reconstruct XP table and reset everything to zero, as a new game', function(event)
 local player = game.players[event.player_index]
 if player.admin then
 	ResetAll()
@@ -1762,19 +1729,12 @@ if new_character and new_character.valid then
 		
 		UpdatePlayerLvStats(player, true) 
 		
-		if global.potion_effects[player.name] and global.potion_effects[player.name]['speed'] then
-			player.character.character_running_speed_modifier = player.character.character_running_speed_modifier + potion_speed_bonus
-			end
+		
 		end
 	end
 end
 
 
-function interface.get_potions_list()
-local pot_table = {"rpg_amnesia_potion","rpg_level_up_potion","rpg_small_xp_potion","rpg_big_xp_potion","rpg_crafting_potion","rpg_speed_potion","rpg_small_healing_potion","rpg_big_healing_potion"}
-if game.active_mods['death_curses'] then	table.insert(pot_table,'rpg_curse_cure_potion')	end
-return pot_table
-end
 
 
 remote.add_interface("RPG", interface )
