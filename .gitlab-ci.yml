@@ -24,7 +24,7 @@ pull-localization:
     - when: never
   stage: updateLocalization
   script:
-    - git checkout --track remotes/origin/$CI_COMMIT_BRANCH
+    #- git checkout --track remotes/origin/$CI_COMMIT_BRANCH
     - git pull
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
