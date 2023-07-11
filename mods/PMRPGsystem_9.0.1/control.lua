@@ -3,7 +3,6 @@ local mod_gui = require("mod-gui")
 require "util"
 require "particles"
 --local modsprites = require("prototypes.sprites")
-
 local format_number = util.format_number
 local stg_critical_interval = 1.5
 --[[  
