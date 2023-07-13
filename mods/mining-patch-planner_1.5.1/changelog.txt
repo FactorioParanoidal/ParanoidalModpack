@@ -1,0 +1,209 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2023-07-05
+  Bugfixes:
+    - Fixed a crash in lane filling overlay when using modules with no speed
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2023-07-05
+  Features:
+    - Added a simple placement info printout
+    - Added a lane filling overlay for belt layouts
+    - Proper deconstruction only in places where entity ghosts were placed
+    - When retrying on the same patch all previous ghosts are automatically removed
+    - Overfill mode uses more of mining drill's external area
+    - Added a Sparse Logistics layout
+  Bugfixes:
+    - Fixed a bug in drill placement logic that caused suboptimal layouts in overfill mode
+    - Fixed the planner selecting tile ghosts
+    - Fixed GUI and cursor mismatch when using Space Exploration Satellite View
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2023-04-02
+  Bugfixes:
+    - Fixed a crash when updating the mod from versions before 1.3.0
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2023-03-28
+  Bugfixes:
+    - Fixed a crash when using Blueprint Sandboxes mod together with Space Exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2023-03-25
+  Bugfixes:
+    - Fixed a crash when launching custom scenarios
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2023-02-06
+  Features:
+    - Added a pipe type option. Pipes are placed automatically if resource requires a fluid.
+    - Added an option to force pipe placement in advanced settings.
+    - Added sound effects.
+    - Updated icons for misc options.
+    - Space Exploration compatibility when placing patches in space. Added space transport belt and scaffold type options.
+  Optimizations:
+    - Internal layout handler refactoring
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2023-01-18
+  Bugfixes:
+    - Fixed a crash in Compact Logistics layout
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2022-12-31
+  Bugfixes:
+    - Fixed a crash when playing with Industrial Revolution 3.
+  Features:
+    - Added an advanced option to show non-electric powered miners.
+      No warranties about usability of generated layouts.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2022-11-24
+  Features:
+    - Added a Module fill option
+  Bugfixes:
+    - Made shortcut icon more distinct from "Blueprint".
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2022-11-14
+  Bugfixes:
+    - Clicking a blueprint button while in add mode exits to placement mode
+    - Fixed beacons in blueprints not getting placed in certain placements
+    - Fixed inserter settings in blueprints not being preserved
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2022-11-04
+  Features:
+    - Moved all miscellaneous settings from being hidden behind advanced options
+  Bugfixes:
+    - Fixed crash because of a missing flags check in miner guard clause
+    - Fixed migration logic on mod changes
+    - Pyanodons compatibility (more so to support Py miners in custom blueprints)
+    - Fixed splitter settings in blueprints not being preserved
+    - Fixed Super Compact layout sometimes missing single resource tiles
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2022-10-11
+  Features:
+    - Blueprint support
+    - Omit deconstruction step option
+    - Better coverage tuning option
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 2022-07-22
+  Bugfixes:
+    - Fixed missing sanity check when changing layouts
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 2022-07-20
+  Bugfixes:
+    - Fixed crash in Logistics layout
+    - Fixed edge case crash due to patch shape in Compact layout
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 2022-06-29
+  Translation:
+    - Added Ukrainian translation (provided by Deps Exploits)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2022-06-11
+  Bugfixes:
+    - Fixed regression with Cursed Filter Mining Drill mod
+  Translation:
+    - Added Russian translation (provided by Aquilo)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 2022-06-09
+  Features:
+    - Adden an option to omit landfill placement. Will still place ghosts for entities.
+  Bugfixes:
+    - Fixed crash regression caused by a flag check on entity prototypes
+    - Fixed crash in super compact layout with missing lanes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2022-06-09
+  Bugfixes:
+    - Nullius compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2022-05-10
+  Bugfixes:
+    - Fixed crash when belts don't have a defined related underground belt
+    - Added missing control setting translation
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2022-03-15
+  Bugfixes:
+    - Fixed deconstruction step marking tiles for deconstruction
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2022-02-21
+  Bugfixes:
+    - Implemented a blacklist for internal entities of other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022-02-20
+  Bugfixes:
+    - Fixed crash when placing belts on fragmented mining patches
+    - Fixed belt placement sometimes stopping midway
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022-02-19
+  Bugfixes:
+    - Changed power pole fallback not to expect "medium-electric-pole" prototype exists
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-02-11
+  Features:
+    - Added Super Compact layout
+    - Added Logistics and Compact Logistics layouts
+  Bugfixes:
+    - Changed power pole logic to be more robust with modded variants
+    - Tuned iteration parameters
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022-01-31
+  Bugfixes:
+    - Fixed interaction with planners from other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022-01-30
+  Bugfixes:
+    - Compatibility for Cursed Filter Mining Drills mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022-01-29
+  Features:
+    - Added two more layouts - compact, and sparse
+    - Added power poles choice
+    - Added a progress indicator rectangle over a resource patch
+    - Improved GUI handling
+  Optimizations:
+    - Rewrote the algorithm to be modular
+    - Rewrote the logic to work on separate ticks
+    - Simplified layout algorithms with rotation invariant logic
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2021-11-30
+  Optimizations:
+    - Improved placement logic of miners with large radius
+  Bugfixes:
+    - Fixed GUI crash in icon logic for mod entities
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2021-11-12
+  Bugfixes:
+    - Fixed GUI checkbox crash
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2021-11-11
+  Features:
+    - Lamp placement
+  Bugfixes:
+    - Fixed GUI being created on start
+    - Space Exploration Iridium compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-11-09
+  Features:
+    - Initial release
