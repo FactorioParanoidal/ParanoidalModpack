@@ -509,6 +509,11 @@
     },
     
     {
+      "name": "mining-patch-planner",
+      "enabled": true
+    },
+    
+    {
       "name": "MIRV",
       "enabled": true
     },
