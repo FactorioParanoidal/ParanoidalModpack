@@ -1081,4 +1081,11 @@ bobmods.lib.tech.remove_recipe_unlock("tungsten-alloy-processing", "angels-coppe
 bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-casting")
 bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-to-ground-casting")
 
+--рецепты для новых донных насосов
+bobmods.lib.recipe.set_ingredients("seafloor-pump", { { "mining-drill-bit-mk1", 3 }, { "pipe", 25 }, { "basic-circuit-board", 10 }, { "iron-plate", 25 } }) 
+bobmods.lib.recipe.set_ingredients("seafloor-pump-2", { { "mining-drill-bit-mk2", 3 }, { "steel-pipe", 30 }, { "electronic-circuit", 15 }, { "steel-plate", 30 }, { "seafloor-pump", 2 } }) 
+bobmods.lib.recipe.set_ingredients("seafloor-pump-3", { { "mining-drill-bit-mk3", 3 }, { "titanium-pipe", 25 }, { "advanced-circuit", 15 }, { "titanium-plate", 25 }, { "seafloor-pump-2", 2 } }) 
+bobmods.lib.tech.add_recipe_unlock("water-washing-2", "seafloor-pump-2")
+bobmods.lib.tech.add_recipe_unlock("water-washing-3", "seafloor-pump-3")
+
 
