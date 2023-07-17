@@ -1008,6 +1008,31 @@ angelsmods.functions.RB.build({
       result = "seafloor-pump",
     },
   },
+  {
+    type = "recipe",
+    name = "seafloor-pump-2",
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "t0-plate", amount = 2 },
+      { type = "item", name = "t0-circuit", amount = 2 },
+      { type = "item", name = "t0-pipe", amount = 2 },
+    },
+    result = "seafloor-pump-2",
+  },
+  {
+    type = "recipe",
+    name = "seafloor-pump-3",
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "t0-plate", amount = 2 },
+      { type = "item", name = "t0-circuit", amount = 2 },
+      { type = "item", name = "t0-pipe", amount = 2 },
+    },
+    result = "seafloor-pump-3",
+  },
+
   --LAND PUMP
   {
     type = "recipe",

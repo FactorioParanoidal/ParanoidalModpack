@@ -7,6 +7,41 @@ local top_priority_enabled = OSM.lib.get_setting_boolean("osm-pumps-power-priori
 local power_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-power")
 local water_pumpjack_enabled = OSM.lib.get_setting_boolean("osm-pumps-enable-ground-water-pumpjacks")
 
+
+local unpowered_pump = data.raw["offshore-pump"]
+local powered_pump = data.raw["assembling-machine"]
+local item = data.raw.item
+local technology = data.raw.technology
+
+local brn_tooltip = "[img=tooltip-category-chemical]"
+local pwr_tooltip = "[img=tooltip-category-electricity]"
+local tooltip_font = "[font=default-bold][color=#f5cb48]"
+local end_tooltip = "[/color][/font]"
+local field_font = "\n[font=default-semibold][color=#ffe6c0]"
+local field_font_2 = "[font=default-semibold][color=#ffe6c0]"
+local end_font = ": [/color][/font]"
+
+local offshore_name = {"entity-name.offshore-pump"}
+local pumpjack_name = {"string.water-pumpjack"}
+local offshore_desc = {"entity-description.offshore-pump"}
+local electric_offshore = {"string.electric-offshore-pump"}
+local burner_offshore = {"string.burner-offshore-pump"}
+
+local pumpjack_tech_desc = {"technology-description.water-pumpjack"}
+
+local seafloor_pump = {"entity-name.seafloor-pump"}
+local seafloor_pump = {"entity-name.seafloor-pump-2"}
+local seafloor_pump = {"entity-name.seafloor-pump-3"}
+local water_bore = {"entity-name.ground-water-pump"}
+
+local consumes = {"tooltip-category.consumes"}
+local burnable_fuel = {"fuel-category-name.chemical"}
+local electricity = {"tooltip-category.electricity"}
+local pumping_speed = {"description.pumping-speed"}
+local max_consumption = {"description.max-energy-consumption"}
+local min_consumption = {"description.min-energy-consumption"}
+
+
 if not mods ["angelsrefining"] then return end
 
 -- Disable bobmining water miners
@@ -22,6 +57,8 @@ if power_enabled then
 	-- Set common properties
 	local crafting_categories = {"pump-water"}
 	local fixed_recipe = "angel-viscous-mud"
+	local fixed_recipe_2 = "angel-viscous-mud-2"
+	local fixed_recipe_3 = "angel-viscous-mud-3"
 	local flags = {"hidden", "placeable-neutral", "player-creation", "filter-directions"}
 	local fluid_boxes =
 	{
@@ -82,6 +119,75 @@ if power_enabled then
 	seafloor_pump.fluid_box = nil
 	data:extend({seafloor_pump})
 
+	-- Make seafloor pump placeholder MK2
+	local seafloor_pump_placeholder_2 = table.deepcopy(data.raw["offshore-pump"]["seafloor-pump-2"])
+	seafloor_pump_placeholder_2.name = "seafloor-pump-2-placeholder"
+	seafloor_pump_placeholder_2.localised_name = {"entity-name.seafloor-pump-2-placeholder"}
+	seafloor_pump_placeholder_2.localised_description = {"", field_font_2, pumping_speed, end_font.."600/s"}
+	data:extend({seafloor_pump_placeholder_2})
+	data.raw.item["seafloor-pump-2"].place_result = "seafloor-pump-2-placeholder"
+	data.raw.item["seafloor-pump-2"].localised_description = {"", pwr_tooltip," ", tooltip_font, consumes, " ", electricity, " ", end_tooltip..field_font, max_consumption, end_font.."588 kW"..field_font, min_consumption, end_font.."18 kW"}
+
+	-- Make seafloor pump
+	local animation = data.raw["offshore-pump"]["seafloor-pump-2"].picture
+	data.raw["offshore-pump"]["seafloor-pump-2"] = nil
+
+	local seafloor_pump = table.deepcopy(data.raw["offshore-pump"]["seafloor-pump-2-placeholder"])
+	seafloor_pump.name = "seafloor-pump-2"
+	seafloor_pump.subgroup = "other"
+	seafloor_pump.type = "assembling-machine"
+	seafloor_pump.placeable_by = {item = "seafloor-pump-2", count = 1}
+	seafloor_pump.crafting_speed = 2
+	seafloor_pump.energy_source = {type = "electric", usage_priority = "secondary-input"}
+	seafloor_pump.energy_usage = "550kW"
+	seafloor_pump.allowed_effects = {"consumption"}
+	seafloor_pump.localised_description = {"entity-description.seafloor-pump-2"}
+	--
+	seafloor_pump.flags = flags
+	seafloor_pump.crafting_categories = crafting_categories
+	seafloor_pump.fixed_recipe = fixed_recipe
+	seafloor_pump.fluid_boxes = fluid_boxes
+	seafloor_pump.animation = animation
+	-- Remove code leftovers
+	seafloor_pump.picture = nil
+	seafloor_pump.pumping_speed = nil
+	seafloor_pump.fluid_box = nil
+	data:extend({seafloor_pump})
+
+	-- Make seafloor pump placeholder MK2
+	local seafloor_pump_placeholder_3 = table.deepcopy(data.raw["offshore-pump"]["seafloor-pump-3"])
+	seafloor_pump_placeholder_3.name = "seafloor-pump-3-placeholder"
+	seafloor_pump_placeholder_3.localised_name = {"entity-name.seafloor-pump-3-placeholder"}
+	seafloor_pump_placeholder_3.localised_description = {"", field_font_2, pumping_speed, end_font.."1200/s"}
+	data:extend({seafloor_pump_placeholder_3})
+	data.raw.item["seafloor-pump-3"].place_result = "seafloor-pump-3-placeholder"
+	data.raw.item["seafloor-pump-3"].localised_description = {"", pwr_tooltip," ", tooltip_font, consumes, " ", electricity, " ", end_tooltip..field_font, max_consumption, end_font.."1030 kW"..field_font, min_consumption, end_font.."33 kW"}
+
+	-- Make seafloor pump
+	local animation = data.raw["offshore-pump"]["seafloor-pump-3"].picture
+	data.raw["offshore-pump"]["seafloor-pump-3"] = nil
+
+	local seafloor_pump = table.deepcopy(data.raw["offshore-pump"]["seafloor-pump-3-placeholder"])
+	seafloor_pump.name = "seafloor-pump-3"
+	seafloor_pump.subgroup = "other"
+	seafloor_pump.type = "assembling-machine"
+	seafloor_pump.placeable_by = {item = "seafloor-pump-3", count = 1}
+	seafloor_pump.crafting_speed = 4
+	seafloor_pump.energy_source = {type = "electric", usage_priority = "secondary-input"}
+	seafloor_pump.energy_usage = "1000kW"
+	seafloor_pump.allowed_effects = {"consumption"}
+	seafloor_pump.localised_description = {"entity-description.seafloor-pump-3"}
+	--
+	seafloor_pump.flags = flags
+	seafloor_pump.crafting_categories = crafting_categories
+	seafloor_pump.fixed_recipe = fixed_recipe
+	seafloor_pump.fluid_boxes = fluid_boxes
+	seafloor_pump.animation = animation
+	-- Remove code leftovers
+	seafloor_pump.picture = nil
+	seafloor_pump.pumping_speed = nil
+	seafloor_pump.fluid_box = nil
+	data:extend({seafloor_pump})
 ---------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------
 

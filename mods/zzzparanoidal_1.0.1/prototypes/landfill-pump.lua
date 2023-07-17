@@ -22,5 +22,9 @@ collision_mask_util.add_layer(data.raw["offshore-pump"]["offshore-pump-4-placeho
 data.raw["offshore-pump"]["offshore-pump-4-placeholder"].adjacent_tile_collision_mask = nil
 collision_mask_util.add_layer(data.raw["offshore-pump"]["seafloor-pump-placeholder"].adjacent_tile_collision_test, layer)
 data.raw["offshore-pump"]["seafloor-pump-placeholder"].adjacent_tile_collision_mask = nil
+collision_mask_util.add_layer(data.raw["offshore-pump"]["seafloor-pump-2-placeholder"].adjacent_tile_collision_test, layer)
+data.raw["offshore-pump"]["seafloor-pump-2-placeholder"].adjacent_tile_collision_mask = nil
+collision_mask_util.add_layer(data.raw["offshore-pump"]["seafloor-pump-3-placeholder"].adjacent_tile_collision_test, layer)
+data.raw["offshore-pump"]["seafloor-pump-3-placeholder"].adjacent_tile_collision_mask = nil
 
 -- Конец мода на помпы Pumps on Landfill
