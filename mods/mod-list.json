@@ -384,6 +384,11 @@
     },
     
     {
+      "name": "fluid_permutations",
+      "enabled": true
+    },
+    
+    {
       "name": "FNEI",
       "enabled": true
     },

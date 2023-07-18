@@ -1,0 +1,141 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 17. 01. 2021
+  Info:
+    - Merge changes from the 1.0 branch (Fluid Permutations 0.3.7)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 13. 01. 2021
+  Info:
+    - Change Factorio version to 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 17. 01. 2021
+  Bugfixes:
+    - Make the flip_recipe (mirroring) function exposed in the remote interface actually return the correct recipe. Current solution is a brute force temporary workaround until a better solution is available.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 13. 01. 2021
+  Features:
+    - Expose a remote interface with a function that takes a recipe name and returns the recipe that both ingredient fluids and resulting fluids reversed
+  Bugfixes:
+    - Fix potential errors caused by bad code
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 17. 08. 2020
+  Bugfixes:
+    - Always clear cached player settings when configuration changes
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 17. 08. 2020
+  Bugfixes:
+    - Fix crash in multiplayer games
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 17. 08. 2020
+  Bugfixes:
+    - Fix crash caused by cross cycle mode code
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 17. 08. 2020
+  Bugfixes:
+    - Fix crash on leaving a server
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 17. 08. 2020
+  Features:
+    - Added Cross Cycle mode - a per player setting (toggleable during game) that allows any of the hotkeys to be used to cycle through all permutations (ingredients and results)
+  Info:
+    - Change factorio version to 1.0
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 29. 07. 2020
+  Features:
+    - Added Simple mode - this mode generates only up to 3 recipes - reversed ingredients, reversed result and both reversed, skipping the other permutations. Disabled by default. If enabled, it will remove all the skipped permutations from existing saves upon loading them
+  Info:
+    - Store recipe names in the permutation control registry instead of table references. This should reduce saving and loading times a bit. Saving and loading speeds were not a problem, just making some optimazations
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 25. 07. 2020
+  Info:
+    - Some code cleanup
+    - Reversed iteration order of the permutations when selecting a permutation
+  Bugfixes:
+    - Added SuperExpensiveMode as an optional dependency
+    - Fixed code for permutation generation for expensive mode
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 16. 06. 2020
+  Info:
+    - Change Factorio version to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 16. 06. 2020
+  Bugfixes:
+    - Add H2O as an optional dependency
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 21. 01. 2020
+  Bugfixes:
+    - Add Momo +(30)Science Mod as an optional dependency
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 15. 01. 2020
+  Bugfixes:
+    - Account for products being defined with a table without type property (default value is "item")
+    - Add Angel's Petrochem Processing as an optional dependency
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 30. 08. 2019
+  Bugfixes:
+    - Account for ItemProductProtope being specified as table with numbered keys
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 16. 03. 2019
+  Bugfixes:
+    - Handle nil items in ingredients and results tables
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 16. 03. 2019
+  Bugfixes:
+    - Check if a recipe has results for normal or expensive but not for the other
+  Info:
+    - Add more optional dependencies and make all of them hidden
+    - Add a more detailed log message when an error is thrown while generating permutations for a recipe
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 11. 03. 2019
+  Info:
+    - Add the logo as thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 11. 03. 2019
+  Info:
+    - Change factorio version to 0.17
+    - Add a sanity check for nil fluidboxes (will prevent a crash if another mod does this)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 10. 09. 2018
+  Bugfixes:
+    - Correctly handle configuration changes
+    - Handle force creation and merging
+    - Fix type-o
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 29. 08. 2018
+  Bugfixes:
+    - Fix loading game for existing saves
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 29. 08. 2018
+  Info:
+    - Hide the recipes for permutation from the technology screen
+    - Add more optional dependencies (MoreScience, MoreSciencePacks and Clowns-Science)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 23. 08. 2018
+  Info:
+    - Added a changelog
+    - Improved the recipe parsing slightly
+    - Made compatible with Omnimatter (Still Omnimatter explicitly throws an error if Fluid Permutations is enabled, I can do nothing about that)
+    - These changes are backward compatible

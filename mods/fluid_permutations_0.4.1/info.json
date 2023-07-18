@@ -1,0 +1,22 @@
+{
+    "name" : "fluid_permutations",
+    "version" : "0.4.1",
+    "factorio_version" : "1.1",
+    "title" : "Fluid Permutations",
+    "author" : "spiwn",
+    "description" : "Rotate fluid inputs and outputs of buildings",
+    "dependencies" : [
+        "base",
+        "(?)SeaBlock",
+        "(?)omnimatter",
+        "(?)omnimatter_science",
+        "(?)MoreScience",
+        "(?)MoreSciencePacks",
+        "(?)Clowns-Science",
+        "(?)ScienceCostTweakerM",
+        "(?)MomoTweak",
+        "(?)angelspetrochem",
+        "(?)SuperExpensiveMode",
+        "(?)H2O"
+    ]
+}
