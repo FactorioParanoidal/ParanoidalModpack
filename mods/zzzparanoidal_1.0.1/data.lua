@@ -11,6 +11,7 @@ require("prototypes.beltentities") --переехало из paranoidal-tweaks_0
 require("prototypes.micro-fix") --доработка напильником всего подряд -- фиксы от Кирика
 
 require("prototypes.entity.entity") --фиксы неправильных имён от SEO
+require("prototypes.recipe-new") --новые рецепты
 
 require("prototypes.BetterAlertArrows_100") --мод BetterAlertArrows
 
