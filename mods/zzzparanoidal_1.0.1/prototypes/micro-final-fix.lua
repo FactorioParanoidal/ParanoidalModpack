@@ -1062,6 +1062,7 @@ bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50}) --Отсыпка по 50
 data.raw["technology"]["radars-1"].hidden = true --Убираем лишнее исследование на радар
 bobmods.lib.tech.add_prerequisite ("radars-2", "radar") --Добавим радар1 к радару2
+bobmods.lib.tech.remove_prerequisite("radars-2", "radars-1") --фикс радара 2
 
 --Фикс пластин вольфрама и дешевых труб
 bobmods.lib.recipe.set_ingredients("tungsten-carbide-x", { { "solid-carbon", 8 }, { "tungsten-oxide", 12 } }) 
