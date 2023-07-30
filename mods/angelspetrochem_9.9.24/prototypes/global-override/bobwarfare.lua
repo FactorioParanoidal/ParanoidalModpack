@@ -43,6 +43,7 @@ if mods["bobwarfare"] then
   OV.patch_recipes({
     {
       name = "nitroglycerin",
+	  category = "advanced-chemistry", -- DrD
       subgroup = "petrochem-rocket",
       order = "ib",
       ingredients = hide_sulfuric_nitric_acid_mixture

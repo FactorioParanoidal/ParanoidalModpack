@@ -529,7 +529,8 @@ data:extend({
   {
     type = "recipe",
     name = "solid-nitroglycerin",
-    category = "chemistry",
+	category = "advanced-chemistry", -- DrD
+    -- category = "chemistry", -- DrD
     subgroup = "petrochem-solids-2",
     energy_required = 2,
     enabled = false,
