@@ -2,6 +2,8 @@
 data.raw.recipe["sulfuric-nitric-acid"].hidden = true
 data.raw.recipe["liquid-glycerol"].ingredients = {{type="fluid", name="liquid-fuel-oil", amount=100}}
 data.raw.recipe["gun-cotton"].ingredients = {{type="item", name="wood", amount=1}}
+
+--[[
 data:extend(
 { 
   {
@@ -26,3 +28,4 @@ data:extend(
     order = "d"
   },
 })
+]]--
