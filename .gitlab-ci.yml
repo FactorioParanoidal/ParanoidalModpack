@@ -30,5 +30,5 @@ pull-localization:
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
     - git commit --verbose -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>'
-    - git remote rm origin && git remote add origin git@gitlab.com:$CI_PROJECT_PATH.git
+    - git remote rm origin && git remote add origin https://SKProCH:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git
     - git push --verbose origin $CI_COMMIT_BRANCH
