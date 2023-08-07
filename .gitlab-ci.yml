@@ -25,7 +25,7 @@ pull-localization:
   stage: updateLocalization
   script:
     - git fetch --all
-    - git switch -c $CI_COMMIT_BRANCH
+    - git checkout -B $CI_COMMIT_BRANCH remotes/origin/$CI_COMMIT_BRANCH
     - git reset --hard remotes/origin/$CI_COMMIT_BRANCH
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
