@@ -25,8 +25,8 @@ pull-localization:
   stage: updateLocalization
   script:
     - git fetch
-    - git checkout $CI_COMMIT_BRANCH
+    - git checkout master
     - git pull
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
-    - git add . && git diff --quiet && git diff --staged --quiet || (git commit -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && git push https://paranoidal:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git master)
+    - git add . && git diff --quiet && git diff --staged --quiet || (git commit -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && git push --verbose https://paranoidal:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git master)
