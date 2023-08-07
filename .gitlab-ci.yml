@@ -26,7 +26,7 @@ pull-localization:
   script:
     - git fetch --all
     - git reset --hard remotes/origin/$CI_COMMIT_BRANCH
-    - git switch -f remotes/origin/$CI_COMMIT_BRANCH
+    - git switch -f --track remotes/origin/$CI_COMMIT_BRANCH
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
     - git add . && git diff --quiet && git diff --staged --quiet || (git commit -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && git push --verbose https://paranoidal:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git master)
