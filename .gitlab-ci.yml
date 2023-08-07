@@ -29,5 +29,5 @@ pull-localization:
     - cd paranoidalLocaleTemp
     - ./build.sh  PullLocalization
     - git config --global user.email 'skproch@yandex.ru'
-    - git commit --verbose -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>'
+    - git commit --verbose -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && echo "No changes"
     - git push --verbose origin
