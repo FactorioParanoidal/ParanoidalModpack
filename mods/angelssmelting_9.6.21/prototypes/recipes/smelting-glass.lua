@@ -143,12 +143,12 @@ data:extend({
     subgroup = "angels-glass-casting",
     normal = {
       enabled = false,
-      energy_required = 4,
+      energy_required = 5, --DrD 4 to 5
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
       },
       results = {
-        { type = "item", name = "angels-plate-glass", amount = 4 },
+        { type = "item", name = "angels-plate-glass", amount = 3 }, --DrD 4 to 3
       },
     },
     expensive = {
