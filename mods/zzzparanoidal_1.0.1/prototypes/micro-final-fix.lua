@@ -1089,4 +1089,10 @@ bobmods.lib.recipe.set_ingredients("seafloor-pump-3", { { "mining-drill-bit-mk3"
 bobmods.lib.tech.add_recipe_unlock("water-washing-2", "seafloor-pump-2")
 bobmods.lib.tech.add_recipe_unlock("water-washing-3", "seafloor-pump-3")
 
+--фикс кривых исследований углерода
+bobmods.lib.tech.remove_recipe_unlock("angels-coal-processing-2", "coke-purification-3")
+bobmods.lib.tech.remove_recipe_unlock("angels-coal-processing-3", "coke-purification-2")
+bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "coke-purification-3")
 
+--фикс недоступности исследования артиллерии
+bobmods.lib.tech.remove_prerequisite("artillery", "radars-1")
