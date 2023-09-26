@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.15.7
+Date: 2023-09-11
+  Bugfixes:
+    - Workaround for bug preventing copy-paste of circuit conditions between miniloaders.
+  Translation:
+    - Update translations.
+---------------------------------------------------------------------------------------------------
 Version: 1.15.6
 Date: 2022-02-12
   Bugfixes:
