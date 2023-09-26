@@ -238,6 +238,15 @@ function util.update_miniloader(entity, direction, type)
   util.update_inserters(entity)
 end
 
+local function dump_miniloader(entity)
+  local inserters = util.get_loader_inserters(entity)
+  local info = {}
+  for _, inserter in ipairs(inserters) do
+    info[#info+1] = inserter.unit_number..":"..serpent.line(inserter.get_or_create_control_behavior().circuit_condition)
+  end
+  return table.concat(info, "; ")
+end
+
 function util.update_inserters(entity)
   local inserters = util.get_loader_inserters(entity)
   local pickup = util.pickup_position(entity)
@@ -248,11 +257,10 @@ function util.update_inserters(entity)
     direction = util.opposite_direction(direction)
   end
 
-  for i=1,#inserters do
+  for i=#inserters,1,-1 do
     inserters[i].direction = direction
     inserters[i].pickup_position = pickup
     inserters[i].drop_position = drop[i]
-    inserters[i].direction = direction
     if loader_type == "input" then
       inserters[i].pickup_target = entity
     else
