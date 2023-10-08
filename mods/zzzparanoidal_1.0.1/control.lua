@@ -99,7 +99,11 @@ script.on_event(defines.events.on_chunk_generated, function(event)
         for _, entity in pairs(event.surface.find_entities_filtered{area = event.area}) do
             -- Проверяем, является ли сущность ресурсом
             if isResource(entity.name, resourceNames) then
-                entity.amount = entity.amount * 5  -- Увеличьте количество ресурсов в чанке
+                if entity.amount * 5 >= 4294967294 then
+                    entity.amount = 4294967294
+                else
+                    entity.amount = entity.amount * 5  -- Увеличьте количество ресурсов в чанке
+                end
             end
         end
     end
