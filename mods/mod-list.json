@@ -860,7 +860,7 @@
     
     {
       "name": "research_evolution_factor",
-      "enabled": true
+      "enabled": false
     },
     
     {
