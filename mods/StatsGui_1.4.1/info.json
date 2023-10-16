@@ -1,0 +1,13 @@
+{
+  "name": "StatsGui",
+  "version": "1.4.1",
+  "title": "Stats GUI",
+  "author": "raiguard",
+  "contact": "Discord: raiguard#7402",
+  "factorio_version": "1.1",
+  "dependencies": ["base >= 1.1.24", "flib >= 0.7.0"],
+  "description": "Displays various statistics, such as biter evolution, playtime, and more. Blends in with the game's FPS/UPS indicator. Similar to EvoGUI.",
+  "package": {
+    "git_publish_branch": "main"
+  }
+}

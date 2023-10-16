@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2022-02-03
+  Bugfixes:
+    - Fixed a crash when the Stats GUI window is destroyed by another mod
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2022-01-26
+  Features:
+    - Added setting to adjust GUI position for the clock
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2021-08-15
+  Features:
+    - Added position sensor (disabled by default)
+    - Research finished sensor will show an infinity symbol if no progress is being made
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2021-03-11
+  Features:
+    - Added a setting to fill the space where the FPS/UPS indicator should be, for those who play without it
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-02-24
+  Features:
+    - Added nearby pollution sensor (disabled by default)
+    - Added remote interface to allow other mods to add custom sensors and preprocessors
+  Bugfixes:
+    - Fixed that the mod was updating GUIs for players who were not currently online
+    - Fixed the research time to finish sensor would be completely borked in multiplayer
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-02-17
+  Features:
+    - Initial release

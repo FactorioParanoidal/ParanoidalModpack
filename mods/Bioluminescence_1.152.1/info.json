@@ -1,0 +1,11 @@
+{
+  "name": "Bioluminescence",
+  "version": "1.152.1",
+  "title": "Bioluminescence",
+  "author": "Reika",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "1.1",
+  "description": "Adds bioluminescence to the natural world of Nauvis.",
+  "dependencies": ["base", "DragonIndustries", "? Rampant", "? NaturalEvolution", "? alien-biomes"]
+}

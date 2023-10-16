@@ -1,0 +1,9 @@
+{
+  "name": "DragonIndustries",
+  "version": "1.152.1",
+  "factorio_version": "1.1",
+  "title": "Dragon Industries - Nauvis Division",
+  "author": "Reika",
+  "description": "The core to all of Reika's mods.",
+  "dependencies": ["base"]
+}
