@@ -1,0 +1,76 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.101.148
+Date: Oct 31 2022
+  Bugfixes:
+    - Fixed some lights and plants being destructible in some circumstances
+---------------------------------------------------------------------------------------------------
+Version: 1.101.144
+Date: Oct 7 2022
+  Bugfixes:
+    - Fixed lights disappearing in some cases
+  New Features:
+    - Added several new layers of soft glow on trees, making forests better lit and with color gradients commonplace
+---------------------------------------------------------------------------------------------------
+Version: 1.101.105
+Date: Apr 28 2021
+  Misc Changes:
+    - 1.1 Update
+---------------------------------------------------------------------------------------------------
+Version: 1.018.24
+Date: Nov 15 2020
+  Misc Changes:
+    - Moved biome color code to Dragon Industries
+---------------------------------------------------------------------------------------------------
+Version: 1.018.18
+Date: Aug 10 2020
+  New Features:
+    - Added fixes for custom units that should not be assigned lights
+    - Added option to use entity lights again instead of script lights, to further improve FPS at the cost of risk of straggler entities
+  Misc Changes:
+    - Converted old light entities from rail chain signals to lamps to avoid weird interactions with rails that were a problem in 0.16
+---------------------------------------------------------------------------------------------------
+Version: 1.018.6
+Date: Jun 15 2020
+  New Features:
+    - Added light reloading system to reduce FPS drops from orphaned lights accumulating on large maps
+---------------------------------------------------------------------------------------------------
+Version: 1.018.5
+Date: Jun 11 2020
+  New Features:
+    - Added an item for the glowing trees to allow them to be replanted
+    - Added some missing event handlers
+---------------------------------------------------------------------------------------------------
+Version: 1.018.1
+Date: May 29 2020
+  Misc Changes:
+    - Update to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.017.12
+Date: Jun 17 2019
+  Bugfixes:
+    - Fixed AlienBiomes detection
+    - Fixed collisions on glowing bushes
+  New Features:
+    - Added plant density option
+  Misc Changes:
+    - Improved mod compatibility of biter color caching
+    - Made biter glow size dynamic with physical size
+---------------------------------------------------------------------------------------------------
+Version: 1.017.6
+Date: Jun 6 2019
+  New Features:
+    - Added glowing biters
+  Misc Changes:
+    - Improved entity handling to reduce straggler entities and unintended side effects
+    - Moved shared code to Dragon Industries
+    - Switched lights to LuaRendering script system
+---------------------------------------------------------------------------------------------------
+Version: 1.017.1
+Date: Mar 23 2019
+  Misc Changes:
+    - Update to 0.17
+---------------------------------------------------------------------------------------------------
+Version: 1.016.172
+Date: Oct 13 2018
+  Misc Changes:
+    - Creation

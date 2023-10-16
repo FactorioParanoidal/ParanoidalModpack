@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2023-05-24
+  Bugfixes:
+    - The fix for the aforementioned crash worked with trainsaver, but still crashed with e.g. IR3’s intro.  Fixed properly now (I hope).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2023-05-24
+  Bugfixes:
+    - Fix a crash when entering a cutscene (e.g. trainsaver).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2023-05-23
+  Features:
+    - Initial release.

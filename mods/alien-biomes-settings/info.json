@@ -1,0 +1,13 @@
+{
+	"name": "alien-biomes-settings",
+	"version": "0.0.2",
+	"title": "Alien Biomes Settings",
+	"author": "Tec",
+	"dependencies": [
+		"base >= 1.1.0",
+		"alien-biomes >= 0.6.7"
+	],
+	"description": "Just more settings for Alien biomes",
+	"factorio_version": "1.1",
+	"homepage":"https://github.com/Technus"
+}
