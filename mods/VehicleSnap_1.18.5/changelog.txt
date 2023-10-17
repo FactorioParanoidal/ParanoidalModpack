@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.18.5
+Date: 2.3.2023
+  Compatibility:
+    - Using Space Exploration universe explorer while driving a vehicle. The change is not SE-specific but if player goes into a non-character based controller mode while driving, the driving state is not disabled upon detecting a loss of vehicle. However no snapping happens if there is no vehicle.
+  Dependencies:
+    - Added Cardinal mod incompatible; it is a mod that does what VehicleSnap does in different way, there is no reason to load both and bad things could happen if you do.
+---------------------------------------------------------------------------------------------------
 Version: 1.18.4
 Date: 25. 11. 2020
   Update:

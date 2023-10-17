@@ -1,9 +1,8 @@
--- snap amount is the amount of different angles car can drive on,
--- (360 / vehiclesnap_amount) is the difference between 2 axis
--- car will slowly turn towards such angle axis
--- Default 16, recommended other tries 4, 8 or 32.
-
--- You can change snapping amount and keybinds ingame in menus.
+-- Snap amount is the amount of different angles car aims to drive,
+-- (360 / vehiclesnap_amount) is the difference between each direction.
+-- Car will slowly turn towards such angle.
+-- Default amount is 16, recommended to try with other multiples of 4.
+-- You can change snapping amount and keybinds in ingame-menus.
 
 local function OnOffText(value)
   if value then return {"description.VehicleSnap_enable"}
@@ -116,8 +115,13 @@ local function onTick()
       local pdata = global.players[player.index]
       if pdata.driving and pdata.snap then
         if not player.vehicle then
-          -- Unexpected error happened, CAR NOT FOUND!
+          if player.controller_type == defines.controllers.character then
+            -- Use of Space Exploration navigation satellite changes controller to godmode,
+            -- after which it returns to car.
           pdata.driving = false
+        else
+          drivers = true
+          end
         else
           drivers = true
           if (pdata.eff_moves > 1) and (math.abs(player.vehicle.speed) > 0.03) then
