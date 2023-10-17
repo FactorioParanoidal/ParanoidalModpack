@@ -55,10 +55,14 @@ if settings.startup["depleted-uranium"].value then
 					type = "unlock-recipe",
 					recipe = "casting-powder-depleted-uranium-2"
 				},
-				--[[{
+				{
 					type = "unlock-recipe",
 					recipe = "casting-powder-depleted-uranium-3"
-				},]]
+				},
+				{
+					type = "unlock-recipe",
+					recipe = "casting-powder-depleted-uranium-4"
+				},
 			},
 			prerequisites = {"advanced-depleted-uranium-smelting-1", "advanced-osmium-smelting"},
 			unit =

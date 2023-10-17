@@ -1,6 +1,6 @@
 if mods["angelsbioprocessing"] then
   data:extend(
-{
+		{
 	{
 		type = "technology",
 		name = "garden-mutation",
@@ -41,11 +41,11 @@ if mods["angelsbioprocessing"] then
 			time = 30
 		},
 	},
-}
-)
+		}
+	)
 	local recipes={"desert-garden-generation","swamp-garden-generation","temperate-garden-generation"}
 	for _,rec in pairs(recipes) do
-		table.insert(data.raw["technology"]["bio-farm-1"].effects,{type = "unlock-recipe", recipe = rec})
+		table.insert(data.raw["technology"]["bio-farm-2"].effects,{type = "unlock-recipe", recipe = rec})
 	end
-	table.insert(data.raw["technology"]["bio-farm-1"].prerequisites,"phosphorus-processing-1")
+	table.insert(data.raw["technology"]["bio-farm-2"].prerequisites,"phosphorus-processing-1")
 end

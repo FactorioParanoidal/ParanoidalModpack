@@ -349,7 +349,7 @@ data:extend(
 		},
 		icons = angelsmods.functions.create_liquid_recipe_icon({
 			"water-purified",
-			{"__Clowns-Processing__/graphics/icons/liquid-mercury.png",icon_size=32},
+			"liquid-mercury",
 		}, {{238,113,22},{203,99,15},{167,78,13}}),
 		order = "h"
 	},
@@ -372,11 +372,9 @@ data:extend(
 			{type = "fluid", name = "liquid-dimethylmercury", amount = 10},
 			{type = "item", name = "solid-salt", amount = 2},
 		},
-		icons =
-		{
-			{icon = "__Clowns-Processing__/graphics/icons/liquid-dimethylmercury.png"},
-		},
-		icon_size = 32,
+		icons = angelsmods.functions.create_viscous_liquid_recipe_icon(
+      {"solid-salt"},
+      {{ 118, 141, 138 },{ 94, 113, 110 },{ 94, 113, 110 }}),
 		order = "z"
   },
   -------------------------

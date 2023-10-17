@@ -5,7 +5,7 @@ if mods["angelsbioprocessing"] then
   -- Algae --
   -----------
   --Orange
-	{
+	--[[{
 		type = "recipe",
 		name = "algae-orange",
 		category = "bio-processing",
@@ -24,13 +24,13 @@ if mods["angelsbioprocessing"] then
 		icon = "__angelsbioprocessing__/graphics/icons/algae-green.png",
 		icon_size = 32,
 		order = "a",
-  },
+  },]]
   --Violet
 	{
 		type = "recipe",
 		name = "algae-violet",
 		category = "bio-processing",
-		subgroup = "bio-processing-green",
+		subgroup = "bio-processing-violet",
 		enabled = false,
 		energy_required = 20,
 		ingredients =
@@ -42,16 +42,14 @@ if mods["angelsbioprocessing"] then
 		{
 		  {type="item", name="algae-violet", amount=40},
 		},
-		icon = "__angelsbioprocessing__/graphics/icons/algae-green.png",
-		icon_size = 32,
-		order = "a",
+		order = "b",
   },
   --Mercury from Violet
 	{
 		type = "recipe",
 		name = "methylmercury-algae",
 		category = "liquifying",
-		subgroup = "bio-processing-green",
+		subgroup = "bio-processing-violet",
 		enabled = false,
 		energy_required = 3,
 		ingredients ={
@@ -61,9 +59,12 @@ if mods["angelsbioprocessing"] then
 		{
 		  {type="fluid", name="liquid-dimethylmercury", amount=2},
 		},
-		icon = "__angelsbioprocessing__/graphics/icons/cellulose-fiber-algae.png",
-		icon_size = 32,
-		order = "b [cellulose-fiber-algae]",
+		icons = angelsmods.functions.create_viscous_liquid_recipe_icon(
+		nil,
+		{{ 118, 141, 138 },{ 94, 113, 110 },{ 94, 113, 110 }},
+		{"algae-violet"}
+		),
+	order = "c [cellulose-fiber-algae]",
   },
   -------------
   -- Gardens --

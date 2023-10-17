@@ -1,4 +1,5 @@
-data:extend(
+if mods["angelsbioprocessing"] then
+	data:extend(
 {
 	{
 		type = "technology",
@@ -9,7 +10,15 @@ data:extend(
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "thermal-filtering-mercury"
+				recipe = "neurotoxin-capsule"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "methylmercury-algae"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "algae-violet"
 			},
 		},
 		prerequisites = {"thermal-water-extraction", "angels-advanced-chemistry-3"},
@@ -35,14 +44,14 @@ data:extend(
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "dimethylmercury-synthesis"
+				recipe = "thermal-filtering-mercury"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "neurotoxin-capsule"
+				recipe = "dimethylmercury-synthesis"
 			},
 		},
-		prerequisites = {"mercury-processing-1", "military-4"},
+		prerequisites = {"mercury-processing-1", "military-3"},
 		unit =
 		{
 			ingredients =
@@ -51,7 +60,6 @@ data:extend(
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
 				{"military-science-pack", 1},
-				{"utility-science-pack", 1},
 			},
 			time = 30,
 			count = 50
@@ -61,3 +69,4 @@ data:extend(
 	
 }
 )
+end
