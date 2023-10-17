@@ -21,9 +21,9 @@ local gui = {}
 ---@field value string Value name
 ---@field tooltip LocalisedString
 ---@field icon SpritePath
----@field icon_enabled SpritePath
+---@field icon_enabled SpritePath?
 ---@field order string
----@field default string
+---@field default string?
 ---@field elem_type string
 ---@field elem_filters PrototypeFilter?
 ---@field elem_value string?
@@ -82,7 +82,7 @@ local function create_setting_selector(player_data, root, action_type, action, v
 			button = root.add{
 				type="choose-elem-button",
 				style=style_helper_selection(),
-				tooltip=value.tooltip,
+				tooltip=mpp_util.wrap_tooltip(value.tooltip),
 				elem_type=value.elem_type,
 				elem_filters=value.elem_filters,
 				item=value.elem_value, -- duplicate them all;
@@ -111,7 +111,7 @@ local function create_setting_selector(player_data, root, action_type, action, v
 					mpp_icon_default=value.icon,
 					mpp_icon_enabled=value.icon_enabled,
 				},
-				tooltip=value.tooltip,
+				tooltip=mpp_util.wrap_tooltip(value.tooltip),
 			}
 		end
 		action_class[value.value] = button
@@ -189,7 +189,7 @@ local function create_blueprint_entry(player_data, table_root, blueprint_item, c
 		sprite="mpp_cross",
 		style="mpp_delete_blueprint_button",
 		tags={mpp_delete_blueprint_button=item_number},
-		tooltip={"gui.delete-blueprint-record"},
+		tooltip=mpp_util.wrap_tooltip{"gui.delete-blueprint-record"},
 	}
 	player_data.blueprints.delete[item_number] = delete_button
 
@@ -197,7 +197,7 @@ local function create_blueprint_entry(player_data, table_root, blueprint_item, c
 	blueprint_line.add{
 		type="label",
 		caption=label,
-		tooltip=tooltip,
+		tooltip=mpp_util.wrap_tooltip(tooltip),
 	}
 
 	local cached = player_data.blueprints.cache[item_number]
@@ -236,7 +236,7 @@ function gui.create_interface(player)
 		type="sprite-button",
 		style=style_helper_advanced_toggle(player_data.advanced),
 		sprite="mpp_advanced_settings",
-		tooltip={"mpp.advanced_settings"},
+		tooltip=mpp_util.wrap_tooltip{"mpp.advanced_settings"},
 		tags={mpp_advanced_settings=true},
 	}
 
@@ -266,7 +266,7 @@ function gui.create_interface(player)
 			name="blueprint_add_button",
 			sprite="mpp_plus",
 			style=style_helper_blueprint_toggle(),
-			tooltip={"mpp.blueprint_add_mode"},
+			tooltip=mpp_util.wrap_tooltip{"mpp.blueprint_add_mode"},
 			tags={mpp_blueprint_add_mode=true},
 		}
 		player_gui.blueprint_add_button.visible = player_data.choices.layout_choice == "blueprints"

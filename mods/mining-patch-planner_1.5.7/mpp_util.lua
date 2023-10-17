@@ -366,4 +366,8 @@ function mpp_util.get_dump_state(player_index)
 	return settings.get_player_settings(player_index)["mpp-dump-heuristics-data"].value --[[@as boolean]]
 end
 
+function mpp_util.wrap_tooltip(tooltip)
+	return tooltip and {"", "     ", tooltip}
+end
+
 return mpp_util
