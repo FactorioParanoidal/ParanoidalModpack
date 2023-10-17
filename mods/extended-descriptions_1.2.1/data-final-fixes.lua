@@ -3,10 +3,13 @@ local floor = math.floor
 local function add_to_description(type, prototype, localised_string)
 	if prototype.localised_description and prototype.localised_description ~= '' then
 		prototype.localised_description = {'', prototype.localised_description, '\n', localised_string}
-	else
-		if type == 'item' and prototype.place_result then
+		return
+	end
+
+	local place_result = prototype.place_result or prototype.placed_as_equipment_result
+	if type == 'item' and place_result then
 			for _, machine in pairs(data.raw) do
-				machine = machine[prototype.place_result]
+			machine = machine[place_result]
 				if machine and machine.localised_description then
 					prototype.localised_description = {
 						'?',
@@ -17,15 +20,19 @@ local function add_to_description(type, prototype, localised_string)
 				end
 			end
 
+		local entity_type = prototype.place_result and 'entity' or 'equipment'
 			prototype.localised_description = {
 				'?',
-				{'', {'entity-description.' .. prototype.place_result}, '\n', localised_string},
+			{'', {entity_type .. '-description.' .. place_result}, '\n', localised_string},
 				{'', {type .. '-description.' .. prototype.name}, '\n', localised_string},
 				localised_string
 			}
 		else
-			prototype.localised_description = {'?', {'', {type .. '-description.' .. prototype.name}, '\n', localised_string}, localised_string}
-		end
+		prototype.localised_description = {
+			'?',
+			{'', {type .. '-description.' .. prototype.name}, '\n', localised_string},
+			localised_string
+		}
 	end
 end
 
@@ -71,20 +78,6 @@ local prefixes = {
 local function energy_to_number(energy)
 	local amount, unit, _ = string.match(energy, '(%d+)(%a-)[JW]')
 	return tonumber(amount) * prefixes[unit]
-end
-
-local function find_item_with_entity(entity)
-	if entity.minable then
-		local result = entity.minable.result
-		for _, items in pairs(data.raw) do
-			for _, item in pairs(items) do
-				if item.stack_size and items[result] and item.place_result == entity.name then
-					return item
-				end
-			end
-		end
-	end
-	return nil
 end
 
 local function map(tbl, f)
