@@ -1710,7 +1710,8 @@ local IgnoredResources =
 	["natural-gas-1"] = true,
 	["natural-gas-2"] = true,
 	["natural-gas-3"] = true,
-	["natural-gas-4"] = true
+	["natural-gas-4"] = true,
+	["lambent-nil-phosphorite"] = true
 }
 
 local function IsIgnoreResource(ResourcePrototype)
