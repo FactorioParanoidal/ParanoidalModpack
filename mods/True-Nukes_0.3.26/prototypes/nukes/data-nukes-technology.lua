@@ -114,6 +114,8 @@ if(settings.startup["enable-nuclear-tests"].value) then
   end
 end
 
+
+
 local standard = {
   {"automation-science-pack", 1},
   {"logistic-science-pack", 1},
@@ -158,11 +160,27 @@ if (not settings.startup["keep-atomic-bomb-without-changes"]) and
   (not settings.startup["enable-medium-atomics"].value) then
   data.raw.technology["atomic-bomb"].effects[1] = nil
 end
+
+local hasSmall = settings.startup["enable-small-atomics"].value
+local hasCompactSmall = settings.startup["enable-compact-small-atomics"].value and hasSmall
+
+local hasMedium = settings.startup["enable-medium-atomics"].value 
+local hasCompactMedium = settings.startup["enable-compact-medium-atomics"].value and hasMedium
+
+local hasLarge = settings.startup["enable-large-atomics"].value 
+local hasCompactLarge = settings.startup["enable-compact-large-atomics"].value and hasLarge
+
+local has15kt = settings.startup["enable-15kt"].value 
+local hasCompact15kt = settings.startup["enable-compact-15kt"].value and has15kt
+
+local hasFusion = settings.startup["enable-fusion"].value 
+local hasCompactFusion = settings.startup["enable-compact-fusion"].value and hasFusion
+
 data.raw.technology["atomic-bomb"].prerequisites = {"basic-atomic-weapons", "rocket-control-unit", "rocket-fuel", "rocketry"}
 
 
 data.raw.technology["atomic-bomb"].unit.count = 1
-if(settings.startup["enable-medium-atomics"].value and settings.startup["enable-nuclear-tests"].value) then
+if(data.raw.tool["test-pack-atomic-20t-1"]) then
   data.raw.technology["atomic-bomb"].unit.ingredients = {{"test-pack-atomic-20t-1", 1}}
 else
   data.raw.technology["atomic-bomb"].unit.ingredients = no_prod
@@ -180,7 +198,7 @@ data:extend{
     {
       
     },
-    prerequisites = {"military-4", "uranium-processing"},
+    prerequisites = {"military-4", "uranium-processing", "electric-energy-accumulators"},
     unit =
     {
       count = 1000,
@@ -199,7 +217,7 @@ if(settings.startup["enable-fire-shield"].value) then
 end
 
 
-if(settings.startup["enable-large-atomics"].value) then
+if(hasLarge) then
   data:extend{
     {
       type = "technology",
@@ -218,7 +236,7 @@ if(settings.startup["enable-large-atomics"].value) then
     },
   }
 end
-if(settings.startup["enable-large-atomics"].value) then
+if(hasLarge) then
   data:extend{
     {
       type = "technology",
@@ -226,7 +244,7 @@ if(settings.startup["enable-large-atomics"].value) then
       icon_size = 256, icon_mipmaps = 4,
       icon = "__base__/graphics/technology/atomic-bomb.png",
       effects = {},
-      prerequisites = {"expanded-atomics"},
+      prerequisites = {"expanded-atomics", "circuit-network"},
       unit =
       {
         count = 250,
@@ -236,7 +254,7 @@ if(settings.startup["enable-large-atomics"].value) then
       order = "e-a-f"
     },
   }
-  if(settings.startup["enable-nuclear-tests"].value) then
+  if(data.raw.tool["test-pack-atomic-500t-1"]) then
     data.raw.technology["full-fission-atomics"].unit =
       {
         count = 1,
@@ -245,7 +263,7 @@ if(settings.startup["enable-large-atomics"].value) then
       }
   end
 end
-if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
+if(hasMedium or hasLarge or hasCompact15kt) then
   data:extend{
     {
       type = "technology",
@@ -253,7 +271,7 @@ if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-l
       icon_size = 256, icon_mipmaps = 4,
       icon = "__True-Nukes__/graphics/atomic-artillery-tech.png",
       effects = {},
-      prerequisites = {"expanded-atomics", "artillery"},
+      prerequisites = {"artillery"},
       unit =
       {
         count = 1000,
@@ -263,55 +281,18 @@ if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-l
       order = "e-a-e"
     },
   }
+  if(data.raw.technology["expanded-atomics"]) then
+    table.insert(data.raw.technology["artillery-atomics"].prerequisites, "expanded-atomics")
+  else
+    table.insert(data.raw.technology["artillery-atomics"].prerequisites, "atomic-bomb")
+    table.insert(data.raw.technology["artillery-atomics"].prerequisites, "kovarex-enrichment-process")
+    table.insert(data.raw.technology["artillery-atomics"].prerequisites, "production-science-pack")
+  end
 end
 
 
 if(nuke_materials.smallBoomMaterial == "californium") then
-  if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value ) then
-    data:extend{
-      {
-        type = "technology",
-        name = "californium-processing",
-        icon_size = 256, icon_mipmaps = 4,
-        icon = "__True-Nukes__/graphics/californium-processing-tech.png",
-        effects =
-        {
-          {
-            type = "unlock-recipe",
-            recipe = "californium-processing"
-          },
-        },
-        prerequisites = {"kovarex-enrichment-process"},
-        unit =
-        {
-          count = 500,
-          ingredients = {
-            {"automation-science-pack", 2},
-            {"logistic-science-pack", 2},
-            {"chemical-science-pack", 1},
-            {"production-science-pack", 1},
-          },
-          time = 30
-        },
-        order = "e-p-b-d"
-      },
-      {
-        type = "technology",
-        name = "californium-weapons",
-        icon_size = 256, icon_mipmaps = 4,
-        icon = "__True-Nukes__/graphics/small-atomic-tech.png",
-        effects = {},
-        prerequisites = {"expanded-atomics", "californium-processing"},
-        unit =
-        {
-          count = 500,
-          ingredients = no_prod,
-          time = 45
-        },
-        order = "e-a-g"
-      },
-    }
-  elseif settings.startup["enable-compact-large-atomics"].value then
+  if(hasSmall or hasCompactMedium or hasCompactLarge or hasCompact15kt) then
     data:extend{
       {
         type = "technology",
@@ -340,8 +321,14 @@ if(nuke_materials.smallBoomMaterial == "californium") then
         order = "e-p-b-d"
       },
     }
+    if(data.raw.technology["expanded-atomics"]) then
+      table.insert(data.raw.technology["californium-processing"].prerequisites, "expanded-atomics")
+    else
+      table.insert(data.raw.technology["californium-processing"].prerequisites, "atomic-bomb")
   end
-else
+  end
+end
+if hasSmall or hasCompactMedium then
     data:extend{
       {
         type = "technology",
@@ -349,7 +336,7 @@ else
         icon_size = 256, icon_mipmaps = 4,
         icon = "__True-Nukes__/graphics/small-atomic-tech.png",
         effects = {},
-        prerequisites = {"expanded-atomics"},
+      prerequisites = {},
         unit =
         {
           count = 500,
@@ -359,9 +346,19 @@ else
         order = "e-a-g"
       },
     }
+  if(data.raw.technology["expanded-atomics"]) then
+    table.insert(data.raw.technology["californium-weapons"].prerequisites, "expanded-atomics")
+  else
+    table.insert(data.raw.technology["californium-weapons"].prerequisites, "atomic-bomb")
+  end
+  if(data.raw.technology["californium-processing"]) then
+    table.insert(data.raw.technology["californium-weapons"].prerequisites, "californium-processing")
+  else
+    table.insert(data.raw.technology["californium-weapons"].prerequisites, "kovarex-enrichment-process")
+  end
 end
 
-if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
+if(hasCompactSmall or hasCompactMedium) then
   data:extend{
     {
       type = "technology",
@@ -388,7 +385,7 @@ if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["
 
 end
 
-if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-compact-large-atomics"].value) then
+if(hasCompact15kt or hasCompactLarge) then
   data:extend{
     {
       type = "technology",
@@ -396,7 +393,7 @@ if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-com
       icon_size = 256, icon_mipmaps = 4,
       icon = "__True-Nukes__/graphics/many-atomic-tech.png",
       effects = {},
-      prerequisites = {"full-fission-atomics", "artillery-atomics"},
+      prerequisites = { "artillery-atomics"},
       unit =
       {
         count = 1,
@@ -406,23 +403,29 @@ if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-com
       order = "e-a-i"
     },
   }
+  if(data.raw.technology["full-fission-atomics"]) then
+    table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "full-fission-atomics")
+  else
+    table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "atomic-bomb")
+    table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "kovarex-enrichment-process")
+    table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "production-science-pack")
+  end
   local canDoTest = true
-  if(settings.startup["enable-nuclear-tests"].value) then
-    if(settings.startup["enable-15kt"].value) then
+
+  if(data.raw.tool["test-pack-atomic-15kt-1"]) then
       table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-15kt-1", 1})
-    elseif(settings.startup["enable-large-atomics"].value)then
+  elseif(data.raw.tool["test-pack-atomic-1kt-1"])then
       table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-1kt-1", 1})
     else
       canDoTest = false
     end
-  end
-  if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
+  if(data.raw.technology["compact-californium-weapons"]) then
     table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "compact-californium-weapons")
 
-    if(settings.startup["enable-nuclear-tests"].value and canDoTest) then
+    if(data.raw.tool["test-pack-atomic-20t-3"] and canDoTest) then
       table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-20t-3", 1})
     end
-  elseif(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value or settings.startup["enable-compact-large-atomics"].value) then
+  elseif(data.raw.technology["compact-full-fission-weapons"]) then
     if(nuke_materials.smallBoomMaterial == "californium") then
       table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "californium-processing")
     end
@@ -439,7 +442,7 @@ if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-com
       })
   end
 
-  if not next(data.raw.technology["compact-full-fission-weapons"].unit.ingredients[1]) then
+  if not data.raw.technology["compact-full-fission-weapons"].unit.ingredients[1] then
     data.raw.technology["compact-full-fission-weapons"].unit = {
       count = 500,
       ingredients = space,
@@ -447,7 +450,7 @@ if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-com
     }
   end
 end
-if(settings.startup["enable-fusion"].value or settings.startup["enable-fusion-building"].value) then
+if(hasFusion) then
   data:extend{
     {
       type = "technology",
@@ -501,18 +504,20 @@ if(settings.startup["enable-fusion"].value or settings.startup["enable-fusion-bu
       order = "e-a-j"
     }
   }
-  if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-compact-large-atomics"].value) then
+  if(data.raw.technology["compact-full-fission-weapons"]) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "compact-full-fission-weapons")
   else
-    if (settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
+    if (data.raw.technology["compact-californium-weapons"]) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "compact-californium-weapons")
+    elseif(data.raw.technology["californium-weapons"]) then
+      table.insert(data.raw.technology["fusion-weapons"].prerequisites, "californium-weapons")
     end
-    if (settings.startup["enable-large-atomics"].value) then
+    if (data.raw.technology["full-fission-atomics"]) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "full-fission-atomics")
     end
   end
 end
-if(settings.startup["enable-compact-fusion"].value) then
+if(hasCompactFusion) then
   data:extend{
     {
       type = "technology",
@@ -531,7 +536,7 @@ if(settings.startup["enable-compact-fusion"].value) then
     }
   }
 
-  if(settings.startup["enable-nuclear-tests"].value) then
+  if(data.raw.tool["test-pack-atomic-2-stage-100kt-1"]) then
     data.raw.technology["compact-fusion-weapons"].unit =
       {
         count = 1,
@@ -541,8 +546,7 @@ if(settings.startup["enable-compact-fusion"].value) then
   end
 end
 
-if(settings.startup["enable-compact-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value or
-  settings.startup["enable-compact-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
+if(hasCompactSmall or hasCompactMedium or hasCompactLarge or hasCompact15kt) then
 
   data:extend{
     {

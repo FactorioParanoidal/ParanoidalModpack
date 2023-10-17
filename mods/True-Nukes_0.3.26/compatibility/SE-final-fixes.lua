@@ -64,7 +64,7 @@ else
 end
 
 
-if(settings.startup["enable-large-atomics"].value) then
+if(data.raw.technology["expanded-atomics"]) then
   data.raw.technology["expanded-atomics"].unit.ingredients = space
   if(data.raw.technology["kovarex-enrichment-process"] and data.raw.technology["kovarex-enrichment-process"].enabled) then
     data.raw.technology["expanded-atomics"].prerequisites = {"atomic-bomb", "nuclear-fuel-reprocessing", "space-science-pack"}
@@ -86,13 +86,13 @@ if(settings.startup["enable-large-atomics"].value) then
       }
   end
 end
-if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
+if(data.raw.technology["artillery-atomics"]) then
   data.raw.technology["artillery-atomics"].unit.ingredients = no_util
   if(data.raw.technology["kovarex-enrichment-process"] and data.raw.technology["kovarex-enrichment-process"].enabled) then
     table.insert(data.raw.technology["artillery-atomics"].prerequisites, "kovarex-enrichment-process")
   end
 end
-if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-large-atomics"].value) then
+if(data.raw.technology["californium-processing"]) then
   data.raw.technology["californium-processing"].unit.ingredients = {
     {"automation-science-pack", 2},
     {"logistic-science-pack", 2},
@@ -102,14 +102,14 @@ if(settings.startup["enable-small-atomics"].value or settings.startup["enable-co
     {"production-science-pack", 1},
   }
 end
-if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value ) then
+if(data.raw.technology["californium-weapons"]) then
   data.raw.technology["californium-weapons"].unit.ingredients = no_prod
 
 end
-if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
+if(data.raw.technology["compact-californium-weapons"]) then
   data.raw.technology["compact-californium-weapons"].unit.ingredients = expensive
 end
-if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-compact-large-atomics"].value) then
+if(data.raw.technology["compact-full-fission-weapons"]) then
   data.raw.technology["compact-full-fission-weapons"].unit.ingredients = {}
   if(settings.startup["enable-nuclear-tests"].value) then
     if(settings.startup["enable-15kt"].value) then

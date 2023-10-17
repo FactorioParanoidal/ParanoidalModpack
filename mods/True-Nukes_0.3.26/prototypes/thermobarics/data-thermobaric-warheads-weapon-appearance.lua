@@ -21,4 +21,11 @@ weaponTypes["artillery-shell"].icons["-thermobaric-3"] = createAppearance({type 
 if mods["SchallTankPlatoon"] then
   local STP_sprites = require("__Warheads__.prototypes.compatibility.SchallTankPlatoon-sprites")
   weaponTypes["autocannon-shell"].icons["-thermobaric-1"] = createAppearance({sprite_types = STP_sprites, type = "autocannon", style = 3, tints = {tints.explosive, tints.explosive, tints.explosive}}).icons
+  if warheadOverrides["autocannon-shell-thermobaric-1"] == nil then
+    warheadOverrides["autocannon-shell-thermobaric-1"] = {}
+  end
+  table.insert(warheadOverrides["autocannon-shell-thermobaric-1"], function (result)
+    result.item.ammo_type.target_type = "direction"
+    result.item.ammo_type.clamp_position = false
+  end)
 end

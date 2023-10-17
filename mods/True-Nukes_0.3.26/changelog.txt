@@ -1,4 +1,56 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.26
+Date: 2023-09-16
+  Bugfixes:
+    - Patched an incompatibility with factorissimo 2, in some conditions.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.25
+Date: 2023-09-05
+  Bugfixes:
+    - Fixed trees crashing game when hit by nuclear blasts.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.24
+Date: 2023-09-01
+  Features:
+    - More settings, particularly a more general blast scaledown and options to retain kill stats.
+  Bugfixes:
+    - Fixed trees getting regaining leaves when hit by nuclear blasts.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.23
+Date: 2023-08-23
+  Bugfixes:
+    - Fixed circular dependancy - may be unstable.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.22
+Date: 2023-08-15
+  Bugfixes:
+    - Fixed incompatibility with Plutonium Energy - fixed by JohnTheCoolingFan - Thanks!
+---------------------------------------------------------------------------------------------------
+Version: 0.3.21
+Date: 2023-07-02
+  Features:
+    - Made tritium fuel cells based on uranium ones, for general compatability
+  Bugfixes:
+    - Fixed some locale issues with settings
+---------------------------------------------------------------------------------------------------
+Version: 0.3.20
+Date: 2023-04-05
+  Bugfixes:
+    - Fixed some issues with settings
+---------------------------------------------------------------------------------------------------
+Version: 0.3.19
+Date: 2023-03-31
+  Bugfixes:
+    - Fixed dots appearing on map behind artillery
+    - Fixed spidertron legs taking damage
+  Features:
+    - Added compatibility for Atomic_Overhaul
+---------------------------------------------------------------------------------------------------
+Version: 0.3.18
+Date: 2023-03-26
+  Bugfixes:
+    - Fixed issue range of Schall's tank autocannon
+---------------------------------------------------------------------------------------------------
 Version: 0.3.17
 Date: 2022-12-21
   Bugfixes:

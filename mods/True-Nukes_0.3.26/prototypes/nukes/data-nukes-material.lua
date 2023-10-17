@@ -34,6 +34,9 @@ if settings.startup["boom-material"].value == "mod-dependant" then
   if mods["PlutoniumEnergy"] then
     boomMaterial = "plutonium-239";
   end
+  if mods["Atomic_Overhaul"] then
+    boomMaterial = "plutonium";
+  end
 elseif settings.startup["boom-material"].value == "custom" then
   boomMaterial = settings.startup["boom-material-name"].value
 end
