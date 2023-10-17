@@ -8,7 +8,7 @@ local reflector = nuke_materials.reflector
 local computer = nuke_materials.computer
 local fusionMaterial = nuke_materials.fusionMaterial
 
-log("hello")
+
 if(warheads["TN-warhead-20--1"]) then
   data:extend{
     {

@@ -1,7 +1,9 @@
-local function damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v, force, cause, corpseMap)
+local function damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v, force, cause, corpseMap, deathStatsForTrees, deathStatsForOther)
   local damage = fireballSq*initialDamage/distSq
   local eProto = v.prototype
-  if(v.type=="tree") then
+  if(v.type=="spider-leg") then
+    return
+  elseif(v.type=="tree" and not deathStatsForTrees) then
     -- efficient tree handling
     if(math.random(0, 100)<1) then
       surface.create_entity{name="fire-flame-on-tree", target = v, position=ePos}
@@ -11,7 +13,11 @@ local function damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v
       (eProto.resistances and eProto.resistances.fire and v.health<(damage-eProto.resistances.fire.decrease)*(1-eProto.resistances.fire.percent))) then
       local surface = v.surface
       local destPos = ePos
+      if (deathStatsForTrees) then
+        v.die();
+      else
       v.destroy()
+      end
       surface.create_entity{name="tree-01-stump",position=destPos}
     else
       if((not eProto.resistances) or not eProto.resistances.fire) then
@@ -48,7 +54,7 @@ local function damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v
       elseif(eProto.resistances and eProto.resistances.fire and v.health>(damage-eProto.resistances.fire.decrease)*(1-eProto.resistances.fire.percent)) then
         v.health = v.health-(damage-eProto.resistances.fire.decrease)*(1-eProto.resistances.fire.percent)
       else
-        if(corpseMap[v.name]) then
+        if((not v.grid) and corpseMap[v.name] and not deathStatsForOther) then
           local corpseName = corpseMap[v.name]
           --local ghost
           --if(eProto.create_ghost_on_death or eProto.create_ghost_on_death == nil) then
@@ -79,6 +85,8 @@ end
 
 
 local function atomic_thermal_blast_internal(surface_index, position, force, cause, thermal_max_r, initialDamage, fireball_r, initial_x, initial_y, corpseMap)
+  local deathStatsForTrees = settings.global["retain-death-statistics-for-trees"].value or (thermal_max_r < 2000 and settings.global["retain-death-statistics-for-trees-small"].value)
+  local deathStatsForOther = settings.global["retain-death-statistics"].value or (thermal_max_r < 2000 and settings.global["retain-death-statistics-small"].value)
   -- do thermal heat-wave damage
   local thermSq = thermal_max_r*thermal_max_r;
   local fireballSq = fireball_r*fireball_r;
@@ -146,7 +154,7 @@ local function atomic_thermal_blast_internal(surface_index, position, force, cau
         local distSq = xdif*xdif + ydif*ydif
         if(distSq <= thermSq and distSq>fireballSq and v.prototype.max_health ~= 0
           and ePos.x>=a[1][1] and ePos.x<a[2][1] and ePos.y>=a[1][2] and ePos.y<a[2][2]) then
-          damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v, force, cause, corpseMap)
+          damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v, force, cause, corpseMap, deathStatsForTrees, deathStatsForOther)
         end
       end
     end
@@ -193,7 +201,7 @@ local function chunk_loaded(chunkLoaderStruct, surface_index, originPos, x, y, c
       local distSq = xdif*xdif + ydif*ydif
       if(distSq <= thermSq and distSq>fireballSq and v.prototype.max_health ~= 0
         and ePos.x>=x and ePos.x<x+32 and ePos.y>=y and ePos.y<y+32 and (killPlanes or v.type ~= "car")) then
-        damage_entity(surface, distSq, ePos, fireballSq, init_thermal, v, force, cause, corpseMap)
+        damage_entity(surface, distSq, ePos, fireballSq, init_thermal, v, force, cause, corpseMap, false, false)
       end
     end
   end

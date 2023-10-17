@@ -6,10 +6,10 @@ end
 data.raw.technology["plutonium-atomic-bomb"] = nil
 
 if (data.raw.technology["expanded-atomics"]) then
-  table.insert(data.raw.technology["expanded-atomics"].prerequisites, "plutonium-enrichment-process")
+  table.insert(data.raw.technology["expanded-atomics"].prerequisites, "nuclear-breeding")
 end
 if (data.raw.technology["californium-processing"]) then
-  table.insert(data.raw.technology["californium-processing"].prerequisites, "plutonium-enrichment-process")
+  table.insert(data.raw.technology["californium-processing"].prerequisites, "nuclear-breeding")
 end
 
 if (data.raw.technology["tritium-breeder-fuel-cell"]) then

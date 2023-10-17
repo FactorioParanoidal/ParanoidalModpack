@@ -365,8 +365,8 @@ end
 -- polution is capped at 500000
 --local function atomic_weapon_hit(surface_index, source_entity, position, crater_internal_r, crater_external_r, fireball_r, fire_outer_r, blast_max_r, tree_fire_max_r, thermal_max_r, load_r, visable_r, polution, flame_proportion, create_small_fires, check_craters)
 script.on_event(defines.events.on_script_trigger_effect, function(event)
-  local mult = 25
-  local thermal_mult = 30
+  local mult = 25 / settings.global["general-nuke-range-scaledown"].value
+  local thermal_mult = 30 / settings.global["general-nuke-range-scaledown"].value
   local position = find_event_position(event);
 
   local source = event.source_entity

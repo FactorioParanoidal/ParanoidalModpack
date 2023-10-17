@@ -6,6 +6,9 @@ require("data-nukes-warheads-weapon-appearance")
 require("data-nukes-technology")
 require("data-nukes-achievements")
 
+if mods["Atomic_Overhaul"] then
+  require("compatibility.atomic-overhaul")
+end
 if mods["space-exploration"] then
   require("compatibility.SE")
 end

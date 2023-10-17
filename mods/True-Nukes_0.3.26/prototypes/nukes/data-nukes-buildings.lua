@@ -8,11 +8,13 @@ table.insert(data.raw.technology["basic-atomic-weapons"].effects,
     type = "unlock-recipe",
     recipe = "nuclear-test-site"
   })
-table.insert(data.raw.technology["fusion-weapons"].effects,
+if data.raw.technology["fusion-weapons"] then
+  table.insert(data.raw.technology["fusion-weapons"].effects,
   {
     type = "unlock-recipe",
     recipe = "fusion-test-site"
   })
+end
 local warheads_to_add = require("data-nukes-building-warheads")
 
 
@@ -25,6 +27,7 @@ for _,w in pairs(warheads_to_add) do
     else
       explosion = {appendOrder = "", appendName = ""}
     end
+    if explosion then
     local recipe = {
       type = "recipe",
       name = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
@@ -63,6 +66,7 @@ for _,w in pairs(warheads_to_add) do
     }
 
     data:extend{recipe, item}
+  end
   end
 end
 
