@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2023-05-09
+  Bugfixes:
+    - Fixed end points simulation blueprint corruption
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2023-05-09
+  Bugfixes:
+    - Fixed messy duct collision boxes causing buildability issues (#14)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2023-05-08
+  Bugfixes:
+    - Fixed that underground pipes could connect to ducts in certain situations (#13)
+    - Fixed that underground ducts would not connect if regular ducts were placed between them (#6)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2023-04-29
+  Changes:
+    - Removed blue fluidbox arrows from ducts (#11)
+---------------------------------------------------------------------------------------------------
 Version: 1.3.1
 Date: 2022-03-12
   Compatibility:

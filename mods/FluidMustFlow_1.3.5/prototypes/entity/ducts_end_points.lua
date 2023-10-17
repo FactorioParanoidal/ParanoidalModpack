@@ -56,7 +56,7 @@ data:extend({
       pipe_connections = {
         { position = { 0.5, 1.5 }, type = "input" },
         { position = { -0.5, 1.5 }, type = "input" },
-        { position = { 0, -1.6 }, type = "output", max_underground_distance = 1 },
+        { position = { 0, -1.5 }, type = "output" },
         { position = { 1.5, -0.5 }, type = "input" },
         { position = { 1.5, 0.5 }, type = "input" },
         { position = { -1.5, -0.5 }, type = "input" },
@@ -306,7 +306,7 @@ data:extend({
       pipe_connections = {
         { position = { 0.5, -1.5 }, type = "output" },
         { position = { -0.5, -1.5 }, type = "output" },
-        { position = { 0, 1.6 }, type = "input", max_underground_distance = 1 },
+        { position = { 0, 1.5 }, type = "input" },
         { position = { 1.5, -0.5 }, type = "output" },
         { position = { 1.5, 0.5 }, type = "output" },
         { position = { -1.5, -0.5 }, type = "output" },
