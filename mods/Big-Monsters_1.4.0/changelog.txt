@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+  Compatibility:
+    - Will not spawn RenaiTransportation turret entities on worm attacks anymore
+  Changes:
+    - Added new threat when playin with "Player body abduction" mod. If an abducted body is note recovered, it may become a human boss enemy
+    - Added bosses from "Arachnids enemy" mod, if installed
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+  Compatibility:
+    - Checks if spider boss needs solid-fuel (because of other mods) and insert when required
+  Changes:
+    - Added more bosses from other biter mods (Frost, Explosive, Toxic) when installed.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+  Bugfixes:
+    - Fixed a reported crash caused by previous version
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+  Compatibility:
+    - Checks if spider boss needs solid-fuel (because of other mods) and insert when required
+  Changes:
+    - Added more bosses from other biter mods (Frost, Explosive, Toxic) when installed.
+---------------------------------------------------------------------------------------------------
 Version: 1.3.1
   Compatibility:
     - Made compatible with warptorio: events happen on the current planet
