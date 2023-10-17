@@ -1,3 +1,5 @@
+Repair = {}
+
 local function get_level_suffix(name)
   return tonumber(string.match(name, "%d+$"))
 end
@@ -12,6 +14,8 @@ local function get_highest_matching_repair_pack(level)
 end
 
 local function repair_recipe(set, original_item, crashed_item, repair_pack_name)
+  local repair_cost = 0.75
+
   set.results = {{name = original_item.name, amount = 1}}
   if set and set.ingredients then
     for k, ingredient in pairs(set.ingredients) do
@@ -19,11 +23,11 @@ local function repair_recipe(set, original_item, crashed_item, repair_pack_name)
         set.ingredients[k] = {name = ingredient[1], amount = ingredient[2]}
       end
       local original_amount = set.ingredients[k].amount or 1
-      local reduced_amount = math.ceil(original_amount * 0.75)
+      local reduced_amount = math.ceil(original_amount * repair_cost)
       if original_amount == reduced_amount and original_amount > 1 then
         reduced_amount = original_amount - 1
       elseif original_amount == reduced_amount and original_amount == 1 then
-        table.insert(set.results, {name = set.ingredients[k].name, amount_min = 1, amount_max = 1, probability = 0.25})
+        table.insert(set.results, {name = set.ingredients[k].name, amount_min = 1, amount_max = 1, probability = (1 - repair_cost)})
       end
       set.ingredients[k].amount = reduced_amount
     end
@@ -32,7 +36,7 @@ local function repair_recipe(set, original_item, crashed_item, repair_pack_name)
   end
 end
 
-local function repair_recipe_and_item(robot_prototype)
+function Repair.make_repair_recipe_and_item(robot_prototype)
   if not robot_prototype.minable and robot_prototype.minable.result then return end
 
   local o_item_name = robot_prototype.minable.result
@@ -117,7 +121,7 @@ local function repair_recipe_and_item(robot_prototype)
   data:extend({crashed_item, recipe_repair, recipe_recombine})
 end
 
-local function robot_attrition_bot_corpse(bot)
+function Repair.make_robot_attrition_bot_corpse(bot)
   -- Dying effect, creates dying particle
   local particle_name
   if bot.dying_trigger_effect and bot.dying_trigger_effect[1] and bot.dying_trigger_effect[1].particle_name then
@@ -193,7 +197,4 @@ local function robot_attrition_bot_corpse(bot)
   data:extend({remnant})
 end
 
-for _, prototype in pairs(data.raw["logistic-robot"]) do
-  repair_recipe_and_item(prototype)
-  robot_attrition_bot_corpse(prototype)
-end
+return Repair
