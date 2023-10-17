@@ -1,7 +1,7 @@
 --[[ Copyright (c) 2019 - 2023 Picklock
  * Part of Picklocks Inserter
  * custom-inputs.lua
- * Version 1.110.5.53
+ * Version 1.110.6.54
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
