@@ -16,8 +16,12 @@ weaponTypes["shotgun-shell-birdshot"]= {
   item = table.deepcopy(data.raw.ammo["piercing-shotgun-shell"]),
   projectile = table.deepcopy(data.raw.projectile["piercing-shotgun-pellet"]),
 }
-weaponTypes["shotgun-shell-birdshot"].item.ammo_type.action[2].repeat_count = 20
-weaponTypes["shotgun-shell-birdshot"].item.ammo_type.action[2].action_delivery = {
+local shotgunActionIndex = 1
+if  (data.raw.ammo["piercing-shotgun-shell"].ammo_type.action[2]) then
+  shotgunActionIndex = 2
+end 
+weaponTypes["shotgun-shell-birdshot"].item.ammo_type.action[shotgunActionIndex].repeat_count = 20
+weaponTypes["shotgun-shell-birdshot"].item.ammo_type.action[shotgunActionIndex].action_delivery = {
   type = "projectile",
   projectile = "piercing-shotgun-pellet",
   starting_speed = 1,
@@ -45,7 +49,7 @@ weaponTypes["shotgun-shell-buckshot"]= {
   item = table.deepcopy(data.raw.ammo["piercing-shotgun-shell"]),
   projectile = table.deepcopy(data.raw.projectile["piercing-shotgun-pellet"]),
 }
-weaponTypes["shotgun-shell-buckshot"].item.ammo_type.action[2].repeat_count = 6
+weaponTypes["shotgun-shell-buckshot"].item.ammo_type.action[shotgunActionIndex].repeat_count = 6
 
 weaponTypes["shotgun-shell-slug"]= {
   type = "projectile",
@@ -65,8 +69,12 @@ weaponTypes["shotgun-shell-slug"]= {
   item = table.deepcopy(data.raw.ammo["piercing-shotgun-shell"]),
   projectile = table.deepcopy(data.raw.projectile["piercing-shotgun-pellet"]),
 }
-weaponTypes["shotgun-shell-slug"].item.ammo_type.action[2].repeat_count = 1
-weaponTypes["shotgun-shell-slug"].item.ammo_type.action[2].action_delivery.direction_deviation = 0
+weaponTypes["shotgun-shell-slug"].item.ammo_type.action[shotgunActionIndex].repeat_count = 1
+if weaponTypes["shotgun-shell-slug"].item.ammo_type.action[shotgunActionIndex].action_delivery.type then
+  weaponTypes["shotgun-shell-slug"].item.ammo_type.action[shotgunActionIndex].action_delivery.direction_deviation = 0
+else
+  weaponTypes["shotgun-shell-slug"].item.ammo_type.action[shotgunActionIndex].action_delivery[1].direction_deviation = 0
+end
 
 weaponTypes["shotgun-shell"]= { -- DO NOT USE, ONLY HERE AS FALLBACK...
   type = "projectile",
@@ -103,6 +111,18 @@ weaponTypes["rounds-magazine"]= {
   image_warhead_shift = {-8, -8},
   item = table.deepcopy(data.raw.ammo["piercing-rounds-magazine"]),
 }
+
+if data.raw.projectile["p-r-bullet"] then
+  weaponTypes["rounds-magazine"].type = "projectile"
+  weaponTypes["rounds-magazine"].projectile = table.deepcopy(data.raw.projectile["p-r-bullet"])
+elseif data.raw.projectile["piercing-rounds-bullet"] then
+  weaponTypes["rounds-magazine"].type = "projectile"
+  weaponTypes["rounds-magazine"].projectile = table.deepcopy(data.raw.projectile["piercing-rounds-bullet"])
+elseif data.raw.projectile["piercing-bullet"] then
+  weaponTypes["rounds-magazine"].type = "projectile"
+  weaponTypes["rounds-magazine"].projectile = table.deepcopy(data.raw.projectile["piercing-bullet"])
+end
+
 weaponTypes["cannon-shell"]= {
   type = "projectile",
   size = "small",
@@ -211,16 +231,16 @@ weaponTypes["capsule"]= {
 }
 
 weaponTypes["warhead-util-projectile"]= {
-  type = "projectile",
+  type = "artillery",
   baseName = "warhead-util-projectile",
   base_item = "infinity-chest",
   icon = "__base__/graphics/icons/infinity-chest.png",
   energy_required = 3000,
-  item = table.deepcopy(data.raw.ammo["cannon-shell"]),
+  item = table.deepcopy(data.raw.ammo["artillery-shell"]),
   projectile = table.deepcopy(data.raw["artillery-projectile"]["artillery-projectile"]),
   image_base_shift = {4, 2},
   image_warhead_shift = {-8, -8},
   projectile_acceleration = 1,
-  ammo_category = "cannon-shell"
+  ammo_category = "artillery-shell"
 }
 weaponNoTech["warhead-util-projectile"] = true

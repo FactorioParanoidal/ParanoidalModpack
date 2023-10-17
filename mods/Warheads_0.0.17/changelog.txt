@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+Date: 2023-10-10
+  Bugfixes:
+    - Fixed strange bug with Make Artillery Great Again and SE breaking thermobaric weapon delivery cannons
+---------------------------------------------------------------------------------------------------
+Version: 0.0.16
+Date: 2023-08-23
+  Bugfixes:
+    - Fixed circular dependancy - may be unstable.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2023-04-04
+  Bugfixes:
+    - Fixed crash when Rampant arsenal and tracer-ammo are installed
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2023-03-31
+  Bugfixes:
+    - Fixed dots appearing on map behind artillery
+  Features:
+    - Added compatibility for Atomic_Overhaul
+    - Added compatibility for light artillery Balanced
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2023-03-26
+  Bugfixes:
+    - Added projectile.force_condition to warhead system
+---------------------------------------------------------------------------------------------------
 Version: 0.0.12
 Date: 2023-01-14
   Features:
