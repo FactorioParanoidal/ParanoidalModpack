@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.21
+Date: 2023-07-29
+  Bugfixes:
+    - Fixed and issue with powder processing tech updates
+---------------------------------------------------------------------------------------------------
+Version: 1.3.20
+Date: 2023-05-28
+  Bugfixes:
+    - More platinum fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.3.19
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed capitalisation on folder name breaking the mod on some OS
+---------------------------------------------------------------------------------------------------
+Version: 1.3.18
+Date: 2023-04-16
+  Features:
+    - Moved garden generation to farm 2 to allow earlier farming (Canisdirusleidy on forum)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.17
+Date: 2023-04-16
+  Features:
+    - Fixed that depleted uranium recipes had no unlock
+    - Fixed dimethymercury from algae path
+    - General clean-ups and icon updates
+---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 2021-08-10
   Features:

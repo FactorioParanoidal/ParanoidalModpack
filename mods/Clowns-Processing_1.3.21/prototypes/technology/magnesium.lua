@@ -28,7 +28,7 @@ data:extend(
 				recipe = "clowns-plate-magnesium"
 			},
 		},
-		prerequisites = {"powder-metallurgy-1", "ore-processing-2"},
+		prerequisites = {"powder-metallurgy-2", "ore-processing-2"},
 		unit =
 		{
 			ingredients =

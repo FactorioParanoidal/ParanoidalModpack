@@ -12,7 +12,11 @@ end
 if mods["pyrawores"] then --force full mode
   clowns.special_vanilla = false
 end
-
+if settings.startup["depleted-uranium"].value and clowns.special_vanilla == false then
+  angelsmods.trigger.smelting_products["enable-all"] = true -- to ensure we get the powder
+end
+angelsmods.trigger.ores["platinum"] = true
+angelsmods.trigger.smelting_products["platinum"].wire = true
 
 require("prototypes.categories")
 
