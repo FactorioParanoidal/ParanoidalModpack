@@ -688,10 +688,6 @@ function ProcessRequest(reqIndex, request)
   end
   schedule.records[#schedule.records + 1] = NewScheduleRecord(to, "item_count", "=", loadingList, 0)
 
-  -- log("DEBUG: schedule = "..serpent.block(schedule))
-  selectedTrain.schedule = schedule
-
-
   local shipment = {}
   if debug_log then log("Creating Delivery: "..totalStacks.." stacks, "..from.." >> "..to) end
   for i=1, #loadingList do
@@ -741,6 +737,11 @@ function ProcessRequest(reqIndex, request)
   global.Dispatcher.availableTrains_total_capacity = global.Dispatcher.availableTrains_total_capacity - global.Dispatcher.availableTrains[selectedTrain.id].capacity
   global.Dispatcher.availableTrains_total_fluid_capacity = global.Dispatcher.availableTrains_total_fluid_capacity - global.Dispatcher.availableTrains[selectedTrain.id].fluid_capacity
   global.Dispatcher.availableTrains[selectedTrain.id] = nil
+
+  -- raises on_train_schedule_changed instantly
+  -- GetNextLogisticStop relies on global.Dispatcher.Deliveries[train.id].train to be set
+  selectedTrain.schedule = schedule
+  -- global.Dispatcher.Deliveries[selectedTrain.id].train = selectedTrain -- not required, train object is stored as reference
 
   -- train is no longer available => set depot to yellow
   setLamp(depot, "yellow", 1)
