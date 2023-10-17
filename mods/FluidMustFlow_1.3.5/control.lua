@@ -16,7 +16,7 @@ local function get_midpoint(pos_1, pos_2)
   }
 end
 
---- @param e on_built_entity|on_robot_built_entity|script_raised_built|script_raised_revive
+--- @param e EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive
 local function join_ducts(e)
   --- @type LuaEntity
   local entity = e.entity or e.created_entity
