@@ -211,7 +211,6 @@ function layout:prepare_belt_layout(state)
 	
 	---@type table<number, MinerPlacement[]>
 	local belt_lanes = {}
-	state.belts = belt_lanes
 	local miner_lane_number = 0 -- highest index of a lane, because using # won't do the job if a lane is missing
 
 	local builder_belts = {}
@@ -224,12 +223,18 @@ function layout:prepare_belt_layout(state)
 		miner_lane_number = max(miner_lane_number, index)
 		if not belt_lanes[index] then belt_lanes[index] = {} end
 		local line = belt_lanes[index]
+		line._index = index
 		if miner.center.x > (line.last_x or 0) then
 			line.last_x = miner.center.x
 			line.last_miner = miner
 		end
 		line[#line+1] = miner
 	end
+
+	local temp_belts = {}
+	for k, v in pairs(belt_lanes) do temp_belts[#temp_belts+1] = v end
+	table.sort(temp_belts, function(a, b) return a._index < b._index end)
+	state.belts = temp_belts
 
 	local shift_x, shift_y = state.best_attempt.sx, state.best_attempt.sy
 
