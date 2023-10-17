@@ -1,3 +1,4 @@
+-- luacheck: globals game global settings script defines, ignore 631
 local noxy_trees = {}
 
 local mathfloor = math.floor
@@ -21,6 +22,10 @@ noxy_trees.disabled = { -- Disables the spreading of these specific entities.
 	["swamp-garden"]        = true,
 	["desert-garden"]       = true,
 	["puffer-nest"]         = true,
+}
+noxy_trees.disabled_match = {
+	["[-]planted"]         = true,
+	["sapling[-]stage[-]"] = true,
 }
 noxy_trees.degradable = { -- The floor tiles that can be degraded and into what.
 	-- Vanilla tiles 0.18
@@ -549,6 +554,26 @@ local function cache_forces()
 	end
 end
 
+local function cache_surfaces()
+	if game then
+		global.surfaces = {}
+		for s in string.gmatch(config.surfaces, '([^,;]+)') do
+			local su = game.get_surface(s)
+			if not su then
+				if tonumber(s) then
+					su = game.get_surface(tonumber(s))
+				end
+			end
+			if su and su.valid then
+				table.insert(global.surfaces, su.index)
+			end
+		end
+		if (#global.surfaces < 1) then
+			global.surfaces = {1}
+		end
+	end
+end
+
 local function initialize()
 	global.chunks           = {}
 	global.chunkindex       = 0
@@ -566,15 +591,7 @@ local function initialize()
 	global.lastdebugmessage = 0
 	global.lasttotalchunks  = 0
 
-	for s in string.gmatch(config.surfaces, '([^,;]+)') do
-		local su = game.get_surface(s)
-		if su and su.valid then
-			table.insert(global.surfaces, su.index)
-		end
-	end
-	if (#global.surfaces < 1) then
-		global.surfaces = {1}
-	end
+	cache_surfaces()
 
 	cache_forces()
 end
@@ -601,6 +618,8 @@ local function cache_settings()
 	config.maximum_trees_per_chunk             = settings.global["Noxys_Trees-maximum-trees-per-chunk"].value
 	config.expansion_distance                  = settings.global["Noxys_Trees-expansion-distance"].value
 	config.surfaces                            = settings.global["Noxys_Trees-surfaces"].value
+
+	cache_surfaces()
 end
 
 cache_settings()
@@ -853,6 +872,18 @@ script.on_event({defines.events.on_tick}, function(event)
 				end
 			end
 		end
+		-- Add disabled prototypes
+		if next(noxy_trees.disabled_match) then
+			for e,_ in pairs(game.entity_prototypes) do
+				for k,_ in pairs(noxy_trees.disabled_match) do
+					if e:find(k) then
+						noxy_trees.disabled[e] = true
+					end
+				end
+			end
+			-- Clear so we don't do this again.
+			noxy_trees.disabled_match = {}
+		end
 		-- Debug
 		if config.debug then
 			if global.lastdebugmessage + config.debug_interval < event.tick then
@@ -879,7 +910,7 @@ script.on_event({defines.events.on_tick}, function(event)
 			-- Do the stuff
 			local last_surface, surface_index = next(global.surfaces, global.last_surface)
 			if surface_index then
-				local surface = game.surfaces[surface_index]
+				local surface = game.get_surface(surface_index)
 				if surface and surface.valid then
 					local chunksdone = 0
 					local chunkstodo = config.chunks_per_operation
