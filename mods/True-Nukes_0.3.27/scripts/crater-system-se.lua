@@ -1,7 +1,7 @@
 local water = require("water-system")
 
-local spaceTiles = {"se-regolith", "se-space-platform-plating", "se-space-platform-scaffold", "se-spaceship-floor"}
-local allSpaceTiles = {"se-regolith", "se-space-platform-plating", "se-space-platform-scaffold", "se-spaceship-floor", "se-space"}
+local spaceTiles = {"se-regolith", "se-space-platform-plating", "se-space-platform-scaffold"}
+local allSpaceTiles = {"se-regolith", "se-space-platform-plating", "se-space-platform-scaffold", "se-space"}
 
 local function tileDown1Map(tile)
   if(tile.name == "se-regolith" or tile.name == "se-space-platform-scaffold")then
