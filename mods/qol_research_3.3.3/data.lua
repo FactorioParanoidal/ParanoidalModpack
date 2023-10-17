@@ -16,6 +16,11 @@ do
     ordering_table = data_utils.create_ordering_table(count)
 end
 
+local order_format_string = 'qol-research-%s-%s-%s'
+if mods['nullius'] then
+    order_format_string = 'nullius-' .. order_format_string
+end
+
 local player_technologies = {}
 local function create_player_technologies_for_category(category, tiers)
     if not settings.startup[setting_formats.research_enabled:format(category.name)].value then
@@ -51,7 +56,7 @@ local function create_player_technologies_for_category(category, tiers)
                     ingredients = tier.cycle_ingredients,
                 },
                 upgrade = true,
-                order = ('qol-research-%s-%s-%s'):format(
+                order = order_format_string:format(
                     ordering_table[category.index],
                     ordering_table[tier_index],
                     ordering_table[technology_index]
