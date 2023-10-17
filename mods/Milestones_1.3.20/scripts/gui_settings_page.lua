@@ -162,7 +162,7 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
 
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     local next_formula = flow.milestones_settings_next_textfield.text
-    if next_formula == "" then next_formula = nil end
+    if not flow.milestones_settings_next_textfield.visible or next_formula == "" then next_formula = nil end
     if next_formula ~= nil then
         local operator, _ = parse_next_formula(next_formula)
         if operator == nil then

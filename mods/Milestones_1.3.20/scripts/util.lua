@@ -46,7 +46,6 @@ end
 local delayed_chat_delay = 240
 
 local function print_chat_delayed(event)
-    log("Printing delayed chat")
     if event.tick == 0 then return end
     for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
         game.print(delayed_chat_message)
@@ -63,4 +62,8 @@ end
 
 function print_delayed_red(message)
     table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
+end
+
+function approximately_equal(a, b)
+    return math.abs(a - b) < 0.00001
 end

@@ -16,9 +16,7 @@ local function validate_milestone_presets(interface_name, presets_to_validate, e
                 break
             end
             if existing_table[preset_name] then
-                print_delayed_red("Preset " .. preset_name .. " already exists.")
-                valid = false
-                break
+                log("Preset " .. preset_name .. " already exists. Overriding.")
             end
             if not preset.required_mods then
                 print_delayed_red("Preset " .. preset_name .. " is missing a `required_mods` value.")
@@ -53,10 +51,7 @@ local function is_preset_mods_enabled(preset)
     return true
 end
 
-function load_presets()
-    log("Loading presets")
-    global.valid_preset_names = {"Empty"}
-
+local function add_remote_presets_to_preset_table()
     -- See presets.lua to find out how to use this reverse remote interface to add your own preset.
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
@@ -69,6 +64,12 @@ function load_presets()
           end
         end
       end
+end
+
+function load_presets()
+    global.valid_preset_names = {"Empty"}
+
+    add_remote_presets_to_preset_table()
 
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
@@ -91,8 +92,6 @@ function load_presets()
 end
 
 function load_preset_addons()
-    log("Loading presets addons")
-    log(serpent.block(game.active_mods))
     preset_addons_loaded = {}
 
     -- See presets.lua to find out how to use this reverse remote interface to add your own preset addon.
@@ -129,6 +128,9 @@ function reload_presets()
     log("Reloading presets")
     local added_presets = {}
     local new_valid_preset_names = {"Empty"}
+
+    add_remote_presets_to_preset_table()
+
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then
             table.insert(new_valid_preset_names, preset_name)
