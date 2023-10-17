@@ -11,6 +11,10 @@ local flib = require('__flib__.data-util')
 local light_scale = settings.startup["lepp_light_size_factor"].value
 local light_size_limit = settings.startup["lepp_light_max_size"].value
 local lep_icons_layer = { { icon = "__LightedPolesPlus__/graphics/icons/lighted.png", icon_size = 32, tint = {r=1, g=1, b=1, a=0.85} } }
+local pole_entity_whitelist = {}
+for name in gmatch(settings.startup["lepp_pole_whitelist"].value, '([^, *]+)') do
+  pole_entity_whitelist[name] = true
+end
 local pole_entity_blacklist = {}
 for name in gmatch(settings.startup["lepp_pole_blacklist"].value, '([^, *]+)') do
   pole_entity_blacklist[name] = true
@@ -72,9 +76,10 @@ for _, item in pairs (data.raw["item"]) do
   if item.place_result and data.raw["electric-pole"][item.place_result] and not pole_entity_blacklist[item.place_result] then
     -- log("[LEP+] found pole "..item.place_result.." in item "..item.name)
     local pole = data.raw["electric-pole"][item.place_result]
-    if pole.draw_copper_wires ~= false -- exclude poles without copper wire connection
+    if pole_entity_whitelist[item.place_result] -- include if whitelisted
+    or (pole.draw_copper_wires ~= false -- exclude poles without copper wire connection
     and pole.maximum_wire_distance and pole.maximum_wire_distance > 0 -- exclude poles with no wire reach
-    and pole.minable and pole.minable.result and pole.minable.result == item.name then
+    and pole.minable and pole.minable.result and pole.minable.result == item.name) then
 
       pole.fast_replaceable_group = pole.fast_replaceable_group or "electric-pole"
 
