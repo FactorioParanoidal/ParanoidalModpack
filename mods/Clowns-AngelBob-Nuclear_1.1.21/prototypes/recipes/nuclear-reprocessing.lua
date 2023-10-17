@@ -73,6 +73,10 @@ data:extend(
 	},
 })
 if data.raw.item["thorium-fuel-cell"] or data.raw.item["angels-thorium-fuel-cell"] then
+	local ucell = "used-up-thorium-fuel-cell"
+	if angelsmods.industries and angelsmods.industries.overhaul then
+		ucell = "used-up-angels-thorium-fuel-cell"
+	end
 data:extend(
 {
 	{
@@ -81,7 +85,7 @@ data:extend(
 		energy_required = 50,
 		enabled = false,
 		category = "centrifuging",
-		ingredients = {{"used-up-thorium-fuel-cell", 5}},
+		ingredients = {{ucell, 5}},
 		icons= {{icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-reprocessing.png", icon_size = 32,}},
 		icon_size=32,
 		crafting_machine_tint =

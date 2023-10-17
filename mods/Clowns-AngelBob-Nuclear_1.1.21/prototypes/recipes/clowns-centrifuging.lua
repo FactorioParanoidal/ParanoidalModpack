@@ -13,13 +13,15 @@ data:extend(
 		{
 			{
 				icon = "__Clowns-Nuclear__/graphics/icons/1.png",
+				icon_size = 64,
+				icon_mipmaps = 4,
 				scale = 1,
 				shift = {0, 0},
 			},
 			{
 				icon = "__Clowns-Processing__/graphics/icons/solid-uranium-hexafluoride.png",
-				scale = 0.5,
-				shift = {-8, -8},
+				scale = 1,
+				shift = {-16, -16},
 			},
 		},
 		icon_size = 32,

@@ -20,7 +20,7 @@ if data.raw.technology["advanced-centrifuging-2"] then
   data.raw["technology"]["atomic-bomb"].prerequisites = {"advanced-centrifuging-2"}
 end
 --if thorium ore add thorium mox fuel cell recipe, or move advanced uranium to nuclear 2 to allow all fuels
-if data.raw.item["thorium-fuel-cell"] or data.raw.item["angels-thorium-fuel-cell"] then
+if data.raw.item["thorium-fuel-cell"] --[[or data.raw.item["angels-thorium-fuel-cell"]] then
   --table.insert(data.raw["technology"]["mixed-oxide-fuel"].effects, {type = "unlock-recipe", recipe = "thorium-mixed-oxide"})
 	OV.disable_recipe("angels-thorium-processing")
 	OV.add_prereq("angels-thorium-power","thorium-ore-processing")

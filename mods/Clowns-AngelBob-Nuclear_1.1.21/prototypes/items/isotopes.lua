@@ -1,4 +1,5 @@
-data:extend(
+if angelsmods.trigger.ores["thorium"] == true then
+	data:extend(
 {
 	{
 		type = "item",
@@ -8,7 +9,12 @@ data:extend(
 		subgroup = "clowns-thorium",
 		order = "b",
 		stack_size = 100
-	},
+	}})
+end
+	
+	
+data:extend(
+{
 	{
 		type = "item",
 		name = "polonium-210",
