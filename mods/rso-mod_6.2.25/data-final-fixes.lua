@@ -5,6 +5,7 @@ local IgnoredDataResources =
 {
 	["fossil-roots"] = true,
 	["tibGrowthNode"] = true,
+	["lambent-nil-phosphorite"] = true,
 --	["termal"] = true,
 --	["termal2"] = true
 }
