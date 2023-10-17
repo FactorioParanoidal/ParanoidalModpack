@@ -455,19 +455,19 @@ data.raw["train-stop"]["train-stop-scrap"].next_upgrade = "train-stop"
 
 data.raw["rail-signal"]["rail-signal-scrap"].fast_replaceable_group = "rail-signal"
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "rail-stop"
+data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "train-stop"
 
 data.raw["rail-signal"]["rail-signal"].fast_replaceable_group = "rail-signal"
 data.raw["rail-chain-signal"]["rail-chain-signal"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop"].fast_replaceable_group = "rail-stop"
+data.raw["train-stop"]["train-stop"].fast_replaceable_group = "train-stop"
 
 data.raw["rail-signal"]["rail-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+--data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
 
 data.raw["rail-signal"]["rail-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+--data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
 -------------------------------------------------------------------------------------------------
 --подкручиваем рецепт стандартных рельс
 bobmods.lib.recipe.set_ingredient("rail", {"stone-crushed", 10})
