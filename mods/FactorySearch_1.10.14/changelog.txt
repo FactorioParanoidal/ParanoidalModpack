@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.10.14
+Date: 8 September 2023
+  Features:
+    - Improved detection of some modded entities in 'Entity' search
+    - All surface names are now capitalised
+---------------------------------------------------------------------------------------------------
+Version: 1.10.12
+Date: 26 February 2023
+  Features:
+    - Added remote interface so that other mods can open the search GUI at a particular item
+    - Added corpse virtual signal so that corpses can now be searched for using 'Entity' search
+    - Lava pools from Freight Forwarding can now be searched for by selecting 'Hot titansteel' using 'Entity' search
+  Locale:
+    - Added complete Ukrainian translations (thanks Met_en_Bouldry on Crowdin!)
+---------------------------------------------------------------------------------------------------
 Version: 1.10.11
 Date: 11 February 2023
   Bugfixes:
@@ -22,7 +37,6 @@ Date: 13 January 2023
     - Fixed many modded resources (including most from Pyanodons) not being searchable ('Entity' search mode)
   Locale:
     - Added complete Chinese translations (thanks Plexpt!)
-
 ---------------------------------------------------------------------------------------------------
 Version: 1.10.7
 Date: 5 January 2023
