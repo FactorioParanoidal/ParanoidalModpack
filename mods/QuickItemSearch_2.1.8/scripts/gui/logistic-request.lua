@@ -7,6 +7,9 @@ local logistic_request = require("__QuickItemSearch__/scripts/logistic-request")
 local logistic_request_gui = {}
 
 function logistic_request_gui.build(player, player_table)
+  if player.gui.screen.qis_request_window then
+    logistic_request_gui.destroy(player_table)
+  end
   local resolution = player.display_resolution
   local scale = player.display_scale
   local focus_frame_size = { resolution.width / scale, resolution.height / scale }
@@ -190,7 +193,15 @@ function logistic_request_gui.build(player, player_table)
 end
 
 function logistic_request_gui.destroy(player_table)
+  local gui_data = player_table.guis.request
+  if not gui_data then
+    return
+  end
+
+  local window = gui_data.refs.window
+  if window and window.valid then
   player_table.guis.request.refs.window.destroy()
+  end
   player_table.guis.request = nil
 end
 

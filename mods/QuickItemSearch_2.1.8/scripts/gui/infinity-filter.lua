@@ -7,6 +7,9 @@ local infinity_filter = require("__QuickItemSearch__/scripts/infinity-filter")
 local infinity_filter_gui = {}
 
 function infinity_filter_gui.build(player, player_table)
+  if player.gui.screen.qis_infinity_filter_window then
+    infinity_filter_gui.destroy(player_table)
+  end
   local resolution = player.display_resolution
   local scale = player.display_scale
   local focus_frame_size = { resolution.width / scale, resolution.height / scale }
@@ -164,8 +167,14 @@ function infinity_filter_gui.build(player, player_table)
 end
 
 function infinity_filter_gui.destroy(player_table)
-  player_table.guis.infinity_filter.refs.window.destroy()
+  local gui_data = player_table.guis.infinity_filter
+  if gui_data then
+    local window = gui_data.refs.window
+    if window and window.valid then
+      window.destroy()
+    end
   player_table.guis.infinity_filter = nil
+  end
 end
 
 function infinity_filter_gui.open(player, player_table, item_data)
