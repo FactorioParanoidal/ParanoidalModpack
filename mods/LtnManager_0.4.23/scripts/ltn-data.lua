@@ -85,7 +85,7 @@ local function parse_train_status(train_data, translations)
                 end
             end
         end
-    elseif state == def.wait_station then
+    elseif train.valid and state == def.wait_station then
         if train_data.surface or train_data.returning_to_depot then
             if train_data.has_contents then
                 return {
@@ -418,7 +418,7 @@ local function iterate_in_transit(working_data, iterations_per_tick)
             local train_data = working_data.trains[delivery_id]
             if
                 train_data
-                and train_data.valid
+                and train_data.train.valid
                 and train_data.main_locomotive
                 and train_data.main_locomotive.surface
             then
