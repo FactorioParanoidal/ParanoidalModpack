@@ -5,6 +5,7 @@ Search = require "scripts.search"
 SearchResults = require "scripts.search-results"
 ResultLocation = require "scripts.result-location"
 Gui = require "scripts.gui"
+require "scripts.remote"
 
 function filtered_surfaces(override_surface, player_surface)
   if override_surface then
@@ -47,16 +48,42 @@ end
 
 script.on_event({defines.events.on_surface_created, defines.events.on_surface_deleted}, update_surface_count)
 
-local function update_resource_names()
-  local resources = game.get_filtered_entity_prototypes({{filter = "type", type = "resource"}})
-  local item_to_resources = {}
-  for _, resource in pairs(resources) do
-    local properties = resource.mineable_properties
+local function generate_item_to_entity_table()
+  -- Make map of {item_name -> list[entity_name]}
+  -- First try items_to_place_this, then mineable_properties
+  -- Exception in mineable_properties is we don't want to include entity_name when type == "simple-entity" if item_name is a resource
+  -- This prevents things like rocks showing when searching for stone
+
+  local resource_prototypes = game.get_filtered_entity_prototypes({{filter = "type", type = "resource"}})
+  local is_resource = {}
+  for _, resource in pairs(resource_prototypes) do
+    is_resource[resource.name] = true
+  end
+
+
+  local prototypes = game.get_filtered_entity_prototypes({})
+  -- Filter out rocks
+  local item_to_entities = {}
+  for _, prototype in pairs(prototypes) do
+    local items_to_place_this = prototype.items_to_place_this
+    if items_to_place_this then
+      for _, item in pairs(items_to_place_this) do
+        local item_name = item.name
+        local associated_entities = item_to_entities[item_name] or {}
+        table.insert(associated_entities, prototype.name)
+        item_to_entities[item_name] = associated_entities
+      end
+    else
+      local properties = prototype.mineable_properties
     if properties.minable and properties.products then
-      for _, item in pairs(resource.mineable_properties.products) do
-        local associated_resources = item_to_resources[item.name] or {}
-        table.insert(associated_resources, resource.name)
-        item_to_resources[item.name] = associated_resources
+        for _, item in pairs(prototype.mineable_properties.products) do
+          local item_name = item.name
+          if prototype.type ~= "simple-entity" or not is_resource[item_name] then
+            local associated_entities = item_to_entities[item_name] or {}
+            table.insert(associated_entities, prototype.name)
+            item_to_entities[item_name] = associated_entities
+          end
+        end
       end
     end
   end
@@ -64,12 +91,12 @@ local function update_resource_names()
   -- Hardcode some Pyanodons associations
   if game.active_mods["pypetroleumhandling"] then
     --  or {} in case something removed those items or playing an older version of Py
-    table.insert(item_to_resources["raw-gas"] or {}, "bitumen-seep")
-    table.insert(item_to_resources["tar"] or {}, "bitumen-seep")
-    table.insert(item_to_resources["crude-oil"] or {}, "bitumen-seep")
+    table.insert(item_to_entities["raw-gas"] or {}, "bitumen-seep")
+    table.insert(item_to_entities["tar"] or {}, "bitumen-seep")
+    table.insert(item_to_entities["crude-oil"] or {}, "bitumen-seep")
   end
 
-  global.items_from_resources = item_to_resources
+  global.item_to_entities = item_to_entities
 end
 
 script.on_init(
@@ -78,7 +105,7 @@ script.on_init(
     global.current_searches = {}
     global.multiple_surfaces = false
     update_surface_count()
-    update_resource_names()
+    generate_item_to_entity_table()
   end
 )
 
@@ -99,6 +126,6 @@ script.on_configuration_changed(
 
     global.multiple_surfaces = false
     update_surface_count()
-    update_resource_names()
+    generate_item_to_entity_table()
   end
 )

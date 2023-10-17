@@ -105,10 +105,8 @@ end
 
 function Gui.build_surface_name(include_surface_name, surface_name)
   if include_surface_name then
-    if surface_name == "nauvis" then
-      -- Space Exploration capitilises all other planet names, so do Nauvis for consistency
-      surface_name = "Nauvis"
-    end
+    -- Capitalize first letter
+    surface_name = surface_name:gsub("^%l", string.upper)
     return  {
       type = "label",
       caption = surface_name,
@@ -479,7 +477,7 @@ function Gui.build(player)
                       type = "checkbox",
                       state = false,
                       caption = {"search-gui.signals-name"},
-                      tooltip = {"search-gui.signals-tooltip", "[entity=decider-combinator][entity=arithmetic-combinator][entity=constant-combinator][entity=roboport][entity=train-stop][entity=rail-signal][entity=rail-chain-signal][entity=accumulator][entity=stone-wall]"},
+                      tooltip = {"search-gui.signals-tooltip"},
                       ref = { "include_signals" },
                       actions = {
                         on_checked_state_changed = { gui = "search", action = "checkbox_toggled" }
