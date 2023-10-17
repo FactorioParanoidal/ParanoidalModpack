@@ -88,7 +88,32 @@ function actions.open_station_gui(Gui, msg, e)
     local player = Gui.player
 
     if e.shift then
+        if station_data.surface_index ~= player.surface_index then
+            if
+                remote.interfaces["space-exploration"]
+                and remote.call("space-exploration", "remote_view_is_unlocked", { player = player })
+            then
+                local zone = remote.call("space-exploration", "get_zone_from_surface_index",
+                    { surface_index = station_data.surface_index })
+                if zone then
+                    remote.call("space-exploration", "remote_view_start", {
+                        player = player,
+                        zone_name = zone.name,
+                        position = station_data.entity.position,
+                        location_name = station_data.name,
+                        freeze_history = true,
+                    })
+                else
+                    util.error_flying_text(player, { "message.ltnm-error-station-on-different-surface-unknown-zone" })
+                    return
+                end
+            else
+                util.error_flying_text(player, { "message.ltnm-error-station-on-different-surface" })
+                return
+            end
+        else
         player.zoom_to_world(station_data.entity.position, 1, station_data.entity)
+        end
 
         rendering.draw_circle({
             color = constants.colors.red.tbl,
