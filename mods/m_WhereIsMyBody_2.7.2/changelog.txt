@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2023-02-12
+  Locale:
+    - Updated Ukrainian translation (thanks to @Met_en_Bouldry on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
 Version: 2.7.1
 Date: 2022-11-27
   Bugfixes:
