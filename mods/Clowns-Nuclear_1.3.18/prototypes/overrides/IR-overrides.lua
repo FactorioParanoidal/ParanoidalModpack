@@ -1,4 +1,4 @@
-if mods["IndustrialRevolution"] then
+if mods["IndustrialRevolution3"] then
 	--update train fuel
 	clowns.functions.replace_ing("nuclear-fuel","uranium-235", {"55%-uranium", 1}, "ing")
 	--update reactor fuel
