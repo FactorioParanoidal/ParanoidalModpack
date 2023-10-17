@@ -241,7 +241,7 @@ local function combine(weapontype, warheadWeapon)
       projectile.smoke = weapontype.projectile.smoke
       projectile.height_from_ground = weapontype.projectile.height
       projectile.collision_box = weapontype.projectile.collision_box
-
+      projectile.force_condition = weapontype.projectile.force_condition
 
       if((not warheadWeapon.projectile.collisions) and (not weapontype.projectile.collide_anyway)) then
         projectile.collision_box = nil
@@ -260,7 +260,7 @@ local function combine(weapontype, warheadWeapon)
     projectile.shadow = weapontype.projectile.shadow
     projectile.localised_name = {"weapontype-name." .. weapontype.name, {"warhead-name." .. warheadWeapon.appendName}}
     projectile.localised_description = {"weapontype-description." .. weapontype.name, {"warhead-description." .. warheadWeapon.appendName}}
-
+    projectile.flags = {"not-on-map"}
     if(weapontype.type == "stream")then
       projectile.action = {
         type = "direct",

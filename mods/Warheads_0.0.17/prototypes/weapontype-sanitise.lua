@@ -241,7 +241,6 @@ local function sanitseWeapontype(weapontype)
       result.item.action_creator = function (projectile, range_mult, target_action, final_action, source_action)
         local a = table.deepcopy(item.ammo_type.action)
         local to_use = nil
-
         for _,act in pairs(a) do
           local action = act
           if(a.action_delivery)then
@@ -251,7 +250,7 @@ local function sanitseWeapontype(weapontype)
             to_use = action.action_delivery
           else
             for _,del in pairs(action.action_delivery) do
-              if (del.projectile) then
+              if (type(del) == "table" and del.projectile) then
                 to_use = del
               end
             end
@@ -468,6 +467,7 @@ local function sanitseWeapontype(weapontype)
     result.projectile.animation = weapontype.projectile_animation or weapontype.picture or weapontype.projectile.animation or weapontype.projectile.picture
     result.projectile.max_speed = weapontype.max_speed  or weapontype.projectile.max_speed
     result.projectile.collision_box = weapontype.collision_box or weapontype.projectile.collision_box
+    result.projectile.force_condition = weapontype.force_condition or weapontype.projectile.force_condition
 
     result.projectile.height = weapontype.height or weapontype.height_from_ground or weapontype.projectile.height or weapontype.projectile.height_from_ground
 

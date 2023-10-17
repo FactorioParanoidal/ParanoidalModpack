@@ -8,7 +8,7 @@ end
 if mods["space-exploration"] then
   require("prototypes.compatibility.SE-weapontypes")
 end
-if mods["lightArtillery"] then
+if mods["lightArtillery"] or mods["lightArtillery-Balanced"]then
   require("prototypes.compatibility.LightArtillery-weapontypes")
 end
 
