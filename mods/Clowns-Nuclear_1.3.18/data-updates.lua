@@ -7,9 +7,7 @@ clowns.functions.add_unlock("kovarex-enrichment-process","clowns-centrifuging-55
 clowns.functions.add_unlock("kovarex-enrichment-process","clowns-centrifuging-45%")
 clowns.functions.add_unlock("kovarex-enrichment-process","nuclear-fuel")
 
---if Early_Nuclear_Power
 require("prototypes.overrides.ENP-overrides")
---require("prototypes.more-overrides")
 
 if data.raw.recipe["advanced-uranium-processing"] then 
   --roll through each ingredient and replace the uranium 235 with the 35%

@@ -26,5 +26,11 @@ data:extend(
 		group = "intermediate-products",
 		order = "b-a-d",
 	},
+	{
+		type = "item-subgroup",
+		name = "clowns-thorium",
+		group = "intermediate-products",
+		order = "b-a-d",
+	},
 }
 )
