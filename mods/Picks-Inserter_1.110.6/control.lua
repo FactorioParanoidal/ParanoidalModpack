@@ -1,7 +1,7 @@
 --[[ Copyright (c) 2019 - 2023 Picklock
  * Part of Picklocks Inserter
  * control.lua
- * Version 1.110.5.53
+ * Version 1.110.6.54
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -466,7 +466,7 @@
 	--mod setting
 		script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 			--if PI_debug then print_debug("raised event: on_runtime_mod_setting_changed") end
-			if not event then return end
+			if not event or not event.player_index then return end 
 			--PI_temp_unlock
 			if event.setting == PI_set.unlock then PI_temp_unlock = settings.global[PI_set.unlock].value end
 			--PI_clear_inserter

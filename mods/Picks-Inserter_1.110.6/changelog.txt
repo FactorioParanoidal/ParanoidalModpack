@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.110.6
+Date: 01.03.2023
+  Bugfixes:
+    - Fixed a bug causing a non-recoverable error with the event on_runtime_mod_setting_changed.
+---------------------------------------------------------------------------------------------------
 Version: 1.110.5
-Date: 06.02.2023
+Date: 07.02.2023
   Features:
     - Added cargo-wagon as target for set back (applies only to inserter cleanup planner).
 ---------------------------------------------------------------------------------------------------
@@ -25,7 +30,7 @@ Date: 05.12.2020
 Version: 1.110.1
 Date: 30.11.2020
   Bugfixes:
-    - Fixed mulitplayer desync related to imserters selected with the inserter cleanup planner 
+    - Fixed mulitplayer desync related to inserters selected with the inserter cleanup planner 
   Locale:
     - Updated language files
   Graphics:
