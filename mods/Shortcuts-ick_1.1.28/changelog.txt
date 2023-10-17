@@ -1,24 +1,39 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.28
+Date: 24.02.2023
+  Features:
+    - Added support for "Artillery Bombardment Remote (DBot's fork)" by DBotThePony (thanks to SBlack).
+  Changes:
+    - Changed date format in changelog to be inline with the base game changelog.
+    - Removed info icons from names of mod settings that have a description.
+    - Improved compatibility with "Gizmos Car Keys (improved)" by Pi-C (thanks to Pi-C).
+    - Improved compatibility with "Blueprint aligner" by emlun (thanks to Neko14789 and emlun).
+    - Improved compatibility with "Blueprint Sandboxes" by somethingtohide (thanks to Syt-ha).
+  Bugfixes:
+    - Fixed crashing with latest versions (>=4.0.0) of "Advanced Artillery Remotes Continued" by azaghal (thanks to azaghal).
+    - Fixed incompatibility with "Nullius" by anachrony (thanks to kuxynator and ExterminatorX)
+
+---------------------------------------------------------------------------------------------------
 Version: 1.1.27
-Date: 2022-06-14
+Date: 14.06.2022
   Bugfixes:
     - Fixed an error on load possibly related to the setting "Disable all technology requirement changes" if the configuration changed.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.26
-Date: 2022-05-23
+Date: 23.05.2022
   Bugfixes:
     - Fixed that the "trees/rocks only" special case for the "Deconstruction planner Environment" didn't work.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.25
-Date: 2022-05-22
+Date: 22.05.2022
   Bugfixes:
     - Fixed that entities were assigned in the wrong order to the "Deconstruction planner Environment" resulting in more error messages than necessary.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.24
-Date: 2022-05-22
+Date: 22.05.2022
   Features:
     - Added support for "RailSignalPlannerNeo" by Neocult.
   Bugfixes:
@@ -27,7 +42,7 @@ Date: 2022-05-22
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.23
-Date: 2022-05-20
+Date: 20.05.2022
   Features:
     - Added new shortcut "Show minimap" (thanks to spiral_power for the suggestion).
     - Added support for "Module Inserter (Non-conflict version)" by Neocult (thanks to Sgamez for the suggestion).
@@ -44,7 +59,7 @@ Date: 2022-05-20
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.22
-Date: 2022-01-14
+Date: 14.01.2022
   Features:
     - Added an option to disable the colored tags or replace them with icons.
   Changes:
@@ -59,7 +74,7 @@ Date: 2022-01-14
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.21
-Date: 2021-12-07
+Date: 07.12.2021
   Features:
     - Added support for "Atomic Artillery Remote" by slyh23.
     - Improved compatibility with "Train Mode Switcher" by leeh.
@@ -72,19 +87,19 @@ Date: 2021-12-07
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.20
-Date: 2021-07-13
+Date: 13.07.2021
   Bugfixes:
     - Fixed that it was impossible to access the "Rail signal planner" settings.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.19
-Date: 2021-05-14
+Date: 14.05.2021
   Bugfixes:
     - Fixed crash on startup when Personal Logistics Shortcut mod was installed.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.18
-Date: 2021-05-11
+Date: 11.05.2021
   Features:
     - Added startup setting to disable all changes done to technology requirements of shortcuts. Default false.
     - Improved compatibility with Industrial Revolution 2.
@@ -94,14 +109,14 @@ Date: 2021-05-11
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.17
-Date: 2021-04-28
+Date: 28.04.2021
   Bugfixes:
     - Fixed that item-on-ground entities were not included in the deconstruction planners.
     - Fixed error when using the custom inputs for the environment deconstruction planners.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.16
-Date: 2021-04-18
+Date: 18.04.2021
   Features:
     - New shortcut: "Vehicle: Driver is gunner".
     - New shortcut: "Spidertron: Logistic request".
@@ -123,7 +138,7 @@ Date: 2021-04-18
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.15
-Date: 2021-03-12
+Date: 12.03.2021
   Features:
     - New shortcut: "Artillery: Land mine thrower targeting remote" from "Land Mine Thrower" mod.
   Bugfixes:
@@ -131,7 +146,7 @@ Date: 2021-03-12
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.14
-Date: 2021-03-10
+Date: 10.03.2021
   Changes:
     - Added a setting for the primary grid size, default 32 (size of a chunk).
     - Reworked the per player settings regarding the grid.
@@ -141,7 +156,7 @@ Date: 2021-03-10
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.13
-Date: 2021-03-03
+Date: 03.03.2021
   Changes:
     - Not connected spidertron remotes will now be removed from the player inventory if you use the shortcut.
     - If you connect a spidertron remote, spidertron remotes in the player inventory that are either connected with the same spidertron or are not connected will be removed.
@@ -155,14 +170,14 @@ Date: 2021-03-03
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.12
-Date: 2021-02-13
+Date: 13.02.2021
   Bugfixes:
     - Fixed that "Circuit Checker" shortcut didn't work.
     - Fixed some legacy code in case "Advanced Artillery Remotes" ever gets updated to 1.1.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.11
-Date: 2021-02-07
+Date: 07.02.2021
   Features:
     - Ghosts of artillery turrets and waggons can now be selected and enabled/disabled with the artillery cannon fire toggle.
   Bugfixes:
@@ -175,19 +190,19 @@ Date: 2021-02-07
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.10
-Date: 2021-02-06
+Date: 06.02.2021
   Bugfixes:
     - Fixed that disabling belt immunity equipment didn't work.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.9
-Date: 2021-01-30
+Date: 30.01.2021
   Bugfixes:
     - Hotfix: Fixed that game wouldn't load if "Well Planner" mod wasn't active.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.8
-Date: 2021-01-30
+Date: 30.01.2021
   Changes:
     - Improved compatibility with "Orbital Ion Cannon (SE Edition)".
   Bugfixes:
@@ -196,25 +211,25 @@ Date: 2021-01-30
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.7
-Date: 2021-01-14
+Date: 14.01.2021
   Bugfixes:
     - Fixed that "winch" from "Vehicle Wagon 2" wasn't hidden from inventory.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.6
-Date: 2021-01-09
+Date: 09.01.2021
   Bugfixes:
     - Fixed that auto generating shortcuts for modded selection tools wouldn't work if the selection tools were created in data-final-fixes.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.5
-Date: 2021-01-08
+Date: 08.01.2021
   Bugfixes:
     - Fixed error when starting a new game or finishing a researching. The "Toggle personal logistics requests" shortcut is now available as soon as you researched "Logistic robotics" on any map (previously you had to research it in that specific map).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.4
-Date: 2021-01-05
+Date: 05.01.2021
   Features:
     - Added support for "Orbital Ion Cannon" updated for 1.1 by kuxynator.
     - Added support for "Outpost Planner for 1.1" by ChucklesTheBeard.
@@ -225,7 +240,7 @@ Date: 2021-01-05
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
-Date: 2020-12-18
+Date: 18.12.2020
   Changes:
     - Lots of internal changes regarding the generation of disabled artillery turrets. Moved it to data-final-fixes.
     - Removed the disabled artillery turret items since they had no use.
@@ -238,7 +253,7 @@ Date: 2020-12-18
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
-Date: 2020-12-04
+Date: 04.12.2020
   Features:
     - Added "Toggle personal logistics requests" shortcut. Thanks to Haxtorio mods.factorio.com/mod/PersonalLogisticsShortcut
     - Added "Train Manual mode" shortcut.
@@ -250,7 +265,7 @@ Date: 2020-12-04
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
-Date: 2020-11-29
+Date: 29.11.2020
   Changes:
     - The "autotrash-network-selection" shortcut will no longer be generated by request from the mod author.
   Bugfixes:
@@ -258,7 +273,7 @@ Date: 2020-11-29
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
-Date: 2020-11-24
+Date: 24.11.2020
   Features:
     - Updated for 1.1
   Changes:
@@ -268,7 +283,7 @@ Date: 2020-11-24
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.14
-Date: 2020-10-17
+Date: 17.10.2020
   Features:
     - Now supports the mod "Outpost Planner (Updated for 1.0)"
     - Added mod "Personal logistics Shortcut" as an optional dependency. Just as an advertisement.
@@ -278,7 +293,7 @@ Date: 2020-10-17
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.13
-Date: 2020-10-15
+Date: 15.10.2020
   Changes:
     - Keyboard inputs will only work now if the corresponding shortcut is available.
   Bugfixes:
@@ -288,7 +303,7 @@ Date: 2020-10-15
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.12
-Date: 2020-10-05
+Date: 05.10.2020
   Features:
     - New shortcut "MIRV targeting remote".
   Changes:
@@ -298,13 +313,13 @@ Date: 2020-10-05
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.11
-Date: 2020-10-04
+Date: 04.10.2020
   Bugfixes:
     - Hotfix: Fixed error when "Zoom out of world" shortcut was used.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
-Date: 2020-10-04
+Date: 04.10.2020
   Features:
     - Every shortcut can now be assigned a keyboard input.
     - New shortcut "Blueprint: Deconstruction planner (Cliff/Fish/Item on ground)".
@@ -329,13 +344,13 @@ Date: 2020-10-04
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
-Date: 2020-09-10
+Date: 10.09.2020
   Bugfixes:
     - Hotfix: Fixed error when researching and AAI Programmable vehicles were not installed.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
-Date: 2020-09-10
+Date: 10.09.2020
   Changes:
     - Settings for mod shortcuts are now only available when the corresponding mod is active.
     - Added forum post as website.
@@ -347,13 +362,13 @@ Date: 2020-09-10
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
-Date: 2020-09-02
+Date: 02.09.2020
   Bugfixes:
     - Hotfix: Mod would fail to load when Vehicle Wagon 2 was active.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6
-Date: 2020-09-02
+Date: 02.09.2020
   Features:
     - Added shortcuts for artillery remotes from Advanced Artillery Remotes mod
     - Improved compatibility with Nanobots.
@@ -361,7 +376,7 @@ Date: 2020-09-02
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
-Date: 2020-09-01
+Date: 01.09.2020
   Features:
     - Disabled equipment has now a grey tint.
   Bugfixes:
@@ -371,13 +386,13 @@ Date: 2020-09-01
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
-Date: 2020-08-23
+Date: 23.08.2020
   Bugfixes:
     - Hotfix: Fixed rail block visualisation shortcut.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
-Date: 2020-08-22
+Date: 22.08.2020
   Bugfixes:
     - Fixed disabling setting "artillery cannon toggle" didn't work properly.
     - Fixed disabling setting "automatically generate mod shortcuts" didn't work properly.
@@ -386,13 +401,13 @@ Date: 2020-08-22
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
-Date: 2020-08-21
+Date: 21.08.2020
   Bugfixes:
     - Fixed mod not loading when P.U.M.P. was active.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: 2019-08-21
+Date: 21.08.2019
   Features:
     - Added setting to hide spidertron remote from inventories. It is turned off on default.
     - Shortcuts from the following mods (if they are installed) are now only available if a certain technology is researched: Car/Tank/Spidertron Locator Button, Circuit Checker, Module Inserter, P.U.M.P, Rail Signal Planner, Spidertron squad control, Temporary Stations, VehicleSnap, Well Planner
@@ -409,7 +424,7 @@ Date: 2019-08-21
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
-Date: 2020-08-14
+Date: 14.08.2020
   Features:
     - Now supports Spidertron remote!
   Changes:
@@ -417,7 +432,7 @@ Date: 2020-08-14
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.18.1
-Date: 2020-07-31
+Date: 31.07.2020
   Features:
     - Now supports vehicle wagon 2.
     - Some shortcuts are now only available when a certain technology is unlocked in that specific save.
@@ -435,7 +450,7 @@ Date: 2020-07-31
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.18.0
-Date: 2020-05-06
+Date: 06.05.2020
   Major Features:
     - Initial release. Made original mod from npc_strider(morley376) mods.factorio.com/mod/Shortcuts compatible for 0.18 .
   Changes:

@@ -16,7 +16,7 @@ data:extend(
 	{
 		setting_type = "startup",
 		name = "autogen-color",
-		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.autogen-color"}, "[font=default-small] [img=info][/font]"},
+		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.autogen-color"}},
 		order = "f[other]-a[autogen-color]",
 		type = "string-setting",
 		allowed_values = {"disabled", "default", "red", "green", "blue"},
@@ -25,7 +25,7 @@ data:extend(
 	{
 		setting_type = "startup",
 		name = "ick-compatibility-mode",
-		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.compatibility-mode"}, "[font=default-small] [img=info][/font]"},
+		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.compatibility-mode"}},
 		order = "f[other]-b[compatibility-mode]",
 		type = "bool-setting",
 		default_value = false
@@ -33,7 +33,7 @@ data:extend(
 	{
 		setting_type = "startup",
 		name = "ick-tags",
-		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.tags"}, "[font=default-small] [img=info][/font]"},
+		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.tags"}},
 		order = "f[other]-c[autogen-color]",
 		type = "string-setting",
 		allowed_values = {"disabled", "tags", "icons"},

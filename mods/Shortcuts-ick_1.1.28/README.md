@@ -49,6 +49,7 @@ You can help translate this mod on [Crowdin](https://crowdin.com/project/factori
 * MOD: Advanced Artillery Remotes Continued
 * MOD: Artillery Bombardment Remote
 * MOD: Artillery Bombardment Remote (Reloaded)
+* MOD: Artillery Bombardment Remote (DBot's fork)
 * Artillery cannon toggle
 * MOD: M.I.R.V. targeting remote
 * MOD: Atomic Artillery Remote

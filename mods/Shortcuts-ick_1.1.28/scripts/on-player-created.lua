@@ -86,11 +86,11 @@ function ick_reset_available_shortcuts(player)
 	end
 
 	if mods["AdvancedArtilleryRemotesContinued"] and setting["artillery-targeting-remote"].value and tech["artillery"].researched == false then
-		player.set_shortcut_available("artillery-cluster-remote", false)
+		player.set_shortcut_available("artillery-cluster-remote-artillery-shell", false)
 		player.set_shortcut_available("artillery-discovery-remote", false)
 	end
 
-	if (mods["artillery-bombardment-remote"] or mods["artillery-bombardment-remote-reloaded"]) and setting["artillery-targeting-remote"].value then
+	if (mods["artillery-bombardment-remote"] or mods["artillery-bombardment-remote-reloaded"] or mods["dbots-artillery-bombardment-remote"]) and setting["artillery-targeting-remote"].value then
 		if tech["artillery-bombardment-remote"].researched == false then
 			player.set_shortcut_available("artillery-bombardment-remote", false)
 		end

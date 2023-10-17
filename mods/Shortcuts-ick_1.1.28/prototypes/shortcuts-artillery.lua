@@ -7,7 +7,7 @@
 
 --[[ Overview of shortcuts-artillery.lua:
 	* Artillery targeting remote shortcut.
-	* AdvancedArtilleryRemotesContinued shortcuts.
+	* AdvancedArtilleryRemotesContinued artillery-discovery-remote shortcut.
 	* Artillery Bombardment Remote shortcuts
 	* Toggle artillery cannon fire
 		- configuration
@@ -20,7 +20,6 @@
 
 -- TAGS
 local artillery_targeting_remote = ""
-local artillery_cluster_remote = ""
 local artillery_discovery_remote = ""
 local artillery_bombardment_remote = ""
 local smart_artillery_bombardment_remote = ""
@@ -32,7 +31,6 @@ local landmine_thrower_remote = ""
 if settings.startup["ick-tags"].value == "tags" then
 	local tag = {"", "[color=red]", {"technology-name.artillery"}, ": [/color]"}
 	artillery_targeting_remote = tag
-	artillery_cluster_remote = tag
 	artillery_discovery_remote = tag
 	artillery_bombardment_remote = tag
 	smart_artillery_bombardment_remote = tag
@@ -43,7 +41,6 @@ if settings.startup["ick-tags"].value == "tags" then
 	landmine_thrower_remote = tag
 elseif settings.startup["ick-tags"].value == "icons" then
 	artillery_targeting_remote = "[img=item/artillery-targeting-remote] "
-	artillery_cluster_remote = "[img=item/artillery-cluster-remote] "
 	artillery_discovery_remote = "[img=item/artillery-discovery-remote] "
 	artillery_bombardment_remote = "[img=item/artillery-bombardment-remote] "
 	smart_artillery_bombardment_remote = "[img=item/smart-artillery-bombardment-remote] "
@@ -81,23 +78,8 @@ if settings.startup["artillery-targeting-remote"].value then
 end
 
 -- ADVANCED ARTILLERY REMOTES CONTINUED
-if settings.startup["artillery-targeting-remote"].value and data.raw.capsule["artillery-cluster-remote"] and data.raw.capsule["artillery-discovery-remote"] then
+if settings.startup["artillery-targeting-remote"].value and data.raw.capsule["artillery-discovery-remote"] then
 	data:extend({
-		{
-			type = "shortcut",
-			name = "artillery-cluster-remote",
-			localised_name = {"", artillery_cluster_remote, {"item-name.artillery-cluster-remote"}},
-			order = "d[artillery]-b[artillery-cluster-remote]",
-			action = "lua",
-			style = "red",
-			icon = {
-				filename = "__Shortcuts-ick__/graphics/artillery-cluster-remote-x32-white.png",
-				priority = "extra-high-no-scale",
-				size = 32,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			}
-		},
 		{
 			type = "shortcut",
 			name = "artillery-discovery-remote",
