@@ -655,13 +655,39 @@ return group, one_brutal
 end
 
 
-function get_random_lesser_boss(evolution)
+
+
+function get_random_lesser_boss(evolution,surface)
 if not evolution then evolution = game.forces.enemy.evolution_factor end
 local list = {'maf-boss-biter-','maf-boss-acid-spitter-'}
 if game.active_mods['ArmouredBiters'] then table.insert(list,'maf-boss-armoured-biter-') end
+
+if game.active_mods['Cold_biters'] then 
+	if (not surface) or #surface.find_entities_filtered{name='cb-cold-spawner',limit=1}>0 then 
+	table.insert(list,'maf-boss-frost-biter-')
+	table.insert(list,'maf-boss-frost-spitter-')
+	end	end
+if game.active_mods['Explosive_biters'] then 
+	if (not surface) or #surface.find_entities_filtered{name='explosive-biter-spawner',limit=1}>0 then 
+	table.insert(list,'maf-boss-explosive-biter-')
+	table.insert(list,'maf-boss-explosive-spitter-')
+	end	end
+
+if game.active_mods['Toxic_biters'] then 
+	if (not surface) or #surface.find_entities_filtered{name='toxic-biter-spawner',limit=1}>0 then 
+	table.insert(list,'maf-boss-toxic-biter-')
+	table.insert(list,'maf-boss-toxic-spitter-')	
+	end	end
+
+if game.active_mods['Arachnids_enemy'] then 
+	if (not surface) or #surface.find_entities_filtered{name='arachnid-spawner-unitspawner',limit=1}>0 then 
+	table.insert(list,'maf-boss-arachnid-biter-')
+	end	end
+
 local n=math.min(10, math.max(math.ceil(evolution*10),1))
 return list[math.random(#list)] ..n
 end
+
 
 
 function Call_next_wave(event)
@@ -725,8 +751,9 @@ end
 
 
 
+
 function CallWormAttack(surface,position,how_many,min_distance,max_distance,force)
-local worms = get_worms_for_evolution()
+local worms = get_worms_for_evolution(nil,nil,surface,position)
 for w=1,how_many do
 	local worm = worms[math.random(#worms)]
 		for t=1,10 do
@@ -745,13 +772,12 @@ end
 
 
 --------------------------------------------------------
-
 function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3,specific_zilla)
 local zilla, name, group
 
 local evo = game.forces.enemy.evolution_factor
 if evo<0.9 and (not specific_event) then 
-	name = get_random_lesser_boss()
+	name = get_random_lesser_boss(evo,surface)
 	else
 
 	local list = {"biterzilla1","biterzilla2","biterzilla3","maf-giant-acid-spitter","maf-giant-fire-spitter","bm-motherbiterzilla"}
@@ -776,6 +802,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		group = surface.create_unit_group{position = position, force = game.forces.enemy}
 		create_remnants_particles (surface, math.random(60,100) , position) 
 		zilla = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		zilla.ai_settings.allow_destroy_when_commands_fail=false 
 		surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
 		group.add_member(zilla)
 		
@@ -843,6 +870,13 @@ function Spidertron_Moves(spider)
 if global.spidertron_nuke then 	
 	spider.insert{name='maf-small-atomic-rocket',count=5}
 	end
+
+local FI = spider.get_fuel_inventory() 
+if FI then 
+	if FI.get_item_count('solid-fuel')<20 and FI.can_insert{name='solid-fuel', count=20} then spider.insert {name='solid-fuel', count=20} end 
+	end
+		
+
 
 if game.forces.enemy.evolution_factor>0.95 then spider.insert{name='explosive-rocket',count=400} else spider.insert{name='rocket',count=400} end
 
@@ -1119,11 +1153,55 @@ if planet and newsurface then
 	end
 end
 
+
+
+-- player body abduction mod
+function on_corpse_feasted(event)
+local corpse=event.corpse
+local attack=event.attack_target
+if corpse and corpse.valid and attack and attack.valid then 
+	local evo = game.forces.enemy.evolution_factor
+	local surface = corpse.surface
+	---if corpse.get_item_count("rocket-launcher")>0 then 
+	if global.chances.biterzilla.min_evo<=evo and math.random(100) <= global.chances.biterzilla.chance*2 then
+		local pforce
+		if corpse.character_corpse_player_index and game.players[corpse.character_corpse_player_index] and game.players[corpse.character_corpse_player_index].valid then 
+			pforce = game.players[corpse.character_corpse_player_index].force
+			end
+		local boss_name=get_random_boss_human_soldier() 
+		local position = surface.find_non_colliding_position(boss_name, corpse.position, 30, 1)
+		local boss = surface.create_entity{name=boss_name, position=position, force = game.forces.enemy}
+		boss.ai_settings.allow_destroy_when_commands_fail=false 
+		table.insert (global.biterzillas, {entity=boss})
+		if pforce then 
+			if global.show_alerts then 
+				pforce.print({"bm-txt-alert"},colors.lightred)
+				pforce.print({"bm-txt-biterzilla"},colors.lightred)
+				end	
+			Play_sound_alert(pforce,3)
+			end
+		else
+		local humie = get_random_human_soldier()
+		local position = surface.find_non_colliding_position(humie, corpse.position, 30, 1)
+		surface.create_entity{name=humie, position= position, force= game.forces.enemy}		
+		end
+end
+end
+
+
 function RegisterModEvents()
 if remote.interfaces["warptorio2"] then 
   local warp_event = remote.call("warptorio2","get_event", "on_post_warp")
   script.on_event(warp_event, function(event)
     on_warptorio_warp(event)
+  end)	
+end
+
+
+if remote.interfaces["PlayerBodyAbduction"] then 
+  local pba_event = remote.call("PlayerBodyAbduction", "get_on_corpse_feasted")
+  script.on_event(pba_event, function(event)
+    on_corpse_feasted(event)
   end)	
 end
 end
