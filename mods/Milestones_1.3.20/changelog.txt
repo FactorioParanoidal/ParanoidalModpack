@@ -1,4 +1,57 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.20
+Date: 2023-08-15
+
+  Changes:
+    - Added plague rocket to default SE presets.
+    - Removed some overly verbose log lines.
+
+  Bugfixes:
+    - Fixed turning off an infinite milestone in settings not actually applying the change.
+    - Fixed milestones added as part of an infinite milestone not editing the right milestone when trying to edit the estimation time.
+
+  Compatibility:
+    - Presets provided via remote interface now have priority over default presets. This means other mods can override default presets.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.19
+Date: 2023-07-14
+
+  Changes:
+    - Removed built-in Sea Block presets, in favor of Sea Block's own preset provided by their mod.
+
+  Bugfixes:
+    - Fixed crash when loading a preset with invalid aliases.
+
+  Locale:
+    - Added Spanish translation thanks to Frodo45127.
+    - Added Polish translation thanks to wuka.
+    - Updated Japanese translation thanks to YAMATO_Hajime.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.18
+Date: 2023-05-20
+
+  Features:
+    - Added "Disable milestone notifications" mod setting which turns off chat notifications. This is a player setting, so each player can have it set the way they want.
+
+  Locale:
+    - Updated Japanese translation thanks to nojio.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.17
+Date: 2023-04-09
+
+  Bugfixes:
+    - Fix remote presets disappearing from the selectable preset list when changing mods in the middle of a game (on configuration changed).
+    - Remove duplicated plastic bar milestone from Sea Block presets.
+
+  Locale:
+    - Ukrainian translation thanks to Met en Bouldry.
+    - Chinese translation update thanks to luaotix.
+    - German translation update thanks to knniDE.
+
+---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 2023-01-31
 

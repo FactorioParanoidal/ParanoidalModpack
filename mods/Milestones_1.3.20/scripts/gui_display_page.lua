@@ -108,7 +108,7 @@ end
 local function find_complete_milestone_from_UI_flow(milestone_flow, global_force)
     local milestone_index = milestone_flow.tags.index
     for _, milestone in pairs(global_force.complete_milestones) do
-        if milestone.sort_index == milestone_index then
+        if approximately_equal(milestone.sort_index, milestone_index) then
             return milestone
         end
     end

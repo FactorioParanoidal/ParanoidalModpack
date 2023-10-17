@@ -84,9 +84,19 @@ function initialize_alias_table()
     global.production_aliases = {}
     for _, loaded_milestone in pairs(global.loaded_milestones) do
         if loaded_milestone.type == "alias" then
+            local valid_alias = false
+            if game.item_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an item alias
+                valid_alias = game.item_prototypes[loaded_milestone.name] ~= nil
+            elseif game.entity_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an entity alias
+                valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
+            end
+            if valid_alias then
             global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
             table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
         end
+    end
     end
 end
 
@@ -133,6 +143,7 @@ function create_next_milestone(force_name, milestone)
 
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil
+    new_milestone.sort_index = milestone.sort_index + 0.0001 -- Should work until there's 10000 iterations of an infinite milestone, lol
 
     return new_milestone
 end
@@ -252,7 +263,7 @@ function sort_milestones(milestones)
     table.sort(milestones, function(a,b)
         if a.completion_tick and not b.completion_tick then return true end -- a comes first
         if not a.completion_tick and b.completion_tick then return false end -- b comes first
-        if not a.completion_tick and not b.completion_tick then return a.sort_index < b.sort_index end
+        if a.completion_tick == b.completion_tick then return a.sort_index < b.sort_index end
         return a.completion_tick < b.completion_tick
     end)
 end

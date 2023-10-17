@@ -3,6 +3,14 @@ local misc = require("__flib__.misc")
 require("scripts.gui")
 require("scripts.milestones_util")
 
+local function force_print(force, message)
+    for _, player in pairs(force.players) do
+        if not settings.get_player_settings(player)["milestones_disable_chat_notifications"].value then
+            player.print(message)
+        end
+    end
+end
+
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
     local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
@@ -11,7 +19,7 @@ local function print_milestone_reached(force, milestone)
     if milestone.type == "technology" then
         localised_name = game.technology_prototypes[milestone.name].localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
-        force.print{"milestones.message_milestone_reached_technology", sprite_name, localised_name, level_string, human_timestamp}
+        force_print(force, {"milestones.message_milestone_reached_technology", sprite_name, localised_name, level_string, human_timestamp})
     else
         if milestone.type == "item" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
@@ -33,13 +41,13 @@ local function print_milestone_reached(force, milestone)
             postscript = " (haha! 😁)"
         end
         if milestone.quantity == 1 then
-            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}, postscript}
+            force_print(force, {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}, postscript})
         else
             local print_quantity = milestone.quantity
             if milestone.quantity >= 10000 then
                 print_quantity = core_util.format_number(milestone.quantity, true)
             end
-            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, localised_name, human_timestamp}, postscript}
+            force_print(force, {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, localised_name, human_timestamp}, postscript})
         end
     end
     force.play_sound{path="utility/achievement_unlocked"}

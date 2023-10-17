@@ -96,7 +96,6 @@ return {
                 milestone.group = "Other"
                 table.insert(global_force.milestones_by_group["Other"], milestone)
             end
-            table.insert(global.delayed_chat_messages, {"milestones.message_migration_130_groups"})
 
             -- Update old estimations with new more accurate estimations
             local force = game.forces[force_name]
@@ -139,6 +138,17 @@ return {
             global_force.item_stats = force.item_production_statistics
             global_force.fluid_stats = force.fluid_production_statistics
             global_force.kill_stats = force.kill_count_statistics
+        end
+    end,
+
+    ["1.3.20"] = function()
+        log("Running 1.3.20 migration")
+        -- Recalculate the sort_index of infinite milestones (first is n, second is n.0001, third is n.0002, etc.)
+        for force_name, force in pairs(game.forces) do
+            if global.forces[force_name] ~= nil then
+                merge_new_milestones(force_name, global.loaded_milestones)
+                backfill_completion_times(force)
+            end
         end
     end,
 }
