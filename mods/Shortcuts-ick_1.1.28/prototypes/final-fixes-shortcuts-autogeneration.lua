@@ -49,8 +49,10 @@ if autogen_color == "default" or autogen_color == "red" or autogen_color == "gre
 		"smart-artillery-exploration-remote",
 		"artillery-jammer-tool",
 		"autotrash-network-selection",
+		"blueprint-align__item__grid-selection-tool", -- "Blueprint aligner" by emlun
 		"circuit-checker",
 		"fp_beacon_selector",
+		"GCKI_car-key", -- "Gizmos Car Keys (improved)" by Pi-C
 		"max-rate-calculator",
 		"module-inserter",
 		"merge-chest-selector",
@@ -82,11 +84,18 @@ if autogen_color == "default" or autogen_color == "red" or autogen_color == "gre
 	for _, tool in pairs(data.raw["selection-tool"]) do
 		local name = tool.name
 		local continue = true
-		for j, ignore_list in pairs(shortcut_ignore_list) do
+
+		-- Ignore tools from "Blueprint Sandboxes" by somethingtohide
+		if string.sub(name, 1, 9) == "bpsb-sbr-" then
+			continue = false
+		else
+			-- Ignore tools from the ignore_list
+			for _, ignore_list in pairs(shortcut_ignore_list) do
 			if name == ignore_list then
 				continue = false
 				break
 			end
+		end
 		end
 
 		if continue == true then

@@ -11,7 +11,7 @@
 
 local shortcuts = {
     "artillery-targeting-remote",
-    "artillery-cluster-remote",
+    "artillery-cluster-remote-artillery-shell",
     "artillery-discovery-remote",
 	"artillery-bombardment-remote",
 	"smart-artillery-bombardment-remote",

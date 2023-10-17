@@ -9,7 +9,7 @@
 	* Artillery targeting remote
 	* Artillery cannon toggle
 	* MOD: Advanced Artillery Remotes Continued
-	* MOD: Artillery Bombardment Remote / Artillery Bombardment Remote (Reloaded)
+	* MOD: Artillery Bombardment Remote / Artillery Bombardment Remote (Reloaded) / Artillery Bombardment Remote (DBot's fork)
 	* MOD: M.I.R.V. targeting remote
 	* MOD: Atomic Artillery Remote
 	* MOD: Landmine thrower
@@ -28,7 +28,7 @@ data:extend(
 	{
 		setting_type = "startup",
 		name = "artillery-toggle",
-		localised_name = {"", "[color=red]", {"technology-name.artillery"}, ": [/color]", {"Shortcuts-ick.artillery-toggle"}, "[font=default-small] [img=info][/font]"},
+		localised_name = {"", "[color=red]", {"technology-name.artillery"}, ": [/color]", {"Shortcuts-ick.artillery-toggle"}},
 		order = "d[artillery]-d[artillery-jammer-tool]",
 		type = "string-setting",
 		allowed_values = {"disabled", "both", "artillery-wagon", "artillery-turret"},
@@ -47,7 +47,7 @@ if mods["AdvancedArtilleryRemotesContinued"] then -- only here to allow checks i
 	}})
 end
 
-if mods["artillery-bombardment-remote"] or mods["artillery-bombardment-remote-reloaded"] then -- only here to allow checks in control.lua
+if mods["artillery-bombardment-remote"] or mods["artillery-bombardment-remote-reloaded"] or mods["dbots-artillery-bombardment-remote"] then -- only here to allow checks in control.lua
 	data:extend({{
 		setting_type = "startup",
 		name = "artillery-bombardment-remote",

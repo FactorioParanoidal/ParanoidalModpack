@@ -548,7 +548,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 			enable_recipe("artillery-targeting-remote", "artillery")
 			enable_recipe("discharge-defense-remote", "discharge-defense-equipment")
 			enable_recipe("spidertron-remote", "spidertron")
-			enable_recipe("artillery-cluster-remote", "artillery")
+			enable_recipe("artillery-cluster-remote-artillery-shell", "artillery")
 			enable_recipe("artillery-discovery-remote", "artillery")
 			enable_recipe("mirv-targeting-remote", "mirv-technology")
 			enable_recipe("atomic-artillery-targeting-remote", "atomic-artillery")
@@ -715,7 +715,7 @@ end
 -- GIVE ITEM
 ---------------------------------------------------------------------------------------------------
 local allowed_items = {
-	"artillery-cluster-remote",
+	"artillery-cluster-remote-artillery-shell",
 	"artillery-discovery-remote",
 	"artillery-jammer-tool",
 	"artillery-targeting-remote",
@@ -1128,7 +1128,7 @@ custom_input_give_item_1("tree-killer")
 
 if settings.startup["artillery-targeting-remote"].value then
 	if settings.startup["advanced-artillery-remote"] and settings.startup["advanced-artillery-remote"].value then
-		custom_input_give_item_2("artillery-cluster-remote")
+		custom_input_give_item_2("artillery-cluster-remote-artillery-shell")
 		custom_input_give_item_2("artillery-discovery-remote")
 	end
 	if settings.startup["artillery-bombardment-remote"] and settings.startup["artillery-bombardment-remote"].value then

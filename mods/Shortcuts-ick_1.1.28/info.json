@@ -1,14 +1,16 @@
 {
 	"name": "Shortcuts-ick",
-	"version": "1.1.27",
+	"version": "1.1.28",
 	"factorio_version": "1.1",
 	"title": "Shortcuts for 1.1",
 	"author": "npc_strider(morley376), modified by ickputzdirwech",
 	"contact": "ickputzdirwech@gmx.de",
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=88439",
 	"dependencies": [
-		"base >= 1.1.59",
+		"base >= 1.1.76",
 		"(?) aai-programmable-vehicles",
+		"(?) AdvancedArtilleryRemotesContinued",
+		"(?) blueprint-sandboxes",
 		"(?) Krastorio2",
 		"(?) northifytool",
 		"(?) PersonalLogisticsShortcut",
