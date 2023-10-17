@@ -5,7 +5,7 @@
 --]]
 
 -- Ore Stack Size
-SelectItemByEntity("resource", settings.startup["ReStack-ores"].value, "ore")
+SelectItemByEntity("resource", settings.startup["ReStack-ores"].value, "ore", false)
 
 for _,recipe in pairs(data.raw.recipe) do
   -- Plate stack size
