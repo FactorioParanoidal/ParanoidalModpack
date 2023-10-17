@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.15
+Date: 04. 05. 2023
+  Bugfixes:
+    - Fixed load error introduced in the last version when using the "repair" option.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.14
+Date: 04. 05. 2023
+  Bugfixes:
+    - Fixed "CRC mismatch" error when joining a server with a different "repair" mod setting.
+
+  Locale:
+    - Added Japanese translation thanks to YAMATO_Hajime.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.5.13
 Date: 26. 12. 2022
   Bugfixes:
