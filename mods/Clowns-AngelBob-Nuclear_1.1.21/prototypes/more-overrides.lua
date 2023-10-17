@@ -149,7 +149,10 @@ data.raw.recipe["mixed-oxide"].ingredients =
   {type="item", name="uranium-238", amount=2},
   {type="item", name="plutonium-239", amount=2}
 }
-
+--override thorium recipe group
+if angelsmods.trigger.ores["thorium"] == false then
+--OV.disable_recipe()
+end
 --globally override plutonium to be consistent 
 OV.global_replace_item("plutonium-240","plutonium-239")
 --execute functions after being called
