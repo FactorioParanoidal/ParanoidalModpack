@@ -303,6 +303,20 @@ function TPlib.energy_source(oript, category, spec, smoke)
   return rt
 end
 
+local function scale_volume(pt, scale)
+  for _, v in pairs(pt) do
+    if v.volume then v.volume = v.volume * scale end
+  end
+end
+
+function TPlib.scale_sound_volume(pt, scale)
+  if pt.variations then
+    scale_volume(pt.variations, scale)
+  else
+    scale_volume(pt, scale)
+  end
+end
+
 
 
 return TPlib
