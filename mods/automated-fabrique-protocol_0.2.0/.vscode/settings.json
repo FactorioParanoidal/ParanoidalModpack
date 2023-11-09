@@ -1,0 +1,52 @@
+{
+    "factorio.versions": [
+        {
+            "name": "1.1.87",
+            "factorioPath": "c:\\Users\\artem.bogomolov.a\\games\\Factorio\\bin\\x64\\factorio.exe"
+        },
+        {
+            "name": "1.1.87.new",
+            "factorioPath": "c:\\Users\\artem\\GAMES\\Factorio\\bin\\x64\\factorio.exe",
+            "active": true
+        }
+    ],
+    "Lua.workspace.library": [
+        "c:\\Users\\artem.bogomolov.a\\games\\Factorio\\data",
+        "c:/Users/artem.bogomolov.a/AppData/Roaming/Code/User/workspaceStorage/cbf7323f521decb0e7ff176f24749e13/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library",
+        "c:\\Users\\artem\\GAMES\\Factorio\\data",
+        "c:/Users/artem/AppData/Roaming/Code/User/workspaceStorage/98f558ba402a0cbbd052261859e535cc/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library"
+    ],
+    "Lua.workspace.userThirdParty": [
+        "c:\\Users\\artem.bogomolov.a\\AppData\\Roaming\\Code\\User\\workspaceStorage\\cbf7323f521decb0e7ff176f24749e13\\justarandomgeek.factoriomod-debug\\sumneko-3rd",
+        "c:\\Users\\artem\\AppData\\Roaming\\Code\\User\\workspaceStorage\\98f558ba402a0cbbd052261859e535cc\\justarandomgeek.factoriomod-debug\\sumneko-3rd",
+        "c:\\Users\\artem\\AppData\\Roaming\\Code\\User\\workspaceStorage\\169a54f054b71cdd89c13dc55e0499a7\\justarandomgeek.factoriomod-debug\\sumneko-3rd"
+    ],
+    "Lua.runtime.builtin": {
+        "io": "disable",
+        "os": "disable",
+        "math": "disable",
+        "debug": "disable",
+        "coroutine": "disable",
+        "package": "disable"
+    },
+    "Lua.runtime.version": "Lua 5.2",
+    "Lua.diagnostics.globals": [
+        "__Profiler",
+        "__DebugAdapter"
+    ],
+    "Lua.runtime.special": {
+        "__object_name": "type"
+    },
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ],
+    "Lua.runtime.plugin": "c:/Users/artem/AppData/Roaming/Code/User/workspaceStorage/98f558ba402a0cbbd052261859e535cc/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/plugin.lua",
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange",
+    "Lua.completion.callSnippet": "Both",
+    "Lua.codeLens.enable": true,
+    "factorio.docs.docLinksVersion": "current",
+    "debug.allowBreakpointsEverywhere": true,
+    "files.eol": "\n",
+    "files.trimFinalNewlines": true
+}

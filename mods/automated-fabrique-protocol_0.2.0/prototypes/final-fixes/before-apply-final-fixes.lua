@@ -1,0 +1,10 @@
+flib = require('__flib__.data-util')
+require('interfaces.constants')
+require('util.main')
+require('prototypes.final-fixes.from-update.resources')
+require('prototypes.final-fixes.from-update.recipes')
+require('prototypes.final-fixes.from-update.items')
+require('prototypes.final-fixes.from-update.entities')
+require('prototypes.final-fixes.from-update.technologies')
+require('prototypes.final-fixes.from-update.crash-site-spaceship-entries')
+flib = nil
