@@ -1,0 +1,168 @@
+{
+    [
+        "type"
+    ] = technology,
+    [
+        "name"
+    ] = chlorine-processing-2,
+    [
+        "prerequisites"
+    ] = {
+        [
+            1
+        ] = chlorine-processing-1,
+        [
+            2
+        ] = gas-steam-cracking-1,
+    },
+    [
+        "effects"
+    ] = {
+        [
+            1
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = gas-allylchlorid,
+        },
+        [
+            2
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = gas-epichlorhydrin,
+        },
+        [
+            3
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = liquid-glycerol,
+        },
+        [
+            4
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = solid-calcium-chloride,
+        },
+        [
+            5
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = butadiene-chlorination,
+        },
+        [
+            6
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = dichlorobutene-dechlorination,
+        },
+        [
+            7
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = vinyl-acetlyene-chlorination,
+        },
+        [
+            8
+        ] = {
+            [
+                "type"
+            ] = unlock-recipe,
+            [
+                "recipe"
+            ] = vinyl-chloride-synthesis,
+        },
+        [
+            9
+        ] = {
+            [
+                "type"
+            ] = nothing,
+            [
+                "effect_description"
+            ] = {
+                [
+                    1
+                ] = research-evolution-factor-effect,
+                [
+                    2
+                ] = 0.185,
+            },
+        },
+    },
+    [
+        "unit"
+    ] = {
+        [
+            "count"
+        ] = 50,
+        [
+            "ingredients"
+        ] = {
+            [
+                1
+            ] = {
+                [
+                    "type"
+                ] = item,
+                [
+                    "name"
+                ] = automation-science-pack,
+                [
+                    "amount"
+                ] = 1,
+            },
+            [
+                2
+            ] = {
+                [
+                    "type"
+                ] = item,
+                [
+                    "name"
+                ] = logistic-science-pack,
+                [
+                    "amount"
+                ] = 1,
+            },
+        },
+        [
+            "time"
+        ] = 15,
+    },
+    [
+        "order"
+    ] = c-a,
+    [
+        "icon"
+    ] = __bobicons__/graphics/technology/chlorine-tech.png,
+    [
+        "icon_size"
+    ] = 128,
+}

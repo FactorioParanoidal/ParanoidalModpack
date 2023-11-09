@@ -1,0 +1,5 @@
+require('interfaces.constants')
+require('prototypes.basic.items')
+require('prototypes.basic.entities')
+require('prototypes.basic.recipes')
+require('prototypes.basic.technologies')
