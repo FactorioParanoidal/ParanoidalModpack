@@ -36,7 +36,7 @@ local function handleRootTechnologyTreeForNotFoundIngredientResolved(root_techno
                     end)
             then
                 EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus(mode, root_technology_name,
-                    effect_ingredient_not_found_in_current_tree)
+                    effect_ingredient_not_found_in_current_tree, technology_name, false)
             end
         end)
 end

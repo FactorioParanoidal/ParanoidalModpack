@@ -1,14 +1,6 @@
-require('basic-technologies')
-require('normal-techologies-tree-update')
-
-
-local function updateTechnologyTree()
-	createBasicTechnologyTree()
-	updateTechnologyNormalTree()
-	linkBasicTechnologiesToNormalTree()
-	updateTechnologyEffectsNormalTree()
-end
-
-if mods["zzzparanoidal"] then
-	updateTechnologyTree()
-end
+require('prototypes.final-fixes.from-update.technologies.basic-technologies')
+require('prototypes.final-fixes.from-update.technologies.normal-techologies-tree-update')
+require('prototypes.final-fixes.from-update.technologies.link-basic-technologies-to-regular-tree')
+require('prototypes.final-fixes.from-update.technologies.technology-unit-add-bean')
+require('prototypes.final-fixes.from-update.technologies.technology-cycle-removing-bean')
+require('prototypes.final-fixes.from-update.technologies.update-and-fix-technology-tree-ingredient-requirement')

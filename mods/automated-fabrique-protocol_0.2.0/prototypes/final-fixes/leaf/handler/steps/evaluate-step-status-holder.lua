@@ -5,8 +5,7 @@ local EvaluatingStepStatus = {}
 EvaluatingStepStatusHolder.initForMode = function(mode)
     EvaluatingStepStatus[mode] = {
         marked_technologies = {},
-        all_found_technologies = {},
-        cached_for_combinations_technologies = {}
+        all_found_technologies = {}
     }
 end
 
@@ -155,11 +154,23 @@ end
 
 EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus = function(mode,
                                                                                      technology_name,
-                                                                                     not_found_inredient)
+                                                                                     not_found_inredient,
+                                                                                     resolving_technology_name,
+                                                                                     is_remove_cycle)
+    if is_remove_cycle then
+        EvaluatingStepStatusHolder.removeTreeFromTechnologyStatus(mode, technology_name,
+            { resolving_technology_name })
+    end
     local technology_status = checkModeTechnologyStatus(mode, technology_name)
     local not_found_inredient_name = not_found_inredient.name or not_found_inredient[1]
     technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = nil
     technology_status.resolved_not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
+    EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name,
+        { resolving_technology_name })
+    log('missed ingredient ' .. not_found_inredient_name .. ' for ' ..
+        technology_name ..
+        ' in mode ' ..
+        mode .. ' found in ' .. resolving_technology_name .. ', removed cycle ' .. tostring(is_remove_cycle))
 end
 
 EvaluatingStepStatusHolder.get_all_unit_subsets = function(unit_set)
@@ -182,26 +193,61 @@ EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack = functi
                                                                                    technology_name)
     local technology_status = checkModeTechnologyStatus(mode, technology_name)
     local technology_units = technology_status.units
+    _table.insert_all_if_not_exists(technology_units, { { type = "item", name = 'salvaged-automation-science-pack' } })
     local status = EvaluatingStepStatus[mode]
-    if status.cached_for_combinations_technologies[technology_units] then
-        return status.cached_for_combinations_technologies[technology_units]
-    end
     local technology_unit_combinations = EvaluatingStepStatusHolder.get_all_unit_subsets(technology_units)
-    local result = _table.filter(status.all_found_technologies,
+    return _table.filter(status.all_found_technologies,
         function(found_technology_name)
             local technology_status_filter = status[found_technology_name]
             local technology_status_filter_units = technology_status_filter.units
             for _, combination in pairs(technology_unit_combinations) do
                 local result = _table.deep_compare(technology_status_filter_units, combination)
                 if result then
+                    -- log('found_technology_name ' .. found_technology_name)
+                    -- log('technology_status_filter_units ' .. Utils.dump_to_console(technology_status_filter_units))
+                    -- log('combination ' .. Utils.dump_to_console(combination))
                     return true
                 end
             end
             return false
         end)
-    status.cached_for_combinations_technologies[technology_units] = result
+end
+local function getOccursTechnologyInAnotherTechnologyTree0(in_which_contain_technology_name,
+                                                           contain_technology_candidate_name,
+                                                           mode, visited_technologies)
+    local result = {}
+    if _table.contains(visited_technologies, in_which_contain_technology_name)
+    then
+        return result
+    end
+    table.insert(visited_technologies, in_which_contain_technology_name)
+    --log(in_which_contain_technology_name)
+    local technology_status = checkModeTechnologyStatus(mode, in_which_contain_technology_name)
+    if not technology_status.tree then return result end
+
+
+    if technology_status.tree and _table.contains(technology_status.tree, contain_technology_candidate_name) then
+        table.insert(result, in_which_contain_technology_name)
+    end
+    _table.each(technology_status.tree,
+        function(parent_name)
+            if (parent_name ~= contain_technology_candidate_name) then
+                _table.insert_all_if_not_exists(result,
+                    getOccursTechnologyInAnotherTechnologyTree0(parent_name,
+                        contain_technology_candidate_name, mode, visited_technologies))
+            end
+        end)
     return result
 end
+
+EvaluatingStepStatusHolder.getOccursTechnologyInAnotherTechnologyTree = function(in_which_contain_technology_name,
+                                                                                 contain_technology_candidate_name,
+                                                                                 mode)
+    return getOccursTechnologyInAnotherTechnologyTree0(in_which_contain_technology_name,
+        contain_technology_candidate_name,
+        mode, {})
+end
+
 
 EvaluatingStepStatusHolder.cleanupForModeAndTechnology = function(mode,
                                                                   technology_name)

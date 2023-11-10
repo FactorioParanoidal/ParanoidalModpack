@@ -22,7 +22,7 @@ local function createBasicTechnology(technology_name, recipes, technology_prereq
 		icon = icon_name,
 		unit = {
 			ingredients = {
-				{ "automation-science-pack", "1" }
+				{ 'salvaged-automation-science-pack', "1" }
 			},
 			count = automation_science_pack_ingredient_count,
 			time = 60
@@ -31,11 +31,13 @@ local function createBasicTechnology(technology_name, recipes, technology_prereq
 	}
 end
 
-function createBasicTechnologyTree()
+local function createBasicTechnologyTree()
 	local basic_recipes = { 'salvaged-mining-drill-bit-mk0',
 		'salvaged-iron-gear-wheel',
 		'salvaged-lab',
-		'salvaged-assembling-machine' }
+		'salvaged-assembling-machine',
+		'salvaged-automation-science-pack'
+	}
 	_table.insert_all_if_not_exists(basic_recipes, createResourceRecipeNames())
 	data:extend {
 		-- корень всего дерева технологий, даёт возможность добывать уголь.
@@ -96,22 +98,25 @@ function createBasicTechnologyTree()
 		createBasicTechnology('basic-motor-processing', { 'motor', 'electric-motor' }, { 'basic-metal-processing' },
 			14,
 			'__aai-industry__/graphics/icons/motor.png', 64),
-		createBasicTechnology('basic-researching', { 'burner-lab', 'sci-component-1', 'automation-science-pack' },
-			{ 'basic-motor-processing', 'coal-ore-smelting', 'basic-metal-processing', 'coal-stone-smelting' },
-			15,
-			'__base__/graphics/icons/automation-science-pack.png', 64),
 		createBasicTechnology('military-0',
 			{ 'pistol', 'firearm-magazine', 'pistol-rearm-ammo', 'bi-wooden-fence', 'respirator' },
 			{ 'basic-wood-production', 'coal-ore-smelting' },
-			16,
+			15,
 			'__base__/graphics/icons/pistol.png', 64),
 		createBasicTechnology('burner-ore-mining', { 'burner-mining-drill', 'mining-drill-bit-mk0' },
-			{ 'basic-researching', 'coal-ore-mining' },
-			20,
+			{ 'coal-ore-mining' },
+			16,
 			'__base__/graphics/icons/burner-mining-drill.png', 64),
 		createBasicTechnology('burner-ore-crushing', { 'burner-ore-crusher' },
-			{ 'basic-researching', 'burner-ore-mining', 'coal-ore-crushing' },
-			20,
-			'__angelsrefining__/graphics/icons/ore-crusher.png', 64)
+			{ 'burner-ore-mining', 'coal-ore-crushing' },
+			17,
+			'__angelsrefining__/graphics/icons/ore-crusher.png', 64),
+		createBasicTechnology('basic-researching', { 'burner-lab', 'sci-component-1', 'automation-science-pack' },
+			{ 'basic-motor-processing', 'coal-ore-smelting', 'basic-metal-processing', 'coal-stone-smelting',
+				'military-0', 'burner-ore-mining', 'burner-ore-crushing' },
+			18,
+			'__base__/graphics/icons/automation-science-pack.png', 64),
 	}
 end
+
+createBasicTechnologyTree()
