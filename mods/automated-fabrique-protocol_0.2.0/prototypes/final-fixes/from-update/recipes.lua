@@ -18,6 +18,7 @@ local function fixBiBioFarmIngredients(ingredients)
 	_table.each(ingredients,
 		function(ingredient)
 			if ingredient.name == "bi-bio-greenhouse" then ingredient.name = "coal-bi-bio-greenhouse" end
+			if ingredient.name == 'glass' then ingredient.name = 'iron-plate' end
 		end)
 end
 fixBiBioFarmIngredients(coal_bi_bio_farm_recipe.normal.ingredients)
@@ -136,7 +137,8 @@ data:extend {
 	copy_salvaged_recipe('burner-assembling-machine', 'salvaged-assembling-machine'),
 	salvaged_offsore_pump_0_recipe,
 	salvaged_mining_drill_recipe,
-	salvaged_ore_crusher_recipe
+	salvaged_ore_crusher_recipe,
+	copy_salvaged_recipe('automation-science-pack', 'salvaged-automation-science-pack')
 }
 data:extend {
 	{

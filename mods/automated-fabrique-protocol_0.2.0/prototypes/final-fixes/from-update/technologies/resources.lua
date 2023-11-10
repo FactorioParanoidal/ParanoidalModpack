@@ -17,7 +17,8 @@ local function get_minable_datas()
                     table.insert(result,
                         {
                             type = minable_result.type,
-                            name = minable_result.name or minable_result[1]
+                            name = minable_result.name or minable_result[1],
+                            required_fluid = minable_result.minable_result
                         }
                     )
                 end)
@@ -49,9 +50,9 @@ local function get_minable_datas()
             -- фугу
             --puffer-nest=Гнездо фугу"}
             --рыбы
-            { type = "fish",  name = "alien-fish-1" },
-            { type = "fish",  name = "alien-fish-2" },
-            { type = "fish",  name = "alien-fish-3" }
+            --{ type = "fish",  name = "alien-fish-1" },
+            --{ type = "fish",  name = "alien-fish-2" },
+            --{ type = "fish",  name = "alien-fish-3" }
         }
     )
     return result
@@ -61,21 +62,28 @@ local function createBasicRecipe(basic_data, suffix)
     local resource_name = basic_data.name
     local resourceRecipeName = resource_name .. suffix
     local resourceItemPrototype = data.raw[resource_type][resource_name]
-    data:extend {
-        {
-            type = "recipe",
-            name = resourceRecipeName,
-            icons = resourceItemPrototype.icons,
-            icon = resourceItemPrototype.icon,
-            icon_size = resourceItemPrototype.icon_size,
-            ingredients = {},
-            category = 'crafting',
-            results =
+    local recipe = {
+        type = "recipe",
+        name = resourceRecipeName,
+        icons = resourceItemPrototype.icons,
+        icon = resourceItemPrototype.icon,
+        icon_size = resourceItemPrototype.icon_size,
+        ingredients = {},
+        category = 'crafting-with-fluid',
+        results = {
             {
-                basic_data
-            },
-            enabled = false
-        }
+                type = resource_type,
+                name = resource_name,
+                amount = 1
+            }
+        },
+        enabled = false
+    }
+    if basic_data.required_fluid then
+        recipe.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
+    end
+    data:extend {
+        recipe
     }
     return resourceRecipeName
 end

@@ -1,0 +1,52 @@
+TechnologyCycleRemovingBean = {}
+TechnologyCycleRemovingBean.technology_datas = data.raw["technology"]
+TechnologyCycleRemovingBean.removePrerequisitesForCycleNormal = function(mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['advanced-electronics'],
+        {
+            "offshore-pump-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['angels-invar-smelting-1'],
+        {
+            "angels-metallurgy-2",
+            "water-treatment-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['angels-nickel-smelting-1'],
+        {
+            "angels-metallurgy-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['angels-zinc-smelting-1'],
+        {
+            "angels-metallurgy-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(
+        TechnologyCycleRemovingBean.technology_datas['angels-sulfur-processing-1'],
+        {
+            "water-treatment-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['zinc-processing'],
+        {
+            "water-treatment-2"
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['titanium-processing'],
+        {
+            'angels-metallurgy-3'
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(
+        TechnologyCycleRemovingBean.technology_datas['angels-titanium-smelting-1'],
+        {
+            'angels-metallurgy-3'
+        },
+        mode)
+    techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['geode-crystallization-1'],
+        {
+            'geode-processing-2'
+        },
+        mode)
+end

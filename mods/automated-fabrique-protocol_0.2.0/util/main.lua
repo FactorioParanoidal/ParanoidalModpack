@@ -61,10 +61,11 @@ end
 
 Utils.getModedObject = function(object, mode)
 	local result = object
-	local temp_result
-	if object[mode] then temp_result = object[mode] end
-	if not temp_result then return result end
+	--	local temp_result
+	if object[mode] then return object[mode] end
+	return result
+	--[[if not temp_result then return result end
 	local keys = _table.keys(temp_result)
 	_table.remove_keys(result, keys)
-	return _table.merge(result, temp_result)
+	return _table.merge(result, temp_result)]]
 end

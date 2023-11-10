@@ -38,12 +38,20 @@ local function raiseAnotherTreesHandlingError(effect_ingredient_not_found_in_cur
 			log(available_technology_name_for_missed_ingredient ..
 				' has units ' ..
 				Utils.dump_to_console(units))
-			log('subsets of units ' .. Utils.dump_to_console(EvaluatingStepStatusHolder.get_all_unit_subsets(units)))
 		end)
 	log(Utils.dump_to_console(data.raw["technology"][technology_name]))
 	log(Utils.dump_to_console(EvaluatingStepStatusHolder.getUnitsFromTechnologyStatus(mode, technology_name)))
 	log(Utils.dump_to_console(available_technology_names_for_ingredients))
-
+	_table.each(available_technology_names_for_ingredients,
+		function(available_technology_name_for_ingredients)
+			log(available_technology_name_for_ingredients ..
+				' is ' ..
+				Utils.dump_to_console(data.raw["technology"][available_technology_name_for_ingredients]))
+			log(technology_name ..
+				' contains in tree of ' .. available_technology_name_for_ingredients .. ' in following technologies ' ..
+				Utils.dump_to_console(EvaluatingStepStatusHolder.getOccursTechnologyInAnotherTechnologyTree(
+					available_technology_name_for_ingredients, technology_name, mode)))
+		end)
 	error('for technology ' ..
 		technology_name ..
 		' keep unresolved ' .. effect_ingredient_not_found_in_current_tree.name .. ' ingredient dependency!')
@@ -61,27 +69,11 @@ local function handleNotFoundIngredentInAnotherTrees(effect_ingredient_not_found
 		raiseAnotherTreesHandlingError(effect_ingredient_not_found_in_current_tree, technology_name, mode,
 			available_technology_names_for_ingredients)
 	end
-
 	for _, uncycled_tech_name_candidate in pairs(available_technology_names_for_ingredients) do
 		if not technologyTreeUtil.haveTechnologyInTree(uncycled_tech_name_candidate, technology_name, mode)
 		then
-			EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name,
-				{ uncycled_tech_name_candidate })
 			EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus(mode, technology_name,
-				effect_ingredient_not_found_in_current_tree)
-			return
-		end
-	end
-	--удаляем цикл, обратную зависимость от технологии. Меняем направление ребра в графе. Разрешаем зависимость в дереве
-	if _table.size(available_technology_names_for_ingredients) == 1 then
-		local uncycled_tech_name_candidate = available_technology_names_for_ingredients[1]
-		if not technologyTreeUtil.haveTechnologyInTree(technology_name, uncycled_tech_name_candidate, mode) then
-			EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name,
-				{ uncycled_tech_name_candidate })
-			EvaluatingStepStatusHolder.removeTreeFromTechnologyStatus(mode, technology_name,
-				{ uncycled_tech_name_candidate })
-			EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus(mode, technology_name,
-				effect_ingredient_not_found_in_current_tree)
+				effect_ingredient_not_found_in_current_tree, uncycled_tech_name_candidate, false)
 			return
 		end
 	end
@@ -95,11 +87,23 @@ local function resolvingNotFoundIngredientsInAnotherTechnologyTree(mode, technol
 		.getNotFoundIngredientsFromTechnologyStatus(
 			mode,
 			technology_name)
+	local loggable = _table.size(effect_ingredients_not_found_in_current_tree) > 0
+	if (loggable) then
+		log('mode ' ..
+			mode ..
+			' for ' ..
+			technology_name ..
+			' resolving not found ingredient start. Count unresolved ingredients: ' ..
+			tostring(_table.size(effect_ingredients_not_found_in_current_tree)))
+	end
 	_table.each(effect_ingredients_not_found_in_current_tree,
 		function(effect_ingredient_not_found_in_current_tree)
 			handleNotFoundIngredentInAnotherTrees(effect_ingredient_not_found_in_current_tree, mode, technology_name,
 				technologyTreeUtil)
 		end)
+	if (loggable) then
+		log('mode ' .. mode .. ' for ' .. technology_name .. ' resolving not found ingredient end')
+	end
 end
 
 
