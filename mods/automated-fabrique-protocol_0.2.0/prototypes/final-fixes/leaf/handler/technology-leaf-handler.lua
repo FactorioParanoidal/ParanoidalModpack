@@ -13,7 +13,7 @@ local function clearStateBeforeStep(mode)
     EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
     return 1
 end
-TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode, technologyUtil, technologyTreeUtil)
+TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
     EvaluatingStepStatusHolder.initForMode(mode)
     local technology_names_count = #technology_names
     local index
@@ -22,8 +22,7 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode,
     _table.each(technology_names,
         function(technology_name)
             log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(technology_name, mode, technologyUtil,
-                technologyTreeUtil)
+            TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(technology_name, mode)
             index = index + 1
         end)
     log('second step')
@@ -40,7 +39,7 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode,
     _table.each(technology_names,
         function(technology_name)
             log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            AnotherTechnologyTreeResolvingStep.evaluate(technology_name, mode, technologyTreeUtil)
+            AnotherTechnologyTreeResolvingStep.evaluate(technology_name, mode)
             index = index + 1
         end)
     index = clearStateBeforeStep(mode)

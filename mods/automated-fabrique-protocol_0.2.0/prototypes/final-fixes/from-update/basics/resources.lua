@@ -18,7 +18,7 @@ local function get_minable_datas()
                         {
                             type = minable_result.type,
                             name = minable_result.name or minable_result[1],
-                            required_fluid = minable_result.minable_result
+                            required_fluid = minable_result.required_fluid
                         }
                     )
                 end)
@@ -31,10 +31,15 @@ local function get_minable_datas()
             { type = "item",  name = 'stone' },
             --вода и пар - неочевидные рецепты
             { type = "fluid", name = 'water' },
+            { type = "fluid", name = 'steam' },
             -- сады разных зон
             { type = "item",  name = "swamp-garden" },
             { type = "item",  name = "desert-garden" },
             { type = "item",  name = "temperate-garden" },
+            -- деревья различных зон
+            { type = "item",  name = "temperate-tree" },
+            { type = "item",  name = "swamp-tree" },
+            { type = "item",  name = "desert-tree" },
             -- инопланетные артефакты
             { type = "item",  name = "small-alien-artifact" },
             { type = "item",  name = "small-alien-artifact-red" },
@@ -42,11 +47,7 @@ local function get_minable_datas()
             { type = "item",  name = "small-alien-artifact-yellow" },
             { type = "item",  name = "small-alien-artifact-green" },
             { type = "item",  name = "small-alien-artifact-blue" },
-            { type = "item",  name = "small-alien-artifact-purple" },
-            -- деревья различных зон
-            { type = "item",  name = "temperate-tree" },
-            { type = "item",  name = "swamp-tree" },
-            { type = "item",  name = "desert-tree" },
+            { type = "item",  name = "small-alien-artifact-purple" }
             -- фугу
             --puffer-nest=Гнездо фугу"}
             --рыбы
@@ -57,6 +58,17 @@ local function get_minable_datas()
     )
     return result
 end
+function getBasicFluidNames()
+    return _table.map(
+        _table.filter(get_minable_datas(),
+            function(minable_data)
+                return minable_data.type and minable_data.type == 'fluid'
+            end),
+        function(minable_data)
+            return minable_data.name
+        end)
+end
+
 local function createBasicRecipe(basic_data, suffix)
     local resource_type = basic_data.type
     local resource_name = basic_data.name

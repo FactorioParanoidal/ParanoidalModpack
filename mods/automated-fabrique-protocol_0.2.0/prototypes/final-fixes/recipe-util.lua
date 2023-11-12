@@ -1,41 +1,7 @@
 local RecipeUtil = {}
 
-
 local function getRecipeObjectForMode(recipe_name, mode)
 	return Utils.getModedObject(data.raw['recipe'][recipe_name], mode)
-end
-
-local function filterRecipeDataByIngredientNameAndType(recipe_name, recipe_ingredient_name, recipe_ingredient_type, mode)
-	local recipeData = getRecipeObjectForMode(recipe_name, mode)
-	return
-		recipeData and (recipeData.main_product and recipeData.main_product == recipe_ingredient_name
-			or
-			recipeData.result and recipeData.result == recipe_ingredient_name
-			or
-			recipeData.results and _table.size(recipeData.results) > 0 and _table.size(
-				_table.filter(recipeData.results,
-					function(result)
-						local result_name = result.name or result[1]
-						return result_name == recipe_ingredient_name and result.type == recipe_ingredient_type
-					end)
-			) > 0
-		)
-end
-
-local function filterRecipeByIngredientNameAndType(recipe_name, recipe_ingredient_name, recipe_ingredient_type, mode)
-	--
-	return not RecipeUtil.isContainDry411Srev(recipe_name) and
-		filterRecipeDataByIngredientNameAndType(recipe_name, recipe_ingredient_name, recipe_ingredient_type, mode)
-end
-
-RecipeUtil.findAvailableRecipesForIngredientDependency = function(recipe_ingredient_name, recipe_ingredient_type, mode)
-	return _table.filter(data.raw["recipe"],
-		function(recipe)
-			local recipe_name = recipe.name
-			return not recipe.hidden
-				and not RecipeUtil.isContainDry411Srev(recipe_name)
-				and filterRecipeByIngredientNameAndType(recipe_name, recipe_ingredient_name, recipe_ingredient_type, mode)
-		end)
 end
 
 local function getRecipeDataProducts(recipeData)

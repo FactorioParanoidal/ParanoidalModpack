@@ -1,13 +1,12 @@
 local TechUtil = {}
 local RecipeUtil = require('recipe-util')
-
 local function getTechnologyObjectForMode(technology_name, mode)
 	return Utils.getModedObject(data.raw["technology"][technology_name], mode)
 end
 
 local function filterTechnologyEffectUnlockRecipe(effect)
-	return effect and effect.type == 'unlock-recipe' and effect.recipe and
-		not RecipeUtil.isContainDry411Srev(effect.recipe)
+	return effect and effect.type == 'unlock-recipe' and effect.recipe
+		and not RecipeUtil.isContainDry411Srev(effect.recipe)
 end
 
 local function getTechnologyObjectEffectRecipesByName(technology_name, mode)
@@ -57,12 +56,27 @@ TechUtil.getAllUnitsForSpecifiedTechnology = function(technology_name, mode)
 		end)
 	return result
 end
+
+TechUtil.getAllRecipesNamesForSpecifiedTechnology = function(technology_name, mode)
+	return _table.map(getTechnologyObjectEffectRecipesByName(technology_name, mode),
+		function(unlocked_recipe)
+			return unlocked_recipe.recipe
+		end)
+end
+
 local function technologyNotFound()
 	error('technology is null!!')
 end
 local function getModedTechnology(technology_candidate, mode)
+	if type(technology_candidate) ~= "table" then
+		error('technology must be a table but got ' .. type(technology_candidate))
+	end
 	if not technology_candidate then technologyNotFound() end
-	return Utils.getModedObject(technology_candidate, mode)
+	local result = Utils.getModedObject(technology_candidate, mode)
+	if not result then
+		error('mode ' .. mode .. 'for techology ' .. result.name .. ' not specified!!')
+	end
+	return result
 end
 TechUtil.addPrerequisitesToTechnology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites then error('prerequisites not specified') end
@@ -76,7 +90,7 @@ end
 TechUtil.removePrerequisitesFromTechnology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites then error('prerequisites not specified') end
 	local technology = getModedTechnology(technology_candidate, mode)
-	if not technology.prerequisites then error('try to remove from  not exists prerequisistes') end
+	if not technology.prerequisites then error('try to remove from not exists prerequisistes') end
 	_table.each(prerequisites,
 		function(prerequisite)
 			_table.remove_item(technology.prerequisites, prerequisite)
@@ -84,10 +98,10 @@ TechUtil.removePrerequisitesFromTechnology = function(technology_candidate, prer
 end
 
 TechUtil.resetTechnologyPrerequisites = function(technology_candidate, prerequisites, mode)
-	if not prerequisites then error('rerequisites not specified') end
+	if not prerequisites then error('prerequisites not specified') end
 	local technology = getModedTechnology(technology_candidate, mode)
 	if technology.prerequisites then technology.prerequisites = nil end
-	TechUtil.addPrerequisitesToTechnology(technology, prerequisites, mode)
+	TechUtil.addPrerequisitesToTechnology(technology_candidate, prerequisites, mode)
 end
 TechUtil.addRecipeEffectToTechnologyEffects = function(technology_candidate, recipe_name, mode)
 	local technology = getModedTechnology(technology_candidate, mode)
@@ -102,9 +116,8 @@ end
 TechUtil.removeRecipeEffectFromTechnologyEffects = function(technology_candidate, recipe_name, mode)
 	local technology = getModedTechnology(technology_candidate, mode)
 	if not recipe_name then error('recipe_name not specified!') end
-	if technology.effects then
-		_table.remove_item(technology.effects, { type = 'unlock-recipe', recipe = recipe_name })
-	end
+	if not technology.effects then error('technology effects not specified!') end
+	_table.remove_item(technology.effects, { type = 'unlock-recipe', recipe = recipe_name })
 end
 
 local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_value, mode)
@@ -120,17 +133,19 @@ local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_v
 	end
 end
 TechUtil.addSciencePacksToTechnologyUnits = function(technology_candidate, technology_units, mode)
-	local technology = getModedTechnology(technology_candidate, mode)
 	if not technology_units then error('technology_units not specified') end
 	_table.each(technology_units,
 		function(technology_unit)
-			addSciencePackToTechnologyUnit(technology, technology_unit, mode)
+			addSciencePackToTechnologyUnit(technology_candidate, technology_unit, mode)
 		end)
 end
 TechUtil.removeSciencePackFrom = function(technology_candidate, science_pack_name, mode)
 	if not science_pack_name then error('science_pack_name not specified') end
 	local technology = getModedTechnology(technology_candidate, mode)
-	_table.remove_item(technology.unit.ingredients, science_pack_name)
+	_table.remove_item(technology.unit.ingredients, science_pack_name,
+		function(table_item, item_for_remove)
+			return table_item[1] == item_for_remove
+		end)
 end
 
 TechUtil.hideTechnology = function(technology_candidate, mode)
@@ -138,4 +153,61 @@ TechUtil.hideTechnology = function(technology_candidate, mode)
 	technology.hidden = true
 end
 
+TechUtil.getAllTechnologiesWithRecipeFluidResultSpecifiedInAnotherRecipeByName = function(recipe_name, mode)
+	local fluids = _table.filter(RecipeUtil.getAllRecipeResults(recipe_name, mode),
+		function(result_data)
+			return result_data.type == 'fluid'
+		end)
+	log('fluids ' .. Utils.dump_to_console(fluids))
+	if _table.size(fluids) ~= 1 then
+		return {}
+	end
+	local target_fluid = fluids[1]
+	local technology_names = TechUtil.getAllActiveTechnologyNames(mode)
+	return _table.filter(technology_names,
+		function(technology_name)
+			local results = TechUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+			return _table.contains_f_deep(results, target_fluid)
+		end)
+end
+
+TechUtil.getAllTechnologiesWithRecipeFluidIngredientsSpecifiedInAnotherRecipeByName = function(recipe_name, mode)
+	local fluids = _table.filter(RecipeUtil.getAllRecipeResults(recipe_name, mode),
+		function(result_data)
+			return result_data.type == 'fluid'
+		end)
+	log('fluids ' .. Utils.dump_to_console(fluids))
+	if _table.size(fluids) ~= 1 then
+		return {}
+	end
+	local target_fluid = fluids[1]
+	local technology_names = TechUtil.getAllActiveTechnologyNames(mode)
+	return _table.filter(technology_names,
+		function(technology_name)
+			local results = TechUtil.getAllRecipesIngredientsForSpecifiedTechnology(technology_name, mode)
+			return _table.contains_f_deep(results, target_fluid)
+		end)
+end
+
+local function filterTechnologyDataHasRecipes(technology_name, mode)
+	local technology = getTechnologyObjectForMode(technology_name, mode)
+	return technology
+		and technology.effects and _table.size(technology.effects) > 0
+		and _table.size(_table.filter(technology.effects,
+			function(effect)
+				return effect.type == 'unlock-recipe' and effect.recipe
+			end)) > 0
+end
+
+TechUtil.getAllActiveTechnologyNames = function(mode)
+	local result = {}
+	_table.each(data.raw["technology"],
+		function(technology)
+			local technology_name = technology.name
+			if not technology.hidden then --and filterTechnologyDataHasRecipes(technology_name, mode) then
+				table.insert(result, technology_name)
+			end
+		end)
+	return result
+end
 return TechUtil
