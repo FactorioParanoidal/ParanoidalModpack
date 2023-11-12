@@ -23,6 +23,7 @@ local function linkBasicTechnologiesToNormalTree(mode)
                 techUtil.hideTechnology(technology, mode)
             end
         end)
+    --  _table.each
 end
 local function updateBasicEffects(mode)
     local technologies = data.raw["technology"]
@@ -44,6 +45,9 @@ local function updateBasicEffects(mode)
     techUtil.removeRecipeEffectFromTechnologyEffects(technologies['basic-automation'], 'steam-inserter', mode)
     techUtil.addRecipeEffectToTechnologyEffects(technologies['steam-power'], 'steam-inserter', mode)
     techUtil.addRecipeEffectToTechnologyEffects(technologies['steam-power'], createSteamRecipe(), mode)
+    techUtil.removeRecipeEffectFromTechnologyEffects(technologies['phosphorus-processing-2'], 'solid-disodium-phosphate',
+        mode)
+    techUtil.addRecipeEffectToTechnologyEffects(technologies['phosphorus-processing-1'], 'solid-disodium-phosphate', mode)
 end
 
 linkBasicTechnologiesToNormalTree("normal")

@@ -660,7 +660,7 @@
     },
     {
       "name": "RecipeBook",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "Renamer",
@@ -866,7 +866,7 @@
     },
     {
       "name": "what-is-it-really-used-for",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "WideChests",

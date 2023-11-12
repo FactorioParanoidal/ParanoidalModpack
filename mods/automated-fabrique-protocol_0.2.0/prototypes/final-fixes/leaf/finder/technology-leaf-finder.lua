@@ -21,32 +21,9 @@ local function markLeafTechnology(result, technology_name, all_technology_names,
     end
 end
 
-local function filterTechnologyDataHasRecipes(technology_name, mode)
-    local technology = getTechnologyObjectForMode(technology_name, mode)
-    return technology
-        and technology.effects and _table.size(technology.effects) > 0
-        and _table.size(_table.filter(technology.effects,
-            function(effect)
-                return effect.type == 'unlock-recipe' and effect.recipe
-            end)) > 0
-end
-
-local function getAllActiveTechnologyNames(mode)
-    local result = {}
-    _table.each(data.raw["technology"],
-        function(technology)
-            local technology_name = technology.name
-            if not technology.hidden and filterTechnologyDataHasRecipes(technology_name, mode) then
-                table.insert(result, technology_name)
-            end
-        end)
-    return result
-end
-
-
 TechnologyLeafFinder.getLeafTechnologiesForResettingDependenies = function(mode)
     local result = {}
-    local all_technology_names = getAllActiveTechnologyNames(mode)
+    local all_technology_names = techUtil.getAllActiveTechnologyNames(mode)
     _table.each(all_technology_names,
         function(technology_name)
             markLeafTechnology(result, technology_name, all_technology_names, mode)

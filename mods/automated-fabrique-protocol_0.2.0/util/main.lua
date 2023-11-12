@@ -17,13 +17,15 @@ _table.contains_f = function(__table, value_function)
 		end) ~= nil
 end
 
+_table.contains_f_deep = function(__table, item)
+	return _table.contains_f(__table, function(item1)
+		return _table.deep_compare(item, item1)
+	end)
+end
 _table.insert_all_if_not_exists = function(table1, table2)
 	_table.each(table2,
 		function(item)
-			if not _table.contains_f(table1,
-					function(value)
-						return _table.deep_compare(item, value)
-					end)
+			if not _table.contains_f_deep(table1, item)
 			then
 				table.insert(table1, #table1 + 1, item)
 			end
@@ -36,15 +38,22 @@ _table.get_item_index = function(__table, item)
 	end
 	return nil
 end
-_table.remove_item = function(__table, item)
-	--log(Utils.dump_to_console(__table))
-	--log(Utils.dump_to_console(item))
-	local item_key = _table.get_item_index(__table, item)
+_table.remove_item = function(__table, item_for_remove, key_evaluate_function)
+	local target_item = item_for_remove
+
+	if key_evaluate_function then
+		target_item = _table.first(_table.filter(__table, function(table_item)
+			return key_evaluate_function(table_item, item_for_remove)
+		end))
+	end
+	local item_key = _table.get_item_index(__table, target_item)
+
 	if not item_key then
-		return false
+		error("Can't delete item " ..
+			Utils.dump_to_console(item_for_remove) .. ' with key ' .. Utils.dump_to_console(item_key) ..
+			' from given table!')
 	end
 	__table[item_key] = nil
-	return true
 end
 Utils.dump_to_console = function(o)
 	if type(o) == 'table' then
@@ -60,12 +69,9 @@ Utils.dump_to_console = function(o)
 end
 
 Utils.getModedObject = function(object, mode)
-	local result = object
-	--	local temp_result
-	if object[mode] then return object[mode] end
-	return result
-	--[[if not temp_result then return result end
-	local keys = _table.keys(temp_result)
-	_table.remove_keys(result, keys)
-	return _table.merge(result, temp_result)]]
+	if not object[mode] then
+		error('mode ' .. mode .. ' for object ' ..
+			Utils.dump_to_console(object) .. ' is not available!')
+	end
+	return object[mode]
 end
