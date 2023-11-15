@@ -23,7 +23,10 @@ end
 
 TechnologyLeafFinder.getLeafTechnologiesForResettingDependenies = function(mode)
     local result = {}
-    local all_technology_names = techUtil.getAllActiveTechnologyNames(mode)
+    local all_technology_names = techUtil.getAllActiveTechnologyNames()
+    local all_technology_name_count = _table.size(all_technology_names)
+    log('all_technology_name_count ' .. all_technology_name_count)
+    log('all_technology_names ' .. Utils.dump_to_console(all_technology_names))
     _table.each(all_technology_names,
         function(technology_name)
             markLeafTechnology(result, technology_name, all_technology_names, mode)

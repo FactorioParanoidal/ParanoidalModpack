@@ -1,4 +1,4 @@
-local TechnologyTreeUtil = {}
+TechnologyTreeUtil = {}
 
 local MAX_INTEGER = 1000
 
@@ -56,5 +56,3 @@ TechnologyTreeUtil.haveTechnologyInTree = function(technology_name, dependency_t
     local dependencies = TechnologyTreeUtil.findDependenciesForTechnologyForAllLevels(technology_name, mode)
     return _table.contains(dependencies, dependency_technology_name)
 end
-
-return TechnologyTreeUtil

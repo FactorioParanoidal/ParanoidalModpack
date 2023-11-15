@@ -26,14 +26,21 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
             'bio-temperate-farming-1',
             'bio-farm-2',
             'bio-processing-paste',
-            'bio-processing-alien-1'
+            'bio-processing-alien-1',
+            'angels-nitrogen-processing-2',
+            'resin-1',
+            'bio-plastic-1',
+            'modules',
+            'bob-drills-2',
+            'bob-area-drills-2'
         },
         mode)
     TechnologyUnitAddBean.addProductionSciencePackToTechnologyUnits(
         {
             'utility-science-pack',
             'bio-processing-paste',
-            'bio-processing-alien-1'
+            'bio-processing-alien-1',
+            'physical-projectile-damage-6'
         },
         mode
     )
@@ -44,7 +51,9 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
             'angels-tungsten-smelting-1',
             'ore-refining',
             'bio-processing-paste',
-            'bio-processing-alien-1'
+            'bio-processing-alien-1',
+            'physical-projectile-damage-6',
+            'rocket-control-unit'
         },
         mode)
     TechnologyUnitAddBean.addEffectivityProcessorToTechnologyUnits(
@@ -54,7 +63,9 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
             'angels-tungsten-smelting-1',
             'ore-refining',
             'bio-processing-paste',
-            'bio-processing-alien-1'
+            'bio-processing-alien-1',
+            'physical-projectile-damage-6',
+            'rocket-control-unit'
         },
         mode)
     TechnologyUnitAddBean.addSpeedProcessorToTechnologyUnits(
@@ -64,20 +75,29 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
             'angels-tungsten-smelting-1',
             'ore-refining',
             'bio-processing-paste',
-            'bio-processing-alien-1'
+            'bio-processing-alien-1',
+            'physical-projectile-damage-6',
+            'rocket-control-unit'
         },
         mode)
     TechnologyUnitAddBean.addTokenBioToTechnologyUnits(
         {
             'bio-nutrient-paste',
-            'bio-farm-2'
+            'bio-farm-2',
+            'angels-nitrogen-processing-2',
+            'angels-advanced-chemistry-2',
+            'chlorine-processing-2',
+            'resin-1',
+            'resins',
+            'bioplastic-pla',
+            'bio-farm-1'
         },
         mode)
     --[[
     removeRecipeEffectFromTechnologyEffects(technologies['nuclear-power'], 'RITEG-1')
     removeRecipeEffectFromTechnologyEffects(technologies['nuclear-power'], 'RITEG-1-from-used-up-RITEG-1')
      --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['modules'], { { "chemical-science-pack", 1 } })
+    techUtil.addSciencePacksToTechnologyUnits(technologies[], { { "chemical-science-pack", 1 } })
     techUtil.addSciencePacksToTechnologyUnits(technologies['angels-ironworks-2'], { { "chemical-science-pack", 1 } })
     techUtil.addSciencePacksToTechnologyUnits(technologies['w93-modular-turrets-lcannon'], { { "chemical-science-pack", 1 } })
     techUtil.addSciencePacksToTechnologyUnits(technologies['w93-modular-turrets'], { { "chemical-science-pack", 1 } })
@@ -301,5 +321,6 @@ end
 local function updateNotFoundEffectesAndSciencePacksExpensive()
 
 end
+
 updateNotFoundEffectesAndSciencePacksNormal()
 updateNotFoundEffectesAndSciencePacksExpensive()

@@ -1,65 +1,66 @@
-require('steps.evaluate-step-status-holder')
+require("steps.evaluate-step-status-holder")
 
 local TechnologyLeafHandler = {}
 
-local TechnologyLeafHandlerTechnologyPropertiesStep = require(
-    'steps.technology-properties-step')
-local TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep = require(
-    'steps.missed-ingredients-in-tech-tree-step')
-local AnotherTechnologyTreeResolvingStep = require('steps.another-technology-tree-candidate-resolving-step')
-local TechnologyTreeResolvedValidatingStep = require('steps.technology-tree-resolved-validating-step')
-local TechnologyTreeResettingStep = require('steps.technology-tree-resetting-step')
+local technologyPropertiesEvaluatingStep = require("steps.technology-properties-step")
+local herselfTechnologyTreeResolvingStep = require("steps.missed-ingredients-in-tech-tree-step")
+local anotherTechnologyTreeResolvingStep = require("steps.another-technology-tree-candidate-resolving-step")
+local technologyTreeResolvedValidatingStep = require("steps.technology-tree-resolved-validating-step")
+local technologyTreeResettingStep = require("steps.technology-tree-resetting-step")
 local function clearStateBeforeStep(mode)
-    EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
-    return 1
+	EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
+	return 1
 end
 TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
-    EvaluatingStepStatusHolder.initForMode(mode)
-    local technology_names_count = #technology_names
-    local index
-    log('first step')
-    index = clearStateBeforeStep(mode)
-    _table.each(technology_names,
-        function(technology_name)
-            log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(technology_name, mode)
-            index = index + 1
-        end)
-    log('second step')
-    index = clearStateBeforeStep(mode)
-    _table.each(technology_names,
-        function(technology_name)
-            log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            local root_technologies = {}
-            TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.evaluate(technology_name, mode, root_technologies)
-            index = index + 1
-        end)
-    index = clearStateBeforeStep(mode)
-    log('third step')
-    _table.each(technology_names,
-        function(technology_name)
-            log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            AnotherTechnologyTreeResolvingStep.evaluate(technology_name, mode)
-            index = index + 1
-        end)
-    index = clearStateBeforeStep(mode)
-    log('fourth step')
-    _table.each(technology_names,
-        function(technology_name)
-            log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            TechnologyTreeResolvedValidatingStep.evaluate(technology_name, mode)
-            index = index + 1
-        end)
-    index = clearStateBeforeStep(mode)
-    log('fifth step')
-    _table.each(technology_names,
-        function(technology_name)
-            log(tostring(index) .. ' of ' .. tostring(technology_names_count))
-            TechnologyTreeResettingStep.evaluate(technology_name, mode)
-            index = index + 1
-        end)
+	EvaluatingStepStatusHolder.initForMode(mode)
+	local technology_names_count = #technology_names
+	local index
+	log("start evaluating cache for properties for all technologies")
+	index = clearStateBeforeStep(mode)
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		technologyPropertiesEvaluatingStep.evaluate(technology_name, mode)
+		index = index + 1
+	end)
+	log("end evaluating cache for properties for all technologies")
+	index = clearStateBeforeStep(mode)
+	log("start trying to resolve recipe ingredient missing evaluating in herself technology tree")
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		local root_technologies = {}
+		herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode, root_technologies)
+		index = index + 1
+	end)
+	log("end trying to resolve recipe ingredient missing evaluating in technology tree")
+	index = clearStateBeforeStep(mode)
+	log("start trying to resolve recipe ingredient missing evaluating in another technology tree")
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		anotherTechnologyTreeResolvingStep.evaluate(
+			technology_name,
+			mode,
+			herselfTechnologyTreeResolvingStep,
+			technologyPropertiesEvaluatingStep
+		)
+		index = index + 1
+	end)
+	log("end trying to resolve recipe ingredient missing evaluating in another technology tree")
+	index = clearStateBeforeStep(mode)
+	log("fourth step")
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		technologyTreeResolvedValidatingStep.evaluate(technology_name, mode)
+		index = index + 1
+	end)
+	index = clearStateBeforeStep(mode)
+	log("fifth step")
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		technologyTreeResettingStep.evaluate(technology_name, mode)
+		index = index + 1
+	end)
 
-    EvaluatingStepStatusHolder.cleanupForMode(mode)
+	EvaluatingStepStatusHolder.cleanupForMode(mode)
 end
 
 return TechnologyLeafHandler

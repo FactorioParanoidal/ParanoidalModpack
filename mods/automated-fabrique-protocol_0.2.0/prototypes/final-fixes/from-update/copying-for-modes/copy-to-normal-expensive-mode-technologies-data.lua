@@ -24,7 +24,7 @@ local technologies = data.raw["technology"]
 
 _table.each(GAME_MODES,
     function(mode)
-        local technology_names = techUtil.getAllActiveTechnologyNames(mode)
+        local technology_names = techUtil.getAllActiveTechnologyNames()
         _table.each(technology_names,
             function(technology_name)
                 local technology = technologies[technology_name]
@@ -46,7 +46,7 @@ end
 
 _table.each(GAME_MODES,
     function(mode)
-        local technology_names = techUtil.getAllActiveTechnologyNames(mode)
+        local technology_names = techUtil.getAllActiveTechnologyNames()
         _table.each(technology_names,
             function(technology_name)
                 local technology = technologies[technology_name]
