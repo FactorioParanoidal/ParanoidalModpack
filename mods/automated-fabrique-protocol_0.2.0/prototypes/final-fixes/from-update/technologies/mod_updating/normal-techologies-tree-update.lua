@@ -1,5 +1,2 @@
 require('prototypes.final-fixes.from-update.technologies.mod_updating.junk-train-3')
 require('prototypes.final-fixes.from-update.technologies.mod_updating.factorisimmo-2-notnotmelon')
-require('prototypes.final-fixes.from-update.technologies.mod_updating.fluid-barrel-proccessing-technology-fixes')
-require('prototypes.final-fixes.from-update.technologies.mod_updating.fluid-canister-proccessing-technology-fixes')
-require('prototypes.final-fixes.from-update.technologies.mod_updating.gas-canister-proccessing-technology-fixes')

@@ -138,7 +138,8 @@ data:extend {
 	salvaged_offsore_pump_0_recipe,
 	salvaged_mining_drill_recipe,
 	salvaged_ore_crusher_recipe,
-	copy_salvaged_recipe('automation-science-pack', 'salvaged-automation-science-pack')
+	copy_salvaged_recipe('automation-science-pack', 'salvaged-automation-science-pack'),
+	copy_salvaged_recipe('accumulator', 'salvaged-generator')
 }
 data:extend {
 	{
@@ -266,6 +267,7 @@ local function disableRecipes()
 	disableRecipe('mining-drill-bit-mk0')
 	disableRecipe('angelsore1-crushed-hand')
 	disableRecipe('angelsore3-crushed-hand')
+	disableRecipe('angels-rod-iron-plate')
 end
 
 disableRecipes()

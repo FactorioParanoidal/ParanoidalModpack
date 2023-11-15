@@ -51,6 +51,7 @@ local function updateFactorissimoMod(technologies, mode)
 end
 
 local technologies = data.raw["technology"]
-_table.each(GAME_MODES, function(mode)
-    updateFactorissimoMod(technologies, mode)
-end)
+_table.each(GAME_MODES,
+    function(mode)
+        updateFactorissimoMod(technologies, mode)
+    end)

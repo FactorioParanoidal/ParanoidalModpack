@@ -38,7 +38,7 @@ _table.get_item_index = function(__table, item)
 	end
 	return nil
 end
-_table.remove_item = function(__table, item_for_remove, key_evaluate_function)
+_table.remove_item = function(__table, item_for_remove, key_evaluate_function, allow_key_missing)
 	local target_item = item_for_remove
 
 	if key_evaluate_function then
@@ -48,12 +48,15 @@ _table.remove_item = function(__table, item_for_remove, key_evaluate_function)
 	end
 	local item_key = _table.get_item_index(__table, target_item)
 
-	if not item_key then
+	if item_key then
+		__table[item_key] = nil
+		return
+	end
+	if not allow_key_missing then
 		error("Can't delete item " ..
 			Utils.dump_to_console(item_for_remove) .. ' with key ' .. Utils.dump_to_console(item_key) ..
 			' from given table!')
 	end
-	__table[item_key] = nil
 end
 Utils.dump_to_console = function(o)
 	if type(o) == 'table' then

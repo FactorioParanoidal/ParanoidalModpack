@@ -36,7 +36,8 @@ local function createBasicTechnologyTree()
 		'salvaged-iron-gear-wheel',
 		'salvaged-lab',
 		'salvaged-assembling-machine',
-		'salvaged-automation-science-pack'
+		'salvaged-automation-science-pack',
+		'salvaged-generator'
 	}
 	_table.insert_all_if_not_exists(basic_recipes, createResourceRecipeNames())
 	data:extend {

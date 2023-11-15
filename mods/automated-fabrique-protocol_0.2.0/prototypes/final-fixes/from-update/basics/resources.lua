@@ -29,9 +29,8 @@ local function get_minable_datas()
             { type = "item",  name = 'coal' },
             { type = "item",  name = 'wood' },
             { type = "item",  name = 'stone' },
-            --вода и пар - неочевидные рецепты
+            --вода  - неочевидные рецепты
             { type = "fluid", name = 'water' },
-            { type = "fluid", name = 'steam' },
             -- сады разных зон
             { type = "item",  name = "swamp-garden" },
             { type = "item",  name = "desert-garden" },

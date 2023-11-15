@@ -1,6 +1,4 @@
 require('util.main')
-local TechnologyTreeUtil = require('prototypes.final-fixes.tree.technology-tree-util')
-require('prototypes.final-fixes.tree.technology-tree-cache-util')
 local TechnologyLeafFinder = require('prototypes.final-fixes.leaf.finder.technology-leaf-finder')
 local TechnologyLeafHandler = require('prototypes.final-fixes.leaf.handler.technology-leaf-handler')
 

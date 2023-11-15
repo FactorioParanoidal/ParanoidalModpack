@@ -8,5 +8,7 @@ local function updateJunkTrain3Mod(technologies, mode)
 end
 
 local technologies = data.raw["technology"]
-updateJunkTrain3Mod(technologies, "normal")
-updateJunkTrain3Mod(technologies, "expensive")
+_table.each(GAME_MODES,
+    function(mode)
+        updateJunkTrain3Mod(technologies, mode)
+    end)
