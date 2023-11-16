@@ -33,6 +33,10 @@ TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(technology_nam
 		return
 	end
 	_table.each(first_level_parents, function(dependency_name)
+		local dependency = Utils.getModedObject(data.raw["technology"][dependency_name], mode)
+		if dependency.hidden then
+			error("technology " .. technology_name .. " has hidden dependency " .. dependency_name)
+		end
 		TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(dependency_name, mode)
 	end)
 end

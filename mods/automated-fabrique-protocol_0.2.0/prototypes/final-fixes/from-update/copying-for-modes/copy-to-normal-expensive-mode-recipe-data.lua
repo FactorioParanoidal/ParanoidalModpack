@@ -36,7 +36,7 @@ end
 local recipes = data.raw["recipe"]
 
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.getAllActiveTechnologyNames()
+	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
 	_table.each(technology_names, function(technology_name)
 		local recipe_names = techUtil.getAllRecipesNamesForSpecifiedTechnology(technology_name, mode)
 		_table.each(recipe_names, function(recipe_name)
@@ -58,7 +58,7 @@ local function clearRecipeData(reciipe)
 end
 
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.getAllActiveTechnologyNames()
+	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
 	_table.each(technology_names, function(technology_name)
 		local recipe_names = techUtil.getAllRecipesNamesForSpecifiedTechnology(technology_name, mode)
 		_table.each(recipe_names, function(recipe_name)

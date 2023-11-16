@@ -36,30 +36,26 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	log("start trying to resolve recipe ingredient missing evaluating in another technology tree")
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
-		anotherTechnologyTreeResolvingStep.evaluate(
-			technology_name,
-			mode,
-			herselfTechnologyTreeResolvingStep,
-			technologyPropertiesEvaluatingStep
-		)
+		anotherTechnologyTreeResolvingStep.evaluate(technology_name, mode, herselfTechnologyTreeResolvingStep)
 		index = index + 1
 	end)
 	log("end trying to resolve recipe ingredient missing evaluating in another technology tree")
 	index = clearStateBeforeStep(mode)
-	log("fourth step")
+	log("start check all unresolved ingredient marked as resolved")
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		technologyTreeResolvedValidatingStep.evaluate(technology_name, mode)
 		index = index + 1
 	end)
+	log("end check all unresolved ingredient marked as resolved")
 	index = clearStateBeforeStep(mode)
-	log("fifth step")
+	log("start resetting technology trees to technology prototypes")
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		technologyTreeResettingStep.evaluate(technology_name, mode)
 		index = index + 1
 	end)
-
+	log("end resetting technology trees to technology prototypes")
 	EvaluatingStepStatusHolder.cleanupForMode(mode)
 end
 

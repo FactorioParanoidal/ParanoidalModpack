@@ -1,14 +1,18 @@
 TechnologyCycleRemovingBean = {}
 TechnologyCycleRemovingBean.technology_datas = data.raw["technology"]
 TechnologyCycleRemovingBean.removePrerequisitesForCycleNormal = function(mode)
-    --[[techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['gas-steam-cracking-2'],
+	--[[techUtil.hideTechnology(TechnologyCycleRemovingBean.technology_datas["nuclear-fuel-reprocessing"], mode)
+	techUtil.hideTechnology(TechnologyCycleRemovingBean.technology_datas["rtg"], mode)
+	techUtil.hideTechnology(TechnologyCycleRemovingBean.technology_datas["physical-projectile-damage-7"], mode)]]
+
+	--[[techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['gas-steam-cracking-2'],
         { 'angels-advanced-chemistry-2' },
         mode)
     techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['resin-1'],
         { 'resins' },
         mode)]]
 
-    --[[techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['advanced-electronics'],
+	--[[techUtil.removePrerequisitesFromTechnology(TechnologyCycleRemovingBean.technology_datas['advanced-electronics'],
         {
             "offshore-pump-2"
         },
