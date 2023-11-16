@@ -183,18 +183,19 @@ TechUtil.getAllTechnologiesWithRecipeFluidResultSpecifiedInAnotherRecipeByName =
 		return {}
 	end
 	local target_fluid = fluids[1]
-	local technology_names = TechUtil.getAllActiveTechnologyNames()
+	local technology_names = TechUtil.getAllActiveTechnologyNames(mode)
 	return _table.filter(technology_names, function(technology_name)
 		local results = TechUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
 		return _table.contains_f_deep(results, target_fluid)
 	end)
 end
 
-TechUtil.getAllActiveTechnologyNames = function()
+TechUtil.getAllActiveTechnologyNames = function(mode)
 	local result = {}
-	_table.each(data.raw["technology"], function(technology)
-		local technology_name = technology.name
-		if not technology.hidden then --and filterTechnologyDataHasRecipes(technology_name, mode) then
+	_table.each(data.raw["technology"], function(technology_candidate)
+		local technology = getModedTechnology(technology_candidate, mode)
+		local technology_name = technology_candidate.name
+		if not technology.hidden then
 			table.insert(result, technology_name)
 		end
 	end)
