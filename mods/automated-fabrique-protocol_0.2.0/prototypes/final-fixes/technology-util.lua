@@ -1,5 +1,5 @@
 local TechUtil = {}
-local RecipeUtil = require("recipe-util")
+
 local function getTechnologyObjectForMode(technology_name, mode)
 	return Utils.getModedObject(data.raw["technology"][technology_name], mode)
 end
@@ -8,7 +8,7 @@ local function filterTechnologyEffectUnlockRecipe(effect)
 	return effect
 		and effect.type == "unlock-recipe"
 		and effect.recipe
-		and not RecipeUtil.isContainDry411Srev(effect.recipe)
+		and not recipeUtil.isContainDry411Srev(effect.recipe)
 end
 
 local function getTechnologyObjectEffectRecipesByName(technology_name, mode)
@@ -24,7 +24,7 @@ TechUtil.getAllRecipesIngredientsForSpecifiedTechnology = function(technology_na
 	local unlocked_recipes = getTechnologyObjectEffectRecipesByName(technology_name, mode)
 	_table.each(unlocked_recipes, function(unlocked_recipe)
 		local recipe_name = unlocked_recipe.recipe
-		local ingredients = RecipeUtil.getAllRecipeIngredients(recipe_name, mode)
+		local ingredients = recipeUtil.getAllRecipeIngredients(recipe_name, mode)
 		_table.insert_all_if_not_exists(result, ingredients)
 	end)
 	return result
@@ -35,7 +35,7 @@ TechUtil.getAllRecipesResultsForSpecifiedTechnology = function(technology_name, 
 	local unlocked_recipes = getTechnologyObjectEffectRecipesByName(technology_name, mode)
 	_table.each(unlocked_recipes, function(unlocked_recipe)
 		local recipe_name = unlocked_recipe.recipe
-		local results = RecipeUtil.getAllRecipeResults(recipe_name, mode)
+		local results = recipeUtil.getAllRecipeResults(recipe_name, mode)
 		_table.insert_all_if_not_exists(result, results)
 	end)
 	return result
@@ -176,7 +176,7 @@ TechUtil.hideTechnology = function(technology_candidate, mode)
 end
 
 TechUtil.getAllTechnologiesWithRecipeFluidResultSpecifiedInAnotherRecipeByName = function(recipe_name, mode)
-	local fluids = _table.filter(RecipeUtil.getAllRecipeIngredients(recipe_name, mode), function(result_data)
+	local fluids = _table.filter(recipeUtil.getAllRecipeIngredients(recipe_name, mode), function(result_data)
 		return result_data.type == "fluid"
 	end)
 	if _table.size(fluids) ~= 1 then
