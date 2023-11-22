@@ -36,7 +36,12 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	log("start trying to resolve recipe ingredient missing evaluating in another technology tree")
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
-		anotherTechnologyTreeResolvingStep.evaluate(technology_name, mode, herselfTechnologyTreeResolvingStep)
+		anotherTechnologyTreeResolvingStep.evaluate(
+			technology_name,
+			mode,
+			herselfTechnologyTreeResolvingStep,
+			technologyPropertiesEvaluatingStep
+		)
 		index = index + 1
 	end)
 	log("end trying to resolve recipe ingredient missing evaluating in another technology tree")

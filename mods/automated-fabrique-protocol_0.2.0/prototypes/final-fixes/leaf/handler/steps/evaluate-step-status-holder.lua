@@ -183,7 +183,7 @@ EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus = func
 	)
 end
 
-EvaluatingStepStatusHolder.get_all_unit_subsets = function(unit_set)
+--[[EvaluatingStepStatusHolder.get_all_unit_subsets = function(unit_set)
 	local result = { {} }
 
 	_table.each(unit_set, function(unit_element)
@@ -195,27 +195,37 @@ EvaluatingStepStatusHolder.get_all_unit_subsets = function(unit_set)
 		_table.insert_all_if_not_exists(result, new_subset)
 	end)
 	return result
-end
+end]]
 
 EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack = function(mode, technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
 	local technology_units = technology_status.units
-	_table.insert_all_if_not_exists(technology_units, { { type = "item", name = "salvaged-automation-science-pack" } })
+	local salvaged_science_pack_unit = { type = "item", name = "salvaged-automation-science-pack" }
+	_table.insert_all_if_not_exists(technology_units, { salvaged_science_pack_unit })
 	local status = EvaluatingStepStatus[mode]
-	local technology_unit_combinations = EvaluatingStepStatusHolder.get_all_unit_subsets(technology_units)
 	return _table.filter(status.all_found_technologies, function(found_technology_name)
 		local technology_status_filter = status[found_technology_name]
 		local technology_status_filter_units = technology_status_filter.units
-		for _, combination in pairs(technology_unit_combinations) do
-			local result = _table.deep_compare(technology_status_filter_units, combination)
-			if result then
-				-- log('found_technology_name ' .. found_technology_name)
-				-- log('technology_status_filter_units ' .. Utils.dump_to_console(technology_status_filter_units))
-				-- log('combination ' .. Utils.dump_to_console(combination))
-				return true
-			end
-		end
-		return false
+		local removable_units = _table.deep_copy(technology_status_filter_units)
+		_table.each(technology_units, function(removing_unit_candidate)
+			_table.remove_item(removable_units, removing_unit_candidate, nil, true)
+		end)
+		local result = _table.size(removable_units) == 0
+		--[[log(
+			" for "
+				.. mode
+				.. " technology "
+				.. technology_name
+				.. " found_technology_name "
+				.. found_technology_name
+				.. " compatible with science packs is  "
+				.. tostring(result)
+				.. " removable_units "
+				.. Utils.dump_to_console(removable_units)
+			--.. " technology_status_filter_units "
+			--.. Utils.dump_to_console(technology_status_filter_units)
+		)]]
+		return result
 	end)
 end
 local function getOccursTechnologyInAnotherTechnologyTree0(

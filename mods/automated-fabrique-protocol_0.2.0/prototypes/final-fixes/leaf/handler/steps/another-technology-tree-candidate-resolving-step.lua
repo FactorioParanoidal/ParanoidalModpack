@@ -1,6 +1,6 @@
 local AnotherTechnologyTreeResolvingStep = {}
 
-local function filterTechnologyNameCandatePredicate(
+local function filterTechnologyNameCandidatePredicate(
 	technology_name_candidate,
 	mode,
 	effect_ingredient_not_found_in_current_tree
@@ -20,7 +20,7 @@ local function filterAllAvaliableTechnologiesWithIngredient(
 	effect_ingredient_not_found_in_current_tree
 )
 	return _table.filter(all_found_technology_names, function(found_technology_name)
-		return filterTechnologyNameCandatePredicate(
+		return filterTechnologyNameCandidatePredicate(
 			found_technology_name,
 			mode,
 			effect_ingredient_not_found_in_current_tree
@@ -44,7 +44,17 @@ local function printInfoForAvailableForIngredientsTechnologyNames(
 			.. " has missing for current technology units "
 			.. Utils.dump_to_console(diff_units)
 	)
-
+	log(
+		"results for "
+			.. available_technology_name_for_ingredients
+			.. " are "
+			.. Utils.dump_to_console(
+				EvaluatingStepStatusHolder.getEffectResultsFromTechnologyStatus(
+					mode,
+					available_technology_name_for_ingredients
+				)
+			)
+	)
 	log(
 		available_technology_name_for_ingredients
 			.. " is "
@@ -70,7 +80,8 @@ local function raiseAnotherTreesHandlingError(
 	effect_ingredient_not_found_in_current_tree,
 	technology_name,
 	mode,
-	available_technology_names_for_ingredients
+	available_technology_names_for_ingredients,
+	technologyPropertiesEvaluatingStep
 )
 	local all_found_technology_names = EvaluatingStepStatusHolder.getAllTechnologyNames(mode)
 	local available_technology_names_for_missed_ingredient = filterAllAvaliableTechnologiesWithIngredient(
@@ -78,6 +89,18 @@ local function raiseAnotherTreesHandlingError(
 		mode,
 		effect_ingredient_not_found_in_current_tree
 	)
+	local all_with_hidden_technology_names = techUtil.getAllTechnologyNamesWithHidden()
+	log("all with hidden technology names " .. Utils.dump_to_console(all_with_hidden_technology_names))
+	EvaluatingStepStatusHolder.initForMode(mode)
+	_table.each(all_with_hidden_technology_names, function(all_with_hidden_technology_name)
+		technologyPropertiesEvaluatingStep.evaluate(all_with_hidden_technology_name, mode, true)
+	end)
+	local all_with_hidden_technology_names_for_missed_ingredient = filterAllAvaliableTechnologiesWithIngredient(
+		all_with_hidden_technology_names,
+		mode,
+		effect_ingredient_not_found_in_current_tree
+	)
+
 	local effect_ingredient_not_found_in_current_tree_name = effect_ingredient_not_found_in_current_tree.name
 		or effect_ingredient_not_found_in_current_tree[1]
 	log(
@@ -85,6 +108,12 @@ local function raiseAnotherTreesHandlingError(
 			.. effect_ingredient_not_found_in_current_tree_name
 			.. " all ACTIVE technologies "
 			.. Utils.dump_to_console(available_technology_names_for_missed_ingredient)
+	)
+	log(
+		"with ingredient as result "
+			.. effect_ingredient_not_found_in_current_tree_name
+			.. " all WITH HIDDEN technologies "
+			.. Utils.dump_to_console(all_with_hidden_technology_names_for_missed_ingredient)
 	)
 	_table.each(
 		available_technology_names_for_missed_ingredient,
@@ -96,8 +125,16 @@ local function raiseAnotherTreesHandlingError(
 			)
 		end
 	)
-	log(Utils.dump_to_console(data.raw["technology"][technology_name]))
-	log(Utils.dump_to_console(available_technology_names_for_ingredients))
+	log(
+		'data.raw["technology"]['
+			.. technology_name
+			.. "]"
+			.. Utils.dump_to_console(data.raw["technology"][technology_name])
+	)
+	log(
+		"available_technology_names_for_ingredients "
+			.. Utils.dump_to_console(available_technology_names_for_ingredients)
+	)
 	_table.each(available_technology_names_for_ingredients, function(available_technology_name_for_ingredients)
 		printInfoForAvailableForIngredientsTechnologyNames(
 			available_technology_name_for_ingredients,
@@ -105,12 +142,24 @@ local function raiseAnotherTreesHandlingError(
 			mode
 		)
 	end)
+	EvaluatingStepStatusHolder.cleanupForMode(mode)
+	local recipe_names = techUtil.getAllRecipesNamesForSpecifiedTechnology(technology_name, mode)
+	local available_recipe_names_for_ingredient = _table.filter(recipe_names, function(recipe_name)
+		return _table.contains_f_deep(
+			recipeUtil.getAllRecipeIngredients(recipe_name, mode),
+			effect_ingredient_not_found_in_current_tree
+		)
+	end)
+
 	error(
 		"for technology "
 			.. technology_name
+			.. " for mode "
+			.. mode
 			.. " keep unresolved "
-			.. effect_ingredient_not_found_in_current_tree_name
-			.. " ingredient dependency!"
+			.. Utils.dump_to_console(effect_ingredient_not_found_in_current_tree)
+			.. " ingredient dependency! Contained recipe names: "
+			.. Utils.dump_to_console(available_recipe_names_for_ingredient)
 	)
 end
 local function handlePossibleError(
@@ -118,7 +167,8 @@ local function handlePossibleError(
 	technology_name,
 	mode,
 	available_technology_names_for_ingredients,
-	herselfTechnologyTreeResolvingStep
+	herselfTechnologyTreeResolvingStep,
+	technologyPropertiesEvaluatingStep
 )
 	EvaluatingStepStatusHolder.markTechnologyWithTreeAsUnvisited(mode, technology_name)
 	herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode, {})
@@ -142,14 +192,16 @@ local function handlePossibleError(
 		effect_ingredient_not_found_in_current_tree,
 		technology_name,
 		mode,
-		available_technology_names_for_ingredients
+		available_technology_names_for_ingredients,
+		technologyPropertiesEvaluatingStep
 	)
 end
 local function handleNotFoundIngredentInAnotherTrees(
 	effect_ingredient_not_found_in_current_tree,
 	mode,
 	technology_name,
-	herselfTechnologyTreeResolvingStep
+	herselfTechnologyTreeResolvingStep,
+	technologyPropertiesEvaluatingStep
 )
 	local all_found_technology_names =
 		EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack(mode, technology_name)
@@ -164,7 +216,8 @@ local function handleNotFoundIngredentInAnotherTrees(
 			technology_name,
 			mode,
 			available_technology_names_for_ingredients,
-			herselfTechnologyTreeResolvingStep
+			herselfTechnologyTreeResolvingStep,
+			technologyPropertiesEvaluatingStep
 		)
 		return
 	end
@@ -189,14 +242,16 @@ local function handleNotFoundIngredentInAnotherTrees(
 		technology_name,
 		mode,
 		available_technology_names_for_ingredients,
-		herselfTechnologyTreeResolvingStep
+		herselfTechnologyTreeResolvingStep,
+		technologyPropertiesEvaluatingStep
 	)
 end
 
 local function resolvingNotFoundIngredientsInAnotherTechnologyTree(
 	mode,
 	technology_name,
-	herSelfTechnologyTreeResolvingStep
+	herSelfTechnologyTreeResolvingStep,
+	technologyPropertiesEvaluatingStep
 )
 	local effect_ingredients_not_found_in_current_tree =
 		EvaluatingStepStatusHolder.getNotFoundIngredientsFromTechnologyStatus(mode, technology_name)
@@ -216,7 +271,8 @@ local function resolvingNotFoundIngredientsInAnotherTechnologyTree(
 			effect_ingredient_not_found_in_current_tree,
 			mode,
 			technology_name,
-			herSelfTechnologyTreeResolvingStep
+			herSelfTechnologyTreeResolvingStep,
+			technologyPropertiesEvaluatingStep
 		)
 	end)
 	if loggable then
@@ -224,7 +280,12 @@ local function resolvingNotFoundIngredientsInAnotherTechnologyTree(
 	end
 end
 
-AnotherTechnologyTreeResolvingStep.evaluate = function(technology_name, mode, herselfTechnologyTreeResolvingStep)
+AnotherTechnologyTreeResolvingStep.evaluate = function(
+	technology_name,
+	mode,
+	herselfTechnologyTreeResolvingStep,
+	technologyPropertiesEvaluatingStep
+)
 	if EvaluatingStepStatusHolder.isVisitedTechnology(mode, technology_name) then
 		return
 	end
@@ -232,13 +293,23 @@ AnotherTechnologyTreeResolvingStep.evaluate = function(technology_name, mode, he
 	-- защита от копирования зависимостей.
 	local dependencies = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
 
-	resolvingNotFoundIngredientsInAnotherTechnologyTree(mode, technology_name, herselfTechnologyTreeResolvingStep)
+	resolvingNotFoundIngredientsInAnotherTechnologyTree(
+		mode,
+		technology_name,
+		herselfTechnologyTreeResolvingStep,
+		technologyPropertiesEvaluatingStep
+	)
 
 	if not dependencies then
 		return
 	end
 	_table.each(dependencies, function(dependency_name)
-		AnotherTechnologyTreeResolvingStep.evaluate(dependency_name, mode, herselfTechnologyTreeResolvingStep)
+		AnotherTechnologyTreeResolvingStep.evaluate(
+			dependency_name,
+			mode,
+			herselfTechnologyTreeResolvingStep,
+			technologyPropertiesEvaluatingStep
+		)
 	end)
 end
 return AnotherTechnologyTreeResolvingStep
