@@ -16,13 +16,22 @@ _table.contains_f = function(__table, value_function)
 end
 
 _table.contains_f_deep = function(__table, item)
-	return _table.contains_f(__table, function(item1)
-		return _table.deep_compare(item, item1)
-	end)
+	return _table.get_item_index(__table, item) ~= nil
 end
 _table.insert_all_if_not_exists = function(table1, table2)
 	_table.each(table2, function(item)
 		if not _table.contains_f_deep(table1, item) then
+			table.insert(table1, #table1 + 1, item)
+		end
+	end)
+end
+
+_table.insert_all_if_not_exists_with_compare = function(table1, table2, comparing_function)
+	if not comparing_function or type(comparing_function) ~= "function" then
+		error(tostring(comparing_function) .. " is not function!")
+	end
+	_table.each(table2, function(item)
+		if comparing_function(table1, item) then
 			table.insert(table1, #table1 + 1, item)
 		end
 	end)
