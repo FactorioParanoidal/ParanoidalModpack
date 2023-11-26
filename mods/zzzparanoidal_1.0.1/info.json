@@ -8,11 +8,11 @@
   "homepage": "https://discord.gg/MnXGAmC",
   "description": "Paranoidal core mod for 1.1",
   "dependencies": [
-    "base >= 1.1.87",
-    "boblibrary", 
+    "base >= 1.1.91",
+    "boblibrary",
     "BatteryElectricTrain",
-    "? angelsindustries", 
-    "? angelsrefining", 
+    "? angelsindustries",
+    "? angelsrefining",
     "? extendedangels",
     "angelsbioprocessing",
     "angelssmelting",
@@ -27,5 +27,5 @@
     "Bio_Industries",
     "marathon",
     "RU-locale"
-    ]
+  ]
 }

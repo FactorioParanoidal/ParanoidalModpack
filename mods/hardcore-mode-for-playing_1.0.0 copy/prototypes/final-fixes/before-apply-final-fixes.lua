@@ -1,4 +1,3 @@
-require("interfaces.constants")
 require("prototypes.final-fixes.from-update.basics.resources")
 require("prototypes.final-fixes.from-update.recipes")
 require("prototypes.final-fixes.from-update.items")

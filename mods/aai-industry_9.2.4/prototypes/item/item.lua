@@ -35,7 +35,7 @@ data:extend({
     icon_size = 64, icon_mipmaps = 1,
     subgroup = "bob-assembly-machine",
     order = "a[assembling-machine-0]",
-    place_result = "assembling-machine-0",
+    --place_result = "assembling-machine-0",
     flags = data.raw.item["assembling-machine-1"].flags,
     --subgroup = data.raw.item["assembling-machine-1"].subgroup,
     --order = data.raw.item["assembling-machine-1"].order .. "-a",
