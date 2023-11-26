@@ -1,4 +1,3 @@
-require('prototypes.final-fixes.from-update.basics.basic-technologies')
 require('prototypes.final-fixes.from-update.technologies.link-basic-technologies-to-regular-tree')
 require('prototypes.final-fixes.from-update.copying-for-modes.copy-to-normal-expensive-mode-data')
 require('prototypes.final-fixes.from-update.technologies.mod_updating.normal-techologies-tree-update')

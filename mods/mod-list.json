@@ -66,9 +66,12 @@
     },
     {
       "name": "automated-fabrique-protocol",
+      "enabled": false
+    },
+    {
+      "name": "automated-utility-protocol",
       "enabled": true
     },
-    
     {
       "name": "baraws",
       "enabled": true
@@ -101,6 +104,13 @@
       "name": "BigLightElectricMiningDrill",
       "enabled": true
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "Bioluminescence",
+      "enabled": true
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "Bio_Industries",
       "enabled": true
@@ -193,6 +203,13 @@
       "name": "bullet-trails",
       "enabled": true
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "check-technology-tree-mods-protocol",
+      "enabled": false
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": true
@@ -345,6 +362,13 @@
       "name": "GUI_Unifyer",
       "enabled": false
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "hardcore-mode-for-playing",
+      "enabled": true
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "helmod",
       "enabled": true
@@ -399,7 +423,7 @@
     },
     {
       "name": "LtnManager",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "LTN_Combinator_Fix",
@@ -465,10 +489,13 @@
       "name": "multi-product-recipe-details",
       "enabled": true
     },
+<<<<<<< HEAD
     {
       "name": "music-new",
       "enabled": true
     },
+=======
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "MxlChievements",
       "enabled": false
@@ -505,6 +532,13 @@
       "name": "NightBrightness",
       "enabled": true
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "nixie-tubes",
+      "enabled": true
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "Noxys_Trees",
       "enabled": true
@@ -557,7 +591,6 @@
       "name": "pathological",
       "enabled": true
     },
-    
     {
       "name": "PCPRedux",
       "enabled": true
@@ -650,6 +683,13 @@
       "name": "Rampant",
       "enabled": false
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "RampantEvolution",
+      "enabled": true
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "RateCalculator",
       "enabled": true
@@ -751,19 +791,24 @@
       "enabled": true
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     
+=======
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "signalstrings",
       "enabled": true
     },
-    
     {
       "name": "simhelper",
       "enabled": true
     },
+<<<<<<< HEAD
     
 >>>>>>> a261c89c6 (update mod list)
+=======
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "SingleColorTerrain",
       "enabled": true
@@ -784,6 +829,21 @@
       "name": "Squeak Through",
       "enabled": true
     },
+<<<<<<< HEAD
+=======
+    {
+      "name": "StatsGui",
+      "enabled": true
+    },
+    {
+      "name": "StatsGui-HandcraftTimer",
+      "enabled": true
+    },
+    {
+      "name": "StatsGui-MovementSpeed",
+      "enabled": true
+    },
+>>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
     {
       "name": "stdlib",
       "enabled": true
@@ -883,6 +943,18 @@
     {
       "name": "zzzparanoidal",
       "enabled": true
+    },
+    {
+      "name": "coverage",
+      "enabled": false
+    },
+    {
+      "name": "profiler",
+      "enabled": false
+    },
+    {
+      "name": "debugadapter",
+      "enabled": false
     }
   ]
 }

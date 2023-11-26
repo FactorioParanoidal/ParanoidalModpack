@@ -180,10 +180,10 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-depleted-uranium-smelting-1",
 		"uranium-ammo",
 		"nuclear-power",
-		"tungsten-processing",
+		--	"tungsten-processing",
 		"angels-tungsten-carbide-smelting-1",
 		"angels-ironworks-4",
-		"angels-nitinol-smelting-1",
+		--"angels-nitinol-smelting-1",
 		"angels-ironworks-3",
 		"w93-modular-turrets-hcannon",
 		"bet-fuel-3",
@@ -193,7 +193,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"angels-copper-tungsten-smelting-1",
 		"bio-refugium-biter-2",
 		"bio-refugium-puffer-3",
-		"bio-refugium-puffer-4",
+		--"bio-refugium-puffer-4",
 		"laser-shooting-speed-7",
 		"laser-shooting-speed-5",
 		"bob-shotgun-shells",
@@ -222,7 +222,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-shotgun-flame-shells",
 		"bob-shotgun-acid-shells",
 		"bob-shotgun-poison-shells",
-		"bob-rocket",
+		--[[bob-rocket",]]
 		"bob-plasma-rocket",
 		"bob-acid-rocket",
 		"bob-flame-rocket",
@@ -249,6 +249,24 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bi-tech-cellulose-2",
 		"angels-alloys-smelting-3",
 		"garden-mutation",
+		"centrifuging-2",
+		"water-treatment-5",
+		"plastic-pc",
+		"remelting-alloy-mixer-4",
+		"remelting-alloy-mixer-3",
+		"nuclear-fuel-3",
+		"radiothermal-fuel-3",
+		"sodium-processing-2",
+		"radiothermal-fuel-2",
+		"radiothermal-fuel-1",
+		"nuclear-fuel-2",
+		"nuclear-fuel-1",
+		"angels-advanced-bio-processing",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"advanced-ore-refining-5",
+		--"advanced-ore-refining-4",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -357,6 +375,24 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bi-tech-cellulose-2",
 		"angels-alloys-smelting-3",
 		"garden-mutation",
+		"centrifuging-2",
+		"water-treatment-5",
+		"plastic-pc",
+		"remelting-alloy-mixer-4",
+		"remelting-alloy-mixer-3",
+		"nuclear-fuel-3",
+		"radiothermal-fuel-3",
+		"sodium-processing-2",
+		"radiothermal-fuel-2",
+		"radiothermal-fuel-1",
+		"nuclear-fuel-2",
+		"nuclear-fuel-1",
+		"angels-advanced-bio-processing",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"advanced-ore-refining-5",
+		"advanced-ore-refining-4",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addEffectivityProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -465,6 +501,24 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bi-tech-cellulose-2",
 		"angels-alloys-smelting-3",
 		"garden-mutation",
+		"centrifuging-2",
+		"water-treatment-5",
+		"plastic-pc",
+		"remelting-alloy-mixer-4",
+		"remelting-alloy-mixer-3",
+		"nuclear-fuel-3",
+		"radiothermal-fuel-3",
+		"sodium-processing-2",
+		"radiothermal-fuel-2",
+		"radiothermal-fuel-1",
+		"nuclear-fuel-2",
+		"nuclear-fuel-1",
+		"angels-advanced-bio-processing",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"advanced-ore-refining-5",
+		"advanced-ore-refining-4",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addSpeedProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -575,6 +629,24 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bi-tech-cellulose-2",
 		"angels-alloys-smelting-3",
 		"garden-mutation",
+		"centrifuging-2",
+		"water-treatment-5",
+		"plastic-pc",
+		"remelting-alloy-mixer-4",
+		"remelting-alloy-mixer-3",
+		"nuclear-fuel-3",
+		"radiothermal-fuel-3",
+		"sodium-processing-2",
+		"radiothermal-fuel-2",
+		"radiothermal-fuel-1",
+		"nuclear-fuel-2",
+		"nuclear-fuel-1",
+		"angels-advanced-bio-processing",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"advanced-ore-refining-5",
+		"advanced-ore-refining-4",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addMilitarySciencePackToTechnologyUnits({
 		"physical-projectile-damage-5",
@@ -633,6 +705,11 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"OilBurning-5",
 		"OilBurning-4",
 		"garden-mutation",
+		"water-treatment-5",
+		"plastic-pc",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addTokenBioToTechnologyUnits({
 		"bio-nutrient-paste",
@@ -655,65 +732,25 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"angels-advanced-chemistry-5",
 		"angels-nitrogen-processing-4",
 		"rocket-control-unit",
-		"bio-processing-crystal-full",
-		"bio-refugium-biter-2",
-		"bio-refugium-biter-3",
-		"bio-refugium-puffer-4",
+		--"bio-processing-crystal-full",
+		--"bio-refugium-biter-2",
+		--"bio-refugium-biter-3",
+		--"bio-refugium-puffer-4",
 		"bet-fuel-4",
 		"bet-fuel-recycling",
+		"centrifuging-2",
+		"water-treatment-5",
+		"plastic-pc",
+		"angels-advanced-bio-processing",
+		"advanced-ore-refining-5",
+		"advanced-ore-refining-4",
+		"thermobaric-weaponry",
 	}, mode)
 	TechnologyUnitAddBean.addSpaceSciencePackToTechnologyUnits({
 		"stack-inserter-research-15",
 		"stack-inserter-research-5",
 		"stack-inserter-research-1",
 	}, mode)
-	--[[    
---
-    techUtil.addSciencePacksToTechnologyUnits(technologies['module-merging'],
-        { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 },
-            { 'science-pack-gold',       1 }, { 'alien-science-pack-blue', 1 }, { 'military-science-pack', 1 } })
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['raw-speed-module-2'],
-            { 'science-pack-gold',       1 }, { 'alien-science-pack-blue', 1 }, { 'military-science-pack', 1 }, { 'pollution-clean-processor', 1 },
-            { 'productivity-processor', 1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 } })
-    techUtil.addSciencePacksToTechnologyUnits(technologies['raw-speed-module-4'],
-            { 'science-pack-gold',       1 }, { 'alien-science-pack-blue', 1 }, { 'military-science-pack', 1 }, { 'pollution-clean-processor', 1 },
-            { 'productivity-processor', 1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 } })
-    --[[techUtil.addSciencePacksToTechnologyUnits(technologies['raw-speed-module-6'],
-			{ "productivity-processor",  1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 },
-			, { 'science-pack-gold', 1 }, { 'alien-science-pack-blue', 1 }, { 'pollution-clean-processor', 1 }, { 'token-bio', 1 }, { 'module-case', 1 } })
-    --
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['w93-modular-turrets-dcannon'],
-        { { 'speed-processor', 1 } })
-    techUtil.addSciencePacksToTechnologyUnits(technologies['bet-charger-3'],
-        { { 'speed-processor', 1 } })
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies[],
-        { { "module-circuit-board", 1 }, 
-            { 'science-pack-gold',    1 }, { 'alien-science-pack-blue', 1 },  { 'pollution-clean-processor', 1 },  })
-    techUtil.addSciencePacksToTechnologyUnits(technologies[],
-        { { "module-circuit-board", 1 }, 
-            { 'science-pack-gold',    1 }, { 'alien-science-pack-blue', 1 },  { 'pollution-clean-processor', 1 } })
-        
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['alien-blue-research'], { { 'automation-science-pack', 1 },
-        { "productivity-processor",  1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 }
-    , { 'chemical-science-pack', 1 }, { 'logistic-science-pack', 1 } })
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['advanced-research'], { { 'advanced-logistic-science-pack', 1 },
-        { "productivity-processor",         1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 }
-    , { 'utility-science-pack', 1 } })
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['bob-shotgun-shells'],
-        { { "productivity-processor", 1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 },
-            { 'production-science-pack', 1 }, { 'utility-science-pack', 1 }, { 'chemical-science-pack', 1 } })
-    --
-    techUtil.addSciencePacksToTechnologyUnits(technologies['advanced-machining'],
-        { { 'advanced-logistic-science-pack', 1 },
-            { "productivity-processor",         1 }, { 'effectivity-processor', 1 }, { 'speed-processor', 1 },
-        })
-    --]]
 end
 local function updateNotFoundEffectesAndSciencePacksExpensive() end
 

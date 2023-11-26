@@ -142,14 +142,29 @@ local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_v
 	if not ingredient_value then
 		error("ingredient_value not specified")
 	end
-	local ingredient = {
-		type = "item",
+	--[[local ingredient = {
+		type = "tool",
 		name = ingredient_value[1],
 		amount = ingredient_value[2],
-	}
+	}]]
 	local technology = getModedTechnology(technology_candidate, mode)
 	if technology.unit and technology.unit.ingredients then
-		_table.insert_all_if_not_exists(technology.unit.ingredients, { ingredient })
+		--log("technology.unit.ingredients " .. Utils.dump_to_console(technology.unit.ingredients))
+		_table.insert_all_if_not_exists_with_compare(
+			technology.unit.ingredients,
+			{ ingredient_value },
+			function(__table, inserting_item)
+				local ingredient_names = _table.map(__table, function(item)
+					return item[1]
+				end)
+				--log("ingredient_names " .. Utils.dump_to_console(ingredient_names))
+				local inserting_ingrediend_name = inserting_item[1]
+				--log("inserting_ingredient_name " .. inserting_ingrediend_name)
+				local result = not _table.contains(ingredient_names, inserting_ingrediend_name)
+				--log("result " .. tostring(result))
+				return result
+			end
+		)
 	end
 end
 TechUtil.addSciencePacksToTechnologyUnits = function(technology_candidate, technology_units, mode)

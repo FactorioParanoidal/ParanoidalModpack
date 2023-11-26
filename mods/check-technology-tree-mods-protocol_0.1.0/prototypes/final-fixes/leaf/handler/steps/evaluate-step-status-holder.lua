@@ -139,13 +139,16 @@ EvaluatingStepStatusHolder.getUnitsFromTechnologyStatus = function(mode, technol
 	return technology_status.units
 end
 
+local function getIngredientName(ingredient)
+	return ingredient.name or ingredient[1]
+end
 EvaluatingStepStatusHolder.addNotFoundIngredientToTechnologyStatus = function(
 	mode,
 	technology_name,
 	not_found_inredient
 )
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	local not_found_inredient_name = not_found_inredient.name or not_found_inredient[1]
+	local not_found_inredient_name = getIngredientName(not_found_inredient)
 	technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
 end
 
@@ -165,7 +168,7 @@ EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus = func
 		EvaluatingStepStatusHolder.removeTreeFromTechnologyStatus(mode, technology_name, { resolving_technology_name })
 	end
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	local not_found_inredient_name = not_found_inredient.name or not_found_inredient[1]
+	local not_found_inredient_name = getIngredientName(not_found_inredient)
 	technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = nil
 	technology_status.resolved_not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
 	EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name, { resolving_technology_name })
@@ -239,17 +242,24 @@ local function getOccursTechnologyInAnotherTechnologyTree0(
 		return result
 	end
 	table.insert(visited_technologies, in_which_contain_technology_name)
-	--log(in_which_contain_technology_name)
+	log(in_which_contain_technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, in_which_contain_technology_name)
 	if not technology_status.tree then
 		return result
 	end
 
 	if technology_status.tree and _table.contains(technology_status.tree, contain_technology_candidate_name) then
+		log("in_which_contain_technology_name " .. in_which_contain_technology_name)
+		log(
+			"technology_status.tree "
+				.. Utils.dump_to_console(technology_status.tree)
+				.. ", contain_technology_candidate_name"
+				.. contain_technology_candidate_name
+		)
 		table.insert(result, in_which_contain_technology_name)
 	end
 	_table.each(technology_status.tree, function(parent_name)
-		if parent_name ~= contain_technology_candidate_name then
+		if parent_name ~= contain_technology_candidate_name and parent_name ~= in_which_contain_technology_name then
 			_table.insert_all_if_not_exists(
 				result,
 				getOccursTechnologyInAnotherTechnologyTree0(

@@ -162,6 +162,56 @@ local function raiseAnotherTreesHandlingError(
 			.. Utils.dump_to_console(available_recipe_names_for_ingredient)
 	)
 end
+
+local function tryLookupInHerselfTree(
+	effect_ingredient_not_found_in_current_tree,
+	technology_name,
+	mode,
+	marked_technologies,
+	for_technology_name
+)
+	if _table.contains(marked_technologies, technology_name) then
+		return false
+	end
+	table.insert(marked_technologies, technology_name)
+
+	local parent_names = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
+	local all_found_techology_names = { technology_name }
+	if parent_names then
+		_table.insert_all_if_not_exists(all_found_techology_names, parent_names)
+	end
+
+	local for_ingredients_found_technology_names = filterAllAvaliableTechnologiesWithIngredient(
+		all_found_techology_names,
+		mode,
+		effect_ingredient_not_found_in_current_tree
+	)
+	if _table.size(for_ingredients_found_technology_names) > 0 then
+		EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus(
+			mode,
+			for_technology_name,
+			effect_ingredient_not_found_in_current_tree,
+			for_ingredients_found_technology_names[1],
+			false
+		)
+		return true
+	end
+	if not parent_names then
+		return false
+	end
+	local found = false
+	_table.each(parent_names, function(parent_name)
+		found = found
+			or tryLookupInHerselfTree(
+				effect_ingredient_not_found_in_current_tree,
+				parent_name,
+				mode,
+				marked_technologies,
+				for_technology_name
+			)
+	end)
+	return found
+end
 local function handlePossibleError(
 	effect_ingredient_not_found_in_current_tree,
 	technology_name,
@@ -170,22 +220,10 @@ local function handlePossibleError(
 	herselfTechnologyTreeResolvingStep,
 	technologyPropertiesEvaluatingStep
 )
-	EvaluatingStepStatusHolder.markTechnologyWithTreeAsUnvisited(mode, technology_name)
-	herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode, {})
 	if
-		EvaluatingStepStatusHolder.hasResolvedStatusForIngredientForTechnology(
-			effect_ingredient_not_found_in_current_tree,
-			technology_name,
-			mode
-		)
+		tryLookupInHerselfTree(effect_ingredient_not_found_in_current_tree, technology_name, mode, {}, technology_name)
 	then
-		log(
-			"for technology "
-				.. technology_name
-				.. " effect_ingredient_not_found_in_current_tree "
-				.. effect_ingredient_not_found_in_current_tree.name
-				.. " resolved in herself tree after adding from another trees!"
-		)
+		--log()
 		return
 	end
 	raiseAnotherTreesHandlingError(
@@ -195,6 +233,79 @@ local function handlePossibleError(
 		available_technology_names_for_ingredients,
 		technologyPropertiesEvaluatingStep
 	)
+end
+local function checkNotCycleByIngredientProductDiagAndotPrerequistesCycle(
+	uncycled_tech_name_candidate,
+	technology_name,
+	mode,
+	visited_technologies
+)
+	if _table.contains(visited_technologies, technology_name) then
+		--		log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")
+		--[[уже посещённые технологии дают true, как множитель просто, иначе всё
+		естественно станет false. А избежать повторов не получится, ибо арность дерева больше 2]]
+		return true
+	end
+	--	log("technology_name " .. technology_name)
+	table.insert(visited_technologies, technology_name)
+	--[[ если технология-кандидат содержит в своём дереве исследуемую технологию - добавлять её нельзя.
+	А сама СОДЕРЖИТСЯ в дереве исследуемой технологии]]
+	if
+		TechnologyTreeUtil.haveTechnologyInTree(uncycled_tech_name_candidate, technology_name, mode)
+		and TechnologyTreeUtil.haveTechnologyInTree(technology_name, uncycled_tech_name_candidate, mode)
+	then
+		--		log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")
+		return false
+	end
+	local uncycled_technology_candidate_ingredients =
+		EvaluatingStepStatusHolder.getEffectIngredientsFromTechnologyStatus(mode, uncycled_tech_name_candidate)
+	--[[	log(
+		"mode "
+			.. mode
+			.. " uncycled_tech_name_candidate "
+			.. uncycled_tech_name_candidate
+			.. " uncycled_technology_candidate_ingredients "
+			.. Utils.dump_to_console(uncycled_technology_candidate_ingredients)
+	)]]
+	local technology_results = EvaluatingStepStatusHolder.getEffectResultsFromTechnologyStatus(mode, technology_name)
+	--[[log(
+		"mode "
+			.. mode
+			.. " technology_name "
+			.. technology_name
+			.. " technology_name_results "
+			.. Utils.dump_to_console(technology_results)
+	)]]
+	local has_no_cycles = true
+	if _table.size(technology_results) > 0 then
+		_table.each(technology_results, function(technology_result)
+			has_no_cycles = has_no_cycles
+				and not _table.contains(uncycled_technology_candidate_ingredients, technology_result)
+		end)
+	end
+	--log("has_no_cycles " .. tostring(has_no_cycles))
+	if not has_no_cycles then
+		--	log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")
+		return false
+	end
+	local tree = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
+	if not tree or _table.size(tree) == 0 then
+		--	log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")
+		return true
+	end
+	_table.each(tree, function(tree_element_tech_name)
+		--	log("has_no_cycles " .. tostring(has_no_cycles))
+		has_no_cycles = has_no_cycles
+			and checkNotCycleByIngredientProductDiagAndotPrerequistesCycle(
+				uncycled_tech_name_candidate,
+				tree_element_tech_name,
+				mode,
+				visited_technologies
+			)
+	end)
+	--[[log("has_no_cycles " .. tostring(has_no_cycles))
+	log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")]]
+	return has_no_cycles
 end
 local function handleNotFoundIngredentInAnotherTrees(
 	effect_ingredient_not_found_in_current_tree,
@@ -222,11 +333,22 @@ local function handleNotFoundIngredentInAnotherTrees(
 		return
 	end
 	for _, uncycled_tech_name_candidate in pairs(available_technology_names_for_ingredients) do
-		-- если технологии в дереве нет, либо если данная технлогия УЖЕ пристутствует в в данном дереве после какого-то этапа считаем, что конфликт разрешён.
-		if
-			not TechnologyTreeUtil.haveTechnologyInTree(uncycled_tech_name_candidate, technology_name, mode)
-			or TechnologyTreeUtil.haveTechnologyInTree(technology_name, uncycled_tech_name_candidate, mode)
-		then
+		local has_no_cycles_result_for_uncycled_tech_name_candidate =
+			checkNotCycleByIngredientProductDiagAndotPrerequistesCycle(
+				uncycled_tech_name_candidate,
+				technology_name,
+				mode,
+				{}
+			)
+		log(
+			" for "
+				.. uncycled_tech_name_candidate
+				.. " and  "
+				.. technology_name
+				.. " has_no_cycles_result_for_uncycled_tech_name_candidate is "
+				.. tostring(has_no_cycles_result_for_uncycled_tech_name_candidate)
+		)
+		if has_no_cycles_result_for_uncycled_tech_name_candidate then
 			EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus(
 				mode,
 				technology_name,
