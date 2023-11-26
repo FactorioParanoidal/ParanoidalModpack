@@ -1,4 +1,5 @@
-require("util.main")
+require("__automated-utility-protocol__.util.main")
+
 local TechnologyLeafFinder = require("prototypes.final-fixes.leaf.finder.technology-leaf-finder")
 local TechnologyLeafHandler = require("prototypes.final-fixes.leaf.handler.technology-leaf-handler")
 
