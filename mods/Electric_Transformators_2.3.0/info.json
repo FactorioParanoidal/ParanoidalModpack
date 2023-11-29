@@ -1,0 +1,9 @@
+{
+	"name": "Electric_Transformators",
+	"version": "2.3.0",
+	"title": "Electric Transformators",
+	"author": "max2344",
+	"description": "Add 5 tiers of transformators for better control over the power grid. The transfer power for each tier is 1MW, 10MW, 100MW, 1GW, 10GW with efficiency of ~98%",
+	"factorio_version": "1.1",
+	"dependencies": [ "base" ]
+}
