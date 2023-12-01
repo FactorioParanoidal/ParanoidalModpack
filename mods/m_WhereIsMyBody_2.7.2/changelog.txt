@@ -1,0 +1,184 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2023-02-12
+  Locale:
+    - Updated Ukrainian translation (thanks to @Met_en_Bouldry on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 2022-11-27
+  Bugfixes:
+    - Fixed crush when a player coprse was removed before player respawn
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2022-10-17
+  Changes:
+    - Improved support of mods and scenarios, it should show properly with https://mods.factorio.com/mod/jetpack etc.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2022-10-17
+  Locale:
+    - Added German translation (thanks to @PatrickBlack on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 2022-10-03
+  Bugfixes:
+    - Fixed a crush for some rare case(s).
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2022-06-21
+  Features:
+    - Players can remove their lines to bodies by removing their chart tags
+  Changes:
+    - Changed chart tags
+  Bugfixes:
+    - Fixed purple lines in some cases
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2022-06-21
+  Features:
+    - Players can auto-create chart tags after death (the setting is disabled by default for this version, I don't recommend it yet. It'll be improved in the next versions)
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2022-06-21
+  Features:
+    - You can stop creation of empty bodies via map setting (the setting is disabled by default)
+    - Added purple line for important bodies and for a selected body
+  Changes:
+    - New icon
+    - Small improvements with gps
+    - By clicking gps coordinates it ignores empty bodies
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2022-06-20
+  Changes:
+    - Ignores players with cheat mode on now
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2022-06-20
+  Features:
+    - Players can track any body by pressing gps message after death
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2022-06-20
+  Features:
+    - Added new setting to ignore bodies with less N items
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2022-06-20
+  Features:
+    - Added customizable line width for players via settings
+  Changes:
+    - Doesn't create lines for empty bodies
+    - Improved stability
+    - Improved settings slightly
+    - Changed behavior slightly (it won't remember your body in the editor)
+    - Added integration with http://mods.factorio.com/mod/gvv
+  Bugfixes:
+    - Fixed very rare visual bug with lines
+    - Fixed setting values
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2022-06-18
+  Changes:
+    - Improved performance
+    - Changed stability (I can't say for sure how it's better etc)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2022-06-18
+  Bugfixes:
+    - Fixed colors
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2022-06-18
+  Bugfixes:
+    - Fixed crush because of weird data (https://mods.factorio.com/mod/m_WhereIsMyBody/discussion/62adaa7da038e3f35eafa9c4)
+  Changes:
+    - Slightly refactored
+    - Slightly improved stability, performance
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2022-01-23
+  Locale:
+    - Added Ukrainian translation (thanks to @Met_en_Bouldry on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2021-12-22
+  Changes:
+    - Changed event handler (slightly better performance)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2021-10-24
+  Locale:
+    - Added Brazilian Portuguese translation (thanks to @BM123499 (Bruno Melo) on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2021-10-17
+  Locale:
+    - Added French translation (thanks to @Drilzxx_ (Kévin) on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2021-10-08
+  Changes:
+    - Destroying lines during on_player_left_game event
+  Notes:
+    - Updated by ZwerOxotnik
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2021-10-08
+  Changes:
+    - Slightly changed on_player_respawned event
+  Notes:
+    - Updated by ZwerOxotnik
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2021-10-08
+  Changes:
+    - Fixed typo
+  Notes:
+    - Updated by ZwerOxotnik
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2021-10-08
+  Changes:
+    - Optimized
+    - Refactored
+    - Changed color and rendering
+  Notes:
+    - Original source ( https://mods.factorio.com/download/WhereIsMyBody/5fbce1f4c23c61e3df5faafb )
+    - Updated by ZwerOxotnik
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-11-24
+  Changes:
+    - Update to 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-11-24
+  Changes:
+    - Update to 1.0
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2020-05-15
+  Changes:
+    - Typo
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2020-05-14
+  Changes:
+    - Added a bunch of missing events
+    - Line draw size/color based on distance to corpse (when there's multiple)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2020-01-27
+  Changes:
+    - Update to Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2019-07-14
+  Changes:
+    - First release

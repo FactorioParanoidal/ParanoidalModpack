@@ -1,0 +1,13 @@
+{
+	"name": "Noxys_Trees",
+	"version": "0.4.5",
+	"factorio_version": "1.1",
+	"title": "Noxys Trees",
+	"author": "Noxy",
+	"contact": "not.a.valid.email.address@example.com",
+	"homepage": "https://mods.factorio.com/user/_noxy_",
+	"description": "Makes the trees spread slowly but also die off with certain condition. Made to be performant and multiplayer friendly. Very configurable.",
+	"dependencies": [
+		"base >= 1.1.0"
+	]
+}

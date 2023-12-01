@@ -1,0 +1,116 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.101.148
+Date: Oct 31 2022
+  Bugfixes:
+    - Fixed getItemByName missing some item types
+  New Features:
+    - Added prefab "tier" 1-5 overlay icons
+  Misc Changes:
+    - "Signal Anchor" type entities (eg EGCombat shield dome connections, DirtyMining ore washer connections) now render and select on top of all other entities
+    - Expanded inventory helper
+---------------------------------------------------------------------------------------------------
+Version: 1.101.144
+Date: Oct 7 2022
+  Bugfixes:
+    - Fixed invalid tile error in biome color calculation
+    - Fixed some error states in recipe editing functions when mods change recipes
+  New Features:
+    - Added tech unlocks to the various ingredient fluids
+  Misc Changes:
+    - Made recipe parsing more robust
+---------------------------------------------------------------------------------------------------
+Version: 1.101.101
+Date: Mar 25 2021
+  Misc Changes:
+    - Update to 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.018.24
+Date: Nov 15 2020
+  Misc Changes:
+    - Improved item lookups
+    - Improved recipe mod compatibility
+    - Inherited biome color system from Bioluminescence
+---------------------------------------------------------------------------------------------------
+Version: 1.018.18
+Date: Aug 10 2020
+  New Features:
+    - Added more library functions
+---------------------------------------------------------------------------------------------------
+Version: 1.018.15
+Date: Jul 28 2020
+  Bugfixes:
+    - Fixed conversion recipes being used as intermediates
+    - Fixed conversion recipes sometimes giving nothing
+    - Fixed error in resistance handling
+---------------------------------------------------------------------------------------------------
+Version: 1.018.10
+Date: Jun 29 2020
+  New Features:
+    - Added more library functions
+    - Added ore cache
+  Misc Changes:
+    - Greatly expanded recipe handling
+    - Improved sprite handling comprehensiveness
+    - Inherited conversion recipe sprites from FTweaks
+    - Redirected getTableSize to native table_size
+---------------------------------------------------------------------------------------------------
+Version: 1.018.5
+Date: Jun 11 2020
+  Bugfixes:
+    - Fixed bug in conversion recipe creation
+  New Features:
+    - Added more library functions
+  Misc Changes:
+    - Expanded tech handling
+---------------------------------------------------------------------------------------------------
+Version: 1.018.2
+Date: Jun 7 2020
+  New Features:
+    - Added itme handling library
+  Misc Changes:
+    - Expanded and improved recipe handling
+    - Expanded tech handling
+    - Greatly improved sprite handling libraries
+  Removed Features:
+    - Removed campaign tech handling
+---------------------------------------------------------------------------------------------------
+Version: 1.018.1
+Date: May 29 2020
+  Misc Changes:
+    - Update to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.017.35
+Date: Dec 29 2019
+  New Features:
+    - Added basic fluid ingredients for use in other mods
+    - Added more library functions
+  Removed Features:
+    - Removed chemplant autobarelling support
+---------------------------------------------------------------------------------------------------
+Version: 1.017.24
+Date: Sep 30 2019
+  Misc Changes:
+    - Expanded tech handling
+    - Improved recipe handling
+---------------------------------------------------------------------------------------------------
+Version: 1.017.18
+Date: Aug 2 2019
+  Bugfixes:
+    - Fixed campaign tech handling
+---------------------------------------------------------------------------------------------------
+Version: 1.017.15
+Date: Jul 1 2019
+  Misc Changes:
+    - Expanded recipe handling
+---------------------------------------------------------------------------------------------------
+Version: 1.017.12
+Date: Jun 17 2019
+  New Features:
+    - Added EntityTracker system
+  Misc Changes:
+    - Expanded string handling
+---------------------------------------------------------------------------------------------------
+Version: 1.017.6
+Date: Jun 6 2019
+  Misc Changes:
+    - Creation

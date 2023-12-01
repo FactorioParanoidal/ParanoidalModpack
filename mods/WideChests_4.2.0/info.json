@@ -1,0 +1,22 @@
+{
+	"name": "WideChests",
+	"version": "4.2.0",
+	"factorio_version": "1.1",
+	"title": "Merging Chests",
+	"author": "Atria",
+	"contact": "tomas.chmelik2@gmail.com",
+	"homepage": "https://github.com/Atria1234/WideChests",
+	"description": "Enables merging of multiple chests into one entity. Supports merging of arbitrary number of chests (configurable in mod settings).",
+	"dependencies": [
+		"? boblogistics",
+		"? bobplates",
+		"? DyWorld-Dynamics",
+		"? nullius >= 1.3.4",
+		"? paperchest",
+		"? angelsbioprocessing",
+		"? verysmallchests",
+		"? WideChestsAllTypes",
+		"? WideChestsUnlimited",
+		"? WideChestsLogistic >= 1.3.0"
+	]
+}

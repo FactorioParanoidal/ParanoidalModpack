@@ -1,0 +1,118 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 6-27-2023
+  Features:
+    - Fixed that descriptions from player equipment grid items were being overridden
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 6-19-2023
+  Features:
+    - Added mod settings to disable descriptions (OhChirpy)
+  Bugfixes:
+    - Remove unused .sfdx folder
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 8-12-2022
+  Features:
+    - Implemented the feature from factorio 1.1.73 that prevents overwritting descriptions.
+    - Improved mod load times.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 7-11-2022
+  Features:
+    - Fluids showing their fuel value and pollution modifier is now a vanilla feature.
+    - Fix crash with Realistic Reactors
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 12-31-2021
+  Features:
+    - Fixed a crash with ev-mining-drills
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 10-5-2021
+  Features:
+    - Logistic robots no longer show Dimensions: 0x0
+    - Fluids will now have their color as part of their name
+    - Machine descriptions will no longer be overwritten.
+    - Removed some unused dependences
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 8-14-2020
+  Features:
+    - Version bump to 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 8-14-2020
+  Bugfixes:
+    - Fixed a crash with space exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 8-11-2020
+  Bugfixes:
+    - Crash quickfix
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 8-11-2020
+  Changes:
+    - Perfect solar/accumulator ratios will now always be above imperfect ratios
+    - Solar panels or accumulator that only make/store 1J are not shown for ratios
+  Bugfixes:
+    - Fixed crash with >20 solar panels or accumulator
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 8-10-2020
+  Features:
+    - The tile restriction message from space exploration is now applied to entities and items alike
+  Changes:
+    - Reactors will now show their heat loss per reactor
+    - Entity dimensions will now only show on the items. This was done so that the normal entity description will show
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 8-9-2020
+  Bugfixes:
+    - Fixed a crash if a recipe had no ingredients
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 8-9-2020
+  Features:
+    - Heat pipe capacity and loss per tile is shown
+    - Reactor max heat is shown
+    - Solar ratios are shown
+  Changes:
+    - Buildings that do not accept modules will no longer have: module slots: 0
+  Bugfixes:
+    - Fixed a crash with some mods
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 8-7-2020
+  Features:
+    - Inserter speed is now displayed
+  Changes:
+    - Rounding algorithm is now round instead of floor
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 8-7-2020
+  Features:
+    - Entity resistances are now displayed for certian military buildings
+  Changes:
+    - Pressure is always displayed
+    - Fluid fuel pollution is now a bulleted item instead of a seperate thing
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 8-6-2020
+  Features:
+    - Added tank volume and tank pressure to pipes, pumps, boilers, ect
+    - If a machine cannot use a certian module then it is displayed on the tooltip
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 8-6-2020
+  Features:
+    - Added tank volume and tank pressure to pipes, pumps, boilers, ect
+    - If a machine cannot use a certian module then it is displayed on the tooltip
+  Bugfixes:
+    - Changed effected to affected
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 8-6-2020
+  Info:
+    - Inital Release
