@@ -1,0 +1,84 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+Date: 2023-10-10
+  Bugfixes:
+    - Fixed strange bug with Make Artillery Great Again and SE breaking thermobaric weapon delivery cannons
+---------------------------------------------------------------------------------------------------
+Version: 0.0.16
+Date: 2023-08-23
+  Bugfixes:
+    - Fixed circular dependancy - may be unstable.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2023-04-04
+  Bugfixes:
+    - Fixed crash when Rampant arsenal and tracer-ammo are installed
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2023-03-31
+  Bugfixes:
+    - Fixed dots appearing on map behind artillery
+  Features:
+    - Added compatibility for Atomic_Overhaul
+    - Added compatibility for light artillery Balanced
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2023-03-26
+  Bugfixes:
+    - Added projectile.force_condition to warhead system
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2023-01-14
+  Features:
+    - Added weapontype for light artillery
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2022-12-21
+  Bugfixes:
+    - Added code to fix repeated recipe ingredients
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2022-11-01
+  Localisation:
+    - Added German translations
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2022-09-29
+  Bugfixes:
+    - Fixed crashes when technology tree is complex
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2022-09-26
+  Bugfixes:
+    - Fixed issues with ranges on weapons, and tank shells not firing where you want
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+  Bugfixes:
+    - Fixed stream type weapons (such as mortars)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+  Bugfixes:
+    - Fixed incompatibility with K2 when realistic combat on.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Bugfixes:
+    - Fixed incompatibility with K2 when realistic combat off.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Bugfixes:
+    - Fixed unknown incompatibility crash.
+  Features:
+    - Support for Ironclad and Rampant mortars.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Bugfixes:
+    - Fixed missing localisation for landmines (and projectiles).
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Bugfixes:
+    - Fixed incompatibility with K2 and IR2 enabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Features:
+    - Initial version
+

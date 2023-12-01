@@ -1,0 +1,405 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.2.3
+Date: 2023-07-30
+  Changes:
+    - Removed the "some rates have been filtered" error - it isn't very useful
+  Bugfixes:
+    - Fixed that closing the GUI with the timescale dropdown open would not close the dropdown (#128)
+    - Fixed that container rates would not take stack sizes into account (#129)
+---------------------------------------------------------------------------------------------------
+Version: 3.2.2
+Date: 2023-06-24
+  Bugfixes:
+    - Fixed a crash when selecting a solar panel (#126)
+---------------------------------------------------------------------------------------------------
+Version: 3.2.1
+Date: 2023-06-20
+  Changes:
+    - Made adjustments to better support game controllers
+  Bugfixes:
+    - Fixed several crashes when the GUI window becomes invalid (#123, #124)
+    - Fixed an error in Polish translation that was preventing the game from starting
+---------------------------------------------------------------------------------------------------
+Version: 3.2.0
+Date: 2023-06-20
+  Features:
+    - Added a new column to intermediate rates showing the output and input rates separately (#111)
+    - Added alt+click to open the row's material in recipe book (#119)
+    - Re-added pollution rates (#109)
+  Changes:
+    - Improved power icon
+    - Increased precision of measurements by one decimal place (#115)
+  Bugfixes:
+    - Fixed that clicking the close button while pinned would close whatever GUI was open at the time
+    - Fixed that fluid energy source effectivity was not taken into account (#117)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.2
+Date: 2023-05-06
+  Changes:
+    - Adjusted colors to be more readable
+  Bugfixes:
+    - Fixed being unable to input zeroes after the decimal point in the manual multiplier field (#112)
+    - Fixed that the GUI would be created and steal focus if hitting control+f before making the first selection (#113)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 2023-05-02
+  Bugfixes:
+    - Fixed a crash when a fluid with temperature is filtered due to the selected divisor
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 2023-04-30
+  Features:
+    - Added a per-player setting to change the default timescale (#102)
+    - Added optional checkboxes for marking a row as "completed" (#103)
+    - Re-added set history, saving the last ten sets (#104)
+    - Re-added support for fluid output temperatures (#107)
+  Changes:
+    - Changed default timescale to "per second"
+    - Manual multiplier will be reset to 1 when making a new selection (#101)
+    - Renamed "measure" to "timescale"
+    - Updated base dependency to 1.1.80, flib dependency to 0.12.7
+  Bugfixes:
+    - Fixed that row tooltips were shown inconsistently depending on GUI contents
+    - Fixed a crash when changing mod options before making an initial selection (#106)
+    - Fixed that fluid energy source filters were not considered when calculating fluid rates (#105)
+    - Fixed that power and heat were not shown as watts in intermediate tooltips
+    - Fixed that some inserters would show NaN rates due to imprecision in an arccosine operation
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 2023-04-29
+  Gui:
+    - Added a description to the "some machines have no power" error
+  Bugfixes:
+    - Fixed that inserter rates were incorrect and would be divided by zero if no stack size bonuses were researched
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 2023-04-28
+  Bugfixes:
+    - Fixed unknown key in timescale dropdown
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 2023-04-28
+  Features:
+    - Added localised search
+    - Machines can be removed from the calculation with shift + right-drag
+    - Added a per-player setting to change the default GUI position (top-left, center)
+    - Added a per-player setting to show calculation errors in the GUI
+  Changes:
+    - Removed alternate selection tool modes
+    - Removed pollution rates
+    - Removed selection history
+    - Removed tips and tricks
+  Gui:
+    - Redesigned the GUI to be more concise and easier to read, and to improve performance
+    - Ingredients, products, and intermediates are shown in separate tables with clear separation
+    - Power and heat rates are integrated into the main tables instead of being separate categories
+    - Manual multiplier has been moved to the header, and the slider has been replaced with up/down buttons
+    - The machines column displays the icons of the producing machines
+    - The net rate tooltip shows producing and consuming machines as well as a breakdown of net rate, net machines, and input/output rates/machines
+    - Calculation errors are shown at the bottom of the GUI
+    - GUI default position is now at the top-left of the screen
+  Optimizations:
+    - Improved performance of rate calculations
+    - Noticeably reduced GUI update times
+    - Removed the spreading of rate calculations over multiple ticks
+  Bugfixes:
+    - Fixed that mining drills without a fluid box were shown as being able to mine resources with fluid
+---------------------------------------------------------------------------------------------------
+Version: 2.4.8
+Date: 2023-02-20
+  Bugfixes:
+    - Fixed that certain buildings generated by Omnicompression would not be selectable
+---------------------------------------------------------------------------------------------------
+Version: 2.4.7
+Date: 2023-02-19
+  Compatibility:
+    - Holographic signs are no longer included in the container filters list
+  Bugfixes:
+    - Fixed accidental inclusion of development files in mod package
+    - Fixed a crash when a mining drill mines a resource with no products
+    - Fixed a crash when filtering by a container with zero inventory slots
+    - Fixed that heat calculations did not account for efficiency modules
+---------------------------------------------------------------------------------------------------
+Version: 2.4.6
+Date: 2022-10-30
+  Bugfixes:
+    - Fixed a crash when using a container filter
+---------------------------------------------------------------------------------------------------
+Version: 2.4.5
+Date: 2022-10-27
+  Features:
+    - Added advanced tooltips to material rates that show which recipes are producing or consuming the material
+  Changes:
+    - Input rates are no longer displayed as negative numbers for technical reasons
+    - Updated base and flib dependencies
+  Bugfixes:
+    - Fixed boiler rates being inaccurate when input and output fluids have different heat capacities
+---------------------------------------------------------------------------------------------------
+Version: 2.4.4
+Date: 2022-05-29
+  Changes:
+    - Updated Chinese locale (by PlexPt) (#92)
+    - Updated Russian locale (by Astorin) (#91)
+  Bugfixes:
+    - Fixed a crash when a fluid energy source has fluid at its default temperature
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2022-02-20
+  Features:
+    - A warning will display when selecting an inserter connected to a belt (#83)
+  Changes:
+    - Added Chinese and Korean locales
+  Bugfixes:
+    - Fixed that generators did not show pollution rates (#88)
+    - Fixed that generators without fluid filters would not show rates (#88)
+    - Fixed that production of fuel burnt results was not being shown (#86)
+    - Fixed that rocket part rates did not account for the time the rocket took to launch (#85)
+    - Fixed that the surface's solar power multiplier was not taken into account for solar power output
+    - Fixed that zero net rates would occasionally show as green or red due to floating point imprecision
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2021-12-09
+  Bugfixes:
+    - Fixed the calculator not correctly handling catalysts (again)
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2021-12-08
+  Changes:
+    - Updated Russian locale (by Astorin) (#77)
+  Bugfixes:
+    - Fixed appending selections not working (#78)
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2021-12-03
+  Features:
+    - Added basic support for fluid output temperatures (#57)
+      - Fluid input temperatures are not supported due to their complexity
+    - Added navigation buttons, allowing you to access the last ten selections (#18)
+    - Using the hotkey or clicking the shortcut while already holding the selection tool will open the GUI
+  Changes:
+    - Updated tips and tricks content and screenshots
+    - Updated Russian locale (by Astorin)
+  Bugfixes:
+    - Fixed machines from the "Mini Machines" mod being unselectable in some cases (#64)
+    - The calculator now accounts for the game engine's 1 craft per tick limitation (#66)
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2021-10-25
+  Features:
+    - Added a warning when selecting a lab without an active research
+  Changes:
+    - Updated Russian locale (by Astorin)
+  Bugfixes:
+    - Fixed rate tooltips rounding to the nearest whole number
+    - Fixed the GUI soft-locking when selecting the inserter units in some situations
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2021-10-23
+  Features:
+    - Added a setting to automatically dismiss the selection tool when the GUI opens
+    - Added a warning when selecting unpowered beacons
+  Gui:
+    - Added warnings when there are no rates for the selected timescale, and when there are no search results
+    - Middle-clicking the titlebar will re-center the GUI
+    - Search results will only update after you quit typing for half a second
+    - The rates table now uses an easier-to-digest alternating colors style
+  Bugfixes:
+    - Fixed that lab calculations did not account for lab input compatibility
+    - Fixed that mining drill calculations did not account for mining probability on a resource (#72)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2021-05-04
+  Features:
+    - Added inserter rates
+      - Requires you to select an inserter in-world
+      - Given rates can be somewhat inaccurate when dealing with belts
+  Changes:
+    - The UI will now shrink to fit if there are less than nine rows in the table
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2021-04-25
+  Bugfixes:
+    - Fixed an extremely rare desync that could happen on extremely specific ticks
+    - Fixed not being able to select some Space Exploration entities
+    - Fixed pollution calculations not accounting for pollution modifier modules
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2021-03-07
+  Bugfixes:
+    - Fixed burner generators not being selectable
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2021-03-02
+  Bugfixes:
+    - Fixed lab calculations not accounting for a lab's base research speed
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2021-02-25
+  Features:
+    - Added tooltips to the frame action buttons (search, pin, close)
+  Changes:
+    - Search textfield will not open on Control + F if the GUI is pinned
+  Bugfixes:
+    - Fixed GUI not resetting when search was closed with escape
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2021-02-17
+  Features:
+    - Shift + selecting with the tool will append the new rates onto the previous selection instead of making a new one
+    - Added name search to GUI (unlocalised)
+  Changes:
+    - Adjusted titlebar spacing to match base game
+    - Updated Russian locale
+  Bugfixes:
+    - Fixed entity and tile ghosts being selectable
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2020-12-29
+  Features:
+    - Selecting a furnace will use the previous recipe if no recipe is currently active on that furnace
+  Changes:
+    - Added deadlock's stacking beltboxes entities to blacklist
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2020-12-24
+  Bugfixes:
+    - Fixed a crash when another mod removes the vanilla "introduction" tip
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2020-12-20
+  Features:
+    - Added per-player setting to adjust the number of visible rows in the rates table
+  Changes:
+    - Increased default visible rows count to ten
+  Bugfixes:
+    - Fixed incorrect burner energy source calculations with reguards to burner efficiency
+    - Fixed being able to select Factorissimo buildings and hidden lights
+    - Fixed horizontal scroll bar showing up at imperfect GUI scales
+    - Fixed rates not being shown for fluid energy sources in some cases
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2020-12-15
+  Bugfixes:
+    - Fixed being able to select many entities that made no sense
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2020-12-15
+  Bugfixes:
+    - Fixed a crash when selecting a miner with no ore underneath
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2020-12-07
+  Bugfixes:
+    - Fixed another crash on configuration changed
+    - Fixed a crash when using any non-english locale
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2020-12-07
+  Changes:
+    - Updated Russian locale
+  Bugfixes:
+    - Fixed a crash on configuration changed
+    - Fixed a crash when the GUI was opened
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2020-12-07
+  Features:
+    - Added new rates
+      - Energy source consumption (burner, fluid, and heat) for all entities
+      - Pollution production and consumption for all entities
+      - Heat output for reactors
+      - Fluid input and output rates for boilers
+    - Added new units
+      - Per-second, minute, and hour for all containers and storage tanks (alongside cargo and fluid wagons)
+      - Per-second, minute, and hour for pollution
+    - Added manual multiplier box and slider
+    - Added tips and tricks
+  Changes:
+    - Changed how the selection tool behaves
+      - Regular select will select production machines
+      - Shift + select will select entities that produce or consume electricity
+    - Redesigned the GUI
+      - The input and output tables are combined into one
+      - Inputs will be shown as negative numbers and are colored red, while outputs are colored green
+      - Consolidated train wagon units into the generic materials "per" rates
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2020-11-29
+  Features:
+    - Added Russian locale (by Astorin)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2020-11-23
+  Features:
+    - Added power production for all entities where it is applicable
+  Changes:
+    - Updated to Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2020-10-29
+  Bugfixes:
+    - Fixed fluid wagon measurements not showing (by robosa)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2020-10-26
+  Bugfixes:
+    - ACTUALLY ACTUALLY fixed product catalyst calculations (by robosa)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2020-10-02
+  Bugfixes:
+    - Fixed a crash when one player's selection would finish while more than one selection was being processed
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2020-09-19
+  Bugfixes:
+    - Fixed a crash when right-clicking the choose elem button to unset it
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-09-18
+  Bugfixes:
+    - Fixed productivity bonus being applied ONLY to product catalysts, instead of the other way around
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-09-17
+  Bugfixes:
+    - Fixed inaccurate electric consumption stats for entities with consumption bonuses and/or drain
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-09-16
+  Bugfixes:
+    - Fixed productivity bonus being applied to product catalysts
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-09-15
+  Features:
+    - Added the following rates:
+      - Electric consumption for all machines
+      - Electric production and consumption for electric energy interfaces
+      - Electric production for solar panels
+      - Fluid consumption for generators
+    - Added the ability to "pin" the GUI so it will remain open alongside other windows
+    - Results are sorted by rate from largest to smallest
+  Changes:
+    - Updated to Factorio 1.0
+    - The base mod is now marked as optional, to enable support for total overhaul mods
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-06-24
+  Bugfixes:
+    - Fixed a crash related to GUI style changes in Factorio 0.18.33
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-06-20
+  Bugfixes:
+    - ACTUALLY fixed incorrect lab consumption calculations
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-06-09
+  Bugfixes:
+    - Fixed incorrect lab consumption calculations
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-05-27
+  Features:
+    - Initial release

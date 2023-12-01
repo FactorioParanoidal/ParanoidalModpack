@@ -1,0 +1,231 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2023.8.17
+  Features:
+    - Increase hidden inventory size 60->300
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2023.1.17
+  Features:
+    - Fix crash with interstellar map
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 11.21.2022
+  Features:
+    - Changed text of center panel blank-gui-item
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 11.21.2022
+  Features:
+    - https://mods.factorio.com/mod/deep-storage-unit/discussion/637c08dc963feacd858ce67f
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 11.19.2022
+  Features:
+    - Fixed a crash when another mod updates and deletes an item contained in a unit
+    - Fixed a crash when blueprinting the memory unit combinator
+    - Fixed that a blueprint ghost of a MU combinator could still output signals
+    - Fixed that the power gui was displaying a lower number than normal
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 11.19.2022
+  Features:
+    - Memory units now have a custom gui
+    - Memory units no longer give memory elements when destroyed. Instead, the items are saved directly to the unit's item
+    - Removed memory elements and memory communicators
+    - se_allow_in_space = true
+    - Fixed entity.clone() not working
+    - Reduced power usage
+    - Changed recipe and technology
+    - Fixed an issue with the packing tape mod.
+    - Changed fmu item subgroup to "storage" (with the rest of the chests)
+    - Items with additional data, such as blueprints or items-with-tags can no longer be stored
+    - Fixed an bug that would freeze units whenever an item's stack size was changed
+---------------------------------------------------------------------------------------------------
+Version: 1.2.15
+Date: 7.11.2022
+  Features:
+    - Fixed memory units going into "dumb chest mode" when they were placed
+    - Fixed a crash involving empty memory elements
+    - Fixed circuit signals still being sent out after being blueprinted
+    - Removed k2 warehouses setting
+    - Massive performance optimizations
+    - You can now place multiple empty elements in a memory unit to extract an even amount into all elements
+---------------------------------------------------------------------------------------------------
+Version: 1.2.14
+Date: 3.25.2021
+  Features:
+    - performance optimizations
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 10.10.2020
+  Features:
+    - Added compatiblity with Picker Dollies
+    - Moved all items into a seperate subgroup
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 10.9.2020
+  Features:
+    - Fixed a bug that was causing power usage to be lower than intended
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 10.9.2020
+  Features:
+    - Fixed a bug
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 10.9.2020
+  Features:
+    - Added memory unit communicators. These can disable map icons and alerts for specfic units.
+    - Added a library module. This will make it easier for me to apply changes to this and the main mod
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 10.7.2020
+  Features:
+    - Fixed a bug that caused units to waste FPS when they were empty
+    - Fluid units will now work if they are above 90% power, instead of having to be 100%
+    - Fixed empty memory element cycling
+    - Fixed a crash when you removed a mod that added a fluid that was stored in a unit
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 10.4.2020
+  Features:
+    - Compatible with space exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 9.17.2020
+  Features:
+    - You can now store circuit connections in blueprints
+    - Compatible with space exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 9.16.2020
+  Features:
+    - Improved error handling when a unit is corrupted
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 9.16.2020
+  Features:
+    - Changed recipe for empty element
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 9.15.2020
+  Features:
+    - Increased update rate from 4 sec to 1 sec
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 9.12.2020
+  Features:
+    - Added empty memory elements
+    - Fixed a crash whenever you tried to start a tutorial
+    - Added map tags
+    - Added an icon when the unit is on low power
+    - New thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 9.11.2020
+  Features:
+    - Added support for cloning the unit. A stepping stone to full space exploration compatiblity
+    - Added a setting to remove warehouses in krastorio
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 9.10.2020
+  Features:
+    - Removed log spam
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 9.10.2020
+  Features:
+    - Fix issue with space exploration
+    - Added setting for 0 power usage
+    - Changed some descriptions
+    - Allowed fluid tempatures in the future
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 9.10.2020
+  Features:
+    - Fix that units sometimes went inactive
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 9.9.2020
+  Features:
+    - No power icon now renders in the center of objects.
+    - Added a setting to change power usage
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 9.5.2020
+  Features:
+    - Fixed a killer bug.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 9.5.2020
+  Features:
+    - Made a new addon for fluids
+    - Increased power usage
+    - Fixed an issue with the item count display
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 9.2.2020
+  Features:
+    - Fixed a corruption
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 9.2.2020
+  Features:
+    - Better support for deconstruction planner
+    - Fixed the crash that I thought I fixed last update but I actually didn't
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 9.2.2020
+  Features:
+    - Fixed a rare crash
+    - Breaking a memory unit will no longer spill 6 rows of item into your inventory
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 9.1.2020
+  Features:
+    - Added numbers up to 999.9 nongennovemnonagintillion
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 9.1.2020
+  Features:
+    - Changed the sprite for the memory unit
+    - Improve UPS
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 8.30.2020
+  Features:
+    - Changed tech icon
+    - Changed memory element icon
+    - Added an API for other mods to change stuff in the memory unit
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 8.30.2020
+  Features:
+    - Renamed deep storage units to memory units
+    - Renamed storage data to memory elements
+    - Improved the item icon for the memory unit
+    - Memory unit can now connect to the cirucit network
+    - Fixed a crash when you used explosive rockets on the memory unit
+    - Increased the base power drain from 60W to 60kW
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 8.28.2020
+  Features:
+    - Added a command to give a storage data
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 8.27.2020
+  Features:
+    - Added names for numbers up to 999 vigintillion
+    - Fixed spelling of undecillion
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 8.27.2020
+  Features:
+    - New thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 8.27.2020
+  Features:
+    - Initial release

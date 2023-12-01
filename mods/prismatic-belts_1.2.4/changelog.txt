@@ -1,0 +1,70 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2023-07-02
+  Locale:
+    - Added partial support for Japanese
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2023-04-01
+  Locale:
+    - Added partial support for Spanish, Simplified Chinese localizations
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022-03-29
+  Locale:
+    - Added Ukrainian localization
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2021-09-12
+  Locale:
+    - Added Brazilian Portuguese localization
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2021-08-05
+  Features:
+    - Completed function `prismatic_belts.logistics_technology_icon`
+    - Logistics-type technologies in all supported mods are now reskinned to be visually consistent with the colored belt surfaces
+  Changes:
+    - Revised flib migration module importing, modifying function `is_newer_version`, and adding additional functions `is_older_version`, `is_version_or_older`, `is_version`, and `is_version_or_newer` at `prismatic_belts.migration`
+    - Added additional color masks to support underlying masking changes in Artisanal Reskins version 2.0.0+
+    - Revised spritesheet generation functions for simplicity and to support using Artisanal Reskin style spritesheets; does not break API
+  Bugfixes:
+    - Fixed that the transport belt animation set function used the wrong spritesheet when `brighten_arrows` was set to `true`
+    - Fixed that the `tint` parameter was not truly optional for the function `prismatic_belts.transport_belt_icon`
+  Locale:
+    - Added Russian localization
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-03-13
+  Locale:
+    - Added German localization
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-03-04
+  Changes:
+    - Now optionally dependent on Artisanal Reskins: Library version 1.1.3, and tier labels respect Artisanal Reskins: Bob's Mods setting "Bob's Logisitcs"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-02-26
+  Changes:
+    - Images are now losslessly compressed, instead of lossy; there is a modest increase in filesize
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-02-19
+  Bugfixes:
+    - Fixed minor visual issues with the tintable spritesheets
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-02-19
+  Bugfixes:
+    - Fixed that the version of Artisanal Reskins that was supported was the development version
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-02-18
+  Features:
+    - Initial release
+    - Reskins the transport belt surface to colors that match the arrows, and updates related icons, structures, and remnants
+    - Supports belts from Bob's Logistics, Krastorio 2, Ultimate Belts, Factorio Extended Plus and Random Factorio Things
+    - Supports loaders from Miniloaders, Loader Redux, Deadlock Stacking Beltboxes & Loaders and Vanilla Loaders
+    - Supports Artisanal Reskins tier labels and custom colors
+    - Public-facing API for mod authors to create their own colored transport belts, see FAQ for details

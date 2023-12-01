@@ -1,0 +1,10 @@
+{
+  "name": "VehicleSnap",
+  "version": "1.18.5",
+  "title": "VehicleSnap",
+  "author": "Zaflis",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=25501",
+  "description": "Smoothly snaps movement angle when driving vehicles.",
+  "dependencies": [ "! cardinal" ],
+  "factorio_version": "1.1"
+}

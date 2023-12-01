@@ -1,0 +1,25 @@
+{
+	"name": "combat-mechanics-overhaul",
+	"version": "0.6.24",
+	"title": "Combat Mechanics Overhaul",
+	"author": "Earendel",
+	"dependencies": [
+		"base >= 1.1.0",
+		"(?) jetpack"
+	],
+	"description": "Overhauls certain combat mechanics and collision settings. Walls block most enemy projectiles from shooting over them such as spitters and enemy shotgun shells. Your projectiles can still go over your own walls without problems. Flying units vehicles can fly over walls, but can still be hit by projectiles. Units and structures are assigned the appropriate biological/mechanical and flying/ground-unit/ground-static tags so that can be affected by or immune to certain effects. Has multiple mod options including things like flying units and vehicles to not be affected by acid pools on the ground. Also provides some collision utilities to for other mods.",
+	"factorio_version": "1.1",
+	"homepage": "https://discord.gg/ymjUVMv",
+  "package": {
+    "ignore": ["**"],
+    "extra": [
+      { 
+        "root": ".build"
+      }
+    ],
+    "scripts": {
+      "datestamp": "sh ./build-scripts/datestamp.sh",
+      "prepackage": "sh ./build-scripts/prepackage.sh"
+    }
+  }
+}

@@ -39,6 +39,21 @@
     },
     
     {
+      "name": "alien-biomes",
+      "enabled": true
+    },
+    
+    {
+      "name": "alien-biomes-hr-terrain",
+      "enabled": true
+    },
+    
+    {
+      "name": "alien-biomes-settings",
+      "enabled": true
+    },
+    
+    {
       "name": "angels-smelting-extended",
       "enabled": true
     },
@@ -70,6 +85,11 @@
     
     {
       "name": "angelssmelting",
+      "enabled": true
+    },
+    
+    {
+      "name": "ArmouredBiters",
       "enabled": true
     },
     
@@ -119,7 +139,17 @@
     },
     
     {
+      "name": "Bioluminescence",
+      "enabled": true
+    },
+    
+    {
       "name": "Bio_Industries",
+      "enabled": true
+    },
+    
+    {
+      "name": "blueprint-sandboxes",
       "enabled": true
     },
     
@@ -249,6 +279,11 @@
     },
     
     {
+      "name": "combat-mechanics-overhaul",
+      "enabled": true
+    },
+    
+    {
       "name": "CoppermineBobModuleRebalancing",
       "enabled": true
     },
@@ -294,6 +329,11 @@
     },
     
     {
+      "name": "DragonIndustries",
+      "enabled": true
+    },
+    
+    {
       "name": "efficient-research",
       "enabled": true
     },
@@ -305,6 +345,16 @@
     
     {
       "name": "Enhanced_Map_Colors",
+      "enabled": true
+    },
+    
+    {
+      "name": "erm_libs",
+      "enabled": true
+    },
+    
+    {
+      "name": "erm_zerg_hd_assets",
       "enabled": true
     },
     
@@ -340,6 +390,11 @@
     
     {
       "name": "factorissimo-2-notnotmelon",
+      "enabled": true
+    },
+    
+    {
+      "name": "factoryplanner",
       "enabled": true
     },
     
@@ -569,6 +624,16 @@
     },
     
     {
+      "name": "Natural_Evolution_Enemies",
+      "enabled": true
+    },
+    
+    {
+      "name": "Natural_Evolution_Graphics",
+      "enabled": true
+    },
+    
+    {
       "name": "nco-InserterCranes",
       "enabled": true
     },
@@ -585,6 +650,11 @@
     
     {
       "name": "NightBrightness",
+      "enabled": true
+    },
+    
+    {
+      "name": "nixie-tubes",
       "enabled": true
     },
     
@@ -704,6 +774,11 @@
     },
     
     {
+      "name": "PipeMeterWLK",
+      "enabled": true
+    },
+    
+    {
       "name": "PipeVisualizer",
       "enabled": true
     },
@@ -759,7 +834,22 @@
     },
     
     {
+      "name": "RampantEvolution",
+      "enabled": true
+    },
+    
+    {
+      "name": "RateCalculator",
+      "enabled": true
+    },
+    
+    {
       "name": "RealisticDecorationCleanup",
+      "enabled": true
+    },
+    
+    {
+      "name": "RecipeBook",
       "enabled": true
     },
     
@@ -770,7 +860,7 @@
     
     {
       "name": "research_evolution_factor",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -874,6 +964,11 @@
     },
     
     {
+      "name": "simhelper",
+      "enabled": true
+    },
+    
+    {
       "name": "SingleColorTerrain",
       "enabled": true
     },
@@ -895,6 +990,21 @@
     
     {
       "name": "Squeak Through",
+      "enabled": true
+    },
+    
+    {
+      "name": "StatsGui",
+      "enabled": true
+    },
+    
+    {
+      "name": "StatsGui-HandcraftTimer",
+      "enabled": true
+    },
+    
+    {
+      "name": "StatsGui-MovementSpeed",
       "enabled": true
     },
     

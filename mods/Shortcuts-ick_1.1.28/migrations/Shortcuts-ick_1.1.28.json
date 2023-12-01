@@ -1,0 +1,10 @@
+{
+    "custom-input":
+    [
+        ["artillery-cluster-remote", "artillery-cluster-remote-artillery-shell"]
+    ],
+    "shortcut":
+    [
+        ["artillery-cluster-remote", "artillery-cluster-remote-artillery-shell"]
+    ]
+}
