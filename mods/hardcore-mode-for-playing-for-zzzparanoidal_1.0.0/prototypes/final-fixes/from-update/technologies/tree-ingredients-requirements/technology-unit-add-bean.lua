@@ -43,6 +43,16 @@ end
 TechnologyUnitAddBean.addTokenBioToTechnologyUnits = function(technology_names, mode)
 	addSciencePacksToTechnologyUnitsByNames(technology_names, mode, { "token-bio", 1 })
 end
+TechnologyUnitAddBean.addAdvancedLogisticSciencePackToTechnologyUnits = function(technology_names, mode)
+	addSciencePacksToTechnologyUnitsByNames(technology_names, mode, { "advanced-logistic-science-pack", 1 })
+end
+TechnologyUnitAddBean.addModuleCaseToTechnologyUnits = function(technology_names, mode)
+	addSciencePacksToTechnologyUnitsByNames(technology_names, mode, { "module-case", 1 })
+end
+
+TechnologyUnitAddBean.addModuleCircuitBoardToTechnologyUnits = function(technology_names, mode)
+	addSciencePacksToTechnologyUnitsByNames(technology_names, mode, { "module-circuit-board", 1 })
+end
 
 TechnologyUnitAddBean.addSpaceSciencePackToTechnologyUnits = function(technology_names, mode)
 	addSciencePacksToTechnologyUnitsByNames(technology_names, mode, { "space-science-pack", 1 })

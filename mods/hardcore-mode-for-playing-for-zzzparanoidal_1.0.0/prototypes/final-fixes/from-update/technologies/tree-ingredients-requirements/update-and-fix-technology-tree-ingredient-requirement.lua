@@ -42,6 +42,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-piercing-rocket",
 		"bob-electric-rocket",
 		"bob-explosive-rocket",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addLogisticSciencePackToTechnologyUnits({
 		"alloy-processing",
@@ -97,6 +98,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-electric-rocket",
 		"bob-explosive-rocket",
 		"CW-air-filtering-1",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addChemicalSciencePackToTechnologyUnits({
 		"chlorine-processing-2",
@@ -164,6 +166,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-piercing-rocket",
 		"bob-electric-rocket",
 		"bob-explosive-rocket",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addProductionSciencePackToTechnologyUnits({
 		"utility-science-pack",
@@ -269,6 +272,12 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-ore-refining-5",
 		--"advanced-ore-refining-4",
 		"thermobaric-weaponry",
+		"angels-steel-smelting-3",
+		"angels-iron-smelting-3",
+		"advanced-osmium-smelting",
+		"fuel-cells",
+		"fusion-reactor-equipment",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -395,6 +404,20 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-ore-refining-5",
 		"advanced-ore-refining-4",
 		"thermobaric-weaponry",
+		"angels-steel-smelting-3",
+		"angels-iron-smelting-3",
+		"angels-metallurgy-5",
+		"orbital-autonomous-fabricators",
+		"advanced-osmium-smelting",
+		"astrometrics",
+		"fuel-cells",
+		"habitation",
+		"life-support-systems",
+		"space-casings",
+		"space-thrusters",
+		"spaceship-command",
+		"ftl-propulsion",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addEffectivityProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -521,6 +544,20 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-ore-refining-5",
 		"advanced-ore-refining-4",
 		"thermobaric-weaponry",
+		"angels-steel-smelting-3",
+		"angels-iron-smelting-3",
+		"angels-metallurgy-5",
+		"orbital-autonomous-fabricators",
+		"advanced-osmium-smelting",
+		"astrometrics",
+		"fuel-cells",
+		"habitation",
+		"life-support-systems",
+		"space-casings",
+		"space-thrusters",
+		"spaceship-command",
+		"ftl-propulsion",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addSpeedProcessorToTechnologyUnits({
 		"production-science-pack",
@@ -649,6 +686,20 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-ore-refining-5",
 		"advanced-ore-refining-4",
 		"thermobaric-weaponry",
+		"angels-steel-smelting-3",
+		"angels-iron-smelting-3",
+		"angels-metallurgy-5",
+		"orbital-autonomous-fabricators",
+		"advanced-osmium-smelting",
+		"astrometrics",
+		"fuel-cells",
+		"habitation",
+		"life-support-systems",
+		"space-casings",
+		"space-thrusters",
+		"spaceship-command",
+		"ftl-propulsion",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addMilitarySciencePackToTechnologyUnits({
 		"physical-projectile-damage-5",
@@ -675,6 +726,7 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-piercing-rocket",
 		"bob-electric-rocket",
 		"bob-explosive-rocket",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addUtilitySciencePackToTechnologyUnits({
 		"bob-shotgun-shells",
@@ -712,6 +764,8 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bio-farm-advanced-upgrade",
 		"bio-refugium-hatchery-2",
 		"thermobaric-weaponry",
+		"angels-iron-smelting-3",
+		"atomic-bomb",
 	}, mode)
 	TechnologyUnitAddBean.addTokenBioToTechnologyUnits({
 		"bio-nutrient-paste",
@@ -747,11 +801,20 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"advanced-ore-refining-5",
 		"advanced-ore-refining-4",
 		"thermobaric-weaponry",
+		"angels-metallurgy-5",
+		"orbital-autonomous-fabricators",
 	}, mode)
+	TechnologyUnitAddBean.addAdvancedLogisticSciencePackToTechnologyUnits(
+		{ "advanced-research", "advanced-machining", "extremely-advanced-material-processing" },
+		mode
+	)
+	TechnologyUnitAddBean.addModuleCaseToTechnologyUnits({ "life-support-systems", "spaceship-command" }, mode)
+	TechnologyUnitAddBean.addModuleCircuitBoardToTechnologyUnits({ "life-support-systems", "spaceship-command" }, mode)
 	TechnologyUnitAddBean.addSpaceSciencePackToTechnologyUnits({
 		"stack-inserter-research-15",
 		"stack-inserter-research-5",
 		"stack-inserter-research-1",
+		"advanced-osmium-smelting",
 	}, mode)
 end
 local function updateNotFoundEffectesAndSciencePacksExpensive() end
