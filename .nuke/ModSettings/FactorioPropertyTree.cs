@@ -26,7 +26,7 @@ public class FactorioPropertyTree {
         => new(FactorioPropertyTreeType.List, value.ToList());
 
     public static FactorioPropertyTree Create(IReadOnlyDictionary<string, FactorioPropertyTree> value)
-        => new(FactorioPropertyTreeType.String, value.ToDictionary());
+        => new(FactorioPropertyTreeType.Dictionary, value.ToDictionary());
 
     public static FactorioPropertyTree ReadFromStream(ModSettingsSteamReader streamReader) {
         var type = (FactorioPropertyTreeType)streamReader.ReadByte();
@@ -43,6 +43,33 @@ public class FactorioPropertyTree {
         };
 
         return new FactorioPropertyTree(type, content);
+    }
+
+    public void WriteToStream(ModSettingsStreamWriter streamWriter) {
+        streamWriter.WriteByte((byte)Type);
+        streamWriter.WriteBool(false);
+
+        switch (Type) {
+            case FactorioPropertyTreeType.None:
+                break;
+            case FactorioPropertyTreeType.Bool:
+                streamWriter.WriteBool(AsBool());
+                break;
+            case FactorioPropertyTreeType.Number:
+                streamWriter.WriteDouble(AsNumber());
+                break;
+            case FactorioPropertyTreeType.String:
+                streamWriter.WriteString(AsString());
+                break;
+            case FactorioPropertyTreeType.List:
+                streamWriter.WriteList(AsList());
+                break;
+            case FactorioPropertyTreeType.Dictionary:
+                streamWriter.WriteDictionary(AsDictionary());
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     public FactorioPropertyTreeType Type { get; }
