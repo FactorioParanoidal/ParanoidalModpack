@@ -310,6 +310,21 @@ data:extend({
 data:extend({
 	{
 		type = "recipe",
+		name = "used-up-tritium-breeder-fuel-cell",
+		icon = "__True-Nukes__/graphics/used-up-tritium-breeder-fuel-cell.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "tritium-breeder-fuel-cell", amount = 1 } },
+		result = "used-up-tritium-breeder-fuel-cell",
+		result_count = 1,
+	},
+})
+
+data:extend({
+	{
+		type = "recipe",
 		name = "used-up-RITEG-1",
 		icon = "__base__/graphics/icons/used-up-uranium-fuel-cell.png",
 		icon_size = 64,
@@ -371,14 +386,8 @@ disableRecipes()
 local function addRecipeEffectsToTechnologies()
 	local technologies = data.raw["technology"]
 	local ore_crushing_technology = technologies["ore-crushing"]
-	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
-		ore_crushing_technology,
-		"angelsore5-crushed-processing"
-	)
-	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
-		ore_crushing_technology,
-		"angelsore6-crushed-processing"
-	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "angelsore5-crushed")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "angelsore6-crushed")
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "iron-plate")
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "copper-plate")
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "lead-plate")
@@ -407,6 +416,10 @@ local function addRecipeEffectsToTechnologies()
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
 		technologies["bob-nuclear-power-3"],
 		"used-up-deuterium-fuel-cell"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["tritium-processing"],
+		"used-up-tritium-breeder-fuel-cell"
 	)
 	--bob warfare mod восстанавливаем удалённые рецепты
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "bullet-casing")

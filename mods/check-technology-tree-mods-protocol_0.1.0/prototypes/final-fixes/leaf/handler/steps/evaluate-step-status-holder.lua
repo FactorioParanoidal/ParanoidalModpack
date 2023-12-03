@@ -242,7 +242,7 @@ local function getOccursTechnologyInAnotherTechnologyTree0(
 		return result
 	end
 	table.insert(visited_technologies, in_which_contain_technology_name)
-	log(in_which_contain_technology_name)
+	--log(in_which_contain_technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, in_which_contain_technology_name)
 	if not technology_status.tree then
 		return result
