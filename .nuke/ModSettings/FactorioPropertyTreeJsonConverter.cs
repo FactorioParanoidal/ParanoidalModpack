@@ -25,7 +25,7 @@ public class FactorioPropertyTreeJsonConverter : JsonConverter<FactorioPropertyT
             case JsonTokenType.String:
                 return FactorioPropertyTree.Create(reader.GetString()!);
             case JsonTokenType.Number:
-                return FactorioPropertyTree.Create(double.Parse(reader.GetString()!));
+                return FactorioPropertyTree.Create(reader.GetDouble());
             case JsonTokenType.True:
                 return FactorioPropertyTree.Create(true);
             case JsonTokenType.False:

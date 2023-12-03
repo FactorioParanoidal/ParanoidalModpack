@@ -8,7 +8,7 @@ namespace ModSettings;
 
 public class ModSettingsSteamReader {
     readonly Stream Stream;
-    /// <inheritdoc />
+
     public ModSettingsSteamReader(Stream stream) {
         Stream = stream;
     }
@@ -63,7 +63,10 @@ public class ModSettingsSteamReader {
         var elementCount = ReadUInt();
 
         var dict = new Dictionary<string, FactorioPropertyTree>((int)elementCount);
-        for (var i = 0; i < elementCount; i++) dict[ReadString()] = ReadPropertyTree();
+        for (var i = 0; i < elementCount; i++) {
+            var readString = ReadString();
+            dict[readString] = ReadPropertyTree();
+        }
 
         return dict;
     }

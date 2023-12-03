@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 
 namespace ModSettings;
 
 public static class ModSettingsConverter {
+    static Dictionary<string, PropertyInfo>? ModSettingsContentProperties;
+
     public static ModSettings Deserialize(Stream datFileStream) {
         var steamReader = new ModSettingsSteamReader(datFileStream);
 
@@ -21,19 +21,7 @@ public static class ModSettingsConverter {
         var modSettingsContent = new ModSettingsContent();
         foreach (var (key, value) in contentPropertyTree) {
             var jsonValues = value.AsDictionary()
-                .ToDictionary(pair => pair.Key, pair =>
-                {
-                    var propertyValue = pair.Value.AsDictionary()["value"];
-                    return propertyValue.Type switch {
-                        FactorioPropertyTreeType.None       => throw new NotSupportedException("Reading None from mod settings not supported"),
-                        FactorioPropertyTreeType.Bool       => JsonValue.Create(propertyValue.AsBool()),
-                        FactorioPropertyTreeType.Number     => JsonValue.Create(propertyValue.AsNumber()),
-                        FactorioPropertyTreeType.String     => JsonValue.Create(propertyValue.AsString()),
-                        FactorioPropertyTreeType.List       => JsonValue.Create(propertyValue.AsList()),
-                        FactorioPropertyTreeType.Dictionary => JsonValue.Create(propertyValue.AsDictionary()),
-                        _                                   => throw new ArgumentOutOfRangeException(nameof(pair.Value.Type))
-                    };
-                });
+                .ToDictionary(pair => pair.Key, pair => pair.Value.AsDictionary()["value"]);
 
             modSettingsContentProperties[key].SetValue(modSettingsContent, jsonValues);
         }
@@ -44,9 +32,34 @@ public static class ModSettingsConverter {
         };
     }
 
+    public static void Serialize(ModSettings modSettings, Stream stream) {
+        var streamWriter = new ModSettingsStreamWriter(stream);
+
+        streamWriter.WriteVersion(modSettings.Version);
+        streamWriter.WriteBool(false);
+
+        var factorioPropertyTrees = GetModSettingsContentProperties()
+            .ToDictionary(pair => pair.Key, pair =>
+            {
+                var jsonValueDictionary = (IReadOnlyDictionary<string, FactorioPropertyTree>)pair.Value.GetValue(modSettings.Content)!;
+                var valuedDictionary = jsonValueDictionary
+                    .ToDictionary(jsonPair => jsonPair.Key, jsonPair =>
+                    {
+                        var tempDictionary = new Dictionary<string, FactorioPropertyTree>() {
+                            { "value", jsonPair.Value }
+                        };
+                        return FactorioPropertyTree.Create(tempDictionary);
+                    });
+                return FactorioPropertyTree.Create(valuedDictionary);
+            });
+        var modSettingsContent = FactorioPropertyTree.Create(factorioPropertyTrees);
+        streamWriter.WritePropertyTree(modSettingsContent);
+    }
+
     static Dictionary<string, PropertyInfo> GetModSettingsContentProperties() {
+        if (ModSettingsContentProperties is not null) return ModSettingsContentProperties;
         var modSettingsContentType = typeof(ModSettingsContent);
         var propertyInfos = modSettingsContentType.GetProperties();
-        return propertyInfos.ToDictionary(info => ((JsonPropertyAttribute)info.GetCustomAttribute(typeof(JsonPropertyAttribute))!).PropertyName!);
+        return ModSettingsContentProperties = propertyInfos.ToDictionary(info => ((JsonPropertyAttribute)info.GetCustomAttribute(typeof(JsonPropertyAttribute))!).PropertyName!);
     }
 }
