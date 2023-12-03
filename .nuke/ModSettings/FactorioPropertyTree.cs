@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ModSettings;
 
@@ -8,6 +9,24 @@ public class FactorioPropertyTree {
         Type = type;
         Value = value;
     }
+
+    public static FactorioPropertyTree CreateNone()
+        => new(FactorioPropertyTreeType.None, null);
+
+    public static FactorioPropertyTree Create(double value)
+        => new(FactorioPropertyTreeType.Number, value);
+
+    public static FactorioPropertyTree Create(bool value)
+        => new(FactorioPropertyTreeType.Bool, value);
+
+    public static FactorioPropertyTree Create(string value)
+        => new(FactorioPropertyTreeType.String, value);
+
+    public static FactorioPropertyTree Create(IEnumerable<FactorioPropertyTree> value)
+        => new(FactorioPropertyTreeType.List, value.ToList());
+
+    public static FactorioPropertyTree Create(IReadOnlyDictionary<string, FactorioPropertyTree> value)
+        => new(FactorioPropertyTreeType.String, value.ToDictionary());
 
     public static FactorioPropertyTree ReadFromStream(ModSettingsSteamReader streamReader) {
         var type = (FactorioPropertyTreeType)streamReader.ReadByte();
@@ -38,9 +57,9 @@ public class FactorioPropertyTree {
     public string AsString()
         => (string)Value!;
 
-    public List<FactorioPropertyTree> AsList()
-        => (List<FactorioPropertyTree>)Value!;
+    public IReadOnlyList<FactorioPropertyTree> AsList()
+        => (IReadOnlyList<FactorioPropertyTree>)Value!;
 
-    public Dictionary<string, FactorioPropertyTree> AsDictionary()
-        => (Dictionary<string, FactorioPropertyTree>)Value!;
+    public IReadOnlyDictionary<string, FactorioPropertyTree> AsDictionary()
+        => (IReadOnlyDictionary<string, FactorioPropertyTree>)Value!;
 }
