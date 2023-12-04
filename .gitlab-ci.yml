@@ -11,8 +11,7 @@ stages:
 
 launch-ability:
   only:
-    - pushes
-    - changes
+    changes:
       - mods/**
   stage: launchability
   script:
