@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 namespace ModSettings;
 
 public class FactorioPropertyTreeJsonConverter : JsonConverter<FactorioPropertyTree> {
+    const string AnyTypeFlagPropertyName = "anyTypeFlag";
+    const string ValuePropertyName = "value";
     /// <inheritdoc />
     public override FactorioPropertyTree? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         switch (reader.TokenType) {
@@ -14,9 +16,9 @@ public class FactorioPropertyTreeJsonConverter : JsonConverter<FactorioPropertyT
                 return FactorioPropertyTree.CreateNone();
             case JsonTokenType.StartObject:
                 var jElementObject = JsonElement.ParseValue(ref reader);
-                var propertyTrees = jElementObject.EnumerateObject()
-                    .ToDictionary(property => property.Name, property => property.Value.Deserialize<FactorioPropertyTree>(options)!);
-                return FactorioPropertyTree.Create(propertyTrees);
+                return jElementObject.TryGetProperty(AnyTypeFlagPropertyName, out var anyTypeFlagElement)
+                    ? ProcessAnyTypeFlagElement(anyTypeFlagElement, jElementObject, options)
+                    : EnumerateToPropertyTree(jElementObject.EnumerateObject(), options, false);
             case JsonTokenType.StartArray:
                 var jElementArray = JsonElement.ParseValue(ref reader);
                 var factorioPropertyTrees = jElementArray.EnumerateArray()
@@ -38,9 +40,51 @@ public class FactorioPropertyTreeJsonConverter : JsonConverter<FactorioPropertyT
                 throw new JsonException("Can't read FactorioPropertyTree from this JSON");
         }
     }
+    static FactorioPropertyTree? ProcessAnyTypeFlagElement(JsonElement anyTypeFlagElement, JsonElement jElementObject, JsonSerializerOptions options) {
+        var anyTypeFlag = anyTypeFlagElement.GetBoolean();
+        var actualValueElement = jElementObject.GetProperty(ValuePropertyName);
+        switch (actualValueElement.ValueKind) {
+            case JsonValueKind.Null:
+            case JsonValueKind.Undefined:
+                return FactorioPropertyTree.CreateNone(anyTypeFlag);
+            case JsonValueKind.Object:
+                return EnumerateToPropertyTree(actualValueElement.EnumerateObject(), options, anyTypeFlag);
+            case JsonValueKind.Array:
+                var factorioPropertyTrees = actualValueElement.EnumerateArray()
+                    .Select(element => element.Deserialize<FactorioPropertyTree>(options)!);
+                return FactorioPropertyTree.Create(factorioPropertyTrees, anyTypeFlag);
+            case JsonValueKind.String:
+                return FactorioPropertyTree.Create(actualValueElement.GetString()!, anyTypeFlag);
+            case JsonValueKind.Number:
+                return FactorioPropertyTree.Create(actualValueElement.GetDouble(), anyTypeFlag);
+            case JsonValueKind.True:
+                return FactorioPropertyTree.Create(true, anyTypeFlag);
+            case JsonValueKind.False:
+                return FactorioPropertyTree.Create(false, anyTypeFlag);
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    static FactorioPropertyTree? EnumerateToPropertyTree(JsonElement.ObjectEnumerator objectEnumerator, JsonSerializerOptions options, bool anyTypeFlag) {
+        var propertyTrees = objectEnumerator.ToDictionary(property => property.Name, property => property.Value.Deserialize<FactorioPropertyTree>(options)!);
+        return FactorioPropertyTree.Create(propertyTrees, anyTypeFlag);
+    }
 
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, FactorioPropertyTree tree, JsonSerializerOptions options) {
+        if (tree.AnyTypeFlag) {
+            writer.WriteStartObject();
+            writer.WriteBoolean(AnyTypeFlagPropertyName, tree.AnyTypeFlag);
+            writer.WritePropertyName(ValuePropertyName);
+            WriteValue(writer, tree, options);
+            writer.WriteEndObject();
+        }
+        else
+            WriteValue(writer, tree, options);
+    }
+
+    static void WriteValue(Utf8JsonWriter writer, FactorioPropertyTree tree, JsonSerializerOptions options) {
         switch (tree.Type) {
             case FactorioPropertyTreeType.None:
                 writer.WriteNullValue();
