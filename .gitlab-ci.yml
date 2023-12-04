@@ -12,6 +12,8 @@ stages:
 launch-ability:
   only:
     - pushes
+    - changes
+      - mods/**
   stage: launchability
   script:
     - ./build.sh EnsureLaunchability
