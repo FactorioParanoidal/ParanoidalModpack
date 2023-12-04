@@ -5,32 +5,33 @@ using System.Linq;
 namespace ModSettings;
 
 public class FactorioPropertyTree {
-    FactorioPropertyTree(FactorioPropertyTreeType type, object? value) {
+    FactorioPropertyTree(FactorioPropertyTreeType type, object? value, bool anyTypeFlag = false) {
         Type = type;
         Value = value;
+        AnyTypeFlag = anyTypeFlag;
     }
 
-    public static FactorioPropertyTree CreateNone()
-        => new(FactorioPropertyTreeType.None, null);
+    public static FactorioPropertyTree CreateNone(bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.None, null, anyTypeFlag);
 
-    public static FactorioPropertyTree Create(double value)
-        => new(FactorioPropertyTreeType.Number, value);
+    public static FactorioPropertyTree Create(double value, bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.Number, value, anyTypeFlag);
 
-    public static FactorioPropertyTree Create(bool value)
-        => new(FactorioPropertyTreeType.Bool, value);
+    public static FactorioPropertyTree Create(bool value, bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.Bool, value, anyTypeFlag);
 
-    public static FactorioPropertyTree Create(string value)
-        => new(FactorioPropertyTreeType.String, value);
+    public static FactorioPropertyTree Create(string value, bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.String, value, anyTypeFlag);
 
-    public static FactorioPropertyTree Create(IEnumerable<FactorioPropertyTree> value)
-        => new(FactorioPropertyTreeType.List, value.ToList());
+    public static FactorioPropertyTree Create(IEnumerable<FactorioPropertyTree> value, bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.List, value.ToList(), anyTypeFlag);
 
-    public static FactorioPropertyTree Create(IReadOnlyDictionary<string, FactorioPropertyTree> value)
-        => new(FactorioPropertyTreeType.Dictionary, value.ToDictionary());
+    public static FactorioPropertyTree Create(IReadOnlyDictionary<string, FactorioPropertyTree> value, bool anyTypeFlag = false)
+        => new(FactorioPropertyTreeType.Dictionary, value.ToDictionary(), anyTypeFlag);
 
     public static FactorioPropertyTree ReadFromStream(ModSettingsSteamReader streamReader) {
         var type = (FactorioPropertyTreeType)streamReader.ReadByte();
-        _ = streamReader.ReadBool();
+        var anyTypeFlag = streamReader.ReadBool();
 
         object? content = type switch {
             FactorioPropertyTreeType.None       => null,
@@ -42,12 +43,12 @@ public class FactorioPropertyTree {
             _                                   => throw new ArgumentOutOfRangeException(nameof(type), "No such PropertyTree type supported")
         };
 
-        return new FactorioPropertyTree(type, content);
+        return new FactorioPropertyTree(type, content, anyTypeFlag);
     }
 
     public void WriteToStream(ModSettingsStreamWriter streamWriter) {
         streamWriter.WriteByte((byte)Type);
-        streamWriter.WriteBool(false);
+        streamWriter.WriteBool(AnyTypeFlag);
 
         switch (Type) {
             case FactorioPropertyTreeType.None:
@@ -74,6 +75,12 @@ public class FactorioPropertyTree {
 
     public FactorioPropertyTreeType Type { get; }
     public object? Value { get; }
+
+    /// <remarks>
+    /// 1 bool the any-type flag (currently not important outside of Factorio internals; default value is false)
+    /// according to https://wiki.factorio.com/Property_tree
+    /// </remarks>
+    public bool AnyTypeFlag { get; }
 
     public bool AsBool()
         => (bool)Value!;

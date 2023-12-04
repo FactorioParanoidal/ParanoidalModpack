@@ -42,10 +42,19 @@ public class ModSettingsStreamWriter {
         }
     }
 
+    /// <remarks>
+    /// 1 bool if there is no string - then, if there is a string:
+    /// 1 Space optimized unsigned int the size of the string
+    /// N byte the string contents
+    /// </remarks>
     public void WriteString(string value) {
-        WriteBool(value.Length == 0);
-        WriteSpaceOptimizedUInt((uint)value.Length);
-        Stream.Write(Encoding.UTF8.GetBytes(value));
+        // but factorio devs fucked up there
+        // and actually there is always be false
+        // even for empty strings there will be: `false 0` (length)
+        WriteBool(false);
+        var buffer = Encoding.UTF8.GetBytes(value);
+        WriteSpaceOptimizedUInt((uint)buffer.Length);
+        Stream.Write(buffer);
     }
 
     public void WriteList(IReadOnlyList<FactorioPropertyTree> list) {
