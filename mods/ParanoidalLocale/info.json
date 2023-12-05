@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "factorio_version": "1.1",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -149,6 +149,21 @@
     "? zzzparanoidal",
     "? PMRPGsystem",
     "? mining-patch-planner",
-    "? fluid_permutations"
+    "? fluid_permutations",
+    "? RecipeBook",
+    "? DragonIndustries",
+    "? combat-mechanics-overhaul",
+    "? alien-biomes-settings",
+    "? Natural_Evolution_Enemies",
+    "? nixie-tubes",
+    "? StatsGui-MovementSpeed",
+    "? RampantEvolution",
+    "? StatsGui-HandcraftTimer",
+    "? factoryplanner",
+    "? PipeVisualizer",
+    "? blueprint-sandboxes",
+    "? PipeMeterWLK",
+    "? StatsGui",
+    "? Bioluminescence"
   ]
 }
