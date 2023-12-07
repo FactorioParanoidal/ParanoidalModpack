@@ -47,8 +47,12 @@ function on_nth_tick()
     local season = get_season (digit_season)
     local last_season = global.season or '1'
     if not (season == last_season) and (period > 31) then
-      game.print ('Now is '..season)
-    end
+      if season == 'summer' then game.print ('Наступило ЛЕТО') --drd
+		elseif season == 'fall' then game.print ('Наступила ОСЕНЬ') --drd
+		elseif season == 'winter' then game.print ('Наступила ЗИМА') --drd
+		elseif season == 'spring' then game.print ('Наступила ВЕСНА') --drd
+		end --drd
+	end
     global.season = season
     
     local phase = math.cos ((day/period)*(2*math.pi))
