@@ -89,6 +89,10 @@ salvaged_offsore_pump_0_recipe.ingredients = {
 		amount = 3,
 	},
 }
+data.raw["recipe"]["bi-wood-pipe"]["normal"].ingredients = { { "wood", 12 } }
+data.raw["recipe"]["bi-wood-pipe"]["expensive"].ingredients = { { "wood", 16 } }
+data.raw["recipe"]["bi-wood-pipe-to-ground"]["normal"].ingredients = { { "wood", 16 }, { "bi-wood-pipe", 5 } }
+data.raw["recipe"]["bi-wood-pipe-to-ground"]["expensive"].ingredients = { { "wood", 20 }, { "bi-wood-pipe", 6 } }
 
 local salvaged_mining_drill_recipe = copy_salvaged_recipe("burner-mining-drill", "salvaged-mining-drill")
 salvaged_mining_drill_recipe.ingredients = {
@@ -397,7 +401,7 @@ local function addRecipeEffectsToTechnologies()
 	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "angelsore6-crushed-smelting")
 	local steam_power_technology = technologies["steam-power"]
 	if steam_power_technology then
-		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, createSteamRecipe())
+		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, createSteamRecipe().name)
 		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, "steam-assembling-machine")
 		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, "steam-mining-drill")
 	end

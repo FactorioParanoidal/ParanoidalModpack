@@ -101,6 +101,10 @@ end
 TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	EvaluatingStepStatusHolder.initForMode(mode)
 	local technology_names_count = #technology_names
+	_table.each(technology_names, function(technology_name)
+		log("technology_name " .. technology_name)
+		log("technology " .. Utils.dump_to_console(technology))
+	end)
 	evaluateTechnologyProperties(technology_names, mode, technology_names_count)
 	validateTechnologyPrerequisitesNoHidden(technology_names, mode, technology_names_count)
 	validateTechnologyEffectsNoHidden(technology_names, mode, technology_names_count)
