@@ -1,4 +1,6 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
+require("__hardcore-mode-for-playing__.prototypes.basic-technologies")
 local function resetBasicTechnologyPrerequisitesToNormalTree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.resetTechnologyPrerequisites(technologies["factory-architecture-t1"], { "basic-researching" }, mode)
@@ -80,10 +82,36 @@ local function removePrerequisitesFromTechnologies(mode)
 	techUtil.removePrerequisitesFromTechnology(technologies["advanced-electronics"], { "offshore-pump-2" }, mode)
 end
 
+local function createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
+	--[[local resource_recipes = createResourceRecipes()
+	local active_technology_names = techUtil.getAllActiveTechnologyNames(mode)
+	_table.each(resource_recipes, function(resource_recipe)
+		local resource_recipe_name = resource_recipe.name
+		local results = recipeUtil.getAllRecipeResults(resource_recipe_name, mode)
+		local recipe_result = results[1]
+		_table.each(active_technology_names, function(active_technology_name)
+			local recipe_ingredients = techUtil.getAllRecipesIngredientsForSpecifiedTechnology(active_technology_name)
+			if _table.contains_f_deep(recipe_ingredients, recipe_result) then
+				techUtil.addRecipeEffectToTechnologyEffects(resource_recipe_name)
+				log(
+					"for technology "
+						.. active_technology_name
+						.. " mode "
+						.. mode
+						.. " added recipe effect "
+						.. resource_recipe_name
+				)
+			end
+		end)
+	end)
+	--TreeRecipeUtil.]]
+end
+
 _table.each(GAME_MODES, function(mode)
 	resetBasicTechnologyPrerequisitesToNormalTree(mode)
 	addPrerequisitesToTechnologies(mode)
 	removePrerequisitesFromTechnologies(mode)
 	removeRecipeEffectsFromTechnologies(mode)
 	moveRecipesToNewTechnologies(mode)
+	--createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
 end)

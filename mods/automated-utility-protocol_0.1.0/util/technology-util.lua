@@ -96,8 +96,9 @@ end
 TechUtil.getAllActiveTechnologyNames = function(mode)
 	local result = {}
 	_table.each(data.raw["technology"], function(technology_candidate)
-		local technology = getModedTechnology(technology_candidate, mode)
 		local technology_name = technology_candidate.name
+		local technology = getModedTechnology(technology_candidate, mode)
+
 		if not technology.hidden then
 			table.insert(result, technology_name)
 		end

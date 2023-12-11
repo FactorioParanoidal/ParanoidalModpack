@@ -3,9 +3,9 @@ TechnologyUnitAddBean = {}
 TechnologyUnitAddBean.technology_datas = data.raw["technology"]
 local function addSciencePacksToTechnologyUnitsByNames(technology_names, mode, unit_ingredient)
 	_table.each(technology_names, function(technology_name)
-		log(
+		--[[log(
 			" for technology_name " .. technology_name .. " add science pack " .. Utils.dump_to_console(unit_ingredient)
-		)
+		)]]
 		techUtil.addSciencePacksToTechnologyUnits(
 			TechnologyUnitAddBean.technology_datas[technology_name],
 			{ unit_ingredient },

@@ -6,9 +6,14 @@ TechnologyNoHiddenValidatingStep.evaluate = function(technology_name, mode)
 	end
 	_table.each(tree, function(tree_element_name)
 		local modedTreeElement = Utils.getModedObject(data.raw["technology"][tree_element_name], mode)
-		if not modedTreeElement or modedTreeElement.hidden then
+		if
+			not modedTreeElement
+			or modedTreeElement.hidden
+				-- исключаем технические технологии, которые будут являться маркерами при "знакомстве" с базовыми ресурсами
+				and not _string.ends_with(tree_element_name, "-detected-resource-technology")
+		then
 			error(
-				" for tehcnology "
+				" for technology "
 					.. technology_name
 					.. " prerequisite called "
 					.. tree_element_name

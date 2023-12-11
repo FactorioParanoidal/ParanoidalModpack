@@ -27,17 +27,30 @@ local function createBasicTechnology(
 		prerequisites = technology_prerequistes,
 		icon_size = icon_size,
 		icon = icon_name,
-		unit = {
+		normal={unit = {
 			ingredients = {
-				{ "salvaged-automation-science-pack", "1" },
+				{ "salvaged-automation-science-pack", 1 },
 			},
 			count = automation_science_pack_ingredient_count,
 			time = 60,
-		},
+		}},
+		expensive= {unit = {
+			ingredients = {
+				{ "salvaged-automation-science-pack", 1 },
+			},
+			count = automation_science_pack_ingredient_count,
+			time = 60,
+		}},
 		effects = technology_effects,
 	}
 end
 
+function createResourceDetectedTechnology(resource_name, icon_path, icon_size)
+	local technology_name = resource_name .. "-detected-resource-technology"
+	local result = createBasicTechnology(technology_name, {}, { "savlaged-automation-tech" }, 1, icon_path, icon_size)
+	result.hidden = true
+	return result
+end
 local function createBasicTechnologyTree()
 	local basic_recipes = {
 		"salvaged-mining-drill-bit-mk0",
@@ -47,24 +60,39 @@ local function createBasicTechnologyTree()
 		"salvaged-automation-science-pack",
 		"salvaged-generator",
 	}
-	_table.insert_all_if_not_exists(basic_recipes, createResourceRecipeNames())
+	local water_detected_tech = createResourceDetectedTechnology("water", "__base__/graphics/icons/water.png", 64)
+	-- исследование воды с помощью радара
+	local coal_detected_tech = createResourceDetectedTechnology("coal", "__base__/graphics/icons/coal.png", 64)
+	-- исследование дерева
+	local wood_detected_tech = createResourceDetectedTechnology("wood", "__base__/graphics/icons/wood.png", 64)
+
 	data:extend({
 		-- корень всего дерева технологий, даёт возможность добывать уголь.
 		createBasicTechnology(
-			"basic-automation-0",
+			"savlaged-automation-tech",
 			basic_recipes,
 			nil,
 			1,
 			"__base__/graphics/icons/assembling-machine-1.png",
 			64
 		),
+		water_detected_tech,
+		coal_detected_tech,
+		wood_detected_tech,
+		-- исследование воды с помощью радара
 		--[[ для добычи руды нужна вода, правда ты не сможешь ничего собрать, трубы у тебя будут, но не будет ресурсов для постройки труб.
 		На самом деле  деревянные трубы очень пригодятся, ведь железо на ранних этапах будет КРАЙНЕ ДОРОГИМ УДОВОЛЬСТВИЕМ, а разводку труб как-то делать придётся.
 		Так что технология только с виду бесполезная, да и медь будет уходить вовсе не на трубы, месторождения будут не такие богатые, чтобы не было перевода сразу всего на медь.]]
 		createBasicTechnology(
 			"coal-wooden-fluid-handling",
-			{ "bi-wood-pipe", "bi-wood-pipe-to-ground", "salvaged-offshore-pump-0" },
-			{ "basic-automation-0" },
+			{
+				"bi-wood-pipe",
+				"bi-wood-pipe-to-ground",
+				"salvaged-offshore-pump-0",
+				createWaterRecipe().name,
+				createWoodRecipe().name,
+			},
+			{ "savlaged-automation-tech", water_detected_tech.name, wood_detected_tech.name },
 			2,
 			"__base__/graphics/icons/offshore-pump.png",
 			64
@@ -72,8 +100,8 @@ local function createBasicTechnologyTree()
 		-- непосредственная добыча руд, для которых требуется лишь вода, пара не будет, стартовать придётся в относительно жёстких условиях.
 		createBasicTechnology(
 			"coal-ore-mining",
-			{ "salvaged-mining-drill" },
-			{ "coal-wooden-fluid-handling" },
+			{ "salvaged-mining-drill", createCoalRecipe().name },
+			{ "coal-wooden-fluid-handling", coal_detected_tech.name },
 			3,
 			"__base__/graphics/icons/burner-mining-drill.png",
 			64
@@ -121,19 +149,12 @@ local function createBasicTechnologyTree()
 			64
 		),
 		-- производство дерево - самое основное.
-		createBasicTechnology(
-			"basic-wood-production",
-			{
-				"coal-bi-bio-farm",
-				"coal-bi-bio-greenhouse",
-				"basic-coal-production-wood",
-				"basic-coal-production-seedling",
-			},
-			{ "coal-stone-smelting", "coal-ore-smelting", "coal-lighting" },
-			9,
-			"__base__/graphics/icons/wood.png",
-			64
-		),
+		createBasicTechnology("basic-wood-production", {
+			"coal-bi-bio-farm",
+			"coal-bi-bio-greenhouse",
+			"basic-coal-production-wood",
+			"basic-coal-production-seedling",
+		}, { "coal-stone-smelting", "coal-ore-smelting", "coal-lighting" }, 9, "__base__/graphics/icons/wood.png", 64),
 		createBasicTechnology(
 			"basic-storage-wood",
 			{ "wooden-chest" },
@@ -199,22 +220,15 @@ local function createBasicTechnologyTree()
 			"__angelsrefining__/graphics/icons/ore-crusher.png",
 			64
 		),
-		createBasicTechnology(
-			"basic-researching",
-			{ "burner-lab", "sci-component-1", "automation-science-pack" },
-			{
-				"basic-motor-processing",
-				"coal-ore-smelting",
-				"basic-metal-processing",
-				"coal-stone-smelting",
-				"military-0",
-				"burner-ore-mining",
-				"burner-ore-crushing",
-			},
-			18,
-			"__base__/graphics/icons/automation-science-pack.png",
-			64
-		),
+		createBasicTechnology("basic-researching", { "burner-lab", "sci-component-1", "automation-science-pack" }, {
+			"basic-motor-processing",
+			"coal-ore-smelting",
+			"basic-metal-processing",
+			"coal-stone-smelting",
+			"military-0",
+			"burner-ore-mining",
+			"burner-ore-crushing",
+		}, 18, "__base__/graphics/icons/automation-science-pack.png", 64),
 	})
 end
 

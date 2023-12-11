@@ -20,11 +20,6 @@ local function get_minable_datas()
 		end)
 	end)
 	_table.insert_all_if_not_exists(result, {
-		{ type = "item", name = "coal" },
-		{ type = "item", name = "wood" },
-		{ type = "item", name = "stone" },
-		--вода  - неочевидные рецепты
-		{ type = "fluid", name = "water" },
 		-- сады разных зон
 		{ type = "item", name = "swamp-garden" },
 		{ type = "item", name = "desert-garden" },
@@ -50,6 +45,7 @@ local function get_minable_datas()
 	})
 	return result
 end
+
 function getBasicFluidNames()
 	return _table.map(
 		_table.filter(get_minable_datas(), function(minable_data)
@@ -90,18 +86,33 @@ local function createBasicRecipe(basic_data, suffix)
 	data:extend({
 		recipe,
 	})
-	return resource_recipe_name
+	return recipe
 end
 
-function createResourceRecipeNames()
+function createResourceRecipes()
 	local minable_datas = get_minable_datas()
 	local result = {}
 	_table.each(minable_datas, function(minable_data)
-		table.insert(result, createBasicRecipe(minable_data, "mineable"))
+		table.insert(result, createBasicRecipe(minable_data, "minable"))
 	end)
 	return result
 end
-
+_table.each(createResourceRecipes(), function(recipe)
+	data:extend({
+		recipe,
+	})
+end)
 function createSteamRecipe()
 	return createBasicRecipe({ type = "fluid", name = "steam" }, "flamable")
+end
+
+function createWaterRecipe()
+	return createBasicRecipe({ type = "fluid", name = "water" }, "minable")
+end
+
+function createCoalRecipe()
+	return createBasicRecipe({ type = "item", name = "coal" }, "minable")
+end
+function createWoodRecipe()
+	return createBasicRecipe({ type = "item", name = "wood" }, "minable")
 end

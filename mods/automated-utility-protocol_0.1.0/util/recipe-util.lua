@@ -41,7 +41,7 @@ local function createTechnologyEffectResultFromRocketLaunchProduct(rocket_launch
 	end
 	local rocket_launch_product_data_type = rocket_launch_product_data.type or "item"
 	local rocket_launch_product_data_name = rocket_launch_product_data.name or rocket_launch_product_data[1]
-	log("rocket launch result type " .. rocket_launch_product_data_type .. " name " .. rocket_launch_product_data_name)
+	--log("rocket launch result type " .. rocket_launch_product_data_type .. " name " .. rocket_launch_product_data_name)
 	return {
 		name = rocket_launch_product_data_name,
 		type = rocket_launch_product_data_type,
