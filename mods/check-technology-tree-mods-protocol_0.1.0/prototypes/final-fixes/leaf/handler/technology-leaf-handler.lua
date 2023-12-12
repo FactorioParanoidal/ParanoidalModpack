@@ -103,7 +103,7 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	local technology_names_count = #technology_names
 	_table.each(technology_names, function(technology_name)
 		log("technology_name " .. technology_name)
-		log("technology " .. Utils.dump_to_console(technology))
+		log("technology " .. Utils.dump_to_console(data.raw["technology"][technology_name]))
 	end)
 	evaluateTechnologyProperties(technology_names, mode, technology_names_count)
 	validateTechnologyPrerequisitesNoHidden(technology_names, mode, technology_names_count)
