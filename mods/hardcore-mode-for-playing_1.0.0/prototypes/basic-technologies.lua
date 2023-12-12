@@ -13,42 +13,44 @@ local function createBasicTechnology(
 			return
 		end
 		data.raw["recipe"][recipe_name].enabled = false
-		if data.raw["recipe"][recipe_name].normal then
-			data.raw["recipe"][recipe_name].normal.enabled = false
-		end
-		if data.raw["recipe"][recipe_name].expensive then
-			data.raw["recipe"][recipe_name].expensive.enabled = false
-		end
 	end)
 	return {
 		type = "technology",
 		name = technology_name,
-		energy = 30,
-		prerequisites = technology_prerequistes,
 		icon_size = icon_size,
 		icon = icon_name,
-		normal={unit = {
-			ingredients = {
-				{ "salvaged-automation-science-pack", 1 },
+		normal = {
+			unit = {
+				ingredients = {
+					{ "salvaged-automation-science-pack", 1 },
+				},
+				count = automation_science_pack_ingredient_count,
+				time = 60,
 			},
-			count = automation_science_pack_ingredient_count,
-			time = 60,
-		}},
-		expensive= {unit = {
-			ingredients = {
-				{ "salvaged-automation-science-pack", 1 },
+			prerequisites = technology_prerequistes,
+			effects = technology_effects,
+			energy = 30,
+		},
+		expensive = {
+			unit = {
+				ingredients = {
+					{ "salvaged-automation-science-pack", 1 },
+				},
+				count = automation_science_pack_ingredient_count,
+				time = 60,
 			},
-			count = automation_science_pack_ingredient_count,
-			time = 60,
-		}},
-		effects = technology_effects,
+			prerequisites = technology_prerequistes,
+			effects = technology_effects,
+			energy = 30,
+		},
 	}
 end
 
 function createResourceDetectedTechnology(resource_name, icon_path, icon_size)
 	local technology_name = resource_name .. "-detected-resource-technology"
 	local result = createBasicTechnology(technology_name, {}, { "savlaged-automation-tech" }, 1, icon_path, icon_size)
-	result.hidden = true
+	result.normal.hidden = true
+	result.expensive.hidden = true
 	return result
 end
 local function createBasicTechnologyTree()
@@ -60,7 +62,7 @@ local function createBasicTechnologyTree()
 		"salvaged-automation-science-pack",
 		"salvaged-generator",
 	}
-	local water_detected_tech = createResourceDetectedTechnology("water", "__base__/graphics/icons/water.png", 64)
+	local water_detected_tech = createResourceDetectedTechnology("water", "__base__/graphics/icons/fluid/water.png", 64)
 	-- исследование воды с помощью радара
 	local coal_detected_tech = createResourceDetectedTechnology("coal", "__base__/graphics/icons/coal.png", 64)
 	-- исследование дерева

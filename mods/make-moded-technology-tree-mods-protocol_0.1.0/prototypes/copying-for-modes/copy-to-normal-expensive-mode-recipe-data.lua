@@ -56,7 +56,6 @@ local function mergeRecipeDataData(for_merging_recipe_data_mode, recipe_data_gen
 				for_merging_recipe_data_mode[recipe_data_field_name] = recipe_data_general[recipe_data_field_name]
 					or for_merging_recipe_data_mode[recipe_data_field_name]
 			end
-
 			return
 		end
 		if not for_merging_recipe_data_mode[recipe_data_field_name] then
@@ -64,9 +63,12 @@ local function mergeRecipeDataData(for_merging_recipe_data_mode, recipe_data_gen
 			return
 		end
 		if for_merging_recipe_data_mode[recipe_data_field_name] and recipe_data_general[recipe_data_field_name] then
-			_table.insert_all_if_not_exists(
+			_table.insert_all_if_not_exists_with_compare(
 				for_merging_recipe_data_mode[recipe_data_field_name],
-				recipe_data_general[recipe_data_field_name]
+				recipe_data_general[recipe_data_field_name],
+				function(o1, o2)
+					return ((o1.name or o1[1]) == (o2.name or o2[1])) and ((o1.type or "item") == (o2.type or "item"))
+				end
 			)
 		end
 	end)
@@ -87,16 +89,18 @@ local recipes = data.raw["recipe"]
 
 _table.each(GAME_MODES, function(mode)
 	_table.each(data.raw["recipe"], function(recipe)
-		--log("recipe_name " .. recipe_name)
+		log("recipe_name " .. recipe.name)
 		local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
 		if not recipe[mode] then
 			recipe[mode] = recipe_data
+			log("not found recipe mode " .. mode .. " replacing general data!")
 			return
 		end
 		local for_merging_recipe_data = recipe[mode]
-		--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
-		--log("recipe_data " .. Utils.dump_to_console(recipe_data))
+		log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
+		log("recipe_data " .. Utils.dump_to_console(recipe_data))
 		mergeRecipeDataData(for_merging_recipe_data, recipe_data)
+		log("merged_data " .. Utils.dump_to_console(for_merging_recipe_data))
 	end)
 end)
 local function clearRecipeData(recipe)
@@ -106,15 +110,15 @@ local function clearRecipeData(recipe)
 end
 
 _table.each(GAME_MODES, function(mode)
-	_table.each(data.raw["recipe"], function(recipe)
+	--[[_table.each(data.raw["recipe"], function(recipe)
 		clearRecipeData(recipe)
-		--[[log(
-				"for mode "
-					.. mode
-					.. " recipe named "
-					.. recipe_name
-					.. " is after copying for modes "
-					.. Utils.dump_to_console(recipe)
-			)]]
-	end)
+		log(
+			"for mode "
+				.. mode
+				.. " recipe named "
+				.. recipe.name
+				.. " is after copying for modes "
+				.. Utils.dump_to_console(recipe)
+		)
+	end)]]
 end)
