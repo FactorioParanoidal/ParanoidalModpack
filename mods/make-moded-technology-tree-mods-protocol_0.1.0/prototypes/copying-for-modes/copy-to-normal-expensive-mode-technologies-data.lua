@@ -1,4 +1,3 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local technology_data_field_names = {
 	"upgrade",
 	"enabled",
@@ -63,16 +62,13 @@ local function mergeTechnologyData(for_merging_technology_data_mode, technology_
 end
 
 _table.each(GAME_MODES, function(mode)
-	local technologies = data.raw["technology"]
-	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
-	_table.each(technology_names, function(technology_name)
-		local technology = technologies[technology_name]
+	_table.each(data.raw["technology"], function(technology)
 		local technology_data_general = createTechnologyDataFromGeneralTechnologyData(technology)
-		if not technologies[technology_name][mode] then
-			technologies[technology_name][mode] = technology_data_general
+		if not technology[mode] then
+			technology[mode] = technology_data_general
 			return
 		end
-		local for_merging_technology_data_mode = technologies[technology_name][mode]
+		local for_merging_technology_data_mode = technology[mode]
 		mergeTechnologyData(for_merging_technology_data_mode, technology_data_general)
 	end)
 end)
@@ -82,13 +78,10 @@ local function clearTechnologyData(technology)
 	end)
 end
 
-_table.each(GAME_MODES, function(mode)
-	local technologies = data.raw["technology"]
-	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
-	_table.each(technology_names, function(technology_name)
-		local technology = technologies[technology_name]
-		clearTechnologyData(technology)
-		--[[log(
+local technologies = data.raw["technology"]
+_table.each(technologies, function(technology)
+	clearTechnologyData(technology)
+	--[[log(
 			"for mode "
 				.. mode
 				.. " technology named "
@@ -96,5 +89,4 @@ _table.each(GAME_MODES, function(mode)
 				.. " is after copying for modes "
 				.. Utils.dump_to_console(technology)
 		)]]
-	end)
 end)

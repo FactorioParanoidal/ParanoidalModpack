@@ -1,4 +1,3 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local recipe_data_field_names = {
 	"ingredients",
 	"results",
@@ -87,38 +86,29 @@ end
 local recipes = data.raw["recipe"]
 
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
-	_table.each(technology_names, function(technology_name)
-		local recipe_names = techUtil.getAllRecipesNamesForSpecifiedTechnology(technology_name, mode)
-		_table.each(recipe_names, function(recipe_name)
-			--log("recipe_name " .. recipe_name)
-			local recipe = recipes[recipe_name]
-			local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
-			if not recipes[recipe_name][mode] then
-				recipes[recipe_name][mode] = recipe_data
-				return
-			end
-			local for_merging_recipe_data = recipes[recipe_name][mode]
-			--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
-			--log("recipe_data " .. Utils.dump_to_console(recipe_data))
-			mergeRecipeDataData(for_merging_recipe_data, recipe_data)
-		end)
+	_table.each(data.raw["recipe"], function(recipe)
+		--log("recipe_name " .. recipe_name)
+		local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
+		if not recipe[mode] then
+			recipe[mode] = recipe_data
+			return
+		end
+		local for_merging_recipe_data = recipe[mode]
+		--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
+		--log("recipe_data " .. Utils.dump_to_console(recipe_data))
+		mergeRecipeDataData(for_merging_recipe_data, recipe_data)
 	end)
 end)
-local function clearRecipeData(reciipe)
+local function clearRecipeData(recipe)
 	_table.each(recipe_data_field_names, function(technology_data_field_name)
-		reciipe[technology_data_field_name] = nil
+		recipe[technology_data_field_name] = nil
 	end)
 end
 
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.getAllTechnologyNamesWithHidden()
-	_table.each(technology_names, function(technology_name)
-		local recipe_names = techUtil.getAllRecipesNamesForSpecifiedTechnology(technology_name, mode)
-		_table.each(recipe_names, function(recipe_name)
-			local recipe = recipes[recipe_name]
-			clearRecipeData(recipe)
-			--[[log(
+	_table.each(data.raw["recipe"], function(recipe)
+		clearRecipeData(recipe)
+		--[[log(
 				"for mode "
 					.. mode
 					.. " recipe named "
@@ -126,6 +116,5 @@ _table.each(GAME_MODES, function(mode)
 					.. " is after copying for modes "
 					.. Utils.dump_to_console(recipe)
 			)]]
-		end)
 	end)
 end)
