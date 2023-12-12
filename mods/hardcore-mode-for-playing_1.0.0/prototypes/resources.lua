@@ -8,16 +8,18 @@ local function get_minable_datas()
 		if not prototype.minable then
 			return
 		end
-		if not prototype.minable.results then
-			return
+		--log("resource prototype data " .. Utils.dump_to_console(prototype.minable))
+		if prototype.minable.results then
+			_table.each(prototype.minable.results, function(minable_result)
+				table.insert(result, {
+					type = minable_result.type,
+					name = minable_result.name or minable_result[1],
+					required_fluid = prototype.minable.required_fluid,
+					amount = prototype.minable.fluid_amount,
+				})
+				--log("prototype.minable.required_fluid " .. tostring(prototype.minable.required_fluid))
+			end)
 		end
-		_table.each(prototype.minable.results, function(minable_result)
-			table.insert(result, {
-				type = minable_result.type,
-				name = minable_result.name or minable_result[1],
-				required_fluid = minable_result.required_fluid,
-			})
-		end)
 	end)
 	_table.insert_all_if_not_exists(result, {
 		-- сады разных зон
@@ -61,7 +63,8 @@ local function createBasicRecipe(basic_data, suffix)
 	local resource_type = basic_data.type
 	local resource_name = basic_data.name
 	local resource_recipe_name = resource_name .. "-" .. suffix
-	log("create basic recipe " .. resource_recipe_name)
+	--log("create basic recipe " .. resource_recipe_name)
+	--log("resource data " .. Utils.dump_to_console(basic_data))
 	local resourceItemPrototype = data.raw[resource_type][resource_name]
 	local recipe = {
 		type = "recipe",
@@ -79,6 +82,7 @@ local function createBasicRecipe(basic_data, suffix)
 				},
 			},
 			ingredients = {},
+			enabled = false,
 		},
 		expensive = {
 			results = {
@@ -87,14 +91,15 @@ local function createBasicRecipe(basic_data, suffix)
 					name = resource_name,
 					amount = 1,
 				},
-				ingredients = {},
 			},
+			ingredients = {},
+			enabled = false,
 		},
-		enabled = false,
 	}
 	if basic_data.required_fluid then
-		recipe.normal.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
-		recipe.expensive.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
+		recipe.normal.ingredients = { { type = "fluid", name = basic_data.required_fluid, amount = basic_data.amount } }
+		recipe.expensive.ingredients =
+			{ { type = "fluid", name = basic_data.required_fluid, amount = basic_data.amount } }
 	end
 	data:extend({
 		recipe,
