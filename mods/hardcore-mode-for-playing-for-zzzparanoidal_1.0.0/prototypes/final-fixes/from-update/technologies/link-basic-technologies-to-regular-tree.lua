@@ -47,6 +47,7 @@ local function addPrerequisitesToTechnologies(mode)
 		{ "electric-chemical-furnace" },
 		mode
 	)
+	techUtil.addPrerequisitesToTechnology(technologies["angels-solder-smelting-basic"], { "ore-crushing" }, mode)
 end
 
 local function removeRecipeEffectsFromTechnologies(mode)
