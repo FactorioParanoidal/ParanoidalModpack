@@ -83,16 +83,21 @@ local function removePrerequisitesFromTechnologies(mode)
 end
 
 local function createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
-	--[[local resource_recipes = createResourceRecipes()
+	local resource_recipes = createResourceRecipes()
 	local active_technology_names = techUtil.getAllActiveTechnologyNames(mode)
 	_table.each(resource_recipes, function(resource_recipe)
 		local resource_recipe_name = resource_recipe.name
 		local results = recipeUtil.getAllRecipeResults(resource_recipe_name, mode)
 		local recipe_result = results[1]
 		_table.each(active_technology_names, function(active_technology_name)
-			local recipe_ingredients = techUtil.getAllRecipesIngredientsForSpecifiedTechnology(active_technology_name)
+			local recipe_ingredients =
+				techUtil.getAllRecipesIngredientsForSpecifiedTechnology(active_technology_name, mode)
 			if _table.contains_f_deep(recipe_ingredients, recipe_result) then
-				techUtil.addRecipeEffectToTechnologyEffects(resource_recipe_name)
+				techUtil.addRecipeEffectToTechnologyEffects(
+					data.raw["technology"][active_technology_name],
+					resource_recipe_name,
+					mode
+				)
 				log(
 					"for technology "
 						.. active_technology_name
@@ -104,7 +109,6 @@ local function createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRec
 			end
 		end)
 	end)
-	--TreeRecipeUtil.]]
 end
 
 _table.each(GAME_MODES, function(mode)
@@ -113,5 +117,5 @@ _table.each(GAME_MODES, function(mode)
 	removePrerequisitesFromTechnologies(mode)
 	removeRecipeEffectsFromTechnologies(mode)
 	moveRecipesToNewTechnologies(mode)
-	--createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
+	createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
 end)
