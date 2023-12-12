@@ -26,6 +26,7 @@ _table.insert_all_if_not_exists(all_fluid_in_container_unmached_recipe_names, em
 local function filter_function(recipe_name)
 	return not _table.contains(all_fluid_in_container_unmached_recipe_names, recipe_name)
 		and not string.find(recipe_name, "empty", 1, true)
+		and not string.find(recipe_name, "-minable", 1, true)
 end
 local function updateFluidInContainerProcessingTechnologyEffectsByMode(technologies, mode, basic_technology_name)
 	if not basic_technology_name or not type(basic_technology_name) == "string" then
