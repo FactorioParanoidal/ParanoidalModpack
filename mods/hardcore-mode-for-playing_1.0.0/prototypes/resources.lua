@@ -69,19 +69,32 @@ local function createBasicRecipe(basic_data, suffix)
 		icons = resourceItemPrototype.icons,
 		icon = resourceItemPrototype.icon,
 		icon_size = resourceItemPrototype.icon_size,
-		ingredients = {},
 		category = "crafting-with-fluid",
-		results = {
-			{
-				type = resource_type,
-				name = resource_name,
-				amount = 1,
+		normal = {
+			results = {
+				{
+					type = resource_type,
+					name = resource_name,
+					amount = 1,
+				},
+			},
+			ingredients = {},
+		},
+		expensive = {
+			results = {
+				{
+					type = resource_type,
+					name = resource_name,
+					amount = 1,
+				},
+				ingredients = {},
 			},
 		},
 		enabled = false,
 	}
 	if basic_data.required_fluid then
-		recipe.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
+		recipe.normal.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
+		recipe.expensive.ingredients = { { type = "fluid", name = basic_data.required_fluid } }
 	end
 	data:extend({
 		recipe,
