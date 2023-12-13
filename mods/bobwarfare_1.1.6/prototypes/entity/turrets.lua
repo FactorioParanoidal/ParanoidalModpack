@@ -1047,7 +1047,7 @@ data:extend({
     direction_deviation = 0,
     range_deviation = 0,
     starting_speed = 1,
-    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
+    lead_target_for_projectile_speed = 1,
     turn_range = 1.0 / 3.0,
 
     size = 1.5,
@@ -1078,7 +1078,7 @@ data:extend({
     direction_deviation = 0,
     range_deviation = 0,
     starting_speed = 1,
-    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
+    lead_target_for_projectile_speed = 1,
     turn_range = 1.0 / 3.0,
 
     size = 1.5,
@@ -1109,7 +1109,7 @@ data:extend({
     direction_deviation = 0,
     range_deviation = 0,
     starting_speed = 1,
-    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
+    lead_target_for_projectile_speed = 1,
     turn_range = 1.0 / 3.0,
 
     size = 1.5,
@@ -1140,7 +1140,7 @@ data:extend({
     direction_deviation = 0,
     range_deviation = 0,
     starting_speed = 1,
-    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
+    lead_target_for_projectile_speed = 1,
     turn_range = 1.0 / 3.0,
 
     size = 1.5,
@@ -1171,7 +1171,7 @@ data:extend({
     direction_deviation = 0,
     range_deviation = 0,
     starting_speed = 1,
-    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
+    lead_target_for_projectile_speed = 1,
     turn_range = 1.0 / 3.0,
 
     size = 1.5,
