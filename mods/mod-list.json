@@ -39,18 +39,8 @@
     },
     
     {
-      "name": "alien-biomes",
-      "enabled": true
-    },
-    
-    {
-      "name": "alien-biomes-hr-terrain",
-      "enabled": true
-    },
-    
-    {
       "name": "alien-biomes-settings",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -85,11 +75,6 @@
     
     {
       "name": "angelssmelting",
-      "enabled": true
-    },
-    
-    {
-      "name": "ArmouredBiters",
       "enabled": true
     },
     
@@ -294,6 +279,11 @@
     },
     
     {
+      "name": "creative-mod",
+      "enabled": false
+    },
+    
+    {
       "name": "Cursed-FMD",
       "enabled": true
     },
@@ -350,11 +340,6 @@
     
     {
       "name": "erm_libs",
-      "enabled": true
-    },
-    
-    {
-      "name": "erm_zerg_hd_assets",
       "enabled": true
     },
     
@@ -524,11 +509,6 @@
     },
     
     {
-      "name": "LTN_Combinator_Fix",
-      "enabled": true
-    },
-    
-    {
       "name": "LTN_Content_Reader",
       "enabled": true
     },
@@ -604,6 +584,11 @@
     },
     
     {
+      "name": "music-new",
+      "enabled": true
+    },
+    
+    {
       "name": "MxlChievements",
       "enabled": true
     },
@@ -625,12 +610,7 @@
     
     {
       "name": "Natural_Evolution_Enemies",
-      "enabled": true
-    },
-    
-    {
-      "name": "Natural_Evolution_Graphics",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -860,7 +840,7 @@
     
     {
       "name": "research_evolution_factor",
-      "enabled": false
+      "enabled": true
     },
     
     {
