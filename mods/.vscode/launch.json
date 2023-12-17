@@ -25,10 +25,9 @@
             "hookData": false,
             "hookControl": false,
             "hookLog": false,
-            "checkGlobals": true,
             "manageMod": false,
             "hookMode": "profile",
-            "useInstrumentMode": false
+            "useInstrumentMode": false,
         }
     ]
 }
