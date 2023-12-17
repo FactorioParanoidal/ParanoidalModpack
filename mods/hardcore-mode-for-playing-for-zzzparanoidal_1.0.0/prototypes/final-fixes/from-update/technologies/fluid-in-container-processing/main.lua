@@ -1,4 +1,4 @@
-require("prototypes.final-fixes.from-update.technologies.fluid-in-container-processing.fluid-in-container-processing")
+require("__hardcore-mode-for-playing__.prototypes.fluid-in-container-processing")
 require(
 	"prototypes.final-fixes.from-update.technologies.fluid-in-container-processing.fluid-barrel-processing-technology-fixes"
 )
