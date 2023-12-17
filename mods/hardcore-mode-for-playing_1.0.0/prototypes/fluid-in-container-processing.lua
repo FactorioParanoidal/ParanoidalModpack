@@ -16,7 +16,16 @@ local filled_barrel_basic_fluid_recipe_names = _table.map(fluid_names, function(
 	end
 	return "empty" .. target_fluid_name .. "-barrel"
 end)
-local specified_recipe_names = { "empty-barrel", "empty-canister", "gas-canister", "barreling-pump" }
+local specified_recipe_names = {
+	"empty-barrel",
+	"empty-canister",
+	"gas-canister",
+	"barreling-pump",
+	"storage-tank",
+	"pipe",
+	"pipe-to-ground",
+	"pump",
+}
 
 local all_fluid_in_container_unmached_recipe_names = {}
 _table.insert_all_if_not_exists(all_fluid_in_container_unmached_recipe_names, specified_recipe_names)
@@ -27,6 +36,7 @@ local function filter_function(recipe_name)
 	return not _table.contains(all_fluid_in_container_unmached_recipe_names, recipe_name)
 		and not string.find(recipe_name, "empty", 1, true)
 		and not string.find(recipe_name, "-minable", 1, true)
+		and rec
 end
 local function updateFluidInContainerProcessingTechnologyEffectsByMode(technologies, mode, basic_technology_name)
 	if not basic_technology_name or not type(basic_technology_name) == "string" then
@@ -36,7 +46,7 @@ local function updateFluidInContainerProcessingTechnologyEffectsByMode(technolog
 		error("filter_function not specified!")
 	end
 	if not technologies[basic_technology_name] then
-		return
+		error("technology '" .. basic_technology_name .. "' not found!")
 	end
 	local recipe_names =
 		_table.filter(techUtil.getAllRecipesNamesForSpecifiedTechnology(basic_technology_name, mode), filter_function)

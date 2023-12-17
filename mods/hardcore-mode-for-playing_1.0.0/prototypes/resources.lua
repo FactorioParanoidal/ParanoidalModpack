@@ -23,7 +23,7 @@ local function get_minable_datas()
 	end)
 	_table.insert_all_if_not_exists(result, {
 		-- сады разных зон
-		{ type = "item", name = "swamp-garden" },
+		--[[{ type = "item", name = "swamp-garden" },
 		{ type = "item", name = "desert-garden" },
 		{ type = "item", name = "temperate-garden" },
 		-- деревья различных зон
@@ -37,7 +37,7 @@ local function get_minable_datas()
 		{ type = "item", name = "small-alien-artifact-yellow" },
 		{ type = "item", name = "small-alien-artifact-green" },
 		{ type = "item", name = "small-alien-artifact-blue" },
-		{ type = "item", name = "small-alien-artifact-purple" },
+		{ type = "item", name = "small-alien-artifact-purple" },]]
 		-- фугу
 		--puffer-nest=Гнездо фугу"}
 		--рыбы
@@ -63,8 +63,8 @@ local function createBasicRecipe(basic_data, suffix)
 	local resource_type = basic_data.type
 	local resource_name = basic_data.name
 	local resource_recipe_name = resource_name .. "-" .. suffix
-	--log("create basic recipe " .. resource_recipe_name)
-	--log("resource data " .. Utils.dump_to_console(basic_data))
+	log("creating basic recipe " .. resource_recipe_name)
+	log("resource data " .. Utils.dump_to_console(basic_data))
 	local resourceItemPrototype = data.raw[resource_type][resource_name]
 	local recipe = {
 		type = "recipe",
@@ -104,6 +104,8 @@ local function createBasicRecipe(basic_data, suffix)
 	data:extend({
 		recipe,
 	})
+	log("basic recipe " .. resource_recipe_name .. " created")
+
 	return recipe
 end
 
@@ -115,11 +117,6 @@ function createResourceRecipes()
 	end)
 	return result
 end
-_table.each(createResourceRecipes(), function(recipe)
-	data:extend({
-		recipe,
-	})
-end)
 function createSteamRecipe()
 	return createBasicRecipe({ type = "fluid", name = "steam" }, "flamable")
 end
