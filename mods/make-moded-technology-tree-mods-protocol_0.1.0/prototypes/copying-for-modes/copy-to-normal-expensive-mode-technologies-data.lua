@@ -31,17 +31,13 @@ end
 
 local function mergeTechnologyData(for_merging_technology_data_mode, technology_data_general)
 	_table.each(technology_data_field_names, function(technology_data_field_name)
+		if not technology_data_general[technology_data_field_name] then
+			--log("property '" .. technology_data_field_name .. "' not specified in general data!")
+			return
+		end
 		if _table.contains(technology_data_field_simple_names, technology_data_field_name) then
-			if
-				type(for_merging_technology_data_mode[technology_data_field_name]) == "boolean"
-				or type(technology_data_general[technology_data_field_name]) == "boolean"
-			then
-				for_merging_technology_data_mode[technology_data_field_name] =
-					technology_data_general[technology_data_field_name]
-			else
-				for_merging_technology_data_mode[technology_data_field_name] = technology_data_general[technology_data_field_name]
-					or for_merging_technology_data_mode[technology_data_field_name]
-			end
+			for_merging_technology_data_mode[technology_data_field_name] =
+				technology_data_general[technology_data_field_name]
 			return
 		end
 		if not for_merging_technology_data_mode[technology_data_field_name] then

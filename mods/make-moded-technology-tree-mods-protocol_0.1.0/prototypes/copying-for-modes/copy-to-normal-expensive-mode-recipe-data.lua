@@ -46,18 +46,15 @@ local recipe_data_field_simple_names = {
 }
 local function mergeRecipeDataData(for_merging_recipe_data_mode, recipe_data_general)
 	_table.each(recipe_data_field_names, function(recipe_data_field_name)
-		if _table.contains(recipe_data_field_simple_names, recipe_data_field_name) then
-			if
-				type(for_merging_recipe_data_mode[recipe_data_field_name]) == "boolean"
-				or type(recipe_data_general[recipe_data_field_name]) == "boolean"
-			then
-				for_merging_recipe_data_mode[recipe_data_field_name] = recipe_data_general[recipe_data_field_name]
-			else
-				for_merging_recipe_data_mode[recipe_data_field_name] = recipe_data_general[recipe_data_field_name]
-					or for_merging_recipe_data_mode[recipe_data_field_name]
-			end
+		if not recipe_data_general[recipe_data_field_name] then
+			--log("property '" .. recipe_data_field_name .. "' not specified in general data!")
 			return
 		end
+		if _table.contains(recipe_data_field_simple_names, recipe_data_field_name) then
+			for_merging_recipe_data_mode[recipe_data_field_name] = recipe_data_general[recipe_data_field_name]
+			return
+		end
+
 		if not for_merging_recipe_data_mode[recipe_data_field_name] then
 			for_merging_recipe_data_mode[recipe_data_field_name] = recipe_data_general[recipe_data_field_name]
 			return
