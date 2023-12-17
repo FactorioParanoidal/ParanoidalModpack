@@ -106,7 +106,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 1,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 200,
     range = 54,
     min_range = 20,
@@ -188,7 +188,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 1.5,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 150,
     range = 56,
     min_range = 20,
@@ -268,7 +268,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 2.1,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 120,
     range = 58,
     min_range = 20,
@@ -350,7 +350,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 2.8,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 100,
     range = 60,
     min_range = 20,
@@ -431,7 +431,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 3.6,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 85,
     range = 62,
     min_range = 20,
@@ -512,7 +512,7 @@ data:extend({
     projectile = "bob-plasma-projectile",
     sound = { { filename = "__base__/sound/fight/electric-beam.ogg", volume = 0.7 } },
     damage_modifier = 4.5,
-    lead_target_for_projectile_speed = 1,
+    lead_target_for_projectile_speed = 0, --DrD fix for https://mods.factorio.com/mod/bobvehicleequipment/discussion/642cb3054558c52749834753
     cooldown = 75,
     range = 64,
     min_range = 20,
