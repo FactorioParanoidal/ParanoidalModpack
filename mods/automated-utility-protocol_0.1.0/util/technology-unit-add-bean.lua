@@ -1,4 +1,4 @@
-local techUtil = require("echnology-util")
+local techUtil = require("technology-util")
 local TechnologyUnitAddBean = {}
 TechnologyUnitAddBean.technology_datas = data.raw["technology"]
 local function addSciencePacksToTechnologyUnitsByNames(technology_names, mode, unit_ingredient)
