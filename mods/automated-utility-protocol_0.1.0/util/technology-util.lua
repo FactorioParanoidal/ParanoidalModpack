@@ -156,7 +156,7 @@ TechUtil.addRecipeEffectToTechnologyEffects = function(technology_candidate, rec
 	if not technology.effects then
 		technology.effects = {}
 	end
-	table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_name })
+	_table.insert_all_if_not_exists(technology.effects, { { type = "unlock-recipe", recipe = recipe_name } })
 	local recipe = Utils.getModedObject(data.raw.recipe[recipe_name], mode)
 	if not recipe then
 		error("recipe with name " .. recipe_name .. " not found!")
@@ -179,11 +179,6 @@ local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_v
 	if not ingredient_value then
 		error("ingredient_value not specified")
 	end
-	--[[local ingredient = {
-		type = "tool",
-		name = ingredient_value[1],
-		amount = ingredient_value[2],
-	}]]
 	local technology = getModedTechnology(technology_candidate, mode)
 	if technology.unit and technology.unit.ingredients then
 		--log("technology.unit.ingredients " .. Utils.dump_to_console(technology.unit.ingredients))
