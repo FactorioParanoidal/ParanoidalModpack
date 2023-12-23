@@ -1,5 +1,7 @@
 local TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep = {}
 
+TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.excluded_item_science_pack =
+	{ type = "item", name = "salvaged-automation-science-pack" }
 local function handleIngredientInTechnologyIngredientsList(ingredient, products, technology_name, mode)
 	if
 		not _table.contains_f(products, function(product)
@@ -27,10 +29,7 @@ local function tryToResolveRecipeIngregientInHerselfTreeRecipeProducts(technolog
 	if not unresolved_ingredients or _table.size(unresolved_ingredients) == 0 then
 		return
 	end
-	log("try to resolve technology_name " .. technology_name .. " unresolved_ingredients")
 	local all_prerequisite_names = TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels(technology_name, mode)
-	-- добавляем себя в список
-	table.insert(all_prerequisite_names, technology_name)
 	local all_recipe_products_by_technologies = _table.map(all_prerequisite_names, function(prerequisite_name)
 		return {
 			technology_name = prerequisite_name,
@@ -62,17 +61,13 @@ TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.evaluate = function(t
 	if EvaluatingStepStatusHolder.isVisitedTechnology(mode, technology_name) then
 		return
 	end
-	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
-
 	writeMissedIngredientsInTechnologyTreeToTechnologyStatus(technology_name, mode)
 	tryToResolveRecipeIngregientInHerselfTreeRecipeProducts(technology_name, mode)
 	local dependencies = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
-	if not dependencies then
-		return
-	end
 	_table.each(dependencies, function(dependency_name)
 		TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.evaluate(dependency_name, mode)
 	end)
+	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
 end
 
 return TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep
