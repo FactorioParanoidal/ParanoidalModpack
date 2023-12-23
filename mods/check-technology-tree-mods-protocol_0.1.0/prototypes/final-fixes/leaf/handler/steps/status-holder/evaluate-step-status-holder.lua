@@ -172,33 +172,7 @@ EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus = func
 	technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = nil
 	technology_status.resolved_not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
 	EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name, { resolving_technology_name })
-	log(
-		"missed ingredient "
-			.. not_found_inredient_name
-			.. " for "
-			.. technology_name
-			.. " in mode "
-			.. mode
-			.. " found in "
-			.. resolving_technology_name
-			.. ", removed cycle "
-			.. tostring(is_remove_cycle)
-	)
 end
-
---[[EvaluatingStepStatusHolder.get_all_unit_subsets = function(unit_set)
-	local result = { {} }
-
-	_table.each(unit_set, function(unit_element)
-		local new_subset = _table.deep_copy(result)
-		_table.each(new_subset, function(new_subset_element)
-			table.insert(new_subset_element, unit_element)
-			table.sort(new_subset_element, unit_table_sorted_function)
-		end)
-		_table.insert_all_if_not_exists(result, new_subset)
-	end)
-	return result
-end]]
 
 EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack = function(mode, technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
@@ -214,20 +188,7 @@ EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack = functi
 			_table.remove_item(removable_units, removing_unit_candidate, nil, true)
 		end)
 		local result = _table.size(removable_units) == 0
-		--[[log(
-			" for "
-				.. mode
-				.. " technology "
-				.. technology_name
-				.. " found_technology_name "
-				.. found_technology_name
-				.. " compatible with science packs is  "
-				.. tostring(result)
-				.. " removable_units "
-				.. Utils.dump_to_console(removable_units)
-			--.. " technology_status_filter_units "
-			--.. Utils.dump_to_console(technology_status_filter_units)
-		)]]
+
 		return result
 	end)
 end
@@ -242,13 +203,16 @@ local function getOccursTechnologyInAnotherTechnologyTree0(
 		return result
 	end
 	table.insert(visited_technologies, in_which_contain_technology_name)
-	--log(in_which_contain_technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, in_which_contain_technology_name)
 	if not technology_status.tree then
 		return result
 	end
 
-	if technology_status.tree and _table.contains(technology_status.tree, contain_technology_candidate_name) then
+	if
+		settings.startup["debug_output"]
+		and technology_status.tree
+		and _table.contains(technology_status.tree, contain_technology_candidate_name)
+	then
 		log("in_which_contain_technology_name " .. in_which_contain_technology_name)
 		log(
 			"technology_status.tree "
@@ -295,16 +259,18 @@ EvaluatingStepStatusHolder.hasResolvedStatusForIngredientForTechnology = functio
 	local not_found_inredient_name = effect_ingredient_not_found_in_current_tree.name
 		or effect_ingredient_not_found_in_current_tree[1]
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	log(
-		" for techonology "
-			.. technology_name
-			.. " for mode "
-			.. mode
-			.. " technology_status.not_found_in_tree_ingredients["
-			.. not_found_inredient_name
-			.. "] "
-			.. Utils.dump_to_console(technology_status.not_found_in_tree_ingredients[not_found_inredient_name])
-	)
+	if settings.startup["debug_output"] then
+		log(
+			" for techonology "
+				.. technology_name
+				.. " for mode "
+				.. mode
+				.. " technology_status.not_found_in_tree_ingredients["
+				.. not_found_inredient_name
+				.. "] "
+				.. Utils.dump_to_console(technology_status.not_found_in_tree_ingredients[not_found_inredient_name])
+		)
+	end
 	return not technology_status.not_found_in_tree_ingredients[not_found_inredient_name]
 end
 

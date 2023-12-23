@@ -30,9 +30,6 @@ TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(technology_nam
 
 	writeTechnologyPropertiesToTechnologyStatus(technology_name, mode, first_level_parents or {})
 
-	if not first_level_parents then
-		return
-	end
 	_table.each(first_level_parents, function(dependency_name)
 		TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(dependency_name, mode)
 	end)
