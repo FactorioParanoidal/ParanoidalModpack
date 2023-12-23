@@ -8,11 +8,12 @@
 	"dependencies": [
 		"base >= 1.1.91",
 		"factorissimo-2-notnotmelon",
-		"!factorissimo-2",
 		"flib",
 		"automated-utility-protocol",
 		"LootingSpaceshipWrecks",
 		"hardcore-mode-for-playing >= 1.0.0",
-		"make-moded-technology-tree-mods-protocol"
+		"make-moded-technology-tree-mods-protocol",
+		"!factorissimo-2",
+		"!hardcore-mode-for-playing-for-zzzparanoidal"
 	]
 }
