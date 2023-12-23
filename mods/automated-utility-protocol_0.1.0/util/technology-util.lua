@@ -98,7 +98,6 @@ TechUtil.getAllActiveTechnologyNames = function(mode)
 	_table.each(data.raw["technology"], function(technology_candidate)
 		local technology_name = technology_candidate.name
 		local technology = getModedTechnology(technology_candidate, mode)
-
 		if
 			not technology.hidden
 			or technology.hidden and _string.ends_with(technology_name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX)
@@ -244,5 +243,10 @@ TechUtil.moveRecipeEffectsToTechnology = function(from_name, to_name, recipe_nam
 	local technologies = data.raw["technology"]
 	TechUtil.removeRecipeEffectFromTechnologyEffects(technologies[from_name], recipe_name, mode)
 	TechUtil.addRecipeEffectToTechnologyEffects(technologies[to_name], recipe_name, mode)
+end
+TechUtil.hasEffects = function(technology_name, mode)
+	local technologies = data.raw["technology"]
+	local technology = getModedTechnology(technologies[technology_name], mode)
+	return technology.effects and _table.size(technology.effects) > 0
 end
 return TechUtil

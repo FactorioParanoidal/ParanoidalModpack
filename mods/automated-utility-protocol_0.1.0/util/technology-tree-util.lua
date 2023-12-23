@@ -1,6 +1,6 @@
 TechnologyTreeUtil = {}
 
-local MAX_INTEGER = 1000
+local MAX_INTEGER = 10000
 
 local function getTechnologyObjectForMode(technology_name, mode)
 	return Utils.getModedObject(data.raw["technology"][technology_name], mode)
@@ -40,21 +40,38 @@ TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel = function(te
 		table.insert(result, key)
 	end)
 	TechnologyTreeCacheUtil.addTechnologyToCacheTree(technology_name, result, mode)
+
 	return result
 end
 
 TechnologyTreeUtil.findPrerequisitesForTechnologyForFirstLevel = function(technology_name, mode)
-	return TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 0, 1, mode)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
+	local result = TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 0, 1, mode)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	return result
 end
 
 TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels = function(technology_name, mode)
-	return TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 1, MAX_INTEGER, mode)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
+	local result =
+		TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 1, MAX_INTEGER, mode)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	return result
 end
 
-TechnologyTreeUtil.haveTechnologyInTree = function(technology_name, dependency_technology_name, mode)
-	if not technology_name or not dependency_technology_name or dependency_technology_name == technology_name then
+TechnologyTreeUtil.haveTechnologyInTree = function(technology_name, prerequisite_technology_candidate_name, mode)
+	if
+		not technology_name
+		or not prerequisite_technology_candidate_name
+		or prerequisite_technology_candidate_name == technology_name
+	then
 		return true
 	end
-	local dependencies = TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels(technology_name, mode)
-	return _table.contains(dependencies, dependency_technology_name)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
+	local prerequisites = TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels(technology_name, mode)
+	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	return _table.contains(prerequisites, prerequisite_technology_candidate_name)
 end
