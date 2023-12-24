@@ -59,7 +59,7 @@ function getBasicFluidNames()
 	)
 end
 
-local function createBasicRecipe(basic_data, suffix)
+function createBasicRecipe(basic_data, suffix)
 	local resource_type = basic_data.type
 	local resource_name = basic_data.name
 	local resource_recipe_name = resource_name .. "-" .. suffix
@@ -130,4 +130,8 @@ function createCoalRecipe()
 end
 function createWoodRecipe()
 	return createBasicRecipe({ type = "item", name = "wood" }, "minable")
+end
+
+function createStoneRecipe()
+	return createBasicRecipe({ type = "item", name = "stone" }, "minable")
 end
