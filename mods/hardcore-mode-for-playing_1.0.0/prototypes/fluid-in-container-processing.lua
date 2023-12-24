@@ -1,4 +1,5 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
 require("__automated-utility-protocol__.util.technology-tree-cache-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 local fluid_names = getBasicFluidNames()
@@ -25,6 +26,7 @@ local specified_recipe_names = {
 	"pipe",
 	"pipe-to-ground",
 	"pump",
+	"offshore-pump",
 }
 
 local all_fluid_in_container_unmached_recipe_names = {}
@@ -36,7 +38,6 @@ local function filter_function(recipe_name)
 	return not _table.contains(all_fluid_in_container_unmached_recipe_names, recipe_name)
 		and not string.find(recipe_name, "empty", 1, true)
 		and not string.find(recipe_name, "-minable", 1, true)
-		and rec
 end
 local function updateFluidInContainerProcessingTechnologyEffectsByMode(technologies, mode, basic_technology_name)
 	if not basic_technology_name or not type(basic_technology_name) == "string" then
@@ -55,9 +56,12 @@ local function updateFluidInContainerProcessingTechnologyEffectsByMode(technolog
 		local empty_recipe_name = string.gsub(recipe_name, "fill", "empty")
 		techUtil.removeRecipeEffectFromTechnologyEffects(technologies[basic_technology_name], recipe_name, mode)
 		techUtil.removeRecipeEffectFromTechnologyEffects(technologies[basic_technology_name], empty_recipe_name, mode)
-
+		log("start recipe_name " .. recipe_name)
 		local technology_names = _table.filter(
-			techUtil.getAllTechnologiesWithRecipeFluidResultSpecifiedInAnotherRecipeByName(recipe_name, mode),
+			techUtil.getAllTechnologiesWithRecipeFuelFluidInContainerResultSpecifiedInAnotherRecipeByName(
+				recipe_name,
+				mode
+			),
 			function(filtered_technology_name)
 				log("basic_technology_name " .. basic_technology_name)
 				log("filtered_technology_name " .. filtered_technology_name)
@@ -74,10 +78,27 @@ local function updateFluidInContainerProcessingTechnologyEffectsByMode(technolog
 				.. " found following technologies with fluid result "
 				.. Utils.dump_to_console(technology_names)
 		)
-		_table.each(technology_names, function(target_technology_name)
-			techUtil.addRecipeEffectToTechnologyEffects(technologies[target_technology_name], recipe_name, mode)
-			techUtil.addRecipeEffectToTechnologyEffects(technologies[target_technology_name], empty_recipe_name, mode)
-		end)
+		local recipe_fuel_candidate_ingredients = _table.filter(
+			recipeUtil.getAllRecipeIngredients(recipe_name, mode),
+			function(recipe_ingredient)
+				return recipe_ingredient.type == "fluid"
+			end
+		)
+		local fluid_ingredient = recipe_fuel_candidate_ingredients[1]
+		if fluid_ingredient.fuel_category then
+			_table.each(technology_names, function(target_technology_name)
+				techUtil.addRecipeEffectToTechnologyEffects(technologies[target_technology_name], recipe_name, mode)
+				techUtil.addRecipeEffectToTechnologyEffects(
+					technologies[target_technology_name],
+					empty_recipe_name,
+					mode
+				)
+			end)
+		else
+			techUtil.hideRecipe(data.raw["recipe"][recipe_name], mode)
+			techUtil.hideRecipe(data.raw["recipe"][empty_recipe_name], mode)
+		end
+		log("end recipe_name " .. recipe_name)
 	end)
 end
 

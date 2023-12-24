@@ -1,7 +1,6 @@
 flib = require("__flib__.data-util")
 require("__automated-utility-protocol__.util.main")
 require("resources")
-require("basic-technologies")
 require("prototypes.items")
 require("prototypes.entities")
 require("prototypes.recipes")

@@ -10,7 +10,7 @@ local function createBasicTechnology(
 	_table.each(recipes, function(recipe_name)
 		table.insert(technology_effects, { type = "unlock-recipe", recipe = recipe_name })
 		if not data.raw["recipe"][recipe_name] then
-			return
+			error("recipe " .. recipe_name .. " not found!")
 		end
 		data.raw["recipe"][recipe_name].enabled = false
 	end)
@@ -48,16 +48,16 @@ end
 
 function createResourceDetectedTechnology(resource_name, icon_path, icon_size, resource_recipe_name)
 	local technology_name = resource_name .. DETECTED_RESOURCE_TECHNOLOGY_SUFFIX
+	log("resource_recipe_name " .. resource_recipe_name)
 	local result = createBasicTechnology(
 		technology_name,
 		{ resource_recipe_name },
-		{ "savlaged-automation-tech" },
+		{ "salvaged-automation-tech" },
 		1,
 		icon_path,
 		icon_size
 	)
-	result.normal.hidden = true
-	result.expensive.hidden = true
+	result.hidden = true
 	return result
 end
 local function createBasicTechnologyTree()
@@ -81,11 +81,12 @@ local function createBasicTechnologyTree()
 	-- исследование дерева
 	local wood_detected_tech =
 		createResourceDetectedTechnology("wood", "__base__/graphics/icons/wood.png", 64, createWoodRecipe().name)
-
+	local stone_detected_tech =
+		createResourceDetectedTechnology("stone", "__base__/graphics/icons/stone.png", 64, createStoneRecipe().name)
 	data:extend({
 		-- корень всего дерева технологий, даёт возможность добывать уголь.
 		createBasicTechnology(
-			"savlaged-automation-tech",
+			"salvaged-automation-tech",
 			basic_recipes,
 			nil,
 			1,
@@ -95,15 +96,23 @@ local function createBasicTechnologyTree()
 		water_detected_tech,
 		coal_detected_tech,
 		wood_detected_tech,
+		stone_detected_tech,
 		-- исследование воды с помощью радара
 		--[[ для добычи руды нужна вода, правда ты не сможешь ничего собрать, трубы у тебя будут, но не будет ресурсов для постройки труб.
 		На самом деле  деревянные трубы очень пригодятся, ведь железо на ранних этапах будет КРАЙНЕ ДОРОГИМ УДОВОЛЬСТВИЕМ, а разводку труб как-то делать придётся.
 		Так что технология только с виду бесполезная, да и медь будет уходить вовсе не на трубы, месторождения будут не такие богатые, чтобы не было перевода сразу всего на медь.]]
-		createBasicTechnology("coal-wooden-fluid-handling", {
-			--[["bi-wood-pipe",
+		createBasicTechnology(
+			"coal-wooden-fluid-handling",
+			{
+				--[["bi-wood-pipe",
 			"bi-wood-pipe-to-ground",
 			"salvaged-offshore-pump-0",]]
-		}, { water_detected_tech.name, wood_detected_tech.name }, 2, "__base__/graphics/icons/offshore-pump.png", 64),
+			},
+			{ "salvaged-automation-tech", water_detected_tech.name, wood_detected_tech.name },
+			2,
+			"__base__/graphics/icons/offshore-pump.png",
+			64
+		),
 		-- непосредственная добыча руд, для которых требуется лишь вода, пара не будет, стартовать придётся в относительно жёстких условиях.
 		createBasicTechnology(
 			"coal-ore-mining",
@@ -114,22 +123,21 @@ local function createBasicTechnologyTree()
 			64
 		),
 		-- дробление руды
-		--[[createBasicTechnology(
+		createBasicTechnology(
 			"coal-ore-crushing",
-			{ "salvaged-ore-crusher", "angelsore1-crushed", "angelsore3-crushed" },
-			{ "coal-ore-mining" },
+			{}, --	{ "salvaged-ore-crusher", "angelsore1-crushed", "angelsore3-crushed" },
+			{ "coal-ore-mining", stone_detected_tech.name },
 			4,
-			"__angelsrefining__/graphics/icons/ore-crusher.png",
+			"__hardcore-mode-for-playing__/graphics/icons/ore-crusher.png",
 			64
-		),]]
+		),
 		-- переработка щебня в камень(других вариантов получить обычный камень нет, так как валуны и прочие большие камни не выдают ни угля, ни камня). Ибо остальное ЧИТ
-		--[[createBasicTechnology("coal-stone-processing", { "stone-crushed" }, { --[["coal-ore-crushing"
-			"savlaged-automation-tech",
-		}, 5, "__base__/graphics/icons/stone.png", 64),]]
+		createBasicTechnology("coal-stone-processing", { --[["stone-crushed"]]
+		}, { "coal-ore-crushing" }, 5, "__base__/graphics/icons/stone.png", 64),
 		createBasicTechnology(
 			"coal-ore-smelting",
 			{ "stone-furnace" }, -- "angelsore1-crushed-smelting", "angelsore3-crushed-smelting" },
-			{ "savlaged-automation-tech" }, --"coal-ore-crushing", "coal-stone-processing" },
+			{ "coal-ore-crushing", "coal-stone-processing" },
 			6,
 			"__base__/graphics/icons/stone-furnace.png",
 			64
@@ -137,7 +145,7 @@ local function createBasicTechnologyTree()
 		createBasicTechnology(
 			"coal-stone-smelting",
 			{ "stone-brick" },
-			{ "coal-ore-smelting" }, --, "coal-stone-processing" },
+			{ "coal-ore-smelting", "coal-stone-processing" },
 			7,
 			"__base__/graphics/icons/stone-brick.png",
 			64
@@ -206,29 +214,41 @@ local function createBasicTechnologyTree()
 		createBasicTechnology("burner-ore-mining", {
 			"burner-mining-drill",
 			--	, "mining-drill-bit-mk0"
-		}, { "coal-ore-mining" }, 16, "__base__/graphics/icons/burner-mining-drill.png", 64),
-		createBasicTechnology("basic-researching", {
-			"lab", --[["sci-component-1",]]
+		}, { "coal-ore-mining", "basic-electronics" }, 16, "__base__/graphics/icons/burner-mining-drill.png", 64),
+		createBasicTechnology(
+			"burner-ore-crushing",
+			{ --[["burner-ore-crusher"]]
+			},
+			{ "burner-ore-mining", "coal-ore-crushing", "salvaged-automation-tech" },
+			17,
+			"__hardcore-mode-for-playing__/graphics/icons/ore-crusher.png",
+			64
+		),
+		createBasicTechnology(
+			"basic-logistics",
+			{},
+			{ "basic-metal-processing", "basic-electronics" },
+			18,
+			"__base__/graphics/technology/logistics-1.png",
+			256
+		),
+		createBasicTechnology("automation-science-pack", {
+			--[["lab", --[["sci-component-1",]]
 			"automation-science-pack",
 		}, {
-			--	"basic-electronics",
+			"basic-electronics",
 			"coal-ore-smelting",
 			"basic-metal-processing",
-			--"coal-stone-smelting",
+			"coal-stone-smelting",
 			"military-0",
 			"burner-ore-mining",
-			--	"burner-ore-crushing",
-		}, 18, "__base__/graphics/icons/automation-science-pack.png", 64),
-	})
-
-	--[[createBasicTechnology(
 			"burner-ore-crushing",
-			{ "burner-ore-crusher" },
-			{ "burner-ore-mining", "coal-ore-crushing" },
-			17,
-			"__angelsrefining__/graphics/icons/ore-crusher.png",
-			64
-		)]]
+			"basic-logistics",
+		}, 19, "__base__/graphics/icons/automation-science-pack.png", 64),
+		createBasicTechnology("repair-pack", {}, {
+			"automation-science-pack",
+		}, 20, "__base__/graphics/icons/repair-pack.png", 64),
+	})
 end
 
 createBasicTechnologyTree()
