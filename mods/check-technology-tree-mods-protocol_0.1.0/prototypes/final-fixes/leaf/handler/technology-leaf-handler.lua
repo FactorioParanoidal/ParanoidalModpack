@@ -22,24 +22,24 @@ local function evaluateTechnologyProperties(technology_names, mode, technology_n
 	log("end evaluating cache for properties for all technologies")
 end
 local function validateTechnologyPrerequisitesNoHidden(technology_names, mode, technology_names_count)
-	--log("start check no hidden prerequisites for all technologies")
+	log("start check no hidden prerequisites for all technologies")
 	local index = clearStateBeforeStep(mode)
 	_table.each(technology_names, function(technology_name)
-		--	log(tostring(index) .. " of " .. tostring(technology_names_count))
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		technologyNoHiddenValidatningStep.evaluate(technology_name, mode)
 		index = index + 1
 	end)
-	--log("end check no hidden prerequisites for all technologies")
+	log("end check no hidden prerequisites for all technologies")
 end
 local function validateTechnologyEffectsNoHidden(technology_names, mode, technology_names_count)
-	--log("start check no hidden recipe effects for all technologies")
+	log("start check no hidden recipe effects for all technologies")
 	local index = clearStateBeforeStep(mode)
 	_table.each(technology_names, function(technology_name)
-		--	log(tostring(index) .. " of " .. tostring(technology_names_count))
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		technologyNoHiddenRecipeEffectsValidatningStep.evaluate(technology_name, mode)
 		index = index + 1
 	end)
-	--log("end check no hidden recipe effects for all technologies")
+	log("end check no hidden recipe effects for all technologies")
 end
 local function findUnresolvedRecipeIngredientNamesInHerselfTechnologyTree(
 	technology_names,
@@ -83,7 +83,7 @@ local function printActiveTechnolgyData(technology_names, mode, technology_names
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		log("technology_name " .. technology_name .. " tree")
 		log(technology_name)
-		printActiveTechnologyTree(mode, technology_name, 0)
+		--	printActiveTechnologyTree(mode, technology_name, 0)
 		log("technology data " .. Utils.dump_to_console(data.raw["technology"][technology_name]))
 		index = index + 1
 	end)

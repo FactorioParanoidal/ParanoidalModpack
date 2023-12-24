@@ -216,7 +216,7 @@ local function writeMissedIngredientsInTechnologyTreeToTechnologyStatus(technolo
 	_table.insert_all_if_not_exists(all_need_ingredients_for_technology_research, technology_unit_ingredients)
 	local products = EvaluatingStepStatusHolder.getEffectResultsFromTechnologyStatus(mode, technology_name)
 	_table.each(all_need_ingredients_for_technology_research, function(ingredient)
-		if not isUnresolvedIngredientInTechnologyProductList(ingredient, products, technology_name, mode) then
+		if isUnresolvedIngredientInTechnologyProductList(ingredient, products, technology_name, mode) then
 			table.insert(result, ingredient)
 		end
 	end)
@@ -279,6 +279,8 @@ TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.evaluate = function(
 	if EvaluatingStepStatusHolder.isVisitedTechnology(mode, technology_name) then
 		return
 	end
+	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
+
 	local unresolved_ingredients = writeMissedIngredientsInTechnologyTreeToTechnologyStatus(technology_name, mode)
 	tryToResolveRecipeIngregientInHerselfTreeRecipeProducts(
 		technology_name,
@@ -294,7 +296,6 @@ TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep.evaluate = function(
 			technologyPropertiesEvaluatingStep
 		)
 	end)
-	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
 end
 
 return TechnologyLeafHandlerMissedIngredientsInTechnologyTreeStep

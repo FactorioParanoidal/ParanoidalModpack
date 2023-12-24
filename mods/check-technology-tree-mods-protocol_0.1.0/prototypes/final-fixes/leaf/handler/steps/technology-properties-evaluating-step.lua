@@ -9,7 +9,7 @@ local function writeTechnologyPropertiesToTechnologyStatus(technology_name, mode
 	EvaluatingStepStatusHolder.addEffectResultsToTechnologyStatus(mode, technology_name, recipe_results)
 	local tool_units = techUtil.getAllUnitsForSpecifiedTechnology(technology_name, mode)
 	EvaluatingStepStatusHolder.addUnitsToTechnologyStatus(mode, technology_name, tool_units)
-	log(
+	--[[log(
 		"for technology "
 			.. technology_name
 			.. " mode "
@@ -22,7 +22,7 @@ local function writeTechnologyPropertiesToTechnologyStatus(technology_name, mode
 			.. Utils.dump_to_console(recipe_results)
 			.. "\ntechnology_units are "
 			.. Utils.dump_to_console(tool_units)
-	)
+	)]]
 end
 
 TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(technology_name, mode)
