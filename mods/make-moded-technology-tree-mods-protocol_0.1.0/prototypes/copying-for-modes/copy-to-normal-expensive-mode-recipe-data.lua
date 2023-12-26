@@ -83,21 +83,23 @@ local function createRecipeDataFromGeneralRecipeData(recipe)
 end
 
 local recipes = data.raw["recipe"]
-
+function merge_recipe_for_modes(recipe, mode)
+	--log("recipe_name " .. recipe.name)
+	local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
+	if not recipe[mode] then
+		recipe[mode] = recipe_data
+		--	log("not found recipe mode " .. mode .. " replacing general data!")
+		return
+	end
+	local for_merging_recipe_data = recipe[mode]
+	--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
+	--log("recipe_data " .. Utils.dump_to_console(recipe_data))
+	mergeRecipeDataData(for_merging_recipe_data, recipe_data)
+	--log("merged_data " .. Utils.dump_to_console(for_merging_recipe_data))
+end
 _table.each(GAME_MODES, function(mode)
 	_table.each(data.raw["recipe"], function(recipe)
-		--log("recipe_name " .. recipe.name)
-		local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
-		if not recipe[mode] then
-			recipe[mode] = recipe_data
-			--	log("not found recipe mode " .. mode .. " replacing general data!")
-			return
-		end
-		local for_merging_recipe_data = recipe[mode]
-		--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
-		--log("recipe_data " .. Utils.dump_to_console(recipe_data))
-		mergeRecipeDataData(for_merging_recipe_data, recipe_data)
-		--log("merged_data " .. Utils.dump_to_console(for_merging_recipe_data))
+		merge_recipe_for_modes(recipe, mode)
 	end)
 end)
 local function clearRecipeData(recipe)
