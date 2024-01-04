@@ -24,4 +24,4 @@ launch-ability:
     - runner_hostname=$(hostname -f)
     - ./factorio/bin/x64/factorio --mod-directory $(cat config.json |jq -r '.modsPath') --start-server-load-scenario base/freeplay --bind $runner_hostname:34197 &
     - jobs -l
-    - for((i=0; ;++i)); do sleep 2;opened_port=$(netstat -u -n -a | grep :34197| xargs); echo "opened_port $opened_port";  done
+    - for((i=0; ;++i)); do sleep 30; opened_port=$(netstat -u -n -a); if [[ $opened_port == *":34197"* ]]; then echo "factorio server started at $opened_port. Mods validation on start with contol.lua completed! New game has been created!"; exit 0  fi  done
