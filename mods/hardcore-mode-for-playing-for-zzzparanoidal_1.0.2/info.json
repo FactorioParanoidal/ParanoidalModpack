@@ -1,6 +1,6 @@
 {
 	"name": "hardcore-mode-for-playing-for-zzzparanoidal",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"title": "Мост для 'Усложнитель игры' и 'zzzparanoidal'",
 	"author": "bogomolov-a-a",
 	"factorio_version": "1.1",
@@ -16,6 +16,7 @@
 		"KaoExtended",
 		"zzzparanoidal",
 		"hardcore-mode-for-playing >= 1.0.0",
-		"make-moded-technology-tree-mods-protocol"
+		"make-moded-technology-tree-mods-protocol",
+		"!hardcore-mode-for-playing-for-vanilla"
 	]
 }

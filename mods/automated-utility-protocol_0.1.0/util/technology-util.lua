@@ -78,30 +78,37 @@ local function getModedTechnology(technology_candidate, mode)
 	return result
 end
 
-TechUtil.getAllTechnologiesWithRecipeFuelFluidInContainerResultSpecifiedInAnotherRecipeByName = function(
-	recipe_name,
-	mode
-)
-	local fluids = _table.filter(recipeUtil.getAllRecipeResults(recipe_name, mode), function(result_data)
-		local result_data_type = result_data.type
-		local result_data_name = result_data.name or result_data[1]
-		log(
-			"for recipe_name "
-				.. recipe_name
-				.. " result_data "
-				.. Utils.dump_to_console(data.raw[result_data_type][result_data_name])
-		)
-		return result_data_type == "item" and data.raw[result_data.type][result_data_name].fuel_category
-	end)
-	if _table.size(fluids) ~= 1 then
+TechUtil.getAllTechnologyNamesWithFuelResultSpecifiedInAnotherRecipeByName = function(recipe_name, mode)
+	local with_fuel_value_items_or_fluids = _table.filter(
+		recipeUtil.getAllRecipeResults(recipe_name, mode),
+		function(result_data)
+			local result_data_type = result_data.type
+			local result_data_name = result_data.name or result_data[1]
+			return data.raw[result_data_type][result_data_name].fuel_value
+		end
+	)
+	if _table.size(with_fuel_value_items_or_fluids) == 0 then
 		return {}
 	end
-	local target_fluid = fluids[1]
 	local technology_names = TechUtil.getAllActiveTechnologyNames(mode)
-	return _table.filter(technology_names, function(technology_name)
-		local results = TechUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
-		return _table.contains_f_deep(results, target_fluid)
+	local result = {}
+	_table.each(with_fuel_value_items_or_fluids, function(with_fuel_value_item_or_fluid)
+		local with_fuel_value_item_or_fluid_name = with_fuel_value_item_or_fluid.name
+			or with_fuel_value_item_or_fluid[1]
+		local target_item_or_fluid = with_fuel_value_item_or_fluid
+		if string.find(with_fuel_value_item_or_fluid_name, "-barrel", 1, true) then
+			target_item_or_fluid =
+				_table.filter(recipeUtil.getAllRecipeIngredients(recipe_name, mode), function(recipe_ingredient)
+					return recipe_ingredient.type == "fluid"
+				end)[1]
+		end
+		local technology_name_with_result = _table.filter(technology_names, function(technology_name)
+			local results = TechUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+			return _table.contains_f_deep(results, target_item_or_fluid)
+		end)
+		result[target_item_or_fluid] = technology_name_with_result
 	end)
+	return result
 end
 
 TechUtil.getAllActiveTechnologyNames = function(mode)

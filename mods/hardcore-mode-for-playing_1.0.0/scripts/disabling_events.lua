@@ -79,6 +79,9 @@ end
 local function disableRecipe(recipe_name, force)
 	log(recipe_name .. " is disabling for manual crafting")
 	force.set_hand_crafting_disabled_for_recipe(recipe_name, true)
+	if not force.get_hand_crafting_disabled_for_recipe(recipe_name) then
+		error("recipe_name " .. recipe_name .. "can't disable for manual crafting!")
+	end
 	log(recipe_name .. " is disabled for manual crafting")
 end
 
