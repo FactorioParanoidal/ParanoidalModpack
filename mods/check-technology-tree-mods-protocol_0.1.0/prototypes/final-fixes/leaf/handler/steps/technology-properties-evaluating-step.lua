@@ -31,8 +31,8 @@ TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(technology_nam
 	end
 	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
 	EvaluatingStepStatusHolder.initForModeAndTechnology(mode, technology_name)
+	--log("technology_name " .. technology_name)
 	local first_level_parents = TechnologyTreeUtil.findPrerequisitesForTechnologyForFirstLevel(technology_name, mode)
-
 	writeTechnologyPropertiesToTechnologyStatus(technology_name, mode, first_level_parents or {})
 
 	_table.each(first_level_parents, function(dependency_name)

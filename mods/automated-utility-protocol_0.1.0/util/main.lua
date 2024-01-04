@@ -76,6 +76,9 @@ Utils.dump_to_console = function(o)
 	if type(o) == "table" then
 		local s = "{ "
 		for k, v in pairs(o) do
+			if type(k) == "table" then
+				k = '"' .. Utils.dump_to_console(k) .. '"'
+			end
 			if type(k) ~= "number" then
 				k = '"' .. k .. '"'
 			end

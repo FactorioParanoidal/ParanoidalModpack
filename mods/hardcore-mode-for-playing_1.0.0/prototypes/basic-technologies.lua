@@ -62,7 +62,6 @@ function createResourceDetectedTechnology(resource_name, icon_path, icon_size, r
 end
 local function createBasicTechnologyTree()
 	local basic_recipes = {
-		--	"salvaged-mining-drill-bit-mk0",
 		"salvaged-iron-gear-wheel",
 		"salvaged-lab",
 		"salvaged-assembling-machine",
@@ -103,11 +102,7 @@ local function createBasicTechnologyTree()
 		Так что технология только с виду бесполезная, да и медь будет уходить вовсе не на трубы, месторождения будут не такие богатые, чтобы не было перевода сразу всего на медь.]]
 		createBasicTechnology(
 			"coal-wooden-fluid-handling",
-			{
-				--[["bi-wood-pipe",
-			"bi-wood-pipe-to-ground",
-			"salvaged-offshore-pump-0",]]
-			},
+			{},
 			{ "salvaged-automation-tech", water_detected_tech.name, wood_detected_tech.name },
 			2,
 			"__base__/graphics/icons/offshore-pump.png",
@@ -125,18 +120,24 @@ local function createBasicTechnologyTree()
 		-- дробление руды
 		createBasicTechnology(
 			"coal-ore-crushing",
-			{}, --	{ "salvaged-ore-crusher", "angelsore1-crushed", "angelsore3-crushed" },
+			{},
 			{ "coal-ore-mining", stone_detected_tech.name },
 			4,
 			"__hardcore-mode-for-playing__/graphics/icons/ore-crusher.png",
 			64
 		),
 		-- переработка щебня в камень(других вариантов получить обычный камень нет, так как валуны и прочие большие камни не выдают ни угля, ни камня). Ибо остальное ЧИТ
-		createBasicTechnology("coal-stone-processing", { --[["stone-crushed"]]
-		}, { "coal-ore-crushing" }, 5, "__base__/graphics/icons/stone.png", 64),
+		createBasicTechnology(
+			"coal-stone-processing",
+			{},
+			{ "coal-ore-crushing" },
+			5,
+			"__base__/graphics/icons/stone.png",
+			64
+		),
 		createBasicTechnology(
 			"coal-ore-smelting",
-			{ "stone-furnace" }, -- "angelsore1-crushed-smelting", "angelsore3-crushed-smelting" },
+			{ "stone-furnace" },
 			{ "coal-ore-crushing", "coal-stone-processing" },
 			6,
 			"__base__/graphics/icons/stone-furnace.png",
@@ -153,19 +154,20 @@ local function createBasicTechnologyTree()
 		createBasicTechnology(
 			"coal-lighting",
 			{},
-			--"deadlock-copper-lamp", "torch" },
 			{ "coal-ore-smelting" },
 			8,
 			"__base__/graphics/icons/small-lamp.png",
 			64
 		),
 		-- производство дерево - самое основное.
-		createBasicTechnology("basic-wood-production", {
-			--[["coal-bi-bio-farm",
-			"coal-bi-bio-greenhouse",
-			"basic-coal-production-wood",
-			"basic-coal-production-seedling",]]
-		}, { "coal-stone-smelting", "coal-ore-smelting", "coal-lighting" }, 9, "__base__/graphics/icons/wood.png", 64),
+		createBasicTechnology(
+			"basic-wood-production",
+			{},
+			{ "coal-stone-smelting", "coal-ore-smelting", "coal-lighting" },
+			9,
+			"__base__/graphics/icons/wood.png",
+			64
+		),
 		createBasicTechnology(
 			"basic-storage-wood",
 			{ "wooden-chest" },
@@ -195,30 +197,30 @@ local function createBasicTechnologyTree()
 			"electricity-0",
 			{
 				"small-electric-pole",
-				--	, "texugo-wind-turbine"
 			},
 			{ "basic-metal-processing", "basic-wood-production" },
 			13,
 			"__base__/graphics/icons/small-electric-pole.png",
 			64
 		),
-		createBasicTechnology("basic-electronics", { --[["motor", "electric-motor"]]
-		}, { "basic-metal-processing" }, 14, "__base__/graphics/icons/electronic-circuit.png", 64),
+		createBasicTechnology(
+			"basic-electronics",
+			{},
+			{ "basic-metal-processing" },
+			14,
+			"__base__/graphics/icons/electronic-circuit.png",
+			64
+		),
 		createBasicTechnology("military-0", {
 			"pistol",
 			"firearm-magazine",
-			--"pistol-rearm-ammo",
-			--"bi-wooden-fence",
-			--"respirator",
 		}, { "basic-wood-production", "coal-ore-smelting" }, 15, "__base__/graphics/icons/pistol.png", 64),
 		createBasicTechnology("burner-ore-mining", {
 			"burner-mining-drill",
-			--	, "mining-drill-bit-mk0"
 		}, { "coal-ore-mining", "basic-electronics" }, 16, "__base__/graphics/icons/burner-mining-drill.png", 64),
 		createBasicTechnology(
 			"burner-ore-crushing",
-			{ --[["burner-ore-crusher"]]
-			},
+			{},
 			{ "burner-ore-mining", "coal-ore-crushing", "salvaged-automation-tech" },
 			17,
 			"__hardcore-mode-for-playing__/graphics/icons/ore-crusher.png",
@@ -233,7 +235,6 @@ local function createBasicTechnologyTree()
 			256
 		),
 		createBasicTechnology("automation-science-pack", {
-			--[["lab", --[["sci-component-1",]]
 			"automation-science-pack",
 		}, {
 			"basic-electronics",
