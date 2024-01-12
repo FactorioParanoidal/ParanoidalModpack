@@ -29,6 +29,7 @@ pull-localization:
     - git clone --depth 1 https://SKProCH:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git paranoidalLocaleTemp
     - cd paranoidalLocaleTemp
     - ./build.sh  PullLocalization
+    - git add -A .
     - git config --global user.email 'skproch@yandex.ru'
     - git commit --verbose -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && echo "No changes"
     - git push --verbose origin
