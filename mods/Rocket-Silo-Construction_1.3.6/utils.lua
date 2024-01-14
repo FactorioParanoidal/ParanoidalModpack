@@ -154,3 +154,11 @@ function remove_raw_ingredient(raw, name)
     end
 	end
 end
+
+function get_localized_name(name)
+local lname = ''
+if game.item_prototypes[name]   then lname = game.item_prototypes[name].localised_name
+ elseif game.equipment_prototypes[name]    then lname = game.equipment_prototypes[name].localised_name  
+ elseif game.entity_prototypes[name] then lname = game.entity_prototypes[name].localised_name end
+return  lname 
+end
