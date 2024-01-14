@@ -2,16 +2,10 @@ local table = require("__flib__.table")
 
 local util = require("scripts.util")
 
-return function(database)
-  for name, prototype in pairs(global.prototypes.lab) do
-    -- Add to items
-    for _, item_name in ipairs(prototype.lab_inputs) do
-      local item_data = database.item[item_name]
-      if item_data then
-        item_data.researched_in[#item_data.researched_in + 1] = { class = "entity", name = name }
-      end
-    end
+local lab_proc = {}
 
+function lab_proc.build(database)
+  for name, prototype in pairs(global.prototypes.lab) do
     local fuel_categories, fuel_filter = util.process_energy_source(prototype)
     database.entity[name] = {
       blueprintable = util.is_blueprintable(prototype),
@@ -39,3 +33,25 @@ return function(database)
     util.add_to_dictionary("entity_description", name, prototype.localised_description)
   end
 end
+
+-- Store labs in science pack items' researched_in
+function lab_proc.process_researched_in(database)
+  for name, prototype in pairs(global.prototypes.lab) do
+    -- Add to items
+    for _, item_name in ipairs(prototype.lab_inputs) do
+      local item_data = database.item[item_name]
+      if item_data then
+        item_data.researched_in[#item_data.researched_in + 1] = { class = "entity", name = name }
+      end
+    end
+  end
+end
+
+-- When calling the module directly, call lab_proc.build
+setmetatable(lab_proc, {
+  __call = function(_, ...)
+    return lab_proc.build(...)
+  end,
+})
+
+return lab_proc

@@ -63,8 +63,20 @@ return function(database, metadata)
         if io_type == "products" and (not disabled or disabled ~= 0) then
           local subtable = category_data[material.type .. "s"]
           subtable[#subtable + 1] = { class = material.type, name = material.name }
+
+          -- If this recipe is enabled at start and is not disabled,
+          -- set enabled at start for its products and their placement results.
           if enabled_at_start then
             material_data.enabled_at_start = true
+            for _, property in pairs({ "place_result", "place_as_equipment_result" }) do
+              local placed_ident = material_data[property]
+              if placed_ident then
+                local placed_data = database[placed_ident.class][placed_ident.name]
+                if placed_data then
+                  placed_data.enabled_at_start = true
+                end
+              end
+            end
           end
         end
 

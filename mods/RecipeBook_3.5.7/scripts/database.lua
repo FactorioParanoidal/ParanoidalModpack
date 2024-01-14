@@ -62,10 +62,11 @@ function database.build()
   mining_drill(database)
 
   fluid(database, metadata)
-  item(database, metadata)
 
   lab(database)
-  offshore_pump(database)
+  offshore_pump(database) -- requires fluids
+
+  item(database, metadata) -- requires all entities
 
   recipe(database, metadata)
   resource(database)
@@ -75,6 +76,7 @@ function database.build()
   fluid.process_temperatures(database, metadata)
   mining_drill.add_resources(database)
   fuel_category.check_fake_category(database)
+  lab.process_researched_in(database)
 
   burning(database)
   entity_state(database)
@@ -83,12 +85,12 @@ function database.build()
 end
 
 local function update_launch_products(launch_products, force_index, to_value)
-  for _, launch_product in ipairs(launch_products) do
+  for _, launch_product in pairs(launch_products) do
     local product_data = database.item[launch_product.name]
     if product_data.researched_forces then
       product_data.researched_forces[force_index] = to_value
     end
-    update_launch_products(database, product_data.rocket_launch_products, force_index)
+    update_launch_products(product_data.rocket_launch_products, force_index, to_value)
   end
 end
 
