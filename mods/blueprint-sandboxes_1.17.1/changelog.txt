@@ -1,4 +1,38 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.17.1
+Date: 2024-01-09
+  Changes:
+    - Neutral Entities in Sandboxes are now considered the same as those belonging to the Sandbox Force
+  Bugfixes:
+    - Items on the ground in Sandboxes were not being destroyed when marked for deconstruction
+---------------------------------------------------------------------------------------------------
+Version: 1.17.0
+Date: 2024-01-03
+  Changes:
+    - A Player changing Forces now has their Sandbox Entities assigned to the new Force
+---------------------------------------------------------------------------------------------------
+Version: 1.16.8
+Date: 2023-11-07
+  Bugfixes:
+    - Another potential startup crash from last release
+---------------------------------------------------------------------------------------------------
+Version: 1.16.7
+Date: 2023-11-07
+  Bugfixes:
+    - Startup crash from last release
+---------------------------------------------------------------------------------------------------
+Version: 1.16.6
+Date: 2023-11-06
+  Changes:
+    - Editor Extensions' Lab setting is forcefully disabled due to compatibility issues
+  Bugfixes:
+    - Updated support for Editor Extensions' Recipes in the Sandbox
+---------------------------------------------------------------------------------------------------
+Version: 1.16.5
+Date: 2023-10-31
+  Changes:
+    - Support for ignoring Smarter Inserter's temporary Entities
+---------------------------------------------------------------------------------------------------
 Version: 1.16.4
 Date: 2023-07-30
   Changes:

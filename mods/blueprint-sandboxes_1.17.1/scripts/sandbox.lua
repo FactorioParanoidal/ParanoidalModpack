@@ -325,12 +325,21 @@ function Sandbox.OnPlayerForceChanged(player)
             labData.sandboxForceName = sandboxForceName
         end
 
+        local labForce = Force.GetOrCreateSandboxForce(force)
         if Sandbox.IsPlayerInsideSandbox(player) then
-            player.print("Your Force changed, so you have been removed from your Sandbox")
-            playerData.preSandboxForceName = force.name
-            Sandbox.Exit(player)
+            if Sandbox.GetSandboxChoiceFor(player, player.surface) ~= Sandbox.player then
+                player.print("Your Force changed, so you have been removed from a Sandbox that you are no longer allowed in")
+                playerData.preSandboxForceName = force.name
+                Sandbox.Exit(player)
+            else
+                player.force = labForce
+            end
         end
-        player.print("Your Force changed, so you might have to Reset your Lab")
+
+        local labSurface = game.surfaces[Lab.NameFromPlayer(player)]
+        if labSurface then
+            Lab.AssignEntitiesToForce(labSurface, labForce)
+        end
     end
 end
 

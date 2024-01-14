@@ -69,5 +69,9 @@ I have found at least three existing discussions on this topic, for reference:
 * [Updated blueprint has no entities during on_player_setup_blueprint](https://forums.factorio.com/viewtopic.php?f=48&t=88100)
 * [get blueprint-book from library link](https://test.forums.factorio.com/viewtopic.php?t=95272)
 
+### Editor Extensions Lab Setting is incompatible
+
+When Editor Extensions is enabled, its Lab Setting is disabled because it is incompatible with this mod.
+
 ## Credits
 * undermark5: Factorissimo Performance Improvements

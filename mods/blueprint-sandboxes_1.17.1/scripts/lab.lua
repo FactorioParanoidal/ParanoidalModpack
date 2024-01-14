@@ -180,4 +180,24 @@ function Lab.Equip(surface)
     return true
 end
 
+-- Update all Entities in Lab with a new Force
+function Lab.AssignEntitiesToForce(surface, force)
+    local surfaceData = global.labSurfaces[surface.name]
+    if not surfaceData then
+        log("Not a Lab, won't Reassign: " .. surface.name)
+        return false
+    end
+
+    log("Reassigning Lab to: " .. surface.name .. " -> " .. force.name)
+
+    for _, entity in pairs(surface.find_entities_filtered {
+        force = surfaceData.sandboxForceName,
+        invert = true,
+    }) do
+        entity.force = force
+    end
+
+    return true
+end
+
 return Lab
