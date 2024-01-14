@@ -1,6 +1,6 @@
 local Migrate = {}
 
-Migrate.version = 011604
+Migrate.version = 011701
 
 function Migrate.Run()
     if not global.version then
@@ -22,6 +22,7 @@ function Migrate.Run()
         if global.version < 011103 then Migrate.v1_11_3() end
         if global.version < 011500 then Migrate.v1_15_0() end
         if global.version < 011604 then Migrate.v1_16_4() end
+        if global.version < 011606 then Migrate.v1_16_6() end
     end
 
     global.version = Migrate.version
@@ -382,6 +383,22 @@ function Migrate.v1_16_4()
     global.equipmentInProgress = {}
 
     log("Migration 1.16.4 Finished")
+end
+
+function Migrate.v1_16_6()
+    --[[
+    1.16.6 added Remote Interface support for Editor Extensions
+    ]]
+
+    log("Migration 1.16.6 Starting")
+
+    for _, force in pairs(game.forces) do
+        if Sandbox.IsSandboxForce(force) then
+            EditorExtensionsCheats.EnableTestingRecipes(force)
+        end
+    end
+
+    log("Migration 1.16.6 Finished")
 end
 
 return Migrate

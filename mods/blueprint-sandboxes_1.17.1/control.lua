@@ -7,6 +7,7 @@ Queue = require("scripts.queue")
 
 -- Required by some
 Illusion = require("scripts.illusion")
+EditorExtensionsCheats = require("scripts.editor-extensions-cheats")
 
 -- Required, but not ordered importantly
 Init = require("scripts.init")

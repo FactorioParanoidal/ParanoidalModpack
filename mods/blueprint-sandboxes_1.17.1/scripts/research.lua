@@ -53,6 +53,8 @@ function Research.EnableSandboxSpecificResearch(force)
         end
     end
 
+    EditorExtensionsCheats.EnableTestingRecipes(force)
+
     global.sandboxForces[force.name].hiddenItemsUnlocked = true
 end
 

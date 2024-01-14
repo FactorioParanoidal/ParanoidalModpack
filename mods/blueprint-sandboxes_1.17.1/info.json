@@ -1,6 +1,6 @@
 {
   "name": "blueprint-sandboxes",
-  "version": "1.16.4",
+  "version": "1.17.1",
   "factorio_version": "1.1",
   "title": "Blueprint Sandboxes",
   "author": "somethingtohide",
@@ -9,6 +9,7 @@
   "dependencies": [
     "base >= 1.1.87",
     "? space-exploration >= 0.5.18",
+    "? EditorExtensions >= 2.0.0",
     "? Cursed-FMD",
     "? factorissimo-2-notnotmelon"
   ]
