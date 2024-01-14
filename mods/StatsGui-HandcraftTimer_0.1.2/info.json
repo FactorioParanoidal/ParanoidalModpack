@@ -1,9 +1,0 @@
-{ "name": "StatsGui-HandcraftTimer"
-, "version": "0.1.2"
-, "title": "Stats GUI — Handcraft Timer"
-, "author": "OrichalcumCosmonaut"
-, "contact": "ActivityPub: @orichalcumcosmonaut@types.pl"
-, "description": "Adds a handcraft timer to Stats GUI."
-, "factorio_version": "1.1"
-, "dependencies": ["base", "StatsGui", "flib >= 0.12.7"]
-}
