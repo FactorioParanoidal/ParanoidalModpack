@@ -84,7 +84,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
     local sprite_path = sprite_path_prefix .. "/" .. milestone.name
     local sprite_number
-    local tooltip = milestone.tooltip   -- Milestone tooltip has precidence
+    local tooltip = milestone.tooltip  -- Milestone tooltip has precedence
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
         tooltip = tooltip or {"", milestone.quantity, "x ", prototype.localised_name}
@@ -242,10 +242,15 @@ function build_display_page(player)
 
     local nb_groups = table_size(global_force.milestones_by_group)
     if view_by_group and nb_groups > 1 then
-        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group, compact_list, show_estimations)
+        local visible_milestones_per_group = {}
+        for group_name, group_milestones in pairs(global_force.milestones_by_group) do
+            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones)
+        end
+
+        local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
         local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
         local i = 1
-        for group_name, group_milestones in pairs(global_force.milestones_by_group) do
+        for group_name, group_milestones in pairs(visible_milestones_per_group) do
             -- Group title
             milestones_table.add({type="label", caption=group_name, style="caption_label"})
             add_n_empty_widgets(milestones_table, column_count-1)
@@ -270,8 +275,10 @@ function build_display_page(player)
             end
         end
     else
+        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones)
+
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-        local nb_milestones = #global_force.complete_milestones + #global_force.incomplete_milestones
+        local nb_milestones = #global_force.complete_milestones + #visible_incomplete_milestones
         local column_count = math.max(
             math.min(
                 math.ceil(math.sqrt(nb_milestones / 3)),
@@ -283,7 +290,7 @@ function build_display_page(player)
             add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
 
-        for _, milestone in pairs(global_force.incomplete_milestones) do
+        for _, milestone in pairs(visible_incomplete_milestones) do
             add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
     end

@@ -6,7 +6,7 @@ function table_contains(table, element)
 end
 
 function validate_milestones(milestones)
-    local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group', 'alias'}
+    local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group', 'alias', 'hidden'}
     for _, milestone in pairs(milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
@@ -28,6 +28,11 @@ function validate_milestones(milestones)
         end
         if milestone.type == 'alias' and type(milestone.equals) ~= "string" then
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "equals"}
+        end
+        if (type(milestone.hidden) == "boolean" and milestone.hidden) or milestone.hidden == "true" then
+            milestone.hidden = true
+        else
+            milestone.hidden = nil
         end
     end
     return milestones, nil

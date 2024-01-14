@@ -93,10 +93,10 @@ function initialize_alias_table()
                 valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
             end
             if valid_alias then
-            global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
-            table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+                global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
+                table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+            end
         end
-    end
     end
 end
 
@@ -266,6 +266,16 @@ function sort_milestones(milestones)
         if a.completion_tick == b.completion_tick then return a.sort_index < b.sort_index end
         return a.completion_tick < b.completion_tick
     end)
+end
+
+function filter_hidden_milestones(milestones)
+    local visible_milestones = {}
+    for _, milestone in pairs(milestones) do
+        if not(milestone.hidden and milestone.completion_tick == nil) then
+            table.insert(visible_milestones, milestone)
+        end
+    end
+    return visible_milestones
 end
 
 function backfill_completion_times(force)

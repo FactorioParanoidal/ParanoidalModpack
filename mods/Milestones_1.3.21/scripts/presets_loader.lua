@@ -55,15 +55,15 @@ local function add_remote_presets_to_preset_table()
     -- See presets.lua to find out how to use this reverse remote interface to add your own preset.
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
-          local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-          if validate_milestone_presets(interface_name, remote_milestones_presets, presets) then
-            ---@cast remote_milestones_presets table
-            for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-                presets[remote_preset_name] = remote_preset
+            local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
+            if validate_milestone_presets(interface_name, remote_milestones_presets, presets) then
+                ---@cast remote_milestones_presets table
+                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
+                    presets[remote_preset_name] = remote_preset
+                end
             end
-          end
         end
-      end
+    end
 end
 
 function load_presets()
