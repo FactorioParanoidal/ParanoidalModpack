@@ -106,7 +106,7 @@ function table_comp.update(component, refs, object_data, player_data, settings, 
           i = i + 1
           local value_label = children[i]
           if not value_label or not value_label.valid or value_label.type ~= "label" then
-            if value_label then
+            if value_label and value_label.valid then
               value_label.destroy()
             end
             value_label = tbl.add({ type = "label", index = i })
@@ -115,8 +115,8 @@ function table_comp.update(component, refs, object_data, player_data, settings, 
         elseif row.type == "goto" then
           i = i + 1
           local button = children[i]
-          if not button or button.type ~= "button" then
-            if button then
+          if not button or not button.valid or button.type ~= "button" then
+            if button and button.valid then
               button.destroy()
             end
             button = tbl.add({
@@ -151,8 +151,8 @@ function table_comp.update(component, refs, object_data, player_data, settings, 
         elseif row.type == "tech_level_selector" then
           i = i + 1
           local flow = children[i]
-          if not flow or flow.type ~= "flow" then
-            if flow then
+          if not flow or not flow.valid or flow.type ~= "flow" then
+            if flow and flow.valid then
               flow.destroy()
             end
             flow = gui.build(tbl, {
@@ -194,9 +194,8 @@ function table_comp.update(component, refs, object_data, player_data, settings, 
             value_label = tbl.add({ type = "label", index = i })
           end
           local tech_level = variables.selected_tech_level
-          value_label.caption = formatter[row.formatter](
-            game.evaluate_expression(value, { L = tech_level, l = tech_level })
-          )
+          value_label.caption =
+            formatter[row.formatter](game.evaluate_expression(value, { L = tech_level, l = tech_level }))
         end
       end
     end
