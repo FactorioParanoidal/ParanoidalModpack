@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2024-01-06
+  Changes:
+    - Prevent unnecessary on_entity_color_changed events when replacing trains with no color set.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2022-01-23
   Bugfixes:
