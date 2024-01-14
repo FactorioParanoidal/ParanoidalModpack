@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.25
+Date: 2023-12-31
+  Changes:
+    - "Inventory tables are sorted by item count in descending order" (thanks to Atria1234)
+    - Added get_provided_inventory_for_surface remote call (thanks to uzere)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.24
+Date: 2023-10-15
+  Fixes:
+    - Inventory tables are sorted by item count in descending order.
+---------------------------------------------------------------------------------------------------
 Version: 0.4.23
 Date: 2023-05-04
   Fixes:
@@ -34,7 +45,7 @@ Version: 0.4.17
 Date: 2023-02-11
   Fixes:
     - Shift-clicking a station should now zoom to the surface the entity is on.
-	- Should no longer error when iterating over invalid trains.
+    - Should no longer error when iterating over invalid trains.
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.16
 Date: 2023-01-19
