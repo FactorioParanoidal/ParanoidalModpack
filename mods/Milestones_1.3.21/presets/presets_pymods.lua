@@ -186,6 +186,8 @@ presets["Full PyMods"] = {
         {type="item",       name="antelope",       quantity=1},
 
         {type="group",      name="Progress"},
+        {type="item",       name="assembling-machine-1",          quantity=1},
+        {type="item",       name="splitter",                      quantity=1},
         {type="item",       name="locomotive",                    quantity=1},
         {type="item",       name="mk02-locomotive",               quantity=1},
         {type="item",       name="ht-locomotive",                 quantity=1},
@@ -360,6 +362,8 @@ presets["Full PyMods (minus Alternative Energy)"] = {
         {type="item",       name="antelope",       quantity=1},
 
         {type="group",      name="Progress"},
+        {type="item",       name="assembling-machine-1",          quantity=1},
+        {type="item",       name="splitter",                      quantity=1},
         {type="item",       name="locomotive",                    quantity=1},
         {type="item",       name="mk02-locomotive",               quantity=1},
         {type="item",       name="ht-locomotive",                 quantity=1},
@@ -448,6 +452,8 @@ presets["Medium PyMods"] = {
         {type="item",       name="space-science-pack",            quantity=1000, next="x10"},
 
         {type="group",      name="Progress"},
+        {type="item",       name="assembling-machine-1",          quantity=1},
+        {type="item",       name="splitter",                      quantity=1},
         {type="item",       name="locomotive",                    quantity=1},
         {type="item",       name="mk02-locomotive",               quantity=1},
         {type="item",       name="ht-locomotive",                 quantity=1},

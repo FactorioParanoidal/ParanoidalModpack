@@ -50,6 +50,10 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
 
+    if milestone.hidden then
+        milestone_flow.tags = {hidden= true}
+    end
+
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
         local default_selection = nil
@@ -170,11 +174,16 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
             next_formula = nil
         end
     end
+
+    local hidden = flow.tags.hidden
+    if not hidden or hidden == "" then hidden = nil end
+
     return {
         type=flow.milestones_settings_item.tags.milestone_type,
         name=flow.milestones_settings_item.elem_value,
         quantity=quantity,
-        next=next_formula
+        next=next_formula,
+        hidden=hidden
     }
 end
 

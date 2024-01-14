@@ -75,7 +75,7 @@ presets = {
     },
 
 
-    ["Space Exploration (No Spoilers)"] = {
+    ["Space Exploration"] = {
         required_mods = {"space-exploration"},
         milestones = {
             {type="group",      name="Science"},
@@ -129,6 +129,8 @@ presets = {
             {type="item",       name="logistic-chest-requester",     quantity=1},
             {type="technology", name="se-spaceship",                 quantity=1},
             {type="item",       name="se-space-elevator",            quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 
             {type="group",      name="Kills"},
@@ -194,7 +196,7 @@ presets = {
     },
 
 
-    ["Space Exploration + Krastorio 2 (No Spoilers)"] = {
+    ["Space Exploration + Krastorio 2"] = {
         required_mods = {"space-exploration", "Krastorio2"},
         milestones = {
             {type="group",      name="Science"},
@@ -261,6 +263,8 @@ presets = {
             {type="technology", name="kr-advanced-pickaxe",          quantity=1},
             {type="item",       name="ai-core",                      quantity=1},
             {type="fluid",      name="matter",                       quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="item",       name="kr-intergalactic-transceiver", quantity=1},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 
@@ -550,6 +554,8 @@ presets = {
             {type="technology", name="kr-advanced-pickaxe",          quantity=1},
             {type="item",       name="ai-core",                      quantity=1},
             {type="fluid",      name="matter",                       quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="item",       name="kr-intergalactic-transceiver", quantity=1},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 

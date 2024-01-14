@@ -11,26 +11,62 @@ local function force_print(force, message)
     end
 end
 
+local function raise_milestone_reached_event(force, milestone, message)
+	if On_milestone_reached_event then
+		script.raise_event(On_milestone_reached_event, {
+            force = force,
+            name = milestone.name,
+            quantity = milestone.quantity,
+            completion_tick = milestone.completion_tick,
+            message = message
+		})
+	end
+end
+
+-- Writes to a file named "milestones-<MAP SEED>.txt"
+-- Each milestone reached appends a new line.
+-- Each line is JSON and looks like this: 
+-- {"force":"player","name":"iron-ore","quantity":10,"type"="item","completion_tick":5279,"completion_time":"1:27"}
+local function write_milestone_to_file(force, milestone, human_timestamp)
+    local file_name = string.format("milestones-%s.txt", game.default_map_gen_settings.seed)
+    local table = {
+        force = force.name,
+        name = milestone.name,
+        quantity = milestone.quantity,
+        type = milestone.type,
+        completion_tick = milestone.completion_tick,
+        completion_time = human_timestamp,
+    }
+    local json = game.table_to_json(table) .. "\n"
+    for player_index, player in pairs(force.players) do
+        if settings.get_player_settings(player)["milestones_write_file"].value then
+            game.write_file(file_name, json, true, player_index)
+        end
+    end
+end
+
+
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
     local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
     local sprite_name = sprite_path_prefix .. "." .. milestone.name
-    local localised_name
+    local milestone_localised_name
+    local message
     if milestone.type == "technology" then
-        localised_name = game.technology_prototypes[milestone.name].localised_name
+        milestone_localised_name = game.technology_prototypes[milestone.name].localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
-        force_print(force, {"milestones.message_milestone_reached_technology", sprite_name, localised_name, level_string, human_timestamp})
+        message = {"milestones.message_milestone_reached_technology", sprite_name, milestone_localised_name, level_string, human_timestamp}
     else
         if milestone.type == "item" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
-                localised_name = "Cargo rocket"
+                milestone_localised_name = "Cargo rocket"
             else
-                localised_name = game.item_prototypes[milestone.name].localised_name
+                milestone_localised_name = game.item_prototypes[milestone.name].localised_name
             end
         elseif milestone.type == "fluid" then
-            localised_name = game.fluid_prototypes[milestone.name].localised_name
+            milestone_localised_name = game.fluid_prototypes[milestone.name].localised_name
         elseif milestone.type == "kill" then
-            localised_name = game.entity_prototypes[milestone.name].localised_name
+            milestone_localised_name = game.entity_prototypes[milestone.name].localised_name
         else
             error("Invalid milestone type! " .. milestone.type)
         end
@@ -41,15 +77,19 @@ local function print_milestone_reached(force, milestone)
             postscript = " (haha! 😁)"
         end
         if milestone.quantity == 1 then
-            force_print(force, {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}, postscript})
+            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, milestone_localised_name, human_timestamp}, postscript}
         else
             local print_quantity = milestone.quantity
             if milestone.quantity >= 10000 then
                 print_quantity = core_util.format_number(milestone.quantity, true)
             end
-            force_print(force, {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, localised_name, human_timestamp}, postscript})
+            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, milestone_localised_name, human_timestamp}, postscript}
         end
     end
+
+    force_print(force, message)
+    raise_milestone_reached_event(force, milestone, message)
+    write_milestone_to_file(force, milestone, human_timestamp)
     force.play_sound{path="utility/achievement_unlocked"}
 end
 
