@@ -52,6 +52,14 @@ data:extend({
 
 {
 	type = "bool-setting",
+	name = "rsc-fill-concrete",
+	setting_type = "runtime-global",
+	default_value = true,
+	order = "a"
+},
+
+{
+	type = "bool-setting",
 	name = "rsc-only-in-alt-mode",
 	setting_type = "runtime-global",
 	default_value = false,

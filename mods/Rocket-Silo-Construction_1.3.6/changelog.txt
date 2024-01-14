@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 05. 09. 2023
+  Changes:
+    - Added mod option to enable/disable placing concrete tiles around construction
+    - Added remote interface for other mods to skip a construction stage
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 02. 03. 2023
+  Compatibility:
+    - Removed missing stage 6 ingredient when playing IndustrialRevolution3
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 10. 05. 2023
+  Compatibility:
+    - Made compatible with Exotic Industries
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 02. 03. 2023
+  Bugfixes:
+    - Fixed costs for IndustrialRevolution3
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 01. 02. 2023
+  Compatibility:
+    - Made compatible with IndustrialRevolution3
+  Changes:
+    - Added custom command to print construction cost: /rsc-totalcost
+---------------------------------------------------------------------------------------------------
 Version: 1.3.1
   Bugfixes:
     - Fixed a load crash when disabled the contruction of SE Cargo Silo
