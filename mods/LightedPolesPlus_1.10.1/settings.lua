@@ -30,7 +30,7 @@ data:extend({
     order = "bb",
     setting_type = "startup",
     allow_blank = true,
-    default_value = "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation",
+    default_value = "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation,se-pylon-construction,se-pylon-construction-radar",
   },
   {
     type = "string-setting",
