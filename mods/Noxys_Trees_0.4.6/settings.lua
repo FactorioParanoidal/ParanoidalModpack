@@ -11,6 +11,15 @@ data:extend({
 	},
 	{
 		type = "double-setting",
+		name = "Noxys_Trees-tree_fire_spread_speed_factor",
+		setting_type = "startup",
+		minimum_value = 0.0001,
+		default_value = 1.0,
+		maximum_value = 10.0,
+		order = "b",
+	},
+	{
+		type = "double-setting",
 		name = "Noxys_Trees-emission_multiplier",
 		setting_type = "startup",
 		default_value = 1,
@@ -45,6 +54,13 @@ data:extend({
 		name = "Noxys_Trees-degrade-tiles",
 		setting_type = "runtime-global",
 		default_value = true,
+		order = "a-c-a"
+	},
+	{
+		type = "bool-setting",
+		name = "Noxys_Trees-do-not-degrade-reinforced-tiles",
+		setting_type = "runtime-global",
+		default_value = false,
 		order = "a-c-a"
 	},
 	{
@@ -191,6 +207,13 @@ data:extend({
 		setting_type = "runtime-global",
 		default_value = "1",
 		order = "a-l",
+	},
+	{
+		type = "bool-setting",
+		name = "Noxys_Trees-trees-grow-on-landfill",
+		setting_type = "runtime-global",
+		default_value = false,
+		order = "a-m",
 	},
 	-- Per user
 })
