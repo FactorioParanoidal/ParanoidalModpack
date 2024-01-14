@@ -140,8 +140,9 @@ local function toggle_hover(event)
     local index = event.player_index
     clear(index)
     local player = game.get_player(index) --[[@as LuaPlayer]]
-    global.hover[index] = not global.hover[index]
-    player.set_shortcut_toggled("bv-toggle-hover", global.hover[index])
+    local toggle = not player.is_shortcut_toggled("bv-toggle-hover")
+    global.hover[index] = toggle
+    player.set_shortcut_toggled("bv-toggle-hover", toggle)
 end
 
 script.on_event("bv-toggle-hover", toggle_hover)
@@ -218,16 +219,16 @@ local next_switch = {
     ["underground-belt"] = function(entity)
         if entity.belt_to_ground_type == "input" then
             return entity.neighbours
-            else
+        else
             return entity.belt_neighbours.outputs[1]
-            end
+        end
     end,
     ["linked-belt"] = function(entity)
         if entity.linked_belt_type == "input" then
             return entity.linked_belt_neighbour
         else
             return entity.belt_neighbours.outputs[1]
-    end
+        end
     end,
 }
 
@@ -246,7 +247,7 @@ local previous_switch = {
     ["linked-belt"] = function(entity)
         if entity.linked_belt_type == "output" then
             return entity.linked_belt_neighbour
-                        else
+        else
             return entity.belt_neighbours.inputs[1]
         end
     end,
@@ -282,7 +283,7 @@ local function cache_belt_line(data, max_highlights)
     if head and head.valid then
         head = switch(next_switch, get_belt_type(head), head)
         data.head = walk_belt(head, next_switch, belt_line, max_highlights, ghost)
-        end
+    end
     if tail and tail.valid then
         data.tail = walk_belt(tail, previous_switch, belt_line, max_highlights, ghost, true)
     end
