@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+  Bugfixes:
+    - added checks for existing player when clicking an alert, possibly preventing a crash
+---------------------------------------------------------------------------------------------------
 Version: 1.3.2
   Bugfixes:
     - added checks for existing entities when clicking an alert, possibly preventing a crash
