@@ -28,21 +28,6 @@ noxy_trees.disabled_match = {
 	["sapling[-]stage[-]"] = true,
 }
 noxy_trees.degradable = { -- The floor tiles that can be degraded and into what.
-	-- Vanilla tiles 0.18
-	["refined-concrete"]              = "concrete",
-	["refined-hazard-concrete-left"]  = "refined-concrete",
-	["refined-hazard-concrete-right"] = "refined-concrete",
-	["red-refined-concrete"]          = "refined-concrete",
-	["green-refined-concrete"]        = "refined-concrete",
-	["blue-refined-concrete"]         = "refined-concrete",
-	["orange-refined-concrete"]       = "refined-concrete",
-	["yellow-refined-concrete"]       = "refined-concrete",
-	["pink-refined-concrete"]         = "refined-concrete",
-	["purple-refined-concrete"]       = "refined-concrete",
-	["black-refined-concrete"]        = "refined-concrete",
-	["brown-refined-concrete"]        = "refined-concrete",
-	["cyan-refined-concrete"]         = "refined-concrete",
-	["acid-refined-concrete"]         = "refined-concrete",
 	-- Vanilla tiles
 	["concrete"]              = "stone-path",
 	["stone-path"]            = true,
@@ -219,9 +204,30 @@ noxy_trees.degradable = { -- The floor tiles that can be degraded and into what.
 	["wood floors_brick speed"] = true,
 }
 
+noxy_trees.reinforced_degradable = {
+	-- Vanilla tiles 0.18
+	["refined-concrete"]              = "concrete",
+	["refined-hazard-concrete-left"]  = "refined-concrete",
+	["refined-hazard-concrete-right"] = "refined-concrete",
+	["red-refined-concrete"]          = "refined-concrete",
+	["green-refined-concrete"]        = "refined-concrete",
+	["blue-refined-concrete"]         = "refined-concrete",
+	["orange-refined-concrete"]       = "refined-concrete",
+	["yellow-refined-concrete"]       = "refined-concrete",
+	["pink-refined-concrete"]         = "refined-concrete",
+	["purple-refined-concrete"]       = "refined-concrete",
+	["black-refined-concrete"]        = "refined-concrete",
+	["brown-refined-concrete"]        = "refined-concrete",
+	["cyan-refined-concrete"]         = "refined-concrete",
+	["acid-refined-concrete"]         = "refined-concrete",
+}
+
 -- Create a list for use in a filter function based of the degradable tiles.
 noxy_trees.tilefilter = {}
 for k,_ in pairs(noxy_trees.degradable) do
+	noxy_trees.tilefilter[#noxy_trees.tilefilter + 1] = k
+end
+for k,_ in pairs(noxy_trees.reinforced_degradable) do
 	noxy_trees.tilefilter[#noxy_trees.tilefilter + 1] = k
 end
 
@@ -257,6 +263,7 @@ noxy_trees.fertility = { -- Tiles not listed here are considered non fertile (no
 	["red-desert-dark"] = 0.15,
 	["sand-dark"]       = 0.15,
 	["sand"]            = 0.1,
+	["landfill"]        = 0, -- Not fertile
 	-- Alien biomes 0.15
 	["grass-red"]         = 1,
 	["grass-orange"]      = 1,
@@ -446,6 +453,7 @@ noxy_trees.fertility = { -- Tiles not listed here are considered non fertile (no
 	["frozen-snow-8"]                = 0.5,
 	["frozen-snow-9"]                = 0.5,
 }
+
 noxy_trees.deathselector = {
 	"dead-grey-trunk",
 	"dry-hairy-tree",
@@ -601,6 +609,7 @@ local function cache_settings()
 	config.debug                               = settings.global["Noxys_Trees-debug"].value
 	config.debug_interval                      = settings.global["Noxys_Trees-debug-interval"].value
 	config.degrade_tiles                       = settings.global["Noxys_Trees-degrade-tiles"].value
+	config.do_not_degrade_reinforced_tiles     = settings.global["Noxys_Trees-do-not-degrade-reinforced-tiles"].value
 	config.overpopulation_kills_trees          = settings.global["Noxys_Trees-overpopulation-kills-trees"].value
 	config.kill_trees_near_unwanted            = settings.global["Noxys_Trees-kill-trees-near-unwanted"].value
 	config.ticks_between_operations            = settings.global["Noxys_Trees-ticks-between-operations"].value
@@ -618,6 +627,11 @@ local function cache_settings()
 	config.maximum_trees_per_chunk             = settings.global["Noxys_Trees-maximum-trees-per-chunk"].value
 	config.expansion_distance                  = settings.global["Noxys_Trees-expansion-distance"].value
 	config.surfaces                            = settings.global["Noxys_Trees-surfaces"].value
+	config.trees_grow_on_landfill              = settings.global["Noxys_Trees-trees-grow-on-landfill"].value
+
+	if config.trees_grow_on_landfill then
+		noxy_trees.fertility["landfill"] = 0.5
+	end
 
 	cache_surfaces()
 end
@@ -681,8 +695,15 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
 	local tile = surface.get_tile(newpos[1], newpos[2])
 	if tile and tile.valid == true then
 		-- Tile degradation
+		local degrade_to = nil
 		if config.degrade_tiles and noxy_trees.degradable[tile.name] then
-			if noxy_trees.degradable[tile.name] == true then
+			degrade_to = noxy_trees.degradable[tile.name]
+		end
+		if not config.do_not_degrade_reinforced_tiles and noxy_trees.reinforced_degradable[tile.name] then
+			degrade_to = noxy_trees.reinforced_degradable[tile.name]
+		end
+		if degrade_to ~= nil then
+			if degrade_to == true then
 				if tile.hidden_tile then
 					tilestoupdate[#tilestoupdate + 1] = {["name"] = tile.hidden_tile, ["position"] = tile.position}
 				else
@@ -690,11 +711,11 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
 				end
 			else
 				if
-					game.tile_prototypes[noxy_trees.degradable[tile.name]]
+					game.tile_prototypes[degrade_to]
 				then
-					tilestoupdate[#tilestoupdate + 1] = {["name"] = noxy_trees.degradable[tile.name], ["position"] = tile.position}
+					tilestoupdate[#tilestoupdate + 1] = {["name"] = degrade_to, ["position"] = tile.position}
 				else
-					nx_debug("ERROR: Invalid tile?: " .. noxy_trees.degradable[tile.name] .. " Tried to convert from: " .. tile.name)
+					nx_debug("ERROR: Invalid tile?: " .. degrade_to .. " Tried to convert from: " .. tile.name)
 				end
 			end
 		elseif -- Tree spreading
@@ -817,8 +838,7 @@ local function process_chunk(surface, chunk)
 					if noxy_trees.fertility[tile.name] then
 						fertility = noxy_trees.fertility[tile.name]
 					end
-					if fertility < config.deaths_by_lack_of_fertility_minimum
-						and fertility < global.rng() then
+					if fertility < config.deaths_by_lack_of_fertility_minimum and fertility < global.rng() then
 						if trees_count / config.maximum_trees_per_chunk > global.rng() then
 							deadening_tree(surface, treetocheck)
 						end
