@@ -7,6 +7,7 @@ require("prototypes.recipefixes")
 require("prototypes.pipes")
 require("prototypes.map-gen-presets")
 require("prototypes.boiler-effectivity")
+require("prototypes.bobfix")
 
 if mods["angelsindustries"] then
     require("prototypes.techfixes-angelsIndustries")
