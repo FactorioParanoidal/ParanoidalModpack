@@ -253,11 +253,12 @@ local function checkNotCycleByIngredientProductDiagAndotPrerequistesCycle(
 	--[[ если технология-кандидат содержит в своём дереве исследуемую технологию - добавлять её нельзя.
 	А сама СОДЕРЖИТСЯ в дереве исследуемой технологии]]
 	if
-		TechnologyTreeUtil.haveTechnologyInTree(uncycled_tech_name_candidate, technology_name, mode)
-		and TechnologyTreeUtil.haveTechnologyInTree(technology_name, uncycled_tech_name_candidate, mode)
+		TechnologyTreeUtil.haveTechnologyInTree(technology_name, uncycled_tech_name_candidate, mode)
+		--TechnologyTreeUtil.haveTechnologyInTree(uncycled_tech_name_candidate, technology_name, mode)
+		--and
 	then
 		--		log("exit from checkNotCycleByIngredientProductDiagAndotPrerequistesCycle")
-		return false
+		return true
 	end
 	local uncycled_technology_candidate_ingredients =
 		EvaluatingStepStatusHolder.getEffectIngredientsFromTechnologyStatus(mode, uncycled_tech_name_candidate)

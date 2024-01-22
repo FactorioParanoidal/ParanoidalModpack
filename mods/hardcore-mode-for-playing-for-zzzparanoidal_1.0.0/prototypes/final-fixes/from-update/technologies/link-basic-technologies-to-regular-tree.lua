@@ -76,6 +76,12 @@ local function moveRecipesToNewTechnologies(mode)
 		"bi-mineralized-sulfuric-waste",
 		mode
 	)
+	techUtil.moveRecipeEffectsToTechnology(
+		"angels-advanced-chemistry-3",
+		"angels-advanced-chemistry-4",
+		"catalyst-metal-violet",
+		mode
+	)
 end
 local function removePrerequisitesFromTechnologies(mode)
 	local technologies = data.raw["technology"]

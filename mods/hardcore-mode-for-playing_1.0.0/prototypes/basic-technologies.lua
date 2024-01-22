@@ -46,9 +46,16 @@ local function createBasicTechnology(
 	}
 end
 
-function createResourceDetectedTechnology(resource_name, icon_path, icon_size)
-	local technology_name = resource_name .. "-detected-resource-technology"
-	local result = createBasicTechnology(technology_name, {}, { "savlaged-automation-tech" }, 1, icon_path, icon_size)
+function createResourceDetectedTechnology(resource_name, icon_path, icon_size, resource_recipe_name)
+	local technology_name = resource_name .. DETECTED_RESOURCE_TECHNOLOGY_SUFFIX
+	local result = createBasicTechnology(
+		technology_name,
+		{ resource_recipe_name },
+		{ "savlaged-automation-tech" },
+		1,
+		icon_path,
+		icon_size
+	)
 	result.normal.hidden = true
 	result.expensive.hidden = true
 	return result
@@ -62,11 +69,18 @@ local function createBasicTechnologyTree()
 		"salvaged-automation-science-pack",
 		"salvaged-generator",
 	}
-	local water_detected_tech = createResourceDetectedTechnology("water", "__base__/graphics/icons/fluid/water.png", 64)
+	local water_detected_tech = createResourceDetectedTechnology(
+		"water",
+		"__base__/graphics/icons/fluid/water.png",
+		64,
+		createWaterRecipe().name
+	)
 	-- исследование воды с помощью радара
-	local coal_detected_tech = createResourceDetectedTechnology("coal", "__base__/graphics/icons/coal.png", 64)
+	local coal_detected_tech =
+		createResourceDetectedTechnology("coal", "__base__/graphics/icons/coal.png", 64, createCoalRecipe().name)
 	-- исследование дерева
-	local wood_detected_tech = createResourceDetectedTechnology("wood", "__base__/graphics/icons/wood.png", 64)
+	local wood_detected_tech =
+		createResourceDetectedTechnology("wood", "__base__/graphics/icons/wood.png", 64, createWoodRecipe().name)
 
 	data:extend({
 		-- корень всего дерева технологий, даёт возможность добывать уголь.
@@ -85,24 +99,15 @@ local function createBasicTechnologyTree()
 		--[[ для добычи руды нужна вода, правда ты не сможешь ничего собрать, трубы у тебя будут, но не будет ресурсов для постройки труб.
 		На самом деле  деревянные трубы очень пригодятся, ведь железо на ранних этапах будет КРАЙНЕ ДОРОГИМ УДОВОЛЬСТВИЕМ, а разводку труб как-то делать придётся.
 		Так что технология только с виду бесполезная, да и медь будет уходить вовсе не на трубы, месторождения будут не такие богатые, чтобы не было перевода сразу всего на медь.]]
-		createBasicTechnology(
-			"coal-wooden-fluid-handling",
-			{
-				"bi-wood-pipe",
-				"bi-wood-pipe-to-ground",
-				"salvaged-offshore-pump-0",
-				createWaterRecipe().name,
-				createWoodRecipe().name,
-			},
-			{ "savlaged-automation-tech", water_detected_tech.name, wood_detected_tech.name },
-			2,
-			"__base__/graphics/icons/offshore-pump.png",
-			64
-		),
+		createBasicTechnology("coal-wooden-fluid-handling", {
+			"bi-wood-pipe",
+			"bi-wood-pipe-to-ground",
+			"salvaged-offshore-pump-0",
+		}, { water_detected_tech.name, wood_detected_tech.name }, 2, "__base__/graphics/icons/offshore-pump.png", 64),
 		-- непосредственная добыча руд, для которых требуется лишь вода, пара не будет, стартовать придётся в относительно жёстких условиях.
 		createBasicTechnology(
 			"coal-ore-mining",
-			{ "salvaged-mining-drill", createCoalRecipe().name },
+			{ "salvaged-mining-drill" },
 			{ "coal-wooden-fluid-handling", coal_detected_tech.name },
 			3,
 			"__base__/graphics/icons/burner-mining-drill.png",

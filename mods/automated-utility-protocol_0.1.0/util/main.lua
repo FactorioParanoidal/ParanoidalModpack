@@ -1,6 +1,7 @@
 _table = require("__stdlib__/stdlib/utils/table")
 _string = require("__stdlib__/stdlib/utils/string")
 GAME_MODES = { "normal", "expensive" }
+DETECTED_RESOURCE_TECHNOLOGY_SUFFIX = "-detected-resource-technology"
 Utils = {}
 
 _table.contains = function(__table, value)

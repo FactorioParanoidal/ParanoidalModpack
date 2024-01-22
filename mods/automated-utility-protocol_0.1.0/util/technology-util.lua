@@ -99,7 +99,10 @@ TechUtil.getAllActiveTechnologyNames = function(mode)
 		local technology_name = technology_candidate.name
 		local technology = getModedTechnology(technology_candidate, mode)
 
-		if not technology.hidden then
+		if
+			not technology.hidden
+			or technology.hidden and _string.ends_with(technology_name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX)
+		then
 			table.insert(result, technology_name)
 		end
 	end)

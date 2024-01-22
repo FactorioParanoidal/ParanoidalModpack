@@ -6,7 +6,7 @@ local function getTechnologyObjectForMode(technology_name, mode)
 	return Utils.getModedObject(data.raw["technology"][technology_name], mode)
 end
 
-TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel = function(technology_name, level, max_level, mode)
+TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel = function(technology_name, level, max_level, mode)
 	if type(technology_name) == "table" then
 		error(Utils.dump_to_console(technology_name))
 	end
@@ -28,7 +28,7 @@ TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel = function(tec
 	end
 	local tempResult = {}
 	_table.each(prerequisites, function(prerequisite_name)
-		tempResult[prerequisite_name] = TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel(
+		tempResult[prerequisite_name] = TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(
 			prerequisite_name,
 			level + 1,
 			max_level,
@@ -43,18 +43,18 @@ TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel = function(tec
 	return result
 end
 
-TechnologyTreeUtil.findParentsForTechnologyForFirstLevel = function(technology_name, mode)
-	return TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel(technology_name, 0, 1, mode)
+TechnologyTreeUtil.findPrerequisitesForTechnologyForFirstLevel = function(technology_name, mode)
+	return TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 0, 1, mode)
 end
 
-TechnologyTreeUtil.findDependenciesForTechnologyForAllLevels = function(technology_name, mode)
-	return TechnologyTreeUtil.findDependenciesForTechnologyForSpecifiedLevel(technology_name, 1, MAX_INTEGER, mode)
+TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels = function(technology_name, mode)
+	return TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel(technology_name, 1, MAX_INTEGER, mode)
 end
 
 TechnologyTreeUtil.haveTechnologyInTree = function(technology_name, dependency_technology_name, mode)
 	if not technology_name or not dependency_technology_name or dependency_technology_name == technology_name then
 		return true
 	end
-	local dependencies = TechnologyTreeUtil.findDependenciesForTechnologyForAllLevels(technology_name, mode)
+	local dependencies = TechnologyTreeUtil.findPrerequisitesForTechnologyForAllLevels(technology_name, mode)
 	return _table.contains(dependencies, dependency_technology_name)
 end
