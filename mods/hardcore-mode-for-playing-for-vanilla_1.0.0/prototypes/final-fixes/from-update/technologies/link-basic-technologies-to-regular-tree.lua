@@ -237,11 +237,6 @@ local function addRecipeEffectsToTechnologies(mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["military"], "light-armor", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["electric-energy-distribution-1"], "steam-engine", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["electric-energy-distribution-1"], "boiler", mode)
-	techUtil.addRecipeEffectToTechnologyEffects(
-		technologies["electric-energy-distribution-1"],
-		createSteamRecipe().name,
-		mode
-	)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["repair-pack"], "repair-pack", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["burner-ore-mining"], "burner-mining-drill", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["burner-ore-mining"], "electric-mining-drill", mode)

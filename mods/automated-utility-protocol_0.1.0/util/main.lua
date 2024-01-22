@@ -99,3 +99,8 @@ Utils.getModedObject = function(object, mode)
 	end
 	return object[mode]
 end
+
+Utils.isFreeplayScenario = function()
+	log("script.level " .. Utils.dump_to_console(script.level))
+	return script.level.level_name == "freeplay" and script.level.mod_name == "base"
+end

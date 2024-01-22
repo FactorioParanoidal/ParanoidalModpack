@@ -1,3 +1,4 @@
+require("technology-tree-cache-util")
 TechnologyTreeUtil = {}
 
 local MAX_INTEGER = 10000
@@ -26,7 +27,6 @@ TechnologyTreeUtil.findPrerequisitesForTechnologyForSpecifiedLevel = function(te
 	if prerequisites == nil then
 		return {}
 	end
-	local tempResult = {}
 	_table.each(prerequisites, function(prerequisite_name)
 		_table.insert_all_if_not_exists(
 			result,
