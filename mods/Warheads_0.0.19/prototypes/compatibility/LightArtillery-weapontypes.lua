@@ -8,6 +8,7 @@ weaponTypes["derpy-artillery-ammo"]= {
   type = "artillery",
   max_size = "small",
   min_size = "tiny",
+  ignore = not settings.startup["enable-derpy-artillery"].value,
   baseName = "derpy-artillery-ammo",
   base_item = "derpy-artillery-ammo",
   icon = icon,

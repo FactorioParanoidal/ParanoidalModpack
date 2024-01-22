@@ -2,6 +2,7 @@ weaponTypes["aai-ironclad-mortar"]= {
   type = "stream",
   max_size = "medium",
   min_size = "tiny",
+  ignore = not settings.startup["enable-ironclad-mortar"].value,
   baseName = "aai-ironclad-mortar",
   baseOrder = "d[cannon-shell]-cz",
   base_item = "mortar-bomb",
