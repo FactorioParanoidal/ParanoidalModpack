@@ -9,10 +9,10 @@
   "description": "Paranoidal core mod for 1.1",
   "dependencies": [
     "base >= 1.1.91",
-    "boblibrary", 
+    "boblibrary",
     "BatteryElectricTrain",
-    "? angelsindustries", 
-    "? angelsrefining", 
+    "? angelsindustries",
+    "? angelsrefining",
     "? extendedangels",
     "angelsbioprocessing",
     "angelssmelting",
@@ -27,5 +27,5 @@
     "Bio_Industries",
     "marathon",
     "RU-locale"
-    ]
+  ]
 }

@@ -1,6 +1,6 @@
 if mods["JunkTrain3"] then
 --создаем новый локомотив
-data:extend({
+--[[data:extend({
 	{
 		type = "locomotive",
 		name = "yir_usl",
@@ -361,7 +361,7 @@ data.raw.item.JunkTrain.place_result = "yir_usl"
 -------------------------------------------------------------------------------------------------
 data.raw.item.ScrapTrailer.icon = "__zzzparanoidal__/graphics/train/t0/usw_icon.png"
 data.raw.item.ScrapTrailer.icon_size = 64
-data.raw.item.ScrapTrailer.place_result = "yir_us_cargo"
+data.raw.item.ScrapTrailer.place_result = "yir_us_cargo"]]
 -------------------------------------------------------------------------------------------------
 --меняем рецепт локомотива мк0
 data.raw.recipe.JunkTrain.ingredients =
