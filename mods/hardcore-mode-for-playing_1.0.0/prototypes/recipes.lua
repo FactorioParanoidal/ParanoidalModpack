@@ -75,8 +75,8 @@ local salvaged_offsore_pump_0_recipe = copy_salvaged_recipe("offshore-pump-0", "
 salvaged_offsore_pump_0_recipe.ingredients = {
 	{
 		type = "item",
-		name = "stone",
-		amount = 20,
+		name = "wood",
+		amount = 40,
 	},
 	{
 		type = "item",
@@ -98,8 +98,8 @@ local salvaged_mining_drill_recipe = copy_salvaged_recipe("burner-mining-drill",
 salvaged_mining_drill_recipe.ingredients = {
 	{
 		type = "item",
-		name = "stone",
-		amount = 60,
+		name = "wood",
+		amount = 120,
 	},
 	{
 		type = "item",
@@ -122,8 +122,8 @@ local salvaged_ore_crusher_recipe = copy_salvaged_recipe("burner-ore-crusher", "
 salvaged_ore_crusher_recipe.ingredients = {
 	{
 		type = "item",
-		name = "stone",
-		amount = 60,
+		name = "wood",
+		amount = 120,
 	},
 	{
 		type = "item",

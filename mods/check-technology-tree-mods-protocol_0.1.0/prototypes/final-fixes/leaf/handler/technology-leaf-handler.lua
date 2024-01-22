@@ -53,8 +53,7 @@ local function findUnresolvedRecipeIngredientNamesInHerselfTechnologyTree(
 	log("start trying to resolve recipe ingredient missing evaluating in herself technology tree")
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
-		local root_technologies = {}
-		herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode, root_technologies)
+		herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode)
 		index = index + 1
 	end)
 	log("end trying to resolve recipe ingredient missing evaluating in technology tree")
@@ -98,13 +97,22 @@ local function updateTechnologyTreesWithResolvedIngredientsAdditions(technology_
 	end)
 	log("end resetting technology trees to technology prototypes")
 end
+local function printActiveTechnolgyData(technology_names, mode, technology_names_count)
+	local index = clearStateBeforeStep(mode)
+	log("start print leaf technology data(and it tree, optional)")
+	_table.each(technology_names, function(technology_name)
+		log(tostring(index) .. " of " .. tostring(technology_names_count))
+		log("technology_name " .. technology_name)
+		log("technology " .. Utils.dump_to_console(data.raw["technology"][technology_name]))
+		index = index + 1
+	end)
+	log("end print leaf technology data(and it tree, optional)")
+end
+
 TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	EvaluatingStepStatusHolder.initForMode(mode)
 	local technology_names_count = #technology_names
-	_table.each(technology_names, function(technology_name)
-		log("technology_name " .. technology_name)
-		log("technology " .. Utils.dump_to_console(data.raw["technology"][technology_name]))
-	end)
+	printActiveTechnolgyData(technology_names, mode, technology_names_count)
 	evaluateTechnologyProperties(technology_names, mode, technology_names_count)
 	validateTechnologyPrerequisitesNoHidden(technology_names, mode, technology_names_count)
 	validateTechnologyEffectsNoHidden(technology_names, mode, technology_names_count)

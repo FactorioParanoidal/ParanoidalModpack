@@ -10,7 +10,7 @@ TechnologyNoHiddenValidatingStep.evaluate = function(technology_name, mode)
 			not modedTreeElement
 			or modedTreeElement.hidden
 				-- исключаем технические технологии, которые будут являться маркерами при "знакомстве" с базовыми ресурсами
-				and not _string.ends_with(tree_element_name, "-detected-resource-technology")
+				and not _string.ends_with(tree_element_name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX)
 		then
 			error(
 				" for technology "
