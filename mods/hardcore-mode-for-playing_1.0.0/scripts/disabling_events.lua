@@ -1,4 +1,5 @@
-local _table = require("__stdlib__/stdlib/utils/table")
+require("__automated-utility-protocol__.util.main")
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
 
 local ENTITY_TYPES_FOR_DISABLING = {
 	"assembling-machine", --сборочные автоматы всех типов
@@ -17,10 +18,97 @@ local ENTITY_TYPES_FOR_DISABLING = {
 	"logistic-container", -- читы для наувиса
 	"infinity-container", -- читы для наувиса
 }
+--from mod "research evolution_factor"
+science_packet_cost = { --evolution cost coefficients for specific science packs
+	["planetary-data"] = 1400,
+	["station-science"] = 3000,
+}
+constant_factor = 0.15 --percent of evolution per each researched technology
+linear_factor = 0.35 --percent of evolution per 1000 total researched science packs
+--from mod "research evolution_factor"
+
+local function tech_cost(tech)
+	local sum = 0
+	if tech.research_unit_ingredients then
+		for _, item in pairs(tech.research_unit_ingredients) do
+			local name, amount
+			if item.type then
+				if item.type == "item" then
+					name = item.name
+					amount = item.amount
+				end
+			else
+				name = item[1]
+				amount = item[2]
+			end
+			if name then
+				--log(name..'----'..amount)
+				sum = sum + amount * (science_packet_cost[name] or 1)
+			end
+		end
+	end
+	local unit_count = tech.research_unit_count
+	if tech.research_unit_count_formula then
+		if tech.name then
+			unit_count = global.infinite_research_units[tech.name]
+			global.infinite_research_units[tech.name] = nil --erasing unusial record
+		end
+	end
+	sum = sum * (unit_count or 0)
+	return sum * 0.00001 * linear_factor + constant_factor * 0.01
+end
+--from mod "research evolution_factor"
+
+local function ignored_tech(tech)
+	return tech.force.name ~= "player"
+		or tech.prototype.hidden
+		or (string.sub(tech.name, 1, 4) == "qol-")
+		or tech.research_unit_count_formula
+end
+local function filterOnlyResearchTechnologies(technology)
+	return technology.researched
+end
+local function getPlayer()
+	if game.is_multiplayer() then
+		return nil
+	end
+	return game.players[1]
+end
+--from mod "research evolution_factor" updated
+local function reset_evolution_factor_to_researched_technologies()
+	local player = getPlayer()
+	if not player then
+		return
+	end
+
+	local researched_technologies = _table.filter(player.force.technologies, filterOnlyResearchTechnologies)
+	log("researched_technologies " .. Utils.dump_to_console(_table.keys(researched_technologies)))
+	if _table.size(researched_technologies) == 1 then
+		log("no technologies!")
+		for _, force in pairs(game.forces) do
+			if force.ai_controllable or force == game.forces.enemy then
+				force.reset_evolution()
+				return
+			end
+		end
+	end
+	_table.each(researched_technologies, function(tech)
+		if ignored_tech(tech) then
+			return
+		end
+
+		local inc = tech_cost(tech)
+
+		for _, force in pairs(game.forces) do
+			if force.ai_controllable or force == game.forces.enemy then
+				force.evolution_factor = 1 - (1 - force.evolution_factor) * math.exp(-inc)
+			end
+		end
+	end)
+end
+
 local SURFACE_NAMES_FOR_ENTITY_DISABLING = { "nauvis" }
-
 local TAX_RATE = 0.13
-
 local MAX_INTEGER = 1000
 
 local function mapIngredientTableToIngredient(research_unit_ingredient_count, research_unit_count)
@@ -36,13 +124,6 @@ local function mapIngredientTableToIngredientArray(research_unit_ingredients, re
 			mapIngredientTableToIngredient(research_unit_ingredient_count, research_unit_count)
 	end)
 	return result
-end
-
-local function getPlayer()
-	if game.is_multiplayer() then
-		return nil
-	end
-	return game.players[1]
 end
 
 local function disableEntity(entity)
@@ -68,11 +149,15 @@ local function disablePlayerEntities()
 	if not player then
 		return
 	end
+	--local difficulty = game.technology_difficulty.technology_difficulty
+	--	local researched_technologies = _table.filter(player.force.technologies, filterOnlyResearchTechnologies)
+	--	local enties_names = techUtil.getAllRecipesResultsForSpecifiedTechnologyRuntime(researched_technologies, difficulty)
 	local disabling_entity_type_names = _table.deep_copy(ENTITY_TYPES_FOR_DISABLING)
 	table.insert(disabling_entity_type_names, "turret")
 	_table.each(disabling_entity_type_names, function(entity_type)
 		disableEntityTypeForSurfaces(entity_type, player.force)
 	end)
+
 	log("production entities disabled on surfaces")
 end
 
@@ -111,7 +196,6 @@ end
 
 local function resetTechnologyIngredientsIfTechnologyHasUnresearchedPrerequisite(technology)
 	if not technology.researched then
-		--log('technology "'..technology.name..'" not researched!')
 		return nil
 	end
 	local result = {}
@@ -135,10 +219,6 @@ local function resetTechnologyIngredientsIfTechnologyHasUnresearchedPrerequisite
 		addIngredientsTo(result, mappedIngredientArray)
 	end
 	return result
-end
-
-local function filterOnlyResearchTechnologies(technology)
-	return technology.researched
 end
 
 local returned_ingredients = {}
@@ -199,11 +279,18 @@ local function resetTechnologiesWithUnresearchedInPath()
 	returnIngredientsToPlayer(player, all_returned_ingredients)
 end
 
-local function OnConfigurationChanged(e)
-	log("configuration changed!")
-	disablePlayerEntities()
-	disableAllRecipes()
-	resetTechnologiesWithUnresearchedInPath()
+local loaded = false
+local function OnTick(e)
+	if not loaded then
+		if Utils.isFreeplayScenario() then
+			log("configuration changed!")
+			disablePlayerEntities()
+			disableAllRecipes()
+			resetTechnologiesWithUnresearchedInPath()
+			reset_evolution_factor_to_researched_technologies()
+			loaded = true
+		end
+	end
 end
 
 local function onBuilt(e)
@@ -212,6 +299,7 @@ local function onBuilt(e)
 		return
 	end
 	local created_entity_type = created_entity.type
+	log("created_entity " .. created_entity_type .. " name " .. created_entity.name)
 	created_entity_surface_name = created_entity.surface.name
 	local is_type_for_disabling = _table.contains(ENTITY_TYPES_FOR_DISABLING, created_entity_type)
 			and _table.contains(SURFACE_NAMES_FOR_ENTITY_DISABLING, created_entity_surface_name)
@@ -223,6 +311,6 @@ local function onLoad()
 	game_reload = false
 end
 
-script.on_configuration_changed(OnConfigurationChanged)
+script.on_event(defines.events.on_tick, OnTick)
 script.on_event({ defines.events.on_built_entity, defines.events.script_raised_built }, onBuilt)
 script.on_load(onLoad)

@@ -17,13 +17,13 @@ local function get_minable_datas()
 					required_fluid = prototype.minable.required_fluid,
 					amount = prototype.minable.fluid_amount,
 				})
-				--log("prototype.minable.required_fluid " .. tostring(prototype.minable.required_fluid))
+				--log("prototype " .. Utils.dump_to_console(prototype))
 			end)
 		end
 	end)
 	_table.insert_all_if_not_exists(result, {
 		-- сады разных зон
-		--[[{ type = "item", name = "swamp-garden" },
+		{ type = "item", name = "swamp-garden" },
 		{ type = "item", name = "desert-garden" },
 		{ type = "item", name = "temperate-garden" },
 		-- деревья различных зон
@@ -37,7 +37,7 @@ local function get_minable_datas()
 		{ type = "item", name = "small-alien-artifact-yellow" },
 		{ type = "item", name = "small-alien-artifact-green" },
 		{ type = "item", name = "small-alien-artifact-blue" },
-		{ type = "item", name = "small-alien-artifact-purple" },]]
+		{ type = "item", name = "small-alien-artifact-purple" },
 		-- фугу
 		--puffer-nest=Гнездо фугу"}
 		--рыбы
@@ -66,6 +66,23 @@ function createBasicRecipe(basic_data, suffix)
 	log("creating basic recipe " .. resource_recipe_name)
 	log("resource data " .. Utils.dump_to_console(basic_data))
 	local resourceItemPrototype = data.raw[resource_type][resource_name]
+	local recipe_data = {
+		results = {
+			{
+				type = resource_type,
+				name = resource_name,
+				amount = 1,
+			},
+		},
+		ingredients = {},
+		enabled = false,
+		always_show_made_in = false,
+		always_show_products = true,
+		allow_intermediates = false,
+		allow_as_intermediate = false,
+		allow_decomposition = false,
+		allow_inserter_overload = false,
+	}
 	local recipe = {
 		type = "recipe",
 		name = resource_recipe_name,
@@ -73,28 +90,8 @@ function createBasicRecipe(basic_data, suffix)
 		icon = resourceItemPrototype.icon,
 		icon_size = resourceItemPrototype.icon_size,
 		category = "crafting-with-fluid",
-		normal = {
-			results = {
-				{
-					type = resource_type,
-					name = resource_name,
-					amount = 1,
-				},
-			},
-			ingredients = {},
-			enabled = false,
-		},
-		expensive = {
-			results = {
-				{
-					type = resource_type,
-					name = resource_name,
-					amount = 1,
-				},
-			},
-			ingredients = {},
-			enabled = false,
-		},
+		normal = recipe_data,
+		expensive = recipe_data,
 	}
 	if basic_data.required_fluid then
 		recipe.normal.ingredients = { { type = "fluid", name = basic_data.required_fluid, amount = basic_data.amount } }
@@ -116,9 +113,6 @@ function createResourceRecipes()
 		table.insert(result, createBasicRecipe(minable_data, "minable"))
 	end)
 	return result
-end
-function createSteamRecipe()
-	return createBasicRecipe({ type = "fluid", name = "steam" }, "flamable")
 end
 
 function createWaterRecipe()

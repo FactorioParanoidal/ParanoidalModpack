@@ -58,8 +58,6 @@ local function getTechnologyNamesForIngredientFuelResultDontContainInBasicTree(
 	_table.each(all_technology_names_for_recipe_with_fuel_result, function(filtered_technology_names, item_or_fluid)
 		result[item_or_fluid] = {}
 		_table.each(filtered_technology_names, function(filtered_technology_name)
-			--log("basic_technology_name " .. basic_technology_name)
-			--log("filtered_technology_name " .. filtered_technology_name)
 			if not TechnologyTreeUtil.haveTechnologyInTree(basic_technology_name, filtered_technology_name, mode) then
 				table.insert(result[item_or_fluid], filtered_technology_name)
 			end
@@ -102,22 +100,6 @@ local function handleRecipe(recipe_name, basic_technology_name, mode)
 			return
 		end
 		log("start recipe_name " .. recipe_name)
-		_table.each(recipeUtil.getAllRecipeResults(recipe_name, mode), function(result_data)
-			local result_data_type = result_data.type
-			local result_data_name = result_data.name or result_data[1]
-			local item_or_fluid = data.raw[result_data_type][result_data_name]
-			log(
-				"count ml of water heated to 165 C of 1 barrel is "
-					.. tostring(
-						(
-							tonumber(string.sub(item_or_fluid.fuel_value, 1, string.len(item_or_fluid.fuel_value) - 1))
-							/ 75
-						)
-							* 1
-							/ 3
-					)
-			)
-		end)
 		log(
 			"all_technology_names_for_recipe_with_fuel_result "
 				.. Utils.dump_to_console(all_technology_names_for_recipe_with_fuel_result)
@@ -154,12 +136,6 @@ local function handleRecipe(recipe_name, basic_technology_name, mode)
 				)
 			end)
 		end)
-		--[[log(
-			"for filled recipe "
-				.. recipe_name
-				.. " found following technologies with fluid result "
-				.. Utils.dump_to_console(technology_names_by_result)
-		)]]
 		log("end recipe_name " .. recipe_name)
 	end)
 end
@@ -187,6 +163,6 @@ function updateFluidInContainerProcessingTechnologyEffects(technology_name)
 	_table.each(GAME_MODES, function(mode)
 		TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
 		updateFluidInContainerProcessingTechnologyEffectsByMode(mode, technology_name)
-		TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+		TechnologyTreeCacheUtil.cleanupTechnologyTreeCache(mode)
 	end)
 end
