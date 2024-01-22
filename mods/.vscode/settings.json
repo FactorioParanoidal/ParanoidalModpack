@@ -3,18 +3,18 @@
         {
             "name": "1.1.87",
             "factorioPath": "c:\\Users\\artem.bogomolov.a\\games\\Factorio\\bin\\x64\\factorio.exe",
-            "docsPath": "..\\..\\..\\..\\..\\..\\artem\\GAMES\\Factorio\\doc-html\\runtime-api.json",
-            "active": true
+            "docsPath": "..\\..\\..\\..\\..\\..\\artem\\GAMES\\Factorio\\doc-html\\runtime-api.json"
         },
         {
             "name": "1.1.87.new",
-            "factorioPath": "c:\\Users\\artem\\GAMES\\Factorio\\bin\\x64\\factorio.exe"
+            "factorioPath": "c:\\Users\\artem\\GAMES\\Factorio\\bin\\x64\\factorio.exe",
+            "active": true
         }
     ],
     "Lua.workspace.library": [
-        "c:\\Users\\artem.bogomolov.a\\games\\Factorio\\data",
         "c:/Users/artem.bogomolov.a/AppData/Roaming/Code/User/workspaceStorage/cbf7323f521decb0e7ff176f24749e13/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library",
-        "c:/Users/artem/AppData/Roaming/Code/User/workspaceStorage/98f558ba402a0cbbd052261859e535cc/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library"
+        "c:/Users/artem/AppData/Roaming/Code/User/workspaceStorage/98f558ba402a0cbbd052261859e535cc/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library",
+        "c:\\Users\\artem\\GAMES\\Factorio\\data"
     ],
     "Lua.workspace.userThirdParty": [
         "c:\\Users\\artem.bogomolov.a\\AppData\\Roaming\\Code\\User\\workspaceStorage\\cbf7323f521decb0e7ff176f24749e13\\justarandomgeek.factoriomod-debug\\sumneko-3rd",

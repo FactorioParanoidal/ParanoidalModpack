@@ -1,3 +1,4 @@
+require("__automated-utility-protocol__.util.tree-recipe-util")
 local function copy_salvaged_recipe(name, new_name)
 	local result = flib.copy_prototype(data.raw["recipe"][name], new_name)
 	result.ingredients = {}
@@ -262,3 +263,190 @@ data:extend({
 		enabled = false,
 	},
 })
+
+data:extend({
+	{
+		type = "recipe",
+		name = "used-up-uranium-fuel-cell",
+		icon = "__base__/graphics/icons/used-up-uranium-fuel-cell.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "uranium-fuel-cell", amount = 1 } },
+		result = "used-up-uranium-fuel-cell",
+		result_count = 1,
+	},
+})
+data:extend({
+	{
+		type = "recipe",
+		name = "used-up-thorium-fuel-cell",
+		icon = "__base__/graphics/icons/used-up-uranium-fuel-cell.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "thorium-fuel-cell", amount = 1 } },
+		result = "used-up-thorium-fuel-cell",
+		result_count = 1,
+	},
+})
+data:extend({
+	{
+		type = "recipe",
+		name = "used-up-deuterium-fuel-cell",
+		icon = "__base__/graphics/icons/used-up-uranium-fuel-cell.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "deuterium-fuel-cell", amount = 1 } },
+		result = "used-up-deuterium-fuel-cell",
+		result_count = 1,
+	},
+})
+
+data:extend({
+	{
+		type = "recipe",
+		name = "used-up-RITEG-1",
+		icon = "__base__/graphics/icons/used-up-uranium-fuel-cell.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "RITEG-1", amount = 1 } },
+		result = "used-up-RITEG-1",
+		result_count = 1,
+	},
+})
+
+data:extend({
+	{
+		type = "recipe",
+		name = "CW-used-air-filter",
+		icon = "__CW-carbon-capture-reforged__/graphics/icons/air-filter-cleaning.png",
+		icon_size = 32,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[CW-used-air-filter]",
+		ingredients = { { type = "item", name = "CW-air-filter", amount = 1 } },
+		result = "CW-used-air-filter",
+		result_count = 1,
+	},
+})
+
+data:extend({
+	{
+		type = "recipe",
+		name = "used-up-advanced-tritium-breeder-fuel-cell",
+		icon = "__True-Nukes__/graphics/tritium-extraction.png",
+		icon_size = 64,
+		icon_mipmaps = 4,
+		subgroup = "intermediate-product",
+		order = "r[used-up-uranium-fuel-cell]",
+		ingredients = { { type = "item", name = "advanced-tritium-breeder-fuel-cell", amount = 1 } },
+		result = "used-up-advanced-tritium-breeder-fuel-cell",
+		result_count = 1,
+	},
+})
+
+local function disableRecipe(recipe_name)
+	if not data.raw["recipe"][recipe_name] then
+		error("recipe " .. recipe_name .. " not found")
+	end
+	data.raw["recipe"][recipe_name].enabled = false
+end
+
+local function disableRecipes()
+	disableRecipe("mining-drill-bit-mk0")
+	disableRecipe("angelsore1-crushed-hand")
+	disableRecipe("angelsore3-crushed-hand")
+	disableRecipe("angels-rod-iron-plate")
+end
+
+disableRecipes()
+
+local function addRecipeEffectsToTechnologies()
+	local technologies = data.raw["technology"]
+	local ore_crushing_technology = technologies["ore-crushing"]
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		ore_crushing_technology,
+		"angelsore5-crushed-processing"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		ore_crushing_technology,
+		"angelsore6-crushed-processing"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "iron-plate")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "copper-plate")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "lead-plate")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "tin-plate")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "glass-from-ore4")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "angelsore5-crushed-smelting")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(ore_crushing_technology, "angelsore6-crushed-smelting")
+	local steam_power_technology = technologies["steam-power"]
+	if steam_power_technology then
+		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, createSteamRecipe())
+		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, "steam-assembling-machine")
+		TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(steam_power_technology, "steam-mining-drill")
+	end
+	local logistic_0_technology = technologies["logistics-0"]
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(logistic_0_technology, "chute-miniloader")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["electricity"], "bob-burner-generator")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["nuclear-power"],
+		"used-up-uranium-fuel-cell"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["nuclear-power"], "used-up-RITEG-1")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["mixed-oxide-fuel"],
+		"used-up-thorium-fuel-cell"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["bob-nuclear-power-3"],
+		"used-up-deuterium-fuel-cell"
+	)
+	--bob warfare mod восстанавливаем удалённые рецепты
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "bullet-casing")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "magazine")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "bullet-projectile")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "bullet")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["bob-bullets"],
+		"uranium-bullet-projectile"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "uranium-bullet")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(technologies["bob-bullets"], "shotgun-shell-casing")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["CW-air-filtering-1"],
+		"CW-used-air-filter"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["dense-neutron-flux"],
+		"used-up-advanced-tritium-breeder-fuel-cell"
+	)
+	local logistic_0_technology = technologies["logistics-0"]
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(logistic_0_technology, "basic-transport-belt")
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["military-2"],
+		"copper-nickel-firearm-magazine"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["basic-fluid-handling"],
+		"offshore-pump-0"
+	)
+end
+
+local function showRecipes()
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet-casing"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["magazine"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet-projectile"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["uranium-bullet-projectile"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["uranium-bullet"])
+	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["shotgun-shell-casing"])
+end
+addRecipeEffectsToTechnologies()
+showRecipes()

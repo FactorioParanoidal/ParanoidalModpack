@@ -1,3 +1,4 @@
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local TechnologyLeafFinder = {}
 
 local function getTechnologyObjectForMode(technology_name, mode)

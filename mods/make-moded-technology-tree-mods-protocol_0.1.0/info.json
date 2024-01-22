@@ -1,10 +1,10 @@
 {
-	"name": "check-technology-tree-mods-protocol",
+	"name": "make-moded-technology-tree-mods-protocol",
 	"version": "0.1.0",
-	"title": "Проверка дерева технологий сборки модов",
+	"title": "Копирование технологий и рецептов в 2 режима",
 	"author": "bogomolov-a-a",
 	"factorio_version": "1.1",
-	"description": "Проверяет сборку модов на достижимость в технологии всех рецептов и исследовательских пакетов из всех предшественников текущей технологии. При возможности - исправляет(добавляет) новые зависимости, содержащие недостующие ингредиенты. Все рецпепты преобразований ОБЯЗАНЫ быть прописаны явно, в том числе добыча ресурсов",
+	"description": "Копирование технологий и рецептов в 2 режима(нормальный и дорогой). Если уже есть - обединяет объявления с преимуществом режимного объявления(normal,expensive)",
 	"dependencies": [
 		"?base",
 		"?aai-industry",
@@ -230,9 +230,7 @@
 		"?ZCS-Trash-Landfill-Continued-Continued",
 		"?zero-fluid-info",
 		"?zzzparanoidal",
-		"?make-moded-technology-tree-mods-protocol",
-		"?hardcore-mode-for-playing",
-		"?hardcore-mode-for-playing-for-zzzparanoidal",
-		"?automated-utility-protocol"
+		"?automated-utility-protocol",
+		"?hardcore-mode-for-playing"
 	]
 }
