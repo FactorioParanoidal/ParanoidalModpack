@@ -9,6 +9,8 @@ local function showTechnologies()
 	-- технология серной кислоты, открываем для газов из мода
 	TreeRecipeUtil.showTechnologyWithoutMode(technologies["sulfur-processing"])
 	TreeRecipeUtil.showTechnologyWithoutMode(technologies["oil-processing"])
+	-- технология электрических химических печей
+	TreeRecipeUtil.showTechnologyWithoutMode(technologies["electric-chemical-furnace"])
 end
 local function hideTechnologies()
 	local technologies = data.raw["technology"]

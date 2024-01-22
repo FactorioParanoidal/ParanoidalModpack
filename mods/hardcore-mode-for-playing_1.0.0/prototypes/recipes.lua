@@ -450,16 +450,47 @@ local function addRecipeEffectsToTechnologies()
 		technologies["basic-fluid-handling"],
 		"offshore-pump-0"
 	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["electric-chemical-furnace"],
+		"electric-chemical-furnace"
+	)
+	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+		technologies["basic-chemistry"],
+		"stone-chemical-furnace"
+	)
 end
 
 local function showRecipes()
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet-casing"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["magazine"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet-projectile"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["bullet"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["uranium-bullet-projectile"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["uranium-bullet"])
-	TreeRecipeUtil.showRecipeWithoutMode(data.raw.recipe["shotgun-shell-casing"])
+	local recipes = data.raw.recipe
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["bullet-casing"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["magazine"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["bullet-projectile"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["bullet"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["uranium-bullet-projectile"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["uranium-bullet"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["shotgun-shell-casing"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["electric-mixing-furnace"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["electric-chemical-furnace"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["stone-chemical-furnace"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["basic-oil-processing"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["bob-oil-processing"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["bob-resin-oil"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["sulfur-2"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["sulfur-3"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["sulfuric-acid-3"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["sulfur-dioxide"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["hydrogen-sulfide"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["nuclear-smelting-copper-plate"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["nuclear-smelting-iron-plate"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["nuclear-smelting-lead-plate"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["nuclear-smelting-silver-plate"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["nuclear-smelting-tin-plate"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["angels-stone-pipe-casting"])
+	TreeRecipeUtil.showRecipeWithoutMode(recipes["angels-stone-pipe-to-ground-casting"])
 end
 addRecipeEffectsToTechnologies()
 showRecipes()
+
+data.raw["recipe"]["stone-chemical-furnace"].main_product = "stone-chemical-furnace"
+data.raw["recipe"]["stone-chemical-furnace"].result = "stone-chemical-furnace"
+data.raw["recipe"]["electric-chemical-furnace"].result = "electric-chemical-furnace"

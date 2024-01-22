@@ -25,7 +25,7 @@
             "hookData": false,
             "hookControl": false,
             "hookLog": false,
-            // "checkGlobals": true,
+            "checkGlobals": true,
             "manageMod": false,
             "hookMode": "profile",
             "useInstrumentMode": false
