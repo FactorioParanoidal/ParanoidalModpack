@@ -40,7 +40,7 @@
     
     {
       "name": "alien-biomes-settings",
-      "enabled": false
+      "enabled": true
     },
     
     {
@@ -120,11 +120,6 @@
     
     {
       "name": "BigLightElectricMiningDrill",
-      "enabled": true
-    },
-    
-    {
-      "name": "Bioluminescence",
       "enabled": true
     },
     
@@ -276,11 +271,6 @@
     {
       "name": "CopyPasteModules",
       "enabled": true
-    },
-    
-    {
-      "name": "creative-mod",
-      "enabled": false
     },
     
     {
@@ -610,7 +600,7 @@
     
     {
       "name": "Natural_Evolution_Enemies",
-      "enabled": false
+      "enabled": true
     },
     
     {
@@ -630,11 +620,6 @@
     
     {
       "name": "NightBrightness",
-      "enabled": true
-    },
-    
-    {
-      "name": "nixie-tubes",
       "enabled": true
     },
     
@@ -690,7 +675,7 @@
     
     {
       "name": "P-U-M-P-S",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -810,11 +795,6 @@
     
     {
       "name": "Rampant",
-      "enabled": true
-    },
-    
-    {
-      "name": "RampantEvolution",
       "enabled": true
     },
     
@@ -944,11 +924,6 @@
     },
     
     {
-      "name": "simhelper",
-      "enabled": true
-    },
-    
-    {
       "name": "SingleColorTerrain",
       "enabled": true
     },
@@ -970,21 +945,6 @@
     
     {
       "name": "Squeak Through",
-      "enabled": true
-    },
-    
-    {
-      "name": "StatsGui",
-      "enabled": true
-    },
-    
-    {
-      "name": "StatsGui-HandcraftTimer",
-      "enabled": true
-    },
-    
-    {
-      "name": "StatsGui-MovementSpeed",
       "enabled": true
     },
     
