@@ -16,7 +16,7 @@ local function damage_entity(surface, distSq, ePos, fireballSq, initialDamage, v
       if (deathStatsForTrees) then
         v.die();
       else
-      v.destroy()
+        v.destroy()
       end
       surface.create_entity{name="tree-01-stump",position=destPos}
     else
@@ -130,6 +130,10 @@ local function atomic_thermal_blast_internal(surface_index, position, force, cau
       end
     end
     if(i<100 and y ~= position.y +thermal_max_r) then
+      distSq1 = distSq1 or ((x-position.x)*(x-position.x)        +(y-position.y)*(y-position.y))
+      distSq2 = distSq2 or ((x+100-position.x)*(x+100-position.x)+(y-position.y)*(y-position.y))
+      distSq3 = distSq3 or ((x-position.x)*(x-position.x)        +(y+100-position.y)*(y+100-position.y))
+      distSq4 = distSq4 or ((x+100-position.x)*(x+100-position.x)+(y+100-position.y)*(y+100-position.y))
       while(x+100<=position.x +thermal_max_r) do
         if(distSq1<thermSq or distSq2<thermSq or distSq3<thermSq or distSq4<thermSq) then
           table.insert(areas, {{x, y}, {x+100, position.y+thermal_max_r}});
@@ -180,7 +184,7 @@ local function atomic_thermal_blast_move_along(corpseMap)
     local pos = atomic_thermal_blast_internal(therm.surface_index, therm.position, therm.force, therm.cause, therm.thermal_max_r, therm.initialDamage, therm.fireball_r, therm.x, therm.y, corpseMap);
     therm.x = pos.x
     therm.y = pos.y
-    if((pos.x == therm.position.x+therm.thermal_max_r and pos.y == therm.position.y+therm.thermal_max_r) or (pos.x == -1 and pos.y == -1)) then
+    if((math.abs(pos.x - (therm.position.x-therm.thermal_max_r))<1 and math.abs(pos.y - (therm.position.y+therm.thermal_max_r))<1) or (pos.x == -1 and pos.y == -1)) then
       global.thermalBlasts[i]=nil
     end
   end

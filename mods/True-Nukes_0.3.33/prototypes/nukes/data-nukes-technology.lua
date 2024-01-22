@@ -325,27 +325,27 @@ if(nuke_materials.smallBoomMaterial == "californium") then
       table.insert(data.raw.technology["californium-processing"].prerequisites, "expanded-atomics")
     else
       table.insert(data.raw.technology["californium-processing"].prerequisites, "atomic-bomb")
-  end
+    end
   end
 end
 if hasSmall or hasCompactMedium then
-    data:extend{
-      {
-        type = "technology",
-        name = "californium-weapons",
-        icon_size = 256, icon_mipmaps = 4,
-        icon = "__True-Nukes__/graphics/small-atomic-tech.png",
-        effects = {},
+  data:extend{
+    {
+      type = "technology",
+      name = "californium-weapons",
+      icon_size = 256, icon_mipmaps = 4,
+      icon = "__True-Nukes__/graphics/small-atomic-tech.png",
+      effects = {},
       prerequisites = {},
-        unit =
-        {
-          count = 500,
-          ingredients = no_prod,
-          time = 45
-        },
-        order = "e-a-g"
+      unit =
+      {
+        count = 500,
+        ingredients = no_prod,
+        time = 45
       },
-    }
+      order = "e-a-g"
+    },
+  }
   if(data.raw.technology["expanded-atomics"]) then
     table.insert(data.raw.technology["californium-weapons"].prerequisites, "expanded-atomics")
   else
@@ -413,12 +413,12 @@ if(hasCompact15kt or hasCompactLarge) then
   local canDoTest = true
 
   if(data.raw.tool["test-pack-atomic-15kt-1"]) then
-      table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-15kt-1", 1})
+    table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-15kt-1", 1})
   elseif(data.raw.tool["test-pack-atomic-1kt-1"])then
-      table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-1kt-1", 1})
-    else
-      canDoTest = false
-    end
+    table.insert(data.raw.technology["compact-full-fission-weapons"].unit.ingredients, {"test-pack-atomic-1kt-1", 1})
+  else
+    canDoTest = false
+  end
   if(data.raw.technology["compact-californium-weapons"]) then
     table.insert(data.raw.technology["compact-full-fission-weapons"].prerequisites, "compact-californium-weapons")
 
@@ -511,6 +511,17 @@ if(hasFusion) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "compact-californium-weapons")
     elseif(data.raw.technology["californium-weapons"]) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "californium-weapons")
+      table.insert(data.raw.technology["fusion-weapons"].effects, 
+        {
+          type = "unlock-recipe",
+          recipe = "neutron-reflector"
+        })
+    else
+      table.insert(data.raw.technology["fusion-weapons"].effects, 
+        {
+          type = "unlock-recipe",
+          recipe = "neutron-reflector"
+        })
     end
     if (data.raw.technology["full-fission-atomics"]) then
       table.insert(data.raw.technology["fusion-weapons"].prerequisites, "full-fission-atomics")

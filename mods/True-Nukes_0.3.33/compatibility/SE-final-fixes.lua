@@ -53,9 +53,24 @@ local energy = {
   {"se-energy-science-pack-1", 1},
 }
 
+local hasSmall = settings.startup["enable-small-atomics"].value
+local hasCompactSmall = settings.startup["enable-compact-small-atomics"].value and hasSmall
+
+local hasMedium = settings.startup["enable-medium-atomics"].value 
+local hasCompactMedium = settings.startup["enable-compact-medium-atomics"].value and hasMedium
+
+local hasLarge = settings.startup["enable-large-atomics"].value 
+local hasCompactLarge = settings.startup["enable-compact-large-atomics"].value and hasLarge
+
+local has15kt = settings.startup["enable-15kt"].value 
+local hasCompact15kt = settings.startup["enable-compact-15kt"].value and has15kt
+
+local hasFusion = settings.startup["enable-fusion"].value 
+local hasCompactFusion = settings.startup["enable-compact-fusion"].value and hasFusion
+
 data.raw.technology["basic-atomic-weapons"].unit.ingredients = basic
 
-if(settings.startup["enable-medium-atomics"].value and settings.startup["enable-nuclear-tests"].value) then
+if(hasMedium and settings.startup["enable-nuclear-tests"].value) then
   data.raw.technology["atomic-bomb"].unit.ingredients = {{"test-pack-atomic-20t-1", 1}}
   data.raw.technology["atomic-bomb"].unit.count = 1
   data.raw.technology["atomic-bomb"].unit.time = 1
@@ -130,14 +145,14 @@ if(data.raw.technology["compact-full-fission-weapons"]) then
   end
 end
 
-if(settings.startup["enable-fusion"].value) then
+if(hasFusion) then
   data.raw.technology["fusion-weapons"].unit = {
     count = 500,
     ingredients = energy,
     time = 60
   }
 end
-if(settings.startup["enable-compact-fusion"].value) then
+if(hasCompactFusion) then
   data.raw.technology["compact-fusion-weapons"].unit = {
     count = 500,
     ingredients = energy,
@@ -153,7 +168,7 @@ if(settings.startup["enable-compact-fusion"].value) then
   end
 end
 
-if(settings.startup["enable-compact-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value or
+if(hasCompactSmall or hasCompactMedium or
   settings.startup["enable-compact-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
   data.raw.technology["dense-neutron-flux"].unit = {
     count = 500,

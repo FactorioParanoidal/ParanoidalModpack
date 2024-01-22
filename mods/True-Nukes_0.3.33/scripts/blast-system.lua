@@ -72,7 +72,7 @@ local function damage_entity(surface, distSq, ePos, power, fire, damage_init, bl
           entity.damage(damage, force, "explosion")
         end
       else
-      entity.destroy()
+        entity.destroy()
       end
       surface.create_entity{name="tree-01-stump",position=ePos}
     else

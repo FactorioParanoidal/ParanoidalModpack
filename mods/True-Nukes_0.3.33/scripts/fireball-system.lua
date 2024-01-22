@@ -79,15 +79,15 @@ local function full_fireball(surface_index, position, fireball_r, crater_externa
       elseif cause and cause.valid then
         if not v.die(force, cause) then
           if(v.destructible) then
-          v.destroy{raise_destroy = true}
-        end
+            v.destroy{raise_destroy = true}
+          end
         end
       elseif not v.die(force) then
         if(v.destructible) then
-        v.destroy{raise_destroy = true}
+          v.destroy{raise_destroy = true}
+        end
       end
     end
-  end
   end
   if(settings.global["destroy-resources-in-crater"].value) then
     -- destroy resources in crater (a bit more to account for the noise on crater edge)
