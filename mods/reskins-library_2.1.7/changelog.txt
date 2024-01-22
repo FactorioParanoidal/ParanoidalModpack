@@ -1,0 +1,377 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2023-12-24
+  Bugfixes:
+    - Fixed that parsing of Angels pipe materials was not returning the expected file paths
+---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2023-12-23
+  Features:
+    - Added `reskins.lib.add_tier_labels_to_entity`
+    - Added `reskins.lib.add_tier_labels_to_icons`
+    - Added `reskins.lib.get_icons_from_entity`. 
+      - Use to get a table of IconData from an entity, regardless of how an icon is formatted
+    - Added `reskins.lib.convert_icons_to_sprite`
+    - Added `reskins.lib.convert_icon_to_sprite`
+    - Added `reskins.lib.get_pipe_pictures`, 
+    - Added `reskins.lib.get_pipe_to_ground_pictures`
+    - Added `reskins.lib.get_pipe_covers`
+  Changes:
+    - Added AAI Loaders to the list of supported mods
+  Deprecated:
+    - Deprecated `reskins.lib.append_tier_labels_to_vanilla_icon`, use `reskins.lib.add_tier_labels_to_entity`
+    - Deprecated `reskins.lib.append_tier_labels`, use `reskins.lib.add_tier_labels_to_icons`
+      - Note that the new function returns a modified icons table, it does not modify the table in place
+    - Deprecated `reskins.lib.pipe_pictures`, `reskins.lib.underground_pipe_pictures` and `reskins.lib.pipe_covers`
+      - New methods take only the material value as an input, the internal bits have been removed as parameters
+---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 2023-04-13
+  Changes:
+    - Added Intermodal Containers to the list of supported mods
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2022-10-06
+  Changes:
+    - Updated transport belt icons to the latest version from Factorio
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2022-04-03
+  Locale:
+    - Added partial localization for Italian
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2022-03-19
+  Locale:
+    - Added localization for Ukrainian
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2022-01-03
+  Changes:
+    - Marked incompatible with Bob's Mods: Alternate Textures
+    - Adjusted entity functions `chemical_plant` and `oil_refinery` to support custom tints and tier label behaviors
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2022-01-03
+  Features:
+    - Added setting "Reskin interface" which supports visual changes and updates to the crafting tabs
+    - Pipes have been adjusted to have separate shadow layers, eliminating the shadow overlay with other entities when placing pipes
+    - Additions of EmmyLua-style documentation is ongoing
+  Changes:
+    - Moved reskinning of the standard Factorio pipe into this mod from Artisanal Reskins: Angel's mods
+    - Internal restructuring to make entity reskinning through functions globally available under `reskins.lib.apply_skin` is ongoing
+  Bugfixes:
+    - Fixed that `rescale_entity` was ignoring Types/Animation defined with stripes or filenames instead of filename
+    - Fixed that highlights were not being applied to transport belt remnants
+  Locale:
+    - Updated Russian localization
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2021-12-12
+  Changes:
+    - Moved code within `composite_existing_icons` into separate function `composite_existing_icons_onto_icons_definition`
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2021-09-29
+  Changes:
+    - Entity rescaling function now processes values attached to a `position` field
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2021-09-14
+  Features:
+    - Added Nauvius Day to compatibility whitelist
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2021-09-12
+  Changes:
+    - Revised handling for entities using `belt_animation_set`
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2021-08-14
+  Features:
+    - Revisions to all color masks for all entities, items, and icons are ongoing
+    - Perceived brightness and contrast have been improved and oversaturation and color blowouts have been reduced for revised entities
+    - Added "Realistic Reactor Glow", "Extended Angels", and "Offshore P.U.M.P.S. and ground water" to the whitelist for compatibility notifications
+    - Added "Chevrons" as an additional option for tier labels
+  Changes:
+    - Revised tints to support new mask and highlights process; purple is now less pink
+    - Setting "Color intensity" with options "Vibrant" and "Soft", which controlled the blending mode for the highlights layer, has been disabled; the current blending mode is equivalent to "Vibrant". The setting may be enabled, see `settings-updates.lua` for details
+    - Removed function `reskins.lib.belt_mask_tint`
+    - Revised function `reskins.lib.rescale_minimachine` to support table-formatted parameters
+    - Revised flib migration module importing, additional functions `is_version_or_older`, `is_version`, and `is_version_or_newer` added at `reskins.lib.migration`
+    - Revised 16x16 pixel tier label mipmaps to improve clarity for distinguishing tiers
+    - Moved oil refinery icon updates to data-updates from data-final-fixes when using Angel's Petrochem Processing higher than version 0.9.19
+  Bugfixes:
+    - Fixed that attempting to play the train tutorial was blocked by a migration calling an undefined function
+  Locale:
+    - Removed default text from string mod setting descriptions for ease of translation and reduction of reduplication of translation effort; defaults are now appended automatically
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2021-07-01
+  Features:
+    - Added function `return_technology_effect_icon`, which returns an IconData layer containing technology constant icons of the specified type at the specified scale and default positioning
+  Changes:
+    - Updated logistics technologies to latest sprites from base Factorio
+    - Revised tier 5 default color, reducing the brightness and saturation slightly to improve color mask results across a variety of entities
+    - Dropped support for ShinyBobGFX, ShinyAngelGFX
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2021-05-02
+  Features:
+    - Added function `create_icon_variations`
+  Changes:
+    - Removed function `ore_icon_variations`
+    - Adjusted function `construct_icon` and `construct_technology_icon` to allow direct specification of base layer for multi-layer icons
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-03-22
+  Bugfixes:
+    - Fixed that nuclear reactor working lights were not properly overridden
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-03-13
+  Locale:
+    - Fixed an inconsistency with colons and Default coloring
+    - Added Chinese Traditional and Korean localizations, updated German localization
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-03-04
+  Features:
+    - Moved handling for transport belts, splitters, and underground belts into this mod
+    - Added startup settings "Reskin entities", "Reskin equipment", "Reskin items and fluids" and "Reskin technologies" to control the scope of the various mod reskin toggles; by default the complete scope is enabled
+    - Added function `check_scope` to check the enabled scope and the given toggle setting and return the appropriate boolean or nil
+    - Added control logic to check for missing Artisanal Reskins mods and notify players once per save
+    - Added a setting "Display notifications" under Player settings to control whether update notifications display
+  Changes:
+    - Revised tint handling, separated transport belt tints into their own table, `reskins.lib.belt_tint_index`
+    - Revised how tints are indexed, allowing for direct reference by tier-number instead of a string
+    - Revised transport belt mask sprites to improve mask precision and color
+    - Consolidated settings-stage functions into `reskins.lib` global function host
+    - Internal code revisions such that reskinning is trigger-based
+    - Revised update notification handling; messages sent by this mod will be sent to admins only (since only they can make mod changes)
+    - Images are now losslessly compressed, instead of lossy; there is a modest increase in filesize
+  Bugfixes:
+    - Fixed that the concatenation routine to append the defaults for boolean settings did not handle LocalisedStrings properly
+  Locale:
+    - Added partial localization for Polish
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-01-31
+  Locale:
+    - Added Russian localization
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-12-25
+  Features:
+    - Added function `vertical_pipe_shadow` to place shadows at appropriate tile locations for pipes
+    - Added item icon for solder and silicon wafer, credit to Vigil for the sprites
+    - Added function `technology_equipment_overlay` for technology icons
+    - Now requires Factorio Library as a dependency
+  Changes:
+    - Adjusted the default color blue for tier 3 to better match the vanilla fast inserter
+    - Revised function `create_explosions_and_particles' such that `inputs.particles` is optional
+    - Equipment technology icons now align with Bob's mods and vanilla Factorio's overlay
+  Bugfixes:
+    - Fixed that inserting an equipment background into a single-layer icon did not properly transcribe the single-layer icon to an icons definition
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-26
+  Features:
+    - Moved to Factorio 1.1
+    - Added a catch-all to ensure nuclear reactors working light is properly defined for Angels or Bobs
+  Changes:
+    - Added transcription of `draw_as_light` and `draw_as_glow` fields to `make_4way_animation_from_spritesheet`
+    - Added support for progression-based tier coloring for the oil refinery when playing with pure Angel's mods
+    - Added `make_glow` boolean to function `ore_icon_pictures` to generate lit ores
+  Bugfixes:
+    - Fixed that `icon_picture_extras` for icons with single layers was not properly handled by `construct_icon`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2020-11-20
+  Bugfixes:
+    - Fixed that `append_tier_labels_to_vanilla_items` did not allow for non-vanilla icon definitions
+  Locale:
+    - Updated Brazilian Portuguese, Czech and German localizations
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2020-11-09
+  Bugfixes:
+    - Fixed that functions `append_tier_labels` and `append_tier_labels_to_vanilla_items` did not specify `icon_size` and `icon_mipmaps`
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2020-11-08
+  Changes:
+    - Changed how default indicators for true/false setting descriptions are handled internally
+    - Added handling of custom Types/Animation parameter `vertically_oriented` to `make_4way_animation_from_spritesheet`
+    - Restored 6th tier labels in a temporary state, pending finalization on how pseudo-6th tier entities will be handled
+    - Changed 6th tier color from a pale violet to orange
+    - Moved item icons for lead and tin ores into this mod from Artisanal Reskins: Bob's Mods
+  Locale:
+    - Modified setting names and descriptions for consistency
+    - Updated Czech and German localizations, added Brazilian Portuguese localization
+    - Preliminary localizations for French (5% complete) and Polish (5% complete)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2020-10-04
+  Features:
+    - Added function `ore_icon_pictures`
+  Changes:
+    - Improved robustness of `composite_existing_icons` function
+    - Added ability to direct-insert `icon`/`icons` specifications using `composite_existing_icons`
+  Bugfixes:
+    - Fixed that the function `composite_existing_icons` produced icons in alt-view that were twice as large as intended
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2020-09-21
+  Features:
+    - Added function `composite_existing_icons`
+    - Added functions `pipe_pictures`, `underground_pipe_pictures` and `pipe_covers`
+  Changes:
+    - Directories are now handled via the `mod` field of the `inputs` table, instead of the `directory` field
+    - Function `create_icons_from_list` can now handle the `mod` field of the `inputs` table
+    - Modified `create_icons_from_list` to allow specification of `icon_filename` directly
+    - Renamed tier-mapping style "Name" to "Traditional", updated description of the setting "Tier mapping" for clarity
+    - Moved several item icons from Artisanal Reskins: Bob's Mods to this mod
+  Bugfixes:
+    - Fixed that assigning an icon to a recipe that shared a name with an item would overwrite the item icon
+    - Fixed that `construct_icon` and `construct_technology_icon` were not properly porting an icon into an icons definition
+  Locale:
+    - Updated Czech and German localizations
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2020-09-06
+  Features:
+    - Added setting `Color intensity`, affecting how bright structures, vehicles and robots appear in-world
+  Changes:
+    - Improved clarity of tier labels at 16px; removed tier labels for 6th tier
+    - Added support for `icon_picture_extras` in function `create_icons_from_list`
+  Locale:
+    - Added localization support for Czech
+    - Updated German localization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-08-24
+  Changes:
+    - Reverted `icon_size` and `icon_mipmaps` are now set to `nil` when `icons` is defined
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-08-24
+  Changes:
+    - Added functionality to `create_icons_from_list` to be able to specify belt-type masks
+    - Adjusted bright spot in oil refinery highlight
+    - Added Bob's Assembling Machines and Angel's Petrochem as hidden dependencies to fix Oil Refinery reskinning issues
+  Locale:
+    - Added localization support for German
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-08-15
+  Features:
+    - Added function `rescale_minimachine_technology`
+  Changes:
+    - `icon_size` and `icon_mipmaps` are now set to `nil` when `icons` is defined, and they are defined per-entry within `icons`
+  Bugfixes:
+    - Fixed that `tint_index` could not be defined under some edge cases
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2020-08-11
+  Changes:
+    - Updated thumbnail
+  Bugfixes:
+    - Fixed startup error when starting without any of Bob's mods; calling a function that hadn't been defined yet
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2020-08-07
+  Features:
+    - Added functions `assign_deferred_icons`, `rescale_minimachine`
+  Changes:
+    - Moved sprites, icons and code for oil refineries into this mod
+    - Revised icon assignment to optionally define `pictures`
+    - Increased scope of `create_icons_from_list` to handle all item/technology icon setups
+    - Changed how tier label setting icons were created and referenced; now uses sprite prototype
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2020-08-03
+  Changes:
+    - Modified function `create_icons_from_list` to support inputs-defined icon deferral
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2020-08-03
+  Features:
+    - Added function `clear_icon_specification`
+    - Added function `create_icons_from_list`
+  Changes:
+    - Modified function `store_icon` to handle data-updates as well
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2020-07-15
+  Changes:
+    - Revised tier label icons, 32px is now more clear
+    - Revised how equipment icon backgrounds are handled
+    - Added support for a 6th tier, currently disabled
+    - Enhanced mod setting names and descriptions with rich text; tier labels are now displayed next to their respective option
+    - Renamed `ingredients`-based tier mapping to `progression`-based tier mapping, and improved the clarity of the setting description
+    - Removed files and code relating to target drone utility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2020-07-13
+  Features:
+    - Added customized version of `make_4way_animation_from_spritesheet`
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2020-07-11
+  Changes:
+    - Code improvements; ensured variables are locally defined
+    - Tier labels now have borders on the left
+    - Tier labels have been improved at 16x and 8x pixel sizes for clarity
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2020-07-06
+  Features:
+    - Added function `rescale_remnant`
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2020-06-24
+  Changes:
+    - Reverted previous change in 0.0.6
+    - Sets icon_size and icon_mipmaps at every entry within an icons table when icons are assigned
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2020-06-23
+  Changes:
+    - Unbrick mods that depend on icon field being present when icons was set by this mod
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2020-06-22
+  Features:
+    - Added function `startup_setting` to handle validation of startup settings
+  Changes:
+    - Moved icon assignments to occur immediately, with method to re-apply if necessary
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2020-06-18
+  Features:
+    - Added functions `construct_technology_icon` and `assign_technology_icon`
+  Changes:
+    - Set minimum version for Base to 0.18.32
+    - Consolidated `setup_masked_icon`, `setup_flat_icon`, `setup_standard_icon` into `construct_icon`
+    - Added support for `inputs.icon_background` in `construct_icon`
+    - Added support for `item-with-entity-data` to `assign_icons`
+    - Added `storage` parameter to function `store_icons` to allow for more control over where icons are stored
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2020-06-11
+  Features:
+    - Added function `store_icons` to collate icon setup parameters for later assignment in data-final-fixes by originating mod
+  Changes:
+    - Added `homepage` property to info.json
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2020-06-08
+  Changes:
+    - Renamed from `Function Library` to `Function Library`
+    - Added means to disable icon mask tinting in setup_masked_icon
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2020-06-06
+  Features:
+    - Initial Beta Release
