@@ -20,11 +20,7 @@ local function writeTechnologyPropertiesToTechnologyStatus(technology_name, mode
 	)
 end
 
-TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(
-	technology_name,
-	mode,
-	allow_hidden_prerequisites_contain
-)
+TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(technology_name, mode)
 	if EvaluatingStepStatusHolder.isVisitedTechnology(mode, technology_name) then
 		return
 	end
@@ -38,10 +34,6 @@ TechnologyLeafHandlerTechnologyPropertiesStep.evaluate = function(
 		return
 	end
 	_table.each(first_level_parents, function(dependency_name)
-		local dependency = Utils.getModedObject(data.raw["technology"][dependency_name], mode)
-		if dependency.hidden and not allow_hidden_prerequisites_contain then
-			error("technology " .. technology_name .. " has hidden dependency " .. dependency_name)
-		end
 		TechnologyLeafHandlerTechnologyPropertiesStep.evaluate(dependency_name, mode)
 	end)
 end

@@ -39,6 +39,12 @@ local function addPrerequisitesToTechnologies(mode)
 	local technologies = data.raw["technology"]
 	techUtil.addPrerequisitesToTechnology(technologies["ore-crushing"], { "burner-ore-crushing" }, mode)
 	techUtil.addPrerequisitesToTechnology(technologies["electric-mining"], { "burner-ore-mining" }, mode)
+	techUtil.addPrerequisitesToTechnology(technologies["electric-chemical-furnace"], { "basic-chemistry" }, mode)
+	techUtil.addPrerequisitesToTechnology(
+		technologies["electric-mixing-furnace"],
+		{ "electric-chemical-furnace" },
+		mode
+	)
 end
 
 local function removeRecipeEffectsFromTechnologies(mode)
@@ -61,6 +67,12 @@ local function moveRecipesToNewTechnologies(mode)
 		mode
 	)
 	techUtil.moveRecipeEffectsToTechnology("basic-automation", "steam-power", "steam-inserter", mode)
+	techUtil.moveRecipeEffectsToTechnology(
+		"water-treatment",
+		"water-treatment-2",
+		"bi-mineralized-sulfuric-waste",
+		mode
+	)
 end
 local function removePrerequisitesFromTechnologies(mode)
 	local technologies = data.raw["technology"]
