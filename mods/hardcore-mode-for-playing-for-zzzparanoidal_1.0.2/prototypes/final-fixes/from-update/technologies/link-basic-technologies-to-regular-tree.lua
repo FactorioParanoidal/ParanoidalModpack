@@ -112,17 +112,13 @@ local function addPrerequisitesToTechnologies(mode)
 		{ "basic-wood-production", "coal-ore-smelting" },
 		mode
 	)
-	techUtil.addPrerequisitesToTechnology(
-		technologies["electronics"],
-		{
-			"basic-electronics",
-			"angels-tin-smelting-1",
-			"bi-tech-timber",
-			"bio-wood-processing",
-			"automation-science-pack",
-		},
-		mode
-	)
+	techUtil.addPrerequisitesToTechnology(technologies["electronics"], {
+		"basic-electronics",
+		"angels-tin-smelting-1",
+		"bi-tech-timber",
+		"bio-wood-processing",
+		"automation-science-pack",
+	}, mode)
 	techUtil.addPrerequisitesToTechnology(
 		technologies["military-0"],
 		{ "coal-detected-resource-technology", "salvaged-automation-tech" },
@@ -179,6 +175,11 @@ local function addPrerequisitesToTechnologies(mode)
 	techUtil.addPrerequisitesToTechnology(
 		technologies["logistic-science-pack"],
 		{ "logistics", "automation-science-pack", "angels-lead-smelting-1", "angels-tin-smelting-1" },
+		mode
+	)
+	techUtil.addPrerequisitesToTechnology(
+		technologies["electric-engine"],
+		{ "coal-detected-resource-technology" },
 		mode
 	)
 end
@@ -287,7 +288,6 @@ local function addRecipeRecipeEffectsToTechnologies(mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["coal-ore-smelting"], "angelsore1-crushed-smelting", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["coal-ore-smelting"], "angelsore3-crushed-smelting", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["coal-lighting"], "deadlock-copper-lamp", mode)
-	techUtil.addRecipeEffectToTechnologyEffects(technologies["coal-lighting"], "torch", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["basic-wood-production"], "coal-bi-bio-farm", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(technologies["basic-wood-production"], "coal-bi-bio-greenhouse", mode)
 	techUtil.addRecipeEffectToTechnologyEffects(
@@ -351,12 +351,17 @@ local function createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRec
 		end)
 	end)
 end
+local function hide_recipes(mode)
+	local recipes = data.raw["recipe"]
+	techUtil.hideRecipe(recipes["torch"], mode)
+end
 _table.each(GAME_MODES, function(mode)
 	createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
 	resetBasicTechnologyPrerequisitesToNormalTree(mode)
-	addPrerequisitesToTechnologies(mode)
 	removePrerequisitesFromTechnologies(mode)
+	addPrerequisitesToTechnologies(mode)
 	removeRecipeEffectsFromTechnologies(mode)
 	addRecipeRecipeEffectsToTechnologies(mode)
 	moveRecipesToNewTechnologies(mode)
+	hide_recipes(mode)
 end)
