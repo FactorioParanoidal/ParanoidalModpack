@@ -10,7 +10,7 @@ local function handle_game_mode_data(mode)
 	TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
 	local leafTechologies = TechnologyLeafFinder.getLeafTechnologiesForResettingDependenies(mode)
 	TechnologyLeafHandler.handleLeafTechonologies(leafTechologies, mode)
-	TechnologyTreeCacheUtil.clearTechnologyTreeCache(mode)
+	TechnologyTreeCacheUtil.cleanupTechnologyTreeCache(mode)
 end
 
 GameModeUtil.handle_game_mode_datas = function()
