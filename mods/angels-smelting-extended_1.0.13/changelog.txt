@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 21.01.2024
+  Bugfixes:
+    - Fluidbox too low on rubber in strand-casters (now allows passthrough of rubber ONLY)
+  Changes:
+    - Small fixes to grouping of smelting products (typo fixes)
+    - A trigger for insulated wire was incorrect causing a crash
+---------------------------------------------------------------------------------------------------
 Version: 1.0.12
 Date: 10.07.2022
   Bugfixes:
