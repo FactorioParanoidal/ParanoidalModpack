@@ -182,6 +182,7 @@ local function on_player_selected_area(event)
 					local merged_chest = create_merged_chest(player, chest_group_to_merge.merged_chest_name, bounding_box.center(chest_group_to_merge.bounding_box))
 					if merged_chest then
 						MergingChests.move_inventories(chest_group_to_merge.entities, { merged_chest })
+						MergingChests.move_inventory_bar(chest_group_to_merge.entities, { merged_chest })
 						MergingChests.reconnect_circuits(chest_group_to_merge.entities, { merged_chest })
 
 						raise_on_chest_merged({

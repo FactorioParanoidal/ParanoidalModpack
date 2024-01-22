@@ -41,6 +41,7 @@ local function on_player_alt_selected_area(event)
 					local split_chests = create_split_chest(merged_chest, split_chest_name, width, height, player)
 
 					MergingChests.move_inventories({ merged_chest }, split_chests)
+					MergingChests.move_inventory_bar({ merged_chest }, split_chests)
 					MergingChests.reconnect_circuits({ merged_chest }, split_chests)
 
 					raise_on_chest_split({

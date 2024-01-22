@@ -106,7 +106,6 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 	entity_data.override_prototype_properties = entity_data.override_prototype_properties or {}
 
 	local next_upgrade_name = entity_data.override_prototype_properties.next_upgrade or base_chest.next_upgrade
-	log('Chest '..base_chest.name..' '..(base_chest.next_upgrade or 'nil'))
 	entity_data.override_prototype_properties.next_upgrade = nil
 	local next_upgrade = next_upgrade_name and MergingChests.get_merged_chest_name(next_upgrade_name, width, height) or nil
 
@@ -238,6 +237,10 @@ function MergingChests.create_mergeable_chest(entity_data, segments_data)
             if MergingChests.is_size_allowed(1, height, entity_data.chest_name) then
                 data:extend({ create_high_chest_entity(entity_data, segments_data.high_segments, height) })
 				max_area = math.max(max_area, height)
+
+				if height > 42 then
+					-- TODO vytvorit stary prototype
+				end
             end
         end
     end

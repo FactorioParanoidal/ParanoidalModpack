@@ -1,4 +1,14 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 5.0.1
+Date: 18.1.2024
+  Features:
+    - Added mod setting to mirror whitelist. When enabled you won't have to specify both "1xN" and "Nx1" in whitelist since either of them would be interpreted as both of them.
+  Bugfixes:
+    - Fixed whitelisting not working as expected.
+    - Fixed bar not being copied during merging and splitting.
+  Info:
+    - Migration to 5.0.0 is still not fixed. Don't upgrade existing saves if you have chests larger than 42 in any direction. It should be fine otherwise as there is no migration.
+---------------------------------------------------------------------------------------------------
 Version: 5.0.0
 Date: 14.1.2024
   Features:

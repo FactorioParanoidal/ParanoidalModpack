@@ -95,6 +95,13 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 default_value = 'NxN',
                 allow_blank = true,
                 order = '99-'..(options.order or chest_name)..'-05'
+            },
+            {
+                name = MergingChests.chest_specific_setting_name(MergingChests.setting_names.mirror_whitelist, chest_name),
+                type = 'bool-setting',
+                setting_type = 'startup',
+                default_value = false,
+                order = '99-'..(options.order or chest_name)..'-06'
             }
         })
     end
@@ -107,7 +114,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 setting_type = 'startup',
                 minimum_value = 0,
                 default_value = 1.0,
-                order = '99-'..(options.order or chest_name)..'-06'
+                order = '99-'..(options.order or chest_name)..'-07'
             },
             {
                 name = MergingChests.chest_specific_setting_name(MergingChests.setting_names.inventory_size_limit, chest_name),
@@ -116,7 +123,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 minimum_value = 1,
                 maximum_value = 65535,
                 default_value = 1000,
-                order = '99-'..(options.order or chest_name)..'-07'
+                order = '99-'..(options.order or chest_name)..'-08'
             }
         })
     end
@@ -129,7 +136,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 setting_type = 'startup',
                 minimum_value = 2,
                 default_value = 5,
-                order = '99-'..(options.order or chest_name)..'-08'
+                order = '99-'..(options.order or chest_name)..'-09'
             }
         })
     end
@@ -153,7 +160,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                     'bottom-middle',
                     'bottom-left'
                 },
-                order = '99-'..(options.order or chest_name)..'-09'
+                order = '99-'..(options.order or chest_name)..'-10'
             }
         })
     end
@@ -167,6 +174,7 @@ function MergingChests.delete_chest_name_settings(chest_name)
     data.raw['int-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.max_height, chest_name)] = nil
     data.raw['int-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.max_area, chest_name)] = nil
     data.raw['string-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.whitelist, chest_name)] = nil
+    data.raw['bool-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.mirror_whitelist, chest_name)] = nil
     data.raw['int-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.inventory_size_limit, chest_name)] = nil
     data.raw['double-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.inventory_size_multiplier, chest_name)] = nil
     data.raw['int-setting'][MergingChests.chest_specific_setting_name(MergingChests.setting_names.warehouse_threshold, chest_name)] = nil
