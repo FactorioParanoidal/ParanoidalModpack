@@ -1,100 +1,80 @@
-
 {
-  "mods": 
-  [
-    
+  "mods": [
     {
       "name": "base",
       "enabled": true
     },
-    
     {
       "name": "aai-industry",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "AbandonedRuins",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "AbandonedRuins-Silly",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "AdditionalPasteSettings",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Aircraft",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "AlertsList2",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "alien-biomes-settings",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angels-smelting-extended",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelsbioprocessing",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelsextended-remelting-fixed",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelsinfiniteores",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelspetrochem",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelsrefining",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "angelssmelting",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "AtomicArtillery",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "automated-fabrique-protocol",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "automated-utility-protocol",
       "enabled": true
     },
-    
     {
       "name": "baraws",
+<<<<<<< HEAD
       "enabled": false
     },
     
@@ -304,200 +284,295 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+      "enabled": true
+    },
+    {
+      "name": "BatteryElectricTrain",
+      "enabled": true
+    },
+    {
+      "name": "beautiful_straight_bridge_railway",
+      "enabled": true
+    },
+    {
+      "name": "belt-visualizer",
+      "enabled": true
+    },
+    {
+      "name": "betterCargoPlanes",
+      "enabled": true
+    },
+    {
+      "name": "Big-Monsters",
+      "enabled": true
+    },
+    {
+      "name": "BigLab",
+      "enabled": true
+    },
+    {
+      "name": "BigLightElectricMiningDrill",
+      "enabled": true
+    },
+    {
+      "name": "Bioluminescence",
+      "enabled": true
+    },
+    {
+      "name": "Bio_Industries",
+      "enabled": true
+    },
+    {
+      "name": "blueprint-sandboxes",
+      "enabled": true
+    },
+    {
+      "name": "blueprint_flip_and_turn",
+      "enabled": true
+    },
+    {
+      "name": "bobassembly",
+      "enabled": true
+    },
+    {
+      "name": "bobelectronics",
+      "enabled": true
+    },
+    {
+      "name": "bobenemies",
+      "enabled": true
+    },
+    {
+      "name": "bobequipment",
+      "enabled": true
+    },
+    {
+      "name": "bobicons",
+      "enabled": true
+    },
+    {
+      "name": "bobinserters",
+      "enabled": true
+    },
+    {
+      "name": "boblibrary",
+      "enabled": true
+    },
+    {
+      "name": "boblogistics",
+      "enabled": true
+    },
+    {
+      "name": "bobmining",
+      "enabled": true
+    },
+    {
+      "name": "bobmodules",
+      "enabled": true
+    },
+    {
+      "name": "bobores",
+      "enabled": true
+    },
+    {
+      "name": "BobPipesThroughput",
+      "enabled": true
+    },
+    {
+      "name": "bobplates",
+      "enabled": true
+    },
+    {
+      "name": "bobpower",
+      "enabled": true
+    },
+    {
+      "name": "bobrevamp",
+      "enabled": true
+    },
+    {
+      "name": "bobtech",
+      "enabled": true
+    },
+    {
+      "name": "bobvehicleequipment",
+      "enabled": true
+    },
+    {
+      "name": "bobwarfare",
+      "enabled": true
+    },
+    {
+      "name": "BottleneckLite",
+      "enabled": true
+    },
+    {
+      "name": "bullet-trails",
+      "enabled": true
+    },
+    {
+      "name": "check-technology-tree-mods-protocol",
+      "enabled": false
+    },
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "Clowns-AngelBob-Nuclear",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Clowns-Nuclear",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Clowns-Processing",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "comb",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "combat-mechanics-overhaul",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "CoppermineBobModuleRebalancing",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "CopyPasteModules",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Cursed-FMD",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "CW-carbon-capture-reforged",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "DeadlockLargerLamp",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "DeadlockResearchNotifications",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "deep-storage-unit",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "DeleteEmptyChunks",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "DewPointAggregator",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "DragonIndustries",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "efficient-research",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ElectricResistance",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Electric_Transformators",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Enhanced_Map_Colors",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "erm_libs",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ERPTbaAB",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "even-distribution",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "EvoGUI",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "expanded-rocket-payloads",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "extended-descriptions",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "extendedangels",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "factorissimo-2-notnotmelon",
       "enabled": true
     },
-    
     {
       "name": "factoryplanner",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "FactorySearch",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "FastRemoveTiles",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Fe-C-accumulator",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Flammable_Oils_fix",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "flib",
       "enabled": true
     },
-    
     {
       "name": "Flow Control",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "fluid-memory-storage",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "FluidMustFlow",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "fluid_permutations",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "FNEI",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "GUI_Unifyer",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -511,10 +586,13 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "hardcore-mode-for-playing",
       "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -525,170 +603,150 @@
 =======
 =======
     
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "hardcore-mode-for-playing-for-vanilla",
-      "enabled": true
-    },
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-    {
-      "name": "hardcore-mode-for-playing-for-zzzparanoidal",
       "enabled": false
     },
+<<<<<<< HEAD
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
+    {
+      "name": "hardcore-mode-for-playing-for-zzzparanoidal",
+      "enabled": true
+    },
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 3434c172d (update mods structure)
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "helmod",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "heroturrets",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "immersive-sounds",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "InfiniteTech",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "JunkTrain3",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "KaoExtended",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "KS_Power",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "laser_fix",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "liborio",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "LightedPolesPlus",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "LogisticTrainNetwork",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "LootingSpaceshipWrecks",
       "enabled": true
     },
-    
     {
       "name": "ltn-cleanup",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "LtnManager",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "LTN_Content_Reader",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "make-moded-technology-tree-mods-protocol",
       "enabled": true
     },
-    
     {
       "name": "make_burner_miners_great_again",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "marathon",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "MaxRateCalculator",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "MilesBobsExpansion",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Milestones",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "miniloader",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "minime_temp",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "mining-patch-planner",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "MIRV",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ModuleInserter",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "more-minimap-autohide-017",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "more-petrochem-hell",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "MoreAchievements",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "multi-product-recipe-details",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -707,50 +765,45 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "MxlChievements",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "m_WhereIsMyBody",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Namelists",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Nanobots",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Natural_Evolution_Enemies",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "nco-InserterCranes",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ner_intermediatestweak",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "newtrainsfx",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "NightBrightness",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -764,10 +817,13 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "nixie-tubes",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -780,181 +836,148 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "Noxys_Trees",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Oberhaul",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "OberNuclear",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Oil_Based_Paint",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "OreRadar",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "original-music-hd-updated",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "osha_mini_containers",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "osm-lib",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "osm-lib-postprocess",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "OverloadedTrains",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "P-U-M-P-S",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ParanoidalLocale",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "pathological",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PCPRedux",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerAtheneum",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerBlueprinter",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerDollies",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerEquipmentKeys",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerExtended",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerInventoryTools",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerPipeTools",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerTweaks",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PickerVehicles",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Picks-Inserter",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PipeMeterWLK",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PipeVisualizer",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "PMRPGsystem",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "pollution-visuals",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "prismatic-belts",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "qol_research",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "QueueToFrontNG",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "QuickItemSearch",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RadioactiveDamage",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "railloader",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RaiLuaLib",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Rampant",
       "enabled": false
@@ -963,6 +986,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
@@ -972,6 +996,8 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "RampantEvolution",
       "enabled": false
@@ -979,6 +1005,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
 =======
     
@@ -987,139 +1014,121 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "RampantMaintenance",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 3434c172d (update mods structure)
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "RateCalculator",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RealisticDecorationCleanup",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RecipeBook",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Renamer",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "research_evolution_factor",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "reskins-angels",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "reskins-bobs",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "reskins-compatibility",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "reskins-library",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ReStack",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RITEG",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Robot256Lib",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "robot_attrition",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Rocket-Silo-Construction",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RocketExplosions",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "rso-mod",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RU-locale",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "RussianStations",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Sandros-fixes",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "scattergun_turret",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "SchallPickupTower",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "SchallTankPlatoon",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Shield-FX",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ShinyBob_Techs",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Shortcuts-ick",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1137,15 +1146,17 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "signalstrings",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "simhelper",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1162,30 +1173,29 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "SingleColorTerrain",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "SmogSolarPanels",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "SpaceMod",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "SpaceXGAR",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Squeak Through",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1199,20 +1209,21 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "StatsGui",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "StatsGui-HandcraftTimer",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "StatsGui-MovementSpeed",
-      "enabled": false
+      "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1225,129 +1236,107 @@
 =======
     
 >>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
+=======
+>>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
     {
       "name": "stdlib",
       "enabled": true
     },
-    
     {
       "name": "steinios_research_sensor",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Subterranean",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Texugo_windgenerator",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "TimedSpawnControl",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Todo-List",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "toxicPollution",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "TrainModeSwitcher",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "TrainSpeedLimit",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Train_Control_Signals",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "True-Nukes",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "UnminableBots",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "UnPollock",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "upgrade-planner-next",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "VehicleSnap",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "vehicle_physics_again",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Warehousing",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "Warheads",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "weaponSoundsRedone",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "what-fish",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "what-is-it-really-used-for",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "WideChests",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "ZCS-Trash-Landfill-Continued-Continued",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "zero-fluid-info",
-      "enabled": false
+      "enabled": true
     },
-    
     {
       "name": "zzzparanoidal",
-      "enabled": false
+      "enabled": true
     }
   ]
 }
