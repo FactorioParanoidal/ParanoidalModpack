@@ -90,16 +90,16 @@ if mods['IndustrialRevolution3'] then fluid = "concrete-fluid" end
 
 local ing_stage2 = 
 		{
-		  {type="item", name="concrete", amount=50*mp},
+          {type="item", name="refined-concrete", amount=50*mp}, --drd concrete
 		  {type="item", name=brick, amount=10*mp},
 		  {type="item", name=steel, amount=ifthen(steel=='steel-plate',20,5)*mp},
 		  {type="item", name=stick, amount=ifthen(stick=='iron-stick',30,5)*mp},
-		  {type="fluid", name=fluid, amount=1000*mp},
+		  {type="fluid", name=fluid, amount=2000*mp}, --drd 2000
 		}
 
 local ing_stage4 = 
 		{
-		  {"concrete", 50*mp},
+          {"refined-concrete", 50*mp}, --drd concrete
 		  {brick, 10*mp},
 		  {steel, ifthen(steel=='steel-plate',20,10)*mp},
 		  {stick2, ifthen(stick=='iron-stick',30,15)*mp},
