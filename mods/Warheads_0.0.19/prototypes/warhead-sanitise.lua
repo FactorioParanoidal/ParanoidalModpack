@@ -240,6 +240,7 @@ local function sanitseWarhead(key, warhead)
     weapon.land_mine.created_action = explosion.created_action or {type = "direct", action_delivery = {type = "instant", target_effects = explosion.created_effect}}
     weapon.land_mine.ammo_category = warhead.ammo_category
     weapon.land_mine.dying_explosion = explosion.dying_explosion or warhead.dying_explosion
+    weapon.tech = warhead.tech
     table.insert(result.weapons, weapon)
   end
   return result

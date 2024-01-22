@@ -5,9 +5,10 @@ local weapontype_sanitise = require("__Warheads__.prototypes.weapontype-sanitise
 local combine = require("__Warheads__.prototypes.warhead-weapontype-combination")
 
 
-
+removedRecipes = {}
 for _,name in pairs(warheadWeaponNameMap) do
   if(data.raw.recipe[name]) then
+    removedRecipes[name] = data.raw.recipe[name]
     data.raw.recipe[name] = nil
   end
 end
@@ -34,7 +35,7 @@ for name,warhead_dirty in pairs(warheads) do
               end
               data:extend(results)
 
-              local tech = warhead_dirty.tech
+              local tech = warheadWeapon.tech
               if weaponNoTech[weapontype.name] then
                 tech = nil
               end
@@ -68,3 +69,10 @@ for name,warhead_dirty in pairs(warheads) do
     end
   end
 end
+
+for name,recipe in pairs(removedRecipes) do
+  if(not data.raw.recipe[name]) then
+    data.raw.recipe[name] = recipe
+  end
+end
+

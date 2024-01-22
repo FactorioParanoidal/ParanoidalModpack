@@ -2,6 +2,7 @@ weaponTypes["rampant-mortar"]= {
   type = "stream",
   max_size = "medium",
   min_size = "tiny",
+  ignore = not settings.startup["enable-rampant-mortar"].value,
   baseName = "rampant-mortar",
   baseOrder = "e[mortar]-c",
   base_item = "grenade-capsule-ammo-rampant-arsenal",
