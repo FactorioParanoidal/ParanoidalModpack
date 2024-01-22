@@ -1,3 +1,5 @@
+local fmath = require("__flib__.math")
+
 --- @alias chest_merged_event { player_index: number, surface: LuaSurface, split_chests: LuaEntity[], merged_chest: LuaEntity }
 
 --- @param entity LuaEntity
@@ -65,23 +67,21 @@ end
 --- @param to_entities LuaEntity[]
 function MergingChests.move_inventory_bar(from_entities, to_entities)
 	local bar_count = 0
-	local bar_entities = 0
-
 	for _, entity in ipairs(from_entities) do
 		local inventory = entity.get_inventory(defines.inventory.chest)
 		if inventory and inventory.supports_bar() then
 			bar_count = bar_count + inventory.get_bar() - 1
-			bar_entities = bar_entities + 1
 		end
 	end
 
+	local to_entities_count = table_size(to_entities)
 	for _, entity in ipairs(to_entities) do
 		local inventory = entity.get_inventory(defines.inventory.chest)
 		if inventory and inventory.supports_bar() then
-			local bar = math.round(bar_count / bar_entities)
+			local bar = fmath.round(bar_count / to_entities_count)
 			inventory.set_bar(bar + 1)
 			bar_count = bar_count - bar
-			bar_entities = bar_entities - 1
+			to_entities_count = to_entities_count - 1
 		end
 	end
 end

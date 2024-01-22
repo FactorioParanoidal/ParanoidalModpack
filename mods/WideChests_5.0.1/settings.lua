@@ -40,12 +40,19 @@ data:extend(
 		order = '05'
 	},
 	{
+		name = MergingChests.setting_names.mirror_whitelist,
+		type = 'bool-setting',
+		setting_type = 'startup',
+		default_value = false,
+		order = '06'
+	},
+	{
 		name = MergingChests.setting_names.inventory_size_multiplier,
 		type = 'double-setting',
 		setting_type = 'startup',
 		minimum_value = 0,
 		default_value = 1.0,
-		order = '06'
+		order = '07'
 	},
 	{
 		name = MergingChests.setting_names.inventory_size_limit,
@@ -54,7 +61,7 @@ data:extend(
 		minimum_value = 1,
 		maximum_value = 65535,
 		default_value = 1000,
-		order = '07'
+		order = '08'
 	},
 	{
 		name = MergingChests.setting_names.sprite_decal_chance,
@@ -63,7 +70,7 @@ data:extend(
 		minimum_value = 0,
 		maximum_value = 100,
 		default_value = 15,
-		order = '08'
+		order = '09'
 	},
 	{
 		name = MergingChests.setting_names.warehouse_threshold,
@@ -71,7 +78,7 @@ data:extend(
 		setting_type = 'startup',
 		minimum_value = 2,
 		default_value = 5,
-		order = '09'
+		order = '10'
 	},
 	{
 		name = MergingChests.setting_names.circuit_connector_position,
@@ -90,13 +97,13 @@ data:extend(
 			'bottom-middle',
 			'bottom-left'
 		},
-		order = '10'
+		order = '11'
 	},
 	{
 		name = MergingChests.setting_names.allow_delete_items,
 		type = 'bool-setting',
 		setting_type = 'runtime-per-user',
 		default_value = false,
-		order = '11'
+		order = '12'
 	}
 })

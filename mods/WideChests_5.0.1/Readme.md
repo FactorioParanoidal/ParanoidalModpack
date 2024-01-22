@@ -53,6 +53,8 @@ Following translations should be provided:
    - If `options.size_settings` was set
  - [mod-setting-name] WideChests_whitelist-chest-sizes-`chest-name`
    - If `options.size_settings` was set
+ - [mod-setting-name] WideChests_mirror-whitelists-`chest-name`
+   - If `options.size_settings` was set
  - [mod-setting-name] WideChests_inventory-size-multiplier-`chest-name`
    - If `options.inventory_settings` was set
  - [mod-setting-name] WideChests_inventory-size-limit-`chest-name`
