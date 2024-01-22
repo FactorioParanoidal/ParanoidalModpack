@@ -94,3 +94,5 @@ CF.replace_ing("nuclear-fuel","uranium-235",{"55%-uranium", 1},"ing")
 
 data.raw.item["nuclear-fuel"].order = "a-a"
 data.raw.item["nuclear-fuel"].subgroup = "clowns-nuclear-fuels"
+
+CF.replace_ing("uranium-processing","uranium-ore",{type="item", name = "uranium-ore", amount = 50},"ing")
