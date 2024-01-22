@@ -78,9 +78,20 @@ local function getModedTechnology(technology_candidate, mode)
 	return result
 end
 
-TechUtil.getAllTechnologiesWithRecipeFluidResultSpecifiedInAnotherRecipeByName = function(recipe_name, mode)
-	local fluids = _table.filter(recipeUtil.getAllRecipeIngredients(recipe_name, mode), function(result_data)
-		return result_data.type == "fluid"
+TechUtil.getAllTechnologiesWithRecipeFuelFluidInContainerResultSpecifiedInAnotherRecipeByName = function(
+	recipe_name,
+	mode
+)
+	local fluids = _table.filter(recipeUtil.getAllRecipeResults(recipe_name, mode), function(result_data)
+		local result_data_type = result_data.type
+		local result_data_name = result_data.name or result_data[1]
+		log(
+			"for recipe_name "
+				.. recipe_name
+				.. " result_data "
+				.. Utils.dump_to_console(data.raw[result_data_type][result_data_name])
+		)
+		return result_data_type == "item" and data.raw[result_data.type][result_data_name].fuel_category
 	end)
 	if _table.size(fluids) ~= 1 then
 		return {}
