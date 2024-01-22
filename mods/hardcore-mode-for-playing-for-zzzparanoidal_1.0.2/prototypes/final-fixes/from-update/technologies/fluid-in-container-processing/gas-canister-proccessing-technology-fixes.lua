@@ -1,0 +1,1 @@
+updateFluidInContainerProcessingTechnologyEffects('gas-canisters')

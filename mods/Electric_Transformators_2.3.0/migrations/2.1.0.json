@@ -1,0 +1,15 @@
+{
+  "entity":
+  [
+    ["trafo-1-placer", "trafo-1-displayer"],
+    ["trafo-2-placer", "trafo-2-displayer"],
+    ["trafo-3-placer", "trafo-3-displayer"],
+    ["trafo-4-placer", "trafo-4-displayer"],
+    ["trafo-5-placer", "trafo-5-displayer"],
+    ["trafo-1", "trafo-1-unit"],
+    ["trafo-2", "trafo-2-unit"],
+    ["trafo-3", "trafo-3-unit"],
+    ["trafo-4", "trafo-4-unit"],
+    ["trafo-5", "trafo-5-unit"]
+  ]
+}

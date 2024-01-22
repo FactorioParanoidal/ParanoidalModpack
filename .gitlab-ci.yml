@@ -1,35 +1,27 @@
 default:
-  image: mcr.microsoft.com/dotnet/sdk:8.0
-
+  image: ubuntu:24.04
+  before_script: apt update&&apt install jq -y&&apt install wget -y&& apt install xz-utils net-tools -y
 variables:
   GIT_DEPTH: 0
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: 1
 
 stages:
   - launchability
-  - updateLocalization
 
 launch-ability:
   only:
     changes:
       - mods/**
+      - ".gitlab-ci.yml"
+      - "Dockerfile"
   stage: launchability
   script:
-    - ./build.sh EnsureLaunchability
-    - ./build.sh EnsureLaunchability --TargetFactorioVersion latest
-
-pull-localization:
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "trigger"
-      when: always
-    - when: never
-  stage: updateLocalization
-  script:
-    - rm -rf paranoidalLocaleTemp
-    - git clone --depth 1 https://SKProCH:$GITLAB_ACCESS_TOKEN@gitlab.com/paranoidal/modpack.git paranoidalLocaleTemp
-    - cd paranoidalLocaleTemp
-    - ./build.sh  PullLocalization
-    - git add -A .
-    - git config --global user.email 'skproch@yandex.ru'
-    - git commit --verbose -am 'Updated ParanoidalLocale mod' --author='SKProCHs Bot <skproch@yandex.ru>' && echo "No changes"
-    - git push --verbose origin
+    - export paranoidal_mods_path="$(cat config.json |jq -r '.modsPath')/$(cat config.json |jq -r '.mod.name')_$(cat config.json |jq -r '.mod.version')"
+    - export base_mod_version_data=$(cat "$paranoidal_mods_path/info.json" | jq -r '.dependencies.[0]'|xargs)
+    - if [[ $base_mod_version_data =~  ^(base >= )([0-9]{0,}\.[0-9]{0,}\.[0-9]{0,})$ ]]; then base_mod_version=${BASH_REMATCH[2]}; else exit 1; fi
+    - echo "Factorio version is $base_mod_version"
+    - wget  "$(cat config.json |jq -r '.serverDownloadLink')/$base_mod_version/$(cat config.json |jq -r '.version')/linux64" -O factorio.tar.xz && tar xf factorio.tar.xz
+    - ./factorio/bin/x64/factorio  --version
+    - runner_hostname=$(hostname -f)
+    - ./factorio/bin/x64/factorio --mod-directory $(cat config.json |jq -r '.modsPath') --start-server-load-scenario base/freeplay --bind $runner_hostname:34197 &
+    - jobs -l
+    - for((i=0; ;++i)); do sleep 30; opened_port=$(netstat -u -n -a); if [[ $opened_port == *":34197"* ]]; then echo "factorio server started at $opened_port. Mods validation on start with contol.lua completed! New game has been created!"; exit 0;  fi  done

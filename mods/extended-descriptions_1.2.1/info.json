@@ -5,5 +5,19 @@
   "title": "Extended Descriptions",
   "author": "notnotmelon",
   "description": "Adds critical information onto the tooltip of items, recipes, and entites",
-  "dependencies": ["base >= 1.1.74", "(?) pypostprocessing", "(?) deadlock-beltboxes-loaders", "(?) angelsrefining", "(?) angelspetrochem", "(?) pyindustry", "(?) Flare Stack", "(?) space-exploration", "(?) nullius"]
+  "dependencies": [
+    "base >= 1.1.74",
+    "(?) pypostprocessing",
+    "(?) deadlock-beltboxes-loaders",
+    "(?) angelsrefining",
+    "(?) angelspetrochem",
+    "(?) pyindustry",
+    "(?) Flare Stack",
+    "(?) space-exploration",
+    "(?) nullius",
+    "?zzzparanoidal",
+    "?hardcore-mode-for-playing",
+    "?hardcore-mode-for-playing-for-vanilla",
+    "?hardcore-mode-for-playing-for-zzzparanoidal"
+  ]
 }
