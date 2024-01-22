@@ -1056,11 +1056,13 @@ bobmods.lib.recipe.add_ingredient("astrometrics", {"clowns-plate-osmium", 100})
 bobmods.lib.recipe.add_ingredient("ftl-drive", {"clowns-plate-osmium", 100})
 
 --Баланс водных насосов
+if data.raw["assembling-machine"]["water-pumpjack-5"] then
 data.raw["assembling-machine"]["water-pumpjack-1"].energy_usage = "600kW"
 data.raw["assembling-machine"]["water-pumpjack-2"].energy_usage = "1000kW"
 data.raw["assembling-machine"]["water-pumpjack-3"].energy_usage = "1350kW"
 data.raw["assembling-machine"]["water-pumpjack-4"].energy_usage = "1700kW"
 data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
+end
 
 --Синие фильтрующие манипуляторы встают на место
 data.raw.technology["filter-inserters"].hidden = true

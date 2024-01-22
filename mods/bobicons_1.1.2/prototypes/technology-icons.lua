@@ -18,8 +18,11 @@ data.raw.technology["nitinol-processing"].icon = "__bobicons__/graphics/technolo
 data.raw.technology["nitinol-processing"].icon_size = 128
 data.raw.technology["silicon-processing"].icon = "__bobicons__/graphics/technology/silicon-processing.png"
 data.raw.technology["silicon-processing"].icon_size = 128
-data.raw.technology["sodium-processing"].icon = "__bobicons__/graphics/technology/sodium-processing.png"
+
+if data.raw.technology["sodium-processing"] then data.raw.technology["sodium-processing"].icon = "__bobicons__/graphics/technology/sodium-processing.png"
 data.raw.technology["sodium-processing"].icon_size = 128
+end
+
 data.raw.technology["titanium-processing"].icon = "__bobicons__/graphics/technology/titanium-processing.png"
 data.raw.technology["titanium-processing"].icon_size = 128
 data.raw.technology["tungsten-processing"].icon = "__bobicons__/graphics/technology/tungsten-processing.png"
