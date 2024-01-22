@@ -18,7 +18,7 @@ TechnologyTreeCacheUtil.removeCacheForTechnologyTree = function(technology_name,
 	TECHNOLOGY_TREE_CACHE[mode][technology_name] = nil
 end
 
-TechnologyTreeCacheUtil.clearTechnologyTreeCache = function(mode)
+TechnologyTreeCacheUtil.cleanupTechnologyTreeCache = function(mode)
 	if not TECHNOLOGY_TREE_CACHE[mode] then
 		return
 	end

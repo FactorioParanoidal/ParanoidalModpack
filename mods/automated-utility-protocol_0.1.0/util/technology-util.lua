@@ -267,4 +267,16 @@ TechUtil.hasEffects = function(technology_name, mode)
 	local technology = getModedTechnology(technologies[technology_name], mode)
 	return technology.effects and _table.size(technology.effects) > 0
 end
+TechUtil.hasRecipeEffectIntoTechnologyEffects = function(technology_candidate, recipe_name, mode)
+	local technology = getModedTechnology(technology_candidate, mode)
+	if not recipe_name then
+		error("recipe_name not specified!")
+	end
+	if not technology.effects then
+		error("technology effects not specified!")
+	end
+	return _table.get_item_index(technology.effects, { type = "unlock-recipe", recipe = recipe_name }) ~= nil
+end
+
+TechUtil.getAllRecipesResultsForSpecifiedTechnologyRuntime = function(researched_technologies, difficulty) end
 return TechUtil
