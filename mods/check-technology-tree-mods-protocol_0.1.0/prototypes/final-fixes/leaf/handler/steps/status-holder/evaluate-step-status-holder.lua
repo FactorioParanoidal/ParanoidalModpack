@@ -142,38 +142,6 @@ end
 local function getIngredientName(ingredient)
 	return ingredient.name or ingredient[1]
 end
-EvaluatingStepStatusHolder.addNotFoundIngredientToTechnologyStatus = function(
-	mode,
-	technology_name,
-	not_found_inredient
-)
-	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	local not_found_inredient_name = getIngredientName(not_found_inredient)
-	technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
-end
-
-EvaluatingStepStatusHolder.getNotFoundIngredientsFromTechnologyStatus = function(mode, technology_name)
-	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	return technology_status.not_found_in_tree_ingredients
-end
-
-EvaluatingStepStatusHolder.resolveNotFoundIngredientsFromTechnologyStatus = function(
-	mode,
-	technology_name,
-	not_found_inredient,
-	resolving_technology_name,
-	is_remove_cycle
-)
-	if is_remove_cycle then
-		EvaluatingStepStatusHolder.removeTreeFromTechnologyStatus(mode, technology_name, { resolving_technology_name })
-	end
-	local technology_status = checkModeTechnologyStatus(mode, technology_name)
-	local not_found_inredient_name = getIngredientName(not_found_inredient)
-	technology_status.not_found_in_tree_ingredients[not_found_inredient_name] = nil
-	technology_status.resolved_not_found_in_tree_ingredients[not_found_inredient_name] = not_found_inredient
-	EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name, { resolving_technology_name })
-end
-
 EvaluatingStepStatusHolder.getTechnologyNamesWithCompatiableSciencePack = function(mode, technology_name)
 	local technology_status = checkModeTechnologyStatus(mode, technology_name)
 	local technology_units = technology_status.units

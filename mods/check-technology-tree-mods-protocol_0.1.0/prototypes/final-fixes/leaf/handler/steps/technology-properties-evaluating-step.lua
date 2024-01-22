@@ -3,20 +3,25 @@ local TechnologyLeafHandlerTechnologyPropertiesStep = {}
 
 local function writeTechnologyPropertiesToTechnologyStatus(technology_name, mode, first_level_parents)
 	EvaluatingStepStatusHolder.addTreeToTechnologyStatus(mode, technology_name, first_level_parents)
-	EvaluatingStepStatusHolder.addEffectIngredientsToTechnologyStatus(
-		mode,
-		technology_name,
-		techUtil.getAllRecipesIngredientsForSpecifiedTechnology(technology_name, mode)
-	)
-	EvaluatingStepStatusHolder.addEffectResultsToTechnologyStatus(
-		mode,
-		technology_name,
-		techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
-	)
-	EvaluatingStepStatusHolder.addUnitsToTechnologyStatus(
-		mode,
-		technology_name,
-		techUtil.getAllUnitsForSpecifiedTechnology(technology_name, mode)
+	local recipe_ingredients = techUtil.getAllRecipesIngredientsForSpecifiedTechnology(technology_name, mode)
+	EvaluatingStepStatusHolder.addEffectIngredientsToTechnologyStatus(mode, technology_name, recipe_ingredients)
+	local recipe_results = techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+	EvaluatingStepStatusHolder.addEffectResultsToTechnologyStatus(mode, technology_name, recipe_results)
+	local tool_units = techUtil.getAllUnitsForSpecifiedTechnology(technology_name, mode)
+	EvaluatingStepStatusHolder.addUnitsToTechnologyStatus(mode, technology_name, tool_units)
+	log(
+		"for technology "
+			.. technology_name
+			.. " mode "
+			.. mode
+			.. "\ntree is "
+			.. Utils.dump_to_console(first_level_parents)
+			.. "\nrecipe_ingredients are "
+			.. Utils.dump_to_console(recipe_ingredients)
+			.. "\nrecipe_results are "
+			.. Utils.dump_to_console(recipe_results)
+			.. "\ntechnology_units are "
+			.. Utils.dump_to_console(tool_units)
 	)
 end
 

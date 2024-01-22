@@ -77,12 +77,5 @@ end
 local technologies = data.raw["technology"]
 _table.each(technologies, function(technology)
 	clearTechnologyData(technology)
-	--[[log(
-			"for mode "
-				.. mode
-				.. " technology named "
-				.. technology_name
-				.. " is after copying for modes "
-				.. Utils.dump_to_console(technology)
-		)]]
+	--log(" technology named " .. technology.name .. " is after copying for modes " .. Utils.dump_to_console(technology))
 end)

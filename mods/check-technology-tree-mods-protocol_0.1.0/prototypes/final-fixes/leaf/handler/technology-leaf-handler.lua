@@ -7,7 +7,6 @@ local technologyNoHiddenValidatningStep = require("steps.technology-no-hidden-va
 local technologyNoHiddenRecipeEffectsValidatningStep =
 	require("steps.technology-no-hidden-recipe-effects-validating-step")
 local herselfTechnologyTreeResolvingStep = require("steps.missed-ingredients-in-tech-tree-step")
-local technologyTreeResolvedValidatingStep = require("steps.technology-tree-resolved-validating-step")
 local function clearStateBeforeStep(mode)
 	EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
 	return 1
@@ -52,39 +51,28 @@ local function findUnresolvedRecipeIngredientNamesInHerselfTechnologyTree(
 	_table.each(technology_names, function(technology_name)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
-		herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode)
+		herselfTechnologyTreeResolvingStep.evaluate(technology_name, mode, technologyPropertiesEvaluatingStep)
 		index = index + 1
 	end)
 	log("end trying to resolve recipe ingredient missing evaluating in technology tree")
 end
-local function validateAllUnresolvedRecipeIngredientMarkAsResolved(technology_names, mode, technology_names_count)
-	local index = clearStateBeforeStep(mode)
-	log("start check all unresolved ingredient marked as resolved")
-	_table.each(technology_names, function(technology_name)
-		log(tostring(index) .. " of " .. tostring(technology_names_count))
-		technologyTreeResolvedValidatingStep.evaluate(technology_name, mode, technologyPropertiesEvaluatingStep)
-		index = index + 1
-	end)
-	log("end check all unresolved ingredient marked as resolved")
-end
-local function printActiveTechnologTree(mode, technology_name, level)
+local function printActiveTechnologyTree(mode, technology_name, level)
 	local prefix = ""
-	for i = 1, level do
-		prefix = prefix .. "-"
+	for i = 0, level - 1 do
+		prefix = prefix .. "|"
 	end
+	prefix = prefix .. "-"
 	if EvaluatingStepStatusHolder.isVisitedTechnology(mode, technology_name) then
 		return
 	end
 	EvaluatingStepStatusHolder.markTechnologyAsVisited(mode, technology_name)
 	local tree = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
-	if not tree then
-		log("-------------------")
+	if not tree or _table.size(tree) == 0 then
 		return
 	end
 	_table.each(tree, function(tree_element_name)
 		log(prefix .. tree_element_name)
-		log("|")
-		printActiveTechnologTree(mode, tree_element_name, level + 1)
+		printActiveTechnologyTree(mode, tree_element_name, level + 1)
 	end)
 end
 local function printActiveTechnolgyData(technology_names, mode, technology_names_count)
@@ -94,8 +82,9 @@ local function printActiveTechnolgyData(technology_names, mode, technology_names
 		EvaluatingStepStatusHolder.cleanupVisitedTechnologies(mode)
 		log(tostring(index) .. " of " .. tostring(technology_names_count))
 		log("technology_name " .. technology_name .. " tree")
-		--[[	printActiveTechnologTree(mode, technology_name, 1)
-		log("technology " .. Utils.dump_to_console(data.raw["technology"][technology_name]))]]
+		log(technology_name)
+		printActiveTechnologyTree(mode, technology_name, 0)
+		log("technology data " .. Utils.dump_to_console(data.raw["technology"][technology_name]))
 		index = index + 1
 	end)
 	log("end print leaf technology data(and it tree, optional)")
@@ -109,7 +98,6 @@ TechnologyLeafHandler.handleLeafTechonologies = function(technology_names, mode)
 	validateTechnologyPrerequisitesNoHidden(technology_names, mode, technology_names_count)
 	validateTechnologyEffectsNoHidden(technology_names, mode, technology_names_count)
 	findUnresolvedRecipeIngredientNamesInHerselfTechnologyTree(technology_names, mode, technology_names_count)
-	validateAllUnresolvedRecipeIngredientMarkAsResolved(technology_names, mode, technology_names_count)
 	EvaluatingStepStatusHolder.cleanupForMode(mode)
 end
 

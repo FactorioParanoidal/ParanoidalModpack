@@ -1,105 +1,133 @@
+
 {
-  "mods": [
+  "mods": 
+  [
+    
     {
       "name": "base",
       "enabled": true
     },
+    
     {
       "name": "aai-industry",
       "enabled": false
     },
+    
     {
       "name": "AbandonedRuins",
       "enabled": false
     },
+    
     {
       "name": "AbandonedRuins-Silly",
       "enabled": false
     },
+    
     {
       "name": "AdditionalPasteSettings",
       "enabled": false
     },
+    
     {
       "name": "Aircraft",
       "enabled": false
     },
+    
     {
       "name": "AlertsList2",
       "enabled": false
     },
+    
     {
       "name": "alien-biomes-settings",
       "enabled": false
     },
+    
     {
       "name": "angels-smelting-extended",
       "enabled": false
     },
+    
     {
       "name": "angelsbioprocessing",
       "enabled": false
     },
+    
     {
       "name": "angelsextended-remelting-fixed",
       "enabled": false
     },
+    
     {
       "name": "angelsinfiniteores",
       "enabled": false
     },
+    
     {
       "name": "angelspetrochem",
       "enabled": false
     },
+    
     {
       "name": "angelsrefining",
       "enabled": false
     },
+    
     {
       "name": "angelssmelting",
       "enabled": false
     },
+    
     {
       "name": "AtomicArtillery",
       "enabled": false
     },
+    
     {
       "name": "automated-fabrique-protocol",
       "enabled": false
     },
+    
     {
       "name": "automated-utility-protocol",
       "enabled": true
     },
+    
     {
       "name": "baraws",
       "enabled": false
     },
+    
     {
       "name": "BatteryElectricTrain",
       "enabled": false
     },
+    
     {
       "name": "beautiful_straight_bridge_railway",
       "enabled": false
     },
+    
     {
       "name": "belt-visualizer",
       "enabled": false
     },
+    
     {
       "name": "betterCargoPlanes",
       "enabled": false
     },
+    
     {
       "name": "Big-Monsters",
       "enabled": false
     },
+    
     {
       "name": "BigLab",
       "enabled": false
     },
+    
     {
       "name": "BigLightElectricMiningDrill",
       "enabled": false
@@ -107,16 +135,21 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "Bioluminescence",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -125,94 +158,119 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "Bio_Industries",
       "enabled": false
     },
+    
     {
       "name": "blueprint-sandboxes",
       "enabled": false
     },
+    
     {
       "name": "blueprint_flip_and_turn",
       "enabled": false
     },
+    
     {
       "name": "bobassembly",
       "enabled": false
     },
+    
     {
       "name": "bobelectronics",
       "enabled": false
     },
+    
     {
       "name": "bobenemies",
       "enabled": false
     },
+    
     {
       "name": "bobequipment",
       "enabled": false
     },
+    
     {
       "name": "bobicons",
       "enabled": false
     },
+    
     {
       "name": "bobinserters",
       "enabled": false
     },
+    
     {
       "name": "boblibrary",
       "enabled": false
     },
+    
     {
       "name": "boblogistics",
       "enabled": false
     },
+    
     {
       "name": "bobmining",
       "enabled": false
     },
+    
     {
       "name": "bobmodules",
       "enabled": false
     },
+    
     {
       "name": "bobores",
       "enabled": false
     },
+    
     {
       "name": "BobPipesThroughput",
       "enabled": false
     },
+    
     {
       "name": "bobplates",
       "enabled": false
     },
+    
     {
       "name": "bobpower",
       "enabled": false
     },
+    
     {
       "name": "bobrevamp",
       "enabled": false
     },
+    
     {
       "name": "bobtech",
       "enabled": false
     },
+    
     {
       "name": "bobvehicleequipment",
       "enabled": false
     },
+    
     {
       "name": "bobwarfare",
       "enabled": false
     },
+    
     {
       "name": "BottleneckLite",
       "enabled": false
     },
+    
     {
       "name": "bullet-trails",
       "enabled": false
@@ -220,16 +278,21 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "check-technology-tree-mods-protocol",
       "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -238,158 +301,199 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": false
     },
+    
     {
       "name": "Clowns-Nuclear",
       "enabled": false
     },
+    
     {
       "name": "Clowns-Processing",
       "enabled": false
     },
+    
     {
       "name": "comb",
       "enabled": false
     },
+    
     {
       "name": "combat-mechanics-overhaul",
       "enabled": false
     },
+    
     {
       "name": "CoppermineBobModuleRebalancing",
       "enabled": false
     },
+    
     {
       "name": "CopyPasteModules",
       "enabled": false
     },
+    
     {
       "name": "Cursed-FMD",
       "enabled": false
     },
+    
     {
       "name": "CW-carbon-capture-reforged",
       "enabled": false
     },
+    
     {
       "name": "DeadlockLargerLamp",
       "enabled": false
     },
+    
     {
       "name": "DeadlockResearchNotifications",
       "enabled": false
     },
+    
     {
       "name": "deep-storage-unit",
       "enabled": false
     },
+    
     {
       "name": "DeleteEmptyChunks",
       "enabled": false
     },
+    
     {
       "name": "DewPointAggregator",
       "enabled": false
     },
+    
     {
       "name": "DragonIndustries",
       "enabled": false
     },
+    
     {
       "name": "efficient-research",
       "enabled": false
     },
+    
     {
       "name": "ElectricResistance",
       "enabled": false
     },
+    
     {
       "name": "Electric_Transformators",
       "enabled": false
     },
+    
     {
       "name": "Enhanced_Map_Colors",
       "enabled": false
     },
+    
     {
       "name": "erm_libs",
       "enabled": false
     },
+    
     {
       "name": "ERPTbaAB",
       "enabled": false
     },
+    
     {
       "name": "even-distribution",
       "enabled": false
     },
+    
     {
       "name": "EvoGUI",
       "enabled": false
     },
+    
     {
       "name": "expanded-rocket-payloads",
       "enabled": false
     },
+    
     {
       "name": "extended-descriptions",
       "enabled": false
     },
+    
     {
       "name": "extendedangels",
       "enabled": false
     },
+    
     {
       "name": "factorissimo-2-notnotmelon",
-      "enabled": false
+      "enabled": true
     },
+    
     {
       "name": "factoryplanner",
       "enabled": false
     },
+    
     {
       "name": "FactorySearch",
       "enabled": false
     },
+    
     {
       "name": "FastRemoveTiles",
       "enabled": false
     },
+    
     {
       "name": "Fe-C-accumulator",
       "enabled": false
     },
+    
     {
       "name": "Flammable_Oils_fix",
       "enabled": false
     },
+    
     {
       "name": "flib",
-      "enabled": false
+      "enabled": true
     },
+    
     {
       "name": "Flow Control",
       "enabled": false
     },
+    
     {
       "name": "fluid-memory-storage",
       "enabled": false
     },
+    
     {
       "name": "FluidMustFlow",
       "enabled": false
     },
+    
     {
       "name": "fluid_permutations",
       "enabled": false
     },
+    
     {
       "name": "FNEI",
       "enabled": false
     },
+    
     {
       "name": "GUI_Unifyer",
       "enabled": false
@@ -397,16 +501,21 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "hardcore-mode-for-playing",
       "enabled": true
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -414,131 +523,173 @@
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
+=======
+    
+    {
+      "name": "hardcore-mode-for-playing-for-vanilla",
+      "enabled": true
+    },
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "hardcore-mode-for-playing-for-zzzparanoidal",
       "enabled": false
     },
+<<<<<<< HEAD
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "helmod",
       "enabled": false
     },
+    
     {
       "name": "heroturrets",
       "enabled": false
     },
+    
     {
       "name": "immersive-sounds",
       "enabled": false
     },
+    
     {
       "name": "InfiniteTech",
       "enabled": false
     },
+    
     {
       "name": "JunkTrain3",
       "enabled": false
     },
+    
     {
       "name": "KaoExtended",
       "enabled": false
     },
+    
     {
       "name": "KS_Power",
       "enabled": false
     },
+    
     {
       "name": "laser_fix",
       "enabled": false
     },
+    
     {
       "name": "liborio",
       "enabled": false
     },
+    
     {
       "name": "LightedPolesPlus",
       "enabled": false
     },
+    
     {
       "name": "LogisticTrainNetwork",
       "enabled": false
     },
+    
     {
       "name": "LootingSpaceshipWrecks",
-      "enabled": false
+      "enabled": true
     },
+    
     {
       "name": "ltn-cleanup",
       "enabled": false
     },
+    
     {
       "name": "LtnManager",
       "enabled": false
     },
+    
     {
       "name": "LTN_Content_Reader",
       "enabled": false
     },
+    
     {
       "name": "make-moded-technology-tree-mods-protocol",
       "enabled": true
     },
+    
     {
       "name": "make_burner_miners_great_again",
       "enabled": false
     },
+    
     {
       "name": "marathon",
       "enabled": false
     },
+    
     {
       "name": "MaxRateCalculator",
       "enabled": false
     },
+    
     {
       "name": "MilesBobsExpansion",
       "enabled": false
     },
+    
     {
       "name": "Milestones",
       "enabled": false
     },
+    
     {
       "name": "miniloader",
       "enabled": false
     },
+    
     {
       "name": "minime_temp",
       "enabled": false
     },
+    
     {
       "name": "mining-patch-planner",
       "enabled": false
     },
+    
     {
       "name": "MIRV",
       "enabled": false
     },
+    
     {
       "name": "ModuleInserter",
       "enabled": false
     },
+    
     {
       "name": "more-minimap-autohide-017",
       "enabled": false
     },
+    
     {
       "name": "more-petrochem-hell",
       "enabled": false
     },
+    
     {
       "name": "MoreAchievements",
       "enabled": false
     },
+    
     {
       "name": "multi-product-recipe-details",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -553,38 +704,49 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "MxlChievements",
       "enabled": false
     },
+    
     {
       "name": "m_WhereIsMyBody",
       "enabled": false
     },
+    
     {
       "name": "Namelists",
       "enabled": false
     },
+    
     {
       "name": "Nanobots",
       "enabled": false
     },
+    
     {
       "name": "Natural_Evolution_Enemies",
       "enabled": false
     },
+    
     {
       "name": "nco-InserterCranes",
       "enabled": false
     },
+    
     {
       "name": "ner_intermediatestweak",
       "enabled": false
     },
+    
     {
       "name": "newtrainsfx",
       "enabled": false
     },
+    
     {
       "name": "NightBrightness",
       "enabled": false
@@ -592,16 +754,21 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "nixie-tubes",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -610,146 +777,184 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "Noxys_Trees",
       "enabled": false
     },
+    
     {
       "name": "Oberhaul",
       "enabled": false
     },
+    
     {
       "name": "OberNuclear",
       "enabled": false
     },
+    
     {
       "name": "Oil_Based_Paint",
       "enabled": false
     },
+    
     {
       "name": "OreRadar",
       "enabled": false
     },
+    
     {
       "name": "original-music-hd-updated",
       "enabled": false
     },
+    
     {
       "name": "osha_mini_containers",
       "enabled": false
     },
+    
     {
       "name": "osm-lib",
       "enabled": false
     },
+    
     {
       "name": "osm-lib-postprocess",
       "enabled": false
     },
+    
     {
       "name": "OverloadedTrains",
       "enabled": false
     },
+    
     {
       "name": "P-U-M-P-S",
       "enabled": false
     },
+    
     {
       "name": "ParanoidalLocale",
       "enabled": false
     },
+    
     {
       "name": "pathological",
       "enabled": false
     },
+    
     {
       "name": "PCPRedux",
       "enabled": false
     },
+    
     {
       "name": "PickerAtheneum",
       "enabled": false
     },
+    
     {
       "name": "PickerBlueprinter",
       "enabled": false
     },
+    
     {
       "name": "PickerDollies",
       "enabled": false
     },
+    
     {
       "name": "PickerEquipmentKeys",
       "enabled": false
     },
+    
     {
       "name": "PickerExtended",
       "enabled": false
     },
+    
     {
       "name": "PickerInventoryTools",
       "enabled": false
     },
+    
     {
       "name": "PickerPipeTools",
       "enabled": false
     },
+    
     {
       "name": "PickerTweaks",
       "enabled": false
     },
+    
     {
       "name": "PickerVehicles",
       "enabled": false
     },
+    
     {
       "name": "Picks-Inserter",
       "enabled": false
     },
+    
     {
       "name": "PipeMeterWLK",
       "enabled": false
     },
+    
     {
       "name": "PipeVisualizer",
       "enabled": false
     },
+    
     {
       "name": "PMRPGsystem",
       "enabled": false
     },
+    
     {
       "name": "pollution-visuals",
       "enabled": false
     },
+    
     {
       "name": "prismatic-belts",
       "enabled": false
     },
+    
     {
       "name": "qol_research",
       "enabled": false
     },
+    
     {
       "name": "QueueToFrontNG",
       "enabled": false
     },
+    
     {
       "name": "QuickItemSearch",
       "enabled": false
     },
+    
     {
       "name": "RadioactiveDamage",
       "enabled": false
     },
+    
     {
       "name": "railloader",
       "enabled": false
     },
+    
     {
       "name": "RaiLuaLib",
       "enabled": false
     },
+    
     {
       "name": "Rampant",
       "enabled": false
@@ -757,16 +962,21 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "RampantEvolution",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -774,107 +984,138 @@
     
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "RampantMaintenance",
       "enabled": false
     },
+<<<<<<< HEAD
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "RateCalculator",
       "enabled": false
     },
+    
     {
       "name": "RealisticDecorationCleanup",
       "enabled": false
     },
+    
     {
       "name": "RecipeBook",
       "enabled": false
     },
+    
     {
       "name": "Renamer",
       "enabled": false
     },
+    
     {
       "name": "research_evolution_factor",
       "enabled": false
     },
+    
     {
       "name": "reskins-angels",
       "enabled": false
     },
+    
     {
       "name": "reskins-bobs",
       "enabled": false
     },
+    
     {
       "name": "reskins-compatibility",
       "enabled": false
     },
+    
     {
       "name": "reskins-library",
       "enabled": false
     },
+    
     {
       "name": "ReStack",
       "enabled": false
     },
+    
     {
       "name": "RITEG",
       "enabled": false
     },
+    
     {
       "name": "Robot256Lib",
       "enabled": false
     },
+    
     {
       "name": "robot_attrition",
       "enabled": false
     },
+    
     {
       "name": "Rocket-Silo-Construction",
       "enabled": false
     },
+    
     {
       "name": "RocketExplosions",
       "enabled": false
     },
+    
     {
       "name": "rso-mod",
       "enabled": false
     },
+    
     {
       "name": "RU-locale",
       "enabled": false
     },
+    
     {
       "name": "RussianStations",
       "enabled": false
     },
+    
     {
       "name": "Sandros-fixes",
       "enabled": false
     },
+    
     {
       "name": "scattergun_turret",
       "enabled": false
     },
+    
     {
       "name": "SchallPickupTower",
       "enabled": false
     },
+    
     {
       "name": "SchallTankPlatoon",
       "enabled": false
     },
+    
     {
       "name": "Shield-FX",
       "enabled": false
     },
+    
     {
       "name": "ShinyBob_Techs",
       "enabled": false
     },
+    
     {
       "name": "Shortcuts-ick",
       "enabled": false
@@ -883,6 +1124,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     
 =======
@@ -892,14 +1134,19 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "signalstrings",
       "enabled": false
     },
+    
     {
       "name": "simhelper",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -912,26 +1159,34 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "SingleColorTerrain",
       "enabled": false
     },
+    
     {
       "name": "SmogSolarPanels",
       "enabled": false
     },
+    
     {
       "name": "SpaceMod",
       "enabled": false
     },
+    
     {
       "name": "SpaceXGAR",
       "enabled": false
     },
+    
     {
       "name": "Squeak Through",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -941,18 +1196,24 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "StatsGui",
       "enabled": false
     },
+    
     {
       "name": "StatsGui-HandcraftTimer",
       "enabled": false
     },
+    
     {
       "name": "StatsGui-MovementSpeed",
       "enabled": false
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
@@ -961,102 +1222,129 @@
 >>>>>>> 17c873b57 (fixed hardcore mod)
 =======
 >>>>>>> 3434c172d (update mods structure)
+=======
+    
+>>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
     {
       "name": "stdlib",
       "enabled": true
     },
+    
     {
       "name": "steinios_research_sensor",
       "enabled": false
     },
+    
     {
       "name": "Subterranean",
       "enabled": false
     },
+    
     {
       "name": "Texugo_windgenerator",
       "enabled": false
     },
+    
     {
       "name": "TimedSpawnControl",
       "enabled": false
     },
+    
     {
       "name": "Todo-List",
       "enabled": false
     },
+    
     {
       "name": "toxicPollution",
       "enabled": false
     },
+    
     {
       "name": "TrainModeSwitcher",
       "enabled": false
     },
+    
     {
       "name": "TrainSpeedLimit",
       "enabled": false
     },
+    
     {
       "name": "Train_Control_Signals",
       "enabled": false
     },
+    
     {
-      "name": "false-Nukes",
+      "name": "True-Nukes",
       "enabled": false
     },
+    
     {
       "name": "UnminableBots",
       "enabled": false
     },
+    
     {
       "name": "UnPollock",
       "enabled": false
     },
+    
     {
       "name": "upgrade-planner-next",
       "enabled": false
     },
+    
     {
       "name": "VehicleSnap",
       "enabled": false
     },
+    
     {
       "name": "vehicle_physics_again",
       "enabled": false
     },
+    
     {
       "name": "Warehousing",
       "enabled": false
     },
+    
     {
       "name": "Warheads",
       "enabled": false
     },
+    
     {
       "name": "weaponSoundsRedone",
       "enabled": false
     },
+    
     {
       "name": "what-fish",
       "enabled": false
     },
+    
     {
       "name": "what-is-it-really-used-for",
       "enabled": false
     },
+    
     {
       "name": "WideChests",
       "enabled": false
     },
+    
     {
       "name": "ZCS-Trash-Landfill-Continued-Continued",
       "enabled": false
     },
+    
     {
       "name": "zero-fluid-info",
       "enabled": false
     },
+    
     {
       "name": "zzzparanoidal",
       "enabled": false

@@ -19,6 +19,17 @@ TechnologyNoHiddenValidatingStep.evaluate = function(technology_name, mode)
 					.. tree_element_name
 					.. " has HIDDEN or not exists for mode "
 					.. mode
+					.. ".\nTechnology object is "
+					.. mode
+					.. Utils.dump_to_console(data.raw["technology"][technology_name])
+					.. ".\nTree element for mode "
+					.. mode
+					.. " is "
+					.. Utils.dump_to_console(modedTreeElement)
+					.. ".\nTree for technology "
+					.. technology_name
+					.. " is "
+					.. Utils.dump_to_console(tree)
 			)
 		end
 	end)
