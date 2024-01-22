@@ -1,0 +1,17 @@
+{
+  "item":
+  [
+    ["se-delivery-cannon-weapon-package-atomic-0_5t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-0_5t"],
+    ["se-delivery-cannon-weapon-package-atomic-2t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-2t"],
+    ["se-delivery-cannon-weapon-package-atomic-4t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-4t"],
+    ["se-delivery-cannon-weapon-package-atomic-8t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-8t"],
+    ["se-delivery-cannon-weapon-package-atomic-20t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-20t"],
+    ["se-delivery-cannon-weapon-package-atomic-500t", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-500t"],
+    ["se-delivery-cannon-weapon-package-atomic-1kt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-1kt"],
+    ["se-delivery-cannon-weapon-package-atomic-15kt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-15kt"],
+    ["se-delivery-cannon-weapon-package-atomic-2-stage-15kt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-2-stage-15kt"],
+    ["se-delivery-cannon-weapon-package-atomic-2-stage-100kt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-2-stage-100kt"],
+    ["se-delivery-cannon-weapon-package-atomic-2-stage-1Mt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-2-stage-1Mt"],
+    ["se-delivery-cannon-weapon-package-atomic-2-stage-5Mt", "se-delivery-cannon-weapon-package-warhead-util-projectile-atomic-2-stage-5Mt"]
+  ]
+}
