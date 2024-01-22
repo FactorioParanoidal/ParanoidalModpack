@@ -1,3 +1,4 @@
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local TechnologyLeafHandlerTechnologyPropertiesStep = {}
 
 local function writeTechnologyPropertiesToTechnologyStatus(technology_name, mode, first_level_parents)

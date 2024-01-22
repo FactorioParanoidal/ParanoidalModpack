@@ -223,4 +223,27 @@ TechUtil.hideTechnology = function(technology_candidate, mode)
 	technology.hidden = true
 end
 
+TechUtil.showTechnology = function(technology_candidate, mode)
+	local technology = getModedTechnology(technology_candidate, mode)
+	technology.hidden = false
+end
+
+TechUtil.showRecipe = function(recipe_candidate, mode)
+	if not recipe_candidate or type(recipe_candidate) ~= "table" then
+		error("wrong recipe prototype!")
+	end
+	Utils.getModedObject(recipe_candidate, mode).hidden = false
+end
+
+TechUtil.hideRecipe = function(recipe_candidate, mode)
+	if not recipe_candidate or type(recipe_candidate) ~= "table" then
+		error("wrong recipe prototype!")
+	end
+	Utils.getModedObject(recipe_candidate, mode).hidden = true
+end
+TechUtil.moveRecipeEffectsToTechnology = function(from_name, to_name, recipe_name, mode)
+	local technologies = data.raw["technology"]
+	TechUtil.removeRecipeEffectFromTechnologyEffects(technologies[from_name], recipe_name, mode)
+	TechUtil.addRecipeEffectToTechnologyEffects(technologies[to_name], recipe_name, mode)
+end
 return TechUtil

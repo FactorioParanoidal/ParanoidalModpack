@@ -1,3 +1,5 @@
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
 local AnotherTechnologyTreeResolvingStep = {}
 
 local function filterTechnologyNameCandidatePredicate(

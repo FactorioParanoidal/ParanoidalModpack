@@ -1,3 +1,4 @@
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local technology_data_field_names = {
 	"upgrade",
 	"enabled",

@@ -1,3 +1,5 @@
+require("technology-unit-add-bean")
+require("technology-cycle-removing-bean")
 local function updateNotFoundEffectesAndSciencePacksNormal()
 	local mode = "normal"
 	TechnologyCycleRemovingBean.removePrerequisitesForCycleNormal(mode)

@@ -48,15 +48,15 @@ TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode = function(technolo
 	if not recipe_name then
 		error("recipe_name not specified!")
 	end
-	if not technology.effects then
-		technology.effects = {}
-	end
-	table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_name })
 	local recipe = data.raw.recipe[recipe_name]
 	if not recipe then
 		error("recipe with name " .. recipe_name .. " not found!")
 	end
 	recipe.enabled = false
+	if not technology.effects then
+		technology.effects = {}
+	end
+	table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_name })
 end
 TreeRecipeUtil.removeRecipeEffectFromTechnologyEffectsWithoutMode = function(technology_candidate, recipe_name)
 	local technology = checkTechnologyCandidate(technology_candidate)
@@ -84,21 +84,21 @@ TreeRecipeUtil.showTechnologyWithoutMode = function(technology_candidate)
 	technology.hidden = false
 end
 
-TreeRecipeUtil.showRecipe = function(recipe_candidate)
+TreeRecipeUtil.showRecipeWithoutMode = function(recipe_candidate)
 	if not recipe_candidate or type(recipe_candidate) ~= "table" then
 		error("wrong recipe prototype!")
 	end
 	recipe_candidate.hidden = false
 end
 
-TreeRecipeUtil.hideRecipe = function(recipe_candidate)
+TreeRecipeUtil.hideRecipeWithoutMode = function(recipe_candidate)
 	if not recipe_candidate or type(recipe_candidate) ~= "table" then
 		error("wrong recipe prototype!")
 	end
 	recipe_candidate.hidden = true
 end
 
-local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_value)
+local function addSciencePackToTechnologyUnitWithoutMode(technology_candidate, ingredient_value)
 	if not ingredient_value then
 		error("ingredient_value not specified")
 	end
@@ -133,12 +133,12 @@ local function addSciencePackToTechnologyUnit(technology_candidate, ingredient_v
 			.. ", use moded version this technology!"
 	)
 end
-TreeRecipeUtil.addSciencePacksToTechnologyUnits = function(technology_candidate, technology_units)
+TreeRecipeUtil.addSciencePacksToTechnologyUnitsWithoutMode = function(technology_candidate, technology_units)
 	if not technology_units then
 		error("technology_units not specified")
 	end
 	_table.each(technology_units, function(technology_unit)
-		addSciencePackToTechnologyUnit(technology_candidate, technology_unit)
+		addSciencePackToTechnologyUnitWithoutMode(technology_candidate, technology_unit)
 	end)
 end
 TreeRecipeUtil.removeSciencePackFromWithoutMode = function(technology_candidate, science_pack_name)
