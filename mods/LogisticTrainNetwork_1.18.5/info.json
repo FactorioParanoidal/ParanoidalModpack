@@ -7,9 +7,5 @@
   "homepage": "https://forums.factorio.com/viewforum.php?f=214",
   "description": "Adds new train stops forming a highly configurable, fully automated logistic network.",
   "factorio_version": "1.1",
-  "dependencies": [
-    "base >= 1.1.91",
-    "flib >= 0.6.0",
-    "(?)cargo-ships"
-  ]
+  "dependencies": ["base >= 1.1.87", "flib >= 0.6.0", "(?)cargo-ships"]
 }
