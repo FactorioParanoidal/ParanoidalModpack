@@ -84,228 +84,7 @@
     },
     
     {
-      "name": "automated-fabrique-protocol",
-      "enabled": true
-    },
-    
-    {
-      "name": "automated-utility-protocol",
-      "enabled": true
-    },
-    
-    {
       "name": "baraws",
-<<<<<<< HEAD
-      "enabled": false
-    },
-    
-    {
-      "name": "BatteryElectricTrain",
-      "enabled": false
-    },
-    
-    {
-      "name": "beautiful_straight_bridge_railway",
-      "enabled": false
-    },
-    
-    {
-      "name": "belt-visualizer",
-      "enabled": false
-    },
-    
-    {
-      "name": "betterCargoPlanes",
-      "enabled": false
-    },
-    
-    {
-      "name": "Big-Monsters",
-      "enabled": false
-    },
-    
-    {
-      "name": "BigLab",
-      "enabled": false
-    },
-    
-    {
-      "name": "BigLightElectricMiningDrill",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-    {
-      "name": "Bioluminescence",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-    {
-      "name": "Bio_Industries",
-      "enabled": false
-    },
-    
-    {
-      "name": "blueprint-sandboxes",
-      "enabled": false
-    },
-    
-    {
-      "name": "blueprint_flip_and_turn",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobassembly",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobelectronics",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobenemies",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobequipment",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobicons",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobinserters",
-      "enabled": false
-    },
-    
-    {
-      "name": "boblibrary",
-      "enabled": false
-    },
-    
-    {
-      "name": "boblogistics",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobmining",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobmodules",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobores",
-      "enabled": false
-    },
-    
-    {
-      "name": "BobPipesThroughput",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobplates",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobpower",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobrevamp",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobtech",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobvehicleequipment",
-      "enabled": false
-    },
-    
-    {
-      "name": "bobwarfare",
-      "enabled": false
-    },
-    
-    {
-      "name": "BottleneckLite",
-      "enabled": false
-    },
-    
-    {
-      "name": "bullet-trails",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-    {
-      "name": "check-technology-tree-mods-protocol",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
       "enabled": true
     },
     
@@ -341,11 +120,6 @@
     
     {
       "name": "BigLightElectricMiningDrill",
-      "enabled": true
-    },
-    
-    {
-      "name": "Bioluminescence",
       "enabled": true
     },
     
@@ -464,15 +238,6 @@
       "enabled": true
     },
     
-    {
-      "name": "check-technology-tree-mods-protocol",
-      "enabled": false
-    },
-<<<<<<< HEAD
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": true
@@ -555,11 +320,6 @@
     
     {
       "name": "ElectricResistance",
-      "enabled": true
-    },
-    
-    {
-      "name": "Electric_Transformators",
       "enabled": true
     },
     
@@ -667,76 +427,7 @@
       "name": "GUI_Unifyer",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
     
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "hardcore-mode-for-playing",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
-=======
-    
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "hardcore-mode-for-playing-for-vanilla",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "hardcore-mode-for-playing-for-zzzparanoidal",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "helmod",
       "enabled": true
@@ -813,11 +504,6 @@
     },
     
     {
-      "name": "make-moded-technology-tree-mods-protocol",
-      "enabled": true
-    },
-    
-    {
       "name": "make_burner_miners_great_again",
       "enabled": true
     },
@@ -886,31 +572,12 @@
       "name": "multi-product-recipe-details",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+    
     {
       "name": "music-new",
       "enabled": true
     },
-=======
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
     
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "MxlChievements",
       "enabled": true
@@ -955,49 +622,7 @@
       "name": "NightBrightness",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
     
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "nixie-tubes",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "Noxys_Trees",
       "enabled": true
@@ -1050,16 +675,11 @@
     
     {
       "name": "P-U-M-P-S",
-      "enabled": true
+      "enabled": false
     },
     
     {
       "name": "ParanoidalLocale",
-      "enabled": true
-    },
-    
-    {
-      "name": "pathological",
       "enabled": true
     },
     
@@ -1175,66 +795,9 @@
     
     {
       "name": "Rampant",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "RampantEvolution",
-      "enabled": false
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "RampantMaintenance",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 3434c172d (update mods structure)
-=======
     
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "RateCalculator",
       "enabled": true
@@ -1247,7 +810,7 @@
     
     {
       "name": "RecipeBook",
-      "enabled": false
+      "enabled": true
     },
     
     {
@@ -1359,62 +922,7 @@
       "name": "Shortcuts-ick",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     
-=======
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "signalstrings",
-      "enabled": true
-    },
-    
-    {
-      "name": "simhelper",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    
->>>>>>> a261c89c6 (update mod list)
-=======
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "SingleColorTerrain",
       "enabled": true
@@ -1439,59 +947,7 @@
       "name": "Squeak Through",
       "enabled": true
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
     
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
-    {
-      "name": "StatsGui",
-      "enabled": true
-    },
-    
-    {
-      "name": "StatsGui-HandcraftTimer",
-      "enabled": true
-    },
-    
-    {
-      "name": "StatsGui-MovementSpeed",
-      "enabled": true
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 18c55d467 (refactor code. seaprate to more mods.)
-=======
-    
->>>>>>> 17c873b57 (fixed hardcore mod)
-=======
->>>>>>> 3434c172d (update mods structure)
-=======
-    
->>>>>>> 97759d324 (fixed check-technology-tree-mods-protocol and it dependencies)
-=======
->>>>>>> 1ef9c2d5c (remove .nuke and c# CI)
-=======
-    
->>>>>>> 9aa94defb (update mod-list.json)
     {
       "name": "stdlib",
       "enabled": true
@@ -1529,11 +985,6 @@
     
     {
       "name": "TrainModeSwitcher",
-      "enabled": true
-    },
-    
-    {
-      "name": "TrainSpeedLimit",
       "enabled": true
     },
     
