@@ -1,0 +1,12 @@
+{
+	"name": "automated-utility-protocol",
+	"version": "0.2.0",
+	"title": "Utility functions for check tech tree and bas automation",
+	"author": "bogomolov-a-a",
+	"factorio_version": "1.1",
+	"description": "Вспомогательные функции для автоматизации фабрики и мода проверки технологического дерева",
+	"dependencies": [
+		"base >= 1.1.91",
+		"stdlib >= 1.4.8"
+	]
+}
