@@ -1107,3 +1107,7 @@ bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "coke-purificatio
 
 --фикс недоступности исследования артиллерии
 bobmods.lib.tech.remove_prerequisite("artillery", "radars-1")
+
+--фикс стрелок порта для сероводорода промывочных машин
+data.raw['assembling-machine']['washing-plant'].fluid_boxes[4].pipe_connections[1].type = "output"
+data.raw['assembling-machine']['washing-plant-2'].fluid_boxes[4].pipe_connections[1].type = "output"
