@@ -1134,3 +1134,6 @@ bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "titanium-electrolysis
 bobmods.lib.tech.remove_recipe_unlock("titanium-processing", "advanced-structure-components")
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-components")
 
+--фикс неправильного бойлера в ядерном реакторе	(AKMF https://discord.com/channels/569536773701500928/1181338288838160445/1197233194102169690)
+bobmods.lib.recipe.remove_ingredient("nuclear-reactor", "boiler-4")
+KaoExtended.recipe.addtorecipe("nuclear-reactor", {"boiler-3", 1})
