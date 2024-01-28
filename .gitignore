@@ -1,9 +1,8 @@
 /*
-!config.json
+!.github
 !mods
-!.gitlab-ci.yml
-!docker-compose.yml
-!Dockerfile
-!README.md
-!Changlelog.txt
 !wiki
+
+!config.json
+!.gitlab-ci.yml
+!README.md
