@@ -1041,9 +1041,9 @@ bobmods.lib.tech.add_prerequisite ("advanced-magnesium-smelting", "angels-metall
 bobmods.lib.tech.remove_prerequisite("advanced-depleted-uranium-smelting-1", "powder-metallurgy-1") --удаляем лишнюю
 bobmods.lib.tech.remove_prerequisite("advanced-osmium-smelting", "powder-metallurgy-1")
 
---Фикс техи турбины
-bobmods.lib.tech.remove_recipe_unlock("bob-steam-turbine-1", "steam-turbine") --удаляем вторую турбину мк1
+--Фикс техи турбины 
 bobmods.lib.tech.add_prerequisite ("bob-steam-turbine-1", "nuclear-power") --добавить теху в ядерку
+bobmods.lib.tech.remove_recipe_unlock("nuclear-power", "steam-turbine") --удаляем вторую турбину мк1 (AKMF)
 
 --Добавляем осмий в лейт гейм рецепты
 bobmods.lib.recipe.add_ingredient("hull-component", {"clowns-plate-osmium", 100})
