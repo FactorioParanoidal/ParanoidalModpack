@@ -1,7 +1,6 @@
 {
     "mod": {
-        "name": "zzzparanoidal",
-        "version": "1.0.1"
+        "name": "zzzparanoidal"
     },
     "modsPath": "./mods",
     "version": "headless",
