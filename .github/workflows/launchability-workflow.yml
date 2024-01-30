@@ -21,7 +21,7 @@ jobs:
         name:  Запуск Factorio с текущей версией сборки модов.
         working-directory: .
         run: |
-          export paranoidal_mods_path="$(cat config.json |jq -r '.modsPath')/$(cat config.json |jq -r '.mod.name')_$(cat config.json |jq -r '.mod.version')"
+          export paranoidal_mods_path="$(cat config.json |jq -r '.modsPath')/$(cat config.json |jq -r '.mod.name')"
           export base_mod_version_data=$(cat "$paranoidal_mods_path/info.json" | jq -r ".dependencies "  |jq ".[0] " |xargs)
           if [[ $base_mod_version_data =~  ^(base >= )([0-9]{0,}\.[0-9]{0,}\.[0-9]{0,})$ ]]; then base_mod_version=${BASH_REMATCH[2]}; else exit 1; fi
           echo "Factorio version is $base_mod_version"
