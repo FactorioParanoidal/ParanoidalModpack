@@ -82,7 +82,7 @@
       "name": "AtomicArtillery",
       "enabled": true
     },
-    
+
     {
       "name": "baraws",
       "enabled": true
@@ -312,7 +312,7 @@
       "name": "DragonIndustries",
       "enabled": true
     },
-    
+
     {
       "name": "efficient-research",
       "enabled": true
@@ -577,7 +577,7 @@
       "name": "music-new",
       "enabled": true
     },
-    
+
     {
       "name": "MxlChievements",
       "enabled": true
@@ -675,7 +675,7 @@
     
     {
       "name": "P-U-M-P-S",
-      "enabled": false
+      "enabled": true
     },
     
     {
