@@ -1,6 +1,6 @@
 if mods["JunkTrain3"] then
 --создаем новый локомотив
-data:extend({
+--[[data:extend({
 	{
 		type = "locomotive",
 		name = "yir_usl",
@@ -361,7 +361,7 @@ data.raw.item.JunkTrain.place_result = "yir_usl"
 -------------------------------------------------------------------------------------------------
 data.raw.item.ScrapTrailer.icon = "__zzzparanoidal__/graphics/train/t0/usw_icon.png"
 data.raw.item.ScrapTrailer.icon_size = 64
-data.raw.item.ScrapTrailer.place_result = "yir_us_cargo"
+data.raw.item.ScrapTrailer.place_result = "yir_us_cargo"]]
 -------------------------------------------------------------------------------------------------
 --меняем рецепт локомотива мк0
 data.raw.recipe.JunkTrain.ingredients =
@@ -455,19 +455,19 @@ data.raw["train-stop"]["train-stop-scrap"].next_upgrade = "train-stop"
 
 data.raw["rail-signal"]["rail-signal-scrap"].fast_replaceable_group = "rail-signal"
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "train-stop"
+data.raw["train-stop"]["train-stop-scrap"].fast_replaceable_group = "rail-stop"
 
 data.raw["rail-signal"]["rail-signal"].fast_replaceable_group = "rail-signal"
 data.raw["rail-chain-signal"]["rail-chain-signal"].fast_replaceable_group = "rail-signal"
-data.raw["train-stop"]["train-stop"].fast_replaceable_group = "train-stop"
+data.raw["train-stop"]["train-stop"].fast_replaceable_group = "rail-stop"
 
 data.raw["rail-signal"]["rail-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
---data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+data.raw["train-stop"]["train-stop-scrap"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
 
 data.raw["rail-signal"]["rail-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["rail-chain-signal"]["rail-chain-signal"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
---data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
+data.raw["train-stop"]["train-stop"].collision_mask = {"item-layer", "object-layer", "player-layer", "water-tile", "layer-14"}
 -------------------------------------------------------------------------------------------------
 --подкручиваем рецепт стандартных рельс
 bobmods.lib.recipe.set_ingredient("rail", {"stone-crushed", 10})
