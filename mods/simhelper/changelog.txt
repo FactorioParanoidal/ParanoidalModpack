@@ -1,0 +1,28 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2023-09-22
+  Bugfixes:
+    - Fixed function capture error about userdata upvalues for c functions like math.random
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022-06-03
+  Changes:
+    - Workaround for stdlib's incorrect usage of __DebugAdapter API (Take 2)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022-06-03
+  Changes:
+    - Workaround for stdlib's incorrect usage of __DebugAdapter API
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022-06-02
+  Changes:
+    - Force `require` hook to take only one argument
+  Major Features:
+    - Add `funccapture` to capture Lua functions for the init and update functions of simulations
+      including the upvalues of the given functions allowing for easy reuse of code
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-01-30
+  Changes:
+    - Fixed modloader `require` hook on additional required files from control.lua
