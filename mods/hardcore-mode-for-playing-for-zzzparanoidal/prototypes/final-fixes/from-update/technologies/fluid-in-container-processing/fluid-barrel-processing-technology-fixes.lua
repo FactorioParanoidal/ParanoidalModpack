@@ -1,0 +1,1 @@
+updateFluidInContainerProcessingTechnologyEffects('fluid-barrel-processing')
