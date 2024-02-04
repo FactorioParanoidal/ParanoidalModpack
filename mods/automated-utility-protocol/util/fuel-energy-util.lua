@@ -1,5 +1,5 @@
-local techUtil = require("technology-util")
-require("technology-tree-util")
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
+require("__automated-utility-protocol__.util.technology-tree-util")
 FuelEnergyUtil = {}
 local modifier_table = {
 	[""] = 1,
