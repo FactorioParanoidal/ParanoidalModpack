@@ -82,7 +82,17 @@
       "name": "AtomicArtillery",
       "enabled": true
     },
-
+    
+    {
+      "name": "automated-fabrique-protocol",
+      "enabled": true
+    },
+    
+    {
+      "name": "automated-utility-protocol",
+      "enabled": true
+    },
+    
     {
       "name": "baraws",
       "enabled": true
@@ -239,6 +249,11 @@
     },
     
     {
+      "name": "check-technology-tree-mods-protocol",
+      "enabled": false
+    },
+    
+    {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": true
     },
@@ -309,17 +324,17 @@
     },
     
     {
-      "name": "DragonIndustries",
-      "enabled": true
-    },
-
-    {
       "name": "efficient-research",
       "enabled": true
     },
     
     {
       "name": "ElectricResistance",
+      "enabled": true
+    },
+    
+    {
+      "name": "Electric_Transformators",
       "enabled": true
     },
     
@@ -429,6 +444,21 @@
     },
     
     {
+      "name": "hardcore-mode-for-playing",
+      "enabled": true
+    },
+    
+    {
+      "name": "hardcore-mode-for-playing-for-vanilla",
+      "enabled": false
+    },
+    
+    {
+      "name": "hardcore-mode-for-playing-for-zzzparanoidal",
+      "enabled": true
+    },
+    
+    {
       "name": "helmod",
       "enabled": true
     },
@@ -480,7 +510,7 @@
     
     {
       "name": "LogisticTrainNetwork",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -490,16 +520,21 @@
     
     {
       "name": "ltn-cleanup",
-      "enabled": true
+      "enabled": false
     },
     
     {
       "name": "LtnManager",
-      "enabled": true
+      "enabled": false
     },
     
     {
       "name": "LTN_Content_Reader",
+      "enabled": false
+    },
+    
+    {
+      "name": "make-moded-technology-tree-mods-protocol",
       "enabled": true
     },
     
@@ -574,11 +609,6 @@
     },
     
     {
-      "name": "music-new",
-      "enabled": true
-    },
-
-    {
       "name": "MxlChievements",
       "enabled": true
     },
@@ -620,6 +650,11 @@
     
     {
       "name": "NightBrightness",
+      "enabled": true
+    },
+    
+    {
+      "name": "nixie-tubes",
       "enabled": true
     },
     
@@ -680,6 +715,11 @@
     
     {
       "name": "ParanoidalLocale",
+      "enabled": true
+    },
+    
+    {
+      "name": "pathological",
       "enabled": true
     },
     
@@ -795,6 +835,11 @@
     
     {
       "name": "Rampant",
+      "enabled": false
+    },
+    
+    {
+      "name": "RampantMaintenance",
       "enabled": true
     },
     
@@ -924,6 +969,16 @@
     },
     
     {
+      "name": "signalstrings",
+      "enabled": true
+    },
+    
+    {
+      "name": "simhelper",
+      "enabled": true
+    },
+    
+    {
       "name": "SingleColorTerrain",
       "enabled": true
     },
@@ -985,6 +1040,11 @@
     
     {
       "name": "TrainModeSwitcher",
+      "enabled": true
+    },
+    
+    {
+      "name": "TrainSpeedLimit",
       "enabled": true
     },
     
