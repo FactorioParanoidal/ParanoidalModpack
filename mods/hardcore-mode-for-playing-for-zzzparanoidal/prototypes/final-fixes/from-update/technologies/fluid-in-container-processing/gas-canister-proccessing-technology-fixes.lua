@@ -1,1 +1,1 @@
-updateFluidInContainerProcessingTechnologyEffects('gas-canisters')
+update_fluid_in_container_processing_technology_recipe_fffects("gas-canisters")

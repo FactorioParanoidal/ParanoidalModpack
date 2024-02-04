@@ -15,19 +15,19 @@ data:extend({
 
 -- поделки из дерева, кроме стружки и чего-то там ещё - не горят, резина не горит
 -- электричка - не горит, тем более с лампами!
-cleanupFuelCategoryForItem("small-electric-pole")
-cleanupFuelCategoryForItem("bi-wooden-pole-big")
-cleanupFuelCategoryForItem("lighted-bi-wooden-pole-big")
-cleanupFuelCategoryForItem("bi-wooden-pole-huge")
-cleanupFuelCategoryForItem("lighted-bi-wooden-pole-huge")
+cleanup_fuel_category_for_Item("small-electric-pole")
+cleanup_fuel_category_for_Item("bi-wooden-pole-big")
+cleanup_fuel_category_for_Item("lighted-bi-wooden-pole-big")
+cleanup_fuel_category_for_Item("bi-wooden-pole-huge")
+cleanup_fuel_category_for_Item("lighted-bi-wooden-pole-huge")
 -- в сундуках всяких хлам лежит - не горит
-cleanupFuelCategoryForItem("wooden-chest")
+cleanup_fuel_category_for_Item("wooden-chest")
 -- в трубах остаётся что угодно, они сырые, не горят
-cleanupFuelCategoryForItem("bi-wood-pipe")
-cleanupFuelCategoryForItem("bi-wood-pipe-to-ground")
+cleanup_fuel_category_for_Item("bi-wood-pipe")
+cleanup_fuel_category_for_Item("bi-wood-pipe-to-ground")
 -- винтовки и туррели - не жечь
-cleanupFuelCategoryForItem("bi-wooden-fence")
-cleanupFuelCategoryForItem("bi-dart-turret")
-cleanupFuelCategoryForItem("bi-woodpulp")
+cleanup_fuel_category_for_Item("bi-wooden-fence")
+cleanup_fuel_category_for_Item("bi-dart-turret")
+cleanup_fuel_category_for_Item("bi-woodpulp")
 --резину не жечь
-cleanupFuelCategoryForItem("solid-rubber")
+cleanup_fuel_category_for_Item("solid-rubber")

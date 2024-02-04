@@ -58,3 +58,6 @@ data:extend({
 	salvaged_mining_drill_entity,
 	salvaged_ore_crusher_entity,
 })
+-- для последних уровней бойлера ставим эффективностьв 0.9, вместо 1.15 и 1.25...
+data.raw["boiler"]["boiler-4"].energy_source.effectivity = 0.9
+data.raw["boiler"]["boiler-5"].energy_source.effectivity = 0.9
