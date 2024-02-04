@@ -44,10 +44,9 @@ local recipe_data_field_simple_names = {
 	"always_show_products",
 	"unlock_results",
 }
-local function mergeRecipeDataData(for_merging_recipe_data_mode, recipe_data_general)
+local function merge_recipe_data_and_general_data(for_merging_recipe_data_mode, recipe_data_general)
 	_table.each(recipe_data_field_names, function(recipe_data_field_name)
 		if not recipe_data_general[recipe_data_field_name] then
-			--log("property '" .. recipe_data_field_name .. "' not specified in general data!")
 			return
 		end
 		if _table.contains(recipe_data_field_simple_names, recipe_data_field_name) then
@@ -70,7 +69,7 @@ local function mergeRecipeDataData(for_merging_recipe_data_mode, recipe_data_gen
 		end
 	end)
 end
-local function createRecipeDataFromGeneralRecipeData(recipe)
+local function create_recipe_data_from_general_recipe_data(recipe)
 	local result = {}
 	_table.each(recipe_data_field_names, function(recipe_data_field_name)
 		if recipe[recipe_data_field_name] and type(recipe[recipe_data_field_name]) == "table" then
@@ -84,40 +83,26 @@ end
 
 local recipes = data.raw["recipe"]
 function merge_recipe_for_modes(recipe, mode)
-	--log("recipe_name " .. recipe.name)
-	local recipe_data = createRecipeDataFromGeneralRecipeData(recipe)
+	local recipe_data = create_recipe_data_from_general_recipe_data(recipe)
 	if not recipe[mode] then
 		recipe[mode] = recipe_data
-		--	log("not found recipe mode " .. mode .. " replacing general data!")
 		return
 	end
 	local for_merging_recipe_data = recipe[mode]
-	--log("for_merging_recipe_data " .. Utils.dump_to_console(for_merging_recipe_data))
-	--log("recipe_data " .. Utils.dump_to_console(recipe_data))
-	mergeRecipeDataData(for_merging_recipe_data, recipe_data)
-	--log("merged_data " .. Utils.dump_to_console(for_merging_recipe_data))
+	merge_recipe_data_and_general_data(for_merging_recipe_data, recipe_data)
 end
+-- сначала сливаем 2 режима
 _table.each(GAME_MODES, function(mode)
 	_table.each(data.raw["recipe"], function(recipe)
 		merge_recipe_for_modes(recipe, mode)
 	end)
 end)
-local function clearRecipeData(recipe)
+local function clear_general_recipe_data(recipe)
 	_table.each(recipe_data_field_names, function(technology_data_field_name)
 		recipe[technology_data_field_name] = nil
 	end)
 end
-
-_table.each(GAME_MODES, function(mode)
-	--[[_table.each(data.raw["recipe"], function(recipe)
-		clearRecipeData(recipe)
-		log(
-			"for mode "
-				.. mode
-				.. " recipe named "
-				.. recipe.name
-				.. " is after copying for modes "
-				.. Utils.dump_to_console(recipe)
-		)
-	end)]]
+--затем отдельно убираем общее между режимами без указания режима
+_table.each(data.raw["recipe"], function(recipe)
+	clear_general_recipe_data(recipe)
 end)
