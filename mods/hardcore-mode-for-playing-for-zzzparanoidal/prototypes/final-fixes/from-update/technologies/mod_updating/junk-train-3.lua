@@ -6,9 +6,17 @@ local function updateJunkTrain3Mod(mode)
 		return
 	end
 	local technologies = data.raw["technology"]
-	techUtil.resetTechnologyPrerequisites(technologies["fluid-wagon"], { "JunkTrain_tech", "fluid-handling" }, mode)
-	techUtil.addPrerequisitesToTechnology(technologies["rail-signals"], { "automated-scrap-rail-transportation" }, mode)
-	techUtil.addPrerequisitesToTechnology(technologies["railway"], { "automated-scrap-rail-transportation" }, mode)
+	techUtil.reset_prerequisites_for_technology(
+		technologies["fluid-wagon"],
+		{ "JunkTrain_tech", "fluid-handling" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["rail-signals"],
+		{ "automated-scrap-rail-transportation" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["railway"], { "automated-scrap-rail-transportation" }, mode)
 end
 _table.each(GAME_MODES, function(mode)
 	updateJunkTrain3Mod(mode)

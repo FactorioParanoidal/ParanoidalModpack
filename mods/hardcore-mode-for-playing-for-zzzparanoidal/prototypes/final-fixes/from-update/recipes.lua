@@ -239,7 +239,8 @@ data:extend({
 	basic_coal_production_wood_recipe,
 	basic_coal_production_seedling_recipe,
 })
-_table.insert_all_if_not_exists(data.raw["recipe"]["salvaged-mining-drill"].ingredients, {
+local salvaged_mining_drill_recipe = data.raw["recipe"]["salvaged-mining-drill"]
+salvaged_mining_drill_recipe.ingredients = {
 	{
 		type = "item",
 		name = "salvaged-mining-drill-bit-mk0",
@@ -251,7 +252,7 @@ _table.insert_all_if_not_exists(data.raw["recipe"]["salvaged-mining-drill"].ingr
 		name = "bi-wood-pipe",
 		amount = 6,
 	},
-})
+}
 
 _table.each(GAME_MODES, function(mode)
 	merge_recipe_for_modes(salvaged_offsore_pump_0_recipe, mode)
@@ -259,4 +260,5 @@ _table.each(GAME_MODES, function(mode)
 	merge_recipe_for_modes(salvaged_mining_drill_bit_mk0_recipe, mode)
 	merge_recipe_for_modes(basic_coal_production_wood_recipe, mode)
 	merge_recipe_for_modes(basic_coal_production_seedling_recipe, mode)
+	merge_recipe_for_modes(salvaged_mining_drill_recipe, mode)
 end)
