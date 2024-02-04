@@ -1,4 +1,4 @@
-require("technology-tree-cache-util")
+require("__automated-utility-protocol__.util.technology-tree-cache-util")
 TechnologyTreeUtil = {}
 
 local MAX_INTEGER = 10000

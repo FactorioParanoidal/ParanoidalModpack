@@ -1,5 +1,5 @@
 local TechUtil = {}
-local recipeUtil = require("recipe-util")
+local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
 
 local function technology_not_found()
 	error("technology is null!!")
@@ -46,7 +46,7 @@ end
 
 TechUtil.get_all_recipe_results_for_specified_technology = function(technology_name, mode)
 	local result = {}
-	local unlocked_recipes = get_technology_object_effect_recipes_by_name(technology_name, mode)
+	local unlocked_recipes = get_technology_object_effect_recipes_by_name(data.raw["technology"][technology_name], mode)
 	_table.each(unlocked_recipes, function(unlocked_recipe)
 		local recipe_name = unlocked_recipe.recipe
 		local results = recipeUtil.get_all_recipe_results(recipe_name, mode)

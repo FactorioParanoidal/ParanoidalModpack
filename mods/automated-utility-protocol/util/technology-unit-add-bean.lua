@@ -1,4 +1,4 @@
-local techUtil = require("technology-util")
+local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local TechnologyUnitAddBean = {}
 TechnologyUnitAddBean.technology_datas = data.raw["technology"]
 local function add_science_packs_to_technology_units_by_names(technology_names, mode, unit_ingredient)
