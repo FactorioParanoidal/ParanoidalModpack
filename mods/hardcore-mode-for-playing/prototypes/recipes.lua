@@ -52,7 +52,7 @@ data:extend({
 
 local function addRecipeEffectsToTechnologies()
 	local technologies = data.raw["technology"]
-	TreeRecipeUtil.addRecipeEffectToTechnologyEffectsWithoutMode(
+	TreeRecipeUtil.add_recipe_effect_to_technology_without_mode(
 		technologies["nuclear-power"],
 		"used-up-uranium-fuel-cell"
 	)

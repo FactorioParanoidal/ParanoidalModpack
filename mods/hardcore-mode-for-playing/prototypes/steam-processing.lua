@@ -36,16 +36,16 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	local mode = recipe_data_by_temperature.mode
 	log(Utils.dump_to_console(Utils.getModedObject(technology, mode)))
 	if techUtil.hasRecipeEffectIntoTechnologyEffects(technology, boiler_name, mode) then
-		techUtil.removeRecipeEffectFromTechnologyEffects(technology, boiler_name, mode)
+		techUtil.remove_recipe_effect_from_technology(technology, boiler_name, mode)
 	end
 	local boiler_name_recipe = data.raw["recipe"][boiler_name]
 	if not Utils.getModedObject(boiler_name_recipe, mode).hidden then
-		techUtil.hideRecipe(boiler_name_recipe, mode)
+		techUtil.hide_recipe(boiler_name_recipe, mode)
 	end
 	local target_boiler_recipe = flib.copy_prototype(data.raw["recipe"][boiler_name], target_boiler_name)
 	data:extend({ target_boiler_recipe })
 	target_boiler_recipe.result = target_boiler_name
-	techUtil.addRecipeEffectToTechnologyEffects(technology, target_boiler_name, mode)
+	techUtil.add_recipe_effect_to_technology(technology, target_boiler_name, mode)
 end
 local function updateBoilerBySteamRecipe(steam_recipes_by_temperature_sorted)
 	_table.each(steam_recipes_by_temperature_sorted, function(recipe_datas_by_temperature_level)
@@ -53,14 +53,14 @@ local function updateBoilerBySteamRecipe(steam_recipes_by_temperature_sorted)
 	end)
 end
 local function steamProcessing(mode)
-	local technology_names = techUtil.getAllActiveTechnologyNames(mode)
+	local technology_names = techUtil.get_all_active_technology_names(mode)
 	local boiler_by_temperature_sorted = boilerProcessing(technology_names, mode)
 	local steam_recipes_by_temperature_sorted = create_steam_recipe_and_fluids(boiler_by_temperature_sorted)
 	log("steam_recipes_by_temperature_sorted " .. Utils.dump_to_console(steam_recipes_by_temperature_sorted))
 	updateBoilerBySteamRecipe(steam_recipes_by_temperature_sorted)
 	local generator_count = 0
 	_table.each(technology_names, function(technology_name)
-		local results = techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+		local results = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		_table.each(results, function(recipe_result)
 			local recipe_result_name = recipe_result.name or recipe_result[1]
 			if data.raw["generator"][recipe_result_name] then
@@ -94,7 +94,7 @@ local function steamProcessing(mode)
 	log("total count of generators is " .. tostring(generator_count))
 	--[[local reactor_count = 0
 	_table.each(technology_names, function(technology_name)
-		local results = techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+		local results = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		_table.each(results, function(recipe_result)
 			local recipe_result_name = recipe_result.name or recipe_result[1]
 			if data.raw["reactor"][recipe_result_name] then

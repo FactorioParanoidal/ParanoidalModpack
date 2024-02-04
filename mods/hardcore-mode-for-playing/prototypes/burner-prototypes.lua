@@ -98,8 +98,7 @@ local function nuclear_reactor_compatiable(recipe_result_prototype, prototype)
 		is_nuclear = true
 	end
 	local prototype_type = prototype.type
-	--log("prototype_type " .. prototype_type .. " recipe_result_prototype_name " .. recipe_result_prototype_name)
-	--log("is_nuclear " .. tostring(is_nuclear) .. " prototype_type " .. prototype_type)
+
 	return (is_nuclear and prototype_type == "reactor") or (not is_nuclear and prototype_type ~= "reactor")
 end
 local function is_allow_prototype_to_apply_entity_with_burner_prototype(
@@ -117,12 +116,15 @@ local function is_allow_prototype_to_apply_entity_with_burner_prototype(
 	local burner_energy_source = additional_data.burner_energy_source
 	local burner_energy_source_effectivity = burner_energy_source.effectivity
 	local burner_source_fuel_inventory_size = burner_energy_source.fuel_inventory_size
+
 	if not burner_source_fuel_inventory_size then
 		if prototype.type ~= "generator-equipment" then
 			return false
 		end
 		burner_source_fuel_inventory_size = 1
 	end
+	log("recipe_result_prototype " .. Utils.dump_to_console(recipe_result_prototype.fuel_category))
+
 	local fuel_candidate_stack_size = recipe_result_prototype.stack_size
 	local max_item_stack_fuel_value = burner_source_fuel_inventory_size
 		* FuelEnergyUtil.read_energy_value_in_raw_joules(recipe_result_prototype.fuel_value)
@@ -135,7 +137,7 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 	if not is_available_burner_or_energry_source_prototype(prototype) then
 		return false
 	end
-	local burner_energy_source = prototype.energy_source or prototype.burner
+	local burner_energy_source = prototype.burner or prototype.energy_source
 	correct_effectivity_to_real(burner_energy_source)
 	log(
 		"found prototype type "
@@ -149,7 +151,7 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 	)
 	burner_energy_source.fuel_category = nil
 	burner_energy_source.fuel_categories = {}
-	local fuel_category_candidates = FuelEnergyUtil.evaluate_available_fuel_prototype_for_recipe(
+	local fuel_category_candidates = FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype(
 		prototype,
 		is_allow_prototype_to_apply_entity_with_burner_prototype,
 		technology_name,
@@ -196,16 +198,17 @@ local function handle_prototype_table_burner_or_energy_source_candidate(prototyp
 	end)
 	return result
 end
+
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.getAllActiveTechnologyNames(mode)
+	local technology_names = techUtil.get_all_active_technology_names(mode)
 	local prototype_types = {}
 
-	--[[_table.each(technology_names, function(technology_name)
-		local prototypes = techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+	_table.each(technology_names, function(technology_name)
+		local prototypes = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		local result_type = handle_prototype_table_burner_or_energy_source_candidate(prototypes, mode, technology_name)
 		if result_type then
 			_table.insert_all_if_not_exists(prototype_types, { result_type })
 		end
-	end)]]
+	end)
 	--log("prototype_types " .. Utils.dump_to_console(prototype_types))
 end)
