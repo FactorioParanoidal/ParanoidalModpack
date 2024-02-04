@@ -3,10 +3,10 @@ data.raw.container["crash-site-spaceship"].minable = {
 	mining_time = 5,
 	results = {
 		--трубы деревянные
-		--	{ name = "bi-wood-pipe", amount = 150 },
-		--	{ name = "bi-wood-pipe-to-ground", amount = 20 },
+		{ name = "bi-wood-pipe", amount = 150 },
+		{ name = "bi-wood-pipe-to-ground", amount = 20 },
 		-- одного насоса с твердотопливным питанием хватит в месте падения
-		--	{ name = "offshore-pump-0", amount = 1 },
+		{ name = "salvaged-offshore-pump-0", amount = 1 },
 		-- батарейка корабельная, используется как UPS
 		{ name = "salvaged-generator", amount = 1 },
 		{ name = "burner-inserter", amount = 20 },
@@ -31,7 +31,7 @@ data.raw.container["crash-site-spaceship"].minable = {
 		--	{ name = "coal-tree-seed", amount = 600 },
 		-- пистолет для самообороны от кусак + несколько сотен магазинов(потому что до патронов можно и не дожить)
 		{ name = "pistol", amount = 1 },
-		{ name = "firearm-magazine", amount = 400 },
+		{ name = "firearm-magazine", amount = 800 },
 	},
 }
 data.raw.container["crash-site-spaceship-wreck-big-1"].minable = { mining_time = 5 }

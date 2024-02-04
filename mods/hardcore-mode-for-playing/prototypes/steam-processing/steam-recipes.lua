@@ -3,7 +3,7 @@ require("__automated-utility-protocol__.util.technology-tree-util")
 require("__automated-utility-protocol__.util.fuel-energy-util")
 local STEAM_OUTPUT_LEVEL_FOR_TEMPERATURE_BY_FUEL = 100
 -- пересчитаем соотношение теплоёмкостей пара и воды в соотношении с реальными теплоёмкостями пара и воды.
-local function fixSteamPrototype()
+local function fix_steam_prototype()
 	local steam_prototype = data.raw["fluid"]["steam"]
 	steam_prototype.heat_capacity = tostring(
 		FuelEnergyUtil.read_energy_value_in_raw_joules(data.raw["fluid"]["water"].heat_capacity) * 2200 / 4200
@@ -11,7 +11,7 @@ local function fixSteamPrototype()
 	steam_prototype.default_temperature = 100
 end
 
-local function createSteamRecipe(new_steam_name, fuel_data, water_amount)
+local function create_steam_recipe_for_fuel_and_temperature(new_steam_name, fuel_data, water_amount)
 	local resource_fluid_prototype = data.raw["fluid"]["steam"]
 	local mode_data = {
 		results = {
@@ -86,7 +86,7 @@ local function evaluate_fuel_datas_for_recipe(
 	boiler_data
 )
 	log("boiler_data " .. boiler_data.name)
-	local available_fuel_prototypes = FuelEnergyUtil.evaluate_available_fuel_prototype_for_recipe(
+	local available_fuel_prototypes = FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype(
 		prototype,
 		is_allow_prototype_to_apply_prototype_function,
 		technology_name,
@@ -121,7 +121,7 @@ local function handle_one_fuel_data_water_amount(
 		return nil
 	end
 
-	local steam_recipe = createSteamRecipe(
+	local steam_recipe = create_steam_recipe_for_fuel_and_temperature(
 		"steam-" .. tostring(target_temperature),
 		fuel_data_water_amount.fuel_data,
 		fuel_data_water_amount.water_amount
@@ -132,7 +132,7 @@ local function handle_one_fuel_data_water_amount(
 	local full_with_fuel_steam_recipe_name = steam_recipe.name
 	local full_with_fuel_steam_fluid = flib.copy_prototype(data.raw["fluid"]["steam"], full_with_fuel_steam_recipe_name)
 	data:extend({ full_with_fuel_steam_fluid })
-	techUtil.addRecipeEffectToTechnologyEffects(boiler_occured_technology, full_with_fuel_steam_recipe_name, mode)
+	techUtil.add_recipe_effect_to_technology(boiler_occured_technology, full_with_fuel_steam_recipe_name, mode)
 	return {
 		recipe_name = full_with_fuel_steam_recipe_name,
 		temperature = target_temperature,
@@ -184,4 +184,4 @@ function create_steam_recipe_and_fluids(boiler_by_temperature_sorted)
 	end)
 	return result
 end
-fixSteamPrototype()
+fix_steam_prototype()

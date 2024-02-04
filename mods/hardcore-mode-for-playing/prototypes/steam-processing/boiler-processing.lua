@@ -36,7 +36,7 @@ local function getBoilersByTargetTemperature(technology_names, mode)
 	local result = {}
 	local boiler_count = 0
 	_table.each(technology_names, function(technology_name)
-		local results = techUtil.getAllRecipesResultsForSpecifiedTechnology(technology_name, mode)
+		local results = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		_table.each(results, function(recipe_result)
 			local recipe_result_name = recipe_result.name or recipe_result[1]
 			if not data.raw["boiler"][recipe_result_name] then
@@ -105,7 +105,7 @@ function boilerProcessing(technology_names, mode)
 				local filtered_boiler_data = _table.filter(boiler_datas, function(data)
 					return data.isBurnerEnergySource
 				end)[1]
-				techUtil.addPrerequisitesToTechnology(
+				techUtil.add_prerequisites_to_technology(
 					technologies[current_technology_name],
 					{ filtered_boiler_data.technology_name_occured_booiler_prototype },
 					mode

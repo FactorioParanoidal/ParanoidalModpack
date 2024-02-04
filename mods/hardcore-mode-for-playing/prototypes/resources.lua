@@ -48,7 +48,7 @@ local function get_minable_datas()
 	return result
 end
 
-function getBasicFluidNames()
+function get_basic_fluid_names()
 	return _table.map(
 		_table.filter(get_minable_datas(), function(minable_data)
 			return minable_data.type and minable_data.type == "fluid"
@@ -59,7 +59,7 @@ function getBasicFluidNames()
 	)
 end
 
-function createBasicRecipe(basic_data, suffix)
+function create_basic_resource_recipe(basic_data, suffix)
 	local resource_type = basic_data.type
 	local resource_name = basic_data.name
 	local resource_recipe_name = resource_name .. "-" .. suffix
@@ -106,26 +106,26 @@ function createBasicRecipe(basic_data, suffix)
 	return recipe
 end
 
-function createResourceRecipes()
+function create_resource_recipes()
 	local minable_datas = get_minable_datas()
 	local result = {}
 	_table.each(minable_datas, function(minable_data)
-		table.insert(result, createBasicRecipe(minable_data, "minable"))
+		table.insert(result, create_basic_resource_recipe(minable_data, "minable"))
 	end)
 	return result
 end
 
-function createWaterRecipe()
-	return createBasicRecipe({ type = "fluid", name = "water" }, "minable")
+function create_water_recipe()
+	return create_basic_resource_recipe({ type = "fluid", name = "water" }, "minable")
 end
 
-function createCoalRecipe()
-	return createBasicRecipe({ type = "item", name = "coal" }, "minable")
+function create_coal_recipe()
+	return create_basic_resource_recipe({ type = "item", name = "coal" }, "minable")
 end
-function createWoodRecipe()
-	return createBasicRecipe({ type = "item", name = "wood" }, "minable")
+function create_wood_recipe()
+	return create_basic_resource_recipe({ type = "item", name = "wood" }, "minable")
 end
 
-function createStoneRecipe()
-	return createBasicRecipe({ type = "item", name = "stone" }, "minable")
+function create_stone_recipe()
+	return create_basic_resource_recipe({ type = "item", name = "stone" }, "minable")
 end

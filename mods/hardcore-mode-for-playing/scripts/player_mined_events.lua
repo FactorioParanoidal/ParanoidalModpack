@@ -1,4 +1,4 @@
-local function OnPlayerMinedEntity(e)
+function on_player_mined_entity(e)
 	local entity = e.entity
 	if not entity or not entity.valid then
 		return
@@ -60,7 +60,7 @@ local function OnPlayerMinedEntity(e)
 	end
 end
 
-local function OnPlayerMinedItem(e)
+function on_player_mined_item(e)
 	local item_stack = e.item_stack
 	if not item_stack then
 		return
@@ -90,7 +90,3 @@ local function OnPlayerMinedItem(e)
 		return
 	end
 end
-
-script.on_event({ defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity }, OnPlayerMinedEntity)
-
-script.on_event({ defines.events.on_player_mined_item }, OnPlayerMinedItem)

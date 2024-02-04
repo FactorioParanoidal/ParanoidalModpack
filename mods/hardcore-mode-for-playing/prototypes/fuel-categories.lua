@@ -1,4 +1,4 @@
-function changeFuelCategoryItem(item_name, fuel_category_name)
+function change_fuel_category_fuel_item(item_name, fuel_category_name)
 	local item_prototype = data.raw["item"][item_name]
 	if not item_prototype then
 		error("item with name" .. item_name .. " not found ")
@@ -8,7 +8,7 @@ function changeFuelCategoryItem(item_name, fuel_category_name)
 	end
 	item_prototype.fuel_category = fuel_category_name
 end
-local function cleanupFuelCategoryForPrototype(prototype)
+local function cleanup_fuel_category_for_prototype(prototype)
 	if not prototype then
 		error("prototype with name" .. prototype.name .. " and type " .. prototype.type .. " not found ")
 	end
@@ -19,11 +19,11 @@ local function cleanupFuelCategoryForPrototype(prototype)
 	prototype.fuel_emissions_multiplier = nil
 	prototype.fuel_glow_color = nil
 end
-function cleanFuelCategoryForGun(gun_name)
-	cleanupFuelCategoryForPrototype(data.raw["gun"][gun_name])
+function cleanup_fuel_category_for_gun(gun_name)
+	cleanup_fuel_category_for_prototype(data.raw["gun"][gun_name])
 end
-function cleanupFuelCategoryForItem(item_name)
-	cleanupFuelCategoryForPrototype(data.raw["item"][item_name])
+function cleanup_fuel_category_for_Item(item_name)
+	cleanup_fuel_category_for_prototype(data.raw["item"][item_name])
 end
 
 function get_fuel_category_name_for_prototype(prototype)
