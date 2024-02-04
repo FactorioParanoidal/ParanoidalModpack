@@ -17,7 +17,7 @@ local technology_data_field_simple_names = {
 	"ignore_tech_cost_multiplier",
 	"max_level",
 }
-local function createTechnologyDataFromGeneralTechnologyData(technology)
+local function create_technology_data_from_general_technology_data(technology)
 	local result = {}
 	_table.each(technology_data_field_names, function(technology_data_field_name)
 		if technology[technology_data_field_name] and type(technology[technology_data_field_name]) == "table" then
@@ -29,7 +29,7 @@ local function createTechnologyDataFromGeneralTechnologyData(technology)
 	return result
 end
 
-local function mergeTechnologyData(for_merging_technology_data_mode, technology_data_general)
+local function merge_technology_data_and_general_data(for_merging_technology_data_mode, technology_data_general)
 	_table.each(technology_data_field_names, function(technology_data_field_name)
 		if not technology_data_general[technology_data_field_name] then
 			--log("property '" .. technology_data_field_name .. "' not specified in general data!")
@@ -57,25 +57,26 @@ local function mergeTechnologyData(for_merging_technology_data_mode, technology_
 	end)
 end
 
+--сначала сливаем 2 режима.
 _table.each(GAME_MODES, function(mode)
 	_table.each(data.raw["technology"], function(technology)
-		local technology_data_general = createTechnologyDataFromGeneralTechnologyData(technology)
+		local technology_data_general = create_technology_data_from_general_technology_data(technology)
 		if not technology[mode] then
 			technology[mode] = technology_data_general
 			return
 		end
 		local for_merging_technology_data_mode = technology[mode]
-		mergeTechnologyData(for_merging_technology_data_mode, technology_data_general)
+		merge_technology_data_and_general_data(for_merging_technology_data_mode, technology_data_general)
 	end)
 end)
-local function clearTechnologyData(technology)
+
+local function clear_general_technology_data(technology)
 	_table.each(technology_data_field_names, function(technology_data_field_name)
 		technology[technology_data_field_name] = nil
 	end)
 end
-
+--затем убираем общее между режима без указания режима.
 local technologies = data.raw["technology"]
 _table.each(technologies, function(technology)
-	clearTechnologyData(technology)
-	--log(" technology named " .. technology.name .. " is after copying for modes " .. Utils.dump_to_console(technology))
+	clear_general_technology_data(technology)
 end)
