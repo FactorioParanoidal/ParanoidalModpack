@@ -1,0 +1,15 @@
+name: No LFS files
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for LFS files
+        run: |
+          if git lfs ls-files | grep -q '.'; then
+            echo "LFS files found in repo, failing check"
+            exit 1
+          fi
+          echo "No LFS files found"
