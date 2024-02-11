@@ -1137,3 +1137,7 @@ bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-co
 --фикс неправильного бойлера в ядерном реакторе	(AKMF https://discord.com/channels/569536773701500928/1181338288838160445/1197233194102169690)
 bobmods.lib.recipe.remove_ingredient("nuclear-reactor", "boiler-4")
 KaoExtended.recipe.addtorecipe("nuclear-reactor", {"boiler-3", 1})
+
+--фикс технологий: Продвинутое исследование после турбо пакетников (AKMF)
+bobmods.lib.tech.remove_prerequisite("advanced-research", "express-inserters")
+bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
