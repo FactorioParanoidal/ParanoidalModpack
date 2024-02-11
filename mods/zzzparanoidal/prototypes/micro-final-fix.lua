@@ -1000,6 +1000,17 @@ end
 
 data.raw.technology["advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
+
+data.raw.technology["Space-Lab-Research-1"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-21"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-41"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-61"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+
+data.raw.technology["stack-inserter-research-1"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-5"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-10"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-15"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+
 --###############################################################################################
 --будет вшито в биоиндустрию
 --дробление камня в ангеловских дробилках руды
