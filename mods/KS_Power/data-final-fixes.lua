@@ -7,130 +7,130 @@ local fuel_values = {
 
 -- coefficient *8.35 above natural;  8.35*x (kg/liquid , m3/gas)
 
-	["gas-hydrogen"] = "150KJ", -- 10,78 МДж/м3 
-	["hydrogen"] = "150KJ", -- 10,78 МДж/м3 
-	["deuterium"] = "150KJ",
-	["gas-deuterium"] = "150KJ",
+	["gas-hydrogen"] = "150kJ", -- 10,78 МДж/м3 
+	["hydrogen"] = "150kJ", -- 10,78 МДж/м3 
+	["deuterium"] = "150kJ",
+	["gas-deuterium"] = "150kJ",
 
-["liquid-multi-phase-oil"] = "360KJ", --21,5MДж/кг
-["crude-oil"] = "734KJ",-- 44 МДж/кг
+["liquid-multi-phase-oil"] = "360kJ", --21,5MДж/кг
+["crude-oil"] = "734kJ",-- 44 МДж/кг
   
-  ["heavy-oil"] = "660KJ", -- МАЗУТ  40
-  ["liquid-naphtha"] = "660KJ",
+  ["heavy-oil"] = "660kJ", -- МАЗУТ  40
+  ["liquid-naphtha"] = "660kJ",
   
-  ["light-oil"] = "690KJ",
- 	["liquid-fuel"] = "1140KJ", 
-	["liquid-fuel-oil"] = "890KJ",  --Gas oil	38MДж/кг
-	["diesel"] = "2250KJ", -- 44,8-43,5 МДж/кг
-	["diesel-fuel"] = "2250KJ", --375KJ
-	["gasoline"] = "1540KJ", -- 46 МДж/кг, 32,7 МДж/литр
-	["kerosene"] = "1436KJ", -- 43 МДж/кг	
+  ["light-oil"] = "690kJ",
+ 	["liquid-fuel"] = "1140kJ", 
+	["liquid-fuel-oil"] = "890kJ",  --Gas oil	38MДж/кг
+	["diesel"] = "2250kJ", -- 44,8-43,5 МДж/кг
+	["diesel-fuel"] = "2250kJ", --375kJ
+	["gasoline"] = "1540kJ", -- 46 МДж/кг, 32,7 МДж/литр
+	["kerosene"] = "1436kJ", -- 43 МДж/кг	
 
-  ["petroleum-gas"] = "700KJ",
-
-	
-	["gas-natural-1"] = "560KJ",  -- 33,5 МДж/м3 
-	["gas-raw-1"] = "500KJ",
-	["liquid-ngl"] =  "780KJ",  -- 46,8 МДж/кг
-
-	["gas-methane"] = "558KJ", -- 33,41 МДж/м3 
-	["gas-ethane"] = "1000KJ",  -- 59,85 МДж/м3 
-	["gas-butane"] = "1900KJ", -- 113,81 МДж/м3 
-	
-	["gas-propene"] = "760KJ", -- 45,6 МДж/м3 
-	["gas-ethylene"] = "800KJ",  -- 48 Мдж/м3
-	["gas-benzene"] = "2420KJ", -- 40.45 МДж/кг -- БЕНЗОЛ 
-
-	["gas-chlor-methane"] = "432KJ",
-	
-	["gas-butadiene"] = "1896KJ", -- butilene 113,51
-	["liquid-ethylbenzene"] = "2616KJ",
-	["liquid-styrene"] = "2600KJ", --42,6 МДж/кг
-	["liquid-toluene"] = "2616KJ", --156,71 Мдж/м3
-	["liquid-phenol"] = "1716KJ", --32.24МДж/кг
+  ["petroleum-gas"] = "700kJ",
 
 	
-  	["acetylene"] = "936KJ", -- 56,04 МДж/м3 
-	["liquid-polyethylene"] = "1796KJ", --47,2 МДж/кг
+	["gas-natural-1"] = "560kJ",  -- 33,5 МДж/м3 
+	["gas-raw-1"] = "500kJ",
+	["liquid-ngl"] =  "780kJ",  -- 46,8 МДж/кг
+
+	["gas-methane"] = "558kJ", -- 33,41 МДж/м3 
+	["gas-ethane"] = "1000kJ",  -- 59,85 МДж/м3 
+	["gas-butane"] = "1900kJ", -- 113,81 МДж/м3 
 	
-	["liquid-resin"] = "1896KJ", --44,7 МДж/кг
-	["liquid-rubber-masterbatch"] = "1850KJ",
-	["liquid-rubber-pre"] = "2150KJ", --33,52 МДж/кг
-	["liquid-rubber"] = "2450KJ",
-	["liquid-plastic"] = "1920KJ",  --41,87 МДж/кг
+	["gas-propene"] = "760kJ", -- 45,6 МДж/м3 
+	["gas-ethylene"] = "800kJ",  -- 48 Мдж/м3
+	["gas-benzene"] = "2420kJ", -- 40.45 МДж/кг -- БЕНЗОЛ 
 
-["gas-synthesis"] = "240KJ", -- 11,5 Мдж/м3
-["gas-residual"] = "700KJ", -- 42 Мдж/м3	
-
-    ["gas-methanol"] = "360KJ", -- 21,1-22 МДж/кг
-	["methanol"] = "360KJ", -- 21,1-22 МДж/кг
-	["gas-ethanol"] = "510KJ", --30,6 МДж/кг
-    ["gas-acetone"] = "524KJ", -- 31,4 МДж/кг
-	["coal-gas"] = "292KJ", -- 17,5 Мдж/м3
-
-
-["gas-chloroethane"] = "155KJ", -- 9,850 кДж/кг
-
-["gas-hydrogen-cyanide"] = "410KJ", --24,53  Энтальпия сгорания 
-["gas-nitrous-oxide"] = "500KJ", --не горит не выпускается  - и иконка странная с зеленью хлора
-["gas-vinyl-acetylene"] = "550KJ",  --33,04 = 44 МДж/кг 1198,1 кДж/моль.
-["gas-vinyl-chloride"] = "310KJ",  --18,1 не горит не выпускается  1198,1 кДж/моль.  62,498 г/моль  18,1 МДж/кг
-["liquid-acetone-cyanohydrin"] = "300KJ", --не горит не выпускается
-["liquid-acrylonitrile"] = "550KJ",  --33,21МДж/кг не горит не выпускается    Теплота сгорания стирола 43,64МДж/кг
-["liquid-dichlorobutene"] = "500KJ", --не горит не выпускается
-
-
-["liquid-methyl-methacrylate"] = "450KJ", -- 25,52 МДж/кг
-["liquid-cellulose-acetate"] = "310KJ", -- 18,75 МДж/кг
-["liquid-acetic-anhydride"] = "255KJ", --   15,3 МДж/кг
-["liquid-raw-vegetable-oil"] = "1600KJ", -- 30 МДж/кг
-["liquid-vegetable-oil"] = "2100KJ", -- 39,6 МДж/кг
-
-
-["gas-enriched-hydrogen-sulfide"] = "364KJ", -- не горит не выпускается  как сероводород
-
-
-["gas-allylchlorid"] = "360KJ", -- 22500
-["liquid-raw-fish-oil"] = "1400KJ", --26025 кДж/кг)
-["liquid-fish-oil"] = "1900KJ", --36025 кДж/кг
-["gas-epichlorohydrin"] = "325KJ", -- 18940 kj/kg
-["liquid-glycerol"] = "310KJ", -- 17957 kj/kg
-["liquid-bisphenol-a"] = "505KJ", --  31000
-["gas-ethylene-oxide"] = "430KJ", --  27649 kJ/kg
-["liquid-ethylene-carbonate"] = "250KJ", -- 14900
-["gas-urea"] = "167KJ", --10550)
-["gas-melamine"] = "262KJ", -- 15670
-["liquid-tetraethyllead"] = "335KJ", -- 19500
-
-
-
-
-
-
-
-	["gas-formaldehyde"] = "280KJ", --17,26 МДж/кг
-
-	["nitroglycerin"] = "730KJ", --13,5 
-
-["gas-methylamine"] = "575KJ",  --34,900 
-["gas-dimethylamine"] = "620KJ",  --38,800
-["gas-dimethylhydrazine"] = "550KJ", --33,000
-
-	["gas-hydrazine"] = "760KJ", --fuel_value = "380KJ", 14644 кДж/кг
+	["gas-chlor-methane"] = "432kJ",
 	
-	["gas-ammonia"] = "310KJ",  --18,6  Мдж/м3
-	["gas-hydrogen-sulfide"] = "364KJ",  --21,75  Мдж/м3
+	["gas-butadiene"] = "1896kJ", -- butilene 113,51
+	["liquid-ethylbenzene"] = "2616kJ",
+	["liquid-styrene"] = "2600kJ", --42,6 МДж/кг
+	["liquid-toluene"] = "2616kJ", --156,71 Мдж/м3
+	["liquid-phenol"] = "1716kJ", --32.24МДж/кг
+
+	
+  	["acetylene"] = "936kJ", -- 56,04 МДж/м3 
+	["liquid-polyethylene"] = "1796kJ", --47,2 МДж/кг
+	
+	["liquid-resin"] = "1896kJ", --44,7 МДж/кг
+	["liquid-rubber-masterbatch"] = "1850kJ",
+	["liquid-rubber-pre"] = "2150kJ", --33,52 МДж/кг
+	["liquid-rubber"] = "2450kJ",
+	["liquid-plastic"] = "1920kJ",  --41,87 МДж/кг
+
+["gas-synthesis"] = "240kJ", -- 11,5 Мдж/м3
+["gas-residual"] = "700kJ", -- 42 Мдж/м3	
+
+    ["gas-methanol"] = "360kJ", -- 21,1-22 МДж/кг
+	["methanol"] = "360kJ", -- 21,1-22 МДж/кг
+	["gas-ethanol"] = "510kJ", --30,6 МДж/кг
+    ["gas-acetone"] = "524kJ", -- 31,4 МДж/кг
+	["coal-gas"] = "292kJ", -- 17,5 Мдж/м3
+
+
+["gas-chloroethane"] = "155kJ", -- 9,850 кДж/кг
+
+["gas-hydrogen-cyanide"] = "410kJ", --24,53  Энтальпия сгорания 
+["gas-nitrous-oxide"] = "500kJ", --не горит не выпускается  - и иконка странная с зеленью хлора
+["gas-vinyl-acetylene"] = "550kJ",  --33,04 = 44 МДж/кг 1198,1 кДж/моль.
+["gas-vinyl-chloride"] = "310kJ",  --18,1 не горит не выпускается  1198,1 кДж/моль.  62,498 г/моль  18,1 МДж/кг
+["liquid-acetone-cyanohydrin"] = "300kJ", --не горит не выпускается
+["liquid-acrylonitrile"] = "550kJ",  --33,21МДж/кг не горит не выпускается    Теплота сгорания стирола 43,64МДж/кг
+["liquid-dichlorobutene"] = "500kJ", --не горит не выпускается
+
+
+["liquid-methyl-methacrylate"] = "450kJ", -- 25,52 МДж/кг
+["liquid-cellulose-acetate"] = "310kJ", -- 18,75 МДж/кг
+["liquid-acetic-anhydride"] = "255kJ", --   15,3 МДж/кг
+["liquid-raw-vegetable-oil"] = "1600kJ", -- 30 МДж/кг
+["liquid-vegetable-oil"] = "2100kJ", -- 39,6 МДж/кг
+
+
+["gas-enriched-hydrogen-sulfide"] = "364kJ", -- не горит не выпускается  как сероводород
+
+
+["gas-allylchlorid"] = "360kJ", -- 22500
+["liquid-raw-fish-oil"] = "1400kJ", --26025 кДж/кг)
+["liquid-fish-oil"] = "1900kJ", --36025 кДж/кг
+["gas-epichlorohydrin"] = "325kJ", -- 18940 kj/kg
+["liquid-glycerol"] = "310kJ", -- 17957 kj/kg
+["liquid-bisphenol-a"] = "505kJ", --  31000
+["gas-ethylene-oxide"] = "430kJ", --  27649 kJ/kg
+["liquid-ethylene-carbonate"] = "250kJ", -- 14900
+["gas-urea"] = "167kJ", --10550)
+["gas-melamine"] = "262kJ", -- 15670
+["liquid-tetraethyllead"] = "335kJ", -- 19500
+
+
+
+
+
+
+
+	["gas-formaldehyde"] = "280kJ", --17,26 МДж/кг
+
+	["nitroglycerin"] = "730kJ", --13,5 
+
+["gas-methylamine"] = "575kJ",  --34,900 
+["gas-dimethylamine"] = "620kJ",  --38,800
+["gas-dimethylhydrazine"] = "550kJ", --33,000
+
+	["gas-hydrazine"] = "760kJ", --fuel_value = "380kJ", 14644 кДж/кг
+	
+	["gas-ammonia"] = "310kJ",  --18,6  Мдж/м3
+	["gas-hydrogen-sulfide"] = "364kJ",  --21,75  Мдж/м3
 	
 	
-	["sour-gas"] = "304KJ",
-	["gas-acid"] = "304KJ",
+	["sour-gas"] = "304kJ",
+	["gas-acid"] = "304kJ",
 	
 	
-	["combustion-mixture1"] = "600KJ",
-	["combustion-mixture2"] = "600KJ",
-	["diborane"] = "600KJ",	
-	["refsyngas"] = "600KJ",
-	["xylenol"] = "600KJ",
+	["combustion-mixture1"] = "600kJ",
+	["combustion-mixture2"] = "600kJ",
+	["diborane"] = "600kJ",	
+	["refsyngas"] = "600kJ",
+	["xylenol"] = "600kJ",
 	
 	
 	["solid-paper"] = "0.8MJ",
