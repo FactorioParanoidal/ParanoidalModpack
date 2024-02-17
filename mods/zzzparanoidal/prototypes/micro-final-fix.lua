@@ -1153,3 +1153,8 @@ KaoExtended.recipe.addtorecipe("nuclear-reactor", {"boiler-3", 1})
 --фикс технологий: Продвинутое исследование после турбо пакетников (AKMF)
 bobmods.lib.tech.remove_prerequisite("advanced-research", "express-inserters")
 bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
+
+--Связи технологий в соответствии с требованиями рецептов (AKMF)
+bobmods.lib.tech.remove_prerequisite("angels-ironworks-3", "angels-steel-smelting-2")
+bobmods.lib.tech.remove_prerequisite("angels-ironworks-2", "angels-steel-smelting-1")
+bobmods.lib.tech.add_prerequisite("angels-ironworks-2", "angels-steel-smelting-2")
