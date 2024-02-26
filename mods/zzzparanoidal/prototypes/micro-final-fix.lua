@@ -1158,3 +1158,8 @@ bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
 bobmods.lib.tech.remove_prerequisite("angels-ironworks-3", "angels-steel-smelting-2")
 bobmods.lib.tech.remove_prerequisite("angels-ironworks-2", "angels-steel-smelting-1")
 bobmods.lib.tech.add_prerequisite("angels-ironworks-2", "angels-steel-smelting-2")
+
+--Добавлен дополнительный уровень технологий для Жидк.Бойлеров 4, 5 в соответсвии с их рецептом (AKMF)
+data.raw.technology["OilBurning-4"].unit.ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 2}, {"production-science-pack", 2}}
+data.raw.technology["OilBurning-5"].unit.ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 2}, {"production-science-pack", 2}, {"utility-science-pack", 2}}
+
