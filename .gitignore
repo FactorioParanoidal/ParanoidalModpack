@@ -3,6 +3,14 @@
 !mods
 !wiki
 
+!.nuke
+bin
+obj
+temp
+.idea
+!build.*
+!Paranoidal.sln
+
 !config.json
 !.gitlab-ci.yml
 !README.md
