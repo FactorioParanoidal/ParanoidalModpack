@@ -45,7 +45,7 @@ partial class Build : NukeBuild
             var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
             if (!File.Exists(modSettingsDatPath))
             {
-                throw new FileNotFoundException("File mods/mod-settings.json not found. Ensure that this file exists");
+                throw new FileNotFoundException($"File {modSettingsDatPath} not found. Ensure that this file exists", modSettingsDatPath);
             }
 
             Log.Information("Starting reading {Path}", modSettingsDatPath);
@@ -66,7 +66,7 @@ partial class Build : NukeBuild
             var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
             if (!File.Exists(modSettingsJsonPath))
             {
-                throw new FileNotFoundException("File mods/mod-settings.json not found. Ensure that this file exists");
+                throw new FileNotFoundException($"File {modSettingsJsonPath} not found. Ensure that this file exists", modSettingsJsonPath);
             }
 
             Log.Information("Starting reading {Path}", modSettingsJsonPath);
