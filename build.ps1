@@ -39,7 +39,7 @@ if ($null -ne (Get-Command "dotnet" -ErrorAction SilentlyContinue) -and `
 }
 else {
     # Download install script
-    $DotNetInstallFile = "$TempDirectory\dotnet-install.ps1"
+    $DotNetInstallFile = "$TempDirectory\dotnet-install.ps1" -replace ' ', '` '
     New-Item -ItemType Directory -Path $TempDirectory -Force | Out-Null
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallUrl, $DotNetInstallFile)
@@ -54,10 +54,11 @@ else {
 
     # Install by channel or version
     $DotNetDirectory = "$TempDirectory\dotnet-win"
+    $DotNetInstallDirectory = $DotNetDirectory -replace ' ', '` '
     if (!(Test-Path variable:DotNetVersion)) {
-        ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetDirectory -Channel $DotNetChannel -NoPath }
+        ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetInstallDirectory -Channel $DotNetChannel -NoPath }
     } else {
-        ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetDirectory -Version $DotNetVersion -NoPath }
+        ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetInstallDirectory -Version $DotNetVersion -NoPath }
     }
     $env:DOTNET_EXE = "$DotNetDirectory\dotnet.exe"
     $env:PATH = "$DotNetDirectory;$env:PATH"
