@@ -22,6 +22,9 @@
 - [Discord сервер](https://discord.com/invite/AWStgXd) - информация для доступа к официальному серверу Factorio, с данной сборкой
 - [Раздача на Rutracker](https://rutracker.org/forum/viewtopic.php?t=5612345) - сборка + Repack игры
 - [Список модов](https://dynalist.io/d/uA_qEbXBVvv6URmWiV6cQqVr) - или посмотрите список папок в директории mods
+- [WIKI](wiki/documents/Home.md) - полезная информация о сборке
+- [FAQ](wiki/documents/FAQ.md) - часто задаваемые вопросы
+- [Инструментарий разработчика](wiki/documents/Build-Scripts.md) - документация инструментария разработчика
 
 ## Данная сборка вам подойдет, если:
  - У вас ОЧЕНЬ много **свободного времени** и вам абсолютно некуда его больше тратить
