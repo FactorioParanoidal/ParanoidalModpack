@@ -1,5 +1,5 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
-local function updateFactorissimoMod(mode)
+local function update_factorissimo_mod(mode)
 	if not mods["factorissimo-2-notnotmelon"] then
 		return
 	end
@@ -53,5 +53,5 @@ local function updateFactorissimoMod(mode)
 	techUtil.add_prerequisites_to_technology(technologies["space-science-pack"], { "factory-recursion-t2" }, mode)
 end
 _table.each(GAME_MODES, function(mode)
-	updateFactorissimoMod(mode)
+	update_factorissimo_mod(mode)
 end)

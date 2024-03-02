@@ -1,6 +1,6 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
-local function resetBasicTechnologyPrerequisitesToNormalTree(mode)
+local function reset_basic_technology_prerequisites_to_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.reset_prerequisites_for_technology(
 		technologies["basic-automation"],
@@ -48,7 +48,7 @@ local function resetBasicTechnologyPrerequisitesToNormalTree(mode)
 	)
 end
 
-local function addPrerequisitesToTechnologies(mode)
+local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.add_prerequisites_to_technology(technologies["ore-crushing"], { "burner-ore-crushing" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["electric-mining"], { "burner-ore-mining" }, mode)
@@ -200,15 +200,16 @@ local function addPrerequisitesToTechnologies(mode)
 		"coal-detected-resource-technology",
 		"wood-detected-resource-technology",
 	}, mode)
+	techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
 end
 
-local function removePrerequisitesFromTechnologies(mode)
+local function remove_prerequisites_from_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.remove_prerequisites_to_technology(technologies["modules-3"], { "advanced-electronics-3" }, mode)
 	techUtil.remove_prerequisites_to_technology(technologies["advanced-electronics"], { "offshore-pump-2" }, mode)
 end
 
-local function removeRecipeEffectsFromTechnologies(mode)
+local function remove_recipes_from_technology_effects_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.remove_recipe_effect_from_technology(technologies["sulfur-processing"], "sulfuric-acid-2", mode)
 	techUtil.remove_recipe_effect_from_technology(
@@ -238,7 +239,7 @@ local function removeRecipeEffectsFromTechnologies(mode)
 	)
 end
 
-local function moveRecipesToNewTechnologies(mode)
+local function move_recipes_to_another_technologies(mode)
 	techUtil.move_recipe_effects_to_another_technology("resins", "resin-1", "solid-resin", mode)
 	techUtil.move_recipe_effects_to_another_technology(
 		"bio-refugium-hatchery",
@@ -306,7 +307,7 @@ local function moveRecipesToNewTechnologies(mode)
 	techUtil.move_recipe_effects_to_another_technology("electronics", "logistics", "yellow-filter-inserter", mode)
 end
 
-local function addRecipeRecipeEffectsToTechnologies(mode)
+local function add_recipe_to_technology_effects(mode)
 	local technologies = data.raw["technology"]
 	techUtil.add_recipe_effect_to_technology(
 		technologies["salvaged-automation-tech"],
@@ -352,7 +353,7 @@ local function addRecipeRecipeEffectsToTechnologies(mode)
 	techUtil.add_recipe_effect_to_technology(technologies["automation-science-pack"], "sci-component-1", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["logistics"], "transport-belt", mode)
 end
-local function createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
+local function create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
 	local resource_recipes = create_resource_recipes()
 	local active_technology_names = techUtil.get_all_active_technology_names(mode)
 	_table.each(resource_recipes, function(resource_recipe)
@@ -396,12 +397,12 @@ local function hide_recipes(mode)
 	techUtil.hide_recipe(recipes["torch"], mode)
 end
 _table.each(GAME_MODES, function(mode)
-	createResourceDetectedTechnologiesAndAddItToNormalTechnologyByRecipeName(mode)
-	resetBasicTechnologyPrerequisitesToNormalTree(mode)
-	removePrerequisitesFromTechnologies(mode)
-	addPrerequisitesToTechnologies(mode)
-	removeRecipeEffectsFromTechnologies(mode)
-	addRecipeRecipeEffectsToTechnologies(mode)
-	moveRecipesToNewTechnologies(mode)
+	create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
+	reset_basic_technology_prerequisites_to_regular_tree(mode)
+	remove_prerequisites_from_technologies_in_regular_tree(mode)
+	add_prerequisites_to_technologies_in_regular_tree(mode)
+	remove_recipes_from_technology_effects_in_regular_tree(mode)
+	add_recipe_to_technology_effects(mode)
+	move_recipes_to_another_technologies(mode)
 	hide_recipes(mode)
 end)
