@@ -62,14 +62,14 @@ local function is_allow_prototype_to_apply_boiler_prototype(boiler_prototype, re
 	if not energy_source then
 		error("ennergy_source for boiler not specified!")
 	end
-	if boiler_data.isBurnerEnergySource then
+	if boiler_data.is_burner_energy_source then
 		return (
 			energy_source.fuel_category and recipe_result_prototype.fuel_category == energy_source.fuel_category
 			or energy_source.fuel_categories
 				and _table.contains(energy_source.fuel_categories, recipe_result_prototype.fuel_category)
 		)
 	end
-	if boiler_data.isFluidEnergySource then
+	if boiler_data.is_fluid_energy_source then
 		--	log("fluid boiler")
 		return energy_source.fluid_box
 			and energy_source.fluid_box.filter

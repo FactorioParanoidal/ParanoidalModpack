@@ -74,6 +74,7 @@ local function is_allow_fuel_category_for_entity_with_burner_applying(prototype,
 		)
 	local maximum_energy_consumption_for_entity_with_burner_prototype = maximum_energy_consumption_per_sec_for_entity_with_burner_prototype
 		* MINIMUM_TIME_IN_WORK_IN_SECS
+
 	if
 		effectivity_max_item_stack_fuel_value - maximum_energy_consumption_for_entity_with_burner_prototype >= -EPSILON
 	then

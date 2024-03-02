@@ -256,6 +256,6 @@ local function create_basic_technology_tree()
 	})
 end
 
-if settings.startup["move-basic-recipe-to-new-basic-technology-hard-start"].value then
-	create_basic_technology_tree()
-end
+--if settings.startup["move-basic-recipe-to-new-basic-technology-hard-start"].value then
+create_basic_technology_tree()
+--end
