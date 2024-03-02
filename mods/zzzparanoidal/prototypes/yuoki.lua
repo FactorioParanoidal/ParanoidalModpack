@@ -16,7 +16,6 @@ data.raw.recipe["y-ac-coal2uc-recipe"].hidden = true
 data.raw.recipe["y-ac-stone2uc-recipe"].hidden = true
 data.raw.recipe["y-ac-iron2uc-recipe"].hidden = true
 
-
 -- Ненужные технологии скрываем
 
 data.raw.technology["yi-inserters"].hidden = true
@@ -35,54 +34,49 @@ data.raw.technology["yi-inserters"].hidden = true
 -- bobmods.lib.recipe.add_new_ingredient ("Recipename", {type="item", name="Itemname", amount=2})
 -- table.insert( data.raw["recipe"]["Recipename"].ingredients, {"Itemname", 14})
 
-bobmods.lib.recipe.remove_result ("angels-ore1-chunk", "y-res1")
-bobmods.lib.recipe.remove_result ("angels-ore3-chunk", "y-res2")
-bobmods.lib.recipe.remove_result ("angels-ore1-crystal", "y-res1")
-bobmods.lib.recipe.remove_result ("angels-ore3-crystal", "y-res2")
-bobmods.lib.recipe.remove_result ("angels-ore1-pure", "y-res1")
-bobmods.lib.recipe.remove_result ("angels-ore3-pure", "y-res2")
-
-
-
-
+bobmods.lib.recipe.remove_result("angels-ore1-chunk", "y-res1")
+bobmods.lib.recipe.remove_result("angels-ore3-chunk", "y-res2")
+bobmods.lib.recipe.remove_result("angels-ore1-crystal", "y-res1")
+bobmods.lib.recipe.remove_result("angels-ore3-crystal", "y-res2")
+bobmods.lib.recipe.remove_result("angels-ore1-pure", "y-res1")
+bobmods.lib.recipe.remove_result("angels-ore3-pure", "y-res2")
 
 -- заменяем ингриды и результат у рецептов
 --Уникомпозит
 data.raw.recipe["angelsore-chunk-mix-yi1-processing"].category = "ore-sorting-4"
 data.raw.recipe["angelsore-chunk-mix-yi1-processing"].ingredients = {
-          {type = "item", name = "angels-ore1-pure", amount = 4},
-          {type = "item", name = "angels-ore3-pure", amount = 4},
-          {type = "item", name = "angels-ore5-pure", amount = 4},
-          {type = "item", name = "solid-sodium", amount = 20},
-        }
-		
+	{ type = "item", name = "angels-ore1-pure", amount = 4 },
+	{ type = "item", name = "angels-ore3-pure", amount = 4 },
+	{ type = "item", name = "angels-ore5-pure", amount = 4 },
+	{ type = "item", name = "solid-sodium", amount = 20 },
+}
+
 data.raw.recipe["angelsore-chunk-mix-yi1-processing"].results = {
-          {type = "item", name = "y-res1", amount = 1}
-        }
+	{ type = "item", name = "y-res1", amount = 1 },
+}
 --Энергоминерал
 data.raw.recipe["angelsore-chunk-mix-yi2-processing"].category = "ore-sorting-4"
 data.raw.recipe["angelsore-chunk-mix-yi2-processing"].ingredients = {
-          {type = "item", name = "angels-ore2-pure", amount = 4},
-          {type = "item", name = "angels-ore4-pure", amount = 4},
-          {type = "item", name = "angels-ore6-pure", amount = 4},
-          {type = "item", name = "solid-white-phosphorus", amount = 20},
-        }
-		
-data.raw.recipe["angelsore-chunk-mix-yi2-processing"].results = {
-          {type = "item", name = "y-res2", amount = 1}
-        }
-		
-data.raw.recipe["y-c22-recipe"].ingredients = {
-          {type = "item", name = "angels-ore2-pure", amount = 4},
-          {type = "item", name = "angels-ore4-pure", amount = 4},
-          {type = "item", name = "angels-ore6-pure", amount = 4},
-          {type = "item", name = "solid-white-phosphorus", amount = 20},
-		
-      --  icons = {          {icon = "__angelsrefining__/graphics/icons/sort-icon.png", icon_size = 32},
-      --    {icon = "__Yuoki__/graphics/icons/yi-res-2-pur.png", icon_size = 32, scale = 0.5, shift = {10, 10}},        },
-	  
+	{ type = "item", name = "angels-ore2-pure", amount = 4 },
+	{ type = "item", name = "angels-ore4-pure", amount = 4 },
+	{ type = "item", name = "angels-ore6-pure", amount = 4 },
+	{ type = "item", name = "solid-white-phosphorus", amount = 20 },
+}
 
---[[
+data.raw.recipe["angelsore-chunk-mix-yi2-processing"].results = {
+	{ type = "item", name = "y-res2", amount = 1 },
+}
+
+data.raw.recipe["y-c22-recipe"].ingredients = {
+	{ type = "item", name = "angels-ore2-pure", amount = 4 },
+	{ type = "item", name = "angels-ore4-pure", amount = 4 },
+	{ type = "item", name = "angels-ore6-pure", amount = 4 },
+	{ type = "item", name = "solid-white-phosphorus", amount = 20 },
+
+	--  icons = {          {icon = "__angelsrefining__/graphics/icons/sort-icon.png", icon_size = 32},
+	--    {icon = "__Yuoki__/graphics/icons/yi-res-2-pur.png", icon_size = 32, scale = 0.5, shift = {10, 10}},        },
+
+	--[[
 	  
       {
         type = "recipe",
@@ -110,13 +104,10 @@ data.raw.recipe["y-c22-recipe"].ingredients = {
         order = "a[yellow-waste-water-purification-yi]"
       }
 	  })
-]]--	  
+]]
+	--
 
-
-
-
-
---[[
+	--[[
 	{ type = "recipe",
     name = "angelsore-chunk-mix-yi1-processing",
     category = "crafting",
@@ -139,13 +130,6 @@ data.raw.recipe["y-c22-recipe"].ingredients = {
     },
 	result_count = 1
   },
-]]--
-
-
-		
-
-
-
-
-
-
+]]
+	--
+}
