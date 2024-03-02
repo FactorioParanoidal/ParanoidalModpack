@@ -1,897 +1,1118 @@
+
 {
-  "mods": [
+  "mods": 
+  [
+    
     {
       "name": "base",
       "enabled": true
     },
+    
     {
       "name": "aai-industry",
       "enabled": true
     },
+    
     {
       "name": "AbandonedRuins",
       "enabled": true
     },
+    
     {
       "name": "AbandonedRuins-Silly",
       "enabled": true
     },
+    
     {
       "name": "AdditionalPasteSettings",
       "enabled": true
     },
+    
     {
       "name": "Aircraft",
       "enabled": true
     },
+    
     {
       "name": "AlertsList2",
       "enabled": true
     },
+    
     {
       "name": "alien-biomes-settings",
       "enabled": true
     },
+    
     {
       "name": "angels-smelting-extended",
       "enabled": true
     },
+    
     {
       "name": "angelsbioprocessing",
       "enabled": true
     },
+    
     {
       "name": "angelsextended-remelting-fixed",
       "enabled": true
     },
+    
     {
       "name": "angelsinfiniteores",
       "enabled": true
     },
+    
     {
       "name": "angelspetrochem",
       "enabled": true
     },
+    
     {
       "name": "angelsrefining",
       "enabled": true
     },
+    
     {
       "name": "angelssmelting",
       "enabled": true
     },
+    
     {
       "name": "AtomicArtillery",
       "enabled": true
     },
+    
     {
       "name": "automated-fabrique-protocol",
       "enabled": true
     },
+    
     {
       "name": "automated-utility-protocol",
       "enabled": true
     },
+    
     {
       "name": "baraws",
       "enabled": true
     },
+    
     {
       "name": "BatteryElectricTrain",
       "enabled": true
     },
+    
     {
       "name": "beautiful_straight_bridge_railway",
       "enabled": true
     },
+    
     {
       "name": "belt-visualizer",
       "enabled": true
     },
+    
     {
       "name": "betterCargoPlanes",
       "enabled": true
     },
+    
     {
       "name": "Big-Monsters",
       "enabled": true
     },
+    
     {
       "name": "BigLab",
       "enabled": true
     },
+    
     {
       "name": "BigLightElectricMiningDrill",
       "enabled": true
     },
+    
     {
       "name": "Bio_Industries",
       "enabled": true
     },
+    
     {
       "name": "blueprint-sandboxes",
       "enabled": true
     },
+    
     {
       "name": "blueprint_flip_and_turn",
       "enabled": true
     },
+    
     {
       "name": "bobassembly",
       "enabled": true
     },
+    
     {
       "name": "bobelectronics",
       "enabled": true
     },
+    
     {
       "name": "bobenemies",
       "enabled": true
     },
+    
     {
       "name": "bobequipment",
       "enabled": true
     },
+    
     {
       "name": "bobicons",
       "enabled": true
     },
+    
     {
       "name": "bobinserters",
       "enabled": true
     },
+    
     {
       "name": "boblibrary",
       "enabled": true
     },
+    
     {
       "name": "boblogistics",
       "enabled": true
     },
+    
     {
       "name": "bobmining",
       "enabled": true
     },
+    
     {
       "name": "bobmodules",
       "enabled": true
     },
+    
     {
       "name": "bobores",
       "enabled": true
     },
+    
     {
       "name": "BobPipesThroughput",
       "enabled": true
     },
+    
     {
       "name": "bobplates",
       "enabled": true
     },
+    
     {
       "name": "bobpower",
       "enabled": true
     },
+    
     {
       "name": "bobrevamp",
       "enabled": true
     },
+    
     {
       "name": "bobtech",
       "enabled": true
     },
+    
     {
       "name": "bobvehicleequipment",
       "enabled": true
     },
+    
     {
       "name": "bobwarfare",
       "enabled": true
     },
+    
     {
       "name": "BottleneckLite",
       "enabled": true
     },
+    
     {
       "name": "bullet-trails",
       "enabled": true
     },
+    
     {
       "name": "check-technology-tree-mods-protocol",
       "enabled": false
     },
+    
     {
       "name": "Clowns-AngelBob-Nuclear",
       "enabled": true
     },
+    
     {
       "name": "Clowns-Nuclear",
       "enabled": true
     },
+    
     {
       "name": "Clowns-Processing",
       "enabled": true
     },
+    
     {
       "name": "comb",
       "enabled": true
     },
+    
     {
       "name": "combat-mechanics-overhaul",
       "enabled": true
     },
+    
     {
       "name": "CoppermineBobModuleRebalancing",
       "enabled": true
     },
+    
     {
       "name": "CopyPasteModules",
       "enabled": true
     },
+    
     {
       "name": "Cursed-FMD",
       "enabled": true
     },
+    
     {
       "name": "CW-carbon-capture-reforged",
       "enabled": true
     },
+    
     {
       "name": "DeadlockLargerLamp",
       "enabled": true
     },
+    
     {
       "name": "DeadlockResearchNotifications",
       "enabled": true
     },
+    
     {
       "name": "deep-storage-unit",
       "enabled": true
     },
+    
     {
       "name": "DeleteEmptyChunks",
       "enabled": true
     },
+    
     {
       "name": "DewPointAggregator",
       "enabled": true
     },
+    
     {
       "name": "efficient-research",
       "enabled": true
     },
+    
     {
       "name": "ElectricResistance",
       "enabled": true
     },
+    
     {
       "name": "Electric_Transformators",
       "enabled": true
     },
+    
     {
       "name": "Enhanced_Map_Colors",
       "enabled": true
     },
+    
     {
       "name": "erm_libs",
       "enabled": true
     },
+    
     {
       "name": "ERPTbaAB",
       "enabled": true
     },
+    
     {
       "name": "even-distribution",
       "enabled": true
     },
+    
     {
       "name": "EvoGUI",
       "enabled": true
     },
+    
     {
       "name": "expanded-rocket-payloads",
       "enabled": true
     },
+    
     {
       "name": "extended-descriptions",
       "enabled": true
     },
+    
     {
       "name": "extendedangels",
       "enabled": true
     },
+    
     {
       "name": "factorissimo-2-notnotmelon",
       "enabled": true
     },
+    
     {
       "name": "factoryplanner",
       "enabled": true
     },
+    
     {
       "name": "FactorySearch",
       "enabled": true
     },
+    
     {
       "name": "FastRemoveTiles",
       "enabled": true
     },
+    
     {
       "name": "Fe-C-accumulator",
       "enabled": true
     },
+    
     {
       "name": "Flammable_Oils_fix",
       "enabled": true
     },
+    
     {
       "name": "flib",
       "enabled": true
     },
+    
     {
       "name": "Flow Control",
       "enabled": true
     },
+    
     {
       "name": "fluid-memory-storage",
       "enabled": true
     },
+    
     {
       "name": "FluidMustFlow",
       "enabled": true
     },
+    
     {
       "name": "fluid_permutations",
       "enabled": true
     },
+    
     {
       "name": "FNEI",
       "enabled": true
     },
+    
     {
       "name": "GUI_Unifyer",
       "enabled": true
     },
+    
     {
       "name": "hardcore-mode-for-playing",
       "enabled": true
     },
+    
     {
       "name": "hardcore-mode-for-playing-for-vanilla",
       "enabled": false
     },
+    
     {
       "name": "hardcore-mode-for-playing-for-zzzparanoidal",
       "enabled": true
     },
+    
     {
       "name": "helmod",
       "enabled": true
     },
+    
     {
       "name": "heroturrets",
       "enabled": true
     },
+    
     {
       "name": "immersive-sounds",
       "enabled": true
     },
+    
     {
       "name": "InfiniteTech",
       "enabled": true
     },
+    
     {
       "name": "JunkTrain3",
       "enabled": true
     },
+    
     {
       "name": "KaoExtended",
       "enabled": true
     },
+    
     {
       "name": "KS_Power",
       "enabled": true
     },
+    
     {
       "name": "laser_fix",
       "enabled": true
     },
+    
     {
       "name": "liborio",
       "enabled": true
     },
+    
     {
       "name": "LightedPolesPlus",
       "enabled": true
     },
+    
     {
       "name": "LogisticTrainNetwork",
       "enabled": false
     },
+    
     {
       "name": "LootingSpaceshipWrecks",
       "enabled": true
     },
+    
     {
       "name": "ltn-cleanup",
       "enabled": false
     },
+    
     {
       "name": "LtnManager",
       "enabled": false
     },
+    
     {
       "name": "LTN_Content_Reader",
       "enabled": false
     },
+    
     {
       "name": "make-moded-technology-tree-mods-protocol",
       "enabled": true
     },
+    
     {
       "name": "make_burner_miners_great_again",
       "enabled": true
     },
+    
     {
       "name": "marathon",
       "enabled": true
     },
+    
     {
       "name": "MaxRateCalculator",
       "enabled": true
     },
+    
     {
       "name": "MilesBobsExpansion",
       "enabled": true
     },
+    
     {
       "name": "Milestones",
       "enabled": true
     },
+    
     {
       "name": "miniloader",
       "enabled": true
     },
+    
     {
       "name": "minime_temp",
       "enabled": true
     },
+    
     {
       "name": "mining-patch-planner",
       "enabled": true
     },
+    
     {
       "name": "MIRV",
       "enabled": true
     },
+    
     {
       "name": "ModuleInserter",
       "enabled": true
     },
+    
     {
       "name": "more-minimap-autohide-017",
       "enabled": true
     },
+    
     {
       "name": "more-petrochem-hell",
       "enabled": true
     },
+    
     {
       "name": "MoreAchievements",
       "enabled": true
     },
+    
     {
       "name": "multi-product-recipe-details",
       "enabled": true
     },
+    
     {
       "name": "MxlChievements",
       "enabled": true
     },
+    
     {
       "name": "m_WhereIsMyBody",
       "enabled": true
     },
+    
     {
       "name": "Namelists",
       "enabled": true
     },
+    
     {
       "name": "Nanobots",
       "enabled": true
     },
+    
     {
       "name": "Natural_Evolution_Enemies",
       "enabled": true
     },
+    
     {
       "name": "nco-InserterCranes",
       "enabled": true
     },
+    
     {
       "name": "ner_intermediatestweak",
       "enabled": true
     },
+    
     {
       "name": "newtrainsfx",
       "enabled": true
     },
+    
     {
       "name": "NightBrightness",
       "enabled": true
     },
+    
     {
       "name": "nixie-tubes",
       "enabled": true
     },
+    
     {
       "name": "Noxys_Trees",
       "enabled": true
     },
+    
     {
       "name": "Oberhaul",
       "enabled": true
     },
+    
     {
       "name": "OberNuclear",
       "enabled": true
     },
+    
     {
       "name": "Oil_Based_Paint",
       "enabled": true
     },
+    
     {
       "name": "OreRadar",
       "enabled": true
     },
+    
     {
       "name": "original-music-hd-updated",
       "enabled": true
     },
+    
     {
       "name": "osha_mini_containers",
       "enabled": true
     },
+    
     {
       "name": "osm-lib",
       "enabled": true
     },
+    
     {
       "name": "osm-lib-postprocess",
       "enabled": true
     },
+    
     {
       "name": "OverloadedTrains",
       "enabled": true
     },
+    
     {
       "name": "P-U-M-P-S",
       "enabled": true
     },
+    
     {
       "name": "ParanoidalLocale",
       "enabled": true
     },
+    
     {
       "name": "pathological",
       "enabled": true
     },
+    
     {
       "name": "PCPRedux",
       "enabled": true
     },
+    
     {
       "name": "PickerAtheneum",
       "enabled": true
     },
+    
     {
       "name": "PickerBlueprinter",
       "enabled": true
     },
+    
     {
       "name": "PickerDollies",
       "enabled": true
     },
+    
     {
       "name": "PickerEquipmentKeys",
       "enabled": true
     },
+    
     {
       "name": "PickerExtended",
       "enabled": true
     },
+    
     {
       "name": "PickerInventoryTools",
       "enabled": true
     },
+    
     {
       "name": "PickerPipeTools",
       "enabled": true
     },
+    
     {
       "name": "PickerTweaks",
       "enabled": true
     },
+    
     {
       "name": "PickerVehicles",
       "enabled": true
     },
+    
     {
       "name": "Picks-Inserter",
       "enabled": true
     },
+    
     {
       "name": "PipeMeterWLK",
       "enabled": true
     },
+    
     {
       "name": "PipeVisualizer",
       "enabled": true
     },
+    
     {
       "name": "PMRPGsystem",
       "enabled": true
     },
+    
     {
       "name": "pollution-visuals",
       "enabled": true
     },
+    
     {
       "name": "prismatic-belts",
       "enabled": true
     },
+    
     {
       "name": "qol_research",
       "enabled": true
     },
+    
     {
       "name": "QueueToFrontNG",
       "enabled": true
     },
+    
     {
       "name": "QuickItemSearch",
       "enabled": true
     },
+    
     {
       "name": "RadioactiveDamage",
       "enabled": true
     },
+    
     {
       "name": "railloader",
       "enabled": true
     },
+    
     {
       "name": "RaiLuaLib",
       "enabled": true
     },
+    
     {
       "name": "Rampant",
       "enabled": false
     },
+    
     {
       "name": "RampantMaintenance",
       "enabled": true
     },
+    
     {
       "name": "RateCalculator",
       "enabled": true
     },
+    
     {
       "name": "RealisticDecorationCleanup",
       "enabled": true
     },
+    
     {
       "name": "RecipeBook",
       "enabled": true
     },
+    
     {
       "name": "Renamer",
       "enabled": true
     },
+    
     {
       "name": "research_evolution_factor",
       "enabled": true
     },
+    
     {
       "name": "reskins-angels",
       "enabled": true
     },
+    
     {
       "name": "reskins-bobs",
       "enabled": true
     },
+    
     {
       "name": "reskins-compatibility",
       "enabled": true
     },
+    
     {
       "name": "reskins-library",
       "enabled": true
     },
+    
     {
       "name": "ReStack",
       "enabled": true
     },
+    
     {
       "name": "RITEG",
       "enabled": true
     },
+    
     {
       "name": "Robot256Lib",
       "enabled": true
     },
+    
     {
       "name": "robot_attrition",
       "enabled": true
     },
+    
     {
       "name": "Rocket-Silo-Construction",
       "enabled": true
     },
+    
     {
       "name": "RocketExplosions",
       "enabled": true
     },
+    
     {
       "name": "rso-mod",
       "enabled": true
     },
+    
     {
       "name": "RU-locale",
       "enabled": true
     },
+    
     {
       "name": "RussianStations",
       "enabled": true
     },
+    
     {
       "name": "scattergun_turret",
       "enabled": true
     },
+    
     {
       "name": "SchallPickupTower",
       "enabled": true
     },
+    
     {
       "name": "SchallTankPlatoon",
       "enabled": true
     },
+    
     {
       "name": "Shield-FX",
       "enabled": true
     },
+    
     {
       "name": "ShinyBob_Techs",
       "enabled": true
     },
+    
     {
       "name": "Shortcuts-ick",
       "enabled": true
     },
+    
     {
       "name": "signalstrings",
       "enabled": true
     },
+    
     {
       "name": "simhelper",
       "enabled": true
     },
+    
     {
       "name": "SingleColorTerrain",
       "enabled": true
     },
+    
     {
       "name": "SmogSolarPanels",
       "enabled": true
     },
+    
     {
       "name": "SpaceMod",
       "enabled": true
     },
+    
     {
       "name": "SpaceXGAR",
       "enabled": true
     },
+    
     {
       "name": "Squeak Through",
       "enabled": true
     },
+    
     {
       "name": "stdlib",
       "enabled": true
     },
+    
     {
       "name": "steinios_research_sensor",
       "enabled": true
     },
+    
     {
       "name": "Subterranean",
       "enabled": true
     },
+    
     {
       "name": "Texugo_windgenerator",
       "enabled": true
     },
+    
     {
       "name": "TimedSpawnControl",
       "enabled": true
     },
+    
     {
       "name": "Todo-List",
       "enabled": true
     },
+    
     {
       "name": "toxicPollution",
       "enabled": true
     },
+    
     {
       "name": "TrainModeSwitcher",
       "enabled": true
     },
+    
     {
       "name": "TrainSpeedLimit",
       "enabled": true
     },
+    
     {
       "name": "Train_Control_Signals",
       "enabled": true
     },
+    
     {
       "name": "True-Nukes",
       "enabled": true
     },
+    
     {
       "name": "UnminableBots",
       "enabled": true
     },
+    
     {
       "name": "UnPollock",
       "enabled": true
     },
+    
     {
       "name": "upgrade-planner-next",
       "enabled": true
     },
+    
     {
       "name": "VehicleSnap",
       "enabled": true
     },
+    
     {
       "name": "vehicle_physics_again",
       "enabled": true
     },
+    
     {
       "name": "Warehousing",
       "enabled": true
     },
+    
     {
       "name": "Warheads",
       "enabled": true
     },
+    
     {
       "name": "weaponSoundsRedone",
       "enabled": true
     },
+    
     {
       "name": "what-fish",
       "enabled": true
     },
+    
     {
       "name": "what-is-it-really-used-for",
       "enabled": true
     },
+    
     {
       "name": "WideChests",
       "enabled": true
     },
+    
     {
       "name": "ZCS-Trash-Landfill-Continued-Continued",
       "enabled": true
     },
-    {
-      "name": "zero-fluid-info",
-      "enabled": true
-    },
+    
     {
       "name": "zzzparanoidal",
       "enabled": true
