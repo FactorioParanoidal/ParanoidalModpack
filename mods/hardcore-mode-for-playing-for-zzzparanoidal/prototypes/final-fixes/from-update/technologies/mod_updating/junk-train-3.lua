@@ -1,6 +1,6 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
 
-local function updateJunkTrain3Mod(mode)
+local function update_junk_train3_mod(mode)
 	-- железнодорожные сигналы теперь зависят от простейшей автоматики, так же, как и железные дороги.
 	if not mods["JunkTrain3"] then
 		return
@@ -19,5 +19,5 @@ local function updateJunkTrain3Mod(mode)
 	techUtil.add_prerequisites_to_technology(technologies["railway"], { "automated-scrap-rail-transportation" }, mode)
 end
 _table.each(GAME_MODES, function(mode)
-	updateJunkTrain3Mod(mode)
+	update_junk_train3_mod(mode)
 end)
