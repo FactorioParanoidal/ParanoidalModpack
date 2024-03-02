@@ -22,11 +22,11 @@ data:extend({
 		name = "disable-production-entities-beyond-factorissimo-building",
 		setting_type = "runtime-global",
 		default_value = false,
-	},
+	} --[[,
 	{
 		type = "bool-setting",
 		name = "move-basic-recipe-to-new-basic-technology-hard-start",
 		setting_type = "startup",
 		default_value = false,
-	},
+	},]],
 })

@@ -1,5 +1,5 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
-local function detectTargetTemperatureForBoiler(boiler)
+local function detect_target_temperature_for_boiler(boiler)
 	local boiler_mode = boiler.mode
 	if boiler_mode == "output-to-separate-pipe" then
 		return boiler.target_temperature
@@ -10,29 +10,29 @@ local function detectTargetTemperatureForBoiler(boiler)
 	return nil
 end
 
-local function isSteamBoiler(boiler)
+local function is_steam_boiler(boiler)
 	return boiler.output_fluid_box.filter == "steam" and boiler.fluid_box.filter == "water"
 end
 
-local function isFluidEnergySourceBoiler(boiler)
+local function is_fluid_energy_source_boiler(boiler)
 	return boiler.energy_source.type == "fluid"
 end
-local function isElectricEnergySourceBoiler(boiler)
+local function is_electric_energy_source_boiler(boiler)
 	return boiler.energy_source.type == "electric"
 end
-local function isHeatEnergySourceBoiler(boiler)
+local function is_heat_energy_source_boiler(boiler)
 	return boiler.energy_source.type == "heat"
 end
-local function isBurnerEnergySourceBoiler(boiler)
+local function is_burner_energy_source_boiler(boiler)
 	return boiler.energy_source.type == "burner"
 end
-local function checkBoilerData(boiler_data)
-	return boiler_data.isFluidEnergySource
-		or boiler_data.isElectricEnergySource
-		or boiler_data.isBurnerEnergySource
-		or boiler_data.isHeatEnergySource
+local function check_boiler_data(boiler_data)
+	return boiler_data.is_fluid_energy_source
+		or boiler_data.is_electric_energy_source
+		or boiler_data.is_burner_energy_source
+		or boiler_data.is_heat_energy_source
 end
-local function getBoilersByTargetTemperature(technology_names, mode)
+local function get_boilers_by_target_temperature(technology_names, mode)
 	local result = {}
 	local boiler_count = 0
 	_table.each(technology_names, function(technology_name)
@@ -43,10 +43,10 @@ local function getBoilersByTargetTemperature(technology_names, mode)
 				return
 			end
 			local boiler = data.raw["boiler"][recipe_result_name]
-			if not isSteamBoiler(boiler) then
+			if not is_steam_boiler(boiler) then
 				return
 			end
-			local target_temperature = detectTargetTemperatureForBoiler(boiler)
+			local target_temperature = detect_target_temperature_for_boiler(boiler)
 			if not result[target_temperature] and target_temperature then
 				result[target_temperature] = {}
 			end
@@ -65,17 +65,17 @@ local function getBoilersByTargetTemperature(technology_names, mode)
 			end
 			local boiler_data = {
 				name = boiler.name,
-				isFluidEnergySource = isFluidEnergySourceBoiler(boiler),
-				isElectricEnergySource = isElectricEnergySourceBoiler(boiler),
-				isBurnerEnergySource = isBurnerEnergySourceBoiler(boiler),
-				isHeatEnergySource = isHeatEnergySourceBoiler(boiler),
+				is_fluid_energy_source = is_fluid_energy_source_boiler(boiler),
+				is_electric_energy_source = is_electric_energy_source_boiler(boiler),
+				is_burner_energy_source = is_burner_energy_source_boiler(boiler),
+				is_heat_energy_source = is_heat_energy_source_boiler(boiler),
 				technology_name_occured_booiler_prototype = technology_name,
 				mode = mode,
 				effectivity = boiler.energy_source.effectivity,
 				energy_consumption = boiler.energy_consumption,
 				temperature = target_temperature,
 			}
-			if not checkBoilerData(boiler_data) then
+			if not check_boiler_data(boiler_data) then
 				error(
 					"for mode "
 						.. mode
@@ -95,15 +95,15 @@ local function getBoilersByTargetTemperature(technology_names, mode)
 	log("total count of boilers is " .. tostring(boiler_count))
 	return result
 end
-function boilerProcessing(technology_names, mode)
+function boiler_processing(technology_names, mode)
 	local technologies = data.raw["technology"]
-	local result = getBoilersByTargetTemperature(technology_names, mode)
+	local result = get_boilers_by_target_temperature(technology_names, mode)
 	_table.each(result, function(boiler_datas, target_temperature)
 		_table.each(boiler_datas, function(boiler_data)
 			local current_technology_name = boiler_data.technology_name_occured_booiler_prototype
-			if not boiler_data.isBurnerEnergySource then
+			if not boiler_data.is_burner_energy_source then
 				local filtered_boiler_data = _table.filter(boiler_datas, function(data)
-					return data.isBurnerEnergySource
+					return data.is_burner_energy_source
 				end)[1]
 				techUtil.add_prerequisites_to_technology(
 					technologies[current_technology_name],
