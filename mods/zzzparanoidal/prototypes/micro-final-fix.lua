@@ -1222,3 +1222,26 @@ data.raw.technology["OilBurning-5"].unit.ingredients = {
 	{ "production-science-pack", 2 },
 	{ "utility-science-pack", 2 },
 }
+
+--Ребаланс генераторов (AKMF)
+data.raw["generator"]["hydrazine-generator"].max_power_output = "4.5MW"
+data.raw["generator"]["hydrazine-generator"].fluid_box.filter = "gas-hydrazine"
+data.raw["generator"]["hydrazine-generator"].energy_source.emissions_per_minute = 4	
+data.raw["generator"]["petroleum-generator"].fluid_box.filter = "diesel-fuel"	--топливо
+data.raw["boiler"]["bi-bio-boiler"].energy_source.emissions_per_minute = 4 	--загрязнение
+data.raw["boiler"]["bi-bio-boiler"].energy_source.effectivity = 1		--эффективность бойлера
+data.raw["generator"]["fluid-generator"].effectivity = 0.67			--эффективность генератора
+data.raw["generator"]["fluid-generator-2"].effectivity = 0.8
+data.raw["generator"]["fluid-generator-3"].effectivity = 0.9
+data.raw["reactor"]["fluid-reactor"].energy_source.effectivity = 0.67
+data.raw["reactor"]["fluid-reactor-2"].energy_source.effectivity = 0.8
+data.raw["reactor"]["burner-reactor"].energy_source.effectivity = 0.8
+data.raw["reactor"]["burner-reactor-2"].energy_source.effectivity = 1.0
+data.raw["reactor"]["fluid-reactor"].energy_source.emissions_per_minute = 20
+data.raw["reactor"]["fluid-reactor-2"].energy_source.emissions_per_minute = 20
+data.raw["reactor"]["burner-reactor"].energy_source.emissions_per_minute = 30
+data.raw["reactor"]["burner-reactor-2"].energy_source.emissions_per_minute = 30
+data.raw["reactor"]["fluid-reactor"].neighbour_bonus = 0.1
+data.raw["reactor"]["fluid-reactor-2"].neighbour_bonus = 0.2
+data.raw["reactor"]["burner-reactor"].neighbour_bonus = 0.1
+data.raw["reactor"]["burner-reactor-2"].neighbour_bonus = 0.2
