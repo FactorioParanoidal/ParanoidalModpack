@@ -1055,6 +1055,15 @@ data.raw["assembling-machine"]["water-pumpjack-3"].energy_usage = "1350kW"
 data.raw["assembling-machine"]["water-pumpjack-4"].energy_usage = "1700kW"
 data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 
+data.raw["assembling-machine"]["water-pumpjack-1"].crafting_speed = 0.2
+data.raw["assembling-machine"]["water-pumpjack-2"].crafting_speed = 0.4
+data.raw["assembling-machine"]["water-pumpjack-3"].crafting_speed = 0.6
+data.raw["assembling-machine"]["water-pumpjack-4"].crafting_speed = 0.8
+data.raw["assembling-machine"]["water-pumpjack-5"].crafting_speed = 1
+
+--Баланс агрегатора росы
+data.raw["assembling-machine"]["dpa"].energy_usage = "1000kW"
+
 --Синие фильтрующие манипуляторы встают на место
 data.raw.technology["filter-inserters"].hidden = true
 bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
