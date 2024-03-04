@@ -1,0 +1,66 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2023-04-20
+  Bugfixes:
+    - Fixed another infinite loop caused by objects bounding_box not matching revive functions check when building ghosts.
+    - Fixed cliffs breaking script, current implementation is to ignore ghosts colliding with cliffs.
+    - Fixed ghost entity not being placed down after crafting when building ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed changelog (hopefully last time).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed changelog (again :|).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed changelog.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2023-04-18
+  Changes:
+    - When clearing forest for ghosts, added a 3 tile clear radius for trees.
+      This should make it clear trees properly when using Tree Collision/Squeak Through/Alien Biomes or similar mods that change tree collision.
+  Bugfixes:
+    - Fixed infinite loop caused by not being able to select entity when building ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed crash with Factorissimo2 when building ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2021-04-16
+  Changes:
+    - Attempt at better combat AI.
+    - Fixed and other things probably.
+    - Removed command cancellation using WASD keys.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2021-04-11
+  Changes:
+    - Added slurping from belts.
+    - Added small text remarks when issueing orders.
+    - Added command cancellation if you touch the movement keys.
+    - Extending find distances from 32 -> 64.
+    - Some fixes and things most likely.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2021-04-10
+  Changes:
+    - Tweaks and polish
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2021-04-04
+  Changes:
+    - Fix raising revive event.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2021-04-04
+  Changes:
+    - Do the whole thing

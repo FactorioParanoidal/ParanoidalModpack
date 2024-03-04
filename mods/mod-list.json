@@ -434,6 +434,11 @@
     },
     
     {
+      "name": "Kruise_Kontrol_Updated",
+      "enabled": true
+    },
+    
+    {
       "name": "KS_Power",
       "enabled": true
     },
