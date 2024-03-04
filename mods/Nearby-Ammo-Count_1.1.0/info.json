@@ -1,0 +1,12 @@
+
+{
+  "name": "Nearby-Ammo-Count",
+  "version": "1.1.0",
+  "title": "Nearby Ammo Count",
+  "author": "Loren1350",
+  "contact": "Schmendrick on the Factorio Forums",
+  "homepage": "",
+  "description": "Nearby turrets show ammo count in alt mode.",
+  "dependencies": ["base"],
+  "factorio_version": "1.1"
+}

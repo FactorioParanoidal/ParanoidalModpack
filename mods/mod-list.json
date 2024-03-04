@@ -419,6 +419,11 @@
     },
     
     {
+      "name": "inserter-throughput",
+      "enabled": true
+    },
+    
+    {
       "name": "JunkTrain3",
       "enabled": true
     },
@@ -570,6 +575,11 @@
     
     {
       "name": "nco-InserterCranes",
+      "enabled": true
+    },
+    
+    {
+      "name": "Nearby-Ammo-Count",
       "enabled": true
     },
     

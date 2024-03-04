@@ -1,0 +1,30 @@
+data:extend{
+	{ type = "double-setting", name = "nearby-ammo-update-per-second",
+		setting_type = "runtime-global", order = "basic",
+		default_value = 4,
+		allowed_values = {1,4,10,20},
+	},
+	{ type = "string-setting", name = "nearby-ammo-display-mode",
+		setting_type = "runtime-global", order = "basic",
+		default_value = "magazine",
+		allowed_values = {"shot","magazine","icon","scaled-icon"},
+	},
+
+	{ type = "color-setting", name = "nearby-ammo-color-normal",
+		setting_type = "runtime-global", order = "colors-1",
+		default_value = {0,255,0,180},
+	},
+	
+	{ type = "color-setting", name = "nearby-ammo-color-low",
+		setting_type = "runtime-global", order = "colors-2",
+		default_value = {255,197,0,255},
+--		default_value = {255,131,0,255},
+		hidden = true,
+	},
+	{ type = "color-setting", name = "nearby-ammo-color-critical",
+		setting_type = "runtime-global", order = "colors-3",
+		default_value = {255,57,47,255},
+		hidden = true,
+	},
+	
+}
