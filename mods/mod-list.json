@@ -909,6 +909,11 @@
     },
     
     {
+      "name": "SpeedLimitSignsForTrains",
+      "enabled": true
+    },
+    
+    {
       "name": "Squeak Through",
       "enabled": true
     },
