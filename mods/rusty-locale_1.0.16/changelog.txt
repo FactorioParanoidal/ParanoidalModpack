@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 18. 12. 2020
+  Changes:
+    - Added linked-belt to the prototype tree
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 10. 12. 2020
+  Bugfixes:
+    - Add linked-container to the prototype tree (https://mods.factorio.com/mod/rusty-locale/discussion/5fd08956d965482a86caf782)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 23. 11. 2020
+  Changes:
+    - Updated for factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 17. 08. 2020
+  Bugfixes:
+    - Ignore root icon_mipmaps if the icons are defined as icons rather than icon
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 15. 08. 2020
+  Bugfixes:
+    - Handle icon mipmaps properly
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 14. 08. 2020
+  Bugfixes:
+    - 1.0 compatibility for new types
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 15. 06. 2020
+  Bugfixes:
+    - Levelled technology locale is now handled properly (https://github.com/theRustyKnife/rusty-locale/pull/3)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 17. 05. 2020
+  Bugfixes:
+    - Fixed that recipes.parse_product didn't copy the product correctly (https://mods.factorio.com/mod/rusty-locale/discussion/5ec03b5a5a04b0000cf7de71).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 15. 04. 2020
+  Bugfixes:
+    - Fixed that icons.of_recipe errored whenever the recipe didn't specify it's own icons, regardless of whether it should inherit them from products.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 07. 04. 2020
+  Changes:
+    - Better validation of icons format, meaning that querying prototypes for icons should either return valid icons or throw an error, instead of returning invalid or partial icons definitions.
+    - icons.of() and prototypes.find() should now handle nil parameters properly (https://github.com/theRustyKnife/rusty-locale/issues/2)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 21. 03. 2020
+  Changes:
+    - icons now throws an error when no valid icons definition was found. An additional argument has been added to the functions that changes this behavior to return nil instead.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 08. 01. 2020
+  Bugfixes:
+    - Fixed that place_result wasn't validated correctly
+  Changes:
+    - Added prototypes.find_by_name
+    - prototypes.find now takes a third argument - silent. This means that by default the function will throw an error if the prototype isn't found now.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 08. 01. 2020
+  Bugfixes:
+    - Added the missing "loader-1x1" prototype type to the type hierarchy
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 03. 01. 2020
+  Bugfixes:
+    - Fixed that "burner-generator" base was wrong
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 03. 01. 2020
+  Bugfixes:
+    - Added the missing "burner-generator" prototype type to the type hierarchy
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 25. 01. 2020
+  Bugfixes:
+    - Fixed that recipes.parse_product didn't return type for some formats (#1)
+  Changes:
+    - locale.of and icons.of can now be called with a name and type instead of a full prototype
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 22. 01. 2020
+  Other:
+    - Initial release
