@@ -70,7 +70,7 @@
     },
     {
       "name": "automated-utility-protocol",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "baraws",
@@ -426,7 +426,7 @@
     },
     {
       "name": "make-moded-technology-tree-mods-protocol",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "make_burner_miners_great_again",
