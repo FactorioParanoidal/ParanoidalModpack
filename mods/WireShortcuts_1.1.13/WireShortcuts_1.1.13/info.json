@@ -1,0 +1,9 @@
+{
+  "name": "WireShortcuts",
+  "version": "1.1.13",
+  "factorio_version": "1.1",
+  "title": "Wire Shortcuts",
+  "author": "daydev",
+  "description": "Removes red and green wires as craftable items and makes them available as shortcuts, similar to blueprints and planners. Let them clutter your inventory no more! Includes a wire cutter tool to quickly remove wires.",
+  "dependencies": []
+}

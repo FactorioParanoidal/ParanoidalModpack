@@ -1,0 +1,202 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2023-04-26
+  Bugfixes:
+    - Fixed that the shortcuts and hotkeys wouldn't work properly with a connection in progress.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2023-04-15
+  Bugfixes:
+    - Fixed that the wire cutter tool could be placed into the inventory;
+    - Fixed crash when using shortcuts when dead.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2023-01-24
+  Changes:
+    - Removed a no longer necessary compatibility feature that prevented spawning wires in the map mode. 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2022-10-01
+  Bugfixes:
+    - Fixed a wire cutter incompatibility with LTN due to hidden wires.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2022-05-02
+  Bugfixes:
+    - Fixed crash when Circuit Network technology is removed by a mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2021-07-09
+  Bugfixes:
+    - Fixed reported incompatibility with Space Exploration harder.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2021-07-09
+  Bugfixes:
+    - Fixed reported incompatibility with Space Exploration.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2021-03-22
+  Bugfixes:
+    - Fixed reported desync due to conditional loading of components.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-01-01
+  Changes:
+    - Removed special compatibility with Industrial Revolution. In case of issues, use "/unlock-shortcut-bar" command
+  Bugfixes:
+    - Fixed incompatibility with Industrial Revolution 2.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2020-12-15
+  Changes:
+    - Wire cutter selection colors adjusted to match the colors of the blueprinting tools.
+    - Extensive internal refactoring. If everthing went right, no changes visible to the user.
+  Bugfixes:
+    - Fixed some copy-paste mishaps in the changelog. 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-12-02
+  Bugfixes:
+    - Fixed possible incompatibility with other shortcut mods.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-12-02
+  Bugfixes:
+    - Fixed that the wire cutter didn't work for the gates.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-12-02
+  Features:
+    - Added the wire cutter tool. See mod desription for details. 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-26
+  Features:
+    - Updated for factorio 1.1.0.
+  Bugfixes:
+    - Fixed that red and green wire icons couldn't be selected for blueprint thumbnails. 
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 2020-06-11
+  Features:
+    - Updated item icons to match the new HD icons in the game.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2020-05-01
+  Locale:
+    - Updated German locale, contributed by FI.
+  Bugfixes:
+    - Fixed the cursor clearing check so that red and green wire wouldn't get in the way.
+    - Implemented that red and green wire are also disposed of when placed into the player trash or on the ground.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2020-04-30
+  Features:
+    - Updated for Factorio 0.18.22.
+  Bugfixes:
+    - Fixed a potential loss of items in the rare event the cursor couldn't be cleared.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2020-04-10
+  Bugfixes:
+    - Attempted to fix that hotkey would not respect shortcut unlocks.
+    - Fixed minor internal validation error.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020-01-23
+  Features:
+    - Updated for Factorio 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.174
+Date: 2019-10-02
+  Bugfixes:
+    - Fixed reported migration crash.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.173
+Date: 2019-09-14
+  Minor Features:
+    - Added compatibility with Industrial Revolution for the copper wire shortcut unlock.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.172
+Date: 2019-07-26
+  Bugfixes:
+    - Fixed minor issues with the implementation of the wire surrogates.
+    - Fixed the changelog.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.171
+Date: 2019-07-25
+  Bugfixes:
+    - Changelog typo
+    - Fixed replacing wires with surrogates in recipes.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.170
+Date: 2019-07-25
+  Features:
+    - Added an option to retain "wire surrogates" in recipes for mods that use them. HIGHLY NOT RECOMMENDED. Let the wires go! But if you must.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.179
+Date: 2019-07-20
+  Bugfixes:
+    - Fixed that colored wire wasn't removed from modded recipes if they were defined in a particular way.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.178
+Date: 2019-05-20
+  Changes:
+    - Disabled wire generation in map mode due to a report that it causes crashes in certain circumstances with other mods.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.177
+Date: 2019-03-17
+  Bugfixes:
+    - Reported error with removing wire from ingredient.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.176
+Date: 2019-03-16
+  Locale:
+    - German, contributed by LeByom.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.175
+Date: 2019-03-15
+  Changes:
+    - Reversed the order of the changelog to improve human readability and respect the convention.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.174
+Date: 2019-03-14
+  Bugfixes:
+    - Fixed that red and green wire weren't properly removed from ingredients of recipes in the presence of Bob's Electronics and potentially other electronics related mods.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.173
+Date: 2019-03-13
+  Bugfixes:
+    - Fixed the changelog format to make the in-game parser happy.
+    - Typos in the changelog.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.172
+Date: 2019-03-12
+  Features:
+    - Remove red and green wire from all recipes (none in vanilla, but sometimes happens in mods, e.g. LTN).
+---------------------------------------------------------------------------------------------------
+Version: 0.2.171
+Date: 2019-03-12
+  Features:
+    - Added changelog :)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.17
+Date: 2019-03-12
+  Features:
+    - Shortcut and hotkey to pick up copper wire from the player inventory if available or otherwise give one (1) copper wire.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.171
+Date: 2019-03-12
+  Changes:
+    - Hotkey to switch color of the currently held wire changed to Ctrl + Tab to avoid conflict with Steam overlay.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.17
+Date: 2019-03-12
+  Features:
+    - Red and green wire no longer craftable.
+    - Red and green wire disappear from the player inventory if placed there by Q or manually.
+    - Shortcut and hotkey to give a stack of red or green wire.
+    - Hotkey to switch color of wire when holding a stack.
+  Locale:
+    - English, Russian, Ukrainian.
