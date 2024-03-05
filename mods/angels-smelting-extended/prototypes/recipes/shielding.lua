@@ -213,8 +213,9 @@ if data.raw.item["insulated-cable"] then
     local box = {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
-      base_area = 10,
-      base_level = -1,
+       base_area = 0.2,
+      base_level = -0.5,
+      filter = "liquid-rubber",
       pipe_connections = {{type = "input-output", position = {-3, 1}}, {type = "input-output", position = {3, 1}}}
     }
     table.insert(data.raw["assembling-machine"]["strand-casting-machine"].fluid_boxes, box)
