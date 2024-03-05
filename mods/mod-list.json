@@ -504,11 +504,6 @@
     },
     
     {
-      "name": "MaxRateCalculator",
-      "enabled": true
-    },
-    
-    {
       "name": "MilesBobsExpansion",
       "enabled": true
     },
@@ -775,6 +770,11 @@
     
     {
       "name": "Rampant",
+      "enabled": true
+    },
+    
+    {
+      "name": "RateCalculator",
       "enabled": true
     },
     
