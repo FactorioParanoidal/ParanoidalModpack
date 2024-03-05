@@ -1,4 +1,7 @@
 --- Utilities for building GUIs and handling GUI events.
+--- ```lua
+--- local flib_gui = require("__flib__/gui-lite")
+--- ```
 --- @class flib_gui
 local flib_gui = {}
 
@@ -109,6 +112,7 @@ function flib_gui.add(parent, def, elems)
       def.elem_mods = elem_mods
       def.handler = handler
       def.style_mods = style_mods
+      def.drag_target = drag_target
     elseif def.tab and def.content then
       local _, tab = flib_gui.add(parent, def.tab, elems)
       local _, content = flib_gui.add(parent, def.content, elems)
@@ -169,10 +173,19 @@ function flib_gui.dispatch(e)
   return false
 end
 
---- Handle all GUI events with `flib_gui.dispatch`. Will not override any existing handlers.
+--- For use with `__core__/lualib/event_handler`. Pass `flib_gui` into `handler.add_lib` to handle
+--- all GUI events automatically.
+flib_gui.events = {}
+for name, id in pairs(defines.events) do
+  if string.find(name, "on_gui_") then
+    flib_gui.events[id] = flib_gui.dispatch
+  end
+end
+
+--- Handle all GUI events with `flib_gui.dispatch`. Will not overwrite any existing event handlers.
 function flib_gui.handle_events()
-  for name, id in pairs(defines.events) do
-    if string.find(name, "on_gui_") and not script.get_event_handler(id) then
+  for id in pairs(flib_gui.events) do
+    if not script.get_event_handler(id) then
       script.on_event(id, flib_gui.dispatch)
     end
   end

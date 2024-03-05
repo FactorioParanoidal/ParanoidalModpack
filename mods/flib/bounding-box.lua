@@ -3,6 +3,9 @@ local position = require("__flib__/position")
 --- Utilities for manipulating bounding boxes. All functions support both the shorthand and explicit syntaxes for boxes
 --- and positions, and will preserve the syntax that was passed in. Boxes are considered immutable; all functions will
 --- return new boxes.
+--- ```lua
+--- local flib_bounding_box = require("__flib__/bounding-box")
+--- ```
 --- @class flib_bounding_box
 local flib_bounding_box = {}
 
@@ -163,12 +166,12 @@ function flib_bounding_box.from_dimensions(center, width, height)
   if center.x then
     return {
       left_top = { x = center.x - width / 2, y = center.y - height / 2 },
-      right_bottom = { x = center.x - width / 2, y = center.y - height / 2 },
+      right_bottom = { x = center.x + width / 2, y = center.y + height / 2 },
     }
   else
     return {
       { center[1] - width / 2, center[2] - height / 2 },
-      { center[1] - width / 2, center[2] - height / 2 },
+      { center[1] + width / 2, center[2] + height / 2 },
     }
   end
 end
@@ -256,13 +259,13 @@ function flib_bounding_box.recenter_on(box, pos)
 
   if box.left_top then
     return {
-      left_top = { x = pos_x - (width / 2), y = pos_y - (width / 2) },
-      right_bottom = { x = pos_x + (height / 2), y = pos_y + (height / 2) },
+      left_top = { x = pos_x - (width / 2), y = pos_y - (height / 2) },
+      right_bottom = { x = pos_x + (width / 2), y = pos_y + (height / 2) },
     }
   else
     return {
-      { pos_x - (width / 2), pos_y - (width / 2) },
-      { pos_x + (height / 2), pos_y + (height / 2) },
+      { pos_x - (width / 2), pos_y - (height / 2) },
+      { pos_x + (width / 2), pos_y + (height / 2) },
     }
   end
 end

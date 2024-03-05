@@ -1,24 +1,19 @@
 {
   "name": "flib",
-  "version": "0.12.4",
+  "version": "0.13.0",
   "title": "Factorio Library",
   "author": "raiguard, Optera, justarandomgeek, Nexela",
-  "contact": "https://lists.sr.ht/~raiguard/factorio-mods-devel",
-  "homepage": "https://git.sr.ht/~raiguard/flib",
+  "contact": "https://github.com/factoriolib/flib",
+  "homepage": "https://github.com/factoriolib/flib",
   "description": "A set of high-quality, commonly-used utilities for creating Factorio mods.",
   "factorio_version": "1.1",
-  "dependencies": [ "base >= 1.1.74" ],
+  "dependencies": [ "base >= 1.1.80" ],
   "package": {
-    "ignore": [
-      "*.code-workspace",
-      "crowdin.yml",
-      ".gitattributes",
-      ".gitignore",
-      ".kakrc",
-      ".mailmap",
-      "stylua.toml",
-      "tests",
-      ".vscode"
-    ]
+    "git_publish_branch": "master",
+    "ignore": [ "crowdin.yml", "imgui.ini", "stylua.toml", "tests" ],
+    "scripts": {
+      "prepublish": "factorio-crowdin-sync"
+    },
+    "sync_portal_details": true
   }
 }

@@ -3,6 +3,9 @@ local mod_gui = require("__core__/lualib/mod-gui")
 local table = require("__flib__/table")
 
 --- Utilities for creating dictionaries of localised string translations.
+--- ```lua
+--- local flib_dictionary = require("__flib__/dictionary-lite")
+--- ```
 --- @class flib_dictionary
 local flib_dictionary = {}
 
@@ -403,17 +406,29 @@ function flib_dictionary.handle_events()
   end
 end
 
+--- For use with `__core__/lualib/event_handler`. Pass `flib_dictionary` into `handler.add_lib` to
+--- handle all relevant events automatically.
+flib_dictionary.events = {
+  [defines.events.on_player_joined_game] = flib_dictionary.on_player_joined_game,
+  [defines.events.on_string_translated] = flib_dictionary.on_string_translated,
+  [defines.events.on_tick] = flib_dictionary.on_tick,
+}
+
 -- Dictionary creation
 
 --- Create a new dictionary. The name must be unique.
 --- @param name string
 --- @param initial_strings Dictionary?
 function flib_dictionary.new(name, initial_strings)
-  local raw = get_data(true).raw
+  local data = get_data(true)
+  local raw = data.raw
   if raw[name] then
     error("Attempted to create dictionary '" .. name .. "' twice.")
   end
   raw[name] = initial_strings or {}
+  if initial_strings then
+    data.raw_count = data.raw_count + table_size(initial_strings)
+  end
 end
 
 --- Add the given string to the dictionary.

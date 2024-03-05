@@ -123,6 +123,7 @@ styles.flib_selected_frame_action_button = {
   -- Simulate clicked-vertical-offset
   top_padding = 1,
   bottom_padding = -1,
+  clicked_vertical_offset = 0,
 }
 
 local btn = styles.button
@@ -139,6 +140,7 @@ styles.flib_selected_tool_button = {
   -- Simulate clicked-vertical-offset
   top_padding = 1,
   bottom_padding = -1,
+  clicked_vertical_offset = 0,
 }
 
 styles.flib_tool_button_light_green = {
@@ -262,6 +264,12 @@ styles.flib_subheader_horizontal_line = {
   },
 }
 
+styles.flib_titlebar_separator_line = {
+  type = "line_style",
+  top_margin = -2,
+  bottom_margin = 2,
+}
+
 -- SCROLL-PANE STYLES
 
 styles.flib_naked_scroll_pane = {
@@ -332,4 +340,11 @@ styles.flib_widthless_invalid_textfield = {
   type = "textbox_style",
   parent = "invalid_value_textfield",
   width = 0,
+}
+
+styles.flib_titlebar_search_textfield = {
+  type = "textbox_style",
+  top_margin = -2,
+  bottom_margin = 1,
+  width = 150,
 }
