@@ -354,7 +354,7 @@
     },
     {
       "name": "hardcore-mode-for-playing",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "hardcore-mode-for-playing-for-vanilla",
@@ -362,7 +362,7 @@
     },
     {
       "name": "hardcore-mode-for-playing-for-zzzparanoidal",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "helmod",
