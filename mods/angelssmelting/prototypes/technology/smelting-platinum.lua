@@ -9,7 +9,7 @@ data:extend({
     icon_mipmaps = 4,
     prerequisites = {
       "ore-electro-whinning-cell",
-      "angels-metallurgy-3",
+      "angels-metallurgy-4",
     },
     effects = {
       {
@@ -35,6 +35,7 @@ data:extend({
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
+        { type = "item", name = "production-science-pack", amount = 1 },
       },
       time = 30,
     },

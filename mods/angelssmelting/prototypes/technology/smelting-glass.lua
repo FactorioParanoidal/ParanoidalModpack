@@ -100,10 +100,10 @@ data:extend({
         type = "unlock-recipe",
         recipe = "angels-plate-glass-3",
       },
-      --[[{
+       {
         type = "unlock-recipe",
-        recipe = "angels-coil-glass-fiber"
-      },]]
+        recipe = "angels-coil-glass-fiber-fast",
+      },
     },
     unit = {
       count = 250,

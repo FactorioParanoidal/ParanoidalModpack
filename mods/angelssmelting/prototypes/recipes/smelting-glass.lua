@@ -110,13 +110,14 @@ data:extend({
   {
     type = "recipe",
     name = "angels-coil-glass-fiber",
-    category = "strand-casting",
+    category = "strand-casting-2",
     subgroup = "angels-glass-casting",
     normal = {
       enabled = false,
       energy_required = 4,
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 80 },
+        { type = "fluid", name = "water", amount = 40 },
       },
       results = {
         { type = "item", name = "angels-coil-glass-fiber", amount = 4 },
@@ -126,13 +127,58 @@ data:extend({
       enabled = false,
       energy_required = 4,
       ingredients = {
-        { type = "fluid", name = "liquid-molten-glass", amount = 100 * intermediatemulti },
+       { type = "fluid", name = "liquid-molten-glass", amount = 100 * intermediatemulti },
+       { type = "fluid", name = "water", amount = 40 },
       },
       results = {
         { type = "item", name = "angels-coil-glass-fiber", amount = 4 },
       },
     },
-    order = "c[angels-coil-glass-fiber]",
+     icons = angelsmods.functions.add_number_icon_layer(
+      angelsmods.functions.get_object_icons("angels-coil-glass-fiber"),
+      1,
+      angelsmods.smelting.number_tint
+    ),
+    order = "c[angels-coil-glass-fiber]-a",
+    crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-molten-glass"),
+  },
+  {
+    type = "recipe",
+    name = "angels-coil-glass-fiber-fast",
+    category = "strand-casting-3",
+    subgroup = "angels-glass-casting",
+    normal = {
+      enabled = false,
+      energy_required = 2,
+      ingredients = {
+        { type = "fluid", name = "liquid-molten-glass", amount = 140 },
+        { type = "fluid", name = "liquid-coolant", amount = 40 },
+      },
+      results = {
+        { type = "item", name = "angels-coil-glass-fiber", amount = 8 },
+        { type = "fluid", name = "liquid-coolant-used", amount = 40, catalyst_amount = 40, temperature = 300 },
+      },
+      main_product = "angels-coil-glass-fiber",
+    },
+    expensive = {
+      enabled = false,
+      energy_required = 2,
+      ingredients = {
+        { type = "fluid", name = "liquid-molten-glass", amount = 180 * intermediatemulti },
+        { type = "fluid", name = "liquid-coolant", amount = 40 },
+      },
+      results = {
+        { type = "item", name = "angels-coil-glass-fiber", amount = 8 },
+        { type = "fluid", name = "liquid-coolant-used", amount = 40, catalyst_amount = 40, temperature = 300 },
+      },
+      main_product = "angels-coil-glass-fiber",
+    },
+    icons = angelsmods.functions.add_number_icon_layer(
+      angelsmods.functions.get_object_icons("angels-coil-glass-fiber"),
+      2,
+      angelsmods.smelting.number_tint
+    ),
+    order = "c[angels-coil-glass-fiber]-b",
     crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint("liquid-molten-glass"),
   },
   -- CASTING RESULT
@@ -148,7 +194,7 @@ data:extend({
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
       },
       results = {
-        { type = "item", name = "angels-plate-glass", amount = 3 }, --DrD 4 to 3
+        { type = "item", name = "angels-plate-glass", amount = 3 },
       },
     },
     expensive = {
@@ -178,11 +224,11 @@ data:extend({
       energy_required = 3,
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
-        { type = "fluid", name = "liquid-molten-lead", amount = 20 },
+        { type = "fluid", name = "liquid-molten-lead", amount = 20, catalyst_amount = 20 },
       },
       results = {
         { type = "item", name = "angels-plate-glass", amount = 4 },
-        { type = "item", name = "solid-lead-oxide", amount = 2 },
+        { type = "item", name = "solid-lead-oxide", amount = 2, catalyst_amount = 2 },
       },
       main_product = "angels-plate-glass",
     },
@@ -191,11 +237,11 @@ data:extend({
       energy_required = 3,
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 50 * intermediatemulti },
-        { type = "fluid", name = "liquid-molten-lead", amount = 20 },
+        { type = "fluid", name = "liquid-molten-lead", amount = 20, catalyst_amount = 20 },
       },
       results = {
         { type = "item", name = "angels-plate-glass", amount = 4 },
-        { type = "item", name = "solid-lead-oxide", amount = 2 },
+        { type = "item", name = "solid-lead-oxide", amount = 2, catalyst_amount = 2 },
       },
       main_product = "angels-plate-glass",
     },
@@ -207,7 +253,7 @@ data:extend({
     order = "d[angels-plate-glass]-c",
   },
   {
-    type = "recipe",
+   type = "recipe",
     name = "angels-plate-glass-3",
     category = "casting-4",
     subgroup = "angels-glass-casting",
@@ -216,12 +262,12 @@ data:extend({
       energy_required = 2,
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
-        { type = "fluid", name = "liquid-molten-tin", amount = 20 },
+        { type = "fluid", name = "liquid-molten-tin", amount = 20, catalyst_amount = 20 },
         { type = "fluid", name = "gas-nitrogen", amount = 20 },
       },
       results = {
         { type = "item", name = "angels-plate-glass", amount = 5 },
-        { type = "item", name = "ingot-tin", amount = 2 },
+        { type = "item", name = "ingot-tin", amount = 2, catalyst_amount = 2 },
       },
       main_product = "angels-plate-glass",
     },
@@ -230,12 +276,12 @@ data:extend({
       energy_required = 2,
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 50 * intermediatemulti },
-        { type = "fluid", name = "liquid-molten-tin", amount = 20 },
+        { type = "fluid", name = "liquid-molten-tin", amount = 20, catalyst_amount = 20 },
         { type = "fluid", name = "gas-nitrogen", amount = 20 },
       },
       results = {
         { type = "item", name = "angels-plate-glass", amount = 5 },
-        { type = "item", name = "ingot-tin", amount = 2 },
+        { type = "item", name = "ingot-tin", amount = 2, catalyst_amount = 2 },
       },
       main_product = "angels-plate-glass",
     },
