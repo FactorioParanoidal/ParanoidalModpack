@@ -466,7 +466,7 @@
 	--mod setting
 		script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 			--if PI_debug then print_debug("raised event: on_runtime_mod_setting_changed") end
-			if not event then return end
+			if not event or not event.player_index then return end 
 			--PI_temp_unlock
 			if event.setting == PI_set.unlock then PI_temp_unlock = settings.global[PI_set.unlock].value end
 			--PI_clear_inserter
@@ -581,7 +581,7 @@
 			if not PI_general.isControlSet then 
 				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
 				PI_general.isAdmin = true
-				-- PI_set_controls(game.players[1])
+				PI_set_controls(game.players[1])
 				PI_modify_all_marks (false)
 			end
 			--Work on Inserter List
