@@ -20,7 +20,7 @@ function RecipeGui.init_template()
             { type = "label", name = "header-label", style = "fnei_recipe_title_label", align = "center", vertical_align = "center", caption = "recipe_name" },
             --{ type = "empty-widget", name = "" , style = "fnei_main_header-sprite-widget", caption = {"fnei.FNEI"} },
             { type = "empty-widget", name = "drag-widget", style = "fnei_recipe_header-drag-widget", drag_target = true},
-            { type = "flow", name = "favorite-flow", style = "fnei_recipe_favorite_flow", children = { 
+            { type = "flow", name = "favorite-flow", style = "fnei_recipe_favorite_flow", children = {
               { type = "sprite-button", name = "favorite-key", tooltip = {"fnei.favorite-button"}, event = cont.favorite_key_event },
             }},
             { type = "sprite-button", name = "back-key", style = "fnei_back_button_style", tooltip = {"gui.cancel"}, event = cont.back_key_event },
@@ -42,7 +42,7 @@ function RecipeGui.init_template()
         }},
 
 ------------------ content ------------------
-      
+
         { type = "table", name = "prod-table", style = "fnei_recipe_products_table", column_count = 2, children = {
           { type = "frame", name = "ingr-frame", style = "fnei_recipe_ingr_frame", children = {
             { type = "label", name = "ingr-label", style = "fnei_default_label", caption = {"fnei.ingredients"} },
@@ -73,7 +73,7 @@ function RecipeGui.init_template()
 
         { type = "flow", name = "tech-flow", style = "fnei_default_horizontal_flow" },
 
-      }}  
+      }}
     }}
   }
 end
@@ -93,19 +93,18 @@ function RecipeGui.is_gui_open()
   end
 end
 
-function RecipeGui.open_window(loc)
-  loc = RecipeGui.close_window() or loc
+function RecipeGui.open_window()
+  RecipeGui.close_window()
   local gui = Gui.add_gui_template(Gui.get_pos(), recipe_gui_template)
-  gui.location = loc
+  gui.location = Gui.get_location()
   return gui
 end
 
 function RecipeGui.close_window()
   if RecipeGui.is_gui_open() then
     local gui = Gui.get_gui(Gui.get_pos(), recipe_gui_template[1].name)
-    local loc = gui.location 
+    Gui.set_location(gui.location)
     gui.destroy()
-    return loc
   end
 end
 
@@ -116,7 +115,7 @@ function RecipeGui.draw_favorite_state(state)
     local style = (state and "fnei_recipe_selected_favorive_button") or "fnei_recipe_favorive_button"
 
     clear_gui(favorite_button)
-    Gui.add_gui_template(favorite_button, {{ 
+    Gui.add_gui_template(favorite_button, {{
       type = "sprite-button",
       name = "favorite-key",
       style = style,
@@ -127,7 +126,7 @@ end
 
 function RecipeGui.set_recipe_time(energy)
   local time = Gui.get_gui(Gui.get_pos(), "fnei_time_label")
-  time.caption = energy
+  time.caption = round_to_str(energy, 3)
 end
 
 function RecipeGui.set_recipe_name(recipe)
@@ -136,7 +135,7 @@ function RecipeGui.set_recipe_name(recipe)
   name.tooltip = name.caption
 
   local style = "fnei_recipe_title_label"
-  
+
   if recipe and recipe.hidden then
     style = "fnei_recipe_grey_title_label"
   elseif recipe and not recipe.enabled then
@@ -154,7 +153,7 @@ function RecipeGui.set_recipe_icon(recipe)
   if rawget(recipe, 'impostor') then
     local _,pos = string.find(value, "impostor[-]minable:")
 
-    if not pos then 
+    if not pos then
       _,pos = string.find(value, "impostor[-]pumped:")
     end
 
@@ -170,15 +169,15 @@ function RecipeGui.set_ingredients(list, dif_prot)
   local ingr_tb = Gui.get_gui(Gui.get_pos(), "list-ingr")
   local template = {}
 
-  table.insert(template,  
+  table.insert(template,
     { type = "flow", name = "time-flow", style = "fnei_recipe_list_elements_flow", direction = "horizontal", children = {
       { type = "sprite-button", name = "fnei_time", style = "slot_button", tooltip = {"fnei.crafting-time"}, sprite = "fnei_time_icon" },
       { type = "label", name = "fnei_time_label", style = "fnei_recipe_element_label", vertical_align = "center", align = "left", caption = {"fnei.crafting-time"} },
     }})
-                  
+
   for _,ingr in pairs(list) do
     table.insert(template, { type = "flow", name = ingr.name .. "-flow", style = "fnei_recipe_list_elements_flow", direction = "horizontal", children = {
-      { type = "choose-elem-button", name = ingr.type .. "_" .. ingr.name, style = "fnei_default_button", elem_type = ingr.type, elem_value = ingr.name, locked = true },
+      { type = "choose-elem-button", name = ingr.type .. "\t" .. ingr.name, style = "fnei_default_button", elem_type = ingr.type, elem_value = ingr.name, locked = true },
       { type = "label", name = ingr.name .. "-label", style = "fnei_recipe_element_label", single_line = true, vertical_align = "center", align = "left", caption = RecipeGui.get_element_caption(ingr) }
     }})
   end
@@ -193,7 +192,7 @@ function RecipeGui.set_ingredients(list, dif_prot)
   for i = 1, dif_prot do
     table.insert(template, { type = "flow", name = "empty_flow" .. i, style = "fnei_recipe_list_elements_flow" })
   end
-  
+
   clear_gui(ingr_tb)
   Gui.add_gui_template(ingr_tb, template)
 end
@@ -204,7 +203,7 @@ function RecipeGui.set_products(list, dif_prot)
 
   for _,res in pairs(list) do
     table.insert(template, { type = "flow", name = res.name .. "-flow", style = "fnei_recipe_list_elements_flow", direction = "horizontal", children = {
-      { type = "choose-elem-button", name = res.type .. "_" .. res.name, style = "fnei_default_button", elem_type = res.type, elem_value = res.name, locked = true },
+      { type = "choose-elem-button", name = res.type .. "\t" .. res.name, style = "fnei_default_button", elem_type = res.type, elem_value = res.name, locked = true },
       { type = "label",  name = res.name .. "-label", style = "fnei_recipe_element_label", single_line = true, vertical_align = "center", align = "left", caption = RecipeGui.get_element_caption(res) }
     }})
   end
@@ -219,7 +218,7 @@ function RecipeGui.set_products(list, dif_prot)
   for i = 1, dif_prot do
     table.insert(template, { type = "flow", name = "empty_flow" .. i, style = "fnei_recipe_list_elements_flow" })
   end
-  
+
   clear_gui(res_tb)
   Gui.add_gui_template(res_tb, template)
 end
@@ -238,52 +237,67 @@ function RecipeGui.set_made_in_list(recipe)
       local caption = Settings.get_val("show-craft-time-label")
       local element
 
+      local ing_cnt = 0
+      local in_fluidbox_cnt = 0
+      local out_fluidbox_cnt = 0
+
+      for _,prot in pairs(recipe.ingredients) do
+        if prot.type == "item" then
+          ing_cnt = ing_cnt + 1
+        elseif prot.type == "fluid" then
+          in_fluidbox_cnt = in_fluidbox_cnt + 1
+        end
+      end
+
+      for _,prot in pairs(recipe.products) do
+        if prot.type == "fluid" then
+          out_fluidbox_cnt = out_fluidbox_cnt + 1
+        end
+      end
+
       if cat.type == "player" and Settings.get_val("show-recipes", "buildings", cat.val.name) then
-        local player = Player.get()
+        if in_fluidbox_cnt <= (cat.ifbox or 0) and out_fluidbox_cnt <= (cat.ofbox or 0) then
+          local player = Player.get()
+          local tooltip = {"", {"fnei.handcraft"}}
 
-        if caption and player and player.character_crafting_speed_modifier + player.force.manual_crafting_speed_modifier + 1 ~= 0 then
-          caption = round(recipe.energy / ((player.character_crafting_speed_modifier + 1) * (player.force.manual_crafting_speed_modifier + 1)), 3)
+          if caption and player and cat.val.name == "handcraft" then
+            local crafting_speed = (player.character_crafting_speed_modifier + 1) * (player.force.manual_crafting_speed_modifier + 1)
+            if crafting_speed ~= 0 then
+              caption = round_to_str(recipe.energy / crafting_speed, 3)
+            end
+          end
+
+          if caption and player and cat.val.name == "handmine" then
+            local mining_speed = (player.character_mining_speed_modifier + 1) * (player.force.manual_mining_speed_modifier + 1) * cat.val.mining_speed
+            if mining_speed ~= 0 then
+              caption = round_to_str(recipe.mining_time / mining_speed, 3)
+            end
+            tooltip = {"", {"fnei.handmining"}}
+          end
+
+          element = {
+            type = "sprite-button",
+            name = cat.val.name,
+            style = "fnei_default_button",
+            tooltip = tooltip,
+            sprite = "fnei_hand_icon"
+          }
         end
-
-        element = { type = "sprite-button",
-                    name = cat.val.name,
-                    style = "fnei_default_button",
-                    tooltip = {"", {"fnei.handcraft"}},
-                    sprite = "fnei_hand_icon"
-                  }
       elseif cat.type == "building" and cat.ingredient_count and Settings.get_val("show-recipes", "buildings", cat.val.name) then
-        local ing_cnt = 0
-        local in_fluidbox_cnt = 0
-        local out_fluidbox_cnt = 0
-
-        for _,prot in pairs(recipe.ingredients) do
-          if prot.type == "item" then
-            ing_cnt = ing_cnt + 1
-          elseif prot.type == "fluid" then
-            in_fluidbox_cnt = in_fluidbox_cnt + 1
-          end
-        end
-
-        for _,prot in pairs(recipe.products) do
-          if prot.type == "fluid" then
-            out_fluidbox_cnt = out_fluidbox_cnt + 1
-          end
-        end
-
         if cat.ingredient_count >= ing_cnt and in_fluidbox_cnt <= (cat.ifbox or 0) and out_fluidbox_cnt <= (cat.ofbox or 0) then
           local entity = item_list[cat.val.name].place_result
 
           if caption and entity and entity.crafting_speed ~= nil then
-            caption = round(recipe.energy / entity.crafting_speed, 3)
+            caption = round_to_str(recipe.energy / entity.crafting_speed, 3)
           end
 
           if caption and entity and entity.pumping_speed then
-            caption = round(recipe.energy / entity.pumping_speed, 3)
+            caption = round_to_str(recipe.energy / entity.pumping_speed, 3)
           end
 
-          element = { 
+          element = {
             type = "choose-elem-button",
-            name = "item_" .. cat.val.name,
+            name = "item\t" .. cat.val.name,
             style = "fnei_default_button",
             elem_type = "item",
             elem_value = cat.val.name,
@@ -291,30 +305,32 @@ function RecipeGui.set_made_in_list(recipe)
           }
         end
       elseif cat.type == 'resource-miner' and cat.mining_speed and Settings.get_val("show-recipes", "buildings", cat.val.name) then
-        element = {
-          type = "choose-elem-button",
-          name = "item_" .. cat.val.name,
-          style = "fnei_default_button",
-          elem_type = "item",
-          elem_value = cat.val.name,
-          locked = true
-        }
-        -- https://wiki.factorio.com/Mining
-        caption = round(recipe.mining_time / (cat.mining_speed), 3)
+        if in_fluidbox_cnt <= (cat.ifbox or 0) and out_fluidbox_cnt <= (cat.ofbox or 0) then
+          element = {
+            type = "choose-elem-button",
+            name = "item\t" .. cat.val.name,
+            style = "fnei_default_button",
+            elem_type = "item",
+            elem_value = cat.val.name,
+            locked = true
+          }
+          -- https://wiki.factorio.com/Mining
+          caption = round_to_str(recipe.mining_time / (cat.mining_speed), 3)
+        end
       end
 
       if element then
         local label
 
         if caption then
-          label = { 
-            type = "label", 
-            name = cat.val.name .. "-label", 
-            style = "fnei_recipe_craft_time_for_building_label", 
-            vertical_align = "top", 
+          label = {
+            type = "label",
+            name = cat.val.name .. "-label",
+            style = "fnei_recipe_craft_time_for_building_label",
+            vertical_align = "top",
             align = "center",
             caption = caption,
-            tooltip = {"", {"fnei.craft-time-in-building"}, ": ", caption} 
+            tooltip = {"", {"fnei.craft-time-in-building"}, ": ", caption}
           }
         end
 
@@ -353,7 +369,7 @@ function RecipeGui.set_techs( recipe )
     for _, tech in pairs(new_tech_list) do
       table.insert(techs, {
         type = "sprite-button",
-        name = "tech_".. tech.name,
+        name = "tech\t".. tech.name,
         style = RecipeGui.get_tech_style( tech ),
         tooltip = get_localised_name(tech),
         sprite = "technology/" .. tech.name
@@ -403,7 +419,7 @@ function RecipeGui.draw_cur_prot(type, name)
   local prot_flow = Gui.get_gui(Gui.get_pos(), "prot-icon")
   clear_gui(prot_flow)
   if name then
-    Gui.add_choose_button(prot_flow, { type = "choose-elem-button", name = type .. "_" .. name, style = "fnei_default_button", elem_type = type, elem_value = name, locked = true })
+    Gui.add_choose_button(prot_flow, { type = "choose-elem-button", name = type .. "\t" .. name, style = "fnei_default_button", elem_type = type, elem_value = name, locked = true })
   end
 end
 
@@ -416,7 +432,7 @@ function RecipeGui.get_element_caption(element)
   if element.type == "item" then
     prot = get_full_item_list()[element.name]
   elseif element.type == "fluid" then
-    prot = get_fluid_list()[element.name]
+    prot = get_full_fluid_list()[element.name]
   elseif element.type == 'entity' then
     prot = game.entity_prototypes[element.name]
   end
@@ -428,16 +444,16 @@ function RecipeGui.get_element_caption(element)
 
   if not Settings.get_val("detail-chance") and prob ~= nil then
     if element.amount then
-      loc_str = round(element.amount * prob, 3)
+      loc_str = round_to_str(element.amount * prob, 3)
     else
       local min = element.amount_min or 0
       local max = element.amount_max or 0
 
-      loc_str = round((min + max) / 2 * prob, 3)
+      loc_str = round_to_str((min + max) / 2 * prob, 3)
     end
 
     loc_str = {"", loc_str, " × ", get_localised_name(prot)}
-  else 
+  else
     -- get amoutn for product
 
     if amnt ~= nil then
@@ -447,7 +463,7 @@ function RecipeGui.get_element_caption(element)
       local max = element.amount_max or 0
 
       if not Settings.get_val("detail-chance") and prob ~= nil then
-        loc_str = round((min + max) / 2 * prob, 3)
+        loc_str = round_to_str((min + max) / 2 * prob, 3)
       else
         if min == max then
             loc_str = max
@@ -468,7 +484,7 @@ function RecipeGui.get_element_caption(element)
     -- add probability for product if exists
 
     if prob ~= nil and prob ~= 1 then
-      loc_str = {"", loc_str, "" .. round(prob * 100, 3) .. "% "}
+      loc_str = {"", loc_str, "" .. round_to_str(prob * 100, 3) .. "% "}
     end
 
     -- add localised name
@@ -477,9 +493,25 @@ function RecipeGui.get_element_caption(element)
   end
 
   -- add temperature for fluid
+  local function is_number(value) return "number" == type(value) end
+  -- Excludes lowest/greatest number that can still be represented on a double
+  -- value-(value-1) == 1 and value-(value+1) == -1 excludes numbers that are not huge enough such that n-1 or n+1 overflow
+  local function is_finite(value) return is_number(value) and value-(value-1) == 1 and value-(value+1) == -1 and -math.huge ~= value and math.huge ~= value end
 
-  if element.type == "fluid" and element.temperature and Settings.get_val("show-temperature-of-fluids") then
-    loc_str = {"", loc_str, " (" .. element.temperature .. "°)"}
+  if element.type == "fluid" and Settings.get_val("show-temperature-of-fluids")  then
+    if element.temperature then -- product
+      loc_str = {"", loc_str, " (" .. element.temperature .. "°C)"}
+    elseif element.minimum_temperature and not is_finite(element.maximum_temperature) then -- ingredient
+      loc_str = {"", loc_str, " ( ≥" .. element.minimum_temperature .. "°C)"}
+    elseif element.maximum_temperature and not is_finite(element.minimum_temperature) then -- ingredient
+      loc_str = {"", loc_str, " ( ≤" .. element.maximum_temperature .. "°C)"}
+    elseif element.minimum_temperature and element.maximum_temperature then -- ingredient; must be after each of the single temperature value test
+      if element.minimum_temperature == element.maximum_temperature then
+        loc_str = {"", loc_str, " (" .. element.minimum_temperature .. "°C)"}
+      else
+        loc_str = {"", loc_str, " (" .. element.minimum_temperature .. "°C - " .. element.maximum_temperature .. "°C)"}
+      end
+    end
   end
 
   return loc_str
@@ -501,7 +533,7 @@ function RecipeGui.draw_paging(page)
     page:draw_back_arrow( arrow )
     arrow.style.vertical_align = "center"
   end
-  
+
   if amnt == 0 then amnt = 1 end
   label.caption = {"", {"fnei.page"}, ": " .. page:get_cur_page() .. "/".. amnt}
 end
