@@ -1174,3 +1174,9 @@ bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
 --Добавлен дополнительный уровень технологий для Жидк.Бойлеров 4, 5 в соответсвии с их рецептом (AKMF)
 data.raw.technology["OilBurning-4"].unit.ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 2}, {"production-science-pack", 2}}
 data.raw.technology["OilBurning-5"].unit.ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 2}, {"production-science-pack", 2}, {"utility-science-pack", 2}}
+
+--Исправление цена на бойлеры (SEO)
+bobmods.lib.recipe.set_ingredients("boiler-2", { { "steel-pipe", 15 }, { "boiler", 2 }, { "steel-plate", 20 } })
+bobmods.lib.recipe.set_ingredients("boiler-3", { { "brass-pipe", 15 }, { "boiler-2", 2 }, { "invar-alloy", 20 } })
+bobmods.lib.recipe.set_ingredients("boiler-4", { { "ceramic-pipe", 15 }, { "boiler-3", 2 }, { "tungsten-plate", 20 } })
+bobmods.lib.recipe.set_ingredients("boiler-5", { { "copper-tungsten-pipe", 15 }, { "boiler-4", 2 }, { "copper-tungsten-alloy", 20 } })
