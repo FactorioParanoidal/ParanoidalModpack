@@ -27,7 +27,7 @@ Check out Xterminator's mod spotlight [here](https://youtu.be/_60XPAT3uas).
     - Entity: Search for built entities of this item, including resource patches
     - Ground: Search for this item on the ground
     - Request: Search for logistic containers that are requesting this item
-    - Signal: Search for entities that are sending this signal (due to API limitations, some types of entity can't be searched for by signal)
+    - Signal: Search for entities that are sending this signal
     - Tag: Search for tags on the map that have this icon
 - Factory Search will present a list of machines matching the selected search modes, grouped by name and proximity
 - Displays results from all surfaces (e.g. all Space Exploration planets are searched)
@@ -55,5 +55,5 @@ You can help by translating this mod into your language using [CrowdIn](https://
 Thank you to:
 
 - [raiguard](https://mods.factorio.com/user/raiguard) for [flib](https://mods.factorio.com/mod/flib) (GUI library), [Quick Item Search](https://mods.factorio.com/mod/QuickItemSearch) (provided initial framework), and [Better Alert Arrows](https://mods.factorio.com/mod/BetterAlertArrows) (arrow sprite)
-- [justarandomgeek](https://mods.factorio.com/user/justarandomgeek) for his excellent [mod debugger](https://github.com/justarandomgeek/vscode-factoriomod-debug)
+- [justarandomgeek](https://mods.factorio.com/user/justarandomgeek) for the excellent [mod debugger](https://github.com/justarandomgeek/vscode-factoriomod-debug)
 - [Earendel](https://mods.factorio.com/user/Earendel) for the character corpse icon

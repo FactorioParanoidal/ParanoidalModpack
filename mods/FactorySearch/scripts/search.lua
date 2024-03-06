@@ -1,5 +1,4 @@
 math2d = require "math2d"
-search_signals = require "__FactorySearch__.scripts.search-signals"
 
 local Search = {}
 
@@ -17,28 +16,16 @@ local function signal_eq(sig1, sig2)
   return sig1 and sig2 and sig1.type == sig2.type and sig1.name == sig2.name
 end
 
--- Some entities are secretly swapped around by their mod. This allows all entities associated
--- with an item to be found by 'Entity' search
+-- Mod-specific overrides for "Entity" search
 local mod_placeholder_entities = {
-  ['rail'] = {'straight-rail', 'curved-rail'},
+  ['ff-ferrous-nodule'] = {'ff-seamount'},  -- Freight Forwarding
+  ['ff-cupric-nodule'] = {'ff-seamount'},
+  ['ff-cobalt-crust'] = {'ff-seamount'},
 
-  ['sp-spidertron-dock'] =  -- SpidertronPatrols
-    {'sp-spidertron-dock-0', 'sp-spidertron-dock-30', 'sp-spidertron-dock-80', 'sp-spidertron-dock-100'},
+  ['ff-hot-titansteel-plate'] =  -- Freight Forwarding
+    {'ff-lava-pool', 'ff-lava-pool-small'},
 
-  ['po-interface'] =  -- PowerOverload
-    {'po-interface', 'po-interface-north', 'po-interface-east', 'po-interface-south'},
-
-  ['offshore-pump-0'] = 'offshore-pump-0',  -- P-U-M-P-S
-  ['offshore-pump-1'] = 'offshore-pump-1',
-  ['offshore-pump-2'] = 'offshore-pump-2',
-  ['offshore-pump-3'] = 'offshore-pump-3',
-  ['offshore-pump-4'] = 'offshore-pump-4',
-
-  ['burner-offshore-pump'] = 'burner-offshore-pump',  -- BurnerOffshorePump
-  ['electric-offshore-pump'] = 'electric-offshore-pump',
-
-  ['se-space-rail'] = {'se-space-straight-rail', 'se-space-curved-rail'},  -- space-exploration
-  ['se-core-fragment-omni'] = {'se-core-fragment-omni', 'se-core-fragment-omni-sealed'},
+  ['se-core-fragment-omni'] = {'se-core-fragment-omni', 'se-core-fragment-omni-sealed'},  -- space-exploration
   ['se-core-fragment-iron-ore'] = {'se-core-fragment-iron-ore', 'se-core-fragment-iron-ore-sealed'},
   ['se-core-fragment-copper-ore'] = {'se-core-fragment-copper-ore', 'se-core-fragment-copper-ore-sealed'},
   ['se-core-fragment-coal'] = {'se-core-fragment-coal', 'se-core-fragment-coal-sealed'},
@@ -66,7 +53,7 @@ local request_entities = list_to_map{ "logistic-container", "character", "spider
 local item_logistic_entities = list_to_map{ "transport-belt", "splitter", "underground-belt", "loader", "loader-1x1", "inserter", "logistic-robot", "construction-robot" }
 local fluid_logistic_entities = list_to_map{ "pipe", "pipe-to-ground", "pump" }
 local ground_entities = list_to_map{ "item-entity" }  -- force = "neutral"
-local signal_entities = list_to_map{ "roboport", "train-stop", "arithmetic-combinator", "decider-combinator", "constant-combinator", "accumulator", "rail-signal", "rail-chain-signal", "wall" }
+local signal_entities = list_to_map{ "roboport", "train-stop", "arithmetic-combinator", "decider-combinator", "constant-combinator", "accumulator", "rail-signal", "rail-chain-signal", "wall", "container", "logistic-container", "inserter", "storage-tank" }
 
 local function add_entity_type(type_list, to_add_list)
   for name, _ in pairs(to_add_list) do
@@ -112,6 +99,14 @@ local function remove_uncharted_groups(surface_data, surface, force)
   end
 end
 
+local function is_wire_connected(entity, entity_type)
+  if entity_type == "arithmetic-combinator" or entity_type == "decider-combinator" then
+    return entity.get_circuit_network(defines.wire_type.red, defines.circuit_connector_id.combinator_output) or entity.get_circuit_network(defines.wire_type.green, defines.circuit_connector_id.combinator_output)
+  else
+    return entity.get_circuit_network(defines.wire_type.red) or entity.get_circuit_network(defines.wire_type.green)
+  end
+end
+
 function Search.process_found_entities(entities, state, surface_data, target_item)
   -- Not used for Entity and Tag search modes
   local target_name = target_item.name
@@ -127,7 +122,8 @@ function Search.process_found_entities(entities, state, surface_data, target_ite
     if state.signals then
       if signal_entities[entity_type] then
         local control_behavior = entity.get_control_behavior()
-        if control_behavior then
+        if control_behavior and is_wire_connected(entity, entity_type) then
+          -- Does everything except mining drill, as API doesn't support that
           if entity_type == "constant-combinator" then
             -- If prototype's `item_slot_count = 0` then .parameters will be nil
             for _, parameter in pairs(control_behavior.parameters or {}) do
@@ -147,9 +143,33 @@ function Search.process_found_entities(entities, state, surface_data, target_ite
                 break
               end
             end
+            if target_is_item and control_behavior.read_logistics then
+              local logistic_network = entity.logistic_network
+              if logistic_network then
+                local signal_count = logistic_network.get_item_count(target_name)
+                if signal_count > 0 then
+                  SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
+                end
+              end
+            end
           elseif entity_type == "train-stop" then
             if signal_eq(control_behavior.stopped_train_signal, target_item) or signal_eq(control_behavior.trains_count_signal, target_item) then
               SearchResults.add_entity(entity, surface_data.signals)
+            elseif control_behavior.read_from_train then
+              local train = entity.get_stopped_train()
+              if train then
+                if target_is_item then
+                  local signal_count = train.get_item_count(target_name)
+                  if signal_count > 0 then
+                    SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
+                  end
+                elseif target_is_fluid then
+                  local signal_count = train.get_fluid_count(target_name)
+                  if signal_count > 0 then
+                    SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
+                  end
+                end
+              end
             end
           elseif entity_type == "accumulator" or entity_type == "wall" then
             if signal_eq(control_behavior.output_signal, target_item) then
@@ -168,6 +188,31 @@ function Search.process_found_entities(entities, state, surface_data, target_ite
                 SearchResults.add_entity(entity, surface_data.signals)
                 break
               end
+            end
+          elseif entity_type == "container" and target_is_item then
+            local signal_count = entity.get_item_count(target_name)
+            if signal_count > 0 then
+              SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
+            end
+          elseif entity_type == "logistic-container" and target_is_item then
+            if control_behavior.circuit_mode_of_operation == defines.control_behavior.logistic_container.circuit_mode_of_operation.send_contents then
+              local signal_count = entity.get_item_count(target_name)
+              if signal_count > 0 then
+                SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
+              end
+            end
+          elseif entity_type == "inserter" and target_is_item then
+            -- Doesn't check inserter if in pulse mode
+            if control_behavior.circuit_read_hand_contents and control_behavior.circuit_hand_read_mode == defines.control_behavior.inserter.hand_read_mode.hold then
+              local held_stack = entity.held_stack
+              if held_stack and held_stack.valid_for_read and held_stack.name == target_name then
+                SearchResults.add_entity_signal(entity, surface_data.signals, held_stack.count)
+              end
+            end
+          elseif entity_type == "storage-tank" and target_is_fluid then
+            local signal_count = entity.get_fluid_count(target_name)
+            if signal_count > 0 then
+              SearchResults.add_entity_signal(entity, surface_data.signals, signal_count)
             end
           end
         end
@@ -428,23 +473,21 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
     end
 
     -- Entities
-    if (target_is_item or target_is_fluid) and state.entities then
+    if state.entities then
       local target_entity_name = mod_placeholder_entities[target_name]
 
-      local is_resource = false
       if not target_entity_name then
-        -- Try as a resource
-        target_entity_name = global.items_from_resources[target_name]
-        if target_entity_name then
-          is_resource = true
-        else
+        -- Check if the item is produced by mining any entities
+        target_entity_name = global.item_to_entities[target_name]
+        if not target_entity_name then
           -- Otherwise, check for the item's place_result
           local item_prototype = game.item_prototypes[target_name]
-          target_entity_name = target_name
           if item_prototype and item_prototype.place_result then
             target_entity_name = item_prototype.place_result.name
+          else
+            -- Or just try an entity with the same name as the item
+            target_entity_name = target_name
           end
-          -- Or just try an entity with the same name as the item
         end
       end
 
@@ -453,7 +496,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
         force = { force, "neutral" },
       }
       for _, entity in pairs(entities) do
-        if is_resource then
+        if entity.type == "resource" then
           local amount
           if entity.initial_amount then
             amount = entity.amount / 3000  -- Calculate yield from amount
@@ -461,7 +504,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
             amount = entity.amount
           end
           SearchResults.add_entity_resource(entity, surface_data.entities, amount)
-        elseif entity.type ~= "resource" then
+        else
           SearchResults.add_entity(entity, surface_data.entities)
         end
       end
@@ -607,23 +650,21 @@ function Search.on_tick()
     end
 
     -- Entities
-    if (target_is_item or target_is_fluid) and state.entities then
+    if state.entities then
       local target_entity_name = mod_placeholder_entities[target_name]
 
-      local is_resource = false
       if not target_entity_name then
-        -- Try as a resource
-        target_entity_name = global.items_from_resources[target_name]
-        if target_entity_name then
-          is_resource = true
-        else
+        -- Check if the item is produced by mining any entities
+        target_entity_name = global.item_to_entities[target_name]
+        if not target_entity_name then
           -- Otherwise, check for the item's place_result
           local item_prototype = game.item_prototypes[target_name]
-          target_entity_name = target_name
           if item_prototype and item_prototype.place_result then
             target_entity_name = item_prototype.place_result.name
+          else
+            -- Or just try an entity with the same name as the item
+            target_entity_name = target_name
           end
-          -- Or just try an entity with the same name as the item
         end
       end
 
@@ -638,7 +679,7 @@ function Search.on_tick()
         end
       end
       for _, entity in pairs(entities) do
-        if is_resource then
+        if entity.type == "resource" then
           local amount
           if entity.initial_amount then
             amount = entity.amount / 3000  -- Calculate yield from amount
@@ -646,7 +687,7 @@ function Search.on_tick()
             amount = entity.amount
           end
           SearchResults.add_entity_resource(entity, surface_data.entities, amount)
-        elseif entity.type ~= "resource" then
+        else
           SearchResults.add_entity(entity, surface_data.entities)
         end
       end
