@@ -1,6 +1,6 @@
 {
     "name": "qol_research",
-    "version": "3.3.0",
+    "version": "3.3.3",
     "title": "Quality of Life research",
     "author": "Aidiakapi",
     "contact": "aidiakapi@gmail.com",
@@ -9,6 +9,8 @@
     "factorio_version": "1.1",
     "dependencies": [
         "base >= 1.1.0",
-        "?space-exploration >= 0.2.0"
+        "?space-exploration >= 0.2.0",
+        "?nullius >= 1.5.0",
+        "?Krastorio2 >= 1.3.0"
     ]
 }
