@@ -993,7 +993,10 @@ data.raw.technology["electric-pole-4"].icon = "__base__/graphics/technology/elec
 data.raw.technology["electric-pole-4"].icon_size = 256
 
 data.raw.technology["angels-advanced-gas-processing"].icons = {{icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2}}
+
+if data.raw.technology["angels-advanced-gas-processing-2"] then
 data.raw.technology["angels-advanced-gas-processing-2"].icons = {{icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2}}
+end
 
 data.raw.technology["advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
@@ -1073,7 +1076,9 @@ data.raw.technology["filter-inserters"].hidden = true
 bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
 
 bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50}) --Отсыпка по 50
+if data.raw["technology"]["radars-1"] then
 data.raw["technology"]["radars-1"].hidden = true --Убираем лишнее исследование на радар
+end
 bobmods.lib.tech.add_prerequisite ("radars-2", "radar") --Добавим радар1 к радару2
 bobmods.lib.tech.remove_prerequisite("radars-2", "radars-1") --фикс радара 2
 
