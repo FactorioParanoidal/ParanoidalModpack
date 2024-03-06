@@ -319,8 +319,8 @@ script.on_event(
 script.on_event(
     {defines.events.on_gui_click},
     function(e)
-        player = game.players[e.player_index]
-        if e.button == defines.mouse_button_type.left then
+        local player = game.players[e.player_index]
+        if player ~= nil and e.button == defines.mouse_button_type.left then
             on_click(e.element, player)
         end
     end
