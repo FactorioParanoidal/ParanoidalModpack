@@ -1,13 +1,21 @@
 {
   "name": "FluidMustFlow",
-  "version": "1.3.1",
+  "version": "1.3.5",
   "title": "Fluid Must Flow",
   "author": "Linver, Krastor, raiguard",
-  "contact": "https://discord.gg/ECBzaXu",
+  "contact": "https://github.com/raiguard/FluidMustFlow",
+  "homepage": "https://github.com/raiguard/FluidMustFlow",
   "description": "Adds very large pipes with enormous throughput capabilities.",
   "factorio_version": "1.1",
-  "dependencies": ["base >= 1.1", "(?) Squeak Through >= 1.3.0"],
+  "dependencies": [
+    "base >= 1.1",
+    "(?) Squeak Through >= 1.3.0"
+  ],
   "package": {
-    "git_publish_branch": "main"
+    "ignore": [ "crowdin.yml", "imgui.ini", "screenshots/*", "stylua.toml" ],
+    "scripts": {
+      "prepublish": "factorio-crowdin-sync"
+    },
+    "sync_portal_details": true
   }
 }
