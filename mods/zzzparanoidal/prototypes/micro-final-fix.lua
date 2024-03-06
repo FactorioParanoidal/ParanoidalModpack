@@ -1158,3 +1158,7 @@ bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "cobalat-electrolysis-
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "titanium-electrolysis-x")
 bobmods.lib.tech.remove_recipe_unlock("titanium-processing", "advanced-structure-components")
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-components")
+
+--фикс технологий: Продвинутое исследование после турбо пакетников (AKMF)
+bobmods.lib.tech.remove_prerequisite("advanced-research", "express-inserters")
+bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
