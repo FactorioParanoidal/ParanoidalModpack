@@ -1105,3 +1105,22 @@ bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "coke-purificatio
 
 --фикс недоступности исследования артиллерии
 bobmods.lib.tech.remove_prerequisite("artillery", "radars-1")
+
+--удалены зеленые катализаторы из дублирующего исследования (теперь он в шлаке где и должен быть)
+bobmods.lib.tech.remove_recipe_unlock("geode-processing-2", "catalysator-green")
+
+--перенос харкода из angelsrefining и исправление цен на здания на правильные
+--Разжижители
+bobmods.lib.recipe.set_ingredients("liquifier", { { "iron-plate", 40 }, { "basic-circuit-board", 3 }, { "pipe", 40 }, { "stone-brick", 60 } })
+bobmods.lib.recipe.set_ingredients("liquifier-2", { { "bronze-alloy", 40 }, { "electronic-circuit", 3 }, { "bronze-pipe", 40 }, { "clay-brick", 60 }, { "liquifier", 2 } })
+bobmods.lib.recipe.set_ingredients("liquifier-3", { { "aluminium-plate", 40 }, { "advanced-circuit", 3 }, { "brass-pipe", 40 }, { "concrete", 60 }, { "liquifier-2", 2 } })
+bobmods.lib.recipe.set_ingredients("liquifier-4", { { "titanium-plate", 40 }, { "processing-unit", 3 }, { "titanium-pipe", 40 }, { "refined-concrete", 60 }, { "liquifier-3", 2 } })
+-- --Термальный экстрактор
+bobmods.lib.recipe.set_ingredients("thermal-extractor", { { "aluminium-plate", 24 }, { "advanced-circuit", 5 }, { "brass-pipe", 12 }, { "concrete", 20 }, { "brass-gear-wheel", 12 }, { "intermediate-structure-components", 5 } })
+-- --Хим заводы
+bobmods.lib.recipe.set_ingredients("angels-chemical-plant", { { "iron-plate", 40 }, { "basic-circuit-board", 3 }, { "pipe", 40 }, { "iron-gear-wheel", 25 } })
+bobmods.lib.recipe.set_ingredients("angels-chemical-plant-2", { { "bronze-alloy", 40 }, { "electronic-circuit", 3 }, { "bronze-pipe", 40 }, { "steel-gear-wheel", 25 }, { "angels-chemical-plant", 2 } })
+bobmods.lib.recipe.set_ingredients("angels-chemical-plant-3", { { "aluminium-plate", 40 }, { "advanced-circuit", 3 }, { "brass-pipe", 40 }, { "brass-gear-wheel", 25 }, { "angels-chemical-plant-2", 2 } })
+bobmods.lib.recipe.set_ingredients("angels-chemical-plant-4", { { "titanium-plate", 40 }, { "processing-unit", 3 }, { "titanium-pipe", 40 }, { "titanium-gear-wheel", 25 }, { "angels-chemical-plant-3", 2 } })
+
+

@@ -619,11 +619,11 @@ angelsmods.functions.RB.build({
       energy_required = 5,
       enabled = false,
       ingredients = {
-			{type = "item", name = "liqui-1", amount = 1},
-			{type = "item", name = "t0-plate", amount = 20}, --drd
-			{type = "item", name = "t0-circuit", amount = 2},
-			{type = "item", name = "t0-pipe", amount = 16}, --drd
-			{type = "item", name = "t0-brick", amount = 8} --drd
+	{ type = "item", name = "liqui-1", amount = 1 },
+        { type = "item", name = "t0-plate", amount = 2 },
+        { type = "item", name = "t0-circuit", amount = 2 },
+        { type = "item", name = "t0-pipe", amount = 2 },
+        { type = "item", name = "t0-brick", amount = 2 },
       },
       result = "liquifier",
     },
@@ -631,11 +631,11 @@ angelsmods.functions.RB.build({
       energy_required = 5 * buildingtime,
       enabled = false,
       ingredients = {
-			{type = "item", name = "liqui-1", amount = 1},
-			{type = "item", name = "t0-plate", amount = 20 * buildingmulti}, --drd
-			{type = "item", name = "t0-circuit", amount = 2 * buildingmulti},
-			{type = "item", name = "t0-pipe", amount = 16 * buildingmulti}, --drd
-			{type = "item", name = "t0-brick", amount = 8 * buildingmulti} --drd
+	{ type = "item", name = "liqui-1", amount = 1 },
+        { type = "item", name = "t0-plate", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-circuit", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-pipe", amount = 2 * buildingmulti },
+        { type = "item", name = "t0-brick", amount = 2 * buildingmulti },
       },
       result = "liquifier",
     },
@@ -764,7 +764,7 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "thermal-2", amount = 1 },
-        { type = "item", name = "t3-plate", amount = 60 }, --DrD
+        { type = "item", name = "t3-plate", amount = 6 },
         { type = "item", name = "t3-circuit", amount = 4 },
         { type = "item", name = "t3-pipe", amount = 4 },
         { type = "item", name = "t3-brick", amount = 4 },
@@ -777,7 +777,7 @@ angelsmods.functions.RB.build({
       enabled = false,
       ingredients = {
         { type = "item", name = "thermal-2", amount = 1 },
-        { type = "item", name = "t3-plate", amount = 60 * buildingmulti }, --DrD
+        { type = "item", name = "t3-plate", amount = 6 * buildingmulti },
         { type = "item", name = "t3-circuit", amount = 4 * buildingmulti },
         { type = "item", name = "t3-pipe", amount = 4 * buildingmulti },
         { type = "item", name = "t3-brick", amount = 4 * buildingmulti },
