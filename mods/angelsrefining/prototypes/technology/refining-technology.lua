@@ -127,6 +127,7 @@ data:extend({
     prerequisites = {
       --"ore-crushing",
       "ore-floatation",
+      "slag-processing-1",
       "water-washing-2",
     },
     effects = {
@@ -327,6 +328,7 @@ data:extend({
       "geode-processing-2",
       "chemical-science-pack",
       "ore-powderizer",
+      "slag-processing-2",
     },
     effects = {
       {
@@ -452,6 +454,7 @@ data:extend({
     prerequisites = {
       "slag-processing-1",
       "ore-leaching",
+      "geode-processing-2",
     },
     effects = {
       {
@@ -468,6 +471,10 @@ data:extend({
       },
       {
         type = "unlock-recipe",
+        recipe = "catalysator-green",
+      },
+      {
+        type = "unlock-recipe",
         recipe = "slag-processing-4",
       },
       {
@@ -481,14 +488,6 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "slag-processing-7",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "slag-processing-8",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "slag-processing-9",
       },
       {
         type = "unlock-recipe",
@@ -540,6 +539,14 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "catalysator-orange",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "slag-processing-8",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "slag-processing-9",
       },
     },
     unit = {
