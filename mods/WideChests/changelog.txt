@@ -1,35 +1,81 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 5.0.3
+Date: 17.2.2024
+  Bugfixes:
+    - Fixed next_upgrade not working when the merge mod is not enabled.
+  Translation:
+    - Added Ukraine translations. Thanks to MetenBouldry
+
+---------------------------------------------------------------------------------------------------
+Version: 5.0.2
+Date: 3.2.2024
+  Translation:
+    - Filled in missing german translations. Thanks to jonaelsasser
+
+---------------------------------------------------------------------------------------------------
+Version: 5.0.1
+Date: 18.1.2024
+  Features:
+    - Added mod setting to mirror whitelist. When enabled you won't have to specify both "1xN" and "Nx1" in whitelist since either of them would be interpreted as both of them.
+  Bugfixes:
+    - Fixed whitelisting not working as expected.
+    - Fixed bar not being copied during merging and splitting.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+Date: 14.1.2024
+  Features:
+    - Added mod setting to pick where circuit connector will be placed on the merged chests.
+    - Mod now checks if merging/splitting of chest would cause items to be deleted and mod setting can prevent merging/splitting in such cases.
+    - Lowered default values of width/height/area mod settings to speed up loading when using default settings.
+    - Replaced old single "Mergable chest" mod setting with mod settings for every individual mergeable chest.
+    - Merged chests can now be upgraded with upgrade planner.
+  Modding:
+    - Rewritten mod to allow other mods to create mergeable variants of their chests.
+    - Added events which are raised when chests are merged or split.
+  Bugfixes:
+    - Lua events are emitted when chests are created/destroyed during merging/splitting.
+  Info:
+    - Migration on existing saves WILL DELETE all chests wider/higher than 42. Don't upgrade if you have such chests in your save (there are no new groundbreaking features anyway). If you have chests smaller than that it should be ok to update, you will just have to update the mod settings after the update.
+
+---------------------------------------------------------------------------------------------------
+Version: 4.2.0
+Date: 13.8.2023
+  Features:
+    - Added support for chests from Very Small Chests mod.
+  Graphics:
+    - Updated graphics of warehouses.
+
+---------------------------------------------------------------------------------------------------
 Version: 4.1.0
 Date: 30.1.2023
-  Feature:
+  Features:
     - Added support for chests from Paper Chest mod.
-    
+
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.3
 Date: 5.1.2023
   Translation:
     - Updated English and German (provided by ST-DDT) translations.
-    
+
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.2
 Date: 23.4.2022
-  Bugfix:
+  Bugfixes:
     - Renamed Nullius chests to fit new version of Nullius.
 
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.1
 Date: 5.3.2022
-  Bugfix:
+  Bugfixes:
     - Fixed changelog.
 
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.0
 Date: 4.3.2022
-  Breaking change:
-    - Fixed type of chest placed when splitting Bob/Dyworld chests. This unfortunately means that all previously merged Bob/Dyworld chests are going to disappear. For Bob chests it is possible to first split the chests before installing this update, but there's no such fix for Dyworld chests.
-
-  Bugfix:
+  Bugfixes:
     - Fixed support for Nullius chests.
+    - Fixed type of chest placed when splitting Bob/Dyworld chests. This unfortunately means that all previously merged Bob/Dyworld chests are going to disappear. For Bob chests it is possible to first split the chests before installing this update, but there's no such fix for Dyworld chests.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.6.0
@@ -46,22 +92,18 @@ Date: 26.10.2021
 ---------------------------------------------------------------------------------------------------
 Version: 3.4.0
 Date: 19.6.2021
-  Major features:
+  Features:
     - Implemented blueprint rotation that supports rotating merged chests within them. Key binding is unbound by default.
-
-  Feature:
     - Added support for copying item requests when requester chest is split (mod configuration in WideChestsLogistic).
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.3.0
 Date: 30.12.2020
-  Major features:
+  Features:
     - Added possibility to merge logistic chests (only single line wide/high). This feature is enabled when you have "WideChestsLogistic" mod enabled. Beware of long loading time and higher memory usage.
-
-  Dependencies:
+  Info:
     - Added optional dependency on WideChestsLogistic.
-
-  Bugfix:
+  Bugfixes:
     - Fixed missing limit of red bar during merge of large chests.
 
 ---------------------------------------------------------------------------------------------------
@@ -85,61 +127,58 @@ Date: 15.8.2020
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.7
 Date: 9.5.2020
-  Bugfix:
+  Bugfixes:
     - Fixed incorrect check of whitelisted chests during merging.
     - Moved updating chest stack size to data-final-fixes stage.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.6
 Date: 20.4.2020
-  Bugfix:
+  Bugfixes:
     - Removed "Modify check stack size" mod setting seince now it has to be always on.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.5
 Date: 23.3.2020
-  Feature:
+  Features:
     - Merging tool is now only available as shortcut.
-
-  Hotfix:
+  Bugfixes:
     - Fixed bug in new merged chest health calculation.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.4
 Date: 21.3.2020
-  Bugfix:
+  Bugfixes:
     - Merged chest's health now scales with the size of the chest (up to 10 times the health of base chest).
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.3
 Date: 10.3.2020
-  Bugfix:
+  Bugfixes:
     - Fixed merging algorithm bug.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.2
 Date: 28.1.2020
-  Bugfix:
+  Bugfixes:
     - Added migration json which works with default mod settings. People who increased the limits and used those chests will either have to create their own migration json or bite the bullet and replace those chests in their save.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.1
 Date: 27.1.2020
-  Bugfix:
+  Bugfixes:
     - Fixed modifying maximum chest stack size not working.
 
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.0
 Date: 23.1.2020
-  Major features:
+  Features:
     - Added possibility to merge all basic chest types at once (only with each other). This feature is enabled when you have "WideChestsAllTypes" mod enabled. Beware of long loading time and higher memory usage.
     - Bob's Brass and Titanium chests are now supported if you have both bobplates and boblogistics enabled.
     - Enforced hard limits on maximum chest area (1600), width (42) and height (42). Increasing over this limit won't do anything unless you have "WideChestsUnlimited" mod enabled in which case there are no limits again. Beware of long loading time and higher memory usage.
-
-  Bugfix:
+  Bugfixes:
     - Fixed edge case creating chests out of thin air when merging specific arrangement of chests.
-
-  Dependencies:
+  Info:
     - Added optional dependency on boblogistics.
     - Added optional dependency on bobplates.
     - Added optional dependency on WideChestsAllTypes.
@@ -157,16 +196,14 @@ Date: 8.5.2019
   Bugfixes:
     - Added maximum chest inventory size limit to game's limit of inventory size (65535).
     - Multiplication sign "×" can be used in whitelist setting instead of letter "x".
-
   Translation:
     - Added additional German localizations.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 19.4.2019
-  Feature:
+  Features:
     - Added whitelist setting to limit creatable chests.
-
   Info:
     - Merged chests can no longer be upgraded using upgrade planner.
 
@@ -181,7 +218,6 @@ Version: 2.1.1
 Date: 2.3.2019
   Bugfixes:
     - Fixed Wide chest shadow bug.
-
   Info:
     - Added mod thumbnail.
 
@@ -191,10 +227,8 @@ Date: 2.3.2019
   Features:
     - Merging tool converted to shortcut and it is no longer available as a item.
     - Updated Merged steel chest sprite.
-
   Bugfixes:
     - Fixed High chest shadow bug.
-
   Info:
     - Updated for Factorio 0.17.
     - Added mod setting to revert back to old Merging tool (giving you the item back, found in blueprint library).
@@ -223,14 +257,12 @@ Version: 2.0.0
 Date: 28.9.2018
   Major Features:
     - Implemented merging of area chests. Maximum chest width, length and area is configurable in mod settings.
-
   Features:
     - Threshold when trashdump will be used (instead of warehouse) is configurable in mod settings.
     - Only singular chests can be merged (alternative select merged chests to split them before merging them).
     - Merge merge tool is now available in blueprint library for free.
     - Added setting to modify mergable chest item stack size so that bots can build all possible chests.
     - Implemented mod setting to select mergable chest type (wooden, iron or steel chest).
-
   Info:
     - Changelog filled.
 
@@ -258,7 +290,6 @@ Date: 16.11.2017
   Major Features:
     - When placing blueprints the ghost is not divided into individual chests and bots delived entire chest in one go (and circuit connections are not destroyed). Maximum size a bots can build is steel chest stack size.
     - Implemented advanced merging algorithm. Chests in selected area are merged by decresing sizes (horizontal chests are prefered) and single selection can merge chests in both directions.
-
   Features:
     - Circuit connections are merged (some cables may not reach after merging and will be missing, see example).
     - Red inventory bar is also merged.
@@ -286,7 +317,6 @@ Version: 1.8.0
 Date: 19.5.2017
   Major Features:
     - Placing merged chests by blueprint will split it into steel chests that will be automaticly merged when they are all placed.
-
   Features:
     - Merging of already merged chests with other chests is now possible.
 
@@ -308,7 +338,6 @@ Version: 1.6.0
 Date: 30.4.2017
   Features:
     - Added option to modify and limit chest size.
-
   Bugfixes:
     - Fixed on-player-selected-area event ignoring selection item.
 
@@ -342,7 +371,6 @@ Version: 1.1.0
 Date: 18.9.2016
   Major Features:
     - Added chests sizes up to 42 (cannot imagine anyone would need more...also more is impossible without reducing texture quality).
-
   Bugfixes:
     - Fixed error with naming mod.
 

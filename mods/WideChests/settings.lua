@@ -1,97 +1,109 @@
-require("init-settings")
+require('init')
+require('setting_init')
 
-local allowedChestNames = { }
-for _, data in pairs(MergingChests.MergableChestIdToData) do
-	if data.name then
-		table.insert(allowedChestNames, data.name)
-	end
-end
+MergingChests.create_mergeable_chest_setting('wooden-chest', { default_value = 'none', order = '1' })
+MergingChests.create_mergeable_chest_setting('iron-chest', { default_value = 'none', order = '2' })
+MergingChests.create_mergeable_chest_setting('steel-chest', { order = '3' })
 
 data:extend(
 {
 	{
-		name = "mergable-chest-name",
-		type = "string-setting",
-		setting_type = "startup",
-		default_value = MergingChests.MergableChestIdToData["steel-chest"].name,
-		allowed_values = allowedChestNames,
-		per_user = false,
-		order = "1"
-	},
-	{
-		name = "max-chest-width",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.max_width,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 2,
-		default_value = 42,
-		per_user = false,
-		order = "2"
+		default_value = 10,
+		order = '02'
 	},
 	{
-		name = "max-chest-height",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.max_height,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 2,
-		default_value = 42,
-		per_user = false,
-		order = "3"
+		default_value = 10,
+		order = '03'
 	},
 	{
-		name = "max-chest-area",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.max_area,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 2,
-		default_value = 1600,
-		per_user = false,
-		order = "4"
+		default_value = 100,
+		order = '04'
 	},
 	{
-		name = "whitelist-chest-sizes",
-		type = "string-setting",
-		setting_type = "startup",
-		default_value = "NxN",
+		name = MergingChests.setting_names.whitelist,
+		type = 'string-setting',
+		setting_type = 'startup',
+		default_value = 'NxN',
 		allow_blank = true,
-		per_user = false,
-		order = "5"
+		order = '05'
 	},
 	{
-		name = "inventory-size-multiplier",
-		type = "double-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.mirror_whitelist,
+		type = 'bool-setting',
+		setting_type = 'startup',
+		default_value = false,
+		order = '06'
+	},
+	{
+		name = MergingChests.setting_names.inventory_size_multiplier,
+		type = 'double-setting',
+		setting_type = 'startup',
 		minimum_value = 0,
 		default_value = 1.0,
-		per_user = false,
-		order = "6"
+		order = '07'
 	},
 	{
-		name = "inventory-size-limit",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.inventory_size_limit,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 1,
 		maximum_value = 65535,
 		default_value = 1000,
-		per_user = false,
-		order = "7"
+		order = '08'
 	},
 	{
-		name = "sprite-decal-chance",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.sprite_decal_chance,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 0,
 		maximum_value = 100,
 		default_value = 15,
-		per_user = false,
-		order = "8"
+		order = '09'
 	},
 	{
-		name = "warehouse-threshold",
-		type = "int-setting",
-		setting_type = "startup",
+		name = MergingChests.setting_names.warehouse_threshold,
+		type = 'int-setting',
+		setting_type = 'startup',
 		minimum_value = 2,
 		default_value = 5,
-		per_user = false,
-		order = "9"
+		order = '10'
 	},
+	{
+		name = MergingChests.setting_names.circuit_connector_position,
+		type = 'string-setting',
+		setting_type = 'startup',
+		default_value = 'center-center',
+		allowed_values = {
+			'center-center',
+			'right-top',
+			'right-middle',
+			'right-bottom',
+			'left-top',
+			'left-middle',
+			'left-bottom',
+			'bottom-right',
+			'bottom-middle',
+			'bottom-left'
+		},
+		order = '11'
+	},
+	{
+		name = MergingChests.setting_names.allow_delete_items,
+		type = 'bool-setting',
+		setting_type = 'runtime-per-user',
+		default_value = false,
+		order = '12'
+	}
 })
-
-
