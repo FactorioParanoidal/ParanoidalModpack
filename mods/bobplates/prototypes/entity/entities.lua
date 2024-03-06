@@ -750,6 +750,7 @@ data:extend({
         { position = { 0, -1 } },
         { position = { 0, 1 } },
       },
+      secondary_draw_orders = { north = -1, east = -1, south = 1, west = -1 },
     },
     two_direction_only = true,
     fast_replaceable_group = "pipe",
