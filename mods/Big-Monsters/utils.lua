@@ -672,15 +672,29 @@ local command = {type = defines.command.go_to_location, destination  = destinati
 unit.set_command(command)			
 end	
 	
-function get_worms_for_evolution(evolution, extra_evo)
+	
+function get_worms_for_evolution(evolution, extra_evo, surface, position)
 if not evolution then evolution = game.forces.enemy.evolution_factor end
 local filter = {{filter = "type",type = "turret"},{filter = "build-base-evolution-requirement", comparison = "≤", value = evolution, mode = "and"}} 
 local worms_p = game.get_filtered_entity_prototypes(filter)
 local worms = {}
 
+--check temperature 
+local temp 
+if surface and position then 
+	temp = surface.calculate_tile_properties({'temperature'},{position})
+	temp = temp.temperature[1]
+	end
+
 for name,proto in pairs (worms_p) do 
 	if not string.find(name, "boss") then 
-		if proto.build_base_evolution_requirement ~= nil then  table.insert(worms,name) end 
+		if proto.build_base_evolution_requirement ~= nil then
+			local add = true
+			if temp then if (string.find(name, "cold") and temp>10) or (string.find(name, "explosive") and temp<40) then add=false end end
+			if string.find(name, "kr-") or string.find(name, "RTPrimer") then add=false end -- krastorio fake worms 
+			if not (string.find(name, "worm")) then add=false end
+			if add then table.insert(worms,name) end
+			end 
 		end
 	end
 
@@ -692,14 +706,18 @@ if extra_evo then
 	local worms_p = game.get_filtered_entity_prototypes(filter)
 	for name,proto in pairs (worms_p) do 
 		if not string.find(name, "boss") then 
-		if proto.build_base_evolution_requirement ~= nil then table.insert(strong_worms,name) end 
+		if proto.build_base_evolution_requirement ~= nil then 
+			local add = true
+			if temp then if (string.find(name, "cold") and temp>10) or (string.find(name, "explosive") and temp<40) then add=false end end
+			if string.find(name, "kr-") or string.find(name, "RTPrimer") then add=false end -- krastorio and RenaiTransportation fake worms 
+			if not (string.find(name, "worm")) then add=false end
+			if add then table.insert(strong_worms,name) end
+			end 
 		end
 		end
 	end
-
 return worms,strong_worms
 end		
-
 
 
 function create_tatoo_for_unit(unit, color)
