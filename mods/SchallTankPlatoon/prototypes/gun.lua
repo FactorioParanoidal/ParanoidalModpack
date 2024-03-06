@@ -15,7 +15,7 @@ tankAC.attack_parameters.cooldown = tankAC.attack_parameters.cooldown/10 --90
 tankAC.attack_parameters.range = 20 --25
 tankAC.attack_parameters.min_range = 5
 tankAC.attack_parameters.damage_modifier = 1.5 --1
-tankAC.attack_parameters.sound[1].volume = 0.5 --1.0
+TPlib.scale_sound_volume(tankAC.attack_parameters.sound, 0.3)
 
 local tankCH1 = table.deepcopy(drg["tank-cannon"])
 tankCH1.name = "tank-cannon-H1"
