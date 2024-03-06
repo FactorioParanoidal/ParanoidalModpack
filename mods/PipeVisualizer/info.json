@@ -1,14 +1,17 @@
 {
   "name": "PipeVisualizer",
-  "version": "1.0.4",
+  "version": "2.2.0",
   "title": "Pipe Visualizer",
-  "description": "Visualize the layout and fluids in pipe networks.",
+  "description": "Visualize the layout and contents of pipe networks. Press H to draw the selected entity's fluid systems, or press Shift + H to draw all visible fluid systems. Press Control + H to toggle between color-by-fluid and color-by-system.",
   "author": "raiguard",
-  "contact": "Discord: raiguard#7402",
-  "homepage": "https://github.com/raiguard/Factorio-PipeVisualizer",
+  "contact": "https://github.com/raiguard/PipeVisualizer",
+  "homepage": "https://github.com/raiguard/PipeVisualizer",
   "factorio_version": "1.1",
-  "dependencies": [ "base >= 1.1.55", "flib >= 0.10.0" ],
+  "dependencies": [ "base >= 1.1.86", "flib >= 0.13.0" ],
   "package": {
-    "git_publish_branch": "main"
+    "git_publish_branch": "main",
+    "ignore": [ "imgui.ini", "screenshots/*" ],
+    "scripts": { "prepublish": "factorio-crowdin-sync" },
+    "sync_portal_details": true
   }
 }
