@@ -864,11 +864,6 @@
     },
     
     {
-      "name": "Sandros-fixes",
-      "enabled": true
-    },
-    
-    {
       "name": "scattergun_turret",
       "enabled": true
     },
@@ -1035,11 +1030,6 @@
     
     {
       "name": "ZCS-Trash-Landfill-Continued-Continued",
-      "enabled": true
-    },
-    
-    {
-      "name": "zero-fluid-info",
       "enabled": true
     },
     
