@@ -1136,3 +1136,25 @@ bobmods.lib.recipe.set_ingredients("angels-chemical-plant-4", { { "titanium-plat
 --фикс стрелок порта для сероводорода промывочных машин
 data.raw['assembling-machine']['washing-plant'].fluid_boxes[4].pipe_connections[1].type = "output"
 data.raw['assembling-machine']['washing-plant-2'].fluid_boxes[4].pipe_connections[1].type = "output"
+
+--Перенос Каркаса 1 в Металлургию 1 (AKMF)
+bobmods.lib.tech.remove_recipe_unlock("steel-processing", "basic-structure-components")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-1", "basic-structure-components")
+
+--Перенос Каркаса 2, примитивного Цинка и Никеля в Металлургию 2 (AKMF)
+bobmods.lib.tech.remove_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
+bobmods.lib.tech.remove_recipe_unlock("angels-nickel-smelting-1", "nickel-electrolysis-x")
+bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "invar-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "zinc-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "nickel-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "invar-alloy-x")
+bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "intermediate-structure-components")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "intermediate-structure-components")
+
+--Перенос Каркаса 3, примитивного Титана и Кобальта в Металлургию 3 (AKMF https://discord.com/channels/569536773701500928/1196117081691795496)
+bobmods.lib.tech.remove_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
+bobmods.lib.tech.remove_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "cobalat-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "titanium-electrolysis-x")
+bobmods.lib.tech.remove_recipe_unlock("titanium-processing", "advanced-structure-components")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-components")
