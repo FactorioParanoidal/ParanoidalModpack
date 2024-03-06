@@ -1,34 +1,57 @@
-local area = require("__flib__.area")
-
-local constants = require("constants")
+local bounding_box = require("__flib__.bounding-box")
 
 if not settings.startup["bnl-enable"].value then
   return
 end
 
--- Extract settings
+local additional_vertical_offset = 0.1
+
+local horizontal_position = 0.3
+
+local ignored_entities = {
+  -- Mining Drones
+  ["mining-depot"] = true,
+  -- Space Exploration
+  ["se-core-miner"] = true,
+  ["se-rocket-launch-pad-silo"] = true,
+  -- Transport Drones
+  ["buffer-depot"] = true,
+  ["fluid-depot"] = true,
+  ["fuel-depot"] = true,
+  ["request-depot"] = true,
+  ["supply-depot"] = true,
+}
+
+local sizes = {
+  small = 0.15,
+  medium = 0.2,
+  large = 0.25,
+  huge = 0.5,
+}
+
+--- @type table<string, Color>
 local status_colors = {}
 for name, spec in pairs(settings.startup) do
-  local matched, _, key = string.find(name, "^bnl%-color%-(.-)$")
-  if matched then
-    status_colors[key] = constants.colors[spec.value]
+  local key = string.match(name, "^bnl%-color%-(.-)$")
+  if key then
+    status_colors[key] = util.premul_color(spec.value --[[@as Color]])
   end
 end
 
-local enable_glow = settings.startup["bnl-glow"].value
-local size = constants.sizes[settings.startup["bnl-indicator-size"].value]
+local enable_glow = settings.startup["bnl-glow"].value --[[@as boolean]]
+local size = sizes[settings.startup["bnl-indicator-size"].value] --[[@as double]]
 
 local function build_indicator(prototype)
-  -- Calculate shift for the indicator
-  local Box = area.load(prototype.selection_box or prototype.collision_box or prototype.drawing_box)
+  local box = bounding_box.ensure_explicit(prototype.selection_box or prototype.collision_box or prototype.drawing_box)
+  --- @type table<string, MapPosition>
   local positions = {
     north_south = {},
     east_west = {},
   }
-  for _, tbl in pairs(positions) do
-    tbl[1] = Box.left_top.x + (Box:width() * constants.horizontal_position) -- X
-    tbl[2] = Box.right_bottom.y - size - constants.additional_vertical_offset -- Y
-    Box = Box:rotate()
+  for _, pos in pairs(positions) do
+    pos.x = box.left_top.x + (bounding_box.width(box) * horizontal_position)
+    pos.y = box.right_bottom.y - size - additional_vertical_offset
+    box = bounding_box.rotate(box)
   end
 
   return {
@@ -57,25 +80,21 @@ end
 local function add_to_wv(prototype, wv_root)
   wv_root = wv_root or prototype
 
-  -- Set status colors
   wv_root.status_colors = status_colors
 
-  -- Get or create working visualisations table
   local wv = wv_root.working_visualisations
   if not wv then
     wv = {}
     wv_root.working_visualisations = wv
   end
 
-  -- Add indicator to working visualisations
   wv[#wv + 1] = build_indicator(prototype)
 end
 
 for _, type in pairs({ "assembling-machine", "furnace", "rocket-silo" }) do
   for name, crafter in pairs(data.raw[type]) do
-    if not constants.ignored_entities[name] then
+    if not ignored_entities[name] then
       if crafter.bottleneck_ignore then
-        -- Remove the property to avoid pollution with some debugging features
         crafter.bottleneck_ignore = nil
       else
         add_to_wv(crafter)
@@ -84,27 +103,27 @@ for _, type in pairs({ "assembling-machine", "furnace", "rocket-silo" }) do
   end
 end
 
-if settings.startup["bnl-include-mining-drills"].value then
-  for name, drill in pairs(data.raw["mining-drill"]) do
-    if not constants.ignored_entities[name] then
-      if drill.bottleneck_ignore then
-        -- Remove the property to avoid pollution with some debugging features
-        drill.bottleneck_ignore = nil
-      else
-        drill.status_colors = status_colors
+if not settings.startup["bnl-include-mining-drills"].value then
+  return
+end
 
-        -- Ensure the drill has a graphics set
-        if not drill.graphics_set then
-          drill.graphics_set = {
-            animation = drill.animations,
-          }
-        end
+for name, drill in pairs(data.raw["mining-drill"]) do
+  if not ignored_entities[name] then
+    if drill.bottleneck_ignore then
+      drill.bottleneck_ignore = nil
+    else
+      drill.status_colors = status_colors
 
-        add_to_wv(drill, drill.graphics_set)
+      if not drill.graphics_set then
+        drill.graphics_set = {
+          animation = drill.animations,
+        }
+      end
 
-        if drill.wet_mining_graphics_set then
-          add_to_wv(drill, drill.wet_mining_graphics_set)
-        end
+      add_to_wv(drill, drill.graphics_set)
+
+      if drill.wet_mining_graphics_set then
+        add_to_wv(drill, drill.wet_mining_graphics_set)
       end
     end
   end

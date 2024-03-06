@@ -1,48 +1,87 @@
-local constants = require("constants")
-
 data:extend({
   {
     type = "bool-setting",
     name = "bnl-enable",
     setting_type = "startup",
     default_value = true,
-    order = "aa",
+    order = "a",
   },
   {
     type = "bool-setting",
     name = "bnl-glow",
     setting_type = "startup",
     default_value = true,
-    order = "ab",
+    order = "a",
   },
   {
     type = "bool-setting",
     name = "bnl-include-mining-drills",
     setting_type = "startup",
     default_value = true,
-    order = "ac",
+    order = "a",
   },
   {
     type = "string-setting",
     name = "bnl-indicator-size",
     setting_type = "startup",
-    default_value = constants.default_size,
-    allowed_values = constants.size_settings,
-    order = "ad",
+    default_value = "small",
+    allowed_values = { "small", "medium", "large", "huge" },
+    order = "a",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-disabled",
+    setting_type = "startup",
+    default_value = { r = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-full_output",
+    setting_type = "startup",
+    default_value = { r = 1, g = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-idle",
+    setting_type = "startup",
+    default_value = { r = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-insufficient_input",
+    setting_type = "startup",
+    default_value = { r = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-low_power",
+    setting_type = "startup",
+    default_value = { r = 1, g = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-no_minable_resources",
+    setting_type = "startup",
+    default_value = { r = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-no_power",
+    setting_type = "startup",
+    default_value = { r = 1 },
+    order = "b",
+  },
+  {
+    type = "color-setting",
+    name = "bnl-color-working",
+    setting_type = "startup",
+    default_value = { g = 1 },
+    order = "b",
   },
 })
-
-local color_settings = {}
-for name, spec in pairs(constants.status_settings) do
-  color_settings[#color_settings + 1] = {
-    type = "string-setting",
-    name = "bnl-color-" .. name,
-    localised_name = { "mod-setting-name.bnl-color-setting", { "mod-setting-name.bnl-status-" .. name } },
-    setting_type = "startup",
-    default_value = spec.color,
-    allowed_values = constants.color_settings,
-    order = spec.order,
-  }
-end
-
-data:extend(color_settings)

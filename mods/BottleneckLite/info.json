@@ -1,14 +1,17 @@
 {
   "name": "BottleneckLite",
-  "version": "1.2.4",
+  "version": "1.2.8",
   "title": "Bottleneck Lite",
-  "author": "raiguard",
-  "contact": "https://lists.sr.ht/~raiguard/factorio-mods-discuss",
-  "homepage": "https://sr.ht/~raiguard/factorio-mods",
-  "factorio_version": "1.1",
-  "dependencies": ["? base >= 1.1.48", "flib >= 0.9.2", "(?) space-exploration-postprocess"],
   "description": "A tool for locating bottlenecks in your factory, with zero runtime overhead and instant response to changes in status.",
+  "author": "raiguard",
+  "contact": "https://github.com/raiguard/BottleneckLite",
+  "homepage": "https://github.com/raiguard/BottleneckLite",
+  "factorio_version": "1.1",
+  "dependencies": [ "base >= 1.1.85", "flib >= 0.12.9", "(?) space-exploration-postprocess" ],
   "package": {
-    "git_publish_branch": "main"
+    "git_publish_branch": "main",
+    "ignore": [ "imgui.ini", "screenshots/*", "stylua.toml" ],
+    "scripts": { "prepublish": "factorio-crowdin-sync" },
+    "sync_portal_details": true
   }
 }
