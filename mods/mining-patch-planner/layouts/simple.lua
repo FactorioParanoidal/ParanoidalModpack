@@ -866,8 +866,8 @@ function layout:expensive_deconstruct(state)
 				tpos2[1], tpos2[2] = cx + pad_right, cy + pad_right
 			end
 			
-			pos1 = mpp_util.revert(c.gx, c.gy, DIR, tpos1[1], tpos1[2], c.tw, c.th)
-			pos2 = mpp_util.revert(c.gx, c.gy, DIR, tpos2[1], tpos2[2], c.tw, c.th)
+			local pos1 = mpp_util.revert(c.gx, c.gy, DIR, tpos1[1], tpos1[2], c.tw, c.th)
+			local pos2 = mpp_util.revert(c.gx, c.gy, DIR, tpos2[1], tpos2[2], c.tw, c.th)
 			
 			-- ugh
 			pos1[1], pos2[1] = min(pos1[1], pos2[1]), max(pos1[1], pos2[1])
@@ -1076,16 +1076,29 @@ function layout:_display_lane_filling(state)
 	end
 	local multiplier = drill_speed / resource_hardness * module_speed * drill_productivity
 
+	local throughput1, throughput2 = 0, 0
 	--local ore_hardness = game.entity_prototypes[state.found_resources
 	for i, belt in pairs(state.belts) do
 		local function lane_capacity(lane) if lane then return #lane * multiplier end return 0 end
 
 		local speed1, speed2 = lane_capacity(belt.lane1), lane_capacity(belt.lane2)
 
+		throughput1 = throughput1 + math.min(1, speed1 / belt_speed)
+		throughput2 = throughput2 + math.min(1, speed2 / belt_speed)
+
 		render_util.draw_belt_lane(state, belt)
 
 		render_util.draw_belt_stats(state, belt, belt_speed, speed1, speed2)
 	end
+
+	if #state.belts > 1 then
+		local x = min(state.belts[1].x1, state.belts[2].x1)
+		local y = (state.belts[1].y + state.belts[#state.belts].y) / 2
+		render_util.draw_belt_total(state, x, y, throughput1, throughput2)
+	end
+
+	--local lanes = math.ceil(math.max(throughput1, throughput2))
+	--state.player.print("Enough to fill "..lanes.." belts after balancing")
 end
 
 ---@param self SimpleLayout

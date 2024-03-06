@@ -79,8 +79,7 @@ require_layout("blueprints")
 ---@return State|nil
 ---@return LocalisedString error status
 local function create_state(event)
-	---@type State
-	local state = {}
+	local state = {} --[[@as State]]
 	state._callback = "start"
 	state.tick = 0
 	state.mod_version = game.active_mods["mining-patch-planner"]

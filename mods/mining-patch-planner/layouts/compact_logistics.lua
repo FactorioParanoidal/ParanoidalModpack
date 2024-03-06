@@ -39,7 +39,7 @@ function layout:prepare_belt_layout(state)
 		miner_lane_number = max(miner_lane_number, index)
 		if not miner_lanes[index] then miner_lanes[index] = {} end
 		local line = miner_lanes[index]
-		if miner.center.x > (line.last_x or 0) then
+		if line.last_x == nil or miner.center.x > line.last_x then
 			line.last_x = miner.center.x
 			line.last_miner = miner
 		end
