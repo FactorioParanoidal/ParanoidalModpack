@@ -100,19 +100,13 @@ local function has_power(powersource, entity)
 end
 
 local basic_item_types = {['item'] = true, ['capsule'] = true, ['gun'] = true, ['rail-planner'] = true, ['module'] = true}
-local items_with_metadata = nil
 local function check_for_basic_item(item)
+	local items_with_metadata = global.items_with_metadata
 	if not items_with_metadata then
 		items_with_metadata = {}
 		for item_name, prototype in pairs(game.item_prototypes) do
-			if prototype.type == 'ammo' then
-				if prototype.magazine_size > 1 then
-					items_with_metadata[item_name] = true
-				end
-			else
-				if not basic_item_types[prototype.type] then
-					items_with_metadata[item_name] = true
-				end
+			if not basic_item_types[prototype.type] then
+				items_with_metadata[item_name] = true
 			end
 		end
 		global.items_with_metadata = items_with_metadata

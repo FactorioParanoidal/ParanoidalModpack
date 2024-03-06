@@ -65,7 +65,7 @@ data:extend{
 		icon_size = 64,
 		icon_mipmaps = 4,
 		name = 'memory-unit',
-		inventory_size = 60,
+		inventory_size = 300,
 		picture = {
 			filename = '__deep-storage-unit__/graphics/entity/memory-unit.png',
 			height = 256,
