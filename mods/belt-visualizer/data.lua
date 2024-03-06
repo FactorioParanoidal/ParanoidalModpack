@@ -1,23 +1,22 @@
 data:extend{{
     type = "custom-input",
     name = "bv-highlight-belt",
+    key_sequence = "SHIFT + H",
+    action = "lua",
+    order = "b",
+}, {
+    type = "custom-input",
+    name = "bv-highlight-ghost",
     key_sequence = "H",
-    alternative_key_sequence = "SHIFT + H",
-    action = "lua"
-},
--- {
---     type = "custom-input",
---     name = "bv-highlight-ghost",
---     key_sequence = "SHIFT + H",
---     action = "lua"
--- },
-{
+    action = "lua",
+    order = "a",
+}, {
     type = "custom-input",
     name = "bv-toggle-hover",
     key_sequence = "",
-    action = "lua"
-},
-{
+    action = "lua",
+    order = "c",
+}, {
     type = "shortcut",
     name = "bv-toggle-hover",
     action = "lua",
@@ -29,7 +28,7 @@ data:extend{{
         priority = "extra-high-no-scale",
         size = 32,
         scale = 0.5,
-        mipmap_count = 2,
+        mipmap_count = 1,
         flags = {"gui-icon"},
     },
     small_icon =
@@ -38,7 +37,7 @@ data:extend{{
       priority = "extra-high-no-scale",
       size = 24,
       scale = 0.5,
-      mipmap_count = 2,
+      mipmap_count = 1,
       flags = {"gui-icon"}
     },
     disabled_small_icon =
@@ -47,8 +46,7 @@ data:extend{{
       priority = "extra-high-no-scale",
       size = 24,
       scale = 0.5,
-      mipmap_count = 2,
+      mipmap_count = 1,
       flags = {"gui-icon"}
     }
-}
-}
+}}
