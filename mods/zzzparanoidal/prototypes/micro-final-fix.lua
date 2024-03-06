@@ -953,11 +953,12 @@ data.raw["recipe"]["angels-concrete"].hidden = true
 bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-2", "angels-concrete")
 -------------------------------------------------------------------------------------------------
 --графические фиксы
-data.raw.technology["plutonium-fuel-cell"].icon_size = 64
-data.raw.technology["plutonium-fuel-cell"].icon_mipmaps = 4
-
-data.raw.technology["thorium-plutonium-fuel-cell"].icon_size = 64
-data.raw.technology["thorium-plutonium-fuel-cell"].icon_mipmaps = 4
+data.raw.technology["plutonium-fuel-cell"].icons = {{icon = "__bobplates__/graphics/icons/nuclear/plutonium-fuel-cell.png", icon_size = 64, icon_mipmaps = 4}} --AKMF
+data.raw.technology["thorium-plutonium-fuel-cell"].icons = {{icon = "__bobplates__/graphics/icons/nuclear/thorium-plutonium-fuel-cell.png", icon_size = 64, icon_mipmaps = 4}} --AKMF
+--data.raw.technology["plutonium-fuel-cell"].icon_size = 64 не знаю почему, но этот вариант не работает --AKMF
+--data.raw.technology["plutonium-fuel-cell"].icon_mipmaps = 4
+--data.raw.technology["thorium-plutonium-fuel-cell"].icon_size = 64
+--data.raw.technology["thorium-plutonium-fuel-cell"].icon_mipmaps = 4
 
 data.raw.technology["effect-transmission"].icon = "__base__/graphics/technology/effect-transmission.png"
 data.raw.technology["effect-transmission"].icon_size = 256
@@ -1000,6 +1001,16 @@ end
 
 data.raw.technology["advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
+
+data.raw.technology["Space-Lab-Research-1"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-21"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-41"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["Space-Lab-Research-61"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+
+data.raw.technology["stack-inserter-research-1"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-5"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-10"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["stack-inserter-research-15"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
 --###############################################################################################
 --будет вшито в биоиндустрию
 --дробление камня в ангеловских дробилках руды
