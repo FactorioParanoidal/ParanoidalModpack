@@ -10,6 +10,8 @@
   "dependencies": [
     "base >= 1.1.74",
     "boblibrary", 
+    "base >= 1.1.100",
+    "boblibrary",
     "BatteryElectricTrain",
     "? angelsindustries", 
     "? angelsrefining", 
