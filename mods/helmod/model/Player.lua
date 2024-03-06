@@ -25,6 +25,23 @@ function Player.load(event)
 end
 
 -------------------------------------------------------------------------------
+---Load factorio player by name or first
+---@param player_name string
+---@return Player
+function Player.try_load_by_name(player_name)
+  for _, player in pairs(game.players) do
+    if Lua_player == nil then
+      Lua_player = player
+    end
+    if player.name == player_name then
+      Lua_player = player
+      break
+    end
+  end
+  return Player
+end
+
+-------------------------------------------------------------------------------
 ---Set factorio player
 ---@param player LuaPlayer
 ---@return Player
@@ -47,12 +64,12 @@ end
 
 ------------------------------------------------------------------------------
 ---Get display sizes
----@return number, number
+---@return number, number, number
 function Player.getDisplaySizes()
-  if Lua_player == nil then return 800,600 end
+  if Lua_player == nil or not Lua_player.valid then return 800,600,1 end
   local display_resolution = Lua_player.display_resolution
   local display_scale = Lua_player.display_scale
-  return display_resolution.width/display_scale, display_resolution.height/display_scale
+  return display_resolution.width, display_resolution.height, display_scale
 end
 
 -------------------------------------------------------------------------------
@@ -100,44 +117,36 @@ end
 -------------------------------------------------------------------------------
 ---Get smart tool
 ---@return LuaItemStack
-function Player.getSmartTool()
+function Player.getSmartTool(entities)
   if Lua_player == nil then
     return nil
   end
-  local inventory = Player.getMainInventory()
-  local tool_stack = nil
-  for i = 1, #inventory do
-    local stack = inventory[i]
-    if stack.valid_for_read and stack.is_blueprint and stack.name == "blueprint" and stack.label == "Helmod Smart Tool" then
-      if stack.is_blueprint_setup() then
-        if Lua_player.cursor_stack.swap_stack(stack) then
-            return Lua_player.cursor_stack
-        end
-      else
-        Lua_player.cursor_stack.swap_stack(stack)
-        return Lua_player.cursor_stack
-      end
-    end
-  end
-  Lua_player.cursor_stack.set_stack("blueprint")
-  return Lua_player.cursor_stack
+  local script_inventory = game.create_inventory(1)
+  local tool_stack = script_inventory[1]
+  tool_stack.set_stack({name="blueprint"})
+  tool_stack.set_blueprint_entities(entities)
+  tool_stack.label = "Helmod Smart Tool"
+
+  Lua_player.add_to_clipboard(tool_stack)
+  Lua_player.activate_paste()
+  script_inventory.destroy()
+  return tool_stack
 end
 
 -------------------------------------------------------------------------------
 ---Set smart tool
 ---@param recipe table
 ---@param type string
+---@param index number
 ---@return any
-function Player.setSmartTool(recipe, type)  
-  if Lua_player == nil or recipe == nil then
-    return nil
-  end
-  local tool_stack = Player.getSmartTool()
-  if tool_stack ~= nil then
-    tool_stack.clear_blueprint()
-    tool_stack.label = "Helmod Smart Tool"
-    tool_stack.allow_manual_label_change = false
+function Player.setSmartTool(recipe, type, index)  
+    if Lua_player == nil or recipe == nil then
+      return nil
+    end
     local factory = recipe[type]
+    if index ~= nil then
+      factory = factory[index]
+    end
     local modules = {}
     for name,value in pairs(factory.modules or {}) do
       modules[name] = value
@@ -151,9 +160,8 @@ function Player.setSmartTool(recipe, type)
     if type == "factory" then
       entity.recipe = recipe.name
     end
-    tool_stack.set_blueprint_entities({entity})
-  
-  end
+
+    Player.getSmartTool({entity})
 end
 
 -------------------------------------------------------------------------------
@@ -404,7 +412,7 @@ end
 -------------------------------------------------------------------------------
 ---Check factory limitation module
 ---@param module table
----@param lua_recipe table
+---@param lua_recipe RecipeData
 ---@return boolean
 function Player.checkFactoryLimitationModule(module, lua_recipe)
   local factory = lua_recipe.factory
@@ -418,17 +426,22 @@ function Player.checkFactoryLimitationModule(module, lua_recipe)
   local check_not_bypass = true
   local prototype = RecipePrototype(lua_recipe)
   local category = prototype:getCategory()
-  if category == "rocket-building" and lua_recipe.name ~= "rocket-part" then
-    local rocket_recipe = RecipePrototype("rocket-part")
-    if rocket_recipe.lua_prototype ~= nil then
-      rocket_recipe.name = "rocket-part"
-      rocket_recipe.factory = lua_recipe.factory
-      allowed = Player.checkFactoryLimitationModule(module, rocket_recipe)
-      return allowed
+  if prototype:getType() == "rocket" then
+    local rocket_part_recipe = Player.getRocketPartRecipe(lua_recipe.factory)
+    if rocket_part_recipe and category == rocket_part_recipe.category and lua_recipe.name ~= rocket_part_recipe.name then
+      local rocket_recipe = RecipePrototype(rocket_part_recipe.name)
+      if rocket_recipe.lua_prototype ~= nil then
+        rocket_recipe.name = rocket_part_recipe.name
+        rocket_recipe.factory = lua_recipe.factory
+        allowed = Player.checkFactoryLimitationModule(module, rocket_recipe)
+        return allowed
+      end
+      return true
     end
-    return true
   end
-  if rules_excluded[category] == nil then category = "standard" end
+  if rules_excluded[category] == nil then
+    category = "standard"
+  end
   check_not_bypass = Player.checkRules(check_not_bypass, rules_excluded, category, EntityPrototype(factory.name):native(), false)
   if table.size(module.limitations) > 0 and check_not_bypass and model_filter_factory_module == true then
     allowed = false
@@ -453,18 +466,18 @@ end
 
 -------------------------------------------------------------------------------
 ---Check beacon limitation module
----@param module table
----@param lua_recipe table
+---@param beacon FactoryData
+---@param recipe RecipeData
+---@param module LuaItemPrototype
 ---@return boolean
-function Player.checkBeaconLimitationModule(module, lua_recipe)
-  local beacon = lua_recipe.beacon
+function Player.checkBeaconLimitationModule(beacon, recipe, module)
   local allowed = true
   local model_filter_beacon_module = User.getModGlobalSetting("model_filter_beacon_module")
 
-  if table.size(module.limitations) > 0 and model_filter_beacon_module == true then
+  if table.size(module.limitations) > 0 and model_filter_beacon_module == true and recipe.type ~= "resource" then
     allowed = false
-    for _, recipe_name in pairs(module.limitations) do
-      if lua_recipe.name == recipe_name then
+    for _, module_recipe_name in pairs(module.limitations) do
+      if module_recipe_name == recipe.name then
         allowed = true
       end
     end
@@ -572,7 +585,11 @@ function Player.ExcludePlacedByHidden(entities)
 
     local show = false
 
-    if #item_filters > 0 then
+    if #item_filters == 0 then
+      -- Has no items to place it. Probably placed by script.
+      -- e.g. Numal reef from Py
+      show = true
+    else
       local items = game.get_filtered_item_prototypes(item_filters)
       for _, item in pairs(items) do
         if not item.has_flag("hidden") then
@@ -617,20 +634,12 @@ function Player.getProductionMachines()
   local filters = {}
   table.insert(filters, {filter="crafting-machine", mode="or"})
   table.insert(filters, {filter="hidden", mode="and", invert=true})
-  table.insert(filters, {filter="crafting-machine", mode="or"})
-  table.insert(filters, {filter="flag", flag="player-creation", mode="and"})
   table.insert(filters, {filter="type", type="lab", mode="or"})
   table.insert(filters, {filter="hidden", mode="and", invert=true})
-  table.insert(filters, {filter="type", type="lab", mode="or"})
-  table.insert(filters, {filter="flag", flag="player-creation", mode="and"})
   table.insert(filters, {filter="type", type="mining-drill", mode="or"})
   table.insert(filters, {filter="hidden", mode="and", invert=true})
-  table.insert(filters, {filter="type", type="mining-drill", mode="or"})
-  table.insert(filters, {filter="flag", flag="player-creation", mode="and"})
   table.insert(filters, {filter="type", type="rocket-silo", mode="or"})
   table.insert(filters, {filter="hidden", mode="and", invert=true})
-  table.insert(filters, {filter="type", type="rocket-silo", mode="or"})
-  table.insert(filters, {filter="flag", flag="player-creation", mode="and"})
   local prototypes = game.get_filtered_entity_prototypes(filters)
   prototypes = Player.ExcludePlacedByHidden(prototypes)
   
@@ -797,6 +806,7 @@ end
 
 function Player.buildResourceRecipe(entity_prototype)
   local prototype = entity_prototype:native()
+  if prototype == nil then return nil end
   local ingredients = {}
   if entity_prototype:getMineableMiningFluidRequired() then
     local fluid_ingredient = {name=entity_prototype:getMineableMiningFluidRequired(), type="fluid", amount=entity_prototype:getMineableMiningFluidAmount()}
@@ -810,14 +820,16 @@ function Player.buildResourceRecipe(entity_prototype)
   recipe.group = {name="helmod", order="zzzz"}
   recipe.subgroup = {name="helmod-resource", order="aaaa"}
   recipe.hidden = false
-  if prototype and prototype.flags ~= nil then
-    recipe.hidden = prototype.flags["hidden"] or false
+  if prototype then
+    if prototype.flags ~= nil then
+      recipe.hidden = prototype.flags["hidden"] or false
+    end
+    recipe.localised_description = prototype.localised_description
+    recipe.localised_name = prototype.localised_name
+    recipe.name = prototype.name
   end
   recipe.ingredients = ingredients
   recipe.products = entity_prototype:getMineableMiningProducts()
-  recipe.localised_description = prototype.localised_description
-  recipe.localised_name = prototype.localised_name
-  recipe.name = prototype.name
   recipe.prototype = {}
   recipe.valid = true
 
@@ -832,8 +844,10 @@ function Player.getResourceRecipes()
 
   for key, prototype in pairs(game.entity_prototypes) do
     if prototype.name ~= nil and prototype.resource_category ~= nil then
-      recipe = Player.buildResourceRecipe(EntityPrototype(prototype))
-      recipes[recipe.name] = recipe
+      local recipe = Player.buildResourceRecipe(EntityPrototype(prototype))
+      if recipe ~= nil then
+        recipes[recipe.name] = recipe
+      end
     end
   end
 
@@ -866,7 +880,7 @@ function Player.getEnergyRecipe(name)
   recipe.group = {name="helmod", order="zzzz"}
   recipe.subgroup = {name="helmod-energy", order="dddd"}
   recipe.hidden = false
-  if prototype.flags ~= nil then
+  if prototype ~= nil and prototype.flags ~= nil then
     recipe.hidden = prototype.flags["hidden"] or false
   end
   recipe.ingredients = {}
@@ -1013,25 +1027,54 @@ function Player.buildFluidRecipe(fluid, ingredients, temperature)
   return recipe
 end
 
-function Player.buildRocketRecipe(prototype)
-  ---Prepare launch = 15s
-  local rocket_part_prototype = RecipePrototype("rocket-part"):native()
-  local rocket_prototype = EntityPrototype("rocket-silo"):native()
-  local products = prototype.rocket_launch_products
-  local ingredients = rocket_part_prototype.ingredients
-  for _,ingredient in pairs(ingredients) do
-    ingredient.amount= ingredient.amount * rocket_prototype.rocket_parts_required
+function Player.getRocketPartRecipe(factory)
+  -- Get rocket silos
+  local silos = {}
+  if factory and factory.name then
+    silos = {game.entity_prototypes[factory.name]}
+  else
+    local entity_filters = {
+      {filter = "type", invert = false, mode = "and", type = "rocket-silo"},
+      {filter = "hidden", invert = true, mode = "and"},
+    }
+    silos = game.get_filtered_entity_prototypes(entity_filters)
   end
+
+  -- Get rocket silo fixed recipes
+  local rocket_part_recipes = {}
+  for _, silo_prototype in pairs(silos) do
+    if silo_prototype.fixed_recipe then
+      table.insert(rocket_part_recipes, game.recipe_prototypes[silo_prototype.fixed_recipe])
+    end
+  end
+  
+  if #rocket_part_recipes == 0 then
+    return nil
+  else
+    return rocket_part_recipes[1]
+  end
+end
+
+function Player.buildRocketRecipe(prototype)
+  if prototype == nil then return nil end
+  local products = prototype.rocket_launch_products
+  local ingredients = {}
+  local item_prototype = ItemPrototype(prototype.name)
+  local stack_size = item_prototype:stackSize()
   table.insert(ingredients, {name=prototype.name, type="item", amount=1, constant=true})
   local recipe = {}
-  recipe.category = rocket_part_prototype.category
+  recipe.category = Player.getRocketPartRecipe().category
   recipe.enabled = true
-  recipe.energy = rocket_part_prototype.energy * rocket_prototype.rocket_parts_required + 15
+  recipe.energy = 1
   recipe.force = {}
   recipe.group = {name="helmod", order="zzzz"}
   recipe.subgroup = {name="helmod-rocket", order="eeee"}
   recipe.hidden = false
   recipe.ingredients = ingredients
+  for key, product in pairs(products) do
+    local product_prototype = ItemPrototype(product.name)
+    local i=0
+  end
   recipe.products = products
   recipe.localised_description = prototype.localised_description
   recipe.localised_name = prototype.localised_name
@@ -1048,7 +1091,7 @@ end
 function Player.getRocketRecipes()
   local recipes = {}
   
-  if Player.getRecipe("rocket-part") ~= nil and Player.getRecipe("rocket-silo") ~= nil then
+  if Player.getRocketPartRecipe() ~= nil then
     for key, item_prototype in pairs(Player.getItemPrototypes()) do
       if item_prototype.rocket_launch_products ~= nil and table.size(item_prototype.rocket_launch_products) > 0 then
         local recipe = Player.buildRocketRecipe(item_prototype)

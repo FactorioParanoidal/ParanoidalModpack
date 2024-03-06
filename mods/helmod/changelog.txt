@@ -1,4 +1,92 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.12.??
+Date: 2024-01-29
+  Bugfixes:
+    - Fix relocation form with UI scale
+    - Fix not found tooltip sprite
+---------------------------------------------------------------------------------------------------
+Version: 0.12.22
+Date: 2024-01-26
+  Bugfixes:
+    - Fix recipe edition tab change after few action
+    - Fix the default assembler controle is wrong when no module
+    - Fix recursive table for parameter.default_factory
+---------------------------------------------------------------------------------------------------
+Version: 0.12.21
+Date: 2024-01-24
+  Bugfixes:
+    - Fix beacons tooltip generating error: localized string 21 > 20 (limit)
+    - Fix smart tool in pin panel
+---------------------------------------------------------------------------------------------------
+Version: 0.12.20
+Date: 2024-01-24
+  Features:
+    - Now we can use few beacons
+    - Now we can add global effects on production line
+  Changes:
+    - Selecting a transport belt to enter an ingredient/product quantity now respects base time #473
+    - Added Chinese translations (thank you luaotix!) #476
+    - Added partial Brazilian Portugese translations (thank you luis das artimanhas!) #484
+    - Simpliied propagation menu, now that propagate with module only on the same category of recipe
+    - Actived by default reworked solver to improve it
+  Bugfixes:
+    - Fixed beacon modules not being selectable for resource recipes with Pyanodon's #478
+    - Fixed Error helmod::on_tick after kick player #490
+    - Fixed Matrix solver with omni fuel #415/#425
+    - Fixed logistic items overflow in the Logstic Edition panel
+    - Fixed Pyanodon AL upgrade techs #345
+---------------------------------------------------------------------------------------------------
+Version: 0.12.19
+Date: 2023-07-30
+  Changes:
+    - Added rules to hide Transport Drones depots #470
+    - Any recipe with no machines available to craft it will be considered locked #470
+  Bugfixes:
+    - Fixed blocks not linking correctly when in ingredient input mode #467
+    - Fixed hidden machines showing when editing a recipe #466
+    - Fixed error with Nullius rocket recipes #468
+    - Fixed empty mod gui frame being shown when setting "Display main icon" is disabled #472
+---------------------------------------------------------------------------------------------------
+Version: 0.12.18
+Date: 2023-07-09
+  Bugfixes:
+    - Fixed error ModelCompute.lua:244 after changer execution order of ModelCompute.prepareBlock
+---------------------------------------------------------------------------------------------------
+Version: 0.12.17
+Date: 2023-07-06
+  Bugfixes:
+    - Fixed crash while applying migration helmod_0.12.16.lua
+    - Fixed crash in onConfigurationChanged for scenario edit
+    - Fixed assembly limitation display turn off in logistic row and tooltip
+    - Fixed linked matrix solved line with extra outputs doesn't automatically update #464
+---------------------------------------------------------------------------------------------------
+Version: 0.12.16
+Date: 2023-06-16
+  Changes:
+    - Moved all matrix calculation in solver
+    - Added a reworked solver to a next step, not yet actived
+    - Added a menu to switch flat or tab in recipe edition
+  Bugfixes:
+    - Fixed formula parser pattern #450
+    - Fixed productivity calculation when recipe speed exceeds 1 craft per tick cap #455
+    - Fixed "convert recipe to block" for "ingredient input" mode #457
+    - Fixed edit recipe ">" and ">>" buttons ignoring factory max ingredient counts #458
+    - Fixed items being destroyed by creating a Helmod Smart Tool while holding an item in hand #459
+    - Fixed rocket part in rocket recipe when silo changed
+    - Fixed turn the limit off in the pinned panel
+    - Fixed Space Science Production
+---------------------------------------------------------------------------------------------------
+Version: 0.12.15
+Date: 2023-03-19
+  Changes:
+    - Updated Korean locale #443
+  Bugfixes:
+    - Fixed Limitation warning messages in Edit Recipe dialog #447
+    - Fixed fluid fuel pollution modifier being ignored #451
+    - Fixed productivity being incorrectly applied to some recipe products #452
+    - Fixed machine selection of Numal reef from Pyanodon's mods #453
+    - Fixed issues with Steam assemblers from Exotic Industries #454
+---------------------------------------------------------------------------------------------------
 Version: 0.12.14
 Date: 2022-11-30
   Changes:

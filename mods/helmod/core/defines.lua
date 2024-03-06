@@ -31,6 +31,11 @@ defines.sprite_tooltip["expand_right_group"] = defines.sprites.tooltip_expand_ri
 defines.sprite_tooltip["pipette"] = defines.sprites.tooltip_pipette.yellow
 
 defines.constant = {}
+defines.constant.solvers = {}
+defines.constant.solvers.normal = "normal"
+defines.constant.solvers.matrix = "matrix"
+defines.constant.default_solver = defines.constant.solvers.matrix
+defines.constant.rocket_deploy_delay = 2434 / 60
 defines.constant.max_float = 1e300
 defines.constant.base_times = {
   { value = 1, caption = "1s", tooltip={"helmod_si.seconde",1}},

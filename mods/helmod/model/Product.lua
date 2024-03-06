@@ -142,7 +142,7 @@ function Product:getBonusAmount()
   if amount >= catalyst_amount then
     return (amount - catalyst_amount) * probability
   end
-  return amount * probability
+  return 0
 end
 
 -------------------------------------------------------------------------------
@@ -241,6 +241,11 @@ end
 function Product:getProductivityBonus(recipe)
   if recipe.isluaobject or recipe.factory == nil or recipe.factory.effects == nil then return 1 end
   local productivity = recipe.factory.effects.productivity
+  local capped_time = recipe.time / recipe.factory.speed
+  local factory_speed = recipe.factory.speed_total or 1
+  local adjusted_time = recipe.time / factory_speed
+  local speed_adjustment = capped_time / adjusted_time
+  productivity = productivity * speed_adjustment
 
   return productivity
 end

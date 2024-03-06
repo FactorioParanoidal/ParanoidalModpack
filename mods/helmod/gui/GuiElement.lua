@@ -96,33 +96,37 @@ end
 ---Get sprite string
 ---@param type string
 ---@param name string
+---@param format string
 ---@return string
-function GuiElement.getSprite(type, name)
+function GuiElement.getSprite(type, name, format)
   local sprite = ""
+  if format == nil then
+    format = "%s/%s"
+  end
   if name == nil then
     sprite = string.format("helmod-%s", type)
   elseif type ~= nil and name ~= nil then
     if type == "resource" then type = "entity" end
     if type == "rocket" then type = "item" end
     if Player.is_valid_sprite_path(string.format("%s/%s", type, name)) then
-      sprite = string.format("%s/%s", type, name)
+      sprite = string.format(format, type, name)
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "item", name)) then
-      sprite = string.format("%s/%s", "item", name)
+      sprite = string.format(format, "item", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> item")
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "entity", name)) then
-      sprite = string.format("%s/%s", "entity", name)
+      sprite = string.format(format, "entity", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> entity")
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "fluid", name)) then
-      sprite = string.format("%s/%s", "fluid", name)
+      sprite = string.format(format, "fluid", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> fluid")
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "technology", name)) then
-      sprite = string.format("%s/%s", "technology", name)
+      sprite = string.format(format, "technology", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> technology")
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "recipe", name)) then
-      sprite = string.format("%s/%s", "recipe", name)
+      sprite = string.format(format, "recipe", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> recipe")
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "item-group", name)) then
-      sprite = string.format("%s/%s", "item-group", name)
+      sprite = string.format(format, "item-group", name)
       Logging:warn(GuiButton.classname, "wrong type", type, name, "-> item-group")
     end
   end
@@ -177,8 +181,8 @@ end
 function GuiElement.getIndexColumnNumber()
 
   local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
-  local width , height = Player.getDisplaySizes()
-  local width_main = math.ceil(width*display_ratio_horizontal)
+  local width , height, scale = Player.getDisplaySizes()
+  local width_main = math.ceil(width*display_ratio_horizontal/scale)
 
   return math.ceil((width_main - 100)/36)
 end
@@ -190,8 +194,8 @@ end
 function GuiElement.getElementColumnNumber(size)
 
   local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
-  local width , height = Player.getDisplaySizes()
-  local width_main = math.ceil(width*display_ratio_horizontal)
+  local width , height, scale = Player.getDisplaySizes()
+  local width_main = math.ceil(width*display_ratio_horizontal/scale)
   return math.max(5, math.floor((width_main-600)/(2*size)))
 end
 

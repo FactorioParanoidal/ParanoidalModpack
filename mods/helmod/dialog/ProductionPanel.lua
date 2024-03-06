@@ -16,6 +16,7 @@ end
 -------------------------------------------------------------------------------
 ---On Bind Dispatcher
 function ProductionPanel:onBind()
+  Dispatcher:bind("on_gui_recipe_update", self, self.update)
   Dispatcher:bind("on_gui_refresh", self, self.update)
   Dispatcher:bind("on_gui_pause", self, self.updateTopMenu)
 end
@@ -64,7 +65,9 @@ function ProductionPanel:getResultPanel()
   if panel[panel_name1] ~= nil and panel[panel_name1].valid then
     return panel[panel_name1], panel[panel_name2]
   end
-  local width_main, height_main = User.getMainSizes()
+  local display_width, display_height, scale = User.getMainSizes()
+  local width_main = display_width/scale
+  local height_main = display_height/scale
   panel.style.natural_width = width_main-25
   local panel1 = GuiElement.add(panel, GuiFlowH(panel_name1))
   panel1.style.horizontally_stretchable = true
@@ -335,6 +338,8 @@ function ProductionPanel:updateSubMenuLeftPanel(model, block)
     local group_debug = GuiElement.add(left_panel, GuiFlowH("group_debug"))
     group_debug.style.horizontal_spacing = button_spacing
     GuiElement.add(group_debug, GuiButton("HMModelDebug", "OPEN", model.id, block_id):sprite("menu", defines.sprites.run_test.black, defines.sprites.run_test.black):style("helmod_button_menu"):tooltip("Open Debug"))
+    local solver_selected = User.getParameter("solver_selected") or defines.constant.default_solver
+    GuiElement.add(group_debug, GuiButton(self.classname, "solver_switch"):style("helmod_button_default"):caption(solver_selected))
   end
 
   ---group tool
@@ -451,6 +456,7 @@ function ProductionPanel:updateSubMenuRightPanel(model, block)
   local group_models = GuiElement.add(right_panel, GuiFlowH("group_models"))
   group_models.style.horizontal_spacing = button_spacing
   GuiElement.add(group_models, GuiButton("HMModelEdition", "OPEN", model.id, block_id):sprite("menu", defines.sprites.edit_document.black, defines.sprites.edit_document.black):style("helmod_button_menu"):tooltip({"helmod_panel.model-edition"}))
+  GuiElement.add(group_models, GuiButton("HMParametersEdition", "OPEN", model.id, block_id):sprite("menu", defines.sprites.parameter.black, defines.sprites.parameter.black):style("helmod_button_menu"):tooltip({"helmod_parameters_edition_panel.title"}))
   local button_model_up = GuiElement.add(group_models, GuiButton(self.classname, "model-index-up", model.id, block_id):sprite("menu", defines.sprites.arrow_left.black, defines.sprites.arrow_left.black):style("helmod_button_menu"):tooltip({"helmod_panel.model-index-up"}))
   button_model_up.enabled = model.owner == Player.native().name
   local button_model_down = GuiElement.add(group_models, GuiButton(self.classname, "model-index-down", model.id, block_id):sprite("menu", defines.sprites.arrow_right.black, defines.sprites.arrow_right.black):style("helmod_button_menu"):tooltip({"helmod_panel.model-index-down"}))
@@ -1077,10 +1083,16 @@ function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
   GuiElement.add(cell_factory, gui_cell_factory)
 
   ---col beacon
-  local beacon = recipe.beacon
-  local cell_beacon = GuiElement.add(gui_table, GuiTable("beacon", recipe.id):column(2):style("helmod_table_list"))
-  local gui_cell_beacon = GuiCellFactory(self.classname, "beacon-action", model.id, block.id, recipe.id):element(beacon):tooltip("tooltip.edit-recipe"):color(GuiElement.color_button_default):byLimit(block.by_limit):controlInfo("crafting-add")
-  GuiElement.add(cell_beacon, gui_cell_beacon)
+  local beacons = recipe.beacons
+  local cell_beacons = GuiElement.add(gui_table, GuiFlowH("beacon", recipe.id))
+  cell_beacons.style.horizontally_stretchable = false
+  cell_beacons.style.horizontal_spacing = 2
+  if beacons ~= nil then
+    for index, beacon in pairs(beacons) do
+      local gui_cell_beacon = GuiCellFactory(self.classname, "beacon-action", model.id, block.id, recipe.id, index):element(beacon):index(index):tooltip("tooltip.edit-recipe"):color(GuiElement.color_button_default):byLimit(block.by_limit):controlInfo("crafting-add")
+      GuiElement.add(cell_beacons, gui_cell_beacon)
+    end
+  end
 
   for _,order in pairs(Model.getBlockOrder(block)) do
     if order == "products" then
@@ -1093,7 +1105,7 @@ function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
         local product = product_prototype:clone()
         product.time = model.time
         product.count = product_prototype:countProduct(model, recipe)
-        if block.count > 1 then
+        if block.by_limit == true and block.count > 1 then
           product.limit_count = product.count / block.count
         end
         if block.by_product ~= false and recipe.contraint ~= nil and recipe.contraint.name == product.name then
@@ -1119,7 +1131,7 @@ function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
         if ingredient.constant == true then
           ingredient.count = ingredient_prototype:countProduct(model, recipe)
         end
-        if block.count > 1 then
+        if block.by_limit == true and block.count > 1 then
           ingredient.limit_count = ingredient.count / block.count
         end
         if block.by_product == false and recipe.contraint ~= nil and recipe.contraint.name == ingredient.name then
@@ -1340,7 +1352,6 @@ function ProductionPanel:onEventAccessAll(event, model, block)
   end
 
   if event.action == "change-model" then
-    ModelCompute.check(model)
     Controller:send("on_gui_open", event, self.classname)
   end
   
@@ -1386,6 +1397,17 @@ function ProductionPanel:onEventAccessAll(event, model, block)
     User.setParameter("block_all_product_visible",not(all_visible))
     Controller:send("on_gui_update", event, self.classname)
   end
+
+  if event.action == "solver_switch" then
+    local solver_selected = User.getParameter("solver_selected") or defines.constant.default_solver
+    if solver_selected == defines.constant.solvers.normal then
+      User.setParameter("solver_selected", defines.constant.solvers.matrix)
+    else
+      User.setParameter("solver_selected", defines.constant.solvers.normal)
+    end
+    Controller:send("on_gui_update", event, self.classname)
+  end
+
 end
 
 -------------------------------------------------------------------------------
@@ -1421,8 +1443,9 @@ function ProductionPanel:onEventAccessRead(event, model, block)
   if event.action == "beacon-action" then
     if event.control == true then
       local recipe = block.recipes[event.item3]
-      if recipe ~= nil and recipe.beacon ~= nil then
-        local beacon = recipe.beacon
+      local index = tonumber(event.item4)
+      if recipe ~= nil and recipe.beacons ~= nil and recipe.beacons[index] ~= nil then
+        local beacon = recipe.beacons[index]
         Player.beginCrafting(beacon.name, beacon.count)
       end
     else
@@ -1801,5 +1824,4 @@ function ProductionPanel:onEventAccessAdmin(event, model, block)
     game.tick_paused = false
     Controller:send("on_gui_pause", event)
   end
-
 end
