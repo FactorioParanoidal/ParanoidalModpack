@@ -1042,7 +1042,7 @@ bobmods.lib.tech.remove_prerequisite("advanced-depleted-uranium-smelting-1", "po
 bobmods.lib.tech.remove_prerequisite("advanced-osmium-smelting", "powder-metallurgy-1")
 
 --Фикс техи турбины
-bobmods.lib.tech.remove_recipe_unlock("bob-steam-turbine-1", "steam-turbine") --удаляем вторую турбину мк1
+bobmods.lib.tech.remove_recipe_unlock("nuclear-power", "steam-turbine") --удаляем вторую турбину мк1 (AKMF)
 bobmods.lib.tech.add_prerequisite ("bob-steam-turbine-1", "nuclear-power") --добавить теху в ядерку
 
 --Добавляем осмий в лейт гейм рецепты
