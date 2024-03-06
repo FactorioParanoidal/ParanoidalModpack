@@ -18,16 +18,24 @@ data:extend({
   },
   {
     type = "string-setting",
-    name = "lepp_pole_blacklist",
+    name = "lepp_pole_whitelist",
     order = "ba",
     setting_type = "startup",
     allow_blank = true,
-    default_value = "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation",
+    default_value = "fish-pole,slp-dec-med-pole,slp-dec-big-pole,slp-dec-sub-pole",
+  },
+  {
+    type = "string-setting",
+    name = "lepp_pole_blacklist",
+    order = "bb",
+    setting_type = "startup",
+    allow_blank = true,
+    default_value = "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation,se-pylon-construction,se-pylon-construction-radar",
   },
   {
     type = "string-setting",
     name = "lepp_tech_blacklist",
-    order = "bb",
+    order = "bc",
     setting_type = "startup",
     allow_blank = true,
     default_value = "",
@@ -35,11 +43,9 @@ data:extend({
   {
     type = "string-setting",
     name = "lepp_tech_fallback",
-    order = "bc",
+    order = "bd",
     setting_type = "startup",
     allow_blank = false,
     default_value = "optics",
   },
 })
-
-
