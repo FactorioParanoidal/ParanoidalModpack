@@ -17,6 +17,22 @@ data:extend({
   },
   {
     type = "recipe",
+    name = "angel-solder-alloy-x",
+    enabled = false,
+	hidden = false,
+    category = "mixing-furnace",
+    energy_required = 32,
+    ingredients = {
+      { type = "item", name = "tin-plate", amount = 5 },
+      { type = "item", name = "lead-plate", amount = 4 },
+    },
+    results = {
+      { type = "item", name = "solder", amount = 1 },
+    },
+    allow_decomposition = false,
+  },
+  {
+    type = "recipe",
     name = "brass-alloy-x",
     enabled = false,
 	hidden = false,
@@ -336,3 +352,4 @@ bobmods.lib.tech.add_recipe_unlock("angels-nickel-smelting-1", "nickel-electroly
 bobmods.lib.tech.add_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-solder-smelting-1", "angel-solder-alloy-x")
