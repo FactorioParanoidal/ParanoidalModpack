@@ -1,4 +1,4 @@
---[[ Copyright (c) 2018 Optera
+  --[[ Copyright (c) 2018 Optera
  * Part of Re-Stack
  *
  * See LICENSE.md in the project directory for license information.
@@ -17,14 +17,21 @@ function add_from_item_array(items, stack_size, category, placed_entity)
 end
 
 -- sets stacks for items associated with an entity or resource
-function SelectItemByEntity(ent_type, stack_size, category)
+function SelectItemByEntity(ent_type, stack_size, category, reverse_check)
   category = category or ent_type
+  if reverse_check == nil then
+    reverse_check = true
+  end
   for name, entity in pairs(data.raw[ent_type]) do
     if entity.minable then
       if entity.minable.result then
         ReStack_Items[entity.minable.result] = {stack_size = stack_size, type = category}
       elseif entity.minable.results then
-        add_from_item_array(entity.minable.results, stack_size, category, name)
+        if reverse_check then
+          add_from_item_array(entity.minable.results, stack_size, category, name)
+        else
+          add_from_item_array(entity.minable.results, stack_size, category)
+        end
       end
     end
   end
