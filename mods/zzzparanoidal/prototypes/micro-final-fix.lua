@@ -1133,3 +1133,6 @@ bobmods.lib.recipe.set_ingredients("angels-chemical-plant-3", { { "aluminium-pla
 bobmods.lib.recipe.set_ingredients("angels-chemical-plant-4", { { "titanium-plate", 40 }, { "processing-unit", 3 }, { "titanium-pipe", 40 }, { "titanium-gear-wheel", 25 }, { "angels-chemical-plant-3", 2 } })
 
 
+--фикс стрелок порта для сероводорода промывочных машин
+data.raw['assembling-machine']['washing-plant'].fluid_boxes[4].pipe_connections[1].type = "output"
+data.raw['assembling-machine']['washing-plant-2'].fluid_boxes[4].pipe_connections[1].type = "output"
