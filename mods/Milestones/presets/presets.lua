@@ -70,12 +70,12 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
 
-    ["Space Exploration (No Spoilers)"] = {
+    ["Space Exploration"] = {
         required_mods = {"space-exploration"},
         milestones = {
             {type="group",      name="Science"},
@@ -129,6 +129,8 @@ presets = {
             {type="item",       name="logistic-chest-requester",     quantity=1},
             {type="technology", name="se-spaceship",                 quantity=1},
             {type="item",       name="se-space-elevator",            quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 
             {type="group",      name="Kills"},
@@ -136,7 +138,8 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="item",       name="se-plague-bomb",               quantity=1},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -188,12 +191,12 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
 
-    ["Space Exploration + Krastorio 2 (No Spoilers)"] = {
+    ["Space Exploration + Krastorio 2"] = {
         required_mods = {"space-exploration", "Krastorio2"},
         milestones = {
             {type="group",      name="Science"},
@@ -227,11 +230,11 @@ presets = {
             {type="item",       name="matter-tech-card",             quantity=1},
             {type="item",       name="se-kr-matter-science-pack-2",  quantity=1},
             {type="item",       name="advanced-tech-card",           quantity=1},
+            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-deep-space-science-pack-1", quantity=1},
             {type="item",       name="se-deep-space-science-pack-2", quantity=1},
             {type="item",       name="se-deep-space-science-pack-3", quantity=1},
             {type="item",       name="se-deep-space-science-pack-4", quantity=1},
-            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-significant-data",          quantity=1000, next="x10"},
 
             {type="group",      name="Resources"},
@@ -260,6 +263,8 @@ presets = {
             {type="technology", name="kr-advanced-pickaxe",          quantity=1},
             {type="item",       name="ai-core",                      quantity=1},
             {type="fluid",      name="matter",                       quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="item",       name="kr-intergalactic-transceiver", quantity=1},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 
@@ -268,7 +273,8 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="item",       name="se-plague-bomb",               quantity=1},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -359,7 +365,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -470,7 +476,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -509,11 +515,11 @@ presets = {
             {type="item",       name="matter-tech-card",             quantity=1},
             {type="item",       name="se-kr-matter-science-pack-2",  quantity=1},
             {type="item",       name="advanced-tech-card",           quantity=1},
+            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-deep-space-science-pack-1", quantity=1},
             {type="item",       name="se-deep-space-science-pack-2", quantity=1},
             {type="item",       name="se-deep-space-science-pack-3", quantity=1},
             {type="item",       name="se-deep-space-science-pack-4", quantity=1},
-            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-significant-data",          quantity=1000, next="x10"},
 
             {type="group",      name="Resources"},
@@ -548,6 +554,8 @@ presets = {
             {type="technology", name="kr-advanced-pickaxe",          quantity=1},
             {type="item",       name="ai-core",                      quantity=1},
             {type="fluid",      name="matter",                       quantity=1},
+            {type="item",       name="se-dimensional-anchor",        quantity=8, hidden=true},
+            {type="technology", name="se-long-range-star-mapping",   quantity=1, hidden=true},
             {type="item",       name="kr-intergalactic-transceiver", quantity=1},
             {type="technology", name="se-spaceship-victory",         quantity=1},
 
@@ -602,7 +610,7 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -655,7 +663,7 @@ presets = {
             {type="item",       name="rocket-part",                    quantity=100},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -712,7 +720,7 @@ presets = {
             {type="item",       name="rocket-part",                    quantity=100},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -762,7 +770,7 @@ presets = {
             {type="item",       name="crystal-full-harmonic",     quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                 quantity=1, next="x5"},
+            {type="kill",       name="character",                 quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -835,192 +843,7 @@ presets = {
             {type="item",       name="solar-panel",                    quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
-        }
-    },
-
-
-    ["Sea Block"] = {
-        required_mods = {"SeaBlock", "bobplates", "bobelectronics", "angelsbioprocessing", "angelspetrochem"},
-        milestones = {
-            {type="group",      name="Science"},
-            {type="item",       name="automation-science-pack",        quantity=1},
-            {type="item",       name="token-bio",                      quantity=1},
-            {type="item",       name="logistic-science-pack",          quantity=1},
-            {type="item",       name="military-science-pack",          quantity=1},
-            {type="item",       name="chemical-science-pack",          quantity=1},
-            {type="item",       name="production-science-pack",        quantity=1},
-            {type="item",       name="utility-science-pack",           quantity=1},
-            {type="item",       name="space-science-pack",             quantity=1},
-            {type="item",       name="automation-science-pack",        quantity=1000, next="x10"},
-            {type="item",       name="token-bio",                      quantity=1000, next="x10"},
-            {type="item",       name="logistic-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="military-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="chemical-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="production-science-pack",        quantity=1000, next="x10"},
-            {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
-            {type="item",       name="space-science-pack",             quantity=10000, next="x10"},
-
-            {type="group",      name="Resources"},
-            {type="item",       name="wood-charcoal",                  quantity=1},
-            {type="item",       name="alien-bacteria",                 quantity=1},
-            {type="item",       name="electronic-circuit",             quantity=1},
-            {type="item",       name="advanced-circuit",               quantity=1},
-            {type="item",       name="processing-unit",                quantity=1},
-            {type="item",       name="advanced-processing-unit",       quantity=1},
-            {type="item",       name="glass",                          quantity=1},
-            {type="item",       name="rubber",                         quantity=1},
-            {type="item",       name="bronze-alloy",                   quantity=1},
-            {type="item",       name="invar-alloy",                    quantity=1},
-            {type="item",       name="brass-alloy",                    quantity=1},
-            {type="item",       name="silver-plate",                   quantity=1},
-            {type="item",       name="gold-plate",                     quantity=1},
-            {type="item",       name="aluminium-plate",                quantity=1},
-            {type="item",       name="cobalt-steel-alloy",             quantity=1},
-            {type="item",       name="plastic-bar",                    quantity=1},
-            {type="item",       name="silicon-nitride",                quantity=1},
-            {type="item",       name="titanium-plate",                 quantity=1},
-            {type="item",       name="tungsten-plate",                 quantity=1},
-            {type="item",       name="copper-tungsten-alloy",          quantity=1},
-            {type="item",       name="tungsten-carbide",               quantity=1},
-            {type="item",       name="nitinol-alloy",                  quantity=1},
-            {type="item",       name="plastic-bar",                    quantity=1},
-            {type="item",       name="sulfur",                         quantity=1},
-            {type="fluid",      name="mineral-sludge",                 quantity=1},
-            {type="fluid",      name="liquid-multi-phase-oil",         quantity=1},
-            {type="fluid",      name="liquid-sulfuric-acid",           quantity=1},
-            {type="fluid",      name="liquid-resin",                   quantity=1},
-            {type="fluid",      name="liquid-fuel-oil",                quantity=1},
-
-            {type="group",      name="Progress"},
-            {type="item",       name="landfill",                       quantity=1},
-            {type="item",       name="landfill",                       quantity=1000, next="x10"},
-            {type="item",       name="construction-robot",             quantity=1},
-            {type="item",       name="locomotive",                     quantity=1},
-            {type="item",       name="spidertron",                     quantity=1},
-            {type="item",       name="productivity-module",            quantity=1},
-            {type="item",       name="logistic-chest-requester",       quantity=1},
-            {type="item",       name="rocket-fuel",                    quantity=1},
-            {type="technology", name="rocket-silo",                    quantity=1},
-            {type="item",       name="rocket-part",                    quantity=100},
-            {type="item",       name="nuclear-reactor",                quantity=1},
-
-            {type="group",      name="Kills"},
-            {type="kill",       name="medium-worm-turret",             quantity=1},
-            {type="kill",       name="big-worm-turret",                quantity=1},
-            {type="kill",       name="behemoth-worm-turret",           quantity=1},
-            {type="kill",       name="behemoth-worm-turret",           quantity=1000, next="x10"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
-        }
-    },
-
-
-    ["Sea Block (With Sea Block Pack)"] = {
-        required_mods = {"SeaBlock", "bobplates", "bobelectronics", "angelsbioprocessing", "angelspetrochem", "bobenemies", "SpaceMod"},
-        milestones = {
-            {type="group",      name="Science"},
-            {type="item",       name="automation-science-pack",        quantity=1},
-            {type="item",       name="token-bio",                      quantity=1},
-            {type="item",       name="logistic-science-pack",          quantity=1},
-            {type="item",       name="military-science-pack",          quantity=1},
-            {type="item",       name="chemical-science-pack",          quantity=1},
-            {type="item",       name="science-pack-gold",              quantity=1},
-            {type="item",       name="advanced-logistic-science-pack", quantity=1},
-            {type="item",       name="production-science-pack",        quantity=1},
-            {type="item",       name="utility-science-pack",           quantity=1},
-            {type="item",       name="space-science-pack",             quantity=1},
-            {type="item",       name="automation-science-pack",        quantity=1000, next="x10"},
-            {type="item",       name="token-bio",                      quantity=1000, next="x10"},
-            {type="item",       name="logistic-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="military-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="chemical-science-pack",          quantity=1000, next="x10"},
-            {type="item",       name="science-pack-gold",              quantity=1000, next="x10"},
-            {type="item",       name="advanced-logistic-science-pack", quantity=1000, next="x10"},
-            {type="item",       name="production-science-pack",        quantity=1000, next="x10"},
-            {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
-            {type="item",       name="space-science-pack",             quantity=10000, next="x10"},
-
-            {type="group",      name="Resources"},
-            {type="item",       name="wood-charcoal",                  quantity=1},
-            {type="item",       name="alien-bacteria",                 quantity=1},
-            {type="item",       name="electronic-circuit",             quantity=1},
-            {type="item",       name="advanced-circuit",               quantity=1},
-            {type="item",       name="processing-unit",                quantity=1},
-            {type="item",       name="advanced-processing-unit",       quantity=1},
-            {type="item",       name="glass",                          quantity=1},
-            {type="item",       name="rubber",                         quantity=1},
-            {type="item",       name="bronze-alloy",                   quantity=1},
-            {type="item",       name="invar-alloy",                    quantity=1},
-            {type="item",       name="brass-alloy",                    quantity=1},
-            {type="item",       name="silver-plate",                   quantity=1},
-            {type="item",       name="gold-plate",                     quantity=1},
-            {type="item",       name="aluminium-plate",                quantity=1},
-            {type="item",       name="cobalt-steel-alloy",             quantity=1},
-            {type="item",       name="plastic-bar",                    quantity=1},
-            {type="item",       name="silicon-nitride",                quantity=1},
-            {type="item",       name="titanium-plate",                 quantity=1},
-            {type="item",       name="angels-plate-chrome",            quantity=1},
-            {type="item",       name="angels-plate-platinum",          quantity=1},
-            {type="item",       name="tungsten-plate",                 quantity=1},
-            {type="item",       name="copper-tungsten-alloy",          quantity=1},
-            {type="item",       name="tungsten-carbide",               quantity=1},
-            {type="item",       name="nitinol-alloy",                  quantity=1},
-            {type="item",       name="plastic-bar",                    quantity=1},
-            {type="item",       name="sulfur",                         quantity=1},
-            {type="fluid",      name="mineral-sludge",                 quantity=1},
-            {type="fluid",      name="liquid-multi-phase-oil",         quantity=1},
-            {type="fluid",      name="liquid-sulfuric-acid",           quantity=1},
-            {type="fluid",      name="liquid-resin",                   quantity=1},
-            {type="fluid",      name="liquid-fuel-oil",                quantity=1},
-
-            {type="group",      name="Progress"},
-            {type="item",       name="landfill",                       quantity=1},
-            {type="item",       name="landfill",                       quantity=1000, next="x10"},
-            {type="alias",      name="landfill-dirt-4",       equals="landfill", quantity=1},
-            {type="alias",      name="landfill-dry-dirt",     equals="landfill", quantity=1},
-            {type="alias",      name="landfill-grass-1",      equals="landfill", quantity=1},
-            {type="alias",      name="landfill-red-desert-1", equals="landfill", quantity=1},
-            {type="alias",      name="landfill-sand-3",       equals="landfill", quantity=1},
-            {type="item",       name="locomotive",                     quantity=1},
-            {type="item",       name="construction-robot",             quantity=1},
-            {type="item",       name="antron",                         quantity=1},
-            {type="item",       name="productivity-module-2",          quantity=1},
-            {type="item",       name="logistic-chest-requester",       quantity=1},
-            {type="item",       name="rocket-fuel",                    quantity=1},
-            {type="technology", name="rocket-silo",                    quantity=1},
-            {type="item",       name="rocket-part",                    quantity=100},
-            {type="item",       name="nuclear-reactor",                quantity=1},
-            {type="item",       name="nuclear-reactor-2",              quantity=1},
-            {type="item",       name="nuclear-reactor-3",              quantity=1},
-
-            {type="group",      name="SpaceX"},
-            {type="item",       name="satellite",            quantity=7},
-            {type="item",       name="drydock-structural",   quantity=10},
-            {type="item",       name="drydock-assembly",     quantity=2},
-            {type="item",       name="protection-field",     quantity=1},
-            {type="item",       name="fusion-reactor",       quantity=1},
-            {type="item",       name="habitation",           quantity=1},
-            {type="item",       name="life-support",         quantity=1},
-            {type="item",       name="command",              quantity=1},
-            {type="item",       name="fuel-cell",            quantity=2},
-            {type="item",       name="space-thruster",       quantity=4},
-            {type="item",       name="hull-component",       quantity=10},
-            {type="technology", name="ftl-theory-A",         quantity=1},
-            {type="technology", name="ftl-theory-B",         quantity=1},
-            {type="technology", name="ftl-theory-C",         quantity=1},
-            {type="technology", name="ftl-theory-D1",        quantity=1},
-            {type="technology", name="ftl-theory-D",         quantity=1},
-            {type="technology", name="ftl-theory-D2",        quantity=1},
-            {type="technology", name="ftl-propulsion",       quantity=1},
-            {type="item",       name="ftl-drive",            quantity=1},
-
-            {type="group",      name="Kills"},
-            {type="kill",       name="medium-worm-turret",             quantity=1},
-            {type="kill",       name="big-worm-turret",                quantity=1},
-            {type="kill",       name="bob-giant-worm-turret",          quantity=1},
-            {type="kill",       name="behemoth-worm-turret",           quantity=1},
-            {type="kill",       name="behemoth-worm-turret",           quantity=1000, next="x10"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -1130,7 +953,7 @@ presets = {
             {type="item",       name="nullius-antimatter",               quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                        quantity=1},
+            {type="kill",       name="character",                        quantity=1, hidden=true},
         }
     },
 
@@ -1208,7 +1031,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -1271,7 +1094,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="uranium-fuel-cell",       quantity=1},
@@ -1281,7 +1104,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -1341,7 +1164,7 @@ presets = {
             {type="item",       name="chromium-ingot",          quantity=1},
             {type="item",       name="platinum-ingot",          quantity=1},
             {type="item",       name="brass-ingot",             quantity=1},
-            {type="item",       name="carbon-foil",            quantity=1},
+            {type="item",       name="carbon-foil",             quantity=1},
             {type="item",       name="electrum-gem",            quantity=1},
             {type="item",       name="electronic-circuit",      quantity=1},
             {type="item",       name="computer-mk1",            quantity=1},
@@ -1365,7 +1188,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="nuclear-reactor",         quantity=1},
@@ -1375,7 +1198,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 }

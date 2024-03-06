@@ -84,8 +84,18 @@ function initialize_alias_table()
     global.production_aliases = {}
     for _, loaded_milestone in pairs(global.loaded_milestones) do
         if loaded_milestone.type == "alias" then
-            global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
-            table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+            local valid_alias = false
+            if game.item_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an item alias
+                valid_alias = game.item_prototypes[loaded_milestone.name] ~= nil
+            elseif game.entity_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an entity alias
+                valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
+            end
+            if valid_alias then
+                global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
+                table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+            end
         end
     end
 end
@@ -133,6 +143,8 @@ function create_next_milestone(force_name, milestone)
 
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil
+    new_milestone.sort_index = milestone.sort_index + 0.0001 -- Should work until there's 10000 iterations of an infinite milestone, lol
+    new_milestone.hidden = nil
 
     return new_milestone
 end
@@ -147,8 +159,16 @@ function ceil_to_nearest_minute(tick)
     return tick - modulo + 60*60
 end
 
-local function find_precision_bracket(milestone, stats)
-    local total_count = stats.get_input_count(milestone.name)
+local function get_total_count(stats, item_name, is_consumption)
+    if is_consumption then
+        return stats.get_output_count(item_name)
+    else
+        return stats.get_input_count(item_name)
+    end
+end
+
+local function find_precision_bracket(milestone, stats, is_consumption)
+    local total_count = get_total_count(stats, milestone.name, is_consumption)
     local previous_bracket = "ALL"
     for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
 
@@ -157,7 +177,7 @@ local function find_precision_bracket(milestone, stats)
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
         if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
-            local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
+            local bracket_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true}
             if bracket_count <= total_count - milestone.quantity then
                 return previous_bracket
             end
@@ -169,13 +189,13 @@ local function find_precision_bracket(milestone, stats)
     return previous_bracket
 end
 
-local function find_sample_in_precision_bracket(milestone, bracket, stats)
-    local total_count = stats.get_input_count(milestone.name)
-    local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
+local function find_sample_in_precision_bracket(milestone, bracket, stats, is_consumption)
+    local total_count = get_total_count(stats, milestone.name, is_consumption)
+    local bracket_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true}
     local count_before_bracket = total_count - bracket_count
     local count_this_bracket = 0
     for i = 300,1,-1 do -- Start from oldest
-        sample_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true, sample_index=i}
+        local sample_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true, sample_index=i}
         count_this_bracket = count_this_bracket + sample_count
         if count_this_bracket + count_before_bracket >= milestone.quantity then
             return i
@@ -214,8 +234,8 @@ local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks
     return lower_bound_ticks, upper_bound_ticks
 end
 
-local function find_production_tick_bounds(milestone, stats)
-    local precision_bracket = find_precision_bracket(milestone, stats)
+local function find_production_tick_bounds(milestone, stats, is_consumption)
+    local precision_bracket = find_precision_bracket(milestone, stats, is_consumption)
     log("bracket to search: " ..precision_bracket)
 
     local lower_bound_ticks_ago, upper_bound_ticks_ago
@@ -224,7 +244,7 @@ local function find_production_tick_bounds(milestone, stats)
         -- All we know is it's between tick 0 and 1000 hours ago
         lower_bound_ticks_ago, upper_bound_ticks_ago = game.tick, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
     else
-        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats)
+        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats, is_consumption)
         if sample_index == 0 then
             return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
         end
@@ -240,11 +260,15 @@ function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_st
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" then
-        return find_production_tick_bounds(milestone, item_stats)
+        return find_production_tick_bounds(milestone, item_stats, false)
     elseif milestone.type == "fluid" then
-        return find_production_tick_bounds(milestone, fluid_stats)
+        return find_production_tick_bounds(milestone, fluid_stats, false)
+    elseif milestone.type == "item_consumption" then
+        return find_production_tick_bounds(milestone, item_stats, true)
+    elseif milestone.type == "fluid_consumption" then
+        return find_production_tick_bounds(milestone, fluid_stats, true)
     elseif milestone.type == "kill" then
-        return find_production_tick_bounds(milestone, kill_stats)
+        return find_production_tick_bounds(milestone, kill_stats, false)
     end
 end
 
@@ -252,9 +276,19 @@ function sort_milestones(milestones)
     table.sort(milestones, function(a,b)
         if a.completion_tick and not b.completion_tick then return true end -- a comes first
         if not a.completion_tick and b.completion_tick then return false end -- b comes first
-        if not a.completion_tick and not b.completion_tick then return a.sort_index < b.sort_index end
+        if a.completion_tick == b.completion_tick then return a.sort_index < b.sort_index end
         return a.completion_tick < b.completion_tick
     end)
+end
+
+function filter_hidden_milestones(milestones, show_incomplete)
+    local visible_milestones = {}
+    for _, milestone in pairs(milestones) do
+        if milestone.completion_tick ~= nil or (show_incomplete and not milestone.hidden) then
+            table.insert(visible_milestones, milestone)
+        end
+    end
+    return visible_milestones
 end
 
 function backfill_completion_times(force)
@@ -293,9 +327,9 @@ end
 
 function is_production_milestone_reached(milestone, global_force)
     local stats
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         stats = global_force.item_stats
-    elseif milestone.type == "fluid" then
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         stats = global_force.fluid_stats
     elseif milestone.type == "kill" then
         stats = global_force.kill_stats
@@ -303,7 +337,12 @@ function is_production_milestone_reached(milestone, global_force)
         error("Invalid milestone type! " .. milestone.type)
     end
 
-    local milestone_count = stats.get_input_count(milestone.name)
+    local milestone_count
+    if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
+        milestone_count = stats.get_output_count(milestone.name)
+    else
+        milestone_count = stats.get_input_count(milestone.name)
+    end
 
     -- Aliases
     if global.production_aliases[milestone.name] then
@@ -370,9 +409,9 @@ end
 
 function is_valid_milestone(milestone)
     local prototype
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = game.item_prototypes[milestone.name]
-    elseif milestone.type == "fluid" then
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
@@ -382,4 +421,18 @@ function is_valid_milestone(milestone)
         return false
     end
     return prototype ~= nil
+end
+
+function sprite_prefix(milestone)
+    if milestone.type == "item" or milestone.type == "item_consumption" then
+        return "item"
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
+        return "fluid"
+    elseif milestone.type == "kill" then
+        return "entity"
+    elseif milestone.type == "technology" then
+        return "technology"
+    else
+        error("Unknown milestone type: " .. milestone.type)
+    end
 end

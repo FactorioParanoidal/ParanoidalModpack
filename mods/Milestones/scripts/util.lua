@@ -5,8 +5,15 @@ function table_contains(table, element)
     return false
 end
 
+function table_get_index(table, element)
+    for i, value in pairs(table) do
+        if value == element then return i end
+    end
+    return nil
+end
+
 function validate_milestones(milestones)
-    local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group', 'alias'}
+    local valid_categories = {"item", "fluid", "item_consumption", "fluid_consumption", "technology", "kill", "group", "alias"}
     for _, milestone in pairs(milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
@@ -14,7 +21,7 @@ function validate_milestones(milestones)
         if type(milestone.name) ~= "string" then
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "name"}
         end
-        if milestone.type ~= 'group' then
+        if milestone.type ~= "group" then
             local num = tonumber(milestone.quantity)
             if num == nil or num < 1 then
                 return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
@@ -26,8 +33,13 @@ function validate_milestones(milestones)
                 end
             end
         end
-        if milestone.type == 'alias' and type(milestone.equals) ~= "string" then
+        if milestone.type == "alias" and type(milestone.equals) ~= "string" then
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "equals"}
+        end
+        if (type(milestone.hidden) == "boolean" and milestone.hidden) or milestone.hidden == "true" then
+            milestone.hidden = true
+        else
+            milestone.hidden = nil
         end
     end
     return milestones, nil
@@ -46,7 +58,6 @@ end
 local delayed_chat_delay = 240
 
 local function print_chat_delayed(event)
-    log("Printing delayed chat")
     if event.tick == 0 then return end
     for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
         game.print(delayed_chat_message)
@@ -63,4 +74,8 @@ end
 
 function print_delayed_red(message)
     table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
+end
+
+function approximately_equal(a, b)
+    return math.abs(a - b) < 0.00001
 end

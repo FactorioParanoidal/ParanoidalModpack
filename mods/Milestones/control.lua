@@ -1,4 +1,5 @@
 require("scripts.commands")
+require("scripts.remote_interface")
 require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
@@ -29,6 +30,8 @@ script.on_init(function()
         end
     end
 
+    fetch_remote_presets()
+    add_remote_presets_to_preset_tables()
     load_presets()
     if initial_preset == nil then
         load_preset_addons()
@@ -60,6 +63,7 @@ script.on_load(function()
     if global.delayed_chat_messages ~= nil and next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
+    add_remote_presets_to_preset_tables()
 end)
 
 script.on_event(defines.events.on_force_created, function(event)
@@ -92,7 +96,10 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     local setting_name = event.setting
     if setting_name == "milestones_check_frequency" then
         global.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
-    elseif setting_name == "milestones_compact_list" or setting_name == "milestones_list_by_group" or setting_name == "milestones_show_estimations" then
+    elseif setting_name == "milestones_compact_list"
+        or setting_name == "milestones_list_by_group"
+        or setting_name == "milestones_show_estimations"
+        or setting_name == "milestones_show_incomplete" then
         refresh_gui_for_player(game.get_player(event.player_index))
     end
 end)
@@ -103,6 +110,9 @@ script.on_configuration_changed(function(event)
     migration.on_config_changed(event, migrations)
 
     if next(event.mod_changes) ~= nil then
+        fetch_remote_presets()
+        -- on_load is called before on_configuration_changed so we have to redo add_remote_presets_to_preset_tables here
+        add_remote_presets_to_preset_tables()
         reload_presets()
     end
     remove_invalid_milestones_all_forces()
