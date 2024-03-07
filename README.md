@@ -1,6 +1,6 @@
 <table align="center"><tr><td align="center" width="9999">
 
-![LOGO](wiki/images/logo.png)
+![LOGO](wiki/documents/images/logo.png)
 
 для Factorio 1.1.100 (протестировано) и выше
 
