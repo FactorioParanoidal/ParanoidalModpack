@@ -956,6 +956,13 @@ bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-2", "angels-concret
 data.raw.technology["plutonium-fuel-cell"].icons = {{icon = "__bobplates__/graphics/icons/nuclear/plutonium-fuel-cell.png", icon_size = 64, icon_mipmaps = 4}} --AKMF
 data.raw.technology["thorium-plutonium-fuel-cell"].icons = {{icon = "__bobplates__/graphics/icons/nuclear/thorium-plutonium-fuel-cell.png", icon_size = 64, icon_mipmaps = 4}} --AKMF
 data.raw.tool["advanced-logistic-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/science/logistic-science-pack-2-128.png", icon_size = 128}} --AKMF
+data.raw.technology["logistic-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/logistic-science-pack-128.png", icon_size = 128}} --SEO
+data.raw.technology["military-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/military-science-pack-128.png", icon_size = 128}} --SEO
+data.raw.technology["chemical-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/chemical-science-pack-128.png", icon_size = 128}} --SEO
+data.raw.technology["production-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/production-science-pack-128.png", icon_size = 128}} --SEO
+data.raw.technology["utility-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/utility-science-pack-128.png", icon_size = 128}} --SEO
+data.raw.technology["space-science-pack"].icons = {{icon = "__bobicons__/graphics/icons/base/space-science-pack-128.png", icon_size = 128}} --SEO
+
 
 data.raw.technology["effect-transmission"].icon = "__base__/graphics/technology/effect-transmission.png"
 data.raw.technology["effect-transmission"].icon_size = 256
