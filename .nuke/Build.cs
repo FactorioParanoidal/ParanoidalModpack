@@ -90,13 +90,17 @@ partial class Build : NukeBuild
         {
             var targetDirectory = RootDirectory / "zipped-mods";
             targetDirectory.CreateOrCleanDirectory();
-            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
 
-            var modpack = await FactorioModpack.LoadFromDirectory(RootDirectory / "mods");
+            var modsDirectory = RootDirectory / "mods";
+            Log.Information("Discovering mods in {TargetDirectory}", targetDirectory);
+            var modpack = await FactorioModpack.LoadFromDirectory(modsDirectory);
+            Log.Information("Discovered {Count} mods", modpack.Count());
+
+            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
             Parallel.ForEach(modpack.Cast<FolderFactorioMod>(), (mod, _) =>
             {
                 var modZipPath = targetDirectory / $"{mod.Info.Name}_{mod.Info.Version}.zip";
-                Log.Information("Zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
+                Log.Information("Started zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
                 Zip(modZipPath, mod.Directory);
             });
         });
