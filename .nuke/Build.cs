@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
+using FactorioParanoidal.FactorioMods;
+using FactorioParanoidal.FactorioMods.Mods;
 using FactorioParanoidal.ModSettingsDat;
 using Microsoft.VisualBasic.CompilerServices;
 using Nuke.Common;
@@ -45,7 +48,8 @@ partial class Build : NukeBuild
             var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
             if (!File.Exists(modSettingsDatPath))
             {
-                throw new FileNotFoundException($"File {modSettingsDatPath} not found. Ensure that this file exists", modSettingsDatPath);
+                throw new FileNotFoundException($"File {modSettingsDatPath} not found. Ensure that this file exists",
+                    modSettingsDatPath);
             }
 
             Log.Information("Starting reading {Path}", modSettingsDatPath);
@@ -58,7 +62,7 @@ partial class Build : NukeBuild
             await JsonSerializer.SerializeAsync(jsonFileStream, modSettings, SerializerOptions);
             Log.Information("{Path} successfully written", modSettingsJsonPath);
         });
-    
+
     Target ConvertModSettingsFromJson => _ => _
         .Executes(async () =>
         {
@@ -66,7 +70,8 @@ partial class Build : NukeBuild
             var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
             if (!File.Exists(modSettingsJsonPath))
             {
-                throw new FileNotFoundException($"File {modSettingsJsonPath} not found. Ensure that this file exists", modSettingsJsonPath);
+                throw new FileNotFoundException($"File {modSettingsJsonPath} not found. Ensure that this file exists",
+                    modSettingsJsonPath);
             }
 
             Log.Information("Starting reading {Path}", modSettingsJsonPath);
@@ -78,5 +83,21 @@ partial class Build : NukeBuild
             await using var datFileStream = File.Open(modSettingsDatPath, FileMode.Create, FileAccess.Write);
             ModSettingsConverter.Serialize(modSettings, datFileStream);
             Log.Information("{Path} successfully written", modSettingsDatPath);
+        });
+
+    Target ZipMods => _ => _
+        .Executes(async () =>
+        {
+            var targetDirectory = RootDirectory / "zipped-mods";
+            targetDirectory.CreateOrCleanDirectory();
+            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
+
+            var modpack = await FactorioModpack.LoadFromDirectory(RootDirectory / "mods");
+            Parallel.ForEach(modpack.Cast<FolderFactorioMod>(), (mod, _) =>
+            {
+                var modZipPath = targetDirectory / $"{mod.Info.Name}_{mod.Info.Version}.zip";
+                Log.Information("Zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
+                Zip(modZipPath, mod.Directory);
+            });
         });
 }
