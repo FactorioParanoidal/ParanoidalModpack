@@ -1029,6 +1029,11 @@
     },
     
     {
+      "name": "WireShortcuts",
+      "enabled": true
+    },
+    
+    {
       "name": "ZCS-Trash-Landfill-Continued-Continued",
       "enabled": true
     },
