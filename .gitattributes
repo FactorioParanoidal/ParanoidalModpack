@@ -1,7 +1,7 @@
 ** !filter !merge !diff
 * text=auto
 
-*.* text eol=lf
+* text eol=lf
 *.json text eol=lf
 *.lua text eol=lf
 *.cfg text eol=lf
@@ -17,3 +17,5 @@
 *.swg binary 
 *.wav binary 
 *.xcf binary 
+*.ttf binary 
+*.zip binary 
