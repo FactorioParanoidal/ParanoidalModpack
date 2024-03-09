@@ -1,1 +1,14 @@
 ** !text !filter !merge !diff
+* text=auto
+
+*.json text eol=lf
+*.lue text eol=lf
+*.cfg text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+*.xml text eol=lf
+
+*.ogg binary 
+*.swg binary 
+*.wav binary 
+*.xcf binary 
