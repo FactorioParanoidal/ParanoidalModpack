@@ -66,7 +66,8 @@
             "enum": [
               "ConvertModSettingsFromJson",
               "ConvertModSettingsToJson",
-              "PrintInfo"
+              "PrintInfo",
+              "ZipMods"
             ]
           }
         },
@@ -78,7 +79,8 @@
             "enum": [
               "ConvertModSettingsFromJson",
               "ConvertModSettingsToJson",
-              "PrintInfo"
+              "PrintInfo",
+              "ZipMods"
             ]
           }
         },
