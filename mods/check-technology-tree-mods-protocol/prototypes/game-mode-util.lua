@@ -7,10 +7,10 @@ local TechnologyLeafHandler = require("prototypes.final-fixes.leaf.handler.techn
 local GameModeUtil = {}
 
 local function handle_game_mode_data(mode)
-	TechnologyTreeCacheUtil.initTechnologyTreeCache(mode)
-	local leafTechologies = TechnologyLeafFinder.getLeafTechnologiesForResettingDependenies(mode)
-	TechnologyLeafHandler.handleLeafTechonologies(leafTechologies, mode)
-	TechnologyTreeCacheUtil.cleanupTechnologyTreeCache(mode)
+	TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
+	local leafTechologies = TechnologyLeafFinder.get_leaf_technologies_for_resetting_dependenies(mode)
+	TechnologyLeafHandler.handle_leaf_techonologies(leafTechologies, mode)
+	TechnologyTreeCacheUtil.cleanup_technology_tree_cache(mode)
 end
 
 GameModeUtil.handle_game_mode_datas = function()
