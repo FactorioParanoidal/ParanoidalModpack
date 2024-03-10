@@ -18,7 +18,7 @@ local function resetBasicTechnologyPrerequisitesToNormalTree(mode)
 	techUtil.reset_prerequisites_for_technology(technologies["logistics"], { "automation", "electricity-0" }, mode)
 	techUtil.reset_prerequisites_for_technology(
 		technologies["electronics"],
-		_table.deep_copy(Utils.getModedObject(technologies["automation"], mode).prerequisites),
+		_table.deep_copy(Utils.get_moded_object(technologies["automation"], mode).prerequisites),
 		mode
 	)
 	techUtil.reset_prerequisites_for_technology(technologies["automation"], { "electronics" }, mode)
