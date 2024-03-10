@@ -1,6 +1,6 @@
 local TechnologyNoHiddenValidatingStep = {}
 TechnologyNoHiddenValidatingStep.evaluate = function(technology_name, mode)
-	local tree = EvaluatingStepStatusHolder.getTreeFromTechnologyStatus(mode, technology_name)
+	local tree = EvaluatingStepStatusHolder.get_tree_from_technology_status(mode, technology_name)
 	if not tree then
 		return
 	end
