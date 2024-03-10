@@ -205,8 +205,17 @@ end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
-	techUtil.remove_prerequisites_to_technology(technologies["modules-3"], { "advanced-electronics-3" }, mode)
-	techUtil.remove_prerequisites_to_technology(technologies["advanced-electronics"], { "offshore-pump-2" }, mode)
+	techUtil.remove_prerequisites_from_technology(technologies["modules-3"], { "advanced-electronics-3" }, mode)
+	techUtil.remove_prerequisites_from_technology(technologies["advanced-electronics"], { "offshore-pump-2" }, mode)
+	techUtil.remove_prerequisites_from_technology(technologies["military-3"], { "aluminium-processing" }, mode)
+	techUtil.remove_prerequisites_from_technology(technologies["tank"], { "invar-processing" }, mode)
+	techUtil.remove_prerequisites_from_technology(technologies["bob-plasma-bullets"], { "deuterium-processing" }, mode)
+	techUtil.remove_prerequisites_from_technology(
+		technologies["bob-shotgun-plasma-shells"],
+		{ "deuterium-processing" },
+		mode
+	)
+	techUtil.remove_prerequisites_from_technology(technologies["bob-plasma-rocket"], { "deuterium-processing" }, mode)
 end
 
 local function remove_recipes_from_technology_effects_in_regular_tree(mode)
