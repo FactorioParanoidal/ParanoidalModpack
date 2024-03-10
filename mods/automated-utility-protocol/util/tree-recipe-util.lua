@@ -20,7 +20,7 @@ TreeRecipeUtil.add_prerequisites_to_technology_without_mode = function(technolog
 	end
 end
 
-TreeRecipeUtil.remove_prerequisites_to_technology_without_mode = function(technology_candidate, prerequisites)
+TreeRecipeUtil.remove_prerequisites_from_technology_without_mode = function(technology_candidate, prerequisites)
 	if not prerequisites then
 		error("prerequisites not specified")
 	end

@@ -142,7 +142,7 @@ TechUtil.add_prerequisites_to_technology = function(technology_candidate, prereq
 		technology.prerequisites = prerequisites
 	end
 end
-TechUtil.remove_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
+TechUtil.remove_prerequisites_from_technology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites then
 		error("prerequisites not specified")
 	end
