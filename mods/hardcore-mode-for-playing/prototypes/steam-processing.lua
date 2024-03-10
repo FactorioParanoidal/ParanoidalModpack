@@ -34,12 +34,12 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	boiler_prototype.output_fluid_box.filter = recipe_data_by_temperature.recipe_name
 	local technology = data.raw["technology"][boiler_data.technology_name_occured_booiler_prototype]
 	local mode = recipe_data_by_temperature.mode
-	log(Utils.dump_to_console(Utils.getModedObject(technology, mode)))
+	log(Utils.dump_to_console(Utils.get_moded_object(technology, mode)))
 	if techUtil.hasRecipeEffectIntoTechnologyEffects(technology, boiler_name, mode) then
 		techUtil.remove_recipe_effect_from_technology(technology, boiler_name, mode)
 	end
 	local boiler_name_recipe = data.raw["recipe"][boiler_name]
-	if not Utils.getModedObject(boiler_name_recipe, mode).hidden then
+	if not Utils.get_moded_object(boiler_name_recipe, mode).hidden then
 		techUtil.hide_recipe(boiler_name_recipe, mode)
 	end
 	local target_boiler_recipe = flib.copy_prototype(data.raw["recipe"][boiler_name], target_boiler_name)
