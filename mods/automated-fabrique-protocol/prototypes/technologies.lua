@@ -82,7 +82,7 @@ data:extend({
 })
 
 --[[attp technologies
-	TreeRecipeUtil.addPrerequisitesToTechnologyWithoutMode(technologies[ATTP_1_TECHNOLOGY_NAME], {
+	TreeRecipeUtil.add_prerequisites_to_technologyWithoutMode(technologies[ATTP_1_TECHNOLOGY_NAME], {
 		"factory-architecture-t1",
 		"factory-connection-type-chest",
 		"factory-connection-type-fluid",
@@ -90,6 +90,6 @@ data:extend({
 		"factory-interior-upgrade-lights",
 		"factory-interior-upgrade-display",
 	})
-	TreeRecipeUtil.addPrerequisitesToTechnology(technologies[ATTP_2_TECHNOLOGY_NAME], { "factory-architecture-t2" })
-	TreeRecipeUtil.addPrerequisitesToTechnology(technologies[ATTP_3_TECHNOLOGY_NAME], { "factory-recursion-t1" })
-	TreeRecipeUtil.addPrerequisitesToTechnology(technologies[ATTP_4_TECHNOLOGY_NAME], { "factory-recursion-t2" })]]
+	TreeRecipeUtil.add_prerequisites_to_technology(technologies[ATTP_2_TECHNOLOGY_NAME], { "factory-architecture-t2" })
+	TreeRecipeUtil.add_prerequisites_to_technology(technologies[ATTP_3_TECHNOLOGY_NAME], { "factory-recursion-t1" })
+	TreeRecipeUtil.add_prerequisites_to_technology(technologies[ATTP_4_TECHNOLOGY_NAME], { "factory-recursion-t2" })]]
