@@ -58,13 +58,13 @@ local function find_unresolved_recipe_ingredient_names_in_herself_technology_tre
 end
 
 TechnologyLeafHandler.handle_leaf_techonologies = function(technology_names, mode)
-	EvaluatingStepStatusHolder.initForMode(mode)
+	EvaluatingStepStatusHolder.init_for_mode(mode)
 	local technology_names_count = #technology_names
 	evaluate_technology_properties(technology_names, mode, technology_names_count)
 	validate_technology_prerequisites_no_hidden(technology_names, mode, technology_names_count)
 	validate_technology_effects_no_hidden(technology_names, mode, technology_names_count)
 	find_unresolved_recipe_ingredient_names_in_herself_technology_tree(technology_names, mode, technology_names_count)
-	EvaluatingStepStatusHolder.cleanupForMode(mode)
+	EvaluatingStepStatusHolder.cleanup_for_mode(mode)
 end
 
 return TechnologyLeafHandler
