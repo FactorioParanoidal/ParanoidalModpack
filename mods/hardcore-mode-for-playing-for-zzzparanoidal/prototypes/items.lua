@@ -1,4 +1,3 @@
-require("__hardcore-mode-for-playing__.prototypes.fuel-categories")
 local function copy_item(name, new_name)
 	return flib.copy_prototype(data.raw["item"][name], new_name)
 end

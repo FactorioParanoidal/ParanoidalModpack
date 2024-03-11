@@ -201,6 +201,7 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		"wood-detected-resource-technology",
 	}, mode)
 	techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bi-tech-bio-boiler"], { "bio-processing-alien-3" }, mode)
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
