@@ -51,6 +51,9 @@ FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype = function
 			result,
 			_table.filter(recipe_results, function(recipe_result)
 				local recipe_result_prototype = data.raw[recipe_result.type][recipe_result.name]
+				if not recipe_result_prototype then
+					return false
+				end
 				return is_allow_prototype_to_apply_prototype_function(
 					prototype,
 					recipe_result_prototype,
