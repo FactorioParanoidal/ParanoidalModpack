@@ -406,7 +406,7 @@
     },
     {
       "name": "LogisticTrainNetwork",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "LootingSpaceshipWrecks",
@@ -414,15 +414,15 @@
     },
     {
       "name": "ltn-cleanup",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "LtnManager",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "LTN_Content_Reader",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "make-moded-technology-tree-mods-protocol",
@@ -666,7 +666,7 @@
     },
     {
       "name": "Rampant",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "RampantMaintenance",
