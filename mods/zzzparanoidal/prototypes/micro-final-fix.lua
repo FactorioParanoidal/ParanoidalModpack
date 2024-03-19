@@ -1188,6 +1188,10 @@ bobmods.lib.recipe.set_ingredients("boiler-3", { { "brass-pipe", 15 }, { "boiler
 bobmods.lib.recipe.set_ingredients("boiler-4", { { "ceramic-pipe", 15 }, { "boiler-3", 2 }, { "tungsten-plate", 20 } })
 bobmods.lib.recipe.set_ingredients("boiler-5", { { "copper-tungsten-pipe", 15 }, { "boiler-4", 2 }, { "copper-tungsten-alloy", 20 } })
 
+--Исправление загрязнения для отстойника и факельной стойки
+data.raw["furnace"]["clarifier"].energy_source.emissions_per_minute = 75
+data.raw["furnace"]["angels-flare-stack"].energy_source.emissions_per_minute = 75
+
 --Ремонт дерева исследований
 bobmods.lib.tech.add_prerequisite ("nuclear-power", "bob-boiler-4") --Ставим ядерку под Бойлер МК4
 bobmods.lib.tech.add_prerequisite ("water-pumpjack-1", "electricity") --помпа
