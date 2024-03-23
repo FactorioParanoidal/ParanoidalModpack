@@ -66,6 +66,8 @@
             "enum": [
               "ConvertModSettingsFromJson",
               "ConvertModSettingsToJson",
+              "EnsureLaunchability",
+              "PrepareHeadless",
               "PrintInfo",
               "ZipMods"
             ]
@@ -79,6 +81,8 @@
             "enum": [
               "ConvertModSettingsFromJson",
               "ConvertModSettingsToJson",
+              "EnsureLaunchability",
+              "PrepareHeadless",
               "PrintInfo",
               "ZipMods"
             ]
