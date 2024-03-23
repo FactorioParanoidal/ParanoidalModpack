@@ -117,7 +117,7 @@ partial class Build : NukeBuild
                 Log.Warning("Factorio headless server will only available for linux!");
             }
 
-            var paranoidal = await FolderFactorioMod.LoadFromDirectory("mods/zzzparanoidal");
+            var paranoidal = await FolderFactorioMod.LoadFromDirectory(RootDirectory / "mods" / "zzzparanoidal");
             var factorioDependency = paranoidal.Info.Dependencies?.FirstOrDefault(dep => dep.Name == "base");
             if (factorioDependency?.EqualityVersion is null)
             {
