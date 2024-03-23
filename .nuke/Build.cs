@@ -1,17 +1,29 @@
-﻿using System;
-using System.Diagnostics;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Threading;
+using System.Text.Json;
 using System.Threading.Tasks;
+using FactorioParanoidal.FactorioMods;
+using FactorioParanoidal.FactorioMods.Mods;
+using FactorioParanoidal.ModSettingsDat;
+using Microsoft.VisualBasic.CompilerServices;
 using Nuke.Common;
+using Nuke.Common.CI;
+using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
+using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
+using Nuke.Common.Utilities.Collections;
 using Serilog;
-using SharpCompress.Common;
-using SharpCompress.Readers;
-partial class Build : NukeBuild {
+using static Nuke.Common.EnvironmentInfo;
+using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.IO.PathConstruction;
+
+[SuppressMessage("ReSharper", "AllUnderscoreLocalParameterName")]
+partial class Build : NukeBuild
+{
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -19,175 +31,77 @@ partial class Build : NukeBuild {
     ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.PrintInfo);
 
-    [GitRepository]
-    GitRepository GitRepo = null!;
-
-    [Parameter("Sets target factorio version to use if required. Specify target version, or null to use minimal required for modpack, or latest for latest factorio version available.")]
-    readonly string? TargetFactorioVersion;
+    [GitRepository] GitRepository GitRepo = null!;
 
     Target PrintInfo => _ => _
-        .Executes(async () =>
+        .Executes(() =>
         {
             Log.Information("Root directory: {RootDirectory}", RootDirectory);
             Log.Information("Branch: {BranchName}", GitRepo.Branch);
             Log.Information("Commit: {CommitHash}", GitRepo.Commit);
-
-            try {
-                var requiredFactorioVersion = await GetRequiredFactorioVersion();
-                Log.Information("For Factorio: {FactorioVersion} and higher", requiredFactorioVersion);
-                Log.Information("Download Factorio {FactorioVersion}: {FactorioDownloading}", requiredFactorioVersion, Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString()));
-            }
-            catch (Exception e) {
-                Log.Error(e, "Failed to determine Factorio version");
-            }
         });
 
-    Target PrepareHeadless => _ => _
+    Target ConvertModSettingsToJson => _ => _
         .Executes(async () =>
         {
-            if (!OperatingSystem.IsLinux()) {
-                Log.Warning("Seems like you are running on non-linux os");
-                Log.Warning("Factorio headless server will only available for linux!");
-            }
-            var requiredFactorioVersion = await GetRequiredFactorioVersion();
-            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion.ToString());
-            if (!Directory.Exists(headlessPath)) {
-                try {
-                    Log.Information("Downloading and extracting archive");
-                    await using var stream = await Utils.HttpClient.GetStreamAsync(Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion.ToString(), "headless", "linux64"));
-                    using var reader = ReaderFactory.Open(stream);
-                    Directory.CreateDirectory(headlessPath);
-                    reader.WriteAllToDirectory(headlessPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-
-                    Log.Information("Factorio extracted");
-                    Log.Information("Testing factorio launchability");
-                    await EnsureFactorioServerCanLaunch(Path.Combine(headlessPath, "factorio"));
-                }
-                catch (Exception e) {
-                    Log.Fatal(e, "Failed to download factorio headless server");
-                    Directory.Delete(headlessPath, true);
-                    throw;
-                }
+            var modSettingsDatPath = RootDirectory / "mods" / "mod-settings.dat";
+            var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
+            if (!File.Exists(modSettingsDatPath))
+            {
+                throw new FileNotFoundException($"File {modSettingsDatPath} not found. Ensure that this file exists",
+                    modSettingsDatPath);
             }
 
-            Log.Information("Factorio {RequiredVersion} server downloaded!", requiredFactorioVersion);
+            Log.Information("Starting reading {Path}", modSettingsDatPath);
+            await using var datFileStream = File.OpenRead(modSettingsDatPath);
+            var modSettings = ModSettingsConverter.Deserialize(datFileStream);
+            Log.Information("{Path} successfully parsed", modSettingsDatPath);
+
+            Log.Information("Opening {Path} file to write JSON", modSettingsJsonPath);
+            await using var jsonFileStream = File.Open(modSettingsJsonPath, FileMode.Create, FileAccess.Write);
+            await JsonSerializer.SerializeAsync(jsonFileStream, modSettings, SerializerOptions);
+            Log.Information("{Path} successfully written", modSettingsJsonPath);
         });
 
-    Target EnsureLaunchability => _ => _
-        .DependsOn(PrepareHeadless)
+    Target ConvertModSettingsFromJson => _ => _
         .Executes(async () =>
         {
-            var requiredFactorioVersion = await GetRequiredFactorioVersion();
-            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion.ToString(), "factorio");
-
-            // Linking mods
-            if (!Directory.Exists(Path.Combine(headlessPath, "mods"))) {
-                Directory.CreateSymbolicLink(Path.Combine(headlessPath, "mods"), Path.Combine(RootDirectory, "mods"));
+            var modSettingsDatPath = RootDirectory / "mods" / "mod-settings.dat";
+            var modSettingsJsonPath = RootDirectory / "mods" / "mod-settings.json";
+            if (!File.Exists(modSettingsJsonPath))
+            {
+                throw new FileNotFoundException($"File {modSettingsJsonPath} not found. Ensure that this file exists",
+                    modSettingsJsonPath);
             }
 
-            Log.Information("Testing PARANOIDAL launchability");
-            await EnsureFactorioServerCanLaunch(headlessPath);
+            Log.Information("Starting reading {Path}", modSettingsJsonPath);
+            await using var jsonFileStream = File.OpenRead(modSettingsJsonPath);
+            var modSettings = await JsonSerializer.DeserializeAsync<ModSettings>(jsonFileStream, SerializerOptions);
+            Log.Information("{Path} successfully parsed", modSettingsJsonPath);
+
+            Log.Information("Opening {Path} file to write JSON", modSettingsDatPath);
+            await using var datFileStream = File.Open(modSettingsDatPath, FileMode.Create, FileAccess.Write);
+            ModSettingsConverter.Serialize(modSettings, datFileStream);
+            Log.Information("{Path} successfully written", modSettingsDatPath);
         });
 
     Target ZipMods => _ => _
-        .Executes(() =>
-        {
-            var targetDirectory = RootDirectory / "zipped-mods";
-            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
-            FileSystemTasks.EnsureCleanDirectory(targetDirectory);
-
-            var mods = Directory.EnumerateDirectories(RootDirectory / "mods");
-            Parallel.ForEach(mods, (modPath, _) =>
-            {
-                var mod = new FactorioMod(modPath);
-                try {
-                    var modZipPath = targetDirectory / $"{mod.GetInternalName()}_{mod.GetModVersion()}.zip";
-                    Log.Information("Zipping {ModName} to {ModZipPath}", mod.GetInternalName(), modZipPath);
-                    Zip(modZipPath, modPath);
-                }
-                catch (Exception e) {
-                    Log.Error("Failed to get version of mod {ModName}, due to {Reason}", mod.GetInternalName(), e.Message);
-                }
-            });
-        });
-
-    Target PullLocalization => _ => _
         .Executes(async () =>
         {
-            var stream = await Utils.HttpClient.GetStreamAsync(Utils.LocalizationModFolderPullAddress);
-            using var reader = new ZipArchive(stream);
+            var targetDirectory = RootDirectory / "zipped-mods";
+            targetDirectory.CreateOrCleanDirectory();
 
-            var paranoidalLocaleFolder = RootDirectory / "mods" / "ParanoidalLocale";
-            FileSystemTasks.EnsureCleanDirectory(paranoidalLocaleFolder);
-            var zipArchiveEntries = reader.Entries.Where(entry => entry.Length != 0).ToList();
-            foreach (var entry in zipArchiveEntries) {
-                var filePath = paranoidalLocaleFolder / entry.FullName[46..];
-                FileSystemTasks.EnsureExistingParentDirectory(filePath);
-                entry.ExtractToFile(filePath);
-            }
+            var modsDirectory = RootDirectory / "mods";
+            Log.Information("Discovering mods in {TargetDirectory}", targetDirectory);
+            var modpack = await FactorioModpack.LoadFromDirectory(modsDirectory);
+            Log.Information("Discovered {Count} mods", modpack.Count());
 
-            Log.Information("Extracted {Count} files", zipArchiveEntries.Count);
+            Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
+            Parallel.ForEach(modpack.Cast<FolderFactorioMod>(), (mod, _) =>
+            {
+                var modZipPath = targetDirectory / $"{mod.Info.Name}_{mod.Info.Version}.zip";
+                Log.Information("Started zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
+                Zip(modZipPath, mod.Directory);
+            });
         });
-
-    async Task EnsureFactorioServerCanLaunch(string factorioServerLocation) {
-        Assert.True(OperatingSystem.IsLinux(), "Factorio can be started only on linux");
-
-        File.Delete(Path.Combine(factorioServerLocation, "non-existent-save"));
-
-        var serverFile = Path.Combine(factorioServerLocation, "bin/x64/factorio");
-        Utils.Chmod(serverFile);
-
-        Log.Information("Starting factorio server");
-        var processStartInfo = new ProcessStartInfo() {
-            UseShellExecute = false,
-            FileName = serverFile,
-            Arguments = "--start-server non-existent-save",
-            RedirectStandardOutput = true,
-        };
-        using var process = Process.Start(processStartInfo).NotNull("Process.Start(processStartInfo) != null");
-        process!.BeginOutputReadLine();
-
-        var factorioInitialized = false;
-        Log.Debug("Redirection Factorio output:");
-        process!.OutputDataReceived += (sender, args) =>
-        {
-            if (args.Data == null) return;
-            Log.Debug("{FactorioLogEntry}", args.Data);
-            if (args.Data.Contains("Factorio initialised")) {
-                factorioInitialized = true;
-                // ReSharper disable once AccessToDisposedClosure
-                process.Kill(true);
-            }
-        };
-
-        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(15));
-        try {
-            await process.WaitForExitAsync(cancellationTokenSource.Token);
-        }
-        catch (TaskCanceledException) {
-            Log.Error("Process hasn't started in 15 minutes. Aborting");
-            process.Kill();
-            throw;
-        }
-
-        if (!factorioInitialized) {
-            throw new Exception("Factorio dont start successfully");
-        }
-    }
-
-    async Task<Version> GetRequiredFactorioVersion() {
-        Log.Information("Resolving factorio version. Parameter TargetFactorioVersion is {TargetFactorioVersion}", TargetFactorioVersion);
-        if (TargetFactorioVersion == null) {
-            RootDirectory.NotNull("Git repository not found");
-            var paranoidalRepository = new ParanoidalRepository(RootDirectory);
-            var coreModPath = paranoidalRepository.LocateMod(ParanoidalRepository.CoreModeName).NotNull("Cannot locate core mod")!;
-            var coreMod = new FactorioMod(coreModPath);
-            return coreMod.GetDependsOnFactorioVersion();
-        }
-        if (TargetFactorioVersion.Trim().ToLower() == "latest") {
-            Log.Information("Resolving latest version");
-            return Version.Parse(await Utils.GetLatestVersion());
-        }
-        return Version.Parse(TargetFactorioVersion);
-    }
 }

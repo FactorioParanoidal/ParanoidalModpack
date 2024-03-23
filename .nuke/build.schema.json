@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Build Schema",
   "$ref": "#/definitions/build",
+  "title": "Build Schema",
   "definitions": {
     "build": {
       "type": "object",
@@ -21,6 +21,7 @@
             "AppVeyor",
             "AzurePipelines",
             "Bamboo",
+            "Bitbucket",
             "Bitrise",
             "GitHubActions",
             "GitLab",
@@ -30,8 +31,8 @@
             "TeamCity",
             "Terminal",
             "TravisCI",
-            "VSCode",
-            "VisualStudio"
+            "VisualStudio",
+            "VSCode"
           ]
         },
         "NoLogo": {
@@ -63,10 +64,9 @@
           "items": {
             "type": "string",
             "enum": [
-              "EnsureLaunchability",
-              "PrepareHeadless",
+              "ConvertModSettingsFromJson",
+              "ConvertModSettingsToJson",
               "PrintInfo",
-              "PullLocalization",
               "ZipMods"
             ]
           }
@@ -77,17 +77,12 @@
           "items": {
             "type": "string",
             "enum": [
-              "EnsureLaunchability",
-              "PrepareHeadless",
+              "ConvertModSettingsFromJson",
+              "ConvertModSettingsToJson",
               "PrintInfo",
-              "PullLocalization",
               "ZipMods"
             ]
           }
-        },
-        "TargetFactorioVersion": {
-          "type": "string",
-          "description": "Sets target factorio version to use if required. Specify target version, or null to use minimal required for modpack, or latest for latest factorio version available"
         },
         "Verbosity": {
           "type": "string",
