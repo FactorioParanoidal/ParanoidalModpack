@@ -121,8 +121,8 @@ partial class Build {
         var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
         while (!token.IsCancellationRequested)
         {
-            var tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
-            if (tcpConnInfoArray.Any(info => info.LocalEndPoint.Port == port))
+            var tcpConnInfoArray = ipGlobalProperties.GetActiveUdpListeners();
+            if (tcpConnInfoArray.Any(info => info.Port == port))
             {
                 return;
             }
