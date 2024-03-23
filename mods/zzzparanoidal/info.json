@@ -8,9 +8,8 @@
   "homepage": "https://discord.gg/MnXGAmC",
   "description": "Paranoidal core mod for 1.1",
   "dependencies": [
-    "base >= 1.1.74",
-    "boblibrary", 
     "base >= 1.1.100",
+    "boblibrary", 
     "boblibrary",
     "BatteryElectricTrain",
     "? angelsindustries", 
