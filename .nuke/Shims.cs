@@ -107,10 +107,14 @@ partial class Build {
                 return true;
             }
         }
-        catch (TaskCanceledException) {
+        catch (TaskCanceledException)
+        {
             Log.Error("Process hasn't started in 15 minutes. Aborting");
-            process.Kill();
             return false;
+        }
+        finally
+        {
+            process.Kill(true);
         }
 
         return false;

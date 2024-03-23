@@ -183,7 +183,7 @@ partial class Build : NukeBuild
             }
 
             var requiredFactorioVersion = factorioDependency.EqualityVersion.Version.ToString(3);
-            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion);
+            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion, "factorio");
 
             Log.Information("Testing PARANOIDAL launchability");
             await EnsureFactorioServerCanLaunch(headlessPath, RootDirectory / "mods");
