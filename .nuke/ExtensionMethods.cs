@@ -6,7 +6,7 @@ using Nuke.Common.IO;
 
 public static class ExtensionMethods
 {
-    public static Version GetBaseBaseRequiredVersion(this IFactorioMod factorioMod)
+    public static Version GetBaseGameRequiredVersion(this IFactorioMod factorioMod)
     {
         var factorioDependency = factorioMod.Info.Dependencies?.FirstOrDefault(dep => dep.Name == "base");
         if (factorioDependency?.EqualityVersion is null)

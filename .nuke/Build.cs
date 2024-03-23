@@ -108,7 +108,7 @@ partial class Build : NukeBuild
             }
 
             var paranoidalMod = await FolderFactorioMod.LoadFromDirectory(RootDirectory / "mods" / "zzzparanoidal");
-            var requiredFactorioVersion = paranoidalMod.GetBaseBaseRequiredVersion();
+            var requiredFactorioVersion = paranoidalMod.GetBaseGameRequiredVersion();
 
             await FactorioLauncher.DownloadFactorioIfRequired(AbsolutePath.Create("factorio_headless"),
                 requiredFactorioVersion, "headless", "linux64");
@@ -122,7 +122,7 @@ partial class Build : NukeBuild
         .Executes(async () =>
         {
             var paranoidalMod = await FolderFactorioMod.LoadFromDirectory(RootDirectory / "mods" / "zzzparanoidal");
-            var requiredFactorioVersion = paranoidalMod.GetBaseBaseRequiredVersion();
+            var requiredFactorioVersion = paranoidalMod.GetBaseGameRequiredVersion();
             var factorioServerLocation = AbsolutePath.Create("factorio_headless") / requiredFactorioVersion.ToString(3);
 
             Log.Information("Testing PARANOIDAL launchability");
