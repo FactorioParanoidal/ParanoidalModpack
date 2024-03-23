@@ -12,7 +12,7 @@ TechnologyNoHiddenValidatingStep.evaluate = function(technology_name, mode)
 				-- исключаем технические технологии, которые будут являться маркерами при "знакомстве" с базовыми ресурсами
 				and not _string.ends_with(tree_element_name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX)
 		then
-			EvaluatingStepStatusHolder.print_technology_tree(mode, technology_name)
+			TechnologyTreeUtil.print_technology_tree(mode, technology_name)
 			error(
 				" for technology "
 					.. technology_name

@@ -212,29 +212,3 @@ EvaluatingStepStatusHolder.cleanup_for_mode = function(mode)
 	end
 	error("step status for mode " .. mode .. " has " .. tostring(technology_in_progress_count) .. " entries!")
 end
-
-local function print_technology_tree0(mode, technology_name, level)
-	local prefix = ""
-	for i = 0, level - 1 do
-		prefix = prefix .. "|"
-	end
-	prefix = prefix .. "-"
-	if EvaluatingStepStatusHolder.is_visited_technology(mode, technology_name) then
-		return
-	end
-	EvaluatingStepStatusHolder.mark_technology_as_visited(mode, technology_name)
-	local tree = EvaluatingStepStatusHolder.get_tree_from_technology_status(mode, technology_name)
-	if not tree or _table.size(tree) == 0 then
-		return
-	end
-	_table.each(tree, function(tree_element_name)
-		log(prefix .. tree_element_name)
-		print_technology_tree0(mode, tree_element_name, level + 1)
-	end)
-end
-
-EvaluatingStepStatusHolder.print_technology_tree = function(mode, technology_name)
-	log("tree of")
-	log(technology_name)
-	print_technology_tree0(mode, technology_name, 0)
-end
