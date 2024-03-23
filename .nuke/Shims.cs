@@ -101,6 +101,7 @@ partial class Build {
             var processExitedTask = process.WaitForExitAsync(cancellationTokenSource.Token);
             var portIsBusyTask = CheckUntilPortIsBusy(port, cancellationTokenSource.Token);
             var completedTask = await Task.WhenAny(processExitedTask, portIsBusyTask);
+            process.Kill(true);
             if (completedTask == portIsBusyTask)
             {
                 Log.Information("Port {Port} acquired by launched Factorio", port);
@@ -110,11 +111,8 @@ partial class Build {
         catch (TaskCanceledException)
         {
             Log.Error("Process hasn't started in 15 minutes. Aborting");
-            return false;
-        }
-        finally
-        {
             process.Kill(true);
+            return false;
         }
 
         return false;
