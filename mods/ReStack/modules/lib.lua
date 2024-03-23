@@ -28,7 +28,7 @@ function SelectItemByEntity(ent_type, stack_size, category, reverse_check)
         ReStack_Items[entity.minable.result] = {stack_size = stack_size, type = category}
       elseif entity.minable.results then
         if reverse_check then
-          add_from_item_array(entity.minable.results, stack_size, category, name)
+        add_from_item_array(entity.minable.results, stack_size, category, name)
         else
           add_from_item_array(entity.minable.results, stack_size, category)
         end
