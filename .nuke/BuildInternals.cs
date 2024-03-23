@@ -1,3 +1,4 @@
+#nullable enable
 using System.Text.Json;
 using FactorioParanoidal.Models.PropertyTrees;
 

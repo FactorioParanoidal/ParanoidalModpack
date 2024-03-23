@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -17,6 +18,8 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -103,5 +106,86 @@ partial class Build : NukeBuild
                 Log.Information("Started zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
                 Zip(modZipPath, mod.Directory);
             });
+        });
+
+    Target PrepareHeadless => _ => _
+        .Executes(async () =>
+        {
+            if (!OperatingSystem.IsLinux())
+            {
+                Log.Warning("Seems like you are running on non-linux os");
+                Log.Warning("Factorio headless server will only available for linux!");
+            }
+
+            var paranoidal = await FolderFactorioMod.LoadFromDirectory("mods/zzzparanoidal");
+            var factorioDependency = paranoidal.Info.Dependencies?.FirstOrDefault(dep => dep.Name == "base");
+            if (factorioDependency?.EqualityVersion is null)
+            {
+                throw new Exception("No factorio version dependency specified in zzzparanoidal mod");
+            }
+
+            var requiredFactorioVersion = factorioDependency.EqualityVersion.Version.ToString(3);
+            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion);
+            if (Directory.Exists(headlessPath))
+            {
+                Log.Information("Factorio found. Checking vanilla launchability");
+                if (await EnsureFactorioServerCanLaunch(Path.Combine(headlessPath, "factorio")))
+                {
+                    return;
+                }
+
+                Log.Information("Vanilla server failed to launch. Deleting");
+            }
+
+            if (Directory.Exists(headlessPath))
+            {
+                Directory.Delete(headlessPath, true);
+            }
+
+            try
+            {
+                Log.Information("Downloading and extracting archive");
+                var factorioDownloadLinkForCurrentOs =
+                    Utils.GetFactorioDownloadLinkForCurrentOs(requiredFactorioVersion, "headless", "linux64");
+                await using var stream = await Utils.HttpClient.GetStreamAsync(factorioDownloadLinkForCurrentOs);
+                using var reader = ReaderFactory.Open(stream);
+                Directory.CreateDirectory(headlessPath);
+                reader.WriteAllToDirectory(headlessPath,
+                    new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
+
+                Log.Information("Factorio extracted");
+                Log.Information("Testing factorio launchability");
+                if (!await EnsureFactorioServerCanLaunch(Path.Combine(headlessPath, "factorio")))
+                {
+                    Log.Information("Factorio server can't be started. Check logs for details");
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Failed to download factorio headless server");
+                Directory.Delete(headlessPath, true);
+                throw;
+            }
+
+            Log.Information("Factorio {RequiredVersion} server downloaded!", requiredFactorioVersion);
+        });
+    
+    Target EnsureLaunchability => _ => _
+        .Unlisted()
+        .DependsOn(PrepareHeadless)
+        .Executes(async () =>
+        {
+            var paranoidal = await FolderFactorioMod.LoadFromDirectory("mods/zzzparanoidal");
+            var factorioDependency = paranoidal.Info.Dependencies?.FirstOrDefault(dep => dep.Name == "base");
+            if (factorioDependency?.EqualityVersion is null)
+            {
+                throw new Exception("No factorio version dependency specified in zzzparanoidal mod");
+            }
+
+            var requiredFactorioVersion = factorioDependency.EqualityVersion.Version.ToString(3);
+            var headlessPath = Path.Combine("factorio_headless", requiredFactorioVersion);
+
+            Log.Information("Testing PARANOIDAL launchability");
+            await EnsureFactorioServerCanLaunch(headlessPath, RootDirectory / "mods");
         });
 }

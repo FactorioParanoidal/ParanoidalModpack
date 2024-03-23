@@ -1,8 +1,18 @@
+#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Threading;
+using System.Threading.Tasks;
+using Nuke.Common;
 using Nuke.Common.IO;
+using Serilog;
+using Process = System.Diagnostics.Process;
+using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
+
 partial class Build {
     void Zip(AbsolutePath target, params string[] paths) => Zip(target, paths.AsEnumerable());
 
@@ -49,6 +59,75 @@ partial class Build {
             catch {
                 //Ignore
             }
+        }
+    }
+    
+    async Task<bool> EnsureFactorioServerCanLaunch(string factorioServerLocation, string? modsPath = null) {
+        Assert.True(OperatingSystem.IsLinux(), "Factorio can be started only on linux");
+
+        // File.Delete(Path.Combine(factorioServerLocation, "non-existent-save"));
+
+        var serverFile = Path.Combine(factorioServerLocation, "bin/x64/factorio");
+        Utils.Chmod(serverFile);
+
+        var port = 34197;
+        var arguments = $"--start-server-load-scenario base/freeplay --bind 0.0.0.0:{port}";
+        if (modsPath is not null)
+        {
+            arguments += $" --mod-directory \"{modsPath}\"";
+        }
+        
+        Log.Information("Starting Factorio server on port {Port}", port);
+        var processStartInfo = new ProcessStartInfo
+        {
+            UseShellExecute = false,
+            FileName = serverFile,
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+        };
+        using var process = Process.Start(processStartInfo).NotNull("Process.Start(processStartInfo) != null")!;
+        process.BeginOutputReadLine();
+
+        Log.Debug("Redirection Factorio output:");
+        process.OutputDataReceived += (_, args) =>
+        {
+            if (args.Data == null) return;
+            Log.Debug("{FactorioLogEntry}", args.Data);
+        };
+
+        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(15));
+        try
+        {
+            var processExitedTask = process.WaitForExitAsync(cancellationTokenSource.Token);
+            var portIsBusyTask = CheckUntilPortIsBusy(port, cancellationTokenSource.Token);
+            var completedTask = await Task.WhenAny(processExitedTask, portIsBusyTask);
+            if (completedTask == portIsBusyTask)
+            {
+                Log.Information("Port {Port} acquired by launched Factorio", port);
+                return true;
+            }
+        }
+        catch (TaskCanceledException) {
+            Log.Error("Process hasn't started in 15 minutes. Aborting");
+            process.Kill();
+            return false;
+        }
+
+        return false;
+    }
+
+    public async Task CheckUntilPortIsBusy(int port, CancellationToken token)
+    {
+        var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+        while (!token.IsCancellationRequested)
+        {
+            var tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            if (tcpConnInfoArray.Any(info => info.LocalEndPoint.Port == port))
+            {
+                return;
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(5), token);
         }
     }
 }

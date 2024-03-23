@@ -1,0 +1,24 @@
+name: Modpack launchability
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+    tags:
+      - '**'
+jobs:
+  launchability:
+    name: Modpack launchability
+    continue-on-error: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache .nuke/temp, ~/.nuget/packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            .nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
+      - name: Launch Factorio with current set of mods
+        run: ./build.sh EnsureLaunchability
