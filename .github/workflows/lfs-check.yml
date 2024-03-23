@@ -1,5 +1,5 @@
 name: No LFS files
-on: [push, pull_request]
+on: [push]
 
 jobs:
   lint:
