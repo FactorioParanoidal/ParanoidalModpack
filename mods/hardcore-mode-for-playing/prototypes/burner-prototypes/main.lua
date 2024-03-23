@@ -78,12 +78,12 @@ local function is_allow_fuel_category_for_entity_with_burner_applying(prototype,
 	if
 		effectivity_max_item_stack_fuel_value - maximum_energy_consumption_for_entity_with_burner_prototype >= -EPSILON
 	then
-		log(
+		--[[log(
 			"maximum_energy_consumption_for_entity_with_burner_prototype "
 				.. tostring(maximum_energy_consumption_for_entity_with_burner_prototype)
 				.. " effectivity_max_item_stack_fuel_value "
 				.. tostring(effectivity_max_item_stack_fuel_value)
-		)
+		)]]
 		return true
 	end
 	return false
@@ -124,7 +124,7 @@ local function is_allow_prototype_to_apply_entity_with_burner_prototype(
 		end
 		burner_source_fuel_inventory_size = 1
 	end
-	log("recipe_result_prototype " .. Utils.dump_to_console(recipe_result_prototype.fuel_category))
+	--	log("recipe_result_prototype " .. Utils.dump_to_console(recipe_result_prototype.fuel_category))
 
 	local fuel_candidate_stack_size = recipe_result_prototype.stack_size
 	local max_item_stack_fuel_value = burner_source_fuel_inventory_size
@@ -140,7 +140,7 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 	end
 	local burner_energy_source = prototype.burner or prototype.energy_source
 	correct_effectivity_to_real(burner_energy_source)
-	log(
+	--[[log(
 		"found prototype type "
 			.. prototype.type
 			.. " called "
@@ -149,7 +149,10 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 			.. technology_name
 			.. " with burner "
 			.. Utils.dump_to_console(burner_energy_source)
-	)
+	)]]
+	if prototype.type == "boiler" then
+		return
+	end
 	burner_energy_source.fuel_category = nil
 	burner_energy_source.fuel_categories = {}
 	local fuel_category_candidates = FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype(
@@ -174,7 +177,7 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 			get_fuel_category_name_for_prototype(fuel_category_candidate)
 		)
 	end)
-	log(
+	--[[log(
 		"changed prototype type "
 			.. prototype.type
 			.. " called "
@@ -183,7 +186,7 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 			.. technology_name
 			.. " with burner "
 			.. Utils.dump_to_console(burner_energy_source)
-	)
+	)]]
 	return true
 end
 

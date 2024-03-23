@@ -107,13 +107,13 @@ local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 		if _table.size(technology_names_by_result) == 0 then
 			return
 		end
-		log("start recipe_name " .. recipe_name)
-		log(
+		--log("start recipe_name " .. recipe_name)
+		--[[log(
 			"all_technology_names_for_recipe_with_fuel_result "
 				.. Utils.dump_to_console(all_technology_names_for_recipe_with_fuel_result)
 				.. " for recipe_name "
 				.. recipe_name
-		)
+		)]]
 		local recipe_fluid_candidate_ingredients = _table.filter(
 			recipeUtil.get_all_recipe_ingredients(recipe_name, mode),
 			function(recipe_ingredient)
@@ -132,7 +132,7 @@ local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 					empty_recipe_name,
 					mode
 				)
-				log(
+				--[[			log(
 					"add recipe pair "
 						.. recipe_name
 						.. " and "
@@ -141,10 +141,10 @@ local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 						.. target_technology_name
 						.. " for mode "
 						.. mode
-				)
+				)]]
 			end)
 		end)
-		log("end recipe_name " .. recipe_name)
+		--	log("end recipe_name " .. recipe_name)
 	end)
 end
 
@@ -163,7 +163,7 @@ local function update_fluid_in_container_processing_technology_recipe_effects_by
 		techUtil.get_all_recipe_names_for_specified_technology(basic_technology_name, mode),
 		filter_function
 	)
-	log("fluid barrel recipes available: " .. Utils.dump_to_console(recipe_names))
+	--log("fluid barrel recipes available: " .. Utils.dump_to_console(recipe_names))
 	_table.each(recipe_names, function(recipe_name)
 		handle_one_recipe(recipe_name, basic_technology_name, mode)
 	end)

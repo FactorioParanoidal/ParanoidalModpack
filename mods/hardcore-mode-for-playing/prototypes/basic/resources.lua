@@ -63,8 +63,8 @@ function create_basic_resource_recipe(basic_data, suffix)
 	local resource_type = basic_data.type
 	local resource_name = basic_data.name
 	local resource_recipe_name = resource_name .. "-" .. suffix
-	log("creating basic recipe " .. resource_recipe_name)
-	log("resource data " .. Utils.dump_to_console(basic_data))
+	--log("creating basic recipe " .. resource_recipe_name)
+	--log("resource data " .. Utils.dump_to_console(basic_data))
 	local resourceItemPrototype = data.raw[resource_type][resource_name]
 	local recipe_data = {
 		results = {
@@ -101,7 +101,7 @@ function create_basic_resource_recipe(basic_data, suffix)
 	data:extend({
 		recipe,
 	})
-	log("basic recipe " .. resource_recipe_name .. " created")
+	--log("basic recipe " .. resource_recipe_name .. " created")
 
 	return recipe
 end
