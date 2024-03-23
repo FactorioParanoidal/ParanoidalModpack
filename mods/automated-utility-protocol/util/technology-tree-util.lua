@@ -50,12 +50,15 @@ end
 
 TechnologyTreeUtil.find_prerequisites_for_technology_for_first_level = function(technology_name, mode)
 	local result = TechnologyTreeUtil.find_prerequisites_for_technology_for_specified_level(technology_name, 1, 1, mode)
+	_table.remove_item(result, technology_name, nil, true)
 	return result
 end
 
 TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels = function(technology_name, mode)
 	local result =
 		TechnologyTreeUtil.find_prerequisites_for_technology_for_specified_level(technology_name, 1, MAX_INTEGER, mode)
+	_table.remove_item(result, technology_name, nil, true)
+
 	return result
 end
 
@@ -69,4 +72,29 @@ TechnologyTreeUtil.have_technology_in_tree = function(technology_name, prerequis
 	end
 	local prerequisites = TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels(technology_name, mode)
 	return _table.contains(prerequisites, prerequisite_technology_candidate_name)
+end
+local function print_technology_tree0(mode, technology_name, level, visited_technologies)
+	local prefix = ""
+	for i = 0, level - 1 do
+		prefix = prefix .. "|"
+	end
+	prefix = prefix .. "-"
+	if _table.contains(visited_technologies, technology_name) then
+		return
+	end
+	table.insert(visited_technologies, technology_name)
+	local tree = TechnologyTreeUtil.find_prerequisites_for_technology_for_first_level(technology_name, mode)
+	if not tree or _table.size(tree) == 0 then
+		return
+	end
+	_table.each(tree, function(tree_element_name)
+		log(prefix .. tree_element_name)
+		print_technology_tree0(mode, tree_element_name, level + 1, visited_technologies)
+	end)
+end
+
+TechnologyTreeUtil.print_technology_tree = function(mode, technology_name)
+	log("tree of")
+	log(technology_name)
+	print_technology_tree0(mode, technology_name, 0, {})
 end
