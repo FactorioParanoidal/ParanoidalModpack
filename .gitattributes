@@ -8,7 +8,6 @@
 *.txt text eol=lf
 *.md text eol=lf
 *.xml text eol=lf
-
 *.ogg binary 
 *.png binary 
 *.jpg binary 
@@ -19,3 +18,4 @@
 *.xcf binary 
 *.ttf binary 
 *.zip binary 
+*.png !text !filter !merge !diff
