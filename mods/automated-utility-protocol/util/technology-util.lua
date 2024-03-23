@@ -1,6 +1,6 @@
 local TechUtil = {}
 local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
-
+require("__automated-utility-protocol__.util.technology-tree-util")
 local function technology_not_found()
 	error("technology is null!!")
 end
@@ -132,15 +132,33 @@ TechUtil.get_all_technology_names_with_hidden = function()
 	end)
 end
 TechUtil.add_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
-	if not prerequisites then
+	if not prerequisites or type(prerequisites) ~= "table" then
 		error("prerequisites not specified")
 	end
+
 	local technology = get_moded_technology(technology_candidate, mode)
-	if technology.prerequisites then
-		_table.insert_all_if_not_exists(technology.prerequisites, prerequisites)
-	else
-		technology.prerequisites = prerequisites
-	end
+	--проверяем на создание циклов.
+	_table.each(prerequisites, function(prerequisite_name)
+		TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
+		local technology_candidate_name = technology_candidate.name
+		if TechnologyTreeUtil.have_technology_in_tree(prerequisite_name, technology_candidate_name, mode) then
+			TechnologyTreeUtil.print_technology_tree(mode, prerequisite_name)
+			error(
+				"prerequisite_name "
+					.. prerequisite_name
+					.. " contains implicitly technology "
+					.. technology_candidate_name
+					.. " and can't be added to it prerequisites!! NO CYCLE IN TREE!!!"
+					.. Utils.dump_to_console(candidate_tree)
+			)
+		end
+		if not technology.prerequisites then
+			technology.prerequisites = {}
+		end
+		if not _table.contains(technology.prerequisites, prerequisite_name) then
+			table.insert(technology.prerequisites, prerequisite_name)
+		end
+	end)
 end
 TechUtil.remove_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites then
