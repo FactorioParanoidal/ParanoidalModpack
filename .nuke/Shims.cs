@@ -95,6 +95,7 @@ partial class Build {
             Log.Debug("{FactorioLogEntry}", args.Data);
         };
 
+        
         var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMinutes(15));
         try
         {
@@ -120,6 +121,7 @@ partial class Build {
 
     public async Task CheckUntilPortIsBusy(int port, CancellationToken token)
     {
+        await Task.Delay(TimeSpan.FromSeconds(5), token);
         var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
         while (!token.IsCancellationRequested)
         {
