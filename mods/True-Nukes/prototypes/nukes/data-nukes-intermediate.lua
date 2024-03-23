@@ -293,7 +293,14 @@ if(nuke_materials.fusionMaterial == "tritium-canister") then
       energy_required = 15,
       enabled = false,
       category = "crafting-with-fluid",
-      ingredients = table.deepcopy(data.raw.recipe["uranium-fuel-cell"].ingredients),
+      ingredients =
+      {
+        {nuke_materials.reflector, 5},
+        {"iron-plate", 10},
+        {"uranium-235", 2},
+        {"uranium-238", 15},
+        {type="fluid", name="water", amount=100}
+      },
       result = "advanced-tritium-breeder-fuel-cell",
       result_count = 10
     },
@@ -303,7 +310,13 @@ if(nuke_materials.fusionMaterial == "tritium-canister") then
       energy_required = 10,
       enabled = false,
       category = "crafting-with-fluid",
-      ingredients = table.deepcopy(data.raw.recipe["uranium-fuel-cell"].ingredients),
+      ingredients =
+      {
+        {"iron-plate", 10},
+        {"uranium-235", 1},
+        {"uranium-238", 19},
+        {type="fluid", name="water", amount=100}
+      },
       result = "tritium-breeder-fuel-cell",
       result_count = 10
     },
@@ -337,9 +350,6 @@ if(nuke_materials.fusionMaterial == "tritium-canister") then
       stack_size = 50
     }
   })
-table.insert(data.raw.recipe["tritium-breeder-fuel-cell"].ingredients, {type="fluid", name="water", amount=100})
-table.insert(data.raw.recipe["advanced-tritium-breeder-fuel-cell"].ingredients, {type="fluid", name="water", amount=100})
-table.insert(data.raw.recipe["advanced-tritium-breeder-fuel-cell"].ingredients, {nuke_materials.reflector, 5})
 end
 for i = 0,100 do
   if(data.raw.module["productivity-module-" .. i] and data.raw.module["productivity-module-" .. i].limitation) then

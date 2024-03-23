@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -32,7 +32,7 @@ for _, name in pairs(ores) do
     if not control then goto continue end
 
     -- Setup rich text localized name
-    control.localised_name = { "", "[entity=" .. name .. "] ", { "entity-name." .. name } }
+    control.localised_name = {"", "[entity="..name.."] ", {"entity-name."..name}}
 
     -- Label to skip to next iteration
     ::continue::

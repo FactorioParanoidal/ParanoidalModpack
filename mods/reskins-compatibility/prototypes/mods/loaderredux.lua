@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -15,7 +15,7 @@ local inputs = {
     base_entity_name = "splitter",
     mod = "compatibility",
     group = "loaderredux",
-    particles = { ["medium"] = 1,["big"] = 4 },
+    particles = {["medium"] = 1, ["big"] = 4},
     icon_layers = 2,
     make_remnants = false,
 }
@@ -24,11 +24,11 @@ local inputs = {
 inputs.tier_labels = reskins.lib.setting("reskins-bobs-do-belt-entity-tier-labeling") and true or false
 
 local tier_map = {
-    ["loader"] = { tier = 1, sprite_variant = 1 },
-    ["fast-loader"] = { tier = 2, sprite_variant = 2 },
-    ["express-loader"] = { tier = 3, sprite_variant = 2, },
-    ["purple-loader"] = { tier = 4, sprite_variant = 2 },
-    ["green-loader"] = { tier = 5, sprite_variant = 2 },
+    ["loader"] = {tier = 1, sprite_variant = 1},
+    ["fast-loader"] = {tier = 2, sprite_variant = 2},
+    ["express-loader"] = {tier = 3, sprite_variant = 2,},
+    ["purple-loader"] = {tier = 4, sprite_variant = 2},
+    ["green-loader"] = {tier = 5, sprite_variant = 2},
 }
 
 -- Reskin entities

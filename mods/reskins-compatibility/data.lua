@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -8,7 +8,6 @@ require("prototypes.functions.functions")
 require("prototypes.functions.circuitprocessing-sprites")
 
 -- Mods
-require("prototypes.mods.aai-loaders")
 require("prototypes.mods.classic-beacon")
 require("prototypes.mods.classic-mining-drill")
 -- require("prototypes.mods.electricboiler")

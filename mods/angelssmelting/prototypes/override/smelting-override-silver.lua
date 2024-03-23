@@ -31,13 +31,14 @@ if angelsmods.trigger.smelting_products["silver"].ingot then
     OV.disable_recipe({ "silver-nitrate", "silver-from-lead" })
     OV.remove_prereq("battery-3", "nitrogen-processing")
     OV.add_prereq("battery-3", "angels-silver-smelting-2")
-    OV.add_prereq("battery-3", "powder-metallurgy-4")
+  end
 
+  if mods["bobplates"] then
     angelsmods.functions.move_item("silver-oxide", "angels-silver", "e")
     data.raw.item["silver-oxide"].icon = "__angelssmelting__/graphics/icons/solid-silver-oxide.png"
     data.raw.item["silver-oxide"].icon_size = 32
     OV.patch_recipes({
-      { name = "silver-oxide", subgroup = "angels-silver", order = "e[silver-oxide]", category = "powder-mixing-3" },
+      { name = "silver-oxide", subgroup = "angels-silver", order = "e[silver-oxide]", category = "powder-mixing-4" },
     })
   end
 
@@ -167,7 +168,7 @@ if angelsmods.trigger.smelting_products["silver"].wire then
   end
   OV.add_prereq("advanced-electronics", "angels-silver-smelting-1")
 
-  if mods["bobassembly"] and settings.startup["bobmods-assembly-electronicmachines"].value then
+  if mods["bobassembly"] and mods["bobelectronics"] then
     OV.patch_recipes({
       {
         name = "basic-silvered-copper-wire",

@@ -155,14 +155,6 @@ data:extend({
         type = "unlock-recipe",
         recipe = "geode-yellow-processing",
       },
-      {
-        type = "unlock-recipe",
-        recipe = "crystal-dust-liquify",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "crystal-slurry-filtering-conversion-1",
-      },
     },
     unit = {
       count = 50,
@@ -192,6 +184,10 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "crystallizer",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "liquifier",
       },
       {
         type = "unlock-recipe",
@@ -329,6 +325,7 @@ data:extend({
     prerequisites = {
       --"ore-floatation",
       "advanced-ore-refining-1",
+      "geode-processing-2",
       "chemical-science-pack",
       "ore-powderizer",
       "slag-processing-2",
@@ -393,7 +390,9 @@ data:extend({
     icon_size = 256,
     icon_mipmaps = 2,
     prerequisites = {
+      --"ore-crushing",
       "geode-processing-1",
+      "slag-processing-1",
     },
     effects = {
       {
@@ -422,7 +421,19 @@ data:extend({
       },
       {
         type = "unlock-recipe",
+        recipe = "crystal-dust-liquify",
+      },
+      {
+        type = "unlock-recipe",
         recipe = "crystal-slurry-filtering-1",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "crystal-slurry-filtering-conversion-1",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "catalysator-green",
       },
     },
     unit = {
@@ -442,7 +453,7 @@ data:extend({
     icon_size = 64,
     prerequisites = {
       "slag-processing-1",
-      "chemical-science-pack",
+      "ore-leaching",
       "geode-processing-2",
     },
     effects = {
@@ -508,9 +519,9 @@ data:extend({
     icon = "__angelsrefining__/graphics/technology/slag-processing.png",
     icon_size = 64,
     prerequisites = {
+      "geode-processing-3",
       "advanced-electronics-2",
       "production-science-pack",
-      "slag-processing-2",
     },
     effects = {
       {
@@ -556,7 +567,8 @@ data:extend({
     icon = "__angelsrefining__/graphics/technology/thermal-extractor.png",
     icon_size = 128,
     prerequisites = {
-      "water-treatment-2",
+      --"slag-processing-1",
+      "advanced-ore-refining-1",
     },
     effects = {
       {
@@ -716,8 +728,8 @@ data:extend({
     prerequisites = {
       "ore-leaching",
       "advanced-ore-refining-2",
+      "ore-electro-whinning-cell",
       "slag-processing-3",
-      "ore-advanced-floatation",
     },
     effects = {
       {
@@ -735,6 +747,10 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "ore-powderizer-3",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "electro-whinning-cell-2",
       },
       {
         type = "unlock-recipe",
@@ -888,7 +904,6 @@ data:extend({
     prerequisites = {
       "ore-refining",
       "advanced-ore-refining-3",
-      "ore-electro-whinning-cell",
       "utility-science-pack",
     },
     effects = {
@@ -902,7 +917,7 @@ data:extend({
       },
       {
         type = "unlock-recipe",
-        recipe = "electro-whinning-cell-2",
+        recipe = "electro-whinning-cell-3",
       },
       {
         type = "unlock-recipe",
@@ -1024,6 +1039,7 @@ data:extend({
     icon_size = 128,
     prerequisites = {
       "ore-powderizer",
+      "advanced-ore-refining-2",
       "thermal-water-extraction-2",
     },
     effects = {
@@ -1073,8 +1089,8 @@ data:extend({
     icon = "__angelsrefining__/graphics/technology/electro-whinning-cell-tech.png",
     icon_size = 128,
     prerequisites = {
-      "ore-leaching",
-      "advanced-ore-refining-3",
+      "ore-advanced-floatation",
+      "geode-processing-3",
     },
     effects = {
       {
@@ -1132,7 +1148,6 @@ data:extend({
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
-        { type = "item", name = "production-science-pack", amount = 1 },
       },
       time = 15,
     },

@@ -131,6 +131,7 @@ if settings.startup["bobmods-assembly-furnaces"].value == true and data.raw.furn
       max_health = input.max_health or 150,
       corpse = "big-remnants",
       dying_explosion = "medium-explosion",
+      light = { intensity = 1, size = 10 },
       resistances = {
         {
           type = "fire",

@@ -7,7 +7,7 @@ data:extend({
   {
     type = "recipe",
     name = "platinum-ore-processing",
-    category = "ore-processing-4",
+    category = "ore-processing-3",
     subgroup = "angels-platinum",
     energy_required = 2,
     enabled = false,
@@ -23,7 +23,7 @@ data:extend({
   {
     type = "recipe",
     name = "platinum-processed-processing",
-    category = "pellet-pressing-4",
+    category = "pellet-pressing-3",
     subgroup = "angels-platinum",
     energy_required = 2,
     enabled = false,
@@ -76,7 +76,7 @@ data:extend({
   {
     type = "recipe",
     name = "platinum-ore-smelting",
-    category = "blast-smelting-4",
+    category = "blast-smelting-3",
     subgroup = "angels-platinum",
     energy_required = 4,
     enabled = false,
@@ -141,7 +141,7 @@ data:extend({
   {
     type = "recipe",
     name = "molten-platinum-smelting",
-    category = "induction-smelting-4",
+    category = "induction-smelting-3",
     subgroup = "angels-platinum-casting",
     energy_required = 4,
     enabled = false,
@@ -157,7 +157,7 @@ data:extend({
   {
     type = "recipe",
     name = "roll-platinum-casting",
-    category = "strand-casting-4",
+    category = "strand-casting-3",
     subgroup = "angels-platinum-casting",
     normal = {
       enabled = false,
@@ -223,7 +223,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-wire-coil-platinum-casting",
-    category = "strand-casting-4",
+    category = "strand-casting-3",
     subgroup = "angels-platinum-casting",
     normal = {
       enabled = false,
@@ -302,7 +302,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-plate-platinum",
-    category = "casting-4",
+    category = "casting-3",
     subgroup = "angels-platinum-casting",
     normal = {
       enabled = false,

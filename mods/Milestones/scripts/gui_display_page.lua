@@ -1,6 +1,8 @@
 local misc = require("__flib__.misc")
 require("scripts.milestones_util")
 
+local empty_set_label = {type="label", caption={"", "[color=100,100,100]", {"milestones.no_visible_milestones"}, "[/color]"}, style="caption_label"}
+
 local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then
         local remaining_ticks = ticks % 60
@@ -9,7 +11,6 @@ local function get_timestamp(ticks, print_milliseconds)
     else
         return misc.ticks_to_timestring(ticks)
     end
-
 end
 
 local function add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)
@@ -64,9 +65,9 @@ end
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list, show_estimations)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_display", tags={index=milestone.sort_index}}
     local prototype = nil
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = game.item_prototypes[milestone.name]
-    elseif milestone.type == "fluid" then
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
@@ -81,13 +82,11 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     end
 
     -- Sprite
-    local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
-    local sprite_path = sprite_path_prefix .. "/" .. milestone.name
+    local sprite_path = sprite_prefix(milestone) .. "/" .. milestone.name
     local sprite_number
     local tooltip = milestone.tooltip  -- Milestone tooltip has precedence
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
-        tooltip = tooltip or {"", milestone.quantity, "x ", prototype.localised_name}
     end
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
@@ -97,7 +96,11 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
         tooltip = tooltip or {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
-        tooltip = tooltip or {"", prefix, prototype.localised_name}
+        local postfix = ""
+        if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
+            postfix = {"", " (", {"milestones.type_consumption"}, ")"}
+        end
+        tooltip = tooltip or {"", prefix, prototype.localised_name, postfix}
     end
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 
@@ -179,8 +182,6 @@ local function get_row_count(milestone_counts_by_group, column_count)
 end
 
 local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
-    local nb_groups = table_size(milestones_by_group)
-
     local real_width = player.display_resolution.width * (1 / player.display_scale)
     local target_width = real_width * 0.9
     -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation)
@@ -194,7 +195,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
         max_column_width = max_column_width - 47
     end
     local max_nb_columns = math.ceil(target_width / max_column_width) - 1
-    local row_count = nb_groups * 2
     local column_count = 1
     local milestone_counts_by_group = {}
     for _group_name, group_milestones in pairs(milestones_by_group) do
@@ -207,8 +207,8 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     end
 
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    row_count = get_row_count(milestone_counts_by_group, column_count)
-    while row_count < column_count * 3 do
+    local row_count = get_row_count(milestone_counts_by_group, column_count)
+    while row_count < column_count * 3 and column_count > 1 do
         column_count = column_count - 1
         row_count = get_row_count(milestone_counts_by_group, column_count)
     end
@@ -236,15 +236,26 @@ function build_display_page(player)
     local global_force = global.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
-    local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
-    local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
-    local show_estimations = settings.get_player_settings(player)["milestones_show_estimations"].value
+    local player_settings = settings.get_player_settings(player)
+    local compact_list = player_settings["milestones_compact_list"].value
+    local view_by_group = player_settings["milestones_list_by_group"].value
+    local show_estimations = player_settings["milestones_show_estimations"].value
+    local show_incomplete = player_settings["milestones_show_incomplete"].value
 
     local nb_groups = table_size(global_force.milestones_by_group)
     if view_by_group and nb_groups > 1 then
         local visible_milestones_per_group = {}
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
-            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones)
+            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
+            if not next(visible_milestones_per_group[group_name]) then
+                visible_milestones_per_group[group_name] = nil
+            end
+        end
+
+        -- No milestones, exit early
+        if not next(visible_milestones_per_group) then
+            display_scroll.add(empty_set_label)
+            return
         end
 
         local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
@@ -275,7 +286,13 @@ function build_display_page(player)
             end
         end
     else
-        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones)
+        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones, show_incomplete)
+
+        -- No milestones, exit early
+        if not next(visible_incomplete_milestones) then
+            display_scroll.add(empty_set_label)
+            return
+        end
 
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
         local nb_milestones = #global_force.complete_milestones + #visible_incomplete_milestones

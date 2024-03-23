@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,14 +13,14 @@ local inputs = {
     base_entity_name = "pump",
     mod = "bobs",
     group = "logistics",
-    particles = { ["medium"] = 3 },
+    particles = {["medium"] = 3},
 }
 
 local tier_map = {
-    ["pump"] = { 1, 2 },
-    ["bob-pump-2"] = { 2, 3 },
-    ["bob-pump-3"] = { 3, 4 },
-    ["bob-pump-4"] = { 4, 5 },
+    ["pump"] = {1, 2},
+    ["bob-pump-2"] = {2, 3},
+    ["bob-pump-3"] = {3, 4},
+    ["bob-pump-4"] = {4, 5},
 }
 
 -- Reskin entities, create and assign extra details
@@ -43,10 +43,10 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(1, {
+    remnant.animation = make_rotated_animation_variations_from_sheet (1, {
         layers = {
             -- Base
             {
@@ -74,7 +74,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/remnants/pump-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/remnants/pump-remnants-mask.png",
                 line_length = 1,
                 width = 94,
                 height = 94,
@@ -85,7 +85,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(2, 2),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/remnants/hr-pump-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/remnants/hr-pump-remnants-mask.png",
                     line_length = 1,
                     width = 188,
                     height = 186,
@@ -100,7 +100,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/remnants/pump-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/remnants/pump-remnants-highlights.png",
                 line_length = 1,
                 width = 94,
                 height = 94,
@@ -111,7 +111,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(2, 2),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/remnants/hr-pump-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/remnants/hr-pump-remnants-highlights.png",
                     line_length = 1,
                     width = 188,
                     height = 186,
@@ -136,8 +136,8 @@ for name, map in pairs(tier_map) do
                     filename = "__base__/graphics/entity/pump/pump-north.png",
                     width = 53,
                     height = 79,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(8.000, 7.500),
                     hr_version = {
@@ -145,29 +145,29 @@ for name, map in pairs(tier_map) do
                         width = 103,
                         height = 164,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(8, 3.5)
                     }
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-north-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-north-mask.png",
                     width = 53,
                     height = 79,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(8.000, 7.500),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-north-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-north-mask.png",
                         width = 103,
                         height = 164,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(8, 3.5),
                         tint = inputs.tint,
@@ -175,21 +175,21 @@ for name, map in pairs(tier_map) do
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-north-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-north-highlights.png",
                     width = 53,
                     height = 79,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(8.000, 7.500),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-north-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-north-highlights.png",
                         width = 103,
                         height = 164,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(8, 3.5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
@@ -204,8 +204,8 @@ for name, map in pairs(tier_map) do
                     filename = "__base__/graphics/entity/pump/pump-east.png",
                     width = 66,
                     height = 60,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0, 4),
                     hr_version = {
@@ -213,29 +213,29 @@ for name, map in pairs(tier_map) do
                         width = 130,
                         height = 109,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.5, 1.75)
                     }
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-east-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-east-mask.png",
                     width = 66,
                     height = 60,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0, 4),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-east-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-east-mask.png",
                         width = 130,
                         height = 109,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.5, 1.75),
                         tint = inputs.tint,
@@ -243,21 +243,21 @@ for name, map in pairs(tier_map) do
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-east-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-east-highlights.png",
                     width = 66,
                     height = 60,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0, 4),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-east-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-east-highlights.png",
                         width = 130,
                         height = 109,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.5, 1.75),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
@@ -272,8 +272,8 @@ for name, map in pairs(tier_map) do
                     filename = "__base__/graphics/entity/pump/pump-south.png",
                     width = 62,
                     height = 87,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(13.5, 0.5),
                     hr_version = {
@@ -281,29 +281,29 @@ for name, map in pairs(tier_map) do
                         width = 114,
                         height = 160,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(12.5, -8)
                     }
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-south-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-south-mask.png",
                     width = 62,
                     height = 87,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(13.5, 0.5),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-south-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-south-mask.png",
                         width = 114,
                         height = 160,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(12.5, -8),
                         tint = inputs.tint,
@@ -311,21 +311,21 @@ for name, map in pairs(tier_map) do
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-south-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-south-highlights.png",
                     width = 62,
                     height = 87,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(13.5, 0.5),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-south-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-south-highlights.png",
                         width = 114,
                         height = 160,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(12.5, -8),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
@@ -340,8 +340,8 @@ for name, map in pairs(tier_map) do
                     filename = "__base__/graphics/entity/pump/pump-west.png",
                     width = 69,
                     height = 51,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0.5, -0.5),
                     hr_version = {
@@ -349,29 +349,29 @@ for name, map in pairs(tier_map) do
                         width = 131,
                         height = 111,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.25, 1.25)
                     }
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-west-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-west-mask.png",
                     width = 69,
                     height = 51,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0.5, -0.5),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-west-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-west-mask.png",
                         width = 131,
                         height = 111,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.25, 1.25),
                         tint = inputs.tint,
@@ -379,21 +379,21 @@ for name, map in pairs(tier_map) do
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/pump-west-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/pump-west-highlights.png",
                     width = 69,
                     height = 51,
-                    line_length = 8,
-                    frame_count = 32,
+                    line_length =8,
+                    frame_count =32,
                     animation_speed = 0.5,
                     shift = util.by_pixel(0.5, -0.5),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/pump/hr-pump-west-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/pump/hr-pump-west-highlights.png",
                         width = 131,
                         height = 111,
                         scale = 0.5,
-                        line_length = 8,
-                        frame_count = 32,
+                        line_length =8,
+                        frame_count =32,
                         animation_speed = 0.5,
                         shift = util.by_pixel(-0.25, 1.25),
                         blend_mode = reskins.lib.blend_mode, -- "additive",

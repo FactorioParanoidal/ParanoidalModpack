@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,20 +13,20 @@ local inputs = {
     base_entity_name = "pumpjack",
     mod = "bobs",
     group = "mining",
-    particles = { ["small"] = 3 },
+    particles = {["small"] = 3},
 }
 
 local tier_map = {
-    ["pumpjack"] = { tier = 1 },
-    ["bob-pumpjack-1"] = { tier = 2 },
-    ["bob-pumpjack-2"] = { tier = 3 },
-    ["bob-pumpjack-3"] = { tier = 4 },
-    ["bob-pumpjack-4"] = { tier = 5 },
-    ["water-miner-1"] = { tier = 1, is_water_miner = true },
-    ["water-miner-2"] = { tier = 2, is_water_miner = true },
-    ["water-miner-3"] = { tier = 3, is_water_miner = true },
-    ["water-miner-4"] = { tier = 4, is_water_miner = true },
-    ["water-miner-5"] = { tier = 5, is_water_miner = true },
+    ["pumpjack"] = {tier = 1},
+    ["bob-pumpjack-1"] = {tier = 2},
+    ["bob-pumpjack-2"] = {tier = 3},
+    ["bob-pumpjack-3"] = {tier = 4},
+    ["bob-pumpjack-4"] = {tier = 5},
+    ["water-miner-1"] = {tier = 1, is_water_miner = true},
+    ["water-miner-2"] = {tier = 2, is_water_miner = true},
+    ["water-miner-3"] = {tier = 3, is_water_miner = true},
+    ["water-miner-4"] = {tier = 4, is_water_miner = true},
+    ["water-miner-5"] = {tier = 5, is_water_miner = true},
 }
 
 -- Rescale pumpjack animation playback speed to something visually appealing
@@ -82,8 +82,8 @@ for name, map in pairs(tier_map) do
     if max_speed - min_speed == 0 then
         animation_speed = entity.mining_speed
     else
-        animation_speed = ((entity.mining_speed / (max_speed - min_speed)) - (min_speed / (max_speed - min_speed))) * max_playback
-            + ((max_speed / (max_speed - min_speed)) - (entity.mining_speed / (max_speed - min_speed))) * min_playback
+        animation_speed = ((entity.mining_speed/(max_speed-min_speed)) - (min_speed/(max_speed-min_speed)))*max_playback
+                        + ((max_speed/(max_speed-min_speed)) - (entity.mining_speed/(max_speed-min_speed)))*min_playback
     end
 
     -- Reskin base particles if we're a water pump
@@ -93,14 +93,14 @@ for name, map in pairs(tier_map) do
     end
 
     -- Fetch remnants
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
     remnant.animation = make_rotated_animation_variations_from_sheet(2, {
         layers = {
             -- Base
             {
-                filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/water-pumpjack-remnants-base.png" or "__base__/graphics/entity/pumpjack/remnants/pumpjack-remnants.png",
+                filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/water-pumpjack-remnants-base.png" or "__base__/graphics/entity/pumpjack/remnants/pumpjack-remnants.png",
                 line_length = 1,
                 width = 138,
                 height = 142,
@@ -108,7 +108,7 @@ for name, map in pairs(tier_map) do
                 direction_count = 1,
                 shift = util.by_pixel(0, 3),
                 hr_version = {
-                    filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/hr-water-pumpjack-remnants-base.png" or "__base__/graphics/entity/pumpjack/remnants/hr-pumpjack-remnants.png",
+                    filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/hr-water-pumpjack-remnants-base.png" or "__base__/graphics/entity/pumpjack/remnants/hr-pumpjack-remnants.png",
                     line_length = 1,
                     width = 274,
                     height = 284,
@@ -120,7 +120,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-mask.png",
                 line_length = 1,
                 width = 138,
                 height = 142,
@@ -129,7 +129,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, 3),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-mask.png",
                     line_length = 1,
                     width = 274,
                     height = 284,
@@ -142,7 +142,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-highlights.png",
                 line_length = 1,
                 width = 138,
                 height = 142,
@@ -151,7 +151,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, 3),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-highlights.png",
                     line_length = 1,
                     width = 274,
                     height = 284,
@@ -170,13 +170,13 @@ for name, map in pairs(tier_map) do
         sheets = {
             -- Base
             {
-                filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/water-pumpjack-base.png" or "__base__/graphics/entity/pumpjack/pumpjack-base.png",
+                filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/water-pumpjack-base.png" or "__base__/graphics/entity/pumpjack/pumpjack-base.png",
                 priority = "extra-high",
                 width = 131,
                 height = 137,
                 shift = util.by_pixel(-2.5, -4.5),
                 hr_version = {
-                    filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/hr-water-pumpjack-base.png" or "__base__/graphics/entity/pumpjack/hr-pumpjack-base.png",
+                    filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/hr-water-pumpjack-base.png" or "__base__/graphics/entity/pumpjack/hr-pumpjack-base.png",
                     priority = "extra-high",
                     width = 261,
                     height = 273,
@@ -211,7 +211,7 @@ for name, map in pairs(tier_map) do
                 -- Base
                 {
                     priority = "high",
-                    filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/water-pumpjack-horsehead.png" or "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
+                    filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/water-pumpjack-horsehead.png" or "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
                     line_length = 8,
                     width = 104,
                     height = 102,
@@ -221,7 +221,7 @@ for name, map in pairs(tier_map) do
                     repeat_count = 6,
                     hr_version = {
                         priority = "high",
-                        filename = map.is_water_miner and reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/hr-water-pumpjack-horsehead.png" or "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead.png",
+                        filename = map.is_water_miner and reskins.bobs.directory.."/graphics/entity/mining/pumpjack/hr-water-pumpjack-horsehead.png" or "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead.png",
                         animation_speed = animation_speed,
                         repeat_count = 6,
                         scale = 0.5,
@@ -235,7 +235,7 @@ for name, map in pairs(tier_map) do
                 -- Mask
                 {
                     priority = "high",
-                    filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/pumpjack-horsehead-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/pumpjack-horsehead-mask.png",
                     line_length = 8,
                     width = 104,
                     height = 102,
@@ -246,7 +246,7 @@ for name, map in pairs(tier_map) do
                     repeat_count = 6,
                     hr_version = {
                         priority = "high",
-                        filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-mask.png",
                         animation_speed = animation_speed,
                         repeat_count = 6,
                         scale = 0.5,
@@ -261,7 +261,7 @@ for name, map in pairs(tier_map) do
                 -- Highlights
                 {
                     priority = "high",
-                    filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/pumpjack-horsehead-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/pumpjack-horsehead-highlights.png",
                     line_length = 8,
                     width = 104,
                     height = 102,
@@ -272,7 +272,7 @@ for name, map in pairs(tier_map) do
                     repeat_count = 6,
                     hr_version = {
                         priority = "high",
-                        filename = reskins.bobs.directory .. "/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-highlights.png",
                         animation_speed = animation_speed,
                         repeat_count = 6,
                         scale = 0.5,

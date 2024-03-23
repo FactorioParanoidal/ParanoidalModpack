@@ -200,7 +200,7 @@ function logistic_request_gui.destroy(player_table)
 
   local window = gui_data.refs.window
   if window and window.valid then
-  player_table.guis.request.refs.window.destroy()
+    player_table.guis.request.refs.window.destroy()
   end
   player_table.guis.request = nil
 end

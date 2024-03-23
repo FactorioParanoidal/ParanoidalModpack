@@ -1,5 +1,0 @@
-require("prototypes.custom-input")
-require("prototypes.font")
-require("prototypes.shortcut")
-require("prototypes.sprite")
-require("prototypes.style")

@@ -128,9 +128,9 @@ function RecipeSelector:updateUnlockRecipesCache()
     if recipe.enabled == true then
       local factories = Player.getProductionsCrafting(recipe.category, recipe)
       if table.size(factories) > 0 then
-      unlock_recipes[recipe.name] = true
+        unlock_recipes[recipe.name] = true
+      end
     end
-  end
   end
   Cache.setData("other", "unlock_recipes", unlock_recipes)
 end

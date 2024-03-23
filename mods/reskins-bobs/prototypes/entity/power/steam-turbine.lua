@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -14,13 +14,13 @@ local inputs = {
     base_entity_name = "steam-turbine",
     mod = "bobs",
     group = "power",
-    particles = { ["medium"] = 2,["big"] = 1 },
+    particles = {["medium"] = 2,["big"] = 1},
 }
 
 local tier_map = {
-    ["steam-turbine"] = { 1, 3 },
-    ["steam-turbine-2"] = { 2, 4 },
-    ["steam-turbine-3"] = { 3, 5 },
+    ["steam-turbine"] = {1, 3},
+    ["steam-turbine-2"] = {2, 4},
+    ["steam-turbine-3"] = {3, 5},
 }
 
 -- Reskin entities, create and assign extra details
@@ -43,10 +43,10 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(1, {
+    remnant.animation = make_rotated_animation_variations_from_sheet (1, {
         layers = {
             -- Base
             {
@@ -74,7 +74,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/remnants/steam-turbine-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/remnants/steam-turbine-remnants-mask.png",
                 line_length = 1,
                 width = 230,
                 height = 204,
@@ -85,7 +85,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(6, 0),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/remnants/hr-steam-turbine-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/remnants/hr-steam-turbine-remnants-mask.png",
                     line_length = 1,
                     width = 460,
                     height = 408,
@@ -100,7 +100,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/remnants/steam-turbine-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/remnants/steam-turbine-remnants-highlights.png",
                 line_length = 1,
                 width = 230,
                 height = 204,
@@ -111,7 +111,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(6, 0),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/remnants/hr-steam-turbine-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/remnants/hr-steam-turbine-remnants-highlights.png",
                     line_length = 1,
                     width = 460,
                     height = 408,
@@ -150,7 +150,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/steam-turbine-H-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/steam-turbine-H-mask.png",
                 width = 160,
                 height = 123,
                 frame_count = 1,
@@ -159,7 +159,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, -2.5),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/hr-steam-turbine-H-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/hr-steam-turbine-H-mask.png",
                     width = 320,
                     height = 245,
                     frame_count = 1,
@@ -172,7 +172,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/steam-turbine-H-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/steam-turbine-H-highlights.png",
                 width = 160,
                 height = 123,
                 frame_count = 1,
@@ -181,7 +181,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, -2.5),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/hr-steam-turbine-H-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/hr-steam-turbine-H-highlights.png",
                     width = 320,
                     height = 245,
                     frame_count = 1,
@@ -239,7 +239,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/steam-turbine-V-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/steam-turbine-V-mask.png",
                 width = 108,
                 height = 173,
                 frame_count = 1,
@@ -248,7 +248,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(5, 6.5),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/hr-steam-turbine-V-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/hr-steam-turbine-V-mask.png",
                     width = 217,
                     height = 347,
                     frame_count = 1,
@@ -261,7 +261,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/steam-turbine-V-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/steam-turbine-V-highlights.png",
                 width = 108,
                 height = 173,
                 frame_count = 1,
@@ -270,7 +270,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(5, 6.5),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/steam-turbine/hr-steam-turbine-V-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/steam-turbine/hr-steam-turbine-V-highlights.png",
                     width = 217,
                     height = 347,
                     frame_count = 1,

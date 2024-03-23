@@ -39,16 +39,23 @@ data:extend{
     },
     {
         type = "bool-setting",
+        name = "milestones_show_incomplete",
+        setting_type = "runtime-per-user",
+        default_value = true,
+        order = "d",
+    },
+    {
+        type = "bool-setting",
         name = "milestones_disable_chat_notifications",
         setting_type = "runtime-per-user",
         default_value = false,
-        order = "d",
+        order = "e",
     },
     {
         type = "bool-setting",
         name = "milestones_write_file",
         setting_type = "runtime-per-user",
         default_value = false,
-        order = "e",
+        order = "f",
     }
 }

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -27,12 +27,12 @@ reskins.lib.setup_standard_entity("dead-greenhouse", 0, inputs)
 
 local dead_greenhouse_base = reskins.lib.make_4way_animation_from_spritesheet({
     -- Base
-    filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-base.png",
+    filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-base.png",
     width = 97,
     height = 96,
     shift = util.by_pixel(0, 0),
     hr_version = {
-        filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-base.png",
+        filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-base.png",
         width = 194,
         height = 192,
         shift = util.by_pixel(0, 0),
@@ -108,12 +108,12 @@ local dead_greenhouse_working = reskins.lib.make_4way_animation_from_spritesheet
     layers = {
         -- Light Underlayer
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-lit.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-lit.png",
             width = 97,
             height = 96,
             shift = util.by_pixel(0, 0),
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-lit.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-lit.png",
                 width = 194,
                 height = 192,
                 shift = util.by_pixel(0, 0),
@@ -122,13 +122,13 @@ local dead_greenhouse_working = reskins.lib.make_4way_animation_from_spritesheet
         },
         -- Light
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-light.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/dead-greenhouse-light.png",
             width = 97,
             height = 96,
             shift = util.by_pixel(0, 0),
             draw_as_light = true,
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-light.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/nauvisday/dead-greenhouse/hr-dead-greenhouse-light.png",
                 width = 194,
                 height = 192,
                 shift = util.by_pixel(0, 0),
@@ -151,17 +151,17 @@ entity.working_visualisations = {
     -- Pipe shadow fixes
     {
         always_draw = true,
-        north_animation = reskins.lib.vertical_pipe_shadow { 0, -1 },
-        south_animation = reskins.lib.vertical_pipe_shadow { 0, 1 },
+        north_animation = reskins.lib.vertical_pipe_shadow{0, -1},
+        south_animation = reskins.lib.vertical_pipe_shadow{0, 1},
     }
 }
 
 entity.fluid_boxes[1].pipe_picture = nil
-entity.fluid_boxes[1].secondary_draw_orders = { east = 3, west = 3, south = 3 }
+entity.fluid_boxes[1].secondary_draw_orders = {east = 3, west = 3, south = 3}
 
 -- Disable burner energy source light
 entity.energy_source.light_flicker = {
-    color = { 0, 0, 0 },
+    color = {0, 0, 0},
     minimum_light_size = 0,
     light_intensity_to_size_coefficient = 0,
 }

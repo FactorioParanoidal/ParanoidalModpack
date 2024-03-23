@@ -58,12 +58,10 @@ decorativeMap["lichen-decal"] = nil
 
 
 local function full_fireball(surface_index, position, fireball_r, crater_external_r, force, cause, corpseMap)
-  local deathStatsForTrees = settings.global["retain-death-statistics-for-trees"].value or (fireball_r < 80 and settings.global["retain-death-statistics-for-trees-small"].value)
-  local deathStatsForOther = settings.global["retain-death-statistics"].value or (fireball_r < 80 and settings.global["retain-death-statistics-small"].value)
   -- kill things in the fireball
   for _,v in pairs(game.surfaces[surface_index].find_entities_filtered{position=position, radius=fireball_r}) do
     if(v.valid and (not (string.match(v.type, "ghost"))) and (not (v.type == "resource"))) then
-      if v.type=="tree" and not deathStatsForTrees then
+      if v.type=="tree" then
         v.destroy()
       elseif v.type == "character" then
         if(v.force == force and v.player) then
@@ -74,18 +72,14 @@ local function full_fireball(surface_index, position, fireball_r, crater_externa
         else
           v.die(force)
         end
-      elseif(corpseMap[v.name] and not deathStatsForOther) then
+      elseif(corpseMap[v.name]) then
         v.destroy{raise_destroy = true}
       elseif cause and cause.valid then
         if not v.die(force, cause) then
-          if(v.destructible) then
-            v.destroy{raise_destroy = true}
-          end
-        end
-      elseif not v.die(force) then
-        if(v.destructible) then
           v.destroy{raise_destroy = true}
         end
+      elseif not v.die(force) then
+        v.destroy{raise_destroy = true}
       end
     end
   end
@@ -132,15 +126,11 @@ local function full_fireball(surface_index, position, fireball_r, crater_externa
         end
       elseif(cause and cause.valid) then
         if not v.die(force, cause) then
-          if(v.destructible) then
-            v.destroy{raise_destroy = true}
-          end
+          v.destroy{raise_destroy = true};
         end
       else
         if not v.die(force) then
-          if(v.destructible) then
-            v.destroy{raise_destroy = true}
-          end
+          v.destroy{raise_destroy = true};
         end
       end
     end
@@ -171,15 +161,11 @@ local function partial_fireball(surface_index, chunkLoaderStruct, chunkPosAndAre
         e.destroy{raise_destroy = true}
       elseif(cause ~= nil and cause.valid) then
         if not e.die(force, cause) then
-          if(e.destructible) then
-            e.destroy{raise_destroy = true}
-          end
+          e.destroy{raise_destroy = true};
         end
       else
         if not e.die(force) then
-          if(e.destructible) then
-            e.destroy{raise_destroy = true}
-          end
+          e.destroy{raise_destroy = true};
         end
       end
     end
@@ -204,15 +190,11 @@ local function partial_fireball(surface_index, chunkLoaderStruct, chunkPosAndAre
         e.destroy{raise_destroy = true}
       elseif(cause ~= nil and cause.valid) then
         if not e.die(force, cause) then
-          if(e.destructible) then
-            e.destroy{raise_destroy = true}
-          end
+          e.destroy{raise_destroy = true};
         end
       else
         if not e.die(force) then
-          if(e.destructible) then
-            e.destroy{raise_destroy = true}
-          end
+          e.destroy{raise_destroy = true};
         end
       end
     end

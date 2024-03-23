@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -12,7 +12,7 @@ if reskins.bobs and (reskins.bobs.triggers.logistics.entities == false) then ret
 local inputs = {
     base_entity_name = "underground-belt",
     mod = "compatibility",
-    particles = { ["medium"] = 3, ["small"] = 2 },
+    particles = {["medium"] = 3, ["small"] = 2},
     make_icons = false,
     make_remnants = false,
 }
@@ -21,23 +21,23 @@ local inputs = {
 inputs.tier_labels = reskins.lib.setting("reskins-bobs-do-belt-entity-tier-labeling") and true or false
 
 local tier_map = {
-    ["basic-transport-belt-loader"] = { tier = 0, is_loader = true, sprite_variant = 1 },
-    ["transport-belt-loader"] = { tier = 1, is_loader = true, sprite_variant = 1 },
-    ["fast-transport-belt-loader"] = { tier = 2, is_loader = true, sprite_variant = 2 },
-    ["express-transport-belt-loader"] = { tier = 3, is_loader = true, sprite_variant = 2 },
-    ["turbo-transport-belt-loader"] = { tier = 4, is_loader = true, sprite_variant = 2 },
-    ["ultimate-transport-belt-loader"] = { tier = 5, is_loader = true, sprite_variant = 2 },
-    ["basic-transport-belt-beltbox"] = { tier = 0, sprite_variant = 1 },
-    ["transport-belt-beltbox"] = { tier = 1, sprite_variant = 1 },
-    ["fast-transport-belt-beltbox"] = { tier = 2, sprite_variant = 2 },
-    ["express-transport-belt-beltbox"] = { tier = 3, sprite_variant = 2 },
-    ["turbo-transport-belt-beltbox"] = { tier = 4, sprite_variant = 2 },
-    ["ultimate-transport-belt-beltbox"] = { tier = 5, sprite_variant = 2 },
+    ["basic-transport-belt-loader"] = {tier = 0, is_loader = true, sprite_variant = 1},
+    ["transport-belt-loader"] = {tier = 1, is_loader = true, sprite_variant = 1},
+    ["fast-transport-belt-loader"] = {tier = 2, is_loader = true, sprite_variant = 2},
+    ["express-transport-belt-loader"] = {tier = 3, is_loader = true, sprite_variant = 2},
+    ["turbo-transport-belt-loader"] = {tier = 4, is_loader = true, sprite_variant = 2},
+    ["ultimate-transport-belt-loader"] = {tier = 5, is_loader = true, sprite_variant = 2},
+    ["basic-transport-belt-beltbox"] = {tier = 0, sprite_variant = 1},
+    ["transport-belt-beltbox"] = {tier = 1, sprite_variant = 1},
+    ["fast-transport-belt-beltbox"] = {tier = 2, sprite_variant = 2},
+    ["express-transport-belt-beltbox"] = {tier = 3, sprite_variant = 2},
+    ["turbo-transport-belt-beltbox"] = {tier = 4, sprite_variant = 2},
+    ["ultimate-transport-belt-beltbox"] = {tier = 5, sprite_variant = 2},
 }
 
 local function light_tint(tint)
     local white = 0.95
-    return { r = (tint.r + white) / 2, g = (tint.g + white) / 2, b = (tint.b + white) / 2 }
+    return {r = (tint.r + white)/2, g = (tint.g + white)/2, b = (tint.b + white)/2}
 end
 
 local function tweak_tint(tint)
@@ -79,23 +79,33 @@ for name, map in pairs(tier_map) do
         -- entity.belt_animation_set = reskins.lib.transport_belt_animation_set(inputs.tint, map.sprite_variant)
 
         -- Icon handling
-        ---@type data.IconData[]
-        local icons = {
+        inputs.icon = {
             {
-                icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/loader-icon-base.png",
-                icon_size = 64,
-                icon_mipmaps = 4,
+                icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/loader-icon-base.png"
             },
             {
                 icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/loader-icon-mask.png",
-                icon_size = 64,
-                icon_mipmaps = 4,
                 tint = inputs.tint,
-            },
+            }
         }
 
-        inputs.icon = reskins.lib.add_tier_labels_to_icons(icons, map.tier)
-        inputs.icon_picture = reskins.lib.convert_icons_to_sprite(icons, 0.25)
+        inputs.icon_picture = {
+            layers = {
+                {
+                    filename = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/loader-icon-base.png",
+                    size = 64,
+                    scale = 0.25,
+                    mipmaps = 4,
+                },
+                {
+                    filename = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/loader-icon-mask.png",
+                    size = 64,
+                    scale = 0.25,
+                    mipmaps = 4,
+                    tint = inputs.tint
+                }
+            }
+        }
     else
         -- Retint the mask
         entity.animation.layers[2].tint = inputs.tint
@@ -105,25 +115,36 @@ for name, map in pairs(tier_map) do
         entity.working_visualisations[1].light.color = light_tint(inputs.tint)
 
         -- Icon handling
-        ---@type data.IconData[]
-        local icons = {
+        inputs.icon = {
             {
-                icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/beltbox-icon-base.png",
-                icon_size = 64,
-                icon_mipmaps = 4,
+                icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/beltbox-icon-base.png"
             },
             {
                 icon = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/beltbox-icon-mask.png",
-                icon_size = 64,
-                icon_mipmaps = 4,
                 tint = inputs.tint,
-            },
+            }
         }
 
-        inputs.icon = reskins.lib.add_tier_labels_to_icons(icons, map.tier)
-        inputs.icon_picture = reskins.lib.convert_icons_to_sprite(icons, 0.25)
+        inputs.icon_picture = {
+            layers = {
+                {
+                    filename = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/beltbox-icon-base.png",
+                    size = 64,
+                    scale = 0.25,
+                    mipmaps = 4,
+                },
+                {
+                    filename = "__deadlock-beltboxes-loaders__/graphics/icons/mipmaps/beltbox-icon-mask.png",
+                    size = 64,
+                    scale = 0.25,
+                    mipmaps = 4,
+                    tint = inputs.tint
+                }
+            }
+        }
     end
 
+    reskins.lib.append_tier_labels(map.tier, inputs)
     reskins.lib.assign_icons(name, inputs)
 
     -- Label to skip to next iteration

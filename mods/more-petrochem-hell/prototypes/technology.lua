@@ -4,11 +4,7 @@ data:extend({
     name = "Fuel-Additive",
     icon = "__more-petrochem-hell__/graphics/Fuel-Additive.png",
     icon_size = 64,
-    prerequisites = {
-	--"gas-steam-cracking-1", --drd
-	"chlorine-processing-1",
-	--"sodium-processing",
-	"angels-lead-smelting-1"},
+    prerequisites = {"gas-steam-cracking-1","chlorine-processing-1","sodium-processing","angels-lead-smelting-1"},
 			
     effects =
     {

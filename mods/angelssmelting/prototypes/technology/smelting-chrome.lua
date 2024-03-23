@@ -9,8 +9,8 @@ data:extend({
     icon_mipmaps = 4,
     prerequisites = {
       "ore-electro-whinning-cell",
-      "angels-metallurgy-4",
-      "angels-coal-processing-3",
+      "angels-metallurgy-3",
+      "angels-coal-processing-2",
     },
     effects = {
       {
@@ -27,12 +27,11 @@ data:extend({
       },
     },
     unit = {
-      count = 250,
+      count = 200,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
-        { type = "item", name = "production-science-pack", amount = 1 },
       },
       time = 30,
     },
@@ -45,8 +44,8 @@ data:extend({
     icon_size = 256,
     icon_mipmaps = 4,
     prerequisites = {
-      --"angels-metallurgy-5",
-      "ore-processing-4",
+      --"angels-metallurgy-4",
+      "ore-processing-3",
       "angels-chrome-smelting-1",
     },
     effects = {
@@ -64,13 +63,12 @@ data:extend({
       },
     },
     unit = {
-      count = 300,
+      count = 250,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
         { type = "item", name = "production-science-pack", amount = 1 },
-        { type = "item", name = "utility-science-pack", amount = 1 },
       },
       time = 30,
     },
@@ -83,8 +81,8 @@ data:extend({
     icon_size = 256,
     icon_mipmaps = 4,
     prerequisites = {
-      --"angels-metallurgy-5",
-      "strand-casting-4",
+      --"angels-metallurgy-4",
+      "strand-casting-3",
       "angels-chrome-smelting-1",
     },
     effects = {
@@ -98,13 +96,12 @@ data:extend({
       },
     },
     unit = {
-      count = 300,
+      count = 250,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
         { type = "item", name = "production-science-pack", amount = 1 },
-        { type = "item", name = "utility-science-pack", amount = 1 },
       },
       time = 30,
     },
@@ -118,9 +115,10 @@ data:extend({
     icon_mipmaps = 4,
     prerequisites = {
       --"angels-metallurgy-5",
-      "ore-processing-5",
+      "ore-processing-4",
       "angels-chrome-smelting-2",
-      "sodium-processing-2",
+      --"angels-sulfur-processing-1", -- it seems rediculous adding this prerequisite to yellow...
+      "sodium-processing",
     },
     effects = {
       {
@@ -145,7 +143,7 @@ data:extend({
       },
     },
     unit = {
-      count = 350,
+      count = 300,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
@@ -165,7 +163,7 @@ data:extend({
     icon_mipmaps = 4,
     prerequisites = {
       --"angels-metallurgy-5",
-      --"strand-casting-4",
+      "strand-casting-4",
       "angels-chrome-casting-2",
     },
     effects = {
@@ -175,7 +173,7 @@ data:extend({
       },
     },
     unit = {
-      count = 350,
+      count = 300,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },

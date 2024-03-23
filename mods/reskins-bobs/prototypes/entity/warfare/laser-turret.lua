@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     base_entity_name = "laser-turret",
     mod = "bobs",
     group = "warfare",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
 }
 
 local tier_map = {
-    ["laser-turret"] = { 1 },
-    ["bob-laser-turret-2"] = { 2, "sapphire" },
-    ["bob-laser-turret-3"] = { 3, "emerald" },
-    ["bob-laser-turret-4"] = { 4, "topaz" },
-    ["bob-laser-turret-5"] = { 5, "diamond" }
+    ["laser-turret"] = {1},
+    ["bob-laser-turret-2"] = {2, "sapphire"},
+    ["bob-laser-turret-3"] = {3, "emerald"},
+    ["bob-laser-turret-4"] = {4, "topaz"},
+    ["bob-laser-turret-5"] = {5, "diamond"}
 }
 
 local function turret_extension(parameters)
@@ -191,7 +191,7 @@ end
 local function turret_shooting_glow(lens)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/beam/" .. lens .. "/" .. lens .. "-laser-turret-shooting-light.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/beam/"..lens.."/"..lens.."-laser-turret-shooting-light.png",
         line_length = 8,
         width = 62,
         height = 58,
@@ -200,7 +200,7 @@ local function turret_shooting_glow(lens)
         blend_mode = "additive",
         shift = util.by_pixel(0, -35),
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/beam/" .. lens .. "/hr-" .. lens .. "-laser-turret-shooting-light.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/beam/"..lens.."/hr-"..lens.."-laser-turret-shooting-light.png",
             line_length = 8,
             width = 122,
             height = 116,
@@ -231,10 +231,10 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(3, {
+    remnant.animation = make_rotated_animation_variations_from_sheet (3, {
         layers = {
             -- Base
             {
@@ -262,7 +262,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/remnants/laser-turret-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/remnants/laser-turret-remnants-mask.png",
                 line_length = 1,
                 width = 100,
                 height = 98,
@@ -273,7 +273,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(3, -2),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/remnants/hr-laser-turret-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/remnants/hr-laser-turret-remnants-mask.png",
                     line_length = 1,
                     width = 198,
                     height = 194,
@@ -288,7 +288,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/remnants/laser-turret-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/remnants/laser-turret-remnants-highlights.png",
                 line_length = 1,
                 width = 100,
                 height = 98,
@@ -299,7 +299,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(3, -2),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/remnants/hr-laser-turret-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/remnants/hr-laser-turret-remnants-highlights.png",
                     line_length = 1,
                     width = 198,
                     height = 194,
@@ -340,9 +340,9 @@ for name, map in pairs(tier_map) do
     -- Reskin entities
     entity.folded_animation = {
         layers = {
-            turret_extension({ frame_count = 1, line_length = 1 }),
-            turret_extension_mask({ frame_count = 1, line_length = 1 }),
-            turret_extension_shadow({ frame_count = 1, line_length = 1 })
+            turret_extension({frame_count=1, line_length = 1}),
+            turret_extension_mask({frame_count=1, line_length=1}),
+            turret_extension_shadow({frame_count=1, line_length=1})
         }
     }
 
@@ -369,14 +369,14 @@ for name, map in pairs(tier_map) do
 
         -- Fix laser offset
         entity.attack_parameters.source_direction_count = 64
-        entity.attack_parameters.source_offset = { 0, -3.423489 / 4 }
+        entity.attack_parameters.source_offset = {0, -3.423489 / 4}
     end
 
     entity.folding_animation = {
         layers = {
-            turret_extension({ run_mode = "backward" }),
-            turret_extension_mask({ run_mode = "backward" }),
-            turret_extension_shadow({ run_mode = "backward" }),
+            turret_extension({run_mode = "backward"}),
+            turret_extension_mask({run_mode = "backward"}),
+            turret_extension_shadow({run_mode = "backward"}),
         }
     }
 
@@ -404,7 +404,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/laser-turret-base-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/laser-turret-base-mask.png",
                 priority = "high",
                 width = 70,
                 height = 52,
@@ -413,7 +413,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, 2),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/hr-laser-turret-base-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/hr-laser-turret-base-mask.png",
                     priority = "high",
                     width = 138,
                     height = 104,
@@ -426,7 +426,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/laser-turret-base-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/laser-turret-base-highlights.png",
                 priority = "high",
                 width = 70,
                 height = 52,
@@ -435,7 +435,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(0, 2),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-turret/hr-laser-turret-base-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-turret/hr-laser-turret-base-highlights.png",
                     priority = "high",
                     width = 138,
                     height = 104,

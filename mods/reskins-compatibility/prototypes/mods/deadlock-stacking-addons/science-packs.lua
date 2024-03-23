@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -59,17 +59,17 @@ end
 
 if reskins.lib.setting("bobmods-tech-colorupdate") == true then
     if reskins.lib.setting("reskins-lib-customize-tier-colors") == true then
-        science_packs["automation-science-pack"] = { tier = 1 }
-        science_packs["logistic-science-pack"] = { tier = 2 }
-        science_packs["chemical-science-pack"] = { tier = 3 }
-        science_packs["production-science-pack"] = { tier = 4 }
-        science_packs["utility-science-pack"] = { tier = 5 }
+        science_packs["automation-science-pack"] = {tier = 1}
+        science_packs["logistic-science-pack"] = {tier = 2}
+        science_packs["chemical-science-pack"] = {tier = 3}
+        science_packs["production-science-pack"] = {tier = 4}
+        science_packs["utility-science-pack"] = {tier = 5}
     else
-        science_packs["automation-science-pack"] = { image = "stacked-utility-science-pack" }
-        science_packs["logistic-science-pack"] = { image = "stacked-automation-science-pack" }
+        science_packs["automation-science-pack"] = {image = "stacked-utility-science-pack"}
+        science_packs["logistic-science-pack"] = {image = "stacked-automation-science-pack"}
         science_packs["chemical-science-pack"] = {}
         science_packs["production-science-pack"] = {}
-        science_packs["utility-science-pack"] = { image = "stacked-logistic-science-pack" }
+        science_packs["utility-science-pack"] = {image = "stacked-logistic-science-pack"}
     end
 end
 
@@ -81,9 +81,9 @@ local stacking_items = {}
 
 for name, map in pairs(science_packs) do
     -- Setup working items
-    local item_name = "deadlock-stack-" .. name
-    local recipe_stack_name = "deadlock-stacks-stack-" .. name
-    local recipe_unstack_name = "deadlock-stacks-unstack-" .. name
+    local item_name = "deadlock-stack-"..name
+    local recipe_stack_name = "deadlock-stacks-stack-"..name
+    local recipe_unstack_name = "deadlock-stacks-unstack-"..name
 
     -- Check if item exists, if not, skip this iteration
     if not data.raw.item[item_name] then goto continue end
@@ -95,7 +95,7 @@ for name, map in pairs(science_packs) do
         parameters.tier = map.tier
         parameters.flat_icon = false
     else
-        parameters.image = map.image or ("stacked-" .. name)
+        parameters.image = map.image or ("stacked-"..name)
     end
 
     -- Add items and recipes to list

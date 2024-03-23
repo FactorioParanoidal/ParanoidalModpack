@@ -64,12 +64,12 @@ end
 
 ------------------------------------------------------------------------------
 ---Get display sizes
----@return number, number
+---@return number, number, number
 function Player.getDisplaySizes()
-  if Lua_player == nil or not Lua_player.valid then return 800,600 end
+  if Lua_player == nil or not Lua_player.valid then return 800,600,1 end
   local display_resolution = Lua_player.display_resolution
   local display_scale = Lua_player.display_scale
-  return display_resolution.width/display_scale, display_resolution.height/display_scale
+  return display_resolution.width, display_resolution.height, display_scale
 end
 
 -------------------------------------------------------------------------------
@@ -137,12 +137,16 @@ end
 ---Set smart tool
 ---@param recipe table
 ---@param type string
+---@param index number
 ---@return any
-function Player.setSmartTool(recipe, type)  
-  if Lua_player == nil or recipe == nil then
-    return nil
-  end
+function Player.setSmartTool(recipe, type, index)  
+    if Lua_player == nil or recipe == nil then
+      return nil
+    end
     local factory = recipe[type]
+    if index ~= nil then
+      factory = factory[index]
+    end
     local modules = {}
     for name,value in pairs(factory.modules or {}) do
       modules[name] = value
@@ -156,7 +160,7 @@ function Player.setSmartTool(recipe, type)
     if type == "factory" then
       entity.recipe = recipe.name
     end
-  
+
     Player.getSmartTool({entity})
 end
 
@@ -408,7 +412,7 @@ end
 -------------------------------------------------------------------------------
 ---Check factory limitation module
 ---@param module table
----@param lua_recipe table
+---@param lua_recipe RecipeData
 ---@return boolean
 function Player.checkFactoryLimitationModule(module, lua_recipe)
   local factory = lua_recipe.factory
@@ -426,14 +430,14 @@ function Player.checkFactoryLimitationModule(module, lua_recipe)
     local rocket_part_recipe = Player.getRocketPartRecipe(lua_recipe.factory)
     if rocket_part_recipe and category == rocket_part_recipe.category and lua_recipe.name ~= rocket_part_recipe.name then
       local rocket_recipe = RecipePrototype(rocket_part_recipe.name)
-    if rocket_recipe.lua_prototype ~= nil then
+      if rocket_recipe.lua_prototype ~= nil then
         rocket_recipe.name = rocket_part_recipe.name
-      rocket_recipe.factory = lua_recipe.factory
-      allowed = Player.checkFactoryLimitationModule(module, rocket_recipe)
-      return allowed
+        rocket_recipe.factory = lua_recipe.factory
+        allowed = Player.checkFactoryLimitationModule(module, rocket_recipe)
+        return allowed
+      end
+      return true
     end
-    return true
-  end
   end
   if rules_excluded[category] == nil then
     category = "standard"
@@ -462,18 +466,18 @@ end
 
 -------------------------------------------------------------------------------
 ---Check beacon limitation module
----@param module table
----@param lua_recipe table
+---@param beacon FactoryData
+---@param recipe RecipeData
+---@param module LuaItemPrototype
 ---@return boolean
-function Player.checkBeaconLimitationModule(module, lua_recipe)
-  local beacon = lua_recipe.beacon
+function Player.checkBeaconLimitationModule(beacon, recipe, module)
   local allowed = true
   local model_filter_beacon_module = User.getModGlobalSetting("model_filter_beacon_module")
 
-  if table.size(module.limitations) > 0 and model_filter_beacon_module == true then
+  if table.size(module.limitations) > 0 and model_filter_beacon_module == true and recipe.type ~= "resource" then
     allowed = false
-    for _, recipe_name in pairs(module.limitations) do
-      if lua_recipe.name == recipe_name then
+    for _, module_recipe_name in pairs(module.limitations) do
+      if module_recipe_name == recipe.name then
         allowed = true
       end
     end
@@ -818,11 +822,11 @@ function Player.buildResourceRecipe(entity_prototype)
   recipe.hidden = false
   if prototype then
     if prototype.flags ~= nil then
-    recipe.hidden = prototype.flags["hidden"] or false
-  end
-  recipe.localised_description = prototype.localised_description
-  recipe.localised_name = prototype.localised_name
-  recipe.name = prototype.name
+      recipe.hidden = prototype.flags["hidden"] or false
+    end
+    recipe.localised_description = prototype.localised_description
+    recipe.localised_name = prototype.localised_name
+    recipe.name = prototype.name
   end
   recipe.ingredients = ingredients
   recipe.products = entity_prototype:getMineableMiningProducts()
@@ -842,9 +846,9 @@ function Player.getResourceRecipes()
     if prototype.name ~= nil and prototype.resource_category ~= nil then
       local recipe = Player.buildResourceRecipe(EntityPrototype(prototype))
       if recipe ~= nil then
-      recipes[recipe.name] = recipe
+        recipes[recipe.name] = recipe
+      end
     end
-  end
   end
 
   return recipes

@@ -1,35 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.1.7
-Date: 2023-12-24
-  Bugfixes:
-    - Fixed that parsing of Angels pipe materials was not returning the expected file paths
----------------------------------------------------------------------------------------------------
-Version: 2.1.6
-Date: 2023-12-23
-  Features:
-    - Added `reskins.lib.add_tier_labels_to_entity`
-    - Added `reskins.lib.add_tier_labels_to_icons`
-    - Added `reskins.lib.get_icons_from_entity`. 
-      - Use to get a table of IconData from an entity, regardless of how an icon is formatted
-    - Added `reskins.lib.convert_icons_to_sprite`
-    - Added `reskins.lib.convert_icon_to_sprite`
-    - Added `reskins.lib.get_pipe_pictures`, 
-    - Added `reskins.lib.get_pipe_to_ground_pictures`
-    - Added `reskins.lib.get_pipe_covers`
-  Changes:
-    - Added AAI Loaders to the list of supported mods
-  Deprecated:
-    - Deprecated `reskins.lib.append_tier_labels_to_vanilla_icon`, use `reskins.lib.add_tier_labels_to_entity`
-    - Deprecated `reskins.lib.append_tier_labels`, use `reskins.lib.add_tier_labels_to_icons`
-      - Note that the new function returns a modified icons table, it does not modify the table in place
-    - Deprecated `reskins.lib.pipe_pictures`, `reskins.lib.underground_pipe_pictures` and `reskins.lib.pipe_covers`
-      - New methods take only the material value as an input, the internal bits have been removed as parameters
----------------------------------------------------------------------------------------------------
-Version: 2.1.5
-Date: 2023-04-13
-  Changes:
-    - Added Intermodal Containers to the list of supported mods
----------------------------------------------------------------------------------------------------
 Version: 2.1.4
 Date: 2022-10-06
   Changes:
@@ -74,7 +43,7 @@ Date: 2021-12-12
 Version: 2.0.3
 Date: 2021-09-29
   Changes:
-    - Entity rescaling function now processes values attached to a `position` field
+    - Entity rescaling function now processes values attached to a `position` field.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2021-09-14
@@ -230,7 +199,7 @@ Date: 2020-09-21
     - Directories are now handled via the `mod` field of the `inputs` table, instead of the `directory` field
     - Function `create_icons_from_list` can now handle the `mod` field of the `inputs` table
     - Modified `create_icons_from_list` to allow specification of `icon_filename` directly
-    - Renamed tier-mapping style "Name" to "Traditional", updated description of the setting "Tier mapping" for clarity
+    - Renamed tier-mapping style "Name" to "Traditional", updated description of the setting "Tier mapping" for clarity.
     - Moved several item icons from Artisanal Reskins: Bob's Mods to this mod
   Bugfixes:
     - Fixed that assigning an icon to a recipe that shared a name with an item would overwrite the item icon

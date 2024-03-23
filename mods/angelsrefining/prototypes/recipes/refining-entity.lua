@@ -372,17 +372,6 @@ data:extend({
     },
     result = "seafloor-pump",
   },
-  --SEA PUMP
-  {
-    type = "recipe",
-    name = "sea-pump",
-    energy_required = 5,
-    enabled = false,
-    ingredients = {
-      { type = "item", name = "angels-void", amount = 1 },
-    },
-    result = "sea-pump",
-  },
   --LAND PUMP
   {
     type = "recipe",
@@ -467,5 +456,15 @@ data:extend({
       { type = "item", name = "angels-void", amount = 1 },
     },
     result = "electro-whinning-cell-2",
+  },
+  {
+    type = "recipe",
+    name = "electro-whinning-cell-3",
+    energy_required = 2,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-void", amount = 1 },
+    },
+    result = "electro-whinning-cell-3",
   },
 })

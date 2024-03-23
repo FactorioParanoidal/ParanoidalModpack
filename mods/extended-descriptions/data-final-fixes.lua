@@ -8,26 +8,26 @@ local function add_to_description(type, prototype, localised_string)
 
 	local place_result = prototype.place_result or prototype.placed_as_equipment_result
 	if type == 'item' and place_result then
-			for _, machine in pairs(data.raw) do
+		for _, machine in pairs(data.raw) do
 			machine = machine[place_result]
-				if machine and machine.localised_description then
-					prototype.localised_description = {
-						'?',
-						{'', machine.localised_description, '\n', localised_string},
-						localised_string
-					}
-					return
-				end
+			if machine and machine.localised_description then
+				prototype.localised_description = {
+					'?',
+					{'', machine.localised_description, '\n', localised_string},
+					localised_string
+				}
+				return
 			end
+		end
 
 		local entity_type = prototype.place_result and 'entity' or 'equipment'
-			prototype.localised_description = {
-				'?',
+		prototype.localised_description = {
+			'?',
 			{'', {entity_type .. '-description.' .. place_result}, '\n', localised_string},
-				{'', {type .. '-description.' .. prototype.name}, '\n', localised_string},
-				localised_string
-			}
-		else
+			{'', {type .. '-description.' .. prototype.name}, '\n', localised_string},
+			localised_string
+		}
+	else
 		prototype.localised_description = {
 			'?',
 			{'', {type .. '-description.' .. prototype.name}, '\n', localised_string},

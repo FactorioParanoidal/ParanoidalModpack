@@ -1,3 +1,5 @@
+local table = require("__flib__.table")
+
 require("scripts.util")
 require("presets.presets")
 require("presets.presets_pymods")
@@ -40,7 +42,7 @@ local function validate_milestone_presets(interface_name, presets_to_validate, e
     return valid
 end
 
-local function is_preset_mods_enabled(preset)
+function is_preset_mods_enabled(preset)
     local forbidden_mods = preset.forbidden_mods or {}
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
@@ -51,66 +53,81 @@ local function is_preset_mods_enabled(preset)
     return true
 end
 
-local function add_remote_presets_to_preset_table()
-    -- See presets.lua to find out how to use this reverse remote interface to add your own preset.
+local function validate_and_add_to_preset_table(interface_name, remote_milestones_presets, existing_table)
+    if validate_milestone_presets(interface_name, remote_milestones_presets, existing_table) then
+        ---@cast remote_milestones_presets table
+        for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
+            existing_table[remote_preset_name] = remote_preset
+        end
+    end
+end
+
+function fetch_remote_presets()
+    -- See presets.lua to find out how to use these reverse remote interface to add your own preset or preset addon.
+    global.remote_presets = {}
+    global.remote_preset_addons = {}
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-            if validate_milestone_presets(interface_name, remote_milestones_presets, presets) then
-                ---@cast remote_milestones_presets table
-                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-                    presets[remote_preset_name] = remote_preset
-                end
-            end
+            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, global.remote_presets)
+        end
+        if functions["milestones_preset_addons"] then
+            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
+            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, global.remote_preset_addons)
         end
     end
+end
+
+function add_remote_presets_to_preset_tables()
+    if global.remote_presets then -- Should always be set in on_init, but just for migration safety
+        for remote_preset_name, remote_preset in pairs(global.remote_presets) do
+            presets[remote_preset_name] = remote_preset
+        end
+    end
+    if global.remote_preset_addons then
+        for remote_preset_name, remote_preset in pairs(global.remote_preset_addons) do
+            preset_addons[remote_preset_name] = remote_preset
+        end
+    end
+end
+
+function get_auto_detected_preset_name()
+    local chosen_preset_name
+    local max_nb_mods_matched = -1
+    for _, preset_name in pairs(global.valid_preset_names) do
+        local preset = presets[preset_name]
+        if preset and #preset.required_mods > max_nb_mods_matched then
+            max_nb_mods_matched = #preset.required_mods
+            chosen_preset_name = preset_name
+        end
+    end
+    return chosen_preset_name
 end
 
 function load_presets()
     global.valid_preset_names = {"Empty"}
 
-    add_remote_presets_to_preset_table()
-
-    local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then
             table.insert(global.valid_preset_names, preset_name)
-            if #preset.required_mods > max_nb_mods_matched then
-                max_nb_mods_matched = #preset.required_mods
-                chosen_preset_name = preset_name
-            end
         end
     end
     log("Valid presets found: " .. serpent.line(global.valid_preset_names))
 
     if global.current_preset_name == nil then
-        global.current_preset_name = chosen_preset_name
+        global.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. global.current_preset_name)
         table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
-        global.loaded_milestones = presets[global.current_preset_name].milestones
+        global.loaded_milestones = table.deep_copy(presets[global.current_preset_name].milestones)
     end
 end
 
 function load_preset_addons()
-    preset_addons_loaded = {}
-
-    -- See presets.lua to find out how to use this reverse remote interface to add your own preset addon.
-    for interface_name, functions in pairs(remote.interfaces) do
-        if functions["milestones_preset_addons"] then
-            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
-            if validate_milestone_presets(interface_name, remote_milestones_presets, preset_addons) then
-                ---@cast remote_milestones_presets table
-                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-                    preset_addons[remote_preset_name] = remote_preset
-                end
-            end
-        end
-    end
-
+    local preset_addons_loaded = {}
     for preset_addon_name, preset_addon in pairs(preset_addons) do
         if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
-            for _, milestone in ipairs(preset_addon.milestones) do
+            for _, milestone in pairs(preset_addon.milestones) do
                 table.insert(global.loaded_milestones, milestone)
             end
         end
@@ -128,8 +145,6 @@ function reload_presets()
     log("Reloading presets")
     local added_presets = {}
     local new_valid_preset_names = {"Empty"}
-
-    add_remote_presets_to_preset_table()
 
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then

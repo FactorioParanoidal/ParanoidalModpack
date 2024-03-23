@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -27,14 +27,14 @@ for _, name in pairs(fluids) do
     if not entity then goto continue end
 
     -- Setup icons
-    inputs.icon = reskins.bobs.directory .. "/graphics/icons/ores/ores/" .. name .. "/" .. name .. ".png"
+    inputs.icon = reskins.bobs.directory.."/graphics/icons/ores/ores/"..name.."/"..name..".png"
 
     reskins.lib.assign_icons(name, inputs)
 
     -- Reskin entity
     entity.stages = {
         sheet = {
-            filename = reskins.bobs.directory .. "/graphics/entity/ores/" .. name .. "/" .. name .. ".png",
+            filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/"..name..".png",
             priority = "extra-high",
             width = 74,
             height = 60,
@@ -42,7 +42,7 @@ for _, name in pairs(fluids) do
             variation_count = 1,
             shift = util.by_pixel(0, -2),
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/ores/" .. name .. "/hr-" .. name .. ".png",
+                filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/hr-"..name..".png",
                 priority = "extra-high",
                 width = 148,
                 height = 120,
@@ -57,3 +57,5 @@ for _, name in pairs(fluids) do
     -- Label to skip to next iteration
     ::continue::
 end
+
+

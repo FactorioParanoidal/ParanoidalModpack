@@ -1,26 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.1.10
-Date: 2023-12-23
-  Features:
-    - Added support for AAI Loaders and AAI Loaders: Bob's Logistics, reskins-bobs#45
-  Changes:
-    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
----------------------------------------------------------------------------------------------------
-Version: 2.1.9
-Date: 2023-05-29
-  Bugfixes:
-    - Fixed that the item-on-ground icons for transport belts when used with Black Rubber Belts were broken.
----------------------------------------------------------------------------------------------------
-Version: 2.1.8
-Date: 2023-04-13
-  Features:
-    - Added support for Intermodal Containers, a fork of Deadlock Crating
----------------------------------------------------------------------------------------------------
-Version: 2.1.7
-Date: 2023-03-30
-  Bugfixes:
-    - Fixed crash with Deadlock's Black Rubber Belts due to missing file
----------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2023-01-01
   Changes:

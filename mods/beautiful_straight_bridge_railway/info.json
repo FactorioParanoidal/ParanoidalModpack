@@ -1,9 +1,9 @@
 {
     "name": "beautiful_straight_bridge_railway",
     "version": "1.1.5",
-    "title": "☆ Schmitt | Beautiful Bridge Railway: Straight! Length-Limit! ☆",
-    "author": "DE_Schmitt",
-    "contact": "",
+    "title": "Beautiful Straight Bridge Railway",
+    "author": "smallfly",
+    "contact": "smallflyATgmxDE",
     "homepage": "",
     "factorio_version": "1.1",
     "dependencies": ["base >= 0.15"],

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -21,7 +21,7 @@ local function capsule_projectile(name)
     if not projectile then return end
 
     projectile.animation = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/capsules/" .. name .. ".png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/capsules/"..name..".png",
         priority = "high",
         flags = { "no-crop" },
         frame_count = 1,
@@ -30,13 +30,14 @@ local function capsule_projectile(name)
     }
 
     projectile.shadow = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/capsules/combat-robot-capsule-shadow.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/capsules/combat-robot-capsule-shadow.png",
         priority = "high",
         flags = { "no-crop" },
         frame_count = 1,
         size = 48,
         scale = 0.5,
     }
+
 end
 
 for _, name in pairs(capsule_projectiles) do

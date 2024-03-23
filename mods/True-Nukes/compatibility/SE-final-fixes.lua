@@ -53,24 +53,9 @@ local energy = {
   {"se-energy-science-pack-1", 1},
 }
 
-local hasSmall = settings.startup["enable-small-atomics"].value
-local hasCompactSmall = settings.startup["enable-compact-small-atomics"].value and hasSmall
-
-local hasMedium = settings.startup["enable-medium-atomics"].value 
-local hasCompactMedium = settings.startup["enable-compact-medium-atomics"].value and hasMedium
-
-local hasLarge = settings.startup["enable-large-atomics"].value 
-local hasCompactLarge = settings.startup["enable-compact-large-atomics"].value and hasLarge
-
-local has15kt = settings.startup["enable-15kt"].value 
-local hasCompact15kt = settings.startup["enable-compact-15kt"].value and has15kt
-
-local hasFusion = settings.startup["enable-fusion"].value 
-local hasCompactFusion = settings.startup["enable-compact-fusion"].value and hasFusion
-
 data.raw.technology["basic-atomic-weapons"].unit.ingredients = basic
 
-if(hasMedium and settings.startup["enable-nuclear-tests"].value) then
+if(settings.startup["enable-medium-atomics"].value and settings.startup["enable-nuclear-tests"].value) then
   data.raw.technology["atomic-bomb"].unit.ingredients = {{"test-pack-atomic-20t-1", 1}}
   data.raw.technology["atomic-bomb"].unit.count = 1
   data.raw.technology["atomic-bomb"].unit.time = 1
@@ -79,7 +64,7 @@ else
 end
 
 
-if(data.raw.technology["expanded-atomics"]) then
+if(settings.startup["enable-large-atomics"].value) then
   data.raw.technology["expanded-atomics"].unit.ingredients = space
   if(data.raw.technology["kovarex-enrichment-process"] and data.raw.technology["kovarex-enrichment-process"].enabled) then
     data.raw.technology["expanded-atomics"].prerequisites = {"atomic-bomb", "nuclear-fuel-reprocessing", "space-science-pack"}
@@ -101,13 +86,13 @@ if(settings.startup["enable-large-atomics"].value) then
       }
   end
 end
-if(data.raw.technology["artillery-atomics"]) then
+if(settings.startup["enable-medium-atomics"].value or settings.startup["enable-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
   data.raw.technology["artillery-atomics"].unit.ingredients = no_util
   if(data.raw.technology["kovarex-enrichment-process"] and data.raw.technology["kovarex-enrichment-process"].enabled) then
     table.insert(data.raw.technology["artillery-atomics"].prerequisites, "kovarex-enrichment-process")
   end
 end
-if(data.raw.technology["californium-processing"]) then
+if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-large-atomics"].value) then
   data.raw.technology["californium-processing"].unit.ingredients = {
     {"automation-science-pack", 2},
     {"logistic-science-pack", 2},
@@ -117,14 +102,14 @@ if(data.raw.technology["californium-processing"]) then
     {"production-science-pack", 1},
   }
 end
-if(data.raw.technology["californium-weapons"]) then
+if(settings.startup["enable-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value ) then
   data.raw.technology["californium-weapons"].unit.ingredients = no_prod
 
 end
-if(data.raw.technology["compact-californium-weapons"]) then
+if(settings.startup["enable-compact-medium-atomics"].value or settings.startup["enable-compact-small-atomics"].value) then
   data.raw.technology["compact-californium-weapons"].unit.ingredients = expensive
 end
-if(data.raw.technology["compact-full-fission-weapons"]) then
+if(settings.startup["enable-compact-15kt"].value or settings.startup["enable-compact-large-atomics"].value) then
   data.raw.technology["compact-full-fission-weapons"].unit.ingredients = {}
   if(settings.startup["enable-nuclear-tests"].value) then
     if(settings.startup["enable-15kt"].value) then
@@ -145,14 +130,14 @@ if(data.raw.technology["compact-full-fission-weapons"]) then
   end
 end
 
-if(hasFusion) then
+if(settings.startup["enable-fusion"].value) then
   data.raw.technology["fusion-weapons"].unit = {
     count = 500,
     ingredients = energy,
     time = 60
   }
 end
-if(hasCompactFusion) then
+if(settings.startup["enable-compact-fusion"].value) then
   data.raw.technology["compact-fusion-weapons"].unit = {
     count = 500,
     ingredients = energy,
@@ -168,7 +153,7 @@ if(hasCompactFusion) then
   end
 end
 
-if(hasCompactSmall or hasCompactMedium or
+if(settings.startup["enable-compact-small-atomics"].value or settings.startup["enable-compact-medium-atomics"].value or
   settings.startup["enable-compact-large-atomics"].value or settings.startup["enable-compact-15kt"].value) then
   data.raw.technology["dense-neutron-flux"].unit = {
     count = 500,

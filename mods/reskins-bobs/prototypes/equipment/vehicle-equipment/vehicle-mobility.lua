@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -6,9 +6,8 @@
 -- Check to see if reskinning needs to be done.
 if not (reskins.bobs and reskins.bobs.triggers.vehicle_equipment.equipment) then return end
 
--- Note that for equipment, the icons property is not used, so omit type information
--- so that an icon is not set on the equipment prototype.
 local inputs = {
+    type = "movement-bonus-equipment",
     equipment_category = "utility",
     mod = "bobs",
     group = "vehicle-equipment",
@@ -26,7 +25,7 @@ local equipment_list = {
 -- Reskin equipment
 for _, name in pairs(equipment_list) do
     -- Fetch equipment
-    local equipment = data.raw["movement-bonus-equipment"][name]
+    local equipment = data.raw[inputs.type][name]
 
     -- Check if entity exists, if not, skip this iteration
     if not equipment then goto continue end
@@ -38,11 +37,11 @@ for _, name in pairs(equipment_list) do
 
     -- Reskin the equipment
     equipment.sprite = {
-        filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/" .. name .. "/" .. name .. "-equipment.png",
+        filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/"..name.."/"..name.."-equipment.png",
         size = 64,
         priority = "medium",
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/" .. name .. "/hr-" .. name .. "-equipment.png",
+            filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/"..name.."/hr-"..name.."-equipment.png",
             size = 128,
             priority = "medium",
             scale = 0.5,

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -20,24 +20,27 @@ local inputs = {
 
 local circuits = {
     -- Basic Boards
-    ["wooden-board"] = { mod = "bobs", group = "electronics", subgroup = "circuits" },
-    ["phenolic-board"] = { mod = "bobs", group = "electronics", subgroup = "circuits" },
-    ["fibreglass-board"] = { mod = "bobs", group = "electronics", subgroup = "circuits" },
+    ["wooden-board"] = {mod = "bobs", group = "electronics", subgroup = "circuits"},
+    ["phenolic-board"] = {mod = "bobs", group = "electronics", subgroup = "circuits"},
+    ["fibreglass-board"] = {mod = "bobs", group = "electronics", subgroup = "circuits"},
+
     -- First stage intermediates
-    ["circuit-board"] = { image = "circuit-board" },                              -- 3
-    ["superior-circuit-board"] = { image = "superior-circuit-board" },            -- 4
-    ["multi-layer-circuit-board"] = { image = "multi-layer-circuit-board" },      -- 5
+    ["circuit-board"] = {image = "circuit-board"}, -- 3
+    ["superior-circuit-board"] = {image = "superior-circuit-board"}, -- 4
+    ["multi-layer-circuit-board"] = {image = "multi-layer-circuit-board"}, -- 5
+
     -- Second stage intermediates, direct ingredients to mainline finished products
-    ["cp-electronic-circuit-board"] = { image = "basic-electronic-board" },       -- 2
-    ["cp-advanced-circuit-board"] = { image = "electronic-circuit-board" },       -- 3
-    ["cp-processing-board"] = { image = "electronic-logic-board" },               -- 4
-    ["cp-advanced-processing-board"] = { image = "electronic-processing-board" }, -- 5
+    ["cp-electronic-circuit-board"] = {image = "basic-electronic-board"}, -- 2
+    ["cp-advanced-circuit-board"] = {image = "electronic-circuit-board"}, -- 3
+    ["cp-processing-board"] = {image = "electronic-logic-board"}, -- 4
+    ["cp-advanced-processing-board"] = {image = "electronic-processing-board"}, -- 5
+
     -- Mainline finished products
-    ["basic-circuit-board"] = { image = "basic-circuit-board" },                  -- 1
-    ["electronic-circuit"] = { image = "electronic-circuit" },                    -- 2
-    ["advanced-circuit"] = { image = "advanced-circuit" },                        -- 3
-    ["processing-unit"] = { image = "processing-unit" },                          -- 4
-    ["advanced-processing-unit"] = { image = "advanced-processing-unit" },        -- 5
+    ["basic-circuit-board"] = {image = "basic-circuit-board"}, -- 1
+    ["electronic-circuit"] = {image = "electronic-circuit"}, -- 2
+    ["advanced-circuit"] = {image = "advanced-circuit"}, -- 3
+    ["processing-unit"] = {image = "processing-unit"}, -- 4
+    ["advanced-processing-unit"] = {image = "advanced-processing-unit"}, -- 5
 }
 
 reskins.lib.create_icons_from_list(circuits, inputs)

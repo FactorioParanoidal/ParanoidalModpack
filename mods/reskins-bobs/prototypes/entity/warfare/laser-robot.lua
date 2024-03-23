@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -9,11 +9,11 @@ if not (reskins.bobs and reskins.bobs.triggers.warfare.entities) then return end
 -- Set input parameters
 local inputs = {
     type = "combat-robot",
-    icon_filename = reskins.bobs.directory .. "/graphics/icons/warfare/robots/bob-laser-robot.png",
+    icon_filename = reskins.bobs.directory.."/graphics/icons/warfare/robots/bob-laser-robot.png",
     base_entity_name = "defender-robot",
     mod = "bobs",
     group = "warfare",
-    particles = { ["small"] = 3 },
+    particles = {["small"] = 3},
     tint = util.color("7f4eca"),
 }
 
@@ -64,15 +64,15 @@ if not robot then return end
 
 reskins.lib.parse_inputs(inputs)
 reskins.lib.create_explosions_and_particles(name, inputs)
-reskins.lib.create_remnant(name, { type = inputs.type, base_entity_name = "defender" })
+reskins.lib.create_remnant(name, {type = inputs.type, base_entity_name = "defender"})
 reskins.lib.construct_icon(name, 0, inputs)
 
 -- Fetch remnant
-local remnant = data.raw["corpse"][name .. "-remnants"]
+local remnant = data.raw["corpse"][name.."-remnants"]
 
 -- Reskin remants
 remnant.animation = {
-    filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-robot/remnants/laser-robot-remnants.png",
+    filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-robot/remnants/laser-robot-remnants.png",
     line_length = 1,
     width = 49,
     height = 47,
@@ -81,7 +81,7 @@ remnant.animation = {
     axially_symmetrical = false,
     direction_count = 1,
     hr_version = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/laser-robot/remnants/hr-laser-robot-remnants.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/laser-robot/remnants/hr-laser-robot-remnants.png",
         line_length = 1,
         width = 98,
         height = 94,

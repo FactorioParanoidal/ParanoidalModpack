@@ -137,7 +137,7 @@ if mods["angelsindustries"] and angelsmods.industries.components then
   add_cutting_recipe("platinum", 5)
 end
 
-if angelsmods.trigger.smelting_products["tin"].wire --[[data.raw.item["insulated-cable"] ]]then --indicates bobelectronics and plates
+if data.raw.item["insulated-cable"] then
   local count = 16
   local ings = data.raw.recipe["insulated-cable"].ingredients
   if ings[1] and ings[1].amount then
@@ -153,8 +153,8 @@ if angelsmods.trigger.smelting_products["tin"].wire --[[data.raw.item["insulated
     {
       type = "recipe",
       name = "angels-wire-coil-insulated-casting",
-      category = "strand-casting",
-      subgroup = "angels-insulated-wire-casting",
+      category = "strand-casting-2",
+      subgroup = "angels-alloys-casting",
       energy_required = 4,
       enabled = false,
       ingredients = {
@@ -172,8 +172,8 @@ if angelsmods.trigger.smelting_products["tin"].wire --[[data.raw.item["insulated
     {
       type = "recipe",
       name = "angels-wire-coil-insulated-casting-fast",
-      category = "strand-casting",
-      subgroup = "angels-insulated-wire-casting",
+      category = "strand-casting-3",
+      subgroup = "angels-alloys-casting",
       energy_required = 2,
       enabled = false,
       ingredients = {
@@ -194,7 +194,7 @@ if angelsmods.trigger.smelting_products["tin"].wire --[[data.raw.item["insulated
       type = "recipe",
       name = "angels-wire-coil-insulated-converting",
       category = mods["bobelectronics"] and "electronics" or "crafting",
-      subgroup = "angels-insulated-wire-casting",
+      subgroup = "angels-alloys-casting",
       energy_required = 1,
       enabled = false,
       ingredients = {
@@ -213,16 +213,14 @@ if angelsmods.trigger.smelting_products["tin"].wire --[[data.raw.item["insulated
     local box = {
       production_type = "input",
       pipe_covers = pipecoverspictures(),
-      base_area = 0.2,
+       base_area = 0.2,
       base_level = -0.5,
       filter = "liquid-rubber",
-      --hide_connection_info = true,
       pipe_connections = {{type = "input-output", position = {-3, 1}}, {type = "input-output", position = {3, 1}}}
     }
     table.insert(data.raw["assembling-machine"]["strand-casting-machine"].fluid_boxes, box)
     for i=2,4 do
       table.insert(data.raw["assembling-machine"]["strand-casting-machine-"..i].fluid_boxes, box)
-      --data.raw["assembling-machine"]["strand-casting-machine-"..i].fluid_boxes.off_when_no_fluid_recipe = true
     end
   end
 end

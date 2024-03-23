@@ -35,7 +35,7 @@ local function fire_damage_entity(surface, entity, force, cause, killPlanes)
             entity.damage(80, force, "fire")
           end
         end
-      elseif (type ~= "tree" and type ~= "spider-leg") then
+      elseif (type ~= "tree") then
         if(cause and cause.valid) then
           entity.damage(100, force, "fire", cause)
         else
@@ -47,14 +47,13 @@ local function fire_damage_entity(surface, entity, force, cause, killPlanes)
 end
 
 
-local function damage_entity(surface, distSq, ePos, power, fire, damage_init, blast_min_damage, entity, force, cause, corpseMap,  deathStatsForTrees, deathStatsForOther)
+local function damage_entity(surface, distSq, ePos, power, fire, damage_init, blast_min_damage, entity, force, cause, corpseMap)
   -- do blast damage - reduced for rails, belts, land mines and flying vehicles, as this makes some sense, and trees in order to leave some alive
   local eProto = entity.prototype
   local damage = power/distSq*damage_init+blast_min_damage
   local t = entity.type
-  if(t=="spider-leg") then
-    return
-  elseif(t=="tree") then
+
+  if(t=="tree") then
     if(fire) then
       surface.create_entity{name="fire-flame-on-tree", target = entity, position=ePos}
     end
@@ -64,22 +63,14 @@ local function damage_entity(surface, distSq, ePos, power, fire, damage_init, bl
       damage = (damage-entity.prototype.resistances.explosion.decrease)*(1-eProto.resistances.explosion.percent)
     end
     -- If a tree is destroyed, don't bother doing particle effects, just destroy it - huge performance savings
-    if (entity.health<damage) then
-      if (deathStatsForTrees) then
-        if(cause and cause.valid) then
-          entity.damage(damage, force, "explosion", cause)
-        else
-          entity.damage(damage, force, "explosion")
-        end
-      else
-        entity.destroy()
-      end
+    if(entity.health<damage) then
+      entity.destroy()
       surface.create_entity{name="tree-01-stump",position=ePos}
     else
       entity.health = entity.health-damage
-      if entity.tree_stage_index_max ~= entity.tree_stage_index then
-        local damage_level = (1-entity.health/eProto.max_health) * (entity.tree_stage_index_max - entity.tree_stage_index)
-        entity.tree_stage_index = math.max(math.ceil(damage_level) + entity.tree_stage_index, 1)
+      if entity.tree_stage_index_max>1 then
+        local damage_level = (1-entity.health/eProto.max_health)*entity.tree_stage_index_max
+        entity.tree_stage_index = math.ceil(damage_level)
       end
     end
     return
@@ -105,7 +96,7 @@ local function damage_entity(surface, distSq, ePos, power, fire, damage_init, bl
     if((not entity.grid) and entity.health>calcDamage) then
       entity.health = entity.health-calcDamage
     else
-      if((not entity.grid) and corpseMap[entity.name] and not deathStatsForOther) then
+      if((not entity.grid) and corpseMap[entity.name]) then
         local corpseName = corpseMap[entity.name]
         --local ghost
         --if(eProto.create_ghost_on_death or eProto.create_ghost_on_death == nil) then
@@ -136,8 +127,6 @@ end
 
 
 local function move_blast(i,blast,pastEHits, corpseMap)
-  local deathStatsForTrees = settings.global["retain-death-statistics-for-trees"].value or (blast.max < 2000 and settings.global["retain-death-statistics-for-trees-small"].value)
-  local deathStatsForOther = settings.global["retain-death-statistics"].value or (blast.max < 2000 and settings.global["retain-death-statistics-small"].value)
 
   -- Compute the number of regions we move the blast in
   local regNum = 8
@@ -260,7 +249,7 @@ local function move_blast(i,blast,pastEHits, corpseMap)
       if(distSq <= blastSq and distSq>blastInnerSq and entity.valid and entity.prototype.max_health ~= 0
         and ePos.x>=area[1][1] and ePos.x<area[2][1] and ePos.y>=area[1][2] and ePos.y<area[2][2]) then
 
-        damage_entity(surface, distSq, ePos, blast.pow, blast.fire, blast.damage_init, blast.blast_min_damage, entity, blast.force, blast.cause, corpseMap, deathStatsForTrees, deathStatsForOthers)
+        damage_entity(surface, distSq, ePos, blast.pow, blast.fire, blast.damage_init, blast.blast_min_damage, entity, blast.force, blast.cause, corpseMap)
         if blast.fire then
           fire_damage_entity(surface, entity, blast.force, blast.cause, true)
         end
@@ -328,7 +317,7 @@ local function chunk_loaded(chunkLoaderStruct, surface_index, originPos, chunkPo
       local distSq = xdif*xdif + ydif*ydif
       if(distSq <= blastSq and entity.prototype.max_health ~= 0
         and ePos.x>=x and ePos.x<x+32 and ePos.y>=y and ePos.y<y+32 and (killPlanes or entity.type ~= "car")) then
-        damage_entity(game.surfaces[surface_index], distSq, ePos, fireballSq, false, init_blast, blast_min_damage, entity, force, cause, corpseMap, false, false)
+        damage_entity(game.surfaces[surface_index], distSq, ePos, fireballSq, false, init_blast, blast_min_damage, entity, force, cause, corpseMap)
       end
     end
   end

@@ -45,7 +45,6 @@ data:extend({
       "angels-glass-smelting-1",
       "angels-stone-smelting-2",
       "angels-lead-smelting-2", -- need this for the lead oxide processing
-      "strand-casting-2",
     },
     effects = {
       {
@@ -81,11 +80,11 @@ data:extend({
     prerequisites = {
       --"angels-metallurgy-4",
       "powder-metallurgy-4",
-      "strand-casting-3",
+      --[["strand-casting-1",]]
       "angels-glass-smelting-2",
       "angels-aluminium-smelting-2",
       "angels-tin-casting-3",
-      "sodium-processing-2",
+      "sodium-processing",
       --"angels-nitrogen-processing-1"
     },
     effects = {
@@ -101,7 +100,7 @@ data:extend({
         type = "unlock-recipe",
         recipe = "angels-plate-glass-3",
       },
-      {
+       {
         type = "unlock-recipe",
         recipe = "angels-coil-glass-fiber-fast",
       },

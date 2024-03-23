@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -6,9 +6,8 @@
 -- Check to see if reskinning needs to be done.
 if not (reskins.bobs and reskins.bobs.triggers.vehicle_equipment.equipment) then return end
 
--- Note that for equipment, the icons property is not used, so omit type information
--- so that an icon is not set on the equipment prototype.
 local inputs = {
+    type = "belt-immunity-equipment",
     icon_name = "vehicle-belt-immunity",
     mod = "bobs",
     group = "vehicle-equipment",
@@ -21,7 +20,7 @@ local inputs = {
 local name = "vehicle-belt-immunity-equipment"
 
 -- Reskin equipment; fetch the equipment
-local equipment = data.raw["belt-immunity-equipment"][name]
+local equipment = data.raw[inputs.type][name]
 
 -- Check if entity exists, if not, return
 if not equipment then return end

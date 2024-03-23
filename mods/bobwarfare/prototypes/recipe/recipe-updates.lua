@@ -82,8 +82,6 @@ if data.raw.item["invar-alloy"] then
 
   bobmods.lib.recipe.replace_ingredient("bob-plasma-turret-3", "steel-plate", "invar-alloy")
   bobmods.lib.tech.add_prerequisite("bob-plasma-turrets-3", "invar-processing")
-  bobmods.lib.recipe.replace_ingredient("tank", "steel-plate", "invar-alloy")
-  bobmods.lib.tech.add_prerequisite("tank", "invar-processing")
 end
 
 if data.raw.item["cobalt-steel-alloy"] then
@@ -96,8 +94,6 @@ if data.raw.item["brass-gear-wheel"] then
   bobmods.lib.tech.add_prerequisite("radars-3", "zinc-processing")
   bobmods.lib.recipe.replace_ingredient("bob-gun-turret-3", "iron-gear-wheel", "brass-gear-wheel")
   bobmods.lib.tech.add_prerequisite("bob-turrets-3", "zinc-processing")
-  bobmods.lib.recipe.replace_ingredient("tank", "iron-gear-wheel", "brass-gear-wheel")
-  bobmods.lib.tech.add_prerequisite("tank", "zinc-processing")
 end
 
 if data.raw.item["aluminium-plate"] then
@@ -246,7 +242,7 @@ end
 if data.raw.item["ruby-5"] then
   bobmods.lib.recipe.add_ingredient("laser-rifle-battery-ruby", { "ruby-5", 1 })
   bobmods.lib.recipe.replace_ingredient("laser-rifle-battery-ruby", "laser-rifle-battery", "laser-rifle-battery-case")
-  bobmods.lib.tech.add_prerequisite("bob-laser-rifle-ammo-1", "gem-processing-3")
+  bobmods.lib.tech.add_prerequisite("bob-laser-rifle-ammo-1", "gem-processing-2")
 end
 
 if data.raw.item["sapphire-5"] then
@@ -257,7 +253,7 @@ if data.raw.item["sapphire-5"] then
     "laser-rifle-battery-case"
   )
   bobmods.lib.recipe.add_ingredient("bob-laser-turret-2", { "sapphire-5", 1 })
-  bobmods.lib.tech.add_prerequisite("bob-laser-turrets-2", "gem-processing-3")
+  bobmods.lib.tech.add_prerequisite("bob-laser-turrets-2", "gem-processing-2")
 end
 
 if data.raw.item["emerald-5"] then

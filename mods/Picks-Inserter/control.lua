@@ -1,7 +1,7 @@
 --[[ Copyright (c) 2019 - 2023 Picklock
  * Part of Picklocks Inserter
  * control.lua
- * Version 1.110.6.54
+ * Version 1.110.5.53
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -581,7 +581,7 @@
 			if not PI_general.isControlSet then 
 				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
 				PI_general.isAdmin = true
-				-- PI_set_controls(game.players[1])
+				PI_set_controls(game.players[1])
 				PI_modify_all_marks (false)
 			end
 			--Work on Inserter List

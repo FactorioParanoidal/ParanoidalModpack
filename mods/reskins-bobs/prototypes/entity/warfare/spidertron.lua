@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -20,7 +20,7 @@ local function spidertron_icons(name)
     ---@type inputs.assign_icons
     local inputs = {
         type = "spider-vehicle",
-        icon = reskins.bobs.directory .. "/graphics/icons/warfare/spidertron/" .. name .. ".png",
+        icon = reskins.bobs.directory.."/graphics/icons/warfare/spidertron/"..name..".png",
         icon_size = 64,
         icon_mipmaps = 4,
     }
@@ -28,11 +28,11 @@ local function spidertron_icons(name)
     reskins.lib.assign_icons(name, inputs)
 
     -- Setup the tintable icons
-    item.icon_tintable = reskins.bobs.directory .. "/graphics/icons/warfare/spidertron/" .. name .. "-tintable.png"
-    item.icon_tintable_mask = reskins.bobs.directory .. "/graphics/icons/warfare/spidertron/" .. name .. "-tintable-mask.png"
+    item.icon_tintable = reskins.bobs.directory.."/graphics/icons/warfare/spidertron/"..name.."-tintable.png"
+    item.icon_tintable_mask = reskins.bobs.directory.."/graphics/icons/warfare/spidertron/"..name.."-tintable-mask.png"
 end
 
-for _, name in pairs(spidertrons) do
+for _,name in pairs(spidertrons) do
     spidertron_icons(name)
 end
 
@@ -77,7 +77,7 @@ if tankotron then
         }
     })
 
-    data.raw["spider-vehicle"]["tankotron"].drawing_box = { { -3, -3.5 }, { 3, 1.75 } }
+    data.raw["spider-vehicle"]["tankotron"].drawing_box = {{-3, -3.5}, {3, 1.75}}
 end
 
 
@@ -85,26 +85,26 @@ end
 -- Revise projectile locations for the various spidertrons
 local guns = {
     ["spidertron-gatling-gun"] = {
-        projectile_center = { 0, 2.3 },
-        projectile_creation_distance = 1.5,
-        projectile_orientation_offset = 1,
-    },
+            projectile_center = {0, 2.3},
+            projectile_creation_distance = 1.5,
+            projectile_orientation_offset = 1,
+        },
     ["spidertron-cannon-1"] = {
-        projectile_center = { 0.3, 2 },
-        projectile_creation_distance = 1.65,
-        projectile_orientation_offset = 0,     -- -1.65
-    },
+            projectile_center = {0.3, 2},
+            projectile_creation_distance = 1.65,
+            projectile_orientation_offset = 0, -- -1.65
+        },
     ["spidertron-cannon-2"] = {
-        projectile_center = { -0.3, 2 },
-        projectile_creation_distance = 1.65,     -- 1.65
-        projectile_orientation_offset = 0,       -- -1.65
-    },
+            projectile_center = {-0.3, 2},
+            projectile_creation_distance = 1.65, -- 1.65
+            projectile_orientation_offset = 0, -- -1.65
+        },
 }
 
 for gun, attack_parameters in pairs(guns) do
     local spidertron_gun = data.raw["gun"][gun]
     if spidertron_gun then
-        spidertron_gun.attack_parameters = util.merge({ spidertron_gun.attack_parameters, attack_parameters })
+        spidertron_gun.attack_parameters = util.merge({spidertron_gun.attack_parameters, attack_parameters})
     end
 end
 

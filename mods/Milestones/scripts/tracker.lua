@@ -48,8 +48,7 @@ end
 
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
-    local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
-    local sprite_name = sprite_path_prefix .. "." .. milestone.name
+    local sprite_name = sprite_prefix(milestone) .. "." .. milestone.name
     local milestone_localised_name
     local message
     if milestone.type == "technology" then
@@ -57,13 +56,13 @@ local function print_milestone_reached(force, milestone)
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
         message = {"milestones.message_milestone_reached_technology", sprite_name, milestone_localised_name, level_string, human_timestamp}
     else
-        if milestone.type == "item" then
+        if milestone.type == "item" or milestone.type == "item_consumption" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
                 milestone_localised_name = "Cargo rocket"
             else
                 milestone_localised_name = game.item_prototypes[milestone.name].localised_name
             end
-        elseif milestone.type == "fluid" then
+        elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
             milestone_localised_name = game.fluid_prototypes[milestone.name].localised_name
         elseif milestone.type == "kill" then
             milestone_localised_name = game.entity_prototypes[milestone.name].localised_name
@@ -71,11 +70,20 @@ local function print_milestone_reached(force, milestone)
             error("Invalid milestone type! " .. milestone.type)
         end
 
-        local message_type = milestone.type == "kill" and "kill" or "item"
+        local message_type
+        if milestone.type == "kill" then
+            message_type = "kill"
+        elseif milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
+            message_type = "consumption"
+        else
+            message_type = "item"
+        end
+
         local postscript
         if milestone.name == "character" then
             postscript = " (haha! 😁)"
         end
+
         if milestone.quantity == 1 then
             message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, milestone_localised_name, human_timestamp}, postscript}
         else

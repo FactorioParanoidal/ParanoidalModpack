@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,27 +13,27 @@ local inputs = {
     icon_name = "composter",
     base_entity_name = "assembling-machine-1",
     mod = "angels",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "bioprocessing",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["composter"] = { tier = 1 },
-    ["composter-2"] = { tier = 2 },
-    ["composter-3"] = { tier = 3 },
+    ["composter"] = {tier = 1},
+    ["composter-2"] = {tier = 2},
+    ["composter-3"] = {tier = 3},
 }
 
 local function composter_base()
     return
     {
-        filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-base.png",
+        filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-base.png",
         priority = "extra-high",
         width = 117,
         height = 129,
         shift = util.by_pixel(0, 0),
         hr_version = {
-            filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-base.png",
+            filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-base.png",
             priority = "extra-high",
             width = 234,
             height = 252,
@@ -46,14 +46,14 @@ end
 local function composter_mask(tint)
     return
     {
-        filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-mask.png",
+        filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-mask.png",
         priority = "extra-high",
         width = 117,
         height = 129,
         shift = util.by_pixel(0, 0),
         tint = tint,
         hr_version = {
-            filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-mask.png",
+            filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-mask.png",
             priority = "extra-high",
             width = 234,
             height = 252,
@@ -67,14 +67,14 @@ end
 local function composter_highlights()
     return
     {
-        filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-highlights.png",
+        filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-highlights.png",
         priority = "extra-high",
         width = 117,
         height = 129,
         shift = util.by_pixel(0, 0),
         blend_mode = reskins.lib.blend_mode,
         hr_version = {
-            filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-highlights.png",
+            filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-highlights.png",
             priority = "extra-high",
             width = 234,
             height = 252,
@@ -120,13 +120,13 @@ for name, map in pairs(tier_map) do
             composter_highlights(),
             -- Idle outputs
             {
-                filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-idle.png",
+                filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-idle.png",
                 priority = "extra-high",
                 width = 111,
                 height = 41,
                 shift = util.by_pixel(0, 0),
                 hr_version = {
-                    filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-idle.png",
+                    filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-idle.png",
                     priority = "extra-high",
                     width = 222,
                     height = 79,
@@ -141,7 +141,7 @@ for name, map in pairs(tier_map) do
         -- Animation
         {
             animation = {
-                filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-animation.png",
+                filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-animation.png",
                 priority = "extra-high",
                 width = 111,
                 height = 41,
@@ -149,7 +149,7 @@ for name, map in pairs(tier_map) do
                 line_length = 5,
                 shift = util.by_pixel(0, 0),
                 hr_version = {
-                    filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-animation.png",
+                    filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-animation.png",
                     priority = "extra-high",
                     width = 222,
                     height = 79,
@@ -165,14 +165,14 @@ for name, map in pairs(tier_map) do
         {
             always_draw = true,
             animation = {
-                filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/composter-shadow.png",
+                filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/composter-shadow.png",
                 priority = "extra-high",
                 width = 145,
                 height = 84,
                 shift = util.by_pixel(0, 0),
                 -- draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.angels.directory .. "/graphics/entity/bioprocessing/composter/hr-composter-shadow.png",
+                    filename = reskins.angels.directory.."/graphics/entity/bioprocessing/composter/hr-composter-shadow.png",
                     priority = "extra-high",
                     width = 287,
                     height = 165,

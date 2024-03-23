@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -17,11 +17,13 @@ local inputs = {
 
 local intermediates = {
     -- Items
-    ["powder-tungsten-carbide"] = { subgroup = "powders/tungsten-carbide" },
+    ["powder-tungsten-carbide"] = {subgroup = "powders/tungsten-carbide"},
+
     -- Recipes
-    ["tungsten-carbide-smelting-1"] = { type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(1, "smelting") },
-    ["tungsten-carbide-smelting-2"] = { type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(2, "smelting") },
-    ["tungsten-carbide-smelting-3"] = { type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(3, "smelting") },
+    ["tungsten-carbide-smelting-1"] = {type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(1, "smelting")},
+    ["tungsten-carbide-smelting-2"] = {type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(2, "smelting")},
+    ["tungsten-carbide-smelting-3"] = {type = "recipe", subgroup = "powders/tungsten-carbide", image = "powder-tungsten-carbide", icon_extras = reskins.angels.num_tier(3, "smelting")},
+
 }
 
 reskins.lib.create_icons_from_list(intermediates, inputs)
@@ -34,7 +36,7 @@ if powder then
 
     for i = 1, 6, 1 do
         table.insert(powder.pictures, {
-            filename = reskins.compatibility.directory .. "/graphics/icons/extendedangels/powders/tungsten-carbide/powder-tungsten-carbide-" .. i .. ".png",
+            filename = reskins.compatibility.directory.."/graphics/icons/extendedangels/powders/tungsten-carbide/powder-tungsten-carbide-"..i..".png",
             size = 64,
             mipmap_count = 4,
             scale = 0.25,

@@ -1,17 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.1.8
-Date: 2023-12-24
-  Bugfixes:
-    - Fixed that attempting to use Angels pipe material colors would fail
----------------------------------------------------------------------------------------------------
-Version: 2.1.7
-Date: 2023-12-23
-  Changes:
-    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
-    - Revised tiers of hydro plants, electrowinning cells, and algae farms to reflect changes to Angel's mods and Extended Angels
-  Bugfixes:
-    - Fixed that the Fiberglass Board recipe added by Angel's mods was not properly reskinned under some circumstances.
----------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2023-01-01
   Changes:

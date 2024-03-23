@@ -284,6 +284,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         enable_edit_time(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_confirm_edit_time" then
         confirm_edit_time(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_reset_preset" then
+        reset_preset(event.player_index)
     elseif event.element.tags.action == "milestones_open_import" then
         toggle_import_export_page(event.player_index, event.element, true)
     elseif event.element.tags.action == "milestones_open_export" then

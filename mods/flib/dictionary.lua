@@ -1,10 +1,6 @@
-if ... ~= "__flib__.dictionary" then
-  return require("__flib__.dictionary")
-end
-
-local gui = require("__flib__.gui-lite")
-local mod_gui = require("__core__.lualib.mod-gui")
-local table = require("__flib__.table")
+local gui = require("__flib__/gui-lite")
+local mod_gui = require("__core__/lualib/mod-gui")
+local table = require("__flib__/table")
 
 --- @diagnostic disable
 --- @deprecated Use 'dictionary-lite' instead.
@@ -74,6 +70,7 @@ function flib_dictionary.new(name, keep_untranslated, initial_contents)
   for key, value in pairs(initial_contents or {}) do
     self:add(key, value)
   end
+  --- @diagnostic disable-next-line
   raw[name] = { strings = self.strings, keep_untranslated = keep_untranslated }
 
   return self

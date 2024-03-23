@@ -28,3 +28,8 @@ for _, name in pairs(bioprocessing_recipes) do
     local recipe = data.raw.recipe[name]
     if recipe then recipe.order = nil end
 end
+
+-- Add liquifying crafting category to advanced chemical plant 3
+if angelsmods.refining then
+    table.insert(data.raw["assembling-machine"]["advanced-chemical-plant-3"].crafting_categories, "liquifying")
+end

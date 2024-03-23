@@ -56,6 +56,13 @@ styles.milestones_small_button = {
   height = 16
 }
 
+styles.milestones_stretchable_button = {
+  type = "button_style",
+  parent = "button",
+  minimal_width = 16,
+  maximal_width = 200
+}
+
 styles.milestones_grey_button = {
   type = "button_style",
   parent = "tool_button",

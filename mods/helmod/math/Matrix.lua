@@ -100,6 +100,8 @@ end)
 ---@field rows {[integer] : {[integer] : number}}
 ---@field columnIndex {[string] : integer}
 ---@field parameters {[integer] : MatrixRowParameters}
+---@field objectives {[string] : number}
+---@field objective_values {[integer] : number}
 
 Matrix = newclass(function(base)
   base.columns = {}
@@ -146,5 +148,5 @@ function Matrix:add_row(row, parameters)
     local cell_value = row:get_value(column) or 0
     if self.rows[irow] == nil then self.rows[irow]={} end
     self.rows[irow][icol] = cell_value
-      end
+  end
 end

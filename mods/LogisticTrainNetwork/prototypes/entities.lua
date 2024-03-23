@@ -4,11 +4,7 @@
  * See LICENSE.md in the project directory for license information.
 --]]
 
-local train_stop = data.raw["train-stop"]["train-stop"]
-train_stop.fast_replaceable_group = train_stop.fast_replaceable_group or "train-stop"
-train_stop.next_upgrade = "logistic-train-stop"
-
-local ltn_stop = flib.copy_prototype(train_stop, "logistic-train-stop")
+local ltn_stop = flib.copy_prototype(data.raw["train-stop"]["train-stop"], "logistic-train-stop")
 ltn_stop.icon = "__LogisticTrainNetwork__/graphics/icons/train-stop.png"
 ltn_stop.icon_size = 64
 ltn_stop.icon_mipmaps = 4
@@ -210,18 +206,9 @@ data:extend({
 
 -- support for cargo ship ports
 if mods["cargo-ships"] then
-  local port = data.raw["train-stop"]["port"]
-  port.fast_replaceable_group = port.fast_replaceable_group or "port"
-  port.next_upgrade = "ltn-port"
-
-  ltn_port = flib.copy_prototype(port, "ltn-port")
-  ltn_port.icon = "__LogisticTrainNetwork__/graphics/icons/port.png"
-  ltn_port.icon_size = 64
-  ltn_port.icon_mipmaps = 4
-  ltn_port.next_upgrade = nil
+  ltn_port = flib.copy_prototype(data.raw["train-stop"]["port"], "ltn-port")
   ltn_port.selection_box = {{-0.01, -0.6}, {1.9, 0.6}}
   -- ltn_port.collision_box = {{-0.01, -0.1}, {1.9, 0.4}}
-
   data:extend({
     ltn_port
   })

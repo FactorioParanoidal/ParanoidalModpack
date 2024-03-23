@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -92,6 +92,7 @@ triggers.power = {
     equipment = reskins.lib.check_scope("equipment", "bobs", "bobpower"),
     items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobpower"),
     technologies = reskins.lib.check_scope("technologies", "bobs", "bobpower"),
+
     -- Fetch bobpower settings
     accumulators = reskins.lib.setting("bobmods-power-accumulators"),
     poles = reskins.lib.setting("bobmods-power-poles"),

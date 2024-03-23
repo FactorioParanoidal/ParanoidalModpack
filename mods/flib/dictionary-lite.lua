@@ -1,36 +1,10 @@
-if ... ~= "__flib__.dictionary-lite" then
-  return require("__flib__.dictionary-lite")
-end
-
-local gui = require("__flib__.gui-lite")
-local mod_gui = require("__core__.lualib.mod-gui")
-local table = require("__flib__.table")
-
---- @class FlibDictionaryGlobal
---- @field init_ran boolean
---- @field player_language_requests table<uint, DictLangRequest>
---- @field player_languages table<uint, string>
---- @field raw table<string, Dictionary>
---- @field raw_count integer
---- @field to_translate string[]
---- @field translated table<string, table<string, TranslatedDictionary>>
---- @field wip DictWipData?
-
---- @class DictWipData
---- @field dict string
---- @field dicts table<string, RawDictionary>
---- @field finished boolean
---- @field key string?
---- @field last_batch_start DictTranslationRequest?
---- @field language string
---- @field received_count integer
---- @field requests table<uint, DictTranslationRequest>
---- @field request_tick uint
---- @field translator LuaPlayer
+local gui = require("__flib__/gui-lite")
+local mod_gui = require("__core__/lualib/mod-gui")
+local table = require("__flib__/table")
 
 --- Utilities for creating dictionaries of localised string translations.
 --- ```lua
---- local flib_dictionary = require("__flib__.dictionary-lite")
+--- local flib_dictionary = require("__flib__/dictionary-lite")
 --- ```
 --- @class flib_dictionary
 local flib_dictionary = {}
@@ -38,7 +12,7 @@ local flib_dictionary = {}
 local request_timeout_ticks = (60 * 5)
 
 --- @param init_only boolean?
---- @return FlibDictionaryGlobal
+--- @return flib_dictionary_global
 local function get_data(init_only)
   if not global.__flib or not global.__flib.dictionary then
     error("Dictionary module was not properly initialized - ensure that all lifecycle events are handled.")
@@ -50,7 +24,7 @@ local function get_data(init_only)
   return data
 end
 
---- @param data FlibDictionaryGlobal
+--- @param data flib_dictionary_global
 --- @param language string
 --- @return LuaPlayer?
 local function get_translator(data, language)
@@ -70,7 +44,7 @@ local function get_translator(data, language)
   end
 end
 
---- @param data FlibDictionaryGlobal
+--- @param data flib_dictionary_global
 local function update_gui(data)
   local wip = data.wip
   for _, player in pairs(game.players) do
@@ -93,7 +67,6 @@ local function update_gui(data)
             type = "frame",
             name = "pane",
             style = "inside_shallow_frame_with_padding",
-            --- @diagnostic disable-next-line: missing-fields
             style_mods = { top_padding = 8 },
             direction = "vertical",
           },
@@ -106,12 +79,10 @@ local function update_gui(data)
           type = "flow",
           name = script.mod_name,
           style = "centering_horizontal_flow",
-          --- @diagnostic disable-next-line: missing-fields
           style_mods = { top_margin = 4, horizontal_spacing = 8 },
           {
             type = "label",
             style = "caption_label",
-            --- @diagnostic disable-next-line: missing-fields
             style_mods = { minimal_width = 130 },
             caption = { "?", { "mod-name." .. script.mod_name }, script.mod_name },
             ignored_by_interaction = true,
@@ -121,7 +92,6 @@ local function update_gui(data)
           {
             type = "progressbar",
             name = "bar",
-            --- @diagnostic disable-next-line: missing-fields
             style_mods = { top_margin = 1, width = 100 },
             ignored_by_interaction = true,
           },
@@ -129,7 +99,6 @@ local function update_gui(data)
             type = "label",
             name = "percentage",
             style = "bold_label",
-            --- @diagnostic disable-next-line: missing-fields
             style_mods = { width = 24, horizontal_align = "right" },
             ignored_by_interaction = true,
           },
@@ -155,18 +124,15 @@ local function update_gui(data)
   end
 end
 
---- @param data FlibDictionaryGlobal
+--- @param data flib_dictionary_global
 --- @return boolean success
 local function request_next_batch(data)
   local raw = data.raw
   local wip = data.wip --[[@as DictWipData]]
-  wip.last_batch_start = nil
   if wip.finished then
     return false
   end
   local requests, strings = {}, {}
-  --- @type DictTranslationRequest?
-  local first_request = nil
   for i = 1, game.is_multiplayer() and 5 or 50 do
     local string
     repeat
@@ -182,18 +148,13 @@ local function request_next_batch(data)
     if wip.finished then
       break
     end
-    local request = { dict = wip.dict, key = wip.key }
-    requests[i] = request
-    if not first_request then
-      first_request = request
-    end
+    requests[i] = { dict = wip.dict, key = wip.key }
     strings[i] = string
   end
 
-  if not first_request then
+  if #strings == 0 then
     return false -- Finished
   end
-  wip.last_batch_start = first_request
 
   local translator = wip.translator
   if not translator.valid or not translator.connected then
@@ -214,7 +175,6 @@ local function request_next_batch(data)
   for i = 1, #ids do
     wip.requests[ids[i]] = requests[i]
   end
-  --- @diagnostic disable-next-line: missing-fields
   wip.request_tick = game.tick
 
   update_gui(data)
@@ -222,7 +182,7 @@ local function request_next_batch(data)
   return true
 end
 
---- @param data FlibDictionaryGlobal
+--- @param data flib_dictionary_global
 local function handle_next_language(data)
   while not data.wip and #data.to_translate > 0 do
     local next_language = table.remove(data.to_translate, 1)
@@ -231,7 +191,6 @@ local function handle_next_language(data)
       if translator then
         -- Start translation
         local dicts = {}
-        --- @type string?
         local first_dict
         for name in pairs(data.raw) do
           first_dict = first_dict or name
@@ -241,7 +200,7 @@ local function handle_next_language(data)
         if not first_dict then
           return
         end
-        --- @type DictWipData
+        --- @class DictWipData
         data.wip = {
           dict = first_dict,
           dicts = dicts,
@@ -280,23 +239,27 @@ function flib_dictionary.on_init()
   if not global.__flib then
     global.__flib = {}
   end
-  --- @type FlibDictionaryGlobal
+  --- @class flib_dictionary_global
   global.__flib.dictionary = {
     init_ran = false,
-    player_language_requests = {},
+    --- @type table<uint, string>
     player_languages = {},
+    --- @type table<uint, DictLangRequest>
+    player_language_requests = {},
+    --- @type table<string, Dictionary>
     raw = {},
     raw_count = 0,
+    --- @type string[]
     to_translate = {},
+    --- @type table<string, table<string, TranslatedDictionary>>
     translated = {},
+    --- @type DictWipData?
     wip = nil,
   }
   -- Initialize all existing players
   for player_index, player in pairs(game.players) do
     if player.connected then
       flib_dictionary.on_player_joined_game({
-        name = defines.events.on_player_joined_game,
-        tick = game.tick,
         --- @cast player_index uint
         player_index = player_index,
       })
@@ -336,11 +299,8 @@ function flib_dictionary.on_tick()
   end
 
   if game.tick - wip.request_tick > request_timeout_ticks then
-    local request = wip.last_batch_start
-    if not request then
-      -- TODO: Remove WIP because we actually finished somehow? This should never happen I think
-      error("We're screwed")
-    end
+    -- next() will return the first string from the last batch because it was inserted first
+    local _, request = next(wip.requests)
     wip.dict = request.dict
     wip.finished = false
     wip.key = request.key
@@ -397,7 +357,7 @@ function flib_dictionary.on_string_translated(e)
     end
   end
 
-  while wip and not next(wip.requests) and not request_next_batch(data) do
+  while wip and table_size(wip.requests) == 0 and not request_next_batch(data) do
     if wip.finished then
       data.translated[wip.language] = wip.dicts
       data.wip = nil

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
@@ -76,13 +76,13 @@ end
 ---@param setting mod_settings
 ---@return boolean|nil
 function reskins.lib.check_scope(scope, mod, setting)
-    if reskins.lib.setting("reskins-" .. mod .. "-do-" .. setting) == true then
-        if reskins.lib.setting("reskins-lib-scope-" .. scope) == true then
+    if reskins.lib.setting("reskins-"..mod.."-do-"..setting) == true then
+        if reskins.lib.setting("reskins-lib-scope-"..scope) == true then
             return true
         else
             return false
         end
-    elseif reskins.lib.setting("reskins-" .. mod .. "-do-" .. setting) == false then
+    elseif reskins.lib.setting("reskins-"..mod.."-do-"..setting) == false then
         return false
     else
         return nil
@@ -92,19 +92,19 @@ end
 -- Setup pack function hosts and import triggers
 if mods["reskins-angels"] then
     reskins.angels = {
-        triggers = require("__reskins-angels__/prototypes/functions/triggers"),
-    }
+    triggers = require("__reskins-angels__/prototypes/functions/triggers")
+}
 end
 
 if mods["reskins-bobs"] then
     reskins.bobs = {
-        triggers = require("__reskins-bobs__/prototypes/functions/triggers"),
-    }
+    triggers = require("__reskins-bobs__/prototypes/functions/triggers")
+}
 end
 
 if mods["reskins-compatibility"] then
     reskins.compatibility = {
-        triggers = require("__reskins-compatibility__/prototypes/functions/triggers"),
+        triggers = require("__reskins-compatibility__/prototypes/functions/triggers")
     }
 end
 
@@ -168,15 +168,15 @@ end
 --- }
 ---```
 function reskins.lib.parse_inputs(inputs)
-    inputs.icon_size = inputs.icon_size or 64                            -- Pixel size of icons
-    inputs.icon_mipmaps = inputs.icon_mipmaps or 4                       -- Number of mipmaps present in the icon image file
-    inputs.technology_icon_size = inputs.technology_icon_size or 128     -- Pixel size of technology icons
+    inputs.icon_size = inputs.icon_size or 64 -- Pixel size of icons
+    inputs.icon_mipmaps = inputs.icon_mipmaps or 4 -- Number of mipmaps present in the icon image file
+    inputs.technology_icon_size = inputs.technology_icon_size or 128 -- Pixel size of technology icons
     inputs.technology_icon_mipmaps = inputs.technology_icon_mipmaps or 1 -- Number of mipmaps present in the technology icon image file
-    inputs.make_explosions = (inputs.make_explosions ~= false)           -- Create explosions; default true
-    inputs.make_remnants = (inputs.make_remnants ~= false)               -- Create remnant; default true
-    inputs.make_icons = (inputs.make_icons ~= false)                     -- Create icons; default true
-    inputs.tier_labels = (inputs.tier_labels ~= false)                   -- Display tier labels; default true
-    inputs.make_icon_pictures = (inputs.make_icon_pictures ~= false)     -- Define the pictures icon field when possible
+    inputs.make_explosions = (inputs.make_explosions ~= false) -- Create explosions; default true
+    inputs.make_remnants = (inputs.make_remnants ~= false) -- Create remnant; default true
+    inputs.make_icons = (inputs.make_icons ~= false) -- Create icons; default true
+    inputs.tier_labels = (inputs.tier_labels ~= false) -- Display tier labels; default true
+    inputs.make_icon_pictures = (inputs.make_icon_pictures ~= false) -- Define the pictures icon field when possible
 
     return inputs
 end
@@ -197,8 +197,8 @@ function reskins.lib.assign_order(name, inputs)
         entity = data.raw[inputs.type][name]
     end
     local item = data.raw["item"][name]
-    local explosion = data.raw["explosion"][name .. "-explosion"]
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local explosion = data.raw["explosion"][name.."-explosion"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     if entity then
         entity.order = inputs.sort_order
@@ -243,9 +243,9 @@ end
 ---```
 function reskins.lib.create_remnant(name, inputs)
     ---@type remnant
-    local remnant = util.copy(data.raw["corpse"][inputs.base_entity_name .. "-remnants"])
-    remnant.name = name .. "-remnants"
-    data:extend({ remnant })
+    local remnant = util.copy(data.raw["corpse"][inputs.base_entity_name.."-remnants"])
+    remnant.name = name.."-remnants"
+    data:extend({remnant})
 
     -- Assign corpse to originating entity
     data.raw[inputs.type][name]["corpse"] = remnant.name
@@ -264,9 +264,9 @@ end
 --- }
 ---```
 function reskins.lib.create_explosion(name, inputs)
-    local explosion = util.copy(data.raw["explosion"][inputs.base_entity_name .. "-explosion"])
-    explosion.name = name .. "-explosion"
-    data:extend({ explosion })
+    local explosion = util.copy(data.raw["explosion"][inputs.base_entity_name.."-explosion"])
+    explosion.name = name.."-explosion"
+    data:extend({explosion})
 
     -- Assign explosion to originating entity
     data.raw[inputs.type][name]["dying_explosion"] = explosion.name
@@ -280,14 +280,14 @@ end
 ---@param key integer # Index corresponding to the particle within the `explosion` prototype
 ---@param tint table # [Types/Color](https://wiki.factorio.com/Types/Color)
 function reskins.lib.create_particle(name, base_entity_name, base_particle_name, key, tint)
-    local particle = util.copy(data.raw["optimized-particle"][base_entity_name .. "-" .. base_particle_name])
-    particle.name = name .. "-" .. base_particle_name .. "-tinted"
+    local particle = util.copy(data.raw["optimized-particle"][base_entity_name.."-"..base_particle_name])
+    particle.name = name.."-"..base_particle_name.."-tinted"
     particle.pictures.sheet.tint = tint
     particle.pictures.sheet.hr_version.tint = tint
-    data:extend({ particle })
+    data:extend({particle})
 
     -- Assign particle to originating explosion
-    data.raw["explosion"][name .. "-explosion"]["created_effect"]["action_delivery"]["target_effects"][key].particle_name = particle.name
+    data.raw["explosion"][name.."-explosion"]["created_effect"]["action_delivery"]["target_effects"][key].particle_name = particle.name
 end
 
 ---@class inputs.create_explosions_and_particles : inputs.create_explosion
@@ -372,7 +372,7 @@ function reskins.lib.make_4way_animation_from_spritesheet(animation)
             animation_speed = anim.animation_speed,
             scale = anim.scale or 1,
             tint = anim.tint,
-            blend_mode = anim.blend_mode,
+            blend_mode = anim.blend_mode
         }
     end
 
@@ -387,8 +387,8 @@ function reskins.lib.make_4way_animation_from_spritesheet(animation)
     local function make_animation(idx)
         if animation.layers then
             local tab = { layers = {} }
-            for k, v in ipairs(animation.layers) do
-                table.insert(tab.layers, make_animation_layer_with_hr_version(idx, v))
+            for k,v in ipairs(animation.layers) do
+            table.insert(tab.layers, make_animation_layer_with_hr_version(idx, v))
             end
             return tab
         else
@@ -401,7 +401,7 @@ function reskins.lib.make_4way_animation_from_spritesheet(animation)
         north = make_animation(0),
         east = make_animation(1),
         south = make_animation(2),
-        west = make_animation(3),
+        west = make_animation(3)
     }
 end
 
@@ -409,7 +409,7 @@ end
 function reskins.lib.vertical_pipe_shadow(shift)
     return
     {
-        filename = reskins.lib.directory .. "/graphics/entity/common/pipe-patches/vertical-pipe-shadow-patch.png",
+        filename = reskins.lib.directory.."/graphics/entity/common/pipe-patches/vertical-pipe-shadow-patch.png",
         priority = "high",
         width = 64,
         height = 64,
@@ -417,7 +417,7 @@ function reskins.lib.vertical_pipe_shadow(shift)
         draw_as_shadow = true,
         shift = shift,
         hr_version = {
-            filename = reskins.lib.directory .. "/graphics/entity/common/pipe-patches/hr-vertical-pipe-shadow-patch.png",
+            filename = reskins.lib.directory.."/graphics/entity/common/pipe-patches/hr-vertical-pipe-shadow-patch.png",
             priority = "high",
             width = 128,
             height = 128,
@@ -425,7 +425,7 @@ function reskins.lib.vertical_pipe_shadow(shift)
             draw_as_shadow = true,
             shift = shift,
             scale = 0.5,
-        },
+        }
     }
 end
 
@@ -438,25 +438,25 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                 layers = {
                     -- Base
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-1-base.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-base.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
                         frame_count = 16,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-1-base.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-base.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 16,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
                     -- Mask
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-1-mask.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-mask.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
@@ -464,19 +464,19 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                         tint = tint,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-1-mask.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-mask.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 16,
                             tint = tint,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
                     -- Highlights
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-1-highlights.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-highlights.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
@@ -484,18 +484,18 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                         blend_mode = reskins.lib.blend_mode,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-1-highlights.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-highlights.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 16,
                             blend_mode = reskins.lib.blend_mode,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
-                },
-            },
+                }
+            }
         }
     else
         transport_belt_animation_set = {
@@ -503,25 +503,25 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                 layers = {
                     -- Base
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-2-base.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-base.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
                         frame_count = 32,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-2-base.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-base.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 32,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
                     -- Mask
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-2-mask.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-mask.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
@@ -529,19 +529,19 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                         tint = tint,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-2-mask.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-mask.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 32,
                             tint = tint,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
                     -- Highlights
                     {
-                        filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/transport-belt-2-highlights.png",
+                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-highlights.png",
                         priority = "extra-high",
                         width = 64,
                         height = 64,
@@ -549,18 +549,18 @@ function reskins.lib.transport_belt_animation_set(tint, variant)
                         blend_mode = reskins.lib.blend_mode,
                         direction_count = 20,
                         hr_version = {
-                            filename = reskins.lib.directory .. "/graphics/entity/base/transport-belt/hr-transport-belt-2-highlights.png",
+                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-highlights.png",
                             priority = "extra-high",
                             width = 128,
                             height = 128,
                             scale = 0.5,
                             frame_count = 32,
                             blend_mode = reskins.lib.blend_mode,
-                            direction_count = 20,
-                        },
+                            direction_count = 20
+                        }
                     },
-                },
-            },
+                }
+            }
         }
     end
     return transport_belt_animation_set

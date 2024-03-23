@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE.md in the project directory for license information.
@@ -38,9 +38,9 @@ if reskins.lib.migration.is_version_or_newer(mods["bobpower"], "1.1.6") then
 end
 
 local technologies = {
-    ["nuclear-power"] = { tier = 1, prog_tier = 3, icon_base = "nuclear-power-" .. material_tiers[1] .. "-color" .. light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor"].tint },         -- t3 reactor
-    ["bob-nuclear-power-2"] = { tier = 2, prog_tier = 4, icon_base = "nuclear-power-" .. material_tiers[2] .. "-color" .. light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor-2"].tint }, -- t4 reactor
-    ["bob-nuclear-power-3"] = { tier = 3, prog_tier = 5, icon_base = "nuclear-power-" .. material_tiers[3] .. "-color" .. light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor-3"].tint }, -- t5 reactor
+    ["nuclear-power"] = {tier = 1, prog_tier = 3, icon_base = "nuclear-power-"..material_tiers[1].."-color"..light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor"].tint}, -- t3 reactor
+    ["bob-nuclear-power-2"] = {tier = 2, prog_tier = 4, icon_base = "nuclear-power-"..material_tiers[2].."-color"..light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor-2"].tint}, -- t4 reactor
+    ["bob-nuclear-power-3"] = {tier = 3, prog_tier = 5, icon_base = "nuclear-power-"..material_tiers[3].."-color"..light_color, tint = reskins.bobs.nuclear_reactor_index["nuclear-reactor-3"].tint}, -- t5 reactor
 }
 
 reskins.lib.create_icons_from_list(technologies, inputs)

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -15,11 +15,11 @@ local inputs = {
 }
 
 local intermediates = {
-    ["seedling"] = { subgroup = "items" },
-    ["fertiliser"] = { subgroup = "items" },
-    ["wood-pellets"] = { subgroup = "items" },
-    ["bob-basic-greenhouse-cycle"] = { type = "recipe", subgroup = "recipes" },
-    ["bob-advanced-greenhouse-cycle"] = { type = "recipe", subgroup = "recipes" },
+    ["seedling"] = {subgroup = "items"},
+    ["fertiliser"] = {subgroup = "items"},
+    ["wood-pellets"] = {subgroup = "items"},
+    ["bob-basic-greenhouse-cycle"] = {type = "recipe", subgroup = "recipes"},
+    ["bob-advanced-greenhouse-cycle"] = {type = "recipe", subgroup = "recipes"},
 }
 
 reskins.lib.create_icons_from_list(intermediates, inputs)

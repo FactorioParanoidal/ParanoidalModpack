@@ -73,6 +73,7 @@ local WHITELIST_SIZE_ANY = 'any'
 --- | 'bottom-left'
 
 --- @alias mod_settings
+--- | { chest_name: string | nil }
 --- | { max_width: number, max_height: number, max_area: number, size_whitelist: size_whitelist }
 --- | { inventory_size_multiplier: number, inventory_size_limit: number }
 --- | { warehouse_threshold: number, sprite_variation_chance: number }
@@ -118,12 +119,13 @@ end
 local function parse_settings(chest_name)
 	local function get_startup_setting_value(setting_name)
 		local setting = chest_name and settings.startup[MergingChests.chest_specific_setting_name(setting_name, chest_name)] or settings.startup[setting_name]
-		return setting.value
+		return setting and setting.value
 	end
 
 	--- @type mod_settings
 	local mod_settings = {
 		chest_name = chest_name,
+		mergeable_chest = MergingChests.is_mod_active(MergingChests.all_types_mod_name) and 'all' or get_startup_setting_value(MergingChests.setting_names.mergeable_chest),
 		max_width = get_startup_setting_value(MergingChests.setting_names.max_width),
 		max_height = get_startup_setting_value(MergingChests.setting_names.max_height),
 		max_area = get_startup_setting_value(MergingChests.setting_names.max_area),
@@ -154,6 +156,11 @@ function MergingChests.get_mod_settings(chest_name)
 	local chest_name_or_default = chest_name or 'default'
 	if cached_mod_settings[chest_name_or_default] == nil then
 		cached_mod_settings[chest_name_or_default] = parse_settings(chest_name)
+		if chest_name then
+			log('Merging chests mod settings for "'..chest_name..'": '..serpent.line(cached_mod_settings[chest_name_or_default]))
+		else
+			log('Default merging chests mod settings: '..serpent.line(cached_mod_settings[chest_name_or_default]))
+		end
 	end
 	return cached_mod_settings[chest_name_or_default]
 end

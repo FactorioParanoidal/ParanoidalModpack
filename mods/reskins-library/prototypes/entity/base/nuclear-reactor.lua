@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
@@ -19,26 +19,26 @@ for _, name in pairs(reactors) do
 
     -- Lights
     entity.working_light_picture = {
-        filename = reskins.lib.directory .. "/graphics/entity/base/nuclear-reactor/reactor-lights.png",
+        filename = reskins.lib.directory.."/graphics/entity/base/nuclear-reactor/reactor-lights.png",
         blend_mode = "additive",
         draw_as_glow = true,
         width = 160,
         height = 160,
         shift = { -0.03125, -0.1875 },
         hr_version = {
-            filename = reskins.lib.directory .. "/graphics/entity/base/nuclear-reactor/hr-reactor-lights.png",
+            filename = reskins.lib.directory.."/graphics/entity/base/nuclear-reactor/hr-reactor-lights.png",
             blend_mode = "additive",
             draw_as_glow = true,
             width = 320,
             height = 320,
             scale = 0.5,
             shift = { -0.03125, -0.1875 },
-        },
+        }
     }
 
     -- Handle ambient-light
     entity.energy_source.light_flicker = {
-        color = { 0, 0, 0 },
+        color = {0, 0, 0},
         minimum_light_size = 0,
         light_intensity_to_size_coefficient = 0,
     }

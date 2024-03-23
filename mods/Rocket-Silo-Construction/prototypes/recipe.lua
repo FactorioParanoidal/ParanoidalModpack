@@ -6,11 +6,8 @@ local mp = settings.startup["rsc-st-cost-mp"].value
 local original_cost_div = 4
 
 -- integration with bobs / angels
-function CheckItem(items)
-	for k,it in pairs (items) do
-		if data.raw.item[it] then return it end
-		end
---return ifthen(data.raw.item[item1],item1,item2)
+function CheckItem(item1,item2)
+return ifthen(data.raw.item[item1],item1,item2)
 end
 
 function AddIfExists(item,atable,amount)
@@ -24,9 +21,10 @@ local drill
 if mods['SeaBlock'] then
 	drill = 'thermal-extractor'
 	else
-	drill = CheckItem({'bob-area-mining-drill-3','electric-mining-drill'})
+	drill = CheckItem('bob-area-mining-drill-3','electric-mining-drill')
 	end
-local stone = CheckItem({'sand','solid-sand','stone'})
+local stone = CheckItem('solid-sand','stone')
+stone = CheckItem('sand',stone)
 
 
 
@@ -54,17 +52,11 @@ if data.raw.item['stone-crushed'] then
 	table.insert(res_stone1,{type="item", name="stone-crushed", amount=10})
 	table.insert(res_stone2,{type="item", name="stone-crushed", amount=15})
 	end
-
 if data.raw.item['slag'] then 
 	table.insert(res_stone1,{type="item", name="slag", amount=40})
 	table.insert(res_stone2,{type="item", name="slag", amount=60})
 	table.insert(build_result2,{type="item", name="slag", amount=40, probability=0.25})
 	table.insert(build_result4,{type="item", name="slag", amount=40, probability=0.25})
-elseif data.raw.item['ei_slag'] then 
-	table.insert(res_stone1,{type="item", name="ei_slag", amount=40})
-	table.insert(res_stone2,{type="item", name="ei_slag", amount=60})
-	table.insert(build_result2,{type="item", name="ei_slag", amount=40, probability=0.25})
-	table.insert(build_result4,{type="item", name="ei_slag", amount=40, probability=0.25})
 	else
 	table.insert(build_result2,{type="item", name="stone", amount=40, probability=0.25})
 	table.insert(build_result4,{type="item", name="stone", amount=40, probability=0.25})
@@ -80,29 +72,26 @@ AddIfExists('angels-ore5',res_stone2,2)
 AddIfExists('angels-ore6',res_stone2,2)
 
 
-local brick  = CheckItem({'concrete-brick','stone-brick'})
-local brick2 = CheckItem({'reinforced-concrete-brick','stone-brick'})
-local stick  = CheckItem({'ei_iron-beam','chromium-rod','titanium-plate','iron-stick'})
-local stick2 = CheckItem({'ei_steel-mechanical-parts','chromium-piston',stick})
-local steel  = CheckItem({'steel-beam','cobalt-steel-alloy','steel-plate'})
-local fluid = "water"
-if mods['IndustrialRevolution3'] then fluid = "concrete-fluid" end 
+local brick  = CheckItem('concrete-brick','stone-brick')
+local brick2 = CheckItem('reinforced-concrete-brick','stone-brick')
+local stick  = CheckItem('titanium-plate','iron-stick')
+local steel  = CheckItem('cobalt-steel-alloy','steel-plate')
 
 local ing_stage2 = 
 		{
-          {type="item", name="refined-concrete", amount=50*mp}, --drd concrete
+		  {type="item", name="refined-concrete", amount=50*mp}, --drd concrete
 		  {type="item", name=brick, amount=10*mp},
 		  {type="item", name=steel, amount=ifthen(steel=='steel-plate',20,5)*mp},
 		  {type="item", name=stick, amount=ifthen(stick=='iron-stick',30,5)*mp},
-		  {type="fluid", name=fluid, amount=2000*mp}, --drd 2000
+		  {type="fluid", name="water", amount=2000*mp}, --drd 1000
 		}
 
 local ing_stage4 = 
 		{
-          {"refined-concrete", 50*mp}, --drd concrete
+		  {"refined-concrete", 50*mp}, --drd concrete
 		  {brick, 10*mp},
-		  {steel, ifthen(steel=='steel-plate',20,10)*mp},
-		  {stick2, ifthen(stick=='iron-stick',30,15)*mp},
+		  {steel, ifthen(steel=='steel-plate',20,5)*mp},
+		  {stick, ifthen(stick=='iron-stick',30,5)*mp},
 		}
 
 local pipe  = 'pipe'           --CheckItem('copper-tungsten-pipe','pipe')   --tungsten not compatible with SE
@@ -110,8 +99,8 @@ local pipe2 = 'pipe-to-ground' --CheckItem('copper-tungsten-pipe-to-ground','pip
 table.insert(ing_stage4,{pipe,  20*mp})
 table.insert(ing_stage4,{pipe2, 10*mp})
 
-local copper = CheckItem({'ei_lead-plate','chromium-plate-heavy','angels-wire-coil-copper','copper-plate'}) --seok   algels smelting
-local cable  = CheckItem({'ei_insulated-wire','copper-cable-heavy','gilded-copper-cable','copper-cable'}) --seok
+local copper = CheckItem('angels-wire-coil-copper','copper-plate') --seok   algels smelting
+local cable  = CheckItem('gilded-copper-cable','copper-cable') --seok
 
 local ing_stage5 = 
 		{
@@ -122,8 +111,7 @@ local ing_stage5 =
 		  {copper, 40*mp},
 		  {steel, 10*mp},
 		}
-if mods["Warp-Drive-Machine"] then table.insert(ing_stage5, {type="item", name="warponium-plate", amount=10*mp}) end 
-
+		  		  
 
 local ing = table.deepcopy(data.raw.recipe['rocket-silo'].ingredients)
 for i=1,#ing do 
@@ -161,9 +149,6 @@ data:extend({
 		subgroup = "defensive-structure",
 		enabled = true,   
 		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,
 		energy_required = 1,
 		ingredients = {},
 		results=res_stone1,     
@@ -180,10 +165,7 @@ data:extend({
 		subgroup = "fluid-recipes",
 		enabled = true,   
 		main_product= "",
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,		
+		hidden = true,			
 		energy_required = 5,
 		ingredients = ing_stage2,
 		results=build_result2,
@@ -198,10 +180,7 @@ data:extend({
 		category = "rsc-stage3",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,		
+		hidden = true,			
 		energy_required = 1,
 		ingredients = {},
 		results=res_stone2,    
@@ -217,10 +196,7 @@ data:extend({
 		category = "rsc-stage4",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,
+		hidden = true,		
 		energy_required = 5,
 		ingredients = ing_stage4,
 		results=build_result4,
@@ -237,10 +213,7 @@ data:extend({
 		category = "rsc-stage5",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,	
+		hidden = true,		
 		energy_required = 5,
 		ingredients = ing_stage5,
 		results=
@@ -260,19 +233,17 @@ data:extend({
 		category = "rsc-stage6",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,	
+		hidden = true,		
 		energy_required = 5,
 		ingredients =
 		{
 		  {"refined-concrete", 10*mp},
 		  {"electric-engine-unit", 5*mp},
-		  {CheckItem({"computer-mk3","processing-unit"}), 5*mp},
-		  {CheckItem({"computer-mk2","advanced-circuit"}), 10*mp},
-		  {CheckItem({"computer-mk1","electronic-circuit"}), 50*mp},
+		  {"processing-unit", 5*mp},
+		  {"advanced-circuit", 10*mp},
+		  {"electronic-circuit", 50*mp},
 		  {"radar", 2*mp},
+		  
 		},
 		results=
 		{
@@ -283,13 +254,6 @@ data:extend({
  
   }
 )
-
-if mods['IndustrialRevolution3'] then 
-	table.insert (data.raw.recipe["rsc-construction-stage5"].ingredients,{"gold-cable", 20*mp})
-	--table.insert (data.raw.recipe["rsc-construction-stage6"].ingredients,{"chromium-window", 20*mp})
-	end 
-
-
 
 if data.raw.item['advanced-processing-unit'] then --bobs
 	table.insert (data.raw.recipe["rsc-construction-stage6"].ingredients,{"advanced-processing-unit", 5*mp})
@@ -368,10 +332,7 @@ if enable_se_probe then
 		category = "rsc-stage6",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,	
+		hidden = true,		
 		energy_required = 5,
 		ingredients =
 		{
@@ -399,10 +360,7 @@ if enable_se_probe then
 		category = "rsc-stage5",
 		subgroup = "defensive-structure",
 		enabled = true,  
-		hidden = true,	
-		hidden_from_flow_stats = true,
-		hidden_from_player_crafting = true,
-		always_show_made_in = false,
+		hidden = true,		
 		energy_required = 5,
 		ingredients = 		{
 		  {"green-wire", 20*mp},

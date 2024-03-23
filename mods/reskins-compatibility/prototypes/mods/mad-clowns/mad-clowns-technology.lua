@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Angel's Mods
 --
 -- See LICENSE.md in the project directory for license information.
@@ -17,10 +17,10 @@ local inputs = {
 }
 
 local technologies = {
-    ["advanced-depleted-uranium-smelting-1"] = { subgroup = "casting", image = "casting-depleted-uranium-technology-icon" },
-    ["advanced-depleted-uranium-smelting-2"] = { subgroup = "casting", image = "casting-depleted-uranium-technology-icon" },
-    ["advanced-magnesium-smelting"] = { subgroup = "casting", image = "casting-magnesium-technology-icon" },
-    ["advanced-osmium-smelting"] = { subgroup = "casting", image = "casting-osmium-technology-icon" },
+    ["advanced-depleted-uranium-smelting-1"] = {subgroup = "casting", image = "casting-depleted-uranium-technology-icon"},
+    ["advanced-depleted-uranium-smelting-2"] = {subgroup = "casting", image = "casting-depleted-uranium-technology-icon"},
+    ["advanced-magnesium-smelting"] = {subgroup = "casting", image = "casting-magnesium-technology-icon"},
+    ["advanced-osmium-smelting"] = {subgroup = "casting", image = "casting-osmium-technology-icon"},
 }
 
 reskins.lib.create_icons_from_list(technologies, inputs)

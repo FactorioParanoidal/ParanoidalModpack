@@ -9,7 +9,6 @@ data:extend({
         icon_size = 128,
         prerequisites = {
             "bio-processing-blue",
-            "production-science-pack",
         },
         effects = {
             {
@@ -20,10 +19,11 @@ data:extend({
         unit = {
             count = 150,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
             },
             time = 30
         },
@@ -37,7 +37,6 @@ data:extend({
         icon_size = 128,
         prerequisites = {
             "bio-farm-2",
-            "chemical-science-pack",
         },
         effects = {
             {
@@ -56,9 +55,9 @@ data:extend({
         unit = {
             count = 150,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
             },
             time = 30
         },
@@ -73,7 +72,6 @@ data:extend({
         order = "c-a",
         prerequisites = {
             "bio-refugium-butchery-2",
-            "production-science-pack",
         },
         effects = {
             {
@@ -84,65 +82,25 @@ data:extend({
         unit = {
             count = 150,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
-                { "token-bio",               1 }
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
             },
             time = 30
         },
     },
 
-    -- Bio farm advanced upgrades
+    -- Bio farm advanced upgrade
     {
         type = "technology",
-        name = "bio-farm-advanced-upgrade-1",
+        name = "bio-farm-advanced-upgrade",
         icon = "__angelsbioprocessing__/graphics/technology/base-farm-tech.png",
         icon_size = 128,
         order = "c-a",
         prerequisites = {
             "bio-temperate-farming-2",
             "bio-desert-farming-2",
-            "bio-swamp-farming-2",
-            "production-science-pack",
-        },
-        effects = {
-            {
-                type = "unlock-recipe",
-                recipe = "temperate-farm-2"
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "desert-farm-2"
-            },
-            {
-                type = "unlock-recipe",
-                recipe = "swamp-farm-2"
-            },
-        },
-        unit = {
-            count = 128,
-            ingredients = {
-                { "automation-science-pack", 4 },
-                { "logistic-science-pack",   4 },
-                { "chemical-science-pack",   4 },
-                { "production-science-pack", 4 },
-                { "token-bio",               1 }
-            },
-            time = 30
-        }
-    },
-
-    {
-        type = "technology",
-        name = "bio-farm-advanced-upgrade-2",
-        icon = "__angelsbioprocessing__/graphics/technology/base-farm-tech.png",
-        icon_size = 128,
-        order = "c-a",
-        prerequisites = {
-            "bio-farm-advanced-upgrade-1",
-            "utility-science-pack",
+            "bio-swamp-farming-2"
         },
         effects = {
             {
@@ -161,12 +119,11 @@ data:extend({
         unit = {
             count = 256,
             ingredients = {
-                { "automation-science-pack", 4 },
-                { "logistic-science-pack",   4 },
-                { "chemical-science-pack",   4 },
-                { "production-science-pack", 4 },
-                { "utility-science-pack",    4 },
-                { "token-bio",               1 }
+                {"automation-science-pack", 4},
+                {"logistic-science-pack", 4},
+                {"chemical-science-pack", 4},
+                {"production-science-pack", 4},
+                {"token-bio", 1}
             },
             time = 30
         }
@@ -180,8 +137,7 @@ data:extend({
         icon_size = 160,
         order = "c-a",
         prerequisites = {
-            "bio-refugium-hatchery",
-            "production-science-pack",
+            "bio-refugium-hatchery"
         },
         effects = {
             {
@@ -196,11 +152,10 @@ data:extend({
         unit = {
             count = 100,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
-                { "token-bio",               1 }
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"token-bio", 1}
             },
             time = 30
         },
@@ -214,8 +169,7 @@ data:extend({
         icon_size = 128,
         order = "c-a",
         prerequisites = {
-            "bio-nutrient-paste",
-            "chemical-science-pack",
+            "bio-nutrient-paste"
         },
         effects = {
             {
@@ -230,9 +184,9 @@ data:extend({
         unit = {
             count = 80,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 }
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1}
             },
             time = 30
         }
@@ -247,13 +201,8 @@ data:extend({
         order = "c-a",
         prerequisites = {
             "bio-refugium-fish-2",
-            "chemical-science-pack",
         },
         effects = {
-            {
-                type = "unlock-recipe",
-                recipe = "bio-refugium-fish-2"
-            },
             {
                 type = "unlock-recipe",
                 recipe = "bio-refugium-fish-3"
@@ -262,9 +211,9 @@ data:extend({
         unit = {
             count = 100,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 }
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1}
             },
             time = 30
         },

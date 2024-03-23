@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,7 +13,7 @@ local inputs = {
     base_entity_name = "gun-turret",
     mod = "bobs",
     group = "warfare",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
 }
 
 local tier_map = {
@@ -57,7 +57,7 @@ end
 local function turret_extension_tint(inputs, parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-raising-mask.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-raising-mask.png",
         priority = "medium",
         width = 66,
         height = 64,
@@ -69,7 +69,7 @@ local function turret_extension_tint(inputs, parameters)
         tint = inputs.tint,
         axially_symmetrical = false,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-raising-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-raising-mask.png",
             priority = "medium",
             width = 130,
             height = 126,
@@ -88,7 +88,7 @@ end
 local function turret_extension_highlights(inputs, parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-raising-highlights.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-raising-highlights.png",
         priority = "medium",
         width = 66,
         height = 64,
@@ -100,7 +100,7 @@ local function turret_extension_highlights(inputs, parameters)
         blend_mode = reskins.lib.blend_mode, -- "additive",
         axially_symmetrical = false,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-raising-highlights.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-raising-highlights.png",
             priority = "medium",
             width = 130,
             height = 126,
@@ -253,22 +253,22 @@ local function turret_attack(inputs, parameters)
                 tint = inputs.tint,
                 stripes = {
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-1-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-1-mask.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-2-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-2-mask.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-3-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-3-mask.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-4-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-4-mask.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     }
@@ -283,22 +283,22 @@ local function turret_attack(inputs, parameters)
                     tint = inputs.tint,
                     stripes = {
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-1-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-1-mask.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-2-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-2-mask.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-3-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-3-mask.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-4-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-4-mask.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         }
@@ -317,22 +317,22 @@ local function turret_attack(inputs, parameters)
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 stripes = {
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-1-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-1-highlights.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-2-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-2-highlights.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-3-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-3-highlights.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     },
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/gun-turret-shooting-4-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/gun-turret-shooting-4-highlights.png",
                         width_in_frames = parameters.frame_count or 2,
                         height_in_frames = 16
                     }
@@ -347,22 +347,22 @@ local function turret_attack(inputs, parameters)
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     stripes = {
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-1-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-1-highlights.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-2-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-2-highlights.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-3-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-3-highlights.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         },
                         {
-                            filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-4-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/hr-gun-turret-shooting-4-highlights.png",
                             width_in_frames = parameters.frame_count or 2,
                             height_in_frames = 16
                         }
@@ -449,24 +449,24 @@ local function turret_attack(inputs, parameters)
                 draw_as_shadow = true,
                 stripes = {
                     {
-                        filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-1.png",
-                        width_in_frames = parameters.frame_count or 2,
-                        height_in_frames = 16
+                    filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-1.png",
+                    width_in_frames = parameters.frame_count or 2,
+                    height_in_frames = 16
                     },
                     {
-                        filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-2.png",
-                        width_in_frames = parameters.frame_count or 2,
-                        height_in_frames = 16
+                    filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-2.png",
+                    width_in_frames = parameters.frame_count or 2,
+                    height_in_frames = 16
                     },
                     {
-                        filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-3.png",
-                        width_in_frames = parameters.frame_count or 2,
-                        height_in_frames = 16
+                    filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-3.png",
+                    width_in_frames = parameters.frame_count or 2,
+                    height_in_frames = 16
                     },
                     {
-                        filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-4.png",
-                        width_in_frames = parameters.frame_count or 2,
-                        height_in_frames = 16
+                    filename = "__base__/graphics/entity/gun-turret/gun-turret-shooting-shadow-4.png",
+                    width_in_frames = parameters.frame_count or 2,
+                    height_in_frames = 16
                     }
                 },
                 hr_version = {
@@ -520,10 +520,10 @@ for name, tier in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(3, {
+    remnant.animation = make_rotated_animation_variations_from_sheet (3, {
         layers = {
             -- Base
             {
@@ -551,7 +551,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/remnants/gun-turret-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/remnants/gun-turret-remnants-mask.png",
                 line_length = 1,
                 width = 126,
                 height = 122,
@@ -562,7 +562,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(3, -1),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/remnants/hr-gun-turret-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/remnants/hr-gun-turret-remnants-mask.png",
                     line_length = 1,
                     width = 252,
                     height = 242,
@@ -577,7 +577,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/remnants/gun-turret-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/remnants/gun-turret-remnants-highlights.png",
                 line_length = 1,
                 width = 126,
                 height = 122,
@@ -588,7 +588,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(3, -1),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/gun-turret/remnants/hr-gun-turret-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/gun-turret/remnants/hr-gun-turret-remnants-highlights.png",
                     line_length = 1,
                     width = 252,
                     height = 242,
@@ -629,11 +629,11 @@ for name, tier in pairs(tier_map) do
     -- Reskin entities
     entity.folded_animation = {
         layers = {
-            turret_extension(inputs, { frame_count = 1, line_length = 1 }),
-            turret_extension_tint(inputs, { frame_count = 1, line_length = 1 }),
-            turret_extension_highlights(inputs, { frame_count = 1, line_length = 1 }),
-            turret_extension_mask(inputs, { frame_count = 1, line_length = 1 }),
-            turret_extension_shadow(inputs, { frame_count = 1, line_length = 1 })
+            turret_extension(inputs, {frame_count = 1, line_length = 1}),
+            turret_extension_tint(inputs, {frame_count = 1, line_length = 1}),
+            turret_extension_highlights(inputs, {frame_count = 1, line_length = 1}),
+            turret_extension_mask(inputs, {frame_count = 1, line_length = 1}),
+            turret_extension_shadow(inputs, {frame_count = 1, line_length = 1})
         }
     }
     entity.preparing_animation = {
@@ -645,15 +645,15 @@ for name, tier in pairs(tier_map) do
             turret_extension_shadow(inputs, {})
         }
     }
-    entity.prepared_animation = turret_attack(inputs, { frame_count = 1 })
+    entity.prepared_animation = turret_attack(inputs, {frame_count = 1})
     entity.attacking_animation = turret_attack(inputs, {})
     entity.folding_animation = {
         layers = {
-            turret_extension(inputs, { run_mode = "backward" }),
-            turret_extension_tint(inputs, { run_mode = "backward" }),
-            turret_extension_highlights(inputs, { run_mode = "backward" }),
-            turret_extension_mask(inputs, { run_mode = "backward" }),
-            turret_extension_shadow(inputs, { run_mode = "backward" })
+            turret_extension(inputs, {run_mode = "backward"}),
+            turret_extension_tint(inputs, {run_mode = "backward"}),
+            turret_extension_highlights(inputs, {run_mode = "backward"}),
+            turret_extension_mask(inputs, {run_mode = "backward"}),
+            turret_extension_shadow(inputs, {run_mode = "backward"})
         }
     }
     entity.base_picture = {

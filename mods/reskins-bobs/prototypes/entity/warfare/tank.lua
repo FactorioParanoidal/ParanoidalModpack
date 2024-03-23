@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,13 +13,13 @@ local inputs = {
     base_entity_name = "tank",
     mod = "bobs",
     group = "warfare",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
 }
 
 local tier_map = {
-    ["tank"] = { 1, 3 },
-    ["bob-tank-2"] = { 2, 4 },
-    ["bob-tank-3"] = { 3, 5 },
+    ["tank"] = {1, 3},
+    ["bob-tank-2"] = {2, 4},
+    ["bob-tank-3"] = {3, 5},
 }
 
 -- Reskin entities, create and assign extra details

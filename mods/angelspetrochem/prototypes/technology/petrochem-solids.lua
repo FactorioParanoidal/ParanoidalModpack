@@ -6,7 +6,8 @@ data:extend({
     icon = "__angelspetrochem__/graphics/technology/plastic-1-tech.png",
     icon_size = 128,
     prerequisites = {
-      "steam-cracking-1",
+      "gas-steam-cracking-1",
+      "oil-steam-cracking-1",
     },
     effects = {
       {
@@ -213,7 +214,7 @@ data:extend({
     icon = "__angelspetrochem__/graphics/technology/separator-tech.png",
     icon_size = 128,
     prerequisites = {
-      --"steam-cracking-1",
+      --"oil-steam-cracking-1",
       "angels-advanced-chemistry-2",
     },
     effects = {

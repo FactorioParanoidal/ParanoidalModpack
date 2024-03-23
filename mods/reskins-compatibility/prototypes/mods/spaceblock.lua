@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -26,7 +26,7 @@ for name, parameters in pairs(fixes) do
                 icon = parameters.icon,
                 icon_size = 64,
                 icon_mipmaps = 4,
-                tint = { r = 0.85, g = 0.5, b = 1, a = 1 },
+                tint = {r = 0.85, g = 0.5, b = 1, a = 1},
             }
         }
     }
@@ -41,21 +41,21 @@ local function boiler_icon(tint)
     if reskins.bobs and reskins.bobs.triggers.power.items then
         icons = {
             {
-                icon = reskins.bobs.directory .. "/graphics/icons/power/boiler/boiler-icon-base.png",
+                icon = reskins.bobs.directory.."/graphics/icons/power/boiler/boiler-icon-base.png",
                 icon_size = 64,
                 icon_mipmaps = 4,
             },
             {
-                icon = reskins.bobs.directory .. "/graphics/icons/power/boiler/boiler-icon-mask.png",
+                icon = reskins.bobs.directory.."/graphics/icons/power/boiler/boiler-icon-mask.png",
                 icon_size = 64,
                 icon_mipmaps = 4,
                 tint = tint,
             },
             {
-                icon = reskins.bobs.directory .. "/graphics/icons/power/boiler/boiler-icon-highlights.png",
+                icon = reskins.bobs.directory.."/graphics/icons/power/boiler/boiler-icon-highlights.png",
                 icon_size = 64,
                 icon_mipmaps = 4,
-                tint = { 1, 1, 1, 0 },
+                tint = {1, 1, 1, 0},
             },
         }
     else
@@ -74,14 +74,14 @@ end
 
 -- Ensure a tint is formatted as expected by reskins.lib functions
 local function format_tint(color)
-    local tint = {
-        r = color.r or color[1],
-        g = color.g or color[2],
-        b = color.b or color[3],
-        a = color.a or color[4] or 1,
-    }
+	local tint = {
+		r = color.r or color[1],
+		g = color.g or color[2],
+		b = color.b or color[3],
+		a = color.a or color[4] or 1,
+	}
 
-    return tint
+	return tint
 end
 
 -- Returns a properly formatted icon definition
@@ -142,28 +142,28 @@ for name, resource in pairs(data.raw.resource) do
 
             if fluid then
                 -- Boiler
-                local item = data.raw.item["spaceblock-dupe-boiler-" .. name]
-                local boiler = data.raw.boiler["spaceblock-dupe-boiler-" .. name]
-                local recipe = data.raw.recipe["spaceblock-dupe-boiler-" .. name]
+                local item = data.raw.item["spaceblock-dupe-boiler-"..name]
+                local boiler = data.raw.boiler["spaceblock-dupe-boiler-"..name]
+                local recipe = data.raw.recipe["spaceblock-dupe-boiler-"..name]
 
                 local icon_tint = reskins.bobs and reskins.bobs.triggers.power.items and format_tint(fluid.base_color) or format_tint(fluid.flow_color)
                 local entity_tint = reskins.bobs and reskins.bobs.triggers.power.entities and format_tint(fluid.base_color) or format_tint(fluid.flow_color)
 
                 local boiler_icons = boiler_icon(icon_tint)
-                reskins.lib.composite_existing_icons_onto_icons_definition(fluid.name, boiler_icons, { type = "fluid", shift = { -8, 8 }, scale = 0.5 })
+                reskins.lib.composite_existing_icons_onto_icons_definition(fluid.name, boiler_icons, {type = "fluid", shift = {-8, 8}, scale = 0.5})
 
                 if recipe then recipe.icons = boiler_icons end
                 if boiler then
                     boiler.icons = boiler_icons
-                    boilers["spaceblock-dupe-boiler-" .. name] = { tint = entity_tint }
+                    boilers["spaceblock-dupe-boiler-"..name] = {tint = entity_tint}
                 end
                 if item then item.icons = boiler_icons end
 
                 -- Chemical Plant
-                local recipe = data.raw.recipe["spaceblock-dupe-boil-" .. name]
+                local recipe = data.raw.recipe["spaceblock-dupe-boil-"..name]
 
                 local boil_icon = collect_icons(fluid)
-                reskins.lib.composite_existing_icons_onto_icons_definition("spaceblock-matter-refinery", boil_icon, { type = "assembling-machine", shift = { -8, 8 }, scale = 0.5 })
+                reskins.lib.composite_existing_icons_onto_icons_definition("spaceblock-matter-refinery", boil_icon, {type = "assembling-machine", shift = {-8, 8}, scale = 0.5})
 
                 if recipe then recipe.icons = boil_icon end
             end
@@ -172,10 +172,10 @@ for name, resource in pairs(data.raw.resource) do
 
             if item then
                 -- Stone Furnace
-                local recipe = data.raw.recipe["spaceblock-dupe-smelt-" .. result.name]
+                local recipe = data.raw.recipe["spaceblock-dupe-smelt-"..result.name]
 
                 local smelter_icons = collect_icons(item)
-                reskins.lib.composite_existing_icons_onto_icons_definition("spaceblock-matter-furnace", smelter_icons, { type = "furnace", shift = { -8, 8 }, scale = 0.5 })
+                reskins.lib.composite_existing_icons_onto_icons_definition("spaceblock-matter-furnace", smelter_icons, {type = "furnace", shift = {-8, 8}, scale = 0.5})
 
                 if recipe then recipe.icons = smelter_icons end
             end
@@ -190,7 +190,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
         base_entity_name = "boiler",
         mod = "bobs",
         group = "power",
-        particles = { ["big"] = 3 },
+        particles = {["big"] = 3},
         make_icons = false,
     }
 
@@ -206,7 +206,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
         reskins.lib.setup_standard_entity(name, 0, inputs)
 
         -- Fetch remnant
-        local remnant = data.raw["corpse"][name .. "-remnants"]
+        local remnant = data.raw["corpse"][name.."-remnants"]
 
         -- Reskin remnants
         remnant.animation = {
@@ -237,7 +237,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/boiler-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/boiler-remnants-mask.png",
                     line_length = 1,
                     width = 138,
                     height = 110,
@@ -248,7 +248,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     shift = util.by_pixel(0, -3),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/hr-boiler-remnants-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/hr-boiler-remnants-mask.png",
                         line_length = 1,
                         width = 274,
                         height = 220,
@@ -263,7 +263,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/boiler-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/boiler-remnants-highlights.png",
                     line_length = 1,
                     width = 138,
                     height = 110,
@@ -274,7 +274,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     shift = util.by_pixel(0, -3),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/hr-boiler-remnants-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/hr-boiler-remnants-highlights.png",
                         line_length = 1,
                         width = 274,
                         height = 220,
@@ -312,14 +312,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-N-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-N-idle-mask.png",
                         priority = "extra-high",
                         width = 131,
                         height = 108,
                         shift = util.by_pixel(-0.5, 4),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-N-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-N-idle-mask.png",
                             priority = "extra-high",
                             width = 269,
                             height = 221,
@@ -330,14 +330,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-N-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-N-idle-highlights.png",
                         priority = "extra-high",
                         width = 131,
                         height = 108,
                         shift = util.by_pixel(-0.5, 4),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-N-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-N-idle-highlights.png",
                             priority = "extra-high",
                             width = 269,
                             height = 221,
@@ -386,14 +386,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Color mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-E-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-E-idle-mask.png",
                         priority = "extra-high",
                         width = 105,
                         height = 147,
                         shift = util.by_pixel(-3.5, -0.5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-E-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-E-idle-mask.png",
                             priority = "extra-high",
                             width = 216,
                             height = 301,
@@ -404,14 +404,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-E-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-E-idle-highlights.png",
                         priority = "extra-high",
                         width = 105,
                         height = 147,
                         shift = util.by_pixel(-3.5, -0.5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-E-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-E-idle-highlights.png",
                             priority = "extra-high",
                             width = 216,
                             height = 301,
@@ -460,14 +460,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-S-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-S-idle-mask.png",
                         priority = "extra-high",
                         width = 128,
                         height = 95,
                         shift = util.by_pixel(3, 12.5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-S-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-S-idle-mask.png",
                             priority = "extra-high",
                             width = 260,
                             height = 192,
@@ -478,14 +478,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-S-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-S-idle-highlights.png",
                         priority = "extra-high",
                         width = 128,
                         height = 95,
                         shift = util.by_pixel(3, 12.5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-S-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-S-idle-highlights.png",
                             priority = "extra-high",
                             width = 260,
                             height = 192,
@@ -534,14 +534,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-W-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-W-idle-mask.png",
                         priority = "extra-high",
                         width = 96,
                         height = 132,
                         shift = util.by_pixel(1, 5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-W-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-W-idle-mask.png",
                             priority = "extra-high",
                             width = 196,
                             height = 273,
@@ -552,14 +552,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-W-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-W-idle-highlights.png",
                         priority = "extra-high",
                         width = 96,
                         height = 132,
                         shift = util.by_pixel(1, 5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-W-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-W-idle-highlights.png",
                             priority = "extra-high",
                             width = 196,
                             height = 273,
@@ -595,7 +595,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
 
         -- Handle ambient-light
         entity.energy_source.light_flicker = {
-            color = { 0, 0, 0 },
+            color = {0, 0, 0},
             minimum_light_size = 0,
             light_intensity_to_size_coefficient = 0,
         }

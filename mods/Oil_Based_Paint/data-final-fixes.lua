@@ -1,5 +1,5 @@
 -- path
-local modpath = "__Oil_Based_Paint__/"
+local modpath    = "__Oil_Based_Paint__/"
 local icons_path = modpath .. "graphics/icons/"
 
 local function apply_function_to_layers(table_of_layers, function_name, extra_parameter)
@@ -67,7 +67,7 @@ local function find_animation_layers(prototype)
 		end
 	end
 
-	--	log(modpath .. "found " .. #anim_layers .. " in " .. prototype.name)
+	log(modpath .. "found " .. #anim_layers .. " in " .. prototype.name)
 	return anim_layers
 end
 
@@ -92,7 +92,7 @@ for _, data_type in ipairs({
 	"spider-vehicle",
 	"spider-leg",
 
-	"corpse",
+	"corpse"
 }) do
 	for _, prototype in pairs(data.raw[data_type]) do
 		if string.match(prototype.name, "%-warden") then
@@ -110,6 +110,7 @@ end
 
 -- We only need one projectile painted:
 apply_function_to_layers(find_animation_layers(data.raw["projectile"]["distractor-capsule"]), duplicate_mask_layer, 2)
+
 
 ------------------------------------
 --  Redirect filenames to this mod
@@ -168,7 +169,7 @@ end
 
 for _, data_type in ipairs({
 	"car",
-	"spider-vehicle",
+	"spider-vehicle"
 }) do
 	for _, vehicle in pairs(data.raw[data_type]) do
 		if string.match(vehicle.name, "%-warden") then
@@ -251,12 +252,12 @@ for _, remote in pairs(data.raw["spidertron-remote"]) do
 	remote.icon_color_indicator_masks = {
 		{
 			icon_color_indicator_mask = icons_path .. "spidertron-remote-mask.png",
-			icon_size = 64,
+			icon_size = 64
 		},
 		{
 			icon_color_indicator_mask = icons_path .. "spidertron-remote-mask.png",
-			icon_size = 64,
-		},
+			icon_size = 64
+		}
 	}
 end
 
@@ -264,13 +265,14 @@ end
 local spidertron_tech = data.raw["technology"]["spidertron"]
 spidertron_tech.icon = icons_path .. "technology.png"
 
+
 -- INVENTORY ICONS: Saturate & achieve darker blacks
 for _, item in pairs(data.raw["item-with-entity-data"]) do
 	if item.icon_tintable_mask then -- the item has tint
 		-- double the color mask
 		item.icon_tintable_masks = {
 			{ icon_tintable_mask = item.icon_tintable_mask, icon_size = 64 },
-			{ icon_tintable_mask = item.icon_tintable_mask, icon_size = 64 },
+			{ icon_tintable_mask = item.icon_tintable_mask, icon_size = 64 }
 		}
 	end
 	item.icon_tintable_mask = nil -- get rid of the singular icon

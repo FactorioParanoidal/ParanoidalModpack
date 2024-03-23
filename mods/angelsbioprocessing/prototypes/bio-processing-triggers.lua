@@ -2,9 +2,6 @@
 
 if angelsmods.triggers.bio_pastes["cobalt"] then
   angelsmods.trigger.ores["cobalt"] = true
-  if mods["bobores"] then
-    bobmods.ores.cobalt.enabled = true
-  end
   angelsmods.trigger.smelting_products["cobalt"].powder = true
 end
 
@@ -42,6 +39,3 @@ if angelsmods.triggers.bio_pastes["zinc"] then
   angelsmods.trigger.ores["zinc"] = true
   angelsmods.trigger.smelting_products["zinc"].powder = true
 end
-
-angelsmods.trigger.gas_acetone = true
-angelsmods.trigger.gas_urea = true

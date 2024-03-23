@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -15,12 +15,12 @@ local inputs = {
 }
 
 local tier_map = {
-    ["basic-transport-belt"] = { tier = 0 },
-    ["transport-belt"] = { tier = 1 },
-    ["fast-transport-belt"] = { tier = 2 },
-    ["express-transport-belt"] = { tier = 3 },
-    ["turbo-transport-belt"] = { tier = 4 },
-    ["ultimate-transport-belt"] = { tier = 5 },
+    ["basic-transport-belt"] = {tier = 0},
+    ["transport-belt"] = {tier = 1},
+    ["fast-transport-belt"] = {tier = 2},
+    ["express-transport-belt"] = {tier = 3},
+    ["turbo-transport-belt"] = {tier = 4},
+    ["ultimate-transport-belt"] = {tier = 5},
 }
 
 reskins.lib.parse_inputs(inputs)
@@ -37,24 +37,21 @@ for name, map in pairs(tier_map) do
     inputs.tint = reskins.lib.belt_tint_index[map.tier] -- actions.hsva2rgba(reskins.lib.RGBtoHSV(reskins.lib.belt_tint_index[map.tier]).h, 0.8, 1)
 
     -- Reskin icon
-    ---@type data.IconData[]
-    local icons = {
+    inputs.icon = {
         {
-            icon = actions.icons_path .. "/rubber-belt-" .. inputs.base .. ".png",
+            icon = actions.icons_path.."/rubber-belt.png",
             icon_size = 64,
             icon_mipmaps = 4,
         },
         {
-            icon = actions.icons_path .. "/rubber-belt-mask.png",
+            icon = actions.icons_path.."/rubber-belt-mask.png",
             icon_size = 64,
             icon_mipmaps = 4,
             tint = inputs.tint,
-        },
+        }
     }
 
-    inputs.icon = reskins.lib.add_tier_labels_to_icons(icons, map.tier)
-    inputs.icon_picture = reskins.lib.convert_icons_to_sprite(icons, 0.25)
-
+    reskins.lib.append_tier_labels(map.tier, inputs)
     reskins.lib.assign_icons(name, inputs)
 
     -- Reskin entity

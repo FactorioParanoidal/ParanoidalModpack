@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2021 Kirazy
 -- Part of Prismatic Belts
 --
 -- See LICENSE.md in the project directory for license information.
@@ -65,9 +65,9 @@ local belt_animation_sets = {
 }
 
 local tiers = {
-    [""] = { technology = "logistics" },
-    ["fast-"] = { technology = "logistics-2" },
-    ["express-"] = { technology = "logistics-3" },
+    [""] = {technology = "logistics"},
+    ["fast-"] = {technology = "logistics-2"},
+    ["express-"] = {technology = "logistics-3"},
 }
 
 if mods["reskins-library"] then
@@ -87,25 +87,28 @@ end
 for prefix, properties in pairs(tiers) do
     -- Fetch entities
     local entities = {
-        belt = data.raw["transport-belt"][prefix .. "transport-belt"],
-        splitter = data.raw["splitter"][prefix .. "splitter"],
-        underground = data.raw["underground-belt"][prefix .. "underground-belt"],
-        loader = data.raw["loader"][prefix .. "loader"],
+        belt = data.raw["transport-belt"][prefix.."transport-belt"],
+        splitter = data.raw["splitter"][prefix.."splitter"],
+        underground = data.raw["underground-belt"][prefix.."underground-belt"],
+        loader = data.raw["loader"][prefix.."loader"],
+
         -- Miniloader
-        miniloader = data.raw["loader-1x1"][prefix .. "miniloader-loader"],
-        filter_miniloader = data.raw["loader-1x1"][prefix .. "filter-miniloader-loader"],
+        miniloader = data.raw["loader-1x1"][prefix.."miniloader-loader"],
+        filter_miniloader = data.raw["loader-1x1"][prefix.."filter-miniloader-loader"],
+
         -- Deadlock Stacking Beltboxes and Compact loaders
-        deadlock_loader = data.raw["loader-1x1"][prefix .. "transport-belt-loader"],
+        deadlock_loader = data.raw["loader-1x1"][prefix.."transport-belt-loader"],
+
         -- Krastorio
-        krastorio_loader = data.raw["loader-1x1"]["kr-" .. prefix .. "loader"],
+        krastorio_loader = data.raw["loader-1x1"]["kr-"..prefix.."loader"],
     }
 
     -- Reskin the belt item
-    local belt_item = data.raw["item"][prefix .. "transport-belt"]
+    local belt_item = data.raw["item"][prefix.."transport-belt"]
     if belt_item then
         local icons = {
             {
-                icon = "__prismatic-belts__/graphics/icons/base/" .. prefix .. "transport-belt.png",
+                icon = "__prismatic-belts__/graphics/icons/base/"..prefix.."transport-belt.png",
                 icon_size = 64,
                 icon_mipmaps = 4,
             }
@@ -113,16 +116,16 @@ for prefix, properties in pairs(tiers) do
 
         -- Append tier labels for reskins-library
         if mods["reskins-library"] and not (reskins.bobs and (reskins.bobs.triggers.logistics.entities == false)) then
-            reskins.lib.append_tier_labels(properties.tier, { icon = icons, tier_labels = reskins.lib.setting("reskins-bobs-do-belt-entity-tier-labeling") and true or false })
+            reskins.lib.append_tier_labels(properties.tier, {icon = icons, tier_labels = reskins.lib.setting("reskins-bobs-do-belt-entity-tier-labeling") and true or false})
 
             local icon_picture = {
-                filename = "__prismatic-belts__/graphics/icons/base/" .. prefix .. "transport-belt.png",
+                filename = "__prismatic-belts__/graphics/icons/base/"..prefix.."transport-belt.png",
                 size = 64,
                 mipmaps = 4,
                 scale = 0.25,
             }
 
-            reskins.lib.assign_icons(prefix .. "transport-belt", { icon = icons, icon_picture = icon_picture, make_icon_pictures = true })
+            reskins.lib.assign_icons(prefix.."transport-belt", {icon = icons, icon_picture = icon_picture, make_icon_pictures = true})
         else
             belt_item.icons = icons
         end
@@ -136,12 +139,12 @@ for prefix, properties in pairs(tiers) do
     -- Reskin all related entity types
     for _, entity in pairs(entities) do
         if entity then
-            entity.belt_animation_set = belt_animation_sets[prefix .. "transport-belt"]
+            entity.belt_animation_set = belt_animation_sets[prefix.."transport-belt"]
         end
     end
 
     -- Setup remnants
-    local remnants = data.raw["corpse"][prefix .. "transport-belt-remnants"]
+    local remnants = data.raw["corpse"][prefix.."transport-belt-remnants"]
 
     if remnants then
         if entities.belt then
@@ -151,7 +154,7 @@ for prefix, properties in pairs(tiers) do
         end
 
         remnants.animation = make_rotated_animation_variations_from_sheet(2, {
-            filename = "__prismatic-belts__/graphics/entity/base/" .. prefix .. "transport-belt/remnants/" .. prefix .. "transport-belt-remnants.png",
+            filename = "__prismatic-belts__/graphics/entity/base/"..prefix.."transport-belt/remnants/"..prefix.."transport-belt-remnants.png",
             line_length = 1,
             width = 54,
             height = 52,
@@ -161,7 +164,7 @@ for prefix, properties in pairs(tiers) do
             direction_count = 4,
             shift = util.by_pixel(1, 0),
             hr_version = {
-                filename = "__prismatic-belts__/graphics/entity/base/" .. prefix .. "transport-belt/remnants/hr-" .. prefix .. "transport-belt-remnants.png",
+                filename = "__prismatic-belts__/graphics/entity/base/"..prefix.."transport-belt/remnants/hr-"..prefix.."transport-belt-remnants.png",
                 line_length = 1,
                 width = 106,
                 height = 102,
@@ -181,7 +184,7 @@ for prefix, properties in pairs(tiers) do
     if technology then
         local icons = {
             {
-                icon = "__prismatic-belts__/graphics/technology/base/" .. properties.technology .. ".png",
+                icon = "__prismatic-belts__/graphics/technology/base/"..properties.technology..".png",
                 icon_size = 256,
                 icon_mipmaps = 4,
             }

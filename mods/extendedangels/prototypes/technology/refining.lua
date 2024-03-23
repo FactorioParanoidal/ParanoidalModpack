@@ -11,7 +11,6 @@ if not mods["Clowns-Extended-Minerals"] then
                 icon_size = util.copy(prerequisite.icon_size),
                 icon_mipmaps = util.copy(prerequisite.icon_mipmaps),
                 prerequisites = {
-                    "chemical-science-pack",
                     "water-washing-2",
                 },
                 effects = {
@@ -23,9 +22,10 @@ if not mods["Clowns-Extended-Minerals"] then
                 unit = {
                     count = 100,
                     ingredients = {
-                        { "automation-science-pack", 1 },
-                        { "logistic-science-pack",   1 },
-                        { "chemical-science-pack",   1 },
+                        {"automation-science-pack", 1},
+                        {"logistic-science-pack", 1},
+                        {"chemical-science-pack", 1},
+                        {"production-science-pack", 1},
                     },
                     time = 15
                 },
@@ -47,10 +47,13 @@ if not mods["Clowns-Processing"] then
                 icon_size = util.copy(prerequisite.icon_size),
                 icon_mipmaps = util.copy(prerequisite.icon_mipmaps),
                 prerequisites = {
-                    "utility-science-pack",
                     "water-treatment-4",
                 },
                 effects = {
+                    {
+                        type = "unlock-recipe",
+                        recipe = "hydro-plant-4"
+                    },
                     {
                         type = "unlock-recipe",
                         recipe = "salination-plant-3"
@@ -59,11 +62,11 @@ if not mods["Clowns-Processing"] then
                 unit = {
                     count = 100,
                     ingredients = {
-                        { "automation-science-pack", 1 },
-                        { "logistic-science-pack",   1 },
-                        { "chemical-science-pack",   1 },
-                        { "production-science-pack", 1 },
-                        { "utility-science-pack",    1 },
+                        {"automation-science-pack", 1},
+                        {"logistic-science-pack", 1},
+                        {"chemical-science-pack", 1},
+                        {"production-science-pack", 1},
+                        {"utility-science-pack", 1},
                     },
                     time = 15
                 },
@@ -86,7 +89,6 @@ if prerequisite then
             icon_size = util.copy(prerequisite.icon_size),
             icon_mipmaps = util.copy(prerequisite.icon_mipmaps),
             prerequisites = {
-                "production-science-pack",
                 "water-washing-3",
             },
             effects = {
@@ -98,10 +100,11 @@ if prerequisite then
             unit = {
                 count = 150,
                 ingredients = {
-                    { "automation-science-pack", 1 },
-                    { "logistic-science-pack",   1 },
-                    { "chemical-science-pack",   1 },
-                    { "production-science-pack", 1 },
+                    {"automation-science-pack", 1},
+                    {"logistic-science-pack", 1},
+                    {"chemical-science-pack", 1},
+                    {"production-science-pack", 1},
+                    {"utility-science-pack", 1},
                 },
                 time = 15
             },
@@ -127,6 +130,14 @@ if prerequisite then
             effects = {
                 {
                     type = "unlock-recipe",
+                    recipe = "ore-crusher-4"
+                },
+                {
+                    type = "unlock-recipe",
+                    recipe = "ore-floatation-cell-4"
+                },
+                {
+                    type = "unlock-recipe",
                     recipe = "ore-leaching-plant-4"
                 },
                 {
@@ -137,11 +148,11 @@ if prerequisite then
             unit = {
                 count = 150,
                 ingredients = {
-                    { "automation-science-pack", 1 },
-                    { "logistic-science-pack",   1 },
-                    { "chemical-science-pack",   1 },
-                    { "production-science-pack", 1 },
-                    { "utility-science-pack",    1 },
+                    {"automation-science-pack", 1},
+                    {"logistic-science-pack", 1},
+                    {"chemical-science-pack", 1},
+                    {"production-science-pack", 1},
+                    {"utility-science-pack", 1},
                 },
                 time = 15
             },

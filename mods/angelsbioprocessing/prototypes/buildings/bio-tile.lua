@@ -1,5 +1,5 @@
 local pollution_absorption_per_second = data.raw["tile"]["out-of-map"].pollution_absorption_per_second
-  * (2 ^ (settings.startup["angels-bio-tile-pollution-absorbtion-multiplier"].value - 1))
+  * settings.startup["angels-bio-tile-pollution-absorbtion-multiplier"].value
 data:extend({
   {
     type = "item",
@@ -26,7 +26,8 @@ data:extend({
     walking_speed_modifier = 1.3,
     layer = 80,
     decorative_removal_probability = 1,
-    pollution_absorption_per_second = pollution_absorption_per_second,
+    pollution_absorption_per_second = data.raw["tile"]["out-of-map"].pollution_absorption_per_second
+      * (2 ^ (settings.startup["angels-bio-tile-pollution-absorbtion-multiplier"].value - 1)),
     variants = {
       main = {
         {

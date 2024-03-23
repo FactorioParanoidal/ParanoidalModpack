@@ -35,11 +35,5 @@ data:extend({
     group = "angels-casting",
     order = "t",
   },
-  {
-    type = "item-subgroup",
-    name = "angels-insulated-wire-casting",
-    group = "angels-casting",
-    order = "s",
-  }
 
 })

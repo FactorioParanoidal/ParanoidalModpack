@@ -109,22 +109,22 @@ end
 
 for name, drill in pairs(data.raw["mining-drill"]) do
   if not ignored_entities[name] then
-      if drill.bottleneck_ignore then
-        drill.bottleneck_ignore = nil
-      else
-        drill.status_colors = status_colors
+    if drill.bottleneck_ignore then
+      drill.bottleneck_ignore = nil
+    else
+      drill.status_colors = status_colors
 
-        if not drill.graphics_set then
-          drill.graphics_set = {
-            animation = drill.animations,
-          }
-        end
+      if not drill.graphics_set then
+        drill.graphics_set = {
+          animation = drill.animations,
+        }
+      end
 
-        add_to_wv(drill, drill.graphics_set)
+      add_to_wv(drill, drill.graphics_set)
 
-        if drill.wet_mining_graphics_set then
-          add_to_wv(drill, drill.wet_mining_graphics_set)
-        end
+      if drill.wet_mining_graphics_set then
+        add_to_wv(drill, drill.wet_mining_graphics_set)
       end
     end
+  end
 end

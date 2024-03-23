@@ -1,7 +1,0 @@
----------------------------------------------------------------------------------------------------
-Version: 0.0.3
-Date: 2021-10-30
-  Changes:
-    - Updated to 1.1.x
-    - Changed meter capacity to 100 down from 1000
-    - Changed wire connection points & sprites to the same as walls (don't know what it was before)

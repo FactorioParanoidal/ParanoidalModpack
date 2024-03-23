@@ -202,7 +202,7 @@ stages[1] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = 2000 --drd
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},

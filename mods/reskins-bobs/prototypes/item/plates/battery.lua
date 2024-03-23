@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -22,9 +22,9 @@ reskins.lib.parse_inputs(inputs)
 
 -- Batteries
 local batteries = {
-    ["battery"] = { tier = 1, prog_tier = 2, technology = "battery", tint = "ff781f" },
-    ["lithium-ion-battery"] = { tier = 2, prog_tier = 3, technology = "battery-2", tint = "41ffdd" },
-    ["silver-zinc-battery"] = { tier = 3, prog_tier = 4, technology = "battery-3", tint = "3dff40" },
+    ["battery"] = {tier = 1, prog_tier = 2, technology = "battery", tint = "ff781f"},
+    ["lithium-ion-battery"] = {tier = 2, prog_tier = 3, technology = "battery-2", tint = "41ffdd"},
+    ["silver-zinc-battery"] = {tier = 3, prog_tier = 4, technology = "battery-3", tint = "3dff40"},
 }
 
 for name, map in pairs(batteries) do

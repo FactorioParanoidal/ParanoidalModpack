@@ -13,6 +13,10 @@ data:extend({
         type = "unlock-recipe",
         recipe = "wood-pellets",
       },
+      {
+        type = "unlock-recipe",
+        recipe = "bio-resin-wood-reprocessing",
+      },
     },
     unit = {
       count = 50,
@@ -29,8 +33,9 @@ data:extend({
     icon_size = 128,
     order = "c-a",
     prerequisites = {
-      "bio-farm-1",
       "bio-wood-processing",
+      "angels-coal-processing",
+      "advanced-material-processing",
     },
     effects = {
       {
@@ -39,13 +44,18 @@ data:extend({
       },
       {
         type = "unlock-recipe",
-        recipe = "bio-resin-wood-reprocessing",
+        recipe = "carbon-from-charcoal",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "gas-carbon-dioxide-from-wood",
       },
     },
     unit = {
       count = 50,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
+        { type = "item", name = "logistic-science-pack", amount = 1 },
       },
       time = 30,
     },
@@ -57,22 +67,13 @@ data:extend({
     icon_size = 128,
     order = "c-a",
     prerequisites = {
-      "angels-coal-processing",
       "bio-wood-processing-2",
-      "logistic-science-pack",
+      "angels-coal-processing-3",
     },
     effects = {
       {
         type = "unlock-recipe",
         recipe = "wood-bricks",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "carbon-from-charcoal",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "gas-carbon-dioxide-from-wood",
       },
     },
     unit = {
@@ -95,8 +96,8 @@ data:extend({
     icon_size = 128,
     order = "c-a",
     prerequisites = {
-      "angels-composting",
-      "bio-processing-brown",
+      "bio-wood-processing",
+      "bio-farm-1",
     },
     effects = {
       {
@@ -113,15 +114,15 @@ data:extend({
       },
       {
         type = "unlock-recipe",
+        recipe = "tree-arboretum-1",
+      },
+      {
+        type = "unlock-recipe",
         recipe = "bio-arboretum-1",
       },
       {
         type = "unlock-recipe",
         recipe = "tree-generator-1",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "tree-arboretum-1",
       },
       {
         type = "unlock-recipe",
@@ -133,13 +134,12 @@ data:extend({
       },
     },
     unit = {
-      count = 10,
+      count = 50,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
       },
-      time = 15,
+      time = 30,
     },
-    ignore_tech_cost_multiplier = true,
   },
   {
     type = "technology",
@@ -375,6 +375,10 @@ data:extend({
         type = "unlock-recipe",
         recipe = "bio-plastic",
       },
+      {
+        type = "unlock-recipe",
+        recipe = "solid-plastic",
+      },
     },
     unit = {
       count = 50,
@@ -578,15 +582,9 @@ data:extend({
     icon_size = 128,
     order = "c-a",
     prerequisites = {
-      "basic-chemistry",
       "bio-processing-brown",
-      "logistic-science-pack",
     },
     effects = {
-      {
-        type = "unlock-recipe",
-        recipe = "solid-alginic-acid",
-      },
       {
         type = "unlock-recipe",
         recipe = "solid-wood-pulp",
@@ -600,10 +598,10 @@ data:extend({
       count = 50,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
-        { type = "item", name = "logistic-science-pack", amount = 1 },
       },
       time = 30,
     },
+    ignore_tech_cost_multiplier = true,
   },
   {
     type = "technology",
@@ -612,10 +610,10 @@ data:extend({
     icon_size = 128,
     order = "c-a",
     prerequisites = {
-      "angels-nitrogen-processing-2",
       "bio-paper-1",
-      "chemical-science-pack",
       "chlorine-processing-1",
+      "angels-nitrogen-processing-2",
+      "angels-sulfur-processing-2",
     },
     effects = {
       {
@@ -640,7 +638,6 @@ data:extend({
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
-        { type = "item", name = "chemical-science-pack", amount = 1 },
       },
       time = 30,
     },
@@ -653,8 +650,7 @@ data:extend({
     order = "c-a",
     prerequisites = {
       "bio-paper-2",
-      "sodium-processing-2",
-      "production-science-pack",
+      "chlorine-processing-3",
     },
     effects = {
       {
@@ -684,7 +680,6 @@ data:extend({
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
-        { type = "item", name = "production-science-pack", amount = 1 },
       },
       time = 30,
     },

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -14,7 +14,7 @@ local inputs = {
     base_entity_name = "steam-turbine",
     mod = "bobs",
     group = "power",
-    particles = { ["medium"] = 2,["big"] = 1 },
+    particles = {["medium"] = 2,["big"] = 1},
     make_remnants = false,
 }
 
@@ -26,10 +26,10 @@ else
 end
 
 local fluid_generators = {
-    ["fluid-generator"] = { 1, 2, 2 / 16 },
-    ["fluid-generator-2"] = { 2, 3, 3 / 16 },
-    ["fluid-generator-3"] = { 3, 4, 4 / 16 },
-    ["hydrazine-generator"] = { 4, 5, 5 / 16, reskins.bobs.hydrazine_tint }
+    ["fluid-generator"] = {1, 2, 2/16},
+    ["fluid-generator-2"] = {2, 3, 3/16},
+    ["fluid-generator-3"] = {3, 4, 4/16},
+    ["hydrazine-generator"] = {4, 5, 5/16, reskins.bobs.hydrazine_tint}
 }
 
 local function setup_fluid_generator(tint)
@@ -38,14 +38,14 @@ local function setup_fluid_generator(tint)
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/fluid-generator-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/fluid-generator-base.png",
                 width = 101,
                 height = 130,
                 frame_count = 8,
                 line_length = 4,
                 shift = util.by_pixel(2.5, -11),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/hr-fluid-generator-base.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/hr-fluid-generator-base.png",
                     width = 202,
                     height = 260,
                     frame_count = 8,
@@ -56,14 +56,14 @@ local function setup_fluid_generator(tint)
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/fluid-generator-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/fluid-generator-mask.png",
                 width = 101,
                 height = 130,
                 repeat_count = 8,
                 tint = tint,
                 shift = util.by_pixel(2.5, -11),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/hr-fluid-generator-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/hr-fluid-generator-mask.png",
                     width = 202,
                     height = 260,
                     repeat_count = 8,
@@ -74,14 +74,14 @@ local function setup_fluid_generator(tint)
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/fluid-generator-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/fluid-generator-highlights.png",
                 width = 101,
                 height = 130,
                 repeat_count = 8,
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 shift = util.by_pixel(2.5, -11),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/hr-fluid-generator-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/hr-fluid-generator-highlights.png",
                     width = 202,
                     height = 260,
                     repeat_count = 8,
@@ -92,14 +92,14 @@ local function setup_fluid_generator(tint)
             },
             -- Shadow
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/fluid-generator-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/fluid-generator-shadow.png",
                 width = 162,
                 height = 130,
                 repeat_count = 8,
                 draw_as_shadow = true,
                 shift = util.by_pixel(33, -11),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/hr-fluid-generator-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/hr-fluid-generator-shadow.png",
                     width = 324,
                     height = 260,
                     repeat_count = 8,
@@ -169,7 +169,7 @@ for name, map in pairs(fluid_generators) do
 
     entity.water_reflection = {
         pictures = {
-            filename = reskins.bobs.directory .. "/graphics/entity/power/fluid-generator/fluid-generator-reflection.png",
+            filename = reskins.bobs.directory.."/graphics/entity/power/fluid-generator/fluid-generator-reflection.png",
             priority = "extra-high",
             width = 28,
             height = 36,

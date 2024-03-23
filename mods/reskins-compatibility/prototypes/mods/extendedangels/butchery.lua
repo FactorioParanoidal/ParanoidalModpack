@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     icon_name = "butchery",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-butchery"] = { tier = 1 },
-    ["bio-butchery-2"] = { tier = 2 },
-    ["bio-butchery-3"] = { tier = 3 },
+    ["bio-butchery"] = {tier = 1},
+    ["bio-butchery-2"] = {tier = 2},
+    ["bio-butchery-3"] = {tier = 3},
 }
 
 -- Adjust for changes in Extended Angels due to modifications to ingredients in Angel's Bioprocessing 0.7.23
@@ -59,28 +59,28 @@ for name, map in pairs(tier_map) do
                 layers = {
                     -- Base patch
                     {
-                        filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/butchery/butchery-base-patch.png",
+                        filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/butchery/butchery-base-patch.png",
                         priority = "extra-high",
                         width = 160,
                         height = 160,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                     },
                     -- Mask
                     {
-                        filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/butchery/butchery-mask.png",
+                        filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/butchery/butchery-mask.png",
                         priority = "extra-high",
                         width = 160,
                         height = 160,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                         tint = inputs.tint,
                     },
                     -- Highlights
                     {
-                        filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/butchery/butchery-highlights.png",
+                        filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/butchery/butchery-highlights.png",
                         priority = "extra-high",
                         width = 160,
                         height = 160,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                         blend_mode = reskins.lib.blend_mode,
                     }
                 }

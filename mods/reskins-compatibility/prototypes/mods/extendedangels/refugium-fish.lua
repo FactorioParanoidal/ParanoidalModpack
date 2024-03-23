@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     icon_name = "refugium-fish",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-refugium-fish"] = { tier = 1 },
-    ["bio-refugium-fish-2"] = { tier = 2 },
-    ["bio-refugium-fish-3"] = { tier = 3 },
+    ["bio-refugium-fish"] = {tier = 1},
+    ["bio-refugium-fish-2"] = {tier = 2},
+    ["bio-refugium-fish-3"] = {tier = 3},
 }
 
 -- Adjust for changes in Extended Angels due to modifications to ingredients in Angel's Bioprocessing 0.7.23
@@ -57,20 +57,20 @@ for name, map in pairs(tier_map) do
             layers = {
                 -- Mask
                 {
-                    filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/refugium-fish/refugium-fish-mask.png",
+                    filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/refugium-fish/refugium-fish-mask.png",
                     priority = "extra-high",
                     width = 288,
                     height = 288,
-                    shift = { 0, 0 },
+                    shift = {0, 0},
                     tint = inputs.tint,
                 },
                 -- Highlights
                 {
-                    filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/refugium-fish/refugium-fish-highlights.png",
+                    filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/refugium-fish/refugium-fish-highlights.png",
                     priority = "extra-high",
                     width = 288,
                     height = 288,
-                    shift = { 0, 0 },
+                    shift = {0, 0},
                     blend_mode = reskins.lib.blend_mode,
                 }
             }

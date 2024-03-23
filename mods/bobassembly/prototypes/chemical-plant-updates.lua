@@ -66,9 +66,7 @@ if settings.startup["bobmods-assembly-chemicalplants"].value == true then
     bobmods.lib.recipe.add_ingredient("chemical-plant-4", { "nitinol-bearing", 5 })
   end
 
-  if data.raw.item["advanced-processing-unit"] then
-    bobmods.lib.tech.add_prerequisite("chemical-plant-4", "advanced-electronics-3")
-  end
+  bobmods.lib.tech.add_prerequisite("chemical-plant-4", "advanced-electronics-3")
 
   if settings.startup["bobmods-assembly-limits"].value == true then
     data.raw["assembling-machine"]["chemical-plant"].ingredient_count = 4

@@ -1,0 +1,11 @@
+{
+  "name": "Kruise_Kontrol_Updated",
+  "version": "0.1.10",
+  "title": "Kruise Kontrol Updated",
+  "author": "Klonan, EliteHunter",
+  "contact": "",
+  "homepage": "",
+  "description": "Hit Kruise Kontrol and let it take care of your problems. Currently updated version only has bugfixes, no new features.",
+  "dependencies": ["base >= 1.1.0"],
+  "factorio_version": "1.1"
+}

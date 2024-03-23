@@ -1,3 +1,0 @@
---- @class Context
---- @field class string
---- @field name string

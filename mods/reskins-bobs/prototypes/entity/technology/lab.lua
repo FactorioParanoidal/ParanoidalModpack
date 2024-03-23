@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -28,7 +28,7 @@ local function reskin_lab(name)
         layers =
         {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/technology/lab/" .. name .. ".png",
+                filename =  reskins.bobs.directory.."/graphics/entity/technology/lab/"..name..".png",
                 width = 98,
                 height = 87,
                 frame_count = 33,
@@ -37,7 +37,7 @@ local function reskin_lab(name)
                 shift = util.by_pixel(0, 1.5),
                 hr_version =
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/technology/lab/hr-" .. name .. ".png",
+                    filename =  reskins.bobs.directory.."/graphics/entity/technology/lab/hr-"..name..".png",
                     width = 194,
                     height = 174,
                     frame_count = 33,
@@ -101,14 +101,14 @@ local function reskin_lab(name)
         layers =
         {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/technology/lab/" .. name .. ".png",
+                filename =  reskins.bobs.directory.."/graphics/entity/technology/lab/"..name..".png",
                 width = 98,
                 height = 87,
                 frame_count = 1,
                 shift = util.by_pixel(0, 1.5),
                 hr_version =
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/technology/lab/hr-" .. name .. ".png",
+                    filename =  reskins.bobs.directory.."/graphics/entity/technology/lab/hr-"..name..".png",
                     width = 194,
                     height = 174,
                     frame_count = 1,
@@ -167,3 +167,4 @@ if not mods["bobmodules"] then return end
 if reskins.lib.setting("reskins-bobs-do-bobmodules") == false then return end
 
 -- lab-module
+

@@ -165,7 +165,6 @@ if settings.startup["bobmods-power-poles"].value == true then
       },
       prerequisites = {
         "electric-substation-3",
-        "production-science-pack",
       },
       unit = {
         count = 400,

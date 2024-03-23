@@ -1,11 +1,10 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
 
 -- Mods
 require("prototypes.mods.aai-industry")
-require("prototypes.mods.aai-loaders-bobs")
 require("prototypes.mods.deadlock-stacking-beltboxes")
 -- require("prototypes.mods.sciencecosttweaker")
 require("prototypes.mods.circuitprocessing")

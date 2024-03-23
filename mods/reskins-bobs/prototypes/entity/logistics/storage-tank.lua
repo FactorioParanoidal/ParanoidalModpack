@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -16,14 +16,14 @@ local inputs = {
     base_entity_name = "storage-tank",
     mod = "bobs",
     group = "logistics",
-    particles = { ["big"] = 1 },
+    particles = {["big"] = 1},
 }
 
 local tier_map = {
-    ["storage-tank"] = { 1, 2 },
-    ["storage-tank-2"] = { 2, 3 },
-    ["storage-tank-3"] = { 3, 4 },
-    ["storage-tank-4"] = { 4, 5 },
+    ["storage-tank"] = {1, 2},
+    ["storage-tank-2"] = {2, 3},
+    ["storage-tank-3"] = {3, 4},
+    ["storage-tank-4"] = {4, 5},
 }
 
 -- Reskin entities, create and assign extra details
@@ -46,7 +46,7 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
     remnant.animation = {
@@ -73,7 +73,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/remnants/storage-tank-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/remnants/storage-tank-remnants-mask.png",
                 line_length = 1,
                 width = 214,
                 height = 142,
@@ -82,7 +82,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(27, 21),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/remnants/hr-storage-tank-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/remnants/hr-storage-tank-remnants-mask.png",
                     line_length = 1,
                     width = 426,
                     height = 282,
@@ -95,7 +95,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/remnants/storage-tank-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/remnants/storage-tank-remnants-highlights.png",
                 line_length = 1,
                 width = 214,
                 height = 142,
@@ -104,7 +104,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(27, 21),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/remnants/hr-storage-tank-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/remnants/hr-storage-tank-remnants-highlights.png",
                     line_length = 1,
                     width = 426,
                     height = 282,
@@ -142,7 +142,7 @@ for name, map in pairs(tier_map) do
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/storage-tank-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/storage-tank-mask.png",
                     priority = "extra-high",
                     frames = 2,
                     width = 110,
@@ -150,7 +150,7 @@ for name, map in pairs(tier_map) do
                     shift = util.by_pixel(0, 4),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/hr-storage-tank-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/hr-storage-tank-mask.png",
                         priority = "extra-high",
                         frames = 2,
                         width = 219,
@@ -162,7 +162,7 @@ for name, map in pairs(tier_map) do
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/storage-tank-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/storage-tank-highlights.png",
                     priority = "extra-high",
                     frames = 2,
                     width = 110,
@@ -170,7 +170,7 @@ for name, map in pairs(tier_map) do
                     shift = util.by_pixel(0, 4),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/logistics/storage-tank/hr-storage-tank-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/logistics/storage-tank/hr-storage-tank-highlights.png",
                         priority = "extra-high",
                         frames = 2,
                         width = 219,
@@ -214,11 +214,11 @@ for name, map in pairs(tier_map) do
             width = 17,
             height = 24,
             hr_version = {
-                filename = "__base__/graphics/entity/storage-tank/hr-window-background.png",
-                priority = "extra-high",
-                width = 34,
-                height = 48,
-                scale = 0.5
+            filename = "__base__/graphics/entity/storage-tank/hr-window-background.png",
+            priority = "extra-high",
+            width = 34,
+            height = 48,
+            scale = 0.5
             }
         },
         flow_sprite = {

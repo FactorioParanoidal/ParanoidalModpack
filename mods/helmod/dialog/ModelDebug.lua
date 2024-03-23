@@ -8,7 +8,7 @@ local display_panel = nil
 -------------------------------------------------------------------------------
 ---Initialization
 function ModelDebug:onInit()
-  self.panelCaption = "Model Debug"
+    self.panelCaption = "Model Debug"
 end
 
 -------------------------------------------------------------------------------
@@ -17,49 +17,49 @@ end
 ---@param width_main number
 ---@param height_main number
 function ModelDebug:onStyle(styles, width_main, height_main)
-  styles.flow_panel = {
-    width = width_main,
-    minimal_height = 200,
-    maximal_height = height_main
+    styles.flow_panel = {
+        width = width_main,
+        minimal_height = 200,
+        maximal_height = height_main
     }
 end
 
 -------------------------------------------------------------------------------
 ---On Bind Dispatcher
 function ModelDebug:onBind()
-  Dispatcher:bind("on_gui_refresh", self, self.update)
+    Dispatcher:bind("on_gui_refresh", self, self.update)
 end
 
 -------------------------------------------------------------------------------
 ---Get or create info panel
 ---@return LuaGuiElement
 function ModelDebug:getInfoPanel()
-  local flow_panel, content_panel, menu_panel = self:getPanel()
-  if content_panel["info-panel"] ~= nil and content_panel["info-panel"].valid then
-    return content_panel["info-panel"]
-  end
-  local panel = GuiElement.add(content_panel, GuiFrameV("info-panel"):style(helmod_frame_style.panel))
-  panel.style.horizontally_stretchable = true
-  return  panel
+    local flow_panel, content_panel, menu_panel = self:getPanel()
+    if content_panel["info-panel"] ~= nil and content_panel["info-panel"].valid then
+        return content_panel["info-panel"]
+    end
+    local panel = GuiElement.add(content_panel, GuiFrameV("info-panel"):style(helmod_frame_style.panel))
+    panel.style.horizontally_stretchable = true
+    return panel
 end
 
 -------------------------------------------------------------------------------
 ---On event
 ---@param event LuaEvent
 function ModelDebug:onEvent(event)
-  local _, block = self:getParameterObjects()
-  if block ~= nil and block.runtimes ~= nil then
-    local runtimes = block.runtimes
-    if event.action == "change-stage" then
-      local stage = User.getParameter("model_stage") or 1
-      if event.item1 == "initial" then stage = 1 end
-      if event.item1 == "previous" and stage > 1 then stage = stage - 1 end
-      if event.item1 == "next" and stage < #runtimes then stage = stage + 1 end
-      if event.item1 == "final" then stage = #runtimes end
-      User.setParameter("model_stage", stage)
+    local _, block = self:getParameterObjects()
+    if block ~= nil and block.runtimes ~= nil then
+        local runtimes = block.runtimes
+        if event.action == "change-stage" then
+            local stage = User.getParameter("model_stage") or 1
+            if event.item1 == "initial" then stage = 1 end
+            if event.item1 == "previous" and stage > 1 then stage = stage - 1 end
+            if event.item1 == "next" and stage < #runtimes then stage = stage + 1 end
+            if event.item1 == "final" then stage = #runtimes end
+            User.setParameter("model_stage", stage)
+        end
+        self:onUpdate(event)
     end
-    self:onUpdate(event)
-  end
 end
 
 -------------------------------------------------------------------------------
@@ -74,17 +74,17 @@ end
 ---On update
 ---@param event LuaEvent
 function ModelDebug:onUpdate(event)
-  self:updateHeader(event)
-  self:updateDebugPanel(event)
+    self:updateHeader(event)
+    self:updateDebugPanel(event)
 end
 
 -------------------------------------------------------------------------------
 ---Update information
 ---@param event LuaEvent
 function ModelDebug:updateHeader(event)
-  local action_panel = self:getMenuPanel()
-  action_panel.clear()
-  local group1 = GuiElement.add(action_panel, GuiFlowH("group1"))
+    local action_panel = self:getMenuPanel()
+    action_panel.clear()
+    local group1 = GuiElement.add(action_panel, GuiFlowH("group1"))
     GuiElement.add(group1,
         GuiButton(self.classname, "change-stage", "initial"):sprite("menu", defines.sprites.expand_left_group.black,
             defines.sprites.expand_left_group.black):style("helmod_button_menu"):tooltip("Initial"))
@@ -105,34 +105,34 @@ end
 ---@param name string
 ---@param caption string
 function ModelDebug:addCellHeader(guiTable, name, caption)
-  local cell = GuiElement.add(guiTable, GuiFlowH("header", name))
-  GuiElement.add(cell, GuiLabel("label"):caption(caption))
+    local cell = GuiElement.add(guiTable, GuiFlowH("header", name))
+    GuiElement.add(cell, GuiLabel("label"):caption(caption))
 end
 
 -------------------------------------------------------------------------------
 ---Update debug panel
 ---@param event LuaEvent
 function ModelDebug:updateDebugPanel(event)
-  local info_panel = self:getInfoPanel()
-  local model, block = self:getParameterObjects()
+    local info_panel = self:getInfoPanel()
+    local model, block = self:getParameterObjects()
 
-  if block ~= nil then
-    info_panel.clear()
-    
-    if block.runtimes ~= nil then
-      local scroll_panel = GuiElement.add(info_panel, GuiScroll("scroll_stage"))
-      scroll_panel.style.horizontally_squashable = true
-      scroll_panel.style.horizontally_stretchable = true
-      local stage = User.getParameter("model_stage") or 1
-      if block.runtimes[stage] == nil then
-        stage = 1
-        User.setParameter("model_stage", stage)
-      end
-      local runtime = block.runtimes[stage]
+    if block ~= nil then
+        info_panel.clear()
+
+        if block.runtimes ~= nil then
+            local scroll_panel = GuiElement.add(info_panel, GuiScroll("scroll_stage"))
+            scroll_panel.style.horizontally_squashable = true
+            scroll_panel.style.horizontally_stretchable = true
+            local stage = User.getParameter("model_stage") or 1
+            if block.runtimes[stage] == nil then
+                stage = 1
+                User.setParameter("model_stage", stage)
+            end
+            local runtime = block.runtimes[stage]
             local ma_panel = GuiElement.add(scroll_panel,
                 GuiFrameV("stage_panel"):style(helmod_frame_style.hidden):caption(runtime.name))
-            local solver_selected = User.getParameter("solver_selected") or "normal"
-            if solver_selected == "normal" then
+            local solver_selected = User.getParameter("solver_selected") or defines.constant.default_solver
+            if solver_selected == defines.constant.solvers.normal then
                 self:buildTableSolver(ma_panel, runtime.matrix, runtime.pivot)
             else
                 self:buildTableSolverMatrix(ma_panel, runtime.matrix, runtime.pivot)
@@ -296,13 +296,13 @@ function ModelDebug:buildTableSolverMatrix(matrix_panel, matrix, pivot)
                 local frame = self:getFrameColored(irow, icol, pivot)
                 self:getCellValue(matrix_table, frame, cell_value)
             end
+        end
     end
-  end
 end
 
 -------------------------------------------------------------------------------
 ---Update display
 function ModelDebug:updateDisplay()
-  local content_panel = self:getInfoPanel()
-  content_panel.clear()
+    local content_panel = self:getInfoPanel()
+    content_panel.clear()
 end

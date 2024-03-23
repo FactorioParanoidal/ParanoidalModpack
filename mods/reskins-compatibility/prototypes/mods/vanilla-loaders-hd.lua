@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -14,7 +14,7 @@ local inputs = {
     base_entity_name = "splitter",
     mod = "compatibility",
     group = "vanilla-loaders-hd",
-    particles = { ["medium"] = 1,["big"] = 4 },
+    particles = {["medium"] = 1, ["big"] = 4},
     make_remnants = false,
 }
 
@@ -22,12 +22,12 @@ local inputs = {
 inputs.tier_labels = reskins.lib.setting("reskins-bobs-do-belt-entity-tier-labeling") and true or false
 
 local tier_map = {
-    ["basic-loader"] = { tier = 0, sprite_variation = 1 },
-    ["loader"] = { tier = 1, sprite_variation = 1 },
-    ["fast-loader"] = { tier = 2, sprite_variation = 2 },
-    ["express-loader"] = { tier = 3, sprite_variation = 2 },
-    ["purple-loader"] = { tier = 4, sprite_variation = 2 },
-    ["green-loader"] = { tier = 5, sprite_variation = 2 },
+    ["basic-loader"] = {tier = 0, sprite_variation = 1},
+    ["loader"] = {tier = 1, sprite_variation = 1},
+    ["fast-loader"] = {tier = 2, sprite_variation = 2},
+    ["express-loader"] = {tier = 3, sprite_variation = 2},
+    ["purple-loader"] = {tier = 4, sprite_variation = 2},
+    ["green-loader"] = {tier = 5, sprite_variation = 2},
 }
 
 -- Reskin entities
@@ -47,12 +47,12 @@ for name, map in pairs(tier_map) do
     entity.structure.direction_in.sheets = {
         -- Base
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-base.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-base.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-base.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-base.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,
@@ -61,13 +61,13 @@ for name, map in pairs(tier_map) do
         },
         -- Mask
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-mask.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-mask.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             tint = inputs.tint,
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-mask.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,
@@ -77,13 +77,13 @@ for name, map in pairs(tier_map) do
         },
         -- Highlights
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-highlights.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-highlights.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             blend_mode = "additive",
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-highlights.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,
@@ -112,13 +112,13 @@ for name, map in pairs(tier_map) do
     entity.structure.direction_out.sheets = {
         -- Base
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-base.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-base.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             y = 96,
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-base.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-base.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,
@@ -128,14 +128,14 @@ for name, map in pairs(tier_map) do
         },
         -- Mask
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-mask.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-mask.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             y = 96,
             tint = inputs.tint,
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-mask.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,
@@ -146,14 +146,14 @@ for name, map in pairs(tier_map) do
         },
         -- Highlights
         {
-            filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/loader-structure-highlights.png",
+            filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/loader-structure-highlights.png",
             priority = "extra-high",
             width = 106,
             height = 96,
             y = 96,
             blend_mode = "additive",
             hr_version = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/vanilla-loaders-hd/loader/hr-loader-structure-highlights.png",
                 priority = "extra-high",
                 width = 212,
                 height = 192,

@@ -8,7 +8,7 @@
   "homepage": "https://forums.factorio.com/viewtopic.php?f=185&t=57861",
   "description": "Crafting base for other MadClown01 mods. Adds many new production chains including sand sluicing, advanced mercury, fluorine, phosphorus & uranium processing, garden generation, neurotoxin production and catalytic electrolysis / filtering. Requires all Angel's mods.",
   "dependencies": [
-    "angelsrefining >= 0.12.5",
+    "angelsrefining >= 0.12.1",
     "angelspetrochem >= 0.9.20",
     "angelssmelting >= 0.6.17",
     "? angelsindustries >= 0.4.14",

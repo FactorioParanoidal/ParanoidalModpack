@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -128,7 +128,6 @@ require("prototypes.item.enemies")
 require("prototypes.item.greenhouse")
 require("prototypes.item.logistics")
 require("prototypes.item.modules")
-require("prototypes.item.modules-intermediates")
 require("prototypes.item.ores")
 require("prototypes.item.plates")
 require("prototypes.item.revamp")

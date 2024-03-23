@@ -120,12 +120,8 @@ data:extend({
         { type = "item", name = "solid-resin", amount = 4 },
       },
     },
-    icons = {
-      {
-        icon = "__angelspetrochem__/graphics/icons/solid-resin.png",
-        icon_size = 32,
-      },
-    },
+    icon = "__angelspetrochem__/graphics/icons/solid-resin.png",
+    icon_size = 32,
     crafting_machine_tint = AF.get_fluid_recipe_tint("liquid-resin"),
     order = "b[resin]-b[solid]",
   },
@@ -218,12 +214,8 @@ data:extend({
         { type = "item", name = "solid-rubber", amount = 4 },
       },
     },
-    icons = {
-      {
-        icon = "__angelspetrochem__/graphics/icons/solid-rubber.png",
-        icon_size = 32,
-      },
-    },
+    icon = "__angelspetrochem__/graphics/icons/solid-rubber.png",
+    icon_size = 32,
     crafting_machine_tint = AF.get_fluid_recipe_tint("liquid-rubber"),
     order = "b[rubber]-b[solid]",
   },
@@ -537,7 +529,8 @@ data:extend({
   {
     type = "recipe",
     name = "solid-nitroglycerin",
-    category = "advanced-chemistry",
+	category = "advanced-chemistry", -- DrD
+    -- category = "chemistry", -- DrD
     subgroup = "petrochem-solids-2",
     energy_required = 2,
     enabled = false,
@@ -563,7 +556,7 @@ data:extend({
   {
     type = "recipe",
     name = "solid-trinitrotoluene",
-    category = "advanced-chemistry",
+    category = "chemistry",
     subgroup = "petrochem-solids-2",
     energy_required = 2,
     enabled = false,

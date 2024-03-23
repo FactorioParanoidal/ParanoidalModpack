@@ -1,0 +1,10 @@
+{
+    "name" : "RampantFixed",
+    "factorio_version" : "1.1",
+    "version" : "1.8.3",
+    "title" : "Rampant, fixed",
+    "author" : "Dimm2101 (fixes), Veden (Rampant)",
+    "homepage" : "",
+    "description" : "Based on Rampant 1.1.1 (new AI and enemies). \n 1. AI significantly rewritten, gameplay different. Can attack from afar. Improved search for a passage in the defense. By default, it does not populate the entire map \n 2. +2 Factions. Can mutate existing nests. Mixed attacks from different factions. Can be combined with nests of other enemies  \n Details on the mod portal",
+    "dependencies" : ["base >= 1.1.0", "!Rampant", "?alien-module", "?Arachnids", "?ArmouredBiters", "?bobenemies", "?combat-mechanics-overhaul", "?RampantArsenal", "?SchallAlienLoot"]
+}

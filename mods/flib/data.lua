@@ -1,3 +1,2 @@
-require("prototypes.sprite")
-require("prototypes.style")
-require("prototypes.technology-slot-style")
+require("prototypes/sprite")
+require("prototypes/style")

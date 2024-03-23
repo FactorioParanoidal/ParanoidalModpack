@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -6,9 +6,8 @@
 -- Check to see if reskinning needs to be done.
 if not (reskins.bobs and reskins.bobs.triggers.vehicle_equipment.equipment) then return end
 
--- Note that for equipment, the icons property is not used, so omit type information
--- so that an icon is not set on the equipment prototype.
 local inputs = {
+    type = "generator-equipment",
     icon_name = "vehicle-fusion-cell",
     equipment_category = "energy",
     mod = "bobs",
@@ -19,18 +18,18 @@ local inputs = {
 reskins.lib.parse_inputs(inputs)
 
 local fusion_cells = {
-    ["vehicle-fusion-cell-1"] = { tier = 0 },
-    ["vehicle-fusion-cell-2"] = { tier = 1 },
-    ["vehicle-fusion-cell-3"] = { tier = 2 },
-    ["vehicle-fusion-cell-4"] = { tier = 3 },
-    ["vehicle-fusion-cell-5"] = { tier = 4 },
-    ["vehicle-fusion-cell-6"] = { tier = 5 },
+    ["vehicle-fusion-cell-1"] = {tier = 0},
+    ["vehicle-fusion-cell-2"] = {tier = 1},
+    ["vehicle-fusion-cell-3"] = {tier = 2},
+    ["vehicle-fusion-cell-4"] = {tier = 3},
+    ["vehicle-fusion-cell-5"] = {tier = 4},
+    ["vehicle-fusion-cell-6"] = {tier = 5},
 }
 
 -- Reskin equipment
 for name, map in pairs(fusion_cells) do
     -- Fetch equipment
-    local equipment = data.raw[ "generator-equipment"][name]
+    local equipment = data.raw[inputs.type][name]
 
     -- Check if entity exists, if not, skip this iteration
     if not equipment then goto continue end
@@ -52,12 +51,12 @@ for name, map in pairs(fusion_cells) do
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-base.png",
+                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-base.png",
                 size = 64,
                 priority = "medium",
                 flags = { "no-crop" },
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-base.png",
+                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-base.png",
                     size = 128,
                     priority = "medium",
                     flags = { "no-crop" },
@@ -66,13 +65,13 @@ for name, map in pairs(fusion_cells) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-mask.png",
+                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-mask.png",
                 size = 64,
                 priority = "medium",
                 flags = { "no-crop" },
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-mask.png",
                     size = 128,
                     priority = "medium",
                     flags = { "no-crop" },
@@ -82,13 +81,13 @@ for name, map in pairs(fusion_cells) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/vehicle-fusion-cell-equipment-highlights.png",
                 size = 64,
                 priority = "medium",
                 flags = { "no-crop" },
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-fusion-cell/hr-vehicle-fusion-cell-equipment-highlights.png",
                     size = 128,
                     priority = "medium",
                     flags = { "no-crop" },

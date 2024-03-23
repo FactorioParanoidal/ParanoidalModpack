@@ -15,6 +15,10 @@ data:extend({
       },
       {
         type = "unlock-recipe",
+        recipe = "solid-alginic-acid",
+      },
+      {
+        type = "unlock-recipe",
         recipe = "algae-green-simple",
       },
       {
@@ -23,11 +27,11 @@ data:extend({
       },
     },
     unit = {
-      count = 10,
+      count = 50,
       ingredients = {
         { type = "item", name = "automation-science-pack", amount = 1 },
       },
-      time = 15,
+      time = 30,
     },
     ignore_tech_cost_multiplier = true,
   },

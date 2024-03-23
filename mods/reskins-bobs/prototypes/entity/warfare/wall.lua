@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -15,14 +15,14 @@ local inputs = {
     type = "wall",
     base_entity_name = "wall",
     mod = "bobs",
-    particles = { ["tiny-stone"] = 3,["small-stone"] = 2,["medium-stone"] = 1 },
+    particles = {["tiny-stone"] = 3, ["small-stone"] = 2, ["medium-stone"] = 1},
 }
 
 if mods["NauvisDay"] then
     inputs.make_explosions = false
 end
 
-inputs.icon_filename = reskins.bobs.directory .. "/graphics/icons/warfare/reinforced-wall/wall.png"
+inputs.icon_filename = reskins.bobs.directory.."/graphics/icons/warfare/reinforced-wall/wall.png"
 
 local reinforced_tint_index = {
     ["tiny-stone"] = util.color("a793bf"),
@@ -53,7 +53,7 @@ local remnant = data.raw["corpse"]["reinforced-wall-remnants"]
 
 -- Reskin remnants
 remnant.animation = make_rotated_animation_variations_from_sheet(4, {
-    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/remnants/reinforced-wall-remnants.png",
+    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/remnants/reinforced-wall-remnants.png",
     width = 60,
     height = 58,
     line_length = 1,
@@ -61,7 +61,7 @@ remnant.animation = make_rotated_animation_variations_from_sheet(4, {
     direction_count = 2,
     shift = util.by_pixel(3, 7.5),
     hr_version = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/remnants/hr-reinforced-wall-remnants.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/remnants/hr-reinforced-wall-remnants.png",
         width = 118,
         height = 114,
         line_length = 1,
@@ -77,7 +77,7 @@ entity.pictures = {
     single = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-single.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-single.png",
                 priority = "extra-high",
                 width = 32,
                 height = 46,
@@ -85,7 +85,7 @@ entity.pictures = {
                 line_length = 2,
                 shift = util.by_pixel(0, -6),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-single.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-single.png",
                     priority = "extra-high",
                     width = 64,
                     height = 86,
@@ -96,7 +96,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-single-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-single-shadow.png",
                 priority = "extra-high",
                 width = 50,
                 height = 32,
@@ -104,7 +104,7 @@ entity.pictures = {
                 shift = util.by_pixel(10, 16),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-single-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-single-shadow.png",
                     priority = "extra-high",
                     width = 98,
                     height = 60,
@@ -119,7 +119,7 @@ entity.pictures = {
     straight_vertical = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-vertical.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-vertical.png",
                 priority = "extra-high",
                 width = 32,
                 height = 68,
@@ -127,7 +127,7 @@ entity.pictures = {
                 line_length = 5,
                 shift = util.by_pixel(0, 8),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-vertical.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-vertical.png",
                     priority = "extra-high",
                     width = 64,
                     height = 134,
@@ -138,7 +138,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-vertical-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-vertical-shadow.png",
                 priority = "extra-high",
                 width = 50,
                 height = 58,
@@ -146,7 +146,7 @@ entity.pictures = {
                 shift = util.by_pixel(10, 28),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-vertical-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-vertical-shadow.png",
                     priority = "extra-high",
                     width = 98,
                     height = 110,
@@ -161,7 +161,7 @@ entity.pictures = {
     straight_horizontal = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-horizontal.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-horizontal.png",
                 priority = "extra-high",
                 width = 32,
                 height = 50,
@@ -169,7 +169,7 @@ entity.pictures = {
                 line_length = 6,
                 shift = util.by_pixel(0, -4),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-horizontal.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-horizontal.png",
                     priority = "extra-high",
                     width = 64,
                     height = 92,
@@ -180,7 +180,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-horizontal-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-horizontal-shadow.png",
                 priority = "extra-high",
                 width = 62,
                 height = 36,
@@ -188,7 +188,7 @@ entity.pictures = {
                 shift = util.by_pixel(14, 14),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-horizontal-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-horizontal-shadow.png",
                     priority = "extra-high",
                     width = 124,
                     height = 68,
@@ -203,7 +203,7 @@ entity.pictures = {
     corner_right_down = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-corner-right.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-corner-right.png",
                 priority = "extra-high",
                 width = 32,
                 height = 64,
@@ -211,7 +211,7 @@ entity.pictures = {
                 line_length = 2,
                 shift = util.by_pixel(0, 6),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-corner-right.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-corner-right.png",
                     priority = "extra-high",
                     width = 64,
                     height = 128,
@@ -222,7 +222,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-corner-right-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-corner-right-shadow.png",
                 priority = "extra-high",
                 width = 62,
                 height = 60,
@@ -230,7 +230,7 @@ entity.pictures = {
                 shift = util.by_pixel(14, 28),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-corner-right-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-corner-right-shadow.png",
                     priority = "extra-high",
                     width = 124,
                     height = 120,
@@ -245,7 +245,7 @@ entity.pictures = {
     corner_left_down = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-corner-left.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-corner-left.png",
                 priority = "extra-high",
                 width = 32,
                 height = 68,
@@ -253,7 +253,7 @@ entity.pictures = {
                 line_length = 2,
                 shift = util.by_pixel(0, 6),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-corner-left.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-corner-left.png",
                     priority = "extra-high",
                     width = 64,
                     height = 134,
@@ -264,7 +264,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-corner-left-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-corner-left-shadow.png",
                 priority = "extra-high",
                 width = 54,
                 height = 60,
@@ -272,7 +272,7 @@ entity.pictures = {
                 shift = util.by_pixel(8, 28),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-corner-left-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-corner-left-shadow.png",
                     priority = "extra-high",
                     width = 102,
                     height = 120,
@@ -287,7 +287,7 @@ entity.pictures = {
     t_up = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-t.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-t.png",
                 priority = "extra-high",
                 width = 32,
                 height = 68,
@@ -295,7 +295,7 @@ entity.pictures = {
                 line_length = 4,
                 shift = util.by_pixel(0, 6),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-t.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-t.png",
                     priority = "extra-high",
                     width = 64,
                     height = 134,
@@ -306,7 +306,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-t-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-t-shadow.png",
                 priority = "extra-high",
                 width = 62,
                 height = 60,
@@ -314,7 +314,7 @@ entity.pictures = {
                 shift = util.by_pixel(14, 28),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-t-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-t-shadow.png",
                     priority = "extra-high",
                     width = 124,
                     height = 120,
@@ -329,7 +329,7 @@ entity.pictures = {
     ending_right = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-ending-right.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-ending-right.png",
                 priority = "extra-high",
                 width = 32,
                 height = 48,
@@ -337,7 +337,7 @@ entity.pictures = {
                 line_length = 2,
                 shift = util.by_pixel(0, -4),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-ending-right.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-ending-right.png",
                     priority = "extra-high",
                     width = 64,
                     height = 92,
@@ -348,7 +348,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-ending-right-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-ending-right-shadow.png",
                 priority = "extra-high",
                 width = 62,
                 height = 36,
@@ -356,7 +356,7 @@ entity.pictures = {
                 shift = util.by_pixel(14, 14),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-ending-right-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-ending-right-shadow.png",
                     priority = "extra-high",
                     width = 124,
                     height = 68,
@@ -371,7 +371,7 @@ entity.pictures = {
     ending_left = {
         layers = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-ending-left.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-ending-left.png",
                 priority = "extra-high",
                 width = 32,
                 height = 48,
@@ -379,7 +379,7 @@ entity.pictures = {
                 line_length = 2,
                 shift = util.by_pixel(0, -4),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-ending-left.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-ending-left.png",
                     priority = "extra-high",
                     width = 64,
                     height = 92,
@@ -390,7 +390,7 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-ending-left-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-ending-left-shadow.png",
                 priority = "extra-high",
                 width = 54,
                 height = 36,
@@ -398,7 +398,7 @@ entity.pictures = {
                 shift = util.by_pixel(8, 14),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-ending-left-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-ending-left-shadow.png",
                     priority = "extra-high",
                     width = 102,
                     height = 68,
@@ -411,7 +411,7 @@ entity.pictures = {
         }
     },
     filling = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-filling.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-filling.png",
         priority = "extra-high",
         width = 24,
         height = 30,
@@ -419,7 +419,7 @@ entity.pictures = {
         line_length = 8,
         shift = util.by_pixel(0, -2),
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-filling.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-filling.png",
             priority = "extra-high",
             width = 48,
             height = 56,
@@ -432,13 +432,13 @@ entity.pictures = {
     water_connection_patch = {
         sheets = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-patch.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-patch.png",
                 priority = "extra-high",
                 width = 58,
                 height = 64,
                 shift = util.by_pixel(0, -2),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-patch.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-patch.png",
                     priority = "extra-high",
                     width = 116,
                     height = 128,
@@ -447,14 +447,14 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-patch-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-patch-shadow.png",
                 priority = "extra-high",
                 width = 74,
                 height = 52,
                 shift = util.by_pixel(8, 14),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-patch-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-patch-shadow.png",
                     priority = "extra-high",
                     width = 144,
                     height = 100,
@@ -468,13 +468,13 @@ entity.pictures = {
     gate_connection_patch = {
         sheets = {
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/reinforced-wall-gate.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/reinforced-wall-gate.png",
                 priority = "extra-high",
                 width = 42,
                 height = 56,
                 shift = util.by_pixel(0, -8),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-gate.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/hr-reinforced-wall-gate.png",
                     priority = "extra-high",
                     width = 82,
                     height = 108,
@@ -483,14 +483,14 @@ entity.pictures = {
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-gate-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/reinforced-wall-gate-shadow.png",
                 priority = "extra-high",
                 width = 66,
                 height = 40,
                 shift = util.by_pixel(14, 18),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-gate-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/reinforced-wall/shadows/hr-reinforced-wall-gate-shadow.png",
                     priority = "extra-high",
                     width = 130,
                     height = 78,

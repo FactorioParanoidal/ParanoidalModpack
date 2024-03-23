@@ -1,16 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.2.1
-Date: 01. 12. 2024
-  Bugfixes:
-    - Fixed crash relating to Electric Furnace 2 when using Krastorio 2 and Space Exploration #151
----------------------------------------------------------------------------------------------------
-Version: 1.2.0
-Date: 22. 12. 2023
-  Changes:
-    - Added support for Space Exploration mod #88
-    - Hid setting "Burner and steam assembling machines" when AAI Industry mod is enabled #133
-    - Added Russian locale (thanks Eldrinn-Elantey!) #149
----------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Bugfixes:

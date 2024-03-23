@@ -10,10 +10,6 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "liquifier",
-      },
-      {
-        type = "unlock-recipe",
         recipe = "angels-electrolyser",
       },
       {
@@ -127,7 +123,7 @@ data:extend({
       "angels-sulfur-processing-2",
       "water-treatment-4",
       "angels-advanced-chemistry-4",
-      mods["angelssmelting"] and "angels-cooling" or "basic-chemistry-2",
+      mods["angelssmelting"] and "angels-coolant-1" or "basic-chemistry-2",
     },
     effects = {
       {
@@ -411,7 +407,6 @@ data:extend({
     icons = angelsmods.functions.create_gas_tech_icon("SSS"),
     prerequisites = {
       "angels-sulfur-processing-2",
-      "angels-nitrogen-processing-1",
       "slag-processing-1",
       "chemical-science-pack",
     },
@@ -497,6 +492,7 @@ data:extend({
       "angels-nitrogen-processing-1",
       "angels-sulfur-processing-1",
       "angels-advanced-chemistry-1",
+      "chlorine-processing-1",
       "water-treatment-2",
     },
     effects = {
@@ -519,6 +515,10 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "gas-nitrogen-dioxide",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "gas-ammonium-chloride",
       },
       {
         type = "unlock-recipe",
@@ -550,9 +550,7 @@ data:extend({
     prerequisites = {
       "angels-nitrogen-processing-2",
       "angels-advanced-chemistry-3",
-      "chlorine-processing-2",
-      "sodium-processing-1",
-      "flammables",
+      "sodium-processing",
     },
     effects = {
       {
@@ -602,10 +600,6 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "gas-refinery-4",
-      },
-      {
-        type = "unlock-recipe",
         recipe = "gas-dinitrogen-tetroxide",
       },
       {
@@ -622,7 +616,7 @@ data:extend({
       },
       {
         type = "unlock-recipe",
-        recipe = "gas-ammonium-chloride",
+        recipe = "gas-refinery-4",
       },
     },
     unit = {
@@ -643,12 +637,19 @@ data:extend({
     name = "chlorine-processing-1",
     icons = angelsmods.functions.create_gas_tech_icon("ClClCl"),
     prerequisites = {
-      "basic-chemistry-3",
+      --"basic-chemistry-2",
+      --"water-treatment",
+      "ore-crushing",
+      "gas-processing",
     },
     effects = {
       {
         type = "unlock-recipe",
         recipe = "water-saline-separation",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "gas-chlor-methane",
       },
       {
         type = "unlock-recipe",
@@ -675,13 +676,9 @@ data:extend({
     icons = angelsmods.functions.create_gas_tech_icon("ClClCl"),
     prerequisites = {
       "chlorine-processing-1",
-      "steam-cracking-1",
+      "gas-steam-cracking-1",
     },
     effects = {
-      {
-        type = "unlock-recipe",
-        recipe = "gas-chlor-methane",
-      },
       {
         type = "unlock-recipe",
         recipe = "gas-allylchlorid",
@@ -689,6 +686,10 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "gas-epichlorhydrin",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "liquid-glycerol",
       },
       {
         type = "unlock-recipe",
@@ -713,6 +714,7 @@ data:extend({
     prerequisites = {
       "chlorine-processing-2",
       "water-treatment-3",
+      "chemical-science-pack",
     },
     effects = {
       {
@@ -749,7 +751,7 @@ data:extend({
     icons = angelsmods.functions.create_gas_tech_icon("ClClCl"),
     prerequisites = {
       "chlorine-processing-3",
-      "sodium-processing-1",
+      "sodium-processing",
       "angels-advanced-chemistry-3",
     },
     effects = {
@@ -779,56 +781,19 @@ data:extend({
   },
   {
     type = "technology",
-    name = "sodium-processing-1",
-    icon = "__angelspetrochem__/graphics/technology/sodium-tech.png",
-    icon_size = 128,
-    prerequisites = {
-      "angels-sulfur-processing-1",
-      "chemical-science-pack",
-      "chlorine-processing-1",
-    },
-    effects = {
-      {
-        type = "unlock-recipe",
-        recipe = "solid-sodium-hydroxide-solid-sodium-sulfate",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "solid-sodium-sulfate-separation",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "solid-sodium-hydroxide",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "liquid-aqueous-sodium-hydroxide",
-      },
-    },
-    unit = {
-      count = 50,
-      ingredients = {
-        { type = "item", name = "automation-science-pack", amount = 1 },
-        { type = "item", name = "logistic-science-pack", amount = 1 },
-        { type = "item", name = "chemical-science-pack", amount = 1 },
-      },
-      time = 15,
-    },
-    order = "c-a",
-  },
-  {
-    type = "technology",
-    name = "sodium-processing-2",
+    name = "sodium-processing",
     icon = "__angelspetrochem__/graphics/technology/sodium-tech.png",
     icon_size = 128,
     prerequisites = {
       "chlorine-processing-3",
       "angels-coal-processing-3",
       "angels-nitrogen-processing-2",
-      "production-science-pack",
-      "sodium-processing-1",
     },
     effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "liquid-aqueous-sodium-hydroxide",
+      },
       {
         type = "unlock-recipe",
         recipe = "liquid-aqueous-sodium-hydroxide-reverse",
@@ -836,6 +801,10 @@ data:extend({
       {
         type = "unlock-recipe",
         recipe = "solid-sodium",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "solid-sodium-hydroxide",
       },
       {
         type = "unlock-recipe",
@@ -849,6 +818,14 @@ data:extend({
         type = "unlock-recipe",
         recipe = "solid-sodium-cyanide",
       },
+      {
+        type = "unlock-recipe",
+        recipe = "solid-sodium-hydroxide-solid-sodium-sulfate",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "solid-sodium-sulfate-separation",
+      },
     },
     unit = {
       count = 50,
@@ -856,7 +833,6 @@ data:extend({
         { type = "item", name = "automation-science-pack", amount = 1 },
         { type = "item", name = "logistic-science-pack", amount = 1 },
         { type = "item", name = "chemical-science-pack", amount = 1 },
-        { type = "item", name = "production-science-pack", amount = 1 },
       },
       time = 15,
     },

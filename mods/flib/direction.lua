@@ -1,12 +1,8 @@
-if ... ~= "__flib__.direction" then
-  return require("__flib__.direction")
-end
-
-local flib_math = require("__flib__.math")
+local flib_math = require("__flib__/math")
 
 --- Functions for working with directions.
 --- ```lua
---- local flib_direction = require("__flib__.direction")
+--- local flib_direction = require("__flib__/direction")
 --- ```
 --- @class flib_direction
 local flib_direction = {}

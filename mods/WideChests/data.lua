@@ -255,3 +255,6 @@ MergingChests.create_mergeable_chest(
     },
     MergingChests.steel_chest_segments
 )
+
+MergingChests.set_next_upgrade_of('container', 'wooden-chest', 'iron-chest')
+MergingChests.set_next_upgrade_of('container', 'iron-chest', 'steel-chest')

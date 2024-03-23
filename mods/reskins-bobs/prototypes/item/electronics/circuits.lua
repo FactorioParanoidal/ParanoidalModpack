@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -19,18 +19,20 @@ local inputs = {
 -- Sets up circuits to use material colors
 local circuits = {
     -- Boards
-    ["wooden-board"] = { subgroup = "circuits" },
-    ["phenolic-board"] = { subgroup = "circuits" },
-    ["fibreglass-board"] = { subgroup = "circuits" },
+    ["wooden-board"] = {subgroup = "circuits"},
+    ["phenolic-board"] = {subgroup = "circuits"},
+    ["fibreglass-board"] = {subgroup = "circuits"},
+
     -- Circuits, standard coloring
-    ["basic-circuit-board"] = { subgroup = "circuits" },
-    ["circuit-board"] = { subgroup = "circuits" },
-    ["superior-circuit-board"] = { subgroup = "circuits" },
-    ["multi-layer-circuit-board"] = { subgroup = "circuits" },
-    ["electronic-circuit"] = { subgroup = "circuits" },
-    ["advanced-circuit"] = { subgroup = "circuits" },
-    ["processing-unit"] = { subgroup = "circuits" },
-    ["advanced-processing-unit"] = { subgroup = "circuits" },
+    ["basic-circuit-board"] = {subgroup = "circuits"},
+    ["circuit-board"] = {subgroup = "circuits"},
+    ["superior-circuit-board"] = {subgroup = "circuits"},
+    ["multi-layer-circuit-board"] = {subgroup = "circuits"},
+
+    ["electronic-circuit"] = {subgroup = "circuits"},
+    ["advanced-circuit"] = {subgroup = "circuits"},
+    ["processing-unit"] = {subgroup = "circuits"},
+    ["advanced-processing-unit"] = {subgroup = "circuits"},
 }
 
 -- Fetch relevant settings
@@ -42,7 +44,7 @@ local function circuit_picture_extras(name)
     return
     {
         {
-            filename = reskins.bobs.directory .. "/graphics/icons/electronics/circuits-custom/" .. name .. "/" .. name .. "-circuitry.png",
+            filename = reskins.bobs.directory.."/graphics/icons/electronics/circuits-custom/"..name.."/"..name.."-circuitry.png",
             size = 64,
             mipmaps = 4,
             scale = 0.25,
@@ -54,49 +56,49 @@ end
 if circuit_color_style == "colored-tier" then
     if custom_color then
         -- Intermediates
-        circuits["basic-circuit-board"] = { subgroup = "circuits-custom", tier = 1, prog_tier = 2, icon_name = "basic-circuit-board", icon_picture_extras = circuit_picture_extras("basic-circuit-board"), flat_icon = false, make_icon_pictures = true }
-        circuits["circuit-board"] = { subgroup = "circuits-custom", tier = 2, prog_tier = 3, icon_name = "circuit-board", icon_picture_extras = circuit_picture_extras("circuit-board"), flat_icon = false, make_icon_pictures = true }
-        circuits["superior-circuit-board"] = { subgroup = "circuits-custom", tier = 3, prog_tier = 4, icon_name = "superior-circuit-board", icon_picture_extras = circuit_picture_extras("superior-circuit-board"), flat_icon = false, make_icon_pictures = true }
-        circuits["multi-layer-circuit-board"] = { subgroup = "circuits-custom", tier = 4, prog_tier = 5, icon_name = "multi-layer-circuit-board", icon_picture_extras = circuit_picture_extras("multi-layer-circuit-board"), flat_icon = false, make_icon_pictures = true }
+        circuits["basic-circuit-board"] = {subgroup = "circuits-custom", tier = 1, prog_tier = 2, icon_name = "basic-circuit-board", icon_picture_extras = circuit_picture_extras("basic-circuit-board"), flat_icon = false, make_icon_pictures = true}
+        circuits["circuit-board"] = {subgroup = "circuits-custom", tier = 2, prog_tier = 3, icon_name = "circuit-board", icon_picture_extras = circuit_picture_extras("circuit-board"), flat_icon = false, make_icon_pictures = true}
+        circuits["superior-circuit-board"] = {subgroup = "circuits-custom", tier = 3, prog_tier = 4, icon_name = "superior-circuit-board", icon_picture_extras = circuit_picture_extras("superior-circuit-board"), flat_icon = false, make_icon_pictures = true}
+        circuits["multi-layer-circuit-board"] = {subgroup = "circuits-custom", tier = 4, prog_tier = 5, icon_name = "multi-layer-circuit-board", icon_picture_extras = circuit_picture_extras("multi-layer-circuit-board"), flat_icon = false, make_icon_pictures = true}
 
         -- Completed
-        circuits["electronic-circuit"] = { subgroup = "circuits-custom", tier = 1, prog_tier = 2, icon_name = "electronic-circuit", icon_picture_extras = circuit_picture_extras("electronic-circuit"), flat_icon = false, make_icon_pictures = true }
-        circuits["advanced-circuit"] = { subgroup = "circuits-custom", tier = 2, prog_tier = 3, icon_name = "advanced-circuit", icon_picture_extras = circuit_picture_extras("advanced-circuit"), flat_icon = false, make_icon_pictures = true }
-        circuits["processing-unit"] = { subgroup = "circuits-custom", tier = 3, prog_tier = 4, icon_name = "processing-unit", icon_picture_extras = circuit_picture_extras("processing-unit"), flat_icon = false, make_icon_pictures = true }
-        circuits["advanced-processing-unit"] = { subgroup = "circuits-custom", tier = 4, prog_tier = 5, icon_name = "advanced-processing-unit", icon_picture_extras = circuit_picture_extras("advanced-processing-unit"), flat_icon = false, make_icon_pictures = true }
+        circuits["electronic-circuit"] = {subgroup = "circuits-custom", tier = 1, prog_tier = 2, icon_name = "electronic-circuit", icon_picture_extras = circuit_picture_extras("electronic-circuit"), flat_icon = false, make_icon_pictures = true}
+        circuits["advanced-circuit"] = {subgroup = "circuits-custom", tier = 2, prog_tier = 3, icon_name = "advanced-circuit", icon_picture_extras = circuit_picture_extras("advanced-circuit"), flat_icon = false, make_icon_pictures = true}
+        circuits["processing-unit"] = {subgroup = "circuits-custom", tier = 3, prog_tier = 4, icon_name = "processing-unit", icon_picture_extras = circuit_picture_extras("processing-unit"), flat_icon = false, make_icon_pictures = true}
+        circuits["advanced-processing-unit"] = {subgroup = "circuits-custom", tier = 4, prog_tier = 5, icon_name = "advanced-processing-unit", icon_picture_extras = circuit_picture_extras("advanced-processing-unit"), flat_icon = false, make_icon_pictures = true}
     else
         if tier_mapping == "traditional-map" then
-            circuits["basic-circuit-board"] = { subgroup = "circuits-name" }
-            circuits["circuit-board"] = { subgroup = "circuits-name" }
-            circuits["superior-circuit-board"] = { subgroup = "circuits-name" }
-            circuits["multi-layer-circuit-board"] = { subgroup = "circuits-name" }
+            circuits["basic-circuit-board"] = {subgroup = "circuits-name"}
+            circuits["circuit-board"] = {subgroup = "circuits-name"}
+            circuits["superior-circuit-board"] = {subgroup = "circuits-name"}
+            circuits["multi-layer-circuit-board"] = {subgroup = "circuits-name"}
 
-            circuits["electronic-circuit"] = { subgroup = "circuits-name" }
-            circuits["advanced-circuit"] = { subgroup = "circuits-name" }
-            circuits["processing-unit"] = { subgroup = "circuits-name" }
-            circuits["advanced-processing-unit"] = { subgroup = "circuits-name" }
+            circuits["electronic-circuit"] = {subgroup = "circuits-name"}
+            circuits["advanced-circuit"] = {subgroup = "circuits-name"}
+            circuits["processing-unit"] = {subgroup = "circuits-name"}
+            circuits["advanced-processing-unit"] = {subgroup = "circuits-name"}
         elseif tier_mapping == "progression-map" then
-            circuits["basic-circuit-board"] = { subgroup = "circuits-progression" }
-            circuits["circuit-board"] = { subgroup = "circuits-progression" }
-            circuits["superior-circuit-board"] = { subgroup = "circuits-progression" }
-            circuits["multi-layer-circuit-board"] = { subgroup = "circuits-progression" }
+            circuits["basic-circuit-board"] = {subgroup = "circuits-progression"}
+            circuits["circuit-board"] = {subgroup = "circuits-progression"}
+            circuits["superior-circuit-board"] = {subgroup = "circuits-progression"}
+            circuits["multi-layer-circuit-board"] = {subgroup = "circuits-progression"}
 
-            circuits["electronic-circuit"] = { subgroup = "circuits-progression" }
-            circuits["advanced-circuit"] = { subgroup = "circuits-progression" }
-            circuits["processing-unit"] = { subgroup = "circuits-progression" }
-            circuits["advanced-processing-unit"] = { subgroup = "circuits-progression" }
+            circuits["electronic-circuit"] = {subgroup = "circuits-progression"}
+            circuits["advanced-circuit"] = {subgroup = "circuits-progression"}
+            circuits["processing-unit"] = {subgroup = "circuits-progression"}
+            circuits["advanced-processing-unit"] = {subgroup = "circuits-progression"}
         end
     end
 elseif circuit_color_style == "colored-vanilla" then
-    circuits["basic-circuit-board"] = { subgroup = "circuits-vanilla" }
-    circuits["circuit-board"] = { subgroup = "circuits-vanilla" }
-    circuits["superior-circuit-board"] = { subgroup = "circuits-vanilla" }
-    circuits["multi-layer-circuit-board"] = { subgroup = "circuits-vanilla" }
+    circuits["basic-circuit-board"] = {subgroup = "circuits-vanilla"}
+    circuits["circuit-board"] = {subgroup = "circuits-vanilla"}
+    circuits["superior-circuit-board"] = {subgroup = "circuits-vanilla"}
+    circuits["multi-layer-circuit-board"] = {subgroup = "circuits-vanilla"}
 
-    circuits["electronic-circuit"] = { subgroup = "circuits-vanilla" }
-    circuits["advanced-circuit"] = { subgroup = "circuits-vanilla" }
-    circuits["processing-unit"] = { subgroup = "circuits-vanilla" }
-    circuits["advanced-processing-unit"] = { subgroup = "circuits-vanilla" }
+    circuits["electronic-circuit"] = {subgroup = "circuits-vanilla"}
+    circuits["advanced-circuit"] = {subgroup = "circuits-vanilla"}
+    circuits["processing-unit"] = {subgroup = "circuits-vanilla"}
+    circuits["advanced-processing-unit"] = {subgroup = "circuits-vanilla"}
 end
 
 reskins.lib.create_icons_from_list(circuits, inputs)

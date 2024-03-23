@@ -1,24 +1,12 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.1.6
-Date: 2023-12-23
-  Features:
-    - Added item icons for Bob's Modules intermediates, courtesy of Max (mxcop) #44
-  Changes:
-    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
-  Bugfixes:
-    - Corrected an issue with how accumulator icons were composed, resulting in incompatibility with YAFC, courtesy of Dale McCoy #43
-    - Fixed that icons were set on equipment prototypes resulting in warnings in the log, as this field is not used #38
-    - Fixed startup error when reskinning of entities was disabled #46
-
----------------------------------------------------------------------------------------------------
 Version: 2.1.5
 Date: 2023-01-01
   Changes:
-    - Updated tier assignments for entities and technologies to reflect changes in Bob's Power version 1.1.6 #39
+    - Updated tier assignments for entities and technologies to reflect changes in Bob's Power version 1.1.6
       - Updated accumulators and solar energy
       - Revised heat pipes, heat exchangers, nuclear reactors, and heat sources to support Heat pipe 4
-    - Added support for revised radar technologies in Bob's Warfare version 1.1.6 #42
-    - Revised plasma turret sprites to support both 4 and 8 directions #40
+    - Added support for revised radar technologies in Bob's Warfare version 1.1.6
+    - Revised plasma turret sprites to support both 4 and 8 directions
   Bugfixes:
     - Fixed plasma turret masks which were erroneously transparent
 ---------------------------------------------------------------------------------------------------

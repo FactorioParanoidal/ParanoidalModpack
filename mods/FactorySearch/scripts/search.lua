@@ -485,7 +485,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
           if item_prototype and item_prototype.place_result then
             target_entity_name = item_prototype.place_result.name
           else
-          -- Or just try an entity with the same name as the item
+            -- Or just try an entity with the same name as the item
             target_entity_name = target_name
           end
         end
@@ -662,7 +662,7 @@ function Search.on_tick()
           if item_prototype and item_prototype.place_result then
             target_entity_name = item_prototype.place_result.name
           else
-          -- Or just try an entity with the same name as the item
+            -- Or just try an entity with the same name as the item
             target_entity_name = target_name
           end
         end

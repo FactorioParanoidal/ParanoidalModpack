@@ -22,10 +22,10 @@ data:extend({
         unit = {
             count = 75,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
             },
             time = 30
         },
@@ -40,7 +40,6 @@ data:extend({
         icon_size = 128,
         prerequisites = {
             "angels-copper-tungsten-smelting-1",
-            "angels-metallurgy-5",
         },
         effects = {
             {
@@ -51,11 +50,11 @@ data:extend({
         unit = {
             count = 100,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
-                { "utility-science-pack",    1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
             },
             time = 30
         },
@@ -71,8 +70,6 @@ data:extend({
         upgrade = true,
         prerequisites = {
             "angels-stone-smelting-3",
-            "angels-titanium-smelting-1",
-            "production-science-pack",
         },
         effects = {
             {
@@ -83,15 +80,48 @@ data:extend({
         unit = {
             count = 100,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
             },
             time = 30
         },
         order = "c-a"
     },
+
+    -- -- Slag processing 3
+    -- {
+    --     type = "technology",
+    --     name = "slag-processing-3",
+    --     icon = "__angelsrefining__/graphics/technology/slag-processing.png",
+    --     icon_size = 64,
+    --     prerequisites = {
+    --         "slag-processing-2",
+    --     },
+    --     effects = {
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "filtration-unit-3"
+    --         },
+    --         {
+    --             type = "unlock-recipe",
+    --             recipe = "crystallizer-3"
+    --         },
+    --     },
+    --     unit = {
+    --         count = 100,
+    --         ingredients = {
+    --             {"automation-science-pack", 1},
+    --             {"logistic-science-pack", 1},
+    --             {"chemical-science-pack", 1},
+    --             {"production-science-pack", 1},
+    --             {"utility-science-pack", 1},
+    --         },
+    --         time = 30
+    --     },
+    --     order = "a-a-a1"
+    -- },
 
     -- Angels tungsten carbide smelting 1
     {
@@ -115,10 +145,10 @@ data:extend({
         unit = {
             count = 75,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
             },
             time = 30
         },
@@ -144,11 +174,11 @@ data:extend({
         unit = {
             count = 100,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
-                { "utility-science-pack",    1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
             },
             time = 30
         },
@@ -178,11 +208,11 @@ data:extend({
         unit = {
             count = 150,
             ingredients = {
-                { "automation-science-pack", 1 },
-                { "logistic-science-pack",   1 },
-                { "chemical-science-pack",   1 },
-                { "production-science-pack", 1 },
-                { "utility-science-pack",    1 },
+                {"automation-science-pack", 1},
+                {"logistic-science-pack", 1},
+                {"chemical-science-pack", 1},
+                {"production-science-pack", 1},
+                {"utility-science-pack", 1},
             },
             time = 30
         },

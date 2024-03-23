@@ -9,7 +9,6 @@
   "description": "Adds plutonium as a source of additional fuel cells, or as additional weaponry material. Adds thermonuclear weaponry. Adds a far more intricate & realistic replacement to the Koravex Enrichment Process.",
   "dependencies": [
 	"? Early_Nuclear_Power >= 0.4.0",
-  "? angelsrefining >= 0.12.1",
-  "? IndustrialRevolution3 >= 3.0.1"
+  "? angelsrefining >= 0.12.1"
 	]
 }

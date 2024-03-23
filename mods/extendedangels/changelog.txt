@@ -1,28 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.5.10
-Date: 2023-12-23
-  Changes:
-    - Renamed Sodium Processing 2 to Sodium Processing 3 as Angel's has added a Sodium Processing 2 tech
-    - Tidied up prerequisites and required science packs
-    - The following buildings now take Tungsten carbide plate instead of Copper tungsten plate to match the other T6 Angel's buildings:
-      - Advanced gas refinery 4
-      - Biter refugium 3
-      - Leaching plant 4
-      - Ore refinery 3
-    - Adjusted the ingredient tiers for the folllowing structures to eliminate a tier gap:
-      - Algae farm 5
-      - Hydro plant 4
-    - All T5 and T6 buildings should now use Titanium concrete bricks
-    - Set minimum required building tiers for Copper Tungsten and Tungsten Carbide recipes
----------------------------------------------------------------------------------------------------
-Version: 0.5.9
-Date: 2023-04-06
-  Bugfixes:
-    - Fixed that in expensive recipe mode, Washing plant 2 was an ingredient in Washing plant 4
-    - Fixed that the upgrade planner would downgrade Salination plant 3, Advanced chemical plant 3, Air filter 4, Washing plant 4, and Hydro plant 4 to a previous tier
-  Locale:
-    - Added localization for Japanese
----------------------------------------------------------------------------------------------------
 Version: 0.5.8
 Date: 2023-01-01
   Changes:

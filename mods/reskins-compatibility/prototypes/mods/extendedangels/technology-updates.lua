@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -20,12 +20,12 @@ local inputs = {
 local technologies = {}
 
 -- Reskin warehouse technologies
-technologies["logistic-warehouses-2"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses" }
-technologies["logistic-warehouses-3"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses" }
-technologies["logistic-warehouses-4"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses" }
-technologies["warehouses-2"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses" }
-technologies["warehouses-3"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses" }
-technologies["warehouses-4"] = { mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses" }
+technologies["logistic-warehouses-2"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses"}
+technologies["logistic-warehouses-3"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses"}
+technologies["logistic-warehouses-4"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-logistic-warehouses"}
+technologies["warehouses-2"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses"}
+technologies["warehouses-3"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses"}
+technologies["warehouses-4"] = {mod = "angels", group = "addons-storage", subgroup = "warehouses", image = "angels-warehouses"}
 
 -- Reskin silo technologies
 -- technologies["logistic-silos"] = {subgroup = "silos"}

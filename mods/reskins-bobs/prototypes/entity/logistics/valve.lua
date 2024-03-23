@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,7 +13,7 @@ local inputs = {
     base_entity_name = "pipe",
     mod = "bobs",
     group = "logistics",
-    particles = { ["small"] = 2 },
+    particles = {["small"] = 2},
     icon_layers = 2,
     make_remnants = false,
 }
@@ -25,21 +25,21 @@ local tint_map = {
 }
 
 local function cardinal_pictures(x, tint)
-    local x_lr = 64 * x
-    local x_hr = 128 * x
+    local x_lr = 64*x
+    local x_hr = 128*x
 
     return
     {
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/valve/valve-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/valve/valve-base.png",
                 priority = "extra-high",
                 x = x_lr,
                 width = 64,
                 height = 64,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/valve/hr-valve-base.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/valve/hr-valve-base.png",
                     priority = "extra-high",
                     x = x_hr,
                     width = 128,
@@ -49,14 +49,14 @@ local function cardinal_pictures(x, tint)
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/valve/valve-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/valve/valve-mask.png",
                 priority = "extra-high",
                 x = x_lr,
                 width = 64,
                 height = 64,
                 tint = tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/logistics/valve/hr-valve-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/logistics/valve/hr-valve-mask.png",
                     priority = "extra-high",
                     x = x_hr,
                     width = 128,

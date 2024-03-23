@@ -55,8 +55,13 @@ local function highlight(event)
     clear(index)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local selected = player.selected
-    if not selected then return end
-    local ghost = selected.type == "entity-ghost" or event.input_name == "bv-highlight-ghost"
+    if not selected then
+        if global.hover[index] == "disabled" then
+            global.hover[index] = "on"
+        end
+        return
+    end
+    local ghost = event.input_name ~= "bv-highlight-belt" or selected.type == "entity-ghost"
     local type = selected.type
     if type == "entity-ghost" then
         if ghost then
@@ -68,7 +73,7 @@ local function highlight(event)
     global.data[index] = data
     local unit_number = selected.unit_number --[[@as number]]
     local filter = not player.is_cursor_empty() and player.cursor_stack.valid_for_read and player.cursor_stack.name
-    if data.ghost == ghost and data.filter == filter and data.origin.valid and data.origin.unit_number == unit_number then
+    if data.filter == filter and data.origin.valid and data.origin.unit_number == unit_number then
         data.cycle = data.cycle % 3 + 1
     else
         data.cycle = 1
@@ -119,11 +124,19 @@ local function refresh(data)
     global.in_progress[data.index] = true
 end
 
-script.on_event("bv-highlight-belt", highlight)
-script.on_event("bv-highlight-ghost", highlight)
+local function keybind(event)
+    local index = event.player_index
+    if global.hover[index] == "on" then
+        global.hover[index] = "disabled"
+    else
+        highlight(event)
+    end
+end
+
+script.on_event("bv-highlight-belt", keybind)
+script.on_event("bv-highlight-ghost", keybind)
 
 script.on_event(e.on_selected_entity_changed, function(event)
-    if not global.hover[event.player_index] then return end
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local data = global.data[event.player_index]
     local selected = player.selected --[[@as LuaEntity]]
@@ -133,15 +146,15 @@ script.on_event(e.on_selected_entity_changed, function(event)
         data.origin = player.selected
         return
     end
+    if global.hover[event.player_index] ~= "on" then return end
     highlight(event)
 end)
 
 local function toggle_hover(event)
     local index = event.player_index
-    clear(index)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local toggle = not player.is_shortcut_toggled("bv-toggle-hover")
-    global.hover[index] = toggle
+    global.hover[index] = toggle and "on" or "off"
     player.set_shortcut_toggled("bv-toggle-hover", toggle)
 end
 

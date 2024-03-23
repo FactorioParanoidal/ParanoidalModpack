@@ -1,14 +1,12 @@
 {
   "name": "prismatic-belts",
-    "version": "1.2.4",
+  "version": "1.2.4",
   "factorio_version": "1.1",
-    "package": {
-        "git_publish_branch": "main"
-    },
   "title": "Prismatic Belts",
   "author": "Kirazy",
   "contact": "kirazy@live.com",
-    "dependencies": [
+  "dependencies":
+  [
     "base",
     "flib",
     "? boblogistics",
@@ -24,5 +22,6 @@
     "? deadlock-beltboxes-loaders",
     "(?) deadlock-integrations",
     "? vanilla-loaders-hd"
+
   ]
 }

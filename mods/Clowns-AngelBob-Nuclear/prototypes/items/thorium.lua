@@ -1,6 +1,4 @@
-
-if angelsmods.trigger.ores["thorium"] == true then
-	if not (mods["bobores"] or mods["bobplates"] or mods["angels-industries"]) and data.raw.item["thorium-ore"] then
+if not (mods["bobores"] or mods["bobplates"] or mods["angels-industries"]) and data.raw.item["thorium-ore"] then
 	data:extend(
 	{ -- thorium fuel cell
 		{
@@ -26,8 +24,8 @@ if angelsmods.trigger.ores["thorium"] == true then
 		},
 	}
 	)
-	end
-	if data.raw.item["thorium-fuel-cell"] then --should never not be true?
+end
+if data.raw.item["thorium-fuel-cell"] then
 	data:extend(
 	{
 		-- thorium ore processing items
@@ -61,5 +59,4 @@ if angelsmods.trigger.ores["thorium"] == true then
 		},
 	}
 	)
-	end
 end

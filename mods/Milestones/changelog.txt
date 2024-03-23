@@ -1,4 +1,42 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.25
+Date: 2024-03-03
+  Bugfixes:
+    - Fixed crash when only 1 milestone was visible while using the mod setting to hide incomplete milestones.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.24
+Date: 2024-02-24
+  Bugfixes:
+    - Fixed remote presets not loading in a new game, issue introduced with 1.3.23.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.23
+Date: 2024-02-19
+  Bugfixes:
+    - Fixed Reset button not working properly for remote presets when loading a save file without mod changes.
+    - Fixed consumption milestones not being backfilled properly.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.3.22
+Date: 2024-01-24
+  Features:
+    - Added new milestone types "item_consumption" and "fluid_consumption", which trigger on consumption rather than production. This has some niche uses for some modpacks.
+      Because of the niche use, these can't be added via the settings GUI yet. You can add them in presets or with the import feature.
+    - Added a player mod setting to allow hiding all incomplete milestones.
+    - Added a "Reset" button in the settings GUI, to reset your settings back to the auto-detected set (preset + addons).
+
+  Changes:
+    - Infinite milestones marked as "hidden" will now only have the initial milestone hidden. Milestones created from the infinite milestone's completion will be visible.
+    - Added a small text to fill the space when no milestones are visible at all, to make it look more intentionally empty.
+    - Marked the selected preset name with "(Modified)" if the current set has been modified compared to the preset.
+    - Preset updates:
+      - Marked all character kills as "hidden".
+      - SEK2 preset: Changed science pack order to account for recent SEK2 changes.
+      - PyMods presets: Added Guar and Arqad Queen milestones, and fixed Phaidaisus milestones.
+      - IR3 preset: Fixed petrochemical generator milestone.
+
+---------------------------------------------------------------------------------------------------
 Version: 1.3.21
 Date: 2023-12-26
   Features:

@@ -1,20 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.9.25
-Date: 22.12.2023
-  Changes:
-    - Compatibility with Bob's changes (911)
-    - Split tech Sodium processing into Sodium processing 1 and Sodium processing 2 (922)
-    - Combined techs Oil Steam cracking and Gas Steam Cracking (951)
-  Bugfixes:
-    - Fixed recipe order of carbon products to correctly display in helmod
-    - Fixed fertiliser not being craftable in mod configurations (924)
----------------------------------------------------------------------------------------------------
-Version: 0.9.24
-Date: 23.02.2023
-  Bugfixes:
-    - Fixed Nitroglycerin and explosives 2 and 3 could not be crafted in any machine (888)
-    - Fixed Bob's fertilizer could not be crafted in any machine (bob greenhouses) (888)
----------------------------------------------------------------------------------------------------
 Version: 0.9.23
 Date: 01.01.2023
   Changes:

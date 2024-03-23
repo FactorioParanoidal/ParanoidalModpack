@@ -24,14 +24,14 @@ function Solver:clone(M)
     local num_row = rawlen(M)
     local num_col = rawlen(M[1])
     for irow, row in pairs(M) do
-      Mx[irow] = {}
+        Mx[irow] = {}
         for icol, col in pairs(row) do
-        Mx[irow][icol] = col
-      end
+            Mx[irow][icol] = col
+        end
     end
     return Mx
 end
-  
+
 -------------------------------------------------------------------------------
 ---Prepare la matrice
 ---@param M table
@@ -42,9 +42,9 @@ function Solver:prepare(M)
     local row = {}
     ---ajoute la ligne Z avec Z=-input
     for icol, cell in pairs(Mx[self.row_input]) do
-      if icol > self.col_start then
+        if icol > self.col_start then
             Mx[#Mx][icol] = 0 - cell
-      end
+        end
     end
     return Mx
 end
@@ -56,9 +56,9 @@ end
 function Solver:finalize(M)
     ---finalize la ligne Z reinject le input Z=Z+input
     for icol, cell in pairs(M[#M]) do
-      if icol > self.col_start then
-        M[#M][icol] = M[#M][icol] + M[self.row_input][icol]
-      end
+        if icol > self.col_start then
+            M[#M][icol] = M[#M][icol] + M[self.row_input][icol]
+        end
     end
     return M
 end
@@ -87,29 +87,29 @@ end
 function Solver:appendState(M)
     local srow = {}
     for irow, row in pairs(M) do
-      if irow > self.row_input and irow < #M then
+        if irow > self.row_input and irow < #M then
             for icol, cell in pairs(row) do
-          if srow[icol] == nil then
+                if srow[icol] == nil then
                     table.insert(srow, 0)
-          end
-          if icol > self.col_start then
-            if cell < 0 then
-              srow[icol] = 2
+                end
+                if icol > self.col_start then
+                    if cell < 0 then
+                        srow[icol] = 2
+                    end
+                    if cell > 0 and srow[icol] ~= 2 then
+                        srow[icol] = 1
+                    end
+                end
             end
-            if cell > 0 and srow[icol] ~= 2 then
-              srow[icol] = 1
-            end
-          end
         end
-      end
     end
     local zrow = M[#M]
     for icol, cell in pairs(zrow) do
-      if icol > self.col_start then
-        if cell > 0 and srow[icol] == 2 then
-          srow[icol] = 3
+        if icol > self.col_start then
+            if cell > 0 and srow[icol] == 2 then
+                srow[icol] = 3
+            end
         end
-      end
     end
     srow[1] = { name = "State", type = "none" }
     table.insert(M, srow)
@@ -117,15 +117,26 @@ function Solver:appendState(M)
 end
 
 -------------------------------------------------------------------------------
+---Abstract Resoud la matrice
+---@param matrix_base Matrix
+---@param debug boolean
+---@param by_factory boolean
+---@param time number
+---@return Matrix, table
+function Solver:solveMatrix(matrix_base, debug, by_factory, time)
+end
+
+-------------------------------------------------------------------------------
 ---Return a matrix of block
 ---@param block table
+---@param parameters ParametersData
 ---@param debug boolean
 ---@return table
-function Solver:solve(block, debug)
+function Solver:solve(block, parameters, debug)
     local mC, runtimes
 
     local ok, err = pcall(function()
-        local mA = Solver.getBlockMatrix(block)
+        local mA = Solver.getBlockMatrix(block, parameters)
         if mA ~= nil then
             mC, runtimes = self:solveMatrix(mA, debug, block.by_factory, block.time)
         end
@@ -202,7 +213,11 @@ function Solver:solve(block, debug)
             block.limit_building = nil
             for _, recipe in spairs(recipes, function(t, a, b) return t[b].index > t[a].index end) do
                 recipe.factory.limit_count = nil
-                recipe.beacon.limit_count = nil
+                if recipe.beacons ~= nil then
+                    for _, beacon in pairs(recipe.beacons) do
+                        beacon.limit_count = nil
+                    end
+                end
                 recipe.limit_energy = nil
                 recipe.limit_pollution = nil
             end
@@ -211,7 +226,11 @@ function Solver:solve(block, debug)
             block.limit_pollution = block.pollution_total / block.count
             for _, recipe in spairs(recipes, function(t, a, b) return t[b].index > t[a].index end) do
                 recipe.factory.limit_count = recipe.factory.count / block.count
-                recipe.beacon.limit_count = recipe.beacon.count / block.count
+                if recipe.beacons ~= nil then
+                    for _, beacon in pairs(recipe.beacons) do
+                        beacon.limit_count = beacon.count / block.count
+                    end
+                end
                 recipe.limit_energy = recipe.energy_total / block.count
                 recipe.limit_pollution = recipe.pollution_total / block.count
             end
@@ -283,8 +302,9 @@ end
 -------------------------------------------------------------------------------
 ---Return a matrix of block
 ---@param block table
+---@param parameters ParametersData
 ---@return table
-function Solver.getBlockMatrix(block)
+function Solver.getBlockMatrix(block, parameters)
     local recipes = block.recipes
     if recipes ~= nil then
         local row_headers = {}
@@ -311,7 +331,7 @@ function Solver.getBlockMatrix(block)
 
         for _, recipe in spairs(recipes, sorter) do
             recipe.base_time = block.time
-            ModelCompute.computeModuleEffects(recipe)
+            ModelCompute.computeModuleEffects(recipe, parameters)
             if recipe.type == "energy" then
                 ModelCompute.computeEnergyFactory(recipe)
             else
@@ -467,8 +487,7 @@ function Solver.getBlockMatrix(block)
                         index = index,
                         key = ingredient_key,
                         name = lua_ingredient.name,
-                        type = lua_ingredient
-                            .type,
+                        type = lua_ingredient.type,
                         is_ingredient = true,
                         tooltip = col_name .. "\nIngredient",
                         temperature = lua_ingredient.temperature,

@@ -10,6 +10,7 @@ local bioprocessing_buildings = {
     ["bio-generator-desert-1"] = "bio-processing-buildings-nauvis-b",
     ["bio-generator-desert-2"] = "bio-processing-buildings-nauvis-b",
     ["bio-generator-desert-3"] = "bio-processing-buildings-nauvis-b",
+
     -- Vegetabilis
     ["desert-farm"] = "bio-processing-buildings-vegetabilis-b",
     ["desert-farm-2"] = "bio-processing-buildings-vegetabilis-b",
@@ -32,6 +33,7 @@ local bioprocessing_buildings = {
     ["bio-processor"] = "bio-processing-buildings-vegetabilis-e",
     ["bio-processor-2"] = "bio-processing-buildings-vegetabilis-e",
     ["bio-processor-3"] = "bio-processing-buildings-vegetabilis-e",
+
     -- Animalis
     ["bio-refugium-biter"] = "bio-processing-buildings-alien-b",
     ["bio-refugium-biter-2"] = "bio-processing-buildings-alien-b",

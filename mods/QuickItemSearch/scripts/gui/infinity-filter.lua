@@ -173,7 +173,7 @@ function infinity_filter_gui.destroy(player_table)
     if window and window.valid then
       window.destroy()
     end
-  player_table.guis.infinity_filter = nil
+    player_table.guis.infinity_filter = nil
   end
 end
 

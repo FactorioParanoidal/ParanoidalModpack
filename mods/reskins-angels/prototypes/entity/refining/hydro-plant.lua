@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Angel's Mods
 --
 -- See LICENSE.md in the project directory for license information.
@@ -25,10 +25,6 @@ local tier_map = {
     -- Extended Angels
     ["hydro-plant-4"] = {tier = 4, prog_tier = 5},
 }
-
-if reskins.lib.migration.is_version_or_newer(mods["extendedangels"], "0.5.10") then
-  tier_map["hydro-plant-4"].prog_tier = nil
-end
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do

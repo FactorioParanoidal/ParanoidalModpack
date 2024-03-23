@@ -1,0 +1,42 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 27. 01. 2023
+  Bugfixes:
+    - Prevented the mod from triggering on miniloaders.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 14. 05. 2022
+  Features:
+    - Added the /it-stopwatch command to measure live inserter performance.
+  Gui:
+    - Changed the toggle button to use the base game mod-gui library to conform to a common style.
+  Changes:
+    - Tweaked the positioning of the number tooltip.
+  Bugfixes:
+    - Fixed a crash from the toggle button getting lost.
+    - Improved the handling of extreme inserter speeds.
+    - Fixed inserter angle rounding discrepancy between the mod and the game.
+    - Accounted for the inserter's intrinsic stack size bonus.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 24. 11. 2020
+  Features:
+    - Added support for inserter and belt ghosts.
+    - Added a key binding to toggle the mod (unbound by default).
+  Changes:
+    - Updated for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 24. 10. 2020
+  Bugfixes:
+    - Fixed a crash when adding the mod to an existing game.
+    - Improved inserter source/destination detection for calculating throughput in the same tick as the inserter was placed (e.g. in the map editor).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 10. 06. 2020
+  Features:
+    - Added throughput display when hovering over an inserter.
+    - Added a setting to control the precision of the displayed value.
+    - Added a setting to disable mod functionality per player.
+  Gui:
+    - Added a button to quickly toggle the mod and a setting to hide the button.

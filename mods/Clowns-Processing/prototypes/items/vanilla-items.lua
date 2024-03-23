@@ -47,7 +47,7 @@ data:extend(
     {
       type = "item",
       name = "casting-powder-depleted-uranium",
-      icon = "__Clowns-Processing__/graphics/icons/powder-depleted-uranium-mix.png",
+      icon = "__Clowns-Processing__/graphics/icons/powder-depleted-uranium.png",
       icon_size = 32,
       subgroup = "clowns-depleted-uranium",
       order = "d",
@@ -90,7 +90,7 @@ data:extend(
     {
       type = "fluid",
       name = "liquid-phosphoric-acid",
-      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 512 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png",
+      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 128 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png", --DrD 512 to 128
       --icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",
@@ -105,11 +105,11 @@ data:extend(
     {
       type = "fluid",
       name = "liquid-mercury",
-      icons = angelsmods.functions.create_viscous_liquid_fluid_icon({icon="__Clowns-Processing__/graphics/icons/Numbers/Hg.png", icon_size=32, icon_mipmaps=2},
-      { { 184, 184, 208 },{ 184, 184, 208 },{ 184, 184, 208 } }),--"__Clowns-Processing__/graphics/icons/liquid-mercury.png",
+      icon = "__Clowns-Processing__/graphics/icons/liquid-mercury.png",
+      icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",
-      base_color = { 184, 184, 208 },
+      base_color = {r = 0.75, g = 0.75, b = 0.75},
       flow_color = {r = 0.8, g = 0.8, b = 0},
       max_temperature = 100,
     },
@@ -117,12 +117,11 @@ data:extend(
     {
       type = "fluid",
       name = "liquid-dimethylmercury",
-      icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil,{ { 118, 141, 138 },{ 94, 113, 110 },{ 94, 113, 110 } }),--"__Clowns-Processing__/graphics/icons/liquid-mercury.png",
-      --icon = "__Clowns-Processing__/graphics/icons/liquid-dimethylmercury.png",
-      --icon_size = 32,
+      icon = "__Clowns-Processing__/graphics/icons/liquid-dimethylmercury.png",
+      icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",
-      base_color = { 118, 141, 138 },
+      base_color = {r = 0.1, g = 0.8, b = 0.7},
       flow_color = {r = 0.1, g = 0.8, b = 0.7},
       max_temperature = 100,
     },
@@ -171,7 +170,7 @@ data:extend(
     {
       type = "fluid",
       name = "liquid-boric-acid",
-      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 512 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png",
+      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 128 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png", --DrD 512 to 128
       --icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",
@@ -365,7 +364,8 @@ data:extend(
     {
       type = "fluid",
       name = "gas-fluorine",
-      icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 216 }, "FFF"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png",
+      --icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "fff"),-- --"__Clowns-Processing__/graphics/icons/gas-fluorine.png", --DrD 216 to 128
+	  icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "FFF"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png",
       --icon_size = 32,
       default_temperature = 25,
       heat_capacity = "0.1KJ",

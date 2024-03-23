@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     icon_name = "hatchery",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-hatchery"] = { tier = 1 },
-    ["bio-hatchery-2"] = { tier = 2 },
-    ["bio-hatchery-3"] = { tier = 3 },
+    ["bio-hatchery"] = {tier = 1},
+    ["bio-hatchery-2"] = {tier = 2},
+    ["bio-hatchery-3"] = {tier = 3},
 }
 
 -- Adjust for changes in Extended Angels due to modifications to ingredients in Angel's Bioprocessing 0.7.23
@@ -60,24 +60,24 @@ for name, map in pairs(tier_map) do
                 priority = "extra-high",
                 width = 160,
                 height = 160,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
             -- Mask
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-idle-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-idle-mask.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 tint = inputs.tint,
             },
             -- Highlights
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-idle-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-idle-highlights.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 blend_mode = reskins.lib.blend_mode,
             },
         },
@@ -95,30 +95,30 @@ for name, map in pairs(tier_map) do
                         height = 160,
                         frame_count = 25,
                         line_length = 5,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                         animation_speed = 0.35,
                     },
                     -- Base
                     {
-                        filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-working-mask.png",
+                        filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-working-mask.png",
                         priority = "extra-high",
                         width = 160,
                         height = 160,
                         frame_count = 25,
                         line_length = 5,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                         animation_speed = 0.35,
                         tint = inputs.tint,
                     },
                     -- Base
                     {
-                        filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-working-highlights.png",
+                        filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-working-highlights.png",
                         priority = "extra-high",
                         width = 160,
                         height = 160,
                         frame_count = 25,
                         line_length = 5,
-                        shift = { 0, 0 },
+                        shift = {0, 0},
                         animation_speed = 0.35,
                         blend_mode = reskins.lib.blend_mode,
                     },
@@ -130,10 +130,10 @@ for name, map in pairs(tier_map) do
         {
             always_draw = true,
             animation = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-shadow.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-shadow.png",
                 width = 160,
                 height = 160,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 draw_as_shadow = true,
             },
         },
@@ -142,13 +142,13 @@ for name, map in pairs(tier_map) do
         {
             fadeout = true,
             animation = {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/hatchery/hatchery-working-light.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/hatchery/hatchery-working-light.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
                 frame_count = 25,
                 line_length = 5,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 animation_speed = 0.35,
                 draw_as_light = true,
             }

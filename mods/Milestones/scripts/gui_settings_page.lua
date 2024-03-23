@@ -47,25 +47,34 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
 
+    local common_type
+    if milestone.type == "item_consumption" then
+        common_type = "item"
+    elseif milestone.type == "fluid_consumption" then
+        common_type = "fluid"
+    else
+        common_type = milestone.type
+    end
+
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
-    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
+    milestone_flow.add{type="sprite", sprite="milestones_icon_"..common_type, tooltip={"milestones.type_"..common_type}}
 
     if milestone.hidden then
         milestone_flow.tags = {hidden= true}
     end
 
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = game.item_prototypes[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item",
-            item=default_selection, tags={action="milestones_change_setting", milestone_type="item"}}
-    elseif milestone.type == "fluid" then
+            item=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
-            fluid=default_selection, tags={action="milestones_change_setting", milestone_type="fluid"}}
+            fluid=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
         local default_selection = nil
@@ -209,6 +218,11 @@ function fill_settings_flow(settings_flow, milestones)
     refresh_all_arrow_buttons(settings_flow)
 end
 
+local function is_preset_modified(current_milestones, preset_name)
+    return presets[preset_name] ~= nil
+        and not table.deep_compare(current_milestones, presets[preset_name].milestones)
+end
+
 function build_settings_page(player)
     local main_frame = get_main_frame(player.index)
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.settings_title"}
@@ -219,31 +233,30 @@ function build_settings_page(player)
     local inner_frame = get_inner_frame(player.index)
     local settings_outer_flow = inner_frame.add{type="flow", name="milestones_settings_outer_flow", direction="vertical", style="milestones_settings_outer_flow"}
 
-    local preset_flow = settings_outer_flow.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
-    preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
+    local preset_flow = settings_outer_flow.add{type="flow", name="milestones_preset_flow", direction="horizontal", style="milestones_horizontal_flow_center"}
 
     -- Preset dropdown
+    preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
     local preset_dropdown = preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names}
     if global.current_preset_name == "Imported" then
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true}
     else
-        local current_preset_index = 1
-        for _, value in pairs(global.valid_preset_names) do
-            if value == global.current_preset_name then break end
-            current_preset_index = current_preset_index + 1
-        end
-        if current_preset_index > #global.valid_preset_names then -- Preset not found, can happen when removing mods
-            current_preset_index = 1
-        end
+        local current_preset_index = table_get_index(global.valid_preset_names, global.current_preset_name) or 1
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
+        if is_preset_modified(global.loaded_milestones, global.current_preset_name) then
+            preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
+        end
     end
 
+    preset_flow.add{type="button", caption={"milestones.settings_reset_preset"}, tooltip={"milestones.settings_reset_preset_tooltip"}, style="milestones_stretchable_button",
+        tags={action="milestones_reset_preset"}}
     preset_flow.add{type="sprite-button", name="milestones_import_button", tooltip={"milestones.settings_import"}, sprite="utility/import_slot", style="tool_button",
         tags={action="milestones_open_import"}}
     preset_flow.add{type="sprite-button", name="milestones_export_button", tooltip={"milestones.settings_export"}, sprite="utility/export_slot", style="tool_button",
         tags={action="milestones_open_export"}}
+
 
     local settings_scroll = settings_outer_flow.add{type="scroll-pane", name="milestones_settings_scroll", style="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
@@ -527,12 +540,47 @@ end)
 function preset_dropdown_changed(event)
     event.element.tags = {action="milestones_change_preset", imported=false}
     local selected_preset_name = event.element.get_item(event.element.selected_index)
-    local global_player = global.players[event.player_index]
+    local preset_milestones = {}
+    if presets[selected_preset_name] then
+        preset_milestones = presets[selected_preset_name].milestones
+    end
+    switch_to_milestones_set(preset_milestones, event.player_index)
+end
+
+function reset_preset(player_index)
+    -- Preset
+    local chosen_preset_name = get_auto_detected_preset_name()
+    local new_milestones = table.deep_copy(presets[chosen_preset_name].milestones)
+
+    -- Preset addons
+    for _preset_addon_name, preset_addon in pairs(preset_addons) do
+        if is_preset_mods_enabled(preset_addon) then
+            for _, milestone in pairs(preset_addon.milestones) do
+                table.insert(new_milestones, milestone)
+            end
+        end
+    end
+
+    local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
+    local current_preset_index = table_get_index(global.valid_preset_names, chosen_preset_name) or 1
+    preset_dropdown.selected_index = current_preset_index
+    preset_dropdown.tags = {action="milestones_change_preset", imported=false}
+
+    switch_to_milestones_set(new_milestones, player_index)
+
+     -- Can be modified or not depending on addons
+    if is_preset_modified(new_milestones, chosen_preset_name) then
+        preset_dropdown.caption = {"", chosen_preset_name, " ", {"milestones.settings_preset_modified"}}
+    end
+end
+
+function switch_to_milestones_set(milestones_set, player_index)
+    local global_player = global.players[player_index]
     local settings_flow = global_player.settings_flow
     settings_flow.clear()
-    if selected_preset_name ~= "Empty" and presets[selected_preset_name] then
-        fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
-        get_outer_frame(event.player_index).force_auto_center()
+    if next(milestones_set) then
+        fill_settings_flow(settings_flow, milestones_set)
+        get_outer_frame(player_index).force_auto_center()
     end
     global_player.settings_selection_indexes = {}
     update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)

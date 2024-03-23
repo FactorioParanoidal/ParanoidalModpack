@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -7,11 +7,11 @@
 if not reskins.lib.setting("reskins-compatibility-do-circuitprocessing-circuit-style") then return end
 
 local circuits = {
-    ["basic-circuit-board"] = { tier = 1 },
-    ["electronic-circuit"] = { tier = 2 },
-    ["advanced-circuit"] = { tier = 3 },
-    ["processing-unit"] = { tier = 4 },
-    ["advanced-processing-unit"] = { tier = 5 },
+    ["basic-circuit-board"] = {tier = 1},
+    ["electronic-circuit"] = {tier = 2},
+    ["advanced-circuit"] = {tier = 3},
+    ["processing-unit"] = {tier = 4},
+    ["advanced-processing-unit"] = {tier = 5},
 }
 
 for circuit, map in pairs(circuits) do
@@ -19,11 +19,11 @@ for circuit, map in pairs(circuits) do
     data:extend({
         {
             type = "sprite",
-            name = "reskins-compatibility-" .. circuit .. "-standard",
-            filename = reskins.compatibility.directory .. "/graphics/icons/sprites/circuits/standard/" .. circuit .. ".png",
+            name = "reskins-compatibility-"..circuit.."-standard",
+            filename = reskins.compatibility.directory.."/graphics/icons/sprites/circuits/standard/"..circuit..".png",
             size = 40,
-            mipmap_count = 2,
-            flags = { "gui-icon" },
+            mipmap_count= 2,
+            flags = {"gui-icon"},
         }
     })
 
@@ -34,30 +34,30 @@ for circuit, map in pairs(circuits) do
     data:extend({
         {
             type = "sprite",
-            name = "reskins-compatibility-" .. circuit .. "-tier",
+            name = "reskins-compatibility-"..circuit.."-tier",
             layers = {
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-base.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-base.png",
                     size = 40,
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 },
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-mask.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-mask.png",
                     size = 40,
                     tint = tint,
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 },
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-highlights.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-highlights.png",
                     size = 40,
                     blend_mode = "additive",
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 }
             },
-            flags = { "gui-icon" }
+            flags = {"gui-icon"}
         }
     })
 end

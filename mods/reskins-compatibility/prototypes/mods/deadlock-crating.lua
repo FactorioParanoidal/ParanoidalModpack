@@ -1,10 +1,10 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
 
 -- Check to see if reskinning needs to be done.
-if not mods["DeadlockCrating"] and not mods["IntermodalContainers"] then return end
+if not mods["DeadlockCrating"] then return end
 if reskins.bobs and (reskins.bobs.triggers.logistics.entities == false) then return end
 
 -- Set input parameters
@@ -12,35 +12,22 @@ local inputs = {
     type = "assembling-machine",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1, ["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     make_icons = false,
     make_remnants = false,
 }
 
-local tier_map = {}
-
-local root
-if mods["IntermodalContainers"] then
-    root = "__IntermodalContainers__"
-
-    tier_map["ic-containerization-machine-1"] = { tier = 1 }
-    tier_map["ic-containerization-machine-2"] = { tier = 2 }
-    tier_map["ic-containerization-machine-3"] = { tier = 3 }
-    tier_map["ic-containerization-machine-4"] = { tier = 4 }
-    tier_map["ic-containerization-machine-5"] = { tier = 5 }
-elseif mods["DeadlockCrating"] then
-    root = "__DeadlockCrating__"
-
-    tier_map["deadlock-crating-machine-1"] = { tier = 1 }
-    tier_map["deadlock-crating-machine-2"] = { tier = 2 }
-    tier_map["deadlock-crating-machine-3"] = { tier = 3 }
-    tier_map["deadlock-crating-machine-4"] = { tier = 4 }
-    tier_map["deadlock-crating-machine-5"] = { tier = 5 }
-end
+local tier_map = {
+    ["deadlock-crating-machine-1"] = {tier = 1},
+    ["deadlock-crating-machine-2"] = {tier = 2},
+    ["deadlock-crating-machine-3"] = {tier = 3},
+    ["deadlock-crating-machine-4"] = {tier = 4},
+    ["deadlock-crating-machine-5"] = {tier = 5},
+}
 
 local function light_tint(tint)
     local white = 0.95
-    return { r = (tint.r + white) / 2, g = (tint.g + white) / 2, b = (tint.b + white) / 2 }
+    return {r = (tint.r + white)/2, g = (tint.g + white)/2, b = (tint.b + white)/2}
 end
 
 local function tweak_tint(tint)
@@ -72,24 +59,35 @@ for name, map in pairs(tier_map) do
     entity.working_visualisations[1].light.color = light_tint(inputs.tint)
 
     -- Icon handling
-    ---@type data.IconData[]
-    local icons = {
+    inputs.icon = {
         {
-            icon = root .. "/graphics/icons/mipmaps/crating-icon-base.png",
-            icon_size = 64,
-            icon_mipmaps = 4,
+            icon = "__DeadlockCrating__/graphics/icons/mipmaps/crating-icon-base.png"
         },
         {
-            icon = root .. "/graphics/icons/mipmaps/crating-icon-mask.png",
-            icon_size = 64,
-            icon_mipmaps = 4,
+            icon = "__DeadlockCrating__/graphics/icons/mipmaps/crating-icon-mask.png",
             tint = inputs.tint,
-        },
+        }
     }
 
-    inputs.icon = reskins.lib.add_tier_labels_to_icons(icons, map.tier)
-    inputs.icon_picture = reskins.lib.convert_icons_to_sprite(icons, 0.25)
+    inputs.icon_picture = {
+        layers = {
+            {
+                filename = "__DeadlockCrating__/graphics/icons/mipmaps/crating-icon-base.png",
+                size = 64,
+                scale = 0.25,
+                mipmaps = 4,
+            },
+            {
+                filename = "__DeadlockCrating__/graphics/icons/mipmaps/crating-icon-mask.png",
+                size = 64,
+                scale = 0.25,
+                mipmaps = 4,
+                tint = inputs.tint
+            }
+        }
+    }
 
+    reskins.lib.append_tier_labels(map.tier, inputs)
     reskins.lib.assign_icons(name, inputs)
 
     -- Tech handling

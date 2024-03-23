@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,28 +13,28 @@ local inputs = {
     base_entity_name = "roboport",
     mod = "bobs",
     group = "logistics",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bob-robo-charge-port"] = { 1, 2 },
-    ["bob-robo-charge-port-large"] = { 1, 2, true },
-    ["bob-robo-charge-port-2"] = { 2, 3 },
-    ["bob-robo-charge-port-large-2"] = { 2, 3, true },
-    ["bob-robo-charge-port-3"] = { 3, 4 },
-    ["bob-robo-charge-port-large-3"] = { 3, 4, true },
-    ["bob-robo-charge-port-4"] = { 4, 5 },
-    ["bob-robo-charge-port-large-4"] = { 4, 5, true },
+    ["bob-robo-charge-port"] = {1, 2},
+    ["bob-robo-charge-port-large"] = {1, 2, true},
+    ["bob-robo-charge-port-2"] = {2, 3},
+    ["bob-robo-charge-port-large-2"] = {2, 3, true},
+    ["bob-robo-charge-port-3"] = {3, 4},
+    ["bob-robo-charge-port-large-3"] = {3, 4, true},
+    ["bob-robo-charge-port-4"] = {4, 5},
+    ["bob-robo-charge-port-large-4"] = {4, 5, true},
 }
 
 local function charge_port_base(shift_x, shift_y, subtier, tint)
-    local shift = { shift_x, shift_y }
+    local shift = {shift_x, shift_y}
     return
     {
         -- Base
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-" .. subtier .. "-base.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-"..subtier.."-base.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 30,
@@ -42,7 +42,7 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
             repeat_count = 12,
             shift = shift,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-" .. subtier .. "-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-"..subtier.."-base.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 60,
@@ -54,7 +54,7 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
         },
         -- Mask
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-mask.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 30,
@@ -63,7 +63,7 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
             shift = shift,
             tint = tint,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-mask.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 60,
@@ -76,7 +76,7 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
         },
         -- Highlights
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-highlights.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-highlights.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 30,
@@ -85,7 +85,7 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
             shift = shift,
             blend_mode = reskins.lib.blend_mode, -- "additive",
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-highlights.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 60,
@@ -98,45 +98,45 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
         },
         -- Shadow
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-shadow.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-shadow.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 35,
             height = 29,
             repeat_count = 12,
-            shift = util.by_pixel(shift_x * 32 + 2.5, shift_y * 32 + 0.5),
+            shift = util.by_pixel(shift_x*32+2.5, shift_y*32+0.5),
             draw_as_shadow = true,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-shadow.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 70,
                 height = 58,
                 repeat_count = 12,
-                shift = util.by_pixel(shift_x * 32 + 2.5, shift_y * 32 + 0.5),
+                shift = util.by_pixel(shift_x*32+2.5, shift_y*32+0.5),
                 draw_as_shadow = true,
                 scale = 0.5,
             }
         },
         -- Lights Mask
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-lights-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-lights-mask.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 16,
             height = 16,
             frame_count = 12,
-            shift = util.by_pixel(shift_x * 32, shift_y * 32 + 1),
+            shift = util.by_pixel(shift_x*32, shift_y*32+1),
             draw_as_glow = true,
             tint = tint,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-lights-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-lights-mask.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 32,
                 height = 32,
                 frame_count = 12,
-                shift = util.by_pixel(shift_x * 32, shift_y * 32 + 1),
+                shift = util.by_pixel(shift_x*32, shift_y*32+1),
                 draw_as_glow = true,
                 tint = tint,
                 scale = 0.5,
@@ -144,23 +144,23 @@ local function charge_port_base(shift_x, shift_y, subtier, tint)
         },
         -- Lights Highlights
         {
-            filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/robo-charge-port-lights-highlights.png",
+            filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/robo-charge-port-lights-highlights.png",
             priority = "medium",
             animation_speed = 0.2,
             width = 16,
             height = 16,
             frame_count = 12,
-            shift = util.by_pixel(shift_x * 32, shift_y * 32 + 1),
+            shift = util.by_pixel(shift_x*32, shift_y*32+1),
             draw_as_glow = true,
             blend_mode = "additive",
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-lights-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/logistics/robo-charge-port/hr-robo-charge-port-lights-highlights.png",
                 priority = "medium",
                 animation_speed = 0.2,
                 width = 32,
                 height = 32,
                 frame_count = 12,
-                shift = util.by_pixel(shift_x * 32, shift_y * 32 + 1),
+                shift = util.by_pixel(shift_x*32, shift_y*32+1),
                 draw_as_glow = true,
                 blend_mode = "additive",
                 scale = 0.5,
@@ -191,11 +191,11 @@ for name, map in pairs(tier_map) do
     -- Icon handling
 
     if is_large then
-        inputs.icon_base = "large-" .. inputs.icon_name .. "-" .. subtier
-        inputs.icon_mask = "large-" .. inputs.icon_name
-        inputs.icon_highlights = "large-" .. inputs.icon_name
+        inputs.icon_base = "large-"..inputs.icon_name.."-"..subtier
+        inputs.icon_mask = "large-"..inputs.icon_name
+        inputs.icon_highlights = "large-"..inputs.icon_name
     else
-        inputs.icon_base = inputs.icon_name .. "-" .. subtier
+        inputs.icon_base = inputs.icon_name.."-"..subtier
         inputs.icon_mask = nil
         inputs.icon_highlights = nil
     end
@@ -203,7 +203,7 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Reskin entities
-    entity.base_animation = { layers = {} }
+    entity.base_animation = {layers = {}}
 
     -- Setup array bounds
     local array_start, array_end = -0.5, 0.5
@@ -224,7 +224,7 @@ for name, map in pairs(tier_map) do
 
     -- Restore some defaults
     entity.recharging_animation = {
-        filename = reskins.bobs.directory .. "/graphics/entity/logistics/roboport/base/roboport-recharging.png",
+        filename = reskins.bobs.directory.."/graphics/entity/logistics/roboport/base/roboport-recharging.png",
         priority = "high",
         width = 37,
         height = 35,

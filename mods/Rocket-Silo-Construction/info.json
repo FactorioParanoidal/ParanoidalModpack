@@ -7,5 +7,5 @@
 	"homepage":"Discord: MFerrari#6561 and Cobaia#6897",
 	"contact": "Discord: MFerrari#6561 and Cobaia#6897",
 	"factorio_version":"1.1",
-	"dependencies": ["base >= 1.1.0","? space-exploration >= 0.6.0", "? IndustrialRevolution3","(?) exotic-industries", "(?) bobplates", "(?) bobelectronics", "(?) angelssmelting", "(?) angelsrefining", "(?) bobores", "(?) SpaceXGAR"]
+	"dependencies": ["base >= 1.1.0","? space-exploration >= 0.6.0", "(?) bobplates", "(?) bobelectronics", "(?) angelssmelting", "(?) angelsrefining", "(?) bobores", "(?) SpaceXGAR"]
 }

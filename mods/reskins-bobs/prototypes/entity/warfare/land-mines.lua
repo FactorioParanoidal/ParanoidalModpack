@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -34,7 +34,7 @@ for _, name in pairs(tier_map) do
 
     -- Reskin entities
     entity.picture_safe = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/" .. name .. "/hr-" .. name .. ".png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/"..name.."/hr-"..name..".png",
         priority = "medium",
         width = 64,
         height = 64,
@@ -42,7 +42,7 @@ for _, name in pairs(tier_map) do
     }
 
     entity.picture_set = {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/" .. name .. "/hr-" .. name .. "-set.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/"..name.."/hr-"..name.."-set.png",
         priority = "medium",
         width = 64,
         height = 64,

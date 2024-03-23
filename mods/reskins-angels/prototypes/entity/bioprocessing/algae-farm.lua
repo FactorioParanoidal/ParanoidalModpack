@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Angel's Mods
 --
 -- See LICENSE.md in the project directory for license information.
@@ -46,9 +46,7 @@ if reskins.lib.migration.is_version_or_newer(mods["SeaBlock"], "0.5.5") then
 end
 
 -- Extended Angel's adds a 5th tier of Algae farm in version 0.5.0, prior to that Algae farm 4 had tier 5 ingredients
-if reskins.lib.migration.is_version_or_newer(mods["extendedangels"], "0.5.10") then
-    tier_map["algae-farm-5"] = {tier = 5, prog_tier = 4}
-elseif reskins.lib.migration.is_version_or_newer(mods["extendedangels"], "0.5.0") then
+if reskins.lib.migration.is_version_or_newer(mods["extendedangels"], "0.5.0") then
     tier_map["algae-farm-5"] = {tier = 5}
 elseif mods["extendedangels"] and reskins.lib.migration.is_older_version(mods["angelsbioprocessing"], "0.7.20") then
     tier_map["algae-farm-4"].prog_tier = 5

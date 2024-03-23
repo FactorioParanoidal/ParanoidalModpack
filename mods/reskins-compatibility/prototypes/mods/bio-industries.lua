@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -15,84 +15,95 @@ local inputs = {
     flat_icon = true,
 }
 
-local shift_upleft = { -8, -8 }
-local shift_upright = { 8, -8 }
+local shift_upleft = {-8, -8}
+local shift_upright = {8, -8}
 local scale = 0.5
 
 local intermediates = {}
 
 if (reskins.bobs and reskins.bobs.triggers.greenhouse.items) then
-    intermediates["seedling"] = { mod = "bobs", group = "greenhouse", subgroup = "items" }
+    intermediates["seedling"] = {mod = "bobs", group = "greenhouse", subgroup = "items"}
 end
 
 if (reskins.bobs and reskins.bobs.triggers.electronics.items) then
-    intermediates["bob-resin-wood"] = { mod = "bobs", type = "recipe", group = "plates", subgroup = "recipes" }
+    intermediates["bob-resin-wood"] = {mod = "bobs", type = "recipe", group = "plates", subgroup = "recipes"}
 end
 
 if (reskins.bobs and reskins.bobs.triggers.plates.items) then
-    intermediates["carbon"] = { mod = "bobs", group = "plates", subgroup = "items" }
+    intermediates["carbon"] = {mod = "bobs", group = "plates", subgroup = "items"}
 end
 
 reskins.lib.create_icons_from_list(intermediates, inputs)
 
 local composite_recipes = {
     -- Seeds
-    ["bi-seed-1"] = { ["bi-seed"] = {},["water"] = { type = "fluid", scale = scale, shift = shift_upleft } },
-    ["bi-seed-2"] = { ["bi-seed"] = {},["bi-ash"] = { scale = scale, shift = shift_upleft } },
-    ["bi-seed-3"] = { ["bi-seed"] = {},["fertilizer"] = { scale = scale, shift = shift_upleft } },
-    ["bi-seed-4"] = { ["bi-seed"] = {},["bi-adv-fertilizer"] = { scale = scale, shift = shift_upleft } },
+    ["bi-seed-1"] = {["bi-seed"] = {}, ["water"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+    ["bi-seed-2"] = {["bi-seed"] = {}, ["bi-ash"] = {scale = scale, shift = shift_upleft}},
+    ["bi-seed-3"] = {["bi-seed"] = {}, ["fertilizer"] = {scale = scale, shift = shift_upleft}},
+    ["bi-seed-4"] = {["bi-seed"] = {}, ["bi-adv-fertilizer"] = {scale = scale, shift = shift_upleft}},
+
     -- Seedlings
-    ["bi-seedling-1"] = { ["seedling"] = {},["water"] = { type = "fluid", scale = scale, shift = shift_upleft } },
-    ["bi-seedling-2"] = { ["seedling"] = {},["bi-ash"] = { scale = scale, shift = shift_upleft } },
-    ["bi-seedling-3"] = { ["seedling"] = {},["fertilizer"] = { scale = scale, shift = shift_upleft } },
-    ["bi-seedling-4"] = { ["seedling"] = {},["bi-adv-fertilizer"] = { scale = scale, shift = shift_upleft } },
+    ["bi-seedling-1"] = {["seedling"] = {}, ["water"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+    ["bi-seedling-2"] = {["seedling"] = {}, ["bi-ash"] = {scale = scale, shift = shift_upleft}},
+    ["bi-seedling-3"] = {["seedling"] = {}, ["fertilizer"] = {scale = scale, shift = shift_upleft}},
+    ["bi-seedling-4"] = {["seedling"] = {}, ["bi-adv-fertilizer"] = {scale = scale, shift = shift_upleft}},
+
     -- Wood
-    ["bi-logs-1"] = { ["wood"] = {},["water"] = { type = "fluid", scale = scale, shift = shift_upleft } },
-    ["bi-logs-2"] = { ["wood"] = {},["bi-ash"] = { scale = scale, shift = shift_upleft } },
-    ["bi-logs-3"] = { ["wood"] = {},["fertilizer"] = { scale = scale, shift = shift_upleft } },
-    ["bi-logs-4"] = { ["wood"] = {},["bi-adv-fertilizer"] = { scale = scale, shift = shift_upleft } },
+    ["bi-logs-1"] = {["wood"] = {}, ["water"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+    ["bi-logs-2"] = {["wood"] = {}, ["bi-ash"] = {scale = scale, shift = shift_upleft}},
+    ["bi-logs-3"] = {["wood"] = {}, ["fertilizer"] = {scale = scale, shift = shift_upleft}},
+    ["bi-logs-4"] = {["wood"] = {}, ["bi-adv-fertilizer"] = {scale = scale, shift = shift_upleft}},
+
     -- Miscellaneous
-    ["bi-battery"] = { ["battery"] = {},["bi-biomass"] = { type = "fluid", scale = scale, shift = shift_upleft } },
-    ["bi-sulfur"] = { ["sulfur"] = {},["bi-ash"] = { scale = scale, shift = shift_upleft } },
-    ["bi-acid"] = { ["sulfuric-acid"] = { type = "fluid" },["bi-biomass"] = { type = "fluid", scale = scale, shift = shift_upleft } },
-    ["bi-basic-gas-processing"] = { ["petroleum-gas"] = { type = "fluid" },["coal"] = { scale = scale, shift = shift_upleft },["resin"] = { scale = scale, shift = shift_upright } },
-    ["bi-solid-fuel"] = { ["solid-fuel"] = {},["wood-bricks"] = { scale = scale, shift = shift_upleft } },
+    ["bi-battery"] = {["battery"] = {}, ["bi-biomass"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+    ["bi-sulfur"] = {["sulfur"] = {}, ["bi-ash"] = {scale = scale, shift = shift_upleft}},
+    ["bi-acid"] = {["sulfuric-acid"] = {type = "fluid"}, ["bi-biomass"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+    ["bi-basic-gas-processing"] = {["petroleum-gas"] = {type = "fluid"}, ["coal"] = {scale = scale, shift = shift_upleft}, ["resin"] = {scale = scale, shift = shift_upright}},
+    ["bi-solid-fuel"] = {["solid-fuel"] = {}, ["wood-bricks"] = {scale = scale, shift = shift_upleft}},
+
     -- Wood and Pulp related recipes
-    ["bi-woodpulp"] = { ["bi-woodpulp"] = {},["wood"] = { scale = scale, shift = shift_upleft } },
-    ["bi-resin-pulp"] = { ["resin"] = {},["bi-woodpulp"] = { scale = scale, shift = shift_upleft } },
-    ["bi-wood-from-pulp"] = { ["wood"] = {},["bi-woodpulp"] = { scale = scale, shift = shift_upleft },["resin"] = { scale = scale, shift = shift_upright } },
+    ["bi-woodpulp"] = {["bi-woodpulp"] = {}, ["wood"] = {scale = scale, shift = shift_upleft}},
+    ["bi-resin-pulp"] = {["resin"] = {}, ["bi-woodpulp"] = {scale = scale, shift = shift_upleft}},
+    ["bi-wood-from-pulp"] = {["wood"] = {}, ["bi-woodpulp"] = {scale = scale, shift = shift_upleft}, ["resin"] = {scale = scale, shift = shift_upright}},
+
     -- Ash
-    ["bi-ash-1"] = { ["bi-ash"] = {},["wood"] = { scale = scale, shift = shift_upleft } },
-    ["bi-ash-2"] = { ["bi-ash"] = {},["bi-woodpulp"] = { scale = scale, shift = shift_upleft } },
+    ["bi-ash-1"] = {["bi-ash"] = {}, ["wood"] = {scale = scale, shift = shift_upleft}},
+    ["bi-ash-2"] = {["bi-ash"] = {}, ["bi-woodpulp"] = {scale = scale, shift = shift_upleft}},
+
     -- Charcoal
-    ["bi-charcoal-1"] = { ["wood-charcoal"] = {},["bi-woodpulp"] = { scale = scale, shift = shift_upleft } },
-    ["bi-charcoal-2"] = { ["wood-charcoal"] = {},["wood"] = { scale = scale, shift = shift_upleft } },
+    ["bi-charcoal-1"] = {["wood-charcoal"] = {}, ["bi-woodpulp"] = {scale = scale, shift = shift_upleft}},
+    ["bi-charcoal-2"] = {["wood-charcoal"] = {}, ["wood"] = {scale = scale, shift = shift_upleft}},
+
     -- Pellets
-    ["bi-coke-coal"] = { ["pellet-coke"] = {},["coal"] = { scale = scale, shift = shift_upleft } },
-    ["bi-pellet-coke"] = { ["pellet-coke"] = {},["solid-fuel"] = { scale = scale, shift = shift_upleft } },
-    ["bi-pellet-coke-2"] = { ["pellet-coke"] = {},["carbon"] = { scale = scale, shift = shift_upleft } },
+    ["bi-coke-coal"] = {["pellet-coke"] = {}, ["coal"] = {scale = scale, shift = shift_upleft}},
+    ["bi-pellet-coke"] = {["pellet-coke"] = {}, ["solid-fuel"] = {scale = scale, shift = shift_upleft}},
+    ["bi-pellet-coke-2"] = {["pellet-coke"] = {}, ["carbon"] = {scale = scale, shift = shift_upleft}},
+
     -- Stone and Crushed Stone
-    ["bi-stone-brick"] = { ["stone-brick"] = {},["bi-ash"] = { scale = scale, shift = shift_upleft },["stone-crushed"] = { scale = scale, shift = shift_upright } },
-    ["bi-crushed-stone-1"] = { ["stone-crushed"] = {},["stone"] = { scale = scale, shift = shift_upleft } },
-    ["bi-crushed-stone-2"] = { ["stone-crushed"] = {},["concrete"] = { scale = scale, shift = shift_upleft } },
-    ["bi-crushed-stone-3"] = { ["stone-crushed"] = {},["hazard-concrete"] = { scale = scale, shift = shift_upleft } },
-    ["bi-crushed-stone-4"] = { ["stone-crushed"] = {},["refined-concrete"] = { scale = scale, shift = shift_upleft } },
-    ["bi-crushed-stone-5"] = { ["stone-crushed"] = {},["refined-hazard-concrete"] = { scale = scale, shift = shift_upleft } },
+    ["bi-stone-brick"] = {["stone-brick"] = {}, ["bi-ash"] = {scale = scale, shift = shift_upleft}, ["stone-crushed"] = {scale = scale, shift = shift_upright}},
+    ["bi-crushed-stone-1"] = {["stone-crushed"] = {}, ["stone"] = {scale = scale, shift = shift_upleft}},
+    ["bi-crushed-stone-2"] = {["stone-crushed"] = {}, ["concrete"] = {scale = scale, shift = shift_upleft}},
+    ["bi-crushed-stone-3"] = {["stone-crushed"] = {}, ["hazard-concrete"] = {scale = scale, shift = shift_upleft}},
+    ["bi-crushed-stone-4"] = {["stone-crushed"] = {}, ["refined-concrete"] = {scale = scale, shift = shift_upleft}},
+    ["bi-crushed-stone-5"] = {["stone-crushed"] = {}, ["refined-hazard-concrete"] = {scale = scale, shift = shift_upleft}},
+
     -- Fertilizer
-    ["bi-fertilizer-1"] = { ["fertilizer"] = {},["sulfur"] = { scale = scale, shift = shift_upleft } },
-    ["bi-fertilizer-2"] = { ["fertilizer"] = {},["sodium-hydroxide"] = { scale = scale, shift = shift_upleft } },
-    ["bi-adv-fertilizer-1"] = { ["bi-adv-fertilizer"] = {},["alien-artifact"] = { scale = scale, shift = shift_upleft } },
-    ["bi-adv-fertilizer-2"] = { ["bi-adv-fertilizer"] = {},["bi-biomass"] = { type = "fluid", scale = scale, shift = shift_upleft } },
+    ["bi-fertilizer-1"] = {["fertilizer"] = {}, ["sulfur"] = {scale = scale, shift = shift_upleft}},
+    ["bi-fertilizer-2"] = {["fertilizer"] = {}, ["sodium-hydroxide"] = {scale = scale, shift = shift_upleft}},
+    ["bi-adv-fertilizer-1"] = {["bi-adv-fertilizer"] = {}, ["alien-artifact"] = {scale = scale, shift = shift_upleft}},
+    ["bi-adv-fertilizer-2"] = {["bi-adv-fertilizer"] = {}, ["bi-biomass"] = {type = "fluid", scale = scale, shift = shift_upleft}},
+
     -- Plastic
-    ["bi-plastic-1"] = { ["plastic-bar"] = {},["wood"] = { scale = scale, shift = shift_upleft } },
-    ["bi-plastic-2"] = { ["plastic-bar"] = {},["bi-cellulose"] = { scale = scale, shift = shift_upleft } },
+    ["bi-plastic-1"] = {["plastic-bar"] = {}, ["wood"] = {scale = scale, shift = shift_upleft}},
+    ["bi-plastic-2"] = {["plastic-bar"] = {}, ["bi-cellulose"] = {scale = scale, shift = shift_upleft}},
+
     -- Cellulose
-    ["bi-cellulose-2"] = { ["bi-cellulose"] = {},["steam"] = { type = "fluid", scale = scale, shift = shift_upleft } },
+    ["bi-cellulose-2"] = {["bi-cellulose"] = {}, ["steam"] = {type = "fluid", scale = scale, shift = shift_upleft}},
 }
 
 if mods["bobelectronics"] and reskins.lib.setting("reskins-bobs-do-bobelectronics-circuit-style") ~= "off" then
-    composite_recipes["wooden-board"] = { ["wooden-board"] = {},["wood"] = { scale = scale, shift = shift_upleft } }
-    composite_recipes["bi-press-wood"] = { ["wooden-board"] = {},["bi-woodpulp"] = { scale = scale, shift = shift_upleft },["resin"] = { scale = scale, shift = shift_upright } }
+    composite_recipes["wooden-board"] = {["wooden-board"] = {}, ["wood"] = {scale = scale, shift = shift_upleft}}
+    composite_recipes["bi-press-wood"] = {["wooden-board"] = {}, ["bi-woodpulp"] = {scale = scale, shift = shift_upleft}, ["resin"] = {scale = scale, shift = shift_upright}}
 end
 
 for name, sources in pairs(composite_recipes) do
@@ -108,11 +119,11 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
         icon_name = "boiler",
         mod = "bobs",
         group = "power",
-        particles = { ["big"] = 3 },
+        particles = {["big"] = 3},
     }
 
     local boilers = {
-        ["bi-bio-boiler"] = { tint = util.color("80801a") }
+        ["bi-bio-boiler"] = {tint = util.color("80801a")}
     }
 
     for name, map in pairs(boilers) do
@@ -127,7 +138,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
         reskins.lib.setup_standard_entity(name, 0, inputs)
 
         -- Fetch remnant
-        local remnant = data.raw["corpse"][name .. "-remnants"]
+        local remnant = data.raw["corpse"][name.."-remnants"]
 
         -- Reskin remnants
         remnant.animation = {
@@ -158,7 +169,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                 },
                 -- Mask
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/boiler-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/boiler-remnants-mask.png",
                     line_length = 1,
                     width = 138,
                     height = 110,
@@ -169,7 +180,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     shift = util.by_pixel(0, -3),
                     tint = inputs.tint,
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/hr-boiler-remnants-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/hr-boiler-remnants-mask.png",
                         line_length = 1,
                         width = 274,
                         height = 220,
@@ -184,7 +195,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                 },
                 -- Highlights
                 {
-                    filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/boiler-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/boiler-remnants-highlights.png",
                     line_length = 1,
                     width = 138,
                     height = 110,
@@ -195,7 +206,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     shift = util.by_pixel(0, -3),
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     hr_version = {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/remnants/hr-boiler-remnants-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/remnants/hr-boiler-remnants-highlights.png",
                         line_length = 1,
                         width = 274,
                         height = 220,
@@ -233,14 +244,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-N-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-N-idle-mask.png",
                         priority = "extra-high",
                         width = 131,
                         height = 108,
                         shift = util.by_pixel(-0.5, 4),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-N-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-N-idle-mask.png",
                             priority = "extra-high",
                             width = 269,
                             height = 221,
@@ -251,14 +262,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-N-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-N-idle-highlights.png",
                         priority = "extra-high",
                         width = 131,
                         height = 108,
                         shift = util.by_pixel(-0.5, 4),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-N-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-N-idle-highlights.png",
                             priority = "extra-high",
                             width = 269,
                             height = 221,
@@ -307,14 +318,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Color mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-E-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-E-idle-mask.png",
                         priority = "extra-high",
                         width = 105,
                         height = 147,
                         shift = util.by_pixel(-3.5, -0.5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-E-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-E-idle-mask.png",
                             priority = "extra-high",
                             width = 216,
                             height = 301,
@@ -325,14 +336,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-E-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-E-idle-highlights.png",
                         priority = "extra-high",
                         width = 105,
                         height = 147,
                         shift = util.by_pixel(-3.5, -0.5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-E-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-E-idle-highlights.png",
                             priority = "extra-high",
                             width = 216,
                             height = 301,
@@ -381,14 +392,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-S-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-S-idle-mask.png",
                         priority = "extra-high",
                         width = 128,
                         height = 95,
                         shift = util.by_pixel(3, 12.5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-S-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-S-idle-mask.png",
                             priority = "extra-high",
                             width = 260,
                             height = 192,
@@ -399,14 +410,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-S-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-S-idle-highlights.png",
                         priority = "extra-high",
                         width = 128,
                         height = 95,
                         shift = util.by_pixel(3, 12.5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-S-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-S-idle-highlights.png",
                             priority = "extra-high",
                             width = 260,
                             height = 192,
@@ -455,14 +466,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Mask
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-W-idle-mask.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-W-idle-mask.png",
                         priority = "extra-high",
                         width = 96,
                         height = 132,
                         shift = util.by_pixel(1, 5),
                         tint = inputs.tint,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-W-idle-mask.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-W-idle-mask.png",
                             priority = "extra-high",
                             width = 196,
                             height = 273,
@@ -473,14 +484,14 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
                     },
                     -- Highlights
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/boiler-W-idle-highlights.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/power/boiler/boiler-W-idle-highlights.png",
                         priority = "extra-high",
                         width = 96,
                         height = 132,
                         shift = util.by_pixel(1, 5),
                         blend_mode = reskins.lib.blend_mode, -- "additive",
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/power/boiler/hr-boiler-W-idle-highlights.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/power/boiler/hr-boiler-W-idle-highlights.png",
                             priority = "extra-high",
                             width = 196,
                             height = 273,
@@ -516,7 +527,7 @@ if reskins.bobs and reskins.bobs.triggers.power.entities then
 
         -- Handle ambient-light
         entity.energy_source.light_flicker = {
-            color = { 0, 0, 0 },
+            color = {0, 0, 0},
             minimum_light_size = 0,
             light_intensity_to_size_coefficient = 0,
         }

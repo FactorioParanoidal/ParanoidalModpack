@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -14,7 +14,7 @@ local inputs = {
     directory = reskins.bobs.directory,
     mod = "bobs",
     group = "plates",
-    particles = { ["big"] = 1 },
+    particles = {["big"] = 1},
     tint = util.color("b29270"),
     icon_layers = 1,
     make_remnants = false,
@@ -22,20 +22,20 @@ local inputs = {
 
 local tier_map = {
     ["bob-small-storage-tank"] = {},
-    ["bob-small-inline-storage-tank"] = { inline = true },
+    ["bob-small-inline-storage-tank"] = {inline = true},
 }
 
 -- All-way small storage tank
 local all_way_sheets = {
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/small-storage-tank.png",
+        filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/small-storage-tank.png",
         priority = "extra-high",
         frames = 1,
         width = 32,
         height = 64,
         shift = util.by_pixel(0, -16),
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-small-storage-tank.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-small-storage-tank.png",
             priority = "extra-high",
             frames = 1,
             width = 64,
@@ -45,7 +45,7 @@ local all_way_sheets = {
         }
     },
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/small-storage-tank-shadow.png",
+        filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/small-storage-tank-shadow.png",
         priority = "extra-high",
         frames = 1,
         width = 64,
@@ -53,7 +53,7 @@ local all_way_sheets = {
         shift = util.by_pixel(16, 0),
         draw_as_shadow = true,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-small-storage-tank-shadow.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-small-storage-tank-shadow.png",
             priority = "extra-high",
             frames = 1,
             width = 128,
@@ -67,14 +67,14 @@ local all_way_sheets = {
 
 local inline_sheets = {
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/inline-storage-tank.png",
+        filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/inline-storage-tank.png",
         priority = "extra-high",
         frames = 2,
         width = 32,
         height = 64,
         shift = util.by_pixel(0, -16),
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-inline-storage-tank.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-inline-storage-tank.png",
             priority = "extra-high",
             frames = 2,
             width = 64,
@@ -84,7 +84,7 @@ local inline_sheets = {
         }
     },
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/inline-storage-tank-shadow.png",
+        filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/inline-storage-tank-shadow.png",
         priority = "extra-high",
         frames = 2,
         width = 64,
@@ -92,7 +92,7 @@ local inline_sheets = {
         shift = util.by_pixel(16, 0),
         draw_as_shadow = true,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-inline-storage-tank-shadow.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-inline-storage-tank-shadow.png",
             priority = "extra-high",
             frames = 2,
             width = 128,
@@ -118,22 +118,22 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, 0, inputs)
 
     -- Reskin entities
-    entity.window_bounding_box = { util.by_pixel(5.5, -21.5), util.by_pixel(10.5, -3.5) }
+    entity.window_bounding_box = {util.by_pixel(5.5, -21.5), util.by_pixel(10.5, -3.5)}
     entity.pictures = {
-        picture = { sheets = map.inline and inline_sheets or all_way_sheets },
+        picture = {sheets = map.inline and inline_sheets or all_way_sheets},
         fluid_background = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/fluid-background.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/fluid-background.png",
             priority = "extra-high",
             width = 5,
             height = 18,
         },
         window_background = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/window-background.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/window-background.png",
             priority = "extra-high",
             width = 5,
             height = 18,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-window-background.png",
+                filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-window-background.png",
                 priority = "extra-high",
                 width = 10,
                 height = 36,
@@ -141,13 +141,13 @@ for name, map in pairs(tier_map) do
             }
         },
         flow_sprite = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/fluid-flow.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/fluid-flow.png",
             priority = "extra-high",
             width = 160,
             height = 10,
         },
         gas_flow = {
-            filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/steam.png",
+            filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/steam.png",
             priority = "extra-high",
             line_length = 10,
             width = 7,
@@ -157,7 +157,7 @@ for name, map in pairs(tier_map) do
             direction_count = 1,
             animation_speed = 0.25,
             hr_version = {
-                filename = reskins.bobs.directory .. "/graphics/entity/plates/small-storage-tank/hr-steam.png",
+                filename = reskins.bobs.directory.."/graphics/entity/plates/small-storage-tank/hr-steam.png",
                 priority = "extra-high",
                 line_length = 10,
                 width = 14,

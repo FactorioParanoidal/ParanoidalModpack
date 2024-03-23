@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -14,15 +14,15 @@ local inputs = {
     base_entity_name = "locomotive",
     mod = "bobs",
     group = "logistics",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
 }
 
 local tier_map = {
-    ["locomotive"] = { 1, 2 },
-    ["bob-locomotive-2"] = { 2, 3 },
-    ["bob-locomotive-3"] = { 3, 4 },
-    ["bob-armoured-locomotive"] = { 1, 4 },
-    ["bob-armoured-locomotive-2"] = { 2, 5 },
+    ["locomotive"] = {1, 2},
+    ["bob-locomotive-2"] = {2, 3},
+    ["bob-locomotive-3"] = {3, 4},
+    ["bob-armoured-locomotive"] = {1, 4},
+    ["bob-armoured-locomotive-2"] = {2, 5},
 }
 
 -- Reskin entities, create and assign extra details
@@ -46,10 +46,10 @@ for name, map in pairs(tier_map) do
     if string.find(name, "armoured") then
         inputs.icon_extras = {
             {
-                icon = reskins.bobs.directory .. "/graphics/icons/logistics/locomotive/armored-train-symbol.png"
+                icon = reskins.bobs.directory.."/graphics/icons/logistics/locomotive/armored-train-symbol.png"
             },
             {
-                icon = reskins.bobs.directory .. "/graphics/icons/logistics/locomotive/armored-train-symbol.png",
+                icon = reskins.bobs.directory.."/graphics/icons/logistics/locomotive/armored-train-symbol.png",
                 tint = reskins.lib.adjust_alpha(reskins.lib.tint_index[tier], 0.75)
             }
         }

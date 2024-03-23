@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     icon_name = "arboretum",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-arboretum-1"] = { tier = 1 },
-    ["bio-arboretum-2"] = { tier = 2 },
-    ["bio-arboretum-3"] = { tier = 3 },
+    ["bio-arboretum-1"] = {tier = 1},
+    ["bio-arboretum-2"] = {tier = 2},
+    ["bio-arboretum-3"] = {tier = 3},
 }
 
 -- Reskin entities, create and assign extra details
@@ -51,31 +51,31 @@ for name, map in pairs(tier_map) do
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-arboretum-shadow.png",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.50 },
+                shift = {0, -0.50},
             },
             -- Base
             {
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-arboretum-base.png",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.50 },
+                shift = {0, -0.50},
             },
             -- Mask
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/arboretum/arboretum-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/arboretum/arboretum-mask.png",
                 priority = "extra-high",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.5 },
+                shift = {0, -0.5},
                 tint = inputs.tint,
             },
             -- Highlights
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/arboretum/arboretum-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/arboretum/arboretum-highlights.png",
                 priority = "extra-high",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.5 },
+                shift = {0, -0.5},
                 blend_mode = reskins.lib.blend_mode,
             },
             -- Pipes
@@ -83,14 +83,14 @@ for name, map in pairs(tier_map) do
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-arboretum-pipes.png",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.50 },
+                shift = {0, -0.50},
             },
             -- Off
             {
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-arboretum-off.png",
                 width = 224,
                 height = 256,
-                shift = { 0, -0.50 },
+                shift = {0, -0.50},
             },
         }
     }

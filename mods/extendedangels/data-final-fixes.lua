@@ -11,9 +11,9 @@ for _, recipe in pairs(recipe_list) do
 
     for _, module in pairs(data.raw.module) do
         if module.limitation then
-            for j, limit in pairs(module.limitation) do
+            for j,limit in pairs(module.limitation) do
                 if limit == recipe then
-                    table.remove(module.limitation, j)
+                    table.remove(module.limitation,j)
                     break
                 end
             end
@@ -32,7 +32,9 @@ local previous_building = {
     "bio-generator-desert-3",
     "bio-arboretum-2",
     "bio-arboretum-3",
+    "gas-refinery-4",
     "advanced-chemical-plant-3",
+    -- "angels-air-filter-3",
     "angels-air-filter-4",
     "hydro-plant-4",
     "salination-plant-3",
@@ -42,6 +44,8 @@ local previous_building = {
     "ore-floatation-cell-4",
     "ore-leaching-plant-4",
     "ore-refinery-3",
+    -- "crystallizer-3",
+    -- "filtration-unit-3",
     "bio-press-2",
     "bio-press-3",
     "bio-processor-2",

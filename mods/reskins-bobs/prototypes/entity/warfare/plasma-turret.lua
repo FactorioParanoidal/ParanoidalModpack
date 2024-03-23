@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -12,16 +12,16 @@ local inputs = {
     base_entity_name = "artillery-turret",
     mod = "bobs",
     group = "warfare",
-    particles = { ["big"] = 4 },
+    particles = {["big"] = 4},
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bob-plasma-turret-1"] = { tier = 1 },
-    ["bob-plasma-turret-2"] = { tier = 2 },
-    ["bob-plasma-turret-3"] = { tier = 3 },
-    ["bob-plasma-turret-4"] = { tier = 4 },
-    ["bob-plasma-turret-5"] = { tier = 5 },
+    ["bob-plasma-turret-1"] = {tier = 1},
+    ["bob-plasma-turret-2"] = {tier = 2},
+    ["bob-plasma-turret-3"] = {tier = 3},
+    ["bob-plasma-turret-4"] = {tier = 4},
+    ["bob-plasma-turret-5"] = {tier = 5},
 }
 
 -- Sea Block 0.5.5 recalibrates turret 1 and 2 to tiers 3 and 4, and hides the rest
@@ -31,12 +31,12 @@ if reskins.lib.migration.is_version_or_newer(mods["SeaBlock"], "0.5.5") then
 end
 
 
-local raising_frame_sequence = { 1, 2, 2, 2, 3, 4, 4, 4, 1, 2, 2, 2, 3, 4, 4, 4 }
+local raising_frame_sequence = {1, 2, 2, 2, 3, 4, 4, 4, 1, 2, 2, 2, 3, 4, 4, 4}
 
 local function plasma_turret_extension_base(parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-base.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-base.png",
         priority = "medium",
         width = 88,
         height = 89,
@@ -47,7 +47,7 @@ local function plasma_turret_extension_base(parameters)
         direction_count = 8,
         shift = util.by_pixel(-0.5, -35),
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-base.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-base.png",
             priority = "medium",
             width = 176,
             height = 178,
@@ -65,7 +65,7 @@ end
 local function plasma_turret_extension_runtime_mask(parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-runtime-mask.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-runtime-mask.png",
         priority = "medium",
         width = 88,
         height = 89,
@@ -77,7 +77,7 @@ local function plasma_turret_extension_runtime_mask(parameters)
         shift = util.by_pixel(-0.5, -35),
         apply_runtime_tint = true,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-runtime-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-runtime-mask.png",
             priority = "medium",
             width = 176,
             height = 178,
@@ -96,7 +96,7 @@ end
 local function plasma_turret_extension_tint_mask(parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-mask.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-mask.png",
         priority = "medium",
         width = 88,
         height = 89,
@@ -108,7 +108,7 @@ local function plasma_turret_extension_tint_mask(parameters)
         shift = util.by_pixel(-0.5, -35),
         tint = parameters.tint,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-mask.png",
             priority = "medium",
             width = 176,
             height = 178,
@@ -127,7 +127,7 @@ end
 local function plasma_turret_extension_highlights(parameters)
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-highlights.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-highlights.png",
         priority = "medium",
         width = 88,
         height = 89,
@@ -139,7 +139,7 @@ local function plasma_turret_extension_highlights(parameters)
         shift = util.by_pixel(-0.5, -35),
         blend_mode = reskins.lib.blend_mode, -- "additive",
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-highlights.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-highlights.png",
             priority = "medium",
             width = 176,
             height = 178,
@@ -160,7 +160,7 @@ local function plasma_turret_extension_lights(parameters)
 
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-lights-mask.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-lights-mask.png",
         priority = "medium",
         width = 67,
         height = 89,
@@ -174,7 +174,7 @@ local function plasma_turret_extension_lights(parameters)
         shift = shift,
         draw_as_glow = true,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-lights-mask.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-lights-mask.png",
             priority = "medium",
             width = 134,
             height = 178,
@@ -197,7 +197,7 @@ local function plasma_turret_extension_lights_highlights(parameters)
 
     return
     {
-        filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-lights-highlights.png",
+        filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-raising-lights-highlights.png",
         priority = "medium",
         width = 67,
         height = 89,
@@ -211,7 +211,7 @@ local function plasma_turret_extension_lights_highlights(parameters)
         shift = shift,
         draw_as_glow = true,
         hr_version = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-lights-highlights.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-raising-lights-highlights.png",
             priority = "medium",
             width = 134,
             height = 178,
@@ -256,13 +256,13 @@ for name, map in pairs(tier_map) do
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-base.png",
                 priority = "high",
                 width = 104,
                 height = 89,
                 shift = util.by_pixel(0, 0),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-base.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-base.png",
                     priority = "high",
                     width = 208,
                     height = 178,
@@ -272,14 +272,14 @@ for name, map in pairs(tier_map) do
             },
             -- Runtime Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-runtime-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-runtime-mask.png",
                 priority = "high",
                 width = 104,
                 height = 89,
                 shift = util.by_pixel(0, 0),
                 apply_runtime_tint = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-runtime-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-runtime-mask.png",
                     priority = "high",
                     width = 208,
                     height = 178,
@@ -290,14 +290,14 @@ for name, map in pairs(tier_map) do
             },
             -- Shadow
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-base-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-base-shadow.png",
                 priority = "high",
                 width = 122,
                 height = 75,
                 shift = util.by_pixel(18.5, 11),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-base-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-base-shadow.png",
                     priority = "high",
                     width = 244,
                     height = 150,
@@ -311,10 +311,10 @@ for name, map in pairs(tier_map) do
 
     entity.folded_animation = {
         layers = {
-            plasma_turret_extension_base({ repeat_count = 1 }),
-            plasma_turret_extension_runtime_mask({ repeat_count = 1 }),
-            plasma_turret_extension_tint_mask({ tint = inputs.tint, repeat_count = 1 }),
-            plasma_turret_extension_highlights({ repeat_count = 1 }),
+            plasma_turret_extension_base({repeat_count = 1}),
+            plasma_turret_extension_runtime_mask({repeat_count = 1}),
+            plasma_turret_extension_tint_mask({tint = inputs.tint, repeat_count = 1}),
+            plasma_turret_extension_highlights({repeat_count = 1}),
         }
     }
 
@@ -322,11 +322,11 @@ for name, map in pairs(tier_map) do
         layers = {
             plasma_turret_extension_base({}),
             plasma_turret_extension_runtime_mask({}),
-            plasma_turret_extension_tint_mask({ tint = inputs.tint }),
+            plasma_turret_extension_tint_mask({tint = inputs.tint}),
             plasma_turret_extension_highlights({}),
-            plasma_turret_extension_lights({ tint = inputs.tint }),
+            plasma_turret_extension_lights({tint = inputs.tint}),
             plasma_turret_extension_lights_highlights({}),
-            plasma_turret_extension_lights({ tint = inputs.tint }),
+            plasma_turret_extension_lights({tint = inputs.tint}),
             plasma_turret_extension_lights_highlights({}),
         }
     }
@@ -335,7 +335,7 @@ for name, map in pairs(tier_map) do
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-base.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -343,7 +343,7 @@ for name, map in pairs(tier_map) do
                 direction_count = 64,
                 shift = util.by_pixel(-0.5, -35),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-base.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-base.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -355,7 +355,7 @@ for name, map in pairs(tier_map) do
             },
             -- Runtime Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-runtime-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-runtime-mask.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -364,7 +364,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(-0.5, -35),
                 apply_runtime_tint = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-runtime-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-runtime-mask.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -377,7 +377,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-mask.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -386,7 +386,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(-0.5, -35),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-mask.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -399,7 +399,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-highlights.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -408,7 +408,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(-0.5, -35),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-highlights.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -421,7 +421,7 @@ for name, map in pairs(tier_map) do
             },
             -- Light Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-light-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-light-mask.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -431,7 +431,7 @@ for name, map in pairs(tier_map) do
                 draw_as_glow = true,
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-light-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-light-mask.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -445,7 +445,7 @@ for name, map in pairs(tier_map) do
             },
             -- Light Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-light-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-cannon-shooting-light-highlights.png",
                 line_length = 8,
                 width = 88,
                 height = 89,
@@ -455,7 +455,7 @@ for name, map in pairs(tier_map) do
                 draw_as_glow = true,
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-light-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/hr-plasma-turret-cannon-shooting-light-highlights.png",
                     line_length = 8,
                     width = 176,
                     height = 178,
@@ -474,21 +474,21 @@ for name, map in pairs(tier_map) do
         layers = {
             plasma_turret_extension_base({}),
             plasma_turret_extension_runtime_mask({}),
-            plasma_turret_extension_tint_mask({ tint = inputs.tint }),
+            plasma_turret_extension_tint_mask({tint = inputs.tint}),
             plasma_turret_extension_highlights({}),
-            plasma_turret_extension_lights({ run_mode = "backward", tint = inputs.tint }),
-            plasma_turret_extension_lights_highlights({ run_mode = "backward" }),
-            plasma_turret_extension_lights({ run_mode = "backward", tint = inputs.tint }),
-            plasma_turret_extension_lights_highlights({ run_mode = "backward" })
+            plasma_turret_extension_lights({run_mode = "backward", tint = inputs.tint}),
+            plasma_turret_extension_lights_highlights({run_mode = "backward"}),
+            plasma_turret_extension_lights({run_mode = "backward", tint = inputs.tint}),
+            plasma_turret_extension_lights_highlights({run_mode = "backward"})
         }
     }
 
     -- Adjust drawing box
-    entity.drawing_box = { { -1.5, -2.5 }, { 1.5, 1.5 } }
+    entity.drawing_box = {{-1.5, -2.5}, {1.5, 1.5}}
 
     entity.water_reflection = {
         pictures = {
-            filename = reskins.bobs.directory .. "/graphics/entity/warfare/plasma-turret/plasma-turret-reflection.png",
+            filename = reskins.bobs.directory.."/graphics/entity/warfare/plasma-turret/plasma-turret-reflection.png",
             priority = "extra-high",
             width = 28,
             height = 29,

@@ -8,7 +8,7 @@
     "homepage": "https://forums.factorio.com/viewtopic.php?f=185&t=89666",
     "dependencies": [
         "base",
-        "reskins-library >= 2.1.7",
+        "reskins-library >= 2.1.6",
         "? reskins-bobs",
         "? angelsbioprocessing",
         "? angelsexploration",

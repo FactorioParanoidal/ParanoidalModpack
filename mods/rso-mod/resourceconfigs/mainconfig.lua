@@ -87,7 +87,6 @@ require("resourceconfigs.bzzirconium")
 require("resourceconfigs.bzcarbon")
 require("resourceconfigs.bzaluminum")
 require("resourceconfigs.bztin")
-require("resourceconfigs.bzchlorine")
 require("resourceconfigs.nullius")
 require("resourceconfigs.spfumaterials")
 require("resourceconfigs.qatmore")
@@ -302,8 +301,7 @@ function loadResourceConfig()
 		fillXander1Config(config)
 	end
 
-	if game.active_mods["Darkstar_utilities"] or game.active_mods["Darkstar_utilities_Low_Spec"]
-	or game.active_mods["Darkstar_utilities_fixed"] then
+	if game.active_mods["Darkstar_utilities"] or game.active_mods["Darkstar_utilities_Low_Spec"] then
 		fillDarkstarConfig(config)
 	end
 
@@ -532,11 +530,7 @@ function loadResourceConfig()
 	if game.active_mods["bzcarbon"] then
 		fillBzcarbon(config)
 	end
-
-	if game.active_mods["bzchlorine"] then
-		fillBzchlorineConfig(config)
-	end
-
+	
 	if game.active_mods["nullius"] then
 		fillNulliusConfig(config)
 		config["enemy-base"] = nil

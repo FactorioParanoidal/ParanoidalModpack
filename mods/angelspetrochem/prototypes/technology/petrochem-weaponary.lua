@@ -72,10 +72,6 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "liquid-glycerol",
-      },
-      {
-        type = "unlock-recipe",
         recipe = "solid-nitroglycerin",
       },
     },
@@ -100,14 +96,6 @@ data:extend({
       "angels-advanced-chemistry-3",
     },
     effects = {
-      {
-        type = "unlock-recipe",
-        recipe = "liquid-toluene-from-benzene",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "liquid-toluene-from-naphtha",
-      },
       {
         type = "unlock-recipe",
         recipe = "solid-trinitrotoluene",

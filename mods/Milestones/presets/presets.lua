@@ -70,7 +70,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -139,7 +139,7 @@ presets = {
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
             {type="item",       name="se-plague-bomb",               quantity=1},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -191,7 +191,7 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -230,11 +230,11 @@ presets = {
             {type="item",       name="matter-tech-card",             quantity=1},
             {type="item",       name="se-kr-matter-science-pack-2",  quantity=1},
             {type="item",       name="advanced-tech-card",           quantity=1},
+            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-deep-space-science-pack-1", quantity=1},
             {type="item",       name="se-deep-space-science-pack-2", quantity=1},
             {type="item",       name="se-deep-space-science-pack-3", quantity=1},
             {type="item",       name="se-deep-space-science-pack-4", quantity=1},
-            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-significant-data",          quantity=1000, next="x10"},
 
             {type="group",      name="Resources"},
@@ -274,7 +274,7 @@ presets = {
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
             {type="item",       name="se-plague-bomb",               quantity=1},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -365,7 +365,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -476,7 +476,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -515,11 +515,11 @@ presets = {
             {type="item",       name="matter-tech-card",             quantity=1},
             {type="item",       name="se-kr-matter-science-pack-2",  quantity=1},
             {type="item",       name="advanced-tech-card",           quantity=1},
+            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-deep-space-science-pack-1", quantity=1},
             {type="item",       name="se-deep-space-science-pack-2", quantity=1},
             {type="item",       name="se-deep-space-science-pack-3", quantity=1},
             {type="item",       name="se-deep-space-science-pack-4", quantity=1},
-            {type="item",       name="singularity-tech-card",        quantity=1},
             {type="item",       name="se-significant-data",          quantity=1000, next="x10"},
 
             {type="group",      name="Resources"},
@@ -610,7 +610,7 @@ presets = {
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1000, next="x10"},
-            {type="kill",       name="character",                    quantity=1, next="x5"},
+            {type="kill",       name="character",                    quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -663,7 +663,7 @@ presets = {
             {type="item",       name="rocket-part",                    quantity=100},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -720,7 +720,7 @@ presets = {
             {type="item",       name="rocket-part",                    quantity=100},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -770,7 +770,7 @@ presets = {
             {type="item",       name="crystal-full-harmonic",     quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                 quantity=1, next="x5"},
+            {type="kill",       name="character",                 quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -843,7 +843,7 @@ presets = {
             {type="item",       name="solar-panel",                    quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                      quantity=1, next="x5"},
+            {type="kill",       name="character",                      quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -953,7 +953,7 @@ presets = {
             {type="item",       name="nullius-antimatter",               quantity=1},
 
             {type="group",      name="Kills"},
-            {type="kill",       name="character",                        quantity=1},
+            {type="kill",       name="character",                        quantity=1, hidden=true},
         }
     },
 
@@ -1031,7 +1031,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -1094,7 +1094,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="uranium-fuel-cell",       quantity=1},
@@ -1104,7 +1104,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 
@@ -1164,7 +1164,7 @@ presets = {
             {type="item",       name="chromium-ingot",          quantity=1},
             {type="item",       name="platinum-ingot",          quantity=1},
             {type="item",       name="brass-ingot",             quantity=1},
-            {type="item",       name="carbon-foil",            quantity=1},
+            {type="item",       name="carbon-foil",             quantity=1},
             {type="item",       name="electrum-gem",            quantity=1},
             {type="item",       name="electronic-circuit",      quantity=1},
             {type="item",       name="computer-mk1",            quantity=1},
@@ -1188,7 +1188,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="nuclear-reactor",         quantity=1},
@@ -1198,7 +1198,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x5"},
+            {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
         }
     },
 }

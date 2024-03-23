@@ -1,11 +1,11 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
 
 --- RegEx string to search for within an icon filename to identify the standard version to be replaced
 ---@alias search_strings
----| '"assembling%-machine"'
+---| '"assembly%-machine"'
 ---| '"beacon"'
 ---| '"chemical%-plant"'
 ---| '"electric%-furnace"'
@@ -16,11 +16,11 @@
 ---| '"electrolyser"'
 ---| '"oil%-refinery"'
 ---| '"radar"'
----| '"storage%-tank"'
+---| '"storage-tank"'
 
 --- String to substitute within an icon filename path to point to the miniature version
 ---@alias replacement_strings
----| '"assembling-machine"'
+---| '"assembly-machine"'
 ---| '"beacon"'
 ---| '"chemical-plant"'
 ---| '"electric-furnace"'
@@ -46,7 +46,7 @@ local function switch_icon_to_mini(name, source_name, pattern, replacement, inpu
 
     -- Check to make sure this entity is valid
     if not destination then return end -- Minimachine isn't there
-    if not source then return end      -- Source isn't there
+    if not source then return end -- Source isn't there
 
     -- Find and copy the active icon field, ensure it's ours
     if source.icon then
@@ -65,25 +65,25 @@ local function switch_icon_to_mini(name, source_name, pattern, replacement, inpu
     -- Switch to miniatures
     if type(inputs.icon) == "table" then
         for n = 1, #inputs.icon do
-            inputs.icon[n].icon = string.gsub(inputs.icon[n].icon, "/" .. pattern .. "/", "/" .. replacement .. "/mini-")
+            inputs.icon[n].icon = string.gsub(inputs.icon[n].icon, "/"..pattern.."/", "/"..replacement.."/mini-")
         end
     else
-        inputs.icon = { { icon = string.gsub(inputs.icon --[[@as string]], "/" .. pattern .. "/", "/" .. replacement .. "/mini-") } }
+        inputs.icon = {{ icon = string.gsub(inputs.icon --[[@as string]], "/"..pattern.."/", "/"..replacement.."/mini-") }}
     end
 
     -- Overlay the mini-machine symbol
     table.insert(inputs.icon --[[@as table]], {
-        icon = reskins.lib.directory .. "/graphics/icons/mini-machine-overlay.png",
+        icon = reskins.lib.directory.."/graphics/icons/mini-machine-overlay.png",
         icon_size = 64,
         icon_mipmaps = 2,
     })
 
     if inputs.icon_picture.layers then
         for n = 1, #inputs.icon_picture.layers do
-            inputs.icon_picture.layers[n].filename = string.gsub(inputs.icon_picture.layers[n].filename, "/" .. pattern .. "/", "/" .. replacement .. "/mini-")
+            inputs.icon_picture.layers[n].filename = string.gsub(inputs.icon_picture.layers[n].filename, "/"..pattern.."/", "/"..replacement.."/mini-")
         end
     else
-        inputs.icon_picture[1].filename = string.gsub(inputs.icon_picture[1].filename, "/" .. pattern .. "/", "/" .. replacement .. "/mini-")
+        inputs.icon_picture[1].filename = string.gsub(inputs.icon_picture[1].filename, "/"..pattern.."/", "/"..replacement.."/mini-")
     end
 
     -- Assign icons
@@ -133,11 +133,11 @@ function reskins.lib.rescale_minimachine_technology(name, source_name)
     -- Setup inputs
     local technology_icon = {
         {
-            icon = reskins.lib.directory .. "/graphics/technology/mini-machine-underlay.png",
+            icon = reskins.lib.directory.."/graphics/technology/mini-machine-underlay.png",
             icon_size = 256,
             icon_mipmaps = 1,
             scale = 1,
-        },
+        }
     }
 
     -- Transcribe icon or icons
@@ -170,14 +170,14 @@ function reskins.lib.rescale_minimachine_technology(name, source_name)
 
     -- Add the mini machine icon
     table.insert(technology_icon, {
-        icon = reskins.lib.directory .. "/graphics/technology/mini-machine-overlay.png",
+        icon = reskins.lib.directory.."/graphics/technology/mini-machine-overlay.png",
         icon_size = 256,
         icon_mipmaps = 3,
         scale = 1,
     })
 
     -- Assign icon
-    reskins.lib.assign_technology_icons(name, { technology_icon = technology_icon })
+    reskins.lib.assign_technology_icons(name, {technology_icon = technology_icon})
 end
 
 -- Filtering tables for rescale_entity
@@ -210,15 +210,15 @@ function reskins.lib.scale(object, scale)
             if type(value) == "table" then
                 scale_subtable(value, scale)
             elseif type(value) == "number" then
-                object[key] = value * scale
+                object[key] = value*scale
             end
         end
     end
 
     -- Check if we're a number
     if type(object) == "number" then
-        return object * scale
-        -- Object is a table
+        return object*scale
+    -- Object is a table
     elseif type(object) == "table" then
         -- Break reference, work on local copy
         object = util.copy(object)
@@ -230,17 +230,17 @@ end
 
 -- Rescale entities
 function reskins.lib.rescale_entity(entity, scalar)
-    for key, value in pairs(entity) do
-        -- This section checks to see where we are, and for the existence of scale.
-        -- Scale is defined if it is missing where it should be present.
+	for key, value in pairs(entity) do
+		-- This section checks to see where we are, and for the existence of scale.
+		-- Scale is defined if it is missing where it should be present.
 
-        -- This checks to see if we're within an hr_version table
-        if key == "hr_version" then
-            entity.scale = entity.scale or 0.5
-            -- If we're not, see if there's one of the three fields indicating a normal-res table
-        elseif (entity.filename or entity.stripes or entity.filenames) then
-            entity.scale = entity.scale or 1
-        end
+		-- This checks to see if we're within an hr_version table
+		if key == "hr_version" then
+			entity.scale = entity.scale or 0.5
+		-- If we're not, see if there's one of the three fields indicating a normal-res table
+		elseif (entity.filename or entity.stripes or entity.filenames) then
+			entity.scale = entity.scale or 1
+		end
 
         -- Check to see if we need to scale this key's value
         for n = 1, #fields do
@@ -259,7 +259,7 @@ function reskins.lib.rescale_entity(entity, scalar)
             end
         end
 
-        if (type(value) == "table") then
+        if(type(value) == "table") then
             reskins.lib.rescale_entity(value, scalar)
         end
 
@@ -284,9 +284,9 @@ function reskins.lib.rescale_remnant(entity, scale)
 
         if remnant then
             local rescaled_remnant = util.copy(remnant)
-            rescaled_remnant.name = "rescaled-" .. rescaled_remnant.name
+            rescaled_remnant.name = "rescaled-"..rescaled_remnant.name
             reskins.lib.rescale_entity(rescaled_remnant, scale)
-            data:extend({ rescaled_remnant })
+            data:extend({rescaled_remnant})
             entity.corpse = rescaled_remnant.name
         end
     end

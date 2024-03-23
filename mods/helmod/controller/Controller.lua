@@ -22,6 +22,7 @@ require "dialog.RichTextPanel"
 require "edition.LogisticEdition"
 require "edition.ModelEdition"
 require "edition.RecipeEdition"
+require "edition.ParametersEdition"
 require "edition.ProductEdition"
 require "edition.RuleEdition"
 require "edition.PreferenceEdition"
@@ -95,6 +96,7 @@ function Controller:prepare()
   table.insert(forms, LogisticEdition("HMLogisticEdition"))
   table.insert(forms, ModelEdition("HMModelEdition"))
   table.insert(forms, RecipeEdition("HMRecipeEdition"))
+  table.insert(forms, ParametersEdition("HMParametersEdition"))
   table.insert(forms, ProductEdition("HMProductEdition"))
   table.insert(forms, RuleEdition("HMRuleEdition"))
   table.insert(forms, PreferenceEdition("HMPreferenceEdition"))
@@ -222,7 +224,7 @@ function Controller:bindController(player)
         flow.destroy()
         if parent and parent.name ~= "top" and #parent.children_names == 0 then
           parent.destroy()
-    end
+        end
       end
     end
 
@@ -230,10 +232,10 @@ function Controller:bindController(player)
     if User.getModSetting("display_main_icon") then
       lua_gui_element = ModGui.get_button_flow(player)
       if lua_gui_element ~= nil then
-      local gui_button = GuiElement.add(lua_gui_element, GuiButton("helmod_planner-command"):sprite("menu", defines.sprites.calculator.white, defines.sprites.calculator.black):style("helmod_button_menu_dark"):tooltip({"helmod_planner-command"}))
-      gui_button.style.width = 37
-      gui_button.style.height = 37
-    end
+        local gui_button = GuiElement.add(lua_gui_element, GuiButton("helmod_planner-command"):sprite("menu", defines.sprites.calculator.white, defines.sprites.calculator.black):style("helmod_button_menu_dark"):tooltip({"helmod_planner-command"}))
+        gui_button.style.width = 37
+        gui_button.style.height = 37
+      end
     end
     User.update()
   end
@@ -245,7 +247,7 @@ end
 ---@param event table
 ---
 function Controller:onTick(event)
-  if Player.native() ~= nil then
+  if Player.native() ~= nil and Player.native().valid then
     local next_event = User.getParameter("next_event")
     if next_event ~= nil then
       if (next_event.event.iteration or 0) < 1000 then
@@ -478,7 +480,6 @@ function Controller:openMainPanel()
     end
     local model, block, recipe = Model.getParameterObjects(parameter_objects)
     event.item1 = model.id
-    ModelCompute.check(model)
     self:send("on_gui_open", event, current_tab)
   end
 end

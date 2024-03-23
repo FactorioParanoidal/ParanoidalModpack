@@ -1,0 +1,22 @@
+{
+  "item": [
+    [
+      "red-wire",
+      "fake-red-wire"
+    ],
+    [
+      "green-wire",
+      "fake-green-wire"
+    ]
+  ],
+  "recipe": [
+    [
+      "red-wire",
+      "fake-red-wire"
+    ],
+    [
+      "green-wire",
+      "fake-green-wire"
+    ]
+  ]
+}

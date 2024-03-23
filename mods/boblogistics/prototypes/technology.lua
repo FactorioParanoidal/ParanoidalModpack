@@ -126,6 +126,7 @@ if settings.startup["bobmods-logistics-trains"].value == true then
         },
       },
       prerequisites = {
+        "railway",
         "advanced-electronics",
         "automated-rail-transportation",
       },
@@ -189,6 +190,7 @@ if settings.startup["bobmods-logistics-trains"].value == true then
         },
       },
       prerequisites = {
+        "railway",
         "automated-rail-transportation",
         "chemical-science-pack",
       },

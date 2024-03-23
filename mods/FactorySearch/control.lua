@@ -75,7 +75,7 @@ local function generate_item_to_entity_table()
       end
     else
       local properties = prototype.mineable_properties
-    if properties.minable and properties.products then
+      if properties.minable and properties.products then
         for _, item in pairs(prototype.mineable_properties.products) do
           local item_name = item.name
           if prototype.type ~= "simple-entity" or not is_resource[item_name] then

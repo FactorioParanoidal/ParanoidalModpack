@@ -10,7 +10,6 @@ data:extend({
     subgroup = "farming-temperate-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "temperate-garden", amount = 1 },
     },
@@ -40,9 +39,8 @@ data:extend({
     subgroup = "farming-temperate-seed",
     enabled = false,
     energy_required = 60,
-    overload_multiplier = 1,
     ingredients = {
-      { type = "item", name = "temperate-garden", amount = 1, catalyst_amount = 1 },
+      { type = "item", name = "temperate-garden", amount = 1 },
       { type = "item", name = "solid-alienated-fertilizer", amount = 2 },
       { type = "item", name = "token-bio", amount = 30 },
       { type = "fluid", name = "water-mineralized", amount = 50 },
@@ -65,7 +63,6 @@ data:extend({
     subgroup = "farming-temperate-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "temperate-garden", amount = 1 },
     },
@@ -123,7 +120,6 @@ data:extend({
     subgroup = "farming-temperate-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "temperate-garden", amount = 1 },
     },
@@ -176,7 +172,6 @@ data:extend({
     subgroup = "farming-desert-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "desert-garden", amount = 1 },
     },
@@ -206,9 +201,8 @@ data:extend({
     subgroup = "farming-desert-seed",
     enabled = false,
     energy_required = 60,
-    overload_multiplier = 1,
     ingredients = {
-      { type = "item", name = "desert-garden", amount = 1, catalyst_amount = 1 },
+      { type = "item", name = "desert-garden", amount = 1 },
       { type = "item", name = "solid-alienated-fertilizer", amount = 2 },
       { type = "item", name = "token-bio", amount = 30 },
       { type = "fluid", name = "water-mineralized", amount = 50 },
@@ -231,7 +225,6 @@ data:extend({
     subgroup = "farming-desert-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "desert-garden", amount = 1 },
     },
@@ -289,7 +282,6 @@ data:extend({
     subgroup = "farming-desert-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "desert-garden", amount = 1 },
     },
@@ -342,7 +334,6 @@ data:extend({
     subgroup = "farming-swamp-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "swamp-garden", amount = 1 },
     },
@@ -372,9 +363,8 @@ data:extend({
     subgroup = "farming-swamp-seed",
     enabled = false,
     energy_required = 60,
-    overload_multiplier = 1,
     ingredients = {
-      { type = "item", name = "swamp-garden", amount = 1, catalyst_amount = 1 },
+      { type = "item", name = "swamp-garden", amount = 1 },
       { type = "item", name = "solid-alienated-fertilizer", amount = 2 },
       { type = "item", name = "token-bio", amount = 30 },
       { type = "fluid", name = "water-mineralized", amount = 50 },
@@ -397,7 +387,6 @@ data:extend({
     subgroup = "farming-swamp-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "swamp-garden", amount = 1 },
     },
@@ -455,7 +444,6 @@ data:extend({
     subgroup = "farming-swamp-seed",
     enabled = false,
     energy_required = 300,
-    overload_multiplier = 1,
     ingredients = {
       { type = "item", name = "swamp-garden", amount = 1 },
     },
@@ -651,7 +639,6 @@ data:extend({
   --  subgroup = "farming-temperate-seed",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "desert-garden", amount = 1},
@@ -675,7 +662,6 @@ data:extend({
   --  subgroup = "bio-processor-swamp",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "swamp-garden", amount = 1},
@@ -699,7 +685,6 @@ data:extend({
   --  subgroup = "farming-temperate",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "temperate-garden", amount = 1},
@@ -723,7 +708,6 @@ data:extend({
   --  subgroup = "bio-processor-swamp",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "desert-garden", amount = 1},
@@ -747,7 +731,6 @@ data:extend({
   --  subgroup = "bio-processor-temperate",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "swamp-garden", amount = 1},
@@ -771,7 +754,6 @@ data:extend({
   --  subgroup = "farming-desert-seed",
   --  enabled = false,
   --  energy_required = 600,
-  --  overload_multiplier = 1,
   --  ingredients =
   --  {
   --    {type = "item", name = "temperate-garden", amount = 4},

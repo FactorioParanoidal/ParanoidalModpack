@@ -179,7 +179,6 @@ data:extend({
     icon_size = 32,
     prerequisites = {
       "bob-repair-pack-4",
-      "production-science-pack",
     },
     effects = {
       {

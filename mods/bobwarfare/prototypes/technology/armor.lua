@@ -57,11 +57,7 @@ data:extend({
     name = "bob-power-armor-3",
     icon = "__bobwarfare__/graphics/icons/technology/power-armor-mk3.png",
     icon_size = 64,
-    prerequisites = {
-      "effectivity-module-3",
-      "power-armor-mk2",
-      "speed-module-3",
-    },
+    prerequisites = {},
     effects = {
       {
         type = "unlock-recipe",
@@ -137,3 +133,9 @@ data:extend({
     order = "g-c-e",
   },
 })
+
+if data.raw.technology["power-armor-2"] then
+  bobmods.lib.tech.add_prerequisite("bob-power-armor-3", "power-armor-2")
+elseif data.raw.technology["power-armor-mk2"] then
+  bobmods.lib.tech.add_prerequisite("bob-power-armor-3", "power-armor-mk2")
+end

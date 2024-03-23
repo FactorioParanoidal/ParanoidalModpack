@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -16,16 +16,16 @@ local inputs = {
     base_entity_name = "chemical-plant",
     mod = "bobs",
     group = "assembly",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     make_remnants = false,
 }
 
 local tier_map = {
-    ["electrolyser"] = { 1, 1 },
-    ["electrolyser-2"] = { 2, 2 },
-    ["electrolyser-3"] = { 3, 3 },
-    ["electrolyser-4"] = { 4, 3 },
-    ["electrolyser-5"] = { 5, 5 }
+    ["electrolyser"] = {1, 1},
+    ["electrolyser-2"] = {2, 2},
+    ["electrolyser-3"] = {3, 3},
+    ["electrolyser-4"] = {4, 3},
+    ["electrolyser-5"] = {5, 5}
 }
 
 -- Reskin entities, create and assign extra details
@@ -44,7 +44,7 @@ for name, map in pairs(tier_map) do
     inputs.tint = reskins.lib.tint_index[tier]
 
     -- Handle unique icons
-    inputs.icon_base = "electrolyser-" .. tier
+    inputs.icon_base = "electrolyser-"..tier
     inputs.icon_mask = inputs.icon_base
     inputs.icon_highlights = inputs.icon_base
 
@@ -55,13 +55,13 @@ for name, map in pairs(tier_map) do
         layers = {
             -- Base
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/electrolyser-" .. tier .. "-base.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/electrolyser-"..tier.."-base.png",
                 width = 136,
                 height = 130,
                 frame_count = 1,
                 shift = util.by_pixel(17, 0),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/hr-electrolyser-" .. tier .. "-base.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/hr-electrolyser-"..tier.."-base.png",
                     width = 272,
                     height = 260,
                     frame_count = 1,
@@ -71,14 +71,14 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/electrolyser-" .. tier .. "-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/electrolyser-"..tier.."-mask.png",
                 width = 136,
                 height = 130,
                 frame_count = 1,
                 shift = util.by_pixel(17, 0),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/hr-electrolyser-" .. tier .. "-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/hr-electrolyser-"..tier.."-mask.png",
                     width = 272,
                     height = 260,
                     frame_count = 1,
@@ -89,14 +89,14 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/electrolyser-" .. tier .. "-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/electrolyser-"..tier.."-highlights.png",
                 width = 136,
                 height = 130,
                 frame_count = 1,
                 shift = util.by_pixel(17, 0),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/hr-electrolyser-" .. tier .. "-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/hr-electrolyser-"..tier.."-highlights.png",
                     width = 272,
                     height = 260,
                     frame_count = 1,
@@ -107,14 +107,14 @@ for name, map in pairs(tier_map) do
             },
             -- Shadow
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/electrolyser-" .. shadow .. "-shadow.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/electrolyser-"..shadow.."-shadow.png",
                 width = 136,
                 height = 130,
                 frame_count = 1,
                 shift = util.by_pixel(17, 0),
                 draw_as_shadow = true,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/electrolyser/hr-electrolyser-" .. shadow .. "-shadow.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/electrolyser/hr-electrolyser-"..shadow.."-shadow.png",
                     width = 272,
                     height = 260,
                     frame_count = 1,

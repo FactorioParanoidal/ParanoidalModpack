@@ -155,7 +155,6 @@ if angelsmods.trigger.washing_tech == false then --not angelsmods.smelting then
   -- disable technology
   OV.disable_technology({ "water-washing-1", "water-washing-2" })
   OV.remove_prereq("geode-processing-1", "water-washing-2")
-  OV.add_unlock("water-treatment", "clarifier")
 else
   angelsmods.trigger.geode_red = true
   angelsmods.trigger.geode_cyan = true
@@ -307,7 +306,8 @@ if mods["bobplates"] then
   if data.raw.fluid["pure-water"] then
     OV.global_replace_item("pure-water", "water-purified")
     OV.disable_recipe({ "pure-water", "pure-water-from-lithia" })
-    angelsmods.functions.add_flag("pure-water", "hidden")
+    data.raw.fluid["pure-water"].hidden = true
+    angelsmods.functions.disable_barreling_recipes("pure-water")
   end
 
   -- lithium processing -------------------------------------------------------

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -16,7 +16,7 @@ local inputs = {
     base_entity_name = "radar",
     mod = "bobs",
     group = "warfare",
-    particles = { ["medium"] = 2 },
+    particles = {["medium"] = 2},
 }
 
 local tier_map = {
@@ -41,10 +41,10 @@ for name, tier in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(1, {
+    remnant.animation = make_rotated_animation_variations_from_sheet (1, {
         layers = {
             -- Base
             {
@@ -72,7 +72,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/remnants/radar-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/remnants/radar-remnants-mask.png",
                 line_length = 1,
                 width = 142,
                 height = 106,
@@ -83,7 +83,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(12, 4),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/remnants/hr-radar-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/remnants/hr-radar-remnants-mask.png",
                     line_length = 1,
                     width = 282,
                     height = 212,
@@ -98,7 +98,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/remnants/radar-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/remnants/radar-remnants-highlights.png",
                 line_length = 1,
                 width = 142,
                 height = 106,
@@ -109,7 +109,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(12, 4),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/remnants/hr-radar-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/remnants/hr-radar-remnants-highlights.png",
                     line_length = 1,
                     width = 282,
                     height = 212,
@@ -170,7 +170,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/radar-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/radar-mask.png",
                 priority = "low",
                 width = 98,
                 height = 128,
@@ -180,7 +180,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(1, -16),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/hr-radar-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/hr-radar-mask.png",
                     priority = "low",
                     width = 196,
                     height = 254,
@@ -194,7 +194,7 @@ for name, tier in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/radar-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/radar-highlights.png",
                 priority = "low",
                 width = 98,
                 height = 128,
@@ -204,7 +204,7 @@ for name, tier in pairs(tier_map) do
                 shift = util.by_pixel(1, -16),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/warfare/radar/hr-radar-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/warfare/radar/hr-radar-highlights.png",
                     priority = "low",
                     width = 196,
                     height = 254,
@@ -225,7 +225,7 @@ for name, tier in pairs(tier_map) do
                 apply_projection = false,
                 direction_count = 64,
                 line_length = 8,
-                shift = util.by_pixel(39, 3),
+                shift = util.by_pixel(39,3),
                 draw_as_shadow = true,
                 hr_version = {
                     filename = "__base__/graphics/entity/radar/hr-radar-shadow.png",
@@ -235,7 +235,7 @@ for name, tier in pairs(tier_map) do
                     apply_projection = false,
                     direction_count = 64,
                     line_length = 8,
-                    shift = util.by_pixel(39.25, 3),
+                    shift = util.by_pixel(39.25,3),
                     draw_as_shadow = true,
                     scale = 0.5
                 }

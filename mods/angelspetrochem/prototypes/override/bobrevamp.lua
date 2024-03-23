@@ -5,7 +5,6 @@ if mods["bobrevamp"] and mods["bobplates"] then
   -----------------------------------------------------------------------------
   -- SOLID FUEL ---------------------------------------------------------------
   -----------------------------------------------------------------------------
-  data.raw.recipe["solid-fuel-from-hydrogen"].icon = nil
   data.raw.recipe["solid-fuel-from-hydrogen"].icons = angelsmods.functions.create_solid_recipe_icon({
     { "__angelspetrochem__/graphics/icons/molecules/hydrogen.png", 72 },
   }, "solid-fuel")
@@ -40,6 +39,6 @@ if mods["bobrevamp"] and mods["bobplates"] then
         },
       })
     end
-    OV.add_prereq("rtg", "angels-coal-processing-3")
+    OV.add_prereq("rtg", "sodium-processing")
   end
 end

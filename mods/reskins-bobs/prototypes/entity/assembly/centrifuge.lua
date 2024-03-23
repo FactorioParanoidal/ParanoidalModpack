@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,13 +13,13 @@ local inputs = {
     base_entity_name = "centrifuge",
     mod = "bobs",
     group = "assembly",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
 }
 
 local tier_map = {
-    ["centrifuge"] = { 1, 3 },
-    ["centrifuge-2"] = { 2, 4 },
-    ["centrifuge-3"] = { 3, 5 },
+    ["centrifuge"] = {1, 3},
+    ["centrifuge-2"] = {2, 4},
+    ["centrifuge-3"] = {3, 5},
 }
 
 -- Reskin entities, create and assign extra details
@@ -42,7 +42,7 @@ for name, map in pairs(tier_map) do
     reskins.lib.setup_standard_entity(name, tier, inputs)
 
     -- Fetch remnant
-    local remnant = data.raw["corpse"][name .. "-remnants"]
+    local remnant = data.raw["corpse"][name.."-remnants"]
 
     -- Reskin remnants
     remnant.animation = make_rotated_animation_variations_from_sheet(1, {
@@ -73,7 +73,7 @@ for name, map in pairs(tier_map) do
             },
             -- Mask
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/remnants/centrifuge-remnants-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/remnants/centrifuge-remnants-mask.png",
                 line_length = 1,
                 width = 144,
                 height = 142,
@@ -84,7 +84,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(7, 4),
                 tint = inputs.tint,
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/remnants/hr-centrifuge-remnants-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/remnants/hr-centrifuge-remnants-mask.png",
                     line_length = 1,
                     width = 286,
                     height = 284,
@@ -99,7 +99,7 @@ for name, map in pairs(tier_map) do
             },
             -- Highlights
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/remnants/centrifuge-remnants-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/remnants/centrifuge-remnants-highlights.png",
                 line_length = 1,
                 width = 144,
                 height = 142,
@@ -110,7 +110,7 @@ for name, map in pairs(tier_map) do
                 shift = util.by_pixel(7, 4),
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/remnants/hr-centrifuge-remnants-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/remnants/hr-centrifuge-remnants-highlights.png",
                     line_length = 1,
                     width = 286,
                     height = 284,
@@ -191,7 +191,7 @@ for name, map in pairs(tier_map) do
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-B-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-B-mask.png",
                 priority = "high",
                 tint = inputs.tint,
                 line_length = 8,
@@ -200,7 +200,7 @@ for name, map in pairs(tier_map) do
                 frame_count = 64,
                 shift = util.by_pixel(23, 6.5),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-B-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-B-mask.png",
                     priority = "high",
                     tint = inputs.tint,
                     scale = 0.5,
@@ -212,7 +212,7 @@ for name, map in pairs(tier_map) do
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-B-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-B-highlights.png",
                 priority = "high",
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 line_length = 8,
@@ -221,7 +221,7 @@ for name, map in pairs(tier_map) do
                 frame_count = 64,
                 shift = util.by_pixel(23, 6.5),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-B-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-B-highlights.png",
                     priority = "high",
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     scale = 0.5,
@@ -274,7 +274,7 @@ for name, map in pairs(tier_map) do
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-A-mask.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-A-mask.png",
                 priority = "high",
                 tint = inputs.tint,
                 line_length = 8,
@@ -283,7 +283,7 @@ for name, map in pairs(tier_map) do
                 frame_count = 64,
                 shift = util.by_pixel(-26, 3.5),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-A-mask.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-A-mask.png",
                     priority = "high",
                     tint = inputs.tint,
                     scale = 0.5,
@@ -295,7 +295,7 @@ for name, map in pairs(tier_map) do
                 }
             },
             {
-                filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-A-highlights.png",
+                filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-A-highlights.png",
                 priority = "high",
                 blend_mode = reskins.lib.blend_mode, -- "additive",
                 line_length = 8,
@@ -304,7 +304,7 @@ for name, map in pairs(tier_map) do
                 frame_count = 64,
                 shift = util.by_pixel(-26, 3.5),
                 hr_version = {
-                    filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-A-highlights.png",
+                    filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-A-highlights.png",
                     priority = "high",
                     blend_mode = reskins.lib.blend_mode, -- "additive",
                     scale = 0.5,
@@ -345,7 +345,7 @@ for name, map in pairs(tier_map) do
             effect = "uranium-glow",
             apply_recipe_tint = "primary",
             fadeout = true,
-            light = { intensity = 0.1, size = 9.9, shift = { 0.0, 0.0 }, color = { r = 0.0, g = 1.0, b = 0.0 } }
+            light = {intensity = 0.1, size = 9.9, shift = {0.0, 0.0}, color = {r = 0.0, g = 1.0, b = 0.0}}
         },
 
         -- Working Light
@@ -357,7 +357,7 @@ for name, map in pairs(tier_map) do
                 layers = {
                     -- Centrifuge C
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-C-light.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-C-light.png",
                         priority = "high",
                         blend_mode = "additive",
                         line_length = 8,
@@ -367,7 +367,7 @@ for name, map in pairs(tier_map) do
                         shift = util.by_pixel(0, -27),
                         draw_as_glow = true,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-C-light.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-C-light.png",
                             priority = "high",
                             scale = 0.5,
                             blend_mode = "additive",
@@ -381,7 +381,7 @@ for name, map in pairs(tier_map) do
                     },
                     -- Centrifuge B
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-B-light.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-B-light.png",
                         priority = "high",
                         blend_mode = "additive",
                         line_length = 8,
@@ -391,7 +391,7 @@ for name, map in pairs(tier_map) do
                         shift = util.by_pixel(16.5, 0.5),
                         draw_as_glow = true,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-B-light.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-B-light.png",
                             priority = "high",
                             scale = 0.5,
                             blend_mode = "additive",
@@ -405,7 +405,7 @@ for name, map in pairs(tier_map) do
                     },
                     -- Centrifuge A
                     {
-                        filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/centrifuge-A-light.png",
+                        filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/centrifuge-A-light.png",
                         priority = "high",
                         blend_mode = "additive",
                         line_length = 8,
@@ -415,7 +415,7 @@ for name, map in pairs(tier_map) do
                         shift = util.by_pixel(-23.5, -2),
                         draw_as_glow = true,
                         hr_version = {
-                            filename = reskins.bobs.directory .. "/graphics/entity/assembly/centrifuge/hr-centrifuge-A-light.png",
+                            filename = reskins.bobs.directory.."/graphics/entity/assembly/centrifuge/hr-centrifuge-A-light.png",
                             priority = "high",
                             scale = 0.5,
                             blend_mode = "additive",

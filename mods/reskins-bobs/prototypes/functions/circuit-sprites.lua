@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -7,10 +7,10 @@
 if not reskins.lib.setting("reskins-bobs-do-bobelectronics-circuit-style") then return end
 
 local circuits = {
-    ["electronic-circuit"] = { tier = 1, prog_tier = 2 },
-    ["advanced-circuit"] = { tier = 2, prog_tier = 3 },
-    ["processing-unit"] = { tier = 3, prog_tier = 4 },
-    ["advanced-processing-unit"] = { tier = 4, prog_tier = 5 },
+    ["electronic-circuit"] = {tier = 1, prog_tier = 2},
+    ["advanced-circuit"] = {tier = 2, prog_tier = 3},
+    ["processing-unit"] = {tier = 3, prog_tier = 4},
+    ["advanced-processing-unit"] = {tier = 4, prog_tier = 5},
 }
 
 for circuit, map in pairs(circuits) do
@@ -18,11 +18,11 @@ for circuit, map in pairs(circuits) do
     data:extend({
         {
             type = "sprite",
-            name = "reskins-bob-" .. circuit .. "-vanilla",
-            filename = reskins.bobs.directory .. "/graphics/icons/sprites/circuits/vanilla/" .. circuit .. ".png",
+            name = "reskins-bob-"..circuit.."-vanilla",
+            filename = reskins.bobs.directory.."/graphics/icons/sprites/circuits/vanilla/"..circuit..".png",
             size = 40,
-            mipmap_count = 2,
-            flags = { "gui-icon" },
+            mipmap_count= 2,
+            flags = {"gui-icon"},
         }
     })
 
@@ -30,11 +30,11 @@ for circuit, map in pairs(circuits) do
     data:extend({
         {
             type = "sprite",
-            name = "reskins-bob-" .. circuit .. "-material",
-            filename = reskins.bobs.directory .. "/graphics/icons/sprites/circuits/material/" .. circuit .. ".png",
+            name = "reskins-bob-"..circuit.."-material",
+            filename = reskins.bobs.directory.."/graphics/icons/sprites/circuits/material/"..circuit..".png",
             size = 40,
-            mipmap_count = 2,
-            flags = { "gui-icon" },
+            mipmap_count= 2,
+            flags = {"gui-icon"},
         }
     })
 
@@ -51,30 +51,30 @@ for circuit, map in pairs(circuits) do
     data:extend({
         {
             type = "sprite",
-            name = "reskins-bob-" .. circuit .. "-tier",
+            name = "reskins-bob-"..circuit.."-tier",
             layers = {
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-base.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-base.png",
                     size = 40,
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 },
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-mask.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-mask.png",
                     size = 40,
                     tint = tint,
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 },
                 {
-                    filename = reskins.lib.directory .. "/graphics/icons/sprites/circuits/" .. circuit .. "/" .. circuit .. "-highlights.png",
+                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-highlights.png",
                     size = 40,
                     blend_mode = "additive",
                     mipmap_count = 2,
-                    flags = { "gui-icon" },
+                    flags = {"gui-icon"},
                 }
             },
-            flags = { "gui-icon" }
+            flags = {"gui-icon"}
         }
     })
 end

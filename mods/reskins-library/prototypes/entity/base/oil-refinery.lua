@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
@@ -12,10 +12,10 @@ if reskins.angels and (reskins.angels.triggers.petrochem.entities == false) then
 if reskins.compatibility then reskins.compatibility.triggers.minimachines.refineries = true end
 
 local tier_map = {
-    ["oil-refinery"] = { tier = 1, prog_tier = 2 },
-    ["oil-refinery-2"] = { tier = 2, prog_tier = 3 },
-    ["oil-refinery-3"] = { tier = 3, prog_tier = 4 },
-    ["oil-refinery-4"] = { tier = 4, prog_tier = 5 },
+    ["oil-refinery"] = {tier = 1, prog_tier = 2},
+    ["oil-refinery-2"] = {tier = 2, prog_tier = 3},
+    ["oil-refinery-3"] = {tier = 3, prog_tier = 4},
+    ["oil-refinery-4"] = {tier = 4, prog_tier = 5},
 }
 
 -- Reskin entities, create and assign extra details

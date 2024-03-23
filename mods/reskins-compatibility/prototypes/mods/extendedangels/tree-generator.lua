@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -12,21 +12,21 @@ local inputs = {
     type = "assembling-machine",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-generator-temperate-1"] = { tier = 1, field = "temperate" },
-    ["bio-generator-temperate-2"] = { tier = 2, field = "temperate" },
-    ["bio-generator-temperate-3"] = { tier = 3, field = "temperate" },
-    ["bio-generator-swamp-1"] = { tier = 1, field = "swamp" },
-    ["bio-generator-swamp-2"] = { tier = 2, field = "swamp" },
-    ["bio-generator-swamp-3"] = { tier = 3, field = "swamp" },
-    ["bio-generator-desert-1"] = { tier = 1, field = "desert" },
-    ["bio-generator-desert-2"] = { tier = 2, field = "desert" },
-    ["bio-generator-desert-3"] = { tier = 3, field = "desert" },
+    ["bio-generator-temperate-1"] = {tier = 1, field = "temperate"},
+    ["bio-generator-temperate-2"] = {tier = 2, field = "temperate"},
+    ["bio-generator-temperate-3"] = {tier = 3, field = "temperate"},
+    ["bio-generator-swamp-1"] = {tier = 1, field = "swamp"},
+    ["bio-generator-swamp-2"] = {tier = 2, field = "swamp"},
+    ["bio-generator-swamp-3"] = {tier = 3, field = "swamp"},
+    ["bio-generator-desert-1"] = {tier = 1, field = "desert"},
+    ["bio-generator-desert-2"] = {tier = 2, field = "desert"},
+    ["bio-generator-desert-3"] = {tier = 3, field = "desert"},
 }
 
 -- Reskin entities, create and assign extra details
@@ -44,7 +44,7 @@ for name, map in pairs(tier_map) do
     end
 
     -- Setup icon_name
-    inputs.icon_name = "tree-generator-" .. map.field
+    inputs.icon_name = "tree-generator-"..map.field
 
     -- Determine what tint we're using
     inputs.tint = map.tint or reskins.lib.tint_index[tier]
@@ -61,7 +61,7 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
             {
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-generator-base.png",
@@ -70,26 +70,26 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/tree-generator/tree-generator-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/tree-generator/tree-generator-mask.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 tint = inputs.tint,
             },
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/tree-generator/tree-generator-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/tree-generator/tree-generator-highlights.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 blend_mode = reskins.lib.blend_mode,
             },
             {
@@ -99,7 +99,7 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
             {
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-generator-1.png",
@@ -108,7 +108,7 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
             {
                 filename = "__angelsbioprocessing__/graphics/entity/trees/bio-generator-top.png",
@@ -117,7 +117,7 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
             },
         }
     }
@@ -132,10 +132,10 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 line_length = 1,
                 frame_count = 1,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 draw_as_glow = true,
             },
-            light = { intensity = 4, size = 4, color = { r = 0.5, g = 1.0, b = 0.5 } }
+            light = {intensity = 4, size = 4, color = {r = 0.5, g = 1.0, b = 0.5}}
         },
     }
 

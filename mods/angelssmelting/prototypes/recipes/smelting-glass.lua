@@ -9,13 +9,13 @@ data:extend({
     name = "glass-mixture-1",
     category = "powder-mixing",
     subgroup = "angels-glass",
-    energy_required = 4,
+    energy_required = 10,
     enabled = false,
     ingredients = {
-      { type = "item", name = "quartz", amount = 1 },
+      { type = "item", name = "quartz", amount = 3 },
     },
     results = {
-      { type = "item", name = "solid-glass-mixture", amount = 1 },
+      { type = "item", name = "solid-glass-mixture", amount = 4 },
     },
     icons = angelsmods.functions.add_number_icon_layer(
       angelsmods.functions.get_object_icons("solid-glass-mixture"),
@@ -127,14 +127,14 @@ data:extend({
       enabled = false,
       energy_required = 4,
       ingredients = {
-        { type = "fluid", name = "liquid-molten-glass", amount = 100 * intermediatemulti },
-        { type = "fluid", name = "water", amount = 40 },
+       { type = "fluid", name = "liquid-molten-glass", amount = 100 * intermediatemulti },
+       { type = "fluid", name = "water", amount = 40 },
       },
       results = {
         { type = "item", name = "angels-coil-glass-fiber", amount = 4 },
       },
     },
-    icons = angelsmods.functions.add_number_icon_layer(
+     icons = angelsmods.functions.add_number_icon_layer(
       angelsmods.functions.get_object_icons("angels-coil-glass-fiber"),
       1,
       angelsmods.smelting.number_tint
@@ -189,7 +189,7 @@ data:extend({
     subgroup = "angels-glass-casting",
     normal = {
       enabled = false,
-      energy_required = 4,
+      energy_required = 5, --DrD 4 to 5
       ingredients = {
         { type = "fluid", name = "liquid-molten-glass", amount = 40 },
       },
@@ -253,7 +253,7 @@ data:extend({
     order = "d[angels-plate-glass]-c",
   },
   {
-    type = "recipe",
+   type = "recipe",
     name = "angels-plate-glass-3",
     category = "casting-4",
     subgroup = "angels-glass-casting",

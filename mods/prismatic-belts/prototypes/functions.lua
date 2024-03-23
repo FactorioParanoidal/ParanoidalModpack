@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2021 Kirazy
 -- Part of Prismatic Belts
 --
 -- See LICENSE.md in the project directory for license information.
@@ -15,26 +15,26 @@ local function normalize_tint(tint)
     local a
 
     if r > 255 or g > 255 or b > 255 then
-        r = r / 255
-        g = g / 255
-        b = b / 255
-        a = tint.a / 255 or tint[4] / 255 or 1
+        r = r/255
+        g = g/255
+        b = b/255
+        a = tint.a/255 or tint[4]/255 or 1
     end
 
-    return { r = r, g = g, b = b, a = a }
+    return {r = r, g = g, b = b, a = a}
 end
 
 -- Adjust the alpha value of a given tint
 function prismatic_belts.adjust_alpha(tint, alpha)
     local tint = normalize_tint(tint)
-    local adjusted_tint = { r = tint.r, g = tint.g, b = tint.b, a = alpha }
+    local adjusted_tint = {r = tint.r, g = tint.g, b = tint.b, a = alpha}
     return adjusted_tint
 end
 
 -- Make an icon_pictures table for reskins-library
 function prismatic_belts.transport_belt_picture(tint, use_reskin_process)
     local standard_icon = prismatic_belts.transport_belt_icon(tint, use_reskin_process)
-    local icon_pictures = { layers = {} }
+    local icon_pictures = {layers = {}}
 
     for _, layer in pairs(standard_icon) do
         table.insert(icon_pictures.layers, {
@@ -79,7 +79,7 @@ function prismatic_belts.logistics_technology_icon(inputs)
                 icon = "__prismatic-belts__/graphics/technology/reskins/logistics-technology-highlights.png",
                 icon_size = 256,
                 icon_mipmaps = 4,
-                tint = { 1, 1, 1, 0 },
+                tint = {1, 1, 1, 0},
             }
         }
     else
@@ -120,7 +120,7 @@ function prismatic_belts.transport_belt_icon(tint, use_reskin_process)
                 icon = "__prismatic-belts__/graphics/icons/reskins/transport-belt-icon-highlights.png",
                 icon_size = 64,
                 icon_mipmaps = 4,
-                tint = { 1, 1, 1, 0 },
+                tint = {1, 1, 1, 0},
             },
         }
     else
@@ -162,21 +162,21 @@ function prismatic_belts.transport_belt_animation_set(inputs)
 
         return
         {
-            filename = "__prismatic-belts__/graphics/entity/" .. directory .. "/transport-belt-" .. inputs.variant .. "-" .. inputs.layer .. ".png",
+            filename = "__prismatic-belts__/graphics/entity/"..directory.."/transport-belt-"..inputs.variant.."-"..inputs.layer..".png",
             priority = "extra-high",
             width = 64,
             height = 64,
-            frame_count = 16 * inputs.variant,
+            frame_count = 16*inputs.variant,
             tint = inputs.tint,
             blend_mode = inputs.blend_mode,
             direction_count = 20,
             hr_version = {
-                filename = "__prismatic-belts__/graphics/entity/" .. directory .. "/hr-transport-belt-" .. inputs.variant .. "-" .. inputs.layer .. ".png",
+                filename = "__prismatic-belts__/graphics/entity/"..directory.."/hr-transport-belt-"..inputs.variant.."-"..inputs.layer..".png",
                 priority = "extra-high",
                 width = 128,
                 height = 128,
                 scale = 0.5,
-                frame_count = 16 * inputs.variant,
+                frame_count = 16*inputs.variant,
                 tint = inputs.tint,
                 blend_mode = inputs.blend_mode,
                 direction_count = 20,
@@ -189,9 +189,9 @@ function prismatic_belts.transport_belt_animation_set(inputs)
         transport_belt_animation_set = {
             animation_set = {
                 layers = {
-                    return_belt_animation_set_layer { directory = "reskins", layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil, variant = variant },
-                    return_belt_animation_set_layer { directory = "reskins", layer = "mask", tint = inputs.mask_tint, variant = variant },
-                    return_belt_animation_set_layer { directory = "reskins", layer = "highlights", blend_mode = "additive", variant = variant },
+                    return_belt_animation_set_layer{directory = "reskins", layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil, variant = variant},
+                    return_belt_animation_set_layer{directory = "reskins", layer = "mask", tint = inputs.mask_tint, variant = variant},
+                    return_belt_animation_set_layer{directory = "reskins", layer = "highlights", blend_mode = "additive", variant = variant},
                 }
             }
         }
@@ -199,14 +199,14 @@ function prismatic_belts.transport_belt_animation_set(inputs)
         transport_belt_animation_set = {
             animation_set = {
                 layers = {
-                    return_belt_animation_set_layer { layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil, variant = variant },
-                    return_belt_animation_set_layer { layer = "mask", tint = inputs.mask_tint, variant = variant },
+                    return_belt_animation_set_layer{layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil, variant = variant},
+                    return_belt_animation_set_layer{layer = "mask", tint = inputs.mask_tint, variant = variant},
                 }
             }
         }
 
         if inputs.brighten_arrows then
-            table.insert(transport_belt_animation_set.animation_set.layers, return_belt_animation_set_layer { layer = "arrows", tint = util.color("4"), blend_mode = "additive-soft", variant = variant })
+            table.insert(transport_belt_animation_set.animation_set.layers, return_belt_animation_set_layer{layer = "arrows", tint = util.color("4"), blend_mode = "additive-soft", variant = variant})
         end
     end
 
@@ -236,7 +236,7 @@ function prismatic_belts.create_remnant(name, inputs)
 
         return
         {
-            filename = "__prismatic-belts__/graphics/entity/" .. directory .. "/remnants/transport-belt-remnants-" .. inputs.layer .. ".png",
+            filename ="__prismatic-belts__/graphics/entity/"..directory.."/remnants/transport-belt-remnants-"..inputs.layer..".png",
             line_length = 1,
             width = 54,
             height = 52,
@@ -248,7 +248,7 @@ function prismatic_belts.create_remnant(name, inputs)
             blend_mode = inputs.blend_mode,
             shift = util.by_pixel(1, 0),
             hr_version = {
-                filename = "__prismatic-belts__/graphics/entity/" .. directory .. "/remnants/hr-transport-belt-remnants-" .. inputs.layer .. ".png",
+                filename ="__prismatic-belts__/graphics/entity/"..directory.."/remnants/hr-transport-belt-remnants-"..inputs.layer..".png",
                 line_length = 1,
                 width = 106,
                 height = 102,
@@ -267,37 +267,37 @@ function prismatic_belts.create_remnant(name, inputs)
     -- Setup belt transport set
     if inputs.use_reskin_process then
         remnant_layers = {
-            return_remnant_layer { directory = "reskins", layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil },
-            return_remnant_layer { directory = "reskins", layer = "mask", tint = inputs.mask_tint },
-            return_remnant_layer { directory = "reskins", layer = "highlights", blend_mode = "additive" },
+            return_remnant_layer{directory = "reskins", layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil},
+            return_remnant_layer{directory = "reskins", layer = "mask", tint = inputs.mask_tint},
+            return_remnant_layer{directory = "reskins", layer = "highlights", blend_mode = "additive"},
         }
     else
         remnant_layers = {
-            return_remnant_layer { layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil },
-            return_remnant_layer { layer = "mask", tint = inputs.mask_tint },
+            return_remnant_layer{layer = "base", tint = inputs.base_tint and prismatic_belts.adjust_alpha(inputs.base_tint, 1) or nil},
+            return_remnant_layer{layer = "mask", tint = inputs.mask_tint},
         }
 
         if inputs.brighten_arrows then
-            table.insert(remnant_layers, return_remnant_layer { layer = "arrows", tint = util.color("4"), blend_mode = "additive-soft" })
+            table.insert(remnant_layers, return_remnant_layer{layer = "arrows", tint = util.color("4"), blend_mode = "additive-soft"})
         end
     end
 
     -- Fetch remnant
-    local remnants = data.raw["corpse"][name .. "-remnants"]
+    local remnants = data.raw["corpse"][name.."-remnants"]
 
     -- If there is no existing remnant, create one
     if not remnants then
         remnants = {
             type = "corpse",
-            name = "prismatic-belts-" .. name .. "-remnants",
+            name = "prismatic-belts-"..name.."-remnants",
             icons = data.raw["transport-belt"][name].icons,
             icon = data.raw["transport-belt"][name].icon,
             icon_size = data.raw["transport-belt"][name].icon_size,
             icon_mipmaps = data.raw["transport-belt"][name].icon_mipmaps,
-            flags = { "placeable-neutral", "not-on-map" },
+            flags = {"placeable-neutral", "not-on-map"},
             subgroup = "belt-remnants",
-            order = (data.raw.item[name] and data.raw.item[name].order) and data.raw.item[name].order .. "-a[" .. name .. "-remnants]" or "a-a-a",
-            selection_box = { { -0.5, -0.5 }, { 0.5, 0.5 } },
+            order = (data.raw.item[name] and data.raw.item[name].order) and data.raw.item[name].order.."-a["..name.."-remnants]" or "a-a-a",
+            selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
             tile_width = 1,
             tile_height = 1,
             selectable_in_game = false,
@@ -306,10 +306,10 @@ function prismatic_belts.create_remnant(name, inputs)
             animation = make_rotated_animation_variations_from_sheet(2, { layers = remnant_layers })
         }
 
-        data:extend({ remnants })
+        data:extend({remnants})
 
         -- Assign the corpse
-        data.raw["transport-belt"][name].corpse = "prismatic-belts-" .. name .. "-remnants"
+        data.raw["transport-belt"][name].corpse = "prismatic-belts-"..name.."-remnants"
     else
         remnants.icons = data.raw["transport-belt"][name].icons
         remnants.icon = data.raw["transport-belt"][name].icon

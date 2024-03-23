@@ -42,7 +42,7 @@ end
 local autogen_color = settings.startup["autogen-color"].value
 if autogen_color == "default" or autogen_color == "red" or autogen_color == "green" or autogen_color == "blue" then
 
-	--	create a post on the discussion page if you want your shortcut to be added to this ignore_list.
+	-- create a post on the discussion page if you want your shortcut to be added to this ignore_list.
 	local shortcut_ignore_list = {
 		"artillery-bombardment-remote",
 		"smart-artillery-bombardment-remote",
@@ -91,11 +91,11 @@ if autogen_color == "default" or autogen_color == "red" or autogen_color == "gre
 		else
 			-- Ignore tools from the ignore_list
 			for _, ignore_list in pairs(shortcut_ignore_list) do
-			if name == ignore_list then
-				continue = false
-				break
+				if name == ignore_list then
+					continue = false
+					break
+				end
 			end
-		end
 		end
 
 		if continue == true then

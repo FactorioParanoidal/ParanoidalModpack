@@ -8,13 +8,11 @@ table.insert(data.raw.technology["basic-atomic-weapons"].effects,
     type = "unlock-recipe",
     recipe = "nuclear-test-site"
   })
-if data.raw.technology["fusion-weapons"] then
-  table.insert(data.raw.technology["fusion-weapons"].effects,
-    {
-      type = "unlock-recipe",
-      recipe = "fusion-test-site"
-    })
-end
+table.insert(data.raw.technology["fusion-weapons"].effects,
+  {
+    type = "unlock-recipe",
+    recipe = "fusion-test-site"
+  })
 local warheads_to_add = require("data-nukes-building-warheads")
 
 
@@ -27,46 +25,44 @@ for _,w in pairs(warheads_to_add) do
     else
       explosion = {appendOrder = "", appendName = ""}
     end
-    if explosion then
-      local recipe = {
-        type = "recipe",
-        name = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
-        category = "nuclear-detonation",
-        enabled = true,
-        hide_from_player_crafting = true,
-        hide_from_stats = true,
-        energy_required = w.energy,
-        ingredients =
-        {
-          {w.warhead, 1}
-        },
-        result = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
-      }
-      if(w.fusion) then
-        recipe.category = "fusion-detonation"
-      end
-      if warhead.additional_ingedients then
-        for _,i in pairs(warhead.additional_ingedients) do
-          table.insert(recipe.ingredients, i)
-        end
-      end
-      if explosion.additional_ingedients then
-        for _,i in pairs(explosion.additional_ingedients) do
-          table.insert(recipe.ingredients, i)
-        end
-      end
-      local item = {
-        type = "item",
-        name = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
-        icon = w.icon or "__True-Nukes__/graphics/15kiloton-detonation.png",
-        icon_size = 64, icon_mipmaps = 1,
-        subgroup = "TN-atomic-detonation",
-        order = "a[nuke]" ..warhead.appendOrder .. explosion.appendOrder .. w.label,
-        stack_size = 1
-      }
-  
-      data:extend{recipe, item}
+    local recipe = {
+      type = "recipe",
+      name = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
+      category = "nuclear-detonation",
+      enabled = true,
+      hide_from_player_crafting = true,
+      hide_from_stats = true,
+      energy_required = w.energy,
+      ingredients =
+      {
+        {w.warhead, 1}
+      },
+      result = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
+    }
+    if(w.fusion) then
+      recipe.category = "fusion-detonation"
     end
+    if warhead.additional_ingedients then
+      for _,i in pairs(warhead.additional_ingedients) do
+        table.insert(recipe.ingredients, i)
+      end
+    end
+    if explosion.additional_ingedients then
+      for _,i in pairs(explosion.additional_ingedients) do
+        table.insert(recipe.ingredients, i)
+      end
+    end
+    local item = {
+      type = "item",
+      name = "detonation" .. warhead.appendName .. explosion.appendName .. w.label,
+      icon = w.icon or "__True-Nukes__/graphics/15kiloton-detonation.png",
+      icon_size = 64, icon_mipmaps = 1,
+      subgroup = "TN-atomic-detonation",
+      order = "a[nuke]" ..warhead.appendOrder .. explosion.appendOrder .. w.label,
+      stack_size = 1
+    }
+
+    data:extend{recipe, item}
   end
 end
 

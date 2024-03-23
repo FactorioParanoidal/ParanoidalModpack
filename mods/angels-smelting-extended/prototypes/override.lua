@@ -20,11 +20,9 @@ end
 angelsmods.functions.OV.add_unlock("angels-tungsten-smelting-3", "angels-roll-tungsten-casting-fast")
 --BRASS
 if angelsmods.trigger.smelting_products["brass"].plate then
-    data.raw.recipe["angels-brass-smelting-1"].subgroup = "angels-brass-casting"
-    data.raw.recipe["angels-brass-smelting-2"].subgroup = "angels-brass-casting"
-    data.raw.recipe["angels-brass-smelting-3"].subgroup = "angels-brass-casting"
-    data.raw.recipe["angels-plate-brass"].subgroup = "angels-brass-casting"
-    data.raw.recipe["brass-alloy"].subgroup = "angels-brass-casting"
+    data.raw.recipe["angels-brass-smelting-1"].order = "angels-brass-casting"
+    data.raw.recipe["angels-brass-smelting-2"].order = "angels-brass-casting"
+    data.raw.recipe["angels-brass-smelting-3"].order = "angels-brass-casting"
     data.raw.recipe["angels-brass-smelting-1"].order = "a"
     data.raw.recipe["angels-brass-smelting-2"].order = "b"
     data.raw.recipe["angels-brass-smelting-3"].order = "c"
@@ -140,7 +138,7 @@ if mods["angelsindustries"] and angelsmods.industries.components then
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-expendable")
     angelsmods.functions.OV.disable_recipe("ASE-iron-gear-casting-advanced")
 end
-if data.raw.item["insulated-cable"] and angelsmods.trigger.smelting_products["tin"].wire then
+if data.raw.item["insulated-cable"] then
     angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-casting")
     angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-converting")
     angelsmods.functions.OV.add_unlock("rubber", "angels-wire-coil-insulated-casting-fast")

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -13,13 +13,13 @@ local inputs = {
     base_entity_name = "artillery-wagon",
     mod = "bobs",
     group = "warfare",
-    particles = { ["big"] = 4 },
+    particles = {["big"] = 4},
 }
 
 local tier_map = {
-    ["artillery-wagon"] = { 1, 3 },
-    ["bob-artillery-wagon-2"] = { 2, 4 },
-    ["bob-artillery-wagon-3"] = { 3, 5 },
+    ["artillery-wagon"] = {1, 3},
+    ["bob-artillery-wagon-2"] = {2, 4},
+    ["bob-artillery-wagon-3"] = {3, 5},
 }
 
 -- Reskin entities, create and assign extra details

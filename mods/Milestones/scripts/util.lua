@@ -5,8 +5,15 @@ function table_contains(table, element)
     return false
 end
 
+function table_get_index(table, element)
+    for i, value in pairs(table) do
+        if value == element then return i end
+    end
+    return nil
+end
+
 function validate_milestones(milestones)
-    local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group', 'alias', 'hidden'}
+    local valid_categories = {"item", "fluid", "item_consumption", "fluid_consumption", "technology", "kill", "group", "alias"}
     for _, milestone in pairs(milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
@@ -14,7 +21,7 @@ function validate_milestones(milestones)
         if type(milestone.name) ~= "string" then
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "name"}
         end
-        if milestone.type ~= 'group' then
+        if milestone.type ~= "group" then
             local num = tonumber(milestone.quantity)
             if num == nil or num < 1 then
                 return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
@@ -26,7 +33,7 @@ function validate_milestones(milestones)
                 end
             end
         end
-        if milestone.type == 'alias' and type(milestone.equals) ~= "string" then
+        if milestone.type == "alias" and type(milestone.equals) ~= "string" then
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "equals"}
         end
         if (type(milestone.hidden) == "boolean" and milestone.hidden) or milestone.hidden == "true" then

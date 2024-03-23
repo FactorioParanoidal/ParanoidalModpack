@@ -1,28 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.2.1
-Date: 01. 12. 2024
-  Bugfixes:
-    - Fixed crash with Space Exploration and Squeak through #152
-    - Fixed crash with Space Exploration and Krastorio 2 #154
-    - Fixed log file warnings with AAI Loaders when Transport Belt Overhaul setting is disabled #158
-    - Fixed Insert Drop Range Shortcut not working after loading a save game. This was also causing desyncs if the host had never saved and loaded #159
----------------------------------------------------------------------------------------------------
-Version: 1.2.0
-Date: 22. 12. 2023
-  Bugfixes:
-    - Fixed that Long-handed inserters were uncraftable when Inserter overhaul was disabled #113
-    - Fixed that techs Railway 2 and Armoured Railway could not be researched when Pyanodons Industry mod was enabled #117
-    - Hid custom input "Change inserter long range" if setting "Inserter Overhaul" is disabled #143
-    - Fixed Inserter Entity Order #144
-  Changes:
-    - Added support for Space Exploration mod #88
-    - Added support for AAI Loaders #109
-    - Most Machines can now fill higher tier pipes when Bigger pipes is enabled #111
-    - Added missing prerequisites #120
-    - Added recipe Crude oil processing when other Bob's mods are not enabled #120
-    - Moved solid fuel recipes to tech "Flammables" #120
-    - Added Russian locale (thanks Eldrinn-Elantey!) #149
----------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Bugfixes:

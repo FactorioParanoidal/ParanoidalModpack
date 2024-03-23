@@ -65,7 +65,7 @@ if data.raw.item["thorium-fuel-cell"] then
     {
       type = "recipe",
       name = "thorium-ore-processing",
-      category = "ore-refining-t3-5",
+      category = "liquifying",
       energy_required = 30,
       enabled = false,
       ingredients = {

@@ -1,4 +1,4 @@
--- Copyright (c) 2023 Kirazy
+-- Copyright (c) 2022 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
@@ -13,15 +13,15 @@ local inputs = {
     icon_name = "press",
     base_entity_name = "assembling-machine-1",
     mod = "compatibility",
-    particles = { ["big"] = 1,["medium"] = 2 },
+    particles = {["big"] = 1, ["medium"] = 2},
     group = "extendedangels",
     make_remnants = false,
 }
 
 local tier_map = {
-    ["bio-press"] = { tier = 1 },
-    ["bio-press-2"] = { tier = 2 },
-    ["bio-press-3"] = { tier = 3 },
+    ["bio-press"] = {tier = 1},
+    ["bio-press-2"] = {tier = 2},
+    ["bio-press-3"] = {tier = 3},
 }
 
 -- Adjust for changes in Extended Angels due to modifications to ingredients in Angel's Bioprocessing 0.7.23
@@ -61,28 +61,28 @@ for name, map in pairs(tier_map) do
                 height = 160,
                 frame_count = 25,
                 line_length = 5,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 animation_speed = 0.5,
             },
             -- Mask
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/press/press-mask.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/press/press-mask.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
                 repeat_count = 25,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 animation_speed = 0.5,
                 tint = inputs.tint,
             },
             -- Highlights
             {
-                filename = reskins.compatibility.directory .. "/graphics/entity/extendedangels/press/press-highlights.png",
+                filename = reskins.compatibility.directory.."/graphics/entity/extendedangels/press/press-highlights.png",
                 priority = "extra-high",
                 width = 160,
                 height = 160,
                 repeat_count = 25,
-                shift = { 0, 0 },
+                shift = {0, 0},
                 animation_speed = 0.5,
                 blend_mode = reskins.lib.blend_mode,
             },
