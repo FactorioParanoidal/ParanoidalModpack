@@ -1,0 +1,32 @@
+name: Заливка изменений на тестирование в master
+on:
+  push: 
+    branches: 
+      - '**'
+      - '!master'
+    tags: 
+      - '**'
+  pull_request: 
+    branches: 
+      - master  
+jobs:
+  launchability:
+    name: Проверка сборки модов на возможность запуска на указанной версии игры
+    continue-on-error: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Клонирование ветки   
+      - timeout-minutes: 10
+        name:  Запуск Factorio с текущей версией сборки модов.
+        working-directory: .
+        run: |
+          export paranoidal_mods_path="$(cat config.json |jq -r '.modsPath')/$(cat config.json |jq -r '.mod.name')"
+          export base_mod_version_data=$(cat "$paranoidal_mods_path/info.json" | jq -r ".dependencies "  |jq ".[0] " |xargs)
+          if [[ $base_mod_version_data =~  ^(base >= )([0-9]{0,}\.[0-9]{0,}\.[0-9]{0,})$ ]]; then base_mod_version=${BASH_REMATCH[2]}; else exit 1; fi
+          echo "Factorio version is $base_mod_version"
+          wget  "$(cat config.json |jq -r '.serverDownloadLink')/$base_mod_version/$(cat config.json |jq -r '.version')/linux64" -O factorio.tar.xz && tar xf factorio.tar.xz
+          ./factorio/bin/x64/factorio  --version
+          runner_hostname=$(hostname -f)
+          ./factorio/bin/x64/factorio --mod-directory $(cat config.json |jq -r '.modsPath') --start-server-load-scenario base/freeplay --bind $runner_hostname:34197 &
+          for((i=0; ;++i)); do sleep 30; working_pid=(jobs -l); if [[ -z "$working_pid" ]]; then echo "factorio crushed!"; exit 1; fi; opened_port=$(netstat -u -n -a); if [[ $opened_port == *":34197"* ]]; then echo "factorio server started at $opened_port. Mods validation on start with contol.lua completed! New game has been created!"; exit 0;  fi  done
