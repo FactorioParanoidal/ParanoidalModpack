@@ -1,0 +1,8 @@
+{
+    "mod": {
+        "name": "zzzparanoidal"
+    },
+    "modsPath": "./mods",
+    "version": "headless",
+    "serverDownloadLink": "https://www.factorio.com/get-download/"
+}
