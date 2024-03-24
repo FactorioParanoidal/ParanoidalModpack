@@ -1,4 +1,54 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2023-11-24
+  Features:
+    - Added a map setting to adjust the number of entities visualized per tick. (#24)
+    - Re-added mouse-over visualization, toggled with Alt+H or the shortcut button. (#20)
+      - Pressing H while hovering will make that entity's fluid systems persist.
+  Bugfixes:
+    - Fixed a crash when an entity is invalidated while in the queue to be visualized. (#21)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2023-10-15
+  Features:
+    - Added a per-player setting to adjust overlay opacity. (#19)
+  Changes:
+    - Box colors are more consistent, being decided by prototype order instead of fluid system ID.
+  Bugfixes:
+    - Fixed that underground connections would cause entity rendering to end prematurely.
+    - Fixed that the default pipe color was semitransparent.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2023-10-14
+  Bugfixes:
+    - Fixed a crash when visualizing a fluid wagon.
+    - Fixed that the color mode GUI from 1.0.x would be left behind when migrating (#17).
+    - Fixed offshore pump boxes being off-center.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2023-10-14
+  Features:
+    - Added a hotkey to visualize an individual system without needing to remain hovered over it (default: H).
+    - Pipe connections on each entity are visualized individually.
+  Changes:
+    - Changed color mode selection from a GUI toggle to a hotkey (default: Control + H).
+    - Changed overlay hotkey from Control + P to Shift + H.
+    - Removed hover-over visualizer in favor of the individual system visualization hotkey.
+    - Visualization is performed over multiple ticks.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023-03-26
+  Bugfixes:
+    - Fixed that the visualizer would show two output-only fluidboxes as connected (#11)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023-03-09
+  Changes:
+    - Pumps are now drawn with a diode shape (by nekizalb)
+  Bugfixes:
+    - Fixed blue fluid colors being distorted to similar shades of cyan
+    - Fixed that fluid-burning labs would not be visualized
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2022-03-18
   Changes:
