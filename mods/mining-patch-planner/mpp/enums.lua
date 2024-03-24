@@ -1,6 +1,10 @@
 local enums = {}
 
-local cached_miners, cached_resource_categories = nil, nil
+---@type LuaEntityPrototype[]
+local cached_miners = {}
+---@type table<string, boolean>
+local cached_resource_categories = {}
+
 local invalid_resource = { --fluid or otherwise
 	["se-core-mining"] = true,
 }
@@ -15,6 +19,8 @@ function enums.get_default_miner()
 	return "electric-mining-drill"
 end
 
+---Get mining drills and resource categories
+---@return LuaEntityPrototype[], table
 function enums.get_available_miners()
 	enums.get_available_miners = function() return cached_miners, cached_resource_categories end
 
@@ -23,9 +29,6 @@ function enums.get_available_miners()
 	--local all_fluids = game.get_filtered_item_prototypes({filter="type", type="
 	local all_resources = game.get_filtered_entity_prototypes{{filter="type", type="resource"}}
 	---@type table<string, LuaResourceCategoryPrototype>
-	local all_categories = game.resource_category_prototypes
-
-	local marked_resource_categories = {}
 
 	for name, proto in pairs(all_resources) do
 		---@cast proto LuaEntityPrototype
