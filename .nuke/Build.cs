@@ -126,6 +126,9 @@ partial class Build : NukeBuild
             var factorioServerLocation = AbsolutePath.Create("factorio_headless") / requiredFactorioVersion.ToString(3);
 
             Log.Information("Testing PARANOIDAL launchability");
-            await FactorioLauncher.EnsureFactorioServerCanLaunch(factorioServerLocation, RootDirectory / "mods");
+            if (!await FactorioLauncher.EnsureFactorioServerCanLaunch(factorioServerLocation, RootDirectory / "mods"))
+            {
+                throw new Exception("Factorio launchability check failed. Check log for details.");
+            }
         });
 }
