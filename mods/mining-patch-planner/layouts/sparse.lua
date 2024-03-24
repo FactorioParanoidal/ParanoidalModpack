@@ -1,4 +1,7 @@
-local mpp_util = require("mpp_util")
+local mpp_util = require("mpp.mpp_util")
+local common   = require("layouts.common")
+local renderer = require("mpp.render_util")
+local drawing  = require("mpp.drawing")
 
 local floor, ceil = math.floor, math.ceil
 local min, max = math.min, math.max
@@ -6,13 +9,14 @@ local EAST, NORTH, SOUTH, WEST = mpp_util.directions()
 
 local simple = require("layouts.simple")
 
-local layout = table.deepcopy(simple) --[[@as Layout]]
+---@class SparseLayout : SimpleLayout
+local layout = table.deepcopy(simple)
 
 layout.name = "sparse"
-layout.translation = {"mpp.settings_layout_choice_sparse"}
+layout.translation = {"", "[entity=transport-belt] ", {"mpp.settings_layout_choice_sparse"}}
 
-layout.restrictions.miner_near_radius = {1, 10e3}
-layout.restrictions.miner_far_radius = {2, 10e3}
+layout.restrictions.miner_size = {1, 10e3}
+layout.restrictions.miner_radius = {1, 10e3}
 layout.restrictions.pole_omittable = true
 layout.restrictions.pole_width = {1, 1}
 layout.restrictions.pole_length = {7.5, 10e3}
@@ -26,38 +30,57 @@ layout.restrictions.coverage_tuning = false
 ---@return PlacementAttempt
 function layout:_placement_attempt(state, shift_x, shift_y)
 	local grid = state.grid
-	local size, near, far = state.miner.size, state.miner.near, state.miner.far
-	local full_size = far * 2 + 1
+	local M = state.miner
+	local size, area = state.miner.size, state.miner.area
 	local miners = {}
+	local heuristic_values = common.init_heuristic_values()
 	local row_index = 1
 	local lane_layout = {}
 
-	for y = 1 + shift_y, state.coords.th + near, full_size do
+	for uy = shift_y, state.coords.th + size, area do
 		local column_index = 1
-		lane_layout[#lane_layout+1] = {y=y+near, row_index = row_index}
-		for x = 1 + shift_x, state.coords.tw, full_size do
-			local tile = grid:get_tile(x, y)
-			local center = grid:get_tile(x+near, y+near) --[[@as GridTile]]
+		local y = uy - M.extent_negative
+		lane_layout[#lane_layout+1] = {y=y, row_index = row_index}
+		for ux = shift_x, state.coords.tw, area do
+			local x = ux - M.extent_negative
+			local tile = grid:get_tile(x, y) --[[@as GridTile]]
 			local miner = {
+				x = x,
+				y = y,
+				origin_x = x + M.x,
+				origin_y = y + M.y,
 				tile = tile,
 				line = row_index,
 				column = column_index,
-				center = center,
 				direction = row_index % 2 == 1 and SOUTH or NORTH
 			}
-			if center.far_neighbor_count > 0 then
+			if tile.neighbors_outer > 0 then
 				miners[#miners+1] = miner
 			end
 			column_index = column_index + 1
 		end
 		row_index = row_index + 1
 	end
-	return {
-		sx=shift_x, sy=shift_y,
+
+	local result = {
+		sx=shift_x,
+		sy=shift_y,
+		bx = 1,
+		by = 1,
 		miners=miners,
-		miner_count=#miners,
 		lane_layout=lane_layout,
+		heuristics = heuristic_values,
+		heuristic_score = #miners,
+		unconsumed = 0,
 	}
+
+	common.process_postponed(state, result, miners, {})
+
+	common.finalize_heuristic_values(result, heuristic_values, state.coords)
+
+	result.heuristic_score = #miners
+
+	return result
 end
 
 ---@param self SimpleLayout
@@ -80,9 +103,9 @@ function layout:prepare_layout_attempts(state)
 		return count, start, slack
 	end
 
-	local countx, slackw2, modx = calc_slack(c.tw, m.near, m.far)
-	local county, slackh2, mody = calc_slack(c.th, m.near, m.far)
-	
+	local countx, slackw2, modx = calc_slack(c.tw, floor(m.size/2), floor(m.area/2))
+	local county, slackh2, mody = calc_slack(c.th, floor(m.size/2), floor(m.area/2))
+
 	for sy = slackh2, slackh2 + mody do
 		for sx = slackw2, slackw2 + modx do
 			attempts[#attempts+1] = {
@@ -156,14 +179,14 @@ end
 function layout:_get_pipe_layout_specification(state)
 	local pipe_layout = {}
 	
-	local m = state.miner
+	local M = state.miner
 	local attempt = state.best_attempt
-	local gutter = m.far-m.near
+	local gutter = M.outer_span
 
-	for _, pre_lane in ipairs(state.miner_lanes) do
+	for _, pre_lane in pairs(state.miner_lanes) do
 		if not pre_lane[1] then goto continue_lanes end
-		local y = pre_lane[1].center.y
-		local sx = attempt.sx
+		local y = pre_lane[1].y + M.pipe_left
+		local sx = attempt.sx + M.outer_span - 1
 		---@type MinerPlacement[]
 		local lane = table.mapkey(pre_lane, function(t) return t.column end) -- make array with intentional gaps between miners
 
@@ -175,9 +198,9 @@ function layout:_get_pipe_layout_specification(state)
 				if current_start == 1 then start_shift = gutter * 2 end
 				pipe_layout[#pipe_layout+1] = {
 					structure="horizontal",
-					x=sx+start_shift+(current_start-1)*m.full_size-gutter*2+1,
+					x=sx + start_shift + (current_start-1) * M.area - gutter * 2 + 1,
 					y=y,
-					w=current_length*m.full_size+gutter*2-1-start_shift,
+					w=current_length * M.area+gutter * 2 - 1 - start_shift,
 				}
 				current_start, current_length = nil, 0
 			elseif not miner and not current_start then
@@ -187,7 +210,7 @@ function layout:_get_pipe_layout_specification(state)
 			elseif i > 1 then
 				pipe_layout[#pipe_layout+1] = {
 					structure="horizontal",
-					x=sx+(i-1)*m.full_size-gutter*2+1,
+					x=sx+(i-1)*M.area-gutter*2+1,
 					y=y,
 					w=gutter*2-1
 				}
@@ -201,8 +224,8 @@ function layout:_get_pipe_layout_specification(state)
 		local lane = attempt.lane_layout[i]
 		pipe_layout[#pipe_layout+1] = {
 			structure="cap_vertical",
-			x=attempt.sx,
-			y=lane.y,
+			x=attempt.sx + M.outer_span - 1,
+			y=lane.y+M.pipe_left,
 			skip_up=i == 1,
 			skip_down=i == state.miner_lane_count,
 		}
@@ -223,14 +246,14 @@ function layout:prepare_belt_layout(state)
 	local miner_lane_count = state.miner_lane_count
 	local miner_max_column = state.miner_max_column
 
-	for _, lane in ipairs(miner_lanes) do
-		table.sort(lane, function(a, b) return a.center.x < b.center.x end)
+	for _, lane in pairs(miner_lanes) do
+		table.sort(lane, function(a, b) return a.x < b.x end)
 	end
 
 	local builder_belts = {}
 	state.builder_belts = builder_belts
 
-	local function get_lane_length(lane) if lane then return lane[#lane].center.x end return 0 end
+	local function get_lane_length(lane) if lane then return lane[#lane].x end return 0 end
 	local function que_entity(t) builder_belts[#builder_belts+1] = t end
 
 	local belt_lanes = {}
@@ -241,14 +264,14 @@ function layout:prepare_belt_layout(state)
 		local lane1 = miner_lanes[i]
 		local lane2 = miner_lanes[i+1]
 
-		local y = attempt.sy + m.size + 1 + (m.far * 2 + 1) * (i-1)
+		local y = attempt.sy + m.area - m.outer_span + m.area * (i-1)
 
 		local belt = {x1=attempt.sx + 1, x2=attempt.sx + 1, y=y, built=false, lane1=lane1, lane2=lane2}
 		belt_lanes[#belt_lanes+1] = belt
 
 		if lane1 or lane2 then
 			local x1 = attempt.sx + 1 + pipe_adjust
-			local x2 = max(get_lane_length(lane1), get_lane_length(lane2)) + m.near
+			local x2 = max(get_lane_length(lane1)+m.out_x+1, get_lane_length(lane2)+ m.out_x + 1)
 			longest_belt = max(longest_belt, x2 - x1 + 1)
 			belt.x1, belt.x2, belt.built = x1, x2, true
 
@@ -265,14 +288,13 @@ function layout:prepare_belt_layout(state)
 
 		if lane2 then
 			for _, miner in ipairs(lane2) do
-				local center = miner.center
-				local mx, my = center.x, center.y
+				local out_x = m.out_x
 
-				for ny = y + 1, y + (m.far - m.near) * 2 - 1 do
+				for ny = y + 1, y + m.outer_span * 2 - 1 do
 					que_entity{
 						name=state.belt_choice,
 						thing="belt",
-						grid_x=mx,
+						grid_x=miner.x + out_x,
 						grid_y=ny,
 						direction=defines.direction.north,
 					}
@@ -291,7 +313,8 @@ end
 function layout:prepare_pole_layout(state)
 	local c = state.coords
 	local m = state.miner
-	local g = state.grid
+	local G = state.grid
+	local P = state.pole
 	local attempt = state.best_attempt
 
 	local pole_proto = game.entity_prototypes[state.pole_choice] or {supply_area_distance=3, max_wire_distance=9}
@@ -309,49 +332,25 @@ function layout:prepare_pole_layout(state)
 	local pole_step = min(floor(pole_proto.max_wire_distance), supply_area + 2)
 	state.pole_step = pole_step
 
-	local miner_lane_width = (state.miner_max_column-1)*m.far*2 + state.miner_max_column
-	local slack = ceil(miner_lane_width / pole_step) * pole_step - c.tw
-	local pole_start = supply_radius - floor(slack / 2) - 1
+	local miner_lane_width = (state.miner_max_column-1) * m.area + state.miner_max_column
+	local pole_start = m.outer_span
 
-	local function get_covered_miners(ix, iy)
-		for sy = -supply_radius, supply_radius do
-			for sx = -supply_radius, supply_radius do
-				local tile = g:get_tile(ix+sx, iy+sy)
-				if tile and tile.built_on == "miner" then
-					return true
-				end
-			end
-		end
-	end
-
-	local function place_pole_lane(y, iy, no_light)
+	local function place_pole_lane(y, iy, skip_light)
 		local pole_lane = {}
 		local ix = 1
-		for x = attempt.sx + pole_start, c.tw, pole_step do
+		for x = attempt.sx + pole_start, c.tw+m.size, pole_step do
 			local built = false
-			if get_covered_miners(x, y) then
+			if G:needs_power(x, y, P) then
 				built = true
 			end
-			local pole = {x=x, y=y, ix=ix, iy=iy, built=built, no_light=no_light}
+			local pole = {x=x, y=y, ix=ix, iy=iy, built=built}
 			pole_lane[ix] = pole
 			ix = ix + 1
 		end
 		
-		-- if built and ix > 1 and pole_lane[ix-1] then
-		-- 	for bx = ix - 1, 1, -1 do
-		-- 		local backtrack_pole = pole_lane[bx]
-		-- 		if not backtrack_pole.built then
-		-- 			backtrack_pole.built = true
-		-- 		else
-		-- 			break
-		-- 		end
-
-		-- 	end
-		-- end
-		-- builder_power_poles[#builder_power_poles+1] = pole
-
 		local backtrack_built = false
 		for pole_i = #pole_lane, 1, -1 do
+			local no_light = (P.wire < 9) and (pole_i % 2 == 0) or nil
 			---@type GridPole
 			local backtrack_pole = pole_lane[pole_i]
 			if backtrack_built or backtrack_pole.built then
@@ -363,6 +362,7 @@ function layout:prepare_pole_layout(state)
 					thing="pole",
 					grid_x = backtrack_pole.x,
 					grid_y = backtrack_pole.y,
+					no_light = skip_light or no_light,
 				}
 
 			end
@@ -371,27 +371,32 @@ function layout:prepare_pole_layout(state)
 		return pole_lane
 	end
 
-	local initial_y = attempt.sy
-	local iy = 1
-	local y_max, y_step = c.th + m.full_size, m.full_size * 2
+	local initial_y = attempt.sy + m.outer_span - 1
+	local iy, between_lane = 1, 0
+	local y_max, y_step = initial_y + c.th + m.area + 1, m.area * 2
 	for y = initial_y, y_max, y_step do
-		if ((m.far - m.near) * 2 + 2 > supply_area) then -- single pole can't supply two lanes
+
+		if y + y_step > y_max then -- last pole lane
+			local backstep = m.outer_span * 2 - 1
+			if state.miner_lanes[between_lane+1] then
+				backstep = ceil(m.size/2)
+			end
+			place_pole_lane(y - backstep)
+		elseif (m.outer_span * 2 + 2) > supply_area then -- single pole can't supply two lanes
 			place_pole_lane(y, iy)
 			if y ~= initial_y then
 				iy = iy + 1
-				place_pole_lane(y - (m.far - m.near) * 2 + 1, iy, true)
+				place_pole_lane(y - m.outer_span * 2 + 1, iy, true)
 			end
-		elseif y + y_step > y_max and state.miner_lane_count % 2 == 0 then -- last pole lane
-			local backstep = (m.far - m.near) * 2 - 1
-			place_pole_lane(y - backstep)
 		else
-			local backstep = y == initial_y and 0 or m.near - m.far
-			place_pole_lane(y + backstep)
+			local backstep = y == initial_y and 0 or ceil(m.size/2)
+			place_pole_lane(y - backstep)
 		end
 		iy = iy + 1
+		between_lane = between_lane + 2
 	end
 
-	return "expensive_deconstruct"
+	return "prepare_lamp_layout"
 end
 
 return layout

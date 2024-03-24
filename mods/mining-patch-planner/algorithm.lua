@@ -1,6 +1,6 @@
-local enums = require("enums")
-local mpp_util = require("mpp_util")
-local compatibility = require("compatibility")
+local enums = require("mpp.enums")
+local mpp_util = require("mpp.mpp_util")
+local compatibility = require("mpp.compatibility")
 
 local floor, ceil = math.floor, math.ceil
 local min, max = math.min, math.max
@@ -10,7 +10,7 @@ local algorithm = {}
 ---@type table<string, Layout>
 local layouts = {}
 algorithm.layouts = layouts
-local function require_layout(layout) 
+local function require_layout(layout)
 	layouts[layout] = require("layouts."..layout)
 	layouts[#layouts+1] = layouts[layout]
 end
@@ -23,20 +23,27 @@ require_layout("compact_logistics")
 require_layout("sparse_logistics")
 require_layout("blueprints")
 
----@class State
+---@class MininimumPreservedState
+---@field layout_choice string
+---@field player LuaPlayer
+---@field surface LuaSurface
+---@field resources LuaEntity[] Filtered resources
+---@field coords Coords
+---@field _previous_state MininimumPreservedState?
+---@field _collected_ghosts LuaEntity[]
+---@field _preview_rectangle nil|uint64 LuaRendering.draw_rectangle
+---@field _lane_info_rendering uint64[]
+---@field _render_objects uint64[] LuaRendering objects
+
+---@class State : MininimumPreservedState
 ---@field _callback string -- callback to be used in the tick
 ---@field tick number
----@field surface LuaSurface
 ---@field is_space boolean
----@field player LuaPlayer
----@field resources LuaEntity[] Filtered resources
+---@field resource_tiles GridTile
 ---@field found_resources LuaEntity[] Resource name -> resource category mapping
 ---@field resource_counts {name: string, count: number}[] Highest count resource first
 ---@field requires_fluid boolean
 ---@field mod_version string
----
----@field _previous_state State?
----@field _collected_ghosts LuaEntity[]
 ---
 ---@field layout_choice string
 ---@field direction_choice string
@@ -57,13 +64,11 @@ require_layout("blueprints")
 ---@field print_placement_info_choice boolean
 ---@field display_lane_filling_choice boolean
 ---
----@field coords Coords
 ---@field grid Grid
 ---@field deconstruct_specification DeconstructSpecification
 ---@field miner MinerStruct
----@field _preview_rectangle nil|uint64 LuaRendering.draw_rectangle
----@field _lane_info_rendering uint64[]
----@field _render_objects uint64[] LuaRendering objects
+---@field pole PoleStruct
+---@field belt BeltStruct
 ---@field blueprint_choice LuaGuiElement
 ---@field blueprint_inventory LuaInventory
 ---@field blueprint LuaItemStack
@@ -79,6 +84,7 @@ require_layout("blueprints")
 ---@return State|nil
 ---@return LocalisedString error status
 local function create_state(event)
+	---@diagnostic disable-next-line: missing-fields
 	local state = {} --[[@as State]]
 	state._callback = "start"
 	state.tick = 0
@@ -87,7 +93,7 @@ local function create_state(event)
 	state._collected_ghosts = {}
 	state._render_objects = {}
 	state._lane_info_rendering = {}
-	
+
 	---@type PlayerData
 	local player_data = global.players[event.player_index]
 
@@ -115,10 +121,10 @@ local function create_state(event)
 	state.debug_dump = mpp_util.get_dump_state(event.player_index)
 
 	if state.layout_choice == "blueprints" then
-		if not player_data.choices.blueprint_choice then
+		local blueprint = player_data.choices.blueprint_choice
+		if blueprint == nil then
 			return nil, {"mpp.msg_unselected_blueprint"}
 		end
-		local blueprint = player_data.choices.blueprint_choice
 		-- state.blueprint_inventory = game.create_inventory(1)
 		-- state.blueprint = state.blueprint_inventory.find_empty_stack()
 		-- state.blueprint.set_stack(blueprint)
@@ -197,7 +203,7 @@ function algorithm.on_player_selected_area(event)
 	local layout = layouts[player_data.choices.layout_choice]
 
 	if state.miner_choice == "none" then
-		return nil, {"msg_miner_err_3"}
+		return nil, {"mpp.msg_miner_err_3"}
 	end
 
 	local layout_categories = get_miner_categories(state, layout)
@@ -227,24 +233,28 @@ function algorithm.on_player_selected_area(event)
 		return nil, {"mpp.msg_miner_err_0"}
 	end
 
-	if player_data.last_state then
-		local renderables = player_data.last_state._render_objects
+	local last_state = player_data.last_state --[[@as MininimumPreservedState]]
+	if last_state ~= nil then
+		local renderables = last_state._render_objects
 
-		local old_resources = player_data.last_state.resources
+		local old_resources = last_state.resources
 
-		local same = true
-		for i, v in pairs(old_resources) do
-			if v ~= filtered[i] then
-				same = false
-				break
-			end
-		end
+		local same = mpp_util.coords_overlap(coords, last_state.coords)
+
+		-- if same then
+		-- 	for i, v in pairs(old_resources) do
+		-- 		if v ~= filtered[i] then
+		-- 			same = false
+		-- 			break
+		-- 		end
+		-- 	end
+		-- end
 
 		if same then
 			for _, id in ipairs(renderables) do
 				rendering.destroy(id)
 			end
-			state._previous_state = player_data.last_state
+			state._previous_state = last_state
 		else
 			local ttl = mpp_util.get_display_duration(event.player_index)
 			for _, id in ipairs(renderables) do
@@ -313,6 +323,37 @@ function algorithm.on_gui_close(player_data)
 			rendering.destroy(id)
 		end
 	end
+end
+
+---@param player_data PlayerData
+function algorithm.cleanup_last_state(player_data)
+	local state = player_data.last_state
+	if not state then return end
+
+	local force, ply = state.player.force, state.player
+	
+	if type(state._collected_ghosts) == "table" then
+		for _, ghost in pairs(state._collected_ghosts) do
+			if ghost.valid then
+				ghost.order_deconstruction(force, ply)
+			end
+		end
+		state._collected_ghosts = {}
+	end
+
+	if type(state._render_objects) == "table" then
+		for _, id in ipairs(state._render_objects) do
+			if rendering.is_valid(id) then
+				rendering.destroy(id)
+			end
+		end
+		state._render_objects = {}
+	end
+
+	rendering.destroy(state._preview_rectangle)
+	mpp_util.update_undo_button(player_data)
+
+	player_data.last_state = nil
 end
 
 return algorithm

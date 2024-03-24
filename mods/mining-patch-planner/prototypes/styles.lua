@@ -49,6 +49,14 @@ default_style.mpp_fake_item_placeholder = {
 	size=32,
 }
 
+default_style.mpp_fake_item_placeholder_blueprint = {
+	type="image_style",
+	stretch_image_to_widget_size = true,
+	left_margin=4,
+	top_margin=4,
+	size=32,
+}
+
 default_style.mpp_fake_blueprint_button = {
 	type="button_style",
 	parent="shortcut_bar_button_blue",
@@ -102,4 +110,24 @@ default_style.mpp_fake_blueprint_sprite = {
 	type="image_style",
 	size=16,
 	stretch_image_to_widget_size=true,
+}
+
+default_style.mpp_filtered_entity = {
+	type="image_style",
+	size=32,
+	stretch_image_to_widget_size=true,
+}
+
+default_style.mpp_section = {
+	type="vertical_flow_style",
+	parent="vertical_flow",
+	natural_width=240,
+}
+
+default_style.mpp_label_warning_style = {
+	type = "label_style",
+	font_color = {1, 1, 0},
+	single_line = false,
+	horizontally_squashable = "on",
+	horizontally_stretchable = "on",
 }

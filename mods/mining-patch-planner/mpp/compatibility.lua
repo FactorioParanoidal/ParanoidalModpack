@@ -1,4 +1,4 @@
-local enum = require("enums")
+local enum = require("mpp.enums")
 
 local compatibility = {}
 
@@ -42,6 +42,7 @@ compatibility.is_space = function(surface_identification)
 	if type(surface_identification) == "string" then
 		surface_identification = game.get_surface(surface_identification).index
 	elseif type(surface_identification) == "userdata" then
+		---@cast surface_identification LuaSurface
 		surface_identification = surface_identification.index
 	end
 
@@ -49,18 +50,53 @@ compatibility.is_space = function(surface_identification)
 	if memoized ~= nil then return memoized end
 
 	if game.active_mods["space-exploration"] then
-		local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index})
+		local zone = remote.call("space-exploration", "get_zone_from_surface_index", {surface_index = surface_index} --[[@as table]]) --[[@as LuaSurface?]]
 		if not zone then
 			memoize_space_surfaces[surface_index] = false
 			return false
 		end
-		local result = remote.call("space-exploration", "get_zone_is_space", {zone_index = zone.index})
+		local result = remote.call("space-exploration", "get_zone_is_space", {zone_index = zone.index} --[[@as table]]) --[[@as boolean]]
 		memoize_space_surfaces[surface_index] = result
 		return result
 	end
 	memoize_space_surfaces[surface_index] = false
 	return false
 end
+
+---@type string
+local space_collision_mask_name = nil
+
+---@type table<string, boolean>
+local memoize_space_buildable = {}
+
+function compatibility.is_buildable_in_space(name)
+	local buildable_status = memoize_space_buildable[name]
+	if buildable_status ~= nil then
+		return buildable_status
+	end
+
+	-- if something goes wrong, give up, allow to build
+	if space_collision_mask_name == nil then
+		local scaffold_tile = game.tile_prototypes["se-space-platform-scaffold"]
+		if not scaffold_tile then
+			memoize_space_buildable[name] = true
+			return true
+		end
+		space_collision_mask_name = next(scaffold_tile.collision_mask)
+		if space_collision_mask_name == nil then
+			memoize_space_buildable[name] = true
+			return true
+		end
+	end
+
+	local entity_proto = game.entity_prototypes[name]
+	local allowed = not entity_proto.collision_mask[space_collision_mask_name]
+
+	memoize_space_buildable[name] = allowed
+
+	return allowed
+end
+
 
 --- Return true to skip non space item
 ---@param is_space boolean
