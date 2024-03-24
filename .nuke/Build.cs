@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -7,19 +8,10 @@ using System.Threading.Tasks;
 using FactorioParanoidal.FactorioMods;
 using FactorioParanoidal.FactorioMods.Mods;
 using FactorioParanoidal.ModSettingsDat;
-using Microsoft.VisualBasic.CompilerServices;
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Utilities.Collections;
 using Serilog;
-using static Nuke.Common.EnvironmentInfo;
-using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 
 [SuppressMessage("ReSharper", "AllUnderscoreLocalParameterName")]
 partial class Build : NukeBuild
@@ -103,5 +95,40 @@ partial class Build : NukeBuild
                 Log.Information("Started zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
                 Zip(modZipPath, mod.Directory);
             });
+        });
+
+    Target PrepareHeadless => _ => _
+        .Unlisted()
+        .Executes(async () =>
+        {
+            if (!OperatingSystem.IsLinux())
+            {
+                Log.Warning("Seems like you are running on non-linux os");
+                Log.Warning("Factorio headless server will only available for linux!");
+            }
+
+            var paranoidalMod = await FolderFactorioMod.LoadFromDirectory(RootDirectory / "mods" / "zzzparanoidal");
+            var requiredFactorioVersion = paranoidalMod.GetBaseGameRequiredVersion();
+
+            await FactorioLauncher.DownloadFactorioIfRequired(AbsolutePath.Create("factorio_headless"),
+                requiredFactorioVersion, "headless", "linux64");
+
+            Log.Information("Factorio {RequiredVersion} server downloaded!", requiredFactorioVersion);
+        });
+
+    Target EnsureLaunchability => _ => _
+        .Unlisted()
+        .DependsOn(PrepareHeadless)
+        .Executes(async () =>
+        {
+            var paranoidalMod = await FolderFactorioMod.LoadFromDirectory(RootDirectory / "mods" / "zzzparanoidal");
+            var requiredFactorioVersion = paranoidalMod.GetBaseGameRequiredVersion();
+            var factorioServerLocation = AbsolutePath.Create("factorio_headless") / requiredFactorioVersion.ToString(3);
+
+            Log.Information("Testing PARANOIDAL launchability");
+            if (!await FactorioLauncher.EnsureFactorioServerCanLaunch(factorioServerLocation, RootDirectory / "mods"))
+            {
+                throw new Exception("Factorio launchability check failed. Check log for details.");
+            }
         });
 }
