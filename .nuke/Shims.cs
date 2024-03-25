@@ -35,7 +35,7 @@ partial class Build {
                     foreach (var path in paths)
                         if (Directory.Exists(path)) {
                             var dirInfo = new DirectoryInfo(path);
-                            var rootPath = Path.GetDirectoryName(dirInfo.FullName);
+                            var rootPath = Path.GetDirectoryName(dirInfo.FullName)!;
                             foreach (var fsEntry in dirInfo.EnumerateFileSystemInfos("*", SearchOption.AllDirectories))
                                 if (fsEntry is FileInfo) {
                                     var relPath = Path.GetRelativePath(rootPath, fsEntry.FullName);
