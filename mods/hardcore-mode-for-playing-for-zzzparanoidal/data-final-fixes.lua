@@ -1,2 +1,8 @@
 require("__automated-utility-protocol__.util.main")
-require("prototypes.final-fixes.before-apply-final-fixes")
+flib = require("__flib__.data-util")
+require("prototypes.items")
+require("prototypes.guns")
+require("prototypes.entities")
+require("prototypes.recipes")
+require("prototypes.technologies")
+flib = nil

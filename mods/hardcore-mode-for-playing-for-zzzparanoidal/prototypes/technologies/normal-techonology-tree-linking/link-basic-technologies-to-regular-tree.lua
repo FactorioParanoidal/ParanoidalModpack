@@ -3,25 +3,29 @@ local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
 local function reset_basic_technology_prerequisites_to_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.reset_prerequisites_for_technology(
+		technologies["factory-architecture-t1"],
+		{ "coal-stone-processing", "coal-ore-smelting", "automation-science-pack" },
+		mode
+	)
+	techUtil.reset_prerequisites_for_technology(
 		technologies["basic-automation"],
 		{ "factory-architecture-t1", "automation-science-pack" },
 		mode
 	)
-	techUtil.reset_prerequisites_for_technology(
-		technologies["stone-wall"],
-		{ "military-0", "basic-automation", "basic-metal-processing" },
-		mode
-	)
+	techUtil.reset_prerequisites_for_technology(technologies["stone-wall"], {
+		"basic-automation",
+		"military-0",
+		"basic-metal-processing",
+	}, mode)
 	techUtil.reset_prerequisites_for_technology(
 		technologies["water-pumpjack-1"],
 		{ "basic-automation", "basic-metal-processing", "angels-copper-smelting-1", "electricity", "coal-ore-smelting" },
 		mode
 	)
-	techUtil.reset_prerequisites_for_technology(technologies["basic-logistics"], { --[["basic-automation",]]
+	techUtil.reset_prerequisites_for_technology(technologies["basic-logistics"], {
 		"iron-storage",
 	}, mode)
 	techUtil.reset_prerequisites_for_technology(technologies["logistics-0"], {
-		"basic-automation",
 		"coal-ore-smelting",
 		"basic-wood-production",
 		"basic-metal-processing",
@@ -38,12 +42,6 @@ local function reset_basic_technology_prerequisites_to_regular_tree(mode)
 	techUtil.reset_prerequisites_for_technology(
 		technologies["electricity"],
 		{ "basic-automation", "electricity-0" },
-		mode
-	)
-
-	techUtil.reset_prerequisites_for_technology(
-		technologies["factory-architecture-t1"],
-		{ "coal-stone-processing", "coal-ore-smelting", "automation-science-pack" },
 		mode
 	)
 end
@@ -201,12 +199,13 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		"wood-detected-resource-technology",
 	}, mode)
 	techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bi-tech-bio-boiler"], { "bio-processing-alien-3" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["electronics"], { "bio-wood-processing-2" }, mode)
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	techUtil.remove_prerequisites_to_technology(technologies["modules-3"], { "advanced-electronics-3" }, mode)
-	techUtil.remove_prerequisites_to_technology(technologies["advanced-electronics"], { "offshore-pump-2" }, mode)
 end
 
 local function remove_recipes_from_technology_effects_in_regular_tree(mode)
@@ -341,7 +340,6 @@ local function add_recipe_to_technology_effects(mode)
 		"basic-coal-production-seedling",
 		mode
 	)
-	techUtil.add_recipe_effect_to_technology(technologies["electricity-0"], "texugo-wind-turbine", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["basic-electronics"], "motor", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["electric-lab"], "electric-motor", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["military-0"], "pistol-rearm-ammo", mode)
@@ -380,14 +378,14 @@ local function create_resource_detected_technologies_and_add_it_to_normal_techno
 			if _table.contains_f_deep(recipe_ingredients, recipe_result) then
 				techUtil.add_recipe_effect_to_technology(active_technology, resource_recipe_name, mode)
 				techUtil.add_prerequisites_to_technology(active_technology, { resource_detected_technology.name }, mode)
-				log(
+				--[[	log(
 					"for technology "
 						.. active_technology_name
 						.. " mode "
 						.. mode
 						.. " added recipe effect "
 						.. resource_recipe_name
-				)
+				)]]
 			end
 		end)
 	end)
