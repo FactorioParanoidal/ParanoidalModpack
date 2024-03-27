@@ -200,7 +200,7 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	}, mode)
 	techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["bi-tech-bio-boiler"], { "bio-processing-alien-3" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["electronics"], { "bio-wood-processing-2" }, mode)
+	--techUtil.add_prerequisites_to_technology(technologies["electronics"], { "basic-wood-production" }, mode)
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
@@ -234,6 +234,11 @@ local function remove_recipes_from_technology_effects_in_regular_tree(mode)
 	techUtil.remove_recipe_effect_from_technology(
 		technologies["ober-nuclear-processing"],
 		"nuclear-smelting-tin-plate",
+		mode
+	)
+	techUtil.remove_recipe_effect_from_technology(
+		technologies["ober-nuclear-processing"],
+		"nuclear-smelting-angels-solder-mixture-smelting",
 		mode
 	)
 end
@@ -307,6 +312,7 @@ local function move_recipes_to_another_technologies(mode)
 end
 
 local function add_recipe_to_technology_effects(mode)
+	--#region basic tech recipes
 	local technologies = data.raw["technology"]
 	techUtil.add_recipe_effect_to_technology(
 		technologies["salvaged-automation-tech"],
@@ -350,6 +356,7 @@ local function add_recipe_to_technology_effects(mode)
 	techUtil.add_recipe_effect_to_technology(technologies["automation-science-pack"], "burner-lab", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["automation-science-pack"], "sci-component-1", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["logistics"], "transport-belt", mode)
+	--#end region basic tech recipes
 end
 local function create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
 	local resource_recipes = create_resource_recipes()
