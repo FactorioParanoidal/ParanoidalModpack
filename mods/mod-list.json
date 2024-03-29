@@ -79,6 +79,16 @@
     },
     
     {
+      "name": "automated-fabrique-protocol",
+      "enabled": false
+    },
+    
+    {
+      "name": "automated-utility-protocol",
+      "enabled": true
+    },
+    
+    {
       "name": "baraws",
       "enabled": true
     },
@@ -226,6 +236,11 @@
     {
       "name": "bullet-trails",
       "enabled": true
+    },
+    
+    {
+      "name": "check-technology-tree-mods-protocol",
+      "enabled": false
     },
     
     {
@@ -404,6 +419,16 @@
     },
     
     {
+      "name": "hardcore-mode-for-playing",
+      "enabled": true
+    },
+    
+    {
+      "name": "hardcore-mode-for-playing-for-zzzparanoidal",
+      "enabled": true
+    },
+    
+    {
       "name": "helmod",
       "enabled": true
     },
@@ -490,6 +515,11 @@
     
     {
       "name": "LTN_Content_Reader",
+      "enabled": false
+    },
+    
+    {
+      "name": "make-moded-technology-tree-mods-protocol",
       "enabled": true
     },
     
@@ -770,7 +800,7 @@
     
     {
       "name": "RampantFixed",
-      "enabled": true
+      "enabled": false
     },
     
     {
@@ -940,11 +970,6 @@
     
     {
       "name": "Subterranean",
-      "enabled": true
-    },
-    
-    {
-      "name": "Texugo_windgenerator",
       "enabled": true
     },
     
