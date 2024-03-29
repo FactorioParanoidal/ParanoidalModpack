@@ -153,8 +153,35 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	data:extend({ target_boiler_prototype, target_boiler_item, target_boiler_recipe })
 	--	log("target_boiler_recipe " .. Utils.dump_to_console(target_boiler_recipe))
 	techUtil.add_recipe_effect_to_technology(technology, target_boiler_name, mode)
+	if not techUtil.has_technology_recipe_effects(technology, "steam", mode) then
+		techUtil.add_recipe_effect_to_technology(technology, "steam", mode)
+	end
 end
 function update_boiler_prototype_by_steam_recipe_prototype(steam_recipes_by_temperature_sorted)
+	local steam_recipe_mode_data = {
+		ingredients = { { type = "fluid", name = "water", amount = 1 } },
+
+		results = {
+			{
+				type = "fluid",
+				name = "steam",
+				amount = 1,
+			},
+		},
+		enabled = false,
+		hide_from_player_crafting = true,
+	}
+	data:extend({
+		{
+			type = "recipe",
+			name = "steam",
+			icon = "__base__/graphics/icons/fluid/steam.png",
+			icon_size = 64,
+			category = "crafting-with-fluid",
+			normal = steam_recipe_mode_data,
+			expensive = steam_recipe_mode_data,
+		},
+	})
 	_table.each(steam_recipes_by_temperature_sorted, function(recipe_datas_by_temperature_level)
 		_table.each(recipe_datas_by_temperature_level, handle_one_recipe_data_by_temperature)
 	end)
