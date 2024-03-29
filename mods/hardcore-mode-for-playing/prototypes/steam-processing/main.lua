@@ -3,8 +3,6 @@ require("__automated-utility-protocol__.util.main")
 require("__hardcore-mode-for-playing__.prototypes.fuel-category.fuel-categories")
 require("__hardcore-mode-for-playing__.prototypes.boiler-processing.main")
 require("__hardcore-mode-for-playing__.prototypes.steam-recipes.main")
-require("__hardcore-mode-for-playing__.prototypes.generator-processing.main")
-require("__hardcore-mode-for-playing__.prototypes.generator-processing.steam-generator-processing")
 
 local function steam_processing(mode)
 	local technology_names = techUtil.get_all_active_technology_names(mode)
@@ -12,7 +10,6 @@ local function steam_processing(mode)
 	local steam_recipes_by_temperature_sorted = create_steam_recipe_and_fluids(boiler_by_temperature_sorted)
 	log("steam_recipes_by_temperature_sorted " .. Utils.dump_to_console(steam_recipes_by_temperature_sorted))
 	update_boiler_prototype_by_steam_recipe_prototype(steam_recipes_by_temperature_sorted)
-	update_steam_generator_prototype_by_steam_recipe_prototype(steam_recipes_by_temperature_sorted, mode)
 end
 
 _table.each(GAME_MODES, function(mode)
