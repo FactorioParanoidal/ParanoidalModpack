@@ -1314,3 +1314,6 @@ bobmods.lib.recipe.replace_ingredient("nco-turbo-crane", "titanium-gear-wheel", 
 bobmods.lib.recipe.replace_ingredient("nco-turbo-crane", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("nco-turbo-filter-crane", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("nco-turbo-filter-crane", "titanium-bearing", "cobalt-steel-bearing")
+
+--ремонт рецепта материнской бактерии (AKMF)
+data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "advanced-chemistry"
