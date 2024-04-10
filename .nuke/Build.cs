@@ -73,7 +73,7 @@ partial class Build : NukeBuild
 
             Log.Information("Opening {Path} file to write JSON", modSettingsDatPath);
             await using var datFileStream = File.Open(modSettingsDatPath, FileMode.Create, FileAccess.Write);
-            ModSettingsConverter.Serialize(modSettings, datFileStream);
+            ModSettingsConverter.Serialize(modSettings!, datFileStream);
             Log.Information("{Path} successfully written", modSettingsDatPath);
         });
 

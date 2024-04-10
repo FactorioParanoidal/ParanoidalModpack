@@ -16,6 +16,7 @@ public static class Utils {
             _ when OperatingSystem.IsWindows() => "win64-manual",
             _ when OperatingSystem.IsMacOS()   => "osx",
             _ when OperatingSystem.IsLinux()   => "linux64",
+            _ => throw new NotSupportedException("Unknown OS")
         };
     }
 

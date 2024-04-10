@@ -2,15 +2,15 @@ local floor, ceil = math.floor, math.ceil
 local min, max = math.min, math.max
 
 local simple = require("layouts.simple")
-local mpp_util = require("mpp_util")
+local mpp_util = require("mpp.mpp_util")
 local mpp_revert = mpp_util.revert
-local pole_grid_mt = require("pole_grid_mt")
+local pole_grid_mt = require("mpp.pole_grid_mt")
 
 ---@class LogisticsLayout:SimpleLayout
 local layout = table.deepcopy(simple)
 
 layout.name = "logistics"
-layout.translation = {"mpp.settings_layout_choice_logistics"}
+layout.translation = {"", "[entity=logistic-chest-passive-provider] ", {"mpp.settings_layout_choice_logistics"}}
 
 layout.restrictions.belt_available = false
 layout.restrictions.logistics_available = true
@@ -41,11 +41,11 @@ function layout:prepare_belt_layout(state)
 	state.miner_lane_count = miner_lane_number
 	state.miner_max_column = miner_max_column
 
-	for _, lane in ipairs(miner_lanes) do
-		table.sort(lane, function(a, b) return a.center.x < b.center.x end)
+	for _, lane in pairs(miner_lanes) do
+		table.sort(lane, function(a, b) return a.x < b.x end)
 	end
 	---@param lane MinerPlacement[]
-	local function get_lane_length(lane) if lane then return lane[#lane].center.x end return 0 end
+	local function get_lane_length(lane) if lane then return lane[#lane].x end return 0 end
 	---@param lane MinerPlacement[]
 	local function get_lane_column(lane) if lane and #lane > 0 then return lane[#lane].column or 0 end return 0 end
 
@@ -56,8 +56,8 @@ function layout:prepare_belt_layout(state)
 		local lane1 = miner_lanes[i]
 		local lane2 = miner_lanes[i+1]
 
-		local y = attempt.sy + (m.size + 1) * i
-		local x0 = attempt.sx + 1
+		local y = attempt.sy - 1 + (m.size + 1) * i
+		local x0 = attempt.sx
 		
 		local column_count = max(get_lane_column(lane1), get_lane_column(lane2))
 		local indices = {}
@@ -65,7 +65,7 @@ function layout:prepare_belt_layout(state)
 		if lane2 then for _, v in ipairs(lane2) do indices[v.column] = v end end
 
 		for j = 1, column_count do
-			local x = x0 + m.near + m.size * (j-1)
+			local x = x0 + m.out_x + m.size * (j-1)
 			if indices[j] then
 				belts[#belts+1] = {
 					name=state.logistics_choice,
