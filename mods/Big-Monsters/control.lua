@@ -315,10 +315,10 @@ end
 
 
 function get_pos_near_enemy_nest(surface,spawn,pforce)
-local enemy = surface.find_nearest_enemy{position=spawn, max_distance=500, force=pforce}
+local enemy = surface.find_nearest_enemy{position=spawn, max_distance=3000, force=pforce}
 if enemy then
 	local f = enemy.force
-	local nests = surface.find_entities_filtered{type='unit-spawner', position=enemy.position, radius=300, force=f, limit=5}
+	local nests = surface.find_entities_filtered{type='unit-spawner', position=enemy.position, radius=300, force=f}
 	if #nests>0 then 
 		spawn = get_random_pos_near(nests[math.random(#nests)].position,30)
 		spawn = surface.find_non_colliding_position('assembling-machine-1', spawn, 0, 1)
