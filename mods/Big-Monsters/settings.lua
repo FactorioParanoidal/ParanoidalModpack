@@ -4,14 +4,23 @@ data:extend({
     type = "int-setting",
     name = "bm-event-days",
     setting_type = "runtime-global",
-	default_value = 6,
+	default_value = 100, --drd
 	minimum_value = 0,
-	maximum_value = 20,
+	maximum_value = 365, --drd
 	order = "a"
-  },  
+  },
+
+   -- skp, drd
+   {
+	   type = "bool-setting",
+	   name = "bm-events-when-peaceful",
+	   setting_type = "runtime-global",
+	   default_value = false,
+	   order = "a"
+   },
+   -- skp, drd
 
 
-  
 {
 	type = "double-setting",
 	name = "bm-invasion-min_evo",
@@ -300,7 +309,7 @@ data:extend({
 	type = "double-setting",
 	name = "bm-tree-events-chance",
 	setting_type = "runtime-global",
-	default_value = 1.0,
+	default_value = 0.0, --drd
 	minimum_value = 0.0,
 	maximum_value = 100,
 	order = "w"
