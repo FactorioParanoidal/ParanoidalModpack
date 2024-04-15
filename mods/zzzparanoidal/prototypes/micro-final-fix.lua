@@ -1344,3 +1344,5 @@ bobmods.lib.recipe.replace_ingredient("nco-turbo-filter-crane", "titanium-bearin
 
 --ремонт рецепта материнской бактерии (AKMF)
 data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "advanced-chemistry"
+--ремонт рецепта высокооктанового обогащенного топлива (AKMF)
+data.raw["recipe"]["high-octane-enriched-fuel"].category = "advanced-chemistry"
