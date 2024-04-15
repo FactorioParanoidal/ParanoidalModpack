@@ -148,7 +148,7 @@ for p=1,#global.player_forces do
 	local pforce = game.forces[global.player_forces[p]]
 	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then
 		--DRD
-		if surface.peaceful_mode then
+		if surface.peaceful_mode and not settings.global["bm-events-when-peaceful"].value then
 			break
 		end
 		--DRD
@@ -329,7 +329,7 @@ end
 
 function Create_Position_Event(the_event, surface, position, pforce)
 	--DRD
-	if surface.peaceful_mode then
+	if surface.peaceful_mode and not settings.global["bm-events-when-peaceful"].value then
 		return
 	end
 	--DRD

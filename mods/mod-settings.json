@@ -1966,7 +1966,7 @@
       "bottleneck-show-waiting_for_target_to_be_built-icon": "none",
       "bottleneck-show-waiting_for_train-color": "off",
       "bottleneck-show-waiting_for_train-icon": "none",
-      "bm-event-days": 20,
+      "bm-event-days": 100,
       "bm-swarm-chance": 20,
       "bm-invasion-chance": 0,
       "bm-brutals-chance": 30,
