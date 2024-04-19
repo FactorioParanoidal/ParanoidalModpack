@@ -1346,3 +1346,52 @@ bobmods.lib.recipe.replace_ingredient("nco-turbo-filter-crane", "titanium-bearin
 data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "advanced-chemistry"
 --ремонт рецепта высокооктанового обогащенного топлива (AKMF)
 data.raw["recipe"]["high-octane-enriched-fuel"].category = "advanced-chemistry"
+
+--добавление цепочки рецептов для утилизации Хлорида кальция(AKMF)
+data:extend({
+{
+		type = "recipe",
+		name = "Calcium-chloride-Calcium-carbonate",
+		category = "chemistry",
+		subgroup = "petrochem-sulfur",
+		energy_required = 4,
+		enabled = "false",
+		ingredients ={
+			{type="item", name="solid-calcium-chloride", amount=1},
+			{type="item", name="solid-sodium-carbonate", amount=1},
+		},
+		localised_name="Реакция обмена: Хлорид кальция в Карбонат кальция",
+		results=
+		{
+			{type="item", name="solid-calcium-carbonate", amount=1},
+			{type="item", name="solid-salt", amount=2},
+		},
+		icon = "__angelsbioprocessing__/graphics/icons/solid-calcium-carbonate.png",
+		icon_size = 32,
+		order = "h", 
+	},
+	{
+		type = "recipe",
+		name = "Calcium-carbonate-Calcium-sulfate",
+		category = "chemistry",
+		subgroup = "petrochem-sulfur",
+		energy_required = 4,
+		enabled = "false",
+		ingredients ={
+			{type="item", name="solid-calcium-carbonate", amount=1},
+			{type="fluid", name="liquid-sulfuric-acid", amount=50},
+		},
+		localised_name="Нейтрализация Карбоната кальция до Сульфата кальция",
+		results=
+		{
+			{type="item", name="solid-calcium-sulfate", amount=1},
+			{type="fluid", name="water", amount=50},
+			{type="fluid", name="gas-carbon-dioxide", amount=50},
+		},
+		icon = "__angelspetrochem__/graphics/icons/solid-calcium-sulfate.png",
+		icon_size = 32,
+		order = "h", 
+	}
+	})
+bobmods.lib.tech.add_recipe_unlock("sodium-processing-2", "Calcium-chloride-Calcium-carbonate")
+bobmods.lib.tech.add_recipe_unlock("bio-processing-red", "Calcium-carbonate-Calcium-sulfate")
