@@ -150,7 +150,7 @@ local function create_basic_technology_tree()
 		create_basic_technology(
 			"coal-stone-smelting",
 			{ "stone-brick" },
-			{ "coal-ore-smelting", "coal-stone-processing" },
+			{ "coal-ore-smelting", "coal-stone-processing", "coal-wooden-fluid-handling" },
 			7,
 			"__base__/graphics/icons/stone-brick.png",
 			64
@@ -223,10 +223,18 @@ local function create_basic_technology_tree()
 			"burner-mining-drill",
 		}, { "coal-ore-mining", "basic-electronics" }, 16, "__base__/graphics/icons/burner-mining-drill.png", 64),
 		create_basic_technology(
+			"water-aggregate-states",
+			{},
+			{ "coal-stone-smelting", "coal-ore-smelting" },
+			17,
+			"__base__/graphics/icons/fluid/steam.png",
+			64
+		),
+		create_basic_technology(
 			"burner-ore-crushing",
 			{},
 			{ "burner-ore-mining", "coal-ore-crushing", "salvaged-automation-tech" },
-			17,
+			18,
 			"__hardcore-mode-for-playing__/graphics/icons/ore-crusher.png",
 			64
 		),
@@ -234,7 +242,7 @@ local function create_basic_technology_tree()
 			"basic-logistics",
 			{},
 			{ "basic-metal-processing", "basic-electronics" },
-			18,
+			19,
 			"__base__/graphics/technology/logistics-1.png",
 			256
 		),
@@ -249,10 +257,10 @@ local function create_basic_technology_tree()
 			"burner-ore-mining",
 			"burner-ore-crushing",
 			"basic-logistics",
-		}, 19, "__base__/graphics/icons/automation-science-pack.png", 64),
+		}, 20, "__base__/graphics/icons/automation-science-pack.png", 64),
 		create_basic_technology("repair-pack", {}, {
 			"automation-science-pack",
-		}, 20, "__base__/graphics/icons/repair-pack.png", 64),
+		}, 21, "__base__/graphics/icons/repair-pack.png", 64),
 	})
 end
 
