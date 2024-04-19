@@ -101,8 +101,6 @@ local function get_another_trees_handling_error_message(
 		.. Utils.dump_to_console(all_with_hidden_technology_names)
 		.. "\n"
 	EvaluatingStepStatusHolder.init_for_mode(mode)
-	TechnologyTreeCacheUtil.cleanup_technology_tree_cache(mode)
-	TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
 	_table.each(all_with_hidden_technology_names, function(all_with_hidden_technology_name)
 		technology_properties_evaluating_step.evaluate(all_with_hidden_technology_name, mode, true)
 	end)
@@ -162,7 +160,7 @@ local function get_another_trees_handling_error_message(
 		)
 	end)
 	EvaluatingStepStatusHolder.cleanup_for_mode(mode)
-	TechnologyTreeCacheUtil.cleanup_technology_tree_cache(mode)
+
 	local recipe_names = techUtil.get_all_recipe_names_for_specified_technology(technology_name, mode)
 	local available_recipe_names_for_ingredient = _table.filter(recipe_names, function(recipe_name)
 		return _table.contains_f_deep(
