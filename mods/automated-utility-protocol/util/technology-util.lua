@@ -131,25 +131,47 @@ TechUtil.get_all_technology_names_with_hidden = function()
 		return technology.name
 	end)
 end
+local function get_candidates_with_current_cycled_prerequisite_name_contains(
+	cycled_technology_name,
+	technology_candidate_cycled_name,
+	mode
+)
+	local result = {}
+	local prerequisite_names =
+		TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels(cycled_technology_name, mode)
+	_table.each(prerequisite_names, function(prerequisite_name)
+		if
+			TechnologyTreeUtil.have_technology_in_tree(prerequisite_name, technology_candidate_cycled_name, mode)
+			and technology_candidate_cycled_name ~= prerequisite_name
+		then
+			table.insert(result, prerequisite_name)
+		end
+	end)
+	return result
+end
 TechUtil.add_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites or type(prerequisites) ~= "table" then
 		error("prerequisites not specified")
 	end
 
 	local technology = get_moded_technology(technology_candidate, mode)
+	local technology_candidate_name = technology_candidate.name
 	--проверяем на создание циклов.
 	_table.each(prerequisites, function(prerequisite_name)
-		TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
-		local technology_candidate_name = technology_candidate.name
 		if TechnologyTreeUtil.have_technology_in_tree(prerequisite_name, technology_candidate_name, mode) then
-			TechnologyTreeUtil.print_technology_tree(mode, prerequisite_name)
+			--[[local candidates = get_candidates_with_current_cycled_prerequisite_name_contains(
+				prerequisite_name,
+				technology_candidate_name,
+				mode
+			)]]
+			TechnologyTreeUtil.print_technology_tree(prerequisite_name, mode)
 			error(
 				"prerequisite_name "
 					.. prerequisite_name
 					.. " contains implicitly technology "
 					.. technology_candidate_name
 					.. " and can't be added to it prerequisites!! NO CYCLE IN TREE!!!"
-					.. Utils.dump_to_console(candidate_tree)
+					.. Utils.dump_to_console(candidates)
 			)
 		end
 		if not technology.prerequisites then
@@ -160,7 +182,7 @@ TechUtil.add_prerequisites_to_technology = function(technology_candidate, prereq
 		end
 	end)
 end
-TechUtil.remove_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
+TechUtil.remove_prerequisites_from_technology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites then
 		error("prerequisites not specified")
 	end
@@ -295,5 +317,20 @@ TechUtil.has_technology_recipe_effects = function(technology_candidate, recipe_n
 	end
 	return _table.get_item_index(technology.effects, { type = "unlock-recipe", recipe = recipe_name }) ~= nil
 end
-
+TechUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies = function(from, to, mode)
+	local all_active_technology_names = TechUtil.get_all_active_technology_names(mode)
+	local with_deleting_prerequisite_technology_names = _table.filter(
+		all_active_technology_names,
+		function(all_active_technology_name)
+			local prerequisites =
+				Utils.get_moded_object(data.raw["technology"][all_active_technology_name], mode).prerequisites
+			return prerequisites and _table.contains(prerequisites, from)
+		end
+	)
+	_table.each(with_deleting_prerequisite_technology_names, function(with_deleting_prerequisite_technology_name)
+		local technology = data.raw["technology"][with_deleting_prerequisite_technology_name]
+		TechUtil.remove_prerequisites_from_technology(technology, { from }, mode)
+		TechUtil.add_prerequisites_to_technology(technology, { to }, mode)
+	end)
+end
 return TechUtil
