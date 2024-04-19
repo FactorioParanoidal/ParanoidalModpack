@@ -41,7 +41,6 @@ FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype = function
 	additional_data
 )
 	local result = {}
-	TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
 	local prerequisite_names =
 		TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels(technology_name, mode)
 	_table.insert(prerequisite_names, technology_name)
@@ -59,7 +58,6 @@ FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype = function
 			end)
 		)
 	end)
-	TechnologyTreeCacheUtil.cleanup_technology_tree_cache(mode)
 	return result
 end
 FuelEnergyUtil.evaluate_water_heating_to_temperature_energy_in_joules = function(temperature)
