@@ -1,6 +1,5 @@
 local techUtil = require("__automated-utility-protocol__.util.technology-util")
 local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
-require("__automated-utility-protocol__.util.technology-tree-cache-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 local fluid_names = get_basic_fluid_names()
 local empty_barrel_basic_fluid_recipe_names = _table.map(fluid_names, function(fluid_name)
@@ -171,8 +170,6 @@ end
 
 function update_fluid_in_container_processing_technology_recipe_fffects(technology_name)
 	_table.each(GAME_MODES, function(mode)
-		TechnologyTreeCacheUtil.init_technology_tree_cache(mode)
 		update_fluid_in_container_processing_technology_recipe_effects_by_mode(mode, technology_name)
-		TechnologyTreeCacheUtil.cleanup_technology_tree_cache(mode)
 	end)
 end
