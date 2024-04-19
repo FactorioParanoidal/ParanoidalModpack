@@ -150,13 +150,13 @@ local function get_occurs_technology_in_another_technology_tree0(
 		and technology_status.tree
 		and _table.contains(technology_status.tree, contain_technology_candidate_name)
 	then
-		log("in_which_contain_technology_name " .. in_which_contain_technology_name)
-		log(
+		--log("in_which_contain_technology_name " .. in_which_contain_technology_name)
+		--[[log(
 			"technology_status.tree "
 				.. Utils.dump_to_console(technology_status.tree)
 				.. ", contain_technology_candidate_name"
 				.. contain_technology_candidate_name
-		)
+		)]]
 		table.insert(result, in_which_contain_technology_name)
 	end
 	_table.each(technology_status.tree, function(parent_name)
