@@ -1378,27 +1378,26 @@ bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-5", "advanced-elect
 bobmods.lib.tech.add_prerequisite("water-treatment-5", "advanced-electronics-3") --очистка воды 5 под контроллеры 3
 bobmods.lib.tech.add_prerequisite("offshore-pump-4", "advanced-electronics-3") --насос 4  под контроллеры 3
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-3") --фильтры 4  под контроллеры 3
-bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "advanced-electronics-3") --башня сбора 4  под контроллеры 3
 bobmods.lib.tech.add_prerequisite("bob-electric-energy-accumulators-3", "advanced-electronics-3") --аккумуляторы 3  под контроллеры 3
-bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "utility-science-pack") --башня сбора 4  под утилити пакеты
 bobmods.lib.tech.add_prerequisite("railway", "concrete") --рельсы под БЕТОН наконец-то
-bobmods.lib.tech.add_prerequisite ("worker-robot-battery-1", "chemical-science-pack") --батареи роботов под синие банки
-bobmods.lib.tech.add_prerequisite ("worker-robot-battery-4", "production-science-pack") --батареи роботов под производственн пакеты
+bobmods.lib.tech.add_prerequisite("worker-robot-battery-1", "chemical-science-pack") --батареи роботов под синие банки
+bobmods.lib.tech.add_prerequisite("worker-robot-battery-4", "production-science-pack") --батареи роботов под производственн пакеты
 bobmods.lib.tech.add_prerequisite("worker-robot-battery-8", "utility-science-pack") --батареи роботов под утилити пакеты
-bobmods.lib.tech.add_prerequisite ("express-miniloader", "production-science-pack") --минипогрузчики 3 под производственн пакеты
-bobmods.lib.tech.add_prerequisite ("bi-tech-organic-plastic", "production-science-pack") --биопластик под производственн пакеты
-bobmods.lib.tech.add_prerequisite ("advanced-electronics", "angels-aluminium-smelting-1") --контроллер 2 под алюминий
-bobmods.lib.tech.add_prerequisite ("weapon-shooting-speed-2", "logistic-science-pack") --скорострельность 2 под зеленые банки
-bobmods.lib.tech.add_prerequisite ("weapon-shooting-speed-3", "military-science-pack") --скорострельность 3 под военные банки
-bobmods.lib.tech.add_prerequisite ("stronger-explosives-2", "military-science-pack") --урон гранат 2  под военные банки
-bobmods.lib.tech.add_prerequisite ("weapon-shooting-speed-6", "utility-science-pack") --скорострельность 6 под утилити банки
-bobmods.lib.tech.add_prerequisite ("follower-robot-count-3", "chemical-science-pack") --боевых роботов под синие банки
-bobmods.lib.tech.add_prerequisite ("stronger-explosives-3", "chemical-science-pack") --урон гранат 3  под военные банки
+bobmods.lib.tech.add_prerequisite("express-miniloader", "production-science-pack") --минипогрузчики 3 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("bi-tech-organic-plastic", "production-science-pack") --биопластик под производственн пакеты
+bobmods.lib.tech.add_prerequisite("advanced-electronics", "angels-aluminium-smelting-1") --контроллер 2 под алюминий
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-2", "logistic-science-pack") --скорострельность 2 под зеленые банки
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-3", "military-science-pack") --скорострельность 3 под военные банки
+bobmods.lib.tech.add_prerequisite("stronger-explosives-2", "military-science-pack") --урон гранат 2  под военные банки
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-6", "utility-science-pack") --скорострельность 6 под утилити банки
+bobmods.lib.tech.add_prerequisite("follower-robot-count-3", "chemical-science-pack") --боевых роботов под синие банки
+bobmods.lib.tech.add_prerequisite("stronger-explosives-3", "chemical-science-pack") --урон гранат 3  под военные банки
 bobmods.lib.tech.remove_prerequisite("bi-tech-garden-3", "angels-stone-smelting-4") --убираем огромные сады из под цемента 4
 data.raw.technology["angels-stone-smelting-4"].unit.count = 200 --меняем цену на цемент 4
-data.raw.technology["angels-stone-smelting-4"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --меняем цену на цемент 4
-bobmods.lib.tech.add_prerequisite ("production-science-pack", "angels-stone-smelting-4") -- производственн пакеты под цемент 4
-bobmods.lib.tech.add_prerequisite ("bi-tech-garden-3", "production-science-pack") --огромные сады под производственн пакеты
+data.raw.technology["angels-stone-smelting-4"].unit.ingredients =
+	{ { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } } --меняем цену на цемент 4
+bobmods.lib.tech.add_prerequisite("production-science-pack", "angels-stone-smelting-4") -- производственн пакеты под цемент 4
+bobmods.lib.tech.add_prerequisite("bi-tech-garden-3", "production-science-pack") --огромные сады под производственн пакеты
 
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp") --лампы
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp") --лампы
