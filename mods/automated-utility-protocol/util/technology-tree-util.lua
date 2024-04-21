@@ -6,9 +6,9 @@ local function get_technology_object_for_mode(technology_name, mode)
 	return Utils.get_moded_object(data.raw["technology"][technology_name], mode)
 end
 
-TechnologyTreeUtil.find_prerequisites_for_technology_for_first_level = function(technology_name, mode)
+--[[TechnologyTreeUtil.find_prerequisites_for_technology_for_first_level = function(technology_name, mode)
 	return get_technology_object_for_mode(technology_name, mode).prerequisites or {}
-end
+end]]
 
 TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels = function(technology_name, mode)
 	local result = {}

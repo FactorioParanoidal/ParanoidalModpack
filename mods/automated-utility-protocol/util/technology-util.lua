@@ -131,24 +131,7 @@ TechUtil.get_all_technology_names_with_hidden = function()
 		return technology.name
 	end)
 end
-local function get_candidates_with_current_cycled_prerequisite_name_contains(
-	cycled_technology_name,
-	technology_candidate_cycled_name,
-	mode
-)
-	local result = {}
-	local prerequisite_names =
-		TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels(cycled_technology_name, mode)
-	_table.each(prerequisite_names, function(prerequisite_name)
-		if
-			TechnologyTreeUtil.have_technology_in_tree(prerequisite_name, technology_candidate_cycled_name, mode)
-			and technology_candidate_cycled_name ~= prerequisite_name
-		then
-			table.insert(result, prerequisite_name)
-		end
-	end)
-	return result
-end
+
 TechUtil.add_prerequisites_to_technology = function(technology_candidate, prerequisites, mode)
 	if not prerequisites or type(prerequisites) ~= "table" then
 		error("prerequisites not specified")
@@ -327,6 +310,12 @@ TechUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies = fun
 			return prerequisites and _table.contains(prerequisites, from)
 		end
 	)
+	--[[log(
+		"with_deleting_prerequisite_technology_names "
+			.. Utils.dump_to_console(with_deleting_prerequisite_technology_names)
+			.. " for technology "
+			.. from
+	)]]
 	_table.each(with_deleting_prerequisite_technology_names, function(with_deleting_prerequisite_technology_name)
 		local technology = data.raw["technology"][with_deleting_prerequisite_technology_name]
 		TechUtil.remove_prerequisites_from_technology(technology, { from }, mode)
