@@ -82,12 +82,12 @@ local function get_unresolved_technology_ingredients(active_technology_name, mod
 	end)
 	return result
 end
-local function check_recipe_ingredients_reachable_in_tree_in_tree_element(
+local function is_recipe_ingredient_unreachable_in_tree_in_tree_element(
 	unresolved_in_technology_ingredient,
 	tree_element_name,
 	mode
 )
-	local recipe_results = techUtil.get_all_tool_units_for_specified_technology(tree_element_name, mode)
+	local recipe_results = techUtil.get_all_recipe_results_for_specified_technology(tree_element_name, mode)
 	return is_unresolved_ingredient_in_technology_product_list(unresolved_in_technology_ingredient, recipe_results)
 end
 local function filter_technology_name_candidate_by_predicate(
@@ -97,9 +97,6 @@ local function filter_technology_name_candidate_by_predicate(
 )
 	local products = techUtil.get_all_recipe_results_for_specified_technology(technology_name_candidate, mode)
 	return _table.contains_f(products, function(product)
-		--[[	log('technology_name_candidate ' ..
-				technology_name_candidate .. ',product.type ' .. product.type ..
-				',product.name ' .. product.name)]]
 		return effect_ingredient_not_found_in_current_tree.type == product.type
 			and effect_ingredient_not_found_in_current_tree.name == product.name
 	end)
@@ -201,18 +198,18 @@ local function check_recipe_ingredient_reachable_in_tree(
 	tree,
 	mode
 )
-	local recipe_result_resolved_ingredient = false
+	local recipe_result_unresolved_ingredient = true
 	_table.each(tree, function(tree_element_table, tree_element_table_name)
-		if not recipe_result_resolved_ingredient then
-			recipe_result_resolved_ingredient = check_recipe_ingredients_reachable_in_tree_in_tree_element(
+		if recipe_result_unresolved_ingredient then
+			recipe_result_unresolved_ingredient = is_recipe_ingredient_unreachable_in_tree_in_tree_element(
 				unresolved_in_technology_ingredient,
 				tree_element_table_name,
 				mode
 			)
 		end
 		_table.each(tree_element_table, function(tree_element_name)
-			if not recipe_result_resolved_ingredient then
-				recipe_result_resolved_ingredient = check_recipe_ingredients_reachable_in_tree_in_tree_element(
+			if recipe_result_unresolved_ingredient then
+				recipe_result_unresolved_ingredient = is_recipe_ingredient_unreachable_in_tree_in_tree_element(
 					unresolved_in_technology_ingredient,
 					tree_element_name,
 					mode
@@ -220,7 +217,7 @@ local function check_recipe_ingredient_reachable_in_tree(
 			end
 		end)
 	end)
-	if not recipe_result_resolved_ingredient then
+	if recipe_result_unresolved_ingredient then
 		raise_error_unresolved_ingredient_in_technology_tree(
 			active_technology_name,
 			mode,
