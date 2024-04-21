@@ -87,7 +87,7 @@ local function get_another_trees_handling_error_message(
 	effect_ingredient_not_found_in_current_tree,
 	technology_name,
 	mode,
-	available_technology_names_for_ingredients,
+	currently_visited_in_tree_technology_names_for_ingredients,
 	technology_properties_evaluating_step
 )
 	local all_found_technology_names = EvaluatingStepStatusHolder.get_all_technology_names_foun_for_mode(mode)
@@ -149,16 +149,19 @@ local function get_another_trees_handling_error_message(
 		)
 		.. "\n"
 	result = result
-		.. "available_technology_names_for_ingredients "
-		.. Utils.dump_to_console(available_technology_names_for_ingredients)
+		.. "currently_visited_in_tree_technology_names_for_ingredients "
+		.. Utils.dump_to_console(currently_visited_in_tree_technology_names_for_ingredients)
 		.. "\n"
-	_table.each(available_technology_names_for_ingredients, function(available_technology_name_for_ingredients)
-		print_info_about_available_for_ingredients_technology_names(
-			available_technology_name_for_ingredients,
-			technology_name,
-			mode
-		)
-	end)
+	_table.each(
+		currently_visited_in_tree_technology_names_for_ingredients,
+		function(available_technology_name_for_ingredients)
+			print_info_about_available_for_ingredients_technology_names(
+				available_technology_name_for_ingredients,
+				technology_name,
+				mode
+			)
+		end
+	)
 	EvaluatingStepStatusHolder.cleanup_for_mode(mode)
 
 	local recipe_names = techUtil.get_all_recipe_names_for_specified_technology(technology_name, mode)
@@ -191,13 +194,13 @@ local function raise_error_unresolved_ingredient_in_technology_tree(
 	log("\nhandle unresolved ingredient")
 	local all_found_technology_names =
 		EvaluatingStepStatusHolder.get_technology_names_with_compatiable_science_pack(mode, technology_name)
-	local available_technology_names_for_ingredients =
+	local currently_visited_in_tree_technology_names_for_ingredients =
 		filter_all_avaliable_technologies_with_ingredient(all_found_technology_names, mode, unresolved_ingredient)
 	local error_message = get_another_trees_handling_error_message(
 		unresolved_ingredient,
 		technology_name,
 		mode,
-		available_technology_names_for_ingredients,
+		currently_visited_in_tree_technology_names_for_ingredients,
 		technology_properties_evaluating_step
 	)
 	log("\nunresolved ingredient handled")
