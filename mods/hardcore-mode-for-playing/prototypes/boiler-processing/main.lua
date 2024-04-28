@@ -132,15 +132,18 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	local target_boiler_prototype = flib.copy_prototype(data.raw["boiler"][boiler_name], target_boiler_name)
 	local energy_source = target_boiler_prototype.energy_source
 	if boiler_data.is_burner_energy_source then
-		local fuel_category_name = fuel_data.type .. "-" .. fuel_data.name
-		data:extend({ { type = "fuel-category", name = fuel_category_name } })
+		local fuel_category_name = get_fuel_category_name_for_prototype(fuel_data)
+		if not data.raw["fuel-category"][fuel_category_name] then
+			data:extend({ { type = "fuel-category", name = fuel_category_name } })
+		end
 		data.raw[fuel_data.type][fuel_data.name].fuel_category = fuel_category_name
 		energy_source.fuel_category = fuel_category_name
 	end
 	if boiler_data.is_fluid_energy_source then
 		energy_source.fluid_box.filter = fuel_data.name
 	end
-	target_boiler_prototype.output_fluid_box.filter = recipe_data_by_temperature.recipe_name
+	-- окей, выходом будет просто пар, но будут действительно разные бойлеры под разные виды топлива
+	target_boiler_prototype.output_fluid_box.filter = "steam"
 	local target_boiler_item = flib.copy_prototype(data.raw["item"][boiler_name], target_boiler_name)
 	local technology = data.raw["technology"][boiler_data.technology_name_occured_boiler_prototype]
 	local mode = recipe_data_by_temperature.mode
@@ -151,7 +154,7 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	local target_boiler_recipe = flib.copy_prototype(data.raw["recipe"][boiler_name], target_boiler_name)
 	set_recipe_result(target_boiler_recipe, target_boiler_name)
 	data:extend({ target_boiler_prototype, target_boiler_item, target_boiler_recipe })
-	--	log("target_boiler_recipe " .. Utils.dump_to_console(target_boiler_recipe))
+	log("target_boiler_recipe " .. Utils.dump_to_console(target_boiler_recipe))
 	techUtil.add_recipe_effect_to_technology(technology, target_boiler_name, mode)
 	if not techUtil.has_technology_recipe_effects(technology, "steam", mode) then
 		techUtil.add_recipe_effect_to_technology(technology, "steam", mode)
