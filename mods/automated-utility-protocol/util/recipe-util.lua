@@ -67,15 +67,40 @@ local function get_rocket_launch_results(result_data)
 	return result
 end
 
+local function get_burnt_result_results(result_data)
+	local result = {}
+	local result_data_item = data.raw[result_data.type][result_data.name]
+	if not result_data_item then
+		return result
+	end
+	local burnt_result_name = result_data_item.burnt_result
+	local burnt_result_type = "item"
+	if not burnt_result_name then
+		return result
+	end
+	if not data.raw[burnt_result_type][burnt_result_name] then
+		error("data.raw[" .. burnt_result_type .. "][" .. burnt_result_name .. "] as burnt_result not exists!")
+	end
+	return {
+		{
+			type = burnt_result_type,
+			name = burnt_result_name,
+		},
+	}
+end
+
 RecipeUtil.get_all_recipe_results = function(recipe_name, mode)
 	local result = {}
 	local recipeData = get_recipe_object_for_mode(recipe_name, mode)
 	_table.insert_all_if_not_exists(result, get_recipe_data_products(recipeData))
-	local rocket_launch_results = {}
+	local additional_results = {}
 	_table.each(result, function(result_data)
-		_table.insert_all_if_not_exists(rocket_launch_results, get_rocket_launch_results(result_data))
+		_table.insert_all_if_not_exists(additional_results, get_rocket_launch_results(result_data))
 	end)
-	_table.insert_all_if_not_exists(result, rocket_launch_results)
+	_table.each(result, function(result_data)
+		_table.insert_all_if_not_exists(additional_results, get_burnt_result_results(result_data))
+	end)
+	_table.insert_all_if_not_exists(result, additional_results)
 	return result
 end
 
@@ -105,8 +130,79 @@ RecipeUtil.get_all_recipe_ingredients = function(recipe_name, mode)
 	return result
 end
 
-RecipeUtil.is_contain_dry411_srev = function(recipe_name)
-	return string.find(recipe_name, "dry411srev-", 1, true)
+RecipeUtil.add_recipe_ingredient = function(recipe_name, mode, ingredient)
+	if
+		not ingredient
+		or not ingredient.type
+		or not type(ingredient.type) == "string"
+		or not ingredient.name
+		or not type(ingredient.name) == "string"
+		or not ingredient.amount
+		or not type(ingredient.amount) == "number"
+	then
+		error("incorrect ingredient " .. Utils.dump_to_console(ingredient))
+	end
+	local ingredient_prototype = data.raw[ingredient.type][ingredient.name]
+	if not ingredient_prototype then
+		error("ingredient with type " .. ingredient.type .. " called " .. ingredient.name .. " not found")
+	end
+	if not recipe_name or not type(recipe_name) == "string" then
+		error("recipe_name is wrong")
+	end
+	local recipe = data.raw["recipe"][recipe_name]
+	if not recipe then
+		error("recipe with name " .. recipe_name .. " not found")
+	end
+	local moded_recipe = Utils.get_moded_object(recipe, mode)
+	if not moded_recipe.ingredients then
+		moded_recipe.ingredients = {}
+	end
+	table.insert(moded_recipe.ingredients, ingredient)
+end
+RecipeUtil.add_recipe_ingredients = function(recipe_name, mode, ingredients)
+	if not ingredients or not type(ingredients) == "table" then
+		error("incorrect ingredients!")
+	end
+	_table.each(ingredients, function(ingredient)
+		RecipeUtil.add_recipe_ingredient(recipe_name, mode, ingredient)
+	end)
+end
+RecipeUtil.remove_recipe_ingredient = function(recipe_name, mode, ingredient)
+	if
+		not ingredient
+		or not ingredient.type
+		or not type(ingredient.type) == "string"
+		or not ingredient.name
+		or not type(ingredient.name) == "string"
+	then
+		error("incorrect ingredient " .. Utils.dump_to_console(ingredient))
+	end
+	local ingredient_prototype = data.raw[ingredient.type][ingredient.name]
+	if not ingredient_prototype then
+		error("ingredient with type " .. ingredient.type .. " called " .. ingredient.name .. " not found")
+	end
+	if not recipe_name or not type(recipe_name) == "string" then
+		error("recipe_name is wrong")
+	end
+	local recipe = data.raw["recipe"][recipe_name]
+	if not recipe then
+		error("recipe with name " .. recipe_name .. " not found")
+	end
+	local moded_recipe = Utils.get_moded_object(recipe, mode)
+	if not moded_recipe.ingredients then
+		error("ingredients table for " .. recipe_name .. ", mode " .. mode .. " not exists!")
+	end
+	_table.remove_item(moded_recipe.ingredients, ingredient, function(table_item, item_to_remove)
+		return table_item.type == item_to_remove.type and table_item.name == item_to_remove.name
+	end, false)
+end
+RecipeUtil.remove_recipe_ingredients = function(recipe_name, mode, ingredients)
+	if not ingredients or not type(ingredients) == "table" then
+		error("incorrect ingredients!")
+	end
+	_table.each(ingredients, function(ingredient)
+		RecipeUtil.remove_recipe_ingredient(recipe_name, mode, ingredient)
+	end)
 end
 
 return RecipeUtil
