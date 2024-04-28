@@ -53,7 +53,7 @@ local function create_steam_recipe_for_fuel_and_temperature(new_steam_name, fuel
 	data:extend({
 		recipe,
 	})
-	log("basic recipe " .. recipe.name .. " created with new name")
+	--log("basic recipe " .. recipe.name .. " created with new name")
 	return recipe
 end
 
@@ -143,7 +143,7 @@ local function evaluate_fuel_datas_for_recipe(
 				fuel_data = { type = prototype.type, name = prototype.name, amount = 1 },
 				water_amount = water_amount_for_fuel,
 			}
-			log("fuel_data_element " .. Utils.dump_to_console(fuel_data_element))
+			--	log("fuel_data_element " .. Utils.dump_to_console(fuel_data_element))
 			table.insert(result, fuel_data_element)
 		end
 	end)
