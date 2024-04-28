@@ -31,3 +31,6 @@ cleanup_fuel_category_for_Item("bi-dart-turret")
 cleanup_fuel_category_for_Item("bi-woodpulp")
 --резину не жечь
 cleanup_fuel_category_for_Item("solid-rubber")
+if data.raw.item["nuclear-fuel"] then
+	data.raw.item["nuclear-fuel"].burnt_result = nil
+end
