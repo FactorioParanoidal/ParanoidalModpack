@@ -1395,3 +1395,13 @@ data:extend({
 	})
 bobmods.lib.tech.add_recipe_unlock("sodium-processing-2", "Calcium-chloride-Calcium-carbonate")
 bobmods.lib.tech.add_recipe_unlock("bio-processing-red", "Calcium-carbonate-Calcium-sulfate")
+
+--Рокировка рецептов нитинольных труб (AKMF)
+bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-pipe")
+bobmods.lib.tech.remove_recipe_unlock("nitinol-processing", "nitinol-pipe")
+bobmods.lib.tech.remove_recipe_unlock("angels-nitinol-smelting-1", "angels-nitinol-pipe-casting")
+bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-casting")
+bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-pipe-to-ground")
+bobmods.lib.tech.remove_recipe_unlock("nitinol-processing", "nitinol-pipe-to-ground")
+bobmods.lib.tech.remove_recipe_unlock("angels-nitinol-smelting-1", "angels-nitinol-pipe-to-ground-casting")
+bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
