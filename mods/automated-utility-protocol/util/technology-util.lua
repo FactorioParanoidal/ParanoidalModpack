@@ -22,7 +22,7 @@ local function filter_technology_effects_unlock_recipe(effect)
 	return effect
 		and effect.type == "unlock-recipe"
 		and effect.recipe
-		and not recipeUtil.is_contain_dry411_srev(effect.recipe)
+	--	and not recipeUtil.is_contain_dry411_srev(effect.recipe)
 end
 
 local function get_technology_object_effect_recipes_by_name(technology_candidate, mode)
