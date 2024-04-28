@@ -262,3 +262,28 @@ _table.each(GAME_MODES, function(mode)
 	merge_recipe_for_modes(basic_coal_production_seedling_recipe, mode)
 	merge_recipe_for_modes(salvaged_mining_drill_recipe, mode)
 end)
+-- рецепты, которые описывают использование предметов в машинах или реакторах
+local riteg1_to_used_up_riteg1_recipe_data = {
+	enabled = false,
+	energy_required = 30,
+	ingredients = {
+		{ "RITEG-1", 1 },
+	},
+	result = "used-up-RITEG-1",
+}
+
+data:extend({
+	{
+		normal = riteg1_to_used_up_riteg1_recipe_data,
+		expensive = riteg1_to_used_up_riteg1_recipe_data,
+		icons = {
+			{ icon = "__RITEG__/graphics/icons/RITEG-1.png" },
+			{ icon = "__RITEG__/graphics/icons/recycling.png", scale = 0.5, shift = { 8, 8 } },
+		},
+		icon_size = 32,
+
+		name = "used-up-RITEG-1",
+		type = "recipe",
+	},
+})
+--конец рецепты, которые описывают использование предметов в машинах или реакторах
