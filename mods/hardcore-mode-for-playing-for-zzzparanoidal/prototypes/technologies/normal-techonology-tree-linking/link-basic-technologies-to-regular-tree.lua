@@ -63,12 +63,18 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		"angels-brass-smelting-1",
 		mode
 	)
-	--[[techUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies(
+	techUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies(
 		"nitrogen-processing",
 		"angels-nitrogen-processing-1",
 		mode
-	)]]
+	)
 	techUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies("radars-1", "radar", mode)
+	techUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies("bio-fermentation", "bio-farm-1", mode)
+	techUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies(
+		"k-angels-advanced-chemistry-5",
+		"angels-advanced-chemistry-3",
+		mode
+	)
 	-- конец заменяем удалённые технологии
 	--остальное
 	techUtil.add_prerequisites_to_technology(
@@ -272,7 +278,7 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	)
 	techUtil.add_prerequisites_to_technology(technologies["alloy-processing"], { "angels-nickel-smelting-1" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["grinding"], { "geode-crystallization-2" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["advanced-electronics-3"], { "modules-3" }, mode)
+	--techUtil.add_prerequisites_to_technology(technologies["advanced-electronics-3"], { "modules-3" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["nitinol-processing"], { "utility-science-pack" }, mode)
 	techUtil.add_prerequisites_to_technology(
 		technologies["tungsten-alloy-processing"],
@@ -346,7 +352,11 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "angels-metallurgy-3", "bob-fluid-handling-2" },
 		mode
 	)
-	techUtil.add_prerequisites_to_technology(technologies["effect-transmission-3"], { "advanced-electronics-3" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["effect-transmission-3"],
+		{ "advanced-electronics-3", "bio-processing-crystal-full" },
+		mode
+	)
 	techUtil.add_prerequisites_to_technology(technologies["speed-module-7"], { "advanced-electronics-3" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["effectivity-module-7"], { "advanced-electronics-3" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["productivity-module-7"], { "advanced-electronics-3" }, mode)
@@ -393,7 +403,6 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "concrete", "angels-metallurgy-3", "electric-engine" },
 		mode
 	)
-	techUtil.add_prerequisites_to_technology(technologies["geode-processing-2"], { "geode-crystallization-2" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["slag-processing-2"], { "concrete" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["ore-leaching"], { "concrete" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["advanced-ore-refining-3"], { "titanium-processing" }, mode)
@@ -451,11 +460,7 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	)
 	techUtil.add_prerequisites_to_technology(technologies["astrometrics"], { "advanced-osmium-smelting" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["ftl-propulsion"], { "advanced-osmium-smelting" }, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-coal-processing"],
-		{ "water-aggregate-states" }, --, "coal-detected-resource-technology", "automation-science-pack" },
-		mode
-	)
+	techUtil.add_prerequisites_to_technology(technologies["angels-coal-processing"], { "water-aggregate-states" }, mode)
 	techUtil.add_prerequisites_to_technology(
 		technologies["angels-coal-processing-2"],
 		{ "chlorine-processing-1" },
@@ -613,11 +618,13 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "advanced-magnesium-smelting" },
 		mode
 	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-tungsten-smelting-3"],
-		{ "angels-coolant-1", "sodium-processing-2", "angels-manganese-smelting-3", "angels-zinc-smelting-2" },
-		mode
-	)
+	techUtil.add_prerequisites_to_technology(technologies["angels-tungsten-smelting-3"], {
+		"angels-coolant-1",
+		"sodium-processing-2",
+		"angels-manganese-smelting-3",
+		"angels-zinc-smelting-2",
+		"phosphorus-processing-2",
+	}, mode)
 	techUtil.add_prerequisites_to_technology(technologies["angels-zinc-smelting-1"], { "ore-floatation" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["bi-tech-coal-processing-2"], { "gas-synthesis" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["bi-tech-fertilizer"], { "sodium-processing" }, mode)
@@ -653,42 +660,268 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		"angels-tungsten-smelting-1",
 		"angels-zinc-smelting-2",
 	}, mode)
-	--techUtil.add_prerequisites_to_technology(technologies["bio-processing-alien-1"], { "bio-processing-paste" }, mode)
-	--[[techUtil.add_prerequisites_to_technology(technologies["coal-ore-crushing"], {
-		"wood-detected-resource-technology",
-		"salvaged-automation-tech",
-		"coal-wooden-fluid-handling",
-		"water-detected-resource-technology",
+	techUtil.add_prerequisites_to_technology(technologies["bio-processing-alien-2"], { "slag-processing-2" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bio-processing-alien-3"], { "bio-processing-paste" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["gardens-3"], { "concrete" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-arboretum-1"],
+		{ "bio-nutrient-paste", "bio-temperate-farming-1" },
+		mode
+	)
+
+	techUtil.add_prerequisites_to_technology(technologies["bio-farm-2"], { "concrete" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-temperate-farming-2"],
+		{ "angels-titanium-smelting-1", "advanced-electronics-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-desert-farming-2"],
+		{ "angels-titanium-smelting-1", "advanced-electronics-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-swamp-farming-2"],
+		{ "angels-titanium-smelting-1", "advanced-electronics-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["bio-nutrient-paste"], {
+		"bio-temperate-farming-1",
+		"bio-desert-farming-1",
+		"bio-swamp-farming-1",
+		"bio-wood-processing",
+		"chlorine-processing-1",
+	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-pressing-1"],
+		{ "bio-swamp-farming-1", "bio-desert-farming-1" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-pressing-2"],
+		{ "angels-titanium-smelting-1", "advanced-electronics-2", "titanium-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-farm-2"],
+		{ "bio-temperate-farming-1", "bio-desert-farming-1" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-swamp-farming-1"],
+		{ "bio-temperate-farming-1", "bio-desert-farming-1" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-fish-2"], { "concrete" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-hatchery"], { "concrete" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-puffer-2"], {
+		"bio-temperate-farming-2",
+		"bio-desert-farming-2",
+		"bio-swamp-farming-2",
+	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-refugium-puffer-3"],
+		{ "angels-tungsten-smelting-1", "advanced-electronics-3", "tungsten-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-refugium-biter-3"],
+		{ "bio-refugium-puffer-2", "angels-copper-tungsten-smelting-1", "tungsten-alloy-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-processing-crystal-full"],
+		{ "production-science-pack", "ore-powderizer" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-refugium-biter-2"],
+		{ "angels-tungsten-smelting-1", "advanced-electronics-3", "tungsten-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-biter-3"], { "bio-processing-alien-2" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-butchery-2"], { "bio-refugium-puffer-1" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["factory-preview"], { "logistic-science-pack" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["garden-mutation"], { "utility-science-pack" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["advanced-magnesium-smelting"], { "water-treatment-4" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["advanced-depleted-uranium-smelting-1"],
+		{ "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["advanced-osmium-smelting"], { "asteroid-mining" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["advanced-uranium-processing-1"],
+		{ "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["mercury-processing-1"],
+		{ "automation-science-pack", "logistic-science-pack", "chemical-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["centrifuging-2"],
+		{ "advanced-electronics-3", "angels-copper-tungsten-smelting-1", "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["phosphorus-processing-1"],
+		{ "angels-nitrogen-processing-1" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-nitrogen-processing-1"],
+		{ "basic-chemistry-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["phosphorus-processing-2"], { "sodium-processing" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["plastic-pc"], { "angels-advanced-chemistry-5" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["remelting-alloy-mixer-1"],
+		{ "angels-steel-smelting-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["remelting-alloy-mixer-4"],
+		{ "advanced-electronics-2", "titanium-processing", "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["nuclear-fuel-1"], { "centrifuging-1" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["nuclear-fuel-2"], { "nuclear-fuel-reprocessing-2" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["nuclear-fuel-3"],
+		{ "thorium-nuclear-fuel-reprocessing-2" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["radiothermal-fuel-1"], { "nuclear-fuel-reprocessing" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["radiothermal-fuel-2"], { "water-treatment-4" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["thorium-nuclear-fuel-reprocessing-2"],
+		{ "thorium-plutonium-fuel-cell" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["thorium-ore-processing"], { "slag-processing-3" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["angels-advanced-gas-processing-2"], {
+		"angels-copper-tungsten-smelting-1",
+		"advanced-electronics-3",
+		"tungsten-alloy-processing",
+		"angels-advanced-chemistry-5",
+	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["sodium-processing-2"],
+		{ "angels-lead-smelting-3", "production-science-pack", "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-copper-tungsten-smelting-2"],
+		{ "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-advanced-bio-processing"],
+		{ "advanced-electronics-3" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["bio-refugium-butchery-3"], { "titanium-processing" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-farm-advanced-upgrade"],
+		{ "angels-tungsten-smelting-1", "advanced-electronics-3", "tungsten-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["bio-refugium-hatchery-2"],
+		{ "angels-titanium-smelting-1", "advanced-electronics-3", "angels-tungsten-smelting-1" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["bio-nutrient-paste-2"], {
+		"concrete",
+		"angels-titanium-smelting-1",
+		"advanced-electronics-2",
+		"titanium-processing",
+		"bio-temperate-farming-2",
+		"bio-desert-farming-2",
+		"bio-swamp-farming-2",
+	}, mode)
+	techUtil.add_prerequisites_to_technology(technologies["water-washing-3"], { "bob-drills-2" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["water-washing-4"],
+		{ "advanced-electronics-2", "utility-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["advanced-ore-refining-5"],
+		{ "angels-copper-tungsten-smelting-1", "tungsten-alloy-processing" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["basic-atomic-weapons"],
+		{ "nuclear-fuel-reprocessing", "electric-energy-accumulators" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["artillery-atomics"], { "full-fission-atomics" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["californium-weapons"],
+		{ "bob-shotgun-shells", "bob-bullets", "Schall-sniper-rifle" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["fusion-weapons"], { "space-science-pack" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["thermobaric-weaponry"], {
+		"angels-explosives-1",
+		"tank",
+		"bob-rocket",
+		"rocket-control-unit",
+		"land-mine",
+		"Schall-tank-H-0",
+		"Schall-tank-SH-0",
+		"artillery",
+	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["artillery-prototype"],
+		{ "engine", "concrete", "military-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["hiend_train"],
+		{ "bob-railway-3", "bob-fluid-wagon-3", "bet-charger-3" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["geode-processing-3"], { "geode-crystallization-2" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["geode-crystallization-1"], { "slag-processing-2" }, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-brass-smelting-1"],
+		{ "angels-zinc-smelting-1", "logistic-science-pack" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(technologies["angels-brass-smelting-3"], { "angels-coolant-1" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["angels-bronze-smelting-3"], { "angels-coolant-1" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["advanced-electronics-3"], { "modules-2" }, mode)
+	techUtil.add_prerequisites_to_technology(technologies["coal-ore-crushing"], {
 		"angels-ore1-detected-resource-technology",
 		"angels-ore3-detected-resource-technology",
 	}, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-ore1-detected-resource-technology"],
-		{ "water-detected-resource-technology" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-ore3-detected-resource-technology"],
-		{ "water-detected-resource-technology" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-ore1-detected-resource-technology"],
-		{ "water-detected-resource-technology" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-ore3-detected-resource-technology"],
-		{ "water-detected-resource-technology" },
-		mode
-	)
 	techUtil.add_prerequisites_to_technology(technologies["basic-wood-production"], {
 		"basic-metal-processing",
 	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["water-aggregate-states"],
+		{ "coal-wooden-fluid-handling" },
+		mode
+	)
 	techUtil.add_prerequisites_to_technology(technologies["burner-ore-crushing"], {
 		"angels-ore5-detected-resource-technology",
 		"angels-ore6-detected-resource-technology",
 	}, mode)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-ore1-detected-resource-technology"],
+		{ "water-detected-resource-technology" },
+		mode
+	)
+	techUtil.add_prerequisites_to_technology(
+		technologies["angels-ore3-detected-resource-technology"],
+		{ "water-detected-resource-technology" },
+		mode
+	)
 	techUtil.add_prerequisites_to_technology(
 		technologies["angels-ore5-detected-resource-technology"],
 		{ "water-aggregate-states" },
@@ -699,7 +932,7 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "water-aggregate-states" },
 		mode
 	)
-	
+
 	techUtil.add_prerequisites_to_technology(
 		technologies["angels-ore2-detected-resource-technology"],
 		{ "water-aggregate-states" },
@@ -710,194 +943,18 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "water-aggregate-states" },
 		mode
 	)
-	techUtil.add_prerequisites_to_technology(technologies["water-treatment"], { "angels-metallurgy-1" }, mode)
-	
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-brass-smelting-1"],
-		{ "angels-zinc-smelting-1", "logistic-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["silicon-processing"], { "chlorine-processing-1" }, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-aluminium-smelting-1"],
-		{ "angels-sulfur-processing-1" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["water-treatment-2"], { "bio-wood-processing-2" }, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["utility-science-pack"],
-		{ "logistics-3", "uranium-processing", "angels-tungsten-smelting-1" },
-		mode
-	)	
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["bio-nutrient-paste"],
-		{ "bio-desert-farming-1", "bio-swamp-farming-1" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["phosphorus-processing-1"],
-		{ "angels-nitrogen-processing-1" },
-		mode
-	)
-	--конец остальное
-	--[[
-	techUtil.add_prerequisites_to_technology(technologies["electric-mining"], { "burner-ore-mining" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["electric-chemical-furnace"], { "basic-chemistry" }, mode)
-	
-	techUtil.add_prerequisites_to_technology(technologies["angels-solder-smelting-basic"], { "ore-crushing" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["military"], {
-		"basic-metal-processing",
-		"coal-ore-smelting",
-		"basic-wood-production",
-		"automation-science-pack",
-		"military-0",
-		"burner-ore-crushing",
-	}, mode)
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["basic-electronics"],
-		{ "basic-wood-production", "coal-ore-smelting" },
-		mode
-	)
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["military-0"],
-		{ "coal-detected-resource-technology", "salvaged-automation-tech" },
-		mode
-	)
-	
-	techUtil.add_prerequisites_to_technology(technologies["coal-stone-smelting"], { "salvaged-automation-tech" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["coal-ore-smelting"], { "salvaged-automation-tech" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["coal-ore-mining"], {
-		"wood-detected-resource-technology",
-		"salvaged-automation-tech",
-		"coal-wooden-fluid-handling",
-		"water-detected-resource-technology",
-	}, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["coal-lighting"],
-		{ "wood-detected-resource-technology", "coal-detected-resource-technology" },
-		mode
-	)
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["coal-stone-processing"],
-		{ "salvaged-automation-tech" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["automation-science-pack"],
-		{ "coal-detected-resource-technology" },
-		mode
-	)	
-	techUtil.add_prerequisites_to_technology(
-		technologies["electric-engine"],
-		{ "coal-detected-resource-technology" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["bob-boiler-2"], { "bi-tech-coal-processing-1" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["OilBurning"], { "flammables" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["electricity"], {
-		"basic-wood-production",
-		"coal-ore-mining",
-		"coal-detected-resource-technology",
-		"wood-detected-resource-technology",
-	}, mode)
-	
-	techUtil.add_prerequisites_to_technology(technologies["basic-chemistry"], {
-		"coal-ore-smelting",
-		"basic-electronics",
-		"coal-detected-resource-technology",
-		"coal-stone-smelting",
-		"automation-science-pack",
-	}, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["automation"],
-		{ "automation-science-pack", "basic-automation" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["electricity"], { "coal-ore-smelting" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["steam-power"], { "automation-science-pack" }, mode)
-	techUtil.add_prerequisites_to_technology(technologies["basic-fluid-handling"], { "coal-ore-smelting" }, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-solder-smelting-1"],
-		{ "automation-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-tin-smelting-1"],
-		{ "ore-crushing", "automation-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-metallurgy-1"],
-		{ "coal-ore-smelting", "automation-science-pack", "basic-fluid-handling" },
-		mode
-	)
-	
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["water-aggregate-states"],
-		{ "coal-detected-resource-technology" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["basic-chemistry-2"], { "water-aggregate-states" }, mode)
-	
-	techUtil.add_prerequisites_to_technology(technologies["logistics"], { "ore-crushing", "electronics" }, mode)
-	
-	techUtil.add_prerequisites_to_technology(technologies["military-2"], { "angels-steel-smelting-1" }, mode)
-	
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-steel-smelting-1"],
-		{ "automation-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["factory-architecture-t2"],
-		{ "coal-stone-smelting", "angels-steel-smelting-1", "angels-metallurgy-1", "logistic-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(technologies["electric-energy-distribution-1"], { "optics" }, mode)
-
-
-	techUtil.add_prerequisites_to_technology(technologies["plastics"], { "logistic-science-pack" }, mode)
-
-	techUtil.add_prerequisites_to_technology(technologies["ore-floatation"], {
-		"angels-steel-smelting-1",
-		"coal-stone-smelting",
-		"basic-electronics",
-		"angels-metallurgy-1",
-		"water-treatment",
-		"logistic-science-pack",
-	}, mode)
-	techUtil.add_prerequisites_to_technology(
-		technologies["basic-chemistry-3"],
-		{ "angels-steel-smelting-1", "logistic-science-pack" },
-		mode
-	)
-	techUtil.add_prerequisites_to_technology(
-		technologies["angels-steel-smelting-2"],
-		{ "angels-manganese-smelting-2" },
-		mode
-	)
-	]]
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
+	-- удаление скрытых технологий
 	techUtil.remove_prerequisites_from_technology(
 		technologies["water-chemistry-2"],
 		{ "angels-electric-boiler-2" },
 		mode
 	)
-	techUtil.remove_prerequisites_from_technology(technologies["modules-3"], { "advanced-electronics-3" }, mode)
-	techUtil.remove_prerequisites_from_technology(
-		technologies["geode-crystallization-1"],
-		{ "geode-processing-2" },
-		mode
-	)
+	-- конец удаление скрытых технологий
+	-- удаление остальных
 	techUtil.remove_prerequisites_from_technology(technologies["silicon-processing"], { "chlorine-processing-2" }, mode)
 	techUtil.remove_prerequisites_from_technology(
 		technologies["mercury-processing-1"],
@@ -910,19 +967,17 @@ local function remove_prerequisites_from_technologies_in_regular_tree(mode)
 		{ "bio-processing-paste" },
 		mode
 	)
-	--[[techUtil.remove_prerequisites_from_technology(
-		technologies["bio-processing-crystal-splinter-2"],
-		{ "bio-processing-alien-1" },
+	techUtil.remove_prerequisites_from_technology(
+		technologies["bio-refugium-biter-3"],
+		{ "bio-refugium-puffer-4" },
 		mode
-	)]]
-	--[[techUtil.remove_prerequisites_from_technology(
+	)
+	techUtil.remove_prerequisites_from_technology(
 		technologies["angels-zinc-smelting-1"],
 		{ "angels-brass-smelting-1" },
 		mode
 	)
-	
-	--
-	]]
+	-- конец удаление остальных
 end
 
 local function remove_recipes_from_technology_effects_in_regular_tree(mode)
@@ -971,6 +1026,15 @@ local function remove_recipes_from_technology_effects_in_regular_tree(mode)
 	)
 	techUtil.remove_recipe_effect_from_technology(technologies["rocket-silo"], "rocket-part", mode)
 	-- конец скрытые рецепты или несуществующие
+	--остальные
+	techUtil.remove_recipe_effect_from_technology(technologies["bio-fermentation"], "fermentation-corn", mode)
+	techUtil.remove_recipe_effect_from_technology(technologies["bio-fermentation"], "fermentation-fruit", mode)
+	techUtil.remove_recipe_effect_from_technology(technologies["bio-fermentation"], "anaerobic-fermentation", mode)
+	techUtil.remove_recipe_effect_from_technology(technologies["bio-fermentation"], "aerobic-fermentation", mode)
+
+	techUtil.remove_recipe_effect_from_technology(technologies["bio-farm-1"], "solid-soil", mode)
+
+	--конец остальные
 end
 
 local function move_recipes_to_another_technologies(mode)
@@ -1070,26 +1134,31 @@ local function move_recipes_to_another_technologies(mode)
 	)
 	techUtil.move_recipe_effects_to_another_technology("resins", "resin-1", "solid-resin", mode)
 	techUtil.move_recipe_effects_to_another_technology("rubber", "rubbers", "liquid-rubber-1", mode)
-	--[[
-	
+	techUtil.move_recipe_effects_to_another_technology(
+		"bio-processing-paste",
+		"bio-nutrient-paste",
+		"paste-cellulose",
+		mode
+	)
 	techUtil.move_recipe_effects_to_another_technology(
 		"bio-nutrient-paste",
 		"bio-nutrient-paste-2",
 		"solid-fruit-nutrients",
 		mode
 	)
-	techUtil.move_recipe_effects_to_another_technology("bio-farm-1", "bio-farm-2", "temperate-garden-generation", mode)
-	techUtil.move_recipe_effects_to_another_technology("bio-farm-1", "bio-farm-2", "solid-soil", mode)
-	techUtil.move_recipe_effects_to_another_technology("bio-farm-1", "bio-farm-2", "swamp-garden-generation", mode)
-	techUtil.move_recipe_effects_to_another_technology("bio-farm-1", "bio-farm-2", "crop-farm", mode)
 	techUtil.move_recipe_effects_to_another_technology(
-		"phosphorus-processing-1",
-		"phosphorus-processing-2",
-		"solid-tetrasodium-pyrophosphate",
+		"bio-farm-1",
+		"bio-temperate-farming-1",
+		"temperate-garden-generation",
 		mode
 	)
-	--end another
-	--[[
+	techUtil.move_recipe_effects_to_another_technology(
+		"bio-farm-1",
+		"bio-swamp-farming-1",
+		"swamp-garden-generation",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology("bio-farm-1", "bio-farm-2", "crop-farm", mode)
 	techUtil.move_recipe_effects_to_another_technology(
 		"bio-refugium-hatchery",
 		"bio-refugium-puffer-2",
@@ -1120,16 +1189,55 @@ local function move_recipes_to_another_technologies(mode)
 		"puffer-egg-5",
 		mode
 	)
-	
-	
-	
 	techUtil.move_recipe_effects_to_another_technology(
-		"angels-advanced-chemistry-3",
-		"angels-advanced-chemistry-4",
-		"catalyst-metal-violet",
+		"angels-nitrogen-processing-2",
+		"angels-nitrogen-processing-1",
+		"gas-ammonia",
 		mode
 	)
-	]]
+	techUtil.move_recipe_effects_to_another_technology(
+		"phosphorus-processing-1",
+		"phosphorus-processing-2",
+		"solid-tetrasodium-pyrophosphate",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-ruby",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-sapphire",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-emerald",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-amethyst",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-topaz",
+		mode
+	)
+	techUtil.move_recipe_effects_to_another_technology(
+		"geode-processing-2",
+		"geode-processing-3",
+		"ober-liquify-diamond",
+		mode
+	)
+	--end another
 end
 
 local function add_recipe_to_technology_effects(mode)
@@ -1202,6 +1310,24 @@ local function add_recipe_to_technology_effects(mode)
 		"angels-plate-manganese",
 		mode
 	)
+
+	-- разнесение ферментации в отдельные ветки, для которых она нужна
+	techUtil.add_recipe_effect_to_technology(technologies["bio-temperate-farming-1"], "fermentation-corn", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-desert-farming-1"], "fermentation-corn", mode)
+
+	techUtil.add_recipe_effect_to_technology(technologies["bio-temperate-farming-2"], "fermentation-fruit", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-desert-farming-2"], "fermentation-fruit", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-swamp-farming-2"], "fermentation-fruit", mode)
+
+	techUtil.add_recipe_effect_to_technology(technologies["bio-temperate-farming-1"], "solid-soil", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-desert-farming-1"], "solid-soil", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-swamp-farming-1"], "solid-soil", mode)
+
+	techUtil.add_recipe_effect_to_technology(technologies["bio-temperate-farming-1"], "anaerobic-fermentation", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-desert-farming-1"], "anaerobic-fermentation", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-temperate-farming-1"], "aerobic-fermentation", mode)
+	techUtil.add_recipe_effect_to_technology(technologies["bio-desert-farming-1"], "aerobic-fermentation", mode)
+	-- конец разнесение ферментации в отдельные ветки, для которых она нужна
 	-- конец остальные
 end
 local function hide_recipes(mode)
@@ -1224,10 +1350,12 @@ local function hide_technologies(mode)
 	--отключить электробойлер и бойлер на солнечных батареях
 	techUtil.hide_technology(technologies["bi-tech-steamsolar-combination"], mode)
 	-- конец отключить электробойлер и бойлер на солнечных батареях
+
 	--остальное
 	techUtil.hide_technology(technologies["zinc-processing"], mode)
 	techUtil.hide_technology(technologies["k-angels-advanced-chemistry-5"], mode)
-	--[[techUtil.hide_technology(technologies["nitrogen-processing"], mode)]]
+	techUtil.hide_technology(technologies["bio-fermentation"], mode)
+	techUtil.hide_technology(technologies["nitrogen-processing"], mode)
 	-- конец остальное
 end
 local function show_technologies(mode)
