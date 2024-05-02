@@ -6,4 +6,4 @@ require("__hardcore-mode-for-playing__.prototypes.burner-prototypes.main")
 require(
 	"__make-moded-technology-tree-mods-protocol__.prototypes.copying-for-modes.copy-to-normal-expensive-mode-recipe-data"
 )
-require("recipe-final-fixes-after-technology-linking")
+require("recipe-final-fixes-after-technology-linking.main")
