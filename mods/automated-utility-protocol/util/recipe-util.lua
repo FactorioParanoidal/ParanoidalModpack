@@ -193,7 +193,11 @@ RecipeUtil.remove_recipe_ingredient = function(recipe_name, mode, ingredient)
 		error("ingredients table for " .. recipe_name .. ", mode " .. mode .. " not exists!")
 	end
 	_table.remove_item(moded_recipe.ingredients, ingredient, function(table_item, item_to_remove)
-		return table_item.type == item_to_remove.type and table_item.name == item_to_remove.name
+		local table_item_type = table_item.type or "item"
+		local item_to_remove_type = item_to_remove.type
+		local table_item_name = table_item.name or table_item[1]
+		local item_to_remove_name = item_to_remove.name or item_to_remove[1]
+		return table_item_type == item_to_remove_type and table_item_name == item_to_remove_name
 	end, false)
 end
 RecipeUtil.remove_recipe_ingredients = function(recipe_name, mode, ingredients)
