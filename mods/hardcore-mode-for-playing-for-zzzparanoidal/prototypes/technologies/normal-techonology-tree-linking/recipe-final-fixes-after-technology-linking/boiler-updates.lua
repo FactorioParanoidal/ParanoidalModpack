@@ -1,37 +1,7 @@
 local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
--- обновление бойлеров
-local boiler_recipe_ingredients = {
-	{
-		type = "item",
-		name = "bi-wood-pipe",
-		amount = 6,
-	},
-	{
-		type = "item",
-		name = "stone-furnace",
-		amount = 1,
-	},
-}
-
-local boiler_wood_165_recipe = data.raw["recipe"]["boiler-steam-165-with-fuel-item-wood"]
-boiler_wood_165_recipe.normal.ingredients = boiler_recipe_ingredients
-boiler_wood_165_recipe.expensive.ingredients = boiler_recipe_ingredients
-
-local boiler_coal_165_recipe = data.raw["recipe"]["boiler-steam-165-with-fuel-item-coal"]
-boiler_coal_165_recipe.normal.ingredients = boiler_recipe_ingredients
-boiler_coal_165_recipe.expensive.ingredients = boiler_recipe_ingredients
-
--- конец обновление бойлеров
 local function remove_recipe_ingredients(mode)
-	if data.raw["item"]["steam-turbine"] then
-		recipeUtil.remove_recipe_ingredient("nuclear-reactor", mode, { type = "item", name = "boiler-4" })
-	end
-	recipeUtil.remove_recipe_ingredient("heat-exchanger", mode, { type = "item", name = "boiler-2" })
-	recipeUtil.remove_recipe_ingredient(
-		"electric-mixing-furnace",
-		mode,
-		{ type = "item", name = "electric-chemical-furnace" }
-	)
+	recipeUtil.remove_recipe_ingredient("boiler-steam-165-with-fuel-item-wood", mode, { type = "item", name = "pipe" })
+	recipeUtil.remove_recipe_ingredient("boiler-steam-165-with-fuel-item-coal", mode, { type = "item", name = "pipe" })
 	recipeUtil.remove_recipe_ingredient(
 		"boiler-2-steam-315-with-fuel-item-coal",
 		mode,
@@ -193,7 +163,61 @@ local function remove_recipe_ingredients(mode)
 		mode,
 		{ type = "item", name = "boiler" }
 	)
-
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-resin",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-gas-vinyl-acetylene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-dichlorobutene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-gas-nitrous-oxide",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-acrylonitrile",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
+	recipeUtil.remove_recipe_ingredient(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-fuel",
+		mode,
+		{ type = "item", name = "boiler" }
+	)
 	recipeUtil.remove_recipe_ingredients(
 		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-plastic",
 		mode,
@@ -230,6 +254,41 @@ local function remove_recipe_ingredients(mode)
 		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
 	)
 	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-resin",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-fuel",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler" }, { type = "item", name = "boiler-2" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
 		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-plastic",
 		mode,
 		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
@@ -246,6 +305,41 @@ local function remove_recipe_ingredients(mode)
 	)
 	recipeUtil.remove_recipe_ingredients(
 		"oil-steam-boiler-3-steam-465-with-fuel-fluid-gas-butane",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-resin",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
+	)
+	recipeUtil.remove_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-fuel",
 		mode,
 		{ { type = "item", name = "oil-steam-boiler-2" }, { type = "item", name = "boiler-3" } }
 	)
@@ -419,16 +513,17 @@ local function remove_recipe_ingredients(mode)
 	-- конец биобойлеры
 end
 local function add_recipe_ingredients(mode)
-	if data.raw["item"]["steam-turbine"] then
-		recipeUtil.add_recipe_ingredients("nuclear-reactor", mode, {
-			{ type = "item", name = "boiler-4-steam-615-with-fuel-item-solid-oil-residual", amount = 1 },
-			{ type = "item", name = "boiler-4-steam-615-with-fuel-item-wood-pellets", amount = 1 },
-		})
-	end
-	recipeUtil.add_recipe_ingredients("heat-exchanger", mode, {
-		{ type = "item", name = "boiler-2-steam-315-with-fuel-item-coal", amount = 1 },
-		{ type = "item", name = "boiler-2-steam-315-with-fuel-item-solid-carbon", amount = 1 },
-	})
+	recipeUtil.add_recipe_ingredient(
+		"boiler-steam-165-with-fuel-item-wood",
+		mode,
+		{ type = "item", name = "bi-wood-pipe", amount = 6 }
+	)
+	recipeUtil.add_recipe_ingredient(
+		"boiler-steam-165-with-fuel-item-coal",
+		mode,
+		{ type = "item", name = "bi-wood-pipe", amount = 6 }
+	)
+
 	recipeUtil.add_recipe_ingredients(
 		"boiler-2-steam-315-with-fuel-item-coal",
 		mode,
@@ -591,6 +686,61 @@ local function add_recipe_ingredients(mode)
 		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
 	)
 	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-resin",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-gas-vinyl-acetylene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-dichlorobutene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-gas-nitrous-oxide",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-acrylonitrile",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-steam-165-with-fuel-fluid-liquid-fuel",
+		mode,
+		{ { type = "item", name = "stone-furnace", amount = 4 }, { type = "item", name = "pipe", amount = 4 } }
+	)
+	recipeUtil.add_recipe_ingredients(
 		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-plastic",
 		mode,
 		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
@@ -623,7 +773,42 @@ local function add_recipe_ingredients(mode)
 	recipeUtil.add_recipe_ingredients(
 		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-fuel-oil",
 		mode,
-		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-resin",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-2-steam-315-with-fuel-fluid-liquid-fuel",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 8 }, { type = "item", name = "steel-pipe", amount = 9 } }
 	)
 	recipeUtil.add_recipe_ingredients(
 		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-plastic",
@@ -642,6 +827,41 @@ local function add_recipe_ingredients(mode)
 	)
 	recipeUtil.add_recipe_ingredients(
 		"oil-steam-boiler-3-steam-465-with-fuel-fluid-gas-butane",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-rubber",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-resin",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-styrene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-ethylbenzene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-polyethylene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-toluene",
+		mode,
+		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
+	)
+	recipeUtil.add_recipe_ingredients(
+		"oil-steam-boiler-3-steam-465-with-fuel-fluid-liquid-fuel",
 		mode,
 		{ { type = "item", name = "steel-furnace", amount = 12 }, { type = "item", name = "steel-pipe", amount = 13 } }
 	)
