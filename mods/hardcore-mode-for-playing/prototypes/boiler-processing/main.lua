@@ -126,7 +126,11 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	local fuel_data = fuel_data_water_amount.fuel_data
 	local boiler_data = recipe_data_by_temperature.boiler_data
 	local boiler_name = boiler_data.name
-	--	log("boiler_name " .. boiler_name)
+	log("boiler_name " .. boiler_name)
+	if string.find(boiler_name, "-with-", 1, true) then
+		-- бойлер уже обработан
+		return
+	end
 	local target_boiler_name = boiler_name .. "-" .. recipe_data_by_temperature.recipe_name
 	--log("target_boiler_name " .. target_boiler_name)
 	local target_boiler_prototype = flib.copy_prototype(data.raw["boiler"][boiler_name], target_boiler_name)
