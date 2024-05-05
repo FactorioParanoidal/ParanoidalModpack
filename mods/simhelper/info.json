@@ -1,0 +1,18 @@
+{
+  "name": "simhelper",
+  "version": "1.1.5",
+  "factorio_version": "1.1",
+  "title": "Simulation Helper",
+  "author": "justarandomgeek",
+  "homepage": "",
+  "contact": "justarandomgeek@gmail.com",
+  "description": "Helper scripts for making simulations",
+  "dependencies": [],
+
+  "package": {
+    "ignore": [
+      "scenarios/tests/**",
+      "scenario-scripts/tests/**"
+    ]
+  }
+}
