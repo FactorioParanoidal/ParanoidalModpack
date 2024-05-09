@@ -17,6 +17,22 @@ data:extend({
 	},
 	{
 		type = "recipe",
+		name = "angel-solder-alloy-x",
+		enabled = false,
+		hidden = false,
+		category = "mixing-furnace",
+		energy_required = 32,
+		ingredients = {
+			{ type = "item", name = "tin-plate", amount = 5 },
+			{ type = "item", name = "lead-plate", amount = 4 },
+		},
+		results = {
+			{ type = "item", name = "solder", amount = 1 },
+		},
+		allow_decomposition = false,
+	},
+	{
+		type = "recipe",
 		name = "brass-alloy-x",
 		enabled = false,
 		hidden = false,
@@ -321,9 +337,17 @@ data:extend({
 	},
 })
 
+bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-brass-smelting-1", "brass-alloy-x")
+
 bobmods.lib.tech.add_recipe_unlock("tungsten-alloy-processing", "tungsten-carbide-x")
 bobmods.lib.tech.add_recipe_unlock("tungsten-alloy-processing", "tungsten-carbide-2x")
+bobmods.lib.tech.add_recipe_unlock("angels-gunmetal-smelting-1", "gunmetal-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-invar-smelting-1", "invar-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-alloy-x")
+bobmods.lib.tech.add_recipe_unlock("angels-cobalt-steel-smelting-1", "cobalt-steel-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-nickel-smelting-1", "nickel-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-zinc-smelting-1", "zinc-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-solder-smelting-1", "angel-solder-alloy-x")
