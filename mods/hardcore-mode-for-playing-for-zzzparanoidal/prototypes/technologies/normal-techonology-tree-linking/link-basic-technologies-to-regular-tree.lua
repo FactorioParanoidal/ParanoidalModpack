@@ -54,7 +54,9 @@ end
 local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	local technologies = data.raw["technology"]
 	--для бойлеров
-	techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
+	if settings.startup["bobmods-power-heatsources"].value == true then
+		techUtil.add_prerequisites_to_technology(technologies["burner-reactor-1"], { "nuclear-power" }, mode)
+	end
 	techUtil.add_prerequisites_to_technology(technologies["bi-tech-bio-boiler"], { "bio-processing-alien-3" }, mode)
 	-- конец для бойлеров
 	--заменяем удалённые технологии
@@ -139,6 +141,11 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "nuclear-fuel-reprocessing", "bob-rocket", "land-mine", "Schall-tank-H-0", "Schall-tank-SH-0" },
 		mode
 	)
+
+	if settings.startup["artillery-shells"].value then
+		techUtil.add_prerequisites_to_technology(technologies["atomic-bomb"], { "artillery" }, mode)
+	end
+
 	techUtil.add_prerequisites_to_technology(technologies["flamethrower"], { "engine" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["advanced-electronics"], {
 		"angels-sulfur-processing-1",
@@ -278,7 +285,6 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 	)
 	techUtil.add_prerequisites_to_technology(technologies["alloy-processing"], { "angels-nickel-smelting-1" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["grinding"], { "geode-crystallization-2" }, mode)
-	--techUtil.add_prerequisites_to_technology(technologies["advanced-electronics-3"], { "modules-3" }, mode)
 	techUtil.add_prerequisites_to_technology(technologies["nitinol-processing"], { "utility-science-pack" }, mode)
 	techUtil.add_prerequisites_to_technology(
 		technologies["tungsten-alloy-processing"],
@@ -943,6 +949,21 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
 		{ "water-aggregate-states" },
 		mode
 	)
+	if settings.startup["bobs-military-simplify"].value == false then
+		techUtil.add_prerequisites_to_technology(technologies["uranium-ammo"], {
+			"Schall-sniper-rifle",
+			"advanced-depleted-uranium-smelting-1",
+			"Schall-tank-H-0",
+			"Schall-tank-SH-0",
+			"w93-modular-turrets-lcannon",
+			"w93-modular-turrets-hcannon",
+		}, mode)
+	end
+	techUtil.add_prerequisites_to_technology(
+		technologies["Schall-pickup-tower-4"],
+		{ "advanced-electronics-2", "utility-science-pack" },
+		mode
+	)
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
@@ -1275,7 +1296,9 @@ local function add_recipe_to_technology_effects(mode)
 	techUtil.add_recipe_effect_to_technology(technologies["military-0"], "pistol-rearm-ammo", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["military-0"], "bi-wooden-fence", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["military-0"], "respirator", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["electricity-0"], "bob-burner-generator", mode)
+	if settings.startup["bobmods-power-heatsources"].value == true then
+		techUtil.add_recipe_effect_to_technology(technologies["electricity-0"], "bob-burner-generator", mode)
+	end
 	techUtil.add_recipe_effect_to_technology(technologies["burner-ore-mining"], "mining-drill-bit-mk0", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["burner-ore-mining"], "burner-mining-drill", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["burner-ore-crushing"], "burner-ore-crusher", mode)
@@ -1287,7 +1310,9 @@ local function add_recipe_to_technology_effects(mode)
 	techUtil.add_recipe_effect_to_technology(technologies["automation-science-pack"], "sci-component-1", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["logistics-0"], "basic-transport-belt", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["logistics"], "transport-belt", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["steam-power"], "steam-mining-drill", mode)
+	if settings.startup["bobmods-mining-steamminingdrills"].value == true then
+		techUtil.add_recipe_effect_to_technology(technologies["steam-power"], "steam-mining-drill", mode)
+	end
 	techUtil.add_recipe_effect_to_technology(technologies["electricity"], "burner-turbine", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["basic-fluid-handling"], "offshore-pump-0", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["ore-crushing"], "iron-plate", mode)
@@ -1295,14 +1320,19 @@ local function add_recipe_to_technology_effects(mode)
 	techUtil.add_recipe_effect_to_technology(technologies["ore-crushing"], "lead-plate", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["ore-crushing"], "tin-plate", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["ore-crushing"], "glass-from-ore4", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["basic-miniloader"], "chute-miniloader", mode)
+	if settings.startup["miniloader-enable-chute"].value == true then
+		techUtil.add_recipe_effect_to_technology(technologies["basic-miniloader"], "chute-miniloader", mode)
+	end
 	techUtil.add_recipe_effect_to_technology(technologies["military"], "copper-nickel-firearm-magazine", mode)
 	--#end region basic tech recipes
 	-- остальные
 	techUtil.add_recipe_effect_to_technology(technologies["nuclear-power"], "used-up-RITEG-1", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["bob-bullets"], "bullet-casing", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["bob-bullets"], "magazine", mode)
-	techUtil.add_recipe_effect_to_technology(technologies["bob-shotgun-shells"], "shotgun-shell-casing", mode)
+
+	if settings.startup["bobs-military-simplify"].value == true then
+		techUtil.add_recipe_effect_to_technology(technologies["bob-bullets"], "bullet-casing", mode)
+		techUtil.add_recipe_effect_to_technology(technologies["bob-bullets"], "magazine", mode)
+		techUtil.add_recipe_effect_to_technology(technologies["bob-shotgun-shells"], "shotgun-shell-casing", mode)
+	end
 	techUtil.add_recipe_effect_to_technology(technologies["CW-air-filtering-1"], "CW-filter-air", mode)
 	techUtil.add_recipe_effect_to_technology(technologies["angels-chrome-smelting-2"], "angels-plate-chrome", mode)
 	techUtil.add_recipe_effect_to_technology(
@@ -1363,9 +1393,13 @@ local function show_technologies(mode)
 end
 local function show_recipes(mode)
 	local recipes = data.raw["recipe"]
-	techUtil.show_recipe(recipes["bullet-casing"], mode)
 	techUtil.show_recipe(recipes["magazine"], mode)
-	techUtil.show_recipe(recipes["shotgun-shell-casing"], mode)
+
+	if settings.startup["bobs-military-simplify"].value == true then
+		techUtil.show_recipe(recipes["shotgun-shell-casing"], mode)
+		techUtil.show_recipe(recipes["bullet-casing"], mode)
+	end
+
 	techUtil.show_recipe(recipes["CW-filter-air"], mode)
 	techUtil.show_recipe(recipes["angels-plate-chrome"], mode)
 	techUtil.show_recipe(recipes["angels-plate-manganese"], mode)
