@@ -1405,3 +1405,6 @@ bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "nitinol-pipe-to
 bobmods.lib.tech.remove_recipe_unlock("nitinol-processing", "nitinol-pipe-to-ground")
 bobmods.lib.tech.remove_recipe_unlock("angels-nitinol-smelting-1", "angels-nitinol-pipe-to-ground-casting")
 bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
+
+--Для сборщика электроники нужны фиол. манипуляторы (AKMF)
+bobmods.lib.tech.add_prerequisite("electronics-machine-3", "turbo-inserter")
