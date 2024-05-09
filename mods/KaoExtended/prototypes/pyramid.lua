@@ -1,5 +1,13 @@
 --BOBS + VANILLA
 
+bobmods.lib.recipe.add_new_ingredient("submachine-gun", { type = "item", name = "pistol", amount = 2 })
+
+bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-2", "logistic-robot")
+bobmods.lib.recipe.remove_ingredient("bob-construction-robot-2", "construction-robot")
+bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-3", "bob-logistic-robot-2")
+bobmods.lib.recipe.remove_ingredient("bob-construction-robot-3", "bob-construction-robot-2")
+bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-4", "bob-logistic-robot-3")
+bobmods.lib.recipe.remove_ingredient("bob-construction-robot-4", "bob-construction-robot-3")
 bobmods.lib.recipe.add_ingredient("bob-logistic-robot-2", { "logistic-robot", 2 })
 bobmods.lib.recipe.add_ingredient("bob-construction-robot-2", { "construction-robot", 2 })
 bobmods.lib.recipe.add_ingredient("bob-logistic-robot-3", { "bob-logistic-robot-2", 2 })
@@ -84,6 +92,48 @@ bobmods.lib.recipe.remove_ingredient("steam-turbine-2", "steam-turbine")
 bobmods.lib.recipe.add_new_ingredient("steam-turbine-2", { type = "item", name = "steam-turbine", amount = 2 })
 bobmods.lib.recipe.remove_ingredient("steam-turbine-3", "steam-turbine-2")
 bobmods.lib.recipe.add_new_ingredient("steam-turbine-3", { type = "item", name = "steam-turbine-2", amount = 2 })
+
+bobmods.lib.recipe.remove_ingredient("assembling-machine-2", "assembling-machine")
+bobmods.lib.recipe.add_new_ingredient(
+	"assembling-machine-2",
+	{ type = "item", name = "assembling-machine-1", amount = 2 }
+)
+bobmods.lib.recipe.remove_ingredient("assembling-machine-3", "assembling-machine-2")
+bobmods.lib.recipe.add_new_ingredient(
+	"assembling-machine-3",
+	{ type = "item", name = "assembling-machine-2", amount = 2 }
+)
+bobmods.lib.recipe.remove_ingredient("assembling-machine-4", "assembling-machine-3")
+bobmods.lib.recipe.add_new_ingredient(
+	"assembling-machine-4",
+	{ type = "item", name = "assembling-machine-3", amount = 2 }
+)
+bobmods.lib.recipe.remove_ingredient("assembling-machine-5", "assembling-machine-4")
+bobmods.lib.recipe.add_new_ingredient(
+	"assembling-machine-5",
+	{ type = "item", name = "assembling-machine-4", amount = 2 }
+)
+bobmods.lib.recipe.remove_ingredient("assembling-machine-6", "assembling-machine-5")
+bobmods.lib.recipe.add_new_ingredient(
+	"assembling-machine-6",
+	{ type = "item", name = "assembling-machine-5", amount = 2 }
+)
+
+bobmods.lib.recipe.remove_ingredient("electronics-machine-1", "iron-gear-wheel")
+bobmods.lib.recipe.add_new_ingredient(
+	"electronics-machine-1",
+	{ type = "item", name = "assembling-machine-1", amount = 1 }
+)
+bobmods.lib.recipe.remove_ingredient("electronics-machine-2", "electronics-machine-1")
+bobmods.lib.recipe.add_new_ingredient(
+	"electronics-machine-2",
+	{ type = "item", name = "electronics-machine-1", amount = 2 }
+)
+bobmods.lib.recipe.remove_ingredient("electronics-machine-3", "electronics-machine-2")
+bobmods.lib.recipe.add_new_ingredient(
+	"electronics-machine-3",
+	{ type = "item", name = "electronics-machine-2", amount = 2 }
+)
 
 bobmods.lib.recipe.remove_ingredient("nuclear-reactor-2", "nuclear-reactor")
 bobmods.lib.recipe.add_new_ingredient("nuclear-reactor-2", { type = "item", name = "nuclear-reactor", amount = 2 })
@@ -366,6 +416,11 @@ bobmods.lib.recipe.add_new_ingredient(
 	"electro-whinning-cell-2",
 	{ type = "item", name = "electro-whinning-cell", amount = 2 }
 )
+bobmods.lib.recipe.remove_ingredient("electro-whinning-cell-3", "electro-whinning-cell-2")
+bobmods.lib.recipe.add_new_ingredient(
+	"electro-whinning-cell-3",
+	{ type = "item", name = "electro-whinning-cell-2", amount = 2 }
+)
 
 bobmods.lib.recipe.remove_ingredient("ore-processing-machine-2", "ore-processing-machine")
 bobmods.lib.recipe.add_new_ingredient(
@@ -565,6 +620,8 @@ bobmods.lib.recipe.add_new_ingredient(
 	{ type = "item", name = "angels-storage-tank-1", amount = 2 }
 )
 bobmods.lib.tech.add_prerequisite("fluid-memory-storage", "gas-processing")
+
+bobmods.lib.recipe.add_new_ingredient("large-accumulator", { type = "item", name = "electronic-circuit", amount = 4 })
 
 bobmods.lib.recipe.add_new_ingredient("heavy-armor-2", { type = "item", name = "heavy-armor", amount = 1 })
 bobmods.lib.recipe.add_new_ingredient("heavy-armor-3", { type = "item", name = "heavy-armor-2", amount = 1 })
