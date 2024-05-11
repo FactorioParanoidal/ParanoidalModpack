@@ -10,7 +10,8 @@ on:
 jobs:
   publish-build-tools:
     name: Publishing build tools
-    runs-on: mcr.microsoft.com/dotnet/sdk:8.0
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:8.0
     steps:
       - uses: actions/checkout@v4
       - run: |
