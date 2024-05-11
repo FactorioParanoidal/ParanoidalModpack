@@ -4,7 +4,8 @@ on:
     branches:
       - master
     paths:
-      - .nuke
+      - '.nuke/**'
+      - '.github/**'
 
 jobs:
   publish-build-tools:
@@ -13,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-             | dotnet publish -r win-x64 -o artifacts
-             | dotnet publish -r linux-x64 -o artifacts
+         dotnet publish -r win-x64 -o artifacts
+         dotnet publish -r linux-x64 -o artifacts
       - uses: actions/upload-artifact@v4
         with: 
           name: BuildTools
