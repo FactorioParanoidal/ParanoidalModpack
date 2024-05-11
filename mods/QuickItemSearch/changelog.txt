@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.11
+Date: ????
+  Changes:
+---------------------------------------------------------------------------------------------------
+Version: 2.1.10
+Date: 2024-05-08
+  Bugfixes:
+    - Fixed somehow orphaned windows not being destroyed before a new window is created. (#38)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.9
+Date: 2024-05-07
+  Bugfixes:
+    - Fixed a crash in certain cases when translations complete after a mod migration. (#35)
+    - Fixed a crash when inputting a value greater than 4,294,967,295. (#37)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.8
 Date: 2023-05-06
   Bugfixes:
