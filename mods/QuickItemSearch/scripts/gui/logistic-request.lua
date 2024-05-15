@@ -227,7 +227,7 @@ function logistic_request_gui.open(player, player_table, item_data)
     local elems = logistic_setter[type]
     local count = request_data[type]
     elems.textfield.enabled = true
-    if count == math.max_uint then
+    if count >= math.max_uint then
       elems.textfield.text = constants.infinity_rep
     else
       elems.textfield.text = tostring(count)
@@ -309,7 +309,9 @@ function logistic_request_gui.update_request(refs, state, element)
   local count
   if element.type == "textfield" then
     count = tonumber(element.text)
-    if not count then
+    if count then
+      count = math.clamp(count, 0, math.max_uint)
+    else
       count = bound == "min" and 0 or math.max_uint
     end
     elems.slider.slider_value = math.round(count / item_data.stack_size) * item_data.stack_size

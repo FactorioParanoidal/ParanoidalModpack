@@ -244,8 +244,8 @@ function infinity_filter_gui.cycle_filter_mode(gui_data)
   local state = gui_data.state
 
   state.infinity_filter.mode = (
-      next(constants.infinity_filter_modes, state.infinity_filter.mode) or next(constants.infinity_filter_modes)
-    )
+    next(constants.infinity_filter_modes, state.infinity_filter.mode) or next(constants.infinity_filter_modes)
+  )
 
   refs.filter_setter.dropdown.selected_index = constants.infinity_filter_mode_to_index[state.infinity_filter.mode]
 end
@@ -271,7 +271,7 @@ function infinity_filter_gui.handle_action(e, msg)
       filter_data.count = count
       refs.filter_setter.textfield.text = tostring(count)
     else
-      local count = tonumber(e.element.text) or 0
+      local count = math.clamp(tonumber(e.element.text) or 0, 0, math.max_uint)
       filter_data.count = count
       refs.filter_setter.slider.slider_value = math.round(count, item_data.stack_size)
     end
