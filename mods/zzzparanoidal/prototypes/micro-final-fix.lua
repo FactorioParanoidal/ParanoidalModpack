@@ -1408,3 +1408,11 @@ bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-to
 
 --Для сборщика электроники нужны фиол. манипуляторы (AKMF)
 bobmods.lib.tech.add_prerequisite("electronics-machine-3", "turbo-inserter")
+
+--Наименование и описание инкубаторов фугу (AKMF)
+data.raw["item"]["bio-hatchery"].localised_name = "Инкубатор"
+data.raw["item"]["bio-hatchery-2"].localised_name = "Инкубатор-2"
+data.raw["item"]["bio-hatchery-3"].localised_name = "Инкубатор-3"
+data.raw["item"]["bio-hatchery"].localised_description = "Уютное место, где могут вылупляться яйца фугу."
+data.raw["item"]["bio-hatchery-2"].description = "Уютное место, где могут вылупляться яйца фугу."
+data.raw["item"]["bio-hatchery-3"].description = "Уютное место, где могут вылупляться яйца фугу."
