@@ -1,0 +1,126 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 11. 01. 2024
+  Changes:
+    - Turned off holo sign now removes the map tag
+    - New imputs: Power production/consumption, accumulator charge
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 15. 08. 2023
+  Changes:
+    - New imputs: Holographic image (any ingame icon). If playing Warp-Drive-Machine: planet image
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 02. 08. 2023
+  Bugfix:
+    - Fixed a reported crash on adding/removing mods (configuration changed)
+  Changes:
+    - updates reduced from 5 to 2 seconds
+    - added remote interface to request hologram refresh
+    - New inputs for Warp-Drive-Machine mod: time on planet, warp time, natives evolution
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 09. 06. 2023
+  Changes:
+    - New input: Production/consumption ratio
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 22. 04. 2023
+  Changes:
+    - New input: Pollution
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 28. 03. 2023
+  Changes:
+    - New inputs: Fluid consumption, Rocket item launched, Time to finish the research, Played time, Time from last player death
+    - Some inputs organized in categories (click / expand)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 08. 11. 2022
+  Changes:
+    - Added new input: wind speed (if nullius, windturbines-redux or WindSpeedChanging mods are active)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 31. 10. 2022
+  Changes:
+    - Close the holographic panel GUI in response to E and ESC
+    - Added blueprint support
+    - Added new input: day time
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+  Bugfix:
+    - Fixed a reported crash when a gui is changed and the hologram is invalid
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Bugfix:
+    - Fixed text color change preview
+    - Fixed gui not responding on god mode scenarios
+  Changes:
+    - Added mod option to change text effects: Default, Fast or No animation (thanks to LCStark)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Bugfix:
+    - Fixed a crash when a mod is removed and the hologram was using some of its icons/names
+  Changes:
+    - Added mod option to enable/disbale hologram animation
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Changes:
+    - New graphics
+    - Added switch to turn on / off the hologram
+    - You can turn OFF the hologram with circuit signal-red=1 and ON with signal-green=1
+    - You can use these commands to turn ON/OFF all holograms (admin only): /hologram-turn-on /hologram-turn-off
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Bugfix:
+    - Fixed lab progress print to integer values from 1 - 100%
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+  Bugfix:
+    - Fixed a reported crash regarding '%' text replacement
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+  Bugfix:
+    - Fixed a problem with fluid production/consumption, that could cause a crash
+    - Fixed text format on some input values
+  Changes:
+    - Added option to print plain text instead of hologram
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+  Bugfix:
+    - Fixed a reported crash
+  Changes:
+    - New button icons
+    - Added RGB text color editor
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+  Changes:
+    - Copy-paste implemented
+    - You can now print input values in the middle of your custom text, using the tag |#|
+    - Added new inputs: kill count, player casualties, enemy evolution
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Bugfix:
+    - Fixed a reported crash regarding empty world tag
+  Changes:
+    - Empty text/icon will clear the hologram bubble
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Changes:
+    - Added new inputs for production/consumption statistics
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Changes:
+    - Added the ability to read and print circuit values, logistic item count and other force stats
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Bugfix:
+    - Fixed a crash with a possible invalid signal icon
+  Changes:
+    - Added textbox option
+    - Made compatible with space exploration to allow building on space platform
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 18.10.2021
+  Info:
+    - Initial release
