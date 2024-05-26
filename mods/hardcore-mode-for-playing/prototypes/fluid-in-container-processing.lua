@@ -1,5 +1,5 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
-local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
+local recipe_util = require("__automated-utility-protocol__.util.recipe-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 local fluid_names = get_basic_fluid_names()
 local empty_barrel_basic_fluid_recipe_names = _table.map(fluid_names, function(fluid_name)
@@ -45,9 +45,10 @@ local function remove_from_basic_technology_fill_and_empty_recipe_names(
 	mode
 )
 	local technologies = data.raw["technology"]
-	techUtil.remove_recipe_effect_from_technology(technologies[basic_technology_name], recipe_name, mode)
-	techUtil.remove_recipe_effect_from_technology(technologies[basic_technology_name], empty_recipe_name, mode)
+	tech_util.remove_recipe_effect_from_technology(technologies[basic_technology_name], recipe_name, mode)
+	tech_util.remove_recipe_effect_from_technology(technologies[basic_technology_name], empty_recipe_name, mode)
 end
+
 local function get_technology_names_for_ingredient_fuel_result_dont_contain_in_basic_technology_tree(
 	all_technology_names_for_recipe_with_fuel_result,
 	basic_technology_name,
@@ -57,8 +58,7 @@ local function get_technology_names_for_ingredient_fuel_result_dont_contain_in_b
 	_table.each(all_technology_names_for_recipe_with_fuel_result, function(filtered_technology_names, item_or_fluid)
 		result[item_or_fluid] = {}
 		_table.each(filtered_technology_names, function(filtered_technology_name)
-			if
-				not TechnologyTreeUtil.have_technology_in_tree(basic_technology_name, filtered_technology_name, mode)
+			if not TechnologyTreeUtil.have_technology_in_tree(basic_technology_name, filtered_technology_name, mode)
 			then
 				table.insert(result[item_or_fluid], filtered_technology_name)
 			end
@@ -68,8 +68,8 @@ local function get_technology_names_for_ingredient_fuel_result_dont_contain_in_b
 end
 local function hide_fill_and_empty_non_fuel_fluid_in_container_recipes(recipe_name, empty_recipe_name, mode)
 	local recipes = data.raw["recipe"]
-	techUtil.hide_recipe(recipes[recipe_name], mode)
-	techUtil.hide_recipe(recipes[empty_recipe_name], mode)
+	tech_util.hide_recipe(recipes[recipe_name], mode)
+	tech_util.hide_recipe(recipes[empty_recipe_name], mode)
 end
 local function add_fill_and_empty_non_fuel_fluid_in_container_recipes(
 	target_technology_name,
@@ -78,25 +78,16 @@ local function add_fill_and_empty_non_fuel_fluid_in_container_recipes(
 	mode
 )
 	local technologies = data.raw["technology"]
-	techUtil.add_recipe_effect_to_technology(technologies[target_technology_name], recipe_name, mode)
-	techUtil.add_recipe_effect_to_technology(technologies[target_technology_name], empty_recipe_name, mode)
+	tech_util.add_recipe_effect_to_technology(technologies[target_technology_name], recipe_name, mode)
+	tech_util.add_recipe_effect_to_technology(technologies[target_technology_name], empty_recipe_name, mode)
 end
 local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 	local empty_recipe_name = string.gsub(recipe_name, "fill", "empty")
-	remove_from_basic_technology_fill_and_empty_recipe_names(
-		basic_technology_name,
-		recipe_name,
-		empty_recipe_name,
-		mode
-	)
-	local all_technology_names_for_recipe_with_fuel_result =
-		techUtil.get_all_technology_names_with_fuel_result_specified_in_another_recipe_by_name(recipe_name, mode)
+	remove_from_basic_technology_fill_and_empty_recipe_names(basic_technology_name,	recipe_name, empty_recipe_name,	mode)
+	local all_technology_names_for_recipe_with_fuel_result = tech_util.get_all_technology_names_with_fuel_result_specified_in_another_recipe_by_name(recipe_name, mode)
 	local technology_names_by_result_results =
-		get_technology_names_for_ingredient_fuel_result_dont_contain_in_basic_technology_tree(
-			all_technology_names_for_recipe_with_fuel_result,
-			basic_technology_name,
-			mode
-		)
+		get_technology_names_for_ingredient_fuel_result_dont_contain_in_basic_technology_tree(all_technology_names_for_recipe_with_fuel_result, basic_technology_name,
+				mode)
 	if _table.size(technology_names_by_result_results) == 0 then
 		hide_fill_and_empty_non_fuel_fluid_in_container_recipes(recipe_name, empty_recipe_name, mode)
 		return
@@ -114,7 +105,7 @@ local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 				.. recipe_name
 		)]]
 		local recipe_fluid_candidate_ingredients = _table.filter(
-			recipeUtil.get_all_recipe_ingredients(recipe_name, mode),
+			recipe_util.get_all_recipe_ingredients(recipe_name, mode),
 			function(recipe_ingredient)
 				return recipe_ingredient.type == "fluid"
 			end
@@ -131,6 +122,7 @@ local function handle_one_recipe(recipe_name, basic_technology_name, mode)
 					empty_recipe_name,
 					mode
 				)
+				tech_util.add_prerequisites_to_technology(data.raw["technology"][target_technology_name],{basic_technology_name},mode)
 				--[[			log(
 					"add recipe pair "
 						.. recipe_name
@@ -159,7 +151,7 @@ local function update_fluid_in_container_processing_technology_recipe_effects_by
 		error("technology '" .. basic_technology_name .. "' not found!")
 	end
 	local recipe_names = _table.filter(
-		techUtil.get_all_recipe_names_for_specified_technology(basic_technology_name, mode),
+		tech_util.get_all_recipe_names_for_specified_technology(basic_technology_name, mode),
 		filter_function
 	)
 	--log("fluid barrel recipes available: " .. Utils.dump_to_console(recipe_names))
