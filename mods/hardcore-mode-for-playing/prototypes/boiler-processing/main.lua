@@ -1,4 +1,4 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
 local function detect_target_temperature_for_boiler(boiler)
 	local boiler_mode = boiler.mode
 	if boiler_mode == "output-to-separate-pipe" then
@@ -35,7 +35,7 @@ local function get_boilers_by_target_temperature(technology_names, mode)
 	local result = {}
 	local boiler_count = 0
 	_table.each(technology_names, function(technology_name)
-		local results = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
+		local results = tech_util.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		_table.each(results, function(recipe_result)
 			local recipe_result_name = recipe_result.name or recipe_result[1]
 			if not data.raw["boiler"][recipe_result_name] then
@@ -52,14 +52,14 @@ local function get_boilers_by_target_temperature(technology_names, mode)
 			if not result[target_temperature] then
 				error(
 					"for mode "
-						.. mode
-						.. " technology_name "
-						.. technology_name
-						.. " found boiler "
-						.. recipe_result_name
-						.. "\nValue:"
-						.. Utils.dump_to_console(boiler)
-						.. " target_temperature is not detected!"
+					.. mode
+					.. " technology_name "
+					.. technology_name
+					.. " found boiler "
+					.. recipe_result_name
+					.. "\nValue:"
+					.. Utils.dump_to_console(boiler)
+					.. " target_temperature is not detected!"
 				)
 			end
 			local boiler_data = {
@@ -77,14 +77,14 @@ local function get_boilers_by_target_temperature(technology_names, mode)
 			if not check_boiler_data(boiler_data) then
 				error(
 					"for mode "
-						.. mode
-						.. " technology_name "
-						.. technology_name
-						.. " found boiler "
-						.. recipe_result_name
-						.. "\nValue:"
-						.. Utils.dump_to_console(boiler)
-						.. " not detected non Void energy_source!"
+					.. mode
+					.. " technology_name "
+					.. technology_name
+					.. " found boiler "
+					.. recipe_result_name
+					.. "\nValue:"
+					.. Utils.dump_to_console(boiler)
+					.. " not detected non Void energy_source!"
 				)
 			end
 			_table.insert(result[target_temperature], boiler_data)
@@ -104,7 +104,7 @@ function boiler_processing(technology_names, mode)
 				local filtered_boiler_data = _table.filter(boiler_datas, function(data)
 					return data.is_burner_energy_source
 				end)[1]
-				techUtil.add_prerequisites_to_technology(
+				tech_util.add_prerequisites_to_technology(
 					technologies[current_technology_name],
 					{ filtered_boiler_data.technology_name_occured_boiler_prototype },
 					mode
@@ -114,6 +114,7 @@ function boiler_processing(technology_names, mode)
 	end)
 	return result
 end
+
 local function set_recipe_result(target_boiler_recipe, target_boiler_name)
 	target_boiler_recipe.normal.result = target_boiler_name
 	target_boiler_recipe.normal.results = nil
@@ -151,17 +152,17 @@ local function handle_one_recipe_data_by_temperature(recipe_data_by_temperature)
 	local target_boiler_item = flib.copy_prototype(data.raw["item"][boiler_name], target_boiler_name)
 	local technology = data.raw["technology"][boiler_data.technology_name_occured_boiler_prototype]
 	local mode = recipe_data_by_temperature.mode
-	if techUtil.has_technology_recipe_effects(technology, boiler_name, mode) then
+	if tech_util.has_technology_recipe_effects(technology, boiler_name, mode) then
 		--		log("from " .. boiler_data.technology_name_occured_boiler_prototype .. " removed recipe " .. boiler_name)
-		techUtil.remove_recipe_effect_from_technology(technology, boiler_name, mode)
+		tech_util.remove_recipe_effect_from_technology(technology, boiler_name, mode)
 	end
 	local target_boiler_recipe = flib.copy_prototype(data.raw["recipe"][boiler_name], target_boiler_name)
 	set_recipe_result(target_boiler_recipe, target_boiler_name)
 	data:extend({ target_boiler_prototype, target_boiler_item, target_boiler_recipe })
 	log("target_boiler_recipe " .. Utils.dump_to_console(target_boiler_recipe))
-	techUtil.add_recipe_effect_to_technology(technology, target_boiler_name, mode)
-	if not techUtil.has_technology_recipe_effects(technology, "steam", mode) then
-		techUtil.add_recipe_effect_to_technology(technology, "steam", mode)
+	tech_util.add_recipe_effect_to_technology(technology, target_boiler_name, mode)
+	if not tech_util.has_technology_recipe_effects(technology, "steam", mode) then
+		tech_util.add_recipe_effect_to_technology(technology, "steam", mode)
 	end
 end
 function update_boiler_prototype_by_steam_recipe_prototype(steam_recipes_by_temperature_sorted)
