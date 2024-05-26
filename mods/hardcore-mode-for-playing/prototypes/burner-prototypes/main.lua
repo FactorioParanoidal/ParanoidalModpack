@@ -1,4 +1,4 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 require("__automated-utility-protocol__.util.fuel-energy-util")
 local function correct_effectivity_to_real(burner_source)
@@ -72,7 +72,8 @@ local function is_allow_fuel_category_for_entity_with_burner_applying(prototype,
 			prototype,
 			effectivity_max_item_stack_fuel_value / MINIMUM_TIME_IN_WORK_IN_SECS
 		)
-	local maximum_energy_consumption_for_entity_with_burner_prototype = maximum_energy_consumption_per_sec_for_entity_with_burner_prototype
+	local maximum_energy_consumption_for_entity_with_burner_prototype =
+		maximum_energy_consumption_per_sec_for_entity_with_burner_prototype
 		* MINIMUM_TIME_IN_WORK_IN_SECS
 
 	if
@@ -165,10 +166,10 @@ local function handle_prototype_burner_or_energy_source_candidate(prototype, mod
 	if not fuel_category_candidates or _table.size(fuel_category_candidates) == 0 then
 		error(
 			"for prototype "
-				.. prototype.type
-				.. " called "
-				.. prototype.name
-				.. " fuel_category_candidates is empty!May be technology tree don't contain technology with fuel candidates?"
+			.. prototype.type
+			.. " called "
+			.. prototype.name
+			.. " fuel_category_candidates is empty!May be technology tree don't contain technology with fuel candidates?"
 		)
 	end
 	_table.each(fuel_category_candidates, function(fuel_category_candidate)
@@ -204,11 +205,11 @@ local function handle_prototype_table_burner_or_energy_source_candidate(prototyp
 end
 
 _table.each(GAME_MODES, function(mode)
-	local technology_names = techUtil.get_all_active_technology_names(mode)
+	local technology_names = tech_util.get_all_active_technology_names(mode)
 	local prototype_types = {}
 
 	_table.each(technology_names, function(technology_name)
-		local prototypes = techUtil.get_all_recipe_results_for_specified_technology(technology_name, mode)
+		local prototypes = tech_util.get_all_recipe_results_for_specified_technology(technology_name, mode)
 		local result_type = handle_prototype_table_burner_or_energy_source_candidate(prototypes, mode, technology_name)
 		if result_type then
 			_table.insert_all_if_not_exists(prototype_types, { result_type })
