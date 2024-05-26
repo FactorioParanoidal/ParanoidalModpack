@@ -13,7 +13,7 @@ if settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-ev
 	salvaged_radar.energy_per_nearby_scan = "250kJ"
 	salvaged_radar.max_distance_of_sector_revealed = 0
 	salvaged_radar.max_distance_of_nearby_sector_revealed = 0
-	data:extends(
+	data:extend(
 		{
 			salvaged_radar
 		}

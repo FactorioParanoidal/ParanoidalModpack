@@ -37,7 +37,11 @@ data:extend(
 	}
 )
 if settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-every-resource"].value then
-	copy_salvaged_recipe("radar", "salvaged-radar")
+	data:extend(
+		{
+			copy_salvaged_recipe("radar", "salvaged-radar")
+		}
+	)
 end
 data:extend(
 	{
