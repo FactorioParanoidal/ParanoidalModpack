@@ -1,9 +1,21 @@
+local function available_for_mining_elements(entity)
+	return entity.name == "puffer-nest" and entity.type == "tree"
+		or entity.type == "tree" and entity.name == "swamp-tree"
+		or entity.type == "tree" and entity.name == "desert-tree"
+		or entity.type == "tree" and entity.name == "temperate-tree"
+end
 function on_player_mined_entity(e)
 	local entity = e.entity
 	if not entity or not entity.valid then
 		return
 	end
-	--log(entity.type..' '..entity.name)
+	log(entity.type .. " " .. entity.name)
+	if available_for_mining_elements(entity) then
+		local player = game.players[e.player_index]
+		research_technologies_for_resources_if_exists_not_researched({ { type = entity.type, name = entity.name } },
+			player.force, "Произведено знакомство с новым ресурсом ", ", недобываемым из поверхности планеты")
+		return
+	end
 	local buffer_inventory = e.buffer
 	local force = game.players[e.player_index].force
 	if
@@ -61,13 +73,18 @@ function on_player_mined_entity(e)
 end
 
 function on_player_mined_item(e)
+	log("on_player_mined_item fired")
 	local item_stack = e.item_stack
 	if not item_stack then
+		log("on_player_mined_item fired, not item stack!")
 		return
 	end
 	local item_stack_name = item_stack.name
-	--log('item '..item_stack_name)
+	log("item " .. item_stack_name)
+	local player = game.players[e.player_index]
 	local force = game.players[e.player_index].force
+	research_technologies_for_resources_if_exists_not_researched({ { type = "item", name = item_stack_name } }, force,
+		"Произведено знакомство с новым ресурсом ", ", недобываемым из поверхности планеты")
 	if
 		not force.technologies["savlaged-automation-tech"]
 		or not force.technologies["savlaged-automation-tech"].valid
