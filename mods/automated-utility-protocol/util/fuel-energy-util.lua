@@ -1,4 +1,4 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 FuelEnergyUtil = {}
 local modifier_table = {
@@ -45,7 +45,7 @@ FuelEnergyUtil.evaluate_available_fuel_prototype_for_entity_prototype = function
 		TechnologyTreeUtil.find_prerequisites_for_technology_for_all_levels(technology_name, mode)
 	_table.insert(prerequisite_names, technology_name)
 	_table.each(prerequisite_names, function(prerequisite_name)
-		local recipe_results = techUtil.get_all_recipe_results_for_specified_technology(prerequisite_name, mode)
+		local recipe_results = tech_util.get_all_recipe_results_for_specified_technology(prerequisite_name, mode)
 		_table.insert_all_if_not_exists(
 			result,
 			_table.filter(recipe_results, function(recipe_result)
@@ -67,7 +67,7 @@ FuelEnergyUtil.evaluate_water_heating_to_temperature_energy_in_joules = function
 		error("can't steam energy evaluating for temperature " .. tostring(temperature))
 	end
 	return (water_prototype.max_temperature - water_prototype.default_temperature)
-			* FuelEnergyUtil.read_energy_value_in_raw_joules(water_prototype.heat_capacity)
+		* FuelEnergyUtil.read_energy_value_in_raw_joules(water_prototype.heat_capacity)
 		+ (temperature - steam_prototype.default_temperature)
-			* FuelEnergyUtil.read_energy_value_in_raw_joules(steam_prototype.heat_capacity)
+		* FuelEnergyUtil.read_energy_value_in_raw_joules(steam_prototype.heat_capacity)
 end
