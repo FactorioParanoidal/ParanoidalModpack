@@ -9,28 +9,41 @@ local function get_recipe_data_products(recipe_data)
 	if not recipe_data then
 		return result
 	end
-	if recipe_data.main_product and recipe_data.main_product ~= "" then
-		table.insert(result, {
-			name = recipe_data.main_product,
-			type = "item",
-		})
-	end
 	if recipe_data.result and recipe_data.result ~= "" then
-		table.insert(result, {
-			name = recipe_data.result,
-			type = "item",
-		})
+		table.insert(
+			result,
+			{
+				name = recipe_data.result,
+				type = "item"
+			}
+		)
 	end
 	if recipe_data.results and _table.size(recipe_data.results) > 0 then
-		_table.each(recipe_data.results, function(result_data)
-			local result_name = result_data.name or result_data[1]
-			if result_name ~= "" then
-				table.insert(result, {
-					name = result_name,
-					type = result_data.type or "item",
-				})
+		_table.each(
+			recipe_data.results,
+			function(result_data)
+				local result_name = result_data.name or result_data[1]
+				if result_name ~= "" then
+					table.insert(
+						result,
+						{
+							name = result_name,
+							type = result_data.type or "item"
+						}
+					)
+				end
 			end
-		end)
+		)
+	end
+	-- только в случае когда ничего ранее не указано, иначе есть хоть один продукт
+	if _table.size(result) == 0 and recipe_data.main_product and recipe_data.main_product ~= "" then
+		table.insert(
+			result,
+			{
+				name = recipe_data.main_product,
+				type = "item"
+			}
+		)
 	end
 	return result
 end
@@ -44,7 +57,7 @@ local function create_technology_effect_result_from_rocket_launch_product(rocket
 	--log("rocket launch result type " .. rocket_launch_product_data_type .. " name " .. rocket_launch_product_data_name)
 	return {
 		name = rocket_launch_product_data_name,
-		type = rocket_launch_product_data_type,
+		type = rocket_launch_product_data_type
 	}
 end
 local function get_rocket_launch_results(result_data)
@@ -60,9 +73,12 @@ local function get_rocket_launch_results(result_data)
 		)
 	end
 	if result_data_item.rocket_launch_products and _table.size(result_data_item.rocket_launch_products) > 0 then
-		_table.each(result_data_item.rocket_launch_products, function(rocket_launch_product_data)
-			table.insert(result, create_technology_effect_result_from_rocket_launch_product(rocket_launch_product_data))
-		end)
+		_table.each(
+			result_data_item.rocket_launch_products,
+			function(rocket_launch_product_data)
+				table.insert(result, create_technology_effect_result_from_rocket_launch_product(rocket_launch_product_data))
+			end
+		)
 	end
 	return result
 end
@@ -84,22 +100,30 @@ local function get_burnt_result_results(result_data)
 	return {
 		{
 			type = burnt_result_type,
-			name = burnt_result_name,
-		},
+			name = burnt_result_name
+		}
 	}
 end
 
-RecipeUtil.get_all_recipe_results = function(recipe_name, mode)
+RecipeUtil.get_all_recipe_results = function(recipe_name, mode, use_only_real_products)
 	local result = {}
 	local recipeData = get_recipe_object_for_mode(recipe_name, mode)
 	_table.insert_all_if_not_exists(result, get_recipe_data_products(recipeData))
 	local additional_results = {}
-	_table.each(result, function(result_data)
-		_table.insert_all_if_not_exists(additional_results, get_rocket_launch_results(result_data))
-	end)
-	_table.each(result, function(result_data)
-		_table.insert_all_if_not_exists(additional_results, get_burnt_result_results(result_data))
-	end)
+	if (not use_only_real_products) then
+		_table.each(
+			result,
+			function(result_data)
+				_table.insert_all_if_not_exists(additional_results, get_rocket_launch_results(result_data))
+			end
+		)
+		_table.each(
+			result,
+			function(result_data)
+				_table.insert_all_if_not_exists(additional_results, get_burnt_result_results(result_data))
+			end
+		)
+	end
 	_table.insert_all_if_not_exists(result, additional_results)
 	return result
 end
@@ -110,15 +134,21 @@ local function get_recipe_data_ingredients(recipeData)
 		return result
 	end
 	if recipeData.ingredients and _table.size(recipeData.ingredients) > 0 then
-		_table.each(recipeData.ingredients, function(result_data)
-			local result_name = result_data.name or result_data[1]
-			if result_name ~= "" then
-				table.insert(result, {
-					name = result_name,
-					type = result_data.type or "item",
-				})
+		_table.each(
+			recipeData.ingredients,
+			function(result_data)
+				local result_name = result_data.name or result_data[1]
+				if result_name ~= "" then
+					table.insert(
+						result,
+						{
+							name = result_name,
+							type = result_data.type or "item"
+						}
+					)
+				end
 			end
-		end)
+		)
 	end
 	return result
 end
@@ -132,14 +162,11 @@ end
 
 RecipeUtil.add_recipe_ingredient = function(recipe_name, mode, ingredient)
 	if
-		not ingredient
-		or not ingredient.type
-		or not type(ingredient.type) == "string"
-		or not ingredient.name
-		or not type(ingredient.name) == "string"
-		or not ingredient.amount
-		or not type(ingredient.amount) == "number"
-	then
+		not ingredient or not ingredient.type or not type(ingredient.type) == "string" or not ingredient.name or
+			not type(ingredient.name) == "string" or
+			not ingredient.amount or
+			not type(ingredient.amount) == "number"
+	 then
 		error("incorrect ingredient " .. Utils.dump_to_console(ingredient))
 	end
 	local ingredient_prototype = data.raw[ingredient.type][ingredient.name]
@@ -163,18 +190,18 @@ RecipeUtil.add_recipe_ingredients = function(recipe_name, mode, ingredients)
 	if not ingredients or not type(ingredients) == "table" then
 		error("incorrect ingredients!")
 	end
-	_table.each(ingredients, function(ingredient)
-		RecipeUtil.add_recipe_ingredient(recipe_name, mode, ingredient)
-	end)
+	_table.each(
+		ingredients,
+		function(ingredient)
+			RecipeUtil.add_recipe_ingredient(recipe_name, mode, ingredient)
+		end
+	)
 end
 RecipeUtil.remove_recipe_ingredient = function(recipe_name, mode, ingredient)
 	if
-		not ingredient
-		or not ingredient.type
-		or not type(ingredient.type) == "string"
-		or not ingredient.name
-		or not type(ingredient.name) == "string"
-	then
+		not ingredient or not ingredient.type or not type(ingredient.type) == "string" or not ingredient.name or
+			not type(ingredient.name) == "string"
+	 then
 		error("incorrect ingredient " .. Utils.dump_to_console(ingredient))
 	end
 	local ingredient_prototype = data.raw[ingredient.type][ingredient.name]
@@ -192,21 +219,79 @@ RecipeUtil.remove_recipe_ingredient = function(recipe_name, mode, ingredient)
 	if not moded_recipe.ingredients then
 		error("ingredients table for " .. recipe_name .. ", mode " .. mode .. " not exists!")
 	end
-	_table.remove_item(moded_recipe.ingredients, ingredient, function(table_item, item_to_remove)
-		local table_item_type = table_item.type or "item"
-		local item_to_remove_type = item_to_remove.type
-		local table_item_name = table_item.name or table_item[1]
-		local item_to_remove_name = item_to_remove.name or item_to_remove[1]
-		return table_item_type == item_to_remove_type and table_item_name == item_to_remove_name
-	end, false)
+	_table.remove_item(
+		moded_recipe.ingredients,
+		ingredient,
+		function(table_item, item_to_remove)
+			local table_item_type = table_item.type or "item"
+			local item_to_remove_type = item_to_remove.type
+			local table_item_name = table_item.name or table_item[1]
+			local item_to_remove_name = item_to_remove.name or item_to_remove[1]
+			return table_item_type == item_to_remove_type and table_item_name == item_to_remove_name
+		end,
+		false
+	)
 end
 RecipeUtil.remove_recipe_ingredients = function(recipe_name, mode, ingredients)
 	if not ingredients or not type(ingredients) == "table" then
 		error("incorrect ingredients!")
 	end
-	_table.each(ingredients, function(ingredient)
-		RecipeUtil.remove_recipe_ingredient(recipe_name, mode, ingredient)
-	end)
+	_table.each(
+		ingredients,
+		function(ingredient)
+			RecipeUtil.remove_recipe_ingredient(recipe_name, mode, ingredient)
+		end
+	)
+end
+
+RecipeUtil.get_recipe_category = function(recipe_name)
+	return data.raw["recipe"][recipe_name].category or "crafting"
+end
+
+RecipeUtil.get_recipe_signature = function(recipe_name, mode)
+	local ingredients = RecipeUtil.get_all_recipe_ingredients(recipe_name, mode)
+	local recipe_results = RecipeUtil.get_all_recipe_results(recipe_name, mode, true)
+	log("recipe_results " .. Utils.dump_to_console(recipe_results))
+	return {
+		ingredients = {
+			solid = _table.size(
+				_table.filter(
+					ingredients,
+					function(ingredient)
+						return ingredient.type == "item"
+					end
+				)
+			),
+			fluid = _table.size(
+				_table.filter(
+					ingredients,
+					function(ingredient)
+						return ingredient.type == "fluid"
+					end
+				)
+			)
+		},
+		results = {
+			solid = _table.size(
+				_table.filter(
+					recipe_results,
+					function(recipe_result)
+						return recipe_result.type == "item"
+					end
+				)
+			),
+			fluid = _table.size(
+				_table.filter(
+					recipe_results,
+					function(recipe_result)
+						return recipe_result.type == "fluid"
+					end
+				)
+			)
+		},
+		category = RecipeUtil.get_recipe_category(recipe_name),
+		name = recipe_name
+	}
 end
 
 return RecipeUtil
