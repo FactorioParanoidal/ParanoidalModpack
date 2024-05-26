@@ -1,2 +1,2 @@
---require("normal-mode")
---require("expensive-mode")
+require("normal-mode")
+require("expensive-mode")

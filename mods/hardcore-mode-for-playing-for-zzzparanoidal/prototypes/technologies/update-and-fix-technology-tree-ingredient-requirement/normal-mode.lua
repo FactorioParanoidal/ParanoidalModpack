@@ -1,8 +1,8 @@
 local technologyUnitAddBean = require("__automated-utility-protocol__.util.technology-unit-add-bean")
 local function updateNotFoundEffectesAndSciencePacksNormal()
 	local mode = "normal"
-	technologyUnitAddBean.addAutomationSciencePackToTechnologyUnits({
-		"productivity-module",
+	technologyUnitAddBean.add_automation_science_pack_to_technology_units({
+		--[[	"productivity-module",
 		"speed-module",
 		"speed-module-2",
 		"speed-module-3",
@@ -45,10 +45,11 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-power-armor-4",
 		"bob-power-armor-5",
 		"extremely-advanced-rocket-payloads",
-		"module-merging",
+		"module-merging",]]
+		"compact-full-fission-weapons"
 	}, mode)
-	technologyUnitAddBean.addLogisticSciencePackToTechnologyUnits({
-		"alloy-processing",
+	technologyUnitAddBean.add_logistic_science_pack_to_technology_units({
+		--[["alloy-processing",
 		"productivity-module",
 		"bio-farm-1",
 		"bio-temperate-farming-1",
@@ -105,10 +106,11 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"bob-power-armor-4",
 		"bob-power-armor-5",
 		"extremely-advanced-rocket-payloads",
-		"module-merging",
+		"module-merging",]]
+		"compact-full-fission-weapons"
 	}, mode)
-	technologyUnitAddBean.addChemicalSciencePackToTechnologyUnits({
-		"chlorine-processing-2",
+	technologyUnitAddBean.add_chemical_science_pack_to_technology_units({
+		--[["chlorine-processing-2",
 		"bio-nutrient-paste",
 		"bio-farm-1",
 		"bio-fermentation",
@@ -182,10 +184,11 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"extremely-advanced-rocket-payloads",
 		"angels-iron-smelting-2",
 		"automation-8",
-		"electronics-machine-5",
+		"electronics-machine-5",]]
+		"compact-full-fission-weapons"
 	}, mode)
-	technologyUnitAddBean.addProductionSciencePackToTechnologyUnits({
-		"utility-science-pack",
+	technologyUnitAddBean.add_production_science_pack_to_technology_units({
+		--[["utility-science-pack",
 		"bio-processing-paste",
 		"bio-processing-alien-1",
 		"physical-projectile-damage-6",
@@ -300,9 +303,104 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"extremely-advanced-rocket-payloads",
 		"advanced-magnesium-smelting",
 		"angels-aluminium-smelting-2",
-		"advanced-depleted-uranium-smelting-2",
+		"advanced-depleted-uranium-smelting-2",]]
+		"compact-full-fission-weapons"
 	}, mode)
-	technologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
+
+	technologyUnitAddBean.add_military_science_pack_to_technology_units({
+		--[["physical-projectile-damage-5",
+		"bet-fuel-4",
+		"bet-fuel-recycling",
+		"bob-bullets",
+		"bob-ap-bullets",
+		"bob-electric-bullets",
+		"bob-he-bullets",
+		"bob-flame-bullets",
+		"bob-acid-bullets",
+		"bob-poison-bullets",
+		"bob-shotgun-ap-shells",
+		"bob-shotgun-electric-shells",
+		"bob-shotgun-explosive-shells",
+		"bob-shotgun-flame-shells",
+		"bob-shotgun-acid-shells",
+		"bob-shotgun-poison-shells",
+		"bob-shotgun-plasma-shells",
+		"bob-rocket",
+		"bob-plasma-rocket",
+		"bob-acid-rocket",
+		"bob-flame-rocket",
+		"bob-poison-rocket",
+		"bob-piercing-rocket",
+		"bob-electric-rocket",
+		"bob-explosive-rocket",
+		"atomic-bomb",
+		"personal-roboport-equipment",
+		"angels-advanced-chemistry-4",]]
+		"compact-full-fission-weapons"
+	}, mode)
+	technologyUnitAddBean.add_utility_science_pack_to_technology_units({
+		--[["bob-shotgun-shells",
+		"logistics-4",
+		"stack-inserter-research-15",
+		"stack-inserter-research-5",
+		"stack-inserter-research-1",
+		"ober-nuclear-processing",
+		"bob-bullets",
+		"bob-ap-bullets",
+		"bob-electric-bullets",
+		"bob-he-bullets",
+		"bob-flame-bullets",
+		"bob-acid-bullets",
+		"bob-poison-bullets",
+		"bob-shotgun-ap-shells",
+		"bob-shotgun-electric-shells",
+		"bob-shotgun-explosive-shells",
+		"bob-shotgun-flame-shells",
+		"bob-shotgun-acid-shells",
+		"bob-shotgun-poison-shells",
+		"bob-shotgun-plasma-shells",
+		"bob-rocket",
+		"bob-plasma-rocket",
+		"bob-acid-rocket",
+		"bob-flame-rocket",
+		"bob-poison-rocket",
+		"bob-piercing-rocket",
+		"bob-electric-rocket",
+		"bob-explosive-rocket",
+		"OilBurning-5",
+		"OilBurning-4",
+		"garden-mutation",
+		"water-treatment-5",
+		"plastic-pc",
+		"bio-farm-advanced-upgrade",
+		"bio-refugium-hatchery-2",
+		"thermobaric-weaponry",
+		"angels-iron-smelting-3",
+		"atomic-bomb",
+		"bob-power-armor-3",
+		"bob-power-armor-4",
+		"bob-power-armor-5",
+		"extremely-advanced-rocket-payloads",
+		"angels-aluminium-smelting-2",]]
+		"compact-full-fission-weapons"
+	}, mode)
+	--technologyUnitAddBean.add_space_science_pack_to_technology_units({
+	--[["stack-inserter-research-15",
+		"stack-inserter-research-5",
+		"stack-inserter-research-1",
+		"advanced-osmium-smelting",
+		"bob-power-armor-4",
+		"bob-power-armor-5",
+		"extremely-advanced-rocket-payloads",
+		"advanced-magnesium-smelting",
+		"automation-8",
+		"angels-aluminium-smelting-2",
+		"angels-titanium-smelting-3",
+		"angels-iron-smelting-3",
+		"advanced-depleted-uranium-smelting-2",]]
+	--[["compact-full-fission-weapons"
+	}, mode)]]
+	--[[technologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
 		"production-science-pack",
 		"utility-science-pack",
 		"angels-tungsten-smelting-1",
@@ -756,83 +854,8 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		"extremely-advanced-rocket-payloads",
 		"angels-aluminium-smelting-2",
 		"advanced-depleted-uranium-smelting-2",
-	}, mode)
-	technologyUnitAddBean.addMilitarySciencePackToTechnologyUnits({
-		"physical-projectile-damage-5",
-		"bet-fuel-4",
-		"bet-fuel-recycling",
-		"bob-bullets",
-		"bob-ap-bullets",
-		"bob-electric-bullets",
-		"bob-he-bullets",
-		"bob-flame-bullets",
-		"bob-acid-bullets",
-		"bob-poison-bullets",
-		"bob-shotgun-ap-shells",
-		"bob-shotgun-electric-shells",
-		"bob-shotgun-explosive-shells",
-		"bob-shotgun-flame-shells",
-		"bob-shotgun-acid-shells",
-		"bob-shotgun-poison-shells",
-		"bob-shotgun-plasma-shells",
-		"bob-rocket",
-		"bob-plasma-rocket",
-		"bob-acid-rocket",
-		"bob-flame-rocket",
-		"bob-poison-rocket",
-		"bob-piercing-rocket",
-		"bob-electric-rocket",
-		"bob-explosive-rocket",
-		"atomic-bomb",
-		"personal-roboport-equipment",
-		"angels-advanced-chemistry-4",
-	}, mode)
-	technologyUnitAddBean.addUtilitySciencePackToTechnologyUnits({
-		"bob-shotgun-shells",
-		"logistics-4",
-		"stack-inserter-research-15",
-		"stack-inserter-research-5",
-		"stack-inserter-research-1",
-		"ober-nuclear-processing",
-		"bob-bullets",
-		"bob-ap-bullets",
-		"bob-electric-bullets",
-		"bob-he-bullets",
-		"bob-flame-bullets",
-		"bob-acid-bullets",
-		"bob-poison-bullets",
-		"bob-shotgun-ap-shells",
-		"bob-shotgun-electric-shells",
-		"bob-shotgun-explosive-shells",
-		"bob-shotgun-flame-shells",
-		"bob-shotgun-acid-shells",
-		"bob-shotgun-poison-shells",
-		"bob-shotgun-plasma-shells",
-		"bob-rocket",
-		"bob-plasma-rocket",
-		"bob-acid-rocket",
-		"bob-flame-rocket",
-		"bob-poison-rocket",
-		"bob-piercing-rocket",
-		"bob-electric-rocket",
-		"bob-explosive-rocket",
-		"OilBurning-5",
-		"OilBurning-4",
-		"garden-mutation",
-		"water-treatment-5",
-		"plastic-pc",
-		"bio-farm-advanced-upgrade",
-		"bio-refugium-hatchery-2",
-		"thermobaric-weaponry",
-		"angels-iron-smelting-3",
-		"atomic-bomb",
-		"bob-power-armor-3",
-		"bob-power-armor-4",
-		"bob-power-armor-5",
-		"extremely-advanced-rocket-payloads",
-		"angels-aluminium-smelting-2",
-	}, mode)
-	technologyUnitAddBean.addTokenBioToTechnologyUnits({
+	}, mode)]]
+	--[[technologyUnitAddBean.addTokenBioToTechnologyUnits({
 		"bio-nutrient-paste",
 		"bio-farm-2",
 		"angels-nitrogen-processing-2",
@@ -874,22 +897,6 @@ local function updateNotFoundEffectesAndSciencePacksNormal()
 		{ "advanced-research", "advanced-machining", "extremely-advanced-material-processing", "electronics-machine-3" },
 		mode
 	)
-	technologyUnitAddBean.addModuleCaseToTechnologyUnits({ "life-support-systems", "spaceship-command" }, mode)
-	technologyUnitAddBean.addModuleCircuitBoardToTechnologyUnits({ "life-support-systems", "spaceship-command" }, mode)
-	technologyUnitAddBean.addSpaceSciencePackToTechnologyUnits({
-		"stack-inserter-research-15",
-		"stack-inserter-research-5",
-		"stack-inserter-research-1",
-		"advanced-osmium-smelting",
-		"bob-power-armor-4",
-		"bob-power-armor-5",
-		"extremely-advanced-rocket-payloads",
-		"advanced-magnesium-smelting",
-		"automation-8",
-		"angels-aluminium-smelting-2",
-		"angels-titanium-smelting-3",
-		"angels-iron-smelting-3",
-		"advanced-depleted-uranium-smelting-2",
-	}, mode)
+	technologyUnitAddBean.addModuleCaseToTechnologyUnits({ "life-support-systems", "spaceship-command" }, mode)]]
 end
 updateNotFoundEffectesAndSciencePacksNormal()
