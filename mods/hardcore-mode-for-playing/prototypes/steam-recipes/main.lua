@@ -1,4 +1,4 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
 require("__automated-utility-protocol__.util.fuel-energy-util")
 local STEAM_MAX_OUTPUT_LEVEL_FOR_TEMPERATURE_BY_FUEL = 250
@@ -87,7 +87,8 @@ local function is_allow_prototype_to_apply_boiler_prototype(boiler_prototype, re
 	end
 	if boiler_data.is_fluid_energy_source then
 		return energy_source.fluid_box
-			and (energy_source.fluid_box.filter and energy_source.fluid_box.filter == recipe_result_prototype.name or not energy_source.fluid_box.filter)
+			and
+			(energy_source.fluid_box.filter and energy_source.fluid_box.filter == recipe_result_prototype.name or not energy_source.fluid_box.filter)
 			and recipe_result_prototype.type == "fluid"
 	end
 	return false
@@ -167,7 +168,7 @@ local function handle_one_fuel_data_water_amount(
 	local full_with_fuel_steam_recipe_name = steam_recipe.name
 	local full_with_fuel_steam_fluid = flib.copy_prototype(data.raw["fluid"]["steam"], full_with_fuel_steam_recipe_name)
 	data:extend({ full_with_fuel_steam_fluid })
-	techUtil.add_recipe_effect_to_technology(boiler_occured_technology, full_with_fuel_steam_recipe_name, mode)
+	tech_util.add_recipe_effect_to_technology(boiler_occured_technology, full_with_fuel_steam_recipe_name, mode)
 	return {
 		recipe_name = full_with_fuel_steam_recipe_name,
 		temperature = target_temperature,
