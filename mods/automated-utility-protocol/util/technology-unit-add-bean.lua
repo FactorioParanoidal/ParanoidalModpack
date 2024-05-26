@@ -1,12 +1,13 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
 local TechnologyUnitAddBean = {}
 TechnologyUnitAddBean.technology_datas = data.raw["technology"]
 local function add_science_packs_to_technology_units_by_names(technology_names, mode, unit_ingredient)
 	_table.each(technology_names, function(technology_name)
 		log(
-			" for technology_name " .. technology_name .. " add science pack " .. Utils.dump_to_console(unit_ingredient)
+			" for technology_name " ..
+			technology_name .. ', mode ' .. mode .. " add science pack " .. Utils.dump_to_console(unit_ingredient)
 		)
-		techUtil.add_science_packs_to_technology_units(
+		tech_util.add_science_packs_to_technology_units(
 			TechnologyUnitAddBean.technology_datas[technology_name],
 			{ unit_ingredient },
 			mode
@@ -40,6 +41,9 @@ end
 TechnologyUnitAddBean.add_utility_science_pack_to_technology_units = function(technology_names, mode)
 	add_science_packs_to_technology_units_by_names(technology_names, mode, { "utility-science-pack", 1 })
 end
+TechnologyUnitAddBean.add_space_science_pack_to_technology_units = function(technology_names, mode)
+	add_science_packs_to_technology_units_by_names(technology_names, mode, { "space-science-pack", 1 })
+end
 TechnologyUnitAddBean.add_token_bio_to_technology_units = function(technology_names, mode)
 	add_science_packs_to_technology_units_by_names(technology_names, mode, { "token-bio", 1 })
 end
@@ -54,8 +58,6 @@ TechnologyUnitAddBean.add_module_circuit_board_to_technology_units = function(te
 	add_science_packs_to_technology_units_by_names(technology_names, mode, { "module-circuit-board", 1 })
 end
 
-TechnologyUnitAddBean.add_space_logistic_science_pack_to_technology_units = function(technology_names, mode)
-	add_science_packs_to_technology_units_by_names(technology_names, mode, { "space-science-pack", 1 })
-end
+
 
 return TechnologyUnitAddBean
