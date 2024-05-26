@@ -1,11 +1,12 @@
-local techUtil = require("__automated-utility-protocol__.util.technology-util")
-local recipeUtil = require("__automated-utility-protocol__.util.recipe-util")
+local tech_util = require("__automated-utility-protocol__.util.technology-util")
+local recipe_util = require("__automated-utility-protocol__.util.recipe-util")
+
 local function create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
 	local resource_recipes = create_resource_recipes()
-	local active_technology_names = techUtil.get_all_active_technology_names(mode)
+	local active_technology_names = tech_util.get_all_active_technology_names(mode)
 	_table.each(resource_recipes, function(resource_recipe)
 		local resource_recipe_name = resource_recipe.name
-		local results = recipeUtil.get_all_recipe_results(resource_recipe_name, mode)
+		local results = recipe_util.get_all_recipe_results(resource_recipe_name, mode)
 		local recipe_result = results[1]
 		local recipe_result_name = recipe_result.name or recipe_result[1]
 		local recipe_result_data = data.raw[recipe_result.type][recipe_result_name]
@@ -22,25 +23,17 @@ local function create_resource_detected_technologies_and_add_it_to_normal_techno
 		})
 		_table.each(active_technology_names, function(active_technology_name)
 			local recipe_ingredients =
-				techUtil.get_all_recipe_ingredients_for_specified_technology(active_technology_name, mode)
+				tech_util.get_all_recipe_ingredients_for_specified_technology(active_technology_name, mode)
 			local active_technology = data.raw["technology"][active_technology_name]
 			if _table.contains_f_deep(recipe_ingredients, recipe_result) then
-				techUtil.add_recipe_effect_to_technology(active_technology, resource_recipe_name, mode)
-				techUtil.add_prerequisites_to_technology(active_technology, { resource_detected_technology.name }, mode)
-				--[[log(
-					"for technology "
-						.. active_technology_name
-						.. " mode "
-						.. mode
-						.. " added recipe effect "
-						.. resource_recipe_name
-						.. " added prerequisite "
-						.. resource_detected_technology.name
-				)]]
+				tech_util.add_recipe_effect_to_technology(active_technology, resource_recipe_name, mode)
+				tech_util.add_prerequisites_to_technology(active_technology, { resource_detected_technology.name }, mode)
 			end
 		end)
 	end)
 end
-_table.each(GAME_MODES, function(mode)
-	create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
-end)
+if settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-every-resource"].value then
+	_table.each(GAME_MODES, function(mode)
+		create_resource_detected_technologies_and_add_it_to_normal_technology_prerequisities_by_recipe_name(mode)
+	end)
+end

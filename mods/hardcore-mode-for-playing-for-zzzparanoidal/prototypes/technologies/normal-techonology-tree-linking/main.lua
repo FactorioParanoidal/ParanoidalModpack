@@ -1,4 +1,4 @@
-require("resource-detected-technology-creating")
+require("__hardcore-mode-for-playing__.prototypes.resource-detected-technology-creating.main")
 require("link-basic-technologies-to-regular-tree")
 require("__hardcore-mode-for-playing__.prototypes.fuel-category.fuel-category-prototype-updates")
 require("__hardcore-mode-for-playing__.prototypes.steam-processing.main")
