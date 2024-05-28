@@ -1,6 +1,6 @@
 local func_capture = require("__simhelper__.funccapture")
 
-data:extend{
+--[[data:extend{
   {
     type = "tips-and-tricks-item",
     name = "nixie-tubes",
@@ -102,3 +102,4 @@ data:extend{
     }
   },
 }
+]]
