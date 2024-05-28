@@ -8,11 +8,6 @@ local function remove_recipe_ingredients(mode)
 	if settings.startup["hardcore-mode-for-playing-use-separated-boilers-for-every-fuel"].value then
 		recipe_util.remove_recipe_ingredient("heat-exchanger", mode, {type = "item", name = "boiler-2"})
 	end
-	recipe_util.remove_recipe_ingredient(
-		"electric-mixing-furnace",
-		mode,
-		{type = "item", name = "electric-chemical-furnace"}
-	)
 
 	recipe_util.remove_recipe_ingredients(
 		"intelligent-io",
