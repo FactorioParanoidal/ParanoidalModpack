@@ -2,13 +2,13 @@ local entity = data.raw["underground-belt"]["green-underground-belt"]
 if entity ~= nil then --bob's logistics is installed
 	local entity = data.raw["underground-belt"]["green-underground-belt"]
 	entity.max_distance = 250
-	table.insert(entity.flags, "not-deconstructable")
+	--table.insert(entity.flags, "not-deconstructable")   --drd
 end
 
 entity = data.raw["underground-belt"]["purple-underground-belt"]
 if entity ~= nil then --bob's logistics is installed
 	entity.max_distance = 250
-	table.insert(entity.flags, "not-deconstructable")
+	--table.insert(entity.flags, "not-deconstructable")   --drd
 end
 
 entity = data.raw["pipe-to-ground"]["nitinol-pipe-to-ground"]
