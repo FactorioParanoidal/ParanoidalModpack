@@ -1410,5 +1410,7 @@ bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-to
 bobmods.lib.tech.add_prerequisite("electronics-machine-3", "turbo-inserter")
 
 --добавление табличек holographic_signs в технологию (AKMF)
-data.raw["recipe"]["hs_holo_sign"].enabled = "false"
-bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
+if data.raw.recipe["hs_holo_sign"] then
+	data.raw["recipe"]["hs_holo_sign"].enabled = "false"
+	bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
+end
