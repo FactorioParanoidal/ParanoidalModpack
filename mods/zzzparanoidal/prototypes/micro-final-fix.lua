@@ -1411,6 +1411,6 @@ bobmods.lib.tech.add_prerequisite("electronics-machine-3", "turbo-inserter")
 
 --добавление табличек holographic_signs в технологию (AKMF)
 if data.raw.recipe["hs_holo_sign"] then
-	data.raw["recipe"]["hs_holo_sign"].enabled = "false"
+	data.raw["recipe"]["hs_holo_sign"].enabled = false
 	bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
 end
