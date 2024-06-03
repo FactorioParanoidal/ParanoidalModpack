@@ -1168,8 +1168,10 @@ bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "intermediate-structur
 
 --Перенос Каркаса 3, примитивного Титана и Кобальта в Металлургию 3 (AKMF https://discord.com/channels/569536773701500928/1196117081691795496)
 bobmods.lib.tech.remove_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
+bobmods.lib.tech.remove_recipe_unlock("angels-cobalt-steel-smelting-1", "cobalt-steel-alloy-x")
 bobmods.lib.tech.remove_recipe_unlock("angels-titanium-smelting-1", "titanium-electrolysis-x")
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "cobalat-electrolysis-x")
+bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "cobalt-steel-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "titanium-electrolysis-x")
 bobmods.lib.tech.remove_recipe_unlock("titanium-processing", "advanced-structure-components")
 bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-components")
@@ -1414,3 +1416,8 @@ if data.raw.recipe["hs_holo_sign"] then
 	data.raw["recipe"]["hs_holo_sign"].enabled = false
 	bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
 end
+
+--Убрана левая печь из электо печи для сплавов (AKMF)
+bobmods.lib.recipe.remove_ingredient("electric-mixing-furnace", "electric-chemical-furnace")
+KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"electric-furnace", 1})
+
