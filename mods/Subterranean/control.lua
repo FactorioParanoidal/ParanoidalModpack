@@ -1,3 +1,4 @@
+--[[
 function Set(list)
 	local set = {}
 	for _, l in ipairs(list) do
@@ -275,3 +276,4 @@ function bobsLogisticsOnMine(event)
 
 	insert_items(game.players[event.player_index], respectiveBelts, calc)
 end
+]]-- --drd
