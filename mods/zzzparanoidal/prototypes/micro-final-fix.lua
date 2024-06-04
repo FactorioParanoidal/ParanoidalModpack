@@ -1411,6 +1411,13 @@ bobmods.lib.tech.add_recipe_unlock("nitinol-processing", "angels-nitinol-pipe-to
 --Для сборщика электроники нужны фиол. манипуляторы (AKMF)
 bobmods.lib.tech.add_prerequisite("electronics-machine-3", "turbo-inserter")
 
+--добавление табличек holographic_signs в технологию (AKMF)
+if data.raw.recipe["hs_holo_sign"] then
+	data.raw["recipe"]["hs_holo_sign"].enabled = false
+	bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
+end
+
 --Убрана левая печь из электо печи для сплавов (AKMF)
 bobmods.lib.recipe.remove_ingredient("electric-mixing-furnace", "electric-chemical-furnace")
 KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"electric-furnace", 1})
+
