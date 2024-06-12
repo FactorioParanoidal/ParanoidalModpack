@@ -1421,3 +1421,6 @@ end
 bobmods.lib.recipe.remove_ingredient("electric-mixing-furnace", "electric-chemical-furnace")
 KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"electric-furnace", 1})
 
+--Увеличение цены снайпер турели
+bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 }  })
+
