@@ -126,9 +126,9 @@ script.on_event(defines.events.on_built_entity, function(event)
 	myVariable = myVariable + 1
    if myVariable <= 5 then
 	 for _, player in pairs(game.players) do
-       if player.gui.top.mod_gui_top_frame.children[1].random then
-        player.gui.top.mod_gui_top_frame.children[1].random.destroy()
-       end
-	  end
+           if player.gui.top.mod_gui_top_frame and player.gui.top.mod_gui_top_frame.children[1] and player.gui.top.mod_gui_top_frame.children[1].random then
+             player.gui.top.mod_gui_top_frame.children[1].random.destroy()
+           end
+	end
     end
 end)
