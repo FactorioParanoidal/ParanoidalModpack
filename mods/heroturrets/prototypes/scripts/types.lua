@@ -383,6 +383,12 @@ local local_create_turret = function(turret,rank,rank_string,mod)
                         end
                     end
                 end
+                if entity.attack_parameters.ammo_type.action.range ~= nil then --drd
+                    entity.attack_parameters.ammo_type.action.range  = entity.attack_parameters.ammo_type.action.range  * mod 
+                end 
+                if entity.attack_parameters.ammo_type.action.width ~= nil then 
+                    entity.attack_parameters.ammo_type.action.width  = entity.attack_parameters.ammo_type.action.width  * mod 
+                end --drd
             elseif entity.attack_parameters.ammo_category ~= nil and entity.attack_parameters.range ~= nil then
                 if cannon_ammo_ranges[entity.attack_parameters.ammo_category] == nil then
                     cannon_ammo_ranges[entity.attack_parameters.ammo_category] = entity.attack_parameters.range
