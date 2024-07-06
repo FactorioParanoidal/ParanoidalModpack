@@ -58,4 +58,7 @@ function technology_research_finished(e)
         end)
         global.basic_item_inserted = true
     end
+    local all_available_entity_items = {}
+    handle_researched_technology(researched_technology, all_available_entity_items)
+    enable_player_entity_on_all_surfaces(game.players[1].force, all_available_entity_items)
 end

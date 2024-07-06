@@ -17,7 +17,7 @@ local function get_localised_name_from_resource(resource)
     end
     return result
 end
-function research_technologiy_for_resource_if_exists_not_researched(resource, force, prefix, suffix)
+function research_technology_for_resource_if_exists_not_researched(resource, force, prefix, suffix)
     local resource_name = resource.name
     local resource_technology_name = get_resource_detected_technology_name(resource_name)
     log("resource_technology_name " .. resource_technology_name)
@@ -36,7 +36,7 @@ end
 function research_technologies_for_resources_if_exists_not_researched(found_resources, force, prefix, suffix)
     if settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-every-resource"].value then
         _table.each(found_resources, function(found_resource)
-            research_technologiy_for_resource_if_exists_not_researched(
+            research_technology_for_resource_if_exists_not_researched(
                 found_resource, force, prefix, suffix
             )
         end)
