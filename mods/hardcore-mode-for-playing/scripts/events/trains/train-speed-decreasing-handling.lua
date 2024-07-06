@@ -54,7 +54,8 @@ function TrainSpeedDecreasingHandling:process_train(train, force_holder)
     local coefficient_from_train_length = train_length_in_tiles / train_length_in_tiles_limit
 
     local preserved_rail_segment_length =
-        train_length_in_tiles * train_length_multiplier_for_braking + coefficient_from_train_speed +
+    -- длину состава не учитываем вообще(как слагаемое ), только скорость и длину состава как балансирующий множитель к базовой длине состава (5 вагонов)
+    --[[ train_length_in_tiles * train_length_multiplier_for_braking +]] coefficient_from_train_speed +
         coefficient_from_train_length
     --  local shift_by_train = math.floor((preserved_rail_segment_length / 10) + 0.5)
     local start_path_index = train_path.current -- shift_by_train
@@ -214,7 +215,7 @@ function TrainSpeedDecreasingHandling:evaluate_acceleration_braking_coefficient(
     elseif abs_speed > 0.3 then
         factor = 0.075 * factor
     else
-        factor = 6 * factor
+        factor = 2 * factor
     end
     factor = 0.3 * factor
     return factor
