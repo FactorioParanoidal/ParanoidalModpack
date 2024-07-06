@@ -2,19 +2,19 @@ require("__automated-utility-protocol__.util.main")
 
 local ENTITY_TYPES_FOR_DISABLING = {
     "assembling-machine", --сборочные автоматы всех типов
-    "accumulator",     -- аккумуляторы всех типов
-    "burner-generator", --твердотопливные генераторы всех типов
-    "generator",       -- паровые генераторы всех типов
-    "boiler",          -- кипятильники всех типов
+    "accumulator",        -- аккумуляторы всех типов
+    "burner-generator",   --твердотопливные генераторы всех типов
+    "generator",          -- паровые генераторы всех типов
+    "boiler",             -- кипятильники всех типов
     "beam",
-    "beacon",          -- радио трансляторы и маяки
-    "furnace",         -- печки всех типов
-    "lab",             -- лаборатории всех типов
-    "solar-panel",     --солнечные панели
-    "reactor",         -- ядерные реакторы всех типов
-    "roboport",        --робопорты, летать только в пределах заводского здания
+    "beacon",             -- радио трансляторы и маяки
+    "furnace",            -- печки всех типов
+    "lab",                -- лаборатории всех типов
+    "solar-panel",        --солнечные панели
+    "reactor",            -- ядерные реакторы всех типов
+    "roboport",           --робопорты, летать только в пределах заводского здания
     "logistic-container", -- читы для наувиса
-    "infinity-container" -- читы для наувиса
+    "infinity-container"  -- читы для наувиса
 }
 --from mod "research evolution_factor"
 local science_packet_cost = {
@@ -126,16 +126,13 @@ local function map_ingredient_table_to_ingredient_array(research_unit_ingredient
     return result
 end
 
-local function disable_entity(entity)
-    entity.active = false
-end
 
 local function disable_entity_on_surface_by_type(surface_name, entity_type, force)
     local entities = game.surfaces[surface_name].find_entities_filtered({ type = entity_type, force = force })
     _table.each(entities, disable_entity)
 end
 
-local function disable_entity_on_all_surfases_by_type(entity_type, force)
+local function disable_entity_on_all_surfaces_by_type(entity_type, force)
     _table.each(
         SURFACE_NAMES_FOR_ENTITY_DISABLING,
         function(surface_name)
@@ -155,7 +152,7 @@ local function disable_player_entities()
     _table.each(
         disabling_entity_type_names,
         function(entity_type)
-            disable_entity_on_all_surfases_by_type(entity_type, player.force)
+            disable_entity_on_all_surfaces_by_type(entity_type, player.force)
         end
     )
     log("production entities disabled on surfaces")
@@ -218,10 +215,10 @@ local function reset_technology_ingredients_if_technology_has_unresearched_prere
             add_ingredients_to(result, ingredients)
         end
     end
-    if has_unresearched_in_the_path then
+    if has_unresearched_in_the_path and not string.find(technology.name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX, 1, true) then
         local mapped_ingredient_array =
             map_ingredient_table_to_ingredient_array(technology.research_unit_ingredients, technology
-            .research_unit_count)
+                .research_unit_count)
         technology.researched = false
         add_ingredients_to(result, mapped_ingredient_array)
     end
@@ -230,7 +227,7 @@ end
 
 local returned_ingredients = {}
 
-local function handle_one_reasearched_technology(technology)
+local function handle_one_researched_technology(technology)
     local ingredients = reset_technology_ingredients_if_technology_has_unresearched_prerequisite(technology)
     if ingredients and _table.size(ingredients) > 0 then
         add_ingredients_to(returned_ingredients, ingredients)
@@ -240,7 +237,7 @@ end
 local function return_ingredient_to_player(ingredient_value, ingredient_name, player)
     local ingredient_count = math.floor(ingredient_value * (1 - TAX_RATE))
     log(
-        'after tax_rate descrease has count of ingredient called "' ..
+        'after tax_rate decrease has count of ingredient called "' ..
         ingredient_name .. '"  is ' .. tostring(ingredient_count)
     )
     if ingredient_count > 0 then
@@ -278,7 +275,7 @@ local function reset_technologies_with_unresearched_prerequisites_in_the_path()
     log("END all researched technologies")
     local all_returned_ingredients = {}
     repeat
-        _table.each(researched_technologies, handle_one_reasearched_technology)
+        _table.each(researched_technologies, handle_one_researched_technology)
         add_ingredients_to(all_returned_ingredients, returned_ingredients)
         returned_ingredients = {}
     until #returned_ingredients == 0
@@ -294,6 +291,8 @@ local function research_basic_technologies_if_need()
             if not technology.enabled then
                 return
             end
+            -- скрываем ресурсные технологии из списка доступных к исследованию, они появятся по событию.
+            if string.find(technology.name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX, 1, true) then technology.enabled = false end
             if
                 (not technology.research_unit_ingredients or _table.size(technology.research_unit_ingredients) == 0) and
                 (settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-every-resource"].value and
@@ -304,6 +303,24 @@ local function research_basic_technologies_if_need()
             end
         end
     )
+end
+local all_available_entity_items = {}
+
+local function disable_entities_for_disabled_technologies()
+    local player = get_player()
+    local force = player.force
+    local researched_technologies = _table.filter(force.technologies, filter_only_research_technologies)
+
+    _table.each(researched_technologies,
+        function(technology) handle_researched_technology(technology, all_available_entity_items) end)
+
+    if game.active_mods["factorissimo-2"] or game.active_mods["factorissimo-2-notnotmelon"] then
+        table.insert(all_available_entity_items, "factory-1-raw")
+    end
+    table.insert(all_available_entity_items, "gun-turret")
+    -- разрешаем самому себе передвигаться
+    table.insert(all_available_entity_items, "character")
+    disable_player_entity_on_all_surfaces(force, all_available_entity_items)
 end
 function disable_on_start_if_need()
     if loaded then
@@ -325,6 +342,7 @@ function disable_on_start_if_need()
     if settings.global["hardcore-mode-for-playing-enable-technology-research-reevaluting"].value then
         reset_technologies_with_unresearched_prerequisites_in_the_path()
     end
+    disable_entities_for_disabled_technologies()
     reset_evolution_factor_to_researched_technologies()
     loaded = true
 end
@@ -335,11 +353,16 @@ function on_built_disabling_event(e)
         return
     end
     local created_entity_type = created_entity.type
-    --	log("created_entity " .. created_entity_type .. " name " .. created_entity.name)
+    local created_entity_name = created_entity.name
+    --    log("created_entity " .. created_entity_type .. " name " .. created_entity.name)
+    --    log("all_available_entity_items " .. Utils.dump_to_console(all_available_entity_items))
     created_entity_surface_name = created_entity.surface.name
     local is_type_for_disabling =
         _table.contains(ENTITY_TYPES_FOR_DISABLING, created_entity_type) and
         _table.contains(SURFACE_NAMES_FOR_ENTITY_DISABLING, created_entity_surface_name) or
         created_entity_type == "solar-panel" -- отключаем солнечные панели в принципе, это чит.
-    created_entity.active = not is_type_for_disabling
+        or not _table.contains(all_available_entity_items, created_entity_name)
+    if is_type_for_disabling then
+        disable_entity(created_entity)
+    end
 end
