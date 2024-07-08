@@ -1279,7 +1279,10 @@ data.raw.technology["angels-stone-smelting-4"].unit.count = 200 --меняем �
 data.raw.technology["angels-stone-smelting-4"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --меняем цену на цемент 4
 bobmods.lib.tech.add_prerequisite ("production-science-pack", "angels-stone-smelting-4") -- производственн пакеты под цемент 4
 bobmods.lib.tech.add_prerequisite ("bi-tech-garden-3", "production-science-pack") --огромные сады под производственн пакеты
-
+--08.07.24
+bobmods.lib.tech.add_prerequisite ("angels-metallurgy-4", "advanced-electronics-2")  -- Промышленная металлургия 4 под Продвинутую электронику 2 
+bobmods.lib.tech.add_prerequisite ("strand-casting-1", "angels-stone-smelting-1")  -- Машины непрерывного литья 1 под кирпичи 1
+bobmods.lib.tech.add_prerequisite ("angels-brass-smelting-1", "ore-floatation")  -- Латунь под Гидропромывку 1
 
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp") --лампы
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp") --лампы
