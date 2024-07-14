@@ -20,11 +20,14 @@ local function reset_basic_technology_prerequisites_to_regular_tree(mode)
         },
         mode
     )
-    tech_util.reset_prerequisites_for_technology(
-        technologies["water-pumpjack-1"],
-        { "basic-automation", "basic-metal-processing", "angels-copper-smelting-1", "electricity", "coal-ore-smelting" },
-        mode
-    )
+    if mods["P-U-M-P-S"] then
+        tech_util.reset_prerequisites_for_technology(
+            technologies["water-pumpjack-1"],
+            { "basic-automation", "basic-metal-processing", "angels-copper-smelting-1", "electricity",
+                "coal-ore-smelting" },
+            mode
+        )
+    end
     tech_util.reset_prerequisites_for_technology(
         technologies["basic-logistics"],
         {
@@ -518,12 +521,15 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
         { "bob-steam-engine-3", "angels-metallurgy-3", "flammables", "slag-processing-1" },
         mode
     )
-    tech_util.add_prerequisites_to_technology(technologies["offshore-pump-3"], { "titanium-processing" }, mode)
-    tech_util.add_prerequisites_to_technology(
-        technologies["offshore-pump-4"],
-        { "nitinol-processing", "advanced-logistic-science-pack" },
-        mode
-    )
+    if mods["P-U-M-P-S"] then
+        tech_util.add_prerequisites_to_technology(technologies["offshore-pump-3"], { "titanium-processing" }, mode)
+
+        tech_util.add_prerequisites_to_technology(
+            technologies["offshore-pump-4"],
+            { "nitinol-processing", "advanced-logistic-science-pack" },
+            mode
+        )
+    end
     tech_util.add_prerequisites_to_technology(
         technologies["angels-steel-smelting-2"],
         { "angels-manganese-smelting-2" },
@@ -1410,7 +1416,9 @@ local function add_recipe_to_technology_effects(mode)
         tech_util.add_recipe_effect_to_technology(technologies["steam-power"], "steam-mining-drill", mode)
     end
     tech_util.add_recipe_effect_to_technology(technologies["electricity"], "burner-turbine", mode)
-    tech_util.add_recipe_effect_to_technology(technologies["basic-fluid-handling"], "offshore-pump-0", mode)
+    if mods["P-U-M-P-S"] then
+        tech_util.add_recipe_effect_to_technology(technologies["basic-fluid-handling"], "offshore-pump-0", mode)
+    end
     tech_util.add_recipe_effect_to_technology(technologies["ore-crushing"], "iron-plate", mode)
     tech_util.add_recipe_effect_to_technology(technologies["ore-crushing"], "copper-plate", mode)
     tech_util.add_recipe_effect_to_technology(technologies["ore-crushing"], "lead-plate", mode)

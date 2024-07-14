@@ -85,8 +85,12 @@ data:extend(
     }
 )
 
-local salvaged_offshore_pump_0_recipe = copy_salvaged_recipe("offshore-pump-0", "salvaged-offshore-pump-0")
-
+local salvaged_offshore_pump_0_recipe
+if mods["P-U-M-P-S"] then
+    salvaged_offshore_pump_0_recipe = copy_salvaged_recipe("offshore-pump-0", "salvaged-offshore-pump-0")
+else
+    salvaged_offshore_pump_0_recipe = copy_salvaged_recipe("offshore-pump", "salvaged-offshore-pump-0")
+end
 salvaged_offshore_pump_0_recipe.ingredients = {
     {
         type = "item",
@@ -188,8 +192,8 @@ local basic_coal_production_wood_recipe = {
             amount = 16
         }
     },
-    subgroup = "bio-bio-farm-fluid-1",
-    category = "biofarm-mod-greenhouse",
+    category = "biofarm-mod-farm",
+    subgroup = "bio-bio-farm-fluid-3",
     energy_required = 10,
     enabled = false
 }
