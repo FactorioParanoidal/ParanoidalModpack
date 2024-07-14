@@ -18,6 +18,6 @@
 		"hardcore-mode-for-playing >= 1.0.0",
 		"make-moded-technology-tree-mods-protocol",
 		"!hardcore-mode-for-playing-for-vanilla",
-		"P-U-M-P-S"
+		"?P-U-M-P-S"
 	]
 }
