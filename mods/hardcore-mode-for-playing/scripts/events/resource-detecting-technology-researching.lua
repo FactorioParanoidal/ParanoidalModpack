@@ -20,9 +20,11 @@ end
 function research_technology_for_resource_if_exists_not_researched(resource, force, prefix, suffix)
     local resource_name = resource.name
     local resource_technology_name = get_resource_detected_technology_name(resource_name)
-    log("resource_technology_name " .. resource_technology_name)
+    -- log("resource_technology_name " .. resource_technology_name)
     if force.technologies[resource_technology_name] and not force.technologies[resource_technology_name].researched then
-        force.technologies[resource_technology_name].researched = true
+        local technology = force.technologies[resource_technology_name]
+        technology.researched = true
+        technology.enabled = true
         local resource_localised_name = get_localised_name_from_resource(resource)
         init_localised_name_translate_with_custom_data(force.players[1], resource_localised_name, prefix, suffix,
             function(translated_data)
