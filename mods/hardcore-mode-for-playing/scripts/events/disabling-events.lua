@@ -295,8 +295,6 @@ local function research_basic_technologies_if_need()
             if not technology.enabled then
                 return
             end
-            -- скрываем ресурсные технологии из списка доступных к исследованию, они появятся по событию.
-            if string.find(technology.name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX, 1, true) then technology.enabled = false end
             if
                 (not technology.research_unit_ingredients or _table.size(technology.research_unit_ingredients) == 0) and
                 (settings.startup["hardcore-mode-for-playing-use-separated-technologies-for-every-resource"].value and
