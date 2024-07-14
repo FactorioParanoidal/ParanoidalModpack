@@ -18,6 +18,12 @@ function handle_researched_technology(researched_technology, all_available_entit
             end
         )
     end)
+    if game.active_mods["factorissimo-2"] or game.active_mods["factorissimo-2-notnotmelon"] then
+        table.insert(all_available_entity_items, "factory-1-raw")
+    end
+    table.insert(all_available_entity_items, "gun-turret")
+    -- разрешаем самому себе передвигаться
+    table.insert(all_available_entity_items, "character")
 end
 
 function disable_player_entity_on_all_surfaces(force, all_available_entity_items)
