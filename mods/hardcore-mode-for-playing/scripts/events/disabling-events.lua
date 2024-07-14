@@ -288,6 +288,10 @@ local function research_basic_technologies_if_need()
     _table.each(
         get_player().force.technologies,
         function(technology)
+            -- скрываем ресурсные технологии из списка доступных к исследованию, они появятся по событию.
+            if string.find(technology.name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX, 1, true) then
+                technology.enabled = technology.researched
+            end
             if not technology.enabled then
                 return
             end
