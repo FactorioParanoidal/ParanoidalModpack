@@ -316,12 +316,6 @@ local function disable_entities_for_disabled_technologies()
     _table.each(researched_technologies,
         function(technology) handle_researched_technology(technology, all_available_entity_items) end)
 
-    if game.active_mods["factorissimo-2"] or game.active_mods["factorissimo-2-notnotmelon"] then
-        table.insert(all_available_entity_items, "factory-1-raw")
-    end
-    table.insert(all_available_entity_items, "gun-turret")
-    -- разрешаем самому себе передвигаться
-    table.insert(all_available_entity_items, "character")
     disable_player_entity_on_all_surfaces(force, all_available_entity_items)
 end
 function disable_on_start_if_need()
