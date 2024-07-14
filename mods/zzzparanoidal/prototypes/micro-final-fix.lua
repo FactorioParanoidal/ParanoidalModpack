@@ -18,13 +18,15 @@ local concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-concrete"])
 concrete_brick_fix.name = "concrete-brick-fix"
 concrete_brick_fix.minable = { mining_time = 0.1, result = "concrete-brick" }
 concrete_brick_fix.layer = "225"
-concrete_brick_fix.variants.material_background =
-{
+concrete_brick_fix.variants.material_background = {
     picture = "__zzzparanoidal__/graphics/grid/concrete.png",
     count = 8,
-    hr_version = { picture = "__zzzparanoidal__/graphics/grid/hr-concrete.png", count = 8, scale = 0.5 }
+    hr_version = { picture = "__zzzparanoidal__/graphics/grid/hr-concrete.png", count = 8, scale = 0.5 },
+    picture = "__zzzparanoidal__/graphics/grid/concrete.png",
+    count = 8,
+    hr_version = { picture = "__zzzparanoidal__/graphics/grid/hr-concrete.png", count = 8, scale = 0.5 },
 }
-data:extend { concrete_brick_fix }
+data:extend({ concrete_brick_fix })
 data.raw["item"]["concrete-brick"].place_as_tile.result = "concrete-brick-fix"
 -------------------------------------------------------------------------------------------------
 --замена tile для reinforced-concrete-brick
@@ -32,40 +34,40 @@ local reinforced_concrete_brick_fix = table.deepcopy(data.raw["tile"]["refined-c
 reinforced_concrete_brick_fix.name = "reinforced-concrete-brick-fix"
 reinforced_concrete_brick_fix.minable = { mining_time = 0.1, result = "reinforced-concrete-brick" }
 reinforced_concrete_brick_fix.layer = "230"
-reinforced_concrete_brick_fix.variants.material_background =
-{
+reinforced_concrete_brick_fix.variants.material_background = {
     picture = "__zzzparanoidal__/graphics/smooth/concrete.png",
     count = 8,
-    hr_version = { picture = "__zzzparanoidal__/graphics/smooth/hr-concrete.png", count = 8, scale = 0.5 }
+    hr_version = { picture = "__zzzparanoidal__/graphics/smooth/hr-concrete.png", count = 8, scale = 0.5 },
+    picture = "__zzzparanoidal__/graphics/smooth/concrete.png",
+    count = 8,
+    hr_version = { picture = "__zzzparanoidal__/graphics/smooth/hr-concrete.png", count = 8, scale = 0.5 },
 }
-data:extend { reinforced_concrete_brick_fix }
+data:extend({ reinforced_concrete_brick_fix })
 data.raw["item"]["reinforced-concrete-brick"].place_as_tile.result = "reinforced-concrete-brick-fix"
 -------------------------------------------------------------------------------------------------
 --подмена графики стандартного кирпича
 if settings.startup["stone-path-concrete"].value then
     local stone_variants = util.table.deepcopy(data.raw.tile["refined-concrete"].variants)
     stone_variants.material_background.picture = "__zzzparanoidal__/graphics/patches/concrete.png"
-    stone_variants.material_background.hr_version = { picture = "__zzzparanoidal__/graphics/patches/hr-concrete.png", count = 8, scale = 0.5 }
+    stone_variants.material_background.hr_version =
+    { picture = "__zzzparanoidal__/graphics/patches/hr-concrete.png", count = 8, scale = 0.5 }
+    data.raw.tile["stone-path"].variants = stone_variants
+    local stone_variants = util.table.deepcopy(data.raw.tile["refined-concrete"].variants)
+    stone_variants.material_background.picture = "__zzzparanoidal__/graphics/patches/concrete.png"
+    stone_variants.material_background.hr_version =
+    { picture = "__zzzparanoidal__/graphics/patches/hr-concrete.png", count = 8, scale = 0.5 }
     data.raw.tile["stone-path"].variants = stone_variants
 end
 -------------------------------------------------------------------------------------------------
 --замена текстуры для "бетон с разметкой опасности"
 data.raw.tile["hazard-concrete-left"].variants.material_background.picture =
 "__zzzparanoidal__/graphics/grid/hazard-concrete-left.png"
-data.raw.tile["hazard-concrete-left"].variants.material_background.hr_version = {
-    picture =
-    "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png",
-    count = 8,
-    scale = 0.5
-}
+data.raw.tile["hazard-concrete-left"].variants.material_background.hr_version =
+{ picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png", count = 8, scale = 0.5 }
 data.raw.tile["hazard-concrete-right"].variants.material_background.picture =
 "__zzzparanoidal__/graphics/grid/hazard-concrete-right.png"
-data.raw.tile["hazard-concrete-right"].variants.material_background.hr_version = {
-    picture =
-    "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png",
-    count = 8,
-    scale = 0.5
-}
+data.raw.tile["hazard-concrete-right"].variants.material_background.hr_version =
+{ picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png", count = 8, scale = 0.5 }
 -------------------------------------------------------------------------------------------------
 --отбираем возможность размещения у "титаново-бетонный кирпич", ибо нету графики для него
 data.raw.item["titanium-concrete-brick"].place_as_tile = nil
@@ -99,7 +101,6 @@ bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-1", "logistic-science-p
 bobmods.lib.tech.add_prerequisite("chemical-processing-2", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite("angels-ironworks-1", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-2", "logistic-science-pack")
-bobmods.lib.tech.add_prerequisite("adv-seed-extraction", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite("nanobots-cliff", "logistic-science-pack")
 --синие банки
 bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-2", "chemical-science-pack")
@@ -108,7 +109,6 @@ bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "chemical-science-pack"
 bobmods.lib.tech.add_prerequisite("bio-refugium-hatchery-2", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite("worker-robots-speed-1", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite("Rubber-Processing", "chemical-science-pack")
-bobmods.lib.tech.add_prerequisite("worker-robots-battery-1", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite("bet-tech", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite("roboport-interface", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite("bio-farm-3", "chemical-science-pack")
@@ -1060,24 +1060,61 @@ data.raw.technology["electric-pole-3"].icon_size = 256
 data.raw.technology["electric-pole-4"].icon = "__base__/graphics/technology/electric-energy-distribution-1.png"
 data.raw.technology["electric-pole-4"].icon_size = 256
 
-data.raw.technology["angels-advanced-gas-processing"].icons = { { icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2 } }
+data.raw.technology["angels-advanced-gas-processing"].icons = {
+    {
+        icon =
+        "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
+        icon_size = 256,
+        icon_mipmaps = 2,
+    },
+    {
+        icon =
+        "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
+        icon_size = 256,
+        icon_mipmaps = 2,
+    },
+}
 
 if data.raw.technology["angels-advanced-gas-processing-2"] then
-    data.raw.technology["angels-advanced-gas-processing-2"].icons = { { icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png", icon_size = 256, icon_mipmaps = 2 } }
+    data.raw.technology["angels-advanced-gas-processing-2"].icons = {
+        {
+            icon =
+            "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
+            icon_size = 256,
+            icon_mipmaps = 2,
+        },
+    }
+    data.raw.technology["angels-advanced-gas-processing-2"].icons = {
+        {
+            icon =
+            "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
+            icon_size = 256,
+            icon_mipmaps = 2,
+        },
+    }
 end
 
 data.raw.technology["advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["advanced-ore-refining-5"].icon_mipmaps = 4
 
-data.raw.technology["Space-Lab-Research-1"].icons = { { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } }       --AKMF
-data.raw.technology["Space-Lab-Research-21"].icons = { { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } }      --AKMF
-data.raw.technology["Space-Lab-Research-41"].icons = { { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } }      --AKMF
-data.raw.technology["Space-Lab-Research-61"].icons = { { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } }      --AKMF
+data.raw.technology["Space-Lab-Research-1"].icons =
+{ { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
 
-data.raw.technology["stack-inserter-research-1"].icons = { { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } }  --AKMF
-data.raw.technology["stack-inserter-research-5"].icons = { { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } }  --AKMF
-data.raw.technology["stack-inserter-research-10"].icons = { { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
-data.raw.technology["stack-inserter-research-15"].icons = { { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["Space-Lab-Research-21"].icons =
+{ { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["Space-Lab-Research-41"].icons =
+{ { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["Space-Lab-Research-61"].icons =
+{ { icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+
+data.raw.technology["stack-inserter-research-1"].icons =
+{ { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["stack-inserter-research-5"].icons =
+{ { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["stack-inserter-research-10"].icons =
+{ { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
+data.raw.technology["stack-inserter-research-15"].icons =
+{ { icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4 } } --AKMF
 --###############################################################################################
 --будет вшито в биоиндустрию
 --дробление камня в ангеловских дробилках руды
@@ -1088,24 +1125,29 @@ data.raw["assembling-machine"]["ore-crusher-3"].crafting_categories = { "ore-ref
 data.raw["assembling-machine"]["ore-crusher-4"].crafting_categories = { "ore-refining-t1", "biofarm-mod-crushing" }
 --коксование в доменке
 data.raw["assembling-machine"]["blast-furnace"].crafting_categories = { "blast-smelting", "biofarm-mod-smelting" }
-data.raw["assembling-machine"]["blast-furnace-2"].crafting_categories = { "blast-smelting", "blast-smelting-2",
-    "biofarm-mod-smelting" }
-data.raw["assembling-machine"]["blast-furnace-3"].crafting_categories = { "blast-smelting", "blast-smelting-2",
-    "blast-smelting-3", "biofarm-mod-smelting" }
-data.raw["assembling-machine"]["blast-furnace-4"].crafting_categories = { "blast-smelting", "blast-smelting-2",
-    "blast-smelting-3", "blast-smelting-4", "biofarm-mod-smelting" }
+data.raw["assembling-machine"]["blast-furnace-2"].crafting_categories =
+{ "blast-smelting", "blast-smelting-2", "biofarm-mod-smelting" }
+
+data.raw["assembling-machine"]["blast-furnace-3"].crafting_categories =
+{ "blast-smelting", "blast-smelting-2", "blast-smelting-3", "biofarm-mod-smelting" }
+data.raw["assembling-machine"]["blast-furnace-4"].crafting_categories =
+{ "blast-smelting", "blast-smelting-2", "blast-smelting-3", "blast-smelting-4", "biofarm-mod-smelting" }
 
 ----------------SEO fix----------------
 --убираем неправильные зависимости
-bobmods.lib.tech.remove_prerequisite("cement-mixture-1", "concrete")        --бетон
 bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
 bobmods.lib.tech.remove_prerequisite("plastic-1", "plastics")               --пластик
-
+bobmods.lib.tech.remove_prerequisite("plastic-1", "plastics")               --пластик
 
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite("concrete", "angels-stone-smelting-2")                     --бетон
 bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction")    --деревянный ящик
+bobmods.lib.tech.add_prerequisite("concrete", "angels-stone-smelting-2")                     --бетон
+bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction")    --деревянный ящик
 bobmods.lib.tech.add_prerequisite("angels-steel-smelting-1", "angels-nitrogen-processing-1") --сталь
+bobmods.lib.tech.add_prerequisite("angels-steel-smelting-1", "angels-flare-stack")           --сталь
+bobmods.lib.tech.add_prerequisite("angels-invar-smelting-1", "zinc-processing")              --сталь
+bobmods.lib.tech.add_prerequisite("plastics", "plastic-1")                                   --пластик
 bobmods.lib.tech.add_prerequisite("angels-steel-smelting-1", "angels-flare-stack")           --сталь
 bobmods.lib.tech.add_prerequisite("angels-invar-smelting-1", "zinc-processing")              --сталь
 bobmods.lib.tech.add_prerequisite("plastics", "plastic-1")                                   --пластик
@@ -1117,12 +1159,15 @@ bobmods.lib.recipe.add_ingredient("bi-bio-accumulator", { "accumulator", 30 })
 bobmods.lib.tech.remove_prerequisite("advanced-magnesium-smelting", "powder-metallurgy-1") --удаляем лишнюю
 bobmods.lib.tech.add_prerequisite("advanced-magnesium-smelting", "ore-processing-4")       --добавить пресс гранулятор мк4
 bobmods.lib.tech.add_prerequisite("advanced-magnesium-smelting", "angels-metallurgy-4")    --добавить доменки мк4
+bobmods.lib.tech.add_prerequisite("advanced-magnesium-smelting", "ore-processing-4")       --добавить пресс гранулятор мк4
+bobmods.lib.tech.add_prerequisite("advanced-magnesium-smelting", "angels-metallurgy-4")    --добавить доменки мк4
 
 --Фикс обеднённого урана и осмия by Kiska Ra
 bobmods.lib.tech.remove_prerequisite("advanced-depleted-uranium-smelting-1", "powder-metallurgy-1") --удаляем лишнюю
 bobmods.lib.tech.remove_prerequisite("advanced-osmium-smelting", "powder-metallurgy-1")
 
 --Фикс техи турбины
+bobmods.lib.tech.remove_recipe_unlock("nuclear-power", "steam-turbine")   --удаляем вторую турбину мк1 (AKMF)
 bobmods.lib.tech.remove_recipe_unlock("nuclear-power", "steam-turbine")   --удаляем вторую турбину мк1 (AKMF)
 bobmods.lib.tech.add_prerequisite("bob-steam-turbine-1", "nuclear-power") --добавить теху в ядерку
 
@@ -1150,7 +1195,6 @@ if mods["P-U-M-P-S"] then
     data.raw["assembling-machine"]["water-pumpjack-4"].crafting_speed = 0.8
     data.raw["assembling-machine"]["water-pumpjack-5"].crafting_speed = 1
 end
-
 --Баланс агрегатора росы
 data.raw["assembling-machine"]["dpa"].energy_usage = "1000kW"
 
@@ -1277,53 +1321,55 @@ data.raw["furnace"]["clarifier"].energy_source.emissions_per_minute = 75
 data.raw["furnace"]["angels-flare-stack"].energy_source.emissions_per_minute = 75
 
 --Ремонт дерева исследований
-bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4")                           --Ставим ядерку под Бойлер МК4
+bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4")
+--Ставим ядерку под Бойлер МК4
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("water-pumpjack-1", "electricity")                     --помпа
+    bobmods.lib.tech.add_prerequisite("water-pumpjack-1", "electricity")                                                                                               --помпа
 end
-bobmods.lib.tech.add_prerequisite("gun-turret", "electricity")                               --турель
-bobmods.lib.tech.add_prerequisite("logistics", "electricity")                                --логистика1
-bobmods.lib.tech.add_prerequisite("basic-chemistry-2", "angels-metallurgy-1")                --базовая химия 2
-bobmods.lib.tech.add_prerequisite("bio-processing-green", "angels-metallurgy-1")             --водоросли 2
-bobmods.lib.tech.add_prerequisite("bio-processing-green", "electronics")                     --водоросли 2
-bobmods.lib.tech.remove_prerequisite("bi-tech-resin-extraction", "bi-tech-timber")           --убираем смолу
-bobmods.lib.tech.remove_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction") --убираем смолу
-data.raw.technology["bi-tech-resin-extraction"].hidden = true                                --убираем смолу
-data.raw.technology["bi-tech-timber"].unit.count = 30                                        --совмещаем смолу и теплицы
-bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-timber")              --ящики под теплицу
-bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "strand-casting-1")             --сталь 2 под МНЛЗ
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2")                      --фильтры под автомат 2
-bobmods.lib.tech.add_prerequisite("water-treatment-2", "angels-metallurgy-2")                --гидростанцию 2 под металлургию 2
-bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2")      --химию 2 под металлургию 2
-bobmods.lib.tech.add_prerequisite("gas-processing", "angels-metallurgy-2")                   --газ под металлургию 2
-bobmods.lib.tech.add_prerequisite("railloader", "miniloader")                                --автопогрузчик под минипогрузчик
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-electronics")              --фильтры 2 под контроллеры
-bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")        --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-sulfur-processing-1")        --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-zinc-smelting-1")            --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("angels-brass-smelting-1", "angels-zinc-smelting-1")    --металлургия 2 под латунь
-bobmods.lib.tech.add_prerequisite("angels-metallurgy-2", "zinc-processing")                  ----металлургия 2 под латунь
-bobmods.lib.tech.add_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")           --цинк под металлургию 2
-bobmods.lib.tech.add_prerequisite("water-washing-2", "angels-metallurgy-2")                  --промывка 2  под металлургию 2
-bobmods.lib.tech.add_prerequisite("ore-powderizer", "angels-stone-smelting-1")               --измельчитель под кирпич
-bobmods.lib.tech.add_prerequisite("bi-tech-garden-2", "chemical-science-pack")               --биосад под химпакеты
-bobmods.lib.tech.remove_prerequisite("advanced-electronics", "offshore-pump-2")              --убираем насосы из электроники
-bobmods.lib.tech.add_prerequisite("offshore-pump-2", "advanced-electronics")                 --ставим их вниз
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-2", "advanced-electronics")             --аквариум 2 под электронику 2
-bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1")          --буры3 под кобальт
-bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1")     --буры3 под кобальт
-bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics") --склады под роботов
-bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics")     --склады под роботов
-bobmods.lib.tech.add_prerequisite("Ducts", "ceramics")                                       --большие трубы под нитрид кремния
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "advanced-electronics-2")           --аквариум 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "angels-titanium-smelting-1")       --аквариум 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "angels-titanium-smelting-1")   --бойня 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "advanced-electronics-2")       --бойня 3 под титан
-bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-3", "production-science-pack")      --смешиватель мк3 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("gun-turret", "electricity")                                                                                                         --турель
+bobmods.lib.tech.add_prerequisite("logistics", "electricity")                                                                                                          --логистика1
+bobmods.lib.tech.add_prerequisite("basic-chemistry-2", "angels-metallurgy-1")                                                                                          --базовая химия 2
+bobmods.lib.tech.add_prerequisite("bio-processing-green", "angels-metallurgy-1")                                                                                       --водоросли 2
+bobmods.lib.tech.add_prerequisite("bio-processing-green", "electronics")                                                                                               --водоросли 2
+bobmods.lib.tech.remove_prerequisite("bi-tech-resin-extraction", "bi-tech-timber")                                                                                     --убираем смолу
+bobmods.lib.tech.remove_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction")                                                                           --убираем смолу
+data.raw.technology["bi-tech-resin-extraction"].hidden = true                                                                                                          --убираем смолу
+data.raw.technology["bi-tech-timber"].unit.count = 30                                                                                                                  --совмещаем смолу и теплицы
+bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-timber")                                                                                        --ящики под теплицу
+bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "strand-casting-1")                                                                                       --сталь 2 под МНЛЗ
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2")                                                                                                --фильтры под автомат 2
+bobmods.lib.tech.add_prerequisite("water-treatment-2", "angels-metallurgy-2")                                                                                          --гидростанцию 2 под металлургию 2
+bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2")                                                                                --химию 2 под металлургию 2
+bobmods.lib.tech.add_prerequisite("gas-processing", "angels-metallurgy-2")                                                                                             --газ под металлургию 2
+bobmods.lib.tech.add_prerequisite("railloader", "miniloader")                                                                                                          --автопогрузчик под минипогрузчик
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-electronics")                                                                                        --фильтры 2 под контроллеры
+bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                  --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-sulfur-processing-1")                                                                                  --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-zinc-smelting-1")                                                                                      --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("angels-brass-smelting-1", "angels-zinc-smelting-1")                                                                              --металлургия 2 под латунь
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-2", "zinc-processing")                                                                                            ----металлургия 2 под латунь
+bobmods.lib.tech.add_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                     --цинк под металлургию 2
+bobmods.lib.tech.add_prerequisite("water-washing-2", "angels-metallurgy-2")                                                                                            --промывка 2  под металлургию 2
+bobmods.lib.tech.add_prerequisite("ore-powderizer", "angels-stone-smelting-1")                                                                                         --измельчитель под кирпич
+bobmods.lib.tech.add_prerequisite("bi-tech-garden-2", "chemical-science-pack")                                                                                         --биосад под химпакеты
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("offshore-pump-3", "angels-titanium-smelting-1")       --насос 3 под титан
+    bobmods.lib.tech.remove_prerequisite("advanced-electronics", "offshore-pump-2")                                                                                    --убираем насосы из электроники
+    bobmods.lib.tech.add_prerequisite("offshore-pump-2", "advanced-electronics")                                                                                       --ставим их вниз
 end
---насос 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-2", "advanced-electronics")                                                                                       --аквариум 2 под электронику 2
+bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1")                                                                                    --буры3 под кобальт
+bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1")                                                                               --буры3 под кобальт
+bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics")                                                                           --склады под роботов
+bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics")                                                                               --склады под роботов
+bobmods.lib.tech.add_prerequisite("Ducts", "ceramics")                                                                                                                 --большие трубы под нитрид кремния
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "advanced-electronics-2")                                                                                     --аквариум 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "angels-titanium-smelting-1")                                                                                 --аквариум 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "angels-titanium-smelting-1")                                                                             --бойня 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "advanced-electronics-2")                                                                                 --бойня 3 под титан
+bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-3", "production-science-pack")                                                                                --смешиватель мк3 под производственн пакеты
+if mods["P-U-M-P-S"] then
+    bobmods.lib.tech.add_prerequisite("offshore-pump-3", "angels-titanium-smelting-1")                                                                                 --насос 3 под титан
+end
 bobmods.lib.tech.add_prerequisite("logistics-3", "angels-titanium-smelting-1")                                                                                         --логистика 3 под титан
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-2")                                                                                      --фильтры 3 под электронику 3
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "angels-titanium-smelting-1")                                                                                  --фильтры 3 под титан
@@ -1345,7 +1391,7 @@ bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-5", "advanced-elect
 bobmods.lib.tech.add_prerequisite("water-treatment-5", "advanced-electronics-3")                                                                                       --очистка воды 5 под контроллеры 3
 if mods["P-U-M-P-S"] then
     bobmods.lib.tech.add_prerequisite("offshore-pump-4", "advanced-electronics-3")                                                                                     --насос 4  под контроллеры 3
-end                                                                                                                                                                    --насос 4  под контроллеры 3
+end
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-3")                                                                                      --фильтры 4  под контроллеры 3
 bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "advanced-electronics-3")                                                                                   --башня сбора 4  под контроллеры 3
 bobmods.lib.tech.add_prerequisite("bob-electric-energy-accumulators-3", "advanced-electronics-3")                                                                      --аккумуляторы 3  под контроллеры 3
@@ -1516,10 +1562,3 @@ KaoExtended.recipe.addtorecipe("electric-mixing-furnace", { "electric-furnace", 
 --Увеличение цены снайпер турели
 bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1",
     { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 } })
-if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.remove_prerequisite("advanced-electronics", "offshore-pump-2") --убираем насосы из электроники
-    bobmods.lib.tech.add_prerequisite("offshore-pump-2", "advanced-electronics")    --ставим их вниз
-end
-if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("offshore-pump-4", "advanced-electronics-3") --насос 4  под контроллеры 3
-end
