@@ -40,7 +40,7 @@ if settings.global["hardcore-mode-for-playing-disable-production-entities-beyond
 end
 if settings.startup["hardcore-mode-for-playing-move-basic-recipe-to-new-basic-technology-hard-start"].value then
     -- автоматизационные исследовательские пакеты - для старта игры
-    table.insert(basic_inventory_items, { name = "salvaged-automation-science-pack", count = 210 })
+    table.insert(basic_inventory_items, { name = "salvaged-automation-science-pack", count = 231 })
     -- ремонтные пакеты на первое время
     table.insert(basic_inventory_items, { name = "repair-pack", count = 4 })
 end
