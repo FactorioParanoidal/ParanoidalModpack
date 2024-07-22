@@ -1301,6 +1301,37 @@ bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-sci
 data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
 bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
 
+--#####################
+--Удаление лишних рыб из сборки
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-2")
+data.raw["capsule"]["raw-fish"].flags = {"hidden"}
+data.raw["capsule"]["alien-fish-1-raw"].flags = {"hidden"}
+data.raw["capsule"]["alien-fish-2-raw"].flags = {"hidden"}
+data.raw["recipe"]["fish-keeping-0"].hidden = true
+data.raw["recipe"]["fish-keeping-1"].hidden = true
+data.raw["recipe"]["fish-keeping-2"].hidden = true
+data.raw["recipe"]["fish-breeding-0"].hidden = true
+data.raw["recipe"]["fish-breeding-1"].hidden = true
+data.raw["recipe"]["fish-breeding-2"].hidden = true
+data.raw["recipe"]["fish-butchery-0"].hidden = true
+data.raw["recipe"]["fish-butchery-1"].hidden = true 
+data.raw["recipe"]["fish-butchery-2"].hidden = true
+data.raw["recipe"]["fish-pressing-0"].hidden = true
+data.raw["recipe"]["fish-pressing-1"].hidden = true
+data.raw["recipe"]["fish-pressing-2"].hidden = true
+--#####################
+
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp") --лампы
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp") --лампы
 bobmods.lib.tech.add_recipe_unlock("electronics", "deadlock-large-lamp")--лампы
