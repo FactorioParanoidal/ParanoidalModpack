@@ -1,8 +1,8 @@
 local technologyUnitAddBean = require("__automated-utility-protocol__.util.technology-unit-add-bean")
 local function updateNotFoundEffectesAndSciencePacksExpensive()
-	local mode = "expensive"
-	technologyUnitAddBean.add_automation_science_pack_to_technology_units({
-		--[[	"productivity-module",
+    local mode = "expensive"
+    technologyUnitAddBean.add_automation_science_pack_to_technology_units({
+        --[[	"productivity-module",
 		"speed-module",
 		"speed-module-2",
 		"speed-module-3",
@@ -46,10 +46,10 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"bob-power-armor-5",
 		"extremely-advanced-rocket-payloads",
 		"module-merging",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	technologyUnitAddBean.add_logistic_science_pack_to_technology_units({
-		--[["alloy-processing",
+
+    }, mode)
+    technologyUnitAddBean.add_logistic_science_pack_to_technology_units({
+        --[["alloy-processing",
 		"productivity-module",
 		"bio-farm-1",
 		"bio-temperate-farming-1",
@@ -107,10 +107,10 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"bob-power-armor-5",
 		"extremely-advanced-rocket-payloads",
 		"module-merging",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	technologyUnitAddBean.add_chemical_science_pack_to_technology_units({
-		--[["chlorine-processing-2",
+
+    }, mode)
+    technologyUnitAddBean.add_chemical_science_pack_to_technology_units({
+        --[["chlorine-processing-2",
 		"bio-nutrient-paste",
 		"bio-farm-1",
 		"bio-fermentation",
@@ -185,10 +185,10 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"angels-iron-smelting-2",
 		"automation-8",
 		"electronics-machine-5",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	technologyUnitAddBean.add_production_science_pack_to_technology_units({
-		--[["utility-science-pack",
+
+    }, mode)
+    technologyUnitAddBean.add_production_science_pack_to_technology_units({
+        --[["utility-science-pack",
 		"bio-processing-paste",
 		"bio-processing-alien-1",
 		"physical-projectile-damage-6",
@@ -304,10 +304,10 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"advanced-magnesium-smelting",
 		"angels-aluminium-smelting-2",
 		"advanced-depleted-uranium-smelting-2",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	technologyUnitAddBean.add_military_science_pack_to_technology_units({
-		--[["physical-projectile-damage-5",
+
+    }, mode)
+    technologyUnitAddBean.add_military_science_pack_to_technology_units({
+        --[["physical-projectile-damage-5",
 		"bet-fuel-4",
 		"bet-fuel-recycling",
 		"bob-bullets",
@@ -335,10 +335,10 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"atomic-bomb",
 		"personal-roboport-equipment",
 		"angels-advanced-chemistry-4",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	technologyUnitAddBean.add_utility_science_pack_to_technology_units({
-		--[["bob-shotgun-shells",
+
+    }, mode)
+    technologyUnitAddBean.add_utility_science_pack_to_technology_units({
+        --[["bob-shotgun-shells",
 		"logistics-4",
 		"stack-inserter-research-15",
 		"stack-inserter-research-5",
@@ -381,9 +381,9 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"bob-power-armor-5",
 		"extremely-advanced-rocket-payloads",
 		"angels-aluminium-smelting-2",]]
-		"compact-full-fission-weapons"
-	}, mode)
-	--[[technologyUnitAddBean.add_space_science_pack_to_technology_units({
+
+    }, mode)
+    --[[technologyUnitAddBean.add_space_science_pack_to_technology_units({
 		--[["stack-inserter-research-15",
 		"stack-inserter-research-5",
 		"stack-inserter-research-1",
@@ -397,9 +397,9 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"angels-titanium-smelting-3",
 		"angels-iron-smelting-3",
 		"advanced-depleted-uranium-smelting-2",]]
-	--[["compact-full-fission-weapons"
+    --[[
 	}, mode)]]
-	--[[technologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
+    --[[technologyUnitAddBean.addProductivityProcessorToTechnologyUnits({
 		"production-science-pack",
 		"utility-science-pack",
 		"angels-tungsten-smelting-1",
@@ -855,7 +855,7 @@ local function updateNotFoundEffectesAndSciencePacksExpensive()
 		"advanced-depleted-uranium-smelting-2",
 	}, mode)]]
 
-	--[[technologyUnitAddBean.addTokenBioToTechnologyUnits({
+    --[[technologyUnitAddBean.addTokenBioToTechnologyUnits({
 		"bio-nutrient-paste",
 		"bio-farm-2",
 		"angels-nitrogen-processing-2",
