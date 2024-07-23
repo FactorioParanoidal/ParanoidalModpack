@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 02.04.2022
+  Bugfixes:
+    - fixed parenthesis in assert at bigpack function
+    - typo in mod description
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 04.02.2021
+  Info:
+    - initial release
+  Changes:
+    - add thumbnail
+    - add readme

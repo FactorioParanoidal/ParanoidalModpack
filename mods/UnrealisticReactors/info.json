@@ -1,0 +1,15 @@
+{
+	"name": "UnrealisticReactors",
+	"version": "0.1.2",
+	"title": "Unrealistic Reactors",
+	"author": "numzero, dodo.the.last, max2344, IngoKnieto, OwnlyMe",
+	"description": "Add more challenging nuclear reactors with a breeder reactor and a cooling tower. The reactors have to be controlled via integrated circuit interface signals. The reactors have a dynamic heat output depending on their temperature. They need proper cooling, otherwise a nuclear meltdown will occur.",
+	"factorio_version": "1.1",
+	"dependencies": [
+		"! RealisticReactors",
+		"? PlutoniumEnergy >= 1.2.15",
+		"? True-Nukes >= 0.1.15",
+		"big-data-string",
+		"base"
+	]
+}
