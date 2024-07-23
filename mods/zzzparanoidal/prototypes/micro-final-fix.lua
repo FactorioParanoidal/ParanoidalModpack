@@ -1324,123 +1324,175 @@ data.raw["furnace"]["angels-flare-stack"].energy_source.emissions_per_minute = 7
 bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4")
 --Ставим ядерку под Бойлер МК4
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("water-pumpjack-1", "electricity")                                                                                               --помпа
+    bobmods.lib.tech.add_prerequisite("water-pumpjack-1", "electricity")                                                                                                                                      --помпа
 end
-bobmods.lib.tech.add_prerequisite("gun-turret", "electricity")                                                                                                         --турель
-bobmods.lib.tech.add_prerequisite("logistics", "electricity")                                                                                                          --логистика1
-bobmods.lib.tech.add_prerequisite("basic-chemistry-2", "angels-metallurgy-1")                                                                                          --базовая химия 2
-bobmods.lib.tech.add_prerequisite("bio-processing-green", "angels-metallurgy-1")                                                                                       --водоросли 2
-bobmods.lib.tech.add_prerequisite("bio-processing-green", "electronics")                                                                                               --водоросли 2
-bobmods.lib.tech.remove_prerequisite("bi-tech-resin-extraction", "bi-tech-timber")                                                                                     --убираем смолу
-bobmods.lib.tech.remove_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction")                                                                           --убираем смолу
-data.raw.technology["bi-tech-resin-extraction"].hidden = true                                                                                                          --убираем смолу
-data.raw.technology["bi-tech-timber"].unit.count = 30                                                                                                                  --совмещаем смолу и теплицы
-bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-timber")                                                                                        --ящики под теплицу
-bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "strand-casting-1")                                                                                       --сталь 2 под МНЛЗ
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2")                                                                                                --фильтры под автомат 2
-bobmods.lib.tech.add_prerequisite("water-treatment-2", "angels-metallurgy-2")                                                                                          --гидростанцию 2 под металлургию 2
-bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2")                                                                                --химию 2 под металлургию 2
-bobmods.lib.tech.add_prerequisite("gas-processing", "angels-metallurgy-2")                                                                                             --газ под металлургию 2
-bobmods.lib.tech.add_prerequisite("railloader", "miniloader")                                                                                                          --автопогрузчик под минипогрузчик
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-electronics")                                                                                        --фильтры 2 под контроллеры
-bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                  --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-sulfur-processing-1")                                                                                  --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-zinc-smelting-1")                                                                                      --металлургия 2 под латунь
-bobmods.lib.tech.remove_prerequisite("angels-brass-smelting-1", "angels-zinc-smelting-1")                                                                              --металлургия 2 под латунь
-bobmods.lib.tech.add_prerequisite("angels-metallurgy-2", "zinc-processing")                                                                                            ----металлургия 2 под латунь
-bobmods.lib.tech.add_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                     --цинк под металлургию 2
-bobmods.lib.tech.add_prerequisite("water-washing-2", "angels-metallurgy-2")                                                                                            --промывка 2  под металлургию 2
-bobmods.lib.tech.add_prerequisite("ore-powderizer", "angels-stone-smelting-1")                                                                                         --измельчитель под кирпич
-bobmods.lib.tech.add_prerequisite("bi-tech-garden-2", "chemical-science-pack")                                                                                         --биосад под химпакеты
+bobmods.lib.tech.add_prerequisite("gun-turret", "electricity")                                                                                                                                                --турель
+bobmods.lib.tech.add_prerequisite("logistics", "electricity")                                                                                                                                                 --логистика1
+bobmods.lib.tech.add_prerequisite("basic-chemistry-2", "angels-metallurgy-1")                                                                                                                                 --базовая химия 2
+bobmods.lib.tech.add_prerequisite("bio-processing-green", "angels-metallurgy-1")                                                                                                                              --водоросли 2
+bobmods.lib.tech.add_prerequisite("bio-processing-green", "electronics")                                                                                                                                      --водоросли 2
+bobmods.lib.tech.remove_prerequisite("bi-tech-resin-extraction", "bi-tech-timber")                                                                                                                            --убираем смолу
+bobmods.lib.tech.remove_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction")                                                                                                                  --убираем смолу
+data.raw.technology["bi-tech-resin-extraction"].hidden = true                                                                                                                                                 --убираем смолу
+data.raw.technology["bi-tech-timber"].unit.count = 30                                                                                                                                                         --совмещаем смолу и теплицы
+bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-timber")                                                                                                                               --ящики под теплицу
+bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "strand-casting-1")                                                                                                                              --сталь 2 под МНЛЗ
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2")                                                                                                                                       --фильтры под автомат 2
+bobmods.lib.tech.add_prerequisite("water-treatment-2", "angels-metallurgy-2")                                                                                                                                 --гидростанцию 2 под металлургию 2
+bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2")                                                                                                                       --химию 2 под металлургию 2
+bobmods.lib.tech.add_prerequisite("gas-processing", "angels-metallurgy-2")                                                                                                                                    --газ под металлургию 2
+bobmods.lib.tech.add_prerequisite("railloader", "miniloader")                                                                                                                                                 --автопогрузчик под минипогрузчик
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-electronics")                                                                                                                               --фильтры 2 под контроллеры
+bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                                                         --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-sulfur-processing-1")                                                                                                                         --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("zinc-processing", "angels-zinc-smelting-1")                                                                                                                             --металлургия 2 под латунь
+bobmods.lib.tech.remove_prerequisite("angels-brass-smelting-1", "angels-zinc-smelting-1")                                                                                                                     --металлургия 2 под латунь
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-2", "zinc-processing")                                                                                                                                   ----металлургия 2 под латунь
+bobmods.lib.tech.add_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2")                                                                                                                            --цинк под металлургию 2
+bobmods.lib.tech.add_prerequisite("water-washing-2", "angels-metallurgy-2")                                                                                                                                   --промывка 2  под металлургию 2
+bobmods.lib.tech.add_prerequisite("ore-powderizer", "angels-stone-smelting-1")                                                                                                                                --измельчитель под кирпич
+bobmods.lib.tech.add_prerequisite("bi-tech-garden-2", "chemical-science-pack")                                                                                                                                --биосад под химпакеты
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.remove_prerequisite("advanced-electronics", "offshore-pump-2")                                                                                    --убираем насосы из электроники
-    bobmods.lib.tech.add_prerequisite("offshore-pump-2", "advanced-electronics")                                                                                       --ставим их вниз
+    bobmods.lib.tech.remove_prerequisite("advanced-electronics", "offshore-pump-2")                                                                                                                           --убираем насосы из электроники
+    bobmods.lib.tech.add_prerequisite("offshore-pump-2", "advanced-electronics")                                                                                                                              --ставим их вниз
 end
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-2", "advanced-electronics")                                                                                       --аквариум 2 под электронику 2
-bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1")                                                                                    --буры3 под кобальт
-bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1")                                                                               --буры3 под кобальт
-bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics")                                                                           --склады под роботов
-bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics")                                                                               --склады под роботов
-bobmods.lib.tech.add_prerequisite("Ducts", "ceramics")                                                                                                                 --большие трубы под нитрид кремния
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "advanced-electronics-2")                                                                                     --аквариум 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "angels-titanium-smelting-1")                                                                                 --аквариум 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "angels-titanium-smelting-1")                                                                             --бойня 3 под титан
-bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "advanced-electronics-2")                                                                                 --бойня 3 под титан
-bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-3", "production-science-pack")                                                                                --смешиватель мк3 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-2", "advanced-electronics")                                                                                                                              --аквариум 2 под электронику 2
+bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1")                                                                                                                           --буры3 под кобальт
+bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1")                                                                                                                      --буры3 под кобальт
+bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics")                                                                                                                  --склады под роботов
+bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics")                                                                                                                      --склады под роботов
+bobmods.lib.tech.add_prerequisite("Ducts", "ceramics")                                                                                                                                                        --большие трубы под нитрид кремния
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "advanced-electronics-2")                                                                                                                            --аквариум 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "angels-titanium-smelting-1")                                                                                                                        --аквариум 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "angels-titanium-smelting-1")                                                                                                                    --бойня 3 под титан
+bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "advanced-electronics-2")                                                                                                                        --бойня 3 под титан
+bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-3", "production-science-pack")                                                                                                                       --смешиватель мк3 под производственн пакеты
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("offshore-pump-3", "angels-titanium-smelting-1")                                                                                 --насос 3 под титан
+    bobmods.lib.tech.add_prerequisite("offshore-pump-3", "angels-titanium-smelting-1")                                                                                                                        --насос 3 под титан
 end
-bobmods.lib.tech.add_prerequisite("logistics-3", "angels-titanium-smelting-1")                                                                                         --логистика 3 под титан
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-2")                                                                                      --фильтры 3 под электронику 3
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "angels-titanium-smelting-1")                                                                                  --фильтры 3 под титан
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "production-science-pack")                                                                                     --фильтры 3 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("gunships", "angels-cobalt-steel-smelting-1")                                                                                        --самолёты под кобальт
-bobmods.lib.tech.add_prerequisite("bi-tech-cellulose-2", "production-science-pack")                                                                                    --целлюлоза 2 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("CW-air-filter-cleaning-4", "production-science-pack")                                                                               --фильтры 4 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("afterburner", "utility-science-pack")                                                                                               --форсаж под утилити пакеты
-bobmods.lib.tech.add_prerequisite("angels-advanced-bio-processing", "production-science-pack")                                                                         --водоросли 5 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("angels-advanced-bio-processing", "utility-science-pack")                                                                            --водоросли 5 под утилити пакеты
-bobmods.lib.tech.add_prerequisite("OilBurning-4", "production-science-pack")                                                                                           --жидк котёл 4 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("OilBurning-4", "angels-titanium-smelting-1")                                                                                        --жидк котёл 4 под титан
-bobmods.lib.tech.add_prerequisite("angels-stone-smelting-4", "angels-titanium-smelting-1")                                                                             --титановый кирпич под титан
-bobmods.lib.tech.add_prerequisite("steel-axe-5", "production-science-pack")                                                                                            --кирка 5 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("steel-axe-6", "utility-science-pack")                                                                                               --кирка 6 под утилити пакеты
-bobmods.lib.tech.add_prerequisite("bi-tech-biomass-reprocessing-2", "production-science-pack")                                                                         --биомасса под производственн пакеты
-bobmods.lib.tech.add_prerequisite("logistics-3", "angels-ironworks-3")                                                                                                 --логистика 3 под титан
-bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-5", "advanced-electronics-3")                                                                             --продв химия 5 под контроллеры
-bobmods.lib.tech.add_prerequisite("water-treatment-5", "advanced-electronics-3")                                                                                       --очистка воды 5 под контроллеры 3
+bobmods.lib.tech.add_prerequisite("logistics-3", "angels-titanium-smelting-1")                                                                                                                                --логистика 3 под титан
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-2")                                                                                                                             --фильтры 3 под электронику 3
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "angels-titanium-smelting-1")                                                                                                                         --фильтры 3 под титан
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "production-science-pack")                                                                                                                            --фильтры 3 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("gunships", "angels-cobalt-steel-smelting-1")                                                                                                                               --самолёты под кобальт
+bobmods.lib.tech.add_prerequisite("bi-tech-cellulose-2", "production-science-pack")                                                                                                                           --целлюлоза 2 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("CW-air-filter-cleaning-4", "production-science-pack")                                                                                                                      --фильтры 4 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("afterburner", "utility-science-pack")                                                                                                                                      --форсаж под утилити пакеты
+bobmods.lib.tech.add_prerequisite("angels-advanced-bio-processing", "production-science-pack")                                                                                                                --водоросли 5 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("angels-advanced-bio-processing", "utility-science-pack")                                                                                                                   --водоросли 5 под утилити пакеты
+bobmods.lib.tech.add_prerequisite("OilBurning-4", "production-science-pack")                                                                                                                                  --жидк котёл 4 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("OilBurning-4", "angels-titanium-smelting-1")                                                                                                                               --жидк котёл 4 под титан
+bobmods.lib.tech.add_prerequisite("angels-stone-smelting-4", "angels-titanium-smelting-1")                                                                                                                    --титановый кирпич под титан
+bobmods.lib.tech.add_prerequisite("steel-axe-5", "production-science-pack")                                                                                                                                   --кирка 5 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("steel-axe-6", "utility-science-pack")                                                                                                                                      --кирка 6 под утилити пакеты
+bobmods.lib.tech.add_prerequisite("bi-tech-biomass-reprocessing-2", "production-science-pack")                                                                                                                --биомасса под производственн пакеты
+bobmods.lib.tech.add_prerequisite("logistics-3", "angels-ironworks-3")                                                                                                                                        --логистика 3 под титан
+bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-5", "advanced-electronics-3")                                                                                                                    --продв химия 5 под контроллеры
+bobmods.lib.tech.add_prerequisite("water-treatment-5", "advanced-electronics-3")                                                                                                                              --очистка воды 5 под контроллеры 3
 if mods["P-U-M-P-S"] then
-    bobmods.lib.tech.add_prerequisite("offshore-pump-4", "advanced-electronics-3")                                                                                     --насос 4  под контроллеры 3
+    bobmods.lib.tech.add_prerequisite("offshore-pump-4", "advanced-electronics-3")                                                                                                                            --насос 4  под контроллеры 3
 end
-bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-3")                                                                                      --фильтры 4  под контроллеры 3
-bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "advanced-electronics-3")                                                                                   --башня сбора 4  под контроллеры 3
-bobmods.lib.tech.add_prerequisite("bob-electric-energy-accumulators-3", "advanced-electronics-3")                                                                      --аккумуляторы 3  под контроллеры 3
-bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "utility-science-pack")                                                                                     --башня сбора 4  под утилити пакеты
-bobmods.lib.tech.add_prerequisite("railway", "concrete")                                                                                                               --рельсы под БЕТОН наконец-то
-bobmods.lib.tech.add_prerequisite("worker-robot-battery-1", "chemical-science-pack")                                                                                   --батареи роботов под синие банки
-bobmods.lib.tech.add_prerequisite("worker-robot-battery-4", "production-science-pack")                                                                                 --батареи роботов под производственн пакеты
-bobmods.lib.tech.add_prerequisite("worker-robot-battery-8", "utility-science-pack")                                                                                    --батареи роботов под утилити пакеты
-bobmods.lib.tech.add_prerequisite("express-miniloader", "production-science-pack")                                                                                     --минипогрузчики 3 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("bi-tech-organic-plastic", "production-science-pack")                                                                                --биопластик под производственн пакеты
-bobmods.lib.tech.add_prerequisite("advanced-electronics", "angels-aluminium-smelting-1")                                                                               --контроллер 2 под алюминий
-bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-2", "logistic-science-pack")                                                                                  --скорострельность 2 под зеленые банки
-bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-3", "military-science-pack")                                                                                  --скорострельность 3 под военные банки
-bobmods.lib.tech.add_prerequisite("stronger-explosives-2", "military-science-pack")                                                                                    --урон гранат 2  под военные банки
-bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-6", "utility-science-pack")                                                                                   --скорострельность 6 под утилити банки
-bobmods.lib.tech.add_prerequisite("follower-robot-count-3", "chemical-science-pack")                                                                                   --боевых роботов под синие банки
-bobmods.lib.tech.add_prerequisite("stronger-explosives-3", "chemical-science-pack")                                                                                    --урон гранат 3  под военные банки
-bobmods.lib.tech.remove_prerequisite("bi-tech-garden-3", "angels-stone-smelting-4")                                                                                    --убираем огромные сады из под цемента 4
-data.raw.technology["angels-stone-smelting-4"].unit.count = 200                                                                                                        --меняем цену на цемент 4
-data.raw.technology["angels-stone-smelting-4"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } } --меняем цену на цемент 4
-bobmods.lib.tech.add_prerequisite("production-science-pack", "angels-stone-smelting-4")                                                                                -- производственн пакеты под цемент 4
-bobmods.lib.tech.add_prerequisite("bi-tech-garden-3", "production-science-pack")                                                                                       --огромные сады под производственн пакеты
+bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-3")                                                                                                                             --фильтры 4  под контроллеры 3
+bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "advanced-electronics-3")                                                                                                                          --башня сбора 4  под контроллеры 3
+bobmods.lib.tech.add_prerequisite("bob-electric-energy-accumulators-3", "advanced-electronics-3")                                                                                                             --аккумуляторы 3  под контроллеры 3
+bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "utility-science-pack")                                                                                                                            --башня сбора 4  под утилити пакеты
+bobmods.lib.tech.add_prerequisite("railway", "concrete")                                                                                                                                                      --рельсы под БЕТОН наконец-то
+bobmods.lib.tech.add_prerequisite("worker-robot-battery-1", "chemical-science-pack")                                                                                                                          --батареи роботов под синие банки
+bobmods.lib.tech.add_prerequisite("worker-robot-battery-4", "production-science-pack")                                                                                                                        --батареи роботов под производственн пакеты
+bobmods.lib.tech.add_prerequisite("worker-robot-battery-8", "utility-science-pack")                                                                                                                           --батареи роботов под утилити пакеты
+bobmods.lib.tech.add_prerequisite("express-miniloader", "production-science-pack")                                                                                                                            --минипогрузчики 3 под производственн пакеты
+bobmods.lib.tech.add_prerequisite("bi-tech-organic-plastic", "production-science-pack")                                                                                                                       --биопластик под производственн пакеты
+bobmods.lib.tech.add_prerequisite("advanced-electronics", "angels-aluminium-smelting-1")                                                                                                                      --контроллер 2 под алюминий
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-2", "logistic-science-pack")                                                                                                                         --скорострельность 2 под зеленые банки
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-3", "military-science-pack")                                                                                                                         --скорострельность 3 под военные банки
+bobmods.lib.tech.add_prerequisite("stronger-explosives-2", "military-science-pack")                                                                                                                           --урон гранат 2  под военные банки
+bobmods.lib.tech.add_prerequisite("weapon-shooting-speed-6", "utility-science-pack")                                                                                                                          --скорострельность 6 под утилити банки
+bobmods.lib.tech.add_prerequisite("follower-robot-count-3", "chemical-science-pack")                                                                                                                          --боевых роботов под синие банки
+bobmods.lib.tech.add_prerequisite("stronger-explosives-3", "chemical-science-pack")                                                                                                                           --урон гранат 3  под военные банки
+bobmods.lib.tech.remove_prerequisite("bi-tech-garden-3", "angels-stone-smelting-4")                                                                                                                           --убираем огромные сады из под цемента 4
+data.raw.technology["angels-stone-smelting-4"].unit.count = 200                                                                                                                                               --меняем цену на цемент 4
+data.raw.technology["angels-stone-smelting-4"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                        --меняем цену на цемент 4
+bobmods.lib.tech.add_prerequisite("production-science-pack", "angels-stone-smelting-4")                                                                                                                       -- производственн пакеты под цемент 4
+bobmods.lib.tech.add_prerequisite("bi-tech-garden-3", "production-science-pack")                                                                                                                              --огромные сады под производственн пакеты
 --08.07.24
-bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "advanced-electronics-2")                                                                                     -- Промышленная металлургия 4 под Продвинутую электронику 2
-bobmods.lib.tech.add_prerequisite("strand-casting-1", "angels-stone-smelting-1")                                                                                       -- Машины непрерывного литья 1 под кирпичи 1
-bobmods.lib.tech.add_prerequisite("angels-brass-smelting-1", "ore-floatation")                                                                                         -- Латунь под Гидропромывку 1
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "advanced-electronics-2")                                                                                                                            -- Промышленная металлургия 4 под Продвинутую электронику 2
+bobmods.lib.tech.add_prerequisite("strand-casting-1", "angels-stone-smelting-1")                                                                                                                              -- Машины непрерывного литья 1 под кирпичи 1
+bobmods.lib.tech.add_prerequisite("angels-brass-smelting-1", "ore-floatation")                                                                                                                                -- Латунь под Гидропромывку 1
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "advanced-electronics-2")                                                                                                                            -- Промышленная металлургия 4 под Продвинутую электронику 2
+bobmods.lib.tech.add_prerequisite("strand-casting-1", "angels-stone-smelting-1")                                                                                                                              -- Машины непрерывного литья 1 под кирпичи 1
+bobmods.lib.tech.add_prerequisite("angels-brass-smelting-1", "ore-floatation")                                                                                                                                -- Латунь под Гидропромывку 1
+--21.07.24
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-3", "ore-leaching")                                                                                                                                      -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
+bobmods.lib.tech.add_prerequisite("modules", "angels-gold-smelting-1")                                                                                                                                        -- Модули под Золото!
+data.raw.technology["modules"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                        --модули теперь за синие банки (как и должно быть)
+bobmods.lib.tech.add_prerequisite("OilBurning-2", "bob-boiler-2")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
+bobmods.lib.tech.add_prerequisite("OilBurning-3", "bob-boiler-3")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
+bobmods.lib.tech.add_prerequisite("OilBurning-4", "bob-boiler-4")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
+bobmods.lib.tech.add_prerequisite("OilBurning-5", "bob-boiler-5")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
+data.raw.technology["bob-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                   --синие банки для буров мк3
+data.raw.technology["bob-area-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                              --синие банки для буров мк3
+bobmods.lib.tech.add_prerequisite("energy-weapons-damage-4", "chemical-science-pack")                                                                                                                         -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite("energy-weapons-damage-5", "utility-science-pack")                                                                                                                          -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite("ober-nuclear-processing", "utility-science-pack")                                                                                                                          -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite("refined-flammables-4", "utility-science-pack")                                                                                                                             -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite("advanced-uranium-processing-1", "utility-science-pack")                                                                                                                    -- Продвинутая переработка урана 1 под правильные банки
+data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 }, { "advanced-logistic-science-pack", 1 } } --Складская логистика 2 делаем правильные банки
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter",
+    { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } })                                                                                                                --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
 
-bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp")                                                                                                 --лампы
-bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp")                                                                                                 --лампы
-bobmods.lib.tech.add_recipe_unlock("electronics", "deadlock-large-lamp")                                                                                               --лампы
-bobmods.lib.tech.add_recipe_unlock("electronics", "deadlock-floor-lamp")                                                                                               --лампы
-bobmods.lib.tech.remove_recipe_unlock("water-treatment", "liquifier")                                                                                                  --убираем второй разжижитель
-bobmods.lib.tech.add_recipe_unlock("bi-tech-timber", "bi-resin-pulp")                                                                                                  --смола в теплицу
-bobmods.lib.tech.add_recipe_unlock("bi-tech-timber", "bi-wood-from-pulp")                                                                                              --смола в теплицу
-bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-1", "angels-iron-gear-wheel-stack-casting")                                                                --убираем заготовки из 1 расплавки
-bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-1", "angels-iron-gear-wheel-stack-converting")                                                             --убираем заготовки из 1 расплавки
-bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-2", "angels-iron-gear-wheel-stack-casting-fast")                                                           --убираем заготовки из 2 расплавки
-bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-2", "angels-iron-gear-wheel-stack-casting")                                                                    --заготовки во 1 литье железа
-bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-2", "angels-iron-gear-wheel-stack-converting")                                                                 --заготовки во 1 литье железа
-bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-3", "angels-iron-gear-wheel-stack-casting-fast")                                                               --заготовки шестеренок в 2  литье железа
-bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-1", "angels-steel-gear-wheel-stack-casting")                                                              --убираем заготовки шестеренок из 1 стали
-bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-1", "angels-steel-gear-wheel-stack-converting")                                                           --убираем заготовки шестеренок из 1 стали
-bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-casting-fast")                                                         --убираем заготовки шестеренок из 2 стали
-bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-casting")                                                                 --рецепты заготовок во 2 сталь
-bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-converting")                                                              --рецепты заготовок во 2 сталь
-bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-3", "angels-steel-gear-wheel-stack-casting-fast")                                                            --рецепты заготовок во 3 сталь
-bobmods.lib.tech.remove_recipe_unlock("ore-floatation", "silver-plate")                                                                                                --удаление простого рецепта серебра
-bobmods.lib.tech.remove_recipe_unlock("angels-advanced-chemistry-4", "advanced-chemical-plant-3")                                                                      --удаляем хим завод 3 из химии 4
-bobmods.lib.tech.add_recipe_unlock("angels-advanced-chemistry-5", "advanced-chemical-plant-3")                                                                         --добавляем хим завод 3 в химию 5
+--#####################
+--Удаление лишних рыб из сборки
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-2")
+data.raw["capsule"]["raw-fish"].flags = { "hidden" }
+data.raw["capsule"]["alien-fish-1-raw"].flags = { "hidden" }
+data.raw["capsule"]["alien-fish-2-raw"].flags = { "hidden" }
+data.raw["recipe"]["fish-keeping-0"].hidden = true
+data.raw["recipe"]["fish-keeping-1"].hidden = true
+data.raw["recipe"]["fish-keeping-2"].hidden = true
+data.raw["recipe"]["fish-breeding-0"].hidden = true
+data.raw["recipe"]["fish-breeding-1"].hidden = true
+data.raw["recipe"]["fish-breeding-2"].hidden = true
+data.raw["recipe"]["fish-butchery-0"].hidden = true
+data.raw["recipe"]["fish-butchery-1"].hidden = true
+data.raw["recipe"]["fish-butchery-2"].hidden = true
+data.raw["recipe"]["fish-pressing-0"].hidden = true
+data.raw["recipe"]["fish-pressing-1"].hidden = true
+data.raw["recipe"]["fish-pressing-2"].hidden = true
+--#####################
+
+bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp")                                         --лампы
+bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp")                                         --лампы
+bobmods.lib.tech.add_recipe_unlock("electronics", "deadlock-large-lamp")                                       --лампы
+bobmods.lib.tech.add_recipe_unlock("electronics", "deadlock-floor-lamp")                                       --лампы
+bobmods.lib.tech.remove_recipe_unlock("water-treatment", "liquifier")                                          --убираем второй разжижитель
+bobmods.lib.tech.add_recipe_unlock("bi-tech-timber", "bi-resin-pulp")                                          --смола в теплицу
+bobmods.lib.tech.add_recipe_unlock("bi-tech-timber", "bi-wood-from-pulp")                                      --смола в теплицу
+bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-1", "angels-iron-gear-wheel-stack-casting")        --убираем заготовки из 1 расплавки
+bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-1", "angels-iron-gear-wheel-stack-converting")     --убираем заготовки из 1 расплавки
+bobmods.lib.tech.remove_recipe_unlock("angels-iron-smelting-2", "angels-iron-gear-wheel-stack-casting-fast")   --убираем заготовки из 2 расплавки
+bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-2", "angels-iron-gear-wheel-stack-casting")            --заготовки во 1 литье железа
+bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-2", "angels-iron-gear-wheel-stack-converting")         --заготовки во 1 литье железа
+bobmods.lib.tech.add_recipe_unlock("angels-iron-casting-3", "angels-iron-gear-wheel-stack-casting-fast")       --заготовки шестеренок в 2  литье железа
+bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-1", "angels-steel-gear-wheel-stack-casting")      --убираем заготовки шестеренок из 1 стали
+bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-1", "angels-steel-gear-wheel-stack-converting")   --убираем заготовки шестеренок из 1 стали
+bobmods.lib.tech.remove_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-casting-fast") --убираем заготовки шестеренок из 2 стали
+bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-casting")         --рецепты заготовок во 2 сталь
+bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-2", "angels-steel-gear-wheel-stack-converting")      --рецепты заготовок во 2 сталь
+bobmods.lib.tech.add_recipe_unlock("angels-steel-smelting-3", "angels-steel-gear-wheel-stack-casting-fast")    --рецепты заготовок во 3 сталь
+bobmods.lib.tech.remove_recipe_unlock("ore-floatation", "silver-plate")                                        --удаление простого рецепта серебра
+bobmods.lib.tech.remove_recipe_unlock("angels-advanced-chemistry-4", "advanced-chemical-plant-3")              --удаляем хим завод 3 из химии 4
+bobmods.lib.tech.add_recipe_unlock("angels-advanced-chemistry-5", "advanced-chemical-plant-3")                 --добавляем хим завод 3 в химию 5
 
 --унификация рецептов манипуляторов и ковееров (AKMF)
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-bearing", "titanium-bearing")
