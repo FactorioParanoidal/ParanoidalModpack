@@ -193,10 +193,20 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
     )
 
     if settings.startup["artillery-shells"].value then
-        tech_util.add_prerequisites_to_technology(technologies["atomic-bomb"], { "artillery" }, mode)
+        tech_util.add_prerequisites_to_technology("atomic-bomb", { "artillery" }, mode)
     end
 
-    tech_util.add_prerequisites_to_technology(technologies["flamethrower"], { "engine" }, mode)
+    tech_util.add_prerequisites_to_technology("flamethrower", { "engine" }, mode)
+    --alien-artifact удалён, с переносом рецепта в alien-research
+    tech_util.add_prerequisites_to_technology("advanced-electronics", { "angels-sulfur-processing-2" }, mode)
+    tech_util.add_prerequisites_to_technology("braking-force-3", { "advanced-logistic-science-pack" }, mode)
+    tech_util.add_prerequisites_to_technology("braking-force-6", { "utility-science-pack" }, mode)
+    tech_util.add_prerequisites_to_technology("logistics-3", { "titanium-processing" }, mode)
+    tech_util.add_prerequisites_to_technology("rocket-silo", { "bob-area-drills-3" }, mode)
+    tech_util.add_prerequisites_to_technology("research-speed-5", { "production-science-pack" }, mode)
+    tech_util.add_prerequisites_to_technology("research-speed-6", { "utility-science-pack" }, mode)
+    tech_util.add_prerequisites_to_technology("electric-energy-distribution-2", { "concrete" }, mode)
+    tech_util.add_prerequisites_to_technology("effect-transmission", { "concrete" }, mode)
     tech_util.add_prerequisites_to_technology(
         technologies["advanced-electronics"],
         {
@@ -1056,6 +1066,133 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
         { "nuclear-fuel-3", "radiothermal-fuel-3" }, mode)
     tech_util.add_prerequisites_to_technology(technologies["bob-nuclear-power-2"],
         { "nuclear-fuel-2", "radiothermal-fuel-2" }, mode)
+    -- добавление после начала игры и использование "когнитивной составляющей"
+    tech_util.add_prerequisites_to_technology("bio-arboretum-temperate-1", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-arboretum-swamp-1", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("gardens-2", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-farm-2", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-temperate-farming-1", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-temperate-farm", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-desert-farming-1", { "gardens" }, mode)
+
+    --
+    if mods["Electric_Transformators"] then
+        tech_util.add_prerequisites_to_technology("trafo-s", { "angels-steel-smelting-1" }, mode)
+        tech_util.add_prerequisites_to_technology("trafo-l", { "chemical-science-pack" }, mode)
+        tech_util.add_prerequisites_to_technology("trafo-xl", { "production-science-pack" }, mode)
+    end
+    if mods["RampantMaintenance"] then
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-failure-3", { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-failure-5", { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-failure-7", { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-failure-9", { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-3", { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-5", { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-7", { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-9", { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-failure-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-failure-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-failure-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-damage-failure-9",
+            { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-downtime-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-downtime-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-downtime-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-downtime-9",
+            { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-checks-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-checks-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-checks-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-checks-9",
+            { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-energy-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-energy-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-energy-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-energy-9",
+            { "space-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-tile-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-tile-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-tile-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-tile-9",
+            { "space-science-pack" },
+            mode)
+
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-pollution-3",
+            { "chemical-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-pollution-5",
+            { "production-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-pollution-7",
+            { "utility-science-pack" },
+            mode)
+        tech_util.add_prerequisites_to_technology("rampant-maintenance-reduce-pollution-9",
+            { "space-science-pack" },
+            mode)
+    end
+    
+    tech_util.add_prerequisites_to_technology("bob-energy-shield-equipment-3", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("bob-battery-equipment-4", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("fusion-reactor-equipment-2", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("night-vision-equipment-3", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("solar-panel-equipment-4", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("personal-laser-defense-equipment-6", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("advanced-electronics-3", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-blue-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-orange-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-purple-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-yellow-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-green-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-red-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-research", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("vehicle-fusion-reactor-equipment-2", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("vehicle-fusion-cell-equipment-2", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("vehicle-big-turret-equipment-1", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("bi-tech-advanced-biotechnology", { "alien-artifact" }, mode)
+    tech_util.add_prerequisites_to_technology("bio-refugium-hatchery", { "gardens" }, mode)
+    tech_util.add_prerequisites_to_technology("alien-artifact", { "automation-science-pack" }, mode)
 end
 
 local function remove_prerequisites_from_technologies_in_regular_tree(mode)
@@ -1092,6 +1229,9 @@ local function remove_prerequisites_from_technologies_in_regular_tree(mode)
         mode
     )
     -- конец удаление остальных
+    -- удаление после начала игры и использование "когнитивной составляющей"
+    tech_util.remove_prerequisites_from_technology("bio-farm-1", { "gardens" }, mode)
+    tech_util.remove_prerequisites_from_technology("alien-artifact", { "gardens" }, mode)
 end
 
 local function remove_recipes_from_technology_effects_in_regular_tree(mode)
@@ -1363,6 +1503,8 @@ local function move_recipes_to_another_technologies(mode)
         "condensator2",
         mode
     )
+    -- после начала игры и прохождения технологического стэка
+    tech_util.move_recipe_effects_to_another_technology("advanced-electronics", "alien-research", "sci-component-o", mode)
     --end another
 end
 
