@@ -47,6 +47,7 @@ function register_events()
     script.on_event(defines.events.on_research_finished, technology_research_finished)
     script.on_event(defines.events.on_tick, on_tick_event)
     script.on_event(defines.events.on_train_changed_state, on_train_changed_state)
+    script.on_event(defines.events.on_train_created, on_train_created)
 end
 
 script.on_load(
