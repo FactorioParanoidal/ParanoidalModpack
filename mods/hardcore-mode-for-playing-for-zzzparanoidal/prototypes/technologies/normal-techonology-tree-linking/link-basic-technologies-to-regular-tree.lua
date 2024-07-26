@@ -866,32 +866,34 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
         { "angels-copper-tungsten-smelting-1", "tungsten-alloy-processing" },
         mode
     )
-    tech_util.add_prerequisites_to_technology(
-        technologies["basic-atomic-weapons"],
-        { "nuclear-fuel-reprocessing", "electric-energy-accumulators" },
-        mode
-    )
-    tech_util.add_prerequisites_to_technology(technologies["artillery-atomics"], { "full-fission-atomics" }, mode)
-    tech_util.add_prerequisites_to_technology(
-        technologies["californium-weapons"],
-        { "bob-shotgun-shells", "bob-bullets", "Schall-sniper-rifle" },
-        mode
-    )
-    tech_util.add_prerequisites_to_technology(technologies["fusion-weapons"], { "space-science-pack" }, mode)
-    tech_util.add_prerequisites_to_technology(
-        technologies["thermobaric-weaponry"],
-        {
-            "angels-explosives-1",
-            "tank",
-            "bob-rocket",
-            "rocket-control-unit",
-            "land-mine",
-            "Schall-tank-H-0",
-            "Schall-tank-SH-0",
-            "artillery"
-        },
-        mode
-    )
+    if mods["Warheads"] then
+        tech_util.add_prerequisites_to_technology(
+            "basic-atomic-weapons",
+            { "nuclear-fuel-reprocessing", "electric-energy-accumulators" },
+            mode
+        )
+        tech_util.add_prerequisites_to_technology("artillery-atomics", { "full-fission-atomics" }, mode)
+        tech_util.add_prerequisites_to_technology(
+            "californium-weapons",
+            { "bob-shotgun-shells", "bob-bullets", "Schall-sniper-rifle" },
+            mode
+        )
+        tech_util.add_prerequisites_to_technology("fusion-weapons", { "space-science-pack" }, mode)
+        tech_util.add_prerequisites_to_technology(
+            "thermobaric-weaponry",
+            {
+                "angels-explosives-1",
+                "tank",
+                "bob-rocket",
+                "rocket-control-unit",
+                "land-mine",
+                "Schall-tank-H-0",
+                "Schall-tank-SH-0",
+                "artillery"
+            },
+            mode
+        )
+    end
     tech_util.add_prerequisites_to_technology(
         technologies["artillery-prototype"],
         { "engine", "concrete", "military-science-pack" },
