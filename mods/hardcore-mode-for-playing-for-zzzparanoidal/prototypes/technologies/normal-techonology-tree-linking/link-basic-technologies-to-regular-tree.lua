@@ -1066,6 +1066,10 @@ local function add_prerequisites_to_technologies_in_regular_tree(mode)
         { "nuclear-fuel-3", "radiothermal-fuel-3" }, mode)
     tech_util.add_prerequisites_to_technology(technologies["bob-nuclear-power-2"],
         { "nuclear-fuel-2", "radiothermal-fuel-2" }, mode)
+    if mods["UnrealisticReactors"] then
+        tech_util.add_prerequisites_to_technology("thermonuclear-bomb",
+            { "productivity-module-6", "fusion-reactor-equipment-2" }, mode)
+    end
     -- добавление после начала игры и использование "когнитивной составляющей"
     tech_util.add_prerequisites_to_technology("bio-arboretum-temperate-1", { "gardens" }, mode)
     tech_util.add_prerequisites_to_technology("bio-arboretum-swamp-1", { "gardens" }, mode)
