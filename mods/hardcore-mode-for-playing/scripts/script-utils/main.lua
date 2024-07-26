@@ -1,4 +1,5 @@
-function handle_researched_technology(researched_technology, all_available_entity_items)
+all_available_entity_items = {}
+function handle_researched_technology(researched_technology)
     local recipe_names = _table.map(
         _table.filter(researched_technology.effects, function(effect) return effect.type == "unlock-recipe" end),
         function(effect) return effect.recipe end)
@@ -26,7 +27,7 @@ function handle_researched_technology(researched_technology, all_available_entit
     table.insert(all_available_entity_items, "character")
 end
 
-function disable_player_entity_on_all_surfaces(force, all_available_entity_items)
+function disable_player_entity_on_all_surfaces(force)
     _table.each(game.surfaces, function(surface)
         local surface_entities = surface.find_entities_filtered { force = force }
         _table.each(surface_entities, function(entity)
@@ -55,7 +56,7 @@ function disable_entity(entity)
     end]]
 end
 
-function enable_player_entity_on_all_surfaces(force, all_available_entity_items)
+function enable_player_entity_on_all_surfaces(force)
     _table.each(game.surfaces, function(surface)
         local surface_entities = surface.find_entities_filtered { force = force }
         _table.each(surface_entities, function(entity)
