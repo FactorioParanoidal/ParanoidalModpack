@@ -20,14 +20,14 @@ coal_bi_bio_greenhouse_entity.crafting_speed = 0.1
 
 local salvaged_offshore_pump_0_entity
 if mods["P-U-M-P-S"] then
-    salvaged_offshore_pump_0_entity = copy_entity("offshore-pump", "offshore-pump-0", "salvaged-offshore-pump-0")
+    salvaged_offshore_pump_0_entity = copy_entity("offshore-pump", "offshore-pump", "salvaged-offshore-pump-0")
 else
     salvaged_offshore_pump_0_entity = copy_entity("offshore-pump", "offshore-pump", "salvaged-offshore-pump-0")
 end
 salvaged_offshore_pump_0_entity.energy_source = {
     type = "void"
 }
-salvaged_offshore_pump_0_entity.pumping_speed = 50
+salvaged_offshore_pump_0_entity.pumping_speed = 100
 
 coal_bi_bio_greenhouse_entity.energy_source = {
     type = "burner",
