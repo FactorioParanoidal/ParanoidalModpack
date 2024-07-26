@@ -25,11 +25,14 @@ function ForceTrainInfoHolder:get_train_info_from_holder_by_train_index(train_id
 end
 
 function ForceTrainInfoHolder:remove_train_info_from_holder_by_train_index(train_id)
+    local exists = self.trains[train_id]
+    if not exists then return false end
     self.trains[train_id] = nil
     self.train_indexes = _table.keys(self.trains)
-    log("ForceTrainInfoHolder:remove_train_info_from_holder_by_train_index")
+    return true
+    --[[   log("ForceTrainInfoHolder:remove_train_info_from_holder_by_train_index")
     log("self.trains " .. Utils.dump_to_console(self.trains))
-    log("self.train_indexes " .. Utils.dump_to_console(self.train_indexes))
+    log("self.train_indexes " .. Utils.dump_to_console(self.train_indexes))]]
 end
 
 function ForceTrainInfoHolder:add_schedule_for_train(train_id, train_schedule)
