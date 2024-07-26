@@ -1,0 +1,25 @@
+{
+ "name": "P-U-M-P-S",
+ "version": "1.1.67",
+ "factorio_version": "1.1",
+ "title": "Offshore P.U.M.P.S. and Ground Water",
+ "author": "OldSkoolMatt",
+ "homepage": "https://mods.factorio.com/mod/P-U-M-P-S",
+ "dependencies":
+	[
+	  "base >= 1.1.0",
+	  "osm-lib >= 1.1.30",
+	  "? bobores >= 1.1.0",
+	  "? boblogistics >= 1.1.2",
+	  "? bobmining >= 1.1.3",
+	  "? bobplates >= 1.1.2",
+	  "? angelsrefining >= 0.12.1",
+	  "! higher-tier-offshore-pumps",
+	  "! BurnerOffshorePump",
+	  "! PumpAnywhere",
+	  "! WaterWell",
+	  "! StoneWaterWell",
+	  "(?)krastorio2"
+	],
+ "description":"[color=orange][font=default-bold]P[/font][/color]umping\n[color=orange][font=default-bold]U[/font][/color]nits\n[color=orange][font=default-bold]M[/font][/color]eeting\n[color=orange][font=default-bold]P[/font][/color]hysics\n[color=orange][font=default-bold]S[/font][/color]tandards\n\nFeatures three extra tiers of offshore pumps, a ground water pumpjack and powering options"
+}
