@@ -86,6 +86,11 @@ local function reset_evolution_factor_to_researched_technologies()
             end
         end
     end
+    for _, force in pairs(game.forces) do
+        if force.ai_controllable or force == game.forces.enemy then
+            force.evolution_factor = 0
+        end
+    end
     _table.each(
         researched_technologies,
         function(tech)
@@ -220,6 +225,7 @@ local function reset_technology_ingredients_if_technology_has_unresearched_prere
             map_ingredient_table_to_ingredient_array(technology.research_unit_ingredients, technology
                 .research_unit_count)
         technology.researched = false
+        log("technology unresearched " .. technology.name)
         add_ingredients_to(result, mapped_ingredient_array)
     end
     return result
@@ -306,17 +312,15 @@ local function research_basic_technologies_if_need()
         end
     )
 end
-local all_available_entity_items = {}
+
 
 local function disable_entities_for_disabled_technologies()
     local player = get_player()
     local force = player.force
     local researched_technologies = _table.filter(force.technologies, filter_only_research_technologies)
-
     _table.each(researched_technologies,
-        function(technology) handle_researched_technology(technology, all_available_entity_items) end)
-
-    disable_player_entity_on_all_surfaces(force, all_available_entity_items)
+        function(technology) handle_researched_technology(technology) end)
+    disable_player_entity_on_all_surfaces(force)
 end
 function disable_on_start_if_need()
     if loaded then
