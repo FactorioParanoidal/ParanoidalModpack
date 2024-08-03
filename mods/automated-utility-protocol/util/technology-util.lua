@@ -363,14 +363,16 @@ TechUtil.replace_all_occurs_prerequisite_to_another_in_active_technologies = fun
     )
 end
 
-TechUtil.find_all_active_technology_names_with_specified_prerequisite_name = function(technology_name, mode)
+TechUtil.find_all_active_technology_names_with_specified_prerequisite_name = function(technology_name, mode, excludes)
     local all_active_technology_names = TechUtil.get_all_active_technology_names(mode)
+    local real_excludes = excludes or {}
     return _table.filter(
         all_active_technology_names,
         function(all_active_technology_name)
             local prerequisites = Utils.get_moded_object(data.raw["technology"][all_active_technology_name], mode)
                 .prerequisites
-            return prerequisites and _table.contains(prerequisites, technology_name)
+            return prerequisites and _table.contains(prerequisites, technology_name) and
+                not _table.contains(real_excludes, all_active_technology_name)
         end
     )
 end
