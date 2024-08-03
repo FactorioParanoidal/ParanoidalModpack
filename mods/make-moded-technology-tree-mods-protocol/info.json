@@ -22,7 +22,6 @@
 		"?angelsrefining",
 		"?angelssmelting",
 		"?AtomicArtillery",
-		"?automated-fabrique-protocol",
 		"?baraws",
 		"?BatteryElectricTrain",
 		"?beautiful_straight_bridge_railway",
@@ -230,6 +229,9 @@
 		"?zero-fluid-info",
 		"?zzzparanoidal",
 		"?automated-utility-protocol",
-		"?hardcore-mode-for-playing"
+		"?hardcore-mode-for-playing",
+		"?RampantMaintance",
+		"?UnrealisticReactors",
+		"?Electric_Transformators"
 	]
 }
