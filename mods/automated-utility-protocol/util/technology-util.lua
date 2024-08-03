@@ -374,5 +374,8 @@ TechUtil.find_all_active_technology_names_with_specified_prerequisite_name = fun
         end
     )
 end
-
+TechUtil.find_all_prerequisite_names_specified_technology = function(technology_name, mode)
+    local technology = get_moded_technology(data.raw["technology"][technology_name], mode)
+    return technology.prerequisites or {}
+end
 return TechUtil
