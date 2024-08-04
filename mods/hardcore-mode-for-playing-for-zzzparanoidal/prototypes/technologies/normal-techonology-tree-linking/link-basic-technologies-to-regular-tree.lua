@@ -31,6 +31,9 @@ local function reset_basic_technology_prerequisites_to_regular_tree(mode)
     tech_util.replace_all_occurs_prerequisite_to_another_in_active_technologies("k-angels-advanced-chemistry-5",
         "angels-advanced-chemistry-3", mode)
     -- конец заменяем удалённые технологии
+    if mods["nixie-tubes"] then
+        tech_util.reset_prerequisites_for_technology("cathodes", { "circuit-network" })
+    end
 end
 
 local function add_prerequisites_to_technologies_in_regular_tree(mode)
