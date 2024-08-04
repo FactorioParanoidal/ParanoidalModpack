@@ -113,7 +113,7 @@ local SURFACE_NAMES_FOR_ENTITY_DISABLING = { "nauvis" }
 -- ладно, без налогов возвращаем.
 local TAX_RATE = 0
 local MAX_INTEGER = 1000
-
+local COAL_COUNT_PER_ONE_UNIT = 20
 local function map_ingredient_table_to_ingredient(research_unit_ingredient_count, research_unit_count)
     return research_unit_ingredient_count * (research_unit_count or MAX_INTEGER * MAX_INTEGER * MAX_INTEGER)
 end
@@ -251,6 +251,18 @@ local function return_ingredient_to_player(ingredient_value, ingredient_name, pl
         player.surface.spill_item_stack(
             player.position,
             { name = ingredient_name, count = ingredient_count },
+            true,
+            player.force,
+            false
+        )
+        --возвращаем ещё уголь для исследования вновь отозванных технологий.
+        player.surface.spill_item_stack(
+            player.position,
+            {
+                name = "coal",
+                count =
+                    ingredient_count * COAL_COUNT_PER_ONE_UNIT
+            },
             true,
             player.force,
             false
