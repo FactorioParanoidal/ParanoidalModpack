@@ -110,7 +110,8 @@ local function reset_evolution_factor_to_researched_technologies()
 end
 
 local SURFACE_NAMES_FOR_ENTITY_DISABLING = { "nauvis" }
-local TAX_RATE = 0.13
+-- ладно, без налогов возвращаем.
+local TAX_RATE = 0
 local MAX_INTEGER = 1000
 
 local function map_ingredient_table_to_ingredient(research_unit_ingredient_count, research_unit_count)
