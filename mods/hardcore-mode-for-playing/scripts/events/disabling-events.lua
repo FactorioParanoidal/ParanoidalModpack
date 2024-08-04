@@ -186,19 +186,19 @@ local function disable_all_recipes_for_manual_crafting()
     )
 end
 
-local function add_ingredient_to(targetIngredients, ingredient_amount, ingredient_name)
-    if not targetIngredients[ingredient_name] then
-        targetIngredients[ingredient_name] = ingredient_amount
+local function add_ingredient_to(target_ingredients, ingredient_amount, ingredient_name)
+    if not target_ingredients[ingredient_name] then
+        target_ingredients[ingredient_name] = ingredient_amount
     else
-        targetIngredients[ingredient_name] = targetIngredients[ingredient_name] + ingredient_amount
+        target_ingredients[ingredient_name] = target_ingredients[ingredient_name] + ingredient_amount
     end
 end
 
-local function add_ingredients_to(targetIngredients, sourceIngredients)
+local function add_ingredients_to(target_ingredients, sourceIngredients)
     _table.each(
         sourceIngredients,
         function(ingredient_amount, ingredient_name)
-            add_ingredient_to(targetIngredients, ingredient_amount, ingredient_name)
+            add_ingredient_to(target_ingredients, ingredient_amount, ingredient_name)
         end
     )
 end
@@ -302,7 +302,6 @@ local function reset_technologies_with_unresearched_prerequisites_in_the_path()
     return_ingredients_to_player(player, all_returned_ingredients)
 end
 
-local loaded = false
 local function research_basic_technologies_if_need()
     _table.each(
         get_player().force.technologies,
@@ -335,10 +334,8 @@ local function disable_entities_for_disabled_technologies()
         function(technology) handle_researched_technology(technology) end)
     disable_player_entity_on_all_surfaces(force)
 end
+
 function disable_on_start_if_need()
-    if loaded then
-        return
-    end
     if not Utils.is_freeplay_scenario() then
         return
     end
@@ -357,7 +354,6 @@ function disable_on_start_if_need()
     end
     disable_entities_for_disabled_technologies()
     reset_evolution_factor_to_researched_technologies()
-    loaded = true
 end
 
 function on_built_disabling_event(e)
