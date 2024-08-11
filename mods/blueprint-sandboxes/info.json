@@ -1,0 +1,16 @@
+{
+  "name": "blueprint-sandboxes",
+  "version": "1.17.1",
+  "factorio_version": "1.1",
+  "title": "Blueprint Sandboxes",
+  "author": "somethingtohide",
+  "description": "Temporary Editor-lite permissions in Lab-like environments for designing and experimenting.",
+  "homepage": "https://github.com/cameronleger/blueprint-sandboxes",
+  "dependencies": [
+    "base >= 1.1.87",
+    "? space-exploration >= 0.5.18",
+    "? EditorExtensions >= 2.0.0",
+    "? Cursed-FMD",
+    "? factorissimo-2-notnotmelon"
+  ]
+}
