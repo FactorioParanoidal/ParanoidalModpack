@@ -6,8 +6,7 @@
   "author": "Sovigod",
   "contact": "https://discord.gg/MnXGAmC",
   "homepage": "https://discord.gg/MnXGAmC",
-  "description": "PARANOIDAL 8 - RC1. Core mod for PARANOIDAL
-  2024.06",
+  "description": "PARANOIDAL 8 - RC1. Core mod for PARANOIDAL\n2024.06",
   "dependencies": [
     "base >= 1.1.100",
     "boblibrary", 
