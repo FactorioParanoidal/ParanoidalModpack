@@ -6,6 +6,7 @@ data:extend({
         type = "bool-setting",
         name = Settings.allowAllTech,
         setting_type = "runtime-global",
+        hidden = true,
         order = "a[common]-a",
         default_value = false,
     },
