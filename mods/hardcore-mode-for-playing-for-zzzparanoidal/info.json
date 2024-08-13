@@ -1,0 +1,23 @@
+{
+	"name": "hardcore-mode-for-playing-for-zzzparanoidal",
+	"version": "1.0.2",
+	"title": "Мост для 'Усложнитель игры' и 'zzzparanoidal'",
+	"author": "bogomolov-a-a",
+	"factorio_version": "1.1",
+	"description": "",
+	"dependencies": [
+		"base >= 1.1.91",
+		"factorissimo-2-notnotmelon",
+		"!factorissimo-2",
+		"flib",
+		"automated-utility-protocol",
+		"Bio_Industries",
+		"LootingSpaceshipWrecks",
+		"KaoExtended",
+		"zzzparanoidal",
+		"hardcore-mode-for-playing >= 1.0.0",
+		"make-moded-technology-tree-mods-protocol",
+		"!hardcore-mode-for-playing-for-vanilla",
+		"?P-U-M-P-S"
+	]
+}

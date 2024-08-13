@@ -1,0 +1,5 @@
+require("resources")
+require("items")
+require("entities")
+require("recipes")
+require("technologies")

@@ -9,12 +9,14 @@ bobmods.lib.tech.remove_prerequisite("plastics", "electrolysis-2")
 bobmods.lib.tech.remove_prerequisite("atomic-bomb", "kovarex-enrichment-process")
 
 --фикс атомной артилерии
-bobmods.lib.tech.add_prerequisite("bob-atomic-artillery-shell", "atomic-bomb")
-bobmods.lib.tech.remove_prerequisite("bob-atomic-artillery-shell", "kovarex-enrichment-process")
+if data.raw.technology["bob-atomic-artillery-shell"] then
+	bobmods.lib.tech.add_prerequisite("bob-atomic-artillery-shell", "atomic-bomb")
+	bobmods.lib.tech.remove_prerequisite("bob-atomic-artillery-shell", "kovarex-enrichment-process")
+end
 bobmods.lib.tech.remove_recipe_unlock("atomic-bomb", "atomic-artillery-shell")
 
 --фикс плазменных ракет
-bobmods.lib.tech.remove_prerequisite("bob-plasma-rocket", "bob-rocket" )
+bobmods.lib.tech.remove_prerequisite("bob-plasma-rocket", "bob-rocket")
 bobmods.lib.tech.add_prerequisite("bob-plasma-rocket", "rocketry")
 
 --убираем лишние рецепты
@@ -22,7 +24,6 @@ bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-chemical-f
 bobmods.lib.tech.remove_recipe_unlock("chemical-processing-1", "stone-furnace-from-stone-chemical-furnace")
 bobmods.lib.tech.remove_recipe_unlock("alloy-processing", "stone-mixing-furnace-from-stone-furnace")
 bobmods.lib.tech.remove_recipe_unlock("alloy-processing", "stone-furnace-from-stone-mixing-furnace")
-
 
 --разные фиксы зависимостей технологий
 --bobmods.lib.tech.add_prerequisite("angels-metallurgy-1", "steel-processing")

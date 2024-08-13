@@ -1,0 +1,96 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 13.08.2021
+  Features:
+    - added new alt key overlay graphics for easier recognition
+    - added hi-res variants for transformator entity graphic
+    - added entity shadow graphics
+    - tinted item icons with corresponding colors by tier
+    - updated alt key overlay option description
+    - added volume setting for transformator hum
+  Graphics:
+    - fixed entity color mask alignment
+    - fixed entity graphic bugs
+    - added new alt key overlay graphics for easier recognition
+    - added entity shadow graphics
+    - added hi-res variants for transformator entity graphic
+    - tinted item icons with corresponding colors by tier
+    - improved regular and hr variant of transformator entity
+  Bugfixes:
+    - fixed copper wire attachment points offsets
+    - fixed crash in check_connections() function when the unit is destroyed
+    - set conversion efficiency 98% by default
+  Changes:
+    - updated readme.md
+    - updated info.json
+  Locale:
+    - updated alt key overlay option description
+    - clarification of descriptions
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 26.02.2021
+  Graphics:
+    - tinted entities by tier
+    - new colored technology icons
+    - add numbers of tiers to item icons as layers 
+    - numbers of tiers for item icons in grey color
+  Bugfixes:
+    - updated more entity flags
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 15.02.2021
+  Bugfixes:
+    - updated entity flags
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 15.02.2021
+  Features:
+    - added startup setting for wiring test interval with option to disable
+    - added startup setting for efficiency
+    - got rid of "no input fluid" message on entities
+    - updated legacy transformers mod support
+  Locale:
+    - improved descriptions
+    - added mod info localization
+  Graphics:
+    - added better thumbnail
+    - added technologies and item icons by tier
+    - removed transparent variants
+    - removed unused pictures
+  Bugfixes:
+    - introduced migrations mechanism
+    - replaced displayed entity with simple-entity-with-force
+    - removed most useless parameters from prototypes
+    - refactored migration support
+    - updated readme
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 13.02.2021
+  Features:
+    - check each 10s for short circuit
+    - display an alert if any transformators are shorted
+    - infinity pipe instead of periodic fluidbox refill
+  Bugfixes:
+    - minor code cleanup
+    - more migration path fixes
+    - revise wiring test
+    - check each 10s for shorts
+    - set efficiency 96%
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 03.01.2021
+  Bugfixes:
+    - fix migration path for maps with previous Transformers 0.18.x setups
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 12.12.2020
+  Info:
+    - upload for game version 1.1 as Electric Transformators
+  Graphics:
+    - remove unused/obsolete files
+  Changes:
+    - fork of Transformers 0.18.3 as Electric Transformators 1.0.0
+    - add readme
+    - update locale
+    - update mod info
