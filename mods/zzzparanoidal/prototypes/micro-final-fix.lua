@@ -1478,3 +1478,6 @@ KaoExtended.recipe.addtorecipe("electric-mixing-furnace", {"electric-furnace", 1
 --Увеличение цены снайпер турели
 bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 }  })
 
+--Маяки больше не действуют на термальные скважины
+data.raw["mining-drill"]["thermal-extractor"].allowed_effects = {"consumption", "pollution"}
+data.raw["mining-drill"]["thermal-bore"].allowed_effects = {"consumption", "pollution"}
