@@ -1279,7 +1279,61 @@ data.raw.technology["angels-stone-smelting-4"].unit.count = 200 --меняем �
 data.raw.technology["angels-stone-smelting-4"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --меняем цену на цемент 4
 bobmods.lib.tech.add_prerequisite ("production-science-pack", "angels-stone-smelting-4") -- производственн пакеты под цемент 4
 bobmods.lib.tech.add_prerequisite ("bi-tech-garden-3", "production-science-pack") --огромные сады под производственн пакеты
+--08.07.24
+bobmods.lib.tech.add_prerequisite ("angels-metallurgy-4", "advanced-electronics-2")  -- Промышленная металлургия 4 под Продвинутую электронику 2 
+bobmods.lib.tech.add_prerequisite ("strand-casting-1", "angels-stone-smelting-1")  -- Машины непрерывного литья 1 под кирпичи 1
+bobmods.lib.tech.add_prerequisite ("angels-brass-smelting-1", "ore-floatation")  -- Латунь под Гидропромывку 1
+--21.07.24
+bobmods.lib.tech.add_prerequisite ("angels-metallurgy-3", "ore-leaching")  -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
+bobmods.lib.tech.add_prerequisite ("modules", "angels-gold-smelting-1") -- Модули под Золото! 
+data.raw.technology["modules"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --модули теперь за синие банки (как и должно быть)
+bobmods.lib.tech.add_prerequisite ("OilBurning-2", "bob-boiler-2") -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
+bobmods.lib.tech.add_prerequisite ("OilBurning-3", "bob-boiler-3") -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
+bobmods.lib.tech.add_prerequisite ("OilBurning-4", "bob-boiler-4") -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
+bobmods.lib.tech.add_prerequisite ("OilBurning-5", "bob-boiler-5") -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
+data.raw.technology["bob-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
+data.raw.technology["bob-area-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
+bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-4", "chemical-science-pack") -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-5", "utility-science-pack") -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite ("ober-nuclear-processing", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite ("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
+data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
+--13.08 починка рецепта кристаллического раствора
+bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
+bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})
 
+--#####################
+--Удаление лишних рыб из сборки
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-1", "fish-keeping-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-fish-2", "fish-breeding-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-2")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-0")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-1")
+bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-2")
+data.raw["capsule"]["raw-fish"].flags = {"hidden"}
+data.raw["capsule"]["alien-fish-1-raw"].flags = {"hidden"}
+data.raw["capsule"]["alien-fish-2-raw"].flags = {"hidden"}
+data.raw["recipe"]["fish-keeping-0"].hidden = true
+data.raw["recipe"]["fish-keeping-1"].hidden = true
+data.raw["recipe"]["fish-keeping-2"].hidden = true
+data.raw["recipe"]["fish-breeding-0"].hidden = true
+data.raw["recipe"]["fish-breeding-1"].hidden = true
+data.raw["recipe"]["fish-breeding-2"].hidden = true
+data.raw["recipe"]["fish-butchery-0"].hidden = true
+data.raw["recipe"]["fish-butchery-1"].hidden = true 
+data.raw["recipe"]["fish-butchery-2"].hidden = true
+data.raw["recipe"]["fish-pressing-0"].hidden = true
+data.raw["recipe"]["fish-pressing-1"].hidden = true
+data.raw["recipe"]["fish-pressing-2"].hidden = true
+--#####################
 
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-large-lamp") --лампы
 bobmods.lib.tech.remove_recipe_unlock("optics", "deadlock-floor-lamp") --лампы
