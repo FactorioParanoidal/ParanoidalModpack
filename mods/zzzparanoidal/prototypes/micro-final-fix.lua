@@ -1422,23 +1422,25 @@ bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "advanced-electronics-2
 bobmods.lib.tech.add_prerequisite("strand-casting-1", "angels-stone-smelting-1")                                                                                                                              -- Машины непрерывного литья 1 под кирпичи 1
 bobmods.lib.tech.add_prerequisite("angels-brass-smelting-1", "ore-floatation")                                                                                                                                -- Латунь под Гидропромывку 1
 --21.07.24
-bobmods.lib.tech.add_prerequisite("angels-metallurgy-3", "ore-leaching")                                                                                                                                      -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
-bobmods.lib.tech.add_prerequisite("modules", "angels-gold-smelting-1")                                                                                                                                        -- Модули под Золото!
-data.raw.technology["modules"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                        --модули теперь за синие банки (как и должно быть)
-bobmods.lib.tech.add_prerequisite("OilBurning-2", "bob-boiler-2")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
-bobmods.lib.tech.add_prerequisite("OilBurning-3", "bob-boiler-3")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
-bobmods.lib.tech.add_prerequisite("OilBurning-4", "bob-boiler-4")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
-bobmods.lib.tech.add_prerequisite("OilBurning-5", "bob-boiler-5")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
-data.raw.technology["bob-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                   --синие банки для буров мк3
-data.raw.technology["bob-area-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                              --синие банки для буров мк3
-bobmods.lib.tech.add_prerequisite("energy-weapons-damage-4", "chemical-science-pack")                                                                                                                         -- Урон энергетического оружия под правильные банки
-bobmods.lib.tech.add_prerequisite("energy-weapons-damage-5", "utility-science-pack")                                                                                                                          -- Урон энергетического оружия под правильные банки
-bobmods.lib.tech.add_prerequisite("ober-nuclear-processing", "utility-science-pack")                                                                                                                          -- Высокотемпературная переработка сырья под правильные банки
-bobmods.lib.tech.add_prerequisite("refined-flammables-4", "utility-science-pack")                                                                                                                             -- Высокотемпературная переработка сырья под правильные банки
-bobmods.lib.tech.add_prerequisite("advanced-uranium-processing-1", "utility-science-pack")                                                                                                                    -- Продвинутая переработка урана 1 под правильные банки
-data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 }, { "advanced-logistic-science-pack", 1 } } --Складская логистика 2 делаем правильные банки
-bobmods.lib.recipe.set_ingredients("yellow-filter-inserter",
-    { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } })                                                                                                                --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
+bobmods.lib.tech.add_prerequisite ("angels-metallurgy-3", "ore-leaching")  -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
+bobmods.lib.tech.add_prerequisite ("modules", "angels-gold-smelting-1") -- Модули под Золото! 
+data.raw.technology["modules"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --модули теперь за синие банки (как и должно быть)
+bobmods.lib.tech.add_prerequisite ("OilBurning-2", "bob-boiler-2") -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
+bobmods.lib.tech.add_prerequisite ("OilBurning-3", "bob-boiler-3") -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
+bobmods.lib.tech.add_prerequisite ("OilBurning-4", "bob-boiler-4") -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
+bobmods.lib.tech.add_prerequisite ("OilBurning-5", "bob-boiler-5") -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
+data.raw.technology["bob-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
+data.raw.technology["bob-area-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
+bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-4", "chemical-science-pack") -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-5", "utility-science-pack") -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite ("ober-nuclear-processing", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite ("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
+data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
+--13.08 починка рецепта кристаллического раствора
+bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
+bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})
 
 --#####################
 --Удаление лишних рыб из сборки
@@ -1612,5 +1614,8 @@ bobmods.lib.recipe.remove_ingredient("electric-mixing-furnace", "electric-chemic
 KaoExtended.recipe.addtorecipe("electric-mixing-furnace", { "electric-furnace", 1 })
 
 --Увеличение цены снайпер турели
-bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1",
-    { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 } })
+bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 }  })
+
+--Маяки больше не действуют на термальные скважины
+data.raw["mining-drill"]["thermal-extractor"].allowed_effects = {"consumption", "pollution"}
+data.raw["mining-drill"]["thermal-bore"].allowed_effects = {"consumption", "pollution"}

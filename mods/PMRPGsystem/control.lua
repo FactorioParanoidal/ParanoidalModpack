@@ -916,10 +916,10 @@ if player.character then
 		player.character.character_mining_speed_modifier   = player.character.character_mining_speed_modifier + global.personalxp.LV_Mining_Speed[name] * global.RPG_Bonus['LV_Mining_Speed']/100 
 		player.character.character_running_speed_modifier  = player.character.character_running_speed_modifier + global.personalxp.LV_Run_Speed[name] * global.RPG_Bonus['LV_Run_Speed']/100 
 
-		player.character.character_build_distance_bonus = player.character.character_build_distance_bonus+ global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist']
-		player.character.character_reach_distance_bonus = player.character.character_reach_distance_bonus+ global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist'] 
-		player.character.character_item_drop_distance_bonus = player.character.character_item_drop_distance_bonus+ global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist'] 
-		player.character.character_resource_reach_distance_bonus = player.character.character_resource_reach_distance_bonus+ global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist']
+		player.character.character_build_distance_bonus = player.character.character_build_distance_bonus + global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist']
+		player.character.character_reach_distance_bonus = player.character.character_reach_distance_bonus + global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist'] 
+		player.character.character_item_drop_distance_bonus = player.character.character_item_drop_distance_bonus + global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist'] 
+		player.character.character_resource_reach_distance_bonus = player.character.character_resource_reach_distance_bonus + global.personalxp.LV_Reach_Dist[name] * global.RPG_Bonus['LV_Reach_Dist']
 
 	if not skip_inv then
 		player.character.character_inventory_slots_bonus = player.character.character_inventory_slots_bonus + global.personalxp.LV_Inv_Bonus[name] * global.RPG_Bonus['LV_Inv_Bonus'] 
@@ -929,8 +929,8 @@ if player.character then
 		player.character.character_health_bonus = player.character.character_health_bonus+ global.personalxp.LV_Health_Bonus[name] * global.RPG_Bonus['LV_Health_Bonus']
 
 	if global.personalxp.opt_Pick_Extender[name] then 
-		player.character.character_item_pickup_distance_bonus = player.character.character_reach_distance_bonus
-		player.character.character_loot_pickup_distance_bonus = player.character.character_reach_distance_bonus
+		player.character.character_item_pickup_distance_bonus = 20
+		player.character.character_loot_pickup_distance_bonus = 20
 		end
 		
 end
@@ -940,6 +940,7 @@ end
 local p_attribs = { 'character_crafting_speed_modifier',
 					'character_mining_speed_modifier',
 					'character_running_speed_modifier',
+					'character_build_distance_bonus',
 					'character_reach_distance_bonus',
 					'character_item_drop_distance_bonus',
 					'character_resource_reach_distance_bonus',
@@ -1096,8 +1097,8 @@ for A=1,#global.Player_Attributes do
 
 
 if global.personalxp.opt_Pick_Extender[name] then 
-	player.character.character_item_pickup_distance_bonus = math.min(player.character.character_reach_distance_bonus,320)
-	player.character.character_loot_pickup_distance_bonus = math.min(player.character.character_reach_distance_bonus,320)
+	player.character.character_item_pickup_distance_bonus = 20
+	player.character.character_loot_pickup_distance_bonus = 20
 	else 
 	player.character.character_item_pickup_distance_bonus = 0
 	player.character.character_loot_pickup_distance_bonus = 0
@@ -1219,8 +1220,8 @@ local frame = player.gui.center["char-panel"] or player.gui.screen["char-panel"]
 		global.personalxp.opt_Pick_Extender[player.name] = cb_pick_extender
 		
 		if cb_pick_extender then
-			player.character.character_item_pickup_distance_bonus = player.character.character_reach_distance_bonus
-			player.character.character_loot_pickup_distance_bonus = player.character.character_reach_distance_bonus
+			player.character.character_item_pickup_distance_bonus = 20
+			player.character.character_loot_pickup_distance_bonus = 20
 		else 
 			player.character.character_item_pickup_distance_bonus = 0
 			player.character.character_loot_pickup_distance_bonus = 0
