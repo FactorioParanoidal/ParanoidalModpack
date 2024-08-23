@@ -1441,6 +1441,8 @@ bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor
 --13.08 починка рецепта кристаллического раствора
 bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
 bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})
+--19.08 починка рецепта взрывчатки 3
+data.raw["recipe"]["solid-trinitrotoluene"].category = "advanced-chemistry"
 
 --#####################
 --Удаление лишних рыб из сборки
