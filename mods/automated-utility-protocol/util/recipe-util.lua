@@ -1,7 +1,7 @@
 local RecipeUtil = {}
 
 local function get_recipe_object_for_mode(recipe_name, mode)
-    return Utils.get_moded_object(data.raw["recipe"][recipe_name], mode)
+    return Utils.get_moded_object("recipe", recipe_name, mode)
 end
 
 local function get_recipe_data_products(recipe_data)
@@ -189,11 +189,8 @@ RecipeUtil.add_recipe_ingredient = function(recipe_name, mode, ingredient)
     if not recipe_name or not type(recipe_name) == "string" then
         error("recipe_name is wrong")
     end
-    local recipe = data.raw["recipe"][recipe_name]
-    if not recipe then
-        error("recipe with name " .. recipe_name .. " not found")
-    end
-    local moded_recipe = Utils.get_moded_object(recipe, mode)
+
+    local moded_recipe = Utils.get_moded_object("recipe", recipe_name, mode)
     if not moded_recipe.ingredients then
         moded_recipe.ingredients = {}
     end
@@ -222,13 +219,9 @@ RecipeUtil.remove_recipe_ingredient = function(recipe_name, mode, ingredient)
         error("ingredient with type " .. ingredient.type .. " called " .. ingredient.name .. " not found")
     end
     if not recipe_name or not type(recipe_name) == "string" then
-        error("recipe_name is wrong")
+        error("recipe_name has wrong type ")
     end
-    local recipe = data.raw["recipe"][recipe_name]
-    if not recipe then
-        error("recipe with name " .. recipe_name .. " not found")
-    end
-    local moded_recipe = Utils.get_moded_object(recipe, mode)
+    local moded_recipe = Utils.get_moded_object("recipe", recipe_name, mode)
     if not moded_recipe.ingredients then
         error("ingredients table for " .. recipe_name .. ", mode " .. mode .. " not exists!")
     end

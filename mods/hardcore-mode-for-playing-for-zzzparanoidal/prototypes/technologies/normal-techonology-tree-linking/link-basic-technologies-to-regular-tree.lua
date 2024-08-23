@@ -20,7 +20,7 @@ local function reset_basic_technology_prerequisites_to_regular_tree(mode)
             "automation-science-pack" }, mode)
     tech_util.reset_prerequisites_for_technology("electricity", { "basic-automation", "electricity-0" }, mode)
     tech_util.reset_prerequisites_for_technology("angels-zinc-smelting-1",
-        _table.deepcopy(Utils.get_moded_object(data.raw["technology"]["zinc-processing"], mode).prerequisites), mode)
+        _table.deepcopy(Utils.get_moded_object("technology", "zinc-processing", mode).prerequisites), mode)
     --заменяем удалённые технологии
     tech_util.replace_all_occurs_prerequisite_to_another_in_active_technologies("zinc-processing",
         "angels-brass-smelting-1", mode)

@@ -1,30 +1,14 @@
 local TechUtil = {}
 local recipe_util = require("__automated-utility-protocol__.util.recipe-util")
 require("__automated-utility-protocol__.util.technology-tree-util")
-local function technology_not_found()
-    error("technology is null!!")
-end
 
-local function get_moded_technology(technology_candidate, mode)
-    if type(technology_candidate) ~= "table" then
-        error("technology must be a table but got " .. type(technology_candidate))
-    end
-    if not technology_candidate then
-        technology_not_found()
-    end
-    local result = Utils.get_moded_object(technology_candidate, mode)
-    if not result then
-        error("mode " .. mode .. "for technology " .. result.name .. " not specified!!")
-    end
-    return result
-end
 local function filter_technology_effects_unlock_recipe(effect)
     return effect and effect.type == "unlock-recipe" and effect.recipe
     --	and not recipe_util.is_contain_dry411_srev(effect.recipe)
 end
 
-local function get_technology_object_effect_recipes_by_name(technology_candidate, mode)
-    local technology_object = get_moded_technology(technology_candidate, mode)
+local function get_technology_object_effect_recipes_by_name(technology_candidate_name, mode)
+    local technology_object = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if not technology_object or not technology_object.effects then
         return {}
     end
@@ -33,7 +17,7 @@ end
 
 TechUtil.get_all_recipe_ingredients_for_specified_technology = function(technology_name, mode)
     local result = {}
-    local unlocked_recipes = get_technology_object_effect_recipes_by_name(data.raw["technology"][technology_name], mode)
+    local unlocked_recipes = get_technology_object_effect_recipes_by_name(technology_name, mode)
     _table.each(
         unlocked_recipes,
         function(unlocked_recipe)
@@ -47,7 +31,7 @@ end
 
 TechUtil.get_all_recipe_results_for_specified_technology = function(technology_name, mode)
     local result = {}
-    local unlocked_recipes = get_technology_object_effect_recipes_by_name(data.raw["technology"][technology_name], mode)
+    local unlocked_recipes = get_technology_object_effect_recipes_by_name(technology_name, mode)
     _table.each(
         unlocked_recipes,
         function(unlocked_recipe)
@@ -61,7 +45,7 @@ end
 
 TechUtil.get_all_tool_units_for_specified_technology = function(technology_name, mode)
     local result = {}
-    local technology_object = get_moded_technology(data.raw["technology"][technology_name], mode)
+    local technology_object = Utils.get_moded_object("technology", technology_name, mode)
     if not technology_object or not technology_object.unit or not technology_object.unit.ingredients then
         return
     end
@@ -78,7 +62,7 @@ end
 
 TechUtil.get_all_recipe_names_for_specified_technology = function(technology_name, mode)
     return _table.map(
-        get_technology_object_effect_recipes_by_name(data.raw["technology"][technology_name], mode),
+        get_technology_object_effect_recipes_by_name(technology_name, mode),
         function(unlocked_recipe)
             return unlocked_recipe.recipe
         end
@@ -135,7 +119,7 @@ TechUtil.get_all_active_technology_names = function(mode)
         data.raw["technology"],
         function(technology_candidate)
             local technology_name = technology_candidate.name
-            local technology = get_moded_technology(technology_candidate, mode)
+            local technology = Utils.get_moded_object("technology", technology_candidate.name, mode)
             if
                 not technology.hidden or
                 technology.hidden and _string.ends_with(technology_name, DETECTED_RESOURCE_TECHNOLOGY_SUFFIX)
@@ -160,9 +144,7 @@ TechUtil.add_prerequisites_to_technology = function(technology_candidate_name, p
     if not prerequisites or type(prerequisites) ~= "table" then
         error("prerequisites not specified")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
-    local technology_candidate_name = technology_candidate.name
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     --проверяем на создание циклов.
     _table.each(
         prerequisites,
@@ -189,8 +171,7 @@ TechUtil.remove_prerequisites_from_technology = function(technology_candidate_na
     if not prerequisites then
         error("prerequisites not specified")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if not technology.prerequisites then
         error("try to remove from not exists prerequisistes")
     end
@@ -206,8 +187,7 @@ TechUtil.reset_prerequisites_for_technology = function(technology_candidate_name
     if not prerequisites then
         error("prerequisites not specified")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if technology.prerequisites then
         technology.prerequisites = nil
     end
@@ -218,12 +198,12 @@ TechUtil.add_recipe_effect_to_technology = function(technology_candidate_name, r
         error("recipe_name not specified!")
     end
     local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if not technology.effects then
         technology.effects = {}
     end
     _table.insert_all_if_not_exists(technology.effects, { { type = "unlock-recipe", recipe = recipe_name } })
-    local recipe = Utils.get_moded_object(data.raw.recipe[recipe_name], mode)
+    local recipe = Utils.get_moded_object("recipe", recipe_name, mode)
     if not recipe then
         error("recipe with name " .. recipe_name .. " not found!")
     end
@@ -234,8 +214,7 @@ TechUtil.remove_recipe_effect_from_technology = function(technology_candidate_na
     if not recipe_name then
         error("recipe_name not specified!")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if not technology.effects then
         error("technology effects not specified!")
     end
@@ -246,8 +225,7 @@ local function add_science_pack_to_technology_units(technology_candidate_name, i
     if not ingredient_value then
         error("ingredient_value not specified")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if technology.unit and technology.unit.ingredients then
         --log("technology.unit.ingredients " .. Utils.dump_to_console(technology.unit.ingredients))
         _table.insert_all_if_not_exists_with_compare(
@@ -286,8 +264,7 @@ TechUtil.remove_science_pack_from_technology_units = function(technology_candida
     if not science_pack_name then
         error("science_pack_name not specified")
     end
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     _table.remove_item(
         technology.unit.ingredients,
         science_pack_name,
@@ -298,44 +275,32 @@ TechUtil.remove_science_pack_from_technology_units = function(technology_candida
 end
 
 TechUtil.hide_technology = function(technology_candidate_name, mode)
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     technology.hidden = true
 end
 
 TechUtil.show_technology = function(technology_candidate_name, mode)
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     technology.hidden = false
 end
 
 TechUtil.show_recipe = function(recipe_candidate_name, mode)
-    local recipe_candidate = data.raw["recipe"][recipe_candidate_name]
-    if not recipe_candidate or type(recipe_candidate) ~= "table" then
-        error("wrong recipe prototype!")
-    end
-    Utils.get_moded_object(recipe_candidate, mode).hidden = false
+    Utils.get_moded_object("recipe", recipe_candidate_name, mode).hidden = false
 end
 
 TechUtil.hide_recipe = function(recipe_candidate_name, mode)
-    local recipe_candidate = data.raw["recipe"][recipe_candidate_name]
-    if not recipe_candidate or type(recipe_candidate) ~= "table" then
-        error("wrong recipe prototype!")
-    end
-    Utils.get_moded_object(recipe_candidate, mode).hidden = true
+    Utils.get_moded_object("recipe", recipe_candidate_name, mode).hidden = true
 end
 TechUtil.move_recipe_effects_to_another_technology = function(from_name, to_name, recipe_name, mode)
     TechUtil.remove_recipe_effect_from_technology(from_name, recipe_name, mode)
     TechUtil.add_recipe_effect_to_technology(to_name, recipe_name, mode)
 end
-TechUtil.has_technology_effects = function(technology_name, mode)
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+TechUtil.has_technology_effects = function(technology_candidate_name, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     return technology.effects and _table.size(technology.effects) > 0
 end
 TechUtil.has_technology_recipe_effects = function(technology_candidate_name, recipe_name, mode)
-    local technology_candidate = data.raw["technology"][technology_candidate_name]
-    local technology = get_moded_technology(technology_candidate, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     if not recipe_name then
         error("recipe_name not specified!")
     end
@@ -369,15 +334,15 @@ TechUtil.find_all_active_technology_names_with_specified_prerequisite_name = fun
     return _table.filter(
         all_active_technology_names,
         function(all_active_technology_name)
-            local prerequisites = Utils.get_moded_object(data.raw["technology"][all_active_technology_name], mode)
+            local prerequisites = Utils.get_moded_object("technology", all_active_technology_name, mode)
                 .prerequisites
             return prerequisites and _table.contains(prerequisites, technology_name) and
                 not _table.contains(real_excludes, all_active_technology_name)
         end
     )
 end
-TechUtil.find_all_prerequisite_names_specified_technology = function(technology_name, mode)
-    local technology = get_moded_technology(data.raw["technology"][technology_name], mode)
+TechUtil.find_all_prerequisite_names_specified_technology = function(technology_candidate_name, mode)
+    local technology = Utils.get_moded_object("technology", technology_candidate_name, mode)
     return technology.prerequisites or {}
 end
 return TechUtil

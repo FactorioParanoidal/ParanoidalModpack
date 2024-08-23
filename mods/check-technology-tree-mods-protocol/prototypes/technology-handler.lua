@@ -4,7 +4,7 @@ local recipe_util = require("__automated-utility-protocol__.util.recipe-util")
 local crafting_machine_util = require("__automated-utility-protocol__.util.crafting-machine-util")
 
 local function check_tree_element_not_hidden(active_technology_name, tree_element_name, mode)
-    local moded_tree_element = Utils.get_moded_object(data.raw["technology"][tree_element_name], mode)
+    local moded_tree_element = Utils.get_moded_object("technology", tree_element_name, mode)
     if
         not moded_tree_element or
         moded_tree_element.hidden and
@@ -46,7 +46,7 @@ local function check_recipes_not_has_hidden_in_tree_element(technology_name, mod
     _table.each(
         recipe_names,
         function(recipe_name)
-            local moded_recipe = Utils.get_moded_object(data.raw["recipe"][recipe_name], mode)
+            local moded_recipe = Utils.get_moded_object("recipe", recipe_name, mode)
             if not moded_recipe or moded_recipe.hidden then
                 error(
                     " for technology " ..
