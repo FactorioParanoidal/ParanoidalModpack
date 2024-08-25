@@ -15,6 +15,26 @@ local tech = data.raw["technology"]
 
 local raw_items = {"item","accumulator","active-defense-equipment","ammo","ammo-turret","arithmetic-combinator","armor","artillery-turret","artillery-wagon","assembling-machine","battery-equipment","beacon","belt-immunity-equipment","boiler","capsule","car","cargo-wagon","combat-robot","constant-combinator","construction-robot","container","decider-combinator","electric-pole","electric-turret","energy-shield-equipment","fluid-wagon","furnace","gate","generator","generator-equipment","gun","heat-pipe","inserter","item","locomotive","logistic-container","logistic-robot","market","mining-drill","module","night-vision-equipment","offshore-pump","pipe","pipe-to-ground","power-switch","programmable-speaker","projectile","pump","radar","rail-chain-signal","rail-planner","rail-signal","reactor","repair-tool","resource","roboport","roboport-equipment","rocket-silo","solar-panel","solar-panel-equipment","splitter","storage-tank","straight-rail","tool","train-stop","transport-belt","underground-belt","wall"}
 
+data:extend({{
+    type = "item-group",
+    name = "hero_group",
+    order = "z",
+    icon = "__bobwarfare__/graphics/icons/technology/plasma-turrets.png",
+    icon_size = 128,
+    icon_mipmaps = 2,
+    localised_name = "Hero Turrets"
+  },
+  {
+    type = "item-subgroup",
+    name = "hero_subgroup",
+    group = "hero_group",
+    order = "e",
+    localised_name = "Hero Turrets"
+}})
+
+
+
+
 --honk
 local types_with_items = {}
 for category, prototypes in pairs(data.raw) do
@@ -277,8 +297,9 @@ local local_create_turret = function(turret,rank,rank_string,mod)
             icons = new_icon,
             icon_size = 64,
             --hide_from_player_crafting = true,
+            -- flags = {"hidden"},
 
-            subgroup = turret.item.subgroup,
+            subgroup = "hero_subgroup",
             order = (turret.item.order or "["..turret.item.name.."]").."["..rank.."]",
             place_result = place_name,            
             stack_size = turret.item.stack_size or 1
@@ -293,7 +314,7 @@ local local_create_turret = function(turret,rank,rank_string,mod)
             icons = new_icon,
             icon_size = 64,
             --hide_from_player_crafting = true,
-            subgroup = turret.item.subgroup,
+            subgroup = "hero_subgroup",
             order = (turret.item.order or "["..turret.item.name.."]").."["..rank.."].tag",
             place_result = place_name,
             stack_size = turret.item.stack_size or 1
@@ -659,6 +680,6 @@ local local_update_ammo_ranges = function()
 end
 
 if data ~= nil and data_final_fixes == true then
-   local_create_turrets()
-   local_update_ammo_ranges()
+    local_create_turrets()
+    local_update_ammo_ranges()
 end
