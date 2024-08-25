@@ -1035,7 +1035,6 @@ bobmods.lib.tech.remove_prerequisite("cement-mixture-1", "concrete") --бето�
 bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
 bobmods.lib.tech.remove_prerequisite("plastic-1", "plastics") --пластик
 
-
 -- добавляем зависимости в техологии для последовательности развития
 bobmods.lib.tech.add_prerequisite ("concrete", "angels-stone-smelting-2") --бетон
 bobmods.lib.tech.add_prerequisite ("bi-tech-wooden-storage-1", "bi-tech-resin-extraction") --деревянный ящик
@@ -1071,17 +1070,17 @@ bobmods.lib.recipe.add_ingredient("astrometrics", {"clowns-plate-osmium", 100})
 bobmods.lib.recipe.add_ingredient("ftl-drive", {"clowns-plate-osmium", 100})
 
 --Баланс водных насосов
-data.raw["assembling-machine"]["water-pumpjack-1"].energy_usage = "600kW"
-data.raw["assembling-machine"]["water-pumpjack-2"].energy_usage = "1000kW"
-data.raw["assembling-machine"]["water-pumpjack-3"].energy_usage = "1350kW"
-data.raw["assembling-machine"]["water-pumpjack-4"].energy_usage = "1700kW"
-data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
+-- data.raw["assembling-machine"]["water-pumpjack-1"].energy_usage = "600kW"
+-- data.raw["assembling-machine"]["water-pumpjack-2"].energy_usage = "1000kW"
+-- data.raw["assembling-machine"]["water-pumpjack-3"].energy_usage = "1350kW"
+-- data.raw["assembling-machine"]["water-pumpjack-4"].energy_usage = "1700kW"
+-- data.raw["assembling-machine"]["water-pumpjack-5"].energy_usage = "2100kW"
 
-data.raw["assembling-machine"]["water-pumpjack-1"].crafting_speed = 0.2
-data.raw["assembling-machine"]["water-pumpjack-2"].crafting_speed = 0.4
-data.raw["assembling-machine"]["water-pumpjack-3"].crafting_speed = 0.6
-data.raw["assembling-machine"]["water-pumpjack-4"].crafting_speed = 0.8
-data.raw["assembling-machine"]["water-pumpjack-5"].crafting_speed = 1
+-- data.raw["assembling-machine"]["water-pumpjack-1"].crafting_speed = 0.2
+-- data.raw["assembling-machine"]["water-pumpjack-2"].crafting_speed = 0.4
+-- data.raw["assembling-machine"]["water-pumpjack-3"].crafting_speed = 0.6
+-- data.raw["assembling-machine"]["water-pumpjack-4"].crafting_speed = 0.8
+-- data.raw["assembling-machine"]["water-pumpjack-5"].crafting_speed = 1
 
 --Баланс агрегатора росы
 data.raw["assembling-machine"]["dpa"].energy_usage = "1000kW"
@@ -1236,7 +1235,7 @@ bobmods.lib.tech.add_prerequisite("bio-refugium-fish-3", "angels-titanium-smelti
 bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "angels-titanium-smelting-1") --бойня 3 под титан
 bobmods.lib.tech.add_prerequisite("bio-refugium-butchery-3", "advanced-electronics-2") --бойня 3 под титан
 bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-3", "production-science-pack") --смешиватель мк3 под производственн пакеты
-bobmods.lib.tech.add_prerequisite("offshore-pump-3", "angels-titanium-smelting-1") --насос 3 под титан
+bobmods.lib.tech.add_prerequisite("offshore-mk3-pump", "angels-titanium-smelting-1") --насос 3 под титан
 bobmods.lib.tech.add_prerequisite("logistics-3", "angels-titanium-smelting-1") --логистика 3 под титан
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "advanced-electronics-2") --фильтры 3 под электронику 3
 bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "angels-titanium-smelting-1") --фильтры 3 под титан
@@ -1299,7 +1298,7 @@ bobmods.lib.tech.add_prerequisite ("ober-nuclear-processing", "utility-science-p
 bobmods.lib.tech.add_prerequisite ("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
 bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
 data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
-bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фитльтрующий твердотопливный
 --13.08 починка рецепта кристаллического раствора
 bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
 bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})
@@ -1320,9 +1319,11 @@ bobmods.lib.tech.remove_recipe_unlock("bio-refugium-butchery-1", "fish-butchery-
 bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-0")
 bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-1")
 bobmods.lib.tech.remove_recipe_unlock("bio-pressing-fish-1", "fish-pressing-2")
+
 data.raw["capsule"]["raw-fish"].flags = {"hidden"}
 data.raw["capsule"]["alien-fish-1-raw"].flags = {"hidden"}
 data.raw["capsule"]["alien-fish-2-raw"].flags = {"hidden"}
+
 data.raw["recipe"]["fish-keeping-0"].hidden = true
 data.raw["recipe"]["fish-keeping-1"].hidden = true
 data.raw["recipe"]["fish-keeping-2"].hidden = true
@@ -1483,3 +1484,50 @@ bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", { { "iron-gear-wheel",
 --Маяки больше не действуют на термальные скважины
 data.raw["mining-drill"]["thermal-extractor"].allowed_effects = {"consumption", "pollution"}
 data.raw["mining-drill"]["thermal-bore"].allowed_effects = {"consumption", "pollution"}
+
+--################### финальный код для новых береговых насосов ###################
+--offshore-burner
+data.raw['item']["offshore-mk0-pump"].place_result = "offshore-mk0-pump"
+data.raw["pump"]["offshore-mk0-pump-output"].energy_usage = "900kW"
+data.raw["offshore-pump"]["offshore-mk0-pump"].pumping_speed = 5
+data.raw.pump["offshore-mk0-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk0-pump"].pumping_speed
+data.raw["item"]["offshore-mk0-pump"].order = "b[fluids]-c[offshore-mk0-pump]"
+--offshore-1
+data.raw['item']["offshore-pump"].place_result = "offshore-pump"
+data.raw["pump"]["offshore-pump-output"].energy_usage = "1200kW"
+data.raw["offshore-pump"]["offshore-pump"].pumping_speed = 20 --20 = 1200/c
+data.raw.pump["offshore-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-pump"].pumping_speed
+data.raw["item"]["offshore-pump"].subgroup = "extraction-machine"
+data.raw["item"]["offshore-pump"].order = "b[fluids]-c[offshore-mk1-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-pump", { {"electronic-circuit", 2}, {"pipe", 5}, {"iron-gear-wheel", 5} })
+bobmods.lib.tech.add_recipe_unlock("electricity", "offshore-pump")
+--offshore-2
+data.raw['item']["offshore-mk2-pump"].place_result = "offshore-mk2-pump"
+data.raw["pump"]["offshore-mk2-pump-output"].energy_usage = "2000kW"
+data.raw["offshore-pump"]["offshore-mk2-pump"].pumping_speed = 40
+data.raw.pump["offshore-mk2-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk2-pump"].pumping_speed
+data.raw["item"]["offshore-mk2-pump"].order = "b[fluids]-c[offshore-mk2-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk2-pump", { { "steel-pipe", 5 }, { "advanced-circuit", 2 }, { "steel-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk2-pump"].prerequisites = {"advanced-electronics", "bob-fluid-handling-2"}
+--offshore-3
+data.raw['item']["offshore-mk3-pump"].place_result = "offshore-mk3-pump"
+data.raw["pump"]["offshore-mk3-pump-output"].energy_usage = "2800kW"
+data.raw["offshore-pump"]["offshore-mk3-pump"].pumping_speed = 60
+data.raw.pump["offshore-mk3-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk3-pump"].pumping_speed
+data.raw["item"]["offshore-mk3-pump"].order = "b[fluids]-c[offshore-mk3-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk3-pump", { { "titanium-pipe", 5 }, { "advanced-circuit", 2 }, { "titanium-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk3-pump"].prerequisites = {"offshore-mk2-pump", "advanced-electronics", "angels-titanium-smelting-1"}
+data.raw["technology"]["offshore-mk3-pump"].prerequisites = {"advanced-electronics", "bob-fluid-handling-2"}
+--offshore-4
+data.raw['item']["offshore-mk4-pump"].place_result = "offshore-mk4-pump"
+data.raw["pump"]["offshore-mk4-pump-output"].energy_usage = "3700kW"
+data.raw["offshore-pump"]["offshore-mk4-pump"].pumping_speed = 80
+data.raw.pump["offshore-mk4-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk4-pump"].pumping_speed
+data.raw["item"]["offshore-mk4-pump"].order = "b[fluids]-c[offshore-mk4-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk4-pump", { { "titanium-pipe", 5 }, { "advanced-circuit", 2 }, { "titanium-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk4-pump"].prerequisites = {"offshore-mk3-pump", "advanced-electronics-2", "advanced-electronics-3"}
+data.raw.technology["offshore-mk4-pump"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}
+--seafloor pumps коррекция скорости помпы
+data.raw.pump["seafloor-pump-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump"].pumping_speed
+data.raw.pump["seafloor-pump-2-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump-2"].pumping_speed
+data.raw.pump["seafloor-pump-3-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump-3"].pumping_speed
