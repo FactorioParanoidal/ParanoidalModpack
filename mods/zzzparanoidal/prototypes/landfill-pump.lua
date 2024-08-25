@@ -6,7 +6,6 @@ for _, tile in pairs(data.raw.tile) do
 end
 
 local collision_mask_util = require("collision-mask-util")
-
 local layer = collision_mask_util.get_first_unused_layer()
 collision_mask_util.add_layer(data.raw.tile["landfill"].collision_mask, layer)
 collision_mask_util.add_layer(data.raw["offshore-pump"]["offshore-pump-0-placeholder"].adjacent_tile_collision_test,
