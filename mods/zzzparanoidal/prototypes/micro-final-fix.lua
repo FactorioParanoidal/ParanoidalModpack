@@ -1422,25 +1422,26 @@ bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "advanced-electronics-2
 bobmods.lib.tech.add_prerequisite("strand-casting-1", "angels-stone-smelting-1")                                                                                                                              -- Машины непрерывного литья 1 под кирпичи 1
 bobmods.lib.tech.add_prerequisite("angels-brass-smelting-1", "ore-floatation")                                                                                                                                -- Латунь под Гидропромывку 1
 --21.07.24
-bobmods.lib.tech.add_prerequisite ("angels-metallurgy-3", "ore-leaching")  -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
-bobmods.lib.tech.add_prerequisite ("modules", "angels-gold-smelting-1") -- Модули под Золото! 
-data.raw.technology["modules"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --модули теперь за синие банки (как и должно быть)
-bobmods.lib.tech.add_prerequisite ("OilBurning-2", "bob-boiler-2") -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
-bobmods.lib.tech.add_prerequisite ("OilBurning-3", "bob-boiler-3") -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
-bobmods.lib.tech.add_prerequisite ("OilBurning-4", "bob-boiler-4") -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
-bobmods.lib.tech.add_prerequisite ("OilBurning-5", "bob-boiler-5") -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
-data.raw.technology["bob-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
-data.raw.technology["bob-area-drills-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}} --синие банки для буров мк3
-bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-4", "chemical-science-pack") -- Урон энергетического оружия под правильные банки
-bobmods.lib.tech.add_prerequisite ("energy-weapons-damage-5", "utility-science-pack") -- Урон энергетического оружия под правильные банки
-bobmods.lib.tech.add_prerequisite ("ober-nuclear-processing", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
-bobmods.lib.tech.add_prerequisite ("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
-bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
-data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
-bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
+bobmods.lib.tech.add_prerequisite("angels-metallurgy-3", "ore-leaching")                                                                                                                                      -- Промышленную металлургию 3 под Химическую обработку руды(кристаллы)
+bobmods.lib.tech.add_prerequisite("modules", "angels-gold-smelting-1")                                                                                                                                        -- Модули под Золото!
+data.raw.technology["modules"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                        --модули теперь за синие банки (как и должно быть)
+bobmods.lib.tech.add_prerequisite("OilBurning-2", "bob-boiler-2")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 2 под Бойлер 2
+bobmods.lib.tech.add_prerequisite("OilBurning-3", "bob-boiler-3")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 3 под Бойлер 3
+bobmods.lib.tech.add_prerequisite("OilBurning-4", "bob-boiler-4")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 4 под Бойлер 4
+bobmods.lib.tech.add_prerequisite("OilBurning-5", "bob-boiler-5")                                                                                                                                             -- Сжигание жидкого и газообразного топлива 5 под Бойлер 5
+data.raw.technology["bob-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                                   --синие банки для буров мк3
+data.raw.technology["bob-area-drills-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } }                                              --синие банки для буров мк3
+bobmods.lib.tech.add_prerequisite("energy-weapons-damage-4", "chemical-science-pack")                                                                                                                         -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite("energy-weapons-damage-5", "utility-science-pack")                                                                                                                          -- Урон энергетического оружия под правильные банки
+bobmods.lib.tech.add_prerequisite("ober-nuclear-processing", "utility-science-pack")                                                                                                                          -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite("refined-flammables-4", "utility-science-pack")                                                                                                                             -- Высокотемпературная переработка сырья под правильные банки
+bobmods.lib.tech.add_prerequisite("advanced-uranium-processing-1", "utility-science-pack")                                                                                                                    -- Продвинутая переработка урана 1 под правильные банки
+data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 }, { "advanced-logistic-science-pack", 1 } } --Складская логистика 2 делаем правильные банки
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter",
+    { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } })                                                                                                                --в рецепт к фильтрующему добавляем фильтрующий твердотопливный
 --13.08 починка рецепта кристаллического раствора
 bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
-bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})
+bobmods.lib.recipe.set_result("crystal-powder-slurry", { name = "crystal-slurry", type = "fluid", amount = 10 })
 --19.08 починка рецепта взрывчатки 3
 data.raw["recipe"]["solid-trinitrotoluene"].category = "advanced-chemistry"
 
@@ -1616,8 +1617,62 @@ bobmods.lib.recipe.remove_ingredient("electric-mixing-furnace", "electric-chemic
 KaoExtended.recipe.addtorecipe("electric-mixing-furnace", { "electric-furnace", 1 })
 
 --Увеличение цены снайпер турели
-bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 }  })
+bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1",
+    { { "iron-gear-wheel", 25 }, { "copper-plate", 25 }, { "steel-plate", 15 }, { "basic-circuit-board", 10 }, { "electric-motor", 8 } })
 
 --Маяки больше не действуют на термальные скважины
-data.raw["mining-drill"]["thermal-extractor"].allowed_effects = {"consumption", "pollution"}
-data.raw["mining-drill"]["thermal-bore"].allowed_effects = {"consumption", "pollution"}
+data.raw["mining-drill"]["thermal-extractor"].allowed_effects = { "consumption", "pollution" }
+data.raw["mining-drill"]["thermal-bore"].allowed_effects = { "consumption", "pollution" }
+
+--################### финальный код для новых береговых насосов ###################
+--offshore-burner
+data.raw['item']["offshore-mk0-pump"].place_result = "offshore-mk0-pump"
+data.raw["pump"]["offshore-mk0-pump-output"].energy_usage = "900kW"
+data.raw["offshore-pump"]["offshore-mk0-pump"].pumping_speed = 5
+data.raw.pump["offshore-mk0-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk0-pump"].pumping_speed
+data.raw["item"]["offshore-mk0-pump"].order = "b[fluids]-c[offshore-mk0-pump]"
+--offshore-1
+data.raw['item']["offshore-pump"].place_result = "offshore-pump"
+data.raw["pump"]["offshore-pump-output"].energy_usage = "1200kW"
+data.raw["offshore-pump"]["offshore-pump"].pumping_speed = 20 --20 = 1200/c
+data.raw.pump["offshore-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-pump"].pumping_speed
+data.raw["item"]["offshore-pump"].subgroup = "extraction-machine"
+data.raw["item"]["offshore-pump"].order = "b[fluids]-c[offshore-mk1-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-pump",
+    { { "electronic-circuit", 2 }, { "pipe", 5 }, { "iron-gear-wheel", 5 } })
+bobmods.lib.tech.add_recipe_unlock("electricity", "offshore-pump")
+--offshore-2
+data.raw['item']["offshore-mk2-pump"].place_result = "offshore-mk2-pump"
+data.raw["pump"]["offshore-mk2-pump-output"].energy_usage = "2000kW"
+data.raw["offshore-pump"]["offshore-mk2-pump"].pumping_speed = 40
+data.raw.pump["offshore-mk2-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk2-pump"].pumping_speed
+data.raw["item"]["offshore-mk2-pump"].order = "b[fluids]-c[offshore-mk2-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk2-pump",
+    { { "steel-pipe", 5 }, { "advanced-circuit", 2 }, { "steel-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk2-pump"].prerequisites = { "advanced-electronics", "bob-fluid-handling-2" }
+--offshore-3
+data.raw['item']["offshore-mk3-pump"].place_result = "offshore-mk3-pump"
+data.raw["pump"]["offshore-mk3-pump-output"].energy_usage = "2800kW"
+data.raw["offshore-pump"]["offshore-mk3-pump"].pumping_speed = 60
+data.raw.pump["offshore-mk3-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk3-pump"].pumping_speed
+data.raw["item"]["offshore-mk3-pump"].order = "b[fluids]-c[offshore-mk3-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk3-pump",
+    { { "titanium-pipe", 5 }, { "advanced-circuit", 2 }, { "titanium-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk3-pump"].prerequisites = { "offshore-mk2-pump", "advanced-electronics",
+    "angels-titanium-smelting-1" }
+data.raw["technology"]["offshore-mk3-pump"].prerequisites = { "advanced-electronics", "bob-fluid-handling-2" }
+--offshore-4
+data.raw['item']["offshore-mk4-pump"].place_result = "offshore-mk4-pump"
+data.raw["pump"]["offshore-mk4-pump-output"].energy_usage = "3700kW"
+data.raw["offshore-pump"]["offshore-mk4-pump"].pumping_speed = 80
+data.raw.pump["offshore-mk4-pump-output"].pumping_speed = data.raw["offshore-pump"]["offshore-mk4-pump"].pumping_speed
+data.raw["item"]["offshore-mk4-pump"].order = "b[fluids]-c[offshore-mk4-pump]"
+bobmods.lib.recipe.set_ingredients("offshore-mk4-pump",
+    { { "titanium-pipe", 5 }, { "advanced-circuit", 2 }, { "titanium-gear-wheel", 10 } })
+data.raw["technology"]["offshore-mk4-pump"].prerequisites = { "offshore-mk3-pump", "advanced-electronics-2",
+    "advanced-electronics-3" }
+data.raw.technology["offshore-mk4-pump"].unit.ingredients = { { "automation-science-pack", 1 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 }, { "production-science-pack", 1 } }
+--seafloor pumps коррекция скорости помпы
+data.raw.pump["seafloor-pump-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump"].pumping_speed
+data.raw.pump["seafloor-pump-2-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump-2"].pumping_speed
+data.raw.pump["seafloor-pump-3-output"].pumping_speed = data.raw["offshore-pump"]["seafloor-pump-3"].pumping_speed
