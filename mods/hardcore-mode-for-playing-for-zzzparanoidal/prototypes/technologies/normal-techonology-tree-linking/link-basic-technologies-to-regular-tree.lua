@@ -863,7 +863,6 @@ local function show_technologies(mode)
     tech_util.show_technology("powder-metallurgy-1", mode)
 end
 local function show_recipes(mode)
-    local recipes = data.raw["recipe"]
     tech_util.show_recipe("magazine", mode)
 
     if settings.startup["bobs-military-simplify"].value == true then
