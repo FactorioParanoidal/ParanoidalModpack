@@ -19,6 +19,18 @@
     [
       "offshore-pump-4",
       "offshore-mk4-pump-output"
+    ],
+    [
+      "seafloor-pump",
+      "seafloor-pump-output"
+    ],
+    [
+      "seafloor-pump-2",
+      "seafloor-pump-2-output"
+    ],
+    [
+      "seafloor-pump-3",
+      "seafloor-pump-3-output"
     ]
   ],
   "item": [
