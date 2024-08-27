@@ -124,6 +124,33 @@ local function replace_blueprint(event) --устраняем баги при с�
     end
 end
 
+-- Функция для проверки наличия значения в таблице
+local function table_contains(tbl, value)
+    for _, v in pairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+-- Функция для проверки и удаления насосов на других поверхностях
+local function kill_nasos(event)
+    local entity = event.created_entity or event.entity
+    -- Проверяем, является ли установленная сущность офшорным насосом
+    if entity and table_contains(offshore_pump_types, entity.name) then
+        -- Проверяем, находится ли она на поверхности nauvis
+        if entity.surface.name ~= "nauvis" then
+            -- Уничтожаем сущность, если она не на поверхности nauvis
+            entity.destroy()
+            -- Вывод сообщения игроку (опционально)
+            if event.player_index then
+                local player = game.get_player(event.player_index)
+                player.print("Зачем ты ставишь насосы в фабрике? Тяни трубы как нормальный мужик!")
+            end
+        end
+    end
+end
 
 
 -- ###############################################################################################
@@ -342,16 +369,22 @@ local function offshore_and_bio(event)
 end
 
 local function gui_and_created(event)
+    kill_nasos(event)
     on_entity_created(event)
     delete_gui_random(event)
     hidden_entity_created(event)
+end
 
+local function nasos_and_entity(event)
+    kill_nasos(event)
+    on_entity_created(event)
+    hidden_entity_created(event)
 end
 
 script.on_event(defines.events.on_built_entity, gui_and_created) -- вместе с delete gui
-script.on_event(defines.events.on_robot_built_entity, on_entity_created)
-script.on_event(defines.events.script_raised_built, on_entity_created)
-script.on_event(defines.events.script_raised_revive, on_entity_created)
+script.on_event(defines.events.on_robot_built_entity, nasos_and_entity)
+script.on_event(defines.events.script_raised_built, nasos_and_entity)
+script.on_event(defines.events.script_raised_revive, nasos_and_entity)
 
 script.on_event(defines.events.on_player_rotated_entity, on_player_rotated_entity)
 
