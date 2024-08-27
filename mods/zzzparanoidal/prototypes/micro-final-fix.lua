@@ -1623,3 +1623,14 @@ data.raw["ammo-turret"]["w93-rocket-turret2"].attack_parameters.turn_range = 0.5
 data.raw["ammo-turret"]["w93-rocket-turret2"].attack_parameters.cooldown = 60
 data.raw["ammo-turret"]["w93-rocket-turret2"].attack_parameters.range = 95
 data.raw["ammo-turret"]["w93-rocket-turret2"].attack_parameters.min_range = 55
+
+
+--###############################################################################################
+--Фикс злых снайперов из Big Monsters
+for i = 1, 10 do
+  local sniper_name = "tc_fake_human_sniper_" .. i
+  if data.raw["unit"][sniper_name] then
+      data.raw["unit"][sniper_name].attack_parameters.range = 60
+      data.raw["unit"][sniper_name].attack_parameters.min_range = 55
+  end
+end
