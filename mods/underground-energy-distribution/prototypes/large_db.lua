@@ -14,7 +14,7 @@ large_db.tile_width					= 3
 large_db.minable 				        = {mining_time = 0.5, result = "ued-large-db"}
 large_db.draw_copper_wires		        = false
 large_db.check_collision_with_entities 	= true
-large_db.supply_area_distance	        = 9
+large_db.supply_area_distance	        = 7.5
 large_db.maximum_wire_distance	        = 18
 large_db.draw_circuit_wires		        = settings.startup["ued-settings-show-circuit"].value
 
