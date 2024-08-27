@@ -71,3 +71,9 @@ script.on_event(
         register_events()
     end
 )
+script.on_configuration_changed(function(configuration_changed_data)
+    register_events()
+    global.configuration_changed = configuration_changed_data.new_version ~= configuration_changed_data.old_version or
+        configuration_changed_data.migration_applied or configuration_changed_data.mod_startup_settings_changed
+        or _table.size(configuration_changed_data.mod_changes) > 0
+end)

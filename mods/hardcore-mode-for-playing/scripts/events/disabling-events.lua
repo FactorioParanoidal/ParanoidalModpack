@@ -339,21 +339,31 @@ function disable_on_start_if_need()
     if not Utils.is_freeplay_scenario() then
         return
     end
-    if not get_player().get_main_inventory() then
+    local player = get_player()
+    if not player.get_main_inventory() then
         return
     end
     research_basic_technologies_if_need()
-    if settings.global["hardcore-mode-for-playing-disable-production-entities-beyond-factorissimo-building"].value then
-        disable_player_entities()
-    end
     if settings.global["hardcore-mode-for-playing-disable-hand-crafting"].value then
         disable_all_recipes_for_manual_crafting()
     end
-    if settings.global["hardcore-mode-for-playing-enable-technology-research-reevaluting"].value then
-        reset_technologies_with_unresearched_prerequisites_in_the_path()
+    if settings.global["hardcore-mode-for-playing-disable-production-entities-beyond-factorissimo-building"].value then
+        disable_player_entities()
     end
+    -- если изменился состав модов, возможно поехали технологические цепочки. Необходимо пересчитать исследованные технологии.
+    if global.configuration_changed then
+        if settings.global["hardcore-mode-for-playing-enable-technology-research-reevaluting"].value then
+            reset_technologies_with_unresearched_prerequisites_in_the_path()
+        end
+
+        reset_evolution_factor_to_researched_technologies()
+        global.configuration_changed = false
+    end
+    -- обрабатываем все исследованные технологии и добавляем доступные сущности в список.
+    local researched_technologies = _table.filter(player.force.technologies, filter_only_research_technologies)
+    _table.each(researched_technologies, handle_researched_technology)
+    ---
     disable_entities_for_disabled_technologies()
-    reset_evolution_factor_to_researched_technologies()
 end
 
 function on_built_disabling_event(e)
