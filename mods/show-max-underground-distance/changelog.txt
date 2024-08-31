@@ -1,0 +1,42 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2024.06.17
+  Compatibility:
+    - Add compatability with exfret's randomizer
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2021.03.02
+  Compatibility:
+    - Bump version number for 1.1 mod manager to find properly
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2020.12.22
+  Compatibility:
+    - Version for Factorio 1.0 to fix dependency issues
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2020.11.29
+  Compatibility:
+    - Update for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2020.08.16
+  Compatibility:
+    - Added check for nil underground distances
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2020.07.07
+  Compatibility:
+    - Added workaround for Pipelayer
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2020.06.11
+  Changes:
+    - Added setting to change icon style
+  Graphics:
+    - Added thin and small icons
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2020.06.08
+  Info:
+    - Initial release
