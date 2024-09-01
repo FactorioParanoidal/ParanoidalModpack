@@ -38,5 +38,5 @@ data.raw.recipe["advanced-thorium-nuclear-fuel-reprocessing|b"].results = {
 
 data.raw.recipe["thorium-processing"].energy_required = 60 --from 10
 --Вернем ядерное топливо в поезда
-data.raw.item["nuclear-fuel"].burnt_result = ""
+data.raw.item["nuclear-fuel"].burnt_result = nil
 data.raw.item["nuclear-fuel"].fuel_category = "chemical"
