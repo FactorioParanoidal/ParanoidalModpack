@@ -96,7 +96,7 @@ local function get_burnt_result_results(result_data)
         return result
     end
     if not data.raw[burnt_result_type][burnt_result_name] then
-        error("data.raw[" .. burnt_result_type .. "][" .. burnt_result_name .. "] as burnt_result not exists!")
+        error(result_data.name .. "'s burnt_result, data.raw[" .. burnt_result_type .. "][" .. burnt_result_name .. "] doesn't exist!")
     end
     return {
         {
