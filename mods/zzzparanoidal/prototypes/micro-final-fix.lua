@@ -1498,7 +1498,7 @@ data.raw.pump["offshore-pump-output"].pumping_speed = data.raw["offshore-pump"][
 data.raw["item"]["offshore-pump"].subgroup = "extraction-machine"
 data.raw["item"]["offshore-pump"].order = "b[fluids]-c[offshore-mk1-pump]"
 bobmods.lib.recipe.set_ingredients("offshore-pump", { {"electronic-circuit", 2}, {"pipe", 5}, {"iron-gear-wheel", 5} })
-bobmods.lib.tech.add_recipe_unlock("electricity", "offshore-pump")
+bobmods.lib.tech.add_recipe_unlock("electronics", "offshore-pump")
 --offshore-2
 data.raw['item']["offshore-mk2-pump"].place_result = "offshore-mk2-pump"
 data.raw["pump"]["offshore-mk2-pump-output"].energy_usage = "2000kW"
@@ -1634,3 +1634,21 @@ for i = 1, 10 do
   end
 end
 --###############################################################################################
+--Финальный Ремонт дерева исследований
+bobmods.lib.tech.remove_prerequisite("radar", "electronics") --фикс радара
+-- bobmods.lib.tech.add_prerequisite ("radar", "electricity") --фикс радара
+bobmods.lib.recipe.set_ingredients("radar", { { "electric-motor", 12 }, { "basic-circuit-board", 20 }, { "stone-brick", 20 }, { "iron-plate", 20 } }) --фикс радара
+bobmods.lib.tech.add_prerequisite ("bob-nuclear-power-2", "centrifuging-1") --ториевая энергетика под Продвинутое центрифугирование 1
+bobmods.lib.tech.add_prerequisite ("bob-area-drills-2", "bob-drills-2") --фикс буров
+bobmods.lib.tech.add_prerequisite ("bob-area-drills-3", "bob-drills-3") --фикс буров
+bobmods.lib.tech.add_prerequisite ("rocket-silo", "bob-area-drills-3") --фикс буров
+bobmods.lib.tech.add_prerequisite ("battery-3", "powder-metallurgy-5") --Аккумулятор 3 поставить под Порошковая металлургия 4
+bobmods.lib.tech.remove_recipe_unlock("advanced-electronics-3", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
+bobmods.lib.tech.add_recipe_unlock("god-module-2", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
+bobmods.lib.tech.remove_recipe_unlock("bi-tech-resin-extraction", "bi-resin-pulp") --прячем лишнюю смолу
+bobmods.lib.tech.remove_recipe_unlock("bi-tech-resin-extraction", "bi-wood-from-pulp") --прячем лишнюю смолу
+data.raw.technology["bi-tech-resin-extraction"].hidden = true --прячем лишнюю смолу
+bobmods.lib.tech.add_prerequisite ("hiend_train", "bob-fluid-wagon-3") -- привязать магнитный локомотив и вагоны к вагонам и цистернам мк3
+bobmods.lib.tech.add_prerequisite ("water-chemistry-2", "thorium-fuel-reprocessing") -- привязатьо дейтериевую энергетику к Переработки тория (нет ядерного катализатора)
+bobmods.lib.tech.add_prerequisite ("extremely-advanced-rocket-payloads", "space-lab") -- Привязать КОсмический челнок к Космическая лаборатория (Данные с космической станции недоступны)
+bobmods.lib.recipe.add_ingredient("offshore-pump", {"offshore-mk0-pump", 2}) -- к Электрический береговой насос добавляем Твердотопливный береговой насос 2 штуки
