@@ -1,10 +1,10 @@
 {
-	"name": "make-moded-technology-tree-mods-protocol",
-	"version": "0.1.0",
-	"title": "Копирование технологий и рецептов в 2 режима",
-	"author": "bogomolov-a-a",
+	"name": "dummyTech",
+	"version": "0.6.9",
+	"title": "Тестовые технологии и рецепты",
+	"author": "Pro_Triforcer",
 	"factorio_version": "1.1",
-	"description": "Копирование технологий и рецептов в 2 режима(нормальный и дорогой). Если уже есть - обединяет объявления с преимуществом режимного объявления(normal,expensive)",
+	"description": "Тестовые технологии и рецепты, чтоб уршачье не ругалось",
 	"dependencies": [
 		"?base",
 		"?aai-industry",
@@ -22,6 +22,7 @@
 		"?angelsrefining",
 		"?angelssmelting",
 		"?AtomicArtillery",
+		"?automated-fabrique-protocol",
 		"?baraws",
 		"?BatteryElectricTrain",
 		"?beautiful_straight_bridge_railway",
@@ -77,6 +78,7 @@
 		"?even-distribution",
 		"?EvoGUI",
 		"?expanded-rocket-payloads",
+		"?extended-descriptions",
 		"?extendedangels",
 		"?factorissimo-2-notnotmelon",
 		"?factoryplanner",
@@ -227,12 +229,6 @@
 		"?WideChests",
 		"?ZCS-Trash-Landfill-Continued-Continued",
 		"?zero-fluid-info",
-		"?zzzparanoidal",
-		"?automated-utility-protocol",
-		"?hardcore-mode-for-playing",
-		"?RampantMaintance",
-		"?UnrealisticReactors",
-		"?Electric_Transformators",
-		"?dummyTech"
+		"?zzzparanoidal"
 	]
 }

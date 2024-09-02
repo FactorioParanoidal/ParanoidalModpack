@@ -47,6 +47,13 @@ local function check_recipes_not_has_hidden_in_tree_element(technology_name, mod
         recipe_names,
         function(recipe_name)
             local moded_recipe = Utils.get_moded_object("recipe", recipe_name, mode)
+            if not moded_recipe then
+                error(
+                        " for technology " ..
+                                technology_name ..
+                                " for mode " .. mode .. " effect recipe with name " .. recipe_name .. " is MISSING!"
+                )
+            end
             if not moded_recipe or moded_recipe.hidden then
                 error(
                     " for technology " ..
@@ -71,10 +78,18 @@ local function check_recipes_not_has_hidden_in_tree(tree, mode)
         end
     )
 end
+local exceptions={}
+local exceptionItems={"wood", "copper-ore", "iron-ore", "stone"}
+for _,v in pairs(exceptionItems) do
+    _table.insert(exceptions,{name=v,type="item"})
+end
 local function is_unresolved_ingredient_in_technology_product_list(ingredient, products)
     return not _table.contains_f(
         products,
         function(product)
+            if _table.contains_f_deep(exceptions, ingredient) then
+                return true
+            end
             return ingredient.type == product.type and ingredient.name == product.name
         end
     )

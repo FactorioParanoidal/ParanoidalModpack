@@ -16,6 +16,8 @@ local function get_technology_object_effect_recipes_by_name(technology_candidate
 end
 
 TechUtil.get_all_recipe_ingredients_for_specified_technology = function(technology_name, mode)
+    log("technology_name"..serpent.dump(technology_name))
+    log("technology"..serpent.dump(data.raw["technology"]["technology_name"]))
     local result = {}
     local unlocked_recipes = get_technology_object_effect_recipes_by_name(technology_name, mode)
     _table.each(
@@ -24,12 +26,15 @@ TechUtil.get_all_recipe_ingredients_for_specified_technology = function(technolo
             local recipe_name = unlocked_recipe.recipe
             local ingredients = recipe_util.get_all_recipe_ingredients(recipe_name, mode)
             _table.insert_all_if_not_exists(result, ingredients)
+            log("ingredients"..serpent.dump(ingredients))
         end
     )
     return result
 end
 
 TechUtil.get_all_recipe_results_for_specified_technology = function(technology_name, mode)
+    log("technology_name"..serpent.dump(technology_name))
+    log("technology"..serpent.dump(data.raw["technology"]["technology_name"]))
     local result = {}
     local unlocked_recipes = get_technology_object_effect_recipes_by_name(technology_name, mode)
     _table.each(
@@ -38,6 +43,7 @@ TechUtil.get_all_recipe_results_for_specified_technology = function(technology_n
             local recipe_name = unlocked_recipe.recipe
             local results = recipe_util.get_all_recipe_results(recipe_name, mode)
             _table.insert_all_if_not_exists(result, results)
+            log("ingredients"..serpent.dump(ingredients))
         end
     )
     return result
