@@ -268,14 +268,14 @@ local function gui_open_spacex_launch_gui(player)
             type = "button",
             name = "bio_button",
 			style = mod_gui.button_style,
-            caption = "Yes, Bring it On!",
+            caption = {"spacex-bio-game"},
 			tooltip = {"spacex-bio-tooltip"}
         }	
 	local iwmm = sctable.add{
             type = "button",
             name = "iwmm_button",
 			style = mod_gui.button_style,
-            caption = "No, I want my mummy!",
+            caption = {"spacex-bio-end"},
 			tooltip = {"spacex-iwmm-tooltip"}
         }
 	else
