@@ -1719,3 +1719,31 @@ data.raw["recipe"]["osmium-pellet-smelting"].category = "blast-smelting-4" --ф�
 data.raw["recipe"]["casting-powder-osmium"].category = "powder-mixing-4" --фикс слишком легкого осмия
 bobmods.lib.tech.add_prerequisite("astrometrics", "advanced-osmium-smelting") --Астрометрика под осмий
 bobmods.lib.tech.add_recipe_unlock("bi-tech-stone-crushing-1", "stone-crushed") --открываем рецепт камня
+--###############################################################################################
+--Баланс телепортера под параноидал
+bobmods.lib.recipe.set_ingredients("teleporter", { { "raw-speed-module-8", 2 }, {"space-science-pack", 50}, {"advanced-processing-unit", 50 }, { "low-density-structure", 150 }, { "silver-zinc-battery", 100 }, { "nitinol-alloy", 150 }})
+data.raw.technology["teleporter"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}, {"space-science-pack", 1} }
+data.raw.technology["teleporter"].unit.count = 2000
+bobmods.lib.tech.add_prerequisite("teleporter", "space-science-pack")
+--###############################################################################################
+-- попытка исправить ошибку с отсутсвием насоса на старте
+data.raw.container["crash-site-spaceship"].minable =
+{
+    mining_time = 5,
+    results={
+      --{name="iron-plate", amount = 114},
+      --{name="copper-plate", amount = 56},
+      {name="steel-plate", amount_min = 5, amount_max = 25},
+  {name="iron-gear-wheel", amount_min = 5, amount_max = 20},
+      {name="electronic-circuit", amount_min = 4, amount_max = 12},
+      {name="concrete", amount_min = 25, amount_max = 85},
+      {name="pipe", amount_min = 5, amount_max = 45},
+      {name="aluminium-plate", amount_min = 5, amount_max = 85},
+      {name="titanium-plate", amount_min = 5, amount_max = 85},
+  {name="condensator3", amount_min = 5, amount_max = 35},
+  {name="processing-electronics", amount_min = 1, amount_max = 5},
+  {name="insulated-cable", amount_min = 11, amount_max = 39},
+      {name="salvaged-generator", amount = 1},
+      {name="offshore-mk0-pump", amount = 1}
+}}
+--###############################################################################################
