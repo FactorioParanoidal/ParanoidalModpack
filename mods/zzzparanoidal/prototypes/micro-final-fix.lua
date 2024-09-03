@@ -1718,3 +1718,4 @@ data.raw["recipe"]["osmium-processed-processing"].category = "pellet-pressing-4"
 data.raw["recipe"]["osmium-pellet-smelting"].category = "blast-smelting-4" --фикс слишком легкого осмия
 data.raw["recipe"]["casting-powder-osmium"].category = "powder-mixing-4" --фикс слишком легкого осмия
 bobmods.lib.tech.add_prerequisite("astrometrics", "advanced-osmium-smelting") --Астрометрика под осмий
+bobmods.lib.tech.add_recipe_unlock("bi-tech-stone-crushing-1", "stone-crushed") --открываем рецепт камня
