@@ -61,7 +61,6 @@ return
     {"stone-wall", {x = -14.5, y = -4.5}, {}},
     {"stone-wall", {x = -14.5, y = -3.5}, {}},
     {"tree-04", {x = -12.5, y = -3.5}, {}},
-    {"offshore-pump", {x = 12.5, y = -4.5}, {dir = "south", fluids = {water = 100}, }},
     {"stone-wall", {x = 14.5, y = -3.5}, {}},
     {"stone-wall", {x = -14.5, y = -1.5}, {}},
     {"tree-04", {x = 8.5, y = -1.5}, {}},

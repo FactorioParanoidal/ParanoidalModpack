@@ -1726,3 +1726,24 @@ data.raw.technology["teleporter"].unit.ingredients = {{"automation-science-pack"
 data.raw.technology["teleporter"].unit.count = 2000
 bobmods.lib.tech.add_prerequisite("teleporter", "space-science-pack")
 --###############################################################################################
+-- попытка исправить ошибку с отсутсвием насоса на старте
+data.raw.container["crash-site-spaceship"].minable =
+{
+    mining_time = 5,
+    results={
+      --{name="iron-plate", amount = 114},
+      --{name="copper-plate", amount = 56},
+      {name="steel-plate", amount_min = 5, amount_max = 25},
+  {name="iron-gear-wheel", amount_min = 5, amount_max = 20},
+      {name="electronic-circuit", amount_min = 4, amount_max = 12},
+      {name="concrete", amount_min = 25, amount_max = 85},
+      {name="pipe", amount_min = 5, amount_max = 45},
+      {name="aluminium-plate", amount_min = 5, amount_max = 85},
+      {name="titanium-plate", amount_min = 5, amount_max = 85},
+  {name="condensator3", amount_min = 5, amount_max = 35},
+  {name="processing-electronics", amount_min = 1, amount_max = 5},
+  {name="insulated-cable", amount_min = 11, amount_max = 39},
+      {name="salvaged-generator", amount = 1},
+      {name="offshore-mk0-pump", amount = 1}
+}}
+--###############################################################################################
