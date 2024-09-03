@@ -87,6 +87,9 @@ end
 if mods["LtnManager"] then
     set_settings_default_value("int-setting", "ltnm-iterations-per-tick", 2)
 end
+if mods["LTN_Combinator"] then
+    set_settings_default_value("bool-setting", "show-ltn-max-trains", true)
+end
 if mods["deep-storage-unit"] or mods["fluid-memory-storage"] then
     set_settings_default_value("string-setting", "memory-unit-power-usage", "480kW")
 end
