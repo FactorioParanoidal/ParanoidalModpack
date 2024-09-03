@@ -14,11 +14,11 @@ data:extend({
 {
     type = "recipe",
     name = "stone-crushed",
-    energy_required = 1,
+    energy_required = 5,
     enabled = false,
-    ingredients = {{"stone-brick", 1}},
+    ingredients = {{"stone-brick", 5}},
     results = {
-        {type = "item", name = "stone", amount =  2}
+        {type = "item", name = "stone", amount =  7}
     }
 }
 })
