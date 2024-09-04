@@ -1,0 +1,75 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2023-01-15
+  Changes:
+    - Consolidated both shortcuts into one (Alt + G by default), which will spawn the ghost counter selection tool when clicked, and use blueprint contents if the player is holding a blueprint in their cursor. The toolbar button will function similarly.
+    - Ghost counter GUI will now remember its last location on the screen.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-09-14
+  Features:
+    - Added ability to manually craft requests. You can attempt to manually craft a request by shift-clicking its blue request button. You can also attempt to manually craft all requests by clicking on the new toolbar button with the hammer icon.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2022-06-20
+  Bugfixes:
+    - Fixed a crash that would occur if you tried to count ghosts from a blueprint book in your inventory.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022-06-12
+  Bugfixes:
+    - Fixed a crash that would occur if a monitored ghost was built or destroyed while the player was dead.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-04-14
+  Bugfixes:
+    - Fixed GUI appearing inappropriately when a player uses unrelated area selection tools.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-03-23
+  Features:
+    - Added support for entities marked for upgrade.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-11-01
+  Optimizations:
+    - Improved tile counting logic.
+  Gui:
+    - Improved temporary request button tooltips.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-10-31
+  Features:
+    - Added support for module requests in already-built entities when using the selection tool. Once all the module requests of an entity are fulfilled, the ghost count will be updated to reflect that.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-10-31
+  Features:
+    - Added support for exporting ghost counts as signals. Click on the button in the top left of the mod window to generate a blueprint with constant combinators, set to output the ghost counts.
+  Bugfixes:
+    - Fixed crash which could occur if you closed the ghost counter window while you still had pending temporary logistic requests, and then modified your logistic requests yourself or using a different mod.
+    - Fixed temporary logistic requests not immediately updating after selection of a new area or blueprint with pre-existing temporary requests.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-10-31
+  Bugfixes:
+    - Fixed crash in Space Exploration which could occur if you had the contents of your inventory or cursor change a few ticks before you turned on Navigation Satellite view.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-10-29
+  Features:
+    - Added a "Request all" button, which allows you to set temporary logistic requests for all the items that you're missing to complete your build. The red button next to it will cancel all of your temporary logistic requests and restore any previous ones you had for those items.
+  Bugfixes:
+    - Fixed issue that could cause temporary logistic requests to linger if an inventory change or ghost count change affected a large number of them.
+    - Fixed issue with new ghost area selections inconsistently modifying temporary logistic requests that you had set.
+    - Fixed mod GUI moving to its default position if you made a new ghost area selection while it was open.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-10-28
+  Features:
+    - Added support for blueprints. Press Ctrl + G while holding a blueprint to get ghost counts from there.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-10-26
+  Features:
+    - Initial release.

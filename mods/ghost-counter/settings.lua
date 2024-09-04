@@ -1,0 +1,10 @@
+data:extend{
+    {
+        name="ghost-counter-min-update-interval",
+        setting_type="runtime-global",
+        type="int-setting",
+        default_value=10,
+        minimum_value=5,
+        maximum_value=120
+    }
+}
