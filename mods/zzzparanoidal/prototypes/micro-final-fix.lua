@@ -1718,7 +1718,9 @@ data.raw["recipe"]["osmium-processed-processing"].category = "pellet-pressing-4"
 data.raw["recipe"]["osmium-pellet-smelting"].category = "blast-smelting-4" --фикс слишком легкого осмия
 data.raw["recipe"]["casting-powder-osmium"].category = "powder-mixing-4" --фикс слишком легкого осмия
 bobmods.lib.tech.add_prerequisite("astrometrics", "advanced-osmium-smelting") --Астрометрика под осмий
-bobmods.lib.tech.add_recipe_unlock("bi-tech-stone-crushing-1", "stone-crushed") --открываем рецепт камня
+bobmods.lib.tech.add_recipe_unlock("bi-tech-stone-crushing-1", "stone-crushed-2") --открываем рецепт камня
+data.raw["rocket-silo"]["rocket-silo"].energy_usage = "250000kW" --увеличиваем потребление энергии ракетной шахтой
+data.raw["rocket-silo"]["rocket-silo"].module_specification.module_slots = 6 --но добавляем ей больше слотов модулей
 --###############################################################################################
 --Баланс телепортера под параноидал
 bobmods.lib.recipe.set_ingredients("teleporter", { { "raw-speed-module-8", 2 }, {"space-science-pack", 50}, {"advanced-processing-unit", 50 }, { "low-density-structure", 150 }, { "silver-zinc-battery", 100 }, { "nitinol-alloy", 150 }})
