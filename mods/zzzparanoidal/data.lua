@@ -24,7 +24,9 @@ require("prototypes.recipe-new") --новые рецепты
 require("prototypes.BetterAlertArrows_100") --мод BetterAlertArrows
 
 require("prototypes.mod_compatibility.heroturrets")
-
+-------------------------------------------------------------------------------------------------
+require("prototypes.bio-content.bio-content-list") --Новый Биоконтент
+-------------------------------------------------------------------------------------------------
 --перенаправляем функцию ангела на функцию боба
 if not mods["angelsindustries"] then
 

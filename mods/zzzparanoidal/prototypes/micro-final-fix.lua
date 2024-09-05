@@ -719,13 +719,13 @@ end
 end --конец mods["angelsindustries"]
 
 --###############################################################################################
-if settings.startup["fitolamps"].value then
-data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].tint = {r=230, g=20, b=190}
-data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=20, b=190}
-
-data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].animation.layers[1].tint = {r=230, g=130, b=210}
-data.raw["assembling-machine"]["bi-bio-greenhouse"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=130, b=210}
-end
+--фитолампы пока выключим
+-- if settings.startup["fitolamps"].value then 
+-- data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].tint = {r=230, g=20, b=190}
+-- data.raw["assembling-machine"]["bi-bio-farm"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=20, b=190}
+-- data.raw["assembling-machine"]["bi-bio-greenhouse-3"].working_visualisations[1].animation.layers[1].tint = {r=230, g=130, b=210}
+-- data.raw["assembling-machine"]["bi-bio-greenhouse-3"].working_visualisations[1].animation.layers[1].hr_version.tint = {r=230, g=130, b=210}
+-- end
 --###############################################################################################
 -- твики из TrainOverhaul
 data.raw.item["solid-fuel"].fuel_acceleration_multiplier = 1.05 --base 1.2
@@ -1748,4 +1748,24 @@ data.raw.container["crash-site-spaceship"].minable =
       {name="salvaged-generator", amount = 1},
       {name="offshore-mk0-pump", amount = 1}
 }}
+--###############################################################################################
+--новый биоконтент МК2 и МК3
+bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-3", "bi-bio-farm-2") --открываем рецепт биофермы 2
+bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-3", "bi-bio-greenhouse-2") --открываем рецепт теплицы 2
+bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-4", "bi-bio-farm-3") --открываем рецепт биофермы 3
+bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-4", "bi-bio-greenhouse-3") --открываем рецепт теплицы 3
+data.raw["recipe"]["bi-logs-3"].category = "biofarm-mod-farm-2" -- Прячем рецепты под новую ферму 2
+data.raw["recipe"]["bi-logs-4"].category = "biofarm-mod-farm-3" -- Прячем рецепты под новую ферму 3
+data.raw["recipe"]["bi-seed-3"].category = "biofarm-mod-greenhouse-2" -- Прячем рецепты под новую теплицу 2
+data.raw["recipe"]["bi-seedling-3"].category = "biofarm-mod-greenhouse-2" -- Прячем рецепты под новую теплицу 2
+data.raw["recipe"]["bi-seed-4"].category = "biofarm-mod-greenhouse-3" -- Прячем рецепты под новую теплицу 3
+data.raw["recipe"]["bi-seedling-4"].category = "biofarm-mod-greenhouse-3" -- Прячем рецепты под новую теплицу 3
+data.raw["assembling-machine"]["bi-bio-reactor"].energy_usage = "200kW" --увеличиваем потребление биореактора мк 1
+data.raw["assembling-machine"]["bi-bio-reactor"].module_specification.module_slots = 1 -- 1 слот модулей для мк1
+bobmods.lib.recipe.set_ingredients("bi-bio-reactor", { { "assembling-machine-1", 2 }, { "steel-plate", 20 }, { "basic-circuit-board", 5 }  }) --баланс рецепта биореактора 1
+bobmods.lib.tech.add_recipe_unlock("bi-tech-biomass-reprocessing-1", "bi-bio-reactor-2") --открываем рецепт биореактора 2
+bobmods.lib.tech.add_recipe_unlock("bi-tech-biomass-reprocessing-2", "bi-bio-reactor-3") --открываем рецепт биореактора 3
+data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Прячем рецепты под новый биореактор 2
+data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 2
+bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-3", "concrete") -- Технологии под Бетон
 --###############################################################################################
