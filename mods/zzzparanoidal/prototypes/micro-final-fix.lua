@@ -1644,7 +1644,7 @@ bobmods.lib.tech.add_prerequisite ("bob-area-drills-3", "bob-drills-3") --фик
 bobmods.lib.tech.add_prerequisite ("rocket-silo", "bob-area-drills-3") --фикс буров
 bobmods.lib.tech.add_prerequisite ("battery-3", "powder-metallurgy-5") --Аккумулятор 3 поставить под Порошковая металлургия 4
 bobmods.lib.tech.remove_recipe_unlock("advanced-electronics-3", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
-bobmods.lib.tech.add_recipe_unlock("god-module-2", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
+bobmods.lib.tech.add_recipe_unlock("god-module-1", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
 bobmods.lib.tech.remove_recipe_unlock("bi-tech-resin-extraction", "bi-resin-pulp") --прячем лишнюю смолу
 bobmods.lib.tech.remove_recipe_unlock("bi-tech-resin-extraction", "bi-wood-from-pulp") --прячем лишнюю смолу
 data.raw.technology["bi-tech-resin-extraction"].hidden = true --прячем лишнюю смолу
