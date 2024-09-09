@@ -89,9 +89,9 @@ if mods.miniloader then
 	
 	if settings.startup["miniloader-enable-filter"].value then
 		if settings.startup["bobmods-logistics-beltoverhaul"].value then
-			data.raw["inserter"]["basic-miniloader-inserter"].rotation_speed = 0.5 * base_inserter_speed
-			data.raw["inserter"]["basic-miniloader-inserter"].localised_description = {"", font_open_tags, speed_desc, font_close_tags, 0.5 * base_display_speed, " ", items_desc, suffix}
-			data.raw["loader-1x1"]["basic-miniloader-loader"].speed = 0.5 * base_speed
+			data.raw["inserter"]["basic-filter-miniloader-inserter"].rotation_speed = 0.5 * base_inserter_speed
+			data.raw["inserter"]["basic-filter-miniloader-inserter"].localised_description = {"", font_open_tags, speed_desc, font_close_tags, 0.5 * base_display_speed, " ", items_desc, suffix}
+			data.raw["loader-1x1"]["basic-filter-miniloader-loader"].speed = 0.5 * base_speed
 		end
 		data.raw["inserter"]["filter-miniloader-inserter"].rotation_speed = 1 * base_inserter_speed
 		data.raw["inserter"]["filter-miniloader-inserter"].localised_description = {"", font_open_tags, speed_desc, font_close_tags, 1 * base_display_speed, " ", items_desc, suffix}
