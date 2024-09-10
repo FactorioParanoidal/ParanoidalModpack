@@ -204,11 +204,12 @@ script.on_event(defines.events.on_pre_player_died, function(event)
     })
 end)
 
-if (settings.global["paranoidal-disable-vanilla-evolution"] or {}).value then
-    script.on_init(function()
-        game.map_settings.enemy_evolution.enabled = false
-    end)
+
+local function off_evo()
+    game.map_settings.enemy_evolution.enabled = false
 end
+
+
 -- ###############################################################################################
 -- задаём функцию для SpilledItems
 local function spilled_items(event)
@@ -381,6 +382,16 @@ local function nasos_and_entity(event)
     hidden_entity_created(event)
 end
 
+local function evo_and_dolly() --выключаем эволюцию
+    if (settings.global["paranoidal-disable-vanilla-evolution"] or {}).value then
+        off_evo()
+    end
+    configure_picker_dollies()
+end
+
+
+
+
 script.on_event(defines.events.on_built_entity, gui_and_created) -- вместе с delete gui
 script.on_event(defines.events.on_robot_built_entity, nasos_and_entity)
 script.on_event(defines.events.script_raised_built, nasos_and_entity)
@@ -395,9 +406,9 @@ script.on_event(defines.events.script_raised_destroy, offshore_and_bio)
 -- script.on_event(defines.events.on_entity_destroyed, offshore_and_bio) --скорей всего не понадобится, но пусть лежит
 
 script.on_init(function() --наш любимый init, запрещаем двигать наши насосы
-    configure_picker_dollies()
+    evo_and_dolly()
 end)
 
 script.on_load(function()
-    configure_picker_dollies()
+    evo_and_dolly()
 end)
