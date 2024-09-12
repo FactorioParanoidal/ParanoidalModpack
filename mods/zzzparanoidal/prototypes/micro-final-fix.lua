@@ -1721,6 +1721,8 @@ bobmods.lib.tech.add_prerequisite("astrometrics", "advanced-osmium-smelting") --
 bobmods.lib.tech.add_recipe_unlock("bi-tech-stone-crushing-1", "stone-crushed-2") --открываем рецепт камня
 data.raw["rocket-silo"]["rocket-silo"].energy_usage = "250000kW" --увеличиваем потребление энергии ракетной шахтой
 data.raw["rocket-silo"]["rocket-silo"].module_specification.module_slots = 6 --но добавляем ей больше слотов модулей
+bobmods.lib.tech.add_prerequisite("advanced-osmium-smelting", "ore-processing-5")--фикс дерева осмия
+bobmods.lib.tech.add_prerequisite("advanced-osmium-smelting", "powder-metallurgy-5") --фикс дерева осмия
 --###############################################################################################
 --Баланс телепортера под параноидал
 bobmods.lib.recipe.set_ingredients("teleporter", { { "raw-speed-module-8", 2 }, {"space-science-pack", 50}, {"advanced-processing-unit", 50 }, { "low-density-structure", 150 }, { "silver-zinc-battery", 100 }, { "nitinol-alloy", 150 }})
