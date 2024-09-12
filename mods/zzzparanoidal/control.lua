@@ -205,7 +205,7 @@ script.on_event(defines.events.on_pre_player_died, function(event)
 end)
 
 
-local function off_evo()
+local function off_evo() --удаление эволюции
     game.map_settings.enemy_evolution.enabled = false
 end
 
@@ -409,6 +409,10 @@ script.on_init(function() --наш любимый init, запрещаем дв�
     evo_and_dolly()
 end)
 
-script.on_load(function()
+script.on_load(function() --без дропа эволюции потому что game недоступен
+    configure_picker_dollies()
+end)
+
+script.on_configuration_changed(function() --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
     evo_and_dolly()
 end)
