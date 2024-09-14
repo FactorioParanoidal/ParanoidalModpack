@@ -134,13 +134,13 @@ if kaoextended.settingsoveride == true then
   KaoExtended.recipe.addtorecipe("speed-module-8",{"predictive-io",1})
   KaoExtended.recipe.addtorecipe("productivity-module-8",{"predictive-io",1})
   KaoExtended.recipe.addtorecipe("effectivity-module-8",{"predictive-io",1})
-	
+if settings.startup["bobmods-modules-enablegodmodules"].value == true then	
   KaoExtended.recipe.addtorecipe("god-module-1", {"intelligent-io", 1})
   KaoExtended.recipe.addtorecipe("god-module-2", {"intelligent-io", 2})
   KaoExtended.recipe.addtorecipe("god-module-3", {"intelligent-io", 3})	
   KaoExtended.recipe.addtorecipe("god-module-4", {"intelligent-io", 4})
   KaoExtended.recipe.addtorecipe("god-module-5", {"intelligent-io", 5})
-
+end
 
 
 else
