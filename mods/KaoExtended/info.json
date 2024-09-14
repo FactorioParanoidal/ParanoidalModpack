@@ -1,14 +1,14 @@
 {
-  "name": "KaoExtended",
-  "version": "9.16.12",
-  "title": "KaoExtended - BobExtended upgrade for 1.1",
-  "factorio_version": "1.1",
-  "author": "Kaorhil based on the marvelous work of Momosundeass touched by nastyslave",
-  "contact": "discord : https://discord.gg/n45nwtZ",
-  "homepage": "discord : https://discord.gg/n45nwtZ",
-  "description": "Harder Technology. More Resources. Recipes are more complicated. More times consume. Core of Factorio:PARANOIDAL",
-  "dependencies": ["base >= 1.1.0",
-  
+ "name": "KaoExtended",
+ "version": "9.16.12",
+ "title": "KaoExtended - BobExtended upgrade for 1.1",
+ "factorio_version": "1.1",
+ "author": "Kaorhil based on the marvelous work of Momosundeass touched by nastyslave",
+ "contact": "discord : https://discord.gg/n45nwtZ",
+ "homepage": "discord : https://discord.gg/n45nwtZ",
+ "description": "Harder Technology. More Resources. Recipes are more complicated. More times consume. Core of Factorio:PARANOIDAL",
+ "dependencies": [
+  "base >= 1.1.0",
   "boblibrary",
   "bobplates",
   "bobmodules",
@@ -24,16 +24,14 @@
   "bobvehicleequipment",
   "bobwarfare",
   "bobenemies",
-  
   "MilesBobsExpansion",
-    
   "angelsinfiniteores",
   "angelsrefining",
   "angelspetrochem",
   "angelssmelting",
   "angelsbioprocessing",
   "? angelsaddons-pressuretanks",
-
+  "? factorissimo-2-notnotmelon",
   "? Factorissimo2",
   "? KS_Power",
   "? Bio_Industries",
@@ -49,12 +47,9 @@
   "? add-loader",
   "? Oberhaul",
   "? Subterrain",
-  
   "? extendedangels",
-  
   "? Clowns-Nuclear",
   "? Clowns-AngelBob-Nuclear",
   "? Clowns-Processing"
-  
-  ]
+ ]
 }
