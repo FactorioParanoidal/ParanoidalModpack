@@ -73,7 +73,7 @@ bobmods.lib.recipe.remove_ingredient ("steam-turbine-3", "steam-turbine-2")
 bobmods.lib.recipe.add_new_ingredient ("steam-turbine-3", {type="item", name="steam-turbine-2", amount=2})
 
 bobmods.lib.recipe.remove_ingredient ("assembling-machine-2", "assembling-machine")
-bobmods.lib.recipe.add_new_ingredient ("assembling-machine-2", {type="item", name="assembling-machine", amount=2})
+bobmods.lib.recipe.add_new_ingredient ("assembling-machine-2", {type="item", name="assembling-machine-1", amount=2})
 bobmods.lib.recipe.remove_ingredient ("assembling-machine-3", "assembling-machine-2")
 bobmods.lib.recipe.add_new_ingredient ("assembling-machine-3", {type="item", name="assembling-machine-2", amount=2})
 bobmods.lib.recipe.remove_ingredient ("assembling-machine-4", "assembling-machine-3")
