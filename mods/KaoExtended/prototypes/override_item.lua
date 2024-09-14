@@ -1,5 +1,6 @@
 --bobmodules
 --clean godmodules from low-tier components
+if settings.startup["bobmods-modules-enablegodmodules"].value == true then
 bobmods.lib.recipe.remove_ingredient ("god-module-1", "module-circuit-board")
 bobmods.lib.recipe.remove_ingredient ("god-module-2", "electronic-components")
 bobmods.lib.recipe.remove_ingredient ("god-module-2", "intergrated-electronics")
@@ -10,7 +11,7 @@ bobmods.lib.recipe.remove_ingredient ("god-module-4", "processing-electronics")
 bobmods.lib.recipe.remove_ingredient ("god-module-5", "electronic-components")
 bobmods.lib.recipe.remove_ingredient ("god-module-5", "intergrated-electronics")
 bobmods.lib.recipe.remove_ingredient ("god-module-5", "processing-electronics")
-
+end
 --clean tier-8 modules from low-tier components
 bobmods.lib.recipe.remove_ingredient ("speed-module-8", "electronic-components")
 bobmods.lib.recipe.remove_ingredient ("effectivity-module-8", "electronic-components")
