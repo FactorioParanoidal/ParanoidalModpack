@@ -30,6 +30,7 @@ if settings.startup["bobmods-power-solar"].value == true then
 end
 
 if settings.startup["bobmods-power-accumulators"].value == true then
+  bobmods.lib.tech.add_recipe_unlock("electric-energy-accumulators", "large-accumulator")
   bobmods.lib.tech.add_recipe_unlock("electric-energy-accumulators", "fast-accumulator")
   bobmods.lib.tech.add_recipe_unlock("electric-energy-accumulators", "slow-accumulator")
 end

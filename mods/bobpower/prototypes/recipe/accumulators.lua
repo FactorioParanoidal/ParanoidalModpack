@@ -109,5 +109,16 @@ if settings.startup["bobmods-power-accumulators"].value == true then
       },
       result = "slow-accumulator-3",
     },
-  })
+  },
+{
+			type = "recipe",
+			name = "large-accumulator",
+			energy_required = 10,
+			enabled = false,
+			ingredients = {
+				{ "iron-plate", 3 },
+				{ "battery", 10 },
+			},
+			result = "large-accumulator",
+		})
 end

@@ -98,5 +98,16 @@ if settings.startup["bobmods-power-accumulators"].value == true then
       place_result = "slow-accumulator-3",
       stack_size = 50,
     },
-  })
+  },
+{
+			type = "item",
+			name = "large-accumulator",
+			icon = "__base__/graphics/icons/accumulator.png",
+			icon_size = 64,
+			icon_mipmaps = 4,
+			subgroup = "bob-energy-accumulator",
+			order = "e[accumulator]-a[accumulator]-a-l",
+			place_result = "large-accumulator",
+			stack_size = 50,
+		})
 end
