@@ -43,7 +43,7 @@ newRecipe("basic", 15).ingredients = {
 }
 newRecipe("intermediate", 30).ingredients = {
   {"basic-structure-components", 2},
-  {"brass-gear-wheel", 8},
+  {"steel-gear-wheel", 8},
   {"bronze-alloy", 10},
   {"invar-alloy", 25}
 }
