@@ -101,8 +101,8 @@ bobmods.lib.tech.add_prerequisite("fusion-reactor", "fusion-reactor-equipment-4"
 
 bobmods.lib.tech.add_prerequisite("rocket-silo", "titanium-processing")
 bobmods.lib.tech.add_prerequisite("rocket-silo", "nitinol-processing")
-bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-electric-energy-accumulators-4")
-bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-solar-energy-4")
+bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-electric-energy-accumulators-3")
+bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-solar-energy-3")
 bobmods.lib.tech.add_prerequisite("rocket-silo", "advanced-electronics-3")
 -- bobmods.lib.tech.add_prerequisite("rocket-silo", "radars-4")
 
