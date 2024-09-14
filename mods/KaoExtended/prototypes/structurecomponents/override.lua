@@ -4,9 +4,9 @@ local function replaceMachine()
   KaoExtended.recipe.addtorecipe("warehouse-basic", {"basic-structure-components", 5})
   
   KaoExtended.recipe.addtorecipe("factory-2", {"basic-structure-components", 50})
-  KaoExtended.recipe.addtorecipe("factory-2", {"factory-1", 2})
+  KaoExtended.recipe.addtorecipe("factory-2", {"factory-1-raw", 2})
   KaoExtended.recipe.addtorecipe("factory-3", {"intermediate-structure-components", 50})
-  KaoExtended.recipe.addtorecipe("factory-3", {"factory-2", 2})
+  KaoExtended.recipe.addtorecipe("factory-3", {"factory-2-raw", 2})
     
   KaoExtended.recipe.addtorecipe("salination-plant", {"intermediate-structure-components", 5})
   KaoExtended.recipe.addtorecipe("salination-plant-2", {"advanced-structure-components", 5})
