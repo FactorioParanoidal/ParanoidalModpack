@@ -341,7 +341,6 @@ data:extend({
 
 bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("angels-brass-smelting-1", "brass-alloy-x")
-bobmods.lib.tech.add_recipe_unlock("alloy-smelting", "copper-tungsten-alloy-x")
 bobmods.lib.tech.add_recipe_unlock("tungsten-alloy-processing", "tungsten-carbide-x")
 bobmods.lib.tech.add_recipe_unlock("tungsten-alloy-processing", "tungsten-carbide-2x")
 bobmods.lib.tech.add_recipe_unlock("angels-gunmetal-smelting-1", "gunmetal-alloy-x")
