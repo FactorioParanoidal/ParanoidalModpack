@@ -1723,6 +1723,7 @@ data.raw["rocket-silo"]["rocket-silo"].energy_usage = "250000kW" --увелич�
 data.raw["rocket-silo"]["rocket-silo"].module_specification.module_slots = 6 --но добавляем ей больше слотов модулей
 bobmods.lib.tech.add_prerequisite("advanced-osmium-smelting", "ore-processing-5")--фикс дерева осмия
 bobmods.lib.tech.add_prerequisite("advanced-osmium-smelting", "powder-metallurgy-5") --фикс дерева осмия
+bobmods.lib.tech.remove_prerequisite("spidertron", "radars-1") --фикс паукатрона
 --###############################################################################################
 --Баланс телепортера под параноидал
 bobmods.lib.recipe.set_ingredients("teleporter", { { "raw-speed-module-8", 2 }, {"space-science-pack", 50}, {"advanced-processing-unit", 50 }, { "low-density-structure", 150 }, { "silver-zinc-battery", 100 }, { "nitinol-alloy", 150 }})
