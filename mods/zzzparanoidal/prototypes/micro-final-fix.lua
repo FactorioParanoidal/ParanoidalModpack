@@ -1802,3 +1802,8 @@ data.raw["item"]["vehicle-roboport-4"].subgroup = "vehicle-misc1"
 data.raw["item"]["vehicle-roboport-3"].order = "v[vehicle-equipment]-f[roboport-3]"
 data.raw["item"]["vehicle-roboport-4"].order = "v[vehicle-equipment]-f[roboport-4]"
 --###############################################################################################
+--прячем лишнюю жидкость
+data.raw["fluid"]["liquid-boric-acid"].hidden = true
+data.raw["recipe"]["fill-liquid-boric-acid-barrel"].hidden = true
+data.raw["recipe"]["empty-liquid-boric-acid-barrel"].hidden = true
+--###############################################################################################
