@@ -1796,3 +1796,9 @@ data.raw["item"]["angels-roll-gunmetal"].localised_name = data.raw["recipe"]["an
 data.raw["item"]["angels-roll-invar"].localised_name = data.raw["recipe"]["angels-roll-invar-casting"].localised_name
 data.raw["item"]["angels-roll-nitinol"].localised_name = data.raw["recipe"]["angels-roll-nitinol-casting"].localised_name
 --###############################################################################################
+--фикс расположения робоспота для транспорта
+data.raw["item"]["vehicle-roboport-3"].subgroup = "vehicle-misc1"
+data.raw["item"]["vehicle-roboport-4"].subgroup = "vehicle-misc1"
+data.raw["item"]["vehicle-roboport-3"].order = "v[vehicle-equipment]-f[roboport-3]"
+data.raw["item"]["vehicle-roboport-4"].order = "v[vehicle-equipment]-f[roboport-4]"
+--###############################################################################################
