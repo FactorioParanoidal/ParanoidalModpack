@@ -1772,3 +1772,27 @@ data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Пр
 data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 2
 bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-3", "concrete") -- Технологии под Бетон
 --###############################################################################################
+--фикс локализации рулонов
+data.raw["recipe"]["angels-roll-tungsten-casting"].localised_name = {"recipe-name.tungsten-casting"}
+data.raw["recipe"]["angels-roll-tungsten-casting-fast"].localised_name = {"recipe-name.tungsten-casting"}
+data.raw["recipe"]["angels-roll-bronze-casting"].localised_name = {"recipe-name.bronze-casting"}
+data.raw["recipe"]["angels-roll-bronze-casting-fast"].localised_name = {"recipe-name.bronze-casting"}
+data.raw["recipe"]["angels-roll-brass-casting"].localised_name = {"recipe-name.brass-casting"}
+data.raw["recipe"]["angels-roll-bronze-casting-fast"].localised_name = {"recipe-name.brass-casting"}
+data.raw["recipe"]["angels-roll-invar-casting"].localised_name = {"recipe-name.invar-casting"}
+data.raw["recipe"]["angels-roll-invar-casting-fast"].localised_name = {"recipe-name.invar-casting"}
+data.raw["recipe"]["angels-roll-nitinol-casting"].localised_name = {"recipe-name.nitinol-casting"}
+data.raw["recipe"]["angels-roll-nitinol-casting-fast"].localised_name = {"recipe-name.nitinol-casting"}
+data.raw["recipe"]["angels-roll-cobalt-steel-casting"].localised_name = {"recipe-name.cobalt-steel-casting"}
+data.raw["recipe"]["angels-roll-cobalt-steel-casting-fast"].localised_name = {"recipe-name.cobalt-steel-casting"}
+data.raw["recipe"]["angels-roll-gunmetal-casting"].localised_name = {"recipe-name.gunmetal-casting"}
+data.raw["recipe"]["angels-roll-gunmetal-casting-fast"].localised_name = {"recipe-name.gunmetal-casting"}
+
+data.raw["item"]["angels-roll-tungsten"].localised_name = data.raw["recipe"]["angels-roll-tungsten-casting"].localised_name
+data.raw["item"]["angels-roll-brass"].localised_name = data.raw["recipe"]["angels-roll-brass-casting"].localised_name
+data.raw["item"]["angels-roll-bronze"].localised_name = data.raw["recipe"]["angels-roll-bronze-casting"].localised_name
+data.raw["item"]["angels-roll-cobalt-steel"].localised_name = data.raw["recipe"]["angels-roll-cobalt-steel-casting"].localised_name
+data.raw["item"]["angels-roll-gunmetal"].localised_name = data.raw["recipe"]["angels-roll-gunmetal-casting"].localised_name
+data.raw["item"]["angels-roll-invar"].localised_name = data.raw["recipe"]["angels-roll-invar-casting"].localised_name
+data.raw["item"]["angels-roll-nitinol"].localised_name = data.raw["recipe"]["angels-roll-nitinol-casting"].localised_name
+--###############################################################################################
