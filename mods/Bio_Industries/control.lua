@@ -147,9 +147,9 @@ BioInd.show("Need to check these tables in global", compound_entity_tables)
       BioInd.writeDebug("Removed %s invalid entries from global[%s]!",
                         {result, compound_tab})
       -- Restore missing hidden entities
-      result = BioInd.restore_missing_entities(compound_name)
-      BioInd.writeDebug("Checked %s compound entities and restored %s missing hidden entries for global[\"%s\"]!",
-                        {result.checked, result.restored, compound_tab})
+      -- result = BioInd.restore_missing_entities(compound_name)
+      -- BioInd.writeDebug("Checked %s compound entities and restored %s missing hidden entries for global[\"%s\"]!",
+      --                   {result.checked, result.restored, compound_tab})
     end
   end
   -- Search all surfaces for unregistered compound entities
@@ -253,7 +253,7 @@ BioInd.writeDebug("Entered function On_Built with these data: " .. serpent.block
   if base then
     -- Make sure we work with a copy of the original table! We don't want to
     -- remove anything from it for real.
-    local hidden_entities = util.table.deepcopy(base_entry.hidden)
+    -- local hidden_entities = util.table.deepcopy(base_entry.hidden)
 
     BioInd.writeDebug("%s (%s) is a compound entity. Need to create %s", {base.name, base.unit_number, hidden_entities})
 BioInd.show("hidden_entities", hidden_entities)
@@ -296,7 +296,7 @@ BioInd.show("hidden_entities", hidden_entities)
       -- We must call create_entities even if there are no hidden entities (e.g. if
       -- the "Easy Gardens" setting is disabled and no hidden poles are required)
       -- because the compound entity gets registered there!
-      BioInd.create_entities(global[base_entry.tab], base, hidden_entities)
+      -- BioInd.create_entities(global[base_entry.tab], base, hidden_entities)
       BioInd.writeDebug("Stored %s in table: %s",
                         {BioInd.print_name_id(base), global[base_entry.tab][base.unit_number]})
     end
@@ -462,15 +462,15 @@ Event.register(Event.pre_remove_events, On_Pre_Remove)
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
 --                              (Thanks to eradicator!)                           --
 ------------------------------------------------------------------------------------
-setmetatable(_ENV, {
-  __newindex = function (self, key, value) --locked_global_write
-    error('\n\n[ER Global Lock] Forbidden global *write*:\n'
-      .. serpent.line{key = key or '<nil>', value = value or '<nil>'} .. '\n')
-    end,
-  __index = function (self, key) --locked_global_read
-    if not (key == "game" or key == "mods") then
-      error('\n\n[ER Global Lock] Forbidden global *read*:\n'
-        .. serpent.line{key = key or '<nil>'} .. '\n')
-    end
-  end
-})
+-- setmetatable(_ENV, {
+--   __newindex = function (self, key, value) --locked_global_write
+--     error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+--       .. serpent.line{key = key or '<nil>', value = value or '<nil>'} .. '\n')
+--     end,
+--   __index = function (self, key) --locked_global_read
+--     if not (key == "game" or key == "mods") then
+--       error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+--         .. serpent.line{key = key or '<nil>'} .. '\n')
+--     end
+--   end
+-- })
