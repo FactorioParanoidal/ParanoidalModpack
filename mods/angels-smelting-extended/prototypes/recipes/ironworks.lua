@@ -212,7 +212,7 @@ data:extend(
     name = "angels-iron-gear-wheel-casting",
     category = "casting",
     subgroup = "angels-iron-casting",
-    localised_name = {"recipe-name.reg-casting", { "lookup.iron"}, "Gear Wheel"},
+    localised_name = {"recipe-name.reg-casting", { "lookup.iron"}, {"string.gear"}},
     energy_required = 2,
     enabled = "false",
     ingredients = {
@@ -229,7 +229,7 @@ data:extend(
     name = "ASE-iron-gear-casting-expendable",
     category = "casting",
     subgroup = "angels-iron-casting",
-    localised_name = { "recipe-name.sand-casting", { "lookup.iron"}, "Gear Wheel"},
+    localised_name = { "recipe-name.sand-casting", { "lookup.iron"}, {"string.gear"}},
     energy_required = 0.5,
     enabled = "false",
     icons = {
@@ -264,7 +264,7 @@ data:extend(
     name = "ASE-iron-gear-casting-advanced",
     category = "casting",
     subgroup = "angels-iron-casting",
-    localised_name = { "recipe-name.die-casting", { "lookup.iron"}, "Gear Wheel"},
+    localised_name = { "recipe-name.die-casting", { "lookup.iron"}, {"string.gear"}},
     energy_required = 0.5,
     enabled = "false",
     icons = {
@@ -302,7 +302,7 @@ for n,metal in pairs(ASE.tables.gears) do
 
     m_gear1.name = "angels-"..metal.."-gear-wheel-casting"
     m_gear1.subgroup = "angels-"..metal.."-casting"
-    m_gear1.localised_name = { "recipe-name.reg-casting", { "lookup."..metal}, "Gear Wheel"}
+    m_gear1.localised_name = { "recipe-name.reg-casting", { "lookup."..metal}, {"string.gear"}}
     m_gear1.ingredients = {{ type = "fluid", name = "liquid-molten-"..metal, amount = 40},}
     m_gear1.results = {{ type = "item", name = metal.."-gear-wheel", amount = 9},}
     -- expendable casting
@@ -310,7 +310,7 @@ for n,metal in pairs(ASE.tables.gears) do
 
     m_gear2.name = "ASE-"..metal.."-gear-casting-expendable"
     m_gear2.subgroup = "angels-"..metal.."-casting"
-    m_gear2.localised_name = { "recipe-name.sand-casting", { "lookup."..metal}, "Gear Wheel"}
+    m_gear2.localised_name = { "recipe-name.sand-casting", { "lookup."..metal}, {"string.gear"}}
     m_gear2.icons[1] = { icon = "__bobplates__/graphics/icons/"..metal.."-gear-wheel.png", icon_size = 32,}
     m_gear2.ingredients = {
       { type = "fluid", name = "liquid-molten-"..metal, amount = 80},
@@ -326,7 +326,7 @@ for n,metal in pairs(ASE.tables.gears) do
 
     m_gear3.name = "ASE-"..metal.."-gear-casting-advanced"
     m_gear3.subgroup = "angels-"..metal.."-casting"
-    m_gear3.localised_name = { "recipe-name.die-casting", { "lookup."..metal}, "Gear Wheel"}
+    m_gear3.localised_name = { "recipe-name.die-casting", { "lookup."..metal}, {"string.gear"}}
     m_gear3.icons[1] = { icon = "__bobplates__/graphics/icons/"..metal.."-gear-wheel.png", icon_size = 32,}
     m_gear3.ingredients = {
       { type = "fluid", name = "liquid-molten-"..metal, amount = 80},
