@@ -48,6 +48,10 @@ data:extend{
 			{
 				type = 'unlock-recipe',
 				recipe = 'factory-3',
+			},
+			{
+				type = 'unlock-recipe',
+				recipe = 'factory-4',
 			}
 		},
 		unit = {

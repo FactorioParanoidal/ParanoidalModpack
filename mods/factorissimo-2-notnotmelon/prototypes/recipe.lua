@@ -24,6 +24,14 @@ data:extend{
 		ingredients = {{'concrete', 5000}, {'steel-plate', 2000}, {'substation', 100}},
 		result = 'factory-3-raw'
 	},
+	{
+		type = 'recipe',
+		name = 'factory-4',
+		enabled = false,
+		energy_required = 600,
+		ingredients = {{'concrete', 50000}, {'steel-plate', 20000}, {'substation', 1000}},
+		result = 'factory-4-raw'
+	},
 	-- Utilities
 	{
 		type = 'recipe',

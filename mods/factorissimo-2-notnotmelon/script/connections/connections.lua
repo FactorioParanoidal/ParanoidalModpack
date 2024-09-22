@@ -263,10 +263,10 @@ local function adjust(factory, indicator, positive)
 end
 Connections.adjust = adjust
 
-local beeps = {'Beep', 'Boop', 'Beep', 'Boop', 'Beeple'}
+local beeps = {'Не трогай!', 'Убери руки', 'Не работает', 'Функция в отпуске'}
 Connections.beep = function()
 	local t = game.tick
-	return beeps[t % 5 + 1]
+	return beeps[t % 4 + 1]
 end
 
 register_connection_type('belt', require('belt'))
