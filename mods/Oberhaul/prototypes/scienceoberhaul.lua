@@ -132,10 +132,10 @@ end
 
 if mods["miniloader"] then
 	data.raw.technology["basic-miniloader"].unit = {count=250,ingredients={{"automation-science-pack",1}},time=60}
-	data.raw.technology["miniloader"].unit = {count=500,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 1}},time=60}
-	data.raw.technology["fast-miniloader"].unit = {count=1000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 1},{"chemical-science-pack", 1}},time=60}
-	data.raw.technology["express-miniloader"].unit = {count=2000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1},{"production-science-pack", 1}},time=60}
-	data.raw.technology["turbo-miniloader"].unit = {count=3000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1},{"production-science-pack", 1},{"advanced-logistic-science-pack", 1}},time=60}
+	data.raw.technology["miniloader"].unit = {count=500,ingredients={{"automation-science-pack",1}},time=60}
+	data.raw.technology["fast-miniloader"].unit = {count=1000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 1}},time=60}
+	data.raw.technology["express-miniloader"].unit = {count=2000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1}},time=60}
+	data.raw.technology["turbo-miniloader"].unit = {count=3000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 2},{"chemical-science-pack", 1},{"advanced-logistic-science-pack", 1}},time=60}
 	data.raw.technology["ultimate-miniloader"].unit = {count=5000,ingredients={{"automation-science-pack",1},{"logistic-science-pack", 3},{"chemical-science-pack", 1},{"production-science-pack", 1},{"advanced-logistic-science-pack", 2},{"utility-science-pack", 1}},time=60}
 end
 
