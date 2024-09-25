@@ -120,6 +120,7 @@ public static class FactorioLauncher
             var portIsBusyTask = CheckUntilPortIsBusy(port, cancellationTokenSource.Token);
             var completedTask = await Task.WhenAny(processExitedTask, portIsBusyTask);
             process.Kill(true);
+            await process.WaitForExitAsync(CancellationToken.None);
             if (completedTask == portIsBusyTask)
             {
                 Log.Information("Port {Port} acquired by launched Factorio", port);
@@ -130,8 +131,12 @@ public static class FactorioLauncher
         {
             Log.Error("Process hasn't started in 15 minutes. Aborting");
             process.Kill(true);
+            await process.WaitForExitAsync(CancellationToken.None);
             return false;
         }
+         
+        // Ensure what we remove lock file, sometimes it breaks launching second step of pipeline
+        (factorioServerLocation / ".lock").DeleteFile();
 
         return false;
     }
