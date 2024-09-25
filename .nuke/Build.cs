@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -8,9 +9,11 @@ using System.Threading.Tasks;
 using FactorioParanoidal.FactorioMods;
 using FactorioParanoidal.FactorioMods.Mods;
 using FactorioParanoidal.ModSettingsDat;
+using Models;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
+using Nuke.Common.Utilities;
 using Serilog;
 
 [SuppressMessage("ReSharper", "AllUnderscoreLocalParameterName")]
@@ -131,4 +134,37 @@ partial class Build : NukeBuild
                 throw new Exception("Factorio launchability check failed. Check log for details.");
             }
         });
+
+    Target EnsureAllModsEnabled => _ => _
+        .Unlisted()
+        .DependsOn(EnsureLaunchability)
+        .Executes(() =>
+        {
+            var modListJsonPath = RootDirectory / "mods" / "mod-list.json";
+            if (!modListJsonPath.Exists())
+            {
+                throw new Exception("mod-list.json file doesn't exist, it can't be checked for disabled mods. " +
+                                    "Does EnsureLaunchability task runned?");
+            }
+
+            Log.Information("Serializing mod-list.json");
+            using var jsonFileStream = File.OpenRead(modListJsonPath);
+            var modListModel = JsonSerializer.Deserialize<ModListModel>(jsonFileStream)!;
+            var disabledMods = modListModel.Mods
+                .Where(mod => !mod.Enabled)
+                .ToImmutableArray();
+
+            if (disabledMods.Length > 0)
+            {
+                var disabledModsString = disabledMods.Select(mod => mod.Name).Join(", ");
+                throw new Exception(
+                    $"Following mods are disabled after factorio run: {disabledModsString}. Check mod dependencies, probably its unmet.");
+            }
+
+            Log.Information("All mods enabled");
+        });
+
+    Target CILaunchability => _ => _
+        .Unlisted()
+        .DependsOn(PrepareHeadless, EnsureLaunchability, EnsureAllModsEnabled);
 }
