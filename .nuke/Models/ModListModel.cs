@@ -2,5 +2,5 @@
 
 public class ModListModel
 {
-    public ModListMod[] Mods { get; set; }
+    public required ModListMod[] Mods { get; set; }
 }

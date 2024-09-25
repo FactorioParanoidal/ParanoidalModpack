@@ -141,7 +141,7 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             var modListJsonPath = RootDirectory / "mods" / "mod-list.json";
-            if (!modListJsonPath.Exists())
+            if (!modListJsonPath.FileExists())
             {
                 throw new Exception("mod-list.json file doesn't exist, it can't be checked for disabled mods. " +
                                     "Does EnsureLaunchability task runned?");
@@ -164,7 +164,7 @@ partial class Build : NukeBuild
             Log.Information("All mods enabled");
         });
 
-    Target CILaunchability => _ => _
+    Target CiLaunchability => _ => _
         .Unlisted()
         .DependsOn(PrepareHeadless, EnsureLaunchability, EnsureAllModsEnabled);
 }
