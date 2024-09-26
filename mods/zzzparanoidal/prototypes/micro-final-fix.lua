@@ -80,7 +80,6 @@ bobmods.lib.tech.add_prerequisite ("armor-absorb-5", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("steel-axe-2", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("bob-area-drills-1", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("fluid-handling", "logistic-science-pack")
-bobmods.lib.tech.add_prerequisite ("miniloader", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("remelting-alloy-mixer-1", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("chemical-processing-2", "logistic-science-pack")
 bobmods.lib.tech.add_prerequisite ("angels-ironworks-1", "logistic-science-pack")
@@ -108,7 +107,6 @@ bobmods.lib.tech.add_prerequisite ("advanced-aerodynamics", "chemical-science-pa
 bobmods.lib.tech.add_prerequisite ("mining-productivity-2", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("CW-air-filter-cleaning-3", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("CW-air-filtering-3", "chemical-science-pack")
-bobmods.lib.tech.add_prerequisite ("fast-miniloader", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("inserter-stack-size-bonus-2", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("bio-refugium-butchery-3", "chemical-science-pack")
 bobmods.lib.tech.add_prerequisite ("physical-projectile-damage-5", "chemical-science-pack")
@@ -1264,7 +1262,6 @@ bobmods.lib.tech.add_prerequisite("railway", "concrete") --рельсы под �
 bobmods.lib.tech.add_prerequisite ("worker-robot-battery-1", "chemical-science-pack") --батареи роботов под синие банки
 bobmods.lib.tech.add_prerequisite ("worker-robot-battery-4", "production-science-pack") --батареи роботов под производственн пакеты
 bobmods.lib.tech.add_prerequisite("worker-robot-battery-8", "utility-science-pack") --батареи роботов под утилити пакеты
-bobmods.lib.tech.add_prerequisite ("express-miniloader", "production-science-pack") --минипогрузчики 3 под производственн пакеты
 bobmods.lib.tech.add_prerequisite ("bi-tech-organic-plastic", "production-science-pack") --биопластик под производственн пакеты
 bobmods.lib.tech.add_prerequisite ("advanced-electronics", "angels-aluminium-smelting-1") --контроллер 2 под алюминий
 bobmods.lib.tech.add_prerequisite ("weapon-shooting-speed-2", "logistic-science-pack") --скорострельность 2 под зеленые банки
