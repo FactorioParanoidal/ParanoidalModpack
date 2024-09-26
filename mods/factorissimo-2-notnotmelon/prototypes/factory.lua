@@ -236,5 +236,75 @@ data:extend{
 		place_result = 'factory-3',
 		stack_size = 1,
 		flags = {'primary-place-result'}
+	}	
+}
+data:extend{
+	{
+		type = 'storage-tank',
+		name = 'factory-4',
+		icon = F..'/graphics/icon/factory-4.png',
+		icon_size = 64,
+		flags = {'player-creation'},
+		minable = {mining_time = 1, result = 'factory-4', count = 1},
+		max_health = 10000,
+		collision_box = {{-15.8, -15.8}, {15.8, 15.8}},
+		selection_box = {{-15.8, -15.8}, {15.8, 15.8}},
+		vehicle_impact_sound = { filename = '__base__/sound/car-stone-impact.ogg', volume = 1.0 },
+		pictures = {
+			picture = {
+				layers = {
+					{
+						filename = F..'/graphics/factory/factory-4-shadow.png',
+						width = 1408,
+						height = 1216,
+						shift = {4, -0.09375},
+						draw_as_shadow = true
+					},
+					{
+						filename = F..'/graphics/factory/factory-4'..alt_graphics..'.png',
+						width = 1408,
+						height = 1216,
+						shift = {4, -0.09375},
+					}
+				}
+			},
+			fluid_background = blank(),
+			window_background = blank(),
+			flow_sprite = blank(),
+			gas_flow = ablank(),
+		},
+		window_bounding_box = {{0,0},{0,0}},
+		fluid_box = {
+			base_area = 1,
+			pipe_covers = pipecoverspictures(),
+			pipe_connections = {},
+		},
+		flow_length_in_ticks = 1,
+		circuit_wire_connection_points = circuit_connector_definitions['storage-tank'].points,
+		circuit_connector_sprites = circuit_connector_definitions['storage-tank'].sprites,
+		circuit_wire_max_distance = 0,
+		map_color = {r = 0.5, g = 0, b = 0.8},
+		is_military_target = true
+	},
+	{
+		type = 'item-with-tags',
+		name = 'factory-4',
+		icon = F..'/graphics/icon/factory-4.png',
+		icon_size = 64,
+		subgroup = 'factorissimo2',
+		order = 'a-c',
+		place_result = 'factory-4',
+		stack_size = 1
+	},
+	{
+		type = 'item',
+		name = 'factory-4-raw',
+		icon = F..'/graphics/icon/factory-4.png',
+		icon_size = 64,
+		subgroup = 'factorissimo2',
+		order = 'a-c',
+		place_result = 'factory-4',
+		stack_size = 1,
+		flags = {'primary-place-result'}
 	}
 }

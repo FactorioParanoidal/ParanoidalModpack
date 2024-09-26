@@ -165,6 +165,7 @@ end
 create_energy_interfaces(8, F..'/graphics/icon/factory-1.png')
 create_energy_interfaces(12, F..'/graphics/icon/factory-2.png')
 create_energy_interfaces(16, F..'/graphics/icon/factory-3.png')
+create_energy_interfaces(32, F..'/graphics/icon/factory-4.png')
 
 -- Connection indicators
 
@@ -271,7 +272,7 @@ data:extend{
 		collision_mask = {},
 		flags = {'not-on-map', 'hidden'},
 		maximum_wire_distance = 1,
-		supply_area_distance = 63,
+		supply_area_distance = 64,
 		pictures = table.deepcopy(data.raw['electric-pole']['substation'].pictures),
 		drawing_box = table.deepcopy(data.raw['electric-pole']['substation'].drawing_box),
 		radius_visualisation_picture = blank(),
@@ -287,7 +288,7 @@ data:extend{
 		collision_mask = {},
 		flags = {'not-on-map', 'hidden'},
 		maximum_wire_distance = 1,
-		supply_area_distance = 0,
+		supply_area_distance = 64,
 		pictures = rblank(),
 		radius_visualisation_picture = blank(),
 		connection_points = {cwc0c()},
@@ -375,7 +376,7 @@ data:extend{
         energy_source = {type = 'void'},
         energy_usage = '1W',
         max_distance_of_sector_revealed = 0,
-        max_distance_of_nearby_sector_revealed = 1,
+        max_distance_of_nearby_sector_revealed = 3,
         pictures = rblank(),
         localised_name = '',
         max_health = 1

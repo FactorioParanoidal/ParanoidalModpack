@@ -64,6 +64,7 @@ local function init_globals()
 		remote.call('PickerDollies', 'add_blacklist_name', 'factory-1', true)
 		remote.call('PickerDollies', 'add_blacklist_name', 'factory-2', true)
 		remote.call('PickerDollies', 'add_blacklist_name', 'factory-3', true)
+		remote.call('PickerDollies', 'add_blacklist_name', 'factory-4', true)
 	end
 end
 
@@ -242,7 +243,6 @@ local function power_pole_placed(pole)
 		if not factory.inside_power_poles[1].valid then goto continue end
 		if electric_network == factory.inside_power_poles[1].electric_network_id then goto continue end
 		connect_power(factory, pole)
-
 		::continue::
 	end
 end
@@ -338,23 +338,28 @@ local function create_factory_position(layout)
 	local cy = 16*math.floor(n / 8)
 
 	-- To make void chunks show up on the map, you need to tell them they've finished generating.
-	surface.set_chunk_generated_status({cx-2, cy-2}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-1, cy-2}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+0, cy-2}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+1, cy-2}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-2, cy-1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-1, cy-1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+0, cy-1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+1, cy-1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-2, cy+0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-1, cy+0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+0, cy+0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+1, cy+0}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-2, cy+1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx-1, cy+1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+0, cy+1}, defines.chunk_generated_status.entities)
-	surface.set_chunk_generated_status({cx+1, cy+1}, defines.chunk_generated_status.entities)
-	surface.destroy_decoratives{area={{32*(cx-2),32*(cy-2)},{32*(cx+2),32*(cy+2)}}}
+	for x = -3, 2 do
+		for y = -3, 2 do
+			surface.set_chunk_generated_status({cx+x, cy+y}, defines.chunk_generated_status.entities)
+		end
+	end
+	
+	-- surface.set_chunk_generated_status({cx-1, cy-2}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+0, cy-2}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+1, cy-2}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-2, cy-1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-1, cy-1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+0, cy-1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+1, cy-1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-2, cy+0}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-1, cy+0}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+0, cy+0}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+1, cy+0}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-2, cy+1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx-1, cy+1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+0, cy+1}, defines.chunk_generated_status.entities)
+	-- surface.set_chunk_generated_status({cx+1, cy+1}, defines.chunk_generated_status.entities)
+	surface.destroy_decoratives{area={{32*(cx-3),32*(cy-3)},{32*(cx+3),32*(cy+3)}}}
 
 	local factory = {}
 	factory.inside_surface = surface
@@ -413,10 +418,10 @@ local function create_factory_interior(layout, force)
 	factory.inside_surface.set_tiles(tiles)
 
 	local power_pole = factory.inside_surface.create_entity{
-        name = 'factory-power-pole',
-        position = {factory.inside_x + layout.inside_energy_x, factory.inside_y + layout.inside_energy_y},
-        force = force
-    }
+		name = 'factory-power-pole',
+		position = {factory.inside_x, factory.inside_y},
+		force = force
+	}
 	power_pole.destructible = false
 	factory.inside_power_poles = {power_pole}
 
@@ -428,7 +433,7 @@ local function create_factory_interior(layout, force)
     radar.destructible = false
 	radar.active = false
 	factory.radar = radar
-
+	
 	if force.technologies['factory-interior-upgrade-lights'].researched then
 		build_lights_upgrade(factory)
 	end
@@ -819,6 +824,7 @@ local clone_forbidden_prefixes = {
 	'factory-1-',
 	'factory-2-',
 	'factory-3-',
+	'factory-4-',
 	'factory-power-input-',
 	'factory-connection-indicator-',
 	'factory-power-pole',

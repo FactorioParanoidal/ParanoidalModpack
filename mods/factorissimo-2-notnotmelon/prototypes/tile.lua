@@ -123,6 +123,8 @@ local function f2fc() return {r=100,g=120,b=140} end
 local function f2wc() return {r=80,g=140,b=200} end
 local function f3fc() return {r=120,g=120,b=100} end
 local function f3wc() return {r=190,g=190,b=80} end
+local function f4fc() return {r=100,g=40,b=120} end
+local function f4wc() return {r=80,g=200,b=80} end
 
 make_tile{
 	name = 'factory-entrance',
@@ -193,3 +195,22 @@ make_tile{
 	pictures = alt_graphics and pictures_ff(1) or pictures_fw(3),
 	map_color = f3wc(),
 }
+
+-- Factory 4
+
+make_tile{
+	name = 'factory-wall-4',
+	collision_mask = edge_mask(),
+	layer = 70,
+	pictures = pictures_fw(4),
+	map_color = f4wc(),
+}
+
+make_tile{
+	name = 'factory-pattern-4',
+	collision_mask = floor_mask(),
+	layer = 70,
+	pictures = alt_graphics and pictures_ff(1) or pictures_fw(4),
+	map_color = f4wc(),
+}
+

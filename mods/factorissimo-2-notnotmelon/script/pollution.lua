@@ -4,25 +4,28 @@ local function update_pollution(factory)
 	local pollution, cp = 0, 0
 	local inside_x, inside_y = factory.inside_x, factory.inside_y
 
-	chunk = {inside_x - 16,inside_y - 16}
-	cp = inside_surface.get_pollution(chunk)
-	if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
-	pollution = pollution + cp
+	for x = -4, 3 do
+		for y = -4, 3 do
+			chunk = {inside_x + x * 32 + 16,inside_y + y * 32 + 16}
+			cp = inside_surface.get_pollution(chunk)
+			if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
+			pollution = pollution + cp
+		end
+	end
+	-- chunk = {inside_x + 16,inside_y - 16}
+	-- cp = inside_surface.get_pollution(chunk)
+	-- if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
+	-- pollution = pollution + cp
 	
-	chunk = {inside_x + 16,inside_y - 16}
-	cp = inside_surface.get_pollution(chunk)
-	if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
-	pollution = pollution + cp
+	-- chunk = {inside_x - 16,inside_y + 16}
+	-- cp = inside_surface.get_pollution(chunk)
+	-- if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
+	-- pollution = pollution + cp
 	
-	chunk = {inside_x - 16,inside_y + 16}
-	cp = inside_surface.get_pollution(chunk)
-	if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
-	pollution = pollution + cp
-	
-	chunk = {inside_x + 16,inside_y + 16}
-	cp = inside_surface.get_pollution(chunk)
-	if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
-	pollution = pollution + cp
+	-- chunk = {inside_x + 16,inside_y + 16}
+	-- cp = inside_surface.get_pollution(chunk)
+	-- if cp ~= 0 then inside_surface.pollute(chunk, -cp) end
+	-- pollution = pollution + cp
 	
 	if pollution == 0 then return end
 	
