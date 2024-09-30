@@ -22,4 +22,4 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
       - name: Launch Factorio with current set of mods
-        run: ./build.sh EnsureLaunchability
+        run: ./build.sh CiLaunchability
