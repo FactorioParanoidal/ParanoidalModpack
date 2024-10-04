@@ -15,3 +15,4 @@ temp
 .idea
 mods/mod-settings.dat
 mods/mod-list.json
+mods/*.zip
