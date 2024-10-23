@@ -8,7 +8,7 @@
   "homepage": "https://discord.gg/MnXGAmC",
   "description": "PARANOIDAL 8. Core mod for PARANOIDAL\n2024.09",
   "dependencies": [
-    "base >= 2.0.7",
+    "base >= 2.0.9",
     "boblibrary", 
     "boblibrary",
     "BatteryElectricTrain",
