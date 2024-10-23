@@ -38,8 +38,8 @@ data.raw["cargo-wagon"]["cargo-wagon"].working_sound = train_wagon_working_sound
 
 	-- RAILS
 
-data.raw["curved-rail"]["curved-rail"].walking_sound = rail_walk_over_sound
-data.raw["straight-rail"]["straight-rail"].walking_sound = rail_walk_over_sound
+data.raw["legacy-curved-rail"]["curved-rail"].walking_sound = rail_walk_over_sound
+data.raw["legacy-straight-rail"]["straight-rail"].walking_sound = rail_walk_over_sound
 
 	-- UI
 	
