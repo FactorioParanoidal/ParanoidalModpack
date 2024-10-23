@@ -55,7 +55,7 @@ public static class FactorioLauncher
         using var responseMessage = await Utils.HttpClient.GetAsync(factorioDownloadLink,
             HttpCompletionOption.ResponseHeadersRead);
         await using var responseStream = await responseMessage.Content.ReadAsStreamAsync();
-        
+
         using var reader = ReaderFactory.Open(responseStream);
         while (reader.MoveToNextEntry())
         {
@@ -63,6 +63,7 @@ public static class FactorioLauncher
             {
                 continue;
             }
+
             var fileName = reader.Entry.Key.Replace("factorio/", "");
             var targetFilePath = downloadPath / fileName;
 
@@ -76,11 +77,15 @@ public static class FactorioLauncher
     }
 
     public static async Task<bool> EnsureFactorioServerCanLaunch(AbsolutePath factorioServerLocation,
-        string? modsPath = null)
+        AbsolutePath? modsPath = null)
     {
         Assert.True(OperatingSystem.IsLinux(), "Factorio can be started only on linux");
 
         (factorioServerLocation / "saves").DeleteDirectory();
+        if (modsPath is not null)
+        {
+            (modsPath / "mod-list.json").DeleteFile();
+        }
 
         var serverFile = factorioServerLocation / "bin/x64/factorio";
         if (!serverFile.Exists())
@@ -120,6 +125,7 @@ public static class FactorioLauncher
             var portIsBusyTask = CheckUntilPortIsBusy(port, cancellationTokenSource.Token);
             var completedTask = await Task.WhenAny(processExitedTask, portIsBusyTask);
             process.Kill(true);
+            await process.WaitForExitAsync(CancellationToken.None);
             if (completedTask == portIsBusyTask)
             {
                 Log.Information("Port {Port} acquired by launched Factorio", port);
@@ -130,8 +136,12 @@ public static class FactorioLauncher
         {
             Log.Error("Process hasn't started in 15 minutes. Aborting");
             process.Kill(true);
+            await process.WaitForExitAsync(CancellationToken.None);
             return false;
         }
+
+        // Ensure what we remove lock file, sometimes it breaks launching second step of pipeline
+        (factorioServerLocation / ".lock").DeleteFile();
 
         return false;
     }
