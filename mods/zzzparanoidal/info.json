@@ -27,6 +27,9 @@
     "AtomicArtillery",
     "Bio_Industries",
     "marathon",
-    "RU-locale"
+    "RU-locale",
+    "! elevated-rails",
+    "! quality",
+    "! space-age"
     ]
 }
