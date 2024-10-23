@@ -133,7 +133,7 @@ partial class Build : NukeBuild
                 .Select(dependency => new FactorioModListItem { Name = dependency.Name, Enabled = false })
                 .ToArray();
             var factorioModList = new FactorioModList { Mods = disabledMods };
-            var modListContent = JsonConvert.SerializeObject(factorioModList);
+            var modListContent = JsonSerializer.Serialize(factorioModList);
             Log.Information("Generating mod-list.json that exclude unsupported mods {UnsupportedMods}", 
                 disabledMods.Select(m => m.Name));
             File.WriteAllText(RootDirectory / "mods" / "mod-list.json", modListContent);
