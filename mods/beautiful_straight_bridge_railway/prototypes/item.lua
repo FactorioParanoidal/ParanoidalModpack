@@ -145,7 +145,7 @@ for id, param in pairs(bridges) do
 	table.insert(holder, ptype)
 
 -- straight-rail
-	ptype = table.deepcopy(data.raw["legacy-straight-rail"]["straight-rail"])
+	ptype = table.deepcopy(data.raw["legacy-straight-rail"]["legacy-straight-rail"])
 	ptype.name = "bbr-straight-rail-"..id
 	ptype.collision_mask = { "object-layer" }
 	ptype.minable.result = "bbr-rail-"..id
@@ -162,7 +162,7 @@ for id, param in pairs(bridges) do
 	table.insert(holder, ptype)
 
 -- curved-rail
-	ptype = table.deepcopy(data.raw["legacy-curved-rail"]["curved-rail"])
+	ptype = table.deepcopy(data.raw["legacy-curved-rail"]["legacy-curved-rail"])
 	ptype.name = "bbr-curved-rail-"..id
 	ptype.collision_mask = { "object-layer" }
 	ptype.minable.result = "bbr-rail-"..id
