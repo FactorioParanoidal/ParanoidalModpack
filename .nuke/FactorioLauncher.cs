@@ -81,6 +81,7 @@ public static class FactorioLauncher
         
         Assert.True(OperatingSystem.IsLinux(), "Factorio can be started only on linux");
         (factorioServerLocation / "saves").DeleteDirectory();
+        (factorioServerLocation / ".lock").DeleteFile();
         
         var port = 34197;
         var arguments = $"--start-server-load-scenario base/freeplay --bind 0.0.0.0:{port}";
