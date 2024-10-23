@@ -10,7 +10,7 @@ local function flatten(ts)
   return out
 end
 
-local all_base_rail_pictures = rail_pictures()
+local all_base_rail_pictures = legacy_rail_pictures("legacy_straight_rail")
 
 local function triple_rail_pictures(direction, layers)
   local out = {}
