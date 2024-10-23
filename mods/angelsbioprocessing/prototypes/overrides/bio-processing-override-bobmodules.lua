@@ -201,7 +201,7 @@ if mods["bobmodules"] then
     -- remove the marked as upgrade from base game
     local tech = data.raw.technology[type .. "-module-3"]
     if tech then
-      tech.upgrade = "false"
+      tech.upgrade = false
     end
   end
   for _, type in pairs({ "speed", "effectivity", "productivity", "pollution-clean", "pollution-create" }) do

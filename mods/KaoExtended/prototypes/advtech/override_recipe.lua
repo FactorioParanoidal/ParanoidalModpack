@@ -68,7 +68,7 @@ if kaoextended.settingsoveride == true then
 	  {
 	    type = "recipe",
 	    name = "science-pack-gold",
-	    enabled = "false",
+	    enabled = false,
   	    energy_required = 30,
   	    ingredients =
   	    {

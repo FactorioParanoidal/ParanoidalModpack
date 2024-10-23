@@ -123,7 +123,7 @@ data:extend({
   {
     type = "recipe",
     name = "ober-portable-solar",
-    enabled = "false",
+    enabled = false,
     energy_required = 10,
     ingredients = 
     {{"solar-panel-equipment-4",16}},

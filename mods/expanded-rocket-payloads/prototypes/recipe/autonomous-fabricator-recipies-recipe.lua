@@ -78,7 +78,7 @@ data:extend({
         type = "recipe",
         name = "orbital-fabricator-component",
         energy_required = 1500,
-        enabled = "false",
+        enabled = false,
         ingredients = 
         {
             {"advanced-assembler", 100},
@@ -101,7 +101,7 @@ data:extend({
         name = "fabricator-shuttle",
         category = "satellite-crafting",
         energy_required = 800,
-        enabled = "false",
+        enabled = false,
         subgroup = "Space-Shuttles",
         ingredients = 
         {

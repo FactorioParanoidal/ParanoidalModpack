@@ -3,7 +3,7 @@ data:extend({
         type = "recipe",
         name = "autonomous-space-mining-drone",
         energy_required = 100,
-        enabled = "false",
+        enabled = false,
         ingredients = 
         {
             {"assembling-machine-3", 100},

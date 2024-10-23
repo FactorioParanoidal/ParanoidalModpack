@@ -396,7 +396,7 @@ end
 ------------------------------------------------------------------------------------
 -- Omnifluid will be confused by our bi-solar-boiler (the compound boiler + solar
 -- plant entity). Let's blacklist it if the mod is active!
-BioInd.show("Omnifluid is active", mods["omnimatter_fluid"] or "false")
+BioInd.show("Omnifluid is active", mods["omnimatter_fluid"] or false)
 BioInd.show("forbidden_boilers", forbidden_boilers)
 
 if mods["omnimatter_fluid"]  then
