@@ -48,7 +48,6 @@ end
 --биг монстры
 if mods["Big-Monsters"] then
     set_settings_default_value("double-setting", "bm-biterzilla-min_evo", 0.4)
-    set_settings_default_value("double-setting", "bm-brutals-min_evo", 0.3)
     set_settings_default_value("int-setting", "bm-difficulty-level", 5)
     set_settings_default_value("int-setting", "bm-invasion-chance", 0)
     set_settings_default_value("double-setting", "bm-invasion-min_evo", 0.4)

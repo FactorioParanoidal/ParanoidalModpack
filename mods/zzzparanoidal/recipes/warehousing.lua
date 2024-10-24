@@ -2,7 +2,7 @@ data:extend({
 	{ -- Basic Warehouse
 		type = "recipe",
 		name = "warehouse-basic",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 		    { "storehouse-basic", 2 }, --added drd
@@ -16,7 +16,7 @@ data:extend({
 	{ -- Passive Provider Warehouse
 		type = "recipe",
 		name = "warehouse-passive-provider",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
@@ -30,7 +30,7 @@ data:extend({
 	{ -- Storage Warehouse
 		type = "recipe",
 		name = "warehouse-storage",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
@@ -44,7 +44,7 @@ data:extend({
 	{ -- Active Provider Warehouse
 		type = "recipe",
 		name = "warehouse-active-provider",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
@@ -58,7 +58,7 @@ data:extend({
 	{ -- Requester Warehouse
 		type = "recipe",
 		name = "warehouse-requester",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
@@ -72,7 +72,7 @@ data:extend({
 	{ -- Buffer Warehouse
 		type = "recipe",
 		name = "warehouse-buffer",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
@@ -86,7 +86,7 @@ data:extend({
 	{ -- Basic Storehouse
 		type = "recipe",
 		name = "storehouse-basic",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "steel-chest", 10 }, --drd
@@ -100,7 +100,7 @@ data:extend({
 	{ -- Passive Provider Storehouse
 		type = "recipe",
 		name = "storehouse-passive-provider",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
@@ -113,7 +113,7 @@ data:extend({
 	{ -- Storage Storehouse
 		type = "recipe",
 		name = "storehouse-storage",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
@@ -126,7 +126,7 @@ data:extend({
 	{ -- Active Provider Storehouse
 		type = "recipe",
 		name = "storehouse-active-provider",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
@@ -139,7 +139,7 @@ data:extend({
 	{ -- Requester Storehouse
 		type = "recipe",
 		name = "storehouse-requester",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
@@ -152,7 +152,7 @@ data:extend({
 	{ -- Buffer Storehouse
 		type = "recipe",
 		name = "storehouse-buffer",
-		enabled = "false",
+		enabled = false,
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },

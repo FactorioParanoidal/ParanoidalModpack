@@ -38,8 +38,8 @@ function set_tint_to_rails (rails_entities, tint)
   local sheet_path_ties = "__Bio_Industries__/graphics/entities/wood_products/rails/ties/"
   local rails_entities = rails_entities or  -- or vanilla
     {
-      data.raw["straight-rail"]["straight-rail"],
-      data.raw["curved-rail"]["curved-rail"]
+      data.raw["legacy-straight-rail"]["straight-rail"],
+      data.raw["legacy-curved-rail"]["curved-rail"]
     }
   global = global or {}
   global["rails"] = {}
