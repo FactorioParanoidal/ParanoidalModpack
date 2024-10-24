@@ -1,5 +1,6 @@
 local DLL = require("prototypes.globals")
 local DLLFUNC = require("prototypes.functions")
+require("__core__/lualib/circuit-connector-sprites")
 
 -- electric large lamp
 
