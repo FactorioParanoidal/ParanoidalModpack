@@ -1295,7 +1295,7 @@ bobmods.lib.tech.add_prerequisite ("ober-nuclear-processing", "utility-science-p
 bobmods.lib.tech.add_prerequisite ("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
 bobmods.lib.tech.add_prerequisite ("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
 data.raw.technology["warehouse-logistics-research-2"].unit.ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"advanced-logistic-science-pack", 1} } --Складская логистика 2 делаем правильные банки
-bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-filter-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фитльтрующий твердотопливный
+bobmods.lib.recipe.set_ingredients("yellow-filter-inserter", { { "electric-motor", 2 }, { "burner-inserter", 1 }, { "electronic-circuit", 4 } }) --в рецепт к фильтрующему добавляем фитльтрующий твердотопливный
 --13.08 починка рецепта кристаллического раствора
 bobmods.lib.recipe.set_ingredients("crystal-powder-slurry", { { "crystal-powder", 10 }, { "water-purified", 10 } })
 bobmods.lib.recipe.set_result("crystal-powder-slurry", {name = "crystal-slurry", type = "fluid", amount = 10})

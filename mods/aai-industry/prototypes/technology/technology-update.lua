@@ -160,7 +160,6 @@ util.tech_lock_recipes(
         "inserter",
         --"small-electric-pole",
         --"small-iron-electric-pole"
-		"burner-filter-inserter"
 		})
 
 if data.raw.recipe["basic-circuit-board"] then -- bobs
