@@ -25,7 +25,7 @@ if reskins.lib.setting("bobmods-logistics-inserteroverhaul") == false then
         ["express-inserter"] = {4, true, "30d79c"},
 
         -- Filter inserters
-        ["filter-inserter"] = {3, false},
+        ["fast-inserter"] = {3, false},
         ["express-filter-inserter"] = {4, true, "df57c2"},
 
         -- Stack inserters
@@ -33,7 +33,7 @@ if reskins.lib.setting("bobmods-logistics-inserteroverhaul") == false then
         ["express-stack-inserter"] = {4, true, "2dcd3f"},
 
         -- Stack filter inserters
-        ["stack-filter-inserter"] = {3, false},
+        ["bulk-inserter"] = {3, false},
         ["express-stack-filter-inserter"] = {4, true, "7e7e7e"},
     }
 else

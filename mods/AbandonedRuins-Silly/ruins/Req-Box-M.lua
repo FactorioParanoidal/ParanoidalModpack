@@ -57,7 +57,7 @@ return
     {"stone-wall", {x = -6, y = 1}, {}},
     {"wall-remnants", {x = -6, y = 2}, {}},
     {"stack-inserter", {x = -4, y = 1}, {dir = "east", }},
-    {"logistic-chest-requester", {x = -3, y = 1}, {}},
+    {"requester-chest", {x = -3, y = 1}, {}},
     {"active-provider-chest-remnants", {x = -2, y = 1}, {}},
     {"stack-inserter-remnants", {x = -2, y = 2}, {dir = "east", }},
     {"active-provider-chest-remnants", {x = 0, y = 1}, {}},

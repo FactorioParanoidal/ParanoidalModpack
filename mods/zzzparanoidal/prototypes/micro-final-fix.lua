@@ -670,11 +670,11 @@ end
 -------------------------------------------------------------------------------------------------
 --сундуки и склады
 data.raw["item"]["steel-chest"].subgroup = "logistic-chests-1"
-data.raw["item"]["logistic-chest-passive-provider"].subgroup = "logistic-chests-1"
-data.raw["item"]["logistic-chest-storage"].subgroup = "logistic-chests-1"
-data.raw["item"]["logistic-chest-active-provider"].subgroup = "logistic-chests-1"
-data.raw["item"]["logistic-chest-requester"].subgroup = "logistic-chests-1"
-data.raw["item"]["logistic-chest-buffer"].subgroup = "logistic-chests-1"
+data.raw["item"]["passive-provider-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["storage-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["active-provider-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["requester-chest"].subgroup = "logistic-chests-1"
+data.raw["item"]["buffer-chest"].subgroup = "logistic-chests-1"
 
 data.raw["item"]["brass-chest"].subgroup = "logistic-chests-2"
 
@@ -1085,7 +1085,7 @@ data.raw["assembling-machine"]["dpa"].energy_usage = "1000kW"
 
 --Синие фильтрующие манипуляторы встают на место
 data.raw.technology["filter-inserters"].hidden = true
-bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
+bobmods.lib.tech.add_recipe_unlock("express-inserters", "fast-inserter")
 
 bobmods.lib.recipe.set_ingredient("landfill", {"stone", 50}) --Отсыпка по 50
 if data.raw["technology"]["radars-1"] then
@@ -1361,12 +1361,12 @@ bobmods.lib.tech.add_recipe_unlock("angels-advanced-chemistry-5", "advanced-chem
 --унификация рецептов манипуляторов и ковееров (AKMF)
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-bearing", "titanium-bearing")
 bobmods.lib.recipe.replace_ingredient("stack-inserter", "cobalt-steel-bearing", "titanium-bearing")
-bobmods.lib.recipe.replace_ingredient("filter-inserter", "cobalt-steel-bearing", "titanium-bearing")
-bobmods.lib.recipe.replace_ingredient("stack-filter-inserter", "cobalt-steel-bearing", "titanium-bearing")
+bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-bearing", "titanium-bearing")
+bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-bearing", "titanium-bearing")
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("stack-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
-bobmods.lib.recipe.replace_ingredient("filter-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
-bobmods.lib.recipe.replace_ingredient("stack-filter-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
+bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
+bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("turbo-inserter", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("turbo-stack-inserter", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("turbo-filter-inserter", "titanium-bearing", "cobalt-steel-bearing")
@@ -1686,7 +1686,7 @@ bobmods.lib.tech.add_prerequisite("worker-robots-storage-2", "advanced-logistic-
 bobmods.lib.tech.add_prerequisite("worker-robots-storage-3", "utility-science-pack")
 bobmods.lib.tech.add_prerequisite("energy-shield-equipment", "electric-engine")
 bobmods.lib.tech.add_prerequisite("battery-equipment", "electric-engine")
-bobmods.lib.tech.add_prerequisite("fusion-reactor-equipment", "solar-panel-equipment-4")
+bobmods.lib.tech.add_prerequisite("fission-reactor-equipment", "solar-panel-equipment-4")
 bobmods.lib.tech.add_prerequisite("personal-roboport-equipment", "processing-unit")
 bobmods.lib.tech.add_prerequisite("mining-productivity-3", "production-science-pack")
 bobmods.lib.tech.add_prerequisite("mining-productivity-3", "utility-science-pack")

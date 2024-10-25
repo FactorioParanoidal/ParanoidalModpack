@@ -62,7 +62,7 @@ return
     {"active-provider-chest-remnants", {x = -1, y = 0.5}, {}},
     {"stack-inserter-remnants", {x = -2, y = 1.5}, {dir = "east", }},
     {"stack-inserter-remnants", {x = -1, y = 1.5}, {dir = "east", }},
-    {"logistic-chest-active-provider", {x = 1, y = 0.5}, {}},
+    {"active-provider-chest", {x = 1, y = 0.5}, {}},
     {"stack-inserter", {x = 1, y = 1.5}, {dir = "south", }},
     {"active-provider-chest-remnants", {x = 0, y = 0.5}, {}},
     {"stack-inserter-remnants", {x = 0, y = 1.5}, {dir = "east", }},

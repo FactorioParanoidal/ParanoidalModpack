@@ -36,7 +36,7 @@ local inserter_map = {
     -- Filter inserters
     ["yellow-filter-inserter"] = {tier = 1, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
     ["red-filter-inserter"] = {tier = 2, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
-    ["filter-inserter"] = {tier = 3, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
+    ["fast-inserter"] = {tier = 3, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
     ["turbo-filter-inserter"] = {tier = 4, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
     ["express-filter-inserter"] = {tier = 5, is_filter = true, type = inserter_type, icon_name = "filter-"..inserter_icon_name},
 
@@ -48,7 +48,7 @@ local inserter_map = {
 
     -- Stack filter inserters
     ["red-stack-filter-inserter"] = {tier = 2, is_filter = true, is_stack_inserter = true, type = stack_inserter_type, icon_name = "filter-"..stack_inserter_icon_name},
-    ["stack-filter-inserter"] = {tier = 3, is_filter = true, is_stack_inserter = true, type = stack_inserter_type, icon_name = "filter-"..stack_inserter_icon_name},
+    ["bulk-inserter"] = {tier = 3, is_filter = true, is_stack_inserter = true, type = stack_inserter_type, icon_name = "filter-"..stack_inserter_icon_name},
     ["turbo-stack-filter-inserter"] = {tier = 4, is_filter = true, is_stack_inserter = true, type = stack_inserter_type, icon_name = "filter-"..stack_inserter_icon_name},
     ["express-stack-filter-inserter"] = {tier = 5, is_filter = true, is_stack_inserter = true, type = stack_inserter_type, icon_name = "filter-"..stack_inserter_icon_name},
 }

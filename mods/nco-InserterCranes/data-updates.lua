@@ -21,9 +21,9 @@ if mods["bobinserters"] then
 end
 
 register_crane("stack-inserter", "nco-wide-crane", true, speed_limit_wide)
-register_crane("stack-filter-inserter", "nco-wide-filter-crane", true, speed_limit_wide)
+register_crane("bulk-inserter", "nco-wide-filter-crane", true, speed_limit_wide)
 register_crane("stack-inserter", "nco-crane", false, speed_limit)
-register_crane("stack-filter-inserter", "nco-filter-crane", false, speed_limit)
+register_crane("bulk-inserter", "nco-filter-crane", false, speed_limit)
 
 -- bob's logistics
 if mods["boblogistics"] then

@@ -241,8 +241,8 @@ if data.raw.item["expedited-transport-belt"] then
 end
 
 local filter_inserters = {
-  ["fast-inserter"] = "filter-inserter",
-  ["stack-inserter"] = "stack-filter-inserter",
+  ["fast-inserter"] = "fast-inserter",
+  ["stack-inserter"] = "bulk-inserter",
   ["express-stack-inserter"] = "express-stack-filter-inserter",
 
   -- boblogistics overhaul

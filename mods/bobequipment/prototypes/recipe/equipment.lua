@@ -111,7 +111,7 @@ data:extend({
     enabled = false,
     energy_required = 10,
     ingredients = {
-      { "fusion-reactor-equipment", 1 },
+      { "fission-reactor-equipment", 1 },
       { "processing-unit", 50 },
       { "efficiency-module-3", 2 },
       { "speed-module-3", 2 },

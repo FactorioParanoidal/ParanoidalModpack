@@ -646,7 +646,7 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "empty-barrel",
+        recipe = "barrel",
       },
     },
     unit = {

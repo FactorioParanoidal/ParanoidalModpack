@@ -102,7 +102,7 @@ end
   bobmods.lib.recipe.replace_ingredient ("drydock-assembly", "processing-unit", "advanced-processing-unit")   
 -- data.raw.recipe["drydock-assembly"].ingredients = {{"assembly-robot",50},{"bob-roboport-4",10},{"advanced-processing-unit",200},{"solar-panel-large-3",200},{"low-density-structure", 100}}
   -- fusion-reactor
-  bobmods.lib.recipe.replace_ingredient ("fusion-reactor", "fusion-reactor-equipment", "fusion-reactor-equipment-4")    
+  bobmods.lib.recipe.replace_ingredient ("fusion-reactor", "fission-reactor-equipment", "fusion-reactor-equipment-4")    
 --data.raw.recipe["fusion-reactor"].ingredients = {{"fusion-reactor-equipment-4",100}}
   -- hull-component
   bobmods.lib.recipe.replace_ingredient ("hull-component", "steel-plate", "titanium-plate")   

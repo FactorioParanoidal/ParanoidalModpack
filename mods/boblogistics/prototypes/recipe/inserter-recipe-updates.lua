@@ -21,8 +21,8 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
     bobmods.lib.recipe.replace_ingredient("fast-inserter", "steel-plate", "aluminium-plate")
     bobmods.lib.recipe.replace_ingredient("stack-inserter", "steel-plate", "aluminium-plate")
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.replace_ingredient("filter-inserter", "steel-plate", "aluminium-plate")
-      bobmods.lib.recipe.replace_ingredient("stack-filter-inserter", "steel-plate", "aluminium-plate")
+      bobmods.lib.recipe.replace_ingredient("fast-inserter", "steel-plate", "aluminium-plate")
+      bobmods.lib.recipe.replace_ingredient("bulk-inserter", "steel-plate", "aluminium-plate")
     end
     bobmods.lib.tech.add_prerequisite("logistics-3", "aluminium-processing")
   end
@@ -30,27 +30,27 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   if data.raw.item["cobalt-steel-bearing"] then
     bobmods.lib.recipe.add_ingredient("fast-inserter", { "cobalt-steel-bearing", 1 })
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.add_ingredient("filter-inserter", { "cobalt-steel-bearing", 1 })
+      bobmods.lib.recipe.add_ingredient("fast-inserter", { "cobalt-steel-bearing", 1 })
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "cobalt-steel-bearing", 5 })
-      bobmods.lib.recipe.add_ingredient("stack-filter-inserter", { "cobalt-steel-bearing", 6 })
+      bobmods.lib.recipe.add_ingredient("bulk-inserter", { "cobalt-steel-bearing", 6 })
     else
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "cobalt-steel-bearing", 5 })
     end
   elseif data.raw.item["brass-bearing"] then
     bobmods.lib.recipe.add_ingredient("fast-inserter", { "brass-bearing", 1 })
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.add_ingredient("filter-inserter", { "brass-bearing", 1 })
+      bobmods.lib.recipe.add_ingredient("fast-inserter", { "brass-bearing", 1 })
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "brass-bearing", 5 })
-      bobmods.lib.recipe.add_ingredient("stack-filter-inserter", { "brass-bearing", 6 })
+      bobmods.lib.recipe.add_ingredient("bulk-inserter", { "brass-bearing", 6 })
     else
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "brass-bearing", 5 })
     end
   elseif data.raw.item["steel-bearing"] then
     bobmods.lib.recipe.add_ingredient("fast-inserter", { "steel-bearing", 1 })
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.add_ingredient("filter-inserter", { "steel-bearing", 1 })
+      bobmods.lib.recipe.add_ingredient("fast-inserter", { "steel-bearing", 1 })
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "steel-bearing", 6 })
-      bobmods.lib.recipe.add_ingredient("stack-filter-inserter", { "steel-bearing", 6 })
+      bobmods.lib.recipe.add_ingredient("bulk-inserter", { "steel-bearing", 6 })
     else
       bobmods.lib.recipe.add_ingredient("stack-inserter", { "steel-bearing", 5 })
     end
@@ -60,16 +60,16 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
     bobmods.lib.recipe.replace_ingredient("fast-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
     bobmods.lib.recipe.replace_ingredient("stack-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.replace_ingredient("filter-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
-      bobmods.lib.recipe.replace_ingredient("stack-filter-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
+      bobmods.lib.recipe.replace_ingredient("fast-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
+      bobmods.lib.recipe.replace_ingredient("bulk-inserter", "iron-gear-wheel", "cobalt-steel-gear-wheel")
     end
     bobmods.lib.tech.add_prerequisite("logistics-3", "cobalt-processing")
   elseif data.raw.item["brass-gear-wheel"] then
     bobmods.lib.recipe.replace_ingredient("fast-inserter", "iron-gear-wheel", "brass-gear-wheel")
     bobmods.lib.recipe.replace_ingredient("stack-inserter", "iron-gear-wheel", "brass-gear-wheel")
     if settings.startup["bobmods-logistics-inserterrequireprevious"].value == true then
-      bobmods.lib.recipe.replace_ingredient("filter-inserter", "iron-gear-wheel", "brass-gear-wheel")
-      bobmods.lib.recipe.replace_ingredient("stack-filter-inserter", "iron-gear-wheel", "brass-gear-wheel")
+      bobmods.lib.recipe.replace_ingredient("fast-inserter", "iron-gear-wheel", "brass-gear-wheel")
+      bobmods.lib.recipe.replace_ingredient("bulk-inserter", "iron-gear-wheel", "brass-gear-wheel")
     end
     bobmods.lib.tech.add_prerequisite("logistics-3", "zinc-processing")
   end

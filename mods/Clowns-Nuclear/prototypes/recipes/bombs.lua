@@ -63,7 +63,7 @@ end
 if data.raw.item["fusion-reactor-equipment-2"] then
 	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"fusion-reactor-equipment-2", 1})
 else
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"fusion-reactor-equipment", 1})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"fission-reactor-equipment", 1})
 end
 
 if data.raw.item["advanced-processing-unit"] then

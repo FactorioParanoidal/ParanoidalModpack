@@ -67,7 +67,7 @@ for _, tech in pairs(tech) do
 end
 
 
-local tech_fusion = tech["fusion-reactor-equipment"]
+local tech_fusion = tech["fission-reactor-equipment"]
 if tech_fusion then
   table.insert(tech_fusion.effects, 1, {type="unlock-recipe", recipe="fusion-reactor-2-equipment"})
   table.insert(tech_fusion.effects, 2, {type="unlock-recipe", recipe="fusion-reactor-3-equipment"})

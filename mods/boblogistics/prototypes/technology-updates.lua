@@ -147,9 +147,9 @@ bobmods.lib.tech.remove_recipe_unlock("automation", "long-handed-inserter")
 
 if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   bobmods.lib.tech.remove_recipe_unlock("fast-inserter", "fast-inserter")
-  bobmods.lib.tech.remove_recipe_unlock("fast-inserter", "filter-inserter")
+  bobmods.lib.tech.remove_recipe_unlock("fast-inserter", "fast-inserter")
   bobmods.lib.tech.remove_recipe_unlock("stack-inserter", "stack-inserter")
-  bobmods.lib.tech.remove_recipe_unlock("stack-inserter", "stack-filter-inserter")
+  bobmods.lib.tech.remove_recipe_unlock("stack-inserter", "bulk-inserter")
 
   bobmods.lib.tech.add_recipe_unlock("electronics", "yellow-filter-inserter")
 
@@ -161,7 +161,7 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   bobmods.lib.tech.add_recipe_unlock("stack-inserter", "red-stack-filter-inserter")
 
   bobmods.lib.tech.add_recipe_unlock("express-inserters", "fast-inserter")
-  bobmods.lib.tech.add_recipe_unlock("express-inserters", "filter-inserter")
+  bobmods.lib.tech.add_recipe_unlock("express-inserters", "fast-inserter")
 
   bobmods.lib.tech.add_recipe_unlock("turbo-inserter", "turbo-inserter")
   bobmods.lib.tech.add_recipe_unlock("turbo-inserter", "turbo-filter-inserter")
@@ -352,10 +352,10 @@ if settings.startup["bobmods-logistics-disableroboports"].value == true then
 end
 
 -- Chest ballancing.
-bobmods.lib.tech.remove_recipe_unlock("construction-robotics", "logistic-chest-passive-provider")
-bobmods.lib.tech.add_recipe_unlock("logistic-robotics", "logistic-chest-requester")
-bobmods.lib.tech.remove_recipe_unlock("logistic-robotics", "logistic-chest-storage")
-bobmods.lib.tech.remove_recipe_unlock("logistic-system", "logistic-chest-requester")
+bobmods.lib.tech.remove_recipe_unlock("construction-robotics", "passive-provider-chest")
+bobmods.lib.tech.add_recipe_unlock("logistic-robotics", "requester-chest")
+bobmods.lib.tech.remove_recipe_unlock("logistic-robotics", "storage-chest")
+bobmods.lib.tech.remove_recipe_unlock("logistic-system", "requester-chest")
 
 -- Old DyTech compatibillity bullshit
 if data.raw.technology["lava-smelting-05"] then

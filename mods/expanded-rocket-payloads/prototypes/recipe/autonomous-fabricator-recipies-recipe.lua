@@ -90,7 +90,7 @@ data:extend({
             {"satellite-bus", 200},
             {"satellite-communications", 500},
             {"satellite-flight-computer", 250},
-            {"stack-filter-inserter", 500},
+            {"bulk-inserter", 500},
           },
         result = "orbital-fabricator-component",
         category = "satellite-crafting",

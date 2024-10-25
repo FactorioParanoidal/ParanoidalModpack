@@ -36,7 +36,7 @@ if kaoextended.settingsoveride == true then
 			{"sci-component-m", 3},
 	    }
 	data.raw["recipe"]["advanced-logistic-science-pack"].ingredients =
-	    {   {"filter-inserter", 1},
+	    {   {"fast-inserter", 1},
 			--{"express-transport-belt", 10}, --moved to sci-component-l
 			{"flying-robot-frame", 1},
 			{"brass-chest", 1},

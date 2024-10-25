@@ -30,7 +30,7 @@ recipe["autonomous-space-mining-drone"].ingredients = {
   {"satellite-flight-computer", 50},
   {"satellite-radar", 10},
   {"satellite-thruster", 10}
-  -- {"stack-filter-inserter", 100}
+  -- {"bulk-inserter", 100}
 }
 
 recipe["ground-auto-fabricator"].ingredients = {{"ground-fabricator-component", 10}}
@@ -55,7 +55,7 @@ recipe["orbital-fabricator-component"].ingredients = {
   {"satellite-bus", 200},
   {"satellite-communications", 500},
   {"satellite-flight-computer", 250}
-  -- {"stack-filter-inserter", 500},
+  -- {"bulk-inserter", 500},
 }
 
 recipe["radioisotope-thermoelectric-generator"].ingredients = {
@@ -264,8 +264,8 @@ if mods["bobinserters"] and settings.startup["ERPTbaAB-use-bobinserters"].value 
   table.insert(recipe["orbital-fabricator-component"].ingredients, {"express-stack-filter-inserter", 500})
 else
   table.insert(recipe["advanced-assembler"].ingredients, {"stack-inserter", 10})
-  table.insert(recipe["autonomous-space-mining-drone"].ingredients, {"stack-filter-inserter", 100})
-  table.insert(recipe["orbital-fabricator-component"].ingredients, {"stack-filter-inserter", 500})
+  table.insert(recipe["autonomous-space-mining-drone"].ingredients, {"bulk-inserter", 100})
+  table.insert(recipe["orbital-fabricator-component"].ingredients, {"bulk-inserter", 500})
 end
 
 if mods["boblogistics"] and not settings.startup["bobmods-logistics-disableroboports"].value then

@@ -2,9 +2,9 @@ data.raw.item["burner-inserter"].order = "e[inserter]-a[burner]"
 data.raw.item["inserter"].order = "e[inserter]-b[standard]"
 data.raw.item["long-handed-inserter"].order = "e[inserter]-c[fast]"
 data.raw.item["fast-inserter"].order = "e[inserter]-d[express]"
-data.raw.item["filter-inserter"].order = "e[inserter]-d[express]-b[filter]"
+data.raw.item["fast-inserter"].order = "e[inserter]-d[express]-b[filter]"
 data.raw.item["stack-inserter"].order = "e[inserter]-d[express]-c[stack]"
-data.raw.item["stack-filter-inserter"].order = "e[inserter]-d[express]-d[stack-filter]"
+data.raw.item["bulk-inserter"].order = "e[inserter]-d[express]-d[stack-filter]"
 
 data:extend({
   {
@@ -130,13 +130,13 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
     },
     {
       type = "item",
-      name = "filter-inserter",
+      name = "fast-inserter",
       localised_name = { "entity-name.express-filter-inserter" },
       icon = "__boblogistics__/graphics/icons/inserter/blue-filter-inserter.png",
       icon_size = 32,
       subgroup = "bob-logistic-tier-3",
       order = "e[inserter]-d[express]-b[filter]",
-      place_result = "filter-inserter",
+      place_result = "fast-inserter",
       stack_size = 50,
     },
     {
@@ -152,13 +152,13 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
     },
     {
       type = "item",
-      name = "stack-filter-inserter",
+      name = "bulk-inserter",
       localised_name = { "entity-name.express-stack-filter-inserter" },
       icon = "__boblogistics__/graphics/icons/inserter/blue-stack-filter-inserter.png",
       icon_size = 32,
       subgroup = "bob-logistic-tier-3",
       order = "e[inserter]-d[express]-d[stack-filter]",
-      place_result = "stack-filter-inserter",
+      place_result = "bulk-inserter",
       stack_size = 50,
     },
 

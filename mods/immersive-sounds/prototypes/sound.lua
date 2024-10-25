@@ -105,9 +105,9 @@ data.raw["tree"]["tree-09-red"].vehicle_impact_sound = car_impact_wood_sound
 
 data.raw.cliff.cliff.vehicle_impact_sound = car_impact_stone_sound
 
-data.raw["simple-entity"]["rock-big"].vehicle_impact_sound = car_impact_stone_sound
-data.raw["simple-entity"]["rock-huge"].vehicle_impact_sound = car_impact_stone_sound
-data.raw["simple-entity"]["sand-rock-big"].vehicle_impact_sound = car_impact_stone_sound
+data.raw["simple-entity"]["big-rock"].vehicle_impact_sound = car_impact_stone_sound
+data.raw["simple-entity"]["huge-rock"].vehicle_impact_sound = car_impact_stone_sound
+data.raw["simple-entity"]["big-sand-rock"].vehicle_impact_sound = car_impact_stone_sound
 
 
 	-- PICKAXE STUFF	

@@ -24,7 +24,7 @@ data:extend({
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
-			{ "logistic-chest-passive-provider", 1 },
+			{ "passive-provider-chest", 1 },
 			{ "steel-plate", 10 },
 			{ "iron-stick", 15 },
 		},
@@ -38,7 +38,7 @@ data:extend({
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
-			{ "logistic-chest-storage", 1 },
+			{ "storage-chest", 1 },
 			{ "steel-plate", 10 },
 			{ "iron-stick", 15 },
 		},
@@ -52,7 +52,7 @@ data:extend({
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
-			{ "logistic-chest-active-provider", 1 },
+			{ "active-provider-chest", 1 },
 			{ "steel-plate", 10 },
 			{ "iron-stick", 15 },
 		},
@@ -66,7 +66,7 @@ data:extend({
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
-			{ "logistic-chest-requester", 1 },
+			{ "requester-chest", 1 },
 			{ "steel-plate", 10 },
 			{ "iron-stick", 15 },
 		},
@@ -80,7 +80,7 @@ data:extend({
 		ingredients =
 		{
 			{ "warehouse-basic", 1 },
-			{ "logistic-chest-buffer", 1 },
+			{ "buffer-chest", 1 },
 			{ "steel-plate", 10 },
 			{ "iron-stick", 15 },
 		},
@@ -107,7 +107,7 @@ data:extend({
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
-			{ "logistic-chest-passive-provider", 1 },
+			{ "passive-provider-chest", 1 },
 			{ "iron-stick", 4 },
 		},
 		energy_required = 5,
@@ -120,7 +120,7 @@ data:extend({
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
-			{ "logistic-chest-storage", 1 },
+			{ "storage-chest", 1 },
 			{ "iron-stick", 4 },
 		},
 		energy_required = 5,
@@ -133,7 +133,7 @@ data:extend({
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
-			{ "logistic-chest-active-provider", 1 },
+			{ "active-provider-chest", 1 },
 			{ "iron-stick", 4 },
 		},
 		energy_required = 5,
@@ -146,7 +146,7 @@ data:extend({
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
-			{ "logistic-chest-requester", 1 },
+			{ "requester-chest", 1 },
 			{ "iron-stick", 4 },
 		},
 		energy_required = 5,
@@ -159,7 +159,7 @@ data:extend({
 		ingredients =
 		{
 			{ "storehouse-basic", 1 },
-			{ "logistic-chest-buffer", 1 },
+			{ "buffer-chest", 1 },
 			{ "iron-stick", 4 },
 		},
 		energy_required = 5,

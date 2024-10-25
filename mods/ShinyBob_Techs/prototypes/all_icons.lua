@@ -685,7 +685,7 @@ local technologies_icons = {
 --   	{"follower-robot-count-6",   				"follower-robot-count-6.png",   			}, 		
 --   	{"follower-robot-count-7",   				"follower-robot-count-7.png",   			}, 		
 
-   	{"fusion-reactor-equipment",   			"fusion-reactor-equipment-1.png",   			}, 		
+   	{"fission-reactor-equipment",   			"fusion-reactor-equipment-1.png",   			}, 		
    	{"fusion-reactor-equipment-2",   			"fusion-reactor-equipment-2.png",   		}, 		
    	{"fusion-reactor-equipment-3",   			"fusion-reactor-equipment-3.png",   		}, 		
    	{"fusion-reactor-equipment-4",   			"fusion-reactor-equipment-4.png",   		}, 		

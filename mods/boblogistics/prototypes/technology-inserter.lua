@@ -58,7 +58,7 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   bobmods.lib.tech.remove_prerequisite("stack-inserter", "advanced-circuit")
 
   bobmods.lib.tech.add_recipe_unlock("stack-inserter-2", "stack-inserter")
-  bobmods.lib.tech.add_recipe_unlock("stack-inserter-2", "stack-filter-inserter")
+  bobmods.lib.tech.add_recipe_unlock("stack-inserter-2", "bulk-inserter")
   bobmods.lib.tech.add_prerequisite("express-inserters", "logistics-3")
 
   data:extend({

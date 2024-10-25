@@ -293,7 +293,7 @@ data:extend(
             enabled = true,
             hidden = true,
             energy_required = 5,
-            ingredients = {{"empty-barrel", 5}},
+            ingredients = {{"barrel", 5}},
             results = {{"steel-plate", 4}}
         }
     }

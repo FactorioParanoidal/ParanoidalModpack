@@ -53,7 +53,7 @@ data:extend({
 	energy_required = 100,
     ingredients =
     {
-	  {"fusion-reactor-equipment", 100 * productionCost}
+	  {"fission-reactor-equipment", 100 * productionCost}
     },
     result = "fusion-reactor"
   },
@@ -200,6 +200,6 @@ local fix = data.raw.recipe["fusion-reactor"]
 if cheapFusion == true then
 	fix.ingredients =
 		{
-		{"fusion-reactor-equipment", 40*productionCost}
+		{"fission-reactor-equipment", 40*productionCost}
 		}
 end

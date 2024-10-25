@@ -179,7 +179,7 @@ end
 
 util.tech_lock_recipes(
     "filter-inserters",  {
-      "filter-inserter"})
+      "fast-inserter"})
 
 util.tech_lock_recipes(
     "radar",  {

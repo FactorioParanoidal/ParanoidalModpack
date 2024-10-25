@@ -22,7 +22,7 @@ return
     {"stack-inserter-remnants", {x = -4, y = -2}, {dir = "east", }},
     {"requester-chest-remnants", {x = -3, y = -2}, {}},
     {"stack-inserter", {x = -2, y = -3}, {}},
-    {"logistic-chest-buffer", {x = -2, y = -2}, {}},
+    {"buffer-chest", {x = -2, y = -2}, {}},
     {"buffer-chest-remnants", {x = -1, y = -2}, {}},
     {"stack-inserter-remnants", {x = -1, y = -3}, {dir = "east", }},
     {"buffer-chest-remnants", {x = 0, y = -2}, {}},
