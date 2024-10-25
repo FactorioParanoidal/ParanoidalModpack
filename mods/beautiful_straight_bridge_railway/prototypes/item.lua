@@ -101,8 +101,8 @@ local bbr_rail_pictures = function(id)
 end
 
 -- add fast_replaceable_group to vanilla rail
--- data.raw["legacy-straight-rail"]["straight-rail"].fast_replaceable_group = "straight-rail"
--- data.raw["legacy-curved-rail"]["curved-rail"].fast_replaceable_group = "curved-rail"
+-- data.raw["legacy-straight-rail"]["legacy-straight-rail"].fast_replaceable_group = "legacy-straight-rail"
+-- data.raw["legacy-curved-rail"]["legacy-curved-rail"].fast_replaceable_group = "legacy-curved-rail"
 
 local ptype
 local holder = {}

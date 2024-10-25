@@ -434,20 +434,20 @@ data.raw["legacy-curved-rail"]["curved-scrap-rail"].max_health = 100
 data.raw["legacy-curved-rail"]["curved-scrap-rail"].resistances = nil
 -------------------------------------------------------------------------------------------------
 --делаем возможность обновления рельс и светофоров штатным путем
-data.raw["legacy-straight-rail"]["straight-scrap-rail"].next_upgrade = "straight-rail"
-data.raw["legacy-curved-rail"]["curved-scrap-rail"].next_upgrade = "curved-rail"
+data.raw["legacy-straight-rail"]["straight-scrap-rail"].next_upgrade = "legacy-straight-rail"
+data.raw["legacy-curved-rail"]["curved-scrap-rail"].next_upgrade = "legacy-curved-rail"
 
 data.raw["legacy-straight-rail"]["straight-scrap-rail"].fast_replaceable_group = "rail"
 data.raw["legacy-curved-rail"]["curved-scrap-rail"].fast_replaceable_group = "rail"
 
-data.raw["legacy-straight-rail"]["straight-rail"].fast_replaceable_group = "rail"
-data.raw["legacy-curved-rail"]["curved-rail"].fast_replaceable_group = "rail"
+data.raw["legacy-straight-rail"]["legacy-straight-rail"].fast_replaceable_group = "rail"
+data.raw["legacy-curved-rail"]["legacy-curved-rail"].fast_replaceable_group = "rail"
 
 data.raw["legacy-straight-rail"]["straight-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 data.raw["legacy-curved-rail"]["curved-scrap-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 
-data.raw["legacy-straight-rail"]["straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-data.raw["legacy-curved-rail"]["curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["legacy-straight-rail"]["legacy-straight-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
+data.raw["legacy-curved-rail"]["legacy-curved-rail"].collision_mask = {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
 
 data.raw["rail-signal"]["rail-signal-scrap"].next_upgrade = "rail-signal"
 data.raw["rail-chain-signal"]["rail-chain-signal-scrap"].next_upgrade = "rail-chain-signal"

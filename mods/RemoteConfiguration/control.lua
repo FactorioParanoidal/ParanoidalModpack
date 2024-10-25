@@ -280,8 +280,8 @@ end
 script.on_event("rc-build", remote_build)
 
 local direction_modifiers = {
-  ["straight-rail"] = 0,       -- 0 means ignore
-  ["curved-rail"] = 0,
+  ["legacy-straight-rail"] = 0,       -- 0 means ignore
+  ["legacy-curved-rail"] = 0,
   ["rail-signal"] = 0,
   ["rail-chain-signal"] = 0,
   ["generator"] = 0,
