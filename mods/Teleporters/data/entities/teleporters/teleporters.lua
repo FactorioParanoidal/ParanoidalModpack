@@ -164,7 +164,7 @@ local technology =
     },
     time = 30
   },
-  prerequisites = {"advanced-electronics", "battery"},
+  prerequisites = {"advanced-circuit", "battery"},
   order = "y-a"
 }
 

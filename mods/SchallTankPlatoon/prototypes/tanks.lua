@@ -85,7 +85,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 16},
+          {"efficiency-module-2", 16},
           {"speed-module-2", 16},
         }
       },
@@ -182,7 +182,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 25},
+          {"efficiency-module-2", 25},
           {"speed-module-2", 25},
         }
       },
@@ -279,7 +279,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 32},
+          {"efficiency-module-2", 32},
           {"speed-module-2", 32},
         }
       },
@@ -378,7 +378,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 40},
+          {"efficiency-module-2", 40},
           {"speed-module-2", 40},
         }
       },
@@ -475,7 +475,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 25},
+          {"efficiency-module-2", 25},
           {"speed-module-2", 25},
         }
       },
@@ -572,7 +572,7 @@ local VEH_specs =
         ingredients =
         {
           {"__VEH__1__", 1},
-          {"effectivity-module-2", 25},
+          {"efficiency-module-2", 25},
           {"speed-module-2", 25},
         }
       },

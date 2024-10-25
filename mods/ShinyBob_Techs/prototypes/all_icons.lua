@@ -2,8 +2,8 @@
 local technologies_icons = { 
 
 
-	{"advanced-electronics",  				"advanced-electronics.png",  				}, 		
-	{"advanced-electronics-2",   				"advanced-electronics-2.png",   			}, 		
+	{"advanced-circuit",  				"advanced-electronics.png",  				}, 		
+	{"processing-unit",   				"advanced-electronics-2.png",   			}, 		
 	{"advanced-electronics-3",   				"advanced-electronics-3.png",   			},
 	
 	{"advanced-material-processing",   		"advanced-material-processing.png",   		}, 		
@@ -533,9 +533,9 @@ local technologies_icons = {
    	{"modules",   							"modules-1.png",   						}, 		
    	{"module-merging",   					"modules-2.png",   					}, 		
 
---   	{"effectivity-module",   				"effectivity-module.png",   				}, 		
---   	{"effectivity-module-2",   				"effectivity-module-2.png",   			}, 		
---   	{"effectivity-module-3",   				"effectivity-module-3.png",   			}, 		
+--   	{"efficiency-module",   				"effectivity-module.png",   				}, 		
+--   	{"efficiency-module-2",   				"effectivity-module-2.png",   			}, 		
+--   	{"efficiency-module-3",   				"effectivity-module-3.png",   			}, 		
 --   	{"effectivity-module-4",   				"effectivity-module-4.png",   			}, 		
 --   	{"effectivity-module-5",   				"effectivity-module-5.png",   			}, 		
 --   	{"effectivity-module-6",   				"effectivity-module-6.png",   			}, 		
@@ -746,7 +746,7 @@ local technologies_icons = {
 --   	{"nuclear-power",   					"nuclear-power.png",   					}, 		
 --   	{"uranium-ammo",   						"uranium-ammo.png",   					}, 		
 
---   	{"optics",   							"optics.png",   						}, 		
+--   	{ "lamp",   							"optics.png",   						}, 		
 --   	{"plastics",   						"plastics.png",   						}, 		
 --   	{"polishing",   						"polishing.png",   						}, 
 

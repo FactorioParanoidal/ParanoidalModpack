@@ -176,7 +176,7 @@ data:extend(
     prerequisites =
     {
       "electronics-machine-3",
-      "advanced-electronics-2"
+      "processing-unit"
     },
     unit =
     {
@@ -221,7 +221,7 @@ data:extend(
     prerequisites =
     {
       "electronics-machine-4",
-      "advanced-electronics-2"
+      "processing-unit"
     },
     unit =
     {
@@ -410,7 +410,7 @@ data:extend(
     prerequisites =
     {
       "electronics-machine-4",
-      "advanced-electronics-2"
+      "processing-unit"
     },
     unit =
     {
@@ -455,7 +455,7 @@ data:extend(
     prerequisites =
     {
       "electronics-machine-4",
-      "advanced-electronics-2"
+      "processing-unit"
     },
     unit =
     {

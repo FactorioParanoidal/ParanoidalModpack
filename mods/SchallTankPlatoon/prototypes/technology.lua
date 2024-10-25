@@ -869,7 +869,7 @@ data:extend
         recipe = "Schall-repair-pack-mk1"
       }
     },
-    prerequisites = {"advanced-electronics"},
+    prerequisites = {"advanced-circuit"},
     unit =
     {
       count = 40,
@@ -895,7 +895,7 @@ data:extend
         recipe = "Schall-repair-pack-mk2"
       }
     },
-    prerequisites = {"Schall-repair-pack-1", "advanced-electronics-2"},
+    prerequisites = {"Schall-repair-pack-1", "processing-unit"},
     unit =
     {
       count = 60,

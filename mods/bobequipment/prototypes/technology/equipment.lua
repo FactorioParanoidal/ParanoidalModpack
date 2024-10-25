@@ -375,7 +375,7 @@ data:extend({
     order = "g-g-b",
     prerequisites = {
       "night-vision-equipment",
-      "advanced-electronics-2",
+      "processing-unit",
     },
     effects = {
       {
@@ -466,7 +466,7 @@ data:extend({
     order = "g-k-c",
     prerequisites = {
       "solar-panel-equipment-2",
-      "advanced-electronics-2",
+      "processing-unit",
     },
     effects = {
       {
@@ -690,7 +690,7 @@ data:extend({
     order = "g-h-b",
     prerequisites = {
       "exoskeleton-equipment",
-      "advanced-electronics-2",
+      "processing-unit",
     },
     effects = {
       {
