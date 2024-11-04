@@ -653,8 +653,8 @@ data:extend
       intensity = 0.3
     },
 
-    circuit_wire_connection_point = circuit_connector_definitions["gate"].points,
-    circuit_connector_sprites = circuit_connector_definitions["gate"].sprites,
+    circuit_wire_connection_point = circuit_connector_definitions["wall"].points,
+    circuit_connector_sprites = circuit_connector_definitions["wall"].sprites,
     circuit_wire_max_distance = default_circuit_wire_max_distance,
     default_output_signal = data.is_demo and {type = "virtual", name = "signal-green"} or {type = "virtual", name = "signal-G"}
   },
