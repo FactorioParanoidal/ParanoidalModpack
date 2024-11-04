@@ -17,8 +17,7 @@ data:extend
     smoke = "smoke-fast",
     smoke_count = 2,
     smoke_slow_down_factor = 1,
-    sound = sounds.small_explosion(0.3)
-    -- sound = sounds.small_explosion(0.5)
+    sound = sounds.small_explosion
   },
   {
     type = "explosion",
@@ -28,7 +27,7 @@ data:extend
     animations = explosion_animations.big_explosion(4),
     -- animations = explosion_animations.big_explosion(),
     light = {intensity = 1, size = 50, color = {r=1.0, g=1.0, b=1.0}},
-    sound = sounds.large_explosion(1.0),
+    sound = sounds.large_explosion,
     created_effect =
     {
       type = "direct",
