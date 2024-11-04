@@ -1009,10 +1009,10 @@ data.raw.technology["Space-Lab-Research-21"].icons = {{icon = "__base__/graphics
 data.raw.technology["Space-Lab-Research-41"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
 data.raw.technology["Space-Lab-Research-61"].icons = {{icon = "__base__/graphics/technology/research-speed.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
 
-data.raw.technology["stack-inserter-research-1"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
-data.raw.technology["stack-inserter-research-5"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
-data.raw.technology["stack-inserter-research-10"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
-data.raw.technology["stack-inserter-research-15"].icons = {{icon = "__base__/graphics/technology/stack-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["bulk-inserter-research-1"].icons = {{icon = "__base__/graphics/technology/bulk-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["bulk-inserter-research-5"].icons = {{icon = "__base__/graphics/technology/bulk-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["bulk-inserter-research-10"].icons = {{icon = "__base__/graphics/technology/bulk-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
+data.raw.technology["bulk-inserter-research-15"].icons = {{icon = "__base__/graphics/technology/bulk-inserter.png", icon_size = 256, icon_mipmaps = 4}} --AKMF
 --###############################################################################################
 --будет вшито в биоиндустрию
 --дробление камня в ангеловских дробилках руды
@@ -1175,7 +1175,7 @@ bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-structure-co
 
 --фикс технологий: Продвинутое исследование после турбо пакетников (AKMF)
 bobmods.lib.tech.remove_prerequisite("advanced-research", "express-inserters")
-bobmods.lib.tech.add_prerequisite("advanced-research", "stack-inserter-3")
+bobmods.lib.tech.add_prerequisite("advanced-research", "bulk-inserter-3")
 
 --Добавлен дополнительный уровень технологий для Жидк.Бойлеров 4, 5 в соответсвии с их рецептом (AKMF)
 data.raw.technology["OilBurning-4"].unit.ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 2}, {"production-science-pack", 2}}
@@ -1360,19 +1360,19 @@ bobmods.lib.tech.add_recipe_unlock("angels-advanced-chemistry-5", "advanced-chem
 
 --унификация рецептов манипуляторов и ковееров (AKMF)
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-bearing", "titanium-bearing")
-bobmods.lib.recipe.replace_ingredient("stack-inserter", "cobalt-steel-bearing", "titanium-bearing")
+bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-bearing", "titanium-bearing")
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-bearing", "titanium-bearing")
 bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-bearing", "titanium-bearing")
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
-bobmods.lib.recipe.replace_ingredient("stack-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
+bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("fast-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("bulk-inserter", "cobalt-steel-gear-wheel", "titanium-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("turbo-inserter", "titanium-bearing", "cobalt-steel-bearing")
-bobmods.lib.recipe.replace_ingredient("turbo-stack-inserter", "titanium-bearing", "cobalt-steel-bearing")
+bobmods.lib.recipe.replace_ingredient("turbo-bulk-inserter", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("turbo-filter-inserter", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("turbo-stack-filter-inserter", "titanium-bearing", "cobalt-steel-bearing")
 bobmods.lib.recipe.replace_ingredient("turbo-inserter", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
-bobmods.lib.recipe.replace_ingredient("turbo-stack-inserter", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
+bobmods.lib.recipe.replace_ingredient("turbo-bulk-inserter", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("turbo-filter-inserter", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("turbo-stack-filter-inserter", "titanium-gear-wheel", "cobalt-steel-gear-wheel")
 bobmods.lib.recipe.replace_ingredient("turbo-transport-belt", "nitinol-bearing", "cobalt-steel-bearing")

@@ -375,7 +375,7 @@ if mods["reskins-angels"] then
     set_settings_default_value("bool-setting", "reskins-angels-use-vanilla-chemical-plant-sprites", true)
 end
 if mods["reskins-bobs"] then
-    set_settings_default_value("bool-setting", "reskins-bobs-flip-stack-inserter-icons", true)
+    set_settings_default_value("bool-setting", "reskins-bobs-flip-bulk-inserter-icons", true)
 end
 if mods["reskins-library"] then
     set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-0", "402000")
@@ -396,7 +396,7 @@ if mods["ReStack"] then
     set_settings_default_value("int-setting", "ReStack-belt", 100)
     set_settings_default_value("int-setting", "ReStack-combinator", 50)
     set_settings_default_value("int-setting", "ReStack-electric-pole", 50)
-    set_settings_default_value("int-setting", "ReStack-inserter", 50)
+    set_settings_default_value("int-setting", "Rebulk-inserter", 50)
     set_settings_default_value("int-setting", "ReStack-nuclear-fuel", 10)
     set_settings_default_value("int-setting", "ReStack-ores", 200)
     set_settings_default_value("int-setting", "ReStack-pipe", 100)

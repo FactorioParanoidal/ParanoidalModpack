@@ -164,12 +164,12 @@ data.raw.inserter["express-filter-inserter"].platform_picture = inserter.graphic
 
 data:extend({
   util.merge({
-    data.raw.inserter["stack-inserter"],
+    data.raw.inserter["bulk-inserter"],
     {
-      name = "express-stack-inserter",
+      name = "express-bulk-inserter",
       icon = "__boblogistics__/graphics/icons/inserter/dark-green-inserter.png",
       icon_size = 32,
-      minable = { result = "express-stack-inserter" },
+      minable = { result = "express-bulk-inserter" },
       max_health = 200,
       extension_speed = 0.25,
       rotation_speed = 0.1,
@@ -179,12 +179,12 @@ data:extend({
     },
   }),
 })
-data.raw.inserter["express-stack-inserter"].icon_mipmaps = nil
-data.raw.inserter["express-stack-inserter"].hand_base_picture = inserter.graphics.dark_green.hand_base_picture()
-data.raw.inserter["express-stack-inserter"].hand_closed_picture =
+data.raw.inserter["express-bulk-inserter"].icon_mipmaps = nil
+data.raw.inserter["express-bulk-inserter"].hand_base_picture = inserter.graphics.dark_green.hand_base_picture()
+data.raw.inserter["express-bulk-inserter"].hand_closed_picture =
   inserter.graphics.dark_green.stack.hand_closed_picture()
-data.raw.inserter["express-stack-inserter"].hand_open_picture = inserter.graphics.dark_green.stack.hand_open_picture()
-data.raw.inserter["express-stack-inserter"].platform_picture = inserter.graphics.dark_green.platform_picture()
+data.raw.inserter["express-bulk-inserter"].hand_open_picture = inserter.graphics.dark_green.stack.hand_open_picture()
+data.raw.inserter["express-bulk-inserter"].platform_picture = inserter.graphics.dark_green.platform_picture()
 
 data:extend({
   util.merge({
@@ -214,7 +214,7 @@ data.raw.inserter["express-stack-filter-inserter"].platform_picture = inserter.g
 
 data.raw.inserter["fast-inserter"].next_upgrade = "express-inserter"
 data.raw.inserter["fast-inserter"].next_upgrade = "express-filter-inserter"
-data.raw.inserter["stack-inserter"].next_upgrade = "express-stack-inserter"
+data.raw.inserter["bulk-inserter"].next_upgrade = "express-bulk-inserter"
 data.raw.inserter["bulk-inserter"].next_upgrade = "express-stack-filter-inserter"
 
 if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
@@ -303,13 +303,13 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
 
   data:extend({
     util.merge({
-      data.raw.inserter["stack-inserter"],
+      data.raw.inserter["bulk-inserter"],
       {
-        name = "red-stack-inserter",
-        icon = "__boblogistics__/graphics/icons/inserter/red-stack-inserter.png",
+        name = "red-bulk-inserter",
+        icon = "__boblogistics__/graphics/icons/inserter/red-bulk-inserter.png",
         icon_size = 32,
-        minable = { result = "red-stack-inserter" },
-        next_upgrade = "stack-inserter",
+        minable = { result = "red-bulk-inserter" },
+        next_upgrade = "bulk-inserter",
         max_health = inserter.stats.red.health,
         extension_speed = inserter.stats.red.extension_speed,
         rotation_speed = inserter.stats.red.rotation_speed,
@@ -319,13 +319,13 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
       },
     }),
   })
-  data.raw.inserter["red-stack-inserter"].icon_mipmaps = nil
-  data.raw.inserter["red-stack-inserter"].working_sound =
+  data.raw.inserter["red-bulk-inserter"].icon_mipmaps = nil
+  data.raw.inserter["red-bulk-inserter"].working_sound =
     util.table.deepcopy(data.raw.inserter["long-handed-inserter"].working_sound)
-  data.raw.inserter["red-stack-inserter"].hand_base_picture = inserter.graphics.red.hand_base_picture()
-  data.raw.inserter["red-stack-inserter"].hand_closed_picture = inserter.graphics.red.stack.hand_closed_picture()
-  data.raw.inserter["red-stack-inserter"].hand_open_picture = inserter.graphics.red.stack.hand_open_picture()
-  data.raw.inserter["red-stack-inserter"].platform_picture = inserter.graphics.red.platform_picture()
+  data.raw.inserter["red-bulk-inserter"].hand_base_picture = inserter.graphics.red.hand_base_picture()
+  data.raw.inserter["red-bulk-inserter"].hand_closed_picture = inserter.graphics.red.stack.hand_closed_picture()
+  data.raw.inserter["red-bulk-inserter"].hand_open_picture = inserter.graphics.red.stack.hand_open_picture()
+  data.raw.inserter["red-bulk-inserter"].platform_picture = inserter.graphics.red.platform_picture()
 
   data:extend({
     util.merge({
@@ -381,21 +381,21 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   data.raw.inserter["fast-inserter"].hand_open_picture = inserter.graphics.blue.hand_open_picture()
   data.raw.inserter["fast-inserter"].platform_picture = inserter.graphics.filter.platform_picture()
 
-  data.raw.inserter["stack-inserter"].icon = "__boblogistics__/graphics/icons/inserter/blue-stack-inserter.png"
-  data.raw.inserter["stack-inserter"].icon_size = 32
-  data.raw.inserter["stack-inserter"].icon_mipmaps = nil
-  data.raw.inserter["stack-inserter"].order = "[inserter]-d[express]-c[stack]"
-  data.raw.inserter["stack-inserter"].next_upgrade = "turbo-stack-inserter"
-  data.raw.inserter["stack-inserter"].max_health = inserter.stats.blue.health
-  data.raw.inserter["stack-inserter"].extension_speed = inserter.stats.blue.extension_speed
-  data.raw.inserter["stack-inserter"].rotation_speed = inserter.stats.blue.rotation_speed
-  data.raw.inserter["stack-inserter"].energy_per_movement = inserter.stats.blue.stack.energy_per_movement
-  data.raw.inserter["stack-inserter"].energy_per_rotation = inserter.stats.blue.stack.energy_per_rotation
-  data.raw.inserter["stack-inserter"].energy_source.drain = inserter.stats.blue.stack.drain
-  data.raw.inserter["stack-inserter"].hand_base_picture = inserter.graphics.blue.hand_base_picture()
-  data.raw.inserter["stack-inserter"].hand_closed_picture = inserter.graphics.blue.stack.hand_closed_picture()
-  data.raw.inserter["stack-inserter"].hand_open_picture = inserter.graphics.blue.stack.hand_open_picture()
-  data.raw.inserter["stack-inserter"].platform_picture = inserter.graphics.blue.platform_picture()
+  data.raw.inserter["bulk-inserter"].icon = "__boblogistics__/graphics/icons/inserter/blue-bulk-inserter.png"
+  data.raw.inserter["bulk-inserter"].icon_size = 32
+  data.raw.inserter["bulk-inserter"].icon_mipmaps = nil
+  data.raw.inserter["bulk-inserter"].order = "[inserter]-d[express]-c[stack]"
+  data.raw.inserter["bulk-inserter"].next_upgrade = "turbo-bulk-inserter"
+  data.raw.inserter["bulk-inserter"].max_health = inserter.stats.blue.health
+  data.raw.inserter["bulk-inserter"].extension_speed = inserter.stats.blue.extension_speed
+  data.raw.inserter["bulk-inserter"].rotation_speed = inserter.stats.blue.rotation_speed
+  data.raw.inserter["bulk-inserter"].energy_per_movement = inserter.stats.blue.stack.energy_per_movement
+  data.raw.inserter["bulk-inserter"].energy_per_rotation = inserter.stats.blue.stack.energy_per_rotation
+  data.raw.inserter["bulk-inserter"].energy_source.drain = inserter.stats.blue.stack.drain
+  data.raw.inserter["bulk-inserter"].hand_base_picture = inserter.graphics.blue.hand_base_picture()
+  data.raw.inserter["bulk-inserter"].hand_closed_picture = inserter.graphics.blue.stack.hand_closed_picture()
+  data.raw.inserter["bulk-inserter"].hand_open_picture = inserter.graphics.blue.stack.hand_open_picture()
+  data.raw.inserter["bulk-inserter"].platform_picture = inserter.graphics.blue.platform_picture()
 
   data.raw.inserter["bulk-inserter"].icon =
     "__boblogistics__/graphics/icons/inserter/blue-stack-filter-inserter.png"
@@ -464,13 +464,13 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
 
   data:extend({
     util.merge({
-      data.raw.inserter["stack-inserter"],
+      data.raw.inserter["bulk-inserter"],
       {
-        name = "turbo-stack-inserter",
-        icon = "__boblogistics__/graphics/icons/inserter/purple-stack-inserter.png",
+        name = "turbo-bulk-inserter",
+        icon = "__boblogistics__/graphics/icons/inserter/purple-bulk-inserter.png",
         icon_size = 32,
-        minable = { result = "turbo-stack-inserter" },
-        next_upgrade = "express-stack-inserter",
+        minable = { result = "turbo-bulk-inserter" },
+        next_upgrade = "express-bulk-inserter",
         max_health = inserter.stats.purple.health,
         extension_speed = inserter.stats.purple.extension_speed,
         rotation_speed = inserter.stats.purple.rotation_speed,
@@ -480,11 +480,11 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
       },
     }),
   })
-  data.raw.inserter["turbo-stack-inserter"].icon_mipmaps = nil
-  data.raw.inserter["turbo-stack-inserter"].hand_base_picture = inserter.graphics.purple.hand_base_picture()
-  data.raw.inserter["turbo-stack-inserter"].hand_closed_picture = inserter.graphics.purple.stack.hand_closed_picture()
-  data.raw.inserter["turbo-stack-inserter"].hand_open_picture = inserter.graphics.purple.stack.hand_open_picture()
-  data.raw.inserter["turbo-stack-inserter"].platform_picture = inserter.graphics.purple.platform_picture()
+  data.raw.inserter["turbo-bulk-inserter"].icon_mipmaps = nil
+  data.raw.inserter["turbo-bulk-inserter"].hand_base_picture = inserter.graphics.purple.hand_base_picture()
+  data.raw.inserter["turbo-bulk-inserter"].hand_closed_picture = inserter.graphics.purple.stack.hand_closed_picture()
+  data.raw.inserter["turbo-bulk-inserter"].hand_open_picture = inserter.graphics.purple.stack.hand_open_picture()
+  data.raw.inserter["turbo-bulk-inserter"].platform_picture = inserter.graphics.purple.platform_picture()
 
   data:extend({
     util.merge({
@@ -517,7 +517,7 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
 
   data.raw.inserter["fast-inserter"].localised_name = { "entity-name.express-inserter" }
   data.raw.inserter["fast-inserter"].localised_name = { "entity-name.express-filter-inserter" }
-  data.raw.inserter["stack-inserter"].localised_name = { "entity-name.express-stack-inserter" }
+  data.raw.inserter["bulk-inserter"].localised_name = { "entity-name.express-bulk-inserter" }
   data.raw.inserter["bulk-inserter"].localised_name = { "entity-name.express-stack-filter-inserter" }
 
   data.raw.inserter["express-inserter"].localised_name = { "entity-name.ultimate-inserter" }
@@ -549,19 +549,19 @@ if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
   data.raw.inserter["express-filter-inserter"].hand_open_picture = inserter.graphics.green.hand_open_picture()
   data.raw.inserter["express-filter-inserter"].platform_picture = inserter.graphics.filter.platform_picture()
 
-  data.raw.inserter["express-stack-inserter"].localised_name = { "entity-name.ultimate-stack-inserter" }
-  data.raw.inserter["express-stack-inserter"].icon = "__boblogistics__/graphics/icons/inserter/green-stack-inserter.png"
-  data.raw.inserter["express-stack-inserter"].icon_size = 32
-  data.raw.inserter["express-stack-inserter"].max_health = inserter.stats.green.health
-  data.raw.inserter["express-stack-inserter"].extension_speed = inserter.stats.green.extension_speed
-  data.raw.inserter["express-stack-inserter"].rotation_speed = inserter.stats.green.rotation_speed
-  data.raw.inserter["express-stack-inserter"].energy_per_movement = inserter.stats.green.stack.energy_per_movement
-  data.raw.inserter["express-stack-inserter"].energy_per_rotation = inserter.stats.green.stack.energy_per_rotation
-  data.raw.inserter["express-stack-inserter"].energy_source.drain = inserter.stats.green.stack.drain
-  data.raw.inserter["express-stack-inserter"].hand_base_picture = inserter.graphics.green.hand_base_picture()
-  data.raw.inserter["express-stack-inserter"].hand_closed_picture = inserter.graphics.green.stack.hand_closed_picture()
-  data.raw.inserter["express-stack-inserter"].hand_open_picture = inserter.graphics.green.stack.hand_open_picture()
-  data.raw.inserter["express-stack-inserter"].platform_picture = inserter.graphics.green.platform_picture()
+  data.raw.inserter["express-bulk-inserter"].localised_name = { "entity-name.ultimate-bulk-inserter" }
+  data.raw.inserter["express-bulk-inserter"].icon = "__boblogistics__/graphics/icons/inserter/green-bulk-inserter.png"
+  data.raw.inserter["express-bulk-inserter"].icon_size = 32
+  data.raw.inserter["express-bulk-inserter"].max_health = inserter.stats.green.health
+  data.raw.inserter["express-bulk-inserter"].extension_speed = inserter.stats.green.extension_speed
+  data.raw.inserter["express-bulk-inserter"].rotation_speed = inserter.stats.green.rotation_speed
+  data.raw.inserter["express-bulk-inserter"].energy_per_movement = inserter.stats.green.stack.energy_per_movement
+  data.raw.inserter["express-bulk-inserter"].energy_per_rotation = inserter.stats.green.stack.energy_per_rotation
+  data.raw.inserter["express-bulk-inserter"].energy_source.drain = inserter.stats.green.stack.drain
+  data.raw.inserter["express-bulk-inserter"].hand_base_picture = inserter.graphics.green.hand_base_picture()
+  data.raw.inserter["express-bulk-inserter"].hand_closed_picture = inserter.graphics.green.stack.hand_closed_picture()
+  data.raw.inserter["express-bulk-inserter"].hand_open_picture = inserter.graphics.green.stack.hand_open_picture()
+  data.raw.inserter["express-bulk-inserter"].platform_picture = inserter.graphics.green.platform_picture()
 
   data.raw.inserter["express-stack-filter-inserter"].localised_name = { "entity-name.ultimate-stack-filter-inserter" }
   data.raw.inserter["express-stack-filter-inserter"].icon =

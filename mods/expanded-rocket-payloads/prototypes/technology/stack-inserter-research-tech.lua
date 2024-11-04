@@ -1,14 +1,14 @@
 data:extend({
     {
         type = "technology",
-        name = "stack-inserter-research-1",
+        name = "bulk-inserter-research-1",
         icon_size = 128,
         order = "y-a",    
-        icon = "__base__/graphics/technology/stack-inserter.png",
+        icon = "__base__/graphics/technology/bulk-inserter.png",
         effects =
         {
           {
-            type = "stack-inserter-capacity-bonus",
+            type = "bulk-inserter-capacity-bonus",
             modifier = 2
           }
         },
@@ -27,18 +27,18 @@ data:extend({
     },  
     {
       type = "technology",
-      name = "stack-inserter-research-5",
+      name = "bulk-inserter-research-5",
       icon_size = 128,
       order = "y-a",    
-      icon = "__base__/graphics/technology/stack-inserter.png",
+      icon = "__base__/graphics/technology/bulk-inserter.png",
       effects =
       {
         {
-          type = "stack-inserter-capacity-bonus",
+          type = "bulk-inserter-capacity-bonus",
           modifier = 2
         }
       },
-      prerequisites = {"stack-inserter-research-1"},
+      prerequisites = {"bulk-inserter-research-1"},
       unit =
       {
         count_formula = "L",
@@ -53,18 +53,18 @@ data:extend({
     },  
     {
       type = "technology",
-      name = "stack-inserter-research-10",
+      name = "bulk-inserter-research-10",
       icon_size = 128,
       order = "y-a",    
-      icon = "__base__/graphics/technology/stack-inserter.png",
+      icon = "__base__/graphics/technology/bulk-inserter.png",
       effects =
       {
         {
-          type = "stack-inserter-capacity-bonus",
+          type = "bulk-inserter-capacity-bonus",
           modifier = 2
         }
       },
-      prerequisites = {"stack-inserter-research-5"},
+      prerequisites = {"bulk-inserter-research-5"},
       unit =
       {
         count_formula = "L",
@@ -79,18 +79,18 @@ data:extend({
     },  
     {
       type = "technology",
-      name = "stack-inserter-research-15",
+      name = "bulk-inserter-research-15",
       icon_size = 128,
       order = "y-a",    
-      icon = "__base__/graphics/technology/stack-inserter.png",
+      icon = "__base__/graphics/technology/bulk-inserter.png",
       effects =
       {
         {
-          type = "stack-inserter-capacity-bonus",
+          type = "bulk-inserter-capacity-bonus",
           modifier = 2
         }
       },
-      prerequisites = {"stack-inserter-research-10"},
+      prerequisites = {"bulk-inserter-research-10"},
       unit =
       {
         count_formula = "2(L-7)",

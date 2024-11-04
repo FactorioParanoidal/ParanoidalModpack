@@ -641,8 +641,8 @@ local technologies_icons = {
    	{"near-inserters",   					"near-inserters.png",   					}, 		
    	{"express-inserters",   					"express-inserters.png",   				}, 		
 
-   	{"stack-inserter",   					"stack-inserters.png",   					}, 		
-   	{"stack-inserter-2",   					"stack-inserters-2.png",   				}, 		
+   	{"bulk-inserter",   					"bulk-inserters.png",   					}, 		
+   	{"bulk-inserter-2",   					"bulk-inserters-2.png",   				}, 		
 
    	{"inserter-capacity-bonus-1",   			"inserter-capacity-bonus.png",   		}, 		
    	{"inserter-capacity-bonus-2",   			"inserter-capacity-bonus.png",   		}, 		
@@ -653,10 +653,10 @@ local technologies_icons = {
    	{"inserter-capacity-bonus-7",   			"inserter-capacity-bonus.png",   		}, 		
    	{"inserter-capacity-bonus-8",   			"inserter-capacity-bonus.png",   		},
    	
-   	{"inserter-stack-size-bonus-1",   			"stack-inserter-capacity-bonus.png",   		}, 		
-   	{"inserter-stack-size-bonus-2",   			"stack-inserter-capacity-bonus.png",   		}, 		
-   	{"inserter-stack-size-bonus-3",   			"stack-inserter-capacity-bonus.png",   		}, 		
-   	{"inserter-stack-size-bonus-4",   			"stack-inserter-capacity-bonus.png",   		}, 		
+   	{"inserter-stack-size-bonus-1",   			"bulk-inserter-capacity-bonus.png",   		}, 		
+   	{"inserter-stack-size-bonus-2",   			"bulk-inserter-capacity-bonus.png",   		}, 		
+   	{"inserter-stack-size-bonus-3",   			"bulk-inserter-capacity-bonus.png",   		}, 		
+   	{"inserter-stack-size-bonus-4",   			"bulk-inserter-capacity-bonus.png",   		}, 		
 
 
    	{"loader",   							"loader-1.png"			,nil,"a-f-a1"   					}, 		

@@ -29,8 +29,8 @@ if reskins.lib.setting("bobmods-logistics-inserteroverhaul") == false then
         ["express-filter-inserter"] = {4, true, "df57c2"},
 
         -- Stack inserters
-        ["stack-inserter"] = {3, false},
-        ["express-stack-inserter"] = {4, true, "2dcd3f"},
+        ["bulk-inserter"] = {3, false},
+        ["express-bulk-inserter"] = {4, true, "2dcd3f"},
 
         -- Stack filter inserters
         ["bulk-inserter"] = {3, false},
@@ -222,7 +222,7 @@ for name, map in pairs(inserter_map) do
 
     -- Handle base_entity
     if string.find(name, "stack%-inserter") then
-        inputs.base_entity_name = "stack-inserter"
+        inputs.base_entity_name = "bulk-inserter"
     else
         inputs.base_entity_name = "inserter"
     end
@@ -239,7 +239,7 @@ for name, map in pairs(inserter_map) do
     -- Handle the type of inserter we're dealing with
     local inserter_type, hand_name
     if string.find(name, "stack") then
-        inserter_type = "stack-inserter"
+        inserter_type = "bulk-inserter"
         hand_name = name
     elseif mods["bobinserters"] and name ~= "long-handed-inserter" then
         inserter_type = "long-inserter"

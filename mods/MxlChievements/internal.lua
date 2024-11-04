@@ -1824,32 +1824,32 @@ data:extend{
 data:extend{
 	{
 		type = "produce-achievement",
-		name = "stack-inserter-1",
+		name = "bulk-inserter-1",
 		order = "u",
-		item_product = "stack-inserter",
+		item_product = "bulk-inserter",
 		amount = 1000000,
 		limited_to_one_game = false,
-		icon = "__MxlChievements__/graphics/stack-inserter.png",
+		icon = "__MxlChievements__/graphics/bulk-inserter.png",
 		icon_size = 128
 	},
 	{
 		type = "produce-achievement",
-		name = "stack-inserter-2",
+		name = "bulk-inserter-2",
 		order = "u",
-		item_product = "stack-inserter",
+		item_product = "bulk-inserter",
 		amount = 1000000000,
 		limited_to_one_game = false,
-		icon = "__MxlChievements__/graphics/stack-inserter.png",
+		icon = "__MxlChievements__/graphics/bulk-inserter.png",
 		icon_size = 128
 	},
 	{
 		type = "produce-achievement",
-		name = "stack-inserter-3",
+		name = "bulk-inserter-3",
 		order = "u",
-		item_product = "stack-inserter",
+		item_product = "bulk-inserter",
 		amount = 1000000000000,
 		limited_to_one_game = false,
-		icon = "__MxlChievements__/graphics/stack-inserter.png",
+		icon = "__MxlChievements__/graphics/bulk-inserter.png",
 		icon_size = 128
 	},
 }

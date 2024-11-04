@@ -58,7 +58,7 @@ data.raw.recipe["rocket-control-unit"].ingredients = {
 }
 if mods.bobtech then
 data.raw.recipe["lab-2"].ingredients = {
-    {"turbo-stack-inserter", 10},
+    {"turbo-bulk-inserter", 10},
     {"turbo-transport-belt", 10},
     {"processing-unit", 25},
     {"lab", 2}
