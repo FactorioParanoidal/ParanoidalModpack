@@ -479,8 +479,8 @@ bobmods.lib.tech.remove_recipe_unlock("bob-railway-2", "rail")
 -------------------------------------------------------------------------------------------------
 --добавляем рецепты обновления примитивов в технологию
 bobmods.lib.tech.add_recipe_unlock("railway", "scrap-rail-to-rail")
-bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-signal-scrap-to-rail-signal")
-bobmods.lib.tech.add_recipe_unlock("rail-signals", "rail-chain-signal-scrap-to-rail-chain-signal")
+bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "rail-signal-scrap-to-rail-signal")
+bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "rail-chain-signal-scrap-to-rail-chain-signal")
 bobmods.lib.tech.add_recipe_unlock("automated-rail-transportation", "train-stop-scrap-to-train-stop")
 -------------------------------------------------------------------------------------------------
 --подкрашиваем примитивы
