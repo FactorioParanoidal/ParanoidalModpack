@@ -442,4 +442,8 @@ if mods["UnrealisticReactors"] then
         set_settings_default_value("bool-setting", "realistic-reactors-disable-vanilla-reactor", false)
     end
 end
+if mods["bobmodules"]then
+    set_settings_default_value("bool-setting","bobmods-modules-enableproductivitylimitation",false)
+end
 -- end startup
+
