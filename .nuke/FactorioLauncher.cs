@@ -133,6 +133,8 @@ public static class FactorioLauncher
             return false;
         }
 
+        (factorioServerLocation / ".lock").DeleteFile();
+
         return false;
     }
 
