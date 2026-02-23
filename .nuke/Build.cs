@@ -134,7 +134,7 @@ partial class Build : NukeBuild
                 .ToArray();
             var factorioModList = new FactorioModList { Mods = disabledMods };
             var modListContent = JsonSerializer.Serialize(factorioModList);
-            Log.Information("Generating mod-list.json that exclude unsupported mods {UnsupportedMods}", 
+            Log.Information("Generating mod-list.json that exclude unsupported mods {UnsupportedMods}",
                 disabledMods.Select(m => m.Name));
             File.WriteAllText(RootDirectory / "mods" / "mod-list.json", modListContent);
 
@@ -142,6 +142,23 @@ partial class Build : NukeBuild
             if (!await FactorioLauncher.EnsureFactorioServerCanLaunch(factorioServerLocation, RootDirectory / "mods"))
             {
                 throw new Exception("Factorio launchability check failed. Check log for details.");
+            }
+        });
+
+    Target NormalizeModFolderNames => _ => _
+        .Executes(async () =>
+        {
+            var modsDirectory = RootDirectory / "mods";
+            var modpack = await FactorioModpack.LoadFromDirectory(modsDirectory);
+            foreach (var factorioMod in modpack.Cast<FolderFactorioMod>())
+            {
+                var directoryName = Path.GetFileName(factorioMod.Directory);
+                if (directoryName != factorioMod.Info.Name)
+                {
+                    Log.Information("Moving {OldPath} to {NewPath}", factorioMod.Directory,
+                        modsDirectory / factorioMod.Info.Name);
+                    Directory.Move(factorioMod.Directory, modsDirectory / factorioMod.Info.Name);
+                }
             }
         });
 }
