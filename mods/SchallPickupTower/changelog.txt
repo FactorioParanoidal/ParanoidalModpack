@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024.12.15
+  Features:
+    - Options on pickup range visualization colour is now using 2.0 "color-setting".
+  Optimisations:
+    - Improved library code.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024.12.15
+  Optimisations:
+    - Improved library code.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024.12.01
+  Features:
+    - Updated to 2.0.
+  Changes:
+    - Adjusted prototypes and function calls to base game 2.0.7 standard.
+    - Rewritten library code, to handle the changed 2.0.7 prototype definitions.
+    - Renamed settings for better mod compatibility.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2020.12.07
   Features:

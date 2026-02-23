@@ -1,5 +1,5 @@
 if not fnei then fnei = {} end
-if not global.fnei then global.fnei = {} end
+if not storage.fnei then storage.fnei = {} end
 
 -------------- include Class libs ----------------
 require "core/Class"
@@ -23,6 +23,7 @@ require "utils/paging"
 require "utils/list"
 require "utils/array"
 require "utils/open_tech_hook"
+require "utils/translate"
 require "scripts/events"
 require "scripts/remote"
 

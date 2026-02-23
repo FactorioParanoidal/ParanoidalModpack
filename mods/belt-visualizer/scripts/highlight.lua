@@ -10,21 +10,22 @@ local straight = const.straight
 local underground = const.underground
 local dash = const.dash
 local splitter = const.splitter
+local lane_splitter = const.lane_splitter
 local loader = const.loader
 local loader_1x1 = const.loader_1x1
 local linked_belt = const.linked_belt
 
 local function is_clockwise(entity, output)
-    return (output.direction - entity.direction) % 8 == 2
+    return (output.direction - entity.direction) % 16 == 4
 end
 
 local function get_splitter_sides(entity, belt)
     local direction = entity.direction
     local position = entity.position
     local belt_position = belt.position
-    local axis = direction % 4 == 0 and "x" or "y"
+    local axis = direction % 8 == 0 and "x" or "y"
     if position[axis] == belt_position[axis] then return side_cycle.both end
-    return (position[axis] > belt_position[axis]) ~= (direction >= 4) and side_cycle.left or side_cycle.right
+    return (position[axis] > belt_position[axis]) ~= (direction >= 8) and side_cycle.left or side_cycle.right
 end
 
 local function get_filter_side(data, entity)
@@ -93,8 +94,8 @@ local function get_prev_lanes(entity, lanes, input)
     for lane in pairs(lanes) do
         if clockwise == (lane == 2) then
             if get_belt_type(entity) == "underground-belt" then
-                local type = entity.belt_to_ground_type == "input"
-                return lane_cycle[clockwise == type and 2 or 3]
+                local btg_type = entity.belt_to_ground_type == "input"
+                return lane_cycle[clockwise == btg_type and 2 or 3]
             else
                 return lane_cycle[1]
             end
@@ -166,7 +167,7 @@ highlight_entity["transport-belt"] = function(data, entity, lanes, path)
     local belt_neighbours = entity.belt_neighbours
     local inputs = belt_neighbours.inputs
     local output = belt_neighbours.outputs[1]
-    local is_curved = (#inputs == 1) and (direction ~= inputs[1].direction)
+    local is_curved = entity.belt_shape ~= "straight"
     local next_lanes, lane_offsets = get_output_lanes(data, entity, lanes, output)
     for lane in pairs(lanes) do
         local offsets = straight[lane][direction]
@@ -174,7 +175,7 @@ highlight_entity["transport-belt"] = function(data, entity, lanes, path)
         if not is_curved then
             draw.line(data, entity, offsets.input, offsets[lane_offset])
         else
-            draw.arc(data, entity, lane, is_clockwise(inputs[1], entity))
+            draw.arc(data, entity, lane, entity.belt_shape == "right")
             if lane_offset == "sideload" then
                 draw.line(data, entity, offsets.output, offsets[lane_offset])
             end
@@ -274,6 +275,27 @@ highlight_entity["splitter"] = function(data, entity, lanes, path)
                     end
                 end
             end
+        end
+    end
+end
+
+highlight_entity["lane-splitter"] = function(data, entity, lanes, path)
+    local direction = entity.direction
+    local belt_neighbours = entity.belt_neighbours
+    local input = belt_neighbours.inputs[1]
+    local output = belt_neighbours.outputs[1]
+    local next_lanes, lane_offsets = get_output_lanes(data, entity, lanes, output)
+    for lane in pairs(lanes) do
+        local offsets = lane_splitter[lane][direction]
+        local lane_offset = lane_offsets[lane]
+        draw.line(data, entity, offsets.input, offsets[lane_offset])
+    end
+    if path == 1 then
+        add_to_queue(data, output, next_lanes, 1, entity)
+    else
+        if input then
+            local prev_lanes = get_prev_lanes(entity, lanes, input)
+            if prev_lanes then add_to_queue(data, input, prev_lanes, 2, entity) end
         end
     end
 end

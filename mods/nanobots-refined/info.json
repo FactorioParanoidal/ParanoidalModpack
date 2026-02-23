@@ -1,0 +1,15 @@
+{
+  "name": "nanobots-refined",
+  "version": "4.0.6",
+  "factorio_version": "2.0",
+  "title": "Nanobots: Early Bots Refined",
+  "author": "foxoftheasterisk",
+  "description": "Early automated constrution bots.  A special emitter gun fires consumable nanobots to perform construction tasks. Also adds items which add new features to construction bots. Thanks to Nexela for creating the original mod and Regi_Mahler for updating it to 2.0. \n\nIf migrating from Nanobots or Nanobots 2.0, I strongly recommend you view the changelog first.",
+  "dependencies": [
+    "base >= 2.0.39",
+    "stdlib2 >= 2.0.0",
+    "? boblibrary", "? aai-industry",
+    "! Nanobots", "! Nanobots2"
+  ],
+  "license": "MIT"
+}

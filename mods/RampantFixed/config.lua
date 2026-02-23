@@ -20,11 +20,12 @@ function config.getAttackWaveMaxSize(universe)
 	end
 end
 
-function config.getAttackWaveSize(universe)
+function config.getAttackWaveSize(map)
+	local universe = map.universe
 	if universe.allowExternalControl and universe.externalControlValues.attackWaveSize then
 		return universe.externalControlValues.attackWaveSize
 	else
-		return universe.attackWaveSize
+		return map.attackWaveSize
 	end
 end
 
@@ -33,16 +34,18 @@ end
     default is universe.attackWaveMaxSize * (evolutionFactor ^ 1.666667)
     DOES NOT affect vanilla biters waves
 --]]
-config.attackWaveScaling = function (universe)
-    return mCeil(gaussianRandomRange(config.getAttackWaveSize(universe),
-                                     universe.attackWaveDeviation,
+config.attackWaveScaling = function (map)
+	local universe = map.universe
+    return mCeil(gaussianRandomRange(config.getAttackWaveSize(map),
+                                     map.attackWaveDeviation,
                                      1,
-                                     universe.attackWaveUpperBound))
+                                     map.attackWaveUpperBound))
 end
 
-config.settlerWaveScaling = function (universe)
-    return mCeil(gaussianRandomRange(universe.settlerWaveSize,
-                                     universe.settlerWaveDeviation,
+config.settlerWaveScaling = function (map)
+	local universe = map.universe
+    return mCeil(gaussianRandomRange(map.settlerWaveSize,
+                                     map.settlerWaveDeviation,
                                      universe.expansionMinSize,
                                      universe.expansionMaxSize))
 end

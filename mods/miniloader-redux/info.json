@@ -1,0 +1,30 @@
+{
+  "name": "miniloader-redux",
+  "version": "0.12.0",
+  "title": "Miniloader (Redux)",
+  "description": "UPS-friendly 1x1 loaders.",
+  "author": "hgschmie",
+  "contact": "https://github.com/hgschmie/factorio-miniloader-redux/issues/",
+  "homepage": "https://github.com/hgschmie/factorio-miniloader-redux",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.59",
+    "(?) matts-logistics",
+    "(?) Krastorio2 >= 2.0.7",
+    "(?) boblogistics",
+    "(?) Load-Furn-2-SpaceAgeFix",
+    "(?) space-exploration"
+  ],
+  "package": {
+    "ignore":[
+      "portal/*",
+      "release/*",
+      "graphics/**/*.webp",
+      ".gitignore",
+      ".vscode"
+    ],
+    "git_publish_branch": "main",
+    "readme": "README.md",
+    "sync_portal_details": true
+  }
+}

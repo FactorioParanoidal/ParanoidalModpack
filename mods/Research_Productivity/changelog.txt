@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024-12-02
+  Info:
+    - Added a new optional setting: "Exponential Research Cost," allowing research costs to double at higher levels instead of increasing linearly. Disabled by default.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024-11-20
+  Balancing:
+    - Laboratories now gain a +10% productivity bonus per level of research, an increase from the previous +9%. The original value was chosen to better balance research productivity relative to mining productivity, but the difference was negligible. The new 10% value results in cleaner numbers.
+  Info:
+    - Updated for Factorio 2.0.
+    - Added localization for German.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-09-09
+  Balancing:
+    - Rebalancing of costs, pattern & effects to be more similar to the Mining Productivity research in the vanilla game.
+      The first three levels now cost 250/500/1000 research units, then infinite research starts with 2500/5000/7500 etc.
+      The higher tier science packs (productivity/utility) are not required before the 3rd level.
+      To compensate for the lower number of levels before infinite research, the buff per level was increased to +9%.
+    - Lab research speed is no longer a prerequisite for Lab productivity. Instead, the required research packages must now be unlocked.
+  Info:
+    - Small reworked to the mod structure (added this changelog, removed the readme, changed the english research name and description).
+      This won't have any effect on the actual gameplay changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-09-08
+  Info:
+    - Created a copy of the original Laboratory Productivity modification by Rhaane (https://mods.factorio.com/mod/Laboratory_Productivity)

@@ -1,0 +1,16 @@
+{
+  "item":
+  [
+	["w93-turret-rocket", "rocket"],
+	["w93-turret-explosive-rocket", "explosive-rocket"],
+	["w93-turret-light-cannon-shells", "w93-fragmentation-cannon-shell"],
+	["w93-turret-light-uranium-cannon-shells", "w93-fragmentation-cannon-shell"],
+	["w93-turret-cannon-shells", "explosive-cannon-shell"],
+	["w93-turret-uranium-cannon-shells", "explosive-uranium-cannon-shell"],
+	["w93-turret-slowdown-cannon-shells", "w93-fragmentation-cannon-shell"]
+  ],
+  "recipe":
+  [
+    ["w93-turret-light-cannon-shells", "w93-fragmentation-cannon-shell"]
+  ]
+}

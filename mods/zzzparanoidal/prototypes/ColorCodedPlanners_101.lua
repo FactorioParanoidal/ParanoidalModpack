@@ -1,8 +1,8 @@
 local changes = {
   ["blueprint"] = {
     ["blueprint"] = {
-      selection_cursor_box_type = "electricity",
-      alt_selection_cursor_box_type = "electricity"
+      selection_cursor_box_type = "bob-electricity",
+      alt_selection_cursor_box_type = "bob-electricity"
     }
   },
   ["copy-paste-tool"] = {
@@ -11,8 +11,8 @@ local changes = {
       alt_selection_cursor_box_type = "not-allowed"
     },
     ["copy-paste-tool"] = {
-      selection_cursor_box_type = "electricity",
-      alt_selection_cursor_box_type = "electricity"
+      selection_cursor_box_type = "bob-electricity",
+      alt_selection_cursor_box_type = "bob-electricity"
     }
   },
   ["deconstruction-item"] = {
@@ -40,3 +40,4 @@ for category, items in pairs(changes) do
 end
 
 data.raw["utility-sprites"]["default"]["upgrade_mark"].filename = "__zzzparanoidal__/graphics/upgrade.png"
+data.raw["utility-sprites"]["default"]["upgrade_mark"].height = 64

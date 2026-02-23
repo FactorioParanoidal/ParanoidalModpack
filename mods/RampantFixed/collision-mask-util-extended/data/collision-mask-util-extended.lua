@@ -82,25 +82,25 @@ local collision_flags =
 collision_mask_util_extended.collision_flags = table.deepcopy(collision_flags)
 
 collision_mask_util_extended.vanilla_named_collision_masks = {
-  ["ground-tile"] = "ground-tile",
-  ["water-tile"] = "water-tile",
-  ["resource-layer"] = "resource-layer",
-  ["doodad-layer"] = "doodad-layer",
-  ["floor-layer"] = "floor-layer",
-  ["item-layer"] = "item-layer",
-  ["ghost-layer"] = "ghost-layer",
-  ["object-layer"] = "object-layer",
-  ["player-layer"] = "player-layer",
-  ["train-layer"] = "train-layer",
-  ["rail-layer"] = "rail-layer",
-  ["transport-belt-layer"] = "transport-belt-layer"
+  ["ground_tile"] = "ground_tile",
+  ["water_tile"] = "water_tile",
+  ["resource"] = "resource",
+  ["doodad"] = "doodad",
+  ["floor"] = "floor-layer",
+  ["rail"] = "rail",
+  ["transport-belt"] = "transport-belt",
+  ["item"] = "item",
+  ["ghost"] = "ghost",
+  ["object"] = "object",
+  ["player"] = "player",
+  ["train"] = "train",
 }
 
 -- fix issue reported in F1.1.5
 collision_mask_util_extended.get_default_mask_vanilla = collision_mask_util_extended.get_default_mask
 collision_mask_util_extended.get_default_mask = function (type)
   if type == "unit" then
-    return {"player-layer", "train-layer", "not-colliding-with-itself"}
+    return {"player", "train", "not-colliding-with-itself"}
   else
     return collision_mask_util_extended.get_default_mask_vanilla(type)
   end
@@ -108,7 +108,7 @@ end
 
 collision_mask_util_extended.get_default_hit_mask = function (type)
   if type == "projectile" then
-    return {"player-layer", "train-layer", "object-layer",
+    return {"player", "train", "object-layer",
      collision_mask_util_extended.get_make_named_collision_mask("flying-layer"),
      collision_mask_util_extended.get_make_named_collision_mask("projectile-layer"),
      collision_mask_util_extended.get_make_named_collision_mask("vehicle-layer"),

@@ -6,7 +6,7 @@ require 'stdlib/core'
 require 'stdlib/area/position'
 
 Chunk = {}
-MAX_UINT = 4294967296
+
 
 --- Calculates the chunk coordinates for the tile position given
 --  @param position to calculate the chunk for
@@ -19,15 +19,25 @@ function Chunk.from_position(position)
     local y = math.floor(position.y)
     local chunk_x = bit32.arshift(x, 5)
     if x < 0 then
-        chunk_x = chunk_x - MAX_UINT
+        chunk_x = chunk_x - 4294967296
     end
     local chunk_y = bit32.arshift(y, 5)
     if y < 0 then
-        chunk_y = chunk_y - MAX_UINT
+        chunk_y = chunk_y - 4294967296
     end
     return {x = chunk_x, y = chunk_y}
 end
 
+
+
+--[[function Chunk.from_position(pos)
+    if pos.x then
+      return { x = pos.x * 32, y = pos.y * 32 }
+    else
+      return { pos[1] * 32, pos[2] * 32 }
+    end
+  end
+]]
 --- Converts a chunk to the area it contains
 -- @param chunk_pos to convert to an area
 -- @return area that chunk is valid for

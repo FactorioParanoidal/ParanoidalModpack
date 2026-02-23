@@ -1,4 +1,59 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 18. 01. 2026
+  Bugfixes:
+    - Fixed softlock in some mod combinations where automation science back and basic circut board required each other #518
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+    - Science pack recipe changes #510
+      - If Bob's Assembling machines mod is enabled, Production science pack will require Assembling machine 3 instead of Assembling machine 2
+      - If Bob's Electronics mod is enabled, Automation science pack will require a Basic circuit board (brown) instead of Copper plate
+      - If Bob's Electronics mod is enabled, Logistic science pack will require an Electronic circuit (green)
+  Bugfixes:
+    - Allow Lab 2 to accept all science packs #512
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 02. 01. 2026
+  Changes:
+    - Integrate Bob's Locale Translations mod #445
+    - Allow Lab 2 to accept Space Age science packs #452 #492
+    - Added support for frozen entities (with Space Age) #477
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 22. 06. 2025
+  Changes:
+    - Added de locale #415
+    - Added zh-TW locale #432
+    - Added Transport Science Pack to Biolab #443
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Changes:
+    - Added preset for Milestones mod #389
+    - Added Transport science achievement #391
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Changes:
+    - Updated science pack recipes #69
+    - Update for Factorio 2.0 #189
+    - Overhauled Burner Phase, removing Steam Science Pack #256
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 21. 02. 2024
+  Changes:
+    - Updated graphics for Logistic science pack #173
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Changes:
+    - Made Burner power phase techs ignore tech cost multiplier #132
+    - Hid setting "Burner power phase" when AAI Industry mod is enabled #133
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Changes:

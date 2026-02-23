@@ -1,10 +1,14 @@
-local position = require("__flib__/position")
+if ... ~= "__flib__.bounding-box" then
+  return require("__flib__.bounding-box")
+end
+
+local flib_position = require("__flib__.position")
 
 --- Utilities for manipulating bounding boxes. All functions support both the shorthand and explicit syntaxes for boxes
 --- and positions, and will preserve the syntax that was passed in. Boxes are considered immutable; all functions will
 --- return new boxes.
 --- ```lua
---- local flib_bounding_box = require("__flib__/bounding-box")
+--- local flib_bounding_box = require("__flib__.bounding-box")
 --- ```
 --- @class flib_bounding_box
 local flib_bounding_box = {}
@@ -63,9 +67,11 @@ end
 --- @return boolean
 function flib_bounding_box.contains_position(box, pos)
   local box = flib_bounding_box.ensure_explicit(box)
-  local pos = position.ensure_explicit(pos)
-  return
-    box.left_top.x <= pos.x and box.left_top.y <= pos.y and box.right_bottom.x >= pos.x and box.right_bottom.y >= pos.y
+  local pos = flib_position.ensure_explicit(pos)
+  return box.left_top.x <= pos.x
+    and box.left_top.y <= pos.y
+    and box.right_bottom.x >= pos.x
+    and box.right_bottom.y >= pos.y
 end
 
 --- Return the box in explicit form.
@@ -73,8 +79,8 @@ end
 --- @return BoundingBox
 function flib_bounding_box.ensure_explicit(box)
   return {
-    left_top = position.ensure_explicit(box.left_top or box[1]),
-    right_bottom = position.ensure_explicit(box.right_bottom or box[2]),
+    left_top = flib_position.ensure_explicit(box.left_top or box[1]),
+    right_bottom = flib_position.ensure_explicit(box.right_bottom or box[2]),
   }
 end
 
@@ -83,8 +89,8 @@ end
 --- @return BoundingBox
 function flib_bounding_box.ensure_short(box)
   return {
-    position.ensure_short(box.left_top or box[1]),
-    position.ensure_short(box.right_bottom or box[2]),
+    flib_position.ensure_short(box.left_top or box[1]),
+    flib_position.ensure_short(box.right_bottom or box[2]),
   }
 end
 
@@ -125,7 +131,7 @@ end
 --- @param pos MapPosition
 --- @return BoundingBox
 function flib_bounding_box.expand_to_contain_position(box, pos)
-  local pos = position.ensure_explicit(pos)
+  pos = flib_position.ensure_explicit(pos)
 
   if box.left_top then
     return {
@@ -182,9 +188,9 @@ end
 --- @return BoundingBox
 function flib_bounding_box.from_position(pos, snap)
   if snap then
-    pos = position.floor(pos)
+    pos = flib_position.floor(pos)
   else
-    pos = position.sub(pos, { 0.5, 0.5 })
+    pos = flib_position.sub(pos, { 0.5, 0.5 })
   end
   local x = pos.x or pos[1]
   local y = pos.y or pos[2]
@@ -219,11 +225,10 @@ end
 function flib_bounding_box.intersects_box(box1, box2)
   local box1 = flib_bounding_box.ensure_explicit(box1)
   local box2 = flib_bounding_box.ensure_explicit(box2)
-  return
-    box1.left_top.x < box2.right_bottom.x
-      and box2.left_top.x < box1.right_bottom.x
-      and box1.left_top.y < box2.right_bottom.y
-      and box2.left_top.y < box1.right_bottom.y
+  return box1.left_top.x < box2.right_bottom.x
+    and box2.left_top.x < box1.right_bottom.x
+    and box1.left_top.y < box2.right_bottom.y
+    and box2.left_top.y < box1.right_bottom.y
 end
 
 --- Return a new box with  the same dimensions, moved by the given delta.

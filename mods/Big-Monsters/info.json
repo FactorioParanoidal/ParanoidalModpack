@@ -1,20 +1,20 @@
 {
 	"name":"Big-Monsters",
 	"author":"MFerrari",
-	"version":"2.0.0",
+	"version":"2.1.2",
 	"title":"Big-Monsters",
 	"description":"Be prepared for the big monsters from this planet!",
 	"homepage":"https://discord.gg/vDfm5tNEqK",
 	"contact": "Discord: MFerrari#6561",
 	"factorio_version":"2.0",
-	"dependencies": ["base >= 2.0.0", "mferrari_lib >= 0.0.1", 
+	"dependencies": ["base >= 2.0.0", "mferrari_lib >= 0.5.5", "? space-age", 
 			"? mferrari-mod-sounds",
 			"? RPGsystem", 
-			"? Cold_biters >= 2.0.0",
-			"? Explosive_biters >= 2.2.0",
-			"? Toxic_biters >= 2.0.0",
+			"? Cold_biters",
+			"? Explosive_biters",
+			"? Toxic_biters",
 			"? Arachnids_enemy",
 			"? ArmouredBiters",
-			"? player_body_abduction >= 0.2.0"
+			"? player_body_abduction"
 			]
 }

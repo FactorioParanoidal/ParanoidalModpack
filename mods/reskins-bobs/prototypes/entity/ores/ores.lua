@@ -1,109 +1,90 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
 
--- Check to see if reskinning needs to be done.
-if not (reskins.bobs and reskins.bobs.triggers.ores.entities) then return end
-
-local inputs = {
-    type = "resource",
-    mod = "bobs",
-    group = "ores",
-}
-
-reskins.lib.parse_inputs(inputs)
+if not (reskins.bobs and reskins.bobs.triggers.ores.entities) then
+	return
+end
 
 local ores = {
-    -- Pure Bob's
-    -- ["gem-ore"] = {},
-    ["lead-ore"] = {mod = "lib", group = "shared"}, -- 404040
-    ["rutile-ore"] = {},
-    ["sulfur"] = {},
-    ["thorium-ore"] = {make_glow = true},
-    ["tin-ore"] = {mod = "lib", group = "shared", variations = 8},
+	-- Pure Bob's
+	-- ["gem-ore"] = { key = "bobs", subfolder = "ores" },
+	["bob-lead-ore"] = { key = "lib", subfolder = "shared" }, -- 404040
+	["bob-rutile-ore"] = { key = "bobs", subfolder = "ores" },
+	["bob-sulfur"] = { key = "bobs", subfolder = "ores" },
+	["bob-thorium-ore"] = { key = "bobs", subfolder = "ores", is_light = true },
+	["bob-tin-ore"] = { key = "lib", subfolder = "shared", num_variations = 8 },
 
-    -- Shared with Angel's
-    ["bauxite-ore"] = {mod = "lib", group = "shared", variations = 8},
-    ["cobalt-ore"] = {mod = "lib", group = "shared"},
-    ["gold-ore"] = {mod = "lib", group = "shared"},
-    ["nickel-ore"] = {mod = "lib", group = "shared"}, -- 408073
-    ["quartz"] = {mod = "lib", group = "shared"}, -- 999999
-    ["silver-ore"] = {mod = "lib", group = "shared"},
-    ["tungsten-ore"] = {mod = "lib", group = "shared", variations = 8},
-    ["zinc-ore"] = {mod = "lib", group = "shared"},
+	-- Shared with Angel's
+	["bob-bauxite-ore"] = { key = "lib", subfolder = "shared", num_variations = 8 },
+	["bob-cobalt-ore"] = { key = "lib", subfolder = "shared" },
+	["bob-gold-ore"] = { key = "lib", subfolder = "shared" },
+	["bob-nickel-ore"] = { key = "lib", subfolder = "shared" }, -- 408073
+	["bob-quartz"] = { key = "lib", subfolder = "shared" }, -- 999999
+	["bob-silver-ore"] = { key = "lib", subfolder = "shared" },
+	["bob-tungsten-ore"] = { key = "lib", subfolder = "shared", num_variations = 8 },
+	["bob-zinc-ore"] = { key = "lib", subfolder = "shared" },
 }
 
-
-
 for name, params in pairs(ores) do
-    -- Fetch entity
-    local entity = data.raw[inputs.type][name]
+	local entity = data.raw["resource"][name]
+	if not entity then
+		goto continue
+	end
 
-    -- Check if entity exists, if not, skip this iteration
-    if not entity then goto continue end
+	if name == "bob-sulfur" then
+		reskins.lib.icons.assign_deferrable_icon({
+			name = entity.name,
+			type_name = entity.type,
+			icon_datum = {
+				icon = "__base__/graphics/icons/sulfur.png",
+				icon_size = 64,
+				scale = 0.5,
+			},
+		})
+	else
+		reskins.lib.icons.assign_deferrable_icon({
+			name = entity.name,
+			type_name = entity.type,
+			icon_data = {
+				{
+					icon = reskins[params.key].directory .. "/graphics/icons/" .. params.subfolder .. "/ores/" .. name .. "/" .. name .. ".png",
+					icon_size = 64,
+					scale = 0.5,
+				},
+			},
+			pictures = reskins.internal.create_sprite_variations(params.key, params.subfolder .. "/ores", name, params.num_variations or 4, params.is_light),
+		})
+	end
 
-    -- Fetch mod information
-    local mod = params.mod or inputs.mod
-    local group = params.group or inputs.group
+	entity.stages = {
+		sheet = {
+			filename = "__reskins-bobs__/graphics/entity/ores/" .. name .. "/" .. name .. ".png",
+			priority = "extra-high",
+			size = 128,
+			frame_count = 8,
+			variation_count = 8,
+			scale = 0.5,
+		},
+	}
 
-    -- Setup icons
-    if name == "sulfur" then
-        inputs.icon = "__base__/graphics/icons/sulfur.png"
-        inputs.icon_picture = nil
-    else
-        inputs.icon = reskins[mod].directory.."/graphics/icons/"..group.."/ores/"..name.."/"..name..".png"
-        inputs.icon_picture = reskins.lib.create_icon_variations({mod = mod, group = group, subgroup = "ores", icon = name, variations = params.variations or 4, glows = params.make_glow})
-    end
+	-- Radioactive glow
+	if name == "bob-thorium-ore" then
+		entity.stages_effect = {
+			sheet = {
+				filename = "__reskins-bobs__/graphics/entity/ores/" .. name .. "/" .. name .. "-glow.png",
+				priority = "extra-high",
+				width = 128,
+				height = 128,
+				frame_count = 8,
+				variation_count = 8,
+				scale = 0.5,
+				blend_mode = "additive",
+				flags = { "light" },
+			},
+		}
+	end
 
-    reskins.lib.assign_icons(name, inputs)
-
-    -- Reskin entity
-    entity.stages = {
-        sheet = {
-            filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/"..name..".png",
-            priority = "extra-high",
-            size = 64,
-            frame_count = 8,
-            variation_count = 8,
-            hr_version = {
-                filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/hr-"..name..".png",
-                priority = "extra-high",
-                size = 128,
-                frame_count = 8,
-                variation_count = 8,
-                scale = 0.5
-            }
-        }
-    }
-
-    -- Radioactive glow
-    if name == "thorium" then
-        entity.stages_effect = {
-            sheet = {
-                filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/"..name.."-glow.png",
-                priority = "extra-high",
-                width = 64,
-                height = 64,
-                frame_count = 8,
-                variation_count = 8,
-                blend_mode = "additive",
-                flags = {"light"},
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/ores/"..name.."/hr-"..name.."-glow.png",
-                    priority = "extra-high",
-                    width = 128,
-                    height = 128,
-                    frame_count = 8,
-                    variation_count = 8,
-                    scale = 0.5,
-                    blend_mode = "additive",
-                    flags = {"light"}
-                }
-            }
-        }
-    end
-
-    -- Label to skip to next iteration
-    ::continue::
+	::continue::
 end

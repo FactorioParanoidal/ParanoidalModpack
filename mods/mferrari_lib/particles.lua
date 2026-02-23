@@ -139,6 +139,21 @@ function create_water_drops(surface, position,count,height)
     local x = position.x
     local y = position.y
     for i = 1, count do
-        surface.create_particle( create_ceiling_prototype('water-particle', x, y,height))
+        surface.create_particle( create_ceiling_prototype('tintable-water-particle', x, y,height))
+    end
+end
+
+--- for space age
+function create_lava_particles(surface, count, position,height_mp)
+if not height_mp then height_mp=1 end
+    for x=1,count do
+        surface.create_particle({
+            position = position,
+            name =  "demolisher-shell-particle-small" , --"vulcanus-lava-particle-long-life-small", -- "vulcanus-blood-particle-lower-layer-small",
+            movement = {random(-5, 5) * 0.01, random(-5, 5) * 0.01},
+            frame_speed = 1,
+            vertical_speed = random(10, 12) * 0.01,
+            height = random(5, 15) * 0.1 * height_mp,
+        })
     end
 end

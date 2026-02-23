@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 07. 02. 2025
+  Changes:
+    - Added RU locale (thanks to Extremator)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 07. 02. 2025
+  Changes:
+    - Added icon selector to textbox to support rich text without typing icon codes
+    - Updated graphical style to better match base game
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 29. 12. 2024
+  Changes:
+    - Updated to Factorio 2.0
+---------------------------------------------------------------------------------------------------
 Version: 2.1.7
 Date: 26. 11. 2020
   Changes:

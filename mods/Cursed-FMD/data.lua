@@ -31,10 +31,6 @@ data.raw["shortcut"]["Cursed-FMD"] = {
     item_to_spawn = "filter-drills",
     order = "zy",
     localised_name = {"gui-control-behavior-modes.set-filters"},
-    icon = {
-      filename = "__Cursed-FMD__/icon_64.png",
-      size = 64,
-      scale = 0.25,
-      flags = {"gui-icon"}
-    }
+    small_icon = "__Cursed-FMD__/icon_64.png",
+	icon = "__Cursed-FMD__/icon_64.png"
   }

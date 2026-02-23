@@ -1,4 +1,73 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2026-02-04
+  Bugfixes:
+    - More recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2026-01-18
+  Bugfixes:
+    - Fixed more small issuess
+    - Recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2026-01-11
+  Bugfixes:
+    - Fixed issue with icons missing sizes causing start-up crashes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.01
+Date: 2026-01-10
+  Features:
+    - now works with 2.0
+  Bugfixes:
+    - Only create recipe alternate Firearms magazine recipe if lead plate is enabled
+    - Made sure ores are enabled for all catalyst types
+    - Made sure Aluminium powder is enabled
+    - Made sure Sintering Ovens are enabled
+    - Made sure early Chemical Furnaces are enabled (for White Phosphorus)
+    - Don't create neurotoxin stuff unless Angel's Bioprocessing mod is enabled
+    - Don't create Dimethylmercury unless Angel's Bioprocessing mod is enabled
+    - Removed fluid Boric Acid (completely unused)
+    - Set minimum machine tiers for Violet Algae and Smelting recipes
+    - Changed Sand Sluicing recipe to produce Osmium Ore instead of Chrome Ore
+    - Swapped effects of Mercury Processing 1 and 2
+    - Added missing tech prerequisites
+    - Changed Depleted Uranium Smelting techs to be different science pack tiers
+    - Increased the science pack tier of Phosphorus Processing techs
+    - Changed Uranium Processing techs to be different science pack tiers
+---------------------------------------------------------------------------------------------------
+Version: 1.3.23
+Date: 2024-01-01
+  Bugfixes:
+    - Sodium processing tech name change fix
+---------------------------------------------------------------------------------------------------
+Version: 1.3.21
+Date: 2023-07-29
+  Bugfixes:
+    - Fixed and issue with powder processing tech updates
+---------------------------------------------------------------------------------------------------
+Version: 1.3.20
+Date: 2023-05-28
+  Bugfixes:
+    - More platinum fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.3.19
+Date: 2023-04-18
+  Bugfixes:
+    - Fixed capitalisation on folder name breaking the mod on some OS
+---------------------------------------------------------------------------------------------------
+Version: 1.3.18
+Date: 2023-04-16
+  Features:
+    - Moved garden generation to farm 2 to allow earlier farming (Canisdirusleidy on forum)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.17
+Date: 2023-04-16
+  Features:
+    - Fixed that depleted uranium recipes had no unlock
+    - Fixed dimethymercury from algae path
+    - General clean-ups and icon updates
+---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 2021-08-10
   Features:

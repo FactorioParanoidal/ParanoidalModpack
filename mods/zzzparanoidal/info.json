@@ -8,28 +8,19 @@
   "homepage": "https://discord.gg/MnXGAmC",
   "description": "PARANOIDAL 8. Core mod for PARANOIDAL\n2024.09",
   "dependencies": [
-    "base >= 2.0.7",
+    "base >= 2.0.73",
     "boblibrary", 
     "boblibrary",
     "BatteryElectricTrain",
+    "KaoExtended",
     "? angelsindustries", 
     "? angelsrefining", 
     "? extendedangels",
     "angelsbioprocessing",
     "angelssmelting",
-    "KaoExtended",
-    "expanded-rocket-payloads",
-    "MilesBobsExpansion",
-    "Clowns-AngelBob-Nuclear",
-    "Clowns-Processing",
+    "expanded-rocket-payloads-continued",
     "bobwarfare",
     "bobrevamp",
-    "AtomicArtillery",
-    "Bio_Industries",
-    "marathon",
-    "RU-locale",
-    "! elevated-rails",
-    "! quality",
-    "! space-age"
+    "Bio_Industries_2"
     ]
 }

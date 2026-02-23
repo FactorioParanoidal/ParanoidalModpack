@@ -1,0 +1,14 @@
+{
+    "name": "easy-wind-turbine",
+    "version": "2.1.1",
+    "title": "easy wind turbine",
+    "author": "Unfunf22",
+    "factorio_version" : "2.0",
+    "dependencies": ["base >= 2.0", "? space-age >= 2.0.0"],
+    "description": "Adds 3 wind turbines to the game and works in some scenarios-missions too.",
+    "package": {
+		"ignore": [
+            "Ignore.txt"
+		]
+	}
+}

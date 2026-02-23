@@ -1,4 +1,101 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.10
+Date: 2026-01-31
+  Changes:
+    - Improved the color matching of AAI Loaders to the configured belt entity colors.
+  Bugfixes:
+    - Fixed that AAI Loader entities did not receive updated tints when used with custom colors.
+  Locale:
+    - Minor update to Korean localization
+---------------------------------------------------------------------------------------------------
+Version: 2.3.9
+Date: 2026-01-10
+  Bugfixes:
+    - Fixed that the Angel's Warehouses added by Extended Angels were not reskinned
+---------------------------------------------------------------------------------------------------
+Version: 2.3.8
+Date: 2026-01-10
+  Bugfixes:
+    - Restored compatibility with Extended Angels
+---------------------------------------------------------------------------------------------------
+Version: 2.3.7
+Date: 2026-01-04
+  Bugfixes:
+    - Fixed startup error when used with Realistic Reactor Glow
+---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 2026-01-03
+  Bugfixes:
+    - Restored compatibility with Classic Mining Drills
+---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2026-01-03
+  Changes:
+    - Adjustments to support Angel's 2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2025-07-03
+  Changes:
+    - Loader item subgroups are now aligned with the belt subgroups added by Bob's Logistics.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2025-07-03
+  Features:
+    - Added support for Loaders Modernized and Miniloader (Redux).
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2025-05-10
+  Bugfixes:
+    - Fixed crash when used with AAI Industry due to missing file.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2025-03-31
+  Bugfixes:
+    - Fixed compatibility with Mini Machines.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2025-03-30
+  Features:
+    - Migration to Factorio 2.0!
+  Changes:
+    - Removed support for Circuit Processing due to changes in Bob's Electronics.
+    - Supports changed made in Vanilla Loaders for Bob's 2.0.0.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-05-21
+  Bugfixes:
+    - Fixed missing `icon_size` causing startup errors when used with the Classic Mining Drill and Semi-Classic Mining Drill mods.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-05-04
+  Features:
+    - Added regeneration of Deadlock's Stacking Beltboxes and Loaders stack items and stack/unstack recipes for reskinned icons. Fixes scaling issues.
+    - Added regeneration of Deadlock's Crating crate pack/unpack recipes and crate items. Fixes scaling issues.
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.1.10
+Date: 2023-12-23
+  Features:
+    - Added support for AAI Loaders and AAI Loaders: Bob's Logistics, reskins-bobs#45
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
+---------------------------------------------------------------------------------------------------
+Version: 2.1.9
+Date: 2023-05-29
+  Bugfixes:
+    - Fixed that the item-on-ground icons for transport belts when used with Black Rubber Belts were broken.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2023-04-13
+  Features:
+    - Added support for Intermodal Containers, a fork of Deadlock Crating
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2023-03-30
+  Bugfixes:
+    - Fixed crash with Deadlock's Black Rubber Belts due to missing file
+---------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2023-01-01
   Changes:

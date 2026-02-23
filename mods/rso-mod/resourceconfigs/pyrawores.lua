@@ -1,7 +1,8 @@
 function fillPyRawOresConfig(config)
+	local nauvisConfig = config.nauvis
 	
 	
-	config["ore-aluminium"] = {
+	nauvisConfig["ore-aluminium"] = {
 		type="resource-ore",
 		
 		-- general spawn params
@@ -18,7 +19,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["ore-chromium"] = {
+	nauvisConfig["ore-chromium"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -28,7 +29,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=2000, size=10, probability=1}
 	}
 	
-	config["ore-lead"] = {
+	nauvisConfig["ore-lead"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -38,7 +39,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["ore-nickel"] = {
+	nauvisConfig["ore-nickel"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -48,7 +49,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=0}
 	}
 	
-	config["ore-quartz"] = {
+	nauvisConfig["ore-quartz"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -58,7 +59,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["raw-coal"] = {
+	nauvisConfig["raw-coal"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -68,7 +69,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["ore-tin"] = {
+	nauvisConfig["ore-tin"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -78,7 +79,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["ore-titanium"] = {
+	nauvisConfig["ore-titanium"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -88,7 +89,7 @@ function fillPyRawOresConfig(config)
 		starting={richness=8000, size=25, probability=1}
 	}
 	
-	config["ore-zinc"] = {
+	nauvisConfig["ore-zinc"] = {
 		type="resource-ore",
 		allotment=80,
 		spawns_per_region={min=1, max=1},
@@ -97,10 +98,19 @@ function fillPyRawOresConfig(config)
 		min_amount=250,
 		starting={richness=8000, size=25, probability=0}
 	}
-	
+
+	nauvisConfig["ore-nexelit"] = {
+		type="resource-ore",
+		allotment=80,
+		spawns_per_region={min=1, max=1},
+		richness=25000,
+		size={min=20, max=30}, 
+		min_amount=250,
+		starting={richness=8000, size=25, probability=1}
+	}
 	
 	-- BIG ROCKS
-	config["aluminium-rock"] = {
+	nauvisConfig["aluminium-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -110,7 +120,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["chromium-rock"] = {
+	nauvisConfig["chromium-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -120,7 +130,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["coal-rock"] = {
+	nauvisConfig["coal-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -130,7 +140,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["copper-rock"] = {
+	nauvisConfig["copper-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -140,7 +150,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["iron-rock"] = {
+	nauvisConfig["iron-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -150,7 +160,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["lead-rock"] = {
+	nauvisConfig["lead-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -160,7 +170,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["nexelit-rock"] = {
+	nauvisConfig["nexelit-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -170,7 +180,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["nickel-rock"] = {
+	nauvisConfig["nickel-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -180,7 +190,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["phosphate-rock-02"] = {
+	nauvisConfig["phosphate-rock-02"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -190,7 +200,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["quartz-rock"] = {
+	nauvisConfig["quartz-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -200,19 +210,19 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["salt-rock"] = {
+	nauvisConfig["salt-rock"] = {
 		type="resource-liquid",
 		minimum_amount=100000,
 		allotment=60,
 		spawns_per_region={min=1, max=1},
 		richness={min=200000, max=400000}, -- richness per resource spawn
-		size={min=3, max=5},
+		size={min=1, max=1},
 		useOreScaling = true,
 		
 		starting={richness=150000, size=1, probability=1}
 	}
 	
-	config["tin-rock"] = {
+	nauvisConfig["tin-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -222,7 +232,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["titanium-rock"] = {
+	nauvisConfig["titanium-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -232,7 +242,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["uranium-rock"] = {
+	nauvisConfig["uranium-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -242,7 +252,7 @@ function fillPyRawOresConfig(config)
 		useOreScaling = true
 	}
 	
-	config["zinc-rock"] = {
+	nauvisConfig["zinc-rock"] = {
 		type="resource-liquid",
 		minimum_amount=500000,
 		allotment=60,
@@ -250,6 +260,10 @@ function fillPyRawOresConfig(config)
 		richness={min=3000000, max=5000000}, -- richness per resource spawn
 		size={min=1, max=1},
 		useOreScaling = true
+	}
+	
+	nauvisConfig["coal"] = {
+		type="empty"
 	}
 	
 end

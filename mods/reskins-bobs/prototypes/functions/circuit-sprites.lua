@@ -1,80 +1,60 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
 
--- Check if the setting exists
-if not reskins.lib.setting("reskins-bobs-do-bobelectronics-circuit-style") then return end
-
-local circuits = {
-    ["electronic-circuit"] = {tier = 1, prog_tier = 2},
-    ["advanced-circuit"] = {tier = 2, prog_tier = 3},
-    ["processing-unit"] = {tier = 3, prog_tier = 4},
-    ["advanced-processing-unit"] = {tier = 4, prog_tier = 5},
+local circuit_names = {
+	"basic-circuit-board",
+	"basic-electronic-circuit-board",
+	"electronic-circuit-board",
+	"electronic-logic-board",
+	"electronic-processing-board",
 }
 
-for circuit, map in pairs(circuits) do
-    -- Make vanilla-colored sprites
-    data:extend({
-        {
-            type = "sprite",
-            name = "reskins-bob-"..circuit.."-vanilla",
-            filename = reskins.bobs.directory.."/graphics/icons/sprites/circuits/vanilla/"..circuit..".png",
-            size = 40,
-            mipmap_count= 2,
-            flags = {"gui-icon"},
-        }
-    })
+for tier, circuit_name in pairs(circuit_names) do
+	---@type data.SpritePrototype
+	local standard_sprite = {
+		type = "sprite",
+		filename = "__reskins-bobs__/graphics/icons/sprites/circuits/standard/" .. circuit_name .. ".png",
+		flags = { "gui-icon" },
+		size = 40,
+		name = "ar-" .. circuit_name .. "-standard",
+		mipmap_count = 2,
+	}
 
-    -- Make material-colored sprites
-    data:extend({
-        {
-            type = "sprite",
-            name = "reskins-bob-"..circuit.."-material",
-            filename = reskins.bobs.directory.."/graphics/icons/sprites/circuits/material/"..circuit..".png",
-            size = 40,
-            mipmap_count= 2,
-            flags = {"gui-icon"},
-        }
-    })
+	data:extend({ standard_sprite })
 
-    -- Parse map
-    local tier = map.tier
-    if reskins.lib.setting("reskins-lib-tier-mapping") == "progression-map" then
-        tier = map.prog_tier
-    end
+	-- Ensure tint has no alpha; circuit coloring does not support partial transparency.
+	local tint = reskins.lib.tiers.get_tint(tier)
+	local sanitized_tint = util.get_color_with_alpha(tint, 1)
 
-    -- Fetch tint
-    local tint = reskins.lib.tint_index[tier]
+	---@type data.SpritePrototype
+	local colored_sprite = {
+		type = "sprite",
+		name = "ar-" .. circuit_name .. "-colored",
+		layers = {
+			{
+				filename = "__reskins-bobs__/graphics/icons/sprites/circuits/colored/" .. circuit_name .. "/" .. circuit_name .. "-base.png",
+				flags = { "gui-icon" },
+				size = 40,
+				tint = sanitized_tint,
+				mipmap_count = 2,
+			},
+			{
+				filename = "__reskins-bobs__/graphics/icons/sprites/circuits/colored/" .. circuit_name .. "/" .. circuit_name .. "-highlights.png",
+				flags = { "gui-icon" },
+				size = 40,
+				blend_mode = "additive",
+				mipmap_count = 2,
+			},
+			{
+				filename = "__reskins-bobs__/graphics/icons/sprites/circuits/colored/" .. circuit_name .. "/" .. circuit_name .. "-traces.png",
+				flags = { "gui-icon" },
+				size = 40,
+				mipmap_count = 2,
+			},
+		},
+	}
 
-    -- Make tier colored sprites
-    data:extend({
-        {
-            type = "sprite",
-            name = "reskins-bob-"..circuit.."-tier",
-            layers = {
-                {
-                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-base.png",
-                    size = 40,
-                    mipmap_count = 2,
-                    flags = {"gui-icon"},
-                },
-                {
-                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-mask.png",
-                    size = 40,
-                    tint = tint,
-                    mipmap_count = 2,
-                    flags = {"gui-icon"},
-                },
-                {
-                    filename = reskins.lib.directory.."/graphics/icons/sprites/circuits/"..circuit.."/"..circuit.."-highlights.png",
-                    size = 40,
-                    blend_mode = "additive",
-                    mipmap_count = 2,
-                    flags = {"gui-icon"},
-                }
-            },
-            flags = {"gui-icon"}
-        }
-    })
+	data:extend({ colored_sprite })
 end

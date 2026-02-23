@@ -1,9 +1,20 @@
 ---
 ---Description of the module.
----@class RecipePrototype
+---@class RecipePrototype : Prototype
+---@field object_name string
+---@field lua_type string
+---@field is_voider any
+---@field is_support_quality boolean
+---@field is_support_burned_quality boolean
+---@field is_support_factory boolean
+---@field is_customized boolean
 RecipePrototype = newclass(Prototype, function(base, object, object_type)
     base.classname = "HMRecipePrototype"
     base.is_voider = nil
+    base.is_support_quality = false
+    base.is_support_fuel_quality = false
+    base.is_support_factory = true
+    base.is_customized = RecipePrototype.isCustomized(object)
     if object ~= nil then
         if type(object) == "string" then
             base.object_name = object
@@ -12,28 +23,67 @@ RecipePrototype = newclass(Prototype, function(base, object, object_type)
             base.object_name = object.name
             base.lua_type = object_type or object.type
         end
-        if base.lua_type == nil or base.lua_type == "recipe" then
-            Prototype.init(base, Player.getRecipe(base.object_name))
-            base.lua_type = "recipe"
-        elseif base.lua_type == "recipe-burnt" then
+        if base.lua_type == nil or base.lua_type == defines.mod.recipes.recipe.name then
+            local recipe = nil
+            if base.is_customized then
+                recipe = Player.getCustomizedRecipe(base.object_name)
+            else
+                recipe = Player.getRecipe(base.object_name)
+            end
+            if recipe == nil and base.object_name ~= nil then
+                -- if recipe is null try find 
+                recipe = Player.findFirstRecipe(base.object_name)
+            end
+            if recipe == nil and base.object_name ~= nil then
+                recipe = Player.getCustomizedRecipe(base.object_name)
+                base.is_customized = true
+            end
+            Prototype.init(base, recipe)
+            base.lua_type = defines.mod.recipes.recipe.name
+            if Player.hasFeatureQuality() then
+                if base.lua_prototype ~= nil and base.lua_prototype.ingredients ~= nil then
+                    for _, ingredient in pairs(base.lua_prototype.ingredients) do
+                        if ingredient.type == "item" then
+                            base.is_support_quality = true
+                        end
+                    end
+                end
+            end
+        elseif base.lua_type == defines.mod.recipes.burnt.name then
             Prototype.init(base, Player.getBurntRecipe(base.object_name))
-        elseif base.lua_type == "energy" then
+        elseif base.lua_type == defines.mod.recipes.energy.name then
             Prototype.init(base, Player.getEnergyRecipe(base.object_name))
-        elseif base.lua_type == "resource" then
+        elseif base.lua_type == defines.mod.recipes.resource.name then
             Prototype.init(base, Player.getResourceRecipe(base.object_name))
-        elseif base.lua_type == "fluid" then
+        elseif base.lua_type == defines.mod.recipes.fluid.name then
             Prototype.init(base, Player.getFluidRecipe(base.object_name))
-        elseif base.lua_type == "boiler" then
+        elseif base.lua_type == defines.mod.recipes.boiler.name then
             local recipe = Player.getBoilerRecipe(base.object_name)
             Prototype.init(base, recipe)
             base.input_fluid_name = recipe.input_fluid_name
             base.output_fluid_temperature = recipe.output_fluid_temperature
             base.output_fluid_name = recipe.output_fluid_name
-        elseif base.lua_type == "technology" then
+        elseif base.lua_type == defines.mod.recipes.technology.name then
             Prototype.init(base, Player.getTechnology(base.object_name))
-        elseif base.lua_type == "rocket" then
+        elseif base.lua_type == defines.mod.recipes.rocket.name then
             local recipe = Player.getRocketRecipe(base.object_name)
             Prototype.init(base, recipe)
+        elseif base.lua_type == defines.mod.recipes.agricultural.name then
+            Prototype.init(base, Player.getAgriculturalRecipe(base.object_name))
+        elseif base.lua_type == defines.mod.recipes.spoiling.name then
+            Prototype.init(base, Player.getSpoilableRecipe(base.object_name))
+            base.is_support_factory = false
+            if Player.hasFeatureQuality() then
+                base.is_support_quality = true
+            end
+        elseif base.lua_type == defines.mod.recipes.constant.name then
+            Prototype.init(base, Player.getCustomizedRecipe(base.object_name))
+            base.is_support_quality = false
+            base.is_support_factory = false
+        else
+            Prototype.init(base, Player.getCustomizedRecipe(base.object_name))
+            base.is_support_factory = false
+            base.is_customized = true
         end
         if base.lua_prototype == nil then
             Logging:error("HMRecipePrototype", "recipe not found", type(object), object)
@@ -44,6 +94,65 @@ RecipePrototype = newclass(Prototype, function(base, object, object_type)
         end
     end
 end)
+
+--- Return allowed machines
+---@return table
+function RecipePrototype:getAllowedMachines()
+    local all_productions = {}
+    if self.lua_type == defines.mod.recipes.energy.name then
+        all_productions[self.lua_prototype.name] = self.lua_prototype
+    elseif self.lua_type == defines.mod.recipes.boiler.name then
+        all_productions = Player.getBoilersForRecipe(self)
+    else
+        local recipe_ingredient_count = self:getIngredientCount()
+        local all_ready = {}
+        local categories = self:getAllCategories()
+        local categories_machines = Player.getCategoriesMachines()
+        for _, category in pairs(categories) do
+            local productions = categories_machines[category]
+            if productions ~= nil then
+                for _, production in pairs(productions) do
+                    if all_ready[production.name] == nil  then
+                        local is_valid = false
+                        local factory_prototype = EntityPrototype(production)
+                        local factory_ingredient_count = factory_prototype:getIngredientCount()
+                        --- check ingredient limitation
+                        if factory_ingredient_count >= recipe_ingredient_count then
+                            is_valid = true
+                        end
+                        --- check mineable require
+                        if self.lua_prototype.name ~= nil and self.lua_type == defines.mod.recipes.resource.name then
+                            local lua_entity_filter = Player.getEntityPrototype(self.lua_prototype.name)
+                            if lua_entity_filter ~= nil then
+                                if production.resource_categories ~= nil and not (production.resource_categories[lua_entity_filter.resource_category]) then
+                                    is_valid = false
+                                elseif lua_entity_filter.mineable_properties and lua_entity_filter.mineable_properties.required_fluid then
+                                    local fluidboxes = factory_prototype:getFluidboxPrototypes()
+                                    if #fluidboxes == 0 then
+                                        is_valid = false
+                                    end
+                                end
+                            end
+                        end
+                        if is_valid == true then
+                            table.insert(all_productions, production)
+                            all_ready[production.name] = true
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return all_productions
+end
+
+-------------------------------------------------------------------------------
+---Check customized
+---@param object table --prototype
+---@return boolean
+function RecipePrototype.isCustomized(object)
+    return object.name ~= nil and string.find(object.name, defines.mod.recipe_customized_prefix, 0, true)
+end
 
 -------------------------------------------------------------------------------
 ---Try to find prototype
@@ -57,20 +166,27 @@ function RecipePrototype.find(object)
         object_name = object.name
     end
     local lua_prototype = Player.getPlayerRecipe(object_name)
-    local lua_type = "recipe"
+    local lua_type = defines.mod.recipes.recipe.name
     if lua_prototype == nil then
         lua_prototype = Player.getPlayerTechnology(object_name)
-        lua_type = "technology"
+        lua_type = defines.mod.recipes.technology.name
     end
     if lua_prototype == nil then
         lua_prototype = Player.getEntityPrototype(object_name)
-        lua_type = "resource"
+        lua_type = defines.mod.recipes.resource.name
     end
     if lua_prototype == nil then
         lua_prototype = Player.getFluidPrototype(object_name)
-        lua_type = "fluid"
+        lua_type = defines.mod.recipes.fluid.name
     end
     return RecipePrototype(lua_prototype, lua_type)
+end
+
+-------------------------------------------------------------------------------
+---Return support factory
+---@return boolean
+function RecipePrototype:isSupportFactory()
+    return self.is_support_factory
 end
 
 -------------------------------------------------------------------------------
@@ -81,6 +197,41 @@ function RecipePrototype:getType()
 end
 
 -------------------------------------------------------------------------------
+---Return Allowed Effects
+---@return table
+function RecipePrototype:getAllowedEffects()
+    if self.lua_prototype == nil then return {} end
+    if self.lua_prototype.object_name == "LuaTechnologyPrototype" then return {} end
+    return self.lua_prototype.allowed_effects
+end
+
+-------------------------------------------------------------------------------
+---Return Allowed Effects
+---@return table | nil
+function RecipePrototype:getAllowedEffectMessage(effect_name)
+    if self.lua_prototype == nil then return nil end
+    if self.lua_prototype.object_name == "LuaTechnologyPrototype" then return nil end
+    if self.lua_prototype.effect_limitation_messages ~= nil then
+        local message_name = string.format("allow_%s_message", effect_name)
+        local effect_limitation_messages = self.lua_prototype.effect_limitation_messages
+        return effect_limitation_messages[message_name]
+    else
+        local message_name = string.format("item-limitation.%s-effect", effect_name)
+        return {message_name}
+    end
+    return nil
+end
+
+-------------------------------------------------------------------------------
+---Return Allowed Module Categories
+---@return table
+function RecipePrototype:getAllowedModuleCategories()
+    if self.lua_prototype == nil then return nil end
+    if self.lua_prototype.object_name == "LuaTechnologyPrototype" then return nil end
+    return self.lua_prototype.allowed_module_categories
+  end
+
+  -------------------------------------------------------------------------------
 ---Return if recipe void ingredient
 ---for flare stack/clarifier ect...
 ---@return boolean
@@ -93,13 +244,39 @@ end
 ---Return category of Prototype
 ---@return string
 function RecipePrototype:getCategory()
-    if self.lua_type == "technology" then
-        return "technology"
+    if defines.mod.recipes[self.lua_type] ~= nil and defines.mod.recipes[self.lua_type].category ~= nil then
+        return defines.mod.recipes[self.lua_type].category
     end
     if self.lua_prototype ~= nil then
         return self.lua_prototype.category or "crafting"
     end
     return nil
+end
+
+-------------------------------------------------------------------------------
+---Return additonnal categories of Prototype
+---@return {[uint]:string}
+function RecipePrototype:getAdditionnalCategories()
+    if self.lua_type == defines.mod.recipes.technology.name then
+        return {}
+    end
+    if self.lua_prototype ~= nil then
+        return self.lua_prototype.additional_categories or {}
+    end
+    return {}
+end
+
+-------------------------------------------------------------------------------
+---Return additonnal categories of Prototype
+---@return {[uint]:string}
+function RecipePrototype:getAllCategories()
+    if self.lua_prototype ~= nil then
+        local categories = self:getAdditionnalCategories()
+        local category = self:getCategory()
+        table.insert(categories, 1, category)
+        return categories
+    end
+    return {}
 end
 
 -------------------------------------------------------------------------------
@@ -131,7 +308,7 @@ function RecipePrototype:getProducts(factory)
         else
             lua_products[product_id] = raw_product
         end
-        if self.lua_type == "recipe-burnt" and raw_product.type == "item" then
+        if self.lua_type == defines.mod.recipes.burnt.name and raw_product.type == "item" then
             local item = ItemPrototype(raw_product.name)
             local burnt_result = item:getBurntResult()
             if burnt_result ~= nil then
@@ -140,10 +317,15 @@ function RecipePrototype:getProducts(factory)
                     amount = lua_products[product_id].amount }
             end
         end
-        if factory ~= nil and factory_prototype:getType() == "boiler" then
+        if factory ~= nil and factory_prototype:getType() == defines.mod.recipes.boiler.name then
+            local fluid_name = "steam"
             local fluid_production = factory_prototype:getFluidProductionFilter()
-            if lua_products[product_id] ~= nil and fluid_production.name == raw_product.name then
-                lua_products[product_id].amount = factory_prototype:getFluidProduction()
+            if fluid_production ~= nil and fluid_production.name ~= nil then
+                fluid_name = fluid_production.name
+            end
+            if lua_products[product_id] ~= nil and fluid_name == raw_product.name then
+                local amount = factory_prototype:getFluidProductionOfBoiler()
+                lua_products[product_id].amount = amount
                 lua_products[product_id].temperature = factory_prototype:getTargetTemperature()
             end
         end
@@ -155,7 +337,7 @@ function RecipePrototype:getProducts(factory)
         table.insert(raw_products, lua_product)
     end
 
-    if self.lua_type == "energy" then
+    if self.lua_type == defines.mod.recipes.energy.name then
         if factory_prototype:getType() == "reactor" then
             local bonus = factory_prototype:getNeighbourBonus()
             for _, raw_product in pairs(raw_products) do
@@ -176,7 +358,7 @@ function RecipePrototype:getProducts(factory)
                 local burnt_result = item:getBurntResult()
                 if burnt_result ~= nil then
                     local factor = 1
-                    if self.lua_type ~= "energy" then
+                    if self.lua_type ~= defines.mod.recipes.energy.name then
                         local consumption_effect = 1
                         if factory.effects ~= nil then
                             consumption_effect = 1 + (factory.effects.consumption or 0)
@@ -190,8 +372,81 @@ function RecipePrototype:getProducts(factory)
             end
         end
     end
-
     return raw_products
+end
+
+-------------------------------------------------------------------------------
+---Return products array of Prototype
+---@param factory table
+---@param quality string
+---@return table
+function RecipePrototype:getQualityProducts(factory, quality)
+    local raw_products = self:getProducts(factory)
+    if quality == nil then
+        quality = "normal"
+    end
+    -- can't do use greater quality
+    if self.is_support_quality == false then
+        quality = "normal"
+    end
+    local lua_quality = Player.getQualityPrototype(quality)
+    local quality_effect = 0 
+    if factory ~= nil and factory.effects ~= nil then
+        quality_effect = factory.effects.quality or 0
+    end
+
+    if quality_effect > 0 then
+        local quality_products = {}
+        local probability_results = ModelCompute.computeQualityProbability(lua_quality, quality_effect)
+        if probability_results ~= nil then
+            for key, probability_result in pairs(probability_results) do
+                for _, raw_product in pairs(raw_products) do
+                    if raw_product.type == "item" then
+                        if key == 0 then
+                            raw_product.quality = probability_result.name
+                            raw_product.quality_probality = probability_result.probability
+                        else
+                            local quality_product = Product(raw_product):clone()
+                            quality_product.quality = probability_result.name
+                            quality_product.quality_probality = probability_result.probability
+                            table.insert(quality_products, quality_product)
+                        end
+                    end
+                end
+            end
+        end
+        if #quality_products > 0 then
+            for _, quality_product in pairs(quality_products) do
+                table.insert(raw_products, quality_product)
+            end
+        end
+    else
+        for _, raw_product in pairs(raw_products) do
+            if raw_product.type == "item" then
+                raw_product.quality = lua_quality.name
+            end
+        end
+    end
+    return raw_products
+end
+
+-------------------------------------------------------------------------------
+---Return ingredients array of Prototype
+---@param factory table
+---@param quality string
+---@return table
+function RecipePrototype:getQualityIngredients(factory, quality)
+    local raw_ingredients = self:getIngredients(factory)
+    for _, raw_ingredient in pairs(raw_ingredients) do
+        if raw_ingredient.type == "item" then
+            if self.is_support_fuel_quality == true and raw_ingredient.burnt == true then
+                raw_ingredient.quality = factory.fuel_quality or "normal"
+            elseif self.is_support_quality == true then
+                raw_ingredient.quality = quality
+            end
+        end
+    end
+    return raw_ingredients
 end
 
 -------------------------------------------------------------------------------
@@ -200,9 +455,9 @@ end
 ---@return table
 function RecipePrototype:getRawProducts(factory)
     if self.lua_prototype ~= nil then
-        if self.lua_type == "energy" then
+        if self.lua_type == defines.mod.recipes.energy.name then
             return self:getEnergyProducts(factory)
-        elseif self.lua_type == "technology" then
+        elseif self.lua_type == defines.mod.recipes.technology.name then
             return { { name = self.lua_prototype.name, type = "technology", amount = 1 } }
         else
             return self.lua_prototype.products
@@ -224,13 +479,14 @@ function RecipePrototype:getEnergyProducts(factory)
         else
             prototype = EntityPrototype(self.lua_prototype.name)
         end
-        if prototype:getType() == "solar-panel" or prototype:getType() == "electric-energy-interface" then
+        local prototype_type = prototype:getType()
+        if prototype_type == "solar-panel" or prototype_type == "electric-energy-interface" then
             local amount = prototype:getEnergyProduction()
             if amount > 0 then
                 local product = { name = "energy", type = "energy", amount = amount }
                 table.insert(products, product)
             end
-        elseif prototype:getType() == "accumulator" then
+        elseif prototype_type == "accumulator" then
             local energy_prototype = prototype:getEnergySource()
             local capacity = energy_prototype:getBufferCapacity()
             ---vanilla day=25000,dusk=5000,night=2500,dawn=5000
@@ -247,14 +503,43 @@ function RecipePrototype:getEnergyProducts(factory)
 
             local product = { name = "energy", type = "energy", amount = amount }
             table.insert(products, product)
-        elseif prototype:getType() == "generator" or prototype:getType() == "burner-generator" then
+        elseif prototype_type == "generator" or prototype_type == "burner-generator" then
             local amount = prototype:getEnergyProduction()
             local product = { name = "energy", type = "energy", amount = amount }
             table.insert(products, product)
-        elseif prototype:getType() == "reactor" then
+        elseif prototype_type == "reactor" then
             local amount = prototype:getEnergyProduction()
             local product = { name = "steam-heat", type = "energy", amount = amount }
             table.insert(products, product)
+        elseif prototype_type == "fusion-reactor" then
+            local fluid_name = "fusion-plasma"
+            local fluid_production = prototype:getFluidProductionFilter()
+            if fluid_production ~= nil and fluid_production.name ~= nil then
+                fluid_name = fluid_production.name
+            end
+            if fluid_name ~= nil then
+                local amount = prototype:getFluidProductionFusionReactor()
+                local product = { name = fluid_name, type = "fluid", amount = amount }
+                table.insert(products, product)
+            end
+        elseif prototype_type == "fusion-generator" then
+            -- value per tick
+            local amount = prototype:getMaxEnergyProduction() * 60
+            local product = { name = "energy", type = "energy", amount = amount }
+            table.insert(products, product)
+
+            if prototype_type == "fusion-generator" then
+                local fluid_name = "fluoroketone-hot"
+                local fluid_consumption = prototype:getFluidProductionFilter()
+                if fluid_consumption ~= nil and fluid_consumption.name ~= nil then
+                    fluid_name = fluid_consumption.name
+                end
+                if fluid_name ~= nil then
+                    local amount = prototype:getFluidConsumptionFusionGenerator()
+                    local ingredient = { name = fluid_name, type = "fluid", amount = amount }
+                    table.insert(products, ingredient)
+                end
+            end
         end
         return products
     end
@@ -263,18 +548,23 @@ end
 
 -------------------------------------------------------------------------------
 ---Return products array of Prototype (may contain duplicate products)
+---@param factory table
 ---@return table
-function RecipePrototype:getRawIngredients()
+function RecipePrototype:getRawIngredients(factory)
     if self.lua_prototype ~= nil then
-        if self.lua_type == "recipe" or self.lua_type == "recipe-burnt" or self.lua_type == "resource" or self.lua_type == "fluid" or self.lua_type == "rocket" or self.lua_type == "boiler" then
-            return self.lua_prototype.ingredients
-        elseif self.lua_type == "technology" then
+        if self.lua_type == defines.mod.recipes.technology.name then
             return self.lua_prototype.research_unit_ingredients
-        elseif self.lua_type == "energy" then
+        elseif self.lua_type == defines.mod.recipes.energy.name then
             local ingredients = {}
-            local prototype = EntityPrototype(self.lua_prototype.name)
+            local prototype
+            if factory ~= nil then
+                prototype = EntityPrototype(factory)
+            else
+                prototype = EntityPrototype(self.lua_prototype.name)
+            end
+            local prototype_type = prototype:getType()
 
-            if prototype:getType() == "accumulator" then
+            if prototype_type == "accumulator" then
                 local energy_prototype = prototype:getEnergySource()
                 local capacity = energy_prototype:getBufferCapacity()
                 ---vanilla day=25000,dusk=5000,night=2500,dawn=5000
@@ -293,7 +583,7 @@ function RecipePrototype:getRawIngredients()
             end
 
             local energy_type = prototype:getEnergyTypeInput()
-            if prototype:getType() ~= "accumulator" and energy_type == "electric" then
+            if prototype_type  ~= "accumulator" and energy_type == "electric" then
                 local amount = prototype:getEnergyConsumption()
                 if amount > 0 then
                     local ingredient = { name = "energy", type = "energy", amount = amount }
@@ -305,7 +595,40 @@ function RecipePrototype:getRawIngredients()
                 table.insert(ingredients, ingredient)
             end
 
+            if prototype_type == "fusion-reactor" then
+                local fluid_name = "fluoroketone-cold"
+                local fluid_production = prototype:getFluidConsumptionFilter()
+                if fluid_production ~= nil and fluid_production.name ~= nil then
+                    fluid_name = fluid_production.name
+                end
+                if fluid_name ~= nil then
+                    local amount = prototype:getFluidProductionFusionReactor()
+                    local product = { name = fluid_name, type = "fluid", amount = amount }
+                    table.insert(ingredients, product)
+                end
+                local amount = prototype:getEnergyConsumption()
+                if amount > 0 then
+                    local ingredient = { name = "energy", type = "energy", amount = amount }
+                    table.insert(ingredients, ingredient)
+                end
+            end
+
+            if prototype_type == "fusion-generator" then
+                local fluid_name = "fusion-plasma"
+                local fluid_consumption = prototype:getFluidConsumptionFilter()
+                if fluid_consumption ~= nil and fluid_consumption.name ~= nil then
+                    fluid_name = fluid_consumption.name
+                end
+                if fluid_name ~= nil then
+                    local amount = prototype:getFluidConsumptionFusionGenerator()
+                    local ingredient = { name = fluid_name, type = "fluid", amount = amount }
+                    table.insert(ingredients, ingredient)
+                end
+            end
+
             return ingredients
+        else
+            return self.lua_prototype.ingredients
         end
     end
     return {}
@@ -354,8 +677,8 @@ end
 ---@param factory table
 ---@return table
 function RecipePrototype:getIngredients(factory)
-    local raw_ingredients = self:getRawIngredients()
-    if self.lua_prototype ~= nil then
+    local raw_ingredients = self:getRawIngredients(factory)
+    if self.lua_prototype ~= nil and factory ~= nil then
         local factory_prototype = EntityPrototype(factory)
         local energy_prototype = factory_prototype:getEnergySource()
         local energy_type = factory_prototype:getEnergyTypeInput()
@@ -364,17 +687,21 @@ function RecipePrototype:getIngredients(factory)
             return {}
         end
 
-        if self.lua_type == "boiler" then
-            local name = factory_prototype:getFluidConsumptionFilter()
-            if name ~= nil then
-                local amount = factory_prototype:getFluidProduction()
-                local ingredient = { name = name, type = "fluid", amount = amount }
+        if self.lua_type == defines.mod.recipes.boiler.name then
+            local fluid_name = "water"
+            local fluid_consumption = factory_prototype:getFluidConsumptionFilter()
+            if fluid_consumption ~= nil and fluid_consumption.name ~= nil then
+                fluid_name = fluid_consumption.name
+            end
+            if fluid_name ~= nil then
+                local amount = factory_prototype:getFluidConsumptionOfBoiler()
+                local ingredient = { name = fluid_name, type = "fluid", amount = amount }
                 raw_ingredients = {}
                 table.insert(raw_ingredients, ingredient)
             end
         end
 
-        if self.lua_type == "rocket" then
+        if self.lua_type == defines.mod.recipes.rocket.name then
             local rocket_prototype = factory_prototype:native()
             local recipe_part_name = rocket_prototype.fixed_recipe
             local rocket_part_prototype = RecipePrototype(recipe_part_name):native()
@@ -383,37 +710,46 @@ function RecipePrototype:getIngredients(factory)
                 ingredient.amount = ingredient.amount * rocket_prototype.rocket_parts_required
                 table.insert(raw_ingredients, ingredient)
             end
-        elseif self.lua_type ~= "energy" then
+        elseif self.lua_type ~= defines.mod.recipes.energy.name then
             local consumption_effect = 1
+            local factory_speed = 1
             if factory ~= nil then
                 if factory.effects ~= nil then
                     consumption_effect = 1 + (factory.effects.consumption or 0)
+                end
+                factory_speed = factory.speed or 1
+                if factory_speed == 0 then
+                    factory_speed = 1
                 end
             end
             ---recipe
             if energy_type == "burner" then
                 if energy_prototype ~= nil and energy_prototype:getFuelCount() ~= nil then
                     local fuel_count = energy_prototype:getFuelCount()
-                    local factor = self:getEnergy() * consumption_effect / factory.speed
+                    local factor = self:getEnergy() * consumption_effect / factory_speed
                     local burner_ingredient = { name = fuel_count.name, type = fuel_count.type,
                         amount = fuel_count.count * factor, burnt = true }
                     table.insert(raw_ingredients, burner_ingredient)
+                    if fuel_count.type == "item" then
+                        self.is_support_fuel_quality = true
+                    end
                 end
             elseif energy_type == "heat" then
                 local amount = factory_prototype:getEnergyConsumption()
-                local factor = self:getEnergy() * consumption_effect / factory.speed
+                local factor = self:getEnergy() * consumption_effect / factory_speed
                 local ingredient = { name = "steam-heat", type = "energy", amount = amount * factor }
                 table.insert(raw_ingredients, ingredient)
             elseif energy_type == "fluid" then
                 local fluid_fuel = factory_prototype:getFluidFuelPrototype()
                 if fluid_fuel ~= nil and fluid_fuel:native() ~= nil then
                     local amount = factory_prototype:getFluidConsumption()
-                    local factor = self:getEnergy() * consumption_effect / factory.speed
+                    local factor = self:getEnergy() * consumption_effect / factory_speed
                     local burner_ingredient = { name = fluid_fuel:native().name, type = "fluid", amount = amount * factor,
                         burnt = true, temperature = fluid_fuel.temperature }
                     table.insert(raw_ingredients, burner_ingredient)
                 end
             end
+
         else
             ---recipe energy
             if energy_type == "burner" then
@@ -445,12 +781,16 @@ end
 ---@return number
 function RecipePrototype:getEnergy(factory)
     if self.lua_prototype ~= nil then
-        if self.lua_type == "energy" then
+        if self.lua_type == defines.mod.recipes.energy.name then
             return 1
-        elseif self.lua_type == "technology" then
+        elseif self.lua_type == defines.mod.recipes.technology.name then
             return self.lua_prototype.research_unit_energy / 60
-        elseif self.lua_type == "rocket" then
+        elseif self.lua_type == defines.mod.recipes.rocket.name then
             return self:getRocketEnergy(factory)
+        elseif self.lua_type == defines.mod.recipes.resource.name then
+            local recipe_prototype = EntityPrototype(self.lua_prototype.name)
+            local mining_time = recipe_prototype:getMineableMiningTime()
+            return mining_time
         else
             return self.lua_prototype.energy
         end
@@ -459,17 +799,30 @@ function RecipePrototype:getEnergy(factory)
 end
 
 -------------------------------------------------------------------------------
+---Return maximum_productivity of Prototype
+---@return number
+function RecipePrototype:getMaximumProductivity()
+    if self.lua_type == defines.mod.recipes.technology.name then
+        return 3
+    end
+    if self.lua_prototype ~= nil then
+        return self.lua_prototype.maximum_productivity or 3
+    end
+    return 3
+end
+
+-------------------------------------------------------------------------------
 ---Return enable of Prototype
 ---@return boolean
 function RecipePrototype:getEnabled()
     if self.lua_prototype ~= nil then
-        if self.lua_type == "recipe" or self.lua_type == "recipe-burnt" then
+        if self.lua_type == defines.mod.recipes.recipe.name or self.lua_type == defines.mod.recipes.burnt.name then
             local lua_recipe = Player.getPlayerRecipe(self.lua_prototype.name)
             if lua_recipe == nil then return false end
             return lua_recipe.enabled
-        elseif self.lua_type == "resource" or self.lua_type == "fluid" then
+        elseif self.lua_type == defines.mod.recipes.resource.name or self.lua_type == defines.mod.recipes.fluid.name then
             return self.lua_prototype.enabled
-        elseif self.lua_type == "technology" then
+        elseif self.lua_type == defines.mod.recipes.technology.name then
             return true
         end
     end
@@ -481,7 +834,7 @@ end
 ---@return boolean
 function RecipePrototype:getUnlock()
     if self.lua_prototype ~= nil then
-        if self.lua_type == "recipe" or self.lua_type == "recipe-burnt" then
+        if self.lua_type == defines.mod.recipes.recipe.name or self.lua_type == defines.mod.recipes.burnt.name then
             local unlock_recipes = Cache.getData("other", "unlock_recipes") or {}
             return unlock_recipes[self.lua_prototype.name]
         end
@@ -495,17 +848,18 @@ end
 ---@return boolean
 function RecipePrototype:getHidden()
     if self.lua_prototype ~= nil then
-        if self.lua_type == "recipe" or self.lua_type == "recipe-burnt" or self.lua_type == "resource" or self.lua_type == "energy" then
+        if self.lua_type == defines.mod.recipes.recipe.name or self.lua_type == defines.mod.recipes.burnt.name 
+        or self.lua_type == defines.mod.recipes.resource.name or self.lua_type == defines.mod.recipes.energy.name then
             return self.lua_prototype.hidden
-        elseif self.lua_type == "technology" then
+        elseif self.lua_type == defines.mod.recipes.technology.name then
             return false
-        elseif self.lua_type == "fluid" then
-            local entities = Player.getOffshorePumps(self.lua_prototype.name)
-            for _, entity in pairs(entities) do
-                return false
+        elseif self.lua_type == defines.mod.recipes.fluid.name then
+            local fluid = Player.getFluidPrototype(self.lua_prototype.name)
+            if fluid ~= nil then
+                return fluid.hidden
             end
             return false
-        elseif self.lua_type == "boiler" then
+        elseif self.lua_type == defines.mod.recipes.boiler.name then
             for _, entity in pairs(Player.getBoilersForRecipe(self.lua_prototype.name)) do
                 return false
             end
@@ -520,7 +874,7 @@ end
 ---@return boolean
 function RecipePrototype:getHiddenPlayerCrafting()
     if self.lua_prototype ~= nil then
-        if self.lua_type == "recipe" or self.lua_type == "recipe-burnt" then
+        if self.lua_type == defines.mod.recipes.recipe.name or self.lua_type == defines.mod.recipes.burnt.name then
             return self.lua_prototype.hidden_from_player_crafting
         else
             return false
@@ -556,23 +910,60 @@ function RecipePrototype:getHasBurntResult()
     return false
 end
 
+---@return any, string
+function RecipePrototype:getCustomizedIcon()
+    local icon_name = {type="virtual", name="signal-no-entry"}
+    local icon_type = "signal"
+    if self.lua_prototype ~= nil then
+        local _,product = next(self.lua_prototype.products)
+        local _,ingredient = next(self.lua_prototype.ingredients)
+        if product ~= nil then
+            icon_name = product.name
+            icon_type = product.type
+        elseif ingredient ~= nil  then
+            icon_name = ingredient.name
+            icon_type = ingredient.type
+        end
+    end
+    return icon_name, icon_type
+end
+
 ---@return string, string
 function RecipePrototype:getIcon()
+    if self.lua_prototype == nil then return "utility","warning_icon" end
     local icon_name = self.lua_prototype.name
     local icon_type = self.lua_type
-
-    if self.lua_type == "recipe-burnt" then
-        icon_type = "recipe"
-    elseif self.lua_type == "resource" then
+    
+    if self.lua_type == defines.mod.recipes.recipe.name then
+        if self.is_customized then
+            icon_name, icon_type = self:getCustomizedIcon()
+        else
+            icon_type = "recipe"
+        end
+    elseif self.lua_type == defines.mod.recipes.burnt.name then
+        if self.is_customized then
+            icon_name, icon_type = self:getCustomizedIcon()
+        else
+            icon_type = "recipe"
+        end
+    elseif self.lua_type == defines.mod.recipes.resource.name then
         icon_type = "entity"
-    elseif self.lua_type == "rocket" then
+    elseif self.lua_type == defines.mod.recipes.rocket.name then
         icon_type = "item"
-    elseif self.lua_type == "energy" then
+    elseif self.lua_type == defines.mod.recipes.energy.name then
         icon_type = "entity"
-    elseif self.lua_type == "boiler" then
+    elseif self.lua_type == defines.mod.recipes.boiler.name then
         icon_type = "fluid"
         icon_name = self.output_fluid_name
+    elseif self.lua_type == defines.mod.recipes.agricultural.name then
+        icon_type = "item"
+    elseif self.lua_type == defines.mod.recipes.spoiling.name then
+        icon_type = "item"
+    elseif self.lua_type == defines.mod.recipes.constant.name then
+        icon_name, icon_type = self:getCustomizedIcon()
+    elseif self.is_customized then
+        icon_name, icon_type = self:getCustomizedIcon()
     end
 
-    return icon_name, icon_type
+    return icon_type, icon_name
 end

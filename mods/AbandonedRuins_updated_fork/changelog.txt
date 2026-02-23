@@ -1,0 +1,705 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.4.18
+Date: 2025-12-26
+  Bugfix:
+    - fixed `007_fix_excluded_surface_names.lua:2: attempt to index field 'excluded' (a nil value)`
+      thanks to @agentid36 for reporting it. I though that migrations only run during update phase?
+---------------------------------------------------------------------------------------------------
+Version: 1.4.17
+Date: 2025-12-25
+  Bugfix:
+    - also need to rename file names, thanks to @agentid36 for reporting it
+---------------------------------------------------------------------------------------------------
+Version: 1.4.16
+Date: 2025-12-25
+  False bugfix:
+    - renamed it wrongly, needs to be `ruins-claim-tool*.png`!
+---------------------------------------------------------------------------------------------------
+Version: 1.4.15
+Date: 2025-12-13
+  Changes:
+    - renamed `ruins-spawn-tick-distance` to `ruins-spawn-tick-seconds` and its constant in
+      `lua/constants.lua` accordingly to make it more clear, that seconds are configured here
+    - added @type-hints for `debug_*` mod-wide variables
+---------------------------------------------------------------------------------------------------
+Version: 1.4.14
+Date: 2025-11-30
+  Fixed:
+    - `surfaces.is_excluded()` didn't return its value
+  Minor:
+    - added debug line to local `init_excluded()` function
+---------------------------------------------------------------------------------------------------
+Version: 1.4.13
+Date: 2025-11-27
+  Fixed:
+    - a long, chained code has caused a `nil` type which caused a raised error in `spawning.spawn_random_ruin()`
+      as the first parameter has to be `table`. Thanks to @gizzum for reporting it.
+    - ops, `#foos` doesn't work when `foos` is a table, need to use `utils.table_size()` instead
+  Changes:
+    - library `ruinsets`'s functions now check on size of ruin-sets, empty tables are being rejected
+---------------------------------------------------------------------------------------------------
+Version: 1.4.12
+Date: 2025-11-26
+  Changes:
+    - no spawning allowed/wanted in "labs" aka. Sandboxes, thanks to @somethingtohide for making me
+      aware of this flag
+  Fixed:
+    - wrong configuration key specified
+---------------------------------------------------------------------------------------------------
+Version: 1.4.11
+Date: 2025-11-26
+  Bugfixes:
+    - `storage.excluded` might not have been initialized (my mistake putting it into `get_all_excluded()`)
+      thanks to @toynbeeidea for reporting it
+    - bumped Factorio version to 2.0.72 (latest patch)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.10
+Date: 2025-11-24
+  Bugfixes:
+    - wrong/old name `ruin_sets` used, the library's name is `ruinsets`
+    - `utils.get_ruin_name()` has returned the ruin, not the fixed name
+  Changes:
+    - introduced debugging of utlities "class"
+    - Introduced function `ruinsets.isset()` which checks if a ruin-set with given name is loaded
+    - moved temporary `surfaces.excluded` to persisted `storage` so mods like
+      BluePrint have it easier
+    - registered on event `on_pre_surface_deleted` to re-include a now being
+      destroyed surface from the index. This reduces a bit save-game size
+    - added debug lines to `utils.get_enemy_force()`
+---------------------------------------------------------------------------------------------------
+Version: 1.4.9
+Date: 2025-11-20
+  Bugfix:
+    - fixed `utilities.lua:88: bad argument #4 of 5 to 'format' (number expected, got nil)`
+  Bugfix (potential):
+    - `game.surfaces[name]` might not be initialized at some point
+  Minor:
+    - Accidently left in some old-lost code `ruin_sets[]='%s'` as `exclude/reinclude_surface`
+      only has one parameter
+  Documentation:
+    - added documentation `SURFACES-PLANETS.md` with code snippets
+---------------------------------------------------------------------------------------------------
+Version: 1.4.8
+Date: 2025-11-02
+  Changes:
+    - moved events and their functiosn to lua/events.lua
+    - also need to move `try_ruin_spawn()` to `spawning` "class"
+    - removed exclusion list from `queue.add_ruin()` function to avoid permanent loop
+    - removed check on `spawning.ruin_sizes` from spawning.lua to avoid permanent loop
+    - moved `_ruin_sets` "map" to new "class" `lua/ruinsets.lua`
+  API:
+    - added remote-call function `get_ruin_sets()` for getting all ruin-sets, type: `table<string, RuinSet>`
+  Minor:
+    - added log message
+    - added internal TODO: If you want a "planet"/surface being blacklisted (nothing being spawned)
+      I won't add it to `surfaces.excluded` list for you, please invoke remote-call function
+      `exclude_surface` if your surface isn't a planet' surface (e.g. NiceFill has such "hidden"
+      surface) or `no_spawning_on()` for each ruin-set individually
+---------------------------------------------------------------------------------------------------
+Version: 1.4.7
+Date: 2025-09-27
+  Bugfixes:
+    - same check added in surfaces.lua (thanks to @reeverdark for reporting it)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.6
+Date: 2025-09-26
+  Bugfixes:
+    - added check for `game.surfaces[name]`, thanks to @FRESKYthefresh / @reeverdark for
+      reporting it
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2025-09-08
+  Bugfixes:
+    - ops, no_spawning is for NOT spawning (denied), need to negate it
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 2025-08-30
+  Minor:
+    - moved configuration key to `constants.lua`
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2025-08-28
+  Bugfixes:
+    - use `game.surfaces[name].planet` instead of some `data.raw` as the later one is not
+      available on control phase
+    - also added same checks in inner functions
+    - renamed migrations (won't hurt)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2025-08-27
+  Minor:
+    - moved icon graphics into own sub-directory
+    - introduced spawning.allow_spawning_on() which checks if spawning on surface is allowed for
+      given ruin-set name
+    - renamed `surfaces.excluded_surfaces` to `excluded` as the 2nd `surfaces` would be redundant
+    - introduced surfaces.is_excluded() which checks if surface name is in exclusion table, this
+      should allow repeated remote-calls on "exclude_surface" and "reinclude_surface" without
+      causing any crashes, but the "inner" function needs to check the exclusion status
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2025-08-25
+  Minor:
+    - introduced utils.list_contains() which checks if a certain value is present in given
+      "list"
+    - added some sanity-checks to make sure only valid parameters can pass
+    - removed unused parameter `tick`, it was present in former release but now since
+      on_nth_tick() is being waited on, the delay should be enough
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2025-08-24
+  Cleanup:
+    - removed deprecated remote-call function "add_ruin_set". Please use "add_ruin_sets" with
+      your whole ruin-set instead
+  Breaking changes:
+    - remote-call function "exclude_surface" was misused for excluding whole planets from spawning
+      ruins of a certain set. This is not how it works. "exclude_surface" is for internal surfaces
+      which mods such as "control-room" or `NiceFill` use to work.
+    - so if you wish to exclude your ruin-set from a planet, use the remote-call function
+      "no_spawning_on" instead. Or if you wish only a few ruins should not spawn on a certain planet
+      add ed the `no_spawning` key to your ruin.
+    - The mod `AbandonedRuins-base` provides all needed documentation
+---------------------------------------------------------------------------------------------------
+Version: 1.3.18
+Date: 2025-08-06
+  Bugfixes:
+    - need to run `init()` also during `on_load` as `spawn_changes` and others are now moved away,
+      thanks to @Silly_Warlock for mentioning this
+    - remote-call function "register_ruin_set" wasn't possible, so please remain with utilities
+      function instead
+  Minor:
+    - introduced wrapper function `utils.output_message()` to avoid crashes due to missing `game`
+---------------------------------------------------------------------------------------------------
+Version: 1.3.17
+Date: 2025-08-06
+  Features:
+    - [s]added remote-call function "register_ruin_set" which wraps around same function in file
+      `lua/utilities.lua`. So no need to `require()` that script anymore[/s]
+  Minor:
+    - moved `storage.exclusive_ruinset` to `spawning` "class/library" to clear some space in
+      game-save file (storage is persisted)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.16
+Date: 2025-08-05
+  Minor:
+    - Added deprecation message so the player can see it, including ruin-set name
+    - reformatted some debug lines
+    - renamed `recipe` to `recipe_name` as this is only the name and not full `LuaRecipe`
+---------------------------------------------------------------------------------------------------
+Version: 1.3.15
+Date: 2025-08-05
+  Bugfixes:
+    - tpzo fixed in variable name
+---------------------------------------------------------------------------------------------------
+Version: 1.3.14
+Date: 2025-08-04
+  Minor:
+    - moved `spawn_chances` table from storage to local lua/spawning.lua "class'" property
+    - moved `ruin_sizes` table to lua/spawning.lua` "class`" property
+---------------------------------------------------------------------------------------------------
+Version: 1.3.13
+Date: 2025-08-03
+  Performance:
+    - `on_tick` was to much, now it can be configured how often a ruin should be attempted to spawn
+  Rewrites:
+    - moved queue (ruins) handling to own LUA "class/library"
+    - moved excluding/reincluding surfaces to own LUA "class/library"
+---------------------------------------------------------------------------------------------------
+Version: 1.3.12
+Date: 2025-08-03
+  Bugfixes:
+    - when no ruin-set is installed the default was "base" which is already a ruin-set's name
+    - replacing "base" with "__none__" and then excluding it from being handled solves a crash
+      reported by @sidfu1 and confirmed by @xyzzycgn
+  Minor:
+    - added more paths (e.g. `.DS_Store` is from MacOS) to be ignored
+---------------------------------------------------------------------------------------------------
+Version: 1.3.11
+Date: 2025-07-27
+  Bugfixes:
+    - skip creating debug world surface when no ruin-set was loaded (e.g. only this mod installed)
+    - local variable `mgs` was pointless as it only caused more memory usage and was used only once
+    - moved `excluded_surfaces` to temporary local variable, it shouldn't be persisted or else
+      I cannot add new internal surfaces easily.
+    - added more checks on array elements to avoid crashes with `?` and `nil` only which are
+      hard to debug
+    - handle missing ruin-set while it is still configured. This might be the case when a mod
+      failed to properly load its ruin-sets
+    - use constants.ENABLE_DEBUG_LOG_KEY instead of hard-coded string (recommended for mod devs)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.10
+Date: 2025-07-27
+  Bugfixes:
+    - Event registrations can only be one function at a time. So if you register two to the
+      same event the later one overwrites the other one, thanks to @Silly_Warlock pointing this
+      out
+  Minor:
+    - added function name to error messages
+---------------------------------------------------------------------------------------------------
+Version: 1.3.9
+Date: 2025-07-27
+  Features:
+    - `add_ruin_size()` now has a 2nd parameter, `half_size` (uint) which will be added/updated
+      in table `utils.ruin_half_sizes`
+    - added another debug message
+  Bugfixes:
+    - fixed logic error in fluid handling in `safe_insert_fluid()`, thanks to @Silly_Warlock
+      pointing it out
+    - got rid of local copies of `prototypes.fluid` and `entity.insert_fluid()`
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+Date: 2025-07-24
+  Features:
+    - Allow ruin-set mods to mark their whole mod exclusively to one or more surfaces
+    - introduced `utils.get_ruin_name()` which will return "unknown" if the ruin doesn't have
+      a key "name" set or otherwise that key is returned
+  Minor:
+    - added surface "NiceFill" to excluded surfaces as this is only an "internal"
+      hidden surface
+    - more/improved debug messages like ruin-set's name
+  Documentation:
+    - removed `docs/ruin_sets.md` as its place is now in `AbandonedRuins-base` mod
+    - updated link to github's "blob" URL
+    - updated links to updated `ruin-maker` mod
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+Date: 2025-07-22
+  Rewrites:
+    - some ruins might contain only tiles to spawn (e.g. `heart.lua` in "base"). They are now
+      correctly spawned (thanks to @Silly_Warlock for reporting this)
+    - only invoke `spawn_entities()` when there is something to spawn
+  Minor:
+    - `spawn_ruin()`: logged amount of variables about to be parsed, entities and tiles about
+      to be spawned
+    - logging `table_size(ruin.entities)` might crash the game as it might be `nil` again
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 2025-07-22
+  Bugfix for bugfix:
+    - ops!
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2025-07-22
+  Bugfixes:
+    - cannot log `entity.name` as the parameter `entity` might be a string, too ... :-(
+    - reverted back last change ... (?)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2025-07-22
+  Bugfixes:
+    - `settings.global` isn't available during "settings" phase, it has to be
+      `data.raw["string-setting"]` for `current-ruin-set` setting.
+    - entities need to be destroyed regardless if they are valid or not
+    - still logging an invalid entity isn't possible, so logging needs to distinguish this
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2025-07-22
+  Features:
+    - moved `register_ruin_set()` from non-working `remote.call()` to `lua/utilities.lua`.
+      You now have to "include" that script instead. See mod `realistic-ruins-updated` for
+      an example.
+  Documentation:
+    - moved `format.md` to `AbandonedRuins-base` as that is the proper place it
+    - updated other documentation files for reflecting the split of the mods
+  Bugfixes:
+    - Need to add previous size's threshold, not current again (thanks to @Silly_Warlock for
+      reporting this
+    - my debug message crashed the game when logging `entity.type/name` when an invalid entity
+      was found
+    - added braces to `count_tiles_filtered()` invocation as this is a function to be invoked
+    - added more debug lines
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2025-07-21
+  Features:
+    - added remote-call function `register_ruin_set` for avoiding hard-coded access on writing
+      mod configuration in other mods (lesser porting)
+  Improvements/bugfixes:
+    - used more `table_size(my_table)` as `#my_table` is undecided size LUA 5.2
+    - fixed all `default-ruin-set` to `current-ruin-set`
+    - added more debug lines
+    - used counter variable for indexed (numeric) tables
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2025-07-20
+  Changes:
+    - fixed bug in `spawn_ruin()` as the keyword `local` was twice, causing the variable's scope
+      being intitialized again inside the `if()` block and the outside variable is NOT updated
+    - added more debug lines
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2025-07-18
+  Changes:
+    - renamed mod to `AbandonedRuins_updated_fork` done by @Keysivi
+    - renamed settings from `AbandonedRuins-*` to `ruins-*`, `current-ruin-set` is now where other
+      ruin-sets can be added to
+    - removed base ruins (duplicated to mod `AbandonedRuins-base`)
+    - further rewrites towards `AbandonedRuins_updated_fork` mod
+    - excluded my old mod's name
+    - added asserts on surface.valid (should always be?)
+    - added more debug lines
+---------------------------------------------------------------------------------------------------
+Version: 1.2.13
+Date: 2025-07-18
+  Changes:
+    - excluded `AbandonedRuins_updated_fork` as they both does the same
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 2025-07-18
+  Changes:
+    - renamed `spawn_table` to `spawn_chances` as tables are tables already and
+      `spawn_chances` is more descriptive
+    - added some more assertitions
+    - added some minor debug lines
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 2025-06-07
+  Fixed:
+    - had to rename `stack-inserter` to `bulk-inserter` (thanks to @Dogman15 for reporting this)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 2025-04-26
+  Fixes:
+    - Parameter `size` was wrongfully documented as `number` must be `string`
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 2025-04-19
+  Changes:
+    - The event `on_tick` did generate to many useless messages, it is now separated from
+      usual debug purposes (EXTREMELY RARE USED!)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2025-04-18
+  Fixes:
+    - Possible fix for spawning ruins on heavy oil (Fulgora) or lava (Vulcanus)
+      or anything not ground without using hard-coded planet names
+    - the goal here is to allow Nauvis-like (water-based oceans) planets to have
+      ruins spawned on without explicitly naming each planet and not spawning on anything
+      that isn't a ground tile
+
+  Changes:
+    - more assertions added
+    - more debug lines added (for checking if above fix works)
+    - reformatted some one-line code
+    - added debug messages and global runtime setting (map) for intense debugging
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 2025-04-12
+  Fixes:
+    - `mods` was/is a mod shorthand to `scripts.active_mods` and is not generic
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2025-04-12
+  Changes:
+    - added Fulgora and Vulcanus as excluded surface, the "water" there isn't
+      detected correctly yet (see `@todo`), @mooklepticon and @Silly_Warlock reported it
+    - renamed a few variables, e.g. `e` to `event` as I don't shorten anything
+    - don't invoke these functions with invalid surfaces, otherwise you will get an assertion
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2025-03-28
+  Fixes:
+    - Finally fixed last error, thank you to @Arrevax for reporting it (I saw here, too)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2025-03-28
+  Fixes:
+    - renamed `<l|m|s>_runins` variable to only `ruins`
+    - ops, need to insert each small ruin ... ;-)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2025-03-27
+  Fixes:
+    - more curly braces added (table/list/array, not single parameters)
+
+  Changes:
+    - converted many table.insert() into a for in pairs() loop
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2025-03-27
+  Fixes:
+    - missed to change these, too (yes small ruins isn't still a loop)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2025-03-27
+  Fixes:
+    - ops, need to add curly braces here, it is a list/array
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2025-03-27
+  Fixes:
+    - defenses will now attack hostile buildings (thank you to @Dran_____ for reporting and @Silly_Warlock
+      for the fix!
+
+  Changes:
+    - moved ruins lua code as they are strictly seen no entities or items to directory `lua`
+    - same with spawning.lua and utilities.lua
+    - added .gitattributes
+    - ops, missed return keyword, better performance now
+    - renamed <small|medium|large>Ruins.lua to <small|medium|large>/__init__.lua
+    - removed "Ruins" silb from directory name
+    - rewrote 3 duplicated lines to a simple loop
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2025-02-16
+  Bugfixes:
+    - no assert here, else module inserter plans won't work (and maybe others, too)
+    - still some debug log around!
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2025-02-16
+  Bugfixes:
+    - Need to use `game.forces` and `game.get_player()` instead of `storage`
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2025-02-16
+  Bugfixes:
+    - `prototype` isn't the proper index (lua/spawning.lua:38: attempt to index field 'prototype' (a nil value))
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2025-02-16
+  Bugfixes:
+    - Need to use `_G['prototypes']` instead of direct `prototypes`
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2025-02-15
+  Bugfixes:
+    - proper year used
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2025-02-15
+  Bugfixes:
+    - used-up was renamed to depleted in Factorio 2.0.7 (thanks to @Silly_Warlock)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2025-02-15
+  Bugfixes:
+    - All parentheses are required, ops (thanks to @Silly_Warlock)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2025-02-15
+  Bugfixes:
+    - Ops, no return needed here anymore
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2025-02-15
+  Bugfixes:
+    - Possible fix from @Silly_Warlock for bad access on protoypes, it should be an item, not a prototype type
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2025-02-15
+  Bugfixes:
+    - data.raw.* isn't available in control.lua, maybe prototypes.* is? Reported by @arighteousgod and @Sgamez
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2025-02-14
+  Bugfixes:
+    - Used prototypes.get_entity_filtered() now, thanks to @Silly_Warlock
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2025-02-14
+  Bugfixes:
+    - Possible fix for crash "LuaPrototypes doesn't contain key splitter." reported by @Samael25
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2025-02-09
+  Bugfixes:
+    - Possible fix, need to ignore key (_ means garbage)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2025-02-09
+  Bugfixes:
+    - Fixed "attempt to index global 'data' (a nil value)" reported by @Sgamez
+    - Possible fix for "LuaGameScript doesn't contain key get_filtered_entity_prototypes."?
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2025-02-09
+  Bugfixes:
+    - Renamed more old references to "AbandonedRuins20" (thanks to @Sgamez for reporting it)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2025-02-09
+  Features:
+    - moved mod's lua scripts to sub folder "lua"
+  Bugfixes:
+    - Fixed a lot of issues with 2.0 base game, like wrong game engine references
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-01-27
+  Features:
+    - Added korean translation (by TsuKkoMiST).
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022-01-02
+  Features:
+    - Added 9 small ruins.
+    - Added 9 medium ruins.
+    - Added 5 large ruins.
+  Changes:
+    - Reduced the amount of power poles in ruins.
+    - Removed 4 small ruins that were broken.
+    - Updated russian translation (by Shadow_Man).
+    - Decreased default spawn changes of small ruins to 4% (from 5%).
+  Bugfixes:
+    - Fixed that oil pumpjack ruins would spawn oil patches.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-04-01
+  Minor Features:
+    - Added custom on_entity_force_changed_event for mod compatibility, see end of control.lua. 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-02-25
+  Minor Features:
+    - Added support for fluid spawning.
+  Bugfixes:
+    - Fixed inserting items with 0 count.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-02-15
+  Changes:
+    - Added minimum and maximum values to the "Minimum distance from spawn" setting.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-02-01
+  Bugfixes:
+    - Fixed desync when spawning ruins that had already been spawned previously.
+    - Fixed crash when claiming ruins due to weird mod interaction.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-01-27
+  Features:
+    - Updated to Factorio 1.1.
+    - Added Finnish translation (by Sigma-One).
+    - Larger ruins can only be found at a larger distance from spawn (minimum distance multiplied by 2.5 and 5 respectively).
+  Bugfixes:
+    - Fixed that the ruins cease_fire status for forces that were created during gameplay was missing.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2020-10-19
+  Changes:
+    - Replaced un-minable non-terrain tiles in ruins with minable tiles.
+    - Hold Shift while using the "Claim ruin" tool to remove all remnants (corpses of structures) in the area.
+  Bugfixes:
+    - Fixed a crash when a ruin was spawned with a invalid recipe.
+    - Fixed that the claim ruin control had no locale.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020-09-28
+  Bugfixes:
+    - Fixed a crash when using a mod-provided ruin set and the rso mod is enabled.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-09-25
+  Changes:
+    - Ruins are no longer deconstructable by default.
+    - Instead you have to claim them with a selection tool obtained with Shift + C or from the shortcut bar.
+    - After claiming a ruin, you can deconstruct it.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-09-24
+  Features:
+    - Added 15 more ruins. 
+    - Added russian translation (by Shadow_Man).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-09-23
+  Features:
+    - Updated to Factorio 1.0.
+    - Completely new ruin spawning algorithm and data structure.
+    - Added 27 more ruins. 
+    - Added a setting to make ruin defenses non-hostile.
+    - Added a setting to select which ruin set to use.
+    - Added the ability for other mods to add their own ruin sets.
+    - Added scenario that spawns all ruins, for mod debug.
+  Changes:
+    - Ruins in forests are now less overgrown.
+  Scripting:
+    - Added a remote interface to disable ruin spawning.
+    - Added a remote interface to exclude surfaces from ruin generation.
+    - Added a remote interface for ruin sets.
+  Bugfixes:
+    - Fixed that ruins could spawn in space in the Space Exploration mod (again).
+    - Fixed that my uses of set_tiles and entity.destroy were not raising events.
+    - Fixed that the military fort ruin sometimes spawned without concrete.
+    - Fixed that ruins could not be deconstructed (still wont show entities as selected during dragging).
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+Date: 08. 05. 2020
+  Minor Features:
+    - When all spawn chances are set to 1, now all types of ruins will spawn, instead of just small ruins.
+    - Code cleanup.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+Date: 28. 04. 2020
+  Minor Features:
+    - Added license file.
+    - Added changelog file.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 25. 01. 2020
+  Minor Features:
+    - Updated for 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 03. 11. 2019
+  Minor Features:
+    - Better compatibility with mods, including AAI vehicles.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 27. 04. 2019
+  Bugfixes:
+    - Fixed that ruins could spawn in space when using the Space Exploration mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 30. 03. 2019
+  Minor Features:
+    - Added more small ruins.
+    - Changed entity building to raise events.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 12. 03. 2019
+  Minor Features:
+    - Added thumbnail.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 12. 03. 2019
+  Major Features:
+    - Updated to 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 25. 12. 2017
+  Bugfixes:
+    - Fixed crash related to cliffs.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 25. 12. 2017
+  Major Features:
+    - Updated for 0.16
+    - Name changed to AbandonedRuins
+    - Maintenance now done by Bilka (original mod by Gangsir)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 10. 08. 2017
+  Minor Features:
+    - Added polish translation of settings
+    - Ruin spawning is now consistent with map seed
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 13. 06. 2017
+  Minor Features:
+    - Smarter system for spawning ruins, each ruin is in their own file
+    - Made adjustments to code to be a little more cohesive
+    - Added a few more medium ruins and large ruins.
+  Bugfixes:
+    - Removed ruins that spawn biters, as these do not respect "no biters" settings.
+    - Small ruins no longer destroy trees and can be overgrown.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 11. 06. 2017
+  Bugfixes:
+    - Quick update to remove some debug code. I know how to mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 11. 06. 2017
+  Major Features:
+    - Mod created.

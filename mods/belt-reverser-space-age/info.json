@@ -1,0 +1,12 @@
+{
+  "name": "belt-reverser-space-age",
+  "version": "2.0.1",
+  "factorio_version": "2.0",
+  "title": "Belt Reverser 2.0",
+  "author": "Cornbread",
+  "contact": "",
+  "homepage": "https://github.com/Cogito/belt-reverser",
+  "description": "Reverse entire segments of belt. Works with belt stacking and quality items.",
+  "dependencies": ["base >= 2.0"],
+  "license": "MIT"
+}

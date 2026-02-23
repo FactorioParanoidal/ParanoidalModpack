@@ -1,8 +1,26 @@
 if mods["Early_Nuclear_Power"] then
-  data.raw["recipe"]["uranium-processing"].results={{"35%-uranium",0.007},{"uranium-238",0.993}}
-  data.raw["recipe"]["crude-uranium-processing"].ingredients={{"uranium-ore",50}}
-  data.raw["recipe"]["crude-uranium-processing"].results={{"35%-uranium",0.005},{"uranium-238",0.895},{"stone",0.1}}
-  data.raw["recipe"]["breeder-nuclear-reactor"].ingredients={{"35%-uranium",20},{"copper-plate",250},{"steel-plate",100},{"electronic-circuit",250},{"stone-brick",200}}
-  data.raw["recipe"]["crude-enrichment"].ingredients={{"35%-uranium",1},{"uranium-238",10}}
-  data.raw["recipe"]["crude-enrichment"].results={{"35%-uranium",1},{"35%-uranium",0.2}}
+  data.raw["recipe"]["uranium-processing"].results={
+    {type="item",name="35pc-uranium",amount=0.007},
+    {type="item",name="uranium-238",amount=0.993}
+  }
+  data.raw["recipe"]["crude-uranium-processing"].ingredients={{type="item",name="uranium-ore",amount=50}}
+  data.raw["recipe"]["crude-uranium-processing"].results={
+    {type="item",name="35pc-uranium",amount=0.005},
+    {type="item",name="uranium-238",amount=0.895},
+    {type="item",name="stone",amount=0.1}
+  }
+  data.raw["recipe"]["breeder-nuclear-reactor"].ingredients={
+    {type="item",name="35pc-uranium",amount=20},
+    {type="item",name="copper-plate",amount=250},
+    {type="item",name="steel-plate",amount=100},
+    {type="item",name="electronic-circuit",amount=250},
+    {type="item",name="stone-brick",amount=200}}
+  data.raw["recipe"]["crude-enrichment"].ingredients={
+    {type="item",name="35pc-uranium",amount=1},
+    {type="item",name="uranium-238",amount=10}
+  }
+  data.raw["recipe"]["crude-enrichment"].results={
+    {type="item",name="35pc-uranium",amount=1},
+    {type="item",name="35pc-uranium",amount=0.2}
+  }
 end

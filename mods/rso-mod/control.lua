@@ -28,6 +28,10 @@ local function debug(str)
 	end
 end
 
+local function UseRSOEnemySpawning()
+	return settings.global["rso-biter-generation"].value or script.active_mods["bobenemies"]
+end
+
 function tableLength(tableToCount)
 	local count = 0
 	for _ in pairs(tableToCount) do count = count + 1 end
@@ -116,9 +120,9 @@ local function rng_for_reg_pos(surfaceIndex, pos)
 	rng.re_seed(normalize(y * 32768))
 	local valY = rng(32768)
 	
-	local mapSeed = global.surfaces[surfaceIndex].seed
-	if global.mapSeedOverride then
-		mapSeed = global.mapSeedOverride
+	local mapSeed = storage.surfaces[surfaceIndex].seed
+	if storage.mapSeedOverride then
+		mapSeed = storage.mapSeedOverride
 	end
 	local seed = normalize( valX * valY * mapSeed )
 	rng.re_seed( seed )
@@ -272,7 +276,7 @@ end
 
 local function isInStartingArea( surfaceIndex, tileX, tileY )
 
-	local surfaceData = global.surfaces[surfaceIndex]
+	local surfaceData = storage.surfaces[surfaceIndex]
 
 	if surfaceData and surfaceData.startingAreas then
 		for idx, data in pairs( surfaceData.startingAreas ) do
@@ -316,7 +320,7 @@ local function modify_resource_size(resourceName, resourceSize, startingArea)
 		resourceSize = math.ceil(resourceSize * settings.global["rso-global-size-mult"].value)
 	end
 	
-	local resourceEntity = game.entity_prototypes[resourceName]
+	local resourceEntity = prototypes.entity[resourceName]
 	if resourceEntity and resourceEntity.infinite_resource then
 		
 		newResourceSize = resourceSize * endless_resource_mode_sizeModifier
@@ -371,7 +375,7 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 	end
 
 	local function updateRects(x, y, radius, scaleX, scaleY)
-		local radiusMax = radius * 3 -- arbitrary multiplier - needs to be big enough to not cut any metaballs
+		local radiusMax = radius * 2.5 -- arbitrary multiplier - needs to be big enough to not cut any metaballs
 		updateRect(outside, x, y, radiusMax)
 		updateRect(inside, x, y, radius)
 	end
@@ -502,7 +506,7 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 	end  
 	
 	local max_p_balls = 2
-	local min_amount = global.surfaces[surface.index].config[rname].min_amount or min_amount
+	local min_amount = storage.surfaces[surface.index].config[rname].min_amount or min_amount
 	if restrictions == 'xy' then
 		-- we have full 4 chunks
 		--radius = radius * 1.5
@@ -513,7 +517,6 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 
 	radius = math.min(radius, 2*CHUNK_SIZE)
 
-	local force
 	-- generate blobs
 	for i=1,max_p_balls do
 		generate_p_ball(rng)
@@ -527,24 +530,29 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 	local oreLocations = {}
 	local forceTotal = 0
 	
+	
 	roundRect( outside )
-
+	
+	local calcProfiler = helpers.create_profiler()
 	for y=outside.ymin, outside.ymax do
 		for x=outside.xmin, outside.xmax do
-			force = calculate_force(x, y)
+			local force = calculate_force(x, y)
 			if force > 0 then
 				oreLocations[#oreLocations + 1] = {x = x, y = y, force = force}
 				forceTotal = forceTotal + force
 			end
 		end
 	end
-
+	calcProfiler.stop()
+--	log ("Used " .. tostring(#oreLocations) .. " out of " .. tostring((outside.ymax - outside.ymin) * (outside.xmax - outside.xmin)) .. " locations")
+	
 	local validCount, resOffsetX, resOffsetY, ratio
 
 	local bestRatio = 0
 	local bestRatioIndex = -1
 	local checkedLocations = {}
 	
+	local checkProfiler = helpers.create_profiler()
 	for index, locationOffset in pairs(locationOrder) do
 		validCount = 0
 		resOffsetX = locationOffset.x * CHUNK_SIZE
@@ -559,9 +567,14 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 				checkedLocations[newX] = {}
 			end
 			if checkedLocations[newX][newY] == nil then
-				checkedLocations[newX][newY] = surface.can_place_entity{name = rname, position = {x = newX,y = newY}}
+				checkedLocations[newX][newY] = surface.can_place_entity
+				{
+					name = rname,
+					position = {x = newX,y = newY},
+					build_check_type = defines.build_check_type.manual,
+					forced = false
+				}
 			end
-			
 			if checkedLocations[newX][newY] then
 				validCount = validCount + 1
 			end
@@ -574,6 +587,7 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 		end
 		
 		debug("Valid ratio "..ratio.." for index "..index.." offsets "..resOffsetX..","..resOffsetY	)
+		--log("Valid ratio "..ratio.." for index "..index.." offsets "..resOffsetX..","..resOffsetY	)
 		
 		if not useResourceCollisionDetection then
 			break
@@ -587,6 +601,7 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 			break
 		end
 	end
+	checkProfiler.stop()
 	
 	if resourceCollisionFieldSkip and bestRatio < resourceCollisionDetectionRatioFallback then
 		validCount = 0
@@ -598,6 +613,7 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 		debug("Selected ratio "..bestRatio.." for index "..bestRatioIndex.." offsets "..resOffsetX..","..resOffsetY	)
 	end
 
+	local createProfiler = helpers.create_profiler()
 	if validCount > 0 then
 		local removeTrees = settings.global["rso-remove-trees"].value
 		local revealResources = settings.global["rso-reveal-spawned-resources"].value
@@ -646,9 +662,9 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 		local minimumInfiniteOreAmount = nil
 		local spawnName = rname
 
-		if game.entity_prototypes[infiniteOreName] then
+		if prototypes.entity[infiniteOreName] then
 			infiniteOrePresent = true
-			minimumInfiniteOreAmount = game.entity_prototypes[infiniteOreName].minimum_resource_amount
+			minimumInfiniteOreAmount = prototypes.entity[infiniteOreName].minimum_resource_amount
 		end
 		
 		if startingArea and not settings.global["rso-infinite-ores-in-start-area"].value then
@@ -719,6 +735,12 @@ local function spawn_resource_ore(surface, rname, pos, size, richness, startingA
 			end
 		end
 	end
+
+	createProfiler.stop()
+
+--	log{"", "Calc ", calcProfiler}
+--	log{"", "Check ", checkProfiler}
+--	log{"", "Create ", createProfiler}
 	
 	if debug_enabled then
 --		debug("Search time "..scanProfiler.." spawn time "..placeProfiler)
@@ -750,7 +772,7 @@ local function spawn_resource_liquid(surface, rname, pos, size, richness, starti
 	
 	richness = ( 0.75 + rng() / 2 ) * richness * size
 	
-	local resourceEntity = game.entity_prototypes[rname]
+	local resourceEntity = prototypes.entity[rname]
 	
 	local total_share = 0
 	local avg_share = 1/size
@@ -780,8 +802,8 @@ local function spawn_resource_liquid(surface, rname, pos, size, richness, starti
 		end
 		local amount = floor(richness*new_share) + saved
 		
-		--if amount >= game.entity_prototypes[rname].minimum then 
-		if amount >= global.surfaces[surface.index].config[rname].minimum_amount then 
+		--if amount >= prototypes.entity[rname].minimum then 
+		if amount >= storage.surfaces[surface.index].config[rname].minimum_amount then 
 			saved = 0
 			
 			local spawned = false
@@ -790,8 +812,8 @@ local function spawn_resource_liquid(surface, rname, pos, size, richness, starti
 			for try=1,15 do
 				local dist = rng()*(max_radius - max_radius*0.1) * try / 15
 				angle = angle + pi/4 + rng()*pi/2
-				x = pos.x + cos(angle)*dist
-				y = pos.y + sin(angle)*dist
+				x = math.floor(pos.x + cos(angle)*dist) + 0.5
+				y = math.floor(pos.y + sin(angle)*dist) + 0.5
 				if surface.can_place_entity{name = rname, position = {x,y}} then
 					debug("@ "..x..","..y.." amount: "..amount.." new_share: "..new_share.." try: "..try)
 					amount = floor(amount * richnessMultiplier)
@@ -843,7 +865,7 @@ local function spawn_resource_liquid(surface, rname, pos, size, richness, starti
 			end
 		else
 			saved = amount
-			debug("Not placed "..rname.." amount "..amount.." minimum "..global.surfaces[surface.index].config[rname].minimum_amount.. " total share "..total_share.." placed till now ".._total)
+			debug("Not placed "..rname.." amount "..amount.." minimum "..storage.surfaces[surface.index].config[rname].minimum_amount.. " total share "..total_share.." placed till now ".._total)
 		end
 	end
 	debug("Total amount: ".._total.." in "..spawnCount.." fields")
@@ -856,7 +878,7 @@ local spawnerTable = nil
 local function initSpawnerTable()
 	if spawnerTable == nil then	
 		spawnerTable = {}
-		for _, prototype in pairs(game.entity_prototypes) do
+		for _, prototype in pairs(prototypes.entity) do
 			if prototype.type == "unit-spawner" then
 				spawnerTable[prototype.name] = prototype
 			end
@@ -912,12 +934,12 @@ local function spawn_entity_helper(surface, prototype, x, y, config)
 end
 
 local function spawn_entity(surface, ent, r_config, x, y, rng)
-	if not settings.global["rso-biter-generation"].value then return end
+	if not UseRSOEnemySpawning() then return end
 	local size = rng(r_config.size.min, r_config.size.max)
 	
 	local _total = 0
-	local r_distance = distanceFromStartingAreas(global.surfaces[surface.index], x/REGION_TILE_SIZE, y/REGION_TILE_SIZE)  
-	local surfaceData = global.surfaces[surface.index]
+	local r_distance = distanceFromStartingAreas(storage.surfaces[surface.index], x/REGION_TILE_SIZE, y/REGION_TILE_SIZE)  
+	local surfaceData = storage.surfaces[surface.index]
 	
 	if surfaceData and surfaceData.starting_area_size then
 		r_distance = r_distance - surfaceData.starting_area_size
@@ -1006,7 +1028,7 @@ local function spawn_entity(surface, ent, r_config, x, y, rng)
 					local sub_type = rng(0, allotment_max)
 					for sub_spawn,v in pairs(r_config.sub_spawns) do
 						if v.allotment_range and sub_type >= v.allotment_range.min and sub_type <= v.allotment_range.max then
-							local turretPrototype = game.entity_prototypes[sub_spawn]
+							local turretPrototype = prototypes.entity[sub_spawn]
 							if turretPrototype then
 								for attempt = 1, maxAttemptCount do
 									local max_d = floor((attempt/4) * CHUNK_SIZE * distancePerBatch)
@@ -1038,17 +1060,18 @@ end
 
 local function spawn_starting_resources( surface, index )
 	
-	local surfaceData = global.surfaces[surface.index]
+	local surfaceData = storage.surfaces[surface.index]
+	debug("Starting area spawn for "..surface.name)
 	if surfaceData.startingAreas[index].spawned then return end
 	
 	-- skip spawning if starting area is to small or starting areas are disabled
-	if global.disableStartingArea or surfaceData.starting_area_size < 0.1 then
+	if storage.disableStartingArea or surfaceData.starting_area_size < 0.1 then
 		surfaceData.startingAreas[index].spawned = true
 		return
 	end
 	
 	local position = surfaceData.startingAreas[index]
-	local config = surfaceData.config
+	local config = surfaceData.config or {}
 
 	-- generate chunks for starting area - it shouldn't matter at 0,0 but it's needed if it has been moved
 	local areaRadius = surfaceData.starting_area_size * REGION_TILE_SIZE
@@ -1057,15 +1080,19 @@ local function spawn_starting_resources( surface, index )
 
 	local rng = rng_for_reg_pos( surface.index, position )
 	local status = true
-	for resName,resConfig in pairs(config) do
-		if resConfig.starting and resConfig.valid and resConfig.allotment > 0 then 
+	for resName, resConfig in pairs(config) do
+		if type(resConfig) == "table" and resConfig.starting and resConfig.valid and resConfig.allotment > 0 then 
 			local prob = rng() -- probability that this resource is spawned
 			debug("starting resource probability rolled "..prob)
 			if resConfig.starting.probability > 0 and prob <= resConfig.starting.probability then
 				local total = 0
-				local radius = 50
-				local maxRadius = 301
-				maxRadius = maxRadius * surface.map_gen_settings.starting_area
+				local distanceDefined = resConfig.starting.distance or false
+				local radius = resConfig.starting.distance or 50
+				local maxRadius = math.max(350, radius + 100)
+				if not distanceDefined then
+					maxRadius = maxRadius * surface.map_gen_settings.starting_area
+				end
+				local radiusStep = distanceDefined and 5 or 25
 				local min_threshold = 0
 				local richness = resConfig.starting.richness
 				
@@ -1077,7 +1104,7 @@ local function spawn_starting_resources( surface, index )
 				
 				while (radius < maxRadius) and (total < min_threshold) do
 				
-					radius = radius + 25
+					radius = radius + radiusStep
 				
 					local angle = rng() * pi * 2
 					local dist = radius / 2 + rng(radius / 2)
@@ -1108,6 +1135,14 @@ local function modifyMinMax(value, mod)
 	value.max = round( value.max * mod )
 end
 
+local function adjustSizeMod(sizeMod)
+	if sizeMod > 1 then
+		local inc = (sizeMod - 1) / 2
+		sizeMod = 1 + inc
+	end
+	return sizeMod
+end
+
 local function build_config_data(surface)
 	local mapGenSettings = nil
 	
@@ -1120,13 +1155,13 @@ local function build_config_data(surface)
 	end
 	
 	local configIndexed = {}
-	local surfaceData = global.surfaces[surface.index]
-	local config = surfaceData.config
+	local surfaceData = storage.surfaces[surface.index]
+	local config = surfaceData.config or {}
 	
 	debug("Building config for " .. surface.name .. " index " .. surface.index)
 	-- build additional indexed array to the associative array
 	for res_name, resConf in pairs(config) do
-		if resConf.valid then -- only add valid resources
+		if type(resConf) == "table" and resConf.valid then -- only add valid resources
 		
 			local settingsForResource = nil
 			local isEntity = (resConf.type == "entity")
@@ -1164,6 +1199,7 @@ local function build_config_data(surface)
 				end
 
 				if sizeMod ~= nil then
+					sizeMod = adjustSizeMod(sizeMod)
 					modifyMinMax(resConf.size, sizeMod)
 					
 					if resConf.starting then
@@ -1201,7 +1237,7 @@ local function build_config_data(surface)
 				end
 			end
 			
-			if not settings.global["rso-oil-in-start-area"].value and resConf.type == "resource-liquid" then
+			if not settings.global["rso-oil-in-start-area"].value and res_name == "crude-oil" and surface.name == "nauvis" then
 				resConf.starting = nil
 			end
 			
@@ -1213,7 +1249,7 @@ local function build_config_data(surface)
 				-- this should be a limited table most likely not full config copy
 				local res_conf = table.deepcopy(resConf)
 				res_conf.name = res_name
-				
+	
 				if res_conf.multi_resource and settings.global["rso-multi-resource-active"].value then
 					local new_list = {}
 					for sub_res_name, allotment in pairs(res_conf.multi_resource) do
@@ -1226,6 +1262,7 @@ local function build_config_data(surface)
 				else
 					res_conf.multi_resource_chance = nil
 				end
+
 				configIndexed[#configIndexed + 1] = res_conf
 			end
 		end
@@ -1261,35 +1298,39 @@ local function checkConfigForInvalidResources(surfaceIndex)
 	--make sure that every resource in the config is actually available.
 	--call this function, before the auxiliary config is prebuilt!
 	
-	local prototypes = game.entity_prototypes
-	local config = global.surfaces[surfaceIndex].config
+	local prototypes = prototypes.entity
+	local config = storage.surfaces[surfaceIndex].config or {}
 	
 	for resourceName, resourceConfig in pairs(config) do
-		if prototypes[resourceName] or resourceConfig.type == "entity" then
-			resourceConfig.valid = true
-		else
-			-- resource was in config, but it doesn't exist in game files anymore - mark it invalid
-			resourceConfig.valid = false
-			
-			--table.insert(invalidResources, "Resource not available: " .. resourceName)
-			debug("Resource not available: " .. resourceName)
-			log("Resource not available: " .. resourceName)
-		end
-		
-		if resourceConfig.valid and resourceConfig.type ~= "entity" then
- 			if prototypes[resourceName].autoplace_specification == nil then
+		if type(resourceConfig) == "table" then
+			if prototypes[resourceName] or resourceConfig.type == "entity" then
+				resourceConfig.valid = true
+			else
+				-- resource was in config, but it doesn't exist in game files anymore - mark it invalid
 				resourceConfig.valid = false
-				debug("Resource "..resourceName.." invalidated - autoplace not present")
+				
+				--table.insert(invalidResources, "Resource not available: " .. resourceName)
+				debug("Resource not available: " .. resourceName)
+				log("Resource not available: " .. resourceName)
+			end
+			
+			if resourceConfig.valid and resourceConfig.type ~= "entity" then
+				if prototypes[resourceName].autoplace_specification == nil then
+					resourceConfig.valid = false
+					debug("Resource "..resourceName.." invalidated - autoplace not present")
+				end
 			end
 		end
 	end
+	
+	l:dump()
 end
 
 local function checkForBobEnemies()
-	if game.entity_prototypes["bob-biter-spawner"] and game.entity_prototypes["bob-spitter-spawner"] then
-		global.useBobEntity = true
+	if prototypes.entity["bob-biter-spawner"] and prototypes.entity["bob-spitter-spawner"] then
+		storage.useBobEntity = true
 	else
-		global.useBobEntity = false
+		storage.useBobEntity = false
 	end
 end
 
@@ -1303,7 +1344,7 @@ local function roll_region(surface, c_x, c_y)
 		return false
 	end
 
-	local surfaceData = global.surfaces[surface.index]
+	local surfaceData = storage.surfaces[surface.index]
 	local configIndexed = surfaceData.configIndexed
 	local regions = surfaceData.regions
 	
@@ -1319,8 +1360,8 @@ local function roll_region(surface, c_x, c_y)
 		local rollCount = math.ceil(#configIndexed / 10) - 1 -- 0 based counter is more convenient here
 		rollCount = math.min(rollCount, 3)
 		
-		local resourceSetting = settings.global["rso-resource-chance"].value
-		
+		local resourceChanceMultiplier = surfaceData.config and surfaceData.config.resourceChanceMultiplier or 1.0
+		local resourceSetting = settings.global["rso-resource-chance"].value * resourceChanceMultiplier
 		local maxAllotment = surfaceData.maxAllotment
 		
 		-- rolle ores only if they are present (it will fail if allotment is 0)
@@ -1447,7 +1488,7 @@ local function roll_chunk(surface, c_x, c_y)
 		return false
 	end
 	
-	local surfaceData = global.surfaces[surface.index]
+	local surfaceData = storage.surfaces[surface.index]
 	
 	local c_center_x=c_x + CHUNK_SIZE/2
 	local c_center_y=c_y + CHUNK_SIZE/2
@@ -1526,7 +1567,7 @@ local function roll_chunk(surface, c_x, c_y)
 					local restriction = ''
 					c_center_x, c_center_y, restriction = find_intersection(surface, c_center_x, c_center_y)
 					spawn_resource_liquid(surface, resource, {x=c_center_x,y=c_center_y}, size, richness, false, restriction, rng)
-				elseif r_config.type=="entity" and not global.skipEnemies then
+				elseif r_config.type=="entity" and not storage.skipEnemies then
 					spawn_entity(surface, resource, r_config, c_center_x, c_center_y, rng)
 				end
 			else
@@ -1554,7 +1595,7 @@ local function clear_chunk(surface, tileX, tileY, ent_list)
 		end
 	end
 	
-	if not global.skipEnemies then
+	if not storage.skipEnemies then
 		-- remove biters
 		for _, obj in pairs(surface.find_entities_filtered{area = {{tileX, tileY}, {tileX + CHUNK_SIZE, tileY + CHUNK_SIZE}}, type="unit"}) do
 			-- and (string.find(obj.name, "-biter", -6) or string.find(obj.name, "-spitter", -8))
@@ -1570,17 +1611,20 @@ end
 
 local function prepareEntityList(surfaceIndex)
 	local entityList = {}
-	local configIndexed = global.surfaces[surfaceIndex].configIndexed
+	local configIndexed = storage.surfaces[surfaceIndex].configIndexed
 	
 	for _,v in pairs(configIndexed) do
-		entityList[#entityList + 1] = v.name
+		if prototypes.entity[v.name] then
+			entityList[#entityList + 1] = v.name
+		end
+		
 		local infiniteOreName = "infinite-".. v.name
 
-		if game.entity_prototypes[infiniteOreName] then
+		if prototypes.entity[infiniteOreName] then
 			entityList[#entityList + 1] = infiniteOreName
 		end
 		
-		if not global.skipEnemies then
+		if not storage.skipEnemies then
 			if v.bases then
 				for base, config in pairs(v.bases) do
 					entityList[#entityList + 1] = base
@@ -1600,7 +1644,7 @@ end
 
 local function regenerateSurface(surface, clearOnly)
 
-	local surfaceData = global.surfaces[surface.index]
+	local surfaceData = storage.surfaces[surface.index]
 	surfaceData.regions = {}
 	
 	local entityList = prepareEntityList(surface.index)
@@ -1638,19 +1682,19 @@ local function regenerateSurface(surface, clearOnly)
 end
 
 local function regenerate_everything(clearOnly, noEnemies)
-	global.skipEnemies = noEnemies
+	storage.skipEnemies = noEnemies
 	
-	for index, surfaceData in pairs(global.surfaces) do
+	for index, surfaceData in pairs(storage.surfaces) do
 		local surface = game.surfaces[index]
 		regenerateSurface(surface, clearOnly)
 	end
 	
-	global.skipEnemies = nil
+	storage.skipEnemies = nil
 end
 
 local function clearStartingArea( surface, pos )
 	
-	local startingAreaTilesSize = math.ceil( global.surfaces[surface.index].starting_area_size * REGION_TILE_SIZE )
+	local startingAreaTilesSize = math.ceil( storage.surfaces[surface.index].starting_area_size * REGION_TILE_SIZE )
 	
 	local chunkPosX = math.floor( pos.x/CHUNK_SIZE ) * CHUNK_SIZE
 	local chunkPosY = math.floor( pos.y/CHUNK_SIZE ) * CHUNK_SIZE
@@ -1675,7 +1719,7 @@ end
 local function printResourceProbability(player)
 	-- prints the probability of each resource - how likely it is to be spawned in percent
 	-- this ignores the multi resource chance
-	local surfaceData = global.surfaces[player.surface.index]
+	local surfaceData = storage.surfaces[player.surface.index]
 	local maxAllotment = surfaceData.maxAllotment
 	player.print("Max allotment"..string.format("%.1f",maxAllotment))
 	debug("Max allotment"..string.format("%.1f",maxAllotment))
@@ -1700,6 +1744,7 @@ end
 
 local IgnoredResources =
 {
+	["scrap"] = true,
 	["deep_oil"] = true,
 	["bi-ground-steam"] = true,
 	["bi-ground-sulfuric-acid"] = true,
@@ -1710,7 +1755,8 @@ local IgnoredResources =
 	["natural-gas-1"] = true,
 	["natural-gas-2"] = true,
 	["natural-gas-3"] = true,
-	["natural-gas-4"] = true
+	["natural-gas-4"] = true,
+	["lambent-nil-phosphorite"] = true
 }
 
 local function IsIgnoreResource(ResourcePrototype)
@@ -1736,15 +1782,17 @@ end
 local function checkForUnusedResources(player)
 	-- find all resources and check if we have it in our config
 	-- if not, tell the user that this resource won't be spawned (with RSO)
-	local surfaceData = global.surfaces[player.surface.index]
+	local surfaceData = storage.surfaces[player.surface.index]
 	
-	for prototypeName, prototype in pairs(game.entity_prototypes) do
+	for prototypeName, prototype in pairs(prototypes.entity) do
 		if prototype.type == "resource" then
 			if not surfaceData.config[prototypeName] then
 				if IsIgnoreResource(prototype) then	-- ignore resources which are not autoplace
 					debug("Resource not configured but ignored (non-autoplace): "..prototypeName)
 				else
-					player.print("The resource "..prototypeName.." is not configured in RSO. It won't be spawned!")
+					if not script.active_mods["space-age"] then
+						player.print("The resource "..prototypeName.." is not configured in RSO. It won't be spawned!")
+					end
 					debug("Resource not configured: "..prototypeName)
 				end
 			else
@@ -1767,16 +1815,33 @@ local function printInvalidResources(player)
 end
 
 local function loadAndPrepareConfig(surface)
-	global.surfaces[surface.index].config = loadResourceConfig()
+	local fullConfig = loadResourceConfig()
+	local planet = surface.planet
+	
+	-- if not planet then
+		-- for pName, pData in pairs(game.planets) do
+			-- log ("Checking " .. pData.name .. " surface " .. (pData.surface and pData.surface.name or "none"))
+			-- if pData and pData.surface and pData.surface.name == surface.name then
+				-- planet = pData
+				-- break
+			-- end	
+		-- end
+	-- end
+
+	if planet then
+		storage.surfaces[surface.index].config = fullConfig[planet.name]
+	end
 	checkConfigForInvalidResources(surface.index)
 	build_config_data(surface)
+	
+	l:dump()
 end
 
 local function updateSurfaceConfig(surface, justCreated, surfaceData)
 	
 	if not surfaceData then
-		global.surfaces[surface.index] = global.surfaces[surface.index] or {}
-		surfaceData = global.surfaces[surface.index]
+		storage.surfaces[surface.index] = storage.surfaces[surface.index] or {}
+		surfaceData = storage.surfaces[surface.index]
 	end
 	
 	surfaceData.seed = surface.map_gen_settings.seed
@@ -1789,7 +1854,7 @@ local function updateSurfaceConfig(surface, justCreated, surfaceData)
 		surfaceData.startingAreas = {}
 		
 		local startingPoints = surface.map_gen_settings.starting_points
-		if startingPoints and surface.index == game.surfaces['nauvis'].index then
+		if startingPoints then
 			for _, startingPoint in pairs(startingPoints) do
 				local startX = 0
 				local startY = 0
@@ -1810,25 +1875,25 @@ local function updateSurfaceConfig(surface, justCreated, surfaceData)
 
 	if config_log_enabled then
 		log("***** Config for surface "..surface.index)
-		log(serpent.block(global.surfaces[surface.index].config))
-		log(serpent.block(global.surfaces[surface.index].configIndexed))
+		log(serpent.block(storage.surfaces[surface.index].config))
+		log(serpent.block(storage.surfaces[surface.index].configIndexed))
 	end
 end
 
 local function initConfig()
-	if not global.surfaces then
-		global.surfaces = {}
+	if not storage.surfaces then
+		storage.surfaces = {}
 	
-		local nauvisSurfaceData = global.surfaces[game.surfaces['nauvis'].index]
+		local nauvisSurfaceData = storage.surfaces[game.surfaces['nauvis'].index]
 		
 		if not nauvisSurfaceData then
 			nauvisSurfaceData = {}
 			
 			local justCreated = true
 			
-			if global.regions then
-				nauvisSurfaceData.regions = global.regions
-				global.regions = nil
+			if storage.regions then
+				nauvisSurfaceData.regions = storage.regions
+				storage.regions = nil
 				justCreated = false
 			else
 				if game.tick > 10 then
@@ -1836,7 +1901,7 @@ local function initConfig()
 				end
 			end
 			
-			global.surfaces[game.surfaces['nauvis'].index] = nauvisSurfaceData
+			storage.surfaces[game.surfaces['nauvis'].index] = nauvisSurfaceData
 			
 			updateSurfaceConfig(game.surfaces['nauvis'], justCreated)
 		end
@@ -1847,17 +1912,15 @@ local function updateConfig()
 	
 	initConfig()
 	
-	for surfaceIndex, surfaceData in pairs(global.surfaces) do
+	for surfaceIndex, surfaceData in pairs(storage.surfaces) do
 		local surface = game.surfaces[surfaceIndex]
 		if surface then
 			updateSurfaceConfig(surface, false, surfaceData)
-		else
-			game.surfaces[surfaceIndex] = nil
 		end
 	end
 
 	for _,surface in pairs(game.surfaces) do
-		if not global.surfaces[surface.index] then
+		if not storage.surfaces[surface.index] then
 			updateSurfaceConfig(surface, false)
 		end
 	end
@@ -1867,10 +1930,22 @@ local function updateConfig()
 end
 
 local function localGenerateChunk( event )
+	
+	local surface = event.surface
 	--changes by xiaoHong - ignore surfaces interface - 11/29/2015
-	if global.ignoreSurfaceNames and global.ignoreSurfaceNames[event.surface.name] then
+	if storage.ignoreSurfaceNames and storage.ignoreSurfaceNames[surface.name] then
 		return
 	end
+	
+	local planet = surface.planet
+	local storageData = storage.surfaces[surface.index]
+	
+	if not storageData then
+		return
+	end
+	
+	--log("Surface "..surface.name.." planet "..(planet and planet.name or "nil"))
+	--log("Storage:\n"..serpent.block(storage.surfaces[event.surface.index]))
 
 	local c_x = event.area.left_top.x
 	local c_y = event.area.left_top.y
@@ -1878,28 +1953,30 @@ local function localGenerateChunk( event )
 	roll_region(event.surface, c_x, c_y)
 	roll_chunk(event.surface, c_x, c_y)
 	
-	if useStraightWorldMod then		
-		straightWorld(event.surface, event.area.left_top, event.area.right_bottom)
-	elseif game.active_mods["building-platform"] and useStraightWorldPlatforms then
-		straightWorldPlatforms(event.surface, event.area.left_top, event.area.right_bottom)
-	end
+--	if useStraightWorldMod then		
+--		straightWorld(event.surface, event.area.left_top, event.area.right_bottom)
+--	elseif script.active_mods["building-platform"] and useStraightWorldPlatforms then
+--		straightWorldPlatforms(event.surface, event.area.left_top, event.area.right_bottom)
+--	end
 
 end
 
 local function init()
 
 	updateConfig()
-
-	spawn_starting_resources(game.surfaces['nauvis'], 1 )
 	
-	if not global.disableEventHandler then
+	if game.surfaces.nauvis then
+		spawn_starting_resources(game.surfaces.nauvis, 1)
+	end
+	
+	if not storage.disableEventHandler then
 		script.on_event(defines.events.on_chunk_generated, localGenerateChunk)
 	end
 end
 
 script.on_init(init)
 script.on_load(function()
-	if not global.disableEventHandler then
+	if not storage.disableEventHandler then
 		script.on_event(defines.events.on_chunk_generated, localGenerateChunk)
 	end
 end)
@@ -1912,7 +1989,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 		region_size = settings.global["rso-region-size"].value
 		REGION_TILE_SIZE = CHUNK_SIZE*region_size
 	elseif event.setting == "rso-enemy-chance" then
-		for surfaceIndex, surfaceData in pairs(global.surfaces) do
+		for surfaceIndex, surfaceData in pairs(storage.surfaces) do
 			for index,v in pairs(surfaceData.configIndexed) do
 				if v.absolute_probability then
 					v.absolute_probability = settings.global["rso-enemy-chance"].value
@@ -1929,7 +2006,7 @@ script.on_event(defines.events.on_player_created, function(event)
 	
 	local player = game.players[event.player_index]
 	
-	if not global.surfaces[player.surface.index] then
+	if not storage.surfaces[player.surface.index] then
 		updateSurfaceConfig(player.surface, false)
 	end
 	
@@ -1964,22 +2041,26 @@ script.on_event(defines.events.on_surface_created, function(event)
 
 	local surface = game.surfaces[event.surface_index]
 	
-	if global.ignoreSurfaceNames and global.ignoreSurfaceNames[surface.name] then
+	if storage.ignoreSurfaceNames and storage.ignoreSurfaceNames[surface.name] then
 		return
 	end
 	
 	initConfig()
 	
 	updateSurfaceConfig(surface, true)
+	
+	spawn_starting_resources(surface, 1)
+
+	l:dump()
 end)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
-	global.surfaces[event.surface_index] = nil
+	storage.surfaces[event.surface_index] = nil
 end)
 
 script.on_event(defines.events.on_surface_cleared, function(event)
-	if global.surfaces[event.surface_index] then 
-		global.surfaces[event.surface_index].regions = {}
+	if storage.surfaces[event.surface_index] then 
+		storage.surfaces[event.surface_index].regions = {}
 	end
 end)
 
@@ -2009,17 +2090,54 @@ end
 
 function seedCommand(parameters)
 
-	global.mapSeedOverride = nil
+	storage.mapSeedOverride = nil
 
 	if parameters and parameters.parameter then
-		global.mapSeedOverride = tonumber(parameters.parameter)
+		storage.mapSeedOverride = tonumber(parameters.parameter)
 	end
 end
 
+function regenerateSurfaceCommand(parameters)
+	if not parameters.player_index then
+		log("Surface regenerate command used without player")
+		return
+	end
+	
+	local withStartingArea = false
+	if parameters.parameter and parameters.parameter == "all" then
+		withStartingArea = true
+	end	
+	
+	local player = game.get_player(parameters.player_index)
+	if player and player.surface then
+		local surface = player.surface
+		local surfaceData = storage.surfaces[surface.index]
+		if withStartingArea then
+			for _, startingArea in pairs(surfaceData.startingAreas) do
+				clearStartingArea(surface, startingArea)
+				startingArea.spawned = false
+			end
+		end
+		
+		regenerateSurface(surface, false)
+		
+		if withStartingArea then
+			for index, _ in pairs(surfaceData.startingAreas) do
+				spawn_starting_resources(surface, index)
+			end
+		end
+		local suffix = ""
+		if withStartingArea then
+			suffix = " with starting area"
+		end
+		player.print("Surface " .. surface.name .. " regenerated" .. suffix)
+	end
+end
 
 commands.add_command("rso-regenerate", "", regenerateCommand)
 commands.add_command("rso-clear", "", clearCommand)
 commands.add_command("rso-override-seed", "", seedCommand)
+commands.add_command("rso-regenerate-surface", "", regenerateSurfaceCommand)
 
 
 remote.add_interface("RSO", {
@@ -2041,8 +2159,8 @@ remote.add_interface("RSO", {
 		if debug_enabled then 
 			game.players[1].print("RSO ignoring surface " .. surfaceName .. " for generation") 
 		end
-		global.ignoreSurfaceNames = global.ignoreSurfaceNames or {}
-		global.ignoreSurfaceNames[surfaceName] = true
+		storage.ignoreSurfaceNames = storage.ignoreSurfaceNames or {}
+		storage.ignoreSurfaceNames[surfaceName] = true
 	end,
 		
 	addStartLocation = function(pos, player)
@@ -2068,7 +2186,7 @@ remote.add_interface("RSO", {
 			surface = game.surfaces['nauvis']
 		end
 			
-		local surfaceData = global.surfaces[surface.index]
+		local surfaceData = storage.surfaces[surface.index]
 
 		local radius = surfaceData.starting_area_size * REGION_TILE_SIZE
 		
@@ -2095,25 +2213,25 @@ remote.add_interface("RSO", {
 	end,
 		
 	saveLog = function()
-		--debug(serpent.block(global.surfaces[1]))
+		--debug(serpent.block(storage.surfaces[1]))
 		l:dump()
 	end,
 	
 	regenConfig = function()
-		for index, surfaceData in pairs(global.surfaces) do
+		for index, surfaceData in pairs(storage.surfaces) do
 			loadAndPrepareConfig(game.surfaces[index])
 		end
 	end,
 	
 	disableChunkHandler = function()
-		if not global.disableEventHandler then
+		if not storage.disableEventHandler then
 			script.on_event(defines.events.on_chunk_generated, nil)
 		end
-		global.disableEventHandler = true
+		storage.disableEventHandler = true
 	end,
 	
 	disableStartingArea = function()
-		global.disableStartingArea = true
+		storage.disableStartingArea = true
 	end,
 
 	generateChunk = function(event)
@@ -2125,7 +2243,7 @@ remote.add_interface("RSO", {
 			return
 		end
 		
-		local surfaceData = global.surfaces[surface.index]
+		local surfaceData = storage.surfaces[surface.index]
 		
 		updateSurfaceConfig(surface, false, surfaceData)
 
@@ -2141,16 +2259,12 @@ remote.add_interface("RSO", {
 	
 	runTest = function(areaSizeX, areaSizeY)
         game.player.character = god
-        local sizeX = areaSizeX or 2000
-        local sizeY = areaSizeY or 2000
+        local sizeX = areaSizeX or 1000
+        local sizeY = areaSizeY or 1000
 		game.forces.player.chart(game.player.surface, {left_top = {x = -sizeX, y = -sizeY},
 			right_bottom = {x = sizeX, y = sizeY}})
-        game.speed = 2
+        game.speed = 4
         game.player.cheat_mode = true
-		
-		if game.player.force.technologies["resource-monitoring"] then
-			game.player.force.technologies["resource-monitoring"].researched = true
-		end
 	end,
 	
 	isInStartingArea = function(surfaceIndex, tileX, tileY)
@@ -2158,15 +2272,15 @@ remote.add_interface("RSO", {
 	end,
 })
 
---Time for the debug code.  If any (not global.) globals are written to at this point, an error will be thrown.
---eg, x = 2 will throw an error because it's not global.x or local x (by Mylon to check for global variables that might cause desyncs)
+--Time for the debug code.  If any (not storage.) globals are written to at this point, an error will be thrown.
+--eg, x = 2 will throw an error because it's not storage.x or local x (by Mylon to check for global variables that might cause desyncs)
 --setmetatable(_G, {
 --   __newindex = function(_, n, v)
 --      log("Desync warning: attempt to write to undeclared var " .. n)
       -- game.print("Attempt to write to undeclared var " .. n)
---      global[n] = v;
+--      storage[n] = v;
 --   end,
 --   __index = function(_, n)
---      return global[n];
+--      return storage[n];
 --   end
 --})

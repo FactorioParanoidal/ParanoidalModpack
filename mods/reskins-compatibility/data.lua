@@ -1,18 +1,17 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Compatibility
 --
 -- See LICENSE in the project directory for license information.
 
 -- Core functions
 require("prototypes.functions.functions")
-require("prototypes.functions.circuitprocessing-sprites")
 
 -- Mods
+require("prototypes.mods.aai-loaders")
 require("prototypes.mods.classic-beacon")
 require("prototypes.mods.classic-mining-drill")
 -- require("prototypes.mods.electricboiler")
 require("prototypes.mods.loaderredux")
-require("prototypes.mods.miniloader")
 require("prototypes.mods.semi-classic-mining-drill")
 require("prototypes.mods.vanilla-loaders-hd")
 require("prototypes.mods.deadlockblackrubberbelts")

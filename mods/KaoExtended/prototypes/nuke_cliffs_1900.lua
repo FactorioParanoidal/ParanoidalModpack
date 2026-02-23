@@ -11,7 +11,7 @@ table.insert(data.raw.projectile["atomic-bomb-wave"].action,
         {
           type = "destroy-cliffs",
           radius = 3,
-          explosion = "explosion"
+          explosion_at_cliff = "explosion"
         }
       }
     }

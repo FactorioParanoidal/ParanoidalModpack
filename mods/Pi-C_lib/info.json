@@ -1,0 +1,11 @@
+{
+ "name": "Pi-C_lib",
+ "version": "2.0.4",
+ "title": "Library for mods by Pi-C",
+ "author": "Pi-C",
+ "contact": "",
+ "homepage": "",
+ "description": "Just some stuff I use in my mods: assertions, debugging, etc.",
+ "factorio_version": "2.0",
+ "dependencies": ["base >= 2.0.55"]
+}

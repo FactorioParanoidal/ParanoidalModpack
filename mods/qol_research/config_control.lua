@@ -8,12 +8,12 @@ local metatable = {}
 local table = setmetatable(table, metatable)
 
 function metatable.__index(_, key)
-    local entity_prototypes = game.entity_prototypes
+    local virtual_signals_prototypes = prototypes.virtual_signal
     local config_table = {}
     for i = 1, 1000000 do
-        local entity_prototype = entity_prototypes['qol-config-dummy-' .. tostring(i)]
-        if entity_prototype then
-            config_table[#config_table + 1] = entity_prototype.order
+        local virtual_signal_prototype = virtual_signals_prototypes['qol-config-dummy-' .. tostring(i)]
+        if virtual_signal_prototype then
+            config_table[#config_table + 1] = virtual_signal_prototype.order
         else
             break
         end

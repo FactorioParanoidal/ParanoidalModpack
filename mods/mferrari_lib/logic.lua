@@ -1,6 +1,7 @@
+
 require ("util")
-local format_time   = util.formattime
-local format_number = util.format_number
+format_time   = util.formattime
+format_number = util.format_number
 
 function d_format_number(number, form)
 	if not form then form = "%.2f" end
@@ -203,12 +204,23 @@ end
 
 --------------------------------------------------------------------------------------
 function iif( cond, val1, val2 )
-	if cond then
-		return val1
-	else
-		return val2
+	if cond then return val1
+	else return val2
 	end
 end
+
+--take a random item from not indexed table , removing it or not
+function take_one_from_table(tab, remov)
+local taken 
+if #tab>0 then 
+	local r = math.random(#tab)
+	taken = tab[r]
+	if remov then table.remove(tab,r) end
+	end
+return taken
+end
+
+
 
 
 --for k,v in Sort_a_Table(your_table, function(t,a,b) return t[b] > t[a] end) do
@@ -293,4 +305,31 @@ function concat_lists_no_dup(list1, list2)
 	for i, obj in pairs(list2) do
 		add_list(list1,obj)
 	end
+end
+
+function get_table_keys(list)
+local keys ={}
+for k,v in pairs (list) do table.insert(keys, k) end
+return keys
+end
+
+function test_relational_operation(val1,op,val2)
+local r
+if op=='=' then r=val1==val2
+elseif op=='>' then r=val1>val2
+elseif op=='>=' then r=val1>=val2
+elseif op=='<' then r=val1<val2
+elseif op=='<=' then r=val1<=val2
+elseif op=='~=' then r=val1<=val2
+end
+return r
+end
+
+
+function get_randon_pos_in_area(area)
+local x1 = area.left_top.x
+local y1 = area.left_top.y
+local x2 = area.right_bottom.x
+local y2 = area.right_bottom.y
+return {x= math.random(x1,x2),y= math.random(y1,y2)}
 end

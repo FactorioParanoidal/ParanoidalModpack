@@ -1,6 +1,0 @@
-return
-{
-  -- "event",
-  -- "gui",
-  -- "translation",
-}

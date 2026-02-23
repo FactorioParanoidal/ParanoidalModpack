@@ -1,9 +1,23 @@
-data.raw["recipe"]["medium-electric-pole"].ingredients = {{"iron-stick", 4},{"steel-plate", 2},{"copper-cable", 2}}
-data.raw["recipe"]["big-electric-pole"].normal.ingredients = {{"iron-stick", 8},{"steel-plate", 10},{"copper-cable", 10}}
-data.raw["recipe"]["big-electric-pole"].expensive.ingredients = {{"iron-stick", 8},{"steel-plate", 10},{"copper-cable", 10}}
-bobmods.lib.recipe.set_ingredient("big-electric-pole-2", {"tinned-copper-cable", 10})
-bobmods.lib.recipe.set_ingredient("big-electric-pole-2", {"brass-alloy", 10})
-bobmods.lib.recipe.set_ingredient("big-electric-pole-3", {"insulated-cable", 10})
-bobmods.lib.recipe.set_ingredient("big-electric-pole-3", {"titanium-plate", 10})
-bobmods.lib.recipe.set_ingredient("big-electric-pole-4", {"gilded-copper-cable", 10})
-bobmods.lib.recipe.set_ingredient("big-electric-pole-4", {"nitinol-alloy", 10})
+data.raw["recipe"]["medium-electric-pole"].ingredients = {
+	{ type = "item", name = "iron-stick", amount = 4 },
+	{ type = "item", name = "steel-plate", amount = 2 },
+	{ type = "item", name = "copper-cable", amount = 2 },
+}
+bobmods.lib.recipe.set_ingredient(
+	"bob-big-electric-pole-2",
+	{ type = "item", name = "bob-tinned-copper-cable", amount = 10 }
+)
+bobmods.lib.recipe.set_ingredient("bob-big-electric-pole-2", { type = "item", name = "bob-brass-alloy", amount = 10 })
+bobmods.lib.recipe.set_ingredient(
+	"bob-big-electric-pole-3",
+	{ type = "item", name = "bob-insulated-cable", amount = 10 }
+)
+bobmods.lib.recipe.set_ingredient(
+	"bob-big-electric-pole-3",
+	{ type = "item", name = "bob-titanium-plate", amount = 10 }
+)
+bobmods.lib.recipe.set_ingredient(
+	"bob-big-electric-pole-4",
+	{ type = "item", name = "bob-gilded-copper-cable", amount = 10 }
+)
+bobmods.lib.recipe.set_ingredient("bob-big-electric-pole-4", { type = "item", name = "bob-nitinol-alloy", amount = 10 })

@@ -68,7 +68,6 @@ end
 function mapUtils.removeChunkFromMap(map, chunk)
     local x = chunk.x
     local y = chunk.y
-
     if not map[x][y] then
         return
     end
@@ -124,8 +123,13 @@ end
     /|\
     6 7 8
 ]]--
-function mapUtils.getNeighborChunks(map, x, y)
-    local neighbors = map.universe.neighbors
+function mapUtils.getNeighborChunks(map, x, y, recursion)
+    local neighbors
+	if recursion then
+		neighbors = {}
+	else
+		neighbors = map.universe.neighbors
+	end
     local chunkYRow1 = y - CHUNK_SIZE
     local chunkYRow3 = y + CHUNK_SIZE
     local xChunks = map[x-CHUNK_SIZE]

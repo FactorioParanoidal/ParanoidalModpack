@@ -51,7 +51,7 @@ end
 -------------------------------------------------------------------------------
 ---Format the number
 ---@param value number the number
----@param suffix string
+---@param suffix? string
 ---@return string --formated number
 function Format.formatNumberKilo(value, suffix)
   if suffix == nil then suffix = "" end
@@ -78,15 +78,20 @@ function Format.formatPercent(num)
 end
 
 -------------------------------------------------------------------------------
+---Return decimal from a string, 0.00 return 2 decimal
+---@param value string
+---@return number
+function Format.decimalFromString(value)
+  local _, c = value:gsub("0","")
+  return c - 1
+end
+-------------------------------------------------------------------------------
 ---Format number for factory
 ---@param number number
 ---@return number
 function Format.formatNumberFactory(number)
-  local decimal = 2
   local format_number = User.getPreferenceSetting("format_number_factory")
-  if format_number == "0" then decimal = 0 end
-  if format_number == "0.0" then decimal = 1 end
-  if format_number == "0.00" then decimal = 2 end
+  local decimal = Format.decimalFromString(format_number)
   return Format.formatNumber(number, decimal)
 end
 
@@ -95,11 +100,36 @@ end
 ---@param number number
 ---@return number
 function Format.formatNumberElement(number)
-  local decimal = 2
   local format_number = User.getPreferenceSetting("format_number_element")
-  if format_number == "0" then decimal = 0 end
-  if format_number == "0.0" then decimal = 1 end
-  if format_number == "0.00" then decimal = 2 end
+  local decimal = Format.decimalFromString(format_number)
   return Format.formatNumber(number, decimal)
 end
+
+-------------------------------------------------------------------------------
+---Format time from tick
+---@param ticks number
+---@return table
+function Format.formatTimeTickLocalised(ticks)
+  if ticks == nil or ticks == 0 then
+    return {"", {"helmod_si.seconde", 0}}
+  end
+  local seconds = ticks / 60
+  local minutes = math.floor((seconds)/60)
+  local seconds = math.floor(seconds - 60*minutes)
+  local heure = math.floor((minutes)/60)
+  local minutes = math.floor(minutes - 60*heure)
+  local duration = {""}
+  if heure > 0 then
+    table.insert(duration, {"helmod_si.hour", heure} )
+  end
+  if minutes > 0 then
+    table.insert(duration, {"helmod_si.minute", minutes} )
+  end
+  if seconds > 0 then
+    table.insert(duration, {"helmod_si.seconde", seconds} )
+  end
+  return duration
+end
+
+
 return Format

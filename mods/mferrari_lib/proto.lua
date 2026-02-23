@@ -1,3 +1,6 @@
+require ("__mferrari_lib__.logic")
+colors = require ("__mferrari_lib__.colors")
+
 function dLog(what) -- data log
     log(serpent.block(what))
     end
@@ -23,7 +26,19 @@ function add_technology_prerequisite(technology, prerequisite)
     end
     end
     
+
+    function remove_recipe_unlock(technology, recipe)
+      if data.raw.technology[technology] and data.raw.technology[technology].effects and data.raw.recipe[recipe] then
+        for i, effect in pairs(data.raw.technology[technology].effects) do
+          if effect.type == "unlock-recipe" and effect.recipe == recipe then 
+            table.remove(data.raw.technology[technology].effects,i)
+            break
+            end
+          end
+        end
+    end
     
+
     function add_recipe_unlock(technology, recipe)
       if data.raw.technology[technology] and data.raw.recipe[recipe] then
         local addit = true
@@ -82,7 +97,7 @@ function add_technology_prerequisite(technology, prerequisite)
     end
     
     function remove_science_pack(technology, pack)
-      if data.raw.technology[technology] and data.raw.tool[pack] then
+      if data.raw.technology[technology] and data.raw.technology[technology].unit and data.raw.technology[technology].unit.ingredients and data.raw.tool[pack] then
         local ingredients = table.deepcopy(data.raw.technology[technology].unit.ingredients)
         for i=#ingredients,1,-1 do
             local ingredient = ingredients[i]
@@ -154,10 +169,10 @@ local is_sprite = function(array)
   
     
   function scale_box(box, scale)
-    box[1][1] = box[1][1] * scale
-    box[1][2] = box[1][2] * scale
-    box[2][1] = box[2][1] * scale
-    box[2][2] = box[2][2] * scale
+    box[1][1] = box[1][1] * scale/2
+    box[1][2] = box[1][2] * scale/2
+    box[2][1] = box[2][1] * scale/2
+    box[2][2] = box[2][2] * scale/2
     return box
   end
  

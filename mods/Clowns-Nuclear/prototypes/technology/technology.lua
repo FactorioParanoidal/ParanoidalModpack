@@ -13,14 +13,15 @@ data:extend(
 				recipe = "mixed-oxide"
 			},
 		},
-		prerequisites = {"nuclear-power"},
+		prerequisites = {"nuclear-power", "kovarex-enrichment-process"},
 		unit =
 		{
 			ingredients =
 			{
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1}
+				{"chemical-science-pack", 1},
+				{"production-science-pack", 1}
 			},
 			time = 30,
 			count = 100
@@ -39,7 +40,7 @@ data:extend(
 				recipe = "thermonuclear-bomb"
 			}
 		},
-		prerequisites = {"atomic-bomb"},
+		prerequisites = {"atomic-bomb", "speed-module-3", "efficiency-module-3", "productivity-module-3", "fission-reactor-equipment"},
 		unit =
 		{
 			count = 10000,

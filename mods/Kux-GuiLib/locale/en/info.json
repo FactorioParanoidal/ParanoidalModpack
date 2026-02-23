@@ -1,0 +1,15 @@
+{
+    "language-name": "English",
+    "font": {
+        "NotoMono":
+        [
+        "__core__/fonts/NotoMono-Regular.ttf",
+        "__core__/fonts/NotoSans-Regular.ttf",
+        "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+        "__core__/fonts/NotoSansThai-Regular.ttf",
+        "__core__/fonts/NotoSansArabic-Regular.ttf",
+        "__core__/fonts/NotoSansHebrew-Regular.ttf",
+        "__core__/fonts/DejaVuSansMono.ttf"
+        ]
+    }
+}

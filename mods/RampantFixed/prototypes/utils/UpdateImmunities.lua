@@ -57,7 +57,7 @@ function immunityUpdates.setPlasmaImmunities()
 
 	local bobPlasmaFound = data.raw["electric-turret"]["bob-plasma-turret-1"]
 	
-	local plasma = data.raw["damage-type"]["plasma"]
+	local plasma = data.raw["damage-type"]["bob-plasma"]
 	for i=1,#immuneFactions do
 		local factionName = immuneFactions[i]
 		for u=1,#names do
@@ -75,14 +75,14 @@ function immunityUpdates.setPlasmaImmunities()
 						electicResist = setResistancePercent(entity, "electric", math.max(electicResist, 70))
 						
 						entity.resistances[#entity.resistances+1] = {
-							type = "plasma",
+							type = "bob-plasma",
 							decrease = 0,
 							percent =  math.max(electicResist, 90)
 							}
 					else	
 						electicResist = setResistancePercent(entity, "electric")
 						entity.resistances[#entity.resistances+1] = {
-							type = "plasma",
+							type = "bob-plasma",
 							decrease = 0,
 							percent =  math.max(electicResist, 70)
 							}
@@ -96,7 +96,7 @@ function immunityUpdates.setPlasmaImmunities()
 	local targetDummy = data.raw["radar"]["targetDummyPlasma-rampant"]
 	if targetDummy then
 		targetDummy.resistances[#targetDummy.resistances+1] = {
-			type = "plasma",
+			type = "bob-plasma",
 			decrease = 0,
 			percent = 100
 			}
@@ -201,7 +201,7 @@ function immunityUpdates.setResistanceToUnknownDamageTypes()
 	knownDamageTypes["laser"] = true
 	knownDamageTypes["electric"] = true
 	knownDamageTypes["explosion"] = true
-	knownDamageTypes["plasma"] = true
+	knownDamageTypes["bob-plasma"] = true
 	knownDamageTypes["bob-pierce"] = true				
 	
 	knownDamageTypes["rampant-longRangeImmunity"] = true

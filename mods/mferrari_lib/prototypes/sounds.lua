@@ -21,4 +21,13 @@ data:extend({
 		volume = 1
 	},   
 
+	{
+		type = "sound",
+		name = "mf_sound_alert",
+		filename = "__mferrari_lib__/sounds/alert.ogg",
+		volume = 1
+	},   
+
+
+
 })

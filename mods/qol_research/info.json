@@ -1,6 +1,6 @@
 {
     "name": "qol_research",
-    "version": "3.3.3",
+    "version": "3.4.2",
     "title": "Quality of Life research",
     "author": "Aidiakapi",
     "contact": "aidiakapi@gmail.com",
@@ -8,7 +8,7 @@
     "description": "The mod adds a bunch of Quality of Life researches/bonuses to the game. You can configure it to cherry pick which ones you want.",
     "factorio_version": "2.0",
     "dependencies": [
-        "base >= 1.1.0",
+        "base >= 2.0.0",
         "?space-exploration >= 0.2.0",
         "?nullius >= 1.5.0",
         "?Krastorio2 >= 1.3.0"

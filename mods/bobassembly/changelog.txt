@@ -1,4 +1,65 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 18. 01. 2026
+  Bugfixes:
+    - Prevent electric poles, solar panels, etc from being crafted in electronics assembly machines #516
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 02. 01. 2026
+  Changes:
+    - Integrate Bob's Locale Translations mod #445
+    - Added support for frozen entities (with Space Age) #477
+  Bugfixes:
+    - AAI loader size adjustment issue #468
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 22. 06. 2025
+  Changes:
+    - Added uk locale #176
+    - Reworked how electronics recipe categories are assigned #424
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 20. 04. 2025
+  Changes:
+    - Added german locale #397
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Info:
+    - Update for Factorio 2.0 #189
+  Changes:
+    - Code tidy: Remove unnecessary global variables #178
+    - Improved Assembling Machine tier progression #179
+    - Updated fluid boxes so that various 2x2-sized machines can be mirrored freely #166
+    - Removed some old low-resolution graphics #200
+    - Updated Assembling Machine color mask #200
+    - Added circuit connections to relevant machines #200
+  Bugfixes:
+    - Fixed Assembling Machine scaling with AAI loaders' rescale setting #167
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 21. 02. 2024
+  Changes:
+    - Removed Space Exploration compatibility changes. These have been moved to a separate compatibility mod #170
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 12. 01. 2024
+  Bugfixes:
+    - Fixed crash relating to Electric Furnace 2 when using Krastorio 2 and Space Exploration #151
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Changes:
+    - Added support for Space Exploration mod #88
+    - Hid setting "Burner and steam assembling machines" when AAI Industry mod is enabled #133
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Bugfixes:

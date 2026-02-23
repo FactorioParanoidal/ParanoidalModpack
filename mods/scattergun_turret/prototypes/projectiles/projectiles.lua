@@ -28,7 +28,7 @@ data:extend(
 {
 	type = "explosion",
 	name = "w93-beam",
-	flags = {"not-on-map", "hidden"},
+	flags = {"not-on-map"},
 	subgroup = "explosions",
 	--animation_speed = 3,
 	rotate = true,
@@ -149,12 +149,12 @@ data:extend({
 	type = "beam",
 	name = "w93-plaser-beam",
 	flags = {"not-on-map"},
+	hidden = true,
 	width = 0.5,
 	damage_interval = 5,
 	random_target_offset = true,
 	action_triggered_automatically = false,
 	action =
-
 	{
 
 		type = "direct",
@@ -175,170 +175,158 @@ data:extend({
 		}
 
 	},
-	head =
-
+	graphics_set =
 	{
-
-		filename = "__base__/graphics/entity/laser-turret/hr-laser-body.png",
-		flags = beam_non_light_flags,
-
-		line_length = 8,
-
-		width = 64,
-
-		height = 12,
-
-		frame_count = 8,
-		scale = 0.5,
-		animation_speed = 0.5,
-		blend_mode = "additive",
-		tint = {0.66, 0.0, 1.0}
-
-	},
-	tail =
-	{
-		filename = "__base__/graphics/entity/laser-turret/hr-laser-end.png",
-
-		flags = beam_non_light_flags,
-
-		width = 110,
-		height = 62,
-		frame_count = 8,
-		shift = util.by_pixel(11.5, 1),
-		scale = 0.5,
-
-		animation_speed = 0.5,
-		blend_mode = "additive",
-		tint = {0.66, 0.0, 1.0}
-
-	},
-	body =
-	{
+		beam =
 		{
-
-			filename = "__base__/graphics/entity/laser-turret/hr-laser-body.png",
-
-			flags = beam_non_light_flags,
-			line_length = 8,
-
-			width = 64,
-
-			height = 12,
-			frame_count = 8,
-
-			scale = 0.5,
-			animation_speed = 0.5,
-			blend_mode = "additive",
-			tint = {0.66, 0.0, 1.0}
-
-		}
-
-	},
-	light_animations =
-	{
-		head =
-		{
-			filename = "__base__/graphics/entity/laser-turret/hr-laser-body-light.png",
-			line_length = 8,
-			width = 64,
-			height = 12,
-			frame_count = 8,
-			scale = 0.5,
-
-			animation_speed = 0.5,
-
-			tint = {0.66, 0.0, 1.0}
-
-		},
-		tail =
-		{
-
-			filename = "__base__/graphics/entity/laser-turret/hr-laser-end-light.png",
-			width = 110,
-
-			height = 62,
-			frame_count = 8,
-			shift = util.by_pixel(11.5, 1),
-			scale = 0.5,
-			animation_speed = 0.5,
-			tint = {0.66, 0.0, 1.0}
-
-		},
-
-		body =
-
-		{
+			head =
 			{
-				filename = "__base__/graphics/entity/laser-turret/hr-laser-body-light.png",
-				line_length = 8,
+				layers =
+				{
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-body.png",
+						flags = beam_non_light_flags,
 
+						line_length = 8,
+
+						width = 64,
+
+						height = 12,
+
+						frame_count = 8,
+						scale = 0.5,
+						animation_speed = 0.5,
+						blend_mode = "additive",
+						tint = {0.66, 0.0, 1.0}
+					},
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-body-light.png",
+						draw_as_light = true,
+						flags = {"light"},
+						line_length = 8,
+						width = 64,
+						height = 12,
+						frame_count = 8,
+						scale = 0.5,
+						animation_speed = 0.5,
+						tint = {0.66, 0.0, 1.0}
+					},
+				}
+			},
+			tail =
+			{
+				layers =
+				{
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-end.png",
+
+						flags = beam_non_light_flags,
+
+						width = 110,
+						height = 62,
+						frame_count = 8,
+						shift = util.by_pixel(11.5, 1),
+						scale = 0.5,
+
+						animation_speed = 0.5,
+						blend_mode = "additive",
+						tint = {0.66, 0.0, 1.0}
+					},
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-end-light.png",
+						draw_as_light = true,
+
+              					flags = {"light"},
+						width = 110,
+						height = 62,
+						frame_count = 8,
+						shift = util.by_pixel(11.5, 1),
+						scale = 0.5,
+						animation_speed = 0.5,
+						tint = {0.66, 0.0, 1.0}
+					},
+				}
+			},
+			body =
+			{
+				layers =
+				{
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-body.png",
+
+						flags = beam_non_light_flags,
+						line_length = 8,
+
+						width = 64,
+
+						height = 12,
+						frame_count = 8,
+
+						scale = 0.5,
+						animation_speed = 0.5,
+						blend_mode = "additive",
+						tint = {0.66, 0.0, 1.0}
+					},
+					{
+						filename = "__base__/graphics/entity/laser-turret/laser-body-light.png",
+						draw_as_light = true,
+
+				                flags = {"light"},
+						line_length = 8,
+						width = 64,
+						height = 12,
+						frame_count = 8,
+						scale = 0.5,
+						animation_speed = 0.5,
+						tint = {0.66, 0.0, 1.0}
+					}
+
+				}
+			}
+		},
+		ground =
+		{
+			head =
+			{
+				filename = "__base__/graphics/entity/laser-turret/laser-ground-light-head.png",
+				draw_as_light = true,
+				flags = {"light"},
+				line_length = 1,
+				width = 256,
+				height = 256,
+				repeat_count = 8,
+				scale = 0.5,
+				shift = util.by_pixel(-32, 0),
+				animation_speed = 0.5,
+				tint = {0.66, 0.0, 1.0}
+			},
+			tail =
+			{
+				filename = "__base__/graphics/entity/laser-turret/laser-ground-light-tail.png",
+				draw_as_light = true,
+				flags = {"light"},
+				line_length = 1,
+				width = 256,
+				height = 256,
+				repeat_count = 8,
+				scale = 0.5,
+				shift = util.by_pixel(32, 0),
+				animation_speed = 0.5,
+				tint = {0.66, 0.0, 1.0}
+			},
+			body =
+			{
+				filename = "__base__/graphics/entity/laser-turret/laser-ground-light-body.png",
+				draw_as_light = true,
+				flags = {"light"},
+				line_length = 1,
 				width = 64,
-				height = 12,
-				frame_count = 8,
+				height = 256,
+				repeat_count = 8,
 				scale = 0.5,
 				animation_speed = 0.5,
 				tint = {0.66, 0.0, 1.0}
-
 			}
-
 		}
-
-	},
-	ground_light_animations =
-
-	{
-		head =
-
-		{
-			filename = "__base__/graphics/entity/laser-turret/laser-ground-light-head.png",
-			line_length = 1,
-			width = 256,
-			height = 256,
-			repeat_count = 8,
-			scale = 0.5,
-
-			shift = util.by_pixel(-32, 0),
-
-			animation_speed = 0.5,
-
-			tint = {0.66, 0.0, 1.0}
-
-		},
-
-		tail =
-
-		{
-
-			filename = "__base__/graphics/entity/laser-turret/laser-ground-light-tail.png",
-			line_length = 1,
-			width = 256,
-			height = 256,
-			repeat_count = 8,
-			scale = 0.5,
-			shift = util.by_pixel(32, 0),
-			animation_speed = 0.5,
-
-			tint = {0.66, 0.0, 1.0}
-
-		},
-		body =
-
-		{
-
-			filename = "__base__/graphics/entity/laser-turret/laser-ground-light-body.png",
-
-			line_length = 1,
-			width = 64,
-			height = 256,
-
-			repeat_count = 8,
-
-			scale = 0.5,
-			animation_speed = 0.5,
-
-			tint = {0.66, 0.0, 1.0}
-
-		}
-
-	},
+	}
 }})

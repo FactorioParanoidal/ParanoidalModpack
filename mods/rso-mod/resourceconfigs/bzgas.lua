@@ -1,5 +1,5 @@
 function fillBzgasConfig(config)
-	config["gas"] = {
+	config.nauvis["gas"] = {
 		type="resource-liquid",
 		minimum_amount=220000,
 		

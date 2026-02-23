@@ -1,3 +1,6 @@
+angelsmods.trigger.ores["lead"] = true
+angelsmods.trigger.smelting_products["lead"].plate = true
+
 require("prototypes.items.thorium") --if thorium ore
 require("prototypes.items.isotopes")
 require("prototypes.items.fuels")

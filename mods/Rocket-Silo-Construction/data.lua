@@ -40,3 +40,19 @@ require ("prototypes.recipe-categories")
 require ("prototypes.recipe")
 require ("prototypes.item")
 require ("prototypes.entities")
+
+
+
+if mods["space-age"] then 
+	local function one_gravity_condition()
+	return
+	{
+		{
+		property = "gravity",
+		min = 0.1
+		}
+	}
+	end
+data.raw.recipe["rsc-excavation-site"].surface_conditions = one_gravity_condition()
+data.raw["assembling-machine"]["rsc-silo-stage1"].surface_conditions = one_gravity_condition()
+end

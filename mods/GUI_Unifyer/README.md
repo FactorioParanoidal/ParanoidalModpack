@@ -1,38 +1,59 @@
-# GUI Unifyer
-Factorio Mod forcing mod buttons to look uniform and aligned, harmonizes most icons.
-(Continuation of Better_Modbuttons by Dr_Pepper)
+# GUI Unifier
 
-⚠️ Currently, there's no way to cleanly uninstall the mod from a save (will leave empty icons)
-Consult with your doctor to see if GUI Unifyer is right for you
+## What is this?
+**GUI Unifier** is a Factorio mod that standardizes the appearance of mod buttons, making them uniform, aligned, and visually consistent. This mod harmonizes most of the modded buttons, ensuring a cleaner and more organized interface.
 
-# Current advancement (before/after)
-![before](https://i.imgur.com/yudkRLa.png)
-![before](https://i.imgur.com/PRWSeGo.png)
-![before](https://i.imgur.com/P9wklhD.png)
------------------------------
-![after](https://i.imgur.com/D3vMpmR.png)
-![after](https://i.imgur.com/5OUYZgh.png)
-![after](https://i.imgur.com/bSNqD4p.png)
+> 🚀 The mod has been refactored and updated to fix numerous bugs and work with **Factorio 2.0** by Solus Caelum, and is now known as **GUI Unifier**.
 
-# Extra features
-- Many buttons which didn't have hover text now do.
-![tooltips](https://i.imgur.com/IXbqUlR.png)
-- 11 button styles for each player to choose from.
-![butt](https://i.imgur.com/PgrDvmK.png) ![butt](https://i.imgur.com/vHc719U.png) ![butt](https://i.imgur.com/VsLSNcu.png) ![butt](https://i.imgur.com/kr7xCK3.png) ![butt](https://i.imgur.com/Usx5HX5.png) ![butt](https://i.imgur.com/ilOvyF6.png)
-![butt](https://i.imgur.com/4g3JbpD.png) ![butt](https://i.imgur.com/A42SceU.png) ![butt](https://i.imgur.com/Xg1Vsu5.png) ![butt](https://i.imgur.com/qIsdTUG.png) ![butt](https://i.imgur.com/3n5vluJ.png)
-- Tweakable top left frame (normal/barebone/invisible)
-![frame](https://i.imgur.com/fOtkHbr.png) ![frame](https://i.imgur.com/linVC4l.png) ![frame](https://i.imgur.com/rbWNha5.png)
-- Most buttons stay selected when their window is open
-![shiny](https://i.imgur.com/Cof4F6v.png)
-- Blueprint related buttons only show when one is selected:
-![blueprint](https://i.imgur.com/jUbwLoX.png)
+> ⚠️ Note: Currently, there is no clean way to uninstall the mod from an existing save. Doing so may leave behind empty icons.
+
+### Current Improvements (Before/After Screenshots)
+Experience the difference with the before and after comparison below:
+
+**Before**:
+
+- ![before](https://i.imgur.com/yudkRLa.png)
+- ![before](https://i.imgur.com/PRWSeGo.png)
+- ![before](https://i.imgur.com/P9wklhD.png)
+
+**After**:
+
+- ![after](https://i.imgur.com/D3vMpmR.png)
+- ![after](https://i.imgur.com/5OUYZgh.png)
+- ![after](https://i.imgur.com/bSNqD4p.png)
+
+## Features
+
+- **Tooltips for Hover Text**: Many buttons that previously had no tooltip now include helpful hover text.
+
+  ![tooltips](https://i.imgur.com/IXbqUlR.png)
+
+- **Customizable Button Styles**: Choose from 11 different button styles to personalize your interface.
+
+  ![butt](https://i.imgur.com/PgrDvmK.png) ![butt](https://i.imgur.com/vHc719U.png) ![butt](https://i.imgur.com/VsLSNcu.png) ![butt](https://i.imgur.com/kr7xCK3.png) ![butt](https://i.imgur.com/Usx5HX5.png) ![butt](https://i.imgur.com/ilOvyF6.png) ![butt](https://i.imgur.com/4g3JbpD.png) ![butt](https://i.imgur.com/A42SceU.png) ![butt](https://i.imgur.com/Xg1Vsu5.png) ![butt](https://i.imgur.com/qIsdTUG.png) ![butt](https://i.imgur.com/3n5vluJ.png)
+
+- **Tweakable Top Left Frame**: Choose between normal, barebone, or invisible styles for the top left frame.
+
+  ![frame](https://i.imgur.com/fOtkHbr.png) ![frame](https://i.imgur.com/linVC4l.png) ![frame](https://i.imgur.com/rbWNha5.png)
+
+- **Persistent Button States**: Most buttons now remain selected when their respective windows are open, adding to the consistency of your experience.
+
+  ![shiny](https://i.imgur.com/Cof4F6v.png)
+
+- **Dynamic Blueprint Button Visibility**: Blueprint-related buttons only appear when a blueprint is selected.
+
+  ![blueprint](https://i.imgur.com/jUbwLoX.png)
 
 # Check out my other mods
 https://mods.factorio.com/mod/snouz-useful-icons
 https://mods.factorio.com/mod/emoji-signals
 https://mods.factorio.com/mod/ToggleSpeedBoost
 
-# Supports (so far)
+## Supported Mods
+GUI Unifier is compatible with a wide range of mods, bringing consistency to even more of your interface. Some of the supported mods include:
+
+- Quick Item Menu
+- Visual Signals
 - Factory Planner
 - Helmod
 - Module Inserter
@@ -150,3 +171,15 @@ https://mods.factorio.com/mod/ToggleSpeedBoost
 - EvoGUI
 - Avatars
 - ModMash Splinter, New Worlds
+
+If your favorite mod isn't listed, feel free to let us know, and we can look into adding support!
+
+## Known Issues
+- **Uninstallation**: As mentioned, uninstalling this mod from a save may leave empty icons. Consider this before removing it.
+
+## Credits
+- The mod was inspired by **Better Modbuttons** by **Dr_Pepper**.
+- Updated and refactored for Factorio 2.0 and maintained by SolusCaelum
+
+## Suggestions & Feedback
+Your feedback is always welcome! If you encounter any issues or have suggestions for improvements or additional mod support, feel free to reach out.

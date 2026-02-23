@@ -1,0 +1,1219 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.18
+Date: 2026-01-27
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Bumped dependency on Pi-C_lib to ">= 2.0.3".
+
+  Bugfixes:
+    - Fixed crash when another mod changed a newly created player's force before we could respond to on_player_created event and initialize our data.  (https://mods.factorio.com/mod/minime/discussion/68fc94681d86777c8f57a2f6)
+
+  Changes:
+    - Sourced out debugging commands /minime-is-event-active and /minime-show-active-events to Pi-C_lib.
+    - When a player switches characters, we now preserve the player's zoom factor.
+    - In response to on_player_changed_force, we now remove the old force's data if no players or suspended players remain on that force.
+    - Added optional dependency on new character mods:
+      - "Kobold Engineer" (https://mods.factorio.com/mod/koboldengineer)
+      - "Lea Character" (https://mods.factorio.com/mod/LeaCharacter)
+      - "Neco-Arc Character" (https://mods.factorio.com/mod/NecoArcCharacter)
+      - "New Gear Girl Character 2.0" (https://mods.factorio.com/mod/NewGirlCharacter-port)
+
+  TODO:
+    - Revert blacklisting surfaces with RSO (last version checked: 7.0.22) when the bug reported in <https://mods.factorio.com/mod/rso-mod/discussion/67d2a535c57b94e615028ec0> is fixed! Our surfaces should be auto-ignored by RSO because they are too small, but this will cause a crash in RSO (trying to access uninitialized tables).
+    - Add dependency on "mimikyu Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+    - Add dependency on "spearmaster Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.17
+Date: 2025-04-06
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when remote function bob_classes_update was called. (https://mods.factorio.com/mod/minime/discussion/67f229cc430fabad27b6f009)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.16
+Date: 2025-03-27
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when players tried to change the current character page of the GUI and clicked the gap between 'next'/'previous' button and drop-down list.  Thanks a lot to ElSuperManuelsito for giving clear instructions on how to reproduce this error that had popped up in the past already. (https://mods.factorio.com/mod/minime/discussion/67e01d808a1148bd9f9e9df5)
+
+    - Fixed that if other mods registered characters with us, only the properties of the main version would be added to our data, but data of derived versions (e.g for Jetpack and Bob's Classes) would be ignored. This caused a crash when the jetpack was activated for Gear Girl. (https://mods.factorio.com/mod/minime/discussion/67de17d4ee0d9f223ae40ea2)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 2025-03-13
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Blacklist our surfaces with RSO. This shouldn't be necessary as the surfaces are too small to be considered by RSO, but it will avoid a crash by accessing uninitialized tables on RSO's end.
+
+  Changes:
+    - Blacklist new surfaces with other mods before they are created. Other mods will act immediately when on_surface_created triggers, so blacklisting surfaces after they have been created is too late!
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2025-03-12
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Replaced optional dependency on "Chicken you are so beautiful" (aka "chicken") with optional dependency on "Chicken you are too beautiful skin" (aka "chicken-skin"). The first one is not a character mod, but provides a new unit. Sorry for messing this up!
+    - Fixed crash on creating surfaces when mod "Everything on Nauvis" is active. (https://mods.factorio.com/mod/EverythingOnNauvis/discussion/67d0407ddfe2c9e00db3294b)
+
+  Changes:
+    - Added optional dependency on fork of character mod "Niko Character".
+
+  Locale:
+    - Added English localization of mod-name for some character mods by plexpt. As the mod names are not localized in the character mods, everybody would see the title set in info.json, with Chinese characters followed by the English name in parentheses. The Chinese characters are removed from the new localization to allow for more intuitive sorting by name.
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2025-01-10
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash with Jetpack. (https://mods.factorio.com/mod/minime/discussion/677b9390eed17b793583641f)
+
+  Changes:
+    - Added optional dependency on new character mods:
+      - "Chicken you are so beautiful"
+      - "Psyduck"
+      - "Yae Miko & Raiden Shogun Characters (Revised)"
+
+  Locale:
+    - Updated zh-CN locale. Thanks to plexpt for providing the translation! (https://mods.factorio.com/mod/minime/discussion/677eafbc4761a5041c8c2ee3)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2024-12-31
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when force data was initialized while character initialization hadn't been run yet. (https://mods.factorio.com/mod/minime/discussion/6773a100933837648394f1f1)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2024-12-20
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash because of conflicting filters when filters were swapped in a group. (https://mods.factorio.com/mod/minime/discussion/67649b4655e9122179521842)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2024-12-19
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that some of the new optional dependencies were missing. I'd moved them out of the way because of circular dependencies, but forgot to put them back in after the dependencies had been fixed on the other end:
+      - "Black Myth Wukong",
+      - "Jinx Arcane",
+      - "Nailong",
+      - "Yasuo"
+
+    - Fixed date and removed obsolete TODO in changelog entry of version 2.0.9.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2024-12-18
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - The remote functions 'get_minime_event_id' and 'get_minime_event_id' are deprecated and will be removed in one of the following versions. As custom events are now generated during the data stage, you can find our custom events in 'defines.events'! The list of our custom events is defined in file 'common.lua' of this mod (currently, there's just one event: 'minime_exchanged_characters').
+
+  Graphics:
+    - I'm indebted to plexpt who made the new graphics for the generic corpses! (Generic corpses replace character corpses from removed mods.)
+
+  Bugfixes:
+    - Fixed that characters would lose guns if they changed from a character with more than the default 3 gun-inventory slots to a character with 3 slots and back.
+      The dummy character will now get a gun inventory with as many slots as the usable character that has the biggest gun inventory to ensure that all weapons can be backed up.
+      When exchanging characters, we used to clear the ammo inventory in the destination before copying weapons to the gun inventory to avoid gun slots being blocked due to incompatible ammo. We now clear only as many slots in the destination as are available in the source inventory to ensure all ammo is preserved when switching from a character with a big gun inventory to a character with a small one and back.
+      (https://mods.factorio.com/mod/minime/discussion/67598735aa7d46879863224b)
+
+  Changes:
+    - Updated remote functions 'get_minime_event_id' and 'get_minime_event_id'. These functions are no longer useful since we now define custom events during the data stage, but they still work.
+
+    - Added optional dependencies on new character mods by plexpt:
+      - "Black Myth Wukong",
+      - "Iron Man Skin",
+      - "Jinx Arcane",
+      - "Nailong",
+      - "Pink Dream Miku Skin",
+      - "Tiga Tianyi",
+      - "Ultraman Tiga",
+      - "Yasuo",
+      -  "Zootopia Flash Skin".
+      -  "Zootopia Judy Hopps Skin".
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2024-12-02
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that "true" instead of the surface name would be stored when marking surfaces for deletion in migrations/01_01_19.lua. This would result in a crash when trying to whitelist the surface with other mods. (https://mods.factorio.com/mod/minime/discussion/674c88cecaedb4f914052ba0)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2024-11-30
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Added migration file that disables the checkbox for the current player character in the "Available characters" GUI.
+
+  Changes:
+    - Removed optional dependency on character mods "Shrek fix 2.0" (no SA support) again as it still overwrites the default character.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2024-11-30
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - If you removed this mod, you could end up without a character, losing all the inventory that was stored in your old character. As admin or single player, you can now use the new console command "/minime-uninstall" to switch all players who are not in god/editor mode to the default character, to remove all GUIs and surfaces created by this mod, and to disable its event handlers.
+      WARNING: If you've run this command accidentally, there is no way to restore the character selector except forcing on_configuration_changed (add/remove another mod) or on_init (remove this mod, save, re-add this mod) to run again!
+
+
+  Bugfixes:
+    - Fixed possible exploit in multiplayer games where players without admin privileges could disable their current character to switch into god mode. Now, the checkbox for your currently selected character on the "Available characters" GUI will always be disabled. (https://mods.factorio.com/mod/minime/discussion/672dc902790645063d498980)
+
+    - Fixed that corpses which were not meant to expire (time_to_live = 0) would be considered expired starting at the next tick – and destroyed, if they still existed. (In Factorio 1.1, time_to_live would always be greater than 0.)
+
+
+  Changes:
+    - Added new console command "/minime-uninstall" (for admins/singleplayer only).
+    - Removed optional dependency on deprecated character mod "Shrek'd (minime fix)".
+    - Added optional dependencies on character mods "Shrek fix 2.0" (no SA support) and "Shrek for 2.0" (with SA support).
+    - Added optional dependency on new character mod "ORKYMiniMAX".
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2024-11-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that the button of the old character would remain disabled if the newly selected character was on another page of the selector GUI. (https://mods.factorio.com/mod/minime/discussion/672ba4ec04ce24edfb30e7b4)
+
+    - Fixed crash on exiting blueprint sandbox. (https://mods.factorio.com/mod/minime/discussion/672c3ec0b6fbc415f0cf5586)
+
+  Changes:
+    - Added optional dependency on new character mod "Walter Character Skin".
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2024-11-02
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on updating main GUI after characters have been disabled via player's "Available characters" GUI.
+    - Updated (hopefully all) remaining occurences of 'game.*_prototypes' to new naming scheme of Factorio 2.0, i.e. 'prototypes.*'.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2024-11-01
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash in handler for on_surface_deleted. (https://mods.factorio.com/mod/minime/discussion/6723bf1b11d77ac637917610)
+
+  Changes:
+    - Added optional dependency on new character mod "The Wickerbeast (Playable Character) (Lexxy's 2.0 fork)".
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2024-10-28
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Bumped dependency on base mod to 2.0.12.
+
+  Bugfixes:
+    - Fixed crash when player joined a multiplayer game where this mod had been newly added. (https://mods.factorio.com/mod/minime/discussion/67178058e38ba538bc213564)
+
+  Changes:
+    - Will now also scale character animations "take_off", "landing", and "idle_with_gun_in_air", which are used by the SA mech-armor. Thanks to Focsy for suggesting to add these to the animations list! (https://mods.factorio.com/mod/minime/discussion/67178058e38ba538bc213564)
+
+    - Reverted change to handling LuaControl::opened. The change was a hacky fix to work around a bug in Factorio that resulted in a crash when LuaControl::opened was used with any value from defines.gui_type other than 'none'. That bug has been fixed in Factorio 2.0.12, so I've also bumped the dependency on the base mod. (https://forums.factorio.com/viewtopic.php?f=11&t=117362)
+
+    - When any part of one of our GUIs is clicked, the GUI will now be brought to the foreground.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-10-28
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when mod is added to an existing game. (https://mods.factorio.com/mod/minime/discussion/67178058e38ba538bc213564, https://mods.factorio.com/mod/minime/discussion/671e4dcf113781f2fd48b6eb)
+
+    - Fixed that there were no preview characters on the GUI when the mod was added to a running game. They had been created alright in on_init, but were removed again by a migration file. In Factorio 1.1, we'd run init() again to rebuild the GUIs, but I've optimized that away when on_configuration_changed was run after on_init. We now restore the preview characters in on_configuration_changed when a migration has been applied – simple fix, but it has taken me hours to find out what happened! :-)
+
+  Changes:
+    - Added optional dependency on character mod "Korone Character 戌神ころね".
+    - Added handler for on_player_controller_changed.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-27
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Update for Factorio 2.0.
+
+  Changes:
+    - Added dependency on a new library mod. I've decided to outsource some code I've used in most of my other mods so I wouldn't have to waste time on fixing the same stuff repeatedly. With the update to Factorio 2.0, there are just too many breaking changes to handle.
+
+    - Added optional dependency on new character mods:
+      - "HuTaoSkin",
+      - "ProtogenCharacterUpdated"
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.42
+Date: 2024-10-05
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that you could end up with a clone of your character on returning from "Blueprint Sandboxes" if you had a character on the old surface and selected a new character while you were in the sandbox. (https://mods.factorio.com/mod/minime/discussion/66b12fa4cae2a6af22c67981)
+
+  Changes:
+    - Switching characters should be more UPS-friendly! We now only set inventory slots and personal logistic slots if source and destination slot have different contents to avoid raising on_entity_logistic_slot_changed (raised for each changed slot!) and on_player_*_inventory_changed unnecessarily, and we skip the on_player_*_inventory_events when they have been raised by our own changes to the inventories. (https://mods.factorio.com/mod/minime/discussion/66d8471a2d93dc39849643b9)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.41
+Date: 2024-06-23
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed yet another crash when trying to access uninitialized table. (https://mods.factorio.com/mod/minime/discussion/667443599d8238447cff537a)
+
+  TODO:
+    - When switching to an armor with less inventory bonus slots, items in the removed slots seem to be removed from the dummy.
+    - Is inventory contents of corpses removed on loading the game?
+    - Nullius introduces the notion of being able to transfer your conciousness to another body (you play the role of a von Neumann Android), and unfortunately Nullius doesn't emit a custom event when it happens, but instead it sets up a hotkey, so I can react to that. (Reported by undermark5 per PM; suggested to Anachrony that they subscribe to our events/use our remote interface.)
+    - Instead of using one preview surface per character prototype, use just one surface (1 column per player times 1 row per prototype).
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.40
+Date: 2024-06-22
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when trying to access uninitialized table. (https://mods.factorio.com/mod/minime/discussion/667443599d8238447cff537a)
+    - Removed setting for leaving corpse on exiting game, as well as all localizations and references to it. My original plan was to add this as optional feature to miniMAXIme, but I eventually decided to make a separate mod (see <https://mods.factorio.com/mod/leave_corpse_on_exit>) instead.
+    - Fixed changelog entry for version 1.1.38 in changelog of 1.1.39. The changes listed in 1.1.38 were duplicates of changes made in 1.1.37, while the things that really had changed were lost.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.39
+Date: 2024-05-07
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash caused by trying to access an undefined flag when starting a new game.
+    - Fixed missing declaration of some variables.
+
+  Changes:
+    - Added optional dependency on new character mods:
+      - "Fallout Power Armor"
+      - "Nepgear Player Replacer [Character selection mod compatibility]", a fork of "Nepgear Player Replacer".
+      - "New Gear Girl Character", a fork of the mod "Gear Girl Character" that fixes some compatbility issues of the original mod.
+    - Updated debugging functions and removed some unused variables.
+    - Removed default setting values from text of mod-setting-description strings in locale files. They have been useless for a long time.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.38
+Date: 2024-03-04
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that debugging was always on and would spam logfiles. (https://mods.factorio.com/mod/minime/discussion/6484c2f28a3657b839f23e8f)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.37
+Date: 2024-01-18
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Added logging code to switching character pages on GUI, so that I can see what input the mod is really working with next time somebody gets this crash. (https://mods.factorio.com/mod/minime/discussion/64ef0572ea67fadfc867f2df)
+
+  Changes:
+    - Added optional dependency on "Mechanicus (Rebuild)", a fork of the discontinued mod "Mechanicus" that is using our helper mod.
+    - Added optional dependency on "Crusader Character Skin", a new character mod.
+
+  Compatibility:
+    - Blacklisted dummy characters created by "Katamari" mod.
+
+  Modding:
+    - Added remote function that will return the base name (stripped of appendixes for "Jetpack" and "Bob's Character Classes") of the character currently used by a player, or of the last character the player used before switching to god mode (or nil if the player is not valid). It should be called like this:
+      if remote.interfaces.minime and remote.interfaces.minime.get_character_basename then
+        char_name = remote.call("minime", "get_character_basename", player)
+      end
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.36
+Date: 2023-07-16
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that global.minime_character_properties wouldn't be updated for characters registered by other mods via the remote interface if they were loaded before us. (https://mods.factorio.com/mod/minime/discussion/64ac77260169bec10a69e4b6s)
+    - Fixed a test condition that caused rebuilding the GUI of a player who clicked another mod's GUI element when the player was using a character from "Bob's Classes" or "Jetpack".
+
+  Changes:
+    - Added optional dependency on "Yae Miko & Raiden Shogun character pack". (https://mods.factorio.com/mod/yaemiko-raidenshogun-characters)
+    - Moved some functions to more appropriate files.
+    - Won't blacklist surfaces with other mods from on_load anymore. It was pointless as the other mods can't update their global table at that stage.
+
+  TODO:
+    - When switching to an armor with less inventory bonus slots, items in the removed slots seem to be removed from the dummy.
+    - Is inventory contents of corpses removed on loading the game?
+    - Nullius introduces the notion of being able to transfer your conciousness to another body (you play the role of a von Neumann Android), and unfortunately Nullius doesn't emit a custom event when it happens, but instead it sets up a hotkey, so I can react to that. (Reported by undermark5 per PM; suggested to Anachrony that they subscribe to our events/use our remote interface.)
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.35
+Date: 2023-07-05
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed stack overflow when enabling/disabling characters (init_player function calling update_armor calling init_player).
+    - Hopefully fixed a bug (couldn't reproduce) when changing character pages on the main GUI with the "Next"/"Previous" buttons. (https://mods.factorio.com/mod/minime/discussion/64a35f8a83fba0779c3ec571)
+
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.34
+Date: 2023-06-29
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when starting new game with "Wave Defense" scenario, which (as of Factorio 1.1.86) deletes all surfaces except nauvis on several occasions. (https://mods.factorio.com/mod/minime/discussion/649ba9ada1c016156fc162f2)
+
+  Changes:
+    - Added handlers for on_pre_surface_deleted and on_surface_deleted to restore our dummy/preview surfaces when they are deleted by other mods.
+    - Added controller_key_sequence to our custom input for toggling the GUI, so it can be used with game controllers (must be assigned by player).
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.33
+Date: 2023-06-20
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when GUI click was registered while player data wasn't initialized yet. (https://mods.factorio.com/mod/minime/discussion/6491595daedcf65902b91d10)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.32
+Date: 2023-06-17
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on loading/starting a game with Factorio < 1.1.85. (https://mods.factorio.com/mod/minime/discussion/6484c2f28a3657b839f23e8f)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.31
+Date: 2023-06-16
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Hopefully fixed a crash (which I couldn't reproduce myself) on leaving SE's remote view mode when our dummy had become invalid. (https://mods.factorio.com/mod/minime/discussion/6484c2f28a3657b839f23e8f)
+
+  Changes:
+    - Added optional dependency on "Vaporeon Character" mod. (https://mods.factorio.com/mod/vaporeon-character)
+    - Added handler for new (as of Factorio version 1.1.83, really working since Factorio 1.1.85) event on_entity_color_changed. (Event will be raised correctly since Factorio 1.1.85: https://forums.factorio.com/viewtopic.php?f=30&t=106677.)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.30
+Date: 2023-05-24
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Bumped dependency to Factorio >=1.1.80, so we can use the new (as of 1.1.77) raise_teleported flag when teleporting characters.
+
+  Bugfixes:
+    - Fixed that removed logistic requests would be restored on swapping characters. (https://mods.factorio.com/mod/minime/discussion/645b52fc16f3ee1913dff95c)
+
+  Changes:
+    - If the "Helper for mods that create new characters" is not used and the current scenario doesn't support characters (e.g. vanilla "Sandbox"), we'll warn players in on_configuration_changed, on_player_created and on_player_joined_game that character selector mode has been disabled. (https://mods.factorio.com/mod/minime/discussion/643622d273faf6cdf78b5a63)
+    - Replaced most references to game.players[], which is shorter to write, with game.get_player(), which is faster.
+
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.29
+Date: 2023-04-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that shortcuts were available when a new player was created in a scenario that doesn't support characters (e.g. "Brave New World" or  vanilla "Sandbox").
+
+  Changes:
+    - Added hidden optional dependency on CharacterModHelper to make sure its remote interface is available before we call it.
+    - If a scenario that doesn't support characters is active, call remote function of CharacterModHelper to tell it that we have disabled selector mode and to disable commands that allow players get a new character. or teleport. For now, this will work with "Brave New World" and the vanilla "Sandbox" scenario.
+    - Added optional dependency on "Protogen Character" mod. (https://mods.factorio.com/mod/ProtogenCharacter)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.28
+Date: 2023-04-01
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that player would always return to the old character when selecting a new character while SE's nav-view was active.
+    - Fixed crash when mod was added to a running game while trying to initialize GUIs of players whose data hadn't been initialized yet because they were not connected. (https://mods.factorio.com/mod/minime/discussion/641f145180f51d981a740b2a, https://mods.factorio.com/mod/minime/discussion/6421d686aa8bbb754bf27453)
+    - Fixed logic for determining whether button flow from mod-gui.lua is empty and can be removed, which resulted in miniMAXIme removing toggle buttons of other mods. (https://mods.factorio.com/mod/minime/discussion/6422f40fb1b5cefe47bde9d0)
+    - Fixed that selecting a new character would have no effect if you load a game where your last character was the flying version ("Jetpack" mod) of a character that had been created by a mod you've removed from the game.
+
+  Changes:
+    - If scenarios that are supposed to be played without a character (e.g. vanilla "Sandbox", or "Brave New World") are active, we remove GUIs and disable shortcuts (includes disabling the respective events).
+    - If character selector mode has been turned off, we now delete the preview entities and surfaces.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.27
+Date: 2023-03-27
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when a new game was started while the character selector mode was disabled. (https://mods.factorio.com/mod/minime/discussion/641e10d9731b03bdb671d8ea)
+
+  Graphics:
+    - Added disabled_icon and disabled_small_icon to shortcut.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.26
+Date: 2023-03-24
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that count of available characters was wrong when a character prototype that had been hidden by a player was removed from the game.
+
+  Changes:
+    - Created per-user setting to choose whether the GUI toggle button (top-left) or a shortcut should be used.
+
+  Graphics:
+    - Updated icons for GUI toggle button and shortcut icons. Thanks a lot to the person who made them but didn't want to be credited for it! :-)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.25
+Date: 2023-03-22
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on teleporting character or player with a Factorio version <1.1.77. (https://mods.factorio.com/mod/minime/discussion/641a34da4dd987b1952b6865)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.24
+Date: 2023-03-21
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - The stable version of Factorio still is 1.1.76, which doesn't have the "script_raised_teleported" event and will crash when we try to register it. We'll only listen to this event now if at least Factorio 1.1.77 is used. (https://mods.factorio.com/mod/minime/discussion/64159ce1de0db5759829f465, https://mods.factorio.com/mod/minime/discussion/641635ddde0db5759829f475)
+    - Fixed that the setting for turning on debugging was ignored, so the only way to turn on writing to the log file was editing a file to change a variable.
+    - Fixed crash when we tried to reopen the GUI of an entity that had been mined or destroyed while the player was in SE's nav-view mode. (https://mods.factorio.com/mod/minime/discussion/63d099ab17b32c261bc88b3f)
+
+  Changes:
+    - Removed setting for dumping debugging output to the game console. It really didn't make sense because you can't scroll up in the chat, so most of the debugging output would be lost.
+    - The toggle button for the character selector GUI now has an icon instead of a textual description, so it will take up less space.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.23
+Date: 2023-03-17
+  Uploaded by:
+    - Pi-C
+
+  Minor feature:
+    - Added a custom-input for toggling the character selector GUI. However, I didn't set a default key combination, you've got to do that yourself (see Main menu->Settings->Controls->Mods->miniMAXIme)!
+
+  Bugfixes:
+    - Fixed that character items would still be duplicated (and spilled on the ground) in response to the player returning from SE's Nav-view mode by using SE's shortcut. The fix introduced in version 1.1.20 worked only if the character had no armor or no armor with inventory size bonus. (https://mods.factorio.com/mod/minime/discussion/63d099ab17b32c261bc88b3f)
+
+
+  Changes:
+    - We'll now raise the new script_raised_teleported event (added in Factorio 1.1.77) when a character has been teleported.
+    - Moved toggle button for "Available characters" GUI from top button flow to the character selector GUI to remove some clutter from the top of the screen. (https://mods.factorio.com/mod/minime/discussion/63250ee2dfe6eb987a367f17)
+    - The toggle button will now show how many of the characters available in the game are on the player's GUI for on-the-fly character switching.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2023-03-03
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed wrong setting description in English locale file. (https://mods.factorio.com/mod/minime/discussion/64010c31686701236bb2a901)
+
+
+  Minor feature:
+    - Added setting to remove armor animations of characters. This is only an optical change: The characters will look the same whether they wear no armor/light armor or a power armor, but they still get all benefits like resistance and inventory bonuses, grid, etc. (https://mods.factorio.com/mod/minime/discussion/64010c31686701236bb2a901)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2023-02-21
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash with "Editor Extensions". (https://mods.factorio.com/mod/minime/discussion/63e4507bbb97f50fbdc01da2)
+    - Fixed that crafting queue would be deleted without refunding resources when a character was switched. (https://mods.factorio.com/mod/minime/discussion/63eb485b9b2c42e73e356dc0)
+
+
+  Changes:
+    - Removed temporary code for checking state of SE remote view from handler of on_gui_click event. We now listen to SE custom events for toggling remote view.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2023-02-07
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash because of stupid mistake when calling a debugging function. (https://mods.factorio.com/mod/minime/discussion/637a49b9bb13e0f9305e169a)
+    - Fixed migration script added in version 1.1.19 to prevent that there wouldn't be any character previews in the GUIs if the mod was added to a running game. (https://mods.factorio.com/mod/minime/discussion/63bbbe70543c1336516fc803)
+    - Fixed that character could be duplicated when on_configuration_changed was run after the game had been  saved while SE had put the player in remote-view mode. (https://mods.factorio.com/mod/minime/discussion/63d099ab17b32c261bc88b3f)
+
+  Changes:
+    - Changed range of scale factor from 10% … 500% to 25% … 250%, so it is in sync again with the scale of the bots I had to change in version 1.1.3 of my "Smaller bots" mod.
+    - Added optional dependency on new character mod "NikoCharacter".
+    - Reused libs for debugging and assertions from Autodrive. This adds commands /minime-is-event-active and /minime-show-active-events when debugging mode has been turned on.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2022-11-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Made sure that character pages in dropdown list are within allowed range. (https://mods.factorio.com/mod/minime/discussion/6364d49e921e50402ace2384)
+
+    - Corrected spacing of preview characters, so they won't overlap for huge characters (scale > 300%). The fix includes a migration script that removes all surfaces with preview character to enforce a rebuild with the new spacing. (https://mods.factorio.com/mod/minime/discussion/6369e228ac21d73eed0c64cd)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2022-10-24
+  Uploaded by:
+    - Pi-C
+
+  Changes:
+    - Added optional dependency on "Des, the Wickerbeast", a new character mod.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2022-08-16
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash caused by a typo. (https://mods.factorio.com/mod/minime/discussion/62fa91a0046a2a2160c99aea)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2022-07-13
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that toggle button for "Available characters"  GUI would be shown even if there were no characters to choose from or if character-selector mode had been turned off. (https://mods.factorio.com/mod/minime/discussion/629a2d54f6710321e7bee8fb)
+    - Fixed (?) crash when player managed to switch to a non-existant page in the character selector GUI. (https://mods.factorio.com/mod/minime/discussion/62c65bce6634c34d913246fb)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2022-06-23
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed the crash I meant to fix in 1.1.14 for real now -- or so I hope! (https://mods.factorio.com/mod/minime/discussion/629a90f867f3e444f73a4802)
+    - Removed some old files that I've forgotten to remove from the mod before the last upload. This reduces the mod size by about 40%, compared with version 1.1.14. :-)
+
+  Changes:
+    - Removed color-coding from the mod settings. It's obsolete now that Factorio 1.1.61 will put a reset button next to each setting in the mod settings GUI.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2022-06-02
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash in on_runtime_mod_setting_changed when player_data.available_characters hadn't been initialized. (https://mods.factorio.com/mod/minime/discussion/6298f2f4b7fc5df62a687ff0)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2022-05-21
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Shuffled order in the init function, so that we'll first build the list of armor prototypes, then the list of character prototypes, and after that the list of character-corpse prototypes. (https://mods.factorio.com/mod/minime/discussion/6264d23288d2e14d256b6b9e)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2022-05-04
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed migration script for from 1.1.11, so that it removes not only the old GUI toggle buttons, but also the old character selector GUIs.
+    - Fixed crash when mod was added to an existing game (https://mods.factorio.com/mod/minime/discussion/6264d23288d2e14d256b6b9e).
+    - Fixed crash when both this mod and another mod that is loaded before us were added to an existing game, and the other mod called our remote interface before we had a chance to run on_init(). (Crash occured with my private version of "Bob's classes".)
+    - Fixed that all checkboxes in the available-characters GUI were initialized as enabled, even if there were pending changes when the GUI was rebuilt from on_configuration_changed.
+    - Fixed logic when "Enable all" button was used. (Checkboxes for newly added characters would be considered changed although these characters already were enabled.)
+    - Fixed changelog: Forgot to mention the new settings for debugging mode in version 1.1.11.
+
+  Changes:
+    - Added tooltips to buttons of the available-characters GUI.
+    - Moved debugging functions out of the way, so I can easily reuse them in my other mods.
+
+  Locale:
+    - Thanks to plexpt for translating the new strings of the zh-CN locale! (Note: I've added some more strings since I've got the locale file; these strings still without translation.)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2022-04-28
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash in inventory script, caused by trying to index a character outside of the block where it was guaranteed to exist. (Thanks to trampek reporting this!)
+    - Fixed crash because of uninitialized GUI. (Thanks to trampek reporting this!)
+    - Fixed crash because of uninitialized GUI pages. (https://mods.factorio.com/mod/minime/discussion/6264d23288d2e14d256b6b9e)
+
+  Changes:
+    - There's now a startup setting to enable the buttons for god and editor mode (turned off by default). Even if the setting is on, you must have admin rights to get these buttons. You'll always be admin in singleplayer mode. (https://mods.factorio.com/mod/minime/discussion/6261139788c264e9c0356e1b)
+    - The page selector buttons will only be created if more characters than fit on a page are available for selection.
+    - Added settings to enable verbose debugging to log file or game chat.
+    - Moved "minime_close-gui-on-selection" and "minime_followmode" from startup settings to player settings.
+    - Added another GUI so players can choose which characters they'll have on their character-selector GUI. (This will only be active if at least 2 characters are available. Also, the default character can not be turned off.)
+    - Added optional dependencies on "pikachu skin" and "Minecraft skin" mods.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2022-04-17
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash in handler for on_gui_selection_state_changed event. Duh, forgot to filter the event so things were done even if a GUI element from another mod was used. (https://mods.factorio.com/mod/minime/discussion/625be9e62ca115a9cf20bd2a)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2022-04-17
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on resuming a game, when a generic corpse was already in use and we tried to replace it with the original one although the prototype still didn't exist.
+    - Fixed that players would always get the default character after respawning if "Space Exploration" was active. SE will bypass the regular event and use a custom event instead. (https://forums.factorio.com/viewtopic.php?p=566029#p566029)
+
+  Changes:
+    - Revamped the GUI:
+      - You now can drag the GUI anywhere you like. Also, it won't be hidden by the minimap any longer.
+      - In addition to the toggle button at the top of the screen, there's now also a close button on the GUI.
+      - Character previews are now presented in groups of up to 5 characters. With mods that add 20 or more characters, the old style wasn't really usable anymore. (https://mods.factorio.com/mod/minime/discussion/624950a43914ca79e4e7f594)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022-04-05
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash in on_post_entity_died event handler. (https://mods.factorio.com/mod/minime/discussion/624c4461662e39ac5219d8f8)
+
+  Changes:
+    - Added optional dependencies on mods creating new character prototypes that should support this mod.
+
+  Locale:
+    - Added zh-CN. Thanks a lot to plexpt for providing the translation! :-)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-04-01
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that mining character corpses would not transfer the inventory contents (because the corpse was already removed in on_pre_player_mined_item).
+    - Fixed bug when changing controller modes: If you'd changed from character to editor mode, and then switched from editor to god mode, you'd get back your old character, and the GUI state would be off (buttons for both god mode and your current character were disabled). If you then proceeded to select another character, your old character would not be removed. (https://mods.factorio.com/mod/minime/discussion/62459b675c4124be8e384c43)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-03-31
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when toggling editor mode. (https://mods.factorio.com/mod/minime/discussion/62452d75dcdb30a82b5b5126)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022-03-20
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed another crash with invalid corpses. (https://mods.factorio.com/mod/minime/discussion/623623e0e9802f299da9e94e)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022-03-13
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when a tech we require has been researched by a force that wasn't initialized. This could happen when forces were created by mods that were loaded after us, provided there was no player on that force and the tech was researched by script.
+
+  Changes:
+    - Added handlers for on_forces_merged and on_research_reversed.
+    - Only keep track of techs researched by forces with players.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022-03-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when inventory slots from ammo or weapons inventory couldn't be copied because weapon and ammo were not compatible with each other. (https://mods.factorio.com/mod/minime/discussion/621d6afb161043d586f0f475)
+    - Fixed crash because of invalid character corpse. (https://mods.factorio.com/mod/minime/discussion/621e6a7e16ca6f43f6b9f87b)
+    - Fixed crash when mod was added to an existing game while player was in god or editor mode. (https://mods.factorio.com/mod/minime/discussion/621e6a7e16ca6f43f6b9f87b)
+
+  Changes:
+    - Characters are now also backed up when weapons inventory is changed.
+    - If you're playing a game based on the "Brave New World" scenario (https://mods.factorio.com/mod/brave-new-world), the GUI won't be available, even if character selector mode has been enabled per setting. (The premise of this scenario is that the player will have access to bots right from the start, but won't have a character.)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022-03-01
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that new_character was nil when the custom event for announcing new characters was raised on leaving god or editor mode.
+    - Fixed crash in event handler for on_player_armor_inventory_changed when player had no character. (https://mods.factorio.com/mod/minime/discussion/6207db96a4589338934321ae)
+
+  Changes:
+    - React if editor mode is toggled by other means than our GUI (will only work when the events on_pre_player_toggled_map_editor or on_pre_player_toggled_map_editor are raised).
+    - Players may toggle god or editor mode without raising an event. In this case, the GUI will be updated the next time defines.events.on_gui_click is triggered.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022-02-11
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash when mod was added to an existing game and minime_player.init_player created a new dummy but didn't store it with player data correctly. (https://mods.factorio.com/mod/minime_temp/discussion/6202f552ba97c29c5b14a228)
+    - Fixed crash caused by call to minime_corpse.make_corpse_list from migration script. (https://mods.factorio.com/mod/minime_temp/discussion/6202f552ba97c29c5b14a228)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022-02-08
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - After a long time, it's time to revive this mod and bring it up to Factorio 1.1. Sorry for the inconvenience, and thanks a lot to gungorenu for providing an alternative version fixing a crash in the meantime!
+    - While I didn't upload any new versions lately, I did work on this mod occasionally. I'll only give an overview of the most important changes since 0.0.21. For more details, check out the older changelog entries!
+    - Back when DellAquila created the mod, it was just for making characters smaller, so they'd look more realistic besides cars and other vehicles. But for quite some time now, you can also use the mod to make your character much bigger. As the old name really isn't fitting anymore, and as I've made some major changes, I've changed the mod title from "minime - More accurate player size compared to vehicles" to "miniMAXIme".
+
+  Major features:
+    - A new dynamic GUI showcases the character skins you can choose from. You can even see what a character would look like if you changed your armor!
+    - In singleplayer games, or with admin rights in multiplayer games, you can now use the GUI to enter god or editor mode. Even without admin rights, you can use it to return to character mode.
+    - This mod will now keep track of corpses. If you've saved your game after you died, and continued to play after removing the mod that provided your last character, your corpse would be lost for good. Now, a generic corpse will be placed instead, so you still have a chance to get back the things you've had in your inventory.
+    - The position of weapons and their attack parameters are now scaled along with the character, so the muzzle flash won't look out of place. (Depending on the skin character you're using, that still may be not perfect.)
+    - You can change your character even when it is riding in a vehicle.
+
+  Changes:
+    - Reworked the code to allow for visibly different characters from skin-changing mods as well as characters that look the same but have different properties (e.g. flying/non-flying, small/huge inventories).
+
+  Graphics:
+    - Thanks to snouz for providing a new mod icon!
+
+  Compatibility:
+    - Works with "Jetpack", so you should be able to use this mod together with "Space Exploration". Thanks a lot to Earendel for adding a feature I've needed to version 0.2.13!
+    - Added support for "Abandoned Ruins", "GUI Unifyer", "Renai Transportation", "RPG System", and "First One's Free".
+    - Laid the ground for compatibility with "Bob's Character classes". (I've sent a patch to Bob. He promised to review and implement the changes eventually, but it probably will still take some weeks or so.)
+    - Prepared for compatibility with "InfiniteInventory". (Provided the author with a patch, but it hasn't been applied yet.)
+
+  Locale:
+    - English
+    - German
+    - French -- thanks to Fr_Dae for providing the translations! (Incomplete due to newly added strings)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.27
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that on copying character inventories, slots in the destination inventory wouldn't be cleared if the respective slots in the source inventory were empty.
+    - Fixed that in on_configuration_changed, data of removed mods was deleted from player data *after* the player was re-initialized. Players with a character from a removed mod would effectively be put into god mode (although according to the GUI they did have a valid character) when the character picker crunched obsolete data and returned nil.
+    - Fixed wrong tooltip on enabled character selector buttons and style of toggle button.
+
+  Changes:
+    - Each player has now separate preview characters that wear the same type of armor as the player's character, so the preview will reflect the real appearance of the player.
+    - Previews are scaled now, so they will always have the same size -- regardless of the scale factor set in the startup settings.
+    - If the prototype of the last character used by a player has been removed from the game, the GUI will display a placeholder with an unclickable button and indicate that the player is in god mode. When a button is clicked, the placeholder will be removed from the GUI.
+    - To select a character, you can now click on either its preview or its button.
+    - Reworked handling of corpses. They aren't stored per player anymore, but centrally (indexed by unit_number of the character).
+    - Show associated player of corpses where the character was not attached to a player (e.g. backup avatars from other mods).
+    - On switching characters, combat bots following the old character will now be re-assigned to the new one in most cases.
+    - Listen to custom event from "RPGsystem" (back up character data when a player levels up).
+    - Added support for "First One's Free" and "InfiniteInventory" (depends on these mods calling our remote functions).
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.26
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - If mods like "Bob's classes" or "Jetpack" are removed from the game, the internal character picker would choose a character version that doesn't exist, so you'd always end up in God mode without the mod knowing about it. Fixed that by cleaning up player data and removing cruft related to these mods.
+    - Update detached character if player was in editor/god mode and the character has been changed (e.g. when Jetpack changes the character from flying to non-flying because it has run out of fuel).
+
+  Changes:
+    - Reworked the GUI so it now showcases the different characters.
+    - Removed the character images from the buttons again because they are obsolete with the new GUI.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.25
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Changes:
+    - Added support for Bob's classes.
+    - If the character selector is active, buttons for switching to editor/god mode will be added to the GUI of players with admin rights. (In singleplayer games, the player is automatically admin.)
+    - When a player switches to editor/god mode, we don't destroy the character but detach the player. When the player wants to use a character again, we reattach the previous character and change *that* to the selected character.
+    - Added startup setting to choose between "Player follows character" and "Character follows player" mode when returning from editor or god mode. Per default, the player will be teleported to the position of the detached character, but the character can now also be moved to the current player position -- even if it is on another surface.
+    - Added character images to the GUI buttons.
+
+  Graphics:
+    - Thanks a lot to snouz for making a new mod icon!
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.24
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Changes:
+    - Update inventories of all corpses when a player has died. The old corpse will exist until it expires naturally or it's inventory is empty. When a player removes only some items from the inventory, and then dies and is respawned, the removed items will be in both inventories. The inventory update prevents players from cheating by committing suicide to get bonus items.
+    - The corpse prototype stored with the corpse data will exist when the mod providing the prototype has never been removed from the game, or when it had been removed and was added again later on. If another mod's corpse prototype is not available, a generic corpse will be used instead, so the inventory from the removed corpse is not lost.
+    - Added compatibility with the "Jetpack" mod: You now can swap characters even when you're flying! Everything happens under the hood, the GUI won't be cluttered with buttons for variations of the same character.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.23
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Changes:
+    - Added migration script to remove the old GUIs.
+    - If the last character used by a player had been removed, and if the character selector had been turned off at the same time, the player would end up without a character and without a way to set another one. In this case, we'll fall back to the first character that's available now (trying for the default character first).
+    - Some properties can only be set if a character is connected to a player, so they will never be applied to the dummy. We store them separately with the player data now.
+
+  Major feature:
+    - Replace corpses based on a prototype from a removed mod with a generic corpse. This way, you won't lose the items that were in the inventory of your old corpse.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.22
+Date: ?
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that on exchanging characters, the new character wouldn't be in exactly the same position as the old one. Thus, when players changed their character in rapid succession, it would move farther and farther away from the original position.
+    - Fixed crash when a character was exchanged while the player had opened a custom GUI.
+    - Fixed that GUI would not be initialized when a game was started without the vanilla cutscene.
+
+  Changes:
+    - Added a setting to disable minimizing the characters' collision box. (https://mods.factorio.com/mod/minime/discussion/5f4b9de4f258b230cfb9dfaf)
+    - Code cleanup: Move from one monolithic file to multiple smaller ones.
+    - Copy the "destructible" property when replacing characters. (With Creative Mod, if you had an "invincible" character and exchanged it, biters would be able to kill you.)
+    - Copy many more properties when character is replaced.
+    - If the last character used by a player is not available anymore (e.g. if a character mod has been removed), fall back to the default character instead of removing the player's character completely.
+    - Blacklisted our secret dummy-storage surface with "AbandonedRuins" if that mod is active.
+    - Ported the GUI to use mod-gui.lua from Factorio's core libs. This way, it is compatible with the "GUI Unifyer" mod.
+
+  Minor feature:
+    - If a character was using a weapon, the muzzle flash would stay at the same position, regardless of the size of the character. Now we scale the position of weapons (data.raw.gun) as well, except for prototypes that -- judging by their name -- were not meant to be personal weapons (e.g. guns for turrets or vehicles). Caveat: This will most likely work for the default character, but may still look weird for other characters that don't have gun-animations, or a considerably bigger/smaller than the default character.
+
+  Locale:
+    - Added strings for new setting. Thanks to Fr_Dae for providing the French translations!
+
+  Modding:
+    - Removed singular forms of functions used to add/remove characters from remote interface. They've been redundant as there were already plural forms of these functions available. It's now possible to call these plural forms not only with a table, but also with a string value if only one character needs to be changed.
+    - Generated custom event other mods can listen to if they want to react to character changes via minime.
+    - Added support for "Lua API global Variable Viewer (gvv)" by x2605. If that mod is active, you can inspect the global table of this mod at runtime -- quite useful for debugging! (https://mods.factorio.com/mod/gvv)
+    - Switched over to the new debugging code from my other mods. I already didn't log stuff unless it was explicitely requested, but the messages were formatted nevertheless, which could hurt UPS because of all the type-casting going on.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.21
+Date: 2020-08-26
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that the new cutscene shown at the start of a new game in Factorio 1.0 would mess with player initialization.
+    - Reworked start-up process (on_init, on_configuration_changed, on_load) so that GUI-related event handlers and remote interfaces will be unregistered/removed if they are not needed.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.20
+Date: 2020-08-14
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Removed log spam. (https://mods.factorio.com/mod/minime/discussion/5f36d49f002cac73f73caa6d)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.18
+Date: 2020-08-08
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that the mod was a UPS hog. (https://mods.factorio.com/mod/minime/discussion/5f2dc36cdc286667cd598a4b)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.17
+Date: 2020-08-06
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed crash on starting a new game when no additional characters were available for selection. (https://mods.factorio.com/mod/minime/discussion/5f1fac25c7033af724e62d35)
+    - Fixed crash when trying to initialize player data for unconnected players in multiplayer games. (https://mods.factorio.com/mod/minime/discussion/5f29a853750fdfe9bce0a4ee)
+
+  Changes:
+    - Added startup setting to scale the characters mining distance along with its size (default: false).
+    - Added startup setting to scale the characters tool-attack distance along with its size (default: false).
+    - Added startup setting to toggle the character selector (default: enabled). (https://mods.factorio.com/mod/minime/discussion/5f1fac25c7033af724e62d35)
+    - Added startup setting to toggle if character list should be closed after a character has been selected. (https://mods.factorio.com/mod/minime/discussion/5f26d8ef30424bd81b1bbe0d)
+    - When a character is changed, the status of the "Personal roboport" switch from the Character menu will be transferred to the new character.
+    - Made sure that all corpse images are scaled -- no matter if they are hidden behind picture, pictures, layers, or sheets.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2020-08-02
+  Uploaded by:
+    - Pi-C
+
+  Bug fixes:
+    - Added some checks to data-updates.lua that should prevent crashes caused by trying to access undefined boxes. (https://mods.factorio.com/mod/minime/discussion/5f1f5a613a1a9422db50e780)
+    - Fixed crash with modded characters that have a bigger inventory than the vanilla character. (https://mods.factorio.com/mod/minime/discussion/5f1f5a613a1a9422db50e780)
+    - Fixed crash with characters that use "picture" instead of "pictures".
+
+  Changes:
+    - Added event handler for on_player_respawned. On respawing, you now will get back the character you had when you died.
+    - If the player already has an unknown character (not the default character, and name doesn't contain he required pattern), I assume it's OK to use this character and add it to the top of the GUI as long as it is available in the game. However, if you change from one unknown character to another (e.g. with another character selector mod), the first unknown character will be replaced by the second one in the GUI.
+    - The status of the GUI's character list (visible/hidden) will now be retained across GUI rebuilds and  restored when a saved game is loaded.
+    - If a player changes the character while a GUI (e.g. crafting menu or production statistics) is open, it now will be kept open.
+
+  Locale:
+    - Added French localization. Thanks a lot to Fr_Dae for the translations!
+
+  Modding:
+    - Added remote interface so other mods can put characters on/remove them from the GUI and inform "minime" if they are about to change/have changed a player's character.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2020-07-27
+  Uploaded by:
+    - Pi-C
+
+  Major Features:
+    - If mods that add new characters (e.g. "Gear Girl Character" or "I, Robot") are active, and if more than one character is available in the game, you will get a GUI where you can change your character at any time. This is completely safe even if the mod providing your last active character is removed: your character's inventories, logistic request slots, and auto-trash slots will be kept intact. The character selector has also been tested in multiplayer mode -- successfully! :-)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2020-07-17
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - All changes are also available for Factorio 0.17 (version 0.0.12 of this mod)!
+
+  Major Features:
+    - Completely reworked the code. We don't hardwire the animations anymore, but just change the scaling of the existing images and image shift positions. This should make it possible to use this mod together with other mods that change the character images, e.g. "Gear Girl Character". (https://mods.factorio.com/mod/minime/discussion/5e643dd9ece61c000ce7af30)
+
+  Changes:
+    - Adjusted range of allowed values for character size: new minimum is 10% (at this scale, the character is already so tiny it's hard to see, anything less and it will be invisible), new maximum is 500% (even that seems excessive, and mining ore is hard because the mining range doesn't adapt to character size).
+
+  Locale:
+    - Added localization files for English and German.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2020-07-17
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - This is identical to version 0.0.13, but for Factorio 0.17!
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2020-07-16
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that shadow for idle animation was off and looping if Sprite Resolution was set to "normal". (https://mods.factorio.com/mod/minime/discussion/5e744b0158ecbc000e7ab08a, https://mods.factorio.com/mod/minime/discussion/5acbbce442dca8000d984fc3)
+    - Fixed that animation speed was changing with character size: they would run extremely fast for smaller characters, and extremely slow for larger ones. (https://mods.factorio.com/mod/minime/discussion/5f033d3bf57065842ffb6b10)
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+  Uploaded by:
+    - DellAquila
+
+  Info:
+    - Updated for Factorio 0.18
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Changed entity Player to Character for new 0.17 version
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Changed animation speed for better running (Thanks to mman0385)
+    - Deleted redundant file
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Uploaded by:
+    - DellAquila
+
+  Bugfixes:
+    - Now doesn't conflict with any mods that modify health, inventory, speed, etc.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Uploaded by:
+    - DellAquila
+
+  Changes:
+    - Fixed shadows in Normal Definition
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Uploaded by:
+    - DellAquila
+
+  Info:
+    - Initial Release

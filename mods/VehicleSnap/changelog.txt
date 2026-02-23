@@ -1,4 +1,44 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 26.11.2025
+  Changes:
+    - You can drive along rails now when vehicle angles is set to 16. It had to use a special table for 8 odd rail angles.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 12.1.2025
+  Updates:
+    - Translation overhaul, added and changed all of them slightly.
+    - Key combination is no longer part of the locale but will still show in the tooltip.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 7.12.2024
+  Updates:
+    - German translation.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 12.10.2024
+  Updates:
+    - Factorio 2.0 release.
+    - Using on_nth_tick event instead of on_tick.
+    - Compatibility for Space Age remote view surface changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.18.7
+Date: 23.9.2024
+  Fixes:
+    - Previous version broke multiplayer when host was not in a vehicle and anyone joined. Leading to deeper study on event syncronization and code simplification. As a result the event is kept on permanently for negligible cpu cost. Please report further issues if any.
+---------------------------------------------------------------------------------------------------
+Version: 1.18.6
+Date: 22.9.2024
+  Fixes:
+    - Better support for playing with multiple surfaces. Several code changes to checking driving state as it had to be delayed to on_idle. Tested in singleplayer with Lunar Landings mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.18.5
+Date: 2.3.2023
+  Compatibility:
+    - Using Space Exploration universe explorer while driving a vehicle. The change is not SE-specific but if player goes into a non-character based controller mode while driving, the driving state is not disabled upon detecting a loss of vehicle. However no snapping happens if there is no vehicle.
+  Dependencies:
+    - Added Cardinal mod incompatible; it is a mod that does what VehicleSnap does in different way, there is no reason to load both and bad things could happen if you do.
+---------------------------------------------------------------------------------------------------
 Version: 1.18.4
 Date: 25. 11. 2020
   Update:

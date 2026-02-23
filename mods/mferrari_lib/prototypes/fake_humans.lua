@@ -8,25 +8,77 @@ v 2.2  4/2024 added optional Mechanicus character mod
 v 2.3  6/2024 added flamethrower, nerf rocket & grenade, not homing grenade
 v 2.4  7/2024 added options for scale, explosives(rocket/grenade soldiers)
 v 2.5 10/2014 made a mod lib 
+v 2.6 11/2024 less hp, spawn ratio downed
+v 2.7 06/2025 tesla
 ]]
 
 local path = "__mferrari_lib__/"
 require ("__mferrari_lib__/prototypes/fake_humans-fire")
+require ("__mferrari_lib__/prototypes/fake_humans-turrets")
 require ("__mferrari_lib__/prototypes/flying_saucer_animation")
 local colors = require("__mferrari_lib__/colors")
+local tile_sounds = require("__base__/prototypes/tile/tile-sounds")
 
 --settings - a mod calling should set these constants
+local base_health    = 180
 local hp_multiplier  = mf_hp_multiplier or 1
 local dmg_multiplier = mf_dmg_multiplier or 1
 
 local base_name      = mf_fh_base_name       or  'mf_fake_human'
-local add_spawner    = mf_fh_add_spawner     or true
+local add_spawner    = mf_fh_add_spawner     or false
 local add_turrets    = mf_fh_add_turrets     or true
 local add_nuker      = mf_fh_add_nuker       or false
 local add_explosive  = mf_fh_add_explosive   or false
 local mechanicus_skin= mf_fh_mechanicus_skin or false
 local unit_scale     = 1
 
+
+
+
+
+
+function mf_add_custom_tesla_prototype(name, max_jumps, jump_range)
+local function make_tesla_chain_lightning_chain(name, beam_name, max_jumps, jump_range, fork_chance, fork_chance_per_quality, beam_duration)
+  return {
+    name = name,
+    type = "chain-active-trigger",
+    max_jumps = max_jumps,
+    max_range_per_jump = jump_range,
+    jump_delay_ticks = 6,
+    fork_chance = fork_chance,
+    fork_chance_increase_per_quality_level = fork_chance_per_quality,
+    action =
+    {
+      type = "direct",
+      action_delivery =
+      {
+        type = "beam",
+        beam = beam_name,
+        max_length = jump_range + 0.5,
+        duration = beam_duration,
+        add_to_shooter = false,
+        destroy_with_source_or_target = false,
+        source_offset = {0, 0}, -- should match beam's target_offset
+      },
+    },
+  }
+end
+
+data:extend(
+{
+  make_tesla_chain_lightning_chain(name, "chain-tesla-gun-beam-bounce", max_jumps, jump_range, 0.3, 0.05, 20),
+})
+end
+
+
+data:extend(
+{
+  {
+    type = "ammo-category",
+    name = "humanoid_ammo_category",
+    icon = path.. "graphics/icon/fake_human.png",
+    subgroup = "ammo-category"
+  }})
 
 
 function concat_lists(list1, list2)
@@ -95,7 +147,7 @@ human_corpse.selection_box = nil
 human_corpse.render_layer = "remnants"
 human_corpse.armor_picture_mapping = nil
 human_corpse.subgroup="corpses"
-
+human_corpse.time_to_live = 60*60*10
 
 
 -- sniper beam
@@ -110,12 +162,77 @@ hack_scale(beam_base, 0.5)
 data:extend{beam_base}
 
 
-local function make_beam_attack(damage_modifier,beam)
+
+
+--requires space age
+function mfFH_make_tesla_attack(chain,damage_modifier,range, cooldown)
  return   {
       type = "beam",
-      ammo_category = "beam",
-      cooldown = 20, --40
-      range = 15 + damage_modifier/2 ,
+      ammo_category = "humanoid_ammo_category", --,"tesla",
+      cooldown = cooldown or 30,
+      range = range or 20,
+      source_direction_count = 64,
+      source_offset = {0, -3.423489 / 4},
+      damage_modifier = damage_modifier,
+      --sound = make_laser_sounds(),
+      ammo_type =
+    {
+      target_type = "entity",
+      action =
+      {
+        type = "direct",
+        action_delivery =
+        {
+          type = "instant",
+          target_effects =
+          {
+            -- Chain effect must go first in case the beam kills the target
+            {
+              type = "nested-result",
+              action =
+              {
+                type = "direct",
+                action_delivery =
+                {
+                  type = "chain",
+                  chain = chain,
+                }
+              }
+            },
+            {
+              type = "nested-result",
+              action =
+              {
+                type = "direct",
+                action_delivery =
+                {
+                  type = "beam",
+                  beam = "chain-tesla-gun-beam-start",
+                  source_offset = {0, -1.31439 },
+                  max_length = 30,
+                  duration = 30,
+                  add_to_shooter = false,
+                  destroy_with_source_or_target = false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    }
+end
+
+
+
+function mfFH_make_beam_attack(damage_modifier,beam, range, cooldown)
+  if not range then range=15 + damage_modifier/2 end
+  cooldown = cooldown or 20
+ return   {
+      type = "beam",
+      ammo_category ="humanoid_ammo_category",-- "beam",
+      cooldown = cooldown , --40
+      range = range,
       source_direction_count = 64,
       source_offset = {0, -3.423489 / 4},
       damage_modifier = damage_modifier,
@@ -129,8 +246,8 @@ local function make_beam_attack(damage_modifier,beam)
           {
             type = "beam",
             beam = beam,
-            max_length = 16+ damage_modifier/2,
-            duration = 20, --30
+            max_length = range, -- 16+ damage_modifier/2,
+            duration = cooldown-1, --30
             source_offset = {0, -1}
           }
         }
@@ -195,7 +312,7 @@ local sound_sniper={
 
 
 
-local function make_sniper_attack(damage,range,cooldown,beam)
+function mfFH_make_sniper_attack(damage,range,cooldown,beam)
  return   {
       type = "projectile",
 	    sound = sound_sniper,
@@ -204,7 +321,7 @@ local function make_sniper_attack(damage,range,cooldown,beam)
       source_direction_count = 64,
       source_offset = {0, -3.423489 / 4},
       damage_modifier = 1,
-      ammo_category = "bullet",
+      ammo_category = "humanoid_ammo_category",--"bullet",
       ammo_type =
       {
 		    target_type = "entity",
@@ -249,11 +366,11 @@ end
 
 
 
-local function make_smg_attack(damage,range,cooldown)
+function mfFH_make_smg_attack(damage,range,cooldown)
 return   {
       type = "projectile",
 	     sound = sound_gun,
-      ammo_category = "bullet",
+      ammo_category = "humanoid_ammo_category",--"bullet",
       warmup = 10,
       cooldown = cooldown,
       range = range,
@@ -293,10 +410,10 @@ end
 
 
 
-local function make_rocket_attack(damage_modifier,range,cooldown,projectile,min_range)
+function mfFH_make_rocket_attack(damage_modifier,range,cooldown,projectile,min_range)
 return   {
       type = "projectile",
-      ammo_category = "rocket",
+      ammo_category ="humanoid_ammo_category",-- "rocket",
       warmup = 40,
       cooldown = cooldown,
       range = range,
@@ -331,10 +448,10 @@ end
 
 
 
-local function make_grenade_attack(damage_modifier,range,cooldown,projectile,min_range)
+function mfFH_make_grenade_attack(damage_modifier,range,cooldown,projectile,min_range)
 return   {
       type = "projectile",
-      ammo_category = "grenade",
+      ammo_category ="humanoid_ammo_category",-- "grenade",
       warmup = 40,
       cooldown = cooldown,
       range = range,
@@ -397,7 +514,7 @@ local make_unit_melee_ammo_type = function(damage_value)
 end
 
 
-local function make_melee_attack(damage)
+function mfFH_make_melee_attack(damage)
  return   {
       type = "projectile",
       damage_modifier = dmg_multiplier,
@@ -412,14 +529,14 @@ end
 
 
 -- cool 90 range 25   "explosive-cannon-projectile",
-local function make_cannon_attack(projectile,damage_modifier,range,cooldown)
+function mfFH_make_cannon_attack(projectile,damage_modifier,range,cooldown)
  return   {
       type = "projectile",
 	  sound = sounds.tank_gunshot,
       cooldown = cooldown, 
       range = range,
 	  flags = {"not-on-map"},
-	  ammo_category = "cannon-shell",
+	  ammo_category = "humanoid_ammo_category",--"cannon-shell",
       warmup = 10,
 	  min_range = 10,
 	  damage_modifier = damage_modifier,
@@ -475,7 +592,7 @@ local lname = {"",{"entity-name."..name},' '..tostring(level)}
 
   local fake_human = table.deepcopy(data.raw.unit["medium-biter"])
   fake_human.flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"}
-  fake_human.hidden=true
+  --fake_human.hidden=true
   fake_human.order="z-"..name.."-"..level
   fake_human.name=name..'_'..level
   fake_human.localised_name = lname
@@ -484,7 +601,7 @@ local lname = {"",{"entity-name."..name},' '..tostring(level)}
 	fake_human.icon = path.. "graphics/icon/fake_human.png"
 	fake_human.icon_size = 64
   fake_human.water_reflection = table.deepcopy(character.water_reflection)
-  fake_human.max_health = 250*level*hp_mp*hp_multiplier --was 200
+  fake_human.max_health = base_health*level*hp_mp*hp_multiplier --was 200 then 250, now180
 	--fake_human.map_color = color
 	--fake_human.enemy_map_color = color --{r = 1}	
 --  fake_human.move_while_shooting = true  --- se ativar ele foge do alvo -flee
@@ -560,15 +677,8 @@ local lname = {"",{"entity-name."..name},' '..tostring(level)}
     } 
 
     fake_human.running_sound_animation_positions = {5, 16}
-    fake_human.walking_sound = {
-      aggregation =
-      {
-        max_count = 2,
-        remove = true
-      },
-      variations = data.raw.tile["sand-1"].walking_sound
-    }
-
+    fake_human.walking_sound = tile_sounds.walking.sand,
+    --
 
   data:extend {fake_human}
   JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[fake_human.name], level/2)
@@ -598,23 +708,23 @@ for k=1,10 do
 	local armor = 1
 	if k>=7 then armor = 3 elseif k>=4 then armor = 2 end
 	local scale=1 + k/100
-	create_fake_human(base_name,'melee',k,armor,colors.white,scale,make_melee_attack(5+k*2)) -- damage
-	create_fake_human(base_name,'pistol_gunner',k,armor,colors.yellow,scale,make_smg_attack((8+k*2)* dmg_multiplier,18+k,20-k/2)) -- damage,range,cooldown
-	create_fake_human(base_name,'machine_gunner',k,armor,colors.brown,scale,make_smg_attack((8+k*2)* dmg_multiplier,18+k,2)) -- damage,range,cooldown
-	create_fake_human(base_name,'sniper',k,armor,colors.green,scale,make_sniper_attack((100+k*5)* dmg_multiplier,70+k,60*6,'sniper-beam')) -- damage,range,cooldown
-	create_fake_human(base_name,'laser',k,armor,colors.cyan,scale,make_beam_attack( (1+ k/5)* dmg_multiplier,"laser-beam")) -- damage,range,cooldown
-	create_fake_human(base_name,'electric',k,armor, colors.blue,scale,make_beam_attack( (1+ k/4)* dmg_multiplier,'electric-beam')) -- damage,range,cooldown
-	create_fake_human(base_name,'rocket',k,armor,colors.orange,scale, make_rocket_attack( (1+ k/5)* dmg_multiplier/3,22+k,60-k,"rocket")) -- damage,range,cooldown
-	create_fake_human(base_name,'grenade',k,armor,colors.lightgrey,scale, make_grenade_attack( k/5,22+k,120-k,"grenade",10)) -- damage,range,cooldown
-	create_fake_human(base_name,'flamethrower',k,armor,colors.red,scale, make_flamethrower_attack( k/5,23+k,40-k,1)) -- damage,range,cooldown
-	create_fake_human(base_name,'cannon',k,armor,colors.orange,scale, make_cannon_attack("cannon-projectile",1+ k/5,30+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
+	create_fake_human(base_name,'melee',k,armor,colors.white,scale,mfFH_make_melee_attack(5+k*2)) -- damage
+	create_fake_human(base_name,'pistol_gunner',k,armor,colors.yellow,scale,mfFH_make_smg_attack((8+k*2)* dmg_multiplier,18+k,20-k/2)) -- damage,range,cooldown
+	create_fake_human(base_name,'machine_gunner',k,armor,colors.brown,scale,mfFH_make_smg_attack((8+k*2)* dmg_multiplier,18+k,2)) -- damage,range,cooldown
+	create_fake_human(base_name,'sniper',k,armor,colors.green,scale,mfFH_make_sniper_attack((100+k*5)* dmg_multiplier,70+k,60*6,'sniper-beam')) -- damage,range,cooldown
+	create_fake_human(base_name,'laser',k,armor,colors.cyan,scale,mfFH_make_beam_attack( (1+ k/5)* dmg_multiplier,"laser-beam")) -- damage,range,cooldown
+	create_fake_human(base_name,'electric',k,armor, colors.blue,scale,mfFH_make_beam_attack( (1+ k/4)* dmg_multiplier,'electric-beam')) -- damage,range,cooldown
+	create_fake_human(base_name,'rocket',k,armor,colors.orange,scale, mfFH_make_rocket_attack( (1+ k/5)* dmg_multiplier/3,22+k,60-k,"rocket")) -- damage,range,cooldown
+	create_fake_human(base_name,'grenade',k,armor,colors.lightgrey,scale, mfFH_make_grenade_attack( k/5,22+k,120-k,"grenade",10)) -- damage,range,cooldown
+	create_fake_human(base_name,'flamethrower',k,armor,colors.red,scale, make_flamethrower_attack( k/5,17+k,40-k,1)) -- damage,range,cooldown
+	create_fake_human(base_name,'cannon',k,armor,colors.orange,scale, mfFH_make_cannon_attack("cannon-projectile",1+ k/5,30+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
 	if add_explosive then 
-		create_fake_human(base_name,'cannon_explosive',k,armor,colors.orange,scale, make_cannon_attack("explosive-cannon-projectile",1+ k/5,35+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
-		create_fake_human(base_name,'cluster_grenade',k,armor,colors.lightgreen,scale, make_grenade_attack( k/5,22+k,120-k,"cluster-grenade",10)) -- damage,range,cooldown
-		create_fake_human(base_name,'erocket',k,armor,colors.purple,scale, make_rocket_attack(  (1+ k/5)* dmg_multiplier/3 ,22+k,60-k,"explosive-rocket")) -- damage,range,cooldown
+		create_fake_human(base_name,'cannon_explosive',k,armor,colors.orange,scale, mfFH_make_cannon_attack("explosive-cannon-projectile",1+ k/5,35+k,90-k)) -- (projectile,damage_modifier,range,cooldown)
+		create_fake_human(base_name,'cluster_grenade',k,armor,colors.lightgreen,scale, mfFH_make_grenade_attack( k/5,22+k,120-k,"cluster-grenade",10)) -- damage,range,cooldown
+		create_fake_human(base_name,'erocket',k,armor,colors.purple,scale, mfFH_make_rocket_attack(  (1+ k/5)* dmg_multiplier/3 ,22+k,60-k,"explosive-rocket")) -- damage,range,cooldown
 		end
 
-	if add_nuker then create_fake_human(base_name,'nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(1+ k/5,40+k,60*10,"mf-small-atomic-rocket",30)) end -- damage,range,cooldown
+	if add_nuker then create_fake_human(base_name,'nuke_rocket',k,armor,colors.magenta,scale, mfFH_make_rocket_attack(1+ k/5,40+k,60*10,"mf-small-atomic-rocket",30)) end -- damage,range,cooldown
 	end
 
 
@@ -629,22 +739,22 @@ if x>#weakness then x=1 end
 local armor = 3
 local scale = 1.5 + k/3
 local boss_hpmp =  200 * k
---create_fake_human(base_name,'boss_melee',k,armor,colors.blue,scale,make_melee_attack(20+k*10)) -- damage
-create_fake_human(base_name,'boss_machine_gunner',k,armor,colors.brown,scale,make_smg_attack((50+k*10)* dmg_multiplier,30+k,2),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_pistol_gunner',k,armor,colors.yellow,scale,make_smg_attack((50+k*10)* dmg_multiplier,30+k,20-k/2),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_sniper',k,armor,colors.green,scale,make_sniper_attack((250+k*40)* dmg_multiplier,89+k,60*5,'sniper-beam'),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_laser',k,armor,colors.cyan,scale,make_beam_attack(    (18 + k*2.5)*dmg_multiplier,"laser-beam"),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_electric',k,armor,colors.lightblue,scale,make_beam_attack( (20 + k*3)*dmg_multiplier,'electric-beam'),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_rocket',k,armor,colors.orange,scale, make_rocket_attack( (1+ k/5)* dmg_multiplier,40+k,60-k,"rocket"),boss_hpmp) -- damage,range,cooldown
-create_fake_human(base_name,'boss_grenade',k,armor,colors.lightgrey,scale, make_grenade_attack(3+ k/5,50+k,120-k,"grenade",30),boss_hpmp) -- damage,range,cooldown
+--create_fake_human(base_name,'boss_melee',k,armor,colors.blue,scale,mfFH_make_melee_attack(20+k*10)) -- damage
+create_fake_human(base_name,'boss_machine_gunner',k,armor,colors.brown,scale,mfFH_make_smg_attack((50+k*10)* dmg_multiplier,30+k,2),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_pistol_gunner',k,armor,colors.yellow,scale,mfFH_make_smg_attack((50+k*10)* dmg_multiplier,30+k,20-k/2),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_sniper',k,armor,colors.green,scale,mfFH_make_sniper_attack((250+k*40)* dmg_multiplier,89+k,60*5,'sniper-beam'),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_laser',k,armor,colors.cyan,scale,mfFH_make_beam_attack(    (18 + k*2.5)*dmg_multiplier,"laser-beam"),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_electric',k,armor,colors.lightblue,scale,mfFH_make_beam_attack( (20 + k*3)*dmg_multiplier,'electric-beam'),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_rocket',k,armor,colors.orange,scale, mfFH_make_rocket_attack( (1+ k/5)* dmg_multiplier,40+k,60-k,"rocket"),boss_hpmp) -- damage,range,cooldown
+create_fake_human(base_name,'boss_grenade',k,armor,colors.lightgrey,scale, mfFH_make_grenade_attack(3+ k/5,50+k,120-k,"grenade",30),boss_hpmp) -- damage,range,cooldown
 create_fake_human(base_name,'boss_flamethrower',k,armor,colors.red,scale, make_flamethrower_attack(3+ k/5,55+k,80-k,scale)) -- damage,range,cooldown
 	--if add_explosive then 
-	create_fake_human(base_name,'boss_cannon_explosive',k,armor,colors.orange,scale, make_cannon_attack("explosive-cannon-projectile", 3+ k/5,50+k,60-k),boss_hpmp) -- (projectile,damage_modifier,range,cooldown)
-	create_fake_human(base_name,'boss_cluster_grenade',k,armor,colors.lightgreen,scale, make_grenade_attack(3+ k/5,55+k,120-k,"cluster-grenade",30),boss_hpmp) -- damage,range,cooldown
-	create_fake_human(base_name,'boss_erocket',k,armor,colors.purple,scale, make_rocket_attack((1+ k/5)* dmg_multiplier,40+k,60-k,"explosive-rocket",30),boss_hpmp) -- damage,range,cooldown
+	create_fake_human(base_name,'boss_cannon_explosive',k,armor,colors.orange,scale, mfFH_make_cannon_attack("explosive-cannon-projectile", 3+ k/5,50+k,60-k),boss_hpmp) -- (projectile,damage_modifier,range,cooldown)
+	create_fake_human(base_name,'boss_cluster_grenade',k,armor,colors.lightgreen,scale, mfFH_make_grenade_attack(3+ k/5,55+k,120-k,"cluster-grenade",30),boss_hpmp) -- damage,range,cooldown
+	create_fake_human(base_name,'boss_erocket',k,armor,colors.purple,scale, mfFH_make_rocket_attack((1+ k/5)* dmg_multiplier,40+k,60-k,"explosive-rocket",30),boss_hpmp) -- damage,range,cooldown
 	--end
 	
-if add_nuker then create_fake_human(base_name,'boss_nuke_rocket',k,armor,colors.magenta,scale, make_rocket_attack(3+ k/5,50+k,60*10,"mf-small-atomic-rocket",35)) end -- damage,range,cooldown
+if add_nuker then create_fake_human(base_name,'boss_nuke_rocket',k,armor,colors.magenta,scale, mfFH_make_rocket_attack(3+ k/5,50+k,60*10,"mf-small-atomic-rocket",35)) end -- damage,range,cooldown
 
 
 local res=10+k*2
@@ -664,7 +774,7 @@ if add_nuker then JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit
 end
 
 -- ultimates [[FOR BIG MONSTER ONLY]]
-create_fake_human(base_name,'ultimate_boss_cannon',20,3,colors.white,3, make_cannon_attack("explosive-cannon-projectile", 5,80,20),4000) -- (projectile,damage_modifier,range,cooldown)
+create_fake_human(base_name,'ultimate_boss_cannon',20,3,colors.white,3, mfFH_make_cannon_attack("explosive-cannon-projectile", 5,80,20),4000) -- (projectile,damage_modifier,range,cooldown)
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit[base_name..'_ultimate_boss_cannon_20'], 35)
 
 
@@ -694,18 +804,17 @@ for L=1,10 do  --level
 		local name = base_name..'_'..surnames[S]..'_'..L
 		local perc = {}
 
-		local Plevel = (L-1)/10     --0.2  + 0,08
-		local peso_nome = S/100
+		local Plevel = (L-1)/18     --0.2  + 0,08
+		local peso_nome = (S-1)/25
 		local Ideal_evo = Plevel + peso_nome
 		local min_evo = math.max(0, Ideal_evo-0.06)
-		local max_evo = math.min(1, Ideal_evo+0.06)
+		local max_evo = math.min(1, Ideal_evo+0.1)
 		local proba = 0.2
-		if S>1 then proba=proba- peso_nome/1.5 end
-		if surnames[S]=='sniper' then proba=proba/2 end
-
+		if S>1 then proba=math.max(proba- peso_nome/10, 0.01) end
+--		if surnames[S]=='sniper' then proba=proba/2 end
 		if min_evo>0 then table.insert(perc,{min_evo, 0}) end
 		table.insert(perc,{Ideal_evo, proba})
-		if max_evo<1 then table.insert(perc,{max_evo, 0}) end		
+		if max_evo<1 and L<10 then table.insert(perc,{max_evo, 0}) end		
 		--if surnames[S]=='erocket' or  surnames[S]=='sniper' then pe = 0.05 rat=rat+0.1 end
 		table.insert(res,{name, perc}) -- evo , power
 		end
@@ -736,10 +845,12 @@ fake_human_spawner.autoplace = nil
 fake_human_spawner.graphics_set = {animations = flying_saucer_animation()}
 fake_human_spawner.max_count_of_owned_units = 4
 fake_human_spawner.max_friends_around_to_spawn = 3
-fake_human_spawner.spawning_cooldown = {60*30, 60*15}  -- default With zero evolution the spawn rate is 20 seconds, with max evolution it is 2.5 seconds
+fake_human_spawner.spawning_cooldown = {60*60, 60*30}  -- default With zero evolution the spawn rate is 20 seconds, with max evolution it is 2.5 seconds
 fake_human_spawner.spawn_decoration = nil
 fake_human_spawner.spawn_decorations_on_expansion = nil
-fake_human_spawner.absorptions_per_second = { pollution = { absolute = 30, proportional = 0.02 } }
+fake_human_spawner.absorptions_per_second = { pollution = { absolute = 50, proportional = 0.02 } }
+fake_human_spawner.time_to_capture = nil
+fake_human_spawner.captured_spawner_entity=nil
 fake_human_spawner.resistances = 
     {
       {
@@ -827,49 +938,5 @@ end
 
 
 
-
-if add_turrets then 
--- SPECIAL TURRET / no ammo / power 
-  local function add_ammo_turret(name)
-  if data.raw["ammo-turret"][name] then 
-    local gun_turret = table.deepcopy(data.raw["ammo-turret"][name])
-    gun_turret.name=base_name ..'_'..name
-   -- gun_turret.flags = {"placeable-player", "placeable-enemy", "not-repairable"}
-    gun_turret.hidden = true
-    gun_turret.attack_parameters.ammo_consumption_modifier = 0 -- does not consume ammo
-    gun_turret.attack_parameters.damage_modifier = 1 + dmg_multiplier
-    gun_turret.max_health = gun_turret.max_health * hp_multiplier
-    data:extend({gun_turret})
-  end
-  end
-
-  local function add_electric_turret(name)
-    if data.raw["electric-turret"][name] then   
-    local laser_turret = table.deepcopy(data.raw["electric-turret"][name])
-    laser_turret.name=base_name ..'_'..name
-   -- laser_turret.flags = {"placeable-player", "placeable-enemy", "not-repairable"}
-    laser_turret.attack_parameters.ammo_type.energy_consumption = "0kJ"
-    laser_turret.attack_parameters.damage_modifier = 3 * dmg_multiplier
-    laser_turret.max_health = laser_turret.max_health * hp_multiplier
-    laser_turret.hidden = true
-    laser_turret.void_energy_source =
-        {
-          type = "electric",
-          buffer_capacity = "15MJ",
-          input_flow_limit = "7MW",
-          drain = "1MW",
-          usage_priority = "primary-input"
-        }
-    data:extend({laser_turret})
-      end
-    end
-
-local turrets = {"gun-turret","railgun-turret","rocket-turret"}
-for _,name in pairs(turrets) do add_ammo_turret(name) end
-
-local turrets = {"laser-turret","tesla-turret"}
-for _,name in pairs(turrets) do add_electric_turret(name) end
-end
-
-
+if add_turrets then mf_fake_human_add_turrets(base_name,dmg_multiplier,hp_multiplier) end
 if add_nuker then  add_nuker_warfare() end

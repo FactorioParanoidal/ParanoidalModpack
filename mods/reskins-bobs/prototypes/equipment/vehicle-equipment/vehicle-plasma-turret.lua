@@ -1,103 +1,77 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
 
 -- Check to see if reskinning needs to be done.
-if not (reskins.bobs and reskins.bobs.triggers.vehicle_equipment.equipment) then return end
+if not (reskins.bobs and reskins.bobs.triggers.vehicle_equipment.equipment) then
+	return
+end
 
+-- Note that for equipment, the icons property is not used, so omit type information
+-- so that an icon is not set on the equipment prototype.
 local inputs = {
-    type = "active-defense-equipment",
-    icon_name = "vehicle-plasma-turret",
-    equipment_category = "offense",
-    mod = "bobs",
-    group = "vehicle-equipment",
+	icon_name = "vehicle-plasma-turret",
+	equipment_category = "offense",
+	mod = "bobs",
+	group = "vehicle-equipment",
 }
 
 -- Setup defaults
-reskins.lib.parse_inputs(inputs)
+reskins.lib.set_inputs_defaults(inputs)
 
 local plasma_turret = {
-    ["vehicle-big-turret-1"] = {tier = 0},
-    ["vehicle-big-turret-2"] = {tier = 1},
-    ["vehicle-big-turret-3"] = {tier = 2},
-    ["vehicle-big-turret-4"] = {tier = 3},
-    ["vehicle-big-turret-5"] = {tier = 4},
-    ["vehicle-big-turret-6"] = {tier = 5},
+	["bob-vehicle-big-turret-equipment-1"] = { tier = 1, prog_tier = 3 },
+	["bob-vehicle-big-turret-equipment-2"] = { tier = 2, prog_tier = 4 },
+	["bob-vehicle-big-turret-equipment-3"] = { tier = 3, prog_tier = 5 },
+	["bob-vehicle-big-turret-equipment-4"] = { tier = 4, prog_tier = 6 },
 }
 
 -- Reskin equipment
 for name, map in pairs(plasma_turret) do
-    -- Fetch equipment
-    local equipment = data.raw[inputs.type][name]
+	-- Fetch equipment
+	local equipment = data.raw["active-defense-equipment"][name]
+	if not equipment then
+		goto continue
+	end
 
-    -- Check if entity exists, if not, skip this iteration
-    if not equipment then goto continue end
+	local tier = reskins.lib.tiers.get_tier(map)
+	inputs.tint = reskins.lib.tiers.get_tint(tier)
 
-    -- Handle tier
-    local tier = map.tier
-    if reskins.lib.setting("reskins-lib-tier-mapping") == "progression-map" then
-        tier = map.prog_tier or map.tier
-    end
+	-- Construct icon
+	reskins.lib.construct_icon(name, tier, inputs)
 
-    -- Determine what tint we're using
-    inputs.tint = reskins.lib.tint_index[tier]
+	-- Reskin the equipment
+	equipment.sprite = {
+		layers = {
+			-- Base
+			{
+				filename = "__reskins-bobs__/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-base.png",
+				size = 256,
+				priority = "medium",
+				flags = { "no-crop" },
+				scale = 0.5,
+			},
+			-- Mask
+			{
+				filename = "__reskins-bobs__/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-mask.png",
+				size = 256,
+				priority = "medium",
+				flags = { "no-crop" },
+				tint = inputs.tint,
+				scale = 0.5,
+			},
+			-- Highlights
+			{
+				filename = "__reskins-bobs__/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-highlights.png",
+				size = 256,
+				priority = "medium",
+				flags = { "no-crop" },
+				blend_mode = reskins.lib.settings.blend_mode, -- "additive",
+				scale = 0.5,
+			},
+		},
+	}
 
-    -- Construct icon
-    reskins.lib.construct_icon(name, tier, inputs)
-
-    -- Reskin the equipment
-    equipment.sprite = {
-        layers = {
-            -- Base
-            {
-                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-base.png",
-                size = 128,
-                priority = "medium",
-                flags = { "no-crop" },
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/hr-vehicle-plasma-turret-equipment-base.png",
-                    size = 256,
-                    priority = "medium",
-                    flags = { "no-crop" },
-                    scale = 0.5,
-                }
-            },
-            -- Mask
-            {
-                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-mask.png",
-                size = 128,
-                priority = "medium",
-                flags = { "no-crop" },
-                tint = inputs.tint,
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/hr-vehicle-plasma-turret-equipment-mask.png",
-                    size = 256,
-                    priority = "medium",
-                    flags = { "no-crop" },
-                    tint = inputs.tint,
-                    scale = 0.5,
-                }
-            },
-            -- Highlights
-            {
-                filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/vehicle-plasma-turret-equipment-highlights.png",
-                size = 128,
-                priority = "medium",
-                flags = { "no-crop" },
-                blend_mode = reskins.lib.blend_mode, -- "additive",
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/equipment/vehicle-equipment/vehicle-plasma-turret/hr-vehicle-plasma-turret-equipment-highlights.png",
-                    size = 256,
-                    priority = "medium",
-                    flags = { "no-crop" },
-                    blend_mode = reskins.lib.blend_mode, -- "additive",
-                    scale = 0.5,
-                }
-            }
-        }
-    }
-
-    -- Label to skip to next iteration
-    ::continue::
+	::continue::
 end

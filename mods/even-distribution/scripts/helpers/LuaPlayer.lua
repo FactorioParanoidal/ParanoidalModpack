@@ -10,16 +10,16 @@ function player:setting(name)
 	elseif name == "enableInventoryCleanupHotkey" then
 		if settings.global["disable-inventory-cleanup"].value then return false end
 	elseif name == "cleanupDropRange" then
-		return math.min(global.settings[self.index].cleanupDropRange, settings.global["global-max-inventory-cleanup-range"].value)
+		return math.min(storage.settings[self.index].cleanupDropRange, settings.global["global-max-inventory-cleanup-range"].value)
 	end
 
-	local setting = global.settings[self.index][name]
+	local setting = storage.settings[self.index][name]
 	if setting == nil and self.mod_settings[name] then return self.mod_settings[name].value end
 	return setting
 end
 
 function player:changeSetting(name, newValue)
-	local setting = global.settings[self.index]
+	local setting = storage.settings[self.index]
 	if setting[name] == nil and self.mod_settings[name] then 
 		self.mod_settings[name] = { value = newValue } 
 	else
@@ -33,23 +33,23 @@ end
 
 function player:trashItems()
 	local cleanupRequestOverflow = self:setting("cleanupRequestOverflow")
-	local defaultTrash           = global.defaultTrash
+	local defaultTrash           = storage.defaultTrash
 	local trash                  = self:contents("character_trash")
 	local logisticSlots          = self:has("valid", "character") and _(self.character):logisticSlots() or {}
 
 	for item,count in pairs(self:contents()) do
-		
+
 		local targetAmount = count
 		local slot = logisticSlots[item]
 
 		if not slot then -- default if no logistic slot with this item
 			targetAmount = defaultTrash[item]
 
-		elseif cleanupRequestOverflow and slot.min > 0 then -- request overflow
-			targetAmount = slot.min
+		elseif cleanupRequestOverflow and slot.count > 0 then -- request overflow
+			targetAmount = slot.count
 
-		elseif slot.max < 4294967295 then -- max value set to infinity = no autotrash
-			targetAmount = slot.max
+		elseif slot.max_count ~= nil then -- max value set to infinity = no autotrash
+			targetAmount = slot.max_count
 		end
 
 		if targetAmount ~= nil then
@@ -68,7 +68,7 @@ function player:playeritemcount(item, includeInv, includeCar)
 	if cursor_stack and cursor_stack.valid_for_read and cursor_stack.name == item then
 		count = count + cursor_stack.count
 	elseif not includeInv and not includeCar then
-		return global.cache[self.index].cursorStackCount or 0
+		return storage.cache[self.index].cursorStackCount or 0
 	end
 
 	if includeInv then
@@ -149,7 +149,13 @@ function player:returnItems(item, amount, takenFromCar, takenFromTrash)
 	end
 	
 	if remaining > 0 then
-		self.surface.spill_item_stack(self.position, { name = item, count = remaining }, false)
+		self.print({"cant-clear-cursor", {"item-name."..item}})
+		self.surface.spill_item_stack{
+			position = self.position, 
+			stack = { name = item, count = remaining }, 
+			enable_looted = false,
+			allow_belts = false
+		}
 	end
 end
 

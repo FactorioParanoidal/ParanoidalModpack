@@ -6,7 +6,7 @@ function make_new_worm(datatab)
 local worm 
 if datatab.raw then worm=table.deepcopy(datatab.raw) else worm=table.deepcopy(data.raw.turret["behemoth-worm-turret"]) end
 worm.name=datatab.name
-if icon then worm.icon=datatab.icon end
+if datatab.icon then worm.icon=datatab.icon end
 worm.max_health = datatab.max_health
 if datatab.resistances then worm.resistances=datatab.resistances end
 

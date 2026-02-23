@@ -49,6 +49,9 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
         error('All mergeable modes are disabled for '..chest_name)
     end
 
+    options.size_settings = options.size_settings or MergingChests.is_mod_active(MergingChests.override_size_settings_mod_name)
+    options.inventory_settings = options.inventory_settings or MergingChests.is_mod_active(MergingChests.override_inventory_settings_mod_name)
+
     local has_custom_settings = options.size_settings or options.inventory_settings or options.threshold_setting or options.circuit_connection_setting
 
     data:extend({
@@ -124,6 +127,18 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 maximum_value = 65535,
                 default_value = 1000,
                 order = '99-'..(options.order or chest_name)..'-08'
+            },
+            {
+                name = MergingChests.chest_specific_setting_name(MergingChests.setting_names.inventory_type, chest_name),
+                type = 'string-setting',
+                setting_type = 'startup',
+                default_value = 'with_bar',
+                allowed_values = {
+                    'normal',
+                    'with_bar',
+                    'with_filters_and_bar'
+                },
+                order = '99-'..(options.order or chest_name)..'-09'
             }
         })
     end
@@ -136,7 +151,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                 setting_type = 'startup',
                 minimum_value = 2,
                 default_value = 5,
-                order = '99-'..(options.order or chest_name)..'-09'
+                order = '99-'..(options.order or chest_name)..'-10'
             }
         })
     end
@@ -160,7 +175,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
                     'bottom-middle',
                     'bottom-left'
                 },
-                order = '99-'..(options.order or chest_name)..'-10'
+                order = '99-'..(options.order or chest_name)..'-11'
             }
         })
     end

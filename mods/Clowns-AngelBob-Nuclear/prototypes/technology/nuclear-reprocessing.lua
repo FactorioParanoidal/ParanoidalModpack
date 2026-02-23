@@ -28,10 +28,6 @@ data:extend(
 		},
 		order = "e-p-b-c"
 	},
-})
-if data.raw.item["thorium-fuel-cell"] or data.raw.item["angels-thorium-fuel-cell"] then
-data:extend(
-{
 	{
 		type = "technology",
 		name = "thorium-nuclear-fuel-reprocessing-2",
@@ -45,7 +41,7 @@ data:extend(
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "advanced-thorium-nuclear-fuel-reprocessing|b"
+				recipe = "advanced-thorium-nuclear-fuel-reprocessing-b"
 			},
 			{
 				type = "unlock-recipe",
@@ -69,4 +65,3 @@ data:extend(
 	}
 }
 )
-end

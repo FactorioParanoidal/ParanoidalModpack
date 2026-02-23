@@ -1,0 +1,81 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 04.01.26
+  Features:
+    - Supports Elevated Rails and includes HQ train graphics with updated geometry and materials (1183)
+    - Crawler-themed trains are now colorable (1183)
+  Changes:
+    - Updated for Factorio 2.0 (994)
+    - Graphics have been moved into separate mods (1183):
+      - Angel's Addons - Mass Transit - Crawler Graphics
+      - Angel's Addons - Mass Transit - Petrochemical Graphics
+      - Angel's Addons - Mass Transit - Smelting Graphics
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 01.01.2023
+  Changes:
+    - Added missing prerequisites
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 06.06.2022
+  Bugfixes:
+    - Fixed crash when the localised_description is a hardcoded string (771)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 10.08.2021
+  Features:
+    - Added compatibility for grid equipment from "Power Armor MK3" & "Portable Power" mods
+    - Added some basic tips and tricks for the trains
+    - Superfluous property clean-up
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 26.05.2021
+  Bugfixes:
+    - Fixed crash when playing without the angels library (inside angels refining)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 26.05.2021
+  Changes:
+    - Added HQ tier numbering icons
+    - Changed and expanded locale strings and text descriptions (489)
+    - Added a max speed tooltip to non-locomotive class train parts (589)
+    - Reduced the braking force to half across the board (off by 1 error) (589)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 20.01.2021
+  Bugfixes:
+    - Fixed that braking force was not increasing per tier
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 27.11.2020
+  Bugfixes:
+    - Fixed bug on start-up load order introduced in last patch
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 26.11.2020
+  Bugfixes:
+    - Updated to factorio version 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 29.10.2020
+  Changes:
+    - Changed air resistance of tender locomotives to be the same as a cargo wagon to promote the
+      use of a regular locomotive in front over all tender locomotives (384)
+    - Some minor localisation changes to unify angels localisation across mods (372)
+  Bugfixes:
+    - Fixed issues where you could not paste from any locomotive onto smelting cargo wagons (390)
+    - Fixed higher tier smelting trains did not require previous tier as ingredient
+    - Fixed bug where disabling the petro train did also disable smelting train
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 08.09.2020
+  Bugfixes:
+    - Fixed crashes when playing stand alone (without the angels mods)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 20.08.2020
+  Features:
+    - Merges angels mobility mods:
+      - Angels Crawler train v0.1.6
+      - Angels Petro train v0.5.10
+      - Angels Smelting train v0.3.9

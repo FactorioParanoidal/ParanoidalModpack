@@ -1,9 +1,9 @@
 require('init')
 require('setting_init')
 
-MergingChests.create_mergeable_chest_setting('wooden-chest', { default_value = 'none', order = '1' })
-MergingChests.create_mergeable_chest_setting('iron-chest', { default_value = 'none', order = '2' })
-MergingChests.create_mergeable_chest_setting('steel-chest', { order = '3' })
+MergingChests.create_mergeable_chest_setting(MergingChests.chest_names.wooden, { default_value = 'none', order = '1' })
+MergingChests.create_mergeable_chest_setting(MergingChests.chest_names.iron, { default_value = 'none', order = '2' })
+MergingChests.create_mergeable_chest_setting(MergingChests.chest_names.steel, { order = '3' })
 
 data:extend(
 {
@@ -64,13 +64,25 @@ data:extend(
 		order = '08'
 	},
 	{
+		name = MergingChests.setting_names.inventory_type,
+		type = 'string-setting',
+		setting_type = 'startup',
+		default_value = 'with_bar',
+		allowed_values = {
+			'normal',
+			'with_bar',
+			'with_filters_and_bar'
+		},
+		order = '09'
+	},
+	{
 		name = MergingChests.setting_names.sprite_decal_chance,
 		type = 'int-setting',
 		setting_type = 'startup',
 		minimum_value = 0,
 		maximum_value = 100,
 		default_value = 15,
-		order = '09'
+		order = '10'
 	},
 	{
 		name = MergingChests.setting_names.warehouse_threshold,
@@ -78,7 +90,7 @@ data:extend(
 		setting_type = 'startup',
 		minimum_value = 2,
 		default_value = 5,
-		order = '10'
+		order = '11'
 	},
 	{
 		name = MergingChests.setting_names.circuit_connector_position,
@@ -97,13 +109,33 @@ data:extend(
 			'bottom-middle',
 			'bottom-left'
 		},
-		order = '11'
+		order = '12'
 	},
 	{
 		name = MergingChests.setting_names.allow_delete_items,
 		type = 'bool-setting',
 		setting_type = 'runtime-per-user',
 		default_value = false,
-		order = '12'
+		order = '13'
+	},
+	{
+		name = MergingChests.setting_names.enable_upgrading_merged_chests,
+		type = 'bool-setting',
+		setting_type = 'startup',
+		default_value = true,
+		order = '14'
 	}
 })
+
+if MergingChests.is_mod_active(MergingChests.override_size_settings_mod_name) then
+	data.raw['int-setting'][MergingChests.setting_names.max_width].hidden = true
+	data.raw['int-setting'][MergingChests.setting_names.max_height].hidden = true
+	data.raw['int-setting'][MergingChests.setting_names.max_area].hidden = true
+	data.raw['string-setting'][MergingChests.setting_names.whitelist].hidden = true
+	data.raw['bool-setting'][MergingChests.setting_names.mirror_whitelist].hidden = true
+
+end
+if MergingChests.is_mod_active(MergingChests.override_inventory_settings_mod_name) then
+	data.raw['double-setting'][MergingChests.setting_names.inventory_size_multiplier].hidden = true
+	data.raw['int-setting'][MergingChests.setting_names.inventory_size_limit].hidden = true
+end

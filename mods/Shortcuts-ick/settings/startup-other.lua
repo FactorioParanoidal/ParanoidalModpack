@@ -6,22 +6,12 @@
 ]]
 
 --[[ Overview of startup-other.lua
-	* Automatically generate mod shortcuts
 	* Disable all technology requirement changes
 	* Choose whether you want tags or icons
 ]]
 
 data:extend(
 {
-	{
-		setting_type = "startup",
-		name = "autogen-color",
-		localised_name = {"", "[color=yellow]", {"gui-menu.other"}, ": [/color]", {"Shortcuts-ick.autogen-color"}},
-		order = "f[other]-a[autogen-color]",
-		type = "string-setting",
-		allowed_values = {"disabled", "default", "red", "green", "blue"},
-		default_value = "default"
-	},
 	{
 		setting_type = "startup",
 		name = "ick-compatibility-mode",

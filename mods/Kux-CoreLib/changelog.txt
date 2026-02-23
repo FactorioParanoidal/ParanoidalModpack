@@ -1,0 +1,560 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.17.8
+  Features:
+    - add (global) nameof(v) as replacement for fname
+    - add (global) typeof(v) as alias for type
+    - add (global) getEnumName
+    - Colors: add lightgray, gray, darkgray
+  Changes:
+    - add FunctionUtils.nameof as replacement for fname
+    - deprecate (global) fname
+    - add skipFrames paramter to (global) call
+  Bugfixes:
+    - fix Storage.set with nil values
+---------------------------------------------------------------------------------------------------
+Version: 3.17.7
+  Changes:
+    - __classUtils caching revised, revert changes from 3.17.4
+  Bugfixes:
+    - fix a bug in __classUtils cache
+    - fix a bug in Dictionary
+---------------------------------------------------------------------------------------------------
+Version: 3.17.6
+  Bugfixes:
+    - fix the 'Member not exists.' crash in TranslationService
+---------------------------------------------------------------------------------------------------
+Version: 3.17.5
+Date: 2025-06-08
+  Info:
+    - requires Factorio 2.0.55
+  Features:
+    - add new method to SettingsData.Extend
+    - add self expanding dictionaries for Dictionary
+    - add (global) getPlayerIndex
+    - add class Storage
+  Changes:
+    - allow Table.toJson in data stage
+---------------------------------------------------------------------------------------------------
+Version: 3.17.4
+  Changes:
+    - __classUtils caching revised, cache removed, ctor added
+    - EventDistributor _G.player management revised
+---------------------------------------------------------------------------------------------------
+Version: 3.17.3
+  Features:
+    - Debug: add global call and trycall
+  Changes:
+    - KuxCoreLib.SettingsData.Extend
+  Bugfixes:
+    - fix a bug in EventDistributor on_configuration_changed
+    - fix other possible issues in EventDistributor
+    - fix a bug in TranslanslationService
+---------------------------------------------------------------------------------------------------
+Version: 3.17.2
+  Features:
+    - Debug: add formatStackTrace, extractCallerFromTrace
+  Bugfixes:
+    - fix an issue with nil in getLuaObject
+---------------------------------------------------------------------------------------------------
+Version: 3.17.1
+  Features:
+    - RecipeUtils add support for additional_categories (Factorio >= 2.0.49)
+  Changes:
+    - FunctionUtils.registerClass checks now for duplicate objects
+  Bugfixes:
+    - LocalizationUtils: fix wrong constant
+---------------------------------------------------------------------------------------------------
+Version: 3.17.0
+Date: 2025-05-15
+  Info:
+    - lib splitted to Kux-GuiLib, all /gui/ files moved in to new lib
+    - Do not update if it is not required.
+    - If you update it too early you will have to wait until dependent mods are also updated!
+---------------------------------------------------------------------------------------------------
+Version: 3.16.4
+  Features:
+    - auto tooltips, captions to ElementBuilder
+    - ElementBuilder add parameter: localization_section, locale
+    - ElementBuilder: tags.path calculation
+    - TranslationService add hasTranslation()
+    - Eventdistributoe: define _G.player (set in each event
+  Changes:
+    - TranslationService accepts strings as LocalisationStzring
+    - ElementBuilder parameter all_names renamed to element_index
+    - ElementBuilder parameter localization_prefix removed
+    - TranslationService getHash optimized
+  Bugfixes:
+    - fix a bug in TranslationService
+---------------------------------------------------------------------------------------------------
+Version: 3.16.3
+  Features:
+    - add LocalizationUtils
+    - add TranslationService
+---------------------------------------------------------------------------------------------------
+Version: 3.16.2
+  Changes:
+    - add global locstring, a global function that returns a LocalisedString always as a table.
+---------------------------------------------------------------------------------------------------
+Version: 3.16.1
+  Bugfixes:
+    - fix for mussing 'supertype' field
+---------------------------------------------------------------------------------------------------
+Version: 3.16.0
+  Features:
+    - Dictionary: add firstKey,firstValue
+    - add classes LuaGenericPrototype, GuiElemenRef, GuiView, VGuiElement
+    - List: add sort
+    - lua: lower add utf8 support
+    - GuiHelper: getPath, getElementKey
+    - add FunctionUtils
+  Changes:
+    - Table.migrate
+    - ElementBuilder
+    - Table.indexOf returns nil if not found instead of 0 [BREAKING CHANGE]
+    - add missing elem_tootip for ElementBuilder
+---------------------------------------------------------------------------------------------------
+Version: 3.15.15
+  Changes:
+    - Dictionary
+    - getRecipe()
+  Features:
+    - RecipeWithQuantity wrapper
+---------------------------------------------------------------------------------------------------
+Version: 3.15.14
+  Changes:
+    - many changes for Factorium
+---------------------------------------------------------------------------------------------------
+Version: 3.15.13
+  Changes:
+    - add pipe-connection-util
+    - change entity-scale-util
+    - ElementBuilder.createView optional all_names
+    - StageBridge.hasData: add support for data stage
+    - StageBridge.hasSettings: add support for data stage
+    - SettingsData.extend:string: add named 3rd parameter 'allowed'
+    - add EntityData.unpackBoundingBox4
+    - add EntityData.getSize
+    - Table.removeAt: remove old workaround
+    - EventDistributor.register: add support for event array
+    - DataRaw.entityTypes Factorio 2.0 space-age support
+    - DataRaw.itemTypes Factorio 2.0 space-age support
+---------------------------------------------------------------------------------------------------
+Version: 3.15.11
+  Features:
+    - get_1 ... get_9, get_n
+    - ElementBuilder.createView: add optional paramter all_names
+    - PrototypeData.SpritePrototype: add unnamed parameters
+    - EntityData.scale: add more cases in entity-scale-util
+    - PrototypeData.VirtualSignalPrototype: add unnamed parameters
+    - Table.replace
+  Changes:
+    - ElementBuilder.createView: add mode_name parameter
+---------------------------------------------------------------------------------------------------
+Version: 3.15.10
+  Changes:
+    - ElementBuilder: chidren are accepted directly in args
+---------------------------------------------------------------------------------------------------
+Version: 3.15.9
+  Features:
+    - add StageBridge a tool to transfgfer data between stages (settings -> data -> control)
+    - add EntityData.scale support for radar
+---------------------------------------------------------------------------------------------------
+Version: 3.15.8
+  Features:
+    - add EntityData.scale (support for furnace and assembling-machine, all oter WIP)
+  Changes:
+    - StringBuilder class hierarchy and docu improved (the use does not change)
+    - SettingsData.Extend x:int,x:double suporting more arguments
+  Bugfixes:
+    - fix a bug in StringBuilder.append
+---------------------------------------------------------------------------------------------------
+Version: 3.15.7
+  Bugfixes:
+    - Fix SettingsData
+---------------------------------------------------------------------------------------------------
+Version: 3.15.6
+  Features:
+    - add PickerDollies.move_shadow_entities
+    - add PickerDollies.move_entity
+    - add hidden const settings for `extend` -> bool_const, int_const, double_const, string_const, color_const
+---------------------------------------------------------------------------------------------------
+Version: 3.15.5
+  Features:
+    - add ItemData.setStacksize
+    - add patch parameter to EntityData.clone, ItemData.clone, RecipeData.clone, TechnologyData.clone
+    - add Table.appendRangeReverse
+    - and more
+  Bugfixes:
+    - Fix a bug in EventDistributor.unregister
+    - Fix a bug in EventDistributor.script_register filters not passed
+    - fix stdlib Position.from_chunk_position now accepts table<number>
+---------------------------------------------------------------------------------------------------
+Version: 3.15.3
+  Features:
+    - add Storage.check() - check if `storage` contains funktions
+    - add AsyncTask class - Functions for handling long-running things over multiple ticks
+    - add global functions set_1 ... set_9, set_n and global vars _1 ... _9, _n
+    - add Storage.check() - check if `storage` contains functions
+    - add KuxCoreLib.__version - the version of the library (corresponds to the mod version)
+  Changes:
+    - Trace does not use _G.trace_isEnabled anymore use Trace.isEnabled instead
+    - Trace.isEnabled is false by default (trace_isEnabled was true)
+---------------------------------------------------------------------------------------------------
+Version: 3.15.2
+  Features:
+    - global getPlayer, getSurface, getForce, getPlayerName, getSurfaceName, getForceName
+---------------------------------------------------------------------------------------------------
+Version: 3.15.1
+  Features:
+    - add RadarData.calcEnergyByScanTime
+    - SelectionTool (WIP)
+  Changes:
+    - Player.getZoomFactor returns 1 if interfacxe Kux-Zooming is not available
+---------------------------------------------------------------------------------------------------
+Version: 3.15.0
+  Changes:
+    - KuxCoreLib.PrototypeData.Extend extended for all prototypes
+  Bugfixes:
+    - Change the order of event registration. fixes Factorissimo get_factory_by_entity
+---------------------------------------------------------------------------------------------------
+Version: 3.14.4
+  Changes:
+    - make ModInfo unprotected and add a protect() function
+    - EventDistributor spports on_space_platform_built_entity, on_space_platform_mined_entity
+---------------------------------------------------------------------------------------------------
+Version: 3.14.3
+  Features:
+    - Player: add zoom, controller_type
+    - add Events.on_next_tick
+  Changes:
+    - Factorissimo.getToplevelSurface
+    - Trace.getIdentifier: add unit number
+---------------------------------------------------------------------------------------------------
+Version: 3.14.2
+  Bugfixes:
+    - another false warnung fixed "Area for Position not found in package.loaded"
+---------------------------------------------------------------------------------------------------
+Version: 3.14.1
+  Bugfixes:
+    - false warnung fixed "Area for Position not found in package.loaded"
+---------------------------------------------------------------------------------------------------
+Version: 3.14.0
+  Features:
+    - include stdlib with fixes and compatibility for Factrorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 3.13.1
+  Features:
+    - add KuxCoreLib.Freeplay (wrapper for 'freeplay' remote interface)
+  Bugfixes:
+    - Fix Factorissimo.isFactoryFloor
+    - Fix Inserter class
+---------------------------------------------------------------------------------------------------
+Version: 3.13.0
+  Features:
+    - add is_obj(any,object_name)
+  Changes:
+    - force to overwrite global vars in each (sub-)stage, this fixes an issue that other mod overwrites my global vars
+    - protect my classes from accidental changes
+---------------------------------------------------------------------------------------------------
+Version: 3.12.2
+  Bugfixes:
+    - FlyingText.create() Fix Factorio 2.0 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 3.12.1
+---------------------------------------------------------------------------------------------------
+Version: 3.12.0
+  Features:
+    - add PlayerStorage (use KuxCoreLib.PlayerStorage)
+    - add @class PlayerData
+    - add Timer (use KuxCoreLib.Timer) [proof of concept]
+    - add @class TimerData
+    - add Flags.toDictionary :: converts a string[] to a dictionary
+---------------------------------------------------------------------------------------------------
+Version: 3.11.5
+  Bugfixes:
+    - Fix Factorissimo.isFactoryFloor
+---------------------------------------------------------------------------------------------------
+Version: 3.11.4
+  Features:
+    - Add ModInfo.version
+  Changes:
+    - ModInfo.new()
+  Bugfixes:
+    - Fix Factorio 2.0 compatibility
+
+---------------------------------------------------------------------------------------------------
+Version: 3.11.3
+  Changes:
+    - Fix Factorio 2.0 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 3.11.2
+  Changes:
+    - add `lib/mod-base`
+    - add global vars: _G.mod (=script_active_mods), _G.isV1, _G.isV2
+    - Factorio 2.0 compatibility code
+---------------------------------------------------------------------------------------------------
+Version: 3.11.1
+Date: 2024-10-21
+  Features:
+    - add Factorissimo.isAvailable()
+  Changes:
+    - Use of `(global or storage)` as a temporary fix
+  Bugfixes:
+    - Fix a crash in Factorissimo.isFactoryFloor if Factorissimo mod is not available.
+  Info:
+    - push to Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.11.0
+Date: 2024-01-17
+  Features:
+    - Add GuiElementCache
+---------------------------------------------------------------------------------------------------
+Version: 2.10.0
+Date: 2023-11-16
+  Features:
+    - Add ElementBuilder (use KuxCoreLib.GuiBuilder.ElementBuilder)
+    - Add GuiHelper
+  Bugfixes:
+    - Fix loading GuiBuilder
+---------------------------------------------------------------------------------------------------
+Version: 2.9.6
+Date: 2023-11-12
+  Features:
+    - ADD DataGrid
+---------------------------------------------------------------------------------------------------
+Version: 2.9.5
+Date: 2023-11-06
+  Features:
+    - Trace.getIdentifier
+    - Table.getKeysFilterByValue
+    - Factorissimo: getFactory, getToplevelFactory
+---------------------------------------------------------------------------------------------------
+Version: 2.9.4
+Date: 2023-11-03
+  Features:
+    - EntityData/ItemData/RecipeData/TechnologyData: NEW field 'base' returns the base prototype
+---------------------------------------------------------------------------------------------------
+Version: 2.9.3
+Date: 2023-11-02
+  Bugfixes:
+    - Fix missing Trace.mock
+---------------------------------------------------------------------------------------------------
+Version: 2.9.2
+Date: 2023-10-28
+  Features:
+    - Trace: defines_name, defines_displayname, exit
+  Changes:
+    - Trace: color
+  Bugfixes:
+    - Fix CollisionMaskData not found
+---------------------------------------------------------------------------------------------------
+Version: 2.9.1
+Date: 2023-10-13
+  Features:
+    - ADD CollisionMaskData
+    - ADD Trace color
+    - ADD Trace warning, error
+  Changes:
+    - some Factorissimo member changed/removed
+  Bugfixes:
+    - FIX Table.countNonNumericKeys
+    - FIX Table.count
+---------------------------------------------------------------------------------------------------
+Version: 2.9.0
+  Features:
+    - ADD Factorissimo a Factorissimo API
+    - ADD SurfacesMod a Surfaces API
+    - ADD Events.on_custom_input
+    - ADD PrototypeData.extend
+  Bugfixes:
+    - FIX naming in SettingsData.extend
+---------------------------------------------------------------------------------------------------
+Version: 2.8.3
+  Bugfixes:
+    - FIX a bug in Settingsdata.extend (wrong prefix)
+---------------------------------------------------------------------------------------------------
+Version: 2.8.2
+  Features:
+    - ADD PickerDollies support (optional)
+    - ADD Events.on_entity_moved (using PickerDollies)
+    - ADD Events.getDisplayName, registerName (alias for same functions in EventDistributor)
+---------------------------------------------------------------------------------------------------
+Version: 2.8.1
+  Features:
+    - ADD ModInfo.isModLoaded
+    - ADD ErrorHandler
+---------------------------------------------------------------------------------------------------
+Version: 2.8.0
+Date: 2023-08-29
+  Features:
+    - ADD class Trace
+    - ADD class Events
+    - ADD EventDistributor: register_on_timer, unregister_on_timer
+    - ADD SettingsData.extend
+  Bugfixes:
+    - FIX a bug in safeget
+---------------------------------------------------------------------------------------------------
+Version: 2.7.3
+Date: 2023-07-27
+  Features:
+    - ADD BigData
+  Bugfixes:
+    - WORKAROUND keep on_nth_tick registered
+---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2023-07-20
+  Features:
+    - ADD AnimationData
+  Changes:
+    - EventDistributor.register accepts array for eventIdentifier
+  Bugfixes:
+    - FIX handler for CustomInput events
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 2023-07-11
+  Changes:
+    - rename 'global' into 'storage', resp. all other 'Global...' names into "Storage...'
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2023-07-10
+  Features:
+    - ADD ModInfo
+    - ADD Debug: getExecutingMod, getCallingMod, getEntryMod
+    - ADD Technology
+    - ADD GuiBuilder
+    - ADD Global  (Storage in >= 2.7.1)
+    - ADD GlobalPlayer (StoragePlayer in >= 2.7.1)
+    - ADD GlobalPlayers (StoragePlayers in >= 2.7.1)
+    - ADD lua: safegetOrCreate
+    - ADD String: join
+    - ADD Flags
+  Changes:
+    - Assert renamed to That (breaking changes)
+    - Assert complaints like in NUnit
+    - all modules are initialized local first (breaking changes)
+      - so every one has the choice now, where modules are visible
+      - NOTE for existing mods: check the visibilitty. require(__Kux-CoreLib__/lib/module) is not global anymore!
+    - documentation updated
+  Bugfixes:
+    - Make some file extensions lowercase
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 2023-06-29
+  Bugfixes:
+    - FIX a error with Table that was accidentally local by default
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2023-06-28
+  Features:
+    - ADD class DataRaw
+    - ADD class EntityData
+    - ADD class ItemData
+    - ADD class PrototypeData
+    - ADD class RecipeData
+    - ADD class TechnologyData
+    - ADD class TechnologyIndex
+    - AAD artifical event 'on_built', 'on_destroy'
+    - ADD class Path
+    - ADD String.escapeTable
+    - ADD Table.append, Table.stats, Table.removeAt, Table.move, Table.removeGaps
+    - Add lua: anypairs(t)
+  Changes:
+    - String.split add second parameter
+    - List:insert parmeters swapped (breaking changes!)
+    - safeget,safeset now accepts path string ("foo.bar.v")
+    - existing external Log modules wil be overriden!
+  Bugfixes:
+    - FIX a bug in Table.remove
+    - FIX a bug in String.escape, '/' was not escaaped
+---------------------------------------------------------------------------------------------------
+Version: 2.5.3
+Date: 2023-06-07
+  Bugfixes:
+    - FIX Version
+---------------------------------------------------------------------------------------------------
+Version: 2.5.2
+Date: 2023-06-01
+  Features:
+    - ADD EventDistributor: registerName, getDisplayName
+---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 2023-05-31
+  Features:
+    - Table.migrate:
+      - ADD parameter versionField
+      - auto detect versionField "dataVersion", "version"
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2023-05-27
+  Features:
+    - ADD Dictionary, List
+    - ADD Table.isNilOrEmpty
+    - UPD prototypeUtils
+    - UPD Version
+  Optimizations:
+    - EventDistributor
+  Bugfixes:
+    - Table.toJson()
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2023-05-15
+  Features:
+    - ADD Version.baseVersionGreaterOrEqual1d1
+  Changes:
+    - add mod.lua
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2023-05-11
+  Features:
+    - ADD Table.diff, Table.removeEmptyTablesRecursive, Table.toJson
+    - ADD String.isNilOrEmpty, String.isNilOrWhitespace
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+  Features:
+    - ADD ColorConverter
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2020-11-24
+  Info:
+    - v2.x.x scheme is for Factorio 1.1 (experimental)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-10-26
+  Features:
+    - lib.Table NEW
+      - getKeys
+      - getValues
+      - count
+      - migrate
+    - lib.Tools NEW
+      - stringSplit
+    - lib.TestRunner NEW
+      - run
+    - lib.lua
+      - safeget
+      - safeset
+  Optimizations:
+    - added tests
+  Bugfixes:
+    - fix Table.migrate. return value was nil
+    - fix crash in Log on_init
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-10-25
+  Bugfixes:
+    - fix crash in Log.trace. > attempt to index upvalue 'data' (a nil value)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-10-23
+  Bugfixes:
+    - fix crash in Log.onSettingsChanged
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-10-21
+  Features:
+    - Log
+    - Modules
+    - FlyingText
+    - lua extension: iif, switch, try catch,
+  Info:
+    - firt public version

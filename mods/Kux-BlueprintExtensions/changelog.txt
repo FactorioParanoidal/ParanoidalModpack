@@ -1,0 +1,163 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.3.16
+  Bugfixes:
+    - Catching a crash with an invalid recipe returned by FLuidPermutations
+---------------------------------------------------------------------------------------------------
+Version: 3.3.15
+  Bugfixes:
+    - Fix crash when using an invalid `active_index`
+---------------------------------------------------------------------------------------------------
+Version: 3.3.14
+  Bugfixes:
+    - add mising translation in settings
+---------------------------------------------------------------------------------------------------
+Version: 3.3.13
+  Bugfixes:
+    - fix 'add landfill'
+    - fix 'wire wap'
+  Bugfixes:
+    - add 'remove landfill'
+---------------------------------------------------------------------------------------------------
+Version: 3.3.12
+  Bugfixes:
+    - fix a crash when updating a bluprint
+---------------------------------------------------------------------------------------------------
+Version: 3.3.11
+  Features:
+    - added bpex command
+  Bugfixes:
+    - fix get_overlapping_tiles
+    - remove log("GUI.update_visibility")
+---------------------------------------------------------------------------------------------------
+Version: 3.3.10
+  Bugfixes:
+    - fix crash
+---------------------------------------------------------------------------------------------------
+Version: 3.3.9
+  Features:
+    - Hide UI for blueprints with "hidden" flag
+  Bugfixes:
+    - fix Blueprint still called old 1.1 functions
+---------------------------------------------------------------------------------------------------
+Version: 3.3.8
+  Features:
+    - added zh-CN locale (reqest by plexpt)
+    - [WIP] convert blueprint command, to convert old rail blueprints to new rail blueprints
+---------------------------------------------------------------------------------------------------
+Version: 3.3.7
+  Changes:
+    - supports writable bluprint from bluprint library again (was disabled in Factorio 1.1)
+    - but blueprint books and read-only blueprints (player lubrary) are still not (yet) supported
+---------------------------------------------------------------------------------------------------
+Version: 3.3.6
+Date: 2024-11-16
+  Bugfixes:
+    - Fix Flip half-rail, add elevated and legacy rail support
+---------------------------------------------------------------------------------------------------
+Version: 3.3.5
+Date: 2024-11-03
+  Bugfixes:
+    - Fix Flip
+---------------------------------------------------------------------------------------------------
+Version: 3.3.4
+Date: 2024-10-31
+  Bugfixes:
+    - Fix Updater
+---------------------------------------------------------------------------------------------------
+Version: 3.3.3
+Date: 2024-10-25
+  Info:
+    - pushed to Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2024-06-04
+  Features:
+    - Support for Fluid Permutations forks which use the same interface name
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2023-09-16
+  Features:
+    - Flip support for Flow Control and derived mods
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2023-09-16
+  Features:
+    - Flip support for Advanced fluid handling
+---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 2023-07-13
+  Changes:
+    - uses Kux-CoreLib 2.7.1
+    - refactoring
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 2023-06-29
+  Changes:
+    - uses Kux-CoreLib 2.6.0
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2022-11-17
+  Changes:
+    - uses Kux-CoreLib 2.2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2022-11-17
+  Bugfixes:
+    - FIX for sidebar does not appear
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2022-10-13
+  Changes:
+    - ADD support for Nullius mirrored buildings nullius-flotation-cell2, nullius-flotation-cell3, nullius-mirror-flotation-cell2, nullius-mirror-flotation-cell3,
+    - ADD support for Advanced Fluid Handling: underground-L-t2-pipe, underground-L-t3-pipe, underground-L-t4-pipe
+    - ADD support for Fluid Must Flow: duct-t-junction
+    - ADD support for blueprint["position-relative-to-grid"]
+  Info:
+    - END of support for Factorio 1.0 and earlier.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2021-07-14
+  Bugfixes:
+    - FIX blueprint allignment with rails. should support also all modded rails and signals if fast_replaceable_group is correctly set
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-01-14
+  Bugfixes:
+    - Fix: (custom-input): game control to link to (clean_cursor) does not exist. (#1.0)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2021-01-13
+  Changes:
+    - support for Fluid Permutations
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2020-11-25
+  Bugfixes:
+    - fix 'clean_cursor' usage for 1.1.x
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2020-11-24
+  Bugfixes:
+    - fix 'clean_cursor' usage for 1.1.0
+    - fix 'mod_gui' usage for 1.1.0
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2020-11-24
+  Info:
+    - v2.x.x scheme for Factorio 1.1.x experimental
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-10-23
+  Features:
+    - prepared support for Fluid Permutations (waiting for interface changes)
+  Bugfixes:
+    - fix crash in Events.add
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-10-22
+  Bugfixes:
+    - FIX crash on selecting a blueprint book
+    - FIX blueprint allignment
+  Info:
+    - First release
+    - Republishing of BlueprintExtensions v0.5.0

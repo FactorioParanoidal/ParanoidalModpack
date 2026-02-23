@@ -7,28 +7,28 @@
 
 --[[ Overview of shortcuts-equipment.lua:
 	* Belt immunity equipment shortcut.
-	* Discharge defense remote shortcut.
 	* Night vision equipment shortcut.
 	* Personal laser defense shortcut.
 	* (Jetpack shortcut.)
 ]]
 
 -- TAGS
-local belt_immunity_equipment = ""
-local discharge_defense_remote = ""
-local night_vision_equipment = ""
-local personal_laser_defense_equipment = ""
+local belt_immunity_equipment
+local night_vision_equipment
+local personal_laser_defense_equipment
 if settings.startup["ick-tags"].value == "tags" then
 	local tag = {"Shortcuts-ick.equipment"}
 	belt_immunity_equipment = tag
-	discharge_defense_remote = tag
 	night_vision_equipment = tag
 	personal_laser_defense_equipment = tag
 elseif settings.startup["ick-tags"].value == "icons" then
 	belt_immunity_equipment = "[img=item/belt-immunity-equipment] "
-	discharge_defense_remote = "[img=item/discharge-defense-remote] "
 	night_vision_equipment = "[img=item/night-vision-equipment] "
 	personal_laser_defense_equipment = "[img=item/personal-laser-defense-equipment] "
+else
+	belt_immunity_equipment = ""
+	night_vision_equipment = ""
+	personal_laser_defense_equipment = ""
 end
 
 -- BELT IMMUNITY EQUIPMENT
@@ -40,70 +40,15 @@ if settings.startup["belt-immunity-equipment"].value then
 		order = "c[equipment-c[belt-immunity-equipment]",
 		action = "lua",
 		toggleable = true,
-		icon = {
-			filename = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x32.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		small_icon = {
-			filename = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x24.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_icon = {
-			filename = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x32-white.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_small_icon = {
-			filename = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x24-white.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		}
-	}})
-end
-
--- DISCHARGE DEFENSE REMOTE
-if settings.startup["discharge-defense-remote"].value then
-	data:extend({{
-		type = "shortcut",
-		name = "discharge-defense-remote",
-		localised_name = {"", discharge_defense_remote, {"item-name.discharge-defense-remote"}},
-		order = "c[equipment]-d[discharge-defense-remote]",
-		action = "lua",
-		style = "red",
-		icon = {
-			filename = "__Shortcuts-ick__/graphics/discharge-defense-remote-x32-white.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		small_icon = {
-			filename = "__Shortcuts-ick__/graphics/discharge-defense-remote-x24-white.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		}
+		icon = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x32.png",
+		icon_size = 32,
+		small_icon = "__Shortcuts-ick__/graphics/belt-immunity-toggle-x24.png",
+		small_icon_size = 24
 	}})
 end
 
 -- NIGHT VISION EQUIPMENT
 if settings.startup["night-vision-equipment"].value then
-	-- Remove shortcut from PickerInventoryTools
-	if mods["PickerInventoryTools"] and data.raw.shortcut["toggle-night-vision-equipment"] then
-		data.raw.shortcut["toggle-night-vision-equipment"] = nil
-	end
-
 	data:extend({{
 		type = "shortcut",
 		name = "night-vision-equipment",
@@ -111,44 +56,15 @@ if settings.startup["night-vision-equipment"].value then
 		order = "c[equipment]-e[night-vision-equipment]",
 		action = "lua",
 		toggleable = true,
-		icon = {
-			filename = "__Shortcuts-ick__/graphics/night-vision-toggle-x32.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		small_icon = {
-			filename = "__Shortcuts-ick__/graphics/night-vision-toggle-x24.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_icon = {
-			filename = "__Shortcuts-ick__/graphics/night-vision-toggle-x32-white.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_small_icon = {
-			filename = "__Shortcuts-ick__/graphics/night-vision-toggle-x24-white.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		}
+		icon = "__Shortcuts-ick__/graphics/night-vision-toggle-x32.png",
+		icon_size = 32,
+		small_icon = "__Shortcuts-ick__/graphics/night-vision-toggle-x24.png",
+		small_icon_size = 24
 	}})
 end
 
 -- PERSONAL LASER DEFENSE
 if settings.startup["active-defense-equipment"].value then
-	-- Remove shortcut from PickerInventoryTools
-	if mods["PickerInventoryTools"] and data.raw.shortcut["toggle-active-defense-equipment"] then
-		data.raw.shortcut["toggle-active-defense-equipment"] = nil
-	end
-
 	data:extend({{
 		type = "shortcut",
 		name = "active-defense-equipment",
@@ -156,79 +72,9 @@ if settings.startup["active-defense-equipment"].value then
 		order = "c[equipment]-f[active-defense-equipment]",
 		action = "lua",
 		toggleable = true,
-		icon = {
-			filename = "__Shortcuts-ick__/graphics/active-defense-equipment-x32.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		small_icon = {
-			filename = "__Shortcuts-ick__/graphics/active-defense-equipment-x24.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_icon = {
-			filename = "__Shortcuts-ick__/graphics/active-defense-equipment-x32-white.png",
-			priority = "extra-high-no-scale",
-			size = 32,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		},
-		disabled_small_icon = {
-			filename = "__Shortcuts-ick__/graphics/active-defense-equipment-x24-white.png",
-			priority = "extra-high-no-scale",
-			size = 24,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		}
+		icon = "__Shortcuts-ick__/graphics/active-defense-equipment-x32.png",
+		icon_size = 32,
+		small_icon = "__Shortcuts-ick__/graphics/active-defense-equipment-x24.png",
+		small_icon_size = 24
 	}})
 end
-
--- JETPACK
---[[
-if mods["jetpack"] and settings.startup["jetpack"].value then
-	if settings.startup["jetpack"].value then
-		data:extend({{
-			type = "shortcut",
-			name = "jetpack",
-			localised_name = {"", {"Shortcuts-ick.equipment"}, {"mod-name.jetpack"}},
-			order = "c[equipment]-g[jetpack]",
-			associated_control_input = "jetpack",
-			action = "lua",
-			toggleable = true,
-			icon = {
-				filename = "__Shortcuts-ick__/graphics/jetpack-x32.png",
-				priority = "extra-high-no-scale",
-				size = 32,
-				scale = 0.5,
-				mipmap_count = 2,
-				flags = {"gui-icon"}
-			},
-			small_icon = {
-				filename = "__Shortcuts-ick__/graphics/jetpack-x24.png",
-				priority = "extra-high-no-scale",
-				size = 24,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			},
-			disabled_icon = {
-				filename = "__Shortcuts-ick__/graphics/jetpack-x32-white.png",
-				priority = "extra-high-no-scale",
-				size = 32,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			},
-			disabled_small_icon = {
-				filename = "__Shortcuts-ick__/graphics/jetpack-x24-white.png",
-				priority = "extra-high-no-scale",
-				size = 24,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			}
-		}})
-	end
-end
-]]

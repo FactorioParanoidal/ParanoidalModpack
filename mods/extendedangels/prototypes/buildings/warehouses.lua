@@ -69,212 +69,195 @@ local tint = angelsmods.addons.storage.number_tint
 local warehouse_buildings = {
     -- STANDARD WAREHOUSES
     -- Warehouse 2
-    ["warehouse-mk2"] = {
+    ["angels-warehouse-mk2"] = {
         source = "angels-warehouse",
         type = "container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse.png",
         tier = 2,
-        order = "a[warehouse-mk2]",
+        order = "a[angels-warehouse-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-mk3",
+        next_upgrade = "angels-warehouse-mk3",
         inventory_size = inventory_sizes[2].warehouse,
     },
-
     -- Warehouse 3
-    ["warehouse-mk3"] = {
+    ["angels-warehouse-mk3"] = {
         source = "angels-warehouse",
         type = "container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse.png",
         tier = 3,
         order = "a[warehouse-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-mk4",
+        next_upgrade = "angels-warehouse-mk4",
         inventory_size = inventory_sizes[3].warehouse,
     },
-
     -- Warehouse 4
-    ["warehouse-mk4"] = {
+    ["angels-warehouse-mk4"] = {
         source = "angels-warehouse",
         type = "container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse.png",
         tier = 4,
-        order = "a[warehouse-mk4]",
+        order = "a[angels-warehouse-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].warehouse,
     },
-
     -- LOGISTIC WAREHOUSES
     -- Warehouse passive provider 2
-    ["warehouse-passive-provider-mk2"] = {
+    ["angels-warehouse-passive-provider-mk2"] = {
         source = "angels-warehouse-passive-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-pprovider.png",
         tier = 2,
-        order = "b[warehouse-passive-provider-mk2]",
+        order = "b[angels-warehouse-passive-provider-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-passive-provider-mk3",
+        next_upgrade = "angels-warehouse-passive-provider-mk3",
         inventory_size = inventory_sizes[2].passive_provider,
     },
-
     -- Warehouse passive provider 3
-    ["warehouse-passive-provider-mk3"] = {
+    ["angels-warehouse-passive-provider-mk3"] = {
         source = "angels-warehouse-passive-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-pprovider.png",
         tier = 3,
-        order = "b[warehouse-passive-provider-mk3]",
+        order = "b[angels-warehouse-passive-provider-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-passive-provider-mk4",
+        next_upgrade = "angels-warehouse-passive-provider-mk4",
         inventory_size = inventory_sizes[3].passive_provider,
     },
-
     -- Warehouse passive provider 4
-    ["warehouse-passive-provider-mk4"] = {
+    ["angels-warehouse-passive-provider-mk4"] = {
         source = "angels-warehouse-passive-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-pprovider.png",
         tier = 4,
-        order = "b[warehouse-passive-provider-mk4]",
+        order = "b[angels-warehouse-passive-provider-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].passive_provider,
     },
-
     -- Warehouse active provider 2
-    ["warehouse-active-provider-mk2"] = {
+    ["angels-warehouse-active-provider-mk2"] = {
         source = "angels-warehouse-active-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-aprovider.png",
         tier = 2,
-        order = "c[warehouse-active-provider-mk2]",
+        order = "c[angels-warehouse-active-provider-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-active-provider-mk3",
+        next_upgrade = "angels-warehouse-active-provider-mk3",
         inventory_size = inventory_sizes[2].active_provider,
     },
-
     -- Warehouse active provider 3
-    ["warehouse-active-provider-mk3"] = {
+    ["angels-warehouse-active-provider-mk3"] = {
         source = "angels-warehouse-active-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-aprovider.png",
         tier = 3,
-        order = "c[warehouse-active-provider-mk3]",
+        order = "c[angels-warehouse-active-provider-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-active-provider-mk4",
+        next_upgrade = "angels-warehouse-active-provider-mk4",
         inventory_size = inventory_sizes[3].active_provider,
     },
-
     -- Warehouse active provider 4
-    ["warehouse-active-provider-mk4"] = {
+    ["angels-warehouse-active-provider-mk4"] = {
         source = "angels-warehouse-active-provider",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-aprovider.png",
         tier = 4,
-        order = "c[warehouse-active-provider-mk4]",
+        order = "c[angels-warehouse-active-provider-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].active_provider,
     },
-
     -- Warehouse storage 2
-    ["warehouse-storage-mk2"] = {
+    ["angels-warehouse-storage-mk2"] = {
         source = "angels-warehouse-storage",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-storage.png",
         tier = 2,
-        order = "d[warehouse-storage-mk2]",
+        order = "d[angels-warehouse-storage-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-storage-mk3",
+        next_upgrade = "angels-warehouse-storage-mk3",
         inventory_size = inventory_sizes[2].storage,
     },
-
     -- Warehouse storage 3
-    ["warehouse-storage-mk3"] = {
+    ["angels-warehouse-storage-mk3"] = {
         source = "angels-warehouse-storage",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-storage.png",
         tier = 3,
-        order = "d[warehouse-storage-mk3]",
+        order = "d[angels-warehouse-storage-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-storage-mk4",
+        next_upgrade = "angels-warehouse-storage-mk4",
         inventory_size = inventory_sizes[3].storage,
     },
-
     -- Warehouse storage 4
-    ["warehouse-storage-mk4"] = {
+    ["angels-warehouse-storage-mk4"] = {
         source = "angels-warehouse-storage",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-storage.png",
         tier = 4,
-        order = "d[warehouse-storage-mk4]",
+        order = "d[angels-warehouse-storage-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].storage,
     },
-
     -- Warehouse requester 2
-    ["warehouse-requester-mk2"] = {
+    ["angels-warehouse-requester-mk2"] = {
         source = "angels-warehouse-requester",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-requester.png",
         tier = 2,
-        order = "f[warehouse-requester-mk2]",
+        order = "f[angels-warehouse-requester-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-requester-mk3",
+        next_upgrade = "angels-warehouse-requester-mk3",
         inventory_size = inventory_sizes[2].requester,
     },
-
     -- Warehouse requester 3
-    ["warehouse-requester-mk3"] = {
+    ["angels-warehouse-requester-mk3"] = {
         source = "angels-warehouse-requester",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-requester.png",
         tier = 3,
-        order = "f[warehouse-requester-mk3]",
+        order = "f[angels-warehouse-requester-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-requester-mk4",
+        next_upgrade = "angels-warehouse-requester-mk4",
         inventory_size = inventory_sizes[3].requester,
     },
-
     -- Warehouse requester 4
-    ["warehouse-requester-mk4"] = {
+    ["angels-warehouse-requester-mk4"] = {
         source = "angels-warehouse-requester",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-requester.png",
         tier = 4,
-        order = "f[warehouse-requester-mk4]",
+        order = "f[angels-warehouse-requester-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].requester,
     },
-
     -- Warehouse buffer 2
-    ["warehouse-buffer-mk2"] = {
+    ["angels-warehouse-buffer-mk2"] = {
         source = "angels-warehouse-buffer",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-buffer.png",
         tier = 2,
-        order = "e[warehouse-buffer-mk2]",
+        order = "e[angels-warehouse-buffer-mk2]",
         subgroup = "angels-warehouses-2",
-        next_upgrade = "warehouse-buffer-mk3",
+        next_upgrade = "angels-warehouse-buffer-mk3",
         inventory_size = inventory_sizes[2].buffer,
     },
-
     -- Warehouse buffer 3
-    ["warehouse-buffer-mk3"] = {
+    ["angels-warehouse-buffer-mk3"] = {
         source = "angels-warehouse-buffer",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-buffer.png",
         tier = 3,
-        order = "e[warehouse-buffer-mk3]",
+        order = "e[angels-warehouse-buffer-mk3]",
         subgroup = "angels-warehouses-3",
-        next_upgrade = "warehouse-buffer-mk4",
+        next_upgrade = "angels-warehouse-buffer-mk4",
         inventory_size = inventory_sizes[3].buffer,
     },
-
     -- Warehouse buffer 4
-    ["warehouse-buffer-mk4"] = {
+    ["angels-warehouse-buffer-mk4"] = {
         source = "angels-warehouse-buffer",
         type = "logistic-container",
         icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-buffer.png",
         tier = 4,
-        order = "e[warehouse-buffer-mk4]",
+        order = "e[angels-warehouse-buffer-mk4]",
         subgroup = "angels-warehouses-4",
         inventory_size = inventory_sizes[4].buffer,
     },
@@ -286,7 +269,7 @@ for name, params in pairs(warehouse_buildings) do
     if not source_entity then goto continue end
 
     -- Fetch the icon with numeral overlay
-    local icons = extangels.numeral_tier({icon = params.icon, icon_size = params.icon_size or 32}, params.tier, params.tint or tint)
+    local icons = extangels.numeral_tier({ icon = params.icon, icon_size = params.icon_size or 32 }, params.tier, params.tint or tint)
 
     data:extend({
         -- Create the item
@@ -301,13 +284,13 @@ for name, params in pairs(warehouse_buildings) do
         },
 
         -- Create the entity
-        util.merge{source_entity, {
+        util.merge { source_entity, {
             name = name,
-            minable = {result = name},
+            minable = { result = name },
             next_upgrade = params.next_upgrade or nil,
             inventory_size = params.inventory_size,
             subgroup = params.subgroup,
-        }},
+        } },
     })
 
     -- Set entity icon
@@ -319,12 +302,12 @@ end
 
 -- ANGEL FIXES
 local base_warehouses = {
-    ["angels-warehouse"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse.png", type = "container"},
-    ["angels-warehouse-passive-provider"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-pprovider.png", type = "logistic-container"},
-    ["angels-warehouse-active-provider"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-aprovider.png", type = "logistic-container"},
-    ["angels-warehouse-storage"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-storage.png", type = "logistic-container"},
-    ["angels-warehouse-requester"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-requester.png", type = "logistic-container"},
-    ["angels-warehouse-buffer"] = {icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-buffer.png", type = "logistic-container"},
+    ["angels-warehouse"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse.png", type = "container" },
+    ["angels-warehouse-passive-provider"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-pprovider.png", type = "logistic-container" },
+    ["angels-warehouse-active-provider"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-aprovider.png", type = "logistic-container" },
+    ["angels-warehouse-storage"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-storage.png", type = "logistic-container" },
+    ["angels-warehouse-requester"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-requester.png", type = "logistic-container" },
+    ["angels-warehouse-buffer"] = { icon = "__angelsaddons-storage__/graphics/icons/warehouse-log-buffer.png", type = "logistic-container" },
 }
 
 for name, params in pairs(base_warehouses) do
@@ -332,17 +315,10 @@ for name, params in pairs(base_warehouses) do
     local entity = data.raw[params.type][name]
 
     if item then
-        item.icons = extangels.numeral_tier({icon = params.icon, icon_size = 32}, 1, tint)
+        item.icons = extangels.numeral_tier({ icon = params.icon, icon_size = 32 }, 1, tint)
     end
 
     if entity then
-        entity.icons = extangels.numeral_tier({icon = params.icon, icon_size = 32}, 1, tint)
+        entity.icons = extangels.numeral_tier({ icon = params.icon, icon_size = 32 }, 1, tint)
     end
 end
-
-
-
-
-
-
-

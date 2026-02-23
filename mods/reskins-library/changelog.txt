@@ -1,4 +1,90 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2026-01-03
+  Bugfixes:
+    - Fixed edge case where a startup error could occur when trying to defer setting an icon
+    - Fixed that the missing mod notification was not correctly resolving the pluralization locale string
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2025-07-03
+  Features:
+    - Added Artisanal Reskins: Compatibility support notifications for Loaders Modernized and Miniloader (Redux).
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2025-05-10
+  Locale:
+    - Removed outdated translations for changed locale strings.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2025-03-30
+  Features:
+    - Migration to Factorio 2.0!
+    - Added new `reskins.lib.tiers.get_tier(tier, prog_tier)` or `get_tier(tier)` function to get the tier number from a PrototypeTierValue or number, and optionally the progression tier number, based on the current setting.
+  Breaking Changes:
+    - Removed `icon_mipmaps` parameter from `api.icons.create_icon` method
+    - Removed `icon_mipmaps` parameter from `api.icons.create_technology_icon` method
+    - Removed `icon_mipmaps` parameter from `api.tiers.create_icon_with_tier_labels` method
+    - Removed all deprecated API functions
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2024-08-03
+  Changes:
+    - Modified the handling of icon defaults: icon_size will now attempt to be coerced to a number, instead of throwing an exception. 
+      - Starting in Factorio 2.0, icon_size can only be a number and will throw exceptions otherwise.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2024-05-04
+  Bugfixes:
+    - Fix that underscores were not considered valid characters in mod names when performing icon filename validation.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-05-04
+  Bugfixes:
+    - Fix that the table check in reskins.lib.append_tier_labels was lost in the deprecation. 
+      - This restores the historical behavior, but mods should now use one of:
+        - reskins.lib.tiers.add_tier_labels_to_icon, taking an IconData object
+        - reskins.lib.tiers_add_tier_labels_to_icons, taking an array of IconData objects
+        - reskins.lib.create_icon_with_tier_labels, taking an icon filename and icon size and optional mipmaps, scale, shift and tint.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-05-04
+  Changes:
+    - Migrated custom color settings to `color-setting`, allowing for the use of a color picker in-game
+    - Significant rework of internals (ongoing), and the API is being reworked.
+      - Some old API functions have been marked deprecated, and will be removed in a future version.
+      - The entire old API surface will be deprecated (eventually), and removed in a later version.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2023-12-24
+  Bugfixes:
+    - Fixed that parsing of Angels pipe materials was not returning the expected file paths
+---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2023-12-23
+  Features:
+    - Added `reskins.lib.add_tier_labels_to_entity`
+    - Added `reskins.lib.add_tier_labels_to_icons`
+    - Added `reskins.lib.get_icons_from_entity`
+      - Use to get a table of IconData from an entity, regardless of how an icon is formatted
+    - Added `reskins.lib.convert_icons_to_sprite`
+    - Added `reskins.lib.convert_icon_to_sprite`
+    - Added `reskins.lib.sprites.pipes.get_pipe_pictures`, 
+    - Added `reskins.lib.sprites.pipes.get_pipe_to_ground_pictures`
+    - Added `reskins.lib.sprites.pipes.get_pipe_covers`
+  Changes:
+    - Added AAI Loaders to the list of supported mods
+  Deprecated:
+    - Deprecated `reskins.lib.append_tier_labels_to_vanilla_icon`, use `reskins.lib.add_tier_labels_to_entity`
+    - Deprecated `reskins.lib.append_tier_labels`, use `reskins.lib.add_tier_labels_to_icons`
+      - Note that the new function returns a modified icons table, it does not modify the table in place
+    - Deprecated `reskins.lib.pipe_pictures`, `reskins.lib.underground_pipe_pictures` and `reskins.lib.pipe_covers`
+      - New methods take only the material value as an input, the internal bits have been removed as parameters
+---------------------------------------------------------------------------------------------------
+Version: 2.1.5
+Date: 2023-04-13
+  Changes:
+    - Added Intermodal Containers to the list of supported mods
+---------------------------------------------------------------------------------------------------
 Version: 2.1.4
 Date: 2022-10-06
   Changes:
@@ -43,7 +129,7 @@ Date: 2021-12-12
 Version: 2.0.3
 Date: 2021-09-29
   Changes:
-    - Entity rescaling function now processes values attached to a `position` field.
+    - Entity rescaling function now processes values attached to a `position` field
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2021-09-14
@@ -199,7 +285,7 @@ Date: 2020-09-21
     - Directories are now handled via the `mod` field of the `inputs` table, instead of the `directory` field
     - Function `create_icons_from_list` can now handle the `mod` field of the `inputs` table
     - Modified `create_icons_from_list` to allow specification of `icon_filename` directly
-    - Renamed tier-mapping style "Name" to "Traditional", updated description of the setting "Tier mapping" for clarity.
+    - Renamed tier-mapping style "Name" to "Traditional", updated description of the setting "Tier mapping" for clarity
     - Moved several item icons from Artisanal Reskins: Bob's Mods to this mod
   Bugfixes:
     - Fixed that assigning an icon to a recipe that shared a name with an item would overwrite the item icon

@@ -6,7 +6,7 @@ local function resetLogisticTechEffects(force)
 
 	for _,tech in pairs(force.technologies) do
 		if tech.researched then
-			for _,effect in pairs(tech.effects) do
+			for _,effect in pairs(tech.prototype.effects) do
 				if effect.type == "character-logistic-trash-slots" then
 					trashslots = trashslots + effect.modifier
 				elseif effect.type == "character-logistic-requests" then

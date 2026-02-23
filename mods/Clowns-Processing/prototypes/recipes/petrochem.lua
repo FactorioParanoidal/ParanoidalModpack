@@ -3,22 +3,22 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-water-separation-oxygen",
-		category = "petrochem-electrolyser",
+		category = "angels-petrochem-electrolyser",
 		subgroup = "clowns-electrolysis",
 		order = "a",
 		energy_required = 2,
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "water-purified", amount = 1000},
-			{type = "item", name = "catalyst-metal-violet", amount = 1}
+			{type = "fluid", name = "angels-water-purified", amount = 1000},
+			{type = "item", name = "clowns-catalyst-metal-violet", amount = 1}
 		},
 		results=
 		{
-			{type = "fluid", name = "gas-oxygen", amount = 800},
-			{type = "item", name = "catalyst-metal-carrier", amount = 1}
+			{type = "fluid", name = "angels-gas-oxygen", amount = 800},
+			{type = "item", name = "angels-catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "OOH",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"angels-gas-oxygen"}, "OOH",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 		crafting_machine_tint =
 		{
 			primary = {r = 1, g = 0, b = 0, a = 0},
@@ -29,22 +29,22 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-water-separation-hydrogen",
-		category = "petrochem-electrolyser",
+		category = "angels-petrochem-electrolyser",
 		subgroup = "clowns-electrolysis",
 		order = "b",
 		energy_required = 2,
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "water-purified", amount = 1000},
-			{type = "item", name = "catalyst-metal-violet", amount = 1}
+			{type = "fluid", name = "angels-water-purified", amount = 1000},
+			{type = "item", name = "clowns-catalyst-metal-violet", amount = 1}
 		},
 		results =
 		{
-			{type = "fluid", name = "gas-hydrogen", amount = 1200},
-			{type = "item", name = "catalyst-metal-carrier", amount = 1}
+			{type = "fluid", name = "angels-gas-hydrogen", amount = 1200},
+			{type = "item", name = "angels-catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-hydrogen"}, "HHO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"angels-gas-hydrogen"}, "HHO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 		crafting_machine_tint =
 		{
 			primary = {r = 1, g = 0, b = 0, a = 0},
@@ -63,15 +63,15 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "gas-compressed-air", amount = 1000},
-			{type = "item", name = "catalyst-metal-violet", amount = 1}
+			{type = "fluid", name = "angels-gas-compressed-air", amount = 1000},
+			{type = "item", name = "clowns-catalyst-metal-violet", amount = 1}
 		},
 		results =
 		{
-			{type = "fluid", name = "gas-nitrogen", amount = 1000},
-			{type = "item", name = "catalyst-metal-carrier", amount = 1}
+			{type = "fluid", name = "angels-gas-nitrogen", amount = 1000},
+			{type = "item", name = "angels-catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-nitrogen"}, "NNO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"angels-gas-nitrogen"}, "NNO",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 	},
 	{
 		type = "recipe",
@@ -83,70 +83,70 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "gas-compressed-air", amount = 1000},
-			{type = "item", name = "catalyst-metal-violet", amount = 1}
+			{type = "fluid", name = "angels-gas-compressed-air", amount = 1000},
+			{type = "item", name = "clowns-catalyst-metal-violet", amount = 1}
 		},
 		results =
 		{
-			{type = "fluid", name = "gas-oxygen", amount = 1000},
-			{type = "item", name = "catalyst-metal-carrier", amount = 1}
+			{type = "fluid", name = "angels-gas-oxygen", amount = 1000},
+			{type = "item", name = "angels-catalyst-metal-carrier", amount = 1}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-oxygen"}, "OON",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"angels-gas-oxygen"}, "OON",{{"__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",icon_size=32}}),
 	},
 	{
 		type = "recipe",
 		name = "hydrochloric-acid-separation",
-		category = "petrochem-electrolyser",
+		category = "angels-petrochem-electrolyser",
 		subgroup = "clowns-electrolysis",
 		order = "e",
 		energy_required = 2,
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "liquid-hydrochloric-acid", amount = 100}
+			{type = "fluid", name = "angels-liquid-hydrochloric-acid", amount = 100}
 		},
 		results =
 		{
-			{type = "fluid", name = "gas-chlorine", amount = 40},
-			{type = "fluid", name = "gas-hydrogen", amount = 60}
+			{type = "fluid", name = "angels-gas-chlorine", amount = 40},
+			{type = "fluid", name = "angels-gas-hydrogen", amount = 60}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-chlorine","gas-hydrogen"}, "CHOc"),
+		icons = angelsmods.functions.create_gas_recipe_icon({"angels-gas-chlorine","angels-gas-hydrogen"}, "CHOc"),
 	},
 	{
 		type = "recipe",
 		name = "hydrofluoric-acid-separation",
-		category = "petrochem-electrolyser",
+		category = "angels-petrochem-electrolyser",
 		subgroup = "clowns-electrolysis",
 		order = "f",
 		energy_required = 2,
 		enabled = false,
 		ingredients =
 		{
-			{type = "fluid", name = "liquid-hydrofluoric-acid", amount = 100}
+			{type = "fluid", name = "angels-liquid-hydrofluoric-acid", amount = 100}
 		},
 		results =
 		{
-			{type = "fluid", name = "gas-fluorine", amount = 40},
-			{type = "fluid", name = "gas-hydrogen", amount = 60}
+			{type = "fluid", name = "clowns-gas-fluorine", amount = 40},
+			{type = "fluid", name = "angels-gas-hydrogen", amount = 60}
 		},
-		icons = angelsmods.functions.create_gas_recipe_icon({"gas-fluorine","gas-hydrogen"}, "FHH",{"liquid-hydrofluoric-acid"}),
+		icons = angelsmods.functions.create_gas_recipe_icon({"clowns-gas-fluorine","angels-gas-hydrogen"}, "FHH",{"angels-liquid-hydrofluoric-acid"}),
 	},
 	{
 		type = "recipe",
-		name = "catalyst-metal-violet",
+		name = "clowns-catalyst-metal-violet",
 		category = "crafting-with-fluid",
-		subgroup = "petrochem-catalysts",
+		subgroup = "angels-petrochem-catalysts",
 		energy_required = 2,
 		enabled = false,
 		ingredients =
 		{
-			{type = "item", name = "catalyst-metal-carrier", amount = 10},
-			{type = "item", name = "platinum-ore", amount = 1},
-			{type = "fluid", name = "liquid-mercury", amount = 10},
+			{type = "item", name = "angels-catalyst-metal-carrier", amount = 10},
+			{type = "item", name = clowns.special_vanilla and "angels-solid-sodium" or "angels-platinum-ore", amount = 1},
+			{type = "fluid", name = "clowns-liquid-mercury", amount = 10},
 		},
 		results =
 		{
-			{type = "item", name = "catalyst-metal-violet", amount = 10},
+			{type = "item", name = "clowns-catalyst-metal-violet", amount = 10},
 		},
 		icon = "__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",
 		icon_size = 32,

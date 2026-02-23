@@ -1,0 +1,18 @@
+License BinbinHfr v2.0
+--------------------------------------------------------------------------------------------------
+Mod created by BinbinHfr (you can contact me on the Factorio forum)
+--------------------------------------------------------------------------------------------------
+License :
+- you are free to use this mod with Factorio.
+- you are free to distribute this mod as long as this license and the mod package are kept intact.
+- you are free to talk about this mod in any form (articles, forums, podcasts, videos, etc.).
+
+- you cannot modify this mod without my explicit permission (except for strict personal use).
+- if you modify this mod, you cannot distribute the modified version nor release it to the public.
+
+- in case this mod seems abandonned and not maintained anymore, and if I do not respond on the 
+  Factorio forum mod's thread, you can then choose to maintain this mod, modify it and distribute 
+  it under a separate release, giving clear credits to the original author.
+  
+- this mod is provided "as is" and without any warranty.
+--------------------------------------------------------------------------------------------------

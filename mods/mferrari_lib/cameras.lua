@@ -5,7 +5,8 @@
 
 v 1.10  07/08/2023	 update cam position (projectiles)  2022 (cam size opt, screen cameras, fix active cam limits, removed position tracking)
 v 1.2 07/2024 - accepts rendering object
-v 2.0 10/24 - factorio2, chart, fixed a crash on closing cameras, added to lib
+v 2.0 10/24 - factorio2, chart, fixed a crash on closing cameras, final position, added to lib
+v 2.1 init GLOBAL CAMERA CONTROL
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   
   
@@ -76,9 +77,9 @@ end
 
 
 
-
 --## CAMERAS
--- Object may be an entity or a fixed position, if entity, camera will follow it
+-- Object may be an entity or a fixed position, if entity, camera will follow it.
+-- May alse be a table with Object + final_position for the camera
 function CreateCameraForPlayer(player,Object,Surface,Text,size,AutoCloseTick,Zoom)
 cam_player_list_validate_cams(player)
 local cams = storage.active_player_cameras[player.name]
@@ -106,28 +107,35 @@ if #cams<Camera_Count_Limit then
 			title_table.style.column_alignments[5] = "right"
 
 
-	local position
+	local position, final_position
 
 	if (not AutoCloseTick) and Camera_Default_Time then AutoCloseTick=Camera_Default_Time end
+	if type(Object)=="table" and Object.final_position then 
+		final_position = Object.final_position
+		Object = Object.Object or Object.object
+		end
 
 	if Object and Object.valid and Object.position then --if its an entity
 		Surface=Object.surface
 		position=Object.position 
-		local tabdata = {player=player, camframe=frame,tick=tick, entity=Object,autoclosetick=AutoCloseTick}
+		local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=Object,autoclosetick=AutoCloseTick,final_position=final_position}
 		table.insert(storage.mf_frame_cameras,tabdata)
+		remote.call("mf_lib","register_camera",tabdata)
 		elseif Object.render then
-			if rendering.is_valid(Object.render) then 
-				position=rendering.get_target(Object.render).position
-				Surface=rendering.get_surface(Object.render)
-				local tabdata = {player=player, camframe=frame,tick=tick, entity=nil,render=Object.render, autoclosetick=AutoCloseTick}
+			if Object.render.valid then 
+				position=Object.render.target.position
+				Surface=Object.render.surface
+				local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=nil,render=Object.render, autoclosetick=AutoCloseTick,final_position=final_position}
 				frame.tags.render=Object.render
 				table.insert(storage.mf_frame_cameras,tabdata)
+				remote.call("mf_lib","register_camera",tabdata)
 				end
 			
 		else -- if object is a position
 		if Surface==nil then Surface=game.surfaces[1] end
-		local tabdata = {player=player, camframe=frame,tick=tick, entity=nil,autoclosetick=AutoCloseTick}
+		local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=nil,autoclosetick=AutoCloseTick,final_position=final_position}
 		table.insert(storage.mf_frame_cameras,tabdata)
+		remote.call("mf_lib","register_camera",tabdata)
 		position=Object 
 		end 
 
@@ -277,23 +285,24 @@ end
 function cam_on_tick(event)
 if #storage.mf_frame_cameras>0 then
 	for K=#storage.mf_frame_cameras,1,-1 do
-		local frame = storage.mf_frame_cameras[K].camframe
-		--local tick  = storage.mf_frame_cameras[K].tick
-		--local entity = storage.mf_frame_cameras[K].entity
-		local render = storage.mf_frame_cameras[K].render
-		local player = storage.mf_frame_cameras[K].player
-		local autoclosetick  = storage.mf_frame_cameras[K].autoclosetick
+		local camera_props = storage.mf_frame_cameras[K]
+		local frame = camera_props.camframe
+		local render = camera_props.render
+		local player = camera_props.player
+		local autoclosetick  = camera_props.autoclosetick
 		if frame and frame.valid then
 			if (autoclosetick and autoclosetick<game.tick) or (frame.tags and (not game.surfaces[frame["mf_camera".. frame.tags.num].surface_index]) ) then 
 				table.remove(storage.mf_frame_cameras,K)
 				frame.destroy()
 				elseif frame.tags then
-				local cam = frame["mf_camera".. frame.tags.num]
-				if cam.entity and cam.entity.valid then cam.position = cam.entity.position end
-				
-				if render and render.valid then -- just a render object
-					local position=rendering.target(render).position
-					cam.position=position
+					local cam = frame["mf_camera".. frame.tags.num]
+					if cam.entity and cam.entity.valid then cam.position = cam.entity.position 
+					elseif render and render.valid then -- just a render object
+						local position=render.target.position
+						cam.position=position
+					elseif camera_props.final_position  then  -- if no more entity or render, go to finail pos
+						cam.position =camera_props.final_position
+						camera_props.final_position =nil
 					end
 				
 				if mf_camera_chart and game.tick%60==0 then
@@ -328,6 +337,44 @@ if player and player.valid then
 		if not cam_exists(player,storage.active_player_cameras[player.name][c]) then
 			table.remove(storage.active_player_cameras[player.name],c)
 			end
+		end
+	end
+end
+
+
+
+function validate_all_cameras()
+for K=#storage.mf_frame_cameras,1,-1 do
+	local camera_props = storage.mf_frame_cameras[K]
+	local frame = camera_props.camframe
+	local c_surface = camera_props.surface
+	if not (frame and frame.valid and c_surface and c_surface.valid) then 
+			table.remove(storage.mf_frame_cameras,K)
+	end
+end
+end
+
+--[[
+
+	FOR GLOBAL CAMERA CONTROL
+
+]]
+function register_camera(camera)
+validate_all_cameras()
+table.insert (storage.mf_frame_cameras, camera)
+end
+
+
+function close_all_cameras_from_surface(surface)
+for K=#storage.mf_frame_cameras,1,-1 do
+	local camera_props = storage.mf_frame_cameras[K]
+	local frame = camera_props.camframe
+	local c_surface = camera_props.surface
+	if not (frame and frame.valid and c_surface and c_surface.valid) then 
+		table.remove(storage.mf_frame_cameras,K)
+	elseif surface==c_surface then
+		table.remove(storage.mf_frame_cameras,K)
+		frame.destroy()
 		end
 	end
 end

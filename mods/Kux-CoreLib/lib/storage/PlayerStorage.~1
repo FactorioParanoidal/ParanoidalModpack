@@ -1,0 +1,101 @@
+require((KuxCoreLibPath or "__Kux-CoreLib__/").."lib/init")
+if(KuxCoreLib.__modules.PlayerStorage) then return KuxCoreLib.__modules.PlayerStorage end
+
+---@class KuxCoreLib.Internal.PlayerData
+---@field player_index integer
+---@field player LuaPlayer
+---@field timers KuxCoreLib.TimerData[]
+
+
+---@class KuxCoreLib.PlayerData
+---@field player_index uint                           The player_index of the player. will be filled automatically.
+---@field player LuaPlayer                            The player object. will be filled automatically.
+---@field __KuxCoreLib KuxCoreLib.Internal.PlayerData Data used internally by Kux-CoreLib. DON'T CHANGE
+
+--- Persistent store per player. <br>
+--- The data will be stored in `storage.__KuxCoreLib__.players[player_index]`
+---@class KuxCoreLib.PlayerStorage : {[uint]: KuxCoreLib.PlayerData}
+---@field getIds fun():string[]
+---@field on_get fun(pdata:KuxCoreLib.PlayerData)
+---@field on_new fun(pdata:KuxCoreLib.PlayerData):table?
+---@field extend fun(self:KuxCoreLib.PlayerStorage, name:string, member:any)
+
+---------------------------------------------------------------------------------------------------
+
+if _G["---ANNONTATION---"] then
+	storage.__KuxCoreLib__.players = nil							---@see KuxCoreLib.PlayerStorage
+	storage.__KuxCoreLib__.players[0] = nil							---@see KuxCoreLib.PlayerData
+	storage.__KuxCoreLib__.players[0].__KuxCoreLib__.timers = nil	---@see KuxCoreLib.TimerData
+end
+
+---@type KuxCoreLib.PlayerStorage
+local PlayerStorage = setmetatable(
+	{
+		__class  = "PlayerStorage",
+		__guid   = "cb7e6ed5-e48c-4ef8-841c-b3782ab36b72",
+		__origin = "Kux-CoreLib/lib/storage/PlayerStorage.lua",
+
+		getIds = function()
+			local ids = {}
+			for player_id, _ in pairs(storage.__KuxCoreLib__.players or {}) do table.insert(ids, player_id) end
+			return ids
+		end,
+		on_new = nil,
+		on_get = nil,
+		extend = function(self, name, value) rawset(self, name, value) end
+	},
+	{
+		__index = function(self, key)
+			if(key=="on_new" or key=="on_get") then return nil end
+			if type(key) == "string" then error("Member not exists. '"..key.."'") end
+
+			local player_index = key
+			if not storage.__KuxCoreLib__.players then storage.__KuxCoreLib__.players = {} end
+			if not storage.__KuxCoreLib__.players[player_index] then
+				local new_data = {
+					player = game.get_player(player_index),
+					player_index = player_index,
+				}
+				local on_new = rawget(self, "on_new")
+				if on_new then
+					local d = on_new(new_data)
+					if d then new_data = d end
+				end
+				new_data.player = new_data.player or game.get_player(player_index)
+				new_data.player_index = player_index
+				new_data.__KuxCoreLib__ = new_data.__KuxCoreLib__ or {}
+				new_data.__KuxCoreLib__.timers = new_data.__KuxCoreLib__ or {}
+				storage.__KuxCoreLib__.players[player_index] = new_data
+			end
+			local pdata = storage.__KuxCoreLib__.players[player_index]
+			pdata.player = game.get_player(player_index)
+			local f = rawget(self, "on_get"); if f then f(pdata) end
+			return pdata
+		end,
+		__newindex = function(self, key, value)
+			if key=="on_new" or key=="on_get" then rawset(self, key, value) return end
+			if type(key) == "string" then error("PlayerStorage is protected. '"..key.."' not exists") end
+			if type(key) ~= "number" then error("Type not valid. 'number' expected. but got '"..type(key).."'") end
+			local player_index = key
+			local player_data = value or {}
+			--[[migration!]] if not storage.__KuxCoreLib__.players then	storage.__KuxCoreLib__.players = {} end
+			player_data.player = game.get_player(player_index)
+			player_data.player_index = player_index
+			--[[migration!]] if not player_data.__KuxCoreLib__ then player_data.__KuxCoreLib__ = {} end
+			--[[migration!]] if not player_data.__KuxCoreLib__ then player_data.__KuxCoreLib__ = {} end
+			player_data.timers = player_data.timers or {}
+			storage.__KuxCoreLib__.players[player_index] = player_data
+		end,
+		__pairs = function()
+			-- Gibt einen Iterator für `storage.player_data` zurück
+			if not storage.__KuxCoreLib__.players then	storage.__KuxCoreLib__.players = {} end
+			return next, storage.__KuxCoreLib__.players, nil
+		end,
+		__ipairs = function()
+			error("ipairs is not supported on PlayerStorage. Use pairs instead.")
+		end,
+		__metatable = false
+	}
+)
+KuxCoreLib.__modules.PlayerStorage = PlayerStorage
+return PlayerStorage

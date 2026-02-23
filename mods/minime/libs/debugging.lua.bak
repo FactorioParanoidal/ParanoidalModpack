@@ -1,0 +1,850 @@
+log("Entered file "..debug.getinfo(1).source)
+
+local debugging = {}
+
+local debug_default = false
+
+
+-- TODO: This shouldn't be in debugging.lua!
+------------------------------------------------------------------------------------
+-- Make it easier to add quotation marks to strings
+local quote = "\""
+
+debugging.enquote = function(text)
+  return quote..text..quote
+end
+
+
+------------------------------------------------------------------------------------
+-- Enable writing to log file until startup options are set, so debugging output
+-- from the start of a game session can be logged. This depends on a locally
+-- installed dummy mod to allow debugging output during development without
+-- spamming real users.
+-- If you don't have this mod or don't want to activate it, you can also change
+-- the value of debug_default!
+debugging.debug_in_log =  (mods and mods["_debug"] and true) or
+                          (script and script.active_mods["_debug"] and true) or
+                          (settings.startup["minime_debug_to_log"] and
+                            settings.startup["minime_debug_to_log"].value) or
+                          debug_default
+
+debugging.is_debug = debugging.debug_in_log
+--~ debugging.is_debug = false
+
+
+
+debugging.set_debug_state = function(debug_state)
+  -- We only change debug_state if logging is allowed at all (depending on presence
+  -- of mod "_debug" or setting)
+  if debugging.debug_in_log and debug_state ~= nil then
+    debugging.is_debug = debug_state
+  end
+end
+
+------------------------------------------------------------------------------------
+--                               DEBUGGING FUNCTIONS                              --
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------
+-- Make a reverse look-up list for event names
+if script then
+  debugging.event_names = {}
+  for event, e in pairs(defines.events) do
+    debugging.event_names[e] = event
+  end
+  debugging.event_names["on_load"] = "on_load"
+  debugging.event_names["on_init"] = "on_init"
+  debugging.event_names["on_configuration_changed"] = "on_configuration_changed"
+  debugging.event_names["on_nth_tick"] = "on_nth_tick"
+end
+
+------------------------------------------------------------------------------------
+-- Make a reverse look-up list for controller names
+if script then
+  debugging.controller_names = {}
+  for name, index in pairs(defines.controllers) do
+    debugging.controller_names[index] = name
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Make a reverse look-up list for mouse-button names
+if script then
+  debugging.mouse_button_names = {}
+  for name, index in pairs(defines.mouse_button_type) do
+    debugging.mouse_button_names[index] = name
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Make a reverse look-up list for entity status names
+if script then
+  debugging.entity_status = {}
+  for name, index in pairs(defines.entity_status) do
+    debugging.entity_status[index] = name
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Make a reverse look-up list for gui_types
+if script then
+  debugging.gui_types = {}
+  for name, index in pairs(defines.gui_type) do
+    debugging.gui_types[index] = name
+  end
+end
+
+------------------------------------------------------------------------------------
+-- This doesn't work as multipe entries in defines.inventory have the same value,
+-- so only the last entry with a given value would persist in the reversed list.
+--~ -- Make a reverse look-up list for inventory names
+--~ debugging.inventory_names = {}
+--~ for k, v in pairs(defines.inventory) do
+  --~ debugging.inventory_names[v] = k
+--~ end
+
+
+------------------------------------------------------------------------------------
+-- Output debugging text
+debugging.writeDebug = function(msg, tab, print_line)
+
+  if not debugging.is_debug then
+    return
+  end
+
+  local args = {}
+  print_line = print_line and print_line:lower()
+
+  -- Use serpent.line instead of serpent.block if this is true!
+  local line = print_line and (print_line == "line" or print_line == "l") and
+                true or false
+
+  if type(tab) ~= "table" then
+    tab = { tab }
+  end
+
+  local v
+  for k = 1, #tab do
+    v = tab[k]
+    -- NIL
+    if v == nil then
+      args[#args + 1] = "NIL"
+    -- EMPTY STRING
+    elseif v == "" then
+      args[#args + 1] = quote..quote
+    -- TABLE
+    elseif type(v) == "table" then
+      args[#args + 1] = line and serpent.line(v, {nocode = true}) or
+                                  serpent.block(v, {nocode = true})
+    -- OTHER VALUE
+    else
+      args[#args + 1] = v
+    end
+  end
+  if #args == 0 then
+    args[1] = "nil"
+  end
+  args.n = #args
+
+    log(string.format(tostring(msg), table.unpack(args)))
+
+  if game and debugging.debug_to_game then
+    game.print(string.format(tostring(msg), table.unpack(args)))
+  end
+
+end
+
+------------------------------------------------------------------------------------
+-- Simple helper to show a single value with descriptive text
+debugging.show = function(desc, term, line)
+  if debugging.is_debug then
+    local is_table = type(term) == "table"
+    local is_object = is_table and term.object_name
+    debugging.writeDebug(tostring(desc)..": %s",
+                          is_object and { debugging.argprint(term) } or
+                          is_table  and { term } or
+                          term,
+                          line)
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Simple helper to set off a block of messages by adding an empty line
+debugging.writeDebugNewBlock = function(msg, ...)
+  if msg then
+    debugging.writeDebug("")
+    debugging.writeDebug(msg, ...)
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Print "entityname (id)"
+debugging.print_name_id = function(entity)
+  local id
+  local name = "unknown entity"
+
+  if entity and entity.valid then
+  -- Stickers don't have an index or unit_number!
+    id = (entity.object_name == "LuaPlayer" and entity.index) or
+          (entity.type == "sticker" and entity.type) or
+          entity.unit_number or entity.object_name
+
+    name = entity.name
+  end
+
+  return string.format("%s (%s)", name, id)
+end
+
+------------------------------------------------------------------------------------
+-- Print "entityname"
+debugging.print_name = function(entity)
+  return entity and entity.valid and entity.name or "nil"
+end
+
+
+------------------------------------------------------------------------------------
+-- Print message if something has been created
+-- proto:     Prototype that has been changed
+debugging.created_msg = function(proto)
+  local proto_name = proto and proto.name or debugging.arg_err(proto)
+  local proto_type = proto and proto.type or debugging.arg_err(proto)
+
+  debugging.writeDebug("Created %s \"%s\".", {proto_type, proto_name})
+end
+
+------------------------------------------------------------------------------------
+-- Print message if data for additional prototypes have been read
+-- data:      Prototype data
+-- list:      List of the subtables in data that we must check
+-- name:      Name of the thing that has been changed
+-- list_name: The type of list (settings, triggers etc.)
+debugging.readdata_msg = function(data, list, name, list_name)
+  local read_data = false
+
+  if list then
+    for t, tab in pairs(list) do
+      if next(data[tab]) then
+        read_data = true
+        break
+      end
+    end
+  elseif next(data) then
+    read_data = true
+  end
+
+  if read_data then
+    debugging.writeDebug("Read data for %s%s.",
+                          {name, list_name and " ("..list_name..")" or ""})
+  else
+    debugging.writeDebug("No data for %s read.", {name})
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Print message if something has been modified
+-- desc:      Description of the changed thing (e.g. "ingredients", "localization")
+-- proto:     Prototype that has been changed
+-- mode:      What happened to the prototype (e.g. "Changed", "Replaced")
+debugging.modified_msg = function(desc, proto, mode)
+  minime.assert(desc, {"string", "table"})
+
+  minime.assert(proto, "table")
+
+  mode = (type(mode) == "string") and mode or "Changed"
+  local lc = mode:lower()
+  local preposition = (lc == "added") and "to" or
+                      (lc == "removed") and "from" or
+                      "of"
+  debugging.writeDebug("%s %s %s %s \"%s\".", {mode, desc, preposition, proto.type, proto.name})
+end
+
+
+------------------------------------------------------------------------------------
+--   Function to print info when a file/function/event script is entered or left  --
+------------------------------------------------------------------------------------
+local function print_on_entered(data)
+  if data then
+    local args = data.args
+    local leave = data.leave
+    local bail_out = data.bail_out
+    local file = data.file or {}
+    local f_name = data.f_name or "NIL"
+    local description = data.description
+    local sep = data.sep
+    local is_event = data.is_event
+    local is_file = data.is_file
+
+    local msg, format_string
+
+    -- Function could have been called with short form function(leave, bail_out),
+    -- so we must adjust the values of "args" and "leave"
+    if args and type(args) ~= "table" and not leave then
+      args = {}
+      leave = true
+    elseif not args then
+      args = {}
+    end
+    leave = leave and "Leaving" or "Entered"
+
+    -- Preserve nil/false (normal exit) and strings (reason for leaving early)
+    if bail_out and type(bail_out) ~= "string" then
+      bail_out = ""
+    end
+    bail_out = bail_out and
+                (bail_out ~= "" and " early: "..bail_out or " early!") or
+                ""
+
+    -- Pretty-format the arguments
+    local arg_list = ""
+    for k, v in pairs(args) do
+      arg_list = type(k) == "number" and arg_list..debugging.argprint(v) or
+                                          arg_list..k.." = "..debugging.argprint(v)
+      arg_list = next(args, k) and arg_list..", " or arg_list
+    end
+
+    -- Unlike function arguments, event data will be listed on their own line!
+    if is_event and arg_list ~= "" then
+      arg_list = "\nEvent data: "..arg_list
+    -- Files won't have any arguments!
+    elseif is_file then
+       arg_list = ""
+    end
+
+    format_string =
+      is_event and    "%s %s %s%s%s\n(%s: %s)" or
+      is_file and     "%s %s %s%s%s" or
+                      "%s %s %s(%s)%s\n(%s: %s)"
+
+
+    msg = { leave, description, f_name, arg_list, bail_out, file.source, file.currentline }
+    if is_event then
+      msg[4] = bail_out
+      msg[5] = arg_list
+    end
+    msg = string.format(format_string, table.unpack(msg))
+
+    -- Output the formatted text
+    debugging.writeDebug("\n%s\n%s\n%s\n", {sep, msg, sep})
+
+  end
+end
+
+
+ ------------------------------------------------------------------------------------
+-- File has been entered
+debugging.entered_file = function(leave, bail_out)
+  -- Skip all the string casting unless we really want to log something!
+  if debugging.is_debug then
+    local sep = string.rep("*", 100)
+
+    local f_name = debug.getinfo(2)
+    f_name = f_name and f_name.source or "NIL"
+
+    print_on_entered({
+      leave = leave, bail_out = bail_out,
+      f_name = f_name, description = "file", sep = sep,
+      is_file = true
+    })
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Function has been entered
+debugging.entered_function = function(args, leave, bail_out)
+  -- Skip all the string casting unless we really want to log something!
+  if debugging.is_debug then
+
+    local leaving = leave or (args and type(args) ~= "table")
+
+    local info = debug.getinfo(2)
+    local file = info and {
+      source = info.source,
+      currentline = leaving and info.currentline or info.linedefined
+    } or {}
+
+    local f_name = info.name or "NIL"
+    local sep = string.rep("-", 100)
+
+    print_on_entered({
+      args = args, leave = leave, bail_out = bail_out,
+      file = file, f_name = f_name, description = "function", sep = sep
+    })
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Function for a /command has been entered
+if script then
+  debugging.entered_command = function(args, leave, bail_out)
+    -- Skip all the string casting unless we really want to log something!
+    if debugging.is_debug then
+
+      local file = debug.getinfo(2)
+      local f_name = args and (args.name or args[1]) and util.table.deepcopy(args.name or args[1])
+      local sep = string.rep(":", 100)
+
+      file = file and {source = file.source, currentline = file.currentline} or {}
+
+      -- If we have only args[1], that will be the command name. We don't want that!
+      args = (args and args[1] and not next(args, 1)) and {} or util.table.deepcopy(args)
+      args.name = nil
+
+      print_on_entered({
+          args = args, leave = leave, bail_out = bail_out,
+          file = file, f_name = f_name, description = "function for command",
+          sep = sep
+      })
+    end
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Event script has been entered
+if script then
+  debugging.entered_event = function(event, leave, bail_out)
+    -- Skip all the string casting unless we really want to log something!
+    if debugging.is_debug then
+
+      local info = debug.getinfo(2)
+      local file = info and {
+        source = info.source,
+        currentline = leave and info.currentline or info.linedefined
+      } or {}
+      local sep = string.rep("=", 100)
+      --~ local args, f_name, event_data
+      local args, f_name
+
+      if event then
+        --~ f_name = event.name and debugging.event_names[event.name]
+        -- We may have stored the literal event name in our list of events, …
+        f_name = (event.name and minime.event_names[event.name]) or
+                  -- … or it could be the name of a custom-input (requires that
+                  -- prototype.action == "lua")
+                  event.input_name
+        args = util.table.deepcopy(event)
+        args.name = nil
+      end
+      if not (args and next(args)) then
+        args = {}
+      end
+
+      print_on_entered({
+        args = args, leave = leave, bail_out = bail_out,
+        file = file, f_name = f_name or "unnamed event",
+        description = "event script for", sep = sep,
+        is_event = true
+      })
+    end
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- File or function has been entered, but there's nothing to do
+debugging.nothing_to_do = function(sep)
+  sep = string.rep(sep or "-", 100)
+
+  local file = debug.getinfo(2)
+  local function_name = debug.getinfo(2, "n").name
+  local msg = function_name and
+                --~ function_name.."\n("..file.source..": ".. file.currentline..")" or
+                string.format("%s\n(%s: %s)",
+                              function_name, file.source, file.currentline) or
+                file.source
+  debugging.writeDebug("\n%s\nNothing to do in %s\n%s\n", {sep, msg, sep})
+end
+
+
+
+------------------------------------------------------------------------------------
+-- Output a different message if arg is not valid
+local function is_invalid(arg)
+  return not (arg and arg.valid) and string.format("%s (invalid)", arg.object_name)
+end
+
+------------------------------------------------------------------------------------
+-- Output arguments a function was called with
+debugging.argprint = function(arg)
+
+  local arg_type = type(arg)
+
+  -- Default: no debugging or arg is nil
+  local ret = "nil"
+
+  -- Debugging must be on, and arg must not be nil
+  if debugging.is_debug and arg ~= nil then
+
+    -- Argument was a string
+    if arg_type == "string" then
+      ret = debugging.enquote(arg)
+
+    -- Argument was a function
+    elseif arg_type == "function" then
+      ret = "function"
+
+    -- Argument was a table
+    elseif arg_type == "table" then
+      -- Control stage
+      if script then
+        -- Argument was a Lua prototype (e.g. LuaEntityPrototype, LuaItemPrototype)
+        if arg.object_name and arg.object_name:match("^Lua%u%a+Prototype$") then
+          ret = is_invalid(arg) or string.format("%s %s", arg.object_name, debugging.enquote(arg.name))
+
+        -- Argument was a player
+        elseif arg.object_name == "LuaPlayer" then
+          ret = is_invalid(arg) or string.format("%s %s (%s)", arg.object_name, arg.index, debugging.enquote(arg.name))
+
+        -- Argument was a force
+        elseif arg.object_name == "LuaForce" then
+          ret = is_invalid(arg) or string.format("%s %s (%s)", arg.object_name, arg.index, debugging.enquote(arg.name))
+
+        -- Argument was a surface
+        elseif arg.object_name == "LuaSurface" then
+          ret = is_invalid(arg) or string.format("%s %s (%s)", arg.object_name, arg.index, debugging.enquote(arg.name))
+
+        -- Argument was a recipe
+        elseif arg.object_name == "LuaRecipe" then
+          ret = is_invalid(arg) or string.format("%s %s", arg.object_name, debugging.enquote(arg.name))
+
+        -- Argument was an entity
+        elseif arg.object_name == "LuaEntity" then
+          ret = is_invalid(arg) or string.format("%s %s (%s)", arg.type, debugging.enquote(arg.name), arg.unit_number)
+
+        -- Argument was a technology
+        elseif arg.object_name == "LuaTechnology" then
+          ret = is_invalid(arg) or string.format("%s %s", arg.object_name, debugging.enquote(arg.name))
+
+        -- Argument was an inventory
+        elseif arg.object_name == "LuaInventory" and arg.valid then
+          local name = (arg.mod_owner and "from mod "..debugging.enquote(arg.mod_owner)) or
+                        (arg.entity_owner and debugging.argprint(arg.entity_owner)) or
+                        (arg.equipment_owner and debugging.argprint(arg.equipment_owner)) or
+                        (arg.player_owner and debugging.argprint(arg.player_owner))
+          ret = arg.index and
+                string.format("Inventory %s (%s, %s slots)", arg.index, name or "nil", #arg) or
+                string.format("%s (%s, %s slots)", arg.object_name, name or "nil", #arg)
+
+        -- Argument was an item stack
+        elseif arg.object_name == "LuaItemStack" and arg.valid then
+          local name = arg.valid_for_read and arg.name or "empty"
+          local count = arg.valid_for_read and arg.count or 0
+          ret = string.format("%s %s (%s)", arg.object_name, debugging.enquote(name), count)
+
+        -- Argument was a GUI element
+        elseif arg.object_name == "LuaGuiElement" then
+          ret = is_invalid(arg) or string.format("%s %s %s", arg.object_name, arg.type, debugging.enquote(arg.name))
+
+        -- Argument was an equipment grid
+        elseif arg.object_name == "LuaEquipmentGrid" then
+          ret = is_invalid(arg) or
+                string.format("%s %s (%s x %s)", arg.object_name, arg.unique_id, arg.width, arg.height)
+
+        -- Argument was an equipment (placed in equipment grids)
+        elseif arg.object_name == "LuaEquipment" then
+          ret = is_invalid(arg) or string.format("%s %s (%s)", arg.object_name, arg.name, arg.type)
+
+        -- Argument was a logistic network
+        elseif arg.object_name == "LuaLogisticNetwork" then
+          ret = is_invalid(arg) or
+                string.format("%s (%s providers, %s requesters, %s con-bots/%s log-bots)",
+                              arg.object_name, #arg.providers, #arg.requesters,
+                              arg.all_construction_robots, arg.all_logistic_robots)
+
+        -- Argument was a train
+        elseif arg.object_name == "LuaTrain" then
+          local locos = #arg.locomotives.front_movers + #arg.locomotives.back_movers
+          ret = is_invalid(arg) or
+                string.format("%s %s (%s locomotives, %s wagons)",
+                              arg.object_name, arg.id, locos, #arg.carriages - locos)
+
+        -- Argument was a chart tag
+        elseif arg.object_name == "LuaCustomChartTag" then
+          ret = is_invalid(arg) or
+                string.format("%s %s on \"%s\"",
+                              arg.object_name, arg.tag_number,
+                              arg.surface and arg.surface.valid and arg.surface.name)
+
+        -- Argument was a rendering
+        elseif arg.object_name == "LuaRendering" then
+          ret = string.format("%s %s %s", arg.object_name, arg.type, arg.id)
+
+        -- Argument was a tile
+        elseif arg.object_name == "LuaTile" then
+          ret = is_invalid(arg) or
+                string.format("%s \"%s\" on \"%s\"",
+                              arg.object_name, arg.name, arg.surface.name)
+
+        -- Argument was something else
+        else
+          ret = serpent.line(arg, {nocode = true})
+        end
+
+      -- Data stage
+      elseif data then
+        -- Argument was something from data.raw
+        if arg.type then
+          ret = string.format("%s %s", arg.type, debugging.enquote(arg.name))
+        -- Argument was something else
+        else
+          ret = serpent.line(arg, {nocode = true})
+        end
+      end
+
+    -- Argument was something else
+    else
+      ret = serpent.line(arg, {nocode = true})
+    end
+  end
+
+  return ret
+end
+
+
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                               Debugging commands                               --
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+if script and debugging.is_debug then
+  local debugging_commands = {}
+
+
+  ------------------------------------------------------------------------------------
+  --                  Show all events we're currently listening to                  --
+  ------------------------------------------------------------------------------------
+  debugging_commands["show-active-events"] = function(command)
+    debugging.entered_command(command)
+
+    local player = minime.ascertain_player(command.player_index)
+    local events = {}
+
+    local bootstrap = {
+      on_init = true,
+      on_load = true,
+      on_configuration_changed = true,
+      on_nth_tick = true,
+    }
+
+    for event, event_name in pairs(minime.event_names) do
+      -- Ignore on_init, on_load, and on_configuration_changed
+      if not bootstrap[event_name] and script.get_event_handler(event) then
+        events[#events + 1] = string.format("%s: %s", event, event_name)
+      end
+    end
+
+    local msg
+    if next(events) then
+      msg = {"minime-command-output.show-active-events", serpent.block(events)}
+    else
+      msg = {"minime-command-output.show-active-events-no-events"}
+    end
+    player.print(msg)
+    log(msg)
+
+    debugging.entered_command(command, "leave")
+  end
+
+
+  ------------------------------------------------------------------------------------
+  --                      Do we listen to the specified event?                      --
+  ------------------------------------------------------------------------------------
+  debugging_commands["is-event-active"] = function(command)
+    debugging.entered_command(command)
+
+    local player = minime.ascertain_player(command.player_index)
+    local id = tonumber(command.parameter)
+    local name = command.parameter
+
+    local event, err_msg
+
+    -- We have an ID, so we can check directly whether the specified event exists.
+    if id then
+      -- Valid event ID
+      if minime.event_names[id] then
+        event = script.get_event_handler(id)
+        name = minime.event_names[id]
+      -- Error: No event with given ID exists.
+      else
+        err_msg = {"minime-command-errors.is-event-active-invalid-event", id}
+      end
+
+    -- We have a name
+    elseif name then
+      -- Ignore fake events where ID and name are the same (on_load etc.)
+      if minime.event_names[name] then
+        id = name
+
+      -- Try to find event name by going over the complete list
+      else
+        for event_id, event_name in pairs(minime.event_names) do
+          if name == event_name then
+            event = script.get_event_handler(event_id)
+            id = event_id
+            break
+          end
+        end
+
+        -- Error: No event with given name exists, so id is still unset.
+        if not id then
+          err_msg = {"minime-command-errors.is-event-active-invalid-event", name}
+        end
+      end
+
+    -- Error: We have neither name nor ID
+    else
+      err_msg = {"minime-command-errors.is-event-active-no-args"}
+    end
+debugging.show("event", event)
+debugging.show("name", name)
+debugging.show("id", id)
+debugging.show("err_msg", err_msg)
+
+    -- Output error message (command_err() will highlight it with color and prefix)
+    if err_msg then
+      minime.command_err(player, err_msg)
+
+    -- Everything was OK, print/log the command result!
+    else
+      local state = event and "true" or "false"
+      local msg = {"minime-command-output.is-event-active-"..state, name, id}
+
+      player.print(msg)
+      log(msg)
+    end
+
+    debugging.entered_command(command, "leave")
+  end
+
+
+  ----------------------------------------------------------------------------------
+  --                            Show inventory contents                           --
+  ----------------------------------------------------------------------------------
+  local function show_inventories(player, character)
+    minime.entered_function({player, character})
+
+    if character and character.valid then
+      local inventory, contents, msg
+      for i, i_name in pairs(minime.inventory_list) do
+        inventory = character.get_inventory(defines.inventory["character_"..i_name])
+        contents = inventory and inventory.valid and inventory.get_contents()
+debugging.show(i_name, inventory)
+debugging.show(contents, contents)
+
+        for item, i_count in pairs(contents or {}) do
+          msg = string.format("%s:\t%s", item, i_count)
+          player.print(msg)
+          log(msg)
+        end
+      end
+    end
+
+    minime.entered_function("leave")
+  end
+
+
+  ----------------------------------------------------------------------------------
+  --                             Show dummy inventory                             --
+  ----------------------------------------------------------------------------------
+  debugging_commands["show-dummy-inventory"] = function(command)
+    debugging.entered_command(command)
+
+    local id = tonumber(command.parameter)
+    local name = command.parameter
+
+    local player = (id or type(name) == "string") and
+                    minime.ascertain_player(id or name) or
+                    minime.ascertain_player(command.player_index)
+debugging.show("player", player)
+    if not (player and player.valid) then
+      local err_msg = {
+        "minime-command-errors.show-dummy-inventory-no-player",
+        player.name
+      }
+      minime.command_err(player, err_msg)
+
+      debugging.entered_command(command, "leave", "not a valid player")
+      return
+    end
+
+    local dummy = global.player_data and
+                  global.player_data[player.index] and
+                  global.player_data[player.index].dummy
+debugging.show("dummy", dummy)
+
+    if dummy and dummy.valid then
+      show_inventories(player, dummy)
+    else
+      local err_msg = {
+        "minime-command-errors.show-dummy-inventory-no-char",
+        player.name
+      }
+      minime.command_err(player, err_msg)
+    end
+
+    debugging.entered_command(command, "leave")
+  end
+
+
+  ----------------------------------------------------------------------------------
+  --                     Show inventory of detached character                     --
+  ----------------------------------------------------------------------------------
+  debugging_commands["show-detached-char-inventory"] = function(command)
+    debugging.entered_command(command)
+
+    local id = tonumber(command.parameter)
+    local name = command.parameter
+
+    local player = (id or type(name) == "string") and
+                    minime.ascertain_player(id or name) or
+                    minime.ascertain_player(command.player_index)
+debugging.show("player", player)
+    if not (player and player.valid) then
+      local err_msg = {"minime-command-errors.show-detached-char-inventory-no-player",
+                  debugging.argprint(player)}
+      minime.command_err(player, err_msg)
+
+      debugging.entered_command(command, "leave", "not a valid player")
+      return
+    end
+
+    local p_data = global.player_data and global.player_data[player.index]
+    local detached = p_data and p_data.detached_character
+debugging.show("detached", debugging.argprint(detached))
+
+    if detached and detached.valid then
+      show_inventories(player, detached)
+    else
+      local err_msg = {"minime-command-errors.show-detached-char-inventory-no-char",
+                        debugging.argprint(player)}
+      minime.command_err(player, err_msg)
+    end
+
+    debugging.entered_command(command, "leave")
+  end
+
+
+
+  ------------------------------------------------------------------------------------
+  --                           Register debugging commands                          --
+  ------------------------------------------------------------------------------------
+  local name
+
+  for c_name, command in pairs(debugging_commands) do
+    name = "minime-"..c_name
+    if not commands.commands[name] then
+      commands.add_command(name, {"minime-commands.command-"..name.."-help", name}, command)
+      debugging.writeDebug("Added debugging mode command \"%s\".", {name})
+    end
+  end
+end
+
+
+------------------------------------------------------------------------------------
+log("Leaving file "..debug.getinfo(1).source)
+return debugging

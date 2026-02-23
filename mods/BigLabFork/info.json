@@ -1,0 +1,11 @@
+{
+	"name": "BigLabFork",
+	"version": "0.1.1",
+	"title": "Big Lab",
+	"author": "_CodeGreen",
+	"factorio_version": "2.0",
+	"description": "Original mod by DellAquila, tweaked and updated to 2.0. \nA Big Lab that processes your science packs much quicker and has more module slots.",
+	"dependencies": [
+		"? DiscoScience >= 1.0.0"
+	]
+}

@@ -4,7 +4,7 @@
 local Model = {
   ---single-line comment
   classname = "HMModel",
-  version = "0.9.35",
+  version = 2,
   beacon_combo = 4,
   beacon_factory = 0.5,
   beacon_factory_constant = 3
@@ -19,7 +19,7 @@ function Model.getModels(bypass)
   local first_id = nil
   local models = {}
   if Model.countModel() > 0 then
-    for _,model in pairs(global.models) do
+    for _,model in pairs(storage.models) do
       if Player.isAdmin() and ( display_all_sheet or model.owner == "admin" or bypass ) then
         models[model.id] = model
         if first_id == nil then first_id = model.id end
@@ -74,63 +74,72 @@ end
 ---Get rules
 ---@return table
 function Model.getRules()
-  if global.rules == nil then
+  if storage.rules == nil then
     Model.resetRules()
   end
-  return global.rules
+  return storage.rules
 end
 
 -------------------------------------------------------------------------------
+---Get export rules
+---@return string
+function Model.getExportRules()
+  local rules = Model.getRules()
+  if #rules > 0 then
+    local string_builder = {}
+    table.insert(string_builder, "local rules = {}")
+    for _, rule in pairs(rules) do
+      local string_rule = string.format("table.insert(rules, {index=%s, mod=\"%s\", name=\"%s\", category=\"%s\", type=\"%s\", value=\"%s\", excluded = %s})"
+          , tostring(rule.index), tostring(rule.mod), tostring(rule.name), tostring(rule.category), tostring(rule.type), tostring(rule.value), tostring(rule.excluded))
+      table.insert(string_builder, string_rule)
+    end
+    return table.concat(string_builder,"\n")
+  else
+    return ""
+  end
+end
+-------------------------------------------------------------------------------
 ---Reset rules
 function Model.resetRules()
-  global.rules = {}
-  table.insert(global.rules, {index=0, mod="base", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="extraction-machine", excluded = false})
-  table.insert(global.rules, {index=1, mod="base", name="production-crafting", category="extraction-machine", type="entity-type", value="mining-drill", excluded = false})
-  table.insert(global.rules, {index=2, mod="base", name="production-crafting", category="energy", type="entity-subgroup", value="energy", excluded = false})
-  table.insert(global.rules, {index=3, mod="base", name="production-crafting", category="technology", type="entity-type", value="lab", excluded = false})
-  table.insert(global.rules, {index=4, mod="base", name="module-limitation", category="extraction-machine", type="entity-type", value="mining-drill", excluded = true})
-  table.insert(global.rules, {index=5, mod="base", name="module-limitation", category="technology", type="entity-type", value="lab", excluded = true})
-  table.insert(global.rules, {index=6, mod="ShinyIcons", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="shinyminer1", excluded = false})
-  table.insert(global.rules, {index=7, mod="ShinyIcons", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="shinyminer2", excluded = false})
-  table.insert(global.rules, {index=8, mod="DyWorld", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="dyworld-extraction-burner", excluded = false})
-  table.insert(global.rules, {index=9, mod="DyWorld", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="dyworld-drills-electric", excluded = false})
-  table.insert(global.rules, {index=10, mod="DyWorld", name="production-crafting", category="extraction-machine", type="entity-subgroup", value="dyworld-drills-burner", excluded = false})
-  table.insert(global.rules, {index=11, mod="DyWorld", name="production-crafting", category="standard", type="entity-name", value="assembling-machine-1", excluded = true})
-  table.insert(global.rules, {index=12, mod="DyWorld", name="production-crafting", category="standard", type="entity-name", value="assembling-machine-2", excluded = true})
-  table.insert(global.rules, {index=13, mod="DyWorld", name="production-crafting", category="standard", type="entity-name", value="assembling-machine-3", excluded = true})
-  table.insert(global.rules, {index=14, mod="DyWorld", name="production-crafting", category="extraction-machine", type="entity-group", value="production", excluded = true})
-  table.insert(global.rules, {index=15, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="supply-depot", excluded = true})
-  table.insert(global.rules, {index=16, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="request-depot", excluded = true})
-  table.insert(global.rules, {index=17, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="buffer-depot", excluded = true})
+  local rules = {}
+  table.insert(rules, {index=0, mod="base", name="selector-filter", category="recipe", type="entity-category", value="recycling", excluded = true})
+  table.insert(rules, {index=1, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="supply-depot", excluded = true})
+  table.insert(rules, {index=2, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="request-depot", excluded = true})
+  table.insert(rules, {index=3, mod="Transport_Drones", name="production-crafting", category="standard", type="entity-name", value="buffer-depot", excluded = true})
+  table.insert(rules, {index=4, mod="Cerys-Moon-of-Fulgora", name="production-crafting", category="exclude-placed-by-hidden", type="entity-name", value="cerys-fulgoran-cryogenic-plant", excluded = true})
+  storage.rules = rules
 end
 
 
 ---Return effects on a table
 ---@return ModuleEffectsData
 function Model.newEffects()
-  return { speed = 0, productivity = 0, consumption = 0, pollution = 0 }
+  return { speed = 0, productivity = 0, consumption = 0, pollution = 0, quality = 0 }
 end
 
 -------------------------------------------------------------------------------
 ---Get and initialize the model
 ---@return table
 function Model.newModel()
-  if global.model_id == nil then global.model_id = 1 end
-  if global.models == nil then global.models = {} end
+  if storage.model_id == nil then storage.model_id = 1 end
+  if storage.models == nil then storage.models = {} end
   local owner = Player.native().name
   if owner == nil or owner == "" then owner = "admin" end
-  global.model_id = global.model_id + 1
+  storage.model_id = storage.model_id + 1
   local model = {}
-  model.id = "model_"..global.model_id
+  model.class = "Model"
+  model.id = "model_"..storage.model_id
   model.owner = owner
+  model.block_root = Model.newBlock(model, { name = model.id, energy_total = 0, pollution = 0, summary = {} })
+  model.block_root.parent_id = model.id
   model.blocks = {}
   model.ingredients = {}
   model.resources = {}
   model.time = 1
   model.version = Model.version
-  model.index = table.size(global.models)
+  model.index = table.size(storage.models)
   Model.appendParameters(model)
-  global.models[model.id] = model
+  storage.models[model.id] = model
   return model
 end
 
@@ -151,8 +160,8 @@ end
 ---Get model
 ---@return table
 function Model.getModelById(model_id)
-  if model_id ~= nil and global.models ~= nil then
-    return global.models[model_id]
+  if model_id ~= nil and storage.models ~= nil then
+    return storage.models[model_id]
   end
 end
 
@@ -162,29 +171,44 @@ end
 ---@return ModelData, BlockData, RecipeData
 function Model.getParameterObjects(parameter)
   if parameter ~= nil then
-    if global.models == nil then
+    if storage.models == nil then
       ---initialisation
-      global.models = {}
+      storage.models = {}
       local model = Model.newModel()
       User.setParameter(parameter.name, {name=parameter.name, model=model.id})
       return model
     end
-    if parameter.model ~= nil and global.models[parameter.model] ~= nil then
-      local model = global.models[parameter.model]
+    if parameter.model ~= nil and storage.models[parameter.model] ~= nil then
+      local model = storage.models[parameter.model]
       local block, recipe
-      if model ~= nil and parameter.block ~= nil and model.blocks ~= nil then
+      if parameter.block ~= nil and model ~= nil and model.blocks ~= nil then
         block = model.blocks[parameter.block]
-        if block ~= nil and parameter.recipe ~= nil and block.recipes ~= nil then
-          recipe = block.recipes[parameter.recipe]
+        if block == nil and model.block_root ~= nil and parameter.block == model.block_root.id then
+          block = model.block_root
         end
+      end
+      if block == nil and model.block_root ~= nil then
+        block = model.block_root
+      end
+      if block == nil and model.block_root == nil then
+        block = Model.newBlock(model, { name = model.id, energy_total = 0, pollution = 0, summary = {} })
+        model.block_root = block
+      end
+      if parameter.recipe ~= nil and block ~= nil and  block.children ~= nil then
+        recipe = block.children[parameter.recipe]
       end
       return model, block, recipe
     else
       ---initialisation parameter
       local model = Model.getLastModel()
       if model == nil then model = Model.newModel() end
-      User.setParameter(parameter.name, {name=parameter.name, model=model.id})
-      return model
+      if model.block_root == nil then
+        local block = Model.newBlock(model, { name = model.id, energy_total = 0, pollution = 0, summary = {} })
+        model.block_root = block
+      end
+      local parameterObjects = {name=parameter.name, model=model.id, block = model.block_root.id}
+      User.setParameter(parameter.name, parameterObjects)
+      return model, model.block_root, nil
     end
   end
 end
@@ -203,36 +227,110 @@ end
 
 -------------------------------------------------------------------------------
 ---Create model Production Block
----@param model table
----@param recipe table
----@return table
-function Model.newBlock(model, recipe)
+---@param model ModelData
+---@param child RecipeData | BlockData
+---@return BlockData
+function Model.newBlock(model, child)
   if model.block_id == nil then model.block_id = 0 end
   model.block_id = model.block_id + 1
 
-  local inputModel = {}
-  inputModel.id = "block_"..model.block_id
-  inputModel.name = recipe.name
-  inputModel.owner = Player.native().name
-  inputModel.count = 1
-  inputModel.power = 0
-  inputModel.ingredients = {}
-  inputModel.products = {}
-  inputModel.recipes = {}
+  local blockModel = {}
+  blockModel.infos = {}
+  blockModel.class = "Block"
+  blockModel.id = "block_"..model.block_id
+  blockModel.index = 0
+  blockModel.name = child.name
+  blockModel.type = child.type
+  if Player.native() == nil then
+    blockModel.owner = model.owner
+  else
+    blockModel.owner = Player.native().name
+  end
+  blockModel.count = 1
+  blockModel.power = 0
+  blockModel.ingredients = {}
+  blockModel.products = {}
+  blockModel.children = {}
+  blockModel.pollution = 0
 
-  return inputModel
+  return blockModel
+end
+
+-------------------------------------------------------------------------------
+---Retrun true if is a unlinked block
+---@param block BlockData
+---@return boolean
+function Model.isUnlinkedBlock(block)
+  if block == nil or block.class ~= "Block" then
+    return false
+  end
+  return block.unlinked and true or false
+end
+
+-------------------------------------------------------------------------------
+---Retrun true if is a block
+---@param child RecipeData | BlockData
+---@return boolean
+function Model.isBlock(child)
+  if child.class == "Block" then
+    return true
+  else
+    return child.children ~= nil
+  end
+end
+
+-------------------------------------------------------------------------------
+---Retrun true if is expand block for this player
+---@param block BlockData
+---@return boolean
+function Model.isExpandBlock(block)
+  if block.class == "Block" then
+    local player_name = Player.getName()
+    if type(block.expanded) ~= "table" then
+      block.expanded = {}
+      block.expanded[player_name] = false
+    end
+    return block.expanded[player_name]
+  end
+  return false
+end
+
+-------------------------------------------------------------------------------
+---Set expand block for this player
+---@param block BlockData
+---@param value boolean
+function Model.setExpandBlock(block, value)
+  if block.class == "Block" then
+    local player_name = Player.getName()
+    if type(block.expanded) ~= "table" then
+      block.expanded = {}
+      block.expanded[player_name] = false
+    end
+    block.expanded[player_name] = value
+  end
+end
+
+-------------------------------------------------------------------------------
+---Create model element
+---@param type string
+---@param name string
+---@param quality? string
+---@return table
+function Model.newElement(type, name, quality)
+  return {type=type, name=name, quality=quality or "normal"}
 end
 
 -------------------------------------------------------------------------------
 ---Create model Beacon
 ---@param name string
----@param count number
+---@param amount number
 ---@return table
-function Model.newBeacon(name, count)
+function Model.newBeacon(name, amount)
   local beaconModel = {}
+  beaconModel.class = "Beacon"
   beaconModel.name = name or "beacon"
   beaconModel.type = "entity"
-  beaconModel.count = count or 0
+  beaconModel.amount = amount or 0
   beaconModel.energy = 0
   beaconModel.combo = User.getPreferenceSetting("beacon_affecting_one")
   beaconModel.per_factory = User.getPreferenceSetting("beacon_by_factory")
@@ -247,13 +345,14 @@ end
 -------------------------------------------------------------------------------
 ---Create model Factory
 ---@param name string
----@param count number
+---@param amount number
 ---@return table
-function Model.newFactory(name, count)
+function Model.newFactory(name, amount)
   local factoryModel = {}
+  factoryModel.class = "Factory"
   factoryModel.name = name or "assembling-machine-1"
   factoryModel.type = "entity"
-  factoryModel.count = count or 0
+  factoryModel.amount = amount or 0
   factoryModel.energy = 0
   factoryModel.speed = 0
   ---limit infini = 0
@@ -290,7 +389,7 @@ end
 ---@param value string
 ---@param excluded boolean
 ---@param index number
----@return Table
+---@return table
 function Model.newRule(mod, name, category, type, value, excluded, index)
   local rule_model = {}
   rule_model.mod = mod
@@ -310,40 +409,115 @@ end
 function Model.countModulesModel(element)
   local count = 0
   if element ~= nil and element.modules ~= nil then
-    for _, value in pairs(element.modules) do
-      count = count + value
+    for _, module in pairs(element.modules) do
+      count = count + module.amount
     end
   end
   return count
 end
 
 -------------------------------------------------------------------------------
+---Return quality element key
+---@param model ModelData
+---@return ModelInfosData
+function Model.getModelInfos(model)
+  if model.infos == nil then
+    model.infos = {}
+  end
+  return model.infos
+end
+
+-------------------------------------------------------------------------------
+---Return root block
+---@param model ModelData
+---@return BlockData
+function Model.getRootBlock(model)
+  if model ~= nil then
+    return model.block_root or Model.firstChild(model.blocks or {})
+  end
+  return {}
+end
+
+-------------------------------------------------------------------------------
+---Return block infos
+---@param block BlockData
+---@return BlockInfosData
+function Model.getBlockInfos(block)
+  if block.infos == nil then
+    block.infos = {}
+  end
+  return block.infos
+end
+
+-------------------------------------------------------------------------------
+---Return quality element key
+---@param element table
+---@return string
+function Model.getQualityElementKey(element)
+  local element_quality = "normal"
+  if element.quality ~= nil then
+    element_quality = element.quality
+  end
+  return string.format("%s-%s", element.name, element_quality)
+end
+
+-------------------------------------------------------------------------------
+---Compare modules
+---@param module1 ModuleData
+---@param module2 ModuleData
+---@param with_amount? boolean
+---@return boolean
+function Model.compareModules(module1, module2, with_amount)
+  if with_amount == true then
+    return module1.name == module2.name and module1.quality == module2.quality and module1.amount == module2.amount
+  else
+    return module1.name == module2.name and module1.quality == module2.quality
+  end
+end
+
+-------------------------------------------------------------------------------
 ---Create model Recipe
----@param model table
+---@param model ModelData
 ---@param name string
 ---@param type string
----@return table
+---@return RecipeData
 function Model.newRecipe(model, name, type)
   if model.recipe_id == nil then model.recipe_id = 0 end
   model.recipe_id = model.recipe_id + 1
 
   local recipeModel = {}
+  recipeModel.class = "Recipe"
   recipeModel.id = "R"..model.recipe_id
   recipeModel.index = 1
   recipeModel.name = name
   recipeModel.type = type or "recipe"
   recipeModel.count = 0
   recipeModel.production = 1
-  recipeModel.factory = Model.newFactory()
   recipeModel.beacons = {}
-  table.insert(recipeModel.beacons, Model.newBeacon())
 
   return recipeModel
 end
 
+
+-------------------------------------------------------------------------------
+---Create model Recipe
+function Model.newCustomizedRecipe()
+  local id = (storage.customized_recipe_id or 0) + 1
+  local name = string.format("%s_%s", defines.mod.recipe_customized_prefix, id)
+  current_recipe = {
+      type = defines.mod.recipes.recipe.name,
+      name = name,
+      energy = 1,
+      products = {},
+      ingredients = {},
+      owner = Player.getName()
+  }
+  return current_recipe
+end
+
 -------------------------------------------------------------------------------
 ---Create model Resource
----@param model table
+---@param model ModelData
 ---@param name string
 ---@param type string
 ---@param count number
@@ -368,22 +542,24 @@ end
 ---Count in list
 ---@return number
 function Model.countModel()
-  return table.size(global.models)
+  return table.size(storage.models)
 end
 
 -------------------------------------------------------------------------------
 ---Set the beacon
----@param recipe table
+---@param recipe RecipeData
 ---@param name string
+---@param quality string
 ---@param combo number
 ---@param per_factory number
 ---@param per_factory_constant number
 ---@return BeaconData
-function Model.addBeacon(recipe, name, combo, per_factory, per_factory_constant)
+function Model.addBeacon(recipe, name, quality, combo, per_factory, per_factory_constant)
   if recipe ~= nil then
     local beacon_prototype = EntityPrototype(name)
     if beacon_prototype:native() ~= nil then
       local beacon = Model.newBeacon(name, 0)
+      beacon.quality = quality
       beacon.combo = combo or User.getPreferenceSetting("beacon_affecting_one")
       beacon.per_factory = per_factory or User.getPreferenceSetting("beacon_by_factory")
       beacon.per_factory_constant = per_factory_constant or User.getPreferenceSetting("beacon_constant")
@@ -396,7 +572,7 @@ end
 
 -------------------------------------------------------------------------------
 ---Set the beacon
----@param recipe table
+---@param recipe RecipeData
 ---@param index number
 ---@param name string
 ---@param combo number
@@ -412,6 +588,9 @@ function Model.setBeacon(recipe, index, name, combo, per_factory, per_factory_co
       beacon.per_factory = per_factory or User.getPreferenceSetting("beacon_by_factory")
       beacon.per_factory_constant = per_factory_constant or User.getPreferenceSetting("beacon_constant")
       if recipe.beacons[index] ~= nil then
+        local old_beacon = recipe.beacons[index]
+        local module_priority = old_beacon.module_priority
+        beacon.module_priority = module_priority
         recipe.beacons[index] = beacon
       end
     end
@@ -420,15 +599,29 @@ end
 
 -------------------------------------------------------------------------------
 ---Set a factory
----@param recipe table
+---@param recipe RecipeData
 ---@param factory_name string
----@param factory_fuel table
-function Model.setFactory(recipe, factory_name, factory_fuel)
+---@param factory_quality? string
+---@param factory_fuel? string
+---@param factory_fuel_quality? string
+function Model.setFactory(recipe, factory_name, factory_quality, factory_fuel, factory_fuel_quality)
   if recipe ~= nil then
+    if factory_quality == "" then
+      factory_quality = nil
+    end
     local factory_prototype = EntityPrototype(factory_name)
     if factory_prototype:native() ~= nil then
+      if recipe.factory == nil then
+        recipe.factory = Model.newFactory()
+        if recipe.beacons == nil or #recipe.beacons == 0 then
+          recipe.beacons = {}
+          table.insert(recipe.beacons, Model.newBeacon())
+        end
+      end
       recipe.factory.name = factory_name
+      recipe.factory.quality = factory_quality
       recipe.factory.fuel = factory_fuel
+      recipe.factory.fuel_quality = factory_fuel_quality
       if Model.countModulesModel(recipe.factory) >= factory_prototype:getModuleInventorySize() then
         recipe.factory.modules = {}
       end
@@ -438,21 +631,21 @@ end
 
 -------------------------------------------------------------------------------
 ---Return first recipe of block
----@param recipes table
----@return table
-function Model.firstRecipe(recipes)
-  for _, recipe in spairs(recipes,function(t,a,b) return t[b].index > t[a].index end) do
-    return recipe
+---@param children {[string] : RecipeData | BlockData}
+---@return RecipeData | BlockData
+function Model.firstChild(children)
+  for _, child in spairs(children, defines.sorters.block.sort) do
+    return child
   end
 end
 
 -------------------------------------------------------------------------------
 ---Return last recipe of block
----@param recipes table
----@return table
-function Model.lastRecipe(recipes)
-  for _, recipe in spairs(recipes,function(t,a,b) return t[b].index < t[a].index end) do
-    return recipe
+---@param children {[string] : RecipeData | BlockData}
+---@return RecipeData | BlockData
+function Model.lastChild(children)
+  for _, child in spairs(children, defines.sorters.block.sort) do
+    return child
   end
 end
 
@@ -482,33 +675,13 @@ function Model.getDefaultRecipe(key)
 end
 
 -------------------------------------------------------------------------------
----Get speed of the factory
----@param key string --factory name
----@return number
-function Model.getSpeedFactory(key)
-  local entity_prototype = EntityPrototype(key)
-  local crafting_speed = entity_prototype:getCraftingSpeed()
-  if crafting_speed ~= 0 then return crafting_speed end
-  local mining_speed = entity_prototype:getMiningSpeed()
-  if mining_speed ~= 0 then return mining_speed end
-  return 1
-end
-
--------------------------------------------------------------------------------
 ---Get the factory of prototype
 ---@param recipe_prototype table
 ---@return string
 function Model.getDefaultPrototypeFactory(recipe_prototype)
   local category = recipe_prototype:getCategory()
   if category ~= nil then
-    local factories = {}
-    if recipe_prototype:getType() == "boiler" then
-      factories = Player.getBoilersForRecipe(recipe_prototype)
-    elseif recipe_prototype:getType() == "fluid" then
-      factories = Player.getProductionsCrafting("fluid", recipe_prototype:native())
-    else
-      factories = Player.getProductionsCrafting(category, recipe_prototype:native())
-    end
+    local factories = recipe_prototype:getAllowedMachines()
     local default_factory_level = User.getPreferenceSetting("default_factory_level")
     local factory_level = 1
     if default_factory_level == "fast" then
@@ -519,10 +692,12 @@ function Model.getDefaultPrototypeFactory(recipe_prototype)
     local level = 1
     local lua_factory = nil
     local last_factory = nil
-    for _, factory in spairs(factories, function(t,a,b) return Model.getSpeedFactory(t[b].name) > Model.getSpeedFactory(t[a].name) end) do
-      if level == factory_level then lua_factory = factory end
-      last_factory = factory
-      level = level + 1
+    for _, factory in spairs(factories, function(t,a,b) return Player.getProductionMachineSpeed(t[b]) > Player.getProductionMachineSpeed(t[a]) end) do
+      if factory.type ~= "character" then
+        if level == factory_level then lua_factory = factory end
+        last_factory = factory
+        level = level + 1
+      end
     end
     if lua_factory ~= nil then return lua_factory.name end
     if last_factory ~= nil then return last_factory.name end
@@ -548,7 +723,7 @@ end
 function Model.factoryHasModule(factory)
   if factory == nil then return false end
   if factory.modules == nil then return false end
-  if factory.modules ~= nil and #factory.modules then return false end
+  if factory.modules ~= nil and table.size(factory.modules) == 0 then return false end
   return true
 end
 
@@ -556,15 +731,16 @@ end
 ---@param module_priorities1 {[uint] : ModulePriorityData}
 ---@param module_priorities2 {[uint] : ModulePriorityData}
 function Model.compareModulePriorities(module_priorities1, module_priorities2)
-  if module_priorities1 == nil or module_priorities2 == nil then return false end
-  if #module_priorities1 ~= #module_priorities2 then return false end
+    if module_priorities1 == nil or module_priorities2 == nil then return false end
+    if #module_priorities1 ~= #module_priorities2 then return false end
     for i = 1, #module_priorities1, 1 do
       local module_priority1 = module_priorities1[i]
       local module_priority2 = module_priorities2[i]
       if module_priority1.name ~= module_priority2.name then return false end
-      if module_priority1.value ~= module_priority2.value then return false end
+      if module_priority1.quality ~= module_priority2.quality then return false end
+      if module_priority1.amount ~= module_priority2.amount then return false end
     end
-  return true
+    return true
 end
 
 ---Compare 2 factories
@@ -575,7 +751,9 @@ end
 function Model.compareFactory(factory1, factory2, with_priority)
   if factory1 == nil or factory2 == nil then return false end
   if factory1.name ~= factory2.name then return false end
+  if factory1.name == factory2.name and factory1.quality ~= factory2.quality then return false end
   if factory1.fuel ~= factory2.fuel then return false end
+  if factory1.fuel_quality ~= factory2.fuel_quality then return false end
   if with_priority and Model.compareModulePriorities(factory1.module_priority, factory2.module_priority) == false then return false end
   return true
 end
@@ -588,7 +766,9 @@ end
 function Model.compareBeacon(beacon1, beacon2, with_priority)
   if beacon1 == nil or beacon2 == nil then return false end
   if beacon1.name ~= beacon2.name then return false end
+  if beacon1.name == beacon2.name and beacon1.quality ~= beacon2.quality then return false end
   if beacon1.fuel ~= beacon2.fuel then return false end
+  if beacon1.fuel_quality ~= beacon2.fuel_quality then return false end
   if beacon1.combo ~= beacon2.combo then return false end
   if beacon1.per_factory ~= beacon2.per_factory then return false end
   if beacon1.per_factory_constant ~= beacon2.per_factory_constant then return false end
@@ -606,7 +786,7 @@ function Model.compareBeacons(beacons1, beacons2)
   for i = 1, #beacons1, 1 do
     local beacon1 = beacons1[i]
     local beacon2 = beacons2[i]
-    local with_priority = Model.factoryHasModule(beacon1) or Model.factoryHasModule(beacon2)
+    local with_priority = beacon1.module_priority or Model.factoryHasModule(beacon2)
     if Model.compareBeacon(beacon1, beacon2, with_priority) == false then return false end
   end
   return true

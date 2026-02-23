@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2025-11-21
+  Locale:
+    - Brazilian Portuguese locale added, provided by Slondo (https://mods.factorio.com/user/Slondo).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2025-11-07
+  Features:
+    - Add setting to adjust the fuel slots in locomotives. This can be set to 2 for compatibility with LTN.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-11-12
+  Bugfixes:
+    - Fix crash when mining/deconstructing a battery-electric locomotive with a partially discharged battery pack inside.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-11-11
+  Info:
+    - Re-release for Factorio 2.0
+  Changes:
+    - Battery recycling is disabled by default for new games to avoid problems with Space Age.
+    - Battery-electric locomotives are now placed in the same item group as the other train items.
+    - Renamed basic batteries and chargers to have a "1" at the end.
+  Features:
+    - Battery pack charging efficiency can be adjusted. This will influence charging time and thus total power consumption.
+    - The capacity of battery packs can be adjusted if you don't want to wait for the high-capacity battery packs late in the game or want more capacity in general.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.7
 Date: 2022-03-13
   Bugfixes:

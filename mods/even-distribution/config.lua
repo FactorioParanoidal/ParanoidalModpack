@@ -1,6 +1,6 @@
 local config = {}
 
-config.defaultLogisticSlots = 
+config.defaultLogisticSlots = -- in stacks, gets added to logistics slots in new games
 {
     ["wood"]               = 1,
     ["coal"]               = 0,

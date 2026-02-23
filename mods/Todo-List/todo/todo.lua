@@ -35,19 +35,18 @@ require("todo/ui/clean_confirm_dialog")
 -- convenience
 require("todo/helper")
 require("todo/logging")
-todo.base64 = require("lib/base64")
 
 function todo.mod_init()
     todo.log("setting up mod data.")
 
-    if not global.todo then
-        global.todo = { ["open"] = {}, ["done"] = {}, ["settings"] = {} }
+    if not storage.todo then
+        storage.todo = { ["open"] = {}, ["done"] = {}, ["settings"] = {} }
     else
-        for _, task in ipairs(global.todo.open) do
+        for _, task in ipairs(storage.todo.open) do
             todo.init_ensure_task_fields(task)
         end
 
-        for _, task in ipairs(global.todo.done) do
+        for _, task in ipairs(storage.todo.done) do
             todo.init_ensure_task_fields(task)
         end
     end
@@ -201,6 +200,25 @@ function todo.on_gui_click(event)
         todo.on_clean_confirm(player)
     elseif (string.find(element.name, "todo_")) then
         todo.log("Unknown todo element name:" .. element.name)
+    end
+end
+
+function todo.on_gui_confirmed(event)
+    local player = game.players[event.player_index]
+    local element = event.element
+    local name = element.name
+    if (element.name == "todo_new_task_title") then
+        todo.on_save_new_task_click(player)
+        todo.log('tried saving task on enter')
+        todo.create_add_task_dialog(player)
+    elseif (string.find(element.name, "todo_main_subtask_new_text_")) then
+        local id = todo.get_task_id_from_element_name(element.name, "todo_main_subtask_new_text_")
+        todo.on_save_new_subtask_click(player, id)
+        if (player.opened.valid) then
+            if (player.opened.todo_scroll_pane.todo_task_table[name]) then
+                player.opened.todo_scroll_pane.todo_task_table[name].focus()
+            end
+        end
     end
 end
 

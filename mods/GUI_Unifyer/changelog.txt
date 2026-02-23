@@ -1,4 +1,65 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2025-02-07
+  Changes:
+    - Updated by Solus Caelum
+    - Added improved error handling and logging in event handlers
+    - Enhanced state validation in ensure_global_state function
+    - Added additional safety checks for player state initialization
+  Bugfixes:
+    - Fixed "attempt to index global 'nil'" crashes in on_built_entity event
+    - Added safety checks to prevent crashes during rapid entity placement
+    - Added validation to prevent nil global state issues
+    - Fixed "attempt to call global 'setup_player' (a nil value)" error on configuration changed
+  Info:
+    - If you encounter any crashes, please enable DEBUG logging in the mod settings and report the issue with your Factorio log file
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025-01-21
+  Features:
+    - Updated by Solus Caelum
+    - Added support for Quick Item Menu mod
+    - Added support for Visual Signals mod
+    - Added comprehensive logging system with configurable levels (DEBUG, INFO, WARNING, ERROR)
+    - Added per-player logging settings in mod options
+    - Added minimum log level setting in mod options
+    - Added extensive diagnostic and debug logging capabilities
+    - Added robust state validation and recovery mechanisms
+    - Added improved button initialization and management system
+  Changes:
+    - Updated for Factorio 2.0 compatibility
+    - Replaced game.active_mods with script.active_mods
+    - Updated frame styles to use Factorio 2.0's built-in styles
+    - Enhanced global state initialization and management
+    - Improved multiplayer synchronization
+    - Centralized mod button configurations
+    - Optimized button array processing
+    - Reorganized icon management system
+    - Improved mod compatibility with Trainsaver, Helmod, and Space Exploration
+    - Strengthened compatibility with mods that temporarily hide UI
+    - Enhanced error handling and recovery systems
+    - Comprehensive state validation for all operations
+    - Improved initialization sequences
+  Bugfixes:
+    - Fixed multiple crashes related to global state initialization
+    - Fixed issues with nil global state during GUI interactions
+    - Fixed button selected states and window state tracking
+    - Added persistent state management for window visibility
+    - Fixed button state synchronization
+    - Fixed crashes during player join events on dedicated servers
+    - Fixed initialization issues with peaceful mode on dedicated servers
+    - Fixed button visibility issues in new games
+    - Added comprehensive validation for GUI element access
+    - Fixed errors when handling clock GUI updates
+    - Fixed buttons getting stuck in selected state (added 60-tick reset)
+    - Fixed issues that arose with Factorio 2.0's API changes
+  Info:
+    - This version represents a major rewrite of the mod with significant improvements
+    - The mod is now known as "GUI Unifier" in most places, though the internal mod name remains unchanged
+    - If you encounter any issues, please enable DEBUG logging in the mod settings. Report any issues with steps to reproduce
+    - The changes in this changelog are consolidated into a single release as 2.0.0.
+    - The full changelog and commit history can be found at https://github.com/snouz/GUI_Unifier
+---------------------------------------------------------------------------------------------------
 Version: 1.12.0
 Date: 2021.10.26
   Changes:

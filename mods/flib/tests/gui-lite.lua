@@ -3,10 +3,23 @@
 
 -- GUI
 
-local flib_gui = require("__flib__/gui-lite")
-local mod_gui = require("__core__/lualib/mod-gui")
+local flib_gui = require("__flib__.gui-lite")
+local mod_gui = require("__core__.lualib.mod-gui")
 
---- @class GuiBase
+--- @alias flib_test.TestGuiMode
+--- | "all"
+--- | "active"
+--- | "completed"
+
+--- @class flib_test.TestGui
+--- @field elems table<string, LuaGuiElement>
+--- @field player LuaPlayer
+--- @field completed_count integer
+--- @field items_left integer
+--- @field mode flib_test.TestGuiMode
+--- @field pinned boolean
+
+--- @class flib.TestGuiBase
 local gui = {}
 
 --- @param name string
@@ -37,6 +50,7 @@ function gui.build(player)
     name = "flib_todo_window",
     direction = "vertical",
     -- Use `elem_mods` to make modifications to the GUI element after creation.
+    --- @diagnostic disable-next-line: missing-fields
     elem_mods = { auto_center = true },
     -- If `handler` is a function, it will call that function for any GUI event on this element.
     -- If it is a dictioanry of event -> function, it will call the corresponding function for the corresponding event.
@@ -60,6 +74,7 @@ function gui.build(player)
       type = "frame",
       style = "inside_shallow_frame",
       -- Use `style_mods` to make modifications to the element's style.
+      --- @diagnostic disable-next-line: missing-fields
       style_mods = { width = 500 },
       direction = "vertical",
       {
@@ -152,8 +167,8 @@ function gui.build(player)
   -- In a real mod, you would want to initially hide the GUI and not set opened until the player opens it.
   player.opened = elems.flib_todo_window
 
-  --- @class Gui
-  global.guis[player.index] = {
+  --- @type flib_test.TestGui
+  storage.guis[player.index] = {
     elems = elems,
     player = player,
     -- State variables
@@ -173,10 +188,10 @@ function gui.on_textfield_text_changed(_, e)
   end
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 --- @param e EventData.on_gui_checked_state_changed
 function gui.change_mode(self, e)
-  local mode = e.element.tags.mode --[[@as string]]
+  local mode = e.element.tags.mode --[[@as flib_test.TestGuiMode]]
   self.mode = mode
   self.elems.all_radio.state = mode == "all"
   self.elems.active_radio.state = mode == "active"
@@ -187,7 +202,7 @@ function gui.change_mode(self, e)
   end
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.clear_completed(self)
   for _, checkbox in pairs(self.elems.todos_flow.children) do
     if checkbox.state then
@@ -198,12 +213,12 @@ function gui.clear_completed(self)
   gui.update_footer(self)
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.hide(self)
   self.elems.flib_todo_window.visible = false
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 --- @param e EventData.on_gui_checked_state_changed
 function gui.on_todo_toggled(self, e)
   local checkbox = e.element
@@ -222,7 +237,7 @@ function gui.on_todo_toggled(self, e)
   gui.update_footer(self)
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 --- @param e EventData.on_gui_confirmed
 function gui.on_textfield_confirmed(self, e)
   local title = e.element.text
@@ -233,6 +248,7 @@ function gui.on_textfield_confirmed(self, e)
   local todos_flow = self.elems.todos_flow
   flib_gui.add(todos_flow, {
     type = "checkbox",
+    --- @diagnostic disable-next-line: missing-fields
     style_mods = { horizontally_stretchable = true },
     caption = title,
     state = false,
@@ -247,7 +263,7 @@ function gui.on_textfield_confirmed(self, e)
   gui.update_footer(self)
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.on_window_closed(self)
   -- Don't close when enabling the pin
   if self.pinned then
@@ -256,7 +272,7 @@ function gui.on_window_closed(self)
   gui.hide(self)
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.show(self)
   self.elems.flib_todo_window.visible = true
   self.elems.textfield.focus()
@@ -265,7 +281,7 @@ function gui.show(self)
   end
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.toggle_pinned(self)
   -- "Pinning" the GUI will remove it from player.opened, allowing it to coexist with other windows.
   -- I highly recommend implementing this for your GUIs. flib includes the requisite sprites and locale for the button.
@@ -274,7 +290,6 @@ function gui.toggle_pinned(self)
     self.elems.close_button.tooltip = { "gui.close" }
     self.elems.pin_button.sprite = "flib_pin_black"
     self.elems.pin_button.style = "flib_selected_frame_action_button"
-    self.player.opened = self.elems.flib_todo_window
     if self.player.opened == self.elems.flib_todo_window then
       self.player.opened = nil
     end
@@ -286,7 +301,7 @@ function gui.toggle_pinned(self)
   end
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.toggle_visible(self)
   if self.elems.flib_todo_window.visible then
     gui.hide(self)
@@ -295,7 +310,7 @@ function gui.toggle_visible(self)
   end
 end
 
---- @param self Gui
+--- @param self flib_test.TestGui
 function gui.update_footer(self)
   self.elems.count_label.caption = self.items_left .. " items left"
   self.elems.clear_completed_button.enabled = self.completed_count > 0
@@ -306,7 +321,7 @@ end
 -- The second argument is an optional wrapper function that will be called in lieu of the specified handler of an
 -- element. It is used in this case to get the GUI table for the corresponding player before calling the handler.
 flib_gui.add_handlers(gui, function(e, handler)
-  local self = global.guis[e.player_index]
+  local self = storage.guis[e.player_index]
   if self then
     handler(self, e)
   end
@@ -321,7 +336,7 @@ flib_gui.handle_events()
 
 -- Initalize guis table
 script.on_init(function()
-  global.guis = {}
+  storage.guis = {}
 end)
 
 -- Create the GUI when a player is created
@@ -339,5 +354,5 @@ script.on_event(defines.events.on_player_created, function(e)
 end)
 
 -- For a real mod, you would also want to handle on_configuration_changed to rebuild your GUIs, and on_player_removed
--- to remove the GUI table from global. You would also want to ensure that the GUI is valid before running methods.
+-- to remove the GUI table from storage. You would also want to ensure that the GUI is valid before running methods.
 -- For the sake of brevity, these things were not covered in this demo.

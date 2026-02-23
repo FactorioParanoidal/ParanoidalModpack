@@ -80,12 +80,13 @@ local processNestActiveness = chunkPropertyUtils.processNestActiveness
 
 local getEnemyStructureCount = chunkPropertyUtils.getEnemyStructureCount
 
+local evoToTier = baseUtils.evoToTier
 local findNearbyBase = baseUtils.findNearbyBase
 local createBase = baseUtils.createBase
 local upgradeEntity = baseUtils.upgradeEntity
 
 local changeEntityAligment = baseUtils.changeEntityAligment
-local changeEntityTier = baseUtils.changeEntityTier
+local changeEntityLvl = baseUtils.changeEntityLvl
 local getDynamicRates = baseUtils.getDynamicRates
 local changeEntityAndUpdateDynamicRates = baseUtils.changeEntityAndUpdateDynamicRates
 
@@ -216,6 +217,11 @@ local function scorePlayerBuildings(map, chunk)
 			local query = universe.filteredEntities_player_pheromones[lvlName]
 			if query then
 				local enityCnt = surface.count_entities_filtered(query)
+				local query2 = universe.ignoredEntities_player_pheromones[lvlName]
+				if query2 then
+					enityCnt = mMax(enityCnt - surface.count_entities_filtered(query2), 0)
+				end
+				
 				pheromones[BASE_PHEROMONE] = pheromones[BASE_PHEROMONE] + enityCnt*values[BASE_PHEROMONE]
 				pheromones[BASE_DETECTION_PHEROMONE] = pheromones[BASE_DETECTION_PHEROMONE] + enityCnt*values[BASE_DETECTION_PHEROMONE]
 				if lvlName == "turrets" then
@@ -239,6 +245,23 @@ local function scorePlayerBuildings(map, chunk)
 
 	return pheromones[BASE_PHEROMONE]
 end
+
+function chunkUtils.needReplacement(map, entity)
+	local needReplacement = false
+	if not VANILLA_ENTITIES[entity.name] then
+		if not map.replaceModedNests then
+			needReplacement = false
+		else
+			needReplacement = ((not map.universe.ALLOW_OTHER_ENEMIES) and (mRandom()<0.4))
+		end
+	else
+		needReplacement = true
+	end
+	
+	return needReplacement
+end
+
+local needReplacement = chunkUtils.needReplacement
 
 function chunkUtils.initialScan(chunk, map, tick)
     local surface = map.surface
@@ -275,12 +298,12 @@ function chunkUtils.initialScan(chunk, map, tick)
 					if base then
 						setChunkBase(map, chunk, base)
 					else
-						base = createBase(map, chunk, tick, thisIsNewEnemyPosition(universe, chunk.x, chunk.y))
+						base = createBase(map, chunk, tick, (map.hasNonmoddedBiters and thisIsNewEnemyPosition(universe, chunk.x, chunk.y)))
 					end
 					thisIsRampantEnemy = base.thisIsRampantEnemy
 				end
 				
-				if thisIsRampantEnemy then
+				if map.hasNonmoddedBiters and thisIsRampantEnemy then
 					local alignment = base.alignment
 						local unitList = surface.find_entities_filtered(universe.filteredEntitiesUnitQuery)
 						for i=1,#unitList do
@@ -293,8 +316,8 @@ function chunkUtils.initialScan(chunk, map, tick)
 						for i = 1, #enemyBuildings do
 							local enemyBuilding = enemyBuildings[i]							
 							if not buildingHiveTypeLookup[enemyBuilding.name] then
-								local newEntity
-								if VANILLA_ENTITIES[enemyBuilding.name] or ((not universe.ALLOW_OTHER_ENEMIES) and (mRandom()<0.8)) then
+								local newEntity								
+								if needReplacement(map, enemyBuilding) then
 									newEntity = upgradeEntity(enemyBuilding, alignment, map, nil, true)
 								end	
 								if newEntity then
@@ -389,7 +412,7 @@ end
 
 function chunkUtils.mapScanEnemyChunk(chunk, map)
     local universe = map.universe
-    local buildingHiveTypeLookup = universe.buildingHiveTypeLookup
+    local buildingHiveTypeLookup = universe.buildingHiveTypeLookup	
     local buildings = map.surface.find_entities_filtered(universe.filteredEntitiesEnemyStructureQuery)
     local counts = map.chunkScanCounts
 
@@ -399,15 +422,14 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 	local changingEntities = false
 	local dynamicRates
 	
-	local baseTier = 1
-	local newTier = 1
+	local buildingsLvl = 1
 			
 	local thisIsRampantEnemy = false
 	if universe.NEW_ENEMIES and base and base.thisIsRampantEnemy then
 		thisIsRampantEnemy = true
 		changingEntities = base.changingEntities
-		baseTier = mMax(base.tier-base.tierHandicap, 1)
-		newTier = mMax(baseTier - mRandom(0, 2), 1)
+		
+		buildingsLvl = mMax(map.buildingsLvl - mRandom(0, 2), 1)
 	end	
 	
 	if changingEntities then
@@ -455,17 +477,13 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 					-- end
 				end
 			else
-				local oldTier = universe.buildingTierLookup[building.name]
-				if oldTier and (oldTier<newTier) and (universe.lvlupTick<=tick) then
-					local roll = mRandom()
-					if roll < 0.01 then
-						--local oldName = building.name
-						newBuilding = changeEntityTier(building, newTier, map)
-						if newBuilding then
-							--game.print("chunkUtils.mapScanEnemyChunk. Changing tier:"..oldName.."->"..newBuilding.name)	-- debug
-							universe.lvlupTick = tick + GLOBAL_LVLUP_COOLDOWN
-							building = newBuilding
-						end
+				local oldLvl = universe.buildingTierLookup[building.name]
+				if oldLvl and (oldLvl<buildingsLvl) and (universe.lvlupTick<=tick) then
+					--local oldName = building.name
+					newBuilding = changeEntityLvl(building, buildingsLvl, map)
+					if newBuilding then
+						universe.lvlupTick = tick + GLOBAL_LVLUP_COOLDOWN
+						building = newBuilding
 					end
 				end
 			end
@@ -478,7 +496,6 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 					or ((building.type =="unit-spawner") and "biter-spawner")
 				)	
 			counts[hiveType] = counts[hiveType] + 1
-			
 			
 			if universe.NEW_ENEMIES then
 				if building.type =="unit-spawner" then
@@ -528,6 +545,10 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
     setHiveCount(map, chunk, counts["hive"])
     setTrapCount(map, chunk, counts["trap"])
     setTurretCount(map, chunk, counts["turret"])
+	if (counts["spitter-spawner"] == 0) and (counts["biter-spawner"] == 0) then
+		chunkPropertyUtils.setNestActiveness(map, chunk, 0)		
+		chunkPropertyUtils.setRaidNestActiveness(map, chunk, 0)
+	end	
 
 	if universe.NEW_ENEMIES and thisIsRampantEnemy then
 		local baseChunkFactions = {}
@@ -562,12 +583,12 @@ function chunkUtils.createChunk(topX, topY)
         y = topY
     }
     chunk[BASE_PHEROMONE] = 0
-    chunk[BASE_DETECTION_PHEROMONE] = 0	-- + !КДА
+    chunk[BASE_DETECTION_PHEROMONE] = 0
     chunk[PLAYER_PHEROMONE] = 0
     chunk[RESOURCE_PHEROMONE] = 0
     chunk[CHUNK_TICK] = 0
     chunk["deathLevel"] = nil	
-
+	chunk.nextSquadTick = nil
     return chunk
 end
 
@@ -753,15 +774,17 @@ function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
 					if entity.type ~= "wall" then	-- + !КДА 2021.11
 						map.destroyPlayerBuildings = map.destroyPlayerBuildings + 1
 						if universe.aiDifficulty == "Hard" then
-							if (map.state == AI_STATE_ONSLAUGHT) then
-								map.points = map.points + entityValue
-								if universe.aiPointsPrintGainsToChat then
-									game.print(map.surface.name .. ": Points: +" .. math.floor(entityValue) .. ". [Structure Kill] Total: " .. string.format("%.2f", map.points))
-								end
-							else
-								map.points = map.points + entityValue * 0.12
-								if universe.aiPointsPrintGainsToChat then
-									game.print(map.surface.name .. ": Points: +" .. math.floor(entityValue * 0.12) .. ". [Structure Kill] Total: " .. string.format("%.2f", map.points))
+							if not (map.supressionData or (map.supressionData.supressionType < 1) or (map.supressionData.supressionEndTick < game.tick)) then	--- prevent mass attack if destroing base
+								if (map.state == AI_STATE_ONSLAUGHT) then
+									map.points = map.points + entityValue
+									if universe.aiPointsPrintGainsToChat then
+										game.print(map.surface.name .. ": Points: +" .. math.floor(entityValue) .. ". [Structure Kill] Total: " .. string.format("%.2f", map.points))
+									end
+								else
+									map.points = map.points + entityValue * 0.12
+									if universe.aiPointsPrintGainsToChat then
+										game.print(map.surface.name .. ": Points: +" .. math.floor(entityValue * 0.12) .. ". [Structure Kill] Total: " .. string.format("%.2f", map.points))
+									end
 								end
 							end
 						end	
@@ -811,35 +834,29 @@ function chunkUtils.makeImmortalEntity(surface, entity)
     local repairName = entity.name
     local repairForce = entity.force
     local repairDirection = entity.direction
-
-    local wires
+	local entityType = entity.type	
+ 	local connections = {}											
     if (entity.type == "electric-pole") then
-        wires = entity.neighbours
-    end
+		local wire_connector = entity.get_wire_connector(defines.wire_connector_id.pole_copper)
+		for _, wireConnection in pairs(wire_connector.connections) do
+			connections[#connections+1] = wireConnection.target
+		end
+	end	
     entity.destroy()
     local newEntity = surface.create_entity({position=repairPosition,
                                              name=repairName,
                                              direction=repairDirection,
                                              force=repairForce})
-    if wires then
-        for _,v in pairs(wires.copper) do
-            if (v.valid) then
-                newEntity.connect_neighbour(v);
-            end
-        end
-        for _,v in pairs(wires.red) do
-            if (v.valid) then
-                newEntity.connect_neighbour({wire = DEFINES_WIRE_TYPE_RED, target_entity = v});
-            end
-        end
-        for _,v in pairs(wires.green) do
-            if (v.valid) then
-                newEntity.connect_neighbour({wire = DEFINES_WIRE_TYPE_GREEN, target_entity = v});
-            end
-        end
-    end
-
-    newEntity.destructible = false
+    if newEntity then
+		if (newEntity.type == "electric-pole") then
+			local newWire_connector = newEntity.get_wire_connector(defines.wire_connector_id.pole_copper)
+			for i = 1, #connections do
+				newWire_connector.connect_to(connections[i], true)
+			end
+		end
+		newEntity.destructible = false
+	end
+	
 end
 
 chunkUtilsG = chunkUtils

@@ -3,163 +3,151 @@ data:extend({
 		type = "recipe",
 		name = "warehouse-basic",
 		enabled = false,
-		ingredients =
-		{
-		    { "storehouse-basic", 2 }, --added drd
-			{ "steel-plate", 200 },
-			{ "stone-brick", 40 },
-			{ "iron-stick", 85 },
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 2}, --added drd
+			{ type = "item", name = "steel-plate", amount = 200},
+			{ type = "item", name = "stone-brick", amount = 40},
+			{ type = "item", name = "iron-stick", amount = 85},
 		},
-		energy_required = 30, 
-		result = "warehouse-basic",
+		energy_required = 30,
+		results = { { type = "item", name = "warehouse-basic", amount = 1 } },
 	},
 	{ -- Passive Provider Warehouse
 		type = "recipe",
-		name = "warehouse-passive-provider",
+		name = "angels-warehouse-passive-provider",
 		enabled = false,
-		ingredients =
-		{
-			{ "warehouse-basic", 1 },
-			{ "passive-provider-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+		ingredients = {
+			{ type = "item", name = "warehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-passive-provider", amount = 1},
+			{ type = "item", name = "steel-plate", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 15},
 		},
 		energy_required = 5,
-		result = "warehouse-passive-provider",
+		results = { { type = "item", name = "angels-warehouse-passive-provider", amount = 1 } },
 	},
 	{ -- Storage Warehouse
 		type = "recipe",
-		name = "warehouse-storage",
+		name = "angels-warehouse-storage",
 		enabled = false,
-		ingredients =
-		{
-			{ "warehouse-basic", 1 },
-			{ "storage-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+		ingredients = {
+			{ type = "item", name = "warehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-storage", amount = 1},
+			{ type = "item", name = "steel-plate", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 15},
 		},
 		energy_required = 5,
-		result = "warehouse-storage",
+		results = { { type = "item", name = "angels-warehouse-storage", amount = 1 } },
 	},
 	{ -- Active Provider Warehouse
 		type = "recipe",
-		name = "warehouse-active-provider",
+		name = "angels-warehouse-active-provider",
 		enabled = false,
-		ingredients =
-		{
-			{ "warehouse-basic", 1 },
-			{ "active-provider-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+		ingredients = {
+			{ type = "item", name = "warehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-active-provider", amount = 1},
+			{ type = "item", name = "steel-plate", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 15},
 		},
 		energy_required = 5,
-		result = "warehouse-active-provider",
+		results = { { type = "item", name = "angels-warehouse-active-provider", amount = 1 } },
 	},
 	{ -- Requester Warehouse
 		type = "recipe",
-		name = "warehouse-requester",
+		name = "angels-warehouse-requester",
 		enabled = false,
-		ingredients =
-		{
-			{ "warehouse-basic", 1 },
-			{ "requester-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+		ingredients = {
+			{ type = "item", name = "warehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-requester", amount = 1},
+			{ type = "item", name = "steel-plate", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 15},
 		},
 		energy_required = 5,
-		result = "warehouse-requester",
+		results = { { type = "item", name = "angels-warehouse-requester", amount = 1 } },
 	},
 	{ -- Buffer Warehouse
 		type = "recipe",
-		name = "warehouse-buffer",
+		name = "angels-warehouse-buffer",
 		enabled = false,
-		ingredients =
-		{
-			{ "warehouse-basic", 1 },
-			{ "buffer-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+		ingredients = {
+			{ type = "item", name = "warehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-buffer", amount = 1},
+			{ type = "item", name = "steel-plate", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 15},
 		},
 		energy_required = 5,
-		result = "warehouse-buffer",
+		results = { { type = "item", name = "angels-warehouse-buffer", amount = 1 } },
 	},
 	{ -- Basic Storehouse
 		type = "recipe",
 		name = "storehouse-basic",
 		enabled = false,
-		ingredients =
-		{
-			{ "steel-chest", 10 }, --drd
-			{ "steel-plate", 50 },
-			{ "stone-brick", 10 },
-			{ "iron-stick", 16 },
+		ingredients = {
+			{ type = "item", name = "steel-chest", amount = 10}, --drd
+			{ type = "item", name = "steel-plate", amount = 50},
+			{ type = "item", name = "stone-brick", amount = 10},
+			{ type = "item", name = "iron-stick", amount = 16},
 		},
 		energy_required = 30,
-		result = "storehouse-basic",
+		results = { { type = "item", name = "storehouse-basic", amount = 1 } },
 	},
 	{ -- Passive Provider Storehouse
 		type = "recipe",
 		name = "storehouse-passive-provider",
 		enabled = false,
-		ingredients =
-		{
-			{ "storehouse-basic", 1 },
-			{ "passive-provider-chest", 1 },
-			{ "iron-stick", 16 }, --drd
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-passive-provider", amount = 1},
+			{ type = "item", name = "iron-stick", amount = 16}, --drd
 		},
 		energy_required = 5,
-		result = "storehouse-passive-provider",
+		results = { { type = "item", name = "storehouse-passive-provider", amount = 1 } },
 	},
 	{ -- Storage Storehouse
 		type = "recipe",
 		name = "storehouse-storage",
 		enabled = false,
-		ingredients =
-		{
-			{ "storehouse-basic", 1 },
-			{ "storage-chest", 1 },
-			{ "iron-stick", 16 }, --drd
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-storage", amount = 1},
+			{ type = "item", name = "iron-stick", amount = 16}, --drd
 		},
 		energy_required = 5,
-		result = "storehouse-storage",
+		results = { { type = "item", name = "storehouse-storage", amount = 1 } },
 	},
 	{ -- Active Provider Storehouse
 		type = "recipe",
 		name = "storehouse-active-provider",
 		enabled = false,
-		ingredients =
-		{
-			{ "storehouse-basic", 1 },
-			{ "active-provider-chest", 1 },
-			{ "iron-stick", 16 }, --drd
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-active-provider", amount = 1},
+			{ type = "item", name = "iron-stick", amount = 16}, --drd
 		},
 		energy_required = 5,
-		result = "storehouse-active-provider",
+		results = { { type = "item", name = "storehouse-active-provider", amount = 1 } },
 	},
 	{ -- Requester Storehouse
 		type = "recipe",
 		name = "storehouse-requester",
 		enabled = false,
-		ingredients =
-		{
-			{ "storehouse-basic", 1 },
-			{ "requester-chest", 1 },
-			{ "iron-stick", 16 }, --drd
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-requester", amount = 1},
+			{ type = "item", name = "iron-stick", amount = 16}, --drd
 		},
 		energy_required = 5,
-		result = "storehouse-requester",
+		results = { { type = "item", name = "storehouse-requester", amount = 1 } },
 	},
 	{ -- Buffer Storehouse
 		type = "recipe",
 		name = "storehouse-buffer",
 		enabled = false,
-		ingredients =
-		{
-			{ "storehouse-basic", 1 },
-			{ "buffer-chest", 1 },
-			{ "iron-stick", 16 }, --drd
+		ingredients = {
+			{ type = "item", name = "storehouse-basic", amount = 1},
+			{ type = "item", name = "angels-logistic-chest-buffer", amount = 1},
+			{ type = "item", name = "iron-stick", amount = 16}, --drd
 		},
 		energy_required = 5,
-		result = "storehouse-buffer",
+		results = { { type = "item", name = "storehouse-buffer", amount = 1 } },
 	},
 })

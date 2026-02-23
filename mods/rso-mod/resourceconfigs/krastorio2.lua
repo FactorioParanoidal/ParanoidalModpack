@@ -1,6 +1,7 @@
 function fillKrastorio2Config(config)
+	local nauvisConfig = config.nauvis
 
-    config["rare-metals"] = 
+    nauvisConfig["kr-rare-metal-ore"] = 
     {
         type="resource-ore",
         allotment=60,
@@ -21,7 +22,7 @@ function fillKrastorio2Config(config)
         }
     }
 
-    config["mineral-water"] = 
+    nauvisConfig["kr-mineral-water"] = 
     {
         type="resource-liquid",
         minimum_amount=100000,
@@ -31,11 +32,11 @@ function fillKrastorio2Config(config)
         size={min=2, max=5},
     }
 
-	if game.active_mods["bztungsten"] then
-		config["mineral-water"].starting = {richness=150000, size=1, probability=1}
+	if script.active_mods["bztungsten"] then
+		nauvisConfig["kr-mineral-water"].starting = {richness=150000, size=1, probability=1}
 	end
 
-    config["imersite"] = 
+    nauvisConfig["kr-imersite"] = 
     {
         type="resource-liquid",
         minimum_amount=150000,

@@ -1,0 +1,41 @@
+[b][size=150]Infos[/size][/b]
+[list]
+[*]Type: Mod
+[*]Name: AfraidOfTheDark
+[*]Description: Night is too dark for you ? Enforced flashlight and personal lights, powerful balloon lights or a pair of natural tinted night glasses could be the solution !
+[*]Tested-With-Factorio-Version: 0.13.0
+[*]Multiplayer compatible: tested on a headless server...
+[*]Locale: english, french, german
+[*]Tags: Night vision, Glasses, Lamp, Light, Vehicles
+[*]License: You are free to use and distribute this mod and also to modify it for personal use, but not to release a modified version without permission (unless visibly not maintained anymore).
+[*]Portal download : https://mods.factorio.com/mods/binbinhfr/AfraidOfTheDark[/list]
+[attachment=1]logo2.jpg[/attachment]
+[spoiler=Description][b][size=150]Description[/size][/b]
+Nights are too dark for you ? 
+When the shadows come, you're afraid of the BBBB (Big Bad Behemoth Bitter) ? 
+You're tired of bumping your head into electrical poles at midnight ? 
+Then this mod is for you !!!
+
+You now have three progressive solutions to unveil the shadows :
+
+First, did you notice that, at night, you have an omindirectional light covering a circular area around you, and also a personal light cone ? This mod enforces these personal lights you are carrying with you. It also works when you are inside a vehicle (car, tank, airplane, and also moving locomotives). You can customize this enforcement by editing the config.lua file.
+[attachment=0]afraidofthedark-screencopy7.jpg[/attachment]
+Second, in the middle game, researching "optics" gives you access to a new powerful lamp : the "balloon light", that has a really wider ligthing area than the classical small lamp :
+[attachment=5]afraidofthedark-screencopy8.jpg[/attachment]
+Third, in the later game, researching "night vision" gives you access to another pair of glasses to wear in your armor : the "perfect night glasses". With these, you can see as if it was noon under the sun ! They are very efficients to hunt in nightclubs too, but alas, you are alone on this planet :
+[attachment=4]afraidofthedark-screencopy9.jpg[/attachment]
+And it is even a little smaller than the green military night vision equipement : 2x2 instead of 3x2 !
+
+And now that the night almost vanished, if you cannot tell what hour of the day it is anymore, just check my [url=https://forums.factorio.com/viewtopic.php?f=92&t=22822]Time Tools mod[/url]...[/spoiler]
+
+[b][size=150]Download[/size][/b]
+For Factorio 0.13.X :
+[color=#00BF80]Please now use the portal for downloads (see link above or use ingame mod install/update), as I won't update both downloads links here anymore.[/color]
+
+For Factorio 0.12.X :
+[attachment=2]AfraidOfTheDark_1.0.6.zip[/attachment]
+[attachment=3]AfraidOfTheDark_1.0.5.zip[/attachment]
+[attachment=6]AfraidOfTheDark_1.0.2.zip[/attachment]
+[attachment=7]AfraidOfTheDark_1.0.1.zip[/attachment]
+
+I am open to suggestions, so feel free to speak.

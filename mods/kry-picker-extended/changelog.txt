@@ -1,0 +1,194 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: January 4, 2026
+  Info:
+    - Converted all instances of Data:copy to Data:krycopy, allowing compatibility with Pymods.
+      No functional changes. Necessary to avoid function overlap with PyPostProcessing.
+    - Updated all instances of recipe_ingredient to use ingredients table of just name/count.
+    - Removed picker-blueprint and picker-deconstruction planners, as they were no longer in use.
+  Minor Features:
+    - Added settings for picker planner menu. Default settings are much larger than previous versions.
+    - Added sorting compatibility for several additional planner-related mods.
+  Changes:
+    - Made muluna tile planner non-stackable, to prevent them from appearing in player inventory.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: December 29, 2025
+  Bugfixes:
+    - Fixed error message in chat regarding minv (a nil value), related to ghost module requests.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: November 24, 2025
+  Bugfixes:
+    - Fixed error message in chat regarding place_result with Solar Productivity blueprint entities.
+    - Added some additional checks to ensure cursor is not empty and not a blueprint before even attempting any ghost revival logic.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: November 24, 2025
+  Bugfixes:
+    - Fixed error when attempting to load into Editor Extensions testing scenario.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: November 24, 2025
+  Bugfixes:
+    - Fixed planner menu cycling when planner was removed from game after first run.
+    - Fixed planners not being added to planner menu when added to game after first run.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: November 23, 2025
+  Bugfixes:
+    - Partial reversion to changes made in 1.0.12, as checking for ghost_type was incorrect logic.
+  Changes:
+    - Added manual compatibility check for solar productivity entities.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: November 19, 2025
+  Bugfixes:
+    - Added minor check to ensure player cursor_stack is not nil (should only apply to Spectator Mode)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: November 13, 2025
+  Changes:
+    - Updated ghost revival logic to check for ghost_type as well as ghost_name.
+      Fixes compatibility with Solar Productivity (and possibly other mods).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: October 9, 2025
+  Bugfixes:
+    - Removed debug print lines from auto ghost revival on first load.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: October 8, 2025
+  Bugfixes:
+    - Fixed auto ghost revive not properly reflecting enabled/disabled setting.
+  Info:
+    - Re-added original author to info.json, not sure when it was accidentally removed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: September 14, 2025
+  Bugfixes:
+    - Fixed error message in chat when pipetting an entity with ghost module requests from a remote interface.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: July 21, 2025
+  Minor Features:
+    - Ghost reviving rails now also places rail supports and rail ramps if present in the inventory.
+    - Added infinity chests to the list of valid chest types to copy/paste container contents.
+    - Allowed overriding the original copied chest when pressing the hotkey over a different chest.
+    - Prevent copy-paste between containers when player is on a different surface.
+      This restriction is ignored when copy-between-surface setting is disabled.
+  Bugfixes:
+    - Fixed error when holding a planner and hovering over a ghost upgrade entity.
+    - Fixed rail ramps triggering the rail-planner ghost revival functionality.
+    - Fixed minor typo when attempting to copy from an empty chest.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: July 20, 2025
+  Minor Features:
+    - Added rail-planner to picker ghost revival functionality.
+      Rails will be used from player inventory before taking from cursor count.
+    - Added setting to ignore quality when using ghost revival feature.
+    - Re-added picker module inserter functionality.
+      Pressing the picker hotkey while hovered over an entity with module requests, automatically inserts those modules from player inventory (as many as possible)
+      Borrowed most of the module code from "Building Ghosts Inserts Modules", by protocol_1903
+  Bugfixes:
+    - Various quality-related bugfixes.
+      Ghost reviving tiles, entities, and upgrades now all respect selected quality.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: July 16, 2025
+  Minor Features:
+    - Added ghost upgrade setting, similar to ghost entity/tile reviver.
+      Allows upgrading/downgrading items when hovering over them with selected item.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: June 29, 2025
+  Bugfixes:
+    - Fixed belt reverser logic when dealing with quality/stacked items on belt.
+  Info:
+    - Fixed month in previous changelog entry.
+    - Fixed accidentally using the wrong license (from my usual default BY-NC 4.0 back to MIT).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: June 1, 2025
+  Changes:
+    - Added a shortcut and hotkey to toggle the Automatic Ghost Revive.
+      If both player settings are disabled, toggling will fail and a message will appear stating so.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: March 21, 2025
+  Changes:
+    - When number of digits for tape measure is set to 0, uses Math.ceil for Size, Width, and Height.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: March 20, 2025
+  Minor Features:
+    - Added setting to define number of significant digits for Tape Measure Tool.
+      Also slightly tweaked the print output for better legibility.
+    - Added proper sorting to the Player specific settings.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: March 3, 2025
+  Bugfixes:
+    - Added 'not-stackable' flag to picker blueprint, deconstruction, and tape measure tools.
+      This was purely needed to prevent Transport Drones from making invalid request recipes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: January 7, 2025
+  Info:
+    - Official public release. Expect dozens of unexpected issues with other mods.
+  Changes:
+    - Updated name of mod from New Picker Extended to Picker Extended Reborn.
+    - Removed Belt Brush functionality (use standalone Belt Brush mod instead).
+    - Disabled Item Count functionality when Yemto's Item Count is enabled.
+    - Removed "Revive It" functionality for compatibility (couldn't test if it was working anyways)
+      This change has no effect over the auto ghost reviver feature.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: January 7, 2025
+  Changes:
+    - Reimplemented Chest Limiter functionality.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: January 6, 2025
+  Minor Features:
+    - Added brand new Picker feature, quality scrolling for held item.
+    - Reimplemented player searchlight, tape measure planner (and required graphics)
+    - Added more blueprint mods to the sort list for picker planner menu.
+  Bugfixes:
+    - Fixed item count feature to correctly account for quality.
+    - Fixed lib.find_item_in_inventory to account for quality.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: January 5, 2025
+  Info:
+    - Included all Picker Atheneum graphics, currently needed for Belt Brush.
+  Minor Features:
+    - Reimplemented ghost item reviver, and merged more Picker Atheneum util scripts. 
+    - Reimplemented belt brush, belt balancer, auto circuits from Picker Belt Tools.
+    - Added flying text to planner cycler, added name and descriptions for some planner mods.
+  Bugfixes:
+    - Fixed compatibility with environment deconstruction planner (from Shortcuts for 2.0).
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: January 3, 2025
+  Minor Features:
+    - Reimplemented item count, copy chest, and inventory sorting functionality.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: January 3, 2025
+  Minor Features:
+    - Reimplemented and fixed planner menu and planner cycler functionality.
+      Added setting to sort planners added by other mods for the planner menu.
+  Changes:
+    - Updated default hotkey from Ctrl+Q to Alt+Q.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: January 2, 2025
+  Info:
+    - Private beta release, very minimal picker-related features have been implementeds.
+      Utilizing internal git functionality to track changes.
+  Minor Features:
+    - Reimplemented player color setting on initial load, multiplayer join, and when setting changed.
+    - Reimplemented start with alt-mode setting on initial load and multiplayer join.
+

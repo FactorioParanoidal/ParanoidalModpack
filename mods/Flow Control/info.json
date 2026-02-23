@@ -1,10 +1,13 @@
 {
   "name": "Flow Control",
-  "version": "3.1.4",
+  "version": "3.2.3",
   "title": "Flow Control",
   "author": "GotLag",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=20645",
-  "description": "Adds pipes with restricted connections, and several useful valves.",
+  "description": "Adds pipes with restricted connections to easily build parallel pipelines. Includes valves from the Valves mod.",
   "factorio_version": "2.0",
-  "dependencies": [ "base >= 1.1.67" ]
+  "dependencies": [
+    "base >= 2.0.8",
+    "? valves >= 1.0.0"
+  ]
 }

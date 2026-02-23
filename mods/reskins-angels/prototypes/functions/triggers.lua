@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Angel's Mods
 --
 -- See LICENSE.md in the project directory for license information.
@@ -7,77 +7,77 @@ local triggers = {}
 
 -- Angel's Bioprocessing
 triggers.bioprocessing = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsbioprocessing"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsbioprocessing"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsbioprocessing"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsbioprocessing"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsbioprocessing"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsbioprocessing"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsbioprocessing"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsbioprocessing"),
 }
 
 -- Angel's Exploration
 triggers.exploration = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsexploration"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsexploration"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsexploration"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsexploration"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsexploration"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsexploration"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsexploration"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsexploration"),
 }
 
 -- Angel's Industries
 triggers.industries = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsindustries"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsindustries"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsindustries"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsindustries"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsindustries"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsindustries"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsindustries"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsindustries"),
 }
 
 -- Angel's Petrochem
 triggers.petrochem = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelspetrochem"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelspetrochem"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelspetrochem"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelspetrochem"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelspetrochem"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelspetrochem"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelspetrochem"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelspetrochem"),
 }
 
 -- Angel's Refining
 triggers.refining = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsrefining"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsrefining"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsrefining"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsrefining"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsrefining"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsrefining"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsrefining"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsrefining"),
 }
 
 -- Angel's Smelting
 triggers.smelting = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelssmelting"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelssmelting"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelssmelting"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelssmelting"),
-    pipes_use_material_colors = false,
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelssmelting"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelssmelting"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelssmelting"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelssmelting"),
+	pipes_use_material_colors = false,
 }
 
 -- Angel's Addons - Mobility
 triggers.mobility = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsaddons-mobility"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsaddons-mobility"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsaddons-mobility"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsaddons-mobility"),
-    pipes_material_colors = false,
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsaddons-mobility"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsaddons-mobility"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsaddons-mobility"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsaddons-mobility"),
+	pipes_material_colors = false,
 }
 
 -- Angel's Addons - Storage
 triggers.storage = {
-    entities = reskins.lib.check_scope("entities", "angels", "angelsaddons-storage"),
-    equipment = reskins.lib.check_scope("equipment", "angels", "angelsaddons-storage"),
-    items = reskins.lib.check_scope("items-and-fluids", "angels", "angelsaddons-storage"),
-    technologies = reskins.lib.check_scope("technologies", "angels", "angelsaddons-storage"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsaddons-storage"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsaddons-storage"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsaddons-storage"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsaddons-storage"),
 }
 
 -- Mad Clown's Compatibility
 triggers.mad_clowns = {
-    is_active = mods["Clowns-AngelBob-Nuclear"] and true or mods["Clowns-Extended-Minerals"] and true or mods["Clowns-Nuclear"] and true or mods["Clowns-Processing"] and true or mods["Clowns-Science"] and true or false
+	is_active = mods["Clowns-AngelBob-Nuclear"] and true or mods["Clowns-Extended-Minerals"] and true or mods["Clowns-Nuclear"] and true or mods["Clowns-Processing"] and true or mods["Clowns-Science"] and true or false,
 }
 
 -- Angel components
 triggers.use_angels_components = (angelsmods and angelsmods.industries and angelsmods.industries.components)
-triggers.use_angels_plates = (not mods["bobplates"])
+triggers.use_angels_plates = not mods["bobplates"]
 
 return triggers

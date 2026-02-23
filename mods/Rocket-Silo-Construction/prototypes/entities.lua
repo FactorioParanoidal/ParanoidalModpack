@@ -4,6 +4,7 @@ local sounds = require("__base__/prototypes/entity/sounds.lua")
 local allowed_effects = {"speed"} -- {"consumption", "speed", "productivity", "pollution"}
 local ENTITYPATH = "__Rocket-Silo-Construction__/graphics/entity/"
 
+local PW_MP = settings.startup["rsc-st-power-mp"].value
 
 local resistances = {
     {
@@ -15,50 +16,36 @@ local resistances = {
         percent = 60
     }
 }
-local energy_usage = "150MW"
-local max_health = 3000
 
+
+local base_pw = math.ceil(150 * PW_MP)
+local energy_usage = tostring(base_pw) .. "MW"
+local max_health = 3000
 local stages = {}
 
 function entitylayer(num, shadow)
 return {
-  filename = ENTITYPATH .. "rs-stage" .. num .. ".png",
-  width = 304,
-  height = 298,
-  --shift = util.by_pixel(-5, 16),
-  draw_as_shadow = shadow or false,
-  scale = 1,
-  hr_version = {
     filename = ENTITYPATH .. "hr-rs-stage" .. num .. ".png",
     width = 608,
     height = 596,
     draw_as_shadow = shadow or false,
-    --shift = util.by_pixel(-5, 16),
+    --shift = util.by_pixel(5, -2),
     scale = 0.5
-  }
 }
 end
 
 function entitylayerserlp(num, shadow)
 return {
-  filename = ENTITYPATH .. "rs-stage" .. num .. "-serlp.png",
-  width = 320,
-  height = 320,
-  --shift = util.by_pixel(-5, 16),
-  draw_as_shadow = shadow or false,
-  scale = 1,
-  hr_version = {
     filename = ENTITYPATH .. "hr-rs-stage" .. num .. "-serlp.png",
     width = 640,
     height = 640,
     draw_as_shadow = shadow or false,
     --shift = util.by_pixel(-5, 16),
     scale = 0.5
-  }
 }
 end
 
-rocketsiloremnant2 = {
+local rocketsiloremnant2 = {
   type = "corpse",
   name = "rsc-silo-stage2_remnant",
   icon = "__base__/graphics/icons/remnants.png",
@@ -76,14 +63,6 @@ rocketsiloremnant2 = {
   remove_on_tile_placement = false,
   animation = 
   {
-    filename = ENTITYPATH .. "rs-stage2_remnant.png",
-    width = 304,
-    height = 298,
-    line_length = 1,
-    frame_count = 1,
-    direction_count = 1,
-    hr_version =
-    {
       filename = ENTITYPATH .. "hr-rs-stage2_remnant.png",
       width = 608,
       height = 596,
@@ -91,10 +70,9 @@ rocketsiloremnant2 = {
       frame_count = 1,
       direction_count = 1,
       scale = 0.5
-    }
   }
 }
-rocketsiloremnant3 = {
+local rocketsiloremnant3 = {
   type = "corpse",
   name = "rsc-silo-stage3_remnant",
   icon = "__base__/graphics/icons/remnants.png",
@@ -112,14 +90,6 @@ rocketsiloremnant3 = {
   remove_on_tile_placement = false,
   animation =
   {
-    filename = ENTITYPATH .. "rs-stage3_remnant.png",
-    width = 304,
-    height = 298,
-    line_length = 1,
-    frame_count = 1,
-    direction_count = 1,
-    hr_version =
-    {
       filename = ENTITYPATH .. "hr-rs-stage3_remnant.png",
       width = 608,
       height = 596,
@@ -127,11 +97,10 @@ rocketsiloremnant3 = {
       frame_count = 1,
       direction_count = 1,
       scale = 0.5
-    }
   }
 }
 
-rocketsiloremnant4 = {
+local rocketsiloremnant4 = {
   type = "corpse",
   name = "rsc-silo-stage4_remnant",
   icon = "__base__/graphics/icons/remnants.png",
@@ -149,14 +118,6 @@ rocketsiloremnant4 = {
   remove_on_tile_placement = false,
   animation =
   {
-    filename = ENTITYPATH .. "rs-stage4_remnant.png",
-    width = 304,
-    height = 298,
-    line_length = 1,
-    frame_count = 1,
-    direction_count = 1,
-    hr_version =
-    {
       filename = ENTITYPATH .. "hr-rs-stage4_remnant.png",
       width = 608,
       height = 596,
@@ -164,7 +125,6 @@ rocketsiloremnant4 = {
       frame_count = 1,
       direction_count = 1,
       scale = 0.5
-    }
   }
 }
 
@@ -183,11 +143,11 @@ stages[1] = {
     fluid_boxes = {}, -- zerado
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("1")
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -202,7 +162,7 @@ stages[1] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 2000 --drd
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -218,6 +178,7 @@ stages[2] = {
     icons = icons_rsc,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 60, result = "rsc-excavation-site"},
+    hidden=true,
     max_health = max_health,
     corpse = "rsc-silo-stage2_remnant",
     dying_explosion = "massive-explosion",
@@ -225,11 +186,11 @@ stages[2] = {
     resistances = resistances,
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("2")
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -244,51 +205,38 @@ stages[2] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
     allowed_effects = allowed_effects,
     open_sound = sounds.machine_open,
     close_sound = sounds.machine_close,
-   --[[ fluid_box =
-    {
-      base_area = 100, -- gets multiplied by 100 by engine
-      base_level = -1, -- pull fluid in
-      height = 1.1,
-    production_type = "input",
-      pipe_covers = pipecoverspictures(),
-      pipe_connections =
-      {
-        { type="input",  position = {-5.5, 3.5-1} },
-        { type="input", position = {-5.5, -3.5-1} },
-   --     { position = {3.5, -5.5-1} },
-    --    { position = {-3.5, -5.5-1} },
-     --   { position = {5.5, 3.5-1} },
-     --   { position = {5.5, -3.5-1} },
-     --   { position = {3.5, 5.5-1} },
-     --   { position = {-3.5, 5.5-1} },
-      },
-  --off_when_no_fluid_recipe = true  
-    },]]
+
     
   fluid_boxes =
     {
       {
+		volume = 1000,
         production_type = "input",
         --pipe_picture = {},
         pipe_covers = pipecoverspictures(),
         base_area = 81,
         base_level = -1,
-        pipe_connections = {{ type="input", position = {0, -5} },
-              { type="input", position = {-5, 0} },
-              { type="input", position = {5, 0} },
-              { type="input", position = {0, 5} } },
+        pipe_connections = {
+			  { flow_direction="input", position = {0, -4} , direction = defines.direction.north},
+              { flow_direction="input", position = {-4, 0} , direction = defines.direction.west},
+              { flow_direction="input", position = {4, 0}  , direction = defines.direction.east},
+              { flow_direction="input", position = {0, 4}  , direction = defines.direction.south}
+			  },
         --secondary_draw_orders = { north = -1 }
       },
-      off_when_no_fluid_recipe = false
     },  
 }
+
+
+
+
 
 stages[3] = {
     type = "assembling-machine",
@@ -298,6 +246,7 @@ stages[3] = {
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 60, result = "rsc-excavation-site"},
     max_health = max_health,
+    hidden=true,
     corpse = "rsc-silo-stage3_remnant",
     dying_explosion = "massive-explosion",
     --alert_icon_shift = util.by_pixel(-3, -12),
@@ -305,11 +254,11 @@ stages[3] = {
     fluid_boxes = {}, -- zerado
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("3")
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -324,7 +273,7 @@ stages[3] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -337,6 +286,7 @@ stages[4] = {
     type = "assembling-machine",
     name = "rsc-silo-stage4",
     order = "r-s",
+    hidden=true,
     icons = icons_rsc,
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 60, result = "rsc-excavation-site"},
@@ -348,11 +298,11 @@ stages[4] = {
     fluid_boxes = {}, -- zerado
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("4")
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -367,7 +317,7 @@ stages[4] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -380,6 +330,7 @@ stages[5] = {
     type = "assembling-machine",
     name = "rsc-silo-stage5",
     icons = icons_rsc,
+    hidden=true,
     order = "r-s",
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 60, result = "rsc-excavation-site"},
@@ -391,12 +342,12 @@ stages[5] = {
     fluid_boxes = {}, -- zerado
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("5"),
             entitylayer("5_shadow", true)
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -411,7 +362,7 @@ stages[5] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -424,6 +375,7 @@ stages[6] = {
     type = "assembling-machine",
     name = "rsc-silo-stage6",
     icons = icons_rsc,
+    hidden=true,
     order = "r-s",
     flags = {"placeable-neutral", "placeable-player", "player-creation"},
     minable = {mining_time = 60, result = "rsc-excavation-site"},
@@ -435,12 +387,12 @@ stages[6] = {
     fluid_boxes = {}, -- zerado
     collision_box = {{-4.40, -4.40}, {4.40, 4.40}}, -- colision do silo
     selection_box = {{-4.5, -4.5}, {4.5, 4.5}},
-    animation = {
+    graphics_set = {animation = {
         layers = {
             entitylayer("6"),
             entitylayer("6_shadow", true)
         }
-    },
+    }},
     vehicle_impact_sound = sounds.generic_impact,
     working_sound = {
         sound = {
@@ -455,7 +407,7 @@ stages[6] = {
     energy_source = {
         type = "electric",
         usage_priority = "secondary-input", -- silo usa primary-input
-        emissions_per_minute = 200
+        emissions_per_minute = { pollution = 200}
     },
     energy_usage = energy_usage,
     module_specification = {module_slots = 0},
@@ -472,6 +424,7 @@ for s = 1, 6 do
     data:extend({stages[s]})
 end
 
+local pipe_p = 4.5
 local function update_proto_serlp(s, sufix_name, collision_box, localised_name, icons)
   local new = table.deepcopy(stages[s])
   new.name = new.name .. sufix_name
@@ -483,28 +436,27 @@ local function update_proto_serlp(s, sufix_name, collision_box, localised_name, 
   --new.animation.layers[1].scale=1
   --new.animation.layers[1].hr_version.scale=0.5
   if s==2 and sufix_name=="-serlp" then
-  new.animation = entitylayerserlp("2")
+  new.graphics_set.animation = entitylayerserlp("2")
   new.fluid_boxes =
   {
     {
+	  volume = 1000,
       production_type = "input",
-      --pipe_picture = {},
       pipe_covers = pipecoverspictures(),
       base_area = 100,
       base_level = -1,
       pipe_connections =
       {
-        { type="input",position = {-5.5, -0.5} },
-        { type="input",position = {5.5,  -0.5} },
-        { type="input",position = {-0.5, -5.5} },
-        { type="input",position = {-0.5,  5.5} },
-        { type="input",position = {-5.5, 0.5} },
-        { type="input",position = {5.5,  0.5} },
-        { type="input",position = {0.5, -5.5} },
-        { type="input",position = {0.5,  5.5} },
+        { flow_direction="input",position = {-pipe_p, -0.5}, direction = defines.direction.west   },
+        { flow_direction="input",position = {pipe_p,  -0.5}, direction = defines.direction.east  },
+        { flow_direction="input",position = {-0.5, -pipe_p}, direction = defines.direction.north  },
+        { flow_direction="input",position = {-0.5,  pipe_p}, direction = defines.direction.south },
+        { flow_direction="input",position = {-pipe_p, 0.5}, direction = defines.direction.west },
+        { flow_direction="input",position = {pipe_p,  0.5}, direction = defines.direction.east },
+        { flow_direction="input",position = {0.5, -pipe_p}, direction = defines.direction.north },
+        { flow_direction="input",position = {0.5,  pipe_p}, direction = defines.direction.south },
       },
     },
-    off_when_no_fluid_recipe = false
   }
   end
   return new
@@ -514,15 +466,15 @@ end
 if data.raw.item["se-rocket-launch-pad"] then
     local enable_se_cargo = settings.startup["rsc-st-enable-se-cargo-silo"].value
     if enable_se_cargo then
-        local cb = data.raw.container["se-rocket-launch-pad"].collision_box
+        local collision_box = data.raw.container["se-rocket-launch-pad"].collision_box
         for s = 1, 6 do
             data:extend(
                 {
                     update_proto_serlp(
                         s,
                         "-serlp",
-                        cb,
-                        {"", {"entity-name.se-rocket-launch-pad"}, {"RSC.construction_site", s}},
+                        collision_box,
+                        {"", {"entity-name.se-rocket-launch-pad"}, {"RSC.construction_site", tostring(s)}},
                         icons_se_crs
                     )
                 }
@@ -534,15 +486,15 @@ end
 if data.raw["rocket-silo"]["se-space-probe-rocket-silo"] then
     local enable_se_probe = settings.startup["rsc-st-enable-se-probe-silo"].value
     if enable_se_probe then
-        local cb = data.raw["rocket-silo"]["se-space-probe-rocket-silo"].collision_box
+        local collision_box = data.raw["rocket-silo"]["se-space-probe-rocket-silo"].collision_box
         for s = 1, 6 do
             data:extend(
                 {
                     update_proto_serlp(
                         s,
                         "-sesprs",
-                        cb,
-                        {"", {"entity-name.se-space-probe-rocket-silo"}, {"RSC.construction_site", s}},
+                        collision_box,
+                        {"", {"entity-name.se-space-probe-rocket-silo"}, {"RSC.construction_site", tostring(s)}},
                         icons_se_sp
                     )
                 }

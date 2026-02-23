@@ -14,7 +14,7 @@ data:extend({
     type = "explosion",
     name = "robot-explosion",
     animations = {{
-      filename = "__base__/graphics/entity/medium-explosion/medium-explosion.png",
+      filename = "__robot_attrition__/graphics/entity/medium-explosion/medium-explosion.png",
       width = 112,
       height = 94,
       line_length = 6,
@@ -133,6 +133,7 @@ data:extend({
         { filename = "__base__/sound/fight/large-explosion-2.ogg", volume = 0.4 }
       }
     },
+    hidden = true,
   },
   {
     type = "technology",
@@ -162,7 +163,8 @@ data:extend({
     placeable_by = {item="logistic-robot", count = 1}, -- blueprintable, deconstrucitble
     icon_size = 64,
     icon_mipmaps = 1,
-    flags = {"hidden", "placeable-neutral", "player-creation", "placeable-off-grid", "not-blueprintable"},
+    flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-blueprintable"},
+    hidden = true,
     minable = {
       mining_time = 0.1,
     },
@@ -181,10 +183,12 @@ data:extend({
         percent = 100
       }
     },
-    scale_info_icons = true,
+    icon_draw_specification = {scale = 0.25},
     create_ghost_on_death = false,
     se_allow_in_space = true,
-    collision_mask = {},
+    collision_mask = {
+      layers = {},
+    },
     collision_box = {{-0.1,-0.1},{0.1,0.1}},
     selection_box = {{-0.2,-0.2},{0.2,0.2}},
     drawing_box = {{-0.2,-0.2},{0.2,0.2}},
@@ -196,6 +200,7 @@ data:extend({
       type = "create-entity"
     },
     inventory_size = 1,
+    inventory_type = "normal",
     picture =
     {
       layers =

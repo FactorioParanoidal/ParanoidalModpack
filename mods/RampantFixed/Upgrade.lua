@@ -114,13 +114,34 @@ local function addCommandSet(queriesAndCommands)
 			queriesAndCommands.filteredEntities_player_pheromones[lvlName] = nil
 		end
 	end	
+
+	local IGNORED_BUILDINGS = constants.IGNORED_BUILDINGS
+	queriesAndCommands.ignoredEntities_player_pheromones = {}
+	for lvlName, values in pairs(GENERATOR_PHEROMONE_LEVEL) do
+		queriesAndCommands.ignoredEntities_player_pheromones[lvlName] = {
+				area=queriesAndCommands.area,
+				force=queriesAndCommands.activePlayerForces,
+				name = {}
+			}
+		local filtered_names = queriesAndCommands.ignoredEntities_player_pheromones[lvlName].name
+		---------
+		for entityName, entitylvlName in pairs(IGNORED_BUILDINGS) do				
+			if entitylvlName == lvlName then
+				filtered_names[#filtered_names+1] = entityName
+			end	
+		end
+		if #filtered_names==0 then
+			queriesAndCommands.ignoredEntities_player_pheromones[lvlName] = nil
+		end
+	end	
+	
 -- - !КДА 
 
 	 -- Factorissimo. Yes, this is a "storage-tank" enities
     queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = {
         area=queriesAndCommands.area,
         force=queriesAndCommands.activePlayerForces,
-        collision_mask = "player-layer",
+        collision_mask = "player",
         type={"storage-tank"}
     }
 	
@@ -181,7 +202,7 @@ local function addCommandSet(queriesAndCommands)
 
     queriesAndCommands.filteredEntitiesChunkNeutral = {
         area=queriesAndCommands.area,
-        collision_mask = "player-layer",
+        collision_mask = "player",
         type={
             "tree",
             "simple-entity"
@@ -199,7 +220,7 @@ local function addCommandSet(queriesAndCommands)
     }
     queriesAndCommands.filteredTilesPathQuery = {
         area=sharedArea,
-        collision_mask="water-tile",
+        collision_mask="player",
         limit = 1
     }
     queriesAndCommands.cliffQuery = {
@@ -211,7 +232,7 @@ local function addCommandSet(queriesAndCommands)
         position={0,0}
     }
     queriesAndCommands.filteredTilesQuery = {
-        collision_mask="water-tile",
+        collision_mask="player",
         area=queriesAndCommands.area
     }
 
@@ -227,11 +248,30 @@ local function addCommandSet(queriesAndCommands)
         distraction = DEFINES_DISTRACTION_BY_ANYTHING
     }
 
+    queriesAndCommands.compoundAttackCommand = {
+		type = defines.command.compound,
+        structure_type = defines.compound_command.return_last,
+		commands = {
+			{type = defines.command.wander,  ticks_to_wait = 1},
+			queriesAndCommands.attackCommand
+		}	
+    }
+
     queriesAndCommands.moveCommand = {
         type = DEFINES_COMMAND_GO_TO_LOCATION,
         destination = queriesAndCommands.position,
         pathfind_flags = { cache = true },
-        distraction = DEFINES_DISTRACTION_BY_ENEMY
+        distraction = DEFINES_DISTRACTION_BY_ENEMY,
+		force = true
+    }
+
+    queriesAndCommands.compoundMoveCommand = {
+		type = defines.command.compound,
+        structure_type = defines.compound_command.return_last,
+		commands = {
+			{type = defines.command.wander,  ticks_to_wait = 1},
+			queriesAndCommands.moveCommand
+		}	
     }
 
     queriesAndCommands.settleCommand = {
@@ -240,6 +280,16 @@ local function addCommandSet(queriesAndCommands)
         distraction = DEFINES_DISTRACTION_BY_ENEMY,
         ignore_planner = true
     }
+	
+    queriesAndCommands.compoundSettleCommand = {
+		type = defines.command.compound,
+        structure_type = defines.compound_command.return_last,
+		commands = {
+			{type = defines.command.wander,  ticks_to_wait = 1},
+			queriesAndCommands.settleCommand
+		}	
+    }
+	
 
     queriesAndCommands.wonderCommand = {
         type = DEFINES_COMMAND_WANDER,
@@ -328,13 +378,13 @@ function upgrade.rebuildActivePlayerForces(universe)
 end
 
 function upgrade.attempt(universe)
-    local starting = global.version
-    if not global.version or global.version < 114 then
-        global.version = 114
+    local starting = storage.version
+    if not storage.version or storage.version < 114 then
+        storage.version = 114
 
         if not universe then
             universe = {}
-            global.universe = universe
+            storage.universe = universe
         end
         game.forces.enemy.kill_all_units()
 
@@ -348,8 +398,6 @@ function upgrade.attempt(universe)
         universe.aiNocturnalMode = settings.global["rampantFixed--permanentNocturnal"].value
 
         universe.mapIterator = nil
-        universe.retreatThreshold = 0
-        universe.rallyThreshold = 0
         universe.formSquadThreshold = 0
         universe.attackWaveSize = 0
         universe.attackWaveDeviation = 0
@@ -377,7 +425,6 @@ function upgrade.attempt(universe)
         universe.settlerWaveSize = 0
 
         universe.enabledMigration = universe.expansion and settings.global["rampantFixed--enableMigration"].value
-        universe.peacefulAIToggle = settings.global["rampantFixed--peacefulAIToggle"].value
         universe.printAIStateChanges = settings.global["rampantFixed--printAIStateChanges"].value
         universe.debugTemperament = settings.global["rampantFixed--debugTemperament"].value
 
@@ -395,35 +442,19 @@ function upgrade.attempt(universe)
         game.map_settings.unit_group.tick_tolerance_when_member_arrives = 60
         game.forces.enemy.ai_controllable = true
 
-        universe.evolutionLevel = game.forces.enemy.evolution_factor
-        global.pendingChunks = nil
-        global.natives = nil
-        global.map = nil
+        universe.evolutionLevel = 0	--game.forces.enemy.evolution_factor
+        storage.pendingChunks = nil
+        storage.natives = nil
+        storage.map = nil
 
         universe.builderCount = 0
         universe.squadCount = 0
 
         addCommandSet(universe)
     end
-    if global.version < 116 then
-        global.version = 116
-
-        universe.maxPoints = 0
-
-        -- if (universe.maps) then
-        --     for _,map in pairs(universe.maps) do
-        --         for _,base in pairs(map.bases) do
-        --             base.damagedBy = {}
-        --             base.deathEvents = 0
-        --         end
-        --     end
-        -- end
-
-        --game.print("Rampant - Version 1.1.0, Rampant")
-    end
-	if global.version < 118 then
+	if storage.version < 118 then
 		local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
-        global.version = 118
+        storage.version = 118
 	    addCommandSet(universe)
 		universe.retribution = 0
 		if universe.maps then
@@ -467,7 +498,9 @@ function upgrade.attempt(universe)
 				for chunk, base in pairs(bases) do
 					if base and base.id and not base.chunkFactions then
 						base.chunkFactions = {}
-						if universe.evolutionLevel<0.15 then
+						if universe.evolutionLevel<0.1 then
+							base.tier = 0
+						elseif universe.evolutionLevel<0.15 then
 							base.tier = 1
 						elseif 	universe.evolutionLevel<0.30 then
 							base.tier = 2
@@ -500,13 +533,13 @@ function upgrade.attempt(universe)
 		end	
 		
 	end	
-	if global.version < 119 then
-        global.version = 119
+	if storage.version < 119 then
+        storage.version = 119
 		universe.retribution = 0	
 	end
 	
-	if global.version < 120 then
-        global.version = 120
+	if storage.version < 120 then
+        storage.version = 120
 		if universe.maps then
 			local builderCount = 0
 			local squadCount = 0
@@ -527,8 +560,8 @@ function upgrade.attempt(universe)
 		--game.print("Rampant fixed, Version 1.0.13. Recaclulate active squads")
 	end
 	
-	if global.version < 121 then
-        global.version = 121
+	if storage.version < 121 then
+        storage.version = 121
 	    addCommandSet(universe)
 		if universe.maps then
 			local mapsCounter = 0
@@ -579,9 +612,9 @@ function upgrade.attempt(universe)
 		
  	end
 	
-	if global.version < 122 then
+	if storage.version < 122 then
 		--game.print("Rampant fixed, Version 1.0.18")
-		global.version = 122
+		storage.version = 122
 		
         universe.processActiveNest = {}
         universe.processActiveNestIterator = nil
@@ -591,8 +624,8 @@ function upgrade.attempt(universe)
 		["entities"] = {}
 		}
 	end
-	if global.version < 124 then	-- Version 1.1
-		global.version = 124
+	if storage.version < 124 then	-- Version 1.1
+		storage.version = 124
 		universe.surfaceIgnoringSet = {}
 		universe.surfaceRemoteSettings = {}
 		universe.chunkToPassScan = {}
@@ -659,23 +692,23 @@ function upgrade.attempt(universe)
 		end
 	end
 	
-	if global.version < 126 then	-- Version 1.1.1
-		global.version = 126	
+	if storage.version < 126 then	-- Version 1.1.1
+		storage.version = 126	
 		if universe.maps then
 			for surfaceIndex, map in pairs(universe.maps) do
 				map.vengenceLimiter = 0
 			end
 		end
 	end
-	if global.version < 127 then	-- Version 1.1.6
-		global.version = 127	
+	if storage.version < 127 then	-- Version 1.1.6
+		storage.version = 127	
 		universe.aiDifficulty = settings.global["rampantFixed--aiDifficulty"].value
 		universe.finalSquadCost = 1		
 		universe.finalVengenceSquadCost = 1		
 	end
 	
-	if global.version < 128 then	-- Version 1.1.9
-		global.version = 128
+	if storage.version < 128 then	-- Version 1.1.9
+		storage.version = 128
 		if universe.maps then
 			for surfaceIndex, map in pairs(universe.maps) do
 				for i, base in pairs(map.bases) do
@@ -686,15 +719,15 @@ function upgrade.attempt(universe)
 		game.print({"description.rampantFixed--EnemySettings1_1_9"})	
 	end
 	
-	if global.version < 129 then	-- Version 1.1.10
-		global.version = 129
+	if storage.version < 129 then	-- Version 1.1.10
+		storage.version = 129
 		if universe.NEW_ENEMIES then
 			game.print({"description.rampantFixed--EnemySettings1_1_10"})	
 		end
 	end	
 
-	if global.version < 131 then	-- Version 1.1.11
-		global.version = 131
+	if storage.version < 131 then	-- Version 1.1.11
+		storage.version = 131
 		if universe.maps then
 			for surfaceIndex, map in pairs(universe.maps) do
 				map.chunkToPlayerTurrets = {}
@@ -702,8 +735,8 @@ function upgrade.attempt(universe)
 		end
 	end	
 	
-	if global.version < 135 then	-- Version 1.2.0
-		global.version = 135
+	if storage.version < 135 then	-- Version 1.2.0
+		storage.version = 135
 		universe.attackWaveMaxSizeEvoPercent = settings.global["rampantFixed--attackWaveMaxSizeEvoPercent"].value
 		universe.chunkToPlayerCount = {}
 		universe.processActiveNestIterator = nil
@@ -722,8 +755,8 @@ function upgrade.attempt(universe)
 		end
 	end	
 
-	if global.version < 136 then	-- Version 1.2.3
-		global.version = 136
+	if storage.version < 136 then	-- Version 1.2.3
+		storage.version = 136
 		upgrade.rebuildActivePlayerForces(universe)
 		universe.groupNumberToSquad = {}
 		
@@ -744,19 +777,14 @@ function upgrade.attempt(universe)
 		end		
 	end
 	
-	if global.version < 137 then	-- Version 1.2.5
-		global.version = 137
+	if storage.version < 137 then	-- Version 1.2.5
+		storage.version = 137
 		universe.unitProtectionData = {}
-		-- if game.active_mods["space-exploration"] and game.active_mods["combat-mechanics-overhaul"] and game.active_mods["Krastorio2"] then
-			 -- if not settings.startup["rampantFixed--useBlockableSteamAttacks"].value then
-				-- game.print({"description.rampantFixed--K2_SE_CMO_incompatibilityWarning"})
-			 -- end			
-		-- end
 	end
 	
-	if global.version < 138  then	-- Version 1.2.8
+	if storage.version < 138  then	-- Version 1.2.8
 		local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
-		global.version = 138
+		storage.version = 138
 		if universe.maps and starting and settings.startup["rampantFixed--newEnemies"].value then
 			for surfaceIndex, map in pairs(universe.maps) do
 				local buildings = map.surface.find_entities_filtered({force = "enemy", type={"turret"}})
@@ -787,13 +815,13 @@ function upgrade.attempt(universe)
 		
 	end
 		
-	if global.version < 139  then	-- Version 1.2.11
-		global.version = 139
+	if storage.version < 139  then	-- Version 1.2.11
+		storage.version = 139
 		universe.unitProtectionData.unitCurrentHP = {}
 	end
 	
-	if global.version < 142  then	-- Version 1.3
-		global.version = 142
+	if storage.version < 142  then	-- Version 1.3
+		storage.version = 142
 		universe.nonRampantCompressedSquads = {}
 		universe.bases = {}
 		universe.baseId = 1
@@ -809,7 +837,7 @@ function upgrade.attempt(universe)
 				local bases = map.chunkToBase
 				local basesProcessed = 0
 				
-				local evoTier = 1
+				local evoTier = 0
 				for tier = 10,1,-1 do
 					if universe.evoToTierMapping[tier] <= map.evolutionLevel then
 						evoTier = tier
@@ -828,7 +856,7 @@ function upgrade.attempt(universe)
 							base.state = BASE_AI_STATE_ACTIVE
 							if universe.NEW_ENEMIES and (not universe.ALLOW_OTHER_ENEMIES) then
 								if not base.thisIsRampantEnemy then
-									base.tier = math.max(evoTier - base.tierHandicap, 1)
+									base.tier = math.max(evoTier - base.tierHandicap, 0)
 
 									base.thisIsRampantEnemy = true
 								end	
@@ -860,8 +888,8 @@ function upgrade.attempt(universe)
         addCommandSet(universe)
 	end
 	
-	if global.version < 143  then	-- Version 1.4.0
-		global.version = 143
+	if storage.version < 143  then	-- Version 1.4.0
+		storage.version = 143
 		universe.oneTickImmunityUnits = {}
 		universe.compressedUnits = {}
 		local compressedUnits = universe.compressedUnits
@@ -896,24 +924,24 @@ function upgrade.attempt(universe)
 		end	
 	end
 	
-	if global.version < 144  then	-- Version 1.4.2
-		global.version = 144
+	if storage.version < 144  then	-- Version 1.4.2
+		storage.version = 144
 		universe.protectedUnits = {}
 	end	
 	
-	if global.version < 150  then	-- Version 1.5
-		global.version = 150
+	if storage.version < 150  then	-- Version 1.5
+		storage.version = 150
 		universe.undergroundSquads = {}
 		universe.undergroundAttackProbability = 0
 	end	
 	
-	if global.version < 152  then	-- Version 1.5.2
-		global.version = 152
+	if storage.version < 152  then	-- Version 1.5.2
+		storage.version = 152
 		universe.undergroundAttack =  settings.global["rampantFixed--undergroundAttack"].value
 	end	
 	
-	if global.version < 161  then	-- Version 1.6.1
-		global.version = 161
+	if storage.version < 161  then	-- Version 1.6.1
+		storage.version = 161
 		for chunkIndex,_ in pairs(universe.chunkToPassScan) do
 			if chunkIndex and (type(attribute) == "table") then
 				local chunkIndexNew = "x"..chunkIndex[1].."y"..chunkIndex[2].."m"..chunkIndex[3]
@@ -936,23 +964,23 @@ function upgrade.attempt(universe)
 		universe.externalControlValues = {}
 	end	
 	
-	if global.version < 164  then	-- Version 1.6.4
-		global.version = 164
+	if storage.version < 164  then	-- Version 1.6.4
+		storage.version = 164
 		universe.evolveTick = 0
 		universe.lvlupTick = 0
 	end	
 
-	if global.version < 170  then	-- Version 1.7.0
-		global.version = 170
+	if storage.version < 170  then	-- Version 1.7.0
+		storage.version = 170
 	end	
 	
-	if global.version < 172  then	-- Version 1.7.2
-		global.version = 172
+	if storage.version < 172  then	-- Version 1.7.2
+		storage.version = 172
 	    universe.randomGenerator = nil
 	end	
 
-	if global.version < 180  then	-- Version 1.8.0
-		global.version = 180
+	if storage.version < 180  then	-- Version 1.8.0
+		storage.version = 180
 	    universe.growingBases = {}
 		if universe.maps then
 			for _, map in pairs(universe.maps) do
@@ -961,13 +989,235 @@ function upgrade.attempt(universe)
 		end	
 	end	
 
-	if global.version < 183  then	-- Version 1.8.3
-		global.version = 183
+	if storage.version < 183  then	-- Version 1.8.3
+		storage.version = 183
 	    universe.debugSettings = {}
 		universe.allowExternalControl = true
 	end	
+
+	if storage.version < 190  then	-- Version 1.9.0
+		storage.version = 190
+	    universe.powerupSettings = {}
+		universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
+	end	
 	
-	return (starting ~= global.version) and global.version
+	if storage.version < 191  then	-- Version 1.9.1
+		storage.version = 191
+		universe.buildingsLvl = 1
+	end	
+	
+	if storage.version < 193  then	-- Version 1.9.0
+		storage.version = 193
+		if not universe.powerupSettings then
+			universe.powerupSettings = {}
+			universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
+		end	
+	end	
+	
+	if storage.version < 11001  then	-- Version 1.10.1
+       storage.version = 11001
+	   addCommandSet(universe)
+	end	
+	
+	if storage.version < 11003  then	-- Version 1.10.3
+		storage.version = 11003
+		if universe.maps then
+			for _, map in pairs(universe.maps) do
+				local chunksToClear = {}
+				for chunk, value in pairs(map.chunkToActiveNest) do
+					if (not map.chunkToNests[chunk]) or (map.chunkToNests[chunk] == 0) then
+						chunksToClear[chunk] = true
+					end
+				end
+				for chunk, value in pairs(map.chunkToActiveRaidNest) do
+					if (not map.chunkToNests[chunk]) or (map.chunkToNests[chunk] == 0) then
+						chunksToClear[chunk] = true
+					end
+				end
+				for chunk, value in pairs(chunksToClear) do
+					if (map.processActiveSpawnerIterator == chunk) then
+						map.processActiveSpawnerIterator = nil
+					end
+					if (map.processActiveRaidSpawnerIterator == chunk) then
+						map.processActiveRaidSpawnerIterator = nil
+					end
+					map.chunkToActiveNest[chunk] = nil
+					map.chunkToActiveRaidNest[chunk] = nil
+				end
+				map.activeRaidNests = 0
+				map.activeNests = 0
+				for chunk, value in pairs(map.chunkToActiveNest) do
+					map.activeNests = map.activeNests + 1
+				end
+				for chunk, value in pairs(map.chunkToActiveRaidNest) do
+					map.activeRaidNests = map.activeRaidNests + 1
+				end
+			end
+		end
+	end	
+	
+	if storage.version < 20003  then	-- Version 2.00.03
+		storage.version = 20003
+	    addCommandSet(universe)
+		
+		universe.demolisherTriggers = {}
+		-- peacePeriod (minutes)
+		-- minEvo - min evolution to start attacks
+		-- AI = 1 - disabled
+		-- AI = 2 - enabled if any nests in map generation
+		--	  = 3 - enabled if any nests or demolisher	
+		universe.planetAISettings = {}
+		universe.planetAISettings.nauvis = 		{changed = true, AI = 2, minEvo = 0, peacePeriod = 20, description = {"space-location-name.nauvis"}}	
+		if script.active_mods["space-age"] then
+			universe.planetAISettings.vulcanus = 	{changed = true, AI = 3, minEvo = 25, peacePeriod = 120, description = {"space-location-name.vulcanus"}}	
+			universe.planetAISettings.gleba = 		{changed = true, AI = 2, minEvo = 20, peacePeriod = 120, description = {"space-location-name.gleba"}}	
+			universe.planetAISettings.fulgora = 	{changed = true, AI = 2, minEvo = 20, peacePeriod = 120, description = {"space-location-name.fulgora"}}	
+			universe.planetAISettings.aquilo = 		{changed = true, AI = 1, minEvo = 20, peacePeriod = 120, description = {"space-location-name.aquilo"}}	
+		end	
+		universe.planetAISettings.others = 		{changed = true, AI = 2, minEvo = 20, peacePeriod = 120, description = {"description.rampantFixed--otherPlanets"}}
+
+		if universe.maps then
+			for _, map in pairs(universe.maps) do
+				map.buildingsLvl = 1
+				map.replaceModedNests = constants.IS_VANILLA_BITERS_SURFACE(map.surface)
+				map.hasNonmoddedBiters = constants.IS_VANILLA_BITERS_SURFACE(map.surface)
+				map.firstStateTick = 0
+				map.truceEndTick = 0
+
+				map.maxPoints = 1000 
+				map.attackWaveMaxSize = 4
+				map.evolutionLevel = nil
+				map.rallyThreshold = 0
+				map.formSquadThreshold = 0
+				map.raiding_minimum_base_threshold = constants.RAIDING_MINIMUM_BASE_THRESHOLD
+				map.no_pollution_attack_threshold = constants.NO_POLLUTION_ATTACK_THRESHOLD
+				map.retribution = 0
+				
+				map.finalSquadCost = 1
+				map.finalVengenceSquadCost = 1
+				map.attackWaveDeviation = 0
+				map.attackWaveUpperBound = 0
+				map.settlerWaveSize = 4
+				map.settlerWaveDeviation = 0
+				map.kamikazeThreshold = 0
+				map.undergroundAttackProbability = 0
+				map.nextDemolisherAttackTick = 0
+				map.supressionData = {supressionEndTick = 0, supressionType = 0, evo = nil}
+			end
+		end	
+		universe.evolutionLevel = nil
+		universe.maxPoints = nil
+		universe.attackWaveMaxSize = nil
+		universe.evolutionLevel = nil
+		universe.retreatThreshold = nil
+		universe.rallyThreshold = nil
+		universe.formSquadThreshold = nil
+		universe.raiding_minimum_base_threshold = nil
+		universe.no_pollution_attack_threshold = nil
+		universe.retribution = nil
+		
+		universe.finalSquadCost = nil
+		universe.finalVengenceSquadCost = nil
+		universe.attackWaveDeviation = nil
+		universe.attackWaveUpperBound = nil
+		universe.settlerWaveSize = nil
+		universe.settlerWaveDeviation = nil
+		universe.kamikazeThreshold = nil
+		universe.undergroundAttackProbability = nil		
+
+		storage.showAISettingsForPlayer = true
+	end	
+
+	if storage.version < 20010  then	-- Version 2.00.10
+		storage.version = 20010
+		universe.undergroundSquads = {}
+	end
+		
+	if storage.version < 20101  then	-- Version 2.01.01
+		storage.version = 20101
+		universe.nonRampantSquads = {}
+		universe.demolisherAttack_AdditionalTime = 0
+	end
+	
+	if storage.version < 20200  then	-- Version 2.02.00
+		storage.version = 20200
+		universe.builderSquads = {}
+		universe.nonRampantBuilders = {}
+		if universe.maps then
+			for _, map in pairs(universe.maps) do
+				map.siegeTick = 0
+				map.resourceSettleTick = 0
+				
+				for chunk, base in pairs(map.chunkToBase) do
+					base.geneRandomizer = game.create_random_generator(game.default_map_gen_settings.seed + base.id * 5500)
+				end
+			end
+		end		
+        -- game.forces.enemy.kill_all_units()	-- nests collision zone become larger
+	end	
+	
+	if storage.version < 20202  then	-- Version 2.02.02
+		storage.version = 20202
+		
+		if universe.maps then
+			for _, map in pairs(universe.maps) do
+				map.canMigrateTick = 0
+			end
+		end		
+	end
+	
+	if storage.version < 20204  then
+		storage.version = 20204
+		
+		-- reset vucanus evolution due bag at 2.02.03
+		if universe.maps then
+			local aquilloSilo = 0
+			local glebaSilo = 0
+			local fulgoraSilo = 0
+			local vulcanusSilo = 0
+			local vulcanusEvo = 0
+			local vulcanusIndex
+			
+			for _,surface in pairs(game.surfaces) do
+				if surface.planet and (surface.planet.name == "aquillo") then
+					aquilloSilo = surface.count_entities_filtered({force = "player", type = "rocket-silo"})
+				elseif surface.planet and (surface.planet.name == "gleba") then
+					glebaSilo = surface.count_entities_filtered({force = "player", type = "rocket-silo"})
+				elseif surface.planet and (surface.planet.name == "fulgora") then
+					fulgoraSilo = surface.count_entities_filtered({force = "player", type = "rocket-silo"})
+				end
+				if surface.planet and (surface.planet.name == "vulcanus") then
+					vulcanusSilo = surface.count_entities_filtered({force = "player", type = "rocket-silo"})
+					vulcanusEvo = game.forces.enemy.get_evolution_factor(surface)
+					if vulcanusEvo == 1 then
+						vulcanusIndex = surface.index
+					end
+				end
+			end
+			
+			if vulcanusIndex and (vulcanusEvo == 1) then
+				local surface = game.surfaces[vulcanusIndex]
+				if (aquilloSilo > 0) and (vulcanusSilo > 2) then
+					game.forces.enemy.set_evolution_factor(0.8, surface)
+				elseif (aquilloSilo > 0) then 
+					game.forces.enemy.set_evolution_factor(0.7, surface)
+				elseif (glebaSilo > 1) and (fulgoraSilo > 1) and (vulcanusSilo > 5) then
+					game.forces.enemy.set_evolution_factor(0.7, surface)
+				elseif (glebaSilo > 0) and (fulgoraSilo > 0) and (vulcanusSilo > 0) then
+					game.forces.enemy.set_evolution_factor(0.5, surface)
+				elseif (glebaSilo == 0) and (vulcanusSilo > 1) then
+					game.forces.enemy.set_evolution_factor(0.3, surface)
+				elseif surface.count_entities_filtered({force = "player", name = "foundry"}) > 10 then
+					game.forces.enemy.set_evolution_factor(0.1, surface)
+				else	
+					game.forces.enemy.set_evolution_factor(0.01, surface)
+				end
+				-- game.print("evo => "..game.forces.enemy.get_evolution_factor(surface)) -- debug
+			end
+		end		
+	end
+	
+	return (starting ~= storage.version) and storage.version
 end
 
 function upgrade.compareTable(entities, option, new)

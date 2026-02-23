@@ -1,274 +1,186 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
 
 -- Check to see if reskinning needs to be done.
-if not (reskins.bobs and reskins.bobs.triggers.power.entities) then return end
-if not (reskins.bobs and reskins.bobs.triggers.power.poles) then return end
+if not (reskins.bobs and reskins.bobs.triggers.power.entities) then
+	return
+end
+if not (reskins.bobs and reskins.bobs.triggers.power.poles) then
+	return
+end
 
 -- Set input parameters
 local inputs = {
-    type = "electric-pole",
-    icon_name = "medium-electric-pole",
-    base_entity_name = "medium-electric-pole",
-    mod = "bobs",
-    group = "power",
-    particles = {["medium-long"] = 1},
+	type = "electric-pole",
+	icon_name = "medium-electric-pole",
+	base_entity_name = "medium-electric-pole",
+	mod = "bobs",
+	group = "power",
+	particles = { ["medium-long"] = 1 },
 }
 
 local tier_map = {
-    ["medium-electric-pole"] = {1, 2},
-    ["medium-electric-pole-2"] = {2, 3},
-    ["medium-electric-pole-3"] = {3, 4},
-    ["medium-electric-pole-4"] = {4, 5},
+	["medium-electric-pole"] = { tier = 1, prog_tier = 2 },
+	["bob-medium-electric-pole-2"] = { tier = 2, prog_tier = 3 },
+	["bob-medium-electric-pole-3"] = { tier = 3, prog_tier = 4 },
+	["bob-medium-electric-pole-4"] = { tier = 4, prog_tier = 5 },
 }
+
+---@param tint data.Color
+---@return data.RotatedAnimation
+local function get_medium_electric_pole_remnant_animation(tint)
+	---@type data.RotatedAnimation
+	local remnant_animation = {
+		layers = {
+			-- Base
+			{
+				filename = "__base__/graphics/entity/medium-electric-pole/remnants/medium-electric-pole-base-remnants.png",
+				width = 284,
+				height = 140,
+				direction_count = 1,
+				shift = util.by_pixel(35, -5),
+				scale = 0.5,
+			},
+			-- Mask
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-base-remnants-mask.png",
+				width = 284,
+				height = 140,
+				direction_count = 1,
+				shift = util.by_pixel(35, -5),
+				tint = tint,
+				scale = 0.5,
+			},
+			-- Highlights
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-base-remnants-highlights.png",
+				width = 284,
+				height = 140,
+				direction_count = 1,
+				shift = util.by_pixel(35, -5),
+				blend_mode = reskins.lib.settings.blend_mode, -- "additive",
+				scale = 0.5,
+			},
+		},
+	}
+
+	return remnant_animation
+end
+
+---@param tint data.Color
+---@return data.RotatedAnimation
+local function get_medium_electric_pole_remnant_animation_overlay(tint)
+	---@type data.RotatedAnimation
+	local remnant_animation = {
+		layers = {
+			-- Base
+			{
+				filename = "__base__/graphics/entity/medium-electric-pole/remnants/medium-electric-pole-top-remnants.png",
+				width = 100,
+				height = 184,
+				direction_count = 1,
+				shift = util.by_pixel(0, -38.5),
+				scale = 0.5,
+			},
+			-- Mask
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-top-remnants-mask.png",
+				width = 100,
+				height = 184,
+				direction_count = 1,
+				shift = util.by_pixel(0, -38.5),
+				tint = tint,
+				scale = 0.5,
+			},
+			-- Highlights
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-top-remnants-highlights.png",
+				width = 100,
+				height = 184,
+				direction_count = 1,
+				shift = util.by_pixel(0, -38.5),
+				blend_mode = reskins.lib.settings.blend_mode, -- "additive",
+				scale = 0.5,
+			},
+		},
+	}
+
+	return remnant_animation
+end
 
 -- Reskin entities, create and assign extra details
 for name, map in pairs(tier_map) do
-    -- Fetch entity
-    local entity = data.raw[inputs.type][name]
+	---@type data.ElectricPolePrototype
+	local entity = data.raw[inputs.type][name]
+	if not entity then
+		goto continue
+	end
 
-    -- Check if entity exists, if not, skip this iteration
-    if not entity then goto continue end
+	local tier = reskins.lib.tiers.get_tier(map)
+	inputs.tint = reskins.lib.tiers.get_tint(tier)
 
-    -- Parse map
-    local tier = map[1]
-    if reskins.lib.setting("reskins-lib-tier-mapping") == "progression-map" then
-        tier = map[2]
-    end
+	reskins.lib.setup_standard_entity(name, tier, inputs)
 
-    -- Determine what tint we're using
-    inputs.tint = reskins.lib.tint_index[tier]
+	-- Fetch remnant
+	local remnant = data.raw["corpse"][name .. "-remnants"]
 
-    reskins.lib.setup_standard_entity(name, tier, inputs)
+	-- Reskin remnants
+	local remnant_animation = get_medium_electric_pole_remnant_animation(inputs.tint)
+	remnant.animation = make_rotated_animation_variations_from_sheet(3, remnant_animation)
 
-    -- Fetch remnant
-    local remnant = data.raw["corpse"][name.."-remnants"]
+	local remnant_animation_overlay = get_medium_electric_pole_remnant_animation_overlay(inputs.tint)
+	remnant.animation_overlay = make_rotated_animation_variations_from_sheet(3, remnant_animation_overlay)
 
-    -- Reskin remnants
-    remnant.animation = make_rotated_animation_variations_from_sheet(3, {
-        layers = {
-            -- Base
-            {
-                filename = "__base__/graphics/entity/medium-electric-pole/remnants/medium-electric-pole-base-remnants.png",
-                line_length = 1,
-                width = 142,
-                height = 70,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(35, -5),
-                hr_version = {
-                    filename = "__base__/graphics/entity/medium-electric-pole/remnants/hr-medium-electric-pole-base-remnants.png",
-                    line_length = 1,
-                    width = 284,
-                    height = 140,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(35, -5),
-                    scale = 0.5,
-                }
-            },
-            -- Mask
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-base-remnants-mask.png",
-                line_length = 1,
-                width = 142,
-                height = 70,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(35, -5),
-                tint = inputs.tint,
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/hr-medium-electric-pole-base-remnants-mask.png",
-                    line_length = 1,
-                    width = 284,
-                    height = 140,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(35, -5),
-                    tint = inputs.tint,
-                    scale = 0.5,
-                }
-            },
-            -- Highlights
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-base-remnants-highlights.png",
-                line_length = 1,
-                width = 142,
-                height = 70,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(35, -5),
-                blend_mode = reskins.lib.blend_mode, -- "additive",
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/hr-medium-electric-pole-base-remnants-highlights.png",
-                    line_length = 1,
-                    width = 284,
-                    height = 140,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(35, -5),
-                    blend_mode = reskins.lib.blend_mode, -- "additive",
-                    scale = 0.5,
-                }
-            },
-        }
-    })
+	-- Reskin entities
+	entity.pictures = {
+		layers = {
+			-- Base
+			{
+				filename = "__base__/graphics/entity/medium-electric-pole/medium-electric-pole.png",
+				priority = "extra-high",
+				width = 84,
+				height = 252,
+				direction_count = 4,
+				shift = util.by_pixel(3.5, -44),
+				scale = 0.5,
+			},
+			-- Mask
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/medium-electric-pole-mask.png",
+				priority = "extra-high",
+				width = 84,
+				height = 252,
+				direction_count = 4,
+				shift = util.by_pixel(3.5, -44),
+				tint = inputs.tint,
+				scale = 0.5,
+			},
+			-- Highlights
+			{
+				filename = "__reskins-bobs__/graphics/entity/power/medium-electric-pole/medium-electric-pole-highlights.png",
+				priority = "extra-high",
+				width = 84,
+				height = 252,
+				direction_count = 4,
+				shift = util.by_pixel(3.5, -44),
+				blend_mode = reskins.lib.settings.blend_mode, -- "additive",
+				scale = 0.5,
+			},
+			-- Shadow
+			{
+				filename = "__base__/graphics/entity/medium-electric-pole/medium-electric-pole-shadow.png",
+				priority = "extra-high",
+				width = 280,
+				height = 64,
+				direction_count = 4,
+				shift = util.by_pixel(56.5, -1),
+				draw_as_shadow = true,
+				scale = 0.5,
+			},
+		},
+	}
 
-    remnant.animation_overlay = make_rotated_animation_variations_from_sheet(3, {
-        layers = {
-            -- Base
-            {
-                filename = "__base__/graphics/entity/medium-electric-pole/remnants/medium-electric-pole-top-remnants.png",
-                line_length = 1,
-                width = 50,
-                height = 92,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(0 , -39),
-                hr_version = {
-                    filename = "__base__/graphics/entity/medium-electric-pole/remnants/hr-medium-electric-pole-top-remnants.png",
-                    line_length = 1,
-                    width = 100,
-                    height = 184,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(0, -38.5),
-                    scale = 0.5,
-                }
-            },
-            -- Mask
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-top-remnants-mask.png",
-                line_length = 1,
-                width = 50,
-                height = 92,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(0 , -39),
-                tint = inputs.tint,
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/hr-medium-electric-pole-top-remnants-mask.png",
-                    line_length = 1,
-                    width = 100,
-                    height = 184,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(0, -38.5),
-                    tint = inputs.tint,
-                    scale = 0.5,
-                }
-            },
-            -- Highlights
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/medium-electric-pole-top-remnants-highlights.png",
-                line_length = 1,
-                width = 50,
-                height = 92,
-                frame_count = 1,
-                direction_count = 1,
-                shift = util.by_pixel(0 , -39),
-                blend_mode = reskins.lib.blend_mode, -- "additive",
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/remnants/hr-medium-electric-pole-top-remnants-highlights.png",
-                    line_length = 1,
-                    width = 100,
-                    height = 184,
-                    frame_count = 1,
-                    direction_count = 1,
-                    shift = util.by_pixel(0, -38.5),
-                    blend_mode = reskins.lib.blend_mode, -- "additive",
-                    scale = 0.5,
-                }
-            }
-        }
-    })
-
-    -- Reskin entities
-    entity.pictures = {
-        layers = {
-            -- Base
-            {
-                filename = "__base__/graphics/entity/medium-electric-pole/medium-electric-pole.png",
-                priority = "extra-high",
-                width = 40,
-                height = 124,
-                direction_count = 4,
-                shift = util.by_pixel(4, -44),
-                hr_version = {
-                    filename = "__base__/graphics/entity/medium-electric-pole/hr-medium-electric-pole.png",
-                    priority = "extra-high",
-                    width = 84,
-                    height = 252,
-                    direction_count = 4,
-                    shift = util.by_pixel(3.5, -44),
-                    scale = 0.5
-                }
-            },
-            -- Mask
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/medium-electric-pole-mask.png",
-                priority = "extra-high",
-                width = 40,
-                height = 124,
-                direction_count = 4,
-                shift = util.by_pixel(4, -44),
-                tint = inputs.tint,
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/hr-medium-electric-pole-mask.png",
-                    priority = "extra-high",
-                    width = 84,
-                    height = 252,
-                    direction_count = 4,
-                    shift = util.by_pixel(3.5, -44),
-                    tint = inputs.tint,
-                    scale = 0.5
-                }
-            },
-            -- Highlights
-            {
-                filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/medium-electric-pole-highlights.png",
-                priority = "extra-high",
-                width = 40,
-                height = 124,
-                direction_count = 4,
-                shift = util.by_pixel(4, -44),
-                blend_mode = reskins.lib.blend_mode, -- "additive",
-                hr_version = {
-                    filename = reskins.bobs.directory.."/graphics/entity/power/medium-electric-pole/hr-medium-electric-pole-highlights.png",
-                    priority = "extra-high",
-                    width = 84,
-                    height = 252,
-                    direction_count = 4,
-                    shift = util.by_pixel(3.5, -44),
-                    blend_mode = reskins.lib.blend_mode, -- "additive",
-                    scale = 0.5
-                }
-            },
-            -- Shadow
-            {
-                filename = "__base__/graphics/entity/medium-electric-pole/medium-electric-pole-shadow.png",
-                priority = "extra-high",
-                width = 140,
-                height = 32,
-                direction_count = 4,
-                shift = util.by_pixel(56, -1),
-                draw_as_shadow = true,
-                hr_version = {
-                    filename = "__base__/graphics/entity/medium-electric-pole/hr-medium-electric-pole-shadow.png",
-                    priority = "extra-high",
-                    width = 280,
-                    height = 64,
-                    direction_count = 4,
-                    shift = util.by_pixel(56.5, -1),
-                    draw_as_shadow = true,
-                    scale = 0.5
-                }
-            }
-        }
-    }
-
-    -- Label to skip to next iteration
-    ::continue::
+	::continue::
 end

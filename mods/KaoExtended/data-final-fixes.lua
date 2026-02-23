@@ -27,7 +27,6 @@ require("prototypes.mining-drill-bit.override")
 
 require("prototypes.recipes.UsedCoolant")
 
---require("prototypes.angelextended.slag")
 require("prototypes.angelextended.angelsbioprocessing")
 require("prototypes.angelextended.angelssmelting")
 
@@ -38,8 +37,6 @@ require("prototypes.pyramid")
 
 require("prototypes.Mining_fluids_903")
 require("prototypes.Manganese_chrome_platinum_sorting")
---require("prototypes.Manganese_chrome_sorting_0172")
---require("prototypes.Platinum_sorting_172")
 require("prototypes.LandmineGridlock_102")
 require("prototypes.BlackTrainSmokeRevised010")
 require("prototypes.BobLogisticZoneExpanderRadius010")

@@ -1,0 +1,21 @@
+{
+  "name": "kry_stdlib",
+  "version": "2.1.0",
+  "factorio_version": "2.0",
+  "title": "Kryzeth Standard Library",
+  "author": "Afforess, Kryzeth",
+  "contact": "",
+  "dependencies": [
+    "base >= 2.0.0"
+  ],
+  "description": "Unofficial fork of the Factorio Standard Library, which was a project to bring Factorio modders high-quality, commonly-required utilities and tools. Compatibility with older mods which relied on the original stdlib mod is not guaranteed.",
+  "package": {
+    "ignore": [
+      "wiki/**",
+      "spec/**",
+      "tools/**",
+      "doc/**",
+      "faketorio/**"
+    ]
+  }
+}

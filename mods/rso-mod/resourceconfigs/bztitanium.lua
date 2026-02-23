@@ -1,6 +1,6 @@
 function fillBztitaniumConfig(config)
 	
-	config["titanium-ore"] = {
+	config.nauvis["titanium-ore"] = {
 		type = "resource-ore",
 		allotment=60,
 		

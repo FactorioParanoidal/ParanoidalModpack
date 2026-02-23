@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------
 ---Description of the module.
----@class EntityPrototype
+---@class EntityPrototype : Prototype
+---@field lua_prototype LuaEntityPrototype
 EntityPrototype = newclass(Prototype,function(base, object)
   if object ~= nil and type(object) == "string" then
     Prototype.init(base, Player.getEntityPrototype(object))
@@ -25,6 +26,14 @@ end
 function EntityPrototype:getAllowedEffects()
   if self.lua_prototype == nil then return nil end
   return self.lua_prototype.allowed_effects
+end
+
+-------------------------------------------------------------------------------
+---Return Allowed Module Categories
+---@return table
+function EntityPrototype:getAllowedModuleCategories()
+  if self.lua_prototype == nil then return nil end
+  return self.lua_prototype.allowed_module_categories
 end
 
 -------------------------------------------------------------------------------
@@ -89,8 +98,29 @@ end
 ---Return max energy usage per second
 ---@return number --default 0
 function EntityPrototype:getMaxEnergyUsage()
-  if self.lua_prototype ~= nil and self.lua_prototype.max_energy_usage ~= nil then
-    return self.lua_prototype.max_energy_usage * 60 / self:getEffectivity()
+  if self.lua_prototype ~= nil then
+    local max_energy_usage = self.lua_prototype.get_max_energy_usage(self.factory.quality)
+    return max_energy_usage * 60 / self:getEffectivity()
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return max energy usage per second
+---@return number --default 0
+function EntityPrototype:getMaxPowerOutput()
+  if self.lua_prototype ~= nil then
+    return self.lua_prototype.get_max_power_output(self.factory.quality) or 0
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return max energy usage per second
+---@return number --default 0
+function EntityPrototype:getMaxEnergyProduction()
+  if self.lua_prototype ~= nil then
+    return self.lua_prototype.get_max_energy_production(self.factory.quality) or 0
   end
   return 0
 end
@@ -115,6 +145,14 @@ end
 function EntityPrototype:getEnergyConsumption()
   if self.lua_prototype == nil then
     return 0
+  end
+
+  if self.lua_prototype.type == "fusion-generator" then
+    return self:getMaxEnergyProduction()
+  end
+
+  if self.lua_prototype.type == "fusion-reactor" then
+    return self:getMaxEnergyUsage()
   end
 
   local energy_prototype = self:getEnergySource()
@@ -145,7 +183,7 @@ function EntityPrototype:getEnergyConsumption()
       return 0
     end
     local fuel_value = fluid_fuel:getFuelValue()
-    local max_energy_production = (self.lua_prototype.max_energy_production or 0) * 60
+    local max_energy_production = self:getMaxPowerOutput() * 60
 
     if self.lua_prototype.burns_fluid ~= true then
       ---Steam engine
@@ -168,12 +206,14 @@ function EntityPrototype:getEnergyProduction()
   if self.lua_prototype ~= nil then
     local energy_prototype = self:getElectricEnergySource()
     if energy_prototype ~= nil then
-      local usage_priority = energy_prototype:getUsagePriority()
+        local usage_priority = energy_prototype:getUsagePriority()
       local production
       if usage_priority == "managed-accumulator" then
         production = energy_prototype:getOutputFlowLimit()
+      elseif usage_priority == "solar" then
+        production = self:getMaxEnergyProduction() * 60
       else
-        production = (self.lua_prototype.max_energy_production or 0) * 60
+        production = self:getMaxPowerOutput() * 60
       end
       
       if self.lua_prototype.type == "generator" then
@@ -209,14 +249,44 @@ function EntityPrototype:getEnergyProduction()
   return 0
 end
 
+---@type ModuleEffects
+local empty_effect ={
+  consumption=0,
+  speed=0,
+  productivity=0,
+  pollution=0,
+  quality=0
+}
 -------------------------------------------------------------------------------
----Return base productivity
----@return number --default 0
-function EntityPrototype:getBaseProductivity()
-  if self.lua_prototype ~= nil then
-    return self.lua_prototype.base_productivity or 0
+---Return base effect
+---@see https://lua-api.factorio.com/latest/types/EffectValue.html
+---@return ModuleEffects
+function EntityPrototype:getBaseEffect()
+  if self.lua_prototype ~= nil and self.lua_prototype.effect_receiver ~= nil then
+    local base_effect = self.lua_prototype.effect_receiver.base_effect or empty_effect
+    base_effect.quality = (base_effect.quality or 0) / 10
+    return base_effect
   end
-  return 0
+  return empty_effect
+end
+
+local empty_effect_receiver = {
+  base_effect = empty_effect,
+  uses_module_effects = true,
+  uses_beacon_effects = true,
+  uses_surface_effects = true
+}
+-------------------------------------------------------------------------------
+---Return base effect
+---@see https://lua-api.factorio.com/latest/types/EffectValue.html
+---@return EffectReceiver
+function EntityPrototype:getEffectReveiver()
+  if self.lua_prototype ~= nil then
+    local effect_receiver = self.lua_prototype.effect_receiver or empty_effect_receiver
+    effect_receiver.base_effect.quality = (effect_receiver.base_effect.quality or 0) / 10
+    return effect_receiver
+  end
+  return empty_effect_receiver
 end
 
 -------------------------------------------------------------------------------
@@ -239,8 +309,48 @@ end
 ---@return number --default 1
 function EntityPrototype:getDistributionEffectivity()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.distribution_effectivity or 1
+    local distribution_effectivity = self.lua_prototype.distribution_effectivity or 1
+    local distribution_effectivity_bonus_per_quality_level = self:getDistributionEffectivityBonusPerQualityLevel()
+    local quality = Player.getQualityPrototype(self.factory.quality)
+    local quality_level = 0
+    if quality ~= nil then
+      quality_level = quality.level
+    end
+    distribution_effectivity = distribution_effectivity + distribution_effectivity_bonus_per_quality_level * quality_level
+    return distribution_effectivity
   end return 1
+end
+
+-------------------------------------------------------------------------------
+---Return distribution effectivity
+---@return number --default 1
+function EntityPrototype:getDistributionEffectivityBonusPerQualityLevel()
+  if self.lua_prototype ~= nil then
+    return self.lua_prototype.distribution_effectivity_bonus_per_quality_level or 0
+  end
+end
+
+-------------------------------------------------------------------------------
+---Return profile effectivity
+---@return number --default 0
+function EntityPrototype:getProfileEffectivity(profile_count)
+  if self.lua_prototype ~= nil or profile_count == 0 then
+    if profile_count > #self.lua_prototype.profile then
+      return self.lua_prototype.profile[#self.lua_prototype.profile] or 1
+    end
+    return self.lua_prototype.profile[profile_count] or 1
+  end
+  return 1
+end
+
+-------------------------------------------------------------------------------
+---Return profile count, "total" or "same_type"
+---@return string "total"
+function EntityPrototype:getProfileCount()
+  if self.lua_prototype ~= nil then
+    return self.lua_prototype.beacon_counter or "total"
+  end
+  return "total"
 end
 
 -------------------------------------------------------------------------------
@@ -257,7 +367,7 @@ end
 ---Return traget temperature
 ---@return number --default 0
 function EntityPrototype:getTargetTemperature()
-  if self.lua_prototype ~= nil then
+  if self.lua_prototype ~= nil and (self:getType() == "boiler" or self:getType() == "fusion-reactor") then
     return self.lua_prototype.target_temperature or 0
   end
   return 0
@@ -278,7 +388,7 @@ end
 ---@return number --default 0
 function EntityPrototype:getFluidUsagePerTick()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.fluid_usage_per_tick or 0
+    return self.lua_prototype.get_fluid_usage_per_tick(self.factory.quality) or 0
   end
   return 0
 end
@@ -288,6 +398,16 @@ end
 ---@return number --default 0
 function EntityPrototype:getFluidUsage()
   return self:getFluidUsagePerTick() * 60
+end
+
+-------------------------------------------------------------------------------
+---Return fluid usage
+---@return number --default 0
+function EntityPrototype:getValveFlowRate()
+  if self.lua_prototype.type == "pump" or self.lua_prototype.type == "offshore-pump" then
+    return self.lua_prototype.get_valve_flow_rate(self.factory.quality)
+  end
+  return 0
 end
 
 -------------------------------------------------------------------------------
@@ -403,7 +523,7 @@ function EntityPrototype:getFluidConsumption()
       end
 
       local max_fluid_usage = self:getFluidUsage()
-      local max_energy_production = (self.lua_prototype.max_energy_production or 0) * 60
+      local max_energy_production = self:getMaxPowerOutput() * 60
 
       local fuel_value
       if self:getBurnsFluid() == true then
@@ -451,7 +571,6 @@ function EntityPrototype:getFluidConsumption()
         else
           local heat_capacity = fluid_fuel:getHeatCapacity()
           local minimum_temperature = fluid_fuel:getMinimumTemperature()
-          local target_temperature = self:getTargetTemperature()
           
           local maximum_temperature = energy_prototype:getMaximumTemperature()
           if maximum_temperature > 0 then
@@ -459,14 +578,8 @@ function EntityPrototype:getFluidConsumption()
           else
             maximum_temperature = fluid_fuel.temperature
           end
-          
-          if target_temperature > 0 then
-            target_temperature = math.min(target_temperature, maximum_temperature)
-          else
-            target_temperature = maximum_temperature
-          end
 
-          local power_extract = self:getPowerExtract(minimum_temperature, target_temperature, heat_capacity)
+          local power_extract = self:getPowerExtract(minimum_temperature, maximum_temperature, heat_capacity)
 
           return energy_consumption / power_extract
         end
@@ -498,7 +611,7 @@ function EntityPrototype:getFluidProduction()
     local fluidboxes = self:getFluidboxPrototypes()
     if fluidboxes ~= nil then
       for _, fluidbox in pairs(fluidboxes) do
-        if fluidbox.production_type == "input-output" or fluidbox.production_type == "input" then
+        if fluidbox.production_type == "output" then
 
           local fluid_prototype = FluidPrototype(fluidbox.filter)
           local heat_capacity = fluid_prototype:getHeatCapacity()
@@ -517,6 +630,140 @@ function EntityPrototype:getFluidProduction()
   return 0
 end
 
+local fix_maximum_temperature = {
+  ["muluna-cycling-steam-turbine"] = 500
+}
+-------------------------------------------------------------------------------
+---Return fluid consumption
+---@return number --default 0
+function EntityPrototype:getFluidConsumptionFusionGenerator()
+  if self:getType() == "fusion-generator" then
+
+    local energy_prototype = self:getEnergySource()
+    local effectivity
+    if energy_prototype ~= nil then
+      effectivity = energy_prototype:getEffectivity()
+    else
+      effectivity = 1
+    end
+
+    local fluidboxes = self:getFluidboxPrototypes()
+    if fluidboxes ~= nil then
+      for _, fluidbox in pairs(fluidboxes) do
+        if fluidbox.production_type == "input-output" or fluidbox.production_type == "input" then
+
+          local fluid_name = "fusion-plasma"
+          if fluidbox.filter ~= nil then
+            fluid_name = fluidbox.filter.name
+          end
+
+          local fluid_prototype = FluidPrototype(fluid_name)
+          local heat_capacity = fluid_prototype:getHeatCapacity()
+          
+          local minimum_temperature = fluid_prototype:getMinimumTemperature()
+          minimum_temperature = fluidbox.minimum_temperature or minimum_temperature
+          -- if another entity with this problem need a best solution
+          -- @see https://github.com/Helfima/helmod/issues/624
+          local maximum_temperature = fix_maximum_temperature[self.lua_prototype.name]
+          local max_temperature = maximum_temperature or fluidbox.maximum_temperature
+          local target_temperature = max_temperature or minimum_temperature
+          local power_extract = self:getPowerExtract(0, target_temperature, heat_capacity)
+          local energy_production = self:getMaxEnergyProduction()
+
+          local value = (60 * energy_production * effectivity) / power_extract
+          return value
+        end
+      end
+    end
+  end
+
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return fluid consumption
+---@return number --default 0
+function EntityPrototype:getFluidConsumptionOfBoiler()
+  if self:getType() == "boiler" then
+
+    local energy_prototype = self:getEnergySource()
+    local effectivity
+    if energy_prototype ~= nil then
+      effectivity = energy_prototype:getEffectivity()
+    else
+      effectivity = 1
+    end
+
+    local fluidboxes = self:getFluidboxPrototypes()
+    if fluidboxes ~= nil then
+      for _, fluidbox in pairs(fluidboxes) do
+        if fluidbox.production_type == "input-output" or fluidbox.production_type == "input" then
+
+          local fluid_name = fluidbox.filter or "water"
+
+          local fluid_prototype = FluidPrototype(fluid_name)
+          local heat_capacity = fluid_prototype:getHeatCapacity()
+          
+          local minimum_temperature = fluid_prototype:getMinimumTemperature()
+          local target_temperature = self:getTargetTemperature()
+          local power_extract = self:getPowerExtract(minimum_temperature, target_temperature, heat_capacity)
+          local energy_consumption = self:getEnergyConsumption()
+
+          return (energy_consumption * effectivity) / power_extract
+        end
+      end
+    end
+  end
+
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return fluid production
+---@return number --default 0
+function EntityPrototype:getFluidProductionFusionReactor()
+  if self:getType() == "fusion-reactor" then
+    local fluid_usage = self:getFluidUsagePerTick()
+    return fluid_usage * 60
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return fluid production
+---@return number --default 0
+function EntityPrototype:getFluidProductionOfBoiler()
+  if self:getType() == "boiler" then
+
+    local energy_prototype = self:getEnergySource()
+    local effectivity
+    if energy_prototype ~= nil then
+      effectivity = energy_prototype:getEffectivity()
+    else
+      effectivity = 1
+    end
+
+    local fluidboxes = self:getFluidboxPrototypes()
+    if fluidboxes ~= nil then
+      for _, fluidbox in pairs(fluidboxes) do
+        if fluidbox.production_type == "output" then
+
+          local fluid_prototype = FluidPrototype(fluidbox.filter)
+          local heat_capacity = fluid_prototype:getHeatCapacity()
+          
+          local minimum_temperature = fluid_prototype:getMinimumTemperature()
+          local target_temperature = self:getTargetTemperature()
+          local power_extract = self:getPowerExtract(minimum_temperature, target_temperature, heat_capacity)
+          local energy_consumption = self:getEnergyConsumption()
+
+          return (energy_consumption * effectivity) / power_extract
+        end
+      end
+    end
+  end
+
+  return 0
+end
 -------------------------------------------------------------------------------
 ---Return fluid production filter
 ---@return LuaFluidPrototype
@@ -532,10 +779,13 @@ end
 ---Return fluid consumption filter
 ---@return LuaFluidPrototype
 function EntityPrototype:getFluidConsumptionFilter()
-  if self.lua_prototype ~= nil and self.lua_prototype.type == "boiler" then
-    local fluidbox = self.lua_prototype.fluidbox_prototypes[1]
-    if fluidbox ~= nil and fluidbox.filter ~= nil then
-      return fluidbox.filter.name
+  if self.lua_prototype ~= nil and (self.lua_prototype.type == "boiler" or self.lua_prototype.type == "fusion-generator") then
+    local fluidbox = self:getFluidboxPrototype("input")
+    if fluidbox == nil then
+      fluidbox = self:getFluidboxPrototype("input-output")
+    end
+    if fluidbox ~= nil then
+      return fluidbox:getFilter()
     end
   end
   return nil
@@ -567,7 +817,27 @@ end
 ---@return number --default 0
 function EntityPrototype:getModuleInventorySize()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.module_inventory_size or 0
+    local module_inventory_size = self.lua_prototype.module_inventory_size or 0
+    local slots_bonus = 0
+    if self.factory ~= nil and self.factory.quality ~= nil then
+      local is_quality_affect = self.lua_prototype.quality_affects_module_slots
+      if is_quality_affect == true then
+        local quality = Player.getQualityPrototype(self.factory.quality)
+        local factory_type = self:getType()
+        if quality ~= nil then
+          if factory_type == "lab" then
+            slots_bonus = quality.lab_module_slots_bonus or 0
+          elseif factory_type == "beacon" then
+            slots_bonus = quality.beacon_module_slots_bonus or 0
+          elseif factory_type == "mining-drill" then
+            slots_bonus = quality.mining_drill_module_slots_bonus or 0
+          else
+            slots_bonus = quality.crafting_machine_module_slots_bonus or 0
+          end
+        end
+      end
+    end
+    return module_inventory_size + slots_bonus
   end
   return 0
 end
@@ -593,8 +863,7 @@ function EntityPrototype:getCraftingSpeed()
 
     local energy_prototype = self:getEnergySource()
     local speedModifier = energy_prototype:getSpeedModifier()
-
-    return (self.lua_prototype.crafting_speed or 1) * speedModifier
+    return (self.lua_prototype.get_crafting_speed(self.factory.quality) or 1) * speedModifier
   end
   return 0
 end
@@ -607,6 +876,14 @@ function EntityPrototype:getMiningSpeed()
     return (self.lua_prototype.mining_speed or 0) * self:getSpeedModifier()
   end
   return 0
+end
+
+-------------------------------------------------------------------------------
+---Return module effect
+---@return number
+function EntityPrototype:getResourceDrain()
+  if self.lua_prototype == nil then return 1 end
+  return (self.lua_prototype.resource_drain_rate_percent or 100) / 100
 end
 
 -------------------------------------------------------------------------------
@@ -637,7 +914,7 @@ end
 ---@return number --default 0
 function EntityPrototype:getResearchingSpeed()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.researching_speed or 1
+    return self.lua_prototype.get_researching_speed(self.factory.quality) or 1
   end
   return 0
 end
@@ -647,36 +924,87 @@ end
 ---@return number --default 0
 function EntityPrototype:getPumpingSpeed()
   if self.lua_prototype ~= nil then
-    return (self.lua_prototype.pumping_speed or 0)*60 
+    return (self.lua_prototype.get_pumping_speed(self.factory.quality) or 0)*60 
   end
   return 0
 end
 
 -------------------------------------------------------------------------------
----Return speed factory for recipe
+---Return growth area
+---@return number --default 0
+function EntityPrototype:getGrowthArea()
+  if self.lua_prototype ~= nil and self.lua_prototype.type == "agricultural-tower" then
+    local growth_grid_tile_size = self.lua_prototype.growth_grid_tile_size or 3
+    local growth_area = growth_grid_tile_size * growth_grid_tile_size
+    return growth_area
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return growth size
+---@return number --default 0
+function EntityPrototype:getGrowthGridSize()
+  if self.lua_prototype ~= nil and self.lua_prototype.type == "agricultural-tower" then
+    local growth_grid_tile_size = self.lua_prototype.growth_grid_tile_size or 3
+    local growth_area = growth_grid_tile_size * growth_grid_tile_size
+    return growth_area
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return growing area
+---@return number --default 0
+function EntityPrototype:getGrowableArea()
+  if self.lua_prototype ~= nil and self.lua_prototype.type == "agricultural-tower" then
+    local growth_area = self:getGrowthArea()
+    if self.factory.growable_area ~= nil then
+      return self.factory.growable_area
+    end
+    local tile_width = self.lua_prototype.tile_width or 3
+    local tile_height = self.lua_prototype.tile_height or 3
+    local machine_area = tile_width*tile_height
+    local logistic_area = 9 -- area necessary for input/output and power
+    local max_grid_size = 7 * 7
+    local max_area = growth_area * max_grid_size
+    local growable_area = max_area - machine_area - logistic_area
+    return growable_area
+  end
+  return 0
+end
+
+-------------------------------------------------------------------------------
+---Return speed factory
 ---@return number
-function EntityPrototype:speedFactory(recipe)
-  if self.lua_prototype and self.lua_prototype.type == "boiler" then
+function EntityPrototype:speedFactory()
+  if self.lua_prototype == nil then
+    return 0
+  end
+  if self.lua_prototype.type == "character" then
+    return Player.getCraftingSpeed()
+  elseif self.lua_prototype.type == "boiler" then
     ---@see https://wiki.factorio.com/Boiler
     ---info energy 1J=1W
     return 1
-  elseif recipe.type == "resource" then
+  elseif self.lua_prototype.type == "mining-drill" then
     ---(mining power - ore mining hardness) * mining speed
     ---@see https://wiki.factorio.com/Mining
     ---hardness removed
     ---@see https://www.factorio.com/blog/post/fff-266
-    local recipe_prototype = EntityPrototype(recipe.name)
     local mining_speed = self:getMiningSpeed()
-    local mining_time = recipe_prototype:getMineableMiningTime()
-    return mining_speed / mining_time
-  elseif recipe.type == "fluid" then
+    return mining_speed
+  elseif self.lua_prototype.type == "pump" or self.lua_prototype.type == "offshore-pump" then
     local pumping_speed = self:getPumpingSpeed()
     return pumping_speed
-  elseif recipe.type == "technology" then
+  elseif self.lua_prototype.type == "lab" then
     local researching_speed = self:getResearchingSpeed()
     return researching_speed
-  elseif recipe.type == "energy" then
-    return self:getSpeedModifier()
+  elseif self.lua_prototype.type == "agricultural-tower" then
+    local growing_area = self:getGrowthArea()
+    local growable_area = self:getGrowableArea()
+    local speed = growable_area/growing_area
+    return speed
   else
     return self:getCraftingSpeed()
   end
@@ -843,8 +1171,8 @@ end
 function EntityPrototype:getInserterCapacity()
   if self.lua_prototype ~= nil then
     local stack_bonus = 0
-    if self.lua_prototype.stack == true then
-      stack_bonus = Player.getForce().stack_inserter_capacity_bonus or 0
+    if self.lua_prototype.bulk == true then
+      stack_bonus = Player.getForce().bulk_inserter_capacity_bonus or 0
     else
       stack_bonus = Player.getForce().inserter_stack_size_bonus or 0
     end
@@ -858,7 +1186,8 @@ end
 ---@return number --default 0
 function EntityPrototype:getInserterRotationSpeed()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.inserter_rotation_speed*60
+    local rotation_speed = self.lua_prototype.get_inserter_rotation_speed(self.factory.quality)
+    return rotation_speed*60
   end
   return 0
 end
@@ -902,7 +1231,9 @@ function EntityPrototype:getPollution()
       if fuel ~= nil then
         emission_multiplier = fuel:getFuelEmissionsMultiplier()
       end
-      emission = energy_prototype:getEmissions() * self:getEffectivity()
+      local emissions = energy_prototype:getEmissions()
+      local emission_pollution = emissions["pollution"] or 2.7777777e-7
+      emission = emission_pollution * self:getEffectivity()
     end
 
     return energy_usage * emission * emission_multiplier
@@ -950,4 +1281,14 @@ function EntityPrototype:getBurnsFluid()
     end
   end
   return nil
+end
+
+-------------------------------------------------------------------------------
+---Return burns fluid
+---@return number
+function EntityPrototype:getSciencePackDrainRatePercent()
+  if self.lua_prototype ~= nil and self.lua_prototype.type == "lab" then
+    return self.lua_prototype.science_pack_drain_rate_percent or 100
+  end
+  return 100
 end

@@ -1,4 +1,159 @@
 ---------------------------------------------------------------------------------------------------
+Version: 7.0.23
+Date: 2026.02.05
+  Changes:
+    - update qatmore config to 2.0 version (by Qatavin)
+---------------------------------------------------------------------------------------------------
+Version: 7.0.22
+Date: 2026.01.18
+  Changes:
+    - re-enable support for Mad Clown's ores
+---------------------------------------------------------------------------------------------------
+Version: 7.0.21
+Date: 2026.01.05
+  Changes:
+    - re-enable support for Angels ores
+---------------------------------------------------------------------------------------------------
+Version: 7.0.20
+Date: 2026.01.02
+  Changes:
+    - buff sulfuric acid on Vulcanus
+---------------------------------------------------------------------------------------------------
+Version: 7.0.19
+Date: 2025.07.13
+  Changes:
+    - add omnimatter config (by Absolute-Phoenix)
+---------------------------------------------------------------------------------------------------
+Version: 7.0.18
+Date: 2025.06.12
+  Changes:
+    - fix potential crash when surface has no config data
+---------------------------------------------------------------------------------------------------
+Version: 7.0.17
+Date: 2025.05.13
+  Changes:
+    - add Krastorio 2 Space Age support (same resources as Krastorio 2)
+---------------------------------------------------------------------------------------------------
+Version: 7.0.16
+Date: 2025.05.06
+  Changes:
+    - restore Krastorio 2 support
+---------------------------------------------------------------------------------------------------
+Version: 7.0.15
+Date: 2025.04.15
+  Changes:
+    - add compatibility support for enemy race manager mod (thanks to heyqule)
+    - mods can now use data.rso_ignore_planets or data.rso_ignore_resource_entities to make rso
+      ignore planets or resources in data stage (thanks to heyqule)
+---------------------------------------------------------------------------------------------------
+Version: 7.0.14
+Date: 2025.04.04
+  Changes:
+    - restore Apm Nuclear support
+    - add support for Pick locks base mod
+    - restore Napu's Mod support
+---------------------------------------------------------------------------------------------------
+Version: 7.0.13
+Date: 2025.04.02
+  Changes:
+    - update bob's ores config to one provided by Qatavin
+---------------------------------------------------------------------------------------------------
+Version: 7.0.12
+Date: 2025.04.02
+  Changes:
+    - fix yields of water resources in bob's ores
+---------------------------------------------------------------------------------------------------
+Version: 7.0.11
+Date: 2025.04.02
+  Changes:
+    - enable bob's ores support, make RSO ignore enemies with bob's enemies mod present
+---------------------------------------------------------------------------------------------------
+Version: 7.0.10
+Date: 2025.03.12
+  Changes:
+    - add cargo ships support
+    - add fulgoran enemies support (RSO won't interefere with their generation anymore)
+    - add support for Py alternative energy resources (balance pending)
+    - add support for Space age without space
+    - add support for planet Muluna
+---------------------------------------------------------------------------------------------------
+Version: 7.0.9
+Date: 2024.12.31
+  Changes:
+    - enabled bz mods support properly
+---------------------------------------------------------------------------------------------------
+Version: 7.0.8
+Date: 2024.12.31
+  Changes:
+    - tweaked Vulcanus resources to prevent shortage of resources in smaller demolisher territories
+    - re-enabled bz mods resource support
+---------------------------------------------------------------------------------------------------
+Version: 7.0.7
+Date: 2024.12.02
+  Changes:
+    - restored multi resource support properly
+---------------------------------------------------------------------------------------------------
+Version: 7.0.6
+Date: 2024.12.02
+  Changes:
+    - restored multi resource support
+---------------------------------------------------------------------------------------------------
+Version: 7.0.5
+Date: 2024.11.14
+  Changes:
+    - removed optimization that caused ore patches to be cut along certain line sometimes
+    - re-enabled support for yuoki mods
+---------------------------------------------------------------------------------------------------
+Version: 7.0.4
+Date: 2024.11.09
+  Changes:
+    - reactivated missing resource print for non SA games
+    - re-enabled support for PY mods and fixed big resource nodes to be single spawns
+---------------------------------------------------------------------------------------------------
+Version: 7.0.3
+Date: 2024.11.05
+  Changes:
+    - add special tungsten patch to Vulcanus that is spawned near starting area within small demolisher zone
+    - add new command /rso-regenerate-surface that will regen surface that player is currently looking at, with parameter all it will also regenerate starting area
+---------------------------------------------------------------------------------------------------
+Version: 7.0.2
+Date: 2024.11.03
+  Changes:
+    - fix clear and regenerate commands
+---------------------------------------------------------------------------------------------------
+Version: 7.0.1
+Date: 2024.11.03
+  Changes:
+    - hide unsupported resources messages for now
+---------------------------------------------------------------------------------------------------
+Version: 7.0.0
+Date: 2024.11.03
+  Features:
+    - first version for Factorio 2.0, supports both vanilla and expansion. Balance might be off but should be playable.
+  Changes:
+    - only base game is supported in this version
+---------------------------------------------------------------------------------------------------
+Version: 6.2.26
+Date: 2024.04.06
+  Changes:
+    - add support for Tricky Old Nick by half_a_cat
+    - add support for Normal Ores For Angel's to properly reenable standard ores in RSO
+---------------------------------------------------------------------------------------------------
+Version: 6.2.25
+Date: 2023.09.01
+  Changes:
+    - add phosporite from Lambet Nil to ignored resources
+---------------------------------------------------------------------------------------------------
+Version: 6.2.24
+Date: 2023.07.05
+  Changes:
+    - make Darkstar utilities config work with fixed version
+---------------------------------------------------------------------------------------------------
+Version: 6.2.23
+Date: 2023.02.07
+  Changes:
+    - add support for bzchlorine mod (by brevven)
+---------------------------------------------------------------------------------------------------
 Version: 6.2.22
 Date: 2023.01.09
   Changes:

@@ -1,4 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.4.2
+Date: 4. 5. 2025
+  Changes:
+    - Update integration with newest version of Krastorio2. Thanks to HerptyDerpoty for the contribution.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.1
+Date: 23. 11. 2024
+  Changes:
+    - Remove `reset_technology_effects()` from running whenever configuration changes. Should improve compatibility with
+      some other mods. Thanks to enraged_tomato for reporting, and BlooSkies for investigating.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.0
+Date: 21. 10. 2024
+  Features:
+    - Preliminary update to Factorio 2.0/Space Age. Does not yet incorporate the new science packs, but it's usable.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.3
+Date: 19. 02. 2023
+  Features:
+    - Added default configuration for Krastorio 2.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.2
+Date: 18. 02. 2023
+  Features:
+    - Added basic compatibility with the Nullius mod.
+---------------------------------------------------------------------------------------------------
 Version: 3.3.0
 Date: 29. 11. 2020
   Changes:
@@ -37,7 +63,7 @@ Version: 2.5.1
 Date: 18. 03. 2020
   Features:
     - Added /qol-reset-technology-effects command.
-  ---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 17. 03. 2020
   Changes:

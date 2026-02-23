@@ -14,10 +14,10 @@ local function on_loc_remove(event) -- entity, player_index
 		return
 	end
 
-	local fuel = burning.name:match("^(.+)-full$")
+	local fuel = burning.name.name:match("^(.+)-full$")
 
 	if not fuel then
-		player_print(event.player_index, "Unexpected fuel in locomotive: "..burning.name)
+		player_print(event.player_index, "Unexpected fuel in locomotive: "..burning.name.name)
 		return
 	end
 
@@ -57,3 +57,20 @@ end
 
 script.on_init(on_initload)
 script.on_load(on_initload)
+
+
+
+------------------------------------------------------------------------------------
+--                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
+--                              (Thanks to eradicator!)                           --
+------------------------------------------------------------------------------------
+setmetatable(_ENV,{
+  __newindex=function (self,key,value) --locked_global_write
+    error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+      .. serpent.line{key=key or '<nil>',value=value or '<nil>'}..'\n')
+    end,
+  __index   =function (self,key) --locked_global_read
+    error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+      .. serpent.line{key=key or '<nil>'}..'\n')
+    end ,
+  })

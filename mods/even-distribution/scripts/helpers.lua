@@ -24,12 +24,16 @@ metatables.helpers = {
         rawget(t, "__on")[k] = v
     end,
     __len = function(t)
-        return #rawget(t, "__on")
+        local __on = rawget(t, "__on")
+        if type(__on) ~= "userdata" then
+            return #__on
+        end
+        return 0
     end,
 }
 
 function this.on(obj) -- wraps object in table with helper methods
-    if type(obj) == "table" and not obj.__self and rawget(obj, "__on") then -- reapply metatable
+    if type(obj) == "table" and rawget(obj, "__on") then -- reapply metatable
         return metatables.use(obj, "helpers")
     else                                                         -- new metatable
         return metatables.use({ __on = obj }, "helpers")
@@ -47,7 +51,7 @@ local conditions = {
     ["string"] = function(obj) return type(obj) == "string" end,
     ["number"] = function(obj) return type(obj) == "number" end,
     ["table"] = function(obj) return type(obj) == "table" end,
-    ["object"] = function(obj) return type(obj) == "table" and obj.__self end,
+    ["userdata"] = function(obj) return type(obj) == "userdata" end,
     ["empty"] = util.isEmpty,
     ["filled"] = util.isFilled,
     ["valid"] = util.isValid,

@@ -1,5 +1,4 @@
 require("prototypes.input")
-require("prototypes.entities")
 require("prototypes.technologies")
 require("prototypes.icons")
 require("prototypes.styles")

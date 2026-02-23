@@ -1,0 +1,13 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 21.11.2024
+  Features:
+    - Adds more quality achiements
+    - Updated to 2.0.21
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 11.10.2024
+  Features:
+    - Adds 101 more achievements
+    - Adds quality achievements
+    - Adds more tiers to current achievements

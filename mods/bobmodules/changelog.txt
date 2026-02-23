@@ -1,4 +1,59 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 18. 01. 2026
+  Changes:
+    - Allow modules to be crafted in electronics assembly machines #517
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 02. 01. 2026
+  Changes:
+    - Updated AAI Industry integration #393
+    - Integrate Bob's Locale Translations mod #445
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 22. 06. 2025
+  Changes:
+    - Added de locale #415
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 20. 04. 2025
+  Changes:
+    - Increased beacon stack sizes to match base game #406
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Changes:
+    - Added preset for Milestones mod #389
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Changes:
+    - Update for Factorio 2.0 #189
+    - Removed Modules Lab #196
+    - Rebalanced all of Bob's Modules, making it less over powered with default settings #269
+      - Reduced number of module tiers from 8 down to 5
+      - Added Quality modules
+      - Removed pure speed, pure productivity, and green modules
+      - Changed god modules to have a single tier (down from 5 tiers)
+      - Added god module variants:
+        - God module
+        - God module (productivity)
+        - God module (quality)
+      - Moved the circuit / logic / processor boards up a tech tier
+      - Rebalanced mod setting defaults
+      - Updated beacon 2 & 3 effects
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Changes:
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Changes:

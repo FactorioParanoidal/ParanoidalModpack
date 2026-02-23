@@ -93,12 +93,14 @@ function unitGroupUtils.createSquad(position, map, group, settlers)
         frenzyPosition = {x = 0,
                           y = 0},
         maxDistance = 0,
-        groupNumber = unitGroup.group_number,
+        groupNumber = unitGroup.unique_id,
         originPosition = {x = 0,
                           y = 0},
 		prevChunk = -1,	
 		undergoundAttack = nil,	-- if true then it will be converted to underground attack when finish gathering
-        chunk = -1
+		nextCommandTick = nil, -- if number and lesser than game.tick then skip squad processing
+        chunk = -1,
+		excluded = nil	-- if true, then universe.builderCount or universe.squadCount will not reduce when squad disbanded
     }
 
     if position then
@@ -110,11 +112,6 @@ function unitGroupUtils.createSquad(position, map, group, settlers)
     end
 
     return squad
-end
-
-function unitGroupUtils.calculateKamikazeThreshold(memberCount, universe)
-    local threshold = (memberCount / config.getAttackWaveMaxSize(universe)) * 0.2 + (universe.evolutionLevel * 0.2)
-    return threshold
 end
 
 unitGroupUtilsG = unitGroupUtils

@@ -1,0 +1,11 @@
+{
+  "name": "yemtositemcount",
+  "version": "0.7.1",
+  "factorio_version": "2.0",
+  "title": "Yemto's Item Count",
+  "author": "Yemto",
+  "contact": "",
+  "homepage": "",
+  "description": "Show the total amount of whatever items the player is holding",
+  "dependencies": ["base >= 2.0"]
+}

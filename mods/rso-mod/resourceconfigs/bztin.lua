@@ -1,6 +1,6 @@
 function fillBztinConfig(config)
 
-	config["tin-ore"] = {
+	config.nauvis["tin-ore"] = {
 		type="resource-ore",
 		
 		allotment=50,

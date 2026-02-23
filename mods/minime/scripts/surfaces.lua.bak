@@ -1,0 +1,308 @@
+minime.entered_file()
+
+local minime_surfaces = {}
+
+--~ -- Remove flag showing that we've deleted the surface ourselves!
+--~ local function remove_flag(surface_index)
+  --~ minime.assert(surface_index, "number", "surface index")
+
+  --~ if global.deleted_surfaces and global.deleted_surfaces[surface_index] then
+    --~ global.deleted_surfaces[surface_index] = nil
+    --~ if not next(global.deleted_surfaces) then
+      --~ global.deleted_surfaces = nil
+      --~ minime.writeDebug("Removed global.deleted_surfaces!")
+    --~ end
+  --~ end
+--~ end
+
+local CHAR_NAME_START_POS = string.len(minime.preview_surface_name_prefix) + 1
+
+
+------------------------------------------------------------------------------------
+--     Create a preview character (and surface, if necessary) for all players     --
+------------------------------------------------------------------------------------
+local function restore_preview_characters(char_name)
+  minime.entered_function({char_name})
+
+  if not minime.character_selector then
+    minime.entered_function({}, "leave", "Character selector is not active!")
+    return
+  end
+
+  minime.assert(char_name, "string", "name of character prototype")
+
+  local c_data = global.minime_characters and
+                  global.minime_characters[char_name] or
+                  minime.arg_err(char_name, "character prototype")
+
+minime.show(char_name, c_data)
+  if not (c_data.preview and
+          c_data.preview.surface and c_data.preview.surface.valid) then
+    minime.writeDebug("Must initialize global.minime_character[%s].preview!",
+                      {char_name})
+    minime_character.initialize_character_preview(char_name)
+  end
+
+  local surface = c_data.preview and c_data.preview.surface
+  local chars = c_data.preview and c_data.preview.entities
+  local offset = 10
+
+
+  local player_chars, p_data, pos
+
+  for p, player in pairs(game.players) do
+    p_data = global.player_data[p]
+    player_chars = p_data and p_data.available_characters
+minime.show("player_chars", player_chars)
+
+    if player_chars[char_name] then
+      -- We make sure that preview characters of different players don't overlap by
+      -- using the player index to determine the character position
+      pos = {(p * offset) - offset, 0}
+      chars[p] = surface.create_entity({
+        name = char_name,
+        position = pos,
+        force = player.force,
+        direction = defines.direction.south,
+      })
+      minime.writeDebug("Created preview %s for player %s!",
+                        {minime.argprint(chars[p]), minime.argprint(p)})
+
+      if chars[p] and chars[p].valid then
+        chars[p].active = false
+        minime.writeDebug("Made %s inactive!", {minime.argprint(chars[p])})
+      end
+
+      -- Make sure the preview character has the same armor as the player's current
+      -- character, so that it will really reflect the player's appearance!
+      if player.character then
+        minime.writeDebug("Updating armor of preview character!")
+        minime_player.update_armor({player_index = p, character = char_name})
+      end
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                               Create new surface                               --
+------------------------------------------------------------------------------------
+minime_surfaces.create_surface = function(surface_name)
+  minime.entered_function({surface_name})
+
+  minime.assert(surface_name, "string", "surface name")
+
+  local surface = game.surfaces[surface_name]
+
+  if not (surface and surface.valid) then
+    local params = {
+      width = 1,
+      height = 1,
+      peaceful_mode = true
+    }
+    surface = game.create_surface(surface_name, params)
+    minime.writeDebug("Created %s!", {minime.argprint(surface)})
+
+    if surface and surface.valid then
+      minime.writeDebug("Blacklisting surface with other mods!")
+      --~ minime.blacklist_surface(surface.name)
+      minime_surfaces.blacklist_surface(surface.name)
+    end
+  end
+
+  minime.entered_function("leave")
+  return surface
+end
+
+
+------------------------------------------------------------------------------------
+--                     Mark surface for removal and delete it                     --
+------------------------------------------------------------------------------------
+minime_surfaces.delete_surface = function(surface)
+  minime.entered_function({surface})
+
+  surface = minime.ascertain_surface(surface)
+
+  if surface and surface.valid then
+
+    -- Set flag so that we'll ignore on_surface_deleted and don't restore things!
+    global.deleted_surfaces = global.deleted_surfaces or {}
+    global.deleted_surfaces[surface.index] = true
+
+    -- Delete surface
+    minime.writeDebug("Removing %s!", {minime.argprint(surface)})
+    game.delete_surface(surface)
+
+    -- Whitelist surface with other mods
+    minime.writeDebug("Whitelisting %s with other mods!",
+                      {minime.argprint(surface)})
+    --~ minime.whitelist_surface(name)
+    minime_surfaces.whitelist_surface(surface)
+
+  else
+    minime.writeDebug("Nothing to do: %s is not a valid surface!",
+                      {minime.argprint(surface)})
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+-- A surface is about to be deleted. Store its index if it's one of our surfaces! --
+------------------------------------------------------------------------------------
+minime_surfaces.on_pre_surface_deleted = function(event)
+  minime.entered_function({event})
+
+  local surface = game.surfaces[event.surface_index]
+  local index, name = surface.index, surface.name
+
+  -- We've deleted the surface ourselves!
+  if global.deleted_surfaces and global.deleted_surfaces[index] then
+    minime.writeDebug("%s was marked for deletion!", {minime.argprint(surface)})
+    global.deleted_surfaces[index] = nil
+
+    if not next(global.deleted_surfaces) then
+      global.deleted_surfaces = nil
+      minime.writeDebug("Removed global.deleted_surfaces!")
+    end
+
+  -- Some other mod destroyed one of our surfaces!
+  elseif name == minime.dummy_surface or
+          minime.prefixed(name, minime.preview_surface_name_prefix) then
+    global.restore_surfaces = global.restore_surfaces or {}
+    global.restore_surfaces[index] = name
+
+    minime.writeDebug("Marked %s for restoring!", {minime.argprint(surface)})
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--               A surface has been deleted -- did it belong to us?               --
+------------------------------------------------------------------------------------
+minime_surfaces.on_surface_deleted = function(event)
+  minime.entered_function({event})
+
+  local index = event.surface_index
+  local name = global.restore_surfaces and
+                global.restore_surfaces[index]
+
+  -- Restore surface!
+  if name then
+    -- Recreate dummy surface and dummies
+    if name == minime.dummy_surface then
+      minime.writeDebug("Restoring dummy surface!")
+      minime_surfaces.create_surface(name)
+
+      minime.writeDebug("Recreating dummies!")
+      local p_data
+      for p, player in pairs(game.players) do
+        p_data = global.player_data[p]
+        if p_data then
+          minime.writeDebug("Creating new dummy for %s!", {minime.argprint(player)})
+          p_data.dummy = minime_player.make_dummy(p)
+        else
+          minime.writeDebug("Skipping: %s has no player data yet!")
+        end
+      end
+
+    -- Recreate surface for preview character and reinitialize preview data
+    elseif minime.prefixed(name, minime.preview_surface_name_prefix) then
+      local char_name = string.sub(name, CHAR_NAME_START_POS)
+      minime.writeDebug("Restoring preview surface for \"%s\"!", {char_name})
+      restore_preview_characters(char_name)
+    end
+
+    global.restore_surfaces[index] = nil
+    minime.writeDebug("Removed global.restore_surfaces[%s]!", {index})
+
+    if not next(global.restore_surfaces) then
+      global.restore_surfaces = nil
+      minime.writeDebug("Removed global.restore_surfaces!")
+    end
+
+  -- We don't care about the deleted surface
+  else
+    minime.writeDebug("Don't care about deleted surface %s!", {index})
+  end
+
+  minime.entered_function("leave")
+end
+
+
+----------------------------------------------------------------------------------
+--        Mods like Bilka's "Abandoned Ruins" should ignore this surface        --
+----------------------------------------------------------------------------------
+minime_surfaces.blacklist_surface = function(surface)
+  minime.entered_function({surface})
+
+  surface = (type(surface) == "string" and surface) or
+            (type(surface) == "table" and surface.object_name == "LuaSurface" and
+              surface.valid and surface.name)
+  minime.assert(surface, "string", "surface name or surface")
+  --~ surface = minime.ascertain_surface(surface)
+
+  local mod_interfaces = {
+    ["AbandonedRuins"] = {
+      f_name = "exclude_surface",
+      args = {surface}
+    },
+  }
+
+  local interface
+  for mod_name, mod_data in pairs(mod_interfaces) do
+    interface = remote.interfaces[mod_name]
+    if interface and interface[mod_data.f_name] then
+      remote.call(mod_name, mod_data.f_name, table.unpack(mod_data.args))
+      minime.writeDebug("Blacklisted surface %s with mod \"%s\"!",
+                        {minime.argprint(surface), mod_name})
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+
+----------------------------------------------------------------------------------
+--              Whitelist surface with mods like "Abandoned Ruins"              --
+----------------------------------------------------------------------------------
+minime_surfaces.whitelist_surface = function(surface)
+  minime.entered_function({surface})
+
+  surface = (type(surface) == "string" and surface) or
+            (type(surface) == "table" and surface.valid and
+              surface.object_name == "LuaSurface" and surface.name)
+  minime.assert(surface, "string", "surface name or surface")
+
+  local mod_interfaces = {
+    ["AbandonedRuins"] = {
+      f_name = "reinclude_surface",
+      args = {surface}
+    },
+  }
+
+  local interface
+  for name, data in pairs(mod_interfaces) do
+    interface = remote.interfaces[name]
+    if interface and interface[data.f_name] then
+      remote.call(name, data.f_name, table.unpack(data.args))
+      minime.writeDebug("Whitelisted surface \"%s\" with mod \"%s\"!",
+                        {surface, name})
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+
+------------------------------------------------------------------------------------
+minime.entered_file("leave")
+
+return minime_surfaces

@@ -100,6 +100,10 @@ end
 ---initialization
 function PrototypeFilters.initialization()
 
+  local PrototypeFiltercustom = PrototypeFilters.addFilterType("custom")
+  PrototypeFiltercustom:addMapping(nil)
+  PrototypeFiltercustom:addFilter("custom")
+ 
   -------------------------------------------------------------------------------
   -------------------------------------------------------------------------------
   local PrototypeFilterEntity = PrototypeFilters.addFilterType("entity")
@@ -164,7 +168,7 @@ function PrototypeFilters.initialization()
   PrototypeFilterEntity:addFilter("build-base-evolution-requirement", "comparison")
   PrototypeFilterEntity:addFilter("selection-priority", "comparison")
   PrototypeFilterEntity:addFilter("emissions", "comparison")
-  PrototypeFilterEntity:addFilter("crafting-category", game.recipe_category_prototypes)
+  PrototypeFilterEntity:addFilter("crafting-category", prototypes.recipe_category)
 
   -------------------------------------------------------------------------------
   -------------------------------------------------------------------------------
@@ -174,15 +178,28 @@ function PrototypeFilters.initialization()
   PrototypeFilterItem:addFilter("name")
   PrototypeFilterItem:addFilter("tool")
   PrototypeFilterItem:addFilter("mergeable")
+  PrototypeFilterItem:addFilter("hidden")
+  PrototypeFilterItem:addFilter("hidden-in-factoriopedia")
+  PrototypeFilterItem:addFilter("is-parameter")
   PrototypeFilterItem:addFilter("item-with-inventory")
   PrototypeFilterItem:addFilter("selection-tool")
   PrototypeFilterItem:addFilter("item-with-label")
+  PrototypeFilterItem:addFilter("has-rocket-launch-products")
   PrototypeFilterItem:addFilter("fuel")
-  PrototypeFilterItem:addFilter("place-as-tile")
   PrototypeFilterItem:addFilter("place-result")
-  PrototypeFilterItem:addFilter("placed-as-equipment-result")
   PrototypeFilterItem:addFilter("burnt-result")
-  PrototypeFilterItem:addFilter("show-in-blueprint-library")
+  PrototypeFilterItem:addFilter("place-as-tile")
+  PrototypeFilterItem:addFilter("placed-as-equipment-result")
+  PrototypeFilterItem:addFilter("plant-result")
+  PrototypeFilterItem:addFilter("spoil-result")
+  PrototypeFilterItem:addFilter("flag")
+  PrototypeFilterItem:addFilter("subgroup")
+  PrototypeFilterItem:addFilter("fuel-category")
+  PrototypeFilterItem:addFilter("stack-size")
+  PrototypeFilterItem:addFilter("fuel-value")
+  PrototypeFilterItem:addFilter("fuel-acceleration-multiplier")
+  PrototypeFilterItem:addFilter("fuel-top-speed-multiplier")
+  PrototypeFilterItem:addFilter("fuel-emissions-multiplier")
 
   local item_flag = {}
   item_flag["hidden"] = true
@@ -194,8 +211,8 @@ function PrototypeFilters.initialization()
   item_flag["mod-openable"] = true
   item_flag["only-in-cursor"] = true
   PrototypeFilterItem:addFilter("flag", item_flag)
-  PrototypeFilterItem:addFilter("subgroup", game.item_subgroup_prototypes)
-  PrototypeFilterItem:addFilter("fuel-category", game.fuel_category_prototypes)
+  PrototypeFilterItem:addFilter("subgroup", prototypes.item_subgroup)
+  PrototypeFilterItem:addFilter("fuel-category", prototypes.fuel_category)
   PrototypeFilterItem:addFilter("stack-size", "comparison")
   PrototypeFilterItem:addFilter("default-request-amount", "comparison")
   PrototypeFilterItem:addFilter("wire-count", "comparison")
@@ -283,8 +300,8 @@ function PrototypeFilters.initialization()
   PrototypeFilterRecipe:addFilter("show-amount-in-title")
   PrototypeFilterRecipe:addFilter("has-ingredients")
   PrototypeFilterRecipe:addFilter("has-products")
-  PrototypeFilterRecipe:addFilter("subgroup", game.item_subgroup_prototypes)
-  PrototypeFilterRecipe:addFilter("category", game.recipe_category_prototypes)
+  PrototypeFilterRecipe:addFilter("subgroup", prototypes.item_subgroup)
+  PrototypeFilterRecipe:addFilter("category", prototypes.recipe_category)
   PrototypeFilterRecipe:addFilter("energy", "comparison")
   PrototypeFilterRecipe:addFilter("emissions-multiplier", "comparison")
   PrototypeFilterRecipe:addFilter("request-paste-multiplier", "comparison")

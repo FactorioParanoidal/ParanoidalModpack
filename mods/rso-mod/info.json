@@ -1,11 +1,11 @@
 {
   "name": "rso-mod",
-  "version": "6.2.25",
+  "version": "7.0.23",
   "factorio_version": "2.0",
   "title": "Resource Spawner Overhaul",
   "author": "Dark, orzelek",
   "contact": "Message me on forums or use discussion board on mod portal",
   "homepage": "https://forums.factorio.com/viewforum.php?f=79",
-  "description": "Overhauls resource spawning system.",
-  "dependencies": ["base >= 1.0.0", "? bobenemies", "? bobores", "? 5dim_ores", "! bitumen"]
+  "description": "Makes resources more sparse than base game. You will need to use trains much earlier to get resources. Game will be more difficult especially with higher enemy settings.",
+  "dependencies": ["base >= 2.0.0", "? bobenemies", "? bobores", "? 5dim_ores", "! bitumen"]
 }

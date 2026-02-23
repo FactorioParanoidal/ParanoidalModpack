@@ -11,6 +11,7 @@ local connectables = {
     ["transport-belt"] = true,
     ["underground-belt"] = true,
     ["splitter"] = true,
+    ["lane-splitter"] = true,
     ["loader"] = true,
     ["loader-1x1"] = true,
     ["linked-belt"] = true,
@@ -31,29 +32,29 @@ local side_cycle = {
 local function empty_offsets(splitter)
     local t = splitter and {left = {}, right = {}} or {}
     return {{
-        [0] = copy(t),
-        [2] = copy(t),
-        [4] = copy(t),
-        [6] = copy(t),
+        [defines.direction.north] = copy(t),
+        [defines.direction.east ] = copy(t),
+        [defines.direction.south] = copy(t),
+        [defines.direction.west ] = copy(t),
     },{
-        [0] = copy(t),
-        [2] = copy(t),
-        [4] = copy(t),
-        [6] = copy(t),
+        [defines.direction.north] = copy(t),
+        [defines.direction.east ] = copy(t),
+        [defines.direction.south] = copy(t),
+        [defines.direction.west ] = copy(t),
     }}
 end
 
 local function offsets(data)
     local t = empty_offsets()
     for name, distance in pairs(data) do
-        t[1][0][name] = {-offset, -distance}
-        t[1][2][name] = {distance, -offset}
-        t[1][4][name] = {offset, distance}
-        t[1][6][name] = {-distance, offset}
-        t[2][0][name] = {offset, -distance}
-        t[2][2][name] = {distance, offset}
-        t[2][4][name] = {-offset, distance}
-        t[2][6][name] = {-distance, -offset}
+        t[1][defines.direction.north][name] = {-offset, -distance}
+        t[1][defines.direction.east ][name] = {distance, -offset}
+        t[1][defines.direction.south][name] = {offset, distance}
+        t[1][defines.direction.west ][name] = {-distance, offset}
+        t[2][defines.direction.north][name] = {offset, -distance}
+        t[2][defines.direction.east ][name] = {distance, offset}
+        t[2][defines.direction.south][name] = {-offset, distance}
+        t[2][defines.direction.west ][name] = {-distance, -offset}
     end
     return t
 end
@@ -64,22 +65,22 @@ local function splitter_offsets(data)
         local distance = v[1]
         local offset_1 = v[2]
         local offset_2 = v[3]
-        t[1][0].left[name] = {-offset_1, -distance}
-        t[1][0].right[name] = {-offset_2, -distance}
-        t[1][2].left[name] = {distance, -offset_1}
-        t[1][2].right[name] = {distance, -offset_2}
-        t[1][4].left[name] = {offset_1, distance}
-        t[1][4].right[name] = {offset_2, distance}
-        t[1][6].left[name] = {-distance, offset_1}
-        t[1][6].right[name] = {-distance, offset_2}
-        t[2][0].left[name] = {offset_2, -distance}
-        t[2][0].right[name] = {offset_1, -distance}
-        t[2][2].left[name] = {distance, offset_2}
-        t[2][2].right[name] = {distance, offset_1}
-        t[2][4].left[name] = {-offset_2, distance}
-        t[2][4].right[name] = {-offset_1, distance}
-        t[2][6].left[name] = {-distance, -offset_2}
-        t[2][6].right[name] = {-distance, -offset_1}
+        t[1][defines.direction.north].left [name] = {-offset_1, -distance}
+        t[1][defines.direction.north].right[name] = {-offset_2, -distance}
+        t[1][defines.direction.east ].left [name] = { distance, -offset_1}
+        t[1][defines.direction.east ].right[name] = { distance, -offset_2}
+        t[1][defines.direction.south].left [name] = { offset_1,  distance}
+        t[1][defines.direction.south].right[name] = { offset_2,  distance}
+        t[1][defines.direction.west ].left [name] = {-distance,  offset_1}
+        t[1][defines.direction.west ].right[name] = {-distance,  offset_2}
+        t[2][defines.direction.north].left [name] = { offset_2, -distance}
+        t[2][defines.direction.north].right[name] = { offset_1, -distance}
+        t[2][defines.direction.east ].left [name] = { distance,  offset_2}
+        t[2][defines.direction.east ].right[name] = { distance,  offset_1}
+        t[2][defines.direction.south].left [name] = {-offset_2,  distance}
+        t[2][defines.direction.south].right[name] = {-offset_1,  distance}
+        t[2][defines.direction.west ].left [name] = {-distance, -offset_2}
+        t[2][defines.direction.west ].right[name] = {-distance, -offset_1}
     end
     return t
 end
@@ -111,10 +112,10 @@ local straight = offsets{
 }
 
 local curved = {
-    [0] = {-0.5, -0.5},
-    [2] = {0.5, -0.5},
-    [4] = {0.5, 0.5},
-    [6] = {-0.5, 0.5},
+    [defines.direction.north] = {-0.5, -0.5},
+    [defines.direction.east ] = {0.5, -0.5},
+    [defines.direction.south] = {0.5, 0.5},
+    [defines.direction.west ] = {-0.5, 0.5},
 }
 
 local half_pixel_width = width / 64
@@ -150,6 +151,12 @@ local splitter = splitter_offsets{
     middle = {0, outer_offset, inner_offset},
     sideload = {sideload, outer_offset, inner_offset},
     line = {0, outer_line, inner_line},
+}
+
+local lane_splitter = offsets{
+    input = -0.5,
+    output = 0.5,
+    sideload = sideload,
 }
 
 local size = width * 1.125 / 32
@@ -216,6 +223,7 @@ return {
     dash_length = dash_length,
     gap_length = gap_length,
     splitter = splitter,
+    lane_splitter = lane_splitter,
     loader = loader,
     loader_1x1 = loader_1x1,
     linked_belt = linked_belt,

@@ -1,0 +1,9 @@
+{
+    "item": [
+        ["angels-solid-sodium-floride", "angels-solid-sodium-fluoride"]
+    ],
+    "recipe": [
+        ["angels-solid-sodium-floride-1","angels-solid-sodium-fluoride-1"],
+        ["angels-solid-sodium-floride-2","angels-solid-sodium-fluoride-2"]
+    ]
+}

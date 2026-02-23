@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 14.10.2023
+  Add:
+    - Ajout des Big Light sur les signaux ferroviaires (rail-signal & rail-chain-signal) vanilla uniquement.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 04.06.2021
+  Fix:
+    - Compatibilité Krastorio2 + Trainstop Nostalgia.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 28.01.2022
+  Changes:
+    - Changes Thumbnail.png
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 07.09.2021
+  Fix:
+    - Fixe de la compatibilité avec Krastorio2.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 07.09.2021
+  Add:
+    - Ajout des Big Light sur les commutateurs (power-switch) vanilla uniquement.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 03.09.2021
+  Add:
+    - Migration du code du mod : BigLightElectricMiningDrill & BigLightTrainStop dans ce mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 01.09.2021
+  New:
+    - Création du mod.

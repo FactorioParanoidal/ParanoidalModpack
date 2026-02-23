@@ -18,32 +18,23 @@ local function table_contains(table, check)
   return false
 end
 
-if not mods["combat-mechanics-overhaul"] then
-	local collision_mask_util_extended = require("collision-mask-util-extended/data/collision-mask-util-extended")		
-	flying_layer = collision_mask_util_extended.get_make_named_collision_mask("flying-layer")
-	
-	for _, prototype in pairs(data.raw.projectile) do	
-		if prototype.collision_box then
-			if not prototype.hit_collision_mask then
-				prototype.hit_collision_mask = collision_mask_util_extended.get_default_hit_mask("projectile")
-			else
-				if not table_contains(prototype.hit_collision_mask, flying_layer) then
-				  table.insert(prototype.hit_collision_mask, flying_layer)
-				end		
-			end
-		end	
-	end
-else	-- rebuild units (CMO broke stream attacks)
-	log("combat-mechanics-overhaul -> rebuild units")
-	if settings.startup["rampantFixed--newEnemies"].value then
-		local swarmUtils = require("prototypes/SwarmUtils")	
-		swarmUtils.processFactions()
-	end
-end
+-- local collision_mask_util_extended = require("collision-mask-util-extended/data/collision-mask-util-extended")		
+-- flying_layer = collision_mask_util_extended.get_make_named_collision_mask("flying-layer")
 
+-- for _, prototype in pairs(data.raw.projectile) do	
+	-- if prototype.collision_box then
+		-- if not prototype.hit_collision_mask then
+			-- prototype.hit_collision_mask = collision_mask_util_extended.get_default_hit_mask("projectile")
+		-- else
+			-- if not table_contains(prototype.hit_collision_mask, flying_layer) then
+			  -- table.insert(prototype.hit_collision_mask, flying_layer)
+			-- end		
+		-- end
+	-- end	
+-- end
 
 if settings.startup["rampantFixed--newEnemies"].value then
-	if data.raw["damage-type"]["plasma"] then
+	if data.raw["damage-type"]["bob-plasma"] then
 		immunityUpdates.setPlasmaImmunities()
 	end	
 	if data.raw["damage-type"]["bob-pierce"] then
@@ -142,18 +133,6 @@ if settings.startup["rampantFixed--flamethrowerTurretsRebalance"].value then
 	flamethrowerTurret.attack_parameters.ammo_type.action.action_delivery.stream = "flamethrower-fire-stream2"
 	flamethrowerTurret.attack_parameters.gun_barrel_length = 0.6	
 	
-	---------------
-	if data.raw["stream"]["suppression-cannon-stream-rampant-arsenal"] then
-		local flamethrowerTurretRA_Stream = data.raw["stream"]["suppression-cannon-stream-rampant-arsenal"]
-		table.remove(flamethrowerTurretRA_Stream.action[1].action_delivery.target_effects, 2)
-		flamethrowerTurretRA_Stream.action[2].action_delivery.target_effects[2].damage.amount = flamethrowerTurretRA_Stream.action[2].action_delivery.target_effects[2].damage.amount * 4
-		
-		
-		local flamethrowerTurretRA = data.raw["fluid-turret"]["suppression-cannon-fluid-turret-rampant-arsenal"]	
-		flamethrowerTurretRA.attack_parameters.cooldown = 30
-		flamethrowerTurretRA.attack_parameters.fluid_consumption = 15
-		data:extend({flamethrowerTurretRA})
-	end	
 end
 	-- -- debug
 	
@@ -163,19 +142,6 @@ end
 	-- biterTest.name = "BiterTest"
 	-- data:extend({biterTest})	
 	-- ---------------
-
-if settings.startup["rampantFixed--rampantArsenalRebalance"].value then
-	local damage_interval = 15
-	for i, sticker in pairs(data.raw["sticker"]) do
-		if string.find(sticker.name, "arsenal") and string.find(sticker.name, "rampant") then
-			if (sticker.duration_in_ticks >= 60) and sticker.damage_per_tick and (sticker.damage_per_tick.amount > 0) and ((not sticker.damage_interval) or (sticker.damage_interval < 10)) then
-				local kf = damage_interval/(sticker.damage_interval or 1)
-				sticker.damage_interval = damage_interval
-				sticker.damage_per_tick.amount = sticker.damage_per_tick.amount * kf
-			end
-		end	
-	end
-end
 
 if settings.startup["rampantFixed--unitSpawnerBreath"].value then
     for _, unitSpawner in pairs(data.raw["unit-spawner"]) do
@@ -199,12 +165,6 @@ for k, unit in pairs(data.raw["unit"]) do
             }
         end
 
-		-- if string.find(k, "-rampant") and (string.find(k, "nuclear-biter") or string.find(k, "suicide-biter") or string.find(k, "fast-biter")) then
-			-- unit.affected_by_tiles = false
-		-- else	
-			-- unit.affected_by_tiles = settings.startup["rampantFixed--unitsAffectedByTiles"].value
-		-- end	
-
         unit.ai_settings = {
             destroy_when_commands_fail = false,
             allow_try_return_to_spawner = true
@@ -217,17 +177,26 @@ if settings.startup["rampantFixed--enableShrinkNestsAndWorms"].value then
         if (string.find(k, "biter") or string.find(k, "spitter") or string.find(k, "hive")) and unit.collision_box then
 			local minDxDy = math.min(unit.collision_box[2][1] - unit.collision_box[1][1], unit.collision_box[2][2] - unit.collision_box[1][2]) 
 			if minDxDy >= 3 then
-				unit.collision_box = {
-					{unit.collision_box[1][1] * 0.50, unit.collision_box[1][2] * 0.50},
-					{unit.collision_box[2][1] * 0.50, unit.collision_box[2][2] * 0.50}
-				}
-			else
-				local k = 1 - (0.5 * minDxDy / 3)
-				unit.collision_box = {
-					{unit.collision_box[1][1] * k, unit.collision_box[1][2] * k},
-					{unit.collision_box[2][1] * k, unit.collision_box[2][2] * k}
-				}				
+				local k = minDxDy * 0.5 / 3
+				if k > 1 then
+					unit.collision_box = {
+						{unit.collision_box[1][1] * 0.50, unit.collision_box[1][2] * 0.50},
+						{unit.collision_box[2][1] * 0.50, unit.collision_box[2][2] * 0.50}
+					}
+				elseif k > 0 then
+					unit.collision_box = {
+						{math.ceil(unit.collision_box[1][1] * 5 / k) / 10, math.ceil(unit.collision_box[1][2] * 5 / k) / 10},
+						{math.ceil(unit.collision_box[2][1] * 5 / k) / 10, math.ceil(unit.collision_box[2][2] * 5 / k) / 10}
+					}					
+				end	
+			-- else
+				-- local k = 1 - (0.5 * minDxDy / 3)
+				-- unit.collision_box = {
+					-- {unit.collision_box[1][1] * k, unit.collision_box[1][2] * k},
+					-- {unit.collision_box[2][1] * k, unit.collision_box[2][2] * k}
+				-- }				
 			end
+			
         end
     end
 
@@ -254,9 +223,21 @@ if settings.startup["rampantFixed--enableFadeTime"].value then
     end
 end
 
+if data.raw["item"]["kr-biomass"] then
+    for k, corpse in pairs(data.raw["corpse"]) do
+        if (string.find(k, "spawner") or string.find(k, "hive")) and string.find(k, "rampant") then
+			if (string.sub(k, 1, 13) == "spawner-spawn") or (string.sub(k, 1, 15) == "spawner-spitter") or (string.find(k, "worm")) then 
+			else
+				corpse.minable = {
+					  mining_time = 1,
+					  results = { { type = "item", name = "kr-biomass", amount_min = 1, amount_max = 5 } },
+					}
+				corpse.selectable_in_game = true	
+			end
+		end		
+	end
+end
+
 if settings.startup["rampantFixed--addWallResistanceAcid"].value then
     vanillaBuildings.addWallResistance()
 end
-
-
-

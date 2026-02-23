@@ -1,4 +1,5 @@
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
+require "util"
 require "mod-gui"
 require "core.tableExtends"
 require "core.global"
@@ -26,3 +27,5 @@ Command = require "core.Command"
 EventController = require "controller.EventController"
 -- attach events
 EventController.start()
+
+require "data.RemoteAPI"

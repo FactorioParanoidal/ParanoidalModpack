@@ -3,10 +3,10 @@ data:extend(
     --violet catalyst
     {
       type = "item",
-      name = "catalyst-metal-violet",
+      name = "clowns-catalyst-metal-violet",
       icon = "__Clowns-Processing__/graphics/icons/catalyst-metal-violet.png",
       icon_size = 32,
-      subgroup = "petrochem-catalysts",
+      subgroup = "angels-petrochem-catalysts",
       order = "f",
       stack_size = 200
     },
@@ -16,7 +16,7 @@ data:extend(
     --processed
     {
       type = "item",
-      name = "processed-depleted-uranium",
+      name = "clowns-processed-depleted-uranium",
       icon = "__Clowns-Processing__/graphics/icons/processed-depleted-uranium.png",
       icon_size = 32,
       subgroup = "clowns-depleted-uranium",
@@ -26,7 +26,7 @@ data:extend(
     --pellet
     {
       type = "item",
-      name = "pellet-depleted-uranium",
+      name = "clowns-pellet-depleted-uranium",
       icon = "__Clowns-Processing__/graphics/icons/pellet-depleted-uranium.png",
       icon_size = 32,
       subgroup = "clowns-depleted-uranium",
@@ -36,7 +36,7 @@ data:extend(
     --powder
     {
       type = "item",
-      name = "powder-depleted-uranium",
+      name = "clowns-powder-depleted-uranium",
       icon = "__Clowns-Processing__/graphics/icons/powder-depleted-uranium.png",
       icon_size = 32,
       subgroup = "clowns-depleted-uranium",
@@ -46,8 +46,8 @@ data:extend(
     --powder-mix
     {
       type = "item",
-      name = "casting-powder-depleted-uranium",
-      icon = "__Clowns-Processing__/graphics/icons/powder-depleted-uranium.png",
+      name = "clowns-casting-powder-depleted-uranium",
+      icon = "__Clowns-Processing__/graphics/icons/powder-depleted-uranium-mix.png",
       icon_size = 32,
       subgroup = "clowns-depleted-uranium",
       order = "d",
@@ -69,7 +69,7 @@ data:extend(
     --phosphorus ore
     {
       type = "item",
-      name = "phosphorus-ore",
+      name = "clowns-phosphorus-ore",
       icon = "__Clowns-Processing__/graphics/icons/phosphorus-ore.png",
       icon_size = 32,
       subgroup = "clowns-phosphorus",
@@ -79,7 +79,7 @@ data:extend(
     --white phosphorus
     {
       type = "item",
-      name = "solid-white-phosphorus",
+      name = "clowns-solid-white-phosphorus",
       icon = "__Clowns-Processing__/graphics/icons/solid-white-phosphorus.png",
       icon_size = 32,
       subgroup = "clowns-phosphorus",
@@ -89,11 +89,11 @@ data:extend(
     --phosphoric-acid
     {
       type = "fluid",
-      name = "liquid-phosphoric-acid",
-      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 128 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png", --DrD 512 to 128
+      name = "clowns-liquid-phosphoric-acid",
+      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/phosphoric-acid.png", 512 }, {{ r = 244, g = 125, b = 001 },{ 242, 242, 242 },{ 214, 012, 012 }}),--"__Clowns-Processing__/graphics/icons/liquid-phosphoric-acid.png",
       --icon_size = 32,
       default_temperature = 25,
-      heat_capacity = "0.1KJ",
+      heat_capacity = "0.1kJ",
       base_color = {r = 0.957, g = 0.49, b = 0},
       flow_color = {r = 0.957, g = 0.49, b = 0},
       max_temperature = 100,
@@ -104,87 +104,51 @@ data:extend(
     --liquid mercury
     {
       type = "fluid",
-      name = "liquid-mercury",
-      icon = "__Clowns-Processing__/graphics/icons/liquid-mercury.png",
-      icon_size = 32,
+      name = "clowns-liquid-mercury",
+      icons = angelsmods.functions.create_viscous_liquid_fluid_icon({icon="__Clowns-Processing__/graphics/icons/Numbers/Hg.png", icon_size=32, icon_mipmaps=2},
+      { { 184, 184, 208 },{ 184, 184, 208 },{ 184, 184, 208 } }),--"__Clowns-Processing__/graphics/icons/liquid-mercury.png",
       default_temperature = 25,
-      heat_capacity = "0.1KJ",
-      base_color = {r = 0.75, g = 0.75, b = 0.75},
+      heat_capacity = "0.1kJ",
+      base_color = { 184, 184, 208 },
       flow_color = {r = 0.8, g = 0.8, b = 0},
       max_temperature = 100,
     },
     --liquid-dmm
     {
       type = "fluid",
-      name = "liquid-dimethylmercury",
-      icon = "__Clowns-Processing__/graphics/icons/liquid-dimethylmercury.png",
-      icon_size = 32,
-      default_temperature = 25,
-      heat_capacity = "0.1KJ",
-      base_color = {r = 0.1, g = 0.8, b = 0.7},
-      flow_color = {r = 0.1, g = 0.8, b = 0.7},
-      max_temperature = 100,
-    },
-    --neurotixin-capsule
-    {
-      type = "capsule",
-      name = "neurotoxin-capsule",
-      icon = "__Clowns-Processing__/graphics/icons/neurotoxin-capsule.png",
-      icon_size = 32,
-      capsule_action =
-      {
-        type = "throw",
-        attack_parameters =
-        {
-          type = "projectile",
-          ammo_category = "capsule",
-          cooldown = 60,
-          projectile_creation_distance = 0.6,
-          range = 35,
-          ammo_type =
-          {
-            category = "capsule",
-            target_type = "position",
-            action =
-            {
-              type = "direct",
-              action_delivery =
-              {
-                type = "projectile",
-                projectile = "neurotoxin-capsule",
-                starting_speed = 0.2
-              }
-            }
-          }
-        }
-      },
-      subgroup = "capsule",
-      order = "c-a",--Just after slowdown-capsule
-      stack_size = 50
-    },
-    ----------------------
-    -- Boron processing --
-    -- incomplete, needs process and source
-    ----------------------
-    --Boric acid
-    {
-      type = "fluid",
-      name = "liquid-boric-acid",
-      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 128 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png", --DrD 512 to 128
+      name = "clowns-liquid-dimethylmercury",
+      icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil,{ { 118, 141, 138 },{ 94, 113, 110 },{ 94, 113, 110 } }),--"__Clowns-Processing__/graphics/icons/liquid-mercury.png",
+      --icon = "__Clowns-Processing__/graphics/icons/liquid-dimethylmercury.png",
       --icon_size = 32,
       default_temperature = 25,
-      heat_capacity = "0.1KJ",
-      base_color = {r = 1, g = 0.6, b = 0.6},
-      flow_color = {r = 1, g = 0.6, b = 0.6},
+      heat_capacity = "0.1kJ",
+      base_color = { 118, 141, 138 },
+      flow_color = {r = 0.1, g = 0.8, b = 0.7},
       max_temperature = 100,
-    },
+    },   
+--    ----------------------
+--    -- Boron processing --
+--    -- incomplete, needs process and source
+--    ----------------------
+--    --Boric acid
+--    {
+--      type = "fluid",
+--      name = "angels-liquid-boric-acid",
+--      icons = angelsmods.functions.create_liquid_fluid_icon({ "__Clowns-Processing__/graphics/icons/boric-acid.png", 512 }, {{r=203/255,g=146/255,b=146/255},{ 214, 012, 012 },{ 242, 242, 242 }}),--"__Clowns-Processing__/graphics/icons/liquid-boric-acid.png",
+--      --icon_size = 32,
+--      default_temperature = 25,
+--      heat_capacity = "0.1kJ",
+--      base_color = {r = 1, g = 0.6, b = 0.6},
+--      flow_color = {r = 1, g = 0.6, b = 0.6},
+--      max_temperature = 100,
+--    },
     --------------------------
     -- Magnesium processing --
     --------------------------
     --ore
     {
       type = "item",
-      name = "magnesium-ore",
+      name = "clowns-magnesium-ore",
       icon = "__Clowns-Processing__/graphics/icons/magnesium-ore.png",
       icon_size = 32,
       subgroup = "clowns-magnesium",
@@ -194,7 +158,7 @@ data:extend(
     --processed
     {
       type = "item",
-      name = "processed-magnesium",
+      name = "clowns-processed-magnesium",
       icon = "__Clowns-Processing__/graphics/icons/processed-magnesium.png",
       icon_size = 32,
       subgroup = "clowns-magnesium",
@@ -204,7 +168,7 @@ data:extend(
     --pellet
     {
       type = "item",
-      name = "pellet-magnesium",
+      name = "clowns-pellet-magnesium",
       icon = "__Clowns-Processing__/graphics/icons/pellet-magnesium.png",
       icon_size = 32,
       subgroup = "clowns-magnesium",
@@ -214,7 +178,7 @@ data:extend(
     --ingot
     {
       type = "item",
-      name = "ingot-magnesium",
+      name = "clowns-ingot-magnesium",
       icon = "__Clowns-Processing__/graphics/icons/ingot-magnesium.png",
       icon_size = 32,
       subgroup = "clowns-magnesium",
@@ -224,11 +188,11 @@ data:extend(
     --molten
     {
       type = "fluid",
-      name = "liquid-molten-magnesium",
+      name = "clowns-liquid-molten-magnesium",
       icon = "__Clowns-Processing__/graphics/icons/molten-magnesium.png",
       icon_size = 32,
       default_temperature = 100,
-      heat_capacity = "0KJ",
+      heat_capacity = "0kJ",
       base_color = {r = 242/255, g = 212/255, b = 194/255},
       flow_color = {r = 242/255, g = 212/255, b = 194/255},
       max_temperature = 100,
@@ -250,7 +214,7 @@ data:extend(
     --ore
     {
       type = "item",
-      name = "osmium-ore",
+      name = "clowns-osmium-ore",
       icon = "__Clowns-Processing__/graphics/icons/osmium-ore.png",
       icon_size = 32,
       subgroup = "clowns-osmium",
@@ -260,7 +224,7 @@ data:extend(
     --processed
     {
       type = "item",
-      name = "processed-osmium",
+      name = "clowns-processed-osmium",
       icon = "__Clowns-Processing__/graphics/icons/processed-osmium.png",
       icon_size = 32,
       subgroup = "clowns-osmium",
@@ -270,7 +234,7 @@ data:extend(
     --pellet
     {
       type = "item",
-      name = "pellet-osmium",
+      name = "clowns-pellet-osmium",
       icon = "__Clowns-Processing__/graphics/icons/pellet-osmium.png",
       icon_size = 32,
       subgroup = "clowns-osmium",
@@ -280,7 +244,7 @@ data:extend(
     --powder
     {
       type = "item",
-      name = "powder-osmium",
+      name = "clowns-powder-osmium",
       icon = "__Clowns-Processing__/graphics/icons/powder-osmium.png",
       icon_size = 32,
       subgroup = "clowns-osmium",
@@ -290,7 +254,7 @@ data:extend(
     --powder-mix
     {
       type = "item",
-      name = "casting-powder-osmium",
+      name = "clowns-casting-powder-osmium",
       icon = "__Clowns-Processing__/graphics/icons/powder-osmium.png",
       icon_size = 32,
       subgroup = "clowns-osmium",
@@ -313,7 +277,7 @@ data:extend(
     --UF6
     {
       type = "item",
-      name = "solid-uranium-hexafluoride",
+      name = "clowns-solid-uranium-hexafluoride",
       icon = "__Clowns-Processing__/graphics/icons/solid-uranium-hexafluoride.png",
       icon_size = 32,
       subgroup = "clowns-uranium",
@@ -323,7 +287,7 @@ data:extend(
     --UF4
     {
       type = "item",
-      name = "solid-uranium-tetrafluoride",
+      name = "clowns-solid-uranium-tetrafluoride",
       icon = "__Clowns-Processing__/graphics/icons/solid-uranium-tetrafluoride.png",
       icon_size = 32,
       subgroup = "clowns-uranium",
@@ -333,7 +297,7 @@ data:extend(
     --UO2
     {
       type = "item",
-      name = "solid-uranium-oxide",
+      name = "clowns-solid-uranium-oxide",
       icon = "__Clowns-Processing__/graphics/icons/solid-uranium-oxide.png",
       icon_size = 32,
       subgroup = "clowns-uranium",
@@ -343,7 +307,7 @@ data:extend(
     --(NH4)2U2O7
     {
       type = "item",
-      name = "solid-ammonium-diuranate",
+      name = "clowns-solid-ammonium-diuranate",
       icon = "__Clowns-Processing__/graphics/icons/solid-ammonium-diuranate.png",
       icon_size = 32,
       subgroup = "clowns-uranium",
@@ -353,7 +317,7 @@ data:extend(
     --UO2(NO3)2
     {
       type = "item",
-      name = "solid-uranyl-nitrate",
+      name = "clowns-solid-uranyl-nitrate",
       icon = "__Clowns-Processing__/graphics/icons/solid-uranyl-nitrate.png",
       icon_size = 32,
       subgroup = "clowns-uranium",
@@ -363,12 +327,11 @@ data:extend(
     --F2
     {
       type = "fluid",
-      name = "gas-fluorine",
-      --icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "fff"),-- --"__Clowns-Processing__/graphics/icons/gas-fluorine.png", --DrD 216 to 128
-	  icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 128 }, "FFF"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png",
+      name = "clowns-gas-fluorine",
+      icons =  angelsmods.functions.create_gas_fluid_icon({ "__Clowns-Processing__/graphics/icons/fluorine.png", 216 }, "FFF"),-- "__Clowns-Processing__/graphics/icons/gas-fluorine.png",
       --icon_size = 32,
       default_temperature = 25,
-      heat_capacity = "0.1KJ",
+      heat_capacity = "0.1kJ",
       base_color = {r = 0.71, g = 0.816, b = 0},
       flow_color = {r = 0.71, g = 0.816, b = 0},
       max_temperature = 100,
@@ -377,7 +340,7 @@ data:extend(
   }
 )
 osmiumbullet=table.deepcopy(data.raw.ammo["uranium-rounds-magazine"])
-osmiumbullet.name="osmium-rounds-magazine"
+osmiumbullet.name="clowns-osmium-rounds-magazine"
 if osmiumbullet.ammo_type.action and osmiumbullet.ammo_type.action.action_delivery then
   osmiumbullet.ammo_type.action.action_delivery.target_effects[2].damage = {amount = 20, type = "physical"}
   osmiumbullet.ammo_type.action.action_delivery.target_effects[3] = {type = "damage",damage = { amount = 6, type = "explosion"}}

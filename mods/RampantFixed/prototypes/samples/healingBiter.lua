@@ -1,6 +1,7 @@
 local smallbiterscale = 0.5
 local small_biter_tint1 = {r=0.56, g=0.46, b=0.42, a=0.65}
 local small_biter_tint2 = {r=1, g=0.63, b=0, a=0.4}
+require("__base__.prototypes.entity.biter-animations")
 
 data:extend({
 	{ -- this defines a damage type so resistances don't effect this damage
@@ -14,8 +15,8 @@ data:extend({
 	    show_when_smoke_off = true,
 	    animation =
 		{
-		    filename = "__base__/graphics/entity/cloud/cloud-45-frames.png",
-		    flags = { "compressed" },
+		    filename = "__RampantFixed__/graphics/entities/cloud/cloud-45-frames.png",
+		    flags = { "always-compressed" },
 		    priority = "low",
 		    width = 256,
 		    height = 256,
@@ -179,7 +180,7 @@ data:extend({
 	    vision_distance = 30,
 	    movement_speed = 0.2,
 	    distance_per_frame = 0.1,
-	    pollution_to_join_attack = 200,
+	    absorptions_to_join_attack = {pollution = 200},
 	    distraction_cooldown = 300,
 	    min_pursue_time = 10 * 60,
 	    max_pursue_distance = 50,

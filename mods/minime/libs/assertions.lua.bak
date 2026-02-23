@@ -1,0 +1,447 @@
+log("Entered file " .. debug.getinfo(1).source)
+
+local assert = {}
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                                LOCAL DEFINITIONS                               --
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-- Read definitions from the debugging library
+do
+log("Reading debugging library!")
+  local debugging = require("__minime__.libs.debugging")
+  local is_debug = debugging.is_debug
+log(string.format("is_debug: %s", is_debug))
+
+  local dummy_function = function() return "nil" end
+
+  for key, value in pairs(debugging) do
+    -- Debugging is on, copy the original definitions!
+    if is_debug then
+      assert[key] = value
+      log(string.format("Added \"%s\": %s",
+                        key,
+                        type(value) == "function" and
+                          "function" or serpent.block(value, {nocode = true})))
+
+    -- Debugging is off, copy everything that is not a function!
+    elseif type(value) ~= "function" then
+      assert[key] = value
+      log(string.format("Added \"%s\": %s",
+                        key, serpent.block(value, {nocode = true})))
+
+    -- Debugging is off, replace function with an empty dummy function, so we won't
+    -- waste UPS on spamming the log file.
+    else
+      assert[key] = dummy_function
+      log(string.format("Replaced function \"%s\" with empty function!", key))
+    end
+  end
+end
+
+local quote = "\""
+assert.enquote = function(text)
+  local ret = (text ~= nil) and
+                (type(text) == "string" and quote..text..quote or
+                                            quote..tostring(text)..quote) or
+                nil
+  return ret
+end
+
+
+
+-- Using next() with custom tables will return garbage, so we must make sure that
+-- it really contains no elements when checking whether it's empty!
+assert.is_custom_table_empty = function(tab)
+  assert.entered_function({tab})
+  local ret = true
+
+  -- We want luacheck to ignore "loop is executed at most once"
+  do
+      -- luacheck: ignore
+
+    -- If there is at least one element, the table is not empty!
+    for e, element in pairs(tab) do
+      ret = false
+      break
+    end
+  end
+
+  return ret
+end
+
+
+
+------------------------------------------------------------------------------------
+-- Map default Factorio player colors to color names
+assert.colors = {
+  default     = {r = 1.000, g = 0.630, b = 0.259},
+  red         = {r = 1.000, g = 0.166, b = 0.141},
+  green       = {r = 0.173, g = 0.824, b = 0.250},
+  blue        = {r = 0.343, g = 0.683, b = 1.000},
+  orange      = {r = 1.000, g = 0.630, b = 0.259},
+  yellow      = {r = 1.000, g = 0.828, b = 0.231},
+  pink        = {r = 1.000, g = 0.520, b = 0.633},
+  purple      = {r = 0.821, g = 0.440, b = 0.998},
+  white       = {r = 0.900, g = 0.900, b = 0.900},
+  black       = {r = 0.500, g = 0.500, b = 0.500},
+  gray        = {r = 0.700, g = 0.700, b = 0.700},
+  brown       = {r = 0.757, g = 0.522, b = 0.371},
+  cyan        = {r = 0.335, g = 0.918, b = 0.866},
+  acid        = {r = 0.708, g = 0.996, b = 0.134},
+  -- This is the default color for vehicles without an owner/locker in AD/GCKI!
+  no_color    = {r = 0, g = 0, b = 0, a = 0.5}
+}
+
+
+------------------------------------------------------------------------------------
+-- Get the player entity from index, name or entity
+assert.ascertain_player = function(player)
+  assert.entered_function({player})
+
+  local ret
+  local p = type(player)
+  if p == "table" then
+    ret = (player.object_name == "LuaPlayer") and player
+  elseif player then
+    ret = game.get_player(player)
+  end
+
+  return ret
+end
+
+------------------------------------------------------------------------------------
+-- Get the force from index, name or entity
+assert.ascertain_force = function(force)
+  assert.entered_function({force})
+
+  local ret
+  local f = type(force)
+  if f == "table" then
+    ret = (force.object_name == "LuaForce") and force
+  elseif force then
+    ret = game.forces[force]
+  end
+
+  return ret
+end
+
+------------------------------------------------------------------------------------
+-- Get the surface from index or name
+assert.ascertain_surface = function(surface)
+  assert.entered_function({surface})
+
+  local ret
+  local s = type(surface)
+  if s == "table" then
+    ret = (surface.object_name == "LuaSurface") and surface
+  elseif surface then
+    ret = game.get_surface(surface)
+  end
+
+  return ret
+end
+
+------------------------------------------------------------------------------------
+-- Get the technology from name or tech
+assert.ascertain_technology = function(tech)
+  assert.entered_function({tech})
+
+  local ret
+  local t = type(tech)
+  if t == "table" then
+    ret = (tech.object_name == "LuaTechnology") and tech
+  elseif tech then
+    ret = game.technologies[tech]
+  end
+
+  return ret
+end
+
+------------------------------------------------------------------------------------
+-- Get color from name, hex, or table
+assert.ascertain_color = function(color)
+  assert.entered_function({color})
+
+  assert.assert(color, {"table", "string", "nil"}, "color, string, or nil")
+
+  local ret
+  local c = type(color)
+  -- Named colors or hex colors
+  if c == "string" then
+    ret = assert.colors[color] or
+          (color:match("^#*[0-9a-fA-F]+$") and util.color(color))
+assert.show("ret", ret)
+    if ret then
+      ret.a = 1
+    end
+
+  -- Lua color
+  elseif c == "table" then
+    -- Make sure we've got a table that only contains valid color data (empty table,
+    -- named keys, or index 1…4)!
+    if next(color) then
+      -- Make a copy of the color table, then remove all valid keys from it
+      local copy = table.deepcopy(color)
+      for _, i in pairs({1, 2, 3, 4, "r", "g", "b", "a"}) do
+        copy[i] = nil
+      end
+
+      -- If the copied table is not empty, the input wasn't a valid color!
+      if next(copy) then
+        assert.entered_function({}, "leave", "not a valid color")
+        return
+      end
+    end
+
+    ret = {
+      r = color.r or color[1] or 0,
+      g = color.g or color[2] or 0,
+      b = color.b or color[3] or 0,
+      a = color.a or color[4] or 1,
+    }
+  end
+
+  return ret
+end
+
+-- Compare two colors. Returns true if the colors are the same
+assert.compare_colors = function(c1, c2)
+  assert.entered_function({c1, c2})
+
+  c1 = assert.ascertain_color(c1)
+  c2 = assert.ascertain_color(c2)
+
+  local ret = c1 and c2 and util.table.compare(c1, c2)
+  assert.show("Colors are the same", ret and "yes" or "no")
+
+  assert.entered_function("leave")
+  return ret
+end
+
+
+------------------------------------------------------------------------------------
+-- Throw an error if a wrong argument has been passed to a function
+assert.arg_err = function(arg, arg_type)
+  error(string.format(
+    "Wrong argument! %s is not %s!",
+    --~ (arg or "nil"), (arg_type and "a valid "..arg_type or "valid")
+    assert.argprint(arg), (arg_type and "a valid "..arg_type or "valid")
+  ))
+end
+
+------------------------------------------------------------------------------------
+-- Rudimentary check of the arguments passed to a function
+assert.check_args = function(arg, arg_type)
+
+  local ret = true
+  arg_type = arg_type and arg_type:lower() or ""
+
+  -- Special arguments: Entities, recipes etc. are stored in tables, but that's not
+  -- enough to make sure they really are such a thing
+  if type(arg) == "table" then
+    local object_type = (arg.object_name and arg.object_name:lower()) or
+                        (arg.type and arg.type:lower())
+    if arg_type ~= object_type and arg_type ~= "table" then
+      ret = false
+    end
+
+  -- Default argument, it should match the string returned by the type() function!
+  elseif type(arg) ~= arg_type then
+    ret = false
+  end
+
+  return ret
+end
+
+------------------------------------------------------------------------------------
+-- Error when argument is not of expected type.
+-- arg:      The value we want to check
+-- arg_type: String or array of strings specifying the expected type(s)
+-- desc:     String (optional) with a description for arg_type. Will be ignored if
+--           arg_type is a table!
+--
+-- If only one type is acceptable for arg, arg_type and, optionally, desc must be
+-- strings:
+--      debugging.assert(arg, arg_type, desc)
+--
+-- If arg may be any of several types (e.g. number and nil), call this function
+-- with an array of strings specifying the names of acceptable arg_types, and
+-- optionally a description:
+--      debugging.assert(arg, {type_1, type_2, …}, desc)
+------------------------------------------------------------------------------------
+assert.assert = function(arg, arg_type, desc)
+  local arg_types
+  --~ if not arg_type then
+  if arg_type == nil then
+    arg_types = {"nil"}
+  elseif type(arg_type) == "string" then
+    arg_types = {arg_type}
+  elseif type(arg_type) == "table" then
+    for k, v in pairs(arg_type) do
+      if type(v) ~= "string" then
+        assert.arg_err(v, "argument type (string)")
+      end
+    end
+    arg_types = arg_type
+  else
+    assert.arg_err(arg_type, "type (nil, string, or array of strings)")
+  end
+
+  local success
+
+  for a, a_type in pairs(arg_types) do
+    if assert.check_args(arg, a_type) then
+      success = true
+      break
+    end
+  end
+
+  if not success then
+    assert.arg_err(arg, desc)
+  end
+  return true
+end
+
+
+------------------------------------------------------------------------------------
+-- Normalize position
+assert.normalize_position = function(position)
+  assert.entered_function({position})
+  local x, y
+
+  if type(position) == "table" and table_size(position) == 2 then
+    x = position.x or position[1]
+    y = position.y or position[2]
+  end
+
+  assert.assert(x, "number", "x-coordinate")
+  assert.assert(y, "number", "y-coordinate")
+
+  return {x = x, y = y}
+end
+
+
+------------------------------------------------------------------------------------
+-- Compare positions
+assert.is_same_position = function(pos_a, pos_b)
+  assert.entered_function({pos_a, pos_b})
+
+  pos_a = assert.normalize_position(pos_a)
+  pos_b = assert.normalize_position(pos_b)
+
+  return (pos_a.x == pos_b.x) and (pos_a.y == pos_b.y)
+end
+
+
+------------------------------------------------------------------------------------
+-- Translate map position to chunk position
+assert.get_chunk_pos = function(pos)
+  assert.entered_function({pos})
+
+  pos = assert.normalize_position(pos)
+
+  return {x = math.floor(pos.x/32), y = math.floor(pos.y/32)}
+end
+
+
+------------------------------------------------------------------------------------
+-- Greatly improved version check for mods (thanks to eradicator!)
+assert.Version = {}
+do
+  local V = assert.Version
+
+  local function parse_version(vstr) -- string "Major.Minor.Patch"
+    local err = function()
+      error('Invalid Version String: <'..vstr..'>')
+    end
+
+    local r = {vstr:match'^(%d+)%.(%d+)%.(%d+)$'}
+
+    if #r ~= 3 then
+      err()
+    end
+
+    for i=1, 3 do
+      r[i] = tonumber(r[i])
+    end
+
+    return r
+  end
+
+  V.gtr = function(verA, verB)
+    local a, b, c = unpack(parse_version(verA))
+    local x, y, z = unpack(parse_version(verB))
+    return (a > x) or (a == x and b > y) or (a == x and b == y and c > z)
+  end
+
+  local map = {
+    ['=' ] = function(A, B) return not (V.gtr(A, B)   or V.gtr(B, A)) end,
+    ['>' ] = V.gtr,
+    ['!='] = function(A, B) return (V.gtr(A, B)       or V.gtr(B, A)) end,
+    ['<='] = function(A, B) return V.gtr(B, A)        or (not V.gtr(A, B)) end,
+    ['>='] = function(A, B) return V.gtr(A, B)        or (not V.gtr(B, A)) end,
+    ['~='] = function(A, B) return (V.gtr(A, B)       or V.gtr(B, A)) end,
+    ['<' ] = function(A, B) return V.gtr(B, A) end,
+  }
+
+  assert.check_version = function(mod_name, operator, need_version)
+assert.entered_function({mod_name, operator, need_version})
+    local mod_version = script and script.active_mods[mod_name] or
+                         mods and mods[mod_name]
+assert.show("mod_version", mod_version)
+assert.show("need_version", need_version)
+    return map[operator](mod_version, need_version)
+  end
+end
+
+
+------------------------------------------------------------------------------------
+-- Look for matching pattern at start of a string
+assert.prefixed = function(look_in, find_at_start)
+  assert.assert(look_in, "string")
+  assert.assert(find_at_start, "string")
+  return look_in:sub(1, #find_at_start) == find_at_start
+end
+
+
+------------------------------------------------------------------------------------
+-- Extract a number from a string, given a variable pattern
+assert.number_from_string = function(look_in, find_pattern)
+  assert.assert(look_in, "string")
+  assert.assert(find_pattern, "string")
+  return tonumber(look_in:match(find_pattern))
+end
+
+------------------------------------------------------------------------------------
+--              Compare two values that may be either boolean or nil              --
+------------------------------------------------------------------------------------
+assert.states_differ = function(a, b)
+  assert.assert(a, {"boolean", "nil"}, "Boolean value or nil")
+  assert.assert(b, {"boolean", "nil"}, "Boolean value or nil")
+  return ((not a) ~= (not b))
+end
+
+
+------------------------------------------------------------------------------------
+--                       Check whether array contains value                       --
+------------------------------------------------------------------------------------
+assert.table_contains = function(tab, value)
+  for k, v in pairs(tab or {}) do
+    if (v == value) then
+      return true
+    end
+  end
+end
+
+------------------------------------------------------------------------------------
+-- Localize entity names for output routines
+-- (Returns localized entity name; falls back to entity name, or to default string)
+assert.loc_name = function(entity)
+  return entity and entity.valid and (entity.localised_name or entity.name) or "nil"
+end
+
+------------------------------------------------------------------------------------
+log("Leaving file " .. debug.getinfo(1).source)
+return assert

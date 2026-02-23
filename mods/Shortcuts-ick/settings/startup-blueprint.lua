@@ -7,28 +7,13 @@
 
 --[[ Overview of startup-blueprint.lua
 	* Deconstruction planner Environment
-	* MOD: Well Planner
 ]]
 
-data:extend(
-{
-	{
-		setting_type = "startup",
-		name = "tree-killer",
-		localised_name = {"", "[color=blue]", {"item-name.blueprint"}, ": [/color]", {"item-name.deconstruction-planner"}, " ", {"item-group-name.environment"}},
-		order = "b[blueprint]-g[tree-killer]",
-		type = "bool-setting",
-		default_value = true
-	}
-})
-
-if mods["WellPlanner"] then
-	data:extend({{
-		setting_type = "startup",
-		name = "well-planner",
-		localised_name = {"", "[color=blue]", {"item-name.blueprint"}, ": [/color]", {"item-name.well-planner"}},
-		order = "b[blueprint]-j[well-planner]",
-    	type = "bool-setting",
-		default_value = true
-	}})
-end
+data:extend({{
+	setting_type = "startup",
+	name = "tree-killer",
+	localised_name = {"", "[color=blue]", {"item-name.blueprint"}, ": [/color]", {"item-name.deconstruction-planner"}, " ", {"item-group-name.environment"}},
+	order = "b[blueprint]-g[tree-killer]",
+	type = "bool-setting",
+	default_value = true
+}})

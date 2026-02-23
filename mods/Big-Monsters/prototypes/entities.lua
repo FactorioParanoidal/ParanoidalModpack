@@ -2,6 +2,9 @@
 require ("prototypes.values")
 local sounds = require("__base__/prototypes/entity/sounds.lua")
 local dying_s = {{filename = "__Big-Monsters__/sounds/death-z.wav",volume = 2}}
+local hit_effects = require("__base__/prototypes/entity/hit-effects.lua")
+local decorative_trigger_effects = require("__base__/prototypes/decorative/decorative-trigger-effects.lua")
+
 
 local HPMult   = mf_hp_multiplier 
 local BIGHPMult= settings.startup["bm-big-enemy-hp-multiplier"].value 
@@ -52,58 +55,90 @@ largetunnel.time_before_removed = 5 * 60 * 60
 
 --------------------------------------------------------------------------------------
 local corpse = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-corpse.name="bm-spawner-corpse"
-corpse.integration=nil
-dLog(corpse)
+corpse.name = "bm-spawner-corpse"
 corpse.decay_animation=nil
+corpse.dying_speed = 0.02
+corpse.final_render_layer = "lower-object-above-shadow"
 corpse.animation =
 {
 	{
 		layers =
 		{
 			{
-				width = 148,
-				height = 148,
-				frame_count = 1,
-				direction_count = 1,
-				shift = {0,0},
-				stripes =
-				{
-					{
-						filename = "__Big-Monsters__/graphics/tunnel-dead.png",
-						width_in_frames = 1,
-						height_in_frames = 1,
-						y = 0
-					},
-				}
+			filename = "__base__/graphics/entity/worm/worm-hole-collapse.png",
+			width = 330,
+			height = 298,
+			shift = util.by_pixel( 5.0, -14.5),
+			line_length = 5,
+			frame_count = 20,
+			direction_count = 1,
+			scale = 0.5,
 			},
 		}
 	}
 }
-corpse.time_before_removed = 5 * 60 * 60
+corpse.time_before_removed = 10 * 60 * 60
+
+
+
+
+local spawn_all_vanilla_units = {
+      {"small-biter", {{0.0, 0.3}, {0.25, 0.3}, {0.35, 0.0}}},
+      {"small-spitter", {{0.25, 0.3}, {0.5, 0.3}, {0.7, 0.0}}},
+	  {"medium-biter", 		 {{0.30, 0.0}, {0.50, 0.3}, {0.60, 0.0}}},
+      {"medium-spitter", {{0.4, 0.0}, {0.5, 0.3}, {0.6, 0.0}}},
+      {"big-spitter", {{0.59, 0.0}, {0.6, 0.4}, {0.7, 0.0}}},
+	  {"big-biter",	{{0.59, 0.0}, {0.6, 0.3}, {0.7, 0.0}}},
+	  {"behemoth-biter", {{0.69, 0.0}, {0.9, 0.4}}},
+	  {"behemoth-spitter", {{0.69, 0.0}, {0.9, 0.4}}}
+	  }
+
+
+if mods["Arachnids_enemy"] then 
+	concat_lists(spawn_all_vanilla_units,
+	{
+	{"arachnid-biter-drone-unit", {{0.0, 0.3}, {0.6, 0.0}}},
+	{"arachnid-biter-warrior-unit", {{0.2, 0.0}, {0.6, 0.3}, {0.7, 0.1}}},
+	{"arachnid-biter-tiger-unit", {{0.5, 0.0}, {1.0, 0.4}}},
+	{"arachnid-biter-royalwarrior-unit", {{0.9, 0.0}, {1.0, 0.3}}},
+	{"arachnid-spitter-smallspitter-unit", {{0.25, 0.0}, {0.5, 0.3}, {0.7, 0.0}}},
+	{"arachnid-spitter-mediumspitter-unit", {{0.4, 0.0}, {0.7, 0.3}, {0.9, 0.1}}},
+	{"arachnid-spitter-bigspitter-unit", {{0.5, 0.0}, {1.0, 0.4}}},
+	{"arachnid-spitter-behemothspitter-unit", {{0.9, 0.0}, {1.0, 0.3}}},
+	{"arachnid-biter-leviathan-unit", {{0.965, 0.0}, {1.0, 0.03}}}	
+	})
+	end
 
 
 --------------------------------------------------------------------------------------
-local spawner = table.deepcopy(data.raw["unit-spawner"]["biter-spawner"])
-spawner.name="bm-spawner" 
+local spawner =  table.deepcopy(data.raw["unit-spawner"]["biter-spawner"])
+spawner.name="bm-spawner"
 spawner.corpse = "bm-spawner-corpse"
+spawner.time_to_capture=0
+spawner.captured_spawner_entity=nil
 spawner.autoplace = nil 
-spawner.time_to_capture = nil
-spawner.graphics_set = {animations =
+spawner.collision_box = {{-1.5, -1.3}, {1.5, 1.3}}
+spawner.selection_box = {{-1.5, -1.3}, {1.5, 1.3}}
+spawner.shooting_cursor_size = 4
+spawner.damaged_trigger_effect = hit_effects.rock()
+spawner.dying_explosion = nil
+spawner.dying_trigger_effect = decorative_trigger_effects.huge_rock()
+spawner.result_units = spawn_all_vanilla_units
+spawner.graphics_set = { animations =
 {
 	{
 		layers =
 		{
 			{
-				filename = "__Big-Monsters__/graphics/tunnel.png",
-				line_length = 1,
-				width = 148,
-				height = 148,
-				frame_count = 1,
-				animation_speed = 0.18,
-				direction_count = 1,
-				run_mode = "forward-then-backward",
-				shift = {0,0},
+			filename = "__base__/graphics/entity/worm/worm-hole-collapse.png",
+			line_length = 1,
+			width = 330,
+			height = 298,
+			scale = 0.5,
+			frame_count = 1,
+			animation_speed = 0.18,
+			direction_count = 1,
+			shift = util.by_pixel( 5.0, -14.5),
 			},
 		}
 	}
@@ -118,9 +153,10 @@ local volcano =  table.deepcopy(data.raw["unit-spawner"][spawnbase])
 volcano.name="bm-volcano"
 volcano.dying_explosion = "nuke-explosion"
 volcano.corpse = nil
-volcano.max_health = 12000 * HPMult
+volcano.max_health = 10000 * HPMult
 volcano.autoplace = nil 
 volcano.resistances = volcano_resistances
+volcano.damaged_trigger_effect = hit_effects.rock()
 volcano.time_to_capture = nil
 volcano.graphics_set = {animations = 
 {
@@ -138,6 +174,18 @@ volcano.graphics_set = {animations =
 				run_mode = "forward-then-backward",
 				shift = {0,0},
 			},
+			{
+				filename = "__Big-Monsters__/graphics/volcano_shadow.png",
+				line_length = 1,
+				width = 300,
+				height = 300,
+				frame_count = 1,
+				animation_speed = 0.18,
+				direction_count = 1,
+				draw_as_shadow=true,
+				run_mode = "forward-then-backward",
+				shift = {0,0},
+			},			
 		}
 	}
 }}
@@ -206,7 +254,7 @@ data:extend(
     subgroup="enemies",
     resistances = fire_resistances,
     healing_per_tick = 0.01,
-	collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+	collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 	selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 	sticker_box = {{-0.4, -0.6}, {0.4, 0.2}},
     distraction_cooldown = 300,
@@ -261,7 +309,7 @@ data:extend(
     subgroup="enemies",
     resistances = acid_resistances,
     healing_per_tick = 0.01,
-	collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+	collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 	selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 	sticker_box = {{-0.4, -0.6}, {0.4, 0.2}},
     distraction_cooldown = 300,
@@ -315,7 +363,7 @@ data:extend(
 			call_for_help_radius = 80+ L*3,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.0,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 200, -- 300,
 		    loot = Loot,
@@ -382,7 +430,7 @@ data:extend(
 			call_for_help_radius = 100,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.0,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 100, -- 300,
 		    loot = Loot,
@@ -451,7 +499,7 @@ data:extend(
 			call_for_help_radius = 80,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 300, -- 300,
 		    loot = Loot,
@@ -520,7 +568,7 @@ data:extend(
 			call_for_help_radius = 80+L,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 300, -- 300,
 		    loot = Loot,

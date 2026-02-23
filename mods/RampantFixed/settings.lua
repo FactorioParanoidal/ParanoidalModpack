@@ -1,39 +1,10 @@
 data:extend({
-        {
-            type = "bool-setting",
-            name = "rampantFixed--allowExternalControl",
-            description = "rampantFixed--allowExternalControl",
-            setting_type = "startup",
-            default_value = false,
-            order = "a[modifier]-a0[remote]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--useDumbProjectiles",
-            description = "rampantFixed--useDumbProjectiles",
-            setting_type = "startup",
-            default_value = true,
-            order = "a[modifier]-a1[projectiles]",
-            per_user = false
-        },
-
-        {
+         {
             type = "bool-setting",
             name = "rampantFixed--disableCollidingProjectiles",
             setting_type = "startup",
             default_value = true,
             order = "b[modifier]-b1[trigger]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--useBlockableSteamAttacks",
-            setting_type = "startup",
-            default_value = false,
-            order = "b[modifier]-b2[trigger]",
             per_user = false
         },
 
@@ -156,16 +127,6 @@ data:extend({
             order = "c[modifier]-a[safe]",
             per_user = false
         },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--safeBuildings-curvedRail",
-            setting_type = "runtime-global",
-            default_value = false,
-            order = "c[modifier]-b[safe]",
-            per_user = false
-        },
-
         {
             type = "bool-setting",
             name = "rampantFixed--safeBuildings-straightRail",
@@ -181,33 +142,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = false,
             order = "c[modifier]-d[safe]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--safeBuildings-railSignals",
-            setting_type = "runtime-global",
-            default_value = false,
-            order = "c[modifier]-e[safe]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--safeBuildings-railChainSignals",
-            setting_type = "runtime-global",
-            default_value = false,
-            order = "c[modifier]-f[safe]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
-            name = "rampantFixed--safeBuildings-trainStops",
-            setting_type = "runtime-global",
-            default_value = false,
-            order = "c[modifier]-g[safe]",
             per_user = false
         },
 
@@ -532,26 +466,6 @@ data:extend({
 
         {
             type = "bool-setting",
-            name = "rampantFixed--peacefulAIToggle",
-            setting_type = "runtime-global",
-            default_value = true,
-            order = "m[total]-c2[ai]",
-            per_user = false
-        },
-
-        {
-            type = "int-setting",
-            name = "rampantFixed--peacePeriod",
-            setting_type = "runtime-global",
-            minimum_value = 0,
-            maximum_value = 1200,
-            default_value = 20,
-            order = "m[total]-c2a[ai]",
-            per_user = false
-        },
-
-        {
-            type = "bool-setting",
             name = "rampantFixed--raidAIToggle",
             setting_type = "runtime-global",
             default_value = true,
@@ -596,6 +510,17 @@ data:extend({
             maximum_value = 0.50,
             default_value = 0.15,
             order = "m[total]-c6[ai]",
+            per_user = false
+        },
+
+        {
+            type = "int-setting",
+            name = "rampantFixed--demolisherAttack_AdditionalTime",
+            setting_type = "runtime-global",
+            minimum_value = 0,
+            maximum_value = 120,
+            default_value = 0,
+            order = "m[total]-c7[ai]",
             per_user = false
         },
 
@@ -691,16 +616,6 @@ data:extend({
         },
 
         {
-            type = "bool-setting",
-            name = "rampantFixed--showAdminMenu",
-            description = "rampantFixed--showAdminMenu",
-            setting_type = "runtime-per-user",
-            default_value = false,
-            order = "m[total]-c[ai]z1",
-            per_user = false
-        },
-		
-        {
             type = "double-setting",
             name = "rampantFixed--settlementsProbability",
             setting_type = "runtime-global",
@@ -756,14 +671,6 @@ data:extend({
             setting_type = "startup",
             default_value = false,
             order = "n[modifier]-c[optimize]",
-            per_user = false
-        },
-        {
-            type = "bool-setting",
-            name = "rampantFixed--rampantArsenalRebalance",
-            setting_type = "startup",
-            default_value = true,
-            order = "n[modifier]-d[optimize]",
             per_user = false
         },
 
@@ -1137,6 +1044,36 @@ data:extend({
             default_value = 20,
             order = "b[modifier]-c[threshold]",
             per_user = false
-        }
+        },
+		
+        {
+            type = "bool-setting",
+            name = "rampantFixed--showAdminMenu",
+            description = "rampantFixed--showAdminMenu",
+            setting_type = "runtime-per-user",
+            default_value = false,
+            order = "a1",
+            per_user = false
+        },
+		
+        {
+            type = "bool-setting",
+            name = "rampantFixed--showPlanetAISettings",
+            description = "rampantFixed--showPlanetAISettings",
+            setting_type = "runtime-per-user",
+            default_value = true,
+            order = "a2",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--showSquadAlert",
+            description = "rampantFixed--showSquadAlert",
+            setting_type = "runtime-per-user",
+            default_value = true,
+            order = "a3",
+            per_user = true
+        },
 
 })

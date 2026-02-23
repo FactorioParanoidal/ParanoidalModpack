@@ -19,7 +19,7 @@ data:extend({
     setting_type = "startup",
     default_value = 80,
     maximum_value = 250,
-    minimum_value = 10,
+    minimum_value = 30,
   },
 
   {
@@ -42,13 +42,6 @@ data:extend({
     setting_type = "startup",
     default_value = false,
   },
-
-  {
-    type = "bool-setting",
-    name = "bobmods-colorupdate",
-    setting_type = "startup",
-    default_value = true,
-  },
   {
     type = "bool-setting",
     name = "bobmods-plates-bluedeuterium",
@@ -57,21 +50,14 @@ data:extend({
   },
   {
     type = "bool-setting",
-    name = "bobmods-plates-nuclearupdate",
-    setting_type = "startup",
-    default_value = true,
-  },
-
-  {
-    type = "bool-setting",
     name = "bobmods-plates-convert-recipes",
     setting_type = "startup",
-    default_value = true,
+    default_value = false,
   },
   {
     type = "bool-setting",
     name = "bobmods-plates-expensive-electrolysis",
     setting_type = "startup",
-    default_value = false,
+    default_value = true,
   },
 })

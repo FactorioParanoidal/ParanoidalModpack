@@ -1,0 +1,75 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 04.01.26
+  Changes:
+    - Updated for Factorio 2.0 (994)
+    - Standardized silo and warehouse storage size (1017)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 01.01.2023
+  Bugfixes:
+    - Fixed tips and tricks icon when warehouses are disabled (850)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 06.06.2022
+  Bugfixes:
+    - Fixed technology cost of logistics silos when playing with bobtech
+    - Fixed technology cost of logistics warehouses when playing with bobtech
+    - Added missing setting localisation
+    - Fixed active / passive provider warehouse descriptions
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 19.12.2021
+  Bugfixes:
+    - Fixed technology cost of logistics silos when not playing with bobslogistics
+    - Fixed technology cost of logistics warehouses when not playing with bobslogistics
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 10.08.2021
+  Changes:
+    - Added some tips and tricks
+    - Superfluous property clean-up
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 31.05.2021
+  Bugfixes:
+    - Fixed crash related to typo in hidden dependencies
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 26.05.2021
+  Changes:
+    - Added setting to disable logitics silos and ore silos independently (499)
+    - Warehouses now prerequisite on ore silos if both are enabled (428)
+    - Pressure tank now always prerequisite on fluid handling
+    - Changed recipes of ore silos when playing with angels refining (340)
+    - Changed some recipes of logistics silos when playing with angels industries (340)
+    - Changed some recipes of logistics warehouses when playing with angels industries (340)
+    - Changed slot count for active providers to match the storage variant
+    - Changed ore silo pick-up result to be just the regular silo (541)
+    - Changed and expanded locale strings and text descriptions (489)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 27.11.2020
+  Changes:
+    - Patched to work without angels (after oversight in last patch)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 26.11.2020
+  Changes:
+    - Updated to Factorio version 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 29.10.2020
+  Changes:
+    - Added Inline storage tank as an option when playing without Angels petrochem (387)
+  Bugfixes:
+    - Fixed blueprinting issues with Jax 35 tank (389)
+    - Some minor localisation changes to unify angels localisation across mods (372)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 20.08.2020
+  Features:
+    - Merges angels storage mods:
+      - Angels pressure-tanks v0.5.2
+      - Angels warehouses v0.5.2
+      - Angels oresilos v0.6.2

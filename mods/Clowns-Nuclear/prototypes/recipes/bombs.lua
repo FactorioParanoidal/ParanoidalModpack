@@ -7,11 +7,10 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{"processing-unit", 20},
-			{"explosives", 10},
-			{"plutonium-239", 10},
+			{type="item",name="processing-unit", amount=20},
+			{type="item",name="explosives", amount=10},
 		},
-		result = "atomic-bomb",
+		results = {{type="item",name="atomic-bomb",amount =1}},
 		icons =
 		{
 			{
@@ -34,9 +33,9 @@ data:extend(
 		ingredients =
 		{
 			--Others added below
-			{"atomic-bomb", 1}
+			{type="item",name="atomic-bomb", amount=1}
 		},
-		result = "thermonuclear-bomb",
+		results = {{type="item",name="thermonuclear-bomb",amount =1}},
 		icons =
 		{
 			{
@@ -51,23 +50,29 @@ data:extend(
 --ADD INGREDIENTS TO THERMONUCLEAR BOMB
 
 if mods["bobmodules"] then
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"speed-module-6", 3})
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"productivity-module-6", 3})
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"effectivity-module-6", 3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="bob-speed-module-5", amount=3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="bob-productivity-module-5", amount=3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="bob-efficiency-module-5", amount=3})
 else
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"speed-module-3", 3})
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"productivity-module-3", 3})
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"efficiency-module-3", 3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="speed-module-3",amount= 3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="productivity-module-3", amount=3})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="efficiency-module-3", amount=3})
 end
 
-if data.raw.item["fusion-reactor-equipment-2"] then
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"fusion-reactor-equipment-2", 1})
+if data.raw.item["bob-fission-reactor-equipment-2"] then
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="bob-fission-reactor-equipment-2", amount=1})
 else
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"fission-reactor-equipment", 1})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="fission-reactor-equipment",amount= 1})
 end
 
 if data.raw.item["advanced-processing-unit"] then
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"advanced-processing-unit", 200})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="advanced-processing-unit", amount=200})
 else
-	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {"processing-unit", 200})
+	table.insert(data.raw["recipe"]["thermonuclear-bomb"].ingredients, {type="item",name="processing-unit", amount=200})
+end
+
+if mods["angelspetrochem"] then
+	table.insert(data.raw["recipe"]["plutonium-atomic-bomb"].ingredients, {type="item",name="angels-plutonium-239", amount= 10})
+else
+	table.insert(data.raw["recipe"]["plutonium-atomic-bomb"].ingredients, {type="item",name="plutonium-239",amount= 10})
 end

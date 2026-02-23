@@ -1,5 +1,6 @@
 --[[ Copyright (c) 2017 David-John Miller AKA Anoyomouse
  * Part of the Warehousing mod
+ * ported to 2.0 by anoyomouse 2024
  *
  * See License.txt in the project directory for license information.
 --]]
@@ -10,12 +11,12 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "steel-plate", 200 },
-			{ "stone-brick", 40 },
-			{ "iron-stick", 85 },
+			{ type = "item", name = "steel-plate", amount = 150 },
+			{ type = "item", name = "stone-brick", amount = 40 },
+			{ type = "item", name = "iron-chest", amount = 40 },
 		},
 		energy_required = 30,
-		result = "warehouse-basic",
+		results = {{type="item", name="warehouse-basic", amount = 1}},
 	},
 	{ -- Passive Provider Warehouse
 		type = "recipe",
@@ -23,13 +24,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "warehouse-basic", 1 },
-			{ "passive-provider-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+			{ type = "item", name = "warehouse-basic", amount = 1 },
+			{ type = "item", name = "passive-provider-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 25 },
+			{ type = "item", name = "concrete", amount = 40 },
 		},
 		energy_required = 5,
-		result = "warehouse-passive-provider",
+		results = {{type="item", name="warehouse-passive-provider", amount=1}},
 	},
 	{ -- Storage Warehouse
 		type = "recipe",
@@ -37,13 +38,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "warehouse-basic", 1 },
-			{ "storage-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+			{ type = "item", name = "warehouse-basic", amount = 1 },
+			{ type = "item", name = "storage-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 25 },
+			{ type = "item", name = "concrete", amount = 40 },
 		},
 		energy_required = 5,
-		result = "warehouse-storage",
+		results = {{type="item", name="warehouse-storage", amount=1}},
 	},
 	{ -- Active Provider Warehouse
 		type = "recipe",
@@ -51,13 +52,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "warehouse-basic", 1 },
-			{ "active-provider-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+			{ type = "item", name = "warehouse-basic", amount = 1 },
+			{ type = "item", name = "active-provider-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 25 },
+			{ type = "item", name = "concrete", amount = 40 },
 		},
 		energy_required = 5,
-		result = "warehouse-active-provider",
+		results = {{type="item", name="warehouse-active-provider", amount=1}},
 	},
 	{ -- Requester Warehouse
 		type = "recipe",
@@ -65,13 +66,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "warehouse-basic", 1 },
-			{ "requester-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+			{ type = "item", name = "warehouse-basic", amount = 1 },
+			{ type = "item", name = "requester-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 25 },
+			{ type = "item", name = "concrete", amount = 40 },
 		},
 		energy_required = 5,
-		result = "warehouse-requester",
+		results = {{type="item", name="warehouse-requester", amount=1}},
 	},
 	{ -- Buffer Warehouse
 		type = "recipe",
@@ -79,13 +80,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "warehouse-basic", 1 },
-			{ "buffer-chest", 1 },
-			{ "steel-plate", 10 },
-			{ "iron-stick", 15 },
+			{ type = "item", name = "warehouse-basic", amount = 1 },
+			{ type = "item", name = "buffer-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 25 },
+			{ type = "item", name = "concrete", amount = 40 },
 		},
 		energy_required = 5,
-		result = "warehouse-buffer",
+		results = {{type="item", name="warehouse-buffer", amount=1}},
 	},
 	{ -- Basic Storehouse
 		type = "recipe",
@@ -93,12 +94,12 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "steel-plate", 50 },
-			{ "stone-brick", 10 },
-			{ "iron-stick", 16 },
+			{ type = "item", name = "steel-plate", amount = 40 },
+			{ type = "item", name = "stone-brick", amount = 10 },
+			{ type = "item", name = "iron-chest", amount = 10 },
 		},
 		energy_required = 30,
-		result = "storehouse-basic",
+		results = {{type="item", name="storehouse-basic", amount=1}},
 	},
 	{ -- Passive Provider Storehouse
 		type = "recipe",
@@ -106,12 +107,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "storehouse-basic", 1 },
-			{ "passive-provider-chest", 1 },
-			{ "iron-stick", 4 },
+			{ type = "item", name = "storehouse-basic", amount = 1 },
+			{ type = "item", name = "passive-provider-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 10 },
+			{ type = "item", name = "concrete", amount = 15 },
 		},
 		energy_required = 5,
-		result = "storehouse-passive-provider",
+		results = {{type="item", name="storehouse-passive-provider", amount=1}},
 	},
 	{ -- Storage Storehouse
 		type = "recipe",
@@ -119,12 +121,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "storehouse-basic", 1 },
-			{ "storage-chest", 1 },
-			{ "iron-stick", 4 },
+			{ type = "item", name = "storehouse-basic", amount = 1 },
+			{ type = "item", name = "storage-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 10 },
+			{ type = "item", name = "concrete", amount = 15 },
 		},
 		energy_required = 5,
-		result = "storehouse-storage",
+		results = {{type="item", name="storehouse-storage", amount=1}},
 	},
 	{ -- Active Provider Storehouse
 		type = "recipe",
@@ -132,12 +135,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "storehouse-basic", 1 },
-			{ "active-provider-chest", 1 },
-			{ "iron-stick", 4 },
+			{ type = "item", name = "storehouse-basic", amount = 1 },
+			{ type = "item", name = "active-provider-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 10 },
+			{ type = "item", name = "concrete", amount = 15 },
 		},
 		energy_required = 5,
-		result = "storehouse-active-provider",
+		results = {{type="item", name="storehouse-active-provider", amount=1}},
 	},
 	{ -- Requester Storehouse
 		type = "recipe",
@@ -145,12 +149,13 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "storehouse-basic", 1 },
-			{ "requester-chest", 1 },
-			{ "iron-stick", 4 },
+			{ type = "item", name = "storehouse-basic", amount = 1 },
+			{ type = "item", name = "requester-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 10 },
+			{ type = "item", name = "concrete", amount = 15 },
 		},
 		energy_required = 5,
-		result = "storehouse-requester",
+		results = {{type="item", name="storehouse-requester", amount=1}},
 	},
 	{ -- Buffer Storehouse
 		type = "recipe",
@@ -158,11 +163,12 @@ data:extend({
 		enabled = false,
 		ingredients =
 		{
-			{ "storehouse-basic", 1 },
-			{ "buffer-chest", 1 },
-			{ "iron-stick", 4 },
+			{ type = "item", name = "storehouse-basic", amount = 1 },
+			{ type = "item", name = "buffer-chest", amount = 1 },
+			{ type = "item", name = "advanced-circuit", amount = 10 },
+			{ type = "item", name = "concrete", amount = 15 },
 		},
 		energy_required = 5,
-		result = "storehouse-buffer",
+		results = {{type="item", name="storehouse-buffer", amount=1}},
 	},
 })

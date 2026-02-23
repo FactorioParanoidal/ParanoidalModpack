@@ -61,7 +61,7 @@ local OSM_void =
 	icon = icons_path.."albert-hofmann.png",
 	icon_size = 64,
 	subgroup = "OSM-placeholder",
-	flags = {"hidden"},
+	hidden=true,
 	order = "*19/04/1943-C20H25N3O*",
 	stack_size = 250
 }	data:extend({OSM_void})

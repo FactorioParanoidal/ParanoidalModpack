@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -7,137 +7,137 @@ local triggers = {}
 
 -- Bob's Assembling Machines
 triggers.assembly = {
-    burner_assembling_machine_is_small = reskins.lib.setting("bobmods-assembly-burner"),
-    entities = reskins.lib.check_scope("entities", "bobs", "bobassembly"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobassembly"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobassembly"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobassembly"),
+	burner_assembling_machine_is_small = reskins.lib.settings.get_value("bobmods-assembly-burner"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobassembly"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobassembly"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobassembly"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobassembly"),
 }
 
 -- Bob's Greenhouse
 triggers.greenhouse = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobgreenhouse"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobgreenhouse"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobgreenhouse"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobgreenhouse"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobgreenhouse"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobgreenhouse"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobgreenhouse"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobgreenhouse"),
 }
 
 -- Bob's Electronics
 triggers.electronics = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobelectronics"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobelectronics"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobelectronics"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobelectronics"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobelectronics"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobelectronics"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobelectronics"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobelectronics"),
 }
 
 -- Bob's Enemies
 triggers.enemies = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobenemies"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobenemies"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobenemies"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobenemies"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobenemies"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobenemies"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobenemies"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobenemies"),
 }
 
 -- Bob's Equipment
 triggers.equipment = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobequipment"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobequipment"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobequipment"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobequipment"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobequipment"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobequipment"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobequipment"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobequipment"),
 }
 
 -- Bob's Logistics
 triggers.logistics = {
-    entities = reskins.lib.check_scope("entities", "bobs", "boblogistics"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "boblogistics"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "boblogistics"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "boblogistics"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "boblogistics"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "boblogistics"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "boblogistics"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "boblogistics"),
 }
 
 -- Bob's Mining
 triggers.mining = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobmining"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobmining"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobmining"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobmining"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobmining"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobmining"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobmining"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobmining"),
 }
 
 -- Bob's Modules
 triggers.modules = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobmodules"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobmodules"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobmodules"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobmodules"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobmodules"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobmodules"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobmodules"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobmodules"),
 }
 
 -- Bob's Metals, Chemicals, and Intermediates
 triggers.plates = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobplates"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobplates"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobplates"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobplates"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobplates"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobplates"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobplates"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobplates"),
 }
 
 -- Bob's Ores
 triggers.ores = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobores"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobores"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobores"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobores"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobores"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobores"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobores"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobores"),
 }
 
 -- Bob's Power
 triggers.power = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobpower"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobpower"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobpower"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobpower"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobpower"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobpower"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobpower"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobpower"),
 
-    -- Fetch bobpower settings
-    accumulators = reskins.lib.setting("bobmods-power-accumulators"),
-    poles = reskins.lib.setting("bobmods-power-poles"),
-    steam = reskins.lib.setting("bobmods-power-steam"),
-    fluidgenerator = reskins.lib.setting("bobmods-power-fluidgenerator"),
-    heatsources = reskins.lib.setting("bobmods-power-heatsources"),
-    nuclear = reskins.lib.setting("bobmods-power-nuclear"),
-    solar = reskins.lib.setting("bobmods-power-solar"),
+	-- Fetch bobpower settings
+	accumulators = reskins.lib.settings.get_value("bobmods-power-accumulators"),
+	poles = reskins.lib.settings.get_value("bobmods-power-poles"),
+	steam = reskins.lib.settings.get_value("bobmods-power-steam"),
+	fluidgenerator = reskins.lib.settings.get_value("bobmods-power-fluidgenerator"),
+	heatsources = reskins.lib.settings.get_value("bobmods-power-heatsources"),
+	nuclear = reskins.lib.settings.get_value("bobmods-power-nuclear"),
+	solar = reskins.lib.settings.get_value("bobmods-power-solar"),
 }
 
 -- Bob's Revamp
 triggers.revamp = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobrevamp"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobrevamp"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobrevamp"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobrevamp"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobrevamp"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobrevamp"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobrevamp"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobrevamp"),
 }
 
 -- Bob's Technology
 triggers.technology = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobtech"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobtech"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobtech"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobtech"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobtech"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobtech"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobtech"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobtech"),
 }
 
 -- Bob's Vehicle Equipment
 triggers.vehicle_equipment = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobvehicleequipment"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobvehicleequipment"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobvehicleequipment"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobvehicleequipment"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobvehicleequipment"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobvehicleequipment"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobvehicleequipment"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobvehicleequipment"),
 }
 
 -- Bob's Warfare
 triggers.warfare = {
-    entities = reskins.lib.check_scope("entities", "bobs", "bobwarfare"),
-    equipment = reskins.lib.check_scope("equipment", "bobs", "bobwarfare"),
-    items = reskins.lib.check_scope("items-and-fluids", "bobs", "bobwarfare"),
-    technologies = reskins.lib.check_scope("technologies", "bobs", "bobwarfare"),
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobwarfare"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobwarfare"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobwarfare"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobwarfare"),
 }
 
 -- aai-industry is optionally dependent on angelsrefining and will perform final edits to the burner assembling machine
 if mods["aai-industry"] and mods["angelsrefining"] then
-    triggers.assembly.burner_assembling_machine_is_small = false
+	triggers.assembly.burner_assembling_machine_is_small = false
 end
 
 return triggers

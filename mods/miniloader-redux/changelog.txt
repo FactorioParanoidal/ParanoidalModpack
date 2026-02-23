@@ -1,0 +1,199 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.12.0
+Date: 2025-10-26
+  Minor Features:
+    - add support for Space Exploration (PR by @lohchness, thank you!)
+  Changes:
+    - Change energy consumption calculation (asked for by various folks on the forum)
+    - Do not crash when any of the hidden entities can't be created. Simply destroy the main entity
+      to allow the player to try again (based on bug report by @ArsStels)
+  Bugfixes:
+    - (not really) Add space exploration as a hidden dependency to work around crash in migrations. Fixes #31, reported by @phazor and @BurninSun.
+---------------------------------------------------------------------------------------------------
+Version: 0.11.0
+Date: 2025-10-13
+  Minor Features:
+    - add support for 'Advanced Furnaces 2'
+    - add config switch to double all recipes for two miniloaders
+  Changes:
+    - use Krastorio remnant graphics
+  Bugfixes:
+    - fix required inserters for bob's mods
+---------------------------------------------------------------------------------------------------
+Version: 0.10.3
+Date: 2025-09-13
+  Bugfixes:
+    - handle blueprint updates correctly when the blueprint is in the player library
+---------------------------------------------------------------------------------------------------
+Version: 0.10.2
+Date: 2025-09-11
+  Changes:
+    - Add a startup setting to work around mod incompatibilities with loader-1x1 collision masks.
+---------------------------------------------------------------------------------------------------
+Version: 0.10.1
+Date: 2025-09-11
+  Bugfixes:
+    - Fix crash when creating large blueprints (Issue #22, reported by @fengyuan213 on github)
+---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+Date: 2025-09-10
+  Bugfixes:
+    - Pay extra attention when building miniloaders from a blueprint to ensure they are placed exactly as marked in the blueprint.
+  Changes:
+    - Entities that would cause a miniloader to 'snap' around are marked and will not change miniloaders when built from a blueprint.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2025-08-02
+  Bugfixes:
+    - Fixed that when fast-replacing a miniloader with filters, logistics or circuit conditions with a chute, the conditions were kept even though the chute does not support them.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2025-07-28
+  Changes:
+    - Redid all of the speed calculations, then replaced with heuristics and measurements. As a result, most loaders should now match belt speeds closely.
+    - added debug inserters for testing
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 2025-07-18
+  Changes:
+    - 2.0.59+ allows better speed calculation for the miniloaders. Ensure that the throughput for all loaders is as close to the belt speeds as possible.
+    - add 'control-miniloader-inserters' and 'rebuild-miniloader-inserters' console commands
+  Bugfixes:
+    - Fix name in Miniloader GUI title bar
+    - Items will no longer "jump" lanes but stay either left or right
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 2025-07-17
+  Changes:
+    - 2.0.59+ allows better speed calculation for the miniloaders. Ensure that the throughput for all loaders is as close to the belt speeds as possible.
+    - add 'control-miniloader-inserters' and 'rebuild-miniloader-inserters' console commands
+  Bugfixes:
+    - Fix name in Miniloader GUI title bar
+    - Items will no longer "jump" lanes but stay either left or right
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 2025-06-30
+  Bugfixes:
+    - Fix crash with Bob's Logistics when the chute loader is disabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 2025-06-29
+  Major Features:
+    - add support for Matt's Logistics belt tiers
+    - add support for Krastorio 2 belt tiers
+    - add support for Bob's Logistics belt tiers
+  Minor Features:
+    - make "Read Transfer" somewhat work, it is actually "Read Hand Contents, pulse mode" of the internal inserters
+    - add a "Don't consume power" startup config option
+  Changes:
+    - recolor the chute as too many mods use "light grey" as a tier color
+    - Fix some naming of the loaders to make it more consistent
+  Bugfixes:
+    - fix an extremely rare crash where the filter config gets corrupted and blueprinting a miniloader
+      causes a duplicate key error
+    - ensure that filtering stays turned off when closing the gui with a filter value set
+    - fix crash with invalid inserter entity (fixes #10, reported by @ramonmayenburg, thank you)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 2025-03-25
+  Changes:
+    - Add /inspect-miniloaders console command
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 2025-03-20
+  Bugfixes:
+    - fix the entity template code, this fixes the crash when fast-replacing (reported by @Krutonium on the mod forums)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 2025-03-16
+  Bugfixes:
+    - fix stack loader to make space age load again
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 2025-03-16
+  Bugfixes:
+    - fix assertion failed crash with ghost constructed entities (reported by @lnleo on the mod forums, thank you)
+    - fix corpse and explosion graphics for the miniloaders
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 2025-02-22
+  Bugfixes:
+    - fix crash is the loader entities do not support filters for whatever reason (#4, reported by @fuskgangg, thank you!)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2025-02-19
+  Bugfixes:
+    - Allow blueprinting when selecting contents for an existing blueprint
+    - Support forward and backwards rotation
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2025-02-16
+  Bugfixes:
+    - Fix migration from old 1.1 miniloaders to miniloader-redux.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2025-01-30
+  Changes:
+    - When migrating old loaders, also activate technology if the old technology had been researched.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 2025-01-29
+  Changes:
+    - Update migration code to work with blueprint books and blueprints in inventories
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2025-01-13
+  Bugfixes:
+    - Agh. Don't call 'close_guis()' from on_load, as the game object is not available. Crashes the mod
+      in multiplayer mode. Again.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2025-01-12
+  Bugfixes:
+    - Fix some more multiplayer issues, it works in a local LAN game, so it should also work in server games.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2025-01-10
+  Changes:
+    - Make snap logic smarter to flip loader around when a chest is in front of the loader (report by @LouisFahrenheit on the mod discussions)
+  Bugfixes:
+    - drop/pickup items at the very front of the loader, ensures that it does not "buffer" additional items
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2025-01-09
+  Changes:
+    - Use the loader GUI which is more appropriate for the miniloader
+  Bugfixes:
+    - When the loader has no power, do not continue to run at half speed
+    - Fix event registration problem when running in multiplayer mode. Reported by @Kodiakfireknight on the mod discussions
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2025-01-05
+  Changes:
+    - Nerf chute a bit more: No filters and no GUI (it is "mechanical" after all)
+  Bugfixes:
+    - Don't leave invisible entitites "dangling" around when a miniloader gets destroyed
+    - Don't kill miniloader ghosts after 10 seconds, they hang around until the game finishes them
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2025-01-03
+  Bugfixes:
+    - Turbo loader should not require Turbo loader but Express Loader. Reported by @Inleo in the mod discussions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2025-01-02
+  Bugfixes:
+    - make recipes and technology invisble when not researched
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2025-01-02
+  Bugfixes:
+    - fix a problem where the config was not fully copied when copy&pasting miniloaders
+    - fix potential problem with global 'util' not being defined
+    - fix a crash with miniloader migration
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2024-12-30
+  Features:
+    - First release

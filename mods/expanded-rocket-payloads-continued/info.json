@@ -1,0 +1,9 @@
+{
+  "name": "expanded-rocket-payloads-continued",
+  "version": "2.0.5",
+  "title": "Expanded Rocket Payloads Continued",
+  "author": "Telkine2018",
+  "description": "Adds several new tiers of functional satellites and other payloads to expand gameplay into the space age.",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0"]
+}

@@ -1,0 +1,84 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2025-09-08
+Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed potential crash function debugging.created_msg (file libs/debugging.lua).I'd copied a function call but didn't change the name of the argument, so an undeclared variable would be used.
+
+  Changes:
+    - Added function assert.is_same_signal_id (file libs/assertions.lua). When comparing SignalIDs, it takes into account that SignalID::type is nil instead of "item" when SignalIDs are read, and that SignalID::quality may be a LuaQualityPrototype, a string (LuaQualityPrototype::name), or nil (defaults to "normal").
+
+  TODO:
+    - Add more functions for dealing with prototypes in the data stage. This will happen gradually as I'm updating my other mods.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2025-09-08
+Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that function debugging.created_msg (file libs/debugging.lua) called non-existent function debugging.arg_err.
+    - Fixed crash when function debugging.arg_print (file libs/debugging.lua) was called for invalid LuaLogisticPoint.
+
+  Changes:
+    - Added LuaStyle to types recognized by argprint (file libs/debugging.lua).
+    - Added functions assert.ascertain_quality and assert.is_same_quality (file libs/assertions.lua). Function assert.is_same_quality must be called with two or more quality specifiers (name or prototype).
+    - Added functions assert.is_negative_number and assert.is_positive_number (file libs/assertions.lua). They make sure that the value '-0' is treated as a negative value. This is useful for determining direction from vehicle speeds: '-0' indicates that the entity was moving backwards before it stopped.
+    - Function debugging.created_msg (file libs.debugging.lua) is now using function debugging.argprint for output. This way, the message produces meaningful output in control as well as in data stage.
+
+  Locale:
+    - Added localization (de, en, zh-CN) for debugging commands (/ID-is-event-active and /ID-show-active-events). The respective commands are now parametrized so that the strings can be reused by all mods using the library.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2025-06-21
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - Added a dependency on Factorio >= 2.0.55 (which currently is the stable version) because this mod utilizes some functions that have been introduced only recently.
+
+  Bugfixes:
+    - Fixed that we looked for objects of type "LuaRendering" instead of "LuaRenderObject" in function ascertain_rendering() of libs/assertions.lua and function argprint() of libs/debugging.lua.
+    - Function remote_call() of file common.lua used to return just one value (if any). It will now pass on all return values of the remote function it has called.
+    - Fixed crash when the lib was required during the settings stage and the dummy mod enabling debugging was not active (global table 'settings' is not available before the end of the settings stage).
+
+  Changes:
+    - Added function swap_args(a, b, condition) to file common.lua.
+    - Added library for string functions (not much yet), see file libs/string_functions.lua!
+    - Use LuaControl::get_inventory_name() instead of LuaInventory::index in function argprint of libs/debugging.lua (requires Factorio >= 2.0.48).
+    - Use LuaHelpers::compare_versions() to make function check_version of libs/assertions.lua more efficient (requires Factorio >= 2.0.55).
+    - Added function ascertain_itemstack(stack_or_table_or_string) to file libs/assertions.lua.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2025-01-13
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Fixed that function for making reverse lookup lists would be called with empty table when working on subtables of defines.riding (needed by Autodrive).
+    - Removed log spam. (https://mods.factorio.com/mod/Pi-C_lib/discussion/6783df278f2c7896721c8b47)
+
+  Changes:
+    - Added function ascertain_rendering(id_or_object) in libs/assertions.lua.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-27
+  Uploaded by:
+    - Pi-C
+
+  Info:
+    - I've sourced out some code I reuse in most of my mods so I can keep it up to date more easily.
+    - For now, the mod contains mainly assertions (always loaded) and debugging stuff (loaded when debugging mode is active). Additional modules can be included separately.
+
+  TODO:
+    - Add more functions for dealing with prototypes in the data stage. This will happen gradually as I'm updating my other mods.

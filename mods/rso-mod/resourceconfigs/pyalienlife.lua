@@ -1,6 +1,6 @@
 function fillPyalienlifeConfig(config)
-	
-	config["ore-bioreserve"] = {
+
+	config.nauvis["ore-bioreserve"] = {
 		type="resource-ore",
 		
 		-- general spawn params

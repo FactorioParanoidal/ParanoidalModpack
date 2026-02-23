@@ -45,15 +45,13 @@ local function get_circuit_connector(chest_name, width, height)
 		x = width / 2 - 0.5
 	end
 
-	return circuit_connector_definitions.create_vector(
+	return circuit_connector_definitions.create_single(
 		universal_connector_template,
 		{
-			{
-				variation = variation,
-				main_offset = { x, y },
-				shadow_offset = { x + 0.1, y + 0.1 },
-				show_shadow = false
-			}
+			variation = variation,
+			main_offset = { x, y },
+			shadow_offset = { x + 0.1, y + 0.1 },
+			show_shadow = false
 		}
 	)
 end
@@ -83,6 +81,7 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 			type = 'logistic-container',
 			logistic_mode = base_chest.logistic_mode,
 			animation_sound = base_chest.animation_sound,
+			trash_inventory_size = base_chest.trash_inventory_size,
 			opened_duration = 7,
 			animation = {
 				layers = sprite
@@ -103,7 +102,7 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 
 	local merged_chest_name = MergingChests.get_merged_chest_name(entity_data.chest_name, width, height)
 
-	table.insert(data.raw['selection-tool'][MergingChests.merge_selection_tool_name].alt_entity_filters, merged_chest_name)
+	table.insert(data.raw['selection-tool'][MergingChests.merge_selection_tool_name].alt_select.entity_filters, merged_chest_name)
 
 	return util.merge({
 		type_specific_properties,
@@ -113,11 +112,11 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 			icon = base_chest.icon,
 			icons = base_chest.icons,
 			icon_size = base_chest.icon_size,
-			fast_replaceable_group = 'merged-container',
 			open_sound = base_chest.open_sound,
 			close_sound = base_chest.close_sound,
 			max_health = base_chest.max_health * math.min(width * height, 10),
 			inventory_size = MergingChests.get_inventory_size(base_chest.inventory_size, width * height, entity_data.chest_name),
+			inventory_type = MergingChests.get_mod_settings(entity_data.chest_name).inventory_type,
 			flags = { 'placeable-player', 'player-creation' },
 			minable = { mining_time = 2, result = entity_data.chest_name, count = width * height },
 			placeable_by = { item = entity_data.chest_name, count = width * height },
@@ -127,10 +126,14 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 			collision_box = { { -width / 2 + 0.15, -height / 2 + 0.15 }, { width / 2 - 0.15, height / 2 - 0.15 } },
 			selection_box = { { -width / 2, -height / 2 }, { width / 2, height / 2 } },
 			subgroup = subgroup,
-			circuit_wire_connection_point = connector.points,
-			circuit_connector_sprites = connector.sprites,
+			circuit_connector = connector,
 			circuit_wire_max_distance = default_circuit_wire_max_distance + math.min(width, height) - 1,
+			hidden_in_factoriopedia = true,
+			surface_conditions = base_chest.surface_conditions
 		},
+		settings.startup[MergingChests.setting_names.enable_upgrading_merged_chests].value and {
+			fast_replaceable_group = 'merged-container',
+		} or {},
 		entity_data.override_prototype_properties or {}
 	})
 end
@@ -141,10 +144,10 @@ end
 local function create_wide_chest_entity(entity_data, segment_data, width)
 	return create_entity(
 		entity_data,
-		{ 'chest-name.'..MergingChests.prefix_with_modname('wide-'..entity_data.chest_name), width },
+		{ 'chest-name.'..MergingChests.prefix_with_modname('wide-'..entity_data.chest_name), ''..width },
 		MergingChests.item_group_names.wide_chests,
 		width,
-        1,
+		1,
 		segment_data
 	)
 end
@@ -155,10 +158,10 @@ end
 local function create_high_chest_entity(entity_data, segment_data, height)
 	return create_entity(
 		entity_data,
-		{ 'chest-name.'..MergingChests.prefix_with_modname('high-'..entity_data.chest_name), height },
+		{ 'chest-name.'..MergingChests.prefix_with_modname('high-'..entity_data.chest_name), ''..height },
 		MergingChests.item_group_names.high_chests,
 		1,
-        height,
+		height,
 		segment_data
 	)
 end
@@ -170,10 +173,10 @@ end
 local function create_warehouse_entity(entity_data, segment_data, width, height)
 	return create_entity(
 		entity_data,
-		{ 'chest-name.'..MergingChests.prefix_with_modname(entity_data.chest_name..'-warehouse'), width, height },
+		{ 'chest-name.'..MergingChests.prefix_with_modname(entity_data.chest_name..'-warehouse'), ''..width, ''..height },
 		MergingChests.item_group_names.warehouses,
 		width,
-        height,
+		height,
 		segment_data
 	)
 end
@@ -185,24 +188,24 @@ end
 local function create_trashdump_entity(entity_data, segment_data, width, height)
 	return create_entity(
 		entity_data,
-		{ 'chest-name.'..MergingChests.prefix_with_modname(entity_data.chest_name..'-trashdump'), width, height },
+		{ 'chest-name.'..MergingChests.prefix_with_modname(entity_data.chest_name..'-trashdump'), ''..width, ''..height },
 		MergingChests.item_group_names.trashdumps,
 		width,
-        height,
+		height,
 		segment_data
 	)
 end
 
 --- @type { [setting_allowed_value]: boolean[] }
 local setting_value_to_enabled_flags = {
-    ['none'] = { false, false, false },
-    ['chest'] = { true, false, false },
-    ['warehouse'] = { false, true, false },
-    ['trashdump'] = { false, false, true },
-    ['chest-warehouse'] = { true, true, false },
-    ['chest-trashdump'] = { true, false, true },
-    ['warehouse-trashdump'] = { false, true, true },
-    ['chest-warehouse-trashdump'] = { true, true, true }
+	['none'] = { false, false, false },
+	['chest'] = { true, false, false },
+	['warehouse'] = { false, true, false },
+	['trashdump'] = { false, false, true },
+	['chest-warehouse'] = { true, true, false },
+	['chest-trashdump'] = { true, false, true },
+	['warehouse-trashdump'] = { false, true, true },
+	['chest-warehouse-trashdump'] = { true, true, true }
 }
 
 --- Creates merged chest prototypes
@@ -225,24 +228,24 @@ function MergingChests.create_mergeable_chest(entity_data, segments_data)
 	local mod_settings = MergingChests.get_mod_settings(entity_data.chest_name)
 	local max_area = 0
 
-    if enable_chest and segments_data.high_segments then
-        for height = 2, math.min(mod_settings.max_height, mod_settings.max_area) do
-            if MergingChests.is_size_allowed(1, height, entity_data.chest_name) then
-                data:extend({ create_high_chest_entity(entity_data, segments_data.high_segments, height) })
+	if enable_chest and segments_data.high_segments then
+		for height = 2, math.min(mod_settings.max_height, mod_settings.max_area) do
+			if MergingChests.is_size_allowed(1, height, entity_data.chest_name) then
+				data:extend({ create_high_chest_entity(entity_data, segments_data.high_segments, height) })
 				max_area = math.max(max_area, height)
-            end
-        end
-    end
+			end
+		end
+	end
 
 	for width = 2, math.min(mod_settings.max_width, mod_settings.max_area) do
-        if enable_chest and segments_data.wide_segments then
-            if MergingChests.is_size_allowed(width, 1, entity_data.chest_name) then
-                data:extend({ create_wide_chest_entity(entity_data, segments_data.wide_segments, width) })
+		if enable_chest and segments_data.wide_segments then
+			if MergingChests.is_size_allowed(width, 1, entity_data.chest_name) then
+				data:extend({ create_wide_chest_entity(entity_data, segments_data.wide_segments, width) })
 				max_area = math.max(max_area, width)
-            end
-        end
+			end
+		end
 
-        for height = 2, math.min(mod_settings.max_height, mod_settings.max_area) do
+		for height = 2, math.min(mod_settings.max_height, mod_settings.max_area) do
 			if MergingChests.is_size_allowed(width, height, entity_data.chest_name) then
 				if enable_trashdump and width > mod_settings.warehouse_threshold and height > mod_settings.warehouse_threshold and segments_data.trashdump_segments then
 					data:extend({ create_trashdump_entity(entity_data, segments_data.trashdump_segments, width, height) })
@@ -256,7 +259,7 @@ function MergingChests.create_mergeable_chest(entity_data, segments_data)
 	end
 
 	if enable_chest or enable_warehouse or enable_trashdump then
-		table.insert(data.raw['selection-tool'][MergingChests.merge_selection_tool_name].entity_filters, entity_data.chest_name)
+		table.insert(data.raw['selection-tool'][MergingChests.merge_selection_tool_name].select.entity_filters, entity_data.chest_name)
 		data.raw.item[entity_data.chest_name].stack_size = math.max(data.raw.item[entity_data.chest_name].stack_size, max_area)
 	end
 end
@@ -266,39 +269,41 @@ end
 --- @param chest_name string
 --- @param next_upgrade string
 function MergingChests.set_next_upgrade_of(type, chest_name, next_upgrade)
-    for _, prototype in pairs(data.raw[type]) do
-        local name, width, height = MergingChests.get_merged_chest_info(prototype.name)
-        if name == chest_name and width and height then
-			local merged_upgrade_name = MergingChests.get_merged_chest_name(next_upgrade, width, height)
-			if data.raw[type][merged_upgrade_name] then
-				prototype.next_upgrade = merged_upgrade_name
+	if settings.startup[MergingChests.setting_names.enable_upgrading_merged_chests].value then
+		for _, prototype in pairs(data.raw[type]) do
+			local name, width, height = MergingChests.get_merged_chest_info(prototype.name)
+			if name == chest_name and width and height then
+				local merged_upgrade_name = MergingChests.get_merged_chest_name(next_upgrade, width, height)
+				if data.raw[type][merged_upgrade_name] then
+					prototype.next_upgrade = merged_upgrade_name
+				end
 			end
-        end
-    end
+		end
+	end
 end
 
 --- Disables next_upgrade of chests of type `type` merged from `chest_name`
 --- @param type `logistic-container` | `container`
 --- @param chest_name string
 function MergingChests.disable_next_upgrade_of(type, chest_name)
-    for _, prototype in pairs(data.raw[type]) do
-        local name, _ = MergingChests.get_merged_chest_info(prototype.name)
-        if name == chest_name then
-            prototype.next_upgrade = nil
-        end
-    end
+	for _, prototype in pairs(data.raw[type]) do
+		local name, _ = MergingChests.get_merged_chest_info(prototype.name)
+		if name == chest_name then
+			prototype.next_upgrade = nil
+		end
+	end
 end
 
 --- Disables next_upgrade of chests which of type `type` which are upgraded to `chest_name`
 --- @param type `logistic-container` | `container`
 --- @param chest_name string
 function MergingChests.disable_next_upgrade_to(type, chest_name)
-    for _, prototype in pairs(data.raw[type]) do
+	for _, prototype in pairs(data.raw[type]) do
 		if prototype.next_upgrade then
 			local name, _ = MergingChests.get_merged_chest_info(prototype.next_upgrade)
 			if name == chest_name then
 				prototype.next_upgrade = nil
 			end
 		end
-    end
+	end
 end

@@ -4,6 +4,7 @@ local needFluid = {}
 local oldMinCat = {}
 local placeable = {}
 local localeRes = {}
+local connector = "___"
 
 for resourceName, resource in pairs(data.raw["resource"]) do
     oldRes[resourceName] = resource.category or "basic-solid"
@@ -77,14 +78,14 @@ for i, arrResource in ipairs(newRes) do
     for drillName, drill in pairs(data.raw["mining-drill"]) do
         if drillName:sub(1, 7) ~= "cursed-" then
             if oldMinCat[drillName] then
-                local newName = drillName .. ";" .. arrResource
+                local newName = drillName .. connector .. arrResource
                 if not data.raw["mining-drill"][newName] and drill.resource_categories then
                     local newDrill = util.table.deepcopy(drill)
                     newDrill.name = newName
                     newDrill.resource_categories = {}
                     newDrill.localised_name = drill.localised_name or {"entity-name." .. drillName}
                     newDrill.localised_description = drill.localised_description or {"entity-description.drillName"}
-                    newDrill.flags = {"placeable-neutral", "player-creation", "hidden"}
+                    newDrill.flags = {"placeable-neutral", "player-creation", "not-in-made-in"}
                     newDrill.order = newName
                     newDrill.placeable_by = util.table.deepcopy(placeable[drill.name])
                     if newDrill.localised_name then
@@ -100,7 +101,7 @@ for i, arrResource in ipairs(newRes) do
                             checkDrill = arrResource
                         end
                     end
-                    if newName == drillName .. ";" .. checkDrill then
+                    if newName == drillName .. connector .. checkDrill then
                         data.raw["mining-drill"][newName] = newDrill
                     end
                 end

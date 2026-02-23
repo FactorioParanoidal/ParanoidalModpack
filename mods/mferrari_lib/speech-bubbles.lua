@@ -8,9 +8,10 @@ function Entity_Speak(entity,text,seconds)
 			storage.entity_speech[id].bubble.destroy()
 			storage.entity_speech[id] = nil
 			end
+
 			local bubble = entity.surface.create_entity({
 				name= "mf_speech_bubble", --"compi-speech-bubble",
-				text= "[font=default-large-bold]".. text .."[/font]",
+				text= {"","[font=default-large-bold]", text,"[/font]"},
 				position={0,0},
 				source=entity })
 			storage.entity_speech[id] = {}

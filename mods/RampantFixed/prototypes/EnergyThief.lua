@@ -22,6 +22,7 @@ function energyThief.addFactionAddon()
                 icon_size = 32,
                 flags = {"placeable-neutral", "player-creation"},
                 order = "s-e-w-f",
+				hidden = true,
                 minable = {mining_time = 1, result = "drain-trigger-rampant"},
                 max_health = 100,
                 selectable_in_game = false,
@@ -44,9 +45,10 @@ function energyThief.addFactionAddon()
                 icon = "__RampantFixed__/graphics/icons/thief/crystal-drain.png",
                 icon_size = 32,
                 icon_mipmaps = 1,
-                flags = {"hidden"},
+                -- flags = {"not-in-made-in"},
                 subgroup = "energy",
                 order = "e[accumulator]-a[accumulator]",
+				hidden = true,
                 place_result = "drain-trigger-rampant",
                 stack_size = 50
             },
@@ -57,9 +59,10 @@ function energyThief.addFactionAddon()
                 icon = "__RampantFixed__/graphics/icons/thief/crystal-drain.png",
                 icon_size = 32,
                 icon_mipmaps = 1,
-                flags = {"hidden"},
+                -- flags = {"not-in-made-in"},
                 subgroup = "energy",
                 order = "e[accumulator]-a[accumulator]",
+				hidden = true,
                 place_result = "crystal-drain-pole-rampant",
                 stack_size = 50
             },
@@ -70,12 +73,13 @@ function energyThief.addFactionAddon()
                 icon = "__RampantFixed__/graphics/icons/thief/crystal-drain.png",
                 icon_size = 32,
                 icon_mipmaps = 1,
-                flags = {"hidden"},
+                -- flags = {"not-in-made-in"},
                 selectable_in_game = false,
                 minable = {hardness = 0.2, mining_time = 0.5, result = "big-electric-pole"},
                 max_health = 750,
                 healing_per_tick = 0.02,
                 corpse = "medium-remnants",
+				is_military_target = true,
                 resistances =
                     {
                         {
@@ -184,7 +188,7 @@ function energyThief.addFactionAddon()
     chest.icon = "__RampantFixed__/graphics/icons/thief/crystal-drain.png"
     chest.icon_size = 32
     chest.icon_mipmaps = 1
-    chest.flags = {"not-repairable", "not-on-map", "hidden"}
+    chest.flags = {"not-repairable", "not-on-map"}	-- , "not-in-made-in"
     chest.subgroup = "enemies"
     chest.next_upgrade = nil
     chest.backer_name = false
@@ -201,6 +205,7 @@ function energyThief.addFactionAddon()
             }
     }}
     chest.max_health = 750
+	chest.is_military_target = true
     chest.resistances =
         {
             {
@@ -243,7 +248,7 @@ function energyThief.addFactionAddon()
                 icon = "__RampantFixed__/graphics/icons/thief/crystal-drain.png",
                 icon_size = 32,
                 icon_mipmaps = 1,
-                flags = {"hidden"},
+                -- flags = {"not-in-made-in"},
                 subgroup = "enemies",
                 order = "a[items]-h[steel-collector]",
                 place_result = "pylon-target-rampant",

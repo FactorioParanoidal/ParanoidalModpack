@@ -4,11 +4,7 @@
 if mods["Bio_Industries"] then
 data.raw["technology"]["bi-tech-bio-cannon"].hidden = true
 
-data.raw["item"]["bi-bio-cannon-area"].flags = {"hidden"}
 
-data.raw["ammo"]["bi-bio-cannon-proto-ammo"].flags = {"hidden"}
-data.raw["ammo"]["bi-bio-cannon-basic-ammo"].flags = {"hidden"}
-data.raw["ammo"]["bi-bio-cannon-poison-ammo"].flags = {"hidden"}
 
 data.raw["recipe"]["bi-bio-cannon"].hidden = true
 data.raw["recipe"]["bi-bio-cannon-proto-ammo"].hidden = true
@@ -22,36 +18,24 @@ local artillery_turret_prototype = table.deepcopy(data.raw["artillery-turret"]["
 
 artillery_turret_prototype.name = "artillery-turret-prototype"
 artillery_turret_prototype.minable = {mining_time = 0.1, result = "artillery-turret-prototype"}
-artillery_turret_prototype.icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret.png"
+artillery_turret_prototype.icon = "__zzzparanoidal__/graphics/entity/artillery-turret.png"
 artillery_turret_prototype.gun = "artillery-gun-prototype"
-artillery_turret_prototype.ammo_stack_limit = "5"
+artillery_turret_prototype.ammo_stack_limit = 5
 artillery_turret_prototype.max_health = 1000
-artillery_turret_prototype.turret_rotation_speed = "0.0003"
-artillery_turret_prototype.turn_after_shooting_cooldown = "100"
-artillery_turret_prototype.manual_range_modifier = "1"
-artillery_turret_prototype.cannon_parking_speed = "0.125"
+artillery_turret_prototype.turret_rotation_speed = 0.0003
+artillery_turret_prototype.turn_after_shooting_cooldown = 100
+artillery_turret_prototype.manual_range_modifier = 1
+artillery_turret_prototype.cannon_parking_speed = 0.125
 artillery_turret_prototype.base_picture.layers = 
 {
     {
-      filename = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret-base.png",
+      filename = "__zzzparanoidal__/graphics/entity/artillery-turret-base.png",
       priority = "high",
       width = 104,
       height = 100,
       direction_count = 1,
       frame_count = 1,
       shift = util.by_pixel(-0, 22),
-      hr_version =
-      {
-        filename = "__zzzparanoidal__/prototypes/artillery-prototype/hr-artillery-turret-base.png",
-        priority = "high",
-        line_length = 1,
-        width = 207,
-        height = 199,
-        frame_count = 1,
-        direction_count = 1,
-        shift = util.by_pixel(-0, 22),
-        scale = 0.5
-      }
     },
     {
       filename = "__base__/graphics/entity/artillery-turret/artillery-turret-base-shadow.png",
@@ -63,19 +47,6 @@ artillery_turret_prototype.base_picture.layers =
       direction_count = 1,
       shift = util.by_pixel(18, 38),
       draw_as_shadow = true,
-      hr_version =
-      {
-        filename = "__base__/graphics/entity/artillery-turret/hr-artillery-turret-base-shadow.png",
-        priority = "high",
-        line_length = 1,
-        width = 277,
-        height = 149,
-        frame_count = 1,
-        direction_count = 1,
-        shift = util.by_pixel(18, 38),
-        draw_as_shadow = true,
-        scale = 0.5
-      }
     }
   }
 
@@ -89,7 +60,6 @@ data:extend({
         name = "artillery-gun-prototype",
         icon = "__base__/graphics/icons/tank-cannon.png",
         icon_size = 64, icon_mipmaps = 4,
-        flags = {"hidden"},
         subgroup = "gun",
         order = "z[artillery]-a[cannon]",
         attack_parameters =
@@ -140,8 +110,9 @@ data:extend({
 {
         type = "ammo",
         name = "artillery-shell-prototype",
-        icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-shell.png",
+        icon = "__zzzparanoidal__/graphics/entity/artillery-shell.png",
         icon_size = 64, icon_mipmaps = 4,
+				ammo_category="artillery-shell-prototype",
         ammo_type =
         {
           category = "artillery-shell-prototype",
@@ -176,11 +147,11 @@ data:extend({
     energy_required = 20,
     ingredients =
     {
-      {"steel-plate", 5},
-      {"bronze-alloy", 2},
-      {"explosives", 3}
+      { type = "item", name = "steel-plate", amount = 5},
+      { type = "item", name = "bob-bronze-alloy", amount = 2},
+      { type = "item", name = "explosives", amount = 3}
     },
-    result = "artillery-shell-prototype"
+    results ={{type="item", name= "artillery-shell-prototype", amount=1}}
 },
 --------------------------------------------------------------------------------------------------
 {
@@ -191,7 +162,7 @@ data:extend({
     map_color = {r=1, g=1, b=0},
     picture =
     {
-      filename = "__zzzparanoidal__/prototypes/artillery-prototype/hr-shell.png",
+      filename = "__zzzparanoidal__/graphics/entity/artillery-shell.png",
       draw_as_glow = true,
       width = 64,
       height = 64,
@@ -199,7 +170,7 @@ data:extend({
     },
     shadow =
     {
-      filename = "__base__/graphics/entity/artillery-projectile/hr-shell-shadow.png",
+      filename = "__base__/graphics/entity/artillery-projectile/shell-shadow.png",
       width = 64,
       height = 64,
       scale = 0.5
@@ -302,7 +273,7 @@ data:extend({
 {
         type = "item",
         name = "artillery-turret-prototype",
-        icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret.png",
+        icon = "__zzzparanoidal__/graphics/entity/artillery-turret.png",
         icon_size = 64, icon_mipmaps = 4, 
         subgroup = "defensive-structure",
         order = "b[turret]-d[artillery-turret]-a[turret]",
@@ -314,25 +285,25 @@ data:extend({
 {
         type = "recipe",
         name = "artillery-turret-prototype",
-        icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery-turret.png",
+        icon = "__zzzparanoidal__/graphics/entity/artillery-turret.png",
         icon_size = 64, icon_mipmaps = 4, 
         enabled = false,
         energy_required = 20,
         ingredients =
         {
-          {"electronic-circuit", 10},
-          {"engine-unit", 15},
-          {"steel-plate", 120},
-          {"concrete", 100},
+          { type = "item", name = "electronic-circuit", amount = 10},
+          { type = "item", name = "engine-unit", amount = 15},
+          { type = "item", name = "steel-plate", amount = 120},
+          { type = "item", name = "concrete", amount = 100},
         },
-        result = "artillery-turret-prototype"
+        results ={{type="item", name= "artillery-turret-prototype", amount=1}}
       },
 --------------------------------------------------------------------------------------------------
       {
         type = "technology",
         name = "artillery-prototype",
         icon_size = 256, icon_mipmaps = 4,
-        icon = "__zzzparanoidal__/prototypes/artillery-prototype/artillery.png",
+        icon = "__zzzparanoidal__/graphics/entity/artillery.png",
         effects = 
         {
           {type = "unlock-recipe", recipe = "artillery-turret-prototype"},
@@ -344,9 +315,9 @@ data:extend({
           count = 300,
           ingredients = 
           {
-            {"automation-science-pack", 1},
-            {"logistic-science-pack", 1},
-            {"military-science-pack", 1},
+            { "automation-science-pack", 1},
+            { "logistic-science-pack", 1},
+            { "military-science-pack", 1},
           },
           time = 30,
         }

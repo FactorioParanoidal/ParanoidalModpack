@@ -1,14 +1,14 @@
 -- Wipe stored values
-local function init_global()
-  global = global or {}
-  global.renamer = {}
+local function init_storage()
+  storage = storage or {}
+  storage.renamer = {}
 end
 
-script.on_configuration_changed(init_global)
-script.on_init(init_global)
+script.on_configuration_changed(init_storage)
+script.on_init(init_storage)
 
 -- Renamer hotkey is pressed
-script.on_event("rename", function(event)
+script.on_event(prototypes.custom_input["rename"], function(event) 
   local player = game.players[event.player_index]
   if player.gui.screen.renamer_frame then
     player.gui.screen.renamer_frame.destroy()
@@ -16,7 +16,7 @@ script.on_event("rename", function(event)
   local selection = player.selected
   if selection then
     if selection.supports_backer_name() then
-      global.renamer[event.player_index] = selection
+      storage.renamer[event.player_index] = selection
       SpawnGUI(player)
     end
   end
@@ -54,39 +54,39 @@ function CancelRename(player)
   if player.gui.screen.renamer_frame then
     player.gui.screen.renamer_frame.destroy()
   end
-  global.renamer[player.index] = nil
+  storage.renamer[player.index] = nil
 end
 
 -- Write name to entity and close GUI
 function CommitRename(player)
   if player.gui.screen.renamer_frame then
-    if global.renamer[player.index] and global.renamer[player.index].valid then
-      global.renamer[player.index].backer_name = player.gui.screen.renamer_frame.renamer_content_flow.renamer_textfield.text
+    if storage.renamer[player.index] and storage.renamer[player.index].valid then
+      storage.renamer[player.index].backer_name = player.gui.screen.renamer_frame.renamer_content_flow.renamer_textfield.text
       end
     player.gui.screen.renamer_frame.destroy()
   end
-  global.renamer[player.index] = nil
+  storage.renamer[player.index] = nil
 end
 
 -- Reset GUI text field contents to entity backer name
 function ResetRename(player)
   if player.gui.screen.renamer_frame then
     local textfield = player.gui.screen.renamer_frame.renamer_content_flow.renamer_textfield
-    if global.renamer[player.index] and global.renamer[player.index].valid then
-      textfield.text = global.renamer[player.index].backer_name
+    if storage.renamer[player.index] and storage.renamer[player.index].valid then
+      textfield.text = storage.renamer[player.index].backer_name
     end
     textfield.select_all()
     textfield.focus()
   end
 end
 
--- Replace GUI text field contents with random name from Randoname mod
+-- Replace GUI text field contents with random name from NameLists mod
 function RandomName(player, tick)
   if player.gui.screen.renamer_frame then
     local textfield = player.gui.screen.renamer_frame.renamer_content_flow.renamer_textfield
-    if global.renamer[player.index] and global.renamer[player.index].valid then
+    if storage.renamer[player.index] and storage.renamer[player.index].valid then
       if remote.interfaces["Namelists"] then
-        textfield.text = remote.call("Namelists", "pick_name", global.renamer[player.index])
+        textfield.text = remote.call("Namelists", "pick_name", storage.renamer[player.index])
       else
         textfield.text = game.backer_names[math.random(#game.backer_names)]
       end
@@ -100,7 +100,7 @@ function SpawnGUI(player)
   local frame = player.gui.screen.add{type = "frame", name = "renamer_frame", style = "frame", direction = "vertical"}
   frame.style.bottom_padding = 4
   local title = frame.add{type = "flow", name = "renamer_titlebar_flow", style = "renamer_titlebar_flow"}
-  local label = title.add {type = "label", name = "renamer_titlebar_label", style = "frame_title", caption = "Rename"}
+  local label = title.add {type = "label", name = "renamer_titlebar_label", style = "frame_title", caption = {"renamer-gui-tooltips.rename-title"}}
   label.drag_target = frame
   local filler = title.add{type = "empty-widget", name = "renamer_title_filler", style = "draggable_space_header"}
   filler.style.horizontally_stretchable = true
@@ -108,16 +108,15 @@ function SpawnGUI(player)
   filler.style.right_margin = 7
   filler.style.left_margin = 7
   filler.drag_target = frame
-  title.add{type = "sprite-button", name = "renamer_cancel", sprite = "utility/close_white", style = "frame_action_button"}
+  title.add{type = "sprite-button", name = "renamer_cancel", sprite = "utility/close", style = "frame_action_button", tooltip = {"renamer-gui-tooltips.cancel"}}
   local content = frame.add{type = "flow", name = "renamer_content_flow"}
   content.style.vertical_align = "center"
   local shuffle = content.add{type = "sprite-button", name = "renamer_random", sprite = "utility/shuffle", style = "tool_button", tooltip = {"renamer-gui-tooltips.random"}}
   shuffle.style.top_margin = 1
-  -- end
   local reset = content.add{type = "sprite-button", name = "renamer_reset", sprite = "utility/refresh", style = "tool_button", tooltip = {"renamer-gui-tooltips.reset"}}
   reset.style.top_margin = 1
-  local textfield = content.add{type = "textfield", name = "renamer_textfield", text = global.renamer[player.index].backer_name}
-  local commit = content.add{type = "sprite-button", name = "renamer_commit", sprite = "renamer-black-check", style = "tool_button", tooltip = {"renamer-gui-tooltips.commit"}}
+  local textfield = content.add{type = "textfield", name = "renamer_textfield", style = "stretchable_textfield", icon_selector = true, text = storage.renamer[player.index].backer_name}
+  local commit = content.add{type = "sprite-button", name = "renamer_commit", sprite = "utility/enter", style = "item_and_count_select_confirm", tooltip = {"renamer-gui-tooltips.commit"}}
   commit.style.top_margin = 1
   textfield.select_all()
   textfield.focus()

@@ -6,10 +6,11 @@ require("prototypes.ThickerLines")
 require("prototypes.ColorCodedPlanners_101") -- мод ColorCodedPlanners_1.0.1
 require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 require("locale.locale-pumps") --локали для PUMPS
+require("standalone-extends.bio-industry")
 
 if mods.bobequipment then
-	data.raw.item["personal-roboport-mk3-equipment"].subgroup = "misc1"
-	data.raw.item["personal-roboport-mk4-equipment"].subgroup = "misc1"
+	data.raw.item["bob-personal-roboport-mk3-equipment"].subgroup = "misc1"
+	data.raw.item["bob-personal-roboport-mk4-equipment"].subgroup = "misc1"
 end
 
 -- Uniform recipe mod

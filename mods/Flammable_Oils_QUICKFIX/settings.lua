@@ -1,0 +1,38 @@
+data:extend({
+    {
+        type = "double-setting",
+        name = "flo-radius-mult",
+        setting_type = "runtime-global",
+        default_value = 0.1,
+        minimum_value = 0,
+        maximum_value = 1000,
+        order = "a",
+    },
+    {
+        type = "double-setting",
+        name = "flo-damage-mult",
+        setting_type = "runtime-global",
+        default_value = 5,
+        minimum_value = 0,
+        maximum_value = 1000,
+        order = "b",
+    },
+    {
+        type = "double-setting",
+        name = "flo-radius-power",
+        setting_type = "runtime-global",
+        default_value = 2.5,
+        minimum_value = 1,
+        maximum_value = 10,
+        order = "c",
+    },
+    {
+        type = "double-setting",
+        name = "flo-damage-power",
+        setting_type = "runtime-global",
+        default_value = 2.5,
+        minimum_value = 1,
+        maximum_value = 10,
+        order = "d",
+    },
+})

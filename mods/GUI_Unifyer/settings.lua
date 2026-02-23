@@ -5,6 +5,21 @@ end
 
 data:extend({
     {
+        type = "bool-setting",
+        name = "gu_enable_logging",
+        setting_type = "runtime-per-user",
+        default_value = false,
+        order = "a-a"
+    },
+    {
+        type = "string-setting",
+        name = "gu_log_level",
+        setting_type = "runtime-per-user",
+        default_value = "INFO",
+        allowed_values = {"DEBUG", "INFO", "WARNING", "ERROR"},
+        order = "a-b"
+    },
+    {
         type = "string-setting",
         name = "gu_frame_style_setting",
         setting_type = "runtime-per-user",
@@ -26,14 +41,14 @@ data:extend({
             "slot_button_notext",
             "slot_sized_button_notext",
             "slot_button_notext_transparent",
-            "gui_unifyer_gui_01",
-            "gui_unifyer_gui_02",
-            "gui_unifyer_gui_03",
-            "gui_unifyer_gui_04",
-            "gui_unifyer_gui_05",
-            "gui_unifyer_gui_06",
-            "gui_unifyer_gui_07",
-            "gui_unifyer_gui_08",
+            "gui_Unifier_gui_01",
+            "gui_Unifier_gui_02",
+            "gui_Unifier_gui_03",
+            "gui_Unifier_gui_04",
+            "gui_Unifier_gui_05",
+            "gui_Unifier_gui_06",
+            "gui_Unifier_gui_07",
+            "gui_Unifier_gui_08",
         },
         order = "b"
     },
@@ -59,27 +74,32 @@ data:extend({
     },
 })
 
-
---Hide icons
-
-local iconlist = require('iconlist')
-
+-- Hide icons
+local icons = require('icons')
 local settingslist = {}
 
-for k, icon in pairs(iconlist) do
+-- Convert new icon format to settings
+for _, icon in pairs(icons) do
+    -- Use array indices for backward compatibility since we're still in transition
+    -- icon[1] is mod name, icon[3] is button name
     if mods[icon[1]] and icon[1] ~= "base" then
+        local button_name = icon[3]
         local alreadyexists = false
-        for _, i in pairs(settingslist) do
-            if icon[3] == i then
+        
+        for _, existing_button in pairs(settingslist) do
+            if button_name == existing_button then
                 alreadyexists = true
+                break
             end
         end
+        
         if not alreadyexists then
-            table.insert(settingslist, icon[3])
+            table.insert(settingslist, button_name)
         end
     end
 end
 
+-- Create settings for each button
 for _, setting in pairs(settingslist) do
     data:extend({
         {

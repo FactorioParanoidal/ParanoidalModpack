@@ -19,6 +19,9 @@ function RecipeSelector:afterInit()
   self.hidden_option = true
   self.product_option = true
   self.hidden_player_crafting = true
+  self.is_support_quality = true
+  self.rules_filter = true
+  self.rule_category = "recipe"
 end
 
 -------------------------------------------------------------------------------
@@ -53,29 +56,37 @@ function RecipeSelector:appendGroups(element, type, list_products, list_ingredie
   end
   local prototype_name = string.format("%s-%s", type, lua_prototype.name)
 
-  for key, raw_product in pairs(prototype:getRawProducts()) do
-    if list_products[raw_product.name] == nil then
-      list_products[raw_product.name] = {}
-    end
-    list_products[raw_product.name][prototype_name] = {name=lua_prototype.name, group=lua_prototype.group.name, subgroup=lua_prototype.subgroup.name, type=type, order=lua_prototype.order}
-    
-    local product = Product(raw_product)
-    local localised_name = product:getLocalisedName()
-    if localised_name ~= nil and localised_name ~= "unknow" then
-      list_translate[raw_product.name] = localised_name
+  if prototype:getRawProducts() ~= nil then
+    for key, raw_product in pairs(prototype:getRawProducts()) do
+      if raw_product.name ~= nil then
+        if list_products[raw_product.name] == nil then
+          list_products[raw_product.name] = {}
+        end
+        list_products[raw_product.name][prototype_name] = {name=lua_prototype.name, group=lua_prototype.group.name, subgroup=lua_prototype.subgroup.name, type=type, order=lua_prototype.order}
+        
+        local product = Product(raw_product)
+        local localised_name = product:getLocalisedName()
+        if localised_name ~= nil and localised_name ~= "unknow" then
+          list_translate[raw_product.name] = localised_name
+        end
+      end
     end
   end
 
-  for key, raw_ingredient in pairs(prototype:getRawIngredients()) do
-    if list_ingredients[raw_ingredient.name] == nil then
-      list_ingredients[raw_ingredient.name] = {}
-    end
-    list_ingredients[raw_ingredient.name][prototype_name] = {name=lua_prototype.name, group=lua_prototype.group.name, subgroup=lua_prototype.subgroup.name, type=type, order=lua_prototype.order}
-    
-    local ingredient = Product(raw_ingredient)
-    local localised_name = ingredient:getLocalisedName()
-    if localised_name ~= nil and localised_name ~= "unknow" then
-      list_translate[raw_ingredient.name] = localised_name
+  if prototype:getRawIngredients() ~= nil then
+    for key, raw_ingredient in pairs(prototype:getRawIngredients()) do
+      if raw_ingredient.name ~= nil then
+        if list_ingredients[raw_ingredient.name] == nil then
+          list_ingredients[raw_ingredient.name] = {}
+        end
+        list_ingredients[raw_ingredient.name][prototype_name] = {name=lua_prototype.name, group=lua_prototype.group.name, subgroup=lua_prototype.subgroup.name, type=type, order=lua_prototype.order}
+        
+        local ingredient = Product(raw_ingredient)
+        local localised_name = ingredient:getLocalisedName()
+        if localised_name ~= nil and localised_name ~= "unknow" then
+          list_translate[raw_ingredient.name] = localised_name
+        end
+      end
     end
   end
 end
@@ -108,6 +119,12 @@ function RecipeSelector:updateGroups(list_products, list_ingredients, list_trans
   for key, entity in pairs(Player.getEnergyMachines()) do
     self:appendGroups(entity, "energy", list_products, list_ingredients, list_translate)
   end
+  for key, recipe in pairs(Player.getAgriculturalRecipes()) do
+    self:appendGroups(recipe, "agricultural", list_products, list_ingredients, list_translate)
+  end
+  for key, recipe in pairs(Player.getSpoilableRecipes()) do
+    self:appendGroups(recipe, "spoiling", list_products, list_ingredients, list_translate)
+  end
 end
 
 -------------------------------------------------------------------------------
@@ -126,7 +143,8 @@ function RecipeSelector:updateUnlockRecipesCache()
   end
   for _, recipe in pairs(Player.getRecipes()) do
     if recipe.enabled == true then
-      local factories = Player.getProductionsCrafting(recipe.category, recipe)
+      local recipe_prototype = RecipePrototype(recipe)
+      local factories = recipe_prototype:getAllowedMachines()
       if table.size(factories) > 0 then
         unlock_recipes[recipe.name] = true
       end
@@ -145,17 +163,17 @@ function RecipeSelector:buildPrototypeTooltipLine(item, displayQuantity)
   if item.type == "energy" then
     local sprite = GuiElement.getSprite(defines.sprite_tooltips[item.name])
     table.insert(line, string.format("[img=%s] ", sprite))
-    table.insert(line, helmod_tag.font.default_bold)
+    table.insert(line, defines.mod.tags.font.default_bold)
     table.insert(line, Format.formatNumberKilo(item.amount, "W"))
     table.insert(line, " x ")
-    table.insert(line, helmod_tag.font.close)
+    table.insert(line, defines.mod.tags.font.close)
   else
     table.insert(line, string.format("[%s=%s] ", item.type, item.name))
     if displayQuantity then
-      table.insert(line, helmod_tag.font.default_bold)
+      table.insert(line, defines.mod.tags.font.default_bold)
       table.insert(line, Format.formatNumberElement(item.amount))
       table.insert(line, " x ")
-      table.insert(line, helmod_tag.font.close)    
+      table.insert(line, defines.mod.tags.font.close)    
     end
   end
   table.insert(line, Player.getLocalisedName(item))
@@ -188,12 +206,12 @@ function RecipeSelector:buildPrototypeTooltip(prototype)
     tooltip = {""}
 
     ---heading
-    table.insert(tooltip, {"", helmod_tag.font.default_bold, recipe_name, helmod_tag.font.close})
+    table.insert(tooltip, {"", defines.mod.tags.font.default_bold, recipe_name, defines.mod.tags.font.close})
 
     ---ingredients
     local ingredients = recipe_prototype:getIngredients(factory)
     if table.size(ingredients) > 0 then
-      table.insert(tooltip, {"", "\n", helmod_tag.font.default_bold, helmod_tag.color.gold, {"helmod_common.ingredients"}, ":", helmod_tag.color.close, helmod_tag.font.close})
+      table.insert(tooltip, {"", "\n", defines.mod.tags.font.default_bold, defines.mod.tags.color.gold, {"helmod_common.ingredients"}, ":", defines.mod.tags.color.close, defines.mod.tags.font.close})
       for _, ingredient in pairs(ingredients) do
         table.insert(tooltip, RecipeSelector:buildPrototypeTooltipLine(ingredient, displayQuantity))
       end
@@ -202,7 +220,7 @@ function RecipeSelector:buildPrototypeTooltip(prototype)
     ---products
     local products = recipe_prototype:getProducts(factory)
     if table.size(products) > 0 then
-      table.insert(tooltip, {"", "\n", helmod_tag.font.default_bold, helmod_tag.color.gold, {"helmod_common.products"}, ":", helmod_tag.color.close, helmod_tag.font.close})
+      table.insert(tooltip, {"", "\n", defines.mod.tags.font.default_bold, defines.mod.tags.color.gold, {"helmod_common.products"}, ":", defines.mod.tags.color.close, defines.mod.tags.font.close})
       for _, product in pairs(products) do
         table.insert(tooltip, RecipeSelector:buildPrototypeTooltipLine(product, displayQuantity))
       end
@@ -213,10 +231,10 @@ function RecipeSelector:buildPrototypeTooltip(prototype)
     if prototype.type == "boiler" then
       entities = Player.getBoilersForRecipe(recipe_prototype)
     elseif prototype.type == "fluid" then
-      entities = Player.getOffshorePumps(prototype.name)
+      entities = Player.getOffshorePumps()
     end
     if table.size(entities) > 0 then
-      table.insert(tooltip, {"", "\n", helmod_tag.font.default_bold, helmod_tag.color.gold, {"helmod_common.made-in"}, ":", helmod_tag.color.close, helmod_tag.font.close})
+      table.insert(tooltip, {"", "\n", defines.mod.tags.font.default_bold, defines.mod.tags.color.gold, {"helmod_common.made-in"}, ":", defines.mod.tags.color.close, defines.mod.tags.font.close})
       for _, entity in pairs(entities) do
         if #tooltip >= 19 then
           table.insert(tooltip, {"", "\n", "..."})
@@ -240,13 +258,11 @@ function RecipeSelector:buildPrototypeIcon(gui_element, prototype, tooltip)
   local model, block, recipe = self:getParameterObjects()
   local recipe_prototype = self:getPrototype(prototype)
   local color = nil
-  if recipe_prototype:getCategory() == "crafting-handonly" then
-    color = "yellow"
-  elseif recipe_prototype:getEnabled() == false then
+  if recipe_prototype:getEnabled() == false then
     color = "red"
   end
 
-  local icon_name, icon_type = recipe_prototype:getIcon()
+  local icon_type, icon_name = recipe_prototype:getIcon()
   local button_prototype = GuiButtonSelectSprite(self.classname, "element-select", prototype.type):choose(icon_type, icon_name, prototype.name):color(color):tooltip(tooltip)
   local button = GuiElement.add(gui_element, button_prototype)
 

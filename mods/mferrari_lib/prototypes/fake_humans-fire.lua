@@ -29,7 +29,7 @@ function flamethrower_attack_parameters(data)
 	return
 		{
 			type = "stream",
-			ammo_category = "biological",
+			ammo_category = "humanoid_ammo_category",
 			cooldown = data.cooldown,
 			cooldown_deviation = data.cooldown_deviation,
 			range = data.range,
@@ -111,9 +111,6 @@ return flamethrower_attack_parameters(
       range_mode = "bounding-box-to-bounding-box"
     })
 end
-
-
-
 
 
 function add_nuker_warfare()
@@ -314,7 +311,7 @@ data:extend({
 		  }
 		}
 	  },
-	  ammo_category = "rocket",
+	  ammo_category = "humanoid_ammo_category",
 	  ammo_type =
 	  {
 		range_modifier = 1.5,

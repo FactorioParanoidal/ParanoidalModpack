@@ -115,7 +115,7 @@ function todo.create_task_table(frame, player)
         type = "label",
         style = "todo_label_default",
         name = "todo_title_top",
-        caption = "Sort"
+        caption = { todo.translate(player, "title_sort")}
     })
 
     table.add({
@@ -250,7 +250,7 @@ function todo.add_task_to_table(player, table, task, completed, is_first, is_las
         type = "sprite-button",
         style = "todo_sprite_button_default",
         name = "todo_open_edit_dialog_button_" .. id,
-        sprite = "utility/rename_icon_normal",
+        sprite = "utility/rename_icon",
         tooltip = { todo.translate(player, "title_edit") }
     })
 
@@ -323,7 +323,8 @@ function todo.add_subtasks_to_task_table(player, table, task)
     row[2] = {
         type = "textfield",
         style = "todo_textfield_default",
-        name = "todo_main_subtask_new_text_" .. task.id
+        name = "todo_main_subtask_new_text_" .. task.id,
+        icon_selector = true
     }
 
     row[8] = {
@@ -379,7 +380,7 @@ function todo.add_subtask_to_main_table(player, table, task_id, subtask, is_firs
             type = "sprite-button",
             style = "todo_sprite_button_default",
             name = string.format("todo_main_subtask_edit_button_%i_%i", task_id, subtask_id),
-            sprite = "utility/rename_icon_normal",
+            sprite = "utility/rename_icon",
             tooltip = { todo.translate(player, "edit_subtask") }
         }
     end

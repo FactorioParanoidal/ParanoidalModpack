@@ -4,10 +4,12 @@ require "core.Object"
 ---Class DispatcherController
 ---
 ---@class DispatcherController
----
+---@field handlers {[string]:{[string]:{class:Object, handlers:{[uint]:function}}}}
+---@field views table
 DispatcherController = newclass(Object,function(base,classname)
   Object.init(base,classname)
   base.handlers = {}
+  base.views = {}
 end)
 
 -------------------------------------------------------------------------------
@@ -70,7 +72,6 @@ function DispatcherController:send(event_type, data, classname)
     end
   end)
   if not(ok) then
-    Player.print(err)
-    log(err)
+    Player.repportError(err, Player.traceEvent(data))
   end
 end

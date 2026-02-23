@@ -13,18 +13,18 @@ data:extend(
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "solid-uranium-hexafluoride"
+				recipe = "clowns-solid-uranium-hexafluoride"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "solid-uranium-tetrafluoride"
+				recipe = "clowns-solid-uranium-tetrafluoride"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "solid-uranium-oxide-1"
+				recipe = "clowns-solid-uranium-oxide-1"
 			},
 		},
-		prerequisites = {"nuclear-power", "angels-advanced-chemistry-4"},
+		prerequisites = {"nuclear-power", "angels-advanced-chemistry-4", "angels-metallurgy-4"},
 		unit =
 		{
 			ingredients =
@@ -32,7 +32,7 @@ data:extend(
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
-				{"utility-science-pack", 1}
+				{"production-science-pack", 1}
 			},
 			time = 30,
 			count = 100
@@ -49,18 +49,18 @@ data:extend(
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "solid-uranium-oxide-2"
+				recipe = "clowns-solid-uranium-oxide-2"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "solid-ammonium-diuranate"
+				recipe = "clowns-solid-ammonium-diuranate"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "solid-uranyl-nitrate"
+				recipe = "clowns-solid-uranyl-nitrate"
 			},
 		},
-		prerequisites = {"advanced-uranium-processing-1"},
+		prerequisites = {"advanced-uranium-processing-1", "angels-metallurgy-5"},
 		unit =
 		{
 			ingredients =
@@ -68,6 +68,7 @@ data:extend(
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
+        {"production-science-pack", 1},
 				{"utility-science-pack", 1}
 			},
 			time = 30,

@@ -7,8 +7,7 @@
   "contact": "discord : https://discord.gg/n45nwtZ",
   "homepage": "discord : https://discord.gg/n45nwtZ",
   "description": "Harder Technology. More Resources. Recipes are more complicated. More times consume. Core of Factorio:PARANOIDAL",
-  "dependencies": ["base >= 1.1.0",
-  
+  "dependencies": ["base >= 2.0",
   "boblibrary",
   "bobplates",
   "bobmodules",
@@ -24,9 +23,6 @@
   "bobvehicleequipment",
   "bobwarfare",
   "bobenemies",
-  
-  "MilesBobsExpansion",
-    
   "angelsinfiniteores",
   "angelsrefining",
   "angelspetrochem",
@@ -36,7 +32,7 @@
 
   "? Factorissimo2",
   "? KS_Power",
-  "? Bio_Industries",
+  "? Bio_Industries_2",
   "? Teleportation",
   "? bobsangelthon",
   "? marathon",

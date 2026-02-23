@@ -7,7 +7,7 @@
 	"dependencies":
 	[
 		"base >= 1.1",
-		"~ osm-lib-postprocess >= 23.01.10"
+		"osm-lib-postprocess >= 23.01.10"
 	],
 	"description": "I finally decided to rely on my own function library,\nYES! THAT'S CORRECT! MY OWN FUNCTION LIBRARY!\n\nREQUIRES Osm-Lib PostProcess"
 }

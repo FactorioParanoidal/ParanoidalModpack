@@ -1,0 +1,154 @@
+require((KuxCoreLibPath or "__Kux-CoreLib__/").."lib/init")
+
+---@class KuxCoreLib.SelectionTool : KuxCoreLib.Class
+---@field asGlobal fun():KuxCoreLib.SelectionTool
+local SelectionTool= {
+	__class  = "KuxCoreLib.SelectionTool",
+	__guid   = "{47793ace-3808-4b99-b078-2aa22649a582}",
+	__origin = "Kux-CoreLib/lib/data/SelectionTool.lua",
+}
+if KuxCoreLib.__classUtils.cache(SelectionTool) then return KuxCoreLib.__classUtils.cached end
+---------------------------------------------------------------------------------------------------
+
+if not script then
+
+	---@param name string
+	---@param icon string
+	-- data.raw["blueprint"][<name>]
+	-- data.raw["item"][<name>]
+	function SelectionTool.create_using_bp(name, icon)
+		assert(name, "name is required")
+		assert(icon, "icon is required")
+
+		local character = data.raw.character.character
+		local extend = KuxCoreLib.PrototypeData.extend
+		local x = extend{prefix=""}
+
+		x:blueprint{name,
+			icon = icon,
+			icon_size = 64,
+			flags = {"not-stackable", "only-in-cursor", "spawnable" },
+			skip_fog_of_war = true,
+			stack_size = 1,
+			hidden = true,
+			select = {
+				border_color = {0, 1, 0},
+				mode = "blueprint",
+				cursor_box_type = "logistics"
+			},
+			alt_select = {
+				border_color = {0, 1, 0},
+				mode = "blueprint",
+				cursor_box_type = "logistics"
+			}
+		}
+
+		x:item{name,
+			icon = icon,
+			icon_size = 64,
+			order = "zzz",
+			flags = {},
+			place_result = name,
+			stack_size = 1,
+		}
+
+		--emulates the curser
+		x:simple_entity_with_owner{name,
+			icon = icon,
+			icon_size = 64,
+			flags = { "not-on-map", "placeable-off-grid", "placeable-player", "player-creation" },
+			collision_mask = {layers = { player=true }},
+			collision_box = table.deepcopy(character.collision_box),
+			selection_box = table.deepcopy(character.selection_box),
+			placeable_by = { item = name, count = 1 },
+			--TODO: -- picture = table.deepcopy(character.animations[1].idle)
+			picture = {sheet = {filename = "__base__/graphics/entity/character/level1_idle.png", priority = "extra-high", width = 92, height = 116, scale = 0.5,shift = {0,-0.65625}}},
+		}
+
+		x:shortcut{name,
+			order = "zzz",
+			action = "lua",
+			toggleable = false,
+			--item_to_spawn = name,
+			icons =
+			{{
+				icon = icon,
+				priority = "extra-high-no-scale",
+				icon_size = 64,
+				scale = 0.5
+			}},
+			small_icons =
+			{{
+				icon = icon,
+				priority = "extra-high-no-scale",
+				icon_size = 64,
+				scale = 0.5
+			}},
+		}
+	end
+end -- not script
+
+if script then
+    local Player = KuxCoreLib.Player
+	SelectionTool.eventName = script.generate_event_name()
+	function SelectionTool.getEventName()
+		if not SelectionTool.eventName then SelectionTool.eventName = script.generate_event_name() end
+		return SelectionTool.eventName
+	end
+
+	local name ="dummy-selection-tool" -- TODO
+
+	function SelectionTool.equip_selection_tool(player_index, name)
+		local player = game.players[player_index]
+		if not player.clear_cursor then return end
+		player.cursor_stack.set_stack(name)
+
+		player.cursor_stack.set_blueprint_entities({
+			{entity_number = 1, name = name, position = {x=0, y=0}, tags = {selection_tool = name}}
+		})
+	end
+
+	Events.on_built_entity(function(e)
+		local entity = e.entity or e["created_entity"]
+		local player = game.players[e.player_index]
+		if not entity.valid or entity.name ~= "entity-ghost" then return end
+		local entity_name = entity.ghost_name
+		if entity_name ~= name then return end
+		local args = {
+			tick = e.tick,
+			player_index = e.player_index,
+			surface_name = e.entity.surface.name,
+			force_name = e.entity.force.name,
+			entity_name = entity_name,
+			tags = entity.tags,
+			position = entity.position,
+		}
+		entity.destroy()
+		player.clear_cursor() -- one time use, by
+
+		script.raise_event(SelectionTool.eventName, args)
+	end)
+
+	Events.on_player_cursor_stack_changed(function(event)
+		local player = game.get_player(event.player_index); if not player then return end
+		--game.print("cursor_stack_temporary " .. tostring(player.cursor_stack_temporary))
+		if Player.isCursorGhost(player) and Player.getCursorItemName(player)==name then
+			SelectionTool.equip_selection_tool(event.player_index)
+		end
+	end)
+
+	--shortcut
+	script.on_event(defines.events.on_lua_shortcut, function(event)
+		if event.prototype_name ~= name then return end
+		SelectionTool.equip_selection_tool(event.player_index, name)
+	end)
+
+	--custom-input
+	script.on_event(name, function(event)
+		SelectionTool.equip_selection_tool(event.player_index, name)
+	end)
+
+end
+
+---------------------------------------------------------------------------------------------------
+return SelectionTool

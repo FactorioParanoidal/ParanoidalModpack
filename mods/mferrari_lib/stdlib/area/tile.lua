@@ -7,7 +7,6 @@ require 'stdlib/area/position'
 require 'stdlib/area/chunk'
 
 Tile = {}
-MAX_UINT = 4294967296
 
 --- Calculates the tile coordinates for the position given
 --  @param position to calculate the tile for
@@ -27,13 +26,16 @@ function Tile.to_area(tile_pos)
     return { left_top = tile_pos, right_bottom = Position.offset(tile_pos, 1, 1) }
 end
 
+
+
 --- Creates a list of tile positions for all adjacent tiles (N, E, S, W) or (N, NE, E, SE, S, SW, W, NW) if diagonal is true
 -- @param surface to examine for adjacent tiles
 -- @param position the center tile position, to search around
 -- @param diagonal (optional: defaults to false) whether to include diagonal tiles
 -- @param tile_name (optional) whether to restrict adjacent tiles to one particular tile name (e.g 'water-tile')
+-- @param different_tile (optional) whether to restrict adjacent tiles if different than this tile name (e.g 'water-tile')
 -- @return list of tile positions adjacent to the given position
-function Tile.adjacent(surface, position, diagonal, tile_name)
+function Tile.adjacent(surface, position, diagonal, tile_name, different_tile)
     fail_if_missing(surface, "missing surface argument")
     fail_if_missing(position, "missing position argument")
 
@@ -46,15 +48,25 @@ function Tile.adjacent(surface, position, diagonal, tile_name)
         local adj_pos = Position.add(position, offset)
         if tile_name then
             local tile = surface.get_tile(adj_pos.x, adj_pos.y)
-            if tile and tile.name == tile_name then
+            if tile and tile.valid and tile.name == tile_name then
                 table.insert(adjacent_tiles, adj_pos)
             end
-        else
+        elseif different_tile then
+            local tile = surface.get_tile(adj_pos.x, adj_pos.y)
+            if tile and tile.valid and tile.name ~= different_tile then
+                table.insert(adjacent_tiles, adj_pos)
+            end
+		else
             table.insert(adjacent_tiles, adj_pos)
         end
     end
     return adjacent_tiles
 end
+
+
+
+
+
 
 --- Gets user data from the tile, stored in a mod's global data.
 --- <p> The data will persist between loads</p>

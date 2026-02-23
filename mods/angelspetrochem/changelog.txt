@@ -1,4 +1,41 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 04.01.26
+  Changes:
+    - Moved coke pellets earlier in the tech tree (714)
+    - Allow Explosives 2 & 3 recipes to accept productivity modules (931)
+    - Removed references to normal / expensive recipes (945)
+    - Added separate crafting categories for Gas Refinery and Advanced Gas Refinery (988)
+    - Updated for Factorio 2.0 (994)
+    - Restored 1:1 water to steam ratio (1071)
+    - Buffed recipes Resin 3, Catalytic synthesis of phenol, and Epichlorohydrin gas (1095)
+    - Added circuit connectors to all machines (1114)
+    - Moved Angel's nuclear overhaul from Angel's Industries to Angel's Petrochemical Processing (1131)
+    - Changed top-up valve threshold from 80% to 50% (1170)
+    - Buffed lime air filtering recipes (1198)
+    - Remove Acids mod setting (1213)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.26
+Date: 21.02.2024
+  Changes:
+    - Removed dependencies that are no longer relevant (975)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.25
+Date: 22.12.2023
+  Changes:
+    - Compatibility with Bob's changes (911)
+    - Split tech Sodium processing into Sodium processing 1 and Sodium processing 2 (922)
+    - Combined techs Oil Steam cracking and Gas Steam Cracking (951)
+  Bugfixes:
+    - Fixed recipe order of carbon products to correctly display in helmod
+    - Fixed fertiliser not being craftable in mod configurations (924)
+---------------------------------------------------------------------------------------------------
+Version: 0.9.24
+Date: 23.02.2023
+  Bugfixes:
+    - Fixed Nitroglycerin and explosives 2 and 3 could not be crafted in any machine (888)
+    - Fixed Bob's fertilizer could not be crafted in any machine (bob greenhouses) (888)
+---------------------------------------------------------------------------------------------------
 Version: 0.9.23
 Date: 01.01.2023
   Changes:

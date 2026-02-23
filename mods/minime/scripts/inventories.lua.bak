@@ -1,0 +1,411 @@
+minime.entered_file()
+
+local minime_inventories = {}
+
+
+local function is_special_stack(stack)
+  --~ minime.entered_function({stack})
+
+  local ret
+  if stack and stack.valid and stack.valid_for_read then
+    ret = stack.is_item_with_entity_data or stack.is_item_with_inventory or
+          stack.is_item_with_tags or stack.is_item_with_label or
+          stack.is_armor
+if ret then
+  minime.show("stack.is_item_with_entity_data", stack.is_item_with_entity_data)
+  minime.show("stack.is_item_with_inventory", stack.is_item_with_inventory)
+  minime.show("stack.is_item_with_tags", stack.is_item_with_tags)
+  minime.show("stack.is_item_with_tags and stack.tags", stack.is_item_with_tags and stack.tags)
+  minime.show("stack.is_item_with_label", stack.is_item_with_label)
+  minime.show("stack.is_item_with_label and stack.label", stack.is_item_with_label and stack.label)
+  minime.show("stack.is_armor", stack.is_armor)
+  --~ minime.show("stack.is_tool", stack.is_tool)
+end
+  end
+--~ minime.show("ret", ret)
+  return ret
+end
+
+
+local function move_stack(inventory, src_index, dst_index)
+  --~ minime.entered_function({minime.argprint(inventory), src_index, dst_index})
+
+  minime.check_args(inventory, "LuaInventory")
+  minime.check_args(src_index, "number")
+  minime.check_args(dst_index, "number")
+
+  local src = inventory[src_index] or
+              minime.arg_err(src_index, "a valid source slot index")
+  local dst = inventory[dst_index] or
+              minime.arg_err(dst_index, "a valid destination slot index")
+
+  -- Source contains item(s): copy to destination!
+  if src.valid_for_read then
+    dst.set_stack(src)
+    src.clear()
+    minime.writeDebug("%s: Moved %s (%s) to slot %s", {src_index, dst.name, dst.count, dst_index})
+
+  -- Source is empty, but destination isn't: clear destination!
+  elseif dst.valid_for_read then
+    dst.clear()
+    minime.writeDebug("%s: Emptied slot %s!", {src_index, dst_index})
+
+  -- Source and destination are empty: skip slot
+  else
+    minime.writeDebug("%s: Nothing to move to slot %s!", {src_index, dst_index})
+  end
+
+  --~ -- minime.entered_function("leave")
+end
+
+------------------------------------------------------------------------------------
+--                               Transfer inventory!                              --
+------------------------------------------------------------------------------------
+minime_inventories.transfer_inventory = function(src, dst, flags)
+  minime.entered_function({minime.argprint(src), minime.argprint(dst), flags})
+
+  minime.assert(src, "LuaInventory", "source inventory")
+  minime.assert(dst, "LuaInventory", "destination inventory")
+  for i, inventory in pairs({ src, dst }) do
+    if not inventory.valid then
+      error(minime.argprint(inventory).." is not a valid inventory!")
+    end
+  end
+minime.show("SRC slots", #src)
+minime.show("DST slots", #dst)
+
+  minime.assert(flags, {"nil", "table"}, "table of flags or nil")
+  local clear_target        = not (flags and flags.dont_clear_target)
+  local ignore_slot_filters = flags and flags.ignore_slot_filters
+
+  local limit = math.min(#src, #dst)
+  local made_changes = 0
+
+  -- Transfer inventory contents if inventory isn't empty
+  if src.is_empty() then
+    minime.writeDebug("Source inventory is empty, clear destination?")
+    -- Shouldn't be really necessary, but just let's play it safe!
+    if dst.is_empty() then
+      minime.writeDebug("No: already empty!")
+    else
+      minime.writeDebug("Yes!")
+      dst.clear()
+    end
+
+  else
+    local success, is_special
+    local transferred = 0
+
+    for i = 1, limit do
+      -- Copy slots with item(s)
+      if src[i].valid_for_read then
+        is_special = is_special_stack(src[i])
+
+        -- Skip slots that have the same contents in src and dstand are not a
+        -- special stack (so we can update armor equipment, blueprints etc.)!
+        if not is_special and dst[i].valid_for_read and
+            (src[i].name == dst[i].name) and (src[i].count == dst[i].count) then
+          minime.writeDebug("Ignoring slot %s: has same contents as source slot!",
+                            {i})
+
+        elseif dst[i].can_set_stack(src[i]) then
+          success = dst[i].set_stack(src[i])
+          minime.writeDebug("%s: %s %s (%s stack)", {
+            i,
+            success and "Set" or "Couldn't set",
+            minime.argprint(dst[i]),
+            is_special and "special" or "normal",
+          })
+          if success then
+            transferred = transferred + 1
+            made_changes = made_changes + 1
+          end
+        end
+      -- If only source slot is empty, clear destination slot
+      elseif clear_target and dst[i].valid_for_read then
+        dst[i].clear()
+        made_changes = made_changes + 1
+        minime.writeDebug("%s: Emptied slot!", {i})
+      end
+    end
+    minime.writeDebug("Transferred %s %s (%s slots total).",
+                      {transferred, transferred == 1 and "stack" or "stacks", limit})
+  end
+
+  -- Copy filters if at least one slot is filtered
+  --~ if src.is_filtered() then
+    --~ for i = 1, limit do
+      --~ local success = dst.set_filter(i, src.get_filter(i))
+      --~ minime.writeDebug("Set filter for slot %s: %s", {i, success})
+    --~ end
+    --~ minime.writeDebug("Set filters!")
+  --~ end
+
+-- TODO: No function calling this is using the flag!
+  -- Ignore inventory filters (when moving player inventory to corpse, there is no
+  -- point to set filters)
+  minime.writeDebugNewBlock("Set slot filters?")
+  if ignore_slot_filters then
+    minime.writeDebug("No: forbidden by flag!")
+
+  -- Copy filters if at least one slot is filtered
+  elseif src.is_filtered() then
+    minime.writeDebug("Yes!")
+    for i = 1, limit do
+      local success = dst.set_filter(i, src.get_filter(i))
+      minime.writeDebug("Set filter for slot %s: %s", {i, success})
+    end
+  elseif dst.is_filtered() then
+    minime.writeDebug("Yes: must clear filters in destination!")
+    for i = 1, limit do
+      local success = dst.set_filter(i, nil)
+      minime.writeDebug("Cleared filter for slot %s: %s", {i, success})
+    end
+  else
+    minime.writeDebug("No: neither src nor dst has filters!")
+  end
+
+  minime.entered_function({type(src), type(dst)}, "leave")
+  return made_changes
+end
+
+
+------------------------------------------------------------------------------------
+--                  Move slots in dummy inventory out of the way                  --
+-- This is meant for mods that temporarily increase a character's main inventory, --
+-- e.g. "First_One_Is_Free" and "InfiniteInventory".                              --
+--
+-- Example: Assume the player backed up a character with a bigger inventory.      --
+-- (dummy: 1000 slots, old character: 120 slots, new character: 100 slots). If a  --
+-- mod adds 5 slots, when the character is backed up next time, the contents of   --
+-- slots 101-105 in the dummy inventory would be overwritten with that of the new --
+-- character's inventories. Thus, we must increase the dummy's' inventory to 1005 --
+-- slots and move the contents from slots 101-1000 to 106-1005.
+------------------------------------------------------------------------------------
+minime_inventories.shift_slots_up = function(player, additional_slots)
+  minime.entered_function({player, additional_slots})
+
+  player = minime.ascertain_player(player)
+  if not (player and player.valid) then
+    minime.arg_err(player, "player specification")
+  end
+
+  minime.check_args(additional_slots, "number")
+  if additional_slots ~= math.floor(additional_slots) then
+    minime.arg_err(additional_slots, "integer")
+  elseif additional_slots <= 0 then
+    minime.arg_err(additional_slots, "a positive value")
+  end
+
+  ------------------------------------------------------------------------------------
+  local player_data = global.player_data[player.index]
+  local char = player.character
+  local dummy = player_data.dummy
+
+  if char and char.valid and dummy and dummy.valid then
+
+    -- Make sure dummy inventory has the bonus slots stored in player_data.char_properties!
+    dummy.character_inventory_slots_bonus = char.character_inventory_slots_bonus
+minime.show("New dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
+
+    -- Get main inventories of character and dummy
+    local char_inv = char.get_main_inventory()
+    local dummy_inv = dummy.get_main_inventory()
+
+    -- Get index of the first and the last slot we must shift in the dummy inventory
+    local first = #char_inv - additional_slots + 1
+    local last = #dummy_inv - additional_slots
+minime.show("New character inventory slots", #char_inv)
+minime.show("Dummy inventory slots", #dummy_inv)
+minime.show("first", first)
+minime.show("last", last)
+minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
+
+    --~ -- Increase dummy inventory
+    -- dummy.character_inventory_slots_bonus = (dummy.character_inventory_slots_bonus or 0) + additional_slots
+    --~ dummy.character_inventory_slots_bonus = char.character_inventory_slots_bonus
+--~ minime.show("New dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
+
+    -- Shift slots up
+    --~ local src, dst
+    local dst_index
+    for src_index = last, first, -1 do
+      dst_index = src_index + additional_slots
+      move_stack(dummy_inv, src_index, dst_index)
+    end
+
+    -- Back up the character!
+    minime.writeDebug("Backing up character!")
+    minime_character.copy_character(char, dummy)
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--       Move slots in dummy inventory into range of reduced inventory size       --
+-- This is meant for mods that temporarily increase a character's main inventory, --
+-- e.g. "First_One_Is_Free" and "InfiniteInventory".                              --
+--
+-- Example: Assume the player changed to a character with a smaller inventory     --
+-- (dummy: 1000 slots, old character: 120 slots, new character: 100 slots). If a  --
+-- mod adds 5 slots, when the character is backed up next time, the contents of   --
+-- slots 101-105 in the dummy inventory would be overwritten with that of the new --
+-- character's inventories. Thus, we must increase the dummy's' inventory to 1005 --
+-- slots and move the contents from slots 101-1000 to 106-1005.
+------------------------------------------------------------------------------------
+minime_inventories.shift_slots_down = function(player, removed_slots)
+  minime.entered_function({player, removed_slots})
+
+  player = minime.ascertain_player(player)
+  if not (player and player.valid) then
+    minime.arg_err(player, "player specification")
+  end
+
+  minime.check_args(removed_slots, "number")
+  if removed_slots ~= math.floor(removed_slots) then
+    minime.arg_err(removed_slots, "integer")
+  elseif removed_slots <= 0 then
+    minime.arg_err(removed_slots, "a positive value")
+  end
+
+  ------------------------------------------------------------------------------------
+  local player_data = global.player_data[player.index]
+  local char = player.character
+  local dummy = player_data.dummy
+
+  if char and char.valid and dummy and dummy.valid then
+
+    -- Get main inventories of character and dummy
+    local char_inv = char.get_main_inventory()
+    local dummy_inv = dummy.get_main_inventory()
+
+    -- Get index of the first and the last slot we must shift in the dummy inventory
+    local first = #char_inv + 1
+    local last = #dummy_inv - removed_slots
+minime.show("New character inventory slots", #char_inv)
+minime.show("Dummy inventory slots", #dummy_inv)
+minime.show("first", first)
+minime.show("last", last)
+minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
+
+    -- Shift slots down
+    --~ local src, dst
+    local src_index
+    for dst_index = first, last do
+      src_index = dst_index + removed_slots
+      move_stack(dummy_inv, src_index, dst_index)
+    end
+
+    -- Back up the character!
+    minime.writeDebug("Backing up character!")
+    minime_character.copy_character(char, dummy)
+
+    -- Reduce dummy inventory
+    dummy.character_inventory_slots_bonus = char.character_inventory_slots_bonus
+minime.show("New dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
+  end
+
+
+  minime.entered_function("leave")
+end
+
+-- First_One_Is_Free/InfiniteInventory: Main inventory changed size. Shift contents
+-- of dummy's main inventory slots up or down, so they aren't removed when the
+-- character is copied to the dummy!
+minime_inventories.main_inventory_resized = function(player)
+  minime.entered_function({player})
+
+  player = minime.ascertain_player(player)
+  if not (player and player.valid) then
+    minime.arg_err(player, "player specification")
+  end
+
+  local player_data = global.player_data[player.index]
+  local old_bonus = player_data and player_data.char_properties and
+                    player_data.char_properties.character_inventory_slots_bonus or 0
+  local new_bonus = player.character and player.character.character_inventory_slots_bonus or 0
+
+  -- Make sure dummy and stored data have the same character_inventory_slots_bonus
+  if player_data.dummy.character_inventory_slots_bonus ~= old_bonus then
+
+    player_data.dummy.character_inventory_slots_bonus = old_bonus
+    minime.show("New dummy.character_inventory_slots_bonus", old_bonus)
+  end
+
+  local changed_slots_count = new_bonus - old_bonus
+minime.show("new_bonus", new_bonus)
+minime.show("old_bonus", old_bonus)
+minime.show("changed_slots_count", changed_slots_count)
+
+  -- Ignore changes by 0!
+  if changed_slots_count > 0 then
+    minime.writeDebug("Increased size of main inventory by %s slot(s)!", {changed_slots_count})
+    minime_inventories.shift_slots_up(player, changed_slots_count)
+  elseif changed_slots_count < 0 then
+    -- Multiplying by -1 seems to be almost 10 times faster than using math.abs()!
+    minime.writeDebug("Reduced size of main inventory by %s slot(s)!", {changed_slots_count * -1})
+    minime_inventories.shift_slots_down(player, changed_slots_count * -1)
+  end
+  minime.entered_function("leave")
+end
+
+
+-- Move contents of all inventories of player to corpse
+minime_inventories.move_char_to_corpse = function(player_or_char, corpse)
+  minime.entered_function({player_or_char, corpse})
+
+  local player = minime.ascertain_player(player_or_char)
+  local char
+  if player and player.valid then
+    char = player.character
+  elseif minime.assert(player_or_char, "LuaEntity") then
+    char = player_or_char
+  end
+minime.show("char", char)
+
+  if not (char and char.valid) then
+    minime.entered_function({player_or_char, corpse}, "leave", "no character")
+    return
+  elseif not (corpse and corpse.valid) then
+    minime.entered_function({player_or_char, corpse}, "leave", "no corpse")
+    return
+  end
+
+
+
+  --~ local player_data = global.player_data[player.index]
+
+  local c_inventory = corpse.get_inventory(defines.inventory.character_corpse)
+  --~ local inventory, transfer, inserted, removed
+  local inventory, transfer, inserted
+
+  for i, i_name in pairs(minime.inventory_list_move_to_corpse) do
+    inventory = char.get_inventory(defines.inventory["character_"..i_name])
+    if inventory and inventory.valid then
+      minime.writeDebug("Moving items from %s to corpse!",
+                        {minime.argprint(inventory)})
+
+      for slot = 1, #inventory do
+        transfer = inventory[slot]
+        if transfer.valid_for_read then
+          inserted = c_inventory[#c_inventory + 1].transfer_stack(transfer)
+          minime.writeDebug("Added %s (%s of %s) to corpse inventory",
+                            {transfer.name, inserted, transfer.count})
+        end
+      end
+    end
+  end
+
+  c_inventory.sort_and_merge()
+  minime.writeDebug("Sorted and merged items in corpse inventory!")
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+minime.entered_file("leave")
+
+return minime_inventories

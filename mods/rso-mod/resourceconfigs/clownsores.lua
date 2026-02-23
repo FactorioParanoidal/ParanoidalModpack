@@ -1,4 +1,5 @@
-function fillClownsMineralsConfig(config)
+function fillClownsMineralsConfig(globalConfig)
+local config = globalConfig.nauvis
 config["clowns-ore1"] = 
 {
 	type="resource-ore",
@@ -109,14 +110,14 @@ config["clowns-resource2"] =
 	min_amount = 150,
 	starting={richness=12000, size=20, probability=0},
 }
-config["clowns-resource3"] = 
-{
-	type="resource-ore",
-	allotment=30,
-	spawns_per_region={min=1, max=1},
-	richness=12000,
-	size={min=15, max=20},
-	min_amount = 150,
-	starting={richness=12000, size=20, probability=0},
-}
+-- config["clowns-resource3"] = 
+-- {
+	-- type="resource-ore",
+	-- allotment=30,
+	-- spawns_per_region={min=1, max=1},
+	-- richness=12000,
+	-- size={min=15, max=20},
+	-- min_amount = 150,
+	-- starting={richness=12000, size=20, probability=0},
+-- }
 end

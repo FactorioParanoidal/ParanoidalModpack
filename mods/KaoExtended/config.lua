@@ -1,4 +1,6 @@
-if not KaoExtended then KaoExtended = {} end
+if not KaoExtended then
+	KaoExtended = {}
+end
 
 -- amount of research pack to complete research (multiple point)
 amount = 6
@@ -11,22 +13,21 @@ oreMultiple = 4
 -- vanilla resource spawn over angels mod and RSO (may cause error on RSO mod ignore it!)
 KaoExtended.vanillaOverAngels = false
 
-	-- override coal resource
-	KaoExtended.spawnVanillaCoal = true
-	KaoExtended.spawnVanillaStone = false
-	KaoExtended.spawnVanillaIron = false
-	KaoExtended.spawnVanillaCopper = false
-	
+-- override coal resource
+KaoExtended.spawnVanillaCoal = true
+KaoExtended.spawnVanillaStone = false
+KaoExtended.spawnVanillaIron = false
+KaoExtended.spawnVanillaCopper = false
+
 -- bob's resource spawn over angels mod and RSO (may cause error on RSO mod ignore it!)
 --KaoExtended.bobsOverAngels = true
 
 -- if you update from 0.14.14 you must turn off all below option
 -- SETTING BELOW WILL NEED TO NEW GAME OR USING "CTRL + SHIFT + L" IN OLD SAVE TO MATCH RECIPE AND TECHNOLOGY RAW DATA
 -- restart my cause your factory to jam or not working in some area.
- 
+
 -- enable basic slag processing and prism slag processing
 KaoExtended.MoreSlagProcessing = true
-
 
 -- lower power(nerf) of Quantum module(God)
 KaoExtended.OPGodModule = false
@@ -53,16 +54,15 @@ KaoExtended.angelsSmeltingTime = 2
 -- hard crafting ammo
 KaoExtended.hardCraftingAmmo = true
 
+KaoExtended.oreMultiple = oreMultiple
+KaoExtended.oreMultiple_multiple = oreMultiple / 2
 
-
-KaoExtended.oreMultiple = oreMultiple;
-KaoExtended.oreMultiple_multiple = oreMultiple / 2;
-
--- begin mod some-corpsemarker_1.0.0 
+-- begin mod some-corpsemarker_1.0.0
 --[[
 script.on_event(defines.events.on_pre_player_died, function(event)
     local player = game.players[event.player_index]
     player.force.add_chart_tag(player.surface, {position=player.position, text='Corpse: '..player.name..'; Time: '..math.floor(game.tick/60/60/60)..':'..(math.floor(game.tick/60/60)%60), icon={type="virtual",name="signal-info"}})
 end)
-]]--
+]]
+--
 -- end mod some-corpsemarker_1.0.0

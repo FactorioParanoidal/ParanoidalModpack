@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: March 19, 2025
+  Changes:
+    - Replaced the deprecated OrphanFinderFixed with the officially updated Orphan Finder mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: January 6, 2025
+  Info:
+    - Initial release, intended to recreate the classic Picker experience.

@@ -3,7 +3,7 @@
 ]]--
 
 function todo.update_export_dialog_button_state()
-    local task_count = #global.todo.open + #global.todo.done
+    local task_count = #storage.todo.open + #storage.todo.done
 
     for _, player in pairs(game.players) do
         local main_frame = todo.get_main_frame(player)
@@ -76,7 +76,7 @@ function todo.encode_task_list_for_export(tasks)
 
         table.insert(to_encode, export_task)
     end
-    return todo.base64.encode(game.table_to_json(to_encode))
+    return helpers.encode_string(helpers.table_to_json(to_encode))
 end
 
 function todo.on_export_cancel_click(player)

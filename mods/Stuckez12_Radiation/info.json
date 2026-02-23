@@ -1,0 +1,15 @@
+{
+    "name": "Stuckez12_Radiation",
+    "version": "1.0.0",
+    "title": "Stuckez12 Radiation",
+    "description": "Uranium and nuclear items are now deadly to YOU, the player. Fight back with absorption gear, radiation suits, and walls while even biters evolve into acid-spewing, radioactive tanks. Customize the radiation, tame the chaos, and turn your factory into a radioactive nightmare.",
+    "author": "Stuckez12",
+    "factorio_version": "2.0",
+    "dependancies": [
+        "base >= 2.0.60",
+        "? Cerys-Moon-of-Fulgora",
+        "? PlutoniumEnergy",
+        "? bobwarfare",
+        "? bztitanium"
+    ]
+}

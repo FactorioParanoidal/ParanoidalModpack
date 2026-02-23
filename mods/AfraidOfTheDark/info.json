@@ -1,0 +1,11 @@
+{
+	"name": "AfraidOfTheDark",
+	"version": "1.0.31",
+	"title": "Afraid Of The Dark (enforced personal lights + more)",
+	"author": "BinbinHfr",
+	"description": "Night is too dark for you? Enforced flashlight and personal lights, powerful balloon lights or a pair of natural tinted night glasses could be the solution!",
+	"homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=23679",
+	"contact": "https://forums.factorio.com/memberlist.php?mode=viewprofile&u=14267",
+	"factorio_version": "2.0",
+	"dependencies": ["base"]
+}

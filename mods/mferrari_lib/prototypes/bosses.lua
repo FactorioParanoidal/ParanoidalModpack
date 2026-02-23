@@ -4,7 +4,6 @@
 --  bosses v 3.0 (18/10/24) - made on lib
 
 -----------
-
 local sounds = require("__base__/prototypes/entity/sounds")
 require("__base__/prototypes/entity/spawner-animation")
 
@@ -13,7 +12,7 @@ require ("__mferrari_lib__/prototypes/bosses_projectiles")
 require ("__mferrari_lib__/prototypes/unit_functions")
 require ("__mferrari_lib__/prototypes/loot")
 require ("__mferrari_lib__/proto")
-
+local path = "__mferrari_lib__/"
 
 -- The mod calling this may have globals
 local boss_hp_multiplier  = mf_hp_multiplier or 1
@@ -27,23 +26,22 @@ local boss_spawner_tint = {0.92, 0.54, 0, 0.5}
 --smoke_boss_tint??
 
 local boss_spawn_all_units = {
-      {"small-biter", {{0.0, 0.3}, {0.25, 0.3}, {0.35, 0.0}}},
-      {"small-spitter", {{0.25, 0.3}, {0.5, 0.3}, {0.7, 0.0}}},
-	    {"medium-biter", 		 {{0.30, 0.0}, {0.50, 0.3}, {0.60, 0.0}}},
-      {"medium-spitter", {{0.4, 0.0}, {0.5, 0.3}, {0.6, 0.0}}},
-      {"big-spitter", {{0.59, 0.0}, {0.6, 0.4}, {0.7, 0.0}}},
-	    {"big-biter",	{{0.59, 0.0}, {0.6, 0.3}, {0.7, 0.0}}},
-	    {"behemoth-biter", {{0.69, 0.0}, {0.9, 0.4}}},
-	    {"behemoth-spitter", {{0.69, 0.0}, {0.9, 0.4}}}
+      {"small-biter", {{0.0, 0.3}, {0.25, 0.3}, {0.5, 0.0}}},
+      {"small-spitter", {{0.25, 0.3}, {0.4, 0.3}, {0.6, 0.0}}},
+	    {"medium-biter", 		 {{0.30, 0.0}, {0.50, 0.3}, {0.7, 0.0}}},
+      {"medium-spitter", {{0.4, 0.0}, {0.5, 0.3}, {0.7, 0.0}}},
+      {"big-spitter", {{0.5, 0.0}, {1, 0.4} }},
+	    {"big-biter",	{{0.5, 0.0}, {1, 0.3} }},
+	    {"behemoth-biter", {{0.87, 0.0}, {1, 0.4}}},
+	    {"behemoth-spitter", {{0.87, 0.0}, {1, 0.3}}}
 	  }
-
 
 
 
 local big_spawner = table.deepcopy(data.raw["unit-spawner"]["biter-spawner"])
 big_spawner.name = "maf-big-spawner"
 big_spawner.icons = {{icon = "__base__/graphics/icons/biter-spawner.png",icon_size = 64, tint = smoke_boss_tint}}
-big_spawner.max_health = 200000 *boss_hp_multiplier
+big_spawner.max_health = 150000 *boss_hp_multiplier
 big_spawner.working_sound.apparent_volume=2
 big_spawner.dying_sound=
     {
@@ -58,25 +56,27 @@ big_spawner.dying_sound=
     }
 big_spawner.resistances = resistances.boss_fire_only
 big_spawner.healing_per_tick = 0.02
-big_spawner.absorptions_per_second = { pollution = { absolute = 15, proportional = 0.005 } } -- v20/0.01
-big_spawner.pollution_to_enhance_spawning = 200
+big_spawner.absorptions_per_second = { pollution = { absolute = 20, proportional = 0.01 } } -- v20/0.01  { absolute = 15, proportional = 0.005 }
+--big_spawner.pollution_to_enhance_spawning = 200
 big_spawner.corpse = "maf-big-spawner-corpse"
 big_spawner.dying_explosion = "blood-explosion-huge"
 big_spawner.loot = Loot
 big_spawner.max_count_of_owned_units = 500
 big_spawner.max_friends_around_to_spawn = 300
-big_spawner.collision_box = scale_box(big_spawner.collision_box, spawner_boss_scale)
-big_spawner.selection_box = scale_box(big_spawner.selection_box, spawner_boss_scale)
-big_spawner.map_generator_bounding_box = scale_box(big_spawner.map_generator_bounding_box, spawner_boss_scale)
+big_spawner.collision_box = scale_box(big_spawner.collision_box, spawner_boss_scale*2)
+big_spawner.selection_box = scale_box(big_spawner.selection_box, spawner_boss_scale*2)
+big_spawner.map_generator_bounding_box = scale_box(big_spawner.map_generator_bounding_box, spawner_boss_scale*2)
+big_spawner.spawning_spacing=6
 big_spawner.result_units = boss_spawn_all_units
 big_spawner.spawning_cooldown = {50, 15}
-big_spawner.spawning_radius = 30
-big_spawner.spawning_spacing = 3
+big_spawner.spawning_radius = 18
 big_spawner.max_spawn_shift = 0
 big_spawner.max_richness_for_spawn_shift = 100
 big_spawner.autoplace = nil
 big_spawner.call_for_help_radius = 250
 big_spawner.time_to_capture = nil
+big_spawner.captured_spawner_entity=nil
+
 --hack_scale(big_spawner, spawner_boss_scale+1.5)
 big_spawner.graphics_set =
 {
@@ -127,6 +127,64 @@ data:extend({big_spawner, boss_corpse})
 
 
 
+
+
+
+
+local infected_ship = table.deepcopy(data.raw["unit-spawner"]["maf-big-spawner"])
+infected_ship.name="maf_infected_ship"
+infected_ship.corpse = nil
+infected_ship.autoplace = nil 
+infected_ship.icons={{icon="__base__/graphics/icons/crash-site-spaceship.png", icon_size=64, tint=colors.lightgray}}
+infected_ship.icon="__base__/graphics/icons/crash-site-spaceship.png"
+infected_ship.collision_box = {{-8.7, -3.3}, {6.9, 4.5}}
+infected_ship.map_generator_bounding_box = {{-8.7, -3.3}, {6.9, 4.5}}
+infected_ship.selection_box = {{-8.7, -3.3}, {6.9, 4.5}}
+infected_ship.dying_explosion = "nuke-explosion"
+infected_ship.max_health = 10000
+infected_ship.graphics_set = { animations =
+{
+	{
+layers =
+      {
+        {
+            filename = path .. "graphics/entity/spaceship-infection.png",
+            priority = "very-low",
+            width = 1228,
+            height = 790,
+            shift = util.by_pixel(-13, 34),
+            dice_x = 4,
+            dice_y = 3,
+            scale = 0.5
+        },
+        {
+            filename = "__base__/graphics/entity/crash-site-spaceship/spaceship-shadow.png",
+            priority = "very-low",
+            width = 1340,
+            height = 842,
+            shift = util.by_pixel(-23, 50),
+            scale = 0.5,
+            dice_x = 5,
+            dice_y = 4,
+            draw_as_shadow = true
+        }
+      }
+	}
+},
+integration = table.deepcopy(data.raw["container"]["crash-site-spaceship"].integration_patch)
+}
+infected_ship.vehicle_impact_sound = sounds.generic_impact
+data:extend({infected_ship})
+
+
+
+
+
+
+
+
+
+
 --- new spawner for BIG BOSSES 
 local bigspawner = table.deepcopy(data.raw["unit-spawner"]["maf-big-spawner"]) 
 bigspawner.name="maf-big-boss-spawner"
@@ -146,7 +204,6 @@ for k=1,10 do
 		end
 	end
 data:extend({bigspawner})
-
 
 
 
@@ -213,7 +270,7 @@ data:extend(
 			call_for_help_radius = 100+k*5,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1 + k/100,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 100, -- 300,
 		    loot = Loot,
@@ -293,7 +350,7 @@ data:extend(
     subgroup="enemies",
     resistances = {},
     healing_per_tick = 0.01,
-	  collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+	  collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 	  selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 	  sticker_box = {{-0.4, -0.6}, {0.4, 0.2}},
     distraction_cooldown = 100,

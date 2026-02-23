@@ -1,27 +1,31 @@
 {
-  "name": "prismatic-belts",
-  "version": "1.2.4",
-  "factorio_version": "2.0",
-  "title": "Prismatic Belts",
-  "author": "Kirazy",
-  "contact": "kirazy@live.com",
-  "dependencies":
-  [
-    "base",
-    "flib",
-    "? boblogistics",
-    "? reskins-library >= 1.1.3",
-    "(?) reskins-bobs",
-    "(?) reskins-compatibility",
-    "? FactorioExtended-Plus-Transport",
-    "? Krastorio2",
-    "? RandomFactorioThings",
-    "? UltimateBelts",
-    "? miniloader",
-    "? LoaderRedux",
-    "? deadlock-beltboxes-loaders",
-    "(?) deadlock-integrations",
-    "? vanilla-loaders-hd"
-
-  ]
+    "name": "prismatic-belts",
+    "version": "2.0.10",
+    "factorio_version": "2.0",
+    "package": {
+        "git_publish_branch": "main"
+    },
+    "title": "Prismatic Belts",
+    "author": "Kirazy",
+    "contact": "kirazy@live.com",
+    "dependencies": [
+        "base",
+        "? space-age",
+        "? boblogistics",
+        "? reskins-library >= 2.3.0",
+        "(?) reskins-bobs",
+        "(?) reskins-compatibility",
+        "? FactorioExtended-Plus-Transport",
+        "? Krastorio2",
+        "? Krastorio2-spaced-out",
+        "? RandomFactorioThings",
+        "? UltimateBelts",
+        "? miniloader",
+        "? more-belts",
+        "? loaders-modernized",
+        "? LoaderRedux",
+        "? deadlock-beltboxes-loaders",
+        "(?) deadlock-integrations",
+        "? vanilla-loaders-hd"
+    ]
 }

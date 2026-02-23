@@ -1,10 +1,10 @@
 {
     "name": "belt-visualizer",
-    "version": "1.3.5",
+    "version": "2.0.2",
     "title": "Belt Visualizer",
     "author": "_CodeGreen",
     "contact": "Discord: _CodeGreen#0836",
-    "description": "Highlight a belt line with the press of a button! (H)\nCycle between different lanes by highlighting the same belt again.\nPressing again while not selecting a belt will stop highlighting.\n\nSee mod portal for more information.",
+    "description": "Highlight a belt line with the press of a button! [G]\nCycle between different lanes by highlighting the same belt again.\nPressing G again while not selecting a belt will stop highlighting.\n\nSee mod portal for more information.",
     "factorio_version": "2.0",
     "dependencies": []
 }

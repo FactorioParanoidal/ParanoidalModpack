@@ -12,15 +12,27 @@ require "__mferrari_lib__/stdlib/area/area"
 
 function ReadRunTimeSettings(event)
 storage.chances = storage.chances or {}  -- in priority order of danger
-storage.chances.volcano      = {min_evo=settings.global["bm-volcano-min_evo"].value  ,chance=settings.global["bm-volcano-chance"].value, max_evo=settings.global["bm-volcano-max_evo"].value}
-storage.chances.spidertron   = {min_evo=settings.global["bm-spidertron-min_evo"].value  , chance=settings.global["bm-spidertron-chance"].value}
-storage.chances.flying_saucer= {min_evo=settings.global["bm-flying-saucer-min_evo"].value  , chance=settings.global["bm-flying-saucer-chance"].value}
-storage.chances.biterzilla = {min_evo=settings.global["bm-biterzilla-min_evo"].value  , chance=settings.global["bm-biterzilla-chance"].value}
-storage.chances.worms      = {min_evo=settings.global["bm-worms-min_evo"].value  ,chance=settings.global["bm-worms-chance"].value}
---storage.chances.brutals    = {min_evo=settings.global["bm-brutals-min_evo"].value  , chance=settings.global["bm-brutals-chance"].value}
-storage.chances.soldiers   = {min_evo=settings.global["bm-soldiers-min_evo"].value  ,chance=settings.global["bm-soldiers-chance"].value}
-storage.chances.invasion   = {min_evo=settings.global["bm-invasion-min_evo"].value  , chance=settings.global["bm-invasion-chance"].value}
-storage.chances.swarm      = {min_evo=0,   chance=settings.global["bm-swarm-chance"].value, max_evo=settings.global["bm-swarm-max_evo"].value}
+storage.chances.volcano       = {min_evo=settings.global["bm-volcano-min_evo"].value  		, chance=settings.global["bm-volcano-chance"].value, max_evo=settings.global["bm-volcano-max_evo"].value}
+storage.chances.spidertron    = {min_evo=settings.global["bm-spidertron-min_evo"].value  	, chance=settings.global["bm-spidertron-chance"].value		, evo_adjust_in_planet=0.10}
+storage.chances.demolisher    = {min_evo=settings.global["bm-demolisher-min_evo"].value  	, chance=settings.global["bm-demolisher-chance"].value		, evo_adjust_in_planet=0.10}
+storage.chances.flying_saucer = {min_evo=settings.global["bm-flying-saucer-min_evo"].value  , chance=settings.global["bm-flying-saucer-chance"].value	, evo_adjust_in_planet=0.10}
+storage.chances.biterzilla    = {min_evo=settings.global["bm-biterzilla-min_evo"].value 	, chance=settings.global["bm-biterzilla-chance"].value		, evo_adjust_in_planet=0.15}
+storage.chances.worms         = {min_evo=settings.global["bm-worms-min_evo"].value  		, chance=settings.global["bm-worms-chance"].value			, evo_adjust_in_planet=0.20}
+storage.chances.soldiers      = {min_evo=settings.global["bm-soldiers-min_evo"].value 		, chance=settings.global["bm-soldiers-chance"].value		, evo_adjust_in_planet=0.25}
+storage.chances.gleba_invaders= {min_evo=settings.global["bm-gleba-invaders-min_evo"].value , chance=settings.global["bm-gleba-invaders-chance"].value	, evo_adjust_in_planet=0.50}
+storage.chances.invasion      = {min_evo=settings.global["bm-invasion-min_evo"].value 		, chance=settings.global["bm-invasion-chance"].value		, evo_adjust_in_planet=0.50}
+storage.chances.swarm         = {min_evo=0, chance=settings.global["bm-swarm-chance"].value , max_evo=settings.global["bm-swarm-max_evo"].value}
+
+storage.allowed_planets = {"fulgora","gleba","vulcanus"}
+storage.spawn_on_sa_planets = settings.global["bm-spawn_on_sa_planets"].value 
+
+
+if not script.active_mods["space-age"] then 
+	storage.chances.gleba_invaders.chance=0
+	storage.chances.demolisher.chance=0
+	storage.allowed_planets = {}
+	storage.spawn_on_sa_planets = false
+	end
 
 storage.enable_silo_attack  = settings.global["bm-enable-silo-attack"].value
 storage.show_cameras 	   	= settings.global["bm-show-cameras"].value
@@ -32,7 +44,6 @@ storage.difficulty_level    = settings.global["bm-difficulty-level"].value
 storage.spidertron_nuke     = settings.global["bm-spidertron-nuke"].value
 storage.tree_events_chance  = settings.global["bm-tree-events-chance"].value/100
 storage.spawn_near_nests    = settings.global["bm-spawn_near_nests"].value 
-
 
 
 if event and event.setting_type=='runtime-per-user' then
@@ -54,9 +65,12 @@ storage.surfaces         = storage.surfaces or {'nauvis'}
 storage.bm_volcano       = storage.bm_volcano or {}
 storage.biterzillas      = storage.biterzillas or {}
 storage.invasions        = storage.invasions or {}
+storage.gleba_invasions  = storage.gleba_invasions or {}
 storage.rocket_silos     = storage.rocket_silos or {}
 storage.other_enemies    = storage.other_enemies or {}
 storage.next_wave        = storage.next_wave or {}
+storage.vanilla_biter_spawners = {"biter-spawner","spitter-spawner"}
+
 
 ReadRunTimeSettings()
 storage.next_event       = storage.next_event or (game.tick + (storage.days * 7 * 60 * 60))
@@ -99,14 +113,24 @@ end
 
 ------------------------------------------------------------------------------------------
 
+function get_planet_evo(surface, adjust) 
+local evo = get_evo_here(surface)
+if surface and surface.valid and adjust and game.planets[surface.name] then 
+	evo = evo + adjust
+	end
+return evo
+end
+
+
 
 function pick_event(excludes,surface)
 local the_event
-local evo = get_evo_here(surface)
+local evo
 if not excludes then excludes={} end
 for event, chances in pairs (storage.chances) do
+	evo = get_planet_evo(surface, chances.evo_adjust_in_planet)
 	if not in_list(excludes,event) then 
-    if evo >= chances.min_evo and math.random(100) <= chances.chance then 
+	if chances.chance>0 and evo >= chances.min_evo and math.random(100) <= chances.chance then 
 		if (not chances.max_evo) or (chances.max_evo>=evo) then 
 			the_event = event
 			break
@@ -114,7 +138,7 @@ for event, chances in pairs (storage.chances) do
 		end
 		end
 	end
-return the_event
+return the_event, evo
 end
 
 
@@ -139,31 +163,34 @@ end
 
 
 
-
+function validate_surfaces_list()
+for s=#storage.surfaces,1,-1 do
+	if not (game.surfaces[storage.surfaces[s]] and game.surfaces[storage.surfaces[s]].valid) then table.remove(storage.surfaces,s) end
+end
+end
 
 
 --the_event = biterzilla,soldiers,worms,volcano,invasion,swarm
 function CreateNewEvent(the_event,surfacename, forcename)
+validate_surfaces_list()
 
 local sufaces_tab = table.deepcopy(storage.surfaces)
 if surfacename then add_list(sufaces_tab, surfacename) end
 
-local next_waves={}
 
 for s=1,#sufaces_tab do
+local next_waves={}
 local surface = game.surfaces[sufaces_tab[s]]
-if not the_event then the_event=pick_event() end
-
-
-
+local evo
+if not the_event then the_event,evo=pick_event(nil,surface) end
+if not evo then evo=get_evo_here(surface) end 
 
 for p=1,#storage.player_forces do
 	local pforce = game.forces[storage.player_forces[p]]
 	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then 
 		local player_spawn = pforce.get_spawn_position(surface)
-		local pcount = #pforce.connected_players 
-	    
-		
+		local pcount = count_players_on_surface(surface, pforce)
+
 		if pcount>0 then 
 			local target  
 			
@@ -171,7 +198,7 @@ for p=1,#storage.player_forces do
 					local last_building = FindTeamAttackCorner(surface, pforce, player_spawn,1)
 					local attack = {surface=surface,target=last_building}   --(at.surface,at.target,at.limit,at.multiplier)
 					table.insert (next_waves,attack) 	
-					--CallFrenzyAttack(surface,last_building)
+					--CallFrenzyAttack(surface,last_building)  --- now on waves
 					alert_force(pforce,{"bm-txt-swarm"})
 					Play_sound_alert(pforce,1)	
 						
@@ -179,7 +206,7 @@ for p=1,#storage.player_forces do
 					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local target = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
-					create_invasion(surface,target,pcount)
+					create_invasion(surface,target,pcount,evo)
 					alert_force(pforce,{"bm-txt-invasion"})
 					Play_sound_alert(pforce,1)	
 					if storage.show_cameras then CreateCameraForForce(pforce,target,surface,nil,nil,120,0.15) end
@@ -201,7 +228,7 @@ for p=1,#storage.player_forces do
 					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local target = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
-					local bigworm = create_bigworm(surface,target,pcount)
+					local bigworm = create_bigworm(surface,target,pcount,evo)
 					if bigworm then  
 						alert_force(pforce,{"bm-txt-worm"})
 						Play_sound_alert(pforce,2)	
@@ -215,27 +242,22 @@ for p=1,#storage.player_forces do
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local group, humie = create_soldiers_group(surface,spawn,pcount,attack1, attack2, player_spawn)
+						local group, humie = create_soldiers_group(surface,spawn,pcount,attack1, attack2, player_spawn,evo)
 						alert_force(pforce,{"bm-txt-human_soldiers"})
 						Play_sound_alert(pforce,2)
 						if storage.show_cameras then CreateCameraForForce(pforce,humie,surface,nil,nil,120,0.15) end
 						end
 
-				--[[
-				elseif the_event=='brutals' then
+
+				elseif the_event=='gleba_invaders' and script.active_mods["space-age"] then  
 					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,4)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local group, brutal = create_brutals_group(surface,spawn,pcount,attack1, attack2, player_spawn)
-						if storage.show_alerts then 
-							pforce.print({"bm-txt-alert"},colors.lightred)
-							pforce.print({"bm-txt-brutals"},colors.lightred)
-							end
-						Play_sound_alert(pforce,2)	
-						if storage.show_cameras then CreateCameraForForce(pforce,brutal,surface,nil,nil,120,0.15) end
-						end]]
+						local attacks = {attack1, attack2, player_spawn}
+						create_gleba_drop_invasion(surface,spawn,pforce,attacks,evo)
+						end
 
 
 				elseif the_event=='biterzilla' then
@@ -244,7 +266,7 @@ for p=1,#storage.player_forces do
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn)
+						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,nil,evo)
 						alert_force(pforce,{"bm-txt-biterzilla"})
 						Play_sound_alert(pforce,3)
 						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
@@ -257,20 +279,31 @@ for p=1,#storage.player_forces do
 					--local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local spider = create_spidertron(surface,spawn,pcount)
+						local spider = create_spidertron(surface,spawn,pcount,evo)
 						alert_force(pforce,{"bm-txt-biterzilla"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
 
-				elseif the_event=='flying_saucer' then
-					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,4)
-					--local rchunk = player_chunks[math.random(#player_chunks)]
-					--local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
+				elseif the_event=='demolisher' and script.active_mods["space-age"] then
+					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,15)
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local spider = create_flying_saucer(surface,spawn,pcount)
-						alert_force(pforce,{"bm-txt-biterzilla"})
+						local worm = create_demolisher(surface,spawn,evo)
+						if worm then
+							alert_force(pforce,{"bm-txt-biterzilla"})
+							Play_sound_alert(pforce,3)	
+							if storage.show_cameras then CreateCameraForForce(pforce,worm,surface,nil,nil,120,0.15) end
+							end
+						end
+
+
+				elseif the_event=='flying_saucer' then
+					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,4)
+					if spawn then
+						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
+						local spider = create_flying_saucer(surface,spawn,pcount,evo)
+						alert_force(pforce,{"bm-txt-ufo"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
@@ -278,11 +311,9 @@ for p=1,#storage.player_forces do
 
 				elseif the_event=='ultimate_boss' then
 					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,10)
-					--local rchunk = player_chunks[math.random(#player_chunks)]
-					--local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,'bm_fake_human_ultimate_boss_cannon_20')
+						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, nil, player_spawn,'bm_fake_human_ultimate_boss_cannon_20',evo)
 						alert_force(pforce,{"bm-txt-biterzilla"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
@@ -295,10 +326,8 @@ for p=1,#storage.player_forces do
 		end --the_event
 	end -- p
 
-end
-
 if #next_waves>0 then 
-	local waves = 2 + math.ceil(storage.difficulty_level) + math.floor (get_evo_here(surface) * 6)
+	local waves = 2 + math.ceil(storage.difficulty_level) + math.floor (evo* 6)
 	for w=1,waves do
 		local tick = game.tick + ((w-1)*60*40 )
 		local new_wave = {tick=tick, event_name=the_event, attacks=next_waves}
@@ -307,14 +336,17 @@ if #next_waves>0 then
 	end
 
 end
+end
 
 
 
 
 
 function Create_Position_Event(the_event, surface, position, pforce)
-local pcount = #pforce.connected_players  
-			
+if not (surface and surface.valid) then return end
+local pcount = math.max(1,count_players_on_surface(surface, pforce)) --1 min to avoid crashes
+local evo = get_evo_here(surface)
+
 			if the_event=='swarm' then 
 					CallFrenzyAttack(surface,position)
 					alert_force(pforce,{"bm-txt-swarm"})
@@ -323,7 +355,7 @@ local pcount = #pforce.connected_players
 					local target = get_random_pos_near(position,150)
 					target = surface.find_non_colliding_position('rocket-silo', target, 60, 1)
 					if target then 
-						create_invasion(surface,target,pcount)
+						create_invasion(surface,target,pcount,evo)
 						alert_force(pforce,{"bm-txt-invasion"})
 						Play_sound_alert(pforce,1)	
 						if storage.show_cameras then CreateCameraForForce(pforce,target,surface,nil,nil,120,0.15) end
@@ -347,7 +379,7 @@ local pcount = #pforce.connected_players
 					local target = get_random_pos_near(position,150)
 					target = surface.find_non_colliding_position('rocket-silo', target, 50, 1)
 					if target then 
-						local bigworm = create_bigworm(surface,target,pcount)
+						local bigworm = create_bigworm(surface,target,pcount,evo)
 						if bigworm then  
 							alert_force(pforce,{"bm-txt-worm"})
 							Play_sound_alert(pforce,2)	
@@ -360,39 +392,60 @@ local pcount = #pforce.connected_players
 					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, humie = create_soldiers_group(surface,spawn,pcount,position)
+						local group, humie = create_soldiers_group(surface,spawn,pcount,position,nil,nil,evo)
 						alert_force(pforce,{"bm-txt-human_soldiers"})
 						Play_sound_alert(pforce,2)	
 						if storage.show_cameras then CreateCameraForForce(pforce,humie,surface,nil,nil,120,0.15) end
 						end
 
-
-				--[[elseif the_event=='brutals' then
+						
+				elseif the_event=='gleba_invaders' and script.active_mods["space-age"] then  
 					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, brutal = create_brutals_group(surface,spawn,pcount,position)
-						if storage.show_alerts then 
-							pforce.print({"bm-txt-alert"},colors.lightred)
-							pforce.print({"bm-txt-brutals"},colors.lightred)
-							end	
-						Play_sound_alert(pforce,2)	
-						if storage.show_cameras then CreateCameraForForce(pforce,brutal,surface,nil,nil,120,0.15) end
-						end]]
+						local attacks = {position, position, position}
+						create_gleba_drop_invasion(surface,spawn,pforce,attacks,evo)
+						end
+
 
 				elseif the_event=='biterzilla' then
 					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, zilla = create_biterzilla(surface,spawn,pcount,position)
+						local group, zilla = create_biterzilla(surface,spawn,pcount,position,nil,nil,nil,evo)
 						alert_force(pforce,{"bm-txt-biterzilla"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
 						end
 
+
+				elseif the_event=='flying_saucer' then
+					local spawn=position
+					if spawn then
+						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
+						local spider = create_flying_saucer(surface,spawn,pcount,evo)
+						alert_force(pforce,{"bm-txt-ufo"})
+						Play_sound_alert(pforce,3)	
+						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
+						end
+
+				elseif the_event=='demolisher' and script.active_mods["space-age"] then
+					local spawn=position
+					if spawn then
+						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
+						local worm = create_demolisher(surface,spawn,evo)
+						if worm then
+							alert_force(pforce,{"bm-txt-biterzilla"})
+							Play_sound_alert(pforce,3)	
+							if storage.show_cameras then CreateCameraForForce(pforce,worm,surface,nil,nil,120,0.15) end
+							end
+						end
+						
 				end
 
 end 
+
+
 
 function Create_Silo_Attack(the_event)
 if not the_event then the_event=pick_event() end
@@ -403,9 +456,9 @@ for s=#storage.rocket_silos,1,-1 do
 		else
 
 		local pforce = silo.force
-		local pcount = #pforce.connected_players 
 		local surface = silo.surface
-		if pcount>0 then Create_Position_Event(the_event, surface, silo.position, pforce) end
+		local pcount = count_players_on_surface(surface, pforce)		
+		if pcount>0 and #pforce.connected_players>0 then Create_Position_Event(the_event, surface, silo.position, pforce) end
 		end
 	end
 end
@@ -477,9 +530,7 @@ end
 
 
 --------------------------------------------------------------------------------------
-function create_soldiers_group(surface,spawn,pcount, attack1, attack2,attack3)
-local evo=get_evo_here(surface)
-
+function create_soldiers_group(surface,spawn,pcount, attack1, attack2,attack3,evo)
 local qt = math.min(10, math.max(2,math.ceil(evo * 10 + math.random(math.ceil(pcount/2)))))  + (storage.difficulty_level-1) * 12
 local group 
 local one_humie 
@@ -511,8 +562,7 @@ group_set_command(group,attack1,attack2,attack3)
 return group, one_humie
 end
 
-function create_invasion(surface,position,pcount)
-local evo=get_evo_here(surface)
+function create_invasion(surface,position,pcount,evo)
 local qt = math.min(25, math.max(1,math.ceil(evo * 20 + math.random(math.ceil(pcount/2))))) + storage.difficulty_level - 1
 table.insert (storage.invasions, {name="bm-spawner", surface=surface, position=position, quant=qt})
 if evo>0.8 then 
@@ -520,6 +570,19 @@ if evo>0.8 then
 	end
 end
 
+
+function create_gleba_drop_invasion(surface,position,pforce,attacks,evo)
+local pos = surface.find_non_colliding_position("mf-gleba-spawner",get_random_pos_near(position,20), 50, 1)
+if pos then 
+	local proj = "mf_alienpod_arrival_projectile_1"
+	if evo>0.7 then proj = "mf_alienpod_arrival_projectile_2" end
+	local pod=surface.create_entity{name=proj, position={pos.x + 5*RandomNegPos(), pos.y-60}, target=pos, force="enemy"}
+	alert_force(pforce,{"bm-txt-gleba-invasion"})
+	Play_sound_alert(pforce,2)
+	if storage.show_cameras then CreateCameraForForce(pforce,{object=pod,final_position=pos},surface,nil,nil,120,0.25) end
+	table.insert (storage.gleba_invasions, {surface=surface, position=pos, spawner_name="mf-gleba-spawner",pforce=pforce,attacks=attacks}) --still to locate a spawner, on nth60
+	end
+end
 
 
 	
@@ -566,46 +629,6 @@ return list[math.random(#list)] ..'_'..n
 end
 
 
---[[
-function get_brutals_for_evolution(evolution,extra_evo)
-local brutals = {}
-local biters = get_units_for_evolution(evolution,extra_evo)
-for b=1,#biters do
-	local brut = 'brutal-'..biters[b]
-	if game.entity_prototypes[brut] then 
-		table.insert(brutals,brut)
-		end
-	end
-return brutals
-end
-
-function create_brutals_group(surface,spawn,pcount, attack1, attack2,attack3)
-local qt = math.min(10, math.max(2,math.ceil(game.forces.enemy.evolution_factor * 10 + math.random(math.ceil(pcount/2))))) + (storage.difficulty_level-1) * 10
-local group 
-local one_brutal 
-local brutals = get_brutals_for_evolution(nil,0.1)
-for x=1, qt do
-	local brutal = brutals[math.random(#brutals)]
-	local position = surface.find_non_colliding_position(brutal, spawn, 200, 1)
-	if position then
-		if not group then 
-			group = surface.create_unit_group{position = position, force = game.forces.enemy} 
-			surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
-			create_remnants_particles (surface, math.random(30,50) , position) 
-			end
-		one_brutal = surface.create_entity{name=brutal, position= position, force= game.forces.enemy}
-		create_tatoo_for_unit(one_brutal) 
-		group.add_member(one_brutal)
-		table.insert (storage.other_enemies,one_brutal )
-		end
-	end
-group_set_command(group,attack1,attack2,attack3)
-return group, one_brutal
-end]]
-
-
-
-
 
 
 function Call_next_wave(event)
@@ -614,7 +637,7 @@ if event_name == 'swarm' then
 	local attacks = event.attacks
 	for a=1,#attacks do
 		local at = attacks[a]
-		CallFrenzyAttack(at.surface,at.target,at.limit,at.multiplier)
+		if at.surface and at.surface.valid then CallFrenzyAttack(at.surface,at.target,at.limit,at.multiplier) end
 		end
 	end
 end
@@ -624,9 +647,9 @@ end
 
 
 --------------------------------------------------------
-function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3,specific_zilla)
+function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3,specific_zilla,evo)
+if not (surface and surface.valid) then return end
 local zilla, name, group
-local evo = get_evo_here(surface)
 if evo<0.9 and (not specific_event) then 
 	name = get_random_lesser_boss(evo,surface)
 	else
@@ -673,7 +696,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		   if math.random(1,2)==1 then
 		      CallFrenzyAttack(surface,attack1)
 		      else
-		      if storage.chances.invasion.chance>=math.random(100) then create_invasion(surface,attack1,pcount) end
+		      if storage.chances.invasion.chance>=math.random(100) then create_invasion(surface,attack1,pcount,evo) end
 		      end
 			end   
 		end
@@ -684,9 +707,9 @@ end
 
 
 
-function create_spidertron(surface,spawn,pcount)
+function create_spidertron(surface,spawn,pcount,evo)
+if not (surface and surface.valid) then return end
 local spider
-local evo = get_evo_here(surface)
 local N=1
 if evo>0.98 then N=5 
 	elseif evo>0.96 then N=4
@@ -704,7 +727,6 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		if evo>0.6 and math.random (3)==1 then effect='defender_capsules' end 
 		if evo>0.85 and math.random (3)==1 then effect='grenade_launcher' end
 		table.insert (storage.biterzillas, {entity=spider, effect = effect})
-		if script.active_mods['Krastorio2'] then spider.insert{name='dt-fuel', count=2} end
 		if evo>=0.9 then 
 			local hpe = (pcount*spider.health/10) * evo
 			if evo>0.95 then hpe = hpe*1.5 end
@@ -717,9 +739,31 @@ end
 
 
 
-function create_flying_saucer(surface,spawn,pcount)
+
+function create_demolisher(surface,spawn,evo)
+if not (surface and surface.valid) then return end
+local worm
+local N="small"
+if evo>0.96 then N="big"
+	elseif evo>0.93 then N="medium"
+	end
+local name= "mf_".. N .. "-demolisher"
+local position = surface.find_non_colliding_position(name, spawn, 0, 1)
+	if position then
+		create_remnants_particles (surface, math.random(60,100) , position) 
+		worm = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
+		surface.create_entity{name="small-demolisher-trail-upper", position=position, force = game.forces.neutral}
+		surface.create_entity{name="small-demolisher-trail-lower", position=position, force = game.forces.neutral}
+		table.insert (storage.biterzillas, {entity=worm})
+		end
+return worm
+end
+
+
+
+function create_flying_saucer(surface,spawn,pcount,evo)
 local spider
-local evo = get_evo_here(surface)
 local N=1
 if evo>0.98 then N=8
 	elseif evo>0.96 then N=7
@@ -793,7 +837,28 @@ for i=#storage.invasions,1,-1 do
 	if inv.quant<1 then table.remove(storage.invasions,i) end
 	end
 	
-	
+for i=#storage.gleba_invasions,1,-1 do
+	local inv =storage.gleba_invasions[i] 
+	local surface  = inv.surface
+	local position = inv.position
+	local spawner  = inv.spawner
+	local pforce   = inv.pforce
+	local attacks  = inv.attacks  -- may have or not ...
+	if not spawner then 
+		--spawner = surface.find_entities_filtered{name=inv.spawner_name, position=position}
+		--if #spawner>0 then
+			--table.insert(storage.other_enemies, spawner[1])
+			--table.remove(storage.gleba_invasions,i)
+			--create_gleba_invasor_units(spawner[1],pforce,attacks)
+			--end
+		end
+	end
+
+
+
+
+
+
 -- ZILLAS 
 for z=#storage.biterzillas,1,-1 do
 	local ZI = storage.biterzillas[z]
@@ -857,18 +922,26 @@ for k=#storage.bm_volcano,1,-1 do
 	local tick  = V.tiltick
 	if volcano and volcano.valid then
 		local pos = volcano.position
+		pos.y=pos.y-4
 		volcano.surface.pollute(pos,75)
 		volcano.surface.create_trivial_smoke{name='fire-smoke-on-adding-fuel', position=pos} 
 		volcano.surface.create_trivial_smoke{name='turbine-smoke', position=pos}
+
+
 		if game.tick > tick then
 			volcano.die()
 			table.remove(storage.bm_volcano,k)
 			else -- erupt!!!
-			volcano.surface.create_entity{name="big-artillery-explosion", position=pos, force = game.forces.neutral}
+			
+			if prototypes.entity["big-demolisher-fissure-explosion"] then 
+				volcano.surface.create_entity{name="big-demolisher-fissure-explosion", position=pos, force = game.forces.enemy}
+				else
+				volcano.surface.create_entity{name="big-artillery-explosion", position=pos, force = game.forces.enemy}
+				end
 			local area = 50
 			local xx = pos.x + math.random(-area,area) 		
 			local yy = pos.y + math.random(-area,area) 		
-			volcano.surface.create_entity{name ="mf-cluster-fire-projectile-big", target_position={x=xx,y=yy}, position={x=xx,y=yy}, source=volcano, force= game.forces.enemy, speed=4}
+			volcano.surface.create_entity{name ="mf-cluster-fire-projectile-big", target_position={x=xx,y=yy}, position={x=xx,y=yy}, source=pos, force= game.forces.enemy, speed=4, move_stuck_players=true}
 			end
 		else
 		table.remove(storage.bm_volcano,k)
@@ -884,6 +957,9 @@ local position = surface.find_non_colliding_position("bm-volcano", target, 200, 
 	if position ~= nil then
 		surface.create_entity{name="nuke-explosion", position=position, force = game.forces.enemy} --big-artillery-explosion
 		volcano = surface.create_entity{name="bm-volcano", position=position, force = game.forces.enemy}
+		if prototypes.entity["big-demolisher-fissure-explosion"] then 
+			surface.create_entity{name="big-demolisher-fissure-explosion", position=position, force = game.forces.enemy}
+			end
 		table.insert(storage.bm_volcano, {volcano=volcano, tiltick=game.tick + duration})
 		end
 return volcano
@@ -891,9 +967,8 @@ end
 
 
 --------------------------------------------------------------------------
-function create_bigworm(surface,target,pcount)
+function create_bigworm(surface,target,pcount,evo)
 local worm = "maf-behemoth-worm-turret"  
-local evo = get_evo_here(surface)
 if evo > 0.80 then worm = "maf-colossal-worm-turret" end
 if evo > 0.9 then 
 	if math.random(1,2)==1 then worm = "maf-worm-boss-fire-shooter" else worm = "bm-worm-boss-acid-shooter" end
@@ -930,8 +1005,9 @@ local Min = 2
 local Max = 6
 local num = math.random(Min,Max) + storage.difficulty_level - 1
 
-local group = mother.unit_group 
-local children = get_units_for_evolution( get_evo_here(mother.surface) )
+local group
+if mother.commandable and mother.commandable.parent_group then group=mother.commandable.parent_group end
+local children = get_units_for_evolution( get_evo_here(mother.surface), nil, storage.vanilla_biter_spawners)
 for k=1,num do
 	local name= children[math.random(#children)]
 	local pos = mother.surface.find_non_colliding_position(name, mother.position, 10, 1)
@@ -949,11 +1025,12 @@ extra=extra or 0
 local x = mother.position.x
 local y = mother.position.y 
 local r = 10
-local Units = mother.surface.find_entities_filtered({force= mother.force, area={{x-r,y-r},{x+r,y+r}}})
+local Units = mother.surface.find_entities_filtered({type="unit", force= mother.force, area={{x-r,y-r},{x+r,y+r}}})
 if #Units>5 + storage.difficulty_level + extra*3 then return end
 local num = math.random(3+ extra)  + storage.difficulty_level - 1
 
-local group = mother.unit_group 
+local group
+if mother.commandable and mother.commandable.parent_group then group=mother.commandable.parent_group end
 for k=1,num do
 	local name= get_random_human_soldier( get_evo_here(mother.surface),mother.surface )
 	local pos = mother.surface.find_non_colliding_position(name, mother.position, 15, 1)
@@ -995,7 +1072,7 @@ function On_Built(event)
 local entity = event.created_entity or event.entity 
 if entity and entity.valid and entity.type~='entity-ghost' then
 	local surface = entity.surface
-	local name=entity.name 
+--	local name=entity.name 
 	table.insert (storage.rocket_silos,entity)
 	if storage.enable_silo_attack then CallFrenzyAttack(surface,entity,nil,1.5) end
 	end
@@ -1007,16 +1084,17 @@ script.on_event(defines.events.script_raised_built, On_Built, filters)
 
 
 
+
 function player_mined_entity(event)
 local player = game.players[event.player_index]	
 if not player.valid then return end
 local ent = event.entity
-if ent.type=='tree' then 
+local surface = ent.surface
+if ent.type=='tree' and in_list(storage.surfaces, surface.name)  then
 	if math.random()<=storage.tree_events_chance then
-		local the_event=pick_event({'biterzilla','volcano'})
+		local the_event=pick_event({'biterzilla','volcano',"spidertron", "demolisher", "flying_saucer","soldiers"})
 		if the_event then 
 			local pforce = player.force
-			local surface = ent.surface
 			Create_Position_Event(the_event, surface, ent.position, pforce)	
 			end
 		end
@@ -1024,6 +1102,26 @@ if ent.type=='tree' then
 end
 local filters = {{filter = "type", type = "tree"}}
 script.on_event(defines.events.on_player_mined_entity, player_mined_entity, filters) 
+
+
+
+
+
+script.on_event(defines.events.on_surface_created, function(event)
+if storage.spawn_on_sa_planets then 
+local surface_index=event.surface_index
+local surface=game.surfaces[surface_index]
+if in_list(storage.allowed_planets, surface.name) then
+	remote.call( "bigmonster", "add_surface", surface.name)
+	end
+end
+end)
+
+
+
+
+
+
 
 
 -- warptorio
@@ -1123,7 +1221,7 @@ for _, e in pairs(storage.other_enemies) do if e and e.valid then e.destroy() en
 storage.other_enemies = {}
 end
 
-local event_names = {'biterzilla','soldiers','worms','volcano','invasion','swarm','spidertron','flying_saucer','ultimate_boss'} --'brutals'
+local event_names = {'biterzilla','soldiers','worms','volcano','invasion','gleba_invaders','swarm','spidertron','demolisher','flying_saucer','ultimate_boss'} 
 
 function interface.create_event(the_event,surfacename,forcename)
 if (not the_event) or in_list(event_names, the_event) then
@@ -1154,6 +1252,16 @@ function interface.add_player_force(forcename)
 if forcename then add_list(storage.player_forces, forcename) end
 end
 
+function interface.add_planet(planet_name)
+if planet_name then add_list(storage.allowed_planets, planet_name) end
+end
+
+function interface.remove_planet(planet_name)
+if planet_name then del_list(storage.allowed_planets, planet_name) end
+end
+
+
+
 remote.add_interface( "bigmonster", interface )
 
 
@@ -1169,8 +1277,10 @@ remote.add_interface( "bigmonster", interface )
  /c remote.call( "bigmonster", "create_event", "worms")
  /c remote.call( "bigmonster", "create_event", "volcano")
  /c remote.call( "bigmonster", "create_event", "invasion")
+ /c remote.call( "bigmonster", "create_event", "gleba_invaders")
  /c remote.call( "bigmonster", "create_event", "swarm")
  /c remote.call( "bigmonster", "create_event", "spidertron")
+ /c remote.call( "bigmonster", "create_event", "demolisher") 
  /c remote.call( "bigmonster", "create_event", "flying_saucer")
 
  /c remote.call( "bigmonster", "create_event", "ultimate_boss")
@@ -1194,6 +1304,11 @@ include surfaces for disasters
 /c remote.call( "bigmonster", "add_surface", surfacename)
 exclude surfaces for disasters
 /c remote.call( "bigmonster", "exclude_surface", surfacename)
+
+
+include/remove SA planet name
+/c remote.call( "bigmonster", "add_planet", planet_name)
+/c remote.call( "bigmonster", "remove_planet", planet_name)
 
 
 include player force to be targeted

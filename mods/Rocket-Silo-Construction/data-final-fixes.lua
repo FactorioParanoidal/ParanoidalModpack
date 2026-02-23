@@ -55,6 +55,6 @@ if mods['space-exploration'] then
 	remove_raw_ingredient(data.raw.recipe["rsc-excavation-site"].ingredients, "processing-unit")
 	if data.raw.recipe["rsc-serlp-excavation-site"] then remove_raw_ingredient(data.raw.recipe["rsc-serlp-excavation-site"].ingredients, "processing-unit") end
 
-	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {"se-heat-shielding", 10*mp} )
-	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {"rocket-control-unit", 5*mp} )
+	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {type="item", name="se-heat-shielding", amount=math.ceil(10*mp)} )
+	table.insert(data.raw.recipe["rsc-construction-stage6"].ingredients, {type="item", name="rocket-control-unit", amount=math.ceil(5*mp)} )
 	end

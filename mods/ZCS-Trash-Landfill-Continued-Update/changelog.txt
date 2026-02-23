@@ -1,0 +1,93 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 26.08.2025
+  Big re-update (hola otra vez, 4 meses después 👋):
+  Features:
+    - Factorio 2.0: migrado de `global` a `storage` y saneado de ciclo completo.
+    - Consumo: 1 slot por ciclo (por defecto 60 s) y configurable vía ajustes.
+    - Polución: proporcional al tamaño del stack con fórmula exponencial y tope (cap).
+    - Ajustes en caliente (runtime-global):
+        • zcs_trash_period_seconds  — segundos por ciclo
+        • zcs_trash_pollution_per_item — polución base por ítem
+        • zcs_trash_pollution_exponent — exponente (>1 = crece más con stacks grandes)
+        • zcs_trash_pollution_cap — límite máximo de polución por slot (0 = sin límite)
+    - Receta/tecnología:
+        • Receta: 120 stone-brick, 30 stone-wall, 8 steel-plate, 12 copper-plate (sin concrete).
+        • Startup setting opcional: zcs_trash_recipe_cost_mult (0.25x–4x) para escalar costos.
+        • Tecnología: requiere "stone-wall" + "steel-processing".
+    - Localización: nombres/desc. de entidad, ítem, receta, tecnología y ajustes (es/en).
+    - Arte: sprite entity 637×637 (picture.size=637); iconos 32×32.
+
+  Fixes:
+    - Registro a prueba de todo: on_built (jugador/robot), script_raised_built, on_entity_cloned;
+      desregistro en mined/died/script_raised_destroy.
+    - Repoblación automática en on_init/on_configuration_changed: reindexa vertederos en el mapa.
+    - Referencias sólidas a la entidad (con recuperación por posición si queda inválida).
+    - Reanclado de timers al cambiar ajustes (evita ciclos “colgados”).
+    - Normalización de slot_index si cambia el tamaño del inventario (compat con otros mods).
+    - Arreglado: prerequisite interno correcto "stone-wall" (antes se usó mal el plural).
+    - Arreglado: inicialización de `GFX` y paths para evitar errores de concatenación nil.
+
+  Balance:
+    - Polución más visible por stack alto (exponente 1.35 por defecto) con cap 100 para evitar
+      picos absurdos con mega-stacks de otros mods.
+    - Coste de receta más razonable para mid-game; sin concrete.
+
+  Compatibility:
+    - Sin dependencias duras: funciona en vanilla, con Quality, con Space Age, o con ambos.
+    - Entidad `container` estándar; `surface.pollute` y eventos 2.0.
+---------------------------------------------------------------------------------------------------
+
+Version: 1.2.6
+Date: 04.04.2025
+  Features:
+    - fix all
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 03.04.2025
+  Features:
+    - fix landfill
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 03.04.2025
+  Features:
+    - fix landfill
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 02.04.2025
+  Features:
+    - fix crash x2
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 01.04.2025
+  Features:
+    - fix crash
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 01.04.2025
+  Features:
+    - Translation to Spanish
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 01.04.2025
+  Features:
+    - Support for Factorio 2.0 
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 02.04.2024
+  Features:
+    - Added setting for tick rate, to customize how often the mod checks for item decay
+    - Added setting for item decay rate, to customize how long an item has to exist in a Trash Landfill before it turns into pollution
+    - Added setting for item decay amount, to customize how many items are consumed per item stack
+    - Added setting for item pollution amount, to customize how much pollution is released per item decayed
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 06.19.2021
+  Fixes:
+    - Removed unneeded hyphen in the name
+    - Corrected sprite paths
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 06.19.2021
+  Features:
+    - Support for Factorio 1.1

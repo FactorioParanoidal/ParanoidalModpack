@@ -117,7 +117,7 @@ data:extend({
       name = "rso-multi-resource-active",
       setting_type = "runtime-global",
       default_value = true,
-      order = "gb",
+     order = "gb",
    },   
    {
       type = "double-setting",
@@ -150,7 +150,7 @@ data:extend({
       type = "bool-setting",
       name = "rso-oil-in-start-area",
       setting_type = "runtime-global",
-      default_value = true,
+      default_value = false,
       order = "ef",
    },
    {

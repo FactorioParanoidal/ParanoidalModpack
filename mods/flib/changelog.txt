@@ -1,4 +1,94 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 2025-11-05
+  Bugfixes:
+    - Fixed that `flib_table.binary_search` would fail to find the last element in the list. (#81)
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 2025-10-31
+  Features:
+    - Added `flib_position.from_direction` and `flib_position.from_orientation`.
+    - Added `flib_math.radian` constant.
+  Changes:
+    - Deprecated `flib_direction.to_vector` and `flib_direction.to_vector_2d` because they do not function correctly.
+    - Deprecated `flib_migration` module in favor of `helpers.compare_versions` and Lua migration files.
+  Bugfixes:
+    - Fixed that `flib_dictionary.handle_events` would not handle on_player_locale_changed.
+    - Fixed LuaLS warnings when passing flib_dictionary or flib_gui as an event_handler module.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 2025-06-05
+  Features:
+    - Added `flib_prototypes.get_base_type` method.
+  Changes:
+    - Improved error messaging of flib_prototypes functions.
+  Bugfixes:
+    - Fixed that `flib_locale.of` would give an incorrect result in some cases. (#80)
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 2025-01-24
+  Bugfixes:
+    - Fixed that `flib_locale.of_item` would not accept all item subtypes.
+    - Fixed that `flib_locale.of_recipe` would incorrectly return the main product name in some cases.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 2025-01-20
+  Optimizations:
+    - Improved performance of `flib_prototypes.all()`.
+  Bugfixes:
+    - Fixed a crash when using `flib_gui_templates.technology_slot()`.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 2024-12-16
+  Features:
+    - Added `flib_locale` module with various utilities for deducing the localised names of prototypes in the prototype stage.
+    - Added `flib_prototypes` module with various utilities for getting prototypes from data.raw.
+    - Added `flib_position.abs()`.
+  Bugfixes:
+    - Removed icon mipmaps properties from `data-util`; icon mipmaps are now automatically deduced by the game engine.
+    - Fixed a crash when attempting to use the `gui-templates` module due to an outdated require path. (#72)
+    - Fixed that `flib_direction.from_positions` did not work correctly. (#74)
+    - Fixed that `flib_migration.on_config_changed` would run migrations unnecessarily. (#71, #73)
+---------------------------------------------------------------------------------------------------
+Version: 0.15.0
+Date: 2024-10-14
+  Features:
+    - Added support for ronna and quetta SI prefixes to `flib_format.number`.
+  Changes:
+    - Updated to Factorio 2.0.
+    - Removed `flib_direction.north` etc. constants. Use `defines.direction` instead.
+    - Renamed `gui-lite` to `gui`, and `dictionary-lite` to `dictionary`.
+    - Removed deprecated modules.
+---------------------------------------------------------------------------------------------------
+Version: 0.14.2
+Date: 2024-07-28
+  Bugfixes:
+    - [dictionary-lite] Fixed that the first translation in a re-requested batch would be skipped.
+    - [math] Fixed that the `sum` function was ignoring the first element. (#69)
+    - Fixed that the `flib_tool_button_light_green` GUI style had a built-in tooltip. (#68)
+---------------------------------------------------------------------------------------------------
+Version: 0.14.1
+Date: 2024-05-10
+  Changes:
+    - Adjusted technology slot GUI template to work with Ultimate Research Queue.
+  Bugfixes:
+    - Fixed that the technology slot GUI styles did not have selected styles.
+---------------------------------------------------------------------------------------------------
+Version: 0.14.0
+Date: 2024-03-29
+  Features:
+    - Added `gui-lite.format_handlers` function.
+    - Added `gui-templates` module for building various common and/or annoying GUI components. Currently just makes technology slots.
+    - Added `table.binary_search` function.
+    - Added `technology` module with various runtime technology-related utilities.
+    - Added technology slot styles.
+    - Added require guards to allow requiring flib modules with any syntax without breaking upvalues.
+  Changes:
+    - `data_util.create_icons` no longer defines default icon size or scale. (#64)
+  Bugfixes:
+    - Fixed `data_util.get_energy_value` not accepting capital `K` as a unit suffix. (#59)
+    - Fixed that dictionary-lite translation batches would not always be re-requested in their entirety due to undefined Lua next() behavior.
+---------------------------------------------------------------------------------------------------
 Version: 0.13.0
 Date: 2023-10-14
   Features:

@@ -8,6 +8,9 @@ local movementUtils = {}
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local mathUtils = require("MathUtils")
+local pheromoneUtils = require("PheromoneUtils")
+
+local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
 
 -- constants
 
@@ -71,6 +74,9 @@ end
 --[[
     Expects all neighbors adjacent to a chunk
 --]]
+--[[
+    Expects all neighbors adjacent to a chunk
+--]]
 function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChunks, scoreFunction)
     local highestChunk = -1
     local highestScore = -MAGIC_MAXIMUM_NUMBER
@@ -89,6 +95,14 @@ function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChun
             end
         end
     end
+	
+	local currentScore
+	if chunk ~=-1 then
+		local currentScore = scoreFunction(map, chunk)
+		if currentScore >= highestScore then
+			pheromoneUtils.processStaticPheromone(map, chunk, {recursion = true, color = {1, 1, 1}})
+		end	
+	end
 
     local nextHighestChunk = -1
     local nextHighestScore = highestScore
@@ -112,6 +126,83 @@ function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChun
 
     return highestChunk, highestDirection, nextHighestChunk, nextHighestDirection
 end
+-- function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChunks, scoreFunction)
+    -- local highestChunk 		--= -1
+    -- local highestScore 		--= -MAGIC_MAXIMUM_NUMBER
+    -- local highestDirection
+	
+	-- local currentScore = 0
+	-- for step = 1, 2 do
+		-- highestChunk = -1
+		-- highestScore = -MAGIC_MAXIMUM_NUMBER
+		-- highestDirection = nil
+		-- for n=1,8 do
+			-- local neighborChunk = neighborDirectionChunks[n]
+			-- if (neighborChunk ~= -1) then
+				-- if canMoveChunkDirection(map, n, chunk, neighborChunk) or (chunk == -1) then
+					-- local score
+					-- if step == 2 then
+						-- score = neighborChunk[BASE_DETECTION_PHEROMONE]
+					-- else
+						-- score = scoreFunction(map, neighborChunk)
+					-- end
+					-- if (score > highestScore) then
+						-- highestScore = score
+						-- highestChunk = neighborDirectionChunks[n]
+						-- highestDirection = n
+					-- end
+				-- end
+			-- end
+		-- end
+		-- if chunk ~=-1 then
+			-- if (step == 2) then
+				-- currentScore = chunk[BASE_DETECTION_PHEROMONE]
+			-- else	
+				-- currentScore = scoreFunction(map, chunk)
+			-- end
+		-- end
+		-- if currentScore < highestScore then
+			-- break
+		-- else
+			-- if step == 2 then
+				-- if chunk ~=-1 then
+					-- -- pheromoneUtils.multiplyPheromones(map, chunk, 0.1, {1, 1, 1})
+					-- for n=1,8 do
+						-- local neighborChunk = neighborDirectionChunks[n]
+						-- if (neighborChunk ~= -1) then
+							-- if (neighborChunk[BASE_DETECTION_PHEROMONE]*4) > chunk[BASE_DETECTION_PHEROMONE] then
+								-- pheromoneUtils.multiplyPheromones(map, neighborChunk, 0.1, {0.5, 0.5, 0.5})
+							-- end	
+						-- end
+					-- end	
+					-- pheromoneUtils.processStaticPheromone(map, chunk, {recursion = true, color = {1, 1, 1}})
+				-- end	
+			-- end	
+		-- end
+	-- end	
+
+    -- local nextHighestChunk = -1
+    -- local nextHighestScore = highestScore
+    -- local nextHighestDirection
+
+    -- -- if (highestChunk ~= -1) then
+        -- -- local nextNeighborDirectionChunks = getNeighborChunks(map, highestChunk.x, highestChunk.y)
+        -- -- for n=1,8 do
+            -- -- local neighborChunk = nextNeighborDirectionChunks[n]
+            -- -- if ((neighborChunk ~= -1) and (neighborChunk ~= chunk) and
+                -- -- canMoveChunkDirection(map, n, highestChunk, neighborChunk)) then
+                -- -- local score = scoreFunction(map, neighborChunk)
+                -- -- if (score > nextHighestScore) then
+                    -- -- nextHighestScore = score
+                    -- -- nextHighestChunk = neighborChunk
+                    -- -- nextHighestDirection = n
+                -- -- end
+            -- -- end
+        -- -- end
+    -- -- end
+
+    -- return highestChunk, highestDirection, nextHighestChunk, nextHighestDirection
+-- end
 
 
 --[[
@@ -145,9 +236,9 @@ function movementUtils.scoreNeighborsForSettling(map, chunk, neighborDirectionCh
     local nextHighestDirection = 0
 
     if (highestChunk ~= -1) then
-        neighborDirectionChunks = getNeighborChunks(map, highestChunk.x, highestChunk.y)
+        local nextNeighborDirectionChunks = getNeighborChunks(map, highestChunk.x, highestChunk.y)
         for x=1,8 do
-            local neighborChunk = neighborDirectionChunks[x]
+            local neighborChunk = nextNeighborDirectionChunks[x]
             if ((neighborChunk ~= -1) and (neighborChunk ~= chunk) and
                 canMoveChunkDirection(map, x, highestChunk, neighborChunk)) then
                 local score = scoreFunction(map, neighborChunk)
@@ -219,10 +310,9 @@ function movementUtils.scoreNeighborsForRetreat(chunk, neighborDirectionChunks, 
     local nextHighestDirection
 
     if (highestChunk ~= -1) then
-        neighborDirectionChunks = getNeighborChunks(map, highestChunk.x, highestChunk.y)
-        for x=1,8 do
-            local neighborChunk = neighborDirectionChunks[x]
-
+  		local nextNeighborDirectionChunks = getNeighborChunks(map, highestChunk.x, highestChunk.y)
+		for x=1,8 do
+            local neighborChunk = nextNeighborDirectionChunks[x]
             if ((neighborChunk ~= -1) and (neighborChunk ~= chunk) and
                 canMoveChunkDirection(map, x, highestChunk, neighborChunk)) then
                 local score = scoreFunction(map, neighborChunk)

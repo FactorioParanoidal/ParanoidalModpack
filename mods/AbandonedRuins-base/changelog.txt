@@ -1,0 +1,89 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2025-11-27
+  Changes:
+    - exclude ruins with water on vulcanus, too
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2025-11-27
+  Changes:
+    - let's not use `table.insert()` anymore when `foos[#foos] = foo` is enough and possibly faster
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2025-08-24
+  Minor:
+    - bumped version number of `AbandonedRuins_updated_fork` to 1.4.0 which has introduced
+      breaking changes
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2025-08-06
+  Documentation:
+    - Updated `ruin_set.md` as there was no remote-call for registering your ruin-set possible,
+      only `utils.register_ruin_set()` is available
+    - added `no_spawning` (per ruin possible) and `no_spawning_on()` (remote-call, entire ruin-set)
+  Minor:
+    - added locales for "base" ruin-set name
+    - fixed version numbers, thanks to @Sgamez for reporting it
+    - bumped mandatory depency `AbandonedRuins_updated_fork` to latest minor 17
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2025-08-03
+  Bugfixes:
+    - all ruin-set mods must now register their name with the framework mod
+      `AbandonedRuins_updated_fork` before they can be selected, since "base" is no longer the
+      default, this mod also needs to register its name
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2025-07-23
+  Features:
+    - added `allowed_surfaces` to some ruins which is a per-ruin table of surface names either
+      if they are allowed or explicitly not to spawn
+    - expanded documentation, also with new remote-call function `spawn_exclusively_on()` so
+      planets/moons can have their exclusive ruin-sets being randomly spawned
+  Bugfixes:
+    - renamed "rock-*" to "*-rock", e.g. "big-rock" is correct entity name, so more entities
+      will spawn (again)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2025-07-22
+  Documentation:
+    - added `format.md` from `AbandonedRuins_updated_fork` mod
+    - added `CONTRIBUTION.md` for how to contribute ruins
+    - added `migration.md` for how to migrate your mod to 1.3.3
+  Changes:
+    - bumped version of `AbandonedRuins_updated_fork`
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2025-07-20
+  Changes:
+    - reactivated ruin splitterI.lua (small) as the same crash happens in other ruin
+      with `random-belt`, too
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2025-07-20
+  Changes:
+    - deactivated ruin splitterI as `random-splitter` is not working ATM
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2025-07-19
+  Changes:
+    - heavy rewrites from old unflexible/static system
+    - moved `replace_*` functions to new `libs/main.lua` file
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2025-04-14
+  Changes:
+    - Corrections made to control.lua
+      Thanks to Severeniys for noticing the incorrect connection of large ruins
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2024-12-19
+  Changes:
+    - All basic ruins are separated into a separate mod
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2021-01-27
+  Changes:
+    - Spawned fuel now respects the fuel overhaul setting.
+    - Updated to Factorio 1.1.
+---------------------------------------------------------------------------------------------------

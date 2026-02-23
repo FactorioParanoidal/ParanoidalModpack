@@ -1,4 +1,70 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+    - Allow Lithium-ion batteris and Silver zinc batteries to be crafted in a Cryogenic plant #515
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 02. 01. 2026
+  Changes:
+    - Updated AAI Industry integration #393
+    - Electrolysis / power rebalance: #418
+      - Reduced the power consumption of electrolysers
+      - Reduced the fuel value of hydrogen
+      - Increased the speed of some electrolysis recipes
+      - Reduced the amount of hydrogen produced by petroleum gas cracking
+      - Reduced the fuel value of petroleum gas
+    - Integrate Bob's Locale Translations mod #445
+    - Added Jetpack mod compatibility: Enable use of Enriched fuel blocks #467
+    - Added support for frozen entities (with Space Age) #477
+    - Simplified Nuclear Settings #504
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 22. 06. 2025
+  Bugfixes:
+    - Fixed crafting_machine_tint startup error when using other mods that also modify the nuclear fuel reprocessing recipe #427
+  Changes:
+    - Added de locale #415
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 20. 04. 2025
+  Bugfixes:
+    - Fixed missing message when attempting to insert efficiency modules into electrolysers #399
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Changes:
+    - Reduced pollution from initial lead plate recipe #379
+    - Added preset for Milestones mod #389
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Info:
+    - Update for Factorio 2.0 #189
+  Changes:
+    - Added sodium hydroxide sink recipe #145
+    - New lead oxide graphics #191
+    - Removed some old low-resolution graphics #200
+    - Added circuit connections to relevant machines #200
+    - Replaced wood -> coal recipe with wood -> carbon recipe to prevent looping #267
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 21. 02. 2024
+  Bugfixes:
+    - Fixed reactor descriptions #162
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Bugfixes:
+    - Fixed Small tank pipe draw issue #107
+    - Fixed tech Plutonium Synthesis being unresearchable with Nuclear Fuel mod #119
+  Changes:
+    - Added missing prerequisites #120
+    - Moved solid fuel recipes to tech "Flammables" #120
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Bugfixes:

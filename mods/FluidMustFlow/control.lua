@@ -3,8 +3,6 @@ if not settings.startup["fmf-enable-duct-auto-join"].value then
   return
 end
 
--- The entire file below this point is copied in src/prototypes/tips-and-tricks.lua for the drag building simulation
-
 --- Calculates the midpoint between two positions.
 --- @param pos_1 MapPosition
 --- @param pos_2 MapPosition
@@ -19,14 +17,14 @@ end
 --- @param e EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive
 local function join_ducts(e)
   --- @type LuaEntity
-  local entity = e.entity or e.created_entity
+  local entity = e.entity
   if not entity or not entity.valid then
     return
   end
 
-  -- Straight ducts only have one fluidbox
-  for _, neighbour in pairs(entity.neighbours[1]) do
-    if entity.name == neighbour.name then
+  for _, connection in pairs(entity.fluidbox.get_pipe_connections(1)) do
+    local neighbour = entity.surface.find_entity(entity.name, connection.target_position)
+    if neighbour then
       local direction = entity.direction
       local force = entity.force
       local last_user = entity.last_user

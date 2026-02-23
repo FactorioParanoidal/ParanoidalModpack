@@ -7,32 +7,32 @@ local PT_specs =
 {
   recipe = {
     [1] = {
-      energy_required = 30,
+      energy_required = 10,
       ingredients = {
-        {"radar", 10},
-        {"steel-chest", 10},
-        {"electronic-circuit", 10}
+        {type = "item", name = "radar", amount = 1},
+        {type = "item", name = "steel-chest", amount = 1},
+        {type = "item", name = "electronic-circuit", amount = 10}
       },
     },
     [2] = {
-      energy_required = 60,
+      energy_required = 30,
       ingredients = {
-        {"__PT__1__", 4},
-        {"advanced-circuit", 10}
+        {type = "item", name = "__PT__1__", amount = 4},
+        {type = "item", name = "advanced-circuit", amount = 10}
       },
     },
     [3] = {
-      energy_required = 120,
+      energy_required = 50,
       ingredients = {
-        {"__PT__2__", 4},
-        {"advanced-circuit", 40}
+        {type = "item", name = "__PT__2__", amount = 4},
+        {type = "item", name = "advanced-circuit", amount = 10}
       },
     },
     [4] = {
-      energy_required = 120,
+      energy_required = 70,
       ingredients = {
-        {"__PT__3__", 4},
-        {"processing-unit", 20}
+        {type = "item", name = "__PT__3__", amount = 4},
+        {type = "item", name = "processing-unit", amount = 10}
       },
     },
   },

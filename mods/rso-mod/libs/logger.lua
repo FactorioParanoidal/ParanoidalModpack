@@ -16,7 +16,7 @@ end
 function Logger:dump(file_name)
   if #self.log_buffer == 0 then return false end
   file_name = file_name or "logs/"..self.prefix..game.tick..".log"
-  game.write_file(file_name, table.concat(self.log_buffer))
+  helpers.write_file(file_name, table.concat(self.log_buffer))
   self.log_buffer = {}
   return true
 end

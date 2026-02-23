@@ -1,7 +1,7 @@
 
 -- Update helper metatables
 local function refreshHelpers(obj)
-	if type(obj) == "table" and not obj.__self then 
+	if type(obj) == "table" then 
 		for key,val in pairs(obj) do
 			refreshHelpers(val)
 		end
@@ -12,15 +12,15 @@ local function refreshHelpers(obj)
 	end
 end
 
-refreshHelpers(global)
+refreshHelpers(storage)
 
 
 
 -- Update player cache metatables
-if global.cache then
-	for __,cache in pairs(global.cache) do
-		if global.markers then  rawset(cache.markers, "__mt", "entityAsIndex") end
-		if global.entities then rawset(cache.entities, "__mt", "entityAsIndex") end
+if storage.cache then
+	for __,cache in pairs(storage.cache) do
+		if storage.markers then  rawset(cache.markers, "__mt", "entityAsIndex") end
+		if storage.entities then rawset(cache.entities, "__mt", "entityAsIndex") end
 	end
 end
 

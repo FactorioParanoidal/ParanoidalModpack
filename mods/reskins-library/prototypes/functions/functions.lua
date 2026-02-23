@@ -1,240 +1,146 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
 
--- Make our function host
-if not reskins then reskins = {} end
-if not reskins.lib then reskins.lib = {} end
-
 -- Library directory
 reskins.lib.directory = "__reskins-library__"
 
--- Setup reskin logging TODO: Actually log things...
-reskins.lib.status = {}
+--- Searches through a nested table based on a sequence of keys and returns the final value.
+---
+--- This function takes a root table and a series of keys, then attempts to locate the value
+--- at the nested position defined by the keys. If any key in the sequence does not exist or the
+--- current value is not a table during traversal, the function returns `nil`.
+---
+--- This mimics the behavior of the null-conditional operator in C#, safely accessing deeply nested properties.
+---
+--- @param root table The table from which to begin the search.
+--- @param ... string|integer A list of keys defining the path to traverse within the root table.
+--- @return any #The value at the end of the key sequence if it exists; otherwise, `nil`.
+local function try_get_value(root, ...)
+	for i = 1, select("#", ...) do
+		if type(root) ~= "table" then
+			return nil
+		end
+		local key = select(i, ...)
+		root = root[key]
+		if root == nil then
+			return nil
+		end
+	end
 
--- Setup migration module
----@diagnostic disable-next-line: different-requires
-reskins.lib.migration = require("migration")
-
----Validates startup settings and returns their value
----@param name string
----@return any setting.value
-function reskins.lib.setting(name)
-    local startup_setting
-    if settings.startup[name] then
-        startup_setting = settings.startup[name].value
-    else
-        startup_setting = nil
-    end
-
-    return startup_setting
+	return root
 end
 
----@alias mod_settings
----| '"angelsaddons-cab"'
----| '"angelsaddons-mobility"'
----| '"angelsaddons-storage"'
----| '"angelsbioprocessing"'
----| '"angelsexploration"'
----| '"angelsindustries"'
----| '"angelspetrochem"'
----| '"angelsrefining"'
----| '"angelssmelting"'
----| '"bobassembly"'
----| '"bobelectronics"'
----| '"bobenemies"'
----| '"bobequipment"'
----| '"bobgreenhouse"'
----| '"boblogistics"'
----| '"bobmining"'
----| '"bobmodules"'
----| '"bobores"'
----| '"bobplates"'
----| '"bobpower"'
----| '"bobrevamp"'
----| '"bobtech"'
----| '"bobvehicleequipment"'
----| '"bobwarfare"'
-
----@alias reskin_mods
----| '"angels"'
----| '"bobs"'
----| '"lib"'
----| '"compatibility"'
-
----@alias sprite_scopes
----| '"entities"'
----| '"equipment"'
----| '"items-and-fluids"'
----| '"technologies"'
-
----Checks to see if the reskin-toggle is enabled for a given setting, and if it is, checks if the given scope is also enabled.
----Returns true if both are true, returns false if one is false, and nil otherwise.
----@param scope sprite_scopes
----@param mod reskin_mods
----@param setting mod_settings
----@return boolean|nil
-function reskins.lib.check_scope(scope, mod, setting)
-    if reskins.lib.setting("reskins-"..mod.."-do-"..setting) == true then
-        if reskins.lib.setting("reskins-lib-scope-"..scope) == true then
-            return true
-        else
-            return false
-        end
-    elseif reskins.lib.setting("reskins-"..mod.."-do-"..setting) == false then
-        return false
-    else
-        return nil
-    end
-end
-
--- Setup pack function hosts and import triggers
-if mods["reskins-angels"] then
-    reskins.angels = {
-    triggers = require("__reskins-angels__/prototypes/functions/triggers")
-}
-end
-
-if mods["reskins-bobs"] then
-    reskins.bobs = {
-    triggers = require("__reskins-bobs__/prototypes/functions/triggers")
-}
-end
-
-if mods["reskins-compatibility"] then
-    reskins.compatibility = {
-        triggers = require("__reskins-compatibility__/prototypes/functions/triggers")
-    }
-end
-
-
--- Fetch blend mode, default `"additive"`. May be overridden in `settings-updates.lua` by uncommenting the line.
----@type string
-reskins.lib.blend_mode = reskins.lib.setting("reskins-lib-blend-mode")
-
----@class inputs.setup_standard_entity : inputs.parse_inputs, inputs.create_explosions_and_particles, inputs.create_remnant, inputs.construct_icons
+---@class SetupStandardEntityInputs : ParseInputsInputs, CreateExplosionsAndParticlesInputs, CreateRemnantInputs, ConstructIconInputsOld
 
 ---Most entities have a common process for reskinning, so consolidate the other functions under one superfunction for ease of use
----@param name string # [Prototype name](https://wiki.factorio.com/PrototypeBase#name)
----@param tier integer # 1-6 are supported, 0 to disable
----@param inputs inputs.setup_standard_entity
+---@param name string # The name of the entity prototype to be reskinned.
+---@param tier integer # The tier of the entity. An integer value from 0 to 6. Default `0`.
+---@param inputs SetupStandardEntityInputs
 function reskins.lib.setup_standard_entity(name, tier, inputs)
-    -- Parse inputs
-    reskins.lib.parse_inputs(inputs)
+	-- Parse inputs
+	reskins.lib.set_inputs_defaults(inputs)
 
-    -- Create particles and explosions
-    if inputs.make_explosions then
-        reskins.lib.create_explosions_and_particles(name, inputs)
-    end
+	-- Create particles and explosions
+	if inputs.make_explosions then
+		reskins.lib.create_explosions_and_particles(name, inputs)
+	end
 
-    -- Create remnants
-    if inputs.make_remnants then
-        reskins.lib.create_remnant(name, inputs)
-    end
+	-- Create remnants
+	if inputs.make_remnants then
+		reskins.lib.create_remnant(name, inputs)
+	end
 
-    -- Create icons
-    if inputs.make_icons then
-        reskins.lib.construct_icon(name, tier, inputs)
-    end
+	-- Create icons
+	if inputs.make_icons then
+		reskins.lib.construct_icon(name, tier, inputs)
+	end
 end
 
----@class inputs.parse_inputs
----@field icon_size? integer # Default 64
----@field icon_mipmaps? integer # Default 4
----@field technology_icon_size? integer # Default 128
----@field technology_icon_mipmaps? integer # Default 1
----@field make_explosions? boolean # Default true, create explosions in `standard_setup_entity`
----@field make_remnants? boolean # Default true, create corpses in `standard_setup_entity`
----@field make_icons? boolean # Default true, create icons in `standard_setup_entity`
----@field tier_labels? boolean # Default true, displays tier labels on icons
----@field make_icon_pictures? boolean # Default true
+---@class ParseInputsInputs
+---@field icon_size? data.SpriteSizeType # Default `64`.
+---@field technology_icon_size? data.SpriteSizeType # Default `128`.
+---@field make_explosions? boolean # Default `true`, creates explosions in `standard_setup_entity`.
+---@field make_remnants? boolean # Default `true`, creates corpses in `standard_setup_entity`.
+---@field make_icons? boolean # Default `true`, create icons in `standard_setup_entity`.
+---@field tier_labels? boolean # Default `true`, displays tier labels on icons.
+---@field make_icon_pictures? boolean # Default `true`, creates pictures for item-on-ground icons.
 
----Sets the default parameters on the standard inputs table if not already set
----@param inputs inputs.parse_inputs
----@return inputs.parse_inputs inputs @
----```
+---Adds missing default values to the given `inputs` table.
+---@param inputs ParseInputsInputs
+---@return ParseInputsInputs inputs
+---```lua
 --- inputs = {
----     icon_size integer -- Default 64
----     icon_mipmaps integer -- Default 4
----     technology_icon_size integer -- Default 128
----     technology_icon_mipmaps integer -- Default 1
----     make_explosions boolean -- Default true, create explosions in `standard_setup_entity`
----     make_remnants boolean -- Default true, create corpses in `standard_setup_entity`
----     make_icons boolean -- Default true, create icons in `standard_setup_entity`
----     tier_labels boolean -- Default true, displays tier labels on icons
----     make_icon_pictures boolean -- Default true
----     ...
+---     icon_size = 64,
+---     technology_icon_size = 128,
+---     make_explosions = true,
+---     make_remnants = true,
+---     make_icons = true,
+---     tier_labels = true,
+---     make_icon_pictures = true,
 --- }
 ---```
-function reskins.lib.parse_inputs(inputs)
-    inputs.icon_size = inputs.icon_size or 64 -- Pixel size of icons
-    inputs.icon_mipmaps = inputs.icon_mipmaps or 4 -- Number of mipmaps present in the icon image file
-    inputs.technology_icon_size = inputs.technology_icon_size or 128 -- Pixel size of technology icons
-    inputs.technology_icon_mipmaps = inputs.technology_icon_mipmaps or 1 -- Number of mipmaps present in the technology icon image file
-    inputs.make_explosions = (inputs.make_explosions ~= false) -- Create explosions; default true
-    inputs.make_remnants = (inputs.make_remnants ~= false) -- Create remnant; default true
-    inputs.make_icons = (inputs.make_icons ~= false) -- Create icons; default true
-    inputs.tier_labels = (inputs.tier_labels ~= false) -- Display tier labels; default true
-    inputs.make_icon_pictures = (inputs.make_icon_pictures ~= false) -- Define the pictures icon field when possible
+function reskins.lib.set_inputs_defaults(inputs)
+	inputs.icon_size = inputs.icon_size or 64
+	inputs.technology_icon_size = inputs.technology_icon_size or 128
+	inputs.make_explosions = (inputs.make_explosions ~= false)
+	inputs.make_remnants = (inputs.make_remnants ~= false)
+	inputs.make_icons = (inputs.make_icons ~= false)
+	inputs.tier_labels = (inputs.tier_labels ~= false)
+	inputs.make_icon_pictures = (inputs.make_icon_pictures ~= false)
 
-    return inputs
+	return inputs
 end
-
----@class inputs.assign_order
----@field type? string # [Prototype](https://wiki.factorio.com/Prototype_definitions)
----@field sort_order? string # [Types/Order](https://wiki.factorio.com/Types/Order)
----@field sort_group? string # Unclear; may be deprecated or unused in Factorio
----@field sort_subgroup? string # The name of the subgroup this entity should be sorted into in the map editor building selection
 
 ---Assigns a consistent `order` property to a given entity prototype and the associated items, explosions, and remnants if they exist
 ---@param name string
----@param inputs inputs.assign_order
+---@param inputs AssignOrderInputs
 function reskins.lib.assign_order(name, inputs)
-    -- Initialize paths
-    local entity
-    if inputs.type then
-        entity = data.raw[inputs.type][name]
-    end
-    local item = data.raw["item"][name]
-    local explosion = data.raw["explosion"][name.."-explosion"]
-    local remnant = data.raw["corpse"][name.."-remnants"]
+	-- Initialize paths
+	local entity
+	if inputs.type then
+		entity = data.raw[inputs.type][name]
+	end
+	local item = data.raw["item"][name]
+	local explosion = data.raw["explosion"][name .. "-explosion"]
+	local remnant = data.raw["corpse"][name .. "-remnants"]
 
-    if entity then
-        entity.order = inputs.sort_order
-        entity.group = inputs.sort_group
-        entity.subgroup = inputs.sort_subgroup
-    end
+	if entity then
+		entity.order = inputs.sort_order
+		entity.group = inputs.sort_group
+		entity.subgroup = inputs.sort_subgroup
+	end
 
-    if item then
-        item.order = inputs.sort_order
-        item.group = inputs.sort_group
-        item.subgroup = inputs.sort_subgroup
-    end
+	if item then
+		item.order = inputs.sort_order
+		-- item.group = inputs.sort_group
+		item.subgroup = inputs.sort_subgroup
+	end
 
-    if explosion then
-        explosion.order = inputs.sort_order
-        explosion.group = inputs.sort_group
-        explosion.subgroup = inputs.sort_subgroup
-    end
+	if explosion then
+		explosion.order = inputs.sort_order
+		-- explosion.group = inputs.sort_group
+		explosion.subgroup = inputs.sort_subgroup
+	end
 
-    if remnant then
-        remnant.order = inputs.sort_order
-        remnant.group = inputs.sort_group
-        remnant.subgroup = inputs.sort_subgroup
-    end
+	if remnant then
+		remnant.order = inputs.sort_order
+		-- remnant.group = inputs.sort_group
+		remnant.subgroup = inputs.sort_subgroup
+	end
 end
 
----@class inputs.create_remnant
----@field base_entity_name string # Name of Factorio reference entity to copy from, e.g. `stone-furnace`
----@field type string # [Prototype](https://wiki.factorio.com/Prototype_definitions)
+---@class CreateRemnantInputs
+---@field base_entity_name string # The type name of the entity to copy an existing `CorpsePrototype` from.
+---@field type string # The type name of the entity to be assigned the new `CorpsePrototype`.
 
 ---@class remnant # See [Prototype/Corpse](https://wiki.factorio.com/Prototype/Corpse)
 
 ---Copies the Factorio corpse specified by `inputs.base_entity_name`, extends `data` with a new
 ---corpse with the name `[name]-remnants`, and assigns it to the named entity
 ---@param name string
----@param inputs inputs.create_remnant
+---@param inputs CreateRemnantInputs
 ---```
 --- inputs = {
 ---     base_entity_name = string -- Name of Factorio reference entity to copy from, e.g. `stone-furnace`
@@ -242,21 +148,21 @@ end
 --- }
 ---```
 function reskins.lib.create_remnant(name, inputs)
-    ---@type remnant
-    local remnant = util.copy(data.raw["corpse"][inputs.base_entity_name.."-remnants"])
-    remnant.name = name.."-remnants"
-    data:extend({remnant})
+	---@type data.CorpsePrototype
+	local remnant = util.copy(data.raw["corpse"][inputs.base_entity_name .. "-remnants"])
+	remnant.name = name .. "-remnants"
+	data:extend({ remnant })
 
-    -- Assign corpse to originating entity
-    data.raw[inputs.type][name]["corpse"] = remnant.name
+	-- Assign corpse to originating entity
+	data.raw[inputs.type][name]["corpse"] = remnant.name
 end
 
----@class inputs.create_explosion : inputs.create_remnant
+---@class CreateExplosionInputs : CreateRemnantInputs
 
 ---Copies the Factorio explosion specified by `inputs.base_entity_name`, extends `data` with a new
----explosion with the name `[name]-explosion`, and assigns it to the named entity
+---explosion with the name `ar-[name]-explosion`, and assigns it to the named entity
 ---@param name string
----@param inputs inputs.create_explosion
+---@param inputs CreateExplosionInputs
 ---```
 --- inputs = {
 ---     base_entity_name = string -- Name of Factorio reference entity to copy from, e.g. `stone-furnace`
@@ -264,39 +170,164 @@ end
 --- }
 ---```
 function reskins.lib.create_explosion(name, inputs)
-    local explosion = util.copy(data.raw["explosion"][inputs.base_entity_name.."-explosion"])
-    explosion.name = name.."-explosion"
-    data:extend({explosion})
+	local explosion_copy = util.copy(data.raw["explosion"][inputs.base_entity_name .. "-explosion"])
+	explosion_copy.name = "ar-" .. name .. "-explosion"
+	data:extend({ explosion_copy })
 
-    -- Assign explosion to originating entity
-    data.raw[inputs.type][name]["dying_explosion"] = explosion.name
+	-- Assign explosion to originating entity
+	data.raw[inputs.type][name]["dying_explosion"] = explosion_copy.name
+end
+
+---Gets the preferred explosion for a given `explosion`, preferring the indirect base explosion, if it exists.
+---@param explosion data.ExplosionPrototype The explosion to check for a base explosion.
+---@return data.ExplosionPrototype
+local function get_preferred_explosion(explosion)
+	-- Several entities have a redirection to a base explosion entity, so we need to check for that and use it
+	-- preferentially.
+
+	---@type data.TriggerEffect[]|nil
+	local target_effects = try_get_value(explosion, "created_effect", "action_delivery", "target_effects")
+
+	if not target_effects or #target_effects == 0 then
+		return explosion
+	end
+
+	if target_effects[1].type == "create-explosion" then
+		-- Copy the explosion reference and update our explosion, if it doesn't already exist, as we may visit the same
+		-- explosion multiple times.
+		local explosion_base_name = target_effects[1].entity_name
+
+		local base_explosion = data.raw["explosion"][explosion_base_name]
+		if base_explosion.name:find("ar-", 1, true) then
+			return base_explosion
+		end
+
+		base_explosion = util.copy(data.raw["explosion"][explosion_base_name])
+		base_explosion.name = "ar-" .. explosion.name .. "-base"
+		data:extend({ base_explosion })
+
+		-- Update the explosion reference name.
+		target_effects[1].entity_name = base_explosion.name
+		return base_explosion
+	end
+
+	return explosion
+end
+
+---A map of particle names to particle exclusions to prevent false positives.
+local particle_exclusions_map = {
+	["metal-particle-medium"] = {
+		"long-metal-particle-medium",
+	},
+}
+
+---Checks if the given `particle_name` is a match for the `base_particle_name`, excepting any exclusions.
+---@param particle_name data.ParticleID The particle name to check.
+---@param base_particle_name string The base particle name to check against.
+---@return boolean # `true` if the particle name is a match for the base particle name, otherwise `false`.
+local function is_particle_name_intended_match(particle_name, base_particle_name)
+	if particle_name:find(base_particle_name, 1, true) then
+		local exclusions = particle_exclusions_map[base_particle_name]
+		if exclusions then
+			for _, exclusion in pairs(exclusions) do
+				if particle_name:find(exclusion, 1, true) then
+					return false
+				end
+			end
+		end
+
+		return true
+	end
+
+	return false
+end
+
+---Gets the preferred particle by checking for a particle name in `particle_effects` that contains the given
+---`base_particle_name`. The method will preferentially select the particle at the index matching `key`, if it exists.
+---Otherwise, the method will select the first particle that matches the `base_particle_name`.
+---@param particle_effects data.CreateParticleTriggerEffectItem[] The particle effects to search through.
+---@param base_particle_name string The base particle name to search for.
+---@param key integer The key to preferentially select, if it exists.
+---@return data.CreateParticleTriggerEffectItem|nil # The preferred particle effect, or `nil` if none are found.
+local function get_preferred_particle(particle_effects, base_particle_name, key)
+	local preferred_particle
+	local fallback_particle
+	for index, effect in pairs(particle_effects) do
+		if is_particle_name_intended_match(effect.particle_name, base_particle_name) then
+			if index == key then
+				preferred_particle = effect
+				break
+			elseif not fallback_particle then
+				fallback_particle = effect
+			end
+		end
+	end
+
+	return preferred_particle or fallback_particle
+end
+
+---Links a given `explosion` to the given `particle` by checking for particle effects in the explosion's target effects
+---that match the `base_particle_name`. The method will preferentially select the particle at the index matching `key`,
+---if it exists. Otherwise, the method will select the first particle that matches the `base_particle_name` to establish
+---the link.
+---@param explosion data.ExplosionPrototype The explosion to link the particle to.
+---@param particle data.ParticlePrototype The particle to link to the explosion.
+---@param base_particle_name string The base particle name to search for.
+---@param key integer The key to preferentially select, if it exists.
+local function link_particle_to_explosion(explosion, particle, base_particle_name, key)
+	local target_effects = try_get_value(explosion, "created_effect", "action_delivery", "target_effects")
+	if not target_effects or #target_effects == 0 then
+		return
+	end
+
+	-- Filter target_effects for all particle effects.
+	local particle_effects = {}
+	for _, effect in pairs(target_effects) do
+		if effect.type == "create-particle" then
+			table.insert(particle_effects, effect)
+		end
+	end
+
+	if #particle_effects > 0 then
+		local particle_effect = get_preferred_particle(particle_effects, base_particle_name, key)
+
+		if particle_effect then
+			particle_effect.particle_name = particle.name
+		end
+	end
 end
 
 ---Copies the Factorio particle specified by `base_entity_name`, applies tints, extends `data`
----with a new particle with the name `[name]-[base-particle-name]-tinted`, and assigns it to the named explosion
----@param name string # [Prototype name](https://wiki.factorio.com/PrototypeBase#name)
----@param base_entity_name string # Name of Factorio reference entity to copy from, e.g. `stone-furnace`
----@param base_particle_name string # Key for `reskins.lib.particle_index`
----@param key integer # Index corresponding to the particle within the `explosion` prototype
----@param tint table # [Types/Color](https://wiki.factorio.com/Types/Color)
+---with a new particle with the name `[name]-[base-particle-name]-tinted`, and links it to the named explosion
+---@param name data.EntityID The name of the entity prototype for which an AR explosion exists.
+---@param base_entity_name data.EntityID Name of Factorio reference entity to copy from, e.g. `stone-furnace`
+---@param base_particle_name string A value from `reskins.lib.particle_index` used to find the particle to copy.
+---@param key integer Index corresponding to the particle within the explosion target_effects table.
+---@param tint data.Color The tint to apply to the particle.
 function reskins.lib.create_particle(name, base_entity_name, base_particle_name, key, tint)
-    local particle = util.copy(data.raw["optimized-particle"][base_entity_name.."-"..base_particle_name])
-    particle.name = name.."-"..base_particle_name.."-tinted"
-    particle.pictures.sheet.tint = tint
-    particle.pictures.sheet.hr_version.tint = tint
-    data:extend({particle})
+	local particle = util.copy(data.raw["optimized-particle"][base_entity_name .. "-" .. base_particle_name])
 
-    -- Assign particle to originating explosion
-    data.raw["explosion"][name.."-explosion"]["created_effect"]["action_delivery"]["target_effects"][key].particle_name = particle.name
+	particle.name = "ar-" .. name .. "-" .. base_particle_name .. "-tinted"
+	particle.pictures.sheet.tint = tint
+
+	data:extend({ particle })
+
+	local explosion = data.raw["explosion"]["ar-" .. name .. "-explosion"]
+	if not explosion then
+		return
+	else
+		local preferred_explosion = get_preferred_explosion(explosion)
+		link_particle_to_explosion(preferred_explosion, particle, base_particle_name, key)
+	end
 end
 
----@class inputs.create_explosions_and_particles : inputs.create_explosion
+---@class CreateExplosionsAndParticlesInputs : CreateExplosionInputs
 ---@field particles? table # Table of keys for `reskins.lib.particle_index` and the target index within the explosion particle table to copy
 ---@field tint table # [Types/Color](https://wiki.factorio.com/Types/Color)
 
 ---Batches the `create_explosion` and `create_particle` function together for ease of use
 ---@param name string # [Prototype name](https://wiki.factorio.com/PrototypeBase#name)
----@param inputs inputs.create_explosions_and_particles @
+---@param inputs CreateExplosionsAndParticlesInputs @
 ---```
 --- inputs = {
 ---     base_entity_name = string -- Name of Factorio reference entity to copy from, e.g. `stone-furnace`
@@ -309,259 +340,24 @@ end
 --- }
 ---```
 function reskins.lib.create_explosions_and_particles(name, inputs)
-    reskins.lib.create_explosion(name, inputs)
+	reskins.lib.create_explosion(name, inputs)
 
-    if inputs.particles then
-        for particle, key in pairs(inputs.particles) do
-            -- Create and assign the particle
-            reskins.lib.create_particle(name, inputs.base_entity_name, reskins.lib.particle_index[particle], key, inputs.tint)
-        end
-    end
+	if inputs.particles then
+		for particle, key in pairs(inputs.particles) do
+			-- Create and assign the particle
+			reskins.lib.create_particle(name, inputs.base_entity_name, reskins.lib.particle_index[particle], key, inputs.tint)
+		end
+	end
 end
 
 reskins.lib.particle_index = {
-    ["tiny-stone"] = "stone-particle-tiny",
-    ["small"] = "metal-particle-small",
-    ["small-stone"] = "stone-particle-small",
-    ["medium"] = "metal-particle-medium",
-    ["medium-long"] = "long-metal-particle-medium",
-    ["medium-stone"] = "stone-particle-medium",
-    ["big"] = "metal-particle-big",
-    ["big-stone"] = "stone-particle-big",
-    ["big-tint"] = "metal-particle-big-tint",
+	["tiny-stone"] = "stone-particle-tiny",
+	["small"] = "metal-particle-small",
+	["small-stone"] = "stone-particle-small",
+	["medium"] = "metal-particle-medium",
+	["medium-long"] = "long-metal-particle-medium",
+	["medium-stone"] = "stone-particle-medium",
+	["big"] = "metal-particle-big",
+	["big-stone"] = "stone-particle-big",
+	["big-tint"] = "metal-particle-big-tint",
 }
-
-function reskins.lib.make_4way_animation_from_spritesheet(animation)
-    local function make_animation_layer(idx, anim)
-        local start_frame = (anim.frame_count or 1) * idx
-        local x = 0
-        local y = 0
-        if anim.vertically_oriented then
-            if anim.line_length then
-                y = idx * anim.height * math.floor(start_frame / (anim.line_length or 1))
-            else
-                y = idx * anim.height
-            end
-        else
-            if anim.line_length then
-                y = anim.height * math.floor(start_frame / (anim.line_length or 1))
-            else
-                x = idx * anim.width
-            end
-        end
-        return
-        {
-            filename = anim.filename,
-            priority = anim.priority or "high",
-            flags = anim.flags,
-            x = x,
-            y = y,
-            width = anim.width,
-            height = anim.height,
-            frame_count = anim.frame_count or 1,
-            line_length = anim.line_length,
-            repeat_count = anim.repeat_count,
-            run_mode = anim.run_mode,
-            frame_sequence = anim.frame_sequence,
-            shift = anim.shift,
-            draw_as_shadow = anim.draw_as_shadow,
-            draw_as_light = anim.draw_as_light,
-            draw_as_glow = anim.draw_as_glow,
-            force_hr_shadow = anim.force_hr_shadow,
-            apply_runtime_tint = anim.apply_runtime_tint,
-            animation_speed = anim.animation_speed,
-            scale = anim.scale or 1,
-            tint = anim.tint,
-            blend_mode = anim.blend_mode
-        }
-    end
-
-    local function make_animation_layer_with_hr_version(idx, anim)
-        local anim_parameters = make_animation_layer(idx, anim)
-        if anim.hr_version and anim.hr_version.filename then
-            anim_parameters.hr_version = make_animation_layer(idx, anim.hr_version)
-        end
-        return anim_parameters
-    end
-
-    local function make_animation(idx)
-        if animation.layers then
-            local tab = { layers = {} }
-            for k,v in ipairs(animation.layers) do
-            table.insert(tab.layers, make_animation_layer_with_hr_version(idx, v))
-            end
-            return tab
-        else
-            return make_animation_layer_with_hr_version(idx, animation)
-        end
-    end
-
-    return
-    {
-        north = make_animation(0),
-        east = make_animation(1),
-        south = make_animation(2),
-        west = make_animation(3)
-    }
-end
-
--- Connecting north/south oriented pipe shadow overlay
-function reskins.lib.vertical_pipe_shadow(shift)
-    return
-    {
-        filename = reskins.lib.directory.."/graphics/entity/common/pipe-patches/vertical-pipe-shadow-patch.png",
-        priority = "high",
-        width = 64,
-        height = 64,
-        repeat_count = 36,
-        draw_as_shadow = true,
-        shift = shift,
-        hr_version = {
-            filename = reskins.lib.directory.."/graphics/entity/common/pipe-patches/hr-vertical-pipe-shadow-patch.png",
-            priority = "high",
-            width = 128,
-            height = 128,
-            repeat_count = 36,
-            draw_as_shadow = true,
-            shift = shift,
-            scale = 0.5,
-        }
-    }
-end
-
--- TRANSPORT BELT PICTURES
-function reskins.lib.transport_belt_animation_set(tint, variant)
-    local transport_belt_animation_set
-    if variant == 1 then
-        transport_belt_animation_set = {
-            animation_set = {
-                layers = {
-                    -- Base
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-base.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 16,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-base.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 16,
-                            direction_count = 20
-                        }
-                    },
-                    -- Mask
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-mask.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 16,
-                        tint = tint,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-mask.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 16,
-                            tint = tint,
-                            direction_count = 20
-                        }
-                    },
-                    -- Highlights
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-1-highlights.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 16,
-                        blend_mode = reskins.lib.blend_mode,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-1-highlights.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 16,
-                            blend_mode = reskins.lib.blend_mode,
-                            direction_count = 20
-                        }
-                    },
-                }
-            }
-        }
-    else
-        transport_belt_animation_set = {
-            animation_set = {
-                layers = {
-                    -- Base
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-base.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 32,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-base.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 32,
-                            direction_count = 20
-                        }
-                    },
-                    -- Mask
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-mask.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 32,
-                        tint = tint,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-mask.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 32,
-                            tint = tint,
-                            direction_count = 20
-                        }
-                    },
-                    -- Highlights
-                    {
-                        filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/transport-belt-2-highlights.png",
-                        priority = "extra-high",
-                        width = 64,
-                        height = 64,
-                        frame_count = 32,
-                        blend_mode = reskins.lib.blend_mode,
-                        direction_count = 20,
-                        hr_version = {
-                            filename = reskins.lib.directory.."/graphics/entity/base/transport-belt/hr-transport-belt-2-highlights.png",
-                            priority = "extra-high",
-                            width = 128,
-                            height = 128,
-                            scale = 0.5,
-                            frame_count = 32,
-                            blend_mode = reskins.lib.blend_mode,
-                            direction_count = 20
-                        }
-                    },
-                }
-            }
-        }
-    end
-    return transport_belt_animation_set
-end

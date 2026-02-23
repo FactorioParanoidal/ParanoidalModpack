@@ -1,6 +1,6 @@
 function fillBzaluminumConfig(config)
 
-	config["aluminum-ore"] = {
+	config.nauvis["aluminum-ore"] = {
 		type="resource-ore",
 		
 		allotment=100,

@@ -129,7 +129,22 @@ function poison.createAttackPoisonClouds(poisonAttacksNumeric)
 															damage = {amount = (attackCooldown/60)*poisonAttacksNumeric["dps"][i], type = "poison"}
 														}
 												}
-										}
+										},
+										{
+											type = "area",
+											radius = 0.5,
+											force = "not-same",
+											action_delivery =
+												{
+													type = "instant",
+													target_effects =
+														{
+															type = "damage",
+															show_in_tooltip = true, 
+															damage = {amount = 2 * (attackCooldown/60)*poisonAttacksNumeric["dps"][i], type = "physical"}
+														}
+												}
+										},
 									}
 							}
 					}
@@ -145,6 +160,7 @@ function poison.createFireClouds(fireCloudNumeric)
 		makeCloud(
 			{
 				name = "fire-cloud-Dmg"..i,
+				localised_name = {"", {"rampant.fire-cloud"}},
 	            scale = fireCloudNumeric["radius"][i]*0.5,
 				tint = { r = 0.8, g = 0.5, b = 0.2, a = 0.05},
 				wind = false,

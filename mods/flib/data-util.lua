@@ -1,6 +1,10 @@
+if ... ~= "__flib__.data-util" then
+  return require("__flib__.data-util")
+end
+
 --- Utilities for data stage prototype manipulation.
 --- ```lua
---- local flib_data_util = require("__flib__/data-util")
+--- local flib_data_util = require("__flib__.data-util")
 --- ```
 --- @class flib_data_util
 local flib_data_util = {}
@@ -36,7 +40,6 @@ function flib_data_util.copy_prototype(prototype, new_name, remove_icon)
   if remove_icon then
     p.icon = nil
     p.icon_size = nil
-    p.icon_mipmaps = nil
     p.icons = nil
   end
 
@@ -47,8 +50,8 @@ end
 ---
 --- Returns `nil` if the prototype's icons are incorrectly or incompletely defined.
 --- @param prototype table
---- @param new_layers? IconSpecification[]
---- @return IconSpecification[]|nil
+--- @param new_layers? data.IconData[]
+--- @return data.IconData[]|nil
 function flib_data_util.create_icons(prototype, new_layers)
   if new_layers then
     for _, new_layer in pairs(new_layers) do
@@ -64,10 +67,9 @@ function flib_data_util.create_icons(prototype, new_layers)
       -- Over define as much as possible to minimize weirdness: https://forums.factorio.com/viewtopic.php?f=25&t=81980
       icons[#icons + 1] = {
         icon = v.icon,
-        icon_size = v.icon_size or prototype.icon_size or 32,
-        icon_mipmaps = v.icon_mipmaps or prototype.icon_mipmaps or 0,
+        icon_size = v.icon_size or prototype.icon_size,
         tint = v.tint,
-        scale = v.scale or 1,
+        scale = v.scale,
         shift = v.shift,
       }
     end
@@ -82,7 +84,6 @@ function flib_data_util.create_icons(prototype, new_layers)
       {
         icon = prototype.icon,
         icon_size = prototype.icon_size,
-        icon_mipmaps = prototype.icon_mipmaps,
         tint = { r = 1, g = 1, b = 1, a = 1 },
       },
     }
@@ -98,6 +99,8 @@ function flib_data_util.create_icons(prototype, new_layers)
 end
 
 local exponent_multipliers = {
+  ["q"] = 0.000000000000000000000000000001,
+  ["r"] = 0.000000000000000000000000001,
   ["y"] = 0.000000000000000000000001,
   ["z"] = 0.000000000000000000001,
   ["a"] = 0.000000000000000001,
@@ -119,6 +122,8 @@ local exponent_multipliers = {
   ["E"] = 1000000000000000000,
   ["Z"] = 1000000000000000000000,
   ["Y"] = 1000000000000000000000000,
+  ["R"] = 1000000000000000000000000000,
+  ["Q"] = 1000000000000000000000000000000,
 }
 
 --- Convert an energy string to base unit value + suffix.
@@ -144,17 +149,16 @@ end
 --- @param position? MapPosition
 --- @param filename? string
 --- @param size? Vector
---- @param mipmap_count? number
 --- @param mods? table
---- @return SpriteSpecification
-function flib_data_util.build_sprite(name, position, filename, size, mipmap_count, mods)
+--- @return data.Sprite
+function flib_data_util.build_sprite(name, position, filename, size, mods)
+  --- @type data.Sprite
   local def = {
     type = "sprite",
     name = name,
     filename = filename,
     position = position,
     size = size,
-    mipmap_count = mipmap_count,
     flags = { "icon" },
   }
   if mods then
@@ -178,8 +182,3 @@ flib_data_util.planner_base_image = "__flib__/graphics/planner.png"
 flib_data_util.dark_red_button_tileset = "__flib__/graphics/dark-red-button.png"
 
 return flib_data_util
-
---- @class IconSpecification
---- @field icon string
---- @field icon_size int
---- @class SpriteSpecification

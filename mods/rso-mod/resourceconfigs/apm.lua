@@ -1,7 +1,7 @@
 function fillApmConfig(config)
 
-	if game.active_mods["apm_nuclear"] or game.active_mods["apm_nuclear_ldinc"] then
-		config["thorium-ore"] = {
+	if script.active_mods["apm_nuclear"] or script.active_mods["apm_nuclear_ldinc"] then
+		config.nauvis["thorium-ore"] = {
 			type="resource-ore",
 			
 			allotment=40,

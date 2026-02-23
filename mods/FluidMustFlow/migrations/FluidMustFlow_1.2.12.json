@@ -1,13 +1,13 @@
 {
     "entity":
     [
-        ["duct-end-point-intake-south", "duct-end-point-intake"],
-        ["duct-end-point-intake-west", "duct-end-point-intake"],
-        ["duct-end-point-intake-north", "duct-end-point-intake"],
-        ["duct-end-point-intake-east", "duct-end-point-intake"],
-        ["duct-end-point-outtake-south", "duct-end-point-outtake"],
-        ["duct-end-point-outtake-west", "duct-end-point-outtake"],
-        ["duct-end-point-outtake-north", "duct-end-point-outtake"],
-        ["duct-end-point-outtake-east", "duct-end-point-outtake"]
+        ["duct-intake-south", "duct-intake"],
+        ["duct-intake-west", "duct-intake"],
+        ["duct-intake-north", "duct-intake"],
+        ["duct-intake-east", "duct-intake"],
+        ["duct-exhaust-south", "duct-exhaust"],
+        ["duct-exhaust-west", "duct-exhaust"],
+        ["duct-exhaust-north", "duct-exhaust"],
+        ["duct-exhaust-east", "duct-exhaust"]
     ]
 }

@@ -91,28 +91,18 @@ end
 
 function this.update(marker, item, count, color)
     if marker then
-        rendering.set_sprite(marker.icon, getSprite(item))
-        rendering.set_text(marker.text, getShortCount(count))
-        rendering.set_color(marker.text, color or getCountColor(count))
+        marker.icon.sprite = getSprite(item)
+        marker.text.text = getShortCount(count)
+        marker.text.color = color or getCountColor(count)
     end
 end
 
 function helpers:unmark() -- destroy distribution marker of entity
-    if self:is("object") then return self:is("valid") and self.destroy() end
+    if self:is("userdata") then return self:is("valid") and self.destroy() end
     
-    local source, player
-    self:where("table", function(__, marker)
+    self:where("userdata", "valid", function(__, marker)
             marker.destroy()
         end)
-        :where("number", function(__, id)
-            if rendering.is_valid(id) then
-                if not source and rendering.get_target(id)  then source = _(rendering.get_target(id).entity) end
-                if not player and rendering.get_players(id) then player = _(rendering.get_players(id)[1]) end
-                rendering.destroy(id)
-            end
-        end)
-
-    if source and player and source:is("valid") and player:is("valid player") then source:mark(player) end
 end
 
 function this.unmark(cache) -- destroy all distribution markers of a player (using cache)
@@ -123,25 +113,12 @@ function this.unmark(cache) -- destroy all distribution markers of a player (usi
 	cache.markers = metatables.new("entityAsIndex")
 end
 
-function helpers:destroyTransferText() -- remove flying text from stack transfer
-	local surface = self.surface
+function helpers:spawnDistributionText(player, item, amount, offY, color) -- spawn distribution text on entity
 	local pos = self.position
 
-	util.destroyIfValid(surface.find_entities_filtered{
-		name = "flying-text",
-		area = {{pos.x, pos.y-1}, {pos.x, pos.y+0.5}},
-		limit = 1
-	}[1])
-end
-
-function helpers:spawnDistributionText(item, amount, offY, color) -- spawn distribution text on entity
-	local surface = self.surface
-	local pos = self.position
-
-	surface.create_entity{ -- spawn text
-		name = "distribution-text",
+    player.create_local_flying_text{ -- spawn text
+        text = {"", "       ", -amount, " ", prototypes.item[item].localised_name},
 		position = { pos.x - 0.5, pos.y + (offY or 0) },
-		text = {"", "       ", -amount, " ", game.item_prototypes[item].localised_name},
 		color = color or config.colors.default
 	}
 end

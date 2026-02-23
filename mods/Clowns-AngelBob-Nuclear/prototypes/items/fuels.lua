@@ -2,7 +2,7 @@ data:extend(
 {
 	{
 		type = "item",
-		name = "hypernuclear-fuel",
+		name = "clowns-hypernuclear-fuel",
 		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/hypernuclear-fuel.png",
 		icon_size = 32,
 		fuel_category = "chemical",
@@ -15,7 +15,7 @@ data:extend(
 	},
 	{
 		type = "item",
-		name = "turbonuclear-fuel",
+		name = "clowns-turbonuclear-fuel",
 		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/turbonuclear-fuel.png",
 		icon_size = 32,
 		fuel_category = "chemical",
@@ -28,7 +28,7 @@ data:extend(
 	},
 	{
 		type = "item",
-		name = "radiothermal-fuel",
+		name = "clowns-radiothermal-fuel",
 		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/radiothermal-fuel.png",
 		icon_size = 32,
 		fuel_category = "chemical",
@@ -41,7 +41,7 @@ data:extend(
 	},
 	{
 		type = "item",
-		name = "superradiothermal-fuel",
+		name = "clowns-superradiothermal-fuel",
 		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/superradiothermal-fuel.png",
 		icon_size = 32,
 		fuel_category = "chemical",
@@ -54,7 +54,7 @@ data:extend(
 	},
 	{
 		type = "item",
-		name = "ultraradiothermal-fuel",
+		name = "clowns-ultraradiothermal-fuel",
 		icon = "__Clowns-AngelBob-Nuclear__/graphics/icons/ultraradiothermal-fuel.png",
 		icon_size = 32,
 		fuel_category = "chemical",

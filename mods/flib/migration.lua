@@ -1,6 +1,14 @@
+if ... ~= "__flib__.migration" then
+  return require("__flib__.migration")
+end
+
+--- @diagnostic disable
+
 --- Mod migration and version comparison functions.
+--- NOTICE: This module is deprecated and should not be used. Use `helpers.compare_versions` and Lua migration files instead.
+--- See https://lua-api.factorio.com/latest/auxiliary/migrations.html#lua-migrations
 --- ```lua
---- local flib_migration = require("__flib__/migration")
+--- local flib_migration = require("__flib__.migration")
 --- ```
 --- @class flib_migration
 local flib_migration = {}
@@ -22,6 +30,7 @@ local version_format = "%02d"
 --- @param version string
 --- @param format string? default: `%02d`
 --- @return string?
+--- @deprecated
 function flib_migration.format_version(version, format)
   if version then
     format = format or version_format
@@ -41,6 +50,7 @@ end
 --- @param current_version string
 --- @param format string? default: `%02d`
 --- @return boolean?
+--- @deprecated Use `helpers.compare_versions` instead.
 function flib_migration.is_newer_version(old_version, current_version, format)
   local v1 = flib_migration.format_version(old_version, format)
   local v2 = flib_migration.format_version(current_version, format)
@@ -58,6 +68,7 @@ end
 --- @param migrations MigrationsTable
 --- @param format? string default: `%02d`
 --- @param ... any All additional arguments will be passed to each function within `migrations`.
+--- @deprecated Use Lua migration files instead. See https://lua-api.factorio.com/latest/auxiliary/migrations.html#lua-migrations
 function flib_migration.run(old_version, migrations, format, ...)
   local migrate = false
   for version, func in pairs(migrations) do
@@ -85,10 +96,11 @@ end
 --- @param mod_name? string The mod to check against. Defaults to the current mod.
 --- @param ... any All additional arguments will be passed to each function within `migrations`.
 --- @return boolean run_generic_micrations
+--- @deprecated Use Lua migration files instead. See https://lua-api.factorio.com/latest/auxiliary/migrations.html#lua-migrations
 function flib_migration.on_config_changed(e, migrations, mod_name, ...)
   local changes = e.mod_changes[mod_name or script.mod_name]
   local old_version = changes and changes.old_version
-  if old_version or not changes then
+  if old_version then
     if migrations then
       flib_migration.run(old_version, migrations, nil, ...)
     end
@@ -101,6 +113,7 @@ end
 --- on_configuration_changed event handler. Both arguments are optional.
 --- @param version_migrations MigrationsTable?
 --- @param generic_handler fun(e: ConfigurationChangedData)?
+--- @deprecated Use Lua migration files instead. See https://lua-api.factorio.com/latest/auxiliary/migrations.html#lua-migrations
 function flib_migration.handle_on_configuration_changed(version_migrations, generic_handler)
   script.on_configuration_changed(function(e)
     if flib_migration.on_config_changed(e, version_migrations) and generic_handler then
@@ -119,16 +132,16 @@ return flib_migration
 --- ```lua
 --- {
 ---   ["1.0.1"] = function()
----     global.foo = nil
----     for _, player_table in pairs(global.players) do
+---     storage.foo = nil
+---     for _, player_table in pairs(storage.players) do
 ---       player_table.bar = "Lorem ipsum"
 ---     end
 ---   end,
 ---   ["1.0.7"] = function()
----     global.bar = {}
+---     storage.bar = {}
 ---   end
 ---   ["1.1.0"] = function(arg)
----     global.foo = arg
+---     storage.foo = arg
 ---   end
 --- }
 --- ```

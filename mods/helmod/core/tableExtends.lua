@@ -60,6 +60,7 @@ end
 ---@param step number
 function table.up_indexed_list(list, index, step)
     if list ~= nil and index > 0 then
+      table.reindex_list(list)
       ---defaut step
       if step == nil then step = 1 end
       ---cap le step
@@ -84,6 +85,7 @@ function table.up_indexed_list(list, index, step)
 function table.down_indexed_list(list, index, step)
   local list_count = table.size(list)
   if list ~= nil and index + 1 < table.size(list) then
+    table.reindex_list(list)
     ---defaut step
     if step == nil then step = 1 end
     ---cap le step
@@ -106,6 +108,9 @@ end
 ---@return number
 function table.size(list)
   if list == nil then return 0 end
+  if type(list) == "userdata" then
+    return #list
+  end
   return table_size(list)
 end
 
@@ -136,4 +141,23 @@ function table.data_info(list)
     end
     return result
   end
+end
+
+-------------------------------------------------------------------------------
+---Convert info table with type for element
+---@param list table
+---@param index_start uint
+---@param index_end? uint
+---@return table
+table.slice = function(list, index_start, index_end)
+  local index_end = index_end or table.size(list)
+  local new_list = {}
+  local index = 1
+  for k, v in pairs(list) do
+    if index > index_start and index <= index_end then
+      new_list[k] = v
+    end
+    index= index + 1
+  end
+  return new_list
 end

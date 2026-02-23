@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-11-03
+  Bugfixes:
+    - 2.0 update.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2021-11-21
+  Bugfixes:
+    - Fixed crash with low res version.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2021-11-21
+  Other:
+    - New graphics update by snouz
+    - Added changelog
+  Graphics:
+    - Burner Generator: HD version, improved visuals, fixed smoke/fire position, new fire style, ground integration, separate shadow.
+    - Big Burner Generator: HD version, ground integration, fixed smoke/fire position, new fire style, fixed entity and shadow position.
+    - Wind Turbine: HD version, ground integration, slowed down animation, separate shadow.
+    - Oil Boiler: Separated base, shadow and animation, fixed visual pipe connections, improved post-effects, ground integration, aligned better.
+    - Diesel Generator: Separated base, shadow and animation (which now glows in the dark), fixed visual pipe connection, improved post-effects, centered entity, aligned/improved smoke.
+    - New HD icons (more in the style of factorio).
+    - Upscaled technologies to HD and fixed their shadows.
+  Optimizations:
+    - Sorted image files, removed unused ones.
+    - Images optimized (compressed when loss is invisible)

@@ -37,7 +37,7 @@ function fireUtils.makeSpreadEffect(attributes)
                 flame_alpha_deviation = 0.05,
 
                 tree_dying_factor = 0.8,
-                emissions_per_second = 0.005,
+                emissions_per_second = {pollution = 0.005},
 
                 fade_in_duration = 120,
                 fade_out_duration = 100,
@@ -145,7 +145,7 @@ function fireUtils.makeSpreadOnceEffect(attributes)
                 flame_alpha_deviation = 0.05,
 
                 tree_dying_factor = 0.7,
-                emissions_per_second = 0.005,
+                emissions_per_second = {pollution = 0.005},
 
                 fade_in_duration = 120,
                 fade_out_duration = 100,
@@ -259,7 +259,7 @@ function fireUtils.makeFire(attributes)
                 flame_alpha = 0.35,
                 flame_alpha_deviation = 0.05,
 
-                emissions_per_second = 0.005,
+                emissions_per_second = {pollution = 0.005},
 
                 add_fuel_cooldown = 10,
                 fade_in_duration = 30,
@@ -400,7 +400,7 @@ function fireUtils.makeAcidSplashFire(attributes, stickerName)
         damage_multiplier_increase_per_added_fuel = 1,
         damage_multiplier_decrease_per_tick = 0.005,
 
-        collision_mask = { "water-tile" },
+        collision_mask = {layers={water_tile = true}},
 
         --spawn_entity = "fire-flame-on-tree",
         uses_alternative_behavior = true,
@@ -420,7 +420,7 @@ function fireUtils.makeAcidSplashFire(attributes, stickerName)
         --flame_alpha = 0.35,
         --flame_alpha_deviation = 0.05,
 
-        emissions_per_second = 0,
+        emissions_per_second = nil,
 
         add_fuel_cooldown = 10,
         fade_in_duration = 1,
@@ -463,407 +463,602 @@ function fireUtils.makeAcidSplashFire(attributes, stickerName)
                             }
                     }
             },
+		pictures =
+		{
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 210,
+				height = 224,
+				frame_count = 26,
+				shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
+				line_length = 8,
+				width = 266,
+				height = 188,
+				frame_count = 26,
+				shift = util.mul_shift(util.by_pixel(2, 2), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 174,
+				height = 150,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
+				line_length = 8,
+				width = 238,
+				height = 266,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 236,
+				height = 208,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
+				line_length = 8,
+				width = 214,
+				height = 140,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 252,
+				height = 154,
+				frame_count = 24,
+				shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
+				line_length = 8,
+				width = 248,
+				height = 160,
+				frame_count = 24,
+				shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.25 + 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  }
+		},
 
-        pictures =
-            {
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 106,
-                                height = 116,
-                                frame_count = 26,
-                                shift = util.mul_shift(util.by_pixel(-12, -10), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 210,
-                                    height = 224,
-                                    frame_count = 26,
-                                    shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 134,
-                                height = 98,
-                                frame_count = 26,
-                                shift = util.mul_shift(util.by_pixel(2, 0), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 266,
-                                    height = 188,
-                                    frame_count = 26,
-                                    shift = util.mul_shift(util.by_pixel(2, 2), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 88,
-                                height = 76,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(-10, -18), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 174,
-                                    height = 150,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 120,
-                                height = 136,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(6, 28), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 238,
-                                    height = 266,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 118,
-                                height = 104,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 236,
-                                    height = 208,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 110,
-                                height = 70,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(16, 2), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 214,
-                                    height = 140,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 128,
-                                height = 80,
-                                frame_count = 24,
-                                shift = util.mul_shift(util.by_pixel(16, -20), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 252,
-                                    height = 154,
-                                    frame_count = 24,
-                                    shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 124,
-                                height = 80,
-                                frame_count = 24,
-                                shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = attributes.scale,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 248,
-                                    height = 160,
-                                    frame_count = 24,
-                                    shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * attributes.scale,
-                                }
-                            }
-                        }
-                },
-            },
+		secondary_pictures =
+		{
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 210,
+				height = 224,
+				frame_count = 26,
+				shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
+				line_length = 8,
+				width = 266,
+				height = 188,
+				frame_count = 26,
+				shift = util.mul_shift(util.by_pixel(2, 2), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 174,
+				height = 150,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
+				line_length = 8,
+				width = 238,
+				height = 266,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 236,
+				height = 208,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(22, -16),(attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
+				line_length = 8,
+				width = 214,
+				height = 140,
+				frame_count = 29,
+				shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  },
+		  {
+			layers =
+			{
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
+				draw_as_glow = true,
+				line_length = 8,
+				width = 252,
+				height = 154,
+				frame_count = 24,
+				shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
+				tint = attributes.tint2,
+				scale = (attributes.scale or 1)
+			  },
+			  {
+				filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
+				line_length = 8,
+				width = 248,
+				height = 160,
+				frame_count = 24,
+				shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+				draw_as_shadow = true,
+				scale = 0.5 * (attributes.scale or 1)
+			  }
+			}
+		  }
+		}
+	  }
 
-        secondary_pictures =
-            {
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 106,
-                                height = 116,
-                                frame_count = 26,
-                                shift = util.mul_shift(util.by_pixel(-12, -10), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = attributes.ground_patch_scale ,
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 210,
-                                    height = 224,
-                                    frame_count = 26,
-                                    shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 134,
-                                height = 98,
-                                frame_count = 26,
-                                shift = util.mul_shift(util.by_pixel(2, 0), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 266,
-                                    height = 188,
-                                    frame_count = 26,
-                                    shift = util.mul_shift(util.by_pixel(2, 2), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 88,
-                                height = 76,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(-10, -18), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 174,
-                                    height = 150,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 120,
-                                height = 136,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(6, 28), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 238,
-                                    height = 266,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 118,
-                                height = 104,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 236,
-                                    height = 208,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 110,
-                                height = 70,
-                                frame_count = 29,
-                                shift = util.mul_shift(util.by_pixel(16, 2), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 214,
-                                    height = 140,
-                                    frame_count = 29,
-                                    shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            }
-                        },
-                },
-                {
-                    layers =
-                        {
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 128,
-                                height = 80,
-                                frame_count = 24,
-                                shift = util.mul_shift(util.by_pixel(16, -20), (attributes.scale or 1)),
-                                tint = attributes.tint2,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 252,
-                                    height = 154,
-                                    frame_count = 24,
-                                    shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
-                                    tint = attributes.tint2,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            },
-                            {
-                                filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
-                                line_length = 8,
-                                direction_count = 1,
-                                width = 124,
-                                height = 80,
-                                frame_count = 24,
-                                shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
-                                draw_as_shadow = true,
-                                scale = (attributes.scale or 1),
-                                hr_version = {
-                                    filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4-shadow.png",
-                                    line_length = 8,
-                                    direction_count = 1,
-                                    width = 248,
-                                    height = 160,
-                                    frame_count = 24,
-                                    shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
-                                    draw_as_shadow = true,
-                                    scale = 0.5 * (attributes.scale or 1),
-                                }
-                            }
-                        }
-                }
-            }
-    }
+        -- pictures =
+            -- {
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 210,	--106,
+                                -- height = 224,	--116,
+                                -- frame_count = 26,
+                                -- shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = attributes.scale
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 134,
+                                -- height = 98,
+                                -- frame_count = 26,
+                                -- shift = util.mul_shift(util.by_pixel(2, 0), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = attributes.scale,
+                            -- }
+                        -- },
+                -- }
+				-- ,
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 88,
+                                -- height = 76,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(-10, -18), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 174,
+                                    -- height = 150,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 120,
+                                -- height = 136,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(6, 28), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 238,
+                                    -- height = 266,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- }
+                        -- },
+                -- },
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 118,
+                                -- height = 104,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 236,
+                                    -- height = 208,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 110,
+                                -- height = 70,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(16, 2), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 214,
+                                    -- height = 140,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- }
+                        -- },
+                -- },
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 128,
+                                -- height = 80,
+                                -- frame_count = 24,
+                                -- shift = util.mul_shift(util.by_pixel(16, -20), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 252,
+                                    -- height = 154,
+                                    -- frame_count = 24,
+                                    -- shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 124,
+                                -- height = 80,
+                                -- frame_count = 24,
+                                -- shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = attributes.scale,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 248,
+                                    -- height = 160,
+                                    -- frame_count = 24,
+                                    -- shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * attributes.scale,
+                                -- }
+                            -- }
+                        -- }
+                -- },
+            -- },
+
+        -- secondary_pictures =
+            -- {
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-1.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 106,
+                                -- height = 116,
+                                -- frame_count = 26,
+                                -- shift = util.mul_shift(util.by_pixel(-12, -10), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = attributes.ground_patch_scale ,
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 210,
+                                    -- height = 224,
+                                    -- frame_count = 26,
+                                    -- shift = util.mul_shift(util.by_pixel(-12, -8), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-1-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 134,
+                                -- height = 98,
+                                -- frame_count = 26,
+                                -- shift = util.mul_shift(util.by_pixel(2, 0), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-1-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 266,
+                                    -- height = 188,
+                                    -- frame_count = 26,
+                                    -- shift = util.mul_shift(util.by_pixel(2, 2), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- }
+                        -- },
+                -- },
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-2.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 88,
+                                -- height = 76,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(-10, -18), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 174,
+                                    -- height = 150,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(-9, -17), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-2-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 120,
+                                -- height = 136,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(6, 28), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-2-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 238,
+                                    -- height = 266,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(6, 29), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- }
+                        -- },
+                -- },
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-3.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 118,
+                                -- height = 104,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 236,
+                                    -- height = 208,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(22, -16), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-3-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 110,
+                                -- height = 70,
+                                -- frame_count = 29,
+                                -- shift = util.mul_shift(util.by_pixel(16, 2), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-3-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 214,
+                                    -- height = 140,
+                                    -- frame_count = 29,
+                                    -- shift = util.mul_shift(util.by_pixel(17, 2), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- }
+                        -- },
+                -- },
+                -- {
+                    -- layers =
+                        -- {
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-4.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 128,
+                                -- height = 80,
+                                -- frame_count = 24,
+                                -- shift = util.mul_shift(util.by_pixel(16, -20), (attributes.scale or 1)),
+                                -- tint = attributes.tint2,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 252,
+                                    -- height = 154,
+                                    -- frame_count = 24,
+                                    -- shift = util.mul_shift(util.by_pixel(17, -19), (attributes.scale or 1)),
+                                    -- tint = attributes.tint2,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- },
+                            -- {
+                                -- filename = "__base__/graphics/entity/acid-splash/acid-splash-4-shadow.png",
+                                -- line_length = 8,
+                                -- direction_count = 1,
+                                -- width = 124,
+                                -- height = 80,
+                                -- frame_count = 24,
+                                -- shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+                                -- draw_as_shadow = true,
+                                -- scale = (attributes.scale or 1),
+                                -- hr_version = {
+                                    -- filename = "__base__/graphics/entity/acid-splash/hr-acid-splash-4-shadow.png",
+                                    -- line_length = 8,
+                                    -- direction_count = 1,
+                                    -- width = 248,
+                                    -- height = 160,
+                                    -- frame_count = 24,
+                                    -- shift = util.mul_shift(util.by_pixel(18, -16), (attributes.scale or 1)),
+                                    -- draw_as_shadow = true,
+                                    -- scale = 0.5 * (attributes.scale or 1),
+                                -- }
+                            -- }
+                        -- }
+                -- }
+            -- }
+    -- }
 
     data:extend ({
             acidFire

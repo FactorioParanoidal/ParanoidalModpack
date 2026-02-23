@@ -1,4 +1,41 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.11
+Date: 2025-05-01
+  Fixes:
+    - Fixed missing localisation keys for RITEG recycling recipes
+---------------------------------------------------------------------------------------------------
+Version: 1.3.10
+Date: 2024-11-12
+  Fixes:
+    - Fixed error when changing runtime mod settings
+    - Fixed changelog file formatting
+---------------------------------------------------------------------------------------------------
+Version: 1.3.9
+Date: 2024-11-04
+  Fixes:
+    - Fixed compatibility with Plutonium Energy 1.7.3
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+Date: 2024-10-26
+  Changes:
+    - RITEGs now use quality to boost energy production
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+Date: 2024-10-26
+  Fixes:
+    - Fixed runtime logic
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 2024-10-26
+  Changes:
+    - Added support for PlutoniumBreeding, a fork of Nuclear fuel for Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2024-10-26
+  Changes:
+    - Factorio 2.0 / Space Age update
+    - PNG Sprites optimized for space efficiency
+---------------------------------------------------------------------------------------------------
 Version: 1.3.4
 Date: 2022-01-09
   Fixes:
@@ -38,32 +75,33 @@ Date: 2019-06-07
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.13
 Date: 2019-03-21
-   - added support of [Nuclear Fuel] - now you can build new RITEG with 10 breeder fuel cells (40 GJ)
+  Changes:
+    - added support of [Nuclear Fuel] - now you can build new RITEG with 10 breeder fuel cells (40 GJ)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.12
 Date: 2019-03-08
   Changes:
-   - fixed startup bug with mod dependencies 
+    - fixed startup bug with mod dependencies 
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.11
 Date: 2019-03-03
   Changes:
-   - added night glowing
+    - added night glowing
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.10
 Date: 2019-03-03
   Changes:
-   - port to 0.17; not implemented: adding night glowing
+    - port to 0.17; not implemented: adding night glowing
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.10
 Date: 2018-11-05
   Changes:
-   - first try to add plutonium
+    - first try to add plutonium
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.9
 Date: 2018-11-04
   Changes:
-   - fixed spam of debug information
+    - fixed spam of debug information
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.8
 Date: 2018-11-03

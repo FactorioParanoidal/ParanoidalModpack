@@ -1,11 +1,21 @@
 data:extend{
 	{ type = "double-setting", name = "unpollock-decorative-rate",
 		setting_type = "startup",
-		default_value = .4,
+		default_value = .7,
 		minimum_value = 0, maximum_value = 1,
 	},
-	{ type = "bool-setting", name = "unpollock-no-fake-rocks",
+	{ type = "bool-setting", name = "unpollock-avoid-resources",
 		setting_type = "startup",
 		default_value = false,
+	},
+	{ type = "string-setting", name = "unpollock-fake-rocks",
+		setting_type = "startup",
+		default_value = "by-order",
+		allowed_values = {
+			"keep",
+			"by-control",
+			"by-order",
+			"by-name",
+			},
 	},
 }

@@ -1,4 +1,127 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2026-01-02
+  Features:
+    - Added support for More Belts
+  Bugfixes:
+    - Fixed that Prismatic Belts: Space Age was still required to use certain API functions
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2025-08-30
+  Changes:
+    - [space-age] Added support for Krastorio 2: Spaced Out
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2025-06-29
+  Changes:
+    - [space-age] Moved sprites for Space Age into this mod; deprecated the supplementary asset mod Prismatic Belts: Space Age
+  Locale:
+    - Updated Japanese localization
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2025-05-11
+  Bugfixes:
+    - Fixed crash due to incorrect call to `logistics_technology_icon` when playing with Krastorio 2
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2025-04-01
+  Bugfixes:
+    - Fixed that the transport belt icons when used with Artisanal Reskins: Bob's Mods were smaller than intended
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2025-03-30
+  Changes:
+    - Updated with support for Bob's 2.0.0
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2024-12-30
+  Features:
+    - Added support for AAI Loaders
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2024-11-08
+  Changes:
+    - Added support for split-lane entities from Loaders Modernized
+  Bugfixes:
+    - Fixed Ultimate Belts support for loaders from Loaders Modernized
+  Locale:
+    - Updated Japanese and Ukrainian localizations
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2024-10-30
+  Features:
+    - Added support for Loaders Modernized
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-10-27
+  Bugfixes:
+    - Removed conditional requires.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-27
+  Features:
+    - Added support for Factorio: Space Age!
+      - Requires supplementary asset mod Prismatic Belts: Space Age. An error will be raised if the mod is not present when Space Age is enabled
+  Changes:
+    - The API has been reworked:
+      - Mod authors should now require the API with `require("__prismatic-belts__.prototypes.api")`
+      - Added `get_transport_belt_frozen_patch`, taking either 1, 2, or 3 as an input to get the Space Age `frozen_patch` for transport belts. Returns `nil` if Space Age is not enabled
+      - Functions `get_transport_belt_animation_set` and `create_remnant` `inputs` structures now have additional properties:
+        - `tint_base_as_overlay` (suggested true)
+        - `tint_mask_as_overlay` (suggested true)
+        - `arrow_tint` (Color); Adds an extra layer to raise the brightness of arrows when working with a darker `mask_tint` when defined, otherwise does nothing
+      - Function `create_remnant` now supports variants; 3 requires Space Age
+      - Functions `get_transport_belt_icon` and `get_transport_belt_technology_icon` `inputs` structures now have additional properties:
+        - `arrow_tint` (Color); Adds an extra layer to raise the brightness of arrows when working with a darker `mask_tint` when defined, otherwise does nothing. It is suggested to use low gray values and an alpha value of 0
+    - Factorio Library has been removed as a dependency
+  Breaking Changes:
+    - The Prismatic Belt global function host `prismatic_belts` has been removed
+    - The API has been reworked:
+      - `adjust_alpha` has been removed
+      - `transport_belt_picture` has been removed
+      - `logistics_technology_icon` has been renamed to `get_transport_belt_technology_icon`
+        - The `inputs` structure has been revised:
+          - `use_reskin_process` has been removed
+          - `arrow_tint` (a Color type) has been added; when omitted, the extra "arrow" layer is not added to the icon. Use to raise the brightness of arrows when working with a darker `mask_tint`
+      - `transport_belt_icon` has been renamed to `get_transport_belt_icon`, and the inputs have been reworked into a single `inputs` structure
+      - `transport_belt_animation_set` has been renamed to `get_transport_belt_animation_set`
+        - The `inputs` structure has been revised: 
+          - `use_reskin_process` has been removed 
+          - `brighten_arrows` (boolean) has been replaced with `arrow_tint` (Color); suggested tints are e.g. `util.color("5")
+      - `create_remnant` `inputs` structure has been revised:
+        - `use_reskin_process` has been removed
+        - `brighten_arrows` (boolean) has been replaced with `arrow_tint` (Color); suggested tints are e.g. `util.color("5")
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2024-10-22
+  Features:
+    - Compatible with 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2024-08-31
+  Locale:
+    - Added partial support for French
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2023-07-02
+  Locale:
+    - Added partial support for Japanese
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2023-04-01
+  Locale:
+    - Added partial support for Spanish, Simplified Chinese localizations
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022-03-29
+  Locale:
+    - Added Ukrainian localization
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2021-09-12
+  Locale:
+    - Added Brazilian Portuguese localization
+---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2021-08-05
   Features:
@@ -22,12 +145,12 @@ Date: 2021-03-13
 Version: 1.1.4
 Date: 2021-03-04
   Changes:
-    - Now optionally dependent on Artisanal Reskins: Library version 1.1.3, and tier labels respect Artisanal Reskins: Bob's Mods setting "Bob's Logisitcs"
+    - Now optionally dependent on Artisanal Reskins: Library version 1.1.3, and tier labels respect Artisanal Reskins: Bob's Mods setting "Bob's Logistics"
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2021-02-26
   Changes:
-    - Images are now losslessly compressed, instead of lossy; there is a modest increase in filesize
+    - Images are now losslessly compressed, instead of lossy; there is a modest increase in file size
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2021-02-19

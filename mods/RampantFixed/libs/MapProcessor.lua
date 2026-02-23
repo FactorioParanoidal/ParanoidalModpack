@@ -64,6 +64,7 @@ local processNestActiveness = chunkPropertyUtils.processNestActiveness
 local formSquads = aiAttackWave.formSquads
 local formVengenceSquad = aiAttackWave.formVengenceSquad
 local formSettlers = aiAttackWave.formSettlers
+local formResourceSettlers = aiAttackWave.formResourceSettlers
 
 local getChunkByPosition = mapUtils.getChunkByPosition
 local getChunkByXY = mapUtils.getChunkByXY
@@ -527,57 +528,106 @@ function mapProcessor.processNests(map, tick)
 end
 
 
-local function chooseSquad(map, migrate, attack)
+local function chooseSquad(map, migrate, attack, tick)
 	local settlementsProbability = settings.global["rampantFixed--settlementsProbability"].value
-    if migrate and ((map.activeRaidNests == 0) or (mRandom()<settlementsProbability)) then		-- ((map.activeNests < 10) or (mRandom()<settlementsProbability)) 
+	if map.canMigrateTick > tick then
+ 		return "attack"
+	end	
+    if migrate and (((map.activeRaidNests == 0) and (map.activeNests == 0)) or (mRandom()<settlementsProbability)) then		-- ((map.activeNests < 10) or (mRandom()<settlementsProbability)) 
 		return "migrate"
 	else
 		return "attack"
 	end
 end
 
+local settlerCooldown = 3600	-- ticks
+local squadCooldown = 3600 -- ticks, any squad
 local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParameters)
     local chunk = next(chunks, map[iterator])
     if not chunk then
 		map[iterator] = nil
         return
-    else
-		local migrate = canMigrate(map)
-		local attack = canAttack(map, tick)
-		if not map.nextSquad then
-			map.nextSquad = chooseSquad(map, migrate, attack) 
-		end	
-		local currentSquad = map.nextSquad
-		if (currentSquad == "migrate") then
-			if map.universe.builderCount >= map.universe.AI_MAX_BUILDER_COUNT then
-				currentSquad = "attack"
-			end
-		elseif migrate and (map.universe.squadCount >= (map.universe.AI_MAX_SQUAD_COUNT*0.8)) then
-			currentSquad = "migrate"			
-		end		
-		local squadCreated = false
-		if remoteInterfaceParameters then
-			currentSquad = "attack"
-            squadCreated = formSquads(map, chunk, tick, remoteInterfaceParameters)
-        elseif migrate and (currentSquad == "migrate") then
-            squadCreated = formSettlers(map, chunk)
-        elseif attack then
-            squadCreated = formSquads(map, chunk, tick)
-        end
-		if squadCreated then
-			if remoteInterfaceParameters then
-				if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
-					game.print(currentSquad.." squad created by remote interface")
-				end	
-			else
-				map.nextSquad = chooseSquad(map, migrate, attack)
-				if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
-					game.print(currentSquad.." squad created. Next is "..map.nextSquad.." squad")
-				end	
-			end	
-		end	
     end
-    map[iterator] = chunk
+	if chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
+		return
+	end
+	
+	local migrate = canMigrate(map) and map.hasNonmoddedBiters
+	local attack = canAttack(map, tick)
+	if not map.nextSquad then
+		map.nextSquad = chooseSquad(map, migrate, attack, tick) 
+	end	
+	local currentSquad = map.nextSquad
+	if (currentSquad == "migrate") then
+		if map.universe.builderCount >= map.universe.AI_MAX_BUILDER_COUNT then
+			currentSquad = "attack"
+		end
+	elseif migrate and (map.universe.squadCount >= (map.universe.AI_MAX_SQUAD_COUNT*0.7)) then
+		currentSquad = "migrate"			
+	end		
+	local squadCreated = false
+	if remoteInterfaceParameters then
+		currentSquad = "attack"
+		squadCreated = formSquads(map, chunk, tick, remoteInterfaceParameters)
+	else
+		if attack and (map.resourceSettleTick < tick) and map.universe.expansion and (map.points > 0) then
+			squadCreated = formResourceSettlers(map, chunk)
+			if squadCreated then
+				currentSquad = "resource"
+			end	
+		end
+		if not squadCreated then
+			if migrate and ((currentSquad == "migrate") or ((map.activeNests == 0) and (map.activeRaidNests == 0))) then
+				currentSquad = "migrate"
+				squadCreated = formSettlers(map, chunk)
+			elseif attack then
+				squadCreated = formSquads(map, chunk, tick)
+			end
+		end	
+	end
+	if squadCreated then
+		if remoteInterfaceParameters then
+			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+				game.print(currentSquad.." squad created by remote interface")
+			end	
+		else
+			if (currentSquad == "migrate") then
+				if map.retribution < 1 then
+					if map.temperament > 0.8 then
+						map.canMigrateTick = tick + settlerCooldown	* 6
+					elseif map.temperament > 0.6 then	
+						map.canMigrateTick = tick + settlerCooldown	* 4
+					elseif map.temperament > 0.4 then	
+						map.canMigrateTick = tick + settlerCooldown * 2
+					elseif map.temperament > 0.2 then	
+						map.canMigrateTick = tick + settlerCooldown 
+					else
+						if map.temperament < 0.3 then
+							-- no cooldown
+						else
+							map.canMigrateTick = tick + settlerCooldown 
+						end							
+					end
+				elseif map.retribution < 10 then
+					if map.temperament > 0.8 then
+						map.canMigrateTick = tick + settlerCooldown
+					end	
+				end	
+			end
+			map.nextSquad = chooseSquad(map, migrate, attack, tick)
+			chunk.nextSquadTick = tick + squadCooldown
+			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+				game.print(currentSquad.." squad created. Next is "..map.nextSquad.." squad")
+			end	
+		end
+	end
+	
+	map[iterator] = chunk		
+	if squadCreated==nil then
+		map.universe.area[1] = {chunk.x, chunk.y}
+		map.universe.area[2] = {chunk.x + 32, chunk.y + 32}
+		mapScanEnemyChunk(chunk, map)	-- if no nests then map[iterator] cleared here
+	end	
 end
 
 function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
@@ -627,6 +677,14 @@ function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
                             map.chunkToActiveRaidNest
 							, remoteInterfaceParameters
 							)
+			if (map.activeNests < 3) and (map.points > 5000) and not remoteInterfaceParameters then
+			   processSpawners(map,
+								tick,
+								"processActiveRaidSpawnerIterator",
+								map.chunkToActiveRaidNest
+								, remoteInterfaceParameters
+								)
+			end	
             processSpawners(map,
                             tick,
                             "processMigrationIterator",
@@ -650,7 +708,7 @@ function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
     end
 end
 
-local querySpawners = {area={}, force="enemy", type={"turret", "unit-spawner"}}
+local querySpawners = {area={}, force="enemy", type={"unit-spawner"}}	-- "turret", 
 -- growType = 0 - center
 local function growChunk(map, base, chunk, growType)
 	local growCenter
@@ -661,15 +719,44 @@ local function growChunk(map, base, chunk, growType)
 		if #entities == 0 then
 			return false
 		end
-		newEntity = baseUtils.upgradeEntity(entities[mRandom(#entities)], base.alignment, map, nil, true, true)
+		local newEntity
+		for i = 1, 2 do
+			local entity = entities[mRandom(#entities)]
+			if entity and entity.valid then
+				if string.find(entity.name, "rampant") then
+					newEntity = baseUtils.upgradeEntity(entities[mRandom(#entities)], base.alignment, map, nil, true, true)
+				else
+					local newPosition = map.surface.find_non_colliding_position(
+						entity.name,
+						entity.position,
+						32,
+						1,
+						true
+					)
+					if newPosition then
+						newEntity = map.surface.create_entity({name = entity.name, position = newPosition, force = entity.force, raise_built = false})
+					end	
+				end
+			end	
+			-- game.print("thisIsRampantEnemy "..tostring(base.thisIsRampantEnemy))	-- debug
+			-- game.print(entity.name.. " from [gps=" .. entity.position.x .. "," .. entity.position.y .. "," .. entity.surface.name .."]")	-- debug
+			if newEntity and newEntity.valid then
+				-- game.print(newEntity.name.. " to [gps=" .. newEntity.position.x .. "," .. newEntity.position.y .. "," .. entity.surface.name .."]")	-- debug
+				chunk.growFails = nil
+				registerEnemyBaseStructure(map, newEntity, base)
+				if remote.interfaces["kr-creep"] then
+					remote.call("kr-creep", "spawn_creep_at_position", map.surface, newEntity.position)
+				else
+					newEntity.spawn_decorations()
+				end
+				break
+			end
+		end	
 		if newEntity and newEntity.valid then
-			chunk.growFails = nil
-			registerEnemyBaseStructure(map, newEntity, base)
-			-- game.print("Growing chunk: [gps=" .. newEntity.position.x .. "," .. newEntity.position.y .."] ".. newEntity.name)	-- debug
 			return true
 		else	
 			chunk.growFails = (chunk.growFails or 0) + 1
-			-- game.print("Growing chunk: [gps=" .. chunk.x .. "," .. chunk.y .."], can't place "..chunk.growFails.."/5")	-- debug
+			--game.print("Growing chunk: [gps=" .. chunk.x .. "," .. chunk.y .."], can't place "..chunk.growFails.."/5")	-- debug
 		end
 		
 	end
@@ -680,9 +767,9 @@ function mapProcessor.processGrowingBases(universe, tick)
 	local growingBases = universe.growingBases
 	local baseId
 	if universe.growingBasesIterator and growingBases[universe.growingBasesIterator] then
-		baseId = next(growingBases, nil)
-	else
 		baseId = next(growingBases, universe.growingBasesIterator)
+	else
+		baseId = next(growingBases, nil)
 	end
 	
     if not baseId then
@@ -721,50 +808,72 @@ function mapProcessor.processGrowingBases(universe, tick)
 	
 	local growed = false
 	local chunksCount = 0
-	local activeChunks = 0
 	local chunksArray = {}
 	for chunk, _ in pairs(base.chunks) do
 		local nestCount = getNestCount(map, chunk) + getHiveCount(map, chunk)
 		local turretCount = getTurretCount(map, chunk)
 		chunksCount = chunksCount + 1
-		if (getNestActiveness(map, chunk) > 0) then
-			activeChunks = activeChunks + 1
-		end
 		if baseUtils.chunkCanGrow(map, chunk) then
 			chunksArray[#chunksArray+1] = chunk
-			-- if not growed then
-			-- -- if growingData.nests and (growingData.nests>0) then
-				-- -- growChunk(map, base, chunk, 1)
-				-- -- growingData.nests = growingData.nests - 1
-			-- -- elseif growingData.worms and (growingData.worms>0) then	
-				-- -- growChunk(map, base, chunk, 2)
-				-- -- growingData.worms = growingData.worms - 1
-			-- -- else
-				-- growed = growChunk(map, base, chunk, 0)
-			-- -- end
-			-- end
-			surface.create_trivial_smoke({name = "growing-dust-nonTriggerCloud-rampant", position = {chunk.x + 16, chunk.y + 16}})
+			-- surface.create_trivial_smoke({name = "growing-dust-nonTriggerCloud-rampant", position = {chunk.x + 16, chunk.y + 16}})
 		end		
 	end
 	
 	if #chunksArray > 0 then
 		growed = growChunk(map, base, chunksArray[mRandom(#chunksArray)], 0)
 	end	
-	
 	if not growed then
 		base.growFails = (base.growFails or 0) + 1
-		-- game.print("base fail to grow: #"..base.id.." try # = "..base.growFails)	-- debug
-		if (base.growFails > 5) or (activeChunks == 0) or (chunksCount >= 6)  then
-			-- game.print("base stop growing: #"..base.id.." activeChunks = "..activeChunks..", growFails =".. base.growFails..", chunksCount = "..chunksCount)	-- debug
-			universe.growingBases[baseId] = nil
-			universe.growingBasesIterator = nil
-		end					
+		if (base.growFails > 10) then
+			if (chunksCount >= 6) and ((not base.forcedGrowthTick) or (base.forcedGrowthTick < tick)) then
+				universe.growingBases[baseId] = nil
+				universe.growingBasesIterator = nil
+			end	
+		end						
 	else
 		base.growFails = nil
 	end
-	growingData.tick = tick + GROWING_COOLDOWN
+	
+	if base.forcedGrowthTick then
+		local evo = game.forces.enemy.get_evolution_factor(map.surface)
+		if evo > 0.99 then
+			growingData.tick = tick + math.floor(GROWING_COOLDOWN*0.3)
+		elseif evo > 0.95 then
+			growingData.tick = tick + math.floor(GROWING_COOLDOWN*0.5)
+		elseif evo > 0.9 then
+			growingData.tick = tick + math.floor(GROWING_COOLDOWN*0.7)
+		else
+			growingData.tick = tick + GROWING_COOLDOWN
+		end
+	else
+		growingData.tick = tick + GROWING_COOLDOWN
+	end	
 
 end
+
+function mapProcessor.showGrowingCloud(universe)
+	if not universe.growingBases then
+		return
+	end	
+	for baseId, growingData in pairs(universe.growingBases) do
+		local base = universe.bases[baseId]
+		local map
+		local surface
+		if base then
+			map = universe.maps[base.mapIndex]
+		end	
+		if map then
+			surface = map.surface
+		end
+		if surface then
+			for chunk, _ in pairs(base.chunks) do
+				if baseUtils.chunkCanGrow(map, chunk) then
+					surface.create_trivial_smoke({name = "growing-dust-nonTriggerCloud-rampant", position = {chunk.x + 16, chunk.y + 16}})
+				end		
+			end
+		end	
+	end
+end	
 
 
 function mapProcessor.suspendClearedMaps(universe, tick)
@@ -786,13 +895,32 @@ function mapProcessor.suspendClearedMaps(universe, tick)
 	if map.surface.name == "nauvis" then	
 	else
 		if not map.suspended then
-			if (map.activeRaidNests < 1) and (tick - (map.suspendCheckTick or 0) > 3600)then
-				local enemySpawners = map.surface.count_entities_filtered({force = "enemy", type = "unit-spawner", limit = 1})
-				if enemySpawners == 0 then
-					map.suspended = true
-					--game.print("suspend clear surface:"..map.surface.name)	-- debug map.suspended
-				end
-				map.suspendCheckTick = tick		
+			local planetAISetting = (universe.planetAISettings[map.surface.name] or universe.planetAISettings["others"])
+			if planetAISetting.AI > 1 then
+				if (map.activeRaidNests < 1) and (tick - (map.suspendCheckTick or 0) > 3600)then
+					local enemiesFound = false
+					local enemySpawners = map.surface.count_entities_filtered({force = "enemy", type = "unit-spawner", limit = 1})
+					if enemySpawners > 0 then
+						enemiesFound  = true 
+					end
+				
+					if planetAISetting.AI == 3 then
+						if not enemiesFound then
+							local segmentedUnits = map.surface.count_entities_filtered({force = "enemy", type = "segmented-unit", limit = 1})
+							if segmentedUnits > 0 then
+								enemiesFound = true 
+							end				
+						end
+					end	
+				
+					if not enemiesFound then
+						map.suspended = true
+						map.suspendCheckTick = tick		
+						-- game.print("suspend clear surface:"..map.surface.name)	-- debug map.suspended
+						
+					end
+					
+				end	
 			end	
 		end
 	end

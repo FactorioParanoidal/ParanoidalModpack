@@ -1,5 +1,5 @@
 
-data.raw["container"]["titanium-chest"].picture =
+data.raw["container"]["bob-titanium-chest"].picture =
     {
       layers =
       {
@@ -22,6 +22,6 @@ data.raw["container"]["titanium-chest"].picture =
         }
       }
     }
-data.raw["item"]["titanium-chest"].icon = "__KaoExtended__/graphics/chest/hr-titanium-chest-icon.png"
-data.raw["item"]["titanium-chest"].icon_size = 64
-data.raw["item"]["titanium-chest"].icon_mipmaps = 4
+data.raw["item"]["bob-titanium-chest"].icon = "__KaoExtended__/graphics/chest/hr-titanium-chest-icon.png"
+data.raw["item"]["bob-titanium-chest"].icon_size = 64
+data.raw["item"]["bob-titanium-chest"].icon_mipmaps = 4

@@ -1,4 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2026-02-04
+  Bugfixes:
+    - Recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2026-01-18
+  Bugfixes:
+    - Fixed crash with Uranium Centrifuging to 20% Enrichment
+    - Recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2026-01-11
+  Bugfixes:
+    - Fixed issue with icons missing sizes causing start-up crashes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.01
+Date: 2026-01-10
+  Features:
+    - now works with 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2023-07-23
+  Features:
+    - Fixed that thorium could not be processed in angelsindustries - caused start-up crash
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2023-04-16
+  Features:
+    - Fixed that thorium could not be processed
+    - Fixed issue with cobalt plate compatability
+---------------------------------------------------------------------------------------------------
 Version: 1.1.19
 Date: 2021-08-10
   Features:

@@ -1,0 +1,576 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.48
+Date: 2026-02-12
+  Changes:
+    - Add interactive tooltips with statistics to Breakdown chart
+---------------------------------------------------------------------------------------------------
+Version: 2.0.47
+Date: 2026-02-09
+  Changes:
+    - Explicitly show networks in Manager's Trains tab for dynamically assigned networks (NETWORK_EACH)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.46
+Date: 2026-02-09
+  Changes:
+    - Change default value for new Depot combinators to NOT require same depot
+    - Change default value for new Station Control combinators to output train count
+  Bugfixes:
+    - Fix NETWORK_EACH stations/trains not showing when filtering by specific network name
+---------------------------------------------------------------------------------------------------
+Version: 2.0.45
+Date: 2026-02-08
+  Bugfixes:
+    - Fix manager filter fields (text search and network mask) not reflecting active filters when opening an already-filtered window
+    - Fix manager filter fields (text search and network mask) jumping cursor to end while editing
+---------------------------------------------------------------------------------------------------
+Version: 2.0.44
+Date: 2026-02-08
+  Bugfixes:
+    - Fix schedule generation for requester stations: ensure circuit condition is applied
+    - Fix sorting columns in manager
+---------------------------------------------------------------------------------------------------
+Version: 2.0.42
+Date: 2026-02-06
+  Changes:
+    - Breakdown tab in manager now requires item filter to display chart and inform user if not filtered
+---------------------------------------------------------------------------------------------------
+Version: 2.0.41
+Date: 2026-02-03
+  Bugfixes:
+    - Hide analytics surface from map view
+---------------------------------------------------------------------------------------------------
+Version: 2.0.40
+Date: 2026-02-01
+  Changes:
+    - CS is now optionally dependent on Factorio Charts
+  Features:
+    - New tab in CS Manager - Utilisation
+    - New tab in CS Manager - Breakdown
+    - New map setting - Enable analytics (TURNED OFF BY DEFAULT)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.39
+Date: 2026-01-08
+  Bugfixes:
+    - Fix crash when inventory contains items with invalid sprites
+    - Deleting a train assigned to a refueler now removes it from refueler train limit
+---------------------------------------------------------------------------------------------------
+Version: 2.0.38
+Date: 2025-12-23
+  Changes:
+    - Click on inventory item to filter stations in GUI
+  Bugfixes:
+    - Occasional "No Path" error for cross-surface return trips (SE Elevator)
+  Translation:
+    - Update to RU locale
+---------------------------------------------------------------------------------------------------
+Version: 2.0.37
+Date: 2025-12-01
+  Changes:
+    - Remove case sensitivity from station search in GUI
+    - Removed alert sending when train cannot find path between surfaces
+  Bugfixes:
+    - Now correctly uses closest Space Elevator when making schedule
+  Translation:
+    - Added Polish language pack
+    - Fix in Russian translation
+    - Fix in German translation
+---------------------------------------------------------------------------------------------------
+Version: 2.0.36
+Date: 2025-10-29
+  Changes:
+    - Change icon for Cybersyn Manager
+    - Make Cybersyn Manager always on (there is no longer setting for enabling/disabling it)
+  Bugfixes:
+    - Fixed variable mismatch causing the GUI not being closable and not auto closing on entity being removed or destroyed
+  Translation:
+    - Remove Cybersyn Manager enabling setting key and description from all locale files
+---------------------------------------------------------------------------------------------------
+Version: 2.0.35
+Date: 2025-10-08
+  Changes:
+    - Avoid no path to first schedule entry
+    - Use different colors for in-transit and not-in-transit items
+    - Add optional Wait Time Tracking to Station GUI
+---------------------------------------------------------------------------------------------------
+Version: 2.0.33
+Date: 2025-09-07
+  Changes:
+    - SE Integration - Warn about elevators with the same name
+  Bugfixes:
+    - Fix crash when updating a station's layout.
+    - SE Integration - Fix crash when elevator travel happens out of order
+---------------------------------------------------------------------------------------------------
+Version: 2.0.32
+Date: 2025-08-13
+  Bugfixes:
+    - Lock train only for missing stations and refuelers
+---------------------------------------------------------------------------------------------------
+Version: 2.0.31
+Date: 2025-08-12
+  Bugfixes:
+    - Avoid crash when station is gone on arrival
+---------------------------------------------------------------------------------------------------
+Version: 2.0.30
+Date: 2025-07-29
+  Bugfixes:
+    - fixed #291 crush when migrating economy on mods update
+---------------------------------------------------------------------------------------------------
+Version: 2.0.29
+Date: 2025-07-28
+  Bugfixes:
+    - fix #245 event filters for ghost entities are incorrect
+    - fix layout check for pickup/dropoff position if large inserters
+    - fix #187 Building Cyber Combinator over Arithmetic Combinator Causing Crash
+    - Update migrated names in economy and deliveries
+---------------------------------------------------------------------------------------------------
+Version: 2.0.28
+Date: 2025-06-23
+  Bugfixes:
+    - Fixed misshap with 2.0.27 release. It didnt contained advertised fixes, instead it was SE elevator support - changelog for .27 have been modified
+    - Check if station exists to avoid crashes when station = nil
+    - Don't update deliveries a station no longer knows about - fixes #281
+---------------------------------------------------------------------------------------------------
+Version: 2.0.27
+Date: 2025-06-20
+  Changes:
+    - Adds back support of SE Elevators for upcoming 2.0 version of SE
+---------------------------------------------------------------------------------------------------
+Version: 2.0.26
+Date: 2025-05-11
+  Changes:
+    - Add option to disable manifest loading conditions
+    - Add default setting for reserved fluid capacity
+    - Add descriptions to Cybersyn signals
+    - Add command to remove `Require same depot` from depots and trains
+  Bugfixes:
+    - Re-calculation train capacities accounts for invalid trains (should no longer crash if train was manually deleted)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.24
+Date: 2025-04-24
+  Changes:
+    - bump version to not collide with beta test version
+---------------------------------------------------------------------------------------------------
+Version: 2.0.23
+Date: 2025-04-24
+  Changes:
+    - changes the strategy to insert Cybersyn schedules from "before the permanent depot entry" to "after interrupt entries". This way add_refueler_schedule does not need to concern itself with direct-to-depot entries.
+    - added a command cybersyn-recalculate-train-size to recalculate all trains and I've added the function on on_configuration_changed
+---------------------------------------------------------------------------------------------------
+Version: 2.0.22
+Date: 2025-04-11
+  Bugfixes:
+    - Handle schedules running empty
+---------------------------------------------------------------------------------------------------
+Version: 2.0.21
+Date: 2025-04-09
+  Changes:
+    - Add support for quality wagon fluid size
+    - Support train groups and preserve schedule interrupts
+---------------------------------------------------------------------------------------------------
+Version: 2.0.20
+Date: 2025-03-16
+  Changes:
+    - Added separate request threshold for all fluids. It supersedes the request threshold when set and is it self superseded by a specific threshold for a fluid
+---------------------------------------------------------------------------------------------------
+Version: 2.0.19
+Date: 2025-02-24
+  Bugfixes:
+    - wagon controls now output fluid signals
+    - GUI crash when some signals were recipes instead of items
+---------------------------------------------------------------------------------------------------
+Version: 2.0.18
+Date: 2025-02-06
+  Changes:
+    - Adds a new virtual signal: reserved fluid capacity per wagon. When this virtual signal is sent to a provider's station combinator, it will cause incoming fluid trains to subtract the value of the signal from the capacity of each wagon when creating a manifest. This is the rough equivalent of "locked slots" behavior for fluids.
+  Bugfixes:
+    - Fix (de)construction on space platform not handled
+---------------------------------------------------------------------------------------------------
+Version: 2.0.17
+Date: 2025-01-24
+  Changes:
+    - Add localised item names in GUI tooltips
+    - Add station count label + tooltip into to inventory tab of GUI
+    - Remove depraciated `invert-sign` setting
+    - Some code refactoring
+  Bugfixes:
+    - Fix for missing GUI item filter data
+  Translation:
+    - Updated russian translation
+---------------------------------------------------------------------------------------------------
+Version: 2.0.16
+Date: 2024-12-11
+  Changes:
+    - Added station control manual inventory mode
+  Translation:
+    - Updated russian translation
+---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 2024-12-03
+  Bugfixes:
+    - Fix crash in GUI manager when signal type was not fluid or item
+---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2024-12-02
+  Changes:
+    - Support Global Variable Viewer mod if installed
+    - Station combinator can require circuit condition for train to leave (green checkmark > 0)
+    - Station control can output train count
+    - GUI manager improvements and fixes
+    - Add derelict combinators detection to /cybersyn-find-problems
+    - Replace sprites with high-res versions
+    - Change cybernetic combinator green `S` glyph to a green `>`
+  Bugfixes:
+    - Fix /cybersyn-fix-priorities not setting priorities to 50
+    - Hide invisible output combinator in Factoriopedia
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2024-11-25
+  Changes:
+    - Test change, please ignore
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2024-11-24
+  Changes:
+    - Expand the problem detection command (/cybersyn-find-problems) to detect combinators that are not close enough to a train stop to affect it
+  Bugfixes:
+    - Fixed changelog formatting
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+  Changes:
+    - Expand the problem detection command (/cybersyn-find-priorities becomes /cybersyn-find-problems with additional inspections)
+    - Add support for ghost combinators
+    - Color all locomotives of a train by next stop if set by user
+    - Implement graphical allow list display
+  Bugfixes:
+    - Fix crash when station is shift-clicked in manager
+    - Fix colors of icons in manager
+  Translation:
+    - Translated in French
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+  Changes:
+    - Cybersyn will now detect if a train is redirected to different station due to vanilla priority and will show a warning message
+    - Added two new console commands for detecting and fixing vanilla priority issues: /cybersyn-find-priorities and /cybersyn-fix-priorities
+    - Added inactivity condition for all requesters inactivity setting is active on combinator as a fix for rare issue when items could still be in inserters while train is pulling away from a requester station, causing a mistaken double delivery.
+  Translation:
+    - Korean language update
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+  Changes:
+    - Global surface matching - Cybersyn will now by default keep different surfaces separetly regardless of network signal (this will require compatibility patch once SE gets 2.0 support)
+    - Update blueprint book to use new 2.0 rails
+    - Compatibility with some electric train mods
+  Bugfixes:
+    - Fix detection of loader-1x1 along tracks
+    - Fix crash on non-item/fluid combinator inputs
+    - Removed trains need cleanup in available_trains
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+  Bugfixes:
+    - Fix missing station control combinator output
+    - Fix bug producing empty manifest
+    - Fix duplicate version entry in changelog
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+  Changes:
+    - support for Space Age Quality
+  Bugfixes:
+    - Fix close button for combinator
+    - fix crash when cybersyn combinator is missing internal data during update
+    - fix for 2.0 migration can produce invalid LuaTrains
+  Translation:
+    - Russian language update
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+  Bugfixes:
+    - Fixed crash when combinator not being attached to a station attempting to calculate layout
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+  Bugfixes:
+    - Fixed error while running event cybersyn::on_pre_player_mined_item (ID 11)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+  Features:
+    - Added allow-list rescan button and display the allow-list numeric representation on the combinator UI
+  Bugfixes:
+    - Fixed wagon-control combinator
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+  Changes:
+    - Refactored quality handling
+    - Initial update of the LTN GUI for 2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+  Bugfixes:
+    - Migrate the get_rail_segment_entity function call that no longer exists in 2.0
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+  Changes:
+    - Initial version of 2.0 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2023-10-10
+  Features:
+    - Added improved combinator display sprites (further improvements coming) - contributed by jagoly
+    - The manager gui now displays control signals - contributed by Shadowvoices
+    - The manager gui now excludes requests that do not exceed the request threshold - contributed by Shadowvoices
+  Bugfixes:
+    - Fixed a crash when clicking on a combinator when the GUI is open - contributed by PeteyPii
+    - Fixed a crash when setting a combinator to depot mode without a network - contributed by download13 and TheXIFC
+    - Stations with provider item thresholds can no longer generate empty train orders - contributed by svr8450
+    - Added missing loader entity type to the automatic allow-list - contributed by gillett-hernandez
+    - Fixed a case where combinator changes not being applied for depots and refuelers - contributed by jagoly
+    - Fixed provide/request orders for the same item getting generated simultaneously - contributed by jagoly
+    - Fixed a crash when opening the manager when adding cybersyn to an existing save - contributed by Mjonir
+    - Fixed a crash when enabling the manager on an existing save - contributed by freyacodes
+  Translation:
+    - Swedish language added - contributed by Sharparam
+    - Chinese language update - contributed by luaotix
+    - Russian language update - contributed by Eldrinn-Elantey
+---------------------------------------------------------------------------------------------------
+Version: 1.2.16
+Date: 2023-5-14
+  Bugfixes:
+    - Fixed Nullius recipe being broken again
+    - Reran manager migrations to fix some people's worlds that used the beta branch
+  Translation:
+    - Chinese language update contributed by luaotix
+    - Russian language correction contributed by Eldrinn-Elantey
+    - Korean language contributed by manmen-mi
+---------------------------------------------------------------------------------------------------
+Version: 1.2.15
+Date: 2023-4-30
+  Bugfixes:
+    - Fixed UPS spikes in Space Exploration related to expensive remote calls into their modding interface.
+    - Added a fix for a crash related to using the beta branch of cybersyn
+    - Fixed missing cybersyn manager translation key.
+    - Improved several tooltips
+---------------------------------------------------------------------------------------------------
+Version: 1.2.14
+Date: 2023-4-30
+  Features:
+    - Added opt-in WIP trains, inventory, and station manager gui (highly experimental, use at your own risk)
+  Changes:
+    - The automatic allow list now consistently looks 3 tiles down the first curved rail it finds along a station for inserters or pumps. Previously it would conditionally look only 1 tile down. This should lead to more intuitive allow list behaviour for stations with trains that park slightly on curved rails.
+  Bugfixes:
+    - Provider override thresholds now correctly override the required train capacity as well; fix contributed by shopt
+    - Fixed a rare crash relating to an uninitialized network mask on a new station
+    - Fixed a SE space elevator bug that caused incorrect orders when the provider and requester station had the same name
+    - Added an incompatibility error with picker dollies, proper compatibility to come in a later update
+    - Fixed entities not having the correct names in nullius contributed by Sharparam
+  Translation:
+    - lengua española (Spanish language) contributed by Majestuozzo
+---------------------------------------------------------------------------------------------------
+Version: 1.2.13
+Date: 2023-2-5
+  Features:
+    - Loader support for automatic allow-list contributed by BadgersOnWalls
+  Bugfixes:
+    - Fixed a crash caused when certain mod entities are deleted
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 2023-1-11
+  Translation:
+    - русский язык (Russian language) contributed by Eldrinn Elantey
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 2023-1-11
+  Bugfixes:
+    - Fixed a bug in 1.2.10 where allow lists were being set incorrectly, if you downloaded 1.2.10 and were affected by this uncheck and check "automatic allow list"
+  Translation:
+    - Deutsche sprache (German language) contributed by Ebaw
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 2023-1-11
+  Changes:
+    - Made the automatic allow list slightly more forgiving to stations where the last wagon would be on a curved rail
+    - Improved performance when fuel threshold is set to 1
+    - Prioritized distance from provider to requester over distance from train to provider
+  Bugfixes:
+    - Fixed a bug where it was possible for a single station to be updated twice per dispatch cycle, which could cause a crash
+    - Fixed a crash where trains would sometimes think a destroyed depot still exists
+    - Fixed a case where the central planner generated a confusing alert
+    - Removed unfinished mod setting with the broken translation key
+  Translation:
+    - 中文 (Chinese language) contributed by plexpt
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 2023-1-7
+  Bugfixes:
+    - Fixed a bug with deliveries sometimes failing to be removed
+    - Fixed several rare crashes
+    - Fixed cybernetic combinator gui not allowing checkbox toggling when clicking on a checkbox caption
+    - Updated flib dependency to the correct version
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2023-1-5
+  Features:
+    - Improved placeholder cybernetic combinator art
+    - Added a wagon control setting to bar unfiltered slots in adjacent cargo wagons
+    - Added a setting for toggling on or off the central planner
+  Changes:
+    - Sped up the rate at which copy-paste by blueprint will be noticed
+  Bugfixes:
+    - Fixed a bug with combinators sometimes failing to connect with train stops
+    - Fixed wagon control combinators outputting wagon contents after inserters have already taken out items
+    - Fixed a rare crash on world migration
+  Scripting:
+    - Added missing return values to some interface functions
+    - Migrated to non-deprecated flib modules
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 2023-1-1
+  Bugfixes:
+    - Fixed a bug with items attempting to be loaded into fluid wagons
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2022-12-30
+  Bugfixes:
+    - Fixed a crash when deconstructing the connected rail of a station
+    - Improved the stability of migrations
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2022-12-30
+  Bugfixes:
+    - Fixed a bug with migrating depots of old worlds
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2022-12-29
+  Bugfixes:
+    - Fixed crash when changing combinator modes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2022-12-29
+  Bugfixes:
+    - Fixed a bug where new stations weren't receiving network ids
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022-12-29
+  Features:
+    - Added a station combinator setting to enable or disable the inactivity condition in a train's orders, disabled by default (but not in <=1.2.1 worlds)
+    - Added a depot combinator setting to enable depot bypass, enabled by default
+    - Added a depot combinator setting to force trains to park at the same depot, enabled by default
+    - Added network "each" for depots
+    - Added a map setting to modify the default locked slots per cargo wagon value
+    - Added a map setting to modify the default priority value
+    - Added a map setting to allow trains with cargo at depots, disabled by default
+  Changes:
+    - Inverted the sign of combinator outputs, a map setting has been added to maintain backwards compatibility with <=1.2.1 worlds
+    - Overhauled the wagon control combinator algorithm to spread items out between cargo wagons
+    - Trains with cargo held in the depot now check if they have been emptied and reset when they have
+    - Cargo capacity is now prioritized over distance when choosing trains
+    - Increased the default request threshold to 2000
+    - Improved English localization
+  Bugfixes:
+    - Fixed a bug where trains with cargo sometimes weren't getting held at depots
+    - Fixed a crash caused by changing a station combinator to the "each" network during a bad tick
+    - Fixed a crash when changing a refueler away from network each
+    - Multiple rare bugs and crashes relating to wagon control combinators are fixed
+    - Fixed a bug with refueler direct orders not being applied after moving through a space elevator
+    - Fixed a bug where filtered slots sometimes weren't being removed
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022-12-24
+  Bugfixes:
+    - Fixed a bug where sometimes refuelers would reject trains they should accept
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-12-23
+  Features:
+    - Forced provide stations to wait until they can service the highest priority request station
+    - Provide stations now override request thresholds with the per-item thresholds set by their station control combinator
+    - Allowed station and fuel combinators to be set to network id "each", for each virtual signal they recieve as input, the stop is added to that network and its signal strength is used as the network mask
+    - Added the ability to specify per-station whether request thresholds represent total items or total stacks
+    - Added more detailed missing train alerts
+  Changes:
+    - The internal blueprint storage for cybernetic combinators was changed for the sake of future-proofing it for adding more combinator settings to the mod, this unfortunately breaks some existing blueprints
+    - Prioritized a train's distance from the provide station over the train's cargo capacity
+    - Nonempty trains in depot are no longer put in manual mode, instead they are forced to park at the depot
+    - Made several alerts persistent
+  Bugfixes:
+    - Fixed bug with depot priority not working
+    - Fixed a memory leak relating to train layouts
+    - Fixed a rare crash when building stations
+    - Fixed a bug where automatic allow-list sometimes could not be turned off
+    - Slightly improved compat with SE thanks to a bugfix in 0.6.94
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-12-17
+  Bugfixes:
+    - Fixed false positives in copy-paste by blueprint detection logic
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-12-16
+  Bugfixes:
+    - Fixed a crash relating to per-item request thresholds
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022-12-16
+  Changes:
+    - Replaced lost train alert with more detailed alerts
+    - Added Nullius compat
+    - Added Pyanodon's compat
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022-12-9
+  Changes:
+    - Made the recipe and research requirements for cybernetic combinators cheaper so that access to them in various modpacks is more in line with my intentions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022-12-8
+  Bugfixes:
+    - Fixed a crash when removing a refueler
+    - Fixed a gui bug
+    - Fixed a crash on newly generated worlds
+    - Fixed a crash with breaking combinators
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022-12-8
+  Features:
+    - Added refueler stations
+    - Added the ability to use the priority signal as input to station control combinators so one can override priority on items with station control combinators thresholds
+  Changes:
+    - Slightly more permissive allow-list logic
+    - Made non-backwards compatible improvements and bugfixes to the modding interface
+    - Updated localization
+  Bugfixes:
+    - Fixed a crash relating to wagon control combinators on request stations
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2022-12-3
+  Changes:
+    - Fixed a bug with SE compat preventing players from joining multiplayer games
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+  Changes:
+    - Added depot bypass
+    - Increased inactivity time so burner inserters are fast enough to trigger it
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022-11-30
+  Changes:
+    - Fixed a crash related to the central planner
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022-11-30
+  Changes:
+    - Allowed several settings to have floating point values
+    - Allow updates per second to be set to 0
+    - Fixed a bug where parallel wagon control combinators were not working
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022-11-30
+  Changes:
+    - Fixed a bug where duplicate orders could not be prevented on stations that share the same pool of items
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-11-29
+  Changes:
+    - Added mod description
+    - Added update rate setting
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022-11-29
+  Changes:
+    - Minor bugfix
+    - Added placeholder sprites

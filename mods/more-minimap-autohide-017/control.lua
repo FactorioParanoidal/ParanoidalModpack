@@ -1,10 +1,10 @@
 require("config")
 
 function init()
-	global.mapview = global.mapview or {}
+	storage.mapview = storage.mapview or {}
 	for i, player in pairs(game.players) do
-		if global.mapview[i] == nil then
-			global.mapview[i] = player.game_view_settings.show_minimap
+		if storage.mapview[i] == nil then
+			storage.mapview[i] = player.game_view_settings.show_minimap
 		end
 	end
 end
@@ -16,7 +16,7 @@ end
 
 function toggle_view_map(event)
 	toggle_view(event.player_index, "show_minimap")
-	global.mapview[event.player_index] = game.players[event.player_index].game_view_settings.show_minimap
+	storage.mapview[event.player_index] = game.players[event.player_index].game_view_settings.show_minimap
 end
 
 function toggle_view_research(event)
@@ -56,7 +56,7 @@ end
 function updated_selected(event)
 	local player = game.players[event.player_index]
 	local selected = player.selected
-	if global.mapview[event.player_index] then
+	if storage.mapview[event.player_index] then
 		if selected and viewsettings.hide_minimap_on[selected.type] then
 			set_map_view(player, false)
 		else

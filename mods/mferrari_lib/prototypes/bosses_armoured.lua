@@ -1,11 +1,17 @@
-require ("prototypes.armoured_animation")
+if mods["ArmouredBiters"] then
+local sounds = require("__base__/prototypes/entity/sounds")
+require ("__ArmouredBiters__/animation")
 
 local behemoth_armoured_tint1 = {r=0.7, g=0.43, b=0.34, a=1}
 local behemoth_armoured_tint2 = {r=0, g=1, b=0.4, a=1}
 
-local boss_hp_multiplier = settings.startup["maf-enemy-hp-multiplier"].value
-local boss_dmg_multiplier = settings.startup["maf-enemy-damage-multiplier"].value
-local wpe_boss_resist_multiplier = 1
+
+local boss_resist_multiplier = 1
+
+local Loot = get_mf_Loot() 
+-- The mod calling this may have globals
+local boss_hp_multiplier  = mf_hp_multiplier or 1
+local boss_dmg_multiplier = mf_dmg_multiplier or 1
 
 
 local function make_biter_area_damage(level,scale)
@@ -40,16 +46,12 @@ return  {
 end
 
 
-function make_a_boss(k)
+function make_armoured_boss(k)
 local scale = 1.6 + k/4
-
 local name = "maf-boss-armoured-biter-"..k
-
 if not data.raw.unit[name] then 
-
 data:extend(
 {
-	
 		{
             type = "unit",
             name = name,
@@ -63,7 +65,7 @@ data:extend(
             resistances = {},
             spawning_time_modifier = 12,
             healing_per_tick = 0,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
             sticker_box = {{-0.6, -0.8}, {0.6, 0}},
 			call_for_help_radius = 100,
@@ -73,12 +75,12 @@ data:extend(
             attack_parameters =
                 {
                     type = "projectile",
+					ammo_category = "melee",
                     range = 2.2 + k/2,
                     cooldown = 80-k,
                     sound =  sounds.biter_roars_big(0.4),
                     animation = armoredAttackBiter(scale, behemoth_armoured_tint1, behemoth_armoured_tint2),
 					ammo_type = {
-							  category = "melee",
 							  target_type = "entity",
 								action = {
 								  {
@@ -95,7 +97,7 @@ data:extend(
 								  },
 								  type = "direct"
 								  },
-								  make_biter_area_damage(1,scale),
+								  make_biter_area_damage(k,scale),
 								  },
 							}					
                 },
@@ -103,7 +105,7 @@ data:extend(
             movement_speed = 0.03 + k/100,
             distance_per_frame = 0.2,
             -- in pu
-            pollution_to_join_attack = 1,
+			absorptions_to_join_attack = { pollution = 1 }, -- 20000
             run_animation = armoredRunBiter(scale, behemoth_armoured_tint1, behemoth_armoured_tint2),
             corpse =  "maf-boss-armoured-biter-corpse-"..k,
             dying_explosion = "blood-explosion-big",
@@ -114,7 +116,7 @@ data:extend(
 			hide_resistances = false,
 			ai_settings = {destroy_when_commands_fail = false},
 			damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
-		    loot = getLoot(),
+		    loot = Loot,
 			has_belt_immunity = true,			
         },
 		add_biter_armoured_die_animation(scale, behemoth_armoured_tint1, behemoth_armoured_tint2,
@@ -135,13 +137,12 @@ end
 
 
 -- armoured biters mod
-if data.raw.unit['small-armoured-biter'] then
 local weakness = {"physical","fire","laser","electric","explosion"}
 local x=0
 for k=1,10 do 
-make_a_boss(k) 
-x=x+1
-if x>#weakness then x=1 end
-JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit['maf-boss-armoured-biter-'..k], 15+k*2*wpe_boss_resist_multiplier,weakness[x])
-end
+	make_armoured_boss(k) 
+	x=x+1
+	if x>#weakness then x=1 end
+	JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit['maf-boss-armoured-biter-'..k], 15+k*2*boss_resist_multiplier,weakness[x])
+	end
 end

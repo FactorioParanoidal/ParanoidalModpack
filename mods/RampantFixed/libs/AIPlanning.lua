@@ -37,8 +37,6 @@ local AI_MAX_STATE_DURATION = constants.AI_MAX_STATE_DURATION
 local BASE_RALLY_CHANCE = constants.BASE_RALLY_CHANCE
 local BONUS_RALLY_CHANCE = constants.BONUS_RALLY_CHANCE
 
-local RETREAT_MOVEMENT_PHEROMONE_LEVEL_MIN = constants.RETREAT_MOVEMENT_PHEROMONE_LEVEL_MIN
-local RETREAT_MOVEMENT_PHEROMONE_LEVEL_MAX = constants.RETREAT_MOVEMENT_PHEROMONE_LEVEL_MAX
 local MINIMUM_AI_POINTS = constants.MINIMUM_AI_POINTS
 
 local K_NO_ACTIVE_NESTS = constants.K_NO_ACTIVE_NESTS
@@ -89,34 +87,32 @@ local function getMaxActiveRaidNests(universe)
 	return activeRaidNests
 end
 
-function aiPlanning.planningUniverse(universe, evo, tick)
+local function planningUniverseMap(map, tick)
+	local universe = map.universe
+	local evo = game.forces.enemy.get_evolution_factor(map.surface)
 	local evolution_factor = getEvoAI(universe, evo, tick)
-    universe.evolutionLevel = evolution_factor	
     local maxPoints = mMax(AI_MAX_POINTS * evolution_factor, MINIMUM_AI_POINTS)
-    universe.maxPoints = maxPoints
+    map.maxPoints = maxPoints
 
     local attackWaveMaxSize = config.getAttackWaveMaxSize(universe)
-    universe.retreatThreshold = linearInterpolation(evolution_factor,
-                                                    RETREAT_MOVEMENT_PHEROMONE_LEVEL_MIN,
-                                                    RETREAT_MOVEMENT_PHEROMONE_LEVEL_MAX)
-    universe.rallyThreshold = BASE_RALLY_CHANCE + (mMin(evolution_factor, 0.3) * BONUS_RALLY_CHANCE)
+    map.rallyThreshold = BASE_RALLY_CHANCE + (mMin(evolution_factor, 0.3) * BONUS_RALLY_CHANCE)
 	local vengefulnessModifier = settings.global["rampantFixed--vengenceProbabilityPercent"].value*25	-- 0.04 is default
 	if vengefulnessModifier ~= 1 then
-		universe.rallyThreshold = universe.rallyThreshold * vengefulnessModifier
+		map.rallyThreshold = map.rallyThreshold * vengefulnessModifier
 	end
-    universe.formSquadThreshold = mMax((0.35 * evolution_factor), 0.1)
-	local thresholdKf = 1 / mMin((1 + universe.retribution*0.01), 2.5)
-	universe.raiding_minimum_base_threshold = mFloor(RAIDING_MINIMUM_BASE_THRESHOLD * thresholdKf)
-	universe.no_pollution_attack_threshold = mFloor(NO_POLLUTION_ATTACK_THRESHOLD * thresholdKf)		
+    map.formSquadThreshold = mMax((0.35 * evolution_factor), 0.1)
+	local thresholdKf = 1 / mMin((1 + map.retribution*0.01), 2.5)
+	map.raiding_minimum_base_threshold = mFloor(RAIDING_MINIMUM_BASE_THRESHOLD * thresholdKf)
+	map.no_pollution_attack_threshold = mFloor(NO_POLLUTION_ATTACK_THRESHOLD * thresholdKf)		
 	
 	local newWaveSize
 	local evoForMaxWaveSize = mMin(evolution_factor / (universe.attackWaveMaxSizeEvoPercent * 0.01), 1)
 	newWaveSize = mMin(mMax(attackWaveMaxSize * (evoForMaxWaveSize ^ 1.4), getMaxActiveRaidNests(universe)*0.02), attackWaveMaxSize)			
-	universe.attackWaveSize = newWaveSize + mMin(mFloor(universe.retribution*0.3), 50)	
-    if (universe.attackWaveSize < 2) then
-        universe.attackWaveSize = 2
+	map.attackWaveSize = newWaveSize + mMin(mFloor(map.retribution*0.1), 25)	
+    if (map.attackWaveSize < 2) then
+        map.attackWaveSize = 2
 	end
-	newWaveSize = config.getAttackWaveSize(universe)	-- if universe.externalControlValues.attackWaveSize defined, then use this value
+	newWaveSize = config.getAttackWaveSize(map)	-- if universe.externalControlValues.attackWaveSize defined, then use this value
 	
 	----------
 	local aiDifficultySquadCostModifier
@@ -125,21 +121,29 @@ function aiPlanning.planningUniverse(universe, evo, tick)
 	else
 		aiDifficultySquadCostModifier = 1 + mMax(newWaveSize / attackWaveMaxSize - 0.3, 0)*2
 	end
-	aiDifficultySquadCostModifier = aiDifficultySquadCostModifier * mMax(0.99^(mFloor(universe.retribution*0.1)), 0.5)
-	universe.finalSquadCost = mFloor(constants.AI_SQUAD_COST * aiDifficultySquadCostModifier)
-	universe.finalVengenceSquadCost = mFloor(constants.AI_VENGENCE_SQUAD_COST * aiDifficultySquadCostModifier)
+	aiDifficultySquadCostModifier = aiDifficultySquadCostModifier * mMax(0.99^(mFloor(map.retribution*0.1)), 0.5)
+	map.finalSquadCost = mFloor(constants.AI_SQUAD_COST * aiDifficultySquadCostModifier)
+	map.finalVengenceSquadCost = mFloor(constants.AI_VENGENCE_SQUAD_COST * aiDifficultySquadCostModifier)
 	----------
 	
-	universe.attackWaveDeviation = (newWaveSize * 0.333)
-	universe.attackWaveUpperBound = newWaveSize + (newWaveSize * 0.35)
+	map.attackWaveDeviation = (newWaveSize * 0.333)
+	map.attackWaveUpperBound = newWaveSize + (newWaveSize * 0.35)
 
-    universe.settlerWaveSize = linearInterpolation(evolution_factor ^ 1.66667,
+    map.settlerWaveSize = linearInterpolation(evolution_factor ^ 1.66667,
                                                    universe.expansionMinSize,
                                                    universe.expansionMaxSize)
-    universe.settlerWaveDeviation = (universe.settlerWaveSize * 0.33)
+    map.settlerWaveDeviation = (map.settlerWaveSize * 0.33)
 
-    universe.kamikazeThreshold = NO_RETREAT_BASE_PERCENT + (evolution_factor * NO_RETREAT_EVOLUTION_BONUS_MAX)
+    map.kamikazeThreshold = NO_RETREAT_BASE_PERCENT + (evolution_factor * NO_RETREAT_EVOLUTION_BONUS_MAX)
 	
+end
+
+function aiPlanning.planningUniverse(universe, tick)
+	for mapId, map in pairs(universe.maps) do
+		if map and not map.suspended then
+			planningUniverseMap(map, tick)
+		end
+	end
 end
 
 
@@ -147,120 +151,196 @@ function aiPlanning.updateBasesToGrow(map, tick, ingnoreGrowingState)
 	local universe = map.universe
 	local basesToGrowSize = 0
 	universe.growingBasesIterator = nil	
-	-- local basesIdList = ""	-- debug
 	for baseId, base in pairs (map.basesToGrow) do
-		universe.growingBases[baseId] = nil
+		if (not base) or (not base.forcedGrowthTick) or (base.forcedGrowthTick < tick) then
+			universe.growingBases[baseId] = nil
+		end	
 		basesToGrowSize = basesToGrowSize + 1
-		
-		-- -- debug
-		-- if basesIdList == "" then
-			-- basesIdList = tostring(baseId)
-		-- else	
-			-- basesIdList = basesIdList .. ", " .. tostring(baseId)	
-		-- end
 	end
-	-- game.print(" aiPlanning.updateBasesToGrow: clear bases, universe.growingBases = "..serpent.dump(universe.growingBases))
-	-- game.print(" aiPlanning.updateBasesToGrow: clear bases, map.basesToGrow = "..basesIdList)
-	--
-
-	if (basesToGrowSize > 0) and ((map.state == AI_STATE_GROWING) or ingnoreGrowingState)then
-		growCnt = mRandom(mMin(basesToGrowSize, 3))
+	if (basesToGrowSize > 0) and ((map.state == AI_STATE_GROWING) or ingnoreGrowingState) then
+		growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
 		local growIndexes = mathUtils.getRandomElementIndexes(map.basesToGrow, growCnt)
-		-- game.print(" aiPlanning.updateBasesToGrow:growIndexes "..serpent.dump(growIndexes))	-- debug
 		for i = 1, #growIndexes do
 			local baseId = growIndexes[i]
 			universe.growingBases[baseId] = {tick = tick}
-			-- game.print("base #"..baseId.." selected to grow")	-- debug
-		end	
-	end	
+		 end	
+	 end	
 end
 
-local function planningMap(map, evolution_factor, tick)
+local function endTruce(map, siegeAIToggle, raidAIToggle)
+	if siegeAIToggle then
+		map.state = AI_STATE_SIEGE
+	elseif raidAIToggle then
+		map.state = AI_STATE_RAIDING	
+	else
+		map.state = AI_STATE_GROWING
+	end
+	game.print({"description.rampantFixed--peacefullModeEndNotification", map.surface.name})
+end
+
+local function planningMap(map, tick)
 	local activeRaidNests = map.activeRaidNests
 	local activeNests =	map.activeNests
     local universe = map.universe
 	
-    map.evolutionLevel = evolution_factor
+	local evo = game.forces.enemy.get_evolution_factor(map.surface)
+	local evolution_factor = getEvoAI(universe, evo, tick)
+	
 	local activeRaidNests_evo = activeRaidNests +  mMin(mFloor(evolution_factor*50), 30)
 	
 	local noActiveNests = (activeNests < mFloor(activeRaidNests_evo/K_NO_ACTIVE_NESTS))
 	local tooLowActiveNests = (activeNests < mFloor(activeRaidNests_evo/K_TOO_LOW_ACTIVE_NESTS))
 	local lowActiveNests = (activeNests < mFloor(activeRaidNests_evo/K_LOW_ACTIVE_NESTS))
-	local activeNestsModified = mMax(mMin(universe.retribution, 1)*60,  activeNests)
+	local activeNestsModified = mMax(mMin(map.retribution, 1)*60,  activeNests)
 	
 
     if not map.state then
 		map.state = AI_STATE_AGGRESSIVE
 	end	
 	
-    local maxPoints = universe.maxPoints
+    local maxPoints = map.maxPoints
     local maxOverflowPoints = maxPoints * 3
-		
-    local points = mMin(universe.evolutionLevel, 1)*100 + (activeNestsModified * 2) + mMin(universe.evolutionLevel*100, activeRaidNests)*0.1       	   	  	
-	if (map.temperament < 0.05)	then	-- settlers cost a lot AP
-        points = points + 180	
-    elseif map.temperament > 0.95 then
-        points = points + 120
-    elseif (map.temperament < 0.25) or (map.temperament > 0.75) then
-        points = points + 90
-    elseif (map.temperament < 0.40) or (map.temperament > 0.60) then
-        points = points + 60
-    end
-	if points > 1200 then
-		points = 1200
-	end
-
-    if (map.state == AI_STATE_ONSLAUGHT) then
-        points = points * 2
-    end
+	local points
 	
-	if (map.pointsTick) and (tick > map.pointsTick) then
-		points = math.floor(points * universe.aiPointsScaler * ((tick - map.pointsTick)/360))*0.1
+	if not (map.state == AI_STATE_PEACEFUL) then
+		points = mMin(evolution_factor, 1)*100 + (activeNestsModified * 2) + mMin(evolution_factor*100, activeRaidNests)*0.1       	   	  	
+		if (map.temperament < 0.05)	then	-- settlers cost a lot AP
+			points = points + 180	
+		elseif map.temperament > 0.95 then
+			points = points + 120
+		elseif (map.temperament < 0.25) or (map.temperament > 0.75) then
+			points = points + 90
+		elseif (map.temperament < 0.40) or (map.temperament > 0.60) then
+			points = points + 60
+		end
+		if points > 1200 then
+			points = 1200
+		end
+
+		if (map.state == AI_STATE_ONSLAUGHT) then
+			points = points * 2
+		end
+		
+		if (map.pointsTick) and (tick > map.pointsTick) then
+			points = math.floor(points * universe.aiPointsScaler * ((tick - map.pointsTick)/360))*0.1
+			if map.supressionData and (map.supressionData.supressionEndTick > tick) and (map.supressionData.supressionType > 0) then
+				points = math.floor(points*0.3)
+			end
+		else
+			points = 0
+		end
 	else
-		points = 0
-	end
+		points = 0 
+	end	
+	
 	map.pointsTick = tick
-
     local currentPoints = map.points
-
     if (currentPoints < maxPoints) then
         map.points = currentPoints + points
     end
-
     if (currentPoints > maxOverflowPoints) then
         map.points = maxOverflowPoints
     end
 	
+	
 	local mapState = map.state
 	local mapStateChanged = false
-		
-	if (map.surface.index == 1) and (map.stateTick == 0) and (tick<=72000) and (universe.peacefulAIToggle) then 
-		if not (map.state == AI_STATE_PEACEFUL) and settings.global["rampantFixed--peacePeriod"].value > 0 then
-			game.print("<Rampant Fixed>:"..map.surface.name.." surface. Passive mode for the first ".. settings.global["rampantFixed--peacePeriod"].value.." minutes")
-			map.state = AI_STATE_PEACEFUL
-			map.stateTick = settings.global["rampantFixed--peacePeriod"].value*3600
+	local resetNextStateTick = true
+	local siegeAIToggle = (universe.siegeAIToggle and map.hasNonmoddedBiters)
+	local enabledMigration = (universe.enabledMigration and map.hasNonmoddedBiters)
+	
+	--------------------
+	local truceEvo = 0
+	local planetAISetting = universe.planetAISettings[map.surface.name]
+	planetAISetting = planetAISetting or universe.planetAISettings["others"]
+	if planetAISetting then
+		truceEvo = planetAISetting.minEvo * 0.01
+		local truceEndTick = map.firstStateTick + planetAISetting.peacePeriod * 3600		
+		-----------------
+		if ((truceEvo > evo) or (truceEndTick > tick)) then
+			if not (map.state == constants.AI_STATE_PEACEFUL) then
+				map.state = constants.AI_STATE_PEACEFUL
+				map.truceEndTick = truceEndTick
+				map.stateTick = mMax(truceEndTick, tick + 3600)
+				mapStateChanged = true
+				resetNextStateTick = false
+				map.points = 400
+				local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
+				if truceLeft > 0 then
+					game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
+				else
+					game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
+				end
+			elseif (map.stateTick <= tick) then
+				map.stateTick = mMax(truceEndTick, tick + 3600)
+			end	
+		elseif (map.state == constants.AI_STATE_PEACEFUL) then
+			if (tick >= truceEndTick) and (evo >= truceEvo) then
+				endTruce(map, siegeAIToggle,  universe.raidAIToggle)
+				-- if siegeAIToggle then
+					-- map.state = AI_STATE_SIEGE
+				-- elseif universe.raidAIToggle then
+					-- map.state = AI_STATE_RAIDING	
+				-- else
+					-- map.state = AI_STATE_GROWING
+				-- end
+				mapStateChanged = true
+				resetNextStateTick = true
+				-- game.print({"description.rampantFixed--peacefullModeEndNotification", map.surface.name})
+			elseif	(tick >= truceEndTick) then
+				if (map.stateTick <= tick) then
+					map.stateTick = tick + 3600 				
+					mapStateChanged = true	
+					resetNextStateTick = false
+				end	
+			end
 		end
-	elseif (universe.aiNocturnalMode and map.surface.darkness < 0.65) 		-- if daytime and aiNocturnalMode...
-		and (tick>216000)
-		and universe.siegeAIToggle 
-		and (activeRaidNests > 0) 
-		then		
-		if (map.stateTick <= tick) then
-			map.state = AI_STATE_SIEGE
-			mapStateChanged = true
+	elseif (tick >= truceEndTick) and (map.state == constants.AI_STATE_PEACEFUL) then
+		endTruce(map, siegeAIToggle,  universe.raidAIToggle)
+		mapStateChanged = true
+		resetNextStateTick = true	
+	end	
+	--------------------
+
+	if not mapStateChanged then
+		if universe.aiNocturnalMode 
+			and siegeAIToggle
+			and (map.stateTick <= tick)
+			then
+			local switchToSiege = false
+			if map.temperament < 0.8 then
+				if (map.surface.darkness < 0.65)	 --- if daytime and aiNocturnalMode...
+					and ((activeRaidNests > 0) or (activeNests > 0))
+					then
+					switchToSiege = true
+				elseif(universe.squadCount >= (universe.AI_MAX_SQUAD_COUNT*0.7))
+					and (mRandom() < 0.5) then
+					switchToSiege = true
+				end
+			end	
+			if switchToSiege then
+				map.state = AI_STATE_SIEGE
+				mapStateChanged = true
+				resetNextStateTick = true
+			end
 		end	
-	else	
+	end	
+
+	if not mapStateChanged then
 		if (map.stateTick <= tick) then
 			--
-			local basesToGrowCnt = table_size(map.basesToGrow)
+			local basesToGrowCnt = table_size(map.basesToGrow)			
 			--
 			local roll = mRandom()
-			if (basesToGrowCnt > 0) and (mRandom() < 0.1) and (tick>36000) then	-- dont use "roll" variable here
+			if (evo < constants.highEvo) and (basesToGrowCnt > 0) and (mRandom() < 0.13) and (tick>36000) then	-- dont use "roll" variable here
 				map.state = AI_STATE_GROWING
-				mapStateChanged = true		
+				mapStateChanged = true
+			-- elseif (map.temperament < 0.7) and siegeAIToggle and (map.siegeTick <= tick) then
+				-- mapStateChanged = true
+				-- map.state = AI_STATE_SIEGE
 			elseif (map.temperament < 0.05) then -- 0 - 0.05
-				if universe.enabledMigration then
-					if (roll < 0.7) and universe.siegeAIToggle then
+				if enabledMigration then
+					if (roll < 0.7) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					else
 						map.state = AI_STATE_MIGRATING
@@ -277,8 +357,8 @@ local function planningMap(map, evolution_factor, tick)
 					end
 				end
 			elseif (map.temperament < 0.20) then -- 0.05 - 0.2
-				if (universe.enabledMigration) then
-					if (roll < 0.4) and universe.siegeAIToggle then
+				if (enabledMigration) then
+					if (roll < 0.4) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					elseif (roll < 0.6) and universe.raidAIToggle then
 						map.state = AI_STATE_RAIDING
@@ -286,7 +366,7 @@ local function planningMap(map, evolution_factor, tick)
 						map.state = AI_STATE_MIGRATING
 					end
 				else
-					if (roll < 0.2) and universe.siegeAIToggle then
+					if (roll < 0.2) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE				
 					elseif universe.raidAIToggle then
 						if (roll < 0.95) then
@@ -299,25 +379,27 @@ local function planningMap(map, evolution_factor, tick)
 					end
 				end
 			elseif (map.temperament < 0.4) then -- 0.2 - 0.4
-				if (universe.enabledMigration) then
+				if (enabledMigration) then
 					if (roll < 0.2) then
 						map.state = AI_STATE_AGGRESSIVE
 					elseif (roll < 0.4) and universe.raidAIToggle then
 						map.state = AI_STATE_RAIDING
-					elseif (roll < 0.6) and universe.siegeAIToggle then
+					elseif (roll < 0.6) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE				
 					elseif (roll < 0.8) then
 						map.state = AI_STATE_MIGRATING
-					elseif universe.peacefulAIToggle and (map.destroyPlayerBuildings > 0) then
-						map.state = AI_STATE_PEACEFUL
+					elseif (basesToGrowCnt > 0) then
+						map.state = AI_STATE_GROWING
 					else
 						map.state = AI_STATE_MIGRATING
 					end
 				else
-					if (roll < 0.6) then
+					if (roll < 0.7) then
 						map.state = AI_STATE_AGGRESSIVE
-					elseif universe.peacefulAIToggle and (map.destroyPlayerBuildings > 0) then
-						map.state = AI_STATE_PEACEFUL
+					elseif (roll < 0.8) and universe.raidAIToggle then
+						map.state = AI_STATE_RAIDING
+					elseif (basesToGrowCnt > 0) and (roll < 0.9) then
+						map.state = AI_STATE_GROWING
 					else
 						map.state = AI_STATE_AGGRESSIVE
 					end
@@ -325,12 +407,10 @@ local function planningMap(map, evolution_factor, tick)
 			elseif (map.temperament < 0.6) then -- 0.4 - 0.6
 				if (roll < 0.6) then
 					map.state = AI_STATE_AGGRESSIVE
-				elseif universe.siegeAIToggle and (roll < 0.65) then	
+				elseif siegeAIToggle and (roll < 0.65) then	
 					map.state = AI_STATE_SIEGE			
-				elseif universe.peacefulAIToggle and (map.destroyPlayerBuildings > 0) then
-					map.state = AI_STATE_PEACEFUL
 				else
-					if universe.enabledMigration then
+					if enabledMigration then
 						map.state = AI_STATE_MIGRATING
 					else
 						map.state = AI_STATE_AGGRESSIVE
@@ -347,14 +427,12 @@ local function planningMap(map, evolution_factor, tick)
 					else
 						map.state = AI_STATE_AGGRESSIVE				
 					end					
-				elseif universe.peacefulAIToggle and (map.destroyPlayerBuildings > 0) then
-					map.state = AI_STATE_PEACEFUL
 				else
 					map.state = AI_STATE_AGGRESSIVE
 				end
 			elseif (map.temperament < 0.95) then -- 0.8 - 0.95
-				if (universe.enabledMigration and universe.raidAIToggle) then
-					if (roll < 0.20) and universe.siegeAIToggle then
+				if (enabledMigration and universe.raidAIToggle) then
+					if (roll < 0.20) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					elseif (roll < 0.45) then
 						map.state = AI_STATE_RAIDING
@@ -363,8 +441,8 @@ local function planningMap(map, evolution_factor, tick)
 					else
 						map.state = AI_STATE_AGGRESSIVE
 					end
-				elseif (universe.enabledMigration) then
-					if (roll < 0.20) and universe.siegeAIToggle then
+				elseif (enabledMigration) then
+					if (roll < 0.20) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					elseif (roll < 0.75) then
 						map.state = AI_STATE_ONSLAUGHT
@@ -387,16 +465,16 @@ local function planningMap(map, evolution_factor, tick)
 					end
 				end
 			else
-				if (universe.enabledMigration and universe.raidAIToggle) then
-					if (roll < 0.30) and universe.siegeAIToggle then
+				if (enabledMigration and universe.raidAIToggle) then
+					if (roll < 0.30) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					elseif (roll < 0.65) then
 						map.state = AI_STATE_RAIDING
 					else
 						map.state = AI_STATE_ONSLAUGHT
 					end
-				elseif (universe.enabledMigration) then
-					if (roll < 0.30) and universe.siegeAIToggle then
+				elseif (enabledMigration) then
+					if (roll < 0.30) and siegeAIToggle then
 						map.state = AI_STATE_SIEGE
 					else
 						map.state = AI_STATE_ONSLAUGHT
@@ -417,7 +495,7 @@ local function planningMap(map, evolution_factor, tick)
 			-- post-processing
 			roll = mRandom()
 			if map.state == AI_STATE_ONSLAUGHT then
-				if activeNests< 70 and (universe.retribution < 1)  then
+				if activeNests< 70 and (map.retribution < 1)  then
 					map.state = AI_STATE_AGGRESSIVE
 				end	
 			elseif map.state == AI_STATE_SIEGE then
@@ -429,7 +507,7 @@ local function planningMap(map, evolution_factor, tick)
 					-- end	
 				-- end
 			else	
-				if universe.siegeAIToggle and (tick>216000) then
+				if siegeAIToggle and (tick>216000) then
 					if (map.state == AI_STATE_MIGRATING) and lowActiveNests then
 						 map.state = AI_STATE_SIEGE
 					elseif (map.state == AI_STATE_AGGRESSIVE) and (
@@ -451,7 +529,7 @@ local function planningMap(map, evolution_factor, tick)
 				end
 			end	
 			
-			if (universe.retribution < 1) and (map.state == AI_STATE_ONSLAUGHT) and (mapState == AI_STATE_ONSLAUGHT) then
+			if (map.retribution < 1) and (map.state == AI_STATE_ONSLAUGHT) and (mapState == AI_STATE_ONSLAUGHT) then
 				if universe.raidAIToggle then
 					map.state = AI_STATE_RAIDING
 				else
@@ -464,6 +542,9 @@ local function planningMap(map, evolution_factor, tick)
 	end	
 
 	if mapStateChanged then
+		if (map.state == AI_STATE_SIEGE) then
+			map.siegeTick = tick + 2 * 60*60*60
+		end
 		map.squadsGenerated = 0
 		map.destroyPlayerBuildings = 0
 		map.lostEnemyUnits = 0
@@ -473,15 +554,21 @@ local function planningMap(map, evolution_factor, tick)
 		map.ionCannonBlasts = 0
 		map.artilleryBlasts = 0
 		
-		aiPlanning.updateBasesToGrow(map, tick, false)
-
-		map.stateTick = randomTickEvent(tick, AI_MIN_STATE_DURATION, AI_MAX_STATE_DURATION)
+		if evo >= constants.highEvo then
+			aiPlanning.updateBasesToGrow(map, tick, true)
+		else
+			aiPlanning.updateBasesToGrow(map, tick, false)
+		end	
+		if resetNextStateTick then
+			map.stateTick = randomTickEvent(tick, AI_MIN_STATE_DURATION, AI_MAX_STATE_DURATION)
+		end	
 	elseif map.stateTick < tick then
-		map.stateTick = randomTickEvent(tick, AI_MIN_STATE_DURATION, AI_MAX_STATE_DURATION)		
+		if resetNextStateTick then
+			map.stateTick = randomTickEvent(tick, AI_MIN_STATE_DURATION, AI_MAX_STATE_DURATION)		
+		end	
 	end	
-	
-			
-    if universe.printAIStateChanges and game.tick % 3600 == 0 then
+				
+    if universe.printAIStateChanges and (game.tick % 3600 == 0) then
         game.print(map.surface.name .. ": AI is now: " .. constants.stateEnglish[map.state] .. ", Next state change is in " .. string.format("%.2f", (map.stateTick - tick) / (60*60)) .. " minutes @ " .. getTimeStringFromTick(map.stateTick) .. " playtime")
     end
 end
@@ -490,7 +577,6 @@ local function temperamentPlanner(map)
     local destroyPlayerBuildings = map.destroyPlayerBuildings
     local lostEnemyUnits = map.lostEnemyUnits
     local lostEnemyBuilding = map.lostEnemyBuilding
-    local rocketLaunched = map.rocketLaunched
     local builtEnemyBuilding = map.builtEnemyBuilding
     local ionCannonBlasts = map.ionCannonBlasts
     local artilleryBlasts = map.artilleryBlasts
@@ -503,21 +589,22 @@ local function temperamentPlanner(map)
 	local universe = map.universe
 	
 	local evoK
-	if map.evolutionLevel < 0.3 then
+	local evolutionLevel = game.forces.enemy.get_evolution_factor(map.surface)
+	if evolutionLevel < 0.3 then
 		 evoK = 0.025
-	elseif map.evolutionLevel < 0.5 then
+	elseif evolutionLevel < 0.5 then
 		 evoK = 0.0125
-	elseif map.evolutionLevel < 0.7 then
+	elseif evolutionLevel < 0.7 then
 		 evoK = 0.00625
-	elseif map.evolutionLevel < 0.9 then
+	elseif evolutionLevel < 0.9 then
 		 evoK = 0.003125
-	elseif map.evolutionLevel < 0.95 then
+	elseif evolutionLevel < 0.95 then
 		 evoK = 0.0015625
 	else
 		 evoK = 0.00078125
 	end
 	local balancingK = 0.5
-	local attackWaveSize = config.getAttackWaveSize(universe)
+	local attackWaveSize = config.getAttackWaveSize(map)
 	if attackWaveSize > 0 then
 		evoK = balancingK * evoK
 	end	
@@ -529,13 +616,14 @@ local function temperamentPlanner(map)
 	end
 	local LEU_evo =	lostEnemyUnits * evoK
 	
-	local AN = mMax(activeNests - destroyPlayerBuildings*0.5 - lostEnemyBuilding*1.5 - LEU_evo, 0)
+	-- local AN = mMax(activeNests - destroyPlayerBuildings*0.5 - lostEnemyBuilding*1.5 - LEU_evo, 0)
+	local AN = activeNests
 	local newTemp
 	local ARN_AN = 0
 	if AN == 0 then 
 		ARN_AN = 1000
 	else
-		ARN_AN = activeRaidNests/AN
+		ARN_AN = (activeRaidNests)/AN
 	end
 	if ARN_AN>=1000 then
 		newTemp = 0	
@@ -564,19 +652,18 @@ local function temperamentPlanner(map)
             game.print("Rampant Stats:")
             game.print("aN:" .. map.activeNests .. ", aRN:" .. map.activeRaidNests .. ", dPB:" .. map.destroyPlayerBuildings ..
                        ", lEU:" .. map.lostEnemyUnits .."(evoK="..evoK..", LEU_evo:"..LEU_evo.. "), lEB:" .. map.lostEnemyBuilding ..", ARN_AN:"..ARN_AN)
-            game.print("temp: " .. map.temperament .. "-->" .. newTemp .. ", points:" .. math.floor(map.points).."/"..math.floor(universe.maxPoints).. ", state:" .. constants.stateEnglish[map.state] .. ", surface:" .. map.surface.index .. " [" .. map.surface.name .. "]")
-            game.print("aS:" .. universe.squadCount .. ", aB:" .. universe.builderCount .. ", atkSize:" .. attackWaveSize .. ", stlSize:" .. universe.settlerWaveSize .. ", formGroup:" .. universe.formSquadThreshold
-				.. ", Rtrb = "..universe.retribution)
-			
+            game.print("temp: " .. map.temperament .. "-->" .. newTemp .. ", points:" .. math.floor(map.points).."/"..math.floor(map.maxPoints).. ", state:" .. constants.stateEnglish[map.state] .. ", surface:" .. map.surface.index .. " [" .. map.surface.name .. "]")
+            game.print("aS:" .. universe.squadCount .. ", aB:" .. universe.builderCount .. ", atkSize:" .. attackWaveSize .. ", stlSize:" .. map.settlerWaveSize .. ", formGroup:" .. map.formSquadThreshold
+				.. ", Rtrb = "..map.retribution)
+            game.print("gTk="..game.tick..", stTk="..map.stateTick..", trEt="..map.truceEndTick..", nDAT = "..map.nextDemolisherAttackTick)
+			game.print("next squad is: "..tostring(map.nextSquad))
 			game.print("Next state change is in " .. string.format("%.2f", (map.stateTick - game.tick) / (60*60)))
-        end
+          end
     end
 end
 
--- universe.evolutionLevel - takes into account the setting "rampantFixed--agressiveStart". Affects squad size and AI behavior
--- map.evolutionLevel - equals the actual evolution. Affects biter tier and nest/worm levels
-function aiPlanning.processMapAIs(universe, evo, tick)
-	aiPlanning.planningUniverse(universe, evo, tick)
+function aiPlanning.processMapAIs(universe, tick)
+	aiPlanning.planningUniverse(universe, tick)
 	
     local mapId = universe.processMapAIIterator
 	local map
@@ -590,7 +677,7 @@ function aiPlanning.processMapAIs(universe, evo, tick)
 	while mapId do
 		if map then
 			if not map.suspended then
-				planningMap(map, evo, tick)
+				planningMap(map, tick)
 				temperamentPlanner(map)
 			end
 		end	

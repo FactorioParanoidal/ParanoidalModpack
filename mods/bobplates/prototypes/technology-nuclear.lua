@@ -9,9 +9,14 @@ data:extend({
         type = "unlock-recipe",
         recipe = "bobingabout-enrichment-process",
       },
+      {
+        type = "unlock-recipe",
+        recipe = "bob-plutonium-nucleosynthesis",
+      },
     },
     prerequisites = {
       "kovarex-enrichment-process",
+      "nuclear-fuel-reprocessing",
     },
     unit = {
       ingredients = {
@@ -27,150 +32,132 @@ data:extend({
   },
 })
 
-if settings.startup["bobmods-plates-nuclearupdate"].value == true then
-  bobmods.lib.tech.add_recipe_unlock("uranium-processing", "empty-nuclear-fuel-cell")
-
-  bobmods.lib.tech.add_prerequisite("bobingabout-enrichment-process", "nuclear-fuel-reprocessing")
-  bobmods.lib.tech.add_recipe_unlock("bobingabout-enrichment-process", "plutonium-nucleosynthesis")
-  data.raw.technology["bobingabout-enrichment-process"].localised_name = { "technology-name.plutonium-synthesis" }
-  data.raw.technology["bobingabout-enrichment-process"].icon = "__bobplates__/graphics/icons/nuclear/plutonium-239.png"
-  data.raw.technology["bobingabout-enrichment-process"].icon_size = 64
-
-  data:extend({
-    {
-      type = "technology",
-      name = "plutonium-fuel-cell",
-      icon = "__bobplates__/graphics/icons/nuclear/plutonium-fuel-cell.png",
-      icon_size = 64,
-      icon_mipmaps = 4,
-      effects = {
-        {
-          type = "unlock-recipe",
-          recipe = "plutonium-fuel-cell",
-        },
-      },
-      prerequisites = {
-        "nuclear-fuel-reprocessing",
-      },
-      unit = {
-        ingredients = {
-          { "automation-science-pack", 1 },
-          { "logistic-science-pack", 1 },
-          { "chemical-science-pack", 1 },
-        },
-        time = 30,
-        count = 50,
-      },
-      order = "e-p-b-c5",
-    },
-  })
-end
-
-if data.raw.item["thorium-ore"] then
-  data:extend({
-    {
-      type = "technology",
-      name = "thorium-processing",
-      icon = "__bobplates__/graphics/icons/technology/thorium-processing.png",
-      icon_size = 128,
-      effects = {
-        {
-          type = "unlock-recipe",
-          recipe = "thorium-processing",
-        },
-        {
-          type = "unlock-recipe",
-          recipe = "thorium-fuel-cell",
-        },
-      },
-      prerequisites = {
-        "nuclear-power",
-      },
-      unit = {
-        ingredients = {
-          { "automation-science-pack", 1 },
-          { "logistic-science-pack", 1 },
-          { "chemical-science-pack", 1 },
-        },
-        time = 30,
-        count = 200,
-      },
-      order = "e-p-b-d1",
-    },
-    {
-      type = "technology",
-      name = "thorium-fuel-reprocessing",
-      icon = "__bobplates__/graphics/icons/technology/thorium-nuclear-fuel-reprocessing.png",
-      icon_size = 128,
-      effects = {
-        {
-          type = "unlock-recipe",
-          recipe = "thorium-fuel-reprocessing",
-        },
-      },
-      prerequisites = {
-        "thorium-processing",
-        "production-science-pack",
-      },
-      unit = {
-        ingredients = {
-          { "automation-science-pack", 1 },
-          { "logistic-science-pack", 1 },
-          { "chemical-science-pack", 1 },
-          { "production-science-pack", 1 },
-        },
-        time = 30,
-        count = 50,
-      },
-      order = "e-p-b-d2",
-    },
-  })
-
-  if settings.startup["bobmods-plates-nuclearupdate"].value == true then
-    data:extend({
-      {
-        type = "technology",
-        name = "thorium-plutonium-fuel-cell",
-        icon = "__bobplates__/graphics/icons/nuclear/thorium-plutonium-fuel-cell.png",
-        icon_size = 64,
-        icon_mipmaps = 4,
-        effects = {
-          {
-            type = "unlock-recipe",
-            recipe = "thorium-plutonium-fuel-cell",
-          },
-        },
-        prerequisites = {
-          "thorium-processing",
-          "nuclear-fuel-reprocessing",
-          "production-science-pack",
-        },
-        unit = {
-          ingredients = {
-            { "automation-science-pack", 1 },
-            { "logistic-science-pack", 1 },
-            { "chemical-science-pack", 1 },
-            { "production-science-pack", 1 },
-          },
-          time = 30,
-          count = 50,
-        },
-        order = "e-p-b-d5",
-      },
-    })
-
-    data.raw.technology["thorium-fuel-reprocessing"].icon =
-      "__bobplates__/graphics/icons/technology/thorium-nuclear-fuel-reprocessing-new.png"
-  else
-    bobmods.lib.tech.add_recipe_unlock("thorium-fuel-reprocessing", "thorium-plutonium-fuel-cell")
-    bobmods.lib.tech.add_prerequisite("bobingabout-enrichment-process", "thorium-fuel-reprocessing")
-  end
-end
+bobmods.lib.tech.add_recipe_unlock("nuclear-power", "bob-empty-nuclear-fuel-cell")
+bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-lead-processing")
 
 data:extend({
   {
     type = "technology",
-    name = "heavy-water-processing",
+    name = "bob-plutonium-fuel-cell",
+    icon = "__bobplates__/graphics/icons/nuclear/plutonium-fuel-cell.png",
+    icon_size = 64,
+    effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "bob-plutonium-fuel-cell",
+      },
+    },
+    prerequisites = {
+      "nuclear-fuel-reprocessing",
+    },
+    unit = {
+      ingredients = {
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1 },
+        { "chemical-science-pack", 1 },
+      },
+      time = 30,
+      count = 50,
+    },
+    order = "e-p-b-c5",
+  },
+})
+
+data:extend({
+  {
+    type = "technology",
+    name = "bob-nuclear-power-2",
+    localised_name = { "technology-name.bob-thorium-power" },
+    icon = "__bobplates__/graphics/icons/technology/thorium-processing.png",
+    icon_size = 128,
+    effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "bob-thorium-processing",
+      },
+      {
+        type = "unlock-recipe",
+        recipe = "bob-thorium-fuel-cell",
+      },
+    },
+    prerequisites = {
+      "nuclear-power",
+      "production-science-pack",
+    },
+    unit = {
+      ingredients = {
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1 },
+        { "chemical-science-pack", 1 },
+        { "production-science-pack", 1 },
+      },
+      time = 30,
+      count = 200,
+    },
+    order = "e-p-b-d1",
+  },
+  {
+    type = "technology",
+    name = "bob-thorium-fuel-reprocessing",
+    icon = "__bobplates__/graphics/icons/technology/thorium-nuclear-fuel-reprocessing-new.png",
+    icon_size = 128,
+    effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "bob-thorium-fuel-reprocessing",
+      },
+    },
+    prerequisites = {
+      "bob-nuclear-power-2",
+    },
+    unit = {
+      ingredients = {
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1 },
+        { "chemical-science-pack", 1 },
+        { "production-science-pack", 1 },
+      },
+      time = 30,
+      count = 50,
+    },
+    order = "e-p-b-d2",
+  },
+})
+
+data:extend({
+  {
+    type = "technology",
+    name = "bob-thorium-plutonium-fuel-cell",
+    icon = "__bobplates__/graphics/icons/nuclear/thorium-plutonium-fuel-cell.png",
+    icon_size = 64,
+    effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "bob-thorium-plutonium-fuel-cell",
+      },
+    },
+    prerequisites = {
+      "bob-nuclear-power-2",
+      "nuclear-fuel-reprocessing",
+    },
+    unit = {
+      ingredients = {
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1 },
+        { "chemical-science-pack", 1 },
+        { "production-science-pack", 1 },
+      },
+      time = 30,
+      count = 50,
+    },
+    order = "e-p-b-d5",
+  },
+})
+
+data:extend({
+  {
+    type = "technology",
+    name = "bob-heavy-water-processing",
     icon = "__bobplates__/graphics/icons/technology/heavy-water.png",
     icon_size = 128,
     order = "e-p-b-e1",
@@ -197,14 +184,16 @@ data:extend({
   },
   {
     type = "technology",
-    name = "deuterium-processing",
+    name = "bob-nuclear-power-3",
+    localised_name = { "technology-name.bob-deuterium-power" },
     icon = "__bobplates__/graphics/icons/technology/deuterium.png",
     icon_size = 128,
     order = "e-p-b-e2",
     prerequisites = {
-      "heavy-water-processing",
-      "electrolysis-1",
+      "bob-heavy-water-processing",
+      "bob-electrolysis-1",
       "nuclear-fuel-reprocessing",
+      "utility-science-pack",
     },
     unit = {
       count = 350,
@@ -214,28 +203,29 @@ data:extend({
         { "logistic-science-pack", 1 },
         { "chemical-science-pack", 1 },
         { "production-science-pack", 1 },
+        { "utility-science-pack", 1 },
       },
     },
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "heavy-water-electrolysis",
+        recipe = "bob-heavy-water-electrolysis",
       },
       {
         type = "unlock-recipe",
-        recipe = "deuterium-fuel-cell",
+        recipe = "bob-deuterium-fuel-cell",
       },
     },
   },
 
   {
     type = "technology",
-    name = "deuterium-fuel-reprocessing",
-    icon = "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing.png",
+    name = "bob-deuterium-fuel-reprocessing",
+    icon = "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-new.png",
     icon_size = 128,
     order = "e-p-b-e3",
     prerequisites = {
-      "deuterium-processing",
+      "bob-nuclear-power-3",
       "uranium-processing",
       "utility-science-pack",
     },
@@ -253,56 +243,45 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "deuterium-fuel-reprocessing",
+        recipe = "bob-deuterium-fuel-reprocessing",
       },
     },
   },
 })
 
-if settings.startup["bobmods-plates-nuclearupdate"].value == true then
-  data:extend({
-    {
-      type = "technology",
-      name = "deuterium-fuel-cell-2",
-      icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2.png",
-      icon_size = 64,
-      icon_mipmaps = 4,
-      effects = {
-        {
-          type = "unlock-recipe",
-          recipe = "deuterium-fuel-cell-2",
-        },
+data:extend({
+  {
+    type = "technology",
+    name = "bob-deuterium-fuel-cell-2",
+    icon = "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2.png",
+    icon_size = 64,
+    effects = {
+      {
+        type = "unlock-recipe",
+        recipe = "bob-deuterium-fuel-cell-2",
       },
-      prerequisites = {
-        "deuterium-processing",
-        "utility-science-pack",
-      },
-      unit = {
-        ingredients = {
-          { "automation-science-pack", 1 },
-          { "logistic-science-pack", 1 },
-          { "chemical-science-pack", 1 },
-          { "production-science-pack", 1 },
-          { "utility-science-pack", 1 },
-        },
-        time = 30,
-        count = 50,
-      },
-      order = "e-p-b-e5",
     },
-  })
-  if settings.startup["bobmods-plates-bluedeuterium"].value == true then
-    data.raw.technology["deuterium-fuel-reprocessing"].icon =
-      "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-blue-new.png"
-    data.raw.technology["deuterium-fuel-cell-2"].icon =
-      "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2-blue.png"
-  else
-    data.raw.technology["deuterium-fuel-reprocessing"].icon =
-      "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-new.png"
-  end
-else
-  if settings.startup["bobmods-plates-bluedeuterium"].value == true then
-    data.raw.technology["deuterium-fuel-reprocessing"].icon =
-      "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-blue.png"
-  end
+    prerequisites = {
+      "bob-nuclear-power-3",
+      "utility-science-pack",
+    },
+    unit = {
+      ingredients = {
+        { "automation-science-pack", 1 },
+        { "logistic-science-pack", 1 },
+        { "chemical-science-pack", 1 },
+        { "production-science-pack", 1 },
+        { "utility-science-pack", 1 },
+      },
+      time = 30,
+      count = 50,
+    },
+    order = "e-p-b-e5",
+  },
+})
+if settings.startup["bobmods-plates-bluedeuterium"].value == true then
+  data.raw.technology["bob-deuterium-fuel-reprocessing"].icon =
+    "__bobplates__/graphics/icons/technology/deuterium-nuclear-fuel-reprocessing-blue-new.png"
+  data.raw.technology["bob-deuterium-fuel-cell-2"].icon =
+    "__bobplates__/graphics/icons/nuclear/deuterium-fuel-cell-2-blue.png"
 end

@@ -4,30 +4,12 @@ data:extend({
     name = "VehicleSnap-shortcut",
     order = "v[vehiclesnap]",
     action = "lua",
+    localised_name = {"shortcut-name.VehicleSnap-shortcut"},
+    associated_control_input = "VehicleSnap-toggle",
     toggleable = true,
-    icon =
-    {
-      filename = "__VehicleSnap__/graphics/icons/vehsnap-x32.png",
-      priority = "extra-high-no-scale",
-      size = 32,
-      scale = 1,
-      flags = { "icon" }
-    },
-    small_icon =
-    {
-      filename = "__VehicleSnap__/graphics/icons/vehsnap-x32.png",
-      priority = "extra-high-no-scale",
-      size = 32,
-      scale = 1,
-      flags = { "icon" }
-    },
-    disabled_small_icon =
-    {
-      filename = "__VehicleSnap__/graphics/icons/vehsnap-x32.png",
-      priority = "extra-high-no-scale",
-      size = 32,
-      scale = 1,
-      flags = { "icon" }
-    }
+    icon = "__VehicleSnap__/graphics/icons/vehsnap-x32.png",
+    icon_size = 32,
+    small_icon = "__VehicleSnap__/graphics/icons/vehsnap-x32.png",
+    small_icon_size = 32
   }
 })

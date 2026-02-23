@@ -1,2 +1,0 @@
-require("internal")
-require("scripted")

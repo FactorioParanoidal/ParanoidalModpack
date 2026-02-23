@@ -54,7 +54,7 @@ commands.add_command('createSquad', "",
 		end
 		local result = remote.call("rampantFixed", "createSquad_ExtCtrl", {surfaceIndex = game.players[command.player_index].surface.index, size = tonumber(command.parameter), ignoreSquadLimit = true})
 		if result then
-			game.print("squad created at [gps=" .. result.position.x .. "," .. result.position.y .."]")
+			game.print("squad created at [gps=" .. result.position.x .. "," .. result.position.y  .. "," .. game.players[command.player_index].surface.name .."]")
 		else
 			game.print("Cant create squad")
 		end
@@ -155,7 +155,7 @@ commands.add_command('getRampantAttackGroups', "",
 		local groups = remote.call("rampantFixed", "getRampantAttackGroups") 
 		for index, group in pairs(groups) do
 			if group.surface == game.players[command.player_index].surface then	-- lets ping only same surface groups
-				game.print("group "..index..", [gps=" .. group.position.x .. "," .. group.position.y .."]")
+				game.print("group "..index..", [gps=" .. group.position.x .. "," .. group.position.y .. "," .. group.surface.name .."]")
 			else
 				game.print("group "..index..", x/y = " .. group.position.x .. "/" .. group.position.y)
 			end	

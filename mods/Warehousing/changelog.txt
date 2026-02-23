@@ -1,4 +1,83 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-12-10
+
+  Changed:
+    - Buffer and Requester buildings now have logistic trash slots to match vanilla chests
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024-12-03
+
+  Fixed:
+    - Entity graphics resolution handling changed in Factorio 2.0 (thank you @hgschmie)
+    - Linked storehouse sprite
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-11-09
+
+  Fixed:
+    - Crash at startup in Factorio 2.0.16
+    - Item sort order in crafting menu
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-11-04
+
+  Changed:
+    - Significant recipe rebalancing to eliminate iron sticks:
+      - Basic versions now require iron chests; steel cost adjusted
+      - Logistic versions now require advanced circuits and concrete
+    - Technology research prerequisites adjusted
+  Fixed:
+    - Icon scaling
+    - Startup setting to enable larger alt-mode icons (on by default) didn't work
+    - Space Age: Warehousing buildings can no longer be built on space platforms
+  Meta:
+    - Housekeeping and reorganization of source code, to avoid stray files in future releases
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2024-10-21
+
+  Changed:
+    - Updated for Factorio 2.0
+    - Removed old migrations: Upgrade old savegames via intermediate load/save in Factorio 1.1 with Warehousing 0.5.7
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 2022-09-24
+
+  Translations:
+    - Brazilian Portuguese updated (thanks PrinceAstero)
+    - Ukrainian updated (thanks sasha.garmash96)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.6
+Date: 2022-02-18
+
+  Translations:
+    - French updated (thanks daikyraraga)
+    - Korean updated (thanks angpoo)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 2022-02-03
+
+  Translations:
+    - Chinese (Simplified) updated (thanks PlexPt)
+    - Ukrainian updated (thanks Met_en_Bouldry)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2021-11-25
+
+  Translations:
+    - Chinese (Traditional) updated (thanks willy04wu69)
+    - Ukrainian updated (thanks padwiyangel)
+
+---------------------------------------------------------------------------------------------------
 Version: 0.5.3
 Date: 2021-09-29
 

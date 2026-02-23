@@ -9,15 +9,6 @@ function utils.get_table_length(array)
 	return count
 end
 
--- Mod presence checker
-function utils.mod_installed(mod_name)
-	if OSM.control_stage then
-		if game.active_mods[mod_name] then return true end
-	elseif OSM.data_stage then
-		if mods[mod_name] then return true end
-	end
-end
-
 -- Returns true if prototype exists
 function utils.prototype_valid(prototype_type, prototype_name)
 

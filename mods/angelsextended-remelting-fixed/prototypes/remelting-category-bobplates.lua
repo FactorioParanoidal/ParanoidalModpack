@@ -1,5 +1,4 @@
-data:extend(
-{
+data:extend({
 	{
 		type = "item-subgroup",
 		name = "aragas-brass-alloy-mixing",
@@ -36,5 +35,4 @@ data:extend(
 		group = "angels-casting",
 		order = "ha",
 	},
-}
-)
+})

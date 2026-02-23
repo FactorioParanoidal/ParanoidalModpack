@@ -4,7 +4,7 @@ local function rotate_entity_clockwise(entity)
 		y = entity.position.x
 	}
 
-	entity.direction = ((entity.direction or 0) + 2) % 8
+	entity.direction = ((entity.direction or 0) + 4) % 16
 end
 
 local function rotate_entity_counterclockwise(entity)
@@ -13,7 +13,7 @@ local function rotate_entity_counterclockwise(entity)
 		y = -entity.position.x
 	}
 
-	entity.direction = ((entity.direction or 0) - 2 + 8) % 8
+	entity.direction = ((entity.direction or 0) - 4 + 16) % 16
 end
 
 local function rotate_tile_clockwise(tile)

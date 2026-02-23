@@ -3,6 +3,11 @@ local cfg1 = require("config.config-1")
 
 
 
+local item_sounds = require("__base__.prototypes.item_sounds")
+local hit_effects = require("__base__.prototypes.entity.hit-effects")
+
+
+
 local PTpt = {}
 
 PTpt.debuglog = PTlib.debuglog
@@ -30,7 +35,7 @@ end
 
 function PTpt.PT_item_name_table_replace(rt)
   for k, v in pairs(rt) do
-    rt[k][1] = v[1]:gsub("__PT__(%d+)__", PTpt.PT_item_name)
+    rt[k].name = v.name:gsub("__PT__(%d+)__", PTpt.PT_item_name)
   end
 end
 
@@ -102,8 +107,12 @@ function PTpt.PT_item_1(tier)
     subgroup = "storage",
     -- subgroup = "logistic-network",
     order = "i[pickup]-"..tier,
+    inventory_move_sound = item_sounds.metal_large_inventory_move,
+    pick_sound = item_sounds.metal_large_inventory_pickup,
+    drop_sound = item_sounds.metal_large_inventory_move,
     place_result = name,
-    stack_size = 20
+    stack_size = 50,
+    weight = 10 * kg * (2 ^ tier)
   }
   return item
 end
@@ -116,12 +125,16 @@ function PTpt.PT_item_2(tier)
     type = "item",
     name = name,
     icons = PTpt.PT_item_icons(tier),
-    flags = {"hidden"},
+    hidden = true,
     subgroup = "storage",
     -- subgroup = "logistic-network",
     order = "i[pickup]-"..tier,
-    place_result = name,
-    stack_size = 20
+    inventory_move_sound = item_sounds.metal_large_inventory_move,
+    pick_sound = item_sounds.metal_large_inventory_pickup,
+    drop_sound = item_sounds.metal_large_inventory_move,
+    place_result = PTpt.PT_item_name(tier), -- name,
+    stack_size = 50,
+    weight = 10 * kg * (2 ^ tier)
   }
   return item
 end
@@ -140,17 +153,15 @@ function PTpt.PT_entity_1(tier)
     name = name,
     icons = PTpt.PT_item_icons(tier),
     localised_description = PTlib.PT_localised_description(range, interval, energy_usage),
-    flags = {"placeable-player", "player-creation"},
+    flags = {"placeable-player", "player-creation", "not-upgradable"},
     minable = {hardness = 0.2, mining_time = 0.5, result = name},
     -- render_layer = "lower-object-above-shadow",
     -- final_render_layer = "decorative",
     -- render_layer = "decorative",
     max_health = 350,
     corpse = "medium-remnants",
-    collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
-    -- selection_box = {{ -1, -1}, {1, 1}},
-    selection_box = {{ -0.7, -0.7}, {0.7, 0.7}},
-    selection_priority = 60,
+    open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
+    close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
     resistances =
     {
       {
@@ -162,12 +173,16 @@ function PTpt.PT_entity_1(tier)
         percent = 60
       }
     },
+    collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
+    -- selection_box = {{ -1, -1}, {1, 1}},
+    selection_box = {{ -0.7, -0.7}, {0.7, 0.7}},
+    selection_priority = 60,
+    damaged_trigger_effect = hit_effects.entity(),
     -- fast_replaceable_group = "container",
     inventory_size = 40,
     -- logistic_mode = "passive-provider",
-    open_sound = { filename = "__base__/sound/metallic-chest-open.ogg", volume=0.65 },
-    close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
-    vehicle_impact_sound =  { filename = "__base__/sound/car-metal-impact.ogg", volume = 0.65 },
+    impact_category = "metal",
+    -- icon_draw_specification = {scale = 0.7},
     picture = PTpt.pickup_tower_base_sheet{chest_type = "steel-chest"},
     -- picture = data.raw["container"]["steel-chest"].picture,
     vector_to_place_result = {0.5, -1.35},--{0, -1.85},
@@ -185,8 +200,8 @@ function PTpt.PT_entity_1(tier)
       distance = range,
       -- offset = {0, 0}
     },
-    circuit_wire_connection_point = circuit_connector_definitions["chest"].points,
-    circuit_connector_sprites = circuit_connector_definitions["chest"].sprites,
+    quality_indicator_scale = 0,
+    circuit_connector = circuit_connector_definitions["chest"],
     circuit_wire_max_distance = default_circuit_wire_max_distance
   }
   return enty
@@ -205,15 +220,16 @@ function PTpt.PT_entity_2(tier)
     name = name,
     icons = PTpt.PT_item_icons(tier),
     localised_description = PTlib.PT_localised_description(range, interval, energy_usage),
-    flags = {"not-blueprintable", "not-deconstructable", "placeable-off-grid"},
+    flags = {"not-blueprintable", "not-deconstructable", "not-upgradable", "placeable-off-grid"},
     -- flags = {"not-blueprintable", "not-deconstructable", "not-selectable-in-game", "placeable-off-grid"},
+    hidden = true,
     -- minable = {hardness = 0.2, mining_time = 0.5, result = PTpt.PT_item_name(tier)},
     create_ghost_on_death = false,
     -- render_layer = "higher-object-above",
     -- final_render_layer = "higher-object-above",
     max_health = 350,
     -- corpse = "medium-remnants",
-    collision_mask = {"water-tile"}, --nil,
+    collision_mask = { layers = { water_tile = true } }, --nil,
     collision_box = {{ -0.7, -0.7}, {0.7, 0.7}},
     -- collision_box = {{0, 0}, {0, 0}},
     selection_box = {{ -1, -1}, {1, 1}},
@@ -244,7 +260,13 @@ function PTpt.PT_entity_2(tier)
       usage_priority = "secondary-input"
     },
     energy_usage = energy_usage.."W", --"250kW",
-    pictures = PTpt.pickup_tower_sheet{}
+    pictures = PTpt.pickup_tower_sheet{},
+    working_sound =
+    {
+      sound = { filename = "__base__/sound/radar.ogg", volume = 0.8 },
+      max_sounds_per_type = 3,
+      use_doppler_shift = false
+    },
   }
   return enty
 end
@@ -258,14 +280,14 @@ function PTpt.PT_recipe(tier, specs)
   rcp.name = itemname
   if rcp.normal then
     rcp.normal.enabled = rcp.normal.enabled or false
-    rcp.normal.result = itemname
+    rcp.normal.results = { {type = "item", name = itemname, amount = 1} }
     PTpt.PT_item_name_table_replace(rcp.normal.ingredients)
     rcp.expensive.enabled = rcp.expensive.enabled or false
-    rcp.expensive.result = itemname
+    rcp.expensive.resuls = { {type = "item", name = itemname, amount = 1} }
     PTpt.PT_item_name_table_replace(rcp.expensive.ingredients)
   else
     rcp.enabled = rcp.enabled or false
-    rcp.result = itemname
+    rcp.results = { {type = "item", name = itemname, amount = 1} }
     PTpt.PT_item_name_table_replace(rcp.ingredients)
   end
   return rcp

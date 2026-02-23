@@ -47,9 +47,9 @@ end
 
 function util.enablesRobots(tech)
 	local recipes = game.recipe_prototypes
-	local items   = game.item_prototypes
+	local items   = prototypes.item
 
-	for __,effect in pairs(tech.effects) do
+	for __,effect in pairs(tech.prototype.effects) do
 		if effect.type == "unlock-recipe" then
 			local recipe = recipes[effect.recipe]
 			for __,product in pairs(recipe.products) do
