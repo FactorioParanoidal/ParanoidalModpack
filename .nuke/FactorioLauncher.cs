@@ -10,6 +10,7 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Serilog;
 using SharpCompress.Compressors.Xz;
+using SharpCompress.IO;
 using Process = System.Diagnostics.Process;
 using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
 
@@ -57,8 +58,9 @@ public static class FactorioLauncher
         using var responseMessage = await Utils.HttpClient.GetAsync(factorioDownloadLink,
             HttpCompletionOption.ResponseHeadersRead);
         await using var responseStream = await responseMessage.Content.ReadAsStreamAsync();
+        await using var sharpCompressStream = SharpCompressStream.Create(responseStream);
 
-        await using var xzStream = new XZStream(responseStream);
+        await using var xzStream = new XZStream(sharpCompressStream);
         await using var reader = new TarReader(xzStream, true);
         while (await reader.GetNextEntryAsync() is { } entry)
         {
