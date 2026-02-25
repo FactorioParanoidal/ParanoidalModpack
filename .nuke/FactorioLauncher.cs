@@ -57,9 +57,8 @@ public static class FactorioLauncher
         using var responseMessage = await Utils.HttpClient.GetAsync(factorioDownloadLink,
             HttpCompletionOption.ResponseHeadersRead);
         await using var responseStream = await responseMessage.Content.ReadAsStreamAsync();
-        await using var positionTrackingStream = new PositionTrackingStream(responseStream);
 
-        await using var xzStream = new XZStream(positionTrackingStream);
+        await using var xzStream = new XZStream(responseStream);
         await using var reader = new TarReader(xzStream, true);
         while (await reader.GetNextEntryAsync() is { } entry)
         {
