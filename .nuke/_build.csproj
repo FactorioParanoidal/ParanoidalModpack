@@ -21,7 +21,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <FactorioParanoidalLibsVersion>0.1.1</FactorioParanoidalLibsVersion>
+    <FactorioParanoidalLibsVersion>0.2.0</FactorioParanoidalLibsVersion>
   </PropertyGroup>
 
   <ItemGroup>

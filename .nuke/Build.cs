@@ -89,10 +89,10 @@ partial class Build : NukeBuild
             var modsDirectory = RootDirectory / "mods";
             Log.Information("Discovering mods in {TargetDirectory}", targetDirectory);
             var modpack = await FactorioModpack.LoadFromDirectory(modsDirectory);
-            Log.Information("Discovered {Count} mods", modpack.Count());
+            Log.Information("Discovered {Count} mods", modpack.Mods.Count);
 
             Log.Information("Zipping mods to {TargetDirectory}", targetDirectory);
-            Parallel.ForEach(modpack.Cast<FolderFactorioMod>(), (mod, _) =>
+            Parallel.ForEach(modpack.Mods.OfType<FolderFactorioMod>(), (mod, _) =>
             {
                 var modZipPath = targetDirectory / $"{mod.Info.Name}_{mod.Info.Version}.zip";
                 Log.Information("Started zipping {ModName} to {ModZipPath}", mod.Info.Name, modZipPath);
@@ -128,10 +128,10 @@ partial class Build : NukeBuild
             var requiredFactorioVersion = paranoidalMod.GetBaseGameRequiredVersion();
             var factorioServerLocation = AbsolutePath.Create("factorio_headless") / requiredFactorioVersion.ToString(3);
 
-            var disabledMods = paranoidalMod.Info.Dependencies
+            var disabledMods = paranoidalMod.Info.Dependencies?
                 .Where(dependency => dependency.IsIncompatible)
                 .Select(dependency => new FactorioModListItem { Name = dependency.Name, Enabled = false })
-                .ToArray();
+                .ToArray() ?? [];
             var factorioModList = new FactorioModList { Mods = disabledMods };
             var modListContent = JsonSerializer.Serialize(factorioModList);
             Log.Information("Generating mod-list.json that exclude unsupported mods {UnsupportedMods}",
@@ -150,7 +150,7 @@ partial class Build : NukeBuild
         {
             var modsDirectory = RootDirectory / "mods";
             var modpack = await FactorioModpack.LoadFromDirectory(modsDirectory);
-            foreach (var factorioMod in modpack.Cast<FolderFactorioMod>())
+            foreach (var factorioMod in modpack.Mods.OfType<FolderFactorioMod>())
             {
                 var directoryName = Path.GetFileName(factorioMod.Directory);
                 if (directoryName != factorioMod.Info.Name)
