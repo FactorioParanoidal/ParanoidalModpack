@@ -1,4 +1,164 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 6.2.4
+Date: 31.5.2025
+  Bugfixes:
+    - Fixed inventory bar being set to higher than game limit during merging AGAIN.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.2.3
+Date: 30.4.2025
+  Bugfixes:
+    - Merged chests now use same surface_conditions as their un-merged variants.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.2.2
+Date: 17.1.2025
+  Features:
+    - Merging chest shortcut shows associated hotkey.
+  Translation:
+    - Fixed German translations. Thanks to ST-DDT
+
+---------------------------------------------------------------------------------------------------
+Version: 6.2.1
+Date: 4.1.2025
+  Bugfixes:
+    - Fixed crash when merging chest while some items have to be deleted.
+    - Fixed "Allow void items" mod setting not being taken into consideration when merging chests.
+  Translation:
+    - Fixed Russian translations. Thanks to eugenikus8
+
+---------------------------------------------------------------------------------------------------
+Version: 6.2.0
+Date: 1.12.2024
+  Features:
+    - Added mod setting for configuring inventory type of merged chests.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.1.1
+Date: 24.11.2024
+  Features:
+    - Chests with quality can now be merged/split. Resulting chest will have lowest quality from chests that are being merged/split.
+    - Added hotkey to create chest merging tool (same as from the shortcut). Is not bound to anything by default.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.1.0
+Date: 23.11.2024
+  Info:
+    - This version was missing dependency to base>=2.0.18, so it was removed from the mod portal.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.7
+Date: 9.11.2024
+  Bugfixes:
+    - Fixed rotate blueprint hotkey working with old 8-way system instead of new 16-way system.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.6
+Date: 3.11.2024
+  Bugfixes:
+    - Added missing trash_inventory_size to logistic chests.
+  Translation:
+    - Fixed German translations. Thanks to Kistenverbinder
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.5
+Date: 1.11.2024
+  Bugfixes:
+    - Removed debug print.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.4
+Date: 31.10.2024
+  Bugfixes:
+    - Fixed deletion of merging surface not checking for existance of the surface.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.3
+Date: 31.10.2024
+  Bugfixes:
+    - Changed how inventory bar of ghost entities are read. Replaced surface with blueprint magic.
+    - Removed merged chests entries from Factoriopedia.
+  Translation:
+    - Fixed Russian and Ukrainian translations. Thanks to eugenikus8
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.2
+Date: 25.10.2024
+  Bugfixes:
+    - Fixed error when merging chests connected directly to combinator.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.1
+Date: 19.10.2024
+  Bugfixes:
+    - kryojenik fixed bug in on_surface_created event handler.
+
+---------------------------------------------------------------------------------------------------
+Version: 6.0.0
+Date: 19.10.2024
+  Info:
+    - Updated to Factorio 2.0
+  Translation:
+    - Fixed Russian translations. Thanks to eugenikus8
+    - Fixed and added more Ukrainian translations. Thanks to eugenikus8
+
+---------------------------------------------------------------------------------------------------
+Version: 5.4.3
+Date: 26.8.2024
+  Translation:
+    - Added more Russian translations. Thanks to eugenikus8
+
+---------------------------------------------------------------------------------------------------
+Version: 5.4.2
+Date: 26.8.2024
+  Bugfixes:
+    - Fixed incorrect translation keys for all languages.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.4.1
+Date: 18.8.2024
+  Bugfixes:
+    - Fixed merged entities still showing up when selecting from/to entities in upgrade planner even when upgrading merged chests is disabled.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.4.0
+Date: 17.8.2024
+  Features:
+    - Added mod setting to disable upgrading merged chests with an upgrade planner.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.3.0
+Date: 13.8.2024
+  Features:
+    - Merged and split chests have their "last_user" property set to player who did the merge/split.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.2.1
+Date: 5.7.2024
+  Bugfixes:
+    - Fixed crash when other mods create forces during on_configuration_changed event.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.2.0
+Date: 4.7.2024
+  Features:
+    - Added support for merging/splitting ghost chests. Thanks to costas-basdekis on GitHub.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.1.1
+Date: 19.3.2024
+  Bugfixes:
+    - Actually fixed inventory bar being set to higher than game limit during merging.
+
+---------------------------------------------------------------------------------------------------
+Version: 5.1.0
+Date: 26.2.2024
+  Features:
+    - Created toggle mods which create size and inventory mod settings for all mergable chest types.
+  Bugfixes:
+    - Fixed inventory bar being set to higher than game limit during merging.
+
+---------------------------------------------------------------------------------------------------
 Version: 5.0.3
 Date: 17.2.2024
   Bugfixes:

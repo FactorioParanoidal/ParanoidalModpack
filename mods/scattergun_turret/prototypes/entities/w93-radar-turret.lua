@@ -1,5 +1,11 @@
 require "util"
 
+circuit_connector_definitions["w93-radar-turret"] = circuit_connector_definitions.create_single
+(
+  universal_connector_template,
+  { variation = 0, main_offset = util.by_pixel( 6 , 24), shadow_offset = util.by_pixel(0,0), show_shadow = false }
+)
+
 data:extend({
 {
 	type = "radar",
@@ -51,8 +57,13 @@ data:extend({
 		{
 
 			{
-				width = 80,
-				height = 60,
+				filenames =
+				{
+					"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret.png",
+					"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret.png",
+				},
+				width = 160,
+				height = 120,
 				priority = "very-low",
 
 				direction_count = 36,
@@ -60,29 +71,7 @@ data:extend({
 				shift = {0.0, 0.0},
 				line_length = 1,
 				lines_per_file = 18,
-				filenames =
-				{
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret-1.png",
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret-2.png",
-				},
-				hr_version =
-				{
-					filenames =
-					{
-						"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret.png",
-						"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret.png",
-					},
-					width = 160,
-					height = 120,
-					priority = "very-low",
-
-					direction_count = 36,
-					axially_symmetrical = false,
-					shift = {0.0, 0.0},
-				        line_length = 1,
-					lines_per_file = 18,
-					scale = 0.5
-				}
+				scale = 0.5
 			},
 			{
 				width = 80,
@@ -104,6 +93,10 @@ data:extend({
 			},
 		},
 	},
+	fast_replaceable_group = "modular-turret-radar",
+	next_upgrade = "w93-radar-turret2",
+	circuit_connector = circuit_connector_definitions["w93-radar-turret"],
+	circuit_wire_max_distance = default_circuit_wire_max_distance,
 	vehicle_impact_sound =
 	{
 		filename = "__base__/sound/car-metal-impact.ogg",
@@ -178,8 +171,13 @@ data:extend({
 		{
 
 			{
-				width = 80,
-				height = 60,
+				filenames =
+				{
+					"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2-base.png",
+					"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2-base.png",
+				},
+				width = 160,
+				height = 120,
 				priority = "very-low",
 
 				direction_count = 36,
@@ -187,58 +185,19 @@ data:extend({
 				shift = {0.0, 0.0},
 				line_length = 1,
 				lines_per_file = 18,
-				filenames =
-				{
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret2-base.png",
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret2-base.png",
-				},
-				hr_version =
-				{
-					filenames =
-					{
-						"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2-base.png",
-						"__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2-base.png",
-					},
-					width = 160,
-					height = 120,
-					priority = "very-low",
-
-					direction_count = 36,
-					axially_symmetrical = false,
-					shift = {0.0, 0.0},
-					line_length = 1,
-					lines_per_file = 18,
-					scale = 0.5
-				}
+				scale = 0.5
 			},
 			{
-				width = 80,
-				height = 60,
+				filename = "__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2.png",
+				width = 160,
+				height = 120,
 				priority = "very-low",
 
 				direction_count = 36,
 				axially_symmetrical = false,
 				shift = util.by_pixel(0, -12),
-				line_length = 1,
-				lines_per_file = 18,
-				filenames =
-				{
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret2-1.png",
-					"__scattergun_turret__/graphics/entity/radar-turret/radar-turret2-2.png",
-				},
-				hr_version =
-				{
-					filename = "__scattergun_turret__/graphics/entity/radar-turret/hr-radar-turret2.png",
-					width = 160,
-					height = 120,
-					priority = "very-low",
-
-					direction_count = 36,
-					axially_symmetrical = false,
-					shift = util.by_pixel(0, -12),
-					line_length = 6,
-					scale = 0.5
-				}
+				line_length = 6,
+				scale = 0.5
 			},
 			{
 				width = 80,
@@ -278,6 +237,10 @@ data:extend({
 			},
 		},
 	},
+	fast_replaceable_group = "modular-turret-radar",
+	next_upgrade = "w93-radar-turret",
+	circuit_connector = circuit_connector_definitions["w93-radar-turret"],
+	circuit_wire_max_distance = default_circuit_wire_max_distance,
 	vehicle_impact_sound =
 	{
 		filename = "__base__/sound/car-metal-impact.ogg",

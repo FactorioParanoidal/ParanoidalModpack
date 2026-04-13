@@ -1,0 +1,13 @@
+{
+    "name": "squeak-through-2",
+    "version": "0.1.4",
+    "title": "Squeak Through 2",
+    "author": "_CodeGreen",
+    "contact": "Discord: @_codegreen",
+    "description": "Squeak through entities that you can't walk between normally.\nA highly configurable and more compatible version of Squeak Through, written from scratch.",
+    "factorio_version": "2.0",
+    "dependencies": [
+        "! Squeak Through",
+        "(?) cargo-ships"
+    ]
+}

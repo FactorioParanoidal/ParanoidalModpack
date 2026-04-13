@@ -9,18 +9,6 @@ data:extend({
   },
   {
     type = "module-category",
-    name = "raw-productivity",
-  },
-  {
-    type = "module-category",
-    name = "raw-speed",
-  },
-  {
-    type = "module-category",
-    name = "green",
-  },
-  {
-    type = "module-category",
     name = "god",
   },
 })
@@ -32,91 +20,83 @@ data:extend({
     order = "b-m",
     icon = "__base__/graphics/technology/module.png",
     icon_size = 256,
-    icon_mipmaps = 4,
   },
 
   {
     type = "item-subgroup",
-    name = "module-intermediates",
+    name = "bob-module-intermediates-1",
     group = "bobmodules",
-    order = "f-0",
+    order = "f-00",
+  },
+  {
+    type = "item-subgroup",
+    name = "bob-module-intermediates-2",
+    group = "bobmodules",
+    order = "f-01",
+  },
+  {
+    type = "item-subgroup",
+    name = "bob-module-intermediates-3",
+    group = "bobmodules",
+    order = "f-02",
+  },
+  {
+    type = "item-subgroup",
+    name = "bob-module-intermediates-4",
+    group = "bobmodules",
+    order = "f-03",
   },
   {
     type = "item-subgroup",
     name = "speed-module",
     group = "bobmodules",
-    order = "f-1",
+    order = "f-04",
   },
   {
     type = "item-subgroup",
-    name = "effectivity-module",
+    name = "efficiency-module",
     group = "bobmodules",
-    order = "f-2",
+    order = "f-05",
   },
   {
     type = "item-subgroup",
     name = "productivity-module",
     group = "bobmodules",
-    order = "f-3",
-  },
-  {
-    type = "item-subgroup",
-    name = "pollution-create-module",
-    group = "bobmodules",
-    order = "f-4",
+    order = "f-06",
   },
   {
     type = "item-subgroup",
     name = "pollution-clean-module",
     group = "bobmodules",
-    order = "f-5",
+    order = "f-07",
   },
   {
     type = "item-subgroup",
-    name = "raw-speed-module",
+    name = "pollution-create-module",
     group = "bobmodules",
-    order = "f-6",
-  },
-  {
-    type = "item-subgroup",
-    name = "raw-speed-module-combine",
-    group = "bobmodules",
-    order = "f-6-1",
-  },
-  {
-    type = "item-subgroup",
-    name = "green-module",
-    group = "bobmodules",
-    order = "f-7",
-  },
-  {
-    type = "item-subgroup",
-    name = "green-module-combine",
-    group = "bobmodules",
-    order = "f-7-1",
-  },
-  {
-    type = "item-subgroup",
-    name = "raw-productivity-module",
-    group = "bobmodules",
-    order = "f-8",
-  },
-  {
-    type = "item-subgroup",
-    name = "raw-productivity-module-combine",
-    group = "bobmodules",
-    order = "f-8-1",
+    order = "f-08",
   },
   {
     type = "item-subgroup",
     name = "god-module",
     group = "bobmodules",
-    order = "f-9",
+    order = "f-aa",
   },
   {
     type = "item-subgroup",
     name = "module-beacon",
     group = "bobmodules",
-    order = "f-z",
+    order = "f-zz",
   },
 })
+
+if mods["quality"] then
+  data:extend({
+    {
+      type = "item-subgroup",
+      name = "quality-module",
+      group = "bobmodules",
+      order = "f-09",
+    },
+  })
+end

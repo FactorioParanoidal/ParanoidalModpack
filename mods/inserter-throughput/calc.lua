@@ -44,7 +44,10 @@ local function calc(rotation_speed, extension_speed, pickup_vector, drop_vector,
     -- get angle from the dot product
     local angle = 0
     if pickup_length > 0 and drop_length > 0 then
-        angle = acos((pickup_x * drop_x + pickup_y * drop_y) / (pickup_length * drop_length))
+        local ratio = (pickup_x * drop_x + pickup_y * drop_y) / (pickup_length * drop_length)
+        if ratio > 1 then ratio = 1
+        elseif ratio < -1 then ratio = -1 end
+        angle = acos(ratio)
     end
     -- convert it to circles
     -- the inserter doesn't have to swing all the way, only within a certain angle of destination
@@ -64,6 +67,18 @@ local function calc(rotation_speed, extension_speed, pickup_vector, drop_vector,
     end
     if drop_belt_speed and (stack_size > 1) then
         ticks_per_cycle = ticks_per_cycle + get_belt_penalty(drop_belt_speed, stack_size)
+    end
+    -- make sure the speed is not faster than the belt's
+    -- belt speed is in tiles per tick
+    if drop_belt_speed then
+        -- half a belt = 4 items/tile
+        local max = drop_belt_speed * ticks_per_cycle * 4
+        if stack_size > max then stack_size = max end
+    end
+    if pickup_belt_speed then
+        -- full belt = 8 items/tile
+        local max = pickup_belt_speed * ticks_per_cycle * 8
+        if stack_size > max then stack_size = max end
     end
     return stack_size * 60 / ticks_per_cycle -- 60 = ticks per second
 end

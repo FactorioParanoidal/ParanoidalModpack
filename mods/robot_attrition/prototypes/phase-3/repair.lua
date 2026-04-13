@@ -16,23 +16,21 @@ end
 local function repair_recipe(set, original_item, crashed_item, repair_pack_name)
   local repair_cost = 0.75
 
-  set.results = {{name = original_item.name, amount = 1}}
+  set.results = {{type = "item", name = original_item.name, amount = 1}}
   if set and set.ingredients then
     for k, ingredient in pairs(set.ingredients) do
-      if ingredient[1] and ingredient[2] then -- Short ingredient form, without keys
-        set.ingredients[k] = {name = ingredient[1], amount = ingredient[2]}
-      end
-      local original_amount = set.ingredients[k].amount or 1
+      local original_amount = ingredient.amount
+      local original_type = ingredient.type
       local reduced_amount = math.ceil(original_amount * repair_cost)
       if original_amount == reduced_amount and original_amount > 1 then
         reduced_amount = original_amount - 1
       elseif original_amount == reduced_amount and original_amount == 1 then
-        table.insert(set.results, {name = set.ingredients[k].name, amount_min = 1, amount_max = 1, probability = (1 - repair_cost)})
+        table.insert(set.results, {type = original_type, name = ingredient.name, amount_min = 1, amount_max = 1, probability = (1 - repair_cost)})
       end
-      set.ingredients[k].amount = reduced_amount
+      ingredient.amount = reduced_amount
     end
-    table.insert(set.ingredients, {name = repair_pack_name, amount = 1})
-    table.insert(set.ingredients, {name = crashed_item.name, amount = 1})
+    table.insert(set.ingredients, {type = "item", name = repair_pack_name, amount = 1})
+    table.insert(set.ingredients, {type = "item", name = crashed_item.name, amount = 1})
   end
 end
 
@@ -98,10 +96,10 @@ function Repair.make_repair_recipe_and_item(robot_prototype)
 
   for _, set in pairs({recipe_recombine, recipe_recombine.normal, recipe_recombine.expensive}) do
     set.ingredients = {
-      {name = repair_pack_name, amount = 1},
-      {name = crashed_item.name, amount = 4}
+      {type = "item", name = repair_pack_name, amount = 1},
+      {type = "item", name = crashed_item.name, amount = 4}
     }
-    set.results = {{name = o_item.name, amount = 1}}
+    set.results = {{type = "item", name = o_item.name, amount = 1}}
   end
 
   recipe_repair.localised_name = {"recipe-name.robot-attrition-repair", {"entity-name."..robot_prototype.name}}
@@ -190,7 +188,9 @@ function Repair.make_robot_attrition_bot_corpse(bot)
   remnant.collision_box = {{-0.1,-0.1},{0.1,0.1}}
   remnant.selection_box = {{-0.2,-0.2},{0.2,0.2}}
   remnant.selectable_in_game = true
-  remnant.collision_mask = {}
+  remnant.collision_mask = {
+    layers = {},
+  }
   remnant.flags = {"placeable-neutral"}
   table.insert(remnant.flags, "placeable-off-grid")
   remnant.animations = remnant.animations or remnant.animation

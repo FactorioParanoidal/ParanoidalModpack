@@ -1,19 +1,32 @@
 {
-	"name": "aai-industry",
-	"version": "9.2.4",
-	"title": "AAI Industry",
-	"author": "Earendel, reworked by nastyslave",
-	"dependencies": [
-		"base >= 1.1",
-		"boblibrary",
-		"boblogistics",
-		"bobpower",
-		"bobplates",
-		"angelspetrochem",
-		"angelssmelting",
-		"? BurnerOffshorePump"
-	],
-	"description": "The industry part of Advanced Autonomous Industries. Adds motors, powered offshore pumps, burner labs, and more. Alters tech and recipes. Additional features will be added gradually. Works with Bobs and Angels.",
-	"factorio_version": "1.1",
-	"homepage": "https://forums.factorio.com/viewtopic.php?f=94&t=48232"
+  "name": "aai-industry",
+  "version": "0.6.14",
+  "title": "AAI Industry",
+  "author": "Earendel",
+  "dependencies": [
+    "base >= 2.0.0",
+    "? space-age >= 2.0.0",
+    "? aai-containers >= 0.1.1",
+    "? InserterFuelLeech >= 0.2.6",
+    "(?) Krastorio2 >= 2.0.6",
+    "(?) angelsrefining",
+    "(?) bobelectronics"
+  ],
+  "description": "The industry part of Advanced Autonomous Industries. Adds burner machines, some new intermediate ingredients, powered offshore pumps, and more. Alters tech and recipes.",
+  "factorio_version": "2.0",
+  "homepage": "https://factorio.miraheze.org",
+  "package": {
+    "git_publish_branch": "master",
+    "ignore": ["**"],
+    "extra": [
+      {
+        "root": ".build"
+      }
+    ],
+    "scripts": {
+      "datestamp": "sh ./build-scripts/datestamp.sh",
+      "prepackage": "sh ./build-scripts/prepackage.sh",
+      "postpublish": "sh ./build-scripts/postpublish.sh"
+    }
+  }
 }

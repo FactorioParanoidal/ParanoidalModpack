@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Changes:
+    - Updated to Factorio 2.0
+    - Updated changelog to use proper syntax.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Changes:
+    - Changed color values to use RGB (0-255) instead of 0-1.
+    - Now you can look up RGB values to plug in instead of having to calculate it yourself.
+    - Settings are now more descriptive/verbose.
+    - Updated changelog to reflect my changes vs. those from the previous mod.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Optimizations:
+    - Random code cleanup.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Features:
+    - Base upload.

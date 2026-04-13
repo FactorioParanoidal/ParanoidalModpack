@@ -25,7 +25,7 @@ data:extend({
     name = "bnl-indicator-size",
     setting_type = "startup",
     default_value = "small",
-    allowed_values = { "small", "medium", "large", "huge" },
+    allowed_values = { "tiny", "small", "medium", "large", "huge" },
     order = "a",
   },
   {
@@ -60,7 +60,7 @@ data:extend({
     type = "color-setting",
     name = "bnl-color-low_power",
     setting_type = "startup",
-    default_value = { r = 1, g = 1 },
+    default_value = { r = 1, g = 0.5 },
     order = "b",
   },
   {

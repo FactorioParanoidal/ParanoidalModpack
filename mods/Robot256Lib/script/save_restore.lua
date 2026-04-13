@@ -33,7 +33,7 @@ local function mergeStackLists(stacks1, stacks2)
       local found = false
       for _,t in pairs(stacks1) do
         if not t.count then t.count = 1 end
-        if s.name == t.name and not (t.ammo or t.data or t.durability) then
+        if (s.name == t.name) and (s.quality == t.quality) and not (t.ammo or t.data or t.durability) then
           t.count = t.count + s.count
           found = true
           break
@@ -74,20 +74,22 @@ local function saveInventoryStacks(source)
         if exportable[stack.name] then
           table.insert(stacks, {name=stack.name, count=1, data=stack.export_stack()})
         else
-          local s = {name=stack.name, count = stack.count}
-          if stack.prototype.magazine_size then
+          local s = {name=stack.name, count=stack.count, quality=stack.quality}
+          if stack.is_ammo then
             if stack.ammo < stack.prototype.magazine_size then
               s.ammo = stack.ammo
             end
           end
-          if stack.prototype.durability then
-            if stack.durability < stack.prototype.durability then
+          if stack.is_tool then
+            if stack.durability < stack.prototype.get_durability(stack.quality) then
               s.durability = stack.durability
             end
           end
           if stack.health < 1 then
             s.health = stack.health
           end
+          
+          -- TODO: Spoilage
           -- Merge with existing stacks to avoid duplicates
           mergeStackLists(stacks, {s})
           
@@ -113,7 +115,7 @@ end
 -- Returns:    remainder -> SimpleItemStack with extra field "data", representing all the items that could not be inserted at this time.
 ---------------------------------------------------------------
 local function insertStack(target, stack, stack_limit)
-  local proto = game.item_prototypes[stack.name]
+  local proto = prototypes.item[stack.name]
   if not stack.count then stack.count = 1 end
   local remainder = table.deepcopy(stack)
   if proto then
@@ -136,7 +138,8 @@ local function insertStack(target, stack, stack_limit)
         local d = 0
         if stack.count > stack_limit then
           -- This time we limit ourselves to part of the given stack.
-          d = target.insert({name=stack.name, count=stack_limit})
+          -- TODO: Handle Spoilage
+          d = target.insert({name=stack.name, count=stack_limit, quality=stack.quality})
         else
           -- Only the last part gets assigned ammo and durability ratings of the original stack
           d = target.insert(stack)
@@ -167,7 +170,7 @@ end
 ---------------------------------------------------------------
 local function spillStack(stack, surface, position)
   if stack then
-    surface.spill_item_stack(position, stack)
+    surface.spill_item_stack{position=position, stack=stack, allow_belts=false}
     if stack.data then
       -- This is a bp item, find it on the surface and restore data
       for _,entity in pairs(surface.find_entities_filtered{name="item-on-ground",position=position,radius=1000}) do
@@ -254,14 +257,15 @@ local function saveBurner(burner)
   if burner and burner.valid then
     local saved = {heat = burner.heat}
     if burner.currently_burning then
-      saved.currently_burning = burner.currently_burning.name
+      saved.currently_burning = burner.currently_burning
       saved.remaining_burning_fuel = burner.remaining_burning_fuel
+      saved.heat = burner.heat
     end
     if burner.inventory and burner.inventory.valid then
-      saved.inventory = itemsToStacks(burner.inventory.get_contents())
+      saved.inventory = burner.inventory.get_contents()
     end
     if burner.burnt_result_inventory and burner.burnt_result_inventory.valid then
-      saved.burnt_result_inventory = itemsToStacks(burner.burnt_result_inventory.get_contents())
+      saved.burnt_result_inventory = burner.burnt_result_inventory.get_contents()
     end
     return saved
   end
@@ -271,9 +275,9 @@ local function restoreBurner(target, saved)
   if target and target.valid and saved then
     -- Only restore burner heat if the fuel prototype still exists and is valid in this burner.
     if (saved.currently_burning and 
-        game.item_prototypes[saved.currently_burning] and 
+        prototypes.item[saved.currently_burning] and 
         target.inventory.can_insert({name=saved.currently_burning, count=1})) then
-      target.currently_burning = game.item_prototypes[saved.currently_burning]
+      target.currently_burning = prototypes.item[saved.currently_burning]
       target.remaining_burning_fuel = saved.remaining_burning_fuel
       target.heat = saved.heat
     end
@@ -293,19 +297,31 @@ local function saveGrid(grid)
   if grid and grid.valid then
     local gridContents = {}
     for _,v in pairs(grid.equipment) do
-      local item = {name=v.name,position=v.position}
+      local item = {
+        name = v.name,
+        position = v.position,
+        quality = v.quality
+      }
+      if item.name == "equipment-ghost" then
+        item.name = v.ghost_name
+        item.ghost = true
+      end
       local burner = saveBurner(v.burner)
-      local energy, shield
+      local energy, shield, to_be_removed
       if v.energy > 0 then
         energy = v.energy
       end
       if v.shield > 0 then
         shield = v.shield
       end
+      if v.to_be_removed then
+        to_be_removed = v.to_be_removed
+      end
       table.insert(gridContents, {item=item,
                                   energy=energy,
                                   shield=shield,
-                                  burner=burner})
+                                  burner=burner,
+                                  to_be_removed=to_be_removed})
     end
     return gridContents
   else
@@ -320,7 +336,7 @@ local function restoreGrid(grid, savedGrid)
   if grid and grid.valid and savedGrid then
     -- Insert as much as possible into this grid, return items not inserted as remainder stacks
     for _,v in pairs(savedGrid) do
-      if game.equipment_prototypes[v.item.name] then
+      if prototypes.equipment[v.item.name] then
         local e = grid.put(v.item)
         if e then
           if v.energy then
@@ -332,6 +348,9 @@ local function restoreGrid(grid, savedGrid)
           if v.burner then
             local r1 = restoreBurner(e.burner,v.burner)
             r_stacks = mergeStackLists(r_stacks, r1)
+          end
+          if v.to_be_removed then
+            grid.order_removal(e)
           end
         else
           r_stacks = mergeStackLists(r_stacks, {{name=v.item.name, count=1}})
@@ -401,7 +420,7 @@ local function saveGridStacks(savedGrid)
         fuel_items = mergeStackLists(fuel_items, v.burner.inventory)
         fuel_items = mergeStackLists(fuel_items, v.burner.burnt_result_inventory)
       end
-      items = mergeStackLists(items, {{name=v.item.name, count=1}})
+      items = mergeStackLists(items, {{name=v.item.name, count=1, quality=v.item.quality}})
     end
     return items, fuel_items
   end
@@ -447,28 +466,33 @@ end
 
 local function saveItemRequestProxy(target)
   -- Search for item_request_proxy ghosts targeting this entity
+  -- There can be more than one, but there isn't usually
   local proxies = target.surface.find_entities_filtered{
             name = "item-request-proxy",
             force = target.force,
             position = target.position
           }
+  
+  -- Merge the requests from all the proxies targeting this entity
+  local insert_plan = {}
+  local removal_plan = {}
   for _, proxy in pairs(proxies) do
-    if proxy.proxy_target == target and proxy.valid then
-      local items = {}
-      local exists = false
-      for k,v in pairs(proxy.item_requests) do
-        items[k] = v
-        exists = true
+    if proxy.proxy_target == target then
+      local ip = proxy.insert_plan
+      if ip then
+        for _,plan in pairs(ip) do
+          insert_plan[#insert_plan+1] = plan
+        end
       end
-      if exists then
-        return items
-      else
-        return nil
+      local rp = proxy.removal_plan
+      if rp then
+        for _,plan in pairs(rp) do
+          removal_plan[#removal_plan+1] = plan
+        end
       end
-    else
-      return nil
     end
   end
+  return insert_plan, removal_plan
 end
 
 return {

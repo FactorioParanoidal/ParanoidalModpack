@@ -1,3 +1,5 @@
+local item_sounds = require("__base__.prototypes.item_sounds")
+
 local pipe_subgroup = "energy-pipe-distribution"
 
 if settings.startup["flow-control-new-group"].value then
@@ -23,8 +25,12 @@ data:extend({
     icon_size = 64,
     subgroup = pipe_subgroup,
     order = "b[pipe]-a[pipe]c",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
     place_result = "pipe-junction",
-    stack_size = 50
+    stack_size = 50,
+    weight = 5 * kg
   },
   {
     type = "item",
@@ -33,8 +39,12 @@ data:extend({
     icon_size = 64,
     subgroup = pipe_subgroup,
     order = "b[pipe]-a[pipe]d",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
     place_result = "pipe-elbow",
-    stack_size = 50
+    stack_size = 50,
+    weight = 5 * kg
   },
   {
     type = "item",
@@ -43,37 +53,11 @@ data:extend({
     icon_size = 64,
     subgroup = pipe_subgroup,
     order = "b[pipe]-a[pipe]e",
+    inventory_move_sound = item_sounds.metal_small_inventory_move,
+    pick_sound = item_sounds.metal_small_inventory_pickup,
+    drop_sound = item_sounds.metal_small_inventory_move,
     place_result = "pipe-straight",
-    stack_size = 50
-  },
-  {
-    type = "item",
-    name = "check-valve",
-    icon = "__Flow Control__/graphics/icon/check-valve.png",
-    icon_size = 64,
-    subgroup = pipe_subgroup,
-    order = "b[pipe]-c[pump]b",
-    place_result = "check-valve",
-    stack_size = 50
-  },
-  {
-    type = "item",
-    name = "overflow-valve",
-    icon = "__Flow Control__/graphics/icon/overflow-valve.png",
-    icon_size = 64,
-    subgroup = pipe_subgroup,
-    order = "b[pipe]-c[pump]c",
-    place_result = "overflow-valve",
-    stack_size = 50
-  },
-  {
-    type = "item",
-    name = "underflow-valve",
-    icon = "__Flow Control__/graphics/icon/underflow-valve.png",
-    icon_size = 64,
-    subgroup = pipe_subgroup,
-    order = "b[pipe]-c[pump]d",
-    place_result = "underflow-valve",
-    stack_size = 50
+    stack_size = 50,
+    weight = 5 * kg
   },
 })

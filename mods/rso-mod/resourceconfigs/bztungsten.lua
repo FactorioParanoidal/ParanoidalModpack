@@ -1,6 +1,6 @@
 function fillBztungstenConfig(config)
 
-	config["tungsten-ore"] = {
+	config.nauvis["tungsten-ore"] = {
 		type="resource-ore",
 		
 		allotment=70,

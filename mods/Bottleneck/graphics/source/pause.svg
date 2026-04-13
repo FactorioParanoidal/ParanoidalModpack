@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="currentColor"
+   stroke-width="2"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   class="feather feather-pause-circle"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="pause-circle.svg"
+   inkscape:version="0.92.4 (f8dce91, 2019-08-02)"
+   inkscape:export-filename="/home/lucas/projects/Bottleneck/graphics/pause.png"
+   inkscape:export-xdpi="288.98999"
+   inkscape:export-ydpi="288.98999">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12">
+    <linearGradient
+       id="linearGradient7290"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop7288" />
+      <stop
+         id="stop7300"
+         offset="0.39785227"
+         style="stop-color:#e6e6e6;stop-opacity:1;" />
+      <stop
+         id="stop7298"
+         offset="0.63074142"
+         style="stop-color:#b3b3b3;stop-opacity:1" />
+      <stop
+         style="stop-color:#333333;stop-opacity:1"
+         offset="1"
+         id="stop7286" />
+    </linearGradient>
+    <filter
+       height="1.048"
+       y="-0.024"
+       width="1.048"
+       x="-0.024"
+       id="filter7260"
+       style="color-interpolation-filters:sRGB"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur7262"
+         stdDeviation="0.2"
+         inkscape:collect="always" />
+    </filter>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       r="10.48"
+       fy="12"
+       fx="12"
+       cy="12"
+       cx="12"
+       id="radialGradient7292"
+       xlink:href="#linearGradient7290"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1850"
+     inkscape:window-height="1016"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="49.625011"
+     inkscape:cy="11.18644"
+     inkscape:window-x="1990"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1">
+    <g
+       style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       id="g94"
+       transform="translate(0.13,-0.12999956)"
+       inkscape:export-filename="/home/lucas/projects/Bottleneck/graphics/pause.png"
+       inkscape:export-xdpi="292.57144"
+       inkscape:export-ydpi="292.57144">
+      <circle
+         r="10"
+         style="opacity:0.98000004;fill:url(#radialGradient7292);fill-opacity:1;fill-rule:nonzero;stroke-width:0.40000001;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter7260)"
+         id="circle3924"
+         cy="12"
+         cx="12" />
+      <g
+         inkscape:label="Fill"
+         id="layer1-3" />
+    </g>
+  </g>
+  <circle
+     cx="12.13"
+     cy="11.87"
+     r="10"
+     id="circle2"
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:export-filename="/home/lucas/projects/Bottleneck/graphics/pause.png"
+     inkscape:export-xdpi="292.57144"
+     inkscape:export-ydpi="292.57144" />
+  <g
+     id="g23"
+     transform="translate(0.12999978,-0.12999978)"
+     inkscape:export-filename="/home/lucas/projects/Bottleneck/graphics/pause.png"
+     inkscape:export-xdpi="292.57144"
+     inkscape:export-ydpi="292.57144">
+    <line
+       style="stroke:#373742;stroke-opacity:1"
+       id="line4"
+       y2="9"
+       x2="10"
+       y1="15"
+       x1="10" />
+    <line
+       style="stroke:#373742;stroke-opacity:1"
+       id="line6"
+       y2="9"
+       x2="14"
+       y1="15"
+       x1="14" />
+  </g>
+</svg>

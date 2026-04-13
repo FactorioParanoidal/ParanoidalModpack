@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024.12.29
+  Changes:
+    - Updated to 2.0
+    - Initial "re-re-release" :) 
+    - Made the code prettier to look at

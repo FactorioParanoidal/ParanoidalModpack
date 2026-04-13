@@ -1,0 +1,10 @@
+{
+  "name": "power-grid-comb",
+  "version": "2.0.0",
+  "title": "Power Grid Comb",
+  "author": "Shane Madden",
+  "homepage": "https://github.com/shanemadden/factorio-power-grid-comb",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0", "flib"],
+  "description": "Clean up inconsistent power cabling while leaving circuit wiring alone."
+}

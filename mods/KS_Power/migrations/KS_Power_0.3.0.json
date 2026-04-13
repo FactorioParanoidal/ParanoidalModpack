@@ -1,0 +1,14 @@
+{
+  "item":
+  [
+    [ "OilSteamBoiler", "oil-steam-boiler" ]
+  ],
+  "recipe":
+  [
+    [ "OilSteamBoiler", "oil-steam-boiler" ]
+  ],
+  "entity": 
+  [
+    [ "OilSteamBoiler", "oil-steam-boiler" ]
+  ]
+}

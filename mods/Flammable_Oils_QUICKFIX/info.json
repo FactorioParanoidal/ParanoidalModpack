@@ -1,0 +1,19 @@
+{
+  "name": "Flammable_Oils_QUICKFIX",
+  "title": "Flammable_Oils_QUICKFIX",
+  "description": "Pipes and storage tanks and stuff will catch fire and explode (original mod Klonan, OwnlyMe)",
+
+  "author": "Fr_Dae, Pi-c, Kannagimoe, Klogan, lily",
+  "contact": "Dae.anthony@gmail.com",
+  "homepage": "https://github.com/FrDae-Factorio-QuickFix/Flammable_Oils_QUICKFIx",
+  
+  "version": "0.2.22",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base", 
+    "? KS_Power", 
+    "? Factorio-Tiberium",
+    "? WaterTurret-revived",
+    "? lilys-incendiaries"
+     ]
+}

@@ -15,15 +15,15 @@ local function raise_on_chest_merged(event)
 end
 
 --- @param entities LuaEntity[]
---- @return { [string]: LuaEntity[] }
+--- @return { [string]: { [boolean]: LuaEntity[] } }
 local function group_by_name(entities)
 	local groups = { }
 	for _, entity in ipairs(entities) do
-		local entity_name = entity.name
-		if not groups[entity_name] then
-			groups[entity_name] = { }
-		end
-		table.insert(groups[entity_name], entity)
+		local is_ghost = entity.name == 'entity-ghost'
+		local entity_name = is_ghost and entity.ghost_name or entity.name
+		groups[entity_name] = groups[entity_name] or {}
+		groups[entity_name][is_ghost] = groups[entity_name][is_ghost] or {}
+		table.insert(groups[entity_name][is_ghost], entity)
 	end
 	return groups
 end
@@ -116,9 +116,10 @@ local function find_largest_rectangle(grid, is_size_allowed)
 end
 
 --- @param entities LuaEntity[]
+--- @param entity_name string
+--- @param is_ghost boolean
 --- @return ChestGroup[]
-local function group_chests(entities)
-	local chest_name = entities[1].name
+local function group_chests(entities, entity_name, is_ghost)
 	local chest_grid = MergingChests.entities_to_grid(entities)
 
 	local groups = { }
@@ -131,7 +132,7 @@ local function group_chests(entities)
 		--- @param height integer
 		--- @return boolean
 		local function is_size_allowed(width, height)
-			return game.entity_prototypes[MergingChests.get_merged_chest_name(chest_name, width, height)] ~= nil
+			return prototypes.entity[MergingChests.get_merged_chest_name(entity_name, width, height)] ~= nil
 		end
 
 		local rectangle = find_largest_rectangle(chest_grid, is_size_allowed)
@@ -140,8 +141,9 @@ local function group_chests(entities)
 			--- @type ChestGroup
 			local group = {
 				entities = { },
-				merged_chest_name = MergingChests.get_merged_chest_name(chest_name, bounding_box.width(rectangle), bounding_box.height(rectangle)),
-				bounding_box = rectangle
+				merged_chest_name = MergingChests.get_merged_chest_name(entity_name, bounding_box.width(rectangle), bounding_box.height(rectangle)),
+				bounding_box = rectangle,
+				is_ghost = is_ghost,
 			}
 			for x = rectangle.left_top.x, rectangle.right_bottom.x - 1 do
 				for y = rectangle.left_top.y, rectangle.right_bottom.y - 1 do
@@ -161,14 +163,25 @@ end
 --- @param player LuaPlayer
 --- @param chest_name string
 --- @param position MapPosition
+--- @param is_ghost boolean
+--- @param bar integer
+--- @param quality LuaQualityPrototype
 --- @return LuaEntity?
-local function create_merged_chest(player, chest_name, position)
-	return player.surface.create_entity({
-		name = chest_name,
+local function create_merged_chest(player, chest_name, position, is_ghost, bar, quality)
+	local entity_data = {
 		position = position,
 		force = player.force,
-		raise_built = true
-	})
+		raise_built = true,
+		bar = math.min(bar, 65535),
+		quality = quality
+	}
+	if is_ghost then
+		entity_data.name = 'entity-ghost'
+		entity_data.inner_name = chest_name
+	else
+		entity_data.name = chest_name
+	end
+	return player.surface.create_entity(entity_data)
 end
 
 local function on_player_selected_area(event)
@@ -176,31 +189,46 @@ local function on_player_selected_area(event)
 		local player = game.players[event.player_index]
 
 		local entity_groups = group_by_name(event.entities)
-		for _, entities in pairs(entity_groups) do
-			for _, chest_group_to_merge in ipairs(group_chests(entities)) do
-				if MergingChests.can_move_inventories(chest_group_to_merge.entities, chest_group_to_merge.merged_chest_name, bounding_box.area(chest_group_to_merge.bounding_box)) then
-					local merged_chest = create_merged_chest(player, chest_group_to_merge.merged_chest_name, bounding_box.center(chest_group_to_merge.bounding_box))
-					if merged_chest then
-						MergingChests.move_inventories(chest_group_to_merge.entities, { merged_chest })
-						MergingChests.move_inventory_bar(chest_group_to_merge.entities, { merged_chest })
-						MergingChests.reconnect_circuits(chest_group_to_merge.entities, { merged_chest })
+		for entity_name, group in pairs(entity_groups) do
+			for is_ghost, entities in pairs(group) do
+				for _, chest_group_to_merge in ipairs(group_chests(entities, entity_name, is_ghost)) do
+					if is_ghost or player.mod_settings[MergingChests.setting_names.allow_delete_items].value or MergingChests.can_move_inventories(chest_group_to_merge.entities, chest_group_to_merge.merged_chest_name, bounding_box.area(chest_group_to_merge.bounding_box)) then
+						local total_bar = MergingChests.get_total_bar(chest_group_to_merge.entities, is_ghost)
+						local quality = MergingChests.get_minimum_quality(chest_group_to_merge.entities)
 
-						raise_on_chest_merged({
-							player_index = event.player_index,
-							surface = event.surface,
-							merged_chest = merged_chest,
-							split_chests = chest_group_to_merge.entities
-						})
+						local merged_chest = create_merged_chest(
+							player,
+							chest_group_to_merge.merged_chest_name,
+							bounding_box.center(chest_group_to_merge.bounding_box),
+							is_ghost,
+							total_bar,
+							quality
+						)
+						if merged_chest then
+							if not is_ghost then
+								merged_chest.last_user = player
+								MergingChests.move_inventories(chest_group_to_merge.entities, { merged_chest })
+							end
+							MergingChests.reconnect_circuits(chest_group_to_merge.entities, { merged_chest })
 
-						for _, entity in ipairs(chest_group_to_merge.entities) do
-							entity.destroy({ raise_destroy = true })
+							raise_on_chest_merged({
+								player_index = event.player_index,
+								surface = event.surface,
+								merged_chest = merged_chest,
+								split_chests = chest_group_to_merge.entities,
+								is_ghost = is_ghost,
+							})
+
+							for _, entity in ipairs(chest_group_to_merge.entities) do
+								entity.destroy({ raise_destroy = true })
+							end
 						end
+					else
+						player.create_local_flying_text({
+							text = { 'flying-text.'..MergingChests.prefix_with_modname('items-would-be-deleted-merge') },
+							position = chest_group_to_merge.entities[1].position
+						})
 					end
-				else
-					player.create_local_flying_text({
-						text = 'flying-text.'..MergingChests.prefix_with_modname('items-would-be-deleted-merge'),
-						position = chest_group_to_merge.entities[1].position
-					})
 				end
 			end
 		end

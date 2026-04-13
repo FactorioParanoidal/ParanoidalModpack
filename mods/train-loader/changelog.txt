@@ -1,0 +1,206 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 19. 12. 2024
+  Features:
+    - Updated circuit connection point.
+    - Removed old graphics assets.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 16. 12. 2024
+  Features:
+    - Updated thumbnail to match new loader sprite graphics.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.11
+Date: 16. 12. 2024
+  Features:
+    - Greatly improved tall loader sprite. Animation coming soon.
+    - Removed experimental option for upcoming loader sprite.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.10
+Date: 02. 12. 2024
+  Features:
+    - Added place ghost loaders button that shows up if loader crafting and recipes are enabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.9
+Date: 01. 12. 2024
+  Features:
+    - Added option for slower loading (4 stacks a second). May be buggy when used with auto balancing. Will update for numeric input later.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.8
+Date: 29. 11. 2024
+  Features:
+    - Increased maximum inventory size to 200 in settings.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.7
+Date: 29. 11. 2024
+  Bugfixes:
+    - Loaders can now be auto placed on top of ores.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.6
+Date: 28. 11. 2024
+  Features:
+    - Removed balancing message.
+  Bugfixes:
+    - Fixed crash caused by experimental auto balancing feature.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+Date: 28. 11. 2024
+  Features:
+    - Fixed bug that prevented stubby loader graphic from being loaded.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 28. 11. 2024
+  Features:
+    - Added option in settings to see experimental sprite changes for the tall sprite, made new experimental sprite.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 27. 11. 2024
+  Bugfixes:
+    - Fixed bug allowing invalid UI state for train stops.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 27. 11. 2024
+  Bugfixes:
+    - Added a maximum train length for the auto placement UI (26 loaders).
+    - Improved UI grammar and fonts.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 27. 11. 2024
+  Bugfixes:
+    - Updated initial default loader positions to assume the player has one engine initially.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 26. 11. 2024
+  Major Features:
+    - Completely overhauled train UI to allow for engines in the middle of a train and more.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.5
+Date: 26. 11. 2024
+  Bugfixes:
+    - Removed debugging print statement.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.4
+Date: 26. 11. 2024
+  Bugfixes:
+    - Fixed major bug with experimental auto balancing feature where it could link the wrong loaders to the wrong train stations.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.3
+Date: 25. 11. 2024
+  Bugfixes:
+    - Added experimental item recipe setting, loaders can now be hand placed or placed by bots if enabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 25. 11. 2024
+  Bugfixes:
+    - Fixed layout shift bug on loaders.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 24. 11. 2024
+  Bugfixes:
+    - Improved multiplayer compatability.
+    - Made loaders placable on top of locomotives, not just wagons.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 24. 11. 2024
+  Features:
+    - Fixed issue with multiplayer support, should hopefully work now.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.9
+Date: 24. 11. 2024
+  Features:
+    - Added experimental auto balancing feature for train loaders, in settings.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.8
+Date: 22. 11. 2024
+  Bugfixes:
+    - Fixed changelog formatting issue.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 22. 11. 2024
+  Features:
+    - Updated sprite of stubby loader to match the tall loader.
+  Bugfixes:
+    - Improved grammar in locale file. 
+---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 21. 11. 2024
+  Bugfixes:
+    - Fixed order of engine buttons.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 20. 11. 2024
+  Bugfixes:
+    - Fixed issue where ghosts were being placed underneath functioning, non-empty train loaders.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 20. 11. 2024
+  Bugfixes:
+    - Updated mod thumbnail to match updated tall loader sprite.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 20. 11. 2024
+  Features:
+    - Updated tall bulk loader sprite.
+  Bugfixes:
+    - Fixed loader render layer causing it to end up below trains.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 19. 11. 2024
+  Features:
+    - Added option in startup settings for different loader entity size, 4x4 or 6x6.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 18. 11. 2024
+  Features:
+    - Added option in settings for stubby/short loaders, for better visibility.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 18. 11. 2024
+  Major Features:
+    - Completely overhauled train UI to allow for any train length and engine configuration. More improvements coming soon.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 17. 11. 2024
+  Features:
+    - Loaders that can't be automatically placed will now place ghosts instead.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 16. 11. 2024
+  Balancing:
+    - Slightly increased max inventory size in settings.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 16. 11. 2024
+  Bugfixes:
+    - Fixed cybersyn allow-list compatability.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 16. 11. 2024
+  Bugfixes:
+    - Fixed missing train gap table bug by creating it at init.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 15. 11. 2024
+  Major Features:
+    - Added ability to set 0, 1, or 2 "empty" gaps, in case you have 2 or 0 engines at the front of your train.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 15. 11. 2024
+  Bugfixes:
+    - Fixed loaders not working.
+    - Fixed loader UI appearing for non loader entities.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 15. 11. 2024
+  Bugfixes:
+    - Fixed not being able to place loaders on top of tree stumps and wagons.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 15. 11. 2024
+  Bugfixes:
+    - Updated image pathnames that prevented the mod from loading.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 15. 11. 2024
+  Major Features:
+    - Initial release.

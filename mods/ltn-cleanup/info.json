@@ -1,8 +1,0 @@
-{
-    "name": "ltn-cleanup",
-    "version": "1.0.17",
-    "title": "LTN Cleanup",
-    "author": "Keombre",
-    "factorio_version": "1.1",
-    "dependencies": ["base", "LogisticTrainNetwork >= 1.15.5"]
-}

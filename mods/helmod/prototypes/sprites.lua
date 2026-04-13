@@ -10,8 +10,8 @@ function sprite_help(name,width,height)
 end
 
 data:extend({
-  sprite_help("getting-start", 798, 359),
-  sprite_help("quick-start", 800, 506),
+  sprite_help("getting-start", 800, 423),
+  sprite_help("quick-start", 800, 423),
   sprite_help("mod-settings-map", 478, 524),
   sprite_help("mod-settings-player", 415, 524),
   sprite_help("preferences-general", 500, 567),
@@ -124,6 +124,8 @@ table.insert(spite_icons, {
 local list = {
   {name="alert1", size=16, scale=1},
   {name="tooltip-blank", size=24, scale=1},
+  {name="event-error-32", size=32, scale=1},
+  {name="event-error-64", size=64, scale=1},
 }
 for icon_row,icon in pairs(list) do
   table.insert(spite_icons, sprite_tooltip(icon.name, icon.size, icon.scale))

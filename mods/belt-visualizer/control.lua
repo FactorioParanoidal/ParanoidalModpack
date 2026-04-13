@@ -8,12 +8,12 @@ local side_cycle = const.side_cycle
 local e = defines.events
 
 local function setup_globals()
-    global.data = {}
-    global.in_progress = {}
-    global.refresh = {}
-    global.belt_lines = {}
-    global.clear = global.clear or {}
-    global.hover = global.hover or {}
+    storage.data = {}
+    storage.in_progress = {}
+    storage.refresh = {}
+    storage.belt_lines = {}
+    storage.clear = storage.clear or {}
+    storage.hover = storage.hover or {}
     -- global.colors = const.generate_colors()
 end
 
@@ -21,30 +21,30 @@ script.on_init(function()
     setup_globals()
 end)
 
-script.on_configuration_changed(function(_)
+script.on_configuration_changed(function(data)
     rendering.clear("belt-visualizer")
     setup_globals()
 end)
 
 local function clear(index)
-    global.in_progress[index] = nil
-    global.refresh[index] = nil
-    local data = global.data[index]
+    storage.in_progress[index] = nil
+    storage.refresh[index] = nil
+    local data = storage.data[index]
     if not data then return end
     data.checked = nil
     data.belt_line = nil
-    if data.ids then
-        global.clear[data.ids] = true
+    if data.render then
+        storage.clear[data.render] = true
     end
-    data.ids = nil
+    data.render = nil
 end
 
 local function remove_player(event)
     local index = event.player_index
     clear(index)
-    global.data[index] = nil
-    global.belt_lines[index] = nil
-    global.hover[index] = nil
+    storage.data[index] = nil
+    storage.belt_lines[index] = nil
+    storage.hover[index] = nil
 end
 
 script.on_event(e.on_player_left_game, remove_player)
@@ -56,8 +56,8 @@ local function highlight(event)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local selected = player.selected
     if not selected then
-        if global.hover[index] == "disabled" then
-            global.hover[index] = "on"
+        if storage.hover[index] == "disabled" then
+            storage.hover[index] = "on"
         end
         return
     end
@@ -69,11 +69,12 @@ local function highlight(event)
         else return end
     end
     if not connectables[type] then return end
-    local data = global.data[index] or {}
-    global.data[index] = data
+    local data = storage.data[index] or {}
+    storage.data[index] = data
     local unit_number = selected.unit_number --[[@as number]]
-    local filter = not player.is_cursor_empty() and player.cursor_stack.valid_for_read and player.cursor_stack.name
-    if data.filter == filter and data.origin.valid and data.origin.unit_number == unit_number then
+    local filter = utils.get_cursor_name(player)
+    local repeat_origin = data.origin and data.origin.valid and data.origin.unit_number == unit_number
+    if data.filter == filter and repeat_origin then
         data.cycle = data.cycle % 3 + 1
     else
         data.cycle = 1
@@ -99,9 +100,9 @@ local function highlight(event)
             utils.check_entity(data, unit_number, lane, path, sides)
         end
     end
-    data.ids = {}
+    data.render = {}
     data.container_passthrough = settings.get_player_settings(player)["bv-container-passthrough"].value
-    global.in_progress[index] = true
+    storage.in_progress[index] = true
 end
 
 local function refresh(data)
@@ -120,14 +121,14 @@ local function refresh(data)
     data.belt_line = {}
     data.head = entity
     data.tail = entity
-    data.ids = {}
-    global.in_progress[data.index] = true
+    data.render = {}
+    storage.in_progress[data.index] = true
 end
 
 local function keybind(event)
     local index = event.player_index
-    if global.hover[index] == "on" then
-        global.hover[index] = "disabled"
+    if storage.hover[index] == "on" then
+        storage.hover[index] = "disabled"
     else
         highlight(event)
     end
@@ -138,7 +139,7 @@ script.on_event("bv-highlight-ghost", keybind)
 
 script.on_event(e.on_selected_entity_changed, function(event)
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
-    local data = global.data[event.player_index]
+    local data = storage.data[event.player_index]
     local selected = player.selected --[[@as LuaEntity]]
     local is_connectable = selected and connectables[get_belt_type(selected)]
     local belt_line = data and data.belt_line
@@ -146,7 +147,7 @@ script.on_event(e.on_selected_entity_changed, function(event)
         data.origin = player.selected
         return
     end
-    if global.hover[event.player_index] ~= "on" then return end
+    if storage.hover[event.player_index] ~= "on" then return end
     highlight(event)
 end)
 
@@ -154,7 +155,7 @@ local function toggle_hover(event)
     local index = event.player_index
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local toggle = not player.is_shortcut_toggled("bv-toggle-hover")
-    global.hover[index] = toggle and "on" or "off"
+    storage.hover[index] = toggle and "on" or "off"
     player.set_shortcut_toggled("bv-toggle-hover", toggle)
 end
 
@@ -185,11 +186,11 @@ local function highlightable(data, entity)
 end
 
 local function on_entity_modified(event)
-    local entity = event.entity or event.created_entity or event.destination
-    for _, data in pairs(global.data) do
+    local entity = event.entity or event.destination
+    for _, data in pairs(storage.data) do
         if highlightable(data, entity) then
-            if not global.refresh[data.index] then
-                global.refresh[data.index] = event.tick + 60
+            if not storage.refresh[data.index] then
+                storage.refresh[data.index] = event.tick + 60
             end
         end
     end
@@ -303,29 +304,29 @@ local function cache_belt_line(data, max_highlights)
 end
 
 script.on_event(e.on_tick, function(event)
-    for index, tick in pairs(global.refresh) do
+    for index, tick in pairs(storage.refresh) do
         if tick == event.tick then
-            refresh(global.data[index])
+            refresh(storage.data[index])
         end
     end
-    local player_count = table_size(global.in_progress)
+    local player_count = table_size(storage.in_progress)
     local highlight_maximum = settings.global["bv-highlight-maximum"].value
-    local max_highlights = highlight_maximum * 8 / table_size(global.clear)
-    for ids in pairs(global.clear) do
+    local max_highlights = highlight_maximum * 8 / table_size(storage.clear)
+    for renders in pairs(storage.clear) do
         local c = 0
-        for id in pairs(ids) do
-            if rendering.is_valid(id) then
-                rendering.destroy(id)
+        for id, render in pairs(renders) do
+            if render.valid then
+                render.destroy()
             end
-            ids[id] = nil
+            renders[id] = nil
             c = c + 1
             if c > max_highlights then break end
         end
-        if not next(ids) then global.clear[ids] = nil end
+        if not next(renders) then storage.clear[renders] = nil end
     end
     max_highlights = highlight_maximum / player_count
-    for index in pairs(global.in_progress) do
-        local data = global.data[index]
+    for index in pairs(storage.in_progress) do
+        local data = storage.data[index]
         cache_belt_line(data, max_highlights)
         local c = 0
         while c < max_highlights do
@@ -340,6 +341,6 @@ script.on_event(e.on_tick, function(event)
             data.next_entities[next_index] = nil
             data.next_index = next_index + 1
         end
-        if not data.next_entities[data.next_index] then global.in_progress[data.index] = nil end
+        if not data.next_entities[data.next_index] then storage.in_progress[data.index] = nil end
     end
 end)

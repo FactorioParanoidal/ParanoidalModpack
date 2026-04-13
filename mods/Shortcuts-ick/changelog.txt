@@ -1,4 +1,97 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 15.11.2024
+  Bugfixes:
+    - Fixed breaking changes from base game version 2.0.18 related to new shortcut icons (thanks to hankthesnake and yavis1231).
+    - Fixed that it was possible to set "zoom out of world limit" to very low values that didn't actually work anymore.
+    - Fixed an error when closing a GUI of an entity with grid when the "Vehicle: Enable logistics while moving" setting was disabled (thanks to Factory077 and Hellpest).
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 09.11.2024
+  Bugfixes:
+    - Fixed error when building artillery while grid was enabled (thanks to Beeblebroxx and aetherialsamurai).
+    - Fixed that technology_to_unlock didn't work properly when the shortcut was explicitely disabled beforehand.
+    - Fixed error when using the custom input for the "Trash unrequested" shortcut (thanks to saaadel).
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 04.11.2024
+  Bugfixes:
+    - Fixed error when closing a train GUI which had an equipment grid (thanks to LokiLaufeyjarson, Factory077, ModifiedShopkeep, Serjevski and LoganDark).
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 03.11.2024
+  Bugfixes:
+    - Fixed error when closing a GUI when the "Trash unrequested" setting was disabled (thanks to rosie1204).
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 03.11.2024
+  Features:
+    - The "Spidertron Enable logistics while moving" shortcut now works for all vehicles with an equipment grid and was renamed to "Enable logistics while moving".
+    - Added "Trash unrequested" shortcut.
+    - Added "Vehicle trash unrequested" shortcut.
+    - Added fulgoran ruins to the environment deconstruction planner (thanks to james1715).
+    - Added icon to artillery turrets and wagons with disabled "Auto targeting" toggle.
+  Changes:
+    - Added a small car to the icon of the "Vehicle logistics" shortcut.
+    - BREAKING: The "Artillery jammer tool" now uses the new "Auto targeting" toggle instead of replacing the entity. Set the "Prepare a startup setting change [...]" map setting to "artillery" before the update to prevent removal of disabled artillery turrets and wagons.
+    - "Driver is gunner" shortcut is only available in multiplayer.
+  Bugfixes:
+    - Fixed an error when glosing the GUI of a spider vehicle with no logistic point (thanks to Saken and saaadel).
+    - Fixed that the "Enable logistics while moving" shortcut wasn't updated when the setting was changed inside the GUI.
+    - Fixed that equipment shortcuts didn't get unavailable when armor was removed (thanks to Marius8).
+    - Fixed "Environment deconstruction planner" and "Toggle artillery cannon fire" tool stop working if held when switching to map view (thanks to WarrantyVoid).
+    - Fixed that the "Disable all technology requirements changes" setting was reversed.
+    - Fixed that vehicle and equipment shortcuts were available when starting a new game.
+    - Fixed that equipment shortcuts were always available when leaving the editor.
+    - Temporary override for technology_to_unlock for shortcuts with action = "lua" until base game fix is rolled out.
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 30.10.2024
+  Bugfixes:
+    - Fixed that shortcuts to disable equipment didn't work (thanks to Marius8).
+    - Fixed that quality got lost when disabling equipment or artillery.
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 26.10.2024
+  Bugfixes:
+    - Fixed an error when trying to travel to a space platform (thanks to VegaTheLich).
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 25.10.2024
+  Features:
+    - Updated for 2.0. Be advised: there are no migrations for saves from 1.1 that allready had this mod installed.
+    - The "Spidertron logistic request" shortcut now works for all vehicles with logistics and was renamed to "Vehicle logistics".
+  Changes:
+    - Removed spidertron remote shortcut since it was implemented in the base game.
+    - Removed artillery targeting remote shortcut since it was implemented in the base game.
+    - Removed discharge defense remote shortcut since it was implemented in the base game.
+    - Removed winch shortcut since it was implemented into the VehicleWagon2 mod directly.
+    - Removed land mine thrower shortcut since it was implemented into the landmine-thrower mod directly.
+    - Removed option to automatically generate shortcuts from selection tools from other mods.
+    - Removed changes to research requirements for shortcuts from the following mods: car-finder, pump and VehicleSnap.
+    - Dropped support for the following mods that were not ported to 2.0 (yet): Spider_Control, RailSignalPlanner, RailSignalPlannerNeo, SpidertronWaypoints, ModuleInserter, ModuleInserterER, Kux-OrbitalIonCannon, circuit-checker, WellPlanner, OreEraser, aai-programmable-vehicles, MaxRateCalculator, artillery-bombardment-remote, artillery-bombardment-remote-reloaded, dbots-artillery-bombardment-remote, MIRV, AdvancedArtilleryRemotesContinued, janky-quality, PickerInventoryTools, Pacifist, PersonalLogisticsShortcut, NightvisionToggles, Nanobots and IndustrialRevolution.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.29
+Date: 12.10.2024
+  Changes:
+    - Removed minimal drain from disabled equipment.
+    - Improved compatibility with "Nullius" by anachrony (thanks to Kenira).
+    - Improved compatibility with "Janky quality (BETA)" by Soul-Burn (thanks to Soul-Burn).
+    - Marked "Pacifist" by derpumu as incompatible (thanks to Motozer).
+  Bugfixes:
+    - Fixed that the uninstall-setting enabled only the vanilla night vision and belt immunity equipments.
+    - Fixed error when using the "Spidertron Auto targeting without gunner" shortcut (thanks to Sgamez).
+    - Fixed that equipment and vehicle shortcuts were always disabled when the configuration changed, even when the player had the equipment equiped or was driving that vehicle respectively (thanks to Sgamez).
+
+---------------------------------------------------------------------------------------------------
 Version: 1.1.28
 Date: 24.02.2023
   Features:

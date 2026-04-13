@@ -1,7 +1,7 @@
 function fillPyHighTechConfig(config)
+	local nauvisConfig = config.nauvis
 	
-	
-	config["molybdenum-ore"] = { -- warning - it exists also in pyfusion
+	nauvisConfig["molybdenum-ore"] = { -- warning - it exists also in pyfusion
 		type="resource-ore",
 		
 		allotment=70,
@@ -11,27 +11,27 @@ function fillPyHighTechConfig(config)
 		min_amount=250,
 	}
 	
-	config["phosphate-rock"] = {
+	nauvisConfig["phosphate-rock"] = {
 		type="resource-liquid",
 		minimum_amount=40000,
 		allotment=50,
-		spawns_per_region={min=1, max=2},
+		spawns_per_region={min=1, max=1},
 		richness={min=65000, max=150000}, -- richness per resource spawn
-		size={min=2, max=5},
+		size={min=1, max=1},
 		useOreScaling = true,
 		
-		starting={richness=75000, size=2, probability=1}
+		starting={richness=75000, size=1, probability=1}
 	}
 	
-	config["rare-earth-bolide"] = {
+	nauvisConfig["rare-earth-bolide"] = {
 		type="resource-liquid",
 		minimum_amount=40000,
 		allotment=50,
-		spawns_per_region={min=1, max=2},
+		spawns_per_region={min=1, max=1},
 		richness={min=50000, max=100000}, -- richness per resource spawn
-		size={min=2, max=5},
+		size={min=1, max=1},
 		useOreScaling = true,
 
-		starting={richness=85000, size=2, probability=1}
+		starting={richness=85000, size=1, probability=1}
 }
 end

@@ -2,12 +2,12 @@ data:extend(
 {
 	{
 		type = "technology",
-		name = "water-treatment-5",
-		icon = "__angelsrefining__/graphics/technology/water-treatment.png",
+		name = "angels-water-treatment-5",
+		icon = "__angelsrefininggraphics__/graphics/technology/water-treatment.png",
 		icon_size = 128,
 		prerequisites =
 		{
-			"water-treatment-4",
+			"angels-water-treatment-4",
 		},
 		effects =
 		{

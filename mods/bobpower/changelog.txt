@@ -1,4 +1,50 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 18. 01. 2026
+  Changes:
+    - Allow higher tier electric poles, solar panels, etc. to be crafted in Electromagnetic plant #516
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 02. 01. 2026
+  Bugfixes:
+    - Fixed heat source flame graphics #481
+  Changes:
+    - Updated AAI Industry integration #393
+    - Integrate Bob's Locale Translations mod #445
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 22. 06. 2025
+  Changes:
+    - Added de locale #415
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Changes:
+    - Update for Factorio 2.0 #189
+    - Updated solar panel graphics #258
+    - Rebalanced burner and fluid burning heat sources #283
+    - Increased the energy usage priority of steam turbines #283
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 21. 02. 2024
+  Bugfixes:
+    - Fixed reactor descriptions #162
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Bugfixes:
+    - Fixed Heat exchanger conversion recipes #115
+    - Fixed Heat pipe 3 & 4 descriptions #123
+  Changes:
+    - Reverted addition of Tech Steam power #108
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.7
 Date: 02. 01. 2023
   Bugfixes:

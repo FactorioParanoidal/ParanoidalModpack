@@ -37,7 +37,7 @@ if settings.startup["remelting-smooth-integration"].value then
 	--SILVER
 	OV.add_unlock("angels-silver-smelting-2", "molten-silver-remelting")
 	--SOLDER
-	OV.add_unlock("angels-solder-smelting-2", "molten-solder-remelting")
+	OV.add_unlock("angels-liquid-molten-solder-2", "molten-solder-remelting")
 	--STEEL
 	OV.add_unlock("angels-steel-smelting-2", "molten-steel-remelting")
 	--TIN
@@ -53,6 +53,5 @@ else
 	aragasmods.functions.OV.disable_technology("remelting-tier-5")
 	aragasmods.functions.OV.disable_technology("remelting-tier-6")
 end
-
 --DYNAMIC OVERRIDES
 --require("prototypes.recipes.remelting-entity-angels")

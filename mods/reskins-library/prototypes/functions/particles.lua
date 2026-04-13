@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Library
 --
 -- See LICENSE.md in the project directory for license information.
@@ -19,7 +19,7 @@ local particles = {}
 -- []-chest
 -- construction-robot
 -- fluid-wagon
--- stack-inserter
+-- bulk-inserter
 -- inserter
 -- locomotive
 -- logistic-robot

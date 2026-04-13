@@ -1,5 +1,15 @@
 # CopyPasteModules ChangeLog
 
+## Factorio version 2.0
+
+### 0.2.0 (2024-10-30)
+Features:
+* Updated to work in version 2.0, including ghost entities and map view. Fix provided by brandon942.
+
+Removed features:
+* Blueprint support was removed, since inserting and changing modules via blueprints now works in vanilla.
+* (Not removing though, but I'm not touching the spaghetti mess that was the blueprint code again.)
+
 
 ## Factorio version 1.1
 

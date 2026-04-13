@@ -1,0 +1,6 @@
+{
+	"recipe": [
+		["UpgradeWindTurbine2", "EasyWindTurbine2"],
+		["UpgradeWindTurbine3", "EasyWindTurbine3"]
+	]
+}

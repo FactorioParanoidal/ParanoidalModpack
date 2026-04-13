@@ -13,6 +13,28 @@ chunkScannerSquad.healing_per_tick = -1
 chunkScannerSquad.corpse = "chunk-scanner-corpse"
 data:extend({chunkScannerSquad})
 
+local chunkScannerNest = util.table.deepcopy(data.raw["unit"]["small-biter"])
+chunkScannerNest.name = "chunk-scanner-nest-rampant"
+chunkScannerNest.health = 1
+chunkScannerNest.collision_box = {{-6, -6}, {6, 6}}
+chunkScannerNest.collision_mask = {layers={object=true, water_tile=true, elevated_rail=true}}
+chunkScannerNest.healing_per_tick = -1
+chunkScannerNest.corpse = "chunk-scanner-corpse"
+data:extend({chunkScannerNest})
+
+local chunkScannerTurret = util.table.deepcopy(data.raw["turret"]["behemoth-worm-turret"])
+chunkScannerTurret.name = "chunk-scanner-turret-rampant"
+chunkScannerTurret.health = 1
+chunkScannerTurret.collision_box = {{-3, -3}, {3, 3}}
+chunkScannerTurret.collision_mask = {layers={object=true, water_tile=true, elevated_rail=true}}
+
+chunkScannerTurret.map_generator_bounding_box = {{-4, -4}, {4, 4}}
+chunkScannerTurret.healing_per_tick = -1
+chunkScannerTurret.build_base_evolution_requirement = 1
+chunkScannerTurret.autoplace = nil
+data:extend({chunkScannerTurret})
+
+
 local chunkScannerSquadMovement = util.table.deepcopy(data.raw["unit"]["small-biter"])
 chunkScannerSquadMovement.name = "chunk-scanner-squad-movement-rampant"
 chunkScannerSquadMovement.health = 1

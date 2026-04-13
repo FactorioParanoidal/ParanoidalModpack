@@ -30,9 +30,9 @@ function vanillaUpdates.addWallResistance()
 					wall.resistances[poisonIndex].percent = 75
 				end
 				if not explosionIndex then
-					wall.resistances[#wall.resistances+1] = {type="explosion",decrease=40}
-				elseif (wall.resistances[explosionIndex].decrease or 0) < 40 then
-					wall.resistances[explosionIndex].decrease = 40
+					wall.resistances[#wall.resistances+1] = {type="explosion",decrease=30}
+				elseif (wall.resistances[explosionIndex].decrease or 0) < 30 then
+					wall.resistances[explosionIndex].decrease = 30
 				end				
 			end
 		end	

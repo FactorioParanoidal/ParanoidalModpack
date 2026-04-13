@@ -298,7 +298,7 @@ function chunkPropertyUtils.decayDeathGenerator(map, chunk)
 end
 
 function chunkPropertyUtils.getPlayerBaseGenerator(map, chunk, pheromoneType)
-	if pheromoneType == BASE_PHEROMONE then
+	if (not pheromoneType) or (pheromoneType == BASE_PHEROMONE) then
 		return map.chunkToPlayerBase[chunk] or 0
 	elseif pheromoneType == BASE_DETECTION_PHEROMONE then
 		return map.chunkToPlayerBaseDetection[chunk] or 0	
@@ -381,35 +381,34 @@ function chunkPropertyUtils.processNestActiveness(map, chunk)
         local activeness = chunkPropertyUtils.getNestActiveness(map, chunk)
         local universe = map.universe
         local raidActiveness = chunkPropertyUtils.getRaidNestActiveness(map, chunk)
-		
-		if (chunk[BASE_DETECTION_PHEROMONE] > universe.raiding_minimum_base_threshold) then
+		if (chunk[BASE_DETECTION_PHEROMONE] > map.raiding_minimum_base_threshold) then
 			chunkPropertyUtils.setRaidNestActiveness(map, chunk, mMin(raidActiveness + 3, 20))
 		else
 			chunkPropertyUtils.setRaidNestActiveness(map, chunk, raidActiveness - 1)
 		end
         if universe.attackUsePlayer and (chunk[PLAYER_PHEROMONE] > universe.attackPlayerThreshold) then
             chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))
-		elseif (chunk[BASE_DETECTION_PHEROMONE] > universe.no_pollution_attack_threshold) then 
-            chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))			
-        elseif (chunk[BASE_DETECTION_PHEROMONE] > 0) then
-			local pollutionThreshold = 3
-			local pollutionActiveness = false
-			if (surface.get_pollution({chunk.x, chunk.y}) > pollutionThreshold) then
-				pollutionActiveness = true
-			elseif (surface.get_pollution({chunk.x+32, chunk.y}) > pollutionThreshold) then	
-				pollutionActiveness = true
-			elseif (surface.get_pollution({chunk.x-32, chunk.y}) > pollutionThreshold) then	
-				pollutionActiveness = true
-			elseif (surface.get_pollution({chunk.x, chunk.y+32}) > pollutionThreshold) then	
-				pollutionActiveness = true
-			elseif (surface.get_pollution({chunk.x, chunk.y-32}) > pollutionThreshold) then	
-				pollutionActiveness = true
-			end
-			if pollutionActiveness then
-				chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))
-			else
+		elseif (chunk[BASE_DETECTION_PHEROMONE] > map.no_pollution_attack_threshold) then 
+            chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))	
+       elseif (chunk[BASE_DETECTION_PHEROMONE] > 0) then
+			-- local pollutionThreshold = 3
+			-- local pollutionActiveness = false
+			-- if (surface.get_pollution({chunk.x, chunk.y}) > pollutionThreshold) then
+				-- pollutionActiveness = true
+			-- elseif (surface.get_pollution({chunk.x+32, chunk.y}) > pollutionThreshold) then	
+				-- pollutionActiveness = true
+			-- elseif (surface.get_pollution({chunk.x-32, chunk.y}) > pollutionThreshold) then	
+				-- pollutionActiveness = true
+			-- elseif (surface.get_pollution({chunk.x, chunk.y+32}) > pollutionThreshold) then	
+				-- pollutionActiveness = true
+			-- elseif (surface.get_pollution({chunk.x, chunk.y-32}) > pollutionThreshold) then	
+				-- pollutionActiveness = true
+			-- end
+			-- if pollutionActiveness then
+				-- chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))
+			-- else
 				chunkPropertyUtils.setNestActiveness(map, chunk, activeness - 2)
-			end
+			-- end
         else
             chunkPropertyUtils.setNestActiveness(map, chunk, activeness - 5)
             chunkPropertyUtils.setRaidNestActiveness(map, chunk, raidActiveness - 5)

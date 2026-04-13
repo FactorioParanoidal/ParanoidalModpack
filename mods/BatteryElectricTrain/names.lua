@@ -62,12 +62,14 @@ name_tech_fuel3 = name_fuel3
 name_tech_fuel4 = name_fuel4
 
 -- Settings
-setting_cheatsy_braking	= "bet-cheatsy-braking"
-setting_cheatsy_locs	= "bet-cheatsy-locs"
-setting_cheatsy_power	= "bet-cheatsy-power"
-setting_cheatsy_speed	= "bet-cheatsy-speed"
-setting_cheatsy_wagons	= "bet-cheatsy-wagons"
-setting_equipment_grid	= "bet-equipment-gridtype"
-setting_recycling	= "bet-recycling"
+setting_battery_slots           = "bet-battery-slots"
+setting_capacity_multiplier	= "bet-capacity-multiplier"
+setting_charging_efficiency	= "bet-charging-efficiency"
+setting_cheatsy_braking		= "bet-cheatsy-braking"
+setting_cheatsy_locs		= "bet-cheatsy-locs"
+setting_cheatsy_power		= "bet-cheatsy-power"
+setting_cheatsy_speed		= "bet-cheatsy-speed"
+setting_cheatsy_wagons		= "bet-cheatsy-wagons"
+setting_equipment_grid		= "bet-equipment-gridtype"
+setting_recycling		= "bet-recycling"
 setting_return_partial_batteries = "bet-return-partial-batteries"
-

@@ -1,0 +1,174 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.31
+Date: 30-10-2024
+  Info:
+    - Fixed a recipe that I accidentally changed in 1.0.28. ~Ashayazu
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.30
+Date: 30-10-2024
+  Info:
+    - Formatted and updated changelog.txt to be compatible with the ingame changelog button in the mods menu. ~Ashayazu
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.29
+Date: 29-10-2024
+  Bugfixes:
+    - Fixed Perfect night sunglasses so that they can be put in equipment grids again. ~Ashayazu
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.28
+Date: 29-10-2024
+  Info:
+    - Factorio 2.0 Compatible. ~Ashayazu
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.27
+Date: 
+  Info:
+    - Factorio 1.0 Compatible
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.26
+Date: 
+  Bugfixes:
+    - Added a check for removed night vision research.
+  Info:
+    - Factorio 1.0 Compatible
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.25
+Date: 
+  Bugfixes:
+    - Fixed Perfect night sunglasses, wearing it makes the night to day. ~Steinio
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Date: 
+  Info:
+    - Factorio 0.17 Compatible.
+    - Perfect Nightvision equipment is under investigation. ~Steinio
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.23
+Date: 
+  Changes:
+    - Balloon lamps can now be fast replaced with other buildable lamps and vice versa. ~Steinio
+  Bugfixes:
+    - Fixed player character changes in base game version 0.17.35. ~Steinio
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 
+  Features:
+    - All available lamps can be built over with each other, also enables upgrade planner functionality. ~Steinio
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 
+  Info:
+    - Factorio 0.17 Compatible.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 
+  Features:
+    - New alternate short balloon lamp (for laku).
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 
+  Info:
+    - Factorio 0.16 Compatible.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 
+  Info:
+    - Factorio 0.15 Compatible.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 
+  Info:
+    - Factorio 0.14 Compatible.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 
+  Changes:
+    - Better init forces when installing on existing game.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 
+  Changes:
+    - Bright or dimmed gfx model customisable in config.lua
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 
+  Changes:
+    - Dimming the light bulb model.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 
+  Changes:
+    - New Utils.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 
+  Changes:
+    - Minor Corrections.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 
+  Info:
+    - Factorio 0.13 Compatible.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 
+  Changes:
+    - Rework of initialisation routines. Custom license. Add a test for prototypes that forgot lights definition.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 
+  Changes:
+    - Test to avoid crash due to Avatars bad definition of light.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 
+  Changes:
+    - Apply also to all other player types, not only basic player/player (like FARL and YARM avatars).
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 
+  Changes:
+    - Improves multiplayer compatibility.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 
+  Changes:
+    - Generalize to vehicles, locomotives and airplanes.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 
+  Features:
+    - Introduces personal light enforcement.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 
+  Info:
+    - Initial release.
+
+---------------------------------------------------------------------------------------------------

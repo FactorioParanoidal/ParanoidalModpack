@@ -1,17 +1,409 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.04
+Date: 2025.09.18
+  Balancing:
+    - The minimum evolution gain on Vulcanus is now equal to the value on a deathworld with zero pollution
+  Bugfixes:
+    - Fixed a mistake that caused evolution on Vulcanus set to 100%
+      Also, the possibility of changing evolution via the console has been taken into account
+      Vulcanus evolution has been reset. The new evolution value, depending on buildings on all planets, is set to 10%-80%
+---------------------------------------------------------------------------------------------------
+Version: 2.02.03
+Date: 2025.09.14
+  Balancing:
+    - Arachnids: added minor explosion resistance to biter, removed from eggs. Added flat weakness to physical dmg. Eggs health reduced
+    - Juggernaut: added physical damage to prevent lag, if they can't break wall or obstacle	
+    - Cooldown from 1.10.2 now apllied for any squads. This will prevent a small area from becoming overcrowded with units
+    - Regeneration Crystal buff now stronger (3 times) at 50+ and 70+ evolution. Also, chance to break when apply buff reduced from 3 to 1%
+    - Removed check for "siege mode does not turn on for too long" (2.02.00)	
+  Bugfixes:
+    - Fixed settlers building interval. It was 60th times higher than inteded
+    - Fixed rare bug, when combat powerup do not oneshot biters
+---------------------------------------------------------------------------------------------------
+Version: 2.02.02
+Date: 2025.09.05
+  Balancing:
+    - Added cooldown for siege squads. This will allow you to destroy bases in the AI "siege" mode without causing 
+       them to grow uncontrollably
+    - Rampant settlers are no longer provoked into attacking the player. This will avoid the situation where a provoked settler
+       builds a nest far from its original location
+    - Rampant settlers building inerval now depends from evolution (20-60sec now, 20 sec before)
+    - Nocturnal Mode: The siege will not start at night if there are already enough nests near the player base
+  Bugfixes:
+    - Fixed biter nests appearing on planets with only modded biters
+    - AI "Growing" mode now spawn both types of nests, if only standart biters allowed
+    - Fixed error if game cant create biter when change squad compression
+---------------------------------------------------------------------------------------------------
+Version: 2.02.01
+Date: 2025.08.12
+  Bugfixes:
+    - Fixed error "Given seed value is too big" when biter base created, if too many bases
+    - "Chunk scanner worm" do not autoplaced now at evo 90%+
+  Balancing:
+    - AI now checks for player buildings near resources when determining resources to settle
+    - Canceled grow base after killing nests becouse it spawn too many nests in late game (cause - artillery)
+---------------------------------------------------------------------------------------------------
+Version: 2.02.00
+Date: 2025.08.10
+  Features:
+    - Now AI gradually populates unguarded resorces
+  Balancing:
+    - Sometimes, the siege mode does not turn on for too long. A check has been added. In this case, the siege will be forced
+    - Nest mutations will remain the same when save/loading game
+  Bugfixes:
+    - Fixed standart and Rampant AI expansion for modded biters.
+       The incorrect operation of the "create base" command for a squad. Instead, a custom algorithm now used
+       Due to the fact that in many cases nests were not created previously, the difficulty may now increase
+  Other:
+    - Low level nests have become more visible on the minimap
+---------------------------------------------------------------------------------------------------
+Version: 2.01.01
+Date: 2025.07.20
+  Features:
+    - Feature "Artillery bombardment force growth of biter base": due to a bug, it worked on any worm/nest destruction.
+       But I liked the result and it will remain as is.
+    - New setting "AI: additional time between attacks of Demolishers"
+  Balancing:
+    - Pollution no longer affects the nest status. Only the distance from the player's base.
+       Now the biters will continue to populate the unguarded area, even if the pollution cloud has spread far beyond the base.
+    - Growth after destroing nests at 90%+ evolution is accelerated by 1/3. At 95% - twice as fast. At 99% - three times as fast.
+  Bugfixes:
+    - Partially fixed broken standart AI expansion (in new Factorio versions) for modded nests
+---------------------------------------------------------------------------------------------------
+Version: 2.01.00
+Date: 2025.06.22
+  Features:
+    - Starting from 90% evolution and above, the AI begins to enlarge small "settlements",
+       which gradually leads to the enlargement of squads
+    - Any growth states now applies to Gleba spawners and modded nests/worms as well
+    - Artillery bombardment force growth of biter base for 15 minutes
+  Balancing:
+    - Vulcanus, demolisher attacks: now only large demolisher attack at 95%+ evo
+    - Now Artillery kill partially cancel effect of Biter supressor lvl 2 (AI squad size) for 5 minutes
+    - Gleba spiders now count as 4 units (loweres from 7) for squad size
+    - Regenerative faction: fixed nests and worms having erroneously low resistance to explosive damage
+       Also, regeneration has been increased.
+  Bugfixes:
+    - Fixed another error if compressed biter killed and can't decompress
+    - Fixed possible appearance of Rampant's Biters on Gleba and other planets where there were originally nests of other enemies
+    - Spawner-worm corpse now can't be looted if Krastorio installed
+---------------------------------------------------------------------------------------------------
+Version: 2.00.13
+Date: 2025.06.14
+  Features:
+    - Added "Unstable feeding reactor". Allows you to temporarily get rid of the attacks of the demolishers and leave Vulcanus
+  Balancing:
+    - Demolisher food: The interval between attacks of a fed Demolisher is doubled.
+  Compatibility:
+    - Krastorio 2. Spawner spitter corpse now can't be looted
+    - Krastorio 2. If the "Realistic weapons" option is enabled, turrets will no longer stop shooting at a one-shot-protoceted biter 
+       if the predicted damage is enough to kill it (Overkill should now exceed half of max health)
+  Bugfixes:
+    - Fixed another error if compressed biter killed and can't decompress
+  Other:
+    - Railroad safety settings merged into one "Safety: Make railroad safe from biters" setting. 
+       Also, it now protects the "elevated" rails
+---------------------------------------------------------------------------------------------------
+Version: 2.00.12
+Date: 2025.05.20
+  Compatibility:
+    - Krastorio 2. Now, if Krastorio 2 installed, player can loot hive corpses for K2 biomass. Added En, ru locale to hive corpses
+---------------------------------------------------------------------------------------------------
+Version: 2.00.11
+Date: 2025.05.03
+  Bugfixes:
+    - Fixed error if compressed biter killed and cant decompress
+    - Fixed error if Bob-Enemies mod installed
+    - Fixed missing resists if Bob-warfare mod installed
+    - Fixed error if any mod, removing egg spoilage installed
+  Other:
+    - Fixed typo "peacefull" in En localisation
+    - Added player setting "Show Rampant AI squads alert". Now player can disable AI squads notification
+    - Added light to nuclear biters
+---------------------------------------------------------------------------------------------------
+Version: 2.00.10
+Date: 2025.03.23
+  Balancing:
+    - Now save/load does not change next Demolisher Attack. So, you cant avoid larger worms now
+    - Underground attacks do not remove concrete floor now. Also, now hard surface reduce healh of biters when they dig out
+    - Slightly increased the chance of AI mode "Growthing" (12% -> 13%)
+  Compatibility:
+    - "Quality for Biters": Underground attacks take into account the quality of the biters
+    - Disabled Rampant Enemies on the planet, if there are no standart biters
+       (example: only explosive biters on Vulcanus)
+  Bugfixes:
+    - Fixed projectiles/beams for high quality biters/worms
+    - Fixed error while powerup buff used (thanks Vankuih)
+  Other:
+    - Ground patch of acid has become more visible
+    - Combat powerup: In the latest versions of Factorio, the ammo from the main inventory is spent first. "Infinity" does not apply to them. 
+       Updated description to indicate this fact
+---------------------------------------------------------------------------------------------------
+Version: 2.00.9
+Date: 2025.03.09
+  Compatibility:
+    - Now only 40% moded nests replaced by Rampant nests (was 80%) if "allow other enemies" option disabled
+  Bugfixes:
+    - Fixed error if run the command to replace Rampant's nests with standard ones when they are already disabled
+    - Fixed "slowing sticker" animation
+    - Added missing En localisation for "showPlanetAISettings" setting
+    - Possibly fixed a bug when creating Biters eggs, if "No Spoilage" mod enabled
+  Other:
+    - The DOT stickers has become larger
+    - Added warning icon, if Demolisher Attack detected at charted chunk
+    - Setting "ShowPlanetAISettings" defaul value now is "true". The AI settings at the start of the game will be shown taking this into account
+---------------------------------------------------------------------------------------------------
+Version: 2.00.8
+Date: 2025.02.24
+  Compatibility:
+    - Removed setting "Optimization: rebalance Rampant Arsenal DOT". Removed optional dependency "Rampant Arsenal"
+       Added optional dependency "Rampant Arsenal (fork)"
+  Bugfixes:
+    - Added new types of diagonal and curved rails to "safe" entites. Elevated rails are not protected - this is how it is intended
+    - All enemy crystal pylons is military target now
+    - Fixed loading error on Factorio 2.0.34+
+---------------------------------------------------------------------------------------------------
+Version: 2.00.7
+Date: 2025.02.18
+  Bugfixes:
+    - Fixed error if "safe" entity destroyed
+---------------------------------------------------------------------------------------------------
+Version: 2.00.6
+Date: 2025.02.17
+  Bugfixes:
+    - Fixed error if enemy level increased without mutation
+---------------------------------------------------------------------------------------------------
+Version: 2.00.5
+Date: 2025.02.17
+  Bugfixes:
+    - Fixed error if mutation occurs at tier 0
+---------------------------------------------------------------------------------------------------
+Version: 2.00.4
+Date: 2025.02.17
+  Balancing:
+    - Biter supressor lvl 2 now increase demolishers attack interval by 1.5 times instead of 5 minutes. Also works on food
+    - Demolisher food no longer anger them for short period, if they are calm
+    - Common faction now is tier 0. Tiers start from 0 (0-10% evo)
+  Bugfixes:
+    - Fixed error on settings changes
+    - Fixed error on electric pole build, if safety enabled
+    - Fixed error on electric pole rebuild when killed, if safety enabled
+    - Fixed loading error if Armored Biters mod is active
+  Other:
+    - Added warning icon, if Rampant AI squad detected at charted chunk
+---------------------------------------------------------------------------------------------------
+Version: 2.00.3
+Date: 2025.02.09
+  Features:
+    - Ported to factorio 2.0 (except for the AI external control interface). Status: late beta version
+    - Some settings have been removed and added
+    - Space Age: Controlling "spider-units" on Gleba, attacks by demolishers on the Volcano, 
+       the ability to customize the AI for these and other planets
+       New mechanic/building: Biter supression/supressor. Has 3 tiers. Significantly weakens AI attacks on the planet, 
+       at the cost of power, if no players on the planet. Freezes evolution at tier 3
+       Capturing Rampant hives to produce eggs. These eggs can be converted to standart biters eggs
+  Balancing:
+    - AI no longer gains action points over time in peace mode
+    - Only rampant and non-modded biters can "learn" underground attacks
+      Modded "units" can "dig" if underground attacks learned 
+      "Spider-units" can`t "dig" even if underground attacks possible
+      Demolishers can't attack underground
+  Bugfixes:
+    - Now only original expansions on planets without non-modded biters to prevent settlers stuck
+    - Now the siege starts correctly if there are no distant nests on the map, but there are close ones
+    - Fixed erroneous interruption of the order if the AI squad broke through the defense 
+      and started to destroy the player's base
+  Compatibility:
+    - "Combat Mechanics Overhaul" marks as incompatible due changing rampant units attack parameters. Also, it replace/makes new collsion layers. 
+      It requires a lot of work to maintain compatibility. Perhaps in the future compatibility will be restored if 
+      the interference with Rampant's unit attack parameters is stopped
+    - "Intelligent Enemy" marks as incompatible due to the interception of control over the units, which disrupts the work of the Rampant AI
+    - "Frost Biters" - not marked as incompatible, but not recommended for use due to a bug that causes cold biters expansion 
+      on Aquilo to result in nests of common biters
+    - "Explosive Biters" added as optional
+---------------------------------------------------------------------------------------------------
+Version: 1.10.5
+Date: 2024.08.15
+  Bugfixes:
+    - Fixed starting new game error
+---------------------------------------------------------------------------------------------------
+Version: 1.10.3
+Date: 2024.08.14
+  Balancing:
+    - Settlers do not create a cooldown on creating squads now
+  Bugfixes:
+    - Fixed a bug where when destroying nests the chunk could remain in active or raid status
+  Optimisations:
+    - Armored and regenerating worm attacks no longer create a crater on the ground, which caused FPS drops
+---------------------------------------------------------------------------------------------------
+Version: 1.10.2
+Date: 2024.08.13
+  Bugfixes:
+    - Fixed a bug where trying to create a lot of squads and a small number of nests would result in a crash
+    - AI peacefull mode is now only possible at the start of the game
+    - Fixed incorrect chunk link to check nests, if no biters found for squad
+  Other:
+    - Added cooldown for creating squads for chunk
+---------------------------------------------------------------------------------------------------
+Version: 1.10.1
+Date: 2024.08.09
+  Bugfixes:
+    - Removed debug message after killing player objects
+    - Now invulnerable Regeneration Crystals placed by player do not attract biters
+  Optimisations:
+    - Biters squad now recalculate the pheromones only in its own chunk
+    - If, as a result of the mining/destruction of the player's buildings, distant squads of biters end up in a chunk where 
+      pheromones cannot reach, such a squad is immediately disbanded.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.0
+Date: 2024.08.07
+  Features:
+    - Attacking squads will have a chance to settle the territory cleared of player objects
+  Balancing:
+    - Long-range squads move twice faster if no player near
+    - Regeneration Crystal is now invulnerable after the first attempt to apply the buff. Also, it can only be broken if someone 
+      has the buff applied to them, regardless of the number of targets. 
+      The chance of breaking has been increased from 1% to 3%.
+  Bugfixes:
+    - On large maps, information about destroyed nests is updated too slowly. 
+      Added a forced check if no biters were found in the area where the nests are supposed to be
+    - If a squad of biters cannot find a path due to changes in the position of player objects, 
+      it will forcefully recalculate the pheromones in its own and neighboring areas.
+  Other:
+    - When the construction of a nest begins, a squad of settlers is excluded from the list of squads, which will allow to 
+      create new squads when the limit is reached
+    - Multiple changes to pheromone calculation algorithms and squad creation capabilities for ultra-long distances
+    - If a squad of biters cannot find a path due to changes in the position of player objects, 
+      it will forcefully recalculate the pheromones in its own and neighboring areas.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.10
+Date: 2024.07.15
+  Bugfixes:
+    - Now only nests and hives can drop powerups
+    - Fixed ingame changelog
+    - Fixed missing en, ru locale for fire clouds
+---------------------------------------------------------------------------------------------------
+Version: 1.9.9
+Date: 2024.06.30
+  Balancing:
+    - Slowed enemy base's tier increasing over time, if you play with end enemy level 6+
+    - Energy-thief and electric faction's: Electrical damage resistance increased (100 -> 150%)
+    - Acid faction poison and acid resistance increased (100 -> 150%)
+      This will force a more thoughtful approach to the placement of biological weapons and electric turrets
+---------------------------------------------------------------------------------------------------
+Version: 1.9.8
+Date: 2024.06.25
+  Bugfixes:
+    - Fixed missing En locale string for underground digging attempt to hard surfaces
+  Other:
+    - Setting "Safety: Make big electric poles safe from biters" makes safe any modded big poles too
+---------------------------------------------------------------------------------------------------
+Version: 1.9.7
+Date: 2024.05.16
+  Balancing:
+    - Regenerative faction now immune to poison. Added flat weakness to fire for worms and nests
+    - Energy-thief faction now immune to poison and electic damage. Also removed flag "not-flammable"
+    - Arachnid faction. Added minor resistance to electic damage. Arachnid eggs now immune to electic damage 
+    - Armored biters: overdamage protection increased from 2 to 3 hits
+    - Regenerative and Armored biters - level 6+ biters move faster
+    - Juggernaut biters: added electric resistance, minor laser weakness, flat laser weakness (-6 damage). Health increased by 1.5 times
+  Bugfixes:
+    - Fixed an error if your character died seconds before the combat powerup ended 	
+---------------------------------------------------------------------------------------------------
+Version: 1.9.6
+Date: 2024.05.08
+  Bugfixes:
+    - Fixed an error that occurred in SE if you enter satellite navigation mode while under the influence of a combat powerup 
+      and use the deconstruction plan
+---------------------------------------------------------------------------------------------------
+Version: 1.9.5
+Date: 2024.05.02
+  Balancing:
+    - Lootstone now cant be found on the map
+  Bugfixes:
+    - Fixed loading error with some mods, if sandstone autoplace settings is nil
+---------------------------------------------------------------------------------------------------
+Version: 1.9.4
+Date: 2024.05.02
+  Bugfixes:
+    - Fixed unplanned lootstone autoplacing. There is a small chance of spawning on the map now
+---------------------------------------------------------------------------------------------------
+Version: 1.9.3
+Date: 2024.05.01
+  Bugfixes:
+    - Fixed an error occurs if biters  attacked by a character who is not attached to the player
+---------------------------------------------------------------------------------------------------
+Version: 1.9.2
+Date: 2024.04.30
+  Bugfixes:
+    - Fixed an error occurs if Rampant's enemies are disabled
+  Other:
+    - Now, when initially replacing worms and nests, their type is preserved
+---------------------------------------------------------------------------------------------------
+Version: 1.9.1
+Date: 2024.04.26
+  Features:
+    - The enemy base's tier increases over time, but not above third. At the beginning of the 4th hour, 
+      the biters will have access to factions of the third tier, regardless of evolution
+  Balancing:
+    - The level of the building now depends on the evolution, and not on the level of the biter base
+      The mutation now increases the level of the building to the corresponding evolution
+    - Tier 2-4 suicide biters damage increased. Now they can damage power armor and armor mk2 
+  Bugfixes:
+    - Fixed an error when a player's powerup ended.
+    - Fixed excessive level reduction for worms and nests. Their level will increase faster with evolution.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.0
+Date: 2024.04.23
+  Features:
+    - Added powerups. They drop from nests when they are directly destroyed by the player. 
+      Designed for a more comfortable game for those who prefer to fight in person
+    - Hard surface (running speed 150%+) delays the process of digging underground attacks 
+      and notifies player of an attempt to pass if in the radar coverage area
+  Balancing:
+    - Nuclear biters turn into suicide biters in underground attack 
+    - Suicide faction damage is divided into several parts, as a result of which armor with good resistance 
+      reduces it much more effectively. High level explosion radius reduced (~30%)
+    - Option "Safety; Increase ... wall resistance" now increases explosion resistance by 30 instead of 40
+    - Wasp worm projectile speed reduced by 4 times. Wasp worm drone range reduced 10->3.3). 
+      This will give a chance of victory against them if long-range weapons are not yet unlocked, 
+      although they are still extremely dangerous
+    - Laser and armored factions: flat fire resistance increased by 5 (laser and armored factions)
+    - Laser spitters range increased by 2. Laser biters now require 2 times less pollution
+    - The limit of nests in a chunk during Growth has been increased. Increased the number of biter bases growing simultaneously
+    - The second, after the start of the game, AI mode will be "siege" if it is allowed
+  Bugfixes:
+    - Added interval between giving orders to squads. Now one order will not precede another if the squad did not manage 
+      to start it immediately, if there are few squads
+    - Fixed: Now the biter does not die when dug out of the ground if it is one of this type
+    - Now the underground attack after digout will attack all the player’s buildings, and not just military ones 
+      and those blocking the passage
+    - Fixed incorrect assessment of tile passability if water may contain ore deposits 
+      (underground attacks and landfill upon death)
+    - Fixed only 1st biter base can grow in "growing" state
+    - Fixed missing creep for growed nests and worms
+  Other:
+    - Corrected the description of the "allow other enemies" setting. 
+      Now it takes into account the possibility of leaving the nests of other mods when replacing them with Rampant nests
+---------------------------------------------------------------------------------------------------
+Version: 1.8.4
+Date: 2024.03.20
+  Bugfixes:
+    - Fixed an error that occurred if Rampant factions are disabled and biters/nests are destroyed from long-range (90+) energy weapons 
+---------------------------------------------------------------------------------------------------
 Version: 1.8.3
 Date: 2024.02.28
   Bugfixes:
     - Fixed an error that occurred when force created and deleted before game started (ArachnidsFaction + Arachnids_enemy mods)
     - Fixed ignoring diplomacy changes after creating a force
-  Other:		
+  Other:
     - Setting "Remote interface: allow external control AI" marked as obsolete. External control is always allowed
 ---------------------------------------------------------------------------------------------------
 Version: 1.8.2
 Date: 2024.01.01
   Bugfixes:
     - Fixed an error that occurred when the list of growing biter bases no longer contained a previously processed base
-  Other:		
+  Other:
     - New setting "Optimization: rebalance of stationary flamethrowers". 
       Reduces attack speed while maintaining overall damage. 
       In fact, flamethrowers become slightly stronger.
@@ -38,7 +430,7 @@ Date: 2023.12.27
   Compatibility:
     - Now "Combat Mechanics Overhaul" can`t change (and broke) "Rampant Fixed" objects. Added this mod to dependency list
       If this mod exists, objects are re-generated in the “data-final-fixes” phase, with changes in loot being saved
-  Other:	
+  Other:
     - Starting peace period max value now 1200 minutes
     - Now only 80% of non-vanilla nests are replaced when the "allow other enemies" setting is disabled. 
       This will allow you to occasionally encounter enemies of other mods if the player forgot to allow them
@@ -72,7 +464,7 @@ Date: 2023.08.25
       Fixed a game crash on biter mass death (now biters no longer try to escape)
       Fixed a rare game crash on compressed biter death
       Fixed a rare game crash when a squad tries to go underground under artillery fire
- ---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 1.7.2
 Date: 2023.08.07
   Balancing:
@@ -114,7 +506,7 @@ Date: 2023.05.15
   Bugfixes:
     - Fixed - compressed biters not in any group were not decompressed on death
   Other:
-    - Collateral damage from the stream attacks, such as fire generated and damage over time, is now shown in tooltips	
+    - Collateral damage from the stream attacks, such as fire generated and damage over time, is now shown in tooltips
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.4
 Date: 2023.04.23
@@ -137,8 +529,8 @@ Date: 2023.04.17
     - Fixed missing Bob Enemies artifacts
     - Fixed error when unburrow, if an underground attack containing a disabled faction
     - Now, nocturnal biters always start the night with a siege
-     (The AI state change time is updated if it has expired. As a result, nocturnal biters do not change AI status immediately after 
-     night falls)
+      (The AI state change time is updated if it has expired. As a result, nocturnal biters do not change AI status immediately after 
+      night falls)
   Compatibility:
     - Alien-module, Armoured biters, Bob Enemies, Rampant aresnal, Shall Alien Loot added as optional mods. 
   Other:
@@ -401,8 +793,8 @@ Date: 2022.09.07
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 2022.08.26
-  Bugfixes
-    - fixed loading error, if gate/wall explosion resitance exist, but decrease value is nill
+  Bugfixes:
+    - Fixed loading error, if gate/wall explosion resitance exist, but decrease value is nill
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.6
 Date: 2022.08.26
@@ -520,15 +912,15 @@ Date: 2022.07.05
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.17
 Date: 2022.06.01
-  Bugfixes:	
+  Bugfixes:
     - Hand flamethrowers sticker applied on immune enemies now also does not cause massive forest fires.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.16
 Date: 2022.05.31
-  New:	
+  New:
     - AI: casualties and causing losses are included in the defense assessment and can change the line of attacks
     - AI: during the attack, the death check at the next point of the route was removed. Now biters are not afraid to attack after heavy losses without result. Even if the assessment of protection led them to the place of mass death, they will continue the attack instead of switching to patrolling
-  Bugfixes:	
+  Bugfixes:
     - AI: during mass attacks on a small area of defense, squads do not block each other's path, which previously forced them to switch to patrolling instead of attacking (the number of these squads could exceed the maximum allowed number of squads, which disabled the creation of new attacks)
   Balancing:
     - "AI: Action points scaling" setting now also increases the base number of squads in aggressive mode. This will allow the AI to spend points evenly 
@@ -543,7 +935,7 @@ Date: 2022.05.29
     - The stickers applied by biters now cant spread fire
     - New setting "Optimization: fire safety of hand flamethrowers". True as default. Hand flamethrowers do not cause massive forest fire
   Bugfixes:
-    - Fixed a bug when fire spitters attacks did not apply sticker DOT on the player  
+    - Fixed a bug when fire spitters attacks did not apply sticker DOT on the player
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.14
 Date: 2022.05.17
@@ -554,27 +946,26 @@ Date: 2022.05.17
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.13
 Date: 2022.05.14
-Date:
   New:
-    - Energy-chief worms now have electic beam attack (and makes energy-drain pylons if electic objects destroyed)  
+    - Energy-chief worms now have electic beam attack (and makes energy-drain pylons if electic objects destroyed)
     - Fire biters: added dungerous small fire cloud on death
   Balancing:
     - Cluster attacks (laser worms and spitters, electric worms) now makes more beams
   Misc:
     - "Range-immunity efficiency" default value now is 98%
     - "World: Allow other enemies" setting now disabled as default
-  Bugfixes:	
+  Bugfixes:
     - Fire worms and spitter attacks moved from "flamethrower" to "biological" category and does not shown at bonus table
     - Fixed typo in "Oneshot protection efficiency" and "Range-immunity efficiency" description (En localisation)
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.12
 Date: 2022.05.12
-  Bugfixes:	
+  Bugfixes:
     - When combining long-range and short-range damage, long-range damage no longer heals a biters with immunity from long-range damage
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.11
 Date: 2022.04.28
-  New:	
+  New:
     - AI takes into account the presence of defense when choosing an attack path
     - New settings: "Oneshot protection efficiency" and "Range-immunity efficiency". 100% as default
   Bugfixes:
@@ -588,7 +979,7 @@ Date: 2022.04.17
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.9
 Date: 2022.04.11
-  New:	
+  New:
     - A mixed settlement of rampant and other enemies is available (see startup settings). Only in the new game. Set as default if the mod is installed for the first time
   Balancing:
     - Killing of bitters from a distance of 90 and more is equated to Artillery
@@ -606,7 +997,7 @@ Date: 2022.02.24
   Balancing:
     - Resistance to unregistered damage types limited to 70% (90% before)
     - Destruction of nests by artillery now give 20% additional action points (50% before)
-    - Destruction of nests by artillery increases the overall difficulty not so much (the effect is about 1.5 times weaker) 
+    - Destruction of nests by artillery increases the overall difficulty not so much (the effect is about 1.5 times weaker)
     - Juggernaut biters acid resistance reduced to Minor
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.7
@@ -614,7 +1005,7 @@ Date: 2022.02.23
   Compatibility:
     - Added check for unknown moded damage types. Resistance for this types is (biter level-1)*10%
   Balancing:
-    - End-game: large retribution counter values remove restrictions on 2 sieges/onslaught in a row 
+    - End-game: large retribution counter values remove restrictions on 2 sieges/onslaught in a row
     - Wasp: doubled drone speed and lifetime
     - Fixed a lack of AI action points on heavily cleaned maps in late game after 1.1.6
     - Now some of the factions are aimed at countering acid damage:
@@ -627,7 +1018,7 @@ Date: 2022.02.23
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 2022.02.06
-  New:	
+  New:
     - New setting: AI Difficulty. "Hard" (as default, AI work same as before 1.1.6), "Lite" - for a more comfortable game (mid-game and later). The response to the player's actions is weaker, attacks are less frequent
   Balancing:
     - 6, 7, 8, 9 enemy levels appear later (6th level - much later, at 65%). The maximum probability of spawning remained at the same levels of evolution
@@ -636,11 +1027,11 @@ Date: 2022.02.06
     - Significantly increased fire worm damage
     - AI: Nocturnal Mode: if the AI finds that there are not enough nests, then the night is guaranteed to start with a siege mode. Also, 2 or more sieges in a row allowed in Nocturnal Mode
     - Siege can't occure 1st hour of game
-    - Setting "Safety; Increase wall resistance to spitters" now also set wall resistance to poison	to 75%
+    - Setting "Safety; Increase wall resistance to spitters" now also set wall resistance to poison to 75%
   Compatibility:
     - Added Shall Alien Loot artifacts drop
   Performance:
-    - Spawn corpses now have fade time 3 sec	
+    - Spawn corpses now have fade time 3 sec
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2022.01.27
@@ -660,7 +1051,7 @@ Date: 2022.01.26
     - Fixed 0% settlements probability in siege/migration mode after 1.1.0 .
     - Fixed crush when deleting SE surface (if there is theoretically possible the presence of biters)
     - Map suspending: checking surfaces with nests for "cleanness from biters" now checks all surfaces, not just the first one in the array. This does not affect the performance of the mod as a whole. However, because of this bug, there is no expected performance gain in games with many defeated worlds
----------------------------------------------------------------------------------------------------	
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2022.01.23
   Bugfixes:
@@ -699,7 +1090,7 @@ Date: 2022.01.21
     - Long range immunity now can be disabled in mod settings   
     - Oneshot protection now can be disabled in mod settings
     - Update locales
----------------------------------------------------------------------------------------------------   
+---------------------------------------------------------------------------------------------------
 Version: 1.0.19
 Date: 2022.01.06
   Bugfixes:
@@ -707,32 +1098,32 @@ Date: 2022.01.06
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.18
 Date: 2022.01.06
-  New:	
+  New:
     - Added death chance to overpopulated area (to hives/nests/worms)
   Performance:
     - Queuing mass mutations to reduce lags
     - Queuing nest processing to reduce lags
   Bugfixes:
     - fixed incorrect description of the nests resistances (nests havnt oneshot protection and long range immunity)
-----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 1.0.17
 Date: 2021.12.20
   Balancing:
-    - Level 8 bitters evo now: 0.74 - 0.98 (before: 0.74 - 0.975) 
-    - Level 9 bitters evo now: 0.82 - 0.99 (before: 0.82 - 0.975) 
+    - Level 8 bitters evo now: 0.74 - 0.98 (before: 0.74 - 0.975)
+    - Level 9 bitters evo now: 0.82 - 0.99 (before: 0.82 - 0.975)
   Bugfixes:
     - fixed crash when disabling a faction at the time of building a new enemy base
-----------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 Version: 1.0.16
 Date: 2021.12.15
-  Balancing:	
+  Balancing:
     - Hives now spawn only its own level and faction objects
     - The hive spawning interval has been significantly increased
   Performance:
-    - Neutral death events that aren't cliffs are no longer processed (Veden, Rampant 2.0)	
+    - Neutral death events that aren't cliffs are no longer processed (Veden, Rampant 2.0)
   Bugfixes:
     - Chunk processing now will create enemy base when found unregistered nest
-    - Fixed frequent hive switching between factions 
+    - Fixed frequent hive switching between factions
     - Fixed desynchronization when connecting to a server from a windows client (~1+ hours of play)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.15
@@ -751,17 +1142,17 @@ Date: 2021.12.07
     - fixed player processing bug (ignored surface)
     - fixed crash when destroying nests with modded multiple-source damage weapons (example: True-Nukes mod)
     - now disabling a faction allows you to continue the game in which it was. But, although, there is no more error, it is still not recommended: these nests will be deleted
----------------------------------------------------------------------------------------------------	
+---------------------------------------------------------------------------------------------------
 Version: 1.0.13
 Date: 2021.12.03
-  New:	
-    - New high tier faction(tier 9, 85% evo) : Juggernaut. Slowly, big biters with extreme physical and fire resists. Cloud atack, healing allies and harming enemies. This is a dps-check of your laser defence 
+  New:
+    - New high tier faction(tier 9, 85% evo) : Juggernaut. Slowly, big biters with extreme physical and fire resists. Cloud atack, healing allies and harming enemies. This is a dps-check of your laser defence
   Balancing:
     - increased tier by 1: fire faction now tier 4, inferno - tier 6
     - suicide (only suicide, not nuclear!) bitters don't have friendly fire anymore (before: always). Don't worry, they're still useless...
     - no more resists RND. 
     - global buff - the percentage of vulnerability is now the same for all levels (50% minor (35-60), 100% major (65 - 90)). Non-percent vulnerability are set to 0 (3-10 and 7-13 before). It will be of practical importance for the Trolls (vulnerability to fire) and Fire, Poison, Physical (weakness to laser) factions. 
-  Misc:	
+  Misc:
     - Optimization: no collision box for spawns	
     - Optimization+rebalance: fire spitters, large waves caused a drop in performance due to the appearance of many fire zones. Now, significantly (5 times) reduced the attack speed of fire spitters. Increased direct hit damage (x1.5). The duration of the fire zone has been reduced (10 sec now, 30 sec before). The damage during a long attacks decreased, but in short battles they have become more dangerous.
     - misc: Factions sorted by tier. Update locales (ru, en)
@@ -777,17 +1168,17 @@ Date: 2021.12.03
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.12
 Date: 2021.11.27
-  Compatibility:	
+  Compatibility:
     - added health to invisible entities, for 5dimm compatibility
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.11
 Date: 2021.11.27
-  Compatibility:	
+  Compatibility:
     - Added support for other enemies. To do this, enable the "allow other enemies" parameter. Enemies with their own AI (example: enemy race manager) are not supported - their work may be incorrect.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: 2021.11.26
-  Misc:	
+  Misc:
     - Localization: en - the names of units and buildings has been shortened (t1 Larva --> Lvl 1)
   Bugfixes:
     - fixed: An error in setting a plasma resist. if it is not b&a.
@@ -804,7 +1195,7 @@ Date: 2021.11.23
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6 
 Date: 2021.11.23
-  Misc:	
+  Misc:
     - Release
     - Improves the enemies tactics: no pollution required, rebalance, bugfixes
 ---------------------------------------------------------------------------------------------------
@@ -839,4 +1230,3 @@ Version: 1.0.2
 Version: 1.0.1
   New:
     - Add base genome, mutations mechanic
----------------------------------------------------------------------------------------------------

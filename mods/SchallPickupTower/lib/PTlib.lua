@@ -16,6 +16,8 @@ end
 
 
 local metric_prefix = {
+  { value = 10^30,  strformat = "%.1f", div1 = 10^29, div2 = 10,  symbol = {"si-prefix-symbol-quetta"} },
+  { value = 10^27,  strformat = "%.1f", div1 = 10^26, div2 = 10,  symbol = {"si-prefix-symbol-ronna"} },
   { value = 10^24,  strformat = "%.1f", div1 = 10^23, div2 = 10,  symbol = {"si-prefix-symbol-yotta"} },
   { value = 10^21,  strformat = "%.1f", div1 = 10^20, div2 = 10,  symbol = {"si-prefix-symbol-zetta"} },
   { value = 10^18,  strformat = "%.1f", div1 = 10^17, div2 = 10,  symbol = {"si-prefix-symbol-exa"} },
@@ -64,6 +66,66 @@ function PTlib.box_area(centre, radius)
   }
 end
 
+function PTlib.counts_add(t, k, amtadd, processzero)
+  if processzero or amtadd > 0 then
+    t[k] = (t[k] or 0) + amtadd
+  end
+end
+
+function PTlib.contain_negative(t, k)
+  return t[k] and t[k] < 0
+end
+
+
+function PTlib.counts_2D_add(t, k1, k2, amtadd, processzero)
+  if not t[k1] then t[k1] = {} end
+  if processzero or amtadd > 0 then
+    t[k1][k2] = (t[k1][k2] or 0) + amtadd
+  end
+end
+
+function PTlib.compare_value_desc(a, b)
+  return a.value > b.value
+end
+
+function PTlib.compare_value_asc(a, b)
+  return a.value < b.value
+end
+
+function PTlib.pairs_sorted(t, f)
+  local a = {}
+  for k, v in pairs(t) do
+    table.insert(a, { key = k, value = v })
+  end
+  table.sort(a, f)
+  local i = 0      -- iterator variable
+  local iter = function ()   -- iterator function
+    i = i + 1
+    if a[i] == nil then return nil
+    else return a[i].key, a[i].value
+    end
+  end
+  return iter
+end
+
+function PTlib.pairs_2D_sorted(t, f)
+  local a = {}
+  for k1, v1 in pairs(t) do
+    for k2, v in pairs(v1) do
+      table.insert(a, { key1 = k1, key2 = k2, value = v })
+    end
+  end
+  table.sort(a, f)
+  local i = 0      -- iterator variable
+  local iter = function ()   -- iterator function
+    i = i + 1
+    if a[i] == nil then return nil
+    else return {a[i].key1, a[i].key2, a[i].value}
+    end
+  end
+  return iter
+end
+
 
 PTlib.PT_icon_layer = {icon = "__SchallPickupTower__/graphics/icons/pickup-tower.png", icon_size = 128, icon_mipmaps = 3}
 PTlib.PT_tech_icon_layer = {icon = "__SchallPickupTower__/graphics/technology/pickup-tower.png", icon_size = 256, icon_mipmaps = 4}
@@ -81,20 +143,63 @@ end
 
 function PTlib.PT_localised_description(range, interval, energy_usage, desc)
   desc = desc or "entity-description.Schall-pickup-tower"
-  return { "", {desc}, {"description.Schall-pickup-range", range}, {"description.Schall-pickup-interval", interval, {"description.Schall-si-unit-symbol-second"}}, {"description.Schall-energy-consumption", PTlib.format_number_eng(energy_usage, {"si-unit-symbol-watt"})} }
+  return { "",
+    {desc}, {"description.Schall-pickup-range", tostring(range)},
+    {"description.Schall-pickup-interval", {"time-symbol-seconds", tostring(interval)}},
+    {"description.Schall-energy-consumption", PTlib.format_number_eng(energy_usage, {"si-unit-symbol-watt"})}
+  }
 end
 
-function PTlib.create_flying_text_item(surface, position, itempt, amountadd, source)
+
+function PTlib.text_quality_or_normal(quality)
+  -- Output "normal" for normal, or "quality" for <> normal
+  if quality == "normal" then
+    return quality
+  else
+    return "quality"
+  end
+end
+
+function PTlib.richtext_item(name, quality)
+  if script.active_mods["quality"] then
+    return "[item="..name..",quality="..quality.."]"
+  else
+    return "[item="..name.."]"
+  end
+end
+
+function PTlib.create_flying_text_item_force(surface, position, itempt, quality, amountadd, inv, force)
   local sign = ""
-  local counts = source.get_item_count(itempt.name)
+  -- local inv = source.get_main_inventory()
+  if not inv then return end
+  local counts = inv.get_item_count({name = itempt.name, quality = quality})
+  -- local counts = player.get_item_count(itempt.name)
   local text
   if amountadd > 0 then
     sign = "+"
   end
+  local chgtext = sign .. tostring(amountadd)
   if counts == 0 then
     color = {r=1, g=0.14, b=0}
+  else
+    color = nil
   end
-  surface.create_entity{ name = "flying-text", position = position, color = color, text = {"description.Schall-flying-text-item", itempt.localised_name, sign, amountadd, counts} }
+  local localetext = "show-diff-"..PTlib.text_quality_or_normal(quality)
+  local itemRT = PTlib.richtext_item(itempt.name, quality)
+  local qualityLOC = prototypes.quality[quality].localised_name
+  for _, player in pairs(force.connected_players) do 
+    player.create_local_flying_text{position = position, color = color, text = {localetext, chgtext, itemRT, counts, itempt.localised_name, qualityLOC}, speed = 10 }
+  end
+end
+
+function PTlib.filter_allow(unlimitedmode, t, k)
+  return unlimitedmode or PTlib.contain_negative(t, k)
+end
+
+function PTlib.filter_update(unlimitedmode, t, k, chg)
+  if not unlimitedmode then
+    PTlib.counts_add(t, k, chg)
+  end
 end
 
 

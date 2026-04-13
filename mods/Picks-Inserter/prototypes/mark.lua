@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2023 Picklock
+--[[ Copyright (c) 2019 - 2026 Picklock
  * Part of Picklocks Inserter
  * mark.lua
- * Version 1.110.5.53
+ * Version 2.1.4.62
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -20,7 +20,7 @@ local myMark = {
     minable = nil,
     collision_box = nil,
     selection_box = nil,
-    collision_mask = {},
+    collision_mask = {layers ={}}, -- ab V2.0
     render_layer = "explosion",
     vehicle_impact_sound = nil,
     pictures =

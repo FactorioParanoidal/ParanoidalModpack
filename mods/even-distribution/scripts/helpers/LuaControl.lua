@@ -4,6 +4,54 @@ local _ = scripts.helpers.on
 
 -- Helper functions for LuaControl --
 
+function control:request(item) -- fetch specific item request
+	local count = 0
+	local logisticPoint = _(self:requesterPoint())
+    
+    if logisticPoint:is("valid") then
+        local filters = logisticPoint.filters
+
+        if filters then
+            _(filters):each(function(__, filter)
+                if filter and filter.name == item and filter.count > count and (filter.quality == nil or filter.quality == "normal") then 
+                    count = math.max(count, filter.count)
+                end
+            end)
+        end
+    end
+	
+	return count
+end
+
+function control:requesterPoint()
+    if self.is_player() and _(self.character):is("valid") then
+        return self.character.get_requester_point()
+    elseif self.is_player() and _(self.cutscene_character):is("valid") then
+        return self.cutscene_character.get_requester_point()
+    else
+        return self.get_requester_point()
+    end
+end
+
+function control:logisticSlots() -- fetch all requests as a dict[name -> CompiledLogisticFilter]
+	local logisticSlots = {}
+	local logisticPoint = _(self:requesterPoint())
+
+    if logisticPoint:is("valid") then
+        local filters = logisticPoint.filters
+
+        if filters then
+            _(filters):each(function(__, filter)
+                if filter and filter.name and (filter.quality == nil or filter.quality == "normal") then
+                    logisticSlots[filter.name] = filter
+                end
+            end)
+        end
+    end
+	
+	return logisticSlots
+end
+
 function control:itemcount(...)
     if self.is_player() then 
         return self:playeritemcount(...) 
@@ -12,24 +60,8 @@ function control:itemcount(...)
     end
 end
 
-function control:requests(...)
-    if self.is_player() then 
-        return _(self.character):entityrequests(...) 
-    else
-        return self:entityrequests(...) 
-    end
-end
-
-function control:request(...)
-    if self.is_player() then 
-        return _(self.character):entityrequest(...) 
-    else
-        return self:entityrequest(...) 
-    end
-end
-
 function control:remainingRequest(item)
-	return self:request(item) - self.get_item_count(item)
+	return self:request(item) - self:itemcount(item)
 end
 
 function control:inventory(name)
@@ -81,7 +113,15 @@ function control:contents(name)
 
     local inv = self:inventory(name)
     if _(inv):isnot("valid") then return {} end
-    return inv.get_contents()
+
+    local contents = inv.get_contents()
+    local contents_converted = {}
+    for __, content in pairs(contents) do
+        if content.quality == "normal" then
+            contents_converted[content.name] = content.count
+        end
+    end
+    return contents_converted
 end
 
 local function insert(self, name, item, amount)
@@ -103,7 +143,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
     if amount <= 0 then return 0 end
 
     local inserted = 0
-    local prototype = _(game.item_prototypes[item])
+    local prototype = _(prototypes.item[item])
 
     -- allow/disallow insertion into specific inventories by passing table with true/false values (default is allow)
     allowed = _({
@@ -126,7 +166,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
 
             -- no space left --> replace inferior items
             if replaceItems and limit > 0 then
-                for __,inferiorFuel in pairs(global.fuelList[prototype.fuel_category]) do
+                for __,inferiorFuel in pairs(storage.fuelList[prototype.fuel_category]) do
                     if inferiorFuel.name == prototype.name or limit <= 0 then break end
 
                     local returnToPlayer = 0
@@ -164,7 +204,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
 
             -- no space left --> replace inferior items
             if replaceItems and limit > 0 then
-                for __,inferiorAmmo in pairs(global.ammoList[prototype.get_ammo_type().category]) do
+                for __,inferiorAmmo in pairs(storage.ammoList[prototype.ammo_category.name]) do
                     if inferiorAmmo.name == prototype.name or limit <= 0 then break end
 
                     local returnToPlayer = 0

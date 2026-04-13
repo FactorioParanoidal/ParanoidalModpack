@@ -1,0 +1,51 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2026-01-25
+  Bugfixes:
+    - Fixed modifying collision of things that only collide with tiles
+    - Fixed unnecessarily modifying map collision box
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2026-01-07
+  Bugfixes:
+    - Fixed missing selector combinator in circuit setting
+  Compatibility:
+    - Removed old Industrial Revolution 3 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed not removing collision with next_upgrade of entities
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2024-10-24
+  Bugfixes:
+    - Fixed use remove collision lists setting erroring on startup
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2024-10-16
+  Features:
+    - Updated to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2024-07-27
+  Bugfixes:
+    - Fixed remove collision settings not working correctly
+    - Fixed prototype squeak_behaviour not working correctly
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2024-06-13
+  Locale:
+    - Added Spanish translation (Wylli)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2024-04-02
+  Bugfixes:
+    - Fixed startup error when both Krastorio 2 and Cargo Ships are enabled
+  Locale:
+    - Added Russian translation (Shadow_Man)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2024-03-28
+  Features:
+    - Initial release

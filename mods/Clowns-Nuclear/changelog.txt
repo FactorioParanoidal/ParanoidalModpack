@@ -1,4 +1,64 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.08
+Date: 2026-02-07
+  Bugfixes:
+    - Fixed crash with Bob's mods
+---------------------------------------------------------------------------------------------------
+Version: 2.0.07
+Date: 2026-02-04
+  Bugfixes:
+    - Error with equipment in nuke recipe
+    - Recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.06
+Date: 2026-01-10
+  Features:
+    - small tweaks for bobs and angels compat
+  Bugfixes:
+    - Recipe & Tech Tree fixes/updates
+---------------------------------------------------------------------------------------------------
+Version: 2.0.05
+Date: 2025-06-15
+  Bugfixes:
+    - Error with equipment in nuke recipe
+---------------------------------------------------------------------------------------------------
+Version: 2.0.04
+Date: 2025-04-27
+  Features:
+    - Updated bobmods compatability
+    - Re-added icons to artillery
+---------------------------------------------------------------------------------------------------
+Version: 2.0.03
+Date: 2025-03-23
+  Bugfixes:
+    - Fixed that nukes could be launched from guns only
+    - Fixed issues with nuclear artillery
+---------------------------------------------------------------------------------------------------
+Version: 2.0.02
+Date: 2025-01-02
+  Bugfixes:
+    - Fixed missing localisation updates 
+---------------------------------------------------------------------------------------------------
+Version: 2.0.01
+Date: 2025-01-02
+  Features:
+    - Now works with 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.3.19
+Date: 2023-11-12
+  Features:
+    - Nerf vanillas uranium processing
+---------------------------------------------------------------------------------------------------
+Version: 1.3.18
+Date: 2023-05-07
+  Features:
+    - Re-activated IR compatibility due to mod name change
+---------------------------------------------------------------------------------------------------
+Version: 1.3.17
+Date: 2023-04-16
+  Bugfixes:
+    - Fixed missing category
+---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 2021-08-10
   Bugfixes:
@@ -85,7 +145,7 @@ Version: 1.2.0
     - All AngelBob material moved to Clowns-AngelBob-Nuclear
     - Added German locale (Thanks to Steino)
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.3
+Version: 1.1.4
   Bugfixes:
     - Bug fixes.
 ---------------------------------------------------------------------------------------------------

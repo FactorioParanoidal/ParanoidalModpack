@@ -1,0 +1,178 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.32
+Date: 27.01.2026
+  Bug Fixes:
+    - Add missing seed ingredient to the sapling recipe
+    - Fix modules for farm and nursery
+    - Fix compatibility with Angel's mods
+---------------------------------------------------------------------------------------------------
+Version: 2.0.31
+Date: 10.12.2025
+  Changes:
+    - Gardens have reduced crafting speed with quality
+---------------------------------------------------------------------------------------------------
+Version: 2.0.30
+Date: 05.11.2025
+  Bug Fixes:
+    - Fix icon scales
+---------------------------------------------------------------------------------------------------
+Version: 2.0.29
+Date: 02.11.2025
+  Bug Fixes:
+    - Remove settings check for wooden rails
+---------------------------------------------------------------------------------------------------
+Version: 2.0.28
+Date: 01.11.2025
+  Changes:
+    - Add wooden rails again (thanks MAGGen)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.27
+Date: 21.10.2025
+  Changes:
+    - Brazilian translation improvements (thanks Slondo)
+    - Upscaled graphics of the huge wooden power poles
+---------------------------------------------------------------------------------------------------
+Version: 2.0.26
+Date: 21.10.2025
+  Changes:
+    - Add Brazilian translations (thanks Slondo)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.25
+Date: 18.10.2025
+  Bug Fixes:
+    - More mod compatibility fixes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.24
+Date: 18.10.2025
+  Bug Fixes:
+    - Krastorio2: Compatibility fixes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.23
+Date: 17.10.2025
+  Bug Fixes:
+    - Fixed crash when placing bio gardens
+    - Match bio garden pollution reduction by the amount of trees equivalent the description states
+    - Correct typo in internal recipe name to fix the localisation
+---------------------------------------------------------------------------------------------------
+Version: 2.0.22
+Date: 16.10.2025
+  Bug Fixes:
+    - Krastorio2: Compatibility fixes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.21
+Date: 11.10.2025
+  Bug Fixes:
+    - Krastorio2: Compatibility fixes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.20
+Date: 12.09.2025
+  Changes:
+    - Code Clean up
+    - More Updates to Bob's Compatibility
+    - Added a few milestones
+---------------------------------------------------------------------------------------------------
+Version: 2.0.19
+Date: 11.09.2025
+  Bug Fixes:
+    - Fix Bio Reactor graphic shift when selecting a recipe with 3 fluid inputs.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.18
+Date: 10.09.2025
+  Bug Fixes:
+    - Fix crash with Krastorio 2 (Spaced Out)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.17
+Date: 10.09.2025
+  Changes:
+    - More Updates to Bob's Compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2.0.16
+Date: 09.09.2025
+  Bug Fixes:
+    - Fixed missing fertilizer icon, attempt 2
+---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 09.09.2025
+  Bug Fixes:
+    - Fixed missing icon "Bio_Industries_2/graphics/icons/fluid_advanced_fertilizer_recipe_64.png not found"
+---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 09.09.2025
+  Bug Fixes:
+    - Fixed missing 'liquid-air'  in not playing with Bob's
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 09.09.2025
+  Changes:
+    - Updated Rail to remove Decorative when placed
+    - Updated Bob's Compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 05.09.2025
+  Changes:
+    - Updated Wood Rail Graphic. No more ugly Tint. (Thanks Snouz!)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 04.09.2025
+  Bug Fixes:
+    - Fixed (I hope) Wood Rail
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 02.09.2025
+  Bug Fixes:
+    - Fix working visualisations for Bio Nursery
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 02.09.2025
+  Bug Fixes:
+    - Fix working visualisations for Bio Farm
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 31.08.2025
+  Bug Fixes:
+    - Fix icon path
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 31.08.2025
+  Bug Fixes:
+    - Fix file names
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 31.08.2025
+  Bug Fixes:
+    - Add missing subgroups (put icons in correct tab)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 31.08.2025
+  Bug Fixes:
+    - Fixed Wood Underground pipe graphic (TheSAguy)
+    - Fixed Prototype Artillery (TheSAguy)
+    - Fixed Dart Turret ammo (TheSAguy)
+  Changes:
+    - Updated Vanilla Rail Recipe (TheSAguy)
+    - Added Wooden Rail (TheSAguy)
+    - Updated some graphics (TheSAguy; BIG thanks to Snouz!)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 28.07.2025
+  Bug Fixes:
+    - Fix Bio Boiler
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 13.07.2025
+  Bug Fixes:
+    - Fix several entities
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 07.07.2025
+  Bug Fixes:
+    - Fix compatibility with Krastorio2
+  Changes:
+    - Add compatibility with Space Age
+    - Add compatibility with Krastorio2 Spaced Out
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 06.07.2025
+  Bug Fixes:
+    - Fix locales
+    - Fix Musk floor

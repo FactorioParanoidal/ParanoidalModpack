@@ -1,0 +1,8 @@
+{
+    "name": "train-loader",
+    "version": "0.9.1",
+    "title": "Modern Bulk Rail Loader",
+    "author": "Vyl",
+    "description": "Modern remake of Bulk Rail Loader, has bulk train loaders and bulk train unloaders, and automatic loader placement. Fully functional. Open a train stop to get started.",
+    "factorio_version": "2.0"
+}

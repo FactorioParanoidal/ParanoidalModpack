@@ -18,7 +18,7 @@ function GuiSprite:sprite(type, name)
   elseif name == nil then
     self.options.sprite = type
   else
-    self.options.sprite = string.format("%s/%s", type, name)
+    self.options.sprite = GuiElement.getSprite(type, name)
   end
   return self
 end

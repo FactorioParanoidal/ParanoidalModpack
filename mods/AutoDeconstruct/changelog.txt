@@ -1,0 +1,428 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2025-10-31
+  Changes:
+    - Updated translations from Crowdin.
+  Bugfixes:
+    - Fixed that deconstructing tiles would also destroy pipe ghosts. When pipe ghosts are placed, no tiles are deconstructed anymore.
+    - Fixed that wrong logistic network was used to determine available pipe types.
+    - Fixed that default pipe was not given preference when enough items were available.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2025-10-24
+  Bugfixes:
+    - Fixed that belts attached to looping splitters sometimes were not deconstructed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2025-10-22
+  Features:
+    - Belt deconstruction logic now removes loaders at the end of the empty belt.
+    - Added setting to deconstruct tiles under all removed entities (off by default).
+  Changes:
+    - Updated translations from Crowdin.
+    - Added support for mining drill area offset (new feature added in 2.0.68).
+    - Optimized search radius for targeting entities.
+  Bugfixes:
+    - Fixed that belts were deconstructed even though recyclers were targeting them.
+    - Fixed that belts were deconstructed even though ghost entities were targeting them.
+    - Fixed crash when attempting to connect pipes to a chemical plant with merged fluidboxes.
+    - Fixed that linked chests were not deconstructed like other chests.
+    - Fixed that chests were deconstructed even though a loader was targeting it.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2025-06-27
+  Changes:
+    - Updated translations from Crowdin.
+  Bugfixes:
+    - Fixed crash on on_configuration_changed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2025-06-19
+  Changes:
+    - Updated translations from Crowdin.
+    - Updated mining drill search radius based on quality bonus added in 2.0.57.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2025-06-03
+  Features:
+    - Added "ore blacklist" of ores to ignore when they are depleted.
+  Changes:
+    - Added "tiberium-ore" to the ore blacklist by default for compatibility with Factorio and Conquer: Tiberian Dawn.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2025-05-30
+  Features:
+    - Pipes type to build is now selected automatically based on collision mask, connection category, and logistic network inventory (non-mobile networks only).
+  Changes:
+    - Updated translations from Crowdin.
+    - Pipe type setting is now a priority list of pipes to use when none are available in logistics.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-11-12
+  Changes:
+    - Many updated translations from Crowdin.
+  Bugfixes:
+    - Fixed that mining drill search area was half what it should be.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024-10-16
+  Bugfixes:
+    - Fixed copy-paste error preventing some drills from being removed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-10-15
+  Bugfixes:
+    - Fixed Big Mining Drill not being deconstructed if last ore was at edge of mining range.
+    - Added missing locale string for mod setting.
+    - Removed remaining debug console messages.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-10-14
+  Features:
+    - Updated for Factorio 2.0.
+    - Added setting to preserve wire-connected belts.
+  Changes:
+    - Overhauled out-of-resources detection to use entity status field for better performance and reliability.
+    - Changed "debug" remote interface to console command.
+  Bugfixes:
+    - Fixed potential desync when using debug remote interface.
+    - Fixed that some belts were not deconstructed when side-loading.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 2024-08-25
+  Changes:
+    - Updated translations from Crowdin.
+  Bugfixes:
+    - Fixed error message when belt is destroyed/removed before it can be marked for deconstruction.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2024-08-17
+  Changes:
+    - Added minimum base version of 1.1.100 for API compatibility.
+  Bugfixes:
+    - Abort any ongoing belt deconstructions when belt setting is disabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2024-08-17
+  Changes:
+    - Updated translations from Crowdin.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2024-07-09
+  Bugfixes:
+    - Fixed errors when drills point at assemblers and other non-chest entities.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2024-07-07
+  Features:
+    - Added setting to also deconstruct unused beacons (enabled by default).
+    - Added setting to also deconstruct unused belts (DISabled by default).
+    - Belt deconstruction is greedy and will deconstruct belts up and downstream from the deconstructed drill if no item sources are found.
+    - Belt deconstruction tries to wait for the belts to naturally empty before deconstructing.  If items get stuck for more than 30 seconds, the belts will be deconstructed anyways.
+    - Belt deconstruction feature is *alpha* so make a backup before enabling the setting.  Please report any strange behavior or crashes!
+---------------------------------------------------------------------------------------------------
+Version: 0.3.16
+Date: 2024-07-04
+  Bugfixes:
+    - Fixed error when pipe ghosts aren't built fast enough.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.15
+Date: 2024-06-30
+  Changes:
+    - Updated Portugese translation thanks to LUISDASARTIMANHAS.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.14
+Date: 2024-06-30
+  Changes:
+    - Added setting to blacklist specific drill entities for mod compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.13
+Date: 2024-06-30
+  Changes:
+    - Updated many translations from crowdin and fixed typo
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+Date: 2023-11-16
+  Changes:
+    - Added setting to allow deconstructing miners with circuit wire connections (thanks to DHandspikerWade).
+    - Disabled automatic deconstruction behavior on sandbox surfaces created by Blueprint Sandboxes and The Blueprint Designer Lab mods.
+  Bugfixes:
+    - Fix error messages / not deconstructing miners on surfaces without a valid Space Exploration zone type.
+    - Fixed possible stale queue data when changing settings by deleting the queue and regenerating it.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+Date: 2023-11-12
+  Bugfixes:
+    - Actually fix the multiplayer error this time. (Properly disable on_nth_tick event when queue is empty.)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 2023-11-10
+  Bugfixes:
+    - Added event subscription to on_load.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 2023-10-04
+  Bugfixes:
+    - Fixed that one ore was stuck in each miner when deconstructed, at least most of the time.
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2023-06-21
+  Bugfixes:
+    - Fixed compatibility with Contruction Continued for ghost pipe creation. (Thanks to ComradeEcho)
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 2023-02-20
+  Bugfixes:
+    - Fixed error message printed when building pipe ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 2023-02-19
+  Features:
+    - New setting to disable the inserter chain check. Useful for mods that add burnt fuel results like Pyanodon's mods.
+  Changes:
+    - Updated translations from crowdin (Hungarian, Norwegian, Chinese)
+  Bugfixes:
+    - Ghost pipes are now built toward existing ghost pipes and underground pipes.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 2022-12-30
+  Changes:
+    - Updated translations from crowdin (Polish and Portugese)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 2022-09-30
+  Changes:
+    - Updated translations from crowdin (Portugese)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2022-07-04
+  Bugfixes:
+    - Fixed that miners would be instantly deconstructed in editor mode by removing player attributions from mod-generated commands. (Thanks to Raiguard for figuring it out)
+    - This fixes compatibility with Editor Extensions "testing lab" and other mods that use editor mode.
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2022-04-17
+  Bugfixes:
+    - Fixed out-of-memory error when used with even-width fluid miners, like Bob's Steam Powered Miner.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2022-03-16
+  Compatibility:
+    - Added mod settings to customize what pipe is used when replacing miners (i.e. kr-steel-pipe).
+  Bugfixes:
+    - Fixed crashes when Editor Extensions "instant deconstruction" is enabled.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2021-11-21
+  New:
+    - Added support for drills with multiple resource types (robot256)
+  Compatibility:
+    - Improved multi-surface compatibility (Nicolas Lang)
+  Bugfixes:
+    - Removed empty fluid miners when setting changes (robot256)
+    - Fixed chests being deconstructed while still in use (robot256)
+    - Fixed a potential crash if an inserter is nearby the chest but not targeting the chest (robot256)
+    - Improved handling of invalid surfaces (Nicolas Lang)
+  Optimizations:
+    - Improved UPS by using on_event filters (robot256)
+    - Moved max_radius calculation to init_globals (robot256)
+  Changes:
+    - Refactored pipe building (Nicolas Lang)
+    - Only build pipes if a miner has more than one connection (robot256)
+    - Deconstruct inserters feeding fuel to burner inserters (robot256)
+    - Only build pipes to connections that are in use (robot256)
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2021-07-01
+  Compatibility:
+    - Improved compatibility with Space-Exploration (Nicolas Lang)
+  Bugfixes:
+    - Fixed error when drill was missing last_user attibute (Nicolas Lang)
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2021-06-04
+  New:
+    - Handle drills that are using fluids, by replacing them with pipes (Nicolas Lang)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.22
+Date: 2021-05-09
+  Bugfixes:
+    - Avoid errors if drills are instantly removed upon deconstruction (DeHackEd)
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.1.21
+Date: 2020-12-02
+  Compatibility:
+    - Updated Factorio version to 1.1 (almightyju)
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.1.20
+Date: 2020-08-16
+  Compatibility:
+    - Updated Factorio version to 1.0
+  Changes:
+    - Updated translations from crowdin
+---------------------------------------------------------------------------------------------------
+Version: 0.1.19
+Date: 2020-06-13
+  Changes:
+    - French and Ukrainian translations added
+---------------------------------------------------------------------------------------------------
+Version: 0.1.18
+Date: 2020-05-09
+  Changes:
+    - Catalan translation added (metalbass)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.17
+Date: 2020-03-23
+  Bugfixes:
+    - More missing locals
+---------------------------------------------------------------------------------------------------
+Version: 0.1.16
+Date: 2020-01-23
+  Compatibility:
+    - Updated Factorio version to 0.18, otherwise no change (Roang-zero1)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.15
+Date: 2020-01-11
+  Bugfixes:
+    - Fixed another missing local declaration for variable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.14
+Date: 2019-12-31
+  Compatibility:
+    - Compatibility fix for Construction Drones mod (phoenixuprising)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.13
+Date: 2019-12-29
+  Bugfixes:
+    - Fixed missing local declaration for variable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2019-02-28
+  Changes:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 2018-02-22
+  Changes:
+    - Better label for in-game option
+    - Added in-game changelog
+  Bugfixes:
+    - Fixed that checking resources didn't respect mining hardness
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2017-12-16
+  Compatibility:
+    - Updated Factorio version to 0.16, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2017-06-30
+  Compatibility:
+    - Compatibility fix for mods using mining drills as position markers
+  Workarounds:
+    - Don't deconstruct miners that are hooked up to a circuit network
+  Changes:
+    - In-game option for removal of targets, instead of configuration file
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2017-04-26
+  Workarounds:
+    - Don't deconstruct miners that have fluids, until I have time to make it smarter
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2017-04-24
+  Compatibility:
+    - Updated Factorio version to 0.15, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2017-02-24
+  Compatibility:
+    - Minor compatibility fix for modded drills that are mineable but not deconstructable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2016-08-27
+  Compatibility:
+    - Updated Factorio version to 0.14, otherwise no change
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2016-08-06
+  Compatibility:
+    - This release requires factorio version 0.13.14
+  Workarounds:
+    - Removed workaround for drill ranges since factorio now exposes them in the prototype (no more data-final-fixes.lua)
+  Optimizations:
+    - Update search radius as drills are built, not always using the maximum range when not needed.
+  Changes:
+    - Now renews deconstruction orders for drills when they time out
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2016-08-03
+  Bugfixes:
+    - Made finding targeted chests more reliable.
+  Debug:
+    - Added remote calls for debug and init. /c remote.call("ad","init"), /c remote.call("ad","debug")
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2016-07-31
+  Optimizations:
+    - Moved from tick based checking to relying on events.
+    - No longer storing anything in global.
+  Bugfixes:
+    - More reliable check that the resource is not infinite
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2016-06-30
+  Bugfixes:
+    - Fixed a warning where the marked drill inserted into a container that is not minable
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2016-06-27
+  Compatibility:
+    - First version for Factorio 0.13.0
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2016-03-04
+  Bugfixes:
+    - fixed config being ignored (chests not getting picked up)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2016-03-01
+  Bugfixes:
+    - fixed init not working properly when upgrading mod version
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2016-02-29
+  Bugfixes:
+    - fixed a desync issue
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2016-02-16
+  Compatibility:
+    - no more hardcoded drill ranges, modded drills now work out of the box
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2015-11-07
+  Bugfixes:
+    - fixed drills being forgotten when game was restarted
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2015-11-05
+  Changes:
+    - now (optionally) removes the chest that the drill outputs to
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2015-11-04
+  Notes:
+    - initial release

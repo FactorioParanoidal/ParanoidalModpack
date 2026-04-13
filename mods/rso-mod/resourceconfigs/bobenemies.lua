@@ -1,6 +1,7 @@
 function fillBobEnemies(config)
 	
-	local enemyConfig = config["enemy-base"]
+	local nauvisConfig = config.nauvis	
+	local enemyConfig = nauvisConfig["enemy-base"]
 	
 	enemyConfig.bases["bob-biter-spawner"]={
 		allotment = 30,
@@ -13,7 +14,7 @@ function fillBobEnemies(config)
 		max_allotment_distance_factor = 2
 	}
 	
-	if game.entity_prototypes["bob-super-spawner"] then
+	if prototypes.entity["bob-super-spawner"] then
 		enemyConfig.bases["bob-super-spawner"]={
 			allotment = 10,
 			allotment_distance_factor = 1.1,
@@ -63,4 +64,25 @@ function fillBobEnemies(config)
 		max_allotment_distance_factor = 8,
 		clear_range = {4, 4},
 	}
+	enemyConfig.sub_spawns["bob-titan-worm-turret"]={
+		min_distance=10,
+		allotment=80,
+		allotment_distance_factor=1.3,
+		max_allotment_distance_factor = 8,
+		clear_range = {4, 4},
+	}
+	enemyConfig.sub_spawns["behemoth-worm-turret"]={
+		min_distance=12,
+		allotment=80,
+		allotment_distance_factor=1.3,
+		max_allotment_distance_factor = 8,
+		clear_range = {4, 4},
+	}
+	enemyConfig.sub_spawns["bob-leviathan-worm-turret"]={
+		min_distance=14,
+		allotment=80,
+		allotment_distance_factor=1.3,
+		max_allotment_distance_factor = 8,
+		clear_range = {4, 4},
+	}	
 end

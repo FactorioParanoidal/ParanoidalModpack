@@ -151,8 +151,8 @@ function smokeUtils.makeNonTriggerCloud(attributes)
                 show_when_smoke_off = true,
                 animation =
                     {
-                        filename = "__base__/graphics/entity/cloud/cloud-45-frames.png",
-                        flags = { "compressed" },
+                        filename = "__RampantFixed__/graphics/entities/cloud/cloud-45-frames.png",
+                        flags = { "always-compressed" },
                         priority = "low",
                         width = 256,
                         height = 256,
@@ -217,12 +217,13 @@ function smokeUtils.makeCloud(attributes, attack)
             {
                 type = "smoke-with-trigger",
                 name = name,
+				localised_name = attributes.localised_name or "cloud",
                 flags = {"not-on-map"},
                 show_when_smoke_off = true,
                 animation =
                     {
-                        filename = "__base__/graphics/entity/cloud/cloud-45-frames.png",
-                        flags = { "compressed" },
+                        filename = "__RampantFixed__/graphics/entities/cloud/cloud-45-frames.png",
+                        flags = { "always-compressed" },
                         priority = "low",
                         width = 256,
                         height = 256,
@@ -290,7 +291,7 @@ function smokeUtils.makeSmokeWithGlow(attributes)
                 animation =
                     {
                         filename = "__base__/graphics/entity/fire-smoke/fire-smoke.png",
-                        flags = { "compressed" },
+                        flags = { "always-compressed" },
                         line_length = 8,
                         width = 253,
                         height = 210,
@@ -304,7 +305,7 @@ function smokeUtils.makeSmokeWithGlow(attributes)
                 glow_animation =
                     {
                         filename = "__base__/graphics/entity/fire-smoke/fire-smoke-glow.png",
-                        flags = { "compressed" },
+                        flags = { "always-compressed" },
                         blend_mode = "additive",
                         line_length = 8,
                         width = 253,
@@ -337,7 +338,7 @@ function smokeUtils.makeSmokeWithoutGlow(attributes)
                 animation =
                     {
                         filename = "__base__/graphics/entity/fire-smoke/fire-smoke.png",
-                        flags = { "compressed" },
+                        flags = { "always-compressed" },
                         line_length = 8,
                         width = 253,
                         height = 210,
@@ -383,7 +384,7 @@ function smokeUtils.makeSmokeAddingFuel(attributes)
                     animation =
                         {
                             filename = "__base__/graphics/entity/fire-smoke/fire-smoke.png",
-                            flags = { "compressed" },
+                            flags = { "always-compressed" },
                             line_length = 8,
                             width = 253,
                             height = 210,
@@ -423,7 +424,7 @@ function smokeUtils.makeSmokeBasic(attributes)
                 direction_count = 1,
                 shift = {-0.53125, -0.4375},
                 priority = "high",
-                flags = { "compressed" },
+                flags = { "always-compressed" },
                 animation_speed = 0.25,
                 filename = "__base__/graphics/entity/smoke/smoke.png"
             },

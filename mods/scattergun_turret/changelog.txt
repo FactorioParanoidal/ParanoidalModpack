@@ -1,4 +1,173 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.0.9
+Date: 10.01.2025
+  Fixes:
+    - Restored 125% range modifier for Cannnon shells and Uranium cannon shells.
+    - Space Age Without Space compat: added 'Tungsten carbide' tech requirement for Pulse lasers.
+  Balancing:
+    - Physical Projectile Damage 1: removed Heavy scattergun damage modifier.
+    - Physical Projectile Damage 2: increased Heavy scattergun damage modifier: +10% -> +20%
+    - Physical Projectile Damage 6: Heavy scattergun damage modifier: +40% -> +20% IF Space Age active
+    - Physical Projectile Damage 7: Heavy scattergun damage modifier: +70% -> +20% IF Space Age active
+---------------------------------------------------------------------------------------------------
+Version: 8.0.8
+Date: 22.12.2024
+  Fixes:
+    - Removed 125% range modifier from Cannnon shells and Uranium cannon shells to fix a bug where shells would detonate on reaching base maximum range of the turret.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.7
+Date: 12.12.2024
+  Fixes:
+    - Changed all translation encoding to UTF-8, as required by Factorio 2.0.25.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.6
+Date: 9.12.2024
+  Changes:
+    - Added polish translation.
+    - Changed translation encoding from ANSI to UTF-8, fixing special characters in german translation.
+  Fixes:
+    - Fixed Heavy scattergun turret rotating past its firing arc limit.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.5
+Date: 6.12.2024
+  Changes:
+    - Added german translation, courtesy of OC1024.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.4
+Date: 14.11.2024
+  Fixes:
+    - Fixed colliding projectiles (shotgun pellets, cannon shells) not colliding with asteroids.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.3
+Date: 8.11.2024
+  Changes:
+    - Added circuit connections to all modular turrets, Heavy Scattergun turret and radars. Thanks to usagirei for help with this.
+  Balancing:
+    - Light cannon turrets (technology): removed "Advanced Circuit" as prerequisite.
+    - Light cannon (recipe): replaced 1 Advanced circuit with 2 Electronic circuits.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.2
+Date: 3.11.2024
+  Changes:
+    - Added chinese machine translation, courtesy of Houraiji_Kyuusyou.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.1
+Date: 18.10.2024
+  Fixes:
+    - Fixed crash on load due to missing graphics file.
+    - Fixed not listing Space Age as optional dependency.
+---------------------------------------------------------------------------------------------------
+Version: 8.0.0
+Date: 18.10.2024
+  Changes:
+    - Updated to Factorio version 2.0.0
+    - Removed "Hardened Inserter" setting - included by default
+    - Removed "Advanced Radars" setting - included by default
+    - Removed "Turret damage technology" setting - removed
+    - Removed "Vanilla cannon ammo compatibility" setting - overhauled and included by default
+    - Slowdown cannon shells: removed
+    - Heavy cannon shells: removed
+    - Light uranium cannon shells: removed
+    - Heavy uranium cannon shells: removed
+    - Rocket pack: removed
+    - Explosive rocket pack: removed
+    - Slowdown rocket pack: renamed to "Slowdown rocket"
+    - Light cannon shells: renamed to "Fragmentation cannon shell"
+    - Rocket turrets (technology): renamed to "Cruise missile turrets"
+    - Rocket launcher (item/recipe): renamed to "Cruise missile launcher"
+    - Rocket turret (Frontline) (item/recipe): renamed to "Cruise missile turret (Frontline)"
+    - Rocket turret (Backline) (item/recipe): renamed to "Cruise missile turret (Backline)"
+    - Added "Space Age" integration
+    - Temporarily removed Krastorio 2 and Industrial Revolution 3 integration until those update to Factorio 2.0
+  Balancing:
+    - All ammo items: stack size: 200 -> 100
+    - Fragmentation cannon shell (item): magazine size: 6 -> 1
+    - Fragmentation cannon shell (item): now a projectile, no longer instant-hit
+    - Fragmentation cannon shell (item): changed damage to 100 Explosion in 1 tile radius
+    - Fragmentation cannon shell (item): added 36 8-damage fragmentation projectiles on hit
+    - Fragmentation cannon shell (recipe): replaced with: 8 Iron stick, 2 Steel plate, 1 Explosives
+    - Fragmentation cannon shell (recipe): items produced: 1 -> 2
+    - Slowdown rocket pack (item): magazine size: 4 -> 1
+    - Slowdown rocket pack (recipe): removed Solid Fuel ingredient
+    - Slowdown rocket pack (recipe): items produced: 2 -> 8
+    - Heavy scattergun turret (entity): Acid resist: 0/20% -> 10/20%
+    - Heavy scattergun turret (entity): Explosion resist: 50/65% -> 0/80%
+    - Heavy scattergun turret (recipe): 10 Iron plate -> 5 Steel plate
+    - Heavy scattergun turret (technology): removed "Gun turret" prerequisite.
+    - Heavy scattergun turret (technology): added "Steel processing" prerequisite.
+    - Modular turrets (technology): removed "Gun turret" prerequisite.
+    - Modular turrets (technology): removed "Automation" prerequisite.
+    - Modular turrets (technology): added "Concrete" prerequisite.
+    - Frontline turret mount (recipe): 15 Stone brick -> 20 Concrete
+    - Cruise missile turrets (technology): replaced "Explosive rocketry" prerequisite with "Rocketry".
+    - Cruise missile turrets (technology): cost: 150 -> 200
+    - Cruise missile turrets (entities): prioritizes high health targets
+    - HMG and Gatling turrets (entities): prioritizes low health targets
+    - All cannon turrets (entities): added target leading, prioritizes high health targets
+    - Pulse laser turrets (entities): prioritizes low health targets
+    - Pulse laser turrets (entities): energy consumed per shot: 650kW -> 600 kW
+    - Pulse laser turrets (entities): idle energy drain: 70/75kW -> 60 kW
+    - Pulse laser (recipe): removed "Iron stick" ingredient
+    - Beam emitter (recipe): removed "Lamp" and "Poison capsule" ingredients
+    - Beam emitter (recipe): increased count of other ingredients to compensate
+    - Beam turret (frontline): beam range: 35 -> 38
+    - Beam turret (frontline): firing range: 32 -> 30
+    - Swapped Beam turrets and Thermal laser turrets on the tech tree - Thermals are space tier, Beams are utility tier
+    - Thermal laser turrets (entities): prioritizes not burning targets
+    - Thermal laser (recipe): replaced with 10 Plastic bar, 10 Battery, 1 Efficiency module 2
+    - Light cannon turrets (technology): added "Explosives" as prerequisite
+    - Dual cannon turrets (technology): cost: 100 -> 200
+    - Heavy cannon turrets (technology): cost: 200 -> 300
+    - Modular turrets damage (technology): removed, use quality ammunition for more damage instead.
+    - Flamethrower turret (entity): fluid consumption increased by a factor of 10.
+---------------------------------------------------------------------------------------------------
+Version: 7.5.1
+Date: 08.05.2024
+  Fixes:
+    - Fixed not being able to insert productivity modules for pulse laser turret head.
+---------------------------------------------------------------------------------------------------
+Version: 7.5.0
+Date: 03.04.2024
+  Changes:
+    - Added fast replace to modular turrets, works with turrets that share ammo type.
+    - Added ability to swap between frontline and backline turret versions using blank upgrade planner.
+  Fixes:
+    - Fixed tooltip for Backline HMG incorrectly saying turret has 240 degree firing cone.
+---------------------------------------------------------------------------------------------------
+Version: 7.4.1
+Date: 22.07.2023
+  Fixes:
+    - Fixed crash with IR3 3.1.8.
+---------------------------------------------------------------------------------------------------
+Version: 7.4.0
+Date: 22.07.2023
+  Changes:
+    - Added optional turret damage technologies, disabled by default.
+    - Improved vanilla cannon ammo compatibility with turrets by disabling same-force collision.
+    - Renamed 'Scattergun turret' to 'Heavy scattergun turret'.
+    - Added 'w93-' prefix to all scattergun turret related IDs for compatibility with IR3.
+    - IR3 compat: Heavy scattergun turret is now available with updated recipe.
+    - IR3 compat: updated to IR3 3.1.0.
+---------------------------------------------------------------------------------------------------
+Version: 7.3.2
+Date: 30.03.2023
+  Changes:
+    - Updated Scattergun turret graphics to use vanilla files, added HR version and color mask.
+    - IR3 compat: Replaced 'Refined concrete' with regular 'Concrete' in 'Frontline turret mount' recipe.
+    - IR3 compat: Replaced prerequisite 'Concrete 2' for 'Concrete 1' in 'Modular turrets' technology and reduced unit cost to 300.
+    - IR3 compat: Replaced 'Reinforced chrome plating' with 'Reinforced steel plating' in 'Backline turret mount' recipe.
+    - IR3 compat: Replaced 'Electronics 3' and 'Lasers 2' tech prerequisites in 'Pulse laser turrets' with 'Electrum', 'Graphene' and 'Military 3'.
+    - IR3 compat: Replaced 'Uranium processing' tech prerequisite in 'Beam turrets' with 'Military 4' and increased research cost to 1400 units.
+    - IR3 compat: Changed 'Thermal laser' recipe.
+    - IR3 compat: Increased all IR3 bullet projectiles range to 35.
+    - IR3 compat: Added 6 'Lead plate' to 'Light uranium cannon shells' recipe.
+    - IR3 compat: Added 6 'Lead plate' to 'Heavy uranium cannon shells' recipe.
+---------------------------------------------------------------------------------------------------
+Version: 7.3.1
+Date: 11.02.2023
+  Changes:
+    - Added Industrial Revolution 3 compatibility
+---------------------------------------------------------------------------------------------------
 Version: 7.3.0
 Date: 15.07.2022
   Changes:
@@ -306,7 +475,7 @@ Version: 3.0.0
     - Added 3 new turrets (Heavy MG, Rocket, Thermal Laser) along with new techs that unlock them.
     - Changed mod name to 'Modular Turrets' from 'Scattergun Turrets'.
 ---------------------------------------------------------------------------------------------------
-Verions: 2.0.0
+Version: 2.0.0
   Changes:
     - Updated to Factorio version 0.16.x.
 ---------------------------------------------------------------------------------------------------

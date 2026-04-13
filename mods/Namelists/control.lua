@@ -13,9 +13,9 @@ local MOD_SETTINGS = {
 }
 
 function rebuild_lists()
-  global.names = {}
-  global.types = {}
-  global.defaults = {weight = 0, lists = {}}
+  storage.names = {}
+  storage.types = {}
+  storage.defaults = {weight = 0, lists = {}}
   if settings.global["namelists-backer-roboports"].value then
     register_list({interface = "base", func = "backer_name", category = "type", target = "roboport", weight = #game.backer_names, backer = true})
   end
@@ -34,7 +34,8 @@ function rebuild_lists()
   if settings.global["namelists-backer-default"].value then
     register_list({interface = "base", func = "backer_name", weight = #game.backer_names, backer = true})
   end
-  script.raise_event(events.on_list_rebuild, {})
+---@diagnostic disable-next-line: param-type-mismatch
+  script.raise_event(events.on_list_rebuild, {"test"})
   log("Interface lists rebuilt")
 end
 
@@ -51,8 +52,8 @@ end)
 -- If name or type isn't specified, register as generic
 -- parameters is a table of {interface = "", func = "", category = "", target = "", weight = ""}
 function register_list(parameters)
-  global.names = global.names or {}
-  global.types = global.types or {}
+  storage.names = storage.names or {}
+  storage.types = storage.types or {}
   if not (parameters.interface and parameters.func and parameters.weight) then
     log("Error registering: missing parameters")
     return
@@ -63,46 +64,46 @@ function register_list(parameters)
   end
   local id = parameters.interface .. "." .. parameters.func
   if parameters.category == "name" then
-    global.names[parameters.target] = global.names[parameters.target] or {weight = 0, lists = {}}
-    if not global.names[parameters.target].lists[id] then
+    storage.names[parameters.target] = storage.names[parameters.target] or {weight = 0, lists = {}}
+    if not storage.names[parameters.target].lists[id] then
       log("Registering interface " .. id .. " for name " .. parameters.target)
-      global.names[parameters.target].lists[id] =
+      storage.names[parameters.target].lists[id] =
       {
         interface = parameters.interface,
         func = parameters.func,
         weight = parameters.weight,
         backer = parameters.backer
       }
-      global.names[parameters.target].weight = global.names[parameters.target].weight + parameters.weight
+      storage.names[parameters.target].weight = storage.names[parameters.target].weight + parameters.weight
     else
       log("Eror registering interface " .. id .. ": already registered for name " .. parameters.target)
     end
   elseif parameters.category == "type" then
-    global.types[parameters.target] = global.types[parameters.target] or {weight = 0, lists = {}}
-    if not global.types[parameters.target].lists[id] then
+    storage.types[parameters.target] = storage.types[parameters.target] or {weight = 0, lists = {}}
+    if not storage.types[parameters.target].lists[id] then
       log("Registering interface " .. id .. " for type " .. parameters.target)
-      global.types[parameters.target].lists[id] =
+      storage.types[parameters.target].lists[id] =
       {
         interface = parameters.interface,
         func = parameters.func,
         weight = parameters.weight,
         backer = parameters.backer
       }
-      global.types[parameters.target].weight = global.types[parameters.target].weight + parameters.weight
+      storage.types[parameters.target].weight = storage.types[parameters.target].weight + parameters.weight
     else
       log("Eror registering interface " .. id .. ": already registered for type " .. parameters.target)
     end
   else
-    if not global.defaults.lists[id] then
+    if not storage.defaults.lists[id] then
       log("Registering interface " .. id .. " as a default")
-      global.defaults.lists[id] =
+      storage.defaults.lists[id] =
       {
         interface = parameters.interface,
         func = parameters.func,
         weight = parameters.weight,
         backer = parameters.backer
       }
-      global.defaults.weight = global.defaults.weight + parameters.weight
+      storage.defaults.weight = storage.defaults.weight + parameters.weight
     else
       log("Eror registering interface " .. id .. ": already registered as default")
     end
@@ -128,13 +129,25 @@ script.on_event("random-name", function(event)
 end)
 
 -- Entity built
--- We don't catch the robot_built event because the ghost will already have a name chosen
--- in the player event
+-- We don't catch the robot_built event because the ghost will already have a name chosen in the player event
 script.on_event(defines.events.on_built_entity, function(event)
-  if event.created_entity.supports_backer_name() then
-    auto_name(event.created_entity)
-  end
+  -- if event.entity.supports_backer_name() then
+  auto_name(event.entity)
+  -- end
 end)
+script.set_event_filter(defines.events.on_built_entity,
+{
+  {filter = "type", type = "roboport"},
+  {filter = "type", type = "lab"},
+  {filter = "type", type = "train-stop"},
+  {filter = "type", type = "locomotive"},
+  {filter = "type", type = "radar"},
+  {filter = "ghost_type", type = "roboport"},
+  {filter = "ghost_type", type = "lab"},
+  {filter = "ghost_type", type = "train-stop"},
+  {filter = "ghost_type", type = "locomotive"},
+  {filter = "ghost_type", type = "radar"}
+})
 
 -- Pick a name unless this is a station built without a ghost
 -- Don't pick a name for hand-built stations, in case they were built over a ghost
@@ -189,22 +202,22 @@ function pick_name(entity)
   end
   local new_name = nil
   -- try to get a name based on entity name
-  if global.names[ent_name] and global.names[ent_name].weight > 0 then
-    new_name = get_weighted_name(global.names[ent_name], entity)
+  if storage.names[ent_name] and storage.names[ent_name].weight > 0 then
+    new_name = get_weighted_name(storage.names[ent_name], entity)
     if new_name then
       return new_name
     end
   end
   -- try to get a name based on entity type
-  if global.types[ent_type] and global.types[ent_type].weight > 0 then
-    new_name = get_weighted_name(global.types[ent_type], entity)
+  if storage.types[ent_type] and storage.types[ent_type].weight > 0 then
+    new_name = get_weighted_name(storage.types[ent_type], entity)
     if new_name then
       return new_name
     end
   end
   -- try to get a name from a default list
-  if global.defaults and global.defaults.weight > 0 then
-    new_name = get_weighted_name(global.defaults, entity)
+  if storage.defaults and storage.defaults.weight > 0 then
+    new_name = get_weighted_name(storage.defaults, entity)
     if new_name then
       return new_name
     end

@@ -1,6 +1,6 @@
 function fillBzzirconiumConfig(config)
 
-	config["zircon"] = {
+	config.nauvis["zircon"] = {
 		type="resource-ore",
 		
 		allotment=80,

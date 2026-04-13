@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2025.9.23
+  Compatibility:
+    - Changed hard coded technology effect insert to be dynamic
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2021.10.2
+  Changes:
+    - Added compatibility for all modded science packs

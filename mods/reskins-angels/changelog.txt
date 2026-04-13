@@ -1,4 +1,52 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2026-01-10
+  Bugfixes:
+    - Fixed that algae farms were not properly reskinned when used with Extended Angels
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2026-01-08
+  Bugfixes:
+    - Fixed that the Hydro Plant was not colored when flipped
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2026-01-05
+  Changes:
+    - Fixed that ore icons were not correctly reskinned (42)
+    - Tin and Lead ore are no longer affected by the setting "Use Angel's material colors for intermediates" (43)
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2026-01-03
+  Features:
+    - Migration to Factorio 2.0!
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-05-12
+  Bugfixes:
+    - Fixed that the Silicon ore sorting recipe had no ore icon.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-05-04
+  Features:
+    - Added colored tier icons for the thermal water extractors.
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.2.0
+  Bugfixes:
+    - Fixed several item icons using Bob's mods icons instead of Angel's mods icons (#34).
+---------------------------------------------------------------------------------------------------
+Version: 2.1.8
+Date: 2023-12-24
+  Bugfixes:
+    - Fixed that attempting to use Angels pipe material colors would fail
+---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2023-12-23
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
+    - Revised tiers of hydro plants, electrowinning cells, and algae farms to reflect changes to Angel's mods and Extended Angels
+  Bugfixes:
+    - Fixed that the Fiberglass Board recipe added by Angel's mods was not properly reskinned under some circumstances.
+---------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2023-01-01
   Changes:

@@ -1,18 +1,22 @@
+if ... ~= "__flib__.orientation" then
+  return require("__flib__.orientation")
+end
+
 --- Functions for working with orientations.
 --- ```lua
---- local flib_orientation = require("__flib__/orientation")
+--- local flib_orientation = require("__flib__.orientation")
 --- ```
 --- @class flib_orientation
 local flib_orientation = {}
 
-flib_orientation.north = defines.direction.north / 8
-flib_orientation.east = defines.direction.east / 8
-flib_orientation.west = defines.direction.west / 8
-flib_orientation.south = defines.direction.south / 8
-flib_orientation.northeast = defines.direction.northeast / 8
-flib_orientation.northwest = defines.direction.northwest / 8
-flib_orientation.southeast = defines.direction.southeast / 8
-flib_orientation.southwest = defines.direction.southwest / 8
+flib_orientation.north = defines.direction.north / 16
+flib_orientation.east = defines.direction.east / 16
+flib_orientation.west = defines.direction.west / 16
+flib_orientation.south = defines.direction.south / 16
+flib_orientation.northeast = defines.direction.northeast / 16
+flib_orientation.northwest = defines.direction.northwest / 16
+flib_orientation.southeast = defines.direction.southeast / 16
+flib_orientation.southwest = defines.direction.southwest / 16
 
 --- Returns a 4way or 8way direction from an orientation.
 --- @param orientation number

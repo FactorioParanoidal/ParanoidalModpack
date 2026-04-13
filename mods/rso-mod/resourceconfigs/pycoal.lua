@@ -1,6 +1,7 @@
 function fillPyCoalConfig(config)
+	local nauvisConfig = config.nauvis
 	
-	config["borax"] = {
+	nauvisConfig["borax"] = {
 		type="resource-ore",
 		
 		-- general spawn params
@@ -17,7 +18,7 @@ function fillPyCoalConfig(config)
 		starting={richness=8000, size=25, probability=1},
 	}
 	
-	config["niobium"] = {
+	nauvisConfig["niobium"] = {
 		type="resource-ore",
 		
 		-- general spawn params

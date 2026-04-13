@@ -1,0 +1,45 @@
+data:extend {
+    {
+        type = "shortcut",
+        name = "miex-configure-module-inserter",
+        associated_control_input = "toggle-module-inserter-ex",
+        action = "lua",
+        style = "blue",
+        icons = { {
+            icon = "__ModuleInserterEx__/graphics/new-module-inserter-x32-white.png",
+            priority = "extra-high-no-scale",
+            icon_size = 32,
+            scale = 1,
+            flags = { "icon" },
+        } },
+        small_icons = { {
+            icon = "__ModuleInserterEx__/graphics/new-module-inserter-x24-white.png",
+            priority = "extra-high-no-scale",
+            icon_size = 24,
+            scale = 1,
+            flags = { "icon" },
+        } },
+    },
+    {
+        type = "shortcut",
+        name = "miex-get-module-inserter",
+        associated_control_input = "get-module-inserter-ex",
+        --order = "a[yarm]",
+        action = "lua",
+        style = "green",
+        icons = { {
+            icon = "__ModuleInserterEx__/graphics/new-module-inserter-x32-white.png",
+            priority = "extra-high-no-scale",
+            icon_size = 32,
+            scale = 1,
+            flags = { "icon" },
+        } },
+        small_icons = { {
+            icon = "__ModuleInserterEx__/graphics/new-module-inserter-x24-white.png",
+            priority = "extra-high-no-scale",
+            icon_size = 24,
+            scale = 1,
+            flags = { "icon" },
+        } },
+    },
+}

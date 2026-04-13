@@ -1,5 +1,6 @@
 --[[ Copyright (c) 2017 David-John Miller AKA Anoyomouse
  * Part of the Warehousing mod
+ * ported to 2.0 by anoyomouse 2024
  *
  * See License.txt in the project directory for license information.
 --]]
@@ -11,7 +12,6 @@ data:extend(
 		name = "warehouse-research",
 		icon = ICONPATH.."warehouse-research.png",
 		icon_size = 256,
-		icon_mipmaps = 4,
 		effects =
 		{
 			{
@@ -41,7 +41,6 @@ data:extend(
 		name = "warehouse-logistics-research-1",
 		icon = ICONPATH.."warehouse-logistics-research-1.png",
 		icon_size = 256,
-		icon_mipmaps = 4,
 		effects =
 		{
 			{
@@ -61,7 +60,7 @@ data:extend(
 				recipe = "storehouse-storage",
 			},
 		},
-		prerequisites = { "warehouse-research", "robotics" },
+		prerequisites = { "warehouse-research", "robotics", "concrete", "advanced-circuit" },
 		unit =
 		{
 			count = 150,
@@ -78,7 +77,6 @@ data:extend(
 		name = "warehouse-logistics-research-2",
 		icon = ICONPATH.."warehouse-logistics-research-2.png",
 		icon_size = 256,
-		icon_mipmaps = 4,
 		effects =
 		{
 			{

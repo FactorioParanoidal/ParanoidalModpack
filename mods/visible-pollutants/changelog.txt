@@ -1,0 +1,84 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2026-01-02
+  Changes:
+    - Solar occlusion is disabled when using Space Exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2025-06-15
+  Bugfixes:
+    - Fix for some zoom-based pop-ins
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2025-06-15
+  Bugfixes:
+    - Removed debugging text
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2025-06-14
+  Changes:
+    - Nearby sprites are determined by zoom level, slightly improving performance while zoomed in
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2025-01-12
+  Bugfixes:
+    - Fix for rare teleportation cases from other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2024-12-13
+  Bugfixes:
+    - Math fix for see-through opacity limiting for less pollution
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2024-12-12
+  Changes:
+    - See-through pollution cloud for selected/nearby entities
+    - Decouple visible animations from placements for improved visuals and performance
+    - Animation algorithm includes the current wind direction/speed
+  Bugfixes:
+    - Math fix for extreme pollution values
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024-12-08
+  Changes:
+    - Solar panel occlusion: reducing power output based on efficiency and pollution
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024-11-28
+  Bugfixes:
+    - Fix for missing Pollution especially when changing surfaces
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024-11-28
+  Changes:
+    - Prioritize updating sprites based on player proximity
+    - Reduced key collisions for less pops
+    - Expanded search radius for less pops
+    - General performance improvements
+    - More efficient handling of common remote view interactions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024-11-27
+  Changes:
+    - Update default settings based on more examples
+    - Update sprite to prevent some translucent areas
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024-11-20
+  Changes:
+    - Pollution can be added to specified Planets that don't already have a pollutant type
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-11-07
+  Changes:
+    - Pollution on the map can now follow a similar color to the visual cloud
+    - Player tracking occurs more frequently, but also more efficiently
+    - Re-titling
+  Bugfixes:
+    - Pollution spawns correctly after remaining far away in the Remote View for long whiles
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-11-06
+  Changes:
+    - Pollution sprites spawn around each player, forming a cloud
+    - Special colors for Gleba spores

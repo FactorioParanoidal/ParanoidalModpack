@@ -8,7 +8,7 @@ local element_list = {}
 
 function Settings.init()
   settings_list["need-show"] =                    { type = "checkbox", tab = "main-settings", def_val = true }
-  settings_list["show-hidden-recipes"] =          { type = "checkbox", tab = "main-settings", def_val = true }
+  settings_list["show-hidden-recipes"] =          { type = "checkbox", tab = "main-settings", def_val = false }
   settings_list["show-disable-recipes"] =         { type = "checkbox", tab = "main-settings", def_val = true }
   settings_list["show-hidden-items"] =            { type = "checkbox", tab = "main-settings", def_val = false }
   settings_list["show-hidden-fluids"] =           { type = "checkbox", tab = "main-settings", def_val = false }
@@ -65,10 +65,10 @@ function Settings.set_val(sett_name, val)
   end
 end
 
-function Settings.get_global_sett()
-  local pl_global = Player.get_global()
-  if not pl_global.settings then pl_global.settings = {} end
-  return pl_global.settings
+function Settings.get_storage_sett()
+  local pl_storage = Player.get_storage()
+  if not pl_storage.settings then pl_storage.settings = {} end
+  return pl_storage.settings
 end
 
 function Settings.init_events()

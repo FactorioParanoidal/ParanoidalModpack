@@ -1,4 +1,5 @@
 Event = require('scripts/event')
+Migrate = require("scripts/migrate")
 
 min_attrition_rate = 0.0011
 tickskip = 10
@@ -14,8 +15,8 @@ end
 
 function get_attrition_rate_for_surface(surface_index)
   -- use cache
-  if global.suface_attrition_rates[surface_index] then
-    return global.suface_attrition_rates[surface_index]
+  if storage.suface_attrition_rates[surface_index] then
+    return storage.suface_attrition_rates[surface_index]
   end
   -- or load
   local rate = nil
@@ -31,48 +32,48 @@ function get_attrition_rate_for_surface(surface_index)
   if rate == nil then
     rate = default_rate
   end
-  global.suface_attrition_rates[surface_index] = rate
+  storage.suface_attrition_rates[surface_index] = rate
   --game.print("Robot attrition rate for surface " .. surface_index .. " ("..game.surfaces[surface_index].name..") is " .. rate)
 
   return rate
 end
 
 function get_crash_item(bot)
-  if global.crash_items[bot.name] then
-    if global.crash_items[bot.name] ~= "none" then
-      return global.crash_items[bot.name]
+  if storage.crash_items[bot.name] then
+    if storage.crash_items[bot.name] ~= "none" then
+      return storage.crash_items[bot.name]
     else
       return nil
     end
   else
     if bot.prototype.mineable_properties.products and bot.prototype.mineable_properties.products[1] then
       local name = bot.prototype.mineable_properties.products[1].name.."-crashed"
-      if game.item_prototypes[name] then
-        global.crash_items[bot.name] = name
+      if prototypes.item[name] then
+        storage.crash_items[bot.name] = name
         return name
       end
     end
   end
-  global.crash_items[bot.name] = "none"
+  storage.crash_items[bot.name] = "none"
 end
 
 function get_bot_speed(name)
-  if not global.bot_speed then global.bot_speed = {} end
-  if not global.bot_speed[name] then
-    global.bot_speed[name] = game.entity_prototypes[name].speed
-    if global.bot_speed[name] >= 10000 then -- Cheat bot e.g. Editor Extensions
-      global.bot_speed[name] = 1
+  if not storage.bot_speed then storage.bot_speed = {} end
+  if not storage.bot_speed[name] then
+    storage.bot_speed[name] = prototypes.entity[name].speed
+    if storage.bot_speed[name] >= 10000 then -- Cheat bot e.g. Editor Extensions
+      storage.bot_speed[name] = 1
     end
   end
-  return global.bot_speed[name]
+  return storage.bot_speed[name]
 end
 
 function get_bot_slow_speed_multiplier(name)
-  if not global.bot_slow_speed_multiplier then global.bot_slow_speed_multiplier = {} end
-  if not global.bot_slow_speed_multiplier[name] then
-    global.bot_slow_speed_multiplier[name] = game.entity_prototypes[name].speed_multiplier_when_out_of_energy
+  if not storage.bot_slow_speed_multiplier then storage.bot_slow_speed_multiplier = {} end
+  if not storage.bot_slow_speed_multiplier[name] then
+    storage.bot_slow_speed_multiplier[name] = prototypes.entity[name].speed_multiplier_when_out_of_energy
   end
-  return global.bot_slow_speed_multiplier[name]
+  return storage.bot_slow_speed_multiplier[name]
 end
 
 function bot_crash(bot, n_bots)
@@ -88,10 +89,10 @@ function bot_crash(bot, n_bots)
     drop.get_inventory(defines.inventory.chest)[1].transfer_stack(item_stack) -- Preserves item-with-entity-data
     drop.order_deconstruction(bot.force)
   end
-  bot.force.kill_count_statistics.on_flow(bot.name, -1) --Track bot's death.
-  if global.forcedata and global.forcedata[bot.force.name] and global.forcedata[bot.force.name]["robot-attrition-explosion-safety"]
-    and n_bots <= 500 * global.forcedata[bot.force.name]["robot-attrition-explosion-safety"] then
-      --game.print("Skip explosion, n_bots "..n_bots.."<= ".. 500 * global.forcedata[bot.force.name]["robot-attrition-explosion-safety"])
+  bot.force.get_kill_count_statistics(bot.surface).on_flow(bot.name, -1) --Track bot's death.
+  if storage.forcedata and storage.forcedata[bot.force.name] and storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"]
+    and n_bots <= 500 * storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"] then
+      --game.print("Skip explosion, n_bots "..n_bots.."<= ".. 500 * storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"])
   else
     bot.surface.create_entity{name = "robot-explosion", position=bot.position}
   end
@@ -99,7 +100,7 @@ function bot_crash(bot, n_bots)
     bot.force = "neutral" -- change force so that it does not cause death alerts
     bot.die()
   end
-  global.bots_crashed = (global.bots_crashed or 0) + 1 -- used as an achievement metric
+  storage.bots_crashed = (storage.bots_crashed or 0) + 1 -- used as an achievement metric
 
 end
 
@@ -128,15 +129,15 @@ function on_tick(event)
   so add these factors to the probability of the next selection round
   factors apply multiplier to next selection phase
   ]]--
-  if not global.force_surfaces then return end
+  if not storage.force_surfaces then return end
   if game.tick % tickskip ~= 0 then return end
 
   --game.forces[force].logistic_networks[network].logistic_robots :: array of LuaEntity
   --for _, force in pairs(game.forces) do
-  for force_name, force_surfaces in pairs(global.force_surfaces) do
+  for force_name, force_surfaces in pairs(storage.force_surfaces) do
     local force = game.forces[force_name]
     if not force then
-      global.force_surfaces[force_name] = nil
+      storage.force_surfaces[force_name] = nil
     else
       local i = randint
       --for surface_name, networks in pairs(force.logistic_networks) do
@@ -151,28 +152,30 @@ function on_tick(event)
             local surface_attrition_rate = get_attrition_rate_for_surface(game.surfaces[surface_name].index)
             if surface_attrition_rate > min_attrition_rate then
               for _, network in pairs(networks) do
-                local n_bots = network.all_logistic_robots - network.available_logistic_robots
-                if n_bots > 50 then -- ignore small networks
-                  if not global.forces[force.name] then global.forces[force.name] = {} end
-                  if not global.forces[force.name][surface_name] then global.forces[force.name][surface_name] = { crash = 0, crash_rate = 0.1 } end
-                  local crash_rate = global.forces[force.name][surface_name].crash_rate * tickskip * surface_attrition_rate / 1000000
-                  local crash = global.forces[force.name][surface_name].crash + crash_rate * n_bots
-                  if crash >= 1 then
-                    local logistic_robots = network.logistic_robots
-                    local to_crash = math.min(math.ceil(#logistic_robots/2), math.random(math.floor(crash))) -- don't crash all
-                    local i = math.random(#logistic_robots) -- choose a starting bot
-                    local crashed = 0
-                    while crashed < to_crash do
-                      -- then step through bots
-                      i = (i % #logistic_robots) + 1
-                      if logistic_robots[i] and logistic_robots[i].valid then
-                        global.forces[force.name][surface_name].crash_rate = global.forces[force.name][surface_name].crash_rate * 0.9 + 0.1 * process_bot(logistic_robots[i], n_bots)
-                      end -- if invalid bots were found just skip them anyway
-                      crashed = crashed + 1
+                if network.valid then -- A crashing robot might invalidate a cached entry in networks 
+                  local n_bots = network.all_logistic_robots - network.available_logistic_robots
+                  if n_bots > 50 then -- ignore small networks
+                    if not storage.forces[force.name] then storage.forces[force.name] = {} end
+                    if not storage.forces[force.name][surface_name] then storage.forces[force.name][surface_name] = { crash = 0, crash_rate = 0.1 } end
+                    local crash_rate = storage.forces[force.name][surface_name].crash_rate * tickskip * surface_attrition_rate / 1000000
+                    local crash = storage.forces[force.name][surface_name].crash + crash_rate * n_bots
+                    if crash >= 1 then
+                      local logistic_robots = network.logistic_robots
+                      local to_crash = math.min(math.ceil(#logistic_robots/2), math.random(math.floor(crash))) -- don't crash all
+                      local i = math.random(#logistic_robots) -- choose a starting bot
+                      local crashed = 0
+                      while crashed < to_crash do
+                        -- then step through bots 
+                        i = (i % #logistic_robots) + 1
+                        if logistic_robots[i] and logistic_robots[i].valid then
+                          storage.forces[force.name][surface_name].crash_rate = storage.forces[force.name][surface_name].crash_rate * 0.9 + 0.1 * process_bot(logistic_robots[i], n_bots)
+                        end -- if invalid bots were found just skip them anyway
+                        crashed = crashed + 1
+                      end
+                      crash = crash - crashed
                     end
-                    crash = crash - crashed
+                    storage.forces[force.name][surface_name].crash = crash
                   end
-                  global.forces[force.name][surface_name].crash = crash
                 end
               end
             end
@@ -184,41 +187,18 @@ function on_tick(event)
 end
 
 function on_init(event)
-  global.forces = {}
-  global.bot_speed = {}
-  global.bot_slow_speed_multiplier = {}
-  global.suface_attrition_rates = {}
+  storage.forces = {}
+  storage.bot_speed = {}
+  storage.bot_slow_speed_multiplier = {}
+  storage.suface_attrition_rates = {}
 
-  global.robot_repair_setting = settings.startup["robot-attrition-repair"].value
-  global.crash_items = {}
+  storage.robot_repair_setting = settings.startup["robot-attrition-repair"].value
+  storage.crash_items = {}
 end
 
-function on_configuration_changed(event)
-  global.forces = {}
-  global.bot_speed = {}
-  global.bot_slow_speed_multiplier = {}
-  global.suface_attrition_rates = {} -- clear
-  if not global.force_surfaces then
-    for _, force in pairs(game.forces) do
-      if not is_system_force(force.name) then
-        for surface_name, networks in pairs(force.logistic_networks) do
-          for _, network in pairs(networks) do
-            if network.all_logistic_robots > 0 then
-              add_surface(force, game.surfaces[surface_name])
-            end
-          end
-        end
-      end
-    end
-  end
-
-  global.robot_repair_setting = settings.startup["robot-attrition-repair"].value
-  global.crash_items = {}
-
-end
 function on_runtime_mod_setting_changed(event)
   if event.setting == "robot-attrition-factor" then
-    global.suface_attrition_rates = {} -- clear
+    storage.suface_attrition_rates = {} -- clear
   end
 end
 
@@ -227,18 +207,18 @@ end
 function add_surface(force, surface)
   if not is_system_force(force.name) then
     if #force.players > 0 then
-      global.force_surfaces = global.force_surfaces or {}
-      global.force_surfaces[force.name] = global.force_surfaces[force.name] or {}
-      if not global.force_surfaces[force.name][surface.name] then
-        global.force_surfaces[force.name][surface.name] = game.tick
+      storage.force_surfaces = storage.force_surfaces or {}
+      storage.force_surfaces[force.name] = storage.force_surfaces[force.name] or {}
+      if not storage.force_surfaces[force.name][surface.name] then
+        storage.force_surfaces[force.name][surface.name] = game.tick
       end
     end
   end
 end
 
 function on_built_roboport(event)
-  if not(event.created_entity and event.created_entity.valid) then return end
-  add_surface(event.created_entity.force, event.created_entity.surface)
+  if not(event.entity and event.entity.valid) then return end
+  add_surface(event.entity.force, event.entity.surface)
 end
 function on_cloned_roboport(event)
   if not(event.destination  and event.destination.valid) then return end
@@ -259,9 +239,9 @@ local bot_remnants_set = nil
 local function populate_remnant_set()
   bot_remnants_set = {}
   if settings.startup["robot-attrition-repair"].value == "Repair75" then
-    for bot_name, bot_prototype in pairs(game.get_filtered_entity_prototypes({{filter="type", type="logistic-robot"}})) do
+    for bot_name, bot_prototype in pairs(prototypes.get_entity_filtered({{filter="type", type="logistic-robot"}})) do
       local remnant_name = bot_name .. "-remnants"
-      if game.entity_prototypes[remnant_name] and game.entity_prototypes[remnant_name].type == "simple-entity" then
+      if prototypes.entity[remnant_name] and prototypes.entity[remnant_name].type == "simple-entity" then
         bot_remnants_set[remnant_name] = true
       end
     end
@@ -277,9 +257,9 @@ end
 -- if a bot corpse appears on a force's surface then order deconstruction
 function on_trigger_created_entity(event)
   local entity = event.entity
-  if is_bot_remnant(entity.name) and global.force_surfaces then
+  if is_bot_remnant(entity.name) and storage.force_surfaces then
     local surface_name = entity.surface.name
-    for force_name, surfaces in pairs(global.force_surfaces) do
+    for force_name, surfaces in pairs(storage.force_surfaces) do
       if surfaces[surface_name] and entity.valid then -- Need to check for validity again as other mods may react to on_marked_for_deconstruction instantly
         entity.order_deconstruction(force_name)
       end
@@ -292,9 +272,9 @@ Event.addListener(defines.events.on_trigger_created_entity, on_trigger_created_e
 function on_research_finished(event)
   local force = event.research.force
   if event.research.name == "robot-attrition-explosion-safety" then
-    global.forcedata = global.forcedata or {}
-    global.forcedata[force.name] = global.forcedata[force.name] or {}
-    global.forcedata[force.name]["robot-attrition-explosion-safety"] = event.research.level - 1
+    storage.forcedata = storage.forcedata or {}
+    storage.forcedata[force.name] = storage.forcedata[force.name] or {}
+    storage.forcedata[force.name]["robot-attrition-explosion-safety"] = event.research.level - 1
   end
 end
 
@@ -305,4 +285,3 @@ Event.addListener(defines.events.on_tick, on_tick)
 Event.addListener(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 Event.addListener("on_init", on_init, true)
-Event.addListener("on_configuration_changed", on_configuration_changed, true)

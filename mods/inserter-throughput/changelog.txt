@@ -1,4 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 21. 10. 2024
+  Changes:
+    - Updated for Factorio 2.0. This is a transitory update to make the mod functional. There will be another update to account for the changed inserter mechanics. Meanwhile, as always, the stopwatch command remains the ultimate arbiter on inserter throughput and will report the correct number.
+  Gui:
+    - Changed the toggle button to use the built-in toggle capability of buttons.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 17. 05. 2024
+  Gui:
+    - Made the popup text obey the game's GUI scale setting.
+  Graphics:
+    - Removed proprietary base game assets.
+  Bugfixes:
+    - Fixed floating-point imprecision preventing inserter speed from being calculated.
+    - Fixed the reported throughput being higher than the relevant belt is capable of.
+---------------------------------------------------------------------------------------------------
 Version: 0.1.4
 Date: 27. 01. 2023
   Bugfixes:

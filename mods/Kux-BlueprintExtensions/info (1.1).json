@@ -1,0 +1,20 @@
+{
+    "name": "Kux-BlueprintExtensions",
+    "version": "2.3.2",
+    "title": "Blueprint Extensions (Kux Edition)",
+    "author": "kuxynator",
+    "factorio_version": "1.1",
+    "dependencies": [
+		"base",
+		"Kux-CoreLib >= 2.7.1",
+		"? fluid_permutations",
+		"? fluid_permutations_fixed",
+		"? GDIW",
+		"? GDIW-updated",
+		"? underground-pipe-pack",
+		"? FluidMustFlow",
+		"(?) nullius",
+		"! BlueprintExtensions"
+	],
+    "description": "Adds tools for updating and placing blueprints.\nSupports Advanced fluid handling, GDIW, Fluid Must Flow, and Nullius."
+}

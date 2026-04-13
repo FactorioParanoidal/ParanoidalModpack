@@ -1,0 +1,11 @@
+{
+	"name": "kry-picker-complete",
+	"version": "1.0.1",
+	"title": "Picker Complete Feature Pack",
+	"author": "Kryzeth",
+	"description": "Modpack that includes all 2.0 mods required to recreate the complete Picker experience.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0.0", "kry_stdlib >= 2.0.0", "kry-picker-extended", "yemtositemcount", "belt-visualizer", "beltbrush2", "belt-reverser-space-age", "even-pickier-dollies", "CursorEnhancements", "Shortcuts-ick", "WireShortcutX", "Orphan Finder", "Kux-BlueprintExtensions", "AutoDeconstruct", "? Renamer", "? Honk", "? car-finder", "? packing-tape", "? adjustable_flashlight", "? ore-eraser-2", "? squeak-through-2", "? kry-vehicle-grids"
+	]
+}

@@ -1,13 +1,13 @@
 
 require ("prototypes.values")
 local sounds = require("__base__/prototypes/entity/sounds.lua")
-local dying_s = {{filename = "__Big-Monsters__/sound/death-z.wav",volume = 2}}
-local HPMult   = settings.startup["bm-enemy-hp-multiplier"].value 
-local BIGHPMult= settings.startup["bm-big-enemy-hp-multiplier"].value 
-local DMGMult  = settings.startup["bm-enemy-damage-multiplier"].value
-local boss_hp_variant =  settings.startup["bm-big-enemy-hp-variant"].value
- 
+local dying_s = {{filename = "__Big-Monsters__/sounds/death-z.wav",volume = 2}}
+local hit_effects = require("__base__/prototypes/entity/hit-effects.lua")
+local decorative_trigger_effects = require("__base__/prototypes/decorative/decorative-trigger-effects.lua")
 
+
+local HPMult   = mf_hp_multiplier 
+local BIGHPMult= settings.startup["bm-big-enemy-hp-multiplier"].value 
 
 -- spider legs water walker
 for n = 1, 8 do
@@ -19,10 +19,10 @@ for n = 1, 8 do
 
 
 
-
 local largetunnel = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
 largetunnel.name="bm-large-tunnel"
 largetunnel.integration=nil
+largetunnel.decay_animation=nil
 largetunnel.animation =
 {
 	{
@@ -55,60 +55,94 @@ largetunnel.time_before_removed = 5 * 60 * 60
 
 --------------------------------------------------------------------------------------
 local corpse = table.deepcopy(data.raw.corpse["biter-spawner-corpse"])
-corpse.name="bm-spawner-corpse"
-corpse.integration=nil
+corpse.name = "bm-spawner-corpse"
+corpse.decay_animation=nil
+corpse.dying_speed = 0.02
+corpse.final_render_layer = "lower-object-above-shadow"
 corpse.animation =
 {
 	{
 		layers =
 		{
 			{
-				width = 148,
-				height = 148,
-				frame_count = 1,
-				direction_count = 1,
-				shift = {0,0},
-				stripes =
-				{
-					{
-						filename = "__Big-Monsters__/graphics/tunnel-dead.png",
-						width_in_frames = 1,
-						height_in_frames = 1,
-						y = 0
-					},
-				}
+			filename = "__base__/graphics/entity/worm/worm-hole-collapse.png",
+			width = 330,
+			height = 298,
+			shift = util.by_pixel( 5.0, -14.5),
+			line_length = 5,
+			frame_count = 20,
+			direction_count = 1,
+			scale = 0.5,
 			},
 		}
 	}
 }
-corpse.time_before_removed = 5 * 60 * 60
+corpse.time_before_removed = 10 * 60 * 60
+
+
+
+
+local spawn_all_vanilla_units = {
+      {"small-biter", {{0.0, 0.3}, {0.25, 0.3}, {0.35, 0.0}}},
+      {"small-spitter", {{0.25, 0.3}, {0.5, 0.3}, {0.7, 0.0}}},
+	  {"medium-biter", 		 {{0.30, 0.0}, {0.50, 0.3}, {0.60, 0.0}}},
+      {"medium-spitter", {{0.4, 0.0}, {0.5, 0.3}, {0.6, 0.0}}},
+      {"big-spitter", {{0.59, 0.0}, {0.6, 0.4}, {0.7, 0.0}}},
+	  {"big-biter",	{{0.59, 0.0}, {0.6, 0.3}, {0.7, 0.0}}},
+	  {"behemoth-biter", {{0.69, 0.0}, {0.9, 0.4}}},
+	  {"behemoth-spitter", {{0.69, 0.0}, {0.9, 0.4}}}
+	  }
+
+
+if mods["Arachnids_enemy"] then 
+	concat_lists(spawn_all_vanilla_units,
+	{
+	{"arachnid-biter-drone-unit", {{0.0, 0.3}, {0.6, 0.0}}},
+	{"arachnid-biter-warrior-unit", {{0.2, 0.0}, {0.6, 0.3}, {0.7, 0.1}}},
+	{"arachnid-biter-tiger-unit", {{0.5, 0.0}, {1.0, 0.4}}},
+	{"arachnid-biter-royalwarrior-unit", {{0.9, 0.0}, {1.0, 0.3}}},
+	{"arachnid-spitter-smallspitter-unit", {{0.25, 0.0}, {0.5, 0.3}, {0.7, 0.0}}},
+	{"arachnid-spitter-mediumspitter-unit", {{0.4, 0.0}, {0.7, 0.3}, {0.9, 0.1}}},
+	{"arachnid-spitter-bigspitter-unit", {{0.5, 0.0}, {1.0, 0.4}}},
+	{"arachnid-spitter-behemothspitter-unit", {{0.9, 0.0}, {1.0, 0.3}}},
+	{"arachnid-biter-leviathan-unit", {{0.965, 0.0}, {1.0, 0.03}}}	
+	})
+	end
 
 
 --------------------------------------------------------------------------------------
-local spawner = table.deepcopy(data.raw["unit-spawner"]["biter-spawner"])
-spawner.name="bm-spawner" 
+local spawner =  table.deepcopy(data.raw["unit-spawner"]["biter-spawner"])
+spawner.name="bm-spawner"
 spawner.corpse = "bm-spawner-corpse"
+spawner.time_to_capture=0
+spawner.captured_spawner_entity=nil
 spawner.autoplace = nil 
-spawner.integration=nil
-spawner.animations =
+spawner.collision_box = {{-1.5, -1.3}, {1.5, 1.3}}
+spawner.selection_box = {{-1.5, -1.3}, {1.5, 1.3}}
+spawner.shooting_cursor_size = 4
+spawner.damaged_trigger_effect = hit_effects.rock()
+spawner.dying_explosion = nil
+spawner.dying_trigger_effect = decorative_trigger_effects.huge_rock()
+spawner.result_units = spawn_all_vanilla_units
+spawner.graphics_set = { animations =
 {
 	{
 		layers =
 		{
 			{
-				filename = "__Big-Monsters__/graphics/tunnel.png",
-				line_length = 1,
-				width = 148,
-				height = 148,
-				frame_count = 1,
-				animation_speed = 0.18,
-				direction_count = 1,
-				run_mode = "forward-then-backward",
-				shift = {0,0},
+			filename = "__base__/graphics/entity/worm/worm-hole-collapse.png",
+			line_length = 1,
+			width = 330,
+			height = 298,
+			scale = 0.5,
+			frame_count = 1,
+			animation_speed = 0.18,
+			direction_count = 1,
+			shift = util.by_pixel( 5.0, -14.5),
 			},
 		}
 	}
-}
+}}
 
 
 
@@ -119,10 +153,12 @@ local volcano =  table.deepcopy(data.raw["unit-spawner"][spawnbase])
 volcano.name="bm-volcano"
 volcano.dying_explosion = "nuke-explosion"
 volcano.corpse = nil
-volcano.max_health = 12000 * HPMult
+volcano.max_health = 10000 * HPMult
 volcano.autoplace = nil 
 volcano.resistances = volcano_resistances
-volcano.animations =
+volcano.damaged_trigger_effect = hit_effects.rock()
+volcano.time_to_capture = nil
+volcano.graphics_set = {animations = 
 {
 	{
 		layers =
@@ -138,9 +174,21 @@ volcano.animations =
 				run_mode = "forward-then-backward",
 				shift = {0,0},
 			},
+			{
+				filename = "__Big-Monsters__/graphics/volcano_shadow.png",
+				line_length = 1,
+				width = 300,
+				height = 300,
+				frame_count = 1,
+				animation_speed = 0.18,
+				direction_count = 1,
+				draw_as_shadow=true,
+				run_mode = "forward-then-backward",
+				shift = {0,0},
+			},			
 		}
 	}
-}
+}}
 
 
 --------------------------------------------------------------------------------------
@@ -154,28 +202,9 @@ local bzilla_carco2 = {r=0.5, g=0.4, b=0.1, a=0.7}
 local bzilla_verde = {r=0, g=1, b=0, a=1}
 local bzilla_verde2 = {r=0.2, g=0.9, b=0.1, a=0.75}
 
+local Loot = get_mf_Loot()
 
-local Loot = 
-	{
-	{ item = "productivity-module-2",  count_min = 1,  count_max = 4,  probability = 0.50 }	,
-	{ item = "productivity-module-3",  count_min = 1,  count_max = 3,  probability = 0.25 }	,
-	{ item = "effectivity-module-2",  count_min = 1,  count_max = 4,  probability = 0.50 }	,
-	{ item = "effectivity-module-3",  count_min = 1,  count_max = 3,  probability = 0.25 }	,
-	{ item = "speed-module-2",  count_min = 1,  count_max = 4,  probability = 0.50 }	,
-	{ item = "speed-module-3",  count_min = 1,  count_max = 3,  probability = 0.25 }	,
-	{ item = "uranium-fuel-cell",  count_min = 1,  count_max = 1,  probability = 0.10 }	,
-	}
 
-if data.raw.capsule['rpg_level_up_potion'] then
-	table.insert ( Loot , {item = "rpg_level_up_potion",  count_min = 1,  count_max = 2,  probability = 0.20})
-	table.insert ( Loot , {item = "rpg_amnesia_potion",  count_min = 1,  count_max = 1,  probability = 0.15})
-	table.insert ( Loot , {item = "rpg_small_xp_potion",  count_min = 1,  count_max = 3,  probability = 0.50})
-	table.insert ( Loot , {item = "rpg_big_xp_potion",  count_min = 1,  count_max = 2,  probability = 0.20})
-	end
-
- 
- 
- 
 function make_biter_area_damage(damage,scale)
 return  {
 					type = "area",
@@ -220,12 +249,12 @@ data:extend(
     icon = "__base__/graphics/icons/behemoth-spitter.png",
 	icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-    max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, --    (1000000 + L*500000) * BIGHPMult,
+    max_health = (1000000 + L^mf_hp_variant * 500000) * BIGHPMult / mf_hp_variant, --    (1000000 + L*500000) * BIGHPMult,
     order="b-b-g",
     subgroup="enemies",
     resistances = fire_resistances,
     healing_per_tick = 0.01,
-	collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+	collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 	selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 	sticker_box = {{-0.4, -0.6}, {0.4, 0.2}},
     distraction_cooldown = 300,
@@ -235,11 +264,11 @@ data:extend(
     max_pursue_distance = 30,
     attack_parameters = spitter_attack_parameters(
     {
-      acid_stream_name = "maf-cluster-fire-projectile",
+      acid_stream_name = "mf-boss-fire-projectile-big",
       range=85+L,
       min_attack_distance=10,
       cooldown=100-L*5,
-      damage_modifier=(100*(L+1)/2) * DMGMult,
+      damage_modifier=(100*(L+1)/2) * mf_dmg_multiplier,
       scale=biterzilla_scale,
       tint1=biterzilla_tint1,
       tint2=biterzilla_tint2,
@@ -249,7 +278,7 @@ data:extend(
 	vision_distance = 100,
     movement_speed = 0.03+L/100,
     distance_per_frame = 0.04,
-    pollution_to_join_attack = 100,
+    absorptions_to_join_attack = { pollution = 100 },
     corpse = "maf-giant-fire-spitter-corpse",
     dying_explosion = "blood-explosion-huge",
 	dying_sound = dying_s,
@@ -260,7 +289,7 @@ data:extend(
     damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
 	run_animation = spitterrunanimation(biterzilla_scale, biterzilla_tint1,biterzilla_tint2),
     hide_resistances = false,
-    ai_settings = {destroy_when_commands_fail = true},
+    ai_settings = {destroy_when_commands_fail = false},
   },
 
 
@@ -275,12 +304,12 @@ data:extend(
 	icon_size = 64, icon_mipmaps = 4,
     flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
     --max_health = (1000000 + L*500000) * BIGHPMult,
-	max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
+	max_health = (1000000 + L^mf_hp_variant * 500000) * BIGHPMult / mf_hp_variant, 	
     order="b-b-g",
     subgroup="enemies",
     resistances = acid_resistances,
     healing_per_tick = 0.01,
-	collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+	collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 	selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 	sticker_box = {{-0.4, -0.6}, {0.4, 0.2}},
     distraction_cooldown = 300,
@@ -294,7 +323,7 @@ data:extend(
       range=80+L*2,
       min_attack_distance=10,
       cooldown=100-L*5,
-      damage_modifier=(100*(L+1)/2) * DMGMult,
+      damage_modifier=(100*(L+1)/2) * mf_dmg_multiplier,
       scale=biterzilla_scale,
       tint1=bzilla_verde,
       tint2=bzilla_verde2,
@@ -304,7 +333,7 @@ data:extend(
 	vision_distance = 100,
     movement_speed = 0.03+L/100,
     distance_per_frame = 0.04,
-    pollution_to_join_attack = 100,
+    absorptions_to_join_attack = { pollution = 100 },
     corpse = "maf-giant-acid-spitter-corpse",
     dying_explosion = "blood-explosion-huge",
     dying_sound = dying_s,
@@ -315,7 +344,7 @@ data:extend(
 	water_reflection = spitter_water_reflection(biterzilla_scale),
     run_animation = spitterrunanimation(biterzilla_scale, bzilla_verde,bzilla_verde2),
     hide_resistances = false,
-    ai_settings = {destroy_when_commands_fail = true}	,
+    ai_settings = {destroy_when_commands_fail = false},
 	
   },
   
@@ -328,13 +357,13 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
+			max_health = (1000000 + L^mf_hp_variant * 500000) * BIGHPMult / mf_hp_variant, 	
 			subgroup="enemies",
 			resistances = fire_resistances,
 			call_for_help_radius = 80+ L*3,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.0,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 200, -- 300,
 		    loot = Loot,
@@ -355,7 +384,7 @@ data:extend(
 								  action_delivery = {
 									target_effects = {
 									  damage = {
-										amount = (600*(L+1)/2) * DMGMult,
+										amount = (600*(L+1)/2) * mf_dmg_multiplier,
 										type = "physical"
 									  },
 									  type = "damage",
@@ -365,7 +394,7 @@ data:extend(
 								  },
 								  type = "direct"
 								  },
-								  make_biter_area_damage((30 + L*5)*DMGMult,6+L), -- damage *MP / area
+								  make_biter_area_damage((30 + L*5)*mf_dmg_multiplier,6+L), -- damage *MP / area
 								  },
 							}
 			},
@@ -373,7 +402,7 @@ data:extend(
 			movement_speed = 0.04+L/100,
 			distance_per_frame = 0.3,
 			-- in pu
-			pollution_to_join_attack = 1, -- 20000
+			absorptions_to_join_attack = { pollution = 1 },
 			corpse = "biterzilla-corpse",
 		    dying_sound = dying_s,
 			dying_explosion = "blood-explosion-big",
@@ -382,7 +411,8 @@ data:extend(
 			running_sound_animation_positions = {2,},
 			damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
 			water_reflection = biter_water_reflection(biterzilla_scale),
-			run_animation = biterrunanimation(biterzilla_scale, biterzilla_tint1, biterzilla_tint2)
+			run_animation = biterrunanimation(biterzilla_scale, biterzilla_tint1, biterzilla_tint2),
+			ai_settings = {destroy_when_commands_fail = false},
 		},
 		
 
@@ -394,13 +424,13 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L^boss_hp_variant * 500000) * BIGHPMult / boss_hp_variant, 	
+			max_health = (1000000 + L^mf_hp_variant * 500000) * BIGHPMult / mf_hp_variant, 	
 			subgroup="enemies",
 			resistances = acidweak_resistances,
 			call_for_help_radius = 100,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.0,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 100, -- 300,
 		    loot = Loot,
@@ -421,7 +451,7 @@ data:extend(
 								  action_delivery = {
 									target_effects = {
 									  damage = {
-										amount = (600*(L+1)/2) * DMGMult,
+										amount = (600*(L+1)/2) * mf_dmg_multiplier,
 										type = "physical"
 									  },
 									  type = "damage",
@@ -431,7 +461,7 @@ data:extend(
 								  },
 								  type = "direct"
 								  },
-								  make_biter_area_damage((35+L*4)*DMGMult,8+L), -- damage *MP / area
+								  make_biter_area_damage((35+L*4)*mf_dmg_multiplier,8+L), -- damage *MP / area
 								  },
 							}
 			},
@@ -439,7 +469,7 @@ data:extend(
 			movement_speed = 0.035+L/100,
 			distance_per_frame = 0.3,
 			-- in pu
-			pollution_to_join_attack = 1, -- 20000
+			absorptions_to_join_attack = { pollution = 1 },
 			corpse = "bm-motherbzilla-corpse",
 		    dying_sound = dying_s,
 			dying_explosion = "blood-explosion-big",
@@ -448,7 +478,8 @@ data:extend(
 			running_sound_animation_positions = {2,},
 			damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
 			water_reflection = biter_water_reflection(biterzilla_scale+2),
-			run_animation = biterrunanimation(biterzilla_scale+2, bzilla_verde, bzilla_verde2)
+			run_animation = biterrunanimation(biterzilla_scale+2, bzilla_verde, bzilla_verde2),
+			ai_settings = {destroy_when_commands_fail = false},
 		},
 
 
@@ -462,13 +493,13 @@ data:extend(
 			icon = "__base__/graphics/icons/behemoth-biter.png",
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
-			max_health = (1000000 + L^boss_hp_variant * 200000) * BIGHPMult / boss_hp_variant, 				
+			max_health = (1000000 + L^mf_hp_variant * 200000) * BIGHPMult / mf_hp_variant, 				
 			subgroup="enemies",
 			resistances = energy_resistances,
 			call_for_help_radius = 80,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 300, -- 300,
 		    loot = Loot,
@@ -489,7 +520,7 @@ data:extend(
 								  action_delivery = {
 									target_effects = {
 									  damage = {
-										amount = (500*(L+1)/2) * DMGMult,
+										amount = (500*(L+1)/2) * mf_dmg_multiplier,
 										type = "physical"
 									  },
 									  type = "damage",
@@ -499,7 +530,7 @@ data:extend(
 								  },
 								  type = "direct"
 								  },
-								  make_biter_area_damage((40+L*5)*DMGMult,5+L), -- damage *MP / area
+								  make_biter_area_damage((40+L*5)*mf_dmg_multiplier,5+L), -- damage *MP / area
 								  },
 							}
 			},			
@@ -507,7 +538,7 @@ data:extend(
 			movement_speed = 0.08+L/100,
 			distance_per_frame = 0.3,
 			-- in pu
-			pollution_to_join_attack = 1, -- 20000
+			absorptions_to_join_attack = { pollution = 1 },
 			corpse = "biterzilla-corpse2",
 		    dying_sound =dying_s,
 			dying_explosion = "blood-explosion-big",
@@ -516,7 +547,8 @@ data:extend(
 			running_sound_animation_positions = {2,},
 			damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
 			water_reflection = biter_water_reflection(biterzilla_scale-1),
-			run_animation = biterrunanimation(biterzilla_scale-1, bzilla_amarelo1, bzilla_amarelo2)
+			run_animation = biterrunanimation(biterzilla_scale-1, bzilla_amarelo1, bzilla_amarelo2),
+			ai_settings = {destroy_when_commands_fail = false},
 		},
 		
 		
@@ -530,13 +562,13 @@ data:extend(
 			icon_size = 64, icon_mipmaps = 4,
 			flags = {"placeable-player", "placeable-enemy", "placeable-off-grid", "breaths-air", "not-repairable"},
 			--max_health = (1600000 + L*400000) * BIGHPMult,
-			max_health = (1600000 + L^boss_hp_variant * 400000) * BIGHPMult / boss_hp_variant, 				
+			max_health = (1600000 + L^mf_hp_variant * 400000) * BIGHPMult / mf_hp_variant, 				
 			subgroup="enemies",
 			resistances = strong_resistances,
 			call_for_help_radius = 80+L,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1,
-			collision_box = {{-0.1, -0.1}, {0.1, 0.1}},
+			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
 			selection_box = {{-3.4, -3.4}, {3.4, 3.4}},
 			distraction_cooldown = 300, -- 300,
 		    loot = Loot,
@@ -557,7 +589,7 @@ data:extend(
 								  action_delivery = {
 									target_effects = {
 									  damage = {
-										amount = (700*(L+1)/2) * DMGMult,
+										amount = (700*(L+1)/2) * mf_dmg_multiplier,
 										type = "physical"
 									  },
 									  type = "damage",
@@ -567,7 +599,7 @@ data:extend(
 								  },
 								  type = "direct"
 								  },
-								   make_biter_area_damage((50+L*5)*DMGMult,8+L), -- damage *MP / area
+								   make_biter_area_damage((50+L*5)*mf_dmg_multiplier,8+L), -- damage *MP / area
 								  },
 							}
 			},			
@@ -575,7 +607,7 @@ data:extend(
 			movement_speed = 0.04+L/100,
 			distance_per_frame = 0.3,
 			-- in pu
-			pollution_to_join_attack = 1, -- 20000
+			absorptions_to_join_attack = { pollution = 1 },
 			corpse = "biterzilla-corpse3",
 		    dying_sound =dying_s,
 		 	dying_explosion = "blood-explosion-big",
@@ -584,7 +616,8 @@ data:extend(
 			running_sound_animation_positions = {2,},
 			damaged_trigger_effect = table.deepcopy(data.raw['unit']['behemoth-biter'].damaged_trigger_effect),
 			water_reflection = biter_water_reflection(biterzilla_scale+1),
-			run_animation = biterrunanimation(biterzilla_scale+1, bzilla_carco1, bzilla_carco2)
+			run_animation = biterrunanimation(biterzilla_scale+1, bzilla_carco1, bzilla_carco2),
+			ai_settings = {destroy_when_commands_fail = false},
 		},
 		
 })		
@@ -593,7 +626,7 @@ data:extend(
 local spider_droid = table.deepcopy(data.raw["spider-vehicle"].spidertron)
 spider_droid.name="bm-spidertron_"..L 
 --spider_droid.max_health=(50000 + L*5000) * BIGHPMult
-spider_droid.max_health = (50000 + L^boss_hp_variant * 5000) * BIGHPMult / boss_hp_variant
+spider_droid.max_health = (50000 + L^mf_hp_variant * 5000) * BIGHPMult / mf_hp_variant
 spider_droid.localised_name = {"",{"entity-name.spidertron"},' '..L}
 spider_droid.hide_resistances = false
 spider_droid.inventory_size=1

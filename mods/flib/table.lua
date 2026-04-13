@@ -1,10 +1,14 @@
+if ... ~= "__flib__.table" then
+  return require("__flib__.table")
+end
+
 --- Extension of the Lua 5.2 table library.
 ---
 --- **NOTE:** Several functions in this module will only work with [arrays](https://www.lua.org/pil/11.1.html),
 --- which are tables with sequentially numbered keys. All table functions will work with arrays as well, but
 --- array functions **will not** work with tables.
 --- ```lua
---- local flib_table: = require("__flib__/table")
+--- local flib_table: = require("__flib__.table")
 --- ```
 --- @class flib_table: tablelib
 local flib_table = {}
@@ -17,8 +21,8 @@ end
 --- Shallow copy an array's values into a new array.
 ---
 --- This function is optimized specifically for arrays, and should be used in place of `table.shallow_copy` for arrays.
---- @param arr Array
---- @return Array
+--- @param arr flib.Array
+--- @return flib.Array
 function flib_table.array_copy(arr)
   local new_arr = {}
   for i = 1, #arr do
@@ -28,8 +32,8 @@ function flib_table.array_copy(arr)
 end
 
 --- Merge all of the given arrays into a single array.
---- @param arrays Array An array of arrays to merge.
---- @return Array
+--- @param arrays flib.Array An array of arrays to merge.
+--- @return flib.Array
 function flib_table.array_merge(arrays)
   local output = {}
   local i = 0
@@ -41,6 +45,43 @@ function flib_table.array_merge(arrays)
     end
   end
   return output
+end
+
+--- Perform a binary search of the array using the given comparator function. The array must be sorted
+--- in a manner compatible with the comparator and must not be modified during the search. The
+--- comparator should return `0` if the element matches the target, a negative number if the element
+--- precedes the target, or a positive number if the element succeeds the target.
+---
+--- ### Example
+---
+--- ```lua
+--- local nums = {1, 3, 4, 8, 20, 69}
+--- local looking_for = 20
+--- local i, match = flib_table.binary_search(nums, function(elem) return looking_for - elem end)
+--- assert(i == 5)
+--- assert(match == looking_for)
+--- ```
+--- @generic T
+--- @param array T[]
+--- @param comparator fun(elem: T): integer
+--- @return integer? The index of the matched element.
+--- @return T? The matched element.
+function flib_table.binary_search(array, comparator)
+  local low, high = 1, #array
+  assert(high, "Invalid array was passed to binary search.")
+  while low <= high do
+    local i = low + math.floor((high - low) / 2)
+    local elem = array[i]
+    assert(elem, "Found a nil element during binary search; array was modified or is invalid.")
+    local res = comparator(elem)
+    if res < 0 then
+      high = i - 1
+    elseif res > 0 then
+      low = i + 1
+    else
+      return i, array[i]
+    end
+  end
 end
 
 --- Recursively compare two tables for inner equality.
@@ -80,23 +121,18 @@ end
 --- @return T
 function flib_table.deep_copy(tbl)
   local lookup_table = {}
-  local function _copy(object)
-    if type(object) ~= "table" then
-      return object
-      -- don't copy factorio rich objects
-    elseif object.__self then
-      return object
-    elseif lookup_table[object] then
-      return lookup_table[object]
+  local function _copy(tbl)
+    if type(tbl) ~= "table" then
+      return tbl
+    elseif lookup_table[tbl] then
+      return lookup_table[tbl]
     end
-
     local new_table = {}
-    lookup_table[object] = new_table
-    for index, value in pairs(object) do
+    lookup_table[tbl] = new_table
+    for index, value in pairs(tbl) do
       new_table[_copy(index)] = _copy(value)
     end
-
-    return setmetatable(new_table, getmetatable(object))
+    return setmetatable(new_table, getmetatable(tbl))
   end
   return _copy(tbl)
 end
@@ -118,7 +154,7 @@ end
 --- log(tbl.foo) -- logs "baz"
 --- log(tbl.set) -- logs "3"
 --- ```
---- @param tables Array An array of tables to merge.
+--- @param tables flib.Array An array of tables to merge.
 --- @return table
 function flib_table.deep_merge(tables)
   local output = {}
@@ -189,7 +225,7 @@ end
 
 --- Call the given function on a set number of items in a table, returning the next starting key.
 ---
---- Calls `callback(value, key)` over `n` items from `tbl`, starting after `from_k`.
+--- Calls `callback(value, key)` over `n` items from `tbl` or until the end is reached, starting after `from_k`.
 ---
 --- The first return value of each invocation of `callback` will be collected and returned in a table keyed by the
 --- current item's key.
@@ -215,7 +251,7 @@ end
 ---   [1] = 1000,
 --- }
 --- event.on_tick(function()
----   global.from_k = table.for_n_of(extremely_large_table, global.from_k, 10, function(v) game.print(v) end)
+---   storage.from_k = table.for_n_of(extremely_large_table, storage.from_k, 10, function(v) game.print(v) end)
 --- end)
 --- ```
 --- @generic K, V, C
@@ -377,7 +413,7 @@ end
 ---
 --- This function utilizes [insertion sort](https://en.wikipedia.org/wiki/Insertion_sort), which is _extremely_ inefficient with large data sets. However, you can spread the sorting over multiple ticks, reducing the performance impact. Only use this function if `table.sort` is too slow.
 --- @generic V
---- @param arr Array<V>
+--- @param arr flib.Array<V>
 --- @param from_index number? The index to start iteration at (inclusive). Pass `nil` or a number less than `2` to begin at the start of the array.
 --- @param iterations number The number of iterations to perform. Higher is more performance-heavy. This number should be adjusted based on the performance impact of the custom `comp` function (if any) and the size of the array.
 --- @param comp fun(a: V, b: V) A comparison function for sorting. Must return truthy if `a < b`.
@@ -433,9 +469,6 @@ function flib_table.reduce(tbl, reducer, initial_value)
   return accumulator
 end
 
---- @deprecated use `table.remove`.
-flib_table.retrieve = flib_table.remove
-
 --- Shallowly copy the contents of a table into a new table.
 ---
 --- The parent table will have a new table reference, but any subtables within it will still have the same table
@@ -490,10 +523,10 @@ flib_table.size = _ENV.table_size
 --- log(serpent.line(arr)) -- {10, 20, 30, 40, 50, 60, 70, 80, 90} (unchanged)
 --- ```
 --- @generic V
---- @param arr Array<V>
+--- @param arr flib.Array<V>
 --- @param start number? default: `1`
 --- @param stop number? Stop at this index. If zero or negative, will stop `n` items from the end of the array (default: `#arr`).
---- @return Array<V> A new array with the copied values.
+--- @return flib.Array<V> A new array with the copied values.
 function flib_table.slice(arr, start, stop)
   local output = {}
   local n = #arr
@@ -526,10 +559,10 @@ end
 --- log(serpent.line(arr)) -- {10, 20, 80, 90} (values were removed)
 --- ```
 --- @generic V
---- @param arr Array<V>
+--- @param arr flib.Array<V>
 --- @param start number default: `1`
 --- @param stop number? Stop at this index. If zero or negative, will stop `n` items from the end of the array (default: `#arr`).
---- @return Array<V> A new array with the extracted values.
+--- @return flib.Array<V> A new array with the extracted values.
 function flib_table.splice(arr, start, stop)
   local output = {}
   local n = #arr
@@ -550,6 +583,6 @@ function flib_table.splice(arr, start, stop)
   return output
 end
 
---- @class Array<T>: { [integer]: T }
+--- @class flib.Array<T>: { [integer]: T }
 
 return flib_table

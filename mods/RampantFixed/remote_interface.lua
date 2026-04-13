@@ -13,13 +13,12 @@
 --  set enemy base to grow
 
 -- setting parameters requires permission. Don't forget to check it out
--- all functions *_ExtCtrl do nothing and return nil, if startup setting "rampantFixed--allowExternalControl" (Remote interface: allow external control AI) disabled -- upd. 1.8.3+ "allowExternalControl" always true
 -- it is recommended to issue a message to the user to enable setting
 
 local aiPlanning = require("libs/AIPlanning")
 local baseUtils = require("libs/BaseUtils")
 local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
-local constants = require("Constants")
+local constants = require("libs/Constants")
 local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
 local config = require("__RampantFixed__/config")
@@ -83,7 +82,7 @@ remote.add_interface("rampantFixed", {
 	-- note: all functions *_ExtCtrl do nothing and return nil, if allowExternalControl = false
 	-- note: since the "rampantFixed--allowExternalControl" is a startup setting, it is enough to check it once (on every load)
 	allowExternalControl = function()
-		return global.universe.allowExternalControl
+		return storage.universe.allowExternalControl
 	end
 	,
 	--------------------
@@ -91,23 +90,20 @@ remote.add_interface("rampantFixed", {
 	-- parameters: {attackWaveMaxSize = number}
 	-- return: number 
 	setWaveMaxSize_ExtCtrl = function(parameters)
-		if not global.universe.allowExternalControl then
-			return nil
-		end
 		if parameters and parameters.attackWaveMaxSize and (type(parameters.attackWaveMaxSize) == "number") and (parameters.attackWaveMaxSize > 0) and (parameters.attackWaveMaxSize <= 1000) then
-			global.universe.externalControlValues.attackWaveMaxSize = parameters.attackWaveMaxSize
+			storage.universe.externalControlValues.attackWaveMaxSize = parameters.attackWaveMaxSize
 		else
-			global.universe.externalControlValues.attackWaveMaxSize = nil		
+			storage.universe.externalControlValues.attackWaveMaxSize = nil		
 		end
-		aiPlanning.planningUniverse(global.universe, game.forces.enemy.evolution_factor, game.tick)
-		return config.getAttackWaveMaxSize(global.universe)
+		aiPlanning.planningUniverse(storage.universe, game.forces.enemy.evolution_factor, game.tick)
+		return config.getAttackWaveMaxSize(storage.universe)
 	end
 	,
 	--------------------
 	-- return: number of maximum wave size
 	-- note: Based on maximum wave size, the wave size is calculated
 	getWaveMaxSize = function()
-		return config.getAttackWaveMaxSize(global.universe)
+		return config.getAttackWaveMaxSize(storage.universe)
 	end
 	,
 	--------------------
@@ -117,30 +113,30 @@ remote.add_interface("rampantFixed", {
 	-- note: its average wave size, including all modifiers.  When forming attacking squads, this value is taken 
 	-- note: starting from 50% of the maximum size, the cost of the squad increases
 	setWaveSize_ExtCtrl = function(parameters)
-		if not global.universe.allowExternalControl then
+		if not storage.universe.allowExternalControl then
 			return nil
 		end
 		if parameters and parameters.attackWaveSize and (type(parameters.attackWaveSize) == "number") and (parameters.attackWaveSize > 0) and (parameters.attackWaveSize <= 1000) then
-			global.universe.externalControlValues.attackWaveSize = parameters.attackWaveSize
+			storage.universe.externalControlValues.attackWaveSize = parameters.attackWaveSize
 		else
-			global.universe.externalControlValues.attackWaveSize = nil
+			storage.universe.externalControlValues.attackWaveSize = nil
 		end
-		aiPlanning.planningUniverse(global.universe, game.forces.enemy.evolution_factor, game.tick)
-		return config.getAttackWaveSize(global.universe)
+		aiPlanning.planningUniverse(storage.universe, game.tick)
+		return config.getAttackWaveSize(storage.universe)
 	end
 	,
 	--------------------
 	-- return: number 
 	-- note: its average wave size, including all modifiers.  When forming attacking squads, this value is taken 
 	getWaveSize = function()
-		return config.getAttackWaveSize(global.universe)
+		return config.getAttackWaveSize(storage.universe)
 	end
 	,
 	--------------------
 	-- return: array of luaUnitGroup. All surfaces. Only Rampant squads. Settlers and underground attacks are not in this list
 	getRampantAttackGroups = function() 
 		local groups = {}
-		for groupNumber, squad in pairs(global.universe.groupNumberToSquad) do
+		for groupNumber, squad in pairs(storage.universe.groupNumberToSquad) do
 			if squad.map and squad.group.valid then
 				groups[#groups+1] = squad.group
 			end
@@ -160,13 +156,13 @@ remote.add_interface("rampantFixed", {
 	--
 	-- return: LuaUnitGroup or nil, if cant create squad
 	createSquad_ExtCtrl = function(parameters) 
-		if not global.universe.allowExternalControl then
+		if not storage.universe.allowExternalControl then
 			return nil
 		end
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then 
 			return nil
 		end
@@ -196,7 +192,7 @@ remote.add_interface("rampantFixed", {
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then 
 			return nil
 		end
@@ -220,7 +216,7 @@ remote.add_interface("rampantFixed", {
 	-- return: table of base stats or nil, if no base
 	getBaseById = function(parameters) 
 		if parameters and parameters.id then
-			return getBaseStats(global.universe.bases[parameters.id])
+			return getBaseStats(storage.universe.bases[parameters.id])
 		else
 			return nil
 		end
@@ -230,7 +226,7 @@ remote.add_interface("rampantFixed", {
 	-- return array of bases stats (look at getBaseStats)
 	getBases = function() 
 		local bases = {}
-		for i, base in pairs(global.universe.bases) do
+		for i, base in pairs(storage.universe.bases) do
 			bases[#bases+1] = getBaseStats(base)
 		end
 		return bases
@@ -283,13 +279,13 @@ remote.add_interface("rampantFixed", {
 	-- 		  	on the size of the map and how long ago there was a mutation in the chunk. Mutation is not possible more than once every 10 minutes
 	--			also, if there is already a mass mutation in the chunk at the time the command is issued, then the delay will increase
 	setBaseFactions_ExtCtrl = function(parameters) 
-		if not global.universe.allowExternalControl then
+		if not storage.universe.allowExternalControl then
 			return nil
 		end
 		if (not parameters) or (not parameters.id) then
 			return -1
 		end
-		local base = global.universe.bases[parameters.id]
+		local base = storage.universe.bases[parameters.id]
 		if not base then
 			return -1
 		end
@@ -333,7 +329,7 @@ remote.add_interface("rampantFixed", {
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then 
 			return nil
 		end
@@ -348,13 +344,10 @@ remote.add_interface("rampantFixed", {
 	-- return: nil or number of points
 	-- note: attack squad cost 175 points (can vary from 90 to 350, depending on various modifiers). But it is worth focusing on the value 175
 	setAI_points_ExtCtrl  = function(parameters) 
-		if not global.universe.allowExternalControl then
-			return nil
-		end
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then 
 			return nil
 		end
@@ -375,13 +368,10 @@ remote.add_interface("rampantFixed", {
 	-- parameters: {surfaceIndex = number,  state = number} 
 	-- return: nil or number (new AI state)
 	setAI_state_ExtCtrl  = function(parameters) 
-		if not global.universe.allowExternalControl then
-			return nil
-		end
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then
 			return nil
 		end	
@@ -400,7 +390,7 @@ remote.add_interface("rampantFixed", {
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then
 			return nil
 		end	
@@ -426,7 +416,7 @@ remote.add_interface("rampantFixed", {
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
 		end
-		local map = global.universe.maps[parameters.surfaceIndex]
+		local map = storage.universe.maps[parameters.surfaceIndex]
 		if not map then
 			return nil
 		end	
@@ -451,7 +441,7 @@ remote.add_interface("rampantFixed", {
 	end	
 	-- ,
 	-- setBaseToGrow_ExtCtrl = function(parameters) 
-		-- local universe = global.universe
+		-- local universe = storage.universe
 		-- if not universe.allowExternalControl then
 			-- return nil
 		-- end

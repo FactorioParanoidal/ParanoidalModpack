@@ -1,6 +1,6 @@
 function fillEnemies(config)
-	
-	config["enemy-base"] = {
+	config.nauvis["enemy-base"] =
+	{
 		type="entity",
 		force="enemy",
 		clear_range = {6, 6},
@@ -55,5 +55,30 @@ function fillEnemies(config)
 			}
 		}
 	}
-	
+
+	config.gleba["gleba_enemy_base"] =
+	{
+		type="entity",
+		force="enemy",
+		clear_range = {6, 6},
+		
+		spawns_per_region={min=2,max=4},
+		size={min=2,max=4},
+		size_per_region_factor=0.4,
+		richness=1,
+		
+		absolute_probability=settings.global["rso-enemy-chance"].value, -- chance to spawn in region
+		probability_distance_factor=1.15, -- relative increase per region
+		max_probability_distance_factor=3.0, -- absolute value
+		
+		bases = {
+			["gleba-spawner-small"] = {allotment = 50},
+			["gleba-spawner"] =
+			{
+				allotment = 50,
+				min_distance = 3,
+				allotment_distance_factor=1.3,
+			}
+		},
+	}	
 end

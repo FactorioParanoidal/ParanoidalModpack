@@ -3,8 +3,8 @@ local function get_stack_size(inserter, prototype)
     if stack_size > 0 then
         return stack_size
     end
-    if prototype.stack then
-        return 1 + prototype.inserter_stack_size_bonus + inserter.force.stack_inserter_capacity_bonus
+    if prototype.bulk then
+        return 1 + prototype.inserter_stack_size_bonus + inserter.force.bulk_inserter_capacity_bonus
     end
     return 1 + prototype.inserter_stack_size_bonus + inserter.force.inserter_stack_size_bonus
 end

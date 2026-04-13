@@ -2,18 +2,6 @@ local util = require ("util")
 
 local droneUtils = {}
 
-------------
-local flying_layer
-local collision_mask_util_extended 
-if mods["combat-mechanics-overhaul"] then
-	collision_mask_util_extended = require("__combat-mechanics-overhaul__/collision-mask-util-extended/data/collision-mask-util-extended")
-else
-	collision_mask_util_extended = require("collision-mask-util-extended/data/collision-mask-util-extended")		
-end
-flying_layer = collision_mask_util_extended.get_make_named_collision_mask("flying-layer")
-------------
-
-
 function droneUtils.makeDrone(attributes)
     local n = attributes.name .. "-drone-rampant"
     local resistances = {}
@@ -34,7 +22,7 @@ function droneUtils.makeDrone(attributes)
         },
         icon = "__base__/graphics/icons/defender.png",
         icon_size = 32,
-        flags = {"placeable-off-grid", "not-on-map", "not-repairable", "breaths-air", "hidden"},
+        flags = {"placeable-off-grid", "not-on-map", "not-repairable", "breaths-air"},	--, "hidden"
         subgroup="capsule",
         order="e-a-a",
         max_health = attributes.health or 60,
@@ -219,10 +207,8 @@ function droneUtils.makeDrone(attributes)
 		end
 	end
 	
-	if flying_layer then
-		drone.collision_mask = {flying_layer, "not-colliding-with-itself"}
-		drone.collision_box = {{0, 0}, {0, 0}}
-	end
+	drone.collision_mask =  {layers={trigger_target=true}, not_colliding_with_itself=true}
+	drone.collision_box = {{0, 0}, {0, 0}}
     return drone
 end
 
@@ -249,7 +235,7 @@ function droneUtils.createCapsuleProjectile(attributes, entityName)
                             {
                                 type = "damage",
 								force = "not-same",
-                                damage = {amount = attributes.damage or 5, type = attributes.damageType or "explosion"}
+                                damage = {amount = attributes.damage or 5, type = attributes.damageType or "physical"}
                             }
                         }
                 }
@@ -259,6 +245,9 @@ function droneUtils.createCapsuleProjectile(attributes, entityName)
     -- if attributes.sourceEffect then
     -- 	actions[#actions+1] = attributes.sourceEffect(attributes)
     -- end
+	local acceleration = attributes.acceleration or 0.01
+ 	acceleration = acceleration * ((attributes.attackModifiers and attributes.attackModifiers.accelerationModifier) or 1)
+	
 
     local cap = {
         type = "projectile",
@@ -269,7 +258,7 @@ function droneUtils.createCapsuleProjectile(attributes, entityName)
         direction_only = attributes.attackDirectionOnly,
         piercing_damage = attributes.piercingDamage or 0,
         force_condition = "not-same",
-        acceleration = attributes.acceleration or 0.01,
+        acceleration = acceleration,
         action = actions,
         light = {intensity = 0.5, size = 4},
         enable_drawing_with_mask = true,

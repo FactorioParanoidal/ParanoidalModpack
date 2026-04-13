@@ -164,7 +164,7 @@ this.templates.settingsWindow = {
 				{
 					type = "sprite-button",
 					name = "ed_close",
-					sprite = "utility/close_white",
+					sprite = "utility/close",
 					hovered_sprite = "utility/close_black",
 					clicked_sprite = "utility/close_black",
 					style = "frame_action_button",
@@ -180,7 +180,7 @@ this.templates.settingsWindow = {
 			type = "scroll-pane",
 			vertical_scroll_policy = "auto-and-reserve-space",
 			style = {
-				parent = "control_settings_scroll_pane", --"scroll_pane_with_dark_background_under_subheader",
+				parent = "list_box_scroll_pane", -- "control_settings_scroll_pane", --"scroll_pane_with_dark_background_under_subheader",
 				minimal_width = 450, --530, -- 350,
 				-- minimal_height = 344, -- Inventory GUI height
 				-- maximal_height = 600,
@@ -207,7 +207,7 @@ this.templates.settingsWindow = {
 								{
 									type = "label",
 									name = "frame_caption",
-									style = "heading_3_label_yellow",
+									style = "caption_label", -- "heading_3_label_yellow"
 									caption = {"settings-gui.general"},
 								},
 							}
@@ -394,7 +394,7 @@ this.templates.settingsWindow = {
 								{
 									type = "label",
 									name = "frame_caption",
-									style = "heading_3_label_yellow",
+									style = "caption_label", -- "heading_3_label_yellow"
 									caption = {"settings-gui.drag-title"},
 								},
 								{
@@ -422,7 +422,7 @@ this.templates.settingsWindow = {
 								},
 								{
 									type = "label",
-									style = "invalid_label",
+									style = "red_label",
 									caption = {"settings-gui.globally-disabled"},
 									onCreated = function(self)
 										self.visible = settings.global["disable-distribute"].value
@@ -450,7 +450,7 @@ this.templates.settingsWindow = {
 									{
 										{
 											type = "label",
-											-- style = "heading_3_label_yellow",
+											-- style = "caption_label", -- "heading_3_label_yellow"
 											caption = {"settings-gui.distribute-from"},
 										},
 										{
@@ -584,7 +584,7 @@ this.templates.settingsWindow = {
 								{
 									type = "label",
 									name = "frame_caption",
-									style = "heading_3_label_yellow",
+									style = "caption_label", -- "heading_3_label_yellow"
 									caption = {"settings-gui.inventory-cleanup-title"},
 								},
 								{
@@ -612,7 +612,7 @@ this.templates.settingsWindow = {
 								},
 								{
 									type = "label",
-									style = "invalid_label",
+									style = "red_label",
 									caption = {"settings-gui.globally-disabled"},
 									onCreated = function(self)
 										self.visible = settings.global["disable-inventory-cleanup"].value
@@ -736,7 +736,7 @@ this.templates.settingsWindow = {
 								{
 									type = "label",
 									name = "frame_caption",
-									style = "heading_3_label_yellow",
+									style = "caption_label", -- "heading_3_label_yellow"
 									caption = {"settings-gui.advanced"},
 								},
 								{
@@ -747,20 +747,20 @@ this.templates.settingsWindow = {
 									type = "sprite-button",
 									name = "expand_advanced",
 									sprite = "utility/expand",
-									hovered_sprite = "utility/expand_dark",
-									clicked_sprite = "utility/expand_dark",
+									hovered_sprite = "utility/expand",
+									clicked_sprite = "utility/expand",
 									style = "frame_action_button",
 									onChanged = function(self, event)
 										if self.sprite == "utility/expand" then
 											self.parent.parent.frame_content.visible = true
 											self.sprite = "utility/collapse"
-											self.hovered_sprite = "utility/collapse_dark"
-											self.clicked_sprite = "utility/collapse_dark"
+											self.hovered_sprite = "utility/collapse"
+											self.clicked_sprite = "utility/collapse"
 										else
 											self.parent.parent.frame_content.visible = false
 											self.sprite = "utility/expand"
-											self.hovered_sprite = "utility/expand_dark"
-											self.clicked_sprite = "utility/expand_dark"
+											self.hovered_sprite = "utility/expand"
+											self.clicked_sprite = "utility/expand"
 										end
 									end,
 								},
@@ -1001,7 +1001,7 @@ this.templates.ignoredEntityChooser = {
 	elem_type = "entity",
 	onCreated = function(self, data)
 		self.elem_value = data.name
-		self.elem_filters = {{ filter = "name", name = _(global.allowedEntities):keys():toPlain() }}
+		self.elem_filters = {{ filter = "name", name = _(storage.allowedEntities):keys():toPlain() }}
 	end,
 	onChanged = function(self, event)
 		local parent = self.parent

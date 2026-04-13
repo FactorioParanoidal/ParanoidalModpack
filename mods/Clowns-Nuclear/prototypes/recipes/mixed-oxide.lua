@@ -7,9 +7,8 @@ data:extend(
 		enabled = false,
 		ingredients =
 		{
-			{"iron-plate", 2},
-			{"plutonium-239", 2},
-			{"uranium-238", 2},
+			{type="item",name="iron-plate", amount=2},
+			{type="item",name="uranium-238", amount=2},
 		},
 		icon = "__Clowns-Nuclear__/graphics/icons/nuclear-fuel-mixed-oxide.png",
 		icon_size = 32,
@@ -17,10 +16,7 @@ data:extend(
 		order = "d-a",
 		results =
 		{
-			{
-				name = "uranium-fuel-cell",
-				amount = 2
-			},
+			{type="item",name = "uranium-fuel-cell",amount = 2},
 		},
 		allow_decomposition = false
 	},
@@ -28,3 +24,9 @@ data:extend(
 	
 }
 )
+
+if mods["angelspetrochem"] then
+	table.insert(data.raw["recipe"]["mixed-oxide"].ingredients, {type="item",name="angels-plutonium-239", amount= 2})
+else
+	table.insert(data.raw["recipe"]["mixed-oxide"].ingredients, {type="item",name="plutonium-239",amount= 2})
+end

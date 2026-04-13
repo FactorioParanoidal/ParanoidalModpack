@@ -1,0 +1,11 @@
+{
+  "name": "GlowingLaserBeams",
+  "version": "0.0.5",
+  "title": "Glowing Laser Beams",
+  "author": "Pikachar",
+  "contact": "",
+  "homepage": "https://github.com/Pikachar2/GlowingLaserBeams",
+  "factorio_version": "2.0",
+  "dependencies": ["base", "?Krastorio", "?Turret_Range_Buff"],
+  "description": "Custom colors for laser beams"
+}

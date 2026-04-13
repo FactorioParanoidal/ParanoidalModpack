@@ -49,7 +49,6 @@ function monolithIcon(filename, size, scale, shift, position, border, stretch)
   return {
     filename = filename,
     priority = "extra-high-no-scale",
-    align = "center",
     size = size,
     scale = scale,
     shift = shift,
@@ -212,9 +211,10 @@ function menuButtonIcons(name, font)
   menuButtonIcon(name, icon_row(2,2,2,2), icon_col(1,3,4,1), 32, "selected_yellow", font, font_white, font_white)
   menuButtonIcon(name, icon_row(2,2,2,2), icon_col(1,3,4,1), 24, "sm_selected_yellow", font, font_white, font_white)
 
-  menuButtonIcon(name, icon_row(2,2,2,2), icon_col(), 36, "flat2", font, font_white, font_white)
-  menuButtonIcon(name, icon_row(2,2,2,2), icon_col(), 32, "flat", font, font_white, font_white)
-  menuButtonIcon(name, icon_row(2,2,2,2), icon_col(), 24, "sm_flat", font, font_white, font_white)
+  menuButtonIcon(name, icon_row(3,3,3,3), icon_col(), 36, "flat2", font, font_white, font_white)
+  menuButtonIcon(name, icon_row(3,3,3,3), icon_col(), 32, "flat", font, font_white, font_white)
+  menuButtonIcon(name, icon_row(3,3,3,3), icon_col(), 24, "m_flat", font, font_white, font_white)
+  menuButtonIcon(name, icon_row(3,3,3,3), icon_col(), 16, "sm_flat", font, font_white, font_white)
 end
 menuButtonIcons("menu")
 
@@ -417,6 +417,25 @@ for _,style in pairs(style_list) do
       hovered_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=148,y=icon_offset_y+style.offset}, {top=0,right=0,bottom=0,left=0}, true),
       clicked_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=184,y=icon_offset_y+style.offset}, {top=0,right=0,bottom=0,left=0}, true),
       disabled_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=111,y=icon_offset_y+style.offset}, {top=0,right=0,bottom=0,left=0}, true)
+    }
+  end
+end
+
+for _,style in pairs(style_list) do
+  if style.suffix == "_flat" then
+    default_gui["helmod_button_actived_icon"..style.suffix] = {
+      type = "button_style",
+      parent = "helmod_button_icon",
+      default_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=0,y=150}, {top=0,right=0,bottom=0,left=0}, true),
+    }
+  else
+    default_gui["helmod_button_actived_icon"..style.suffix] = {
+      type = "button_style",
+      parent = "helmod_button_icon",
+      default_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=111,y=style.offset}, {top=0,right=0,bottom=0,left=0}, true),
+      hovered_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=148,y=style.offset}, {top=0,right=0,bottom=0,left=0}, true),
+      clicked_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=184,y=style.offset}, {top=0,right=0,bottom=0,left=0}, true),
+      disabled_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=111,y=style.offset}, {top=0,right=0,bottom=0,left=0}, true)
     }
   end
 end
@@ -686,4 +705,38 @@ default_gui["helmod_button_tab_selected"] = {
   disabled_font_color={r=0.5, g=0.5, b=0.5},
   disabled_graphical_set = compositionIcon("__helmod__/graphics/gui.png", corner_size, {8, 0}),
   pie_progress_color = {r=1, g=1, b=1}
+}
+
+gui_color =
+{
+    white = { 1, 1, 1 },
+    white_with_alpha = { 1, 1, 1, 0.5 },
+    grey = { 0.5, 0.5, 0.5 },
+    green = { 0, 1, 0 },
+    red = { 255, 142, 142 },
+    orange = { 0.98, 0.66, 0.22 },
+    light_orange = { 1, 0.74, 0.40 },
+    caption = { 255, 230, 192 },
+    achievement_green = { 210, 253, 145 },
+    achievement_tan = { 255, 230, 192 },
+    achievement_failed = { 176, 171, 171 },
+    achievement_failed_body = { 255, 136, 136 },
+    blue = { 128, 206, 240 }
+}
+
+default_gui["helmod_link"] = {
+  type = "button_style",
+  parent = "helmod_button_default",
+  horizontal_align = "left",
+  font = "default-bold",
+  minimal_width = 0,
+  height = 19,
+  padding = 1,
+  margin = 1,
+  default_font_color = gui_color.light_orange,
+  hovered_font_color = gui_color.grey,
+  default_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=0,y=150}, {top=0,right=0,bottom=0,left=0}, true),
+  hovered_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=0,y=150}, {top=0,right=0,bottom=0,left=0}, true),
+  clicked_graphical_set = monolithIcon("__core__/graphics/gui.png", monolith_size, monolith_scale, {0,0}, {x=0,y=150}, {top=0,right=0,bottom=0,left=0}, true),
+  
 }

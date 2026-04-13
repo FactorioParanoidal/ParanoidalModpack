@@ -9,27 +9,26 @@
 	* Environment deconstruction planner
 		- Tree killer deconstruction planner.
 		- Tree killer shortcut.
-	* WellPlanner shortcut.
 ]]
 
 -- TAGS
-local deconstruction_planner = ""
-local well_planner = ""
+local deconstruction_planner
 if settings.startup["ick-tags"].value == "tags" then
 	local tag = {"", "[color=blue]", {"item-name.blueprint"}, ": [/color]"}
 	deconstruction_planner = tag
-	well_planner = tag
 elseif settings.startup["ick-tags"].value == "icons" then
 	deconstruction_planner = "[img=entity/tree-01] "
-	well_planner = "[img=item/well-planner] "
+else
+	deconstruction_planner = ""
 end
 
 -- ENVIRONMENT DECONSTRUCTION PLANNER
-if  settings.startup["tree-killer"].value then
+if settings.startup["tree-killer"].value then
 	local tree_killer = util.table.deepcopy(data.raw["deconstruction-item"]["deconstruction-planner"])
 		tree_killer.name = "tree-killer"
 		tree_killer.localised_name = {"", {"item-group-name.environment"}, " ", {"item-name.deconstruction-planner"}}
-		tree_killer.flags = {"only-in-cursor", "hidden"}
+		tree_killer.flags = {"only-in-cursor", "spawnable"}
+		tree_killer.hidden = true
 		tree_killer.entity_filter_count = 255
 
 	data:extend({
@@ -42,38 +41,10 @@ if  settings.startup["tree-killer"].value then
 			action = "lua",
 			technology_to_unlock = "construction-robotics",
 			style = "red",
-			icon = {
-				filename = "__Shortcuts-ick__/graphics/tree-killer-x32-white.png",
-				priority = "extra-high-no-scale",
-				size = 32,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			},
-			small_icon = {
-				filename = "__Shortcuts-ick__/graphics/tree-killer-x24-white.png",
-				priority = "extra-high-no-scale",
-				size = 24,
-				scale = 0.5,
-				flags = {"gui-icon"}
-			}
+			icon = "__Shortcuts-ick__/graphics/tree-killer-x32-white.png",
+			icon_size = 32,
+			small_icon = "__Shortcuts-ick__/graphics/tree-killer-x24-white.png",
+			small_icon_size = 24
 		}
 	})
-end
-
--- WELL PLANNER
-if settings.startup["well-planner"] and settings.startup["well-planner"].value and data.raw["selection-tool"]["well-planner"] then
-	data:extend({{
-		type = "shortcut",
-		name = "well-planner",
-		localised_name = {"", well_planner, {"item-name.well-planner"}},
-		order = "b[blueprint]-j[well-planner]",
-		action = "lua",
-		icon = {
-			filename = "__WellPlanner__/graphics/well-planner.png",
-			priority = "extra-high-no-scale",
-			size = 64,
-			scale = 0.5,
-			flags = {"gui-icon"}
-		}
-	}})
 end

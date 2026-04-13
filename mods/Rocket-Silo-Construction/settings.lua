@@ -19,12 +19,21 @@ data:extend({
   },
 
   {
-    type = "int-setting",
+    type = "double-setting",
     name = "rsc-st-cost-mp",
     setting_type = "startup",
 	default_value = 1,
-	minimum_value = 1,
+	minimum_value = 0.5,
 	maximum_value = 100,
+  },
+
+  {
+    type = "double-setting",
+    name = "rsc-st-power-mp",
+    setting_type = "startup",
+	default_value = 1,
+	minimum_value = 0.25,
+	maximum_value = 3,
   },
 
 
@@ -49,6 +58,14 @@ data:extend({
     default_value = false,
  },
 
+
+{
+	type = "bool-setting",
+	name = "rsc-fill-concrete",
+	setting_type = "runtime-global",
+	default_value = true,
+	order = "a"
+},
 
 {
 	type = "bool-setting",

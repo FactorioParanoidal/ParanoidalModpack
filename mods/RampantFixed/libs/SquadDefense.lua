@@ -53,6 +53,7 @@ local function scoreRetreatLocation(map, neighborChunk)
 end
 
 function aiDefense.retreatUnits(chunk, cause, map, tick, radius)
+	error("aiDefense.retreatUnits")
     if (tick - getRetreatTick(map, chunk) > COOLDOWN_RETREAT) and (getEnemyStructureCount(map, chunk) == 0) then
 
         setRetreatTick(map, chunk, tick)

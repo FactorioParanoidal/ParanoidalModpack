@@ -1,6 +1,6 @@
 function fillEnhancedRecipesConfig(config)
 
-	if game.active_mods["enhanced_recipes"] then
+	if script.active_mods["enhanced_recipes"] then
 	
 		config["bauxite-ore"] =
 		{

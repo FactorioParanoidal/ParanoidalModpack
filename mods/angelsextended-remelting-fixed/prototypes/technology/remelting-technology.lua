@@ -1,119 +1,109 @@
-data:extend(
-{
+data:extend({
 	-- Alloy Mixer
 	{
 		type = "technology",
 		name = "remelting-alloy-mixer-1",
-		icon = "__angelssmelting__/graphics/technology/induction-furnace-tech.png",
-		icon_size = 256, icon_mipmaps = 2,
-		prerequisites =
-		{
+		icon = "__angelssmeltinggraphics__/graphics/technology/induction-furnace-tech.png",
+		icon_size = 256,
+		icon_mipmaps = 2,
+		prerequisites = {
 			"angels-metallurgy-1",
 		},
-		effects =
-		{
+		effects = {
 			{
 				type = "unlock-recipe",
-				recipe = "alloy-mixer"
+				recipe = "alloy-mixer",
 			},
 		},
-		unit =
-		{
+		unit = {
 			count = 50,
 			ingredients = {
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
 			},
-			time = 30
+			time = 30,
 		},
-		order = "c-a"
+		order = "c-a",
 	},
 	{
 		type = "technology",
 		name = "remelting-alloy-mixer-2",
-		icon = "__angelssmelting__/graphics/technology/induction-furnace-tech.png",
-		icon_size = 256, icon_mipmaps = 2,
-		prerequisites =
-		{
+		icon = "__angelssmeltinggraphics__/graphics/technology/induction-furnace-tech.png",
+		icon_size = 256,
+		icon_mipmaps = 2,
+		prerequisites = {
 			"remelting-alloy-mixer-1",
 		},
-		effects =
-		{
+		effects = {
 			{
 				type = "unlock-recipe",
-				recipe = "alloy-mixer-2"
+				recipe = "alloy-mixer-2",
 			},
 		},
-		unit =
-		{
+		unit = {
 			count = 50,
 			ingredients = {
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
 			},
-			time = 30
+			time = 30,
 		},
-		order = "c-a"
+		order = "c-a",
 	},
 	{
 		type = "technology",
 		name = "remelting-alloy-mixer-3",
-		icon = "__angelssmelting__/graphics/technology/induction-furnace-tech.png",
-		icon_size = 256, icon_mipmaps = 2,
-		prerequisites =
-		{
+		icon = "__angelssmeltinggraphics__/graphics/technology/induction-furnace-tech.png",
+		icon_size = 256,
+		icon_mipmaps = 2,
+		prerequisites = {
 			"remelting-alloy-mixer-2",
 		},
-		effects =
-		{
+		effects = {
 			{
 				type = "unlock-recipe",
-				recipe = "alloy-mixer-3"
+				recipe = "alloy-mixer-3",
 			},
 		},
-		unit =
-		{
+		unit = {
 			count = 50,
 			ingredients = {
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-				{"production-science-pack", 1},
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "production-science-pack", 1 },
 			},
-			time = 30
+			time = 30,
 		},
-		order = "c-a"
+		order = "c-a",
 	},
 	{
 		type = "technology",
 		name = "remelting-alloy-mixer-4",
-		icon = "__angelssmelting__/graphics/technology/induction-furnace-tech.png",
-		icon_size = 256, icon_mipmaps = 2,
-		prerequisites =
-		{
+		icon = "__angelssmeltinggraphics__/graphics/technology/induction-furnace-tech.png",
+		icon_size = 256,
+		icon_mipmaps = 2,
+		prerequisites = {
 			"remelting-alloy-mixer-3",
 		},
-		effects =
-		{
+		effects = {
 			{
 				type = "unlock-recipe",
-				recipe = "alloy-mixer-4"
+				recipe = "alloy-mixer-4",
 			},
 		},
-		unit =
-		{
+		unit = {
 			count = 50,
 			ingredients = {
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-				{"production-science-pack", 1},
-				{"utility-science-pack", 1},
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "production-science-pack", 1 },
+				{ "utility-science-pack", 1 },
 			},
-			time = 30
+			time = 30,
 		},
-		order = "c-a"
+		order = "c-a",
 	},
-}
-)
+})

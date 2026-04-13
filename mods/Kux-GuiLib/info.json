@@ -1,0 +1,13 @@
+{
+	"name": "Kux-GuiLib",
+	"version": "3.0.10",
+	"title": "Kuxynator's GUI Library",
+	"author": "Kuxynator",
+	"homepage": "https://mods.factorio.com/user/kuxynator",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0",
+		"Kux-CoreLib >= 3.17.8"
+	],
+	"description": "Provides GUI functionality for Kuxynator's mods."
+}

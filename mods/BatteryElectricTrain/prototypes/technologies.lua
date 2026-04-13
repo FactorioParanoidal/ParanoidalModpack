@@ -3,7 +3,7 @@ data:extend({
 		type = "technology",
 		name = name_tech_bet,
 		icon = graphics_path..name_tech_bet..".png",
-		icon_size = 256, icon_mipmaps = 4,
+		icon_size = 256,
 		effects = {
 			{type = "unlock-recipe", recipe = name_locomotive},
 			{type = "unlock-recipe", recipe = name_chg1},
@@ -90,12 +90,12 @@ data:extend({
 		type = "technology",
 		name = name_tech_fuel2,
 		icon = graphics_path..name_tech_fuel2.."-tech.png",
-		icon_size = 128, icon_mipmaps = 4,
+		icon_size = 128,
 		effects = {
 			{type = "unlock-recipe", recipe = name_fuel2.."-empty"},
 			{type = "unlock-recipe", recipe = name_fuel2.."-full"},
 		},
-		prerequisites = {name_tech_bet, "advanced-electronics-2"},
+		prerequisites = {name_tech_bet, "processing-unit"},
 		unit = {
 			count = 300,
 			ingredients = {
@@ -112,7 +112,7 @@ data:extend({
 		type = "technology",
 		name = name_tech_fuel3,
 		icon = graphics_path..name_tech_fuel3.."-tech.png",
-		icon_size = 128, icon_mipmaps = 4,
+		icon_size = 128,
 		effects = {
 			{type = "unlock-recipe", recipe = name_fuel3.."-empty"},
 			{type = "unlock-recipe", recipe = name_fuel3.."-full"},
@@ -134,12 +134,12 @@ data:extend({
 		type = "technology",
 		name = name_tech_fuel4,
 		icon = graphics_path..name_tech_fuel4.."-tech.png",
-		icon_size = 128, icon_mipmaps = 4,
+		icon_size = 128,
 		effects = {
 			{type = "unlock-recipe", recipe = name_fuel4.."-empty"},
 			{type = "unlock-recipe", recipe = name_fuel4.."-full"},
 		},
-		prerequisites = {name_tech_fuel3, "effectivity-module-3"},
+		prerequisites = {name_tech_fuel3, "efficiency-module-3"},
 		unit = {
 			count = 300,
 			ingredients = {
@@ -160,7 +160,7 @@ if settings.startup[setting_recycling].value then
 		type = "technology",
 		name = name_tech_recycling,
 		icon = graphics_path..name_tech_recycling.."-tech.png",
-		icon_size = 128, icon_mipmaps = 4,
+		icon_size = 128,
 		effects = {
 			{type = "unlock-recipe", recipe = name_fuel1.."-recycling"},
 			{type = "unlock-recipe", recipe = name_fuel2.."-recycling"},

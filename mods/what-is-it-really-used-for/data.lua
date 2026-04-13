@@ -4,8 +4,8 @@ data:extend({
     name = "looking-glass",
     filename = "__what-is-it-really-used-for__/graphics/search-icon.png",
     priority = "extra-high-no-scale",
-    width = 64,
-    height = 64,
+    width = 300,
+    height = 300,
     scale = 1,
   },
   {

@@ -1,15 +1,7 @@
 local config = {}
 
-local PT_rect_color_specs =
-{
-  ["red"]     = {r=0.10, g=0.05, b=0.05, a=0.05},
-  ["yellow"]  = {r=0.10, g=0.10, b=0.05, a=0.05},
-  ["green"]   = {r=0.05, g=0.10, b=0.05, a=0.05},
-  ["cyan"]    = {r=0.05, g=0.10, b=0.10, a=0.05},
-  ["blue"]    = {r=0.05, g=0.05, b=0.10, a=0.05},
-  ["magenta"] = {r=0.10, g=0.05, b=0.10, a=0.05},
-  ["white"]   = {r=0.10, g=0.10, b=0.10, a=0.05},
-}
+config.mod_prefix         = "Schall-PT-"
+config.mod_prefix_ptrn    = "Schall%-PT%-"
 
 config.idx_inv_chest      = defines.inventory.chest
 config.PT_mod_name        = "SchallPickupTower"
@@ -18,7 +10,18 @@ config.PT_radius_ptrn     = "%a+%-%a(%d+)"
 config.PT_upper_suffix    = "-upper"
 config.PT_upper_ptrn      = "%-upper$"
 config.PT_upper_radius_ptrn = "%a+%-%a(%d+)%-.+"
-config.PT_rect_color      = PT_rect_color_specs[settings.startup["pickuptower-range-color"].value]
+config.PT_rect_color      = settings.startup[config.mod_prefix .. "range-colour"].value
+for k, v in pairs(config.PT_rect_color) do
+  config.PT_rect_color[k] = v / 4
+end
+config.PT_rect_color[4] = 0.05  -- These changes are to make two display modes offering similar visualizations.
+
+config.PT_upper_filter = {
+  {filter = "name", name = "Schall-pickup-tower-R32-upper"},
+  {filter = "name", name = "Schall-pickup-tower-R64-upper"},
+  {filter = "name", name = "Schall-pickup-tower-R96-upper"},
+  {filter = "name", name = "Schall-pickup-tower-R128-upper"},
+}
 
 
 

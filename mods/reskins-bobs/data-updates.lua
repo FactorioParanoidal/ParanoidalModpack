@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -23,6 +23,7 @@ require("prototypes.entity.ores.ores-updates")
 ----------------------------------------------------------------------------------------------------
 require("prototypes.item.electronics.circuits") -- Bob has circuit coloring in data-updates
 require("prototypes.item.plates.battery") -- Bob has some battery updates in data-updates
+require("prototypes.item.plates-updates")
 
 ----------------------------------------------------------------------------------------------------
 -- TECHNOLOGIES
@@ -36,7 +37,5 @@ require("prototypes.technology.warfare-updates") -- Bob does tech updates in dat
 ----------------------------------------------------------------------------------------------------
 -- GUI Modifications
 ----------------------------------------------------------------------------------------------------
+-- FIXME: This is a temporary disablement of the item group icons, until new ones are created.
 -- require("prototypes.item-group.item-group")
-
--- Assign deferred icons
-reskins.lib.assign_deferred_icons("bobs", "data-updates")

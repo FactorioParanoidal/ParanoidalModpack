@@ -1,4 +1,3 @@
-if data.raw.item["thorium-fuel-cell"] then
   data:extend(
   { --basic thorium processing
     {
@@ -7,7 +6,9 @@ if data.raw.item["thorium-fuel-cell"] then
       energy_required = 10,
       enabled = false,
       category = "centrifuging",
-      ingredients = {{"thorium-ore", 10}},
+      ingredients = {
+        {type="item",name="angels-thorium-ore", amount=10}
+      },
       icon = "__Clowns-Nuclear__/graphics/icons/thorium-processing.png",
       icon_size = 32,
       crafting_machine_tint =
@@ -20,19 +21,19 @@ if data.raw.item["thorium-fuel-cell"] then
       order = "z",
       results =
       {
-        {type="item", name="thorium-232", amount=1},
+        {type="item", name="angels-thorium-232", amount=1},
       }
     },
     { --thorium fuel cells
       type = "recipe",
-      name = "thorium-mixed-oxide",
+      name = "clowns-thorium-mixed-oxide",
       energy_required = 50,
       enabled = false,
       ingredients =
       {
-        {type="item", name="iron-plate", amount=2},
-        {type="item", name="plutonium-239", amount=2},
-        {type="item", name="thorium-232", amount=2}
+        {type="item", name="angels-plate-lead", amount=2},
+        {type="item", name="angels-plutonium-239", amount=2},
+        {type="item", name="angels-thorium-232", amount=2}
       },
       icon = "__Clowns-Nuclear__/graphics/icons/thorium-nuclear-fuel-mixed-oxide.png",
       icon_size = 32,
@@ -40,44 +41,42 @@ if data.raw.item["thorium-fuel-cell"] then
       order = "d-b",
       results =
       {
-        {
-          name = "thorium-fuel-cell",
-          amount = 2
-        },
+        { type= "item", name = "angels-thorium-fuel-cell", amount = 2},
       },
       allow_decomposition = false
     },
     {
       type = "recipe",
-      name = "thorium-fuel-cell",
+      name = "clowns-thorium-fuel-cell",
       energy_required = 10,
       enabled = false,
       ingredients =
       {
-        {"iron-plate", 10},
-        {"55%-uranium", 1},
-        {"thorium-232", 19},
+        {type="item", name="angels-plate-lead", amount= 10},
+        {type="item", name="55pc-uranium", amount= 1},
+        {type="item", name="angels-thorium-232", amount= 19},
       },
-      result = "thorium-fuel-cell",
-      result_count = 10,
+      results = {
+        {type= "item", name= "angels-thorium-fuel-cell", amount = 10}
+      },
     },
     --thorium from ore
     {
       type = "recipe",
-      name = "thorium-ore-processing",
-      category = "liquifying",
+      name = "clowns-thorium-ore-processing",
+      category = "angels-ore-refining-t3-5",
       energy_required = 30,
       enabled = false,
       ingredients = {
-        {"thorium-ore",10},
-        {type="fluid",name="liquid-hydrofluoric-acid",amount=100}
+        {type="item", name="angels-thorium-ore", amount=10},
+        {type="fluid",name="angels-liquid-hydrofluoric-acid",amount=100}
       },
       results = {
-        {type="fluid",name="thorium-solution",amount=13},
+        {type="fluid",name="clowns-liquid-thorium-solution",amount=13},
         {type="fluid",name="steam", amount=90, temperature=650},
-        {"slag",2}
+        {type="item", name="angels-slag",amount=2}
       },
-      main_product = "thorium-solution",
+      main_product = "clowns-liquid-thorium-solution",
     },
     {
       type = "recipe",
@@ -86,32 +85,31 @@ if data.raw.item["thorium-fuel-cell"] then
       category = "chemistry",
       enabled = false,
       ingredients = {
-        {type="fluid",name="thorium-solution",amount=26},
-        {type="fluid",name="water-purified",amount=180}
+        {type="fluid",name="clowns-liquid-thorium-solution",amount=26},
+        {type="fluid",name="angels-water-purified",amount=180}
       },
       results = {
-        {"thorium-salt",20},
-        {type="fluid",name="water-greenyellow-waste", amount=200},
+        {type="item", name="clowns-solid-thorium-salt",amount=20},
+        {type="fluid",name="angels-water-greenyellow-waste", amount=200},
       },
-      main_product="thorium-salt",
+      main_product="clowns-solid-thorium-salt",
     },
     {
       type = "recipe",
-      name = "thorium-purification",
+      name = "clowns-thorium-purification",
       energy_required = 18,
-      category = "washing-plant",
+      category = "angels-washing-plant",
       enabled = false,
       ingredients = {
-        {"thorium-salt",13},
-        {type="fluid",name="liquid-naphtha",amount=200}
+        {type="item", name="clowns-solid-thorium-salt",amount=13},
+        {type="fluid",name="angels-liquid-naphtha",amount=200}
       },
       results = {
-        {"thorium-232",9},
-        {type="fluid",name="liquid-naphtha",amount=200},
-        {"slag",4}
+        {type="item", name="angels-thorium-232",amount=9},
+        {type="fluid",name="angels-liquid-naphtha",amount=200},
+        {type="item", name="angels-slag",amount=4}
       },
-      main_product = "thorium-232",
+      main_product = "angels-thorium-232",
     }
   }
   )
-end

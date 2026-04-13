@@ -1,0 +1,372 @@
+---------------------------------------------------------------------------------------------------
+Version: 2025.09.15
+Date: 2025-09-15
+  Changes:
+    - Added fluidbox nudging to resolve long outstanding icon placement issues; thanks for the
+      inspiration watdafawx
+---------------------------------------------------------------------------------------------------
+Version: 2025.06.20
+Date: 2025-06-20
+  Changes:
+    - Skipped non-square assemblers
+---------------------------------------------------------------------------------------------------
+Version: 2025.04.03
+Date: 2025-04-03
+  Changes:
+    - Blacklisted Bob's Steam Assembling Machine; thanks KiwiHawk
+---------------------------------------------------------------------------------------------------
+Version: 2024.11.18
+Date: 2024-11-18
+  Changes:
+    - Blacklisted Factorissimo 3's BoreHole Pump; thanks aerospacesmith
+---------------------------------------------------------------------------------------------------
+Version: 2024.11.01
+Date: 2024-11-01
+  Changes:
+    - Updated to Factorio version 2.0
+    - Improved processing logic, if an entity doesn't have fluidboxes, it's skipped
+    - Reworked fluidbox logic, if an entity has input-output pipes already, they are no longer
+      adjusted
+---------------------------------------------------------------------------------------------------
+Version: 2022.07.23
+Date: 2022.07.23
+  Changes:
+    - Blacklisted entities from 248k
+---------------------------------------------------------------------------------------------------
+Version: 2022.06.13
+Date: 2022.06.13
+  Changes:
+    - Blacklisted entities from FluidicPower
+---------------------------------------------------------------------------------------------------
+Version: 2022.05.17
+Date: 2022.05.17
+  Changes:
+    - Blacklisted several entities from P-U-M-P-s
+    - Blacklisted the steam-assembling-machine from bobassembly
+---------------------------------------------------------------------------------------------------
+Version: 2022.05.07
+Date: 2022.05.07
+  Bugfixes:
+    - Removed references to mining-drills and pumpjacks as they are unable to passthrough result
+      fluid, due to the construction of the entity type
+    - Removed extraenous logging
+  Changes:
+    - Blacklisted the y-emotor-s from Youki Industries - Engines (Addon)
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.17
+Date: 2022.02.17
+  Bugfixes:
+    - Fixed issue where entities with an even width or height would not calculate correct fluidbox
+      positions
+    - Fixed issue where entities that listed output fluidboxes before inputs would calculate
+      incorrect fluidbox positions
+  Changes:
+    - Blacklisted the rfp-discharge-pump from RealisticFusionPower
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.09
+Date: 2022.02.09
+  Bugfixes:
+    - Fixed issue where fluid would not flow through output fluid boxes in some pipe configurations
+      (again (You'd think I'd have learnt by now))
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.06
+Date: 2022.02.06
+  Bugfixes:
+    - Fixed issue where fluid would not flow through output fluid boxes in some pipe configurations
+      (again (hopefully for the last time!!!))
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.05
+Date: 2022.02.05
+  Changes:
+    - Overhauled fluidbox processing methods; should now be compatible with all mods natively.
+    - Removed compatibility requirements for existing integrations
+    - THIS WILL BREAK EXISTING SAVES
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.03
+Date: 2022.02.03
+  Bugfixes:
+    - Adjusted support for Rocket-Silo-Construction
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.02
+Date: 2022.02.02
+  Changes:
+    - Added support for Rocket-Silo-Construction
+---------------------------------------------------------------------------------------------------
+Version: 2022.02.01
+Date: 2022.02.01
+  Bugfixes:
+    - Fixed support for probably most mods - not sure how this mod was still working.
+---------------------------------------------------------------------------------------------------
+Version: 2022.01.31
+Date: 2022.01.31
+  Bugfixes:
+    - Fixed support for Transport_Drones
+---------------------------------------------------------------------------------------------------
+Version: 2022.01.25
+Date: 2022.01.25
+  Changes:
+    - Updated support for Angels Bio Processing
+---------------------------------------------------------------------------------------------------
+Version: 2022.01.17
+Date: 2022.01.17
+  Changes:
+    - Added support for pumpjack passthrough
+---------------------------------------------------------------------------------------------------
+Version: 2022.01.15
+Date: 2022.01.15
+  Bugfixes:
+    - Fixed issue where fluid would not flow through output fluid boxes in some pipe configurations
+      (again)
+---------------------------------------------------------------------------------------------------
+Version: 2022.01.13
+Date: 2022.01.13
+  Bugfixes:
+    - Updated Space Exploration compatibility (thanks HanBai)
+    - Fixed issue where fluid would not flow through output fluid boxes in some pipe configurations
+---------------------------------------------------------------------------------------------------
+Version: 2021.08.16
+Date: 2021.08.16
+  Changes:
+    - Added French Locale (thanks Friendch)
+---------------------------------------------------------------------------------------------------
+Version: 2021.06.07
+Date: 2021.06.07
+  Bugfixes:
+    - Adjusted extendedangels compatibility (thanks aerospacesmith)
+---------------------------------------------------------------------------------------------------
+Version: 2021.04.19
+Date: 2021.04.19
+  Changes:
+    - Added extendedangels compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2021.04.03
+Date: 2021.04.03
+  Bugfixes:
+    - Fixed Transport Drones compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2021.03.31
+Date: 2021.03.31
+  Changes:
+    - Added Krastorio2 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2021.03.03
+Date: 2021.03.03
+  Changes:
+    - Added Factorio-Tiberium compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2021.02.07
+Date: 2021.02.07
+  Bugfixes:
+    - Fixed Space Exploration compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2021.02.062
+Date: 2021.02.06
+  Changes:
+    - Added compatibility for IndustrialRevolution
+  Bugfixes:
+    - Fixed German translation file (Thanks Pi-C)
+---------------------------------------------------------------------------------------------------
+Version: 2021.02.06
+Date: 2021.02.06
+  Changes:
+    - Updated versioning
+    - Updated short description as requested
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2020-11-24
+  Changes:
+    - Updated to Factorio Version 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2020-08-15
+  Changes:
+    - Updated to Factorio Version 1.0
+    - Removed redundant logging
+---------------------------------------------------------------------------------------------------
+Version: 0.1.17
+Date: 2020-07-06
+  Changes:
+    - Added compatibility for Geothermal
+---------------------------------------------------------------------------------------------------
+Version: 0.1.16
+Date: 2020-06-13
+  Changes:
+    - Added compatibility for WhistleStopFactories
+---------------------------------------------------------------------------------------------------
+Version: 0.1.15
+Date: 2020-06-11
+  Changes:
+    - Added German translation (Thanks Vort3x)
+  Bugfixes:
+    - Fixed Polish translation file location
+---------------------------------------------------------------------------------------------------
+Version: 0.1.14
+Date: 2020-06-10
+  Changes:
+    - Adjusted base_area to stop single fluid recipe chemical plants from having a large storage volume
+---------------------------------------------------------------------------------------------------
+Version: 0.1.13
+Date: 2020-06-09
+  Changes:
+    - Added compatibility for Tranport_Drones
+    - Added compatibility for Deep_Storage_Unit (Thanks Luzifer Senpai#0001)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2020-04-15
+  Changes:
+    - Added compatibility for angelspetrochem
+    - Added compatibility for Advanced Furnaces (Load-Furn)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 2020-03-27
+  Changes:
+    - Added compatibility for aai-industry
+    - Added compatibility for Youki Industries and yi_engines
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2020-03-23
+  Changes:
+    - Added compatibility for Mining_Drones
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2020-02-17
+  Changes:
+    - Added Polish Locale (Thanks Tomirad)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2020-02-15
+  Changes:
+    - Removed APP side compatibility for Bio Industries as Pi-C has included all BI compatibility requirements in the last release of BI
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2020-01-24
+  Changes:
+    - Updated to Factorio version 0.18.0
+    - Reduced optional dependancies
+  Bugfixes:
+    - Added compatibility for BoreHole
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2019-12-24
+  Bugfixes:
+    - Added compatibility for Power_to_Fluid_updated and reverse-factory
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2019-08-28
+  Changes:
+    - Fixed options to turn off extra pipes for assembling machines, chemical plants and oil refineries
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2019-08-18
+  Changes:
+    - Added options to turn off extra pipes for chemical plants and oil refineries
+    - Removed the default blacklist for centrifuges
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2019-08-08
+  Bugfixes:
+    - Updated Bob Plates compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2019-08-07
+  Bugfixes:
+    - Updated Space Exploration compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2019-08-07
+  Bugfixes:
+    - Removal of extraenous logging
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2019-08-07
+  Changes:
+    - Major overhaul of mod workings, because of issues arising from changes in base engine version 0.17.63
+---------------------------------------------------------------------------------------------------
+Version: 0.0.15
+Date: 2019-08-06
+  Changes:
+    - Added Omnimatter, Omnimatter_Crystal compatibility
+    - Added Omnimatter_Fluid incompatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.14
+Date: 2019-08-05
+  Bugfixes:
+    - Fix issues with output fluidbox height
+---------------------------------------------------------------------------------------------------
+Version: 0.0.13
+Date: 2019-08-03
+  Changes:
+    - Added AquiferDrill compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.12
+Date: 2019-07-24
+  Changes:
+    - Added CW-hydrogen-power compatibility
+    - Added trainConstructionSite compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.11
+Date: 2019-07-24
+  Bugfixes:
+    - Fixed Bobs Plates compatibility (electrolysers)
+    - Yet another Angels compatibility issue (Bio Processing and Smelting)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.10
+Date: 2019-07-23
+  Changes:
+    - Added Bio Industries compatibility
+    - Added NPUtils compatibility
+    - Added minimum versions for base and mods
+  Bugfixes:
+    - Fixed Angels Smelting compatibility for Chemical Furnaces
+---------------------------------------------------------------------------------------------------
+Version: 0.0.9
+Date: 2019-07-22
+  Changes:
+    - Added Angels Bio Processing compatibility
+    - Added Angels Petro Chemical compatibility
+    - Added Bob Plates compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 2019-07-21
+  Changes:
+    - Added Geothermal compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+Date: 2019-07-21
+  Changes:
+    - Added Expanded Rocket Payloads compatibility
+  Bugfixes:
+    - Fixed several typos
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: 2019-07-20
+  Changes:
+    - Changelog compatibility - thanks PI-C
+    - Utilized blacklist functions for vanilla entities
+    - Added Angels Smelting machines compatibility
+    - Added Bob's Assembling Machine's compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 2019-07-19
+  Changes:
+    - Added the ability to blacklist an assembling machine from another mod. See FAQ for more details
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2019-07-19
+  Bugfixes:
+    - Corrected Assembler to Pipe connections (Thanks TheStaplerGun)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2019-07-02
+  Bugfixes:
+    - Added Angels Smelting Support for multi-liquid recipes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: ?
+  Changes:
+    - Added optional Py support
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2019-04-11
+  Changes:
+    - Initial Release

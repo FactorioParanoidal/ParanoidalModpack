@@ -25,6 +25,38 @@ local mMax = math.max
 local compressedColor = {r = 0.3, g = 0.5, b = 0, a = 0.3}
 local smthCompressedColor = {r = 0.3, g = 0.5, b = 0, a = 0.3}	--{r = 0.7, g = 0.3, b = 0, a = 0.5}
 
+local function draw_CompressedText(count, surface, entity, color, textId)
+	local renderingObject
+	if textId then
+		renderingObject = rendering.get_object_by_id(textId)	
+	end
+	if renderingObject then
+		renderingObject.text = tostring(count)
+	else
+		renderingObject = rendering.draw_text{text = tostring(count), 
+		surface = surface, 
+		target = entity, 
+		only_in_alt_mode = false,
+		color = (color or compressedColor), 
+		scale = 2.5
+		}
+	end
+	return renderingObject.id	 				
+end
+
+local function destroy_RenderingText(textId)
+	if not textId then
+		return
+	end	
+	local renderingObject
+	if textId then
+		renderingObject = rendering.get_object_by_id(textId)	
+	end
+	if renderingObject then
+		renderingObject.destroy()
+	end
+end
+
 
 function squadCompression.clearComresseData(universe, squad)
 	if not squad then
@@ -36,8 +68,9 @@ function squadCompression.clearComresseData(universe, squad)
 		for _, entity in pairs(group.members) do
 			compresseData = universe.compressedUnits[entity.unit_number]
 			if compresseData then
-				if compresseData.textId and rendering.is_valid(compresseData.textId) then
-					rendering.destroy(compresseData.textId) 
+				if compresseData.textId then
+					destroy_RenderingText(compresseData.textId)
+					compresseData.textId = nil
 				end
 				universe.compressedUnits[entity.unit_number] = nil
 			end
@@ -66,8 +99,9 @@ function squadCompression.decompressUnit(universe, surface, entity)
 				end	
 				decompressed = decompressed + 1
 			end
-			if compressedUnit.textId and rendering.is_valid(compressedUnit.textId) then
-				rendering.destroy(compressedUnit.textId) 
+			if compressedUnit.textId then
+				destroy_RenderingText(compressedUnit.textId)
+				compressedUnit.textId = nil 
 			end
 		end
 		universe.compressedUnits[compressIndex] = nil
@@ -117,11 +151,11 @@ function squadCompression.squadDecompress(universe, surface, squad, group, cause
 							direction = entity.direction,
 							force = entity.force,
 							})	
-						if newEntity.valid then 
+						if newEntity and newEntity.valid then 
 							group.add_member(newEntity)
+							newEntity.destructible = false
+							universe.oneTickImmunityUnits[#universe.oneTickImmunityUnits+1] = {entity = newEntity, tick = game.tick + 1}
 						end	
-						newEntity.destructible = false
-						universe.oneTickImmunityUnits[#universe.oneTickImmunityUnits+1] = {entity = newEntity, tick = game.tick + 1}
 						decomressedTotal = decomressedTotal + 1
 						decomressed = decomressed + 1
 					end
@@ -135,8 +169,9 @@ function squadCompression.squadDecompress(universe, surface, squad, group, cause
 							}
 						decomressLater = true	
 					end
-					if compressedUnit.textId and rendering.is_valid(compressedUnit.textId) then
-						rendering.destroy(compressedUnit.textId) 
+					if compressedUnit.textId then
+						destroy_RenderingText(compressedUnit.textId)
+						compressedUnit.textId = nil
 					end
 				end
 				universe.compressedUnits[compressIndex] = nil
@@ -145,7 +180,7 @@ function squadCompression.squadDecompress(universe, surface, squad, group, cause
 		if decomressLater then
 			universe.decomressQueue[group] = queuedMembers 
 		end	
-		--game.print(group.group_number..": decompressed: + "..decomressedTotal.." units [gps=" .. group.position.x .. "," .. group.position.y .."]")	-- DEBUG
+		--game.print(group.unique_id..": decompressed: + "..decomressedTotal.." units [gps=" .. group.position.x .. "," .. group.position.y .."]")	-- DEBUG
 	end	
 	
 	if squad then
@@ -179,11 +214,12 @@ function squadCompression.processDecompressQueue(universe)
 					end	
 					local newEntity = group.surface.create_entity({
 						name = compressedData.name,
+						quality = compressedData.quality,
 						position = compressedData.position, 
 						direction = compressedData.direction,
 						force = compressedData.force,
 						})	
-					if newEntity.valid then 
+					if newEntity and newEntity.valid then 
 						group.add_member(newEntity)
 					end	
 					decomressedTotal = decomressedTotal + 1
@@ -200,27 +236,6 @@ function squadCompression.processDecompressQueue(universe)
 		end
 	end	
 end
-
-local function draw_CompressedText(count, surface, entity, color, textId)
-	if textId and rendering.is_valid(textId) then
-		rendering.destroy(textId)
-	end
-	return rendering.draw_text{text = tostring(count), 
-		surface = surface, 
-		target = entity, 
-		only_in_alt_mode = false,
-		color = (color or compressedColor), 
-		scale = 2.5
-		}
-	 				
-end
-
-local function destroy_CompressedText(textId)
-	if textId and rendering.is_valid(textId) then
-		rendering.destroy(textId)
-	end
-end
-
 
 local function squadCompress(map, squad)
 	if not squad then
@@ -261,7 +276,7 @@ local function squadCompress(map, squad)
 	
 	if #group.members > 35 then		
 		for _, entity in pairs(group.members) do
-			if entity.valid then
+			if entity.valid and (entity.type == "unit") then
 				compressIndex = entity.name
 				if not compressedMembers[entity.name] then
 					compressedMembers[entity.name] = {count = 0}
@@ -269,7 +284,7 @@ local function squadCompress(map, squad)
 				compressedUnit = compressedUnits[entity.unit_number]
 				if compressedUnit then
 					compressedMembers[entity.name].count = compressedMembers[entity.name].count + compressedUnit.count
-					destroy_CompressedText(compressedUnit.textId)
+					destroy_RenderingText(compressedUnit.textId)
 					compressedUnits[entity.unit_number] = nil
 				else
 					compressedMembers[entity.name].count = compressedMembers[entity.name].count + 1
@@ -281,7 +296,7 @@ local function squadCompress(map, squad)
 			end	
 		end
 		for _, entity in pairs(group.members) do
-			if entity.valid then
+			if entity.valid and (entity.type == "unit") then
 				local stackSize = compressedMembers[entity.name].count
 				if stackSize > 1 then	
 					compressedUnits[entity.unit_number] = {count = stackSize, entity = entity}
@@ -350,7 +365,7 @@ local function squadSmoothCompress(map, squad, compressedSize)
 	local unitsCounter = 0	-- debug	
 	
 	for _, entity in pairs(group.members) do
-		if entity.valid then
+		if entity.valid and (entity.type == "unit") then
 			if not compressDatas[entity.name] then
 				compressDatas[entity.name] = {count = 0, entities = {}, unitSample = entity}
 			end
@@ -358,7 +373,7 @@ local function squadSmoothCompress(map, squad, compressedSize)
 			if compressedUnit then
 				compressDatas[entity.name].count = compressDatas[entity.name].count + compressedUnit.count
 				membersToCompress = membersToCompress + compressedUnit.count
-				destroy_CompressedText(compressedUnit.textId)
+				destroy_RenderingText(compressedUnit.textId)
 				compressedUnits[entity.unit_number] = nil
 			else
 				compressDatas[entity.name].count = compressDatas[entity.name].count + 1
@@ -384,7 +399,9 @@ local function squadSmoothCompress(map, squad, compressedSize)
 									force = unitSample.force,
 									})
 				entities[#entities+1] = entity	
-				group.add_member(entity)									
+				if newEntity and newEntity.valid then 
+					group.add_member(entity)									
+				end	
 			end
 		elseif unitsToCreate < 0 then
 			for i = #entities, (compressData.maxStacks + 1), -1 do
@@ -467,7 +484,7 @@ end
 -- local renderColor2 = {1, 0, 0}
 
 
-function squadCompression.processNonRampantSquads(universe)
+function squadCompression.nonRampantCompressedSquads(universe)
 	local map
 	local u = 0
 	for i, squad in pairs(universe.nonRampantCompressedSquads) do
@@ -506,29 +523,37 @@ function squadCompression.onUnitKilled(universe, surface, entity, eventForce, ca
 			position = entity.position, 
 			direction = entity.direction,
 			force = entity.force,
-			})	
-		if compressedUnit.count > 1 then
-			compressedUnits[newEntity.unit_number] = {count = compressedUnit.count, entity = newEntity}
-			compressedUnits[newEntity.unit_number].textId = draw_CompressedText(compressedUnits[newEntity.unit_number].count, surface, newEntity)	
+			})
+		if not newEntity then
+			compressedUnits[entity.unit_number] = nil
+			return
 		end
+		if newEntity.valid then	
+			if compressedUnit.count > 1 then
+				compressedUnits[newEntity.unit_number] = {count = compressedUnit.count, entity = newEntity}
+				compressedUnits[newEntity.unit_number].textId = draw_CompressedText(compressedUnits[newEntity.unit_number].count, surface, newEntity)	
+			end
+		end	
 		compressedUnits[entity.unit_number] = nil
 		
-		local group = entity.unit_group
-		if group then
+		local group = (entity.commandable and entity.commandable.parent_group)
+		if group and group.is_unit_group then
 			group.add_member(newEntity)
 		end	
 		
 		if eventForce and (eventForce.name ~= "enemy") and cause and cause.valid then
-			newEntity.destructible = false
-			universe.oneTickImmunityUnits[#universe.oneTickImmunityUnits+1] = {entity = newEntity, tick = game.tick + 5}
+			if newEntity.valid then	
+				newEntity.destructible = false
+				universe.oneTickImmunityUnits[#universe.oneTickImmunityUnits+1] = {entity = newEntity, tick = game.tick + 5}
+			end	
 
 			local incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, cause.position.x, cause.position.y)
 			if group then
-				local squad = universe.groupNumberToSquad[group.group_number] or universe.nonRampantCompressedSquads[group.group_number]
+				local squad = universe.groupNumberToSquad[group.unique_id] or universe.nonRampantCompressedSquads[group.unique_id]
 				if incomingRange < 70 then
 					squadCompression.squadDecompress(universe, surface, squad, group, cause, true)
 				end	
-			elseif incomingRange < 20 then 
+			elseif (incomingRange < 20) and newEntity.valid then 
 				squadCompression.decompressUnit(universe, surface, newEntity)
 			end
 		end					
@@ -545,9 +570,9 @@ function squadCompression.onUnitPreKilled(universe, surface, entity, eventForce,
 	if compressedUnit.count < 2 then
 		compressedUnits[entity.unit_number] = nil
 	else
-		destroy_CompressedText(compressedUnit.textId)
+		destroy_RenderingText(compressedUnit.textId)
 		
-		entity.health = entity.prototype.max_health		
+		entity.health = entity.max_health		
 		compressedUnit.count = compressedUnit.count - 1
 		if compressedUnit.count > 1 then
 			compressedUnit.textId = draw_CompressedText(compressedUnit.count, surface, entity)	
@@ -565,8 +590,9 @@ function squadCompression.onUnitPreKilled(universe, surface, entity, eventForce,
 		
 		if eventForce and (eventForce.name ~= "enemy") and cause and cause.valid then
 			local incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, cause.position.x, cause.position.y)
-			if group then
-				local squad = universe.groupNumberToSquad[group.group_number] or universe.nonRampantCompressedSquads[group.group_number]
+			local group = (entity.commandable and entity.commandable.parent_group)
+			if group and group.is_unit_group then
+				local squad = universe.groupNumberToSquad[group.unique_id] or universe.nonRampantCompressedSquads[group.unique_id]
 				if incomingRange < 70 then
 					squadCompression.squadDecompress(universe, surface, squad, group, cause, true)
 				end

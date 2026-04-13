@@ -1,0 +1,7 @@
+{
+  "technology":
+  [
+    ["filter-inserters", "filter-inserter"],
+    ["filter-stack-inserter", "stack-filter-inserter"]
+  ]
+}

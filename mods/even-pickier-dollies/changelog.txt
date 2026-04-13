@@ -1,0 +1,138 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2025-10-28
+  Changes:
+    - Add polish translation (contributed by @GPDiwka on github, thank you!)
+  Bugfixes:
+    - allow moving entities that have "magic" wire connections (created by scripts or to a different surface). This fixes moving the connection poles within compact circuits.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 2025-09-06
+  Changes:
+    - Add a startup setting to control whether biters and biter related entities can be moved. This also affects the captive-biter-spawners (Semi-requested by @DarkHelmet on the forum)
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2025-09-05
+  Features:
+    - Support entity blacklisting through mod-data in the prototype phase (suggested by @LoupAndSnoop in #9)
+    - Do not allow entity moving when remote viewing. The old behavior can be restored with a startup setting (suggested by @UltraJohn on the forum)
+  Bugfixes:
+    - do not allow captive-biter-spawners to be moved (reported by @dragon_gawain on the forum)
+---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 2025-07-15
+  Bugfixes:
+    - Fix that some mods that use internal wiring but expose max wire distance of 0 could not be moved.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2025-06-23
+  Bugfixes:
+    - fix crash when player cursor stack is not available (e.g. because the player is dead). Reported by @JigSaW_3 on the forums.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 2025-06-12
+  Changes:
+    - Ghosts do not collide with items.
+    - Entities "hoover" up items. If the inventory is full, do not move the items around.
+    - Add new setting to allow destruction of items on the ground if the inventory is full.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2025-06-11
+  Changes:
+    - Allow moving ghosts, if enabled.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.4
+Date: 2025-03-25
+  Bugfixes:
+    - Enforce deselection with changing the cursor stack, irrespective whether there is a new entity or not.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.3
+Date: 2025-03-20
+  Bugfixes:
+    - When rotating an entity and then picking up a blueprint from the blueprint library and rotating it, the entity kept rotating. Reported by @Nightmare_Sky on the forums.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.2
+Date: 2025-01-15
+  Changes:
+    - Make deselection of the "saved" entity configurable (suggested by @Magnus.Ertel on the mod discussion forum)
+---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 2025-01-13
+  Changes:
+    - add russian locale (thanks @dodther on github!)
+    - raise 'script_raised_teleport' if a regular entity is moved. (suggested by @heinwessels on github)
+    - deselect the "saved" entity whenever another entity is touched by the player
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2024-12-14
+  Changes:
+    - add "transporter mode" that allows moving of belts and loaders
+    - allow ghost moving in cheat mode (suggest on mod discussions)
+    - only do rocket check if trying to move a rocket silo (reported on mod discussions by @kuxynator)
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2024-11-30
+  Changes:
+    - add more specific collision checks to allow entities that "hide" invisible entities
+      to move
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2024-11-26
+  Changes:
+    - debugging now shows both current and future position
+    - support rotating oblong entities with other sizes than 2x1
+  Bugfixes:
+    - adding a new entity to the "know entities" list would not update the internal storage
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2024-11-22
+  Changes:
+    - Fix missing error message if entities could not be moved at all
+    - re-added locale string
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2024-11-22
+  Changes:
+    - 2.0.21 brought an addition to the LuaEntity::teleport API that makes all of the previous
+      teleporting around no longer necessary. This makes the code much simpler and removes all
+      of the 2.0 specific workaround for fluid entities etc. go away.
+    - automatically mine any item on the ground that is lying in the path of an entity.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2024-11-18
+  Changes:
+    - add debug visualization
+    - rework collision logic for 2.0 (fixes the "disconnect pipe bug")
+    - pay extra attention when moving fluid entities
+    - write docs
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-11-10
+  Changes:
+    - .. and I need to learn how to write change log entries...
+    - fix "can move entities over each other" report from forum. LuaEntity::can_place_entity has
+      changed
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-11-01
+  Changes:
+    - 2.0.14 fixed the "fluids disappearing" bug. Back the change out again.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2024-10-26
+  Changes:
+    - Refactor the code to be more modular, rework the rotate / move logic
+    - Fix issue where contents disappear from a moved storage tank. This smells like a bug in the
+      game itself (see https://forums.factorio.com/viewtopic.php?f=7&t=117719)
+    - add reverse oblong rotation
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-10-25
+  Changes:
+    - Fixed crash with remote interface (reported on the mod forum, thanks @wretlaw120)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-24
+  Changes:
+    - Forked from PickerDollies 1.2.6
+    - applied Factorio 2.0 changes

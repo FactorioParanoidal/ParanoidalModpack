@@ -1,0 +1,8 @@
+{
+  "recipe": [
+    ["flat-lamp-c", "flat-lamp"]
+  ],
+  "technology": [
+    ["flat-lamp-t", "flat-lamp"]
+  ]
+}

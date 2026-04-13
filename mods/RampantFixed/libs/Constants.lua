@@ -43,9 +43,6 @@ constants.MAGIC_MAXIMUM_BASE_NUMBER = 100000000
 constants.MAXIMUM_BASE_RADIUS = 128	-- + !КДА 2021.11 (chunkUtils.initialScan)	<32 - 1 chunk, 50 ~ 3x3, 128 - 4 chunk radius, ...
 constants.BASE_CHANGING_CHANCE = 0.1	-- + !КДА 2021.11 (chunkUtils.initialScan)
 
-constants.RETREAT_MOVEMENT_PHEROMONE_LEVEL_MIN = 1000
-constants.RETREAT_MOVEMENT_PHEROMONE_LEVEL_MAX = 130000
-
 constants.PROCESS_QUEUE_SIZE = 140
 constants.SCAN_QUEUE_SIZE = 2
 constants.RESOURCE_QUEUE_SIZE = 7
@@ -188,7 +185,7 @@ constants.BASE_SPAWNER_UPGRADE = 30*60*60	-- 30min	-- 250
 constants.BASE_WORM_UPGRADE = 20*60*60	-- 20min	-- 200
 constants.BASE_EVOLVE_THRESHOLD = constants.BASE_SPAWNER_UPGRADE	-- 1st evolve time
 constants.GLOBAL_EVOLVE_COOLDOWN = 5*60*60 
-constants.GLOBAL_LVLUP_COOLDOWN = 1*60*60
+constants.GLOBAL_LVLUP_COOLDOWN = 20*60
 
 constants.BASE_DISTANCE_THRESHOLD = 30 * constants.CHUNK_SIZE
 constants.BASE_DISTANCE_LEVEL_BONUS = 15
@@ -264,8 +261,12 @@ constants.MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK = 10000
 constants.NO_POLLUTION_ATTACK_THRESHOLD = 5900	-- ~ 5 chunks raduis (if 10000 max value)
 constants.K_NO_ACTIVE_NESTS = 40
 constants.K_TOO_LOW_ACTIVE_NESTS = 20
-constants.K_LOW_ACTIVE_NESTS = 10
+constants.K_LOW_ACTIVE_NESTS = 8
 constants.RAIDING_MINIMUM_BASE_THRESHOLD = 550	-- ~ 27 chunks raduis (if 10000 max value)
+
+constants.highEvo = 0.9
+constants.growPheromones_min = 1000
+constants.growPheromones_max = 8000	-- ~ 2,5 chunks
 
 constants.GENERATOR_PHEROMONE_LEVEL = {}
 local GENERATOR_PHEROMONE_LEVEL = constants.GENERATOR_PHEROMONE_LEVEL
@@ -322,6 +323,7 @@ BUILDING_PHEROMONES["beacon"] = "5"
 BUILDING_PHEROMONES["boiler"] = "5"
 BUILDING_PHEROMONES["generator"] = "5"
 BUILDING_PHEROMONES["mining-drill"] = "5"
+BUILDING_PHEROMONES["agricultural-tower"] = "5"
 
 BUILDING_PHEROMONES["artillery-turret"] = "6"
 BUILDING_PHEROMONES["reactor"] = "6"
@@ -341,9 +343,17 @@ for enitityType, pheromoneLvl in pairs(BUILDING_PHEROMONES) do
 	end	
 end
 -------------------------
+constants.IGNORED_BUILDINGS = {} 
+local IGNORED_BUILDINGS = constants.IGNORED_BUILDINGS
+IGNORED_BUILDINGS["regenerationCrystal-rampantFixed"] = "radar"
+
 
 function constants.GET_ENTITY_PHEROMONES(entity, pheromoneType)	
 	local pheromoneLvl
+	if IGNORED_BUILDINGS[entity.name] then
+		return 0
+	end
+	
 	pheromoneLvl = BUILDING_PHEROMONES[entity.type]
 	if not pheromoneLvl then
 		return 0
@@ -361,11 +371,12 @@ local sFind = string.find
 -- list of names. Can't be enabled manually/by remote interface
 function constants.isExcludedSurface(surfaceName)
 	return (sFind(surfaceName, "Factory floor") or
-        sFind(surfaceName, " Orbit") or
+		sFind(surfaceName, " Orbit") or
         sFind(surfaceName, "clonespace") or
         sFind(surfaceName, "BPL_TheLabplayer") or
         sFind(surfaceName, "starmap-") or
-        (surfaceName == "aai-signals") or
+        sFind(surfaceName, "platform-") or
+		(surfaceName == "aai-signals") or
         sFind(surfaceName, "NiceFill") or
         sFind(surfaceName, "Asteroid Belt") or
         sFind(surfaceName, "Vault ") or
@@ -390,23 +401,44 @@ function constants.SURFACE_IGNORED(surface, universe)
 	local surfaceName = surface.name
 	local isExcludedSurface = false
 		
-	if not constants.isExcludedSurface(surfaceName) then
-		local map_gen_settings = surface.map_gen_settings
-		local autoplace_controls = map_gen_settings and map_gen_settings.autoplace_controls  
-		if (not autoplace_controls) and (map_gen_settings.default_enable_all_autoplace_controls) then
-			autoplace_controls =  game.default_map_gen_settings.autoplace_controls
+	if constants.isExcludedSurface(surfaceName) then
+		--	game.print(surfaceName.." in exluded list")	-- debug
+		isExcludedSurface = true 
+	else
+		isExcludedSurface = true 
+		local planetAISetting = (universe.planetAISettings[surface.name] or universe.planetAISettings["others"])
+		if planetAISetting.AI > 1 then
+
+			local map_gen_settings = surface.map_gen_settings
+			local autoplace_controls = map_gen_settings and map_gen_settings.autoplace_controls
+			if (not autoplace_controls) and (map_gen_settings.default_enable_all_autoplace_controls) then
+				autoplace_controls =  game.default_map_gen_settings.autoplace_controls
+			end	
+			if autoplace_controls then
+				for autoplaceControlName, autoplaceSettings in pairs (autoplace_controls) do
+					autoplaceControl = prototypes.autoplace_control[autoplaceControlName]
+					if autoplaceControl.category == "enemy" then
+						-- game.print(surfaceName..".autoplace_control:"..autoplaceControlName.."fr/rch/sz"..autoplaceSettings.frequency.."/"..autoplaceSettings.richness.."/"..autoplaceSettings.size)	-- debug
+						if (autoplaceSettings.frequency>0) and (autoplaceSettings.richness>0) and (autoplaceSettings.size>0) then
+							isExcludedSurface = false
+						end
+					end
+				end
+			end
+			
+			if planetAISetting.AI == 3 then
+				--- demolishers
+				local territory_settings = map_gen_settings and map_gen_settings.territory_settings
+				if territory_settings and territory_settings.units then
+					for _, unit in pairs(territory_settings.units) do
+						if string.find(unit, "demolisher") then
+							isExcludedSurface = false
+							break
+						end
+					end 
+				end
+			end	
 		end	
-		local enemy_base_settings = autoplace_controls and autoplace_controls["enemy-base"]
-		if enemy_base_settings and (enemy_base_settings.frequency>0) and (enemy_base_settings.richness>0) and (enemy_base_settings.size>0) then
-			-- log(surfaceName..".enemy_base_settings:"..serpent.dump(enemy_base_settings))	-- debug
-		else
-			-- if enemy_base_settings then
-				-- log(surfaceName..".enemy_base_settings:"..serpent.dump(enemy_base_settings))	-- debug
-			-- else	
-				-- log(surfaceName..".enemy_base_settings: nil")				-- debug
-			-- end
-			isExcludedSurface = true
-		end
 	end
 	-- game.print(surface.name.." will be ignored: "..tostring(isExcludedSurface))	-- debug
 	
@@ -417,6 +449,22 @@ function constants.SURFACE_IGNORED(surface, universe)
 	end
 	
 	return isExcludedSurface
+end
+
+function constants.IS_VANILLA_BITERS_SURFACE(surface)
+	local map_gen_settings = surface.map_gen_settings
+	local autoplace_controls = map_gen_settings and map_gen_settings.autoplace_controls
+	if (not autoplace_controls) and (map_gen_settings.default_enable_all_autoplace_controls) then
+		autoplace_controls =  game.default_map_gen_settings.autoplace_controls
+	end	
+	local hasBiters = false
+	if autoplace_controls then
+		local autoplaceSettings = autoplace_controls["enemy-base"]
+		if autoplaceSettings and (autoplaceSettings.frequency>0) and (autoplaceSettings.richness>0) and (autoplaceSettings.size>0) then
+			hasBiters = true
+		end
+	end
+	return hasBiters
 end
 
 function constants.FACTORISSIMO_ENTITY(entity)
@@ -621,8 +669,7 @@ constants.FACTION_SET[#constants.FACTION_SET+1] = {
     type = "neutral",
     tint = {r=0.9, g=0.9, b=0.9, a=1},
     tint2 = {r=1, g=1, b=1, a=1},	
-    -- acceptRate = {1, 7, 0.3, 0.1},	-- + !КДА 2021.10
-    acceptRate = {1, 6, 0.15, 0.01},
+    acceptRate = {0, 6, 0.15, 0.01},
     evo = 0,
     units = {
         {
@@ -649,9 +696,9 @@ constants.FACTION_SET[#constants.FACTION_SET+1] = {
             type = "spitter-spawner",
             name = "spitter-spawner",
             majorResistances = {},
-            acceptRate = {1, 10, 0.3, 0.5},
+            acceptRate = {0, 10, 0.3, 0.5},
             minorResistances = {},
-            attributes = {},
+            attributes = {"lowHealth"},
             drops = {"nilArtifact"},
             buildSets = {
                 {"spitter", 1, 10}
@@ -661,9 +708,9 @@ constants.FACTION_SET[#constants.FACTION_SET+1] = {
             type = "biter-spawner",
             name = "biter-spawner",
             majorResistances = {},
-            acceptRate = {1, 10, 0.3, 0.5},
+            acceptRate = {0, 10, 0.3, 0.5},
             minorResistances = {},
-            attributes = {},
+            attributes = {"lowHealth"},
             drops = {"nilArtifact"},
             buildSets = {
                 {"biter", 1, 10}
@@ -673,7 +720,7 @@ constants.FACTION_SET[#constants.FACTION_SET+1] = {
             type = "turret",
             name = "worm",
             majorResistances = {},
-            acceptRate = {1, 10, 0.8, 0.6},
+            acceptRate = {0, 10, 0.8, 0.6},
             minorResistances = {},
             attackAttributes = {"spit", "acid"},
             attributes = {},
@@ -701,14 +748,14 @@ if settings.startup["rampantFixed--acidEnemy"].value then
         tint = {r=1, g=1, b=1, a=1},
         tint2 = {r=0.4, g=0.9, b=0.4, a=1},
         -- acceptRate = {1, 10, 0.1, 0.2},
-        acceptRate = {1, 10, 0.1, 0.15},	-- + !КДА 2021.10
+        acceptRate = {1, 10, 0.1, 0.15},
         evo = 0,
         units = {
             {
                 type = "biter",
                 attackAttributes = {"melee", "acidPool"},
                 name = "biter",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 attributes = {},
                 drops = {"nilArtifact"}
             },
@@ -716,7 +763,7 @@ if settings.startup["rampantFixed--acidEnemy"].value then
                 type = "spitter",
                 attackAttributes = {"spit", "acid"},
                 name = "spitter",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 attributes = {},
                 drops = {"nilArtifact"}
             }
@@ -725,7 +772,7 @@ if settings.startup["rampantFixed--acidEnemy"].value then
             {
                 type = "spitter-spawner",
                 name = "spitter-spawner",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 acceptRate = {1, 10, 0.3, 0.5},
                 attributes = {},
                 drops = {"nilArtifact"},
@@ -736,7 +783,7 @@ if settings.startup["rampantFixed--acidEnemy"].value then
             {
                 type = "biter-spawner",
                 name = "biter-spawner",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 acceptRate = {1, 10, 0.3, 0.5},
                 attributes = {},
                 drops = {"nilArtifact"},
@@ -747,7 +794,7 @@ if settings.startup["rampantFixed--acidEnemy"].value then
             {
                 type = "turret",
                 name = "worm",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 attackAttributes = {"spit", "acid"},
                 acceptRate = {1, 10, 0.8, 0.6},
                 attributes = {},
@@ -756,7 +803,7 @@ if settings.startup["rampantFixed--acidEnemy"].value then
             {
                 type = "hive",
                 name = "hive",
-                immunity = {"acid", "poison"},
+                resitancePercent = {{"acid", 150}, {"poison", 150}},
                 acceptRate = {2, 10, 0.001, 0.0175},
                 attributes = {},
                 drops = {"nilArtifact"},
@@ -772,7 +819,7 @@ end
 if settings.startup["rampantFixed--laserEnemy"].value then
     constants.FACTION_SET[#constants.FACTION_SET+1] = {
         type = "laser",
-        tint = {r=0, g=0.6, b=0.6, a=1},		-- + !КДА 2021.11	{r=0.3, g=0.3, b=0.42, a=1}
+        tint = {r=0, g=0.6, b=0.6, a=1},		-- {r=0.3, g=0.3, b=0.42, a=1}
         tint2 = {r=0, g=1, b=1, a=1},
         acceptRate = {2, 10, 0.1, 0.15},
         evo = 0.10,
@@ -785,7 +832,8 @@ if settings.startup["rampantFixed--laserEnemy"].value then
                 majorResistances = {"electric"},
                 minorResistances = {"fire", "acid"},
                 minorWeaknesses = {"physical"},
-                attributes = {{"overdamageProtection", 1.5}},		
+				addFlatResistance = {{"fire", 6}, {"acid", 6}},		 -- must be later than other resistances/weakness
+                attributes = {"quickSpawning", {"overdamageProtection", 1.5}},		
                 drops = {"blueArtifact"}
             },
             {
@@ -796,7 +844,8 @@ if settings.startup["rampantFixed--laserEnemy"].value then
                 majorResistances = {"electric"},
                 minorResistances = {"fire", "acid"},
                 minorWeaknesses = {"physical"},
-                attributes = {"quickCooldown", {"overdamageProtection", 1.5}},		
+				addFlatResistance = {{"fire", 6}, {"acid", 6}},		 -- must be later than other resistances/weakness
+                attributes = {"quickCooldown", {"overdamageProtection", 1.5}, {"bonusRange", 2}},		
                 drops = {"blueArtifact"}
             }
         },
@@ -953,6 +1002,7 @@ if settings.startup["rampantFixed--infernoEnemy"].value then
         type = "inferno",
         tint = {r=0.5, g=0.1, b=0.1, a=1},
         tint2 = {r=0.9, g=0.1, b=0.1, a=1},
+        labelTint = {r=1, g=0.3, b=0.3, a=1},
         acceptRate = {6, 10, 0.05, 0.15},	-- + !КДА 2021.11	{3, 10, 0.1, 0.125}
         evo = 0.2,
         units ={
@@ -1014,6 +1064,7 @@ if settings.startup["rampantFixed--waspEnemy"].value then
         type = "wasp",
         tint = {r=1, g=1, b=0, a=1},
         tint2 = {r=0, g=0, b=0, a=1},
+        labelTint = {r=0.4, g=0.4, b=0.4, a=1},
         acceptRate = {3, 10, 0.1, 0.15},
         evo = 0.2,
         units = {
@@ -1022,13 +1073,14 @@ if settings.startup["rampantFixed--waspEnemy"].value then
                 attackAttributes = {"spit", "acid"},
                 name = "wasp",
                 attributes = {"followsPlayer", "notInKillStatistics"},
-                drops = {"purpleArtifact"}
+                drops = {}
             },
             {
                 type = "drone",
                 attackAttributes = {"lowDamageStream", "acid"},
                 name = "worm-wasp",
-                attributes = {"stationary", "notInKillStatistics"},
+                minorResistances = {"physical", "laser"},
+                attributes = {"bigger", "stationary", "notInKillStatistics", {"bonusRange", -5}},
                 drops = {}
             },
             {
@@ -1053,7 +1105,7 @@ if settings.startup["rampantFixed--waspEnemy"].value then
             {
                 type = "turret",
                 name = "worm",
-                attackAttributes = {"capsule", {"drone", "worm-wasp"}},
+                attackAttributes = {"capsule", {"drone", "worm-wasp"}, {"speedModifier", 0.25}, {"accelerationModifier", 0}},
                 acceptRate = {1, 10, 0.8, 0.6},
                 attributes = {},
                 drops = {"purpleArtifact"}
@@ -1098,6 +1150,7 @@ if settings.startup["rampantFixed--spawnerEnemy"].value then
                 type = "drone",
                 attackAttributes = {"touch", "acid"},
                 name = "worm-egg",
+                majorWeaknesses = {"physical"},
                 attributes = {"stationary", "bigger", "notInKillStatistics", {"clusterDeath", "spawn"}},
                 drops = {}
             },
@@ -1154,7 +1207,7 @@ if settings.startup["rampantFixed--electricEnemy"].value then
                 type = "biter",
                 attackAttributes = {"beam", "electric"},
                 name = "biter",
-				immunity = {"electric"},	
+                resitancePercent = {{"electric", 150}},
                 minorResistances = {"laser"},
                 attributes = {"slowCooldown","lowHealth"},
                 drops = {"blueArtifact"}
@@ -1164,7 +1217,7 @@ if settings.startup["rampantFixed--electricEnemy"].value then
             {
                 type = "biter-spawner",
                 name = "biter-spawner",
-				immunity = {"electric"},	
+                resitancePercent = {{"electric", 150}},
                 minorResistances = {"laser"},
                 acceptRate = {1, 10, 0.4, 0.6},
                 attributes = {},
@@ -1176,7 +1229,7 @@ if settings.startup["rampantFixed--electricEnemy"].value then
             {
                 type = "turret",
                 name = "worm",
-				immunity = {"electric"},	
+                resitancePercent = {{"electric", 150}},
                 minorResistances = {"laser"},
                 acceptRate = {1, 10, 0.8, 0.6},
                 attackAttributes = 	{"spit", "electric", "cluster"},
@@ -1186,7 +1239,7 @@ if settings.startup["rampantFixed--electricEnemy"].value then
             {
                 type = "hive",
                 name = "hive",
-				immunity = {"electric"},	
+                resitancePercent = {{"electric", 150}},
                 minorResistances = {"laser"},
                 attributes = {},
                 acceptRate = {2, 10, 0.001, 0.0175},
@@ -1214,7 +1267,8 @@ if settings.startup["rampantFixed--physicalEnemy"].value then
                 majorResistances = {"physical", "explosion", "acid"},
                 minorResistances = {"fire"},
                 minorWeaknesses = {"laser"},
-                attributes = {"highHealth", "longReach", "big", "slowMovement", "altBiterArmored", {"overdamageProtection", 2}},
+				addFlatResistance = {{"fire", 6}},		 -- must be later than other resistances/weakness
+                attributes = {"highHealth", "longReach", "big", "slowMovement", "altBiterArmored", {"overdamageProtection", 3}},
                 drops = {"redArtifact"}
             }
         },
@@ -1265,6 +1319,7 @@ if settings.startup["rampantFixed--trollEnemy"].value then
         type = "troll",
         tint = {r=0.4, g=0.4, b=0.4, a=1},			-- {r=0.4, g=0.4, b=0.4, a=1}
         tint2 = {r=0.55, g=0, b=0, a=1},			-- {r=1, g=0.2, b=0.2, a=1}
+        labelTint = {r=0.7, g=0.4, b=0.4, a=1},
         acceptRate = {3, 10, 0.1, 0.15},
         evo = 0.17,
         units = {
@@ -1272,10 +1327,11 @@ if settings.startup["rampantFixed--trollEnemy"].value then
                 type = "biter",
                 attackAttributes = {"melee"},
                 name = "biter",
+				immunity = {"poison"},	
 				majorResistances = {"explosion"},
                 minorResistances = {"physical"},
                 majorWeaknesses = {"fire"},
-                attributes = {"highestHealth", "longReach", "bigger",
+                attributes = {"highestHealth", "longReach", "bigger",			-- "healAlliesOnDeath",
                               "highestRegen", "slowMovement", "altBiterArmored", {"overdamageProtection", 5}},
                 drops = {"redArtifact"}
             }
@@ -1284,8 +1340,11 @@ if settings.startup["rampantFixed--trollEnemy"].value then
             {
                 type = "biter-spawner",
                 name = "biter-spawner",
-                minorResistances = {"physical", "explosion"},
+				immunity = {"poison"},
+				majorResistances = {"explosion"},				
+                minorResistances = {"physical"},
                 majorWeaknesses = {"fire"},
+				addFlatResistance = {{"fire", -6}},		 -- must be later than other resistances/weakness
                 acceptRate = {1, 10, 0.4, 0.6},
                 attributes = {"highestHealth", "bigger", "highestRegen"},
                 drops = {"redArtifact"},
@@ -1296,8 +1355,11 @@ if settings.startup["rampantFixed--trollEnemy"].value then
             {
                 type = "turret",
                 name = "worm",
-                minorResistances = {"physical", "explosion"},
+				immunity = {"poison"},	
+				majorResistances = {"explosion"},				
+                minorResistances = {"physical"},
                 majorWeaknesses = {"fire"},
+				addFlatResistance = {{"fire", -6}},		 -- must be later than other resistances/weakness
                 attackAttributes = {"spit", "physical"},
                 acceptRate = {1, 10, 0.8, 0.6},
                 attributes = {"highestHealth", "bigger", "highestRegen"},
@@ -1306,8 +1368,11 @@ if settings.startup["rampantFixed--trollEnemy"].value then
             {
                 type = "hive",
                 name = "hive",
-                minorResistances = {"physical", "explosion"},
+				immunity = {"poison"},	
+				majorResistances = {"explosion"},				
+                minorResistances = {"physical"},
                 majorWeaknesses = {"fire"},
+				addFlatResistance = {{"fire", -6}},		 -- must be later than other resistances/weakness
                 attributes = {"highestHealth", "bigger", "highRegen"},
                 acceptRate = {2, 10, 0.001, 0.0175},
                 drops = {"redArtifact"},
@@ -1459,6 +1524,11 @@ if settings.startup["rampantFixed--nuclearEnemy"].value then
                 majorResistances = {"fire", "acid"},
                 majorWeaknesses = {"explosion"},
                 attributes = {"lowestHealth", "quickMovement", "quickSpawning", "killsSelf", {"overdamageProtection", 5}},
+				light = {
+				  color = {0, 0.5, 0},
+				  intensity = 0.9,
+				  size = 12
+				},
                 drops = {"yellowArtifact"}
             }
         },
@@ -1470,6 +1540,11 @@ if settings.startup["rampantFixed--nuclearEnemy"].value then
                 majorWeaknesses = {"explosion"},
                 acceptRate = {1, 10, 0.4, 0.6},
                 attributes = {"quickSpawning"},				
+				light = {
+				  color = {0, 0.5, 0},
+				  intensity = 0.9,
+				  size = 16
+				},
                 drops = {"yellowArtifact"},
                 buildSets = {
                     {"biter", 1, 10}
@@ -1483,6 +1558,11 @@ if settings.startup["rampantFixed--nuclearEnemy"].value then
                 acceptRate = {1, 10, 0.8, 0.6},
                 attackAttributes = {"spit", "acid", "slow"},
                 attributes = {},
+				light = {
+				  color = {0, 0.5, 0},
+				  intensity = 0.9,
+				  size = 12
+				},
                 drops = {"yellowArtifact"}
             },
             {
@@ -1491,6 +1571,11 @@ if settings.startup["rampantFixed--nuclearEnemy"].value then
                 majorResistances = {"fire", "acid"},
                 majorWeaknesses = {"explosion"},
                 attributes = {},				
+				light = {
+				  color = {0, 0.5, 0},
+				  intensity = 0.9,
+				  size = 18
+				},
                 acceptRate = {2, 10, 0.001, 0.0175},
                 drops = {"yellowArtifact"},
                 buildSets = {
@@ -1506,6 +1591,7 @@ if settings.startup["rampantFixed--energyThiefEnemy"].value then
         type = "energy-thief",
         tint = {r=0.2, g=0.2, b=0.4, a=1},
         tint2 = {r=0.1, g=0.1, b=0.1, a=1},
+        labelTint = {r=0.4, g=0.4, b=0.4, a=1},
         acceptRate = {3, 10, 0.1, 0.15},
         evo = 0.2,
         units = {
@@ -1513,10 +1599,12 @@ if settings.startup["rampantFixed--energyThiefEnemy"].value then
                 type = "biter",
                 attackAttributes = {"beam", "electric", "drainCrystal"},
                 name = "biter",
-                majorResistances = {"electric", "laser"},
+                resitancePercent = {{"electric", 150}},
+				immunity = {"poison"},	
+                majorResistances = {"laser"},
                 minorResistances = {"explosion"},
                 minorWeaknesses = {"physical"},
-                attributes = {"slowCooldown", "not-flammable", {"overdamageProtection", 2}},
+                attributes = {"slowCooldown", {"overdamageProtection", 2}},
                 drops = {"blueArtifact"}
             }
         },
@@ -1524,7 +1612,9 @@ if settings.startup["rampantFixed--energyThiefEnemy"].value then
             {
                 type = "biter-spawner",
                 name = "biter-spawner",
-                majorResistances = {"electric", "laser"},
+                resitancePercent = {{"electric", 150}},
+				immunity = {"poison"},	
+                majorResistances = {"laser"},
                 minorResistances = {"explosion"},
                 acceptRate = {1, 10, 0.4, 0.6},
                 attributes = {},
@@ -1536,7 +1626,9 @@ if settings.startup["rampantFixed--energyThiefEnemy"].value then
             {
                 type = "turret",
                 name = "worm",
-                majorResistances = {"electric", "laser"},
+                resitancePercent = {{"electric", 150}},
+				immunity = {"poison"},	
+                majorResistances = {"laser"},
                 minorResistances = {"explosion"},
                 acceptRate = {1, 10, 0.8, 0.6},
                 attackAttributes = {"beam", "electric", "drainCrystal", {"bonusRange", 14}, {"damageKoefficient", 5}, {"durationKoefficient", 0.8}},
@@ -1546,7 +1638,9 @@ if settings.startup["rampantFixed--energyThiefEnemy"].value then
             {
                 type = "hive",
                 name = "hive",
-                majorResistances = {"electric", "laser"},
+                resitancePercent = {{"electric", 150}},
+				immunity = {"poison"},	
+                majorResistances = {"laser"},
                 minorResistances = {"explosion"},
                 attributes = {},
                 acceptRate = {2, 10, 0.001, 0.0175},
@@ -1643,7 +1737,7 @@ if settings.startup["rampantFixed--JuggernautEnemy"].value then
         type = "juggernaut",
         tint = {r=0.7, g=0.2, b=0.2, a=1},
         tint2 = {r=0, g=0.7, b=0, a=0.7},
-        acceptRate = {9, 10, 0.10, 0.15},
+        acceptRate = {9, 10, 0.15, 0.15},
         evo = 0.75,
         units = {
             {
@@ -1652,8 +1746,10 @@ if settings.startup["rampantFixed--JuggernautEnemy"].value then
                 name = "biter",
                 extremeResistances = {"fire", "physical"},
                 majorResistances = {"poison","explosion"},
-                minorResistances = {"acid"},
-                attributes = {"highestHealth", "longReach", "bigger",
+                minorResistances = {"acid", "electric"},
+                minorWeaknesses = {"laser"},
+				addFlatResistance = {{"laser", -6}},		 -- must be later than other resistances/weakness
+                attributes = {{"bonusHealth", 3}, "longReach", "bigger",
                               {"movement", 0.8}, "altBiterArmored", "poisonDeathCloud"},	
                 drops = {"greenArtifact"}
             }
@@ -1713,7 +1809,7 @@ if settings.startup["rampantFixed--ArachnidsEnemy"].value then
                 attackAttributes = {"melee", "acid"},		--, "acidPool"
                 name = "biter",
                 immunity = {"acid", "poison"},
-                minorResistances = {"laser", "fire"},
+                minorResistances = {"laser", "fire", "electric", "explosion"},
                 majorWeaknesses = {"physical"},
                 attributes = {"highestHealth", {"movement", 0.8}, "altBiterArachnid", {"spawnOnDeath", "egg", 0, 1, "drone"}},	
                 drops = {"nilArtifact"}
@@ -1722,9 +1818,10 @@ if settings.startup["rampantFixed--ArachnidsEnemy"].value then
                 type = "drone",
                 attackAttributes = {"touch", "acid"},
                 name = "egg",
-                immunity = {"acid", "poison"},
-				majorResistances = {"laser", "explosion", "fire", "electric"}, 
+                immunity = {"acid", "poison", "electric"},
+				majorResistances = {"laser", "fire"}, 
                 majorWeaknesses = {"physical"},
+				addFlatResistance = {{"physical", -10}},		 -- must be later than other resistances/weakness				
                 attributes = {"egg", "notInKillStatistics", {"clusterDeath", "biter", 1}},			--{"clusterDeath", "biter", 2}
                 drops = {}
             }

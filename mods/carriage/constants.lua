@@ -1,0 +1,1 @@
+GRAPHICSPATH = "__carriage__/graphics/"

@@ -1,0 +1,458 @@
+minime.entered_file()
+
+mod_gui = require("mod-gui")
+
+local minime_gui = {}
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                              Names of GUI elements                             --
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+minime_gui_names = require("gui_stuff.gui_element_names")
+minime_gui.available = require("gui_stuff.gui_available_chars")
+minime_gui.selector = require("gui_stuff.gui_char_selector")
+
+
+-- Number of characters displayed on each page of the character selector
+minime_gui.characters_per_page       = 5
+
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                                 Local functions                                --
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+--                                Shared functions                                --
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+--                               Create a GUI spacer                              --
+------------------------------------------------------------------------------------
+minime_gui.make_spacer = function(parent, name, width)
+  minime.entered_function({parent, name, width})
+
+  local ret = parent.add({
+    type = "empty-widget",
+    name = name,
+    direction = "horizontal",
+  })
+  ret.style.minimal_width = 5
+  ret.style.maximal_width = width or 200
+  ret.style.natural_width = ret.style.maximal_width
+  ret.style.horizontally_squashable = true
+
+  minime.entered_function("leave")
+  return ret
+end
+
+
+------------------------------------------------------------------------------------
+--                            Create a GUI flow element                           --
+------------------------------------------------------------------------------------
+--~ local function make_flow(parent, name, caption, direction)
+minime_gui.make_flow = function(flow_data)
+  minime.entered_function({flow_data})
+
+  if type(flow_data) ~= "table" then
+    minime.entered_function("leave", "Missing argument!")
+    return
+  end
+
+  -- Create flow
+  local ret = flow_data.parent.add({
+    type = "flow",
+    name = flow_data.name,
+    direction = flow_data.direction or "vertical",
+    visible = true,
+  })
+
+  -- Add title?
+  if flow_data.caption then
+    ret.add({
+      type = "label",
+      name = "title",
+      caption = flow_data.caption,
+      style = "frame_title",
+      ignored_by_interaction = true,
+    })
+  end
+
+  minime.entered_function("leave")
+  return ret
+end
+
+
+------------------------------------------------------------------------------------
+--         Make list of characters that will go together on one GUI page!         --
+------------------------------------------------------------------------------------
+minime_gui.make_gui_character_pages = function(player)
+  minime.entered_function({player})
+
+  player = minime.ascertain_player(player)
+  if not player and player.valid then
+    minime.arg_err(player, "player specification")
+  end
+
+minime.show("mod.player_data", mod.player_data)
+  -- Get or initialize player data!
+  local p_data = mod.player_data[player.index]
+  if not p_data then
+    minime.writeDebug("Must initialize mod.player_data[%s]!", {player.index})
+    minime_player.init_player({player_index = player.index})
+    p_data = mod.player_data[player.index]
+  end
+
+  p_data.gui_character_pages = {}
+  p_data.gui_character_pages_lookup = {}
+
+  -- Make the list of characters available to the player
+  minime_gui.available.init_player_character_list(player)
+
+  local chars = p_data.available_characters
+  local pages = p_data.gui_character_pages
+  local lookup = p_data.gui_character_pages_lookup
+
+  local cnt = 1
+  local page = 1
+
+  for char, c_state in pairs(chars) do
+minime.show(char, c_state)
+    -- Characters are enabled (true) or disabled (false)
+    if c_state then
+      if cnt > minime_gui.characters_per_page then
+        page = page + 1
+        cnt = 1
+      end
+
+      pages[page] = pages[page] or {}
+      pages[page][cnt] = char
+
+      lookup[char] = page
+
+      cnt = cnt + 1
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--               Reinitialize GUI when runtime settings are changed!              --
+------------------------------------------------------------------------------------
+minime_gui.init_guis = function(player)
+  minime.entered_function({player})
+
+  -- Make sure we have a valid player!
+  player = minime.ascertain_player(player)
+  if not (player and player.valid) then
+    minime.arg_err(player, "player specification")
+  end
+
+  -- We don't initialize GUIs of disconnected players!
+  if not player.connected then
+    minime.entered_function({player}, "leave", "not connected")
+    return
+  end
+
+  -- Init GUIs of the player!
+  for g, gui in pairs({"available", "selector"}) do
+    minime_gui[gui].init_gui(player)
+  end
+
+  minime.entered_function("leave")
+end
+
+------------------------------------------------------------------------------------
+--                                   REMOVE GUI!                                  --
+------------------------------------------------------------------------------------
+minime_gui.remove_gui = function(player)
+  minime.entered_function({player})
+
+  for g, gui in pairs({"available", "selector"}) do
+    minime_gui[gui].remove_gui(player)
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                            TEMPORARILY DISABLE GUI!                            --
+------------------------------------------------------------------------------------
+minime_gui.disable_guis = function(player)
+  minime.entered_function({player})
+
+  for g, gui in pairs({"available", "selector"}) do
+    minime_gui[gui].hide_gui(player)
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                                 RE-ENABLE GUI!                                 --
+------------------------------------------------------------------------------------
+minime_gui.enable_guis = function(player)
+  minime.entered_function({player})
+
+  for g, gui in pairs({"available", "selector"}) do
+    minime_gui[gui].unhide_gui(player)
+  end
+
+  minime.entered_function("leave")
+end
+
+
+--~ ------------------------------------------------------------------------------------
+--~ --    Respond to click on character selection button/preview or removal button!   --
+--~ ------------------------------------------------------------------------------------
+--~ minime_gui.character_button_click = function(player, clicked_button)
+  --~ minime.entered_function({player, clicked_button})
+
+  --~ minime_gui.select_character(player, clicked_button)
+  --~ minime_character.switch_characters(player)
+
+  --~ minime.entered_function("leave")
+--~ end
+
+
+------------------------------------------------------------------------------------
+--                                SELECT CHARACTER!                               --
+------------------------------------------------------------------------------------
+minime_gui.select_character = function(player, clicked)
+  minime.entered_function({player, clicked})
+
+  player = minime.ascertain_player(player)
+  if not (player and player.valid) then
+    minime.arg_err(player, "player specification")
+  end
+  minime.assert(clicked, "string", "button name")
+
+  local names = minime_gui_names.selector
+  local frames = names.frames
+  local flows = names.flows
+
+  local page = names.character_page_prefix..mod.player_data[player.index].character_gui_page
+  local gui = player.gui.screen
+  local frame = gui and gui[frames.main]
+
+  -- Character buttons
+  local char_page = frame and frame[frames.characters] and
+                              frame[frames.characters][page]
+
+  -- Character removal buttons (God/editor mode)
+  local removal = frame and frame[flows.bottom] and
+                            frame[flows.bottom][flows.removal] and
+                            frame[flows.bottom][flows.removal][flows.removal_buttons]
+
+  minime.writeDebug("%s clicked button \"%s\"", {player.name, clicked}, "line")
+
+  -- Toggle the buttons
+  if (char_page and char_page[clicked]) or (removal and removal[clicked]) then
+
+    --~ local p_data = global.player_data[player.index]
+    local p_data = mod.player_data[player.index]
+    p_data.last_character = clicked:gsub("^"..minime.character_button_prefix, "")
+
+    -- Player selected god mode
+    if p_data.last_character == minime.godmode_button_name then
+minime.writeDebug("Selected god mode!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+                  {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
+
+      p_data.last_character = ""
+      p_data.god_mode = true
+      p_data.editor_mode = nil
+minime.writeDebug("last_character: %s\tgod_mode: %s\teditor_mode: %s",
+                  {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
+
+    -- Player selected editor mode
+    elseif p_data.last_character == minime.editor_button_name then
+minime.writeDebug("Selected editor mode!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+                  {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
+
+      -- SE doesn't allow players to enter editor mode if remote view mode is active
+      if p_data.SE_nav_view then
+        minime_player.stop_SE_remote_view(player, {keep_detached_character = true})
+      end
+
+      p_data.last_character = ""
+      p_data.editor_mode = true
+      p_data.god_mode = nil
+minime.writeDebug("last_character: %s\tgod_mode: %s\teditor_mode: %s",
+                  {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
+
+    -- Player selected character
+    else
+minime.writeDebug("Selected character!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+                  {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
+
+      -- If the player is in SE's remote view mode, turn it off!
+      minime.writeDebug("Has player activated SE's remote view?")
+      if p_data.SE_nav_view then
+        minime.writeDebug("Must stop remote view mode!")
+        -- Stopping remote view will cause SE to immediately raise its event. We
+        -- don't want to overwrite p_data.last_character in this case, because we'd
+        -- be stuck with the old character SE has returned us to instead of getting
+        -- the new character selected by the player.
+        local flags = {keep_last_character = true}
+        minime_player.stop_SE_remote_view(player, flags)
+      else
+        minime.writeDebug("Remote view isn't active!")
+      end
+
+    end
+    minime.writeDebug("Changed last_character for player %s to \"%s\"",
+                      --~ {player.name, global.player_data[player.index].last_character})
+                      {player.name, mod.player_data[player.index].last_character})
+
+    --~ -- --Update GUI
+    --~ -- minime.writeDebug("Must update GUI!")
+    --~ -- minime_gui.gui_update(player)
+
+    -- Close GUI if setting "minime_close_gui_on_selection" is enabled
+    if p_data.settings.close_gui_on_selection then
+      minime_gui.selector.gui_toggle(player)
+      minime.writeDebug("Closed GUI!")
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+
+------------------------------------------------------------------------------------
+--                              GUI-ACTION DETECTED!                              --
+------------------------------------------------------------------------------------
+minime_gui.on_gui_click = function(event)
+  minime.entered_function({event})
+
+  local element = event.element.name
+
+  local element_string = minime.argprint(element)
+
+
+  -- Return if clicked element doesn't belong to us!
+  do
+    local mod_name = event.element.get_mod()
+    if mod_name ~= minime.modName then
+      local reason = string.format("%s belongs to %s",
+                                    element_string, mod_name or "scenario script")
+      minime.entered_function({}, "leave", reason)
+      return
+    end
+  end
+
+
+  ----------------------------------------------------------------------------------
+  -- Element of available-characters list was clicked
+  if minime.prefixed(element, minime.available_chars_prefix) then
+    minime.writeDebug("Diverting to available-characters list (%s)!",
+                      --~ minime.argprint(element))
+                      {element_string})
+    minime_gui.available.on_gui_click(event)
+
+
+  -- Element character selector was clicked
+  elseif minime.prefixed(element, minime.character_selector_prefix) then
+    minime.writeDebug("Diverting to character selector (%s)!",
+                      --~ minime.argprint(element))
+                      {element_string})
+    minime_gui.selector.on_gui_click(event)
+
+  -- Something else from our GUI has been clicked
+  else
+    minime.writeDebug("Player %s clicked %s!",
+                      --~ {event.player_index, minime.argprint(element)})
+                      {event.player_index, element_string})
+  end
+
+
+  -- Move the clicked GUI to the foreground!
+  do
+    local gui_top_names = {
+      [minime_gui_names.available.frames.main] = true,
+      [minime_gui_names.selector.frames.main] = true,
+    }
+    local e = event.element
+minime.show("event.element", e)
+    minime.writeDebugNewBlock("Trying to find GUI root element!")
+
+    -- GUI could have been destroyed if changes have been applied on the GUI for
+    -- turning characters on or off, enforcing a rebuild of the GUI.
+    while e and e.valid and not gui_top_names[e.name] do
+minime.show("Checking element", e)
+      e = e.parent
+    end
+    if e and e.valid then
+      minime.writeDebugNewBlock("Bringing %s to front!", {minime.argprint(e)})
+      e.bring_to_front()
+    else
+      minime.writeDebugNewBlock("%s does not belong to any of our GUIs!")
+    end
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                          GUI-ACTION (DROP-DOWN LIST)!                          --
+------------------------------------------------------------------------------------
+minime_gui.on_gui_selection_state_changed = function(event)
+  minime.entered_function({event})
+
+  local element = event.element
+
+  -- Return if this is not an element of our mod
+  if not minime.prefixed(element.name, minime.mod_elements_prefix) then
+    minime.entered_function({},"leave", "Nothing to do!")
+    return
+  end
+
+  -- Page selection in character selector was changed via drop-down list
+  if minime.prefixed(element.name, minime.character_selector_prefix) then
+    minime.writeDebug("Diverting to character selector (%s)!", minime.argprint(element))
+    minime_gui.selector.on_gui_selection_state_changed(event)
+  end
+
+  minime.entered_function("leave")
+end
+
+
+
+------------------------------------------------------------------------------------
+--                              GUI-ACTION (CHECKBOX)                             --
+------------------------------------------------------------------------------------
+minime_gui.on_gui_checked_state_changed = function(event)
+  minime.entered_function({event})
+
+  local element = event.element
+
+  if not minime.prefixed(element.name, minime.mod_elements_prefix) then
+    minime.entered_function({}, "leave", "Nothing to do for %s \""..minime.argprint(element).."\"!")
+    return
+  end
+
+  ------------------------------------------------------------------------------------
+  -- Divert to available characters!
+  if minime.prefixed(element.name, minime.available_chars_prefix) then
+    minime.writeDebug("Diverting to available-characters list (%s)!", minime.argprint(element))
+    minime_gui.available.on_gui_checked_state_changed(event)
+  end
+
+  minime.entered_function("leave")
+end
+
+------------------------------------------------------------------------------------
+minime.entered_file("leave")
+return minime_gui

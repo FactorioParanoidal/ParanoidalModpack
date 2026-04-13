@@ -1,6 +1,6 @@
 function fillYuokiConfig(config)
 	
-	config["y-res1"] = {
+	config.nauvis["y-res1"] = {
 		type="resource-ore",
 		allotment=50,
 		spawns_per_region={min=1, max=1},
@@ -11,7 +11,7 @@ function fillYuokiConfig(config)
 		starting={richness=2000, size=15, probability=1},
 	}
 	
-	config["y-res2"] = {
+	config.nauvis["y-res2"] = {
 		type="resource-ore",
 		allotment=50,
 		spawns_per_region={min=1, max=1},

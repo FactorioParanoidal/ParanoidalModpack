@@ -1,6 +1,5 @@
+require("prototypes.oil-boiler")
+require("prototypes.turbine")
+require("prototypes.burner-generator")
 require("prototypes.diesel-generator")
-
-require("prototypes.entity.oil-boilers")
-require("prototypes.item.oil-boilers")
-require("prototypes.recipe.oil-boilers")
-require("prototypes.technology.oil-boilers")
+require("prototypes.big-burner-generator")

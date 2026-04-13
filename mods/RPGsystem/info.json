@@ -1,0 +1,11 @@
+{
+    "name": "RPGsystem",
+    "author": "MFerrari",
+    "version": "2.0.7",
+    "title": "RPG System",
+    "homepage":"https://discord.gg/vDfm5tNEqK",
+    "contact": "Discord: MFerrari#6561",
+    "factorio_version": "2.0",
+    "dependencies": ["base >= 2.0.50"],
+    "description": "This mod adds a basic RPG system to the game (XP, level-up and skills)"
+}

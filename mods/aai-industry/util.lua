@@ -312,11 +312,10 @@ end
 function util.replace_filenames_recursive(subject, what, with)
   if subject.filename then
     subject.filename = util.replace(subject.filename, what, with)
-  else
-    for _, sub in pairs(subject) do
-      if (type(sub) == "table") then
-        util.replace_filenames_recursive(sub, what, with)
-      end
+  end
+  for _, sub in pairs(subject) do
+    if (type(sub) == "table") then
+      util.replace_filenames_recursive(sub, what, with)
     end
   end
 end

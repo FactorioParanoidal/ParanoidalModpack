@@ -1,11 +1,11 @@
 {
     "name": "Picks-Inserter",
-    "version": "1.110.6",
-    "title": "Picklock's Inserter",
+    "version": "2.1.4",
+    "title": "Picklocks Inserter block detacher",
     "author": "Picklock",
     "contact": "",
-    "homepage": "",
-    "factorio_version": "1.1",
-    "dependencies": ["base >= 1.1"],
-    "description": "This mod prevents Inserters to get stuck holding Items."
+    "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=79205",
+    "factorio_version": "2.0",
+    "dependencies": ["base >= 2.0", "? space-age >= 2.0"],
+    "description": "This mod prevents inserters from getting stuck when holding items."
 }

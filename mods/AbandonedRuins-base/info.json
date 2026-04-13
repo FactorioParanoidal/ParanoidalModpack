@@ -1,0 +1,23 @@
+{
+  "name": "AbandonedRuins-base",
+  "version": "0.1.5",
+  "title": "Abandoned Ruins - Base",
+  "author": "roland77, Keysivi, Gangsir, Bilka",
+  "homepage": "https://github.com/Quix0r/AbandonedRuins-base",
+  "factorio_version": "2.0",
+  "description": "Adds a playable `base` ruin-set to 'Abandoned Ruins - Updated (core)'. This mod serves also as an example for using latest 1.3.x changes.",
+  "dependencies":
+  [
+    "base >= 2.0.60",
+    "AbandonedRuins_updated_fork >= 1.4.0",
+    "?space-age"
+  ],
+  "package":
+  {
+    "scripts":
+    {
+      "prepackage": "./scripts/extract_changes.sh",
+      "postpublish": "./scripts/github_release.sh"
+    }
+  }
+}

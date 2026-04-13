@@ -1,0 +1,18 @@
+{
+  "recipe":
+  [
+	["scattergun-turret", "w93-scattergun-turret"]
+  ],
+  "item":
+  [
+	["scattergun-turret", "w93-scattergun-turret"]
+  ],
+  "entity":
+  [
+	["scattergun-turret", "w93-scattergun-turret"]
+  ],
+  "technology":
+  [
+	["scattergun-turrets", "w93-scattergun-turrets"]
+  ]
+}

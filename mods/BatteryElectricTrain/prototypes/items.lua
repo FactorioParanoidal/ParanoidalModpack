@@ -1,3 +1,24 @@
+local function MakeLocomotive()
+	local loc = {
+		type = "item-with-entity-data",
+		name = name_locomotive,
+		icon = graphics_path..name_locomotive.."-icon.png",
+		icon_size = 64,
+		subgroup = "train-transport",
+		order = "c[rolling-stock]-a[locomotive_bet]",
+		place_result = name_locomotive,
+		stack_size = 5,
+	}
+
+	-- SchallTransportGroup compatibility
+	if mods["SchallTransportGroup"] then
+		loc.subgroup = "vehicles-railway"
+		loc.order = "a[train-system]-fb[battery-locomotive]"
+	end
+
+	return loc
+end
+
 local function MakeCharger(name)
 	return {
 		type = "item",
@@ -12,17 +33,7 @@ local function MakeCharger(name)
 end
 
 data:extend({
-	{
-		type = "item-with-entity-data",
-		name = name_locomotive,
-		icon = graphics_path..name_locomotive.."-icon.png",
-		icon_size = 64,
-		icon_mipmaps = 4,
-		subgroup = name_group_chargers,
-		order = "a",
-		place_result = name_locomotive,
-		stack_size = 5,
-	},
+	MakeLocomotive(),
 	MakeCharger(name_chg1),
 	MakeCharger(name_chg2),
 	MakeCharger(name_chg3),
@@ -38,7 +49,6 @@ local function EmptyFuel(output)
 		name		= output.."-empty",
 		icon		= graphics_path..output.."-empty-icon.png",
 		icon_size	= 64,
-		icon_mipmaps	= 4,
 		stack_size	= 1,
 		subgroup	= name_group_batteries,
 		order		= "a",
@@ -57,10 +67,9 @@ local function FullFuel(infuel, output)
 		name		= output.."-full",
 		icon		= graphics_path..output.."-full-icon.png",
 		icon_size	= 64,
-		icon_mipmaps	= 4,
 		burnt_result	= output.."-empty",
 		fuel_category	= name_cat_fuel_battery,
-		fuel_value	= (vanilla_stacks * infuel.stack_size * util.parse_energy(infuel.fuel_value)).."J",
+		fuel_value	= (settings.startup[setting_capacity_multiplier].value * vanilla_stacks * infuel.stack_size * util.parse_energy(infuel.fuel_value)).."J",
 		fuel_acceleration_multiplier = infuel.fuel_acceleration_multiplier,
 		fuel_top_speed_multiplier    = infuel.fuel_top_speed_multiplier,
 		stack_size	= 1,

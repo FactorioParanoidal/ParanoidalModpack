@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
@@ -17,10 +17,12 @@ require("prototypes.entity.assembly.centrifuge")
 require("prototypes.entity.assembly.distillery")
 require("prototypes.entity.assembly.electrolyser")
 require("prototypes.entity.assembly.electric-furnace")
+require("prototypes.entity.assembly.oil-refinery")
 require("prototypes.entity.assembly.steel-furnace")
 require("prototypes.entity.assembly.stone-furnace")
 
 -- Bob's Logistics
+require("prototypes.entity.logistics.belt-entities")
 require("prototypes.entity.logistics.cargo-wagon")
 require("prototypes.entity.logistics.chest")
 require("prototypes.entity.logistics.construction-robots")
@@ -45,7 +47,6 @@ require("prototypes.entity.mining.mining-drill")
 require("prototypes.entity.mining.pumpjack")
 
 -- Bob's Modules
-require("prototypes.entity.modules.beacon-module-slots")
 require("prototypes.entity.modules.beacon")
 
 -- Bob's Metals, Chemicals, and Intermediates
@@ -100,7 +101,7 @@ require("prototypes.entity.warfare.combat-robots")
 require("prototypes.equipment.equipment.battery")
 require("prototypes.equipment.equipment.energy-shield")
 require("prototypes.equipment.equipment.exoskeleton")
-require("prototypes.equipment.equipment.fusion-reactor")
+require("prototypes.equipment.equipment.fission-reactor")
 require("prototypes.equipment.equipment.laser-defense")
 require("prototypes.equipment.equipment.night-vision")
 require("prototypes.equipment.equipment.personal-roboport")
@@ -111,8 +112,8 @@ require("prototypes.equipment.equipment.solar-panel")
 require("prototypes.equipment.vehicle-equipment.vehicle-battery")
 require("prototypes.equipment.vehicle-equipment.vehicle-belt-immunity")
 require("prototypes.equipment.vehicle-equipment.vehicle-energy-shield")
-require("prototypes.equipment.vehicle-equipment.vehicle-fusion-cell")
-require("prototypes.equipment.vehicle-equipment.vehicle-fusion-reactor")
+require("prototypes.equipment.vehicle-equipment.vehicle-fission-cell")
+require("prototypes.equipment.vehicle-equipment.vehicle-fission-reactor")
 require("prototypes.equipment.vehicle-equipment.vehicle-laser-defense")
 require("prototypes.equipment.vehicle-equipment.vehicle-mobility")
 require("prototypes.equipment.vehicle-equipment.vehicle-plasma-turret")
@@ -127,7 +128,6 @@ require("prototypes.item.electronics")
 require("prototypes.item.enemies")
 require("prototypes.item.greenhouse")
 require("prototypes.item.logistics")
-require("prototypes.item.modules")
 require("prototypes.item.ores")
 require("prototypes.item.plates")
 require("prototypes.item.revamp")
@@ -144,8 +144,6 @@ require("prototypes.technology.greenhouse")
 -- require("prototypes.technology.inserters")
 require("prototypes.technology.logistics")
 require("prototypes.technology.mining")
-require("prototypes.technology.module-permutations")
-require("prototypes.technology.module")
 require("prototypes.technology.personal-equipment")
 require("prototypes.technology.plates")
 require("prototypes.technology.power")

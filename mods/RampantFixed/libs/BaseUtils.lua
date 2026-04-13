@@ -38,6 +38,12 @@ local BASE_DISTANCE_TO_EVO_INDEX = constants.BASE_DISTANCE_TO_EVO_INDEX
 local BASE_COLLECTION_THRESHOLD = constants.BASE_COLLECTION_THRESHOLD
 
 local CHUNK_SIZE = constants.CHUNK_SIZE
+local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
+local RAIDING_MINIMUM_BASE_THRESHOLD = constants.RAIDING_MINIMUM_BASE_THRESHOLD
+
+local highEvo = constants.highEvo
+local growPheromones_min = constants.growPheromones_min
+local growPheromones_max = constants.growPheromones_max
 
 -- imported functions
 
@@ -70,32 +76,50 @@ local next = next
 local mRandom = math.random
 
 -- module code
-
-local function evoToTier(universe, evolutionFactor)
-    local v
-   for i=10,1,-1 do
-        if universe.evoToTierMapping[i] <= evolutionFactor then
-            v = i
-            if mRandom() <= 0.65 then
-                break
-            end
-        end
-    end
-    return v
-end
-
--- + !КДА 2021.11
-local function evoToTierNorandom(universe, evolutionFactor)
-    local v
+local tierEnd = settings.startup["rampantFixed--tierEnd"].value
+local ticksPerTier = mFloor(3600*60*1.3 * (1.6 ^ mMax(0, (tierEnd - 5))))
+local function evoToTierNorandom(universe, evolutionFactor, gameTick)
+    if not universe.NEW_ENEMIES then
+		return 0
+	end
+	local tierByTime = 0
+	if gameTick then
+		tierByTime = 0 + mMin(math.floor(gameTick / ticksPerTier), 3)		
+	end
+    local tier = 0
     for i=10,1,-1 do
         if universe.evoToTierMapping[i] <= evolutionFactor then
-            v = i
+            tier = i
             break
         end
     end
-    return v
+    return mMax(tier, tierByTime)
 end
--- - !КДА 2021.11
+
+function baseUtils.evoToTier(universe, evolutionFactor, gameTick)
+	return evoToTierNorandom(universe, evolutionFactor, gameTick)
+end
+
+local evoToBuildingLvl = {}
+evoToBuildingLvl[1] = 0.14
+evoToBuildingLvl[2] = 0.26
+evoToBuildingLvl[3] = 0.37
+evoToBuildingLvl[4] = 0.47
+evoToBuildingLvl[5] = 0.56
+evoToBuildingLvl[6] = 0.65
+evoToBuildingLvl[7] = 0.74
+evoToBuildingLvl[8] = 0.825
+evoToBuildingLvl[9] = 0.91
+evoToBuildingLvl[10] = 1
+
+function baseUtils.evoToBuildingLvl(evolutionFactor)
+	for i = 1, 10 do
+		if evolutionFactor < evoToBuildingLvl[i] then
+			return i
+		end	
+	end
+	return 10
+end
 
 function baseUtils.findNearbyBase(map, chunk, maxDistance, baseChangingChance)	
     local x = chunk.x
@@ -160,17 +184,22 @@ end
 -- - !КДА 2021.11
 
 -- return faction name. "neutral", "troll, etc..
-local function findBaseMutation(map, targetEvolution, targetTier)
+local function findBaseMutation(map, targetEvolution, targetTier, randomizer)
     local universe = map.universe
 	local tier
 	if targetTier then
 		tier = targetTier
 	else	
-		tier = evoToTierNorandom(universe, targetEvolution or map.evolutionLevel)	
+		tier = evoToTierNorandom(universe, targetEvolution or game.forces.enemy.get_evolution_factor(map.surface), game.tick)	
 	end	
 	
     local alignments = universe.evolutionTableAlignment[tier]
-    local roll = mRandom()
+    local roll
+	if randomizer then
+		roll = randomizer()
+	else	
+		roll = mRandom()
+	end
     for i=1,#alignments do
         local alignment = alignments[i]
 
@@ -188,16 +217,15 @@ end
 -- filteredAligments{neutral = 0.2, acid = 0.1, ...}
 -- mutationRates = {n1, n2,...}	==> return {faction1 = n1, faction2 = n2,...} 
 -- return {troll = 1, electic = 1,...}
-local function findBaseMutations(map, targetEvolution, targetTier, mutationCount, mutationRates,exceptFactions)
+local function findBaseMutations(map, targetEvolution, targetTier, mutationCount, mutationRates, randomizer, exceptFactions)
     local universe = map.universe
 	local tier
 	if targetTier then
 		tier = targetTier
 	else	
-		tier = evoToTierNorandom(universe, targetEvolution or map.evolutionLevel)	
+		tier = evoToTierNorandom(universe, targetEvolution or game.forces.enemy.get_evolution_factor(map.surface), game.tick)	
 	end	
     local alignments = universe.evolutionTableAlignment[tier]
-
 	local filteredAligments = {}
 	local aligmentsCount = 0
 	local ratesSum = 0
@@ -226,7 +254,12 @@ local function findBaseMutations(map, targetEvolution, targetTier, mutationCount
 	end
 	local result = {}
 	for u = 1, maxMutations do
-		local roll = mRandom()*ratesSum
+		local roll
+		if randomizer then
+			roll = randomizer()*ratesSum
+		else	
+			roll = mRandom()*ratesSum
+		end	
 		for faction, rate in pairs(filteredAligments) do
 			local alignment = alignments[i]
 			roll = roll - filteredAligments[faction]
@@ -249,29 +282,25 @@ local function findBaseMutations(map, targetEvolution, targetTier, mutationCount
 	end
 	return result
 end
- 
-local function initialEntityUpgrade(faction, tier, maxTier, map, useHiveType)
+  
+local function initialEntityUpgrade(faction, lvl, map, useHiveType, entityType)
     local evolutionTable = map.universe.buildingEvolveLookup
     local entity
 
-    local useTier
+    local useLvl
 
     local tierRoll = mRandom()
     if (tierRoll < 0.4) then
-        useTier = maxTier
-    elseif (tierRoll < 0.7) then
-        useTier = mMax(maxTier - 1, tier)
-    elseif (tierRoll < 0.9) then
-        useTier = mMax(maxTier - 2, tier)
+        useLvl = lvl
     else
-        useTier = mMax(maxTier - 3, tier)
+        useLvl = mMax(lvl - 1, 1)
     end
 
 	local upgradesTier = evolutionTable[faction]
 	if not upgradesTier then
 		upgradesTier = evolutionTable["neutral"]
 	end
-    local upgrades = upgradesTier[useTier]
+    local upgrades = upgradesTier[useLvl]
 
     if upgrades then
         if useHiveType then
@@ -283,6 +312,19 @@ local function initialEntityUpgrade(faction, tier, maxTier, map, useHiveType)
                 end
             end
         end
+		if entityType then
+			local validTypes = {}
+            for ui=1,#upgrades do
+                local upgrade = upgrades[ui]
+                if string.find(upgrade[3], entityType) then
+					validTypes[#validTypes+1] = upgrade[2]
+                end
+            end
+			if #validTypes>0 then
+                local buildings = validTypes[mRandom(#validTypes)]
+                entity = buildings[mRandom(#buildings)]
+			end
+		end
         if not entity then
             local roll = mRandom()
 
@@ -352,13 +394,6 @@ local function entityEvolve(originalEntity, map)
 		roll = roll - upgrade[1]
 		if roll<=0 then
 			local buildingSet = upgrade[2]
---			if (upgrade[3]~= hiveType) and (oldFaction==faction) then
---				game.print("entityUpgrade---------------start")
-				-- for u = 1,#factionUpgrades do 
-					-- game.print(""..u..":"..factionUpgrades[u][1].."," .. factionUpgrades[u][3]..( (u == 1 and "<--here") or ""))				
-				-- end
---				game.print("entityUpgrade---------------end")
---			end
 			return buildingSet[mRandom(#buildingSet)]
 		end
 	end
@@ -368,7 +403,7 @@ local function entityEvolve(originalEntity, map)
 end
 
 
-local function entityUpgrade(faction, tier, maxTier, originalEntity, map)
+local function entityUpgrade(faction, lvl, originalEntity, map)
 	local universe = map.universe
     local hiveType = universe.buildingHiveTypeLookup[originalEntity.name]
 	if not hiveType then
@@ -385,28 +420,12 @@ local function entityUpgrade(faction, tier, maxTier, originalEntity, map)
 			return originalEntity.name
 		end	
 	end	
-
-    local useTier
-	if tier == maxTier then
-		useTier = maxTier
-	else		
-		local tierRoll = mRandom()
-		if (tierRoll < 0.4) then
-			useTier = maxTier
-		elseif (tierRoll < 0.7) then
-			useTier = mMax(maxTier - 1, tier)
-		elseif (tierRoll < 0.9) then
-			useTier = mMax(maxTier - 2, tier)
-		else
-			useTier = mMax(maxTier - 3, tier)
-		end
-	end	
 	
     local evolutionTable = map.universe.buildingEvolveLookup
 	if not evolutionTable[faction] then
 		return originalEntity.name		
 	end
-    local upgrades = evolutionTable[faction][useTier]
+    local upgrades = evolutionTable[faction][lvl]
     if not upgrades then
 		return originalEntity.name		
 	end
@@ -428,33 +447,15 @@ local function entityUpgrade(faction, tier, maxTier, originalEntity, map)
 		roll = roll - upgrade[1]
 		if roll<=0 then
 			local buildingSet = upgrade[2]
---			if (upgrade[3]~= hiveType) and (oldFaction==faction) then
---				game.print("entityUpgrade---------------start")
-				-- for u = 1,#factionUpgrades do 
-					-- game.print(""..u..":"..factionUpgrades[u][1].."," .. factionUpgrades[u][3]..( (u == 1 and "<--here") or ""))				
-				-- end
---				game.print("entityUpgrade---------------end")
---			end
 			return buildingSet[mRandom(#buildingSet)]
 		end
 	end
 	return originalEntity.name		
 end
 
-local function findEntityUpgrade(faction, currentEvo, evoIndex, originalEntity, map, evolve)
+local function findEntityUpgrade(faction, originalEntity, map, evolve, entityType)
     local universe = map.universe
-    local adjCurrentEvo = mMax(
-        ((faction ~= universe.enemyAlignmentLookup[originalEntity.name]) and 0) or currentEvo,
-        0
-    )
 
-    local tier = evoToTier(universe, adjCurrentEvo)
-    local maxTier = evoToTierNorandom(universe, evoIndex)
-
-    if (tier > maxTier) then
-		tier = maxTier
---        return nil
-    end
 
     if evolve then
         local chunk = getChunkByPosition(map, originalEntity.position)
@@ -470,9 +471,9 @@ local function findEntityUpgrade(faction, currentEvo, evoIndex, originalEntity, 
 				end
 			end
 		end	
-		return initialEntityUpgrade(faction, tier, maxTier, map, (makeHive and "hive"))
+		return initialEntityUpgrade(faction, map.buildingsLvl, map, (makeHive and "hive"), entityType)	-- maxTier
     else
-        return entityUpgrade(faction, tier, maxTier, originalEntity, map)
+        return entityUpgrade(faction, map.buildingsLvl, originalEntity, map)	-- maxTier
     end
 end
 
@@ -546,7 +547,7 @@ local function deleteAssociatedUnits(entity)
 	if entity.valid and (entity.type == "unit-spawner") then
 		if entity.units then
 			for i, unit in pairs(entity.units) do
-				if unit and unit.valid and (unit.type == "unit") and (not unit.unit_group) then
+				if unit and unit.valid and (unit.type == "unit") and (not unit.commandable.parent_group) then
 					unit.destroy()		--unit.die(unit.force)
 				end
 			end
@@ -558,7 +559,6 @@ end
 function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, addEntity)	
     local surface = map.surface
     local position = entity.position
-    local currentEvo = (addEntity and 0) or entity.prototype.build_base_evolution_requirement or 0
     local universe = map.universe
 
 	local faction
@@ -566,6 +566,15 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
 		faction = baseAlignment
 	else
 		faction = getFactionFromAligment(baseAlignment)
+	end
+	
+	local entityType
+	if not addEntity then
+		if entity.type == "turret" then
+			entityType = "turret"
+		else
+			entityType = "spawner"
+		end
 	end
 
 	if not faction then
@@ -575,19 +584,16 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
 		return nil
     end
 
-    local distance = mMin(1, euclideanDistancePoints(position.x, position.y, 0, 0) * BASE_DISTANCE_TO_EVO_INDEX)
-    local evoIndex = mMax(distance, map.evolutionLevel)	
-
     local spawnerName = findEntityUpgrade(faction,
-                                          currentEvo,
-                                          evoIndex,
                                           entity,
                                           map,
-                                          evolve)
+                                          evolve,
+										  entityType
+										  )
  	
 
-   if spawnerName and (addEntity or (spawnerName~=entity.name)) then
-		--game.print(entity.name.."->"..spawnerName.." [gps=" .. entity.position.x .. "," .. entity.position.y .."]")	-- debug
+   if spawnerName and (addEntity or (spawnerName~=entity.name)) then   
+		-- game.print(entity.name.."->"..spawnerName.." [gps=" .. entity.position.x .. "," .. entity.position.y .."]")	-- debug
 		if not addEntity then
 			deleteAssociatedUnits(entity)
 			entity.destroy()
@@ -596,12 +602,15 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
         local query = universe.upgradeEntityQuery		
         query.name = name		
         query.position = disPos or position
-
         if addEntity or (not surface.can_place_entity(query)) then
+			local addEntityPrototype = "chunk-scanner-nest-rampant"
+			if addEntity and (universe.buildingHiveTypeLookup[name] == "turret") then
+				addEntityPrototype = "chunk-scanner-turret-rampant"
+			end
             local newPosition = surface.find_non_colliding_position(
-                (addEntity and "chunk-scanner-squad-rampant") or name,
+                (addEntity and addEntityPrototype) or name,
                 disPos or position,
-                CHUNK_SIZE,
+				CHUNK_SIZE,
                 1,
                 true
             )
@@ -670,18 +679,17 @@ function baseUtils.evolveEntity(entity, map)
 
 end
 
-function baseUtils.changeEntityTier(entity, newTier, map)
+function baseUtils.changeEntityLvl(entity, lvl, map)
     local surface = map.surface
     local position = entity.position
     local universe = map.universe
-	
+
 	local oldFaction = universe.enemyAlignmentLookup[entity.name]
 	if not oldFaction then	
 		return nil
 	end
 	local oldName = entity.name	
-	--local tier = universe.buildingTierLookup[entity.name]
-    local spawnerName = entityUpgrade(oldFaction, newTier, newTier, entity, map)
+    local spawnerName = entityUpgrade(oldFaction, lvl, entity, map)
 		
     if spawnerName and (spawnerName~=oldName)then
         local name = spawnerName
@@ -698,46 +706,14 @@ function baseUtils.changeEntityTier(entity, newTier, map)
 		end	
 	end
 	return nil
-	
-		
-    -- if not (spawnerName==oldName)then
-        -- entity.destroy()
-        -- local name = universe.buildingSpaceLookup[spawnerName] or spawnerName
-        -- local query = universe.upgradeEntityQuery
-        -- query.name = name
-        -- query.position = position
-
-        -- if not surface.can_place_entity(query) then
-            -- local newPosition = surface.find_non_colliding_position(
-                -- name,
-                -- position,
-                -- CHUNK_SIZE,
-                -- 1,
-                -- true
-            -- )
-            -- query.position = newPosition or position
-        -- end
-
-		-- query.name = spawnerName
-        -- if remote.interfaces["kr-creep"] then
-            -- remote.call("kr-creep", "spawn_creep_at_position", surface, query.position)
-        -- end
-		-- local newEntity = surface.create_entity(query)
-		-- if newEntity.valid then
-			-- return newEntity
-		-- else
-			-- return nil
-		-- end		
-   -- end
-   -- return nil
-	
 end
 
 
-function baseUtils.changeEntityAligment(entity, newAlignments, map)
+function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierChanging)
 	if not entity.valid then
 		return nil	
 	end
+	
     local surface = map.surface
     local position = entity.position
     local universe = map.universe
@@ -756,8 +732,14 @@ function baseUtils.changeEntityAligment(entity, newAlignments, map)
     end
 	
 	local oldName = entity.name
-	local tier = universe.buildingTierLookup[entity.name]
-    local spawnerName = entityUpgrade(newFaction, tier, tier, entity, map)
+	local lvl
+	if allowTierChanging then
+		lvl = map.buildingsLvl
+	else
+		lvl = universe.buildingTierLookup[entity.name]
+	end
+	
+    local spawnerName = entityUpgrade(newFaction, lvl, entity, map)
     if spawnerName and (spawnerName~=oldName) then
         local name = spawnerName
 		local query = {}
@@ -843,7 +825,7 @@ local function upgradeBase(map, base, upgradeType)
 			
 			if (oldAlignment[factions[roll]] - RateStep) < 0.005 then	-- if rate too low, then do nothing or change faction
 				if upgradeType == 1 then
-					newFaction = findBaseMutation(map, nil, baseTier)
+					newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 					if not oldAlignment[newFaction] then
 						oldAlignment[newFaction] = oldAlignment[factions[roll]]
 						oldAlignment[factions[roll]] = nil
@@ -858,7 +840,7 @@ local function upgradeBase(map, base, upgradeType)
 			end				 
 		end
 	elseif upgradeType == 2 then
-		local newFaction = findBaseMutation(map, nil, baseTier)
+		local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 		if not oldAlignment[newFaction] then
 			local oldFaction
 			local newAlignmentAndSteps = {10, {}}
@@ -887,14 +869,14 @@ local function upgradeBase(map, base, upgradeType)
 			factionTotal = factionTotal + 1
 			factionRates[factionTotal] = rate
 		end
-		base.newAlignmentAndSteps = {30, findBaseMutations(map, nil, baseTier, factionTotal, factionRates)}
+		base.newAlignmentAndSteps = {30, findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)}
 		result = true
 	elseif upgradeType == 4 then
 		local newAlignmentAndSteps = {30, {}}
 		local newAlignment = newAlignmentAndSteps[2]
 		local ratesTotal = 0
 		for faction, rate in pairs(oldAlignment) do
-			newAlignment[faction] = mRandom(1, 10)
+			newAlignment[faction] = base.geneRandomizer(1, 10)
 			ratesTotal = ratesTotal + newAlignment[faction]
 		end
 		
@@ -1002,7 +984,7 @@ function baseUtils.getDynamicRates(base)
 	if totalRate == 0 then totalRate = 1 end
 	
 	local totalCount
-	if not(base.factionsTotal) or base.factionsTotal[1]==0 then 
+	if not(base.factionsTotal) or (base.factionsTotal[1]==0) then 
 		totalCount = 0
 	else
 		totalCount = base.factionsTotal[1]
@@ -1061,7 +1043,7 @@ function baseUtils.changeEntityAndUpdateDynamicRates(entity, dynamicRates, map, 
 		return nil
 	end
 	
-	local newEntity = baseUtils.changeEntityAligment(entity, newFaction, map)
+	local newEntity = baseUtils.changeEntityAligment(entity, newFaction, map, true)
 		
 	if newEntity then
 		if base and base.factionsTotal then 	
@@ -1163,7 +1145,7 @@ function baseUtils.chunkCanGrow(map, chunk)
 	end
 	local nestCount = getNestCount(map, chunk) + getHiveCount(map, chunk)
 	local turretCount = getTurretCount(map, chunk)
-	if (nestCount < 3) or ((nestCount + turretCount) < 10) then
+	if (nestCount < 8) or ((nestCount + turretCount) < 15) then
 		return true
 	end		
 	--game.print("baseUtils.chunkCanGrow: [gps=" .. chunk.x .. "," .. chunk.y .."] = false" )	-- debug
@@ -1184,21 +1166,17 @@ function baseUtils.processBase(chunk, map, tick, base)
 		base.tick = tick+36000
         return
 	end
-	
+	local evo = game.forces.enemy.get_evolution_factor(map.surface)
     local surface = map.surface
     local universe = map.universe
-    local point = universe.position
-
-    point.x = chunk.x + (CHUNK_SIZE * mRandom())
-    point.y = chunk.y + (CHUNK_SIZE * mRandom())
-	local newTier = evoToTierNorandom(map.universe, map.evolutionLevel) - base.tierHandicap
+	local newTier = evoToTierNorandom(map.universe, evo, tick) - base.tierHandicap
 	if base.tier < newTier then
 		base.tier = newTier
 		base.nextMutationTick = tick + 36000
 		upgradeBase(map, base, 3)
 		base.state = BASE_AI_STATE_ACTIVE
 	elseif (base.state == BASE_AI_STATE_MUTATE) and ((base.nextMutationTick or 0) < tick) and (not base.changingEntities) and (not base.newAlignmentAndSteps) then
-		local mutateRoll = mRandom()		
+		local mutateRoll = base.geneRandomizer()		
 		--base.nextMutationTick = tick + 36000
 		if (mutateRoll < 0.05) then
 			upgradeBase(map, base, 3)
@@ -1218,20 +1196,35 @@ function baseUtils.processBase(chunk, map, tick, base)
 	updateBaseStats(base)
 	------- growing
 	local baseCanGrow = false
-	local chunksCount = 0 
-	local activeChunks = 0 
-	for chunk, _ in pairs(base.chunks) do
-		if (getNestActiveness(map, chunk) > 0) then
-			activeChunks = activeChunks + 1
-			-- baseCanGrow = baseCanGrow or baseUtils.chunkCanGrow(map, chunk)	 -- only active chunk
+	if base.forcedGrowthTick and (base.forcedGrowthTick > tick) then
+		baseCanGrow = true
+	else		
+		local chunksCount = 0 
+		local activeChunks = 0 
+		if (evo > highEvo) then
+			for chunk, _ in pairs(base.chunks) do
+				if (chunk[BASE_DETECTION_PHEROMONE] >= growPheromones_min) and (chunk[BASE_DETECTION_PHEROMONE] <= growPheromones_max) then
+					baseCanGrow = baseCanGrow or baseUtils.chunkCanGrow(map, chunk)
+				end
+				chunksCount = chunksCount + 1
+			end
+		else
+			for chunk, _ in pairs(base.chunks) do
+				if (getNestActiveness(map, chunk) > 0) then
+					activeChunks = activeChunks + 1
+				end
+				chunksCount = chunksCount + 1
+			end
+			if (activeChunks > 0) and (chunksCount <= 5) then
+				for chunk, _ in pairs(base.chunks) do
+					baseCanGrow = baseCanGrow or baseUtils.chunkCanGrow(map, chunk)	 -- only active chunk
+				end
+			end
 		end
-		chunksCount = chunksCount + 1
-	end
-	if (activeChunks > 0) and (chunksCount <= 5) then
-		for chunk, _ in pairs(base.chunks) do
-			baseCanGrow = baseCanGrow or baseUtils.chunkCanGrow(map, chunk)	 -- only active chunk
-		end		
-	end
+		if chunksCount > 5 then
+			baseCanGrow = false
+		end
+	end	
 	
 	if baseCanGrow then
 		if not map.basesToGrow[base.id] then
@@ -1288,18 +1281,22 @@ function baseUtils.createBase(map, chunk, tick, thisIsRampantEnemy)
     local meanLevel = mFloor(distance * 0.005)
 
     local distanceIndex = mMin(1, distance * BASE_DISTANCE_TO_EVO_INDEX)
-    local evoIndex = mMax(distanceIndex, map.evolutionLevel)
+    local evoIndex = mMax(distanceIndex, game.forces.enemy.get_evolution_factor(map.surface))
 
-	local tier = evoToTierNorandom(map.universe, evoIndex)
+	local tier = evoToTierNorandom(map.universe, evoIndex, tick)
 	local tierHandicap 
-	if tier == 1 then
-		if mRandom()<0.7 then 
+	if tier <= 1 then
+		if mRandom()<0.8 then 
 			tierHandicap = 0
 		else
 			tierHandicap = 1
 		end
 	else
-		tierHandicap = mRandom(mMin(3, tier))-1
+		if mRandom()<0.5 then 
+			tierHandicap = 0
+		else
+			tierHandicap = mRandom(mMin(3, tier))-1
+		end	
 	end	
 
     local baseTick = (tick or 0)
@@ -1314,6 +1311,9 @@ function baseUtils.createBase(map, chunk, tick, thisIsRampantEnemy)
                                                       BASE_DISTANCE_THRESHOLD * 0.75,
                                                       BASE_DISTANCE_THRESHOLD * 1.50)
     local distanceThreshold = (baseLevel * BASE_DISTANCE_LEVEL_BONUS) + baseDistanceThreshold
+	
+	local geneSeed = game.default_map_gen_settings.seed + universe.baseId * 5500
+	geneSeed = geneSeed % 4294967295	-- can't exceed 4294967295 
 
     local base = {
         x = x,
@@ -1332,6 +1332,7 @@ function baseUtils.createBase(map, chunk, tick, thisIsRampantEnemy)
 		mapIndex = map.surface.index,
 		chunks = {},
 		basesToGrow = {},
+		geneRandomizer = game.create_random_generator(geneSeed),
         id = universe.baseId
 		, chunkFactions = {}, factionsTotal = nil, changingEntities = false, tier = tier, tierHandicap = tierHandicap, newAlignmentAndSteps = nil 
     }
@@ -1343,7 +1344,6 @@ function baseUtils.createBase(map, chunk, tick, thisIsRampantEnemy)
     return base
 end
 
--- + !КДА 2021.11
 function baseUtils.findNewBaseAligment(map, chunk)
 	if not chunk then
         return {neutral = 1}
@@ -1354,11 +1354,10 @@ function baseUtils.findNewBaseAligment(map, chunk)
     local distance = euclideanDistancePoints(x, y, 0, 0)
 
     local distanceIndex = mMin(1, distance * BASE_DISTANCE_TO_EVO_INDEX)
-    local evoIndex = mMax(distanceIndex, map.evolutionLevel)
+    local evoIndex = mMax(distanceIndex, game.forces.enemy.get_evolution_factor(map.surface))
     local alignment = findBaseInitialAlignment(map, evoIndex) or {neutral = 1}
 	return alignment
 end
--- - !КДА 2021.11
 
 function baseUtils.rebuildNativeTables(universe)
     local alignmentSet = {}
@@ -1377,12 +1376,25 @@ function baseUtils.rebuildNativeTables(universe)
     universe.costLookup = costLookup
     local buildingHiveTypeLookup = {}
     universe.buildingHiveTypeLookup = buildingHiveTypeLookup
-    local buildingTierLookup = {}	-- + !КДА 2021.11
+	
+    local buildingTierLookup = {}	
     universe.buildingTierLookup = buildingTierLookup
+	
 
-    for i=1,10 do
-        evoToTierMapping[#evoToTierMapping+1] = (((i - 1) * 0.1) ^ 0.8) - 0.01
-	end
+	evoToTierMapping[1] = 0.1
+	evoToTierMapping[2] = 0.17
+	evoToTierMapping[3] = 0.27
+	evoToTierMapping[4] = 0.37
+	evoToTierMapping[5] = 0.47
+	evoToTierMapping[6] = 0.56
+	evoToTierMapping[7] = 0.65
+	evoToTierMapping[8] = 0.74
+	evoToTierMapping[9] = 0.83
+	evoToTierMapping[10] = 0.91
+	
+    -- for i=1,10 do
+        -- evoToTierMapping[#evoToTierMapping+1] = (((i - 1) * 0.1) ^ 0.8) - 0.01
+	-- end
 
     for i=1,#FACTION_SET do
         local faction = FACTION_SET[i]
@@ -1392,7 +1404,7 @@ function baseUtils.rebuildNativeTables(universe)
         local factionBuildingPicker = {}
         buildingEvolveLookup[faction.type] = factionBuildingPicker
 
-        for t=1,10 do
+        for t=0,10 do
             local alignments = alignmentSet[t]
             if not alignments then
                 alignments = {}
@@ -1470,7 +1482,7 @@ function baseUtils.rebuildNativeTables(universe)
         end
     end
 
-    for t=1,10 do
+    for t=0,10 do
         local alignments = alignmentSet[t]
         local totalAlignment = 0
         for i=1,#alignments do		
@@ -1500,12 +1512,12 @@ function baseUtils.rebuildNativeTables(universe)
 		for _,base in pairs(universe.bases) do
 			local map = universe.maps[base.mapIndex]
 			if map then
-				local evoIndex = evoToTier(universe, map.evolutionLevel)
+				local tier = evoToTierNorandom(universe, game.forces.enemy.get_evolution_factor(map.surface), game.tick)
 				cnt = cnt + 1
 				for x=1,#base.alignment do
 					local alignment = base.alignment[x]
 					if not universe.buildingEvolveLookup[alignment] then
-						base.alignment = findBaseInitialAlignment(map, evoIndex) or {neutral = 1}
+						base.alignment = findBaseInitialAlignment(map, tier) or {neutral = 1}
 						break
 					end
 				end
@@ -1555,7 +1567,7 @@ function baseUtils.ShowNewBaseAligments(universe, targetEvolution)
 end
 
 function baseUtils.ShowEvoToTierMapping(universe)
-	for i=10,1,-1 do
+	for i=10,0,-1 do
 		game.print(tostring(i)..":"..tostring(universe.evoToTierMapping[i]))
 	end	
 	return ""

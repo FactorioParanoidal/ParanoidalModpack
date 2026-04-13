@@ -1,4 +1,55 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 24. 09. 2025
+  Bugfixes:
+    - Fixed crash when adding mod to an existing game.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 23. 09. 2025
+  Bugfixes:
+    - Fixed that the explosions were visible within factoriopedia.
+    - Fixed that the alt-mode preview was larger than intended.
+    - Fixed mod not being active on most surfaces.
+
+  Locale:
+    - Added Czech translation thanks to Asyps.
+    - Updated Chinese Simplified translation, thanks to tanvec.
+    - Added Chinese Traditional translation, thanks to Cassidy.
+    - Added Vietnamese translation, thanks to DTA.
+    - Updated Spanish translation, thanks to SpiderLove.
+    - Added German translation, thanks to Felix.
+    - Added Korean translation, thanks to x2605.
+    - Added Brazilian Portuguese translation, thanks to 123499.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Updated Korean translation, thanks to PolarZero.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 30. 01. 2025
+  Bugfixes:
+    - Having the repair bots setting on no longer causes a crash on startup.
+    - Fixed the "medium explosion" startup error for version 2.0.23 and above.
+
+  Locale:
+    - Added Czech translation thanks to Asyps.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 27. 10. 2024
+  Bugfixes:
+    - Having the repair bots setting on no longer causes a load error on startup.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 21. 10. 2024
+  Info:
+    - Updated for Factorio 2.0.
+
+  Bugfixes:
+    - Fix rare crash where a logistic network is invalidated while robot died of attrition.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.5.15
 Date: 04. 05. 2023
   Bugfixes:

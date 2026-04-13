@@ -2,21 +2,18 @@ local default_gui = data.raw["gui-style"].default
 
 default_gui["helmod_textfield"] = {
   type = "textbox_style",
-  parent = "search_textfield_with_fixed_width",
   minimal_width = 70,
   maximal_width = 70
 }
 
 default_gui["helmod_textfield_filter"] = {
   type = "textbox_style",
-  parent = "search_textfield_with_fixed_width",
   minimal_width = 200,
   maximal_width = 200
 }
 
 default_gui["helmod_textfield_element"] = {
   type = "textbox_style",
-  parent = "search_textfield_with_fixed_width",
   font = "helmod_font_normal",
   minimal_width = 50,
   maximal_width = 50
@@ -29,14 +26,14 @@ default_gui["helmod_textfield_element_green"] = {
       {
         filename = "__helmod__/graphics/gui.png",
         corner_size = 3,
-        position = {8, 80},
+        position = {8, 16},
         scale = 1
       },
       active_background =
       {
         filename = "__helmod__/graphics/gui.png",
         corner_size = 3,
-        position = {0, 80},
+        position = {0, 16},
         scale = 1
       }
 }
@@ -48,14 +45,14 @@ default_gui["helmod_textfield_element_red"] = {
       {
         filename = "__helmod__/graphics/gui.png",
         corner_size = 3,
-        position = {8, 88},
+        position = {8, 24},
         scale = 1
       },
       active_background =
       {
         filename = "__helmod__/graphics/gui.png",
         corner_size = 3,
-        position = {0, 88},
+        position = {0, 24},
         scale = 1
       }
 }
@@ -100,6 +97,16 @@ default_gui["helmod_label_element"] = {
   parent = "label",
   font = "helmod_font_normal",
   top_padding = -3,
+  right_padding = 2,
+  bottom_padding = 0,
+  left_padding = 2
+}
+
+default_gui["helmod_label_element2"] = {
+  type = "label_style",
+  parent = "label",
+  font = "helmod_font_normal",
+  top_padding = -4,
   right_padding = 2,
   bottom_padding = 0,
   left_padding = 2
@@ -340,4 +347,15 @@ default_gui["helmod_label_icon_sm"] = {
   right_padding = 1,
   bottom_padding = 1,
   left_padding = 0
+}
+
+default_gui["helmod_spoil_progressbar"] = {
+    type = "progressbar_style",
+    filled_font_color = {0, 0, 0},
+    horizontal_align = "right",
+    horizontally_stretchable = "off",
+    color = {179, 179, 179},
+    height = 8,
+    bar_width = 50,
+    embed_text_in_bar = true
 }

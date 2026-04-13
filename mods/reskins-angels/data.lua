@@ -1,4 +1,4 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Angel's Mods
 --
 -- See LICENSE.md in the project directory for license information.
@@ -75,7 +75,7 @@ require("prototypes.entity.refining.ore-refinery")
 require("prototypes.entity.refining.ore-sorting-facility")
 require("prototypes.entity.refining.salination-plant")
 -- require("prototypes.entity.refining.seafloor-pump")
--- require("prototypes.entity.refining.thermal-extractor")
+require("prototypes.entity.refining.thermal-extractor")
 require("prototypes.entity.refining.washing-plant")
 -- require("prototypes.entity.refining.water-pump")
 

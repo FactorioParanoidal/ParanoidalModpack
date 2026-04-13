@@ -1,21 +1,751 @@
-v0.2.4: Support for Bobs transport overhaul and steam power tiers.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.14
+Date: 11. 11. 2025
+  Changes:
+    - Enhanced the graphics of the fuel processor icon.
+    - Each variation of wall now has its own tier gate.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.13
+Date: 04. 10. 2025
+  Changes:
+    - Enhanced the graphics of the fuel processor entity.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.12
+Date: 03. 10. 2025
+  Changes:
+    - Removed trees growing through crashed spaceship on game start.
+  Bugfixes:
+    - Fixed that the big mining drill would need a minimum fluid level.
+  Compatibility:
+    - [K2] Fix Processed Fuel not being accepted as a vehicle fuel.
+  Locale:
+    - Updated Korean translation, thanks to PolarZero
+    - Updated Chinese Traditional translation, thanks to Cassidy.
+    - Updated Russian translation, thanks to Shadow_Man.
 
-v0.2.3: Updated offshore pump to new prototype spec.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.11
+Date: 22. 09. 2025
+  Compatibility:
+    - [K2] Adjusted the recipe of the Chemical science pack.
+    - [K2] Adjusted the recipe of the Engine unit.
+    - [K2] Added the Steel processing tech as a prerequisite to the Multi-cylinder engine tech.
+    - [K2] Adjusted the recipe of the Electronic components.
 
-v0.2.1: Updated for Factorio 0.16. Crash sequence is now a config option. Spiked Steel Walls that reflect damage have been added.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.10
+Date: 24. 06. 2025
+  Compatibility:
+    - [K2] Adjusted the recipe of the Electric Mining Drill.
+    - [K2] Adjusted the recipe of the Assembling Machine 1.
+    - [K2] Adjusted the recipe of the Solar Panel.
+  Bugfixes:
+    - [K2] Fixed that it was not possible to craft copper wire when starting a new game.
+    - [K2] Fixed that it was not possible to craft sand when starting a new game.
+    - [K2] Fixed the two electronic circuit recipes.
 
-v0.1.12: Fixed electric engine lubricant requirement. AAI intermediates can now use productivity modules. Other mods can now disable the crash sequence (see forum thread).
+---------------------------------------------------------------------------------------------------
+Version: 0.6.9
+Date: 23. 06. 2025
+  Changes:
+    - Added recipe signal for Electronic Circuit (Wood) recipe to allow it to be selected via combinators.
+    - Prevent automated insertion and extraction of items from the spaceship wreck.
+    - Dynamically resize the inventory of the spaceship wreck when starting science packs would overflow the wrecks inventory.
+  Compatibility:
+    - Updated Krastorio 2 compatibility.
+  Bugfixes:
+    - Migrate AAI Industry tech "Electric Mining" to Base Game tech "Electric Mining Drill" when updating from 1.1 saves.
+  Locale:
+    - Updated Spanish translation, thanks to Spiderlove.
+    - Added Chinese Traditional translation, thanks to Cassidy.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Added French translation, thanks to Nilsou.
+    - Updated Chinese Simplified translation, thanks to tanvec.
 
-v0.1.11: Fixed broken assembling machine 1 recipe.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.8
+Date: 08. 04. 2025
+  Bugfixes:
+    - Fixed simulation error in the Bulk Crafting tips and tricks.
+    - Fixed minumum perceived performance of Burner Turbine Generator.
+    - Fixed Industrial furnace pipe pictures and connections.
+  Changes:
+    - Added Oil Gathering as a prerequisite to Oil Processing.
 
-v0.1.9: Added Vehicle Fuel and Fuel Processor
+---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 24. 03. 2025
+  Compatibility:
+    - Removed technology "reset" call when a game's configuration has changed, for better compatibility with other mods.
 
-v0.1.8: Changed motor and engine icons to increase distinctiveness.
+  Bugfixes:
+    - Fixed load error with Factorio 2.0.42 caused by a change in data validation for graphics definition.
 
-v0.1.6: BOOM. Game starts with a crash landing.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 27. 01. 2025
+  Changes:
+    - Rearranged some technology prerequisites to make the early game tech tree clearer.
+    - Added a circuit connection to the industrial furnace and the fuel processor to get them in line with the connectibility of machines in Factorio 2.0
 
-v0.1.4: Burner Turbine is now lower priority power output. Removed tech lock on Unit Remote Controller.
+  Bugfixes:
+    - Fixed load error when the Fuel processor was disabled in mod settings.
 
-v0.1.3: Fixed "Basic Logistics" tech name. Fixed expensive Electric Motor recipe.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 13. 11. 2024
+  Changes:
+    - [Space Age] Small iron electric poles can now be made in the Electromagnetic plant.
 
-v0.1.2: Fixed broken motor recipe.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 24. 10. 2024
+  Changes:
+    - Added new icons for the 3 oil processing recipes (basic, advanced, and crude).
+
+  Bugfixes:
+    - Fixed that utility science packs had a wrong crafting time.
+    - Fixed that the advanced and crude oil processing recipes were not selectable as a recipe signal in combinators.
+    - Fixed the Factoriopedia pages for sand and glass showing the only recipe as an "alternative" recipe.
+    - Fixed that the electric furnace technology was missing concrete as a prerequisite.
+    - [Quality] The recycler can no longer turn sand back into stone.
+    - [Quality] Fixed many recycling recipes that were returning results based on vanilla recipes instead of AAI recipes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 22. 10. 2024
+  Bugfixes:
+    - Fixed that the burner assembling machine could not craft copper cables or iron rods when using with Space Age.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 21. 10. 2024
+  Bugfixes:
+    - Fixed that the map generation was increasing the amount of rocks, instead of increasing the richness of stone patches.
+    - Fixed load error when using Alien Biomes.
+    - [K2] Fixed the Electronic circuit from wood icon not using the updated Krastorio 2 Electronic circuit icon.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 21. 10. 2024
+  Changes:
+    - Fixed that iron stick was not unlocked for burner mechanics.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 20. 10. 2024
+  Features:
+    - Updated to Factorio 2.0.
+
+  Changes:
+    - Added a starting trigger tech to unlock burner machines, similar to vanilla's new steam power tech. Starting items are adjusted to account for this.
+    - Removed AAI's starting crashed ship in favor of the vanilla crashed ship.
+    - Removed the "Tint ghosts" mod settings, which is now vanilla.
+
+  Compatibility:
+    - With Space Age active, AAI's big drill will be removed in favor of SA's big drill.
+    - Removed compatibility with deprecated Industrial Revolution 2.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.22
+Date: 29. 11. 2023
+  Compatibility:
+    - With Angel's Petrochemical Processing installed, boilers will now unlock with "basic chemistry" instead of "steam power", to allow the early creation of carbon and avoid a softlock. (Thanks to KiwiHawk)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.21
+Date: 14. 11. 2023
+  Bugfixes:
+    - Fixed offshore pumps showing a 2-directional fluid arrow instead of just an output fluid arrow.
+
+  Compatibility:
+    - Fixed offshore pumps leaving behind internal entities when moved with Picker Dollies.
+    - Fixed 3-way compatibility issue with Bob's Logistics and Krastorio 2 that prevented Bob's pipes from being unlockable. (Thanks to KiwiHawk)
+
+  Locale:
+    - Added Vietnamese translation, thanks to DTA.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Updated Czech translation, thanks to Asyps.
+    - Updated Turkish translation, thanks to UberReis.
+    - Removed outdated IR2 compatibility locale file.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.20
+Date: 18. 05. 2023
+  Changes:
+    - Concrete tech now requires automation 2 tech, automation 2 now requires steel processing (to ensure the availability of ingredients).
+    - Walls will now display damage resistances in their tooltips.
+    - "Spiked steel wall" renamed to "Steel wall" to reflect the low damage of spikes.
+
+  Bugfixes:
+    - Fixed fuel processor animation stutter when it goes from working to idle. (Thanks to stringweasel)
+    - Very slight tweak to steel wall graphics alignment.
+
+  Locale:
+    - Updated Japanese translation, thanks to YAMATO_Hajime.
+    - Small locale tweaks and typo fixes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.19
+Date: 10. 06. 2022
+  Changes:
+    - Updated German translation, thanks to ChironMZ.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.18
+Date: 30. 06. 2022
+  Changes:
+    - Added new engine tech icon.
+    - Increased selection priority of scrappy ship wreck pieces.
+    - Deylayed crash site spawn by 1 tick so that the vanilla spaceship wreck won't spawn on top of it.
+    - Burner inserters can fuel themselves from the fuel inventory of the entity they are picking up items from (This is not the full burner leech effect).
+
+  Locale:
+    - Added Spanish translation, thanks to Spiderlove.
+    - Added Korean translation, thanks to x2605.
+    - Added Turkish translation, thanks to superbnoobster.
+    - Added Brazilian Portuguese translation, thanks to 123499.
+    - Updated Russian translation, thanks to Shadow_Man.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.17
+Date: 01. 05. 2022
+  Changes:
+    - Wide flashlight setting now applies to additional characters and vehicles.
+    - Toolbelt technology icons have capacity indicator.
+    - Unique technology icons for electricity and electric engine unit.
+
+  Bugfixes:
+    - Adjust prerequisistes of a few technologies to make sure ingredients are unlocked before their recipes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.16
+Date: 03. 04. 2022
+  Changes:
+    - The stone tablet electronic circuit recipe is used for raw decomposition and intermediate handcrafting.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.15
+Date: 02. 04. 2022
+  Changes:
+    - Nightvision now interacts less weirdly with shield projectors.
+    - Added a new icon to the wood electronic chip recipe.
+
+  Bugfixes:
+    - Adjust prerequisistes of a few technologies to make sure ingredients are unlocked before their recipes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.14
+Date: 18. 03. 2022
+  Features:
+    - Added high contrast nights.
+    - Added enhanced nightvision effect.
+    - Added wide-beam flashlight.
+    - Added a tint to ghosts.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.13
+Date: 17. 02. 2022
+  Bugfixes:
+    - Fixed changelog not loading in game (there was a space on an empty line).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.12
+Date: 16. 02. 2022
+  Bugfixes:
+    - Fixed small issue with industrial furnace's propeller animation
+
+  Compatibility:
+    - [IR2] Added Fuel processing technology as Electricity prerequisite if enabled and increased steam mining drill energy usage to 450kW.
+    - [IR2] Fixed a crash if the starting age is set to something else than burner age.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.11
+Date: 26. 12. 2021
+  Bugfixes:
+    - Fixed that part of the science recipe changes weren't applying correctly.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.10
+Date: 21. 12. 2021
+  Changes:
+    - Basic automation technology removed, you start with the previosuly locked recipes (Burner assembling machine, Burner inserter).
+    - Basic logistics is researched by default (mod option).
+    - Science packs cannot be hand crafted.
+    - Steam power now requires Fluid handling.
+    - Electricity now requires processed fuel (if enabled).
+    - Mining times for resources have been adjusted. Coal is slightly faster to mine, iron and copper are slightly slower.
+    - Added transport belt to starter items.
+    - Starter items are now given even if the crash sequence is disabled.
+    - Disabled crash site if playing in testing scenarios (e.g. ctrl+clicking "Single player" or Editor Extensions mod).
+    - Changed burner turbine's output priority from "primary" to "secondary" (Same as steam engines and steam turbines).
+
+  Bugfixes:
+    - Fixed offshore pump energy consumption.
+
+  Compatibility:
+    - Industrial Revolution 2 compatibility thanks to Genhis.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.9
+Date: 14. 05. 2021
+  Locale:
+    - Updated Chinese translation thanks to Ph.X.
+    - Japanese translation thanks to Donadona.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.8
+Date: 05. 05. 2021
+  Changes:
+    - Licence update (clarification only).
+
+  Bugfixes:
+    - If fuel processing is disabled then it will be removed as a prerequisite for techs.
+    - Code formatting improvements thanks to Mernom.
+    - Fixed wall upgrade chain thanks to Mernom.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 13. 03. 2021
+  Locale:
+    - Russian translation thanks to Shadow_Man.
+
+  Bugfixes:
+    - Reorganised some code for consistent checksum (cause multiplayer problems if settings were different).
+
+  Compatibility:
+    - Fixed Dectorio concrete wall recipe.
+    - Option to disable processed fuel now just disables the tech.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 02. 03. 2021
+  Bugfixes:
+    - Fixed crash on boot related to missing processed fuel when stone paths are disabled.
+
+  Compatibility:
+    - Unmarked EndgameCombat as incompatible (insufficient evidence to support this caused a crash on boot).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 17. 02. 2021
+  Changes:
+    - Added rough stone path floor, can be placed with stone (mod option).
+    - Changed motor name to single-cylinder engine and change icon.
+    - Changed engine unit name to multi-cylinder engine and changed recipe.
+    - Changed electric motor to small electric motor, changed recipe and icon.
+    - Changed electric engine unit to big electric motor, changed recipe and icon.
+    - Changed processed fuel icon to look lower tech.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 29. 11. 2020
+  Changes:
+    - Fixed that big mining drill required itself in the normal difficulty recipe.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 28. 11. 2020
+  Changes:
+    - New night graphics and lights for burner structures.
+    - Wide area mining drill is now a Big mining drill, has new graphics, is 5x5, has a mining range of 3 tiles, and is faster and has more modules slots but requires more energy. The size increase will break existing mining builds.
+    - Industrial fuurnace is faster and has more modules slots but requires more energy.
+
+  Compatibility:
+    - Better support for offshore pumps removed by other mod scripts.
+    - Better support for dectorio walls.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 24. 11. 2020
+  Info:
+    - Updated for Factorio 1.1.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.23
+Date: 06. 10. 2020
+  Compatibility:
+    - Krastorio 2: Changed greenhouse power cost to be based on K2 mod settings for fuel overrides (if wood fuel value is reduced greenhouses cost less to run).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.22
+Date: 04. 10. 2020
+  Compatibility:
+    - Krastorio 2: Fixed burner assembling machine was prevented from using processed fuel.
+    - Krastorio 2: Changed AAI Industry Processed Fuel to be slower for vehicles (K2 has vehicle specific fuels).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.21
+Date: 29. 09. 2020
+  Compatibility:
+    - Krastorio 2: Fixed that basic fluid techs needed automation tech as a prerequisite but not the automation tech cards.
+    - Krastorio 2: Fixed burner lab was prevented from using processed fuel.
+    - Krastorio 2: Science packs / Cards (except the basic card) cannot be made by hand.
+    - Krastorio 2: Tweaked wood circuit recipe.
+    - Krastorio 2: Added growing with sand recipe for greenhouse.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.20
+Date: 29. 09. 2020
+  Bugfixes:
+    - Fixed wall entity icons.
+
+  Compatibility:
+    - Krastorio 2: Stops Krastorio 2 from moving basic logistics to after automation tech card.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.19
+Date: 30. 08. 2020
+  Info:
+    - Set minimum version of Factorio to 1.0.0
+
+  Locale:
+    - Fixed some typos.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.18
+Date: 19. 08. 2020
+  Bugfixes:
+    - Fixed issue with angels + k2 sand conversion recipe.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.17
+Date: 16. 08. 2020
+  Changes:
+    - Added processed fuel as a valid fule for spider vehicle entityies if they have a normal burner power source.
+
+  Bugfixes:
+    - Fixed next_upgrade for burner assembling machine and burner lab.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.16
+Date: 07. 08. 2020
+  Locale:
+    - Added Japanese translation.
+    - Added Polish translation.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.15
+Date: 22. 06. 2020
+  Locale:
+    - Added some tech descriptions.
+
+  Changes:
+    - Refined the offshore pump selection box.
+    - Burner inserter now has inserter as next updarede (for upgrade planner).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.14
+Date: 20. 06. 2020
+  Bugfixes:
+    - Removed conditional require (caused multiplayer problems).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.13
+Date: 31. 05. 2020
+  Locale:
+    - Added Chinese translation thanks to Frost.
+
+  Compatibility:
+    - Marked EndgameCombat as incompatible (fails to load).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+Date: 24. 05. 2020
+  Bugfixes:
+    - Fixed processed fuel could not be used in vehicles that didn't have a fuel category defined (and defaulted to chemical only).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+Date: 20. 05. 2020
+  Bugfixes:
+    - Fixed missing locale for fuel processor energy gain mod setting.
+    - Fixed missing locale for processed-chemical fuel category.
+    - Added "consumes electricity" to offshore pump description.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.10
+Date: 18. 05. 2020
+  Changes:
+    - Added Fast motor crafting mod option. Makes motors craft from iron plate in the same time as iron gears in vanilla. Iron gear 0.2s, Motor 0.3s, Copper cable 0.2s, Electric motor 0.4s.
+    - Changed the way that fuel processing works. No longer requires electricity and can mix inputs.
+    - Added mod option to disable processed fuel.
+    - Added mod option for processed fuel energy gain. Default is 10%.
+    - Added mod option for burner turbine efficiency. Default is now 85%.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+Date: 08. 05. 2020
+  Changes:
+    - Added wide area mining drill.
+    - Added medium electic pole technology, cheaper then electrical energy distribution 1.
+    - Electrical energy distribution 1 now only unlocks big electric pole and requires concrete (which was required for the big electric pole recipe anyway).
+    - The wind turbine from K2 is now locked behind electricity tech.
+
+  Bugfixes:
+    - Fixed small iron electric pole entity icon not matching the item icon.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 02. 05. 2020
+  Changes:
+    - Added a burner lab to crash sequence loot.
+    - Added a mod setting for starting science that can help speed though the early game if needed.
+
+  Bugfixes:
+    - Fixed missing locale for filter inserter and stack filter inserter.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 02. 05. 2020
+  Changes:
+    - Changed burner turbine generator underlying prototype type to burner generator.
+    - Added filter stack inserter technology.
+
+  Bugfixes:
+    - Fixed some tech prerequisite issues relating to lasers.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 03. 04. 2020
+  Bugfixes:
+    - Fixed issue with some techs being disabled by other mods.
+    - Fixed issue with some techs being disabled when installing and loading part-way though a map.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 26. 02. 2020
+  Bugfixes:
+    - Fixed issue with normal resolution sprite.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 26. 02. 2020
+  Changes:
+    - Added an industrial furnace with more module slots, and that can handle smelting recipes that the electric smelter can't.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+  Bugfixes:
+    - Fixed automatic fuel conversion icon when using both 32px and 64px icon layers.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 27. 01. 2020
+  Info:
+    - Updated for Factorio 0.18.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.23
+  Changes:
+    - Changes starting crash sequence extra items to be restricted if items are disabled by other mods.
+    - Shipwreck pieces now give guaranteed resources instead of chances.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.22
+  Changes:
+    - Allowed productivity for new crude oil processing recipe.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.21
+  Changes:
+    - Basic oil processing is improved but requires water and only returns petroleum.
+    - Advanced oil processing is worse for petroleum but better for light oil.
+    - A new Crude oil processing is faster and mainly returns heavy oil.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.20
+  Changes:
+    - Changes to logistic science packs are conditional on the recipe being close to the vanilla recipe (not altered by bobs).
+    - Changed utility science pack recipe to output 5 science packs with a craft time of 35s (same number of packs per second as vanilla).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.19
+  Bugfixes:
+    - Fixes the burner turbine generator had accidently become 100% effective, reduced to 95% effectivity.
+    - Added extra conditional checks to some functions that add tech prerequisites.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.18
+  Changes:
+    - Decreased effective cost of logistic science pack. Uses more transport belt but outputs 2 packs.
+    - Decreased effective cost of utility science pack. Uses more processing units but outputs 4 packs.
+    - Added logistic science pack cost to filter inserters tech.
+    - Updated some compatibility code relating to steam power for bobs mods.
+    - Improved support for entities being built via script.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.17
+  Changes:
+    - Decreased Assembling machine 2 electronic circuit cost.
+    - Assembling machine 3 requires electric engine units instead of electric motors.
+    - Steam turbine require electric motors but less copper and gears.
+    - Increased concrete and steel wall resistances, decreased health (overall durability improvement).
+
+  Bugfixes:
+    - Fixed that electric engine tech did not require engine tech.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.16
+  Changes:
+    - Updated pollution emissions to new format.
+    - Assembling machine 2 and 3 require steel plate instead of iron gear wheels.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.15
+  Bugfixes:
+    - Compatibility patch for other mods that add toolbelt infinite tiers.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.14
+  Bugfixes:
+    - Compatibility patch for other mods that add toolbelt tiers.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.13
+  Features:
+    - Added 6 tiers of toolbelt tech for a total of +30 inventory slots.
+
+  Bugfixes:
+    - Fixed changelog formatting
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+  Bugfixes:
+    - Fixed crash with starting... crash sequence.
+    - Minor change to migration code.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+  Info:
+    - Reduced stone brick requirement for steel and electric furnaces.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+  Info:
+    - Updated for Factorio 0.17.35
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+  Changes:
+    - Increased stone resource generation.
+  Fixes:
+    - Fixed that at lamp didn't require glass. Circuit requirement removed.
+    - Fixed that the first tier of bobs boilers didn't require MK1 boilers after one of the tech changed names.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+  Changes:
+    - Changed glass stack size to 100
+    - Moved productivity-allow statements to final data step so that bobs mods modules won't ignore some intermediates.
+  Bugfixes:
+    - Fixed yellow transport belt being available in basic logistics if bobs basic belts are installed.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+  Changes:
+    - Changed a function to work with Angels mods.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+  Bugfixes:
+    - Better bobs support. Support for multi-layered icons
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+  Features:
+    - Added Sand and Glass.
+  Changes:
+    - Reduced iron cost for motors.
+    - Cheaper inserters and belts.
+    - Updated support for bobs/angels.
+    - Updated to new pollution spec.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+  Locale:
+    - Added missing technology descriptions.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+  Bugfixes:
+    - Changed the shipwreck collision settings to not interfere with RSO resource spawning.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+  Bugfixes:
+    - Fixed that some damage to the burner generator was unrepairable.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Info:
+    - Updated for Factorio 0.17.
+  Graphics:
+    - New textures for stone and spiked steel walls.
+  Changes:
+    - A few minor recipe tweaks.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+  Features:
+    - Support for Bobs transport overhaul and steam power tiers.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Changes:
+    - Updated offshore pump to new prototype spec.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Info:
+    - Updated for Factorio 0.16.
+  Changes:
+    - Crash sequence is now a config option.
+  Features:
+    - Spiked Steel Walls that reflect damage have been added.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+  Bugfixes:
+    - Fixed electric engine lubricant requirement.
+  Changes:
+    - AAI intermediates can now use productivity modules.
+  Modding:
+    - Other mods can now disable the crash sequence (see forum thread).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+  Bugfixes:
+    - v0.1.11: Fixed broken assembling machine 1 recipe.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+  Features:
+    - Added Vehicle Fuel and Fuel Processor
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+  Graphics:
+    - Changed motor and engine icons to increase distinctiveness.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Features:
+    - BOOM. Game starts with a crash landing.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Changes:
+    - Burner Turbine is now lower priority power output.
+    - Removed tech lock on Unit Remote Controller.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Bugfixes:
+    - Fixed "Basic Logistics" tech name.
+    - Fixed expensive Electric Motor recipe.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Bugfixes:
+    - Fixed broken motor recipe.

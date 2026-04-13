@@ -1,10 +1,14 @@
 -------------------------------------------------------------------------------
 ---Description of the module.
 ---@class GuiElement
+---@field name table
+---@field classname string
+---@field options table
 GuiElement = newclass(function(base,...)
   base.name = {...}
   base.classname = "HMGuiElement"
   base.options = {}
+  base.post_action = {}
   base.is_caption = true
 end)
 GuiElement.classname = "HMGuiElement"
@@ -15,6 +19,15 @@ GuiElement.color_button_none = "blue"
 GuiElement.color_button_edit = "green"
 GuiElement.color_button_add = "yellow"
 GuiElement.color_button_rest = "red"
+
+-------------------------------------------------------------------------------
+---Add suffix on name
+---@param suffix string
+---@return GuiElement
+function GuiElement:suffix(suffix)
+    table.insert(self.name, suffix)
+    return self
+end
 
 -------------------------------------------------------------------------------
 ---Set style
@@ -95,8 +108,8 @@ end
 -------------------------------------------------------------------------------
 ---Get sprite string
 ---@param type string
----@param name string
----@param format string
+---@param name? string
+---@param format? string
 ---@return string
 function GuiElement.getSprite(type, name, format)
   local sprite = ""
@@ -108,6 +121,7 @@ function GuiElement.getSprite(type, name, format)
   elseif type ~= nil and name ~= nil then
     if type == "resource" then type = "entity" end
     if type == "rocket" then type = "item" end
+    if type == "signal" or type == "virtual" then type = "virtual-signal" end
     if Player.is_valid_sprite_path(string.format("%s/%s", type, name)) then
       sprite = string.format(format, type, name)
     elseif Player.is_valid_sprite_path(string.format("%s/%s", "item", name)) then
@@ -134,10 +148,68 @@ function GuiElement.getSprite(type, name, format)
 end
 
 -------------------------------------------------------------------------------
+---Get sprite string
+---@param type string
+---@param name string
+---@param quality string?
+---@return string
+function GuiElement.getSpriteWithQuality(type, name, quality)
+  local sprite = ""
+  if type == "resource" then type = "entity" end
+  if type == "rocket" then type = "item" end
+  if Player.is_valid_sprite_path(string.format("%s/%s", type, name)) then
+    if quality == nil then
+      sprite = string.format("[%s=%s]", type, name)
+    else
+      sprite = string.format("[%s=%s,quality=%s]", type, name, quality)
+    end
+  end
+  return sprite
+end
+
+-------------------------------------------------------------------------------
+---Set caption
+---@param element LuaGuiElement
+---@return table
+function GuiElement.getElementTags(element)
+  if element ~= nil then
+    return element.tags or {}
+  end
+  return {}
+end
+
+-------------------------------------------------------------------------------
+---Set caption
+---@param element LuaGuiElement
+---@return string | nil
+function GuiElement.getElementQuality(element)
+  local tags = GuiElement.getElementTags(element)
+  if tags ~= nil then
+    return tags.quality
+  end
+  return nil
+end
+
+-------------------------------------------------------------------------------
+---Get name
+---@return string
+function GuiElement:getName()
+  if type(self.name) == "table" then
+    return table.concat(self.name,"=")
+  else
+    return self.name
+  end
+end
+
+-------------------------------------------------------------------------------
 ---Get options
 ---@return table
 function GuiElement:getOptions()
-  self.options.name = table.concat(self.name,"=")
+  if type(self.name) == "table" then
+    self.options.name = table.concat(self.name,"=")
+  else
+    self.options.name = self.name
+  end
   if self.is_caption then
     self.options.caption = self.m_caption
   end
@@ -162,41 +234,82 @@ function GuiElement.add(parent, gui_element)
   local element = nil
   local ok , err = pcall(function()
     if gui_element.classname ~= "HMGuiCell" then
-      element = parent.add(gui_element:getOptions())
+      local options = gui_element:getOptions()
+      element = parent.add(options)
+      GuiElement.addPostAction(element, gui_element)
     else
       element = gui_element:create(parent)
     end
   end)
   if not ok then
-    element = parent.add(gui_element:onErrorOptions())
-    log(err)
-    log(debug.traceback())
+    local error_index = #parent.children_names
+    local gui_error = GuiSprite(gui_element:getName()):suffix(error_index):sprite("helmod-event-error-32"):tooltip(err)
+    element = parent.add(gui_error:getOptions())
+    Player.repportError(err, debug.traceback())
   end
   return element
+end
+
+-------------------------------------------------------------------------------
+---Add a post action on element
+---@param parent LuaGuiElement --container for element
+---@param gui_element GuiElement
+function GuiElement.addPostAction(parent, gui_element)
+  if gui_element.post_action == nil then return end
+  for action_name, action in pairs(gui_element.post_action) do
+    if action_name == "mask_quality" then
+      GuiElement.maskQuality(parent, action.quality, action.size)
+    end
+    if action_name == "mask_spoil" then
+      GuiElement.maskSpoil(parent, action.spoil, action.size)
+    end
+    if action_name == "apply_elem_value" then
+      if action ~= nil and action.name ~= nil then
+        parent.elem_value = action
+      end
+    end
+    if action_name == "apply_style" then
+      if action ~= nil then
+        for key, value in pairs(action) do
+          parent.style[key] = value
+        end
+      end
+    end
+  end
+end
+
+-------------------------------------------------------------------------------
+---Get Index column number
+---@return number
+function GuiElement.getWidthMainPanel()
+  local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
+  local width , height, scale = Player.getDisplaySizes()
+  local width_main = math.ceil(width*display_ratio_horizontal/scale)
+  return math.ceil(width_main)
 end
 
 -------------------------------------------------------------------------------
 ---Get Index column number
 ---@return number
 function GuiElement.getIndexColumnNumber()
-
   local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
   local width , height, scale = Player.getDisplaySizes()
   local width_main = math.ceil(width*display_ratio_horizontal/scale)
-
   return math.ceil((width_main - 100)/36)
 end
 
 -------------------------------------------------------------------------------
----Get Element column number
+---Get Element column number and width
 ---@param size number
----@return number
+---@return number, number
 function GuiElement.getElementColumnNumber(size)
-
   local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
   local width , height, scale = Player.getDisplaySizes()
   local width_main = math.ceil(width*display_ratio_horizontal/scale)
-  return math.max(5, math.floor((width_main-600)/(2*size)))
+  local width_cell = (width_main-550)/2
+  local item_count = math.floor(width_cell/size)
+  local count = math.max(5, item_count)
+  return count, count*size
 end
 
 -------------------------------------------------------------------------------
@@ -248,17 +361,17 @@ function GuiElement.infoTemperature(parent, element, style)
       GuiElement.add(parent, GuiLabel("temperature"):caption(caption):style(style))
     end
     if Tmin ~= nil or Tmax ~= nil then
-      Tmin = Tmin or -1e300
-      Tmax = Tmax or 1e300
-      if Tmin > -1e300 and Tmax > 1e300 then
+      Tmin = Tmin or -1e38
+      Tmax = Tmax or 1e38
+      if Tmin > -1e38 and Tmax > 1e38 then
         local caption_min = {"",  "≥", Tmin, "°"}
         GuiElement.add(parent, GuiLabel("temperature_min"):caption(caption_min):style(style))
       end
-      if Tmin < -1e300 and Tmax < 1e300 then
+      if Tmin < -1e38 and Tmax < 1e38 then
         local caption_max = {"", "≤", Tmax, "°"}
         GuiElement.add(parent, GuiLabel("temperature_max"):caption(caption_max):style(style))
       end
-      if Tmin > -1e300 and Tmax < 1e300 then
+      if Tmin > -1e38 and Tmax < 1e38 then
         local panel = GuiElement.add(parent, GuiFlowV("temperature"))
         local caption_min = {"", "≥", Tmin, "°"}
         GuiElement.add(panel, GuiLabel("temperature_min"):caption(caption_min):style(style))
@@ -270,11 +383,222 @@ function GuiElement.infoTemperature(parent, element, style)
   end
 end
 
+function GuiElement.rgbColorTag(color)
+  local r = math.floor(color.r * 255)
+  local g = math.floor(color.g * 255)
+  local b = math.floor(color.b * 255)
+  return string.format("[color=%s,%s,%s]", r, g, b)
+end
+
+-------------------------------------------------------------------------------
+---Add quality mmask
+---@param parent LuaGuiElement
+---@param quality string
+---@param size number?
+---@param top_padding number?
+function GuiElement.maskQuality(parent, quality, size, top_padding)
+  if quality == nil or quality == "normal" then
+    return
+  end
+  local sprite_name = GuiElement.getSprite("quality", quality)
+  local container = GuiElement.add(parent, GuiFlow("quality-info"))
+  local style_name = parent.style.name
+  local mask_frame = GuiElement.add(container, GuiSprite("quality-info"):sprite(sprite_name))
+  if string.find(style_name, "_sm") then
+    container.style.top_padding = top_padding or 8
+    mask_frame.style.width = size or 8
+    mask_frame.style.height = size or 8
+  elseif string.find(style_name, "_m") then
+    container.style.top_padding = top_padding or 12
+    mask_frame.style.width = size or 10
+    mask_frame.style.height = size or 10
+  else
+    container.style.top_padding = top_padding or 20
+    mask_frame.style.width = size or 12
+    mask_frame.style.height = size or 12
+  end
+  mask_frame.style.stretch_image_to_widget_size = true
+  mask_frame.ignored_by_interaction = true
+end
+
+-------------------------------------------------------------------------------
+---Add quality mmask
+---@param parent LuaGuiElement
+---@param element ProductData
+function GuiElement.maskSpoil(parent, element)
+  if element == nil or element.spoil_percent == nil then
+    return
+  end
+  local spoil_percent = element.spoil_percent or 1
+  local style_name = parent.style.name
+  local top_padding = 29
+  local left_padding = 2
+  local width_back = 30
+  local height_back = 6
+  if string.find(style_name, "_m") then
+    top_padding= 18
+    width_back = 20
+  elseif string.find(style_name, "_sm") then
+    top_padding = 8
+    width_back = 15
+  end
+  local height_front = height_back - 2
+  local width_front = width_back - 2
+  width_front = width_front * spoil_percent / 100
+
+  local container_back = GuiElement.add(parent, GuiFlow("spoil-info-back"))
+  container_back.style.top_padding = top_padding
+  container_back.style.left_padding = left_padding
+  local mask_frame = GuiElement.add(container_back, GuiFrameH("spoil-info-back"):style("helmod_frame_element_w30", "G20_5", 1))
+  mask_frame.style.width = width_back
+  mask_frame.style.height = height_back
+  mask_frame.ignored_by_interaction = true
+
+  local container_front = GuiElement.add(parent, GuiFlow("spoil-info-front"))
+  container_front.style.top_padding = top_padding + 1
+  container_front.style.left_padding = left_padding + 1
+  local mask_frame = GuiElement.add(container_front, GuiFrameH("spoil-info-front"):style("helmod_frame_element_w30", "G100_3", 1))
+  mask_frame.style.width = width_front
+  mask_frame.style.height = height_front
+  mask_frame.ignored_by_interaction = true
+end
+
+---Add secondary icon mask
+---@param parent LuaGuiElement
+---@param icon_type string
+---@param icon_name string
+---@param icon_quality? string
+function GuiElement.maskSecondaryIcon(parent, icon_type, icon_name, icon_quality)
+  local container_secondary = GuiElement.add(parent, GuiFlow("secondary-info"))
+  local frame_secondary = GuiElement.add(container_secondary, GuiFrame("secondary-frame"):style("helmod_frame_element_w30", "gray", 6))
+  frame_secondary.style.width = 20
+  frame_secondary.style.margin = 0
+  frame_secondary.style.padding = 1
+  local mask_secondary = GuiElement.add(frame_secondary, GuiSprite("secondary-info"):sprite(icon_type, icon_name))
+  container_secondary.style.top_padding = 15
+  container_secondary.style.left_padding = 15
+  mask_secondary.style.width = 20
+  mask_secondary.style.height = 20
+  mask_secondary.style.stretch_image_to_widget_size = true
+  mask_secondary.ignored_by_interaction = true
+  if icon_quality ~= nil  then
+    GuiElement.maskQuality(mask_secondary, icon_quality, 10, 10)
+  end
+end
+
+-------------------------------------------------------------------------------
+---Add secondary icon mask
+---@param parent LuaGuiElement
+---@param block_infos BlockInfosData
+function GuiElement.maskBlockSecondaryIcon(parent, block_infos)
+  if parent == nil or block_infos == nil then
+    return
+  end
+  if block_infos.secondary_icon ~= nil then
+    local icon_type = block_infos.secondary_icon.name.type or "item"
+    local icon_name = block_infos.secondary_icon.name.name or "item"
+    local icon_quality = block_infos.secondary_icon.quality
+    GuiElement.maskSecondaryIcon(parent, icon_type, icon_name, icon_quality)
+  elseif block_infos.location ~= nil and block_infos.location.name ~= "nauvis" then
+    local icon_type = block_infos.location.type or "item"
+    local icon_name = block_infos.location.name or "item"
+    GuiElement.maskSecondaryIcon(parent, icon_type, icon_name)
+  end
+end
+
+---Add secondary medium icon mask
+---@param parent LuaGuiElement
+---@param icon_type string
+---@param icon_name string
+---@param icon_quality? string
+function GuiElement.maskSecondaryIconM(parent, icon_type, icon_name, icon_quality)
+  local container_secondary = GuiElement.add(parent, GuiFlow("secondary-info"))
+  local frame_secondary = GuiElement.add(container_secondary, GuiFrame("secondary-frame"):style("helmod_frame_element_w30", "gray", 6))
+  frame_secondary.style.width = 14
+  frame_secondary.style.margin = 0
+  frame_secondary.style.padding = 1
+  local mask_secondary = GuiElement.add(frame_secondary, GuiSprite("secondary-info"):sprite(icon_type, icon_name))
+  container_secondary.style.top_padding = 12
+  container_secondary.style.left_padding = 12
+  mask_secondary.style.width = 14
+  mask_secondary.style.height = 14
+  mask_secondary.style.stretch_image_to_widget_size = true
+  mask_secondary.ignored_by_interaction = true
+  if icon_quality ~= nil  then
+    GuiElement.maskQuality(mask_secondary, icon_quality, 6, 6)
+  end
+end
+
+-------------------------------------------------------------------------------
+---Add secondary medium icon mask
+---@param parent LuaGuiElement
+---@param block_infos BlockInfosData
+function GuiElement.maskBlockSecondaryIconM(parent, block_infos)
+  if parent == nil or block_infos == nil then
+    return
+  end
+  if block_infos.secondary_icon ~= nil then
+    local icon_type = block_infos.secondary_icon.name.type or "item"
+    local icon_name = block_infos.secondary_icon.name.name or "item"
+    local icon_quality = block_infos.secondary_icon.quality
+    GuiElement.maskSecondaryIconM(parent, icon_type, icon_name, icon_quality)
+  elseif block_infos.location ~= nil and block_infos.location.name ~= "nauvis" then
+    local icon_type = block_infos.location.type or "item"
+    local icon_name = block_infos.location.name or "item"
+    GuiElement.maskSecondaryIconM(parent, icon_type, icon_name)
+  end
+end
+
+---Add secondary icon mask
+---@param parent LuaGuiElement
+---@param icon_type string
+---@param icon_name string
+---@param icon_quality? string
+function GuiElement.maskIcon(parent, icon_type, icon_name, icon_quality)
+  local container_secondary = GuiElement.add(parent, GuiFlow("mask-info"))
+  local mask_secondary = GuiElement.add(container_secondary, GuiSprite("secondary-info"):sprite(icon_type, icon_name))
+  mask_secondary.style.stretch_image_to_widget_size = true
+  mask_secondary.ignored_by_interaction = true
+  if icon_quality ~= nil  then
+    GuiElement.maskQuality(mask_secondary, icon_quality, 10, 10)
+  end
+end
+
+-------------------------------------------------------------------------------
+---Add quality selector
+---@param parent LuaGuiElement
+---@param quality string
+---@return LuaGuiElement
+function GuiElement.addQualitySelector(parent, quality, ...)
+  local scroll_panel = GuiElement.add(parent, GuiScroll(...):policy(true))
+  scroll_panel.style.minimal_height = 32
+  scroll_panel.style.maximal_height = 64
+  scroll_panel.style.bottom_margin = 5
+  local quality_options = GuiElement.add(scroll_panel, GuiTable("quality-table"):column(6))
+  quality_options.style.cell_padding = 1
+  local qualities = Player.getQualityPrototypes();
+  for _, lua_quality in pairs(qualities) do
+      if lua_quality.hidden == false then
+          local style = defines.styles.button.select_icon_m
+          if quality == lua_quality.name then
+              style = defines.styles.button.select_icon_m_green
+          end
+          local localized_name = lua_quality.localised_name
+          local button = GuiElement.add(quality_options, GuiButton(...):sprite("quality", lua_quality.name):style(style):tooltip(localized_name))
+          --button.locked = true
+      end
+  end
+  return quality_options
+end
+
 -------------------------------------------------------------------------------
 ---Add recipe information
 ---@param parent LuaGuiElement
 ---@param element table
 function GuiElement.infoRecipe(parent, element)
+  if element == nil then
+    return
+  end
   local sprite_name = nil
   local tooltip = nil
   if element.type == "recipe-burnt" then
@@ -294,10 +618,23 @@ function GuiElement.infoRecipe(parent, element)
     local caption = Format.formatNumberKilo(element.output_fluid_temperature, "°")
     local label = GuiElement.add(parent, GuiLabel("temperature"):caption(caption):style(style):ignored_by_interaction())
     label.style.top_padding = -5
-  elseif element.type ~= "recipe" then
+  elseif element.type == "agricultural" then
     sprite_name = GuiElement.getSprite(defines.sprite_info.developer)
     tooltip = {"tooltip.resource-recipe"}
+  elseif element.type == "spoiling" then
+    sprite_name = GuiElement.getSprite(defines.sprite_info.developer)
+    tooltip = {"tooltip.resource-recipe"}
+  elseif element.type == "constant" then
+    sprite_name = GuiElement.getSprite(defines.sprite_info.customized)
+  elseif element.type ~= "recipe" then
+    sprite_name = GuiElement.getSprite(defines.sprite_info.mining)
+    tooltip = {"tooltip.resource-recipe"}
   end
+  
+  if RecipePrototype.isCustomized(element) then
+    sprite_name = GuiElement.getSprite(defines.sprite_info.customized)
+  end
+
   if sprite_name ~= nil then
     local container = GuiElement.add(parent, GuiFlow("recipe-info"))
     container.style.top_padding = -4
@@ -307,4 +644,12 @@ function GuiElement.infoRecipe(parent, element)
     sprite.style.height = defines.sprite_size
     sprite.style.stretch_image_to_widget_size = true
   end
+end
+
+-------------------------------------------------------------------------------
+---Add tags
+---@param data table
+function GuiElement:tags(data)
+  self.options["tags"] = data
+  return self
 end

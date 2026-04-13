@@ -1,0 +1,7 @@
+{
+  "recipe":
+  [
+    ["electronic-circuit", "electronic-circuit-wood"],
+    ["electronic-circuit-stone", "electronic-circuit"]
+  ]
+}

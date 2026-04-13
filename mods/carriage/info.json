@@ -1,0 +1,10 @@
+{
+  "name": "carriage",
+  "version": "0.1.1",
+  "title": "Carriage Transport",
+  "author": "SoulCRYSIS",
+  "description": "An early game train system - slower but simpler to setup. Free path crafting.",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0"]
+}
+

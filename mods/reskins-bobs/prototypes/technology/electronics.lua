@@ -1,27 +1,32 @@
--- Copyright (c) 2022 Kirazy
+-- Copyright (c) 2024 Kirazy
 -- Part of Artisanal Reskins: Bob's Mods
 --
 -- See LICENSE in the project directory for license information.
 
 -- Check to see if reskinning needs to be done.
-if not (reskins.bobs and reskins.bobs.triggers.electronics.technologies) then return end
+if not (reskins.bobs and reskins.bobs.triggers.electronics.technologies) then
+	return
+end
 
--- Setup standard inputs
+---@type CreateIconsFromListInputs
 local inputs = {
-    mod = "bobs",
-    group = "electronics",
-    type = "technology",
-    technology_icon_size = 256,
-    technology_icon_mipmaps = 4,
-    flat_icon = true,
+	mod = "bobs",
+	group = "electronics",
+	type = "technology",
+	technology_icon_size = 256,
+	flat_icon = true,
 }
 
+---@type CreateIconsFromListTable
 local technologies = {
-    -- ["electronics"] = {}, -- solder, solder plate, insulated wire, basic circuit, filter inserter, resistor, tin wire
+	-- solder, solder plate, insulated wire, basic circuit, resistor, tin wire
+	-- ["electronics"] = {},
 
-    -- Advanced electronics
-    -- ["advanced-electronics"] = {},
-    ["advanced-electronics-3"] = {technology_icon_filename = "__base__/graphics/technology/advanced-electronics-2.png"}, -- Use "advanced-electronics-2" from base
+	-- Advanced electronics
+	-- ["advanced-electronics"] = {},
+
+	-- FIXME: The icon is gone in 2.0. Bundled from 1.1 for now.
+	["bob-advanced-processing-unit"] = {},
 }
 
-reskins.lib.create_icons_from_list(technologies, inputs)
+reskins.internal.create_icons_from_list(technologies, inputs)

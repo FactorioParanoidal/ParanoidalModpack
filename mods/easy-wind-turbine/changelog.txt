@@ -1,0 +1,133 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 16.12.2025
+  Bugfixes:
+    - Duplicate Science pack in Prerequisites.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 16.12.2025
+  Features:
+    - Introducing Tier 4 & 5.
+    - New setting to increase the internal for WindTurbines Simulation.
+  Changes:
+    - Power: Tier 1: 1MW, Tier 2: 5MW, Tier 3: 10MW, Tier 4:15MW, Tier 5: 20MW.
+    - Setting for WindTurbines are changes to a selective style.
+    - Recipe change Base Game.
+    - [space-age] Full Recipe change.
+    - Tech changes Base Game.
+    - [space-age] Tech changes.
+  Graphics:
+    - New textures for 4 & 5.
+    - Replaced Texture for tier 1.
+  Info:
+    - Changes made by @Sgamez in Agreement with unfunf22.
+    - Old power values: 1 = 1.02MW, 2 = 4MW, 3 = ~10MW, 4 = NA, 5 = NA.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 5.11.25
+  Bugfixes:
+    - Now it should work in Sandbox without crashing.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 5.11.2025
+  Features:
+    - Added setting on how to craft Wind Turbines. From scratch.
+  Changes:
+    - Restructured code by separating files.
+    - Minimum value now set to 1.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 4.11.2025
+  Features:
+    - Added setting to allow for adjusting the steam Interval Refresh rate.
+  Bugfixes:
+    - Steam turbines running out of Steam when using the quality mod.
+    - Valid values are 60 to 10. This is more like a temporary fix if you have the space age DLC.
+  Credits:
+    - By: SGZ_Creations.(@Sgamez)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 19.01.2025
+  Bugfixes:
+    - Fixed/renamed some lines.
+    - Fixed changelog parser error
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 19.01.2025
+  Changes:
+    - Mod is not compatible with KS_Power for now. (fixed in V: 2.0.14)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 18.01.2025
+  Bugfixes:
+    - Changed code for more surfaces again (thanks to madox1000 for that updated .lua file)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 12.11.2024
+  Bugfixes:
+    - Changed code for more surfaces
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 10.11.2024
+  Bugfixes:
+    - Changed collision box to 0.05 (thanks again to @Sgamez)
+    - Again changelog related (thanks again to @Sgamez)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 10.11.2024
+  Bugfixes:
+    - Technology names
+  Changes:
+    - Some entries are now fixed. (thanks again to @Sgamez)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 10.11.2024
+  Bugfixes:
+    - Restructured changelog to allow the in game parser to read the log. (@Sgamez)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 09.11.2024
+  Changes:
+    - Removed Changelog.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 08.11.2024
+  Bugfixes:
+    - Changelog error hopefully.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 04.11.2024
+  Bugfixes:
+    - Possible fix for the new surfaces(other planets).
+  Changes:
+    - Code separated for each surface to better maintain the code.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 04.11.2024
+  Bugfixes:
+    - Possible fix for the new surfaces(other planets).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 03.11.2024
+  Changes:
+    - Changed code for the new surfaces.
+---------------------------------------------------------------------------------------------------
+Version: 2.0
+Date: 27.10.2024
+  Features:
+    - Factorio Version 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 05.10.2021 
+  Features:
+    - Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 29.09.2021
+  Changes:
+    - Janky update doesn't really work. Don't load this Version!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 01.02.2020
+  Features:
+    - Ported Version of an old mod. This is where it begins.

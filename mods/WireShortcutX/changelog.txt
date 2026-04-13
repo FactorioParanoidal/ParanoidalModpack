@@ -1,0 +1,51 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 21 November 2024
+  Features:
+    - Increased shortcut icon size to match 2.0.18 shortcut icon sizes
+  Bugfixes:
+    - Fixed locale error in Settings > Controls
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 31 October 2024
+  Features:
+    - Factorio 2.0 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 23 January 2023
+  Changes:
+    - All four keybindings are now always available no matter what the "Number of shortcuts" setting is set to
+  Bugfixes:
+    - Fixed temporary wires sometimes being spilled when using Space Exploration's Navigation satellite
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 12 January 2023
+  Bugfixes:
+    - Fixed temporary wires being returned to the inventory when clicking on single-wire shortcuts
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 11 January 2023
+  Features:
+    - Added "Number of shortcuts" startup setting
+      - One: Same behaviour as previous versions - press to create a wire, repeated presses cycle between wires
+      - Two (default): One combined shortcut for red and green wires, one for only copper cable
+      - Three: Each wire/cable has its own shortcut, Alt-W still cycles wires but has no button
+  Bugfixes:
+    - Fixed pressing Q whilst creating a wire connection clearing the wire item instead of just the connection (only fixed in 1.1.75+)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 5 January 2023
+  Changes:
+    - Wires from inventory are no longer used when pressing the shortcut
+    - Wires from shortcut are no longer returned to the inventory after use
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 5 January 2023
+  Changes:
+    - Repeated presses of the shortcut or Alt-W now cycles wires
+    - Removed Control-Scrolling to cycle wires
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 5 January 2023
+  Features:
+    - Initial release

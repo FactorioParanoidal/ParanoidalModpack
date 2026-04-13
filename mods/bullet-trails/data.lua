@@ -30,6 +30,7 @@ for _, beam  in pairs(beams) do
       type = "explosion",
       name = beam,
       flags = {"not-on-map", "placeable-off-grid"},
+      hidden = true,
       random_target_offset = true,
       target_offset_y = -0.3,
       animation_speed = 1,

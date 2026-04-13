@@ -4,56 +4,6 @@ scripts = {} -- custom scripts
 local funcs = {} -- Functions bound to their respective game event
 
 
-local function formatLuaObject(v, handler)
-	if v.__self and type(v.__self) == "userdata" then
-		if v.valid == true then
-			if type(v.help) == "function" then
-			
-				-- Format LuaObjects nicely
-				local help = v.help()
-				local objType = help:gsub("^Help for (%w+):.*$", "%1")
-				if objType == "LuaItemStack" and not v.valid_for_read then return objType.."<EMPTY>" end
-				
-				local t = help:find("[\r\n]type %[RW?%]") and v.type or nil
-				local n = help:find("[\r\n]name %[RW?%]") and v.name or nil
-				local l = help:find("[\r\n]label %[RW?%]") and v.label or nil
-				local id = l and "'"..l.."'" or ""
-				if l and n then id = id.." : " end
-				id = id..(n or "")
-				if t ~= n then
-					if n and t then id = id.." : " end
-					id = id..(t or "")
-				end
-				
-				return objType.."<"..id..">"
-			else
-				-- No help function exists?
-				return serpent.line(v)
-			end
-		else
-			return "?<INVALID>"
-		end
-	else
-		return handler(v)
-	end
-end
-
-local function formatTable(tbl)
-	local new = {}
-	
-	for k,v in pairs(tbl) do
-		if type(v) == "table" then
-			new[k] = formatLuaObject(v, function(_v) return formatTable(_v) end)
-		elseif type(v) == "function" then
-			new[k] = tostring(k).."()"
-		else
-			new[k] = tostring(v)
-		end
-	end
-	
-	return new
-end
-
 function dlog(...) -- Print debug message
 	local tick = 0
 	if game then tick = game.tick end
@@ -61,7 +11,7 @@ function dlog(...) -- Print debug message
 	
 	for key,val in pairs({...}) do
 		if type(val) == "table" then
-			msg = msg.." "..formatLuaObject(val, function(_v) return serpent.line(formatTable(_v)) end)
+			msg = msg.." "..serpent.line(val)
 		elseif type(val) == "function" then
 			msg = msg.." "..tostring(key).."()"
 		else

@@ -1,0 +1,9 @@
+{
+    "mod-setting":
+    [
+        ["AbandonedRuins-enemy-not-cease-fire", "ruins-enemy-not-cease-fire"],
+        ["AbandonedRuins-enable-debug-log", "ruins-enable-debug-log"],
+        ["AbandonedRuins-enable-debug-on-tick", "ruins-enable-debug-on-tick"],
+        ["AbandonedRuins-set", "current-ruin-set"]
+    ]
+}

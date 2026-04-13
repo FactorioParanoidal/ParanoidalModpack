@@ -1,6 +1,6 @@
 function fillBzleadConfig(config)
 
-	config["lead-ore"] = {
+	config.nauvis["lead-ore"] = {
 		type="resource-ore",
 		
 		allotment=80,

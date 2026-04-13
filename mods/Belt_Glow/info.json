@@ -1,0 +1,17 @@
+{
+  "name": "Belt_Glow",
+  "version": "1.4.0",
+  "factorio_version": "2.0",
+  "title": "Belt Glow",
+  "author": "Tserup",
+  "contact": "Discord:tserup",
+  "description": "Belts glow at the night, including castra and K2SO now.",
+  "dependencies": [
+    "base >= 2.0.0",
+    "? space-age",
+    "(?) space-exploration",
+    "? castra",
+    "? Krastorio2-spaced-out",
+    "? AdvancedBeltsSA"
+    ]
+}

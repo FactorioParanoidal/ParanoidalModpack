@@ -25,11 +25,11 @@ local effects = {
   },
   {
     type = "unlock-recipe",
-    recipe = "duct-end-point-intake",
+    recipe = "duct-intake",
   },
   {
     type = "unlock-recipe",
-    recipe = "duct-end-point-outtake",
+    recipe = "duct-exhaust",
   },
 }
 
@@ -72,21 +72,20 @@ end
 data:extend({
   {
     type = "technology",
-    -- WHY IS THIS CAPITALIZED!?!?!?!?!?!
-    name = "Ducts",
-    icon_size = 128,
-    icon = "__FluidMustFlow__/graphics/icon/technologies/iron_duct_tecnology.png",
+    name = "ducts",
+    icon = "__FluidMustFlow__/graphics/icons/technologies/ducts.png",
+    icon_size = 256,
     upgrade = false,
-    effects = effects,
-    prerequisites = prerequisites,
     unit = {
+      time = 20,
       count = 30,
       ingredients = {
         { "automation-science-pack", 2 },
         { "logistic-science-pack", 2 },
         { "chemical-science-pack", 1 },
       },
-      time = 20,
     },
+    prerequisites = prerequisites,
+    effects = effects,
   },
 })

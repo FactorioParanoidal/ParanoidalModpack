@@ -1,0 +1,293 @@
+Version: 1.0.0
+Date: 18-10-2025
+    Info:
+        - Official release of the mod
+    Additions:
+        - 14 new achievements related to radiation
+        - 9 menu simulations showing off the radiation mechanic
+    Changes:
+        - Chunk Radius Setting max value increased from 16 to 48
+        - Revamp to updating chunk radiation damage values (causing change above >:] )
+    Bugfixes:
+        - Sound is now played per player instead of globally
+        - Fixed infrequent crash when near radiation walls
+    Locale:
+        - Updated English locale
+---------------------------------------------------------------------------------------------------
+Version: 0.12.5
+Date: 05-10-2025
+    Bugfixes:
+        - Fixed slight freezes that occur when moving between chunks (when chunk radiation is enabled)
+---------------------------------------------------------------------------------------------------
+Version: 0.12.4
+Date: 04-10-2025
+    Additions:
+        - Added setting toggle for biter and chunk based radiation
+        - Added setting descriptions
+    Bugfixes:
+        - Removed debug info.
+        - Fixed locale issues
+---------------------------------------------------------------------------------------------------
+Version: 0.12.3
+Date: 03-10-2025
+    Bugfixes:
+        - Fixed chests not being removed properly from internal mod memory
+        - Removed code that further restricted when trying to update chunk concurrent damage
+---------------------------------------------------------------------------------------------------
+Version: 0.12.2
+Date: 01-10-2025
+    Additions:
+        - Atomic bomb explosions leave behind residual radiation for an hour
+    Bugfixes:
+        - Fixed crash when attempting to access character concurrent damage
+        - Re-enabled spawn protection
+---------------------------------------------------------------------------------------------------
+Version: 0.12.1
+Date: 30-09-2025
+    Bugfixes:
+        - Fixed crash when attempting to update character position
+---------------------------------------------------------------------------------------------------
+Version: 0.12.0
+Date: 29-09-2025
+    Additions:
+        - All chests distance calculations are now based on chunk distance instead of tile distance
+    Changes:
+        - (Logistic) Containers have been removed from nearby radiation calculations
+---------------------------------------------------------------------------------------------------
+Version: 0.11.6
+Date: 28-09-2025
+    Bugfixes:
+        - Fixed crash when loading into any save
+---------------------------------------------------------------------------------------------------
+Version: 0.11.5
+Date: 27-09-2025
+    Bugfixes:
+        - Renamed migration file meant for 0.11.4 to proper naming convention (0.11.4 should now be fully applied)
+---------------------------------------------------------------------------------------------------
+Version: 0.11.4
+Date: 27-09-2025
+    Bugfixes:
+        - Fix top radiation logo positioning when GUI scale is changed
+---------------------------------------------------------------------------------------------------
+Version: 0.11.3
+Date: 20-09-2025
+    Mod Compatibility:
+        - BZ Titanium now supported
+    Changes:
+        - Updated locale file to be more accurate
+    Bugfixes:
+        - Potential fix to radiation logo being off centered on wider screens
+---------------------------------------------------------------------------------------------------
+Version: 0.11.2
+Date: 19-09-2025
+    Bugfixes:
+        - Actual fix to instant crash regarding visuals
+---------------------------------------------------------------------------------------------------
+Version: 0.11.1
+Date: 19-09-2025
+    Additions:
+        - MK3 equipment for both Reduction and Absorption pieces
+            - Reduction MK3: 60% radiation damage reduction
+            - Absorption MK3: 50 radiation damage absorbed
+        - Final technology research for radiation protection
+    Changes:
+        - Changed MK2 equipment to use efficiency module 2's (removed iron plate)
+        - Moved radiation suit to near total radiation protection technology
+        - Changed technology advanced radiation protection science consumption 30s -> 45s
+        - Modified the volume of Medium/High radiation damage
+        - Modified technology names
+        - Swapped tips and tricks ordering/triggers
+    Bugfixes:
+        - Fixed unknown key for player setting "Enable GUI Effects"
+        - Potential fix to instant crash regarding visuals
+        - Fixed tips and tricks simulation's crashing
+---------------------------------------------------------------------------------------------------
+Version: 0.11.0
+Date: 18-09-2025
+    Additions:
+        - Transparent radiation logo that appears signalling the player is taking damage
+            - Sprite changes to create glitch effect
+            - Toggleable per player (default: True)
+---------------------------------------------------------------------------------------------------
+Version: 0.10.4
+Date: 12-09-2025
+    Bugfixes:
+        - Filtered out walls so only radiation walls resist radiation
+---------------------------------------------------------------------------------------------------
+Version: 0.10.3
+Date: 12-09-2025
+    Bugfixes:
+        - Fixed crash when trying to detect items on a belt
+---------------------------------------------------------------------------------------------------
+Version: 0.10.2
+Date: 11-09-2025
+    Additions:
+        - Small tag displaying radiation values for every radiative item/fluid/etc...
+    Changes:
+        - Internal logic on how items are added to radiative lists
+---------------------------------------------------------------------------------------------------
+Version: 0.10.1
+Date: 10-09-2025
+    Additions:
+        - Tips and tricks explaining radioactive biters
+    Bugfixes:
+        - Behemoth biters/spitters did not damage player
+---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+Date: 09-09-2025
+    Additions:
+        - Biters and their corpses emit radiation
+            - Behemoth biters and spiters
+            - Big biters and spitters
+        - All liquids now included in radiation calculations
+        - Two commands to add/remove unit radiation values
+    Changes:
+        - Fluids in entities (e.g. assembling machines) now emit radiation
+    Bugfixes:
+        - Now made command "/add_radioactive_resource {resource_name}" accessible
+---------------------------------------------------------------------------------------------------
+Version: 0.9.4
+Date: 08-09-2025
+    Additions:
+        - Command to display all items classified as radioactive including radioactivity value
+        - Gun turrets included in radiation damage calculations
+    Mod Compatibility:
+        - Bob's Warfare now supported
+    Changes:
+        - Removed duplicate entry of all items from the factoriopedia
+        - Added all mods to dependency list as optional
+    Bugfixes:
+        - Removed item from PlutoniumEnergy compatibility causing crash
+---------------------------------------------------------------------------------------------------
+Version: 0.9.3
+Date: 08-09-2025
+    Additions:
+        - New tips and tricks simulation for radiation walls
+        - Added in optional dependencies for compatible mods
+    Changes:
+        - "Advanced radiation protection" research now requires "nuclear power" research instead of "kovarex enrichment" research
+    Bugfixes:
+        - Fixed mod API calls not working properly
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 08-09-2025
+    Mod Compatibility:
+        - PlutoniumEnergy now supported
+    Changes:
+        - Reordered radiation resistant items in crafting grid
+    Bugfixes:
+        - Fixed unknown key for radiation name
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 07-09-2025
+    Mod Compatibility:
+        - Cery's Moon of Fulgora now supported
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 05-09-2025
+    Additions:
+        - Two commands to either add or remove the current character the player is playing
+        - Radiation resistant wall preventing 200 radiation damage
+    Changes:
+        - Locale updated
+        - Changed crafting time for all equipment
+            - Radiation Absorption: 5s -> 12s
+            - Radiation Absorption MK2: 5s -> 20s
+            - Radiation Reduction: 5s -> 12s
+            - Radiation Reduction MK2: 5s -> 20s
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 05-09-2025
+    Changes:
+        - Radiation damage now scales exponentially with distance instead of linear approach
+        - Modifications to both tips and tricks radiation intro and distance simulations
+        - English locale spelling changes
+    Bugfixes:
+        - Fixed tips and tricks radiation intro crash just before looping
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 04-09-2025
+    Additions:
+        - 5 tips and tricks simulations explaining everything currently implemented
+        - Inserters included in damage calculations
+    Changes:
+        - Advanced radiation protection uses utility science pack instead of production science pack
+        - Radiation suit moved to advanced radiation protection technology
+        - Setting protection radius min value changed from 20 -> 0
+        - Setting radiation radius min value changed from 2 -> 8
+        - Changed character to wear heavy armour when wearing the radiation suit
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 02-09-2025
+    Additions:
+        - New entity sources for potential radiation damage
+            - Construction and Logistic robots
+            - Locomotives and Cargo Wagons
+            - Item entities on the floor
+            - Nuclear reactors
+            - Logistic containers
+    Changes:
+        - Refactored entire code logic
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 31-08-2025
+    Bugfixes:
+        - Fixed excessive UPS useage
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 30-08-2025
+    Additions:
+        - MK2 equipment for both Reduction and Absorption pieces
+            - Reduction MK2: 40% radiation damage reduction
+            - Absorption MK2: 20 radiation damage absorbed
+    Changes:
+        - Buffed Reduction MK1 from 5% to 20%
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 29-08-2025
+    Additions:
+        - Vehicles and Spidertron types now included in radiation damage calculations.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 28-08-2025
+    Bugfixes:
+        - Player now take damage when in map view
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 28-08-2025
+    Additions:
+        - Added radiation suit with 250 base damage resistant + 95% resistant to radiation damage
+            - Includes medium sized equipment grid
+            - Icon generated by GenAI then modified (I'm no artist)
+    Changes:
+        - Locale English changes
+    Bugfixes:
+        - Fixed crash occuring when in map view
+    Bugs:
+        - Player does not take damage when in map view
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 28-08-2025
+    Additions:
+        - All buildings with type "assembling machine" now included in radiation damage calculations. This includes:
+            - All Assembly Machines (mk1 to mk3)
+            - Centrifuge
+            - Oil Refinery
+            - Chemical Plant
+        - All Furnaces and Rocket Silo also included in calculations.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 27-08-2025
+    Additions:
+        - Added world centre radiation protection to prevent instant death on respawn
+            - Protection radius configurable in mod settings (20 - 125 | default: 50)
+        - Both containers and player corpses with radiated items are now included in damage calculations
+    Changes:
+        - Changed default radiation distance from 4 to 12
+        - Radiation is now its own damage type
+        - Small code refactor to make adding future damage functions easier to implement
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 26-08-2025
+    Additions:
+        - Initial mod creation

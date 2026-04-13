@@ -92,7 +92,7 @@ data:extend(
 		order = "b[zoom]",
 		type = "double-setting",
 		default_value = 0.1,
-		minimum_value = 0.0,
+		minimum_value = 0.032, -- actual lower limit must be somewhere between 0.031250 and 0.031251
 		maximum_value = 20.0
 	},
 	-- ENVIRONMENT DECONSTRUCTION PLANNER

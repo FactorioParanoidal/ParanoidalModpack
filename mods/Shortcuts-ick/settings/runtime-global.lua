@@ -30,7 +30,7 @@ data:extend(
 	{
 		setting_type = "runtime-global",
 		name = "ick-prepare-uninstall",
-		localised_description = {"mod-setting-description.ick-prepare-uninstall", {"Shortcuts-ick.artillery-toggle"}, {"equipment-name.personal-laser-defense-equipment"}, {"item-name.belt-immunity-equipment"}, {"technology-name.night-vision-equipment"}},
+		localised_description = {"mod-setting-description.ick-prepare-uninstall", {"equipment-name.personal-laser-defense-equipment"}, {"item-name.belt-immunity-equipment"}, {"technology-name.night-vision-equipment"}},
 		type = "string-setting",
 		allow_blank = true,
 		default_value = ""

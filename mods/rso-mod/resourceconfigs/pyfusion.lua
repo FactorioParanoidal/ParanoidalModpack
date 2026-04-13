@@ -1,7 +1,7 @@
 function fillPyFusionConfig(config)
+	local nauvisConfig = config.nauvis
 	
-	
-	config["molybdenum-ore"] = {
+	nauvisConfig["molybdenum-ore"] = {
 		type="resource-ore",
 		
 		allotment=70,
@@ -11,23 +11,23 @@ function fillPyFusionConfig(config)
 		min_amount=250,
 	}
 	
-	config["regolites"] = {
+	nauvisConfig["regolites"] = {
 		type="resource-liquid",
 		minimum_amount=50000,
 		allotment=60,
-		spawns_per_region={min=1, max=2},
+		spawns_per_region={min=1, max=1},
 		richness={min=50000, max=100000}, -- richness per resource spawn
-		size={min=2, max=5},
+		size={min=1, max=1},
 		useOreScaling = true
 	}
 	
-	config["volcanic-pipe"] = {
+	nauvisConfig["volcanic-pipe"] = {
 		type="resource-liquid",
 		minimum_amount=50000,
 		allotment=60,
-		spawns_per_region={min=1, max=2},
+		spawns_per_region={min=1, max=1},
 		richness={min=50000, max=100000}, -- richness per resource spawn
-		size={min=2, max=5},
+		size={min=1, max=1},
 		useOreScaling = true
 	}
 end

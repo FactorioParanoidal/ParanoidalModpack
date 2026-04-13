@@ -1,308 +1,137 @@
--- Fetch marathon mode settings
-local buildingmulti = angelsmods.marathon.buildingmulti
-local buildingtime = angelsmods.marathon.buildingtime
-
 angelsmods.functions.RB.build({
-    -- Hydro plant 4
-	{
-        type = "recipe",
-        name = "hydro-plant-4",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"hydro-plant-3", 1},
-                {"t5-plate", 4},
-                {"t5-circuit", 12},
-                {"t5-pipe", 16},
-                {"t6-brick", 12},
-            },
-            result =  "hydro-plant-4",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"hydro-plant-3", 1},
-                {"t5-plate", 4 * buildingmulti},
-                {"t5-circuit", 12 * buildingmulti},
-                {"t5-pipe", 16 * buildingmulti},
-                {"t6-brick", 12 * buildingmulti},
-            },
-            result =  "hydro-plant-4",
-        },
+  -- Hydro plant 4
+  {
+    type = "recipe",
+    name = "angels-hydro-plant-4",
+    localised_name = { "entity-name.angels-hydro-plant-4" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-hydro-plant-3", amount = 1 },
+      { type = "item", name = "t4-plate", amount = 4 },
+      { type = "item", name = "t4-circuit", amount = 12 },
+      { type = "item", name = "t4-pipe", amount = 16 },
+      { type = "item", name = "t4-brick", amount = 12 },
     },
+    results = { { type = "item", name = "angels-hydro-plant-4", amount = 1 } },
+  },
 
-    -- Salination plant 3
-	{
-        type = "recipe",
-        name = "salination-plant-3",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"salination-plant-2", 1},
-                {"t5-plate", 14},
-                {"t5-circuit", 12},
-                {"t5-pipe", 8},
-                {"t6-brick", 15},
-            },
-            result =  "salination-plant-3",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"salination-plant-2", 1},
-                {"t5-plate", 14 * buildingmulti},
-                {"t5-circuit", 12 * buildingmulti},
-                {"t5-pipe", 8 * buildingmulti},
-                {"t6-brick", 15 * buildingmulti},
-            },
-            result =  "salination-plant-3",
-        },
+  -- Salination plant 3
+  {
+    type = "recipe",
+    name = "angels-salination-plant-3",
+    localised_name = { "entity-name.angels-salination-plant-3" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-salination-plant-2", amount = 1 },
+      { type = "item", name = "t5-plate", amount = 14 },
+      { type = "item", name = "t5-circuit", amount = 12 },
+      { type = "item", name = "t5-pipe", amount = 8 },
+      { type = "item", name = "t5-brick", amount = 15 },
     },
+    results = { { type = "item", name = "angels-salination-plant-3", amount = 1 } },
+  },
 
-    -- Washing plant 3
-    {
-        type = "recipe",
-        name = "washing-plant-3",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"washing-plant-2", 1},
-                {"t3-plate", 4},
-                {"t3-circuit", 4},
-                {"t3-pipe", 9},
-                {"t3-brick", 5},
-            },
-            result = "washing-plant-3",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"washing-plant-2", 1},
-                {"t3-plate", 4 * buildingmulti},
-                {"t3-circuit", 4 * buildingmulti},
-                {"t3-pipe", 9 * buildingmulti},
-                {"t3-brick", 5 * buildingmulti},
-            },
-            result = "washing-plant-3",
-        },
+  -- Washing plant 3
+  {
+    type = "recipe",
+    name = "angels-washing-plant-3",
+    localised_name = { "entity-name.angels-washing-plant-3" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-washing-plant-2", amount = 1 },
+      { type = "item", name = "t3-plate", amount = 4 },
+      { type = "item", name = "t3-circuit", amount = 4 },
+      { type = "item", name = "t3-pipe", amount = 9 },
+      { type = "item", name = "t3-brick", amount = 5 },
     },
+    results = { { type = "item", name = "angels-washing-plant-3", amount = 1 } },
+  },
 
-    -- Washing plant 4
-	{
-        type = "recipe",
-        name = "washing-plant-4",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"washing-plant-3", 1},
-                {"t4-plate", 4},
-                {"t4-circuit", 4},
-                {"t4-pipe", 9},
-                {"t4-brick", 5},
-            },
-            result = "washing-plant-4",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"washing-plant-2", 1},
-                {"t4-plate", 4 * buildingmulti},
-                {"t4-circuit", 4 * buildingmulti},
-                {"t4-pipe", 9 * buildingmulti},
-                {"t4-brick", 5 * buildingmulti},
-            },
-            result = "washing-plant-4",
-        },
+  -- Washing plant 4
+  {
+    type = "recipe",
+    name = "angels-washing-plant-4",
+    localised_name = { "entity-name.angels-washing-plant-4" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-washing-plant-3", amount = 1 },
+      { type = "item", name = "t4-plate", amount = 4 },
+      { type = "item", name = "t4-circuit", amount = 4 },
+      { type = "item", name = "t4-pipe", amount = 9 },
+      { type = "item", name = "t4-brick", amount = 5 },
     },
+    results = { { type = "item", name = "angels-washing-plant-4", amount = 1 } },
+  },
 
--- Ore crusher 4
-    {
-        type = "recipe",
-        name = "ore-crusher-4",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"ore-crusher-3", 1},
-                {"t4-plate", 3},
-                {"t4-brick", 3},
-                {"t4-gears", 2},
-            },
-            result =  "ore-crusher-4",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"ore-crusher-3", 1},
-                {"t4-plate", 3 * buildingmulti},
-                {"t4-brick", 3 * buildingmulti},
-                {"t4-gears", 2 * buildingmulti},
-            },
-            result =  "ore-crusher-4",
-        },
-        subgroup = "ore-crusher",
+  -- Ore crusher 4
+  {
+    type = "recipe",
+    name = "angels-ore-crusher-4",
+    localised_name = { "entity-name.angels-ore-crusher-4" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-ore-crusher-3", amount = 1 },
+      { type = "item", name = "t4-plate", amount = 3 },
+      { type = "item", name = "t4-brick", amount = 3 },
+      { type = "item", name = "t4-gears", amount = 2 },
     },
+    results = { { type = "item", name = "angels-ore-crusher-4", amount = 1 } },
+  },
 
-    -- Ore floatation cell 4
-    {
-        type = "recipe",
-        name = "ore-floatation-cell-4",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"ore-floatation-cell-3", 1},
-                {"t5-plate", 4},
-                {"t5-circuit", 8},
-                {"t5-pipe", 4},
-                {"t6-brick", 8},
-            },
-            result =  "ore-floatation-cell-4",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"ore-floatation-cell-3", 1},
-                {"t5-plate", 4 * buildingmulti},
-                {"t5-circuit", 8 * buildingmulti},
-                {"t5-pipe", 4 * buildingmulti},
-                {"t6-brick", 8 * buildingmulti},
-            },
-            result =  "ore-floatation-cell-4",
-        },
-        subgroup = "ore-floatation",
+  -- Ore floatation cell 4
+  {
+    type = "recipe",
+    name = "angels-ore-floatation-cell-4",
+    localised_name = { "entity-name.angels-ore-floatation-cell-4" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-ore-floatation-cell-3", amount = 1 },
+      { type = "item", name = "t5-plate", amount = 4 },
+      { type = "item", name = "t5-circuit", amount = 8 },
+      { type = "item", name = "t5-pipe", amount = 4 },
+      { type = "item", name = "t5-brick", amount = 8 },
     },
+    results = { { type = "item", name = "angels-ore-floatation-cell-4", amount = 1 } },
+  },
 
-    -- Ore leaching plant 4
-    {
-        type = "recipe",
-        name = "ore-leaching-plant-4",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"ore-leaching-plant-3", 1},
-                {"t6-plate", 4},
-                {"t5-circuit", 8},
-                {"t6-pipe", 4},
-                {"t6-brick", 8},
-            },
-            result =  "ore-leaching-plant-4",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"ore-leaching-plant-3", 1},
-                {"t6-plate", 4 * buildingmulti},
-                {"t5-circuit", 8 * buildingmulti},
-                {"t6-pipe", 4 * buildingmulti},
-                {"t6-brick", 8 * buildingmulti},
-            },
-            result =  "ore-leaching-plant-4",
-        },
-        subgroup = "ore-leaching",
+  -- Ore leaching plant 4
+  {
+    type = "recipe",
+    name = "angels-ore-leaching-plant-4",
+    localised_name = { "entity-name.angels-ore-leaching-plant-4" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-ore-leaching-plant-3", amount = 1 },
+      { type = "item", name = "t6-plate", amount = 4 },
+      { type = "item", name = "t6-circuit", amount = 8 },
+      { type = "item", name = "t6-pipe", amount = 4 },
+      { type = "item", name = "t6-brick", amount = 8 },
     },
+    results = { { type = "item", name = "angels-ore-leaching-plant-4", amount = 1 } },
+  },
 
-
-    -- Ore refinery 3
-    {
-        type = "recipe",
-        name = "ore-refinery-3",
-        normal = {
-            energy_required = 5,
-            enabled = "false",
-            ingredients = {
-                {"ore-refinery-2", 1},
-                {"t6-plate", 12},
-                {"t5-circuit", 12},
-                {"t6-brick", 20},
-            },
-            result =  "ore-refinery-3",
-        },
-        expensive = {
-            energy_required = 5 * buildingtime,
-            enabled = "false",
-            ingredients = {
-                {"ore-refinery-2", 1},
-                {"t6-plate", 12 * buildingmulti},
-                {"t5-circuit", 12 * buildingmulti},
-                {"t6-brick", 20 * buildingmulti},
-            },
-            result =  "ore-refinery-3",
-        },
-        subgroup = "ore-refining",
+  -- Ore refinery 3
+  {
+    type = "recipe",
+    name = "angels-ore-refinery-3",
+    localised_name = { "entity-name.angels-ore-refinery-3" },
+    energy_required = 5,
+    enabled = false,
+    ingredients = {
+      { type = "item", name = "angels-ore-refinery-2", amount = 1 },
+      { type = "item", name = "t6-plate", amount = 12 },
+      { type = "item", name = "t6-circuit", amount = 12 },
+      { type = "item", name = "t6-brick", amount = 20 },
     },
-
-    -- -- Crystallizer 3
-    -- {
-    --     type = "recipe",
-    --     name = "crystallizer-3",
-    --     normal = {
-    --     energy_required = 5,
-    --     enabled = "false",
-    --     ingredients = {
-    --         {"crystallizer-2", 1},
-    --         {"t5-plate", 10},
-    --         {"t5-circuit", 5},
-    --         {"t5-pipe", 5},
-    --         {"t6-brick", 10},
-    --     },
-    --     result = "crystallizer-3",
-    --     },
-    --     expensive = {
-    --     energy_required = 5 * buildingtime,
-    --     enabled = "false",
-    --     ingredients = {
-    --         {"crystallizer-2", 1},
-    --         {"t5-plate", 10 * buildingmulti},
-    --         {"t5-circuit", 5 * buildingmulti},
-    --         {"t5-pipe", 5 * buildingmulti},
-    --         {"t6-brick", 10 * buildingmulti},
-    --     },
-    --     result = "crystallizer-3",
-    --     },
-    -- },
-
-    -- -- Filtration unit 3
-    -- {
-    --     type = "recipe",
-    --     name = "filtration-unit-3",
-    --     normal = {
-    --         energy_required = 5,
-    --         enabled = "false",
-    --         ingredients = {
-    --             {"filtration-unit-2", 1},
-    --             {"t5-plate", 2},
-    --             {"t5-circuit", 5},
-    --             {"t5-pipe", 8},
-    --             {"t6-brick", 5},
-    --         },
-    --         result = "filtration-unit-3",
-    --     },
-    --     expensive = {
-    --         energy_required = 5 * buildingtime,
-    --         enabled = "false",
-    --         ingredients = {
-    --             {"filtration-unit-2", 1},
-    --             {"t5-plate", 2 * buildingmulti},
-    --             {"t5-circuit", 5 * buildingmulti},
-    --             {"t5-pipe", 8 * buildingmulti},
-    --             {"t6-brick", 5 * buildingmulti},
-    --         },
-    --         result = "filtration-unit-3",
-    --     },
-    -- },
+    results = { { type = "item", name = "angels-ore-refinery-3", amount = 1 } },
+  },
 })
 
 -- Order fixes

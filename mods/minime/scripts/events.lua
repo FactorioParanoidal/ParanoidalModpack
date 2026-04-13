@@ -1,0 +1,383 @@
+minime.entered_file()
+
+-- This will hold the shared functions
+local minime_events = {}
+
+-- Make a local copy of defines.events, so we can add custom events from other mods
+local event_names = table.deepcopy(defines.events)
+
+
+-- List of optional events
+minime.optional_events = {
+  shortcut = {
+    on_lua_shortcut = minime_player.on_lua_shortcut,
+  },
+}
+
+-- List of custom events (we've only one right now, but could easily add more if needed)
+local custom_event_names = {
+  "minime_exchanged_characters",
+}
+
+--~ -- Generate event IDs
+--~ minime.minime_event_ids = minime.minime_event_ids or {}
+--~ do
+  --~ local id
+  --~ for c, custom_event_name in pairs(custom_event_names) do
+    --~ id = script.generate_event_name()
+    --~ minime.minime_event_ids[custom_event_name] = id
+    --~ event_names[custom_event_name] = id
+    --~ minime.event_names[id] = custom_event_name
+    --~ minime.show("Generated ID for event "..custom_event_name, id)
+  --~ end
+--~ end
+-- Generate event IDs
+minime.minime_event_ids = minime.minime_event_ids or {}
+do
+  for c, custom_event_name in pairs(custom_event_names) do
+    --~ minime.minime_event_ids[custom_event_name] = custom_event_name
+    --~ event_names[custom_event_name] = custom_event_name
+    --~ minime.event_names[custom_event_name] = custom_event_name
+    --~ minime.show("Generated ID for event "..custom_event_name, custom_event_name)
+    minime.minime_event_ids[custom_event_name] = defines.events[custom_event_name]
+    event_names[custom_event_name] = custom_event_name
+    minime.event_names[custom_event_name] = custom_event_name
+    minime.show("Generated ID for event "..custom_event_name, custom_event_name)
+  end
+end
+
+
+
+------------------------------------------------------------------------------------
+--                             DEFINE EVENT HANDLERS!                             --
+------------------------------------------------------------------------------------
+local event_handlers = {}
+local event_filters = {}
+
+minime_events.get_event_handlers = function()
+  minime.entered_function()
+  ----------------------------------------------------------------------------------
+  -- When player joins the game, initialize GUI and data!
+  event_handlers.on_player_joined_game = minime_player.on_player_joined_game
+
+  ----------------------------------------------------------------------------------
+  -- When player's cutscene is cancelled by player interaction or script, initialize
+  -- GUI and data!
+  event_handlers.on_cutscene_cancelled = minime_player.on_player_joined_game
+
+  -- Also init GUI and data if the player's cutscene ends naturally.
+  event_handlers.on_cutscene_finished = minime_player.on_player_joined_game
+
+  ----------------------------------------------------------------------------------
+  -- When player respawned, initialize GUI and data!
+  event_handlers.on_player_respawned = minime_player.init_player
+
+
+  ----------------------------------------------------------------------------------
+  -- When one of our surfaces has been deleted by another mod, restore it!
+  event_handlers.on_pre_surface_deleted = minime_surfaces.on_pre_surface_deleted
+  event_handlers.on_surface_deleted = minime_surfaces.on_surface_deleted
+
+  ----------------------------------------------------------------------------------
+  -- Back up the character when player dies
+  event_handlers.on_pre_player_died = minime_player.backup_player
+
+  ----------------------------------------------------------------------------------
+  -- Back up the character when player and, optionally, create character-corpse
+  -- when player is leaving the game
+  event_handlers.on_pre_player_left_game = minime_player.on_pre_player_left_game
+
+  ----------------------------------------------------------------------------------
+  -- Back up the character when player's weapon inventory is changed
+  --~ event_handlers.on_player_gun_inventory_changed = minime_player.backup_player
+  event_handlers.on_pre_player_died = minime_player.update_gun_inventory
+
+  ----------------------------------------------------------------------------------
+  -- When players are removed from the game, remove their GUI and data!
+  event_handlers.on_pre_player_removed = minime_player.remove_player
+
+  ----------------------------------------------------------------------------------
+  -- Disable GUI when players join force from "Blueprint Sandboxes", and enable them
+  -- again when player returns.
+  event_handlers.on_player_changed_force = minime_forces.on_player_changed_force
+
+  ----------------------------------------------------------------------------------
+  -- Create/remove tables when forces have been merged
+  event_handlers.on_forces_merged = minime_forces.on_forces_merged
+
+  ----------------------------------------------------------------------------------
+  -- Update data in the force table when researches have changed
+  event_handlers.on_research_finished = minime_forces.tech_changed
+  event_handlers.on_research_reversed = minime_forces.tech_changed
+
+  ----------------------------------------------------------------------------------
+  -- Initialize force data and hide our surfaces from forces that have been newly
+  -- created or reset
+  event_handlers.on_force_created = minime_forces.on_force_created_or_reset
+  event_handlers.on_force_reset   = minime_forces.on_force_created_or_reset
+
+  ----------------------------------------------------------------------------------
+  -- Update preview characters when a player's armor is changed
+  event_handlers.on_player_armor_inventory_changed = minime_player.update_armor
+
+  ----------------------------------------------------------------------------------
+  -- Update dummy character's logistic slots when they change in player's character
+  event_handlers.on_entity_logistic_slot_changed = minime_player.update_logistic_slots
+
+  ----------------------------------------------------------------------------------
+  -- Update color of dummy and preview characters if color of players' character is
+  -- changed
+  event_handlers.on_entity_color_changed = minime_player.update_character_color
+
+
+  ----------------------------------------------------------------------------------
+  -- Back up the new corpse and update the inventory data of all other corpses
+  event_handlers.on_player_died = minime_corpse.on_player_died
+
+  ----------------------------------------------------------------------------------
+  -- Check whether dead character was one we care about
+  event_handlers.on_entity_died = minime_corpse.on_entity_died
+  event_filters.on_entity_died = {
+    {filter = "type", type = "character"}
+  }
+
+  ------------------------------------------------------------------------------------
+  -- Back up the new corpse and update the inventory data of all other corpses
+  event_handlers.on_post_entity_died = minime_corpse.on_post_entity_died
+  event_filters.on_post_entity_died = {
+    {filter = "type", type = "character"}
+  }
+
+  ----------------------------------------------------------------------------------
+  -- When a corpse expires, remove it from mod.player_data!
+  event_handlers.on_character_corpse_expired = minime_corpse.remove_corpse_data
+
+  ----------------------------------------------------------------------------------
+  -- When a corpse is mined, remove it from mod.player_data!
+  event_handlers.on_pre_player_mined_item = minime_corpse.remove_corpse_data
+  event_filters.on_pre_player_mined_item = {
+    {filter = "type", type = "character-corpse"}
+  }
+
+
+  ----------------------------------------------------------------------------------
+  -- When a player leaves the game, remove just the GUI!
+  event_handlers.on_player_left_game = minime_gui.remove_gui
+
+  ----------------------------------------------------------------------------------
+  -- React to GUI clicks
+  event_handlers.on_gui_click = minime.character_selector and
+                                minime_gui.on_gui_click or nil
+
+  ----------------------------------------------------------------------------------
+  -- React to change of selection state in GUI (drop-down list)
+  event_handlers.on_gui_selection_state_changed = minime.character_selector and
+                                                  minime_gui.on_gui_selection_state_changed or nil
+
+
+  ----------------------------------------------------------------------------------
+  -- React to change of selection state in GUI (checkbox)
+  event_handlers.on_gui_checked_state_changed = minime.character_selector and
+                                                minime_gui.on_gui_checked_state_changed or nil
+
+
+  ----------------------------------------------------------------------------------
+  -- React to custom-input event (GUI toggle button)
+  if minime.character_selector then
+    local e_name = minime.toggle_gui_input_shortcut_name
+    event_handlers[e_name] = minime_player.on_custom_input
+    event_names[e_name] = e_name
+    minime.event_names[e_name] = e_name
+  end
+
+
+
+  ----------------------------------------------------------------------------------
+  -- Reinitialize GUI when runtime settings are changed
+  event_handlers.on_runtime_mod_setting_changed = minime_player.on_runtime_mod_setting_changed
+
+
+  ----------------------------------------------------------------------------------
+  -- Custom event from "RPG System"
+  if remote.interfaces.RPG and
+      remote.interfaces.RPG.get_on_player_updated_status then
+    local id = remote.call("RPG", "get_on_player_updated_status")
+    local e_name = "on_player_updated_status_RPGsystem"
+    event_names[e_name] = id
+    minime.event_names[id] = e_name
+    event_handlers[e_name] = minime_player.backup_player
+  end
+
+
+  ----------------------------------------------------------------------------------
+  -- Custom events from "Space Exploration"
+  if remote.interfaces["space-exploration"] then
+
+    local function check_interface(SE_remote_fname, local_event_name, local_fname)
+      minime.entered_function({SE_remote_fname, local_event_name, local_fname})
+      local id = minime.remote_call("space-exploration", SE_remote_fname)
+minime.show("id", id)
+      if id then
+        local name = "SE_custom_event_"..local_event_name
+        event_names[name] = id
+        minime.event_names[id] = name
+
+        event_handlers[name] = local_fname
+      end
+      minime.entered_function("leave")
+    end
+
+    -- SE will bypass on_player_respawned and replace it with a custom event.
+    check_interface("get_on_player_respawned_event", "on_player_respawned",
+                    minime_player.init_player)
+
+    -- SE is about to enter remote view and put the player in god mode.
+    check_interface("get_on_remote_view_started_event", "remote_view_started",
+                    minime_character.SE_remote_view_started)
+
+    -- SE has left remote view and put the player back in character mode. The only
+    -- thing guaranteed is that the player won't be in god mode anymore -- character
+    -- mode is expected, but the player could end up with another controller type
+    -- (spectator or ghost controller).
+    check_interface("get_on_remote_view_stopped_event", "remote_view_stopped",
+                    minime_character.SE_remote_view_stopped)
+  end
+
+
+  ----------------------------------------------------------------------------------
+  -- Make sure our GUI is kept in sync when editor mode is toggled by other means
+  event_handlers.on_pre_player_toggled_map_editor = minime_character.on_pre_player_toggled_map_editor
+  event_handlers.on_player_toggled_map_editor = minime_character.on_player_toggled_map_editor
+
+  ----------------------------------------------------------------------------------
+  -- Make sure our GUI is kept in sync when controller is changed by other means
+  event_handlers.on_player_controller_changed = minime_character.on_player_controller_changed
+
+  ----------------------------------------------------------------------------------
+  -- Debugging
+  local function log_event_data(event)
+    minime.entered_function({event})
+    minime.entered_function("leave")
+  end
+
+  --~ event_handlers.on_player_main_inventory_changed = log_event_data
+  --~ event_handlers.on_pre_player_crafted_item = log_event_data
+  --~ event_handlers.on_player_cancelled_crafting = log_event_data
+
+
+  -- Teleport testing
+  event_handlers.script_raised_teleported = minime.is_debug and log_event_data or
+                                                                nil
+
+
+  ------------------------------------------------------------------------------------
+  --                               Just for debugging!                              --
+  -- Listeners for our own custom events, so we can check what data we've passed on --
+  ------------------------------------------------------------------------------------
+  if minime.is_debug then
+    minime.writeDebug("Debugging mode: Add handlers for our custom event(s)!")
+    event_handlers.minime_exchanged_characters = log_event_data
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                            REGISTER EVENT HANDLERS!                            --
+------------------------------------------------------------------------------------
+minime_events.attach_events = function(event_list)
+  minime.entered_function({event_list})
+
+    minime.assert(event_list, {"table", "nil"},
+                                "table of event names/handlers or nil")
+
+    local id, filters
+    for event_name, event_handler in pairs(event_list or event_handlers) do
+      id = event_names[event_name]
+
+      script.on_event(id, function(event)
+        minime.entered_event(event)
+
+        event_handler(event)
+
+        minime.entered_event(event, "leave")
+      end)
+      minime.writeDebug("Attached event \"%s\".", {event_name})
+
+      filters = event_filters[event_name]
+      if filters then
+        minime.writeDebug("Setting filters for event %s: %s",
+                          {minime.enquote(event_name), filters}, "line")
+        script.set_event_filter(id, filters)
+      end
+    end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                           UNREGISTER EVENT HANDLERS!                           --
+------------------------------------------------------------------------------------
+minime_events.detach_events = function(event_list)
+  minime.entered_function({event_list})
+
+  minime.assert(event_list, {"table", "nil"},
+                              "table of event names/handlers or nil")
+
+  for event_name, event_handler in pairs(event_list or event_handlers) do
+    script.on_event(event_names[event_name], nil)
+    minime.writeDebug("Detached event %s.", {event_name})
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                   SET UP TABLES FOR MARKING EVENT AS IGNORED!                  --
+------------------------------------------------------------------------------------
+minime_events.setup_skip_event = function(event_name)
+  minime.entered_function({event_name})
+
+  minime.assert(event_name, "string", "event name")
+
+  --~ global.skip_events = global.skip_events or {}
+  --~ global.skip_events[event_name] = global.skip_events[event_name] or {}
+  --~ minime.writeDebugNewBlock("Made sure global.skip_events.%s exists!",
+                            --~ {event_name})
+  mod.skip_events = mod.skip_events or {}
+  mod.skip_events[event_name] = mod.skip_events[event_name] or {}
+  minime.writeDebugNewBlock("Made sure mod.skip_events.%s exists!", {event_name})
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+--                   REMOVE TABLES FOR MARKING EVENT AS IGNORED!                  --
+------------------------------------------------------------------------------------
+minime_events.remove_skip_event = function(event_name)
+  minime.entered_function({event_name})
+
+  minime.assert(event_name, "string", "event name")
+
+  if mod.skip_events and mod.skip_events[event_name] and
+                          not next(mod.skip_events[event_name]) then
+
+    minime.writeDebugNewBlock("Removing mod.skip_events.%s!", {event_name})
+    mod.skip_events[event_name] = nil
+  end
+  if mod.skip_events and not next(mod.skip_events) then
+
+    minime.writeDebugNewBlock("Removing mod.skip_events!")
+    mod.skip_events = nil
+  end
+
+  minime.entered_function("leave")
+end
+
+
+------------------------------------------------------------------------------------
+minime.entered_file("leave")
+return minime_events

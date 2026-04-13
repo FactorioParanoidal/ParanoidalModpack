@@ -144,16 +144,20 @@ end
     4- -5
     /|\
     6 7 8
+	parameters.recursion - if true then make new neighbors table, else use universe.neighbors
+	parameters.color - color of chunk border if showPheromones is true
 ]]--
-function pheromoneUtils.processStaticPheromone(map, chunk)
+function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
     local chunkBase = -MAGIC_MAXIMUM_NUMBER
 	local chunkBaseDetection = -MAGIC_MAXIMUM_NUMBER
     local chunkResource = -MAGIC_MAXIMUM_NUMBER
+
     local chunkPathRating = getPathRating(map, chunk)
 
     local clear = getEnemyStructureCount(map, chunk)
 
-    local tempNeighbors = getNeighborChunks(map, chunk.x, chunk.y)
+    local tempNeighbors = getNeighborChunks(map, chunk.x, chunk.y, parameters and parameters.recursion)
+	local halveIfDecreasing = (parameters and parameters.halveIfDecreasing) or false
 
     local neighbor
     local neighborPass
@@ -262,11 +266,16 @@ function pheromoneUtils.processStaticPheromone(map, chunk)
         end
     end
 	
-    pheromone_neighbor.chunkBaseDetection = mMin(pheromone_neighbor.chunkBaseDetection, MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK)  * 0.9
+    pheromone_neighbor.chunkBaseDetection = mMin(pheromone_neighbor.chunkBaseDetection, MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK)
+	if pheromone_neighbor.chunkBaseDetection < 500 then
+		pheromone_neighbor.chunkBaseDetection = mMax(pheromone_neighbor.chunkBaseDetection - 1, 0)
+	else
+		pheromone_neighbor.chunkBaseDetection = pheromone_neighbor.chunkBaseDetection * 0.9
+	end
     pheromone = mMin(getPlayerBaseGenerator(map, chunk, BASE_DETECTION_PHEROMONE), MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK)	
 	
     if pheromone_neighbor.chunkBaseDetection < pheromone then
-        chunk[BASE_DETECTION_PHEROMONE] = pheromone
+       chunk[BASE_DETECTION_PHEROMONE] = pheromone
     else
         chunk[BASE_DETECTION_PHEROMONE] = pheromone_neighbor.chunkBaseDetection
     end
@@ -274,13 +283,17 @@ function pheromoneUtils.processStaticPheromone(map, chunk)
         chunk[BASE_DETECTION_PHEROMONE] = pheromone * chunkPathRating	
 	end
 	
-    pheromone_neighbor.chunkBase = pheromone_neighbor.chunkBase * 0.9
-    pheromone = getPlayerBaseGenerator(map, chunk, BASE_PHEROMONE)
-	
-    if pheromone_neighbor.chunkBase < pheromone then
-        chunk[BASE_PHEROMONE] = pheromone * chunkPathRating
-    else
-        chunk[BASE_PHEROMONE] = pheromone_neighbor.chunkBase * chunkPathRating
+	if pheromone_neighbor.chunkBase < 500 then
+		pheromone_neighbor.chunkBase = mMax(pheromone_neighbor.chunkBase - 1, 0)
+	else
+		pheromone_neighbor.chunkBase = pheromone_neighbor.chunkBase * 0.9
+	end
+   pheromone = getPlayerBaseGenerator(map, chunk, BASE_PHEROMONE)
+	chunk[BASE_PHEROMONE] = mMax(pheromone, pheromone_neighbor.chunkBase)
+    if chunk[BASE_PHEROMONE] > 100 then
+        chunk[BASE_PHEROMONE] = mMax(chunk[BASE_PHEROMONE] * chunkPathRating, 100)
+    elseif chunkPathRating <= 0.1 then
+        chunk[BASE_PHEROMONE] = mMax(0, chunk[BASE_PHEROMONE] - 5)
     end
 		
 	-- turrets and kills
@@ -299,22 +312,38 @@ function pheromoneUtils.processStaticPheromone(map, chunk)
 	chunk[BASE_DETECTION_PHEROMONE] = math.floor(chunk[BASE_DETECTION_PHEROMONE])
 	chunk[BASE_PHEROMONE] = math.floor(chunk[BASE_PHEROMONE])
 	
-	-- DEBUG
-	-- local chunkText = ""..chunk[BASE_PHEROMONE].."/"..chunk[BASE_DETECTION_PHEROMONE].."("..(math.floor(pheromoneMultiplier*100)/100)..") "
-	-- if chunk.textId then
-		-- rendering.set_text(chunk.textId, chunkText)
-	-- else	
-		-- chunk.textId = rendering.draw_text({
-		-- text = chunkText, 
-		-- surface = map.surface,
-		-- target = {x = chunk.x, y = chunk.y},
-		-- color = {r = 0, g = 0.5, b = 0, a = 0.5},
-		-- forces = {"player"},
-		-- scale = 5
-		-- })
-	 -- end
-	
+	if map.universe.debugSettings.showPheromones then
+		local chunkText = ""..chunk[BASE_PHEROMONE].."/"..chunk[BASE_DETECTION_PHEROMONE].."("..(math.floor(pheromoneMultiplier*100)/100)..") "
+		local renderingObject
+		if chunk.textId then
+			renderingObject = rendering.get_object_by_id(chunk.textId)	
+		end
+		if renderingObject then
+			renderingObject.text = chunkText
+		else
+			renderingObject = rendering.draw_text({
+			text = chunkText, 
+			surface = map.surface,
+			target = {x = chunk.x, y = chunk.y},
+			color = {r = 0, g = 0.5, b = 0, a = 0.5},
+			forces = {"player"},
+			scale = 5
+			})
+			chunk.textId = renderingObject.id
+		end
+		rendering.draw_rectangle({
+            color = (parameters and parameters.color) or {0.1, 0.3, 0.1, 0.6},
+            width = 16,
+            left_top = {chunk.x, chunk.y},
+            right_bottom = {chunk.x+32, chunk.y+32},
+            surface = map.surface,
+            time_to_live = 120,
+            draw_on_ground = true,
+            visible = true
+		})
+	end
 
+	clear = clear and (chunk[BASE_DETECTION_PHEROMONE] < 9000)
     pheromone_neighbor.chunkResource = pheromone_neighbor.chunkResource * 0.9
     pheromone = getResourceGenerator(map, chunk)
     if (pheromone > 0) and clear then
@@ -322,15 +351,15 @@ function pheromoneUtils.processStaticPheromone(map, chunk)
     end
     if chunkResource < pheromone then
         if clear then
-            chunk[RESOURCE_PHEROMONE] = pheromone * chunkPathRating
+            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone * chunkPathRating)
         else
-            chunk[RESOURCE_PHEROMONE] = pheromone * chunkPathRating * 0.1
+            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone * chunkPathRating * 0.1)
         end
     else
         if clear then
-            chunk[RESOURCE_PHEROMONE] = pheromone_neighbor.chunkResource * chunkPathRating
+            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone_neighbor.chunkResource * chunkPathRating)
         else
-            chunk[RESOURCE_PHEROMONE] = pheromone_neighbor.chunkResource * chunkPathRating * 0.1
+            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone_neighbor.chunkResource * chunkPathRating * 0.1)
         end
     end
 end
@@ -514,6 +543,42 @@ function pheromoneUtils.processPheromone(map, chunk, player)
 		-- })
 	-- end	
 	--
+end
+
+function pheromoneUtils.multiplyPheromones(map, chunk, N, color)
+    chunk[BASE_PHEROMONE] = mMax(math.floor(chunk[BASE_PHEROMONE] * N), 0)
+    chunk[BASE_DETECTION_PHEROMONE] = mMax(math.floor(chunk[BASE_DETECTION_PHEROMONE] * N), 0)
+    chunk[PLAYER_PHEROMONE] = mMax(math.floor(chunk[PLAYER_PHEROMONE] * N), 0)
+	if map.universe.debugSettings.showPheromones then
+		local chunkText = ""..chunk[BASE_PHEROMONE].."/"..chunk[BASE_DETECTION_PHEROMONE]
+		local renderingObject
+		if chunk.textId then
+			renderingObject = rendering.get_object_by_id(chunk.textId)	
+		end
+		if renderingObject then
+			renderingObject.text = chunkText
+		else	
+			renderingObject = rendering.draw_text({
+			text = chunkText, 
+			surface = map.surface,
+			target = {x = chunk.x, y = chunk.y},
+			color = {r = 0, g = 0.5, b = 0, a = 0.5},
+			forces = {"player"},
+			scale = 5
+			})
+			chunk.textId = renderingObject.id
+		end
+		rendering.draw_rectangle({
+            color = color or {0.1, 0.3, 0.1, 0.6},
+            width = 16,
+            left_top = {chunk.x, chunk.y},
+            right_bottom = {chunk.x+32, chunk.y+32},
+            surface = map.surface,
+            time_to_live = 120,
+            draw_on_ground = true,
+            visible = true
+		})
+	end
 end
 
 pheromoneUtilsG = pheromoneUtils

@@ -1,6 +1,10 @@
+if ... ~= "__flib__.math" then
+  return require("__flib__.math")
+end
+
 --- Extension of the Lua 5.2 math library.
 --- ```lua
---- local flib_math = require("__flib__/math")
+--- local flib_math = require("__flib__.math")
 --- ```
 --- @class flib_math: factorio.mathlib
 local flib_math = {}
@@ -24,6 +28,9 @@ flib_math.deg_to_rad = flib_math.pi / 180 --- @type number
 --- local deg = 1 x flib_math.rad_to_deg -- 57.2958
 --- ```
 flib_math.rad_to_deg = 180 / flib_math.pi --- @type number
+
+--- One radian.
+flib_math.radian = 2 * flib_math.pi
 
 flib_math.max_double = 0X1.FFFFFFFFFFFFFP+1023
 flib_math.min_double = -0X1.FFFFFFFFFFFFFP+1023
@@ -75,40 +82,6 @@ function flib_math.floored(num, divisor)
   return flib_math.floor(num)
 end
 
---- Round a number to the nearest N decimal places.
----
---- From [lua-users.org](http://lua-users.org/wiki/SimpleRound).
---- @param num number
---- @param num_decimals number
---- @return number
---- @deprecated Use flib_math.round
-function flib_math.round_to(num, num_decimals)
-  local mult = 10 ^ num_decimals
-  return flib_math.floor(num * mult + 0.5) / mult
-end
-
---- Ceil a number to N decimal places.
---- Use `math.ceil` directly if no decimals are needed.
---- @param num number
---- @param num_decimals number
---- @return number
---- @deprecated Use flib_math.ceiled
-function flib_math.ceil_to(num, num_decimals)
-  local mult = 10 ^ num_decimals
-  return flib_math.ceil(num * mult) / mult
-end
-
---- Floor a number to N decimal places.
---- Use `math.floor` directly if no decimals are needed.
---- @param num number
---- @param num_decimals number
---- @return number
---- @deprecated use flib_math.floored
-function flib_math.floor_to(num, num_decimals)
-  local mult = 10 ^ num_decimals
-  return flib_math.floor(num * mult) / mult
-end
-
 --- Returns the argument with the maximum value from a set.
 --- @param set number[]
 --- @return number
@@ -127,7 +100,7 @@ end
 --- @param set number[]
 --- @return number
 function flib_math.sum(set)
-  local sum = set[2] or 0
+  local sum = set[1] or 0
   for i = 2, #set do
     sum = sum + set[i]
   end

@@ -1,0 +1,74 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 25. 02. 2025
+  Features:
+    - Will no longer connect two electric grids that were previously not connected
+    - Selection will now prioritize horizontal and vertical connections, where this is not possible the smallest possible connection will be made
+  Changes:
+    - Update to Factorio 2.0 API
+  Optimizations:
+    - Selection tool will now only select electric poles
+    - Improved algorithm for horiztonal and vertical matches
+  Info:
+    - Updated by @AckEmma, Optimizations by @CodeGreen
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 13. 12. 2020
+  Changes:
+    - Update for 1.1
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+Date: 22. 03. 2020
+  Changes:
+    - Updated for compatibility with Realistic Electric Trains thanks to robot256
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+Date: 29. 01. 2020
+  Changes:
+    - Update for 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+Date: 13. 04. 2019
+  Changes:
+    - Move to a cursor-only tool item that can be grabbed from the shortcut bar or the blueprint library
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 26. 02. 2019
+  Changes:
+    - Fix mod portal thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 26. 02. 2019
+  Changes:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 0.16.5
+Date: 29. 12. 2018
+  Changes:
+    - Added shift-selection mode that will only connect to poles directly north/south/east/west of selected poles
+---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 02. 06. 2018
+  Changes:
+    - Poles are reconstructed in the same order as before but sorted by shortest wire reach first, to create clean grids more reliably with mixed pole types
+---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 03. 05. 2018
+  Info:
+    - Added German translation courtesy of ST-DDT on GitHub
+    - Updated tool icon to be more distinctive in the inventory, with a yellow tinted blueprint background
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+Date: 05. 04. 2018
+  Bugfixes:
+    - Track reconnection targets that get destroyed by unit number instead of using find_entity()
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 05. 04. 2018
+  Bugfixes:
+    - Don't use find_entity() for reconnecting circuit wires when the target didn't get rebuilt
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+Date: 04. 04. 2018
+  Info:
+    - Initial release

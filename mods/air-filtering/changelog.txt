@@ -1,0 +1,165 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.9.6
+Date: 2026-01-31
+  Changes:
+    - Added circuit network connectivity to all air filter machines.
+    - Air filter machines can now be controlled via circuit network conditions.
+    - Air filter machines can now output their contents to the circuit network.
+    - Added compatibility with space-age mod for circuit network features.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.5
+Date: 2025-07-24
+  Changes:
+    - Air filters now clean both pollution and spores.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.4
+Date: 2025-07-23
+  Changes:
+    - Removed old migration data to prevent "air-filter" item name confusion.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.3
+Date: 2024-12-21
+  Changes:
+    - Fixed DE locale encoding. Thanks "GismanAna" for the info!
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 2024-11-09
+  Changes:
+    - Fixed Fr locale entity names.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2024-10-27
+  Changes:
+    - Fixed changelog.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2024-10-27
+  Changes:
+    - Fixed invisible animation problem. Thanks to "Elec" for the updated API info!
+---------------------------------------------------------------------------------------------------
+Version: 0.8.9
+Date: 2024-10-22
+  Changes:
+    - Fixed "Recipe has no results" error.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.8
+Date: 2024-10-18
+  Changes:
+    - Updated for 2.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.7
+Date: 2024-10-17
+  Changes:
+    - Copied from Dae for Factorio 1.1 before Space Age update. Source: https://mods.factorio.com/mod/Air-Filtering_Fix
+---------------------------------------------------------------------------------------------------
+Version: 0.8.6
+Date: 2024-09-30
+  Changes:
+    - Add Japanesse trad from motoki
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 2024-09-29
+  Changes:
+    - Credit goes to Dae
+    - Made it 1.1 compatible
+    - Added fr locales
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 2024-09-28
+  Changes:
+    - Made it compatible to the latest modding api changes (Thanks to James_Reaver, for pointing me in the right direction!)
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 2024-09-27
+  Changes:
+    - Made it 0.18 compatible
+    - Tweeked the numbers a little (see FAQ)
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 2024-09-26
+  Changes:
+    - Made some grammar tweeks to the technology texts (Credits to the person who pointed it out to me via pm)
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 2024-09-25
+  Changes:
+    - Added technology descriptions
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 2024-09-24
+  Changes:
+    - Made it 0.17 compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2024-09-23
+  Changes:
+    - Made it 0.16 compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2024-09-22
+  Changes:
+    - Made it 0.15 compatible
+    - Changed requirements for researching "Air Filtering Machine Mk3" and "Air Filter Recycling". They are a bit more expensive now
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2024-09-21
+  Changes:
+    - Removed old air filter machines to reduce cluttering of logisitics stuff
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2024-09-20
+  Changes:
+    - Good news for people using angels mods: The recipe name conflict has been resolved! *wiping sweat off of his forehead*
+    - Renamed "air filters" to "unused air filters" (with migration, thanks to Optera!)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2024-09-19
+  Changes:
+    - Made it 0.14 compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2024-09-18
+  Changes:
+    - Updated to fit the modding changes made in Patch 0.13.0
+    - Tweaked the values pollution reduction and power usage to be less overpowered (hopefully)
+    - Added ukrainian locale (Thanks to user ukr)
+    - Updated russian locale (Thanks to user cxOne)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2024-09-17
+  Changes:
+    - Updated Graphics (Big thanks to Captain NeL for this one!)
+    - Added russian locale (Also done by Captain NeL)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2024-09-16
+  Changes:
+    - Rebalanced pollution reduction
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2024-09-15
+  Changes:
+    - New Feature: Added 2 additional air filter machines and their respective (expensive) technologies
+    - Pretty expensive and energy-hungry, but more efficient in cleaning large amounts of pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2024-09-14
+  Changes:
+    - Bugfix: Fixed wrong order in filter selection menu of smart inserters (reported by Kryzeth here. Thank you Kryzeth!)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2024-09-13
+  Changes:
+    - Made it 0.12 compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2024-09-12
+  Changes:
+    - by y.petremann, Factorio 0.11.22.
+    - Air filtering machine works like furnaces for recipes (no need to indicate the recipe, simply put air filters directly inside)
+    - Air filtering machine have more appropriate graphics and sounds
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2024-09-11
+  Changes:
+    - Added the contents to the mod[/size]

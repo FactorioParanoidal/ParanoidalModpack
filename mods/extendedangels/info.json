@@ -1,16 +1,20 @@
 {
     "name": "extendedangels",
-    "version": "0.5.10",
-    "factorio_version": "1.1",
+    "version": "0.6.6",
+    "factorio_version": "2.0",
     "title": "Extended Angels",
     "author": "AdamCirillo",
-    "dependencies":[
-        "angelssmelting >= 0.6.22",
-        "bobplates",
+    "dependencies": [
+        "angelsrefining >= 2.0.0",
+        "angelssmelting >= 2.0.0",
         "flib",
         "? angelsaddons-storage",
         "? bobtech",
-        "? angelsbioprocessing >= 0.7.25",
+        "? bobplates",
+        "? angelsbioprocessing >= 2.0.0",
         "? Clowns-Processing"
-    ]
+    ],
+    "package": {
+        "git_publish_branch": "master"
+    }
 }

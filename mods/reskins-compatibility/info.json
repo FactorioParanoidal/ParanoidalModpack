@@ -1,18 +1,22 @@
 {
     "name": "reskins-compatibility",
-    "version": "2.1.10",
-    "factorio_version": "1.1",
+    "version": "2.3.10",
+    "factorio_version": "2.0",
     "title": "Artisanal Reskins: Compatibility",
     "author": "Kirazy",
     "contact": "kirazy@live.com",
     "homepage": "",
     "dependencies": [
         "base",
-        "reskins-library >= 2.1.6",
-        "(?) reskins-bobs",
+        "reskins-library >= 2.3.0",
+        "(?) reskins-bobs >= 2.3.2",
         "(?) reskins-angels",
         "? aai-industry",
+        "? aai-loaders",
+        "? aai-loaders-bobs",
         "? angels-smelting-extended",
+        "? angelsbioprocessinggraphics",
+        "? angelssmeltinggraphics",
         "? Bio_Industries",
         "? CircuitProcessing",
         "? classic-beacon",
@@ -21,6 +25,7 @@
         "? deadlock-beltboxes-loaders",
         "? DeadlockBlackRubberBelts",
         "? DeadlockCrating",
+        "? DeadlockStackingForAngels",
         "? DeadlockStackingForBobs",
         "? DeadlockStackingForVanilla",
         "? extendedangels",
@@ -35,5 +40,8 @@
         "? semi-classic-mining-drill",
         "? spaceblock",
         "? vanilla-loaders-hd"
-    ]
+    ],
+    "package": {
+        "git_publish_branch": "master"
+    }
 }

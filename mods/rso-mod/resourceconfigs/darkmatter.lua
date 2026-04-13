@@ -4,7 +4,7 @@ function fillDarkMatterConfig(config)
 	if game.entity_prototypes["tenemut"] then
 		oreName = "tenemut"
 	end
-	if game.active_mods["dark-matter-replicators-18"] then
+	if script.active_mods["dark-matter-replicators-18"] then
 		oreName = "dmr18-tenemut"
 	end
 	

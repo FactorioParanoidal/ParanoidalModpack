@@ -24,7 +24,7 @@ function this.new(name)
 end
 
 function this.refresh(obj)
-	if type(obj) == "table" and not obj.__self then 
+	if type(obj) == "table" then 
 		for key,val in pairs(obj) do
 			this.refresh(val)
 		end

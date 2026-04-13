@@ -1,0 +1,19 @@
+core
+	config
+	classes/unique_array
+
+game
+	core
+
+area/area
+	core
+	area/position
+	utils/math
+	utils/string
+
+area/chunk
+	core
+	game
+	area/position
+	area/area		!!
+

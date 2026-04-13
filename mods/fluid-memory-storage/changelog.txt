@@ -1,4 +1,92 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.7.9
+Date: 2025-08-19
+  Bugfixes:
+    - Migrating fluids across version no longer voids the associated units.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.8
+Date: 2024-12-10
+  Bugfixes:
+    - Fixed a crash. Resolves https://github.com/notnotmelon/fluid-memory-storage/issues/8
+---------------------------------------------------------------------------------------------------
+Version: 1.7.7
+Date: 2024-12-06
+  Bugfixes:
+    - Resolves https://github.com/notnotmelon/fluid-memory-storage/issues/5
+---------------------------------------------------------------------------------------------------
+Version: 1.7.6
+Date: 2024-12-06
+  Bugfixes:
+    - Fixed crash at 2.1B fluids stored. Resolves https://github.com/notnotmelon/fluid-memory-storage/issues/7 Resolves https://github.com/notnotmelon/fluid-memory-storage/issues/6 Resolves https://github.com/notnotmelon/fluid-memory-storage/issues/4
+---------------------------------------------------------------------------------------------------
+Version: 1.7.5
+Date: 2024-10-31
+  Changes:
+    - Unpacked raw memory units can now be sent in the rocket silo. Resolves [#7](https://github.com/notnotmelon/fluid-memory-storage/issues/7)
+---------------------------------------------------------------------------------------------------
+Version: 1.7.4
+Date: 2024-10-30
+  Bugfixes:
+    - Added support for the new build/destroy luaevents added in 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.7.3
+Date: 2024-10-30
+  Bugfixes:
+    - Added support for the new build/destroy luaevents added in 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.7.2
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed possbile crash related to invalid luarender objects for flying text
+---------------------------------------------------------------------------------------------------
+Version: 1.7.1
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed that the stored fluid information would be deleted in certian cases when placing the fluid unit.
+    - Fixed the combinator not updating properly. Resolves [#3](https://github.com/notnotmelon/fluid-memory-storage/issues/3)
+  Changes:
+    - The quality of the fluid unit combinator now matches the quality of the fluid unit itself.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 2024-10-24
+  Features:
+    - Update to 2.0
+  Bugfixes:
+    - Data stage fixes for 2.0
+    - Global -> Storage
+---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 2024-08-27
+  Bugfixes:
+    - Fix crash from previous update
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 2024-08-27
+  Features:
+    - Added additional power consumption options in the mod settings. Now you can go all the way up to 50MW. (Previous limit was 2.4MW)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2024-08-04
+  Bugfixes:
+    - Fix locale key error in the case of a fluid unit data corruption.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2024-08-04
+  Bugfixes:
+    - Fixed a crash caused by a faulty migration (https://mods.factorio.com/mod/fluid-memory-storage/discussion/65a40370e283339a647d533e)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2024-08-04
+  Bugfixes:
+    - Fixed incompatibility with the "no overhang" mod
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2024-08-04
+  Info:
+    - Combined locale files into a single locale file.
+  Features:
+    - Added automatic portal deployment with via https://github.com/fgardt/factorio-mod-template
+---------------------------------------------------------------------------------------------------
 Version: 1.4.6
 Date: 2023.1.17
   Features:

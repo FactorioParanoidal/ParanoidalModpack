@@ -1,14 +1,14 @@
 local gui = {}
 local util = scripts.util
 local templates = scripts["gui-templates"]
-local mod_gui = require("mod-gui")
+-- local mod_gui = require("mod-gui")
 
 local helpers = scripts.helpers
 local _ = helpers.on
 
 local MAX_DUPLICATES = 1000
 
--- GUI events are saved in global.guiEvents["EVENT NAME"][PLAYER INDEX][GUI ELEMENT INDEX]
+-- GUI events are saved in storage.guiEvents["EVENT NAME"][PLAYER INDEX][GUI ELEMENT INDEX]
 local eventHandlers = {} -- FIXME: support multiple events (curently all events saved under same ID in eventHandlers)
 
 local events = {
@@ -105,20 +105,20 @@ local function getParameters(template, name)
 	return parameters
 end
 
-local function getDefaultRoot(template, player)
-	if template.type == "button" or template.type == "sprite-button" then
-		return mod_gui.get_button_flow(player)
-	end
+-- local function getDefaultRoot(template, player)
+-- 	if template.type == "button" or template.type == "sprite-button" then
+-- 		return mod_gui.get_button_flow(player)
+-- 	end
 	
-	return mod_gui.get_frame_flow(player)
-end
+-- 	return mod_gui.get_frame_flow(player)
+-- end
 
 local function getRoot(template, player)
-	if template.root then
-		return template.root(player, getDefaultRoot(template, player))
-	end
+	-- if template.root then
+		return template.root(player) --, getDefaultRoot(template, player))
+	-- end
 	
-	return getDefaultRoot(template, player)
+	-- return getDefaultRoot(template, player)
 end
 
 function gui.create(player, template, data, parent, ID) -- recursively builds a gui from a template
@@ -150,7 +150,7 @@ function gui.create(player, template, data, parent, ID) -- recursively builds a 
 	end
 	
 	local index = created.player_index
-	for event,list in pairs(global.guiEvents) do -- register events
+	for event,list in pairs(storage.guiEvents) do -- register events
 		if template[event] then
 			list[index] = list[index] or {}
 			list[index][created.index] = ID..";"..elemName
@@ -158,7 +158,7 @@ function gui.create(player, template, data, parent, ID) -- recursively builds a 
 	end
 	
 	if template.onChanged and onChangedEvents[template.type] then -- register unified onChanged event
-		local list = global.guiEvents[onChangedEvents[template.type]]
+		local list = storage.guiEvents[onChangedEvents[template.type]]
 		list[index] = list[index] or {}
 		list[index][created.index] = ID..";"..elemName
 	end
@@ -209,7 +209,7 @@ end
 
 local function handleGuiEvent(event, name)
 	if event.element.get_mod() == script.mod_name then
-		local handlers = global.guiEvents[name][event.player_index]
+		local handlers = storage.guiEvents[name][event.player_index]
 		if handlers then
 			local handler = handlers[event.element.index]
 			if handler and eventHandlers[handler] then eventHandlers[handler](event.element, event) end

@@ -3,13 +3,8 @@ debug_enabled = false
 config_log_enabled = false
 debug_items_enabled = false
 
---region_size = 7	-- alternative mean to control how further away resources would be, default - 256 tiles or 8 chunks
-				-- each region is region_size*region_size chunks
-				-- each chunk is 32*32 tiles
-
 starting_area_size = 1         	-- starting area in regions, safe from random nonsense
 
---multi_resource_active = true			-- moved to settings
 multi_resource_richness_factor = 0.60 	-- any additional resource is multiplied by this value times resources-1
 multi_resource_size_factor = 0.90
 multi_resource_chance_diminish = 0.6	-- diminishing effect factor on multi_resource_chance

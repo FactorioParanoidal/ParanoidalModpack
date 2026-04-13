@@ -9,19 +9,19 @@ data:extend(
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "osmium-ore-processing"
+				recipe = "clowns-osmium-ore-processing"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "osmium-processed-processing"
+				recipe = "clowns-osmium-processed-processing"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "osmium-pellet-smelting"
+				recipe = "clowns-osmium-pellet-smelting"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "casting-powder-osmium"
+				recipe = "clowns-casting-powder-osmium"
 			},
 			{
 				type = "unlock-recipe",
@@ -29,10 +29,10 @@ data:extend(
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "osmium-rounds-magazine"
+				recipe = "clowns-osmium-rounds-magazine"
 			},
 		},
-		prerequisites = {"powder-metallurgy-1", "ore-processing-2", "military-4"},
+		prerequisites = {"angels-powder-metallurgy-4", "angels-ore-processing-3", "angels-sodium-processing-2", "angels-rocket-booster-2", "military-3"},
 		unit =
 		{
 			ingredients =
@@ -40,7 +40,7 @@ data:extend(
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
-				{"utility-science-pack", 1}
+				{"production-science-pack", 1}
 			},
 			time = 30,
 			count = 100

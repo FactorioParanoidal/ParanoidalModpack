@@ -191,6 +191,12 @@ data:extend(
 	},
 	{
 		type = "item-subgroup",
+		name = "bio-processing-violet",
+		group = mods["angelsbioprocessing"] and "angels-bio-processing-nauvis" or "angels-resource-refining",
+		order = "d-a", --should be after blue algae
+	},
+	{
+		type = "item-subgroup",
 		name = "clowns-depleted-uranium",
 		group = "angels-smelting",
 		order = "ea",--Just after angels-copper (e)
@@ -240,13 +246,13 @@ data:extend(
 	{
 		type = "item-subgroup",
 		name = "clowns-electrolysis",
-		group = "petrochem-refining",
+		group = "angels-petrochem-refining",
 		order = "caa",
 	},
 	{
 		type = "item-subgroup",
 		name = "clown-ores",
-		group = "resource-refining",
+		group = "angels-resource-refining",
 		order = "ac",
 	},
 }

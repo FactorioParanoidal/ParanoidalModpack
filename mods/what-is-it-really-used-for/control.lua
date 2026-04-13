@@ -6,7 +6,7 @@ function find_technology(recipe, player)
   local disabled_unlocking_tech = {"not_found"}
   for _,tech in pairs(player.force.technologies) do
     if not tech.researched then
-      for _, effect in pairs(tech.effects) do
+      for _, effect in pairs(tech.prototype.effects) do
         if effect.type == "unlock-recipe" and effect.recipe == recipe then
           if tech.enabled then
             return tech.localised_name
@@ -28,7 +28,7 @@ function get_machines_for_recipe(recipe, player)
   local factories = {}
   local recipe_category = recipe.category
 
-  for _, entity in pairs(game.entity_prototypes) do
+  for _, entity in pairs(prototypes.entity) do
     if entity.crafting_categories and entity.ingredient_count then
       if entity.crafting_categories[recipe_category] and entity.ingredient_count >= #recipe.ingredients then
         factories[entity.name] = entity
@@ -62,6 +62,10 @@ end
 function add_recipe_to_list(recipe, table, player)
   local from_research = recipe.enabled or find_technology(recipe.name, player)
   if from_research then
+    show_hidden = player.mod_settings["wiiuf-show-hidden-recipes"].value
+    if recipe.hidden and not show_hidden then
+      return false
+    end
     table.add{type="sprite", name="wiiuf_recipe_sprite_"..recipe.name, sprite="recipe/"..recipe.name}
     local label = table.add{
       type="label", name="wiiuf_recipe_label_"..recipe.name, caption=recipe.localised_name,
@@ -71,7 +75,7 @@ function add_recipe_to_list(recipe, table, player)
     label.style.maximal_width = 249
     label.style.vertical_align = "center"
     if not recipe.enabled then
-      label.style = "invalid_label"
+      label.style = "red_label"
       label.tooltip = {"behind_research", from_research}
     elseif recipe.hidden then
       label.style = "wiiuf_hidden_label_style"
@@ -85,7 +89,7 @@ end
 function identify(item, player, side, recipe_name)
   -- If it's not actually an item, do nothing
   -- This can happen if you click the recipe name on the recipe pane
-  if not game.item_prototypes[item] and not game.fluid_prototypes[item] then
+  if not prototypes.item[item] and not prototypes.fluid[item] then
     return
   end
 
@@ -115,7 +119,7 @@ function identify(item, player, side, recipe_name)
   sort_recipes(ingredient_in, player)
   sort_recipes(product_of, player)
 
-  for _, entity in pairs(game.entity_prototypes) do
+  for _, entity in pairs(prototypes.entity) do
     if entity.loot then
       for _,loot in pairs(entity.loot) do
         if loot.item == item then
@@ -138,9 +142,11 @@ function identify(item, player, side, recipe_name)
         end
       end
     end
+  end
 
-    if entity.fluid and entity.fluid.name == item then
-      pumped_from[entity.name] = entity
+  for _, tile in pairs(prototypes.tile) do
+    if tile.fluid and tile.fluid.name == item then
+      pumped_from[tile.name] = tile
     end
   end
 
@@ -172,9 +178,9 @@ function identify(item, player, side, recipe_name)
     -- controls
     player.opened = main_frame
     local location = {200, 100}
-    if global.wiiuf_frame_locations ~= nil then
-      if global.wiiuf_frame_locations[player.index] ~= nil then
-        location = global.wiiuf_frame_locations[player.index]
+    if storage.wiiuf_frame_locations ~= nil then
+      if storage.wiiuf_frame_locations[player.index] ~= nil then
+        location = storage.wiiuf_frame_locations[player.index]
       end
     end
     main_frame.location = location
@@ -197,17 +203,17 @@ function identify(item, player, side, recipe_name)
 
   local sprite = "questionmark"
   local localised_name = item
-  if game.item_prototypes[item] then
+  if prototypes.item[item] then
     sprite = "item/"..item
-    localised_name = game.item_prototypes[item].localised_name
-  elseif game.fluid_prototypes[item] then
+    localised_name = prototypes.item[item].localised_name
+  elseif prototypes.fluid[item] then
     sprite = "fluid/"..item
-    localised_name = game.fluid_prototypes[item].localised_name
+    localised_name = prototypes.fluid[item].localised_name
   end
 
   local button_style = "wiiuf_small_slot_button"
 
-  local history = global.wiiuf_item_history[player.index]
+  local history = storage.wiiuf_item_history[player.index]
   if history.position > 1 then
     title_frame.add{
       type = "sprite-button",
@@ -289,14 +295,14 @@ function identify(item, player, side, recipe_name)
       type = "flow",
       name = "wiiuf_body_flow",
       direction = "horizontal",
-      style = "slot_table_spacing_horizontal_flow"
+      style = "horizontal_flow"
     }
   else
     body_flow = main_frame.add{
       type = "flow",
       name = "wiiuf_body_flow",
       direction = "horizontal",
-      style = "slot_table_spacing_horizontal_flow"
+      style = "horizontal_flow"
     }
   end
 
@@ -342,7 +348,7 @@ function identify(item, player, side, recipe_name)
         mined_table.add{
           type = "label",
           name = "wiiuf_mined_fluid_label_"..i.."_"..fluid,
-          caption = game.fluid_prototypes[fluid].localised_name
+          caption = prototypes.fluid[fluid].localised_name
         }
       else
         mined_table.add{
@@ -385,25 +391,14 @@ function identify(item, player, side, recipe_name)
     local pumped_table = pumped_scroll.add{
       type = "table", name = "wiiuf_pumped_table", column_count = 2
     }
-    machine_unlocks = get_item_unlocks(pumped_from, player)
-    for i, entity in pairs(pumped_from) do
-      local unlock = machine_unlocks[entity.name]
-      local caption = entity.localised_name
+    for i, tile in pairs(pumped_from) do
+      local caption = tile.localised_name
       local tooltip = nil
       local style = nil
-      if unlock ~= "already_unlocked" then
-        style = "invalid_label"
-        tooltip = {"behind_research", unlock}
-      end
-      if unlock == false then
-        style = "invalid_label"
-        tooltip = {"wiiuf_unavailable"}
-        caption = {"disabled_thing", caption}
-      end
       pumped_table.add{
         type = "sprite",
         name = "wiiuf_sprite_" .. i,
-        sprite = "entity/"..entity.name,
+        sprite = "tile/"..tile.name,
         tooltip = tooltip
       }
       local label = pumped_table.add{
@@ -507,19 +502,19 @@ function identify_and_add_to_history(
     item, player, side, should_clear_history, recipe_name)
   -- If it's not actually an item, do nothing
   -- This can happen if you click the recipe name on the recipe pane
-  if not game.item_prototypes[item] and not game.fluid_prototypes[item] then
+  if not prototypes.item[item] and not prototypes.fluid[item] then
     return
   end
 
   local history
   if (should_clear_history or
-      global.wiiuf_item_history == nil or
-      global.wiiuf_item_history[player.index] == nil) then
+      storage.wiiuf_item_history == nil or
+      storage.wiiuf_item_history[player.index] == nil) then
     clear_history(player)
-    history = global.wiiuf_item_history[player.index]
+    history = storage.wiiuf_item_history[player.index]
   else
     -- Truncate the history by deleting anything after the present entry
-    history = global.wiiuf_item_history[player.index]
+    history = storage.wiiuf_item_history[player.index]
     while #history.list > history.position do
       history.list[#history.list] = nil
     end
@@ -598,9 +593,9 @@ function show_recipe_details(recipe_name, player)
 
   function add_sprite_and_label(add_to, thing_to_add, with_amount, style, tooltip, sprite_dir, i, force_decimals)
     if sprite_dir == "auto" then
-      if game.item_prototypes[thing_to_add.name] then
+      if prototypes.item[thing_to_add.name] then
         sprite_dir = "item"
-      elseif game.fluid_prototypes[thing_to_add.name] then
+      elseif prototypes.fluid[thing_to_add.name] then
         sprite_dir = "fluid"
       else
         player.print("Unknown sprite type for "..thing_to_add.name)
@@ -609,15 +604,15 @@ function show_recipe_details(recipe_name, player)
     end
     local localised_name = thing_to_add.localised_name
     if sprite_dir == "item" then
-      if game.item_prototypes[thing_to_add.name] then
-        localised_name = game.item_prototypes[thing_to_add.name].localised_name
+      if prototypes.item[thing_to_add.name] then
+        localised_name = prototypes.item[thing_to_add.name].localised_name
       else
         -- We were told it was an item but it wasn't.  This can happen for
         -- crafting entities sometimes.  Just silently do nothing in this case
         return
       end
     elseif sprite_dir == "fluid" then
-      localised_name = game.fluid_prototypes[thing_to_add.name].localised_name
+      localised_name = prototypes.fluid[thing_to_add.name].localised_name
     end
     local table = add_to.add{
       type="table", name="wiiuf_recipe_table_"..i, column_count=2
@@ -675,7 +670,7 @@ function show_recipe_details(recipe_name, player)
   local unlock = nil
   if not recipe.enabled then
     unlock = find_technology(recipe.name, player)
-    recipe_style = "invalid_label"
+    recipe_style = "red_label"
   end
 
   add_sprite_and_label(
@@ -688,7 +683,7 @@ function show_recipe_details(recipe_name, player)
       type="label",
       name="wiiuf_recipe_unlock_warning",
       caption={"behind_research", unlock},
-      style="invalid_label"
+      style="red_label"
     }
   end
 
@@ -726,10 +721,10 @@ function show_recipe_details(recipe_name, player)
       local tooltip = nil
       local style = nil
       if unlock ~= "already_unlocked" then
-        style = "invalid_label"
+        style = "red_label"
         tooltip = {"behind_research", unlock}
       end
-      local crafting_time = recipe.energy / machine.crafting_speed
+      local crafting_time = recipe.energy / machine.get_crafting_speed()
       add_sprite_and_label(
         recipe_scroll, machine, crafting_time, style, tooltip, "item", i, true
       )
@@ -763,12 +758,12 @@ function minimise(item, player, from_side)
 
   local sprite = "questionmark"
   local localised_name = item
-  if game.item_prototypes[item] then
+  if prototypes.item[item] then
     sprite = "item/"..item
-    localised_name = game.item_prototypes[item].localised_name
-  elseif game.fluid_prototypes[item] then
+    localised_name = prototypes.item[item].localised_name
+  elseif prototypes.fluid[item] then
     sprite = "fluid/"..item
-    localised_name = game.fluid_prototypes[item].localised_name
+    localised_name = prototypes.fluid[item].localised_name
   end
   if not player.gui.left.wiiuf_item_flow.wiiuf_item_table["wiiuf_show_" .. item] then
     player.gui.left.wiiuf_item_flow.wiiuf_item_table.add{
@@ -811,27 +806,27 @@ function add_top_button(player)
     type = "sprite-button",
     name = "looking-glass",
     sprite = "looking-glass",
-    style = mod_gui.button_style,
+    style = mod_gui.icon_button_style,
     tooltip = {"top_button_tooltip"}
   }
 end
 
 function clear_history(player)
-  if global.wiiuf_item_history == nil then
-    global.wiiuf_item_history = {}
+  if storage.wiiuf_item_history == nil then
+    storage.wiiuf_item_history = {}
   end
-  global.wiiuf_item_history[player.index] = {
+  storage.wiiuf_item_history[player.index] = {
     position = 0,
     list = {}
   }
 end
 
 function ensure_translations_available(player_index)
-  if global.wiiuf_item_translations == nil then
-    global.wiiuf_item_translations = {}
+  if storage.wiiuf_item_translations == nil then
+    storage.wiiuf_item_translations = {}
   end
-  if global.wiiuf_item_translations[player_index] == nil then
-    global.wiiuf_item_translations[player_index] = {}
+  if storage.wiiuf_item_translations[player_index] == nil then
+    storage.wiiuf_item_translations[player_index] = {}
   end
 end
 
@@ -842,21 +837,25 @@ function init_player(player)
 end
 
 script.on_init(function()
-  global.n_fluids = 0
-  for _ in pairs(game.fluid_prototypes) do
-    global.n_fluids = global.n_fluids +1
+  storage.n_fluids = 0
+  for _, fluid in pairs(prototypes.fluid) do
+    if not fluid.parameter then
+      storage.n_fluids = storage.n_fluids + 1
+    end
   end
-  global.wiiuf_item_history = {}
-  global.wiiuf_item_translations = {}
+  storage.wiiuf_item_history = {}
+  storage.wiiuf_item_translations = {}
   for _, player in pairs(game.players) do
     init_player(player)
   end
 end)
 
 script.on_configuration_changed(function()
-  global.n_fluids = 0
-  for _ in pairs(game.fluid_prototypes) do
-    global.n_fluids = global.n_fluids +1
+  storage.n_fluids = 0
+  for _, fluid in pairs(prototypes.fluid) do
+    if not fluid.parameter then
+      storage.n_fluids = storage.n_fluids + 1
+    end
   end
   for _, player in pairs(game.players) do add_top_button(player) end
 end)
@@ -883,9 +882,17 @@ script.on_event(defines.events.on_gui_click, function(event)
     else
       if flow.fluids_table then flow.fluids_table.destroy()
       else
-        local fluids_table = flow.add{type = "table", column_count = math.ceil(global.n_fluids/10), name = "fluids_table", style = "slot_table"}
-        for _, fluid in pairs(game.fluid_prototypes) do
-          fluids_table.add{type = "sprite-button", name = "wiiuf_fluid_" .. fluid.name, sprite = "fluid/"..fluid.name, style = "slot_button", tooltip = fluid.localised_name}
+        local fluids_table = flow.add{type = "table", column_count = math.ceil(storage.n_fluids/10), name = "fluids_table", style = "slot_table"}
+        for _, fluid in pairs(prototypes.fluid) do
+          if not fluid.parameter then
+            fluids_table.add{
+              type = "sprite-button",
+              name = "wiiuf_fluid_" .. fluid.name,
+              sprite = "fluid/"..fluid.name,
+              style = "slot_button",
+              tooltip = fluid.localised_name
+            }
+          end
         end
       end
     end
@@ -971,7 +978,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   -- Back through item history
   elseif event.element.name == "wiiuf_back" then
-    local history = global.wiiuf_item_history[player.index]
+    local history = storage.wiiuf_item_history[player.index]
     if history.position > 1 then
       history.position = history.position - 1
     end
@@ -979,7 +986,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
   -- Forward through item history
   elseif event.element.name == "wiiuf_forward" then
-    local history = global.wiiuf_item_history[player.index]
+    local history = storage.wiiuf_item_history[player.index]
     if history.position < #history.list then
       history.position = history.position + 1
     end
@@ -990,7 +997,7 @@ end)
 script.on_event("inspect_item", function(event)
   local player = game.players[event.player_index]
   local flow = get_wiiuf_flow(player)
-  if player.cursor_stack.valid_for_read then
+  if player.cursor_stack ~= nil and player.cursor_stack.valid_for_read then
     clear_history(player)
     identify_and_add_to_history(player.cursor_stack.name, player, true)
   else
@@ -1009,7 +1016,7 @@ script.on_event("inspect_item", function(event)
 end)
 
 function get_or_request_translation(player, localised_name, count)
-  local translations = global.wiiuf_item_translations[player.index]
+  local translations = storage.wiiuf_item_translations[player.index]
   local key = localised_name[1] or localised_name
   local translation = translations[key]
   if translation == nil then
@@ -1052,18 +1059,19 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
 
     -- remove capitals, and for internal names also purge special characters
     -- and replace spaces with -
-    local text = event.element.text:lower()
+    local to_lower_func = helpers.multilingual_to_lower or string.lower
+    local text = to_lower_func(event.element.text)
     local internal_text = text:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
     internal_text = internal_text:gsub(" ", "%%-")
 
     ensure_translations_available(player.index)
     local translation_count = 0
 
-    for _, item in pairs(game.item_prototypes) do
+    for _, item in pairs(prototypes.item) do
       translation, translation_count = get_or_request_translation(
         player, item.localised_name, translation_count)
-      if item.name:lower():find(internal_text, 1, true) or
-          translation:lower():find(text, 1, true) then
+      if to_lower_func(item.name):find(internal_text, 1, true) or
+          to_lower_func(translation):find(text, 1, true) then
         results_table.add{
           type = "sprite",
           name = "wiiuf_item_sprite_" .. item.name,
@@ -1079,11 +1087,11 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
         label.style.vertical_align = "center"
       end
     end
-    for _, item in pairs(game.fluid_prototypes) do
+    for _, item in pairs(prototypes.fluid) do
       translation, translation_count = get_or_request_translation(
         player, item.localised_name, translation_count)
-      if item.name:lower():find(internal_text, 1, true) or
-          translation:lower():find(text, 1, true) then
+      if to_lower_func(item.name):find(internal_text, 1, true) or
+          to_lower_func(translation):find(text, 1, true) then
         results_table.add{
           type = "sprite",
           name = "wiiuf_fluid_" .. item.name,
@@ -1104,10 +1112,10 @@ end)
 
 script.on_event(defines.events.on_gui_location_changed, function(event)
   if event.element.name == "wiiuf_center_frame" then
-    if global.wiiuf_frame_locations == nil then
-      global.wiiuf_frame_locations = {}
+    if storage.wiiuf_frame_locations == nil then
+      storage.wiiuf_frame_locations = {}
     end
-    global.wiiuf_frame_locations[event.player_index] = event.element.location
+    storage.wiiuf_frame_locations[event.player_index] = event.element.location
   end
 end)
 
@@ -1124,7 +1132,7 @@ script.on_event(defines.events.on_string_translated, function(event)
   -- This can be triggered by a different mod requesting translpations, so we
   -- need to ensure that the translations are available
   ensure_translations_available(event.player_index)
-  local translations = global.wiiuf_item_translations[event.player_index]
+  local translations = storage.wiiuf_item_translations[event.player_index]
   local key = event.localised_string[1] or event.localised_string
   translations[key] = event.result
 end)

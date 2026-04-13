@@ -96,11 +96,14 @@ function AbstractSelector:onInit()
   self.sprite_type = "item-group"
   self:afterInit()
   self.parameterTarget = string.format("%s_%s",self.classname,"target")
+  self.panel_close_before_main = true
 end
 
 -------------------------------------------------------------------------------
 ---After initialization
 function AbstractSelector:afterInit()
+  self.rules_filter = false
+  self.unlock_recipe = false
   self.disable_option = false
   self.hidden_option = false
   self.product_option = false
@@ -215,6 +218,11 @@ function AbstractSelector:onBeforeOpen(event)
   else
     User.setParameter("filter_prototype_product", true)
   end
+
+  if event.item ~= nil then
+    User.setParameter("selector_quality_prototype", event.item.quality)
+  end
+  quality_selector_cell = nil
 end
 
 -------------------------------------------------------------------------------
@@ -240,18 +248,33 @@ function AbstractSelector:onEvent(event)
         Controller:send("on_gui_event", event, "HMRecipeExplorer")
         self:close()
       end
+    elseif User.getParameter(self.parameterTarget) == "HMCreatedOrWhereUsedPanel" then
+      if event.action == "element-select" then
+        Controller:send("on_gui_event", event, "HMCreatedOrWhereUsedPanel")
+        self:close()
+      end
     else
       ---classic selector
       if event.action == "element-select" and prototype_type ~= "container" then
         local index = nil
         if self:getProductFilter() == false then index = 0 end
         local new_block, new_recipe = ModelBuilder.addRecipeIntoProductionBlock(model, block, prototype_name, prototype_type, index)
+        local selector_quality_prototype = User.getParameter("selector_quality_prototype")
+        if selector_quality_prototype ~= nil then
+          new_recipe.quality = selector_quality_prototype
+        end
         ModelCompute.update(model)
         User.setParameter("scroll_element", new_recipe.id)
         User.setActiveForm("HMProductionPanel")
         User.setParameterObjects("HMProductionPanel", model.id, new_block.id, new_recipe.id)
         User.setParameterObjects(self.classname, model.id, new_block.id)
         Controller:send("on_gui_refresh", event)
+
+        if User.getPreferenceSetting("close_after_selection") == true then
+          if User.getPreferenceSetting("close_after_selection", self.classname) == true then
+              self:close()
+          end
+      end
       end
       ---container selector
       if event.action == "element-select" and prototype_type == "container" then
@@ -275,6 +298,11 @@ function AbstractSelector:onEvent(event)
 
   if event.action == "recipe-group" then
     User.setParameter("recipe_group_selected",event.item1)
+    Controller:send("on_gui_update", event, self.classname)
+  end
+
+  if event.action == "quality-select" then
+    User.setParameter("selector_quality_prototype",event.item1)
     Controller:send("on_gui_update", event, self.classname)
   end
 
@@ -405,7 +433,7 @@ function AbstractSelector:translate(event)
       local query_translate = table.remove(event.table_translate)
       self:updateWaitMessage(string.format("Wait translate: %s", query_translate.index or 0))
       for _,localised_name in pairs(query_translate.list_translate) do
-        Player.native().request_translation(localised_name)
+        User.queryTranslate(localised_name)
       end
       if #event.table_translate > 0 then
         return User.createNextEvent(event, self.classname, "translate")
@@ -460,6 +488,8 @@ function AbstractSelector:checkFilter(search)
   end
   return true
 end
+
+local quality_selector_cell = nil
 
 -------------------------------------------------------------------------------
 ---Update filter
@@ -557,6 +587,16 @@ function AbstractSelector:updateFilter(event)
       GuiElement.add(filter_table, GuiLabel("filter_show_lock_recipes"):caption({"helmod_recipe-edition-panel.filter-show-lock-recipes"}))
     end
 
+    if self.rules_filter then
+      local filter_show_excludes_by_rules = User.getSetting("filter_show_excludes_by_rules")
+      GuiElement.add(filter_table, GuiCheckBox(self.classname, "change-boolean-settings", "filter_show_excludes_by_rules"):state(filter_show_excludes_by_rules))
+      GuiElement.add(filter_table, GuiLabel("filter_show_excludes_by_rules"):caption({"helmod_recipe-edition-panel.filter-show-excludes-by-rules"}))
+    end
+
+    if Player.hasFeatureQuality() and self.is_support_quality then
+      GuiElement.add(filter_table, GuiLabel("label-quality"):caption({ "helmod_label.quality" }))
+      quality_selector_cell = GuiElement.add(filter_table, GuiFlowH("selector-quality"))
+    end
     ---filter
     local filter_box_panel = GuiElement.add(panel, GuiFlowH("filter-box-panel"))
 
@@ -584,6 +624,23 @@ function AbstractSelector:updateFilter(event)
         end
       end
   end
+  if Player.hasFeatureQuality() and self.is_support_quality and quality_selector_cell ~= nil then
+    quality_selector_cell.clear()
+    local current_quality = "normal"
+    local selector_quality_prototype = User.getParameter("selector_quality_prototype")
+    if selector_quality_prototype ~= nil then
+      current_quality = selector_quality_prototype
+    end
+    GuiElement.addQualitySelector(quality_selector_cell, current_quality, self.classname, "quality-select")
+  end
+end
+
+function AbstractSelector:rulesFilter(prototype)
+  local rules_included, rules_excluded = Player.getRules("selector-filter")
+  local show = true
+  ---resolve rule excluded
+  show = Player.checkRules(show, rules_excluded, self.rule_category, prototype, false)
+  return show
 end
 
 -------------------------------------------------------------------------------
@@ -616,37 +673,43 @@ function AbstractSelector:createElementLists(event)
   end
   ---execute loop
   if event.continue and event.method == "list" then
-    local filter_show_lock_recipes = User.getSetting("filter_show_lock_recipes")
-    local filter_show_disable = User.getSetting("filter_show_disable")
-    local filter_show_hidden = User.getSetting("filter_show_hidden")
-    local filter_show_hidden_player_crafting = User.getSetting("filter_show_hidden_player_crafting")
-    local query_list = table.remove(event.table_element)
-    self:updateWaitMessage(string.format("Wait list build: %s", query_list.index or 0))
+    if event.table_element ~= nil and #event.table_element > 0 then
+      local filter_show_lock_recipes = User.getSetting("filter_show_lock_recipes")
+      local filter_show_disable = User.getSetting("filter_show_disable")
+      local filter_show_hidden = User.getSetting("filter_show_hidden")
+      local filter_show_hidden_player_crafting = User.getSetting("filter_show_hidden_player_crafting")
+      local filter_show_excludes_by_rules = User.getSetting("filter_show_excludes_by_rules")
+      local query_list = table.remove(event.table_element)
+      if query_list ~= nil then
+        self:updateWaitMessage(string.format("Wait list build: %s", query_list.index or 0))
 
-    for key, element in pairs(query_list.list) do
-      ---filter sur le nom element (product ou ingredient)
-      if self:checkFilter(key) then
-        for element_name, element in pairs(element) do
-          local prototype = self:getPrototype(element)
-          if (not(self.unlock_recipe) or (prototype:getUnlock() == true or filter_show_lock_recipes == true)) and 
-            (not(self.disable_option) or (prototype:getEnabled() == true or filter_show_disable == true)) and 
-            (not(self.hidden_option) or (prototype:getHidden() == false or filter_show_hidden == true)) and
-            (not(self.hidden_player_crafting) or (prototype:getHiddenPlayerCrafting() == false or filter_show_hidden_player_crafting == true)) then
+        for key, element in pairs(query_list.list) do
+          ---filter sur le nom element (product ou ingredient)
+          if self:checkFilter(key) then
+            for element_name, element in pairs(element) do
+              local prototype = self:getPrototype(element)
+              if (not(self.rules_filter) or (filter_show_excludes_by_rules == true or self:rulesFilter(prototype:native()) == true)) and
+                (not(self.unlock_recipe) or (filter_show_lock_recipes == true or prototype:getUnlock() == true)) and 
+                (not(self.disable_option) or (filter_show_disable == true or prototype:getEnabled() == true)) and 
+                (not(self.hidden_option) or (filter_show_hidden == true or prototype:getHidden() == false)) and
+                (not(self.hidden_player_crafting) or (filter_show_hidden_player_crafting == true or prototype:getHiddenPlayerCrafting() == false)) then
 
-            if list_group_elements[element.group] == nil then list_group_elements[element.group] = {} end
-            if list_group_elements[element.group][element.subgroup] == nil then list_group_elements[element.group][element.subgroup] = {} end
-            list_group_elements[element.group][element.subgroup][element_name] = element
+                if list_group_elements[element.group] == nil then list_group_elements[element.group] = {} end
+                if list_group_elements[element.group][element.subgroup] == nil then list_group_elements[element.group][element.subgroup] = {} end
+                list_group_elements[element.group][element.subgroup][element_name] = element
 
-            list_group[element.group] = prototype:getGroup()
-            list_subgroup[element.subgroup] = prototype:getSubgroup()
+                list_group[element.group] = prototype:getGroup()
+                list_subgroup[element.subgroup] = prototype:getSubgroup()
+              end
+            end
           end
         end
+        User.setCache(self.classname, "list_group", list_group)
+        User.setCache(self.classname, "list_subgroup", list_subgroup)
+        User.setCache(self.classname, "list_group_elements", list_group_elements)
       end
     end
-    User.setCache(self.classname, "list_group", list_group)
-    User.setCache(self.classname, "list_subgroup", list_subgroup)
-    User.setCache(self.classname, "list_group_elements", list_group_elements)
-    if #event.table_element > 0 then
+    if event.table_element ~= nil and #event.table_element > 0 then
       return User.createNextEvent(event, self.classname, "list")
     else
       event.continue = false

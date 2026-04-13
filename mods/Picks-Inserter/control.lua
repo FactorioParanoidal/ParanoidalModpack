@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2023 Picklock
+--[[ Copyright (c) 2019 - 2026 Picklock
  * Part of Picklocks Inserter
  * control.lua
- * Version 1.110.5.53
+ * Version 2.1.4.62
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -14,11 +14,11 @@
 		local PI_log = false
 		
 		local PI_general ={
-			name = "Picklocks Inserter",
-			version = "1.110.4",
+			name = "Picklocks Inserter block detacher",
+			version = "2.1.4",
 			selector = "PI_inserter_selector",
 			isControlSet = false,
-			isAdmin = false,
+			isAdmin = true,
 			tick = 1
 		}
 	
@@ -26,7 +26,7 @@
 		PI_db_inserters = {}
 		PI_db_internal ={
 			index=0,
-			cpt=10 		--purges per tick
+			cpt=6 		--purges per tick
 		}
 
 	--internal settings
@@ -41,6 +41,7 @@
 			lab = "lab",
 			log_chest = "logistic-container",
 			miner = "mining-drill",
+			belt = "transport-belt",
 			num = "number",
 			tab = "table"
 		}
@@ -89,10 +90,10 @@
 			--PI_print = false
 			--if PI_debug then print_debug("function started: PI_load - from " ..strSource) end
 			--PI_print = bolValue
-			if global.PI_db_inserters then PI_db_inserters = global.PI_db_inserters or {} end
+			if storage.PI_db_inserters then PI_db_inserters = storage.PI_db_inserters or {} end
 			if PI_db_inserters == nil then PI_db_inserters = {} end
-			if global.PI_db_internal then
-				PI_db_internal = global.PI_db_internal or 
+			if storage.PI_db_internal then
+				PI_db_internal = storage.PI_db_internal or 
 				{
 					index=0,
 					cpt=10 		--purges per tick
@@ -103,7 +104,7 @@
 	--save
 --		local function PI_save()
 --			--if PI_debug then print_debug("function started: PI_save") end
---			--global[PI_db.inserter] = PI_db_inserters
+--			--storage[PI_db.inserter] = PI_db_inserters
 --		end
 
 	--set Controls
@@ -124,6 +125,7 @@
 
 	--Calculates bottom center of inserter to place mark there
 		local function PI_get_Iserter_Position(myInserter)
+			--if PI_debug then print_debug("function started: PI_get_Iserter_Position") end
 			local pos_left_top = myInserter.prototype.selection_box.left_top
 			local pos_right_bottom = myInserter.prototype.selection_box.right_bottom
 			--Calculating center of inserter selection box
@@ -152,11 +154,11 @@
 			end
 		end
 		
-	--modify nark if mod-settings were changed
+	--modify mark if mod-settings were changed
 		local function PI_modify_all_marks (bolForce)
 			--if PI_debug then print_debug("function started: PI_modify_all_marks") end
-			--load DB from global
-			PI_db_inserters = global.PI_db_inserters
+			--load DB from storage
+			PI_db_inserters = storage.PI_db_inserters
 			if PI_db_inserters and #PI_db_inserters > 0 then
 				if not bolForce and PI_set_mark and PI_db_inserters[1].mark ~= nil then return end
 				if not bolForce and not PI_set_mark and PI_db_inserters[1].mark == nil then return end
@@ -171,46 +173,84 @@
 					end 
 				end
 			end
-			--save DB to global
-			global.PI_db_inserters = PI_db_inserters
+			--save DB to storage
+			storage.PI_db_inserters = PI_db_inserters
 			
 		end
-
-	--put item stack into entity
-		local function PI_PutStackBack(stack, entity)
-			--if PI_debug then print_debug("function started: PI_PutStackBack") end
-			if entity.type == PI_type.chest or entity.type == PI_type.log_chest then
-				--if PI_debug then print_debug("entity.type: container or logistic-container") end
-				if PI_temp_unlock then
-					--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
-					local entityInv = entity.get_inventory(1)
-					local entityInvBar = entityInv.get_bar()
-					entityInv.set_bar()
-					stack.count = stack.count - entity.insert(stack)
-					entityInv.set_bar(entityInvBar)
-				else
-					stack.count = stack.count - entity.insert(stack)
+		
+	--put item stack back at belt
+		local function pi_ibd_put_stack_to_belt (myBelt, myStack, myLineID)
+			--https://forums.factorio.com/viewtopic.php?t=28657
+			--https://forums.factorio.com/viewtopic.php?t=25996		
+			--https://forums.factorio.com/viewtopic.php?t=70199
+			--if PI_debug then print_debug("function started: pi_ibd_put_stack_to_belt") end
+			--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: bevore myStack.count = "..tostring(myStack.count)) end
+			myBeltLine = myBelt.get_transport_line (myLineID)
+			if myBeltLine.valid then
+				--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: myBeltLine == valid") end
+				local myItem = {
+					name = myStack.name,
+					quality = myStack.quality,
+					count = 1
+				}	
+				for i = 0,1,.28125 do
+					local intItemBevore = myBeltLine.get_item_count()
+					--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: intItemBevore = "..tostring(intItemBevore)) end
+					if not myBeltLine.insert_at(i, myStack) then
+						myBeltLine.insert_at(i, myItem)
+					end
+					local intItemAfter = myBeltLine.get_item_count()
+					--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: intItemAfter = "..tostring(intItemAfter)) end
+					myStack.count = myStack.count - (intItemAfter - intItemBevore)
+					if myStack.count == 0 then break end
 				end
-			elseif entity.type == PI_type.assembler or entity.type == PI_type.furnace then
-				--if PI_debug then print_debug("entity.type: assembling-machine or furnance") end
-				stack.count = stack.count - entity.get_inventory(3).insert(stack)
-			elseif entity.type == PI_type.miner or entity.type == PI_type.cargo then
-				--if PI_debug then print_debug("entity.type: mining-drill or cargo-wagon") end
-				stack.count = stack.count - entity.get_inventory(1).insert(stack)
-			elseif entity.type == PI_type.car or entity.type == PI_type.lab then
-				--if PI_debug then print_debug("entity.type: car or lab") end
-				stack.count = stack.count - entity.get_inventory(2).insert(stack)
-			elseif entity.type == PI_type.cargo or entity.type == PI_type.log_chest then
-				--if PI_debug then print_debug("entity.type: cargo-wagon") end
-				if PI_temp_unlock then
-					--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
-					local entityInv = entity.get_inventory(1)
-					local entityInvBar = entityInv.get_bar()
-					entityInv.set_bar()
-					stack.count = stack.count - entity.insert(stack)
-					entityInv.set_bar(entityInvBar)
-				else
-					stack.count = stack.count - entity.insert(stack)
+			end
+			--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: after myStack.count = "..tostring(myStack.count)) end
+			return myStack
+		end
+		
+	--put item stack into entity
+		local function PI_PutStackBack(myInserter, myEntity)
+			--if PI_debug then print_debug("function started: PI_PutStackBack") end
+			stack = myInserter.held_stack
+			if myEntity ~= nil then
+				if myEntity.type == PI_type.chest or myEntity.type == PI_type.log_chest then
+					--if PI_debug then print_debug("entity.type: container or logistic-container") end
+					if PI_temp_unlock then
+						--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
+						local entityInv = myEntity.get_inventory(1)
+						local entityInvBar = entityInv.get_bar()
+						entityInv.set_bar()
+						stack.count = stack.count - myEntity.insert(stack)
+						entityInv.set_bar(entityInvBar)
+					else
+						stack.count = stack.count - myEntity.insert(stack)
+					end
+				elseif myEntity.type == PI_type.assembler or myEntity.type == PI_type.furnace then
+					--if PI_debug then print_debug("entity.type: assembling-machine or furnance") end
+					stack.count = stack.count - myEntity.get_inventory(3).insert(stack)
+				elseif myEntity.type == PI_type.miner or myEntity.type == PI_type.cargo then
+					--if PI_debug then print_debug("entity.type: mining-drill or cargo-wagon") end
+					stack.count = stack.count - myEntity.get_inventory(1).insert(stack)
+				elseif myEntity.type == PI_type.car or myEntity.type == PI_type.lab then
+					--if PI_debug then print_debug("entity.type: car or lab") end
+					stack.count = stack.count - myEntity.get_inventory(2).insert(stack)
+				elseif myEntity.type == PI_type.cargo or myEntity.type == PI_type.log_chest then
+					--if PI_debug then print_debug("entity.type: cargo-wagon") end
+					if PI_temp_unlock then
+						--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
+						local entityInv = myEntity.get_inventory(1)
+						local entityInvBar = entityInv.get_bar()
+						entityInv.set_bar()
+						stack.count = stack.count - myEntity.insert(stack)
+						entityInv.set_bar(entityInvBar)
+					else
+						stack.count = stack.count - myEntity.insert(stack)
+					end
+				elseif myEntity.type == PI_type.belt then
+					--if PI_debug then print_debug("entity.type: transport-belt") end
+					stack = pi_ibd_put_stack_to_belt (myEntity, stack, 1)
+					if stack.count > 0 then stack = pi_ibd_put_stack_to_belt (myEntity, stack, 2) end
 				end
 			end
 			--if PI_debug then print_debug("PI_PutStackBack - stack.count: " ..tostring(stack.count)) end
@@ -218,7 +258,8 @@
 				--if PI_debug then print_debug("Stack could not be set back complete: " ..stack.count.. " " ..stack.name) end
 				if PI_clear_inserter then
 					--Delete items in hand of inserter
-					if entity.type == PI_type.cargo then return end --exclude pickup entity "cargo-wagon"
+					--if myEntity.type == PI_type.cargo then return end --exclude pickup entity "cargo-wagon"
+					if myEntity ~= nil and myEntity.type == PI_type.cargo then return end --exclude pickup entity "cargo-wagon"
 					--if PI_debug then print_debug("settings: PI_clear_inserter enabled") end
 					stack.clear()
 					--if PI_debug then print_debug("Items in hand of inserter deleted") end
@@ -233,18 +274,28 @@
 		function PI_checkInserterIsStuck(myInserter)
 			--if PI_debug then print_debug("function started: PI_checkInserterIsStuck") end   
 			local myPickupTarget = myInserter.pickup_target
-			if myPickupTarget == nil then return end
-			if myInserter.held_stack.valid_for_read and myInserter.drop_position.x == myInserter.held_stack_position.x and myInserter.drop_position.y == myInserter.held_stack_position.y then
-				--if PI_debug then print_debug("To be cleared: " ..myInserter.name.. "(" ..myInserter.type..  "/Pos:" ..myInserter.position.x.."/" ..myInserter.position.y.. "/Stack:" ..myInserter.held_stack.count.. " " ..myInserter.held_stack.name.. ")") end
-				PI_PutStackBack(myInserter.held_stack, myPickupTarget)
+--			if myPickupTarget == nil then return end
+			if myPickupTarget == nil and myInserter.status ~= defines.entity_status.waiting_for_train then return end
+			--if PI_debug then print_debug("PI_checkInserterIsStuck: Status = " ..tostring(myInserter.status)) end
+			--if PI_debug then print_debug("PI_checkInserterIsStuck: Positions: drop_position.x = " ..tostring(myInserter.drop_position.x).. " - held_stack_position.x = " ..tostring(myInserter.held_stack_position.x).. " - drop_position.y = " ..tostring(myInserter.drop_position.y).. " - held_stack_position.y = " ..tostring(myInserter.held_stack_position.y)) end
+
+			if myInserter.held_stack.valid_for_read and (myInserter.status == defines.entity_status.waiting_for_space_in_destination 
+			 or myInserter.status == defines.entity_status.waiting_for_train
+			 or math.floor(myInserter.drop_position.x) == math.floor(myInserter.held_stack_position.x) and math.floor(myInserter.drop_position.y) == math.floor(myInserter.held_stack_position.y))			 
+			 then
+--			 or myInserter.drop_position.x == myInserter.held_stack_position.x and myInserter.drop_position.y == myInserter.held_stack_position.y) 
+--			if myInserter.held_stack.valid_for_read and myInserter.status == defines.entity_status.waiting_for_space_in_destination then
+--			if myInserter.held_stack.valid_for_read and myInserter.drop_position.x == myInserter.held_stack_position.x and myInserter.drop_position.y == myInserter.held_stack_position.y then
+				--if PI_debug then print_debug("PI_checkInserterIsStuck: To be cleared: " ..myInserter.name.. "(" ..myInserter.type..  "/Pos:" ..myInserter.position.x.."/" ..myInserter.position.y.. "/Stack:" ..myInserter.held_stack.count.. " " ..myInserter.held_stack.name.. ")") end
+				PI_PutStackBack(myInserter, myPickupTarget)
 			end
 		end
 
 	--add inserter to inserter list
 		local function PI_addInserterToDB(myInserter)
 			--if PI_debug then print_debug("function started: PI_addInserterToDB") end
-			--load DB from global
-			PI_db_inserters = global.PI_db_inserters
+			--load DB from storage
+			PI_db_inserters = storage.PI_db_inserters
 			if PI_db_inserters and #PI_db_inserters > 0 then
 				for i = #PI_db_inserters, 1, -1 do
 					if PI_db_inserters[i].inserter == myInserter then
@@ -260,29 +311,29 @@
 			if PI_db_inserters == nil then PI_db_inserters = {} end
 			table.insert(PI_db_inserters, {inserter = myInserter, mark = myMark, tick = 1}) -- added tick
 			--if PI_debug then print_debug("PI_addInserterToDB: Inserter added to DB") end
-			--save DB to global
-			global.PI_db_inserters = PI_db_inserters
+			--save DB to storage
+			storage.PI_db_inserters = PI_db_inserters
 		end
 
 	--remove inserter from inserter list
 		local function PI_remInserterFromDB(myInserter, intIndex)
 			--if PI_debug then print_debug("function started: PI_remInserterFromDB") end
-			--load DB from global
-			PI_db_inserters = global.PI_db_inserters
+			--load DB from storage
+			PI_db_inserters = storage.PI_db_inserters
 			if intIndex then
 				--if PI_debug then print_debug("PI_remInserterFromDB: Index given") end
 				--remove mark
 				PI_remove_inserter_mark (PI_db_inserters[intIndex].mark)
 				table.remove(PI_db_inserters, intIndex)
-				--save DB to global
-				global.PI_db_inserters = PI_db_inserters
+				--save DB to storage
+				storage.PI_db_inserters = PI_db_inserters
 				--if PI_debug then print_debug("PI_remInserterFromDB: Inserter removed from DB") end
 			else
 				--if PI_debug then print_debug("PI_remInserterFromDB: Inserter given") end
 				for i, myDBInserter in pairs(PI_db_inserters) do
 					while PI_db_inserters[i] == nil do table.remove(PI_db_inserters, i) end
-					--save DB to global
-					global.PI_db_inserters = PI_db_inserters
+					--save DB to storage
+					storage.PI_db_inserters = PI_db_inserters
 					if PI_db_inserters[i].inserter == myInserter then
 						--if PI_debug then print_debug("PI_remInserterFromDB: Inserter detected in DB") end
 						PI_remInserterFromDB(myDBInserter, i)
@@ -308,9 +359,9 @@
 	--parse inserter list
 		local function PI_parseInserterList(myTick)
 			--if PI_debug then print_debug("function started: PI_parseInserterList") end
-			--load DB from global
-			PI_db_inserters = global.PI_db_inserters
-			if global.PI_db_internal then PI_db_internal = global.PI_db_internal end
+			--load DB from storage
+			PI_db_inserters = storage.PI_db_inserters
+			if storage.PI_db_internal then PI_db_internal = storage.PI_db_internal end
 			if PI_db_inserters and #PI_db_inserters > 0 then
 				if PI_db_internal.index == 0 or PI_db_internal.index >= #PI_db_inserters then
 					PI_db_internal.cpt = PI_clear_max
@@ -338,9 +389,9 @@
 				end
 				PI_db_internal.index = PI_db_internal.index + PI_db_internal.cpt
 			end
-			--save DB to global
-			global.PI_db_inserters = PI_db_inserters
-			global.PI_db_internal = PI_db_internal
+			--save DB to storage
+			storage.PI_db_inserters = PI_db_inserters
+			storage.PI_db_internal = PI_db_internal
 		end
 
 	-- get Inserter around wagon
@@ -509,17 +560,16 @@
 		end)
 
 	--train state
-		-- 0 = defines.train_state.on_the_path	Normal state -- following the path.
-		-- 1 = defines.train_state.path_lost	Had path and lost it -- must stop.
-		-- 2 = defines.train_state.no_schedule	Doesn't have anywhere to go.	
-		-- 3 = defines.train_state.no_path	Has no path and is stopped.
-		-- 4 = defines.train_state.arrive_signal	Braking before a rail signal.
-		-- 5 = defines.train_state.wait_signal	Waiting at a signal.
-		-- 6 = defines.train_state.arrive_station	Braking before a station.
-		-- 7 = defines.train_state.wait_station	Waiting at a station.
-		-- 8 = defines.train_state.manual_control_stop	Switched to manual control and has to stop.
-		-- 9 = defines.train_state.manual_control	Can move if user explicitly sits in and rides the train.
-		--1ß = defines.train_state.destination_full	Same as no_path but all candidate train stops are full 
+		-- 0 = defines.train_state.on_the_path	= Normal state -- following the path. 
+		-- 1 = defines.train_state.no_schedule	= Doesn't have anywhere to go.
+		-- 2 = defines.train_state.no_path = Has no path and is stopped.
+		-- 3 = defines.train_state.arrive_signal = Braking before a rail signal.
+		-- 4 = defines.train_state.wait_signal = Waiting at a signal.
+		-- 5 = defines.train_state.arrive_station = Braking before a station.
+		-- 6 = defines.train_state.manual_control_stop = Switched to manual control and has to stop.
+		-- 7 = defines.train_state.manual_control = Can move if user explicitly sits in and rides the train.
+		-- 8 = defines.train_state.wait_station = Waiting at a station.
+		-- 9 = defines.train_state.destination_full = Same as no_path but all candidate train stops are full
 		script.on_event(defines.events.on_train_changed_state, function(event, old_state)
 			--if PI_debug then 
 			--	print_debug("raised event: on_train_changed_state fired by train " ..tostring(event.train.id))
@@ -528,9 +578,10 @@
 			--end
 			if PI_target_train_stop then
 				--if PI_debug then print_debug("settings: PI_target_train_stop enabled") end
-				--if event.train.state == 0 then
-				if event.train.state == 0 or event.train.state == 3 or event.train.state == 5 or event.train.state == 10 then
-					if event.old_state == 7 then
+				--if event.train.state == 0 or event.train.state == 3 or event.train.state == 5 or event.train.state == 10 then
+				if event.train.state == defines.train_state.on_the_path or event.train.state == defines.train_state.no_path or event.train.state == defines.train_state.wait_signal or event.train.state == defines.train_state.destination_full then
+					--if event.old_state == 7 then
+					if event.old_state == defines.train_state.wait_station then
 						if next(event.train.get_contents()) then
 							--if PI_debug then print_debug("Detect cargo_wagons connected to train") end
 							for i, myWagon in pairs(event.train.cargo_wagons) do
@@ -547,10 +598,10 @@
 		script.on_event(defines.events.on_player_selected_area, function(event)
 			--if PI_debug then print_debug("raised event: on_player_selected_area") end
 			if event.item and event.item == PI_general.selector then
-				--if PI_debug then print_debug("PI_inserter_selector detected") end
+				--if PI_debug then print_debug("on_player_selected_area: PI_inserter_selector detected") end
 				local myTable = PI_parseSelectedEntityList(event.entities, PI_type.inserter, false)
 				if #myTable then
-					--if PI_debug then print_debug(table_size(myTable).. " Inserters selected") end
+					--if PI_debug then print_debug("on_player_selected_area: "..table_size(myTable).. " Inserters selected") end
 					for i, myInserter in pairs(myTable) do
 						PI_addInserterToDB(myInserter)
 					end
@@ -563,10 +614,10 @@
 		script.on_event(defines.events.on_player_alt_selected_area, function(event)
 			--if PI_debug then print_debug("raised event: on_player_alt_selected_area") end
 			if event.item and event.item == PI_general.selector then
-				--if PI_debug then print_debug("PI_inserter_selector detected") end
+				--if PI_debug then print_debug("on_player_alt_selected_area: PI_inserter_selector detected") end
 				local myTable = PI_parseSelectedEntityList(event.entities, PI_type.inserter, true)
 				if #myTable then
-					--if PI_debug then print_debug(table_size(myTable).. " Inserters selected") end
+					--if PI_debug then print_debug("on_player_alt_selected_area: "..table_size(myTable).. " Inserters selected") end
 					for i, myInserter in pairs(myTable) do
 						PI_remInserterFromDB(myInserter)
 					end
@@ -581,11 +632,11 @@
 			if not PI_general.isControlSet then 
 				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
 				PI_general.isAdmin = true
-				PI_set_controls(game.players[1])
+				if game.players[1] and game.players[1].valid then PI_set_controls(game.players[1]) end
 				PI_modify_all_marks (false)
 			end
 			--Work on Inserter List
-			----if PI_debug then print_debug("raised event: on_tick") end
+			--if PI_debug then print_debug("raised event: on_tick") end
 			PI_parseInserterList(event.tick)			
 		end)
 

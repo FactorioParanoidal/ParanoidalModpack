@@ -1,11 +1,13 @@
 -------------------------------------------------------------------------------
 ---Class to help to build form
+---@class Form : Object
 Form = newclass(Object,function(base,classname)
   Object.init(base,classname)
   base:style()
   base.otherClose = true
   base.locate = "screen"
   base.panelClose = true
+  base.panel_close_before_main = base.panel_close_before_main or false
   base.help_button = true
   base.auto_clear = true
   base.content_verticaly = true
@@ -340,6 +342,9 @@ function Form:open(event)
     Player.native().opened = self:getPanel()
   end
 
+  if self.panel_close_before_main then
+    table.insert(Controller.panel_close_before_main, self.classname)
+  end
   return true
 end
 
@@ -581,7 +586,7 @@ end
 
 -------------------------------------------------------------------------------
 ---Close dialog
----@param force boolean
+---@param force? boolean
 function Form:close(force)
   if not(self:isOpened()) and force ~= true then return end
   local flow_panel, content_panel, menu_panel = self:getPanel()
@@ -591,6 +596,14 @@ function Form:close(force)
 
   if self.classname == "HMProductionPanel" then
     Player.setShortcutState(false)
+  end
+
+  if self.panel_close_before_main then
+    for index, value in ipairs(Controller.panel_close_before_main) do
+      if self.classname == value then
+        table.remove(Controller.panel_close_before_main, index)
+      end
+    end
   end
 end
 

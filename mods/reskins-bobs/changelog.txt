@@ -1,12 +1,87 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 2026-01-03
+  Bugfixes:
+    - Fixed that several item prototypes were left in an unhealthy state due to two separate icon definitions, resolving unused prototype data warnings.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2025-06-29
+  Bugfixes:
+    - Fixed incorrect progression tier for heat pipe 3.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2025-05-10
+  Bugfixes:
+    - Fixed that the storage tank and pump sprites were not properly aligned, due to changes in 2.0.46.
+    - Fixed that the mining drill status LED sprites had alignment issues when using AAI Industries.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2025-05-10
+  Bugfixes:
+    - Fixed that the steam turbines were jumping for joy when vertically oriented.
+  Locale:
+    - Removed outdated translations for changed locale strings.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2025-03-31
+  Changes:
+    - Added support for Mini Machine overrides for the mini centrifuges.
+  Bugfixes:
+    - Fixed that attempting to load with the Inserter Overhaul disabled would fail due to a missing image file.
+    - Fixed that the 5th tier of mining drill research did not use the intended sprite.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2025-03-31
+  Bugfixes:
+    - Fixed that the electric chemical furnace and multi-purpose furnaces did not use the correct pipe pictures.
+    - Fixed the the mirrored barreling machine, compressor, and distillery did not use the correct sprites.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2025-03-30
+  Features:
+    - Migration to Factorio 2.0!
+    - Added mirrored versions of stone and steel chemical furnace sprites.
+  Changes:
+    - Added support for the revised assembly machine tiers in Bob's Assembling machines, version 1.3.0
+    - Added `sprite_set` flag to the AssemblingMachineFlags type on the reskins.lib.apply_skin.assembling_machine method.
+      - Indicates which sprite set to use. If omitted, defaults to the tier. Supports integers between 0 and 5.
+    - Many personal and vehicle equipment entities have had their tier and progression tiers recalibrated.
+    - Adjusted progression tiers for several entities.
+    - Disabled the item group GUI overrides.
+    - Updated circuit sprites with newer versions, and improved the customer color sprites.
+    - Removed the module sprites now that they have natively been implemented in Bob's Modules.
+    - Removed the module slot art style `artisan-reskin-8-lights` and `artisan-reskin-5-lights`.
+    - Minor improvements to several sprites and color masks.
+
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-05-04
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.2.0
+    - Migrated custom color settings to `color-setting`, allowing for the use of a color picker in-game
+  Bugfixes:
+    - Fixed that technology icons for the Gem Processing techs were assigned to the wrong tier
+---------------------------------------------------------------------------------------------------
+Version: 2.1.6
+Date: 2023-12-23
+  Features:
+    - Added item icons for Bob's Modules intermediates, courtesy of Max (mxcop) #44
+  Changes:
+    - Internal updates to reflect changes to Artisanal Reskins: Library, now depends on version 2.1.6
+  Bugfixes:
+    - Corrected an issue with how accumulator icons were composed, resulting in incompatibility with YAFC, courtesy of Dale McCoy #43
+    - Fixed that icons were set on equipment prototypes resulting in warnings in the log, as this field is not used #38
+    - Fixed startup error when reskinning of entities was disabled #46
+
+---------------------------------------------------------------------------------------------------
 Version: 2.1.5
 Date: 2023-01-01
   Changes:
-    - Updated tier assignments for entities and technologies to reflect changes in Bob's Power version 1.1.6
+    - Updated tier assignments for entities and technologies to reflect changes in Bob's Power version 1.1.6 #39
       - Updated accumulators and solar energy
       - Revised heat pipes, heat exchangers, nuclear reactors, and heat sources to support Heat pipe 4
-    - Added support for revised radar technologies in Bob's Warfare version 1.1.6
-    - Revised plasma turret sprites to support both 4 and 8 directions
+    - Added support for revised radar technologies in Bob's Warfare version 1.1.6 #42
+    - Revised plasma turret sprites to support both 4 and 8 directions #40
   Bugfixes:
     - Fixed plasma turret masks which were erroneously transparent
 ---------------------------------------------------------------------------------------------------

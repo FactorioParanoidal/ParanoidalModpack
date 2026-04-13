@@ -14,7 +14,6 @@ local strlen = string.len
 local format = string.format
 
 local draw_text = rendering.draw_text
-local destroy_text = rendering.destroy
 local text_color = {1, 1, 1}
 local text_offset = {0.5, -0.5}
 
@@ -24,15 +23,10 @@ local stopwatch_timeout = 3600 -- in ticks
 
 -- COMPATIBILITY
 
-local name_blacklist = nil
+local name_blacklist = {}
 
-if not script.active_mods['miniloader'] then
-    name_blacklist = {} -- disable blacklist
-end
-
-local function populate_name_blacklist()
-    name_blacklist = {}
-    local inserters = game.get_filtered_entity_prototypes{{filter = 'type', type = 'inserter'}}
+if script.active_mods['miniloader'] then
+    local inserters = prototypes.get_entity_filtered{{filter = 'type', type = 'inserter'}}
     for name in pairs(inserters) do
         if string.find(name, 'miniloader', nil, true) then
             name_blacklist[name] = true
@@ -92,9 +86,10 @@ local function get_throughput_info(inserter, precision)
         end
     end
     
+    local quality = inserter.quality
     local value = calc(
-        prototype.inserter_rotation_speed,
-        prototype.inserter_extension_speed,
+        prototype.get_inserter_rotation_speed(quality),
+        prototype.get_inserter_extension_speed(quality),
         vector(inserter_position, pickup_position),
         vector(inserter_position, drop_position),
         get_stack_size(inserter, prototype),
@@ -106,14 +101,6 @@ end
 
 -- GUI
 
-local function update_toggle_button_state(toggle_button, new_state)
-    if new_state then
-        toggle_button.style = 'inserter_throughput_pressed_button'
-    else
-        toggle_button.style = mod_button_style
-    end
-end
-
 local function init_toggle_button(player)
     local top_gui = get_mod_button_flow(player)
     local toggle_element = top_gui['inserter-throughput-toggle']
@@ -122,12 +109,14 @@ local function init_toggle_button(player)
             type = 'sprite-button',
             name = 'inserter-throughput-toggle',
             tooltip = {'inserter-throughput.toggle-button-tooltip'},
-            sprite = 'inserter-throughput-toggle-button'
+            sprite = 'inserter-throughput-toggle-button',
+            style = mod_button_style,
+            auto_toggle = true,
         }
     end
     local player_settings = player.mod_settings
     toggle_element.visible = player_settings['inserter-throughput-show-toggle'].value
-    update_toggle_button_state(toggle_element, player_settings['inserter-throughput-enabled'].value)
+    toggle_element.toggled = player_settings['inserter-throughput-enabled'].value
 end
 
 local function on_entity_selected(event)
@@ -138,10 +127,11 @@ local function on_entity_selected(event)
     if not player_settings['inserter-throughput-enabled'].value then
         return
     end
-    local current_entity = game.get_player(player_index).selected
-    local global_player_data = global.player_data
+    local player = game.get_player(player_index)
+    local current_entity = player.selected
+    local global_player_data = storage.player_data
     local data = global_player_data[player_index]
-    local text_id = data and data.text_id
+    local text_object = data and data.text_object
     if current_entity then
         local entity_type = current_entity.type
         local entity_name = nil
@@ -151,9 +141,6 @@ local function on_entity_selected(event)
         else
             entity_name = current_entity.name
         end
-        if not name_blacklist then
-            populate_name_blacklist()
-        end
         if entity_type ~= 'inserter' or name_blacklist[entity_name] then
             current_entity = nil
         end
@@ -162,61 +149,64 @@ local function on_entity_selected(event)
         if not data then
             data = {}
             global_player_data[player_index] = data
-        elseif data.text_id then
-            destroy_text(data.text_id)
+        elseif text_object then
+            text_object.destroy()
         end
         local precision = player_settings['inserter-throughput-rounding-precision'].value
-        data.text_id = draw_text{
+        data.text_object = draw_text{
             text = get_throughput_info(current_entity, precision),
             surface = current_entity.surface,
             target = current_entity,
             target_offset = text_offset,
+            scale = player.display_scale,
             color = text_color,
             players = {player_index},
             scale_with_zoom = true,
             vertical_alignment = 'baseline',
         }
-    elseif text_id then
-        destroy_text(text_id)
-        data.text_id = nil
+    elseif text_object then
+        text_object.destroy()
+        data.text_object = nil
     end
 end
 
 local function on_setting_changed(event)
-    -- event.player_index   player whose setting has changed, if applicable (API seems to be wrong)
+    -- event.player_index   player whose setting has changed, if applicable
     -- event.setting        name of the setting, as seen in the prototype
     -- event.setting_type   type of the setting, as seen in the prototype
     local setting_name = event.setting
     local player_index = event.player_index
     if setting_name == 'inserter-throughput-show-toggle' then
-        local button = get_mod_button_flow(game.get_player(player_index))['inserter-throughput-toggle']
+        local player = game.get_player(player_index)
+        local button = get_mod_button_flow(player)['inserter-throughput-toggle']
         if button then
             local new_state = settings.get_player_settings(player_index)[setting_name].value
             button.visible = new_state
         else
-            init_toggle_button(game.get_player(player_index))
+            init_toggle_button(player)
         end
     elseif setting_name == 'inserter-throughput-enabled' then
-        local button = get_mod_button_flow(game.get_player(player_index))['inserter-throughput-toggle']
+        local player = game.get_player(player_index)
+        local button = get_mod_button_flow(player)['inserter-throughput-toggle']
         if button then
             local new_state = settings.get_player_settings(player_index)[setting_name].value
-            update_toggle_button_state(button, new_state)
+            button.toggled = new_state
             if not new_state then -- remove the tooltip on disable, if any
-                local data = global.player_data[player_index]
-                local text_id = data and data.text_id
-                if text_id then
-                    destroy_text(text_id)
-                    data.text_id = nil
+                local data = storage.player_data[player_index]
+                local text_object = data and data.text_object
+                if text_object then
+                    text_object.destroy()
+                    data.text_object = nil
                 end
             end
         else
-            init_toggle_button(game.get_player(player_index))
+            init_toggle_button(player)
         end
     end
 end
 
 local function on_toggle(event)
-    -- event.player_index   player who triggered the custom input (unlisted in API)
+    -- event.player_index   player who triggered the custom input
     local player_settings = settings.get_player_settings(event.player_index)
     local enabled_setting = player_settings['inserter-throughput-enabled']
     enabled_setting.value = not enabled_setting.value
@@ -262,10 +252,10 @@ local function stopwatch_command(event)
     entry.entity_position = inserter.position
     entry.entity_surface = inserter.surface.name
     entry.timeout_tick = event.tick + stopwatch_timeout
-    if not global.stopwatch then
-        global.stopwatch = {entry}
+    if not storage.stopwatch then
+        storage.stopwatch = {entry}
     else
-        table.insert(global.stopwatch, entry)
+        table.insert(storage.stopwatch, entry)
     end
 end
 
@@ -301,11 +291,11 @@ end
 -- EVENTS
 
 local function init()
-    if not global.player_data then
-        global.player_data = {}
+    if not storage.player_data then
+        storage.player_data = {}
     end
     -- player_data[player_index] = table
-    --      .text_id        id of the rendered text
+    --      .text_object    the rendering system object showing the text
     for _, player in pairs(game.players) do
         init_toggle_button(player)
     end
@@ -317,7 +307,7 @@ local function on_player_joined_game(event)
 end
 
 local function on_tick(event)
-    local watches = global.stopwatch
+    local watches = storage.stopwatch
     if not watches then
         return
     end
@@ -356,7 +346,7 @@ local function on_tick(event)
         end
     end
     if n == 0 then
-        global.stopwatch = nil
+        storage.stopwatch = nil
     end
 end
 

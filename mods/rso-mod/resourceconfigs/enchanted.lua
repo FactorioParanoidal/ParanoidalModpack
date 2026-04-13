@@ -1,6 +1,6 @@
 function fillEnchantedConfig(config)
 
-	if game.active_mods["EnchantedNuclear"] then
+	if script.active_mods["EnchantedNuclear"] then
 		config["thorium-ore"] = {
 			type="resource-ore",
 			
@@ -12,7 +12,7 @@ function fillEnchantedConfig(config)
 		}
 	end
 	
-	if game.active_mods["EnchantedElectronics"] then
+	if script.active_mods["EnchantedElectronics"] then
 		config["tin-ore"] = {
 			type="resource-ore",
 			
@@ -24,7 +24,7 @@ function fillEnchantedConfig(config)
 		}
 	end
 
-	if game.active_mods["EnchantedIndustries"] then
+	if script.active_mods["EnchantedIndustries"] then
 		config["chromium-ore"] = {
 			type="resource-ore",
 			

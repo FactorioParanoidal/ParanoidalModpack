@@ -7,12 +7,13 @@ local function MakeLocomotive()
 		error("Required vanilla locomotive not found. Another mod must have removed it.", 0)
 	end
 
+	local fuel_slots = settings.startup[setting_battery_slots].value
+
 	local loc = shallowcopy(vanilla_loc)
 	loc.name = name_locomotive
 
 	loc.icon = graphics_path..name_locomotive.."-icon.png"
 	loc.icon_size = 64
-	loc.icon_mipmaps = 4
 
 	loc.color = {99, 202, 255}
 
@@ -21,10 +22,11 @@ local function MakeLocomotive()
 		result = name_locomotive,
 	}
 
-	loc.burner = {
-		fuel_category = name_cat_fuel_battery,
-		fuel_inventory_size = 1,
-		burnt_inventory_size = 2,
+	loc.energy_source = {
+		type = "burner",
+		fuel_categories = {name_cat_fuel_battery},
+		fuel_inventory_size = fuel_slots,
+		burnt_inventory_size = fuel_slots + 1,
 	}
 
 	if settings.startup[setting_cheatsy_locs].value then
@@ -45,7 +47,6 @@ local function MakeLocomotive()
 			volume = 0.35
 		},
 		match_speed_to_activity = true,
-		max_sounds_per_type = 2,
 	}
 
 	local grid = settings.startup[setting_equipment_grid].value
@@ -88,13 +89,14 @@ else
 end
 
 local base_accumulator = data.raw["accumulator"]["accumulator"]
+local chg_work_vis = nil
 if base_accumulator then
 	base_charger.working_sound = base_accumulator.working_sound
 
-	if base_accumulator.charge_animation and base_accumulator.charge_animation.layers and base_accumulator.charge_animation.layers[2] then
-		local chg_anim = shallowcopy(base_accumulator.charge_animation.layers[2])
+	if base_accumulator.chargable_graphics and base_accumulator.chargable_graphics.charge_animation and base_accumulator.chargable_graphics.charge_animation.layers and base_accumulator.chargable_graphics.charge_animation.layers[2] then
+		local chg_anim = shallowcopy(base_accumulator.chargable_graphics.charge_animation.layers[2])
 		chg_anim.shift = util.by_pixel(0, -10)
-		base_charger.working_visualisations = {{ animation = chg_anim }}
+		chg_work_vis = {{ animation = chg_anim }}
 	end
 else
 	log("No charging animation and sound for train battery pack chargers because the vanilla accumulator could not be found.")
@@ -120,14 +122,19 @@ local function MakeCharger(name, speed)
 	else
 		chg.energy_source.usage_priority = "secondary-input"
 	end
-	chg.animation = {
-		filename = graphics_path..name..".png",
-		priority = "high",
-		width = 135,
-		height = 93,
-		frame_count = 1,
-		shift = util.by_pixel(21, 0),
+	chg.graphics_set = {
+		animation = {
+			filename = graphics_path..name..".png",
+			priority = "medium",
+			width = 135,
+			height = 93,
+			frame_count = 1,
+			shift = util.by_pixel(21, 0),
+		},
 	}
+	if chg_work_vis then
+		chg.graphics_set.working_visualisations = chg_work_vis
+	end
 	return chg
 end
 

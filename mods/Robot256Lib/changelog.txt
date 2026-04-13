@@ -1,4 +1,88 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2026-01-17
+  Bugfixes:
+    - Fix crash when spilling items.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2025-09-07
+  Bugfixes:
+    - Fix that replaceCarriage can reset schedule of other trains in the same group.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2025-09-02
+  Changes:
+    - Add support for overriding carriage quality during replacement.
+  Bugfixes:
+    - Fix a crash caused by insert_fluid in replaceCarriage.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2025-05-29
+  Bugfixes:
+    - Fix a replacing rolling stock in a train that is in manual mode in some cases.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2025-03-17
+  Bugfixes:
+    - Fix a new crash replacing rolling stock in train with no schedule.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2025-03-16
+  Bugfixes:
+    - Use new schedule API to make sure schedule records and interrupts are preserved during carriage replacement.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2024-12-19
+  Bugfixes:
+    - Fix crash replacing rolling stock in train with no schedule.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2024-12-17
+  Bugfixes:
+    - Fix accidentally-unminable rolling stock using new API feature in 2.0.26.
+    - Small improvement handling schedules and train groups.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2024-11-22
+  Bugfixes:
+    - Fixed crash when replacing locomotive with void energy source.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2024-11-17
+  Changes:
+    - Added support for Factorio 2.0 train groups.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2024-11-02
+  Bugfixes:
+    - Fixed that copy_color_from_train_stop was not preserved on replacement.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed crash when replacing carriages with equipment grids.
+    - Fixed that equipment removal orders were not preserved.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed that fuel insert requests were recreated out of order during carriage replacement.
+    - Fixed that fuel removal requests were lost during carriage replacement.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-10-31
+  Bugfixes:
+    - Fix crash in pipette library when not in cheat mode due to quality handling code.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-11
+  Changes:
+    - Updated for Factorio 2.0
+    - Added support for rolling stock quality when replacing carriages
+    - Added support for artillery auto targeting control
+    - Added support for quality and spoilage when copying Cargo Wagon cargo
+    - Added support for quality in burner, ammo, item-request-proxy, and probably equipment grid.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2024-01-06
   Changes:

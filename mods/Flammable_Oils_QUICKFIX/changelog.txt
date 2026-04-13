@@ -1,0 +1,156 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.22
+Date: 2025-04-26
+  Info:
+    - Updated by Fr_Dae
+  Changes:
+    - water-turret2 by water-turret-revive in info.json
+---------------------------------------------------------------------------------------------------
+Version: 0.2.21
+Date: 2025-04-23
+  Changes:
+    - Added some fluids from cubeine mod to override list
+    - Added global settings to control raddius and damage of the explsions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.20
+Date: 2025-03-20
+  Changes:
+    - Fixed mod not working
+---------------------------------------------------------------------------------------------------
+Version: 0.2.19
+Date: 2025-03-20
+  Changes:
+    - Pump now doesn't explode
+    - Explosion / fire chance is based on the damage type
+---------------------------------------------------------------------------------------------------
+Version: 0.2.18
+Date: 2025-03-19
+  Info:
+    - Updated by Fr_Dae
+  Changes:
+    - Fix issue with locale files
+---------------------------------------------------------------------------------------------------
+Version: 0.2.17
+Date: 2025-03-14
+  Info:
+    - Updated by MsBinaryLily
+  Changes:
+    - Switched to new (cubic rather than quadratic) formula for damage and radius calculation
+    - Added extra linear falloff for damage depending on radius from center 
+    - Reduced the pollution by factor by 10
+  Info:
+    - Updated by Fr_Dae
+    - add lily on Json
+    - remove zip from repo
+    - remove old issue screnshoot
+---------------------------------------------------------------------------------------------------
+Version: 0.2.16
+Date: 2025-03-13
+  Info:
+    - Updated by MsBinaryLily
+  Changes:
+    - Updated from fire-flame to oil-fire-flame 
+    - Buffed oil-fire-flame so it destroys pipes more reliably
+    - Added automatic burnable fluid and gas detection
+    - Ensured fuel values and pollution values are updated correctly
+    - Introduced energy, rather then just fraction, into explosion damage and radius calculation
+---------------------------------------------------------------------------------------------------
+Version: 0.2.15
+Date: 2025-03-04
+  Info:
+    - Updated by Kannagi
+  Changes:
+    - Changed it from global to local instances. 
+    - Updated from game.fluid_prototypes to prototypes.fluid_prototypes.
+    - Updated from oil-fire-flame to fire-flame 
+---------------------------------------------------------------------------------------------------
+Version: 0.2.14
+Date: 02. 11. 2024
+  Info:
+    - Updated by Fr_Dae
+  Changes:
+    - synthax fix
+---------------------------------------------------------------------------------------------------
+Version: 0.2.13
+Date: 02. 11. 2024
+  Info:
+    - Updated by Fr_Dae
+  Changes:
+    - 2.0 update first try
+---------------------------------------------------------------------------------------------------
+Version: 0.2.12
+
+  Change:
+    - commas fix - DragonMaus
+---------------------------------------------------------------------------------------------------
+Version: 0.2.11
+
+  Change:
+    - del 🔥
+    - add ks_power in description
+    - pollution value (main()#2480)fucktorus
+---------------------------------------------------------------------------------------------------
+Version: 0.2.10
+
+  Change:
+    - data missing
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+
+  Change:
+    - add 🔥 
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+Date: 2020-10-19
+
+  Change:
+    - add water and acid NO flammable. 
+    - Version:  1.0
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 2020-09-20
+
+  Change:
+    - Change changelog 
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 2020-08-28
+
+  Change:
+    - Change changelog 
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 2020-08-28
+
+  Change:
+    - add "local emissions" Value. 
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2020-08-21
+
+  Changes:
+    - Modify data-upDate: with local fuel_values ligne 8 ["crude-oil"] = "0.4MJ",
+    - Modify data-upDate: with local fuel_values ligne 8 ["light-oil"] = "0.9MJ",   
+    - Modify data-upDate: with local fuel_values ligne 8 ["heavy-oil"] = "0.45MJ",
+    - Modify data-upDate: with local fuel_values ligne 8 ["petroleum-gas"] = "0.45MJ", 
+    - Modify data-upDate: with local fuel_values ligne 8 ["diesel-fuel"] = "1.1MJ"
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2020-08-20
+
+  Changes:
+    - 0.18
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2019-10-15
+
+  Changes:
+    - 0.17

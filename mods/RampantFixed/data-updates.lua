@@ -1,12 +1,5 @@
-local vanillaUpdates = require("prototypes/utils/UpdatesVanilla")
-
 local attackBall = require("prototypes/utils/AttackBall")
 local constants = require("libs/Constants")
-
--- if settings.startup["rampantFixed--useDumbProjectiles"].value or settings.startup["rampantFixed--newEnemies"].value then
-    -- attackBall.generateVanilla()
-    -- vanillaUpdates.useDumbProjectiles()
--- end
 
 for _, robot in pairs(data.raw["logistic-robot"]) do
     -- if not robot.collision_mask then

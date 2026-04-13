@@ -1,0 +1,92 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.0.10
+  Features:
+    - add class Designer
+    - ElementBuilder add sopport for color names
+  Changes:
+    - ElementSelectorVieww: compensate performance loss
+---------------------------------------------------------------------------------------------------
+Version: 3.0.9
+  Features:
+    - activating ElementAccessor for all mods
+  Changes:
+    - KuxGuiLib.PlayerContext: remove gui field
+    - rename createElementAccessorLazy to loadElementAccessor
+
+---------------------------------------------------------------------------------------------------
+Version: 3.0.8
+  Features:
+    - aclass Gui
+    - GuiView: add new(), finalize(), create ElementAccessor
+    - Changelog: log changes in data stage into log file
+  Changes:
+    - add 4 observed GUI events
+    - ElementBuilder
+  Bugfixes:
+    - fix a bug in MessageDialog
+---------------------------------------------------------------------------------------------------
+Version: 3.0.7
+  Changes:
+    - PlayerContext
+    - ErrorDialog translation logic
+    - ElementBuilder meta
+---------------------------------------------------------------------------------------------------
+Version: 3.0.6
+  Features:
+    - ElementBuilder: conditional elements, conditional children
+    - ElementBuilder enhanced error message for createView, createPart
+---------------------------------------------------------------------------------------------------
+Version: 3.0.5
+  Features:
+    - add fonts default-8 .. default-20
+    - add fonts default-bold-8 .. default-bold-20
+  Bugfixes:
+    - remove check for missing element_index
+---------------------------------------------------------------------------------------------------
+Version: 3.0.4
+  Changes:
+    - cleanup ElementBuilder: new signatures for createView and createPart
+    - backwards compatibility aliases have been removed.
+    - add ContextMenu context assignment options
+  Bugfixes:
+    - fix a crash in ErrorDialog,MessageDialog
+
+---------------------------------------------------------------------------------------------------
+Version: 3.0.3
+  Features:
+    - add MessageDialog
+    - add localization files
+    - add internal class GuiLibStorage
+    - add internal class ElementStackTrace
+    - add GUI builder trace for better debugging of UI errors
+    - better UI error handling instead of crashing the game (optional)
+  Changes:
+    - redesign ErrorDialog (UI and features)
+    - loc format changed to avoid conflicts. Backwards compatible
+  Bugfixes:
+    - cleanup copied names
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+  Bugfixes:
+    - fix broken data storage
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+  Bugfixes:
+    - fix an issue in PlayerCantext.applyTemplate
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 2025-05-21
+  Features:
+    - all things from Kux-CoreLib/lib/gui
+    - fonts: NotoMono-10, ..., NotoMono-20
+    - styles: Kux-GuiLib-dark-code-textbox
+
+    - CLibbordDialog
+    - ContextMenu
+    - ElementSelectorView
+    - ErrorDialog
+    - ElementSelectorOptionsView
+    - PlayerContext
+  Info:
+    - files from Kux-CoreLib/lib/gui moved into this lib
+    - first release

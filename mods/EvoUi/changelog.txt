@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2025.09.05
+  Changes:
+    - Updated for Factorio2.0
+    - Added ArmouredBiters enemies/spawner to statistics
+    - Modified mod name to avoid conflicts with other possible forks

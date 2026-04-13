@@ -40,6 +40,10 @@ function todo.edit_persist_task_changes(player, id)
     todo.log("Player " .. player.name .. " updates task " .. id)
 
     local original = todo.get_task_by_id(id)
+    if (original == nil) then
+        todo.log("Task " .. id .. " has been confirmed / cleared by someone else.")
+        return
+    end
 
     original.title = dialog.todo_edit_task_table["todo_edit_task_title"].text
     original.task = dialog.todo_edit_task_table["todo_edit_task_textbox"].text

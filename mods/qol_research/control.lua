@@ -228,8 +228,8 @@ end)
 script.on_event(defines.events.on_player_created, function (event)
     local player = game.players[event.player_index]
     if player.admin then
-        --player.print('[qol] Quality of Life Research v3 is installed') --drd
-        --player.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!') --drd
+        player.print('[qol] Quality of Life Research v3 is installed')
+        player.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!')
     end
 end)
 
@@ -239,9 +239,6 @@ script.on_configuration_changed(function (changes)
 
     plog('configuration change detected, updating for all forces and resetting technology effects')
     update_for_all_forces()
-    for _, force in pairs(game.forces) do
-        force.reset_technology_effects()
-    end
 
     is_logging_enabled = was_logging_enabled
 

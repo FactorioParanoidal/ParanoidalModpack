@@ -4,28 +4,6 @@ local PTrender = require("lib.PTrender")
 
 
 
-local function counts_add(t, k, amtadd, processzero)
-  if processzero or amtadd > 0 then
-    t[k] = (t[k] or 0) + amtadd
-  end
-end
-
-local function contain_negative(t, k)
-  return t[k] and t[k] < 0
-end
-
-local function filter_allow(unlimitedmode, t, k)
-  return unlimitedmode or contain_negative(t, k)
-end
-
-local function filter_update(unlimitedmode, t, k, chg)
-  if not unlimitedmode then
-    t[k] = t[k] + chg
-  end
-end
-
-
-
 local function add_PT(e)
   local entity = e.entity or e.created_entity
   if not entity or not entity.valid or not entity.name:match(cfg2.PT_ptrn) or entity.name:match(cfg2.PT_upper_ptrn) then return end
@@ -41,7 +19,7 @@ local function add_PT(e)
   position.y = position.y + 0.01
   local force = entity.force
   local chest = entity
-  local tower = surface.create_entity({name = entity.name..cfg2.PT_upper_suffix, position = position, force = force}) -- force = "neutral"
+  local tower = surface.create_entity({name = entity.name..cfg2.PT_upper_suffix, quality = entity.quality, position = position, force = force}) -- force = "neutral"
   tower.destructible = false
 end
 
@@ -72,7 +50,8 @@ local function pickup_items(e)
   local inv = search_results[1].get_inventory(cfg2.idx_inv_chest)
   local i = #inv
   -- Use signals to determine limited mode and filters
-  local signals = search_results[1].get_merged_signals(defines.circuit_connector_id.container)
+  -- local signals = search_results[1].get_merged_signals(defines.circuit_connector_id.container)
+  local signals = search_results[1].get_signals(defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green)
   local unlimitedmode = true
   local filters = {}
   if signals then
@@ -82,35 +61,36 @@ local function pickup_items(e)
     end
   end
   -- Search for items on ground
-  local itemproto = game.item_prototypes
+  local itemproto = prototypes.item   -- game.item_prototypes
   local item_cnt = {}
   local totalcnt = 0
   for _, enty in pairs(surface.find_entities_filtered{area = PTlib.box_area(position, pickupradius), type = "item-entity"}) do
     local stack = enty.stack
     local suc_insert = 0
-    if filter_allow(unlimitedmode, filters, stack.name) then
+    if PTlib.filter_allow(unlimitedmode, filters, stack.name) then
       if stack.grid or stack.is_blueprint or stack.is_blueprint_book or stack.is_armor or stack.is_item_with_inventory or stack.is_item_with_entity_data or stack.is_deconstruction_item or stack.is_upgrade_item then
         while i > 0 and inv[i].valid_for_read do i = i-1 end
         -- if i > 1 then suc_insert = inv[i].set_stack(stack) end
         if i > 1 and inv[i].set_stack(stack) then suc_insert = 1 end
-      elseif stack.durability then
-        suc_insert = inv.insert({name=stack.name, durability=stack.durability})
-      elseif stack.type=="ammo" then
-        suc_insert = inv.insert({name=stack.name, ammo=stack.ammo})
+      -- elseif stack.durability then
+      --   suc_insert = inv.insert({name=stack.name, quality = stack.quality, durability=stack.durability})
+      -- elseif stack.type=="ammo" then
+      --   suc_insert = inv.insert({name=stack.name, quality = stack.quality, ammo=stack.ammo})
       else
         suc_insert = inv.insert(stack)
       end
       if suc_insert > 0 then
         totalcnt = totalcnt + suc_insert
-        counts_add(item_cnt, stack.name, suc_insert)
-        filter_update(unlimitedmode, filters, stack.name, suc_insert)
+        -- counts_add(item_cnt, stack.name, suc_insert)
+        PTlib.counts_2D_add(item_cnt, stack.name, stack.quality.name, suc_insert)
+        PTlib.filter_update(unlimitedmode, filters, stack.name, suc_insert)
         stack.clear()
       end
     end
   end
-  for k, v in pairs(item_cnt) do
-    PTlib.create_flying_text_item(surface, position, itemproto[k], v, inv)
+  for v in PTlib.pairs_2D_sorted(item_cnt, PTlib.compare_value_desc) do
     position.y = position.y + 0.5
+    PTlib.create_flying_text_item_force(surface, position, itemproto[v[1]], v[2], v[3], inv, radar.force)
     -- PTlib.debugprint("  Picked up " .. totalcnt .. " items.")
   end
 end
@@ -121,8 +101,8 @@ local function configuration_changed()
 end
 
 local function runtime_mod_setting_changed(e)
-  if e.setting:match("^pickuptower%-") then PTrender.init() end
-  if e.setting == "pickuptower-range-force-disable" and settings.global[e.setting].value then
+  if e.setting:match(cfg2.mod_prefix_ptrn) then PTrender.init() end
+  if e.setting == cfg2.mod_prefix .. "range-force-disable" and settings.global[e.setting].value then
     PTrender.clear_rendering()
   end
 end
@@ -158,7 +138,7 @@ end
 
 script.on_configuration_changed(                                        configuration_changed)
 script.on_event(defines.events.on_runtime_mod_setting_changed,          runtime_mod_setting_changed)
-script.on_event(defines.events.on_sector_scanned,                       sector_scanned)
+script.on_event(defines.events.on_sector_scanned,                       sector_scanned, cfg2.PT_upper_filter)
 script.on_event({defines.events.on_built_entity,
                  defines.events.on_robot_built_entity,
                  defines.events.script_raised_built,

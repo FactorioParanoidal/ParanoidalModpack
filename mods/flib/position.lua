@@ -1,15 +1,32 @@
-local flib_math = require("__flib__/math")
+if ... ~= "__flib__.position" then
+  return require("__flib__.position")
+end
+
+local flib_direction = require("__flib__.direction")
+local flib_math = require("__flib__.math")
 
 --- Utilities for manipulating positions. All functions support both the shorthand and explicit syntaxes and will
 --- preserve the syntax that was passed in.
 --- ```lua
---- local flib_position = require("__flib__/position")
+--- local flib_position = require("__flib__.position")
 --- ```
 --- @class flib_position
 local flib_position = {}
 
 --- FIXME: Sumneko doesn't properly handle generics yet and throws a bunch of bogus warnings.
 --- @diagnostic disable
+
+--- Return the absolute value of the position's coordinates.
+--- @generic P
+--- @param pos P
+--- @return P
+function flib_position.abs(pos)
+  if pos.x then
+    return { x = math.abs(pos.x), y = math.abs(pos.y) }
+  else
+    return { math.abs(pos[1]), math.abs(pos[2]) }
+  end
+end
 
 --- Add two positions.
 --- @generic P
@@ -141,6 +158,27 @@ function flib_position.from_chunk(pos)
   else
     return { pos[1] * 32, pos[2] * 32 }
   end
+end
+
+--- Return a position created from the given direction and distance.
+--- @param direction defines.direction
+--- @param distance number
+--- @return MapPosition
+function flib_position.from_direction(direction, distance)
+  return flib_position.from_orientation(flib_direction.to_orientation(direction), distance)
+end
+
+--- Return a position created from the given orientation and distance.
+--- @param orientation RealOrientation
+--- @param distance number
+--- @return MapPosition
+function flib_position.from_orientation(orientation, distance)
+  -- We cannot use the standard x = cos theta and y = sin theta because Factorio's orientation space is rotated by 90
+  -- degrees and flipped vertically.
+  local x_factor = math.sin(flib_math.radian * orientation)
+  local y_factor = -math.cos(flib_math.radian * orientation)
+
+  return { x = distance * x_factor, y = distance * y_factor }
 end
 
 --- Test if `pos1` is greater than or equal to `pos2`.

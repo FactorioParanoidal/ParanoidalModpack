@@ -1,0 +1,7 @@
+{
+    "technology":
+    [
+        ["electric-mining", "electric-mining-drill"],
+        ["kr-basic-fluid-handling", "basic-fluid-handling"]
+    ]
+}

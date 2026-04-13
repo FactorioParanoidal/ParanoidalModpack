@@ -1,4 +1,51 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 02. 01. 2026
+  Changes:
+    - Updated AAI Industry integration #393
+    - Integrate Bob's Locale Translations mod #445
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 22. 06. 2025
+  Changes:
+    - Added uk locale #176
+    - Added de locale #415
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 20. 04. 2025
+  Bugfixes:
+    - Allowed productivity on Basic Electronic Components and disalowed on Basic Circuit Boards #395
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Bugfixes:
+    - Superior circuit board recipe missing silver plate #371
+  Changes:
+    - Added preset for Milestones mod #389
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Changes:
+    - Update for Factorio 2.0 #189
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 12. 01. 2024
+  Changes:
+    - Allow Basic Circuit Boards to be automatically crafted as intermediates #157
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Changes:
+    - Added missing prerequisites #120
+    - Renamed Copper cable to Copper wire #128
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Changes:

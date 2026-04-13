@@ -1,0 +1,15 @@
+{
+  "name": "WireShortcutX",
+  "version": "1.3.1",
+  "title": "Wire Shortcuts X",
+  "author": "Xorimuth",
+  "homepage": "https://discord.gg/pkJc4v9nfT",
+  "description": "Adds a shortcut (Alt-W) for giving free wires, repeat presses cycle between wire types. Adds nicer looking wire shortcuts than vanilla.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base"
+  ],
+  "package": {
+    "ignore": ["resources/*", "scenarios/*"]
+  }
+}

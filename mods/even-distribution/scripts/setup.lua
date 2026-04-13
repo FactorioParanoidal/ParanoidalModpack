@@ -10,13 +10,13 @@ local helpers = scripts.helpers
 local _ = helpers.on
 
 function setup.on_init()
-	global.cache = global.cache or {}
-	global.distrEvents = global.distrEvents or {}
-	global.settings = global.settings or {}
-	global.defaultTrash = setup.generateTrashItemList()
+	storage.cache = storage.cache or {}
+	storage.distrEvents = storage.distrEvents or {}
+	storage.settings = storage.settings or {}
+	storage.defaultTrash = setup.generateTrashItemList()
 	
-	global.remoteIgnoredEntities = global.remoteIgnoredEntities or {}
-	global.allowedEntities = _(game.entity_prototypes)
+	storage.remoteIgnoredEntities = storage.remoteIgnoredEntities or {}
+	storage.allowedEntities = _(prototypes.entity)
 								:where(function(prototype)
 									return util.hasInventory(prototype) and 
 										   not config.ignoredEntities[prototype.type] and 
@@ -27,8 +27,8 @@ function setup.on_init()
 								end)
 								:toPlain()
 
-	-- GUI events are saved in global.guiEvents["EVENT NAME"][PLAYER INDEX][GUI ELEMENT INDEX]
-	global.guiEvents = global.guiEvents or 
+	-- GUI events are saved in storage.guiEvents["EVENT NAME"][PLAYER INDEX][GUI ELEMENT INDEX]
+	storage.guiEvents = storage.guiEvents or 
 	{ 
 		onCheckedStateChanged   = {},
 		onClicked               = {},
@@ -43,7 +43,7 @@ function setup.on_init()
 	}
 
 	-- Fuel upgrade list (ascending fuel value)
-	global.fuelList = _(game.item_prototypes)
+	storage.fuelList = _(prototypes.item)
 						:where("fuel")
 						:toArray()
 						:groupBy("fuel_category")
@@ -56,11 +56,11 @@ function setup.on_init()
 						:toPlain()
 
 	-- Ammo upgrade list (ascending damage)
-	global.ammoList = _(game.item_prototypes)
+	storage.ammoList = _(prototypes.item)
 						:where("ammo")
 						:toArray()
 						:groupBy(function(__,prototype)
-							return prototype.get_ammo_type().category
+							return prototype.ammo_category.name
 						end)
 						:sort(function(a,b)
 							return _(a):calculateDamage() < _(b):calculateDamage()
@@ -89,18 +89,17 @@ function setup.setupPlayer(player_index, player)
 end
 
 function setup.createPlayerCache(index)
-	global.cache[index] = global.cache[index] or {}
-	global.cache[index].items = global.cache[index].items or {}
-	global.cache[index].markers = global.cache[index].markers or {}
-	metatables.use(global.cache[index].markers, "entityAsIndex")
-	global.cache[index].entities = global.cache[index].entities or {}
-	metatables.use(global.cache[index].entities, "entityAsIndex")
+	storage.cache[index] = storage.cache[index] or {}
+	storage.cache[index].items = storage.cache[index].items or {}
+	storage.cache[index].markers = storage.cache[index].markers or {}
+	metatables.use(storage.cache[index].markers, "entityAsIndex")
+	storage.cache[index].entities = storage.cache[index].entities or {}
+	metatables.use(storage.cache[index].entities, "entityAsIndex")
 end
 
 function setup.migrateSettings(player)
-	local settings = global.settings[player.index] or {}
-	global.settings[player.index] = settings
-	local character = _(player.character or player.cutscene_character)
+	local settings = storage.settings[player.index] or {}
+	storage.settings[player.index] = settings
 
 	-- default values
 	if settings.distributionMode == nil             then settings.distributionMode = "distribute" end
@@ -137,20 +136,21 @@ function setup.migrateSettings(player)
 		settings.distributionDelay      = player.mod_settings["distribution-delay"].value
 		settings.cleanupDropRange       = player.mod_settings["max-inventory-cleanup-drop-range"].value
 
-		if character:is("valid") then
-			-- move custom trash to logistic slots
-			if settings.customTrash and character:is("valid") then
+		if player:is("valid") then
+			local logisticPoint = _(player:requesterPoint())
 
-				local slotCount = character.request_slot_count
-				local slots = character:logisticSlots()
-				if _(slots):is("empty") then slotCount = 0 end
+			-- move custom trash to logistic slots
+			if settings.customTrash and logisticPoint:is("valid") then
+				
+				local section = logisticPoint.add_section("Even Distribution (migrated settings)")
+				local slotCount = 1
 				
 				_(settings.customTrash)
 					:wherepair(function(item) -- {item,count}
-								return slots[item[1]] == nil and global.defaultTrash[item[1]] ~= item[2]
+								return storage.defaultTrash[item[1]] ~= item[2]
 							end, 
 							function(item,count)
-								character.set_personal_logistic_slot(slotCount + 1, {
+								section.set_slot(slotCount, {
 									name = item,
 									min = 0,
 									max = count,
@@ -162,8 +162,8 @@ function setup.migrateSettings(player)
 			end
 
 			-- add default logistic slots
-			if player:setting("enableInventoryCleanupHotkey") and _(character:logisticSlots()):is("empty") then 
-				setup.addDefaultLogisticSlots(character)
+			if player:setting("enableInventoryCleanupHotkey") and _(player:logisticSlots()):is("empty") then 
+				setup.addDefaultLogisticSlots(player)
 			end
 		end
 
@@ -191,8 +191,8 @@ function setup.migrateSettings(player)
 	if settings.version == "1.0.3" then
 		settings.version = "1.0.8"
 
-		global.lastCharts = nil
-		global.lastCharacters = nil
+		storage.lastCharts = nil
+		storage.lastCharacters = nil
 
 		dlog("Player ("..player.name..") settings migrated from 1.0.3 to 1.0.8")
 	end
@@ -202,27 +202,30 @@ function setup.migrateSettings(player)
 	-- end
 end
 
-function setup.addDefaultLogisticSlots(character)
-	local slotCount = 0
-	local slots = {}
-
-	character.character_personal_logistic_requests_enabled = false
+function setup.addDefaultLogisticSlots(player)
+	local logisticPoint = _(player:requesterPoint())
 	
-	_(config.defaultLogisticSlots)
-		:wherepair(
-			function(item) -- {item,count}
-				return slots[item[1]] == nil and 
-					   global.defaultTrash[item[1]] ~= item[2] and
-					   game.item_prototypes[item[1]]
-			end, 
-			function(item,count)
-				character.set_personal_logistic_slot(slotCount + 1, {
-					name = item,
-					min = 0,
-					max = count * game.item_prototypes[item].stack_size,
-				})
-				slotCount = slotCount + 1
-			end)
+	if logisticPoint:is("valid") then
+		local slotCount = 1
+		local section = logisticPoint.add_section("Even Distribution (default settings)")
+		-- section.active = false
+		logisticPoint.enabled = false
+
+		_(config.defaultLogisticSlots)
+			:wherepair(
+				function(item) -- {1=item,2=count}
+					local prototype = prototypes.item[item[1]]
+					return prototype and storage.defaultTrash[item[1]] ~= item[2] * prototype.stack_size
+				end,
+				function(item,count)
+					section.set_slot(slotCount, {
+						value = item,
+						min = 0,
+						max = count * prototypes.item[item].stack_size,
+					})
+					slotCount = slotCount + 1
+				end)
+	end
 end
 
 function setup.on_force_created(event)
@@ -239,19 +242,19 @@ function setup.on_runtime_mod_setting_changed(event)
 			setup.enableLogisticsTab(force) 
 		end
 
-		-- add default logistic slots when enabling shift+c (if all slots are empty)
-		if settings.global["disable-inventory-cleanup"].value == false then
+		-- -- add default logistic slots when enabling shift+c (if all slots are empty)
+		-- if settings.global["disable-inventory-cleanup"].value == false then
 			
-			for __,player in pairs(game.players) do
-				local character = _(player.character or player.cutscene_character)
-				if character:is("valid") and 
-				   _(player):setting("enableInventoryCleanupHotkey") and 
-				   _(character:logisticSlots()):is("empty") then 
+		-- 	for __,player in pairs(game.players) do
+		-- 		local player = _(player)
+		-- 		if player:is("valid") and 
+		-- 		   player:setting("enableInventoryCleanupHotkey") and 
+		-- 		   _(player:logisticSlots()):is("empty") then 
 
-					setup.addDefaultLogisticSlots(character)
-				end
-			end
-		end
+		-- 			setup.addDefaultLogisticSlots(player)
+		-- 		end
+		-- 	end
+		-- end
 	end
 end
 
@@ -272,7 +275,7 @@ end
 function setup.hasLogisticSlots(force)
 	for _,tech in pairs(force.technologies) do
 		if tech.researched and tech.name ~= "enable-logistics-tab" then
-			for _,effect in pairs(tech.effects) do
+			for _,effect in pairs(tech.prototype.effects) do
 				if effect.type == "character-logistic-requests" then
 					if effect.modifier then return true end
 				end
@@ -286,8 +289,8 @@ end
 function setup.generateTrashItemList()
 	local items = {}
 	
-	for name,item in pairs(game.item_prototypes) do
-		if not (item.place_result or item.place_as_equipment_result or item.has_flag("hidden")) then -- or item.place_as_tile_result
+	for name,item in pairs(prototypes.item) do
+		if not (item.place_result or item.place_as_equipment_result or item.hidden) then -- or item.place_as_tile_result
 			local default = defaultTrash[name] or defaultTrash[item.subgroup.name] or defaultTrash[item.group.name]
 			
 			if default and default ~= "ignore" then
@@ -304,7 +307,7 @@ function setup.generateTrashItemList()
 end
 
 function setup.on_load()
-	metatables.refresh(global)
+	metatables.refresh(storage)
 end
 
 return setup

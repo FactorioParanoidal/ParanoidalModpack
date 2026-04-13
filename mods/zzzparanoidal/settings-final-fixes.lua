@@ -34,12 +34,11 @@ end
 --shortcuts - КАЖДЫЙ САМ НАСТРАИВАЕТ ПОД СЕБЯ, если использует. СТАНДАРТНЫХ НАСТРОЕК НЕТ!
 --runtime.global влияют на всю карту
 -- руины
-if mods["AbandonedRuins"] then
-    set_settings_default_value("string-setting", "AbandonedRuins-set", "base")
-    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.0025)
-    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.01)
+if mods["AbandonedRuins_updated_fork"] then
     set_settings_default_value("int-setting", "ruins-min-distance-from-spawn", 400)
     set_settings_default_value("double-setting", "ruins-small-ruin-chance", 0.025)
+    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.01)
+    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.0025)
 end
 --ритег
 if mods["__RITEG__"] then
@@ -48,7 +47,6 @@ end
 --биг монстры
 if mods["Big-Monsters"] then
     set_settings_default_value("double-setting", "bm-biterzilla-min_evo", 0.4)
-    set_settings_default_value("double-setting", "bm-brutals-min_evo", 0.3)
     set_settings_default_value("int-setting", "bm-difficulty-level", 5)
     set_settings_default_value("int-setting", "bm-invasion-chance", 0)
     set_settings_default_value("double-setting", "bm-invasion-min_evo", 0.4)
@@ -66,35 +64,18 @@ if mods["DeleteEmptyChunks"] then
     set_settings_default_value("int-setting", "DeleteEmptyChunks_radius", 1)
 end
 --Factorissimo2
-if mods["factorissimo-2-notnotmelon"] or mods["Factorissimo2"] then
+if mods["factorissimo-2-notnotmelon"] or mods["Factorissimo2-Space-Age-Port"] then
     set_settings_default_value("bool-setting", "Factorissimo2-better-recursion-2", false)
 end
 --even-distribution
 if mods["even-distribution"] then
     set_settings_default_value("int-setting", "global-max-inventory-cleanup-range", 100)
 end
---ltn-cleanup
-if mods["ltn-cleanup"] then
-    set_settings_default_value("bool-setting", "ltn-cleanup-failed-trains", true)
-    set_settings_default_value("int-setting", "ltn-dispatcher-nth_tick", 6)
-    set_settings_default_value("bool-setting", "ltn-interface-message-gps", true)
-    set_settings_default_value("string-setting", "ltn-interface-console-level", "0")
-    set_settings_default_value("bool-setting", "ltn-interface-message-gps", true)
-end
-if mods["LTN_Content_Reader"] then
-    set_settings_default_value("int-setting", "ltn_content_reader_update_interval", 240)
-end
-if mods["LtnManager"] then
-    set_settings_default_value("int-setting", "ltnm-iterations-per-tick", 2)
-end
-if mods["LTN_Combinator"] then
-    set_settings_default_value("bool-setting", "show-ltn-max-trains", true)
-end
 if mods["deep-storage-unit"] or mods["fluid-memory-storage"] then
     set_settings_default_value("string-setting", "memory-unit-power-usage", "480kW")
 end
 if mods["ModuleInserter"] then
-    set_settings_default_value("int-setting", "module_inserter_proxies_per_tick", 10)
+    set_settings_default_value("int-setting", "module-inserter-ex-proxies-per-tick", 10)
 end
 if mods["namelists"] then
     set_settings_default_value("bool-setting", "namelists-backer-stations", true)
@@ -143,12 +124,8 @@ if mods["RampantFixed"] then
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfSquads", 20)
 
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-bigElectricPole", true)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-curvedRail", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", true)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-railChainSignals", true)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-railSignals", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-trainStops", true)
 end
 if mods["TimedSpawnControl"] then
     set_settings_default_value("bool-setting", "random-spawn", false)
@@ -202,15 +179,8 @@ if mods["True-Nukes"] then
     set_settings_default_value("bool-setting", "enable-menu-backgrounds", false)
     set_settings_default_value("bool-setting", "enable-nuclear-tests", false)
 end
-if mods["angelspetrochem"] then
-    set_settings_default_value("bool-setting", "angels-enable-converter", false)
-end
 if mods["angelsrefining"] then
-    set_settings_default_value("bool-setting", "angels-enable-hide-void", true)
-    set_settings_default_value("double-setting", "angels-marathon-buildingmulti", 5)
-    set_settings_default_value("double-setting", "angels-marathon-buildingtime", 4)
-    set_settings_default_value("double-setting", "angels-marathon-intermediatemulti", 2)
-    set_settings_default_value("double-setting", "angels-marathon-rawmulti", 2)
+    set_settings_default_value("bool-setting",   "angels-enable-hide-void", true)
 end
 if mods["angelsinfiniteores"] then
     set_settings_default_value("bool-setting", "angels-enablefluidreq", true)
@@ -271,6 +241,7 @@ if mods["bobpower"] then
     set_settings_default_value("bool-setting", "bobmods-power-fluidgenerator", false)
     set_settings_default_value("bool-setting", "bobmods-power-heatsources", false)
 end
+
 if mods["bobrevamp"] then
     set_settings_default_value("bool-setting", "bobmods-revamp-oil", false)
 end
@@ -302,7 +273,7 @@ if mods["heroturrets"] then
     set_settings_default_value("int-setting", "heroturrets-setting-level-up-modifier", 100)
     set_settings_default_value("bool-setting", "heroturrets-use-csv", true)
 end
-if mods["LightedPolesPlus"] then
+if mods["Lighted-Poles-Plus"] then
     set_settings_default_value(
         "string-setting",
         "lepp_pole_blacklist",
@@ -314,10 +285,10 @@ if mods["toxicPollution"] then
     set_settings_default_value("int-setting", "armor-absorb-multiplier", 1000)
     set_settings_default_value("bool-setting", "auto-equip-armor", true)
 end
-if mods["miniloader"] then
-    set_settings_default_value("bool-setting", "miniloader-enable-chute", false)
+if mods["miniloader-redux"] then
+    set_settings_default_value("bool-setting", "hps__ml-chute_loader", false)
 end
-if mods["minime_temp"] then
+if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
 end
 if mods["multi-product-recipe-details"] then
@@ -331,8 +302,9 @@ if mods["P-U-M-P-S"] then
     set_settings_default_value("bool-setting", "osm-pumps-burner-offshore-pump", true)
 end
 if mods["PCPRedux"] then
-    set_settings_default_value("bool-setting", "pcp-glass-sink", false)
+    -- set_settings_default_value("bool-setting", "pcp-glass-sink", false)
 end
+-- not adapted to kry-picker. needs to review
 if mods["PickerTweaks"] then
     set_settings_default_value("double-setting", "picker-belt-sounds", 0.5)
     set_settings_default_value("bool-setting", "picker-clean-tree-burning", true)
@@ -355,10 +327,10 @@ if mods["PickerVehicles"] then
     set_settings_default_value("bool-setting", "picker-unstoppable-trains", true)
 end
 if mods["SchallPickupTower"] then
-    set_settings_default_value("int-setting", "pickuptower-tier-max", 4)
+    set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
 end
 if mods["railloader"] then
-    set_settings_default_value("int-setting", "railloader-capacity", 320)
+    set_settings_default_value("int-setting", "train_loader_inverntory_size", 200)
 end
 if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--allowLongRangeImmunity", false)
@@ -376,17 +348,17 @@ if mods["reskins-angels"] then
     set_settings_default_value("bool-setting", "reskins-angels-use-vanilla-chemical-plant-sprites", true)
 end
 if mods["reskins-bobs"] then
-    set_settings_default_value("bool-setting", "reskins-bobs-flip-stack-inserter-icons", true)
+    set_settings_default_value("bool-setting", "reskins-bobs-flip-bulk-inserter-icons", true)
 end
 if mods["reskins-library"] then
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-0", "402000")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-1", "de9400")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-2", "c20600")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-3", "1b87c2")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-4", "a600bf")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-5", "23de55")
-    set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
-    set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-0", "402000")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-1", "de9400")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-2", "c20600")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-3", "1b87c2")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-4", "a600bf")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-5", "23de55")
+    -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
+    -- set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
 end
 if mods["ReStack"] then
     set_settings_default_value("int-setting", "ReStack-ammo-bullet", 200)
@@ -421,10 +393,10 @@ if mods["SpaceMod"] then
     set_settings_default_value("string-setting", "SpaceX-launch-profile", "Launch Meglo-mania(x25)")
 end
 if mods["SchallTankPlatoon"] then
-    set_settings_default_value("bool-setting", "tankplatoon-ht-RA-enable", false)
+    set_settings_default_value("bool-setting", "Schall-TP-ht-RA-enable", false)
     set_settings_default_value(
         "string-setting",
-        "tankplatoon-personal-laser-defense-equipment-energy-consumption",
+        "Schall-TP-personal-laser-defense-equipment-energy-consumption",
         "800kJ"
     )
 end

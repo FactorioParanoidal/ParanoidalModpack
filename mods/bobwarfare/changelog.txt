@@ -1,4 +1,76 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 02. 01. 2026
+  Bugfixes:
+    - Fixed crash with Quality Asteroids mod #455
+  Changes:
+    - Integrate Bob's Locale Translations mod #445
+    - Added support for frozen entities (with Space Age) #477
+    - Buffed atomic explosion damage. Added checks for when nuclear ground tiles are created. #501
+    - Buffed combat robot damage #502
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 22. 06. 2025
+  Changes:
+    - Added poison and acid resistance to asteroids #423
+    - Reduce the cost of Rockets #428
+    - Blue Alien Alloy takes Cobalt Steel instead of Tungsten #429
+    - Added zh-TW locale #432
+    - Reduce the cost of Cordite #437
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 20. 04. 2025
+  Bugfixes:
+    - Fixed topaz laser rifle battery missing topaz (with Bob's MCI mod) #400
+    - Fixed startup crash with mods that are overwriting base game functions #402
+  Changes:
+    - Reduced ammo stack sizes to match base game #406
+    - Increased the damage of poison, explosive, napalm and atomic artillery shells #406
+    - Increased the range of laser robots #406
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Bugfixes:
+    - Fixed crash with AAI Programmable Vehicles #390
+  Changes:
+    - Increased the range of tank 2 & 3 and spidertron cannons #386
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Bugfixes:
+    - Fixed missing poison cloud localisation #195
+  Changes:
+    - Spread out the armor techs more evenly between tech tiers #180
+    - Changed combat robot and mech brains to use circuits rather than circuit components #184
+    - Update for Factorio 2.0 #189
+    - Added significant power drain to plasma turrets #212
+    - General rebalancing #280
+    - Removed Invar Cobalt-steel armor and Titanium-Ceramic armor #292
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 21. 02. 2024
+  Bugfixes:
+    - Fixed Artillery Turret order #165
+    - Removed optional dependency on AAI Industry to fix circular reference issue #171
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Bugfixes:
+    - Fixed Artillery Wagon Item Subgroup #110
+    - Fixed graphical gap between gates and reinforced walls #130
+    - Fixed crash related to setting Vehicle flamethrower starts fires #141
+  Changes:
+    - Increased the health, prepare range, and rotation speed of some higher tier turrets #84
+    - Added missing prerequisites #120
+    - Adjusted tank recipe #129
+    - Don't add tech radars-1 when AAI Industry mod is enabled #133
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Bugfixes:

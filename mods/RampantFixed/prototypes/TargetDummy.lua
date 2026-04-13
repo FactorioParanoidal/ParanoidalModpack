@@ -22,7 +22,7 @@ function targetDummy.addTargetDummies()
                 selection_box = {{-1, -1}, {1, 1}},
                 energy_per_nearby_scan = "6MJ",
                 energy_per_sector = "6MJ",
-				emissions_per_second = 1,
+				emissions_per_second = {pollution = 1},
                 max_distance_of_sector_revealed = 0,
 				max_distance_of_nearby_sector_revealed = 1,
                 resistances = {

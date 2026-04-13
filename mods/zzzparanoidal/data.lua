@@ -1,59 +1,56 @@
-require("prototypes.fuel")
-require("prototypes.fish")
-require("prototypes.washers")
-require("prototypes.seed-extractor")
-angelsmods.trigger.smelting_products["cobalt"].plate=true
---новые насосы
-require("prototypes/offshore-pump/item")
-require("prototypes/offshore-pump/recipe")
-require("prototypes/offshore-pump/more-offshore-pumps")
-require("prototypes/offshore-pump/entity-offshore-pump")
-require("prototypes/offshore-pump/entity-seafloor-pump")
-require("prototypes/offshore-pump/hidden-pole")
-require("prototypes/offshore-pump/technology")
---
-require("prototypes.artillery-prototype.artillery-turret-prototype") --фикс убирающий био-арту и добовляющий новую на базе обычной
+require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 
-require("prototypes.beltentities") --переехало из paranoidal-tweaks_0.18.34 (sbelyakov)
+-- new entities
+require("prototypes.entity.bio-content")
+require("prototypes.entity.offshore-pumps")
+require("prototypes.entity.battery-electric-train")
+require("prototypes.entity.flame-car")
+require("prototypes.entity.concrete-brick")
+require("prototypes.entity.artillery-prototype")
 
-require("prototypes.micro-fix") --доработка напильником всего подряд -- фиксы от Кирика
+-- new items
+require("prototypes.item.mining-drill-bit")
+require("prototypes.item.structured-components")
+require("prototypes.item.electronics")
+require("prototypes.item.bio-content")
+require("prototypes.item.offshore-pumps")
+require("prototypes.item.battery-electric-train")
+require("prototypes.item.flame-car")
+require("prototypes.item.artillery-prototype")
+require("prototypes.item.concrete-brick")
 
-require("prototypes.entity.entity") --фиксы неправильных имён от SEO
-require("prototypes.recipe-new") --новые рецепты
+-- new recipies
+require("prototypes.recipe.warehouses")
+require("prototypes.recipe.chemistry")
+require("prototypes.recipe.manganese-chrome-platinum-sorting")
+require("prototypes.recipe.mining-drill-bit")
+require("prototypes.recipe.electronics")
+require("prototypes.recipe.structured-components")
+require("prototypes.recipe.science-packs")
+require("prototypes.recipe.bio-content")
+require("prototypes.recipe.offshore-pumps")
+require("prototypes.recipe.battery-electric-train")
+require("prototypes.recipe.flame-car")
+require("prototypes.recipe.artillery-prototype")
+require("prototypes.recipe.glass")
+require("prototypes.recipe.concrete-brick")
+require("prototypes.recipe.stone")
+require("prototypes.recipe.ammo-pistol")
+require("prototypes.recipe.metallurgy")
 
-require("prototypes.BetterAlertArrows_100") --мод BetterAlertArrows
+-- new technologies
+require("prototypes.technology.offshore-pumps")
+require("prototypes.technology.battery-electric-train")
+require("prototypes.technology.bio-content")
+require("prototypes.technology.flame-car")
+require("prototypes.technology.artillery-prototype")
+require("prototypes.technology.alien-artifacts")
 
-require("prototypes.mod_compatibility.heroturrets")
--------------------------------------------------------------------------------------------------
-require("prototypes.bio-content.bio-content-list") --Новый Биоконтент
--------------------------------------------------------------------------------------------------
---перенаправляем функцию ангела на функцию боба
-if not mods["angelsindustries"] then
+-- new selection-tools
+require("prototypes.selection-tool.heroturrets")
 
-function angelsmods.functions.OV.add_unlock(technology, recipe)
-    if
-      type(technology) == "string" and
-      type(recipe) == "string" and
-      data.raw.technology[technology] and
-      data.raw.recipe[recipe]
-    then
-        bobmods.lib.tech.add_recipe_unlock(technology, recipe)
-    end
-end
+-- new subgroups
+require("prototypes.subgroups.angels-subgroups")
 
-end
-
--- Uniform recipe mod
-for _,r in pairs(data.raw["recipe"]) do
-	r.always_show_products=true;
-	r.show_amount_in_title=false;
-	if r.normal ~= nil then
-  		r.normal.always_show_products = true;
-  		r.normal.show_amount_in_title = false;
-	end
-	if r.expensive ~= nil then
- 	 	r.expensive.always_show_products = true;
-  		r.expensive.show_amount_in_title = false;
-	end
-end
--- Uniform recipe end
+-- tweaks
+require("tweaks.custom.angelsmods")

@@ -61,7 +61,7 @@ function this.distributeItems(player, entities, items, dropToChests, dropToOutpu
 						local failedToInsert = amount - itemsInserted
 						if failedToInsert > 0 then
 							if itemCount.current ~= itemCount.original then
-								entity:spawnDistributionText(item, itemCount.current - itemCount.original, offY)
+								entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, offY)
 								if not marked[entity] then
 									entity:mark(player)
 									marked[entity] = true
@@ -78,7 +78,7 @@ function this.distributeItems(player, entities, items, dropToChests, dropToOutpu
 				local itemCount = itemCounts[entity]
 				local amount = itemCount.current - itemCount.original
 				if amount ~= 0 then
-					entity:spawnDistributionText(item, amount, offY)
+					entity:spawnDistributionText(player,item, amount, offY)
 					if not marked[entity] then
 						entity:mark(player)
 						marked[entity] = true
@@ -143,7 +143,7 @@ function this.balanceItems(player, entities, items, dropToChests, dropToOutput)
 						local failedToInsert = amount - itemsInserted
 						if failedToInsert > 0 then
 							if itemCount.current ~= itemCount.original then
-								entity:spawnDistributionText(item, itemCount.current - itemCount.original, offY)
+								entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, offY)
 								if not marked[entity] then
 									entity:mark(player)
 									marked[entity] = true
@@ -165,7 +165,7 @@ function this.balanceItems(player, entities, items, dropToChests, dropToOutput)
 				local itemCount = itemCounts[entity]
 				local amount = itemCount.current - itemCount.original
 				if amount ~= 0 then
-					entity:spawnDistributionText(item, amount, offY)
+					entity:spawnDistributionText(player,item, amount, offY)
 					if not marked[entity] then
 						entity:mark(player)
 						marked[entity] = true
@@ -258,7 +258,7 @@ end
 
 function this.filterEntities(entities, item, dropToChests, dropToOutput)
 	local result = metatables.new("entityAsIndex")
-	local prototype = game.item_prototypes[item]
+	local prototype = prototypes.item[item]
 	
 	_(entities):each(function(__, entity)
 		entity = _(entity)
@@ -270,7 +270,7 @@ function this.filterEntities(entities, item, dropToChests, dropToOutput)
 				result[entity] = entity
 			elseif (entity.prototype.logistic_mode == "requester" or (entity.type == "spider-vehicle" and entity.get_logistic_point(defines.logistic_member_index.character_requester))) and entity:remainingRequest(item) > 0 then
 				result[entity] = entity
-			elseif dropToChests and (entity.type == "container" or entity.type == "logistic-container") and entity.get_item_count(item) > 0 then
+			elseif dropToChests and (entity.type == "container" or entity.type == "logistic-container") and entity:itemcount(item) > 0 then
 				result[entity] = entity
 			elseif entity.type == "lab" and entity:inventory("lab_input").can_insert(item) then
 				result[entity] = entity

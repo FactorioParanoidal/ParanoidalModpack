@@ -4,6 +4,8 @@ require "core.FormModel"
 
 require "dialog.AdminPanel"
 require "dialog.ArrangeModels"
+require "dialog.BugRepportPanel"
+require "dialog.CreatedOrWhereUsedPanel"
 require "dialog.HelpPanel"
 require "dialog.ModelDebug"
 require "dialog.PinPanel"
@@ -14,14 +16,16 @@ require "dialog.Download"
 require "dialog.Calculator"
 require "dialog.RecipeExplorer"
 require "dialog.ProductionPanel"
-require "dialog.PropertiesPanel"
 require "dialog.PrototypeFiltersPanel"
+require "dialog.QualityPanel"
 require "dialog.UnitTestPanel"
 require "dialog.RichTextPanel"
 
 require "edition.LogisticEdition"
 require "edition.ModelEdition"
+require "edition.BlockEdition"
 require "edition.RecipeEdition"
+require "edition.RecipeCustomization"
 require "edition.ParametersEdition"
 require "edition.ProductEdition"
 require "edition.RuleEdition"
@@ -32,6 +36,7 @@ require "selector.RecipeSelector"
 require "selector.TechnologySelector"
 require "selector.ItemSelector"
 require "selector.FluidSelector"
+require "selector.TileSelector"
 
 require "model.Prototype"
 require "model.ElectricPrototype"
@@ -43,6 +48,7 @@ require "model.ItemPrototype"
 require "model.Product"
 require "model.RecipePrototype"
 require "model.Technology"
+require "model.TilePrototype"
 
 ModGui = require "mod-gui"
 Cache = require "data.Cache"
@@ -76,14 +82,16 @@ function Controller:prepare()
   local forms = {}
   table.insert(forms, AdminPanel("HMAdminPanel"))
   table.insert(forms, ArrangeModels("HMArrangeModels"))
+  table.insert(forms, BugReportPanel("HMBugReportPanel"))
+  table.insert(forms, CreatedOrWhereUsedPanel("HMCreatedOrWhereUsedPanel"))
   table.insert(forms, HelpPanel("HMHelpPanel"))
   table.insert(forms, ModelDebug("HMModelDebug"))
   table.insert(forms, Download("HMDownload"))
   table.insert(forms, Calculator("HMCalculator"))
   table.insert(forms, RecipeExplorer("HMRecipeExplorer"))
   table.insert(forms, ProductionPanel("HMProductionPanel"))
-  table.insert(forms, PropertiesPanel("HMPropertiesPanel"))
   table.insert(forms, PrototypeFiltersPanel("HMPrototypeFiltersPanel"))
+  table.insert(forms, QualityPanel("HMQualityPanel"))
   table.insert(forms, UnitTestPanel("HMUnitTestPanel"))
   table.insert(forms, RichTextPanel("HMRichTextPanel"))
 
@@ -92,10 +100,13 @@ function Controller:prepare()
   table.insert(forms, TechnologySelector("HMTechnologySelector"))
   table.insert(forms, ItemSelector("HMItemSelector"))
   table.insert(forms, FluidSelector("HMFluidSelector"))
+  table.insert(forms, TileSelector("HMTileSelector"))
 
   table.insert(forms, LogisticEdition("HMLogisticEdition"))
   table.insert(forms, ModelEdition("HMModelEdition"))
+  table.insert(forms, BlockEdition("HMBlockEdition"))
   table.insert(forms, RecipeEdition("HMRecipeEdition"))
+  table.insert(forms, RecipeCustomization("HMRecipeCustomization"))
   table.insert(forms, ParametersEdition("HMParametersEdition"))
   table.insert(forms, ProductEdition("HMProductEdition"))
   table.insert(forms, RuleEdition("HMRuleEdition"))
@@ -127,6 +138,7 @@ function Controller:on_init()
   table.insert(forms, TechnologySelector("HMTechnologySelector"))
   table.insert(forms, ItemSelector("HMItemSelector"))
   table.insert(forms, FluidSelector("HMFluidSelector"))
+  table.insert(forms, TileSelector("HMTileSelector"))
   for _,form in pairs(forms) do
     form:prepare()
   end
@@ -355,6 +367,7 @@ function Controller:onGuiAction(event)
     if views == nil then self:prepare() end
 
     event.classname, event.action, event.item1, event.item2, event.item3, event.item4, event.item5 = string.match(event.element.name,pattern)
+    event.item = GuiElement.getElementTags(event.element)
 
     if event.classname == self.classname and event.action == "CLOSE" then
       Controller:cleanController(Player.native())
@@ -426,6 +439,14 @@ function Controller:onGuiHotkey(event)
       view:close()
     end
   end
+  if event.input_name == "helmod-create-or-where-used-open" then
+    local view = Controller:getView("HMCreatedOrWhereUsedPanel")
+    if not(view:isOpened()) then
+      self:send("on_gui_open", event, "HMCreatedOrWhereUsedPanel")
+    else
+      view:close()
+    end
+  end
 end
 
 
@@ -460,13 +481,20 @@ function Controller:onGuiSetting(event)
   end
 end
 
+Controller.panel_close_before_main = {}
 -------------------------------------------------------------------------------
 ---Prepare main display
 ---
 function Controller:openMainPanel()
   if self:isOpened() then
-    self:cleanController(Player.native())
-    game.tick_paused = false
+    if #Controller.panel_close_before_main == 0 then
+      self:cleanController(Player.native())
+      game.tick_paused = false
+    else
+      local last_form_name = Controller.panel_close_before_main[#Controller.panel_close_before_main]
+      local view = Controller:getView(last_form_name)
+      view:close()
+    end
   else
     local current_tab = "HMProductionPanel"
     local parameter_name = string.format("%s_%s", current_tab, "objects")

@@ -1,6 +1,6 @@
 function fillEngineersConfig(config)
 	
-	if not game.active_mods["Engineersvsenvironmentalist"] then
+	if not script.active_mods["Engineersvsenvironmentalist"] then
 		return
 	end
 	

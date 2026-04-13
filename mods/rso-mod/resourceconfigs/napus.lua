@@ -1,5 +1,5 @@
 function fillNapusConfig(config)
-	config["remains"] = {
+	config.nauvis["remains"] = {
 		type="resource-liquid",
 		minimum_amount=250000,
 		allotment=70,

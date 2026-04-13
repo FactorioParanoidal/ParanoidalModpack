@@ -26,10 +26,10 @@ end
 
 -------------------------------------------------------------------------------
 ---Return emissions
----@return number --default 0
+---@return table
 function EnergySourcePrototype:getEmissions()
   if self.lua_prototype ~= nil then
-    return self.lua_prototype.emissions or 2.7777777e-7
+    return self.lua_prototype.emissions_per_joule or {}
   end
   return 0
 end
@@ -131,7 +131,7 @@ end
 ---@return number --default 0
 function ElectricSourcePrototype:getInputFlowLimit()
   if self.lua_prototype ~= nil then
-    return (self.lua_prototype.input_flow_limit or 0) * 60
+    return (self.lua_prototype.get_input_flow_limit() or 0) * 60
   end
   return 0
 end
@@ -141,7 +141,7 @@ end
 ---@return number --default 0
 function ElectricSourcePrototype:getOutputFlowLimit()
   if self.lua_prototype ~= nil then
-    return (self.lua_prototype.output_flow_limit or 0) * 60
+    return (self.lua_prototype.get_output_flow_limit() or 0) * 60
   end
   return 0
 end
@@ -174,10 +174,12 @@ end
 ---@return table
 function BurnerPrototype:getFuelPrototypes()
   local filters = {}
-  for fuel_category,_ in pairs(self:getFuelCategories()) do
-    table.insert(filters, {filter = "fuel-value",    mode = "or",  invert = false, comparison = ">", value = 0})
+  local fuel_categories = self:getFuelCategories()
+  for fuel_category,_ in pairs(fuel_categories) do
+    -- first must be used mode "or" for few categories
+    table.insert(filters, {filter = "hidden",        mode = "or", invert = true})
+    table.insert(filters, {filter = "fuel-value",    mode = "and", invert = false, comparison = ">", value = 0})
     table.insert(filters, {filter = "fuel-category", mode = "and", invert = false, ["fuel-category"] = fuel_category})
-    table.insert(filters, {filter = "flag",          mode = "and", invert = true,  flag = "hidden"})
   end
   
   local items = {}

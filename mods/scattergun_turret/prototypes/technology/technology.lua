@@ -2,20 +2,20 @@ data:extend(
 {
 	{
 		type = "technology",
-		name = "scattergun-turrets",
+		name = "w93-scattergun-turrets",
 		icon = "__scattergun_turret__/graphics/technology/scattergun-turret-tech.png",
 		icon_size = 128,
 		effects =
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "scattergun-turret"
+				recipe = "w93-scattergun-turret"
 			},
 		},
 		prerequisites =
 		{
+			"steel-processing",
 			"military",
-			"gun-turret",
 			"logistic-science-pack",
 		},
 		unit =
@@ -27,8 +27,7 @@ data:extend(
 				{"logistic-science-pack", 1},
 			},
 			time = 45
-		},
-		order = "e-a-e"
+		}
 	},
 	{
 		type = "technology",
@@ -53,13 +52,16 @@ data:extend(
 				type = "unlock-recipe",
 				recipe = "w93-hmg-turret2"
 			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-hardened-inserter"
+			},
 		},
 		prerequisites =
 		{
 			"military-science-pack",
-			"gun-turret",
 			"engine",
-			"automation",
+			"concrete",
 		},
 		unit =
 		{
@@ -71,8 +73,7 @@ data:extend(
 				{"military-science-pack", 1},
 			},
 			time = 45
-		},
-		order = "e-a-a"
+		}
 	},
 	{
 		type = "technology",
@@ -103,8 +104,7 @@ data:extend(
 				{"military-science-pack", 1},
 			},
 			time = 60
-		},
-		order = "e-a-a"
+		}
 	},
 	{
 		type = "technology",
@@ -125,6 +125,10 @@ data:extend(
 				type = "unlock-recipe",
 				recipe = "w93-gatling-turret2"
 			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-slowdown-magazine"
+			},
 		},
 		prerequisites =
 		{
@@ -139,12 +143,131 @@ data:extend(
 			{
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
 				{"military-science-pack", 1},
+				{"chemical-science-pack", 1},
 			},
 			time = 60
+		}
+	},
+	{
+		type = "technology",
+		name = "w93-modular-turrets-lcannon",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-lcannon-tech.png",
+		icon_size = 128,
+		effects =
+		{
+			{
+				type = "unlock-recipe",
+				recipe = "w93-modular-gun-lcannon"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-lcannon-turret"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-lcannon-turret2"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-fragmentation-cannon-shell",
+			},
 		},
-		order = "e-a-b"
+		prerequisites =
+		{
+			"w93-modular-turrets",
+			"explosives"
+		},
+		unit =
+		{
+			count = 100,
+			ingredients =
+			{
+				{"automation-science-pack", 1},
+				{"logistic-science-pack", 1},
+				{"military-science-pack", 1},
+			},
+			time = 45
+		}
+	},
+	{
+		type = "technology",
+		name = "w93-modular-turrets-dcannon",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-dcannon-tech.png",
+		icon_size = 128,
+		effects =
+		{
+			{
+				type = "unlock-recipe",
+				recipe = "w93-modular-gun-dcannon"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-dcannon-turret"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-dcannon-turret2"
+			},
+		},
+		prerequisites =
+		{
+			"w93-modular-turrets-lcannon",
+			"military-3",
+			"speed-module",
+		},
+		unit =
+		{
+			count = 200,
+			ingredients =
+			{
+				{"automation-science-pack", 1},
+				{"logistic-science-pack", 1},
+				{"military-science-pack", 1},
+				{"chemical-science-pack", 1},
+			},
+			time = 60
+		}
+	},
+	{
+		type = "technology",
+		name = "w93-modular-turrets-hcannon",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-hcannon-tech.png",
+		icon_size = 128,
+		effects =
+		{
+			{
+				type = "unlock-recipe",
+				recipe = "w93-modular-gun-hcannon"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-hcannon-turret"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-hcannon-turret2"
+			},
+		},
+		prerequisites =
+		{
+			"w93-modular-turrets-dcannon",
+			"military-4",
+			"tank",
+		},
+		unit =
+		{
+			count = 300,
+			ingredients =
+			{
+				{"automation-science-pack", 1},
+				{"logistic-science-pack", 1},
+				{"chemical-science-pack", 1},
+				{"military-science-pack", 1},
+				{"utility-science-pack",1},
+			},
+			time = 60
+		}
 	},
 	{
 		type = "technology",
@@ -165,15 +288,19 @@ data:extend(
 				type = "unlock-recipe",
 				recipe = "w93-rocket-turret2"
 			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-turret-slowdown-rocket"
+			},
 		},
 		prerequisites =
 		{
 			"w93-modular-turrets",
-			"explosive-rocketry",
+			"rocketry",
 		},
 		unit =
 		{
-			count = 150,
+			count = 200,
 			ingredients =
 			{
 				{"automation-science-pack", 1},
@@ -182,8 +309,7 @@ data:extend(
 				{"military-science-pack", 1},
 			},
 			time = 60
-		},
-		order = "e-a-d"
+		}
 	},
 	{
 		type = "technology",
@@ -223,49 +349,7 @@ data:extend(
 				{"military-science-pack", 1},
 			},
 			time = 60
-		},
-		order = "e-a-e"
-	},
-	{
-		type = "technology",
-		name = "w93-modular-turrets-tlaser",
-		icon = "__scattergun_turret__/graphics/technology/modular-turret-tlaser-tech.png",
-		icon_size = 128,
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "w93-modular-gun-tlaser"
-			},
-			{
-				type = "unlock-recipe",
-				recipe = "w93-tlaser-turret"
-			},
-			{
-				type = "unlock-recipe",
-				recipe = "w93-tlaser-turret2"
-			},
-		},
-		prerequisites =
-		{
-			"w93-modular-turrets-plaser",
-			"military-4",
-			"effectivity-module",
-		},
-		unit =
-		{
-			count = 250,
-			ingredients =
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-				{"military-science-pack", 1},
-				{"utility-science-pack",1},
-			},
-			time = 60
-		},
-		order = "e-a-e"
+		}
 	},
 	{
 		type = "technology",
@@ -289,9 +373,10 @@ data:extend(
 		},
 		prerequisites =
 		{
-			"w93-modular-turrets-tlaser",
-			"uranium-processing",
-			"space-science-pack",
+			"w93-modular-turrets-plaser",
+			"nuclear-power",
+			"military-4",
+			"laser",
 		},
 		unit =
 		{
@@ -303,123 +388,85 @@ data:extend(
 				{"chemical-science-pack", 1},
 				{"military-science-pack", 1},
 				{"utility-science-pack",1},
-				{"space-science-pack",1},
 			},
 			time = 60
-		},
-		order = "e-a-e"
+		}
 	},
 	{
 		type = "technology",
-		name = "w93-modular-turrets-lcannon",
-		icon = "__scattergun_turret__/graphics/technology/modular-turret-lcannon-tech.png",
+		name = "w93-modular-turrets-tlaser",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-tlaser-tech.png",
 		icon_size = 128,
 		effects =
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "w93-modular-gun-lcannon"
+				recipe = "w93-modular-gun-tlaser"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "w93-lcannon-turret"
+				recipe = "w93-tlaser-turret"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "w93-lcannon-turret2"
-			},
-			{
-				type = "unlock-recipe",
-				recipe = "w93-turret-light-cannon-shells",
+				recipe = "w93-tlaser-turret2"
 			},
 		},
 		prerequisites =
 		{
-			"w93-modular-turrets",
-			"advanced-electronics",
+			"w93-modular-turrets-beam",
+			"space-science-pack",
+			"efficiency-module-2",
 		},
 		unit =
 		{
-			count = 100,
-			ingredients =
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"military-science-pack", 1},
-			},
-			time = 45
-		},
-		order = "e-a-c"
-	},
-	{
-		type = "technology",
-		name = "w93-modular-turrets-dcannon",
-		icon = "__scattergun_turret__/graphics/technology/modular-turret-dcannon-tech.png",
-		icon_size = 128,
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "w93-modular-gun-dcannon"
-			},
-			{
-				type = "unlock-recipe",
-				recipe = "w93-dcannon-turret"
-			},
-			{
-				type = "unlock-recipe",
-				recipe = "w93-dcannon-turret2"
-			},
-		},
-		prerequisites =
-		{
-			"w93-modular-turrets-lcannon",
-			"military-3",
-			"speed-module",
-		},
-		unit =
-		{
-			count = 100,
+			count = 500,
 			ingredients =
 			{
 				{"automation-science-pack", 1},
 				{"logistic-science-pack", 1},
 				{"chemical-science-pack", 1},
 				{"military-science-pack", 1},
+				{"utility-science-pack",1},
+				{"space-science-pack",1}
 			},
 			time = 60
-		},
-		order = "e-a-c"
+		}
 	},
 	{
 		type = "technology",
-		name = "w93-modular-turrets-hcannon",
-		icon = "__scattergun_turret__/graphics/technology/modular-turret-hcannon-tech.png",
+		name = "w93-modular-turrets-radar",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-radar-tech.png",
 		icon_size = 128,
 		effects =
 		{
 			{
 				type = "unlock-recipe",
-				recipe = "w93-modular-gun-hcannon"
+				recipe = "w93-modular-gun-radar"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "w93-hcannon-turret"
+				recipe = "w93-radar-turret"
 			},
 			{
 				type = "unlock-recipe",
-				recipe = "w93-hcannon-turret2"
+				recipe = "w93-modular-gun-radar2"
+			},
+			{
+				type = "unlock-recipe",
+				recipe = "w93-radar-turret2"
 			},
 		},
 		prerequisites =
 		{
-			"w93-modular-turrets-dcannon",
-			"military-4",
-			"tank",
+			"w93-modular-turrets2",
+			"efficiency-module-2",
+			"speed-module-2",
+			"utility-science-pack",
 		},
 		unit =
 		{
-			count = 200,
+			count = 75,
 			ingredients =
 			{
 				{"automation-science-pack", 1},
@@ -429,7 +476,100 @@ data:extend(
 				{"utility-science-pack",1},
 			},
 			time = 60
-		},
-		order = "e-a-c"
+		}
 	},
+
+	-- Damage Techs --
+	--[[
+	{
+		type = "technology",
+		name = "w93-modular-turrets-damage-1",
+		icon = "__scattergun_turret__/graphics/technology/modular-turret-damage-tech.png",
+		icon_size = 128,
+		effects =
+		{
+			{
+				type = "turret-attack",
+				turret_id = "w93-hmg-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-hmg-turret2",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-gatling-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-gatling-turret2",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-lcannon-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-lcannon-turret2",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-dcannon-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-dcannon-turret2",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-hcannon-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-hcannon-turret2",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-rocket-turret",
+				modifier = 0.1
+			},
+			{
+				type = "turret-attack",
+				turret_id = "w93-rocket-turret2",
+				modifier = 0.1
+			},
+		},
+		prerequisites =
+		{
+			"w93-modular-turrets",
+			"space-science-pack",
+		},
+		unit =
+		{
+			count_formula = "2^(L-1)*1000",
+			ingredients =
+			{
+				{"automation-science-pack", 1},
+				{"logistic-science-pack", 1},
+				{"chemical-science-pack", 1},
+				{"military-science-pack", 1},
+				{"utility-science-pack",1},
+				{"space-science-pack", 1}
+			},
+			time = 60
+		},
+		upgrade = true,
+		max_level = "infinite"
+	}
+	--]]
  })

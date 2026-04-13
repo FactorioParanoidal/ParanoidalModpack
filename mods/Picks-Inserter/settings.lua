@@ -1,7 +1,7 @@
---[[ Copyright (c) 2019 - 2023 Picklock
+--[[ Copyright (c) 2019 - 2026 Picklock
  * Part of Picklocks Inserter
  * settings.lua
- * Version 1.110.5.53
+ * Version 2.1.4.62
  *
  * See LICENSE.MD in the project directory for license information.
 --]]
@@ -53,9 +53,9 @@ data:extend(
 		type = "int-setting",
 		name = "PI_clear_max",
 		setting_type = "runtime-global",
-		default_value = 10,
+		default_value = 6,
 		minimum_value = 1,
-		maximum_value = 120,
+		maximum_value = 30,
 		order = "b[select]-d"
 	},
  	{

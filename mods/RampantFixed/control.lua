@@ -13,30 +13,35 @@
 
 -- imports
 
-local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
-local unitUtils = require("libs/UnitUtils")
+local aiAttackWave = require("libs/AIAttackWave")
+local aiPredicates = require("libs/AIPredicates")
+local aiPlanning = require("libs/AIPlanning")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
+local biterSupressors = require("libs/BiterSupressors")
+local config = require("config")
+local constants = require("libs/Constants")
+local chunkProcessor = require("libs/ChunkProcessor")
+local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
+local demolisherUtils = require("libs/DemolisherUtils")
+local chunkUtils = require("libs/ChunkUtils")
+local GUI_Elements = require("libs/GUI_Elements")
+local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
 local mathUtils = require("libs/MathUtils")
-local unitGroupUtils = require("libs/UnitGroupUtils")
-local chunkProcessor = require("libs/ChunkProcessor")
-local mapProcessor = require("libs/MapProcessor")
-local constants = require("libs/Constants")
 local pheromoneUtils = require("libs/PheromoneUtils")
-local squadDefense = require("libs/SquadDefense")
+local powerup = require("libs/Powerup")
 local squadAttack = require("libs/SquadAttack")
 local squadCompression = require("libs/SquadCompression")
+local squadDefense = require("libs/SquadDefense")
+local stringUtils = require("libs/StringUtils")
 local tests = require("libs/Tests")
 local undergroundAttack = require("libs/UndergroundAttack")
-
-local aiAttackWave = require("libs/AIAttackWave")
-local aiPlanning = require("libs/AIPlanning")
-local chunkUtils = require("libs/ChunkUtils")
+local unitGroupUtils = require("libs/UnitGroupUtils")
+local unitUtils = require("libs/UnitUtils")
 local upgrade = require("Upgrade")
-local config = require("config")
-local aiPredicates = require("libs/AIPredicates")
-local stringUtils = require("libs/StringUtils")
+
+local hasSpaceAgeMod = script.active_mods["space-age"]
 
 require("remote_interface")
 
@@ -66,6 +71,9 @@ local OVERDAMAGEPROTECTION_THRESHOLD = constants.OVERDAMAGEPROTECTION_THRESHOLD
 local VANILLA_ENTITIES = constants.VANILLA_ENTITIES
 -- imported functions
 
+local processSupression = biterSupressors.processSupression
+local biterSupressionType = biterSupressors.supressionType
+
 local isRampantSetting = stringUtils.isRampantSetting
 
 local canMigrate = aiPredicates.canMigrate
@@ -74,15 +82,15 @@ local convertTypeToDrainCrystal = unitUtils.convertTypeToDrainCrystal
 
 local squadDispatch = squadAttack.squadDispatch
 local processDecompressQueue = squadCompression.processDecompressQueue
-local processNonRampantSquads = squadCompression.processNonRampantSquads
+local nonRampantCompressedSquads = squadCompression.nonRampantCompressedSquads
 local removeOneTickImmunity = squadCompression.removeOneTickImmunity
 local onUnitPreKilled = squadCompression.onUnitPreKilled
 
 local createUndergroudAttack = undergroundAttack.createUndergroudAttack
 local enrageBitersInRange = bitersEnrage.enrageBitersInRange
-local addDebugButton = tests.addDebugButton
-local onDebugElementClick = tests.onDebugElementClick
-local debug_onUnitDamaged = tests.debug_onUnitDamaged
+-- local addDebugButton = tests.addDebugButton
+-- local onDebugElementClick = tests.onDebugElementClick
+-- local debug_onUnitDamaged = tests.debug_onUnitDamaged
 local in_debug_list = tests.in_debug_list
 
 local cleanUpMapTables = mapProcessor.cleanUpMapTables
@@ -102,6 +110,7 @@ local disperseVictoryScent = pheromoneUtils.disperseVictoryScent
 local getChunkByPosition = mapUtils.getChunkByPosition
 
 local entityForPassScan = chunkUtils.entityForPassScan
+local needReplacement = chunkUtils.needReplacement
 
 local processPendingChunks = chunkProcessor.processPendingChunks
 local processScanChunks = chunkProcessor.processScanChunks
@@ -118,6 +127,8 @@ local processNests = mapProcessor.processNests
 local processGrowingBases = mapProcessor.processGrowingBases
 
 local rallyUnits = aiAttackWave.rallyUnits
+local processBuilders = aiAttackWave.processBuilders
+local processNonRampantBuilders = aiAttackWave.processNonRampantBuilders
 
 local recycleBases = baseUtils.recycleBases
 
@@ -143,7 +154,7 @@ local makeImmortalEntity = chunkUtils.makeImmortalEntity
 local registerResource = chunkUtils.registerResource
 local unregisterResource = chunkUtils.unregisterResource
 
-local cleanSquads = squadAttack.cleanSquads
+local processSquads = squadAttack.processSquads
 
 local processCompression = squadCompression.processCompression
 
@@ -162,6 +173,8 @@ local thisIsNewEnemyPosition = chunkPropertyUtils.thisIsNewEnemyPosition
 local mMax = math.max
 local mMin = math.min
 
+local onUnitDamaged_oneshot = powerup.onUnitDamaged_oneshot
+
 -- local references to global
 
 local universe -- manages the chunks that make up the game universe
@@ -176,7 +189,7 @@ local function onIonCannonFired(event)
 	if not map then
 		return
 	end	
-	universe.retribution = universe.retribution + 1
+	map.retribution = map.retribution + 1
 	map.vengenceLimiter = 0
     map.ionCannonBlasts = map.ionCannonBlasts + 1
     map.points = map.points + 4000
@@ -200,7 +213,7 @@ end
 
 
 local function onLoad()
-    universe = global.universe
+    universe = storage.universe
     hookEvents()
 end
 
@@ -229,7 +242,6 @@ local function onChunkDeleted(event)
 end
 
 local function prepMap(surface)
-
     local surfaceIndex = surface.index
 
     if not universe.maps then
@@ -307,6 +319,7 @@ local function prepMap(surface)
 
     map.surface = surface
     map.universe = universe
+	map.suspended = false
 
     map.vengenceQueue = {}
     map.points = 0
@@ -316,8 +329,9 @@ local function prepMap(surface)
     map.pendingAttack = nil
     map.building = nil
 
-    map.evolutionLevel = game.forces.enemy.evolution_factor
     map.canAttackTick = 0
+	map.canMigrateTick = 0
+	
     map.drainPylons = {}
     map.groupNumberToSquad = {}
     map.activeRaidNests = 0
@@ -334,11 +348,41 @@ local function prepMap(surface)
 	map.squadsGenerated = 0	-- (every 20 active Nests chunks = 1 max squad in agressive mode), aiAttackWave.formSquads
     map.temperament = 0.5
     map.temperamentScore = 0
-    map.stateTick = 0
+    map.firstStateTick = 0
+	map.truceEndTick = -1
+	map.stateTick = 0
 
 	map.nextPlayerScan = 0
 	
 	map.basesToGrow = {}
+	
+	-- universe settings before 2.0
+	map.maxPoints = 0 
+	map.attackWaveMaxSize = 0
+	map.rallyThreshold = 0
+	map.formSquadThreshold = 0
+	map.raiding_minimum_base_threshold = 0
+	map.no_pollution_attack_threshold = 0
+	map.retribution = 0
+	map.undergroundAttackProbability = 0
+	
+	map.finalSquadCost = 0
+	map.finalVengenceSquadCost = 0
+	map.attackWaveDeviation = 0
+	map.attackWaveUpperBound = 0
+	map.settlerWaveSize = 0
+	map.settlerWaveDeviation = 0
+	map.kamikazeThreshold = 0	
+	map.buildingsLvl = 1
+	
+	map.replaceModedNests = constants.IS_VANILLA_BITERS_SURFACE(map.surface)		-- to do: Clean up the mess here 
+	map.hasNonmoddedBiters = constants.IS_VANILLA_BITERS_SURFACE(map.surface)
+	map.nextDemolisherAttackTick = 0
+	map.supressionData = {supressionEndTick = 0, supressionType = 0, evo = nil}
+	
+	map.siegeTick = 0
+	map.resourceSettleTick = 0
+	--
 	
     -- queue all current chunks that wont be generated during play
     local tick = game.tick
@@ -356,12 +400,27 @@ local function prepMap(surface)
         end
     end
 
-    processPendingChunks(universe, tick, true)
+     processPendingChunks(universe, tick, true)
 end
 
 local function setNewEnemySide()
 	universe["ALLOW_OTHER_ENEMIES"] = settings.startup["rampantFixed--allowOtherEnemies"].value
 	universe["NEW_ENEMIES_SIDE"] = settings.startup["rampantFixed--newEnemiesSide"].value
+end
+
+local additionalPoles = {}	-- reseted after save/load
+local function entityIsImmortal(entity)	
+	if (universe.safeEntities[entity.type] or universe.safeEntities[entity.name]) then
+		return true						 
+	elseif universe.safeEntities["big-electric-pole"] and (entity.type == "electric-pole") then
+		if not additionalPoles[entity.name] then
+			additionalPoles[entity.name] = {safe = ((entity.prototype.get_max_wire_distance() > 18) and (entity.prototype.get_supply_area_distance() < 7))}
+		end
+		if additionalPoles[entity.name].safe then 
+			return true
+		end
+	end
+	return false
 end
 
 local function onBuild(event)
@@ -377,7 +436,7 @@ local function onBuild(event)
         else
             accountPlayerEntity(entity, map, true, false)
             if universe.safeBuildings then
-                if universe.safeEntities[entity.type] or universe.safeEntities[entity.name] then
+                if entityIsImmortal(entity) then
                     entity.destructible = false
                 end
             end
@@ -407,12 +466,12 @@ local landfillVectors = {{0,0}, {1,0}, {0,1}, {-1,0}, {0,-1}}
 
 local function biters_landfill(entity)
 	if (not entity) or (not entity.valid) then return end
-	if entity.prototype.max_health < 300 then return end	
+	if entity.max_health < 300 then return end	
 	local position = entity.position
 	local surface = entity.surface
 	for _, vector in pairs(landfillVectors) do
 		local tile = surface.get_tile({position.x + vector[1], position.y + vector[2]})
-		if tile.collides_with("resource-layer") then
+		if tile.collides_with("water_tile") then
 			surface.set_tiles({{name = "landfill", position = tile.position}},true,true,true,true)
 			local particle_pos = {tile.position.x + 0.5, tile.position.y + 0.5}
 			for _ = 1, 50, 1 do
@@ -471,7 +530,10 @@ local function onDeath(event)
             if artilleryBlast then
                 map.artilleryBlasts = map.artilleryBlasts + 1
 				map.vengenceLimiter = 0
-				universe.retribution = universe.retribution + 0.002
+				map.retribution = map.retribution + 0.002
+				if map.supressionData then
+					 map.supressionData.artilleryEffectTick = game.tick + 5 * 3600
+				end
 				
 				if cause and cause.valid and (cause.type == "electric-turret") then
 					if mRandom() < 0.005 then
@@ -491,19 +553,12 @@ local function onDeath(event)
 						-- drop death pheromone where unit died
 						deathScent(map, chunk)
 
-						-- if (not artilleryBlast) and (-getDeathGenerator(map, chunk) < -universe.retreatThreshold) and cause and cause.valid then
-							-- retreatUnits(chunk,
-										 -- cause,
-										 -- map,
-										 -- tick,
-										 -- (artilleryBlast and RETREAT_SPAWNER_GRAB_RADIUS) or RETREAT_GRAB_RADIUS)
-						-- end
-
 						map.lostEnemyUnits = map.lostEnemyUnits + 1
 						local chainVengenceCoefficient = settings.global["rampantFixed--chainVengenceCoefficient"].value	-- 0.6 default
 						local vengenceOffset = chainVengenceCoefficient ^ map.vengenceLimiter
-						if (not surface.peaceful_mode) and (mRandom() < (universe.rallyThreshold * vengenceOffset)) then
+						if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) and (not surface.peaceful_mode) and (mRandom() < (map.rallyThreshold * vengenceOffset)) then
 							rallyUnits(chunk, map, tick)
+							chunk.nextSquadTick = tick + 7200
 						end
 					end
 					if artilleryBlast and universe.undergroundAttack then
@@ -512,6 +567,10 @@ local function onDeath(event)
 						squadCompression.onUnitKilled(universe, surface, entity, event.force, cause)
 					end	
 				end
+			elseif (entityType == "segmented-unit") then	
+				if map.nextDemolisherAttackTick then
+					map.nextDemolisherAttackTick = mMax(game.tick, map.nextDemolisherAttackTick) + 5*3600
+				end
             elseif event.force and (event.force.name ~= "enemy") and
                 ((entityType == "unit-spawner") or (entityType == "turret"))
             then
@@ -519,7 +578,7 @@ local function onDeath(event)
 				local pointsGain = 0
                 if (entityType == "unit-spawner") then
 					if artilleryBlast then
-						universe.retribution = universe.retribution + 0.018	-- additional retribution points					
+						map.retribution = map.retribution + 0.018	-- additional retribution points					
 					end
 					if universe.aiDifficulty ~= "Hard" then
 						pointsGain = RECOVER_NEST_COST * 0.2
@@ -543,13 +602,27 @@ local function onDeath(event)
                         game.print(map.surface.name .. ": Points: +" .. pointsGain .. ". [Worm or Nest Lost] Total: " .. string.format("%.2f", map.points))				
 				end
 				
-
+				-- if (chunk ~= -1) then	-- spawn too many nests in late game
+					-- local baseFromChunk = map.chunkToBase[chunk]
+					-- if baseFromChunk then
+						-- baseFromChunk.forcedGrowthTick = tick + 15*3600
+						-- if not universe.growingBases[baseFromChunk.id] then
+							-- universe.growingBases[baseFromChunk.id] = {tick = tick}
+						-- end	
+					-- end
+				-- end
                 unregisterEnemyBaseStructure(map, entity, event.damage_type)
 
                 if (chunk ~= -1) then
-                    rallyUnits(chunk, map, tick)
+					if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) then
+						rallyUnits(chunk, map, tick)
+						chunk.nextSquadTick = tick + 7200
+					end	
 					if cause and cause.valid and (cause.type == "character") then
 						enrageBitersInRange(map, cause.position, getChunkByPosition(map, cause.position), tick)
+						if not artilleryBlast then
+							powerup.checkAndDropPowerup(entity, cause, universe, entity.force.get_evolution_factor(surface))
+						end						
 					end
                     -- if artilleryBlast and cause and cause.valid then
                         -- retreatUnits(chunk,
@@ -596,7 +669,7 @@ local function onDeath(event)
                         if conversion then
                             local newEntity = surface.create_entity({
                                     position=entity.position,
-                                    name=convertTypeToDrainCrystal(entity.force.evolution_factor, conversion),
+                                    name=convertTypeToDrainCrystal(entity.force.get_evolution_factor(surface), conversion),
                                     direction=entity.direction
                             })
                             if (conversion == "pole") then
@@ -609,30 +682,11 @@ local function onDeath(event)
                                 local pair = {targetEntity, newEntity}
                                 map.drainPylons[targetEntity.unit_number] = pair
                                 map.drainPylons[newEntity.unit_number] = pair
-                                local wires = entity.neighbours
-                                if wires then
-                                    for _,v in pairs(wires.copper) do
-                                        if (v.valid) then
-                                            newEntity.connect_neighbour(v);
-                                        end
-                                    end
-                                    -- for _,v in pairs(wires.red) do
-                                        -- if (v.valid) then
-                                            -- newEntity.connect_neighbour({
-                                                    -- wire = DEFINES_WIRE_TYPE_RED,
-                                                    -- target_entity = v
-                                            -- });
-                                        -- end
-                                    -- end
-                                    -- for _,v in pairs(wires.green) do
-                                        -- if (v.valid) then
-                                            -- newEntity.connect_neighbour({
-                                                    -- wire = DEFINES_WIRE_TYPE_GREEN,
-                                                    -- target_entity = v
-                                            -- });
-                                        -- end
-                                    -- end
-                                end
+                                local wire_connector = entity.get_wire_connector(defines.wire_connector_id.pole_copper)
+								local newWire_connector = newEntity.get_wire_connector(defines.wire_connector_id.pole_copper)
+								for _, wireConnection in pairs(wire_connector.connections) do
+									newWire_connector.connect_to(wireConnection.target, true)
+								end
                             elseif newEntity.backer_name then
                                 newEntity.backer_name = ""
                             end
@@ -644,11 +698,19 @@ local function onDeath(event)
                     unregisterResource(entity, map)
                 end
             end
-            if creditNatives and universe.safeBuildings and
-                (universe.safeEntities[entityType] or universe.safeEntities[entity.name])
-            then
-                makeImmortalEntity(surface, entity)
-            else
+            if creditNatives then
+				if universe.safeBuildings and entityIsImmortal(entity) then
+					makeImmortalEntity(surface, entity)
+				else	
+					accountPlayerEntity(entity, map, false, creditNatives)
+				end
+				if (entityType ~= "wall") and cause and cause.valid and (cause.type == "unit") and cause.commandable and cause.commandable.parent_group then
+					local squad = universe.groupNumberToSquad[cause.commandable.parent_group.unique_id]
+					if squad then
+						squad.kills = (squad.kills or 0) + 1
+					end
+				end
+           else
                 accountPlayerEntity(entity, map, false, creditNatives)
             end	
         end
@@ -675,14 +737,14 @@ local function onEnemyBaseBuild(event)
 				local thisIsRampantEnemy = false
                 base = findNearbyBase(map, chunk, MAXIMUM_BASE_RADIUS, BASE_CHANGING_CHANCE)
                 if not base then
-					thisIsRampantEnemy = thisIsNewEnemyPosition(universe, chunk.x, chunk.y)
+					thisIsRampantEnemy = map.hasNonmoddedBiters and thisIsNewEnemyPosition(universe, chunk.x, chunk.y)
                     base = createBase(map,
                                       chunk,
                                       event.tick,
 									  thisIsRampantEnemy)
                 end
-				if base and base.thisIsRampantEnemy then
-					if VANILLA_ENTITIES[entity.name] or ((not universe.ALLOW_OTHER_ENEMIES) and (mRandom()<0.8)) then	-- if change this, look also chunkUtils.initialScan
+				if map.hasNonmoddedBiters and base and base.thisIsRampantEnemy then					
+					if needReplacement(map, entity) then	-- if change this, look also chunkUtils.initialScan
 						entity = upgradeEntity(entity,
 										   base.alignment,
 										   map ,nil, true)
@@ -825,27 +887,27 @@ local function onUsedCapsule(event)
 end
 
 local function onRocketLaunch(event)
-    local entity = event.rocket_silo or event.rocket
-    if entity.valid then
-        local map = universe.maps[entity.surface.index]
-		local points
-		if game.active_mods["space-exploration"] then
-			universe.retribution = universe.retribution + 0.1
-			points = 500
-		else
-			universe.retribution = universe.retribution + 10
-			points = 5000
-		end	
-		if not map then
-			return
-		end	
- 		map.vengenceLimiter = 0
-        map.rocketLaunched = map.rocketLaunched + 1
-        map.points = map.points + points
-        if universe.aiPointsPrintGainsToChat then
-            game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
-        end
-    end
+    -- local entity = event.rocket_silo or event.rocket
+    -- if entity.valid then
+        -- local map = universe.maps[entity.surface.index]
+		-- local points
+		-- if game.active_mods["space-exploration"] then
+			-- map.retribution = map.retribution + 0.1
+			-- points = 500
+		-- else
+			-- map.retribution = map.retribution + 10
+			-- points = 5000
+		-- end	
+		-- if not map then
+			-- return
+		-- end	
+ 		-- map.vengenceLimiter = 0
+        -- map.rocketLaunched = map.rocketLaunched + 1
+        -- map.points = map.points + points
+        -- if universe.aiPointsPrintGainsToChat then
+            -- game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
+        -- end
+    -- end
 end
 
 local function onTriggerEntityCreated(event)
@@ -871,10 +933,9 @@ local function onGroupFinishedGathering(event)
 	end
 	local map = universe.maps[group.surface.index]
 	if not map then 
-		--group.destroy()
 		return		
 	end
-	local squad = universe.groupNumberToSquad[group.group_number]
+	local squad = universe.groupNumberToSquad[group.unique_id]
 	if (not group.is_script_driven) or (squad and not squad.vengence) then
 		if (not group.is_script_driven) and (not settings.global["rampantFixed--allowDaytimeNonRampantActions"].value) then
 			if (map.state == constants.AI_STATE_PEACEFUL) or (universe.aiNocturnalMode and (group.surface.darkness <= 0.65)) then
@@ -885,26 +946,69 @@ local function onGroupFinishedGathering(event)
 	end
 	
 	if squad then
-		if not squad.undergoundAttack then
+		if squad.onTheWay then
+			return
+		end	
+		if (not squad.undergoundAttack) or squad.hasSpiders then
 			processCompression(map, squad, getChunkByPosition(map, group.position), true)
 		else
 			createUndergroudAttack(map, squad)
 		end
-	elseif (#group.members > 70) and group.position and not group.is_script_driven then
+	elseif group.position and not group.is_script_driven then
+		local nonRampantSquad = universe.nonRampantSquads[group.unique_id] or universe.nonRampantCompressedSquads[group.unique_id]
+		if nonRampantSquad then
+			return
+		end	
 		local nonRampantSquad = createSquad(group.position, map, group, false)
 		nonRampantSquad.nonRampantSquad = true
-		processCompression(map, nonRampantSquad, getChunkByPosition(map, group.position), false)
-		if nonRampantSquad.compressed then
-			universe.nonRampantCompressedSquads[group.group_number] = nonRampantSquad
-			--game.print("non-rampant squad#"..group.group_number..", "..#group.members.." units [gps=" .. group.position.x .. "," .. group.position.y .."]")	-- debug
+		if (#group.members > 70) then
+			processCompression(map, nonRampantSquad, getChunkByPosition(map, group.position), false)
 		end	
+		if nonRampantSquad.compressed then
+			universe.nonRampantCompressedSquads[group.unique_id] = nonRampantSquad
+		else
+			universe.nonRampantSquads[group.unique_id] = nonRampantSquad				
+		end
+		-- 2025/07. AI bug. if no default units then group can't build new base 
+		-- so, lets create 1 unit when group created + destroy it when group finish gathering
+		if map.hasNonmoddedBiters then
+			local members = group.members
+			for _, entity in pairs(members) do
+				entity.destroy()
+				break
+			end	
+			
+		end
 	end
-	
 	-- group can be destroyed after createUndergroudAttack()
-	if squad and group.valid and group.is_script_driven then
+	if squad and group.valid and group.is_script_driven and not squad.onTheWay then
 		squadDispatch(map, squad)
 	end
 end
+
+-- debug
+		-- 2025/07. AI bug. if no default units then group can't build new base 
+		-- so, lets create 1 unit when group created + destroy it when group finish gathering
+local function on_unit_group_created(event)
+    local group = event.group
+    if not group.valid or (group.force.name ~= "enemy") or group.is_script_driven then
+		return
+	end
+	local map = universe.maps[group.surface.index]
+	if not map then 
+		return		
+	end
+	
+	if map.hasNonmoddedBiters then
+		local newEntity = group.surface.create_entity({
+			name = "small-biter",
+			position = group.position, 
+			force = group.force,
+			})
+		group.add_member(newEntity)
+	end
+end
+------
 
 local function onForceCreated(event)
 	upgrade.rebuildActivePlayerForces(universe)
@@ -962,6 +1066,10 @@ local function onSurfaceCreated(event)
 	local surface = game.surfaces[event.surface_index]
 	if not SURFACE_IGNORED(surface, universe) then
 		prepMap(surface)
+		local map = universe.maps[event.surface_index]
+		if map then
+			map.firstStateTick = game.tick
+		end	
 	end	
 end
 
@@ -994,9 +1102,28 @@ local function onBuilderArrived(event)
     targetPosition.y = builder.position.y
 
     if universe.aiPointsPrintSpendingToChat then
-        game.print("Settled: [gps=" .. targetPosition.x .. "," .. targetPosition.y .."]")		
+        game.print("Settled: [gps=" .. targetPosition.x .. "," .. targetPosition.y .. "," .. builder.surface.name .."]")		
     end
     builder.surface.create_entity(universe.createBuildCloudQuery)
+	local map = universe.maps[builder.surface.index]
+	if map then
+		local chunk = mapUtils.getChunkByXY(map, builder.position.x, builder.position.y)
+		if chunk and (chunk~=-1) then
+			chunk.nextSquadTick = game.tick + 3600*5	-- temporary stop attacks from this chunk
+		end
+		local group = event.group
+		if group and group.is_unit_group and not universe.groupNumberToSquad[group.unique_id] then
+			local members = {}
+			for _, entity in pairs(group.members) do 
+				if entity.valid and (entity.type == "unit") then
+					members[#members+1] = entity
+				end
+			end
+			if #members > 0 then
+				universe.nonRampantBuilders[group] = members
+			end	
+		end
+	end	
 end
 
 local targetDummyArray= {}
@@ -1004,6 +1131,7 @@ targetDummyArray["targetDummyPlasma-rampant"] = true
 targetDummyArray["targetDummyFire-rampant"] = true
 targetDummyArray["targetDummyPhysical-rampant"] = true
 targetDummyArray["targetDummyLaser-rampant"] = true
+
 local protectedAreaUnitsQuery = {
 		position = nil,
 		radius = 6,
@@ -1027,9 +1155,13 @@ local function onSectorScanned(event)
 				-- end	
 			-- end
 			entity.damage(30, "neutral")
+		elseif hasSpaceAgeMod and biterSupressionType(entity.name) then
+			processSupression(entity)
 		elseif entity.name == "test-rampant" then
 			onEntitySpawned(event)
 			entity.damage(1, "neutral")
+		elseif entity.name == "regenerationCrystal-rampantFixed" then
+			powerup.onRegenerationCrystalTick(entity, game.forces.enemy.get_evolution_factor(entity.surface))
 		end
 	end
 	return
@@ -1104,9 +1236,9 @@ local function onEntityDamaged(event)
 		 
 		local unitProtection = fillAndReturnUnitProtections(event.entity)
 		if (event.final_damage_amount > 0) and event.cause and (event.cause ~= event.entity) then
-			if (event.cause.type == "character") and debug_onUnitDamaged(event, universe.debugSettings) then
+			if onUnitDamaged_oneshot(event, universe) then
 				return
-			end
+			 end
 			-----------------
 			if allowLongRangeImmunity and unitProtection.longRangeImmunity then
 				local incomingRange = 0
@@ -1117,12 +1249,12 @@ local function onEntityDamaged(event)
 						incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, event.cause.position.x, event.cause.position.y)
 					end	
 					if incomingRange == - 1 then
-						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.prototype.max_health)
+						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
 						event.final_damage_amount = event.final_damage_amount * LR_exceptions_DamageKf
 						entity.health = startHP - event.final_damage_amount					
 						event.final_health = entity.health					
 					elseif incomingRange>unitProtection.longRangeImmunity then
-						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.prototype.max_health)
+						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
 						if LR_DamageKf > 0 then
 							event.final_damage_amount = event.final_damage_amount * LR_DamageKf
 						else
@@ -1137,7 +1269,7 @@ local function onEntityDamaged(event)
 			-----------------
 			if allowOneshotProtection and unitProtection.overdamageProtection and (event.original_damage_amount > OVERDAMAGEPROTECTION_THRESHOLD) and (event.original_damage_amount >= event.final_damage_amount)  then
 				local maxDamage = unitProtection.overdamageProtection
-				local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.prototype.max_health)
+				local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
 				if maxDamage<event.original_damage_amount then
 					local final_damage_amount = maxDamage*(event.final_damage_amount/event.original_damage_amount)
 					if OP_efficienty < 1 then
@@ -1169,19 +1301,123 @@ local function onEntityDamaged(event)
 	end		
 end
 
+local function processPlanetAISettings()
+	for planetName ,planetAISetting in pairs(universe.planetAISettings) do
+		if planetAISetting.changed then
+			if not (planetName == "others") then
+				local surface = game.surfaces[planetName]
+				if surface and (not constants.isExcludedSurface(surface.name)) then
+					universe.surfaceIgnoringSet[surface.index] = nil
+					if (planetAISetting.AI == 1) then
+						if universe.maps[surface.index] then
+							onSurfaceDeleted({surface_index = surface.index})
+							-- game.print({"description.rampantFixed--AI_PlanetOff", planetName})	-- debug			
+						end	
+					else
+						if not universe.maps[surface.index] then
+							onSurfaceCreated({surface_index = surface.index})
+							local map = universe.maps[surface.index]
+							if map then
+								map.firstStateTick = 0		-- prevent cheating by on/off AI
+								map.truceEndTick = 0
+							end
+							-- game.print({"description.rampantFixed--AI_PlanetOn", planetName})	-- debug			
+						end
+					end
+
+				end				
+				planetAISetting.changed = false
+			end
+		end	
+	end	
+	
+	local planetAISetting = universe.planetAISettings.others
+	if planetAISetting and planetAISetting.changed then
+		for _,surface in pairs(game.surfaces) do
+			if (not constants.isExcludedSurface(surface.name)) and not universe.planetAISettings[surface.name] then
+				if (planetAISetting.AI == 1) then
+					if universe.maps[surface.index] then
+						onSurfaceDeleted({surface_index = surface.index})
+						-- game.print({"description.rampantFixed--AI_PlanetOff", surface.name})			
+					end	
+				else
+					if not universe.maps[surface.index] then
+						onSurfaceCreated({surface_index = surface.index})
+						-- game.print({"description.rampantFixed--AI_PlanetOn", surface.name})			
+					end
+				end							
+			end
+		end
+		planetAISetting.changed = false
+	end
+end
+	
+local function processNewSurfaceStasus(universe)
+	if not universe.newSurfaceStasus then
+		return
+	end	
+	for surface_index, newStasus in pairs (universe.newSurfaceStasus) do
+		if newStasus == "create" then
+			if not universe.maps[surface_index] then
+				onSurfaceCreated({surface_index = surface_index})
+			end	
+		elseif newStasus == "delete" then
+			if universe.maps[surface_index] then
+				onSurfaceDeleted({surface_index = surface_index})
+			end	
+		end		
+	end
+	universe.newSurfaceStasus = nil	
+end
+
+
 local function showNewgameMessages()
+	-- game.print({"description.rampantFixed--enableShootingAlerts"})	
 	-- if universe.NEW_ENEMIES then
 		-- game.print({"description.rampantFixed--EnemySettings1_1_10"})	
-	-- end
-	-- if game.active_mods["space-exploration"] and game.active_mods["combat-mechanics-overhaul"] and game.active_mods["Krastorio2"] then
-		 -- if not settings.startup["rampantFixed--useBlockableSteamAttacks"].value then
-			-- game.print({"description.rampantFixed--K2_SE_CMO_incompatibilityWarning"})
-		 -- end			
 	-- end
 end	
 
 
 -- hooks
+local function on_player_cursor_stack_changed(event)
+	local player = game.players[event.player_index]
+	if universe.powerupSettings[player.name] and universe.powerupSettings[player.name].endlessAmmo then
+		powerup.on_player_cursor_stack_changed(player, universe.powerupSettings[player.name])
+	end
+end
+script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
+
+
+local function on_player_ammo_inventory_changed(event)
+	local player = game.players[event.player_index]
+	if universe.powerupSettings[player.name] and universe.powerupSettings[player.name].endlessAmmo then
+		powerup.endlessAmmo_onInventoryChanged(player, universe.powerupSettings[player.name])
+	end
+end
+script.on_event(defines.events.on_player_ammo_inventory_changed, on_player_ammo_inventory_changed)
+
+local function onScriptTriggerEffect(event)
+
+	if event.effect_id == "powerup-combat5min-rampantFixed" and event.target_entity and event.target_entity.valid then
+		powerup.applyCombatPowerup(event.target_entity.player, universe.powerupSettings, 3600*5)
+	elseif hasSpaceAgeMod and (event.effect_id == "feed-the-demolisher-rampant" and event.target_entity and event.target_entity.valid) then
+		demolisherUtils.feedDemolisher(event.target_entity, event.cause_entity, event.surface_index)
+	elseif hasSpaceAgeMod and (event.effect_id == "fear-demolisher-rampant") then
+		demolisherUtils.fearDemolishers(event.surface_index)
+	end
+end
+ 
+local function onPlayerRespawned(event)
+	local player = game.players[event.player_index]
+	if (not player.valid) or (not player.character) then
+		return
+	end
+	if universe.powerupSettings[player.name] then
+		powerup.onPlayerRespawned(player, universe.powerupSettings)
+		powerup.drawPowerups(player, universe.powerupSettings[player.name])
+	end
+end 
  
 script.on_event(defines.events.on_tick,
                 function ()
@@ -1232,7 +1468,6 @@ script.on_event(defines.events.on_tick,
                             recycleBases(universe, tick)
                         end
                         cleanUpMapTables(map, tick)
-						suspendClearedMaps(universe, tick)
                     elseif (pick == 1) then
 						processPlayers(gameRef.connected_players, universe, tick)
                     elseif (pick == 2) then
@@ -1254,7 +1489,7 @@ script.on_event(defines.events.on_tick,
                     end
 					
 					if pick60 == 0 then	
-						processMapAIs(universe, gameRef.forces.enemy.evolution_factor, tick)
+						processMapAIs(universe, tick)
 					end
 
 					if pick~=5 then
@@ -1262,29 +1497,81 @@ script.on_event(defines.events.on_tick,
 					end	
                     processActiveNests(universe, tick)
 					processDecompressQueue(universe)
-                    cleanSquads(universe)
-end
+                    processSquads(universe)
+		end
 )
-
 script.on_nth_tick(30000, 
 	function()
 		if universe then
-			local evo = game.forces.enemy.evolution_factor
+			local evo = game.forces.enemy.get_evolution_factor()
 			if settings.startup["rampantFixed--JuggernautEnemy"].value and (not universe.JuggernautAlertShown) and (evo > 0.75) and (evo < 0.82) then
 				universe.JuggernautAlertShown = true
 				game.print({"description.rampantFixed--JuggernautAlert"})
 			end
 			baseUtils.setRandomBaseToMutate(universe)
+			if hasSpaceAgeMod then
+				demolisherUtils.vulcanusEvolution()	-- if you change the call frequency, then change the function
+			end	
 		end	
 	end
 )
 
+script.on_nth_tick(5000,
+	function()
+		if universe then
+			suspendClearedMaps(universe, game.tick)
+			if hasSpaceAgeMod then
+				demolisherUtils.processDemolishers()
+			end	
+			---
+			if universe.nonRampantSquads then
+				for i, squad in pairs(universe.nonRampantSquads) do
+					if not squad.group.valid then
+						universe.nonRampantSquads[i] = nil
+					end	
+				end
+			end
+		end	
+	end
+)
+
+script.on_nth_tick(300, 
+	function()
+		if universe then
+			processPlanetAISettings()
+			processNewSurfaceStasus(universe)			
+			-----------
+			if storage.showAISettingsForPlayer and (game.tick >=300) and (#game.players > 0) then
+				for playerIndex, player in pairs(game.players) do
+					local player_settings = settings.get_player_settings(player)
+					if player.admin or in_debug_list(player) then						
+						if player_settings["rampantFixed--showPlanetAISettings"].value then
+							GUI_Elements.openPlanetAISettings(player.index)
+							break
+						end
+					end
+				end			
+				for playerIndex, player in pairs(game.players) do
+					local player_settings = settings.get_player_settings(player)
+					player_settings["rampantFixed--showPlanetAISettings"] = {value = false}
+				end			
+				
+				storage.showAISettingsForPlayer = nil
+			end
+			-----------
+			
+			if hasSpaceAgeMod then
+				demolisherUtils.processDemolisherTriggers()
+			end	
+		end	
+	end
+)
 --- copressed and underground squads
 script.on_nth_tick(60, 
 	function()
 		if universe then
 			if universe.nonRampantCompressedSquads then
-				processNonRampantSquads(universe)
+				nonRampantCompressedSquads(universe)
 			end
 		end
 	end
@@ -1297,11 +1584,27 @@ script.on_nth_tick(30,
 		end
 	end
 )
+--------------
+script.on_nth_tick(252, 
+	function()
+		if universe and (game.tick > 0) then
+			processNonRampantBuilders(universe, game.tick)
+			processBuilders(universe, game.tick)
+		end
+	end
+)
 
 script.on_nth_tick(3600,
 	function()
-		if universe then
-			undergroundAttack.updateUndergroundAttackProbability(universe)
+		if universe then			
+			for _, map in pairs(universe.maps) do
+				if map and (not map.suspended) and map.surface.valid then
+					undergroundAttack.updateUndergroundAttackProbability(map)
+					map.buildingsLvl = baseUtils.evoToBuildingLvl(game.forces.enemy.get_evolution_factor(map.surface))
+				end	
+			end
+			---------------
+			mapProcessor.showGrowingCloud(universe)
 		end
 	end
 )
@@ -1311,290 +1614,11 @@ script.on_nth_tick(36000,
 		squadCompression.checkCompressedUnitsList(universe)
 	end
 )
---- 
----- GUI + ----------
-local function surfaceStatusCaption(surfaceIgnored)
-	if surfaceIgnored then
-		return {"description.rampantFixed--surfaceIgnored_True"}
-	else
-		return {"description.rampantFixed--surfaceIgnored_False"}			
-	end	
-end
-
-function create_surfaceIteraction_frame(player)
-	local gui = player.gui.screen
-
-	for i, children in pairs(gui.children) do
-		if children.name ==  "rampantFixed--surfaceIteraction_frame" then
-			children.destroy()
-			break
-		end
-	end
-	
-	local root = gui.add{name = "rampantFixed--surfaceIteraction_frame", type = "frame", direction = "vertical"}	--			, style = "non_draggable_frame", caption={"description.rampantFixed--surfaceIteraction_frame"}
-	root.force_auto_center()
-	
-	player.opened = root
-	if not (root and root.valid) then return end -- setting player.opened can cause other scripts to delete UIs
-	
-    -- Titlebar
-    local titlebar = root.add {
-        type = "flow",
-        name = "rampantFixed_closeSurfaceTitle",
-        direction = "horizontal"
-    }
-    titlebar.drag_target = root
-    titlebar.add { -- Title
-        type = "label",
-        caption = {"description.rampantFixed--surfaceIteraction_frame"},
-        ignored_by_interaction = true,
-        style = "frame_title"
-    }
-    titlebar.add {
-        type = "empty-widget",
-        ignored_by_interaction = true,
-    }
-
-	titlebar.add { -- Close button
-		type = "sprite-button",
-		name="rampantFixed_closeSurfaceStatus",
-		sprite = "utility/close_white",
-		hovered_sprite = "utility/close_black",
-		clicked_sprite = "utility/close_black",
-		style = "close_button"
-	}
-	---------------	
-	local title_table = root.add{type="table", name="rampantFixed--surfaceIteraction_table", column_count=2, draw_horizontal_lines=false}
-	title_table.style.horizontally_stretchable = true
-	title_table.style.column_alignments[1] = "left"
-	title_table.style.column_alignments[2] = "right"
-	title_table.drag_target = root
-	
-	title_table.add{type="label", name="rampantFixed_surfaceName_Title", caption={"description.rampantFixed--surfaceName_Title"}}
-	title_table.add{type="label", name="rampantFixed_surfaceIgnored_Title", caption={"description.rampantFixed--surfaceIgnored_Title"}}
-	
- 	for _,surface in pairs(game.surfaces) do
-		local surfaceName = surface.name
-		if not constants.isExcludedSurface(surfaceName) then
-			title_table.add{type="label", name="rampantFixed_surfaceName_"..tostring(surface.index), caption=surfaceName}
-			title_table.add{type="button", name="rampantFixed_surfaceStatus_"..tostring(surface.index), caption=surfaceStatusCaption(SURFACE_IGNORED(surface, universe)), style = "rampantFixed_surfaceStatus_button"}
-		end
-	end	
-end
-
-function setSurfaceStatus(surface, newStatus)
-	if not surface then
-		-- game.print("setSurfaceStatus: no surface")	-- debug
-		return true
-	end
-		
-	if newStatus then
-		universe.surfaceIgnoringSet[surface.index] = 1
-		--game.print("setSurfaceStatus: ignored")	-- debug
-		if universe.maps[surface.index] then
-			--game.print("setSurfaceStatus: call onSurfaceDeleted")	-- debug
-			onSurfaceDeleted({surface_index = surface.index})
-		end	
-	else
-		--game.print("setSurfaceStatus: prepmap")	-- debug
-		universe.surfaceIgnoringSet[surface.index] = 0
-		prepMap(surface)
-	end		
-	return newStatus
-end
-
-function surfaceStatusClick(guiElement)
-	local surfaceIndex = tonumber(string.sub(guiElement.name, 28))
-	local surface = game.surfaces[surfaceIndex]
-	if not surface then
-		game.print("Surface #"..surfaceIndex.." is not found")
-		return
-	end
-	
-	local newStatus = setSurfaceStatus(surface, not SURFACE_IGNORED(surface, universe))
-	
-	guiElement.caption = surfaceStatusCaption(newStatus)
-	if newStatus then
-		game.print("Surface <"..surface.name.."> now is ignored")
-	else
-		game.print("Surface <"..surface.name.."> now processed")	
-	end	
-end
-
-local function replaceNewEnemiesNests()
-	local totalReplaced = 0
-	for _,surface in pairs(game.surfaces) do
-		local buildings = surface.find_entities_filtered({force = "enemy", type={"turret", "unit-spawner"}})
-		local buildingsTotal = #buildings
-		for i=1,buildingsTotal do
-			local building = buildings[i]
-			local entityName
-			local entityPosition = {x = 0, y = 0}
-			
-			if building.type == "turret" then
-				local wormTier = 0
-				wormTier = universe.buildingTierLookup[building.name]
-				if wormTier then
-					if wormTier < 3 then
-						entityName = "small-worm-turret"
-					elseif wormTier < 6 then	
-						entityName = "medium-worm-turret"
-					elseif wormTier < 9 then
-						entityName = "big-worm-turret"
-					else
-						entityName = "behemoth-worm-turret"
-					end
-				end	
-			elseif building.type == "unit-spawner" then	
-				local faction = universe.enemyAlignmentLookup[building.name]
-				local hiveType = universe.buildingHiveTypeLookup[building.name]
-				if faction then
-					if hiveType == "spitter-spawner" then
-						entityName = "spitter-spawner"
-					else
-						entityName = "biter-spawner"
-					end
-				end
-			end	
-			if entityName then
-				entityPosition.x = building.position.x
-				entityPosition.y = building.position.y
-				building.destroy()
-				surface.create_entity({name = entityName, position = entityPosition, force = "enemy"}) 
-				totalReplaced = totalReplaced + 1
-			end	
-		end	
-
-		if universe.bases then
-		    for i, base in pairs(universe.bases) do
-				base.thisIsRampantEnemy = false
-			end			
-		end
-	end	
-	game.print({"description.rampantFixed--msg_replaceNewEnemiesNests", totalReplaced})
-	universe.NEW_ENEMIES = false
-end
-
-local function create_disableAdminMenu(player)
-	local gui = player.gui.screen
-
-	for i, children in pairs(gui.children) do
-		if children.name ==  "rampantFixed_AdminMenu_frame" then
-			children.destroy()
-			return
-			--break
-		end
-	end
-	
-	local root = gui.add{name = "rampantFixed_AdminMenu_frame", type = "frame", direction = "vertical"}	--			, style = "non_draggable_frame", caption={"description.rampantFixed--surfaceIteraction_frame"}
-	root.force_auto_center()
-	player.opened = root
-	if not (root and root.valid) then return end -- setting player.opened can cause other scripts to delete UIs
-	
-    -- Titlebar
-    local titlebar = root.add {
-        type = "flow",
-        name = "rampantFixed_AdminMenuTitle",
-		alignment = "right",
-        direction = "horizontal"
-    }
-    titlebar.drag_target = root
-    titlebar.add { -- Title
-        type = "label",
-        caption = {"description.rampantFixed--AdminMenu"},
-        ignored_by_interaction = true,
-        style = "rampantFixed_menu_label"	--"frame_title"
-    }
-    titlebar.add {
-        type = "empty-widget",
-        ignored_by_interaction = true,
-    }
-
-	titlebar.add { -- Close button
-		type = "sprite-button",
-		name="rampantFixed_closeAdminMenu",
-		sprite = "utility/close_white",
-		hovered_sprite = "utility/close_black",
-		clicked_sprite = "utility/close_black",
-		style = "close_button"
-	}
-	---------------	
-	-- local menu_table = root.add{type="table", name="rampantFixed--adminMenu_table", column_count=2, draw_horizontal_lines=false}
-	-- menu_table.style.horizontally_stretchable = true
-	-- menu_table.style.column_alignments[1] = "left"
-	-- menu_table.style.column_alignments[2] = "right"
-	-- menu_table.drag_target = root
-	-- menu_table.add{type="label", caption="1."}
-	root.add{type = "button", name = "rampantFixed_showDisableNewEnemiesDialog", caption = {"description.rampantFixed--showDisableNewEnemies"}, style = "rampantFixed_menu_button"}
-	-- menu_table.add{type="label", caption="2."}
-	root.add{type = "button", name = "rampantFixed_showSurfaceIteractionFrame", caption = {"description.rampantFixed--surfaceIteraction_frame"}, style = "rampantFixed_menu_button"}
-	
-	addDebugButton(player, root)	
-end
-
-local function create_disableNewEnemies_frame(player)
-	local gui = player.gui.screen
-
-	for i, children in pairs(gui.children) do
-		if children.name ==  "rampantFixed--disableNewEnemies_frame" then
-			children.destroy()
-			break
-		end
-	end
-		
-	local root = gui.add{name = "rampantFixed--disableNewEnemies_frame", type = "frame", style = "non_draggable_frame", direction = "vertical", caption={"description.rampantFixed--msg-ask-disableNewEnemies"}}
-	root.force_auto_center()
-	player.opened = root
-	if not (root and root.valid) then return end -- setting player.opened can cause other scripts to delete UIs
-	
-	root.add{type = "label", name = "rampantFixed--disableNewEnemies_text" , caption = {"description.rampantFixed--disableNewEnemies_text"}}
-	frame = root.add{type="table", name="rampantFixed--disableNewEnemies_table", column_count=2, draw_horizontal_lines=false}
-	frame.add{type = "button", name = "rampantFixed--button_disableNewEnemies_disable", caption = {"description.rampantFixed--button_disableNewEnemies_disable"}}
-	frame.add{type = "button", name = "rampantFixed--button_disableNewEnemies_cancel", caption = {"description.rampantFixed--button_disableNewEnemies_cancel"}}
-end
-
 
 local function on_gui_click(event)
-	local guiElement = event.element
-	if guiElement.name == "rampantFixed_adminMenuButton" then
-		create_disableAdminMenu(game.players[event.player_index])
-	elseif guiElement.name == "rampantFixed_showDisableNewEnemiesDialog" then
-		create_disableNewEnemies_frame(game.players[event.player_index])
-	elseif guiElement.name == "rampantFixed_showSurfaceIteractionFrame" then
-		create_surfaceIteraction_frame(game.players[event.player_index])				
-	elseif guiElement.name == "rampantFixed_closeAdminMenu" then
-		guiElement.parent.parent.destroy()				
-	elseif guiElement.name == "rampantFixed--button_disableNewEnemies_disable" then
-		replaceNewEnemiesNests()
-		guiElement.parent.parent.destroy()
-	elseif guiElement.name == "rampantFixed--button_disableNewEnemies_cancel" then
-		guiElement.parent.parent.destroy()
-	elseif (guiElement.name == "rampantFixed_closeSurfaceStatus") then
-		guiElement.parent.parent.destroy()
-	elseif string.sub(guiElement.name, 1 , 27 ) == "rampantFixed_surfaceStatus_" then
-		surfaceStatusClick(guiElement)
-	elseif string.sub(guiElement.name, 1 , 18 ) == "rampantFixed_Debug" then
-		onDebugElementClick(event, universe)
-	end
-	
+	GUI_Elements.on_gui_click(event)
+	return
 end
-
-local function create_disableAdminMenuButton(player, showButton)
-	local gui = player.gui.top
-
-	for i, children in pairs(gui.children) do
-		if children.name ==  "rampantFixed_adminMenuButton" then
-			children.destroy()
-			break
-		end
-	end
-	
-	if showButton then
-		gui.add{type = "sprite-button", name = "rampantFixed_adminMenuButton", caption = "RFx", sprite = "entity/big-biter"}
-	end	
-	
-end
---- GUI -
 
 local function onModSettingsChange(event)
 
@@ -1607,21 +1631,59 @@ local function onModSettingsChange(event)
     upgrade.compareTable(universe,
                          "safeBuildings",
                          settings.global["rampantFixed--safeBuildings"].value)
+	------- curved rails					 
     upgrade.compareTable(universe.safeEntities,
                          "curved-rail",
-                         settings.global["rampantFixed--safeBuildings-curvedRail"].value)
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "legacy-curved-rail",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "curved-rail-a",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "curved-rail-b",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+						 
+	------- elevated rails					 
+    upgrade.compareTable(universe.safeEntities,
+                         "rail-ramp",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+						 
+    upgrade.compareTable(universe.safeEntities,
+                         "elevated-straight-rail",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "elevated-half-diagonal-rail",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "elevated-curved-rail-a",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "elevated-curved-rail-b",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+    upgrade.compareTable(universe.safeEntities,
+                         "rail-support",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+	-------------------					 
     upgrade.compareTable(universe.safeEntities,
                          "straight-rail",
                          settings.global["rampantFixed--safeBuildings-straightRail"].value)
+						 
+    upgrade.compareTable(universe.safeEntities,
+                         "half-diagonal-rail",
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
+						 
+	-------------------					 
     upgrade.compareTable(universe.safeEntities,
                          "rail-signal",
-                         settings.global["rampantFixed--safeBuildings-railSignals"].value)
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
     upgrade.compareTable(universe.safeEntities,
                          "rail-chain-signal",
-                         settings.global["rampantFixed--safeBuildings-railChainSignals"].value)
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
     upgrade.compareTable(universe.safeEntities,
                          "train-stop",
-                         settings.global["rampantFixed--safeBuildings-trainStops"].value)
+                         settings.global["rampantFixed--safeBuildings-straightRail"].value)
     upgrade.compareTable(universe.safeEntities,
                          "lamp",
                          settings.global["rampantFixed--safeBuildings-lamps"].value)
@@ -1638,6 +1700,7 @@ local function onModSettingsChange(event)
         universe.safeEntities["lighted-big-electric-pole-3"] = newValue
         universe.safeEntities["lighted-big-electric-pole-2"] = newValue
         universe.safeEntities["lighted-big-electric-pole"] = newValue
+		-- planned: chande "destructible" flag for enities on the map
     end
 
     upgrade.compareTable(universe,
@@ -1651,6 +1714,10 @@ local function onModSettingsChange(event)
                          settings.global["rampantFixed--siegeAIToggle"].value)
 
     universe.undergroundAttack = settings.global["rampantFixed--undergroundAttack"].value
+
+    upgrade.compareTable(universe,
+                         "demolisherAttack_AdditionalTime",
+                         settings.global["rampantFixed--demolisherAttack_AdditionalTime"].value)
 
     upgrade.compareTable(universe,
                          "attackPlayerThreshold",
@@ -1679,7 +1746,6 @@ local function onModSettingsChange(event)
     universe.aiPointsPrintSpendingToChat = settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value
 
     universe.enabledMigration = universe.expansion and settings.global["rampantFixed--enableMigration"].value
-    universe.peacefulAIToggle = settings.global["rampantFixed--peacefulAIToggle"].value
     universe.printAIStateChanges = settings.global["rampantFixed--printAIStateChanges"].value
     universe.debugTemperament = settings.global["rampantFixed--debugTemperament"].value
 
@@ -1694,10 +1760,14 @@ local function onModSettingsChange(event)
 		local player_settings = settings.get_player_settings(player)
 		if player.admin or in_debug_list(player) then
 			if player_settings["rampantFixed--showAdminMenu"].value then
-				create_disableAdminMenuButton(player, true)
+				GUI_Elements.create_disableAdminMenuButton(player, true)
 			else
-				create_disableAdminMenuButton(player, false)			
+				GUI_Elements.create_disableAdminMenuButton(player, false)			
 			end	
+			
+			if player_settings["rampantFixed--showPlanetAISettings"].value then
+				GUI_Elements.openPlanetAISettings(player.index)							
+			end
 		end
 	end
 	
@@ -1708,7 +1778,7 @@ local function onConfigChanged()
     local version = upgrade.attempt(universe)
     if version then
         if not universe then
-            universe = global.universe
+            universe = storage.universe
         end
     end
 
@@ -1721,10 +1791,6 @@ local function onConfigChanged()
                          "NEW_ENEMIES",
                          settings.startup["rampantFixed--newEnemies"].value)
 
-    -- upgrade.compareTable(universe,
-                         -- "allowExternalControl",
-                         -- settings.startup["rampantFixed--allowExternalControl"].value)	-- 1.8.3++
-			
 	upgrade.rebuildActivePlayerForces(universe)
 	
     if universe.NEW_ENEMIES then
@@ -1754,11 +1820,10 @@ local function onConfigChanged()
             prepMap(surface)
         end
     end
-		
 end
 
 local function onInit()
-    global.universe = {}
+    storage.universe = {}
     hookEvents()
     onConfigChanged()
 	setNewEnemySide()
@@ -1809,23 +1874,28 @@ script.on_event(defines.events.on_unit_group_finished_gathering, onGroupFinished
 
 script.on_event(defines.events.on_build_base_arrived, onBuilderArrived)
 
--- + !КДА 2021.11
 script.on_event(defines.events.on_sector_scanned, onSectorScanned)
---script.on_event(defines.events.on_script_trigger_effect, onScriptTriggerEffect)
+script.on_event(defines.events.on_script_trigger_effect, onScriptTriggerEffect)
+script.on_event(defines.events.on_player_respawned, onPlayerRespawned)
+
 script.on_event(defines.events.on_entity_damaged, onEntityDamaged, {
 	{filter="type", type="unit"}, 
 	{mode = "and", invert = true, filter="damage-type", type ="fire"},
 	{mode = "and", invert = true, filter="damage-type", type ="acid"},
 	{mode = "or", filter="original-damage-amount", value = 200, comparison = ">"},
-	{mode = "and", filter="type", type="unit"},	
+	{mode = "or", filter="type", type="spider-unit"},	
+	{mode = "or", filter="type", type="segmented-unit"},	
 	})
--- - !КДА 2021.11
+	
 script.on_event(defines.events.on_gui_click, on_gui_click)
+
+script.on_event(defines.events.on_unit_group_created, on_unit_group_created)	-- debug!!
 
 
 local function setSurfaces(event)
-	create_surfaceIteraction_frame(game.players[event.player_index])
+	GUI_Elements.setSurfaces(event)
 end
+
 commands.add_command('rampantSetSurfaces', "", setSurfaces)
 
 local function rampantSetAIState(event)
@@ -1898,5 +1968,9 @@ local function rampantCreateCompressedBiter(event)
 	end
 	
 end
-
 --commands.add_command('rampantCreateCompressedBiter', "", rampantCreateCompressedBiter)
+
+local function rampantCreateDebugMenu(event)
+	GUI_Elements.rampantCreateDebugMenu(event)		
+end
+commands.add_command('rampantDebugMenu', "", rampantCreateDebugMenu)

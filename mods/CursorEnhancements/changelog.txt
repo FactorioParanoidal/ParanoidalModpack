@@ -1,0 +1,138 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2024-12-17
+  Changes:
+    - Changed default item group scroll hotkeys to shift + alt + scroll to fix conflict with quality cycling.
+    - Reverted change to quick-crafting introduced in v2.2.1. (#32)
+    - If hovering a resource entity, the item in cursor will take precedence for quick-crafting. (#28)
+  Compatibility:
+    - [Just Go!] Auto-ghost-cursor is disabled for vehicles when this mod is installed. (#36)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-10-29
+  Bugfixes:
+    - Quick-craft will always craft the item in the cursor instead of using the selected prototype. (#28)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-10-15
+  Changes:
+    - Updated to Factorio 2.0.
+    - Changed default item group scroll hotkeys to alt + scroll.
+    - Removed smart pipette - it is now built-in to the game!
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2024-05-05
+  Bugfixes:
+    - Fixed that using smarter pipette with Brave New World would spawn free items. (#24)
+    - Fixed a crash during quick-crafting when a recipe has a product with no result count. (#25)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2023-06-04
+  Features:
+    - Added a setting to change the quick-craft amount (#19)
+    - Using the pipette on a water tile will give an offshore pump (#18)
+  Changes:
+    - Quick-craft count is scaled by the number of products in the recipe (#17)
+    - Quick-craft will consider all possible recipes instead of just the first one (#17)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2023-05-16
+  Bugfixes:
+    - Fixed smarter pipette erroneously executing even when the base game's pipette would work fine
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2023-01-11
+  Bugfixes:
+    - Fixed quick-craft not working on entity ghosts
+    - Fixed that development-only files were included in mod releases
+    - Fixed that subgroup scrolling included hidden items
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2023-01-06
+  Bugfixes:
+    - Fixed that the cursor would be overwritten with an empty blueprint after pasting a blueprint
+    - Subgroup scrolling now ignores spawnable items (blueprints, selection tools, etc)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2023-01-02
+  Features:
+    - Added quick-craft hotkey (control + Q)
+    - Quick-scrolling now scrolls between item subgroups instead of upgrades/downgrades
+  Changes:
+    - Rewrote the mod from scratch
+    - Removed scrolling override settings and cheat-mode settings
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2021-12-06
+  Compatibility:
+    - Added related items scrolling for Deadlock's Stacking Beltboxes and Ultimate Belts
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2021-02-21
+  Changes:
+    - Selection tools, such as blueprints, will be ignored for cursor ghost transitions and recall last item
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2021-01-03
+  Features:
+    - Tile pipette now plays the pipette sound
+  Bugfixes:
+    - Fixed tile pipette activating if a cursor ghost was present
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2021-01-03
+  Features:
+    - Added ghost cursor transitions for tiles
+    - Added tile pipette function
+  Bugfixes:
+    - Removed unused "transfer stack from network" custom-input
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2020-12-15
+  Bugfixes:
+    - Fixed being unable to clear the cursor after building something while the tick is paused
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2020-11-30
+  Bugfixes:
+    - Fixed another edge-case with ghost cursor transitions
+    - Fixed default cursor scrolls for vanilla tiles not including refined hazard concrete
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2020-11-29
+  Features:
+    - Added cursor scrolls for vanilla tiles (landfill, stone brick, concrete)
+  Bugfixes:
+    - Fixed the need to clear cursor twice after placing an entity
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2020-11-26
+  Bugfixes:
+    - Fixed ghost cursor transitions behaving incorrectly
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2020-11-23
+  Features:
+    - Added item name labels when scrolling between items
+  Changes:
+    - Updated to Factorio 1.1
+  Bugfixes:
+    - Fixed the "retrieve last item" functionality to include cursor ghosts
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-09-17
+  Changes:
+    - Scrolling to an item you don't have when not in cheat mode will set the ghost for that item, regardless of whether it places an entity
+      - This guarantees that all items are always accessible by scrolling, whether or not you have them
+  Bugfixes:
+    - Fixed player-specific next item negation not working
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-09-13
+  Changes:
+    - Release for Factorio 1.0... SMH
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020-09-13
+  Features:
+    - Initial release

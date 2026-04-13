@@ -1,10 +1,54 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 15. 01. 2026
+  Changes:
+    - Updated Korean locale #506
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 02. 01. 2026
+  Changes:
+    - Updated AAI Industry integration #393
+    - Integrate Bob's Locale Translations mod #445
+    - Added support for frozen entities (with Space Age) #477
+    - Improved Water Pumpjack graphics #494
+  Bugfixes:
+    - Fixed error with uk locale #447
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 22. 06. 2025
+  Changes:
+    - Added uk locale #176
+    - Added de locale #415
+    - Added zh-TW locale #432
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 05. 04. 2025
+  Bugfixes:
+    - Fix missing locale key for steel axe techs (without Bob's MCI mod) #369
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 30. 03. 2025
+  Changes:
+    - Update for Factorio 2.0 #189
+    - Changed axe techs to be unlocked via trigger rather than via science packs (when Bob's MCI mod is enabled) #240
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 21. 02. 2024
+  Changes:
+    - Removed Space Exploration compatibility changes. These have been moved to a separate compatibility mod #170
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22. 12. 2023
+  Changes:
+    - Added Russian locale (thanks Eldrinn-Elantey!) #149
+---------------------------------------------------------------------------------------------------
 Version: 1.1.6
 Date: 01. 01. 2023
   Changes:
     - Compatibility changes for Krastorio 2 mod #42
       - Fixed upgrading mining drills
       - Pumpjacks can now be placed on oil
+    - Added support for Space Exploration mod #88
   Bugfixes:
     - Fixing accidental global variables #50
     - Machines Showing In/Out Fluidbox arrows #66

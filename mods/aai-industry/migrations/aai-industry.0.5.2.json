@@ -1,0 +1,18 @@
+{
+  "item":
+  [
+    ["area-electric-mining-drill", "area-mining-drill"]
+  ],
+  "recipe":
+  [
+    ["area-electric-mining-drill", "area-mining-drill"]
+  ],
+  "entity":
+  [
+    ["area-electric-mining-drill", "electric-mining-drill"]
+  ],
+  "technology":
+  [
+    ["area-electric-mining-drill", "area-mining-drill"]
+  ]
+}

@@ -4,11 +4,11 @@ data:extend({
     name = "bob-tanks-2",
     icon = "__base__/graphics/technology/tank.png",
     icon_size = 256,
-    icon_mipmaps = 4,
     prerequisites = {
       "tank",
       "artillery",
-      "advanced-electronics-2",
+      "processing-unit",
+      "production-science-pack",
     },
     effects = {
       {
@@ -17,12 +17,13 @@ data:extend({
       },
     },
     unit = {
-      count = 100,
+      count = 250,
       ingredients = {
         { "automation-science-pack", 1 },
         { "logistic-science-pack", 1 },
         { "chemical-science-pack", 1 },
         { "military-science-pack", 1 },
+        { "production-science-pack", 1 },
       },
       time = 30,
     },
@@ -34,7 +35,6 @@ data:extend({
     name = "bob-tanks-3",
     icon = "__base__/graphics/technology/tank.png",
     icon_size = 256,
-    icon_mipmaps = 4,
     prerequisites = {
       "bob-tanks-2",
       "military-4",
@@ -46,7 +46,7 @@ data:extend({
       },
     },
     unit = {
-      count = 150,
+      count = 250,
       ingredients = {
         { "automation-science-pack", 1 },
         { "logistic-science-pack", 1 },

@@ -1,0 +1,164 @@
+﻿---------------------------------------------------------------------------------------------------
+Version: 1.0.32
+Date: 12/22/2025
+  Fixes :
+    - fixed an issue with turrets having multiple base visualtion layers causing a crash 
+    - fixed an issue with fluid turrets on rank up using up all the oil on their fluid network
+---------------------------------------------------------------------------------------------------
+Version: 1.0.30
+Date: 07/06/2025
+  Tweaks:
+    - removed ranked turrets from Factoriopedia for Hoochie
+---------------------------------------------------------------------------------------------------
+Version: 1.0.29
+Date: 07/06/2025
+  Fixes:
+    - added compatability with Bigger Artillery mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.28
+Date: 07/03/2025
+  Fixes:
+    - added an additional check in the entity validation check for some edge cases
+---------------------------------------------------------------------------------------------------
+Version: 1.0.27
+Date: 07/02/2025
+  Fixes:
+    - added a normalization for selection boxes for compatibility with Kuxynator mods (Thanks Kuxynator!)
+    - added Water turrets to the ignore list of turrets 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.26
+Date: 05/27/2025
+  Fixes:
+    - Removed turret recipes from factoriopedia to clean it up. They couldn't be crafted anyway (Thanks Hoochie)
+    - Made the custom ranks default to six instead of 10 (thanks Dune 1411 for the suggestion)
+    - Removed Space Age rail gun range modifier as once it was past the projectile range, the turret would waste ammo.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.25
+Date: 05/10/2025
+  Fixes:
+    - Fixed issue with the main is_valid check failing if the entity wasn't valid
+  Features:
+    - added a setting to set the newly ranked turrets health to max instead of using the previous health amount
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Date: 03/30/2025
+  Features:
+    - Added new settings to allow you to set your own buff percentages for Attack Speed and rotation per rank. Similar to custom buff percentage. Will default to what the overall buff percentage is if not enabled.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.23
+Date: 03/30/2025
+  Bugfixes:
+    - added mising nil check
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 03/30/2025
+  Tweaks:
+    - updated the locale file to be more in line with what it is actually changing
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 03/30/2025
+  Features:
+    - Added new settings to allow you to set your own buff percentages for Max Health, Range and Cooldown per rank. Will add more at a later date. Similar to custom buff percentage. Will default to what the overall buff percentage is if not enabled.
+  Tweaks:
+    - Changed the max custom buffs from 500% to 1000%. Be warned high values can break your game, but for those with super computers, have at it.
+  Balance:
+    - Updated the cooldown modifier calcuation to be more in line with the actual buff being applied. Was WAY too powerful. Your turrets rate of fire at later ranks will be severly nerfed compared to what it was. Use the custom firerate setting if you want to boost it back to what it was
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 03/27/2025
+  Tweaks:
+    - Changed the max custom buffs from 200% to 500%. Be warned high values can break your game, but for those with super computers, have at it.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 03/25/2025
+  Bugfixes:
+    - Fixed bug with having a custom names that were more than 12 values causing the mod to crash on startup
+  Tweaks:
+    - Reverted rank icon change. 
+    - removed the minimum number for custom ranks from 6 to 1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 03/25/2025
+  Tweaks:
+    - Updated locale file for setting tool tip to show the new maximum of 200% instead of 999%.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 03/25/2025
+  Tweaks:
+    - Changed maximum buff from 999% to 200%. This is to protect users from bricking their games if they get wild.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 03/25/2025
+  Features:
+    - Added new settings to allow you to set your own buff percentages per rank. Similar to custom rank names / kill / damage.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 03/24/2025
+  Features:
+    - Added new settings to allow you to set your own kill / damage ranks. Similar to the custom rank names
+    - changed the max threshold of the inidividual turret rank settings from 20 to 100
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+  Info :
+    - Since the kills / damage done needed for ranks were changed, you might see some of your turrets downgrade ( or even upgrade if it had enough kills) to other ranks.
+
+  Tweaks:
+    - Reworded some of the setting descriptions to be more clear on what they do.
+    - changed the setting for the Artillery Turret Modifier setting to be 1.5 to be more balanced.
+  Balancing:
+    - Rebalanced the kills / damaged needed for ranking. Previously it felt too easy to get the first couple of levels and then took a long time to get to the final rank. I have flattened this a bit and increased the amount of kills needed to get the first couple of ranks. New values can be found on the mod home page.
+  Features:
+    - Added two new Prestige ranks which each give a 5% increase to the total buffs applied for a total of a 60% buff at max rank (previously 50%). The previous final rank still gives the same amount of buffs at 50%.  
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+  Features:
+    - Added in the functionality for turrets to keep their circuit connections when they are promoted
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+  Compatibility:
+    - Added a check for nil on data load for compatibility with mods that do not contain "gun" prototypes
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+  Fixes:
+    - Fixed an issue with control behavior settings not checking if the entity was valid
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+  Fixes:
+    - Fixed an issue with the entity not being valid before building out the priority targeting settings
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+  Fixes:
+    - Fixed an issue where the priority targeting settings were not being copied over to the newly leveled turret
+    - also fixed a related issue with circuit settings not copying over. Found an issue with circuit connections not copying over but have not found a good solution just yet.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+  Fixes:
+    - added a nil check for entity.maxhealth for turrets like laser walls
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+  Tweaks:
+    - Updated the level badge placement logic 
+  Compatibility:
+    - skipping Zeus Turret mod and disabled
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+  Fixes:
+    - Fixed an issue with Concentrated solar mod not working correctly. Just disabled for this mod for now
+    - Fixed an issue with a nil value found for some modded turrets
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Fixes:
+    - Fixed path in info.json
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Compatibility:
+    - Ported HeroTurrets to Factorio 2.0. Added Space Age compatibility

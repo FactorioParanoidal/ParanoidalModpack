@@ -5,18 +5,21 @@ if not bobmods.logistics then
   bobmods.logistics = {}
 end
 
-data:extend({
-  {
-    type = "custom-input",
-    name = "bob-inserter-long",
-    key_sequence = "SHIFT + L",
-    consuming = "none",
-  },
-})
+if settings.startup["bobmods-logistics-inserteroverhaul"].value == true then
+  data:extend({
+    {
+      type = "custom-input",
+      name = "bob-inserter-long",
+      key_sequence = "SHIFT + L",
+      consuming = "none",
+    },
+  })
+end
 
 require("prototypes.category")
 
 require("prototypes.robot-parts")
+require("prototypes.valves")
 
 require("prototypes.item.train")
 require("prototypes.item.robots")
@@ -49,11 +52,15 @@ require("prototypes.recipe.pipes-recipe")
 require("prototypes.recipe.storage-tank-recipe")
 require("prototypes.recipe.logistic-container-recipe")
 require("prototypes.recipe.pump-recipe")
+require("prototypes.recipe.chemicals")
 
 require("prototypes.technology")
 require("prototypes.technology-logistics")
 require("prototypes.technology-inserter")
 
-require("prototypes.valves")
 require("prototypes.chests")
 require("prototypes.repair-pack")
+
+require("prototypes.aai-loaders")
+
+require("prototypes.tips-and-tricks")

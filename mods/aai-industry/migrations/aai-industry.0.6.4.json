@@ -1,0 +1,7 @@
+{
+  "recipe":
+  [
+    ["sand-from-stone", "sand"],
+    ["glass-from-sand", "glass"]
+  ]
+}

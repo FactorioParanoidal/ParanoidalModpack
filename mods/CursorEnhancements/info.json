@@ -1,0 +1,19 @@
+{
+  "name": "CursorEnhancements",
+  "version": "2.2.2",
+  "title": "Cursor Enhancements",
+  "description": "Enhances the cursor with a variety of tools and shortcuts. Smarter pipette, quick crafting, automatic ghost cursor, and related items scrolling.",
+  "author": "raiguard",
+  "contact": "https://github.com/raiguard/CursorEnhancements",
+  "homepage": "https://github.com/raiguard/CursorEnhancements",
+  "factorio_version": "2.0",
+  "dependencies": [ "base >= 2.0.0", "flib >= 0.15.0", "(?) space-exploration" ],
+  "package": {
+    "git_publish_branch": "master",
+    "ignore": [ "crowdin.yml", "imgui.ini", "screenshots/*", "stylua.toml" ],
+    "scripts": {
+      "prepublish": "factorio-crowdin-sync"
+    },
+    "sync_portal_details": true
+  }
+}
