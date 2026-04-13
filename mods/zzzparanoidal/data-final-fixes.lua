@@ -1,81 +1,170 @@
-require("prototypes.techfixes")
-require("prototypes.change-background")
-require("prototypes.warfare")
-require("prototypes.recipefixes")
-require("prototypes.pipes")
-require("prototypes.map-gen-presets")
-require("prototypes.boiler-effectivity")
-require("prototypes.bobfix")
+require("tweaks.entity.roboport")
+require("tweaks.entity.add-liquid-to-mine-ores")
+require("tweaks.entity.construction-robots")
+require("tweaks.entity.alien-loot")
+require("tweaks.entity.increase-stack-size")
+require("tweaks.entity.warfare")
+require("tweaks.entity.pipes")
+require("tweaks.entity.beacons") -- по маякам можно ходить
+require("tweaks.entity.offshore-pumps")
+require("tweaks.entity.assemblers")
+require("tweaks.entity.furnaces")
+require("tweaks.entity.fuel")
+require("tweaks.entity.trains")
+require("tweaks.entity.drills")
+require("tweaks.entity.bio-mod")
+require("tweaks.entity.fuel")
+require("tweaks.entity.belts")
+require("tweaks.entity.boilers")
+require("tweaks.entity.alert-arrow")
+require("tweaks.entity.miniloaders")
+require("tweaks.entity.generators")
+require("tweaks.entity.fluid-void")
+require("tweaks.entity.gas-void")
+require("tweaks.entity.wires")
+require("tweaks.entity.nuke-cliffs")
 
--- Здесь большинство вещей исчезло, так что коментирую до переработки
--- if mods["angelsindustries"] then
---     require("prototypes.techfixes-angelsIndustries")
--- end -- при наличии angelsIndustries
+require("tweaks.item.personal-roboport")
+require("tweaks.item.roboport")
+require("tweaks.item.fuel")
 
-if mods["angelsbioprocessing"] then
-	require("prototypes.modules")
-end -- при наличии angelsbioprocessing
+require("tweaks.recipe.insert-mining-drill-bit")
+require("tweaks.recipe.insert-structured-components")
+require("tweaks.recipe.metallurgy")
+require("tweaks.recipe.pumps")
+require("tweaks.recipe.gems")
+require("tweaks.recipe.module")
+require("tweaks.recipe.poles") -- Изменение рецептов ЛЭП
+require("tweaks.recipe.yuoki")
+require("tweaks.recipe.concrete")
+require("tweaks.recipe.pipes")
+require("tweaks.recipe.groups")
+require("tweaks.recipe.fuel")
+require("tweaks.recipe.science-packs")
 
-require("prototypes.artillery-prototype.artillery-turret-prototype-final-fix") --фикс добавляющий прототип арты в обычную арту
+require("tweaks.technology.chemistry")
+require("tweaks.technology.metallurgy")
+require("tweaks.technology.warfare")
+require("tweaks.technology.boilers")
+require("tweaks.technology.pumps")
+require("tweaks.technology.yuoki")
+require("tweaks.technology.concrete")
+require("tweaks.technology.fuel")
 
-require("recipes.gemfix")
-require("recipes.warehousing")
-require("recipes.module-contactfix")
+require("tweaks.custom.main-menu-background")
+require("tweaks.custom.map-gen-presets")
+require("tweaks.custom.icons")
+require("tweaks.custom.selections")
 
-require("prototypes.walkable-beacons") -- по маякам можно ходить, код из walkable-beacons
--------------------------------------------------------------------------------------------------
+
+require("removals.bio-modules")
+require("removals.fishes")
+
 require("graphics.train.train_reskin") -- рескин поездов
--- require("graphics.ore_radar.ore_radar_reskin") -- рескин радара руды -- mod not enabled yet
 -------------------------------------------------------------------------------------------------
--- require("prototypes.micro-final-fix") --доработка напильником всего подряд -- фиксы от Кирика -- not reviewed
-require("final-fixes.concrete-brick")
-require("final-fixes.concrete")
-require("final-fixes.pipes")
-require("final-fixes.technologies")
-require("final-fixes.recipies")
-require("final-fixes.icons")
-require("final-fixes.tweaks")
-require("final-fixes.ore-nerfs")
-require("final-fixes.ore-buffs")
-require("final-fixes.recipe-group-tweaks")
-require("final-fixes.battery-trains")
-require("final-fixes.graphics")
-require("final-fixes.fishes")
-require("final-fixes.weapon-tweaks")
-require("final-fixes.bio-mod")
-require("final-fixes.metal-rolls")
--------------------------------------------------------------------------------------------------
-require("prototypes.entity.entity") --фиксы неправильных имён от SEO
--------------------------------------------------------------------------------------------------
---фиксы совместимости для модов
-require("prototypes.mod_compatibility.Transport_Drones")
-require("prototypes.mod_compatibility.JunkTrain")
+require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
+require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый
 
--------------------------------------------------------------------------------------------------
-require("prototypes.offshore-pump.animation") --анимация для новых насосов
--------------------------------------------------------------------------------------------------
-require("prototypes.landfill-pump") --Установка насосов на отсыпку
--------------------------------------------------------------------------------------------------
-require("recipes.poles") --Изменение рецептов ЛЭП
--------------------------------------------------------------------------------------------------
-if mods["yuoki"] then
-	require("prototypes.yuoki")
-end -- при наличии yuoki
+require("tweaks.custom.uniform-recipies")
 
--- Uniform recipe mod
-for _, r in pairs(data.raw["recipe"]) do
-	r.always_show_products = true
-	r.show_amount_in_title = false
-end
--- Uniform recipe end
-
--- modern factorio accept only ingredients like {type = "...", name = "...", amount=...}
--- there i convert {"...", ...} to {type = "...", name = "...", amount=...}
-require("recipes.fix-ingredients-style")
---должно быть последним. После всех рецептов.
-require("recipes.flowfix")
-
--- фикс части косяков с префиксами в рецептах angels-/bob-
-require("__zzzcompability__/fixes/prefixes")
--- finall aplying of override functions
+-- final aplying of override functions
 angelsmods.functions.OV.execute()
+
+-- ============================================================
+-- ПРЯМЕ ВИПРАВЛЕННЯ РЕЦЕПТІВ ПЛАВКИ (після OV.execute)
+-- Аналог iron-plate→ore1-crushed та copper-plate→ore3-crushed
+-- ============================================================
+
+-- bob-lead-plate: замінюємо bob-lead-ore на angels-ore5-crushed (Rubyte)
+log("[NEXUS-UA] Starting bob-lead-plate fix, recipe exists: "..tostring(data.raw.recipe["bob-lead-plate"] ~= nil))
+if data.raw.recipe["bob-lead-plate"] then
+    local r = data.raw.recipe["bob-lead-plate"]
+    log("[NEXUS-UA] bob-lead-plate BEFORE: enabled="..tostring(r.enabled).." hidden="..tostring(r.hidden).." ings="..tostring(#(r.ingredients or {})))
+    r.enabled = true
+    r.hidden = false
+    r.category = "smelting"
+    r.localised_name = nil
+    r.energy_required = 20
+    r.ingredients = { { type = "item", name = "angels-ore5-crushed", amount = 7 } }
+    r.results = {
+        { type = "item", name = "bob-lead-plate", amount = 4 },
+        { type = "item", name = "angels-slag", amount = 1 },
+    }
+    r.icon = "__angelssmeltinggraphics__/graphics/icons/plate-lead.png"
+    r.icon_size = 32
+    r.icons = nil
+    log("[NEXUS-UA] bob-lead-plate set icon path: __angelssmeltinggraphics__/graphics/icons/plate-lead.png")
+    -- Видалити з локів технологій
+    for _, tech in pairs(data.raw.technology) do
+        if tech.effects then
+            for i = #tech.effects, 1, -1 do
+                if tech.effects[i].type == "unlock-recipe" and tech.effects[i].recipe == "bob-lead-plate" then
+                    table.remove(tech.effects, i)
+                end
+            end
+        end
+    end
+end
+
+-- bob-tin-plate: замінюємо bob-tin-ore на angels-ore6-crushed (Bobmonium)
+if data.raw.recipe["bob-tin-plate"] then
+    local r = data.raw.recipe["bob-tin-plate"]
+    r.enabled = true
+    r.hidden = false
+    r.category = "smelting"
+    r.localised_name = nil
+    r.energy_required = 20
+    r.ingredients = { { type = "item", name = "angels-ore6-crushed", amount = 7 } }
+    r.results = {
+        { type = "item", name = "bob-tin-plate", amount = 4 },
+        { type = "item", name = "angels-slag", amount = 1 },
+    }
+    r.icons = {
+        { icon = "__bobplates__/graphics/icons/plate/tin-plate.png", icon_size = 32 }
+    }
+    r.icon = nil
+    r.icon_size = 32
+    log("[NEXUS-UA] bob-tin-plate set icon path: __bobplates__/graphics/icons/plate/tin-plate.png")
+    for _, tech in pairs(data.raw.technology) do
+        if tech.effects then
+            for i = #tech.effects, 1, -1 do
+                if tech.effects[i].type == "unlock-recipe" and tech.effects[i].recipe == "bob-tin-plate" then
+                    table.remove(tech.effects, i)
+                end
+            end
+        end
+    end
+end
+
+-- Відключити примітивні raw-ore рецепти (дублюють кращі crushed-ore варіанти)
+-- angels-ore5-smelting: 1x Rubyte ore → 1x Lead plate (замінено на bob-lead-plate: 7x Crushed → 4x)
+if data.raw.recipe["angels-ore5-smelting"] then
+    data.raw.recipe["angels-ore5-smelting"].enabled = false
+    data.raw.recipe["angels-ore5-smelting"].hidden = true
+    log("[NEXUS-UA] angels-ore5-smelting: DISABLED + HIDDEN (replaced by bob-lead-plate)")
+end
+
+-- angels-ore6-smelting: 1x Bobmonium ore → 1x Tin plate (замінено на bob-tin-plate: 7x Crushed → 4x)
+if data.raw.recipe["angels-ore6-smelting"] then
+    data.raw.recipe["angels-ore6-smelting"].enabled = false
+    data.raw.recipe["angels-ore6-smelting"].hidden = true
+    log("[NEXUS-UA] angels-ore6-smelting: DISABLED + HIDDEN (replaced by bob-tin-plate)")
+end
+
+-- Залишити bob-lead-plate-2 доступним (хімічна піч)
+if data.raw.recipe["bob-lead-plate-2"] then
+    local r = data.raw.recipe["bob-lead-plate-2"]
+    r.enabled = true
+    r.hidden = false
+    r.localised_name = nil
+    r.icons = {
+        { icon = "__bobplates__/graphics/icons/plate/lead-plate.png", icon_size = 32 }
+    }
+    r.icon = nil
+    r.icon_size = 32
+    log("[NEXUS-UA] bob-lead-plate-2 set icon path: __bobplates__/graphics/icons/plate/lead-plate.png")
+end
+
+
+--должно быть последним. После всех рецептов.
+require("tweaks.custom.flowfix")

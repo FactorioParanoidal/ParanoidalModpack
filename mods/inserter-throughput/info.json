@@ -1,0 +1,13 @@
+{
+  "name": "inserter-throughput",
+  "version": "0.1.6",
+  "factorio_version": "2.0",
+  "title": "Inserter Throughput",
+  "author": "curiosity-a",
+  "contact": "",
+  "homepage": "",
+  "description": "Displays the throughput of the selected inserter (under ideal conditions).\nNow with a measuring tool for live testing.",
+  "dependencies": [
+    "base >= 2.0"
+	]
+}

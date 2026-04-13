@@ -1,0 +1,43 @@
+data:extend({
+	-- super charger
+	{
+		type = "item",
+		name = "super_charger",
+		icon = "__zzzparanoidal__/graphics/train/electric/charger_icon.png",
+		icon_size = 32,
+		subgroup = "bet-logistics",
+		order = "b1",
+		stack_size = 10,
+		place_result = "super_charger",
+	},
+	{
+		type = "item-with-entity-data",
+		name = "hiend_loco",
+		icon = "__zzzparanoidal__/graphics/train/hiend/ht-locomotive.png",
+		icon_size = 64,
+		subgroup = "train-transport",
+		order = "z",
+		place_result = "hiend_loco",
+		stack_size = 10,
+	},
+	{
+		type = "item",
+		name = "hiend_wagon",
+		icon = "__zzzparanoidal__/graphics/train/hiend/ht-generic-wagon.png",
+		icon_size = 64,
+		subgroup = "train-transport",
+		order = "z",
+		place_result = "hiend_wagon",
+		stack_size = 10,
+	},
+	{
+		type = "item",
+		name = "hiend_fluid_wagon",
+		icon = "__zzzparanoidal__/graphics/train/hiend/ht-generic-fluid-wagon.png",
+		icon_size = 64,
+		subgroup = "train-transport",
+		order = "z",
+		place_result = "hiend_fluid_wagon",
+		stack_size = 10,
+	},
+})

@@ -1,20 +1,9 @@
-local Assert = require("utils.assert")
 local setting = data.raw["bool-setting"]["bobmods-burnerphase"]
-log(serpent.block(setting))
-Assert.AssertOutdated(
-	setting and setting.hidden == true,
-	"Expected bobmods-burnerphase setting to be hidden by angelsrefining mod"
-)
-local default = {
-	default_value = true,
-	forced_value = true,
-	hidden = false,
-	name = "bobmods-burnerphase",
-	setting_type = "startup",
-	type = "bool-setting",
-}
 
-setting.hidden = false
-setting.forced_value = true
-setting.default_value = true
-log(serpent.block(setting))
+-- The setting was previously hidden and bypassed by bobtech itself if aai-industry was active.
+-- We removed that hardcode in bobtech, so we can now safely define its properties here.
+if setting then
+	setting.hidden = false
+	setting.forced_value = false -- Allow user to toggle it
+	setting.default_value = true
+end

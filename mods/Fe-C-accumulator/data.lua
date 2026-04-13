@@ -13,7 +13,7 @@ data:extend({
 				recipe = "fe-c-accumulator",
 			},
 		},
-		prerequisites = { "bob-electricity" },
+		-- prerequisites will be added in data-updates if bob-electricity exists
 		unit = {
 			count = 10,
 			ingredients = {

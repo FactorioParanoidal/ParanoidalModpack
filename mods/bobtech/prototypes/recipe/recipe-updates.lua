@@ -94,7 +94,7 @@ end
 data.raw.recipe["utility-science-pack"].energy_required = 35
 bobmods.lib.recipe.set_result("utility-science-pack", { type = "item", name = "utility-science-pack", amount = 5 })
 
-if settings.startup["bobmods-burnerphase"].value == true or true then
+if settings.startup["bobmods-burnerphase"].value == true then
   bobmods.lib.recipe.add_new_ingredient("lab", { type = "item", name = "bob-burner-lab", amount = 1 })
 end
 

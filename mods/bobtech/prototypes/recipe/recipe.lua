@@ -29,7 +29,7 @@ data:extend({
   },
 })
 
-if settings.startup["bobmods-burnerphase"].value == true or true then
+if settings.startup["bobmods-burnerphase"].value == true then
   data:extend({
     {
       type = "recipe",

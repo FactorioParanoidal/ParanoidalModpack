@@ -27,7 +27,7 @@ function setup(event)
 
   if remote.interfaces["DiscoScience"] and remote.interfaces["DiscoScience"]["setLabScale"] then
     remote.call("DiscoScience", "setLabScale", "bob-lab-2", 1)
-    if settings.startup["bobmods-burnerphase"].value == true  or true then
+    if settings.startup["bobmods-burnerphase"].value == true then
       remote.call("DiscoScience", "setLabScale", "bob-burner-lab", 1)
     end
     if

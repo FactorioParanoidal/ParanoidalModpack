@@ -274,7 +274,7 @@ else
   bobmods.lib.tech.add_prerequisite("bob-advanced-logistic-science-pack", "fast-inserter")
 end
 
-if settings.startup["bobmods-burnerphase"].value == true or true then
+if settings.startup["bobmods-burnerphase"].value == true then
   bobmods.lib.tech.add_recipe_unlock("bob-lab", "lab")
   bobmods.lib.tech.add_prerequisite("logistic-science-pack", "bob-lab")
   bobmods.lib.tech.add_prerequisite("electronics", "bob-electricity")

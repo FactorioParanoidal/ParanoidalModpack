@@ -3,8 +3,6 @@ local function get_setting(name)
 end
 
 
-log("collision layers:"..serpent.block(data.raw["collision-layer"]))
-
 local light_intensity = get_setting("inlaid-lamps-extended-light_intensity")    --.9
 local light_size = get_setting("inlaid-lamps-extended-light_size")              --40
 local light_colored_intensity = get_setting("inlaid-lamps-extended-light_colored_intensity") --1
@@ -22,7 +20,6 @@ end
 local lamps = data.raw["lamp"]
 local lamp = lamps["small-lamp"]
 
-log("Vanilla lamp: "..serpent.block(lamp))
 
 -- Copy base lamp's staggering parameters, falling back to a sensible default
 local loc_darkness_for_all_lamps_on = lamp.darkness_for_all_lamps_on or 0.7
@@ -209,7 +206,6 @@ small_lamp.fast_replaceable_group = "lamps"
 
 data:extend({small_lamp})
 small_lamp = lamps[lamp_name]
-log("Small lamp: "..serpent.block(lamps[small_lamp.name]))
 
 
 ------------------------------------------------------------------------------------
@@ -326,7 +322,6 @@ big_lamp.fast_replaceable_group = nil
 
 data:extend({big_lamp})
 big_lamp = lamps[lamp_name]
-log("Big lamp: "..serpent.block(big_lamp))
 
 --~ error("Break!")
 ------------------------------------------------------------------------------------

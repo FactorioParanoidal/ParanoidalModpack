@@ -9,15 +9,16 @@ local function FixSandProcessing()
 	data.raw.technology["sand-processing"] = nil
 	data.raw.technology["glass-processing"] = nil
 
-	local sciencepack = data.raw.technology["automation-science-pack"]
-	Assert.AssertOutdated(type(sciencepack) == "table", "automation-science-pack tech not found")
-	for index, req in ipairs(sciencepack.prerequisites) do
-		if req == "glass-processing" then
-			table.remove(sciencepack.prerequisites, index)
-			return
+	for _, tech in pairs(data.raw.technology) do
+		if tech.prerequisites then
+			for i = #tech.prerequisites, 1, -1 do
+				local req = tech.prerequisites[i]
+				if req == "glass-processing" or req == "sand-processing" then
+					table.remove(tech.prerequisites, i)
+				end
+			end
 		end
 	end
-
 end
 
 FixSandProcessing()
