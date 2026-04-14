@@ -8,7 +8,7 @@
   "description": "This mod doesn't do anything by itself. You need to install ruin-set mods or no ruin will be spawned.\n\nThis mod is based on 1.1.6 (abondoned mod?) and @Keysivi's changes to move out base ruins to an external mod and contains many fixes for Factorio 2.0. Abandoned Ruins - Updated adds randomly spawns ruins in the world. These ruins are destroyed fragments of bases, forts, small oases, and more.\n\nExplore them for loot, adventure, or entertainment, but beware, some still have running defenses from the last player that landed on the planet, with more successful colonies having better defenses.",
   "dependencies":
   [
-    "base >= 2.0.72",
+    "base >= 2.0.69",
     "?space-age",
     "!AbandonedRuins",
     "!AbandonedRuins20"
