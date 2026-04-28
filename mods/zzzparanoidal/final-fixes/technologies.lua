@@ -132,6 +132,12 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-ore-crushing", "glass-from-or
 paralib.bobmods.lib.tech.remove_prerequisite("angels-solid-cement", "concrete") --бетон
 paralib.bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "concrete") --бетон
 paralib.bobmods.lib.tech.remove_prerequisite("angels-plastic-1", "plastics") --пластик
+--cement processing 2 без синих банок (как в 1.1)
+paralib.bobmods.lib.tech.remove_prerequisite("angels-stone-smelting-2", "chemical-science-pack")
+paralib.bobmods.lib.tech.set_science_packs("angels-stone-smelting-2", {
+	{ "automation-science-pack", 1 },
+	{ "logistic-science-pack", 1 },
+})
 
 -- добавляем зависимости в техологии для последовательности развития
 paralib.bobmods.lib.tech.add_prerequisite("concrete", "angels-stone-smelting-2") --бетон
