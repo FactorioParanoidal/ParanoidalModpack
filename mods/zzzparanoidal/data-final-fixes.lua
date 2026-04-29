@@ -151,20 +151,5 @@ if data.raw.recipe["angels-ore6-smelting"] then
     log("[NEXUS-UA] angels-ore6-smelting: DISABLED + HIDDEN (replaced by bob-tin-plate)")
 end
 
--- Залишити bob-lead-plate-2 доступним (хімічна піч)
-if data.raw.recipe["bob-lead-plate-2"] then
-    local r = data.raw.recipe["bob-lead-plate-2"]
-    r.enabled = true
-    r.hidden = false
-    r.localised_name = nil
-    r.icons = {
-        { icon = "__bobplates__/graphics/icons/plate/lead-plate.png", icon_size = 32 }
-    }
-    r.icon = nil
-    r.icon_size = 32
-    log("[NEXUS-UA] bob-lead-plate-2 set icon path: __bobplates__/graphics/icons/plate/lead-plate.png")
-end
-
-
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")
