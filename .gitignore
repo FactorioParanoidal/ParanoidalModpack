@@ -13,6 +13,7 @@ bin
 obj
 temp
 .idea
+**/.DS_Store
 mods/mod-settings.dat
 mods/mod-list.json
 mods/*.zip
