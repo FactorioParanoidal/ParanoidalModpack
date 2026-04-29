@@ -59,6 +59,7 @@ require("tweaks.custom.selections")
 
 require("removals.bio-modules")
 require("removals.fishes")
+require("removals.aai-medium-electric-pole")
 
 require("graphics.train.train_reskin") -- рескин поездов
 -------------------------------------------------------------------------------------------------
