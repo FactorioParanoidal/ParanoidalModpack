@@ -1,6 +1,4 @@
 require("__zzzparanoidal__.paralib")
--- подкрутка чтобы сборщик1 мог собирать сам себя
-data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 5
 -- Добавление нужных для крафта конденсаторов категорий в сборочники
 local function AssemblerTweak(name)
     if(data.raw["assembling-machine"][name]) then
@@ -17,15 +15,15 @@ AssemblerTweak("bob-assembling-machine-4")
 AssemblerTweak("bob-assembling-machine-5")
 AssemblerTweak("bob-assembling-machine-6")
 
--- from KaoExtended
-data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 4
+-- from KaoExtended (issue #190: было 4 — рецепты зданий 2.0 требуют 5-6 ингредиентов, AM2 не крафтился в AM1)
+data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 6
 data.raw["assembling-machine"]["assembling-machine-2"].ingredient_count = 7
 data.raw["assembling-machine"]["assembling-machine-3"].ingredient_count = 9
 data.raw["assembling-machine"]["bob-assembling-machine-4"].ingredient_count = 12
 data.raw["assembling-machine"]["bob-assembling-machine-5"].ingredient_count = 15
 data.raw["assembling-machine"]["bob-assembling-machine-6"].ingredient_count = 20
 
-data.raw["assembling-machine"]["bob-electronics-machine-1"].ingredient_count = 5
+data.raw["assembling-machine"]["bob-electronics-machine-1"].ingredient_count = 6 -- issue #190: было 5, advanced-circuit и модули требуют 6
 data.raw["assembling-machine"]["bob-electronics-machine-2"].ingredient_count = 10
 data.raw["assembling-machine"]["bob-electronics-machine-3"].ingredient_count = 16
 
