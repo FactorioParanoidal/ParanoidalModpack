@@ -653,6 +653,10 @@ paralib.bobmods.lib.tech.hide("bob-burner-lab")
 paralib.bobmods.lib.tech.remove_prerequisite("automation-science-pack", "bob-burner-lab")
 -- fix research trigger from bob-burner-lab -> burner-lab
 data.raw.technology["automation-science-pack"].research_trigger.item = "burner-lab"
+-- bobtech (recipe-updates.lua:98) добавляет bob-burner-lab в ингредиенты рецепта lab,
+-- но мы скрыли его теху → крафт невозможен. В рецепте lab уже есть burner-lab от
+-- aai-industry — он и остаётся каноном. Убираем дубль.
+paralib.bobmods.lib.recipe.remove_ingredient("lab", "bob-burner-lab")
 
 -- add electric-motor recipe unlock to electricity tech
 paralib.bobmods.lib.tech.add_recipe_unlock("electricity", "electric-motor")
