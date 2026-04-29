@@ -73,84 +73,37 @@ require("tweaks.custom.uniform-recipies")
 angelsmods.functions.OV.execute()
 
 -- ============================================================
--- ПРЯМЕ ВИПРАВЛЕННЯ РЕЦЕПТІВ ПЛАВКИ (після OV.execute)
--- Аналог iron-plate→ore1-crushed та copper-plate→ore3-crushed
+-- ПРЯМОЕ ИСПРАВЛЕНИЕ РЕЦЕПТОВ ПЛАВКИ (после OV.execute)
+-- Стратегия 1.1: модифицируем angels*-crushed-smelting in-place
+-- (7 crushed → 4 plate + 1 slag), как было в micro-final-fix.lua.
+-- bob-*-plate recipe остаётся скрытым силами angelssmelting'а.
 -- ============================================================
 
--- bob-lead-plate: замінюємо bob-lead-ore на angels-ore5-crushed (Rubyte)
-log("[NEXUS-UA] Starting bob-lead-plate fix, recipe exists: "..tostring(data.raw.recipe["bob-lead-plate"] ~= nil))
-if data.raw.recipe["bob-lead-plate"] then
-    local r = data.raw.recipe["bob-lead-plate"]
-    log("[NEXUS-UA] bob-lead-plate BEFORE: enabled="..tostring(r.enabled).." hidden="..tostring(r.hidden).." ings="..tostring(#(r.ingredients or {})))
-    r.enabled = true
-    r.hidden = false
-    r.category = "smelting"
-    r.localised_name = nil
+local function patch_crushed_smelting(recipe_name, crushed_name, plate_name)
+    local r = data.raw.recipe[recipe_name]
+    if not r then return end
     r.energy_required = 20
-    r.ingredients = { { type = "item", name = "angels-ore5-crushed", amount = 7 } }
+    r.ingredients = { { type = "item", name = crushed_name, amount = 7 } }
     r.results = {
-        { type = "item", name = "bob-lead-plate", amount = 4 },
+        { type = "item", name = plate_name, amount = 4 },
         { type = "item", name = "angels-slag", amount = 1 },
     }
-    r.icon = "__angelssmeltinggraphics__/graphics/icons/plate-lead.png"
-    r.icon_size = 32
-    r.icons = nil
-    log("[NEXUS-UA] bob-lead-plate set icon path: __angelssmeltinggraphics__/graphics/icons/plate-lead.png")
-    -- Видалити з локів технологій
-    for _, tech in pairs(data.raw.technology) do
-        if tech.effects then
-            for i = #tech.effects, 1, -1 do
-                if tech.effects[i].type == "unlock-recipe" and tech.effects[i].recipe == "bob-lead-plate" then
-                    table.remove(tech.effects, i)
-                end
-            end
-        end
+    r.main_product = plate_name
+    r.localised_name = { "item-name." .. plate_name }
+end
+
+-- Свинец (Rubyte): 7×ore5-crushed → 4×lead-plate + 1×slag
+patch_crushed_smelting("angels-ore5-crushed-smelting", "angels-ore5-crushed", "bob-lead-plate")
+
+-- Олово (Bobmonium): 7×ore6-crushed → 4×tin-plate + 1×slag
+patch_crushed_smelting("angels-ore6-crushed-smelting", "angels-ore6-crushed", "bob-tin-plate")
+
+-- Отключить raw-ore дубликаты (появились в 2.0; в 1.1 их не было)
+for _, name in ipairs({ "angels-ore5-smelting", "angels-ore6-smelting" }) do
+    if data.raw.recipe[name] then
+        data.raw.recipe[name].enabled = false
+        data.raw.recipe[name].hidden = true
     end
-end
-
--- bob-tin-plate: замінюємо bob-tin-ore на angels-ore6-crushed (Bobmonium)
-if data.raw.recipe["bob-tin-plate"] then
-    local r = data.raw.recipe["bob-tin-plate"]
-    r.enabled = true
-    r.hidden = false
-    r.category = "smelting"
-    r.localised_name = nil
-    r.energy_required = 20
-    r.ingredients = { { type = "item", name = "angels-ore6-crushed", amount = 7 } }
-    r.results = {
-        { type = "item", name = "bob-tin-plate", amount = 4 },
-        { type = "item", name = "angels-slag", amount = 1 },
-    }
-    r.icons = {
-        { icon = "__bobplates__/graphics/icons/plate/tin-plate.png", icon_size = 32 }
-    }
-    r.icon = nil
-    r.icon_size = 32
-    log("[NEXUS-UA] bob-tin-plate set icon path: __bobplates__/graphics/icons/plate/tin-plate.png")
-    for _, tech in pairs(data.raw.technology) do
-        if tech.effects then
-            for i = #tech.effects, 1, -1 do
-                if tech.effects[i].type == "unlock-recipe" and tech.effects[i].recipe == "bob-tin-plate" then
-                    table.remove(tech.effects, i)
-                end
-            end
-        end
-    end
-end
-
--- Відключити примітивні raw-ore рецепти (дублюють кращі crushed-ore варіанти)
--- angels-ore5-smelting: 1x Rubyte ore → 1x Lead plate (замінено на bob-lead-plate: 7x Crushed → 4x)
-if data.raw.recipe["angels-ore5-smelting"] then
-    data.raw.recipe["angels-ore5-smelting"].enabled = false
-    data.raw.recipe["angels-ore5-smelting"].hidden = true
-    log("[NEXUS-UA] angels-ore5-smelting: DISABLED + HIDDEN (replaced by bob-lead-plate)")
-end
-
--- angels-ore6-smelting: 1x Bobmonium ore → 1x Tin plate (замінено на bob-tin-plate: 7x Crushed → 4x)
-if data.raw.recipe["angels-ore6-smelting"] then
-    data.raw.recipe["angels-ore6-smelting"].enabled = false
-    data.raw.recipe["angels-ore6-smelting"].hidden = true
-    log("[NEXUS-UA] angels-ore6-smelting: DISABLED + HIDDEN (replaced by bob-tin-plate)")
 end
 
 --должно быть последним. После всех рецептов.
