@@ -5,8 +5,7 @@ local hit_effects = require("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
 
---amd makes no sense with space age... theyre literally the same building lol
-if not settings.startup["aai-wide-drill"].value or mods["space-age"] then return end
+if not settings.startup["aai-wide-drill"].value then return end
 
 data:extend({
   {
@@ -63,9 +62,6 @@ data:extend({
     },
   },
 })
-
-
-
 
 electric_drill_animation_speed = 0.4
 electric_drill_animation_sequence =
@@ -1652,7 +1648,7 @@ data:extend(
     },
     monitor_visualization_tint = {r=78, g=173, b=255},
     fast_replaceable_group = "area-mining-drill",
-    circuit_connector = circuit_connector_definitions["electric-mining-drill"],
+    circuit_connector = table.deepcopy(circuit_connector_definitions["electric-mining-drill"]),
     circuit_wire_max_distance = default_circuit_wire_max_distance,
     allowed_effects = {"consumption", "speed",  "pollution", "productivity", "quality"},
   },

@@ -186,7 +186,7 @@ data:extend({
             constant_speed = true,
             animation =
             {
-              filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+              filename = "__aai-industry__/graphics/entity/fuel-processor/fuel-processor-fire.png",
               line_length = 10,
               width = 40,
               height = 81,

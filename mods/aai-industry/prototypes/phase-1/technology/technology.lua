@@ -329,7 +329,7 @@ data:extend{
     {
         type = "technology",
         name = "medium-electric-pole",
-        icon =  data.raw.technology["electric-energy-distribution-1"].icon,
+        icon = data.raw.technology["electric-energy-distribution-1"].icon,
         icon_size = 256,
         order = "a",
         prerequisites = {"steel-processing", "electricity", "logistic-science-pack"},

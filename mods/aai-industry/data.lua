@@ -24,3 +24,4 @@ require("prototypes/phase-1/combined/industrial-furnace")
 require("prototypes/phase-1/combined/area-mining-drill")
 
 require("prototypes/phase-1/compatibility/space-age")
+require("prototypes/phase-1/compatibility/freezing")
