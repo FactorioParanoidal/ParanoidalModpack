@@ -17,6 +17,7 @@ util.tech_add_prerequisites("circuit-network", "electronics")
 util.tech_add_prerequisites("automation-2", "electronics")
 util.tech_add_prerequisites("logistics-2", "electronics")
 util.tech_add_prerequisites("solar-energy", "electronics")
+util.tech_add_prerequisites("solar-energy", "glass-processing")
 util.tech_add_prerequisites("advanced-circuit", "electronics")
 
 util.tech_add_prerequisites("advanced-material-processing-2", "concrete")
