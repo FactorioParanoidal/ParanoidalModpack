@@ -185,10 +185,12 @@ data:extend({
 	{
 		type = "recipe",
 		name = "bob-nickel-electrolysis-x",
+		main_product = "bob-nickel-plate",
+		localised_name = { "item-name.bob-nickel-plate" },
 		icons = {
 			{
 				icon = "__bobplates__/graphics/icons/plate/nickel-plate.png",
-				icon_size = 32,
+				icon_size = 64,
 				icon_mipmaps = 4,
 			},
 			{
@@ -218,6 +220,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "bob-zinc-electrolysis-x",
+		main_product = "bob-zinc-plate",
+		localised_name = { "item-name.bob-zinc-plate" },
 		icons = {
 			{
 				icon = "__bobplates__/graphics/icons/plate/zinc-plate.png",
@@ -251,10 +255,12 @@ data:extend({
 	{
 		type = "recipe",
 		name = "cobalat-electrolysis-x",
+		main_product = "bob-cobalt-plate",
+		localised_name = { "item-name.bob-cobalt-plate" },
 		icons = {
 			{
 				icon = "__bobplates__/graphics/icons/plate/cobalt-plate.png",
-				icon_size = 32,
+				icon_size = 64,
 				icon_mipmaps = 4,
 			},
 			{
@@ -266,7 +272,7 @@ data:extend({
 			},
 		},
 		subgroup = "angels-smelting",
-		order = "f[ingot-zinc]-d",
+		order = "f[ingot-cobalt]-d",
 		category = "angels-petrochem-electrolyser",
 		enabled = false,
 		energy_required = 17,
@@ -288,6 +294,8 @@ data:extend({
 	{
 		type = "recipe",
 		name = "bob-titanium-electrolysis-x",
+		main_product = "bob-titanium-plate",
+		localised_name = { "item-name.bob-titanium-plate" },
 		icons = {
 			{
 				icon = "__bobplates__/graphics/icons/plate/titanium-plate.png",
@@ -303,7 +311,7 @@ data:extend({
 			},
 		},
 		subgroup = "angels-smelting",
-		order = "f[ingot-zinc]-d",
+		order = "f[ingot-titanium]-d",
 		category = "angels-petrochem-electrolyser",
 		enabled = false,
 		energy_required = 22,
