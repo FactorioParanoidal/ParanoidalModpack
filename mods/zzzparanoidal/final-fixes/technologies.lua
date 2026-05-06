@@ -343,6 +343,15 @@ if data.raw.technology["modules"] then
 		{ "chemical-science-pack", 1 },
 	}) --модули теперь за синие банки (как и должно быть)
 end
+for _, tier1_module in ipairs({ "speed-module", "efficiency-module", "productivity-module" }) do
+	if data.raw.technology[tier1_module] then
+		paralib.bobmods.lib.tech.set_science_packs(tier1_module, {
+			{ "automation-science-pack", 1 },
+			{ "logistic-science-pack", 1 },
+			{ "chemical-science-pack", 1 },
+		}) --tier-1 модули за синие банки, иначе цена ниже их пререквизитов (gold-smelting-1 / metallurgy-3)
+	end
+end
 if data.raw.technology["bob-drills-2"] then
 	paralib.bobmods.lib.tech.set_science_packs("bob-drills-2", {
 		{ "automation-science-pack", 1 },
