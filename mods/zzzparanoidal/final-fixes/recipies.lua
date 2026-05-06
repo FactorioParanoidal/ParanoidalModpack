@@ -803,3 +803,18 @@ paralib.bobmods.lib.recipe.set_ingredients("bob-basic-circuit-board", {
 })
 
 paralib.bobmods.lib.recipe.replace_ingredient("bi-bio-farm", "stone-crushed", "stone-brick");
+
+-- aai-industry ввёл айтем sand и завязал на него concrete (5 stone-brick + 10 sand + 2 iron-stick + 100 water).
+-- Vanilla sand производится только из bob-quartz (через angels-ore-sorting-2/3/4 — поздняя цепочка),
+-- а angels-цепочка делает angels-solid-sand и concrete её не принимает. Из-за этого блокируется ранний rail.
+-- Чиним: подменяем sand → angels-solid-sand в concrete и прячем aai-шный sand, чтобы не дублировался в FNEI.
+if data.raw.recipe["concrete"] and data.raw.item["angels-solid-sand"] then
+	paralib.bobmods.lib.recipe.replace_ingredient("concrete", "sand", "angels-solid-sand")
+	if data.raw.recipe["sand"] then
+		data.raw.recipe["sand"].enabled = false
+		data.raw.recipe["sand"].hidden = true
+	end
+	if data.raw.item["sand"] then
+		data.raw.item["sand"].hidden = true
+	end
+end
