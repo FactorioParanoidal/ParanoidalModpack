@@ -329,7 +329,7 @@ local CarriageData = {}
 ---@param name string
 ---@return CarriageData
 local function GetCarriageData(name)
-	if name:sub(#"OT_level-") ~= "OT_level-" then
+	if name:sub(1, #"OT_level-") ~= "OT_level-" then
 		return { -- default in game carriage -- 0 level
 			baseName = name,
 			level = 0,

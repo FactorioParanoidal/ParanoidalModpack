@@ -8,6 +8,7 @@
 !config.json
 !.gitlab-ci.yml
 !README.md
+!THIRD_PARTY_PATCHES.md
 
 bin
 obj
