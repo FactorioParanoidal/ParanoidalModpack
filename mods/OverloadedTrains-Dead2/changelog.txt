@@ -1,3 +1,8 @@
+Version: 2.0.11
+  Changes:
+    - Fix error with trains loosing their groups, set group after recreating carriage.
+    - Fix train.speed not being properly set after recreating, potentially causes sudden stops if weight changes mid-transit.
+
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.10
   Changes:
