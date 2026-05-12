@@ -1,0 +1,26 @@
+{
+  "name": "factorissimo-2-notnotmelon",
+  "version": "3.11.19",
+  "title": "Factorissimo 3",
+  "author": "MagmaMcFry, notnotmelon",
+  "homepage": "https://github.com/notnotmelon/factorissimo-2-notnotmelon",
+  "description": "Factorissimo adds factory buildings to Factorio. Place them down, walk in, build your factories inside! Now updated for space age!",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.64",
+    "? space-age",
+    "? space-exploration",
+    "! Factorissimo2",
+    "! Factorissimo2-Space-Age-Port",
+    "! robotworld-continued",
+    "(?) Bio_Industries",
+    "(?) power-grid-comb",
+    "(?) EfficientSmelting",
+    "(?) Krastorio2",
+    "(?) PickerDollies",
+    "(?) advanced_fluid_handling_for_py",
+    "(?) SchallBeltConfiguration",
+    "(?) any-planet-start",
+    "(?) Gregtorio"
+  ]
+}

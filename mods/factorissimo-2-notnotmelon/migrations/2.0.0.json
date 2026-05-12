@@ -1,0 +1,28 @@
+{
+    "item": [
+        [
+            "factory-1",
+            "factory-1-instantiated"
+        ],
+        [
+            "factory-2",
+            "factory-2-instantiated"
+        ],
+        [
+            "factory-3",
+            "factory-3-instantiated"
+        ],
+        [
+            "factory-1-raw",
+            "factory-1"
+        ],
+        [
+            "factory-2-raw",
+            "factory-2"
+        ],
+        [
+            "factory-3-raw",
+            "factory-3"
+        ]
+    ]
+}

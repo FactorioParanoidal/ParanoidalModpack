@@ -63,10 +63,6 @@ end
 if mods["DeleteEmptyChunks"] then
     set_settings_default_value("int-setting", "DeleteEmptyChunks_radius", 1)
 end
---Factorissimo2
-if mods["factorissimo-2-notnotmelon"] or mods["Factorissimo2-Space-Age-Port"] then
-    set_settings_default_value("bool-setting", "Factorissimo2-better-recursion-2", false)
-end
 --even-distribution
 if mods["even-distribution"] then
     set_settings_default_value("int-setting", "global-max-inventory-cleanup-range", 100)

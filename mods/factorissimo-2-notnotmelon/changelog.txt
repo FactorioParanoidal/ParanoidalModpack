@@ -1,0 +1,1443 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.11.19
+Date: 2026-03-15
+  Compatibility:
+    - Fix compatibility with warptorio.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.18
+Date: 2026-03-14
+  Bugfixes:
+    - Fix compatibility with warptorio.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.17
+Date: 2026-02-07
+  Compatibility:
+    - Added incompatibility flag with "robotworld-continued"
+---------------------------------------------------------------------------------------------------
+Version: 3.11.16
+Date: 2026-01-27
+  Compatibility:
+    - Added compatibility with "space-is-fake". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/265
+---------------------------------------------------------------------------------------------------
+Version: 3.11.15
+Date: 2026-01-27
+  Bugfixes:
+    - Fixed crash on load.
+  Changes:
+    - Added "+" icons under technologies which previously had no effects listed.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.14
+Date: 2026-01-27
+  Compatibility:
+    - Added compatiblity and custom recipes with pyanodons.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.13
+Date: 2026-01-27
+  Bugfixes:
+    - Fixed "This won't work here! This factory building is designed for Factory floor 1. Was instead Nauvis factory floor. ". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/268
+---------------------------------------------------------------------------------------------------
+Version: 3.11.12
+Date: 2026-01-27
+  Bugfixes:
+    - Resolved crash with maraxsis. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/267
+---------------------------------------------------------------------------------------------------
+Version: 3.11.11
+Date: 2026-01-19
+  Bugfixes:
+    - Fixed message "This won't work here" appearing for legacy factory floor 1.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.10
+Date: 2026-01-19
+  Compatibility:
+    - Factory buildings can no longer be constructed via the `Mouse Over Construction` mod. Resolves https://codeberg.org/raiguard/MouseOverConstruction/issues/36
+---------------------------------------------------------------------------------------------------
+Version: 3.11.9
+Date: 2026-01-18
+  Bugfixes:
+    - Fixed a crash involving factory placement checks. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/264
+---------------------------------------------------------------------------------------------------
+Version: 3.11.8
+Date: 2026-01-18
+  Bugfixes:
+    - Quality strikes again
+---------------------------------------------------------------------------------------------------
+Version: 3.11.7
+Date: 2026-01-18
+  Balancing:
+    - With space age DLC, the space factory technology is now unlocked with promethium science packs, rather than all 3 planetary science packs. Cost increased from 3000 to 5000.
+  Bugfixes:
+    - Fixed that space factory buildings could get "stuck" in the space platform hub with no way to construct them. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/259
+---------------------------------------------------------------------------------------------------
+Version: 3.11.6
+Date: 2026-01-18
+  Compatibility:
+    - Fixed placement error with jellystem and yumako when warptorio space age is installed. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/255
+---------------------------------------------------------------------------------------------------
+Version: 3.11.5
+Date: 2026-01-18
+  Bugfixes:
+    - Added surface sanity checks to ensure grass does not generate in factory buildings.
+    - Removed "Factory floor 0". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/256
+---------------------------------------------------------------------------------------------------
+Version: 3.11.4
+Date: 2026-01-17
+  Bugfixes:
+    - Fixed warning of "Not enough empty roboport slots..." when using factory roboport upgrade. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/261
+---------------------------------------------------------------------------------------------------
+Version: 3.11.3
+Date: 2026-01-17
+  Bugfixes:
+    - Fixed factory circuit connectors not being placeable in space. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/247
+---------------------------------------------------------------------------------------------------
+Version: 3.11.2
+Date: 2026-01-17
+  Optimizations:
+    - Improved UPS usage for "idle" chest connections. Credit to Toys0125
+---------------------------------------------------------------------------------------------------
+Version: 3.11.1
+Date: 2025-11-22
+  Bugfixes:
+    - Fixes duplicate "-factory-floor" in surface name. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/251
+---------------------------------------------------------------------------------------------------
+Version: 3.11.0
+Date: 2025-10-20
+  Features:
+    - added first draft of support for Dimensional Warp that could be extended to support Warptorio 2. Neo nauvis will be a valid factory floor despite being hidden, both Neo nauvis and Electria will have water for the borehole-pump, factory floors will try to use the planet name and remove trailing -<num> to be compatible with numbered surfaces
+  Bugfixes:
+    - genp being destroyed but not set to nill when moving a platform between global electric network and standard electric network resulting in a failing assert
+    - left some debug
+    - mistyped a '.' in factory-buildings.lua:56
+---------------------------------------------------------------------------------------------------
+Version: 3.10.15
+Date: 2025-10-05
+  Compatibility:
+    - Fixed crash with blueprint sandboxes.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.14
+Date: 2025-10-04
+  Compatibility:
+    - Fixed fluid connections somtimes being disconnected when sending SE spaceship factory to space.
+    - Removed restriction on "SE spaceship factories" not being placable in space.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.13
+Date: 2025-10-03
+  Compatibility:
+    - Removed incompat flags on "bulk rail loader".
+---------------------------------------------------------------------------------------------------
+Version: 3.10.12
+Date: 2025-09-30
+  Changes:
+    - Removed mod setting "better recursion 2"
+---------------------------------------------------------------------------------------------------
+Version: 3.10.11
+Date: 2025-09-30
+  Bugfixes:
+    - Fixed preview camera not working properly in editor mode.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.10
+Date: 2025-09-30
+  Bugfixes:
+    - Limited the total number of invisible construction bots per factorissimo to 500. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/238
+---------------------------------------------------------------------------------------------------
+Version: 3.10.9
+Date: 2025-09-30
+  Bugfixes:
+    - Fixed fluid connections sometimes disconnecting on save reload. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/206
+---------------------------------------------------------------------------------------------------
+Version: 3.10.8
+Date: 2025-09-30
+  Compatibility:
+    - Added incompatibility flags with bulk rail loader. Use https://mods.factorio.com/mod/train-loader instead. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/188
+---------------------------------------------------------------------------------------------------
+Version: 3.10.7
+Date: 2025-09-30
+  Compatibility:
+    - Removed incompatibility flag with "global-power-network". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/94.
+  Bugfixes:
+    - Placing a SA space factory now connects to the electric network. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/239
+---------------------------------------------------------------------------------------------------
+Version: 3.10.6
+Date: 2025-09-30
+  Balancing:
+    - The factory preview camera no longer renders until you have researched the "factory-interior-upgrade-lights" technology.
+  Compatibility:
+    - Banned placement of chests and storage tanks inside se spaceship factories.
+    - SE spaceship factorissimos now have special floor tilesets.
+    - Space exploration buildings are now marked as "grounded" if placed inside spaceship factorisismo.
+    - There is now a seperation between SE space factories and SE spaceship factories. Attemping to place one in the incorrect tiles will cause it to go inactive.
+  Bugfixes:
+    - Fixed se spaceship factories not being marked correctly when performing recursion.
+  Changes:
+    - Factory camera and overlays now work correctly if factory is set to inactive.
+    - If a factory building goes inactive it now destroys all belt/pipe/ect connections.
+    - Killing a factory via guns or biters now prints a warning @ position in chat. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/240
+---------------------------------------------------------------------------------------------------
+Version: 3.10.5
+Date: 2025-09-29
+  Bugfixes:
+    - Fixed crash on new factory connection.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.4
+Date: 2025-09-29
+  Compatibility:
+    - Allow space factories to be placed on space exploration spaceships.
+    - Fix belt connections getting severed when space exploration spaceship changes surface.
+    - Fixed some invisible entities staying around when factory is moved via space exploration spaceship.
+  Graphics:
+    - Updated icons for hidden entities factory eject chest and construction request chest.
+---------------------------------------------------------------------------------------------------
+Version: 3.10.3
+Date: 2025-09-27
+  Bugfixes:
+    - Fixed crash when building factory on other planet in space exploration. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/236
+---------------------------------------------------------------------------------------------------
+Version: 3.10.2
+Date: 2025-09-23
+  Bugfixes:
+    - Fixed migration crash with factory eject chests. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/233
+---------------------------------------------------------------------------------------------------
+Version: 3.10.1
+Date: 2025-09-22
+  Locale:
+    - Update Korean Locale to Latest Version ([#231](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/231))
+---------------------------------------------------------------------------------------------------
+Version: 3.10.0
+Date: 2025-09-22
+  Features:
+    - Added space factories. Works with both space age and space exploration.
+  Graphics:
+    - Removed startup setting "alt graphics".
+    - Removed unused "factory-subicon-big" from graphic files.
+    - Removed unused graphic files for "factory pattern" tiles.
+  Changes:
+    - Removed mod setting "indestructable factory buildings".
+---------------------------------------------------------------------------------------------------
+Version: 3.9.7
+Date: 2025-08-13
+  Bugfixes:
+    - Fixed map overlay floating up and down with mech suit. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/215
+---------------------------------------------------------------------------------------------------
+Version: 3.9.6
+Date: 2025-08-09
+  Bugfixes:
+    - Account for display_density_scale
+---------------------------------------------------------------------------------------------------
+Version: 3.9.5
+Date: 2025-08-06
+  Bugfixes:
+    - Fixed crash when researching a new technology. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/219
+---------------------------------------------------------------------------------------------------
+Version: 3.9.4
+Date: 2025-08-05
+  Changes:
+    - Added a per-player setting to disable the factory preview.
+---------------------------------------------------------------------------------------------------
+Version: 3.9.3
+Date: 2025-08-05
+  Compatibility:
+    - Added compat with "gregtorio". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/218
+---------------------------------------------------------------------------------------------------
+Version: 3.9.2
+Date: 2025-08-04
+  Changes:
+    - Factories can now request repair packs if you have the "factory construction roboport" technology researched. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/201
+---------------------------------------------------------------------------------------------------
+Version: 3.9.1
+Date: 2025-08-04
+  Bugfixes:
+    - Deconstruction crash with unresearched roboport upgrade
+---------------------------------------------------------------------------------------------------
+Version: 3.9.0
+Date: 2025-08-04
+  Features:
+    - The construction roboport upgrade will now automatically eject unused items to the outside surface.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.31
+Date: 2025-08-04
+  Features:
+    - Reworked the camera preview system. Camera now renders onto the minimap instead of the top left corner. Deleted "factory preview" technology. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/213
+  Compatibility:
+    - Added forced dependancy on factorio version 2.0.60 or higher. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/214
+  Changes:
+    - Hovering over a logistic or construction robot while that robot contains a packed factory building will now show the preview for that factory building.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.30
+Date: 2025-08-04
+  Balancing:
+    - Removed "space-science-pack" from the factory-architecture-t2 technology while space age is installed.
+    - The factory construction roboport no longer needs energy.
+  Compatibility:
+    - Added incompatibility flag with "global-power-network". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/94
+    - Fixed crash with "modular life". Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/207
+  Bugfixes:
+    - Fixed "invalid factory data" when ctrl+x on an empty factory building. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/211
+    - Improved the speed of the factory roboport upgrade. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/182
+  Locale:
+    - Updated the factory building locale to explain how to move a factory building from remote view.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.29
+Date: 2025-07-17
+  Locale:
+    - Fix duplicate "connections: 24" text in factory building descriptions.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.28
+Date: 2025-07-15
+  Compatibility:
+    - Added warning message when using the quantum fabricator mod. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/203
+---------------------------------------------------------------------------------------------------
+Version: 3.8.27
+Date: 2025-07-15
+  Locale:
+    - Updated quality tooltip descriptions for factory buildings.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.26
+Date: 2025-06-04
+  Compatibility:
+    - No longer spawn a cryogenic plant on cerys factory buildings. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/194
+---------------------------------------------------------------------------------------------------
+Version: 3.8.25
+Date: 2025-06-04
+  Compatibility:
+    - Added support for the "elevated pipes" mod. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/199
+---------------------------------------------------------------------------------------------------
+Version: 3.8.24
+Date: 2025-05-03
+  Bugfixes:
+    - Fixed Can't get inside new placed factories. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/195
+---------------------------------------------------------------------------------------------------
+Version: 3.8.23
+Date: 2025-05-03
+  Compatibility:
+    - Fixed crash on load with Solar System++. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/186
+---------------------------------------------------------------------------------------------------
+Version: 3.8.22
+Date: 2025-05-03
+  Bugfixes:
+    - Fixed a migration crash.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.21
+Date: 2025-03-02
+  Compatibility:
+    - Added char, terra palus, janus, castra, cubium, nix, dea-dia, prosephina, lemures, frozeta, circa, and neumann V compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.20
+Date: 2025-03-02
+  Compatibility:
+    - Added aiur, tiber, moshine, and arrakis compatibility.
+    - Added ligumis compatibility.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.19
+Date: 2025-02-25
+  Bugfixes:
+    - Fixed crash when deconstructing a factory building in specific scenarios. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/171
+---------------------------------------------------------------------------------------------------
+Version: 3.8.18
+Date: 2025-02-04
+  Compatibility:
+    - Fixed a crash when tried to delete internal factory in BP Sandboxes. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/170
+---------------------------------------------------------------------------------------------------
+Version: 3.8.17
+Date: 2025-02-04
+  Compatibility:
+    - Fixed crash with the any planet start mod.
+    - Removed incompatibility flag with the "upgradable quality" mod. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/174
+---------------------------------------------------------------------------------------------------
+Version: 3.8.16
+Date: 2025-01-16
+  Compatibility:
+    - Added a remote API for custom factory upgrades such as roboport or greenhouse. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/168
+---------------------------------------------------------------------------------------------------
+Version: 3.8.15
+Date: 2025-01-16
+  Bugfixes:
+    - Fixed a remote API error in add_layout. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/166
+    - Fixed a remote API error in get_surface_name. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/167
+---------------------------------------------------------------------------------------------------
+Version: 3.8.14
+Date: 2025-01-15
+  Bugfixes:
+    - Fixed warning "no space for construction robot".
+---------------------------------------------------------------------------------------------------
+Version: 3.8.13
+Date: 2025-01-13
+  Bugfixes:
+    - Fixed a crash. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/165
+---------------------------------------------------------------------------------------------------
+Version: 3.8.12
+Date: 2025-01-12
+  Compatibility:
+    - Added factory floor: corrundum.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.11
+Date: 2025-01-12
+  Bugfixes:
+    - Fixed print statement spam due to debug statements.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.10
+Date: 2025-01-12
+  Compatibility:
+    - Added incompatibility with "upgradeable-quality" mod.
+  Bugfixes:
+    - Fixed a crash with packing tape mod. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/163
+    - Fixed quality pips not rendering in the factory alt-mode overlay. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/162
+---------------------------------------------------------------------------------------------------
+Version: 3.8.9
+Date: 2025-01-11
+  Balancing:
+    - Factory mk2 is now unlocked with chemical science instead of space science.
+    - Factory upgrade: chest connection is now unlocked with chemical science instead of space science.
+  Optimizations:
+    - Fixed performance issues when deconstructing belts or pipes. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/161
+  Bugfixes:
+    - Fixed fluid connection pumps having a collision mask.
+  Locale:
+    - Fixed unknown key open outside surface to remote view.
+  Changes:
+    - Mining a completely empty factory building now returns a blank factory item and also cleans up the factory surface instead of making a packed factory.
+    - Removed broken compatibility with global power network.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.8
+Date: 2025-01-10
+  Bugfixes:
+    - Fixed 32p icon size definition for connection indicaticators in blueprints when the real icon size was 64p.
+    - Fixed item loss with the upgrade planner. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/160
+    - Prevented contraband hidden construction robots from being created. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/159 Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/158
+---------------------------------------------------------------------------------------------------
+Version: 3.8.7
+Date: 2025-01-05
+  Optimizations:
+    - Greatly simplified and optimized the code related to the factory construction upgrade.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.6
+Date: 2025-01-05
+  Optimizations:
+    - Greatly simplified and optimized the code related to the factory construction upgrade.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.5
+Date: 2025-01-02
+  Compatibility:
+    - Added compat with the blueprint sandboxes mod. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/90
+---------------------------------------------------------------------------------------------------
+Version: 3.8.4
+Date: 2025-01-02
+  Bugfixes:
+    - Fixed very very dumb syntax error (I didn't test it)
+---------------------------------------------------------------------------------------------------
+Version: 3.8.3
+Date: 2025-01-02
+  Compatibility:
+    - Added `remote_api.is_factorissimo_surface()`
+---------------------------------------------------------------------------------------------------
+Version: 3.8.2
+Date: 2025-01-02
+  Bugfixes:
+    - Fixed the remote API.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.1
+Date: 2025-01-02
+  Compatibility:
+    - Added additional safety checks to ensure grass tiles never generate.
+  Bugfixes:
+    - Fixed factory building roboport upgrade exterior chests not getting properly cleane up when destructing a factory building.
+---------------------------------------------------------------------------------------------------
+Version: 3.8.0
+Date: 2025-01-02
+  Features:
+    - Packed factory buildings can now be built from remote view via construction bots. Now supports control+X to move factory buildings from remote view. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/155
+---------------------------------------------------------------------------------------------------
+Version: 3.7.11
+Date: 2025-01-02
+  Compatibility:
+    - Added factory floor muluna and factory floor luna.
+---------------------------------------------------------------------------------------------------
+Version: 3.7.10
+Date: 2024-12-30
+  Bugfixes:
+    - Fixed crash related to incorrect roboport request surfaces. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/154
+---------------------------------------------------------------------------------------------------
+Version: 3.7.9
+Date: 2024-12-29
+  Bugfixes:
+    - Fixed crash due to missing entity.valid check.
+---------------------------------------------------------------------------------------------------
+Version: 3.7.8
+Date: 2024-12-29
+  Changes:
+    - Implemented crowdin translations integration.
+    - Large control-stage rewrite and despagettification. Please report any issues on our github.
+---------------------------------------------------------------------------------------------------
+Version: 3.7.7
+Date: 2024-12-28
+  Bugfixes:
+    - Fixed that construction bots would sometimes make it halfway and then "randomly" stop when travelling to a factory building. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/140
+---------------------------------------------------------------------------------------------------
+Version: 3.7.6
+Date: 2024-12-28
+  Bugfixes:
+    - Fixed that the description of the factory buildings told to open in remote view via Shift+LMB while the actual hotkey was Shift+RMB. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/152
+---------------------------------------------------------------------------------------------------
+Version: 3.7.5
+Date: 2024-12-28
+  Compatibility:
+    - Added compatibility with the any planet start mod.
+  Bugfixes:
+    - Fixed error "this factory is designed for ..." appearing at the wrong times. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/151
+---------------------------------------------------------------------------------------------------
+Version: 3.7.4
+Date: 2024-12-25
+  Bugfixes:
+    - Increased delay time before performing recursive deepcopy to allow the hidden radars to scan the area. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/136
+---------------------------------------------------------------------------------------------------
+Version: 3.7.3
+Date: 2024-12-25
+  Bugfixes:
+    - Default keybind is now changed and allowed remapping for the "enter factorissimo from remote view" key. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/117
+---------------------------------------------------------------------------------------------------
+Version: 3.7.2
+Date: 2024-12-25
+  Bugfixes:
+    - Flipping a connection now also counts as rotation. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/133
+  Changes:
+    - Added default `controller_key_sequence` when playing on nintendo switch.
+---------------------------------------------------------------------------------------------------
+Version: 3.7.1
+Date: 2024-12-24
+  Compatibility:
+    - Added compatibility with Cerys
+    - Fix cerys radiative towers being too close together.
+    - Tenebris and maraxsis trenches are now permablack.
+    - The borehole pump now works properly on maraxsis and tenebris.
+    - The maraxsis water shader now spawns inside maraxsis factory floor.
+  Bugfixes:
+    - Fixed that you could place a factory on the wrong planet. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/149
+---------------------------------------------------------------------------------------------------
+Version: 3.7.0
+Date: 2024-12-23
+  Features:
+    - Redo all tech and item icon graphics. Removed factory floors from starmap. Update by snouz. More info: https://github.com/notnotmelon/factorissimo-2-notnotmelon/pull/142
+  Graphics:
+    - Optimized all PNG sizes via oxipng, pngquant, and spritter. Total bundle size reduced by 48.2% (-3.21 MB).
+---------------------------------------------------------------------------------------------------
+Version: 3.6.6
+Date: 2024-11-29
+  Bugfixes:
+    - Fixed crash when removing a mod that adds planets. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/123
+---------------------------------------------------------------------------------------------------
+Version: 3.6.5
+Date: 2024-11-25
+  Bugfixes:
+    - Fixed crash when combined with 5dim mods. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/121
+---------------------------------------------------------------------------------------------------
+Version: 3.6.4
+Date: 2024-11-25
+  Bugfixes:
+    - Fixed pipe segmentation with squeak through. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/111
+---------------------------------------------------------------------------------------------------
+Version: 3.6.3
+Date: 2024-11-25
+  Bugfixes:
+    - Fixed green grass tiles in the factory floor when RSO is installed. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/115
+---------------------------------------------------------------------------------------------------
+Version: 3.6.2
+Date: 2024-11-25
+  Bugfixes:
+    - Fixed a crash when spilling items related to belt disconnections. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/118
+---------------------------------------------------------------------------------------------------
+Version: 3.6.1
+Date: 2024-11-25
+  Bugfixes:
+    - Fixed setting factory icons over map view does not change it. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/107
+---------------------------------------------------------------------------------------------------
+Version: 3.6.0
+Date: 2024-11-25
+  Features:
+    - Removed "packed" construction roboports. Construction requests are now built via the space platform animation. Huge thanks to Quezler for the MIT repository which much of the code is based on. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/113. Resolves https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/86
+---------------------------------------------------------------------------------------------------
+Version: 3.5.18
+Date: 2024-11-11
+  Bugfixes:
+    - Fixed "missing material" notification spam when researching any tech or loading a save. Resolves [#100](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/100) Resolves [#93](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/93)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.17
+Date: 2024-11-11
+  Bugfixes:
+    - The factory-recursion-t2 technology now depends on factory-recursion-t1. Resolves [#99](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/99)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.16
+Date: 2024-11-11
+  Bugfixes:
+    - Fixed crash when connecting to an invalid factory power pole. Resolves [#96](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/96)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.15
+Date: 2024-11-10
+  Bugfixes:
+    - Fixed incorrect circuit connector sprite location for the borehole pump
+---------------------------------------------------------------------------------------------------
+Version: 3.5.14
+Date: 2024-11-09
+  Bugfixes:
+    - Fixed that the borehole pump had no vehicle_impact_sound
+---------------------------------------------------------------------------------------------------
+Version: 3.5.13
+Date: 2024-11-03
+  Changes:
+    - Increased the width of the door by 50%
+---------------------------------------------------------------------------------------------------
+Version: 3.5.12
+Date: 2024-11-03
+  Compatibility:
+    - Added custom event for mods to hook into when the factory blueprint is registered.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.11
+Date: 2024-11-03
+  Bugfixes:
+    - Fix crash when closing a GUI. Resolves [#82](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/82)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.10
+Date: 2024-11-03
+  Changes:
+    - Manually inserting robobots will now decrement the construction robot request count. Resolves [#79](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/79)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.9
+Date: 2024-11-02
+  Bugfixes:
+    - Added incompatibility flag with "Factorissimo2-Space-Age-Port". Resolves [#76](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/76)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.8
+Date: 2024-11-02
+  Changes:
+    - Personal construction bots no longer travel inside factories. Resolves [#75](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/75) Resolves [#67](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/67)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.7
+Date: 2024-11-02
+  Bugfixes:
+    - Fixed a crash when using certain mods or commands that remove pollution. Resolves [#74](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/74)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.6
+Date: 2024-11-02
+  Bugfixes:
+    - Fixed a crash when removing the space age mod from a save.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.5
+Date: 2024-11-02
+  Bugfixes:
+    - Removed some hidden entities from factoriopedia.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.4
+Date: 2024-11-02
+  Bugfixes:
+    - Fixed that the construction roboport upgrade did not work for tile ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.3
+Date: 2024-11-02
+  Bugfixes:
+    - Factory roboport and construction chest settings are now persisted in blueprints. Resolves [#54](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/54)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.2
+Date: 2024-11-02
+  Changes:
+    - Amount of initally requested robobots in the factory roboport upgrade no longer scales with quality (always 10)
+---------------------------------------------------------------------------------------------------
+Version: 3.5.1
+Date: 2024-11-02
+  Bugfixes:
+    - Greatly improved collision detection for mech suit entering the factory building.
+---------------------------------------------------------------------------------------------------
+Version: 3.5.0
+Date: 2024-11-02
+  Features:
+    - Added factory upgrade: greenhouse
+    - Growing crops indoors causes +50% extra spores.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.18
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed the borehole pump smokestack could activate even while unpowered.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.17
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed incorrect collision box checking for inserter -> belt connection formation. Resolves [#69](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/69)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.16
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed crash when cancelling an upgrade planner construction request inside a factory building with the factory roboport enabled. Resolves [#71](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/71)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.15
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed a crash when biters eat a factory building.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.14
+Date: 2024-11-01
+  Changes:
+    - The factory construction chest no longer has a deconstruction planner being filtered by default.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.13
+Date: 2024-11-01
+  Bugfixes:
+    - Fixed use of shift+click to exit remote-view factory building does not update the overlay combinator. Resolves [#68](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/68)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.12
+Date: 2024-10-31
+  Bugfixes:
+    - Fixed that each of the factory floor surfaces only played 1 track of music. Resolves [#52](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/52)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.11
+Date: 2024-10-31
+  Bugfixes:
+    - Fixed crash related to 3rd party mod removing surface conditions to science pack recipes.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.10
+Date: 2024-10-31
+  Bugfixes:
+    - Fixed factory floor stays connected to power grid after you move the building away from power poles. Resolves [#60](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/60)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.9
+Date: 2024-10-31
+  Bugfixes:
+    - Fixed ghost chest connections lingering in certian cases. Resolves [#65](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/65)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.8
+Date: 2024-10-31
+  Locale:
+    - Fixed incorrect localised name for "packed" factory buildings. Resolves [#59](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/59)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.7
+Date: 2024-10-31
+  Bugfixes:
+    - Improved collision detection for mech suit flying into a factory building. Resolves [#58](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/58)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.6
+Date: 2024-10-31
+  Locale:
+    - Updated Chinese and Russian locale.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.5
+Date: 2024-10-31
+  Bugfixes:
+    - Fixed a crash when biters fully eat a factory building. Resolves [#57](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/57)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.4
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed grass surfaces appearing in some cases. Resolves [#56](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/56)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.3
+Date: 2024-10-30
+  Bugfixes:
+    - The factory construction chest now has a logistic filter set to "deconstruction planner" by default. Resolves [#54](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/54)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.2
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed inserters able to insert items into the factory construction chest. Resolves [#55](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/55)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.1
+Date: 2024-10-30
+  Changes:
+    - Improved the user experience of the editor/god controller trying to teleport into a factory building.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.0
+Date: 2024-10-30
+  Features:
+    - Shift-clicking the factory power monitor now opens the outside surface in remote-view.
+  Locale:
+    - Improved the english locale for the factory circuit connector so its more obvious how it works.
+  Changes:
+    - Entering a factory via remote view is now performed by SHIFT+right click (previously just right click)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.12
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed a crash related to out-of-bounds construction ghosts in the factory floor.
+  Graphics:
+    - Heat connections are now red (previously yellow)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.11
+Date: 2024-10-30
+  Changes:
+    - Use a more sensible zoom level with remote view entering a factory
+    - We no longer support spidertrons entry into factory buildings.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.10
+Date: 2024-10-30
+  Bugfixes:
+    - Fixed exploit allowing players to teleport between factory buildings.
+  Changes:
+    - Instantiated factory buildings can no longer be recycled
+---------------------------------------------------------------------------------------------------
+Version: 3.3.9
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed that the factory roboport upgrade would vastly overrequest the required construction items.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.8
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed a crash related to the upgrade planner interaction with the factory roboport upgrade. Resolves [#47](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/47)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.7
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed missing music in factory floors. Resolves [#44](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/44)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.6
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed factory roboport upgrade was building entities even if the factory is inactive due to missing recursion research technology.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.5
+Date: 2024-10-29
+  Bugfixes:
+    - Comment out some broken code related to the factory roboport upgrade.
+    - Fixed crash in Roboport.cleanup_factory_exterior()
+    - Fixed rare crash when deconstructing a factory building.
+    - Hid the "quality indicator pips" from the outside surface hidden requester chest entity.
+    - Ignore ghosts already registered for construction.
+  Changes:
+    - Decreased the frequency of the roboport upgrade being ticked.
+    - Increase the amount of inital construction bots requested in the roboport upgrade based on factory quality.
+    - Increased the inventory size of the factory construction chest from 48 slots to 100 slots
+---------------------------------------------------------------------------------------------------
+Version: 3.3.4
+Date: 2024-10-29
+  Changes:
+    - Added a mod setting which allows for cheap research
+---------------------------------------------------------------------------------------------------
+Version: 3.3.3
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed crash when researching the factory upgrade: roboport technology. Resolves [#39](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/39)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.2
+Date: 2024-10-29
+  Bugfixes:
+    - Added hard dependancy on experimental factorio to prevent hard crashes. Resolves [#38](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/38) Resolves [#42](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/42) Resolves [#40](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/40)
+---------------------------------------------------------------------------------------------------
+Version: 3.3.1
+Date: 2024-10-29
+  Bugfixes:
+    - Fixed "Unbound factory" errors spamming the logs.
+    - Fixed a crash when researching the factory roboport upgrade.
+---------------------------------------------------------------------------------------------------
+Version: 3.3.0
+Date: 2024-10-29
+  Features:
+    - Allowed construction robots to travel inside factory buildings and construct ghosts.
+    - Clicking on a factory building now opens the inner surface in remote view.
+  Bugfixes:
+    - Fixed a crash with the "stack inserters" mod by Xorimuth. Resolves [#36](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/36)
+    - Resolves [#35](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/35)
+  Changes:
+    - Changed the mechanics for mech armor entering factory buildings. Resolves [#37](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/37)
+    - Moved the factory overlay tech from space science to green science.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.1
+Date: 2024-10-28
+  Bugfixes:
+    - Fixed belt->inserter connections not always connecting in the correct direction.
+---------------------------------------------------------------------------------------------------
+Version: 3.2.0
+Date: 2024-10-28
+  Features:
+    - Added support for belt->inserter connection types.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.9
+Date: 2024-10-28
+  Bugfixes:
+    - Fix a crash related to overlay teleportation migration. Resolves [#32](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/32)
+---------------------------------------------------------------------------------------------------
+Version: 3.1.8
+Date: 2024-10-28
+  Bugfixes:
+    - Remove unneeded persistent state from storage table
+  Changes:
+    - Changed the position of "factory overlay controller"
+---------------------------------------------------------------------------------------------------
+Version: 3.1.7
+Date: 2024-10-27
+  Bugfixes:
+    - Fixed the hidden planet was showing up in the agri tower tooltip
+---------------------------------------------------------------------------------------------------
+Version: 3.1.6
+Date: 2024-10-27
+  Graphics:
+    - Added smoke to the borehole pump
+    - Adjusted the tech icon for the borehole pump
+    - Adjusted the tech icon for the heat connection
+---------------------------------------------------------------------------------------------------
+Version: 3.1.5
+Date: 2024-10-27
+  Changes:
+    - Foundries can now be crafted in the foundry
+---------------------------------------------------------------------------------------------------
+Version: 3.1.4
+Date: 2024-10-27
+  Bugfixes:
+    - Borehole recipes are now hidden from the players crafting menu
+    - Fixed borehole recipes being in the wrong subgroup.
+    - The borehole pump now properly freezes on aquilo
+---------------------------------------------------------------------------------------------------
+Version: 3.1.3
+Date: 2024-10-27
+  Bugfixes:
+    - Fixed quality not correctly applying to factory buildings in some cases
+---------------------------------------------------------------------------------------------------
+Version: 3.1.2
+Date: 2024-10-27
+  Bugfixes:
+    - Fixed a crash with advanced furances 2. Resolves [#29](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/29)
+  Graphics:
+    - Improved the graphics for the borehole pump item icon
+---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 2024-10-27
+  Bugfixes:
+    - Fixed crash with pyanodons mods
+  Graphics:
+    - New graphics for the circuit connection tech icon
+    - Remade the graphics for the factory circuit connector.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 2024-10-27
+  Features:
+    - Added borehole pumps
+    - Renamed the mod to Factorissimo 3! We have come a long way these past years :)
+  Bugfixes:
+    - Removed collision mask for linked belts. Allows fast-replace of factory buildings.
+  Graphics:
+    - Fixed texture clipping in the recursion 2 tech icon
+  Changes:
+    - Changed the mining time of factory buildings from 1 second to 0.5 seconds
+    - UPS improvements for heat connections.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.2
+Date: 2024-10-27
+  Bugfixes:
+    - Fixed a crash when combined with the infinite quality tiers mod. Resolves [#27](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/27)
+  Graphics:
+    - Yet more graphics improvements to the factorissimo tile transitions.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.1
+Date: 2024-10-27
+  Graphics:
+    - Greatly improved the graphics for frozen Aquilo factory buildings.
+    - Improved the graphics for the out-of-map tile transitions.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.0
+Date: 2024-10-27
+  Features:
+    - Factory buildings now scale with quality. Legendary!
+  Changes:
+    - The wall mounted factory pump is now only selectable from the outside surface.
+---------------------------------------------------------------------------------------------------
+Version: 1.8.0
+Date: 2024-10-26
+  Features:
+    - Added packed icon graphics for picked-up factory buildings. Resolves [#25](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/25)
+---------------------------------------------------------------------------------------------------
+Version: 1.7.1
+Date: 2024-10-26
+  Changes:
+    - Buffed the wire reach of the factory circuit connector from 7.5 tiles to 14 tiles.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 2024-10-26
+  Features:
+    - Implemented recursive deepcopy
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 2024-10-26
+  Features:
+    - Implemented surface render parameters and fog animations for all factory surfaces.
+    - Rendered a small planet indicator over top the factory power monitor
+  Bugfixes:
+    - Fix some technologies missing necessary prereqs in the tech tree. Resolves [#24](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/24)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.17
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed factory circuit connections.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.16
+Date: 2024-10-26
+  Compatibility:
+    - Added compat with the global power network mod. Resolves [#21](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/21)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.15
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed a crash when researching the factory overlay controller. Resolves [#23](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/23)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.14
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed that the factory preview camera sometimes rendered as fog-of-war.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.13
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed issues of the game not responding when migrating from a 1.1 save. Resolves [#22](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/22)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.12
+Date: 2024-10-26
+  Graphics:
+    - Remaster the mod thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 1.5.11
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed a crash involving the factory overlay controler. Resolves [#20](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/20)
+    - Fixed a crash related to placing belt connections in editor mode.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.10
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed interior lights upgrade sometimes not getting correctly applied
+    - Fixed various crashes when uninstalling space age from an existing world.
+  Graphics:
+    - Converted all factory building graphics into high-resolution
+---------------------------------------------------------------------------------------------------
+Version: 1.5.9
+Date: 2024-10-26
+  Changes:
+    - Added a hard requirement on factorio version 2.0.11 or greater. Resolves [#17](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/17)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.8
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed grass tiles appearing in the factory floor surface. Resolves: [#16](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/16)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.7
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed a crash caused by invalid migration file. Resolves [#15](https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/15)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.6
+Date: 2024-10-26
+  Bugfixes:
+    - Removed mysterious "factory middleman surface" from appearing int the remote view selection
+---------------------------------------------------------------------------------------------------
+Version: 1.5.5
+Date: 2024-10-26
+  Bugfixes:
+    - Fix crash when space exploration is not installed due to pump speeds.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.4
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed crash when putting aquilo in the overlay combinator
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2024-10-26
+  Bugfixes:
+    - Fix the slow pump speed for real this time
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed crash without space age due to missing ceiling surface-property
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2024-10-26
+  Bugfixes:
+    - Fixed fluid inputs being too slow
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2024-10-25
+  Features:
+    - Add factorissimo to the starmap
+    - Add unstackable flag to factory building items
+    - Added new logic for factorissimo entrance when using a mech suit
+    - Banned rocket silos, cargo landing pads, and artillery turrets from being built indoors
+    - Blocked placement of factory buildings in surfaces with too low gravity.
+    - Cleaned up factoriopedia tab
+    - Fluid connections are now linked pipes
+    - Remove Factorissimo2-same-surface mod setting in prep for aquilo
+    - Reworked the tech tree when space age is installed
+  Compatibility:
+    - Added optional dependancy on the space age mod
+  Bugfixes:
+    - Add support for global_electric_network()
+    - Delete all data-stage crashes in 2.0
+    - Fix crash when hovering the factory overlay
+    - Fix incorrect migration files
+    - Fixed belt-to-belt connections
+    - Fixed crashes related to the factorissimo combinator overlays
+    - Fixed offset rendering issues related to the new rendering API
+    - Fixed player travel not working
+    - Global -> Storage
+    - No need to define icons here as this is handled by main_product
+    - Prevent factorissimos from being sent up in rocket silos.
+    - Re-implement multiple factories per surface due to mod api insights
+    - Rewrite system of electricity connections in order to support 2.0
+    - Update flying texts for 2.0 API
+    - Update generate_factory_item_description for 2.0
+    - Update the remove_direct_connection function for 2.0
+    - Update vscode config to include new globals
+  Graphics:
+    - Added new graphics for the factory overlay controller
+    - Improve tile transitions for factorissimo tiles
+    - Improved out-of-map tile graphics via parallax
+  Locale:
+    - Added text colors and font ligatures
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2024-08-06
+  Compatibility:
+    - Fixed crash when exploded by a nuke from the true nukes mod
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2024-08-06
+  Compatibility:
+    - Added optional dependancy on shall belt config (https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/64e219d0f621bbed514bc3ab)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2024-08-05
+  Bugfixes:
+    - Fixed an issue with the remote API causing new factorissimo tiers to not function.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2024-08-05
+  Features:
+    - Added a runtime mod setting to prevent travel inside factorissimos via spidertron
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2024-08-05
+  Locale:
+    - Delete unneeded locale files
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2024-08-05
+  Features:
+    - Added automatic portal deployment with via https://github.com/fgardt/factorio-mod-template
+  Changes:
+    - Fix license files
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2023.1.17
+  Info:
+    - Spidertrons now must have a driver for teleportation
+    - Fixed crash with picker dollies
+    - Fixed crash with adv fluid handling for pY
+    - Fixed crash with factoriomaps
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022.12.9
+  Info:
+    - Fixed a crash with K2+SE
+    - Added layout.surface_override to layout API https://mods.factorio.com/mod/space-factorissimo-updated/discussion/62f24d587d4d88d0f006c738
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2022.12.9
+  Info:
+    - Fixed a crash with SE https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/638a256cb94c53001f98940f
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022.11.30
+  Info:
+    - Blueprinting a factory exterior will now preserve all interior entities as ghosts
+---------------------------------------------------------------------------------------------------
+Version: 1.1.27
+Date: 2022.11.22
+  Info:
+    - Fixed chest connections ignoring bars in some cases https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/637aa5d3c2757b81f497a4de
+---------------------------------------------------------------------------------------------------
+Version: 1.1.26
+Date: 2022.11.12
+  Info:
+    - Fixed issues with chest connections not stacking items properly https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/63704be93c80dcd14d7abb29
+---------------------------------------------------------------------------------------------------
+Version: 1.1.25
+Date: 2022.11.12
+  Info:
+    - Added soft dependancy on Krastorio https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/636fd426f40a0a5fafbdaa4e
+---------------------------------------------------------------------------------------------------
+Version: 1.1.24
+Date: 2022.11.11
+  Info:
+    - Spanish translation from Francisco López Román
+---------------------------------------------------------------------------------------------------
+Version: 1.1.23
+Date: 2022.11.11
+  Info:
+    - Fixed issue when SHIFT+Clicking factory power poles. https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/6320a625f5d6c3baf18b821e
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2022.11.11
+  Info:
+    - Fixed rare issue with 1.1.16 migration file https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/6320aa69717dbe0f313c4786
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2022.11.10
+  Info:
+    - Fixed item-with-tags getting tags reverted when moving through a chest connection https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/636ca225ad2206759f389838
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2022.8.17
+  Info:
+    - Chinese translation from 0x3F4
+    - Fixed 2ed crash with Efficient Smelting
+    - Reduced hand mining time of factory buildings from 5->1
+    - Changed descriptions of some mod settings
+    - Factory circuit transfer combinator changed to use operable=false instead of closing the gui via script
+    - Improved spidertron teleportation when the spider is controlled with a remote and has a driver
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2022.8.8
+  Info:
+    - Added ablity to blueprint factory overlay combinators
+    - Fixed crash with Efficient Smelting
+    - French translation from KroMignon
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2022.8.1
+  Info:
+    - Hotfix for jetpack mod crash
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2022.8.1
+  Info:
+    - Fixed some more unknown key issues while using space exploration
+    - Fixed a potential crash with radar changes in 1.1.16
+    - Added compatiblity with https://mods.factorio.com/mod/jetpack
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2022.7.31
+  Info:
+    - Added hr graphics for the factory circuit connector
+    - New technology icon for External Overlay Display
+    - Companion drones can now build factory buildings normally
+    - Fixed performance problems with hidden radars
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2022.7.30
+  Info:
+    - Fixed that you could create a circuit connection without proper research
+    - Connection snapping code was rewritten to use selection boxes instead of bounding boxes. Fixes issues with the squeak through mod and certian modded entities.
+    - Fixed some unknown key issues while using space exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2022.7.28
+  Info:
+    - Added error message when building a factory building with companion drones. was causing save corruption before
+    - Fixed that destroying a pole with a pistol/biter would cause the pole's ghost to not have wire connections
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2022.7.27
+  Info:
+    - Fixed chat spam
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2022.7.27
+  Info:
+    - Fixed that destroying factory buildings from another mod removed connection indicators and factory overlays
+    - Fixed an issue with the spidertron engineer mod
+    - Fixed that companion drones could enter factory buildings
+    - Construction robots will now travel with the player even if the player is riding a spidertron
+    - Fixed that the factory overlay would show incorrectly in spefic scenarios
+    - Fixed an incompatibility with Building Time mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2022.7.25
+  Info:
+    - New HR graphics from drd_avel
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2022.7.24
+  Info:
+    - Fixed a crash with the power-grid-comb mod
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2022.7.24
+  Info:
+    - Chest connections will now point towards provider chests by default
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2022.7.24
+  Info:
+    - Fixed that connection settings was obtainable
+    - Spidertrons will now only enter a factory building without a driver if their autopilot destination is above a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022.7.24
+  Info:
+    - Added Russian translation from Eldrinn Elantey
+    - Belt connections now work with splitters
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022.7.24
+  Info:
+    - Added flying text when trying to create a connection without proper research
+    - New graphics for circuit connection research
+    - Circuit connection and chest connection research is now gated behind Arcitechure 2
+    - Added high-res pipe connection graphics
+    - Removed cancel_creation() from remote api
+    - Added crowdin https://crowdin.com/project/factorissimo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2022.7.23
+  Info:
+    - Fixed a crash with companion drones
+    - Added sound effects while creating factory connections
+    - Fixed several issues with editor mode
+    - Reverted the change from 1.0.11: "Fixed that you could rotate a factory building when you had something in your cursor"
+    - Fixed a crash when destroying a factory building that was near a power switch but not connected to it
+    - Fixed several compatiblity issues with bio industries
+    - Robots are now indestructable after picking up a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2022.7.21
+  Info:
+    - Fixed a crash when destroying an entity without a unit number
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2022.7.21
+  Info:
+    - Spidertrons can now enter a factory without a driver
+    - Removed the factory-1-overlay entity
+    - Fixed crashes involving having a factory building inside itself
+    - Tech tree changes
+    - Removed remnants
+    - Fixed that clicking the camera toggle button with a factory in your cursor could cause the overlay to never disappear
+    - The camera now works for factory items on the floor
+    - New heat connection tech graphics
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2022.7.19
+  Info:
+    - Fixed that you could rotate connection indicators
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2022.7.19
+  Info:
+    - Fixed that you couldn't enter factory buildings after running /c game.reload_mods()
+    - Fixed a crash when riding a car inside a rocket silo
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2022.7.19
+  Info:
+    - Added a remote API
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2022.7.18
+  Info:
+    - Fixed circuit connections not working across the same surface
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2022.7.17
+  Info:
+    - Fixed hovering a factory pole in the map viewer would show the wrong factory exterior
+    - Fixed an incompatibility with Companion Drones and similar mods
+    - Fixed issues with defines.events.script_raised_built and defines.events.script_raised_revive
+    - Made it easier to migrate from the unforked version
+    - Added localisation to dummy pipe connections
+    - Removed bulk pipes for dummy pipe connections
+    - Fixed blueprinting a invalid factory building causing a crash
+    - Factory buildings are now a high priority military target
+    - Factory buildings now drop themselves on the ground when killed. (Instead of being voided)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2022.7.16
+  Info:
+    - Added a setting that allows you to toggle number graphics on factory buildings (default: off)
+    - Fixed that you could rotate a factory building when you had something in your cursor
+    - New graphics for factory item icons
+    - Fixed that fluid would not flow past hidden bulk pipes
+    - Removed out-of-factory tiles. Replaced with out-of-map
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2022.7.15
+  Info:
+    - Greatly improved spidertron teleportation
+    - Fixed some localisation issues in the custom hotkeys gui
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2022.7.15
+  Info:
+    - Fixed a crash when creating a blueprint without any entities
+    - Changed belt spilling mechanics  https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d18f8d8dcfa2a515e77f2a
+    - You can now blueprint connection settings
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2022.7.15
+  Info:
+    - Fixed a crash with the copy and cut blueprint tools
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022.7.14
+  Info:
+    - priority electric pole mechanics were removed  https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62ce7014bb9d8bc591641649
+    - blueprinting system was improved (still more work to do)
+    - Fixed https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d02ea6c3132d49100acef7
+    - Fixed https://mods.factorio.com/mod/factorissimo-2-notnotmelon/discussion/62d0762d0731c7acf8048c54
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022.7.13
+  Info:
+    - fluid connections now support 'offshore-pump'
+    - changed factory building default surface from "Factory floor 1" to "factory-floor-1"
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2022.7.13
+  Info:
+    - fixed a crash when picking up invalid factory buildings
+    - fixed that trying to use recursion without the research would cause an unbound building
+    - inactive factory buildings no longer have overlay cameras
+    - fixed high-speed gui flashing when selecting a factory and a factory camera at the same time
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022.7.12
+  Info:
+    - factory buildings are now stored as item-with-tags
+    - factory items will now show their config settings on their item form
+    - removed the limit of 99 factory items
+    - removed factory requester chests. they are unnecessary with this new system
+    - researching recursion 1 or recursion 2 will now auto enable inactive buildings
+    - personal robots will now teleport with the player when they change buildings
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022.7.12
+  Info:
+    - belt connections now support 'loader', 'loader-1x1', 'linked-belt'
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022.7.11
+  Info:
+    - fixed a bug involving picking up a factory building with a full inventory
+    - added pipe connections for pumps, storage-tank, infinity-pipe
+    - fixed a crash involving belts registered in final-fixes stage
+    - fixed a crash involving rotatable fluid entities
+    - fixed crash with mobile factory mod
+    - fixed an issue with blueprinting factory fluid connections
+    - reduced mod tile usage
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022.7.9
+  Info:
+    - fixed a crash involving solar panels and robots
+    - you can now use a spidertron to enter a factory building
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022.7.8
+  Info:
+    - factory lamp upgrade overhaul
+    - acculumulators function properly in factory buildings
+    - improved electric interface gui
+    - factorio api now allows for unlimited surfaces. updated the mod to reflect this
+    - new mod setting Factorissimo2-same-surface
+    - added linked-container and infinity-container to chest connections
+    - Optimized electric network using cross surface wiring
+    - Optimized factorissimo pollution handling
+    - Optimized players entering and exiting factorissimo buildings
+    - Optimized circuit connections to use cross surface electric pole wiring
+    - Optimized belt connections using the new linked-belt prototype
+    - All electric network connections are now bidirectional
+    - Adjusted factorissimo-1 recipe to use more copper
+    - New setting allows all buildings to be on the same surface. You will be able to see all your factories from the map view
+    - Removed cheaper technology and recipe settings
+    - Heat pipe connections
+    - Dummy pipe connections only form when pipes are connected on both sides
+    - Removed bulk input and output fluid pipes. Fluid transfer is now always fast with any pipe connection
