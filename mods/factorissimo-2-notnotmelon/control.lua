@@ -1,0 +1,27 @@
+require "lib.lib"
+
+require "script.remote-api"
+require "script.layout"
+require "script.factory-buildings"
+require "script.connections.connections"
+require "script.roboport.roboport"
+require "script.blueprint"
+require "script.camera"
+require "script.travel"
+require "script.overlay"
+require "script.pollution"
+require "script.electricity"
+require "script.greenhouse"
+require "script.lights"
+require "script.port-markers"
+require "script.borehole-pump"
+require "script.migration"
+
+require "compat.factorio-maps"
+require "compat.cerys"
+require "compat.maraxsis"
+require "compat.resource-spawner-overhaul"
+require "compat.picker-dollies"
+require "compat.space-exploration"
+
+factorissimo.finalize_events()
