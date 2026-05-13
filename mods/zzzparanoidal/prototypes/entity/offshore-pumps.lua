@@ -16,7 +16,10 @@ end
 local energySources = {
 	burner = {
 		type = "burner",
-		fuel_categories = { "chemical" },
+		fuel_categories = {
+			"chemical",
+			data.raw["fuel-category"]["processed-chemical"] and "processed-chemical" or nil,
+		},
 		effectivity = 1,
 		fuel_inventory_size = 1,
 		emissions_per_minute = { pollution = 9 },
