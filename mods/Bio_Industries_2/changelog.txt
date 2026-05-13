@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.34
+Date: 24.02.2026
+  Changes:
+    - Add glass to the bio nursery if it exists
+  Bug Fixes:
+    - Add migration for 2.0.33
+---------------------------------------------------------------------------------------------------
+Version: 2.0.33
+Date: 24.02.2026
+  Changes:
+    - Add Polish language (thanks S3BA)
+  Bug Fixes:
+    - Fix old recipe result code for mod compatibility
+    - Fix missing module slots for various entities
+    - Allow productivity modules for Bio fuel conversion 1
+    - Remove wooden rails again (they caused problems)
+    - Remove unused power-rails code
+---------------------------------------------------------------------------------------------------
 Version: 2.0.32
 Date: 27.01.2026
   Bug Fixes:

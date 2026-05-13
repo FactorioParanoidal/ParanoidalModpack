@@ -506,7 +506,7 @@ data:extend({
         resistances = { { type = "fire", percent = 95 } },
         collision_box = { { -1.2, -1.2 }, { 1.2, 1.2 } },
         selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
-        module_specification = { module_slots = 2 },
+        module_slots = 2,
         allowed_effects = { "consumption", "speed", "pollution" },
 		graphics_set = {
 			-- Working animation (16 frames)

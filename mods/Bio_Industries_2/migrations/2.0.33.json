@@ -1,0 +1,8 @@
+{
+  "entity": [
+    ["bi-straight-rail-wood", "straight-rail"],
+    ["bi-half-diagonal-rail-wood", "half-diagonal-rail"],
+    ["bi-curved-rail-a-wood", "curved-rail-a"],
+    ["bi-curved-rail-b-wood", "curved-rail-b"]
+  ]
+}

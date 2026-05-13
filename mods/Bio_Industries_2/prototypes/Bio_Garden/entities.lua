@@ -84,9 +84,7 @@ data:extend({
     -- Changed for 0.18.34/1.1.4 -- Modules don't make sense for the gardens!
     -- (Efficiency modules are also meant to reduce pollution, but as the base value
     -- is negative, the resulting value is greater than the base value! )
-    module_specification = {
-      module_slots = 1
-    },
+    module_slots = 1,
     -- Changed for 0.18.34/1.1.4 -- We need to use an empty table here, so the gardens
     -- won't be affected by beacons!
     allowed_effects = { "consumption", "speed" },
@@ -224,9 +222,7 @@ data:extend({
     -- Changed for 0.18.34/1.1.4 -- Modules don't make sense for the gardens!
     -- (Efficiency modules are also meant to reduce pollution, but as the base value
     -- is negative, the resulting value is greater than the base value! )
-    module_specification = {
-      module_slots = 2
-    },
+    module_slots = 2,
     -- Changed for 0.18.34/1.1.4 -- We need to use an empty table here, so the gardens
     -- won't be affected by beacons!
     allowed_effects = { "consumption", "speed" },
@@ -406,9 +402,7 @@ data:extend({
     -- Changed for 0.18.34/1.1.4 -- Modules don't make sense for the gardens!
     -- (Efficiency modules are also meant to reduce pollution, but as the base value
     -- is negative, the resulting value is greater than the base value! )
-    module_specification = {
-      module_slots = 4
-    },
+    module_slots = 4,
     -- Changed for 0.18.34/1.1.4 -- We need to use an empty table here, so the gardens
     -- won't be affected by beacons!
     allowed_effects = { "consumption", "speed" },

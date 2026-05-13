@@ -69,7 +69,6 @@ require("prototypes.Wood_Products.recipe")
 require("prototypes.Wood_Products.containers-entities")
 require("prototypes.Wood_Products.containers-item")
 require("prototypes.Wood_Products.containers-recipe")
-require("prototypes.Wood_Products.rail")
 
 
 if not mods["Natural_Evolution_Buildings"] then
