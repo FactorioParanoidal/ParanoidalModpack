@@ -203,34 +203,6 @@ if not mods["angelsindustries"] then
 		data.raw["recipe"]["even-better-cargo-plane"].subgroup = "aircraft"
 		data.raw["item-with-entity-data"]["even-better-cargo-plane"].subgroup = "aircraft"
 	end
-	--###############################################################################################
-	--переносим трубы
-	if mods["FluidMustFlow"] then
-		data.raw["recipe"]["duct-small"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-small"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-t-junction"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-t-junction"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-curve"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-curve"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-cross"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-cross"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-underground"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-underground"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["non-return-duct"].subgroup = "FluidMustFlow"
-		data.raw["item"]["non-return-duct"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-end-point-intake"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-end-point-outtake"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct"].subgroup = "FluidMustFlow"
-		data.raw["item"]["duct-long"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["check-valve"].subgroup = "FluidMustFlow"
-		data.raw["item"]["check-valve"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["valves-overflow"].subgroup = "FluidMustFlow"
-		data.raw["item"]["valves-overflow"].subgroup = "FluidMustFlow"
-		data.raw["recipe"]["underflow-valve"].subgroup = "FluidMustFlow"
-		data.raw["item"]["underflow-valve"].subgroup = "FluidMustFlow"
-	end
 	-------------------------------------------------------------------------------------------------
 	if mods["Bio_Industries"] then
 		data.raw["recipe"]["bi-wood-pipe"].subgroup = "pipe"

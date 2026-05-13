@@ -254,9 +254,6 @@ end
 if mods["ElectricResistance"] then
     set_settings_default_value("int-setting", "electric-resistance-power-consumption", 2)
 end
-if mods["FluidMustFlow"] then
-    set_settings_default_value("int-setting", "fmf-underground-duct-max-length", 50)
-end
 if mods["heroturrets"] then
     set_settings_default_value(
         "string-setting",
