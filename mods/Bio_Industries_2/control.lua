@@ -534,16 +534,6 @@ local function On_Pre_Remove(event)
             BioInd.show("Removed arboretum radar! Table", storage.bi_arboretum_radar_table)
         end
 
-        -- Power rails: Connections must be explicitely removed, otherwise the poles
-        -- from the remaining rails will automatically connect and bridge the gap in
-        -- the power supply!
-        if entity.name:match("bi%-%a+%-rail%-power") and base_entry.pole and base_entry.pole.valid then
-            BioInd.writeDebug("Before")
-            BioInd.writeDebug("Disconnecting %s!", { BioInd.print_name_id(base_entry.pole) })
-            base_entry.pole.disconnect_neighbour()
-            BioInd.writeDebug("After")
-        end
-
         -- Default: Remove all hidden entities!
         for hidden, h_name in pairs(compound_entity.hidden or {}) do
             BioInd.show("hidden", hidden)
@@ -553,14 +543,6 @@ local function On_Pre_Remove(event)
             base_entry[hidden] = nil
         end
         storage[compound_entity.tab][entity.unit_number] = nil
-
-        -- Rail-to-power: Connections must be explicitely removed, otherwise the poles
-        -- from the different rail tracks hooked up to this connector will automatically
-        -- keep the separate power networks connected!
-    elseif entity.name == "bi-power-to-rail-pole" then
-        BioInd.writeDebug("Rail-to-power connector has been removed")
-        entity.disconnect_neighbour()
-        BioInd.writeDebug("Removed copper wires from %s (%g)", { entity.name, entity.unit_number })
 
         -- Removed seedling
     elseif entity.name == "seedling" then
@@ -632,7 +614,6 @@ local function On_Death(event)
         storage.bi.trees[entity.name] or
         -- Entity checks
         entity.name == storage.compound_entities["bi-arboretum"].hidden.radar.name or
-        entity.name == "bi-power-to-rail-pole" or
         entity.name == "seedling" then
         BioInd.writeDebug("Divert to On_Pre_Remove!")
         On_Pre_Remove(event)

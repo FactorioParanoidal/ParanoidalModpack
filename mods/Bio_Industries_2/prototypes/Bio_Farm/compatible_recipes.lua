@@ -417,13 +417,13 @@ if data.raw.item[data.raw.item["kr-sand"] and "kr-sand" or "sand"] or
   -- Adjust result for BioTech
   if mods["BioTech"] then
 BioInd.writeDebug("Adjusting result for \"BioTech\" …")
-    recipe.result = "biotech-sand"
+    recipe.results[1].name = "biotech-sand"
 
   -- Adjust result for Angel's
   elseif mods["angelsrefining"] then
     -- Adjust result
 BioInd.writeDebug("Adjusting result for \"angelsrefining\" …")
-    recipe.result = "solid-sand"
+    recipe.results[1].name = "solid-sand"
 
   -- Adjust icon for Krastorio
   elseif mods["Krastorio2"] or mods["Krastorio2-spaced-out"] then

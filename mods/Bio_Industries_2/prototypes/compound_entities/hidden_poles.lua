@@ -141,24 +141,6 @@ BioInd.show("locale_name", locale_name)
     end
 
   ------------------------------------------------------------------------------------
-  -- Adjust properties for hidden power-rail pole
-  ------------------------------------------------------------------------------------
-  elseif (c_entities["bi-straight-rail-power"] and
-            c_entities["bi-straight-rail-power"].hidden[h_key] and
-            pole_name == c_entities["bi-straight-rail-power"].hidden[h_key].name) or
-          (c_entities["bi-curved-rail-power"] and
-            c_entities["bi-curved-rail-power"].hidden[h_key] and
-            pole_name == c_entities["bi-curved-rail-power"].hidden[h_key].name) then
-  --~ elseif pole_name == c_entities["bi-straight-rail-power"].hidden[h_key].name then
-
-    --~ pole.localised_name = {"entity-name.bi-rail-power"}
-    --~ pole.localised_description = {"entity-description.bi-rail-power"}
-    pole.maximum_wire_distance = 9
-    pole.supply_area_distance = 2
-    shift_picture(pole)
-    BioInd.show("Adjusted properties of", pole_name)
-
-  ------------------------------------------------------------------------------------
   -- Adjust properties for hidden pole of bio gardens
   ------------------------------------------------------------------------------------
   elseif c_entities["bi-bio-garden"] and

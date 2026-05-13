@@ -55,34 +55,6 @@ return function(mod_name)
     end
 
     ------------------------------------------------------------------------------------
-    -- Same values for collision masks
-    -- Default: {"item-layer", "object-layer", "rail-layer", "floor-layer", "water-tile"}
-    common.RAIL_BRIDGE_MASK = { "object-layer", "consider-tile-transitions" }
-
-    -- "Transport Drones" removes "object-layer" from rails, so if bridges have only
-    -- {"object-layer"}, there collision mask will be empty, and they can be built even
-    -- over cliffs. So we need to add another layer to bridges ("floor-layer").
-    -- As of Factorio 1.1.0, rails need to have "rail-layer" in their mask. This will work
-    -- alright, but isn't available in earlier versions of Factorio, so we will use
-    -- "floor-layer" there instead.
-    local need = common.check_version("base", ">=", "1.1.0") and "rail-layer" or "floor-layer"
-    table.insert(common.RAIL_BRIDGE_MASK, need)
-
-    -- Rails use basically the same mask as rail bridges, ...
-    common.RAIL_MASK = util.table.deepcopy(common.RAIL_BRIDGE_MASK)
-    -- ... we just need to add some layers so our rails have the same mask as vanilla rails.
-    table.insert(common.RAIL_MASK, "item-layer")
-    table.insert(common.RAIL_MASK, "water-tile")
-
-
-
-    ------------------------------------------------------------------------------------
-    -- Set maximum_wire_distance of Power-to-rail connectors
-    common.POWER_TO_RAIL_WIRE_DISTANCE = 4
-
-
-
-    ------------------------------------------------------------------------------------
     -- List of compound entities
     -- Key:       name of the base entity
     -- tab:       name of the global table where data of these entity are stored
@@ -660,7 +632,6 @@ return function(mod_name)
                     filter = "name",
                     name = {
                         -- Poles named here will be ignored!
-                        "bi-rail-power-hidden-pole",
                         "bi-musk-mat-hidden-pole",
                         "bi-bio-garden-hidden-pole"
                     },
@@ -738,62 +709,6 @@ return function(mod_name)
             end
         end
     end
-
-    --------------------------------------------------------------------
-    -- Connect hidden poles of powered rails -- this is also used in
-    -- migration scripts, so make it a function in common.lua!
-    -- (This function may be called for hidden poles that have not been
-    -- added to the table yet if the pole has just been built. In this
-    -- case, we pass on the new pole explicitly!)
-    common.connect_power_rail = function(base, new_pole)
-        local pole = storage.bi_power_rail_table[base.unit_number].pole or new_pole
-        if pole and pole.valid then
-            -- Remove all copper wires from new pole
-            pole.disconnect_neighbour()
-            common.writeDebug("Removed all wires from %s %g", { pole.name, pole.unit_number })
-
-            -- Look for connecting rails at front and back of the new rail
-            for s, side in ipairs({ "front", "back" }) do
-                common.writeDebug("Looking for rails at %s", { side })
-                local neighbour
-                -- Look in all three directions
-                for d, direction in ipairs({ "left", "straight", "right" }) do
-                    common.writeDebug("Looking for rails in %s direction", { direction })
-                    neighbour = base.get_connected_rail {
-                        rail_direction = defines.rail_direction[side],
-                        rail_connection_direction = defines.rail_connection_direction[direction]
-                    }
-                    common.writeDebug("Rail %s of %s (%s): %s (%s)",
-                        { direction, base.name, base.unit_number, (neighbour and neighbour.name or "nil"), (neighbour and neighbour.unit_number or "nil") })
-
-                    -- Only make a connection if found rail is a powered rail
-                    -- (We'll know it's the right type if we find it in our table!)
-                    neighbour = neighbour and neighbour.valid and storage.bi_power_rail_table[neighbour.unit_number]
-                    if neighbour and neighbour.pole and neighbour.pole.valid then
-                        pole.connect_neighbour(neighbour.pole)
-                        common.writeDebug("Connected poles!")
-                    end
-                end
-            end
-
-            -- Look for Power-rail connectors
-            local connector = base.surface.find_entities_filtered {
-                position = base.position,
-                radius = common.POWER_TO_RAIL_WIRE_DISTANCE, -- maximum_wire_distance of Power-to-rail-connectors
-                name = "bi-power-to-rail-pole"
-            }
-            -- Connect to first Power-rail connector we've found
-            if connector and next(connector) then
-                pole.connect_neighbour(connector[1])
-                common.writeDebug("Connected " .. pole.name .. " (" .. pole.unit_number ..
-                    ") to " .. connector[1].name .. " (" .. connector[1].unit_number .. ")")
-                common.writeDebug("Connected %s (%g) to %s (%g)",
-                    { pole.name, pole.unit_number, connector[1].name, connector[1].unit_number })
-            end
-            common.writeDebug("Stored %s (%g) in global table", { base.name, base.unit_number })
-        end
-    end
-
 
     ------------------------------------------------------------------------------------
     -- Get the value of a startup setting
