@@ -29,7 +29,6 @@ if not mods["angelsindustries"] then
 		{ type = "item-subgroup", name = "spider", group = "transport", order = "x" },
 		{ type = "item-subgroup", name = "aircraft", group = "transport", order = "y" },
 		-------------------------------------------------------------------------------------------------
-		{ type = "item-subgroup", name = "FluidMustFlow", group = "logistics", order = "d-a-3" },
 		{ type = "item-subgroup", name = "FlowControl", group = "logistics", order = "d-a-4" },
 		{ type = "item-subgroup", name = "wooden-pole", group = "logistics", order = "d-1" },
 		{ type = "item-subgroup", name = "medium-electric-pole", group = "logistics", order = "d-2" },
