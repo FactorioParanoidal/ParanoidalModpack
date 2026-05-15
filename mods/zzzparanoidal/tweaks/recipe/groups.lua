@@ -145,17 +145,6 @@ if not mods["angelsindustries"] then
 		data.raw.item["logistic-train-stop"].order = "g"
 	end
 
-	if mods["railloader"] then
-		data.raw["recipe"]["railloader"].subgroup = "transport-rail-other"
-		data.raw["recipe"]["railloader"].order = "h"
-		data.raw.item["railloader"].subgroup = "transport-rail-other"
-		data.raw.item["railloader"].order = "h"
-
-		data.raw["recipe"]["railunloader"].subgroup = "transport-rail-other"
-		data.raw["recipe"]["railunloader"].order = "i"
-		data.raw.item["railunloader"].subgroup = "transport-rail-other"
-		data.raw.item["railunloader"].order = "i"
-	end
 	-------------------------------------------------------------------------------------------------
 	--артиллерийские вагоны
 	data.raw["recipe"]["artillery-wagon"].subgroup = "artillery-wagon"
