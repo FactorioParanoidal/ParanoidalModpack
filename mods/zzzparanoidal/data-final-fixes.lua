@@ -67,6 +67,11 @@ require("graphics.train.train_reskin") -- рескин поездов
 require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
 require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый
 
+-- map-gen presets: на data-final-fixes, чтобы захватить autoplace-control'ы
+-- любого мода, который их регистрирует в data-updates/data-final-fixes
+-- (не только в data-stage).
+require("prototypes.map-gen-presets")
+
 require("tweaks.custom.uniform-recipies")
 
 -- final aplying of override functions
