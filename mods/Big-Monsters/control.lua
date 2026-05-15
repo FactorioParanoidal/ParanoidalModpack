@@ -10,6 +10,19 @@ require "__mferrari_lib__/stdlib/area/chunk"
 require "__mferrari_lib__/stdlib/area/area"
 
 
+-- Skip event spawning on peaceful surfaces or on maps generated with
+-- enemy-base size = 0 (i.e. no enemies expected). Can be overridden via
+-- runtime setting "bm-events-when-peaceful" (default off).
+local function bm_peaceful_skip(surface)
+    if not surface or not surface.valid then return true end
+    if settings.global["bm-events-when-peaceful"] and settings.global["bm-events-when-peaceful"].value then return false end
+    if surface.peaceful_mode then return true end
+    local ac = surface.map_gen_settings and surface.map_gen_settings.autoplace_controls
+    if ac and ac["enemy-base"] and ac["enemy-base"].size == 0 then return true end
+    return false
+end
+
+
 function ReadRunTimeSettings(event)
 storage.chances = storage.chances or {}  -- in priority order of danger
 storage.chances.volcano       = {min_evo=settings.global["bm-volcano-min_evo"].value  		, chance=settings.global["bm-volcano-chance"].value, max_evo=settings.global["bm-volcano-max_evo"].value}
@@ -187,7 +200,8 @@ if not evo then evo=get_evo_here(surface) end
 
 for p=1,#storage.player_forces do
 	local pforce = game.forces[storage.player_forces[p]]
-	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then 
+	if surface and the_event and pforce and (not surfacename or surface.name==surfacename) and (not forcename or pforce.name==forcename) then
+		if bm_peaceful_skip(surface) then break end
 		local player_spawn = pforce.get_spawn_position(surface)
 		local pcount = count_players_on_surface(surface, pforce)
 
@@ -344,6 +358,7 @@ end
 
 function Create_Position_Event(the_event, surface, position, pforce)
 if not (surface and surface.valid) then return end
+if bm_peaceful_skip(surface) then return end
 local pcount = math.max(1,count_players_on_surface(surface, pforce)) --1 min to avoid crashes
 local evo = get_evo_here(surface)
 
@@ -632,12 +647,12 @@ end
 
 
 function Call_next_wave(event)
-local event_name = event.event_name 
-if event_name == 'swarm' then 
+local event_name = event.event_name
+if event_name == 'swarm' then
 	local attacks = event.attacks
 	for a=1,#attacks do
 		local at = attacks[a]
-		if at.surface and at.surface.valid then CallFrenzyAttack(at.surface,at.target,at.limit,at.multiplier) end
+		if at.surface and at.surface.valid and not bm_peaceful_skip(at.surface) then CallFrenzyAttack(at.surface,at.target,at.limit,at.multiplier) end
 		end
 	end
 end
@@ -1074,7 +1089,7 @@ if entity and entity.valid and entity.type~='entity-ghost' then
 	local surface = entity.surface
 --	local name=entity.name 
 	table.insert (storage.rocket_silos,entity)
-	if storage.enable_silo_attack then CallFrenzyAttack(surface,entity,nil,1.5) end
+	if storage.enable_silo_attack and not bm_peaceful_skip(surface) then CallFrenzyAttack(surface,entity,nil,1.5) end
 	end
 end		
 local filters = {{filter = "name", name = "rsc-silo-stage1"}, {filter = "name", name = "rsc-silo-stage1-serlp"}, {filter = "name", name = "rocket-silo"}}
