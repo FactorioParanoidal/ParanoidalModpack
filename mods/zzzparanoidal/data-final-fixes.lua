@@ -61,6 +61,7 @@ require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
 require("removals.alloy-mixer")
+require("removals.clowns-steel-c2")
 
 require("graphics.train.train_reskin") -- рескин поездов
 -------------------------------------------------------------------------------------------------
