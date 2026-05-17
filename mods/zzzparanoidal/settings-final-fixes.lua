@@ -110,10 +110,6 @@ if mods["QualityOfLife"] then
     set_settings_default_value("double-setting", "qol-toolbelts-flat-bonus", 0)
     set_settings_default_value("double-setting", "qol-toolbelts-multiplier", 1)
 end
-if mods["railloader"] then
-    set_settings_default_value("string-setting", "railloader-allowed-items", "any")
-    set_settings_default_value("bool-setting", "railloader-show-configuration-messages", false)
-end
 if mods["RampantFixed"] then
     set_settings_default_value("int-setting", "rampantFixed--attackWaveMaxSize", 55)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfBuilders", 25)
@@ -321,9 +317,6 @@ if mods["PickerVehicles"] then
 end
 if mods["SchallPickupTower"] then
     set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
-end
-if mods["railloader"] then
-    set_settings_default_value("int-setting", "train_loader_inverntory_size", 200)
 end
 if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--allowLongRangeImmunity", false)

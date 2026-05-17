@@ -347,6 +347,14 @@ data:extend({
 		order = "z",
 	},
 
+	{
+		type = "bool-setting",
+		name = "bm-events-when-peaceful",
+		setting_type = "runtime-global",
+		default_value = false,
+		order = "z-peaceful",
+	},
+
 	-- per player
 	{
 		type = "bool-setting",
