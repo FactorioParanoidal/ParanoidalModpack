@@ -185,11 +185,6 @@ paralib.bobmods.lib.tech.remove_recipe_unlock(
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-casting")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-to-ground-casting")
 
---фикс кривых исследований углерода
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-coal-processing-2", "coke-purification-3")
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-coal-processing-3", "angels-coke-purification-2")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "coke-purification-3")
-
 --фикс недоступности исследования артиллерии
 paralib.bobmods.lib.tech.remove_prerequisite("artillery", "radar")
 
