@@ -3,6 +3,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "glass-from-ore4",
+		localised_name = { "item-name.bob-glass" },
 		category = "smelting",
 		group = "angels-casting",
 		subgroup = "angels-glass-casting",
