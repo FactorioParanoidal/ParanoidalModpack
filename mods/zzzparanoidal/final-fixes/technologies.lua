@@ -93,9 +93,6 @@ paralib.bobmods.lib.tech.remove_prerequisite("angels-metallurgy-1", "bob-electri
 paralib.bobmods.lib.tech.remove_prerequisite("angels-nickel-smelting-1", "angels-ore-crushing")
 paralib.bobmods.lib.tech.remove_prerequisite("angels-lead-smelting-1", "angels-ore-crushing")
 paralib.bobmods.lib.tech.remove_prerequisite("angels-lead-smelting-1", "angels-basic-chemistry")
---убираем рецепты из технологий
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-1", "angels-stone-pipe-casting")
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-stone-smelting-1", "angels-stone-pipe-to-ground-casting")
 --перенос электролиза дальше по дереву
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-basic-chemistry", "angels-electrolyser")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-basic-chemistry", "angels-dirt-water-separation")
@@ -168,22 +165,6 @@ paralib.bobmods.lib.recipe.hide("bob-copper-tungsten-pipe")
 paralib.bobmods.lib.recipe.hide("bob-copper-tungsten-pipe-to-ground")
 paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe")
 paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe-to-ground")
-
-paralib.bobmods.lib.tech.remove_recipe_unlock(
-	"angels-copper-tungsten-smelting-1",
-	"angels-copper-tungsten-pipe-casting"
-)
-paralib.bobmods.lib.tech.remove_recipe_unlock(
-	"angels-copper-tungsten-smelting-1",
-	"angels-copper-tungsten-pipe-to-ground-casting"
-)
-paralib.bobmods.lib.tech.remove_recipe_unlock("bob-tungsten-alloy-processing", "angels-copper-tungsten-pipe-casting")
-paralib.bobmods.lib.tech.remove_recipe_unlock(
-	"bob-tungsten-alloy-processing",
-	"angels-copper-tungsten-pipe-to-ground-casting"
-)
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-casting")
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-tungsten-smelting-1", "angels-tungsten-pipe-to-ground-casting")
 
 --фикс недоступности исследования артиллерии
 paralib.bobmods.lib.tech.remove_prerequisite("artillery", "radar")
@@ -557,12 +538,8 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-bio-processing-red", "Calcium
 --Рокировка рецептов нитинольных труб (AKMF)
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-nitinol-pipe")
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-nitinol-pipe")
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-nitinol-smelting-1", "angels-nitinol-pipe-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-nitinol-pipe-to-ground")
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-nitinol-pipe-to-ground")
-paralib.bobmods.lib.tech.remove_recipe_unlock("angels-nitinol-smelting-1", "angels-nitinol-pipe-to-ground-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
 
 --Для сборщика электроники нужны фиол. манипуляторы (AKMF)
 paralib.bobmods.lib.tech.add_prerequisite("bob-electronics-machine-3", "bob-turbo-inserter")
