@@ -221,14 +221,8 @@ local function replaceMining()
 	)
 end
 local function replacePower()
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"bob-steam-engine-2",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"bob-steam-engine-3",
-		{ type = "item", name = "intermediate-structure-components", amount = 1 }
-	)
+	-- bob-steam-engine-2/3 structure-components включены в set_ingredients
+	-- в final-fixes/recipies.lua (часть marathon 1.1-баланса).
 
 	if data.raw["item"]["petroleum-generator"] then
 		paralib.bobmods.lib.recipe.add_ingredient(
