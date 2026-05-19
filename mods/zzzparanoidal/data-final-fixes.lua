@@ -27,6 +27,7 @@ require("tweaks.entity.nuke-cliffs")
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
 require("tweaks.item.fuel")
+require("tweaks.item.grouping")
 
 require("tweaks.recipe.insert-mining-drill-bit")
 require("tweaks.recipe.insert-structured-components")
