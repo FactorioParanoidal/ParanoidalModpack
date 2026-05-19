@@ -567,17 +567,6 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	{ type = "item", name = "angels-chemical-plant-3", amount = 2 }
 )
 
-paralib.bobmods.lib.recipe.remove_ingredient("angels-electric-boiler-2", "angels-electric-boiler")
-paralib.bobmods.lib.recipe.add_new_ingredient(
-	"angels-electric-boiler-2",
-	{ type = "item", name = "angels-electric-boiler", amount = 2 }
-)
-paralib.bobmods.lib.recipe.remove_ingredient("angels-electric-boiler-3", "angels-electric-boiler-2")
-paralib.bobmods.lib.recipe.add_new_ingredient(
-	"angels-electric-boiler-3",
-	{ type = "item", name = "angels-electric-boiler-2", amount = 2 }
-)
-
 paralib.bobmods.lib.recipe.remove_ingredient("clowns-sluicer-2", "clowns-sluicer")
 paralib.bobmods.lib.recipe.add_new_ingredient("clowns-sluicer-2", { type = "item", name = "clowns-sluicer", amount = 2 })
 

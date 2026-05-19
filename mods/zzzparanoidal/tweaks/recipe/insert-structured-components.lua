@@ -24,10 +24,6 @@ local function replaceMachine()
 		"angels-salination-plant-2",
 		{ type = "item", name = "advanced-structure-components", amount = 5 }
 	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-salination-plant-2",
-		{ type = "item", name = "angels-salination-plant", amount = 2 }
-	)
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-washing-plant-2",
@@ -146,23 +142,6 @@ local function replaceMachine()
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"bob-electric-furnace-3",
-		{ type = "item", name = "advanced-structure-components", amount = 2 }
-	)
-
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-2",
-		{ type = "item", name = "intermediate-structure-components", amount = 2 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-3",
-		{ type = "item", name = "intermediate-structure-components", amount = 8 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-4",
 		{ type = "item", name = "advanced-structure-components", amount = 2 }
 	)
 
