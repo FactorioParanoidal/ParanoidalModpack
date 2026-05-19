@@ -5,7 +5,7 @@
 
 -- 7 «чистых» металлов без спец-кейсов. Tungsten/plastic/stone/copper-tungsten/ceramic
 -- в 1.1 шли через отдельные cycles (sintering, gas, item-stone, powder-mix) — здесь не
--- порируем, по необходимости — отдельным PR.
+-- портируем, по необходимости — отдельным PR.
 
 -- В 2.0 сабгруппы для сплавов (brass/bronze/nitinol) объединены в angels-alloys-casting;
 -- остальные металлы имеют per-metal subgroup. Тип фиксируется в 5-м поле.
