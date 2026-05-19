@@ -24,10 +24,6 @@ local function replaceMachine()
 		"angels-salination-plant-2",
 		{ type = "item", name = "advanced-structure-components", amount = 5 }
 	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-salination-plant-2",
-		{ type = "item", name = "angels-salination-plant", amount = 2 }
-	)
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-washing-plant-2",
