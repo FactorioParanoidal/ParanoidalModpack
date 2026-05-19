@@ -554,6 +554,23 @@ end
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-sodium-processing-2", "Calcium-chloride-Calcium-carbonate")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-bio-processing-red", "Calcium-carbonate-Calcium-sulfate")
 
+-- Литьё труб из расплавов (порт angels-smelting-extended 1.1).
+-- Каждый pipe-casting открывается базовой smelting-1 техой своего металла,
+-- как было в 1.1 (prototypes/override.lua loop в апстриме).
+-- nitinol обрабатывается отдельно ниже — у него AKMF-рокада на bob-nitinol-processing.
+for _, metal in ipairs({ "iron", "copper", "steel", "brass", "bronze", "titanium" }) do
+	paralib.bobmods.lib.tech.add_recipe_unlock(
+		"angels-" .. metal .. "-smelting-1",
+		"angels-" .. metal .. "-pipe-casting"
+	)
+	paralib.bobmods.lib.tech.add_recipe_unlock(
+		"angels-" .. metal .. "-smelting-1",
+		"angels-" .. metal .. "-pipe-to-ground-casting"
+	)
+end
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
+
 --Рокировка рецептов нитинольных труб (AKMF)
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-nitinol-pipe")
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-nitinol-pipe")
