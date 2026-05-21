@@ -833,5 +833,3 @@ if data.raw.recipe["concrete"] and data.raw.item["angels-solid-sand"] then
 		data.raw.item["sand"].hidden = true
 	end
 end
-
-paralib.bobmods.lib.recipe.enabled("wind-turbine-2", false)

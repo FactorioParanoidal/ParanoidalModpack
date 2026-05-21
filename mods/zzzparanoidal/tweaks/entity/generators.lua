@@ -15,3 +15,16 @@ if entity then
   entity.production = power
 end
 
+paralib.bobmods.lib.recipe.enabled("wind-turbine-2", false)
+
+local function changePower (itemName, power)
+  if (data.raw["generator"] and data.raw["generator"][itemName]) then
+    data.raw["generator"][itemName].fluid_usage_per_tick = power
+  end
+end
+
+changePower("EasyWindTurbine1",0.00049) --50KW
+changePower("EasyWindTurbine2",0.00392) --400KW
+changePower("EasyWindTurbine3",0.0098)  --1MW
+changePower("EasyWindTurbine4",0.0196)  --2MW
+changePower("EasyWindTurbine5",0.049)   --5MW
