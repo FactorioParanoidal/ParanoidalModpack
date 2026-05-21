@@ -26,3 +26,5 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bob-bron
 --bobplates small icon size saves vram
 data.raw.technology["bob-fluid-canister-processing"].icon_size = 128
 data.raw.technology["bob-fluid-canister-processing"].icon = "__zzzparanoidal__/graphics/bob/fluid-canister.png"
+
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-ore-crushing", "quartz-glass")
