@@ -81,7 +81,7 @@ migrate_alloys_subgroup(data.raw.recipe)
 migrate_alloys_subgroup(data.raw.fluid)
 
 -- =============================================================================
--- 1. PIPE CASTING (litie trub iz rasplavov)
+-- 1. PIPE CASTING (литъё труб из расплавов)
 -- =============================================================================
 -- В 1.1 шло через mod angels-smelting-extended/prototypes/recipes/ironworks.lua.
 -- 2.0-bob делает трубы только через plate+brick; этот альтернативный путь
