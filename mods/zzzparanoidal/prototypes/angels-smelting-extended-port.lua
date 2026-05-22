@@ -1,19 +1,14 @@
--- Переходный/частичный порт мода angels-smelting-extended (Pezzawinkle, 1.0.13, 1.1-only)
--- на 2.0. Оригинальный мод не портирован, его прототипы пропали при порте 1.1 → 2.0.
--- Здесь восстанавливаем рабочие куски без переноса всего мода.
+-- Частичный порт мода angels-smelting-extended (Pezzawinkle, 1.1-only).
+-- Оригинальный мод в 2.0 не портирован — восстанавливаем рабочие куски.
 --
--- В одном файле:
---   1) PIPE CASTING       — 7 металлов × 2 типа труб (PR #234)
---   2) ALLOY ROLLS        — brass/bronze/tungsten × {casting, converting, fast}
---   3) TECH UNLOCKS       — все привязки к существующим angels-X-smelting-N
+-- Секции:
+--   0) PER-METAL SUBGROUPS для сплавов (визуальное разделение в Factoriopedia)
+--   1) PIPE CASTING       — литьё труб из расплавов для 7 металлов
+--   2) ALLOY ROLLS        — сплавы → roll-coils для 7 сплавов
+--   3) TECH UNLOCKS       — привязки рецептов к техам
 --
--- НЕ переносим (нужно отдельным усилием):
---   - pipe-casting спец-кейсы (tungsten/plastic/stone/copper-tungsten/ceramic — sintering/gas/powder)
---   - alloy-rolls для nitinol/invar/cobalt-steel/gunmetal (нужны новые angels-alloys-smelting-N техи)
---   - gear-wheel casting (5 ironworks-N техов)
---   - alloy ingot-mixing (3 alloys-smelting-N техов)
---   - shielding coils (angelsindustries-overhaul-зависимое)
---   - stacks (girder stacks etc)
+-- Техи angels-alloys-smelting-1/2/3 определены в data-stage отдельно
+-- (prototypes/technology/angels-alloys-smelting.lua).
 
 require("__zzzparanoidal__.paralib")
 
@@ -149,33 +144,28 @@ for _, m in ipairs(pipe_metals) do
 end
 
 -- =============================================================================
--- 2. ALLOY ROLLS (compressing-extended) — brass / bronze / tungsten
+-- 2. ALLOY ROLLS (compressing-extended) — 7 сплавов
 -- =============================================================================
--- В 1.1 шло через mod angels-smelting-extended/prototypes/recipes/compressing-extended.lua.
--- Для каждого металла 3 рецепта: casting (T1) / converting (1 roll → 4 plate с productivity) /
--- casting-fast (T2 с coolant). Plus новый item angels-roll-X.
+-- Для каждого металла: 1 item angels-roll-<metal> + 3 рецепта (casting T1,
+-- converting, casting-fast T2). Иконка — тинтованный roll-iron.png.
 --
--- Эти 3 сплава выбраны потому что в 2.0 уже есть angels-X-smelting-2/3 техи —
--- новые техи не требуются. Для nitinol/invar/cobalt-steel/gunmetal нужны новые техи
--- angels-alloys-smelting-N — это отдельная задача.
+-- Привязка к техам:
+--   brass/bronze/tungsten         → angels-<metal>-smelting-2/3
+--   invar/cobalt-steel/gunmetal   → angels-alloys-smelting-2/3 (секция 3)
+--   nitinol                       → bob-nitinol-processing (все 3 рецепта)
 --
--- Иконка: тинтованный roll-iron.png из angelssmeltinggraphics (как 1.1 extended делал
--- с roll-blank.png).
-
--- molten_amount задаёт базовое количество для T1; T2 = molten_amount * 1.75.
--- В 1.1 для tungsten базовое было 20 (gas), для остальных — 80 (molten).
+-- molten_amount — базовое количество для T1. T2 fast = molten_amount × 1.75.
+-- Для tungsten вместо molten metal используется gas-tungsten-hexafluoride,
+-- базовый объём 20 (а не 80).
 --
--- Layout в Factoriopedia (важно для row-wrap):
--- Для brass/bronze (metal_letter заданный) кладём roll item + 2 casting рецепта
--- ВНУТРЬ metal-кластера на сабблок `c[roll-<metal>]`. После 5 item-в-кластере
--- (fluid + 3 molten + alloy) roll-кластер (item + T1 + T2 = 3 шт) аккуратно
--- занимает позиции 6-8 первого ряда — все рулоны рядом друг с другом, как в
--- iron/tin. Converting (1 roll → 4 plate) живёт отдельно на сабблоке
--- `d[plate-<metal>-from-roll]` — как у Angels' iron-plate-2 (l[angels-plate-X]-d).
---
--- Для tungsten metal_letter нет — используем Angels' iron convention:
--- item на плоском `j`, casting recipes на `j[angels-roll-<metal>]-{a,b}`,
--- converting на `l[angels-plate-<metal>]-d`.
+-- Layout в Factoriopedia: для металлов с metal_letter кладём roll-item +
+-- T1/T2 рецепты внутрь metal-кластера на сабблоке c[roll-<metal>] —
+-- roll-кластер плотно стоит с molten/alloy рецептами без row-wrap.
+-- Converting (1 roll → 4 plate) выносится на отдельный сабблок
+-- d[plate-<metal>-from-roll] (как Angels' iron-plate-2 на l[plate-iron]-d).
+-- Для tungsten metal_letter нет — Angels' iron-convention: item на плоском
+-- `j`, recipes на j[angels-roll-tungsten]-{a,b}, converting на
+-- l[angels-plate-tungsten]-d.
 local roll_alloys = {
 	brass = {
 		molten        = "angels-liquid-molten-brass",
@@ -202,6 +192,41 @@ local roll_alloys = {
 		subgroup      = "angels-tungsten-casting",
 		metal_letter  = nil, -- собственная subgroup без metal-letter convention
 		tint          = { r = 136 / 256, g = 98 / 256, b = 65 / 256, a = 1 },
+	},
+	-- Сплавы из общей подгруппы angels-alloys-casting (см. секцию 0).
+	-- metal_letter — позиция в per-metal subgroups: bronze=a, brass=b,
+	-- gunmetal=c, invar=d, cobalt-steel=e, nitinol=f. Tints из 1.1 ASE.
+	nitinol = {
+		molten        = "angels-liquid-molten-nitinol",
+		molten_amount = 80,
+		plate         = "bob-nitinol-alloy",
+		subgroup      = "angels-nitinol-casting",
+		metal_letter  = "f",
+		tint          = { r = 106 / 256, g = 92 / 256, b = 153 / 256, a = 1 },
+	},
+	invar = {
+		molten        = "angels-liquid-molten-invar",
+		molten_amount = 80,
+		plate         = "bob-invar-alloy",
+		subgroup      = "angels-invar-casting",
+		metal_letter  = "d",
+		tint          = { r = 95 / 256, g = 125 / 256, b = 122 / 256, a = 1 },
+	},
+	["cobalt-steel"] = {
+		molten        = "angels-liquid-molten-cobalt-steel",
+		molten_amount = 80,
+		plate         = "bob-cobalt-steel-alloy",
+		subgroup      = "angels-cobalt-steel-casting",
+		metal_letter  = "e",
+		tint          = { r = 61 / 256, g = 107 / 256, b = 153 / 256, a = 1 },
+	},
+	gunmetal = {
+		molten        = "angels-liquid-molten-gunmetal",
+		molten_amount = 80,
+		plate         = "bob-gunmetal-alloy",
+		subgroup      = "angels-gunmetal-casting",
+		metal_letter  = "c",
+		tint          = { r = 224 / 256, g = 103 / 256, b = 70 / 256, a = 1 },
 	},
 }
 
@@ -307,10 +332,12 @@ data:extend(items)
 data:extend(recipes)
 
 -- =============================================================================
--- 3. TECH UNLOCKS (привязка рецептов к existing angels-X-smelting-N техам)
+-- 3. TECH UNLOCKS
 -- =============================================================================
--- В 1.1 эти юнлоки шли через override.lua extended мода. Воспроизводим тот же
--- паттерн через paralib helper.
+-- Сами техи angels-alloys-smelting-1/2/3 создаются в data-stage отдельно
+-- (prototypes/technology/angels-alloys-smelting.lua) — это нужно чтобы
+-- research_evolution_factor успел применить свой evolution-factor effect
+-- в своём data-final-fixes (он проходит по всем существующим техам).
 
 -- 3a. Pipe casting: каждый pipe-casting открывается на angels-<metal>-smelting-1.
 -- nitinol особый — у него AKMF-рокада на bob-nitinol-processing (см. ниже).
@@ -327,7 +354,7 @@ end
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
 
--- 3b. Alloy rolls: подвязываем на angels-X-smelting-2 (T1 + converting) и -3 (T2 fast).
+-- 3b. Roll'ы brass/bronze/tungsten: на existing angels-<metal>-smelting-2/3.
 for _, metal in ipairs({ "brass", "bronze", "tungsten" }) do
 	paralib.bobmods.lib.tech.add_recipe_unlock(
 		"angels-" .. metal .. "-smelting-2",
@@ -342,3 +369,14 @@ for _, metal in ipairs({ "brass", "bronze", "tungsten" }) do
 		"angels-roll-" .. metal .. "-casting-fast"
 	)
 end
+
+-- 3c. Roll'ы invar/cobalt-steel/gunmetal: на angels-alloys-smelting-2/3.
+-- nitinol целиком на bob-nitinol-processing (вне alloys-smelting тех-дерева).
+for _, metal in ipairs({ "invar", "cobalt-steel", "gunmetal" }) do
+	paralib.bobmods.lib.tech.add_recipe_unlock("angels-alloys-smelting-2", "angels-roll-" .. metal .. "-casting")
+	paralib.bobmods.lib.tech.add_recipe_unlock("angels-alloys-smelting-2", "angels-roll-" .. metal .. "-converting")
+	paralib.bobmods.lib.tech.add_recipe_unlock("angels-alloys-smelting-3", "angels-roll-" .. metal .. "-casting-fast")
+end
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-roll-nitinol-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-roll-nitinol-converting")
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-roll-nitinol-casting-fast")
