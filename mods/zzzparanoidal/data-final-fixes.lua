@@ -109,5 +109,8 @@ for _, name in ipairs({ "angels-ore5-smelting", "angels-ore6-smelting" }) do
     end
 end
 
+-- Oberhaul refining-port (после OV.execute, чтобы OV не перезатёр изменения).
+require("tweaks.recipe.oberhaul-refining-port")
+
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")
