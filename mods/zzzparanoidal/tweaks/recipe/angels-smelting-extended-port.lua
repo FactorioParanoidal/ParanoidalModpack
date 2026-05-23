@@ -529,9 +529,11 @@ data:extend(recipes)
 -- research_evolution_factor успел применить свой evolution-factor effect
 -- в своём data-final-fixes (он проходит по всем существующим техам).
 
--- 3a. Pipe casting: каждый pipe-casting открывается на angels-<metal>-smelting-1.
--- nitinol особый — у него AKMF-рокада на bob-nitinol-processing (см. ниже).
-for _, metal in ipairs({ "iron", "copper", "steel", "brass", "bronze", "titanium" }) do
+-- 3a. Pipe casting: на angels-<metal>-smelting-1 для большинства металлов.
+-- Iron — особый: pipe-casting переехал на angels-ironworks-1 (вместе с iron
+-- gear-wheel casting, для тематической связности — обе операции в литейной).
+-- Nitinol pipe — на bob-nitinol-processing (свой tech-tree).
+for _, metal in ipairs({ "copper", "steel", "brass", "bronze", "titanium" }) do
 	paralib.bobmods.lib.tech.add_recipe_unlock(
 		"angels-" .. metal .. "-smelting-1",
 		"angels-" .. metal .. "-pipe-casting"
@@ -541,6 +543,8 @@ for _, metal in ipairs({ "iron", "copper", "steel", "brass", "bronze", "titanium
 		"angels-" .. metal .. "-pipe-to-ground-casting"
 	)
 end
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-to-ground-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
 
