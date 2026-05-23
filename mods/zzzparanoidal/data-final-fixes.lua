@@ -69,7 +69,7 @@ require("graphics.train.train_reskin") -- рескин поездов
 require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
 require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый
 require("final-fixes.icon-size-fallback")
-require("prototypes.angels-smelting-extended-port") -- частичный порт мода angels-smelting-extended из 1.1
+require("tweaks.recipe.angels-smelting-extended-port") -- частичный порт мода angels-smelting-extended из 1.1
 
 require("tweaks.custom.uniform-recipies")
 
