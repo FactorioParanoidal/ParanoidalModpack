@@ -61,7 +61,6 @@ require("tweaks.custom.selections")
 require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
-require("removals.alloy-mixer")
 require("removals.clowns-steel-c2")
 
 require("graphics.train.train_reskin") -- рескин поездов
@@ -75,6 +74,22 @@ require("tweaks.custom.uniform-recipies")
 
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
+
+-- Локали для рецептов angelsextended-remelting-fixed:
+-- molten-*-alloy-mixing* и molten-*-remelting не имеют recipe-name локалей
+-- ни в 1.1, ни в 2.0. В 1.1 Factorio авто-выводил имя из единственного fluid-
+-- результата; в 2.0 из-за кастомного icons-оверлея авто-вывод не срабатывает
+-- → "Unknown key: recipe-name.X". Прокидываем имя через localised_name к fluid.
+-- (Sorting/rebalance/tier-categories — в tweaks/recipe/angels-smelting-extended-port.lua)
+for name, recipe in pairs(data.raw.recipe) do
+	if (name:match("^molten%-.*%-alloy%-mixing") or name:match("^molten%-.*%-remelting$"))
+		and not recipe.localised_name then
+		local fluid = recipe.results and recipe.results[1] and recipe.results[1].name
+		if fluid then
+			recipe.localised_name = { "fluid-name." .. fluid }
+		end
+	end
+end
 
 -- ============================================================
 -- ПРЯМОЕ ИСПРАВЛЕНИЕ РЕЦЕПТОВ ПЛАВКИ (после OV.execute)

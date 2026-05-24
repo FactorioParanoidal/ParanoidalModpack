@@ -53,5 +53,8 @@ require("prototypes.selection-tool.heroturrets")
 -- new subgroups
 require("prototypes.subgroups.angels-subgroups")
 
+-- new recipe categories
+require("prototypes.recipe-category.alloy-mixing-tiers")
+
 -- tweaks
 require("tweaks.custom.angelsmods")
