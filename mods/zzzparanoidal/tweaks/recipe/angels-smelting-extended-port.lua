@@ -76,6 +76,128 @@ migrate_alloys_subgroup(data.raw.recipe)
 migrate_alloys_subgroup(data.raw.fluid)
 
 -- =============================================================================
+-- 0b. ALLOY-MIXING (angelsextended-remelting-fixed): subgroup + tier rebalance
+-- =============================================================================
+-- Recipes molten-X-alloy-mixing* живут в собственных subgroup'ах
+-- aragas-X-alloy-mixing → визуально отрываются от своих металлов. Переносим
+-- в angels-<metal>-casting на хвост через "z[alloy-mixing]-N".
+for name, recipe in pairs(data.raw.recipe) do
+	local metal, suffix = name:match("^molten%-(.+)%-alloy%-mixing%-?(.*)$")
+	if metal then
+		local target = "angels-" .. metal .. "-casting"
+		-- Защита: если subgroup для нового сплава ещё не создан, оставляем
+		-- original (иначе Factorio упадёт при prototype validation).
+		if data.raw["item-subgroup"][target] then
+			recipe.subgroup = target
+			recipe.order = "z[alloy-mixing]-" .. (suffix ~= "" and suffix or "1")
+		end
+	end
+end
+
+-- Steel rebalance: парность alloy-mixing ↔ native ingot-рецептов.
+--   native -4 (steel+cobalt+nickel, на steel-3) ↔ NEW *-cobalt-nickel
+--   native -5 (steel+chrome+tungsten, на steel-4) ↔ *-alloy-mixing-4 (был на steel-3)
+-- Default remelting-fixed ставил alloy-mixing-4 на steel-3 (нет ingot-аналога
+-- с chrome+tungsten на этом тире) + для cobalt+nickel вообще не было пары.
+-- Alloy-mixer имеет 3 fluid input → cobalt идёт как powder (паттерн как у -4
+-- с tungsten powder), nickel остаётся fluid'ом.
+table.insert(recipes, {
+	type = "recipe",
+	name = "molten-steel-alloy-mixing-cobalt-nickel",
+	-- T2 mixer (MK2+, синяя наука): ингредиенты на уровне alloy-mixing -2/-3.
+	-- Категорию ставим здесь, а не через recipe_tier_overrides ниже: рецепт
+	-- добавляется в data.raw через data:extend(recipes) в конце файла —
+	-- override-loop его не догонит.
+	category = "molten-alloy-mixing-2",
+	subgroup = "angels-steel-casting",
+	order = "z[alloy-mixing]-3-cobalt",
+	enabled = false,
+	energy_required = 4,
+	ingredients = {
+		{ type = "fluid", name = "angels-liquid-molten-iron", amount = 240 },
+		{ type = "fluid", name = "angels-liquid-molten-nickel", amount = 120 },
+		{ type = "fluid", name = "angels-gas-oxygen", amount = 60 },
+		{ type = "item", name = "angels-powder-cobalt", amount = 12 },
+	},
+	results = { { type = "fluid", name = "angels-liquid-molten-steel", amount = 440 } },
+	icons = {
+		{ icon = "__angelssmeltinggraphics__/graphics/icons/molten-steel.png" },
+		{
+			icon = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png",
+			tint = { r = 0.8, g = 0.8, b = 0.8, a = 0.5 },
+			scale = 0.32,
+			shift = { -12, -12 },
+		},
+	},
+	icon_size = 64,
+})
+
+do
+	local OV = angelsmods.functions.OV
+	OV.remove_unlock("angels-steel-smelting-3", "molten-steel-alloy-mixing-4")
+	OV.add_unlock("angels-steel-smelting-4", "molten-steel-alloy-mixing-4")
+	OV.add_unlock("angels-steel-smelting-3", "molten-steel-alloy-mixing-cobalt-nickel")
+end
+
+-- Alloy-mixer tiers: default — все 4 mixer'а с одной категорией molten-alloy-
+-- mixing → MK1 и MK4 craftят то же самое, тиры теряют смысл. Делаем как у
+-- angels-induction-furnace: per-tier категории + cumulative по тиру здания.
+-- Сами категории определены в prototypes/recipe-category/alloy-mixing-tiers.lua
+-- (требуют data-stage). Здесь только привязка к зданиям и recipe-categorization.
+data.raw["assembling-machine"]["alloy-mixer"].crafting_categories = {
+	"molten-alloy-mixing",
+}
+data.raw["assembling-machine"]["alloy-mixer-2"].crafting_categories = {
+	"molten-alloy-mixing", "molten-alloy-mixing-2",
+}
+data.raw["assembling-machine"]["alloy-mixer-3"].crafting_categories = {
+	"molten-alloy-mixing", "molten-alloy-mixing-2", "molten-alloy-mixing-3",
+}
+data.raw["assembling-machine"]["alloy-mixer-4"].crafting_categories = {
+	"molten-alloy-mixing", "molten-alloy-mixing-2", "molten-alloy-mixing-3", "molten-alloy-mixing-4",
+}
+
+-- Tier = science-tier техи, в которой unlock'ается рецепт (а не суффикс -N).
+-- Default rule: суффикс -N → tier N. Без суффикса → base T1.
+-- Overrides для рецептов где tier по науке расходится с суффиксом:
+--   steel-3 на steel-smelting-2 (RG) → T2
+--   solder-3 на solder-smelting-3 (RG+chemical) → T2 (а не T3)
+--   bronze-3 на bronze-smelting-3 (RG+chemical) → T2 (а не T3)
+-- brass-3 на brass-smelting-3 (RG+chemical+production) → T3 (по rule, OK).
+local tier_special = {
+	["molten-steel-alloy-mixing-3"]  = 2,
+	["molten-solder-alloy-mixing-3"] = 2,
+	["molten-bronze-alloy-mixing-3"] = 2,
+}
+for name, recipe in pairs(data.raw.recipe) do
+	if name:match("^molten%-.*%-alloy%-mixing") then
+		local tier = tier_special[name] or tonumber(name:match("-(%d+)$"))
+		if tier and tier >= 2 and tier <= 4 then
+			recipe.category = "molten-alloy-mixing-" .. tier
+		end
+	end
+end
+
+-- Build cost: tier-N alloy-mixer требует 2× tier-(N-1) (default было 1×).
+-- Поддерживаем оба формата ingredient'ов: long {name=,amount=} и short {n,a}.
+for _, m in ipairs({
+	{ recipe = "alloy-mixer-2", prev = "alloy-mixer" },
+	{ recipe = "alloy-mixer-3", prev = "alloy-mixer-2" },
+	{ recipe = "alloy-mixer-4", prev = "alloy-mixer-3" },
+}) do
+	local r = data.raw.recipe[m.recipe]
+	if r and r.ingredients then
+		for _, ing in ipairs(r.ingredients) do
+			if ing.name == m.prev then
+				ing.amount = 2
+			elseif ing[1] == m.prev then
+				ing[2] = 2
+			end
+		end
+	end
+end
+
+-- =============================================================================
 -- 1. PIPE CASTING (литъё труб из расплавов)
 -- =============================================================================
 -- В 1.1 шло через mod angels-smelting-extended/prototypes/recipes/ironworks.lua.
