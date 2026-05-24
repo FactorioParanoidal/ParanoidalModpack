@@ -143,6 +143,74 @@ for _, m in ipairs(pipe_metals) do
 	})
 end
 
+-- 1b. Pipe casting спец-кейсы из 1.1 ASE — не на molten-<metal>:
+--   plastic — fluid liquid-plastic
+--   stone   — item stone (sintering, vanilla)
+-- Tungsten + copper-tungsten в 1.1 paranoidal modpack были скрыты и unlock'и
+-- удалены (см. 1.1 zzzparanoidal/prototypes/micro-final-fix.lua) — здесь
+-- их не портируем, повторяя поведение 1.1 modpack.
+-- Subgroup — общая angels-alloys-casting.
+local special_pipe_recipes = {
+	-- plastic (default casting, liquid-plastic 40 / 170).
+	-- Regular pipe в 1.1 имел amount=4 (баг автора), подогнал к 40 как у
+	-- остальных металлов.
+	{
+		name = "angels-plastic-pipe-casting",
+		pipe_item = "bob-plastic-pipe",
+		category = "angels-casting",
+		ingredients = { { type = "fluid", name = "angels-liquid-plastic", amount = 40 } },
+		results_amount = 4,
+		tint_fluid = "angels-liquid-plastic",
+	},
+	{
+		name = "angels-plastic-pipe-to-ground-casting",
+		pipe_item = "bob-plastic-pipe-to-ground",
+		category = "angels-casting",
+		ingredients = { { type = "fluid", name = "angels-liquid-plastic", amount = 170 } },
+		results_amount = 2,
+		energy_required = 2,
+		tint_fluid = "angels-liquid-plastic",
+	},
+	-- stone (sintering): 20 stone → 4 pipe, 75 stone → 2 pipe-to-ground.
+	-- Faithful 1.1: amounts = base×5 / ug_multi×5 (ug_multi=15, см. 1.1
+	-- ironworks.lua:55).
+	{
+		name = "angels-stone-pipe-casting",
+		pipe_item = "bob-stone-pipe",
+		category = "angels-sintering",
+		ingredients = { { type = "item", name = "stone", amount = 20 } },
+		results_amount = 4,
+	},
+	{
+		name = "angels-stone-pipe-to-ground-casting",
+		pipe_item = "bob-stone-pipe-to-ground",
+		category = "angels-sintering",
+		ingredients = { { type = "item", name = "stone", amount = 75 } },
+		results_amount = 2,
+		energy_required = 2,
+	},
+}
+
+for _, r in ipairs(special_pipe_recipes) do
+	local recipe = {
+		type = "recipe",
+		name = r.name,
+		localised_name = { "item-name." .. r.pipe_item },
+		category = r.category,
+		subgroup = "angels-alloys-casting",
+		energy_required = r.energy_required or 4,
+		enabled = false,
+		auto_recycle = false,
+		ingredients = r.ingredients,
+		results = { { type = "item", name = r.pipe_item, amount = r.results_amount } },
+		order = "n[" .. r.pipe_item .. "]",
+	}
+	if r.tint_fluid then
+		recipe.crafting_machine_tint = angelsmods.functions.get_fluid_recipe_tint(r.tint_fluid)
+	end
+	table.insert(recipes, recipe)
+end
+
 -- =============================================================================
 -- 2. ALLOY ROLLS (compressing-extended) — 7 сплавов
 -- =============================================================================
@@ -353,6 +421,12 @@ for _, metal in ipairs({ "iron", "copper", "steel", "brass", "bronze", "titanium
 end
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
+
+-- Спец-кейсы pipe-casting (см. секцию 1b). Каждый на своей T1-техе по 1.1 ASE.
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-to-ground-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-powder-metallurgy-1", "angels-stone-pipe-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-powder-metallurgy-1", "angels-stone-pipe-to-ground-casting")
 
 -- 3b. Roll'ы brass/bronze/tungsten: на existing angels-<metal>-smelting-2/3.
 for _, metal in ipairs({ "brass", "bronze", "tungsten" }) do
