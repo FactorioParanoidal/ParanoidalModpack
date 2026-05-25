@@ -70,6 +70,8 @@ require("final-fixes.recipies")-- Пожалуйста не добавляйте
 require("final-fixes.icon-size-fallback")
 require("tweaks.recipe.angels-smelting-extended-port") -- частичный порт мода angels-smelting-extended из 1.1
 require("tweaks.recipe.angels-wire-coil-insulated-port") -- port angels-wire-coil-insulated (1.1 ASE)
+require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casting + dies (1.1 ASE ironworks)
+require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
 
 require("tweaks.custom.uniform-recipies")
 
