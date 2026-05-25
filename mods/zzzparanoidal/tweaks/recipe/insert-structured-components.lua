@@ -44,10 +44,6 @@ local function replaceMachine()
 	)
 
 	paralib.bobmods.lib.recipe.add_ingredient(
-		"assembling-machine-2",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
 		"assembling-machine-3",
 		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
