@@ -23,3 +23,6 @@ data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Пр
 data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 2
 paralib.bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-3", "concrete") -- Технологии под Бетон
 
+paralib.bobmods.lib.recipe.remove_ingredient("bi-bio-greenhouse", "glass")
+data.raw.item["bi-bio-greenhouse"].subgroup = "bio-bio-farm-fluid-entity"
+data.raw.item["bi-bio-farm"].subgroup = "bio-bio-farm-fluid-entity"

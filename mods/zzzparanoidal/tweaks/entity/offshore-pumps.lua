@@ -6,6 +6,16 @@ local offshore_pumps = {
 	"offshore-mk4-pump",
 }
 
+-- Convert single image to stripe
+local function make_stripes(count, filename)
+	local stripe = { filename = filename, width_in_frames = 1, height_in_frames = 1 }
+	local stripes = {}
+	for i = 1, count do
+		stripes[i] = stripe
+	end
+	return stripes
+end
+
 for _, offshore_pump in pairs(offshore_pumps) do
 	local animation_table = {}
 
@@ -15,7 +25,7 @@ for _, offshore_pump in pairs(offshore_pumps) do
 
 	for _, animation in pairs(animation_table) do
 		table.insert(animation.north.layers, {
-			stripes = OSM.utils.make_stripes(
+			stripes = make_stripes(
 				8 * 4,
 				"__zzzparanoidal__/graphics/entity/offshore-pump/"
 					.. offshore_pump
@@ -32,7 +42,7 @@ for _, offshore_pump in pairs(offshore_pumps) do
 		})
 
 		table.insert(animation.east.layers, {
-			stripes = OSM.utils.make_stripes(
+			stripes = make_stripes(
 				8 * 4,
 				"__zzzparanoidal__/graphics/entity/offshore-pump/"
 					.. offshore_pump
@@ -49,7 +59,7 @@ for _, offshore_pump in pairs(offshore_pumps) do
 		})
 
 		table.insert(animation.south.layers, {
-			stripes = OSM.utils.make_stripes(
+			stripes = make_stripes(
 				8 * 4,
 				"__zzzparanoidal__/graphics/entity/offshore-pump/"
 					.. offshore_pump
@@ -66,7 +76,7 @@ for _, offshore_pump in pairs(offshore_pumps) do
 		})
 
 		table.insert(animation.west.layers, {
-			stripes = OSM.utils.make_stripes(
+			stripes = make_stripes(
 				8 * 4,
 				"__zzzparanoidal__/graphics/entity/offshore-pump/"
 					.. offshore_pump

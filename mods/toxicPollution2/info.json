@@ -1,0 +1,14 @@
+{
+    "name": "toxicPollution2",
+    "version": "1.0.0",
+    "title": "Toxic Pollution 2",
+    "factorio_version": "2.0",
+    "author": "Likos, ArtMares, ViridiVir (2.0 port by Lampotrias)",
+    "homepage": "https://github.com/ArtMares/toxicPollution",
+    "description": "Pollution damages the player without armor. Adds a respirator item, toxin resistance to all armors, configurable damage threshold, and circuit-network signals for pollution monitoring.",
+    "dependencies": [
+        "base >= 2.0.0",
+        "? bobwarfare",
+        "? air-filtering"
+    ]
+}

@@ -27,6 +27,7 @@ require("tweaks.entity.nuke-cliffs")
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
 require("tweaks.item.fuel")
+require("tweaks.item.grouping")
 
 require("tweaks.recipe.insert-mining-drill-bit")
 require("tweaks.recipe.insert-structured-components")
@@ -60,12 +61,18 @@ require("tweaks.custom.selections")
 require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
-require("removals.alloy-mixer")
+require("removals.clowns-steel-c2")
 
 require("graphics.train.train_reskin") -- рескин поездов
 -------------------------------------------------------------------------------------------------
 require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
 require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый
+require("final-fixes.icon-size-fallback")
+require("tweaks.recipe.angels-smelting-extended-port") -- частичный порт мода angels-smelting-extended из 1.1
+require("tweaks.recipe.angels-wire-coil-insulated-port") -- port angels-wire-coil-insulated (1.1 ASE)
+require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casting + dies (1.1 ASE ironworks)
+require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
+require("tweaks.recipe.marathon-port") -- 1.1 marathon-баланс (порт из 1.1 in-game)
 
 -- map-gen presets: на data-final-fixes, чтобы захватить autoplace-control'ы
 -- любого мода, который их регистрирует в data-updates/data-final-fixes
@@ -76,6 +83,22 @@ require("tweaks.custom.uniform-recipies")
 
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
+
+-- Локали для рецептов angelsextended-remelting-fixed:
+-- molten-*-alloy-mixing* и molten-*-remelting не имеют recipe-name локалей
+-- ни в 1.1, ни в 2.0. В 1.1 Factorio авто-выводил имя из единственного fluid-
+-- результата; в 2.0 из-за кастомного icons-оверлея авто-вывод не срабатывает
+-- → "Unknown key: recipe-name.X". Прокидываем имя через localised_name к fluid.
+-- (Sorting/rebalance/tier-categories — в tweaks/recipe/angels-smelting-extended-port.lua)
+for name, recipe in pairs(data.raw.recipe) do
+	if (name:match("^molten%-.*%-alloy%-mixing") or name:match("^molten%-.*%-remelting$"))
+		and not recipe.localised_name then
+		local fluid = recipe.results and recipe.results[1] and recipe.results[1].name
+		if fluid then
+			recipe.localised_name = { "fluid-name." .. fluid }
+		end
+	end
+end
 
 -- ============================================================
 -- ПРЯМОЕ ИСПРАВЛЕНИЕ РЕЦЕПТОВ ПЛАВКИ (после OV.execute)
@@ -110,6 +133,9 @@ for _, name in ipairs({ "angels-ore5-smelting", "angels-ore6-smelting" }) do
         data.raw.recipe[name].hidden = true
     end
 end
+
+-- Oberhaul refining-port (после OV.execute, чтобы OV не перезатёр изменения).
+require("tweaks.recipe.oberhaul-refining-port")
 
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")

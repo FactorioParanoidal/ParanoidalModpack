@@ -70,14 +70,7 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	{ type = "item", name = "angels-storage-tank-3", amount = 4 }
 )
 
-paralib.bobmods.lib.recipe.remove_ingredient("bob-steam-engine-2", "steam-engine")
-paralib.bobmods.lib.recipe.add_new_ingredient("bob-steam-engine-2", { type = "item", name = "steam-engine", amount = 2 })
-paralib.bobmods.lib.recipe.remove_ingredient("bob-steam-engine-3", "bob-steam-engine-2")
-paralib.bobmods.lib.recipe.add_new_ingredient("bob-steam-engine-3", { type = "item", name = "bob-steam-engine-2", amount = 2 })
-paralib.bobmods.lib.recipe.remove_ingredient("bob-steam-engine-4", "bob-steam-engine-3")
-paralib.bobmods.lib.recipe.add_new_ingredient("bob-steam-engine-4", { type = "item", name = "bob-steam-engine-3", amount = 2 })
-paralib.bobmods.lib.recipe.remove_ingredient("bob-steam-engine-5", "bob-steam-engine-4")
-paralib.bobmods.lib.recipe.add_new_ingredient("bob-steam-engine-5", { type = "item", name = "bob-steam-engine-4", amount = 2 })
+-- Steam-engine 2..5 balance moved to tweaks/recipe/marathon-port.lua (1.1 in-game parity).
 
 paralib.bobmods.lib.recipe.remove_ingredient("bob-boiler-2", "boiler")
 paralib.bobmods.lib.recipe.add_new_ingredient("bob-boiler-2", { type = "item", name = "boiler", amount = 2 })
@@ -565,17 +558,6 @@ paralib.bobmods.lib.recipe.remove_ingredient("angels-chemical-plant-4", "angels-
 paralib.bobmods.lib.recipe.add_new_ingredient(
 	"angels-chemical-plant-4",
 	{ type = "item", name = "angels-chemical-plant-3", amount = 2 }
-)
-
-paralib.bobmods.lib.recipe.remove_ingredient("angels-electric-boiler-2", "angels-electric-boiler")
-paralib.bobmods.lib.recipe.add_new_ingredient(
-	"angels-electric-boiler-2",
-	{ type = "item", name = "angels-electric-boiler", amount = 2 }
-)
-paralib.bobmods.lib.recipe.remove_ingredient("angels-electric-boiler-3", "angels-electric-boiler-2")
-paralib.bobmods.lib.recipe.add_new_ingredient(
-	"angels-electric-boiler-3",
-	{ type = "item", name = "angels-electric-boiler-2", amount = 2 }
 )
 
 paralib.bobmods.lib.recipe.remove_ingredient("clowns-sluicer-2", "clowns-sluicer")

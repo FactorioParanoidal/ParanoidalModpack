@@ -24,10 +24,6 @@ local function replaceMachine()
 		"angels-salination-plant-2",
 		{ type = "item", name = "advanced-structure-components", amount = 5 }
 	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-salination-plant-2",
-		{ type = "item", name = "angels-salination-plant", amount = 2 }
-	)
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-washing-plant-2",
@@ -47,10 +43,6 @@ local function replaceMachine()
 		{ type = "item", name = "advanced-structure-components", amount = 10 }
 	)
 
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"assembling-machine-2",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"assembling-machine-3",
 		{ type = "item", name = "intermediate-structure-components", amount = 2 }
@@ -150,23 +142,6 @@ local function replaceMachine()
 	)
 
 	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-2",
-		{ type = "item", name = "intermediate-structure-components", amount = 2 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-3",
-		{ type = "item", name = "intermediate-structure-components", amount = 8 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"angels-electrolyser-4",
-		{ type = "item", name = "advanced-structure-components", amount = 2 }
-	)
-
-	paralib.bobmods.lib.recipe.add_ingredient(
 		"bob-electric-chemical-mixing-furnace",
 		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
@@ -242,14 +217,8 @@ local function replaceMining()
 	)
 end
 local function replacePower()
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"bob-steam-engine-2",
-		{ type = "item", name = "basic-structure-components", amount = 1 }
-	)
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"bob-steam-engine-3",
-		{ type = "item", name = "intermediate-structure-components", amount = 1 }
-	)
+	-- bob-steam-engine-2/3 structure-components включены в set_ingredients
+	-- в final-fixes/recipies.lua (часть marathon 1.1-баланса).
 
 	if data.raw["item"]["petroleum-generator"] then
 		paralib.bobmods.lib.recipe.add_ingredient(

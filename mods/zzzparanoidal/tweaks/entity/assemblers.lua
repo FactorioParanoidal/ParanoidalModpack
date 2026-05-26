@@ -8,8 +8,26 @@ local function AssemblerTweak(name)
 end
 
 AssemblerTweak("burner-assembling-machine")
+paralib.bobmods.lib.recipe.set_ingredients("burner-assembling-machine", {
+	{ type = "item", name = "motor", amount = 4 },
+	{ type = "item", name = "stone-brick", amount = 10 },
+	{ type = "item", name = "iron-plate", amount = 24 },
+})
 AssemblerTweak("assembling-machine-1")
+paralib.bobmods.lib.recipe.set_ingredients("assembling-machine-1", {
+    { type = "item", name = "burner-assembling-machine", amount = 1 },
+	{ type = "item", name = "electric-motor", amount = 4 },
+	{ type = "item", name = "iron-plate", amount = 25 },
+    { type = "item", name = "iron-gear-wheel", amount = 25 },
+    { type = "item", name = "bob-basic-circuit-board", amount = 25 },
+})
 AssemblerTweak("assembling-machine-2")
+paralib.bobmods.lib.recipe.set_ingredients("assembling-machine-2", {
+    { type = "item", name = "assembling-machine-1", amount = 2 },
+	{ type = "item", name = "basic-structure-components", amount = 1 },
+	{ type = "item", name = "electric-motor", amount = 4 },
+    { type = "item", name = "electronic-circuit", amount = 25 },
+})
 AssemblerTweak("assembling-machine-3")
 AssemblerTweak("bob-assembling-machine-4")
 AssemblerTweak("bob-assembling-machine-5")

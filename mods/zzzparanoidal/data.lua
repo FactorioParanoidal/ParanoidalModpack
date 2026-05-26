@@ -18,6 +18,7 @@ require("prototypes.item.battery-electric-train")
 require("prototypes.item.flame-car")
 require("prototypes.item.artillery-prototype")
 require("prototypes.item.concrete-brick")
+require("prototypes.item.gear-dies")
 
 -- new recipies
 require("prototypes.recipe.warehouses")
@@ -45,12 +46,17 @@ require("prototypes.technology.bio-content")
 require("prototypes.technology.flame-car")
 require("prototypes.technology.artillery-prototype")
 require("prototypes.technology.alien-artifacts")
+require("prototypes.technology.angels-alloys-smelting")
+require("prototypes.technology.angels-ironworks")
 
 -- new selection-tools
 require("prototypes.selection-tool.heroturrets")
 
 -- new subgroups
 require("prototypes.subgroups.angels-subgroups")
+
+-- new recipe categories
+require("prototypes.recipe-category.alloy-mixing-tiers")
 
 -- tweaks
 require("tweaks.custom.angelsmods")
