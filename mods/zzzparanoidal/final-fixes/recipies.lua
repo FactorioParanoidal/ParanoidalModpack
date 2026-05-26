@@ -70,40 +70,7 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	{ type = "item", name = "angels-storage-tank-3", amount = 4 }
 )
 
--- Цены паровых двигателей по 1.1 marathon/recipe-bob-steam-power.lua (normal mode).
--- В 2.0 marathon-мод не подтянули, default bobpower-рецепты в 5-15× дешевле, что
--- разрушает прогрессию. set_ingredients ниже восстанавливает 1.1-баланс плюс
--- структурные компоненты (basic/intermediate), которые в 1.1 добавлял KaoExtended.
-paralib.bobmods.lib.recipe.set_ingredients("bob-steam-engine-2", {
-	{ type = "item", name = "steam-engine",                   amount = 2 },
-	{ type = "item", name = "steel-plate",                    amount = 75 },
-	{ type = "item", name = "bob-steel-pipe",                 amount = 25 },
-	{ type = "item", name = "bob-steel-gear-wheel",           amount = 25 },
-	{ type = "item", name = "bob-steel-bearing",              amount = 15 },
-	{ type = "item", name = "basic-structure-components",     amount = 1 },
-})
-paralib.bobmods.lib.recipe.set_ingredients("bob-steam-engine-3", {
-	{ type = "item", name = "bob-steam-engine-2",                amount = 2 },
-	{ type = "item", name = "bob-brass-pipe",                    amount = 25 },
-	{ type = "item", name = "bob-brass-alloy",                   amount = 45 },
-	{ type = "item", name = "bob-cobalt-steel-gear-wheel",       amount = 25 },
-	{ type = "item", name = "bob-cobalt-steel-bearing",          amount = 15 },
-	{ type = "item", name = "intermediate-structure-components", amount = 1 },
-})
-paralib.bobmods.lib.recipe.set_ingredients("bob-steam-engine-4", {
-	{ type = "item", name = "bob-steam-engine-3",       amount = 2 },
-	{ type = "item", name = "bob-titanium-pipe",        amount = 25 },
-	{ type = "item", name = "bob-titanium-plate",       amount = 40 },
-	{ type = "item", name = "bob-titanium-gear-wheel",  amount = 25 },
-	{ type = "item", name = "bob-titanium-bearing",     amount = 20 },
-})
-paralib.bobmods.lib.recipe.set_ingredients("bob-steam-engine-5", {
-	{ type = "item", name = "bob-steam-engine-4",      amount = 2 },
-	{ type = "item", name = "bob-nitinol-pipe",        amount = 25 },
-	{ type = "item", name = "bob-nitinol-alloy",       amount = 40 },
-	{ type = "item", name = "bob-nitinol-gear-wheel",  amount = 25 },
-	{ type = "item", name = "bob-nitinol-bearing",     amount = 20 },
-})
+-- Steam-engine 2..5 balance moved to tweaks/recipe/marathon-port.lua (1.1 in-game parity).
 
 paralib.bobmods.lib.recipe.remove_ingredient("bob-boiler-2", "boiler")
 paralib.bobmods.lib.recipe.add_new_ingredient("bob-boiler-2", { type = "item", name = "boiler", amount = 2 })
