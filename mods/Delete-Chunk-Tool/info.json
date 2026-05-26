@@ -1,0 +1,10 @@
+{
+    "name": "Delete-Chunk-Tool",
+    "version": "1.0.2",
+    "title": "Chunk Delete Tool",
+    "author": "NotRexButCaesar",
+    "homepage": "",
+    "factorio_version": "2.0",
+    "dependencies": ["base >= 2.0"],
+    "description": "Server Administrators can delete chunks using a selection tool.  Hold shift to delete chunks containing player entities.  Inspired by a similar mod by billbo99."
+}

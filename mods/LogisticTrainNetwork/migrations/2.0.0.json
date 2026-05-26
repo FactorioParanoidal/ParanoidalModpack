@@ -1,0 +1,16 @@
+{
+  "int-setting": [
+    [
+      "ltn-dispatcher-depot-inactivity(s)",
+      "ltn-dispatcher-depot-inactivity"
+    ],
+    [
+      "ltn-dispatcher-stop-timeout(s)",
+      "ltn-dispatcher-stop-timeout"
+    ],
+    [
+      "ltn-dispatcher-delivery-timeout(s)",
+      "ltn-dispatcher-delivery-timeout"
+    ]
+  ]
+}

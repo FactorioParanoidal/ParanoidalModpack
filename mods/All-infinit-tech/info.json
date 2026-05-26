@@ -1,0 +1,13 @@
+{
+    "name": "All-infinit-tech",
+    "version": "0.4.0",
+    "title": "All-infinit-tech",
+    "author": "yourzone",
+    "factorio_version": "2.0",
+    "description": "This is add all useful infinite technologies into one mod",
+    "dependencies": [
+        "base >= 2.0.0",
+        "? space-age",
+        "? Krastorio2"
+    ]
+}

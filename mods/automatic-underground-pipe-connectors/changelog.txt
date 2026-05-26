@@ -1,0 +1,133 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2025-06-11
+  Changes:
+    - Revert to 2.0.3 entity creation strategy. Break Aquilo tile placement again.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2025-06-11
+  Bugfixes:
+    - Underground was re-placed as ghost when pipe missing from inventory
+    - Error on placement of non-unit entity
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2025-06-06
+  Bugfixes:
+    - Underground dragging immediately placed unnecessary underground after pipe placement
+    - Ghost undergrounds connected to ghost buildings in the same blueprint
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2025-05-31
+  Bugfixes:
+    - Crash error caused by previous fix to hand icon, now broken again temporarily
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2025-05-31
+  Bugfixes:
+    - Error due to new underground entity invalidated mid-tick
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2025-05-30
+  Changes:
+    - No connections between any undergrounds created in the same tick, not just for blueprints
+  Bugfixes:
+    - Reserved inventory slot (hand icon) was lost for blueprint/pipe when mod triggered
+    - Pipes no longer fast replace valves or other pipe-like entities
+    - Pipes with weird connection offsets now connect correctly
+    - First underground of multiple created in a tick no longer ignored
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2025-05-29
+  Bugfixes:
+    - Error due to new underground entity invalidated mid-tick
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2025-05-28
+  Features:
+    - Remote interface for reading, updating, replacing the underground to pipe lookup table
+  Changes:
+    - Refactor API usage to use build_from_cursor and support ice-platform
+  Bugfixes:
+    - Temporary blueprints dropped to inventory
+    - Undergrounds in blueprints creating pipes prematurely
+    - Ghost pipes counting as automatic connection targets
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2025-05-24
+  Bugfixes:
+    - Fixed undo/redo not working
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2024-11-02
+  Bugfixes:
+    - Another crash on missing player inventory
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-11-01
+  Features:
+    - Place tile ghost to support automatic connector over water, space, lava, etc
+  Bugfixes:
+    - Crash on missing player inventory
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-23
+  Features:
+    - Recognizes dynamic fluid inputs, such as on Assemblers
+  Changes:
+    - Support for Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024-09-14
+  Features:
+    - Support non-pipe ghosts with fluidboxes as connectable neighbors
+  Changes:
+    - Replace custom vector lookup with util.direction_vectors
+    - Add LuaLS annotations to source for all types and functions
+    - Improve source comments
+    - Improve source naming
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2023-12-09
+  Bugfixes:
+    - Crash with mods that add underground pipe recipes with fluid ingredients
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2023-12-09
+  Bugfixes:
+    - Crash with mods that add underground pipe recipes with byproducts
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2023-11-02
+  Bugfixes:
+    - Crash when checking invalid fluid-turret fluidbox
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2023-06-18
+  Features:
+    - Replace ghost pipes
+    - Place ghost pipes when placing ghost underground pipes
+    - Place ghosts/pipes when placing near non-pipe entities with fluid connections
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2021-12-28
+  Changes:
+    - Version bump for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2021-12-28
+  Bugfixes:
+    - Avoid errors on unrecognized pipes
+    - Avoid replacing fast-replace-able entities like other pipes
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020-09-07
+  Features:
+    - Prevent mixing fluids
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-09-06
+  Features:
+    - Automatically place a pipe when two undergrounds are placed at a corner or one space apart
+  Other:
+    - First version!
+

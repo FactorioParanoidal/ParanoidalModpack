@@ -87,7 +87,7 @@ if not mods["angelsindustries"] then
 		data.raw.item["sentinel-alarm"].subgroup = "circuit-input"
 	end
 
-	if mods["LTN_Combinator_Fix"] then
+	if mods["LTN_Combinator_Fix"] or mods["LTN_Combinator_Modernized"] then
 		data.raw["recipe"]["ltn-combinator"].subgroup = "circuit-combinator"
 		data.raw.item["ltn-combinator"].subgroup = "circuit-combinator"
 	end

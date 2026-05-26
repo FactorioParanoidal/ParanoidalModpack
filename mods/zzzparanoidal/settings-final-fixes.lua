@@ -140,6 +140,9 @@ end
 if mods["LogisticTrainNetwork"] then
     set_settings_default_value("bool-setting", "ltn-interface-factorio-alerts", false)
 end
+if mods["LtnManager"] then
+    set_settings_default_value("int-setting", "ltnm-iterations-per-tick", 2)
+end
 if mods["PickerInventoryTools"] then
     set_settings_default_value("bool-setting", "picker-auto-sort-inventory", false)
     set_settings_default_value("bool-setting", "picker-filter-filters", false)

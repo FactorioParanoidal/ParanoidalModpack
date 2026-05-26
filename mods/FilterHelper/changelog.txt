@@ -1,0 +1,250 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.24
+Date: 2026-02-20
+  Changes:
+    - Added option to not show fuel items unless in inputs, for mods with many fuel items
+    - Added option to not show result item qualities beyond unlocked qualities
+---------------------------------------------------------------------------------------------------
+Version: 0.2.23
+Date: 2026-02-06
+  Changes:
+    - Added support for multiple default items for splitters
+  Bugfixes:
+    - Added spoiled ingredients to output inserters (fixed)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.22
+Date: 2025-10-07
+  Changes:
+    - Added spoiled ingredients to output inserters
+    - Support for ignoring entities with "no-automated-item-" for inserters
+    - Added mod hooks on specific entity interactions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.21
+Date: 2025-10-03
+  Changes:
+    - Optimized handling fuel items
+---------------------------------------------------------------------------------------------------
+Version: 0.2.20
+Date: 2025-06-29
+  Changes:
+    - Set a filter on a splitter to the direction without an output belt
+---------------------------------------------------------------------------------------------------
+Version: 0.2.19
+Date: 2025-06-12
+  Changes:
+    - Fixed automatic "Use filters" setting for inserters with just one filter slot (such as mechanical inserters from Pyanodons)
+---------------------------------------------------------------------------------------------------
+Version: 0.2.18
+Date: 2025-06-01
+  Changes:
+    - Added support for working across belt ghosts
+    - Added support for working across splitters
+    - Added support for working across underground belts
+---------------------------------------------------------------------------------------------------
+Version: 0.2.17
+Date: 2025-06-01
+  Changes:
+    - Added support for default item to show on splitters
+    - Added support for lane splitters
+  Bugfixes:
+    - Fixed crash when setting "Full chest" request on ghost logistic containers
+  Fixes:
+    - Support for setting "Full chest" requests on quality logistic containers
+---------------------------------------------------------------------------------------------------
+Version: 0.2.16
+Date: 2025-05-19
+  Changes:
+    - Enable "Use filters" when setting a filter on an inserter, configurable
+  Fixes:
+    - Fixed filtering mining drill resources when product name is different
+---------------------------------------------------------------------------------------------------
+Version: 0.2.15
+Date: 2025-04-21
+  Changes:
+    - Support for getting inventory of proxy containers
+  Bugfixes:
+    - Don't crash on getting inventory of proxy containers
+---------------------------------------------------------------------------------------------------
+Version: 0.2.14
+Date: 2025-04-01
+  Changes:
+    - Added support for requested quality modules on crafting machines
+  Bugfixes:
+    - Actually support fluid filters on fluid mining drills. Fixed bad commit.
+    - Do not crash on ghost loaders
+---------------------------------------------------------------------------------------------------
+Version: 0.2.13
+Date: 2025-03-31
+  Changes:
+    - Support ghost entities
+    - Support fluid filters on fluid mining drills
+  Bugfixes:
+    - Do not crash on proxy-containers
+---------------------------------------------------------------------------------------------------
+Version: 0.2.12
+Date: 2025-01-11
+  Bugfixes:
+    - Fixed crashes relating to entity ghosts
+---------------------------------------------------------------------------------------------------
+Version: 0.2.11
+Date: 2024-12-31
+  Changes:
+    - Support output filter of spoiled fuel
+---------------------------------------------------------------------------------------------------
+Version: 0.2.10
+Date: 2024-12-28
+  Bugfixes:
+    - Fixed crash when opening infinity chest with multiple filter slots
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+Date: 2024-11-17
+  Bugfixes:
+    - Added missing "valid" check on gui click
+  Changes:
+    - Added tooltip for pipette
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+Date: 2024-11-06
+  Bugfixes:
+    - Fix crash on filtered mining drills with fluids
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 2024-11-02
+  Bugfixes:
+    - Fixed invalid updaters/entities
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 2024-11-02
+  Changes:
+    - Support for filtered miners
+    - Support for quality upgraded products
+  Bugfixes:
+    - Fixed incorrect addition of filters of filterable inventories
+    - Don't show filter if there's no relevant updater
+  Internal:
+    - Simplify and consolidate item and quality canonization
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 2024-10-30
+  Changes:
+    - Support for spoilage results
+  Bugfixes:
+    - Fixed crash with non-item logistic requests
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2024-10-22
+  Bugfixes:
+    - Handle case of filter with quality and no item
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2024-10-21
+  Changes:
+    - Logistic chest updaters now work with the top logistic group if exists
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2024-10-18
+  Bugfixes:
+    - Fixed handling signals without quality
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2024-10-18
+  Bugfixes:
+    - Fixed migration from old versions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2024-10-14
+  Changes:
+    - Updated for Factorio version 2.0
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+Date: 2023-12-20
+  Changes:
+    - Updated readme
+    - Items are refreshed periodically, opening gui when needed
+  Bugfixes:
+    - Fixed active items changing order of filters
+    - Handling players who are removed
+    - Fixed items changing order on update
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+Date: 2023-12-11
+  Changes:
+    - Middle button to put ghost in hand, to manually set filters or conditions
+    - Add active items to items, so they can be easily unfiltered or unrequested
+  Bugfixes:
+    - Fixed invalid entity when getting button description
+    - Fixed opening moving cargo wagons and spidertron
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+Date: 2023-12-07
+  Bugfixes:
+    - Fixed opening non-filtered entities
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+Date: 2023-12-07
+  Changes:
+    - Changed interface to use left/right-click to add and remove filters
+    - Added support for logistic storage, requester and buffer chests
+    - Add loader1x2 and loader1x1 support
+    - Add item suggestions for inserters grabbing from/setting on underground belts, splitters, and loaders
+    - Add rocket launch silo suggestions
+    - Add fuel / burnt fuel result suggestions
+    - Use multiple columns when there are lots of item suggestions
+    - Added control tooltips per entity type
+    - Support filters on cars and cargo wagons
+    - Support existing/all filters on cars and cargo wagons
+    - Support increasing/decreasing requests by 5 stacks and full container
+  Bugfixes:
+    - Fixed crash when selecting a fluid from a signal as a filter by no longer showing non-item signals from the circuit network
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2023-10-03
+  Bugfixes:
+    - Fixed crash when opening infinity chest
+    - Fixed crash when inserter receives a signal with no name
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2023-06-16
+  Changes:
+    - Fix UI overflow with many suggestions
+    - Add circuit networks as suggestion source
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2023-06-15
+  Changes:
+    - Fix crash when mining open entity
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2023-06-15
+  Changes:
+    - Fix crash with attempting to draw fluids as items
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2023-06-14
+  Changes:
+    - Add splitter support
+    - Add belt item suggestions
+    - Always replace filtered item when only one filter exists
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2023-06-14
+  Changes:
+    - Fix crash on new game
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2023-06-14
+  Changes:
+    - Create thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2023-06-14
+  Changes:
+    - Update mod portal
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2023-06-14
+  Features:
+    - Intial release
+    - Reads chest contents
+    - Reads recipe input/output
+    - Reads fuel input/output

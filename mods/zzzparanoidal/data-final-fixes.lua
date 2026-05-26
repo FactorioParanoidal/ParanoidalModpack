@@ -73,6 +73,8 @@ require("tweaks.recipe.angels-wire-coil-insulated-port") -- port angels-wire-coi
 require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casting + dies (1.1 ASE ironworks)
 require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
 require("tweaks.recipe.marathon-port") -- 1.1 marathon-баланс (порт из 1.1 in-game)
+require("tweaks.recipe.teleporters-port") -- port 1.1 paranoidal teleporter cost
+require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circuit-network tech (1.1)
 
 require("tweaks.custom.uniform-recipies")
 

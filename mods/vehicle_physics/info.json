@@ -1,0 +1,13 @@
+{
+    "name": "vehicle_physics",
+    "version": "2.0.4",
+    "title": "Vehicle Physics",
+	"description": "Realistic driving physics.. supports airplanes",
+    "author": "OwnlyMe",
+    "factorio_version": "2.0",
+    "dependencies": [
+		"?Hovercrafts",
+		"?Raven",
+		"?raven_mk2"
+		]
+}

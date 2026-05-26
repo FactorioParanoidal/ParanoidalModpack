@@ -1,0 +1,25 @@
+{
+    "name": "LTN_Combinator_Modernized",
+    "version": "2.2.7",
+    "title": "LTN Combinator Modernized",
+    "description": "Add a combinator with friendly GUI to manage LTN Control Signals for each LTN Train Stop",
+    "author": "kryojenik",
+    "contact": "https://github.com/kryojenik/LTN_Combinator_Modernized",
+    "homepage": "https://github.com/kryojenik/LTN_Combinator_Modernized",
+    "factorio_version": "2.0",
+    "dependencies": [
+        "base >= 2.0.72",
+        "flib >= 0.16.5",
+        "LogisticTrainNetwork >= 2.5.1"
+    ],
+    "package": {
+        "git_publish_branch": "main",
+        "ignore": [
+            "TODO.md",
+            "trace-string.txt",
+            "types.lua",
+            "screenshots/*"
+        ],
+        "sync_portal_details": false
+    }
+}

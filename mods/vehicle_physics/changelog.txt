@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2025-06-30
+  Bugfixes:
+    -  Drifting sound not playing globally anymore (in multiplayer)
+
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2024-11-22
+  Changes:
+    -  Added support for the new hovercrafts update
+    
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2024-11-13
+  Changes:
+    -  Support for "HelicopterRevival" and possibly other aircraft mods where the collision_mask is nil instead of an empty table
+    
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-11-11
+  Changes:
+    - Update for Factorio 2.0 Space Age
+
+---------------------------------------------------------------------------------------------------
+Version: 0.xx.4
+- Added some algorithm to increase manuverability while braking
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+- Reduced volume
+
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+- Added sounds
+- Fixed a bug when a tank was destroyed

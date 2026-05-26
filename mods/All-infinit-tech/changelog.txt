@@ -1,0 +1,68 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 12-02-2026
+  Features:
+    - Added compatiblity with krastorio2 tech tree and science packs 
+    - Remove compatiblity with space-exploration mod because of a weird bug
+  Bugfixes:
+    - Redid technology progression to add missing prerequisites tech
+  Balancing:
+    - For Krastorio2 - make infinite science more expensive (using KR2 technologies).
+    - For krastorio2 - balance bot battery to follow kr2 tech
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 11-02-2026
+  Bugfixes:
+    - Cleanup int variable for inserter tech
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 10-01-2026
+  Bugfixes:
+    - fix not upgrading stack inserter size
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 01-06-2025
+  Features:
+    - added support for space-age expansion
+  Bugfixes:
+    - fix count/count_formula bug
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 29-05-2025
+  Features:
+    - change graphics for tech
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 22-05-2025
+  Features:
+    - Updated to 2.0
+  Bugfixes:
+    - added name & description for settings key
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 28-04-2024
+  Bugfixes:
+    - fix optional mod name
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+  Features:
+    - Change technologie icon to custom image "to the moon"
+    - Change technologie recipe cost for artillery range and speed to use settings formula
+    - Change technologie recipe cost for Energy weapon to use settings formula
+    - Change technologie recipe cost for Worker speed to use settings formula
+    - Patch for Space exploration
+  Bugfixes:
+    - Some code cleanup
+  Balancing:
+    - all science have a level 1 to 7 single use research.
+    - Science cost rebalance
+    - Reworked infinite  formula
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Balancing:
+    - Changed the "bot batterie " tech tree
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Major Features:
+    - Initial release.
+    - This general section is the 0.1.0 version section.
