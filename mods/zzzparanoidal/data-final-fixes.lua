@@ -74,6 +74,11 @@ require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casti
 require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
 require("tweaks.recipe.marathon-port") -- 1.1 marathon-баланс (порт из 1.1 in-game)
 
+-- map-gen presets: на data-final-fixes, чтобы захватить autoplace-control'ы
+-- любого мода, который их регистрирует в data-updates/data-final-fixes
+-- (не только в data-stage).
+require("prototypes.map-gen-presets")
+
 require("tweaks.custom.uniform-recipies")
 
 -- final aplying of override functions
