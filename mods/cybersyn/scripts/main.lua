@@ -91,7 +91,7 @@ function on_refueler_broken(map_data, refueler_id, refueler)
 					lock_train(train.entity)
 					send_alert_refueler_of_train_broken(map_data, train.entity)
 				else
-					train.se_awaiting_removal = train_id
+					train.se_awaiting_removal = true
 				end
 			end
 		end
@@ -190,7 +190,7 @@ function on_station_broken(map_data, station_id, station)
 						lock_train(train.entity)
 						send_alert_station_of_train_broken(map_data, train.entity)
 					else
-						train.se_awaiting_removal = train_id
+						train.se_awaiting_removal = true
 					end
 				end
 			end
@@ -554,9 +554,13 @@ function combinator_update(map_data, comb, reset_display)
 			local train_id = depot.available_train_id
 			if train_id then
 				local train = map_data.trains[train_id]
-				remove_available_train(map_data, train_id, train)
-				add_available_train_to_depot(map_data, mod_settings, train_id, train, id, depot)
-				interface_raise_train_status_changed(train_id, STATUS_D, STATUS_D)
+				if train then
+					remove_available_train(map_data, train_id, train)
+					add_available_train_to_depot(map_data, mod_settings, train_id, train, id, depot)
+					interface_raise_train_status_changed(train_id, STATUS_D, STATUS_D)
+				else
+					depot.available_train_id = nil
+				end
 			end
 		elseif type == 4 then
 			set_refueler_from_comb(map_data, mod_settings, id, entity --[[@as Refueler]])

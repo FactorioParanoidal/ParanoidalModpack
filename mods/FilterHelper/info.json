@@ -1,0 +1,12 @@
+{
+    "name": "FilterHelper",
+    "version": "0.2.24",
+    "title": "Filter Helper",
+    "description": "Adds context aware quick select for filter inserters.",
+    "author": "Momo",
+    "factorio_version": "2.0",
+    "package": {
+        "git_publish_branch": "main",
+        "sync_portal_details": true
+    }
+}

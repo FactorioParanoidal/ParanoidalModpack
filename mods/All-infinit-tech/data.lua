@@ -1,0 +1,5 @@
+require('prototypes/science-tech')
+require('prototypes/bot-battery')
+require('prototypes/bot-capacity')
+require('prototypes/braking')
+require('prototypes/inserter-capacity')

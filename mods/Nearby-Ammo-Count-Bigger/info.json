@@ -1,0 +1,12 @@
+{
+  "name": "Nearby-Ammo-Count-Bigger",
+  "version": "2.0.1",
+  "title": "Nearby Ammo Count (Paranoidal bigger text)",
+  "factorio_version": "2.0",
+  "author": "Loren1350 (Paranoidal fork: bigger text)",
+  "homepage": "https://mods.factorio.com/mod/Nearby-Ammo-Count",
+  "description": "Nearby turrets show ammo count in alt mode. Paranoidal fork: enlarged text for readability at default zoom.",
+  "dependencies": [
+    "base"
+  ]
+}

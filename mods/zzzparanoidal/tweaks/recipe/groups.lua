@@ -87,18 +87,6 @@ if not mods["angelsindustries"] then
 		data.raw.item["sentinel-alarm"].subgroup = "circuit-input"
 	end
 
-	if mods["LTN_Combinator_Fix"] then
-		data.raw["recipe"]["ltn-combinator"].subgroup = "circuit-combinator"
-		data.raw.item["ltn-combinator"].subgroup = "circuit-combinator"
-	end
-	if mods["LTN_Content_Reader"] then
-		data.raw["recipe"]["ltn-provider-reader"].subgroup = "circuit-combinator"
-		data.raw.item["ltn-provider-reader"].subgroup = "circuit-combinator"
-		data.raw["recipe"]["ltn-requester-reader"].subgroup = "circuit-combinator"
-		data.raw.item["ltn-requester-reader"].subgroup = "circuit-combinator"
-		data.raw["recipe"]["ltn-delivery-reader"].subgroup = "circuit-combinator"
-		data.raw.item["ltn-delivery-reader"].subgroup = "circuit-combinator"
-	end
 	-------------------------------------------------------------------------------------------------
 	--перенос в транспорт
 	data.raw["item-subgroup"]["train-transport"] =
@@ -137,13 +125,6 @@ if not mods["angelsindustries"] then
 	data.raw["recipe"]["train-stop"].order = "f"
 	data.raw.item["train-stop"].subgroup = "transport-rail-other"
 	data.raw.item["train-stop"].order = "f"
-
-	if mods["LogisticTrainNetwork"] then
-		data.raw["recipe"]["logistic-train-stop"].subgroup = "transport-rail-other"
-		data.raw["recipe"]["logistic-train-stop"].order = "g"
-		data.raw.item["logistic-train-stop"].subgroup = "transport-rail-other"
-		data.raw.item["logistic-train-stop"].order = "g"
-	end
 
 	-------------------------------------------------------------------------------------------------
 	--артиллерийские вагоны

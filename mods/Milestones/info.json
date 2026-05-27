@@ -1,0 +1,13 @@
+{
+    "name": "Milestones",
+    "version": "1.4.7",
+    "title": "Milestones",
+    "author": "Wiwiweb",
+    "dependencies": ["base >= 2.0.0", "flib >= 0.16.0"],
+    "factorio_version": "2.0",
+    "package": {
+      "git_publish_branch": "main",
+      "removeZipAfterPublish": true,
+      "ignore": ["*.mp4", "*.kra"]
+    }
+}

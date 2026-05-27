@@ -1,0 +1,9 @@
+{
+	"name": "mining-patch-planner",
+	"version": "1.7.18",
+	"title": "Mining Patch Planner",
+	"author": "Rimbas",
+	"factorio_version": "2.0",
+	"dependencies": ["base >= 2.0.45"],
+	"description": "Adds a planner that designs a miner layout for a resource patch."
+}

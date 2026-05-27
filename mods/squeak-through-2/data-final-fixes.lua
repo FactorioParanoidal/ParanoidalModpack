@@ -4,10 +4,10 @@ local cmu = require("collision-mask-util")
 local character = data.raw.character.character
 
 local character_box = character.collision_box --[[@as data.BoundingBox]]
-character_box[1][1] = character_box[1][1] + 1/256
-character_box[1][2] = character_box[1][2] + 1/256
-character_box[2][1] = character_box[2][1] - 1/256
-character_box[2][2] = character_box[2][2] - 1/256
+character_box[1][1] = math.min(0, character_box[1][1] + 1/256)
+character_box[1][2] = math.min(0, character_box[1][2] + 1/256)
+character_box[2][1] = math.max(0, character_box[2][1] - 1/256)
+character_box[2][2] = math.max(0, character_box[2][2] - 1/256)
 
 ---@type table<string, boolean>
 local disabled_types = {}
@@ -93,7 +93,6 @@ local function trim(n, override)
     local new_decimal = math.min(max_trim, decimal)
     return (base + new_decimal) * sign
 end
-
 
 local prototypes = cmu.collect_prototypes_colliding_with_mask(cmu.get_mask(character))
 ---@cast prototypes data.EntityPrototype[]

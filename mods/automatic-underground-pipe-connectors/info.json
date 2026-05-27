@@ -1,0 +1,10 @@
+{
+  "name": "automatic-underground-pipe-connectors",
+  "version": "2.0.11",
+  "title": "Automatic Underground Pipe Connectors",
+  "author": "Sparr",
+  "contact": "sparr0@gmail.com",
+  "homepage": "https://github.com/sparr/factorio-mod-automatic-underground-pipe-connectors",
+  "factorio_version": "2.0",
+  "description": "Automatically place a pipe when two undergrounds are placed at a corner or one space apart"
+}

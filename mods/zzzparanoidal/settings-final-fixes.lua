@@ -137,9 +137,6 @@ end
 if mods["PMRPGsystem"] then
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
-if mods["LogisticTrainNetwork"] then
-    set_settings_default_value("bool-setting", "ltn-interface-factorio-alerts", false)
-end
 if mods["PickerInventoryTools"] then
     set_settings_default_value("bool-setting", "picker-auto-sort-inventory", false)
     set_settings_default_value("bool-setting", "picker-filter-filters", false)
