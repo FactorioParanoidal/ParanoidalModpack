@@ -125,9 +125,6 @@ local function replaceMachine()
 		{ type = "item", name = "advanced-structure-components", amount = 2 }
 	)
 
-	paralib.bobmods.lib.recipe.add_ingredient("steel-furnace", { type = "item", name = "stone-furnace", amount = 2 })
-	paralib.bobmods.lib.recipe.add_ingredient("electric-furnace", { type = "item", name = "steel-furnace", amount = 2 })
-
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"electric-furnace",
 		{ type = "item", name = "basic-structure-components", amount = 1 }
