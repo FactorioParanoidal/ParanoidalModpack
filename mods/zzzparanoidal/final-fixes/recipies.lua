@@ -767,12 +767,21 @@ if data.raw.recipe["hs_holo_sign"] then
 	paralib.bobmods.lib.tech.add_recipe_unlock("circuit-network", "hs_holo_sign")
 end
 
---Убрана левая печь из электо печи для сплавов (AKMF)
+-- Печи для сплавов: вшиваем базовую печь как в 1.1 (Oberhaul beltrecipes.lua:154-173).
+paralib.bobmods.lib.recipe.set_ingredients("bob-stone-mixing-furnace", {
+	{ type = "item", name = "stone-furnace", amount = 1 },
+	{ type = "item", name = "stone-brick", amount = 5 },
+})
+paralib.bobmods.lib.recipe.set_ingredients("bob-steel-mixing-furnace", {
+	{ type = "item", name = "steel-furnace", amount = 1 },
+	{ type = "item", name = "steel-plate", amount = 10 },
+	{ type = "item", name = "stone-brick", amount = 10 },
+})
+-- electric-mixing: chemical-furnace (от insert-structured-components) → electric-furnace (1.1).
 paralib.bobmods.lib.recipe.remove_ingredient("bob-electric-mixing-furnace", "bob-electric-chemical-furnace")
-paralib.bobmods.lib.recipe.add_ingredient(
-	"bob-electric-mixing-furnace",
-	{ type = "item", name = "electric-furnace", amount = 1 }
-)
+paralib.bobmods.lib.recipe.add_ingredient("bob-electric-mixing-furnace", { type = "item", name = "electric-furnace", amount = 1 })
+-- electric-chemical-mixing: electric-furnace → electric-mixing-furnace (1.1).
+paralib.bobmods.lib.recipe.replace_ingredient("bob-electric-chemical-mixing-furnace", "electric-furnace", "bob-electric-mixing-furnace")
 
 -- Unlock iron-stick by default
 paralib.bobmods.lib.recipe.enabled("iron-stick", true)
