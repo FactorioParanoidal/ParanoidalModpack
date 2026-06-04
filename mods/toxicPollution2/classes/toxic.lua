@@ -167,11 +167,18 @@ function Toxic:RemoveAlert(player, signal)
 end
 
 function Toxic:GetPollution(player)
-    return math.floor(player.surface.get_pollution({player.position.x, player.position.y}))
+    -- Read at the character, not player.position: in remote view the latter is the camera.
+    local c = player.character
+    if not c then return 0 end
+    return math.floor(c.surface.get_pollution(c.position))
 end
 
 function Toxic:GetPlayerArmor(player)
-    local inv = player.get_inventory(defines.inventory.character_armor)
+    -- Read the character's armor inventory directly: player.get_inventory returns nil
+    -- in remote view, which made the mod treat an armored character as unarmored.
+    local c = player.character
+    if not c then return 0, nil end
+    local inv = c.get_inventory(defines.inventory.character_armor)
     if not inv then return 0, nil end
     local count = inv.get_item_count()
     if count > 0 then
