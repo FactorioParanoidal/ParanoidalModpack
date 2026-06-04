@@ -2,6 +2,7 @@
 !.github
 !mods
 !docs
+!tools
 !.nuke
 !build.*
 !Paranoidal.sln
