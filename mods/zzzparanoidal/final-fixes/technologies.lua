@@ -302,6 +302,7 @@ if data.raw.technology["angels-stone-smelting-4"] then
 		{ "automation-science-pack", 1 },
 		{ "logistic-science-pack", 1 },
 		{ "chemical-science-pack", 1 },
+		{ "production-science-pack", 1 },
 	}) --меняем цену на цемент 4
 	data.raw.technology["angels-stone-smelting-4"].unit.count = 200 --меняем цену на цемент 4
 end
