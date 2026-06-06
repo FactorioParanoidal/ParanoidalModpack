@@ -270,9 +270,9 @@ paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-crusher-2", "angels-ore
 paralib.bobmods.lib.recipe.add_new_ingredient("angels-ore-crusher-2", { type = "item", name = "angels-ore-crusher", amount = 2 })
 paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-crusher-3", "angels-ore-crusher-2")
 paralib.bobmods.lib.recipe.add_new_ingredient("angels-ore-crusher-3", { type = "item", name = "angels-ore-crusher-2", amount = 2 })
-if data.raw.item["ore-crusher-4"] then
-	paralib.bobmods.lib.recipe.remove_ingredient("ore-crusher-4", "angels-ore-crusher-3")
-	paralib.bobmods.lib.recipe.add_new_ingredient("ore-crusher-4", { type = "item", name = "angels-ore-crusher-3", amount = 2 })
+if data.raw.item["angels-ore-crusher-4"] then
+	paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-crusher-4", "angels-ore-crusher-3")
+	paralib.bobmods.lib.recipe.add_new_ingredient("angels-ore-crusher-4", { type = "item", name = "angels-ore-crusher-3", amount = 2 })
 end
 
 paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-sorting-facility-2", "angels-ore-sorting-facility")
@@ -301,10 +301,10 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	"angels-ore-floatation-cell-3",
 	{ type = "item", name = "angels-ore-floatation-cell-2", amount = 2 }
 )
-if data.raw.item["ore-floatation-cell-4"] then
-	paralib.bobmods.lib.recipe.remove_ingredient("ore-floatation-cell-4", "angels-ore-floatation-cell-3")
+if data.raw.item["angels-ore-floatation-cell-4"] then
+	paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-floatation-cell-4", "angels-ore-floatation-cell-3")
 	paralib.bobmods.lib.recipe.add_new_ingredient(
-		"ore-floatation-cell-4",
+		"angels-ore-floatation-cell-4",
 		{ type = "item", name = "angels-ore-floatation-cell-3", amount = 2 }
 	)
 end
@@ -322,9 +322,9 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 
 paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-refinery-2", "angels-ore-refinery")
 paralib.bobmods.lib.recipe.add_new_ingredient("angels-ore-refinery-2", { type = "item", name = "angels-ore-refinery", amount = 2 })
-if data.raw.item["ore-refinery-3"] then
-	paralib.bobmods.lib.recipe.remove_ingredient("ore-refinery-3", "angels-ore-refinery-2")
-	paralib.bobmods.lib.recipe.add_new_ingredient("ore-refinery-3", { type = "item", name = "angels-ore-refinery-2", amount = 2 })
+if data.raw.item["angels-ore-refinery-3"] then
+	paralib.bobmods.lib.recipe.remove_ingredient("angels-ore-refinery-3", "angels-ore-refinery-2")
+	paralib.bobmods.lib.recipe.add_new_ingredient("angels-ore-refinery-3", { type = "item", name = "angels-ore-refinery-2", amount = 2 })
 end
 
 paralib.bobmods.lib.recipe.remove_ingredient("angels-filtration-unit-2", "angels-filtration-unit")
