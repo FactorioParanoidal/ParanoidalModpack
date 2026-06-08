@@ -1,6 +1,6 @@
 {
   "name": "MultipleUnitTrainControl",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "factorio_version": "2.0",
   "title": "Multiple Unit Train Control",
   "author": "robot256",
@@ -22,6 +22,7 @@
     "(?)bigger_slower_trains-M",
     "(?)bobvehicleequipment",
     "(?)Krastorio2 >= 0.9.0",
+    "(?)Krastorio2-spaced-out",
     "(?)fluidTrains",
     "(?)electric-vehicles-reborn >= 0.1.2",
     "(?)se-space-trains",
