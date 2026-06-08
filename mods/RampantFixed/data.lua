@@ -225,4 +225,5 @@ if mods["space-age"] then
 	demolisherUtils.makeDemolisherFood()
 	demolisherUtils.makeUnstableReactor()
 	
+	require("prototypes/buildings/HeatingTower")
 end

@@ -381,7 +381,11 @@ local function planningMap(map, tick)
 			elseif (map.temperament < 0.4) then -- 0.2 - 0.4
 				if (enabledMigration) then
 					if (roll < 0.2) then
-						map.state = AI_STATE_AGGRESSIVE
+						if (activeRaidNests < 1000) then
+							map.state = AI_STATE_MIGRATING
+						else	
+							map.state = AI_STATE_AGGRESSIVE
+						end	
 					elseif (roll < 0.4) and universe.raidAIToggle then
 						map.state = AI_STATE_RAIDING
 					elseif (roll < 0.6) and siegeAIToggle then
@@ -431,62 +435,104 @@ local function planningMap(map, tick)
 					map.state = AI_STATE_AGGRESSIVE
 				end
 			elseif (map.temperament < 0.95) then -- 0.8 - 0.95
-				if (enabledMigration and universe.raidAIToggle) then
-					if (roll < 0.20) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
-					elseif (roll < 0.45) then
-						map.state = AI_STATE_RAIDING
+				if enabledMigration then
+					if (activeRaidNests < 1000) and (roll < 0.20) then
+						map.state = AI_STATE_MIGRATING
+					elseif (roll < 0.30) then
+						if siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						elseif universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
+					elseif (roll < 0.65) then
+						if universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						elseif siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						else
+							map.state = AI_STATE_AGGRESSIVE
+						end
 					elseif (roll < 0.85) then
 						map.state = AI_STATE_ONSLAUGHT
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				elseif (enabledMigration) then
-					if (roll < 0.20) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
-					elseif (roll < 0.75) then
-						map.state = AI_STATE_ONSLAUGHT
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				elseif (universe.raidAIToggle) then
-					if (roll < 0.45) then
-						map.state = AI_STATE_ONSLAUGHT
-					elseif (roll < 0.75) then
-						map.state = AI_STATE_RAIDING
-					else
+					else	
 						map.state = AI_STATE_AGGRESSIVE
 					end
 				else
-					if (roll < 0.65) then
+					if (roll < 0.30) then
+						if siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						elseif universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
+					elseif (roll < 0.65) then
+						if universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						elseif siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						else
+							map.state = AI_STATE_AGGRESSIVE
+						end
+					elseif (roll < 0.85) then
 						map.state = AI_STATE_ONSLAUGHT
-					else
+					else	
 						map.state = AI_STATE_AGGRESSIVE
 					end
 				end
 			else
-				if (enabledMigration and universe.raidAIToggle) then
-					if (roll < 0.30) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
+				if enabledMigration then
+					if (activeRaidNests < 1000) and (roll < 0.30) then
+						map.state = AI_STATE_MIGRATING
+					elseif (basesToGrowCnt > 0) and (roll < 0.10) then
+						map.state = AI_STATE_GROWING
+					elseif (roll < 0.30) then
+						if siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						elseif universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
 					elseif (roll < 0.65) then
-						map.state = AI_STATE_RAIDING
-					else
+						if universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						elseif siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
+					elseif (roll < 0.85) then
 						map.state = AI_STATE_ONSLAUGHT
-					end
-				elseif (enabledMigration) then
-					if (roll < 0.30) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
-					else
-						map.state = AI_STATE_ONSLAUGHT
-					end
-				elseif (universe.raidAIToggle) then
-					if (roll < 0.45) then
-						map.state = AI_STATE_ONSLAUGHT
-					else
-						map.state = AI_STATE_RAIDING
+					else	
+						map.state = AI_STATE_AGGRESSIVE
 					end
 				else
-					map.state = AI_STATE_ONSLAUGHT
+					if (basesToGrowCnt > 0) and (roll < 0.05) then
+						map.state = AI_STATE_GROWING
+					elseif (roll < 0.30) then
+						if siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						elseif universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
+					elseif (roll < 0.65) then
+						if universe.raidAIToggle then
+							map.state = AI_STATE_RAIDING
+						elseif siegeAIToggle then
+							map.state = AI_STATE_SIEGE
+						else
+							map.state = AI_STATE_ONSLAUGHT
+						end
+					elseif (roll < 0.85) then
+						map.state = AI_STATE_ONSLAUGHT
+					else	
+						map.state = AI_STATE_AGGRESSIVE
+					end
 				end
 			end
 
@@ -542,6 +588,10 @@ local function planningMap(map, tick)
 	end	
 
 	if mapStateChanged then
+		if (map.state == AI_STATE_SIEGE) or (map.state == AI_STATE_MIGRATING) then
+			map.canMigrateTick = game.tick
+			map.resourceSettleTick = mMin(game.tick + 3600*5, map.resourceSettleTick)
+		end	
 		if (map.state == AI_STATE_SIEGE) then
 			map.siegeTick = tick + 2 * 60*60*60
 		end

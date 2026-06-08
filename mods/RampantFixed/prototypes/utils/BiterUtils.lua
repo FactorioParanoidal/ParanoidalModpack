@@ -1083,7 +1083,6 @@ function biterFunctions.makeMeleePoisonCloud(range, tier, animation)
 end
 -- + !КДА 2021.11
 
-
 function biterFunctions.makeWormAlienLootTable(name)
     local biterLoot
 
@@ -1553,6 +1552,62 @@ function biterFunctions.createMeleeAttack(attackAttributes)
         animation = unitUtils.biterattackanimation(attackAttributes.scale, attackAttributes.tint, attackAttributes.tint2 or attackAttributes.tint, attackAttributes.altBiter)
     }
 end
+
+function biterFunctions.createMeleeVampiricAttack(attackAttributes)
+    return {
+        type = "projectile",
+        range = attackAttributes.range or 0.5,
+        cooldown = attackAttributes.cooldown or 35,
+        cooldown_deviation = 0.15,
+        range_mode = "bounding-box-to-bounding-box",
+        ammo_category = "melee",
+        ammo_type = {
+            category = "melee",
+            target_type = "entity",
+            action =
+                {
+                    {
+                        type = "area",
+                        radius = 3 + attackAttributes.radius,
+                        force = "not-same",
+                        ignore_collision_condition = true,
+                        action_delivery =
+                            {
+                                type = "instant",
+								source_effects = attackAttributes.sourceEffect and attackAttributes.sourceEffect(attackAttributes),
+                                target_effects =
+                                    {
+                                        type = "damage",
+                                        damage = { amount = attackAttributes.damage * 0.75, type = attackAttributes.damageType or "physical" }
+                                    }
+                            }
+                    },
+                    {
+                        type = "direct",
+                        action_delivery =
+                            {
+                                type = "instant",
+								source_effects = 
+									{
+                                        type = "damage",
+										affects_target = true,
+										show_in_tooltip = true,
+										damage = { amount = -attackAttributes.damage * 0.75, type = "poison" }
+									},
+                                target_effects = 
+									{
+										type = "damage",
+										damage = { amount = attackAttributes.damage * 0.25, type = "poison" }
+									}								
+                            }
+                    }
+                }
+        },
+        sound = sounds.biter_roars(0.2 + (attackAttributes.effectiveLevel * 0.05)),
+        animation = unitUtils.biterattackanimation(attackAttributes.scale, attackAttributes.tint, attackAttributes.tint2 or attackAttributes.tint, attackAttributes.altBiter)
+    }
+end
+
 
 function biterFunctions.biterAttackSounds(effectiveLevel)
     return {

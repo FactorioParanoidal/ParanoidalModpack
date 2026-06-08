@@ -62,6 +62,7 @@ local createAttackBall = acidBall.createAttackBall
 local createSpitFire = acidBall.createSpitFire
 local createRangedAttack = biterUtils.createRangedAttack
 local createMeleeAttack = biterUtils.createMeleeAttack
+local createMeleeVampiricAttack = biterUtils.createMeleeVampiricAttack
 local makeMeleePoisonCloud = biterUtils.makeMeleePoisonCloud
 local makeflamerAtack = biterUtils.makeflamerAtack
 local createSpawnAttack = biterUtils.createSpawnAttack
@@ -1421,6 +1422,8 @@ local function buildAttack(faction, template)
         local attack = template.attackAttributes[i]
         if (attack == "melee") then
             template.attackGenerator = createMeleeAttack
+        elseif (attack == "meleeVampiric") then
+            template.attackGenerator = createMeleeVampiricAttack	
         elseif (attack == "acidPool") then
             template.addon[#template.addon+1] = acidPuddleAttributeNumeric
             template.meleePuddleGenerator = function (attributes)

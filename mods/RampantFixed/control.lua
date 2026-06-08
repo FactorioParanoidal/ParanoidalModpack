@@ -558,7 +558,6 @@ local function onDeath(event)
 						local vengenceOffset = chainVengenceCoefficient ^ map.vengenceLimiter
 						if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) and (not surface.peaceful_mode) and (mRandom() < (map.rallyThreshold * vengenceOffset)) then
 							rallyUnits(chunk, map, tick)
-							chunk.nextSquadTick = tick + 7200
 						end
 					end
 					if artilleryBlast and universe.undergroundAttack then
@@ -616,7 +615,6 @@ local function onDeath(event)
                 if (chunk ~= -1) then
 					if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) then
 						rallyUnits(chunk, map, tick)
-						chunk.nextSquadTick = tick + 7200
 					end	
 					if cause and cause.valid and (cause.type == "character") then
 						enrageBitersInRange(map, cause.position, getChunkByPosition(map, cause.position), tick)
@@ -1154,7 +1152,7 @@ local function onSectorScanned(event)
 					-- --game.print("tick:"..game.tick.. " add protection to "..universe.protectedUnits[protectedEntity.unit_number].tick)
 				-- end	
 			-- end
-			entity.damage(30, "neutral")
+			entity.damage(3000, "neutral")
 		elseif hasSpaceAgeMod and biterSupressionType(entity.name) then
 			processSupression(entity)
 		elseif entity.name == "test-rampant" then
@@ -1299,6 +1297,10 @@ local function onEntityDamaged(event)
 			end
 		end
 	end		
+end
+
+local function onSegmentedEntityDamaged(event)
+	demolisherUtils.onSegmentedEntityDamaged(event)
 end
 
 local function processPlanetAISettings()
@@ -1886,6 +1888,8 @@ script.on_event(defines.events.on_entity_damaged, onEntityDamaged, {
 	{mode = "or", filter="type", type="spider-unit"},	
 	{mode = "or", filter="type", type="segmented-unit"},	
 	})
+
+script.on_event(defines.events.on_segmented_unit_damaged, onSegmentedEntityDamaged)	
 	
 script.on_event(defines.events.on_gui_click, on_gui_click)
 
@@ -1970,7 +1974,60 @@ local function rampantCreateCompressedBiter(event)
 end
 --commands.add_command('rampantCreateCompressedBiter', "", rampantCreateCompressedBiter)
 
+local function resetResourceSeetlerTick(event)
+    local surfaceIndex = game.players[event.player_index].surface.index
+    local map = universe.maps[surfaceIndex]
+	if map then
+		map.resourceSettleTick = 0
+		game.print("resource settle tick reseted")
+		return
+	end	
+end
+commands.add_command('resetResourceSeetlerTick', "", resetResourceSeetlerTick)
+
 local function rampantCreateDebugMenu(event)
 	GUI_Elements.rampantCreateDebugMenu(event)		
 end
 commands.add_command('rampantDebugMenu', "", rampantCreateDebugMenu)
+
+if hasSpaceAgeMod then
+	local function startDemolisherAttack(event)
+		local surface = game.players[event.player_index].surface
+		local map = universe.maps[surface.index]
+		if not map then
+			return
+		end	
+		local demolishers = surface.find_entities_filtered({force = "enemy", type = "segmented-unit"})
+		local demolishersCount = #demolishers
+		
+		local targetEntities
+		local targetEntitiesCount
+		if (demolishersCount > 0) then
+			targetEntities = surface.find_entities_filtered({force = universe.activePlayerForces, type = {"accumulator", "assembling-machine", "furnace", "lab", "mining-drill", "rocket-silo", "solar-panel"}})
+			targetEntitiesCount = #targetEntities 
+			if (targetEntitiesCount > 0) then
+				local demolisherSource = demolishers[mRandom(1, demolishersCount)]
+				local demolisher = surface.create_entity({
+					position= demolisherSource.position,
+					name = demolisherSource.name,
+					direction=demolisherSource.direction,
+					force = demolisherSource.force
+				})
+				if not map.wildDemolishers then
+					map.wildDemolishers = {}
+				end 
+				map.wildDemolishers[demolisher.unit_number] = {entity = demolisher, hunger = 1}
+				local targetEntity = targetEntities[mRandom(1, targetEntitiesCount)]			
+				universe.demolisherTriggers[demolisher.unit_number] = {
+					surface = surface, 
+					demolisher = demolisher, 
+					target = targetEntity,
+					detected = false
+					}							
+				-- game.print("startDemolisherAttack: [gps=" .. demolisher.position.x .. "," .. demolisher.position.y .. "," .. demolisher.surface.name .."]".. "unit_number="..demolisher.unit_number)	-- debug
+			end
+		end	
+	end
+
+	commands.add_command('startDemolisherAttack', "", startDemolisherAttack)
+end	

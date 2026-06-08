@@ -39,6 +39,7 @@ local addVictoryGenerator = chunkPropertyUtils.addVictoryGenerator
 local getNeighborChunks = mapUtils.getNeighborChunks
 
 local getEnemyStructureCount = chunkPropertyUtils.getEnemyStructureCount
+local getEnemySpawnersCount = chunkPropertyUtils.getEnemySpawnersCount
 local getPlayerTurretCount = chunkPropertyUtils.getPlayerTurretCount
 local getPathRating = chunkPropertyUtils.getPathRating
 local getPassable = chunkPropertyUtils.getPassable
@@ -99,7 +100,7 @@ function pheromoneUtils.deathScent(map, chunk)
     addDeathGenerator(map, chunk, DEATH_PHEROMONE_GENERATOR_AMOUNT)
 end
 
-local function compare_pheromones(neighbor, pheromone_neighbor)
+local function compare_pheromones(map, neighbor, pheromone_neighbor)
 	local pheromone
 	pheromone = neighbor[BASE_PHEROMONE]
 	if pheromone_neighbor.chunkBase < pheromone then
@@ -110,7 +111,13 @@ local function compare_pheromones(neighbor, pheromone_neighbor)
 	if pheromone_neighbor.chunkBaseDetection < pheromone then
 		pheromone_neighbor.chunkBaseDetection = pheromone
 	end			
-	pheromone = neighbor[RESOURCE_PHEROMONE]
+	
+	if ((neighbor[BASE_DETECTION_PHEROMONE] or 0) < 9000) and (getEnemySpawnersCount(map, neighbor) == 0) then
+		pheromone = neighbor[RESOURCE_PHEROMONE]			
+	else
+		pheromone_neighbor.isClaimedResource = true
+		pheromone = 0
+	end 
 	if pheromone_neighbor.chunkResource < pheromone then
 		pheromone_neighbor.chunkResource = pheromone
 	end
@@ -154,8 +161,6 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
 
     local chunkPathRating = getPathRating(map, chunk)
 
-    local clear = getEnemyStructureCount(map, chunk)
-
     local tempNeighbors = getNeighborChunks(map, chunk.x, chunk.y, parameters and parameters.recursion)
 	local halveIfDecreasing = (parameters and parameters.halveIfDecreasing) or false
 
@@ -164,14 +169,14 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
 
     local chunkPass = getPassable(map, chunk)
     local pheromone
-	local pheromone_neighbor = {chunkBase = 0, chunkBaseDetection = 0, chunkResource = 0}
+	local pheromone_neighbor = {chunkBase = 0, chunkBaseDetection = 0, chunkResource = 0, isClaimedResource = false}
 	
     if (chunkPass == CHUNK_ALL_DIRECTIONS) then
         neighbor = tempNeighbors[2]
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -179,7 +184,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -187,7 +192,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -195,7 +200,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -203,7 +208,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if (neighborPass == CHUNK_ALL_DIRECTIONS) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -211,7 +216,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if (neighborPass == CHUNK_ALL_DIRECTIONS) then
- 				compare_pheromones(neighbor, pheromone_neighbor)
+ 				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -219,7 +224,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if (neighborPass == CHUNK_ALL_DIRECTIONS) then
- 				compare_pheromones(neighbor, pheromone_neighbor)
+ 				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -227,7 +232,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if (neighborPass == CHUNK_ALL_DIRECTIONS) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
     elseif (chunkPass == CHUNK_EAST_WEST) then
@@ -236,7 +241,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -244,7 +249,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
     elseif (chunkPass == CHUNK_NORTH_SOUTH) then
@@ -253,7 +258,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
- 				compare_pheromones(neighbor, pheromone_neighbor)
+ 				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
 
@@ -261,7 +266,7 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
             if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
-				compare_pheromones(neighbor, pheromone_neighbor)
+				compare_pheromones(map, neighbor, pheromone_neighbor)
             end
         end
     end
@@ -343,25 +348,22 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
 		})
 	end
 
-	clear = clear and (chunk[BASE_DETECTION_PHEROMONE] < 9000)
-    pheromone_neighbor.chunkResource = pheromone_neighbor.chunkResource * 0.9
-    pheromone = getResourceGenerator(map, chunk)
-    if (pheromone > 0) and clear then
-        pheromone = linearInterpolation(pheromone, 15000, 20000)
-    end
-    if chunkResource < pheromone then
-        if clear then
-            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone * chunkPathRating)
-        else
-            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone * chunkPathRating * 0.1)
-        end
-    else
-        if clear then
-            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone_neighbor.chunkResource * chunkPathRating)
-        else
-            chunk[RESOURCE_PHEROMONE] = math.floor(pheromone_neighbor.chunkResource * chunkPathRating * 0.1)
-        end
-    end
+	if not pheromone_neighbor.isClaimedResource and (chunk[BASE_DETECTION_PHEROMONE] < 9000) and (getEnemySpawnersCount(map, chunk) == 0) then
+		pheromone = getResourceGenerator(map, chunk)
+		if pheromone > 0 then
+			pheromone = linearInterpolation(pheromone, 15000, 20000)
+		end
+	else	
+		pheromone = 0	-- if player or biter nests near, then ignore resource source
+	end	
+	pheromone_neighbor.chunkResource = pheromone_neighbor.chunkResource * 0.9
+	if pheromone_neighbor.chunkResource < pheromone then
+		chunk[RESOURCE_PHEROMONE] = math.floor(pheromone * chunkPathRating)
+	else
+		chunk[RESOURCE_PHEROMONE] = math.floor(pheromone_neighbor.chunkResource * chunkPathRating)
+	end
+	
+    
 end
 
 function pheromoneUtils.processPheromone(map, chunk, player)

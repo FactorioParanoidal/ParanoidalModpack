@@ -160,6 +160,9 @@ function chunkPropertyUtils.getEnemyStructureCount(map, chunk)
     return (map.chunkToNests[chunk] or 0) + (map.chunkToTurrets[chunk] or 0) + (map.chunkToTraps[chunk] or 0) +
         (map.chunkToUtilities[chunk] or 0) + (map.chunkToHives[chunk] or 0)
 end
+function chunkPropertyUtils.getEnemySpawnersCount(map, chunk)
+    return (map.chunkToNests[chunk] or 0) + (map.chunkToHives[chunk] or 0)
+end
 
 function chunkPropertyUtils.getRetreatTick(map, chunk)
     return map.chunkToRetreats[chunk] or 0
