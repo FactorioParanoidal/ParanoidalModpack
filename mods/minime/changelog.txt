@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.19
+Date: 2026-03-03
+  Uploaded by:
+    - Pi-C
+
+  Bugfixes:
+    - Removed dependency on character mod "Lea Character" to avoid circular dependency: "Lea Character" depends on "!skins" which optionally depends on "miniMAXIme" again. (https://mods.factorio.com/mod/minime/discussion/69a49aaa90345c592e4f818c)
+
+  Changes:
+    - Added optional dependency on new character mods:
+      - "Chef Kawasaki Character" (https://mods.factorio.com/mod/Chef_Kawasaki_Character)
+      - "Emberthal Character Reskin" ( Emberthal Character Reskin )
+
+  TODO:
+    - Figure out why animations of jetpack-characters are not scaled!
+    - Revert blacklisting surfaces with RSO (last version checked: 7.0.22) when the bug reported in <https://mods.factorio.com/mod/rso-mod/discussion/67d2a535c57b94e615028ec0> is fixed! Our surfaces should be auto-ignored by RSO because they are too small, but this will cause a crash in RSO (trying to access uninitialized tables).
+    - Add dependency on "mimikyu Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+    - Add dependency on "spearmaster Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+---------------------------------------------------------------------------------------------------
 Version: 2.0.18
 Date: 2026-01-27
   Uploaded by:
@@ -20,10 +39,7 @@ Date: 2026-01-27
       - "Neco-Arc Character" (https://mods.factorio.com/mod/NecoArcCharacter)
       - "New Gear Girl Character 2.0" (https://mods.factorio.com/mod/NewGirlCharacter-port)
 
-  TODO:
-    - Revert blacklisting surfaces with RSO (last version checked: 7.0.22) when the bug reported in <https://mods.factorio.com/mod/rso-mod/discussion/67d2a535c57b94e615028ec0> is fixed! Our surfaces should be auto-ignored by RSO because they are too small, but this will cause a crash in RSO (trying to access uninitialized tables).
-    - Add dependency on "mimikyu Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
-    - Add dependency on "spearmaster Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.17
 Date: 2025-04-06

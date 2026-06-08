@@ -6,8 +6,8 @@ local corpses = data.raw["character-corpse"]
 minime.ignore_chars = minime.ignore_chars or minime.get_ignore_characters()
 minime.show("Won't scale these characters", minime.ignore_chars)
 
-minime.show("Default character", chars.character)
-minime.show("Default character-corpse", corpses["character-corpse"])
+--~ minime.show("Default character", chars.character)
+--~ minime.show("Default character-corpse", corpses["character-corpse"])
 
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
@@ -23,6 +23,11 @@ local scale_factor = minime.minime_character_scale
 -- to mess with other mods, so we return the scaled position in the original
 -- format (dictionary: {x = 1, y = 1}, or array: {1, 1}).
 local function scale_position(position, hr)
+  --~ minime.entered_function({position, hr})
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function({position, hr})
+--~ end
+
   -- Make sure position is in correct format
   position = position or { x = 0, y = 0}
   if type(position) ~= "table" or table_size(position) ~= 2 then
@@ -35,14 +40,25 @@ local function scale_position(position, hr)
   local x = (position.x or position[1]) * scale_factor * hr
   local y = (position.y or position[2]) * scale_factor * hr
 
+  --~ minime.entered_function("leave")
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function("leave")
+--~ end
   return (position.x and position.y) and { x = x, y = y} or {x, y}
 end
 
 
 local function scale_image(img)
+  --~ minime.entered_function({img})
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function({img})
+--~ end
+
   if not img.scaled then
     -- Set scale (defaults to 1 if not explicitly set)
+minime.show("img.scale", img.scale)
     img.scale = (img.scale or 1) * scale_factor
+minime.show("img.scale", img.scale)
 minime.show("Scaled image", img.filename)
     if img.hr_version then
       img.hr_version.scale = (img.hr_version.scale or 1) * scale_factor
@@ -58,10 +74,20 @@ minime.show("Scaled HR image", img.hr_version.filename)
     -- Mark picture as scaled -- otherwise it will be scaled each time it's used!
     img.scaled = true
   end
+
+  --~ minime.entered_function("leave")
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function("leave")
+--~ end
 end
 
 
 local function recurse(tab)
+  --~ minime.entered_function({tab})
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function({tab})
+--~ end
+
   for p, picture in pairs(tab) do
 minime.show("p", p)
     if type(picture) == "table" then
@@ -74,6 +100,10 @@ minime.show("p", p)
       minime.writeDebug("Deadend! No picture: %s", {picture}, "line")
     end
   end
+  --~ minime.entered_function("leave")
+--~ if character.name == "character-jetpack" then
+  --~ minime.entered_function("leave")
+--~ end
 end
 
 
@@ -130,7 +160,10 @@ else
     -- New in Factorio 2.0:
     "take_off",
     "landing",
+    "idle_in_air",
     "idle_with_gun_in_air",
+    "flying",
+    "flying_with_gun",
   }
 
   -- Scale characters' mining reach along with their graphics?
@@ -167,27 +200,62 @@ else
       if mining_distance then
         character.reach_resource_distance = character.reach_resource_distance * scale_factor
         minime.writeDebug("Scaled reach_resource_distance of \"%s\" to %s.",
-                      {character.name, character.reach_resource_distance})
+                            {character.name, character.reach_resource_distance})
       end
 
       -- Scale tool-attack distance
       if tool_attack_distance then
         character.tool_attack_distance = (character.tool_attack_distance or 1.5) * scale_factor
         minime.writeDebug("Scaled tool_attack_distance of \"%s\" to %s (Default: %s)",
-                      {character.name, character.tool_attack_distance or "nil",
-                       character.tool_attack_distance/scale_factor})
+                          {character.name, character.tool_attack_distance or "nil",
+                           character.tool_attack_distance/scale_factor})
       end
 
+      minime.writeDebugNewBlock("Trying to scale armor anims of %s!",
+                                {minime.argprint(character)})
       -- Apply scale_factor to character graphics
-      for _, armor_level in pairs(character.animations) do
+      --~ for _, armor_level in pairs(character.animations) do
+--~ minime.show("Checking armor_level", _)
+        --~ for a, animation in pairs(animation_list) do
+--~ minime.show(a, animation)
+          --~ animation = armor_level[animation] or {}
+--~ minime.show("Adjusted animation", animation)
+--~ minime.show("type(animation.layers)", type(animation.layers))
+          --~ for p, picture in pairs(animation.layers or {}) do
+            --~ scale_image(picture)
+          --~ end
+        --~ end
+      --~ end
+minime.show("type(character.animations)", type(character.animations))
+minime.show("character.animations.filename", character.animations.filename)
+minime.show("character.animations.filenames", character.animations.filenames)
+minime.show("character.animations.stripes", character.animations.stripes)
+      for _, armor_level in pairs(character.animations or minime.EMPTY_TAB) do
+minime.show("Checking armor_level", _)
         for a, animation in pairs(animation_list) do
-          animation = armor_level[animation] or {}
+minime.show(a, animation)
+          animation = armor_level[animation] or minime.EMPTY_TAB
+minime.show("Adjusted animation", animation)
+minime.show("type(animation.layers)", type(animation.layers))
           for p, picture in pairs(animation.layers or {}) do
-            scale_image(picture)
+            if armor_level.filename or
+                armor_level.filenames or
+                armor_level.stripes then
+
+              minime.writeDebug("Scaling single image!")
+              scale_image(character.animations)
+            else
+              minime.writeDebug("Recursing character.animations!")
+              recurse(character.animations)
+            end
           end
         end
       end
-
+minime.show("scale_factor", scale_factor)
+minime.show("character.animations", character.animations)
+--~ if character.name == "character-jetpack" then
+  --~ error("Break!")
+--~ end
       -- Apply scale factor to character.corpse, if it exists
       if character.corpse then
         corpse = corpses[character.corpse]
