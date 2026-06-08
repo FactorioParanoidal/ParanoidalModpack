@@ -45,10 +45,19 @@ NANO.USABLE_EXPLOSIVES = {
 
 --Tables linked to technologies, values are the tile radius
 NANO.BOT_RADIUS = {[0] = 7, [1] = 9, [2] = 11, [3] = 13, [4] = 15}
-NANO.AUTO_SPEEDS = {[0] = 25, [1] = 21, [2] = 18, [3] = 15, [4] = 13}
---Manual speeds work out to 15, 12, 10, ~8.6, 7.5
---Which... maybe the later ones should give bigger boosts?
---No, the numbers don't look that different, but they FEEL a lot faster, and that's what matters.
+NANO.DEFAULT_AUTO_SPEED = 25
+
+local auto_speeds = { } 
+
+NANO.get_auto_speed = function(boost)
+    if auto_speeds[boost] then
+        return auto_speeds[boost]
+    end
+
+    auto_speeds[boost] = settings.startup["nanobots-auto-speed"].value / (1 + boost)
+
+    return auto_speeds[boost]
+end
 
 NANO.MANUAL_RADIUS = 10
 

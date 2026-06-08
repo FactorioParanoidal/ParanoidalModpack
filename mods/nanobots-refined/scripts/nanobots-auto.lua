@@ -16,7 +16,6 @@ local max, floor, table_size, table_find = math.max, math.floor, table_size, tab
 local config = require('config')
 local armormods = require('scripts/armor-mods')
 local bot_radius = config.BOT_RADIUS
-local queue_speed = config.AUTO_SPEED_BONUS
 local network_limit = true --keeping this here in case i decide to bring this option back
 
 local function unique(tbl)
@@ -109,7 +108,7 @@ NanobotsAuto.process_queue_tasks = function(tick)
         --If not for the "finished!" sound effect, we wouldn't hardly even need the refill
         
         if success then
-            local tick_spacing = max(1, config.AUTO_SPEEDS[player.force.get_gun_speed_modifier('nano-ammo') * 4] or config.AUTO_SPEEDS[0])
+            local tick_spacing = max(1, config.get_auto_speed(player.force.get_gun_speed_modifier('nano-ammo')))
             pdata.next_auto_tick = tick + tick_spacing
             if config.DEBUG then
                 game.print("Tick-spacing: " .. tick_spacing .. ", next_auto_tick: " .. pdata.next_auto_tick)

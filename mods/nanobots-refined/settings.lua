@@ -7,6 +7,20 @@ data:extend{
         order = "nanobots-aa[auto-bots-roll-out]"
     },
     {
+        type = "int-setting",
+        name = "nanobots-manual-speed",
+        setting_type = "startup",
+        default_value = 15,
+        order = "nanobots-aba[cooldown-manual]"
+    },
+    {
+        type = "int-setting",
+        name = "nanobots-auto-speed",
+        setting_type = "startup",
+        default_value = 25,
+        order = "nanobots-abb[cooldown-auto]"
+    },
+    {
         type = "bool-setting",
         name = "nanobots-nano-build-tiles",
         setting_type = "runtime-per-user",
