@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 2026-06-06
+  Bugfixes:
+    - Fix crash when modifying train groups during carriage replacement (thanks to Lampotrias).
+---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2026-01-17
   Bugfixes:
