@@ -1,4 +1,13 @@
 
+
+
+--[[ Título e Botão Fechar
+    local title_bar = frame.add{type = "flow", direction = "horizontal"}
+    title_bar.add{type = "label", caption = "Mission Cargo Log", style = "frame_title"}
+    local spacer = title_bar.add{type = "empty-widget"}
+    spacer.style.horizontally_stretchable = true
+    title_bar.add{type = "sprite-button", name = "close_mule_central", sprite = "utility/close", style = "frame_action_button"}
+]]
 function add_gui_frame_title_and_close_bt(frame,caption,trd_but,search_text)
   local title_table =frame.title_table
   if not title_table then 
@@ -19,7 +28,7 @@ function add_gui_frame_title_and_close_bt(frame,caption,trd_but,search_text)
     if trd_but then 
       local bt_3 = title_table.add(trd_but) 
       end
-    local bt_close = title_table.add{type = "sprite-button", name='bt_destroy_my_2parent', style = "shortcut_bar_button_small", sprite = "utility/close", tooltip={"close"} } 
+    local bt_close = title_table.add{type = "sprite-button", name='bt_destroy_my_2parent', style = "frame_action_button", sprite = "utility/close", tooltip={"close"} } -- "shortcut_bar_button_small"
     if frame.parent==game.players[frame.player_index].gui.screen then
       frame.auto_center = true 
       title_table.drag_target = frame
@@ -61,3 +70,15 @@ function create_message_board_gui_for_player(player,title,sprite,subtitle,messag
     create_message_board_gui_for_player(player,title,sprite,subtitle,message_table,tab_size)
     end
   end
+
+
+
+
+function find_gui_element_recursive(element, name)
+    if element.name == name then return element end
+    for _, child in pairs(element.children) do
+        local found = find_gui_element_recursive(child, name)
+        if found then return found end
+    end
+    return nil
+end

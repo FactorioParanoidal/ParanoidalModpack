@@ -2,6 +2,8 @@
 if mods["space-age"] then
 local sounds = require("__base__.prototypes.entity.sounds")
 
+local rock_name = mf_demolisher_corpse_rock_name or "huge-rock"
+
 local dying_particles = {
           {
             type = "create-particle",
@@ -203,7 +205,7 @@ local remove_effect = {8,7,6,5,4,3}
 for _,k in pairs(remove_effect) do table.remove(demolisher.dying_trigger_effect,k) end
 --add blood 
 for _,b in pairs(dying_particles) do table.insert(demolisher.dying_trigger_effect,b) end
-demolisher.dying_trigger_effect[1] = {type = "create-entity",entity_name = "huge-rock"}
+demolisher.dying_trigger_effect[1] = {type = "create-entity",entity_name = rock_name}
 
 --segments
 local remove_effect = {8,7,6,5,4,3}
@@ -219,7 +221,7 @@ for k,segment in pairs(demolisher.segment_engine.segments) do
 		end
 	if raw.dying_trigger_effect then 
 		for _,b in pairs(dying_particles) do table.insert(raw.dying_trigger_effect,b) end
-		raw.dying_trigger_effect[1]={type = "create-entity",entity_name = "huge-rock"}
+		raw.dying_trigger_effect[1]={type = "create-entity",entity_name = rock_name}
 		for _,k in pairs(remove_effect) do table.remove(raw.dying_trigger_effect,k) end
 		end
 	data:extend({raw})

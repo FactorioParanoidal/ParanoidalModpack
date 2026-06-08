@@ -48,17 +48,19 @@ return {
 	concrete = '[img=item/concrete]',	
 	biter = '[img=entity/big-biter]',	
 	worm = '[img=entity/small-worm-turret]',	
-	down_arrow= '[img=utility/down_arrow]', 
+	down_arrow= '[img=utility/hint_arrow_down]', 
 	arrow_up = '[img=utility/hint_arrow_up]',  
 	import = '[img=utility/import]',  
 	export = '[img=utility/export]',  
 	golem = '[img=achievement/golem]',  
-	parameter = "[virtual-signal=signal-item-parameter]",
+	parameter = "[img=virtual-signal/signal-item-parameter]",
 	thruster = '[img=item/thruster]',
 	nauvis = "[planet=nauvis]",
 	gleba = "[planet=gleba]",
 	fulgora = "[planet=fulgora]",
 	vulcanus = "[planet=vulcanus]",
 	aquilo = "[planet=aquilo]",
-	}
+	skull = "[img=virtual-signal/signal-skull]",
+	flag  = '[img=virtual-signal/signal-white-flag]',
 
+}

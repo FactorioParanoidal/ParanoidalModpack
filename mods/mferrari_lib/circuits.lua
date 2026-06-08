@@ -6,6 +6,14 @@ wire_connectors_1[defines.wire_connector_id.circuit_red].connect_to(wire_connect
 wire_connectors_1[defines.wire_connector_id.circuit_green].connect_to(wire_connectors_2[defines.wire_connector_id.circuit_green], false)
 end
 
+function mf_connect_power_poles(entity,target)
+if entity and target and entity.valid and target.valid then
+    local connector1 = entity.get_wire_connector(defines.wire_connector_id.pole_copper,true)
+    local connector2 = target.get_wire_connector(defines.wire_connector_id.pole_copper,true)
+    connector1.connect_to(connector2,false)
+    end
+end
+
 
 
 function get_circuit_connected_entities(entity)

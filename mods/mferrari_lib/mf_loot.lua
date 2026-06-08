@@ -48,7 +48,8 @@ chest.insert(item)
 end
 
 
-function add_quality_loot(chest,n)
+
+function add_quality_loot(chest,n, max_level)
 local sgroups = {"transport", "gun", "armor", "equipment", "military-equipment", "utility-equipment", "turret"}
 local items = {}
 for name, proto in pairs (prototypes.item) do
@@ -58,11 +59,12 @@ for name, proto in pairs (prototypes.item) do
             end
         end
     end
-local quality_names=get_quality_names()
+local quality_names=get_quality_names(max_level)
 for x=1,n do
     local quality, quality_name
     if #quality_names>0 then
-        quality = quality_names[math.random(#quality_names)]
+		local rand_limit = math.random(#quality_names)
+        quality = quality_names[math.random(rand_limit)]
         quality_name=quality.name
         end
     local item = {name=items[math.random(#items)], count=math.random(n), quality=quality_name}

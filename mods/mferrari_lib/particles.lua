@@ -5,14 +5,15 @@ local floor = math.floor
 
 function create_stone_particles(surface, count, position,height_mp)
 if not height_mp then height_mp=1 end
+local height = random(9, 11) * 0.1 * height_mp
     for x=1,count do
         surface.create_particle{
             position = position,
             name = 'stone-particle-medium',
             movement = {random(-5, 5) * 0.01, random(-5, 5) * 0.01},
             frame_speed = 1,
-            vertical_speed = random(12, 14) * 0.01,
-            height = random(9, 11) * 0.1 * height_mp,
+            vertical_speed = random(12, 14) * 0.01 * height_mp,
+            height = height,
         }
     end
 end

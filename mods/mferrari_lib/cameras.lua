@@ -110,26 +110,31 @@ if #cams<Camera_Count_Limit then
 	local position, final_position
 
 	if (not AutoCloseTick) and Camera_Default_Time then AutoCloseTick=Camera_Default_Time end
+	
 	if type(Object)=="table" and Object.final_position then 
 		final_position = Object.final_position
-		Object = Object.Object or Object.object
+
+		if not Object.render then
+			Object = Object.Object or Object.object --- ???
+			end
 		end
 
-	if Object and Object.valid and Object.position then --if its an entity
+	if type(Object)=="table" and Object.render then
+		if Object.render.valid then 
+			position=Object.render.target.position
+			Surface=Object.render.surface
+			local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=nil,render=Object.render, autoclosetick=AutoCloseTick,final_position=final_position}
+			frame.tags.render=Object.render
+			table.insert(storage.mf_frame_cameras,tabdata)
+			remote.call("mf_lib","register_camera",tabdata)
+			end
+
+		elseif Object and Object.valid and Object.position then --if its an entity --- crashes if 
 		Surface=Object.surface
 		position=Object.position 
 		local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=Object,autoclosetick=AutoCloseTick,final_position=final_position}
 		table.insert(storage.mf_frame_cameras,tabdata)
 		remote.call("mf_lib","register_camera",tabdata)
-		elseif Object.render then
-			if Object.render.valid then 
-				position=Object.render.target.position
-				Surface=Object.render.surface
-				local tabdata = {player=player, surface=Surface, camframe=frame,tick=tick, entity=nil,render=Object.render, autoclosetick=AutoCloseTick,final_position=final_position}
-				frame.tags.render=Object.render
-				table.insert(storage.mf_frame_cameras,tabdata)
-				remote.call("mf_lib","register_camera",tabdata)
-				end
 			
 		else -- if object is a position
 		if Surface==nil then Surface=game.surfaces[1] end
