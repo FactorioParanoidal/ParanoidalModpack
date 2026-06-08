@@ -1,6 +1,6 @@
 local sounds = require("__base__/prototypes/entity/sounds.lua")
 
-local function add_potion(name,icon,cooldown,heal)
+function add_potion(name,icon,cooldown,heal)
 data:extend({
   {
     type = "capsule",

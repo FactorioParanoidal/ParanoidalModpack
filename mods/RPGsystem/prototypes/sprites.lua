@@ -1,3 +1,6 @@
+--local mod_gui = require("mod-gui")
+--local playercolor = game.players[event.player_index].color
+
 ICONPATH = "__RPGsystem__/graphics/"
 
 local attributesList = {
@@ -15,7 +18,7 @@ local attributesList = {
   "LV_Reach_Dist",  
 }
 
-local function createSprite(att)
+function createSprite(att)
   local p = {}
   p.type = "sprite"
   p.name = att .. "_sprite"
