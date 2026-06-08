@@ -1,4 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.0.3
+Date: 2026-06-01
+  Changes:
+    - Updated for changes to the Turbo belt in Bob's mods 2.1+
+  Bugfixes:
+    - Fixed that Bob's Logistics technologies were not updated as intended
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 2026-05-10
+  Bugfixes:
+    - Fixed startup issue when used with AAI Loaders and Advanced belts when fluid ingredients are enabled
+    - Fixed that the wrong technologies were referenced with Advanced Belts
+    - Fixed that Periodic Madness was not included as an optional mod dependency
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 2026-05-10
+  Features:
+    - Now updates AAI loaders icons, including lane filtering and stacking variants, to have appropriately colored belts
+    - Added native support for Periodic Madness
+    - Enhanced API to include support for using the transport belt, fast transport belt, express transport belt and turbo transport belt preset sprite sheets
+    - Enhanced API for the logistics technology icon to allow coloring the structure paint independently
+  Bugfixes:
+    - Fixed that the Krastorio 2 and Krastorio 2: Spaced Outs belts were colored incorrectly
+    - Fixed that the Iper belt icon did not well match the belt itself
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 2026-05-08
+  Features:
+    - Now dynamically discovers and updates the belt animation set for any entities that use any of the supported transport belts
+    - [space-age] Added support for frozen transport belts
+    - Added native support for most belt mods on the mod portal
+---------------------------------------------------------------------------------------------------
 Version: 2.0.10
 Date: 2026-01-02
   Features:

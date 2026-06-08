@@ -1,9 +1,4 @@
--- Copyright (c) Kirazy
--- Part of Prismatic Belts
---
--- See LICENSE.md in the project directory for license information.
-
-local api = require("prototypes.api")
+local sprite_utils = { icons = require("__reskins-sprite-utils__.icons") }
 
 if not mods["more-belts"] then
 	return
@@ -18,10 +13,10 @@ if not belt and splitter and lane_splitter then
 end
 
 local function get_lane_splitter_icon(splitter_entity, belt_entity)
-	local splitter_icon = api.icons.get_icon_from_prototype_by_reference(splitter_entity)
-	local belt_icon = api.icons.get_icon_from_prototype_by_reference(belt_entity)
+	local splitter_icon = sprite_utils.icons.get_icon_from_prototype(splitter_entity)
+	local belt_icon = sprite_utils.icons.get_icon_from_prototype(belt_entity)
 
-	return api.icons.combine_icons(false, splitter_icon, api.icons.transform_icon(belt_icon, 0.5, { 8, -8 }))
+	return sprite_utils.icons.compose_icons("default", splitter_icon, sprite_utils.icons.transform_icon(belt_icon, 0.5, { 8, -8 }))
 end
 
 ---@type DeferrableIconData
@@ -31,4 +26,4 @@ local deferrable_icon = {
 	icon_data = get_lane_splitter_icon(splitter, belt),
 }
 
-api.icons.assign_deferrable_icon(deferrable_icon)
+sprite_utils.icons.assign_deferrable_icon(deferrable_icon)

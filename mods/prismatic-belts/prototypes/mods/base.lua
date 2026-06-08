@@ -1,187 +1,101 @@
--- Copyright (c) Kirazy
--- Part of Prismatic Belts
---
--- See LICENSE.md in the project directory for license information.
-
 local api = require("prototypes.api")
-local meld = require("meld")
+local sprite_utils = { icons = require("__reskins-sprite-utils__.icons") }
 
--- Setup belt animation sets for vanilla entities
-local belt_animation_sets = {
+-- Periodic Madness re-sequences the belts.
+if mods["periodic-madness"] then
+	return
+end
+
+local transport_belts = {
 	["transport-belt"] = {
-		animation_set = {
-			filename = "__prismatic-belts__/graphics/entity/base/transport-belt/transport-belt.png",
-			priority = "extra-high",
-			width = 128,
-			height = 128,
-			scale = 0.5,
-			frame_count = 16,
-			direction_count = 20,
-		},
-		frozen_patch = api.get_transport_belt_frozen_patch(1),
+		logistics_technology_name = "logistics",
+		belt_sprites = api.defines.belt_sprites.standard,
+		belt_preset = api.defines.belt_presets.standard,
 	},
 	["fast-transport-belt"] = {
-		animation_set = {
-			filename = "__prismatic-belts__/graphics/entity/base/fast-transport-belt/fast-transport-belt.png",
-			priority = "extra-high",
-			width = 128,
-			height = 128,
-			scale = 0.5,
-			frame_count = 32,
-			direction_count = 20,
-		},
-		frozen_patch = api.get_transport_belt_frozen_patch(2),
+		logistics_technology_name = "logistics-2",
+		belt_sprites = api.defines.belt_sprites.fast,
+		belt_preset = api.defines.belt_presets.fast,
 	},
 	["express-transport-belt"] = {
-		animation_set = {
-			filename = "__prismatic-belts__/graphics/entity/base/express-transport-belt/express-transport-belt.png",
-			priority = "extra-high",
-			width = 128,
-			height = 128,
-			scale = 0.5,
-			frame_count = 32,
-			direction_count = 20,
-		},
-		frozen_patch = api.get_transport_belt_frozen_patch(2),
+		logistics_technology_name = "logistics-3",
+		belt_sprites = api.defines.belt_sprites.fast,
+		belt_preset = api.defines.belt_presets.express,
 	},
 }
 
--- Add belt reader sprites.
-meld(belt_animation_sets["transport-belt"], belt_reader_gfx)
-meld(belt_animation_sets["fast-transport-belt"], belt_reader_gfx)
-meld(belt_animation_sets["express-transport-belt"], belt_reader_gfx)
+local is_reskin_adaptation_needed = mods["reskins-library"] and not (reskins.bobs and (reskins.bobs.triggers.logistics.entities == false))
+if is_reskin_adaptation_needed then
+	transport_belts["transport-belt"].tier = 1
+	transport_belts["fast-transport-belt"].tier = 2
+	transport_belts["express-transport-belt"].tier = 3
 
-local tiers = {
-	[""] = { technology = "logistics" },
-	["fast-"] = { technology = "logistics-2" },
-	["express-"] = { technology = "logistics-3" },
-}
-
-if mods["reskins-library"] then
-	tiers[""].tier = 1
-	tiers["fast-"].tier = 2
-	tiers["express-"].tier = 3
-end
-
-if mods["miniloader"] then
-	local chute = data.raw["loader-1x1"]["chute-miniloader-loader"]
-
-	if chute then
-		chute.belt_animation_set = belt_animation_sets["transport-belt"]
+	if reskins.lib.settings.get_value("reskins-lib-customize-tier-colors") then
+		transport_belts["transport-belt"].mask_tint = reskins.lib.tiers.get_belt_tint(1)
+		transport_belts["fast-transport-belt"].mask_tint = reskins.lib.tiers.get_belt_tint(2)
+		transport_belts["express-transport-belt"].mask_tint = reskins.lib.tiers.get_belt_tint(3)
 	end
 end
 
-if mods["loaders-modernized"] then
-	local chute = data.raw["loader-1x1"]["chute-mdrn-loader"]
-
-	if chute then
-		chute.belt_animation_set = belt_animation_sets["transport-belt"]
+for name, options in pairs(transport_belts) do
+	local entity = data.raw["transport-belt"][name]
+	if not entity then
+		goto continue
 	end
-end
 
-for prefix, properties in pairs(tiers) do
-	-- Fetch entities
-	local entities = {
-		belt = data.raw["transport-belt"][prefix .. "transport-belt"],
-		splitter = data.raw["splitter"][prefix .. "splitter"],
+	local preset = api.get_preset(options.belt_preset)
 
-		-- More Belts, potentially others...
-		lane_splitter = data.raw["lane-splitter"][prefix .. "lane-splitter"],
+	---@type data.IconData[]
+	local icon_data = options.mask_tint and api.get_transport_belt_icon({
+		mask_tint = options.mask_tint,
+	}) or { preset.icon }
 
-		underground = data.raw["underground-belt"][prefix .. "underground-belt"],
-		loader = data.raw["loader"][prefix .. "loader"],
-
-		-- Miniloader
-		miniloader = data.raw["loader-1x1"][prefix .. "miniloader-loader"],
-		filter_miniloader = data.raw["loader-1x1"][prefix .. "filter-miniloader-loader"],
-
-		-- Deadlock Stacking Beltboxes and Compact loaders
-		deadlock_loader = data.raw["loader-1x1"][prefix .. "transport-belt-loader"],
-
-		-- Krastorio
-		krastorio_loader = data.raw["loader-1x1"]["kr-" .. prefix .. "loader"],
-
-		-- Loaders Modernized
-		mdrn_loader = data.raw["loader-1x1"][prefix .. "mdrn-loader"],
-		mdrn_loader_split = data.raw["loader-1x1"][prefix .. "mdrn-loader-split"],
-
-		-- AAI Loaders
-		aai_loader = data.raw["loader-1x1"]["aai-" .. prefix .. "loader"],
+	---@type DeferrableIconData
+	local deferrable_icon = {
+		name = entity.name,
+		type_name = entity.type,
+		icon_data = icon_data,
 	}
 
-	-- Reskin the belt item
-	local belt_item = data.raw["item"][prefix .. "transport-belt"]
-	if belt_item then
-		---@type data.IconData[]
-		local icon_data = { {
-			icon = "__prismatic-belts__/graphics/icons/base/" .. prefix .. "transport-belt.png",
-			icon_size = 64,
-		} }
-
+	if is_reskin_adaptation_needed then
 		-- Append tier labels for reskins-library
-		if mods["reskins-library"] and not (reskins.bobs and (reskins.bobs.triggers.logistics.entities == false)) then
-			local do_labels = reskins.lib.settings.get_value("reskins-bobs-do-belt-entity-tier-labeling") == true
+		local do_labels = reskins.lib.settings.get_value("reskins-bobs-do-belt-entity-tier-labeling") == true
+		deferrable_icon.icon_data = do_labels and reskins.lib.tiers.add_tier_labels_to_icons(options.tier, icon_data) or icon_data
+		deferrable_icon.pictures = do_labels and reskins.lib.sprites.create_sprite_from_icons(icon_data, 1.0) or nil
+	end
 
-			---@type DeferrableIconData
-			local deferrable_icon = {
-				name = prefix .. "transport-belt",
-				type_name = "transport-belt",
-				icon_data = do_labels and reskins.lib.tiers.add_tier_labels_to_icons(properties.tier, icon_data) or icon_data,
-				pictures = do_labels and reskins.lib.sprites.create_sprite_from_icons(icon_data, 1.0) or nil,
-			}
+	sprite_utils.icons.assign_deferrable_icon(deferrable_icon)
 
-			reskins.lib.icons.assign_deferrable_icon(deferrable_icon)
-		else
-			belt_item.icons = icon_data
+	local animation_set = options.mask_tint and api.get_transport_belt_animation_set({
+		mask_tint = options.mask_tint,
+		belt_sprites = options.belt_sprites,
+	}) or preset.belt_animation_set
+	api.apply_belt_animation_set_and_update_related_connectables(entity, animation_set, {
+		mask_tint = options.mask_tint or preset.tint,
+	})
 
-			-- Update entity icon to match
-			if entities.belt then
-				entities.belt.icons = belt_item.icons
-			end
+	if options.mask_tint then
+		api.create_or_update_remnants(entity.name, { mask_tint = options.mask_tint })
+	else
+		local remnants = data.raw["corpse"][entity.name .. "-remnants"]
+
+		if remnants then
+			remnants.icons = entity.icons
+			remnants.icon = entity.icon
+			remnants.icon_size = entity.icon_size
+			remnants.animation = preset.remnants_animation
 		end
 	end
 
-	-- Reskin all related entity types
-	for _, entity in pairs(entities) do
-		if entity then
-			entity.belt_animation_set = belt_animation_sets[prefix .. "transport-belt"]
-		end
-	end
+	---@type DeferrableIconData
+	local assignable_tech_icon = {
+		name = options.logistics_technology_name,
+		type_name = "technology",
+		icon_data = options.mask_tint and api.get_transport_belt_technology_icon({
+			mask_tint = options.mask_tint,
+		}) or { preset.technology_icon },
+	}
+	sprite_utils.icons.assign_deferrable_icon(assignable_tech_icon)
 
-	-- Setup remnants
-	local remnants = data.raw["corpse"][prefix .. "transport-belt-remnants"]
-
-	if remnants then
-		if entities.belt then
-			remnants.icons = entities.belt.icons
-			remnants.icon = entities.belt.icon
-			remnants.icon_size = entities.belt.icon_size
-		end
-
-		remnants.animation = make_rotated_animation_variations_from_sheet(2, {
-			filename = "__prismatic-belts__/graphics/entity/base/" .. prefix .. "transport-belt/remnants/" .. prefix .. "transport-belt-remnants.png",
-			line_length = 1,
-			width = 106,
-			height = 102,
-			frame_count = 1,
-			variation_count = 1,
-			axially_symmetrical = false,
-			direction_count = 4,
-			shift = util.by_pixel(1, -0.5),
-			scale = 0.5,
-		})
-	end
-
-	-- Setup logistics technologies
-	local technology = data.raw["technology"][properties.technology]
-
-	if technology then
-		---@type data.IconData[]
-		local icon_data = { {
-			icon = "__prismatic-belts__/graphics/technology/base/" .. properties.technology .. ".png",
-			icon_size = 256,
-		} }
-
-		technology.icons = icon_data
-	end
+	::continue::
 end

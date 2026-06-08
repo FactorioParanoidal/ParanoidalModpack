@@ -1,8 +1,3 @@
--- Copyright (c) Kirazy
--- Part of Prismatic Belts
---
--- See LICENSE.md in the project directory for license information.
-
 --- Provides enumerations for use in Prismatic Belts.
 ---
 ---### Examples
@@ -46,9 +41,34 @@ defines_api.belt_sprites = {
 	fast = 2,
 	---Indicates turbo belt sprites.
 	---
-	---Used for faster belt speeds, typically more than 75 items/s.
+	---Used for faster belt speeds, typically more than 60 items/s.
 	---Has twice as many frames as `defines.belt_sprites.fast` and larger spacing between arrows. Used for fastest belt speeds.
 	turbo = 3,
+}
+
+---Represents the different types of transport belt sprite sheets that have been included as
+---pre-colored sprite sheets.
+---
+---Pre-colored sprite sheets are more performative than multi-layered dynamic sprite sheets and so
+---these have been included to support reskinning the standard base-Factorio transport belts.
+---@enum PrismaticBelts.Api.Defines.BeltPresets
+defines_api.belt_presets = {
+	---Indicates the (yellow) transport belt animation set should be used.
+	---
+	---Should be used with slower belt speeds, less than 30 items/s.
+	standard = 1,
+	---Indicates the fast (red) transport belt animation set should be used.
+	---
+	---Should be used with faster belt speeds, between 30 items/s and 60 items/s.
+	fast = 2,
+	---Indicates the express (blue) transport belt animation set should be used. 
+	---
+	---Should be used with faster belt speeds, between 30 items/s and 60 items/s.
+	express = 3,
+	---Indicates the turbo (green) transport belt animation set should be used.
+	---
+	---Should be used with fastest belt speeds, more than 60 items/s.
+	turbo = 4,
 }
 
 return defines_api
