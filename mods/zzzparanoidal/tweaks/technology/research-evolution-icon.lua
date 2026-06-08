@@ -16,7 +16,7 @@ local effect_keys = {
 
 for _, tech in pairs(data.raw.technology) do
     if tech.effects then
-        for _, effect in pairs(tech.effects) do
+        for _, effect in ipairs(tech.effects) do
             if
                 effect.type == "nothing"
                 and type(effect.effect_description) == "table"
