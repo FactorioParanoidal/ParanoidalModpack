@@ -17,11 +17,19 @@ storage.chunk_data = storage.chunk_data or {}
 storage.biters = storage.biters or {}
 storage.chunk_que = storage.chunk_que or {}
 storage.residual_records = storage.residual_records or {}
+storage.recorded_characters = storage.recorded_characters or {}
 
 
 -- Mod Config
 script.on_init(mod_addons.integrate_mods)
-script.on_configuration_changed(mod_addons.integrate_mods)
+script.on_configuration_changed(function(data)
+    -- Check if any mods actually changed
+    if not data.mod_changes or next(data.mod_changes) == nil then return end
+
+    game.print("Stuckez12 Radiation: Detected change in mod configuration. Defaulting radiated items/fluids")
+
+    mod_addons.integrate_mods()
+end)
 
 
 -- Interval damage event

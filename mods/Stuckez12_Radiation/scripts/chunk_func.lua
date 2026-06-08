@@ -129,9 +129,6 @@ function chunk_func.update_concurrent_damage(character)
 
             local chunk = storage.chunk_data[surface][x][y]
 
-            local chests = chunk.chest or {}
-            local damage = 0
-
             chunk.last_updated = chunk.last_updated or 0
 
             if chunk.last_updated >= game.tick then
@@ -139,32 +136,6 @@ function chunk_func.update_concurrent_damage(character)
             end
 
             chunk_func.add_chunk_to_que(surface, x, y)
-
-            -- for _, chest in pairs(chests) do
-            --     if not chest.valid then goto invalid end
-
-            --     local inv = chest.get_inventory(defines.inventory.chest)
-
-            --     for i = 1, #inv do
-            --         local item = inv[i]
-
-            --         if item and item.valid_for_read then
-            --             local value = storage.radiation_items[item.name]
-
-            --             if not value then goto skip_item end
-
-            --             damage = damage + (item.count * value)
-            --         end
-
-            --         ::skip_item::
-            --     end
-
-            --     ::invalid::
-            -- end
-
-            -- chunk.damage = damage
-            -- chunk.effect_dist = math.min(math.floor(damage / 50), chunk_radius)
-            -- chunk.last_updated = game.tick + time_ext + (20 * math.random(10))
 
             ::skip_re_calc::
 

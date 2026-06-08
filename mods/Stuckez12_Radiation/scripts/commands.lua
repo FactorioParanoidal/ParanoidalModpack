@@ -1,6 +1,7 @@
 local player_management = require("scripts.player_management")
 local mod_addons = require("scripts.mod_integrations")
 local chunk_func = require("scripts.chunk_func")
+local item_window = require("scripts.gui_item")
 
 commands.add_command("radiation_add_self", "Add current character to radiation damage list", function(command)
     if command.player_index then
@@ -69,4 +70,17 @@ commands.add_command("chest_migrate", "Add all chests to storage", function(comm
 
     game.print("Stuckez12 Radiation: Added all chests to memory")
     log("Adding all chests to feature memory")
+end)
+
+commands.add_command("modify_items", "Creates GUI window to change individual item radiation values", function(command)
+    if command.player_index then
+        
+        local player = game.get_player(command.player_index)
+
+        if player and player.valid and player.character.valid then
+            item_window.create_window(player)
+
+            log("Fluid/Item config GUI window created")
+        end
+    end
 end)
