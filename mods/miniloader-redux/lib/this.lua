@@ -1,4 +1,3 @@
----@meta
 ----------------------------------------------------------------------------------------------------
 --- Initialize this mod's globals
 ----------------------------------------------------------------------------------------------------
@@ -8,6 +7,7 @@
 ---@field MiniLoader miniloader.Controller
 ---@field Snapping miniloader.Snapping
 ---@field Console miniloader.Console
+---@field Gui miniloader.Gui
 This = {
     other_mods = {
         ['PickerDollies'] = 'picker-dollies',
@@ -22,5 +22,5 @@ if script then
     This.MiniLoader = require('scripts.controller')
     This.Snapping = require('scripts.snapping')
     This.Console = require('scripts.console')
-    require('scripts.gui')
+    This.Gui = require('scripts.gui')
 end

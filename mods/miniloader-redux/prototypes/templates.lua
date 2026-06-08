@@ -1,4 +1,3 @@
----@meta
 ------------------------------------------------------------------------
 -- Loader templates
 ------------------------------------------------------------------------
@@ -11,9 +10,11 @@ local supported_mods = {
     ['space-age'] = 'space_age',
     ['matts-logistics'] = 'matt',
     ['Krastorio2'] = 'krastorio',
+    ['bobelectronics'] = 'bob_electronics',
     ['boblogistics'] = 'bob',
     ['Load-Furn-2-SpaceAgeFix'] = 'adv_furnace_2',
     ['space-exploration'] = 'space_exploration',
+    ['TurboBelt'] = 'turbo_belt',
 }
 
 -- contains switches for all enabled game modes. The keys are the canonical
@@ -72,6 +73,10 @@ local function check_space_exploration()
     return game_mode.space_exploration
 end
 
+local function check_turbo_belt()
+    return game_mode.turbo_belt
+end
+
 ---@return data.VoidEnergySource energy_source
 ---@return number consumption_amount
 ---@return number drain_amount
@@ -90,15 +95,17 @@ local max_loader = game_mode.space_age and 'turbo' or 'express'
 
 ---@param data table<string, any>
 local function select_data(data)
-    for name in pairs(game_mode) do
-        if name ~= 'base' then
-            -- mod + space age?
-            if game_mode.space_age then
-                local sa_name = name .. '_space_age'
-                if data[sa_name] then return data[sa_name] end
+    for name, present in pairs(game_mode) do
+        if present then
+            if name ~= 'base' then
+                -- mod + space age?
+                if game_mode.space_age and name ~= 'space_age' then
+                    local sa_name = name .. '_space_age'
+                    if data[sa_name] then return data[sa_name] end
+                end
+                -- just mod?
+                if data[name] then return data[name] end
             end
-            -- just mod?
-            if data[name] then return data[name] end
         end
     end
 
@@ -139,6 +146,7 @@ local loaders = {
                 prerequisites = function()
                     return select_data {
                         base = { 'logistics', 'steel-processing', 'electronics' },
+                        bob_electronics = { 'logistics', 'steel-processing', 'bob-electronics' },
                     }
                 end,
                 speed_config = {
@@ -233,9 +241,12 @@ local loaders = {
         end,
     },
 
-    -- turbo miniloader, space age game
+    -- turbo miniloader, space age game or turbo belt mod loaded
+    -- this one is special as the same entity should be enabled if either condition is true
     ['turbo'] = {
-        condition = check_space_age,
+        condition = function()
+            return check_space_age() or check_turbo_belt()
+        end,
         data = function(dash_prefix)
             local previous = 'express'
 
@@ -257,7 +268,9 @@ local loaders = {
                 end,
                 prerequisites = function()
                     return select_data {
+                        -- space age and turbo belt are mutually exclusive
                         space_age = { 'turbo-transport-belt', 'metallurgic-science-pack', const:name_from_prefix('express'), },
+                        turbo_belt = { 'turbo-transport-belt', const:name_from_prefix('express'), },
                     }
                 end,
                 speed_config = {

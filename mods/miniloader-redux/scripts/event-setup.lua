@@ -49,7 +49,7 @@ end
 ---@param event EventData.on_built_entity | EventData.on_robot_built_entity | EventData.on_space_platform_built_entity | EventData.script_raised_revive | EventData.script_raised_built
 local function on_entity_created(event)
     local entity = event and event.entity
-    if not entity then return end
+    if not (entity and entity.valid) then return end
 
     local pdata = event.player_index and Player.pdata(event.player_index)
     ---@type miniloader.PreBuild?
@@ -87,16 +87,6 @@ local function on_entity_died(event)
     if not (event.unit_number) then return end
 
     This.MiniLoader:destroy(event.unit_number)
-end
-
---------------------------------------------------------------------------------
--- Entity destruction
---------------------------------------------------------------------------------
-
----@param event EventData.on_object_destroyed
-local function on_object_destroyed(event)
-    -- main entity destroyed
-    This.MiniLoader:destroy(event.useful_id)
 end
 
 --------------------------------------------------------------------------------
@@ -151,13 +141,33 @@ local function on_entity_settings_pasted(event)
 end
 
 --------------------------------------------------------------------------------
+-- undo/redo
+--------------------------------------------------------------------------------
+
+---@param event EventData.on_undo_applied
+local function on_undo_redo_applied(event)
+    for _, action in pairs(event.actions) do
+        if action.type == 'copy-entity-settings' and action.target and action.entity_with_previous_settings then
+            local inserter = game.surfaces[action.surface_index].find_entity(action.target.name, action.target.position)
+            if inserter and inserter.valid then
+                local ml_entity = This.MiniLoader:getEntity(inserter.unit_number)
+                if ml_entity then
+                    ml_entity.config.inserter_config = This.MiniLoader:readConfigFromBlueprintEntity(action.entity_with_previous_settings, ml_entity)
+                    This.MiniLoader:reconfigure(ml_entity)
+                end
+            end
+        end
+    end
+end
+
+--------------------------------------------------------------------------------
 -- serialization for Blueprinting and Tombstones
 --------------------------------------------------------------------------------
 
 ---@param entity LuaEntity
 ---@return table<string, any>?
 local function serialize_config(entity)
-    if not entity and entity.valid then return end
+    if not (entity and entity.valid) then return end
 
     return This.MiniLoader:serializeConfiguration(entity)
 end
@@ -165,7 +175,7 @@ end
 ---@param entity LuaEntity
 ---@return table<string, any>?
 local function add_snapping_tag(entity)
-    if not entity and entity.valid then return end
+    if not (entity and entity.valid) then return end
 
     return This.MiniLoader:addSnappingTag(entity)
 end
@@ -276,11 +286,12 @@ local function register_events()
     Framework.ghost_manager:registerForName(const.supported_type_names)
     Framework.ghost_manager:addGhostCallback(ghost_callback)
 
-    -- entity destroy (can't filter on that)
-    Event.register(defines.events.on_object_destroyed, on_object_destroyed)
-
     -- Configuration changes (startup)
     Event.on_configuration_changed(on_configuration_changed)
+
+    -- Undo/Redo
+    Event.register(defines.events.on_undo_applied, on_undo_redo_applied)
+    Event.register(defines.events.on_redo_applied, on_undo_redo_applied)
 
     -- manage blueprinting and copy/paste
     Framework.blueprint:registerCallbackForNames(const.supported_type_names, serialize_config)

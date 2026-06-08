@@ -24,6 +24,9 @@ The genius of the 1x1 Miniloader module is that it checks all the boxes. Hence M
 - Rotates better than the old miniloader (flips through belt directions and orientation).
 - Supports Fast replacement, Blueprinting, Copy&Paste, Cloning.
 - Supports a simple "chute" loader that is available early in the game (configurable).
+- Supports undo/redo for configuration changes
+- Supports parameterized blueprints
+- When spoiling is enabled in the game, the GUI allows setting the spoil priority (This needs testing!)
 
 There are three available tiers in the base game ("Vanilla", Fast and Express) and five when playing Space Age (additionally Turbo and Stack). I made a conscious decision to not support any additional tiers or enable stacking in the base game. The mod tries to follow the "spirit" of the game and there are other options (such as Loader Modernized) that work fine if this is not wanted.
 
@@ -34,6 +37,7 @@ Miniloader supports some other mods:
 - [Bob's Logistics](https://mods.factorio.com/mod/boblogistics)
 - [Advanced Furnaces 2 SpaceAgeFix](https://mods.factorio.com/mod/Load-Furn-2-SpaceAgeFix)
 - [Space Exploration](https://mods.factorio.com/mod/space-exploration)
+- [TurboBelt](https://mods.factorio.com/mod/TurboBelt)
 
 The miniloaders are activated if the corresponding module is detected.
 
@@ -182,4 +186,4 @@ Tear down and rebuild all internal inserters. This is useful for debugging if a 
 
 ## Legal
 
-(C) 2024-2025 Henning Schmiedehausen (hgschmie). Released under the MIT License.
+(C) 2024-2026 Henning Schmiedehausen (hgschmie). Released under the MIT License.

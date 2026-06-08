@@ -1,4 +1,3 @@
----@meta
 ------------------------------------------------------------------------
 -- Item generation code
 ------------------------------------------------------------------------
@@ -19,7 +18,9 @@ local FORMAT_STRING = '%.2fkW'
 -- unlike the miniloader, it manages all other entities fully. It also uses different inserter entities for
 -- primary and hidden inserters which allows for correct power stats and blueprints.
 
+---@diagnostic disable-next-line: undefined-global
 local loader_connector_definitions = circuit_connector_definitions.create_vector(
+---@diagnostic disable-next-line: undefined-global
     universal_connector_template,
     {
         { variation = 26, main_offset = util.by_pixel(1, 11),  shadow_offset = util.by_pixel(1, 12), show_shadow = true },  -- North
@@ -34,7 +35,9 @@ local loader_connector_definitions = circuit_connector_definitions.create_vector
     }
 )
 
+---@diagnostic disable-next-line: undefined-global
 local inserter_connector_definitions = circuit_connector_definitions.create_vector(
+---@diagnostic disable-next-line: undefined-global
     universal_connector_template,
     {
         { variation = 31, main_offset = util.by_pixel(17, 0),  shadow_offset = { 0, 0 }, }, -- North
@@ -50,6 +53,9 @@ local function compute_dash_prefix(name)
     return name .. '-'
 end
 
+---@param tint data.Color
+---@param variant string
+---@param mask_variant string?
 local function icon_gfx(tint, variant, mask_variant)
     if not mask_variant then mask_variant = '' end
 
@@ -135,6 +141,7 @@ local function create_item(params)
 
         -- ItemPrototype
         stack_size = stack_size,
+        ---@diagnostic disable-next-line: undefined-global
         weight = 1000 / stack_size * kg,
         icons = icon_gfx(params.tint, params.entity_gfx),
 
@@ -262,6 +269,7 @@ local function create_entity(params)
         stack_size_bonus               = params.bulk and 4 or speed_config.stack_size_bonus,
         max_belt_stack_size            = params.bulk and 4 or 1,
 
+        ---@diagnostic disable-next-line: undefined-global
         circuit_wire_max_distance      = not params.nerf_mode and default_circuit_wire_max_distance or 0,
         draw_inserter_arrow            = false,
         chases_belt_items              = false,
@@ -303,10 +311,15 @@ local function create_entity(params)
         close_sound                    = { filename = '__base__/sound/open-close/inserter-close.ogg', volume = 0.5 },
         working_sound                  = {
             match_progress_to_activity = true,
+            ---@diagnostic disable-next-line: undefined-global
             sound = sound_variations('__base__/sound/inserter-basic', 5, 0.5, { volume_multiplier('main-menu', 2), volume_multiplier('tips-and-tricks', 1.8) }),
             audible_distance_modifier = 0.3
         },
         fast_replaceable_group         = 'mini-loader',
+        icon_draw_specification        = {
+            scale = 0.5,
+            scale_for_many = 0.75,
+        },
     }
 
     apply_prototype_processors(params, inserter)
@@ -395,6 +408,7 @@ local function create_entity(params)
         energy_source               = void_energy,
         energy_per_item             = '0.0000001W',
 
+        ---@diagnostic disable-next-line: undefined-global
         circuit_wire_max_distance   = default_circuit_wire_max_distance,
         circuit_connector           = loader_connector_definitions,
 

@@ -517,9 +517,11 @@ end
 -- table.invert(b) --returns {'foo' = k1, 'bar' = ?}
 -- @tparam table tbl the table to invert
 -- @treturn table a new table with inverted mapping
-function Table.invert(tbl)
+function Table.invert(tbl, as_string)
     local inverted = {}
-    for k, v in pairs(tbl) do inverted[v] = k end
+    for k, v in pairs(tbl) do
+        inverted[v] = as_string and tostring(k) or k
+    end
     return inverted
 end
 

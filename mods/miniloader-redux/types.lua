@@ -45,6 +45,10 @@
 ---@field prototype_processor miniloader.PrototypeProcessor?
 ---@field global_prototype_processors miniloader.PrototypeProcessor[]
 
+---@class miniloader.ModData
+---@field speed_config miniloader.SpeedConfig
+---@field nerf_mode boolean
+
 ----------------------------------------------------------------------------------------------------
 -- scripts/controller.lua
 ----------------------------------------------------------------------------------------------------

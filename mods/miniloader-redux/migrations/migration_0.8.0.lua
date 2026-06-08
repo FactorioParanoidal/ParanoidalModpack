@@ -16,8 +16,10 @@ for entity_id, entity in pairs(This.MiniLoader:entities()) do
         ---@type miniloader.SpeedConfig
         local speed_config = assert(prototypes.mod_data[const.name].data[entity.main.name].speed_config)
         entity.config.highspeed = speed_config.items_per_second > 240
-        entity.inserters = assert(This.MiniLoader:createInserters(entity.main, speed_config, entity.config))
-
-        This.MiniLoader:reconfigure(entity)
+        local inserters, success = This.MiniLoader:createInserters(entity.main, speed_config, entity.config)
+        if success then
+            entity.inserters = inserters
+            This.MiniLoader:reconfigure(entity)
+        end
     end
 end

@@ -21,7 +21,7 @@ end
 ---@param player_index integer
 ---@return table<string,any?> player_storage
 function FrameworkRuntime:player_storage(player_index)
-    local _, player_data = Player.get(player_index)
+    local player_data = Player.pdata(player_index)
 
     player_data[Framework.STORAGE] = player_data[Framework.STORAGE] or {}
     return player_data[Framework.STORAGE] --[[@as table<string, any?>>]]
