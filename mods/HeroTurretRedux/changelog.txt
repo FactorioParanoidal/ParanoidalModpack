@@ -1,7 +1,43 @@
 ﻿---------------------------------------------------------------------------------------------------
+Version: 1.0.38
+Date: 03/11/2026
+  Fixes:
+    - Fixed bug with prio targets 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.37
+Date: 03/07/2026
+  Fixes:
+    - made ammo range changes an experimental setting, Set to false by default.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.36
+Date: 03/07/2026
+  Fixes:
+    - added artillery turret ammo to use max range
+---------------------------------------------------------------------------------------------------
+Version: 1.0.35
+Date: 03/05/2026
+  Fixes:
+    - fixed bug with priorities for ghosts not sticking if they were from a ranked turret
+    - tweaked the energy capacity of energy based weapons to accomadate their shooting speed
+    - Added turrets max range to ammo that uses range 
+    - fixed Yuoki Turrets not working correctly with the mod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.34
+Date: 02/17/2026
+  Fixes:
+    - bug fixes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.33
+Date: 02/17/2026
+  Fixes:
+    - various bug fixes.
+  Features:
+    - setting to remove turret ranks from ghost view
+    - setting to stop ranked turrets from being copy /pasted and instead use their base verison
+---------------------------------------------------------------------------------------------------
 Version: 1.0.32
 Date: 12/22/2025
-  Fixes :
+  Fixes:
     - fixed an issue with turrets having multiple base visualtion layers causing a crash 
     - fixed an issue with fluid turrets on rank up using up all the oil on their fluid network
 ---------------------------------------------------------------------------------------------------
@@ -99,8 +135,7 @@ Date: 03/24/2025
     - changed the max threshold of the inidividual turret rank settings from 20 to 100
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.14
-  Info :
-    - Since the kills / damage done needed for ranks were changed, you might see some of your turrets downgrade ( or even upgrade if it had enough kills) to other ranks.
+  Info::
 
   Tweaks:
     - Reworded some of the setting descriptions to be more clear on what they do.

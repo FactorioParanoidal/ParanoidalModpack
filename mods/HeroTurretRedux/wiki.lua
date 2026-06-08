@@ -21,7 +21,7 @@ heroturrets_wiki =
 			{type = "line"},
 			{type = "text", text = "Hero Turret Private 2nd Class " .. heroturrets.defines.turret_levelup_one .. " Kills"},
 			{type = "text", text = "Hero Turret Corporal " .. heroturrets.defines.turret_levelup_two .." Kills"},
-			{type = "text", text = "Hero Turret Sargent  " .. heroturrets.defines.turret_levelup_three .." Kills"},
+			{type = "text", text = "Hero Turret Sergeant  " .. heroturrets.defines.turret_levelup_three .." Kills"},
 			{type = "text", text = "Hero Turret General " .. heroturrets.defines.turret_levelup_four .." Kills"},
 		},
 	},{

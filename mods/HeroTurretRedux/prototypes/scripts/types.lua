@@ -50,6 +50,18 @@ local cooldownBuffsTable = nil
 local attackSpeedBuffsTable = nil
 local turretRotationBuffsTable = nil
 
+--- Parses a Factorio Energy string (e.g. "5MJ", "300W") and returns the value
+--- multiplied by factor as a valid Energy string (e.g. "10000000J", "600W").
+--- Handles all SI prefixes supported by Factorio: k M G T P E Z Y R Q
+local scale_energy_value = function(value, factor)
+    if type(value) ~= "string" or value == "infinity" then return value end
+    local si = {k=1e3, M=1e6, G=1e9, T=1e12, P=1e15, E=1e18, Z=1e21, Y=1e24, R=1e27, Q=1e30}
+    local num, prefix, unit = value:match("^([%d%.]+)([kMGTPEZYRQ]?)([WJ])$")
+    if num == nil then return value end
+    local scaled = tonumber(num) * (si[prefix] or 1) * factor
+    return string.format("%.0f", scaled) .. unit
+end
+
 local types_with_items = {}
 for category, prototypes in pairs(data.raw) do
   local name, prototype = next(prototypes)
@@ -288,7 +300,6 @@ local local_create_turret_with_tags = function(turret)
     item_with_tags.hidden_in_factoriopedia = true
     item_with_tags.name = name_with_tags
     item_with_tags.localised_name = turret.item.localised_name
-    item_with_tags.localised_description = turret.item.localised_desc
     item_with_tags.localised_description = turret.item.localised_desc
     item_with_tags.order = ((turret.item.order or "[")..turret.item.name.."]")..".tag"
     turret.entity.minable.result = name_with_tags
@@ -641,7 +652,8 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             order = ((turret.item.order or "[")..turret.item.name.."]").."["..rank.."]",
             place_result = place_name,            
             stack_size = turret.item.stack_size or 1,
-            hidden_in_factoriopedia = true
+            hidden_in_factoriopedia = true,
+            hidden = settings.startup["heroturrets-hide-ranked-from-ghost-cursor"].value  -- Hide from ghost cursor selection in remote view
         }
         
         local item_with_tags = {
@@ -657,8 +669,10 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             order = ((turret.item.order or "[")..turret.item.name.."]").."["..rank.."].tag",
             place_result = place_name,
             stack_size = turret.item.stack_size or 1,
-            hidden_in_factoriopedia = true
+            hidden_in_factoriopedia = true,
+            hidden = settings.startup["heroturrets-hide-ranked-from-ghost-cursor"].value  -- Hide from ghost cursor selection in remote view
         }
+        
         
         local recipe = nil
         --if turret.recipe ~= nil  then
@@ -708,6 +722,7 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 
         local entity = table.deepcopy(turret.entity)
         entity.name = entity_name
+        entity.next_upgrade = nil  -- Clear next_upgrade from source to prevent conflicts with hidden mining results
         entity.max_health = (math.floor((entity.max_health*max_health_custom_mod)/10)*10)
         if entity.rotation_speed ~= nil then entity.rotation_speed = entity.rotation_speed*turret_rotation_custom_mod end
         if entity.preparing_speed ~= nil then entity.preparing_speed = entity.preparing_speed* attack_speed_custom_mod end
@@ -810,6 +825,26 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
                     local gun_name = "hero-turret-gun-"..rank.."-for-" ..entity.gun
                     if gun.attack_parameters.cooldown ~= nil then gun.attack_parameters.cooldown = (gun.attack_parameters.cooldown / cooldown_custom_mod)  end
                     if gun.attack_parameters.range ~= nil then gun.attack_parameters.range = gun.attack_parameters.range * range_custom_mod end
+                    -- Track the gun's ammo category range so local_update_ammo_ranges can patch ammo deliveries.
+                    -- Use manual_range_modifier if present, since that sets the true max targeting distance.
+                    if gun.attack_parameters.ammo_category ~= nil and gun.attack_parameters.range ~= nil then
+                        local cat = gun.attack_parameters.ammo_category
+                        local effective_range = gun.attack_parameters.range
+                        if entity.manual_range_modifier ~= nil then
+                            effective_range = effective_range * entity.manual_range_modifier
+                        end
+                        if cannon_ammo_ranges[cat] == nil or cannon_ammo_ranges[cat] < effective_range then
+                            cannon_ammo_ranges[cat] = effective_range
+                        end
+                    end
+                    if gun.attack_parameters.ammo_type ~= nil and gun.attack_parameters.ammo_type.action ~= nil then
+                        if gun.attack_parameters.ammo_type.action.action_delivery ~= nil and gun.attack_parameters.ammo_type.action.action_delivery.max_length ~= nil then
+                            gun.attack_parameters.ammo_type.action.action_delivery.max_length = gun.attack_parameters.ammo_type.action.action_delivery.max_length * range_custom_mod
+                        end
+                        if gun.attack_parameters.ammo_type.action.action_delivery ~= nil and gun.attack_parameters.ammo_type.action.action_delivery.max_range ~= nil then
+                            gun.attack_parameters.ammo_type.action.action_delivery.max_range = gun.attack_parameters.ammo_type.action.action_delivery.max_range * range_custom_mod
+                        end
+                    end
                     gun.name = gun_name
                     gun.localised_name = localised_name
                     gun.localised_description = localised_desc
@@ -829,6 +864,19 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
         entity.localised_name = localised_name
         entity.localised_description = localised_desc
         entity.hidden_in_factoriopedia = true
+
+        -- Scale electric energy source to match the increased firing rate.
+        -- Firing rate is multiplied by cooldown_custom_mod, so energy/s must scale proportionally.
+        -- This keeps the status-panel max-consumption display accurate and ensures the turret
+        -- can actually draw enough power to sustain its buffed fire rate.
+        if entity.energy_source ~= nil and entity.energy_source.type == "electric" then
+            if entity.energy_source.input_flow_limit ~= nil then
+                entity.energy_source.input_flow_limit = scale_energy_value(entity.energy_source.input_flow_limit, cooldown_custom_mod)
+            end
+            if entity.energy_source.buffer_capacity ~= nil then
+                entity.energy_source.buffer_capacity = scale_energy_value(entity.energy_source.buffer_capacity, cooldown_custom_mod)
+            end
+        end
         
         local left = nil        
         local top = nil
@@ -968,12 +1016,14 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 				if settings.startup["heroturrets-allow-artillery-turrets"].value == false and turret.entity.type == "artillery-turret" then
 
 				else
-					if turret.entity.next_upgrade == nil then turret.entity.next_upgrade = entity_name end
+					-- Commented out to prevent ranked turrets from appearing in ghost cursor selection
+					-- if turret.entity.next_upgrade == nil then turret.entity.next_upgrade = entity_name end
 				end
 			else
 				if settings.startup["heroturrets-allow-artillery-turrets"].value == false and turret.entity.type == "artillery-turret" then
 				else
-					if turret.entity.next_upgrade == nil then turret.entity.next_upgrade = entity_name end
+					-- Commented out to prevent ranked turrets from appearing in ghost cursor selection
+					-- if turret.entity.next_upgrade == nil then turret.entity.next_upgrade = entity_name end
 				end
 			end
 		else
@@ -1161,12 +1211,74 @@ end
 
 
 
---not used
-local local_update_ammo_ranges = function()    
+local local_update_ammo_ranges = function()
+    if next(cannon_ammo_ranges) == nil then return end
 
+    local function update_delivery(delivery, min_range)
+        if delivery == nil then return end
+        if delivery.type ~= nil then
+            -- single TriggerDelivery
+            if delivery.max_range ~= nil then
+                if delivery.max_range < min_range then
+                    delivery.max_range = min_range
+                end
+            elseif delivery.type == "projectile" then
+                -- No explicit max_range: Factorio may bake the original gun's range at
+                -- load time, so we set it explicitly to allow the full scaled range.
+                delivery.max_range = min_range
+            end
+            if delivery.max_length ~= nil and delivery.max_length < min_range then
+                delivery.max_length = min_range
+            end
+        else
+            -- array of TriggerDelivery
+            for _, d in ipairs(delivery) do
+                update_delivery(d, min_range)
+            end
+        end
+    end
+
+    local function update_action(action, min_range)
+        if action == nil then return end
+        if action.type ~= nil then
+            -- single TriggerItem
+            update_delivery(action.action_delivery, min_range)
+        else
+            -- array of TriggerItems
+            for _, a in ipairs(action) do
+                update_action(a, min_range)
+            end
+        end
+    end
+
+    local function process_ammo_type(ammo_type, category_override)
+        local category = (ammo_type ~= nil and ammo_type.category) or category_override
+        if ammo_type == nil or category == nil then return end
+        local needed_range = cannon_ammo_ranges[category]
+        if needed_range == nil then return end
+        update_action(ammo_type.action, needed_range)
+    end
+
+    for _, ammo in pairs(data.raw["ammo"]) do
+        if ammo.ammo_type ~= nil then
+            if ammo.ammo_type.category ~= nil then
+                process_ammo_type(ammo.ammo_type)
+            elseif ammo.ammo_category ~= nil then
+                -- ammo_type has no inline category; use the item-level ammo_category
+                process_ammo_type(ammo.ammo_type, ammo.ammo_category)
+            else
+                for _, at in ipairs(ammo.ammo_type) do process_ammo_type(at) end
+            end
+        end
+        if ammo.ammo_types ~= nil then
+            for _, at in ipairs(ammo.ammo_types) do process_ammo_type(at) end
+        end
+    end
 end
 
 if data ~= nil and (data_final_fixes == true or data_updates == true) then
    local_create_turrets()
-   local_update_ammo_ranges()
+   if settings.startup["heroturrets-update-ammo-ranges"].value == true then
+      local_update_ammo_ranges()
+   end
 end

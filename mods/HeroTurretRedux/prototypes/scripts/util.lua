@@ -172,7 +172,7 @@ local local_create_icon = function(base_icons, new_icons, options)
         table.insert(base_icons, icon)
     end
     for i=1, #base_icons do 
-        if type(base_icons[i].shift) ~= table then base_icons[i].shift = {0,0} end
+        if type(base_icons[i].shift) ~= "table" then base_icons[i].shift = {0,0} end
     end
     return base_icons
 end
@@ -186,7 +186,7 @@ local local_table_remove = function(tble, value)
         if local_is_int(value) == true then
             table.remove(tble, value)
         else
-            for k, v in next, table do 
+            for k, v in next, tble do 
                 if v ~= value then
                     table.insert(new_table, v)
                 end

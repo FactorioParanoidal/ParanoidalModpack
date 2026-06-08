@@ -206,7 +206,7 @@ heroturrets.register_script = function(script)
 					register_event_for_in(heroturrets.on_added_by_name, function(entity) table.insert(script.on_tick.table(), entity) end,s)
 					register_event_for_in(heroturrets.on_removed_by_name, function(entity) 
 						local t = script.on_tick.table()
-						table.remove(table, index_of(t, entity)) 
+						table.remove(t, index_of(t, entity)) 
 					end,s)	
 				end
 			end
@@ -509,8 +509,8 @@ end
 
 --[[done]]
 local local_on_selected = function(event)
-	player = game.players[event.player_index]
-	entity = player.selected	
+	local player = game.players[event.player_index]
+	local entity = player.selected	
 	for k=1, #heroturrets.on_selected do local v = heroturrets.on_selected[k]
 		v(player,entity)
 	end
@@ -558,6 +558,44 @@ local local_on_player_rotated_entity = function(event)
 	local_on_standard_entity_event(entity,heroturrets.on_adjust,heroturrets.on_adjust_by_name)
 	end]]
 
+local local_on_player_setup_blueprint = function(event)
+	-- Only process if the setting is disabled (default behavior is to replace ranked turrets with base)
+	if settings.global["heroturrets-allow-blueprint-rank"].value then
+		return
+	end
+	
+	local player = game.players[event.player_index]
+	local blueprint = player.blueprint_to_setup
+	if not blueprint or not blueprint.valid_for_read then
+		blueprint = player.cursor_stack
+	end
+	
+	if not blueprint or not blueprint.valid_for_read or not blueprint.is_blueprint then
+		return
+	end
+	
+	local entities = blueprint.get_blueprint_entities()
+	if not entities then return end
+	
+	local modified = false
+	for i, entity in pairs(entities) do
+		-- Check if this is a ranked turret (starts with "hero-turret-")
+		if starts_with(entity.name, "hero-turret-") then
+			-- Extract the base turret name by removing the rank prefix
+			-- Format is: hero-turret-{rank}-for-{base_name}
+			local base_name = entity.name:match("hero%-turret%-%d+%-for%-(.+)")
+			if base_name then
+				entity.name = base_name
+				modified = true
+			end
+		end
+	end
+	
+	if modified then
+		blueprint.set_blueprint_entities(entities)
+	end
+end
+
 script.on_event(defines.events.on_player_toggled_map_editor,function(event)
 	if is_map_editor == true then is_map_editor = false
 	else is_map_editor = true end
@@ -590,5 +628,6 @@ script.on_event(defines.events.on_player_rotated_entity,local_on_player_rotated_
 --script.on_event("automate-target",local_on_adjust)
 
 script.on_event(defines.events.on_entity_cloned,local_on_entity_cloned) 
+script.on_event(defines.events.on_player_setup_blueprint, local_on_player_setup_blueprint)
 
 -- FIX LATER script.on_event(defines.events.on_gui_click, landmine_on_gui_click)

@@ -7,7 +7,6 @@ if not heroturrets.defines then require ("prototypes.scripts.defines") end
 --[[create local references]]
 --[[util]]
 local is_valid = heroturrets.util.is_valid
-local print = heroturrets.util.print
 local starts_with = heroturrets.util.starts_with
 local ends_with = heroturrets.util.ends_with
 local table_contains = heroturrets.util.table.contains
@@ -184,7 +183,7 @@ local local_replace_turret = function(entity,recipe)
 
 	local fluid = {}
 	if entity.fluidbox ~= nil then 
-	  for k = 1, #entity.fluidbox do fb = entity.fluidbox[k]
+	  for k = 1, #entity.fluidbox do local fb = entity.fluidbox[k]
 		if fb ~=nil and fb.name ~= nil then
 			table.insert(fluid,fb)
 		end
@@ -216,7 +215,7 @@ local local_replace_turret = function(entity,recipe)
 	end
 
 	if fluid ~=nil then
-		for k = 1, #fluid do fb = fluid[k]
+		for k = 1, #fluid do local fb = fluid[k]
 			--Commenting out for now until I can get a fix for the whole fluid network being drained
 			--new_entity.fluidbox[k] = fb
 		end
@@ -224,7 +223,9 @@ local local_replace_turret = function(entity,recipe)
 	--build out the target priority list in the new turret entity
 	if targets_Table ~= nil then
 		for index, priority_target in pairs(targets_Table) do
-			new_entity.set_priority_target(index,priority_target)
+			if priority_target ~= nil and priority_target.valid then
+				new_entity.set_priority_target(index,priority_target)
+			end
 		end
 	end
 	
@@ -276,7 +277,7 @@ local get_Custom_Damage_Table = function()
 	if useCustomDamageTable then
 		local customString = local_trim(customDamageTable) 
 
-		if customString == 0 then return nil end
+		if customString == "" then return nil end
 		return parseCustomRankTable(customString)		
     
 	end 
@@ -286,7 +287,7 @@ local get_Custom_Kill_Table = function()
 	if useCustomKillsTable then
 		local customString = local_trim(customKillsTable) 
 
-		if customString == 0 then return nil end
+		if customString == "" then return nil end
 
     	return parseCustomRankTable(customString)		
 	end 
@@ -450,7 +451,7 @@ local local_turret_added = function(entity,event)
 		for k = 1, rank_count do
 			if starts_with(event.entity.name,"hero-turret-"..k) then
 				local dmg = event.entity.damage_dealt
-				if dgm == nil then dgm = 0 end
+				if dmg == nil then dmg = 0 end
 				local kills = event.entity.kills
 				if kills == nil then kills = 0 end
 				event.entity.kills = math.min(4294967295,math.max(local_get_kill_table()[k]*multiplier, kills))
@@ -495,7 +496,26 @@ local local_turret_added = function(entity,event)
 	end
 
 local local_turret_removed = function(entity,event)	
-	
+
+	-- Capture priority targets from dying ranked turrets while the entity is still valid.
+	-- on_post_entity_died fires after the entity is gone, so we store them here by unit_number
+	-- for retrieval during ghost replacement.
+	if event ~= nil and event.name == defines.events.on_entity_died then
+		if is_valid(entity) and starts_with(entity.name, "hero-turret-") and entity.unit_number ~= nil then
+			if storage.heroturrets.dying_turret_targets == nil then
+				storage.heroturrets.dying_turret_targets = {}
+			end
+			local ignore_unprioritised = nil
+			if entity.type ~= "artillery-turret" then
+				ignore_unprioritised = entity.ignore_unprioritised_targets
+			end
+			storage.heroturrets.dying_turret_targets[entity.unit_number] = {
+				targets = build_priority_targets(entity),
+				ignore_unprioritised = ignore_unprioritised
+			}
+		end
+	end
+
 	if event ~= nil and event.cause ~= nil and table_contains(turret_types,event.cause.type) and event.cause.kills ~=nil then						
 		if settings.startup["heroturrets-allow-artillery-turrets"].value == false and event.cause.type == "artillery-turret" then return end
 		
@@ -582,15 +602,41 @@ local local_turret_removed = function(entity,event)
 local local_on_post_entity_died = function(event)
 	if settings.global["heroturrets-allow-ghost-rank"].value then return end
 	if event.ghost ~= nil then	
-		local fstr = event.ghost.ghost_name :match("^hero%-turret%-%d%-for%-")
+		local fstr = event.ghost.ghost_name:match("^hero%-turret%-%d+%-for%-")
 		if fstr ~=nil then
 			local base_entity = event.ghost.ghost_name:sub(#fstr+1)
 			local force = event.ghost.force
 			local direction = event.ghost.direction
 			local position = event.ghost.position
 			local surface = event.ghost.surface
+
+			-- Prefer targets captured from the live entity; fall back to reading from the ghost.
+			local targets_table = {}
+			local ignore_unprioritised = nil
+			local stored_data = storage.heroturrets.dying_turret_targets ~= nil
+				and event.unit_number ~= nil
+				and storage.heroturrets.dying_turret_targets[event.unit_number]
+			if stored_data then
+				targets_table = stored_data.targets
+				ignore_unprioritised = stored_data.ignore_unprioritised
+				storage.heroturrets.dying_turret_targets[event.unit_number] = nil
+			else
+				targets_table = build_priority_targets(event.ghost)
+				ignore_unprioritised = event.ghost.ignore_unprioritised_targets
+			end
+
 			event.ghost.destroy()
-			surface.create_entity{name = "entity-ghost", inner_name = base_entity, force = force, position = position, direction = direction}
+			local new_ghost = surface.create_entity{name = "entity-ghost", inner_name = base_entity, force = force, position = position, direction = direction}
+			if new_ghost ~= nil then
+				for index, priority_target in pairs(targets_table) do
+					if priority_target ~= nil and priority_target.valid then
+						pcall(new_ghost.set_priority_target, index, priority_target)
+					end
+				end
+				if ignore_unprioritised ~= nil then
+					new_ghost.ignore_unprioritised_targets = ignore_unprioritised
+				end
+			end
 		end
 	end
 	end

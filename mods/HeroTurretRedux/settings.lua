@@ -1,6 +1,13 @@
 ﻿data:extend(
 {
 	{
+		type = "bool-setting",
+		name = "heroturrets-hide-ranked-from-ghost-cursor",
+		setting_type = "startup",
+		default_value = true,
+		order = "aa"
+	},
+	{
 		type = "int-setting",
 		name = "heroturrets-setting-level-up-modifier",
 		setting_type = "startup",
@@ -48,7 +55,7 @@
 		type = "int-setting",
 		name = "heroturrets-setting-artillery-turret-kill-multiplier",
 		setting_type = "startup",
-		default_value = 1.5,
+		default_value = 2,
 		minimum_value = 1,
 		maximum_value = 100,
 		order = "f"
@@ -66,13 +73,13 @@
 		default_value = true,
 		order = "h"
 	},
-	--[[{
+	{
 		type = "bool-setting",
 		name = "heroturrets-allow-blueprint-rank",
 		setting_type = "runtime-global",
 		default_value = false,
 		order = "d"
-	},]]
+	},
 	{
 		type = "string-setting",
 		name = "heroturrets-kill-counter",
@@ -241,5 +248,12 @@
 		default_value = "False",
 		allowed_values = {"True", "False"},
 		order = "ze"
+	},
+	{
+		type = "bool-setting",
+		name = "heroturrets-update-ammo-ranges",
+		setting_type = "startup",
+		default_value = false,
+		order = "zf"
 	}
 })
