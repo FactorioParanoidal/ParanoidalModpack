@@ -1,14 +1,14 @@
 local Data = require('__kry_stdlib__/stdlib/data/data') --[[@as StdLib.Data]]
 local Space = require('__kry_stdlib__/stdlib/data/space')
 
---- Planet (mainly just a placeholder for Space, to automatically wrap around planets)
---- @class StdLib.Data.Planet : StdLib.Data
-local Planet = {
-    __class = 'Planet',
+--- SpaceLocation
+--- @class StdLib.Data.SpaceLocation : StdLib.Data.Space
+local SpaceLocation = {
+    __class = 'SpaceLocation',
 }
 
 -- Custom __index function for function inheritance from both Space and Data.
-Planet.__index = function(table, key)
+SpaceLocation.__index = function(table, key)
     -- Check if the key exists in Space first.
     if Space[key] then
         return Space[key]
@@ -20,11 +20,11 @@ Planet.__index = function(table, key)
     return nil
 end
 
-function Planet:__call(planet)
-    local new = self:get(planet, 'planet')
+function SpaceLocation:__call(space_location)
+    local new = self:get(space_location, 'space-location')
     return new
 end
 
-setmetatable(Planet, Planet)
+setmetatable(SpaceLocation, SpaceLocation)
 
-return Planet
+return SpaceLocation

@@ -7,8 +7,7 @@ end
 local Table = require('__kry_stdlib__/stdlib/utils/table') --[[@as StdLib.Utils.Table]]
 local groups = require('__kry_stdlib__/stdlib/data/modules/groups')
 
-
---TODO fields temporary added
+--TODO fields temporary added ??? I don't know what this comment means
 
 --- Data
 --- @class StdLib.Data : StdLib.Core
@@ -54,7 +53,7 @@ end
 
 --(( METHODS ))--
 
---- Is this a valid object
+--- Is this a valid data object
 --- @param type string? [opt] if present is the object this type
 --- @return boolean
 function Data:is_valid(type)
@@ -113,6 +112,18 @@ end
 function Data:error(msg)
     error(msg or 'Forced Error')
     return self
+end
+
+-- dump the contents of the data object using serpent into error
+function Data:serpent_error()
+    local dump = serpent.block(self._raw, {
+        name = self.name or "object",
+        metatostring = false,
+        nocode = true,
+        comment = false
+    })
+
+    error(dump, 2)
 end
 
 --- Changes the validity of the object.
