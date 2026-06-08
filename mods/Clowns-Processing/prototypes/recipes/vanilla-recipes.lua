@@ -541,7 +541,7 @@ data:extend(
     ingredients =
     {
       {type = "item", name = "clowns-phosphorus-ore", amount = 8},
-      {type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 10},
+      {type = "fluid", name = "sulfuric-acid", amount = 10},
     },
     results =
     {
