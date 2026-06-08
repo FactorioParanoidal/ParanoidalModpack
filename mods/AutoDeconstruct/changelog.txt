@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2026-02-26
+  Bugfixes:
+    - Hotfix for crash introduced in previous update.  next(table_of_tables) == 1, not table_of_tables[1], LOL.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2026-02-22
+  Changes:
+    - Updated translations from Crowdin.
+  Bugfixes:
+    - Fixed that automatic pipe selection would not look at tile and pipe collision masks. Fixes compat with Space Exploration.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: 2025-10-31
   Changes:

@@ -13,7 +13,7 @@ end
 
 function debug_message_with_position(entity, msg)
   if not storage.debug then return end
-  msg_all({"autodeconstruct-debug", util.positiontostr(entity.position) .. " " .. entity.name  .. " " .. msg})
+  msg_all({"autodeconstruct-debug", entity.surface.name .. ":" .. util.positiontostr(entity.position) .. " " .. entity.name  .. " " .. msg})
 end
 
 -- Use a prime number interval so we don't regularly collide with any even-numbered events
