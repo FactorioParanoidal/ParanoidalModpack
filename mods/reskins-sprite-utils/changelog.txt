@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2026-06-07
+  Changes:
+    - Revised `icons.assign_icons_to_prototype_and_related_prototypes` to pattern match for explosion/remnant related entities, as well as retrieve the first configured explosion and corpse for updates, if available on the prototype.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-06-06
+  Features:
+    - Added `sprites.make_rotated_animation_variations_from_spritesheet`, a typed variant of the base-mod equivalent method.
+    - Added `sprites.get_rescaled_prototype`, a non-mutating counterpart to `sprites.rescale_prototype` that returns a rescaled copy.
+    - Added `colors.rgba_to_hsva` and `colors.rgba_to_hsla` for converting RGBA colors to HSVA and HSLA color spaces respectively.
+    - Added `colors.hsva_to_rgba` and `colors.hsla_to_rgba` for converting HSVA and HSLA colors back to RGBA.
+    - Added `colors.normalize` for normalizing a color's channel values to between 0 and 1.
+    - Added `colors.overlay` for alpha-compositing an overlay color on top of a base color in linear light.
+    - Added `colors.blend` for blending two colors uniformly in perceptual color space using Oklab.
+  Changes:
+    - Revised `icons.get_icon_from_prototype` to throw on nil input rather than return nil; for a concrete input the method always returns a concrete output.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2026-05-10
+  Bugfixes:
+    - Fixed that recipe prototypes would have their icon cleared when an icon was required in some circumstances.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2026-05-08
+  Features:
+    - Added new `colors` module with method `colors.from_argb` method taking an 8-character ARGB hex code and converting it to a Factorio RGBA color vector.
+  Changes:
+    - Added "default" as the first item in IconDefaultsType to support tab-autocomplete.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2026-01-11
+  Features:
+    - Initial release.

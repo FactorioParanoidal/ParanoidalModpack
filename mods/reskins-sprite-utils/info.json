@@ -1,0 +1,15 @@
+{
+    "name": "reskins-sprite-utils",
+    "version": "0.1.1",
+    "factorio_version": "2.0",
+    "title": "Artisanal Reskins: Sprite Utils",
+    "author": "Kirazy",
+    "contact": "https://discord.gg/qAvSyzZFPr",
+    "homepage": "https://github.com/kirazy/reskins-sprite-utils",
+    "dependencies": [
+        "base"
+    ],
+    "package": {
+        "git_publish_branch": "main"
+    }
+}
