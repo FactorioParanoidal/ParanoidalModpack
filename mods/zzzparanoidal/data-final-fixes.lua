@@ -51,6 +51,7 @@ require("tweaks.technology.pumps")
 require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
+require("tweaks.technology.research-evolution-icon") -- иконка-график вместо красного "+" у эффекта research_evolution_factor
 
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.map-gen-presets")
