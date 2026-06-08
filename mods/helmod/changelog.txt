@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.13
+Date: 2026-03-20
+  Changes:
+    - Added display hidden products mode preference, to use absolute or relative value for display hidden products
+    - Added open factoriopedia on alt + click on element icon
+    - Added open CreatedOrWhereUsed on alt + shift + click on element icon
+    - Changed block tree navigator more natural
+  Bugfixes:
+    - Fixed move rows into new block to preserve the order of the children
+---------------------------------------------------------------------------------------------------
+Version: 2.2.12
+Date: 2026-02-14
+  Changes:
+    - Add a scroll on list of products and ingredients in the Recipe Edition
+  Bugfixes:
+    - Fixed delete mod_gui_top_frame frame if helmod is owner with command '/helmod close'
+    - Fixed error product amount in objective when product use probability
+    - Fixed pivot icon display, wrong quality match
+---------------------------------------------------------------------------------------------------
 Version: 2.2.11
 Date: 2026-01-04
   Changes:
