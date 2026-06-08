@@ -1,8 +1,5 @@
--- Factorissimo вешает на factory-recursion-t1/t2 пустой эффект-заглушку
--- {type="nothing", effect_description=""}, который рисуется как голый "+".
--- Способность вкладывать фабрики выдаётся скриптом (factory-buildings.lua, по .researched),
--- эффект косметический. Убираем только пустые nothing-эффекты; эффект эволюции
--- (research_evolution_factor, у него описание — таблица) не трогаем.
+-- Рекурсия выдаётся скриптом (по .researched), а не эффектом, поэтому пустой
+-- nothing-эффект Factorissimo (голый "+") можно безопасно убрать.
 if not mods["factorissimo-2-notnotmelon"] then
     return
 end
