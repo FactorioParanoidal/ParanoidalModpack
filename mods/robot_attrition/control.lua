@@ -89,7 +89,7 @@ function bot_crash(bot, n_bots)
     drop.get_inventory(defines.inventory.chest)[1].transfer_stack(item_stack) -- Preserves item-with-entity-data
     drop.order_deconstruction(bot.force)
   end
-  bot.force.get_kill_count_statistics(bot.surface).on_flow(bot.name, -1) --Track bot's death.
+  bot.force.get_kill_count_statistics(bot.surface).on_flow(bot, -1)
   if storage.forcedata and storage.forcedata[bot.force.name] and storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"]
     and n_bots <= 500 * storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"] then
       --game.print("Skip explosion, n_bots "..n_bots.."<= ".. 500 * storage.forcedata[bot.force.name]["robot-attrition-explosion-safety"])

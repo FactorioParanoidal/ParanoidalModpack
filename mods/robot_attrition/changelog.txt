@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 10. 05. 2026
+  Bugfixes:
+    - Fixed that robots with quaality that died were counted as normal quality in kill statistics.
+  Locale:
+    - Updated Spanish translation, thanks to SpiderLove.
+---------------------------------------------------------------------------------------------------
 Version: 0.6.5
 Date: 24. 09. 2025
   Bugfixes:
