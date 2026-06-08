@@ -134,9 +134,7 @@ function ResultLocation.highlight(player, data)
 
   ResultLocation.draw_markers(player, surface_name, data.selection_boxes)
   ResultLocation.draw_arrow(player, surface_name, data.position)
-  if helpers.compare_versions(helpers.game_version, "2.0.56") >= 0 then
-    ResultLocation.draw_chart_marker(player, surface_name, data.group_selection_box)
-  end
+  ResultLocation.draw_chart_marker(player, surface_name, data.group_selection_box)
 end
 
 ---@param player LuaPlayer

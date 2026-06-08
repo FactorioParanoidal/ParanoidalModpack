@@ -1,3 +1,5 @@
+local interop = require("scripts.remote")
+
 local SearchGui = {}
 
 ---@param signal SignalID
@@ -391,6 +393,12 @@ function SearchGui.build(player)
             },
             {type = "empty-widget", style = "fs_flib_titlebar_drag_handle", ignored_by_interaction = true},
             {
+              type = "flow",
+              direction = "horizontal",
+              ref = {"recent_items_flow"},
+              style_mods = {horizontal_spacing = 2},
+            },
+            {
               type = "sprite-button",
               style = "frame_action_button",
               sprite = "fs_flib_pin_white",
@@ -668,6 +676,7 @@ function SearchGui.open(player, player_data)
   refs.frame.visible = true
   refs.frame.bring_to_front()
   player.set_shortcut_toggled("search-factory", true)
+  SearchGui.update_recent_panel(player_data)
 end
 
 ---@param player LuaPlayer
@@ -791,6 +800,10 @@ function SearchGui.start_search(player, player_data, _, _, immediate)
   local elem_button = refs.item_select
   local item = elem_button.elem_value --[[@as SignalID]]
   if item then
+    -- Broadcast item/fluid selection to other mods (interop spec v1)
+    if item.name and (item.type == "item" or item.type == "fluid") then
+      interop.raise_item_selected(player.index, item.name)
+    end
     local force = player.force --[[@as LuaForce]]
     local state = generate_state(refs)
     local state_valid = is_valid_state(state)
@@ -834,6 +847,61 @@ function SearchGui.sort_results_dropdown_changed(player, player_data)
   local dropdown = player_data.refs.sort_results_dropdown
   local sort_results_by_options = {"count", "distance", "name"}
   player_data.sort_results_by = sort_results_by_options[dropdown.selected_index]
+end
+
+---@param player_data PlayerData
+function SearchGui.update_recent_panel(player_data)
+  local flow = player_data.refs.recent_items_flow
+  if not flow or not flow.valid then return end
+
+  flow.clear()
+
+  local items = storage.recent_external_items and storage.recent_external_items[player_data.refs.frame.player_index]
+  if not items or #items == 0 then return end
+
+  for _, entry in ipairs(items) do
+    local sprite_path
+    if prototypes.item[entry.item_name] then
+      sprite_path = "item/" .. entry.item_name
+    elseif prototypes.fluid[entry.item_name] then
+      sprite_path = "fluid/" .. entry.item_name
+    end
+
+    if sprite_path then
+      local proto = prototypes.item[entry.item_name] or prototypes.fluid[entry.item_name]
+      local tooltip = proto and proto.localised_name or entry.item_name
+      gui.add(flow, {
+        {
+          type = "sprite-button",
+          sprite = sprite_path,
+          tooltip = tooltip,
+          style = "frame_action_button",
+          tags = { fs_recent_item_name = entry.item_name },
+          handler = {[defines.events.on_gui_click] = SearchGui.on_recent_item_clicked},
+        }
+      })
+    end
+  end
+end
+
+---@param player LuaPlayer
+---@param player_data PlayerData
+---@param element LuaGuiElement
+function SearchGui.on_recent_item_clicked(player, player_data, element)
+  local item_name = element.tags.fs_recent_item_name
+  if not item_name then return end
+
+  local sig_type
+  if prototypes.item[item_name] then
+    sig_type = "item"
+  elseif prototypes.fluid[item_name] then
+    sig_type = "fluid"
+  else
+    return
+  end
+
+  player_data.refs.item_select.elem_value = { type = sig_type, name = item_name }
+  SearchGui.start_search(player, player_data)
 end
 
 gui.add_handlers(SearchGui,

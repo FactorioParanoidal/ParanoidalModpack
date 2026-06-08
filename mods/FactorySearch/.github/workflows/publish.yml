@@ -1,0 +1,11 @@
+on: push
+name: Publish
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish Mod
+      uses: danbka33/factorio-mod-portal-publish@master
+      env:
+        FACTORIO_MOD_API_KEY: ${{ secrets.FACTORIO_MOD_API_KEY }}
