@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.14.3
+Date: 8 June 2026
+  Bugfixes:
+    - Fixed crash when searching on Gleba in 'Module' search mode
+---------------------------------------------------------------------------------------------------
 Version: 1.14.2
 Date: 4 June 2026
   Bugfixes:
@@ -8,7 +13,6 @@ Version: 1.14.1
 Date: 4 June 2026
   Features:
     - Add cross-mod recent items panel in titlebar
-    - Agricultural towers can now be searched for in 'Module' search mode
   Bugfixes:
     - Fixed resources not appearing in 'Entity' search mode when quality is disabled
 ---------------------------------------------------------------------------------------------------

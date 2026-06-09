@@ -273,7 +273,7 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
               end
             end
             if control_behavior.circuit_read_ingredients then
-              local inventory = entity.get_inventory(defines.inventory.assembling_machine_input)
+              local inventory = entity.get_inventory(defines.inventory.crafter_input)
               if inventory then
                 local signal_count = 0
                 if target_is_item then
@@ -591,9 +591,9 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
         elseif entity_type == "mining-drill" then
           inventory = entity.get_inventory(defines.inventory.mining_drill_modules)
         elseif entity_type == "assembling-machine" or entity_type == "furnace" or entity_type == "rocket-silo" then
-          inventory = entity.get_inventory(defines.inventory.assembling_machine_modules)
+          inventory = entity.get_inventory(defines.inventory.crafter_modules)
         elseif entity_type == "agricultural-tower" then
-          inventory = entity.get_inventory(defines.inventory.agricultural_tower_modules)
+          --inventory = entity.get_inventory(defines.inventory.agricultural_tower_modules)
         end
         if inventory then
           local item_count = get_item_count(inventory, target_item_and_quality)
