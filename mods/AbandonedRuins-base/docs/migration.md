@@ -4,7 +4,7 @@
 
 1.3.0 was the first merged version and it wasn't really stable. But it has introduced a lot of changes to the configuration keys and the way you can expand any existing ruin-set (e.g. "base")
 
-1.3.2 has added a new remote-call function called "register_ruin_set" which can be found in this mod's control.lua file.
+1.3.2 has added a no longer working/possible remote-call function called "register_ruin_set". Please stick with `utils.register_ruin_set()` instead.
 
 Previous code: (perhaps in `settings.lua`?)
 ```
@@ -13,8 +13,10 @@ data.raw["string-setting"]["AbandonedRuins-set"].default_value = "YourRuinsMod"
 ```
 New code: (in `control.lua`)
 ```
+local utils = require("__AbandonedRuins_updated_fork__/lua/utilities")
+
 local function make_ruin_set()
-    remote.call("AbandonedRuins", "register_ruin_set", "FortressRuins", true)
+    utils.register_ruin_set("FortressRuins", true)
     -- DO MORE STUFF HERE
 end
 

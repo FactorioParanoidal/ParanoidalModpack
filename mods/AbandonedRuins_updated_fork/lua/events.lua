@@ -1,14 +1,21 @@
-local constants = require("lua/constants")
-local utils = require("lua/utilities")
-local ruinsets = require("lua/ruinsets")
-local spawning = require("lua/spawning")
-local surfaces = require("lua/surfaces")
-local queue = require("lua/queue")
+-- Load other libraries
+local constants = require("constants")
+local planets   = require("planets")
+local queue     = require("queue")
+local ruinsets  = require("ruinsets")
+local spawning  = require("spawning")
+local surfaces  = require("surfaces")
+local utils     = require("utilities")
 
 ---@type number
 local spawn_tick = settings.global[constants.SPAWN_TICK_SECONDS_KEY].value
+---@type boolean
+local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
+---@type boolean
+local debug_on_tick = settings.global[constants.ENABLE_DEBUG_ON_TICK_KEY].value
 
-local on_entity_force_changed_event = script.generate_event_name()
+---@type LuaEvent
+on_entity_force_changed_event = script.generate_event_name()
 
 local function update_debug_log()
   debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
@@ -20,7 +27,7 @@ local function init()
   if debug_log then log("[init]: CALLED!") end
   if game then
     log("[init]: Initializing enemy force' cease fire ...")
-    utils.set_enemy_force_cease_fire(utils.get_enemy_force(), not settings.global["ruins-enemy-not-cease-fire"].value)
+    utils.set_enemy_force_cease_fire(utils.get_enemy_force(), not settings.global[constants.ENABLE_ENEMY_NOT_CEASE_FIRE_KEY].value)
   else
     log("[init]: Cannot intitialize enemy force' cease fire, this is normal during on_load event.")
   end
@@ -29,12 +36,13 @@ local function init()
   if debug_log then log("[init]: Invoking spawning.init() ...") end
   spawning.init()
 
+  -- Initialize planets list
+  if debug_log then log("[init]: Invoking planets.init() ...") end
+  planets.init()
+
   -- Update debug flags
   if debug_log then log("[init]: Invoking update_debug_log() ...") end
   update_debug_log()
-
-  ---@type boolean
-  storage.spawn_ruins = storage.spawn_ruins or true
 
   if debug_log then log("[init]: EXIT!") end
 end
@@ -47,7 +55,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, init)
 
 script.on_event(defines.events.on_force_created, function()
   -- Sets up the diplomacy for all forces, not just the newly created one.
-  utils.set_enemy_force_diplomacy(utils.get_enemy_force(), not settings.global["ruins-enemy-not-cease-fire"].value)
+  utils.set_enemy_force_diplomacy(utils.get_enemy_force(), not settings.global[constants.ENABLE_ENEMY_NOT_CEASE_FIRE_KEY].value)
 end)
 
 script.on_nth_tick(spawn_tick, function(event)
@@ -56,10 +64,10 @@ script.on_nth_tick(spawn_tick, function(event)
   ---@type RuinQueueItem[] All currently queued ruin-queue items
   local queue_items = queue.get_ruins()
 
-  ---@type string
+  ---@type string Name of currently choosen ruin-set (e.g. "base")
   local ruinset_name = settings.global[constants.CURRENT_RUIN_SET_KEY].value
 
-  if debug_on_tick then log(string.format("[on_tick]: queue_items[]='%s',ruinset_name='%s'", type(queue_items), ruinset_name)) end
+  if debug_on_tick then log(string.format("[on_tick]: queue_items[%s]()=%d,ruinset_name='%s'", type(queue_items), table_size(queue_items), ruinset_name)) end
 
   if table_size(queue_items) == 0 then
     if debug_on_tick then log(string.format("[on_tick]: event.tick=%d has no ruins to spawn - EXIT!", event.tick)) end
@@ -81,7 +89,7 @@ script.on_nth_tick(spawn_tick, function(event)
   ---@type RuinQueueItem Individual ruin-queue item
   for _, queue_item in pairs(queue_items) do
     if debug_on_tick then log(string.format("[on_tick]: Spawning queue_item.size='%s',queue_item.center='%s',queue_item.surface='%s' ...", queue_item.size, tostring(queue_item.center), tostring(queue_item.surface))) end
-    if not utils.ruin_half_sizes[queue_item.size] then
+    if not spawning.ruin_half_sizes[queue_item.size] then
       error(string.format("queue_item.size='%s' is not registered in ruin_half_sizes table. Have you forgotten to invoke `utils.register_ruin_set()`?", queue_item.size))
     end
 
@@ -96,7 +104,7 @@ script.on_nth_tick(spawn_tick, function(event)
       if type(ruins) == "table" and table_size(ruins) > 0 then
         -- The ruin-set is either marked as non-exclusive or it surface and ruin-set name are matching
         if debug_on_tick then log(string.format("[on_tick]: Invoking spawning.spawn_random_ruin() with ruins()=%d,ruinset_name='%s',queue_item.size='%s' ...", #ruins, ruinset_name, queue_item.size)) end
-        spawning.spawn_random_ruin(ruins, utils.ruin_half_sizes[queue_item.size], queue_item.center, queue_item.surface)
+        spawning.spawn_random_ruin(ruins, spawning.ruin_half_sizes[queue_item.size], queue_item.center, queue_item.surface)
       end
     end
   end
@@ -109,17 +117,20 @@ end)
 
 script.on_event(defines.events.on_chunk_generated, function (event)
   if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name)) end
-  if storage.spawn_ruins == false then
-    if debug_log then log("[on_chunk_generated]: Spawning ruins is disabled by configuration - EXIT!") end
+  if settings.global[constants.CURRENT_RUIN_SET_KEY].value == constants.NONE then
+    if debug_log then log("[on_chunk_generated]: No ruin-set selected by player - EXIT!") end
     return
   elseif event.surface.name == constants.DEBUG_SURFACE_NAME then
     if debug_log then log(string.format("[on_chunk_generated]: Debug surface '%s' must spawn ruins on their own, not through randomness - EXIT!", event.surface.name)) end
     return
+  elseif event.surface.planet ~= nil and not planets.is_planet_allowed(event.surface.planet) then
+    if debug_log then log(string.format("[on_chunk_generated]: Surface's planet '%s' is not allowed to spawn ruins on - EXIT!", event.surface.planet.name)) end
+    return
   elseif event.surface.generate_with_lab_tiles == true then
     if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' is a lab, no spawning here - EXIT!", event.surface.name)) end
     return
-  elseif settings.global[constants.CURRENT_RUIN_SET_KEY].value == constants.NONE then
-    if debug_log then log("[on_chunk_generated]: No ruin-set selected by player - EXIT!") end
+  elseif spawning.is_spawning_ruins_enabled() == false then
+    if debug_log then log("[on_chunk_generated]: Spawning ruins is disabled by configuration - EXIT!") end
     return
   elseif utils.str_contains_any_from_table(event.surface.name, surfaces.get_all_excluded()) then
     if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name)) end
@@ -127,7 +138,7 @@ script.on_event(defines.events.on_chunk_generated, function (event)
   end
 
   local center       = utils.get_center_of_chunk(event.position)
-  local min_distance = settings.global["ruins-min-distance-from-spawn"].value
+  local min_distance = settings.global[constants.MIN_DISTANCE_FROM_SPAWN_KEY].value
   local spawn_chance = math.random()
   if debug_log then log(string.format("[on_chunk_generated]: center.x=%d,center.y=%d,min_distance=%d,spawn_chance=%.2f", center.x, center.y, min_distance, spawn_chance)) end
 

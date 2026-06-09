@@ -1,54 +1,42 @@
-# Ruin sets
-
+# How to create ruin-sets
 Other mods can add their own ruin sets to *Abandoned Ruins - Updated* (aka. "core").
 
-## Step 1: Ruin set setting
+## Simple start
+First step is to fork my `AbandonedRuins-base` repository. As GIT is fairly distrubuted you can also do this from e.g. gitlab or your own GIT server.
 
-The settings should be modified in `settings-updates.lua`. Make sure to set "AbandonedRuins_updated_fork >= 1.x.x" as a dependency while `x.x` is the lastest middle.minor version.
+While forking/cloing it, best option is to rename it NOW to avoid confusion and people (including yourself) might want to play it "from source" and not a distributed ZIP file.
 
-Add a ruin set name to the setting:
-```lua
--- Add this to your settings-updates.lua file, remote-call isn't working
-local utils = require("__AbandandonedRuins_updated_fork__/lua/utilities")
-utils.register_ruin_set("your-name", false)
+So go to your `mods` folder and start the cloning:
+```shell
+# Example:
+cd /opt/GOG/Factorio/game/mods/
+
+# Now clone your fork
+git clone git@github.com:You/MyRuinsSet.git
+
+# Change into that new directory
+cd MyRuinsSet
 ```
-Optional: replace `false` with `true` to mark as default.
+Now start editing the files, first change `info.json` as it still points on `AbandonedRuins-base` and not yours. So change all relevant fields, like `name`, `version` (e.g. 0.0.1), `author`, `description`, et cetera.
+Leave the dependency to the core mod `AbandonedRuins_updated_fork` but make sure you use the latest stable version (you can find it at the mod's page.
 
-## Step 2: Ruin set remote interface
+Make any needed changes to dependencies and other flags, e.g. if your ruin-set is for Space Age, add the proper flag to `info.json`, too!
 
-Adding a ruin-set is a simple as providing the ruins to *Abandoned Ruins - Updated* via the `add_ruin_sets` remote call in `on_init` and `on_load` in `control.lua`. For the format of ruins, see [ruin data format](docs/format.md).
+Next clear the `changelog.txt` but keep a first entry in it for your first release (please document your changes so others can quickly see what you have done).
 
-Some extra care needs to be taken with ruin sets, as they are not save/loaded. That means they should not be changed during the game.<br>
-For that reason, it is recommended to only add ruin sets in `on_init` and `on_load` events. Furthermore, it is recommended to not conditionally change ruin sets.
+Now `git rm ruins/<size>/<ruin-file>.lua` all ruins files (NOT directories!), **except** `__init__.lua` and place your own ruin files in. In `__init__.lua` you fill find a list of the old names, clear that list and fill it with your ruin names ommitting the `.lua` file extension.
 
-```lua
---- Ruinsets by size, more sizes, e.g. tiny, huge can be added by invoking remote-call function `add_ruin_size`
-local ruin_sets = {
-  small  = require("ruins/small") -- an array of ruins
-  medium = require("ruins/medium") -- an array of ruins
-  large  = require("ruins/large") -- an array of ruins
-}
+There is only one step more for a very basic ruin-set (nothing fancy like described below): Edit `control.lua` and change the value for `RUINSET_NAME` to your liking, NOT the mod's name here!
 
-local function init()
-  -- Register this mod's ruin-sets
-  remote.call("AbandonedRuins", "add_ruin_sets", "my-ruin-set", ruin_sets)
+E.g. use `"my-set"` not `"MyRuinsSet"` here as the later one is the mod's name, not your ruin-set's name! This name will later show up in the "currently selected ruin-set" selection box.
 
-  -- Make it exclusive to one surface (Fulgora) only, no other ruins spawn on that surface nor ruins from this set will spawn somewhere else
-  remote.call("AbandonedRuins", "spawn_exclusively_on", "fulgora", "my-ruin-set")
-  -- OR Don't spawn ruins from your ruin-set at all
-  remote.call("AbandondedRuins", "no_spawning_on", "fulgora", "my-ruin-set")
-end
+Now you can try to launch Factorio and see what happens. If it starts normally, you are nearly done. Go to mod-settings and check if your ruin-set name you have set in `RUINSET_NAME` appears in the selection box. Yes? Then congratulation!
 
--- The ruin set is always created when the game is loaded, since the ruin sets are not save/loaded by AbandonedRuins.
--- Since this is using on_load, we must be sure that it always produces the same result for everyone.
-script.on_init(init)
-script.on_load(init)
-```
-With `ruin_sets` seperated from function call, you can e.g. modify the entities depending if other mods are installed. For an example clone `AbandonedRuins-base`, too, and study each file carefully.
+### Deprecated way
+The above way is the most easiest way as all, including optional but recommended `ruin.name` support is included. There was an old way documented here. Please port your ruin-set to the new way. Adding ruins is just as easy as adding another value to an array.
 
 ## Excluded surfaces versus spawning on specific surfaces or exclusively
-
-There are two options in *Abandoned Ruins - Updated* and they have different purposes. So let me clarify them here:
+There are different ways in *Abandoned Ruins - Updated* how ruins should spawn or not spawn. So let me clarify them here:
 
 - `spawn_on_surfaces` is a table of surfaces where exclusively ruins should spawn or everywhere except those listed here. It is ruin-depending, optional to use. Its purpose to either allow ruins spawn only on specified surfaces or on all surfaces except the ones listed.
 - `spawn_exclusively_on()` is a remote-call function to let the "core" mod be notified that the ruin-sets should exclusively spawn on that surface.
@@ -74,4 +62,32 @@ Example #2:
 if script.active_mods["AbandonedRuins_updated_fork"] then
 	remote.call("AbandonedRuins", "exclude_surface", "YourFactorisimoMod")
 end
+```
+
+## Adding more sizes?
+The current ruin-sets can be split into 3 different "sizes" with each having different spawn chances. As per default settings, while `small` as the highest chance and `large` has the lowest. Still for some folks these 3 sizes might not be enough.
+
+E,g, `tiny` or `huge` might be some desired names. For this, there is some experimental (untested!) support in core mod and you have to add a global runtime setting to your `settings.lua` file:
+
+First add the folder `ruins/tiny` and copy `__init__.lua` from e.g. `ruins/small/` to it, remove all ruin names from the list.
+
+Add some ruin files to folder `ruins/tiny/` and add their names to the previously cleared list.
+
+Then add the size `tiny` to your `settings.lua` file:
+```lua
+data:extend({
+  {
+    type = "double-setting",
+    name = "ruins-tiny-ruin-chance",
+    setting_type = "runtime-global",
+    default_value = 0.02,
+    minimum_value = 0.0,
+    maximum_value = 1.0,
+    order = "c0"
+  }
+})
+```
+
+Last in your `control.lua` you have to register the new ruin size:
+```
 ```

@@ -1,4 +1,53 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.4
+Date: 2026-06-08
+  Fixes:
+    - utilities.safe_damage() is now rejecting only negative values, zero is being ignored or at
+      least logged when `debug_utils` is enabled
+---------------------------------------------------------------------------------------------------
+Version: 1.5.3
+Date: 2026-06-08
+  Fixes:
+    - Added a check that no zero/negative damage can be dealt to an entity as this doesn't make
+      sense at all. Thanks to @ShbVal for reporting this
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2026-06-08
+  Fixes:
+    - Fixed `attempt to index global 'ruin' (a nil value)` in `spawning.lua:381`, thanks to @ShbVal
+      for reporting it
+    - had to move initialization of `storage.allowed_planets` into `planet.init()` function to avoid
+      nil during loading a ~5 months old save game
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2026-06-08
+  Fixes:
+    - Lua doesn't seem to like `foo += 1`, so I had to do the longer way. Lua seem to be a single-pass
+      "compiler" (more interpreter): [1], thanks to @F3zy for reporting it
+    - References:
+      1: https://stackoverflow.com/questions/20091779/lua-operators-why-isnt-and-so-on-defined
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2026-06-08
+  Incompatible:
+    - renamed remote-call function `set_spawn_ruins` to `enable_spawning_ruins`
+    - renamed      --- " ---       `get_spawn_ruins` to `is_spawning_ruins_enabled`
+    - renamed      --- " ---       `add_ruin_size` to `register_ruin_size`
+    - `register_ruin_size` has now a 3rd mandatory parameter `multiplier` for minimum distance calculation
+  Performance:
+    - avoided "global" (mod-wide global) variables like debug_log and its siblings, *use locals*
+    - added startup setting "enable expensive sanity-checks", disable this only when you know what you
+      are doing! They are always enabled when debug-log is enabled
+    - rewrote some parts, like `x = x +1` costs in a loop a bit more time than `x += 1`
+    - used some more local variables (I was wrong about them, they are better for performance)
+    - `utils.str_contains_any_from_table()` is now "caching" its result, avoding looping for same result
+  Changes:
+    - moved remote-call functions to `lua/remotes.lua` which is in turn being loaded after `lua/events.lua`
+    - moved settings keys `ruins-min-distance-from-spawn` and `ruins-enemy-not-cease-fire` to constants.lua
+    - added basic support for enabling/disabling spawning on individual planets (no GUI yet!)
+    - added more sanity-checks on function's start
+    - Factorio's Mod portal requires no executable files being included (need to exclude build scripts)
+---------------------------------------------------------------------------------------------------
 Version: 1.4.18
 Date: 2025-12-26
   Bugfix:
