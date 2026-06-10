@@ -389,6 +389,7 @@ data:extend({
     enabled = false,
     allow_decomposition = false,
     auto_recycle = false,
+    allow_as_intermediate = false,
     ingredients = {
       { type = "item", name = "angels-wire-coil-gold", amount = 4 },
     },

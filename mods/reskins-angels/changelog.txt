@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2026-06-01
+  Bugfixes:
+    - Fixed that nuclear fuel, fuel cells and isotopes were not reskinned
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2026-05-31
+  Changes:
+    - Adjustments to support changes made for Bob's mods 2.1+.
+  Bugfixes:
+    - Fixed potentially wrong results when resolving ore sprites in some circumstances
+    - Fixed that Angel's powder icons were not reskinned
+---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2026-01-10
   Bugfixes:

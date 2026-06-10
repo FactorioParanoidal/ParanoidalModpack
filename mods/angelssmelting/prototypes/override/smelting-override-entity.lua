@@ -34,10 +34,14 @@ if not angelsmods.trigger.sintering_tech then
   OV.add_prereq("angels-stone-smelting-1", "angels-metallurgy-1")
 
   -- rename powder metallurgy techs
-  data.raw.technology["angels-powder-metallurgy-2"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 1" }
-  data.raw.technology["angels-powder-metallurgy-3"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 2" }
-  data.raw.technology["angels-powder-metallurgy-4"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 3" }
-  data.raw.technology["angels-powder-metallurgy-5"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 4" }
+  data.raw.technology["angels-powder-metallurgy-2"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 1" }
+  data.raw.technology["angels-powder-metallurgy-3"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 2" }
+  data.raw.technology["angels-powder-metallurgy-4"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 3" }
+  data.raw.technology["angels-powder-metallurgy-5"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 4" }
 elseif not angelsmods.trigger.early_sintering_oven then
   OV.disable_recipe({
     "angels-sintering-oven",
@@ -88,8 +92,12 @@ elseif not angelsmods.trigger.early_sintering_oven then
   data.raw.recipe["angels-sintering-oven-5"].localised_name = { "entity-name.angels-sintering-oven-2" }
 
   -- rename powder metallurgy techs
-  data.raw.technology["angels-powder-metallurgy-2"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 1" }
-  data.raw.technology["angels-powder-metallurgy-3"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 2" }
-  data.raw.technology["angels-powder-metallurgy-4"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 3" }
-  data.raw.technology["angels-powder-metallurgy-5"].localised_name = { "", { "technology-name.angels-powder-metallurgy" }, " 4" }
+  data.raw.technology["angels-powder-metallurgy-2"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 1" }
+  data.raw.technology["angels-powder-metallurgy-3"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 2" }
+  data.raw.technology["angels-powder-metallurgy-4"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 3" }
+  data.raw.technology["angels-powder-metallurgy-5"].localised_name =
+    { "", { "technology-name.angels-powder-metallurgy" }, " 4" }
 end

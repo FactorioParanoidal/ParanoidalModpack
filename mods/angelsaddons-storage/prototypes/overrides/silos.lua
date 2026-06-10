@@ -2,23 +2,27 @@ local OV = angelsmods.functions.OV
 
 if angelsmods.addons.storage.icon_scaling then
   if angelsmods.addons.storage.silos or angelsmods.addons.storage.oresilos then
-    data.raw["container"]["angels-silo"].scale_info_icons = true
+    data.raw["container"]["angels-silo"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
   end
   if angelsmods.addons.storage.silos then
-    data.raw["logistic-container"]["angels-silo-active-provider"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-silo-passive-provider"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-silo-requester"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-silo-storage"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-silo-buffer"].scale_info_icons = true
+    data.raw["logistic-container"]["angels-silo-active-provider"].icon_draw_specification =
+      { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["logistic-container"]["angels-silo-passive-provider"].icon_draw_specification =
+      { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["logistic-container"]["angels-silo-requester"].icon_draw_specification =
+      { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["logistic-container"]["angels-silo-storage"].icon_draw_specification =
+      { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["logistic-container"]["angels-silo-buffer"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
   end
   if angelsmods.addons.storage.oresilos then
-    data.raw["container"]["angels-silo-ore1"].scale_info_icons = true
-    data.raw["container"]["angels-silo-ore2"].scale_info_icons = true
-    data.raw["container"]["angels-silo-ore3"].scale_info_icons = true
-    data.raw["container"]["angels-silo-ore4"].scale_info_icons = true
-    data.raw["container"]["angels-silo-ore5"].scale_info_icons = true
-    data.raw["container"]["angels-silo-ore6"].scale_info_icons = true
-    data.raw["container"]["angels-silo-coal"].scale_info_icons = true
+    data.raw["container"]["angels-silo-ore1"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-ore2"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-ore3"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-ore4"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-ore5"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-ore6"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
+    data.raw["container"]["angels-silo-coal"].icon_draw_specification = { scale = 2.5, scale_for_many = 2.5 }
   end
 end
 

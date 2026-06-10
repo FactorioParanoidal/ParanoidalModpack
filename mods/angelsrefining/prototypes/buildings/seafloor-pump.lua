@@ -1,12 +1,33 @@
 local hit_effects = require("__base__/prototypes/entity/hit-effects")
 local sounds = require("__base__/prototypes/entity/sounds")
 
-circuit_connector_definitions["angels-seafloor-pump"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 31, main_offset = util.by_pixel( 46.5, -16), shadow_offset = util.by_pixel( 46.5, -16), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel( 17.5,  25.25), shadow_offset = util.by_pixel( 17.5,  25.25), show_shadow = true },
-  { variation = 28, main_offset = util.by_pixel( 46.125,  4.375), shadow_offset = util.by_pixel( 46.125,  4.375), show_shadow = true },
-  { variation = 26, main_offset = util.by_pixel(-17.5,  25.25), shadow_offset = util.by_pixel(-17.5,  25.25), show_shadow = true },
-})
+circuit_connector_definitions["angels-seafloor-pump"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 31,
+      main_offset = util.by_pixel(46.5, -16),
+      shadow_offset = util.by_pixel(46.5, -16),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(17.5, 25.25),
+      shadow_offset = util.by_pixel(17.5, 25.25),
+      show_shadow = true,
+    },
+    {
+      variation = 28,
+      main_offset = util.by_pixel(46.125, 4.375),
+      shadow_offset = util.by_pixel(46.125, 4.375),
+      show_shadow = true,
+    },
+    {
+      variation = 26,
+      main_offset = util.by_pixel(-17.5, 25.25),
+      shadow_offset = util.by_pixel(-17.5, 25.25),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -26,10 +47,18 @@ data:extend({
     icon_size = 32,
     flags = { "placeable-neutral", "player-creation", "filter-directions" },
     collision_mask = { layers = { object = true, train = true, is_object = true, is_lower_object = true } },
-    tile_buildability_rules =
-    {
-      { area = { { -1.4, -1.4 }, { 1.4, 0.4 } }, required_tiles = { layers = { ground_tile = true } }, colliding_tiles = { layers = { water_tile = true } }, remove_on_collision = true },
-      { area = { { -2, -3 }, { 2, -2 } }, required_tiles = { layers = { water_tile = true } }, colliding_tiles = { layers = {} } },
+    tile_buildability_rules = {
+      {
+        area = { { -1.4, -1.4 }, { 1.4, 0.4 } },
+        required_tiles = { layers = { ground_tile = true } },
+        colliding_tiles = { layers = { water_tile = true } },
+        remove_on_collision = true,
+      },
+      {
+        area = { { -2, -3 }, { 2, -2 } },
+        required_tiles = { layers = { water_tile = true } },
+        colliding_tiles = { layers = {} },
+      },
     },
     minable = { mining_time = 0.1, result = "angels-seafloor-pump" },
     max_health = 150,
@@ -83,7 +112,7 @@ data:extend({
       fade_in_ticks = 4,
       fade_out_ticks = 20,
     },
-    perceived_performance = {minimum = 0.5},
+    perceived_performance = { minimum = 0.5 },
     always_draw_fluid = true,
     graphics_set = {
       base_pictures = {

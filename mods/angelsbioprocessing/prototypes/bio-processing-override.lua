@@ -15,11 +15,11 @@ local lab_ignore = angelsmods.trigger.lab_ignore_token
 require("prototypes.overrides.bio-processing-override-base-game")
 
 --REFINING
-if angelsmods.refining then
-  --MOVE UNLOCKS
-  OV.add_unlock("angels-bio-processing-green", "angels-water-mineralized")
-  OV.remove_unlock("angels-water-treatment", "angels-water-mineralized")
-end
+
+--MOVE UNLOCKS
+OV.remove_unlock("angels-water-treatment", "angels-water-mineralized")
+OV.add_unlock("angels-sodium-processing-2", "angels-algae-brown-burning-wash")
+OV.add_prereq("angels-sodium-processing-2", "angels-bio-processing-green")
 
 --UPDATE LABS INPUT
 for labs_n, labs in pairs(data.raw["lab"]) do

@@ -23,9 +23,9 @@ local function extendBobs()
 		data.raw["resource"]["bob-zinc-ore"].minable.fluid_amount = 20
 	end
 
-	if data.raw["resource"]["bob-tungsten-ore"] then
-		data.raw["resource"]["bob-tungsten-ore"].minable.required_fluid = "water"
-		data.raw["resource"]["bob-tungsten-ore"].minable.fluid_amount = 20
+	if data.raw["resource"]["tungsten-ore"] then
+		data.raw["resource"]["tungsten-ore"].minable.required_fluid = "water"
+		data.raw["resource"]["tungsten-ore"].minable.fluid_amount = 20
 	end
 
 	if data.raw["resource"]["bob-tin-ore"] then
@@ -115,11 +115,11 @@ local function extendAngles()
 		data.raw["resource"]["angels-ore6"].minable.fluid_amount = 100
 	end
 
-	data.raw.resource["infinite-angels-ore1"].minable.required_fluid = "angels-liquid-sulfuric-acid"
+	data.raw.resource["infinite-angels-ore1"].minable.required_fluid = "sulfuric-acid"
 	data.raw.resource["infinite-angels-ore1"].mining_time = 7
 	data.raw.resource["infinite-angels-ore2"].minable.required_fluid = "angels-liquid-hydrofluoric-acid"
 	data.raw.resource["infinite-angels-ore2"].mining_time = 14
-	data.raw.resource["infinite-angels-ore3"].minable.required_fluid = "angels-liquid-sulfuric-acid"
+	data.raw.resource["infinite-angels-ore3"].minable.required_fluid = "sulfuric-acid"
 	data.raw.resource["infinite-angels-ore3"].mining_time = 7
 	data.raw.resource["infinite-angels-ore4"].minable.required_fluid = "angels-liquid-hydrochloric-acid"
 	data.raw.resource["infinite-angels-ore4"].mining_time = 12

@@ -1,10 +1,30 @@
-circuit_connector_definitions["angels-crop-farm"] = circuit_connector_definitions.create_vector(universal_connector_template,
-{
-  { variation =  4, main_offset = util.by_pixel( 38.5,  55.125), shadow_offset = util.by_pixel( 38.5,  55.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 38.5,  55.125), shadow_offset = util.by_pixel( 38.5,  55.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 38.5,  55.125), shadow_offset = util.by_pixel( 38.5,  55.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 38.5,  55.125), shadow_offset = util.by_pixel( 38.5,  55.125), show_shadow = true }
-})
+circuit_connector_definitions["angels-crop-farm"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(38.5, 55.125),
+      shadow_offset = util.by_pixel(38.5, 55.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(38.5, 55.125),
+      shadow_offset = util.by_pixel(38.5, 55.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(38.5, 55.125),
+      shadow_offset = util.by_pixel(38.5, 55.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(38.5, 55.125),
+      shadow_offset = util.by_pixel(38.5, 55.125),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -32,7 +52,12 @@ data:extend({
     fast_replaceable_group = "angels-crop-farm",
     module_slots = 2,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-temperate-farming", "angels-desert-farming", "angels-swamp-farming", "angels-basic-farming" },
+    crafting_categories = {
+      "angels-temperate-farming",
+      "angels-desert-farming",
+      "angels-swamp-farming",
+      "angels-basic-farming",
+    },
     crafting_speed = 1,
     energy_source = {
       type = "electric",

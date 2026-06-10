@@ -1,6 +1,6 @@
 {
   "name": "angelspetrochem",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "factorio_version": "2.0",
   "title": "Angel's Petrochemical Processing",
   "author": "Arch666Angel",
@@ -9,7 +9,7 @@
   "description": "Angel's Petrochemical processing changes Oil processing and adds Gas processing, as well as a more complex web of chemical production. Includes overrides and tie-ins to Bob's technologies and recipes.",
   "dependencies": [
     "base >= 2.0.48",
-    "angelsrefining >= 2.0.0",
+    "angelsrefining >= 2.0.3",
     "~ angelspetrochemgraphics >= 2.0.0"
   ]
 }

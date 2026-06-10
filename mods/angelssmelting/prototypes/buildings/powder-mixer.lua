@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-ore-processing-machine"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 32, main_offset = util.by_pixel(-6.375, -39.5), shadow_offset = util.by_pixel(-6.375, -39.5), show_shadow = true },
-  { variation = 32, main_offset = util.by_pixel(-6.375, -39.5), shadow_offset = util.by_pixel(-6.375, -39.5), show_shadow = true },
-  { variation = 32, main_offset = util.by_pixel(-6.375, -39.5), shadow_offset = util.by_pixel(-6.375, -39.5), show_shadow = true },
-  { variation = 32, main_offset = util.by_pixel(-6.375, -39.5), shadow_offset = util.by_pixel(-6.375, -39.5), show_shadow = true },
-})
+circuit_connector_definitions["angels-ore-processing-machine"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 32,
+      main_offset = util.by_pixel(-6.375, -39.5),
+      shadow_offset = util.by_pixel(-6.375, -39.5),
+      show_shadow = true,
+    },
+    {
+      variation = 32,
+      main_offset = util.by_pixel(-6.375, -39.5),
+      shadow_offset = util.by_pixel(-6.375, -39.5),
+      show_shadow = true,
+    },
+    {
+      variation = 32,
+      main_offset = util.by_pixel(-6.375, -39.5),
+      shadow_offset = util.by_pixel(-6.375, -39.5),
+      show_shadow = true,
+    },
+    {
+      variation = 32,
+      main_offset = util.by_pixel(-6.375, -39.5),
+      shadow_offset = util.by_pixel(-6.375, -39.5),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -285,7 +306,12 @@ data:extend({
     drawing_box_vertical_extension = 0.55,
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-powder-mixing", "angels-powder-mixing-2", "angels-powder-mixing-3", "angels-powder-mixing-4" },
+    crafting_categories = {
+      "angels-powder-mixing",
+      "angels-powder-mixing-2",
+      "angels-powder-mixing-3",
+      "angels-powder-mixing-4",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "electric",

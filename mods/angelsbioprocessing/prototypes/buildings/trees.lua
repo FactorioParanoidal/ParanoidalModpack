@@ -28,7 +28,7 @@ data:extend({
         { type = "item", name = "angels-temperate-tree", amount = 1 },
       },
     },
-    emissions_per_second = {pollution = -0.006}, --emissions_per_tick = -0.0001,
+    emissions_per_second = { pollution = -0.006 }, --emissions_per_tick = -0.0001,
     factoriopedia_simulation = simulations.factoriopedia_angels_temperate_tree,
     max_health = 20,
     collision_box = { { -0.9, -0.9 }, { 0.9, 0.9 } },
@@ -40,7 +40,7 @@ data:extend({
     autoplace = {
       order = "xaa",
       probability_expression = 0.000025,
-      tile_restriction = {"grass-1", "grass-2", "grass-3", "grass-4", "dry-dirt"},
+      tile_restriction = { "dirt-3", "dirt-4", "dirt-5", "dirt-6", "dirt-7", "dry-dirt", "red-desert-1" },
     },
     pictures = {
       {
@@ -86,7 +86,7 @@ data:extend({
         { type = "item", name = "angels-swamp-tree", amount = 1 },
       },
     },
-    emissions_per_second = {pollution = -0.006}, --emissions_per_tick = -0.0001,
+    emissions_per_second = { pollution = -0.006 }, --emissions_per_tick = -0.0001,
     factoriopedia_simulation = simulations.factoriopedia_angels_swamp_tree,
     max_health = 20,
     collision_box = { { -0.9, -0.9 }, { 0.9, 0.9 } },
@@ -98,7 +98,7 @@ data:extend({
     autoplace = {
       order = "yaa",
       probability_expression = 0.000025,
-      tile_restriction = {"dirt-1", "dirt-2", "dirt-3", "dirt-4", "dirt-5", "dirt-6", "dirt-7"},
+      tile_restriction = { "grass-1", "grass-2", "grass-3", "grass-4", "red-desert-0" },
     },
     pictures = {
       {
@@ -150,7 +150,7 @@ data:extend({
         { type = "item", name = "angels-desert-tree", amount = 1 },
       },
     },
-    emissions_per_second = {pollution = -0.006}, --emissions_per_tick = -0.0001,
+    emissions_per_second = { pollution = -0.006 }, --emissions_per_tick = -0.0001,
     factoriopedia_simulation = simulations.factoriopedia_angels_desert_tree,
     max_health = 20,
     collision_box = { { -0.9, -0.9 }, { 0.9, 0.9 } },
@@ -160,9 +160,9 @@ data:extend({
     order = "z-b",
     impact_category = "wood",
     autoplace = {
-      order = "yaa",
+      order = "zaa",
       probability_expression = 0.000025,
-      tile_restriction = {"dirt-1", "dirt-2", "dirt-3", "dirt-4", "dirt-5", "dirt-6", "dirt-7"},
+      tile_restriction = { "sand-1", "sand-2", "sand-3", "dirt-1", "dirt-2", "red-desert-2", "red-desert-3" },
     },
     pictures = {
       {

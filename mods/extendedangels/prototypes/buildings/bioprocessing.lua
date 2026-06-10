@@ -15,6 +15,7 @@ local bioprocessing_buildings = {
         crafting_speed = 3,
         emissions_per_minute = -100 / 3 * 3,
         energy_usage = "225kW",
+        allow_bio_productivity = true,
     },
     -- Arboretums
     ["angels-bio-arboretum-2"] = {
@@ -27,6 +28,7 @@ local bioprocessing_buildings = {
         crafting_speed = 1,
         emissions_per_minute = -200,
         energy_usage = "200kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-arboretum-3"] = {
         source = "angels-bio-arboretum-1",
@@ -37,6 +39,7 @@ local bioprocessing_buildings = {
         crafting_speed = 2,
         emissions_per_minute = -400,
         energy_usage = "400kW",
+        allow_bio_productivity = true,
     },
     -- Seed generators
     ["angels-bio-generator-temperate-2"] = {
@@ -205,6 +208,7 @@ local bioprocessing_buildings = {
         crafting_speed = 1.5,
         emissions_per_minute = -60,
         energy_usage = "125kW",
+        allow_bio_productivity = true,
     },
     ["angels-crop-farm-3"] = {
         source = "angels-crop-farm",
@@ -215,6 +219,7 @@ local bioprocessing_buildings = {
         crafting_speed = 2,
         emissions_per_minute = -80,
         energy_usage = "150kW",
+        allow_bio_productivity = true,
     },
     ["angels-temperate-farm-2"] = {
         source = "angels-temperate-farm",
@@ -226,6 +231,7 @@ local bioprocessing_buildings = {
         crafting_speed = 3,
         emissions_per_minute = -120,
         energy_usage = "155kW",
+        allow_bio_productivity = true,
     },
     ["angels-temperate-farm-3"] = {
         source = "angels-temperate-farm",
@@ -236,6 +242,7 @@ local bioprocessing_buildings = {
         crafting_speed = 4,
         emissions_per_minute = -160,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     ["angels-swamp-farm-2"] = {
         source = "angels-swamp-farm",
@@ -247,6 +254,7 @@ local bioprocessing_buildings = {
         crafting_speed = 3,
         emissions_per_minute = -120,
         energy_usage = "155kW",
+        allow_bio_productivity = true,
     },
     ["angels-swamp-farm-3"] = {
         source = "angels-swamp-farm",
@@ -257,6 +265,7 @@ local bioprocessing_buildings = {
         crafting_speed = 4,
         emissions_per_minute = -160,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     ["angels-desert-farm-2"] = {
         source = "angels-desert-farm",
@@ -268,6 +277,7 @@ local bioprocessing_buildings = {
         crafting_speed = 3,
         emissions_per_minute = -120,
         energy_usage = "155kW",
+        allow_bio_productivity = true,
     },
     ["angels-desert-farm-3"] = {
         source = "angels-desert-farm",
@@ -278,6 +288,7 @@ local bioprocessing_buildings = {
         crafting_speed = 4,
         emissions_per_minute = -160,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     -- Hatcheries
     ["angels-bio-hatchery-2"] = {
@@ -336,6 +347,7 @@ local bioprocessing_buildings = {
         crafting_speed = 1.25,
         emissions_per_minute = -60,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-refugium-fish-3"] = {
         source = "angels-bio-refugium-fish",
@@ -346,6 +358,7 @@ local bioprocessing_buildings = {
         crafting_speed = 2,
         emissions_per_minute = -100,
         energy_usage = "225kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-refugium-puffer-2"] = {
         source = "angels-bio-refugium-puffer",
@@ -357,6 +370,7 @@ local bioprocessing_buildings = {
         crafting_speed = 1.25,
         emissions_per_minute = -60,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-refugium-puffer-3"] = {
         source = "angels-bio-refugium-puffer",
@@ -367,6 +381,7 @@ local bioprocessing_buildings = {
         crafting_speed = 2,
         emissions_per_minute = -100,
         energy_usage = "225kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-refugium-biter-2"] = {
         source = "angels-bio-refugium-biter",
@@ -378,6 +393,7 @@ local bioprocessing_buildings = {
         crafting_speed = 3,
         emissions_per_minute = -40,
         energy_usage = "190kW",
+        allow_bio_productivity = true,
     },
     ["angels-bio-refugium-biter-3"] = {
         source = "angels-bio-refugium-biter",
@@ -388,6 +404,7 @@ local bioprocessing_buildings = {
         crafting_speed = 4,
         emissions_per_minute = -60,
         energy_usage = "225kW",
+        allow_bio_productivity = true,
     },
     -- Seed extractors
     ["angels-seed-extractor-2"] = {
@@ -450,6 +467,10 @@ for name, params in pairs(bioprocessing_buildings) do
 
     -- Set entity icon
     data.raw[params.type and params.type or "assembling-machine"][name].icons = icons
+
+    if params.allow_bio_productivity then
+        angelsmods.functions.allow_bio_productivity(name)
+    end
 
     -- Continue
     ::continue::

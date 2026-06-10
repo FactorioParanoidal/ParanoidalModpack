@@ -4,7 +4,7 @@ local OV = angelsmods.functions.OV
 OV.add_prereq({
   "angels-water-treatment-2",
   "angels-water-washing-2",
-  "oil-gathering",  
+  "oil-gathering",
 }, "angels-stone-smelting-1")
 
 -- Concrete brick
@@ -62,13 +62,13 @@ if mods["bobplates"] then
   -- Brass
   OV.add_prereq({
     "angels-metallurgy-3",
-  }, "bob-zinc-processing")
+  }, "bob-brass-processing")
   if mods["bobassembly"] then
     OV.add_prereq({
       "automation-3",
-    }, "bob-zinc-processing")
+    }, "bob-brass-processing")
   end
-  
+
   -- Titanium
   OV.add_prereq({
     "angels-advanced-chemistry-4",
@@ -84,7 +84,7 @@ if mods["bobplates"] then
     "angels-ore-processing-4",
     "automation-5",
   }, "bob-tungsten-processing")
-  
+
   -- Circuits
   OV.add_prereq({
     "angels-metallurgy-5",
@@ -93,7 +93,7 @@ elseif mods["bobelectronics"] then
   OV.add_prereq({
     "angels-metallurgy-5",
   }, "bob-advanced-processing-unit")
-  
+
   if mods["bobassembly"] then
     OV.add_prereq({
       "automation-4",

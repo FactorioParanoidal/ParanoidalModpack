@@ -46,7 +46,7 @@ paralib.bobmods.lib.tech.add_recipe_unlock("bob-drills-3", "mining-drill-bit-mk4
 newRecipe("mk5", 15).ingredients = {
 	{ type = "item", name = "mining-drill-bit-mk4", amount = 2},
 	{ type = "item", name = "bob-nitinol-gear-wheel", amount = 4},
-	{ type = "item", name = "bob-tungsten-carbide", amount = 20},
+	{ type = "item", name = "tungsten-carbide", amount = 20},
 }
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-drills-4", "mining-drill-bit-mk5")
 

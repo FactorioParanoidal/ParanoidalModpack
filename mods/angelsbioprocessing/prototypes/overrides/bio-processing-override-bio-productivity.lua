@@ -1,6 +1,8 @@
 local module_categories = {}
 for _, category in pairs(data.raw["module-category"]) do
-  table.insert(module_categories, category.name)
+  if category.name ~= "angels-bio-yield" then
+    table.insert(module_categories, category.name)
+  end
 end
 
 for _, entity_category in pairs({

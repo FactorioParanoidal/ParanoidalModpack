@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-powderizer"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 25, main_offset = util.by_pixel(-18, -17.625), shadow_offset = util.by_pixel(-18, -17.625), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel(-18, -17.625), shadow_offset = util.by_pixel(-18, -17.625), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel(-18, -17.625), shadow_offset = util.by_pixel(-18, -17.625), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel(-18, -17.625), shadow_offset = util.by_pixel(-18, -17.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-powderizer"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 25,
+      main_offset = util.by_pixel(-18, -17.625),
+      shadow_offset = util.by_pixel(-18, -17.625),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(-18, -17.625),
+      shadow_offset = util.by_pixel(-18, -17.625),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(-18, -17.625),
+      shadow_offset = util.by_pixel(-18, -17.625),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(-18, -17.625),
+      shadow_offset = util.by_pixel(-18, -17.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

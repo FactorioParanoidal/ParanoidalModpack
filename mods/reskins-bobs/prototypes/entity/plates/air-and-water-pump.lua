@@ -19,15 +19,22 @@ local inputs = {
 }
 
 local tier_map = {
-	["bob-water-pump"] = { tier = 1, prog_tier = 2, pump_type = "water" },
-	["bob-water-pump-2"] = { tier = 2, prog_tier = 3, pump_type = "water" },
-	["bob-water-pump-3"] = { tier = 3, prog_tier = 4, pump_type = "water" },
-	["bob-water-pump-4"] = { tier = 4, prog_tier = 5, pump_type = "water" },
-	["bob-air-pump"] = { tier = 1, prog_tier = 2, pump_type = "air" },
-	["bob-air-pump-2"] = { tier = 2, prog_tier = 3, pump_type = "air" },
-	["bob-air-pump-3"] = { tier = 3, prog_tier = 4, pump_type = "air" },
-	["bob-air-pump-4"] = { tier = 4, prog_tier = 5, pump_type = "air" },
+	["bob-water-pump"] = { tier = 1, prog_tier = 1, pump_type = "water" },
+	["bob-water-pump-2"] = { tier = 2, prog_tier = 2, pump_type = "water" },
+	["bob-water-pump-3"] = { tier = 3, prog_tier = 3, pump_type = "water" },
+	["bob-water-pump-4"] = { tier = 4, prog_tier = 4, pump_type = "water" },
+	["bob-air-pump"] = { tier = 1, prog_tier = 1, pump_type = "air" },
+	["bob-air-pump-2"] = { tier = 2, prog_tier = 2, pump_type = "air" },
+	["bob-air-pump-3"] = { tier = 3, prog_tier = 3, pump_type = "air" },
+	["bob-air-pump-4"] = { tier = 4, prog_tier = 4, pump_type = "air" },
 }
+
+if reskins.lib.version.is_older(mods["boblibrary"], "2.1.0") then
+	tier_map["bob-water-pump-3"].prog_tier = 4
+	tier_map["bob-water-pump-4"].prog_tier = 5
+	tier_map["bob-air-pump-3"].prog_tier = 4
+	tier_map["bob-air-pump-4"].prog_tier = 5
+end
 
 local function generate_recipe_mask(pump_type, layer, blend_mode)
 	local recipe_mask = reskins.lib.sprites.make_4way_animation_from_spritesheet({

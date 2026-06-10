@@ -66,7 +66,7 @@ if angelsmods.industries.components then
       ingredients = {
         { type = "item", name = "angels-silicon-wafer", amount = 1 },
         { type = "item", name = "angels-wire-silver", amount = 1 },
-        { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 1 },
+        { type = "fluid", name = "sulfuric-acid", amount = 1 },
       },
       results = { { type = "item", name = "circuit-microchip", amount = 1 } },
       icon_size = 32,
@@ -99,7 +99,7 @@ if angelsmods.industries.components then
       ingredients = {
         { type = "item", name = "angels-silicon-wafer", amount = 1 },
         { type = "item", name = "angels-wire-platinum", amount = 1 },
-        { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 1 },
+        { type = "fluid", name = "sulfuric-acid", amount = 1 },
       },
       results = { { type = "item", name = "circuit-cpu", amount = 1 } },
       icon_size = 32,

@@ -441,7 +441,13 @@ data:extend({
       { type = "fluid", name = "angels-liquid-ngl", amount = 30 },
       { type = "fluid", name = "angels-liquid-mineral-oil", amount = 20 },
       { type = "item", name = "angels-solid-coke", amount = 6 }, --COKE
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = AF.create_gas_recipe_icon({
@@ -517,41 +523,8 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-carbon", amount = 3 },
     },
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-carbon"), 1, angelsmods.petrochem.number_tint),
     order = "d[coke-purification]-a",
     crafting_machine_tint = AF.get_recipe_tints({ { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 }, "steam" }),--[[{
-        primary = {r = 1, g = 0.5, b = 0.5, a = 0},
-        secondary = {r = 1, g = 0.5, b = 0.5, a = 0},
-        tertiary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255}
-      }]]
-  },
-  {
-    type = "recipe",
-    name = "angels-coke-purification-2",
-    category = "angels-liquifying",
-    subgroup = "angels-petrochem-coal",
-    energy_required = 2,
-    enabled = false,
-    auto_recycle = false,
-    hide_from_signal_gui = true,
-    ingredients = {
-      { type = "item", name = "angels-solid-coke", amount = 4 },
-      { type = "item", name = "angels-solid-sodium-hydroxide", amount = 1 },
-      { type = "fluid", name = "angels-gas-nitrogen", amount = 30 },
-    },
-    results = {
-      { type = "item", name = "angels-solid-carbon", amount = 6 },
-      { type = "item", name = "angels-solid-sodium-carbonate", amount = 1 },
-      { type = "fluid", name = "water", amount = 10 },
-    },
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-carbon"), 2, angelsmods.petrochem.number_tint),
-    order = "d[coke-purification]-b",
-    crafting_machine_tint = AF.get_recipe_tints({
-      { r = 1, g = 1, b = 1 },
-      "angels-gas-nitrogen",
-      "water",
-      AF.fluid_color("NaCO3"),
-    }),--[[{
         primary = {r = 1, g = 0.5, b = 0.5, a = 0},
         secondary = {r = 1, g = 0.5, b = 0.5, a = 0},
         tertiary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255}
@@ -573,18 +546,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-coal-crushed", amount = 2 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-coal-crushed"),
-      { 10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-coal-crushed"), { 10, 10 }, 0.5),
     order = "b[coal-crushed]",
   },
   {
@@ -779,7 +747,13 @@ data:extend({
       { type = "fluid", name = "angels-water-purified", amount = 50 },
     },
     results = {
-      { type = "fluid", name = "angels-liquid-water-semiheavy-1", amount = 200, ignored_by_stats = 200, temperature = 25 },
+      {
+        type = "fluid",
+        name = "angels-liquid-water-semiheavy-1",
+        amount = 200,
+        ignored_by_stats = 200,
+        temperature = 25,
+      },
       { type = "fluid", name = "steam", amount = 50, temperature = 125 },
     },
     main_product = "angels-liquid-water-semiheavy-1",
@@ -819,7 +793,13 @@ data:extend({
       { type = "fluid", name = "angels-water-purified", amount = 50 },
     },
     results = {
-      { type = "fluid", name = "angels-liquid-water-semiheavy-2", amount = 200, ignored_by_stats = 200, temperature = 25 },
+      {
+        type = "fluid",
+        name = "angels-liquid-water-semiheavy-2",
+        amount = 200,
+        ignored_by_stats = 200,
+        temperature = 25,
+      },
       { type = "fluid", name = "steam", amount = 50, temperature = 125 },
     },
     main_product = "angels-liquid-water-semiheavy-2",
@@ -859,7 +839,13 @@ data:extend({
       { type = "fluid", name = "angels-water-purified", amount = 50 },
     },
     results = {
-      { type = "fluid", name = "angels-liquid-water-semiheavy-3", amount = 200, ignored_by_stats = 200, temperature = 25 },
+      {
+        type = "fluid",
+        name = "angels-liquid-water-semiheavy-3",
+        amount = 200,
+        ignored_by_stats = 200,
+        temperature = 25,
+      },
       { type = "fluid", name = "steam", amount = 50, temperature = 125 },
     },
     main_product = "angels-liquid-water-semiheavy-3",
@@ -916,7 +902,13 @@ data:extend({
     enabled = false,
     hide_from_signal_gui = true,
     ingredients = {
-      { type = "fluid", name = "angels-liquid-water-heavy", amount = 100, ignored_by_stats = 100, minimum_temperature = 26 },
+      {
+        type = "fluid",
+        name = "angels-liquid-water-heavy",
+        amount = 100,
+        ignored_by_stats = 100,
+        minimum_temperature = 26,
+      },
       { type = "fluid", name = "angels-water-purified", amount = 25 },
     },
     results = {
@@ -968,7 +960,11 @@ data:extend({
       }
     ),
     order = "a[water-separation]-c[water-heavy]-a",
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-deuterium", "angels-liquid-water-heavy", "angels-gas-oxygen" }),--[[{
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-deuterium",
+      "angels-liquid-water-heavy",
+      "angels-gas-oxygen",
+    }),--[[{
         primary = {r = 1, g = 0, b = 0, a = 0},
         secondary = {r = 1, g = 1, b = 1, a = 0},
         tertiary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255}
@@ -1005,7 +1001,11 @@ data:extend({
       }
     ),
     order = "a[water-separation]-c[water-heavy]-b",
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-deuterium", "angels-liquid-water-heavy", "angels-gas-oxygen" }),--[[{
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-deuterium",
+      "angels-liquid-water-heavy",
+      "angels-gas-oxygen",
+    }),--[[{
         primary = {r = 1, g = 0, b = 0, a = 0},
         secondary = {r = 1, g = 1, b = 1, a = 0},
         tertiary = {r = 167 / 255, g = 75 / 255, b = 5 / 255, a = 0 / 255}

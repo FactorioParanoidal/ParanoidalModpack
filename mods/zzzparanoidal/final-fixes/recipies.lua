@@ -733,9 +733,9 @@ paralib.bobmods.lib.recipe.set_ingredients("bob-boiler-3", {
 	{ type = "item", name = "bob-invar-alloy", amount = 20 },
 })
 paralib.bobmods.lib.recipe.set_ingredients("bob-boiler-4", {
-	{ type = "item", name = "bob-ceramic-pipe", amount = 15 },
+	{ type = "item", name = "bob-titanium-pipe", amount = 15 },
 	{ type = "item", name = "bob-boiler-3", amount = 2 },
-	{ type = "item", name = "bob-tungsten-plate", amount = 20 },
+	{ type = "item", name = "tungsten-plate", amount = 20 },
 })
 paralib.bobmods.lib.recipe.set_ingredients("bob-boiler-5", {
 	{ type = "item", name = "bob-copper-tungsten-pipe", amount = 15 },

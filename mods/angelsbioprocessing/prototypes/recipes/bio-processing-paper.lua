@@ -148,7 +148,11 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-wood-pulp", amount = 20 },
     },
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-wood-pulp"), 1, angelsmods.bioprocessing.number_tint),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-wood-pulp"),
+      1,
+      angelsmods.bioprocessing.number_tint
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       "water",
     }),
@@ -238,7 +242,11 @@ data:extend({
       { type = "item", name = "angels-solid-wood-pulp", amount = 25 },
       { type = "fluid", name = "angels-liquid-brown-liquor", amount = 75 },
     },
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-wood-pulp"), 2, angelsmods.bioprocessing.number_tint),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-wood-pulp"),
+      2,
+      angelsmods.bioprocessing.number_tint
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-brown-liquor",
       "angels-liquid-pulping-liquor",
@@ -348,7 +356,11 @@ data:extend({
       { type = "fluid", name = "angels-liquid-black-liquor", amount_min = 35, amount_max = 40 },
     },
     always_show_products = true,
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-wood-pulp"), 3, angelsmods.bioprocessing.number_tint),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-wood-pulp"),
+      3,
+      angelsmods.bioprocessing.number_tint
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-black-liquor",
       "angels-liquid-white-liquor",
@@ -376,7 +388,11 @@ data:extend({
     always_show_products = true,
     show_amount_in_title = false,
     allow_decomposition = false,
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-paper"), 1, angelsmods.bioprocessing.number_tint),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-paper"),
+      1,
+      angelsmods.bioprocessing.number_tint
+    ),
     order = "ba",
   },
   {
@@ -398,7 +414,11 @@ data:extend({
       { type = "item", name = "angels-solid-sodium-hypochlorite", amount = 2 },
     },
     allow_decomposition = false,
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-paper"), 2, angelsmods.bioprocessing.number_tint),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-paper"),
+      2,
+      angelsmods.bioprocessing.number_tint
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       AF.fluid_color("NaOCl"),
       "angels-gas-chlorine",
@@ -425,10 +445,7 @@ data:extend({
       { type = "fluid", name = "angels-gas-oxygen", amount = 100 },
     },
     main_product = "angels-solid-salt",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-        { "angels-solid-sodium-hypochlorite" },
-        "angels-solid-salt"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-solid-sodium-hypochlorite" }, "angels-solid-salt"),
     icon_size = 32,
     crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-oxygen", AF.fluid_color("NaOCl") }),
     order = "g[solid-sodium-hypochlorite-decomposition]",
@@ -455,8 +472,17 @@ data:extend({
       { type = "fluid", name = "angels-water-yellow-waste", amount = 100 },
     },
     allow_decomposition = false,
-    icons = AF.add_number_icon_layer(AF.get_object_icons("angels-solid-paper"), 3, angelsmods.bioprocessing.number_tint),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-water-yellow-waste", "water", "angels-gas-oxygen", "angels-gas-sulfur-dioxide" }),
+    icons = AF.add_number_icon_layer(
+      AF.get_object_icons("angels-solid-paper"),
+      3,
+      angelsmods.bioprocessing.number_tint
+    ),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-water-yellow-waste",
+      "water",
+      "angels-gas-oxygen",
+      "angels-gas-sulfur-dioxide",
+    }),
     order = "bc",
   },
 })

@@ -151,7 +151,13 @@ data:extend({
     },
     results = {
       { type = "item", name = "angels-coil-glass-fiber", amount = 8 },
-      { type = "fluid", name = "angels-liquid-coolant-used", amount = 40, temperature = 300 },
+      {
+        type = "fluid",
+        name = "angels-liquid-coolant-used",
+        amount = 40,
+        ignored_by_productivity = 40,
+        temperature = 300,
+      },
     },
     main_product = "angels-coil-glass-fiber",
     icons = angelsmods.functions.add_number_icon_layer(

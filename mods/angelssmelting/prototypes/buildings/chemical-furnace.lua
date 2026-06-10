@@ -31,12 +31,33 @@ local function angels_chemical_furnace_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-chemical-furnace"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-4.75,  33), shadow_offset = util.by_pixel(-4.75,  33), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.75,  33), shadow_offset = util.by_pixel(-4.75,  33), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.75,  33), shadow_offset = util.by_pixel(-4.75,  33), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.75,  33), shadow_offset = util.by_pixel(-4.75,  33), show_shadow = true },
-})
+circuit_connector_definitions["angels-chemical-furnace"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.75, 33),
+      shadow_offset = util.by_pixel(-4.75, 33),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.75, 33),
+      shadow_offset = util.by_pixel(-4.75, 33),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.75, 33),
+      shadow_offset = util.by_pixel(-4.75, 33),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.75, 33),
+      shadow_offset = util.by_pixel(-4.75, 33),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -472,7 +493,12 @@ data:extend({
     drawing_box_vertical_extension = 0.75,
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-chemical-smelting", "angels-chemical-smelting-2", "angels-chemical-smelting-3", "angels-chemical-smelting-4" },
+    crafting_categories = {
+      "angels-chemical-smelting",
+      "angels-chemical-smelting-2",
+      "angels-chemical-smelting-3",
+      "angels-chemical-smelting-4",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "electric",

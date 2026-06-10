@@ -31,12 +31,33 @@ local function floatationpipepictures()
   }
 end
 
-circuit_connector_definitions["angels-ore-floatation-cell"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 27, main_offset = util.by_pixel(-25.375,  10.875), shadow_offset = util.by_pixel(-25.375,  10.875), show_shadow = true },
-  { variation = 27, main_offset = util.by_pixel(-25.375,  10.875), shadow_offset = util.by_pixel(-25.375,  10.875), show_shadow = true },
-  { variation = 27, main_offset = util.by_pixel(-25.375,  10.875), shadow_offset = util.by_pixel(-25.375,  10.875), show_shadow = true },
-  { variation = 27, main_offset = util.by_pixel(-25.375,  10.875), shadow_offset = util.by_pixel(-25.375,  10.875), show_shadow = true },
-})
+circuit_connector_definitions["angels-ore-floatation-cell"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 27,
+      main_offset = util.by_pixel(-25.375, 10.875),
+      shadow_offset = util.by_pixel(-25.375, 10.875),
+      show_shadow = true,
+    },
+    {
+      variation = 27,
+      main_offset = util.by_pixel(-25.375, 10.875),
+      shadow_offset = util.by_pixel(-25.375, 10.875),
+      show_shadow = true,
+    },
+    {
+      variation = 27,
+      main_offset = util.by_pixel(-25.375, 10.875),
+      shadow_offset = util.by_pixel(-25.375, 10.875),
+      show_shadow = true,
+    },
+    {
+      variation = 27,
+      main_offset = util.by_pixel(-25.375, 10.875),
+      shadow_offset = util.by_pixel(-25.375, 10.875),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

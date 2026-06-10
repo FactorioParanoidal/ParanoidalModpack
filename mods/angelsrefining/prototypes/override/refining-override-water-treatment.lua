@@ -244,18 +244,28 @@ if mods["bobplates"] then
   OV.add_unlock("bob-lithium-processing", "angels-solid-lithium")
   if angelsmods.bioprocessing then
     OV.add_unlock("bob-lithium-processing", "angels-algae-brown-burning")
+    OV.add_prereq("bob-lithium-processing", "angels-bio-processing-green")
   end
   OV.set_science_pack("bob-lithium-processing", "chemical-science-pack", 1)
 
   --Insert water resources to bob recipes (NEED A WAY TO PATCH A SPECIFIC TINT)
   OV.patch_recipes({
-    { name = "bob-nitric-acid", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
-    { name = "bob-sulfuric-acid-2", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
+    {
+      name = "bob-nitric-acid",
+      ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
+    },
+    {
+      name = "bob-sulfuric-acid-2",
+      ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
+    },
     {
       name = "bob-petroleum-gas-cracking",
       ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
     },
-    { name = "bob-coal-cracking", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
+    {
+      name = "bob-coal-cracking",
+      ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
+    },
     {
       name = "bob-lithium-perchlorate",
       ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
@@ -263,8 +273,14 @@ if mods["bobplates"] then
     { name = "explosives", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
     { name = "sulfur", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
     { name = "sulfuric-acid", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
-    { name = "heavy-oil-cracking", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
-    { name = "light-oil-cracking", ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } } },
+    {
+      name = "heavy-oil-cracking",
+      ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
+    },
+    {
+      name = "light-oil-cracking",
+      ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },
+    },
     {
       name = "advanced-oil-processing",
       ingredients = { { name = "angels-water-purified", type = "fluid", amount = "water" } },

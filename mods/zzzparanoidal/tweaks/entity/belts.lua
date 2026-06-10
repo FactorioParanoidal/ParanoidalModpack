@@ -29,11 +29,11 @@ data.raw["splitter"]["express-splitter"].speed = 4 * base_speed
 
 if mods.boblogistics then
 	-- 8x Purple Belt
-	data.raw["transport-belt"]["bob-turbo-transport-belt"].speed = 6 * base_speed
-	data.raw["underground-belt"]["bob-turbo-underground-belt"].speed = 6 * base_speed
-	data.raw["splitter"]["bob-turbo-splitter"].speed = 6 * base_speed
+	data.raw["transport-belt"]["turbo-transport-belt"].speed = 6 * base_speed
+	data.raw["underground-belt"]["turbo-underground-belt"].speed = 6 * base_speed
+	data.raw["splitter"]["turbo-splitter"].speed = 6 * base_speed
 
-	data.raw["underground-belt"]["bob-turbo-underground-belt"].max_distance = 23
+	data.raw["underground-belt"]["turbo-underground-belt"].max_distance = 23
 
 	-- 16x Green Belt
 	data.raw["transport-belt"]["bob-ultimate-transport-belt"].speed = 12 * base_speed

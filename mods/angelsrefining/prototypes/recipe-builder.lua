@@ -88,10 +88,18 @@ local function check_ingredients(ingredients)
         table.remove(ingredients, i)
         l = l - 1
       else -- adjust ingredient for fallback
-        ingredients[i] = { type = item.type, name = i_name, amount = i_amount, maximum_temperature = item.maximum_temperature, minimum_temperature = item.minimum_temperature }
+        ingredients[i] = {
+          type = item.type,
+          name = i_name,
+          amount = i_amount,
+          maximum_temperature = item.maximum_temperature,
+          minimum_temperature = item.minimum_temperature,
+        }
         ingredient_map[item.type][i_name] = i
         i = i + 1
       end
+    else
+      break
     end
   end
 end

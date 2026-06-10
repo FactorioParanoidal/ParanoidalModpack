@@ -44,7 +44,7 @@ data:extend({
     auto_recycle = false,
     ingredients = {
       { type = "item", name = "angels-pellet-cobalt", amount = 2 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 20 },
+      { type = "fluid", name = "sulfuric-acid", amount = 20 },
     },
     results = {
       { type = "item", name = "angels-solid-cobalt-hydroxide", amount = 6 },

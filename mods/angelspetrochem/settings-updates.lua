@@ -13,3 +13,6 @@ if mods["bobrevamp"] then
   angelsmods.settings.hide_setting("bool-setting", "bobmods-revamp-old-oil", false)
   angelsmods.settings.hide_setting("bool-setting", "bobmods-revamp-oil", false)
 end
+if mods["Nuclear Fuel"] then
+  angelsmods.settings.hide_setting("bool-setting", "nuclear-fuel-kovarex-enabled", true)
+end

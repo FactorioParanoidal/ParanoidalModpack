@@ -8,6 +8,33 @@ if not (reskins.bobs and reskins.bobs.triggers.power.entities) then
 	return
 end
 
+local function make_heat_pipe_pictures(path, name_prefix, data, draw_as_glow)
+	local all_pictures = {}
+	local func = draw_as_glow and apply_heat_pipe_glow or function(t)
+		return t
+	end
+	for key, t in pairs(data) do
+		if t.empty then
+			all_pictures[key] = { priority = "extra-high", filename = "__core__/graphics/empty.png", width = 1, height = 1 }
+		else
+			local tile_pictures = {}
+			for i = 1, (t.variations or 1) do
+				local sprite = func({
+					priority = "extra-high",
+					filename = path .. name_prefix .. "-" .. (t.name or string.gsub(key, "_", "-")) .. (t.omit_number and ".png" or ("-" .. tostring(i) .. ".png")),
+					width = (t.width or 32) * 2,
+					height = (t.height or 32) * 2,
+					scale = 0.5,
+					shift = t.shift,
+				})
+				table.insert(tile_pictures, sprite)
+			end
+			all_pictures[key] = tile_pictures
+		end
+	end
+	return all_pictures
+end
+
 -- Set input parameters
 local inputs = {
 	type = "heat-pipe",
@@ -79,7 +106,7 @@ for name, map in pairs(tier_map) do
 
 	-- Reskin entities
 	entity.connection_sprites = make_heat_pipe_pictures("__reskins-bobs__/graphics/entity/power/heat-pipe/" .. map.material .. "/", "heat-pipe", {
-		single = { name = "straight-vertical-single", ommit_number = true },
+		single = { name = "straight-vertical-single", omit_number = true },
 		straight_vertical = { variations = 6 },
 		straight_horizontal = { variations = 6 },
 		corner_right_up = { name = "corner-up-right", variations = 6 },

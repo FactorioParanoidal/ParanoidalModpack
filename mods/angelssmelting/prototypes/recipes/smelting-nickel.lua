@@ -44,7 +44,7 @@ data:extend({
     auto_recycle = false,
     ingredients = {
       { type = "item", name = "angels-processed-nickel", amount = 4 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 60 },
+      { type = "fluid", name = "sulfuric-acid", amount = 60 },
     },
     results = {
       { type = "item", name = "angels-cathode-nickel", amount = 12 },

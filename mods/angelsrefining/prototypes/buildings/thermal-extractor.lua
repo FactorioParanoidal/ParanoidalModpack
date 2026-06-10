@@ -1,4 +1,4 @@
-local hit_effects = require ("__base__.prototypes.entity.hit-effects")
+local hit_effects = require("__base__.prototypes.entity.hit-effects")
 
 data:extend({
   {
@@ -84,14 +84,14 @@ data:extend({
         },
       },
     },
-    open_sound = {filename = "__base__/sound/open-close/pumpjack-open.ogg", volume = 0.5},
-    close_sound = {filename = "__base__/sound/open-close/pumpjack-close.ogg", volume = 0.5},
+    open_sound = { filename = "__base__/sound/open-close/pumpjack-open.ogg", volume = 0.5 },
+    close_sound = { filename = "__base__/sound/open-close/pumpjack-close.ogg", volume = 0.5 },
     impact_category = "metal",
     working_sound = {
       sound = { filename = "__angelsrefininggraphics__/sound/thermal-extractor.ogg" },
       max_sounds_per_prototype = 3,
       fade_in_ticks = 4,
-      fade_out_ticks = 10
+      fade_out_ticks = 10,
     },
     fast_replaceable_group = "angels-thermal-extractor",
   },
@@ -178,14 +178,14 @@ data:extend({
         },
       },
     },
-    open_sound = {filename = "__base__/sound/open-close/pumpjack-open.ogg", volume = 0.5},
-    close_sound = {filename = "__base__/sound/open-close/pumpjack-close.ogg", volume = 0.5},
+    open_sound = { filename = "__base__/sound/open-close/pumpjack-open.ogg", volume = 0.5 },
+    close_sound = { filename = "__base__/sound/open-close/pumpjack-close.ogg", volume = 0.5 },
     impact_category = "metal",
     working_sound = {
       sound = { filename = "__angelsrefininggraphics__/sound/thermal-extractor.ogg" },
       max_sounds_per_prototype = 3,
       fade_in_ticks = 4,
-      fade_out_ticks = 10
+      fade_out_ticks = 10,
     },
     fast_replaceable_group = "angels-thermal-extractor",
   },

@@ -46,7 +46,11 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/hydrogen-chloride.png", 72 },
     }, "ClClH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-hydrogen-chloride", "angels-gas-hydrogen", "angels-gas-chlorine" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-hydrogen-chloride",
+      "angels-gas-hydrogen",
+      "angels-gas-chlorine",
+    }),
     order = "c[gas-hydrogen-chloride]",
   },
   {
@@ -69,7 +73,11 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/chlorine.png", 72 },
       { "__angelspetrochemgraphics__/graphics/icons/molecules/hydrogen.png", 72 },
     }, "ClClH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-hydrogen-chloride", "angels-gas-chlorine", "angels-gas-hydrogen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-hydrogen-chloride",
+      "angels-gas-chlorine",
+      "angels-gas-hydrogen",
+    }),
     order = "d[gas-hydrogen-chloride]",
   },
   {
@@ -92,7 +100,11 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/chloromethane.png", 72 },
     }, "CClH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-chlor-methane", "angels-gas-methane", "angels-gas-chlorine" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-chlor-methane",
+      "angels-gas-methane",
+      "angels-gas-chlorine",
+    }),
     order = "e[gas-chlor-methane]",
   },
   {
@@ -133,7 +145,7 @@ data:extend({
     hide_from_signal_gui = true,
     ingredients = {
       { type = "item", name = "angels-solid-salt", amount = 6 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 120 },
+      { type = "fluid", name = "sulfuric-acid", amount = 120 },
     },
     results = {
       { type = "fluid", name = "angels-liquid-hydrochloric-acid", amount = 70 },
@@ -145,7 +157,7 @@ data:extend({
     }, "ClHO"),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-hydrchloric-acid",
-      "angels-liquid-sulfuric-acid",
+      "sulfuric-acid",
       AF.fluid_color("NaCl"),
       AF.fluid_color("Na2SO4"),
     }),
@@ -282,7 +294,11 @@ data:extend({
     icons = angelsmods.functions.create_liquid_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/glycerol.png", 72 },
     }, "COH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-glycerol", "angels-gas-epichlorohydrin", "angels-water-purified" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-glycerol",
+      "angels-gas-epichlorohydrin",
+      "angels-water-purified",
+    }),
     order = "j[liquid-glycerol]",
   },
   {

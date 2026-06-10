@@ -86,7 +86,7 @@ data:extend({
     order = "c-a",
   },
 
-  -- Logisitic warehouses 2
+  -- Logistic warehouses 2
   {
     type = "technology",
     name = "angels-logistic-warehouses-2",

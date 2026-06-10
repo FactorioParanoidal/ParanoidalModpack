@@ -13,7 +13,7 @@ data:extend({
     icons = {
       mods["angelssmelting"] and {
         icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
-        icon_size = 32
+        icon_size = 32,
       } or {
         icon = "__base__/graphics/icons/iron-plate.png",
         icon_size = 64,
@@ -41,7 +41,7 @@ data:extend({
     icons = {
       mods["angelssmelting"] and {
         icon = "__angelssmeltinggraphics__/graphics/icons/plate-copper.png",
-        icon_size = 32
+        icon_size = 32,
       } or {
         icon = "__base__/graphics/icons/copper-plate.png",
         icon_size = 64,

@@ -19,6 +19,7 @@ require("tweaks.entity.boilers")
 require("tweaks.entity.alert-arrow")
 require("tweaks.entity.miniloaders")
 require("tweaks.entity.generators")
+require("tweaks.entity.oberhaul-lab-power") -- 1.1 Oberhaul: энергия лабов (scienceoberhaul)
 require("tweaks.entity.fluid-void")
 require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
@@ -51,6 +52,7 @@ require("tweaks.technology.pumps")
 require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
+require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
 
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.map-gen-presets")
@@ -138,6 +140,37 @@ end
 
 -- Oberhaul refining-port (после OV.execute, чтобы OV не перезатёр изменения).
 require("tweaks.recipe.oberhaul-refining-port")
+
+-- Oberhaul belt-port (beltrecipes + beltentities, 1.1)
+require("tweaks.recipe.oberhaul-belt-port")
+
+-- Oberhaul petrochem-port (petrochemchange, 1.1)
+require("tweaks.recipe.oberhaul-petrochem-port")
+
+-- Баланс стоимости резины из дерева (resin/bob-resin)
+require("tweaks.recipe.resin-balance")
+
+-- Oberhaul gems-port (gems2 огранка + gems ликвефакция, 1.1)
+require("tweaks.recipe.oberhaul-gems-port")
+
+-- Oberhaul solar-port (bobssolar: ×4 тиры панелей/аккумуляторов, 1.1)
+require("tweaks.recipe.oberhaul-solar-port")
+
+-- Oberhaul module-port (эффекты + слоты модулей, 1.1; цена — отдельно)
+require("tweaks.recipe.oberhaul-module-port")
+
+-- Bob's/Angels 2.1: фл­юид angels-liquid-sulfuric-acid ретайрнут → базовый sulfuric-acid
+-- (миграция angelspetrochem 2.0.2). Перенаправляем все рецепты, ещё ссылающиеся на мёртвый
+-- фл­юид (angelsindustries 1.1.0 без апдейта, PCPRedux, zzz chemistry/electronics).
+for _, recipe in pairs(data.raw.recipe) do
+	for _, list in ipairs({ recipe.ingredients or {}, recipe.results or {} }) do
+		for _, item in pairs(list) do
+			if item.name == "angels-liquid-sulfuric-acid" then
+				item.name = "sulfuric-acid"
+			end
+		end
+	end
+end
 
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")

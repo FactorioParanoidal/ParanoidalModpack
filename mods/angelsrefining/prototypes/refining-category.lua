@@ -162,12 +162,6 @@ data:extend({
   },
   {
     type = "item-subgroup",
-    name = "angels-ores",
-    group = "angels-resource-refining",
-    order = "d[ores]",
-  },
-  {
-    type = "item-subgroup",
     name = "angels-liquifying",
     group = "angels-resource-refining",
     order = "e[mineral]-a[liquifying]",

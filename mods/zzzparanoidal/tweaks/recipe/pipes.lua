@@ -1,4 +1,4 @@
 require("paralib")
-paralib.bobmods.lib.recipe.hide("bob-stone-pipe")
-paralib.bobmods.lib.recipe.hide("bob-stone-pipe-to-ground")
+paralib.bobmods.lib.recipe.hide("pipe")
+paralib.bobmods.lib.recipe.hide("pipe-to-ground")
 

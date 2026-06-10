@@ -7,7 +7,7 @@ data:extend({
   },
 })
 
--- if mods["aai-industry"] then
---   data.raw["bool-setting"]["bobmods-burnerphase"].hidden = true
---   data.raw["bool-setting"]["bobmods-burnerphase"].forced_value = false
--- end
+if mods["aai-industry"] then
+  data.raw["bool-setting"]["bobmods-burnerphase"].hidden = true
+  data.raw["bool-setting"]["bobmods-burnerphase"].forced_value = false
+end

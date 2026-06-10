@@ -24,7 +24,11 @@ data:extend({
       "angels-liquid-condensates",
       "angels-gas-raw-1",
     }, "NgNgNg"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-raw-1", "angels-gas-natural-1", "angels-water-yellow-waste" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-raw-1",
+      "angels-gas-natural-1",
+      "angels-water-yellow-waste",
+    }),
     order = "a[gas-separation]",
   },
   {
@@ -105,7 +109,12 @@ data:extend({
         "angels-gas-synthesis",
       }
     ),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-methane", "angels-liquid-ngl", "angels-gas-carbon-monoxide", "angels-gas-synthesis" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-methane",
+      "angels-liquid-ngl",
+      "angels-gas-carbon-monoxide",
+      "angels-gas-synthesis",
+    }),
     order = "d",
   },
   {
@@ -138,7 +147,12 @@ data:extend({
         "angels-liquid-condensates",
       }
     ),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-ethane", "angels-liquid-ngl", "angels-liquid-naphtha", "angels-liquid-condensates" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-ethane",
+      "angels-liquid-ngl",
+      "angels-liquid-naphtha",
+      "angels-liquid-condensates",
+    }),
     order = "e",
   },
   {
@@ -171,7 +185,12 @@ data:extend({
         "angels-gas-residual",
       }
     ),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-residual", "angels-gas-ethane", "angels-gas-residual", "angels-liquid-toluene" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-residual",
+      "angels-gas-ethane",
+      "angels-gas-residual",
+      "angels-liquid-toluene",
+    }),
     order = "f",
   },
   {
@@ -404,7 +423,12 @@ data:extend({
     icons = angelsmods.functions.create_liquid_recipe_icon({
       "angels-gas-synthesis",
     }, { { 196, 075, 085 }, { 170, 071, 081 }, { 148, 066, 075 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-synthesis", "angels-liquid-naphtha", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-synthesis",
+      "angels-liquid-naphtha",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "e[steam-cracking-naphtha]",
   },
   {
@@ -459,7 +483,12 @@ data:extend({
     icons = angelsmods.functions.create_liquid_recipe_icon({
       "angels-gas-synthesis",
     }, { { 063, 189, 063 }, { 058, 173, 58 }, { 053, 159, 053 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-mineral-oil", "angels-gas-synthesis", "steam", "angels-gas-residual" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-mineral-oil",
+      "angels-gas-synthesis",
+      "steam",
+      "angels-gas-residual",
+    }),
     order = "f[catalyst-steam-cracking-mineral-oil]",
   },
   {
@@ -482,7 +511,12 @@ data:extend({
     icons = angelsmods.functions.create_liquid_recipe_icon({
       "angels-gas-synthesis",
     }, { { 237, 212, 104 }, { 239, 210, 093 }, { 247, 216, 081 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-synthesis", "angels-liquid-fuel-oil", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-synthesis",
+      "angels-liquid-fuel-oil",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "g[catalyst-steam-cracking-fuel-oil]",
   },
   {
@@ -528,7 +562,11 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/hydrogen.png", 72 },
       { "__angelspetrochemgraphics__/graphics/icons/molecules/carbon-monoxide.png", 72 },
     }, { { 210, 120, 210 }, { 175, 100, 175 }, { 140, 080, 140 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-hydrogen", "angels-gas-synthesis", "angels-gas-carbon-monoxide" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-hydrogen",
+      "angels-gas-synthesis",
+      "angels-gas-carbon-monoxide",
+    }),
     order = "a[gas-synthesis-separation]",
   },
   {
@@ -551,7 +589,11 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       "angels-gas-synthesis",
     }, { { 210, 120, 210 }, { 175, 100, 175 }, { 140, 080, 140 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-synthesis", "angels-gas-carbon-monoxide", "angels-gas-hydrogen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-synthesis",
+      "angels-gas-carbon-monoxide",
+      "angels-gas-hydrogen",
+    }),
     order = "b[gas-synthesis-reforming]",
   },
   {
@@ -572,7 +614,13 @@ data:extend({
       { type = "fluid", name = "angels-gas-methane", amount = 60 },
       { type = "fluid", name = "angels-gas-ethane", amount = 20 },
       { type = "fluid", name = "angels-gas-butane", amount = 20 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
@@ -580,7 +628,12 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/butane.png", 72 },
       { "__angelspetrochemgraphics__/graphics/icons/molecules/ethane.png", 72 },
     }, { { 210, 120, 210 }, { 175, 100, 175 }, { 140, 080, 140 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-methane", "angels-gas-synthesis", "angels-gas-butane", "angels-gas-hydrogen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-methane",
+      "angels-gas-synthesis",
+      "angels-gas-butane",
+      "angels-gas-hydrogen",
+    }),
     order = "c[gas-synthesis-methanation]",
   },
   {
@@ -599,13 +652,23 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-liquid-naphtha", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
       "angels-liquid-naphtha",
     }, { { 210, 120, 210 }, { 175, 100, 175 }, { 140, 080, 140 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-naphtha", "angels-gas-synthesis", "angels-gas-carbon-monoxide" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-naphtha",
+      "angels-gas-synthesis",
+      "angels-gas-carbon-monoxide",
+    }),
     order = "d[liquid-mineral-oil-catalyst]",
   },
   {
@@ -625,7 +688,13 @@ data:extend({
     results = {
       { type = "fluid", name = "angels-water-purified", amount = 20 },
       { type = "fluid", name = "angels-gas-methanol", amount = 80 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
@@ -706,7 +775,12 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/methanol.png", 72 },
     }, "CHWs"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-methanol", "angels-gas-methane", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-methanol",
+      "angels-gas-methane",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "a[steam-cracking-methane]",
   },
   {
@@ -731,7 +805,12 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/ethylene.png", 72 },
     }, "CHWs"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-ethylene", "angels-gas-ethane", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-ethylene",
+      "angels-gas-ethane",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "b[gas-ethylene]",
   },
   {
@@ -754,7 +833,12 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/benzene.png", 72 },
     }, "CHWs"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-benzene", "angels-gas-butane", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-benzene",
+      "angels-gas-butane",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "c[steam-cracking-butane]",
   },
   {
@@ -775,14 +859,25 @@ data:extend({
     results = {
       { type = "fluid", name = "angels-gas-butadiene", amount = 80 },
       { type = "fluid", name = "angels-gas-residual", amount = 20 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-butadiene",
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/butadiene.png", 72 },
     }, "CHWs"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-butadiene", "angels-liquid-naphtha", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-butadiene",
+      "angels-liquid-naphtha",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "d[gas-butadiene]",
   },
   {
@@ -801,7 +896,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-propene", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_liquid_recipe_icon({
@@ -827,7 +928,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-benzene", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-benzene",
     always_show_products = true,
@@ -853,7 +960,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-liquid-polyethylene", amount = 50 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-liquid-polyethylene",
     always_show_products = true,
@@ -886,14 +999,24 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-methanol", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-methanol",
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/methanol.png", 72 },
     }, "COH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-methanol", "angels-gas-carbon-dioxide", "angels-gas-hydrogen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-methanol",
+      "angels-gas-carbon-dioxide",
+      "angels-gas-hydrogen",
+    }),
     order = "a[gas-methanol-catalyst]",
   },
   {
@@ -912,13 +1035,23 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-ethylene-oxide", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/ethylene-oxide.png", 72 },
     }, "COH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-ethylene-oxide", "angels-gas-ethylene", "angels-gas-oxygen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-ethylene-oxide",
+      "angels-gas-ethylene",
+      "angels-gas-oxygen",
+    }),
     order = "b[gas-ethylene-oxide-catalyst]",
   },
   {
@@ -938,14 +1071,24 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-liquid-toluene", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-liquid-toluene",
     always_show_products = true,
     icons = angelsmods.functions.create_liquid_recipe_icon({
       "angels-liquid-toluene",
     }, { { 196, 075, 085 }, { 170, 071, 081 }, { 148, 066, 075 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-toluene", "angels-liquid-naphtha", "angels-gas-hydrogen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-toluene",
+      "angels-liquid-naphtha",
+      "angels-gas-hydrogen",
+    }),
     order = "e[toluene]-a",
   },
   {
@@ -965,7 +1108,13 @@ data:extend({
     results = {
       { type = "fluid", name = "angels-liquid-toluene", amount = 100 },
       { type = "fluid", name = "angels-gas-hydrogen-chloride", amount = 50 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
@@ -995,7 +1144,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-formaldehyde", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-formaldehyde",
     always_show_products = true,
@@ -1021,7 +1176,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-liquid-styrene", amount = 50 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-liquid-styrene",
     always_show_products = true,
@@ -1048,7 +1209,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-liquid-phenol", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-liquid-phenol",
     always_show_products = true,
@@ -1080,7 +1247,12 @@ data:extend({
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/propene.png", 72 },
     }, "CHWs"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-propene", "angels-gas-methanol", "angels-gas-residual", "steam" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-propene",
+      "angels-gas-methanol",
+      "angels-gas-residual",
+      "steam",
+    }),
     order = "e[gas-propene]",
   },
   --ADVANCED CHEMISTRY
@@ -1164,14 +1336,25 @@ data:extend({
     results = {
       { type = "fluid", name = "angels-liquid-phenol", amount = 60 },
       { type = "fluid", name = "angels-gas-acetone", amount = 60 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = angelsmods.functions.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/phenol.png", 72 },
       { "__angelspetrochemgraphics__/graphics/icons/molecules/acetone.png", 72 },
     }, "COH"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-phenol", "angels-gas-benzene", "angels-gas-acetone", "angels-gas-oxygen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-phenol",
+      "angels-gas-benzene",
+      "angels-gas-acetone",
+      "angels-gas-oxygen",
+    }),
     order = "d[cumene-process]-b",
   },
   {

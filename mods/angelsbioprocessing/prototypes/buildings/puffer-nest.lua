@@ -16,7 +16,7 @@ data:extend({
       result = "angels-bio-puffer-egg-1",
       count = 2,
     },
-    emissions_per_second = {pollution = -0.006}, --emissions_per_tick = -0.0001,
+    emissions_per_second = { pollution = -0.006 }, --emissions_per_tick = -0.0001,
     factoriopedia_simulation = simulations.factoriopedia_angels_puffer_nest,
     max_health = 20,
     collision_box = { { -0.8, -0.8 }, { 0.8, 0.8 } },

@@ -281,7 +281,7 @@ function angelsmods.petrochem.steamcrackerpipepictures1()
       width = 64,
       height = 64,
       scale = 0.5,
-      shift = {0, 1},
+      shift = { 0, 1 },
     },
     east = {
       filename = "__angelspetrochemgraphics__/graphics/entity/separator/blank.png",

@@ -41,7 +41,11 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/nitrogen.png", 64 },
       { "__angelspetrochemgraphics__/graphics/icons/molecules/oxygen.png", 72 },
     }, "NNO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-nitrogen", "angels-gas-compressed-air", "angels-gas-oxygen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-nitrogen",
+      "angels-gas-compressed-air",
+      "angels-gas-oxygen",
+    }),
     order = "b[air]-a[separation]",
   },
   {
@@ -89,14 +93,24 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-nitrogen-monoxide", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-nitrogen-monoxide",
     always_show_products = true,
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/nitric-oxide.png", 72 },
     }, "NOO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-nitrogen-monoxide", "angels-gas-ammonia", "angels-gas-oxygen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-nitrogen-monoxide",
+      "angels-gas-ammonia",
+      "angels-gas-oxygen",
+    }),
     order = "c[gas-nitrogen-dioxide]",
   },
   {
@@ -118,7 +132,11 @@ data:extend({
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/nitrogen-dioxide.png", 72 },
     }, "NOO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-nitrogen-dioxide", "angels-gas-oxygen", "angels-gas-nitrogen-monoxide" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-nitrogen-dioxide",
+      "angels-gas-oxygen",
+      "angels-gas-nitrogen-monoxide",
+    }),
     order = "d",
   },
   {
@@ -137,7 +155,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-ammonia", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-ammonia",
     always_show_products = true,
@@ -166,7 +190,11 @@ data:extend({
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/ammonium-chloride.png", 72 },
     }, "NHCl"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-ammonium-chloride", "angels-gas-ammonia", "angels-gas-hydrogen-chloride" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-ammonium-chloride",
+      "angels-gas-ammonia",
+      "angels-gas-hydrogen-chloride",
+    }),
     order = "f",
   },
   {
@@ -191,7 +219,12 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/urea.png", 72 },
       "angels-water-purified",
     }, "CNO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-urea", "angels-gas-ammonia", "angels-water-purified", "angels-gas-carbon-dioxide" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-urea",
+      "angels-gas-ammonia",
+      "angels-water-purified",
+      "angels-gas-carbon-dioxide",
+    }),
     order = "g",
   },
   {
@@ -219,7 +252,11 @@ data:extend({
         { "__angelspetrochemgraphics__/graphics/icons/molecules/nitrogen-dioxide.png", 72 },
       }
     ),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-nitric-acid", "angels-gas-nitrogen-dioxide", "angels-water-purified" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-nitric-acid",
+      "angels-gas-nitrogen-dioxide",
+      "angels-water-purified",
+    }),
     order = "h[nitric-acid]-a[water-purified]",
   },
   {
@@ -232,7 +269,7 @@ data:extend({
     hide_from_signal_gui = true,
     ingredients = {
       { type = "item", name = "angels-solid-sodium-nitrate", amount = 5 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 40 },
+      { type = "fluid", name = "sulfuric-acid", amount = 40 },
     },
     results = {
       { type = "fluid", name = "angels-liquid-nitric-acid", amount = 40 },
@@ -249,7 +286,7 @@ data:extend({
     ),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-nitric-acid",
-      "angels-liquid-sulfuric-acid",
+      "sulfuric-acid",
       AF.fluid_color("NaNO3"),
     }),
     order = "h[nitric-acid]-b[sulfuric-acid]",
@@ -269,7 +306,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-melamine", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-melamine",
     always_show_products = true,
@@ -299,7 +342,11 @@ data:extend({
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/chloramine.png", 72 },
     }, "NHCl"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-monochloramine", "angels-gas-ammonia", AF.fluid_color("NaOCl") }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-monochloramine",
+      "angels-gas-ammonia",
+      AF.fluid_color("NaOCl"),
+    }),
     order = "a",
   },
   {
@@ -319,7 +366,13 @@ data:extend({
     results = {
       { type = "fluid", name = "angels-gas-hydrazine", amount = 100 },
       { type = "fluid", name = "angels-gas-hydrogen-chloride", amount = 100 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-gas-hydrazine",
     always_show_products = true,
@@ -356,7 +409,12 @@ data:extend({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/methylamine.png", 72 },
       "angels-water-purified",
     }, "CHN"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-methylamine", "angels-gas-methanol", "angels-water-purified", "angels-gas-ammonia" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-methylamine",
+      "angels-gas-methanol",
+      "angels-water-purified",
+      "angels-gas-ammonia",
+    }),
     order = "c",
   },
   {
@@ -434,7 +492,13 @@ data:extend({
     },
     results = {
       { type = "fluid", name = "angels-gas-dinitrogen-tetroxide", amount = 50 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     main_product = "angels-gas-dinitrogen-tetroxide",
@@ -461,7 +525,11 @@ data:extend({
       { type = "item", name = "angels-solid-ammonium-nitrate", amount = 3 },
     },
     icon_size = 32,
-    crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("NH4NO3"), "angels-gas-ammonia", "angels-liquid-nitric-acid" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      AF.fluid_color("NH4NO3"),
+      "angels-gas-ammonia",
+      "angels-liquid-nitric-acid",
+    }),
     order = "g",
   },
   {

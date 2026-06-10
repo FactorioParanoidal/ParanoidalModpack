@@ -4,7 +4,7 @@
 -- See LICENSE.md in the project directory for license information.
 
 -- Check to see if reskinning needs to be done.
-if not (reskins.angels and reskins.angels.triggers.industries.items) then
+if not (reskins.angels and reskins.angels.triggers.petrochem.items) then
 	return
 end
 
@@ -17,7 +17,7 @@ local inputs = {
 }
 
 -- Check to see if reskinning needs to be done.
-if not mods["angelsindustries"] then
+if not mods["angelspetrochem"] then
 	return
 end
 
@@ -67,7 +67,7 @@ local intermediates = {
 	----------------------------------------------------------------------------------------------------
 	-- Nuclear fuel cells
 	["angels-deuterium-fuel-cell"] = get_fuel_overrides("fuel-cell"),
-	["AMOX-cell"] = get_fuel_overrides("fuel-cell"),
+	["angels-mixed-oxide-cell"] = util.merge({ { image = "AMOX-cell" }, get_fuel_overrides("fuel-cell") }),
 	["angels-thorium-fuel-cell"] = get_fuel_overrides("fuel-cell"),
 	["angels-uranium-fuel-cell"] = get_fuel_overrides("fuel-cell"),
 	["uranium-fuel-cell"] = get_fuel_overrides("fuel-cell"),
@@ -77,12 +77,12 @@ local intermediates = {
 	["angels-nuclear-fuel-2"] = get_fuel_overrides("fuel"),
 
 	-- Nuclear isotopes
-	["americium-241"] = get_isotope_overrides("americium-241"),
-	["curium-245"] = get_isotope_overrides("curium-245"),
-	["neptunium-240"] = get_isotope_overrides("neptunium-240"),
-	["plutonium-240"] = get_isotope_overrides("plutonium-240"),
-	["thorium-232"] = get_isotope_overrides("thorium-232"),
-	["uranium-234"] = get_isotope_overrides("uranium-234"),
+	["angels-americium-241"] = util.merge({ { image = "americium-241" }, get_isotope_overrides("americium-241") }),
+	["angels-curium-245"] = util.merge({ { image = "curium-245" }, get_isotope_overrides("curium-245") }),
+	["angels-neptunium-240"] = util.merge({ { image = "neptunium-240" }, get_isotope_overrides("neptunium-240") }),
+	["bob-plutonium-239"] = util.merge({ { image = "plutonium-240" }, get_isotope_overrides("plutonium-240") }),
+	["bob-thorium-232"] = util.merge({ { image = "thorium-232" }, get_isotope_overrides("thorium-232") }),
+	["angels-uranium-234"] = util.merge({ { image = "uranium-234" }, get_isotope_overrides("uranium-234") }),
 	["uranium-235"] = get_isotope_overrides("uranium-235"),
 }
 

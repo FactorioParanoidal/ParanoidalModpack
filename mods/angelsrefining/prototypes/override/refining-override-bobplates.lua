@@ -104,6 +104,16 @@ if mods["bobplates"] then
       OV.set_science_pack("bob-acid-rocket", "production-science-pack", 1)
       OV.set_science_pack("bob-flame-rocket", "production-science-pack", 1)
       OV.set_science_pack("bob-poison-rocket", "production-science-pack", 1)
+      OV.add_prereq({
+        "bob-ap-bullets",
+        "bob-shotgun-ap-shells",
+        "bob-piercing-rocket",
+        "bob-electric-rocket",
+        "bob-explosive-rocket",
+        "bob-acid-rocket",
+        "bob-flame-rocket",
+        "bob-poison-rocket",
+      }, "production-science-pack")
     end
   end
 end
@@ -191,10 +201,10 @@ if mods["bobplates"] then
   OV.add_prereq("angels-ore-processing-5", "bob-nitinol-processing")
 
   if mods["boblogistics"] then
-    OV.add_prereq("angels-slag-processing-2", "bob-zinc-processing")
-    OV.add_prereq("angels-water-treatment-3", "bob-zinc-processing")
+    OV.add_prereq("angels-slag-processing-2", "bob-brass-processing")
+    OV.add_prereq("angels-water-treatment-3", "bob-brass-processing")
   else
-    OV.add_prereq("angels-advanced-ore-refining-2", "bob-zinc-processing")
+    OV.add_prereq("angels-advanced-ore-refining-2", "bob-brass-processing")
   end
 
   OV.add_prereq("angels-advanced-ore-refining-4", "bob-advanced-processing-unit")

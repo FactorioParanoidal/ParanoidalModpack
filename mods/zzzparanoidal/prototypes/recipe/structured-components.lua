@@ -35,9 +35,9 @@ if data.raw.item["bob-alien-science-pack"] then
 	newRecipe("anotherworld", 120).ingredients = {
 		{ type = "item", name = "advanced-structure-components", amount = 10 },
 		{ type = "item", name = "plastic-bar", amount = 200 },
-		{ type = "item", name = "bob-tungsten-carbide", amount = 200 },
+		{ type = "item", name = "tungsten-carbide", amount = 200 },
 		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
-		{ type = "item", name = "bob-ceramic-bearing", amount = 200 },
+		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
 		{ type = "item", name = "bob-gold-plate", amount = 100 },
 		{ type = "item", name = "bob-silver-plate", amount = 100 },
 		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 200 },
@@ -47,9 +47,9 @@ else
 	newRecipe("anotherworld", 120).ingredients = {
 		{ type = "item", name = "advanced-structure-components", amount = 10 },
 		{ type = "item", name = "plastic-bar", amount = 200 },
-		{ type = "item", name = "bob-tungsten-carbide", amount = 200 },
+		{ type = "item", name = "tungsten-carbide", amount = 200 },
 		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
-		{ type = "item", name = "bob-ceramic-bearing", amount = 200 },
+		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
 		{ type = "item", name = "bob-gold-plate", amount = 100 },
 		{ type = "item", name = "bob-silver-plate", amount = 100 },
 		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 200 },

@@ -1,9 +1,3 @@
--- замена иконки на технологии припоя
-data.raw["technology"]["angels-solder-smelting-basic"].icon =
-	"__reskins-library__/graphics/icons/shared/items/solder.png"
-data.raw["technology"]["angels-solder-smelting-basic"].icon_size = 64
-data.raw["technology"]["angels-solder-smelting-basic"].icon_mipmaps = 4
--------------------------------------------------------------------------------------------------
 -- замена иконки рецепта дробленого камня из шлака
 data.raw["recipe"]["angels-stone-crushed"].icon = "__Bio_Industries_2__/graphics/icons/crushed-stone.png"
 data.raw["recipe"]["angels-stone-crushed"].icon_size = 64

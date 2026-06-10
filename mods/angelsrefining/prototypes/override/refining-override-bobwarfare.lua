@@ -5,8 +5,6 @@ local move_item = angelsmods.functions.move_item
 -- so we try to organize it a bit to 'empty' some tabs
 if mods["bobwarfare"] and not mods["angelsexploration"] then
   local intermediate_subgroup = "bob-ammo-parts"
-  data.raw["item-subgroup"][intermediate_subgroup].group = "combat"
-  data.raw["item-subgroup"][intermediate_subgroup].order = "z"
 
   move_item("bob-bullet-projectile", intermediate_subgroup, "a[bullet-projectile]-a[regular]")
   move_item("bob-ap-bullet-projectile", intermediate_subgroup, "a[bullet-projectile]-b[pierce]")

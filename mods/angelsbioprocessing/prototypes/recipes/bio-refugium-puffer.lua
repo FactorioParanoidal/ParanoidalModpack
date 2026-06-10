@@ -768,7 +768,7 @@ data:extend({
         show_details_in_recipe_tooltip = false,
       },
     },
-    main_product =  "angels-bio-puffer-egg-4",
+    main_product = "angels-bio-puffer-egg-4",
     allow_productivity = true,
     icons = {
       {
@@ -1151,7 +1151,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-puffer-egg-shell", amount = 1 },
       { type = "item", name = "angels-bio-puffer-1", amount = 1, probability = 0.95 },
-      { type = "item", name = "angels-bio-puffer-2", amount = 1, probability = 0.05, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-bio-puffer-2",
+        amount = 1,
+        probability = 0.05,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     main_product = "angels-bio-puffer-1",
     icon = "__angelsbioprocessinggraphics__/graphics/icons/puffer-1-egg.png",
@@ -1173,7 +1179,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-puffer-egg-shell", amount = 1 },
       { type = "item", name = "angels-bio-puffer-2", amount = 1, probability = 0.8 },
-      { type = "item", name = "angels-bio-puffer-1", amount = 1, probability = 0.2, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-bio-puffer-1",
+        amount = 1,
+        probability = 0.2,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     main_product = "angels-bio-puffer-2",
     icon = "__angelsbioprocessinggraphics__/graphics/icons/puffer-2-egg.png",
@@ -1195,7 +1207,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-puffer-egg-shell", amount = 1 },
       { type = "item", name = "angels-bio-puffer-3", amount = 1, probability = 0.7 },
-      { type = "item", name = "angels-bio-puffer-1", amount = 1, probability = 0.3, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-bio-puffer-1",
+        amount = 1,
+        probability = 0.3,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     main_product = "angels-bio-puffer-3",
     icon = "__angelsbioprocessinggraphics__/graphics/icons/puffer-3-egg.png",
@@ -1217,7 +1235,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-puffer-egg-shell", amount = 1 },
       { type = "item", name = "angels-bio-puffer-4", amount = 1, probability = 0.6 },
-      { type = "item", name = "angels-bio-puffer-1", amount = 1, probability = 0.4, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-bio-puffer-1",
+        amount = 1,
+        probability = 0.4,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     main_product = "angels-bio-puffer-4",
     icon = "__angelsbioprocessinggraphics__/graphics/icons/puffer-4-egg.png",
@@ -1239,7 +1263,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-puffer-egg-shell", amount = 1 },
       { type = "item", name = "angels-bio-puffer-5", amount = 1, probability = 0.5 },
-      { type = "item", name = "angels-bio-puffer-1", amount = 1, probability = 0.5, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-bio-puffer-1",
+        amount = 1,
+        probability = 0.5,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     main_product = "angels-bio-puffer-5",
     icon = "__angelsbioprocessinggraphics__/graphics/icons/puffer-5-egg.png",
@@ -1252,7 +1282,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-puffer-butchery-1",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-1" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-1" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-puffer-butchery",
     enabled = false,
@@ -1264,16 +1294,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-raw-meat", amount = 1 },
     },
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-bio-puffer-1" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-bio-puffer-1" }, "angels-bio-raw-meat"),
     order = "aa",
   },
   {
     type = "recipe",
     name = "angels-puffer-butchery-2",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-2" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-2" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-puffer-butchery",
     enabled = false,
@@ -1285,16 +1312,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-raw-meat", amount = 1 },
     },
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-bio-puffer-2" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-bio-puffer-2" }, "angels-bio-raw-meat"),
     order = "ab",
   },
   {
     type = "recipe",
     name = "angels-puffer-butchery-3",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-3" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-3" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-puffer-butchery",
     enabled = false,
@@ -1306,16 +1330,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-raw-meat", amount = 1 },
     },
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-bio-puffer-3" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-bio-puffer-3" }, "angels-bio-raw-meat"),
     order = "ac",
   },
   {
     type = "recipe",
     name = "angels-puffer-butchery-4",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-4" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-4" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-puffer-butchery",
     enabled = false,
@@ -1327,16 +1348,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-raw-meat", amount = 1 },
     },
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-bio-puffer-4" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-bio-puffer-4" }, "angels-bio-raw-meat"),
     order = "ad",
   },
   {
     type = "recipe",
     name = "angels-puffer-butchery-5",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-5" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-bio-puffer-5" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-puffer-butchery",
     enabled = false,
@@ -1348,10 +1366,7 @@ data:extend({
     results = {
       { type = "item", name = "angels-bio-raw-meat", amount = 1 },
     },
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-bio-puffer-5" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-bio-puffer-5" }, "angels-bio-raw-meat"),
     order = "ae",
   },
   ---------------------------------------------------------------------------

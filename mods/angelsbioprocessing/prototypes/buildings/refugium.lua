@@ -1,23 +1,86 @@
-circuit_connector_definitions["angels-bio-refugium-fish"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  5, main_offset = util.by_pixel( 84.5,  105), shadow_offset = util.by_pixel( 84.5,  105), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 84.5,  105), shadow_offset = util.by_pixel( 84.5,  105), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 84.5,  105), shadow_offset = util.by_pixel( 84.5,  105), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 84.5,  105), shadow_offset = util.by_pixel( 84.5,  105), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-refugium-fish"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 5,
+      main_offset = util.by_pixel(84.5, 105),
+      shadow_offset = util.by_pixel(84.5, 105),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(84.5, 105),
+      shadow_offset = util.by_pixel(84.5, 105),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(84.5, 105),
+      shadow_offset = util.by_pixel(84.5, 105),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(84.5, 105),
+      shadow_offset = util.by_pixel(84.5, 105),
+      show_shadow = true,
+    },
+  })
 
-circuit_connector_definitions["angels-bio-refugium-puffer"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-60.125,  55.875), shadow_offset = util.by_pixel(-60.125,  55.875), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-60.125,  55.875), shadow_offset = util.by_pixel(-60.125,  55.875), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-60.125,  55.875), shadow_offset = util.by_pixel(-60.125,  55.875), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-60.125,  55.875), shadow_offset = util.by_pixel(-60.125,  55.875), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-refugium-puffer"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-60.125, 55.875),
+      shadow_offset = util.by_pixel(-60.125, 55.875),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-60.125, 55.875),
+      shadow_offset = util.by_pixel(-60.125, 55.875),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-60.125, 55.875),
+      shadow_offset = util.by_pixel(-60.125, 55.875),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-60.125, 55.875),
+      shadow_offset = util.by_pixel(-60.125, 55.875),
+      show_shadow = true,
+    },
+  })
 
-circuit_connector_definitions["angels-bio-refugium-biter"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-3.5, -49), shadow_offset = util.by_pixel(-3.5, -49), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-3.5, -49), shadow_offset = util.by_pixel(-3.5, -49), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-3.5, -49), shadow_offset = util.by_pixel(-3.5, -49), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-3.5, -49), shadow_offset = util.by_pixel(-3.5, -49), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-refugium-biter"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-3.5, -49),
+      shadow_offset = util.by_pixel(-3.5, -49),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-3.5, -49),
+      shadow_offset = util.by_pixel(-3.5, -49),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-3.5, -49),
+      shadow_offset = util.by_pixel(-3.5, -49),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-3.5, -49),
+      shadow_offset = util.by_pixel(-3.5, -49),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   -- FISH

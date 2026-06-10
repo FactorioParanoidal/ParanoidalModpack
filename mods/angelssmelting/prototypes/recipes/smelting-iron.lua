@@ -387,17 +387,12 @@ data:extend({
     results = {
       { type = "item", name = "iron-plate", amount = 4 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
-          icon_size = 32,
-        }
+        icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
+        icon_size = 32,
       },
-      angelsmods.functions.get_object_icons("angels-liquid-molten-iron"),
-      { -10, -10 },
-      0.4375
-    ),
+    }, angelsmods.functions.get_object_icons("angels-liquid-molten-iron"), { -10, -10 }, 0.4375),
     order = "l[angels-plate-iron]-c", -- l[angels-plate-iron]-a reserved for crushed saphirite smelting (see global overrides)
   }, -- l[angels-plate-iron]-b reserved for base game smelting recipe (see global overrides)
   {
@@ -416,17 +411,12 @@ data:extend({
     results = {
       { type = "item", name = "iron-plate", amount = 4 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
-          icon_size = 32,
-        }
+        icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
+        icon_size = 32,
       },
-      angelsmods.functions.get_object_icons("angels-roll-iron"),
-      { -10, -10 },
-      0.4375
-    ),
+    }, angelsmods.functions.get_object_icons("angels-roll-iron"), { -10, -10 }, 0.4375),
     order = "l[angels-plate-iron]-d",
   },
   {
@@ -443,15 +433,10 @@ data:extend({
     results = {
       { type = "item", name = "iron-stick", amount = 1 },
     },
-    icons = angelsmods.functions.add_icon_layer(
-      angelsmods.functions.get_object_icons("iron-stick"),
-      {
-        icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
-        icon_size = 32,
-      },
-      { -10, -10 },
-      0.4375
-    ),
+    icons = angelsmods.functions.add_icon_layer(angelsmods.functions.get_object_icons("iron-stick"), {
+      icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png",
+      icon_size = 32,
+    }, { -10, -10 }, 0.4375),
     order = "m[angels-rod-iron]-a",
   },
   {

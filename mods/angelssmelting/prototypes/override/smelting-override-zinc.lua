@@ -30,12 +30,12 @@ if angelsmods.trigger.smelting_products["zinc"].ingot then
       {
         name = "angels-ingot-zinc",
         ingredients = {
-          { type = "fluid", name = "angels-liquid-molten-lead", amount = 0 }
+          { type = "fluid", name = "angels-liquid-molten-lead", amount = 0 },
         },
         results = {
-          { type = "item", name = "angels-ingot-lead", amount = 0 }
-        }
-      }
+          { type = "item", name = "angels-ingot-lead", amount = 0 },
+        },
+      },
     })
     OV.remove_prereq("angels-zinc-smelting-1", "angels-lead-smelting-1")
   end

@@ -15,18 +15,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 1 },
       { type = "item", name = "angels-stone-crushed", amount = 2 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-blue"),
-      { -10, 10 },
-      0.6
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-blue"), { -10, 10 }, 0.6),
     order = "a[geode-blue-processing]",
   },
   {
@@ -44,18 +39,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 1 },
       { type = "item", name = "angels-stone-crushed", amount = 2 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-red"),
-      { -10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-red"), { -10, 10 }, 0.5),
     order = "f[geode-red-processing]",
   },
   {
@@ -73,18 +63,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 2 },
       { type = "item", name = "angels-stone-crushed", amount = 1 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-yellow"),
-      { -10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-yellow"), { -10, 10 }, 0.5),
     order = "c[geode-yellow-processing]",
   },
   {
@@ -102,18 +87,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 2 },
       { type = "item", name = "angels-stone-crushed", amount = 3 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-purple"),
-      { -10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-purple"), { -10, 10 }, 0.5),
     order = "b[geode-purple-processing]",
   },
   {
@@ -131,18 +111,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 3 },
       { type = "item", name = "angels-stone-crushed", amount = 2 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-cyan"),
-      { -10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-cyan"), { -10, 10 }, 0.5),
     order = "e[geode-cyan-processing]",
   },
   {
@@ -160,18 +135,13 @@ data:extend({
       { type = "item", name = "angels-crystal-dust", amount = 3 },
       { type = "item", name = "angels-stone-crushed", amount = 2 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
-          icon_size = 64,
-          scale = 0.5
-        }
+        icon = "__angelsrefininggraphics__/graphics/icons/ore-crusher.png",
+        icon_size = 64,
+        scale = 0.5,
       },
-      angelsmods.functions.get_object_icons("angels-geode-lightgreen"),
-      { -10, 10 },
-      0.5
-    ),
+    }, angelsmods.functions.get_object_icons("angels-geode-lightgreen"), { -10, 10 }, 0.5),
     order = "d[geode-lightgreen-processing]",
   },
 })

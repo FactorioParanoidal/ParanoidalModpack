@@ -23,8 +23,6 @@ if mods["bobplates"] then
     OV.remove_prereq("bob-nitinol-processing", "bob-alloy-processing")
     OV.remove_prereq("steel-processing", "bob-alloy-processing")
     OV.remove_prereq("bob-tungsten-processing", "bob-alloy-processing")
-    OV.remove_prereq("bob-tungsten-alloy-processing", "bob-alloy-processing")
-    OV.remove_prereq("bob-zinc-processing", "bob-alloy-processing")
     if mods["bobpower"] then
       OV.remove_prereq("bob-fluid-generator-1", "bob-alloy-processing")
       OV.add_prereq("bob-fluid-generator-1", "angels-bronze-smelting-1")
@@ -32,7 +30,11 @@ if mods["bobplates"] then
     OV.set_research_difficulty("bob-alloy-processing", "bob-bronze-alloy", 10, "craft-item")
   else
     angelsmods.functions.hide("angels-liquid-molten-bronze")
-    OV.disable_recipe({ "angels-liquid-molten-bronze", "angels-liquid-molten-bronze-2", "angels-liquid-molten-bronze-3" })
+    OV.disable_recipe({
+      "angels-liquid-molten-bronze",
+      "angels-liquid-molten-bronze-2",
+      "angels-liquid-molten-bronze-3",
+    })
     OV.disable_recipe({ "angels-plate-bronze" })
     OV.disable_technology({ "angels-bronze-smelting-1", "angels-bronze-smelting-2", "angels-bronze-smelting-3" })
   end

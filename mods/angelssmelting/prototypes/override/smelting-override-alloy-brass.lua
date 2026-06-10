@@ -14,12 +14,19 @@ if mods["bobplates"] then
     data.raw["item"]["bob-brass-alloy"].icon_size = 32
     OV.disable_recipe({ "bob-brass-alloy" })
     angelsmods.functions.allow_productivity("angels-plate-brass")
-    OV.add_prereq("bob-zinc-processing", "angels-brass-smelting-1")
-    OV.set_research_difficulty("bob-zinc-processing", "bob-brass-alloy", 10, "craft-item")
+    OV.add_prereq("bob-brass-processing", "angels-brass-smelting-1")
+    OV.remove_prereq("bob-brass-processing", "chemical-science-pack")
+    OV.set_research_difficulty("bob-brass-processing", "bob-brass-alloy", 10, "craft-item")
+    OV.remove_prereq("bob-brass-processing", "bob-zinc-processing")
+    OV.add_prereq("bob-brass-processing", "angels-ore-floatation")
+    OV.disable_technology("bob-zinc-processing")
+    OV.add_unlock("bob-brass-processing", "bob-brass-bearing-ball")
+    OV.add_unlock("bob-brass-processing", "bob-brass-bearing")
   else
     angelsmods.functions.hide("angels-liquid-molten-brass")
     OV.disable_recipe({ "angels-liquid-molten-brass", "angels-liquid-molten-brass-2", "angels-liquid-molten-brass-3" })
     OV.disable_recipe({ "angels-plate-brass" })
+    OV.disable_recipe({ "bob-brass-bearing-ball", "bob-brass-bearing" })
     OV.disable_technology({ "angels-brass-smelting-1", "angels-brass-smelting-2", "angels-brass-smelting-3" })
   end
 end

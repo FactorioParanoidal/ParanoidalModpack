@@ -95,7 +95,10 @@ data:extend({
     icons = angelsmods.functions.create_liquid_recipe_icon({
       { "__angelssmeltinggraphics__/graphics/icons/molecule-hexafluorosilicic-acid.png", 72 },
     }, "SiFF"),
-    crafting_machine_tint = angelsmods.functions.get_recipe_tints({ "angels-liquid-molten-lead", "angels-liquid-molten-silicon" }),
+    crafting_machine_tint = angelsmods.functions.get_recipe_tints({
+      "angels-liquid-molten-lead",
+      "angels-liquid-molten-silicon",
+    }),
     order = "f[liquid-hexafluorosilicic-acid]",
   },
   -- SMELTING RESULTS

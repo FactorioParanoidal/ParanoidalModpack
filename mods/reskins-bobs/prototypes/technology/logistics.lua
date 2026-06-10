@@ -39,15 +39,15 @@ local technologies = {
 	-- ["fluid-wagon"] = {tier = 1, prog_tier = 2},
 	-- ["bob-fluid-wagon-2"] = {tier = 1, prog_tier = 3},
 	-- ["bob-fluid-wagon-3"] = {tier = 1, prog_tier = 4},
-	-- ["bob-armoured-fluid-wagon"] = {tier = 1, prog_tier = 4},
-	-- ["bob-armoured-fluid-wagon-2"] = {tier = 1, prog_tier = 5},
+	-- ["bob-armoured-fluid-wagon"] = {tier = 1, prog_tier = 3},
+	-- ["bob-armoured-fluid-wagon-2"] = {tier = 1, prog_tier = 4},
 
 	-- Trains and cargo wagons
 	-- ["railway"] = {tier = 1, prog_tier = 2},
 	-- ["bob-railway-2"] = {tier = 1, prog_tier = 3},
 	-- ["bob-railway-3"] = {tier = 1, prog_tier = 4},
-	-- ["bob-armoured-railway"] = {tier = 1, prog_tier = 4},
-	-- ["bob-armoured-railway-2"] = {tier = 1, prog_tier = 5},
+	-- ["bob-armoured-railway"] = {tier = 1, prog_tier = 3},
+	-- ["bob-armoured-railway-2"] = {tier = 1, prog_tier = 4},
 
 	-- Roboports
 	-- ["bob-robo-modular-1"] = {tier = 1, prog_tier = 2},

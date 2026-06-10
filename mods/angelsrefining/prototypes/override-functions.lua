@@ -5,7 +5,7 @@ local ov_functions = {}
 -- OVERRIDE DATA TABLES
 local substitution_table, disable_table, modify_table, override_table, patch_table
 -- HELPER FUNCTIONS
-local building_types = {
+local entity_types = {
   "assembling-machine",
   "mining-drill",
   "lab",
@@ -23,6 +23,7 @@ local building_types = {
   "electric-pole",
   "wall",
   "gate",
+  "resource",
 }
 
 local function initialize_tables()
@@ -341,28 +342,22 @@ ov_functions.remove_output = function(recipe, item)
 end
 
 ov_functions.global_replace_item = function(old, new) -- replace all occurrences of old in recipes with new (old may be a table containing a list of items)
+  local old_table
   if type(old) == "table" then
-    for ik, item in pairs(old) do
-      substitution_table.recipe_items[item] = new
-    end
+    old_table = old
   else
-    substitution_table.recipe_items[old] = new
-    for _, type in pairs(building_types) do
-      for name, entity in pairs(data.raw[type]) do
-        if entity and entity.next_upgrade then
-          if entity.next_upgrade == old then
-            angelsmods.functions.set_next_upgrade(type, name, new)
-          end
-        end
-      end
-    end
+    old_table = { old }
+  end
+
+  for _, item in pairs(old_table) do
+    substitution_table.recipe_items[item] = new
   end
 end
 
 ov_functions.copy_item_properties = function(from, to)
   local from_item = data.raw.item[from]
   local to_item = data.raw.item[to]
-  to_item.localised_name = { "item-name."..from_item.name }
+  to_item.localised_name = { "item-name." .. from_item.name }
   to_item.icon = from_item.icon
   to_item.icon_size = from_item.icon_size
   to_item.icons = from_item.icons
@@ -500,65 +495,58 @@ ov_functions.set_research_difficulty = function(technology, unit_time, unit_amou
   create-space-platform
   ]]
   local tab_form = { -- allow for triggered technologies
-    ["unit"]={
+    ["unit"] = {
       time = unit_time,
       amount = unit_amount,
     },
-    ["craft-item"]=
-    {
+    ["craft-item"] = {
       count = unit_amount,
       item = unit_time,
-      type = trigger
+      type = trigger,
     },
-    ["craft-fluid"]=
-    {
+    ["craft-fluid"] = {
       count = unit_amount,
       fluid = unit_time,
-      type = "craft-fluid"
+      type = "craft-fluid",
     },
-    ["mine-entity"]=
-    {
+    ["mine-entity"] = {
       entity = unit_time,
-      type = "mine-entity"
+      type = "mine-entity",
     },
-    ["send-item-to-orbit"]=
-    {
+    ["send-item-to-orbit"] = {
       item = unit_time,
-      type = "send-item-to-orbit"
+      type = "send-item-to-orbit",
     },
-    ["capture-spawner"]=
-    {
+    ["capture-spawner"] = {
       item = unit_time,
-      type = "capture-spawner"
+      type = "capture-spawner",
     },
-    ["build-entity"]=
-    {
+    ["build-entity"] = {
       entity = unit_time,
-      type = "build-entity"
+      type = "build-entity",
     },
-    ["create-space-platform"]=
-    {
-      type="create-space-platform"
+    ["create-space-platform"] = {
+      type = "create-space-platform",
     },
   }
   if type(technology) == "table" then
     for _, tech in pairs(technology) do --two types, {unit={count,{ings},time},research_trigger={count,item,type}}
-      ov_functions.set_research_difficulty(tech, unit_time, unit_amount,trigger)
+      ov_functions.set_research_difficulty(tech, unit_time, unit_amount, trigger)
     end
   else
     guarantee_subtable(modify_table.technologies, technology)
     guarantee_subtable(modify_table.technologies[technology], "difficulty")
     if trigger == nil then
       local tech = data.raw.technology[technology]
-      if tech and type(tech.research_trigger)=="table" then
+      if tech and type(tech.research_trigger) == "table" then
         trigger = tech.research_trigger.type
-      elseif tech and type(tech.unit)=="table" then
+      elseif tech and type(tech.unit) == "table" then
         trigger = "unit"
       else
-        log("technology ".. technology.." does not have an unlock condition")
+        log("technology " .. technology .. " does not have an unlock condition")
       end
     end
-    if trigger == "unit" or nil then
+    if trigger == nil or trigger == "unit" then
       modify_table.technologies[technology].difficulty = tab_form["unit"]
     else
       modify_table.technologies[technology].difficulty = tab_form[trigger]
@@ -699,7 +687,7 @@ ov_functions.barrel_overrides = function(fluid, style) --Bottling override funct
           fluid_s.localised_name or { "fluid-name." .. fluid_s.name },
         }
       end
-      angelsmods.functions.patch_recycling_recipes({F_Fill.name})
+      angelsmods.functions.patch_recycling_recipes({ F_Fill.name })
     end
   end
 end
@@ -721,15 +709,7 @@ local function adjust_recipe(recipe) -- check a recipe for basic adjustments bas
     local st = parent[subtable]
     if st then
       local replace = {}
-      for ix, item in pairs(st) do
-        if item and not item.name then -- shift to uniform format for ease of handling
-          item.name = item[1]
-          item.type = "item"
-          item.amount = item[2]
-          item[1] = nil
-          item[2] = nil
-          log("recipe "..parent.name.." "..subtable.." is still using the old format")
-        end
+      for _, item in pairs(st) do
         local new = substitution_table[substitution_type][item.name]
         if new then
           item.name = new
@@ -756,10 +736,10 @@ local function adjust_recipe(recipe) -- check a recipe for basic adjustments bas
       end
     end
   end
-  local function adjust_difficulty(path)
-    adjust_subtable(path, "ingredients", "recipe_items")
-    adjust_subtable(path, "results", "recipe_items")
-    adjust_member(path, "main_product", "recipe_items")
+  local function adjust_difficulty(recipe)
+    adjust_subtable(recipe, "ingredients", "recipe_items")
+    adjust_subtable(recipe, "results", "recipe_items")
+    adjust_member(recipe, "main_product", "recipe_items")
   end
   local function safe_insert(array, new_item)
     local addit = true
@@ -785,8 +765,10 @@ local function adjust_recipe(recipe) -- check a recipe for basic adjustments bas
           end
         elseif recipe.additional_categories then
           for i, category in pairs(recipe.additional_categories) do
-            table.remove(recipe.additional_categories, i)
-            break
+            if category == category_name then
+              table.remove(recipe.additional_categories, i)
+              break
+            end
           end
         end
       end
@@ -798,7 +780,7 @@ local function adjust_recipe(recipe) -- check a recipe for basic adjustments bas
   adjust_additional_categories()
 end
 
-local function adjust_technology(tech, k) -- check a tech for basic adjustments based on tables and make any necessary changes
+local function adjust_technology(tech, tech_name) -- check a tech for basic adjustments based on tables and make any necessary changes
   local function override_subtable(subtable, o_subtable) -- handle special case changes (sort of a partial deep copy/overwrite)
     if type(o_subtable) == "string" then
       o_subtable = { o_subtable }
@@ -818,13 +800,13 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
       end
     end
   end
-  if disable_table.technologies[k] or substitution_table.technologies[k] then
-    data.raw.technology[k].enabled = false
-    data.raw.technology[k].hidden = true
+  if disable_table.technologies[tech_name] or substitution_table.technologies[tech_name] then
+    data.raw.technology[tech_name].enabled = false
+    data.raw.technology[tech_name].hidden = true
   end
   -- adjust effects
   local dup_table = {}
-  local modifications = modify_table.technologies[k] and modify_table.technologies[k].unlocks or nil
+  local modifications = modify_table.technologies[tech_name] and modify_table.technologies[tech_name].unlocks or nil
   local to_remove = {}
   if tech.effects then
     for ek, effect in pairs(tech.effects) do
@@ -854,13 +836,21 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
   end
   -- adjust prerequisites
   dup_table = {}
-  modifications = modify_table.technologies[k] and modify_table.technologies[k].prereqs or nil
+  modifications = modify_table.technologies[tech_name] and modify_table.technologies[tech_name].prereqs or nil
   if tech.prerequisites then
     to_remove = {}
     for pk, prereq in pairs(tech.prerequisites) do
       local new = substitution_table.technologies[prereq]
       if new then
-        tech.prerequisites[pk] = new
+        if dup_table[new] then
+          -- new prerequisite already exists; remove this entry instead of duplicating
+          to_remove[pk] = true
+        else
+          tech.prerequisites[pk] = new
+          dup_table[new] = true
+        end
+      else
+        dup_table[prereq] = true
       end
       if modifications and modifications[prereq] == false then
         to_remove[pk] = true
@@ -870,8 +860,6 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
     for pk, prereq in pairs(tech.prerequisites) do
       if to_remove[pk] then
         table.insert(actual_remove, pk)
-      else
-        dup_table[tech.prerequisites[pk]] = true
       end
     end
     for i = #actual_remove, 1, -1 do
@@ -888,17 +876,17 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
       end
     end
   end
-  local overrides = override_table.technologies[k]
+  local overrides = override_table.technologies[tech_name]
   if overrides then
     if type(overrides) == "string" then
-      tech[overrides] = not tech[overrides] or true
+      tech[overrides] = not tech[overrides]
     else
       override_subtable(tech, overrides)
     end
   end
   --adjust difficulty (time and amount of ingredients)
-  if modify_table.technologies[k] then
-    modifications = modify_table.technologies[k].difficulty
+  if modify_table.technologies[tech_name] then
+    modifications = modify_table.technologies[tech_name].difficulty
     if modifications then
       if modifications.type then -- not a unit based technology
         tech.unit = nil
@@ -913,13 +901,13 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
   --adjust ingredient list only if unit based tech
   if tech.unit then
     dup_table = {}
-    modifications = modify_table.technologies[k] and modify_table.technologies[k].packs or nil
+    modifications = modify_table.technologies[tech_name] and modify_table.technologies[tech_name].packs or nil
     to_remove = {}
     tech.unit = tech.unit or {}
     tech.unit.ingredients = tech.unit.ingredients or {}
     for pk, pack in pairs(tech.unit.ingredients) do
       if substitution_table.science_packs[pack[1]] and substitution_table.science_packs[pack[1]].remove then
-        for k, rem in pairs(substitution_table.science_packs[pack[1]].remove) do
+        for _, rem in pairs(substitution_table.science_packs[pack[1]].remove) do
           to_remove[rem] = true
         end
       end
@@ -957,6 +945,65 @@ local function adjust_technology(tech, k) -- check a tech for basic adjustments 
   end
 end
 
+local function replace_technology_items(tech)
+  if tech.unit then
+    for _, ingredient in pairs(tech.unit.ingredients) do
+      local new = substitution_table.recipe_items[ingredient[1]]
+      if new then
+        ingredient[1] = new
+      end
+    end
+  elseif tech.research_trigger then
+    local trigger = tech.research_trigger
+    if trigger.type == "mine-entity" then
+      local old = trigger.entity
+      local new = substitution_table.recipe_items[old]
+      if new then
+        trigger.entity = new
+      end
+    elseif trigger.type == "craft-item" then
+      local old = trigger.item
+      local new = substitution_table.recipe_items[old]
+      if new then
+        trigger.item = new
+      end
+    elseif trigger.type == "craft-fluid" then
+      local old = trigger.fluid
+      local new = substitution_table.recipe_items[old]
+      if new then
+        trigger.fluid = new
+      end
+    end
+  end
+end
+
+local function replace_entity_items(entity_type)
+  for entity_name, entity in pairs(data.raw[entity_type]) do
+    if entity.next_upgrade and substitution_table.recipe_items[entity.next_upgrade] then
+      local new = substitution_table.recipe_items[entity.next_upgrade]
+      angelsmods.functions.set_next_upgrade(entity_type, entity_name, new)
+    end
+    if entity.minable then
+      if entity.minable.result and substitution_table.recipe_items[entity.minable.result] then
+        local new = substitution_table.recipe_items[entity.minable.result]
+        entity.minable.result = new
+      end
+      if entity.minable.results then
+        for _, product in pairs(entity.minable.results) do
+          if substitution_table.recipe_items[product.name] then
+            local new = substitution_table.recipe_items[product.name]
+            product.name = new
+          end
+        end
+      end
+      if entity.minable.required_fluid and substitution_table.recipe_items[entity.minable.required_fluid] then
+        local new = substitution_table.recipe_items[entity.minable.required_fluid]
+        entity.minable.required_fluid = new
+      end
+    end
+  end
+end
+
 ov_functions.execute = function()
   for _, recipe in pairs(data.raw.recipe) do -- run through all recipes to perform substitutions/overrides
     adjust_recipe(recipe)
@@ -966,8 +1013,13 @@ ov_functions.execute = function()
   end
   RB.patch(patch_table)
 
-  for k, tech in pairs(data.raw.technology) do -- run through all technologies to perform substitutions/overrides
-    adjust_technology(tech, k)
+  for tech_name, tech in pairs(data.raw.technology) do -- run through all technologies to perform substitutions/overrides
+    adjust_technology(tech, tech_name)
+    replace_technology_items(tech)
+  end
+
+  for _, entity_type in pairs(entity_types) do
+    replace_entity_items(entity_type)
   end
 
   initialize_tables() -- reset the data tables after execution to allow for multiple points of execution (eg, one set of adjustments in data-updates and another in data-final-fixes)

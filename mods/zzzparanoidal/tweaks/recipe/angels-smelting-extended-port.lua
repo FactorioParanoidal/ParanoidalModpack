@@ -219,7 +219,6 @@ local pipe_metals = {
 	{ "brass",    "bob-brass-pipe",        "bob-brass-pipe-to-ground",        190, "angels-brass-casting",    "b" },
 	{ "bronze",   "bob-bronze-pipe",       "bob-bronze-pipe-to-ground",       170, "angels-bronze-casting",   "a" },
 	{ "titanium", "bob-titanium-pipe",     "bob-titanium-pipe-to-ground",     210, "angels-titanium-casting", nil },
-	{ "nitinol",  "bob-nitinol-pipe",      "bob-nitinol-pipe-to-ground",      230, "angels-nitinol-casting",  "f" },
 }
 
 local function pipe_order(metal_letter, metal, sub_letter)
@@ -298,14 +297,14 @@ local special_pipe_recipes = {
 	-- ironworks.lua:55).
 	{
 		name = "angels-stone-pipe-casting",
-		pipe_item = "bob-stone-pipe",
+		pipe_item = "pipe",
 		category = "angels-sintering",
 		ingredients = { { type = "item", name = "stone", amount = 20 } },
 		results_amount = 4,
 	},
 	{
 		name = "angels-stone-pipe-to-ground-casting",
-		pipe_item = "bob-stone-pipe-to-ground",
+		pipe_item = "pipe-to-ground",
 		category = "angels-sintering",
 		ingredients = { { type = "item", name = "stone", amount = 75 } },
 		results_amount = 2,
@@ -378,7 +377,7 @@ local roll_alloys = {
 		-- и в 1.1 имел сильно меньший базовый объём (20 газа вместо 80 расплава).
 		molten        = "angels-gas-tungsten-hexafluoride",
 		molten_amount = 20,
-		plate         = "bob-tungsten-plate",
+		plate         = "tungsten-plate",
 		subgroup      = "angels-tungsten-casting",
 		metal_letter  = nil, -- собственная subgroup без metal-letter convention
 		tint          = { r = 136 / 256, g = 98 / 256, b = 65 / 256, a = 1 },

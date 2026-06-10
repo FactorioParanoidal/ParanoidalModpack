@@ -297,3 +297,28 @@ data:extend({
   },
   -- order m reserved for bob silicon processing
 })
+
+if mods["bobplates"] and mods["boblogistics"] then
+  data:extend({
+    {
+      type = "recipe",
+      name = "bob-ceramic-pipe",
+      enabled = false,
+      ingredients = {
+        { type = "item", name = "bob-silicon-nitride", amount = 1 },
+      },
+      results = { { type = "item", name = "bob-ceramic-pipe", amount = 1 } },
+    },
+
+    {
+      type = "recipe",
+      name = "bob-ceramic-pipe-to-ground",
+      enabled = false,
+      ingredients = {
+        { type = "item", name = "bob-ceramic-pipe", amount = 16 },
+        { type = "item", name = "bob-silicon-nitride", amount = 5 },
+      },
+      results = { { type = "item", name = "bob-ceramic-pipe-to-ground", amount = 2 } },
+    },
+  })
+end

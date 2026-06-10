@@ -5,7 +5,7 @@ local function angels_air_filter_fluid_boxes()
       pipe_picture = angelsmods.petrochem.electrolyserpictures(),
       pipe_covers = pipecoverspictures(),
       volume = 1000,
-      pipe_connections = { { flow_direction = "input", direction = defines.direction.north, position = { 0, -2 }, } },
+      pipe_connections = { { flow_direction = "input", direction = defines.direction.north, position = { 0, -2 } } },
     },
     {
       production_type = "output",
@@ -17,12 +17,33 @@ local function angels_air_filter_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-air-filter"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-4.375,  62.625), shadow_offset = util.by_pixel(-4.375,  62.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  62.625), shadow_offset = util.by_pixel(-4.375,  62.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  62.625), shadow_offset = util.by_pixel(-4.375,  62.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  62.625), shadow_offset = util.by_pixel(-4.375,  62.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-air-filter"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 62.625),
+      shadow_offset = util.by_pixel(-4.375, 62.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 62.625),
+      shadow_offset = util.by_pixel(-4.375, 62.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 62.625),
+      shadow_offset = util.by_pixel(-4.375, 62.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 62.625),
+      shadow_offset = util.by_pixel(-4.375, 62.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

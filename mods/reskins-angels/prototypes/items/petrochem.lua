@@ -35,6 +35,7 @@ local intermediates = {
 if mods["reskins-bobs"] then
 	intermediates["bob-resin-wood"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "items", image = "bob-resin", icon_extras = reskins.angels.num_tier(1, inputs.group) }
 	intermediates["angels-solid-resin"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "items", image = "bob-resin" }
+	intermediates["angels-solid-resin"] = { type = "item", mod = "bobs", group = "plates", subgroup = "items", image = "bob-resin" }
 end
 
 if not data.raw.recipe["bob-rubber"] then

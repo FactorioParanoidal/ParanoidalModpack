@@ -46,6 +46,8 @@ data:extend({
 })
 
 if mods["bobmodules"] then
+  data.raw.recipe["angels-bio-yield-module"].energy_required = 7.5
+  data.raw.recipe["angels-bio-yield-module-2"].energy_required = 15
   data:extend({
     {
       type = "recipe",
@@ -57,8 +59,8 @@ if mods["bobmodules"] then
         { type = "item", name = "bob-pollution-create-module-4", amount = 1 },
         { type = "item", name = "angels-token-bio", amount = 1 },
       },
-      energy_required = 15,
-      results = {{ type = "item", name = "angels-bio-yield-module-4", amount = 1 }},
+      energy_required = 60,
+      results = { { type = "item", name = "angels-bio-yield-module-4", amount = 1 } },
     },
     {
       type = "recipe",
@@ -70,8 +72,8 @@ if mods["bobmodules"] then
         { type = "item", name = "bob-pollution-create-module-5", amount = 1 },
         { type = "item", name = "angels-token-bio", amount = 1 },
       },
-      energy_required = 15,
-      results = {{ type = "item", name = "angels-bio-yield-module-5", amount = 1 }},
+      energy_required = 120,
+      results = { { type = "item", name = "angels-bio-yield-module-5", amount = 1 } },
     },
   })
 end

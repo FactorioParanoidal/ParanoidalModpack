@@ -50,7 +50,13 @@ data:extend({
       { type = "fluid", name = "angels-water-mineralized", amount = 50 },
     },
     results = {
-      { type = "item", name = "angels-temperate-garden", amount = 2, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-temperate-garden",
+        amount = 2,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-temperate-garden",
     allow_productivity = true,

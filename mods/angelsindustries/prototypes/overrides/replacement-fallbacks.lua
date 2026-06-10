@@ -47,15 +47,15 @@ angelsmods.industries.block_replace = {
   --pipes (fluid box replacements)
   ["bob-copper-pipe"] = { new = "block-fluidbox-1", amt_multi = 0.5 },
   ["pipe"] = { new = "block-fluidbox-1", amt_multi = 1 },
-  ["bob-stone-pipe"] = { new = "block-fluidbox-1", amt_multi = 1.5 },
+  ["pipe"] = { new = "block-fluidbox-1", amt_multi = 1.5 },
   ["bob-steel-pipe"] = { new = "block-fluidbox-1", amt_multi = 2 },
   ["bob-bronze-pipe"] = { new = "block-fluidbox-1", amt_multi = 2.5 },
   ["bob-plastic-pipe"] = { new = "block-fluidbox-1", amt_multi = 3 },
   ["bob-brass-pipe"] = { new = "block-fluidbox-1", amt_multi = 3.5 },
   ["bob-titanium-pipe"] = { new = "block-fluidbox-2", amt_multi = 1 },
-  ["bob-ceramic-pipe"] = { new = "block-fluidbox-2", amt_multi = 1.5 },
+  ["bob-titanium-pipe"] = { new = "block-fluidbox-2", amt_multi = 1.5 },
   ["bob-tungsten-pipe"] = { new = "block-fluidbox-2", amt_multi = 2 },
-  ["bob-nitinol-pipe"] = { new = "block-fluidbox-2", amt_multi = 2.5 },
+  ["bob-copper-tungsten-pipe"] = { new = "block-fluidbox-2", amt_multi = 2.5 },
   ["bob-copper-tungsten-pipe"] = { new = "block-fluidbox-2", amt_multi = 3 },
   --wire/cable
   ["copper-cable"] = { new = "cable-harness-1", amt_multi = 1 },
@@ -113,6 +113,6 @@ if mods["bobelectronics"] then
     { new = "circuit-orange-loaded", amt_multi = 1, unlock_by = "advanced-circuit" }
 end
 if mods["bobplates"] then
-  angelsmods.industries.general_replace["bob-lithium-ion-battery"] = { new = "battery-3", amt_multi = 1 }
-  angelsmods.industries.general_replace["bob-silver-zinc-battery"] = { new = "battery-6", amt_multi = 1 }
+  angelsmods.industries.general_replace["bob-battery-2"] = { new = "battery-3", amt_multi = 1 }
+  angelsmods.industries.general_replace["bob-battery-3"] = { new = "battery-6", amt_multi = 1 }
 end

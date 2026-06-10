@@ -33,7 +33,7 @@ if mods["bobelectronics"] then
   OV.patch_recipes({
     {
       name = "bob-wooden-board",
-      results = {{ type = "item", name = "bob-wooden-board", amount = 1 }},
+      results = { { type = "item", name = "bob-wooden-board", amount = 1 } },
     },
   })
   angelsmods.functions.remove_productivity("bob-wooden-board")

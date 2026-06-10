@@ -60,6 +60,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
         filename = "__base__/sound/item/metal-large-inventory-pickup.ogg",
         volume = 0.8,
       },
+      weight = 50000,
     },
     {
       type = "recipe",
@@ -113,7 +114,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
       },
       heat_buffer = {
         max_temperature = 750,
-        specific_heat = "5.4MJ",
+        specific_heat = "1.5MJ",
         max_transfer = "10GW",
         connections = {
           {
@@ -198,6 +199,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
         filename = "__base__/sound/item/metal-large-inventory-pickup.ogg",
         volume = 0.8,
       },
+      weight = 50000,
     },
     {
       type = "recipe",
@@ -230,7 +232,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
         connection_patches_disconnected = connection_patches_disconnected("-2"),
         heat_buffer = {
           max_temperature = 1000,
-          specific_heat = "9MJ",
+          specific_heat = "1.5MJ",
           max_transfer = "30GW",
         },
       },
@@ -258,6 +260,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
         filename = "__base__/sound/item/metal-large-inventory-pickup.ogg",
         volume = 0.8,
       },
+      weight = 50000,
     },
     {
       type = "recipe",
@@ -302,6 +305,7 @@ if settings.startup["bobmods-power-heatsources"].value == true then
         filename = "__base__/sound/item/metal-large-inventory-pickup.ogg",
         volume = 0.8,
       },
+      weight = 50000,
     },
     {
       type = "recipe",
@@ -502,5 +506,17 @@ if settings.startup["bobmods-power-heatsources"].value == true then
     })
 
     bobmods.lib.tech.add_recipe_unlock("bob-burner-reactor-1", "bob-fluid-reactor-from-fluid-furnace")
+  end
+
+  if feature_flags["space_travel"] then
+    local function no_space()
+      return {
+        { property = "pressure", min = 10 },
+      }
+    end
+    data.raw.reactor["bob-burner-reactor"].surface_conditions = no_space()
+    data.raw.reactor["bob-burner-reactor-2"].surface_conditions = no_space()
+    data.raw.reactor["bob-fluid-reactor"].surface_conditions = no_space()
+    data.raw.reactor["bob-fluid-reactor-2"].surface_conditions = no_space()
   end
 end

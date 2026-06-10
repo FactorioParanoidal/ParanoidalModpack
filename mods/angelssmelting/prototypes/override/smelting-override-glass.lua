@@ -24,7 +24,12 @@ if angelsmods.trigger.smelting_products["glass"].mixture then
 else
   angelsmods.functions.hide("angels-solid-glass-mixture")
   angelsmods.functions.hide("angels-liquid-molten-glass")
-  OV.disable_recipe({ "angels-solid-glass-mixture", "angels-solid-glass-mixture-2", "angels-solid-glass-mixture-3", "angels-solid-glass-mixture-4" })
+  OV.disable_recipe({
+    "angels-solid-glass-mixture",
+    "angels-solid-glass-mixture-2",
+    "angels-solid-glass-mixture-3",
+    "angels-solid-glass-mixture-4",
+  })
   OV.disable_recipe({ "angels-liquid-molten-glass" })
   OV.disable_technology({ "angels-glass-smelting-1", "angels-glass-smelting-2", "angels-glass-smelting-3" })
 end
@@ -42,9 +47,23 @@ if angelsmods.trigger.smelting_products["glass"].plate then
     data.raw["recipe"]["angels-plate-glass-2"].main_product = "bob-glass"
     data.raw["recipe"]["angels-plate-glass-3"].main_product = "bob-glass"
 
-    OV.disable_recipe("bob-glass")
+    if mods["bobgreenhouse"] and not mods["angelsbioprocessing"] then
+      -- Glass is needed for Bob's Greenhouses if Bioprocessing mod is not enabled
+      OV.patch_recipes({
+        {
+          name = "bob-glass",
+          ingredients = {
+            { type = "item", name = "bob-quartz", amount = 10 },
+          },
+          subgroup = "angels-glass-casting",
+          order = "d[angels-plate-glass]-a",
+        },
+      })
+    else
+      OV.disable_recipe("bob-glass")
+    end
     OV.add_prereq("solar-energy", "angels-glass-smelting-1")
-    
+
     if mods["bobwarfare"] then
       OV.add_prereq({
         "military-3", -- Sniper rifle

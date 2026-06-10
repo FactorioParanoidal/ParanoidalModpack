@@ -35,7 +35,7 @@ end
 --Hide Recipes
   if mods["bobplates"] then
 OV.disable_recipe({ "bob-copper-tungsten-alloy" })
-OV.disable_recipe({ "bob-tungsten-carbide" })
+OV.disable_recipe({ "tungsten-carbide" })
 OV.disable_recipe({ "bob-tungsten-carbide-2" })
   end
 OV.disable_recipe({ "angels-pellet-tungsten-smelting" })

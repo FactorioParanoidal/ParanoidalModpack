@@ -24,7 +24,7 @@ local inputs = {
 ---
 ---### Parameters
 ---@param name string # The name of the technology. Matches a file under the given `folder` with the format `{name}-technology-lights.png`
----@param folder? string # The folder under `"__reskins-bobs__/graphics/technology/plates/"` to seach for the image file, defaults to `name`.
+---@param folder? string # The folder under `"__reskins-bobs__/graphics/technology/plates/"` to search for the image file, defaults to `name`.
 local function get_technology_light_layer(name, folder)
 	folder = folder or name
 
@@ -43,7 +43,7 @@ end
 ---@type CreateIconsFromListTable
 local technologies = {
 	-- Nuclear
-	-- ["uranium-processing"] = {}, -- uranium proc, centri t3
+	-- ["uranium-processing"] = {}, -- uranium proc, centrifuge t3
 	["bob-deuterium-fuel-reprocessing"] = { subgroup = "nuclear", image = "bob-deuterium-fuel-reprocessing-pink" },
 	["bob-thorium-fuel-reprocessing"] = { subgroup = "nuclear" },
 	["bob-thorium-processing"] = {
@@ -60,7 +60,6 @@ local technologies = {
 	["bob-deuterium-fuel-cell-2"] = { subgroup = "nuclear" },
 
 	-- Furnaces
-	["bob-alloy-processing"] = { subgroup = "smelting" },
 	["bob-chemical-processing-1"] = { subgroup = "smelting" },
 	["advanced-material-processing"] = { subgroup = "smelting" },
 	["bob-steel-mixing-furnace"] = { subgroup = "smelting" },
@@ -275,12 +274,6 @@ local technologies = {
 		technology_icon_size = 256,
 	},
 
-	-- copper-tungsten, tungsten carbide, c-tun-pipes
-	["bob-tungsten-alloy-processing"] = {
-		subgroup = "plates",
-		technology_icon_size = 256,
-	},
-
 	-- nitinol plate, gear, bearing, ball,. pipes
 	["bob-nitinol-processing"] = {
 		subgroup = "plates",
@@ -294,6 +287,7 @@ local technologies = {
 	},
 
 	-- tungsten plate, gear, pipe, acid, oxide, powdered
+	-- copper-tungsten, tungsten carbide, c-tun-pipes (Bob's mods 2.1+)
 	["bob-tungsten-processing"] = {
 		subgroup = "plates",
 		technology_icon_size = 256,
@@ -402,7 +396,15 @@ local technologies = {
 	},
 }
 
--- Prefer the technology icon added for bobselectronics
+if reskins.lib.version.is_older(mods["boblibrary"], "2.1.0") then
+	-- copper-tungsten, tungsten carbide, c-tun-pipes
+	technologies["bob-tungsten-alloy-processing"] = {
+		subgroup = "plates",
+		technology_icon_size = 256,
+	}
+end
+
+-- Prefer the technology icon added for bobelectronics
 if not mods["bobelectronics"] then
 	technologies["bob-advanced-processing-unit"] = {
 		subgroup = "processing-steps",

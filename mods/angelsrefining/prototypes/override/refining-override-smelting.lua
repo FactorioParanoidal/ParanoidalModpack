@@ -11,10 +11,12 @@ local ore_exists = angelsmods.functions.ore_enabled
 -------------------------------------------------------------------------------
 if angelsmods.functions.is_special_vanilla() then
   OV.add_unlock("angels-ore-crushing", "angels-copper-pebbles")
+  OV.add_unlock("angels-ore-crushing", "angels-copper-ore-smelting")
   OV.add_unlock("angels-ore-crushing", "angels-copper-pebbles-smelting")
   OV.add_unlock("angels-ore-crushing", "angels-copper-nugget-smelting")
 
   OV.add_unlock("angels-ore-crushing", "angels-iron-pebbles")
+  OV.add_unlock("angels-ore-crushing", "angels-iron-ore-smelting")
   OV.add_unlock("angels-ore-crushing", "angels-iron-pebbles-smelting")
   OV.add_unlock("angels-ore-crushing", "angels-iron-nugget-smelting")
 end

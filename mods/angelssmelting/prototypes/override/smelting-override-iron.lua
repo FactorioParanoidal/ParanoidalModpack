@@ -63,7 +63,7 @@ if angelsmods.trigger.smelting_products["iron"].ingot then
           angelsmods.functions.get_object_icons("angels-liquid-molten-iron"),
           3,
           angelsmods.smelting.number_tint
-        )
+        ),
       },
       {
         name = "angels-liquid-molten-iron-5",
@@ -71,7 +71,7 @@ if angelsmods.trigger.smelting_products["iron"].ingot then
           angelsmods.functions.get_object_icons("angels-liquid-molten-iron"),
           4,
           angelsmods.smelting.number_tint
-        )
+        ),
       },
     })
   end

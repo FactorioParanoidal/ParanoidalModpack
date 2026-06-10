@@ -17,12 +17,33 @@ local function angels_blast_furnace_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-blast-furnace"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel( 8.875,  58.625), shadow_offset = util.by_pixel( 8.875,  58.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 8.875,  58.625), shadow_offset = util.by_pixel( 8.875,  58.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 8.875,  58.625), shadow_offset = util.by_pixel( 8.875,  58.625), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 8.875,  58.625), shadow_offset = util.by_pixel( 8.875,  58.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-blast-furnace"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(8.875, 58.625),
+      shadow_offset = util.by_pixel(8.875, 58.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(8.875, 58.625),
+      shadow_offset = util.by_pixel(8.875, 58.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(8.875, 58.625),
+      shadow_offset = util.by_pixel(8.875, 58.625),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(8.875, 58.625),
+      shadow_offset = util.by_pixel(8.875, 58.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -527,7 +548,12 @@ data:extend({
     drawing_box_vertical_extension = 1,
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-blast-smelting", "angels-blast-smelting-2", "angels-blast-smelting-3", "angels-blast-smelting-4" },
+    crafting_categories = {
+      "angels-blast-smelting",
+      "angels-blast-smelting-2",
+      "angels-blast-smelting-3",
+      "angels-blast-smelting-4",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "burner",

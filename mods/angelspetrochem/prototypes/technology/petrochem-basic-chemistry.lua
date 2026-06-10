@@ -282,11 +282,7 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
-        recipe = "angels-coke-purification-2",
-      },
-      {
-        type = "unlock-recipe",
-        recipe = "angels-pellet-coke"
+        recipe = "angels-pellet-coke",
       },
     },
     unit = {

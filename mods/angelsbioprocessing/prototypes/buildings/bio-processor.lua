@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-bio-processor"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  3, main_offset = util.by_pixel(-11.5, -30.875), shadow_offset = util.by_pixel(-11.5, -30.875), show_shadow = true },
-  { variation =  3, main_offset = util.by_pixel(-11.5, -30.875), shadow_offset = util.by_pixel(-11.5, -30.875), show_shadow = true },
-  { variation =  3, main_offset = util.by_pixel(-11.5, -30.875), shadow_offset = util.by_pixel(-11.5, -30.875), show_shadow = true },
-  { variation =  3, main_offset = util.by_pixel(-11.5, -30.875), shadow_offset = util.by_pixel(-11.5, -30.875), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-processor"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 3,
+      main_offset = util.by_pixel(-11.5, -30.875),
+      shadow_offset = util.by_pixel(-11.5, -30.875),
+      show_shadow = true,
+    },
+    {
+      variation = 3,
+      main_offset = util.by_pixel(-11.5, -30.875),
+      shadow_offset = util.by_pixel(-11.5, -30.875),
+      show_shadow = true,
+    },
+    {
+      variation = 3,
+      main_offset = util.by_pixel(-11.5, -30.875),
+      shadow_offset = util.by_pixel(-11.5, -30.875),
+      show_shadow = true,
+    },
+    {
+      variation = 3,
+      main_offset = util.by_pixel(-11.5, -30.875),
+      shadow_offset = util.by_pixel(-11.5, -30.875),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

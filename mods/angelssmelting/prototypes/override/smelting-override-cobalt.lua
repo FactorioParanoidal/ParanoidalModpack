@@ -30,7 +30,12 @@ if angelsmods.trigger.smelting_products["cobalt"].ingot then
     OV.global_replace_item("angels-solid-cobalt-oxide", "bob-cobalt-oxide")
     angelsmods.functions.hide("angels-solid-cobalt-oxide")
     OV.copy_item_properties("angels-solid-cobalt-oxide", "bob-cobalt-oxide")
-    OV.disable_recipe({ "bob-cobalt-oxide", "bob-cobalt-oxide-from-copper", "bob-cobalt-plate", "bob-cobalt-steel-alloy" })
+    OV.disable_recipe({
+      "bob-cobalt-oxide",
+      "bob-cobalt-oxide-from-copper",
+      "bob-cobalt-plate",
+      "bob-cobalt-steel-alloy",
+    })
     OV.remove_prereq({ "bob-battery-2", "bob-rtg" }, "bob-cobalt-processing") --based on the oxide not the plate
     OV.add_prereq({ "bob-battery-2", "bob-rtg" }, "angels-cobalt-smelting-1") --based on the oxide not the plate
   end

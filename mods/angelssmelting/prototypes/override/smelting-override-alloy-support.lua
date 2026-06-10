@@ -57,7 +57,7 @@ if mods["bobplates"] then
     }) do
       if data.raw["assembling-machine"][rep.name] then
         data.raw["assembling-machine"][rep.name].localised_name = { "entity-name." .. rep.locale }
-      --[[else
+        --[[else
         log(rep.name)]]
       end
     end
@@ -65,8 +65,10 @@ if mods["bobplates"] then
     OV.add_prereq("bob-electric-mixing-furnace", "bob-steel-mixing-furnace")
     OV.remove_prereq("bob-steel-mixing-furnace", "bob-alloy-processing")
     OV.remove_prereq("bob-electric-mixing-furnace", "bob-alloy-processing")
-    data.raw.technology["bob-multi-purpose-furnace-1"].localised_name = { "technology-name.angels-multi-purpose-furnace-1" }
-    data.raw.technology["bob-multi-purpose-furnace-2"].localised_name = { "technology-name.angels-multi-purpose-furnace-2" }
+    data.raw.technology["bob-multi-purpose-furnace-1"].localised_name =
+      { "technology-name.angels-multi-purpose-furnace-1" }
+    data.raw.technology["bob-multi-purpose-furnace-2"].localised_name =
+      { "technology-name.angels-multi-purpose-furnace-2" }
   else --remove metal mixing furnaces if multi-purpose are also removed
     -- remove stone mixing furnace
     OV.global_replace_item("bob-stone-mixing-furnace", "stone-furnace")

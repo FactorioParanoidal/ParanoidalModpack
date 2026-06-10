@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-bio-butchery"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  0, main_offset = util.by_pixel( 5.5, -40), shadow_offset = util.by_pixel( 5.5, -40), show_shadow = true },
-  { variation =  0, main_offset = util.by_pixel( 5.5, -40), shadow_offset = util.by_pixel( 5.5, -40), show_shadow = true },
-  { variation =  0, main_offset = util.by_pixel( 5.5, -40), shadow_offset = util.by_pixel( 5.5, -40), show_shadow = true },
-  { variation =  0, main_offset = util.by_pixel( 5.5, -40), shadow_offset = util.by_pixel( 5.5, -40), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-butchery"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 0,
+      main_offset = util.by_pixel(5.5, -40),
+      shadow_offset = util.by_pixel(5.5, -40),
+      show_shadow = true,
+    },
+    {
+      variation = 0,
+      main_offset = util.by_pixel(5.5, -40),
+      shadow_offset = util.by_pixel(5.5, -40),
+      show_shadow = true,
+    },
+    {
+      variation = 0,
+      main_offset = util.by_pixel(5.5, -40),
+      shadow_offset = util.by_pixel(5.5, -40),
+      show_shadow = true,
+    },
+    {
+      variation = 0,
+      main_offset = util.by_pixel(5.5, -40),
+      shadow_offset = util.by_pixel(5.5, -40),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

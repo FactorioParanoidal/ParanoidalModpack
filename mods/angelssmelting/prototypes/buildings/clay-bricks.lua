@@ -5,8 +5,9 @@ data:extend({
     needs_correction = false,
     minable = { mining_time = 0.5, result = "angels-clay-brick" },
     mined_sound = { filename = "__base__/sound/deconstruct-bricks.ogg" },
-    collision_mask = {layers={
-      ground_tile=true}},
+    collision_mask = { layers = {
+      ground_tile = true,
+    } },
     walking_speed_modifier = 1.25,
     layer = 60,
     decorative_removal_probability = 0.75,
@@ -66,7 +67,7 @@ data:extend({
       },
     },
     map_color = { r = 50, g = 50, b = 50 },
-    absorptions_per_second = {pollution = 0},
+    absorptions_per_second = { pollution = 0 },
     --ageing=0,
     vehicle_friction_modifier = 1.1,
   },

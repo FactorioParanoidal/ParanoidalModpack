@@ -21,14 +21,16 @@ if mods["bobplates"] then
       "angels-bio-refugium-puffer-1",
       "angels-bio-swamp-farm",
       "angels-bio-temperate-farm",
-    }, "bob-zinc-processing")
+    }, "bob-brass-processing")
 
     -- Titanium pipe
     OV.add_prereq({
       "angels-bio-refugium-biter-1",
     }, "bob-titanium-processing")
   end
+end
 
+if angelsmods.trigger.smelting_products["glass"].plate then
   -- Glass
   OV.add_prereq({
     "angels-bio-refugium-fish-1",

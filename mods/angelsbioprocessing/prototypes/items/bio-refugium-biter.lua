@@ -8,7 +8,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-small.png",
-        icon_size = 32
+        icon_size = 32,
       },
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-crown.png",
@@ -36,7 +36,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-medium.png",
-        icon_size = 32
+        icon_size = 32,
       },
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-crown.png",
@@ -64,7 +64,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-big.png",
-        icon_size = 32
+        icon_size = 32,
       },
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/biter-crown.png",

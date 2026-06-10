@@ -97,7 +97,6 @@ local intermediates = {
 	["bob-silver-plate"] = { subgroup = "plates", image = "angels-plate-silver" },
 	["bob-tin-plate"] = { subgroup = "plates", image = "angels-plate-tin" },
 	["bob-titanium-plate"] = { subgroup = "plates", image = "angels-plate-titanium" },
-	["bob-tungsten-plate"] = { subgroup = "plates", image = "angels-plate-tungsten" },
 	["bob-zinc-plate"] = { subgroup = "plates", image = "angels-plate-zinc" },
 
 	-- Pure Angels Wires
@@ -134,32 +133,53 @@ local intermediates = {
 	-- ["angels-rod-steel"]
 }
 
+local is_boblibrary_same_or_newer_than_2_1_0 = reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0")
+if is_boblibrary_same_or_newer_than_2_1_0 then
+	intermediates["tungsten-plate"] = { subgroup = "plates", image = "angels-plate-tungsten" }
+else
+	intermediates["bob-tungsten-plate"] = { subgroup = "plates", image = "angels-plate-tungsten" }
+end
+
 if mods["reskins-bobs"] then
-	intermediates["bob-tungsten-carbide"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "plates", image = "bob-tungsten-carbide", icon_extras = reskins.angels.num_tier(1, inputs.group) }
-	intermediates["bob-tungsten-carbide-2"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "plates", image = "bob-tungsten-carbide", icon_extras = reskins.angels.num_tier(2, inputs.group) }
+	if is_boblibrary_same_or_newer_than_2_1_0 then
+		intermediates["tungsten-carbide"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "plates", image = "bob-tungsten-carbide" }
+	else
+		intermediates["bob-tungsten-carbide"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "plates", image = "bob-tungsten-carbide", icon_extras = reskins.angels.num_tier(1, inputs.group) }
+		intermediates["bob-tungsten-carbide-2"] = { type = "recipe", mod = "bobs", group = "plates", subgroup = "plates", image = "bob-tungsten-carbide", icon_extras = reskins.angels.num_tier(2, inputs.group) }
+	end
 end
 
 -- Check if we're using Angel's material colors
 if reskins.lib.settings.get_value("reskins-angels-use-angels-material-colors") then
 	-- Gears
-	intermediates["bob-cobalt-steel-gear-wheel"] = { subgroup = "gears" }
+	if not is_boblibrary_same_or_newer_than_2_1_0 then
+		intermediates["bob-cobalt-steel-gear-wheel"] = { subgroup = "gears" }
+	end
 	intermediates["bob-nitinol-gear-wheel"] = { subgroup = "gears" }
 	intermediates["bob-titanium-gear-wheel"] = { subgroup = "gears" }
 	intermediates["bob-tungsten-gear-wheel"] = { subgroup = "gears" }
 
 	-- Bearing Balls
-	intermediates["bob-ceramic-bearing-ball"] = { subgroup = "bearing-balls" }
-	intermediates["bob-cobalt-steel-bearing-ball"] = { subgroup = "bearing-balls" }
+	if is_boblibrary_same_or_newer_than_2_1_0 then
+		intermediates["bob-brass-bearing-ball"] = { subgroup = "bearing-balls" }
+	else
+		intermediates["bob-ceramic-bearing-ball"] = { subgroup = "bearing-balls" }
+		intermediates["bob-cobalt-steel-bearing-ball"] = { subgroup = "bearing-balls" }
+	end
 	intermediates["bob-nitinol-bearing-ball"] = { subgroup = "bearing-balls" }
 	intermediates["bob-titanium-bearing-ball"] = { subgroup = "bearing-balls" }
 
 	-- Bearings
-	intermediates["bob-ceramic-bearing"] = { subgroup = "bearings" }
-	intermediates["bob-cobalt-steel-bearing"] = { subgroup = "bearings" }
+	if is_boblibrary_same_or_newer_than_2_1_0 then
+		intermediates["bob-brass-bearing"] = { subgroup = "bearings" }
+	else
+		intermediates["bob-ceramic-bearing"] = { subgroup = "bearings" }
+		intermediates["bob-cobalt-steel-bearing"] = { subgroup = "bearings" }
+	end
 	intermediates["bob-nitinol-bearing"] = { subgroup = "bearings" }
 	intermediates["bob-titanium-bearing"] = { subgroup = "bearings" }
 
-	-- Bob Warefare Armor
+	-- Bob Warfare Armor
 	intermediates["bob-power-armor-mk4"] = { type = "armor", subgroup = "armor" }
 	intermediates["bob-power-armor-mk5"] = { type = "armor", subgroup = "armor" }
 end
@@ -612,24 +632,25 @@ end
 
 -- Make variations for powders
 local powder_variations = {
-	["powder-aluminium"] = "aluminium",
-	["casting-powder-tungsten"] = "tungsten-mixture",
-	["powder-chrome"] = "chrome",
-	["powder-cobalt"] = "cobalt",
-	["powder-copper"] = "copper",
-	["powder-gold"] = "gold",
-	["powder-iron"] = "iron",
-	["powder-steel"] = "steel",
-	["powder-lead"] = "lead",
-	["powder-manganese"] = "manganese",
-	["powder-nickel"] = "nickel",
-	["powder-platinum"] = "platinum",
-	["silicon-powder"] = "silicon",
-	["powder-silver"] = "silver",
-	["powder-tin"] = "tin",
-	["powder-titanium"] = "titanium",
-	["powdered-tungsten"] = "tungsten",
-	["powder-zinc"] = "zinc",
+	["angels-powder-aluminium"] = "aluminium",
+	["angels-casting-powder-tungsten"] = "tungsten-mixture",
+	["angels-powder-chrome"] = "chrome",
+	["angels-powder-cobalt"] = "cobalt",
+	["angels-powder-copper"] = "copper",
+	["angels-powder-gold"] = "gold",
+	["angels-powder-iron"] = "iron",
+	["angels-powder-steel"] = "steel",
+	["angels-powder-lead"] = "lead",
+	["angels-powder-manganese"] = "manganese",
+	["angels-powder-nickel"] = "nickel",
+	["angels-powder-platinum"] = "platinum",
+	["bob-silicon-powder"] = "silicon",
+	["angels-powder-silicon"] = "silicon",
+	["angels-powder-silver"] = "silver",
+	["angels-powder-tin"] = "tin",
+	["angels-powder-titanium"] = "titanium",
+	["bob-powdered-tungsten"] = "tungsten",
+	["angels-powder-zinc"] = "zinc",
 }
 
 for powder, material in pairs(powder_variations) do

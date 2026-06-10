@@ -703,6 +703,14 @@ local loaders = {
         data = function(dash_prefix)
             local previous = 'express'
 
+            -- Костыль (upstream issue #41): Bob's Logistics 2.1 переименовал
+            -- bob-turbo-{transport-belt,underground-belt,splitter} → базовые turbo-* (Space Age,
+            -- миграция boblogistics_2.1.0.json). Старого имени ленты больше нет → nil-краш на speed.
+            -- Если старой ленты нет — берём базовый префикс 'turbo-' (bob-turbo-inserter ниже жив).
+            if not data.raw['transport-belt'][dash_prefix .. 'transport-belt'] then
+                dash_prefix = 'turbo-'
+            end
+
             return {
                 order = 'd[a]-q',
                 subgroup = 'belt',

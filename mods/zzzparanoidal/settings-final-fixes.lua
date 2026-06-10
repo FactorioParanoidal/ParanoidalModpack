@@ -234,9 +234,6 @@ end
 if mods["bobrevamp"] then
     set_settings_default_value("bool-setting", "bobmods-revamp-oil", false)
 end
-if mods["Oberhaul"] then
-    set_settings_default_value("bool-setting", "bobs-military-simplify", false)
-end
 if mods["DeadlockResearchNotifications"] then
     set_settings_default_value("bool-setting", "deadlock-force-research-queue", true)
 end
@@ -368,9 +365,6 @@ end
 if mods["Rocket-Silo-Construction"] then
     set_settings_default_value("bool-setting", "rsc-st-not-removable-silo", true)
     set_settings_default_value("bool-setting", "rsc-st-not-removable-site", true)
-end
-if mods["Oberhaul"] then
-    set_settings_default_value("bool-setting", "simple-cordite", false)
 end
 if mods["SpaceMod"] then
     set_settings_default_value("string-setting", "SpaceX-launch-profile", "Launch Meglo-mania(x25)")

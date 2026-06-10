@@ -303,7 +303,11 @@ data:extend({
       { type = "item", name = "angels-solid-mud", amount_min = 0, amount_max = 3, probability = 0.5 },
     },
     main_product = "angels-water-heavy-mud",
-    crafting_machine_tint = angelsmods.functions.get_recipe_tints({ "angels-water-heavy-mud", "angels-water-viscous-mud", "water" }),
+    crafting_machine_tint = angelsmods.functions.get_recipe_tints({
+      "angels-water-heavy-mud",
+      "angels-water-viscous-mud",
+      "water",
+    }),
     order = "b",
   },
   {
@@ -368,7 +372,11 @@ data:extend({
       { type = "item", name = "angels-solid-mud", amount_min = 0, amount_max = 3, probability = 0.5 },
     },
     main_product = "angels-water-thin-mud",
-    crafting_machine_tint = angelsmods.functions.get_recipe_tints({ "angels-water-thin-mud", "angels-water-light-mud", "water" }),
+    crafting_machine_tint = angelsmods.functions.get_recipe_tints({
+      "angels-water-thin-mud",
+      "angels-water-light-mud",
+      "water",
+    }),
     order = "e",
   },
   {
@@ -391,10 +399,15 @@ data:extend({
       angelsmods.functions.create_viscous_liquid_fluid_icon(
         nil,
         { { 039, 112, 194 }, { 168, 173, 173 }, { 070, 133, 232 }, { 185, 185, 185, 0.8 } }
-      ),    
-      5, angelsmods.refining.number_tint
+      ),
+      5,
+      angelsmods.refining.number_tint
     ),
-    crafting_machine_tint = angelsmods.functions.get_recipe_tints({ "angels-water-saline", "angels-water-thin-mud", "water" }),
+    crafting_machine_tint = angelsmods.functions.get_recipe_tints({
+      "angels-water-saline",
+      "angels-water-thin-mud",
+      "water",
+    }),
     order = "f",
   },
   {

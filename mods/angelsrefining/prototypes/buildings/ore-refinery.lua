@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-ore-refinery"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  5, main_offset = util.by_pixel( 31.25,  49.875), shadow_offset = util.by_pixel( 31.25,  49.875), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 31.25,  49.875), shadow_offset = util.by_pixel( 31.25,  49.875), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 31.25,  49.875), shadow_offset = util.by_pixel( 31.25,  49.875), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 31.25,  49.875), shadow_offset = util.by_pixel( 31.25,  49.875), show_shadow = true },
-})
+circuit_connector_definitions["angels-ore-refinery"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 5,
+      main_offset = util.by_pixel(31.25, 49.875),
+      shadow_offset = util.by_pixel(31.25, 49.875),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(31.25, 49.875),
+      shadow_offset = util.by_pixel(31.25, 49.875),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(31.25, 49.875),
+      shadow_offset = util.by_pixel(31.25, 49.875),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(31.25, 49.875),
+      shadow_offset = util.by_pixel(31.25, 49.875),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

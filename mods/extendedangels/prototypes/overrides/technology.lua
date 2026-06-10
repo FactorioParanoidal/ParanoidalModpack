@@ -11,7 +11,7 @@ OV.add_unlock("angels-advanced-chemistry-4", "angels-air-filter-4")
 OV.add_prereq("angels-tungsten-smelting-3", "angels-manganese-smelting-3")
 OV.add_prereq("angels-tungsten-smelting-3", "angels-zinc-smelting-2")
 OV.add_prereq("angels-tungsten-smelting-3", "angels-sodium-processing-3")
-OV.add_prereq("bob-tungsten-alloy-processing", "angels-tungsten-carbide-smelting-1")
+OV.add_prereq("bob-tungsten-processing", "angels-tungsten-carbide-smelting-1")
 OV.add_prereq("angels-advanced-chemistry-4", "angels-nitrogen-processing-3")
 OV.add_unlock("angels-advanced-ore-refining-3", "angels-ore-crusher-4")
 OV.add_unlock("angels-advanced-ore-refining-4", "angels-ore-floatation-cell-4")
@@ -25,7 +25,7 @@ OV.add_prereq("angels-strand-casting-4", "angels-stone-smelting-4")
 
 
 if mods["bobplates"] then
-OV.add_prereq("bob-tungsten-alloy-processing", "angels-copper-tungsten-smelting-1")
+OV.add_prereq("bob-tungsten-processing", "angels-copper-tungsten-smelting-1")
 OV.add_prereq("angels-warehouses-2","bob-zinc-processing")
 OV.add_prereq("angels-warehouses-2","angels-invar-smelting-1")
 OV.add_prereq("angels-warehouses-3","bob-ceramics")
@@ -37,12 +37,12 @@ OV.add_prereq("angels-logistic-warehouses-4","bob-nitinol-processing")
 OV.add_prereq("angels-logistic-warehouses-4","bob-advanced-processing-unit")
 OV.add_prereq("angels-water-washing-3", "bob-zinc-processing")
 OV.add_prereq("angels-water-washing-4","bob-titanium-processing")
-OV.add_prereq("angels-advanced-ore-refining-5", "bob-tungsten-alloy-processing")
+OV.add_prereq("angels-advanced-ore-refining-5", "bob-tungsten-processing")
 OV.add_prereq(
     "angels-water-treatment-5",
   { 
     "bob-advanced-processing-unit",
-    "bob-tungsten-alloy-processing",
+    "bob-tungsten-processing",
   })
 
 else
@@ -127,7 +127,7 @@ if angelsmods.bioprocessing then
       "angels-bio-refugium-hatchery-3",
       "angels-bio-refugium-puffer-5",
     },
-      "bob-tungsten-alloy-processing"
+      "bob-tungsten-processing"
       )
     OV.add_prereq({
       "angels-advanced-bio-processing",
@@ -176,7 +176,7 @@ if mods["angelsaddons-storage"] then
       "bob-advanced-logistic-science-pack"
     )
     bobmods.lib.tech.add_science_pack(
-      "ngels-logistic-warehouses-4",
+      "angels-logistic-warehouses-4",
       "bob-advanced-logistic-science-pack",
       1
     )

@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-ore-crusher"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 30, main_offset = util.by_pixel( 35.875, -31.625), shadow_offset = util.by_pixel( 35.875, -31.625), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel( 35.875, -31.625), shadow_offset = util.by_pixel( 35.875, -31.625), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel( 35.875, -31.625), shadow_offset = util.by_pixel( 35.875, -31.625), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel( 35.875, -31.625), shadow_offset = util.by_pixel( 35.875, -31.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-ore-crusher"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 30,
+      main_offset = util.by_pixel(35.875, -31.625),
+      shadow_offset = util.by_pixel(35.875, -31.625),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(35.875, -31.625),
+      shadow_offset = util.by_pixel(35.875, -31.625),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(35.875, -31.625),
+      shadow_offset = util.by_pixel(35.875, -31.625),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(35.875, -31.625),
+      shadow_offset = util.by_pixel(35.875, -31.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   --Burner-Ore-Crusher

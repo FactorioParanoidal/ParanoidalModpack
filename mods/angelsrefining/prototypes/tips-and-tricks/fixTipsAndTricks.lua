@@ -51,7 +51,7 @@ data.raw["tips-and-tricks-item"]["clear-cursor"].simulation.init = [[
     }
     tip_story_init(story_table)
   ]]
-  
+
 data.raw["tips-and-tricks-item"]["circuit-network"].simulation.init = [[
     require("__core__/lualib/story")
     player = game.simulation.create_test_player{name = "cable-guy"}
@@ -566,8 +566,8 @@ data.raw["tips-and-tricks-item"]["circuit-network"].simulation.init = [[
     }
     tip_story_init(story_table)
   ]]
-  
-data.raw["tips-and-tricks-item"]["belt-lanes"].simulation.init  = [[
+
+data.raw["tips-and-tricks-item"]["belt-lanes"].simulation.init = [[
     game.simulation.camera_position = {0, 0.5}
 
     game.surfaces[1].create_entities_from_blueprint_string
@@ -576,7 +576,7 @@ data.raw["tips-and-tricks-item"]["belt-lanes"].simulation.init  = [[
       position = {4, 0}
     }
   ]]
-  
+
 data.raw["tips-and-tricks-item"]["inserters"].simulation.init = [[
     game.simulation.camera_position = {0, 0.5}
 
@@ -601,8 +601,7 @@ data.raw["tips-and-tricks-item"]["inserters"].simulation.init = [[
       storage.chest_2.clear_items_inside()
     end)
   ]]
-  
-  
+
 data.raw["tips-and-tricks-item"]["z-dropping"].simulation.init = [[
     require("__core__/lualib/story")
     player = game.simulation.create_test_player{name = "big k"}
@@ -714,9 +713,8 @@ data.raw["tips-and-tricks-item"]["z-dropping"].simulation.init = [[
     tip_story_init(story_table)
   ]]
 
-
 local function fix_e_confirm()
-    data.raw["tips-and-tricks-item"]["e-confirm"].simulation.init = [[
+  data.raw["tips-and-tricks-item"]["e-confirm"].simulation.init = [[
     require("__core__/lualib/story")
     player = game.simulation.create_test_player{name = "big k"}
     player.teleport({-8.5, -1.5})
@@ -827,7 +825,7 @@ local function fix_e_confirm()
 end
 
 local function fix_bulk_crafting()
-    data.raw["tips-and-tricks-item"]["bulk-crafting"].simulation.init = [[
+  data.raw["tips-and-tricks-item"]["bulk-crafting"].simulation.init = [[
     require("__core__/lualib/story")
     player = game.simulation.create_test_player{name = "big k"}
     player.teleport({0, 4.5})
@@ -916,10 +914,10 @@ local function fix_bulk_crafting()
     }
     tip_story_init(story_table)
   ]]
-end 
+end
 
 local function fix_splitters()
-    data.raw["tips-and-tricks-item"]["splitters"].simulation.init = [[
+  data.raw["tips-and-tricks-item"]["splitters"].simulation.init = [[
     require("__core__/lualib/story")
     player = game.simulation.create_test_player{name = "big k"}
     player.teleport({0, 0.5})
@@ -1064,7 +1062,7 @@ local function fix_splitters()
 end
 
 if mods["angelsindustries"] then
-    fix_e_confirm()
-    fix_bulk_crafting()
-    fix_splitters()
+  fix_e_confirm()
+  fix_bulk_crafting()
+  fix_splitters()
 end

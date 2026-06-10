@@ -105,7 +105,9 @@ data:extend({
     name = "angels-water-yellow-waste",
     --Icons include their respective cleaned counterpart
     icons = angelsmods.functions.create_viscous_liquid_fluid_icon(
-      mods["angelspetrochem"] and { icon = "__angelspetrochemgraphics__/graphics/icons/solid-sulfur.png", icon_size = 32 } or {"__base__/graphics/icons/sulfur.png"},
+      mods["angelspetrochem"]
+          and { icon = "__angelspetrochemgraphics__/graphics/icons/solid-sulfur.png", icon_size = 32 }
+        or { "__base__/graphics/icons/sulfur.png" },
       { { 116, 140, 211 }, { 255, 219, 051 }, { 109, 070, 020, 0.8 }, { 254, 204, 049 } },
       true
     ),
@@ -122,7 +124,9 @@ data:extend({
     name = "angels-water-red-waste",
     --Icons include their respective cleaned counterpart
     icons = angelsmods.functions.create_viscous_liquid_fluid_icon(
-      mods["angelspetrochem"] and { icon = "__angelspetrochemgraphics__/graphics/icons/solid-sodium-nitrate.png", icon_size = 32 } or nil,
+      mods["angelspetrochem"]
+          and { icon = "__angelspetrochemgraphics__/graphics/icons/solid-sodium-nitrate.png", icon_size = 32 }
+        or nil,
       { { 116, 140, 211 }, { 155, 063, 061 }, { 109, 070, 020, 0.8 }, { 124, 050, 048 } },
       true
     ),
@@ -208,7 +212,8 @@ data:extend({
         nil,
         { { 070, 133, 232 }, { 117, 089, 036 }, { 102, 076, 029, 0.8 }, { 102, 076, 029, 0.8 } }
       ),
-      1, angelsmods.refining.number_tint
+      1,
+      angelsmods.refining.number_tint
     ),
     subgroup = "angels-water-washing-fluid",
     order = "b",
@@ -227,7 +232,8 @@ data:extend({
         nil,
         { { 070, 133, 232 }, { 070, 133, 232 }, { 109, 070, 020, 0.8 }, { 109, 070, 020, 0.8 } }
       ),
-      2, angelsmods.refining.number_tint
+      2,
+      angelsmods.refining.number_tint
     ),
     subgroup = "angels-water-washing-fluid",
     order = "c",
@@ -246,7 +252,8 @@ data:extend({
         nil,
         { { 109, 070, 020 }, { 109, 070, 020 }, { 070, 133, 232, 0.8 }, { 070, 133, 232, 0.8 } }
       ),
-      3, angelsmods.refining.number_tint
+      3,
+      angelsmods.refining.number_tint
     ),
     subgroup = "angels-water-washing-fluid",
     order = "d",
@@ -265,7 +272,8 @@ data:extend({
         nil,
         { { 039, 112, 194 }, { 109, 070, 020 }, { 070, 133, 232, 0.8 }, { 070, 133, 232, 0.8 } }
       ),
-      4, angelsmods.refining.number_tint
+      4,
+      angelsmods.refining.number_tint
     ),
     subgroup = "angels-water-washing-fluid",
     order = "e",

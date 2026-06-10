@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-algae-farm"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  6, main_offset = util.by_pixel( 97, -51.375), shadow_offset = util.by_pixel( 97, -51.375), show_shadow = true },
-  { variation =  6, main_offset = util.by_pixel( 97, -51.375), shadow_offset = util.by_pixel( 97, -51.375), show_shadow = true },
-  { variation =  6, main_offset = util.by_pixel( 97, -51.375), shadow_offset = util.by_pixel( 97, -51.375), show_shadow = true },
-  { variation =  6, main_offset = util.by_pixel( 97, -51.375), shadow_offset = util.by_pixel( 97, -51.375), show_shadow = true }
-})
+circuit_connector_definitions["angels-algae-farm"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 6,
+      main_offset = util.by_pixel(97, -51.375),
+      shadow_offset = util.by_pixel(97, -51.375),
+      show_shadow = true,
+    },
+    {
+      variation = 6,
+      main_offset = util.by_pixel(97, -51.375),
+      shadow_offset = util.by_pixel(97, -51.375),
+      show_shadow = true,
+    },
+    {
+      variation = 6,
+      main_offset = util.by_pixel(97, -51.375),
+      shadow_offset = util.by_pixel(97, -51.375),
+      show_shadow = true,
+    },
+    {
+      variation = 6,
+      main_offset = util.by_pixel(97, -51.375),
+      shadow_offset = util.by_pixel(97, -51.375),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -312,7 +333,12 @@ data:extend({
     fast_replaceable_group = "angels-algae-farm",
     module_slots = 2,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-bio-processing", "angels-bio-processing-2", "angels-bio-processing-3", "angels-bio-processing-4" },
+    crafting_categories = {
+      "angels-bio-processing",
+      "angels-bio-processing-2",
+      "angels-bio-processing-3",
+      "angels-bio-processing-4",
+    },
     crafting_speed = 2,
     energy_source = {
       type = "electric",

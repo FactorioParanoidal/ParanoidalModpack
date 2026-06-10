@@ -69,16 +69,16 @@ data.raw["pipe-to-ground"]["bob-tungsten-pipe-to-ground"].resistances ={
 		{type = "physical", percent = 60}
 		}
 
-data.raw["pipe"]["bob-nitinol-pipe"].max_health = 500
-data.raw["pipe"]["bob-nitinol-pipe"].resistances ={
+data.raw["pipe"]["bob-copper-tungsten-pipe"].max_health = 500
+data.raw["pipe"]["bob-copper-tungsten-pipe"].resistances ={
 		{type = "fire", percent = 98},
 		{type = "acid", percent = 80},
 		{type = "explosion", percent = 80},
 		{type = "impact", percent = 80},
 		{type = "physical", percent = 80}
 		}
-data.raw["pipe-to-ground"]["bob-nitinol-pipe-to-ground"].max_health = 650
-data.raw["pipe-to-ground"]["bob-nitinol-pipe-to-ground"].resistances ={
+data.raw["pipe-to-ground"]["bob-copper-tungsten-pipe-to-ground"].max_health = 650
+data.raw["pipe-to-ground"]["bob-copper-tungsten-pipe-to-ground"].resistances ={
 		{type = "fire", percent = 98},
 		{type = "acid", percent = 80},
 		{type = "explosion", percent = 80},

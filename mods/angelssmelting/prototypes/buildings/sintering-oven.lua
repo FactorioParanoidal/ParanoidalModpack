@@ -442,7 +442,13 @@ data:extend({
     selection_box = { { -2.5, -2.5 }, { 2.5, 2.5 } },
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-sintering", "angels-sintering-2", "angels-sintering-3", "angels-sintering-4", "angels-sintering-5" },
+    crafting_categories = {
+      "angels-sintering",
+      "angels-sintering-2",
+      "angels-sintering-3",
+      "angels-sintering-4",
+      "angels-sintering-5",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "electric",

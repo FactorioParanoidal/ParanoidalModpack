@@ -31,6 +31,7 @@ if mods["bobplates"] then
       subgroup = "angels-alloys-casting",
       energy_required = 4,
       enabled = false,
+      hide_from_signal_gui = false,
       ingredients = {
         { type = "item", name = "angels-ingot-copper", amount = 18 },
         { type = "item", name = "angels-ingot-zinc", amount = 12 },
@@ -55,6 +56,7 @@ if mods["bobplates"] then
       subgroup = "angels-alloys-casting",
       energy_required = 4,
       enabled = false,
+      hide_from_signal_gui = false,
       ingredients = {
         { type = "item", name = "angels-ingot-copper", amount = 18 },
         { type = "item", name = "angels-ingot-zinc", amount = 12 },
@@ -86,18 +88,36 @@ if mods["bobplates"] then
       results = {
         { type = "item", name = "bob-brass-alloy", amount = 4 },
       },
-      icons = angelsmods.functions.add_icon_layer(
+      icons = angelsmods.functions.add_icon_layer({
         {
-          {
-            icon = "__angelssmeltinggraphics__/graphics/icons/plate-brass.png",
-            icon_size = 32,
-          }
+          icon = "__angelssmeltinggraphics__/graphics/icons/plate-brass.png",
+          icon_size = 32,
         },
-        angelsmods.functions.get_object_icons("angels-liquid-molten-brass"),
-        { -10, -10 },
-        0.4375
-      ),
+      }, angelsmods.functions.get_object_icons("angels-liquid-molten-brass"), { -10, -10 }, 0.4375),
       order = "b[brass]-b[brass-alloy]",
+    },
+    --INTERMEDIATE
+    {
+      type = "recipe",
+      name = "bob-brass-bearing-ball",
+      enabled = false,
+      ingredients = {
+        { type = "item", name = "bob-brass-alloy", amount = 1 },
+      },
+      results = { { type = "item", name = "bob-brass-bearing-ball", amount = 12 } },
+      allow_productivity = true,
+    },
+
+    {
+      type = "recipe",
+      name = "bob-brass-bearing",
+      enabled = false,
+      ingredients = {
+        { type = "item", name = "bob-brass-alloy", amount = 1 },
+        { type = "item", name = "bob-brass-bearing-ball", amount = 16 },
+      },
+      results = { { type = "item", name = "bob-brass-bearing", amount = 2 } },
+      allow_productivity = true,
     },
   })
 end

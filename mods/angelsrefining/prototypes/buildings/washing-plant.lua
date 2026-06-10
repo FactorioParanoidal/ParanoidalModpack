@@ -5,7 +5,7 @@ local function angels_washing_plant_fluid_boxes()
       pipe_covers = pipecoverspictures(),
       volume = 1000,
       pipe_connections = {
-        { flow_direction = "input", position = { 0, 2 }, direction = defines.direction.south }
+        { flow_direction = "input", position = { 0, 2 }, direction = defines.direction.south },
       },
     },
     {
@@ -27,12 +27,33 @@ local function angels_washing_plant_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-washing-plant"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  5, main_offset = util.by_pixel( 3.5,  39.625), shadow_offset = util.by_pixel( 3.5,  39.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 3.5,  39.625), shadow_offset = util.by_pixel( 3.5,  39.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 3.5,  39.625), shadow_offset = util.by_pixel( 3.5,  39.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 3.5,  39.625), shadow_offset = util.by_pixel( 3.5,  39.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-washing-plant"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 5,
+      main_offset = util.by_pixel(3.5, 39.625),
+      shadow_offset = util.by_pixel(3.5, 39.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(3.5, 39.625),
+      shadow_offset = util.by_pixel(3.5, 39.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(3.5, 39.625),
+      shadow_offset = util.by_pixel(3.5, 39.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(3.5, 39.625),
+      shadow_offset = util.by_pixel(3.5, 39.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

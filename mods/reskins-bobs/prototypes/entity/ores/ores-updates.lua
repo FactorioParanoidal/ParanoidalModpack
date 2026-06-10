@@ -24,9 +24,14 @@ local ores = {
 	"bob-nickel-ore",
 	"bob-quartz",
 	"bob-silver-ore",
-	"bob-tungsten-ore",
 	"bob-zinc-ore",
 }
+
+if reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0") then
+	table.insert(ores, "tungsten-ore")
+else
+	table.insert(ores, "bob-tungsten-ore")
+end
 
 for _, name in pairs(ores) do
 	-- Check for autoplace controls, skip if it does not exist

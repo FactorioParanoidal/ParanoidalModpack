@@ -22,11 +22,16 @@ reskins.lib.set_inputs_defaults(inputs)
 local batteries = {
 	["battery-equipment"] = { tier = 1 },
 	["battery-mk2-equipment"] = { tier = 2 },
-	["bob-battery-mk3-equipment"] = { tier = 3 },
 	["bob-battery-mk4-equipment"] = { tier = 4 },
 	["bob-battery-mk5-equipment"] = { tier = 5 },
 	["bob-battery-mk6-equipment"] = { tier = 6 },
 }
+
+if reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0") then
+	batteries["battery-mk3-equipment"] = { tier = 3 }
+else
+	batteries["bob-battery-mk3-equipment"] = { tier = 3 }
+end
 
 -- Reskin equipment
 for name, map in pairs(batteries) do

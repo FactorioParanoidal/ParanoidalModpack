@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.8
+Date: 2026-05-08
+  Bugfixes:
+    - Fixed that the additional tiers of algae farms, arboretums, crop farms, temperate farms, desert farms, swamp farms and refugiums did not accept agricultural modules
+---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 2026-03-14
+  Bugfixes:
+    - Fixed typo in preventing technology from using the intended science packs.
+  Locale:
+    - Minor updates to localization.
+---------------------------------------------------------------------------------------------------
 Version: 0.6.6
 Date: 2026-01-18
   Changes:

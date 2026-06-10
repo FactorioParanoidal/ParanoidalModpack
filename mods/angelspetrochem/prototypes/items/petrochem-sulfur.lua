@@ -62,7 +62,7 @@ data:extend({
   },
   {
     type = "fluid",
-    name = "angels-liquid-sulfuric-acid",
+    name = "sulfuric-acid",
     localised_description = show_formula and {
       "tooltip-description.chemical-formula",
       "H[font=default-tiny-bold]2[/font]SO[font=default-tiny-bold]4[/font]",

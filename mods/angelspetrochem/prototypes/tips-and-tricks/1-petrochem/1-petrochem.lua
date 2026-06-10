@@ -20,10 +20,9 @@ data:extend({
 
     starting_status = "locked",
     dependencies = nil,
-    trigger =
-    {
+    trigger = {
       type = "research",
-      technology = "angels-basic-chemistry"
+      technology = "angels-basic-chemistry",
     },
 
     --simulation = require "prototypes.tips-and-tricks.1-petrochem.1-petrochem-simulation",

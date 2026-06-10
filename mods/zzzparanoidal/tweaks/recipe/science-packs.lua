@@ -41,7 +41,7 @@ paralib.bobmods.lib.recipe.set_ingredients("production-science-pack", {
 paralib.bobmods.lib.recipe.set_ingredients("utility-science-pack", {
 	{ type = "item", name = "processing-unit", amount = 5 },
 	{ type = "item", name = "express-transport-belt", amount = 10 },
-	{ type = "item", name = "bob-lithium-ion-battery", amount = 10 },
+	{ type = "item", name = "bob-battery-2", amount = 10 },
 	{ type = "item", name = "uranium-238", amount = 5 },
 	{ type = "item", name = "sci-component-4", amount = 3 },
 	{ type = "item", name = "bob-rubber", amount = 10 },

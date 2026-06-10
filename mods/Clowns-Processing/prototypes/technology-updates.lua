@@ -50,6 +50,5 @@ end
 OV.add_prereq("angels-advanced-chemistry-3", "mercury-processing-1")
 OV.add_prereq("uranium-ammo", "advanced-depleted-uranium-smelting-1")
 if mods["bobplates"] then
-OV.add_prereq("centrifuging-2", "bob-tungsten-alloy-processing")
---OV.add_prereq("centrifuging-2", "bob-tungsten-processing")
+OV.add_prereq("centrifuging-2", "bob-tungsten-processing")
 end

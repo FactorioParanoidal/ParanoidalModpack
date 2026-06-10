@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-pellet-press"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  2, main_offset = util.by_pixel(-21.25, -16.375), shadow_offset = util.by_pixel(-21.25, -16.375), show_shadow = true },
-  { variation =  2, main_offset = util.by_pixel(-21.25, -16.375), shadow_offset = util.by_pixel(-21.25, -16.375), show_shadow = true },
-  { variation =  2, main_offset = util.by_pixel(-21.25, -16.375), shadow_offset = util.by_pixel(-21.25, -16.375), show_shadow = true },
-  { variation =  2, main_offset = util.by_pixel(-21.25, -16.375), shadow_offset = util.by_pixel(-21.25, -16.375), show_shadow = true },
-})
+circuit_connector_definitions["angels-pellet-press"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-21.25, -16.375),
+      shadow_offset = util.by_pixel(-21.25, -16.375),
+      show_shadow = true,
+    },
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-21.25, -16.375),
+      shadow_offset = util.by_pixel(-21.25, -16.375),
+      show_shadow = true,
+    },
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-21.25, -16.375),
+      shadow_offset = util.by_pixel(-21.25, -16.375),
+      show_shadow = true,
+    },
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-21.25, -16.375),
+      shadow_offset = util.by_pixel(-21.25, -16.375),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -284,7 +305,12 @@ data:extend({
     selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-pellet-pressing", "angels-pellet-pressing-2", "angels-pellet-pressing-3", "angels-pellet-pressing-4" },
+    crafting_categories = {
+      "angels-pellet-pressing",
+      "angels-pellet-pressing-2",
+      "angels-pellet-pressing-3",
+      "angels-pellet-pressing-4",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "electric",

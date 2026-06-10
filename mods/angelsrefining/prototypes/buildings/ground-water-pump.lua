@@ -8,12 +8,33 @@ local create_static_stripes = function(stripe, stripe_count)
   return stripes
 end
 
-circuit_connector_definitions["angels-ground-water-pump"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 31, main_offset = util.by_pixel( 16.125, -0.5), shadow_offset = util.by_pixel( 16.125, -0.5), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel( 4.625,  6.375), shadow_offset = util.by_pixel( 4.625,  6.375), show_shadow = true },
-  { variation = 29, main_offset = util.by_pixel(-15.625,  5.625), shadow_offset = util.by_pixel(-15.625,  5.625), show_shadow = true },
-  { variation =  2, main_offset = util.by_pixel(-5.625,  8.375), shadow_offset = util.by_pixel(-5.625,  8.375), show_shadow = true },
-})
+circuit_connector_definitions["angels-ground-water-pump"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 31,
+      main_offset = util.by_pixel(16.125, -0.5),
+      shadow_offset = util.by_pixel(16.125, -0.5),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(4.625, 6.375),
+      shadow_offset = util.by_pixel(4.625, 6.375),
+      show_shadow = true,
+    },
+    {
+      variation = 29,
+      main_offset = util.by_pixel(-15.625, 5.625),
+      shadow_offset = util.by_pixel(-15.625, 5.625),
+      show_shadow = true,
+    },
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-5.625, 8.375),
+      shadow_offset = util.by_pixel(-5.625, 8.375),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -32,11 +53,11 @@ data:extend({
     icon = "__angelsrefininggraphics__/graphics/icons/water-pump.png",
     icon_size = 48,
     flags = { "placeable-neutral", "player-creation" },
-    collision_mask = {layers={object=true, train=true, is_object=true, is_lower_object=true}},
+    collision_mask = { layers = { object = true, train = true, is_object = true, is_lower_object = true } },
     collision_box = { { -0.45, -1.45 }, { 0.45, 0.45 } },
     tile_width = 1,
     tile_height = 1,
-    fluid_source_offset = {0, -1},
+    fluid_source_offset = { 0, -1 },
     selection_box = { { -0.5, -1.5 }, { 0.5, 0.5 } },
     minable = { mining_time = 0.1, result = "angels-ground-water-pump" },
     max_health = 100,
@@ -54,13 +75,12 @@ data:extend({
         {
           flow_direction = "output",
           position = { 0, 0 },
-          direction = defines.direction.south
+          direction = defines.direction.south,
         },
       },
     },
-    energy_source =
-    {
-      type = "void"
+    energy_source = {
+      type = "void",
     },
     energy_usage = "60kW",
 

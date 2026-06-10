@@ -20,7 +20,7 @@ if mods["bobgreenhouse"] then
   OV.global_replace_item("bob-seedling", "angels-tree-seed")
   OV.disable_recipe("bob-seedling")
   angelsmods.functions.hide("bob-seedling")
-  
+
   -- wood pellets
   OV.global_replace_item("bob-wood-pellets", "angels-wood-pellets")
   OV.disable_recipe("bob-wood-pellets")

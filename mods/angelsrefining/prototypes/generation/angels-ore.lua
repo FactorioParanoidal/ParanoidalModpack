@@ -11,6 +11,7 @@ angelsmods.functions.add_resource("make", {
   output_min = 1,
   output_max = 1,
   icon = "__angelsrefininggraphics__/graphics/icons/angels-ore1/angels-ore1.png",
+  icon_size = 32,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore1"].value,
     base_density = 10,
@@ -32,6 +33,7 @@ angelsmods.functions.add_resource("make", {
   output_min = 1,
   output_max = 1,
   icon = "__angelsrefininggraphics__/graphics/icons/angels-ore2/angels-ore2.png",
+  icon_size = 32,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore2"].value,
     base_density = 7,
@@ -84,6 +86,7 @@ angelsmods.functions.add_resource("make", {
   output_min = 1,
   output_max = 1,
   icon = "__angelsrefininggraphics__/graphics/icons/angels-ore4/angels-ore4.png",
+  icon_size = 32,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore4"].value,
     base_density = 7,
@@ -105,6 +108,7 @@ angelsmods.functions.add_resource("make", {
   output_min = 1,
   output_max = 1,
   icon = "__angelsrefininggraphics__/graphics/icons/angels-ore5/angels-ore5.png",
+  icon_size = 32,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore5"].value,
     base_density = 8,
@@ -126,6 +130,7 @@ angelsmods.functions.add_resource("make", {
   output_min = 1,
   output_max = 1,
   icon = "__angelsrefininggraphics__/graphics/icons/angels-ore6/angels-ore6.png",
+  icon_size = 32,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore6"].value,
     base_density = 8,

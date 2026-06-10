@@ -9,7 +9,7 @@ if mods["bobmodules"] then
     OV.add_prereq("modules", "angels-chlorine-processing-1")
   end
 
-  if mods["angelssmelting"] and angelsmods.trigger.smelting_products["silver"].wire then
+  if mods["angelssmelting"] then
     OV.add_prereq("modules", "angels-silver-smelting-1")
   elseif mods["bobplates"] then
     OV.add_prereq("modules", "bob-lead-processing")
@@ -29,15 +29,35 @@ if mods["bobmodules"] then
         },
       },
       {
+        name = "bob-module-circuit-board",
+        ingredients = {
+          { type = "item", name = "angels-wire-tin", amount = 2 },
+          { type = "item", name = "bob-tin-plate", amount = 0 },
+          { type = "item", name = "copper-plate", amount = 0 },
+        },
+      },
+      {
         name = "bob-module-processor-board",
         ingredients = {
-          { type = "item", name = "bob-silver-plate", amount = "bob-tin-plate" },
+          { type = "item", name = "angels-wire-silver", amount = 4 },
+          { type = "item", name = "bob-tin-plate", amount = 0 },
+          { type = "item", name = "copper-plate", amount = 0 },
+        },
+      },
+      {
+        name = "bob-module-processor-board-2",
+        ingredients = {
+          { type = "item", name = "angels-wire-gold", amount = 8 },
+          { type = "item", name = "bob-silver-plate", amount = 0 },
+          { type = "item", name = "copper-plate", amount = 0 },
         },
       },
       {
         name = "bob-module-processor-board-3",
         ingredients = {
-          { type = "item", name = "angels-wire-platinum", amount = "bob-gold-plate" },
+          { type = "item", name = "angels-wire-platinum", amount = 16 },
+          { type = "item", name = "bob-gold-plate", amount = 0 },
+          { type = "item", name = "copper-plate", amount = 0 },
         },
       },
     })
@@ -49,12 +69,6 @@ if mods["bobmodules"] then
           { "!!" },
           { type = "item", name = "copper-plate", amount = 1 },
           { type = "item", name = "bob-silver-plate", amount = 1 },
-        },
-      },
-      {
-        name = "bob-module-processor-board-2",
-        ingredients = {
-          { type = "item", name = "bob-silver-plate", amount = "bob-gold-plate" },
         },
       },
     })

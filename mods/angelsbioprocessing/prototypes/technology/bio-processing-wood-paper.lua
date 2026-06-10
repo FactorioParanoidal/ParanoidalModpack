@@ -94,7 +94,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-arboretum-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -155,7 +155,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-arboretum-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -202,7 +202,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-arboretum-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -245,7 +245,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-temperate-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -288,7 +288,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-temperate-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -326,7 +326,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-temperate-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -361,7 +361,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-swamp-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -400,7 +400,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-swamp-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -438,7 +438,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-swamp-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -473,7 +473,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-desert-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -512,7 +512,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-desert-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
@@ -550,7 +550,7 @@ data:extend({
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/technology/bio-desert-generator-tech.png",
-        icon_size = 128
+        icon_size = 128,
       },
     },
     order = "c-a",
