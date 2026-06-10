@@ -86,6 +86,9 @@ end
 if mods["OverloadedTrains"] then
     set_settings_default_value("double-setting", "OT_realism", 1)
 end
+if mods["MultipleUnitTrainControl"] then
+    set_settings_default_value("string-setting", "multiple-unit-train-control-debug", "none") -- глушим лог-спам "registered upgrade mapping"
+end
 if mods["Picks-Inserter"] then
     set_settings_default_value("int-setting", "PI_clear_max", 1)
     set_settings_default_value("bool-setting", "PI_target_selection", false)
