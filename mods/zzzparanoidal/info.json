@@ -36,6 +36,7 @@
     "? angelsindustries >= 2.0.0",
     "? extendedangels >= 0.6.8",
     "expanded-rocket-payloads-continued",
-    "Bio_Industries_2"
+    "Bio_Industries_2",
+    "? research_evolution_factor"
   ]
 }

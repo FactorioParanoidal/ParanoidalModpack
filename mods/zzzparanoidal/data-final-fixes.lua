@@ -53,6 +53,8 @@ require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
 require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
+require("tweaks.technology.research-evolution-icon") -- иконка-график вместо красного "+" у эффекта research_evolution_factor
+require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
 
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.map-gen-presets")

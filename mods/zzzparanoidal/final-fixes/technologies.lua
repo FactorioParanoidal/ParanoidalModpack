@@ -305,6 +305,14 @@ if data.raw.technology["angels-stone-smelting-4"] then
 	}) --меняем цену на цемент 4
 	data.raw.technology["angels-stone-smelting-4"].unit.count = 200 --меняем цену на цемент 4
 end
+if data.raw.technology["angels-cobalt-casting-2"] then
+	paralib.bobmods.lib.tech.set_science_packs("angels-cobalt-casting-2", {
+		{ "automation-science-pack", 1 },
+		{ "logistic-science-pack", 1 },
+		{ "chemical-science-pack", 1 },
+		{ "production-science-pack", 1 },
+	}) --фиолетовая наука как у angels-cobalt-smelting-2 (тир 2)
+end
 paralib.bobmods.lib.tech.add_prerequisite("bi-tech-garden-3", "production-science-pack") --огромные сады под производственн пакеты
 paralib.bobmods.lib.tech.add_prerequisite("angels-metallurgy-4", "processing-unit") -- Промышленная металлургия 4 под Продвинутую электронику 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-strand-casting-1", "angels-stone-smelting-1") -- Машины непрерывного литья 1 под кирпичи 1
