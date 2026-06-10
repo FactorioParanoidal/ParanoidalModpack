@@ -1,0 +1,331 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 10.11.2025
+  Bugfixes:
+    - Fixed a typo in bobsmods for logistic robots (by progger)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 13.06.2025
+  Bugfixes:
+    - Fixed compatibility issue with Bob 2.0 mod (by Sectoid)
+    - Fixed compatibility issue with Krastorio2 2.0 mod (by pla)
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 03.04.2025
+  Bugfixes:
+    - Fixed mod compatibility of IR3, Krastorio2 and Pyanodons with Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 28.10.2024
+  Features:
+    - Mod is now compatible with Factorio 2.0! (without space age for now)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 15.10.2024
+  Features:
+    - Added rudimentary compatibility for angels tech overhaul mode
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 15.07.2024
+  Bugfixes:
+    - Fixed compatibility issue with Bob's Technology mod and Technology Overhaul setting from Angel's Industries mod (by KiwiHawk)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 13.01.2024
+  Features:
+    - Added Janky Quality integration
+    - Added Better Victory Screen integration
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 14.11.2023
+  Bugfixes:
+    - Fixed changelog parsing error
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 14.11.2023
+  Bugfixes:
+    - Fixed "Ramp Up" startup option not working correctly with some mods
+    - Fixed Bob compatibility issue with "FTL D" technology
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 11.11.2023
+  Bugfixes:
+    - Fixed IR3 compatibility with spaceship fuel not showing up in logistics.
+    - Fixed IR3 compatibility paired with Extended Descriptions to show correct info.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 28.10.2023
+  Changes:
+    - Changed FTL research to gradually ramp up the required science packs and not all at once (can be changed via startup settings)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 03.10.2023
+  Bugfixes:
+    - Fixed GUI popups after completing SpaceX for the first time.
+    - Minor spelling fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 09.09.2023
+  Bugfixes:
+    - Fixed Bobs compatibility: Removed obsolete recipe and technology changes which did not apply to recent bob versions anymore.
+    - Fixed Bobs compatibility: Fixed many technology dependencies.
+    - Fixed Bobs + Angels compatibility: Fixed low density technology dependency.
+    - Fixed Krastorio2 compatibility: Added many missing technology dependencies.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 06.04.2023
+  Changes:
+    - IR3 compatibility: Changed oxygen barrel recipe to require oxygen as well
+  Bugfixes:
+    - Fixed IR3 compatibility with nuclear fuel by adding a new recipe called "Spaceship Fuel"
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 27.03.2023
+  Bugfixes:
+    - Fixed a crash in recipe replacements in Krastorio2/Pyanodons compatibility
+    - Fixed technology FTL D research costs for classic mode when using Bob mods
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 26.03.2023
+  Features:
+    - Added Krastorio2 integration
+    - Added Pyanodons integration
+  Changes:
+    - Added all 5 basic science packs to SpaceX techs
+    - Adapted bob technology FTL D research cost to new curve
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 22.03.2023
+  Major Features:
+    - First release of the forked version
+    - Added a new stage
+      - Requires to bring oxygen, fuel, water and ai companions to the spaceship.
+      - A space map has to be created to find a destination.
+      - Adds a few more technologies, new recipes and a new satellite that returns an item required to craft the space map.
+  Features:
+    - Added startup option to split combinator signal output. If enabled:
+      - Exisiting combinator will output the required item for the current stage only
+      - New combinator will output the current stage as special signal S only
+    - Added player option to display days or hours in the log
+    - Added new item group for spacex items
+    - Added startup setting to replace nuclear with rocket fuel
+    - Added startup setting "Classic Mode" which disables the new stage 4 additions
+    - Added Laser Cannon to the already existing stage 3
+    - Added Lab as ingridient to astrometrics lab
+    - Added more strings to translation config file
+  Changes:
+    - Changed game completion logic. Finish screen will be shown after first SpaceX completion. Game and SpaceX can be continued afterwards
+    - Changed research cost to gradually increase
+    - Replaced rocket fuel with nuclear reactor for the fuel cell
+    - Changed GUI to only display the required items for the current stage
+    - Changed GUI to display the stage number
+    - Various GUI overhauls to look more aesthetic
+      - Main GUI
+      - Log GUI
+    - Slightly changed color of combinator graphics
+    - Changed launch profile startup settings to launch multiplier and added a few more multipliers
+    - Removed pcalls
+    - Removed ru translation because too many string changes
+  Bugfixes:
+    - Fixed a bug that caused the GUI button to not be added when a mod change occures
+    - Fixed the "/resetSpaceX" command to properly reset the launch progress
+    - Fixed Log being increased if rockets are launched while SpaceX is already finished and waiting for user input
+    - Fixed Bob Mods compatibility when robo ports are disabled. Will use personal roboport instead
+    - Fixed closing Log window as well as main window when SpaceX button is pressed
+    - Fixed correct display days/hours of playtime in Log
+    - Fixed correctly setting technology unlock requirements
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+  Changes:
+    - Minor corrections to the technology pre-requisites when using Bobs mods courtesy of KiwiHawk.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Changes:
+    - Version 1.1 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Changes:
+    - Correction to assembly robot icon size
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+  Changes:
+    - Russian language translation update
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+  Changes:
+    - Version 0.18 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+  Changes:
+    - Changes dependencies to accomodate Bob;s new Personnal Equipment Mod.  You now need Personnal Equipment.  You now do not need Warfare.  If personnal equipment mod is missing, then the Bob;s mods recipes will not be activated.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+  Changes:
+    - Adds new map mod settings (ie change while playing) to allow for the suppression of the narrative messages.  Suppress narrative Popups will remove the message after completion of the satellite network and completion of the drydock.  Auto continue will suppress the final message and automatically choose to continue with another launch (Ie Bring it on).
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+  Changes:
+    - Fixed the missing descriptions on technologies ftl D1 and ftl D2
+    - Added thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+  Changes:
+    - Compatibility for 0.17 extended for bob's mods
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+  Changes:
+    - Compatibility for v0.17 (not including bob's mods)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.18 
+  Changes:
+    - Fixes invalid entity error on spacex combinator 
+    - Fixes text on the Habitation component description
+---------------------------------------------------------------------------------------------------
+Version: 0.3.15
+  Changes:
+    - technology icon resolution upgrade coutesy of drd_avel
+---------------------------------------------------------------------------------------------------
+Version: 0.3.14
+  Changes:
+    - Fixes a crash if spacex combinator is placed prior to launching a single rocket.
+    - Adds command "Get_log_file" which will write your SpaceX log out to the script-output folder.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.13
+  Changes:
+    - Redacted
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+  Changes:
+    - Fixes a rare crash on rocket launch event.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+  Changes:
+    - Fixes an error on game close out
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+  Changes:
+    - Added Russian language support courtesy of Zerggurat
+    - Performance issues with the SpaceX combinator resolved
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+  Changes:
+    - Redacted
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+  Changes:
+    - Remove spacex combinator debug information
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+  Changes:
+    - improved grammar in flavour text
+    - SpaceX Combinator introduced
+      - Will give accurate signal for current components needed to complete the current SpaceX phase. Current SpaceX phase given through virtual signal S 1,2 or 3. Can be used to set filters/requester chests etc
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+  Changes:
+    - under the Bob's mods integration, the technology price for faster than light theory D was incorrectly priced
+    - under some circumstances the tech and recipe price multipliers were not working correctly
+    - the data handling has been reduced with the removal of data-updates script
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+  Changes:
+    - the mod now works correctly in conjunction with scenarios that do not use silo script
+    - the mod now allows for multiple launching of SpaceX rockets
+      - When the final SpaceX component is launched the player (or admin player in multiplayer scenario) is presented with an option to reset the SpaceX production counter, or end the game (latter option still offers the standard vanilla end game screen with options that include continue game, but in this case the SpaceX counter will not reset)
+    - the command "/resetSpaceX" will allow you to resume SpaceX launches on a map that has previously completed the full process (eg under an earlier version of this mod, or even on this version by mistake for example)
+    - multiple SpaceX launches are logged with playtime stamp and ability to name/describe the launch event
+    - Flavour text added to SpaceX milestones courtesy of JD-Plays
+    - Oh, yes, Bob's mod integration is back baby!
+    - New mod setting allows for switching off bobs mods integration in case it causes any issues
+    - Bob coefficient inflates the cost of end game research under Bob mods integration to partially offset extreme over powered nature of end game Bobs mods. Currently, this coefficient is set to 10. In the hands of a good player, the highest tier bobs mods machines, modules, beacons and other easily provide 150 -250+ times the power of vanilla equivalents, so the coefficient at 10 is a very conservative clawback.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+  Changes:
+    - launches after completing the spaceship victory will not spam victory message
+    - mod now supports mod_gui (refer ff#174)
+    - colour and alignment added to Space Progress Summary
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+  Changes:
+    - Redacted
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+  Changes:
+    - v0.16 compatibility
+    - fix for headless server issue on configuration changed
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Changes:
+    - Adds space science packs to last research (Faster than light propulsion systems)
+    - Minor update to mod start conditions
+    - In the start conditions, can opt out of having space science requirement in last SpaceX research
+    - In the start conditions can adjust the cost of the fusion reactor to 40 portable fusion reactors
+      - This reduces the cost of the component so that it is equivalent to the cost it was under v0.14 (10k processing units instead of 25k processing units)
+    - In the start conditions can discount the tech costs by 4x to compensate for the marathon mode tech cost increases (at the default level). ie players can choose to use marathon costs for the vanilla game, and still use the standard tech costs once they start the SpaceX researches.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+  Changes:
+    - v0.15 compatibility
+    - suppressed launch without satellite message
+    - SpaceX components can be auto launched with "auto launch with satellite setting" in rocket silo
+    - ftl drive moved to last position of Space Progress Summary
+    - In space progress summary Hull sections renamed to Hull components to match name of item
+    - item icons all changed to 32x32 square to conform with v0.15 standards
+    - Mod configuration added
+      - Research costs and production costs can be independently increased by multiples of 2 upto 16x classic cost. Required number of launches can be increased by 5x or by 25x
+      - Note all these launches require the base item, so effectively production cost and extended launches multiply together. These options are available from the mod settings menu.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Changes:
+    - Corrected size of technology graphics so now they all look as intended rather than just left top corner
+    - Bob's mods technology/recipes will not be activated unless the following minimum Bob's modules are in use -
+      - Bob's library
+      - Bob's modules
+      - Bob's warfare
+      - Bob'e electronics
+    - this should fix any issues with "unusual" combinations of Bob's mods
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Changes:
+    - Graphics update courtesy of Steinerrr
+    - New technology icons for all 15 techs (counting ftl as 4 techs)
+    - New item icons for Assembly robot, Drydock Structural Component, Drydock Assembly Component, Hull Component, Protection Field, Fusion Reactor, Spaceship Thruster, Fuel Cell, Command Center, FTL Drive
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Changes:
+    - Fixed an issue where the Drydock completed message could be prematurely generated
+    - Fixed an issue where Angels infinite ores used without Bobs mods caused an error on loading factorio
+    - Bob's mods integration
+      - Added an alternate recipe for the spaceship protection field to remove the (excessive) multi-colored alien goo farming required
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+  Changes:
+    - Fixed space progress reference to Drydock Command
+      - This is now identified as the Drydock assembly component (like the item that needs to be launched
+    - Corrected endgame console victory message for minor spelling error in "achieved"
+    - Fixed the graphic for the life support icon
+    - Added Bob's Mod integration based on bob's mod configuration:
+    - Satellite recipe uses radar 5s, advanced processing unit, large solar panel mk 3s,large accumulator mk 3s
+    - Low density structure uses titanium and nitinol in the place of steel and copper
+    - Habitation component uses titanium and advanced processing unit to replace steel and processing unit
+    - Fuel cell component uses titanium and advanced processing unit to replace steel and processing unit
+    - Protection field component uses energy shield mk 6 to replace energy shield mk 2
+    - Hull component uses titanium in place of steel
+    - Fusion Reactor component uses fusion reactor mk 4 in place of fusion reactor equipment
+    - Drydock assembly component uses large solar panel mk3, roboport mk 4, and advanced processing units in place of vanila items
+    - All module requirements become god module 5s if god modules employed, otherwise the lvl 8 module version is used in the following -
+    - Assembly robot which also uses construction robot mk 4
+    - Space thruster which also uses titanium pipe and advanced processing unit
+    - Life support which also uses titanium pipe and advanced processing unit
+    - Command Centre which also uses advanced processing unit
+    - Astrometrics which also uses advanced processing unit
+    - FTL drive which also uses advanced processing unit
+    - Bob's mods technology changes
+    - if the dark blue science pack is available then all SpaceX techs that required the 4 vanilla sciences now also require dark blue
+    - in addition, the ftl drive becomes 5 parts of 200k research each
+    - SpaceX research is adjusted to include pre-requisites to the appropriate bob's mods techs
+    - Space Assembly technology has the module pre-requisites added
+    - Rocket silo now also requires titanium process, nitinol processing, electric energy accumulators mk4 , solar energy mk 4, advanced electronics 3, and radars 4
+    - Space Construction additionally needs Modular robo ports 4
+    - Protection fields needs Energy shield equipment mk 6
+    - Fusion reactor needs Fusion Reactor equipment mk 4

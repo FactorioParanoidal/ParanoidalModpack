@@ -158,6 +158,7 @@ require("tweaks.recipe.oberhaul-solar-port")
 
 -- Oberhaul module-port (эффекты + слоты модулей, 1.1; цена — отдельно)
 require("tweaks.recipe.oberhaul-module-port")
+require("tweaks.technology.spacemod-port")
 
 -- Bob's/Angels 2.1: фл­юид angels-liquid-sulfuric-acid ретайрнут → базовый sulfuric-acid
 -- (миграция angelspetrochem 2.0.2). Перенаправляем все рецепты, ещё ссылающиеся на мёртвый
