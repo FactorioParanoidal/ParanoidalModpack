@@ -1,8 +1,0 @@
-{
-  "name": "OverloadedTrains-Dead2",
-  "version": "2.0.11",
-  "title": "Overloaded Trains, groupfix by Dead2",
-  "author": "OwnlyMe, ptx0, Dead2",
-  "description": "Train acceleration now depends on the loaded items (freely adjustable realism factor). Same as mod by OwnlyMe, fixed trains losing group association.",
-  "factorio_version": "2.0"
-}
