@@ -74,9 +74,18 @@ local function evo_and_dolly() --выключаем эволюцию
 	-- configure_picker_dollies()
 end
 
+-- Форс рантайм-настроек модов на старте карты (set_settings_default_value не бьёт существующий mod-settings.dat).
+-- MU Control debug=info → "none" (иначе спамит "registered upgrade mapping" каждую загрузку).
+local function force_mod_settings()
+	if settings.global["multiple-unit-train-control-debug"] then
+		settings.global["multiple-unit-train-control-debug"] = { value = "none" }
+	end
+end
+
 
 script.on_init(function() --наш любимый init, запрещаем двигать наши насосы
 	evo_and_dolly()
+	force_mod_settings()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -85,7 +94,8 @@ end)
 
 script.on_configuration_changed(function(data) --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
 	evo_and_dolly()
-	
+	force_mod_settings()
+
 	-- Примусове розблокування рецептів свинцю/олова на існуючих збереженнях
 	for _, force in pairs(game.forces) do
 		local recipes_to_unlock = {
