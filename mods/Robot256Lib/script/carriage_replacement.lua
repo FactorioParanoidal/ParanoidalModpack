@@ -289,6 +289,10 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
     if train_group then
       -- Group will set the basic schedule and interrupts
       newTrain.group = train_group
+      -- Re-fetch: assigning the train to a group replaces its LuaSchedule
+      -- object, invalidating the handle obtained above (used by add_record
+      -- below and by .current after the if/else).
+      newSchedule = newTrain.get_schedule()
       -- We still need to restore the schedule to include any temporary stops specific to this train.
       -- Add entries individually to avoid affecting other trains in the group.
       for k=1,#train_schedule_records do
@@ -305,6 +309,10 @@ local function replaceCarriage(carriage, newName, raiseBuilt, raiseDestroy, flip
     end
     
     newTrain.manual_mode = manual_mode
+    -- Re-fetch here too: set_records/set_interrupts (no-group path) or the group
+    -- assignment can invalidate the handle obtained earlier, and reading .current
+    -- on a stale LuaSchedule crashes.
+    newSchedule = newTrain.get_schedule()
     -- Send train to correct station in schedule
     if newSchedule.current ~= destination and destination <= newSchedule.get_record_count() then
       newTrain.go_to_station(destination)
