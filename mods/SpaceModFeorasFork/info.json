@@ -1,0 +1,16 @@
+{
+  "name": "SpaceModFeorasFork",
+  "version": "1.3.3",
+  "title": "Space Extension Mod (Feoras Fork)",
+  "author": "Feoras",
+  "description": "Greatly extend the end game requiring multiple launches, massively increased science and item production. Requires a few hundred launches with a variety of new components. The goal is to build a vessel capable of getting you off the planet and home safely.",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.6", "? Milestones",
+    "? boblibrary", "? bobplates", "? bobmodules", "? bobelectronics", "? boblogistics", "? bobtech", "? bobequipment",
+    "? angelsindustries",
+    "? Krastorio2",
+    "? IndustrialRevolution", "? IndustrialRevolution3",
+    "? pyalienlife", "? pyalternativeenergy", "? pycoalprocessing", "? pyfusionenergy", "? pyhightech", "? pyindustry", "? pypetroleumhandling", "? pyrawores", "? pypostprocessing",
+    "? better-victory-screen >= 0.2.3",
+    "! SpaceMod", "! space-exploration", "! space-age"]
+}

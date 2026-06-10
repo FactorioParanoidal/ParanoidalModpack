@@ -372,8 +372,14 @@ end
 if mods["Oberhaul"] then
     set_settings_default_value("bool-setting", "simple-cordite", false)
 end
-if mods["SpaceMod"] then
-    set_settings_default_value("string-setting", "SpaceX-launch-profile", "Launch Meglo-mania(x25)")
+if mods["SpaceModFeorasFork"] then
+    set_settings_default_value("double-setting", "SpaceX-launch-multiplier", 25) -- 1.1: Meglo-mania(x25)
+    -- скрыть множитель цены исследований + снять список значений (под .dat)
+    local rc = data.raw["double-setting"] and data.raw["double-setting"]["SpaceX-research"]
+    if rc then
+        rc.hidden = true
+        rc.allowed_values = nil
+    end
 end
 if mods["SchallTankPlatoon"] then
     set_settings_default_value("bool-setting", "Schall-TP-ht-RA-enable", false)
