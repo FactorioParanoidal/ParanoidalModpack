@@ -9,15 +9,11 @@ if mods.miniloader and settings.startup["miniloader-energy-usage"].value then  -
   end
 end
 
--- ── Синхронизация скоростей miniloader-redux со скоростями лент ───────────────
--- В 1.1 это делал beltentities.lua (блок `if mods.miniloader`); при порте на 2.0
--- перенесли только половину (ленты), и лоадеры уехали на сток-шкалу Bob's.
--- В miniloader-redux реальный throughput даёт ПРОТОТИП-ИНСЕРТЕР (rotation_speed/
--- stack_size_bonus, рантайм клонирует его inserter_pairs*2 раз — scripts/controller.lua).
--- speed_config.items_per_second идёт только в тултип + флаг highspeed (>240/полоса),
--- а loader-1x1.speed — визуальный сегмент ленты. Поэтому правим все три.
--- Throughput в линейной зоне ≈ 240 * rotation_speed при stack 0 / 1 паре
--- (родные точки мода: rot 0.125 -> 30/с, rot 0.25 -> 60/с); пары масштабируют линейно.
+-- Синхронизация скоростей miniloader-redux с лентами (в 1.1 — beltentities.lua;
+-- при порте на 2.0 перенесли только ленты, лоадеры остались на сток-шкале Bob).
+-- Реальный throughput задаёт ПРОТОТИП-ИНСЕРТЕР (rotation_speed/stack_size_bonus,
+-- рантайм клонирует inserter_pairs*2 — scripts/controller.lua); items_per_second —
+-- только тултип+флаг highspeed; loader-1x1.speed — визуальный сегмент. Правим все три.
 if mods["miniloader-redux"] and data.raw["mod-data"] and data.raw["mod-data"]["miniloader"] then
   local md = data.raw["mod-data"]["miniloader"]
 
