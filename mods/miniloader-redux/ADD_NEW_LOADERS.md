@@ -14,10 +14,9 @@ Going faster than 240 items/s required some reconfiguration of the pickup and dr
 | Standard             | 15                | 0.075          | 2              | 1         | 15/15/15           |
 | Fast                 | 30                | 0.125          | 2              | 1         | 30/30/30           |
 | Express              | 45                | 0.125          | 2              | 2         | 48/48/45           |
-| Turbo                | 60                | 0.25           | 2              | 1         | 60/60/60           |
+| Turbo #)             | 60                | 0.25           | 2              | 1         | 60/60/60           |
 | Stack                | 60                | 0.25           | 2              | 1 *)      | 60/60/60           |
 | Bob Basic            | 7.5               | 0.046875       | 2              | 1         | 8/9/7.5            |
-| Bob Turbo            | 60                | 0.25           | 2              | 1         | 60/60/60           |
 | Bob Ultimate         | 75                | 0.1875         | 2              | 3         | 75/75/75           |
 | Krastorio Advanced   | 60                | 0.25           | 2              | 1         | 60/60/60           |
 | Krastorio Superior   | 90                | 0.25           | 2              | 4         | 90/90/90           |
@@ -39,6 +38,7 @@ both: Input/Output from/to a belt of the same tier, chest at both ends
 
 *) Stacking loaders are a special case; they are locked into 4x (max stack size) stack<br/>
 +) Using high speed mode. This shifts the pickup points for some loaders to allow going past 240 items/sec.
+#) Starting with 0.13.1, bob will activate the "turbo" loader instead of using a dedicated "bob-turbo" loader. Old entities will be transparently migrated.
 
 For non-stacking belts, the theoretical maximum throughput is 480 items/sec (max belt speed). The maximum that seems to be possible with inserters (which need time to swing around and can drop only one item per tick on a belt) seems to be the 425 items/sec measured for the Matt Ultimate loader.
 
@@ -55,7 +55,7 @@ local supported_mods = {
 }
 ```
 
-At the end of the `template.loaders` table, add a note for the mod you support. If a mod adds new belt tiers, they are usually called `<something>-transport-belt`. For Bob, the new tiers are called `bob-basic`, `bob-turbo` and `bob-ultimate` (see [the bob belt prototypes](https://github.com/modded-factorio/bobsmods/blob/main/boblogistics/prototypes/entity/belt.lua) for details). For each tier, add an empty entry:
+At the end of the `template.loaders` table, add a note for the mod you support. If a mod adds new belt tiers, they are usually called `<something>-transport-belt`. For Bob, the new tiers are called `bob-basic` and `bob-ultimate` (see [the bob belt prototypes](https://github.com/modded-factorio/bobsmods/blob/main/boblogistics/prototypes/entity/belt.lua) for details). For each tier, add an empty entry:
 
 ```lua
 ---@type table<string, miniloader.LoaderDefinition>
@@ -67,7 +67,6 @@ template.loaders = {
     -- =================================================
 
     ['bob-basic'] = {},
-    ['bob-turbo'] = {},
     ['bob-ultimate'] = {},
 }
 ```

@@ -243,9 +243,10 @@ local loaders = {
 
     -- turbo miniloader, space age game or turbo belt mod loaded
     -- this one is special as the same entity should be enabled if either condition is true
+    -- as boblogistics rolled their turbo loader into this, change the color if bob is enabled
     ['turbo'] = {
         condition = function()
-            return check_space_age() or check_turbo_belt()
+            return check_space_age() or check_turbo_belt() or check_bob()
         end,
         data = function(dash_prefix)
             local previous = 'express'
@@ -254,15 +255,22 @@ local loaders = {
                 order = 'd[a]-p',
                 subgroup = 'belt',
                 stack_size = 50,
-                tint = util.color('A8D550d9'),
+                tint = check_bob() and util.color('b700ff') or util.color('A8D550d9'),
                 speed = data.raw['transport-belt'][dash_prefix .. 'transport-belt'].speed,
                 upgrade_from = const:name_from_prefix(previous),
+                corpse_gfx = ((check_space_age() or check_turbo_belt()) and 'turbo') or 'express',
                 ingredients = function()
+                    local inserter = check_bob()
+                        and ((settings.startup['bobmods-logistics-inserteroverhaul'].value == true)
+                            and 'bob-turbo-inserter'
+                            or 'bob-express-inserter')
+                        or 'bulk-inserter'
+
                     return select_data {
                         base = {
                             { type = 'item', name = const:name_from_prefix(previous),  amount = 1 },
                             { type = 'item', name = dash_prefix .. 'underground-belt', amount = 1 },
-                            { type = 'item', name = 'bulk-inserter',                   amount = 2 },
+                            { type = 'item', name = inserter,                          amount = 2 },
                         },
                     }
                 end,
@@ -271,6 +279,7 @@ local loaders = {
                         -- space age and turbo belt are mutually exclusive
                         space_age = { 'turbo-transport-belt', 'metallurgic-science-pack', const:name_from_prefix('express'), },
                         turbo_belt = { 'turbo-transport-belt', const:name_from_prefix('express'), },
+                        bob = { 'logistics-4', const:name_from_prefix(previous), },
                     }
                 end,
                 speed_config = {
@@ -698,59 +707,10 @@ local loaders = {
             }
         end,
     },
-    ['bob-turbo'] = {
-        condition = check_bob,
-        data = function(dash_prefix)
-            local previous = 'express'
-
-            -- Костыль (upstream issue #41): Bob's Logistics 2.1 переименовал
-            -- bob-turbo-{transport-belt,underground-belt,splitter} → базовые turbo-* (Space Age,
-            -- миграция boblogistics_2.1.0.json). Старого имени ленты больше нет → nil-краш на speed.
-            -- Если старой ленты нет — берём базовый префикс 'turbo-' (bob-turbo-inserter ниже жив).
-            if not data.raw['transport-belt'][dash_prefix .. 'transport-belt'] then
-                dash_prefix = 'turbo-'
-            end
-
-            return {
-                order = 'd[a]-q',
-                subgroup = 'belt',
-                stack_size = 50,
-                tint = util.color('b700ff'),
-                speed = data.raw['transport-belt'][dash_prefix .. 'transport-belt'].speed,
-                upgrade_from = const:name_from_prefix(previous),
-                corpse_gfx = '', -- use basic graphics for explosion and remnants
-                ingredients = function()
-                    local inserter = (settings.startup['bobmods-logistics-inserteroverhaul'].value == true)
-                        and 'bob-turbo-inserter'
-                        or 'bob-express-inserter'
-
-                    return select_data {
-                        bob = {
-                            { type = 'item', name = const:name_from_prefix(previous),  amount = 1 },
-                            { type = 'item', name = dash_prefix .. 'underground-belt', amount = 1 },
-                            { type = 'item', name = inserter,                          amount = 2 },
-                        },
-                    }
-                end,
-                prerequisites = function()
-                    return select_data {
-                        bob = { 'logistics-4', const:name_from_prefix(previous), },
-                    }
-                end,
-                speed_config = {
-                    items_per_second = 60,
-                    rotation_speed = 0.25,
-                    inserter_pairs = 1,
-                    stack_size_bonus = 0,
-                },
-            }
-        end,
-
-    },
     ['bob-ultimate'] = {
         condition = check_bob,
         data = function(dash_prefix)
-            local previous = 'bob-turbo'
+            local previous = 'turbo'
 
             return {
                 order = 'd[a]-r',

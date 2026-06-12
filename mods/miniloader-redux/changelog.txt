@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.13.1
+Date: 2026-06-11
+  Bugfix:
+    - update support for bob logistics 2.1
+    - ensure that string keys do not leak into the internal configuration (addresses #39)
+    - fix a crash bug when redoing a spoilage setting change
+    - fix gui bug when opening a GUI with spoilage already set
+---------------------------------------------------------------------------------------------------
 Version: 0.13.0
 Date: 2026-05-06
   Changes:

@@ -69,7 +69,6 @@ function Gui.getUi(gui)
                                         name = 'spoilage_priority',
                                         handler = { [defines.events.on_gui_checked_state_changed] = gui_events.onToggleSpoilage },
                                         state = false,
-                                        enabled = false,
                                     },
                                     {
                                         type = 'empty-widget',
@@ -146,24 +145,15 @@ local function update_spoilage(gui, ml_entity)
     local fresh_first = assert(gui:findElement('fresh_first'))
 
     if This.MiniLoader.spoiling then
+        spoilage_priority.enabled = true
+
         local inserter_spoil_priority = ml_entity.config.inserter_config.inserter_spoil_priority or 'none'
 
-        if inserter_spoil_priority == 'none' then
-            spoilage_priority.enabled = true
-            spoilage_priority.state = false
-            spoiled_first.enabled = false
-            fresh_first.enabled = false
-        else
-            spoiled_first.enabled = true
-            fresh_first.enabled = true
-            if inserter_spoil_priority == 'spoiled_first' then
-                spoiled_first.state = true
-                fresh_first.state = false
-            else
-                spoiled_first.state = false
-                fresh_first.state = true
-            end
-        end
+        spoilage_priority.state = (inserter_spoil_priority ~= 'none')
+        spoiled_first.enabled = spoilage_priority.state
+        fresh_first.enabled = spoilage_priority.state
+        spoiled_first.state = (inserter_spoil_priority == 'spoiled_first')
+        fresh_first.state = (inserter_spoil_priority == 'fresh_first')
     else
         spoilage_priority.enabled = false
         spoilage_priority.state = false

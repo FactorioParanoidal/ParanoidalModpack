@@ -302,37 +302,48 @@ end
 -- blueprinting
 ------------------------------------------------------------------------
 
---- in very rare cases, some entries in the filter array end up having string
---- keys. try to convert them to number keys, if there would be a conflict, drop
---- the key that comes second
----@param ml_entity miniloader.Data
-function Controller:sanitizeConfiguration(ml_entity)
+--- Blueprints are deserialized from json and the set of keys may be deserialized
+--- as strings. Turn them back into numbers.
+---
+---@param ml_config miniloader.Config
+function Controller:sanitizeConfiguration(ml_config)
+    if not ml_config then return end
+
     local filters = {}
-    for key, value in pairs(ml_entity.config.inserter_config.filters) do
+    for key, value in pairs(ml_config.inserter_config.filters) do
         local new_key = tonumber(key)
         if new_key then
             filters[new_key] = value
         end
     end
-    if table_size(ml_entity.config.inserter_config.filters) ~= table_size(filters) then
-        ml_entity.config.inserter_config.filters = filters
-    end
+    ml_config.inserter_config.filters = filters
 end
 
 --- Serializes the configuration suitable for blueprinting and tombstone management.
 ---
 ---@param entity LuaEntity
----@return table<string, any>?
+---@return Tags?
 function Controller:serializeConfiguration(entity)
     local ml_entity = self:getEntity(entity.unit_number)
     if not ml_entity then return end
-
-    self:sanitizeConfiguration(ml_entity)
 
     return {
         [const.config_tag_name] = ml_entity.config,
         [const.no_snapping_tag_name] = 'true',
     }
+end
+
+---@param tags Tags?
+---@return miniloader.Config? ml_config
+---@return boolean no_snapping
+function Controller:deserializeConfiguration(tags)
+    if not (tags and tags[const.config_tag_name]) then return nil, false end
+
+    ---@type miniloader.Config
+    local ml_config = tags[const.config_tag_name]
+    self:sanitizeConfiguration(ml_config)
+
+    return ml_config, tostring(tags[const.no_snapping_tag_name]) == 'true'
 end
 
 --- Add tag to entities to not snap miniloaders when built from blueprint.
@@ -553,17 +564,22 @@ function Controller:readConfigFromBlueprintEntity(bp_entity, ml_entity)
     end
 
     if not ml_entity.config.nerf_mode then
-        inserter_config.loader_filter_mode = bp_entity.use_filters and (bp_entity.filter_mode or 'whitelist') or 'none'
+        inserter_config.inserter_filter_mode = bp_entity.use_filters and (bp_entity.filter_mode or 'whitelist') or nil
+        inserter_config.loader_filter_mode = inserter_config.inserter_filter_mode or 'none'
 
         inserter_config.read_transfers = control_behavior.circuit_read_hand_contents or false
 
         if bp_entity.filters then
-            for idx, filter in pairs(bp_entity.filters) do
-                inserter_config.filters[idx] = filter
+            for _, filter in pairs(bp_entity.filters) do
+                inserter_config.filters[filter.index] = {
+                    name = filter.name,
+                    quality = filter.quality,
+                    comparator = filter.comparator,
+                }
             end
         end
 
-        inserter_config.inserter_spoil_priority = self.spoiling and (bp_entity.spoil_priority or 'none') or nil
+        inserter_config.inserter_spoil_priority = self.spoiling and fix_spoil_prio[bp_entity.spoil_priority or 'none'] or nil
     else
         inserter_config.loader_filter_mode = 'none'
         inserter_config.inserter_spoil_priority = self.spoiling and 'none' or nil

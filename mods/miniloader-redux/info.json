@@ -1,6 +1,6 @@
 {
   "name": "miniloader-redux",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "title": "Miniloader (Redux)",
   "description": "UPS-friendly 1x1 loaders.",
   "author": "hgschmie",
@@ -11,7 +11,7 @@
     "base >= 2.0.59",
     "(?) matts-logistics",
     "(?) Krastorio2 >= 2.0.7",
-    "(?) boblogistics",
+    "(?) boblogistics >= 2.1.0",
     "(?) Load-Furn-2-SpaceAgeFix",
     "(?) space-exploration",
     "(?) TurboBelt"

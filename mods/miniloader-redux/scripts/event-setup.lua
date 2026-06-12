@@ -36,13 +36,13 @@ local function ghost_callback(attached_entity)
     ---@type miniloader.PreBuild?
     local pre_build = pdata and pdata.pre_build
 
-    local config = attached_entity.tags and attached_entity.tags[const.config_tag_name] --[[@as miniloader.Config]]
+    local config = This.MiniLoader:deserializeConfiguration(attached_entity.tags)
 
     -- correct config direction in the ml_config tag
     if config and config.direction then
         config.direction = This.Snapping:correct_direction(config.direction, pre_build)
         -- reassign tags to entity
-        attached_entity.entity.tags = attached_entity.tags
+        attached_entity.entity.tags = util.copy(attached_entity.tags)
     end
 end
 
@@ -56,7 +56,7 @@ local function on_entity_created(event)
     local pre_build = pdata and pdata.pre_build
 
     local tags = event.tags
-    local config = tags and tags[const.config_tag_name] --[[@as miniloader.Config]]
+    local config, no_snapping = This.MiniLoader:deserializeConfiguration(tags)
     -- correct config direction in the ml_config tag
     if config and config.direction then
         config.direction = This.Snapping:correct_direction(config.direction, pre_build)
@@ -67,8 +67,7 @@ local function on_entity_created(event)
         tags = tags or entity_ghost.tags
     end
 
-    config = tags and tags[const.config_tag_name] --[[@as miniloader.Config]]
-    local no_snapping = tags and tags[const.no_snapping_tag_name] or false
+    config, no_snapping = This.MiniLoader:deserializeConfiguration(tags)
 
     This.MiniLoader:create(entity, config, no_snapping)
 end
@@ -165,7 +164,7 @@ end
 --------------------------------------------------------------------------------
 
 ---@param entity LuaEntity
----@return table<string, any>?
+---@return Tags?
 local function serialize_config(entity)
     if not (entity and entity.valid) then return end
 
@@ -201,10 +200,6 @@ local function on_configuration_changed()
         migration:migrateMiniloaders()
         migration:migrateBlueprints()
         migration:migrateTechnologies()
-    end
-
-    for _, ml_entity in pairs(This.MiniLoader:entities()) do
-        This.MiniLoader:sanitizeConfiguration(ml_entity)
     end
 end
 
