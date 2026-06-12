@@ -28,7 +28,7 @@ if mods["miniloader-redux"] and data.raw["mod-data"] and data.raw["mod-data"]["m
     { belt = "transport-belt",                ml = "hps__ml-miniloader" },
     { belt = "fast-transport-belt",           ml = "hps__ml-fast-miniloader" },
     { belt = "express-transport-belt",        ml = "hps__ml-express-miniloader",      rotation = 0.25,  stack = 0, pairs = 1 },
-    { belt = "turbo-transport-belt",          ml = "hps__ml-bob-turbo-miniloader",    rotation = 0.375, stack = 0, pairs = 1 },
+    { belt = "turbo-transport-belt",          ml = "hps__ml-turbo-miniloader",    rotation = 0.375, stack = 0, pairs = 1 },
     { belt = "bob-ultimate-transport-belt",   ml = "hps__ml-bob-ultimate-miniloader", rotation = 0.375, stack = 0, pairs = 2 },
   }
 
@@ -81,7 +81,7 @@ if mods["miniloader-redux"] and data.raw["mod-data"] and data.raw["mod-data"]["m
   -- turbo-минилоадер выпал в общую группу 'belt' вместо своего тира (сток-баг
   -- redux/reskins на turbo-rename) → ставим в bob-logistic-tier-4, как его лента.
   for _, kind in ipairs({ "item", "inserter" }) do
-    local proto = data.raw[kind] and data.raw[kind]["hps__ml-bob-turbo-miniloader"]
+    local proto = data.raw[kind] and data.raw[kind]["hps__ml-turbo-miniloader"]
     if proto and proto.subgroup == "belt" then
       proto.subgroup = "bob-logistic-tier-4"
       proto.order = "d[a]-p"
