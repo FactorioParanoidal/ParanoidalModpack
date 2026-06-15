@@ -58,6 +58,7 @@ local function get_or_create_surface_data(surface)
   if not storage.solar_surfaces then storage.solar_surfaces = {} end
   ---@type SolarSurface | nil
   local surface_data = storage.solar_surfaces[surface.index]
+  -- TODO: Store current and last-set SPM
   if not surface_data then
     surface_data = {
       index = surface.index,
@@ -111,6 +112,7 @@ local function update_solar_multiplier(surface_data)
     log("Solar Surface referencing an unknown Surface index: " .. surface_data.index)
     return
   end
+  -- TODO: Know the original/recent/desired SPM instead of hardcoding 1
   if Solar.OcclusionEnabled and surface_data.base_effectiveness > 0 then
     local multiplier = surface_data.reduced_effectiveness / surface_data.base_effectiveness
     if multiplier < 0 then multiplier = 0 end
