@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.9
+Date: 2026-06-14
+  Changes:
+    - Support for Bob's Mods 2.1+
+    - Tier 4 warehouses now require titanium bearings, instead of the now-removed ceramic bearings
+---------------------------------------------------------------------------------------------------
 Version: 0.6.8
 Date: 2026-05-08
   Bugfixes:

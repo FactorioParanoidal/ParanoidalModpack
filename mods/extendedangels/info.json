@@ -1,6 +1,6 @@
 {
     "name": "extendedangels",
-    "version": "0.6.8",
+    "version": "0.6.9",
     "factorio_version": "2.0",
     "title": "Extended Angels",
     "author": "AdamCirillo",
@@ -9,6 +9,7 @@
         "angelssmelting >= 2.0.0",
         "flib",
         "? angelsaddons-storage",
+        "? boblibrary >= 2.1.0",
         "? bobtech",
         "? bobplates",
         "? angelsbioprocessing >= 2.0.0",

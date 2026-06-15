@@ -17,12 +17,12 @@ local recipe_ingredient_changes = {
     old_name = "stone-brick",
   },
   ["block-construction-3"] = {
-    new_name = "concrete-brick",
+    new_name = "angels-concrete-brick",
     old_name = "angels-clay-brick",
   },
   ["block-construction-4"] = {
     new_name = "angels-reinforced-concrete-brick",
-    old_name = "concrete-brick",
+    old_name = "angels-concrete-brick",
   },
   ["block-construction-5"] = {
     new_name = "angels-titanium-concrete-brick",
@@ -78,7 +78,7 @@ local building_type_names = {
   "pump",
   "rocket-silo",
   "radar",
-  "beacon",
+  "beacon",	
   "boiler",
   "generator",
   "solar-panel",
