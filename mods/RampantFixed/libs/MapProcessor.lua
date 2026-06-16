@@ -530,6 +530,7 @@ end
 
 local function chooseSquad(map, migrate, attack, tick)
 	local settlementsProbability = settings.global["rampantFixed--settlementsProbability"].value
+	local survivalMode = settings.global["rampantFixed--enableMigration"].value
 	if map.canMigrateTick > tick then
  		return "attack"
 	end	
@@ -549,6 +550,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
         return
     end
 	if chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
+		map[iterator] = chunk
 		return
 	end
 	
@@ -570,7 +572,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 		currentSquad = "attack"
 		squadCreated = formSquads(map, chunk, tick, remoteInterfaceParameters)
 	else
-		if attack and (map.resourceSettleTick < tick) and map.universe.expansion and (map.points > 0) then
+		if attack and map.hasNonmoddedBiters and (map.resourceSettleTick < tick) and map.universe.expansion and (map.points > 0) then
 			squadCreated = formResourceSettlers(map, chunk)
 			if squadCreated then
 				currentSquad = "resource"
@@ -591,9 +593,11 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 				game.print(currentSquad.." squad created by remote interface")
 			end	
 		else
-			if (currentSquad == "migrate") then
+			if (currentSquad == "migrate") and not (map.state == AI_STATE_MIGRATING) then
 				if map.retribution < 1 then
-					if map.temperament > 0.8 then
+					if (map.activeRaidNests < 120) and (map.temperament >= 0.3) then
+						map.canMigrateTick = tick + settlerCooldown
+					elseif map.temperament > 0.8 then
 						map.canMigrateTick = tick + settlerCooldown	* 6
 					elseif map.temperament > 0.6 then	
 						map.canMigrateTick = tick + settlerCooldown	* 4

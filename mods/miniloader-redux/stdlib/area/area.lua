@@ -1,9 +1,5 @@
 --- Tools for working with bounding boxes.
--- @module Area.Area
--- @usage local Area = require('stdlib.area/area')
--- @see Area.Position
--- @see Concepts.BoundingBox
--- @see Concepts.Position
+---@class Area.Area: BoundingBox.0
 local Area = { __class = 'Area', __index = require('stdlib.core') }
 setmetatable(Area, Area)
 

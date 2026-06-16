@@ -74,17 +74,24 @@ end
 ---@type { [PipeNamePrefix]: PipeReskinParams }
 local pipe_material_map = {
 	["bob-copper"] = { material_type = "copper", tier = 1, tint = util.color("#d45539") },
-	["bob-stone"] = { material_type = "stone", tier = 1, tint = util.color("#cfcfcf") },
 	["bob-bronze"] = { material_type = "bronze", tier = 2, tint = util.color("#b09954") },
 	["bob-steel"] = { material_type = "steel", tier = 2, tint = util.color("#877c76") },
 	["bob-plastic"] = { material_type = "plastic", tier = 3, tint = util.color("#0078ff") },
-	["bob-brass"] = { material_type = "brass", tier = 3, tint = util.color("#f9c854") },
+	["bob-aluminium"] = { material_type = "aluminum", tier = 3, tint = util.color("#b3b7b9") },
+	["bob-brass"] = { material_type = "brass", tier = 4, tint = util.color("#f9c854") },
 	["bob-titanium"] = { material_type = "titanium", tier = 4, tint = util.color("#adadb2") },
-	["bob-ceramic"] = { material_type = "ceramic", tier = 4, tint = util.color("#8f7967") },
-	["bob-tungsten"] = { material_type = "tungsten", tier = 4, tint = util.color("#3b3b3b") },
-	["bob-nitinol"] = { material_type = "nitinol", tier = 5, tint = util.color("#706f6b") },
+	["bob-tungsten"] = { material_type = "tungsten", tier = 5, tint = util.color("#3b3b3b") },
 	["bob-copper-tungsten"] = { material_type = "copper-tungsten", tier = 5, tint = util.color("#99593d") },
 }
+
+if reskins.lib.version.is_older(mods["boblibrary"], "2.1.0") then
+	pipe_material_map["bob-stone"] = { material_type = "stone", tier = 1, tint = util.color("#cfcfcf") }
+	pipe_material_map["bob-ceramic"] = { material_type = "ceramic", tier = 4, tint = util.color("#8f7967") }
+	pipe_material_map["bob-nitinol"] = { material_type = "nitinol", tier = 5, tint = util.color("#706f6b") }
+
+	pipe_material_map["bob-brass"].tier = 3
+	pipe_material_map["bob-tungsten"].tier = 4
+end
 
 -- One-off fixes of the standard pipes.
 if reskins.lib.tiers.is_pipe_tier_labeling_enabled then

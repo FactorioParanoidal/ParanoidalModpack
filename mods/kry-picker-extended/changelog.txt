@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: May 26, 2026
+  Major Features:
+    - Auto Ghost Revival: Improved compatibility with entities that have a different placeable_by item
+      This allows compatibility with mods such as Flow Configuration and Mini/Micro Machines
+  Minor Features:
+    - Extended entity family functionality from just rail variants to the following:
+      rails/signals, belts/splitters/underground, pipes/underground, and all inserters.
+      This allows holding any member of the family in the cursor to revive any other member, if the matching item(s) are in theh player inventory, and should respect quality.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.19
 Date: January 4, 2026
   Info:

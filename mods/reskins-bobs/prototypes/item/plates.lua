@@ -29,28 +29,26 @@ local intermediates = {
 	["bob-gunmetal-alloy"] = { subgroup = "plates", defer_to_data_updates = true },
 	["bob-invar-alloy"] = { subgroup = "plates", defer_to_data_updates = true },
 	["bob-lead-plate"] = { subgroup = "plates" },
-	["bob-lithium"] = { subgroup = "plates" },
+	["lithium-plate"] = { subgroup = "plates", image = "bob-lithium-plate" },
 	["bob-nickel-plate"] = { subgroup = "plates" },
 	["bob-nitinol-alloy"] = { subgroup = "plates", defer_to_data_updates = true },
 	["bob-silver-plate"] = { subgroup = "plates" },
 	["bob-solder-alloy"] = { subgroup = "plates" }, -- Shared with Bob's Electronics
 	["bob-tin-plate"] = { subgroup = "plates" },
 	["bob-titanium-plate"] = { subgroup = "plates" },
-	["bob-tungsten-carbide"] = { subgroup = "plates" },
-	["bob-tungsten-plate"] = { subgroup = "plates" },
+	["tungsten-carbide"] = { subgroup = "plates", image = "bob-tungsten-carbide" },
+	["tungsten-plate"] = { subgroup = "plates", image = "bob-tungsten-plate" },
 	["bob-zinc-plate"] = { subgroup = "plates" },
 	["bob-alien-orange-alloy"] = { subgroup = "plates" },
 	["bob-alien-blue-alloy"] = { subgroup = "plates" },
 
 	-- Bearings
-	["bob-ceramic-bearing"] = { subgroup = "bearings" },
 	["bob-cobalt-steel-bearing"] = { subgroup = "bearings" },
 	["bob-nitinol-bearing"] = { subgroup = "bearings" },
 	["bob-steel-bearing"] = { subgroup = "bearings" },
 	["bob-titanium-bearing"] = { subgroup = "bearings" },
 
 	-- Bearing Balls
-	["bob-ceramic-bearing-ball"] = { subgroup = "bearing-balls" },
 	["bob-cobalt-steel-bearing-ball"] = { subgroup = "bearing-balls" },
 	["bob-nitinol-bearing-ball"] = { subgroup = "bearing-balls" },
 	["bob-steel-bearing-ball"] = { subgroup = "bearing-balls" },
@@ -104,7 +102,7 @@ local intermediates = {
 	["bob-silicon-wafer"] = { mod = "lib", group = "shared", subgroup = "items", image = "silicon-wafer" },
 	["bob-silicon-plate"] = { subgroup = "items", image = "silicon" },
 	["bob-glass"] = { mod = "lib", group = "shared", subgroup = "items", image = "glass" },
-	["bob-carbon"] = { subgroup = "items" },
+	["carbon"] = { subgroup = "items", image = "bob-carbon" },
 	["bob-rubber"] = { mod = "lib", group = "shared", subgroup = "items", image = "rubber" }, -- Shared with Bob's Electronics, Angels
 	["bob-resin"] = { subgroup = "items" }, -- Shared with Bob's Electronics
 	["bob-enriched-fuel"] = { subgroup = "items" },
@@ -132,6 +130,15 @@ local intermediates = {
 	["bob-topaz-5"] = { subgroup = "gems", image = "topaz-5" },
 	["bob-diamond-5"] = { subgroup = "gems", image = "diamond-5" },
 }
+
+if reskins.lib.version.is_older(mods["boblibrary"], "2.1.0") then
+	intermediates["bob-lithium-plate"] = { subgroup = "plates" }
+	intermediates["bob-tungsten-carbide"] = { subgroup = "plates" }
+	intermediates["bob-tungsten-plate"] = { subgroup = "plates" }
+	intermediates["bob-ceramic-bearing"] = { subgroup = "bearings" }
+	intermediates["bob-ceramic-bearing-ball"] = { subgroup = "bearing-balls" }
+	intermediates["bob-carbon"] = { subgroup = "items" }
+end
 
 -- Separate so that items and recipes with the same name can be handled differently.
 local recipes = {

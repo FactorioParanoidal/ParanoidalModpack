@@ -111,7 +111,10 @@ data:extend({
       "tooltip-description.chemical-formula",
       "C[font=default-tiny-bold]2[/font]H[font=default-tiny-bold]6[/font]O",
     } or nil,
-    icons = AF.create_gas_fluid_icon({ "__angelsbioprocessinggraphics__/graphics/icons/molecule-ethanol.png", 72 }, "COH"),
+    icons = AF.create_gas_fluid_icon(
+      { "__angelsbioprocessinggraphics__/graphics/icons/molecule-ethanol.png", 72 },
+      "COH"
+    ),
     subgroup = "angels-bio-processor-fermentation",
     order = "b[processing]-d[ethanol]",
     default_temperature = 0,

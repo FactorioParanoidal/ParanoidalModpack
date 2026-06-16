@@ -302,7 +302,7 @@ data:extend({
               shift = util.by_pixel(61, 10),
               scale = 0.5,
             },
-            angelsmods.functions.get_vertical_pipe_shadow(util.by_pixel( 16, -16.25)),
+            angelsmods.functions.get_vertical_pipe_shadow(util.by_pixel(16, -16.25)),
           },
         },
         east = {

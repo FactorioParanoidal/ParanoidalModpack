@@ -30,8 +30,6 @@ OV.disable_recipe({ "coal-liquefaction" })
 OV.disable_recipe({ "plastic-bar" })
 
 -- sulfur
-OV.converter_fluid("sulfuric-acid", "angels-liquid-sulfuric-acid")
-
 OV.global_replace_technology("sulfur-processing", "angels-sulfur-processing-1")
 OV.disable_recipe("sulfur")
 

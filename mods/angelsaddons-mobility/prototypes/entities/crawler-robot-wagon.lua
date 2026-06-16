@@ -124,143 +124,190 @@ funcs.generate_train_entities({
   pictures = {
     rotated = {
       layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon", {
-          dice = 4,
-          priority = "very-low",
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-running-lights", {
-          dice = 4,
-          priority = "very-low",
-          draw_as_light = true,
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon",
+          {
+            dice = 4,
+            priority = "very-low",
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-mask",
+          {
+            dice = 4,
+            priority = "very-low",
+            apply_runtime_tint = true,
+            tint_as_overlay = true,
+            flags = { "mask" },
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-running-lights",
+          {
+            dice = 4,
+            priority = "very-low",
+            draw_as_light = true,
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-shadow",
+          {
+            dice = 4,
+            priority = "very-low",
+            flags = { "shadow" },
+            draw_as_shadow = true,
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
       },
     },
     slope_angle_between_frames = 1.25,
     slope_back_equals_front = true,
     sloped = {
       layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped", {
-          dice = 4,
-          priority = "very-low",
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-running-lights", {
-          dice = 4,
-          priority = "very-low",
-          draw_as_light = true,
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped",
+          {
+            dice = 4,
+            priority = "very-low",
+            direction_count = 80,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-mask",
+          {
+            dice = 4,
+            priority = "very-low",
+            apply_runtime_tint = true,
+            tint_as_overlay = true,
+            flags = { "mask" },
+            direction_count = 80,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-running-lights",
+          {
+            dice = 4,
+            priority = "very-low",
+            draw_as_light = true,
+            direction_count = 80,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-sloped-shadow",
+          {
+            dice = 4,
+            priority = "very-low",
+            flags = { "shadow" },
+            draw_as_shadow = true,
+            direction_count = 80,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
       },
     },
   },
   horizontal_doors = {
     layers = {
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal", {
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal-mask", {
-        apply_runtime_tint = true,
-        tint_as_overlay = true,
-        flags = { "mask" },
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal-shadow", {
-        flags = { "shadow" },
-        draw_as_shadow = true,
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal",
+        {
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal-mask",
+        {
+          apply_runtime_tint = true,
+          tint_as_overlay = true,
+          flags = { "mask" },
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-horizontal-shadow",
+        {
+          flags = { "shadow" },
+          draw_as_shadow = true,
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
     },
   },
   vertical_doors = {
     layers = {
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical", {
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical-mask", {
-        apply_runtime_tint = true,
-        tint_as_overlay = true,
-        flags = { "mask" },
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
-      util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical-shadow", {
-        flags = { "shadow" },
-        draw_as_shadow = true,
-        frame_count = 8,
-        scale = 0.5,
-        usage = "train",
-      }),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical",
+        {
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical-mask",
+        {
+          apply_runtime_tint = true,
+          tint_as_overlay = true,
+          flags = { "mask" },
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
+      util.sprite_load(
+        "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-robot-wagon/crawler-robot-wagon-door-vertical-shadow",
+        {
+          flags = { "shadow" },
+          draw_as_shadow = true,
+          frame_count = 8,
+          scale = 0.5,
+          usage = "train",
+        }
+      ),
     },
   },
   wheels = funcs.standard_train_wheels,
   drive_over_tie_trigger = {
     type = "play-sound",
-    sound = sound_variations("__base__/sound/train-tie", 6, 0.4, { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }),
+    sound = sound_variations(
+      "__base__/sound/train-tie",
+      6,
+      0.4,
+      { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }
+    ),
   },
   tie_distance = 50,
   working_sound = {

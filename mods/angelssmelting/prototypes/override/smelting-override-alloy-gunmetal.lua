@@ -20,6 +20,8 @@ if mods["bobplates"] then
       OV.add_prereq("bob-shotgun-shells", "angels-gunmetal-smelting-1")
       OV.add_prereq("bob-rocket", "angels-gunmetal-smelting-1")
     end
+
+    OV.global_replace_technology("bob-zinc-processing", "angels-gunmetal-smelting-1")
   else
     angelsmods.functions.hide("angels-liquid-molten-gunmetal")
     OV.disable_recipe({ "angels-liquid-molten-gunmetal" })

@@ -463,9 +463,9 @@ function loadResourceConfig()
 		fillKrastorio2Config(config)
 	end
 --
---	if script.active_mods["Mobile_Factory"] then
---		fillMobileFactoryConfig(config)
---	end
+	if script.active_mods["Mobile_Factory"] or script.active_mods["Mobile_Factory_zoms"] then
+		fillMobileFactoryConfig(config)
+	end
 --
 --	if script.active_mods["FoodIndustry"] then
 --		fillFoodIndustriesConfig(config)

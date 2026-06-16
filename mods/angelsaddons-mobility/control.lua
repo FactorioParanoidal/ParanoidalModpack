@@ -55,9 +55,8 @@ local on_entity_settings_pasted = function(event)
 
   local is_valid_source = wagons_to_copy[source.name] or wagons_to_copy[destination.name]
 
-  local is_valid_destination =
-      (source_entity_types[source.type] and destination_entity_types[destination.type]) or
-      (source_entity_types[destination.type] and destination_entity_types[source.type])
+  local is_valid_destination = (source_entity_types[source.type] and destination_entity_types[destination.type])
+    or (source_entity_types[destination.type] and destination_entity_types[source.type])
 
   if is_valid_source and is_valid_destination then
     destination.color = source.color or source.prototype.color

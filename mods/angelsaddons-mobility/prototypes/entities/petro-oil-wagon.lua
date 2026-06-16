@@ -132,68 +132,90 @@ funcs.generate_train_entities({
           scale = 0.5,
           usage = "train",
         }),
-        util.sprite_load("__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          allow_low_quality_rotation = true,
-          back_equals_front = true,
-          direction_count = 128,
-          scale = 0.5,
-          usage = "train",
-        }),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-mask",
+          {
+            dice = 4,
+            priority = "very-low",
+            apply_runtime_tint = true,
+            tint_as_overlay = true,
+            flags = { "mask" },
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-shadow",
+          {
+            dice = 4,
+            priority = "very-low",
+            flags = { "shadow" },
+            draw_as_shadow = true,
+            allow_low_quality_rotation = true,
+            back_equals_front = true,
+            direction_count = 128,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
       },
     },
     slope_angle_between_frames = 1.25,
     slope_back_equals_front = true,
-    sloped = funcs.use_sloped_train_features and {
-      layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped", {
-          dice = 4,
-          priority = "very-low",
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          direction_count = 80,
-          scale = 0.5,
-          usage = "train",
-        }),
-      },
-    } or nil,
+    sloped = funcs.use_sloped_train_features
+        and {
+          layers = {
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped",
+              {
+                dice = 4,
+                priority = "very-low",
+                direction_count = 80,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped-mask",
+              {
+                dice = 4,
+                priority = "very-low",
+                apply_runtime_tint = true,
+                tint_as_overlay = true,
+                flags = { "mask" },
+                direction_count = 80,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-petro__/graphics/entity/petro-oil-wagon/petro-oil-wagon-sloped-shadow",
+              {
+                dice = 4,
+                priority = "very-low",
+                flags = { "shadow" },
+                draw_as_shadow = true,
+                direction_count = 80,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+          },
+        }
+      or nil,
   },
   wheels = funcs.standard_train_wheels,
   drive_over_tie_trigger = {
     type = "play-sound",
-    sound = sound_variations("__base__/sound/train-tie", 6, 0.4, { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }),
+    sound = sound_variations(
+      "__base__/sound/train-tie",
+      6,
+      0.4,
+      { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }
+    ),
   },
   tie_distance = 50,
   working_sound = {

@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-gas-refinery-small"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 25, main_offset = util.by_pixel( 29.875, -15.25), shadow_offset = util.by_pixel( 29.875, -15.25), show_shadow = true },
-  { variation = 30, main_offset = util.by_pixel(-35.25, -4.875), shadow_offset = util.by_pixel(-35.25, -4.875), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel(-69.75, -88.625), shadow_offset = util.by_pixel(-69.75, -88.625), show_shadow = true },
-  { variation = 27, main_offset = util.by_pixel( 56.375, -99.5), shadow_offset = util.by_pixel( 56.375, -99.5), show_shadow = true },
-})
+circuit_connector_definitions["angels-gas-refinery-small"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 25,
+      main_offset = util.by_pixel(29.875, -15.25),
+      shadow_offset = util.by_pixel(29.875, -15.25),
+      show_shadow = true,
+    },
+    {
+      variation = 30,
+      main_offset = util.by_pixel(-35.25, -4.875),
+      shadow_offset = util.by_pixel(-35.25, -4.875),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(-69.75, -88.625),
+      shadow_offset = util.by_pixel(-69.75, -88.625),
+      show_shadow = true,
+    },
+    {
+      variation = 27,
+      main_offset = util.by_pixel(56.375, -99.5),
+      shadow_offset = util.by_pixel(56.375, -99.5),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   --SMALL REFINERY

@@ -185,7 +185,7 @@ if not mods["aai-industry"] and settings.startup["bobmods-assembly-burner"].valu
         filename = "__base__/sound/item/mechanical-inventory-pickup.ogg",
         volume = 0.8,
       },
-      weight = 40000,
+      weight = 20000,
     },
 
     {
@@ -333,10 +333,14 @@ if not mods["aai-industry"] and settings.startup["bobmods-assembly-burner"].valu
     },
   })
 
-  bobmods.lib.tech.ignore_tech_cost_multiplier("automation", false)
-
   if settings.startup["bobmods-assembly-limits"].value == true then
     data.raw["assembling-machine"]["bob-burner-assembling-machine"].ingredient_count = 2
     data.raw["assembling-machine"]["bob-steam-assembling-machine"].ingredient_count = 4
+  end
+
+  if feature_flags["space_travel"] then
+    data.raw["assembling-machine"]["bob-burner-assembling-machine"].surface_conditions = {
+      { property = "pressure", min = 10 },
+    }
   end
 end

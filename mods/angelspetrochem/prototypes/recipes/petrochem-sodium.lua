@@ -45,15 +45,16 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-sodium", amount = 5 },
       { type = "item", name = "angels-electrode-used", amount = 1, ignored_by_productivity = 1 },
-      { type = "fluid", name = "angels-water-purified", amount = 50 },
-      --{type = "fluid", name = "angels-gas-oxygen", amount = 50}
+      { type = "fluid", name = "steam", amount = 50 },
+      --{type = "fluid", name = "angels-gas-oxygen", amount = 50} --excluded for complexity reasons
     },
     main_product = "angels-solid-sodium",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-        { "angels-solid-sodium-hydroxide" },
-        "angels-solid-sodium"
-    ),
-    crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("Na"), AF.fluid_color("NaOH"), "angels-water-purified" }), --tempted to swap the NaOH with the "liquid" variant
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-solid-sodium-hydroxide" }, "angels-solid-sodium"),
+    crafting_machine_tint = AF.get_recipe_tints({
+      AF.fluid_color("Na"),
+      AF.fluid_color("NaOH"),
+      "angels-water-purified",
+    }), --tempted to swap the NaOH with the "liquid" variant
     order = "a[sodium]-b[hydroxide]",
   },
   {
@@ -75,10 +76,7 @@ data:extend({
       { type = "item", name = "sulfur", amount = 2 },
     },
     main_product = "angels-solid-sodium",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-        { "angels-solid-sodium-sulfate" },
-        "angels-solid-sodium"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-solid-sodium-sulfate" }, "angels-solid-sodium"),
     order = "a[sodium]-c[sulfate]",
   },
   -- SODIUM SYNTHESIS
@@ -101,7 +99,11 @@ data:extend({
       { type = "item", name = "angels-solid-sodium-carbonate", amount = 5 },
     },
     icon_size = 32,
-    crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("NaCO3"), "angels-gas-carbon-dioxide", AF.fluid_color("Na") }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      AF.fluid_color("NaCO3"),
+      "angels-gas-carbon-dioxide",
+      AF.fluid_color("Na"),
+    }),
     order = "b[sodium]-a[sodium-carbonate]",
   },
   {
@@ -124,7 +126,13 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-sodium-cyanide", amount = 5 },
       { type = "fluid", name = "angels-gas-hydrogen", amount = 30 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-solid-sodium-cyanide",
     icon_size = 32,
@@ -156,11 +164,12 @@ data:extend({
       { type = "item", name = "angels-solid-sodium-hydroxide", amount = 5 },
     },
     main_product = "angels-solid-sodium-hydroxide",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-        { "angels-solid-sodium" },
-        "angels-solid-sodium-hydroxide"
-    ),
-    crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("NaOH"), "angels-water-purified", AF.fluid_color("Na") }),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-solid-sodium" }, "angels-solid-sodium-hydroxide"),
+    crafting_machine_tint = AF.get_recipe_tints({
+      AF.fluid_color("NaOH"),
+      "angels-water-purified",
+      AF.fluid_color("Na"),
+    }),
     order = "c[sodium-hydroxide]-a[generation]",
   },
   {
@@ -182,8 +191,8 @@ data:extend({
     },
     main_product = "angels-solid-sodium-hydroxide",
     icons = angelsmods.functions.create_solid_recipe_icon(
-        { "angels-liquid-aqueous-sodium-hydroxide" },
-        "angels-solid-sodium-hydroxide"
+      { "angels-liquid-aqueous-sodium-hydroxide" },
+      "angels-solid-sodium-hydroxide"
     ),
     crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("NaOH"), "angels-liquid-aqueous-sodium-hydroxide" }),
     order = "c[sodium-hydroxide]-b[hydroxide]",
@@ -200,7 +209,7 @@ data:extend({
     hide_from_signal_gui = true,
     ingredients = {
       { type = "item", name = "angels-solid-sodium-hydroxide", amount = 4 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 80 },
+      { type = "fluid", name = "sulfuric-acid", amount = 80 },
     },
     results = {
       { type = "item", name = "angels-solid-sodium-sulfate", amount = 2 },
@@ -210,7 +219,7 @@ data:extend({
     icon_size = 32,
     crafting_machine_tint = AF.get_recipe_tints({
       AF.fluid_color("Na2SO4"),
-      "angels-liquid-sulfuric-acid",
+      "sulfuric-acid",
       AF.fluid_color("NaOH"),
     }),
     order = "d[sodium-hydroxide]",
@@ -239,7 +248,10 @@ data:extend({
     },
     main_product = "angels-liquid-aqueous-sodium-hydroxide",
     always_show_products = true,
-    icons = AF.create_liquid_recipe_icon({ "angels-solid-sodium-carbonate" }, { { 151, 212, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }),
+    icons = AF.create_liquid_recipe_icon(
+      { "angels-solid-sodium-carbonate" },
+      { { 151, 212, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-aqueous-sodium-hydroxide",
       "angels-water-purified",
@@ -267,7 +279,10 @@ data:extend({
     },
     main_product = "angels-liquid-aqueous-sodium-hydroxide",
     always_show_products = true,
-    icons = AF.create_liquid_recipe_icon({ "angels-solid-sodium-hydroxide" }, { { 151, 212, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }),
+    icons = AF.create_liquid_recipe_icon(
+      { "angels-solid-sodium-hydroxide" },
+      { { 151, 212, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }
+    ),
     crafting_machine_tint = AF.get_recipe_tints({
       "angels-liquid-aqueous-sodium-hydroxide",
       "angels-water-purified",
@@ -343,7 +358,13 @@ data:extend({
     },
     results = {
       { type = "item", name = "angels-solid-sodium-perchlorate", amount = 5 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     main_product = "angels-solid-sodium-perchlorate",
     icon_size = 32,

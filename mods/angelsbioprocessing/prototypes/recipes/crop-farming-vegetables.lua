@@ -174,7 +174,13 @@ data:extend({
       { type = "item", name = "angels-temperate-3-seed-dormant", amount = 5, ignored_by_stats = 5 },
     },
     results = {
-      { type = "item", name = "angels-temperate-3-seed", amount = 5, ignored_by_productivity = 5, ignored_by_stats = 5 },
+      {
+        type = "item",
+        name = "angels-temperate-3-seed",
+        amount = 5,
+        ignored_by_productivity = 5,
+        ignored_by_stats = 5,
+      },
       { type = "item", name = "angels-temperate-3-seed", amount = 1, probability = 0.05 },
     },
     main_product = "angels-temperate-3-seed",
@@ -193,7 +199,13 @@ data:extend({
       { type = "item", name = "angels-temperate-4-seed-dormant", amount = 5, ignored_by_stats = 5 },
     },
     results = {
-      { type = "item", name = "angels-temperate-4-seed", amount = 5, ignored_by_productivity = 5, ignored_by_stats = 5 },
+      {
+        type = "item",
+        name = "angels-temperate-4-seed",
+        amount = 5,
+        ignored_by_productivity = 5,
+        ignored_by_stats = 5,
+      },
       { type = "item", name = "angels-temperate-4-seed", amount = 1, probability = 0.05 },
     },
     main_product = "angels-temperate-4-seed",
@@ -212,7 +224,13 @@ data:extend({
       { type = "item", name = "angels-temperate-5-seed-dormant", amount = 5, ignored_by_stats = 5 },
     },
     results = {
-      { type = "item", name = "angels-temperate-5-seed", amount = 5, ignored_by_productivity = 5, ignored_by_stats = 5 },
+      {
+        type = "item",
+        name = "angels-temperate-5-seed",
+        amount = 5,
+        ignored_by_productivity = 5,
+        ignored_by_stats = 5,
+      },
       { type = "item", name = "angels-temperate-5-seed", amount = 1, probability = 0.05 },
     },
     main_product = "angels-temperate-5-seed",

@@ -9,7 +9,7 @@ if mods["bobplates"] and data.raw["fluid"]["bob-deuterium"] then
   OV.converter_fluid("bob-heavy-water", "angels-liquid-water-heavy")
   OV.converter_fluid("bob-deuterium", "angels-gas-deuterium")
 
-  OV.disable_recipe({ "bob-heavy-water", "bob-heavy-water-electrolysis" })
+  OV.disable_recipe({ "bob-heavy-water", "bob-deuterium" })
 
   OV.global_replace_technology("bob-heavy-water-processing", "angels-water-chemistry-1")
   OV.disable_technology("bob-heavy-water-processing")
@@ -22,7 +22,12 @@ if mods["bobplates"] and data.raw["fluid"]["bob-deuterium"] then
       {
         name = "fission-reactor-equipment",
         ingredients = {
-          { type = "fluid", name = "angels-liquid-water-semiheavy-3", amount = "angels-liquid-water-heavy", maximum_temperature = 30 },
+          {
+            type = "fluid",
+            name = "angels-liquid-water-semiheavy-3",
+            amount = "angels-liquid-water-heavy",
+            maximum_temperature = 30,
+          },
         },
       },
     })
@@ -32,13 +37,23 @@ if mods["bobplates"] and data.raw["fluid"]["bob-deuterium"] then
       {
         name = "bob-vehicle-fission-cell-equipment-2",
         ingredients = {
-          { type = "fluid", name = "angels-liquid-water-semiheavy-3", amount = "angels-liquid-water-heavy", maximum_temperature = 30 },
+          {
+            type = "fluid",
+            name = "angels-liquid-water-semiheavy-3",
+            amount = "angels-liquid-water-heavy",
+            maximum_temperature = 30,
+          },
         },
       },
       {
         name = "bob-vehicle-fission-reactor-equipment-2",
         ingredients = {
-          { type = "fluid", name = "angels-liquid-water-semiheavy-3", amount = "angels-liquid-water-heavy", maximum_temperature = 30 },
+          {
+            type = "fluid",
+            name = "angels-liquid-water-semiheavy-3",
+            amount = "angels-liquid-water-heavy",
+            maximum_temperature = 30,
+          },
         },
       },
     })
@@ -274,7 +289,6 @@ else
   angelsmods.functions.hide("angels-gas-ammonium-chloride")
   OV.remove_prereq("angels-nitrogen-processing-3", "angels-chlorine-processing-2")
 end
-
 
 -----------------------------------------------------------------------------
 -- SULFURIC ACID ------------------------------------------------------------

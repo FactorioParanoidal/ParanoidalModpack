@@ -118,10 +118,12 @@ end
 ---@param player LuaPlayer
 function Proximity.add_sprites_near_player_if_moved(player)
   if not player.surface.pollutant_type then return end
+
   -- Reduce update rate while in wide chart mode
   if player.render_mode == defines.render_mode.chart and game.tick % 3 > 0 then
     return
   end
+
   local last_player_cell = storage.player_cells[player.index]
   local player_cell = Grid.from_map_position(player.position)
   if last_player_cell
@@ -129,6 +131,11 @@ function Proximity.add_sprites_near_player_if_moved(player)
       and last_player_cell.y == player_cell.y
   then return end
   storage.player_cells[player.index] = player_cell
+
+  if not last_player_cell then
+    Proximity.add_sprites_near_player(player)
+    return
+  end
 
   local wide_radius = determine_max_draggable_chunk_radii(player)
   local visible_radius = determine_max_visible_chunk_radii(player)

@@ -101,7 +101,7 @@ local product_entities = list_to_map{ "assembling-machine", "furnace", "offshore
 local item_storage_entities = list_to_map{ "container", "logistic-container", "linked-container", "temporary-container", "roboport", "character", "car", "artillery-wagon", "cargo-wagon", "spider-vehicle", "cargo-landing-pad", "space-platform-hub" }
 local neutral_item_storage_entities = list_to_map{ "character-corpse" }  -- force = "neutral"
 local fluid_storage_entities = list_to_map{ "storage-tank", "fluid-wagon" }
-local modules_entities = list_to_map{ "assembling-machine", "furnace", "rocket-silo", "mining-drill", "lab", "beacon" }
+local modules_entities = list_to_map{ "assembling-machine", "furnace", "rocket-silo", "mining-drill", "lab", "beacon", "agricultural-tower" }
 local request_entities = list_to_map{ "logistic-container", "character", "spider-vehicle", "roboport", "space-platform-hub", "cargo-landing-pad", "item-request-proxy" }
 local item_logistic_entities = list_to_map{ "transport-belt", "splitter", "underground-belt", "linked-belt", "lane-splitter", "loader", "loader-1x1", "inserter", "logistic-robot", "construction-robot" }
 local fluid_logistic_entities = list_to_map{ "pipe", "pipe-to-ground", "pump", "valve" }
@@ -273,7 +273,7 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
               end
             end
             if control_behavior.circuit_read_ingredients then
-              local inventory = entity.get_inventory(defines.inventory.assembling_machine_input)
+              local inventory = entity.get_inventory(defines.inventory.crafter_input)
               if inventory then
                 local signal_count = 0
                 if target_is_item then
@@ -591,7 +591,9 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
         elseif entity_type == "mining-drill" then
           inventory = entity.get_inventory(defines.inventory.mining_drill_modules)
         elseif entity_type == "assembling-machine" or entity_type == "furnace" or entity_type == "rocket-silo" then
-          inventory = entity.get_inventory(defines.inventory.assembling_machine_modules)
+          inventory = entity.get_inventory(defines.inventory.crafter_modules)
+        elseif entity_type == "agricultural-tower" then
+          --inventory = entity.get_inventory(defines.inventory.agricultural_tower_modules)
         end
         if inventory then
           local item_count = get_item_count(inventory, target_item_and_quality)
@@ -787,9 +789,13 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
     if state.entities then
       local target_entity_names = get_target_entity_names(target_item)
       if target_entity_names then
+        local quality_filter
+        if target_quality ~= "any" and script.feature_flags.quality then
+          quality_filter = target_quality
+        end
         entities = surface.find_entities_filtered{
           name = target_entity_names,
-          quality = target_quality ~= "any" and target_quality or nil,
+          quality = quality_filter,  -- Only nil will find resources/corpses
           force = { force, "neutral" },
         }
         for _, entity in pairs(entities) do
@@ -962,10 +968,14 @@ function on_tick()
     if state.entities then
       local target_entity_names = get_target_entity_names(target_item)
       if target_entity_names then
+        local quality_filter
+        if target_quality ~= "any" and script.feature_flags.quality then
+          quality_filter = target_quality
+        end
         entities = current_surface.find_entities_filtered{
           area = chunk_area,
           name = target_entity_names,
-          quality = target_quality ~= "any" and target_quality or nil,
+          quality = quality_filter,
           force = { force, "neutral" },
         }
         for _, entity in pairs(entities) do

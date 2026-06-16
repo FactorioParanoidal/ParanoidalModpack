@@ -202,7 +202,11 @@ function epd:move_entity(move_event)
     end
 
     -- everything seems to be fine
-    if target_entity.last_user then target_entity.last_user = player end
+
+    -- set user in pcall as this is not supported by all entities
+    pcall(function ()
+        target_entity.last_user = player
+    end)
 
     -- Move a proxy to the correct position...
     local proxy = surface.find_entity("item-request-proxy", start_pos)
@@ -254,10 +258,10 @@ end
 ---@param event EventData.CustomInputEvent
 ---@param reverse boolean
 function epd.rotate_oblong_entity(event, reverse)
-    ---@type LuaPlayer?
     local player = game.get_player(event.player_index)
-    if not player then return end
-    if player.cursor_stack.valid_for_read or player.cursor_ghost then return end
+    if not (player and player.cursor_stack) then return end
+
+    if player.cursor_stack.valid_for_read or player.cursor_ghost or player.selected then return end
 
     local pdata = tools.pdata(event.player_index)
 
@@ -293,7 +297,6 @@ end
 ---@param event EventData.CustomInputEvent
 ---@param reverse boolean
 function epd.rotate_saved_dolly(event, reverse)
-    ---@type LuaPlayer?
     local player = game.get_player(event.player_index)
     if not (player and player.cursor_stack) then return end
 
@@ -367,9 +370,13 @@ end
 function epd.register_events()
     script.on_event({ "dolly-move-north", "dolly-move-east", "dolly-move-south", "dolly-move-west" }, epd.dolly_move)
 
+    ---@diagnostic disable-next-line: param-type-mismatch
     script.on_event("dolly-rotate-rectangle", function (event) epd.rotate_oblong_entity(event, false) end)
+    ---@diagnostic disable-next-line: param-type-mismatch
     script.on_event("dolly-rotate-rectangle-reverse", function (event) epd.rotate_oblong_entity(event, true) end)
+    ---@diagnostic disable-next-line: param-type-mismatch
     script.on_event("dolly-rotate-saved", function (event) epd.rotate_saved_dolly(event, false) end)
+    ---@diagnostic disable-next-line: param-type-mismatch
     script.on_event("dolly-rotate-saved-reverse", function (event) epd.rotate_saved_dolly(event, true) end)
 
     script.on_configuration_changed(epd.on_configuration_changed)

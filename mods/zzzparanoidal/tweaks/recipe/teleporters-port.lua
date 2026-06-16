@@ -11,7 +11,7 @@ paralib.bobmods.lib.recipe.set_ingredients("teleporter", {
 	{ type = "item",  name = "space-science-pack",        amount = 50  },
 	{ type = "item",  name = "advanced-processing-unit",  amount = 50  },
 	{ type = "item",  name = "low-density-structure",     amount = 150 },
-	{ type = "item",  name = "bob-silver-zinc-battery",   amount = 100 },
+	{ type = "item",  name = "bob-battery-3",   amount = 100 },
 	{ type = "item",  name = "bob-nitinol-alloy",         amount = 150 },
 })
 

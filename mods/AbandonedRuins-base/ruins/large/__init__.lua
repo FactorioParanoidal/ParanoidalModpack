@@ -27,6 +27,8 @@ for _, name in pairs({
 
 	---@type Ruin Individual ruin, file' name becomes ruin's name
 	local ruin = require(name)
+
+	-- Register ruin name so later debug logs show which one has caused the crash
 	ruin.name = name
 	ruins[#ruins + 1] = ruin
 end

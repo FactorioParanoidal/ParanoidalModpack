@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-ore-sorting-facility"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel( 41.375, -13.125), shadow_offset = util.by_pixel( 41.375, -13.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 41.375, -13.125), shadow_offset = util.by_pixel( 41.375, -13.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 41.375, -13.125), shadow_offset = util.by_pixel( 41.375, -13.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 41.375, -13.125), shadow_offset = util.by_pixel( 41.375, -13.125), show_shadow = true },
-})
+circuit_connector_definitions["angels-ore-sorting-facility"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(41.375, -13.125),
+      shadow_offset = util.by_pixel(41.375, -13.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(41.375, -13.125),
+      shadow_offset = util.by_pixel(41.375, -13.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(41.375, -13.125),
+      shadow_offset = util.by_pixel(41.375, -13.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(41.375, -13.125),
+      shadow_offset = util.by_pixel(41.375, -13.125),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -278,7 +299,12 @@ data:extend({
     selection_box = { { -3.5, -3.5 }, { 3.5, 3.5 } },
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "pollution", "productivity" },
-    crafting_categories = { "angels-ore-sorting", "angels-ore-sorting-2", "angels-ore-sorting-3", "angels-ore-sorting-4" },
+    crafting_categories = {
+      "angels-ore-sorting",
+      "angels-ore-sorting-2",
+      "angels-ore-sorting-3",
+      "angels-ore-sorting-4",
+    },
     crafting_speed = 1.5,
     energy_source = {
       type = "electric",
@@ -356,7 +382,13 @@ data:extend({
     selection_box = { { -3.5, -3.5 }, { 3.5, 3.5 } },
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "pollution", "productivity" },
-    crafting_categories = { "angels-ore-sorting", "angels-ore-sorting-2", "angels-ore-sorting-3", "angels-ore-sorting-4", "angels-ore-sorting-5" },
+    crafting_categories = {
+      "angels-ore-sorting",
+      "angels-ore-sorting-2",
+      "angels-ore-sorting-3",
+      "angels-ore-sorting-4",
+      "angels-ore-sorting-5",
+    },
     crafting_speed = 2,
     energy_source = {
       type = "electric",

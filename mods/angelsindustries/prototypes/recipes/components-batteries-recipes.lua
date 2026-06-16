@@ -221,7 +221,7 @@ if angelsmods.industries.components then
       category = "chemistry",
       energy_required = 2.5,
       ingredients = {
-        { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 20 },
+        { type = "fluid", name = "sulfuric-acid", amount = 20 },
         { type = "fluid", name = "angels-water-saline", amount = 5 },
       },
       results = {
@@ -230,7 +230,7 @@ if angelsmods.industries.components then
       allow_decomposition = true,
       crafting_machine_tint = angelsmods.functions.get_recipe_tints({
         "battery-electrolyte-1",
-        "angels-liquid-sulfuric-acid",
+        "sulfuric-acid",
         "angels-water-saline",
         "battery-electrolyte-1",
       }),

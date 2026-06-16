@@ -32,8 +32,9 @@ else
     "angels-solid-sodium-cyanide",
     "angels-solid-sodium-carbonate",
     "angels-solid-sodium-sulfate",
+    "angels-solid-sodium-carbonate-electrolysis",
   })
-  angelsmods.functions.hide("angels-solid-sodium-cyanide")
+  angelsmods.functions.hide({ "angels-solid-sodium-cyanide", "angels-solid-sodium-carbonate" })
   OV.remove_prereq("angels-sodium-processing-1", "angels-chlorine-processing-1")
   OV.add_prereq("angels-sodium-processing-1", "angels-chlorine-processing-3")
 end

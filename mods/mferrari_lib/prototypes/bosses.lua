@@ -199,7 +199,7 @@ bigspawner.result_units = {}
 for k=1,10 do 
 	table.insert (bigspawner.result_units, {'maf-boss-biter-'..k, {{k/10 - 0.05, 0.0}, {k/10, 0.05}}})
 	table.insert (bigspawner.result_units, {'maf-boss-acid-spitter-'..k, {{k/10 - 0.05, 0.0}, {k/10, 0.05}}})
-	if mods['ArmouredBiters'] then 
+	if mods['ArmouredBiters'] and data.raw.unit['maf-boss-armoured-biter-'..k] then 
 		table.insert (bigspawner.result_units, {'maf-boss-armoured-biter-'..k, {{k/10 - 0.05, 0.0}, {k/10, 0.05}}})
 		end
 	end
@@ -267,7 +267,6 @@ data:extend(
 			max_health =  (40000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant,  --40000 * k * boss_hp_multiplier,
 			subgroup="enemies",
 			resistances = {},
-			call_for_help_radius = 100+k*5,
 			spawning_time_modifier = 8,
 			healing_per_tick = 0.1 + k/100,
 			collision_box = {{-0.4, -0.4}, {0.4, 0.4}},

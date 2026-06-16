@@ -56,7 +56,7 @@ data:extend({
 			{ type = "item", name = "bob-invar-alloy", amount = 6 },
 			{ type = "item", name = "bob-gold-plate", amount = 10 },
 			{ type = "item", name = "bob-titanium-plate", amount = 12 },
-			{ type = "item", name = "bob-tungsten-plate", amount = 8 },
+			{ type = "item", name = "tungsten-plate", amount = 8 },
 		},
 		results = { { type = "item", name = "sci-component-4", amount = 2 } },
 	},

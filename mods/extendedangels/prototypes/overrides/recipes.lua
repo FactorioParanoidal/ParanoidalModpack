@@ -33,12 +33,12 @@ for _, name in pairs(bioprocessing_recipes) do
   end
 end
 --Hide Recipes
-  if mods["bobplates"] then
-OV.disable_recipe({ "bob-copper-tungsten-alloy" })
-OV.disable_recipe({ "bob-tungsten-carbide" })
-OV.disable_recipe({ "bob-tungsten-carbide-2" })
-  end
+if mods["bobplates"] then
+  OV.disable_recipe({ "bob-copper-tungsten-alloy" })
+  OV.disable_recipe({ "tungsten-carbide" })
+end
 OV.disable_recipe({ "angels-pellet-tungsten-smelting" })
+
 --Productivity Overrides
 angelsmods.functions.allow_productivity("angels-plate-tungsten-carbide")
 angelsmods.functions.allow_productivity("angels-molten-copper-tungsten-smelting-1")

@@ -24,7 +24,10 @@ if mods["bobores"] then
       "infinite-gem-ore",
       { name = "bob-sapphire-ore", probability = bobmods.gems.SapphireRatio }
     )
-    bobmods.lib.resource.add_result("infinite-gem-ore", { name = "bob-topaz-ore", probability = bobmods.gems.TopazRatio })
+    bobmods.lib.resource.add_result(
+      "infinite-gem-ore",
+      { name = "bob-topaz-ore", probability = bobmods.gems.TopazRatio }
+    )
   end
 
   if bobmods.ores.settings.GemsFromOtherOres == true then

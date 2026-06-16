@@ -5,7 +5,6 @@ if angelsmods.refining then
   OV.add_prereq("bob-fluid-barreling", "angels-fluid-control")
 
   --CREATE CONVERTER
-  OV.converter_fluid("sulfuric-acid", "angels-liquid-sulfuric-acid")
   OV.converter_fluid("heavy-oil", "angels-liquid-naphtha")
   OV.converter_fluid("light-oil", "angels-liquid-fuel-oil")
   OV.converter_fluid("petroleum-gas", "angels-gas-methane")
@@ -98,5 +97,5 @@ if angelsmods.refining then
   angelsmods.functions.make_void("angels-gas-acid", "chemical")
   angelsmods.functions.make_void("angels-gas-hydrogen-sulfide", "chemical")
   angelsmods.functions.make_void("angels-gas-sulfur-dioxide", "chemical")
-  angelsmods.functions.make_void("angels-liquid-sulfuric-acid", "chemical")
+  angelsmods.functions.make_void("sulfuric-acid", "chemical")
 end

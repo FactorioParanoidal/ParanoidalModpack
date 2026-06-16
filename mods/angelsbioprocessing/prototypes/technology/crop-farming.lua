@@ -288,9 +288,9 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
+        { "automation-science-pack", 4 },
         { "angels-token-bio", 1 },
-        { "logistic-science-pack",  4 },
+        { "logistic-science-pack", 4 },
       },
       time = 30,
     },
@@ -334,8 +334,8 @@ data:extend({
     unit = {
       count = 64,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },
@@ -372,8 +372,8 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },
@@ -431,9 +431,9 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
+        { "automation-science-pack", 4 },
         { "angels-token-bio", 1 },
-        { "logistic-science-pack",  4 },
+        { "logistic-science-pack", 4 },
       },
       time = 30,
     },
@@ -477,8 +477,8 @@ data:extend({
     unit = {
       count = 64,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },
@@ -515,8 +515,8 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },
@@ -574,9 +574,9 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
+        { "automation-science-pack", 4 },
         { "angels-token-bio", 1 },
-        { "logistic-science-pack",  4 },
+        { "logistic-science-pack", 4 },
       },
       time = 30,
     },
@@ -620,8 +620,8 @@ data:extend({
     unit = {
       count = 64,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },
@@ -658,8 +658,8 @@ data:extend({
     unit = {
       count = 32,
       ingredients = {
-        { "automation-science-pack",  4 },
-        { "logistic-science-pack",  4 },
+        { "automation-science-pack", 4 },
+        { "logistic-science-pack", 4 },
         { "chemical-science-pack", 4 },
         { "angels-token-bio", 1 },
       },

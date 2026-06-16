@@ -31,7 +31,10 @@ if angelsmods.trigger.smelting_products["titanium"].ingot then
   end
 
   if angelsmods.trigger.smelting_products["titanium"].plate then
-    if not angelsmods.trigger.smelting_products["tin"].ingot or not angelsmods.trigger.smelting_products["aluminium"].ingot then
+    if
+      not angelsmods.trigger.smelting_products["tin"].ingot
+      or not angelsmods.trigger.smelting_products["aluminium"].ingot
+    then
       OV.disable_recipe({ "angels-liquid-molten-titanium-4" })
       OV.remove_prereq("angels-titanium-casting-3", "angels-tin-smelting-3")
       OV.remove_prereq("angels-titanium-casting-3", "angels-aluminium-smelting-3")
@@ -42,8 +45,8 @@ if angelsmods.trigger.smelting_products["titanium"].ingot then
             angelsmods.functions.get_object_icons("angels-liquid-molten-titanium"),
             4,
             angelsmods.smelting.number_tint
-          )
-        }
+          ),
+        },
       })
     end
   else
@@ -71,7 +74,11 @@ else
   angelsmods.functions.hide("angels-ingot-titanium")
   angelsmods.functions.hide("angels-liquid-molten-titanium")
   OV.disable_recipe({ "angels-processed-titanium", "angels-pellet-titanium" })
-  OV.disable_recipe({ "angels-liquid-titanium-tetrachloride", "angels-liquid-titanium-tetrachloride-2", "angels-sponge-titanium" })
+  OV.disable_recipe({
+    "angels-liquid-titanium-tetrachloride",
+    "angels-liquid-titanium-tetrachloride-2",
+    "angels-sponge-titanium",
+  })
   OV.disable_recipe({ "angels-ingot-titanium", "angels-ingot-titanium-2" })
   OV.disable_recipe({
     "angels-liquid-molten-titanium",

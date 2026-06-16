@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.06
+Date: 2026.05.08
+  Bugfixes:
+    - Fixed crush if demolisher damaged by "nil" source 
+---------------------------------------------------------------------------------------------------
+Version: 2.02.05
+Date: 2026.05.07
+  Features:
+    - Demolishers: since Vulcanus evo 40%, Hungry Demolishers counterattack turrets
+    - The AI now ignores resources if there are biter nests or surrounded by player buildings
+      Previously, they were only ignored if they were being built directly
+  Balancing:
+    - Settlers building interval now ignored in AI "migrate" mode
+      Also resource settlers interval reduced in siege and migrate modes
+  Bugfixes:
+    - Fixed broken "survival mode", the settlements on the map were significantly less often than intended
+    - Partially fixed an issue where expansions would occur on the same side of the player's base
+    - Fixed temporary stops of all attacks on small maps in some cases
+    - Fixed mistake that prevented claiming far resources
+    - Fixed crush in compressing squad procedure	
+  Other:
+    - Removed "learned undgerground attack" message, if that attack occurs too early
+---------------------------------------------------------------------------------------------------
 Version: 2.02.04
 Date: 2025.09.18
   Balancing:

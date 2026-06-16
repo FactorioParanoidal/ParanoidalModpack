@@ -61,11 +61,31 @@ if stay then command_add_stay(command) end
 CM.set_command(command)			
 end	
 
-function unit_follows_player(unit, stay)
-local characters = unit.surface.find_entities_filtered{type='character', force=unit.force, position=unit.position, radius=20}
-if #characters>0 then
-	unit_go_to_entity(unit,characters[1], stay)
+function unit_follows_player(unit, stay, radius)
+if unit and unit.valid then	
+	local characters = unit.surface.find_entities_filtered{type='character', force=unit.force, position=unit.position, radius=radius or 30}
+	if #characters>0 then
+		unit_go_to_entity(unit,characters[1], stay)
+		end
+	end
 end
+
+
+function unit_follows_nearest_character(unit, stay)
+if unit and unit.valid then	
+	local dist, char
+	local characters = unit.surface.find_entities_filtered{type='character', force=unit.force}
+	if #characters>0 then
+		for _,c in pairs(characters) do 
+			local d = distance(c.position,unit.position)
+			if (not dist) or d<dist then 
+				char= c
+				dist = d
+				end
+			end
+		unit_go_to_entity(unit,char, stay)
+		end
+	end
 end
 
 
@@ -171,6 +191,31 @@ if prototypes.entity["tb_infected_ship"] then
 	end
 return nests[math.random(#nests)]
 end		
+
+
+
+
+
+-- from the worm list, returns those that are valid for the current evolution
+function What_worms_are_for_evolution(evolution, extra_evo, worms_list)
+local worms = {}
+local strong_worms = {}
+
+for _,name in pairs (worms_list) do 
+	local proto = prototypes.entity[name]
+	if proto and proto.type=="turret" then 
+		local p_evo = proto.build_base_evolution_requirement
+		if p_evo then
+			if p_evo<=evolution then table.insert(worms,name) end
+			if extra_evo and evolution+extra_evo<=p_evo and p_evo>=evolution then table.insert(strong_worms,name) end
+			end 
+		end
+	end
+return worms,strong_worms
+end		
+
+
+
 
 
 function get_worms_for_evolution(evolution, extra_evo, surface, position)
@@ -293,8 +338,12 @@ end
 
 
 --## Get unit names for an evolution   @spawners = table list with spawner names or a string 
-function get_units_for_evolution(evolution,extra_evo, spawners)
+function get_units_for_evolution(evolution,extra_evo, spawners, exclude_part_names)
 	local excluded_part_names = {"mother","boss","protomolecule","human"}
+	if exclude_part_names then  
+		if type(exclude_part_names)=="string" then add_list(excluded_part_names,exclude_part_names)
+		elseif type(exclude_part_names)=="table" then concat_lists(excluded_part_names,exclude_part_names) end
+	end
 	local function may_add(name)
 		for _,n in pairs (excluded_part_names) do
 			if string.find(name, n) then return false end
@@ -332,6 +381,30 @@ local strong_units = {} -- for extra strong ones
 		end
 return unit_names,strong_units
 end	
+
+
+
+--## Get unit names for @spawners = table list with spawner names or a string 
+function get_units_names_for_spawners(spawners)
+if not spawners then -- if not passed, get all spawners
+	spawners = {}
+	local filter = {{filter = "type", type = "unit-spawner"}}
+	for name,_ in pairs(prototypes.get_entity_filtered(filter)) do table.insert(spawners,name) end
+	end
+local unit_names = {}
+	for _,name in pairs (spawners) do
+		local proto=prototypes.entity[name]
+		for Y,RU in pairs (proto.result_units) do
+			local uname = RU.unit
+			local SP = RU['spawn_points']
+			if not in_list(unit_names,uname) and prototypes.entity[uname] and prototypes.entity[uname].type=='unit' then 
+				add_list(unit_names, uname)
+				end
+			end
+		end
+return unit_names
+end	
+
 
 
 
@@ -447,6 +520,24 @@ if not evolution then evolution = get_evo_here(surface) end
 		return list[math.random(#list)] ..n
 	end
 
+
+
+-- if boss list == sting - no evo maths 
+function Spawn_One_Boss_here(surface,position,force,bosses_list, evolution)
+if not evolution then evolution = get_evo_here(surface, force) end
+local name
+if type(bosses_list)=="string" then name = bosses_list
+	else
+	local n=math.min(10, math.max(math.ceil(evolution*10),1))
+	name = bosses_list[math.random(#bosses_list)] ..'-'..n
+	end
+local p = surface.find_non_colliding_position(name, position, 20, 2)
+if p then
+	local boss = surface.create_entity{name = name,position=p,force=force}
+	boss.ai_settings.allow_destroy_when_commands_fail=false 
+	return boss
+	end
+end
 
 
 function BOSS_spawn_here(surface,position,evolution,force,ignore_surface_check,no_spitter)

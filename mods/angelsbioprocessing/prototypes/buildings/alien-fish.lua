@@ -40,7 +40,7 @@ data:extend({
     },
     autoplace = {
       order = "xa",
-      probability_expression = "x%2*y%2*0.01"
+      probability_expression = "x%2*y%2*0.01",
     },
     protected_from_tile_building = false,
   },
@@ -68,7 +68,7 @@ data:extend({
     },
     autoplace = {
       order = "xb",
-      probability_expression = "+x%2*y%2*0.01"
+      probability_expression = "+x%2*y%2*0.01",
     },
     protected_from_tile_building = false,
   },
@@ -96,7 +96,7 @@ data:extend({
     },
     autoplace = {
       order = "xc",
-      probability_expression = "x%2*+y%2*0.01"
+      probability_expression = "x%2*+y%2*0.01",
     },
     protected_from_tile_building = false,
   },

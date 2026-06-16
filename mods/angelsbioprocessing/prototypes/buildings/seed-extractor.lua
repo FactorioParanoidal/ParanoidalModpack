@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-seed-extractor"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  5, main_offset = util.by_pixel( 25.5,  33.125), shadow_offset = util.by_pixel( 25.5,  33.125), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 25.5,  33.125), shadow_offset = util.by_pixel( 25.5,  33.125), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 25.5,  33.125), shadow_offset = util.by_pixel( 25.5,  33.125), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 25.5,  33.125), shadow_offset = util.by_pixel( 25.5,  33.125), show_shadow = true },
-})
+circuit_connector_definitions["angels-seed-extractor"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 5,
+      main_offset = util.by_pixel(25.5, 33.125),
+      shadow_offset = util.by_pixel(25.5, 33.125),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(25.5, 33.125),
+      shadow_offset = util.by_pixel(25.5, 33.125),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(25.5, 33.125),
+      shadow_offset = util.by_pixel(25.5, 33.125),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(25.5, 33.125),
+      shadow_offset = util.by_pixel(25.5, 33.125),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

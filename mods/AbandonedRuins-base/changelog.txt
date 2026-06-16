@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 2026-06-08
+  Minor:
+    - updated documentation, remote-call function 'register_ruin_set' is not possible
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2026-01-09
+  Changes:
+    - bumped AR minimum version due to API changes
+    - bumped Factorio version to latest patch level
+    - *use locals` for performance reasons, LUA hashes global variable names, locals not
+---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 2025-11-27
   Changes:

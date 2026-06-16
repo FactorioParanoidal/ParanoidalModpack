@@ -164,7 +164,7 @@ data:extend({
     icon_size = 64,
     icon_mipmaps = 1,
     flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-blueprintable"},
-    hidden = true,
+    hidden_in_factoriopedia = true,
     minable = {
       mining_time = 0.1,
     },

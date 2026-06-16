@@ -327,7 +327,7 @@ function tests.showChunkResourceGenerator(map, showText)
 	for x, nestsY in pairs(map) do
 		if (type(x) == "number") and (math.floor(x)==x) then
 			for y, chunk in pairs(nestsY) do
-				local chunkText = ""..(map.chunkToResource[chunk] or "")
+				local chunkText = ""..(map.chunkToResource[chunk] or "").."=>".. tostring(chunk[3])
 				local renderingObject
 				if chunk.textResourceId then
 					renderingObject = rendering.get_object_by_id(chunk.textResourceId)	

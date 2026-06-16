@@ -74,7 +74,7 @@ if mods["bobplates"] then
   angelsmods.trigger.ores["silver"] = ore_exists("bob-silver-ore")
   angelsmods.trigger.ores["titanium"] = ore_exists("bob-rutile-ore")
   angelsmods.trigger.ores["gold"] = ore_exists("bob-gold-ore")
-  angelsmods.trigger.ores["tungsten"] = ore_exists("bob-tungsten-ore")
+  angelsmods.trigger.ores["tungsten"] = ore_exists("tungsten-ore")
   angelsmods.trigger.ores["thorium"] = angelsmods.trigger.ores["thorium"] or ore_exists("bob-thorium-ore")
   --angelsmods.trigger.ores["gem-ore"] = ore_exists("gem-ore")
   --angelsmods.trigger.ores["gem-ruby"] = ore_exists("ruby-ore")

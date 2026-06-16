@@ -55,7 +55,6 @@ OV.global_replace_icon(
   { "__angelspetrochemgraphics__/graphics/icons/liquid-sulfuric-acid.png", icon_size = 64 }
 )
 move_item("sulfur", "angels-petrochem-sulfur", "a[sulfer]-a[sulfer]")
-angelsmods.functions.hide("sulfuric-acid")
 if angelsmods.trigger.early_sulfuric_acid == true then
   OV.remove_prereq("battery", "sulfur-processing")
   OV.add_prereq("battery", "angels-sulfur-processing-2")
@@ -224,4 +223,34 @@ if data.raw["reactor"]["nuclear-reactor"] then
     minimum_light_size = 0,
     light_intensity_to_size_coefficient = 0,
   }
+end
+
+-------------------------------------------------------------------------------
+-- CRAFTING CATEGORIES --------------------------------------------------------
+-------------------------------------------------------------------------------
+if data.raw["recipe-category"]["cryogenics"] then
+  OV.add_additional_category("angels-solid-nitroglycerin", "cryogenics")
+  OV.add_additional_category("angels-solid-trinitrotoluene", "cryogenics")
+end
+
+if data.raw["recipe-category"]["chemistry-or-cryogenics"] then
+  for _, entity_name in pairs({
+    "angels-chemical-plant-2",
+    "angels-chemical-plant-3",
+    "angels-chemical-plant-4",
+  }) do
+    local entity = data.raw["assembling-machine"][entity_name]
+    if entity then
+      local addit = true
+      for _, category in pairs(entity.crafting_categories) do
+        if category == "chemistry-or-cryogenics" then
+          addit = false
+          break
+        end
+      end
+      if addit then
+        table.insert(entity.crafting_categories, "chemistry-or-cryogenics")
+      end
+    end
+  end
 end

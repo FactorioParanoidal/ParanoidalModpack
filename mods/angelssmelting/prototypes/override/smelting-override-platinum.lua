@@ -91,17 +91,6 @@ if angelsmods.trigger.smelting_products["platinum"].wire then
       OV.add_prereq("bob-advanced-processing-unit", "angels-platinum-smelting-1")
     end
   end
-  if mods["bobmodules"] then
-    OV.patch_recipes({
-      {
-        name = "bob-module-processor-board-3",
-        ingredients = {
-          { type = "item", name = "angels-wire-platinum", amount = "copper-plate" },
-        },
-      },
-    })
-    OV.add_prereq("bob-modules-4", "angels-platinum-smelting-1")
-  end
   if mods["bobassembly"] and settings.startup["bobmods-assembly-electronicmachines"].value then
     OV.add_additional_category("angels-wire-platinum", "electronics")
     OV.add_additional_category("angels-wire-platinum-2", "electronics")

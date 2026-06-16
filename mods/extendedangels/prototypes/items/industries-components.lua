@@ -8,7 +8,7 @@ data:extend({
     name = "block-construction-0", -- required at start
     icon = "__angelsindustriesgraphics__/graphics/icons/block-construction-1.png",
     icon_size = 32,
-    subgroup = "blocks-frames",
+    subgroup = "angels-blocks-frames",
     order = "a",
     stack_size = 200,
   },

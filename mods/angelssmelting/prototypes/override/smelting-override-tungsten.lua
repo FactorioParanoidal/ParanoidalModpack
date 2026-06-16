@@ -11,7 +11,7 @@ end
 if angelsmods.trigger.ores["tungsten"] then
   if mods["bobores"] then
     local angel_ore = data.raw.item["angels-tungsten-ore"]
-    local bob_ore = data.raw.item["bob-tungsten-ore"]
+    local bob_ore = data.raw.item["tungsten-ore"]
     OV.global_replace_item(angel_ore.name, bob_ore.name)
     OV.copy_item_properties(angel_ore.name, bob_ore.name)
     angelsmods.functions.hide(angel_ore.name)
@@ -61,38 +61,18 @@ end
 if angelsmods.trigger.smelting_products["tungsten"].plate then
   -- REPLACE ITEMS (use bob version)
   if mods["bobplates"] then
-    OV.global_replace_item("angels-plate-tungsten", "bob-tungsten-plate")
+    OV.global_replace_item("angels-plate-tungsten", "tungsten-plate")
     angelsmods.functions.hide("angels-plate-tungsten")
-    OV.copy_item_properties("angels-plate-tungsten", "bob-tungsten-plate")
-    OV.disable_recipe({ "bob-tungsten-plate" })
+    OV.copy_item_properties("angels-plate-tungsten", "tungsten-plate")
+    OV.disable_recipe({ "tungsten-plate" })
     OV.add_prereq("bob-tungsten-processing", "angels-tungsten-smelting-1")
-    OV.set_research_difficulty("bob-tungsten-processing", "bob-tungsten-plate", 10, "craft-item")
+    OV.set_research_difficulty("bob-tungsten-processing", "tungsten-plate", 10, "craft-item")
 
     angelsmods.functions.move_item("bob-copper-tungsten-alloy", "angels-tungsten-casting", "l")
-    angelsmods.functions.move_item("bob-tungsten-carbide", "angels-tungsten-casting", "k")
+    angelsmods.functions.move_item("tungsten-carbide", "angels-tungsten-casting", "k")
     OV.patch_recipes({
       {
-        name = "bob-tungsten-carbide",
-        subgroup = "angels-tungsten-casting",
-        energy_required = 6,
-        ingredients = {
-          { type = "item", name = "bob-tungsten-oxide", amount = 10 },
-          { type = "item", name = "angels-solid-carbon", amount = 10 },
-        },
-        results = {
-          { type = "item", name = "bob-tungsten-carbide", amount = 20 },
-        },
-        order = "k[tungsten-carbide]-a",
-        icons = angelsmods.functions.add_number_icon_layer({
-          {
-            icon = "__bobplates__/graphics/icons/plate/tungsten-carbide-plate.png",
-            icon_size = 64,
-            scale = 0.5,
-          },
-        }, 1, angelsmods.smelting.number_tint),
-      },
-      {
-        name = "bob-tungsten-carbide-2",
+        name = "tungsten-carbide",
         subgroup = "angels-tungsten-casting",
         energy_required = 6,
         ingredients = {
@@ -100,19 +80,12 @@ if angelsmods.trigger.smelting_products["tungsten"].plate then
           { type = "item", name = "angels-solid-carbon", amount = 10 },
         },
         results = {
-          { type = "item", name = "bob-tungsten-carbide", amount = 20 },
+          { type = "item", name = "tungsten-carbide", amount = 20 },
         },
-        order = "k[tungsten-carbide]-b",
-        icons = angelsmods.functions.add_number_icon_layer({
-          {
-            icon = "__bobplates__/graphics/icons/plate/tungsten-carbide-plate.png",
-            icon_size = 64,
-            scale = 0.5,
-          },
-        }, 2, angelsmods.smelting.number_tint),
+        order = "k[tungsten-carbide]",
       },
     })
-    
+
     OV.remove_prereq("bob-tungsten-processing", "bob-nickel-processing")
   end
 else
@@ -143,17 +116,18 @@ end
 -------------------------------------------------------------------------------
 if mods["bobplates"] then
   local alloy_recipes = {
-    "bob-tungsten-carbide",
-    "bob-tungsten-carbide-2",
+    "tungsten-carbide",
     "bob-copper-tungsten-alloy",
   }
 
   for _, name in pairs(alloy_recipes) do
     if data.raw.recipe[name] then
       data.raw.recipe[name].category = "angels-sintering-4"
+      OV.remove_unlock("bob-tungsten-processing", name)
+      OV.add_unlock("angels-tungsten-smelting-1", name)
     end
   end
-  
+
   OV.patch_recipes({
     {
       name = "bob-copper-tungsten-alloy",
@@ -168,5 +142,5 @@ if mods["bobplates"] then
       },
     },
   })
-  OV.add_prereq("bob-tungsten-alloy-processing", "angels-copper-smelting-2")
+  OV.add_prereq("angels-tungsten-smelting-1", "angels-copper-smelting-2")
 end

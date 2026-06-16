@@ -54,6 +54,7 @@ local updated_recipes = {
   "chemical-plant",
   "constant-combinator",
   "oil-refinery",
+  "production-science-pack",
   "rocket",
 }
 local updated_items = {

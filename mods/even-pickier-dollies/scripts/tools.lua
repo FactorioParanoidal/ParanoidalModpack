@@ -2,9 +2,13 @@
 -- tools. Some of this code has been picked out of stdlib
 --
 
+local util = require('util')
+
 local const = require('scripts.constants')
 
 local collision_mask_util = require('collision-mask-util')
+
+local TICKS_PER_SECOND = 60
 
 ---@type epd.ModData
 local mod_data = assert(prototypes.mod_data['even-pickier-dollies']).data
@@ -141,7 +145,7 @@ end
 ---@param save_time uint
 ---@return LuaEntity?
 function tools.get_saved_entity(pdata, tick, save_time)
-    if pdata.dolly and (not pdata.dolly.valid or tick > (pdata.dolly_tick + second * save_time)) then
+    if pdata.dolly and (not pdata.dolly.valid or tick > (pdata.dolly_tick + TICKS_PER_SECOND * save_time)) then
         pdata.dolly = nil
     end
     return pdata.dolly
@@ -313,7 +317,7 @@ end
 
 ---@param pos MapPosition
 ---@param area BoundingBox
----@eturn BoundingBox area
+---@return BoundingBox area
 function tools.area_normalize(pos, area)
     return {
         left_top = tools.position_subtract(area.left_top, pos),
@@ -324,7 +328,7 @@ end
 ---@param new_pos MapPosition
 ---@param old_pos MapPosition
 ---@param area BoundingBox
----@eturn BoundingBox area
+---@return BoundingBox area
 function tools.area_center(new_pos, old_pos, area)
     local normalized = tools.area_normalize(old_pos, area)
     return {

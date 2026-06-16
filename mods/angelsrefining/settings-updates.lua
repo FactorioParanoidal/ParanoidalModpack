@@ -20,7 +20,6 @@ if mods["bobores"] then
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enablequartz")
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enablerutile")
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enablesilverore")
-  angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enablesulfur")
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enabletinore")
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enabletungstenore")
   angelsmods.settings.hide_setting("bool-setting", "bobmods-ores-enablezincore")

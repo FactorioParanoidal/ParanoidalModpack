@@ -24,9 +24,15 @@ reskins.lib.set_inputs_defaults(inputs)
 -- Batteries
 local batteries = {
 	["battery"] = { tier = 1, prog_tier = 2, technology = "battery", tint = "ff781f" },
-	["bob-lithium-ion-battery"] = { tier = 2, prog_tier = 3, technology = "battery-2", tint = "41ffdd" },
-	["bob-silver-zinc-battery"] = { tier = 3, prog_tier = 4, technology = "battery-3", tint = "3dff40" },
 }
+
+if reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0") then
+	batteries["bob-battery-2"] = { tier = 2, prog_tier = 3, technology = "bob-battery-2", tint = "41ffdd" }
+	batteries["bob-battery-3"] = { tier = 3, prog_tier = 4, technology = "bob-battery-3", tint = "3dff40" }
+else
+	batteries["bob-lithium-ion-battery"] = { tier = 2, prog_tier = 3, technology = "battery-2", tint = "41ffdd" }
+	batteries["bob-silver-zinc-battery"] = { tier = 3, prog_tier = 4, technology = "battery-3", tint = "3dff40" }
+end
 
 for name, map in pairs(batteries) do
 	-- Fetch item

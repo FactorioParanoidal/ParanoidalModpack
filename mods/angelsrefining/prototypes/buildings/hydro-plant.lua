@@ -64,12 +64,33 @@ local function hydropipepictures2()
   }
 end
 
-circuit_connector_definitions["angels-hydro-plant"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 25, main_offset = util.by_pixel( 50.625,  42), shadow_offset = util.by_pixel( 50.625,  42), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel( 50.625,  42), shadow_offset = util.by_pixel( 50.625,  42), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel( 50.625,  42), shadow_offset = util.by_pixel( 50.625,  42), show_shadow = true },
-  { variation = 25, main_offset = util.by_pixel( 50.625,  42), shadow_offset = util.by_pixel( 50.625,  42), show_shadow = true },
-})
+circuit_connector_definitions["angels-hydro-plant"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 25,
+      main_offset = util.by_pixel(50.625, 42),
+      shadow_offset = util.by_pixel(50.625, 42),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(50.625, 42),
+      shadow_offset = util.by_pixel(50.625, 42),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(50.625, 42),
+      shadow_offset = util.by_pixel(50.625, 42),
+      show_shadow = true,
+    },
+    {
+      variation = 25,
+      main_offset = util.by_pixel(50.625, 42),
+      shadow_offset = util.by_pixel(50.625, 42),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

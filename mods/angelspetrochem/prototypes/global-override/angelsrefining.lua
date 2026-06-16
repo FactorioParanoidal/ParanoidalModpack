@@ -1,17 +1,10 @@
 local OV = angelsmods.functions.OV
 
---ACID OVERRIDE FOR REFINING AND ORES
-for _, resource in pairs(data.raw.resource) do
-  if resource.minable and (resource.minable.required_fluid == "sulfuric-acid") then
-    resource.minable.required_fluid = "angels-liquid-sulfuric-acid"
-  end
-end
-
 OV.patch_recipes({
   {
     name = "angels-ore2-crystal",
     ingredients = {
-      { name = "angels-liquid-hydrofluoric-acid", type = "fluid", amount = "angels-liquid-sulfuric-acid" },
+      { name = "angels-liquid-hydrofluoric-acid", type = "fluid", amount = "sulfuric-acid" },
     },
     crafting_machine_tint = angelsmods.functions.get_recipe_tints({
       "angels-liquid-hydrofluoric-acid",
@@ -21,7 +14,7 @@ OV.patch_recipes({
   {
     name = "angels-ore4-crystal",
     ingredients = {
-      { name = "angels-liquid-hydrochloric-acid", type = "fluid", amount = "angels-liquid-sulfuric-acid" },
+      { name = "angels-liquid-hydrochloric-acid", type = "fluid", amount = "sulfuric-acid" },
     },
     crafting_machine_tint = angelsmods.functions.get_recipe_tints({
       "angels-liquid-hydrochloric-acid",
@@ -31,7 +24,7 @@ OV.patch_recipes({
   {
     name = "angels-ore5-crystal",
     ingredients = {
-      { name = "angels-liquid-nitric-acid", type = "fluid", amount = "angels-liquid-sulfuric-acid" },
+      { name = "angels-liquid-nitric-acid", type = "fluid", amount = "sulfuric-acid" },
     },
     crafting_machine_tint = angelsmods.functions.get_recipe_tints({
       "angels-liquid-nitric-acid",

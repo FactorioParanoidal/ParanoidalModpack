@@ -360,7 +360,7 @@ local pattern = "([^=]*)=?([^=]*)=?([^=]*)=?([^=]*)=?([^=]*)=?([^=]*)=?([^=]*)"
 -------------------------------------------------------------------------------
 ---On gui action
 ---
----@param event table
+---@param event LuaEvent
 ---
 function Controller:onGuiAction(event)
   if event.element ~= nil and (string.find(event.element.name,"^HM.*") or string.find(event.element.name,"^helmod.*")) then
@@ -369,6 +369,15 @@ function Controller:onGuiAction(event)
     event.classname, event.action, event.item1, event.item2, event.item3, event.item4, event.item5 = string.match(event.element.name,pattern)
     event.item = GuiElement.getElementTags(event.element)
 
+    if event.item ~= nil and event.alt == true then
+      if event.shift == true then
+        local new_event = {item=event.item, action="OPEN", classname="HMCreatedOrWhereUsedPanel", item1="from-alt"}
+        Controller:onGuiEvent(new_event)
+      else
+        Player.open_factoriopedia_gui(event.item)
+      end
+      return
+    end
     if event.classname == self.classname and event.action == "CLOSE" then
       Controller:cleanController(Player.native())
     elseif event.classname == "helmod_planner-command" then

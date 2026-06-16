@@ -43,13 +43,13 @@ data:extend({
     max_health = 350,
     corpse = "oil-refinery-remnants",
     dying_explosion = "oil-refinery-explosion",
-    icon_draw_specification = {scale = 2, shift = {0, -0.3}},
+    icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
-    collision_box = {{-2.4, -2.4}, {2.4, 2.4}},
+    collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
     collision_mask = oilrefinery.collision_mask,
-    selection_box = {{-2.5, -2.5}, {2.5, 2.5}},
+    selection_box = { { -2.5, -2.5 }, { 2.5, 2.5 } },
     damaged_trigger_effect = hit_effects.entity(),
     drawing_box_vertical_extension = 0.3,
     module_slots = 2,
@@ -104,8 +104,7 @@ data:extend({
         },
         {
           fadeout = true,
-          north_animation =
-          {
+          north_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
             height = 205,
@@ -114,41 +113,38 @@ data:extend({
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          east_animation =
-          {
+          east_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321;
+            x = 321,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          south_animation =
-          {
+          south_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 2;
+            x = 321 * 2,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          west_animation =
-          {
+          west_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 3;
+            x = 321 * 3,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-        }
-      }
+        },
+      },
     },
     impact_category = "metal-large",
     open_sound = sounds.metal_large_open,
@@ -156,90 +152,83 @@ data:extend({
     working_sound = {
       sound = { filename = "__base__/sound/oil-refinery.ogg" },
       fade_in_ticks = 4,
-      fade_out_ticks = 20
+      fade_out_ticks = 20,
     },
     fluid_boxes = {
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {-1, 2}
-          }
-        }
+            position = { -1, 2 },
+          },
+        },
       },
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {1, 2}
-          }
-        }
+            position = { 1, 2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {-2, -2}
-          }
-        }
+            position = { -2, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {0, -2}
-          }
-        }
+            position = { 0, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {2, -2}
-          }
-        }
-      }
+            position = { 2, -2 },
+          },
+        },
+      },
     },
-    water_reflection =
-    {
-      pictures =
-      {
+    water_reflection = {
+      pictures = {
         filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,
         shift = util.by_pixel(5, 95),
         variation_count = 4,
-        scale = 5
+        scale = 5,
       },
       rotate = false,
-      orientation_to_variation = true
-    }
+      orientation_to_variation = true,
+    },
   },
   {
     type = "item",
@@ -273,7 +262,7 @@ data:extend({
     max_health = 350,
     corpse = "oil-refinery-remnants",
     dying_explosion = "oil-refinery-explosion",
-    icon_draw_specification = {scale = 2, shift = {0, -0.3}},
+    icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
     collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
@@ -334,8 +323,7 @@ data:extend({
         },
         {
           fadeout = true,
-          north_animation =
-          {
+          north_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
             height = 205,
@@ -344,41 +332,38 @@ data:extend({
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          east_animation =
-          {
+          east_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321;
+            x = 321,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          south_animation =
-          {
+          south_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 2;
+            x = 321 * 2,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          west_animation =
-          {
+          west_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 3;
+            x = 321 * 3,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-        }
-      }
+        },
+      },
     },
     impact_category = "metal-large",
     open_sound = sounds.metal_large_open,
@@ -386,89 +371,82 @@ data:extend({
     working_sound = {
       sound = { filename = "__base__/sound/oil-refinery.ogg" },
       fade_in_ticks = 4,
-      fade_out_ticks = 20
+      fade_out_ticks = 20,
     },
     fluid_boxes = {
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {-1, 2}
-          }
-        }
+            position = { -1, 2 },
+          },
+        },
       },
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {1, 2}
-          }
-        }
+            position = { 1, 2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {-2, -2}
-          }
-        }
+            position = { -2, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {0, -2}
-          }
-        }
+            position = { 0, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {2, -2}
-          }
-        }
-      }
+            position = { 2, -2 },
+          },
+        },
+      },
     },
-    water_reflection =
-    {
-      pictures =
-      {
+    water_reflection = {
+      pictures = {
         filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,
         shift = util.by_pixel(5, 95),
         variation_count = 4,
-        scale = 5
+        scale = 5,
       },
       rotate = false,
-      orientation_to_variation = true
+      orientation_to_variation = true,
     },
   },
   {
@@ -502,7 +480,7 @@ data:extend({
     max_health = 300,
     corpse = "oil-refinery-remnants",
     dying_explosion = "oil-refinery-explosion",
-    icon_draw_specification = {scale = 2, shift = {0, -0.3}},
+    icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
     collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
@@ -563,8 +541,7 @@ data:extend({
         },
         {
           fadeout = true,
-          north_animation =
-          {
+          north_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
             height = 205,
@@ -573,41 +550,38 @@ data:extend({
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          east_animation =
-          {
+          east_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321;
+            x = 321,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          south_animation =
-          {
+          south_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 2;
+            x = 321 * 2,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-          west_animation =
-          {
+          west_animation = {
             filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
             width = 321,
-            x = 321 * 3;
+            x = 321 * 3,
             height = 205,
             blend_mode = "additive",
             draw_as_glow = true,
             shift = util.by_pixel(-1, -50),
             scale = 0.5,
           },
-        }
-      }
+        },
+      },
     },
     impact_category = "metal-large",
     open_sound = sounds.metal_large_open,
@@ -615,89 +589,82 @@ data:extend({
     working_sound = {
       sound = { filename = "__base__/sound/oil-refinery.ogg" },
       fade_in_ticks = 4,
-      fade_out_ticks = 20
+      fade_out_ticks = 20,
     },
     fluid_boxes = {
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {-1, 2}
-          }
-        }
+            position = { -1, 2 },
+          },
+        },
       },
       {
         production_type = "input",
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
-            flow_direction="input",
+            flow_direction = "input",
             direction = defines.direction.south,
-            position = {1, 2}
-          }
-        }
+            position = { 1, 2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {-2, -2}
-          }
-        }
+            position = { -2, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {0, -2}
-          }
-        }
+            position = { 0, -2 },
+          },
+        },
       },
       {
         production_type = "output",
         pipe_covers = pipecoverspictures(),
         volume = 100,
-        pipe_connections =
-        {
+        pipe_connections = {
           {
             flow_direction = "output",
             direction = defines.direction.north,
-            position = {2, -2}
-          }
-        }
-      }
+            position = { 2, -2 },
+          },
+        },
+      },
     },
-    water_reflection =
-    {
-      pictures =
-      {
+    water_reflection = {
+      pictures = {
         filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,
         shift = util.by_pixel(5, 95),
         variation_count = 4,
-        scale = 5
+        scale = 5,
       },
       rotate = false,
-      orientation_to_variation = true
-    }
+      orientation_to_variation = true,
+    },
   },
 })

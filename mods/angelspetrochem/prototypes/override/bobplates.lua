@@ -65,16 +65,15 @@ if mods["bobplates"] then
       data.raw.fluid[fluid].fuel_value = (math.floor(vals.fv / 5 + 0.5)) * 5 .. "kJ"
       data.raw.fluid[fluid].emissions_multiplier = vals.em or data.raw.fluid[fluid].emissions_multiplier or 1
       if vals.turr ~= false then
-        table.insert(
-          turret_params,
-          { type = fluid, damage_modifier = math.floor(vals.fv / Energy_table["angels-gas-methane"].fv * 10 + 0.5) / 10 }
-        )
+        table.insert(turret_params, {
+          type = fluid,
+          damage_modifier = math.floor(vals.fv / Energy_table["angels-gas-methane"].fv * 10 + 0.5) / 10,
+        })
       end
     end
   end
   --fuel oil balancing
-  data.raw.recipe["bob-enriched-fuel"].ingredients =
-    { { type = "fluid", name = "bob-liquid-fuel", amount = 100 } } --up from 20
+  data.raw.recipe["bob-enriched-fuel"].ingredients = { { type = "fluid", name = "bob-liquid-fuel", amount = 100 } } --up from 20
 end
 
 -------------------------------------------------------------------------------
@@ -233,22 +232,24 @@ if mods["bobplates"] or mods["bobelectronics"] then
         },
       },
     })
-    if mods["bobequipment"] then
-      OV.add_prereq("bob-personal-roboport-mk3-equipment", "angels-rubbers")
-    end
-    if mods["boblogistics"] then
-      OV.add_prereq("bob-robo-modular-3", "angels-rubbers")
-      OV.add_prereq("bob-robots-2", "angels-rubbers")
-    end
-    if mods["bobmodules"] then
-      OV.add_prereq("effect-transmission-3", "angels-rubbers")
-    end
-    if mods["bobpower"] then
-      OV.add_prereq("bob-electric-pole-3", "angels-rubbers")
-      OV.add_prereq("bob-electric-substation-3", "angels-rubbers")
-    end
-    if mods["bobvehicleequipment"] then
-      OV.add_prereq("bob-vehicle-roboport-equipment-3", "angels-rubbers")
+    if mods["bobelectronics"] then
+      if mods["bobequipment"] then
+        OV.add_prereq("bob-personal-roboport-mk3-equipment", "angels-rubbers")
+      end
+      if mods["boblogistics"] then
+        OV.add_prereq("bob-robo-modular-3", "angels-rubbers")
+        OV.add_prereq("bob-robots-2", "angels-rubbers")
+      end
+      if mods["bobmodules"] then
+        OV.add_prereq("effect-transmission-2", "angels-rubbers")
+      end
+      if mods["bobpower"] then
+        OV.add_prereq("bob-electric-pole-3", "angels-rubbers")
+        OV.add_prereq("bob-electric-substation-3", "angels-rubbers")
+      end
+      if mods["bobvehicleequipment"] then
+        OV.add_prereq("bob-vehicle-roboport-equipment-3", "angels-rubbers")
+      end
     end
     if mods["bobwarfare"] then
       OV.add_prereq("bob-walking-vehicle", "angels-rubbers")
@@ -266,7 +267,8 @@ if mods["bobplates"] then
   if data.raw.recipe["bob-pure-water-pump"] then
     data.raw.recipe["bob-pure-water-pump"].icon = nil
     data.raw.recipe["bob-pure-water-pump"].icon_size = 32
-    data.raw.recipe["bob-pure-water-pump"].icons = { { icon = "__angelsrefininggraphics__/graphics/icons/water-purified.png" } }
+    data.raw.recipe["bob-pure-water-pump"].icons =
+      { { icon = "__angelsrefininggraphics__/graphics/icons/water-purified.png" } }
   end
 end
 
@@ -274,9 +276,9 @@ end
 -- CARBON PROCESSING ----------------------------------------------------------
 -------------------------------------------------------------------------------
 if mods["bobplates"] then
-  OV.global_replace_item("bob-carbon", "angels-solid-carbon")
-  angelsmods.functions.hide("bob-carbon")
-  OV.remove_unlock("bob-chemical-processing-1", "bob-carbon")
+  OV.global_replace_item("carbon", "angels-solid-carbon")
+  angelsmods.functions.hide("carbon")
+  OV.remove_unlock("bob-chemical-processing-1", "carbon")
   OV.remove_unlock("bob-chemical-processing-1", "bob-carbon-from-wood")
   OV.hide_recipe("bob-carbon-from-wood")
   OV.add_prereq("bob-lead-processing", "angels-coal-processing")
@@ -296,8 +298,8 @@ if mods["bobplates"] then
     OV.add_prereq("angels-thorium-power", "bob-tungsten-processing")
   end
 
-  OV.add_prereq("angels-advanced-chemistry-2", "bob-zinc-processing")
-  OV.add_prereq("angels-nitrogen-processing-4", "bob-tungsten-alloy-processing")
+  OV.add_prereq("angels-advanced-chemistry-2", "bob-brass-processing")
+  OV.add_prereq("angels-nitrogen-processing-4", "bob-tungsten-processing")
   OV.add_prereq("angels-advanced-chemistry-5", "bob-advanced-processing-unit")
 elseif mods["bobelectronics"] then
   OV.add_prereq("angels-advanced-chemistry-5", "bob-advanced-processing-unit")

@@ -19,7 +19,13 @@ data:extend({
       { type = "fluid", name = "angels-gas-hydrogen-sulfide", amount = 60 },
       { type = "fluid", name = "angels-gas-carbon-dioxide", amount = 20 },
       { type = "fluid", name = "angels-gas-hydrogen-fluoride", amount = 20 },
-      { type = "item", name = "angels-catalyst-metal-carrier", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-catalyst-metal-carrier",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
     },
     always_show_products = true,
     icons = AF.create_gas_recipe_icon({
@@ -54,7 +60,11 @@ data:extend({
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/solid-sulfur.png", 32 },
     }, "SSS"),
-    crafting_machine_tint = AF.get_recipe_tints({ AF.fluid_color("S"), "angels-gas-hydrogen-sulfide", "angels-gas-oxygen" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      AF.fluid_color("S"),
+      "angels-gas-hydrogen-sulfide",
+      "angels-gas-oxygen",
+    }),
     order = "b[solid-sulfur]",
   },
   {
@@ -77,7 +87,11 @@ data:extend({
     icons = AF.create_gas_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/sulfur-dioxide.png", 72 },
     }, "SOO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-gas-sulfur-dioxide", "angels-gas-oxygen", AF.fluid_color("S") }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-gas-sulfur-dioxide",
+      "angels-gas-oxygen",
+      AF.fluid_color("S"),
+    }),
     order = "ca[gas-sulfur-dioxide]",
   },
   {
@@ -110,7 +124,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-liquid-sulfuric-acid",
-    localised_name = { "fluid-name.angels-liquid-sulfuric-acid" },
+    localised_name = { "fluid-name.sulfuric-acid" },
     category = "chemistry",
     subgroup = "angels-petrochem-sulfur",
     energy_required = 2,
@@ -121,13 +135,17 @@ data:extend({
       { type = "fluid", name = "angels-water-purified", amount = 40 },
     },
     results = {
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 60 },
+      { type = "fluid", name = "sulfuric-acid", amount = 60 },
     },
     always_show_products = true,
     icons = AF.create_liquid_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/sulfuric-acid.png", 72 },
     }, "SHO"),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-sulfuric-acid", "angels-gas-sulfur-dioxide", "angels-water-purified" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "sulfuric-acid",
+      "angels-gas-sulfur-dioxide",
+      "angels-water-purified",
+    }),
     order = "d[liquid-sulfuric-acid]",
   },
   {

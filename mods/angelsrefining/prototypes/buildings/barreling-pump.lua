@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-barreling-pump"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  6, main_offset = util.by_pixel( 0.125,  32.125), shadow_offset = util.by_pixel( 0.125,  32.125), show_shadow = true },
-  { variation =  0, main_offset = util.by_pixel( 41.25, -5.5), shadow_offset = util.by_pixel( 41.25, -5.5), show_shadow = true },
-  { variation =  10, main_offset = util.by_pixel( 0.5, -46.875), shadow_offset = util.by_pixel( 0.5, -46.875), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-38.75, -6.875), shadow_offset = util.by_pixel(-38.75, -6.875), show_shadow = true },
-})
+circuit_connector_definitions["angels-barreling-pump"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 6,
+      main_offset = util.by_pixel(0.125, 32.125),
+      shadow_offset = util.by_pixel(0.125, 32.125),
+      show_shadow = true,
+    },
+    {
+      variation = 0,
+      main_offset = util.by_pixel(41.25, -5.5),
+      shadow_offset = util.by_pixel(41.25, -5.5),
+      show_shadow = true,
+    },
+    {
+      variation = 10,
+      main_offset = util.by_pixel(0.5, -46.875),
+      shadow_offset = util.by_pixel(0.5, -46.875),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-38.75, -6.875),
+      shadow_offset = util.by_pixel(-38.75, -6.875),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

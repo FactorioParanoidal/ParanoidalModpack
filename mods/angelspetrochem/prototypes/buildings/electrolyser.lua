@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-electrolyser"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel( 20.875,  62), shadow_offset = util.by_pixel( 20.875,  62), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 20.875,  62), shadow_offset = util.by_pixel( 20.875,  62), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 20.875,  62), shadow_offset = util.by_pixel( 20.875,  62), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel( 20.875,  62), shadow_offset = util.by_pixel( 20.875,  62), show_shadow = true },
-})
+circuit_connector_definitions["angels-electrolyser"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(20.875, 62),
+      shadow_offset = util.by_pixel(20.875, 62),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(20.875, 62),
+      shadow_offset = util.by_pixel(20.875, 62),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(20.875, 62),
+      shadow_offset = util.by_pixel(20.875, 62),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(20.875, 62),
+      shadow_offset = util.by_pixel(20.875, 62),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -94,7 +115,11 @@ data:extend({
     },
     impact_category = "metal",
     working_sound = {
-      sound = { filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg", volume = 0.65, audible_distance_modifier = 0.5, },
+      sound = {
+        filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg",
+        volume = 0.65,
+        audible_distance_modifier = 0.5,
+      },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
     fluid_boxes = {
@@ -220,7 +245,11 @@ data:extend({
     },
     impact_category = "metal",
     working_sound = {
-      sound = { filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg", volume = 0.65, audible_distance_modifier = 0.5, },
+      sound = {
+        filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg",
+        volume = 0.65,
+        audible_distance_modifier = 0.5,
+      },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
     fluid_boxes = {
@@ -346,7 +375,11 @@ data:extend({
     },
     impact_category = "metal",
     working_sound = {
-      sound = { filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg", volume = 0.65, audible_distance_modifier = 0.5, },
+      sound = {
+        filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg",
+        volume = 0.65,
+        audible_distance_modifier = 0.5,
+      },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
     fluid_boxes = {
@@ -471,7 +504,11 @@ data:extend({
     },
     impact_category = "metal",
     working_sound = {
-      sound = { filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg", volume = 0.65, audible_distance_modifier = 0.5, },
+      sound = {
+        filename = "__angelspetrochemgraphics__/sound/electrolyser.ogg",
+        volume = 0.65,
+        audible_distance_modifier = 0.5,
+      },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
     fluid_boxes = {

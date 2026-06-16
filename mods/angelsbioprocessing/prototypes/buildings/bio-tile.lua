@@ -4,7 +4,10 @@ data:extend({
   {
     type = "item",
     name = "angels-bio-tile",
-    localised_description = { "item-description.angels-bio-tile", string.format("%.6f", pollution_absorption_per_second) },
+    localised_description = {
+      "item-description.angels-bio-tile",
+      string.format("%.6f", pollution_absorption_per_second),
+    },
     icon = "__angelsbioprocessinggraphics__/graphics/icons/bio-tile.png",
     icon_size = 64,
     subgroup = "angels-stone",
@@ -13,7 +16,7 @@ data:extend({
     place_as_tile = {
       result = "angels-bio-tile",
       condition_size = 4,
-      condition = {layers = {water_tile = true}},
+      condition = { layers = { water_tile = true } },
     },
   },
   {
@@ -22,12 +25,13 @@ data:extend({
     needs_correction = false,
     minable = { mining_time = 0.5, result = "angels-bio-tile" },
     mined_sound = { filename = "__base__/sound/deconstruct-bricks.ogg" },
-    collision_mask = {layers={
-      ground_tile=true}},
+    collision_mask = { layers = {
+      ground_tile = true,
+    } },
     walking_speed_modifier = 1.3,
     layer = 80,
     decorative_removal_probability = 1,
-    absorptions_per_second = {pollution = pollution_absorption_per_second},
+    absorptions_per_second = { pollution = pollution_absorption_per_second },
     variants = {
       main = {
         {

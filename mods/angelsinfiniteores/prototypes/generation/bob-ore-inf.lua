@@ -306,40 +306,6 @@ if mods["bobores"] then
       end
     end
 
-    if bobmods.ores.sulfur.enabled == true then
-      if data.raw.resource["sulfur"] then
-        angelsmods.functions.add_resource("make", {
-          name = "infinite-sulfur",
-          get = "sulfur",
-          order = "b",
-          sheet = 3,
-          infinite = true,
-          glow = true,
-          var = 3,
-          map_color = { r = 0.8, g = 0.75, b = 0.1 },
-          tint = { r = 0.8, g = 0.75, b = 0.1 },
-          mining_time = 1,
-          type = "item",
-          minimum = angelsmods.ores.yield,
-          normal = 1500,
-          maximum = 6000,
-          acid_to_mine = "water",
-          output_name = "sulfur",
-          output_min = 1,
-          output_max = 1,
-          output_probability = angelsmods.ores.loweryield,
-          -- icon = "__bobores__/graphics/icons/sulfur.png",
-          autoplace = {
-            starting_area = false,
-            -- resource_index = 39,
-            base_density = 5,
-            regular_rq_factor_multiplier = 0.3,
-            starting_rq_factor_multiplier = 0.5,
-          },
-        })
-      end
-    end
-
     if bobmods.ores.thorium.enabled == true then
       if data.raw.resource["thorium-ore"] then
         angelsmods.functions.add_resource("make", {

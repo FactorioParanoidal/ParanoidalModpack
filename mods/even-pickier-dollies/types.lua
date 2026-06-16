@@ -35,7 +35,7 @@
 ---@field dolly_moved_entity_id fun(): uint
 ---@field add_oblong_name fun(entity_name: string): boolean
 ---@field remove_oblong_name fun(entity_name: string): boolean
----@field get_oblong_names fun(): {[string]: true}
+---@field get_oblong_names fun(): {[string]: number}
 ---@field add_blacklist_name fun(entity_name: string): boolean
 ---@field remove_blacklist_name fun(entity_name: string): boolean
 ---@field get_blacklist_names fun(): {[string]: true}
@@ -47,7 +47,7 @@
 ---@class EvenPickierDolliesStorage
 ---@field players {[uint]: EvenPickierDolliesPlayerData}
 ---@field blacklist_names {[string]: true}
----@field oblong_names {[string]: true}
+---@field oblong_names {[string]: number}
 
 ---@class EvenPickierDolliesPlayerData
 ---@field dolly_tick uint
@@ -56,9 +56,9 @@
 ---@class EvenPickierDolliesMoveEvent
 ---@field player LuaPlayer
 ---@field pdata EvenPickierDolliesPlayerData
----@field tick integer,
+---@field tick integer
 ---@field entity LuaEntity
----@field save_time uint,
+---@field save_time uint
 ---@field direction defines.direction?
 ---@field rotate defines.direction?
 ---@field distance number

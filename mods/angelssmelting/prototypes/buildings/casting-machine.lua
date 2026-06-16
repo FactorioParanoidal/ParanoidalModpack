@@ -32,32 +32,41 @@ end
 ---@param is_flipped boolean?
 ---@return data.CraftingMachineGraphicsSet
 local function get_graphics_set(is_flipped, pipes)
-	local flipped = is_flipped == true and "-flipped" or ""
+  local flipped = is_flipped == true and "-flipped" or ""
 
   ---@type data.CraftingMachineGraphicsSet
   local graphics_set = {
     animation = {
       layers = {
-        util.sprite_load("__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation" .. flipped, {
-          priority = "high",
-          frame_count = 49,
-          animation_speed = 0.5,
-          scale = 0.5,
-        }),
-        util.sprite_load("__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation-shadow" .. flipped, {
-          priority = "high",
-          frame_count = 49,
-          animation_speed = 0.5,
-          draw_as_shadow = true,
-          scale = 0.5,
-        }),
-        util.sprite_load("__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-lights" .. flipped, {
-          priority = "high",
-          frame_count = 49,
-          animation_speed = 0.5,
-          draw_as_light = true,
-          scale = 0.5,
-        }),
+        util.sprite_load(
+          "__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation" .. flipped,
+          {
+            priority = "high",
+            frame_count = 49,
+            animation_speed = 0.5,
+            scale = 0.5,
+          }
+        ),
+        util.sprite_load(
+          "__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-animation-shadow" .. flipped,
+          {
+            priority = "high",
+            frame_count = 49,
+            animation_speed = 0.5,
+            draw_as_shadow = true,
+            scale = 0.5,
+          }
+        ),
+        util.sprite_load(
+          "__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-lights" .. flipped,
+          {
+            priority = "high",
+            frame_count = 49,
+            animation_speed = 0.5,
+            draw_as_light = true,
+            scale = 0.5,
+          }
+        ),
       },
     },
     working_visualisations = {
@@ -65,23 +74,47 @@ local function get_graphics_set(is_flipped, pipes)
       {
         always_draw = true,
         render_layer = "floor",
-        animation = util.sprite_load("__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-integration-patch" .. flipped, {
-          priority = "high",
-          scale = 0.5,
-        }),
+        animation = util.sprite_load(
+          "__angelssmeltinggraphics__/graphics/entity/casting-machine/casting-machine-integration-patch" .. flipped,
+          {
+            priority = "high",
+            scale = 0.5,
+          }
+        ),
       },
-    }
+    },
   }
 
   return graphics_set
 end
 
-circuit_connector_definitions["angels-casting-machine"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-41.125,  35.125), shadow_offset = util.by_pixel(-41.125,  35.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-41.125,  35.125), shadow_offset = util.by_pixel(-41.125,  35.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-41.125,  35.125), shadow_offset = util.by_pixel(-41.125,  35.125), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-41.125,  35.125), shadow_offset = util.by_pixel(-41.125,  35.125), show_shadow = true },
-})
+circuit_connector_definitions["angels-casting-machine"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-41.125, 35.125),
+      shadow_offset = util.by_pixel(-41.125, 35.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-41.125, 35.125),
+      shadow_offset = util.by_pixel(-41.125, 35.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-41.125, 35.125),
+      shadow_offset = util.by_pixel(-41.125, 35.125),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-41.125, 35.125),
+      shadow_offset = util.by_pixel(-41.125, 35.125),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

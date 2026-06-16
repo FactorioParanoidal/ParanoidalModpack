@@ -23,7 +23,11 @@ if angelsmods.addons.mobility.petrotrain.enabled then
         },
         time = 15,
       },
-      prerequisites = { "speed-module", "efficiency-module", "chemical-science-pack", "angels-gas-processing", "angels-oil-processing" },
+      prerequisites = {
+        "speed-module",
+        "efficiency-module",
+        "chemical-science-pack",
+      },
     },
     {
       unit = {
@@ -36,7 +40,13 @@ if angelsmods.addons.mobility.petrotrain.enabled then
         },
         time = 30,
       },
-      prerequisites = { "speed-module-2", "efficiency-module-2", "low-density-structure", "electric-engine", "production-science-pack" },
+      prerequisites = {
+        "speed-module-2",
+        "efficiency-module-2",
+        "low-density-structure",
+        "electric-engine",
+        "production-science-pack",
+      },
     },
     {
       unit = {

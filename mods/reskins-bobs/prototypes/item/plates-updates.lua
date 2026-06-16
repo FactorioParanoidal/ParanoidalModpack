@@ -86,8 +86,8 @@ local intermediates = {
 	["bob-cobalt-oxide"] = ternary(get_value(angelsmods, "trigger", "smelting_products", "cobalt", "ingot"), nil, { subgroup = "powders" }),
 	["bob-tungsten-oxide"] = ternary(get_value(angelsmods, "trigger", "smelting_products", "tungsten", "powder"), nil, { subgroup = "powders" }),
 	["bob-powdered-tungsten"] = ternary(get_value(angelsmods, "trigger", "smelting_products", "tungsten", "powder"), nil, { subgroup = "powders" }),
-	["bob-lead-oxide"] = ternary(get_value(angelsmods, "triggers", "smelting_products", "lead", "ingot"), nil, { subgroup = "powders" }),
-	["bob-silver-nitrate"] = ternary(get_value(angelsmods, "triggers", "smelting_products", "silver", "ingot"), nil, { subgroup = "powders" }),
+	["bob-lead-oxide"] = ternary(get_value(angelsmods, "trigger", "smelting_products", "lead", "ingot"), nil, { subgroup = "powders" }),
+	["bob-silver-nitrate"] = ternary(get_value(angelsmods, "trigger", "smelting_products", "silver", "ingot"), nil, { subgroup = "powders" }),
 }
 
 reskins.internal.create_icons_from_list(intermediates, inputs)

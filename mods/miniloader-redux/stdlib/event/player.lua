@@ -53,10 +53,17 @@ function Player.get(player)
 end
 
 --- Get the players saved data table. Creates it if it doesn't exist.
--- @tparam number index The player index to get data for
+-- @param number index The player index to get data for
 -- @treturn table the player's storage data
 function Player.pdata(index)
     return storage.players and storage.players[index] or Player.init(index)
+end
+
+--- Returns all known player indexes
+--- @return integer[]
+function Player.known_players()
+    storage.players = storage.players or {}
+    return table.keys(storage.players)
 end
 
 --- Merge a copy of the passed data to all players in `storage.players`.

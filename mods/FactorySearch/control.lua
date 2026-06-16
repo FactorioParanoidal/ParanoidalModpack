@@ -8,7 +8,7 @@ Search = require "scripts.search"
 SearchResults = require "scripts.search-results"
 ResultLocation = require "scripts.result-location"
 SearchGui = require "scripts.search-gui"
-require "scripts.remote"
+Interop = require "scripts.remote"
 
 ---@alias ItemName string
 ---@alias EntityName string
@@ -36,6 +36,7 @@ require "scripts.remote"
 ---@field searching_label LuaGuiElement label
 ---@field search_progressbar LuaGuiElement progressbar
 ---@field result_flow LuaGuiElement flow
+---@field recent_items_flow LuaGuiElement flow
 ---@field highlighted_button? LuaGuiElement sprite-button
 
 ---@class (exact) PlayerData
@@ -237,6 +238,19 @@ local function generate_item_to_entity_table()
   storage.item_to_entities = item_to_entities
 end
 
+local function setup_interop_callback()
+  Interop.set_on_external_item_callback(function(player_index, item_name, source)
+    Interop.add_recent_item(player_index, item_name, source)
+    local player = game.get_player(player_index)
+    if player then
+      local player_data = storage.players[player_index]
+      if player_data and player_data.refs.frame.valid and player_data.refs.frame.visible then
+        SearchGui.update_recent_panel(player_data)
+      end
+    end
+  end)
+end
+
 local function on_init()
   ---@type table<PlayerIndex, PlayerData>
   storage.players = {}
@@ -244,8 +258,17 @@ local function on_init()
   storage.current_searches = {}
   ---@type boolean
   storage.multiple_surfaces = false
+  ---@type table<PlayerIndex, {item_name: string, source: string}[]>
+  storage.recent_external_items = {}
   update_surface_count()
   generate_item_to_entity_table()
+  Interop.subscribe_to_events()
+  setup_interop_callback()
+end
+
+local function on_load()
+  Interop.subscribe_to_events()
+  setup_interop_callback()
 end
 
 local function on_configuration_changed()
@@ -263,11 +286,17 @@ local function on_configuration_changed()
   storage.current_searches = {}
 
   storage.multiple_surfaces = false
+  if not storage.recent_external_items then
+    storage.recent_external_items = {}
+  end
   update_surface_count()
   generate_item_to_entity_table()
+  Interop.subscribe_to_events()
+  setup_interop_callback()
 end
 
 Control.on_init = on_init
+Control.on_load = on_load
 Control.on_configuration_changed = on_configuration_changed
 Control.events = {
   [defines.events.on_surface_created] = update_surface_count,

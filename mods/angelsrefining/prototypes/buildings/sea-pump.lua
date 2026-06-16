@@ -22,10 +22,18 @@ data:extend({
     flags = { "placeable-neutral", "player-creation", "filter-directions" },
     hidden_in_factoriopedia = true,
     collision_mask = { layers = { object = true, train = true, is_object = true, is_lower_object = true } },
-    tile_buildability_rules =
-    {
-      { area = { { -1.4, -1.4 }, { 1.4, 0.4 } }, required_tiles = { layers = { ground_tile = true } }, colliding_tiles = { layers = { water_tile = true } }, remove_on_collision = true },
-      { area = { { -2, -3 }, { 2, -2 } }, required_tiles = { layers = { water_tile = true } }, colliding_tiles = { layers = {} } },
+    tile_buildability_rules = {
+      {
+        area = { { -1.4, -1.4 }, { 1.4, 0.4 } },
+        required_tiles = { layers = { ground_tile = true } },
+        colliding_tiles = { layers = { water_tile = true } },
+        remove_on_collision = true,
+      },
+      {
+        area = { { -2, -3 }, { 2, -2 } },
+        required_tiles = { layers = { water_tile = true } },
+        colliding_tiles = { layers = {} },
+      },
     },
     minable = { mining_time = 0.1, result = "angels-sea-pump" },
     max_health = 200,
@@ -79,7 +87,7 @@ data:extend({
       fade_in_ticks = 4,
       fade_out_ticks = 20,
     },
-    perceived_performance = {minimum = 0.5},
+    perceived_performance = { minimum = 0.5 },
     always_draw_fluid = true,
     graphics_set = {
       base_pictures = {
@@ -189,10 +197,18 @@ data:extend({
     icon_size = 32,
     flags = { "placeable-neutral", "player-creation", "filter-directions" },
     collision_mask = { layers = { object = true, train = true, is_object = true, is_lower_object = true } },
-    tile_buildability_rules =
-    {
-      {area = { { -1.4, -1.4 }, { 1.4, 0.4 } }, required_tiles = { layers = { ground_tile = true } }, colliding_tiles = { layers = { water_tile = true } }, remove_on_collision = true },
-      { area = { { -2, -3 }, { 2, -2 } }, required_tiles = { layers = { water_tile = true } }, colliding_tiles = { layers = {} } },
+    tile_buildability_rules = {
+      {
+        area = { { -1.4, -1.4 }, { 1.4, 0.4 } },
+        required_tiles = { layers = { ground_tile = true } },
+        colliding_tiles = { layers = { water_tile = true } },
+        remove_on_collision = true,
+      },
+      {
+        area = { { -2, -3 }, { 2, -2 } },
+        required_tiles = { layers = { water_tile = true } },
+        colliding_tiles = { layers = {} },
+      },
     },
     minable = { mining_time = 0.1, result = "angels-sea-pump" },
     placeable_by = { item = "angels-sea-pump", count = 1 },

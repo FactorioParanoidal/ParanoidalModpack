@@ -106,7 +106,13 @@ data:extend({
       { type = "fluid", name = "angels-liquid-nutrient-pulp", amount = 20 },
     },
     results = {
-      { type = "item", name = "angels-biter-queen-small", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-biter-queen-small",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
       {
         type = "item",
         name = "angels-biter-queen-small",
@@ -163,7 +169,13 @@ data:extend({
       { type = "fluid", name = "angels-liquid-nutrient-pulp", amount = 40 },
     },
     results = {
-      { type = "item", name = "angels-biter-queen-medium", amount = 1, ignored_by_productivity = 1, ignored_by_stats = 1 },
+      {
+        type = "item",
+        name = "angels-biter-queen-medium",
+        amount = 1,
+        ignored_by_productivity = 1,
+        ignored_by_stats = 1,
+      },
       {
         type = "item",
         name = "angels-biter-queen-medium",
@@ -229,7 +241,13 @@ data:extend({
         show_details_in_recipe_tooltip = false,
       },
       { type = "item", name = "angels-biter-big-egg", amount = 1 },
-      { type = "item", name = "angels-biter-big-egg", amount = 1, probability = 0.5, show_details_in_recipe_tooltip = false },
+      {
+        type = "item",
+        name = "angels-biter-big-egg",
+        amount = 1,
+        probability = 0.5,
+        show_details_in_recipe_tooltip = false,
+      },
     },
     allow_productivity = true,
     always_show_products = true,
@@ -429,7 +447,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-biter-queen-small-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-small" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-small" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -450,16 +468,13 @@ data:extend({
       },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-queen-small" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-queen-small" }, "angels-bio-raw-meat"),
     order = "a[small]-b[queen]",
   },
   {
     type = "recipe",
     name = "angels-biter-small-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-small" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-small" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -473,16 +488,13 @@ data:extend({
       { type = "item", name = "angels-crystal-splinter-raw", amount = 1, probability = 0.9 },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-small" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-small" }, "angels-bio-raw-meat"),
     order = "a[small]-a[normal]",
   },
   {
     type = "recipe",
     name = "angels-biter-queen-medium-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-medium" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-medium" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -503,16 +515,13 @@ data:extend({
       },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-queen-medium" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-queen-medium" }, "angels-bio-raw-meat"),
     order = "b[medium]-b[queen]",
   },
   {
     type = "recipe",
     name = "angels-biter-medium-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-medium" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-medium" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -526,16 +535,13 @@ data:extend({
       { type = "item", name = "angels-crystal-shard-raw", amount = 1, probability = 0.7 },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-medium" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-medium" }, "angels-bio-raw-meat"),
     order = "b[medium]-a[normal]",
   },
   {
     type = "recipe",
     name = "angels-biter-queen-big-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-big" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-queen-big" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -556,16 +562,13 @@ data:extend({
       },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-queen-big" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-queen-big" }, "angels-bio-raw-meat"),
     order = "c[big]-b[queen]",
   },
   {
     type = "recipe",
     name = "angels-biter-big-butchering",
-    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-big" }  },
+    localised_name = { "recipe-name.angels-butchering", { "item-name.angels-biter-big" } },
     category = "angels-bio-butchery",
     subgroup = "angels-bio-biter-butchery",
     enabled = false,
@@ -579,10 +582,7 @@ data:extend({
       { type = "item", name = "angels-crystal-full-raw", amount = 1, probability = 0.5 },
     },
     main_product = "angels-bio-raw-meat",
-    icons = angelsmods.functions.create_solid_recipe_icon(
-      { "angels-biter-big" },
-      "angels-bio-raw-meat"
-    ),
+    icons = angelsmods.functions.create_solid_recipe_icon({ "angels-biter-big" }, "angels-bio-raw-meat"),
     order = "c[big]-a[normal]",
   },
 })

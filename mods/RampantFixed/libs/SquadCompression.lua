@@ -392,15 +392,15 @@ local function squadSmoothCompress(map, squad, compressedSize)
 		if unitsToCreate > 0 then 
 			for i = 1, unitsToCreate do
 				local unitSample = compressData.unitSample
-				local entity = surface.create_entity({
+				local newEntity = surface.create_entity({
 									name = unitSample.name,
 									position = unitSample.position, 
 									direction = unitSample.direction,
 									force = unitSample.force,
 									})
-				entities[#entities+1] = entity	
 				if newEntity and newEntity.valid then 
-					group.add_member(entity)									
+					entities[#entities+1] = newEntity	
+					group.add_member(newEntity)									
 				end	
 			end
 		elseif unitsToCreate < 0 then
@@ -415,7 +415,7 @@ local function squadSmoothCompress(map, squad, compressedSize)
 			local entity = entities[i]
 			local stackSize = mCeil((compressData.count - unitsCounted) / i)
 			unitsCounted = unitsCounted + stackSize
-			if stackSize > 1 then
+			if (stackSize > 1) and entity and entity.valid then
 				compressedUnits[entity.unit_number] = {count = stackSize, entity = entity}
 					if squad.nonRampantSquad then
 						compressedUnits[entity.unit_number].textId = draw_CompressedText(compressedUnits[entity.unit_number].count, surface, entity, {r = 0, g = 0.5, b = 0, a = 0.3})

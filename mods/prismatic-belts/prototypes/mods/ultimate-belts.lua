@@ -1,102 +1,92 @@
--- Copyright (c) Kirazy
--- Part of Prismatic Belts
---
--- See LICENSE.md in the project directory for license information.
-
 local api = require("prototypes.api")
+local sprite_utils = { colors = require("__reskins-sprite-utils__.colors") }
 
-if not (mods["UltimateBelts"] or mods["UltimateBeltsSpaceAge"]) then
+if not (mods["UltimateBelts"] or mods["UltimateBeltsSpaceAge"] or mods["NovasUltimateBelts"] or mods["UltimateBeltsSpaceAgeFork"]) then
 	return
 end
 
-local base_tint = util.color("404040")
-local tint_base_as_overlay = true
-local variant = api.defines.belt_sprites.turbo
+local default_base_tint = sprite_utils.colors.from_argb("FF404040")
 
-local tiers = {
-	["ultra-fast-"] = { tint = util.color("00b30cff") },
-	["extreme-fast-"] = { tint = util.color("e00000ff"), arrow_tint = util.color("5") },
-	["ultra-express-"] = { tint = util.color("3604b5e8"), arrow_tint = util.color("5") },
-	["extreme-express-"] = { tint = util.color("002bffff"), arrow_tint = util.color("5") },
-	["ultimate-"] = { tint = util.color("00ffddd1") },
-	["original-ultimate-"] = { tint = util.color("00ffddd1") },
+---@type PrismaticBelts.TransportBeltIconInputs
+local default_belt_icon = {
+	use_three_arrow_variant = true,
 }
 
--- Setup all the entities to use the updated belt animation sets
-for prefix, properties in pairs(tiers) do
-	-- Fetch entities
-	local entities = {
-		belt = data.raw["transport-belt"][prefix .. "belt"],
-		splitter = data.raw["splitter"][prefix .. "splitter"],
-		underground = data.raw["underground-belt"][prefix .. "underground-belt"],
-		loader = data.raw["loader"]["ub-" .. prefix .. "loader"],
+---@type PrismaticBelts.TransportBeltInputsMapping
+local transport_belt_inputs_map = {
+	["ultra-fast-belt"] = {
+		logistics_technology = {
+			name = "ultra-fast-logistics",
+		},
+		belt_icon = default_belt_icon,
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("FF00B30C"),
+		},
+		forced_connectable_belt_entities = {
+			{ name = "ultra-fast-splitter", type_name = "splitter" },
+		},
+	},
+	["extreme-fast-belt"] = {
+		logistics_technology = {
+			name = "extreme-fast-logistics",
+			arrow_tint = { 0.2, 0.2, 0.2, 0 },
+		},
+		belt_icon = util.merge({ default_belt_icon, { arrow_tint = { 0.2, 0.2, 0.2, 0 } } }),
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("FFE00000"),
+			arrow_tint = sprite_utils.colors.from_argb("FF555555"),
+		},
+	},
+	["ultra-express-belt"] = {
+		logistics_technology = {
+			name = "ultra-express-logistics",
+			arrow_tint = { 0.2, 0.2, 0.2, 0 },
+		},
+		belt_icon = util.merge({ default_belt_icon, { arrow_tint = { 0.2, 0.2, 0.2, 0 } } }),
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("E83604B5"),
+			arrow_tint = sprite_utils.colors.from_argb("FF555555"),
+		},
+	},
+	["extreme-express-belt"] = {
+		logistics_technology = {
+			name = "extreme-express-logistics",
+			arrow_tint = { 0.2, 0.2, 0.2, 0 },
+		},
+		belt_icon = util.merge({ default_belt_icon, { arrow_tint = { 0.2, 0.2, 0.2, 0 } } }),
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("FF002BFF"),
+			arrow_tint = sprite_utils.colors.from_argb("FF555555"),
+		},
+	},
+	["ultimate-belt"] = {
+		logistics_technology = {
+			name = "ultimate-logistics",
+		},
+		belt_icon = default_belt_icon,
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("D100FFDD"),
+		},
+		forced_connectable_belt_entities = {
+			{ name = "original-ultimate-splitter", type_name = "splitter" },
+			{ name = "original-ultimate-underground-belt", type_name = "underground-belt" },
+		},
+	},
+	["original-ultimate-belt"] = {
+		logistics_technology = {
+			name = "original-ultimate-logistics",
+		},
+		belt_icon = default_belt_icon,
+		belt_animation_set = {
+			base_tint = default_base_tint,
+			mask_tint = sprite_utils.colors.from_argb("D100FFDD"),
+		},
+	},
+}
 
-		-- Miniloader
-		miniloader = data.raw["loader-1x1"]["ub-" .. prefix .. "miniloader-loader"],
-		filter_miniloader = data.raw["loader-1x1"]["ub-" .. prefix .. "filter-miniloader-loader"],
-
-		-- Deadlock Stacking Beltboxes and Compact loaders
-		deadlock_loader = data.raw["loader-1x1"][prefix .. "belt-loader"],
-
-		-- Loaders Modernized
-		mdrn_loader = data.raw["loader-1x1"][prefix .. "mdrn-loader"],
-		mdrn_loader_split = data.raw["loader-1x1"][prefix .. "mdrn-loader-split"],
-
-		-- AAI Loaders
-		aai_loader = data.raw["loader-1x1"]["aai-" .. prefix .. "loader"],
-	}
-
-	-- Reskin the belt item
-	local belt_item = data.raw["item"][prefix .. "belt"]
-
-	if belt_item then
-		belt_item.icons = api.get_transport_belt_icon({
-			use_three_arrow_variant = true,
-			base_tint = base_tint,
-			mask_tint = properties.tint,
-			arrow_tint = properties.arrow_tint and { 0.2, 0.2, 0.2, 0 } or nil,
-		})
-
-		-- Update entity icon to match
-		if entities.belt then
-			entities.belt.icons = belt_item.icons
-		end
-	end
-
-	-- Reskin all related entity types
-	for _, entity in pairs(entities) do
-		if entity then
-			entity.belt_animation_set = api.get_transport_belt_animation_set({
-				base_tint = base_tint,
-				tint_base_as_overlay = tint_base_as_overlay,
-				mask_tint = properties.tint,
-				tint_mask_as_overlay = true,
-				variant = variant,
-				arrow_tint = properties.arrow_tint,
-			})
-		end
-	end
-
-	-- Setup remnants
-	if entities.belt then
-		api.create_remnant(prefix .. "belt", {
-			base_tint = base_tint,
-			tint_base_as_overlay = tint_base_as_overlay,
-			mask_tint = properties.tint,
-			tint_mask_as_overlay = true,
-			variant = variant,
-			arrow_tint = properties.arrow_tint,
-		})
-	end
-
-	-- Setup logistics technologies
-	local technology = data.raw["technology"][prefix .. "logistics"]
-
-	if technology then
-		technology.icons = api.get_transport_belt_technology_icon({
-			base_tint = util.color("404040"),
-			mask_tint = properties.tint,
-			arrow_tint = properties.arrow_tint and { 0.2, 0.2, 0.2, 0 } or nil,
-		})
-	end
-end
+api.transform_belts_and_related_connectables(transport_belt_inputs_map)

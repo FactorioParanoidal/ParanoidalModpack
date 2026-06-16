@@ -109,7 +109,7 @@ data:extend({
     auto_recycle = false,
     ingredients = {
       { type = "item", name = "angels-anode-copper", amount = 12 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 30 },
+      { type = "fluid", name = "sulfuric-acid", amount = 30 },
     },
     results = {
       { type = "item", name = "angels-ingot-copper", amount = 12 },
@@ -269,17 +269,12 @@ data:extend({
     results = {
       { type = "item", name = "copper-plate", amount = 4 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelssmeltinggraphics__/graphics/icons/plate-copper.png",
-          icon_size = 32,
-        }
+        icon = "__angelssmeltinggraphics__/graphics/icons/plate-copper.png",
+        icon_size = 32,
       },
-      angelsmods.functions.get_object_icons("angels-liquid-molten-copper"),
-      { -10, -10 },
-      0.4375
-    ),
+    }, angelsmods.functions.get_object_icons("angels-liquid-molten-copper"), { -10, -10 }, 0.4375),
     order = "j[angels-plate-copper]-c", -- j[angels-plate-copper]-a reserved for crushed stiratite smelting (see global overrides)
   }, -- j[angels-plate-copper]-b reserved for base game smelting recipe (see global overrides)
   {
@@ -298,17 +293,12 @@ data:extend({
     results = {
       { type = "item", name = "copper-plate", amount = 4 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelssmeltinggraphics__/graphics/icons/plate-copper.png",
-          icon_size = 32,
-        }
+        icon = "__angelssmeltinggraphics__/graphics/icons/plate-copper.png",
+        icon_size = 32,
       },
-      angelsmods.functions.get_object_icons("angels-roll-copper"),
-      { -10, -10 },
-      0.4375
-    ),
+    }, angelsmods.functions.get_object_icons("angels-roll-copper"), { -10, -10 }, 0.4375),
     order = "j[angels-plate-copper]-d",
   },
   {
@@ -321,23 +311,19 @@ data:extend({
     enabled = false,
     allow_decomposition = false,
     auto_recycle = false,
+    allow_as_intermediate = false,
     ingredients = {
       { type = "item", name = "angels-wire-coil-copper", amount = 4 },
     },
     results = {
       { type = "item", name = "copper-cable", amount = 16 },
     },
-    icons = angelsmods.functions.add_icon_layer(
+    icons = angelsmods.functions.add_icon_layer({
       {
-        {
-          icon = "__angelssmeltinggraphics__/graphics/icons/wire-copper.png",
-          icon_size = 32,
-        }
+        icon = "__angelssmeltinggraphics__/graphics/icons/wire-copper.png",
+        icon_size = 32,
       },
-      angelsmods.functions.get_object_icons("angels-wire-coil-copper"),
-      { -10, -10 },
-      0.4375
-    ),
+    }, angelsmods.functions.get_object_icons("angels-wire-coil-copper"), { -10, -10 }, 0.4375),
     order = "k[angels-wire-copper]-e", -- k[angels-wire-copper]-a reserved for base game recipe (see global overrides)
   },
 })

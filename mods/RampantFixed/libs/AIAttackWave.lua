@@ -330,7 +330,7 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 		if squadPosition then
 			local squad = createSquad(squadPosition, map, nil, true)
 
-			squad.maxDistance = 12
+			squad.maxDistance = 17 * CHUNK_SIZE
 			squad.siege = false
 
 			universe.formGroupCommand.group = squad.group
@@ -348,7 +348,11 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 				universe.groupNumberToSquad[squad.groupNumber] = squad
 				squadCreated = true
 				
-				map.resourceSettleTick = game.tick + 1800*60	-- 30 min
+				if (map.state == constants.AI_STATE_SIEGE) or (map.state == constants.AI_STATE_MIGRATING) then
+					map.resourceSettleTick = game.tick + 3600*5
+				else
+					map.resourceSettleTick = game.tick + 3600*30	-- 30 min
+				end	
 			else
 				squadCreated = nil
 				if (squad.group.valid) then
@@ -598,7 +602,6 @@ function aiAttackWave.processNonRampantBuilders(universe, tick)
 				squad.nextCommandTick = tick + 36000	
 				squad.checkTick = tick + 36000	-- some groups get stuck 
 				squad.status = SQUAD_BUILDING
-				
 				local cmd = {type = defines.command.stop, ticks_to_wait = 3600*10, distraction = defines.distraction.none}
 				newGroup.set_command(cmd)
 				

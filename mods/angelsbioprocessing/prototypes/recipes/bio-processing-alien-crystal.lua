@@ -161,6 +161,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -193,6 +194,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -225,6 +227,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -400,6 +403,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -432,6 +436,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -464,6 +469,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -640,6 +646,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -672,6 +679,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",
@@ -704,6 +712,7 @@ data:extend({
       { type = "item", name = "angels-milling-drum", amount = 1, ignored_by_stats = 1, ignored_by_productivity = 1 },
     },
     allow_decomposition = false,
+    hide_from_signal_gui = false,
     icons = {
       {
         icon = "__angelsbioprocessinggraphics__/graphics/icons/crystal-powder.png",

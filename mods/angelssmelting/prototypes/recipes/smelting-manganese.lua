@@ -89,7 +89,7 @@ data:extend({
     auto_recycle = false,
     ingredients = {
       { type = "item", name = "angels-processed-manganese", amount = 4 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 40 },
+      { type = "fluid", name = "sulfuric-acid", amount = 40 },
     },
     results = {
       { type = "item", name = "angels-cathode-manganese", amount = 12 },
@@ -113,7 +113,7 @@ data:extend({
     ingredients = {
       { type = "item", name = "angels-solid-manganese-oxide", amount = 12 },
       { type = "item", name = "angels-ingot-iron", amount = 4, ignored_by_stats = 4 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 40 },
+      { type = "fluid", name = "sulfuric-acid", amount = 40 },
     },
     results = {
       { type = "item", name = "angels-cathode-manganese", amount = 12 },

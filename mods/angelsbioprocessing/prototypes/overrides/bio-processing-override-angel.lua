@@ -6,7 +6,14 @@ if angelsmods.trigger.smelting_products["glass"].mixture then --only change it i
 end
 
 -- FARMING TOOLTIPS
-for _, item_name in pairs({ "angels-solid-beans", "angels-solid-corn", "angels-solid-leafs", "angels-solid-nuts", "angels-solid-pips", "angels-solid-fruit" }) do
+for _, item_name in pairs({
+  "angels-solid-beans",
+  "angels-solid-corn",
+  "angels-solid-leafs",
+  "angels-solid-nuts",
+  "angels-solid-pips",
+  "angels-solid-fruit",
+}) do
   local item = data.raw["item"][item_name]
   if item then
     local origin_items = {}
@@ -63,14 +70,34 @@ OV.add_prereq("speed-module-3", "angels-bio-processing-crystal-full")
 OV.add_prereq("productivity-module-3", "angels-bio-processing-crystal-full")
 OV.add_prereq("efficiency-module-3", "angels-bio-processing-crystal-full")
 
+if mods["quality"] then
+  OV.modify_input("quality-module", { type = "item", name = "angels-crystal-splinter-harmonic", amount = 1 })
+  OV.modify_input("quality-module-2", { type = "item", name = "angels-crystal-shard-harmonic", amount = 1 })
+  OV.modify_input("quality-module-3", { type = "item", name = "angels-crystal-full-harmonic", amount = 1 })
+
+  OV.add_prereq("quality-module", "angels-bio-processing-crystal-splinter-2")
+  OV.add_prereq("quality-module-2", "angels-bio-processing-crystal-shard-2")
+  OV.add_prereq("quality-module-3", "angels-bio-processing-crystal-full")
+end
+
 for _, type in pairs({ "speed", "efficiency", "productivity" }) do
   -- remove the marked as upgrade from base game
   for _, tier in pairs({ "2", "3" }) do
-    local tech = data.raw.technology[type .. "-module-"..tier]
+    local tech = data.raw.technology[type .. "-module-" .. tier]
     if tech then
       tech.upgrade = false
     end
   end
+end
+
+for _, recipe_name in pairs({
+  "angels-bio-yield-module",
+  "angels-bio-yield-module-2",
+  "angels-bio-yield-module-3",
+  "angels-bio-yield-module-4",
+  "angels-bio-yield-module-5",
+}) do
+  OV.add_additional_category(recipe_name, "electronics")
 end
 
 -- BEACON

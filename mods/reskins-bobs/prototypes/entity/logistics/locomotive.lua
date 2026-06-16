@@ -25,8 +25,8 @@ local tier_map = {
 	["locomotive"] = { tier = 1, prog_tier = 2 },
 	["bob-locomotive-2"] = { tier = 2, prog_tier = 3 },
 	["bob-locomotive-3"] = { tier = 3, prog_tier = 4 },
-	["bob-armoured-locomotive"] = { tier = 1, prog_tier = 4 },
-	["bob-armoured-locomotive-2"] = { tier = 2, prog_tier = 5 },
+	["bob-armoured-locomotive"] = { tier = 1, prog_tier = 3 },
+	["bob-armoured-locomotive-2"] = { tier = 2, prog_tier = 4 },
 }
 
 -- Reskin entities, create and assign extra details

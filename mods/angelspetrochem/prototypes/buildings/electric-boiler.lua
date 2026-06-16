@@ -5,12 +5,33 @@ local extra_loss = 0.04 -- % of total power
 
 local dissipation_factor = 1 / (1 - extra_loss)
 
-circuit_connector_definitions["angels-electric-boiler"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  2, main_offset = util.by_pixel(-37.25, -28.5), shadow_offset = util.by_pixel(-37.25, -28.5), show_shadow = true },
-  { variation = 15, main_offset = util.by_pixel( 10.875, -55.5), shadow_offset = util.by_pixel( 10.875, -55.5), show_shadow = true },
-  { variation =  2, main_offset = util.by_pixel(-37.25, -28.5), shadow_offset = util.by_pixel(-37.25, -28.5), show_shadow = true },
-  { variation = 15, main_offset = util.by_pixel( 10.875, -55.5), shadow_offset = util.by_pixel( 10.875, -55.5), show_shadow = true },
-})
+circuit_connector_definitions["angels-electric-boiler"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-37.25, -28.5),
+      shadow_offset = util.by_pixel(-37.25, -28.5),
+      show_shadow = true,
+    },
+    {
+      variation = 15,
+      main_offset = util.by_pixel(10.875, -55.5),
+      shadow_offset = util.by_pixel(10.875, -55.5),
+      show_shadow = true,
+    },
+    {
+      variation = 2,
+      main_offset = util.by_pixel(-37.25, -28.5),
+      shadow_offset = util.by_pixel(-37.25, -28.5),
+      show_shadow = true,
+    },
+    {
+      variation = 15,
+      main_offset = util.by_pixel(10.875, -55.5),
+      shadow_offset = util.by_pixel(10.875, -55.5),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

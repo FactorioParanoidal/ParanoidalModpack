@@ -6,6 +6,7 @@ local demolisherUtils = {}
 local biterSupressors = require("libs/BiterSupressors")
 local constants = require("libs/Constants")
 local customAlerts = require("CustomAlerts")
+local mathUtils = require("libs/MathUtils")
 
 local increaseNextDemolisherAttackTick = biterSupressors.increaseNextDemolisherAttackTick
 local showAlert = customAlerts.showAlert
@@ -231,6 +232,7 @@ function demolisherUtils.processDemolishers()
 							surface = surface, 
 							demolisher = demolisher, 
 							target = targetEntity,
+							nextRevengeTick = nil,
 							detected = false
 							}							
 						-- rendering.draw_line{surface = surface, from = demolisher.position, to = targetEntity.position, color = {0, 0, 1}, width = 2, time_to_live = 6000}	-- debug
@@ -277,6 +279,53 @@ function demolisherUtils.processDemolisherTriggers()
 			storage.universe.demolisherTriggers[i] = nil
 		end
 	end
+end
+
+local demolisherRevengeCooldown = 20	-- ticks
+local demolisherRevengeRange = 25
+function demolisherUtils.onSegmentedEntityDamaged(event)
+		
+	if 	(not event.segmented_unit)
+		or (not event.segmented_unit.valid)
+		or (not event.cause)
+		or (not event.cause.valid)
+		then
+		return
+	end
+	local demolisherTrigger = storage.universe.demolisherTriggers[event.segmented_unit.unit_number]
+	if not demolisherTrigger then
+		demolisherTrigger = storage.universe.demolisherTriggers[event.segmented_unit.unit_number - 1]	-- (don't know why, but unit_number greater by 1)
+	end
+	if not demolisherTrigger then
+		local i = 0
+		for unit_number, demolisherTrigger in pairs(storage.universe.demolisherTriggers) do
+			i = i + 1
+		end
+		return
+	end
+	if demolisherTrigger.nextRevengeTick and (demolisherTrigger.nextRevengeTick > game.tick) then
+		return
+	end	
+	local surface = event.segmented_unit.surface
+	local evo = game.forces.enemy.get_evolution_factor(surface)
+	if evo < 0.4 then
+		return
+	end
+	local incomingRange = mathUtils.euclideanDistancePoints(event.segmented_unit.segments[1].position.x, event.segmented_unit.segments[1].position.y, event.cause.position.x, event.cause.position.y)
+	if incomingRange > demolisherRevengeRange then
+		return
+	end	
+	local attackName
+	if evo < 0.6 then
+		attackName = "small-demolisher-fissure"
+	elseif evo < 0.9 then
+		attackName = "medium-demolisher-fissure"
+	else
+		attackName = "big-demolisher-fissure"
+	end
+	surface.create_entity({name = attackName, force = game.forces.enemy, position = event.cause.position})
+	
+	demolisherTrigger.nextRevengeTick = game.tick + demolisherRevengeCooldown
 end
 
 -- called each 30000 tick. 

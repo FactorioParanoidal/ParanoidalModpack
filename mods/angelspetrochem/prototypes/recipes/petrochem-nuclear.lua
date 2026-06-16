@@ -174,7 +174,7 @@ data:extend({
     },
     results = {
       { type = "item", name = "uranium-235", amount = 1, probability = 0.95, ignored_by_productivity = 1 }, --balances the isotope numbers
-      { type = "item", name = "angels-plutonium-239", amount = 13, ignored_by_productivity = 13},
+      { type = "item", name = "angels-plutonium-239", amount = 13, ignored_by_productivity = 13 },
       { type = "item", name = "uranium-238", amount = 43, ignored_by_productivity = 43 },
     },
     icons = {

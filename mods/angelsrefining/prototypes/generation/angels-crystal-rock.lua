@@ -2,7 +2,7 @@ data:extend({
   {
     type = "noise-function",
     name = "angels_elevation_level",
-    parameters = {"optimal", "range", "max_range"},
+    parameters = { "optimal", "range", "max_range" },
     expression = "angels_value_optimal_with_range(elevation, optimal, range, max_range)",
   },
   {
@@ -31,7 +31,7 @@ data:extend({
           amount_min = 15,
           amount_max = 25,
         },
-      }
+      },
     },
     loot = {
       { item = "stone", probability = 1, count_min = 5, count_max = 10 },

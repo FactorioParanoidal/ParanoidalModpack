@@ -63,7 +63,6 @@ function angelsmods.migration.replace_signals(entities_to_check, signals_to_repl
         or controlBehavior.type == defines.control_behavior.type.loader
         or controlBehavior.type == defines.control_behavior.type.pump
         or controlBehavior.type == defines.control_behavior.type.turret
-
       then
         replace_control_behavior("circuit_condition", controlBehavior, signals_to_replace)
       end
@@ -315,6 +314,8 @@ function angelsmods.migration.replace_item(entities_to_check, items_to_replace)
   angelsmods.migration.replace_signals(entities_to_check, items_to_replace)
   angelsmods.migration.replace_entity(entities_to_check, items_to_replace)
   angelsmods.migration.replace_currently_burning(entities_to_check, items_to_replace)
+  angelsmods.migration.replace_logistics_slot(entities_to_check, items_to_replace)
+  angelsmods.migration.replace_filter(entities_to_check, items_to_replace)
 end
 
 function angelsmods.migration.replace_quick_bar_slot(items_to_replace)
@@ -336,26 +337,96 @@ function angelsmods.migration.replace_quick_bar_slot(items_to_replace)
   end
 end
 
-function angelsmods.migration.replace_logistics_slot(items_to_replace)
-  -- items_to_replace is a table of item_to_replace
-  -- item_to_replace is a table with 2 entries, first entry is old item name
-  -- and second entry is the new item name (or nil)
+function angelsmods.migration.replace_logistics_slot(entities_to_check, items_to_replace)
+  -- items_to_replace is a table where the keys are the old item, and
+  -- the values are the new item.
   items_to_replace = items_to_replace or {}
-
-  for _, player in pairs(game.players) do
-    if player.character ~= nil then
-      -- find used slots
-      local point = player.character.get_requester_point()
-      if point then
-        for _, item_to_replace in pairs(items_to_replace) do
-          for _, section in pairs(point.sections) do        
+  for _, entity in pairs(entities_to_check) do
+    -- find used slots
+    local point = entity.get_requester_point()
+    if point then
+      for old_item, new_item in pairs(items_to_replace) do
+        for _, section in pairs(point.sections) do
+          if section.is_manual then
             for i = 1, 100 do
               local slot = section.get_slot(i)
               if slot.value then
-                if slot.value.name == item_to_replace[1] then
-                  slot.value.name = item_to_replace[2]
-                  section.set_slot(i, slot)
+                if slot.value.name == old_item then
+                  slot.value.name = new_item
+                  local filter_index = section.set_slot(i, slot)
                 end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+function angelsmods.migration.replace_filter(entities_to_check, items_to_replace)
+  -- items_to_replace is a table where the keys are the old item, and
+  -- the values are the new item.
+
+  local types_to_check = {
+    ["asteroid-collector"] = true,
+    ["inserter"] = true,
+    ["loader"] = true,
+    ["loader-1x1"] = true,
+    ["mining-drill"] = true,
+  }
+
+  items_to_replace = items_to_replace or {}
+  for _, entity in pairs(entities_to_check) do
+    if types_to_check[entity.type] then
+      -- find used slots
+      for i = 1, entity.filter_slot_count do
+        local filter = entity.get_filter(i)
+        if filter then
+          for old_item, new_item in pairs(items_to_replace) do
+            if filter.name == old_item then
+              entity.set_filter(i, new_item)
+            end
+          end
+        end
+      end
+    elseif entity.type == "splitter" then
+      local filter = entity.splitter_filter
+      if filter then
+        for old_item, new_item in pairs(items_to_replace) do
+          if filter.name == old_item then
+            entity.splitter_filter = new_item
+          end
+        end
+      end
+    elseif entity.type == "logistic-container" and entity.prototype.logistic_mode == "storage" then
+      local filter = entity.storage_filter
+      if filter then
+        for old_item, new_item in pairs(items_to_replace) do
+          if filter.name.name == old_item then
+            entity.storage_filter = new_item
+          end
+        end
+      end
+    end
+
+    -- inventory slot filter
+    for _, inventory_index in pairs({
+      defines.inventory.car_trunk,
+      defines.inventory.cargo_wagon,
+      defines.inventory.character_main,
+      defines.inventory.editor_main,
+      defines.inventory.god_main,
+      defines.inventory.spider_trunk,
+    }) do
+      local inventory = entity.get_inventory(inventory_index)
+      if inventory and inventory.is_filtered() then
+        for i = 1, #inventory do
+          local filter = inventory.get_filter(i)
+          if filter then
+            for old_item, new_item in pairs(items_to_replace) do
+              if filter.name == old_item then
+                inventory.set_filter(i, new_item)
               end
             end
           end

@@ -16,7 +16,7 @@ local function addingMiningdrillbits()
 	paralib.bobmods.lib.recipe.remove_ingredient("bob-mining-drill-3", "bob-titanium-plate")
 
 	paralib.bobmods.lib.recipe.add_ingredient("bob-mining-drill-4", { type = "item", name = "mining-drill-bit-mk5", amount = 1})
-	paralib.bobmods.lib.recipe.remove_ingredient("bob-mining-drill-4", "bob-tungsten-carbide")
+	paralib.bobmods.lib.recipe.remove_ingredient("bob-mining-drill-4", "tungsten-carbide")
 
 	paralib.bobmods.lib.recipe.add_ingredient("bob-area-mining-drill-1", { type = "item", name = "mining-drill-bit-mk2", amount = 1})
 	paralib.bobmods.lib.recipe.add_ingredient("bob-area-mining-drill-2", { type = "item", name = "mining-drill-bit-mk3", amount = 1})

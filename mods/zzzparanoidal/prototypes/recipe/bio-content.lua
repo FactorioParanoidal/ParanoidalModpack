@@ -33,10 +33,7 @@ data:extend({ -- Greenhouse
 			{ type = "item", name = "steel-plate", amount = 10},
 			{ type = "item", name = "concrete", amount = 10},
 			{ type = "item", name = "deadlock-large-lamp", amount = 5},
-			{
-				"bi-bio-greenhouse",
-				2,
-			},
+			{ type = "item", name = "bi-bio-greenhouse", amount = 2 },
 		},
 		enabled = false,
 		energy_required = 5,

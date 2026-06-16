@@ -1,4 +1,3 @@
----@meta
 ------------------------------------------------------------------------
 -- mod constant definitions.
 --
@@ -148,7 +147,6 @@ Constants.snapping_type_names = table.array_combine(Constants.forward_snapping_t
 Constants.forward_snapping_types = table.array_to_dictionary(Constants.forward_snapping_type_names, true)
 
 ---@enum miniloader.LoaderDirection
----@type table<miniloader.LoaderDirection, string>
 Constants.loader_direction = {
     input = 'input',
     output = 'output',

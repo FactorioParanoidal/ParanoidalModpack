@@ -188,115 +188,149 @@ funcs.generate_train_entities({
   pictures = {
     rotated = {
       layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender", {
-          dice = 4,
-          priority = "very-low",
-          allow_low_quality_rotation = true,
-          direction_count = 256,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          allow_low_quality_rotation = true,
-          direction_count = 256,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-running-lights", {
-          dice = 4,
-          priority = "very-low",
-          draw_as_light = true,
-          allow_low_quality_rotation = true,
-          direction_count = 256,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          allow_low_quality_rotation = true,
-          direction_count = 256,
-          scale = 0.5,
-          usage = "train",
-        }),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender",
+          {
+            dice = 4,
+            priority = "very-low",
+            allow_low_quality_rotation = true,
+            direction_count = 256,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-mask",
+          {
+            dice = 4,
+            priority = "very-low",
+            apply_runtime_tint = true,
+            tint_as_overlay = true,
+            flags = { "mask" },
+            allow_low_quality_rotation = true,
+            direction_count = 256,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-running-lights",
+          {
+            dice = 4,
+            priority = "very-low",
+            draw_as_light = true,
+            allow_low_quality_rotation = true,
+            direction_count = 256,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-shadow",
+          {
+            dice = 4,
+            priority = "very-low",
+            flags = { "shadow" },
+            draw_as_shadow = true,
+            allow_low_quality_rotation = true,
+            direction_count = 256,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
       },
     },
     slope_angle_between_frames = 1.25,
-    sloped = funcs.use_sloped_train_features and {
-      layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped", {
-          dice = 4,
-          priority = "very-low",
-          direction_count = 160,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-mask", {
-          dice = 4,
-          priority = "very-low",
-          apply_runtime_tint = true,
-          tint_as_overlay = true,
-          flags = { "mask" },
-          direction_count = 160,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-running-lights", {
-          dice = 4,
-          priority = "very-low",
-          draw_as_light = true,
-          direction_count = 160,
-          scale = 0.5,
-          usage = "train",
-        }),
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-shadow", {
-          dice = 4,
-          priority = "very-low",
-          flags = { "shadow" },
-          draw_as_shadow = true,
-          direction_count = 160,
-          scale = 0.5,
-          usage = "train",
-        }),
-      },
-    } or nil,
+    sloped = funcs.use_sloped_train_features
+        and {
+          layers = {
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped",
+              {
+                dice = 4,
+                priority = "very-low",
+                direction_count = 160,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-mask",
+              {
+                dice = 4,
+                priority = "very-low",
+                apply_runtime_tint = true,
+                tint_as_overlay = true,
+                flags = { "mask" },
+                direction_count = 160,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-running-lights",
+              {
+                dice = 4,
+                priority = "very-low",
+                draw_as_light = true,
+                direction_count = 160,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-shadow",
+              {
+                dice = 4,
+                priority = "very-low",
+                flags = { "shadow" },
+                draw_as_shadow = true,
+                direction_count = 160,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+          },
+        }
+      or nil,
   },
   front_light_pictures = {
     rotated = {
       layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-lights", {
-          dice = 4,
-          priority = "very-low",
-          blend_mode = "additive",
-          draw_as_light = true,
-          allow_low_quality_rotation = true,
-          direction_count = 256,
-          scale = 0.5,
-          usage = "train",
-        }),
+        util.sprite_load(
+          "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-lights",
+          {
+            dice = 4,
+            priority = "very-low",
+            blend_mode = "additive",
+            draw_as_light = true,
+            allow_low_quality_rotation = true,
+            direction_count = 256,
+            scale = 0.5,
+            usage = "train",
+          }
+        ),
       },
     },
     slope_angle_between_frames = 1.25,
-    sloped =  funcs.use_sloped_train_features and {
-      layers = {
-        util.sprite_load("__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-lights", {
-          dice = 4,
-          priority = "very-low",
-          blend_mode = "additive",
-          draw_as_light = true,
-          direction_count = 160,
-          scale = 0.5,
-          usage = "train"
-        }),
-      },
-    } or nil,
+    sloped = funcs.use_sloped_train_features
+        and {
+          layers = {
+            util.sprite_load(
+              "__angelsaddons-mobility-graphics-crawler__/graphics/entity/crawler-locomotive-tender/crawler-locomotive-tender-sloped-lights",
+              {
+                dice = 4,
+                priority = "very-low",
+                blend_mode = "additive",
+                draw_as_light = true,
+                direction_count = 160,
+                scale = 0.5,
+                usage = "train",
+              }
+            ),
+          },
+        }
+      or nil,
   },
   wheels = funcs.standard_train_wheels,
   stop_trigger = {
@@ -360,7 +394,12 @@ funcs.generate_train_entities({
   },
   drive_over_tie_trigger = {
     type = "play-sound",
-    sound = sound_variations("__base__/sound/train-tie", 6, 0.4, { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }),
+    sound = sound_variations(
+      "__base__/sound/train-tie",
+      6,
+      0.4,
+      { volume_multiplier("main-menu", 2.4), volume_multiplier("driving", 1.3) }
+    ),
   },
   tie_distance = 50,
   impact_category = "metal",

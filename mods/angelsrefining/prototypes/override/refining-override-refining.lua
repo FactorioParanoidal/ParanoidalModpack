@@ -191,4 +191,3 @@ OV.set_research_difficulty("uranium-processing", "uranium-ore", 100, "craft-item
 if mods["textplates"] then
   OV.set_research_difficulty("textplates-uranium", "uranium-ore", 100, "craft-item")
 end
-

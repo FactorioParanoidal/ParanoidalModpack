@@ -1,4 +1,5 @@
 local core_utils = require("__core__/lualib/util")
+
 data.raw["utility-constants"]["default"].default_other_force_color = core_utils.copy(data.raw["utility-constants"]["default"].default_enemy_force_color)
 
 data:extend({

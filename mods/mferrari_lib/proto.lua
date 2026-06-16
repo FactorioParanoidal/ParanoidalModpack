@@ -4,13 +4,52 @@ colors = require ("__mferrari_lib__.colors")
 function dLog(what) -- data log
     log(serpent.block(what))
     end
-    
+
+
 
 function make_composite_icon_rb(icon1, tint1, icon2, tint2)
 return {
 	{icon=icon1,icon_size = 64, icon_mipmaps = 4, tint=tint1},
 	{icon=icon2,icon_size = 64, icon_mipmaps = 4, tint=tint2,priority="medium",shift={8,8},scale=0.3}}
 end
+
+
+function replace_and_disable_technology(from_tech,to_tech)
+if data.raw.technology[from_tech] and data.raw.technology[to_tech] then
+    data.raw.technology[from_tech].enabled=false
+    data.raw.technology[from_tech].visible_when_disabled=false
+    for k,tech in pairs(data.raw.technology) do
+        if tech.prerequisites then
+            for i,prereq in pairs(tech.prerequisites) do
+                if prereq == from_tech then tech.prerequisites[i]=to_tech end
+                end
+            end
+        end
+  end
+end
+
+
+function disable_tech_and_trim_dependencies(tech_name)
+if data.raw.technology[tech_name] then
+    local raw_tech = data.raw.technology[tech_name]
+    raw_tech.enabled=false
+    raw_tech.visible_when_disabled=false
+    local prerequisites = raw_tech.prerequisites
+
+    for k,tech in pairs(data.raw.technology) do
+        if tech.prerequisites then
+            for i,prereq in pairs(tech.prerequisites) do
+                if prereq == tech_name then 
+                    del_list(tech.prerequisites,prereq)
+                    concat_lists_no_dup(tech.prerequisites,prerequisites)
+                    end
+                end
+            end
+        end
+  end
+end
+
+
 
 
 function add_technology_prerequisite(technology, prerequisite)
@@ -37,7 +76,20 @@ function add_technology_prerequisite(technology, prerequisite)
           end
         end
     end
-    
+
+
+function remove_recipe_ingredient(recipe_name, ingredient)
+  if type(ingredient) == "string" then ingredient = {ingredient} end
+      if data.raw.recipe[recipe_name] and data.raw.recipe[recipe_name].ingredients then
+        for i=#data.raw.recipe[recipe_name].ingredients,1,-1 do 
+           local ing = data.raw.recipe[recipe_name].ingredients[i]
+            if in_list(ingredient, ing.name) then 
+              table.remove(data.raw.recipe[recipe_name].ingredients,i)
+              end
+          end
+        end
+  end
+
 
     function add_recipe_unlock(technology, recipe)
       if data.raw.technology[technology] and data.raw.recipe[recipe] then

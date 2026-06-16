@@ -33,7 +33,7 @@ if mods["bobplates"] then
     "bob-air-pump-3",
     "bob-air-pump-4",
     "bob-void-pump",
-    "void-bob-ammonia",
+    "void-ammonia",
     "void-bob-carbon-dioxide",
     "void-bob-chlorine",
     "void-bob-deuterium",
@@ -69,7 +69,7 @@ if mods["bobplates"] then
   --clean-up pre-requisites
   OV.remove_prereq("steel-processing", "bob-electrolysis-1")
   OV.remove_prereq("bob-lithium-processing", "bob-electrolysis-1")
-  OV.remove_prereq("bob-zinc-processing", "bob-electrolysis-1")
+  OV.remove_prereq("bob-brass-processing", "bob-electrolysis-1")
   OV.remove_prereq("bob-lead-processing", "bob-electrolysis-1")
   OV.remove_prereq("bob-cobalt-processing", "bob-electrolysis-1")
 
@@ -128,7 +128,7 @@ if mods["bobplates"] then
   -- sodium processing --------------------------------------------------------
   OV.global_replace_item("bob-sodium-hydroxide", "angels-solid-sodium-hydroxide")
   angelsmods.functions.hide("bob-sodium-hydroxide")
-  OV.disable_recipe('bob-sodium-hydroxide-sink')
+  OV.disable_recipe("bob-sodium-hydroxide-sink")
 
   -- nitrogen processing ------------------------------------------------------
   OV.converter_fluid("bob-liquid-air", "angels-gas-compressed-air")
@@ -176,7 +176,7 @@ if mods["bobplates"] then
     "sulfur",
     "bob-sulfur-2",
     "bob-sulfur-3",
-    "bob-carbon",
+    "carbon",
     "bob-resin-oil",
   })
   -- plastics -----------------------------------------------------------------
@@ -226,7 +226,7 @@ if mods["bobplates"] then
       category = "angels-petrochem-electrolyser",
     },
     {
-      name = "bob-lithium",
+      name = "lithium-plate",
       category = "angels-petrochem-electrolyser",
     },
     {

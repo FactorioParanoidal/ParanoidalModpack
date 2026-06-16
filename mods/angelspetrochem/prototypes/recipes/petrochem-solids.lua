@@ -59,7 +59,11 @@ data:extend({
     icons = AF.create_viscous_liquid_recipe_icon(nil, { { 255, 255, 255 }, { 255, 255, 255 } }, {
       AF.add_number_icon_layer({}, 2, angelsmods.petrochem.number_tint),
     }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-plastic", "angels-liquid-naphthta", "angels-liquid-polyethylene" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-plastic",
+      "angels-liquid-naphthta",
+      "angels-liquid-polyethylene",
+    }),
     order = "a[plastic]-a[liquid]-b",
   },
   {
@@ -81,7 +85,11 @@ data:extend({
     icons = AF.create_viscous_liquid_recipe_icon(nil, { { 255, 255, 255 }, { 255, 255, 255 } }, {
       AF.add_number_icon_layer({}, 3, angelsmods.petrochem.number_tint),
     }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-plastic", "angels-gas-formaldehyde", "angels-liquid-phenol" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-plastic",
+      "angels-gas-formaldehyde",
+      "angels-liquid-phenol",
+    }),
     order = "a[plastic]-a[liquid]-c",
   },
   --RESIN
@@ -143,7 +151,11 @@ data:extend({
     icons = AF.create_viscous_liquid_recipe_icon(nil, { { 255, 225, 155 }, { 255, 225, 155 } }, {
       AF.add_number_icon_layer({}, 2, angelsmods.petrochem.number_tint),
     }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-resin", "angels-gas-melamine", "angels-gas-formaldehyde" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-resin",
+      "angels-gas-melamine",
+      "angels-gas-formaldehyde",
+    }),
     order = "b[resin]-a[liquid]-b",
   },
   {
@@ -165,7 +177,11 @@ data:extend({
     icons = AF.create_viscous_liquid_recipe_icon(nil, { { 255, 225, 155 }, { 255, 225, 155 } }, {
       AF.add_number_icon_layer({}, 3, angelsmods.petrochem.number_tint),
     }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-resin", "angels-liquid-bisphenol-a", "angels-gas-epichlorohydrin" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-resin",
+      "angels-liquid-bisphenol-a",
+      "angels-gas-epichlorohydrin",
+    }),
     order = "b[resin]-a[liquid]-c",
   },
   --RUBBER
@@ -203,7 +219,11 @@ data:extend({
     },
     always_show_products = true,
     icons = AF.create_viscous_liquid_recipe_icon(nil, { { 193, 197, 255 }, { 193, 197, 255 } }),
-    crafting_machine_tint = AF.get_recipe_tints({ "angels-liquid-rubber", "angels-liquid-styrene", "angels-gas-butadiene" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      "angels-liquid-rubber",
+      "angels-liquid-styrene",
+      "angels-gas-butadiene",
+    }),
     order = "b[rubber]-a[liquid]",
   },
   --FUEL
@@ -320,7 +340,10 @@ data:extend({
     icons = AF.create_solid_recipe_icon({
       { "__angelspetrochemgraphics__/graphics/icons/molecules/hydrazine.png", 72 },
     }, "solid-fuel"),
-    crafting_machine_tint = AF.get_recipe_tints({ { r = 105 / 255, g = 105 / 255, b = 105 / 255 }, "angels-gas-hydrazine" }),
+    crafting_machine_tint = AF.get_recipe_tints({
+      { r = 105 / 255, g = 105 / 255, b = 105 / 255 },
+      "angels-gas-hydrazine",
+    }),
     order = "e[solid-fuel-hydrazine]",
   },
   --CATALYSTS
@@ -454,7 +477,7 @@ data:extend({
       { type = "fluid", name = "angels-water-purified", amount = 50 },
     },
     results = {
-      { type = "item", name = "angels-electrode", amount = 1 },
+      { type = "item", name = "angels-electrode", amount = 1, ignored_by_stats = 1 },
       { type = "fluid", name = "angels-water-mineralized", amount = 10 },
       { type = "fluid", name = "water", amount = 40 },
     },
@@ -476,7 +499,7 @@ data:extend({
     allow_productivity = true,
     ingredients = {
       { type = "fluid", name = "angels-liquid-glycerol", amount = 50 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 25 },
+      { type = "fluid", name = "sulfuric-acid", amount = 25 },
       { type = "fluid", name = "angels-liquid-nitric-acid", amount = 25 },
       { type = "item", name = "coal", amount = 1 },
     },
@@ -488,7 +511,7 @@ data:extend({
     crafting_machine_tint = AF.get_recipe_tints({
       { r = 1, g = 0, b = 0 },
       "angels-liquid-glycerol",
-      "angels-liquid-sulfuric-acid",
+      "sulfuric-acid",
       "angels-liquid-nitric-acid",
     }),
     order = "a[explosives]-b",
@@ -505,7 +528,7 @@ data:extend({
     allow_productivity = true,
     ingredients = {
       { type = "fluid", name = "angels-liquid-toluene", amount = 50 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 25 },
+      { type = "fluid", name = "sulfuric-acid", amount = 25 },
       { type = "fluid", name = "angels-liquid-nitric-acid", amount = 25 },
     },
     results = {
@@ -518,7 +541,7 @@ data:extend({
     crafting_machine_tint = AF.get_recipe_tints({
       { r = 1, g = 0, b = 0 },
       "angels-liquid-toluene",
-      "angels-liquid-sulfuric-acid",
+      "sulfuric-acid",
       "angels-liquid-nitric-acid",
     }),
     order = "a[explosives]-c",

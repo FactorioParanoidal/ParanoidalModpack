@@ -48,7 +48,11 @@ if angelsmods.trigger.smelting_products["aluminium"].ingot then
   else
     -- no need for molten recipe
     angelsmods.functions.hide("angels-liquid-molten-aluminium")
-    OV.disable_recipe({ "angels-liquid-molten-aluminium", "angels-liquid-molten-aluminium-2", "angels-liquid-molten-aluminium-3" })
+    OV.disable_recipe({
+      "angels-liquid-molten-aluminium",
+      "angels-liquid-molten-aluminium-2",
+      "angels-liquid-molten-aluminium-3",
+    })
     OV.disable_technology({ "angels-aluminium-casting-2", "angels-aluminium-casting-3" })
     -- swap tech tier 1 to ingots
     for _, property in pairs({ "icon", "icon_size", "icons", "localised_name" }) do
@@ -80,7 +84,11 @@ else
     "angels-solid-aluminium-oxide-2",
   })
   OV.disable_recipe({ "angels-ingot-aluminium" })
-  OV.disable_recipe({ "angels-liquid-molten-aluminium", "angels-liquid-molten-aluminium-2", "angels-liquid-molten-aluminium-3" })
+  OV.disable_recipe({
+    "angels-liquid-molten-aluminium",
+    "angels-liquid-molten-aluminium-2",
+    "angels-liquid-molten-aluminium-3",
+  })
 end
 
 -------------------------------------------------------------------------------

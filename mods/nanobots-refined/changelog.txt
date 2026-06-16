@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.0.7
+Date: 2026-06-05
+  Features:
+    - Firing speeds (for both manual and auto modes) are now configurable.
+  Changes:
+    - Updated mod description.
+  Bugfixes:
+    - Removed extraneous zipped version of Russian localization.
+    - Fixed bug preventing Bob's mods recipe replacements from working.
+---------------------------------------------------------------------------------------------------
 Version: 4.0.6
 Date: 2025-08-21
   Minor Features:

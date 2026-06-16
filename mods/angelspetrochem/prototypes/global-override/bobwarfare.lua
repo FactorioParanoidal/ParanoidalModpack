@@ -40,17 +40,15 @@ if mods["bobwarfare"] then
       name = "bob-nitroglycerin",
       subgroup = "angels-petrochem-rocket",
       order = "ib",
-      ingredients = hide_sulfuric_nitric_acid_mixture
-          and {
-            { type = "fluid", name = "bob-sulfuric-nitric-acid", amount = 0 }, -- was 30
-            { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 15 },
-            { type = "fluid", name = "angels-liquid-nitric-acid", amount = 15 },
-          }
-        or nil,
+      ingredients = hide_sulfuric_nitric_acid_mixture and {
+        { type = "fluid", name = "bob-sulfuric-nitric-acid", amount = 0 }, -- was 30
+        { type = "fluid", name = "sulfuric-acid", amount = 15 },
+        { type = "fluid", name = "angels-liquid-nitric-acid", amount = 15 },
+      } or nil,
       category = hide_sulfuric_nitric_acid_mixture and "angels-advanced-chemistry" or nil,
       crafting_machine_tint = angelsmods.functions.get_recipe_tints({
         "angels-liquid-glycerol",
-        "angels-liquid-sulfuric-acid",
+        "sulfuric-acid",
         "angels-liquid-nitric-acid",
       }),
     },
@@ -73,13 +71,13 @@ if mods["bobwarfare"] then
     {
       name = "bob-gun-cotton",
       ingredients = {
-        { name = "angels-liquid-nitric-acid", type = "fluid", amount = "angels-liquid-sulfuric-acid" },
+        { name = "angels-liquid-nitric-acid", type = "fluid", amount = "sulfuric-acid" },
       },
     },
     {
       name = "bob-gun-cotton-synthetic",
       ingredients = {
-        { name = "angels-liquid-nitric-acid", type = "fluid", amount = "angels-liquid-sulfuric-acid" },
+        { name = "angels-liquid-nitric-acid", type = "fluid", amount = "sulfuric-acid" },
       },
     },
   })

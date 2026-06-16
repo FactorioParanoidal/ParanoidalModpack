@@ -1,6 +1,6 @@
 {
   "name": "minime",
-  "version": "2.0.18",
+  "version": "2.0.19",
   "title": "miniMAXIme: Character scaler and selector",
   "author": "DellAquila; Pi-C",
   "description": "Adjust the size of your character -- and change your appearance at any time if you've other mods that provide extra characters!",
@@ -10,7 +10,7 @@
     "base >= 2.0.12",
     "Pi-C_lib >= 2.0.3",
     "(?) bobclasses",
-    "(?) CharacterModHelper",
+    "(?) CharacterModHelper >= 2.0.6",
     "(?) RitnCharacters",
     "? AmongUsCharacter",
     "? chicken-skin",
@@ -54,8 +54,9 @@
     "? zootopia-judy",
 
     "? koboldengineer >= 1.0.1",
-    "? LeaCharacter",
     "? NecoArcCharacter",
-    "? NewGirlCharacter-port"
+    "? NewGirlCharacter-port",
+    "? Chef_Kawasaki_Character",
+    "? emberthal"
   ]
 }

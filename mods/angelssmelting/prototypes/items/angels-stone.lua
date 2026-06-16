@@ -40,7 +40,7 @@ data:extend({
     place_as_tile = {
       result = "angels-tile-clay-brick",
       condition_size = 2,
-      condition = {layers = {water_tile = true}},
+      condition = { layers = { water_tile = true } },
     },
   },
   -- order f is reserved for stone brick (see override)
@@ -73,7 +73,7 @@ data:extend({
       result = "angels-tile-concrete-brick",
       -- result = "tutorial-grid",
       condition_size = 1,
-      condition = {layers = {water_tile = true}},
+      condition = { layers = { water_tile = true } },
     },
   },
   {
@@ -87,7 +87,7 @@ data:extend({
     place_as_tile = {
       result = "angels-tile-reinforced-concrete-brick",
       condition_size = 1,
-      condition = {layers = {water_tile = true}},
+      condition = { layers = { water_tile = true } },
     },
   },
 })

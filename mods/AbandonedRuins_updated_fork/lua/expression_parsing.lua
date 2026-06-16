@@ -1,13 +1,17 @@
+-- Load other libraries
 local constants = require("constants")
+
+---@type boolean
+local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
 
 local parsing = {}
 
--- extend table 1 with table 2
+-- Extends and/or overwrites table 1 with keys/values from table 2
 -- no safety checks, very naive
 ---@param table1 table table to extend
 ---@param table2 table
 local function extend(table1, table2)
-  if debug_log then log(string.format("[extend]: table1()=%d,table2()=%d - CALLED!", table_size(table1), table_size(table2))) end
+  if debug_log then log(string.format("[extend]: table1[]=%s,table2[]=%s - CALLED!", type(table1), type(table2))) end
   for key, value in pairs(table2) do
     if debug_log then log(string.format("[extend]: key='%s',value[]='%s'", key, type(value))) end
     table1[key] = value
@@ -24,8 +28,10 @@ local common_expressions =
     if debug_log then log(string.format("[variable]: t[]='%s',vars[]='%s' - CALLED!", type(t), type(vars))) end
     if type(t.name) ~= "string" then
       error(string.format("t.name[]='%s' is not expected type 'string'", type(t.name)))
+    elseif #t.name == 0 then
+      error("A variable's name cannot be empty")
     elseif type(vars) ~= "table" then
-       error(string.format("vars[]='%s' is not expected type 'table'", type(vars)))
+      error(string.format("vars[]='%s' is not expected type 'table'", type(vars)))
     end
 
     if debug_log then log(string.format("[variable]: Returning vars[%s][]='%s' - EXIT!", t.name, type(vars[t.name]))) end
@@ -37,9 +43,9 @@ local common_expressions =
   ---@return number|string
   ["random-variable"] = function(t, vars)
     if type(t.variables) ~= "table" then
-       error(string.format("t.variables[]='%s' is not expected type 'table'", type(t.variables)))
+      error(string.format("t.variables[]='%s' is not expected type 'table'", type(t.variables)))
     elseif type(vars) ~= "table" then
-       error(string.format("vars[]='%s' is not expected type 'table'", type(vars)))
+      error(string.format("vars[]='%s' is not expected type 'table'", type(vars)))
     end
 
     return vars[t.variables[math.random(table_size(t.variables))]]
@@ -102,7 +108,7 @@ parsing.number = function(t, vars)
   if debug_log then log(string.format("[number]: t[]='%s',vars[]='%s' - CALLED!", type(t), type(vars))) end
   if type(t) == "table" then
     if debug_log then log(string.format("[number]: Parsing t.type='%s',t.name='%s' ...", t.type, t.name)) end
-    if number_expressions[t.type] == "nil" then
+    if number_expressions[t.type] == nil then
       error("Unrecognized number-expression type: " .. t.type)
     end
 
@@ -129,7 +135,7 @@ parsing.entity = function(t, vars)
   if debug_log then log(string.format("[entity]: t[]='%s',vars[]='%s' - CALLED!", type(t), type(vars))) end
   if type(t) == "table" then
     if debug_log then log(string.format("[entity]: Parsing t.type='%s',t.name='%s' ...", t.type, t.name)) end
-    if entity_expressions[t.type] == "nil" then
+    if entity_expressions[t.type] == nil then
       error("Unrecognized entity-expression type: " .. t.type)
     end
 

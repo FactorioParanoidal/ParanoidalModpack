@@ -1,11 +1,16 @@
 if angelsmods.addons.storage.warehouses then
   if angelsmods.addons.storage.icon_scaling then
-    data.raw["container"]["angels-warehouse"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-warehouse-passive-provider"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-warehouse-active-provider"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-warehouse-storage"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-warehouse-requester"].scale_info_icons = true
-    data.raw["logistic-container"]["angels-warehouse-buffer"].scale_info_icons = true
+    data.raw["container"]["angels-warehouse"].icon_draw_specification = { scale = 3.5, scale_for_many = 3.5 }
+    data.raw["logistic-container"]["angels-warehouse-passive-provider"].icon_draw_specification =
+      { scale = 3.5, scale_for_many = 3.5 }
+    data.raw["logistic-container"]["angels-warehouse-active-provider"].icon_draw_specification =
+      { scale = 3.5, scale_for_many = 3.5 }
+    data.raw["logistic-container"]["angels-warehouse-storage"].icon_draw_specification =
+      { scale = 3.5, scale_for_many = 3.5 }
+    data.raw["logistic-container"]["angels-warehouse-requester"].icon_draw_specification =
+      { scale = 3.5, scale_for_many = 3.5 }
+    data.raw["logistic-container"]["angels-warehouse-buffer"].icon_draw_specification =
+      { scale = 3.5, scale_for_many = 3.5 }
   end
 
   --OVERRIDE FOR BOBS

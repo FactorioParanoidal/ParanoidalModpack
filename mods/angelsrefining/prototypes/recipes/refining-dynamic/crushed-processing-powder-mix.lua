@@ -106,13 +106,12 @@ data:extend({
       { type = "item", name = "angels-void", amount = 1 },
     },
     icons = {
-      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png",
-        icon_size = 32
-      },
-      { icon = "__angelsrefininggraphics__/graphics/icons/angels-ore8-crushed.png",
+      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png", icon_size = 32 },
+      {
+        icon = "__angelsrefininggraphics__/graphics/icons/angels-ore8-crushed.png",
         icon_size = 32,
         scale = 0.5,
-        shift = { -10, 10 }
+        shift = { -10, 10 },
       },
     },
     order = "g",
@@ -134,13 +133,12 @@ data:extend({
       { type = "item", name = "angels-void", amount = 1 },
     },
     icons = {
-      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png",
-        icon_size = 32
-      },
-      { icon = "__angelsrefininggraphics__/graphics/icons/angels-ore8-powder.png",
+      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png", icon_size = 32 },
+      {
+        icon = "__angelsrefininggraphics__/graphics/icons/angels-ore8-powder.png",
         icon_size = 32,
         scale = 0.5,
-        shift = { -10, 10 }
+        shift = { -10, 10 },
       },
     },
     order = "g",
@@ -162,13 +160,12 @@ data:extend({
       { type = "item", name = "angels-void", amount = 1 },
     },
     icons = {
-      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png",
-        icon_size = 32
-      },
-      { icon = "__angelsrefininggraphics__/graphics/icons/angels-ore9-crushed.png",
+      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png", icon_size = 32 },
+      {
+        icon = "__angelsrefininggraphics__/graphics/icons/angels-ore9-crushed.png",
         icon_size = 32,
         scale = 0.5,
-        shift = { -10, 10 }
+        shift = { -10, 10 },
       },
     },
     order = "h",
@@ -190,13 +187,12 @@ data:extend({
       { type = "item", name = "angels-void", amount = 1 },
     },
     icons = {
-      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png",
-        icon_size = 32
-      },
-      { icon = "__angelsrefininggraphics__/graphics/icons/angels-ore9-powder.png",
+      { icon = "__angelsrefininggraphics__/graphics/icons/sort-icon.png", icon_size = 32 },
+      {
+        icon = "__angelsrefininggraphics__/graphics/icons/angels-ore9-powder.png",
         icon_size = 32,
         scale = 0.5,
-        shift = { -10, 10 }
+        shift = { -10, 10 },
       },
     },
     order = "h",

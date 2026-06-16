@@ -1,6 +1,10 @@
+-- Load other libraries
 local constants = require("__AbandonedRuins_updated_fork__/lua/constants")
-local utils = require("__AbandonedRuins_updated_fork__/lua/utilities")
-local spawning = require("__AbandonedRuins_updated_fork__/lua/spawning")
+local utils     = require("__AbandonedRuins_updated_fork__/lua/utilities")
+local spawning  = require("__AbandonedRuins_updated_fork__/lua/spawning")
+
+---@type boolean
+local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
 
 -- Enable debug log by default
 settings.global[constants.ENABLE_DEBUG_LOG_KEY].value = true
@@ -39,7 +43,7 @@ end
 
 script.on_init(function()
   -- Disable normal spawning
-  remote.call("AbandonedRuins", "set_spawn_ruins", false)
+  remote.call("AbandonedRuins", "enable_spawning_ruins", false)
 end)
 
 
@@ -53,11 +57,15 @@ script.on_event(defines.events.on_player_created, function(event)
   log(string.format("[on_player_created]: ruin_set[]='%s'", type(ruin_set)))
   if ruin_set == nil then
     -- Issue notice
-    utils.output_message("Abandoned Ruins: No ruins loaded! Will not create debug world.")
+    utils.output_message("Abandoned Ruins: No default ruin-set configured or not loaded! Will not create debug world.")
     return
   end
 
-  local total_ruins_amount = #ruin_set.small + #ruin_set.medium + #ruin_set.large
+  local total_ruins_amount = 0
+  for _, size in pairs(remote_call("AbandonedRuins", "get_ruin_sizes")) do
+    log(string.format("[on_player_created]: size='%s'", size))
+    total_ruins_amount = total_ruins_amount + ruin_set[size]
+  end
   local chunk_radius = math.ceil(math.sqrt(total_ruins_amount) / 2)
 
   log(string.format("[on_player_created]: total_ruins_amount=%d,chunk_radius=%.2f", total_ruins_amount, chunk_radius))
@@ -70,9 +78,10 @@ script.on_event(defines.events.on_player_created, function(event)
       elevation = 10
     }
   })
+  log(string.format("[on_player_created]: surface[]='%s'", type(surface))) end
 
-  -- skip invalid surfaces
-  if not surface.valid then
+  if not (surface and surface.valid) then
+    -- skip invalid surfaces
     utils.output_message(string.format("Abandoned Ruins: Invalid surface created: '%s'", constants.DEBUG_SURFACE_NAME))
     log(string.format("WARNING: surface[]='%s',name='%s' is not valid - EXIT!", type(surface), constants.DEBUG_SURFACE_NAME))
     return
@@ -85,12 +94,16 @@ script.on_event(defines.events.on_player_created, function(event)
   local x = -chunk_radius
   local y = -chunk_radius
 
-  for size, ruin_list in pairs(ruin_set) do
-    for _, ruin in pairs(ruin_list) do
+  for size, ruins in pairs(ruin_set) do
+    log(string.format("[on_player_created]: size='%s',ruins()=%d", size, #ruins))
+    local half_size = spawning.ruin_half_sizes[size]
+
+    for _, ruin in pairs(ruins) do
+      log(string.format("[on_player_created]: Spawning ruin.name='%s' ...", utils.get_ruin_name(ruin)))
       local center = utils.get_center_of_chunk({x = x, y = y})
 
-      spawning.spawn_ruin(ruin, utils.ruin_half_sizes[size], center, surface)
-      draw_dimensions(center, utils.ruin_half_sizes[size], surface)
+      spawning.spawn_ruin(ruin, half_size, center, surface)
+      draw_dimensions(center, half_size, surface)
 
       x = x + 1
       if (x >= chunk_radius) then

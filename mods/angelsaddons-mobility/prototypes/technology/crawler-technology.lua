@@ -45,7 +45,13 @@ if angelsmods.addons.mobility.crawlertrain.enabled then
         },
         time = 30,
       },
-      prerequisites = { "speed-module-2", "efficiency-module-2", "low-density-structure", "electric-engine", "production-science-pack" },
+      prerequisites = {
+        "speed-module-2",
+        "efficiency-module-2",
+        "low-density-structure",
+        "electric-engine",
+        "production-science-pack",
+      },
     },
     {
       unit = {

@@ -1,0 +1,8 @@
+{
+  "name": "OverloadedTrains",
+  "version": "2.0.10",
+  "title": "Overloaded Trains",
+  "author": "OwnlyMe, ptx0",
+  "description": "Train acceleration now depends on the loaded items (freely adjustable realism factor)",
+  "factorio_version": "2.0"
+}

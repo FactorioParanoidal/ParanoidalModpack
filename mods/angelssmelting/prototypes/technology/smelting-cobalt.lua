@@ -89,8 +89,8 @@ data:extend({
     icon = "__angelssmeltinggraphics__/graphics/technology/casting-cobalt-tech.png",
     icon_size = 256,
     prerequisites = {
-      "angels-metallurgy-4",
-      "angels-strand-casting-2",
+      --"angels-metallurgy-4",
+      "angels-strand-casting-3",
       "angels-cobalt-smelting-1",
     },
     effects = {
@@ -109,6 +109,7 @@ data:extend({
         { "automation-science-pack", 1 },
         { "logistic-science-pack", 1 },
         { "chemical-science-pack", 1 },
+        { "production-science-pack", 1 },
       },
       time = 30,
     },
@@ -159,8 +160,8 @@ data:extend({
     icon = "__angelssmeltinggraphics__/graphics/technology/casting-cobalt-tech.png",
     icon_size = 256,
     prerequisites = {
-      "angels-metallurgy-5",
-      "angels-strand-casting-3",
+      --"angels-metallurgy-5",
+      "angels-strand-casting-4",
       "angels-cobalt-casting-2",
     },
     effects = {

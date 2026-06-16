@@ -1742,7 +1742,7 @@ if settings.startup["rampantFixed--JuggernautEnemy"].value then
         units = {
             {
                 type = "biter",
-                attackAttributes = {"meleePoisonCloud"},
+                attackAttributes = {"meleePoisonCloud"},	--{"meleeVampiric"},
                 name = "biter",
                 extremeResistances = {"fire", "physical"},
                 majorResistances = {"poison","explosion"},

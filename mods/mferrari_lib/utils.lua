@@ -1,4 +1,5 @@
 
+
 function Log(what)
 helpers.write_file("mf_log.log", serpent.block(what), true)
 end
@@ -17,6 +18,21 @@ local render = rendering.draw_sprite{
       }
 end
 
+function light_on_entity(entity, scale, tint, intensity)
+local render = rendering.draw_light{
+        sprite = "mf_glow",
+        target = entity,
+        surface = entity.surface,
+        tint = tint,
+        x_scale = scale,
+        y_scale = scale,
+        render_mode = "additive",
+		intensity =intensity or 0.8,
+        --time_to_live = length,
+      }
+end
+
+
 
 -- Create a random direction vector to look in
 function GetRandomVector(v)
@@ -28,6 +44,44 @@ v=v or 3
     end
     return randVec
 end
+
+function validade_or_remove_from_list(entities)
+	for x=#entities,1,-1 do 
+		local ent = entities[x]
+		if not (ent and ent.valid) then table.remove(entities,x) end
+		end
+end
+
+
+
+function remove_forbidden_items_from_player(player,forbidden)
+local character = player.character
+if not (character and character.valid) then return end
+if type(forbidden)=="string" then forbidden={forbidden} end
+local invs = {defines.inventory.character_main, defines.inventory.character_trash}
+for _,name in pairs (forbidden) do
+	for __, inv in pairs (invs) do
+		local I = character.get_inventory(inv)
+		local count = I.get_item_count(name)
+		if count>0 then I.remove{name=name, count=count} end
+		end
+	end
+end
+
+function remove_forbidden_items_from_spider(vehicle,forbidden)
+if not (vehicle and vehicle.valid) then return end
+if type(forbidden)=="string" then forbidden={forbidden} end
+local invs = {defines.inventory.spider_trunk,defines.inventory.spider_trash}
+for _,name in pairs (forbidden) do
+	for __, inv in pairs (invs) do
+		local I = vehicle.get_inventory(inv)
+		local count = I.get_item_count(name)
+		if count>0 then I.remove{name=name, count=count} end
+		end
+	end
+end
+
+
 
 
 function safe_vehicle_teleport(vehicle,surface,position)
@@ -41,6 +95,12 @@ end
 function safe_player_teleport(player,surface,position)
 local pos = surface.find_non_colliding_position("character", position, 50, 1) --zero was freezing game if no tiles 
 if pos then player.teleport(pos, surface) else player.teleport(position, surface) end
+end
+
+
+function get_player_char_surface(player)
+if player and player.character and player.character.valid then return player.character.surface 
+else return player.surface end
 end
 
 function get_gps_tag(position,surface)
@@ -149,7 +209,7 @@ if grid_a and grid_b then
 return t
 end
 
-
+--respects quality
 function transfer_inventory (entity_a, entity_b, inventory_type, inventory_type_b, filters)
 local tqt = 0
     local inv_a = entity_a.get_inventory(inventory_type)
@@ -224,19 +284,24 @@ return pls
 end
 
 
-function get_players_near_object(object,howfar,force)
+function get_players_near_object(object,howfar,force, want_characters)
 local pls={}
+local CP = game.connected_players
+if force then CP = force.connected_players end
 if object and object.valid then
-	for p, player in pairs(game.connected_players) do
+	for p, player in pairs(CP) do
 		if player and player.valid and player.character and player.character.valid and object.surface==player.character.surface then
 			if distance(object.position,player.character.position)<=howfar then 
-				if (not force) or (force==player.force) then table.insert(pls,player) end
+				if want_characters then table.insert(pls,player.character)
+					else table.insert(pls,player) end
 				end
 			end
 		end
 	end
 return pls
 end
+
+
 
 function get_pos_near_enemy_nest(surface,spawn,pforce)
 	local enemy = surface.find_nearest_enemy{position=spawn, max_distance=500, force=pforce}
@@ -746,4 +811,202 @@ elseif #same_ore>0 then
 	ore.amount=ore.amount+increase_amount + math.random(10)
 	create_stone_particles(surface, 25, ore.position)
 end
+end
+
+
+function get_chunks_from_positions(positions)
+local visited = {}    
+local chunks = {}
+    for _, pos in pairs(positions) do 
+        local C = Chunk.from_position(pos)
+        local key = C.x .. "," .. C.y
+        if not visited[key] then
+            visited[key] = true
+            table.insert(chunks, C)
+            end   
+        end
+return chunks
+end 
+
+
+
+
+function limit_text_with_icons(text, max_chars)
+    if not text or max_chars <= 0 then return "" end
+
+    -- Trim
+    text = text:match("^%s*(.-)%s*$")
+
+    local result = {}
+    local count = 0
+    local i = 1
+    local len = #text
+
+    while i <= len do
+        if count >= max_chars then break end
+
+        local char = text:sub(i, i)
+
+        -- Detecta bloco [...]
+        if char == "[" then
+            local close_pos = text:find("%]", i)
+
+            if close_pos then
+                local content = text:sub(i + 1, close_pos - 1)
+
+                -- Bloco válido (tem "=")
+                if content:find("=") then
+                    -- Agora conta como 2 caracteres
+                    if count + 2 > max_chars then break end
+
+                    table.insert(result, text:sub(i, close_pos))
+                    count = count + 2
+                    i = close_pos + 1
+                else
+                    -- Não é bloco válido → caractere normal
+                    table.insert(result, char)
+                    count = count + 1
+                    i = i + 1
+                end
+            else
+                -- "[" sem fechamento
+                table.insert(result, char)
+                count = count + 1
+                i = i + 1
+            end
+        else
+            table.insert(result, char)
+            count = count + 1
+            i = i + 1
+        end
+    end
+
+    return table.concat(result)
+end
+
+
+
+function calculate_movement_vector(pos1, pos2, duration_seconds,addXY)
+    -- 1. Converter segundos para ticks (Factorio roda a 60fps/60tps)
+    local total_ticks = duration_seconds * 60
+    
+    -- Caso o tempo seja 0, evita divisão por zero
+    if total_ticks <= 0 then return {x = 0, y = 0} end
+
+    -- 2. Calcular a distância total em cada eixo
+    local dx = pos2.x - pos1.x
+    local dy = pos2.y - pos1.y
+
+    -- 3. Retornar o vetor de deslocamento por tick
+	if addXY then 
+   	return {
+         x=dx / total_ticks,
+         y=dy / total_ticks
+    }
+	else
+    return {
+         dx / total_ticks,
+         dy / total_ticks
+    }
+	end
+end
+
+-- Chart area for a force
+function ChartArea(force, position, chunkDist, surface)
+    force.chart(surface,
+        {{position.x-(32*chunkDist),
+        position.y-(32*chunkDist)},
+        {position.x+(32*chunkDist),
+        position.y+(32*chunkDist)}})
+end
+
+
+function stretch_sprite_to_size( gui, size)
+gui.style.width =  size
+gui.style.height = size
+gui.style.stretch_image_to_widget_size = true
+end
+
+
+
+function build_tile_around_entity(entity, tile_name, radius, adjust_L, adjust_R)
+adjust_L=adjust_L or 0
+adjust_R=adjust_R or 0
+local surface = entity.surface
+local bb=entity.bounding_box
+local area = {
+	left_top = {x = math.ceil(bb.left_top.x - radius)-1 + adjust_L, y = math.ceil(bb.left_top.y - radius)-1 + adjust_L},
+	right_bottom = {x = math.ceil(bb.right_bottom.x + radius)-1 + adjust_R, y = math.ceil(bb.right_bottom.y + radius)-1 + adjust_R}
+}
+AddTile(tile_name,area,surface)
+end
+
+
+function get_randon_diagonal_distance(pos,distance)
+local orientation = math.random(8)
+local x=pos.x
+local y=pos.y
+if orientation==1 then y=y-distance
+elseif orientation==2 then y=y-distance/1.5   x=x+distance/1.5
+elseif orientation==3 then  x=x+distance
+elseif orientation==4 then y=y+distance/1.5   x=x+distance/1.5
+elseif orientation==5 then y=y+distance
+elseif orientation==6 then y=y+distance/1.5   x=x-distance/1.5			
+elseif orientation==7 then x=x-distance			
+elseif orientation==8 then y=y-distance/1.5   x=x-distance/1.5
+end
+return {x=x,y=y}
+end
+
+
+function apply_proportional_damage_on_area(surface, position, radius, damage, except, force, dmg_type, no_friend, create_scorchmark)
+    dmg_type = dmg_type or "impact"
+    force = force or game.forces.enemy
+    
+    -- 1. Efeitos de Ambiente (Scorchmark e Decorativos)
+    if create_scorchmark then
+        -- Cria a marca de queimado média no centro
+        surface.create_entity{
+            name = "medium-scorchmark", 
+            position = position, 
+            force = "neutral"
+        }
+        
+        -- Destrói decorativos (grama, pedras, etc) no raio da explosão
+        surface.destroy_decoratives{
+            area = {
+                {position.x - radius, position.y - radius},
+                {position.x + radius, position.y + radius}
+            }
+        }
+    end
+
+    -- 2. Busca de entidades para dano
+    local things = surface.find_entities_filtered{position = position, radius = radius}
+    
+    for _, e in pairs(things) do 
+        if e and e.valid and e.health and e.destructible and e.force then
+            if (not except) or except ~= e then 
+                if (not no_friend) or e.force ~= force then
+                    
+                    -- CALCULO DE DANO PROPORCIONAL
+                    local dist = math.sqrt((e.position.x - position.x)^2 + (e.position.y - position.y)^2)
+                    local final_damage = damage
+                    local half_radius = radius * 0.5
+                    
+                    if dist > half_radius then
+                        -- Cálculo: 100% de dano até metade do raio, decaindo até 25% na borda
+                        local ratio = (dist - half_radius) / (radius - half_radius)
+                        local damage_multiplier = 1.0 - (ratio * 0.75) 
+                        
+                        if damage_multiplier < 0.25 then damage_multiplier = 0.25 end
+                        final_damage = damage * damage_multiplier
+                    end
+
+                    -- Aplica o dano via Script (ignora triggers de protótipo)
+                    e.damage(final_damage, force, dmg_type) 
+                end
+            end
+        end 
+    end 
 end

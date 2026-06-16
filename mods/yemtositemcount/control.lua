@@ -138,6 +138,26 @@ local function calculatePlayerItem(player, stack)
 	end
 end
 
+local preview_queue = {}
+
+local function wait_for_blueprint()
+    for pid, _ in pairs(preview_queue) do
+        local player = game.players[pid]
+        local blueprint = player and get_blueprint_record(player)
+
+        -- Player no longer exists or isn't look at a blueprint
+        if not blueprint then
+            preview_queue[pid] = nil
+
+        -- Player's blueprint has fully loaded
+        elseif not blueprint.is_preview then
+            preview_queue[pid] = nil
+            create_gui(player)
+            player.gui.center.total_item_count.caption = calculateFromCost(player, blueprint.cost_to_build) .. " "
+        end
+    end
+end
+
 local function refresh(e)
 	local player = game.players[e.player_index]
 	local blueprint = get_blueprint_record(player)
@@ -149,8 +169,12 @@ local function refresh(e)
     end
 
 	if blueprint then
-		create_gui(player)
-		player.gui.center.total_item_count.caption = calculateFromCost(player, blueprint.cost_to_build) .. " "
+        if blueprint.is_preview then
+            preview_queue[e.player_index] = true
+        else
+            create_gui(player)
+            player.gui.center.total_item_count.caption = calculateFromCost(player, blueprint.cost_to_build) .. " "
+        end
 	elseif stack and stack.valid_for_read and not is_blacklisted(player, stack) then
         create_gui(player)
         player.gui.center.total_item_count.caption = calculatePlayerItem(player, stack) .. " "
@@ -159,7 +183,9 @@ local function refresh(e)
     end
 end
 
-script.on_event(defines.events.on_player_cursor_stack_changed,          refresh)
-script.on_event(defines.events.on_player_main_inventory_changed,        refresh)
-script.on_event(defines.events.on_player_ammo_inventory_changed,        refresh)
-script.on_event(defines.events.on_player_armor_inventory_changed,       refresh)
+script.on_event(defines.events.on_player_cursor_stack_changed, refresh)
+script.on_event(defines.events.on_player_main_inventory_changed, refresh)
+script.on_event(defines.events.on_player_ammo_inventory_changed, refresh)
+script.on_event(defines.events.on_player_armor_inventory_changed, refresh)
+script.on_event(defines.events.on_tick, wait_for_blueprint)
+

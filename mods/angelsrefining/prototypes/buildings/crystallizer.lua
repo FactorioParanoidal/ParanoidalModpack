@@ -43,12 +43,33 @@ local function angels_crystallizer_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-crystallizer"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-4.375,  41.75), shadow_offset = util.by_pixel(-4.375,  41.75), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  41.75), shadow_offset = util.by_pixel(-4.375,  41.75), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  41.75), shadow_offset = util.by_pixel(-4.375,  41.75), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.375,  41.75), shadow_offset = util.by_pixel(-4.375,  41.75), show_shadow = true },
-})
+circuit_connector_definitions["angels-crystallizer"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 41.75),
+      shadow_offset = util.by_pixel(-4.375, 41.75),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 41.75),
+      shadow_offset = util.by_pixel(-4.375, 41.75),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 41.75),
+      shadow_offset = util.by_pixel(-4.375, 41.75),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.375, 41.75),
+      shadow_offset = util.by_pixel(-4.375, 41.75),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {

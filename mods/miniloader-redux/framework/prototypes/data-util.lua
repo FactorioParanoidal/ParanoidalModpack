@@ -69,6 +69,7 @@ function FrameworkDataUtil.copy_entity_prototype(prototype, new_name, make_invis
 
     -- ConstantCombinatorPrototype
     if p.circuit_wire_connection_points then p.circuit_wire_connection_points = sprites.empty_connection_points(4) end
+---@diagnostic disable-next-line: undefined-global
     if p.circuit_wire_max_distance then p.circuit_wire_max_distance = default_circuit_wire_max_distance end
     if p.draw_copper_wires then p.draw_copper_wires = false end
 

@@ -28,7 +28,7 @@ if angelsmods.trigger.smelting_products["steel"].ingot then
           angelsmods.functions.get_object_icons("angels-liquid-molten-steel"),
           2,
           angelsmods.smelting.number_tint
-        )
+        ),
       },
       {
         name = "angels-liquid-molten-steel-4",
@@ -36,7 +36,7 @@ if angelsmods.trigger.smelting_products["steel"].ingot then
           angelsmods.functions.get_object_icons("angels-liquid-molten-steel"),
           3,
           angelsmods.smelting.number_tint
-        )
+        ),
       },
       {
         name = "angels-liquid-molten-steel-5",
@@ -44,7 +44,7 @@ if angelsmods.trigger.smelting_products["steel"].ingot then
           angelsmods.functions.get_object_icons("angels-liquid-molten-steel"),
           4,
           angelsmods.smelting.number_tint
-        )
+        ),
       },
     })
     OV.remove_prereq("angels-steel-smelting-2", "angels-silicon-smelting-1")

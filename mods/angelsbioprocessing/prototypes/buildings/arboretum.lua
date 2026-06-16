@@ -1,16 +1,58 @@
-circuit_connector_definitions["angels-bio-arboretum-1"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  8, main_offset = util.by_pixel(-66.125, -11.5), shadow_offset = util.by_pixel(-66.125, -11.5), show_shadow = true },
-  { variation =  8, main_offset = util.by_pixel(-66.125, -11.5), shadow_offset = util.by_pixel(-66.125, -11.5), show_shadow = true },
-  { variation =  8, main_offset = util.by_pixel(-66.125, -11.5), shadow_offset = util.by_pixel(-66.125, -11.5), show_shadow = true },
-  { variation =  8, main_offset = util.by_pixel(-66.125, -11.5), shadow_offset = util.by_pixel(-66.125, -11.5), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-arboretum-1"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 8,
+      main_offset = util.by_pixel(-66.125, -11.5),
+      shadow_offset = util.by_pixel(-66.125, -11.5),
+      show_shadow = true,
+    },
+    {
+      variation = 8,
+      main_offset = util.by_pixel(-66.125, -11.5),
+      shadow_offset = util.by_pixel(-66.125, -11.5),
+      show_shadow = true,
+    },
+    {
+      variation = 8,
+      main_offset = util.by_pixel(-66.125, -11.5),
+      shadow_offset = util.by_pixel(-66.125, -11.5),
+      show_shadow = true,
+    },
+    {
+      variation = 8,
+      main_offset = util.by_pixel(-66.125, -11.5),
+      shadow_offset = util.by_pixel(-66.125, -11.5),
+      show_shadow = true,
+    },
+  })
 
-circuit_connector_definitions["angels-bio-generator"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-4.625,  24.375), shadow_offset = util.by_pixel(-4.625,  24.375), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.625,  24.375), shadow_offset = util.by_pixel(-4.625,  24.375), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.625,  24.375), shadow_offset = util.by_pixel(-4.625,  24.375), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-4.625,  24.375), shadow_offset = util.by_pixel(-4.625,  24.375), show_shadow = true },
-})
+circuit_connector_definitions["angels-bio-generator"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.625, 24.375),
+      shadow_offset = util.by_pixel(-4.625, 24.375),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.625, 24.375),
+      shadow_offset = util.by_pixel(-4.625, 24.375),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.625, 24.375),
+      shadow_offset = util.by_pixel(-4.625, 24.375),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-4.625, 24.375),
+      shadow_offset = util.by_pixel(-4.625, 24.375),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   -- GENERATOR

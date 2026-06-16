@@ -95,7 +95,7 @@ data:extend({
     auto_recycle = false,
     ingredients = {
       { type = "item", name = "angels-solid-zinc-oxide", amount = 12 },
-      { type = "fluid", name = "angels-liquid-sulfuric-acid", amount = 40 },
+      { type = "fluid", name = "sulfuric-acid", amount = 40 },
     },
     results = {
       { type = "item", name = "angels-cathode-zinc", amount = 12 },

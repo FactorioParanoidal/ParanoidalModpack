@@ -1,14 +1,30 @@
--- Copyright (c) Kirazy
--- Part of Prismatic Belts
---
--- See LICENSE.md in the project directory for license information.
+-- Privileged execution order.
+require("prototypes.mods.base")
+require("prototypes.mods.space-age")
+require("prototypes.mods.bobs")
 
--- Mod Requires
-require("prototypes.mods.base") -- Vanilla with LoaderRedux / Vanilla Loaders / Deadlock Loaders
-require("prototypes.mods.space-age") -- Space Age
-require("prototypes.mods.bobs") -- Bob's Mods / Artisanal Reskins with Miniloaders / LoaderRedux / Vanilla Loaders / Deadlock Loaders
+-- Alphabetical. 😤
+require("prototypes.mods.5dim-transport")
+require("prototypes.mods.advanced-belts-sa")
+require("prototypes.mods.advanced-belts")
+require("prototypes.mods.belts-pro")
+require("prototypes.mods.better-belts")
+require("prototypes.mods.beyond-belts")
+require("prototypes.mods.castra")
+require("prototypes.mods.ev-logistics")
+require("prototypes.mods.exotic-industries")
+require("prototypes.mods.factorio-extended-plus")
+require("prototypes.mods.factorioplus")
+require("prototypes.mods.iper-belt")
+require("prototypes.mods.krastorio")
+require("prototypes.mods.mach-speed-logistics")
+require("prototypes.mods.matts-logistics")
 require("prototypes.mods.more-belts")
-require("prototypes.mods.krastorio") -- Krastorio 2 with Miniloaders
-require("prototypes.mods.ultimate-belts") -- Ultimate Belts with Miniloaders / Deadlock Loaders
-require("prototypes.mods.factorio-extended-plus") -- Factorio Extended Plus with Miniloaders / LoaderRedux / Deadlock Loaders
-require("prototypes.mods.random-factorio-things") -- Factorio Extended Plus with Miniloaders / Deadlock Loaders / Vanilla Loaders
+require("prototypes.mods.periodic-madness")
+require("prototypes.mods.promethium-belts")
+require("prototypes.mods.quantum-belts")
+require("prototypes.mods.random-factorio-things")
+require("prototypes.mods.rapid-belts")
+require("prototypes.mods.slow-belts-updated")
+require("prototypes.mods.ultimate-belts")
+require("prototypes.mods.wood-logistics")

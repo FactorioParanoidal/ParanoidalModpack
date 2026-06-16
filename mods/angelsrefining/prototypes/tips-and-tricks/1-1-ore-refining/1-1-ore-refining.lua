@@ -14,10 +14,9 @@ data:extend({
 
     starting_status = "locked",
     dependencies = nil,
-    trigger =
-    {
+    trigger = {
       type = "research",
-      technology = "angels-ore-crushing"
+      technology = "angels-ore-crushing",
     },
     --simulation = require "prototypes.tips-and-tricks.1-1-ore-refining.1-ore-refining-simulation",
   },

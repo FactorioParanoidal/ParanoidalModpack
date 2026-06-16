@@ -1,5 +1,7 @@
 function fillMobileFactoryConfig(config)
-	config["DimensionalOre"] = {
+	local nauvisConfig = config.nauvis
+
+	nauvisConfig["DimensionalOre"] = {
 		type="resource-ore",
 		
 		allotment=80,
@@ -12,7 +14,7 @@ function fillMobileFactoryConfig(config)
 		starting={richness=6000, size=20, probability=1},
 	}
 
-	config["DimensionalFluid"] = {
+	nauvisConfig["DimensionalFluid"] = {
 		type="resource-liquid",
 		minimum_amount=240000,
 		allotment=70,

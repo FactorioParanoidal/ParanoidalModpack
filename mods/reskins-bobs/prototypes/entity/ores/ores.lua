@@ -23,9 +23,14 @@ local ores = {
 	["bob-nickel-ore"] = { key = "lib", subfolder = "shared" }, -- 408073
 	["bob-quartz"] = { key = "lib", subfolder = "shared" }, -- 999999
 	["bob-silver-ore"] = { key = "lib", subfolder = "shared" },
-	["bob-tungsten-ore"] = { key = "lib", subfolder = "shared", num_variations = 8 },
 	["bob-zinc-ore"] = { key = "lib", subfolder = "shared" },
 }
+
+if reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0") then
+	ores["tungsten-ore"] = { key = "lib", subfolder = "shared", filename = "bob-tungsten-ore", num_variations = 8 }
+else
+	ores["bob-tungsten-ore"] = { key = "lib", subfolder = "shared", num_variations = 8 }
+end
 
 for name, params in pairs(ores) do
 	local entity = data.raw["resource"][name]
@@ -33,6 +38,7 @@ for name, params in pairs(ores) do
 		goto continue
 	end
 
+	local sprite_name = params.filename or name
 	if name == "bob-sulfur" then
 		reskins.lib.icons.assign_deferrable_icon({
 			name = entity.name,
@@ -49,18 +55,18 @@ for name, params in pairs(ores) do
 			type_name = entity.type,
 			icon_data = {
 				{
-					icon = reskins[params.key].directory .. "/graphics/icons/" .. params.subfolder .. "/ores/" .. name .. "/" .. name .. ".png",
+					icon = reskins[params.key].directory .. "/graphics/icons/" .. params.subfolder .. "/ores/" .. sprite_name .. "/" .. sprite_name .. ".png",
 					icon_size = 64,
 					scale = 0.5,
 				},
 			},
-			pictures = reskins.internal.create_sprite_variations(params.key, params.subfolder .. "/ores", name, params.num_variations or 4, params.is_light),
+			pictures = reskins.internal.create_sprite_variations(params.key, params.subfolder .. "/ores", sprite_name, params.num_variations or 4, params.is_light),
 		})
 	end
 
 	entity.stages = {
 		sheet = {
-			filename = "__reskins-bobs__/graphics/entity/ores/" .. name .. "/" .. name .. ".png",
+			filename = "__reskins-bobs__/graphics/entity/ores/" .. sprite_name .. "/" .. sprite_name .. ".png",
 			priority = "extra-high",
 			size = 128,
 			frame_count = 8,

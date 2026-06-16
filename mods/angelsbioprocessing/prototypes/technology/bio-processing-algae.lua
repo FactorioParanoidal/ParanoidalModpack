@@ -60,7 +60,7 @@ data:extend({
       },
       {
         type = "unlock-recipe",
-        recipe = "angels-algae-brown-burning-wash",
+        recipe = "angels-water-mineralized",
       },
     },
     unit = {

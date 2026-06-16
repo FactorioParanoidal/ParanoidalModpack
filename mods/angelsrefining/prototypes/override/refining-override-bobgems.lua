@@ -38,12 +38,12 @@ end
 -------------------------------------------------------------------------------
 if mods["bobplates"] then
   OV.patch_recipes({
-    { name = "bob-ruby-3", results = {{ type = "item", name = "bob-ruby-3", amount = 1 }}},
-    { name = "bob-sapphire-3", results = {{ type = "item", name = "bob-sapphire-3", amount = 1 }}},
-    { name = "bob-emerald-3", results = {{ type = "item", name = "bob-emerald-3", amount = 1 }}},
-    { name = "bob-amethyst-3", results = {{ type = "item", name = "bob-amethyst-3", amount = 1 }}},
-    { name = "bob-topaz-3", results = {{ type = "item", name = "bob-topaz-3", amount = 1 }}},
-    { name = "bob-diamond-3", results = {{ type = "item", name = "bob-diamond-3", amount = 1 }}},
+    { name = "bob-ruby-3", results = { { type = "item", name = "bob-ruby-3", amount = 1 } } },
+    { name = "bob-sapphire-3", results = { { type = "item", name = "bob-sapphire-3", amount = 1 } } },
+    { name = "bob-emerald-3", results = { { type = "item", name = "bob-emerald-3", amount = 1 } } },
+    { name = "bob-amethyst-3", results = { { type = "item", name = "bob-amethyst-3", amount = 1 } } },
+    { name = "bob-topaz-3", results = { { type = "item", name = "bob-topaz-3", amount = 1 } } },
+    { name = "bob-diamond-3", results = { { type = "item", name = "bob-diamond-3", amount = 1 } } },
   })
 end
 

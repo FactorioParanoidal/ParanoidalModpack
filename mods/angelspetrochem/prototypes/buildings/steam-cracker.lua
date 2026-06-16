@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-steam-cracker"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation = 18, main_offset = util.by_pixel(-55.375,  63.375), shadow_offset = util.by_pixel(-55.375,  63.375), show_shadow = true },
-  { variation = 18, main_offset = util.by_pixel(-55.375,  63.375), shadow_offset = util.by_pixel(-55.375,  63.375), show_shadow = true },
-  { variation = 18, main_offset = util.by_pixel(-55.375,  63.375), shadow_offset = util.by_pixel(-55.375,  63.375), show_shadow = true },
-  { variation = 18, main_offset = util.by_pixel(-55.375,  63.375), shadow_offset = util.by_pixel(-55.375,  63.375), show_shadow = true },
-})
+circuit_connector_definitions["angels-steam-cracker"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 18,
+      main_offset = util.by_pixel(-55.375, 63.375),
+      shadow_offset = util.by_pixel(-55.375, 63.375),
+      show_shadow = true,
+    },
+    {
+      variation = 18,
+      main_offset = util.by_pixel(-55.375, 63.375),
+      shadow_offset = util.by_pixel(-55.375, 63.375),
+      show_shadow = true,
+    },
+    {
+      variation = 18,
+      main_offset = util.by_pixel(-55.375, 63.375),
+      shadow_offset = util.by_pixel(-55.375, 63.375),
+      show_shadow = true,
+    },
+    {
+      variation = 18,
+      main_offset = util.by_pixel(-55.375, 63.375),
+      shadow_offset = util.by_pixel(-55.375, 63.375),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -121,7 +142,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -131,7 +152,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -255,7 +276,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -265,7 +286,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -389,7 +410,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -399,7 +420,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -522,7 +543,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -532,7 +553,7 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {

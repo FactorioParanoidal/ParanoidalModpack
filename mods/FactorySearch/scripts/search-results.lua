@@ -160,6 +160,7 @@ function SearchResults.add_tag(tag, entity_groups)
   local localised_name = tag.text
   if localised_name == "" then localised_name = { "search-gui.default-map-tag-name" } end
 
+  ---@type EntityGroup
   local group = {
     count = 1,
     avg_position = tag_position,
@@ -167,6 +168,7 @@ function SearchResults.add_tag(tag, entity_groups)
     selection_boxes = {
       [1] = selection_box
     },
+    selection_box = selection_box,
     localised_name = localised_name,
   }
   table.insert(entity_groups, group)

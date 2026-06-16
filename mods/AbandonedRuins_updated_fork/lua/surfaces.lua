@@ -1,3 +1,9 @@
+-- Load other libraries
+local constants = require("constants")
+
+---@type boolean
+local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
+
 --- "Class/library" for surface handling
 local surfaces = {}
 
@@ -52,6 +58,8 @@ function surfaces.exclude(name)
   if debug_log then log(string.format("[exclude]: name[]='%s' - CALLED!", type(name))) end
   if type(name) ~= "string" then
     error(string.format("name[]='%s' is not expected type 'string'", type(name)))
+  elseif #name == 0 then
+    error("Parameter 'name' cannot be an empty string")
   elseif game.surfaces[name] ~= nil and game.surfaces[name].planet ~= nil then
     error(string.format("Surface name='%s' is a planet surface. This function is for internal or underground surfaces only. If you want your ruins not spawning on a certain planet, use `no_spawning` for individual ruins or invoke the remote-call function `no_spawning_on` to exclude your ruin-set from a planet entirely.", name))
   elseif storage.excluded[name] ~= nil then
@@ -73,6 +81,8 @@ function surfaces.reinclude(name)
   if debug_log then log(string.format("[reinclude]: name[]='%s' - CALLED!", type(name))) end
   if type(name) ~= "string" then
     error(string.format("name[]='%s' is not expected type 'string'", type(name)))
+  elseif #name == 0 then
+    error("Parameter 'name' cannot be an empty string")
   elseif game.surfaces[name] ~= nil and game.surfaces[name].planet ~= nil then
     error(string.format("Surface name='%s' is a planet surface. This function is for internal or underground surfaces only. If you want your ruins not spawning on a certain planet, use `no_spawning` for individual ruins or invoke the remote-call function `no_spawning_on` to exclude your ruin-set from a planet entirely.", name))
   elseif storage.excluded[name] == nil then
@@ -95,6 +105,8 @@ function surfaces.is_excluded(name)
   if debug_log then log(string.format("[is_excluded]: name[]='%s' - CALLED!", type(name))) end
   if type(name) ~= "string" then
     error(string.format("name[]='%s' is not expected type 'string'", type(name)))
+  elseif #name == 0 then
+    error("Parameter 'name' cannot be an empty string")
   end
 
   -- Init table (if not found)

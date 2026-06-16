@@ -76,9 +76,16 @@ end
 local pipe_material_map = {
 	["titanium"] = { material_type = "angels-titanium", tier = 4, tint = util.color("#995f92") },
 	["ceramic"] = { material_type = "angels-ceramic", tier = 4, tint = util.color("#ffffff") },
-	["tungsten"] = { material_type = "angels-tungsten", tier = 4, tint = util.color("#7e5f45") },
-	["nitinol"] = { material_type = "angels-nitinol", tier = 5, tint = util.color("#7664a9") },
+	["tungsten"] = { material_type = "angels-tungsten", tier = 5, tint = util.color("#7e5f45") },
 }
+
+if reskins.lib.version.is_same_or_newer(mods["boblibrary"], "2.1.0") then
+	-- Brass is tier 3 in Angel's, but became tier 4 in Bob's.
+	pipe_material_map["brass"] = { material_type = "brass", tier = 3, tint = util.color("#f9c854") }
+else
+	pipe_material_map["tungsten"].tier = 4
+	pipe_material_map["nitinol"] = { material_type = "angels-nitinol", tier = 5, tint = util.color("#7664a9") }
+end
 
 -- Reskin pipes, create and assign extra details
 for name_prefix, params in pairs(pipe_material_map) do

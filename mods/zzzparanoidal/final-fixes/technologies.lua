@@ -161,8 +161,7 @@ paralib.bobmods.lib.tech.add_prerequisite("bob-radar-2", "radar") --Добави
 
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-tungsten-alloy-processing", "bob-tungsten-carbide-2x")
 paralib.bobmods.lib.recipe.hide("bob-tungsten-carbide-2x")
-paralib.bobmods.lib.recipe.hide("bob-copper-tungsten-pipe")
-paralib.bobmods.lib.recipe.hide("bob-copper-tungsten-pipe-to-ground")
+-- copper-tungsten-труба РАСПРЯТАНА: после удаления нитинол-трубы (Bob's 2.1) она верхний тир и делается обычным рецептом (молтена copper-tungsten нет).
 paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe")
 paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe-to-ground")
 
@@ -445,32 +444,7 @@ paralib.bobmods.lib.recipe.replace_ingredient(
 	"bob-titanium-gear-wheel",
 	"bob-cobalt-steel-gear-wheel"
 )
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-transport-belt",
-	"bob-nitinol-bearing",
-	"bob-cobalt-steel-bearing"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-transport-belt",
-	"bob-nitinol-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-underground-belt",
-	"bob-nitinol-bearing",
-	"bob-cobalt-steel-bearing"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-underground-belt",
-	"bob-nitinol-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient("bob-turbo-splitter", "bob-nitinol-bearing", "bob-cobalt-steel-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-splitter",
-	"bob-nitinol-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
+-- turbo-ленты — в tweaks/recipe/oberhaul-belt-port.lua
 paralib.bobmods.lib.recipe.replace_ingredient(
 	"nco-wide-crane",
 	"bob-cobalt-steel-gear-wheel",
@@ -548,10 +522,10 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-bio-processing-red", "Calcium
 -- prototypes/angels-smelting-extended-port.lua (единый файл порта).
 
 --Рокировка рецептов нитинольных труб (AKMF)
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-nitinol-pipe")
-paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-nitinol-pipe")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-nitinol-pipe-to-ground")
-paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-nitinol-pipe-to-ground")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-copper-tungsten-pipe")
+paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-copper-tungsten-pipe")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitinol-smelting-1", "bob-copper-tungsten-pipe-to-ground")
+paralib.bobmods.lib.tech.remove_recipe_unlock("bob-nitinol-processing", "bob-copper-tungsten-pipe-to-ground")
 
 --Для сборщика электроники нужны фиол. манипуляторы (AKMF)
 paralib.bobmods.lib.tech.add_prerequisite("bob-electronics-machine-3", "bob-turbo-inserter")

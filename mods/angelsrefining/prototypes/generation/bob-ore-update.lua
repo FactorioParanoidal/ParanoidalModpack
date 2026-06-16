@@ -126,20 +126,6 @@ if bobmods and bobmods.ores then
       })
     end
 
-    if bobmods.ores.sulfur.enabled then
-      angelsmods.functions.add_resource("update", {
-        name = "bob-sulfur",
-        order = "b-cj",
-        autoplace = {
-          starting_area = false,
-          resource_index = 39,
-          base_density = 8,
-          regular_rq_factor_multiplier = 1.0,
-          starting_rq_factor_multiplier = 1.1,
-        },
-      })
-    end
-
     if bobmods.ores.tin.enabled then
       angelsmods.functions.add_resource("update", {
         name = "bob-tin-ore",
@@ -156,7 +142,7 @@ if bobmods and bobmods.ores then
 
     if bobmods.ores.tungsten.enabled then
       angelsmods.functions.add_resource("update", {
-        name = "bob-tungsten-ore",
+        name = "tungsten-ore",
         order = "b-cl",
         autoplace = {
           starting_area = false,

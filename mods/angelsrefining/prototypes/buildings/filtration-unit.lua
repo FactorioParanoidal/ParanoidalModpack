@@ -1,9 +1,30 @@
-circuit_connector_definitions["angels-filtration-unit"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  4, main_offset = util.by_pixel(-27.25,  38), shadow_offset = util.by_pixel(-27.25,  38), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-27.25,  38), shadow_offset = util.by_pixel(-27.25,  38), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-27.25,  38), shadow_offset = util.by_pixel(-27.25,  38), show_shadow = true },
-  { variation =  4, main_offset = util.by_pixel(-27.25,  38), shadow_offset = util.by_pixel(-27.25,  38), show_shadow = true },
-})
+circuit_connector_definitions["angels-filtration-unit"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-27.25, 38),
+      shadow_offset = util.by_pixel(-27.25, 38),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-27.25, 38),
+      shadow_offset = util.by_pixel(-27.25, 38),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-27.25, 38),
+      shadow_offset = util.by_pixel(-27.25, 38),
+      show_shadow = true,
+    },
+    {
+      variation = 4,
+      main_offset = util.by_pixel(-27.25, 38),
+      shadow_offset = util.by_pixel(-27.25, 38),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -75,8 +96,8 @@ data:extend({
         pipe_covers = pipecoverspictures(),
         pipe_picture = angelsmods.refining.filtrationpipepictures1(),
         volume = 1000,
-        pipe_connections = { 
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+        pipe_connections = {
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -86,7 +107,7 @@ data:extend({
         pipe_picture = angelsmods.refining.filtrationpipepictures2(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -180,7 +201,7 @@ data:extend({
         pipe_picture = angelsmods.refining.filtrationpipepictures1(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -189,7 +210,7 @@ data:extend({
         pipe_picture = angelsmods.refining.filtrationpipepictures2(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -280,7 +301,7 @@ data:extend({
         pipe_picture = angelsmods.refining.filtrationpipepictures1(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { 1, 2 }, direction = defines.direction.south },
         },
       },
       {
@@ -289,7 +310,7 @@ data:extend({
         pipe_picture = angelsmods.refining.filtrationpipepictures2(),
         volume = 1000,
         pipe_connections = {
-          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south }
+          { flow_direction = "input", position = { -1, 2 }, direction = defines.direction.south },
         },
       },
       {

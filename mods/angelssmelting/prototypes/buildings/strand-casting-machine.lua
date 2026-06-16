@@ -31,12 +31,33 @@ local function angels_strand_casting_machine_fluid_boxes()
   }
 end
 
-circuit_connector_definitions["angels-strand-casting-machine"] = circuit_connector_definitions.create_vector(universal_connector_template, {
-  { variation =  5, main_offset = util.by_pixel( 50,  11.625), shadow_offset = util.by_pixel( 50,  11.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 50,  11.625), shadow_offset = util.by_pixel( 50,  11.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 50,  11.625), shadow_offset = util.by_pixel( 50,  11.625), show_shadow = true },
-  { variation =  5, main_offset = util.by_pixel( 50,  11.625), shadow_offset = util.by_pixel( 50,  11.625), show_shadow = true },
-})
+circuit_connector_definitions["angels-strand-casting-machine"] =
+  circuit_connector_definitions.create_vector(universal_connector_template, {
+    {
+      variation = 5,
+      main_offset = util.by_pixel(50, 11.625),
+      shadow_offset = util.by_pixel(50, 11.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(50, 11.625),
+      shadow_offset = util.by_pixel(50, 11.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(50, 11.625),
+      shadow_offset = util.by_pixel(50, 11.625),
+      show_shadow = true,
+    },
+    {
+      variation = 5,
+      main_offset = util.by_pixel(50, 11.625),
+      shadow_offset = util.by_pixel(50, 11.625),
+      show_shadow = true,
+    },
+  })
 
 data:extend({
   {
@@ -448,7 +469,12 @@ data:extend({
     drawing_box_vertical_extension = 1,
     module_slots = 3,
     allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-    crafting_categories = { "angels-strand-casting", "angels-strand-casting-2", "angels-strand-casting-3", "angels-strand-casting-4" },
+    crafting_categories = {
+      "angels-strand-casting",
+      "angels-strand-casting-2",
+      "angels-strand-casting-3",
+      "angels-strand-casting-4",
+    },
     crafting_speed = 3,
     energy_source = {
       type = "electric",

@@ -1,6 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: May 26, 2026
+  Info:
+    - Fixed year in date of the previous changelog
+    - Removed some leftover css files
+  Minor Features:
+    - Added space-connection and space-location scripts (under stdlib/data/)
+      Similar to planet script, mainly just a shorthand wrapper for functions contained in the space script
+    - Added mod-setting script (under stdlib/data/)
+      Can be used during startup or data phase to interact with mod settings
+      Primary function is to shorthand checks for setting existing, and grabbing value
+      Includes force_hidden(value) function, to mark as hidden and set a forced_value
+---------------------------------------------------------------------------------------------------
 Version: 2.1.0
-Date: January 4, 2025
+Date: January 4, 2026
   Info:
     - Potentially resolved long standing issues between PyPostProcessing and Stdlib since 2.0
   Changes:

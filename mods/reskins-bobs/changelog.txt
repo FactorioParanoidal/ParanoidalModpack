@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.8
+Date: 2026-06-01
+  Changes:
+    - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions
+---------------------------------------------------------------------------------------------------
+Version: 2.3.7
+Date: 2026-05-31
+  Changes:
+    - Adjustments to support changes made for Bob's mods 2.1+.
+    - Progression tiers have changed for the following entities when used with Bob's mods 2.1+:
+      - Barrelling Pumps and Compressors (4, 5 -> 3, 4)
+    - Corrected progression tiers for the following entities:
+      - Armored Trains (4, 5 -> 3, 4)
+      - Barrelling Pumps and Compressors (2, 3, -> 1, 2)
+      - Exoskeletons (3, 4, 5 -> 2, 3, 4)
+      - Sniper Turrets (1 -> 2)
+  Bugfixes:
+    - Fixed that Bob's overflow, top-up and one-way valves were not reskinned
+---------------------------------------------------------------------------------------------------
 Version: 2.3.6
 Date: 2026-01-03
   Bugfixes:

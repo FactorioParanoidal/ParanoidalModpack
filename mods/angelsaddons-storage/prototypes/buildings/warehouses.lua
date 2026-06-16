@@ -1,6 +1,10 @@
-circuit_connector_definitions["angels-warehouse"] = circuit_connector_definitions.create_single(universal_connector_template,
-  { variation =  4, main_offset = util.by_pixel(-4.625,  14.25), shadow_offset = util.by_pixel(-4.625,  14.25), show_shadow = true }
-)
+circuit_connector_definitions["angels-warehouse"] =
+  circuit_connector_definitions.create_single(universal_connector_template, {
+    variation = 4,
+    main_offset = util.by_pixel(-4.625, 14.25),
+    shadow_offset = util.by_pixel(-4.625, 14.25),
+    show_shadow = true,
+  })
 
 data:extend({
   {

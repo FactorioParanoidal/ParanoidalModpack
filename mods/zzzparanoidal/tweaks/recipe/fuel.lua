@@ -8,9 +8,9 @@ data.raw.recipe["bi-wood-fuel-brick"].ingredients =
 
 -- баланс электрички
 if mods["BatteryElectricTrain"] then
-	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-2-empty", "battery", "bob-lithium-ion-battery")
-	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-3-empty", "battery", "bob-silver-zinc-battery")
-	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "battery", "bob-silver-zinc-battery")
+	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-2-empty", "battery", "bob-battery-2")
+	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-3-empty", "battery", "bob-battery-3")
+	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "battery", "bob-battery-3")
 	paralib.bobmods.lib.recipe.replace_ingredient("bet-fuel-4-empty", "effectivity-module-3", "speed-module-3")
 	paralib.bobmods.lib.recipe.add_ingredient("bet-fuel-4-empty", { type = "item", name = "bob-advanced-processing-unit", amount = 3})
 end

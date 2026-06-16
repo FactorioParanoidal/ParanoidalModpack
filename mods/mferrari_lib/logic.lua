@@ -80,7 +80,6 @@ function RandomNegPos()
     end
 end
 
-
 function to_table(pos_arr)
     if #pos_arr == 2 then
         return { x = pos_arr[1], y = pos_arr[2] }

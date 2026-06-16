@@ -1,6 +1,6 @@
 {
   "name": "HeroTurretRedux",
-  "version": "1.0.32",
+  "version": "1.0.38",
   "title": "HeroTurrets_Redux",
   "author": "ForTheKing55",
   "contact": "",
@@ -9,6 +9,6 @@
   "description": "Turrets are built using salvaged self-learning AI tech from your ship allowing them to get deadlier with practice.  Extends turrets via ranking system based on kills. Turrets generated so not limited to vanilla, identifiable by overlaid rank insignia. Rank buffs individual turrets.",
   "dependencies": [
     "base >= 2.0",
-    "(?) Rampant Arsenal"
+    "? Yuoki >= 1.2.0"
   ]
 }

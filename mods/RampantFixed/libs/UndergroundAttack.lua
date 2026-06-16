@@ -604,7 +604,7 @@ function undergroundAttack.updateUndergroundAttackProbability(map)
 	end
 	if map.undergroundAttackProbability == 0 then
 		map.undergroundAttackProbability = newUndergroundAttackProbability
-		if newUndergroundAttackProbability > 0 then
+		if (newUndergroundAttackProbability > 0) and not map.universe.firtstUndergroundAlertShown then	-- firtstUndergroundAlertShown - sometimes 1st attack occurs early (exmpl: long range squadkilling), so do not warn again
 			game.print({"description.rampantFixed--undergroundAttackWarning", map.surface.name})
 			game.print({"description.rampantFixed--undergroundAttackWarning2"})
 		end

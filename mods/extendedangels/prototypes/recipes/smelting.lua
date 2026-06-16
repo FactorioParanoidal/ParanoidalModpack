@@ -217,7 +217,7 @@ data:extend({
       { type = "item", name = "angels-powder-tungsten-carbide", amount = 12 },
     },
     results = {
-      { type = "item", name = "bob-tungsten-carbide", amount = 12 },
+      { type = "item", name = "tungsten-carbide", amount = 12 },
     },
     order = "ad",
   },

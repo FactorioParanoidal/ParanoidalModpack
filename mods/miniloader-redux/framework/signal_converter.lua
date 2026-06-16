@@ -34,12 +34,12 @@ function SignalConverter:signal_to_prototype(signal)
     assert(signal)
 
     local signal_type = signal.signal.type or 'item' -- see https://lua-api.factorio.com/latest/concepts/SignalID.html
-    local type = self.signal_id_type[signal_type] and self.signal_id_type[signal_type]
+    local signal_id_type = self.signal_id_type[signal_type] and self.signal_id_type[signal_type]
         or signal_type                               -- see https://lua-api.factorio.com/latest/classes/LuaPrototypes.html
 
-    assert(prototypes[type], ('prototype [%s] does not exist'):format(type))
-    assert(prototypes[type][signal.signal.name], ('prototype [%s][%s] does not exist'):format(type, signal.signal.name))
-    return prototypes[type][signal.signal.name]
+    assert(prototypes[signal_id_type], ('prototype [%s] does not exist'):format(signal_id_type))
+    assert(prototypes[signal_id_type][signal.signal.name], ('prototype [%s][%s] does not exist'):format(signal_id_type, signal.signal.name))
+    return prototypes[signal_id_type][signal.signal.name]
 end
 
 ---@param signal Signal

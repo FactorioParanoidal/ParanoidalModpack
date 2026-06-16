@@ -19,6 +19,7 @@ require("tweaks.entity.boilers")
 require("tweaks.entity.alert-arrow")
 require("tweaks.entity.miniloaders")
 require("tweaks.entity.generators")
+require("tweaks.entity.oberhaul-lab-power") -- 1.1 Oberhaul: энергия лабов (scienceoberhaul)
 require("tweaks.entity.fluid-void")
 require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
@@ -51,7 +52,7 @@ require("tweaks.technology.pumps")
 require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
-require("tweaks.technology.spacemod-port")
+require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
 require("tweaks.technology.research-evolution-icon") -- иконка-график вместо красного "+" у эффекта research_evolution_factor
 require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
 
@@ -89,12 +90,8 @@ require("tweaks.custom.uniform-recipies")
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
 
--- Локали для рецептов angelsextended-remelting-fixed:
--- molten-*-alloy-mixing* и molten-*-remelting не имеют recipe-name локалей
--- ни в 1.1, ни в 2.0. В 1.1 Factorio авто-выводил имя из единственного fluid-
--- результата; в 2.0 из-за кастомного icons-оверлея авто-вывод не срабатывает
--- → "Unknown key: recipe-name.X". Прокидываем имя через localised_name к fluid.
--- (Sorting/rebalance/tier-categories — в tweaks/recipe/angels-smelting-extended-port.lua)
+-- molten-*-alloy-mixing/remelting не имеют recipe-name локали → "Unknown key" в 2.0
+-- (icons-оверлей ломает авто-вывод). Берём имя из fluid-результата.
 for name, recipe in pairs(data.raw.recipe) do
 	if (name:match("^molten%-.*%-alloy%-mixing") or name:match("^molten%-.*%-remelting$"))
 		and not recipe.localised_name then
@@ -105,13 +102,8 @@ for name, recipe in pairs(data.raw.recipe) do
 	end
 end
 
--- ============================================================
--- ПРЯМОЕ ИСПРАВЛЕНИЕ РЕЦЕПТОВ ПЛАВКИ (после OV.execute)
--- Стратегия 1.1: модифицируем angels*-crushed-smelting in-place
--- (7 crushed → 4 plate + 1 slag), как было в micro-final-fix.lua.
--- bob-*-plate recipe остаётся скрытым силами angelssmelting'а.
--- ============================================================
-
+-- 1.1 micro-final-fix: правим angels*-crushed-smelting in-place (после OV.execute,
+-- чтобы OV не перезатёр). bob-*-plate остаётся скрыт силами angelssmelting.
 local function patch_crushed_smelting(recipe_name, crushed_name, plate_name)
     local r = data.raw.recipe[recipe_name]
     if not r then return end
@@ -125,10 +117,8 @@ local function patch_crushed_smelting(recipe_name, crushed_name, plate_name)
     r.localised_name = { "item-name." .. plate_name }
 end
 
--- Свинец (Rubyte): 7×ore5-crushed → 4×lead-plate + 1×slag
+-- свинец (Rubyte / ore5), олово (Bobmonium / ore6)
 patch_crushed_smelting("angels-ore5-crushed-smelting", "angels-ore5-crushed", "bob-lead-plate")
-
--- Олово (Bobmonium): 7×ore6-crushed → 4×tin-plate + 1×slag
 patch_crushed_smelting("angels-ore6-crushed-smelting", "angels-ore6-crushed", "bob-tin-plate")
 
 -- Отключить raw-ore дубликаты (появились в 2.0; в 1.1 их не было)
@@ -141,6 +131,37 @@ end
 
 -- Oberhaul refining-port (после OV.execute, чтобы OV не перезатёр изменения).
 require("tweaks.recipe.oberhaul-refining-port")
+
+-- Oberhaul belt-port (beltrecipes + beltentities, 1.1)
+require("tweaks.recipe.oberhaul-belt-port")
+
+-- Oberhaul petrochem-port (petrochemchange, 1.1)
+require("tweaks.recipe.oberhaul-petrochem-port")
+
+-- Баланс стоимости резины из дерева (resin/bob-resin)
+require("tweaks.recipe.resin-balance")
+
+-- Oberhaul gems-port (gems2 огранка + gems ликвефакция, 1.1)
+require("tweaks.recipe.oberhaul-gems-port")
+
+-- Oberhaul solar-port (bobssolar: ×4 тиры панелей/аккумуляторов, 1.1)
+require("tweaks.recipe.oberhaul-solar-port")
+
+-- Oberhaul module-port (эффекты + слоты модулей, 1.1; цена — отдельно)
+require("tweaks.recipe.oberhaul-module-port")
+require("tweaks.technology.spacemod-port")
+
+-- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
+-- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.
+for _, recipe in pairs(data.raw.recipe) do
+	for _, list in ipairs({ recipe.ingredients or {}, recipe.results or {} }) do
+		for _, item in pairs(list) do
+			if item.name == "angels-liquid-sulfuric-acid" then
+				item.name = "sulfuric-acid"
+			end
+		end
+	end
+end
 
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")

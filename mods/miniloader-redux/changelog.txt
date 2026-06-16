@@ -1,4 +1,26 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.13.1
+Date: 2026-06-11
+  Bugfix:
+    - update support for bob logistics 2.1
+    - ensure that string keys do not leak into the internal configuration (addresses #39)
+    - fix a crash bug when redoing a spoilage setting change
+    - fix gui bug when opening a GUI with spoilage already set
+---------------------------------------------------------------------------------------------------
+Version: 0.13.0
+Date: 2026-05-06
+  Changes:
+    - correctness fixes
+    - another fix for configuration copy/paste
+    - support Bob's Electronics (fixes #38)
+    - support undo/redo
+    - make alt icons smaller (suggested by @b_jonas on the forum)
+    - support blueprint parameterization (fixes #24)
+    - add a GUI for spoilage (addresses #32)
+    - add support for TurboBelt (contributed by @n0t49a1n in #34)
+    - address problems with Blueprint Sandboxes described in #35. Actual fix needs to be done in
+      that mod
+---------------------------------------------------------------------------------------------------
 Version: 0.12.0
 Date: 2025-10-26
   Minor Features:
