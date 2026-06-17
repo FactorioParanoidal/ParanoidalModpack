@@ -1,0 +1,157 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.11
+Date: 07. 03. 2026
+  Bugfixes:
+    - Fixed that the "off" belt stacking setting added belt stacking to the prototype regardless.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.10
+Date: 02. 03. 2026
+  Compatibility:
+    - [Expansion] Added a startup setting to control loader belt stacking.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.9
+Date: 27. 02. 2026
+  Bugfixes:
+    - Fixed that the internal loader pipes were visible in editor mode.
+    - Fixed that the internal loader pipes were not given a localised name.
+  Locale:
+    - Added Ukrainian translation, thanks to Генріх Мхітарян.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.8
+Date: 22. 02. 2026
+  Changes:
+    - The alt-mode icons have been scaled down slightly.
+  Bugfixes:
+    - [Space Exploration] Fixed the internal pipe counting against spaceship integrity.
+  Locale:
+    - Updated Spanish translation, thanks to SpiderLove.
+    - Updated Russian translation, thanks to Shadow_Man.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+Date: 03. 06. 2025
+  Bugfixes:
+    - [Krastorio 2] Fixed crash on startup with Krastorio 2.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+Date: 05. 04. 2025
+  Bugfixes:
+    - [Space Age] Fixed crafting category for foundry.
+    - [Space Exploration] Fixed loading error.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 25. 11. 2024
+  Changes:
+    - Adjusted volume of the item pick/drop sounds to match vanilla.
+
+  Bugfixes:
+    - [Space Age] Fixed loaders not functioning correctly on space platforms.
+    - Fixed loaders in lubricated mode accepting any fluid.
+    - Fixed loaders not snapping to ghost fusion reactors, ghost agricultural towers, or ghost asteroid collectors.
+    - Internal pipes are now hidden from Factoriopedia.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 02. 11. 2024
+  Changes:
+    - Loader items now have a colorblind hint, taken from their respective transport belt. (Colorblind hints are an experimental Factorio setting)
+
+  Compatibility:
+    - [Space Age] Turbo loaders now have Vulcanus as their default import location for space platform logistics.
+    - [Space Age] Loaders can now freeze on Aquilo.
+    - [Space Age] Fixed Turbo loaders recipe always requiring their previous tier, even without AAI Industry.
+    - [Space Age] Increased tungsten plate cost of Turbo loaders to be about the cost of 2 splitters.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 21. 10. 2024
+  Bugfixes:
+    - Fixed that loaders in lubricated mode would instantly empty a fluid system.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 21. 10. 2024
+  Bugfixes:
+    - Fixed load error when using with Pyanodons.
+    - Fixed load error when using with Space Age and AAI Loaders is in "Graphics Only" mode.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 17. 10. 2024
+  Bugfixes:
+    - Fixed test migration leftover causing chat messages.
+    - Added missing explosion on loader destruction.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 16. 10. 2024
+  Changes:
+    - Updated for Factorio 2.0
+
+  Compatibility:
+    - [Space Age] Added Turbo loaders when Space Age is active.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 02. 09. 2024
+  Bugfixes:
+    - Fixed v0.1.5 migration crash when using loaders in non-lubricated mode.
+
+  Compatibility:
+    - [SE] Added the missing Space Science Pack to the cost of the Space Loader technology.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 02. 09. 2024
+  Changes:
+    - Removed custom order string on loader entities, so they use the more standard Factorio default order string. (Thanks to KiwiHawk)
+
+  Bugfixes:
+    - Fixed issue where destroying and quickly reviving a lubricated loader would put it in a broken "No Lubricant" state even when it did have lubricant. (Already broken loaders will not be automatically fixed. Rebuilding them will fix the issue.)
+
+  Compatibility:
+    - [K2] Loaders now have default upgrade targets: Express -> Advanced -> Superior.
+    - [SE] Space Loader now has a default upgrade target: Black Deep Space Loader.
+
+  Locale:
+    - Added Japanese translation, thanks to YAMATO_Hajime.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 29.1.2023
+  Changes:
+    - Added rails as snap targets for loaders, since loaders can be used with cargo wagons as of Factorio v1.1.75.
+
+  Bugfixes:
+    - Fixed cloning creating extra pipe entities if the loaders were being used in lubricated mode.
+    - Fixed crash that could occur in lubricated mode if the crude oil or lubricant icon definitions were changed by another mod and AAI Loaders tried to make a cheaper lubricant recipe.
+
+  Locale:
+    - Added Russian translation, thanks to Shadow_Man.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 30.12.2022
+  Compatibility:
+    - Improved loader recipes when used with Pyanodons mods.
+
+  Locale:
+    - Added Korean translation, thanks to Ruri.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 28.12.2022
+  Compatibility:
+    - Fixed a tech prerequisite issue, improving compatibility with IR3.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 28.12.2022
+  Info:
+    - Initial version.
+    - Lubricated, expensive and graphics-only modes.
