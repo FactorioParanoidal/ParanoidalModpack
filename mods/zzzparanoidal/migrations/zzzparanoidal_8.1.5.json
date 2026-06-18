@@ -1,0 +1,18 @@
+{
+  "entity": [
+    ["hps__ml-bob-basic-miniloader-l", "aai-basic-loader"],
+    ["hps__ml-miniloader-l", "aai-loader"],
+    ["hps__ml-fast-miniloader-l", "aai-fast-loader"],
+    ["hps__ml-express-miniloader-l", "aai-express-loader"],
+    ["hps__ml-turbo-miniloader-l", "aai-turbo-loader"],
+    ["hps__ml-bob-ultimate-miniloader-l", "aai-ultimate-loader"]
+  ],
+  "item": [
+    ["hps__ml-bob-basic-miniloader", "aai-basic-loader"],
+    ["hps__ml-miniloader", "aai-loader"],
+    ["hps__ml-fast-miniloader", "aai-fast-loader"],
+    ["hps__ml-express-miniloader", "aai-express-loader"],
+    ["hps__ml-turbo-miniloader", "aai-turbo-loader"],
+    ["hps__ml-bob-ultimate-miniloader", "aai-ultimate-loader"]
+  ]
+}

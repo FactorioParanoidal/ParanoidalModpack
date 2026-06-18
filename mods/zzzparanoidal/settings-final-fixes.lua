@@ -271,8 +271,8 @@ if mods["toxicPollution"] then
     set_settings_default_value("int-setting", "armor-absorb-multiplier", 1000)
     set_settings_default_value("bool-setting", "auto-equip-armor", true)
 end
-if mods["miniloader-redux"] then
-    set_settings_default_value("bool-setting", "hps__ml-chute_loader", false)
+if mods["aai-loaders"] then
+    set_settings_default_value("string-setting", "aai-loaders-mode", "expensive")
 end
 if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
