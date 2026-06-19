@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -59,6 +59,7 @@
     "? Wr_Enhanced_Map_Colors",
     "? ZCS-Trash-Landfill-Continued-Update",
     "? aai-industry",
+    "? aai-loaders",
     "? air-filtering",
     "? angelsaddons-bots",
     "? angelsaddons-cab",
@@ -101,7 +102,6 @@
     "? inserter-throughput",
     "? kry-picker-extended",
     "? mferrari_lib",
-    "? miniloader-redux",
     "? minime",
     "? mining-patch-planner",
     "? more-achievements",
