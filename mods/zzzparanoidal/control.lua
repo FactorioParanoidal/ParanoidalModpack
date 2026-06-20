@@ -1,4 +1,5 @@
 require("controls.heroturrets_script") -- скрипт разжалования турелей
+require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
 -- ###############################################################################################
 -- from some corpse marker
 script.on_event(defines.events.on_pre_player_died, function(event)
