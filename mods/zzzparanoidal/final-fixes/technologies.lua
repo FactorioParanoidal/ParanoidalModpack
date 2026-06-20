@@ -107,13 +107,12 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "angels-c
 --целюлозное волокно в переработку древесины
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-bio-wood-processing", "angels-cellulose-fiber-raw-wood")
 -------------------------------------------------------------------------------------------------
---ремкомплект в электричество
-paralib.bobmods.lib.recipe.enabled("repair-pack", false)
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-electricity", "repair-pack")
--------------------------------------------------------------------------------------------------
 --конденсатор в электричество
+-- bob-electricity есть только при burner-phase (bobmods-burnerphase); с aai-industry он выключен
+-- → техи нет, анлок молча отваливается. Фолбэк на ванильную electricity (тот же ранний тир).
+local elec = data.raw.technology["bob-electricity"] and "bob-electricity" or "electricity"
 paralib.bobmods.lib.recipe.enabled("condensator", false)
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-electricity", "condensator")
+paralib.bobmods.lib.tech.add_recipe_unlock(elec, "condensator")
 -------------------------------------------------------------------------------------------------
 --паровой манипулятор в автоматику
 paralib.bobmods.lib.recipe.enabled("bob-steam-inserter", false)
