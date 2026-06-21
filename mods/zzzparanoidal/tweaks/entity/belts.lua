@@ -33,13 +33,9 @@ if mods.boblogistics then
 	data.raw["underground-belt"]["turbo-underground-belt"].speed = 6 * base_speed
 	data.raw["splitter"]["turbo-splitter"].speed = 6 * base_speed
 
-	data.raw["underground-belt"]["turbo-underground-belt"].max_distance = 23
-
 	-- 16x Green Belt
 	data.raw["transport-belt"]["bob-ultimate-transport-belt"].speed = 12 * base_speed
 	data.raw["underground-belt"]["bob-ultimate-underground-belt"].speed = 12 * base_speed
 	data.raw["splitter"]["bob-ultimate-splitter"].speed = 12 * base_speed
-
-	data.raw["underground-belt"]["bob-ultimate-underground-belt"].max_distance = 27
 end
 

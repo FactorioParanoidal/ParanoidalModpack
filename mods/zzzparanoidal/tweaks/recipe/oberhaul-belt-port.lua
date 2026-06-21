@@ -1,4 +1,4 @@
--- Порт belt-рецептов и дистанций тоннелей из мода Oberhaul (1.1: beltrecipes.lua + beltentities.lua). Значения — дамп 1.1.
+-- Порт belt-рецептов из мода Oberhaul (1.1: beltrecipes.lua). Значения — дамп 1.1.
 
 local function set_ingredients(recipe_name, ingredients)
   local recipe = data.raw.recipe[recipe_name]
@@ -46,11 +46,3 @@ set_ingredients("turbo-splitter", {
   { type = "item", name = "bob-cobalt-steel-bearing", amount = 4 },
   { type = "item", name = "bob-cobalt-steel-gear-wheel", amount = 10 },
 })
-
-local function set_ug_distance(name, dist)
-  local ug = data.raw["underground-belt"][name]
-  if ug then ug.max_distance = dist end
-end
-set_ug_distance("bob-basic-underground-belt", 5)
-set_ug_distance("fast-underground-belt", 11)
-set_ug_distance("express-underground-belt", 17)
