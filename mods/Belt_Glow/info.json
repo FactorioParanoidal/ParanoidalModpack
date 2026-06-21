@@ -1,17 +1,20 @@
 {
   "name": "Belt_Glow",
-  "version": "1.4.0",
+  "version": "2.2.2",
   "factorio_version": "2.0",
   "title": "Belt Glow",
   "author": "Tserup",
   "contact": "Discord:tserup",
-  "description": "Belts glow at the night, including castra and K2SO now.",
+  "description": "Belts will glow at night, compatible with most mods.",
   "dependencies": [
     "base >= 2.0.0",
     "? space-age",
     "(?) space-exploration",
     "? castra",
     "? Krastorio2-spaced-out",
-    "? AdvancedBeltsSA"
+    "? AdvancedBeltsSA",
+    "? factorio_hd_age_base_game_logistics",
+    "? RenaiTransportation",
+    "? prismatic-belts"
     ]
 }
