@@ -1,4 +1,29 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2026-6-19
+  Info:
+    - Added compatibility with Prismatic Belts.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-6-18
+  Info:
+    - Fixed compatibility with Dredgeworks.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-6-18
+  Info:
+    - Added compatibility with Renai Transportation.Belt Ramps also glow now.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-6-17
+  Info:
+    - Added compatibility with Factorio HD Age Logistic.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-6-16
+  Info:
+    - Added compatibility for more mods, including support for most custom transport belts.
+---------------------------------------------------------------------------------------------------
 Version: 1.4.0
 Date: 2025-10-11
   Info:
@@ -18,7 +43,7 @@ Date: 2025-9-27
 Version: 1.1.1
 Date: 2025-9-26
   Info:
-    - Fixed a crash caused by SE.
+    - Fixed compatibility with SE.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2025-9-25
