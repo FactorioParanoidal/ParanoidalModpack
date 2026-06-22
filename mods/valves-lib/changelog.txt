@@ -1,0 +1,8 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 13.01.2026
+  Features:
+    - Initial release of Valves Library.
+    - Allows valve thresholds to be set dynamically.
+    - Allow valve default thresholds to be set in startup settings.
+    - Warns players when valves are connected to pumps in unsupported ways.

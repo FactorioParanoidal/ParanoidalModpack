@@ -1,0 +1,8 @@
+{
+    "entity":
+    [
+        [ "valves-overflow", "valves-overflow-legacy" ],
+        [ "valves-top_up", "valves-top_up-legacy" ],
+        [ "valves-one_way", "valves-one_way-legacy" ]
+    ]
+  }

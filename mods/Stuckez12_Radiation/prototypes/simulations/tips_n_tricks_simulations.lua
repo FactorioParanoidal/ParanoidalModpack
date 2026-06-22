@@ -1,5 +1,3 @@
-
-
 local simulations = {}
 
 simulations.uranium_patch_walk_over = {
@@ -72,7 +70,7 @@ simulations.uranium_patch_walk_over = {
         end
     ]],
 
-    mods = {"base", "Stuckez12_Radiation"}
+    mods = { "base", "Stuckez12_Radiation" }
 }
 
 
@@ -276,7 +274,7 @@ simulations.radiation_walls = {
 
         for i = 1, 5 do
             surface.create_entity{
-                name = "radiation-wall",
+                name = "stkz-radiation-wall",
                 position = {-2, -3 + i},
                 force = "neutral"
             }

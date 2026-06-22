@@ -14,8 +14,8 @@ data:extend({
         order = "a",
         indent = 0,
         trigger = {
-            type = "research",
-            technology  = "chemical-science-pack"
+            type       = "research",
+            technology = "chemical-science-pack"
         },
         simulation = simulations.uranium_patch_walk_over
     },
@@ -27,8 +27,8 @@ data:extend({
         order = "b",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "uranium-mining"
+            type       = "research",
+            technology = "uranium-mining"
         },
         simulation = simulations.radiation_entity_list
     },
@@ -40,8 +40,8 @@ data:extend({
         order = "c",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "uranium-processing"
+            type       = "research",
+            technology = "uranium-processing"
         },
         simulation = simulations.radiation_distance_impact
     },
@@ -53,24 +53,24 @@ data:extend({
         order = "d",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "radiation-protection"
+            type       = "research",
+            technology = "radiation-protection"
         },
-        dependencies = {"Stuckez12-radiation-distance-impact"},
+        dependencies = { "Stuckez12-radiation-distance-impact" },
         simulation = simulations.radiation_resistance
     },
     {
         type = "tips-and-tricks-item",
         name = "Stuckez12-radiation-walls",
-        tag = "[item=uranium-ore][item=radiation-wall]",
+        tag = "[item=uranium-ore][item=stkz-radiation-wall]",
         category = "Stuckez12-Radiation",
         order = "e",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "advanced-radiation-protection"
+            type       = "research",
+            technology = "advanced-radiation-protection"
         },
-        dependencies = {"Stuckez12-radiation-distance-impact"},
+        dependencies = { "Stuckez12-radiation-distance-impact" },
         simulation = simulations.radiation_walls
     },
     {
@@ -81,10 +81,10 @@ data:extend({
         order = "f",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "advanced-radiation-protection"
+            type       = "research",
+            technology = "advanced-radiation-protection"
         },
-        dependencies = {"Stuckez12-radiation-distance-impact"},
+        dependencies = { "Stuckez12-radiation-distance-impact" },
         simulation = simulations.radiation_biters
     },
     {
@@ -95,10 +95,10 @@ data:extend({
         order = "g",
         indent = 1,
         trigger = {
-            type = "research",
-            technology  = "near-total-radiation-protection"
+            type       = "research",
+            technology = "near-total-radiation-protection"
         },
-        dependencies = {"Stuckez12-radiation-biters"},
+        dependencies = { "Stuckez12-radiation-biters" },
         simulation = simulations.radiation_suit
     }
 })

@@ -1,0 +1,14 @@
+{
+  "name": "valves-lib",
+  "version": "1.0.0",
+  "title": "Valves Library",
+  "description": "Library to extend functionality of valves. Inspired by Flow Control and Advanced Fluid Handling.",
+  "author": "stringweasel",
+  "factorio_version": "2.0",
+  "dependencies": [ 
+    "base >= 2.0.60"
+  ],
+  "package":{
+    "ignore":[ "*.md", "*.zip", "mod-page/*" ]
+  }
+}
