@@ -14,20 +14,20 @@ local crafter_defines = {
     defines.inventory.crafter_trash
 }
 local type_defines = {
-    ["container"] = {defines.inventory.chest},
-    ["logistic-container"] = {defines.inventory.chest},
-    ["character-corpse"] = {defines.inventory.chest},
+    ["container"] = { defines.inventory.chest },
+    ["logistic-container"] = { defines.inventory.chest },
+    ["character-corpse"] = { defines.inventory.chest },
     ["assembling-machine"] = crafter_defines,
     ["rocket-silo"] = crafter_defines,
     ["furnace"] = crafter_defines,
-    ["car"] = {defines.inventory.car_trunk, defines.inventory.car_ammo, defines.inventory.car_trash, defines.inventory.fuel},
-    ["spider-vehicle"] = {defines.inventory.spider_trunk, defines.inventory.spider_ammo, defines.inventory.spider_trash},
-    ["reactor"] = {defines.inventory.fuel, defines.inventory.burnt_result},
-    ["construction-robot"] = {defines.inventory.robot_cargo},
-    ["logistic-robot"] = {defines.inventory.robot_cargo},
-    ["locomotive"] = {defines.inventory.fuel},
-    ["cargo-wagon"] = {defines.inventory.cargo_wagon},
-    ["ammo-turret"] = {defines.inventory.turret_ammo}
+    ["car"] = { defines.inventory.car_trunk, defines.inventory.car_ammo, defines.inventory.car_trash, defines.inventory.fuel },
+    ["spider-vehicle"] = { defines.inventory.spider_trunk, defines.inventory.spider_ammo, defines.inventory.spider_trash },
+    ["reactor"] = { defines.inventory.fuel, defines.inventory.burnt_result },
+    ["construction-robot"] = { defines.inventory.robot_cargo },
+    ["logistic-robot"] = { defines.inventory.robot_cargo },
+    ["locomotive"] = { defines.inventory.fuel },
+    ["cargo-wagon"] = { defines.inventory.cargo_wagon },
+    ["ammo-turret"] = { defines.inventory.turret_ammo }
 }
 local belt_types = {
     ["transport-belt"] = true,
@@ -38,10 +38,10 @@ local damage_reduction = 15
 local wall_resistance = 200
 local atomic_residual_radiation = 5000
 local achievement_thresholds = {
-    [0.1]="resist-spicy-food",
-    [50]="gamma-or-gammon",
-    [500]="i-am-invincible",
-    [2000]="god-of-radiation"
+    [0.1] = "resist-spicy-food",
+    [50] = "gamma-or-gammon",
+    [500] = "i-am-invincible",
+    [2000] = "god-of-radiation"
 }
 
 -- Settings variables
@@ -99,10 +99,9 @@ function damage_resistances(player, damage)
     return math.max(0, damage - (absorber_count * 10))
 end
 
-
 function play_sound(sound_name, volume, character)
     if storage.sim_char then
-        game.play_sound{
+        game.play_sound {
             path = sound_name,
             volume_modifier = volume
         }
@@ -113,44 +112,41 @@ function play_sound(sound_name, volume, character)
     if storage.player_connections and storage.player_connections[character] then
         local player = storage.player_connections[character].player
 
-        player.play_sound{
+        player.play_sound {
             path = sound_name,
             volume_modifier = volume
         }
     end
 end
 
-
 function area_fetch_entities(player, entities)
     local radius = settings.global[mod_name .. "Radiation-Radius"].value
 
     if storage.sim_dist then radius = storage.sim_dist end
 
-    return player.surface.find_entities_filtered{
+    return player.surface.find_entities_filtered {
         area = {
-            {math.floor(player.position.x) - radius, math.floor(player.position.y) - radius},
-            {player.position.x + radius, player.position.y + radius}
+            { math.floor(player.position.x) - radius, math.floor(player.position.y) - radius },
+            { player.position.x + radius,             player.position.y + radius }
         },
         type = entities
     }
 end
-
 
 function area_fetch_units(player, units)
     local radius = settings.global[mod_name .. "Radiation-Radius"].value
 
     if storage.sim_dist then radius = storage.sim_dist end
 
-    return player.surface.find_entities_filtered{
+    return player.surface.find_entities_filtered {
         area = {
-            {math.floor(player.position.x) - radius, math.floor(player.position.y) - radius},
-            {player.position.x + radius, player.position.y + radius}
+            { math.floor(player.position.x) - radius, math.floor(player.position.y) - radius },
+            { player.position.x + radius,             player.position.y + radius }
         },
         type = "unit",
         name = units
     }
 end
-
 
 function bresenham_wall_grid_count(wall_grid, dest_x, dest_y, p_x, p_y)
     local wall_count = 0;
@@ -211,7 +207,6 @@ function bresenham_wall_grid_count(wall_grid, dest_x, dest_y, p_x, p_y)
     return wall_count
 end
 
-
 function radiation_wall_block(player, entity, wall_grid, wall_found, damage)
     if not wall_found then return damage end
 
@@ -229,7 +224,6 @@ function radiation_wall_block(player, entity, wall_grid, wall_found, damage)
 
     return math.max(damage - (wall_count * wall_resistance * damage_reduction), 0)
 end
-
 
 function player_inventory_damage(player)
     local damage = 0
@@ -266,7 +260,6 @@ function player_inventory_damage(player)
     return damage
 end
 
-
 function ore_patch_damage(player, resource)
     local value = storage.radiation_items[resource.name]
 
@@ -278,7 +271,6 @@ function ore_patch_damage(player, resource)
 
     return value * dist_percent * math.max(resource.amount / 1000, 1)
 end
-
 
 function belt_damage(player, belt)
     local damage = 0
@@ -305,9 +297,8 @@ function belt_damage(player, belt)
     return damage
 end
 
-
 function prevent_spawn_death(player, damage)
-    local world_center_distance = math.sqrt((0 - player.position.x)^2 + (0 - player.position.y)^2)
+    local world_center_distance = math.sqrt((0 - player.position.x) ^ 2 + (0 - player.position.y) ^ 2)
 
     local protection_radius = settings.global[mod_name .. "Protection-Radius"].value
 
@@ -315,7 +306,6 @@ function prevent_spawn_death(player, damage)
 
     return damage
 end
-
 
 function calculate_distance_percent(player, entity)
     local radius = settings.global[mod_name .. "Radiation-Radius"].value
@@ -326,7 +316,6 @@ function calculate_distance_percent(player, entity)
 
     return math.max((1 - (distance / radius)) ^ 2, 0)
 end
-
 
 function calculate_entity_radiation_damage(player, entity, inv, wall_grid, wall_found, damage)
     local dist_percent = calculate_distance_percent(player, entity)
@@ -343,9 +332,8 @@ function calculate_entity_radiation_damage(player, entity, inv, wall_grid, wall_
     return damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
 end
 
-
 function get_wall_grid(player)
-    local wall_entities = area_fetch_entities(player, {"wall"})
+    local wall_entities = area_fetch_entities(player, { "wall" })
     local wall_grid = {}
 
     local radius = (settings.global[mod_name .. "Radiation-Radius"].value * 2) + 1
@@ -363,13 +351,13 @@ function get_wall_grid(player)
 
     local detected_wall = false
 
-    for i=1, #wall_entities do
+    for i = 1, #wall_entities do
         local wall = wall_entities[i]
 
         local x_pos = (math.floor(wall.position.x) - start_x) + 1
         local y_pos = (math.floor(wall.position.y) - start_y) + 1
 
-        if wall.name == "radiation-wall" then
+        if wall.name == "stkz-radiation-wall" then
             wall_grid[x_pos][y_pos] = true
             detected_wall = true
         end
@@ -377,7 +365,6 @@ function get_wall_grid(player)
 
     return wall_grid, detected_wall
 end
-
 
 function enemy_radiation_damage(character, unit_types)
     local entities = area_fetch_units(character, unit_types)
@@ -398,18 +385,17 @@ function enemy_radiation_damage(character, unit_types)
     return damage
 end
 
-
 function get_entity_fluid_damage(player, entity)
     local damage = 0
 
     if entity.fluidbox then
         for i = 1, #entity.fluidbox do
             local fluid = entity.fluidbox[i]
-                
+
             if fluid then
                 local value = storage.radiation_fluids[fluid.name]
 
-                if value then 
+                if value then
                     local dist_percent = calculate_distance_percent(player, entity)
 
                     damage = damage + (value * dist_percent * fluid.amount)
@@ -420,7 +406,6 @@ function get_entity_fluid_damage(player, entity)
 
     return damage
 end
-
 
 function calculate_damage(player)
     local entity_types = {
@@ -461,25 +446,23 @@ function calculate_damage(player)
         table.insert(entity_types, "logistic-container")
         table.insert(entity_types, "container")
     end
- 
+
     local entities = area_fetch_entities(player, entity_types)
     local wall_grid, wall_found = get_wall_grid(player)
     local damage = 0
     local calculated_damage = 0
 
-    for i=1, #entities do
+    for i = 1, #entities do
         local entity = entities[i]
 
         if belt_types[entity.type] then
             calculated_damage = belt_damage(player, entity)
 
             damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
-
         elseif entity.type == "resource" then
             calculated_damage = ore_patch_damage(player, entity)
 
             damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
-
         elseif entity.type == "simple-entity" and entity.name == "residual-radiation" then
             exists = radiation_funcs.update_atomic_radiation(entity)
 
@@ -488,7 +471,6 @@ function calculate_damage(player)
 
                 damage = damage + (atomic_residual_radiation * dist_percent)
             end
-
         elseif entity.type == "item-entity" then
             if entity.valid and entity.stack and entity.stack.valid_for_read then
                 local item_name = entity.stack.name
@@ -503,7 +485,6 @@ function calculate_damage(player)
                     damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
                 end
             end
-
         elseif entity.type == "inserter" then
             if entity.held_stack.valid_for_read then
                 local value = storage.radiation_items[entity.held_stack.name]
@@ -516,7 +497,6 @@ function calculate_damage(player)
                     damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
                 end
             end
-
         elseif entity.type == "corpse" and settings.global[mod_name .. "Enable-Biter-Radiation"].value then
             local corpse_type = storage.biters[string.gsub(entity.name, "-corpse", "")]
 
@@ -527,20 +507,19 @@ function calculate_damage(player)
 
                 damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
             end
-
         elseif entity.type == "pipe" or entity.type == "storage-tank" then
             calculated_damage = get_entity_fluid_damage(player, entity)
 
             damage = damage + radiation_wall_block(player, entity, wall_grid, wall_found, calculated_damage)
-
         else
             local all_defines = type_defines[entity.type]
 
-            if all_defines then 
+            if all_defines then
                 for _, define in pairs(all_defines) do
                     local inv = entity.get_inventory(define)
 
-                    if inv then damage = calculate_entity_radiation_damage(player, entity, inv, wall_grid, wall_found, damage) end
+                    if inv then damage = calculate_entity_radiation_damage(player, entity, inv, wall_grid, wall_found,
+                            damage) end
                 end
             end
         end
@@ -554,7 +533,6 @@ function calculate_damage(player)
 
     return damage
 end
-
 
 function radiation_funcs.player_radiation_damage()
     local damage = 0
@@ -693,7 +671,6 @@ function radiation_funcs.player_radiation_damage()
     end
 end
 
-
 function add_character(character, player)
     storage.player_connections[character] = {
         player = player,
@@ -705,7 +682,6 @@ function add_character(character, player)
         }
     }
 end
-
 
 function radiation_funcs.update_character_pos(event)
     local player = game.get_player(event.player_index)
@@ -721,7 +697,6 @@ function radiation_funcs.update_character_pos(event)
 
     return
 end
-
 
 function radiation_funcs.relink_characters_to_players()
     local player_list = {}
@@ -744,11 +719,10 @@ function radiation_funcs.relink_characters_to_players()
             end
         end
 
----@diagnostic disable-next-line: need-check-nil
+        ---@diagnostic disable-next-line: need-check-nil
         player_list[remove_player] = nil
     end
 end
-
 
 function radiation_funcs.link_character(character)
     local player_list = {}
@@ -766,13 +740,11 @@ function radiation_funcs.link_character(character)
     end
 end
 
-
 function update_damage_records(character, damage)
     if not storage.player_connections then storage.player_connections = {} end
 
     if storage.player_connections[character] then
         storage.player_connections[character].last_damage = damage
-
     else
         radiation_funcs.link_character(character)
 
@@ -783,7 +755,6 @@ function update_damage_records(character, damage)
         gui_overlay.create_radiation_display(player)
     end
 end
-
 
 function radiation_funcs.update_gui_logo()
     if not storage.player_connections then return end
@@ -798,15 +769,13 @@ function radiation_funcs.update_gui_logo()
     end
 end
 
-
 function radiation_funcs.add_atomic_radiation(entity)
     storage.residual_records = storage.residual_records or {}
 
     local table_key = tostring(entity.position.x) .. "|" .. tostring(entity.position.y)
 
-    storage.residual_records[table_key] = game.tick + (60 ^ 3)  -- sticks around for an hour
+    storage.residual_records[table_key] = game.tick + (60 ^ 3) -- sticks around for an hour
 end
-
 
 function radiation_funcs.update_atomic_radiation(entity)
     storage.residual_records = storage.residual_records or {}
@@ -823,18 +792,18 @@ function radiation_funcs.update_atomic_radiation(entity)
 
             return false
         end
-    else radiation_funcs.add_atomic_radiation(entity) end
-    
+    else
+        radiation_funcs.add_atomic_radiation(entity)
+    end
+
     return true
 end
-
 
 function radiation_funcs.trigger_achievement(player, achievement)
     if player and player.valid and not storage.sim_char then
         player.unlock_achievement(achievement)
     end
 end
-
 
 function get_player(character)
     storage.player_connections = storage.player_connections or {}
@@ -844,7 +813,6 @@ function get_player(character)
 
     return storage.player_connections[character]
 end
-
 
 function record_all_players()
     storage.recorded_characters = storage.recorded_characters or {}
@@ -882,6 +850,5 @@ function record_all_players()
 
     storage.recorded_characters = accounted_characters
 end
-
 
 return radiation_funcs
