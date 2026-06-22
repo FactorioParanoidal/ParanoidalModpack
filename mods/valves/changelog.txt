@@ -1,0 +1,139 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 14.01.2026
+  Changes:
+    - Split of generic valve functionality into separate library mod called Valves Library.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 13.01.2026
+  Compatibility:
+    - Better compatibility with Bobs Adjustable Valves mod.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 26.07.2025
+  Changes:
+    - Limit valve pump speed in mod settings to the `max_fluid_flow` utility constant.
+  Compatibility:
+    - Allow other mods to add their own valves using the new `mod-data` mechanic.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 26.06.2025
+  Graphics:
+    - Added valve animations (snouz).
+  Bugfixes:
+    - Fixed crash when creating legacy entity from the editor (snouz).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 14.06.2025
+  Bugfixes:
+    - Fixed crash when valve or pump is not built by a player (e.g. by a construction robot).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 14.06.2025
+  Minor Features:
+    - Increase visibility of /valves-find-bad-connections command.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 14.06.2025
+  Features:
+    - Warn players when valves are connected to pump in unsupported way. See Factoriopedia or modpage.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 18.05.2025
+  Changes:
+    - Reduced the amount of valve sounds that can be played at once.
+  Compatibility:
+    - Fixed valves not always being grouped correctly with the pumps in menus.
+  Locale:
+    - Updated Russian translation by eugenikus8.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 12.05.2025
+  Bugfixes:
+    - Removed remnant debug print.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 12.05.2025
+  Features:
+    - Valves now use new native Factorio prototypes.
+    - IMPORTANT: Old blueprints containing valves will be supported until 2.1. Please update any blueprints containing valves!
+    - Valve behaviour is now more consistent with expected behaviour.
+  Changes:
+    - Custom threshold settings are now startup settings. Old settings will be lost.
+  Compatibility:
+    - [PyIndustry] Added a setting to disable the automatic migration of PyIndustry valves.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 22.03.2025
+  Bugfixes:
+    - Fixed that Top Up valve ghosts would not retain threshold settings.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 20.01.2025
+  Features:
+    - Added a startup setting for the overflow, top-up and one-way valves' pump speed when it's open.
+  Compatibility:
+    - Recipe and required technology is now compatible with more mods.
+    - [PyIndustry] Valve recipe and required technology is now based on deprecated Py valves instead of pump.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 02.12.2024
+  Compatibility:
+    - Added compatibility with Even Pickier Dollies.
+  Bugfixes:
+    - Fixed that one-way valve ghosts would show a threshold.
+    - Fixed that valve threshold settings are reset when mods changed.
+    - Fixed that some valves leave hidden entities behind (hopefully).
+    - Fixed missing localization for key-bind settings.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 19.11.2024
+  Bugfixes:
+    - Fixed crash during cloning of valves.
+    - Fixed crash in older migration in some circumstances.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 18.11.2024
+  Bugfixes:
+    - Fixed that some valves during migrate their connections correctly after the 1.1.1 update.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 17.11.2024
+  Bugfixes:
+    - Fixed that flipping valves did not update internal entities. (Note: flipping still hard for the moment due to Factorio engine bug, see https://forums.factorio.com/121887)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 16.11.2024
+  Bugfixes:
+    - Fixed top-up valve not working after reducing number of entities.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 16.11.2024
+  Bugfixes:
+    - Fixed pre-existing valves being broken after the previous update.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 15.11.2024
+  Optimizations:
+    - Reduced number of hidden combinators and tanks even more to the absolute minimum.
+  Bugfixes:
+    - Fixed quick-replacing valves breaking due to circuit condition not being updated.
+  Locale:
+    - Updated Russian translation by eugenikus8.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 07.11.2024
+  Features:
+    - Default valve thresholds can be changed in map settings.
+  Optimizations:
+    - Reduced number of hidden combinators.
+  Locale:
+    - Simplified Chinese translation by Houraiji_Kyuusyou.
+    - Russian translation by eugenikus8.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 05.11.2024
+  Features:
+    - Added Overflow valve.
+    - Added Top Up valve.
+    - Added One Way valve.

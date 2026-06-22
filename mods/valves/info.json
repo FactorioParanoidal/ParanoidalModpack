@@ -1,0 +1,15 @@
+{
+  "name": "valves",
+  "version": "2.2.0",
+  "title": "Valves",
+  "description": "Adds three seperate animated valves for pipes: overflow, top-up and one-way/check valves. Inspired by Flow Control and Advanced Fluid Handling. The thresholds can be configured using shortcuts. Uses valve functionality provided by Factorio.",
+  "author": "stringweasel",
+  "factorio_version": "2.0",
+  "dependencies": [ 
+    "base >= 2.0.60",
+    "valves-lib >= 1.0.0"
+  ],
+  "package":{
+    "ignore":[ "*.md", "*.zip", "mod-page/*" ]
+  }
+}
