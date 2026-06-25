@@ -40,10 +40,10 @@ end
 
 local function modChange(event)
 	if event.mod_changes == nil then return end
-	if event.mod_changes.Enhanced_Map_Colors == nil then return end
+	if event.mod_changes.Wr_Enhanced_Map_Colors == nil then return end
 
-	local previousOldEMCModVersion = event.mod_changes.Enhanced_Map_Colors.old_version
-	local currentNewEMCModVersion = event.mod_changes.Enhanced_Map_Colors.new_version
+	local previousOldEMCModVersion = event.mod_changes.Wr_Enhanced_Map_Colors.old_version
+	local currentNewEMCModVersion = event.mod_changes.Wr_Enhanced_Map_Colors.new_version
 
 	destroyOldMainGuiButton()
 	if previousOldEMCModVersion == nil then 
