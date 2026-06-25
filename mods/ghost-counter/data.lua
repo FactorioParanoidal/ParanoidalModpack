@@ -8,13 +8,13 @@ data:extend{
         name = NAME.tool.ghost_counter,
         subgroup = "tool",
         select = {
-            mode = {"any-entity", "same-force"},
+            mode = {"same-force", "any-entity"},
             cursor_box_type = "copy",
             border_color = {57, 156, 251},
             count_button_color = {43, 113, 180},
         },
         alt_select = {
-            mode = {"any-entity", "same-force"},
+            mode = {"same-force", "any-entity", "tile-ghost"},
             cursor_box_type = "copy",
             border_color = {0, 89, 132},
             count_button_color = {43, 113, 180}
