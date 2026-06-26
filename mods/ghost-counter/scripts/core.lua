@@ -233,7 +233,7 @@ function get_blueprint_counts(entities, tiles)
             if item_requests and next(item_requests) then
                 for _, item_request in pairs(item_requests) do
                     local name = item_request.id.name --[[@as string]]
-                    local quality = item_request.id.quality --[[@as string]]
+                    local quality = item_request.id.quality or base_quality--[[@as string]]
                     local name_and_quality = name .. "+" .. quality
 
                     requests[name_and_quality] = requests[name_and_quality] or make_empty_request(name, quality)
@@ -319,7 +319,7 @@ end
 function update_inventory_info(player_index)
     local playerdata = get_make_playerdata(player_index)
     local cursor_stack = playerdata.luaplayer.cursor_stack
-    local inventory = playerdata.luaplayer.get_main_inventory()
+    local inventory = playerdata.luaplayer.character.get_main_inventory()
     local requests = playerdata.job.requests
 
     -- Iterate over each request and get the count in inventory
@@ -367,6 +367,7 @@ end
 function update_logistics_info(player_index)
     local playerdata = get_make_playerdata(player_index)
     local requests = playerdata.job.requests
+    local base_quality = get_base_quality()
 
     -- Get player character
     local character = playerdata.luaplayer.character
@@ -378,7 +379,8 @@ function update_logistics_info(player_index)
     local logistic_requests = {}
     if logistic_point and logistic_point.filters then
         for _, slot in pairs(logistic_point.filters) do
-            local name_and_quality = slot.name .. "+" .. slot.quality
+            local entity_quality = slot.quality or base_quality
+            local name_and_quality = slot.name .. "+" .. entity_quality
             if requests[name_and_quality] then
                 requests[name_and_quality].requested = slot.count
                 logistic_requests[name_and_quality] = true

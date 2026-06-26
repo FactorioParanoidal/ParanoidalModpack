@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2026-06-23
+  Changes:
+    - Updated translations from Crowdin.
+  Bugfixes:
+    - Fixed that drills with only one pipe connection would not be deconstructed when pipe building was enabled.
+    - Fixed that some debug messages did not print the full error message.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.12
 Date: 2026-02-26
   Bugfixes:
