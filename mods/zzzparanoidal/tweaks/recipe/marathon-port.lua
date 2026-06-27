@@ -19,12 +19,6 @@ paralib.bobmods.lib.recipe.set_ingredients("rocket", {
 })
 data.raw.recipe["rocket"].energy_required = 8
 
--- shotgun-shell: возврат 1.1-стоимости (ранее был SKIP, оставался дешёвый bob 2.0 copper×2+iron×2)
-paralib.bobmods.lib.recipe.set_ingredients("shotgun-shell", {
-	{ type = "item", name = "copper-plate", amount = 10 },
-	{ type = "item", name = "iron-plate", amount = 10 },
-})
-
 
 -- Armor
 
