@@ -46,6 +46,11 @@ if mods["__RITEG__"] then
 end
 --биг монстры
 if mods["Big-Monsters"] then
+    -- 1.1: event-days=100, tree-events-chance=0, max=365. В 2.0 автор сменил дефолты (6 / 1.0) и срезал потолок до 20.
+    -- maximum_value правим первым: иначе значение/дефолт 100 нелегальны при max=20.
+    data.raw["int-setting"]["bm-event-days"].maximum_value = 365
+    set_settings_default_value("int-setting", "bm-event-days", 100)
+    set_settings_default_value("double-setting", "bm-tree-events-chance", 0)
     set_settings_default_value("double-setting", "bm-biterzilla-min_evo", 0.4)
     set_settings_default_value("int-setting", "bm-difficulty-level", 5)
     set_settings_default_value("int-setting", "bm-invasion-chance", 0)
