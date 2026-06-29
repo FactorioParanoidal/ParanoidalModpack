@@ -1,0 +1,11 @@
+{
+  "name": "Clockwork-2",
+  "version": "1.1.3",
+  "title": "Clockwork",
+  "author": "Yehn",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 1.1"],
+  "description": "I just port it for factorio 2.0. Original credits for Yehn. Changes the parameters of the solar cycle: Make days longer or shorter and control what portion of the cycle is night. Make nights darker if you like. Includes an optional Sun Never Rises mode."
+}

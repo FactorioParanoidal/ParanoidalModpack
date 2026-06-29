@@ -76,8 +76,18 @@ local function evo_and_dolly() --выключаем эволюцию
 end
 
 
+local DARK_NIGHTS_MIN_BRIGHTNESS = 0.1 -- тьма ночи как в 1.1 (NightBrightness опускал min_brightness, ~5–15%); крутить тут
+local function apply_dark_nights() -- Clockwork-2 min_brightness не трогает, делаем сами
+	for _, surface in pairs(game.surfaces) do
+		if not surface.freeze_daytime then
+			surface.min_brightness = DARK_NIGHTS_MIN_BRIGHTNESS
+		end
+	end
+end
+
 script.on_init(function() --наш любимый init, запрещаем двигать наши насосы
 	evo_and_dolly()
+	apply_dark_nights()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -101,4 +111,7 @@ script.on_configuration_changed(function(data) --фикс эволюции пр�
 			end
 		end
 	end
+	apply_dark_nights()
 end)
+
+script.on_event(defines.events.on_surface_created, apply_dark_nights)

@@ -84,6 +84,14 @@ end
 if mods["NightBrightness"] then
     set_settings_default_value("int-setting", "night_brightness_period_days", 24)
 end
+if mods["Clockwork-2"] then
+    set_settings_default_value("double-setting", "Clockwork-cycle-length", 1)
+    set_settings_default_value("double-setting", "Clockwork-dusk", 0.2)
+    set_settings_default_value("double-setting", "Clockwork-evening", 0.3)
+    set_settings_default_value("double-setting", "Clockwork-morning", 0.7)
+    set_settings_default_value("double-setting", "Clockwork-dawn", 0.8)
+    set_settings_default_value("int-setting", "Clockwork-darknight-percent", 0)
+end
 if mods["Noxys_Trees"] then
     set_settings_default_value("int-setting", "Noxys_Trees-maximum-trees-per-chunk", 256)
     set_settings_default_value("int-setting", "Noxys_Trees-ticks-between-operations", 61)
