@@ -17,9 +17,7 @@ end
 
 paralib.bobmods.lib.recipe.enabled("wind-turbine-2", false)
 
--- Wind Turbines (relaunched): рецепты крафта возвращаем 1-в-1 как в 1.1 (Texugo_windgenerator).
--- relaunched ставит свои (более лёгкие) рецепты — перетираем тут (data-final-fixes, рецепты уже созданы).
--- T2: big-electric-pole-2 → bob-big-electric-pole-2 (Bob's 2.x переименовал прототип).
+-- Рецепты T1-T3 как в 1.1 (Texugo). T2: big-electric-pole-2 -> bob-big-electric-pole-2 (переименование в Bob's 2.x).
 local function setWindRecipe (name, energy, ingredients)
   local r = data.raw.recipe[name]
   if r then
@@ -51,8 +49,16 @@ setWindRecipe("texugo-wind-turbine3", 150, {
   { type = "item", name = "concrete",           amount = 500 },
 })
 
--- T4 (titanic) убираем из доступа: сносим только рецепт и технологию.
--- Прототипы entity/item/twt-collision-rect4 ОСТАВЛЯЕМ: их жёстко перечисляют миграции самого мода
--- (migrations/1.1.7.lua, 2.0.2.lua) в find_entities_filtered — удаление уронит загрузку сейва.
+-- T4: сносим только рецепт и технологию. Прототипы entity/item/twt-collision-rect4 НЕ трогать —
+-- их перечисляют миграции мода (1.1.7.lua, 2.0.2.lua), удаление ломает загрузку сейва.
 if data.raw.recipe then data.raw.recipe["texugo-wind-turbine4"] = nil end
 if data.raw.technology then data.raw.technology["texugo-wind-turbine4"] = nil end
+
+-- Тех-пререквизиты как в 1.1: T2 за bob-electric-pole-2, T3 за robotics.
+local function setWindTechPrereq (tech, prereqs)
+  local t = data.raw.technology[tech]
+  if t then t.prerequisites = prereqs end
+end
+setWindTechPrereq("texugo-wind-turbine2", { "bob-electric-pole-2" })
+setWindTechPrereq("texugo-wind-turbine3", { "robotics", "processing-unit", "texugo-wind-turbine2" })
+if data.raw.technology["texugo-wind-turbine2"] then data.raw.technology["texugo-wind-turbine2"].unit.count = 200 end -- count T2 как в 1.1
