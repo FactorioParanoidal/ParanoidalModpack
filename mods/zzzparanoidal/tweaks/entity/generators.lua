@@ -17,14 +17,42 @@ end
 
 paralib.bobmods.lib.recipe.enabled("wind-turbine-2", false)
 
-local function changePower (itemName, power)
-  if (data.raw["generator"] and data.raw["generator"][itemName]) then
-    data.raw["generator"][itemName].fluid_usage_per_tick = power
+-- Wind Turbines (relaunched): рецепты крафта возвращаем 1-в-1 как в 1.1 (Texugo_windgenerator).
+-- relaunched ставит свои (более лёгкие) рецепты — перетираем тут (data-final-fixes, рецепты уже созданы).
+-- T2: big-electric-pole-2 → bob-big-electric-pole-2 (Bob's 2.x переименовал прототип).
+local function setWindRecipe (name, energy, ingredients)
+  local r = data.raw.recipe[name]
+  if r then
+    r.energy_required = energy
+    r.ingredients = ingredients
   end
 end
 
-changePower("EasyWindTurbine1",0.00049) --50KW
-changePower("EasyWindTurbine2",0.00392) --400KW
-changePower("EasyWindTurbine3",0.0098)  --1MW
-changePower("EasyWindTurbine4",0.0196)  --2MW
-changePower("EasyWindTurbine5",0.049)   --5MW
+setWindRecipe("texugo-wind-turbine", 8, {
+  { type = "item", name = "wood",                amount = 10 },
+  { type = "item", name = "copper-cable",        amount = 20 },
+  { type = "item", name = "iron-stick",          amount = 20 },
+  { type = "item", name = "small-electric-pole", amount = 4  },
+  { type = "item", name = "iron-gear-wheel",     amount = 4  },
+})
+setWindRecipe("texugo-wind-turbine2", 30, {
+  { type = "item", name = "bob-big-electric-pole-2", amount = 4   },
+  { type = "item", name = "electronic-circuit",      amount = 10  },
+  { type = "item", name = "iron-gear-wheel",         amount = 50  },
+  { type = "item", name = "steel-plate",             amount = 150 },
+  { type = "item", name = "stone-brick",             amount = 150 },
+})
+setWindRecipe("texugo-wind-turbine3", 150, {
+  { type = "item", name = "advanced-circuit",   amount = 25  },
+  { type = "item", name = "flying-robot-frame", amount = 25  },
+  { type = "item", name = "iron-gear-wheel",    amount = 100 },
+  { type = "item", name = "substation",         amount = 10  },
+  { type = "item", name = "steel-plate",        amount = 500 },
+  { type = "item", name = "concrete",           amount = 500 },
+})
+
+-- T4 (titanic) убираем из доступа: сносим только рецепт и технологию.
+-- Прототипы entity/item/twt-collision-rect4 ОСТАВЛЯЕМ: их жёстко перечисляют миграции самого мода
+-- (migrations/1.1.7.lua, 2.0.2.lua) в find_entities_filtered — удаление уронит загрузку сейва.
+if data.raw.recipe then data.raw.recipe["texugo-wind-turbine4"] = nil end
+if data.raw.technology then data.raw.technology["texugo-wind-turbine4"] = nil end

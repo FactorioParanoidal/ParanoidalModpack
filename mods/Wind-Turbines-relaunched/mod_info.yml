@@ -1,0 +1,9 @@
+mod_info:
+  description_file: README.md
+  summary: adds 4 types of wind turbines with different technical requirements and power output
+  title: Wind Turbines relaunched
+  attach_source_link: true
+  license: mit
+  category: content
+  tags:
+    - power

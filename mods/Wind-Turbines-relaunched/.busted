@@ -1,0 +1,19 @@
+return {
+  _all = {
+    coverage = true
+  },
+  default = {
+    verbose = true,
+    --["suppress-pending"] = true
+    --lpath = "./?;./?.lua;./events/?.lua",
+    ["exclude-pattern"] = "test",
+  },
+  CI = {
+    output = "TAP",
+  }
+  --  apiUnit = {
+  --  tags = "api",
+  --  ROOT = {"spec"},
+  --  verbose = true
+  --}
+}
