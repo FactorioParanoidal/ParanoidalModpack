@@ -8,7 +8,6 @@
   "dependencies": [
     "base >= 1.1.0",
     "? AbandonedRuins_updated_fork",
-    "? AfraidOfTheDark",
     "? Aircraft-space-age",
     "? All-infinit-tech",
     "? BatteryElectricTrain",

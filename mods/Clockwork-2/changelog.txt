@@ -1,0 +1,98 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+  Changes:
+    - Fairly major overhaul to Clockwork's internal workings - now, in multisurface mode, which surfaces will be excluded is an explicit option. This should reduce edge case weirdness with other mods, and ensures it works properly with simple multisurface mods like Warptorio. A solution for individual surface customization (i.e., for Space Exploration et al) is in the works.
+    - Clockwork's daylength multiplier now always works off of the vanilla daylength. If you are using version 1.1.0 with a mod that has custom daylengths and it is working well for you, you should skip this version.
+    - Revised terminology to better match the Factorio wiki. dawn -> day; dusk -> sunset; evening -> night; morning -> sunrise
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Changes:
+    - Update for Factorio 1.1.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Changes:
+    - Removed the Pitch Black nights checkbox, as it's no longer needed with the Darkness Percentage field - 0% is off/vanilla, 100% is Pitch Black. This change will be a bit disruptive - some will have to adjust their settings to get their previous configuration - but this allows for some streamlining of the settings and internal code.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+  Bugfixes:
+    - Small error in the migration script.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Changes:
+    - NOTE: THIS VERSION IS NOT VERY SAVE COMPATIBLE, but if you don't use multisurface mode you should be fine.
+    - Multisurface handling has been thoroughly revamped. This mod should handle multiple surfaces much better now. Multisurface users, please follow this upgrade procedure: 1. Restore your world to as close to default settings as possible. 2. Remove Clockwork. 3. Save your game (so you have a save state without Clockwork). 4. Upgrade Clockwork to 1.0.2 (or latest version) 5. Re-enable Clockwork and configure to your liking. THOSE USING A SINGLE SURFACE (AKA Vanilla/Nauvis) SHOULD BE FINE AND DO NOT NEED TO DO ANYTHING SPECIAL. Multisurface users, sorry for the trouble and thanks for your patience; it should be much better going forward.
+    - All of this is mostly for Warptorio2 compatibility. If there's issues with other mods that use multiple surfaces, please report them.
+    - Darkness is back to being granular! If you want darker than vanilla but not complete and utter darkness, visit the settings and you can set a percentage of the darkening effect.
+    - Added an option to simplify the flare's recipe. This is intended for use with mods that make circuits much more difficult to reach, and replaces the circuit requirement with plates instead.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Changes:
+    - Also (finally) integrated the new flare graphics and sounds generously provided by Galenmacil - a special thanks to Galenmacil for these great assets
+  Bugfixes:
+    - Fixed flares to work with the new decorative system. 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Changes:
+    - Update for Factorio 1.0.0
+    - Default surface start time updated to the new Factorio freeplay default (dawn; 0.71). Your current setting will remain as is unless you reset the settings to default.
+    - Moved some on_init() code to on_player_created (for the first player) for the sake of compatibility with the vanilla freeplay script.
+  Info:
+    - (Freeplay Scenario) Try setting your start time to 0.25 or 0.3 if you want your ship to be crashing just as the sun sets.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+  Changes:
+    - Compatibility support for Krastorio 2: Accumulator changes have been moved to later in the data lifecycle to ensure Krastorio2's accumulators are modified, if the respective Clockwork setting is active.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+  Bugfixes:
+    - Fixed a bug where pitch black night wouldn't work with endless night mode (the surface won't respond to darkness changes at certain phases, so the code that set darkness was moved up to execute sooner). FOR AN EXISTING SAVE: If you experienced this bug, please turn off the "pitch black" setting, then turn it back on and you should be OK.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+  Changes:
+    - Due to recent controversies around licensing within the Factorio modding community, I'm now explicitly including the license text with the mod download. Note that, as the license was listed on the mod webpage from the beginning, this license applies to all versions of his mod. Now, however, it is packaged with the files too.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.2
+  Changes:
+    - Multisurface mode no longer enabled by default - just to err on the side of caution with mod compatibility.
+    - There is now an option to disable nightvision, for those that really want to emphasize lights.
+  Bugfixes:
+    - Fixed a bug where pitch black night setting wouldn't turn off.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+  Changes:
+    - Requires Factorio 0.18.1. 0.18.0 will no longer work.
+    - Updated to use Factorio's new brightness system. Granular changes are no longer possible. You will need to update your Clockwork settings in game.
+    - Multi Surface support added. This may help Clockwork work with mods that add planets and similar.
+---------------------------------------------------------------------------------------------------
+Version: 0.18.0
+  Changes:
+    - Update for Factorio 0.18.
+    - Known issue: Brightness setting no longer works. Factorio devs have accepted this as a bug.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.4
+  Changes:
+    - Added the ability to change the minimum brightness level. Simply, you can make nights even darker and scarier now.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.3
+  Changes:
+    - Increased the maximum day/night multiplier and accumulator multiplier settings to 1000, for you crazy people that want a factorio day to be 24 real hours or longer. Did some testing to ensure these values will work, at least until someone makes a Terajoule accumulator (Don't worry, even bob mod's biggest accumulators don't come close).
+---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+  Changes:
+    - Added a setting to control the time of day a game starts at. Default is "0.0" or noon, but if you adjust the dusk/evening/morning/dawn thresholds, you may wish to change this.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+  Bugfixes:
+    - Additional safety checks in case another mod touches surface day/night settings
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+  Changes:
+    - Updated for Factorio version 0.17.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+  Bugfixes:
+    - large multiplier values no longer break flares.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.0
+  Changes:
+    - initial release.
