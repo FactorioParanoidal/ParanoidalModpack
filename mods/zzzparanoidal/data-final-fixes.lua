@@ -43,6 +43,7 @@ require("tweaks.recipe.pipes")
 require("tweaks.recipe.groups")
 require("tweaks.recipe.fuel")
 require("tweaks.recipe.science-packs")
+require("tweaks.recipe.warfare") -- рецепт artillery-turret: добавление artillery-turret-prototype (файл не был подключён при порте)
 
 require("tweaks.technology.chemistry")
 require("tweaks.technology.metallurgy")
