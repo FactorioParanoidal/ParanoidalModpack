@@ -1,0 +1,6 @@
+reporter = "html"
+reportfile = "wind-turbines-luacov.report.html"
+exclude = { "lib", "test", "spec", ".luarocks", "/usr/local/share/lua/5.4/" }
+include = { "./", "scripts/", "prototypes" }
+runreport = true
+includeuntestedfiles = true

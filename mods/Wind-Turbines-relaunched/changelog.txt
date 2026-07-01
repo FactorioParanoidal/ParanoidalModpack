@@ -1,0 +1,289 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2026-05-19
+  Bugfixes:
+    - Disable mode "SURFACE+PRESSURE" to avoid crashing when mod Space Exploration is loaded, while placing
+      turbines on other planets than nauvis. Without Space Exploration nothing will be affected.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2026-05-01
+  Bugfixes:
+    - Suppress bogus entries in factoriopedia
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2025-10-03
+  Features:
+    - Introduced an option to increase the build costs for the turbines (default off)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2025-09-25
+  Bugfixes:
+    - Fixed problem with migration script for 2.1.2
+  Changes:
+    - Changed internal representation of turbines
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2025-08-22
+  Balancing:
+    - Made wind speed function less erratic (and thus a bit more reliable)
+  Changes:
+    - Improved (early game) integration for Krastorio 2 / Krastorio 2 Spaced Out
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2025-08-07
+  Balancing:
+    - Reduced maximum of allowed pressure for building on a surface to a reasonable value
+  Changes:
+    - Introduced 3rd operational mode for wind speed/energy yield calculation
+    - Made power output and displayed values in gui consistent
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2025-07-18
+  Changes:
+    - Added an option to switch between 2 modes for wind speed
+    - Added an option to switch between 2 modes for space requirements of turbines
+      (for details of both please have a look at the README.md)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2025-07-10
+  Feature:
+    - Introduce increase of production with higher quality of entity
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2025-07-04
+  Locale:
+    - Adjustments in locale ru. Thx to Onseshigo
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2025-05-16
+  Locale:
+    - New locales
+        ελληνικά (el)
+        magyar (hu)
+        türkçe (tr)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2025-04-01
+  Locale:
+    - New locales
+      suomi (fi)
+      norsk (no)
+      svenska (sv-SE)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2025-03-16
+  Locale:
+    - New locales
+      한국인 (ko)
+      中国人 (zh-CN)
+      中國人 (zh-TW)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2025-03-09
+  Locale:
+    - Added a few locales
+      čeština (cs)
+      italiano (it)
+      nederlands (nl)
+      polski (pl)
+      русский (ru)
+      українська (uk-UA)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2025-03-03
+  Bugfixes:
+    - Fixed problem introduced in 2.0.2 when no space age DLC is present
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2025-03-01
+  Bugfixes:
+    - Fixed inconsistency with space age extension (turbines could be build on space platforms, but in space there is
+      no wind 😉).
+      Now turbines can only be built on planets, with the exception of aquilo (pressure too low) and wooden mills are
+      not possible on vulcanus.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2025-02-25
+  Locale:
+    - Added a few locales
+      deutsch (de)
+      español (es-ES)
+      français (fr)
+      日本語 (ja)
+      português (pt-BR)
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025-02-19
+  Features:
+    - Ported to V 2.0 of game
+    - Compatible with both base game and space age extension
+  Info:
+    - Due to the withdrawal of rocket-control-unit titanic turbine now uses the former ingredients of it
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2022-07-10
+  Bugfixes:
+    - Fixed advanced turbines not requiring research
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2022-04-03
+  Bugfixes:
+    - Attempted fix for crash related to damaging the turbines by multiple attacks in one tick
+    - Attempted fix for turbines behing hit by both enemy and friendly forces simultaneously and destroyed in the process
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2022-03-19
+  Changes:
+    - Fine tweaks for collision and selection boxes, now they all fit on the grid correctly
+    - Significantly reduced manufacturing time for all recipes to: 4s, 15s, 60s, 240s
+    - Internal reorganization of the mod's files
+    - Added "Expensive" (Marathon) recipes. More testing needed for balance in Marathon mode
+    - Increased stack sizes on the lower-tier turbines; Titanic is still stack size 1
+  Graphics:
+    - The Titanic wind turbine has now standard (lower) resolution graphics. Finally it can be used safely on low-end PCs with integrated graphics!
+    - The Titanic wind turbine (Tier4) is slightly smaller and how fits the exact same area of four Wind turbines (Tier3)
+    - The visual size and position for all turbines have been adjusted slightly to better fit the grid
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2022-03-06
+  Bugfixes:
+    - All turbines can now be damaged and destroyed by impact (rammed with a car or tank)
+  Balance:
+    - Windmill recipe: Reduced Small electric poles from 10 to 8 (Can now be built from one chopped tree)
+    - Wind generator recipe: Reduced Engine units from 15 to 10, Stone walls from 6 to 5; Increased Medium electric poles from 4 to 5
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2022-03-04
+  Changes:
+    - Ability to disable the Titanic wind turbine (for low-end PCs where the big graphics might cause issues)
+    - Basic Windmill is now researched by default and can be hand crafted without any research (to skip polluting boilers completely)
+    - Significantly increased max power output (from 40 to 67), resulting in an average of "45" units (kW+)
+    - Significantly reduced build cost of Windmill, and to a lesser degree the Wind generator and Wind turbine
+    - Altered health amounts and resistances, the higher tiers are very durable
+    - Significantly increased the internal capacitor for all wind generators to better assist with wind speed fluctuation
+  Bugfixes:
+    - Wind Generator research now uses only one Automation research per cycle
+    - Further optimized graphics to reduce mod size
+  Locale:
+    - Removed old russian and chinese locale as it was outdated and did not match anymore the recent changes
+    - Name changed to "Wind Turbines" in the settings file
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2021-12-06
+  Changes:
+    - Altered research to allow completing the game purely on wind power with all variants (no more space science):
+    - Windmill uses automation research only; Wind generator is now logistics research; Wind turbine is chemical research; Titanic wind turbine is utility research
+    - Altered recipes to better fit the tech tree progression and better balance with other power production facilities
+    - All four variants are now heavier on iron and lighter on copper
+    - Wind generator no longer requires electric engine units (instead recycles mechanical engines and four steel poles into its guts)
+    - Wind turbine no longer requires drone frames (that didn't make much sense) but instead more electric engine units; It now also needs lots of plastic to build
+    - Titanic wind turbine now needs and recycles nuclear tech (by converting 10 steam turbines into one giant wind turbine)
+  Bugfixes:
+    - Restored some missing initialization code
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2021-12-06
+  Changes:
+    - English localization: Renamed the first three tiers into: "Windmill", "Wind generator", "Wind turbine";
+    - Windmill now requires 50 logistics+automation research to enable
+    - Altered recipes for better progression with technology advancements:
+    - Windmill: 20 Wood electric poles instead of raw wood; Reduced number of electronics; Added gears and decreased iron plates
+    - Wind generator: Requires plastic instead of steel; Reduced advanced circuits to 10; Requires steel power pole instead of substation
+    - Wind turbine: Requires 100 Low Density Structures; Reduced amount of steel to 300; Reduced processing units from 25 to 20; Flying robot frames increased from 25 to 30; Needs one steam turbine; Removed gears
+    - Tweaked graphics for Windmill: Lighter wood shade and edge anti-aliasing
+    - New item icons for Windmill and Wind generator; More visible icons for the other two
+    - Adjusted hitboxes to better match the graphics
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2021-12-05
+  Changes:
+    - Truly removed hidden power poles
+    - Converted all turbines to Electric Energy Interfaces instead of generators, eliminating fluid boxes.
+    - Removed the old sound, as it was too loud with several turbines together. (Will get replaced with a more appropriate "whoosh" sound in the future)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2021-12-04
+  Bugfixes:
+    - Fixed crash on startup
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2021-12-04
+  Changes:
+    - Changed visual style of Titanic Turbine to look very metallic
+    - Adjusted shadows for large turbine to better reflect its size; New coloring
+    - Removed hidden power poles inside turbines, they now need to stay near existing power poles to be able to deliver energy
+    - Changed selection and collision boxes to more accurately reflect the sizes of the turbines.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2021-05-06
+  Changes:
+    - 1.1 update
+---------------------------------------------------------------------------------------------------
+Version: 0.18.4
+Date: 2020-08-06
+  Changes:
+    - Compatibility with Construction Drones
+    - Compatibility with Creative Mod
+    - Wind turbine selection box now matches collision box
+    - Improve UPS
+    - Fix changelog to work with in-game mod browser
+    - Added localization for invisible poles
+    - Invisible power pole wire connections are now on the tip of the turbine instead of the base
+    - Adjusted mining times
+---------------------------------------------------------------------------------------------------
+Version: 0.18.3
+  Bugfixes:
+    - Fixed Bug when picking up Titanic Turbine
+---------------------------------------------------------------------------------------------------
+Version: 0.18.2
+  Bugfixes:
+    - Small Bugfixes and Simplified Chinese update
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+  Changes:
+    - Added Tier 4, the Titanic Wind Turbine
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+  Balance:
+    - Wood turbine: lowered the amount of Wood (from 25 to 20), iron (from 25 to 20) and Copper Cable (from 50 to 40) 
+    - Steel Turbine: lowered the amount of Eletric Engines (from 25 to 15), Steel (from 200 to 150) and Bricks (from 200 to 150)
+---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+  Changes:
+    - Fixed bad argument.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.7
+  Changes:
+    - Using bobs electronics, wood turbines will use Basic Circuit Board instead of Basic Electronic Circuit
+    - Updated the graphics of the Huge Turbine (again), tweaked the shadow.
+    - Optimized files sizes, Thanks to ialsojustwantmods for the sprites.
+  Locale:
+    - Russian (RU) by ialsojustwantmods
+---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+  Changes:
+    - Fixed all turbines being immune to physical damage, but you can't destroy them by driving over.
+    - Collision box now is smaller, especially for the huge turbine, but the space between them and other constructions have increased.
+    - Turbines now connects between then and the energy network, you don't need poles or substations anymore. (works only in new turbines, to connect old ones, you need to remove then and place again)
+    - Updated the graphics of the Huge Turbine.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+  Bugfixes:
+    - Over 400 downloads and no one noticed that all turbines are unlocked without the research
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+  Locale:
+    - Simplified Chinese (zh-CN) - by xiaolianyy04
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+  Changes:
+    - Energy output reduced 2,5 times. Now tier 1/2/3 produces an average of 40/400/4000 KW
+    - Energy output is now configurable in Startup settings.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Locale:
+    - Simplified Chinese (zh-CN) - by xiaolianyy04
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Changes:
+    - First release
