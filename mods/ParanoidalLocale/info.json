@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.12.3",
+  "version": "1.13.0",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -16,6 +16,7 @@
     "? BigLight",
     "? Bio_Industries_2",
     "? BottleneckLite",
+    "? Clockwork-2",
     "? Clowns-AngelBob-Nuclear",
     "? Clowns-Nuclear",
     "? Clowns-Processing",
@@ -89,7 +90,6 @@
     "? bobwarfare",
     "? cybersyn",
     "? deep-storage-unit",
-    "? easy-wind-turbine",
     "? even-pickier-dollies",
     "? expanded-rocket-payloads-continued",
     "? extendedangels",
