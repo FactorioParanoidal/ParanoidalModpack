@@ -164,5 +164,8 @@ for _, recipe in pairs(data.raw.recipe) do
 	end
 end
 
+-- Балансовые правки Clowns-Extended-Minerals (катализаторная сортировка + добыча)
+require("tweaks.recipe.clowns-extended-minerals")
+
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")
