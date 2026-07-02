@@ -198,6 +198,23 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-3", "advanced-stru
 paralib.bobmods.lib.tech.remove_prerequisite("bob-advanced-research", "bob-express-inserter")
 paralib.bobmods.lib.tech.add_prerequisite("bob-advanced-research", "bob-bulk-inserter-3")
 
+--Состав науки advanced/alien research: +production под вход bob-bulk-inserter-3 (он уже требует production)
+paralib.bobmods.lib.tech.set_science_packs("bob-advanced-research", {
+	{ "automation-science-pack", 1 },
+	{ "logistic-science-pack", 1 },
+	{ "chemical-science-pack", 1 },
+	{ "production-science-pack", 1 },
+})
+if data.raw.technology["bob-alien-research"] then
+	paralib.bobmods.lib.tech.set_science_packs("bob-alien-research", {
+		{ "automation-science-pack", 1 },
+		{ "logistic-science-pack", 1 },
+		{ "military-science-pack", 1 },
+		{ "chemical-science-pack", 1 },
+		{ "production-science-pack", 1 },
+	})
+end
+
 -- --Добавлен дополнительный уровень технологий для Жидк.Бойлеров 4, 5 в соответсвии с их рецептом (AKMF)
 if data.raw.technology["OilBurning-4"] then
 	paralib.bobmods.lib.tech.set_science_packs("OilBurning-4", {
