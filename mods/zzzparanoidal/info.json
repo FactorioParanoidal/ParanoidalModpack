@@ -38,6 +38,7 @@
     "? extendedangels >= 0.6.9",
     "expanded-rocket-payloads-continued",
     "Bio_Industries_2",
-    "? research_evolution_factor"
+    "? research_evolution_factor",
+    "? Repair_Turret"
   ]
 }
