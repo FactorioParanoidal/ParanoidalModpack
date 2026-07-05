@@ -166,5 +166,6 @@ for _, recipe in pairs(data.raw.recipe) do
 	end
 end
 
+require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")

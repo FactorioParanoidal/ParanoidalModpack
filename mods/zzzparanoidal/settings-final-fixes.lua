@@ -356,28 +356,6 @@ if mods["reskins-library"] then
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
     -- set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
 end
-if mods["ReStack"] then
-    set_settings_default_value("int-setting", "ReStack-ammo-bullet", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-cannon", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-flamethrower", 100)
-    set_settings_default_value("int-setting", "ReStack-ammo-rocket", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-shotgun", 200)
-    set_settings_default_value("int-setting", "ReStack-belt", 100)
-    set_settings_default_value("int-setting", "ReStack-combinator", 50)
-    set_settings_default_value("int-setting", "ReStack-electric-pole", 50)
-    set_settings_default_value("int-setting", "ReStack-inserter", 50)
-    set_settings_default_value("int-setting", "ReStack-nuclear-fuel", 10)
-    set_settings_default_value("int-setting", "ReStack-ores", 200)
-    set_settings_default_value("int-setting", "ReStack-pipe", 100)
-    set_settings_default_value("int-setting", "ReStack-plates", 400)
-    set_settings_default_value("int-setting", "ReStack-roboport", 20)
-    set_settings_default_value("int-setting", "ReStack-rocket-parts", 10)
-    set_settings_default_value("int-setting", "ReStack-science-pack", 200)
-    set_settings_default_value("int-setting", "ReStack-solid-fuel", 100)
-    set_settings_default_value("int-setting", "ReStack-uranium", 100)
-    set_settings_default_value("int-setting", "ReStack-wire", 400)
-    set_settings_default_value("int-setting", "ReStack-wood", 200)
-end
 if mods["Rocket-Silo-Construction"] then
     set_settings_default_value("bool-setting", "rsc-st-not-removable-silo", true)
     set_settings_default_value("bool-setting", "rsc-st-not-removable-site", true)
