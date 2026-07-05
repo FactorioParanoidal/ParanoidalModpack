@@ -75,10 +75,10 @@ end
 if mods["deep-storage-unit"] or mods["fluid-memory-storage"] then
     set_settings_default_value("string-setting", "memory-unit-power-usage", "480kW")
 end
-if mods["ModuleInserter"] then
+if mods["ModuleInserterEx"] then
     set_settings_default_value("int-setting", "module-inserter-ex-proxies-per-tick", 10)
 end
-if mods["namelists"] then
+if mods["Namelists"] then
     set_settings_default_value("bool-setting", "namelists-backer-stations", true)
 end
 if mods["NightBrightness"] then
@@ -150,7 +150,7 @@ if mods["rso-mod"] then
 end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
-if mods["PMRPGsystem"] then
+if mods["RPGsystem"] then
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
 if mods["PickerInventoryTools"] then
@@ -176,7 +176,7 @@ end
 if mods["aai-industry"] then
     set_settings_default_value("int-setting", "aai-burner-turbine-efficiency", 25)
 end
-if mods["Aircraft"] then
+if mods["Aircraft-space-age"] then
     set_settings_default_value("bool-setting", "aircraft-hardmode", true)
     set_settings_default_value("bool-setting", "inserter-immunity", true)
 end
@@ -260,7 +260,7 @@ end
 if mods["ElectricResistance"] then
     set_settings_default_value("int-setting", "electric-resistance-power-consumption", 2)
 end
-if mods["heroturrets"] then
+if mods["HeroTurretRedux"] then
     set_settings_default_value(
         "string-setting",
         "heroturrets-csv-names",
@@ -279,7 +279,7 @@ if mods["Lighted-Poles-Plus"] then
         "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation"
     )
 end
-if mods["toxicPollution"] then
+if mods["toxicPollution2"] then
     set_settings_default_value("double-setting", "min-pollution-to-damage", 150)
     set_settings_default_value("int-setting", "armor-absorb-multiplier", 1000)
     set_settings_default_value("bool-setting", "auto-equip-armor", true)

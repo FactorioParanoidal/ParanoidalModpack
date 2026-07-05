@@ -367,7 +367,6 @@ if data.raw.technology["bob-area-drills-2"] then
 end
 paralib.bobmods.lib.tech.add_prerequisite("energy-weapons-damage-4", "chemical-science-pack") -- Урон энергетического оружия под правильные банки
 paralib.bobmods.lib.tech.add_prerequisite("energy-weapons-damage-5", "utility-science-pack") -- Урон энергетического оружия под правильные банки
-paralib.bobmods.lib.tech.add_prerequisite("ober-nuclear-processing", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
 paralib.bobmods.lib.tech.add_prerequisite("refined-flammables-4", "utility-science-pack") -- Высокотемпературная переработка сырья под правильные банки
 paralib.bobmods.lib.tech.add_prerequisite("advanced-uranium-processing-1", "utility-science-pack") -- Продвинутая переработка урана 1 под правильные банки
 paralib.bobmods.lib.tech.set_science_packs("warehouse-logistics-research-2", {
