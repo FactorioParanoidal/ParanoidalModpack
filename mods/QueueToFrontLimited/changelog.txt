@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2023.11.24
+  Changes:
+    - If queue to front enabled and only one item is in the queue then dont do anything
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2023.10.28
+  Bugfixes:
+    - QueueToFrontLimited::onpreplayercrafteditem (ID 109) Value out of range (0-1): 1.033333
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2023.10.25
+  Changes:
+    - @Daschi .. suggested that I remember the current progress of a craft and if the new item is the same keep the same progress when rebuilding the crafting queue.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2023.10.10
+  Changes:
+    - Support for Factorio 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2023.03.19
+  Changes:
+    - Forgot the locale file
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2023.03.19
+  Changes:
+    - Updated version to impose a limit on the queue length
