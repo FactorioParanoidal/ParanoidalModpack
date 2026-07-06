@@ -1,0 +1,9 @@
+{
+  "item":
+  [
+    ["small-iron-blank",   "textplate-small-iron"],
+    ["large-iron-blank",   "textplate-large-iron"],
+    ["small-copper-blank", "textplate-small-copper"],
+    ["large-copper-blank", "textplate-large-copper"]
+  ]
+}

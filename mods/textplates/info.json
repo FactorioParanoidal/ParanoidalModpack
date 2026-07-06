@@ -1,0 +1,25 @@
+{
+  "name": "textplates",
+  "title": "Text Plates",
+  "version": "0.7.2",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0"],
+  "author": "Earendel, gheift",
+  "description": "Text shaped plates for signs and labels. Letters, numbers and symbols. Large and small variants of: Iron, copper, stone, steel, concrete, glass, gold, and uranium.",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=34935",
+  "license": "GNU LGPLv3",
+  "package": {
+    "git_publish_branch": "master",
+    "ignore": ["**"],
+    "extra": [
+      { 
+        "root": ".build"
+      }
+    ],
+    "scripts": {
+      "datestamp": "sh ./build-scripts/datestamp.sh",
+      "prepackage": "sh ./build-scripts/prepackage.sh",
+      "postpublish": "sh ./build-scripts/postpublish.sh"
+    }
+  }
+}

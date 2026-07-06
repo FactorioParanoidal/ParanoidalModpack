@@ -1,0 +1,285 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 27. 01. 2025
+  Bugfixes:
+    - Fixed GUI not opening properly in remote view.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 21. 10. 2024
+  Bugfixes:
+    - Fixed a crash when attempting to interact with non-textplate ghosts.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 20. 10. 2024
+  Info:
+    - Updated for Factorio 2.0
+
+  Features:
+    - Text plates can now be replaced by text plates of a different material, with upgrade planners or building one on top of another (fast-replace).
+
+  Locale:
+    - Added Ukrainian translation, thanks to bootseller.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Updated German translation, thanks to mape6.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.10
+Date: 04. 10. 2022
+  Compatibility:
+    - [PyMods] Fixed glass textplate prerequisite for upcoming PyMods release.
+    - [Even more text plates] Fixed crash when using plastic plates.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.9
+Date: 16. 07. 2022
+  Bugfixes:
+    - Fixed K and L graphics were swapped.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.8
+Date: 15. 07. 2022
+  Changes:
+    - Added plastic text plates.
+
+  Compatibility:
+    - [Space Exploration] Adds arcosphere characters ε γ λ ω φ θ ξ ζ.
+    - [Even more text plates] Plastic is not added becuase it is already in that mod with additional settings.
+    - [Space Exploration + Even more text plates] Even more text plates is not compatible with the additional symbols.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 09. 07. 2022
+  Locale:
+    - Updated Russian translation thanks to Shadow_Man.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 09. 07. 2022
+  Compatibility:
+    - Fixed crash if another mod deleted the textplate data table.
+    - Improved IR2 support.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 06. 07. 2022
+  Bugfixes:
+    - Fixed filename case.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 06. 07. 2022
+  Changes:
+    - Added technologies for some text plate materials.
+
+  Locale:
+    - Added Spanish translation thanks to SpiderLove.
+    - Added Portuguese (Brazil) translation thanks to 123499.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 26. 11. 2020
+  Bugfixes:
+    - Fixed problem with ghost UI change.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 26. 11. 2020
+  Changes:
+    - The Textplate UI now activates when holding a text plate ghost (for example building from Space Exploration's satellite mode).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 23. 11. 2020
+  Info:
+    - Updated for Factorio 1.1
+
+  Changes:
+    - Uranium text now glows in the dark.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 29. 07. 2020
+  Bugfixes:
+    - Fixed crash rare crash when using pipette.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 26. 02. 2020
+  Info:
+    - Updated for Factorio 0.18.9.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 27. 01. 2020
+  Info:
+    - Updated for Factorio 0.18.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+  Bugfixes:
+    - Fixed script error on pipette action.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+  Bugfixes:
+    - Fixed text symbol index offset.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+  Features:
+    - Manually placing a blank text plate over a ghost text plate places the symbol of the ghost. If you place a specific symbol over the top the new symbol will override.
+    - Using the pipette tool on a symbol selects that symbol.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+  Features:
+    - If Dectorio is installed text plates get moved to that tab.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+  Features:
+    - Added new text plate types: stone, concrete, steel, glass, gold, uranium.
+  Scripting:
+    - Added a remote interface so that other mods can add new textplate variants.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+  Info:
+    - Updated for Factorio 0.17.
+
+  Bugfixes:
+    - Fixed conflict with nanobots.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+  Bugfixes:
+    - Fixed ghost variation offset.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Info:
+    - Updated for Factorio 0.16.x.
+
+  Optimisations:
+    - Includes some changes by gheift so that text plates use the 'variations' feature.
+    - Decreased file size.
+
+  Gui:
+    - Added a button to deselect the input field.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Bugfixes:
+    - Fixed overlapping issue when standing on textplates (uses new entity type).
+
+  Changes:
+    - Performance increased when blueprinting.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+  Changes:
+    - Prevent ghosts from immediately expiring due to new vanilla bug.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Locale:
+    - Namespaced locale.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Locale:
+    - Updated locale format for 0.15.
+    - Added ru locale.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Info:
+    - Updated for Factorio v0.15
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.20
+  Bugfixes:
+    - Fixed Text Plates placeable on water.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.18
+  Bugfixes:
+    - Fixed error on plate destruction.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.17
+  Bugfixes:
+    - Fixed rare crash error.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.16
+  Changes:
+    - Added events for Creative Mode.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.15
+  Bugfixes:
+    - Fixed error with nanobots support.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.14
+  Changes:
+    - Support for Nanobots: Early Bots, Bluebuild, and similar mods.
+
+  Optimisations:
+    - Code optimisation.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.13
+  Scripting:
+    - Added a custom event API and supports the event on_entity_revived so that other mods can trigger the correct entity revive behaviour (event details and the raise_event function are in control.lua).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.12
+  Bugfixes:
+    - Fixed a bug found at the end of placing a sequence of letters.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.11
+  Changes:
+    - Default text plate is now a generic 'square' instead of the blank with an inventory slot. The blank still exists because it is required for ghosts and blueprints.
+
+  Locale:
+    - Also added German translation thanks to LuziferSenpai.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.10
+  Changes:
+    - Text plate shapes disabled as signals
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.9
+  Features:
+    - New symbols
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+  Features:
+    - Added ghost-place and enhanced blueprinting functionality thanks to Y.Petremann.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Major Features:
+    - Added a symbol sequencer, type in a message and then the message symbols will be placed in order.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Changes:
+    - Text plates now have their own item group. Blanks are at the top of the list.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Changes:
+    - Added blank plates that when selected allow you to choose the place style.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Locale:
+    - Added locale for entity names.
