@@ -521,8 +521,8 @@ paralib.bobmods.lib.recipe.replace_ingredient(
 if data.raw["recipe"]["bacterial-growth-seed-cultivation-2"] then
 	data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "angels-advanced-chemistry"
 end
---ремонт рецепта высокооктанового обогащенного топлива (AKMF)
-if data.raw["recipe"]["high-octane-enriched-fuel"] then
+--high-octane-enriched-fuel (more-petrochem-hell2): крафт в angels-advanced-chemistry вместо базовой chemistry
+if mods["more-petrochem-hell2"] then
 	data.raw["recipe"]["high-octane-enriched-fuel"].category = "angels-advanced-chemistry"
 end
 
