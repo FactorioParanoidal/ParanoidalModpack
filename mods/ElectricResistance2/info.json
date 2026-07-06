@@ -1,0 +1,11 @@
+{
+  "name": "ElectricResistance2",
+  "version": "1.0.0",
+  "title": "Electric Resistance",
+  "description": "Каждый электростолб потребляет немного энергии — баланс сложности энергосети. По мотивам ElectricResistance (darkfrei, MIT), переписано под 2.0.",
+  "author": "ParanoidalModpack",
+  "license": "MIT",
+  "homepage": "https://mods.factorio.com/mod/ElectricResistance",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0"]
+}
