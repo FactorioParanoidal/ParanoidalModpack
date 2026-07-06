@@ -1,0 +1,8 @@
+{
+	"tile":
+	[
+		["dect-gravel", "dect-stone-gravel"],
+		["dect-iron-gravel", "dect-iron-ore-gravel"],
+		["dect-copper-gravel", "dect-copper-ore-gravel"]
+	]
+}
