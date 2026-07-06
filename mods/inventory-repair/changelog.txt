@@ -1,0 +1,73 @@
+---------------------------------------------------------------------------------------------------
+Version: 20.0.3
+Date: 2025-05-02
+  Bugfixes:
+    - Fixed an error when a player was deleted from the game.
+---------------------------------------------------------------------------------------------------
+Version: 20.0.2
+Date: 2024-10-28
+  Bugfixes:
+    - Fixed a startup error related to changes in prototypes API
+---------------------------------------------------------------------------------------------------
+Version: 20.0.1
+Date: 2024-10-21
+  Features:
+    - Added option to select best or worst repair tool (infinite still first)
+  Bugfixes:
+    - Updated to work with API changes made just hours before release :(
+---------------------------------------------------------------------------------------------------
+Version: 20.0.0
+Date: 2024-10-20
+  Features:
+    - Updated to Factorio version 2.0
+    - Fully repairing an item causes the inventory to sort itself (based on player setting).
+---------------------------------------------------------------------------------------------------
+Version: 19.1.1
+Date: 2023-07-19
+  Bugfixes:
+    - Fixed a bug that paused repairing while crafting something.
+---------------------------------------------------------------------------------------------------
+Version: 19.1.0
+Date: 2022-08-05
+  Minor Features:
+    - Added an option for adjusting frequency of repairs (overall rate is unchanged).
+  Bugfixes:
+    - Fixed crash that could occur when dying at the wrong moment in cheat mode.
+---------------------------------------------------------------------------------------------------
+Version: 19.0.1
+Date: 2020-12-03
+  Features:
+    - Sounds are now pulled from default_manual_repair so it inherits changes by other mods.
+---------------------------------------------------------------------------------------------------
+Version: 19.0.0
+Date: 2020-11-25
+  Features:
+    - Updated to Factorio version 1.1
+  Changes:
+    - Removed "free-hand" requirement; repairs happen regardless of crafting queue
+    - Removed balancing setting. Now it's based on what game mode the player is in. Freeplay players are in "balanced" mode and cheat and editor players are in instant mode.
+  Bugfixes:
+    - Fixed a potential bug after updating any mods where repairs would stop until a player's inventory changed.
+  Graphics:
+    - Updated thumbnail.
+  Locale:
+    - Changed name to Inventory Repair.
+---------------------------------------------------------------------------------------------------
+Version: 18.0.1
+Date: 2020-03-27
+  Bugfixes:
+    - Fixed a bug that prevented players from joining a game if someone is in the process of repairing an item.
+---------------------------------------------------------------------------------------------------
+Version: 18.0.0
+Date: 2020-01-22
+  Features:
+    - Updated to Factorio version 0.18
+  Minor Features:
+    - Minor optimizations when players have repair packs and no items to repair
+---------------------------------------------------------------------------------------------------
+Version: 17.1.0
+Date: 2019-08-04
+  Features:
+    - Repairs items in your inventory directly with repair packs.
+    - Supports modded repair packs by preferring infinite durability and faster repair packs
+    - Two repair modes: balanced, which mirrors how fast repairing by hand is; and instant, which repairs items instantly
