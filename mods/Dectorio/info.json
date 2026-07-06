@@ -1,0 +1,15 @@
+{
+  "name": "Dectorio",
+  "version": "0.13.1",
+  "title": "Dectorio",
+  "author": "PantherX",
+  "contact": "",
+  "homepage": "https://github.com/jpanther/Dectorio",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "? alien-biomes >= 0.7.1",
+    "(?) aai-industry >= 0.6.4"
+  ],
+  "license": "GNU GPLv3"
+}

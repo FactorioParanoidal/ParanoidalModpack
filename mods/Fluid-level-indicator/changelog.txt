@@ -1,0 +1,174 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.9.9
+Date: 09 May 2025
+  Minor Changes:
+    - Added Krastorio 2 compatibility back for steel pipes.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.8
+Date: 03 April 2025
+  Minor Changes:
+    - Removed high throughput fluid level indicators from compatibility with Bob's mods, they are not necessary any more due to the fluid changes in v2.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.7
+Date: 14 November 2024
+  Minor Bugfix:
+    - Fixed a minor crash related to another mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.6
+Date: 12 November 2024
+  Minor Features:
+    - Added Russian translation (Thanks to eugenikus8).
+---------------------------------------------------------------------------------------------------
+Version: 0.9.5
+Date: 10 November 2024
+  Minor Bugfix:
+    - Fluid level indicators now work on space ships too.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.4
+Date: 10 November 2024
+  Minor Bugfix:
+    - Added extra check for deleting units to fix a rare crash.
+    - Added entity location check to support PickerDollies and similar mods (Thanks to hgschmie).
+  Minor changes:
+    - Removed some redundant flow meter code.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.3
+Date: 24 October 2024
+  Minor Bugfix:
+    - Fixed the "Fluid amount has to be positive" crash.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 21 October 2024
+  Minor Bugfix:
+    - Fixed a crash when removing a unit #2.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 21 October 2024
+  Minor Bugfix:
+    - Fixed a crash when removing a unit.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 7 October 2024
+  Major Features:
+    - Update to make it work with Factorio version 2.0.
+    - Flow meter was removed. Does not work with the new fluid system rework in Factorio 2.0.
+    - Compatibilities with other mods are turned off until the next version.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.7
+Date: 2 September 2024
+  Minor Features:
+    - Added localalized mod description and name.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.6
+Date: 18 August 2024
+  Minor Features:
+    - Added Chinese translation (Thanks to PlexPt).
+    - Added Hungarian translation.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+Date: 22 July 2024
+  Minor Features:
+    - Added German translation (Thanks to knniDE).
+    - Fluid level indicators are now grouped with pipes when using Flow Control or Space Exploration.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 1 April 2024
+  Bugfixes:
+    - Fixed cross fluid level indicator not showing values.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 23 March 2024
+  Balancing:
+    - Changed MK4 tech price (Bob's Logistics compatibility). 
+  Bugfixes:
+    - Fixed MK4 recipe ingredients (Bob's Logistics compatibility).
+    - Fixed locale for the new MK entities.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 22 March 2024
+  Minor Features:
+    - Added higher fluid capacity entities for compatibility with the different pipe sizes in Bob's Logistics mod.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 19 February 2024
+  Other:
+    - Fixed changelog to be visible from the game.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 17 February 2024
+  Major Features:
+    - New mode: flow meter. You can change to it by selecting the entity and changing the value of the drop-down menu to "Flow meter mode". Shows the value in 1/s.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.4
+Date: 16 February 2024
+  Bugfixes:
+    - Fixed crash that occured when a surface was deleted.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.3
+Date: 14 February 2024
+  Minor Features:
+    - Added steel version with a higher fluid capacity of 125 (only enabled with Krastorio 2).
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 9 October 2023
+  Bugfixes:
+    - Fixed gui lingering at storage-tank entity screen.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 8 October 2023
+  Feature:
+    - Added new entity: straight pipe fluid level indicator.
+  Changes:
+    - Removed overlay hack.
+  Bugfixes:
+    - Fixed shadows.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 5 October 2023
+  Feature:
+    - It is now possible to change the behavior of the indicator to show empty or a mid-filled pipe
+      as green if needed.
+    - Minor tweaks: wire connection location, 
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 14 June 2023
+  Other:
+    - Fixed changelog style to be visible from the game - Thanks ComradeEcho.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 16 March 2023
+  Feature:
+    - Added support for using sprites instead of drawn fonts. This improves readability at lower 
+      resolutions by a lot.
+  Other:
+    - Changed where the item is in the crafting menu, it is now next to the pump.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 15 March 2023
+  Feature:
+    - Added support for using default font. Might look better at lower resolutions.
+  Bugfixes:
+    - Fixed low resolution sprite scaling.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 15 March 2023
+  Other:
+    - Fixed alt-mode icon showing over the numbers.
+    - Added support for Space Exploration, they can now be built in space and on space-ships.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 14 March 2023
+  Performance improvement:
+    - Added two new settings to change how often and how many units to update per tick. 
+  Other:
+    - Changed wiring location.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 13 March 2023
+  Features:
+    - Now hiding the connection info for better visibility in alt mode.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 13 March 2023
+  Features:
+    - Initial release of a mod, that shows the fluid level in a system.

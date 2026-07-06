@@ -1,0 +1,22 @@
+{
+	"item":
+	[
+		["dect-base-grass", "dect-base-grass-1"],
+		["dect-base-grass-medium", "dect-base-grass-3"],
+		["dect-base-grass-dry", "dect-base-grass-2"],
+		["dect-base-dirt", "dect-base-dirt-3"],
+		["dect-base-dirt-dark", "dect-base-dirt-6"],
+		["dect-base-sand", "dect-base-sand-1"],
+		["dect-base-sand-dark", "dect-base-sand-3"],
+		["dect-base-stone-rock", "dect-base-rock-big"],
+		["dect-base-red-desert-rock-big-01", "dect-base-rock-big"],
+		["dect-base-red-desert-rock-huge-01", "dect-base-rock-huge"],
+		["dect-base-red-desert-rock-huge-02", "dect-base-rock-huge"],
+		["fire-hazard-concrete", "dect-paint-emergency"]
+	],
+	"tile":
+	[
+		["concrete-fire-left", "dect-paint-emergency-left"],
+		["concrete-fire-right", "dect-paint-emergency-right"]
+	]
+}
