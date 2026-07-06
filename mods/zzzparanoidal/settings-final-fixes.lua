@@ -165,7 +165,7 @@ end
 if mods["PickerVehicles"] then
     set_settings_default_value("bool-setting", "picker-manual-train-keys", true)
 end
-if mods["PipeVisualizer"] then
+if mods["PipeVisualizer-Updated"] then
     set_settings_default_value("double-setting", "pv-overlay-opacity", 0.6)
 end
 if mods["reskins-library"] then
