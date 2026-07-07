@@ -1,11 +1,5 @@
 require "util"
 
-local new_assembler=table.deepcopy(data.raw["assembling-machine"]["bob-electronics-machine-3"])
-		new_assembler.name="electronics-machine-4"
-		data:extend{new_assembler}
-local new_assembler=table.deepcopy(data.raw["assembling-machine"]["bob-electronics-machine-3"])
-		new_assembler.name="electronics-machine-5"
-		data:extend{new_assembler}
 
 data:extend(
 {
@@ -284,7 +278,6 @@ data:extend(
     collision_box = {{-0.7, -0.7}, {0.7, 0.7}},
     selection_box = {{-1, -1}, {1, 1}},
     fast_replaceable_group = "assembling-machine",
-	next_upgrade = "electronics-machine-5",
 	animation =
     {
       layers =
@@ -384,22 +377,3 @@ data:extend(
 )
 data.raw["assembling-machine"]["electronics-machine-4"].animation.layers[2].tint={r = 1, g = 0.5, b = 0.2}
 data.raw["assembling-machine"]["electronics-machine-5"].animation.layers[2].tint={r = 1, g = 1, b = 1}
---[[
-		local new_assembler=table.deepcopy(data.raw["assembling-machine"]["electronics-machine-4"])
-		new_assembler.name="electronics-machine-5"
-		new_assembler.icon="__MilesBobsExpansion2__/graphics/icons/electronics-machine-5.png"
-		new_assembler.crafting_speed="8.0"
-		new_assembler.order="d[electronics-machine-5]"
-		new_assembler.animation.layers[2].tint={r = 1.0, g = 1.0, b = 1.0}
-		new_assembler.energy_usage="1500kW"
-		new_assembler.energy_source={type = "electric", usage_priority = "secondary-input", emissions_per_minute = { pollution = 6 }}
-		new_assembler.minable={hardness = 0.2, mining_time = 0.5, results = {{type="item", name="electronics-machine-5", amount=1}}}
-		new_assembler.module_specification.module_slots="8"
-		data:extend{new_assembler}
-		
-		local new_assembleritem=table.deepcopy(data.raw["item"]["electronics-machine-4"])
-        new_assembleritem.name="electronics-machine-5"
-		new_assembleritem.place_result = "electronics-machine-5"		
-		new_assembleritem.icon="__MilesBobsExpansion2__/graphics/icons/electronics-machine-5.png"
-		data:extend{new_assembleritem}
-]]--
