@@ -441,6 +441,20 @@ data:extend(
     },
     allowed_effects = {"consumption", "speed", "productivity", "pollution"}
   },
-  
+
 }
 )
+
+-- 2.0: сборочные машины рендерят графику через graphics_set (top-level animation игнорируется)
+for _, n in ipairs({ "assembling-machine-7", "assembling-machine-8", "assembling-machine-9" }) do
+	local e = data.raw["assembling-machine"][n]
+	if e and e.animation and not e.graphics_set then
+		e.graphics_set = { animation = e.animation }
+		e.animation = nil
+	end
+end
+
+-- цепочка апгрейда: bob tier 6 → Miles tier 7
+if data.raw["assembling-machine"]["bob-assembling-machine-6"] then
+	data.raw["assembling-machine"]["bob-assembling-machine-6"].next_upgrade = "assembling-machine-7"
+end

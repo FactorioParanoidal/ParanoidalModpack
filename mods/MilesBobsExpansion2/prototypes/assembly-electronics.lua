@@ -375,5 +375,10 @@ data:extend(
 
 }
 )
-data.raw["assembling-machine"]["electronics-machine-4"].animation.layers[2].tint={r = 1, g = 0.5, b = 0.2}
-data.raw["assembling-machine"]["electronics-machine-5"].animation.layers[2].tint={r = 1, g = 1, b = 1}
+-- Графика electronics-4/5 наследуется от bob-electronics-machine-3 в data-final-fixes
+-- (чтобы захватить уже перекрашенную reskins-bobs версию). См. data-final-fixes.lua.
+
+-- цепочка апгрейда: bob electronics tier 3 → Miles electronics tier 4
+if data.raw["assembling-machine"]["bob-electronics-machine-3"] then
+	data.raw["assembling-machine"]["bob-electronics-machine-3"].next_upgrade = "electronics-machine-4"
+end
