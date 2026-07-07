@@ -265,7 +265,6 @@ end
 if mods["PCPRedux"] then
     -- set_settings_default_value("bool-setting", "pcp-glass-sink", false)
 end
--- not adapted to kry-picker. needs to review
 if mods["SchallPickupTower"] then
     set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
 end
