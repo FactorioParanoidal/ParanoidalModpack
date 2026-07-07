@@ -81,9 +81,6 @@ end
 if mods["Namelists"] then
     set_settings_default_value("bool-setting", "namelists-backer-stations", true)
 end
-if mods["NightBrightness"] then
-    set_settings_default_value("int-setting", "night_brightness_period_days", 24)
-end
 if mods["Clockwork-2"] then
     set_settings_default_value("double-setting", "Clockwork-cycle-length", 1)
     set_settings_default_value("double-setting", "Clockwork-dusk", 0.2)
@@ -107,18 +104,6 @@ if mods["Picks-Inserter"] then
     set_settings_default_value("bool-setting", "PI_target_selection", false)
     set_settings_default_value("bool-setting", "PI_target_train_stop", false)
     set_settings_default_value("bool-setting", "PI_temp_unlock", false)
-end
-if mods["PickerInventoryTools"] then
-    set_settings_default_value("bool-setting", "picker-autodeconstruct", true)
-    set_settings_default_value("bool-setting", "picker-autodeconstruct-target", true)
-    set_settings_default_value(
-        "string-setting",
-        "picker-carousel-registry",
-        "{['medium-electric-pole'] = 'big-electric-pole', ['big-electric-pole'] = 'substation'}"
-    )
-    set_settings_default_value("bool-setting", "picker-copy-between-surfaces", false)
-    set_settings_default_value("bool-setting", "picker-get-out-of-the-way", false)
-    set_settings_default_value("bool-setting", "picker-train-honk", false)
 end
 if mods["QualityOfLife"] then
     set_settings_default_value("double-setting", "qol-logistic-slots-flat-bonus", 0)
@@ -152,18 +137,6 @@ end
 -- runtime.per_user влияют на каждого игрока в отдельности
 if mods["RPGsystem"] then
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
-end
-if mods["PickerInventoryTools"] then
-    set_settings_default_value("bool-setting", "picker-auto-sort-inventory", false)
-    set_settings_default_value("bool-setting", "picker-filter-filters", false)
-    set_settings_default_value("bool-setting", "picker-filter-requests", false)
-    set_settings_default_value("bool-setting", "picker-use-bar-limit", false)
-end
-if mods["PickerPipeTools"] then
-    set_settings_default_value("bool-setting", "picker-find-orphans", false)
-end
-if mods["PickerVehicles"] then
-    set_settings_default_value("bool-setting", "picker-manual-train-keys", true)
 end
 if mods["PipeVisualizer-Updated"] then
     set_settings_default_value("double-setting", "pv-overlay-opacity", 0.6)
@@ -250,14 +223,7 @@ end
 if mods["bobrevamp"] then
     set_settings_default_value("bool-setting", "bobmods-revamp-oil", false)
 end
-if mods["DeadlockResearchNotifications"] then
-    set_settings_default_value("bool-setting", "deadlock-force-research-queue", true)
-end
-if mods["extended-descriptions"] then
-    set_settings_default_value("bool-setting", "ed-inserter-stats", false)
-    set_settings_default_value("bool-setting", "ed-solar-ratios", false)
-end
-if mods["ElectricResistance"] then
+if mods["ElectricResistance2"] then
     set_settings_default_value("int-setting", "electric-resistance-power-consumption", 2)
 end
 if mods["HeroTurretRedux"] then
@@ -290,10 +256,6 @@ end
 if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
 end
-if mods["multi-product-recipe-details"] then
-    set_settings_default_value("bool-setting", "mprd-amount-display", true)
-    set_settings_default_value("bool-setting", "mprd-vertical-display", true)
-end
 if mods["Noxys_Trees"] then
     set_settings_default_value("double-setting", "Noxys_Trees-emission_multiplier", 1.5)
 end
@@ -302,28 +264,6 @@ if mods["P-U-M-P-S"] then
 end
 if mods["PCPRedux"] then
     -- set_settings_default_value("bool-setting", "pcp-glass-sink", false)
-end
--- not adapted to kry-picker. needs to review
-if mods["PickerTweaks"] then
-    set_settings_default_value("double-setting", "picker-belt-sounds", 0.5)
-    set_settings_default_value("bool-setting", "picker-clean-tree-burning", true)
-    set_settings_default_value("bool-setting", "picker-fireproof-rail-signals", true)
-    set_settings_default_value("bool-setting", "picker-fireproof-rolling-stock", true)
-    set_settings_default_value("bool-setting", "picker-generic-vehicle-grids", true)
-    set_settings_default_value("string-setting", "picker-ghost-tint", "lightblue")
-    set_settings_default_value("int-setting", "picker-inventory-size", 60)
-    set_settings_default_value("string-setting", "picker-iondicators-arrow", "cyan")
-    set_settings_default_value("string-setting", "picker-iondicators-line", "green")
-    set_settings_default_value("bool-setting", "picker-no-artillery-reveal", true)
-    set_settings_default_value("double-setting", "picker-reacher-build-distance", 6)
-    set_settings_default_value("double-setting", "picker-reacher-drop-item-distance", 6)
-    set_settings_default_value("double-setting", "picker-reacher-reach-distance", 6)
-    set_settings_default_value("bool-setting", "picker-roundup-resources", true)
-    set_settings_default_value("bool-setting", "picker-show-bots-on-map", true)
-end
-if mods["PickerVehicles"] then
-    set_settings_default_value("bool-setting", "picker-naked-rails", false)
-    set_settings_default_value("bool-setting", "picker-unstoppable-trains", true)
 end
 if mods["SchallPickupTower"] then
     set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
