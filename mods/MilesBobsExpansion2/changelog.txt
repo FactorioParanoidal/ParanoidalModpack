@@ -1,0 +1,39 @@
+-Initial release
+
+-0.2.0 - 26th December 2018
+Added the early electric furnace
+
+-0.3.0 - 6th January 2019
+Fixed technology naming issues not displaying correctly
+Adjusted Science Time on technologies
+Now with 100% more logos!
+
+-0.4.0 - 12th January 2019
+Fixed the early electric furnaces subgroup to be correct
+Adjusted science time and cost to the early electric furnaces
+
+-0.4.1 - 12th January 2019
+Hotfix to add bob modules dependency for the items needed in the recipes
+Hotfix on the item order for the early electric furnace
+
+-0.5.0 - 26th July 2019
+Updated for 0.17, sorry for the wait xoxo
+Removed Bob's Plates dependency and updated dependency versions
+Updated all Assembling Machines to HQ sprites
+Changed Assembling Machine 8 to a new shade of pink (Thanks to LuziferSenpai!)
+
+-0.5.1 - 27th July 2019
+Hotfix for a dependency
+
+-0.5.2 - 31st August 2019
+Hotfix for a Typo, allowing 57 Modules in an Assembler instead of the desired 7
+
+-0.6.0 - 19st November 2019
+New Icon Art
+Nerfed Crafting Speed of normal Assemblers to a maximum of 5.00
+Updated Dependencies to their newest versions
+
+-0.6.1 - 14th December 2019
+Fixed Pollution of electronic Assemblers, T4 generating 0.1 less thant T3 and T5 generating 0.1 less than T4
+Adjusted Module Slots to 7 and 8 for electronic assembler T4 and T5 (Down from 8 and 10)
+Adjusted energy usage of electronic assembler T4 and T5 to 800kW and 1000kW to be more in line with the other machines
