@@ -167,12 +167,6 @@ if not mods["angelsindustries"] then
 		data.raw["item-with-entity-data"]["flying-fortress"].subgroup = "aircraft"
 	end
 
-	if mods["betterCargoPlanes"] then
-		data.raw["recipe"]["better-cargo-plane"].subgroup = "aircraft"
-		data.raw["item-with-entity-data"]["better-cargo-plane"].subgroup = "aircraft"
-		data.raw["recipe"]["even-better-cargo-plane"].subgroup = "aircraft"
-		data.raw["item-with-entity-data"]["even-better-cargo-plane"].subgroup = "aircraft"
-	end
 	-------------------------------------------------------------------------------------------------
 	if mods["Bio_Industries"] then
 		data.raw["recipe"]["bi-wood-pipe"].subgroup = "pipe"
