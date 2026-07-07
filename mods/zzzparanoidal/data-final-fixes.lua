@@ -39,7 +39,6 @@ require("tweaks.recipe.module")
 require("tweaks.recipe.poles") -- Изменение рецептов ЛЭП
 require("tweaks.recipe.yuoki")
 require("tweaks.recipe.concrete")
-require("tweaks.recipe.pipes")
 require("tweaks.recipe.groups")
 require("tweaks.recipe.fuel")
 require("tweaks.recipe.science-packs")
