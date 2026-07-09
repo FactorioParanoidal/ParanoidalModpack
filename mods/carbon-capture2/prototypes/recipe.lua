@@ -1,6 +1,6 @@
 -- 2.0-порт рецептов CW. Миграции: result→results, short-form→long-form,
 -- enabled/hidden строки→bool; ремап Bob's-сплавов (bob-*) и Angels-флюидов (angels-*).
-local ICON = "__CW-carbon-capture-reforged2__/graphics/icons/"
+local ICON = "__carbon-capture2__/graphics/icons/"
 
 data:extend({
 	{

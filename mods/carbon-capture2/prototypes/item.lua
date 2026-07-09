@@ -2,7 +2,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-1",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-1.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-1.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -13,7 +13,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-2",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-2.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-2.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -24,7 +24,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-3",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-3.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-3.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -35,7 +35,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-4",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-4.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-4.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -46,7 +46,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-5",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-5.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-5.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -57,7 +57,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter-machine-6",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-6.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-6.png",
 		icon_size = 64,
 		flags = {},
 		subgroup = "production-machine",
@@ -68,7 +68,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-empty-air-filter",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/empty-air-filter.png",
+		icon = "__carbon-capture2__/graphics/icons/empty-air-filter.png",
 		icon_size = 64,
 		icon_mipmaps = 4,
 		flags = {},
@@ -79,7 +79,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-air-filter",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter.png",
+		icon = "__carbon-capture2__/graphics/icons/air-filter.png",
 		icon_size = 64,
 		icon_mipmaps = 4,
 		flags = {},
@@ -90,7 +90,7 @@ data:extend({
 	{
 		type = "item",
 		name = "CW-used-air-filter",
-		icon = "__CW-carbon-capture-reforged2__/graphics/icons/used-air-filter.png",
+		icon = "__carbon-capture2__/graphics/icons/used-air-filter.png",
 		icon_size = 64,
 		icon_mipmaps = 4,
 		flags = {},

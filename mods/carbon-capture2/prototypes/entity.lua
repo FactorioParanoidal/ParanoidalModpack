@@ -21,7 +21,7 @@ for _, t in ipairs(tiers) do
 	local name = "CW-air-filter-machine-" .. t.n
 	local m = table.deepcopy(base)
 	m.name = name
-	m.icon = "__CW-carbon-capture-reforged2__/graphics/icons/air-filter-machine-" .. t.n .. ".png"
+	m.icon = "__carbon-capture2__/graphics/icons/air-filter-machine-" .. t.n .. ".png"
 	m.icon_size = 64
 	m.max_health = 300
 	m.corpse = "small-remnants"
@@ -43,7 +43,7 @@ for _, t in ipairs(tiers) do
 	m.animation = nil
 	m.graphics_set = {
 		animation = {
-			filename = "__CW-carbon-capture-reforged2__/graphics/entity/air-filter-machine-" .. t.n .. ".png",
+			filename = "__carbon-capture2__/graphics/entity/air-filter-machine-" .. t.n .. ".png",
 			priority = "high",
 			width = 99,
 			height = 112,

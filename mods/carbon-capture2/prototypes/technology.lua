@@ -2,7 +2,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filtering-1",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-1.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-1.png",
 		icon_size = 64,
 		prerequisites = {"steel-processing", "electronics", "automation"},
 		effects =
@@ -34,7 +34,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filtering-2",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-2.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-2.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-1","automation-2"},
 		effects =
@@ -60,7 +60,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filtering-3",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-3.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-3.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-2","automation-3"},
 		effects =
@@ -86,7 +86,7 @@ data:extend({
 		{
 		type = "technology",
 		name = "CW-air-filtering-4",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-4.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-4.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-3"},
 		effects =
@@ -113,7 +113,7 @@ data:extend({
 		{
 		type = "technology",
 		name = "CW-air-filtering-5",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-5.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-5.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-4"},
 		effects =
@@ -141,7 +141,7 @@ data:extend({
 		{
 		type = "technology",
 		name = "CW-air-filtering-6",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filtering-6.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filtering-6.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-5"},
 		effects =
@@ -171,7 +171,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filter-cleaning-1",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filter-cleaning-1.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-1.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filtering-1"},
 		effects =
@@ -195,7 +195,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filter-cleaning-2",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filter-cleaning-2.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-2.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filter-cleaning-1"},
 		effects =
@@ -220,7 +220,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filter-cleaning-3",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filter-cleaning-3.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-3.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filter-cleaning-2"},
 		effects =
@@ -246,7 +246,7 @@ data:extend({
 	{
 		type = "technology",
 		name = "CW-air-filter-cleaning-4",
-		icon = "__CW-carbon-capture-reforged2__/graphics/technology/air-filter-cleaning-4.png",
+		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-4.png",
 		icon_size = 64,
 		prerequisites = {"CW-air-filter-cleaning-3"},
 		effects =
