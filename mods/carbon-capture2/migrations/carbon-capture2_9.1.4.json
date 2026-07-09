@@ -1,0 +1,12 @@
+{
+  "entity": [
+    ["air-filter-machine", "CW-air-filter-machine-1"],
+    ["air-filter-machine-mk2", "CW-air-filter-machine-2"],
+    ["air-filter-machine-mk3", "CW-air-filter-machine-3"]
+  ],
+  "item": [
+    ["air-filter-machine", "CW-air-filter-machine-1"],
+    ["air-filter-machine-mk2", "CW-air-filter-machine-2"],
+    ["air-filter-machine-mk3", "CW-air-filter-machine-3"]
+  ]
+}
