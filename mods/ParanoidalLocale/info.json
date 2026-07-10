@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -63,7 +63,6 @@
     "? ZCS-Trash-Landfill-Continued-Update",
     "? aai-industry",
     "? aai-loaders",
-    "? air-filtering",
     "? angelsaddons-bots",
     "? angelsaddons-cab",
     "? angelsaddons-mobility",
