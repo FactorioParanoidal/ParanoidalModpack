@@ -13,14 +13,14 @@ local mirv_projectile = "mirv-projectile"
 local mirv_pollution_trigger = "mirv-pollute"
 
 local make_mirv_launcher = function(silo)
-  local launcher = silo.surface.create_entity
+  local turret = silo.surface.create_entity
   {
     name = launcher,
     position = silo.position,
     force = silo.force
   }
-  launcher.insert(insert_param)
-  launcher.destructible = false
+  turret.insert(insert_param)
+  turret.destructible = false
 
 end
 
