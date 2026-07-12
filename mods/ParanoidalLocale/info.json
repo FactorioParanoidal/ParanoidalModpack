@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -31,7 +31,6 @@
     "? Kux-BlueprintExtensions",
     "? Kux-CoreLib",
     "? Kux-GuiLib",
-    "? Kux-OrbitalIonCannon",
     "? LargerLamps-2_0",
     "? Lighted-Poles-Plus",
     "? ModuleInserterEx",
