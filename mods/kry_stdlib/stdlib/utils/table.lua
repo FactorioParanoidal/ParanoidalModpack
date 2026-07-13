@@ -118,6 +118,19 @@ function Table.each(tbl, func, ...)
     return tbl
 end
 
+--- Returns true if the unkeyed array contains the given value.
+-- @param tbl table? the array to search
+-- @param value any the value to look for
+-- @return boolean #true if the value exists in the array
+function Table.contains(tbl, value)
+    assert(type(tbl) == "table", "Expected first argument to be a table")
+    for _, v in pairs(tbl) do
+        if v == value then
+            return true
+        end
+    end
+end
+
 --- Returns a new array that is a one-dimensional recursive flattening of the given array.
 -- For every element that is an array, extract its elements into the new array.
 -- <p>The optional level argument determines the level of recursion to flatten.
