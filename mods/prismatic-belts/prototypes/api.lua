@@ -288,7 +288,7 @@ function api.get_transport_belt_technology_icon(inputs)
 end
 
 ---@param inputs PrismaticBelts.TransportBeltIconInputs
----@return data.IconData
+---@return data.IconData[]
 local function get_aai_loader_technology_icon_belt_layers(inputs)
 	local icon_type = inputs.use_three_arrow_variant and "ub-loader" or "loader"
 
@@ -366,7 +366,7 @@ function api.get_transport_belt_icon(inputs)
 end
 
 ---@param inputs PrismaticBelts.TransportBeltIconInputs
----@return data.IconData
+---@return data.IconData[]
 local function get_aai_loader_icon_belt_layers(inputs)
 	local icon_type = inputs.use_three_arrow_variant and "ub-transport-belt" or "transport-belt"
 
@@ -597,7 +597,7 @@ function api.create_or_update_remnants(transport_belt_name, inputs)
 	end
 
 	-- Setup belt transport set
-	---@type data.RotatedAnimation
+	---@type data.RotatedAnimation[]
 	local remnant_layers = {
 		return_remnant_layer({
 			layer = "base",
