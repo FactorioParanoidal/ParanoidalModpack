@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2026-07-10
+  Bugfixes:
+    - Fix crash in wind mode "surface + pressure" when a turbine is placed on a surface with no associated planet.
+    - Turbines respond to changes in surface pressure.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2026-07-09
+  Bugfixes:
+    - Fixed a crash when placing turbines caused by a change in API in factorio 2.1
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2026-06-23
+  Changes:
+    - Upgrade to V 2.1 of base game
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 2026-07-11
+  Changes:
+    - Applied changes from branch for V 2.1 of the base game (for details see V 2.3.2)
+---------------------------------------------------------------------------------------------------
 Version: 2.2.3
 Date: 2026-05-19
   Bugfixes:

@@ -73,6 +73,7 @@ As of version 2.0.1 several locales are supported. Currently these are:
 
 ## Contributors
 - Onseshigo: adjustments in locale ru
+- Yottagarasu: Thx for fixing the issues #43 + #44
 
 ----
 ## Relaunch of Wind Turbines from wavtrex with the necessary patches for V 2.0 of factorio.
