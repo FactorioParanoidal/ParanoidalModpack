@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.08
+Date: 2026.07.04
+  Other:
+    - Unscheduled release. There are no releases for Factorio 2.0 expected; the next releases will be for version 2.1
+  Bugfixes:
+    - Fixed error if combat power-up kill unit. If that unit, when killed, removes other objects from the map
+---------------------------------------------------------------------------------------------------
+Version: 2.02.07
+Date: 2026.07.01
+  Other:
+    - Unscheduled release. There are no releases for Factorio 2.0 expected; the next releases will be for version 2.1
+  Balancing:
+    - Now fed Demolishers stop attacking immediately 
+  Bugfixes:
+    - Fixed a bug where an attacking demolisher not react to food/fear 
+---------------------------------------------------------------------------------------------------
 Version: 2.02.06
 Date: 2026.05.08
   Bugfixes:

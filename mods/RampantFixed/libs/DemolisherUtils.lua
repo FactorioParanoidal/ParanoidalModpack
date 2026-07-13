@@ -27,7 +27,7 @@ function demolisherUtils.feedDemolisher(demolisher, cause_entity, surface_index)
 	local map = universe.maps[surface_index]
 	local hunger = 0
 	if map and map.wildDemolishers then
-		for unit_number, wildDemolisherData in pairs(map.wildDemolishers) do
+		for unit_number, wildDemolisherData in pairs(map.wildDemolishers) do			
 			if wildDemolisherData.entity.valid 
 				and (unit_number == demolisher.unit_number) 
 				and (wildDemolisherData.hunger > 0)
@@ -40,8 +40,12 @@ function demolisherUtils.feedDemolisher(demolisher, cause_entity, surface_index)
 		end
 	end
 
+	if (not demolisherFeeded) and universe.demolisherTriggers[demolisher.unit_number] then		--if not hungry demolisher attack
+		demolisherFeeded = true
+	end
 	if demolisherFeeded then
 		universe.demolisherTriggers[demolisher.unit_number] = nil
+		demolisher.segmented_unit.set_ai_state({type = defines.segmented_unit_ai_state.enraged_at_nothing, last_damage_time = 0, destination = demolisher.position})
 	end
 		
 	local messageSource
@@ -87,7 +91,7 @@ function demolisherUtils.fearDemolishers(surface_index)
 	local hunger = 0
 	if map.wildDemolishers then
 		for unit_number, wildDemolisherData in pairs(map.wildDemolishers) do
-			if wildDemolisherData.entity.valid and (wildDemolisherData.hunger > 0) then
+			if wildDemolisherData.entity.valid then
 				wildDemolisherData.hunger = 0
 				universe.demolisherTriggers[unit_number] = nil
 			end
@@ -221,13 +225,13 @@ function demolisherUtils.processDemolishers()
 							if not map.wildDemolishers then
 								map.wildDemolishers = {}
 							end 
-							local hunger = (SA_demolishers[newEntityName] and SA_demolishers[newEntityName].hunger) or 1
-							map.wildDemolishers[demolisher.unit_number] = {entity = demolisher, hunger = hunger}
+							map.wildDemolishers[demolisher.unit_number] = {entity = demolisher, hunger = 0}
 						end
 						
 						if not targetEntity then
 							targetEntity = targetEntities[mRandom(1, targetEntitiesCount)]
 						end
+						map.wildDemolishers[demolisher.unit_number].hunger = ((SA_demolishers[demolisher.name] and SA_demolishers[demolisher.name].hunger) or 1)
 						universe.demolisherTriggers[demolisher.unit_number] = {
 							surface = surface, 
 							demolisher = demolisher, 
