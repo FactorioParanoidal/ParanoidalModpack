@@ -191,7 +191,7 @@ function powerup.onUnitDamaged_oneshot(event, universe)
 	entitisToKill = event.entity.surface.find_entities_filtered(entitisToKillQuery)
 	for i=1,#entitisToKill do
 		local entity = entitisToKill[i]
-		if entity.valid then
+		if entity and entity.valid then
 			if entity.max_health <= 4000 then
 				universe.unitProtectionData.unitCurrentHP[entity.unit_number] = nil
 				entity.die(event.cause.player.force, event.cause)

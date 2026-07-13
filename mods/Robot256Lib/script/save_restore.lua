@@ -257,7 +257,7 @@ local function saveBurner(burner)
   if burner and burner.valid then
     local saved = {heat = burner.heat}
     if burner.currently_burning then
-      saved.currently_burning = burner.currently_burning
+      saved.currently_burning = {name=burner.currently_burning.name.name, quality=burner.currently_burning.quality.name}
       saved.remaining_burning_fuel = burner.remaining_burning_fuel
       saved.heat = burner.heat
     end
@@ -274,12 +274,23 @@ end
 local function restoreBurner(target, saved)
   if target and target.valid and saved then
     -- Only restore burner heat if the fuel prototype still exists and is valid in this burner.
-    if (saved.currently_burning and 
-        prototypes.item[saved.currently_burning] and 
-        target.inventory.can_insert({name=saved.currently_burning, count=1})) then
-      target.currently_burning = prototypes.item[saved.currently_burning]
-      target.remaining_burning_fuel = saved.remaining_burning_fuel
-      target.heat = saved.heat
+    if saved.currently_burning then
+      if type(saved.currently_burning) == "table" then
+        if (prototypes.item[saved.currently_burning.name] and 
+            target.inventory.can_insert({name=saved.currently_burning.name, count=1})) then
+          target.currently_burning = saved.currently_burning  -- includes quality information
+          target.remaining_burning_fuel = saved.remaining_burning_fuel
+          target.heat = saved.heat
+        end
+      else
+        -- Old style currently_burning is string
+        if (prototypes.item[saved.currently_burning] and 
+            target.inventory.can_insert({name=saved.currently_burning, count=1})) then
+          target.currently_burning = {name=saved.currently_burning}
+          target.remaining_burning_fuel = saved.remaining_burning_fuel
+          target.heat = saved.heat
+        end
+      end
     end
     local r1 = insertInventoryStacks(target.inventory, saved.inventory)
     local r2 = insertInventoryStacks(target.burnt_result_inventory, saved.burnt_result_inventory)

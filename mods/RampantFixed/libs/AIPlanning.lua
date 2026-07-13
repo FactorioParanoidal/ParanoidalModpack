@@ -460,7 +460,7 @@ local function planningMap(map, tick)
 						map.state = AI_STATE_AGGRESSIVE
 					end
 				else
-					if (roll < 0.30) then
+					if (roll < 0.15) or ((roll < 0.3) and ((activeNests > 70) or (map.retribution >= 1))) then
 						if siegeAIToggle then
 							map.state = AI_STATE_SIEGE
 						elseif universe.raidAIToggle then
@@ -468,9 +468,11 @@ local function planningMap(map, tick)
 						else
 							map.state = AI_STATE_ONSLAUGHT
 						end
-					elseif (roll < 0.65) then
+					elseif (roll < 0.6) then
 						if universe.raidAIToggle then
 							map.state = AI_STATE_RAIDING
+						elseif (basesToGrowCnt > 0) then
+							map.state = AI_STATE_GROWING
 						elseif siegeAIToggle then
 							map.state = AI_STATE_SIEGE
 						else
@@ -512,14 +514,14 @@ local function planningMap(map, tick)
 				else
 					if (basesToGrowCnt > 0) and (roll < 0.05) then
 						map.state = AI_STATE_GROWING
-					elseif (roll < 0.30) then
+					elseif (roll < 0.15) or ((roll < 0.3) and ((activeNests > 70) or (map.retribution >= 1))) then
 						if siegeAIToggle then
 							map.state = AI_STATE_SIEGE
 						elseif universe.raidAIToggle then
 							map.state = AI_STATE_RAIDING
 						else
 							map.state = AI_STATE_ONSLAUGHT
-						end
+						end						
 					elseif (roll < 0.65) then
 						if universe.raidAIToggle then
 							map.state = AI_STATE_RAIDING

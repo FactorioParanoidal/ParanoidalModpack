@@ -47,18 +47,6 @@ local function resetWindCount(event)
 end
 -- ###############################################################
 
-local function updatePressures()
-    local pressures = {}
-    for k, v in pairs(prototypes.space_location) do
-        if v.type == "planet" then
-            pressures[k] = v.surface_properties and v.surface_properties.pressure or 1000 -- if no pressure set, assume default (from nauvis)
-        end
-    end
-
-    storage.pressures =  pressures
-end
--- ###############################################################
-
 local function businessLogic(event)
     storage.wind = storage.wind + 0.02
     local x = storage.wind
@@ -67,12 +55,6 @@ local function businessLogic(event)
             (math.sin(5*x/2+3)/4)-(math.sin(6*x/2+4)/2)+math.sin(x/3)+2.5)/4.655 or 0
 
     local knownSurface = {}
-    -- prevent nil access
-    if not storage.pressures then
-        updatePressures()
-    end
-
-    local nauvis = storage.pressures['nauvis']
 
     for _, wind_turbine in pairs(storage.wind_turbines) do
         local entity = wind_turbine.entity
@@ -92,7 +74,6 @@ local function businessLogic(event)
             if use_surface_wind_speed then
                 local surface = wind_turbine.surface
                 local surface_index = surface.index
-                local surface_name = surface.name
 
                 -- surface already used in this round?
                 if knownSurface[surface_index] then
@@ -103,8 +84,10 @@ local function businessLogic(event)
                     y = math.sqrt(wind_speed.windspeed(surface_index))
 
                     if wind_scale_with_pressure then
-                        -- scale with pressure on planet
-                        pf = storage.pressures[surface_name] / nauvis
+                        -- scale with the effective pressure of the surface, relative to the
+                        -- surface-property default (== pressure on nauvis). get_property works on
+                        -- every surface (incl. script-created ones), falling back to the default
+                        pf = surface.get_property('pressure') / prototypes.surface_property['pressure'].default_value
                     end
 
                     knownSurface[surface_index] = {
@@ -267,7 +250,6 @@ local function initializer()
 
     checkSettings()
     registerEvents()
-    updatePressures()
 end
 -- ###############################################################
 
@@ -290,8 +272,6 @@ control.on_load = load
 control.on_configuration_changed = configuration_changed
 
 control.events = {
-    [defines.events.on_surface_created] = updatePressures,
-    [defines.events.on_surface_deleted] = updatePressures,
     [defines.events.on_built_entity] = build_entity,
     [defines.events.on_robot_built_entity] = build_entity,
     [defines.events.script_raised_revive]= build_entity,
