@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.16
+Date: 2026-06-25
+  Bugfixes:
+    - Fix that currently burning energy was not restored to Burners since 2.0 added quality to LuaBurner::currently_burning.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.15
 Date: 2026-06-06
   Bugfixes:
