@@ -12,21 +12,100 @@ function Detector:init()
     end
 end
 
+function Detector:ReadProperty(object, key)
+    local ok, value = pcall(function()
+        return object[key]
+    end)
+    if ok then
+        return value
+    end
+    return nil
+end
+
+function Detector:SignalValue(signal)
+    return {type = signal.type, name = signal.name, quality = "normal"}
+end
+
+function Detector:IsPollutionSignal(signal)
+    return signal ~= nil and signal.name == self.signal.name
+end
+
+function Detector:SetSignal(combinator, count)
+    if combinator.section ~= nil then
+        local section = combinator.behavior.get_section(combinator.section)
+        if section == nil then
+            return false
+        end
+
+        local filter = section.get_slot(combinator.idx)
+        local value = self:SignalValue(self.signal)
+        if filter ~= nil and self:IsPollutionSignal(filter.value) then
+            value = filter.value
+        end
+
+        section.set_slot(combinator.idx, {
+            value = value,
+            min = count,
+        })
+        return true
+    end
+
+    local set_signal = self:ReadProperty(combinator.behavior, "set_signal")
+    if set_signal ~= nil then
+        set_signal(combinator.idx, {
+            signal = self.signal,
+            count = count,
+        })
+        return true
+    end
+
+    return false
+end
+
+function Detector:RegisterCombinator(entity, behavior, idx, section)
+    local combinator = storage.combinators[entity.unit_number]
+    if combinator == nil then
+        combinator = {
+            behavior = behavior,
+            idx = idx,
+            section = section,
+            surface = entity.surface.name,
+            position = entity.position,
+        }
+        storage.combinators[entity.unit_number] = combinator
+    else
+        combinator.idx = idx
+        combinator.section = section
+    end
+
+    self:SetSignal(combinator, math.floor(entity.surface.get_pollution(entity.position)))
+end
+
 function Detector:CheckEntity(entity)
     if entity.type == "constant-combinator" then
         local behavior = entity.get_control_behavior()
-        if behavior.parameters then
-            for i = 1, #behavior.parameters do
-                local signal = behavior.parameters[i].signal
-                if signal ~= nil and signal.name == "signal-yellow-more-toxin" then
+        local parameters = self:ReadProperty(behavior, "parameters")
+        if parameters then
+            for i = 1, #parameters do
+                local signal = parameters[i].signal
+                if self:IsPollutionSignal(signal) then
                     signal.count = math.floor(entity.surface.get_pollution(entity.position))
-                    if storage.combinators[entity.unit_number] == nil then
-                        storage.combinators[entity.unit_number] = {
-                            behavior = behavior,
-                            idx = i,
-                            surface = entity.surface.name,
-                            position = entity.position,
-                        }
+                    self:RegisterCombinator(entity, behavior, i, nil)
+                end
+            end
+            return
+        end
+
+        local sections_count = self:ReadProperty(behavior, "sections_count")
+        if sections_count ~= nil then
+            for section_index = 1, sections_count do
+                local section = behavior.get_section(section_index)
+                if section ~= nil then
+                    for i = 1, section.filters_count do
+                        local filter = section.get_slot(i)
+                        if filter ~= nil and self:IsPollutionSignal(filter.value) then
+                            self:RegisterCombinator(entity, behavior, i, section_index)
+                        end
                     end
                 end
             end
@@ -53,10 +132,7 @@ function Detector:OnTick(event)
             if el.behavior.valid == false then
                 count = count -1
             elseif (count - step) % self.step == 0 and el.behavior.enabled == true then
-                el.behavior.set_signal(el.idx, {
-                    signal = self.signal,
-                    count = math.floor(game.surfaces[el.surface].get_pollution(el.position))
-                })
+                self:SetSignal(el, math.floor(game.surfaces[el.surface].get_pollution(el.position)))
             end
             count = count + 1
         end
