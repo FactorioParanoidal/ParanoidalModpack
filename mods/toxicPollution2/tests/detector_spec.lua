@@ -1,4 +1,4 @@
-package.path = "../?.lua;../?/init.lua;" .. package.path
+package.path = "mods/toxicPollution2/?.lua;mods/toxicPollution2/?/init.lua;../?.lua;../?/init.lua;" .. package.path
 
 require("util.class")
 require("classes.detector")
