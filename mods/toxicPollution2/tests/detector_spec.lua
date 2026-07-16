@@ -1,4 +1,10 @@
-package.path = "mods/toxicPollution2/?.lua;mods/toxicPollution2/?/init.lua;../?.lua;../?/init.lua;" .. package.path
+local source = debug.getinfo(1, "S").source
+local script_path = source:sub(1, 1) == "@" and source:sub(2) or arg[0]
+local mod_path = script_path:match("^(.*)[/\\]tests[/\\]detector_spec%.lua$")
+if mod_path == nil then
+    mod_path = ".."
+end
+package.path = mod_path .. "/?.lua;" .. mod_path .. "/?/init.lua;" .. package.path
 
 require("util.class")
 require("classes.detector")

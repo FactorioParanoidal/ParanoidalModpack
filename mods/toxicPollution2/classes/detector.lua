@@ -52,7 +52,7 @@ function Detector:SetSignal(combinator, count)
 
     local set_signal = self:ReadProperty(combinator.behavior, "set_signal")
     if set_signal ~= nil then
-        combinator.behavior.set_signal(combinator.idx, {
+        set_signal(combinator.idx, {
             signal = self.signal,
             count = count,
         })
