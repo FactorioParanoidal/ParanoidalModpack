@@ -563,7 +563,7 @@ if data.raw.technology["bi-tech-resin-extraction"] then
 	data.raw.technology["bi-tech-resin-extraction"].hidden = true --прячем лишнюю смолу
 end
 paralib.bobmods.lib.tech.add_prerequisite("hiend_train", "bob-fluid-wagon-3") -- привязать магнитный локомотив и вагоны к вагонам и цистернам мк3
-paralib.bobmods.lib.tech.add_prerequisite("angels-water-chemistry-2", "bob-thorium-fuel-reprocessing") -- привязатьо дейтериевую энергетику к Переработки тория (нет ядерного катализатора)
+paralib.bobmods.lib.tech.add_prerequisite("angels-water-chemistry-2", "angels-thorium-power") -- привязать дейтериевую энергетику к ториевой энергетике Angel's
 paralib.bobmods.lib.tech.add_prerequisite("extremely-advanced-rocket-payloads", "space-lab") -- Привязать КОсмический челнок к Космическая лаборатория (Данные с космической станции недоступны)
 paralib.bobmods.lib.recipe.add_ingredient("offshore-pump", { type = "item", name = "offshore-mk0-pump", amount = 2 }) -- к Электрический береговой насос добавляем Твердотопливный береговой насос 2 штуки
 
@@ -581,7 +581,6 @@ paralib.bobmods.lib.tech.add_prerequisite("follower-robot-count-5", "utility-sci
 paralib.bobmods.lib.tech.add_prerequisite("inserter-capacity-bonus-5", "bob-advanced-logistic-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("inserter-capacity-bonus-7", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("logistic-science-pack", "logistics")
-paralib.bobmods.lib.tech.add_prerequisite("steel-processing", "electric-mining")
 paralib.bobmods.lib.tech.add_prerequisite("logistics", "electronics")
 paralib.bobmods.lib.tech.add_prerequisite("chemical-science-pack", "engine")
 paralib.bobmods.lib.tech.add_prerequisite("military-science-pack", "gun-turret")
