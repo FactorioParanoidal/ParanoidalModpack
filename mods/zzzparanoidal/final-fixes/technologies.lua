@@ -140,7 +140,7 @@ paralib.bobmods.lib.tech.add_prerequisite("concrete", "angels-stone-smelting-2")
 paralib.bobmods.lib.tech.add_prerequisite("bi-tech-wooden-storage-1", "bi-tech-resin-extraction") --деревянный ящик
 paralib.bobmods.lib.tech.add_prerequisite("angels-steel-smelting-1", "angels-nitrogen-processing-1") --сталь
 paralib.bobmods.lib.tech.add_prerequisite("angels-steel-smelting-1", "angels-flare-stack") --сталь
-paralib.bobmods.lib.tech.add_prerequisite("angels-invar-smelting-1", "bob-zinc-processing") --сталь
+paralib.bobmods.lib.tech.add_prerequisite("angels-invar-smelting-1", "bob-brass-processing") --латунь перед инваром, как в прогрессии 1.1
 paralib.bobmods.lib.tech.add_prerequisite("plastics", "angels-plastic-1") --пластик
 
 --Фикс магния
