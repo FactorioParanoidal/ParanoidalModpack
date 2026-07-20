@@ -1,9 +1,0 @@
-.idea
-.vscode
-*.iml
-*.log
-*.kra
-*~
-release
-images
-benchmark.sh
