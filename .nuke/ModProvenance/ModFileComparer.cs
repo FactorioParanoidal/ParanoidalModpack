@@ -20,7 +20,7 @@ public static class ModFileComparer
 
     private static readonly HashSet<string> IgnoredFileNames = new(StringComparer.OrdinalIgnoreCase)
     {
-        ".DS_Store", ".gitattributes", "Thumbs.db"
+        ".DS_Store", ".gitattributes", ".gitignore", "Thumbs.db"
     };
 
     private static readonly HashSet<string> BinaryExtensions = new(StringComparer.OrdinalIgnoreCase)
