@@ -8,6 +8,13 @@ on:
     branches:
       - '**'
 jobs:
+  mod-provenance:
+    name: Mod provenance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check local mods against Mod Portal
+        run: ./build.sh CheckModProvenance --maintain-mod-provenance
   launchability:
     name: Modpack launchability
     runs-on: ubuntu-latest

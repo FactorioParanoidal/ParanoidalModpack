@@ -1,0 +1,13 @@
+{
+  "mod": "toxicPollution2",
+  "source": "local",
+  "original": {
+    "name": "Toxic Pollution",
+    "authors": ["ArtMares"],
+    "portal": {
+      "name": "toxicPollution",
+      "url": "https://mods.factorio.com/mod/toxicPollution"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал остановился на Factorio 0.16/0.17."
+}

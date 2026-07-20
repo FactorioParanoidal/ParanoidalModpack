@@ -1,20 +1,23 @@
-** !filter !merge !diff
-* text=auto
+# All repository text files have the same checkout representation on every OS.
+* text=auto eol=lf
 
-* text eol=lf
-*.json text eol=lf
-*.lua text eol=lf
-*.cfg text eol=lf
-*.txt text eol=lf
-*.md text eol=lf
-*.xml text eol=lf
-*.ogg binary 
-*.png binary 
-*.jpg binary 
-*.mp4 binary 
-*.ods binary 
-*.swg binary 
-*.wav binary 
-*.xcf binary 
-*.ttf binary 
-*.zip binary 
+# Binary files must never be passed through text or line-ending conversion.
+*.7z binary
+*.gif binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.mp3 binary
+*.mp4 binary
+*.ods binary
+*.ogg binary
+*.pdf binary
+*.png binary
+*.png.bak binary
+*.swg binary
+*.ttf binary
+*.wav binary
+*.xcf binary
+*.xcf.bak binary
+*.zip binary
+Thumbs.db binary

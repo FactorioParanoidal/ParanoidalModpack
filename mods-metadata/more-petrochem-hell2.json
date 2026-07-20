@@ -1,0 +1,13 @@
+{
+  "mod": "more-petrochem-hell2",
+  "source": "local",
+  "original": {
+    "name": "More Petrochem Hell",
+    "authors": ["Claviduck"],
+    "portal": {
+      "name": "more-petrochem-hell",
+      "url": "https://mods.factorio.com/mod/more-petrochem-hell"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал остановился на Factorio 0.17/0.18."
+}
