@@ -1,0 +1,11 @@
+{
+    "name": "MxlChievements2",
+    "version": "3.0.1",
+    "title": "MxlChievements2",
+    "author": "Mxlppxl, ParanoidalModpack",
+	"contact": "Mxlppxl@hotmail.com",
+    "homepage": "",
+    "factorio_version": "2.0",
+	"dependencies": ["base >= 2.0", "? quality", "? space-age", "! MxlChievements"],
+    "description": "Paranoidal fork of MxlChievements 3.0.1. Adds production achievements and skips achievements whose item, fluid, or quality targets do not exist in the active mod set."
+}
