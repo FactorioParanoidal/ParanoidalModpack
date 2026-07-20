@@ -20,12 +20,12 @@ public static class ModFileComparer
 
     private static readonly HashSet<string> IgnoredFileNames = new(StringComparer.OrdinalIgnoreCase)
     {
-        ".DS_Store", "Thumbs.db"
+        ".DS_Store", ".gitattributes", "Thumbs.db"
     };
 
     private static readonly HashSet<string> BinaryExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
-        ".7z", ".gif", ".ico", ".jpeg", ".jpg", ".mp3", ".mp4", ".ods", ".ogg", ".pdf", ".png", ".swg",
+        ".7z", ".gif", ".ico", ".jpeg", ".jpg", ".kra", ".mp3", ".mp4", ".ods", ".ogg", ".pdf", ".png", ".swg",
         ".ttf", ".wav", ".xcf", ".zip"
     };
 

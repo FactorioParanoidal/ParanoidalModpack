@@ -93,7 +93,8 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
             {
                 Log.Debug("Expected entry matched for {Mod}: version {Version}, hash {ContentHash}",
                     name, version, currentHash);
-                results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.Unchanged, []));
+                results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.Unchanged, [],
+                    ChangeReason: declaration?.ChangeReason));
 
                 continue;
             }
@@ -110,7 +111,8 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
                     Log.Information("Registering {Mod} as a local project mod in the provenance lock", name);
                     updatedEntries[name] = new ModProvenanceExpectedEntry(name, version, currentHash, metadataHash);
                     acceptedCount++;
-                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, []));
+                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, [],
+                        ChangeReason: declaration?.ChangeReason));
                 }
                 else
                 {
@@ -119,7 +121,8 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
                         ? "local project mod is not present in the provenance lock; run maintenance to register it"
                         : "mod differs from upstream lock; run with --check-mod-portal to verify the current version";
                     Log.Warning("{Mod} lock mismatch: {Error}", name, error);
-                    results.Add(new ModProvenanceResult(name, version, status, [], error));
+                    results.Add(new ModProvenanceResult(name, version, status, [], error,
+                        ChangeReason: declaration?.ChangeReason));
                     failures.Add($"{name}: {error}");
                 }
 
@@ -132,7 +135,7 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
 
             var upstreamResult = await CheckUpstreamAsync(mod, version, currentFiles, currentHash,
                 declaration, expectedEntry, metadataHash, options, services.GetRequiredService<IFactorioApi>());
-            results.Add(upstreamResult.Result);
+            results.Add(upstreamResult.Result with { ChangeReason = declaration?.ChangeReason });
             if (upstreamResult.IsAccepted)
             {
                 acceptedCount++;

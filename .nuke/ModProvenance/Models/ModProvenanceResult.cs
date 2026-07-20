@@ -9,4 +9,5 @@ public sealed record ModProvenanceResult(
     ModProvenanceStatus Status,
     IReadOnlyList<FileChange> Changes,
     string? Error = null,
-    string? MetadataTemplate = null);
+    string? MetadataTemplate = null,
+    string? ChangeReason = null);
