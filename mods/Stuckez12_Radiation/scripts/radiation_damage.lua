@@ -534,6 +534,125 @@ function calculate_damage(player)
     return damage
 end
 
+-- ==== [TEMP DEBUG stkz-radiation-debug] снять/откатить после отладки ====
+-- Ловушка на баг: НЕ спамит. Полный отчёт пишется только (1) один раз за жизнь при
+-- первом ненулевом уроне (FIRST-DAMAGE) и (2) на смертельном ударе (LETHAL).
+-- found==0 при raw_damage>0 => урон «из ниоткуда» = сигнатура бага.
+local DEBUG = true
+local DEBUG_LOG = "stkz-radiation-debug.log"
+local dbg_to_screen = true -- FIRST-DAMAGE пишем только в файл; LETHAL — и на экран
+
+local function dbg(line)
+    if dbg_to_screen then game.print("[RAD-DBG] " .. line) end
+    helpers.write_file(DEBUG_LOG, line .. "\n", true)
+end
+
+-- Полный отчёт: настройки, позиция игрока, расстояние до центра (0,0),
+-- и разбивка урона по каждому источнику "родными" числами мода.
+function radiation_funcs.debug_report(character, raw_damage, tag, to_screen)
+    dbg_to_screen = (to_screen ~= false)
+    local pos = character.position
+    local center_d = math.sqrt(pos.x * pos.x + pos.y * pos.y)
+    local prot = settings.global[mod_name .. "Protection-Radius"].value
+    local radius = settings.global[mod_name .. "Radiation-Radius"].value
+
+    dbg("======= RAD REPORT [" .. tostring(tag) .. "] tick " .. game.tick .. " =======")
+    dbg(("player=%s surface=%s pos=(%.1f,%.1f)"):format(
+        (character.player and character.player.name) or "?", character.surface.name, pos.x, pos.y))
+    dbg(("health=%.1f/%.1f  dist_to_center(0,0)=%.1f  Protection-Radius=%d  spawn_protected=%s")
+        :format(character.health or -1, character.max_health or -1, center_d, prot, tostring(center_d <= prot)))
+    dbg(("Base-Radiation=%s  Damage-Multiplier=%s  Radiation-Radius=%s  Enable-Biter=%s  Enable-Chunk=%s")
+        :format(
+            tostring(settings.global[mod_name .. "Base-Radiation"].value),
+            tostring(settings.global[mod_name .. "Damage-Multiplier"].value),
+            tostring(radius),
+            tostring(settings.global[mod_name .. "Enable-Biter-Radiation"].value),
+            tostring(settings.global[mod_name .. "Enable-Chunk-Range-Radiation"].value)))
+    dbg("raw_damage (до ÷15 и множителей) = " .. tostring(raw_damage))
+
+    local found = 0
+
+    local entity_types = { "resource", "transport-belt", "underground-belt", "splitter",
+        "item-entity", "assembling-machine", "rocket-silo", "furnace", "reactor", "inserter",
+        "container", "logistic-container", "car", "spider-vehicle", "cargo-wagon", "locomotive",
+        "pipe", "storage-tank", "corpse", "simple-entity" }
+
+    local biters_on = settings.global[mod_name .. "Enable-Biter-Radiation"].value
+
+    for _, e in pairs(area_fetch_entities(character, entity_types)) do
+        local contrib = 0
+        if e.type == "resource" then
+            contrib = ore_patch_damage(character, e)
+        elseif belt_types[e.type] then
+            contrib = belt_damage(character, e)
+        elseif e.type == "simple-entity" then
+            if e.name == "residual-radiation" then
+                contrib = atomic_residual_radiation * calculate_distance_percent(character, e)
+            end
+        elseif e.type == "corpse" then
+            if biters_on then
+                local ctype = storage.biters[string.gsub(e.name, "-corpse", "")]
+                if ctype then contrib = ctype * calculate_distance_percent(character, e) * 0.6 end
+            end
+        elseif e.type == "item-entity" then
+            if e.stack and e.stack.valid_for_read and storage.radiation_items[e.stack.name] then
+                contrib = storage.radiation_items[e.stack.name] * calculate_distance_percent(character, e)
+            end
+        elseif e.type == "inserter" then
+            if e.held_stack and e.held_stack.valid_for_read and storage.radiation_items[e.held_stack.name] then
+                contrib = e.held_stack.count * storage.radiation_items[e.held_stack.name] *
+                    calculate_distance_percent(character, e)
+            end
+        else
+            local defs = type_defines[e.type]
+            if defs then
+                local dp = calculate_distance_percent(character, e)
+                for _, def in pairs(defs) do
+                    local inv = e.get_inventory(def)
+                    if inv then
+                        for item, value in pairs(storage.radiation_items) do
+                            local c = inv.get_item_count(item)
+                            if c > 0 then contrib = contrib + c * value * dp end
+                        end
+                    end
+                end
+            end
+            contrib = contrib + get_entity_fluid_damage(character, e)
+        end
+        if contrib and contrib > 0 then
+            found = found + 1
+            dbg(("  SRC %-18s %-26s @ (%.1f,%.1f) d=%.1f contrib=%.1f"):format(
+                e.type, e.name, e.position.x, e.position.y,
+                math.sqrt((pos.x - e.position.x) ^ 2 + (pos.y - e.position.y) ^ 2), contrib))
+        end
+    end
+
+    local invd = player_inventory_damage(character)
+    if invd > 0 then
+        found = found + 1
+        dbg("  SRC inventory           (в инвентаре игрока, без затухания) contrib=" .. invd)
+    end
+
+    if settings.global[mod_name .. "Enable-Biter-Radiation"].value then
+        local bd = enemy_radiation_damage(character,
+            { "big-biter", "behemoth-biter", "big-spitter", "behemoth-spitter" })
+        if bd and bd > 0 then found = found + 1; dbg("  SRC biters              (рядом) contrib=" .. bd) end
+    end
+
+    if storage.player_connections and storage.player_connections[character] then
+        local cc = storage.player_connections[character].concurrent_damage
+        if cc and cc > 0 then found = found + 1; dbg("  SRC chunk-chests        (чанковые, сквозь стены) contrib=" .. cc) end
+    end
+
+    if found == 0 then
+        dbg("  !!! ИСТОЧНИК НЕ НАЙДЕН: урон насчитан, но ни один источник не дал >0 в скане — сигнатура бага !!!")
+    end
+    dbg("==========================================================")
+    dbg_to_screen = true
+    return found
+end
+-- ==== [/TEMP DEBUG] ====
+
 function radiation_funcs.player_radiation_damage()
     local damage = 0
 
@@ -573,6 +692,12 @@ function radiation_funcs.player_radiation_damage()
             chunk_func.update_concurrent_damage(character)
 
             damage = damage + storage.player_connections[character].concurrent_damage
+        end
+
+        -- [TEMP DEBUG stkz-radiation-debug] один раз за жизнь: первый ненулевой (сырой) урон
+        if DEBUG and not storage.sim_char and damage > 0 and not storage.dbg_first_logged then
+            storage.dbg_first_logged = true
+            radiation_funcs.debug_report(character, damage, "FIRST-DAMAGE", false)
         end
 
         if not storage.sim_char then -- Skip when in simulation
@@ -624,6 +749,21 @@ function radiation_funcs.player_radiation_damage()
 
         prior_health = character.health
         max_health = character.max_health
+
+        -- [TEMP DEBUG stkz-radiation-debug] ловушка смертельного удара
+        if DEBUG and not storage.sim_char and damage > 0 and damage >= (character.health or 0) then
+            dbg_to_screen = false -- всё подробное — только в файл
+            dbg(("*** LETHAL HIT: dmg=%.2f >= health=%.1f — смертельный удар этим тиком ***")
+                :format(damage, character.health or -1))
+            local found = radiation_funcs.debug_report(character, saved_damage, "LETHAL", false)
+            -- на экран — ровно одна строка (debug_report в конце вернул dbg_to_screen=true)
+            if found == 0 then
+                dbg("⚠⚠ НЕОБЪЯСНИМАЯ смерть от радиации (источник НЕ найден) — это тот самый баг! Пришлите нам файл script-output/stkz-radiation-debug.log + этот сейв.")
+            else
+                dbg("Смерть от радиации зафиксирована. Если источник кажется странным — пришлите нам файл script-output/stkz-radiation-debug.log + этот сейв.")
+            end
+            storage.dbg_first_logged = false -- пере-взвести захват на следующую жизнь
+        end
 
         character.damage(damage, game.forces.enemy, "Stuckez12-radiation")
 
