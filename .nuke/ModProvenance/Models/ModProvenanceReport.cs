@@ -22,27 +22,26 @@ public sealed record ModProvenanceReport(IReadOnlyList<ModProvenanceResult> Resu
         {
             summary.AppendLine("## Problems\n");
             foreach (var result in problems)
-                summary.AppendLine($"- [{result.Name}](#{GetAnchor(result.Name)}) - {GetProblemText(result)}");
+                summary.AppendLine($"- `{result.Name}` - {GetProblemText(result)}");
             summary.AppendLine();
         }
 
         summary.AppendLine("## All mods\n");
-        summary.AppendLine("| Mod | Version | Result | Reason |");
-        summary.AppendLine("|---|---:|---|---|");
+        summary.AppendLine("| Mod | Version | Result |");
+        summary.AppendLine("|---|---:|---|");
         foreach (var result in Results)
         {
             var link = result.Status == ModProvenanceStatus.ProjectMod
                 ? $"`{result.Name}`"
-                : $"[`{result.Name}`](https://mods.factorio.com/mod/{result.Name})";
-            var reason = string.IsNullOrWhiteSpace(result.ChangeReason)
-                ? "-"
-                : $"**{EscapeTableCell(result.ChangeReason)}**";
-            summary.AppendLine($"| {link} | {result.Version} | {GetStatusText(result.Status)} | {reason} |");
+                : $"[`{result.Name}`](https://mods.factorio.com/mod/{System.Uri.EscapeDataString(result.Name)})";
+            var status = GetStatusText(result.Status);
+            if (result.Status is not (ModProvenanceStatus.ExactUpstream or ModProvenanceStatus.ProjectMod))
+                status = $"**{status}**";
+            summary.AppendLine($"| {link} | {result.Version} | {status} |");
         }
 
         foreach (var result in problems)
         {
-            summary.AppendLine($"\n<a id=\"{GetAnchor(result.Name)}\"></a>");
             summary.AppendLine($"## `{result.Name}`\n");
             if (!string.IsNullOrEmpty(result.Error)) summary.AppendLine($"**Error:** {result.Error}\n");
             if (!string.IsNullOrEmpty(result.MetadataTemplate))
@@ -59,10 +58,12 @@ public sealed record ModProvenanceReport(IReadOnlyList<ModProvenanceResult> Resu
                 summary.AppendLine("```diff");
                 foreach (var change in result.Changes)
                 {
-                    if (change.Kind is ChangeKind.Removed or ChangeKind.Changed)
+                    if (change.Kind is ChangeKind.Removed)
                         summary.AppendLine($"- {change.Path}");
-                    if (change.Kind is ChangeKind.Added or ChangeKind.Changed)
+                    if (change.Kind is ChangeKind.Added)
                         summary.AppendLine($"+ {change.Path}");
+                    if (change.Kind is ChangeKind.Changed)
+                        summary.AppendLine($"! {change.Path}");
                 }
                 summary.AppendLine("```\n");
             }
@@ -73,18 +74,12 @@ public sealed record ModProvenanceReport(IReadOnlyList<ModProvenanceResult> Resu
 
     private static bool IsProblem(ModProvenanceResult result) => !string.IsNullOrEmpty(result.Error);
 
-    private static string GetAnchor(string name) => "mod-" +
-        new string(name.ToLowerInvariant().Select(character => char.IsLetterOrDigit(character) ? character : '-').ToArray())
-            .Trim('-');
-
     private static string GetProblemText(ModProvenanceResult result) => result.Status switch
     {
         ModProvenanceStatus.Modified when result.MetadataTemplate is not null => "modified; metadata required",
         ModProvenanceStatus.Modified => "modified; metadata invalid or stale",
         _ => GetStatusText(result.Status)
     };
-
-    private static string EscapeTableCell(string value) => value.Replace("|", "\\|").Replace("\r", " ").Replace("\n", " ");
 
     private static string GetStatusText(ModProvenanceStatus status) => status switch
     {
