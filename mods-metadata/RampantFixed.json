@@ -1,0 +1,13 @@
+{
+  "mod": "RampantFixed",
+  "source": "local",
+  "original": {
+    "name": "Rampant, fixed",
+    "authors": ["Dimm2101"],
+    "portal": {
+      "name": "RampantFixed",
+      "url": "https://mods.factorio.com/mod/RampantFixed"
+    }
+  },
+  "changeReason": "Сторонний форк Rampant от Dimm2101 с нашими дополнительными патчами Gui_style, rails→legacy и libs из PR #316."
+}

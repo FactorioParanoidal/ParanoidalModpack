@@ -189,7 +189,7 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
         return new ModProvenanceReport(results, failures);
     }
 
-    private async Task<UpstreamCheckResult> CheckUpstreamAsync(FolderFactorioMod mod, Version version,
+    private async Task<UpstreamCheckResult> CheckUpstreamAsync(FolderFactorioMod mod, FactorioVersion version,
         IReadOnlyDictionary<string, string> currentFiles, string currentHash,
         ModMetadata? declaration, ModProvenanceExpectedEntry? previousExpected, string? metadataHash,
         ModProvenanceOptions options, IFactorioApi api)

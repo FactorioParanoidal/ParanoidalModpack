@@ -1,0 +1,6 @@
+﻿{
+  "mod": "Big-Monsters",
+  "source": "portal",
+  "upstreamVersion": "2.1.2",
+  "changeReason": "Наш peaceful-mode guard (#220/#57) + ru-локаль"
+}

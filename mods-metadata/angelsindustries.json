@@ -1,0 +1,13 @@
+{
+  "mod": "angelsindustries",
+  "source": "local",
+  "original": {
+    "name": "Angel's Industries",
+    "authors": ["Arch666Angel"],
+    "portal": {
+      "name": "angelsindustries",
+      "url": "https://mods.factorio.com/mod/angelsindustries"
+    }
+  },
+  "changeReason": "Локальный порт deprecated-версии Angel's Industries с Factorio 1.1 на Factorio 2.0 и адаптация к Bob's 2.1, выполненные в PR #267."
+}

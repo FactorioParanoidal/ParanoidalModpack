@@ -1,0 +1,6 @@
+﻿{
+  "mod": "Noxys_Trees",
+  "source": "portal",
+  "upstreamVersion": "0.5.2",
+  "changeReason": "Исправление совместимости при отсутствии uranium-ore (#296)"
+}
