@@ -27,7 +27,7 @@ jobs:
         env:
           HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          if git diff --quiet -- mods-metadata; then
+          if [[ -z "$(git status --porcelain -- mods-metadata)" ]]; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
