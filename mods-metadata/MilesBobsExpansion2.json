@@ -1,0 +1,13 @@
+{
+  "mod": "MilesBobsExpansion2",
+  "source": "local",
+  "original": {
+    "name": "Miles' Bob's Expansion",
+    "authors": ["TehFocus"],
+    "portal": {
+      "name": "MilesBobsExpansion",
+      "url": "https://mods.factorio.com/mod/MilesBobsExpansion"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: поддержка оригинала заканчивается на Factorio 1.1."
+}

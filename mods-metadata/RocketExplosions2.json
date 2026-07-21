@@ -1,0 +1,13 @@
+{
+  "mod": "RocketExplosions2",
+  "source": "local",
+  "original": {
+    "name": "Rocket Explosions",
+    "authors": ["darkfrei"],
+    "portal": {
+      "name": "RocketExplosions",
+      "url": "https://mods.factorio.com/mod/RocketExplosions"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал поддерживает только Factorio 1.1."
+}

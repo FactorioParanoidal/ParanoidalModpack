@@ -1,0 +1,13 @@
+{
+  "mod": "ERPCTbaAB2",
+  "source": "local",
+  "original": {
+    "name": "ERPCTbaAB2",
+    "authors": ["quindao"],
+    "portal": {
+      "name": "ERPCTbaAB",
+      "url": "https://mods.factorio.com/mod/ERPCTbaAB"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал поддерживает только Factorio 1.1. Порт возвращает AngelBob-интеграцию для expanded-rocket-payloads-continued, база которого существует в 2.0, но использует ванильные рецепты (PR #312)."
+}

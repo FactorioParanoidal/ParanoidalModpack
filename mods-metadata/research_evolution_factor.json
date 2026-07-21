@@ -1,0 +1,13 @@
+{
+  "mod": "research_evolution_factor",
+  "source": "local",
+  "original": {
+    "name": "Research Causes Evolution",
+    "authors": ["H8UL", "Tias"],
+    "portal": {
+      "name": "research_causes_evolution",
+      "url": "https://mods.factorio.com/mod/research_causes_evolution"
+    }
+  },
+  "changeReason": "Локальный форк механики эволюции от исследований для Factorio 2.0, перенесённый в сборку в PR #267."
+}

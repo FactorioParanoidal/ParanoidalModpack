@@ -24,6 +24,7 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
+        "CheckModProvenance",
         "ConvertModSettingsFromJson",
         "ConvertModSettingsToJson",
         "EnsureLaunchability",
@@ -102,7 +103,22 @@
     }
   },
   "allOf": [
-    {},
+    {
+      "properties": {
+        "CheckModPortal": {
+          "type": "boolean",
+          "description": "Checks lock mismatches against the exact Mod Portal release without changing the lock file"
+        },
+        "MaintainModProvenance": {
+          "type": "boolean",
+          "description": "Removes obsolete metadata and maintains the lock when every other mismatch is an exact Mod Portal release"
+        },
+        "PrepareModProvenance": {
+          "type": "boolean",
+          "description": "Creates metadata templates for modified Mod Portal mods without changing the expected file"
+        }
+      }
+    },
     {
       "$ref": "#/definitions/NukeBuild"
     }

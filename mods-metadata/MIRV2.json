@@ -1,0 +1,13 @@
+{
+  "mod": "MIRV2",
+  "source": "local",
+  "original": {
+    "name": "M.I.R.V",
+    "authors": ["Klonan"],
+    "portal": {
+      "name": "MIRV",
+      "url": "https://mods.factorio.com/mod/MIRV"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал заканчивается на Factorio 1.1. Использовавшийся вместо него Kux-OrbitalIonCannon не был аналогом и реализовывал другую механику орбитальных ионных пушек, поэтому удалён (PR #313)."
+}
