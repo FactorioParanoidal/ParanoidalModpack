@@ -1,0 +1,6 @@
+{
+  "mod": "Stuckez12_Radiation",
+  "source": "portal",
+  "upstreamVersion": "1.1.2",
+  "changeReason": "Наша намеренная переработка радиационного урона в scripts/radiation_damage.lua из PR #278."
+}

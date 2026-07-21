@@ -1,0 +1,13 @@
+{
+  "mod": "SpaceXGAR2",
+  "source": "local",
+  "original": {
+    "name": "SpaceX Get a Room",
+    "authors": ["Ober3550"],
+    "portal": {
+      "name": "SpaceXGAR",
+      "url": "https://mods.factorio.com/mod/SpaceXGAR"
+    }
+  },
+  "changeReason": "Наш полный порт SpaceX Get a Room с Factorio 1.1 на Factorio 2.0, заведённый целиком в PR #267."
+}

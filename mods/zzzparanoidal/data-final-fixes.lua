@@ -96,6 +96,8 @@ require("tweaks.custom.uniform-recipies")
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
 
+require("tweaks.technology.clowns-processing") -- Clowns-Processing: актуальный prerequisite Bob's tungsten
+
 -- molten-*-alloy-mixing/remelting не имеют recipe-name локали → "Unknown key" в 2.0
 -- (icons-оверлей ломает авто-вывод). Берём имя из fluid-результата.
 for name, recipe in pairs(data.raw.recipe) do

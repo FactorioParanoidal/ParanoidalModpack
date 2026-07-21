@@ -2,12 +2,19 @@
 !.github
 !mods
 !docs
+!mods-metadata
 !.nuke
 !build.*
 !Paranoidal.sln
 !config.json
 !.gitlab-ci.yml
 !README.md
+
+# Mod archives may contain repository configuration that does not apply to this repository.
+**/.gitignore
+**/.gitattributes
+!/.gitignore
+!/.gitattributes
 
 bin
 obj

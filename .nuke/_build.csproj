@@ -21,14 +21,17 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <FactorioParanoidalLibsVersion>0.2.0</FactorioParanoidalLibsVersion>
+    <FactorioParanoidalLibsVersion>0.2.1-nightly.0.13</FactorioParanoidalLibsVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FactorioParanoidal.FactorioMods" Version="$(FactorioParanoidalLibsVersion)" />
+    <PackageReference Include="FactorioParanoidal.FactorioApi" Version="$(FactorioParanoidalLibsVersion)" />
     <PackageReference Include="FactorioParanoidal.ModSettingsDat" Version="$(FactorioParanoidalLibsVersion)" />
+    <PackageReference Include="NuGet.Packaging" Version="7.6.0" />
     <PackageReference Include="Nuke.Common" Version="10.1.0" />
-    <PackageReference Include="SharpCompress" Version="0.46.3" />
+    <PackageReference Include="SharpCompress" Version="0.50.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
 
 </Project>
