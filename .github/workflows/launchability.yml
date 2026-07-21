@@ -9,10 +9,12 @@ on:
       - master
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   mod-provenance:
+    permissions:
+      contents: write
     name: Mod provenance
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'

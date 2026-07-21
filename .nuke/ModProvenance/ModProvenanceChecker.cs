@@ -231,8 +231,8 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
         catch (ModPortalHttpException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
         {
             var error = declaration is null
-                ? "not found on the Mod Portal; add a metadata declaration with source 'local' or portalName"
-                : "configured Mod Portal source was not found";
+                ? "not found on the Mod Portal; add mods-metadata/<mod>.json with source 'local' if this mod is not hosted on the Mod Portal"
+                : "not found on the Mod Portal for the current mod name/version";
             Log.Warning("Mod Portal source not found for {Mod} version {Version}: {Error}", name, version, error);
             return new UpstreamCheckResult(
                 new ModProvenanceResult(name, version, ModProvenanceStatus.SourceNotFound, [], error), null,
