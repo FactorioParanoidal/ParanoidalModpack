@@ -77,14 +77,49 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
             var name = mod.Info.Name;
             var version = mod.Info.Version;
             metadata.TryGetValue(name, out var declaration);
+            var isLocal = declaration?.Source == "local";
+            var expectedEntry = expected.Mods.SingleOrDefault(x => x.Name == name);
+            var metadataHash = GetMetadataHash(declaration);
+            if (isLocal)
+            {
+                var localEntryMatches = expectedEntry is not null && expectedEntry.Version == version &&
+                                        expectedEntry.ContentHash is null &&
+                                        expectedEntry.MetadataHash == metadataHash;
+                if (localEntryMatches)
+                {
+                    Log.Debug("Expected local project entry matched for {Mod} version {Version}", name, version);
+                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, [],
+                        ChangeReason: declaration!.ChangeReason));
+                    continue;
+                }
+
+                lockMismatchCount++;
+                if (options.Maintenance)
+                {
+                    Log.Information("Updating local project entry for {Mod} without a content hash", name);
+                    updatedEntries[name] = new ModProvenanceExpectedEntry(name, version, null, metadataHash);
+                    acceptedCount++;
+                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, [],
+                        ChangeReason: declaration!.ChangeReason));
+                }
+                else
+                {
+                    const string error =
+                        "local project metadata or version differs from the provenance lock; run maintenance to update it";
+                    Log.Warning("{Mod} local project entry mismatch: {Error}", name, error);
+                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, [], error,
+                        ChangeReason: declaration!.ChangeReason));
+                    failures.Add($"{name}: {error}");
+                }
+
+                continue;
+            }
+
             var currentDirectory = AbsolutePath.Create(mod.Directory);
             var currentHash = ModFileComparer.GetDirectoryHash(currentDirectory);
-            var expectedEntry = expected.Mods.SingleOrDefault(x => x.Name == name);
-            var isLocal = declaration?.Source == "local";
             Log.Debug("Inspecting {Mod} version {Version}: directory hash {ContentHash}", name, version,
                 currentHash);
 
-            var metadataHash = GetMetadataHash(declaration);
             var requiresMetadataMigration = options.Maintenance && declaration is not null &&
                                             expectedEntry?.MetadataHash is null;
             if (!requiresMetadataMigration && expectedEntry is not null && expectedEntry.Version == version &&
@@ -104,27 +139,14 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
                 name, expectedEntry?.Version, expectedEntry?.ContentHash ?? "<none>", version, currentHash);
             lockMismatchCount++;
 
-            if (isLocal || !options.VerifyUpstream)
+            if (!options.VerifyUpstream)
             {
-                if (isLocal && options.Maintenance)
-                {
-                    Log.Information("Registering {Mod} as a local project mod in the provenance lock", name);
-                    updatedEntries[name] = new ModProvenanceExpectedEntry(name, version, currentHash, metadataHash);
-                    acceptedCount++;
-                    results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.ProjectMod, [],
-                        ChangeReason: declaration?.ChangeReason));
-                }
-                else
-                {
-                    var status = isLocal ? ModProvenanceStatus.ProjectMod : ModProvenanceStatus.LockMismatch;
-                    var error = isLocal
-                        ? "local project mod is not present in the provenance lock; run maintenance to register it"
-                        : "mod differs from upstream lock; run with --check-mod-portal to verify the current version";
-                    Log.Warning("{Mod} lock mismatch: {Error}", name, error);
-                    results.Add(new ModProvenanceResult(name, version, status, [], error,
-                        ChangeReason: declaration?.ChangeReason));
-                    failures.Add($"{name}: {error}");
-                }
+                const string error =
+                    "mod differs from upstream lock; run with --check-mod-portal to verify the current version";
+                Log.Warning("{Mod} lock mismatch: {Error}", name, error);
+                results.Add(new ModProvenanceResult(name, version, ModProvenanceStatus.LockMismatch, [], error,
+                    ChangeReason: declaration?.ChangeReason));
+                failures.Add($"{name}: {error}");
 
                 continue;
             }
