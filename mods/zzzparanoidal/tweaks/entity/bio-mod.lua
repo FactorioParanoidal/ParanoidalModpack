@@ -23,7 +23,7 @@ paralib.bobmods.lib.recipe.set_ingredients(
 paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-2") --открываем рецепт биореактора 2
 paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-3") --открываем рецепт биореактора 3
 data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Прячем рецепты под новый биореактор 2
-data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 2
+data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 3
 
 paralib.bobmods.lib.recipe.remove_ingredient("bi-bio-greenhouse", "glass")
 data.raw.item["bi-bio-greenhouse"].subgroup = "bio-bio-farm-fluid-entity"
