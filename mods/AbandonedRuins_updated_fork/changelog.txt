@@ -1,22 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.5
+Date: 2026-06-26
+  Changes:
+   - @pault-pg has added missing language string for "expensive sanity checks" setting (thank you!),
+     PR #7
+   - some tpzos fixed, thanks to @pault-pg, PR #8
+   - bumped version for `base` mod to 2.0.77
+---------------------------------------------------------------------------------------------------
 Version: 1.5.4
 Date: 2026-06-08
   Fixes:
     - utilities.safe_damage() is now rejecting only negative values, zero is being ignored or at
-      least logged when `debug_utils` is enabled
+      least logged when `debug_utils` is enabled. Thanks to @F3zy for reporting this.
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.3
 Date: 2026-06-08
   Fixes:
     - Added a check that no zero/negative damage can be dealt to an entity as this doesn't make
-      sense at all. Thanks to @ShbVal for reporting this
+      sense at all. Thanks to @ShbVal for reporting this.
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2026-06-08
   Fixes:
     - Fixed `attempt to index global 'ruin' (a nil value)` in `spawning.lua:381`, thanks to @ShbVal
       for reporting it
-    - had to move initialization of `storage.allowed_planets` into `planet.init()` function to avoid
+    - had to move initialization of `storage.allowed_planets` into `planets.init()` function to avoid
       nil during loading a ~5 months old save game
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1

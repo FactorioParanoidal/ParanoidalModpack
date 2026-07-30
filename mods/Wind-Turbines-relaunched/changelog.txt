@@ -15,6 +15,17 @@ Date: 2026-06-23
   Changes:
     - Upgrade to V 2.1 of base game
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 2026-07-14
+  Bugfixes:
+    - Avoid crash when a giant turbine is already placed and giant turbines become disabled afterwards.
+    - Corrected wrong locale code for Ukrainian localization
+  Ease of use:
+    - Added the ability to upgrade turbines (except the wooden wind turbine) with turbines of the same tier but higher
+      quality with fast replace.
+  Locale:
+    - Applied changes to locale en from the 2.1 series to all locales
+---------------------------------------------------------------------------------------------------
 Version: 2.2.4
 Date: 2026-07-11
   Changes:

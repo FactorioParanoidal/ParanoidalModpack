@@ -98,6 +98,7 @@ data:extend({
         corpse = 'big-remnants',
         dying_explosion = 'big-explosion',
         fast_replaceable_group = 'texugo-wind-turbine3',
+        next_upgrade = 'texugo-wind-turbine3',
         collision_mask = { layers = { item = true, object = true, water_tile = true } },
         collision_box = extended_collision_area and {{ -2.9, -7.4 }, { 2.9, 1.4 }} or {{ -2.9, -1.4 }, { 2.9, 1.4 }},
         selection_box = extended_collision_area and {{ -3,   -7.5 }, {   3, 1.5 }} or {{ -3,   -1.5 }, {   3, 1.5 }},

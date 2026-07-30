@@ -4,7 +4,7 @@ autodeconstruct = {}
 
 local math2d = require("math2d")
 
-local blacklist_surface_prefixes = {"BPL_TheLab", "bpsb%-lab"}
+local blacklist_surface_prefixes = prototypes.mod_data["autodeconstruct-blacklist"].data.surfaces
 local RESOURCE_CHECK_TIME = 15
 local RESOURCE_EJECT_TIME = 30
 local DECONSTRUCT_TIMEOUT = 1800
@@ -134,9 +134,21 @@ function autodeconstruct.init_globals()
 end
 
 
--- Find the target entity the miner is dropping in, if any
+-- Find the target entity the miner/inserter/assembler/furnace/loader is dropping in, if any
 local function find_target(entity)
-  if entity.drop_target then  -- works when target is a chest
+  if (entity.type == "loader" or entity.type == "loader-1x1") and entity.loader_type == "input" then
+    -- Only care about chests that loaders are filling
+    local container = entity.loader_container
+    if container and container.valid then
+      return container
+    else
+      -- Look for a ghost
+      local ghost = entity.surface.find_entity("entity-ghost", util.moveposition(entity.position, entity.direction, 0.5*math.floor(entity.prototype.radius*4)))
+      if ghost and ghost.valid then
+        return ghost
+      end
+    end
+  elseif entity.drop_target then  -- works when target is a chest
     if storage.debug then msg_all({"autodeconstruct-debug", "found " .. entity.drop_target.name .. " at " .. util.positiontostr(entity.drop_target.position)}) end
     return entity.drop_target
   else
@@ -160,6 +172,20 @@ local function find_targeting(entity, types)
   for _, e in pairs(found_ghosts) do
     if find_target(e) == entity then
       table.insert(targeting, e)
+    end
+  end
+  if entity.type == 'loader' or entity.type == 'loader-1x1' then
+    if entity.loader_type == "output" then
+      if entity.loader_container and entity.loader_container.valid then
+        table.insert(targeting, entity.loader_container)
+      else -- Check for any ghost in the pickup spot
+        local ghost = entity.surface.find_entity("entity-ghost", util.moveposition(entity.position, entity.direction, -0.5*math.floor(entity.prototype.radius*4)))
+        if ghost and ghost.valid then
+          table.insert(targeting, ghost)
+        else -- Just assume something is there, checking for all possible rails and rail ghosts is annoying
+          table.insert(targeting, entity)
+        end
+      end
     end
   end
 
@@ -493,7 +519,7 @@ local function deconstruct_target(drill)
 
   if target ~= nil and target.minable and target.prototype.selectable_in_game and not storage.blacklist[target.name] then
     if target.type == "logistic-container" or target.type == "container" or target.type == "linked-container" then
-      local targeting = find_targeting(target, {'mining-drill', 'inserter', 'assembling-machine', 'furnace'})
+      local targeting = find_targeting(target, {'mining-drill', 'inserter', 'assembling-machine', 'furnace', 'loader', 'loader-1x1'})
 
       if targeting ~= nil then
         local chest_is_idle = true
