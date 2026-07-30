@@ -9,16 +9,16 @@ local alt_input =
 {
   name = "klient-alt-move-to",
   type = "custom-input",
-  key_sequence = "CONTROL + ALT + mouse-button-2",
-  consuming = "game-only"
+  consuming = "game-only",
+  key_sequence = "CONTROL + ALT + mouse-button-2"
 }
 
 local enqueue_input =
 {
   name = "klient-enqueue-command",
   type = "custom-input",
-  key_sequence = "CONTROL + ALT + SHIFT + mouse-button-2",
-  consuming = "game-only"
+  consuming = "game-only",
+  key_sequence = "CONTROL + ALT + SHIFT + mouse-button-2"
 }
 
 local cancel_w =
@@ -61,9 +61,8 @@ local cancel_enter =
 {
   name = "klient-cancel-enter",
   type = "custom-input",
-  linked_game_control = "toggle-driving",
   consuming = "none",
-  key_sequence = ""
+  key_sequence = "RETURN"
 }
 
 
