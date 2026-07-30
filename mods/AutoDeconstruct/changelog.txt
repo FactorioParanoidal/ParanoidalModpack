@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2026-07-29
+  Changes:
+    - Moved the autodeconstruct surface blacklist to a mod-data entry so other mods can add to it. (thanks to PizzaPlanner)
+  Bugfixes:
+    - Fixed that loaders were not treated as item sources, so belts and chests attached to them could be improperly deconstructed.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.13
 Date: 2026-06-23
   Changes:
