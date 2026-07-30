@@ -105,6 +105,7 @@ if handle_settings.WindTurbine4() then
                 {type = 'impact', percent = 60, decrease = 30}
             },
             fast_replaceable_group = 'texugo-wind-turbine4',
+            next_upgrade = 'texugo-wind-turbine4',
             collision_mask = { layers = { item = true, object = true, water_tile = true } },
             collision_box = extended_collision_area and {{ -5.9, -13.9 }, { 5.9, 3.9 }} or {{ -5.9, -3.9 }, { 5.9, 3.9 }} ,
             selection_box = extended_collision_area and {{   -6,   -14 }, {   6,   4 }} or {{   -6,   -4 }, {   6,   4 }} ,
