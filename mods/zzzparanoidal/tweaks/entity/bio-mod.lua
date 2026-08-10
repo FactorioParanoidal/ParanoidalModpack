@@ -1,8 +1,10 @@
 require("__zzzparanoidal__.paralib")
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-3", "bi-bio-farm-2") --открываем рецепт биофермы 2
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-3", "bi-bio-greenhouse-2") --открываем рецепт теплицы 2
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-4", "bi-bio-farm-3") --открываем рецепт биофермы 3
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-bio-farming-4", "bi-bio-greenhouse-3") --открываем рецепт теплицы 3
+-- BI 2.0 не создаёт техи bi-tech-bio-farming-2/3/4 (были в BI 1.1 new_tech.lua, удалены при конверсии).
+-- Тиры вешаем на техи-хосты рецептов роста, которые они крафтят: MK2 -> fertilizer (bi-*-3), MK3 -> advanced-biotechnology (bi-*-4).
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-fertilizer", "bi-bio-farm-2") --открываем рецепт биофермы 2
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-fertilizer", "bi-bio-greenhouse-2") --открываем рецепт теплицы 2
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-farm-3") --открываем рецепт биофермы 3
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-greenhouse-3") --открываем рецепт теплицы 3
 
 data.raw["recipe"]["bi-logs-3"].category = "biofarm-mod-farm-2" -- Прячем рецепты под новую ферму 2
 data.raw["recipe"]["bi-logs-4"].category = "biofarm-mod-farm-3" -- Прячем рецепты под новую ферму 3
@@ -17,11 +19,11 @@ paralib.bobmods.lib.recipe.set_ingredients(
 	"bi-bio-reactor",
 	{ { type = "item", name = "assembling-machine-1", amount = 2}, { type = "item", name = "steel-plate", amount = 20}, { type = "item", name = "bob-basic-circuit-board", amount = 5} }
 ) --баланс рецепта биореактора 1
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-biomass-reprocessing-1", "bi-bio-reactor-2") --открываем рецепт биореактора 2
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-biomass-reprocessing-2", "bi-bio-reactor-3") --открываем рецепт биореактора 3
+-- BI 2.0 не создаёт техи bi-tech-biomass-reprocessing-1/2 (были в BI 1.1); рецепты biomass-2/3 открывает advanced-biotechnology — туда же вешаем реакторы
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-2") --открываем рецепт биореактора 2
+paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-3") --открываем рецепт биореактора 3
 data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Прячем рецепты под новый биореактор 2
-data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 2
-paralib.bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-3", "concrete") -- Технологии под Бетон
+data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 3
 
 paralib.bobmods.lib.recipe.remove_ingredient("bi-bio-greenhouse", "glass")
 data.raw.item["bi-bio-greenhouse"].subgroup = "bio-bio-farm-fluid-entity"

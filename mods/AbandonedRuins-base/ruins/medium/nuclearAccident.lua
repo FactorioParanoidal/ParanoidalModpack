@@ -204,5 +204,10 @@ return
     {"water-green", {x = 6, y = 2}},
     {"water-green", {x = 6, y = 4}},
     {"water-green", {x = 6, y = 5}},
+  },
+  no_spawning =
+  {
+    fulgora = true,
+    vulcanus = true
   }
 }

@@ -2,20 +2,20 @@
 -- https://www.geogebra.org/m/GDgua6HK
 -- y = sin(3x/2)/3+sin(2x/2+2)/3+sin(3x/2-3)/2-sin(4x/2+1)/3-sin(5x/2+3)/4-sin(6x/2+4)/2+sin(x/3)+2.5
 
-local handle_settings = require("scripts/handle_settings")
-local wind_speed = require("scripts/wind_speed")
+local handle_settings = require("scripts.handle_settings")
+local wind_speed = require("scripts.wind_speed")
+local tableHelper = require("scripts.TableHelper")
 
 local powersetting = handle_settings.WindPower()
 local use_extended_collision_area = handle_settings.useExtendedCollisionArea()
 local use_surface_wind_speed = handle_settings.useSurfaceWindSpeed()
 local wind_scale_with_pressure = handle_settings.scaleWithPressure()
 
-local output_modifiers = {
-    ['texugo-wind-turbine'] = 1,
-    ['texugo-wind-turbine2'] = 10,
-    ['texugo-wind-turbine3'] = 100,
-    ['texugo-wind-turbine4'] = 1000,
-}
+local output_modifiers = tableHelper.addOptionalWT4({
+        ['texugo-wind-turbine'] = 1,
+        ['texugo-wind-turbine2'] = 10,
+        ['texugo-wind-turbine3'] = 100,
+    }, {['texugo-wind-turbine4'] = 1000,})
 
 local quality_factor = {
     [0] = 1,
@@ -26,19 +26,17 @@ local quality_factor = {
 }
 
 -- collision rectangles
-local turbine_map = {
-    ['texugo-wind-turbine'] = 'twt-collision-rect',
-    ['texugo-wind-turbine2'] = 'twt-collision-rect2',
-    ['texugo-wind-turbine3'] = 'twt-collision-rect3',
-    ['texugo-wind-turbine4'] = 'twt-collision-rect4',
-}
+local turbine_map = tableHelper.addOptionalWT4({
+        ['texugo-wind-turbine'] = 'twt-collision-rect',
+        ['texugo-wind-turbine2'] = 'twt-collision-rect2',
+        ['texugo-wind-turbine3'] = 'twt-collision-rect3',
+    }, {['texugo-wind-turbine4'] = 'twt-collision-rect4',})
 
-local reverse_map = {
-    ['twt-collision-rect'] = 'texugo-wind-turbine',
-    ['twt-collision-rect2'] = 'texugo-wind-turbine2',
-    ['twt-collision-rect3'] = 'texugo-wind-turbine3',
-    ['twt-collision-rect4'] = 'texugo-wind-turbine4',
-}
+local reverse_map = tableHelper.addOptionalWT4({
+        ['twt-collision-rect'] = 'texugo-wind-turbine',
+        ['twt-collision-rect2'] = 'texugo-wind-turbine2',
+        ['twt-collision-rect3'] = 'texugo-wind-turbine3',
+    }, { ['twt-collision-rect4'] = 'texugo-wind-turbine4', })
 
 local function resetWindCount(event)
     if storage.wind >= 1800 then
@@ -162,6 +160,13 @@ end
 -- ###############################################################
 
 --- register complexer events, i.e with additional filters
+local filter = tableHelper.addOptionalWT4({
+        { filter = "type", type = "simple-entity-with-owner" },
+        { filter = "name", name = "twt-collision-rect" },
+        { filter = "name", name = "twt-collision-rect2" },
+        { filter = "name", name = "twt-collision-rect3" },
+    }, { {filter="name", name = "twt-collision-rect4"} })
+
 local function registerEvents()
     -- Damage to the base (can only take impact damage) is transmitted to the turbine (for example, when impacting with a car or tank)
     script.on_event(defines.events.on_entity_damaged, function(event)
@@ -179,15 +184,7 @@ local function registerEvents()
                 end
             end
         end
-    end,
-            {
-                {filter="type", type = "simple-entity-with-owner"},
-                {filter="name", name = "twt-collision-rect"},
-                {filter="name", name = "twt-collision-rect2"},
-                {filter="name", name = "twt-collision-rect3"},
-                {filter="name", name = "twt-collision-rect4"}
-            }
-    )
+    end, filter)
 end
 -- ###############################################################
 

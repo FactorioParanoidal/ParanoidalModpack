@@ -50,7 +50,6 @@ paralib.bobmods.lib.tech.add_prerequisite("fluid-handling", "logistic-science-pa
 paralib.bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-1", "logistic-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-chemical-processing-2", "logistic-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("angels-ironworks-1", "logistic-science-pack")
-paralib.bobmods.lib.tech.add_prerequisite("bi-tech-bio-farming-2", "logistic-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("adv-seed-extraction", "logistic-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("nanobots-cliff", "logistic-science-pack")
 --синие банки

@@ -1,6 +1,6 @@
 {
   "name": "even-pickier-dollies",
-  "version": "2.7.3",
+  "version": "2.7.5",
   "factorio_version": "2.0",
   "title": "Even Pickier Dollies",
   "author": "hgschmie",
@@ -12,7 +12,7 @@
   ],
   "description": "Move and rotate most placed entities.",
   "package": {
-    "git_publish_branch": "main",
+    "git_publish_branch": "2.0-maint",
     "readme": "README.md",
     "sync_portal_details": true
   }

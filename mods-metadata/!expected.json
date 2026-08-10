@@ -3,14 +3,14 @@
   "mods": [
     {
       "name": "AbandonedRuins-base",
-      "version": "0.1.7",
-      "contentHash": "e08d667ce864391a41b2f61603c6a7e1",
+      "version": "0.1.8",
+      "contentHash": "5426bf6bbf63c692d830e760c98ff774",
       "metadataHash": null
     },
     {
       "name": "AbandonedRuins_updated_fork",
-      "version": "1.5.4",
-      "contentHash": "7edc94bcc99f16ef0cd5f5b355994443",
+      "version": "1.5.5",
+      "contentHash": "b70d96c6fe9744a2dd07d7457be87055",
       "metadataHash": null
     },
     {
@@ -33,8 +33,8 @@
     },
     {
       "name": "AutoDeconstruct",
-      "version": "1.0.13",
-      "contentHash": "95f8a18d20b33062aa4bf8c5960a986a",
+      "version": "1.0.14",
+      "contentHash": "1afa81686bb3c6f3472ed9b86e1cd875",
       "metadataHash": null
     },
     {
@@ -136,13 +136,13 @@
     {
       "name": "ERPCTbaAB2",
       "version": "2.0.0",
-      "contentHash": "e6b24a591e729277dd9c800d404fb13a",
+      "contentHash": null,
       "metadataHash": "2b564425c4ee87829a5391df5ec0c0a66d15b47e4f0354186cb30a2c79c705bf"
     },
     {
       "name": "ElectricResistance2",
       "version": "1.0.0",
-      "contentHash": "63ba4789f229458c14d03403ba63140f",
+      "contentHash": null,
       "metadataHash": "7bc1298921f288c62b61c20ca1f2c898496bee69b9ff58f9a1b3de4e8b762059"
     },
     {
@@ -172,7 +172,7 @@
     {
       "name": "Fe-C-accumulator",
       "version": "0.0.1",
-      "contentHash": "a1163ab6d08b58c364033c46ed1e0741",
+      "contentHash": null,
       "metadataHash": "28151cb78e9e3576fae11ab0824d985803b97e147d6a894e88e63ae2f91ab37a"
     },
     {
@@ -231,8 +231,8 @@
     },
     {
       "name": "Kruise_Kontrol_Updated",
-      "version": "0.2.6",
-      "contentHash": "55476857850210033b9df0b8502e0270",
+      "version": "0.3.0",
+      "contentHash": "861010e246f5185153d5ec34bd5813a9",
       "metadataHash": null
     },
     {
@@ -268,13 +268,13 @@
     {
       "name": "MIRV2",
       "version": "1.0.0",
-      "contentHash": "ed4a6aadfab7dfecd76764e7bf852877",
+      "contentHash": null,
       "metadataHash": "577aeb7ebe782a22a7b6e6ea17173ab5cc42ef422068b35c3d750c9fcde645ce"
     },
     {
       "name": "MilesBobsExpansion2",
       "version": "9.6.1",
-      "contentHash": "d4a8ce9cd5781a7812ac81eb68c4d946",
+      "contentHash": null,
       "metadataHash": "34499313d1a185103ab2fa5e1ce14c58fa507c053ff2103eefe293a313cbc22f"
     },
     {
@@ -310,7 +310,7 @@
     {
       "name": "Nearby-Ammo-Count-Bigger",
       "version": "2.0.1",
-      "contentHash": "fb30bb5e4a32148ca9f07a5184096ffa",
+      "contentHash": null,
       "metadataHash": "1fd7cc42ed22a2788222f767811dfa21b00cf3c7ee0b3e62e4ce42a48593f410"
     },
     {
@@ -340,7 +340,7 @@
     {
       "name": "ParanoidalLocale",
       "version": "1.16.0",
-      "contentHash": "6f8eb38a4fcfa8f738b9139e8c7c6836",
+      "contentHash": null,
       "metadataHash": "9eada249331e920a65aa7baa410ce2575bfc0e8be55a24bf27e598f78168b3bc"
     },
     {
@@ -382,7 +382,7 @@
     {
       "name": "RampantFixed",
       "version": "2.02.08",
-      "contentHash": "1e24def946a883f0498910d1fa048339",
+      "contentHash": null,
       "metadataHash": "face3bb0acf40d05f17c683e308b5a2256737e884cd137ed8c592ff092124b06"
     },
     {
@@ -418,7 +418,7 @@
     {
       "name": "RocketExplosions2",
       "version": "1.1.5",
-      "contentHash": "ef30d65149a1646fa761c19e30b1e086",
+      "contentHash": null,
       "metadataHash": "dcd42fe8836818fe1fdf70b1cd494393fc3055a8134a30210fceeb9bb10adc5d"
     },
     {
@@ -448,7 +448,7 @@
     {
       "name": "SpaceXGAR2",
       "version": "0.17.0",
-      "contentHash": "dbcd963a11705ba744ebd6e1d7232842",
+      "contentHash": null,
       "metadataHash": "ea442b073c45f5f18cbfb503dc2a9a427276ad404ae7ae19bd2d3d6ee0308f6b"
     },
     {
@@ -507,8 +507,8 @@
     },
     {
       "name": "Wind-Turbines-relaunched",
-      "version": "2.2.4",
-      "contentHash": "6f175657bac9edecb3ceb85570ea7371",
+      "version": "2.2.5",
+      "contentHash": "35b363235444a9772032cf90897d324d",
       "metadataHash": null
     },
     {
@@ -592,13 +592,13 @@
     {
       "name": "angelsextended-remelting-fixed",
       "version": "9.1.3",
-      "contentHash": "7b1f11b7c2b9d4ce2ff768be00b413ef",
+      "contentHash": null,
       "metadataHash": "bb8366c260cc6f8ba3e3037e37f31629a9927207a457e8c3637c3f1b0519166a"
     },
     {
       "name": "angelsindustries",
       "version": "2.0.0",
-      "contentHash": "1add27e1c54b03c599fcbf618304ae57",
+      "contentHash": null,
       "metadataHash": "aa464fde770324541ed19c011aa795702b620cb031bfe27c1ba19bb65dfa6d5f"
     },
     {
@@ -784,7 +784,7 @@
     {
       "name": "carbon-capture2",
       "version": "9.1.4",
-      "contentHash": "dc5e9a732fd9d7d8a3b0e229898fe28c",
+      "contentHash": null,
       "metadataHash": "95b803b374b6c0da67d9913c4d881410603aeb01ba3755a9d5839f50272b39b2"
     },
     {
@@ -807,8 +807,8 @@
     },
     {
       "name": "even-pickier-dollies",
-      "version": "2.7.3",
-      "contentHash": "b8a2829a3883ab0529c7c65b9d52e5be",
+      "version": "2.7.5",
+      "contentHash": "64509297b82b7bd12424f5beddf3e45a",
       "metadataHash": null
     },
     {
@@ -862,7 +862,7 @@
     {
       "name": "immersive-sounds2",
       "version": "0.1.1",
-      "contentHash": "5a30ebb5f5217b76cc9fe64a7ea7c78b",
+      "contentHash": null,
       "metadataHash": "51f504b61896410dc5c25cece2192af13f8afe7e8c9c85ac079d35c4e4d40ac3"
     },
     {
@@ -903,8 +903,8 @@
     },
     {
       "name": "mining-patch-planner",
-      "version": "1.7.18",
-      "contentHash": "c3dd1ff6c2d9f8604c44dcd73fabc738",
+      "version": "1.7.19",
+      "contentHash": "4f8720d2f3c2f8f18d1e496ea3b42415",
       "metadataHash": null
     },
     {
@@ -922,7 +922,7 @@
     {
       "name": "more-petrochem-hell2",
       "version": "0.18.2",
-      "contentHash": "5831b35681c6304507e1fe7f2f8fc549",
+      "contentHash": null,
       "metadataHash": "1fc1af2c56ae822cedb3faed8bd66a09103476e9cd2c57174a6706897b94c74d"
     },
     {
@@ -934,7 +934,7 @@
     {
       "name": "newtrainsfx2",
       "version": "1.2.2",
-      "contentHash": "9e07fdee0d7fc20d0464d621d2ded382",
+      "contentHash": null,
       "metadataHash": "05beee19bb068d996756e7e465756a243502e0567ef7c4467d26452036002a4a"
     },
     {
@@ -964,7 +964,7 @@
     {
       "name": "research_evolution_factor",
       "version": "1.1.05",
-      "contentHash": "842dcb70322cd986d5c98b388090c0b9",
+      "contentHash": null,
       "metadataHash": "dcc3c2e562d5047f13f973f073c9c09e7cacc5a42538b1c37a75988b95907266"
     },
     {
@@ -1042,7 +1042,7 @@
     {
       "name": "toxicPollution2",
       "version": "1.0.0",
-      "contentHash": "8372235c7b67b7b2371616cec782f8af",
+      "contentHash": null,
       "metadataHash": "1f77eba183e592bd49ea6034cb71ec0abaac5e7d6fbfbdf3cb4391ad1fe881d4"
     },
     {
@@ -1078,13 +1078,13 @@
     {
       "name": "zzzcompability",
       "version": "0.0.1",
-      "contentHash": "1758b741e5d5714fd76103931901a000",
+      "contentHash": null,
       "metadataHash": "830166c7fe66cb8efb02ee9affa76d18a7c23afc3428ce9c9d1a486e59373362"
     },
     {
       "name": "zzzparanoidal",
       "version": "8.1.7",
-      "contentHash": "ad3a72b5b5e114b60d943b9b679573a7",
+      "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
     }
   ]

@@ -192,7 +192,7 @@ remote.add_interface("AbandonedRuins",
   end,
 
   -- Registers ruin-set name as "no-spawning" to a surface. This means that ruins from given set will not spawn on given surface.
-  ---@param surface_name string Surface's name to the ruin-set should be exclusive to
+  ---@param surface_name string Surface's name to the ruin-set should not spawn any ruins on
   ---@param ruinset_name string Name of the ruin-set that is exclusive to given surface (aka. planet/moon)
   no_spawning_on = function(surface_name, ruinset_name)
     if debug_log then log(string.format("[no_spawning_on]: surface_name[]='%s',ruinset_name[]='%s' - CALLED!", type(surface_name), type(ruinset_name))) end
