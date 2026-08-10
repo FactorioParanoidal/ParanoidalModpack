@@ -296,6 +296,12 @@
       "metadataHash": null
     },
     {
+      "name": "MxlChievements2",
+      "version": "3.0.1",
+      "contentHash": "55fa82ca92631f5d2c9d817831eb5f7b",
+      "metadataHash": "ff43a956c73182caea64f3464f102bf9267937b3f4bd73f9df8e153d5eefd664"
+    },
+    {
       "name": "Namelists",
       "version": "2.2.0",
       "contentHash": "dfb718fe0029b4c67bf4bfb7c002fe59",

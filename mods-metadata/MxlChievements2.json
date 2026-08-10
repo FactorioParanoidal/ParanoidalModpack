@@ -1,0 +1,13 @@
+{
+  "mod": "MxlChievements2",
+  "source": "local",
+  "original": {
+    "name": "MxlChievements",
+    "authors": ["Mxlppxl"],
+    "portal": {
+      "name": "MxlChievements",
+      "url": "https://mods.factorio.com/mod/MxlChievements"
+    }
+  },
+  "changeReason": "Форк MxlChievements 3.0.1: оригинал добавляет achievements на отсутствующие в non-SA/non-Quality сборке прототипы (Quality/Space Age), из-за чего загрузка модов падает; также содержит дублирующиеся имена achievement-прототипов и пустые placeholder-иконки. Форк переименован в MxlChievements2, конфликтует с оригиналом (! MxlChievements) и пропускает недоступные achievements (PR #323)."
+}
