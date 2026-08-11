@@ -1,0 +1,6 @@
+{
+  "mod": "OverloadedTrains-Dead2",
+  "source": "portal",
+  "upstreamVersion": "2.0.11",
+  "changeReason": "Временный фикс краша (баг в самом моде): суффиксная схема отрезания уровня ошибочно резала тир-имена вагонов Bob's (bob-cargo-wagon-2 → несуществующий bob-cargo-wagon), create_entity падал при движении состава в авторежиме. Гардим отрезание суффикса и create_entity по наличию прототипа. Баг сообщён автору, снять при upstream-фиксе."
+}
