@@ -298,7 +298,6 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 	end
 	local contentweight = 0
 	local player
-	local train_speed = train.speed
 	local manual_mode = train.manual_mode
 	local drivers = {}
 
@@ -386,6 +385,8 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 	local extra_levels = math.ceil(remainder)
 	local train_unchanged = true
 	local current_schedule = train.schedule
+	local current_group = train.group
+	local current_speed = train.speed
 
 	--replace entities
 	for i, carriage in pairs(train.carriages) do
@@ -473,7 +474,11 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 	end
 	if not train_unchanged then
 		train.schedule = current_schedule
+		train.speed = current_speed
 		--train.speed = train.speed+0.01
+		if current_group then
+			train.group = current_group
+		end
 		for _, tbl in pairs(drivers) do
 			if not tbl.player.driving then
 				tbl.player.teleport(tbl.position)

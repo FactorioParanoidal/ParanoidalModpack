@@ -93,7 +93,7 @@ if mods["Noxys_Trees"] then
     set_settings_default_value("int-setting", "Noxys_Trees-maximum-trees-per-chunk", 256)
     set_settings_default_value("int-setting", "Noxys_Trees-ticks-between-operations", 61)
 end
-if mods["OverloadedTrains"] then
+if mods["OverloadedTrains-Dead2"] then
     set_settings_default_value("double-setting", "OT_realism", 1)
 end
 if mods["MultipleUnitTrainControl"] then
