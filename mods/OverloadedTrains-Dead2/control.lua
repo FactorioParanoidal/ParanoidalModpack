@@ -395,7 +395,10 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 				local name = carriage.name
 				local dash = name:reverse():find("-")
 				local old_level = ""
-				if dash and dash < 4 then
+				-- Хвост "-N" — уровень OT только если имя без него реальный прототип;
+				-- иначе тир-вагоны Bob's (bob-cargo-wagon-2) резались бы до
+				-- несуществующего bob-cargo-wagon → create_entity падал (баг мода, сообщён автору).
+				if dash and dash < 4 and prototypes.entity[name:sub(1,-dash-1)] then
 					old_level = name:sub(-dash)
 					name = name:sub(1,-dash-1)
 				end
@@ -409,7 +412,7 @@ script.on_event(defines.events.on_train_changed_state, function(event)
 				else
 					level = ""
 				end
-				if old_level ~= level then
+				if old_level ~= level and prototypes.entity[name..level] then
 					train_unchanged = false
 					local position = carriage.position
 					local orientation = carriage.orientation
