@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -35,6 +35,7 @@
     "? Lighted-Poles-Plus",
     "? ModuleInserterEx",
     "? MultipleUnitTrainControl",
+    "? MxlChievements2",
     "? Namelists",
     "? Nearby-Ammo-Count-Bigger",
     "? Noxys_Trees",
