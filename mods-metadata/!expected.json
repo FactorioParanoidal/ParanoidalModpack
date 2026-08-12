@@ -326,12 +326,6 @@
       "metadataHash": null
     },
     {
-      "name": "OverloadedTrains-Dead2",
-      "version": "2.0.11",
-      "contentHash": "0f16f97cba16303cf21a4798b51a39a7",
-      "metadataHash": "380fa300d62a474d7b314614588a7b9ca8a99d164d510128b5e841bf51802b6e"
-    },
-    {
       "name": "PCPRedux",
       "version": "1.1.0",
       "contentHash": "44274ab9d3bdea349a31b3342ada2753",
@@ -1083,7 +1077,7 @@
     },
     {
       "name": "zzzparanoidal",
-      "version": "8.1.7",
+      "version": "8.1.8",
       "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
     }
