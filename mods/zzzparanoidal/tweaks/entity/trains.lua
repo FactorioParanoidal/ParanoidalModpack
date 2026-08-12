@@ -28,8 +28,6 @@ data.raw["cargo-wagon"]["cargo-wagon"].air_resistance = 0.007
 -------------------------------------------------------------------------------------------------
 data.raw["cargo-wagon"]["bob-cargo-wagon-3"].max_speed = 10
 -- 1.1 Oberhaul (trains.lua, train-wagon-nerf): урезанная вместимость карго-вагонов.
--- Нерфим базу И копии OverloadedTrains (base-1..base-20 — deepcopy наследует inventory_size;
--- иначе при свапе вагона по загрузке вместимость вернулась бы к стоку).
 -- angels-mobility (Mass Transit) — те же тиры/значения для консистентности (в 1.1 мода не было).
 -- Гард `if cw[base]` пропускает отсутствующие вагоны → безопасно, если мода нет.
 local wagon_nerf = {
@@ -51,9 +49,6 @@ local wagon_nerf = {
 local cw = data.raw["cargo-wagon"]
 for base, size in pairs(wagon_nerf) do
 	if cw[base] then cw[base].inventory_size = size end
-	for i = 1, 20 do
-		if cw[base .. "-" .. i] then cw[base .. "-" .. i].inventory_size = size end
-	end
 end
 -------------------------------------------------------------------------------------------------
 --вагон-цистерна мк1
