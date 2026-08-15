@@ -3,6 +3,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FactorioParanoidal.FactorioMods;
+using FactorioParanoidal.FactorioMods.Mods;
+using ModDescriptions;
 using ModProvenance;
 using ModProvenance.Models;
 using Nuke.Common;
@@ -20,12 +23,18 @@ partial class Build
     public bool PrepareModProvenance { get; }
 
     Target CheckModProvenance => _ => _
-        .Description("Checks local mods against the exact Mod Portal release").Executes((Func<Task>)(async () =>
+        .Description("Checks mod descriptions and local mods against the exact Mod Portal release").Executes((Func<Task>)(async () =>
         {
+            var modpack = await FactorioModpack.LoadFromDirectory(RootDirectory / "mods");
+            var mods = modpack.Mods.OfType<FolderFactorioMod>()
+                .OrderBy(x => x.Info.Name, StringComparer.Ordinal)
+                .ToArray();
+            var descriptionsChecker = new ModDescriptionsChecker(RootDirectory);
+            descriptionsChecker.Check(mods);
             var checker = new ModProvenanceChecker(RootDirectory, SerializerOptions);
             var modProvenanceOptions = new ModProvenanceOptions(CheckModPortal, MaintainModProvenance,
                 PrepareModProvenance);
-            var report = await checker.CheckAsync(modProvenanceOptions);
+            var report = await checker.CheckAsync(modProvenanceOptions, mods);
             var summary = "# Mod provenance\n\n" + report;
 
             Log.Information("{Summary}", summary);
