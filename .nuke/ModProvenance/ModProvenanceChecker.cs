@@ -27,9 +27,9 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
     const string ModMetadataFolder = "mods-metadata";
     private readonly AbsolutePath _lockPath = rootDirectory / ModMetadataFolder / ExpectedModsFile;
 
-    public async Task<ModProvenanceReport> CheckAsync(ModProvenanceOptions options)
+    public async Task<ModProvenanceReport> CheckAsync(ModProvenanceOptions options,
+        IReadOnlyList<FolderFactorioMod> mods)
     {
-        var mods = await LoadMods();
         var failures = new List<string>();
         var results = new List<ModProvenanceResult>();
         Log.Debug("Loaded {ModCount} folder mods from {ModsDirectory}", mods.Count, rootDirectory / "mods");
@@ -335,15 +335,6 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
         return true;
     }
 
-    private async Task<IReadOnlyList<FolderFactorioMod>> LoadMods()
-    {
-        var modpack = await FactorioModpack.LoadFromDirectory(rootDirectory / "mods");
-        Log.Debug("FactorioModpack discovered {ModCount} mods", modpack.Mods.Count);
-        return modpack.Mods.OfType<FolderFactorioMod>()
-            .OrderBy(x => x.Info.Name, StringComparer.Ordinal)
-            .ToArray();
-    }
-
     private Dictionary<string, ModMetadata> LoadModMetadata()
     {
         var metadataDirectory = rootDirectory / ModMetadataFolder;
@@ -355,7 +346,7 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
 
         var result = new Dictionary<string, ModMetadata>(StringComparer.Ordinal);
         foreach (var path in Directory.EnumerateFiles(metadataDirectory, "*.json", SearchOption.TopDirectoryOnly)
-                     .Where(x => !string.Equals(Path.GetFileName(x), ExpectedModsFile, StringComparison.Ordinal)))
+                      .Where(x => !Path.GetFileName(x).StartsWith('!')))
         {
             var metadata = JsonSerializer.Deserialize<ModMetadata>(File.ReadAllText(path), serializerOptions)
                            ?? throw new JsonException($"Could not deserialize {path}.");
