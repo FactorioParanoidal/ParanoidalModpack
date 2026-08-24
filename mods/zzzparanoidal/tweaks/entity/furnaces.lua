@@ -99,3 +99,10 @@ if mods["BatteryElectricTrain"] then
 	}
 end
 
+-- super_charger стоит как "4" сразу за bet-charger-3 (order "b"); низкоприоритетные — после него
+for _, name in ipairs({ "bet-charger-tertiary-1", "bet-charger-tertiary-2", "bet-charger-tertiary-3" }) do
+	if data.raw.item[name] then
+		data.raw.item[name].order = "c"
+	end
+end
+

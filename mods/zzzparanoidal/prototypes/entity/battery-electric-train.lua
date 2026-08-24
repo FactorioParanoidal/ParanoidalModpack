@@ -61,7 +61,7 @@ super_charger.minable = { mining_time = 1, result = "super_charger" }
 super_charger.crafting_speed = 50
 super_charger.energy_usage = "100MW"
 super_charger.energy_source = { type = "electric", drain = "50kW", usage_priority = "secondary-input" }
-super_charger.working_visualisations = {
+super_charger.graphics_set.animation = {
 	filename = "__zzzparanoidal__/graphics/train/electric/charger_sheet.png",
 	priority = "medium",
 	width = 256,
@@ -72,17 +72,7 @@ super_charger.working_visualisations = {
 	scale = 0.5,
 	animation_speed = 0.01,
 }
-super_charger.animation = {
-	filename = "__zzzparanoidal__/graphics/train/electric/charger_sheet.png",
-	priority = "medium",
-	width = 256,
-	height = 256,
-	frame_count = 16,
-	line_length = 4,
-	shift = { 0.5, -0.5 },
-	scale = 0.5,
-	animation_speed = 0.01,
-}
+super_charger.graphics_set.working_visualisations = nil
 
 data:extend({
 	super_charger,
