@@ -144,6 +144,7 @@ data:extend({ -- ###############################################################
 			module_slots = 2,
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -192,6 +193,7 @@ data:extend({ -- ###############################################################
 					},
 				},
 			},
+		},
 		},
 		open_sound = {
 			filename = "__base__/sound/machine-open.ogg",
@@ -299,6 +301,7 @@ data:extend({ -- ###############################################################
 			module_slots = 3,
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -347,6 +350,7 @@ data:extend({ -- ###############################################################
 					},
 				},
 			},
+		},
 		},
 		open_sound = {
 			filename = "__base__/sound/machine-open.ogg",
@@ -435,6 +439,7 @@ data:extend({ -- ###############################################################
 		collision_box = { { -4.2, -4.2 }, { 4.2, 4.2 } },
 		selection_box = { { -4.5, -4.5 }, { 4.5, 4.5 } },
 		scale_entity_info_icon = true,
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -442,7 +447,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 304,
 					height = 400,
-					shift = { 0, -1.5 },
+					shift = { 0, -2 },
 					scale = 1,
 				},
 				{
@@ -450,7 +455,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 400,
 					height = 400,
-					shift = { 1.5, -1.5 },
+					shift = { 1, -2 },
 					scale = 1,
 					draw_as_shadow = true,
 				},
@@ -468,12 +473,13 @@ data:extend({ -- ###############################################################
 							width = 400,
 							height = 400,
 							scale = 1,
-							shift = { 0, -1.5 },
+							shift = { 1, -2 },
 							blend_mode = "additive",
 						},
 					},
 				},
 			},
+		},
 		},
 		crafting_categories = { "biofarm-mod-farm", "biofarm-mod-farm-2" },
 		crafting_speed = 1.5,
@@ -576,6 +582,7 @@ data:extend({ -- ###############################################################
 		collision_box = { { -4.2, -4.2 }, { 4.2, 4.2 } },
 		selection_box = { { -4.5, -4.5 }, { 4.5, 4.5 } },
 		scale_entity_info_icon = true,
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -583,7 +590,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 304,
 					height = 400,
-					shift = { 0, -1.5 },
+					shift = { 0, -2 },
 					scale = 1,
 				},
 				{
@@ -591,7 +598,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 400,
 					height = 400,
-					shift = { 1.5, -1.5 },
+					shift = { 1, -2 },
 					scale = 1,
 					draw_as_shadow = true,
 				},
@@ -609,12 +616,13 @@ data:extend({ -- ###############################################################
 							width = 400,
 							height = 400,
 							scale = 1,
-							shift = { 0, -1.5 },
+							shift = { 1, -2 },
 							blend_mode = "additive",
 						},
 					},
 				},
 			},
+		},
 		},
 		crafting_categories = { "biofarm-mod-farm", "biofarm-mod-farm-2", "biofarm-mod-farm-3" },
 		crafting_speed = 2.0,
@@ -762,6 +770,7 @@ data:extend({ -- ###############################################################
 		fluid_boxes_off_when_no_fluid_recipe = true,
 		collision_box = { { -1.2, -1.2 }, { 1.2, 1.2 } },
 		selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -774,7 +783,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0, -0.5 },
+					shift = { 0, -0.125 },
 				},
 				{
 					filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_reactor/bioreactor_shadow.png",
@@ -786,7 +795,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0.5, -0.5 },
+					shift = { 0.5, -0.125 },
 					draw_as_shadow = true,
 				},
 			},
@@ -807,11 +816,12 @@ data:extend({ -- ###############################################################
 							repeat_count = 1,
 							animation_speed = 0.2,
 							scale = 1,
-							shift = { 0, -0.5 },
+							shift = { 0, -0.125 },
 						},
 					},
 				},
 			},
+		},
 		},
 		energy_source = {
 			type = "electric",
@@ -927,6 +937,7 @@ data:extend({ -- ###############################################################
 		fluid_boxes_off_when_no_fluid_recipe = true,
 		collision_box = { { -1.2, -1.2 }, { 1.2, 1.2 } },
 		selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -939,7 +950,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0, -0.5 },
+					shift = { 0, -0.125 },
 				},
 				{
 					filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_reactor/bioreactor_shadow.png",
@@ -951,7 +962,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0.5, -0.5 },
+					shift = { 0.5, -0.125 },
 					draw_as_shadow = true,
 				},
 			},
@@ -972,11 +983,12 @@ data:extend({ -- ###############################################################
 							repeat_count = 1,
 							animation_speed = 0.2,
 							scale = 1,
-							shift = { 0, -0.5 },
+							shift = { 0, -0.125 },
 						},
 					},
 				},
 			},
+		},
 		},
 		energy_source = {
 			type = "electric",
