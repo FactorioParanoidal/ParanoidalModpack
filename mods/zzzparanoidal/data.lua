@@ -42,7 +42,6 @@ require("prototypes.recipe.metallurgy")
 -- new technologies
 require("prototypes.technology.offshore-pumps")
 require("prototypes.technology.battery-electric-train")
-require("prototypes.technology.bio-content")
 require("prototypes.technology.flame-car")
 require("prototypes.technology.artillery-prototype")
 require("prototypes.technology.alien-artifacts")
