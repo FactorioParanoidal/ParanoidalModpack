@@ -695,7 +695,7 @@ data:extend({ -- ###############################################################
 				base_level = -1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 0,
 						flow_direction = "input",
 						position = { 0, -1 },
 					},
@@ -712,7 +712,7 @@ data:extend({ -- ###############################################################
 				pipe_connections = {
 					{
 						flow_direction = "input",
-						direction = 8,
+						direction = 4,
 						position = { 1, 0 },
 					},
 				},
@@ -743,7 +743,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, -1 },
 					},
@@ -759,7 +759,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, 1 },
 					},
@@ -862,7 +862,7 @@ data:extend({ -- ###############################################################
 				base_level = -1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 0,
 						flow_direction = "input",
 						position = { 0, -1 },
 					},
@@ -879,7 +879,7 @@ data:extend({ -- ###############################################################
 				pipe_connections = {
 					{
 						flow_direction = "input",
-						direction = 8,
+						direction = 4,
 						position = { 1, 0 },
 					},
 				},
@@ -910,7 +910,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, -1 },
 					},
@@ -926,7 +926,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, 1 },
 					},
