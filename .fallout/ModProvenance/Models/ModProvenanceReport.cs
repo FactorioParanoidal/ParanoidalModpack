@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ModProvenance;
 
 namespace ModProvenance.Models;
 
@@ -11,7 +11,7 @@ public sealed record ModProvenanceReport(IReadOnlyList<ModProvenanceResult> Resu
     public override string ToString()
     {
         var summary = new StringBuilder();
-        if (this.Results.Count == 0)
+        if (Results.Count == 0)
         {
             summary.AppendLine("No local mod directories were found.");
             return summary.ToString();
@@ -33,7 +33,7 @@ public sealed record ModProvenanceReport(IReadOnlyList<ModProvenanceResult> Resu
         {
             var link = result.Status == ModProvenanceStatus.ProjectMod
                 ? $"`{result.Name}`"
-                : $"[`{result.Name}`](https://mods.factorio.com/mod/{System.Uri.EscapeDataString(result.Name)})";
+                : $"[`{result.Name}`](https://mods.factorio.com/mod/{Uri.EscapeDataString(result.Name)})";
             var status = GetStatusText(result.Status);
             if (result.Status is not (ModProvenanceStatus.ExactUpstream or ModProvenanceStatus.ProjectMod))
                 status = $"**{status}**";

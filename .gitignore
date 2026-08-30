@@ -3,7 +3,7 @@
 !mods
 !docs
 !mods-metadata
-!.nuke
+!.fallout
 !build.*
 !Paranoidal.sln
 !config.json

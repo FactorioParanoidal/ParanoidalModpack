@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Formats.Tar;
 using System.IO;
 using System.Linq;
@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using Nuke.Common;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.IO;
 using Serilog;
 using SharpCompress.Compressors.Xz;
 using SharpCompress.IO;

@@ -1,9 +1,9 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+
 public static class Utils {
     public const string LocalizationModFolderPullAddress = "https://gitlab.com/paranoidal/locale/-/archive/main/locale-main.zip?path=ParanoidalLocale";
     public static readonly HttpClient HttpClient = new();

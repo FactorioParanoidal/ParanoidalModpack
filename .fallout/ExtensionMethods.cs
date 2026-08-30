@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using FactorioParanoidal.FactorioMods.Mods;
-using Nuke.Common.IO;
+using Fallout.Common.IO;
 
 public static class ExtensionMethods
 {

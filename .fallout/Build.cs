@@ -1,6 +1,4 @@
-#nullable enable
 using System;
-using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -9,15 +7,14 @@ using FactorioParanoidal.FactorioMods;
 using FactorioParanoidal.FactorioMods.ModLists;
 using FactorioParanoidal.FactorioMods.Mods;
 using FactorioParanoidal.ModSettingsDat;
-using Newtonsoft.Json;
-using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
 using Serilog;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 [SuppressMessage("ReSharper", "AllUnderscoreLocalParameterName")]
-partial class Build : NukeBuild
+partial class Build : FalloutBuild
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
