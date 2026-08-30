@@ -1,4 +1,3 @@
-using System;
 using FactorioParanoidal.FactorioMods.Mods;
 
 namespace ModProvenance.Models;
