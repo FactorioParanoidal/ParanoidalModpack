@@ -159,9 +159,6 @@ paralib.bobmods.lib.tech.add_prerequisite("bob-radar-2", "radar") --Добави
 
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-tungsten-alloy-processing", "bob-tungsten-carbide-2x")
 paralib.bobmods.lib.recipe.hide("bob-tungsten-carbide-2x")
--- copper-tungsten-труба РАСПРЯТАНА: после удаления нитинол-трубы (Bob's 2.1) она верхний тир и делается обычным рецептом (молтена copper-tungsten нет).
-paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe")
-paralib.bobmods.lib.recipe.hide("bob-tungsten-pipe-to-ground")
 
 --фикс недоступности исследования артиллерии
 paralib.bobmods.lib.tech.remove_prerequisite("artillery", "radar")
