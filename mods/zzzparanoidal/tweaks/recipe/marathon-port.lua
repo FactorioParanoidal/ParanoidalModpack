@@ -72,10 +72,10 @@ paralib.bobmods.lib.recipe.set_ingredients("bob-brass-pipe-to-ground", {
 	{ type = "item", name = "bob-brass-alloy", amount = 15 },
 })
 
-paralib.bobmods.lib.recipe.set_ingredient("bob-titanium-pipe", { type = "item", name = "bob-silicon-nitride", amount = 4 })
+paralib.bobmods.lib.recipe.set_ingredient("bob-ceramic-pipe", { type = "item", name = "bob-silicon-nitride", amount = 4 })
 
-paralib.bobmods.lib.recipe.set_ingredients("bob-titanium-pipe-to-ground", {
-	{ type = "item", name = "bob-titanium-pipe", amount = 25 },
+paralib.bobmods.lib.recipe.set_ingredients("bob-ceramic-pipe-to-ground", {
+	{ type = "item", name = "bob-ceramic-pipe", amount = 25 },
 	{ type = "item", name = "bob-silicon-nitride", amount = 15 },
 })
 
@@ -91,13 +91,6 @@ paralib.bobmods.lib.recipe.set_ingredient("bob-tungsten-pipe", { type = "item", 
 paralib.bobmods.lib.recipe.set_ingredients("bob-tungsten-pipe-to-ground", {
 	{ type = "item", name = "bob-tungsten-pipe", amount = 25 },
 	{ type = "item", name = "tungsten-plate", amount = 10 },
-})
-
-paralib.bobmods.lib.recipe.set_ingredient("bob-copper-tungsten-pipe", { type = "item", name = "bob-nitinol-alloy", amount = 2 })
-
-paralib.bobmods.lib.recipe.set_ingredients("bob-copper-tungsten-pipe-to-ground", {
-	{ type = "item", name = "bob-copper-tungsten-pipe", amount = 250 },
-	{ type = "item", name = "bob-nitinol-alloy", amount = 100 },
 })
 
 paralib.bobmods.lib.recipe.set_ingredient("bob-copper-tungsten-pipe", { type = "item", name = "bob-copper-tungsten-alloy", amount = 2 })
