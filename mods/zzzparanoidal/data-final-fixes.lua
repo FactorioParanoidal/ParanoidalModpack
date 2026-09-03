@@ -140,8 +140,8 @@ end
 -- Oberhaul refining-port (после OV.execute, чтобы OV не перезатёр изменения).
 require("tweaks.recipe.oberhaul-refining-port")
 
--- Oberhaul belt-port (beltrecipes + beltentities, 1.1)
-require("tweaks.recipe.oberhaul-belt-port")
+-- 1.1-цены лестницы лент поверх стока Bob+Angels
+require("tweaks.recipe.belt-tier-cost")
 
 -- Oberhaul petrochem-port (petrochemchange, 1.1)
 require("tweaks.recipe.oberhaul-petrochem-port")
