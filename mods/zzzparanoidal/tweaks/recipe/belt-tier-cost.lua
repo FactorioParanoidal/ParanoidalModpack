@@ -28,15 +28,9 @@ local amounts = {
 for _, entry in ipairs(amounts) do
 	local recipe = data.raw.recipe[entry[1]]
 	if recipe and recipe.ingredients then
-		for _, ingredient in pairs(recipe.ingredients) do
-			-- ingredients в 2.0 встречаются в обеих формах: {name=, amount=} и {name, count}
-			local name = ingredient.name or ingredient[1]
-			if name == entry[2] then
-				if ingredient.amount then
-					ingredient.amount = entry[3]
-				else
-					ingredient[2] = entry[3]
-				end
+		for _, ingredient in ipairs(recipe.ingredients) do
+			if ingredient.name == entry[2] then
+				ingredient.amount = entry[3]
 			end
 		end
 	end
