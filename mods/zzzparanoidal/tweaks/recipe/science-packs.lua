@@ -139,7 +139,3 @@ paralib.bobmods.lib.recipe.add_ingredient(
 	{ type = "item", name = "condensator3", amount = 8 }
 )
 
-paralib.bobmods.lib.recipe.add_ingredient(
-	"transport-belt",
-	{ type = "item", name = "bob-basic-transport-belt", amount = 2 }
-)

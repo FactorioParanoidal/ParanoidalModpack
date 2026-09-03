@@ -141,7 +141,7 @@ end
 require("tweaks.recipe.oberhaul-refining-port")
 
 -- Oberhaul belt-port (beltrecipes + beltentities, 1.1)
-require("tweaks.recipe.oberhaul-belt-port")
+require("tweaks.recipe.belt-tier-cost")
 
 -- Oberhaul petrochem-port (petrochemchange, 1.1)
 require("tweaks.recipe.oberhaul-petrochem-port")
