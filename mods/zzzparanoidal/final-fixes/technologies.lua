@@ -398,60 +398,6 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-ore-floatation", "bob-silv
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-advanced-chemistry-4", "advanced-chemical-plant-3") --удаляем хим завод 3 из химии 4
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-advanced-chemistry-5", "advanced-chemical-plant-3") --добавляем хим завод 3 в химию 5
 
---унификация рецептов манипуляторов и ковееров (AKMF)
-paralib.bobmods.lib.recipe.replace_ingredient("fast-inserter", "bob-cobalt-steel-bearing", "bob-titanium-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient("stack-inserter", "bob-cobalt-steel-bearing", "bob-titanium-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient("fast-inserter", "bob-cobalt-steel-bearing", "bob-titanium-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"stack-filter-inserter",
-	"bob-cobalt-steel-bearing",
-	"bob-titanium-bearing"
-)
-paralib.bobmods.lib.recipe.replace_ingredient("fast-inserter", "bob-cobalt-steel-gear-wheel", "bob-titanium-gear-wheel")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"stack-inserter",
-	"bob-cobalt-steel-gear-wheel",
-	"bob-titanium-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient("fast-inserter", "bob-cobalt-steel-gear-wheel", "bob-titanium-gear-wheel")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"stack-filter-inserter",
-	"bob-cobalt-steel-gear-wheel",
-	"bob-titanium-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient("bob-turbo-inserter", "bob-titanium-bearing", "bob-cobalt-steel-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-bulk-inserter",
-	"bob-titanium-bearing",
-	"bob-cobalt-steel-bearing"
-)
-paralib.bobmods.lib.recipe.replace_ingredient("bob-turbo-inserter", "bob-titanium-bearing", "bob-cobalt-steel-bearing")
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-bulk-inserter",
-	"bob-titanium-bearing",
-	"bob-cobalt-steel-bearing"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-inserter",
-	"bob-titanium-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-bulk-inserter",
-	"bob-titanium-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-inserter",
-	"bob-titanium-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
-paralib.bobmods.lib.recipe.replace_ingredient(
-	"bob-turbo-bulk-inserter",
-	"bob-titanium-gear-wheel",
-	"bob-cobalt-steel-gear-wheel"
-)
--- turbo-ленты — в tweaks/recipe/oberhaul-belt-port.lua
 paralib.bobmods.lib.recipe.replace_ingredient(
 	"nco-wide-crane",
 	"bob-cobalt-steel-gear-wheel",
