@@ -19,9 +19,13 @@ paralib.bobmods.lib.recipe.set_ingredients(
 	"bi-bio-reactor",
 	{ { type = "item", name = "assembling-machine-1", amount = 2}, { type = "item", name = "steel-plate", amount = 20}, { type = "item", name = "bob-basic-circuit-board", amount = 5} }
 ) --баланс рецепта биореактора 1
--- BI 2.0 не создаёт техи bi-tech-biomass-reprocessing-1/2 (были в BI 1.1); рецепты biomass-2/3 открывает advanced-biotechnology — туда же вешаем реакторы
+-- BI 2.0 не создаёт техи bi-tech-biomass-reprocessing-1/2 (были в BI 1.1); рецепт biomass-2 открывает advanced-biotechnology — туда же вешаем реактор MK2
 paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-2") --открываем рецепт биореактора 2
-paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-reactor-3") --открываем рецепт биореактора 3
+-- Фиолетовый тир 1.1 (целлюлоза 2, батарея, биомасса 3, биореактор MK3) отдан своей
+-- bi-tech-advanced-biotechnology-2 — она же открывает реактор MK3
+paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-cellulose-2")
+paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-battery")
+paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-biomass-3")
 data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Прячем рецепты под новый биореактор 2
 data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 3
 

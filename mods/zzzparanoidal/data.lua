@@ -47,6 +47,7 @@ require("prototypes.technology.artillery-prototype")
 require("prototypes.technology.alien-artifacts")
 require("prototypes.technology.angels-alloys-smelting")
 require("prototypes.technology.angels-ironworks")
+require("prototypes.technology.bio-advanced-biotechnology-2")
 
 -- new selection-tools
 require("prototypes.selection-tool.heroturrets")

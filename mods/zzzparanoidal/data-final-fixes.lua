@@ -49,10 +49,8 @@ require("tweaks.recipe.repair-turret") -- Repair Turret: дорогой реце
 require("tweaks.recipe.osha-containers") -- osha mini passive/storage: синхрон с большими (убрать лишний advanced-circuit)
 require("tweaks.recipe.miles-bobs-expansion-port") -- MilesBobsExpansion2: восстановление богатых рецептов тиров 7-9/electronics 4-5 (1.1)
 
-require("tweaks.technology.chemistry")
 require("tweaks.technology.metallurgy")
 require("tweaks.technology.warfare")
-require("tweaks.technology.boilers")
 require("tweaks.technology.pumps")
 require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")

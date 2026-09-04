@@ -9,9 +9,4 @@ paralib.bobmods.lib.recipe.set_results(
 	{ { type = "item", name = "bob-module-contact", amount = 2 } }
 )
 
--- from KaoExtended
-paralib.bobmods.lib.recipe.add_new_ingredient("angels-bio-yield-module", {type = "item", name = "bob-alien-artifact", amount = 5})
-paralib.bobmods.lib.recipe.add_new_ingredient("angels-bio-yield-module-2", {type = "item", name = "bob-alien-artifact", amount = 10})
-paralib.bobmods.lib.recipe.add_new_ingredient("angels-bio-yield-module-3", {type = "item", name = "bob-alien-artifact", amount = 20})
-
 
