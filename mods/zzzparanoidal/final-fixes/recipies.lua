@@ -2,8 +2,6 @@
 require("__zzzparanoidal__.paralib")
 --BOBS + VANILLA
 
-paralib.bobmods.lib.recipe.add_new_ingredient("submachine-gun", { type = "item", name = "pistol", amount = 2 })
-
 paralib.bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-2", "logistic-robot")
 paralib.bobmods.lib.recipe.remove_ingredient("bob-construction-robot-2", "construction-robot")
 paralib.bobmods.lib.recipe.remove_ingredient("bob-logistic-robot-3", "bob-logistic-robot-2")
@@ -564,7 +562,7 @@ paralib.bobmods.lib.recipe.remove_ingredient("clowns-sluicer-2", "clowns-sluicer
 paralib.bobmods.lib.recipe.add_new_ingredient("clowns-sluicer-2", { type = "item", name = "clowns-sluicer", amount = 2 })
 
 paralib.bobmods.lib.recipe.add_new_ingredient("memory-unit", { type = "item", name = "warehouse-basic", amount = 2 })
-paralib.bobmods.lib.tech.add_prerequisite("memory-unit", "bob-tungsten-alloy-processing")
+paralib.bobmods.lib.tech.add_prerequisite("memory-unit", "bob-tungsten-processing")
 paralib.bobmods.lib.recipe.remove_ingredient("fluid-memory-unit", "warehouse-research")
 paralib.bobmods.lib.recipe.add_new_ingredient(
 	"fluid-memory-unit",

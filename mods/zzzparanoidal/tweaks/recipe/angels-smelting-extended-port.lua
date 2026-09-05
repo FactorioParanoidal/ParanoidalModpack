@@ -544,8 +544,6 @@ for _, metal in ipairs({ "copper", "steel", "brass", "bronze", "titanium" }) do
 end
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-to-ground-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("bob-nitinol-processing", "angels-nitinol-pipe-to-ground-casting")
 
 -- Спец-кейсы pipe-casting (см. секцию 1b). Каждый на своей T1-техе по 1.1 ASE.
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-casting")
