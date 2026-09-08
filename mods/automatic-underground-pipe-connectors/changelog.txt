@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2026-09-05
+  Changes:
+    - Move the tile, cover, undo and neighbor logic into lib/ modules
+    - Add unit tests, and integration tests that drive a real Factorio
+    - Add a walkthrough mode that steps through the integration fixtures in a live game
+  Bugfixes:
+    - Connectors placed in editor mode no longer consume items, since building is free there
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2026-09-05
+  Changes:
+    - Add a luacheck config, with Factorio's globals taken from the FMTK library
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2026-09-05
+  Features:
+    - Cover meltable ground under an automatic connector, with a tile or a ghost
+  Bugfixes:
+    - Connector next to a ghost underground was placed as a real pipe for free
+---------------------------------------------------------------------------------------------------
 Version: 2.0.11
 Date: 2025-06-11
   Changes:
