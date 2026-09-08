@@ -9,8 +9,8 @@
     },
     {
       "name": "AbandonedRuins_updated_fork",
-      "version": "1.5.5",
-      "contentHash": "b70d96c6fe9744a2dd07d7457be87055",
+      "version": "1.5.7",
+      "contentHash": "4103fda28227516a43f812f51cc058b5",
       "metadataHash": null
     },
     {
@@ -651,8 +651,8 @@
     },
     {
       "name": "automatic-underground-pipe-connectors",
-      "version": "2.0.11",
-      "contentHash": "3d11caf491529ab01586602fd91d580e",
+      "version": "2.0.14",
+      "contentHash": "095b203cd23c8f101e7db0b6538bdf26",
       "metadataHash": null
     },
     {
@@ -999,8 +999,8 @@
     },
     {
       "name": "rso-mod",
-      "version": "7.0.25",
-      "contentHash": "2f628b5de9e1ab4d7ab5d18b0f9aa59b",
+      "version": "7.0.26",
+      "contentHash": "7c3b397b4d741ac0e964ff1290f0392b",
       "metadataHash": null
     },
     {
