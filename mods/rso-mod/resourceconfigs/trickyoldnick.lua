@@ -1,14 +1,14 @@
 function fillTrickyOldNickConfig(config)
 
      -- Modify Nullius's iron ore config
-     if config["iron-ore"] then
-         config["iron-ore"].starting = nil
-         config["iron-ore"].allotment = 80
+     if config.nauvis["iron-ore"] then
+         config.nauvis["iron-ore"].starting = nil
+         config.nauvis["iron-ore"].allotment = 80
      end
 
-     config["nullius-fumarole"].multi_resource["nullius-nickel-ore"] = 2
+     config.nauvis["nullius-fumarole"].multi_resource["nullius-nickel-ore"] = 2
 
-     config["nullius-nickel-ore"] = {
+     config.nauvis["nullius-nickel-ore"] = {
          type = "resource-ore",
 
          allotment = 28,

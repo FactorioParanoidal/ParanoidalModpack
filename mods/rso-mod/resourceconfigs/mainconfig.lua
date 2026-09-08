@@ -515,16 +515,16 @@ function loadResourceConfig()
 		fillBzchlorineConfig(config)
 	end
 
---	if script.active_mods["nullius"] then
---		fillNulliusConfig(config)
---		config["enemy-base"] = nil
---	end
---
---	-- Has to be after nullius
---	if script.active_mods["tricky-old-nick"] then
---			fillTrickyOldNickConfig(config)
---	end
---	
+	if script.active_mods["nullius"] then
+		fillNulliusConfig(config)
+		config["enemy-base"] = nil
+	end
+
+	-- Has to be after nullius
+	if script.active_mods["tricky-old-nick"] then
+			fillTrickyOldNickConfig(config)
+	end
+	
 --	if script.active_mods["SpFuMaterialPack"] then
 --		fillSpFuMaterialsConfig(config)
 --	end

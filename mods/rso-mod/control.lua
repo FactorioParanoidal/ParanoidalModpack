@@ -1062,6 +1062,8 @@ local function spawn_starting_resources( surface, index )
 	
 	local surfaceData = storage.surfaces[surface.index]
 	debug("Starting area spawn for "..surface.name)
+
+	if not surfaceData.startingAreas[index] then return end
 	if surfaceData.startingAreas[index].spawned then return end
 	
 	-- skip spawning if starting area is to small or starting areas are disabled
