@@ -1,11 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.5.7
+Date: 2026-09-07
+  Fixes:
+    - ops, `spawn_ruin()` need to allow debug world to spawn ruins, too (thanks to @MoSII2710)
+---------------------------------------------------------------------------------------------------
+Version: 1.5.6
+Date: 2026-09-07
+  Fixes (thanks to @MoSII2710):
+    - removed stray `end` after `log()` invocation, maybe there was an `if` before
+    - replaced last `remote_call()` with `remote.call()` which is Factorio's way
+    - added missing `#` in debug `control.lua` or else the array is added and not its size
+    - added check if current surface's name is not matching debug world's name to prevent wanted
+      `error()` invocation which happens in `clear_area()`. This behavior (of `clear_area()`) is
+      intended as only real surfaces needs clearing, not any debug/"hidden" surfaces
+  Changes:
+    - added additonal log message for manual comparison of surface's name and debug world's name
+---------------------------------------------------------------------------------------------------
 Version: 1.5.5
 Date: 2026-06-26
   Changes:
-   - @pault-pg has added missing language string for "expensive sanity checks" setting (thank you!),
+    - @tobiaspal has added missing language string for "expensive sanity checks" setting (thank you!),
      PR #7
-   - some tpzos fixed, thanks to @pault-pg, PR #8
-   - bumped version for `base` mod to 2.0.77
+    - some tpzos fixed, thanks to @tobiaspal, PR #8
+    - bumped version for `base` mod to 2.0.77
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.4
 Date: 2026-06-08
