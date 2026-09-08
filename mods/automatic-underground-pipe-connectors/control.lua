@@ -1,7 +1,11 @@
 local util = require("util")
+local neighbors = require("lib.neighbors")
+local tiles = require("lib.tiles")
+local undo = require("lib.undo")
 
 ---@class (exact) Storage
 ---@field pipe_lookup PipeLookup
+---@field tile_lookup TileLookup
 ---@field index_rebuilt_tick integer
 ---@type Storage
 storage=storage
@@ -14,55 +18,16 @@ storage.pipe_lookup = storage.pipe_lookup or {}
 ---@alias PipeLookup table<string, PipeLookupEntry>
 storage.pipe_lookup = storage.pipe_lookup or {}
 
----Map from underground pipe direction to the locations and directions of neighbors it might connect to by adding a single pipe
----@type { [defines.direction]: { pos: Vector, dir: defines.direction }[] }
-local directions_to_neighbors = {
-    [defines.direction.north] = { -- for an underground pipe pointing north
-        {pos={-1,-1}, dir=defines.direction.east }, -- one space ahead and left, a pipe pointing east would trigger a connection
-        {pos={ 0,-2}, dir=defines.direction.south}, -- two spaces ahead, pointing south
-        {pos={ 1,-1}, dir=defines.direction.west }, -- one space ahead and right, pointing west
-    },
-    [defines.direction.east ] = {
-        {pos={ 1,-1}, dir=defines.direction.south},
-        {pos={ 2, 0}, dir=defines.direction.west },
-        {pos={ 1, 1}, dir=defines.direction.north},
-    },
-    [defines.direction.south] = {
-        {pos={ 1, 1}, dir=defines.direction.west },
-        {pos={ 0, 2}, dir=defines.direction.north},
-        {pos={-1, 1}, dir=defines.direction.east },
-    },
-    [defines.direction.west ] = {
-        {pos={-1, 1}, dir=defines.direction.north},
-        {pos={-2, 0}, dir=defines.direction.east },
-        {pos={-1,-1}, dir=defines.direction.south},
-    },
-}
+--- Lookup table from tile name to the item name that places it, or `false` if no item does
+---@alias TileLookup table<string, string|false>
+storage.tile_lookup = storage.tile_lookup or {}
 
 ---
----@alias EntityEtc LuaEntity|LuaSurface.create_entity_param.base|LuaSurface.can_place_entity_param|LuaSurface.can_fast_replace_param
-
----@param entity LuaEntity
-local function entity_type_or_ghost_type(entity)
-    return entity.type == "entity-ghost" and entity.ghost_type or entity.type
-end
-
----@param entity LuaEntity
----@param position MapPosition
----@return boolean place
-local function should_place_based_on_neighbor_fluidbox_prototypes(entity, position)
-    local fluidbox = entity.fluidbox
-    for i = 1, #fluidbox do
-        for _, pipe_connection in pairs( fluidbox.get_pipe_connections(i) ) do
-            -- floor operation rounds to nearest 0.5 to mimic pipe connection snapping behavior
-            if position[1] == math.floor( ( pipe_connection.target_position.x + 0.25 ) * 2 ) / 2 and
-               position[2] == math.floor( ( pipe_connection.target_position.y + 0.25 ) * 2 ) / 2 then
-                return true
-            end
-        end
-    end
-    return false
-end
+---@alias EntityEtc
+---| LuaEntity
+---| LuaSurface.create_entity_param.base
+---| LuaSurface.can_place_entity_param
+---| LuaSurface.can_fast_replace_param
 
 ---@param event EventData.on_built_entity
 local function on_built_entity(event)
@@ -87,7 +52,7 @@ local function on_built_entity(event)
     local underground_surface = entity.surface
     local underground_direction = entity.direction
     local underground_position = entity.position
-    local neighbors_directions = directions_to_neighbors[underground_direction]
+    local neighbors_directions = neighbors.directions_to_neighbors[underground_direction]
     local pipe_position_delta = util.direction_vectors[underground_direction]
     local pipe_item_name = lookup_entry.item
     local pipe_entity_name = lookup_entry.entity
@@ -95,12 +60,29 @@ local function on_built_entity(event)
         underground_position.x + pipe_position_delta[1],
         underground_position.y + pipe_position_delta[2]
     }
+    -- decide what we are connecting to before anything reads `placing_ghost`
+    local found_neighbor, neighbor_is_ghost = neighbors.find_connection_neighbor(
+        underground_surface, underground_position, neighbors_directions,
+        underground_entity_name, pipe_position )
+    if not found_neighbor then
+        -- bail out because there's nothing here worth connecting to
+        return
+    end
+    if neighbor_is_ghost then
+        -- a ghost neighbor gets a ghost pipe, which costs nothing from inventory
+        placing_ghost = true
+    end
+
     local player = game.players[event.player_index]
     local inventory = player.get_main_inventory()
+    -- The map editor does not charge for a build, so a connector placed alongside
+    -- one should not be charged for either, and there is nothing to run out of
+    -- that would justify downgrading it to a ghost.
+    local free_build = player.controller_type == defines.controllers.editor
     local pipe_stack --[[@type LuaItemStack?]]
 
     -- if we don't have any regular pipes in our inventory we want to place a ghost instead
-    if not placing_ghost then
+    if not placing_ghost and not free_build then
         if inventory then
             pipe_stack = inventory.find_item_stack(pipe_item_name)
             placing_ghost = not pipe_stack
@@ -109,24 +91,30 @@ local function on_built_entity(event)
         end
     end
 
-    local place_tile = false;
     local existing_tile = underground_surface.get_tile( pipe_position[ 1 ], pipe_position[ 2 ] );
-    local cover_tile = existing_tile.prototype.default_cover_tile
+    local existing_tile_state = tiles.save_tile_state( existing_tile )
+    local cover_tile_proto = tiles.cover_tile_for( underground_surface, entity.force, existing_tile.prototype )
+    ---@type EntityEtc?
     local tile_ghost_definition
-    if cover_tile then
-        if cover_tile.name == "ice-platform" then
-            -- TODO logic for concrete on ice platforms
-            return
+    -- tile ghosts stack, eg a concrete ghost over an ice platform ghost over ammoniacal ocean,
+    -- and what matters is whichever one ends up on top
+    ---@type LuaTilePrototype?
+    local ghosted_tile_prototype
+    local existing_tile_ghosts = underground_surface.find_entities_filtered{
+        name = "tile-ghost", position = pipe_position }
+    for _, existing_tile_ghost in pairs(existing_tile_ghosts) do
+        local existing_ghost_tile_prototype = existing_tile_ghost.ghost_prototype --[[@as LuaTilePrototype]]
+        if not ghosted_tile_prototype or not existing_ghost_tile_prototype.collision_mask.layers.meltable then
+            ghosted_tile_prototype = existing_ghost_tile_prototype
         end
+    end
+    if cover_tile_proto then
         placing_ghost = true;
-        local existing_tile_ghost = underground_surface.find_entity( "tile-ghost", pipe_position )
-        if existing_tile_ghost == nil then
-            place_tile = true;
-            ---@type EntityEtc
+        if #existing_tile_ghosts == 0 then
             tile_ghost_definition = {
                 name = "tile-ghost",
                 position = pipe_position,
-                inner_name = cover_tile.name,
+                inner_name = cover_tile_proto.name,
                 -- properties just for create_entity
                 force = entity.force,
                 player = event.player_index,
@@ -136,10 +124,75 @@ local function on_built_entity(event)
                 -- properties just for can_place_entity
                 build_check_type = defines.build_check_type.script_ghost,
             }
-            if not underground_surface.can_place_entity( tile_ghost_definition --[[@as LuaSurface.can_place_entity_param]] ) then
-            -- bail out because we can't place the tile ghost
+            if not underground_surface.can_place_entity(
+                tile_ghost_definition --[[@as LuaSurface.can_place_entity_param]] )
+            then
+                -- bail out because we can't place the tile ghost
                 return
             end
+        end
+    end
+
+    local tile_proto_to_check_for_melt = existing_tile.prototype
+    if ghosted_tile_prototype then
+        tile_proto_to_check_for_melt = ghosted_tile_prototype
+    elseif cover_tile_proto then
+        tile_proto_to_check_for_melt = cover_tile_proto
+    end
+
+    -- a pipe collides with the meltable layer, so a meltable tile needs a cover tile of its own
+    ---@type EntityEtc?
+    local melt_tile_ghost_definition
+    ---@type Tile?
+    local melt_tile
+    ---@type string?
+    local melt_tile_item_name
+    if tile_proto_to_check_for_melt.collision_mask.layers.meltable then
+        local underground_tile = underground_surface.get_tile( underground_position.x, underground_position.y )
+        local melt_cover_tile_proto = tiles.find_melt_cover_tile(
+            underground_surface, entity.force, tile_proto_to_check_for_melt, underground_tile, inventory )
+        if not melt_cover_tile_proto then
+            -- bail out because we don't know what to cover the meltable tile with
+            return
+        end
+        -- a real cover tile only makes sense under a real pipe, and only if we have the item to pay for it
+        local cover_ghost = placing_ghost
+        if not cover_ghost and not free_build then
+            local cover_item_name = tiles.tile_item_name( melt_cover_tile_proto.name )
+            if cover_item_name and inventory and inventory.find_item_stack( cover_item_name ) then
+                melt_tile_item_name = cover_item_name
+            else
+                -- without the item the cover has to be a ghost, and a pipe can't sit on an uncovered meltable tile
+                cover_ghost = true
+                placing_ghost = true
+            end
+        end
+        if cover_ghost then
+            melt_tile_ghost_definition = {
+                name = "tile-ghost",
+                position = pipe_position,
+                inner_name = melt_cover_tile_proto.name,
+                -- properties just for create_entity
+                force = entity.force,
+                player = event.player_index,
+                raise_built = true,
+                create_build_effect_smoke = true,
+                spawn_decorations = true,
+                -- properties just for can_place_entity
+                build_check_type = defines.build_check_type.script_ghost,
+            }
+            -- only worth asking when the ground we picked this tile for is the ground that is there
+            -- now. with another cover tile going underneath first the answer would be about the wrong
+            -- tile, eg concrete refused over ammoniacal ocean when an ice platform ghost is going
+            -- between them, so leave it to create_entity once the tile below it exists
+            if tile_proto_to_check_for_melt.name == existing_tile.name
+            and not underground_surface.can_place_entity(
+                melt_tile_ghost_definition --[[@as LuaSurface.can_place_entity_param]] ) then
+                -- bail out because we can't place the cover tile ghost
+                return
+            end
+        else
+            melt_tile = { name = melt_cover_tile_proto.name, position = existing_tile.position }
         end
     end
 
@@ -161,13 +214,27 @@ local function on_built_entity(event)
         pipe_entity_definition.inner_name = pipe_entity_name
     end
 
-    if not underground_surface.can_place_entity( pipe_entity_definition --[[@as LuaSurface.can_place_entity_param]] ) then
+    -- a pipe collides with the meltable layer, so on a meltable tile the build check would fail on ground
+    -- we are about to cover. lay the cover tile down for the check and put it straight back, so the check
+    -- still catches everything else it is here for, fluid mixing included
+    local can_place --[[@type boolean]]
+    if melt_tile then
+        underground_surface.set_tiles( { melt_tile }, false, false, false, false )
+        can_place = underground_surface.can_place_entity(
+            pipe_entity_definition --[[@as LuaSurface.can_place_entity_param]] )
+        tiles.restore_tile_state( underground_surface, existing_tile_state, false )
+    else
+        can_place = underground_surface.can_place_entity(
+            pipe_entity_definition --[[@as LuaSurface.can_place_entity_param]] )
+    end
+    if not can_place then
         -- bail out because we can't place a pipe, could be blocked or a fluid mixing violation
         return
     end
 
     if placing_ghost then
-        local found_entities = underground_surface.find_entities( { pipe_entity_definition.position, pipe_entity_definition.position } )
+        local found_entities = underground_surface.find_entities(
+            { pipe_entity_definition.position, pipe_entity_definition.position } )
         for _,found_entity in pairs(found_entities) do
             if found_entity.type ~= "tile-ghost" then
                 -- bail out because there's already something where we'd place a ghost
@@ -178,75 +245,90 @@ local function on_built_entity(event)
 
     if underground_surface.can_fast_replace( pipe_entity_definition --[[@as LuaSurface.can_fast_replace_param]] ) then
         local ghost = underground_surface.find_entity("entity-ghost", pipe_entity_definition.position)
-        if ghost and ghost.ghost_name == pipe_entity_name then
-            -- don't bail out, matching ghost is ok to replace
-        else
+        -- a matching ghost is ok to replace, so only bail out for anything else
+        if not ghost or ghost.ghost_name ~= pipe_entity_name then
             -- bail out because there's something here our pipe would fast replace
             return
         end
     end
 
-    -- look at the three possible locations for another underground or entity to connect
-    for _, neighbor_candidate in pairs(neighbors_directions) do
-        local candidate_pos = {underground_position.x + neighbor_candidate.pos[1], underground_position.y + neighbor_candidate.pos[2]}
-        local place = false
-        -- first, check for a matching underground pipe
-        local neighbor_entity = underground_surface.find_entity( underground_entity_name, candidate_pos )
-        if neighbor_entity and neighbor_entity.name == underground_entity_name and neighbor_entity.direction == neighbor_candidate.dir then
-            place = true
-        end
-        if not place then
-            -- check for a matching underground pipe ghost
-            local neighbor_ghost = underground_surface.find_entity( "entity-ghost", candidate_pos )
-            if neighbor_ghost and neighbor_ghost.ghost_name == underground_entity_name and neighbor_ghost.direction == neighbor_candidate.dir then
-                place = true
-                placing_ghost = true
+    -- found something to connect to! everything below this point actually changes the world,
+    -- so anything that fails has to put back whatever the steps before it managed to place
+    ---@type LuaEntity[]
+    local placed_tile_ghosts = {}
+    local placed_melt_tile = false
+    ---@type UndoState?
+    local undo_state_before_melt_tile
+
+    --- Undo whatever we placed, so a failure part way through leaves no trace
+    local function rollback()
+        for _, tile_ghost in pairs(placed_tile_ghosts) do
+            if tile_ghost.valid then
+                tile_ghost.destroy()
             end
         end
-        if not place then
-            -- check for a matching non-pipe entity with a fluidbox connection
-            local neighbor_entities = underground_surface.find_entities( { candidate_pos, candidate_pos } )
-            for _,neighbor_entity in pairs(neighbor_entities) do
-                local entity_type = entity_type_or_ghost_type(neighbor_entity)
-                if entity_type == "fluid-wagon" then
-                    -- these have fluidbox connections for pumps, but not for pipes
-                    goto continue_neighbor_entities
-                end
-                if  ( entity_type ~= "pipe" and entity_type ~= "pipe-to-ground"
-                    ) and (
-                        neighbor_entity.fluidbox and
-                        #neighbor_entity.fluidbox > 0
-                    )
-                then
-                    if should_place_based_on_neighbor_fluidbox_prototypes(neighbor_entity, pipe_position) then
-                        place = true
-                        goto bail_neighbor_entities
-                    end
-                end
-                ::continue_neighbor_entities::
+        if placed_melt_tile then
+            tiles.restore_tile_state( underground_surface, existing_tile_state, true )
+            if undo_state_before_melt_tile then
+                -- the tile is gone again, so the player shouldn't be offered an undo for it
+                undo.restore_undo_state( player, undo_state_before_melt_tile )
+            end
+            if melt_tile_item_name and inventory then
+                inventory.insert({name=melt_tile_item_name, count=1})
             end
         end
-        ::bail_neighbor_entities::
-        if place then
-            -- found something to connect to!
-            if not placing_ghost then
-                -- we ensured above that placing_ghost is true xor we have the necessary item to remove from inventory
-                if inventory then
-                    inventory.remove({name=pipe_item_name})
-                else
-                    player.print("Placed a pipe for free. This shouldn't happen. Please report a bug on the Automatic Underground Pipe Connectors mod discussion page or github issue tracker, including your game save.")
-                end
-            end
-            local tile_failed = false
-            if place_tile then
-                tile_failed = not underground_surface.create_entity( tile_ghost_definition --[[@as LuaSurface.create_entity_param]] )
-            end
-            if not tile_failed then
-                -- place the pipe or ghost entity
-                underground_surface.create_entity(pipe_entity_definition --[[@as LuaSurface.create_entity_param]])
-            end
-            -- no need to check other potential neighbors
-            break
+    end
+
+    if tile_ghost_definition then
+        local tile_ghost = underground_surface.create_entity(
+            tile_ghost_definition --[[@as LuaSurface.create_entity_param]] )
+        if not tile_ghost then
+            -- bail out because we couldn't place the cover tile ghost the pipe needs
+            return
+        end
+        placed_tile_ghosts[#placed_tile_ghosts+1] = tile_ghost
+    end
+
+    if melt_tile_ghost_definition then
+        local tile_ghost = underground_surface.create_entity(
+            melt_tile_ghost_definition --[[@as LuaSurface.create_entity_param]] )
+        if not tile_ghost then
+            rollback()
+            -- bail out because we couldn't place the cover tile ghost the pipe needs
+            return
+        end
+        placed_tile_ghosts[#placed_tile_ghosts+1] = tile_ghost
+    end
+
+    if melt_tile then
+        -- the trial run above proved the pipe fits once this tile is down.
+        -- passing the player puts the tile in their undo queue, alongside the underground they just placed
+        undo_state_before_melt_tile = undo.save_undo_state( player )
+        underground_surface.set_tiles( {melt_tile}, true, false, true, true, player )
+        placed_melt_tile = true
+        if melt_tile_item_name and inventory then
+            -- we only chose a real tile over a ghost because this item was in inventory
+            inventory.remove({name=melt_tile_item_name})
+        end
+    end
+
+    if not placing_ghost and not free_build then
+        -- we ensured above that placing_ghost is true xor we have the necessary item to remove from inventory
+        if inventory then
+            inventory.remove({name=pipe_item_name})
+        else
+            player.print("Placed a pipe for free. This shouldn't happen. Please report a bug on "
+                .. "the Automatic Underground Pipe Connectors mod discussion page or github issue "
+                .. "tracker, including your game save.")
+        end
+    end
+
+    -- place the pipe or ghost entity
+    if not underground_surface.create_entity(pipe_entity_definition --[[@as LuaSurface.create_entity_param]]) then
+        -- the world changed under us between the checks above and now
+        rollback()
+        if not placing_ghost and not free_build and inventory then
+            inventory.insert({name=pipe_item_name, count=1})
         end
     end
 end
@@ -259,10 +341,18 @@ local function rebuild_index()
         return
     end
     storage.index_rebuilt_tick = game.tick
+    -- tile prototypes and the items that place them can change with the mod list
+    storage.tile_lookup = {}
     local underground_recipe_prototypes = prototypes.get_recipe_filtered(
         {
-            {filter="has-product-item",elem_filters={{filter="place-result",elem_filters={{filter="type",type="pipe-to-ground"}}}}},
-            {mode="and",filter="has-ingredient-item",elem_filters={{filter="place-result",elem_filters={{filter="type",type="pipe"}}}}}
+            {
+                filter="has-product-item",
+                elem_filters={{filter="place-result",elem_filters={{filter="type",type="pipe-to-ground"}}}}
+            },
+            {
+                mode="and",filter="has-ingredient-item",
+                elem_filters={{filter="place-result",elem_filters={{filter="type",type="pipe"}}}}
+            }
         }
     )
     for _, underground_recipe_prototype in pairs(underground_recipe_prototypes) do
@@ -315,10 +405,14 @@ local function validate_lookup(underground_entity, lookup_entry)
         pipe_items[stack.name] = true
     end
 
-    if not pipe_items[lookup_entry.item] -- The item needs to be able to place the pipe
-    or not prototypes.item[lookup_entry.item] -- The item needs to exist (theoretically we can skip this since it was in an items_to_place_this)
-    or not pipe_prototype or pipe_prototype.type ~= "pipe" -- The pipe needs to be an actual pipe
-    or not underground_prototype or underground_prototype.type ~= "pipe-to-ground" then -- The underground needs to be an actual underground
+    -- The item needs to be able to place the pipe
+    if not pipe_items[lookup_entry.item]
+    -- The item needs to exist (theoretically we can skip this since it was in an items_to_place_this)
+    or not prototypes.item[lookup_entry.item]
+    -- The pipe needs to be an actual pipe
+    or not pipe_prototype or pipe_prototype.type ~= "pipe"
+    -- The underground needs to be an actual underground
+    or not underground_prototype or underground_prototype.type ~= "pipe-to-ground" then
         error("Given underground lookup entry is not valid: "..underground_entity.." -> "..serpent.line(lookup_entry))
     end
 
@@ -360,4 +454,8 @@ remote.add_interface("automatic-underground-pipe-connectors", {
     end,
 })
 
-script.on_event( defines.events.on_built_entity, on_built_entity, {{filter="type",type="pipe-to-ground"},{filter="ghost_type",type="pipe-to-ground"}})
+script.on_event(
+    defines.events.on_built_entity,
+    on_built_entity,
+    {{filter="type",type="pipe-to-ground"},{filter="ghost_type",type="pipe-to-ground"}}
+)
