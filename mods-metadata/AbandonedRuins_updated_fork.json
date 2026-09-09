@@ -1,0 +1,6 @@
+{
+  "mod": "AbandonedRuins_updated_fork",
+  "source": "portal",
+  "upstreamVersion": "1.5.7",
+  "changeReason": "Временно ограничивает обработчик runtime-настроек настройками Ruins, чтобы изменения настроек других модов не перезапускали Ruins и не выводили отладочное сообщение"
+}
