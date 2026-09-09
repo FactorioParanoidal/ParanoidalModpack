@@ -169,6 +169,9 @@ for _, recipe in pairs(data.raw.recipe) do
 	end
 end
 
+-- PCPRedux: дубль sodium nitrate (старое ангеловское имя) → angels-solid-sodium-nitrate
+require("removals.pcp-sodium-nitrate-duplicate")
+
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")
