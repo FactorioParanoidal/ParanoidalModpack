@@ -3,21 +3,28 @@
 
 local function rename_item_in_list(list, old_name, new_name)
 	if not list then return end
+	-- Не создаём дубли ингредиентов и не схлопываем вероятностные результаты.
+	-- Если оба предмета уже есть, оставляем список без изменений.
 	for _, item in pairs(list) do
-		if item.name == old_name then
-			item.name = new_name
-		elseif item[1] == old_name then
-			item[1] = new_name
+		if (item.type == nil or item.type == "item") and (item.name or item[1]) == new_name then
+			return
+		end
+	end
+	for _, item in pairs(list) do
+		if item.type == nil or item.type == "item" then
+			if item.name == old_name then
+				item.name = new_name
+			elseif item[1] == old_name then
+				item[1] = new_name
+			end
 		end
 	end
 end
 
 local function rename_item_in_recipe(recipe, old_name, new_name)
-	if not recipe then return end
+	if not recipe or not data.raw.item[new_name] then return end
 	rename_item_in_list(recipe.ingredients, old_name, new_name)
 	rename_item_in_list(recipe.results, old_name, new_name)
-	if recipe.normal then rename_item_in_recipe(recipe.normal, old_name, new_name) end
-	if recipe.expensive then rename_item_in_recipe(recipe.expensive, old_name, new_name) end
 end
 
 -- Все рецепты сборки используют единый щебень Angels. Имена рецептов Bio
@@ -28,7 +35,7 @@ end
 
 -- Старый предмет остаётся только как скрытый прототип для совместимости.
 local legacy_crushed_stone = data.raw.item["stone-crushed"]
-if legacy_crushed_stone then
+if legacy_crushed_stone and data.raw.item["angels-stone-crushed"] then
 	legacy_crushed_stone.hidden = true
 	legacy_crushed_stone.hidden_in_factoriopedia = true
 end

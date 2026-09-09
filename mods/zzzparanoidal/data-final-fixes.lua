@@ -68,6 +68,7 @@ require("tweaks.custom.selections")
 require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
+require("removals.aai-basic-logistics")
 require("removals.clowns-steel-c2")
 require("removals.angels-valves") -- прячем Angels-flow-клапаны: заменены модом valves (inspector остаётся)
 
@@ -79,6 +80,7 @@ require("final-fixes.icon-size-fallback")
 require("tweaks.recipe.angels-smelting-extended-port") -- частичный порт мода angels-smelting-extended из 1.1
 require("tweaks.recipe.angels-wire-coil-insulated-port") -- port angels-wire-coil-insulated (1.1 ASE)
 require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casting + dies (1.1 ASE ironworks)
+-- После final-fixes.recipies: там bi-bio-farm ещё заменяет старый stone-crushed на кирпич.
 require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
 require("tweaks.recipe.marathon-port") -- 1.1 marathon-баланс (порт из 1.1 in-game)
 require("tweaks.recipe.teleporters-port") -- port 1.1 paranoidal teleporter cost
@@ -95,6 +97,7 @@ require("tweaks.custom.uniform-recipies")
 angelsmods.functions.OV.execute()
 
 require("tweaks.technology.clowns-processing") -- Clowns-Processing: актуальный prerequisite Bob's tungsten
+require("tweaks.technology.energy-balance") -- ранняя энергетика без обработанного топлива и отдельной электрификации
 
 -- molten-*-alloy-mixing/remelting не имеют recipe-name локали → "Unknown key" в 2.0
 -- (icons-оверлей ломает авто-вывод). Берём имя из fluid-результата.
@@ -168,6 +171,9 @@ for _, recipe in pairs(data.raw.recipe) do
 		end
 	end
 end
+
+-- PCPRedux: дубль sodium nitrate (старое ангеловское имя) → angels-solid-sodium-nitrate
+require("removals.pcp-sodium-nitrate-duplicate")
 
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 --должно быть последним. После всех рецептов.
