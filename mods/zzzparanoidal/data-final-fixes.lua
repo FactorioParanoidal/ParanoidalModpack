@@ -68,6 +68,7 @@ require("tweaks.custom.selections")
 require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
+require("removals.aai-basic-logistics")
 require("removals.clowns-steel-c2")
 require("removals.angels-valves") -- прячем Angels-flow-клапаны: заменены модом valves (inspector остаётся)
 
