@@ -1,6 +1,6 @@
 {
   "name": "zzzparanoidal",
-  "version": "8.1.8",
+  "version": "8.1.9",
   "title": "!_Paranoidal",
   "factorio_version": "2.0",
   "author": "Sovigod",
@@ -36,6 +36,7 @@
     "? angelsaddons-pressuretanks",
     "? angelsindustries >= 2.0.0",
     "? extendedangels >= 0.6.9",
+    "? PCPRedux",
     "expanded-rocket-payloads-continued",
     "Bio_Industries_2",
     "? research_evolution_factor",
