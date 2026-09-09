@@ -95,6 +95,7 @@ require("tweaks.custom.uniform-recipies")
 angelsmods.functions.OV.execute()
 
 require("tweaks.technology.clowns-processing") -- Clowns-Processing: актуальный prerequisite Bob's tungsten
+require("tweaks.technology.energy-balance") -- ранняя энергетика без обработанного топлива и отдельной электрификации
 
 -- molten-*-alloy-mixing/remelting не имеют recipe-name локали → "Unknown key" в 2.0
 -- (icons-оверлей ломает авто-вывод). Берём имя из fluid-результата.

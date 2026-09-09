@@ -145,6 +145,13 @@ end
 -- startup влияют на прототипы(сущности, предметы, рецепты, технологии и их связи между собой)
 if mods["aai-industry"] then
     set_settings_default_value("int-setting", "aai-burner-turbine-efficiency", 25)
+
+    local fuel_processor = data.raw["bool-setting"]["aai-fuel-processor"]
+    if fuel_processor then
+        fuel_processor.default_value = false
+        fuel_processor.hidden = true
+        fuel_processor.forced_value = false
+    end
 end
 if mods["Aircraft-space-age"] then
     set_settings_default_value("bool-setting", "aircraft-hardmode", true)
