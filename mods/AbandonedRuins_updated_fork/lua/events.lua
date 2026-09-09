@@ -17,13 +17,15 @@ local debug_on_tick = settings.global[constants.ENABLE_DEBUG_ON_TICK_KEY].value
 ---@type LuaEvent
 on_entity_force_changed_event = script.generate_event_name()
 
-local function update_debug_log()
+local function update_debug_log(announce)
   debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
   debug_on_tick = settings.global[constants.ENABLE_DEBUG_ON_TICK_KEY].value
-  utils.output_message(string.format("Ruins: debug log is now: debug=%s,on_tick=%s", debug_log, debug_on_tick))
+  if announce then
+    utils.output_message(string.format("Ruins: debug log is now: debug=%s,on_tick=%s", debug_log, debug_on_tick))
+  end
 end
 
-local function init()
+local function init(event)
   if debug_log then log("[init]: CALLED!") end
   if game then
     log("[init]: Initializing enemy force' cease fire ...")
@@ -42,16 +44,28 @@ local function init()
 
   -- Update debug flags
   if debug_log then log("[init]: Invoking update_debug_log() ...") end
-  update_debug_log()
+  local debug_setting_changed = event and
+    (event.setting == constants.ENABLE_DEBUG_LOG_KEY or event.setting == constants.ENABLE_DEBUG_ON_TICK_KEY)
+  update_debug_log(debug_setting_changed)
 
   if debug_log then log("[init]: EXIT!") end
+end
+
+local function on_runtime_mod_setting_changed(event)
+  local is_ruins_setting = event.setting == constants.CURRENT_RUIN_SET_KEY or
+    string.sub(event.setting, 1, 6) == "ruins-"
+  if is_ruins_setting then
+    init(event)
+  end
 end
 
 script.on_init(init)
 script.on_load(init)
 script.on_configuration_changed(init)
-script.on_event(defines.events.on_player_created, update_debug_log)
-script.on_event(defines.events.on_runtime_mod_setting_changed, init)
+script.on_event(defines.events.on_player_created, function()
+  update_debug_log(false)
+end)
+script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 
 script.on_event(defines.events.on_force_created, function()
   -- Sets up the diplomacy for all forces, not just the newly created one.
