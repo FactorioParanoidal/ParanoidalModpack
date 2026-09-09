@@ -86,9 +86,22 @@ local function apply_dark_nights() -- Clockwork-2 min_brightness не трога
 	end
 end
 
+local function disable_obsolete_basic_logistics()
+	if not (script.active_mods["aai-industry"] and script.active_mods["boblogistics"]) then
+		return
+	end
+	for _, force in pairs(game.forces) do
+		local basic_logistics = force.technologies["basic-logistics"]
+		if basic_logistics and force.technologies["logistics-0"] then
+			basic_logistics.enabled = false
+		end
+	end
+end
+
 script.on_init(function() --наш любимый init, запрещаем двигать наши насосы
 	evo_and_dolly()
 	apply_dark_nights()
+	disable_obsolete_basic_logistics()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -113,6 +126,8 @@ script.on_configuration_changed(function(data) --фикс эволюции пр�
 		end
 	end
 	apply_dark_nights()
+	disable_obsolete_basic_logistics()
 end)
 
 script.on_event(defines.events.on_surface_created, apply_dark_nights)
+script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
