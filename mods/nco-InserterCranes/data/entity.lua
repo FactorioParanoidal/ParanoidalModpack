@@ -1,4 +1,4 @@
-﻿local util = require("util")
+local util = require("util")
 
 local function scale_energy(energy, factor)
   local value = tonumber(energy:match("[%d\\.]+"))
@@ -53,8 +53,9 @@ local function calculate_performance(entity, wide, forced_ips)
   performance._ips_old = entity.rotation_speed * 60 * old_stack_size
   performance._ips_new = forced_ips or (((wide and 16) or 4.5) * performance._ips_old)
   local max_stack_size_bonus = 250
-  if settings.startup["max_stack_size_bonus"] and settings.startup["max_stack_size_bonus"].value then
-    max_stack_size_bonus = tonumber(settings.startup["max_stack_size_bonus"].value)
+  local stack_limit_setting = settings.startup["nco-inserter-cranes-max-stack-size-bonus"]
+  if stack_limit_setting and stack_limit_setting.value then
+    max_stack_size_bonus = tonumber(stack_limit_setting.value)
   end
   local new_stack_size_bonus = math.min(max_stack_size_bonus, math.floor(performance._ips_new / 25 + 0.5) * 25)
   performance._new_speed_sec = performance._ips_new / new_stack_size_bonus
@@ -83,11 +84,10 @@ local function make_crane_entity(entityName, newName, wide, forced_ips)
     entity.selection_box = {{-3, -1}, {3, 1}}
   end
   local entity_performance = calculate_performance(entity, wide, forced_ips)
-  log(newName .. "-performance: " .. serpent.block(entity_performance))
   entity.stack = false
   entity.next_upgrade = nil
   entity.extension_speed = entity_performance.extension_speed
-  entity.rotation_speed = entity_performance.extension_speed
+  entity.rotation_speed = entity_performance.rotation_speed
   entity.stack_size_bonus = entity_performance.stack_size_bonus
   entity.energy_per_movement = entity_performance.energy_per_movement
   entity.energy_per_rotation = entity_performance.energy_per_rotation

@@ -1,4 +1,4 @@
-﻿local function make_icon_layer(base,icon_size)
+local function make_icon_layer(base,icon_size)
 	local layer = {
 		icon = base.icon,
 		icon_size = base.icon_size or icon_size,

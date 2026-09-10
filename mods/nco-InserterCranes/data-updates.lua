@@ -32,7 +32,7 @@ if mods["boblogistics"] then
 	register_crane("bob-turbo-bulk-inserter", "nco-turbo-crane", false, nil)
 
 	register_crane("bob-express-bulk-inserter", "nco-wide-express-crane", true, nil)
-	register_crane("bob-express-bulk-inserter", "nco-express-crane", true, nil)
+	register_crane("bob-express-bulk-inserter", "nco-express-crane", false, nil)
 end
 
 --krastorio 2
