@@ -932,6 +932,12 @@
       "metadataHash": null
     },
     {
+      "name": "nco-InserterCranes",
+      "version": "0.0.8",
+      "contentHash": null,
+      "metadataHash": "2c6e291cf64ce2d42bb767ce065e357b62284ec371ed1b8341dd1b95723934ce"
+    },
+    {
       "name": "newtrainsfx2",
       "version": "1.2.2",
       "contentHash": null,
