@@ -1,0 +1,13 @@
+{
+  "name": "OverloadedTrainsSimple",
+  "version": "0.1.0",
+  "title": "Overloaded Trains Simple (Paranoidal Fork)",
+  "author": "SEO-master",
+  "factorio_version": "2.0",
+  "description": "Local Paranoidal fork. Progressively reduces train acceleration according to occupied cargo-wagon slots and carried fluid without replacing rolling stock. This fork is not published on the Mod Portal.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "! space-age",
+    "! quality"
+  ]
+}
