@@ -16,11 +16,7 @@ local function calculate_load(train)
   for _, wagon in pairs(train.cargo_wagons) do
     local inventory = wagon.get_inventory(defines.inventory.cargo_wagon)
     if inventory then
-      for slot = 1, #inventory do
-        if inventory[slot].valid_for_read then
-          occupied_slots = occupied_slots + 1
-        end
-      end
+      occupied_slots = occupied_slots + (#inventory - inventory.count_empty_stacks())
     end
   end
 
