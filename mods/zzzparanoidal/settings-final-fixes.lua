@@ -132,7 +132,7 @@ if mods["rso-mod"] then
 end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
-if mods["RPGsystem"] then
+if mods["PMRPGsystem"] then
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
 if mods["PipeVisualizer-Updated"] then

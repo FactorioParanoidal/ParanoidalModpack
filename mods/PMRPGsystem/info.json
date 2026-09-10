@@ -1,0 +1,14 @@
+{
+  "name": "PMRPGsystem",
+  "author": "ProjectMakers",
+  "version": "9.0.2",
+  "title": "PM RPG System — Paranoidal Beta 8",
+  "homepage": "https://projectmakers.de",
+  "contact": "",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.77",
+    "! RPGsystem"
+  ],
+  "description": "Local Factorio 2.0 port of ProjectMakers PM RPG System 9.0.1 from the user Beta 8. Original progression and gameplay preserved. Based on MFerrari RPGsystem."
+}
