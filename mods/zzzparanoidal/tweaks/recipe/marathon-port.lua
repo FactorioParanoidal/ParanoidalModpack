@@ -239,7 +239,7 @@ paralib.bobmods.lib.recipe.set_ingredients("pipe-to-ground", {
 paralib.bobmods.lib.recipe.set_ingredients("rail", {
 	{ type = "item", name = "iron-stick", amount = 2 },
 	{ type = "item", name = "steel-plate", amount = 2 },
-	{ type = "item", name = "stone-crushed", amount = 10 },
+	{ type = "item", name = "angels-stone-crushed", amount = 10 },
 	{ type = "item", name = "concrete", amount = 6 },
 })
 
