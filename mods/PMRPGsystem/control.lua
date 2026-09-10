@@ -313,7 +313,7 @@ if storage.CharXPMOD == nil then
 ResetXPTables()
 
 
-mySettingsrpg = {
+local mySettingsrpg = {
 	charxpmod_LV_Health_Bonus = {
 	  value = 10, 
 	},
@@ -1265,15 +1265,21 @@ end)
 script.on_event(defines.events.on_pre_player_died, function(event)
 local player = game.players[event.player_index]
 local name = player.name
-local XP = storage.personalxp.XP[name] 
-local Level = storage.personalxp.Level[name] 
-local NextLevel = storage.xp_table[Level]
-local XP_ant
-if Level==1 then XP_ant = 0 else XP_ant = storage.xp_table[Level-1] end
-local Interval_XP = NextLevel - XP_ant
+storage.personalxp.Death[name] = (storage.personalxp.Death[name] or 0) + 1
+storage.handle_respawn[name] = true
+local XP = storage.personalxp.XP[name]
+local Level = storage.personalxp.Level[name]
+local NextLevel, XP_ant
+if type(Level) == "number" and type(storage.xp_table) == "table" then
+	NextLevel = storage.xp_table[Level]
+	if Level == 1 then XP_ant = 0 else XP_ant = storage.xp_table[Level-1] end
+end
+-- Keep death/respawn tracking even if damaged RPG state prevents a safe penalty.
+if type(XP) ~= "number" or type(NextLevel) ~= "number" or type(XP_ant) ~= "number" then
+	log("PMRPGsystem: skipped death XP penalty for player " .. player.index .. ": invalid XP or level thresholds")
+	return
+end
 local Penal = math.floor((XP-XP_ant)*storage.setting_death_penal/100)
-storage.personalxp.Death[name] = storage.personalxp.Death[name]+1
-storage.handle_respawn[name]=true
 if Penal>0 then 
 storage.personalxp.XP[name] = storage.personalxp.XP[name]-Penal
 player.print({"", {'xp_lost'}, RPG_format_number(Penal)}, {color = colors.lightred})

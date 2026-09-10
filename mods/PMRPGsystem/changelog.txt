@@ -5,6 +5,9 @@ Version: 9.0.2
     - Adapts persistent storage, health/evolution access, flying text, print settings and rename icon.
     - Restores the Beta 8 RPG button when GUI_Unifyer is installed and the Paranoidal hidden-panel default.
     - Prevents simultaneous activation with RPGsystem.
+  Bugfixes:
+    - Skips the death XP penalty for invalid level thresholds without losing death/respawn tracking.
+    - Corrects trash-slot tooltip units and the English reset command; removes an unused test file.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
   Changes:
@@ -23,7 +26,7 @@ Version: 1.3.2
   Changes:
     - New gui panel with close button
     - Player tag editor (suffix name) on a upper-right button
-    - Commands added to console only, not on tag editer anymore
+    - Commands added to console only, not on tag editor anymore
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.1
   Bugfixes:
