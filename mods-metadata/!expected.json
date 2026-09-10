@@ -338,6 +338,12 @@
       "metadataHash": null
     },
     {
+      "name": "PMRPGsystem",
+      "version": "9.0.2",
+      "contentHash": null,
+      "metadataHash": "c9420227cf8548caf83b156b46638f5cbc69c0eb61022568cf04a1122114e92e"
+    },
+    {
       "name": "ParanoidalLocale",
       "version": "1.24.1",
       "contentHash": null,
@@ -371,12 +377,6 @@
       "name": "RITEG",
       "version": "1.3.11",
       "contentHash": "813d636be5c46f75bf9715fea4499e27",
-      "metadataHash": null
-    },
-    {
-      "name": "RPGsystem",
-      "version": "2.0.8",
-      "contentHash": "f258d56be922bd59b6067b726ee51928",
       "metadataHash": null
     },
     {
