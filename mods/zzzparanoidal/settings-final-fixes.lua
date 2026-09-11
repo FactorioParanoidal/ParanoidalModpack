@@ -117,11 +117,6 @@ if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
 end
-if mods["TimedSpawnControl"] then
-    set_settings_default_value("bool-setting", "random-spawn", false)
-    set_settings_default_value("int-setting", "respawn-timer", 60)
-    set_settings_default_value("bool-setting", "unstuck-button", false)
-end
 if mods["robot-attrition"] then
     set_settings_default_value("double-setting", "robot-attrition-factor", 0.4)
 end
