@@ -1,0 +1,13 @@
+{
+  "mod": "JunkTrain3",
+  "source": "local",
+  "original": {
+    "name": "Junk Train",
+    "authors": ["Goldsword44", "d3x0r", "SqFKYo"],
+    "portal": {
+      "name": "JunkTrain3",
+      "url": "https://mods.factorio.com/mod/JunkTrain3"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0. Локальный порт восстанавливает итоговые поезда и раннюю инфраструктуру пользовательской Beta 8, переводит примитивные пути на штатную геометрию наземных рельсов 2.0 и добавляет согласованный лимит скорости 80 км/ч."
+}
