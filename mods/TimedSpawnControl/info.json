@@ -1,0 +1,11 @@
+{
+  "name": "TimedSpawnControl",
+  "version": "2.0.0",
+  "factorio_version": "2.0",
+  "title": "Spawn Control with cooldown",
+  "author": "Maxikaaz",
+  "contact": "",
+  "homepage": "https://mods.factorio.com/mod/TimedSpawnControl",
+  "dependencies": ["base >= 2.0.77"],
+  "description": "Local Factorio 2.0 port for Paranoidal. Keeps per-player spawn points and the unstuck action from the original mod, with a fixed 60-second spawn-point cooldown. Random spawning is intentionally excluded."
+}

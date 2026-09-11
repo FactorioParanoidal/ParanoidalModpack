@@ -1,0 +1,6 @@
+{
+  "mod": "GUI_Unifyer",
+  "source": "portal",
+  "upstreamVersion": "2.0.1",
+  "changeReason": "Исправляет интеграцию локального TimedSpawnControl: вместо удалённой функции случайного возрождения оформляет кнопку «Я застрял», как в Beta 8."
+}

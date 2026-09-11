@@ -176,7 +176,7 @@ local icons = {
         {"screen", "105"}),
     create_icon_entry("SpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
-    create_icon_entry("TimedSpawnControl", "spawncontrol_random_button", "random", {'guiu.spawncontrol_random_button'}, nil, nil, nil),
+    create_icon_entry("TimedSpawnControl", "spawncontrol_random_button", "unstuck", {'guiu.spawncontrol_unstuck'}, nil, nil, nil),
     create_icon_entry("what-is-missing", "whatsmissing_button", "what_is_missing", {'guiu.whatismissing_button'}, nil, nil,
         {"left", "what_is_missing"}),
     create_icon_entry("some-zoom", "somezoom_out_button", "but_zoom_zout", {'guiu.somezoom_out_button'}, nil, nil, nil),
