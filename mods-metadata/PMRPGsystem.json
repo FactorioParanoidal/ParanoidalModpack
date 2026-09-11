@@ -1,0 +1,5 @@
+{
+  "mod": "PMRPGsystem",
+  "source": "local",
+  "changeReason": "Переносит PMRPGsystem 9.0.1 из пользовательской распакованной Beta 8 на Factorio 2.0.77 с сохранением формул прокачки; исходный форк ProjectMakers на основе RPGsystem MFerrari, по явной задаче текущего пользователя"
+}
