@@ -5,25 +5,69 @@ local primitive_rails = {
   ["curved-scrap-rail-b"] = true,
 }
 
--- Factorio reports train speed in tiles per tick: 54 km/h / (60 ticks/s * 3.6) = 1/4.
-local speed_limit = 1 / 4
+-- Factorio reports train speed in tiles per tick: 80 km/h / (60 ticks/s * 3.6) = 10/27.
+local damage_speed = 10 / 27
+local damage_budget = 64
 
-local function train_is_on_primitive_rail(train)
-  for _, rail in pairs(train.get_rails()) do
-    if primitive_rails[rail.name] then
-      return true
-    end
+local function enqueue_rail(queue, rail, damage)
+  local id = rail.unit_number
+  if queue.entries[id] then
+    queue.entries[id].damage = queue.entries[id].damage + damage
+    return
   end
-  return false
+  queue.entries[id] = {rail = rail, damage = damage}
+  if queue.last then
+    queue.entries[queue.last].next = id
+  else
+    queue.first = id
+  end
+  queue.last = id
+  queue.size = queue.size + 1
 end
 
--- Periodic slowdown, not a hard cap: trains may accelerate or cross short sections between checks.
+local function damage_released_rails(queue)
+  -- A blocked segment goes to the back, so stopped trains cannot starve other entries.
+  for _ = 1, math.min(queue.size, damage_budget) do
+    local id = queue.first
+    local entry = queue.entries[id]
+    queue.first = entry.next
+    queue.entries[id] = nil
+    queue.size = queue.size - 1
+    if not queue.first then
+      queue.last = nil
+    end
+
+    local rail = entry.rail
+    if rail.valid and primitive_rails[rail.name] then
+      -- Wait until no train occupies the segment, including slow or stopped trains.
+      if rail.can_be_destroyed() then
+        rail.damage(entry.damage, "neutral", "impact")
+      else
+        enqueue_rail(queue, rail, entry.damage)
+      end
+    end
+  end
+end
+
 script.on_nth_tick(20, function()
-  -- Query only moving trains; no world-wide entity or rail scan is performed.
+  -- Old experimental destruction marks have no speed history; cancel them once.
+  if not storage.damaged_rails or storage.damaged_rails.version ~= 2 then
+    storage.damaged_rails = {version = 2, entries = {}, size = 0}
+  end
+  local queue = storage.damaged_rails
+  damage_released_rails(queue)
+
+  -- Each sample adds 1 HP per excess km/h to every primitive rail under the train.
+  -- Never change train speed; short sections may be crossed between checks.
   for _, train in pairs(game.train_manager.get_trains({is_moving = true})) do
-    local speed = train.speed
-    if math.abs(speed) > speed_limit and train_is_on_primitive_rail(train) then
-      train.speed = speed < 0 and -speed_limit or speed_limit
+    local speed = math.abs(train.speed)
+    if speed > damage_speed then
+      local damage = (speed - damage_speed) * 216
+      for _, rail in pairs(train.get_rails()) do
+        if rail.valid and primitive_rails[rail.name] then
+          enqueue_rail(queue, rail, damage)
+        end
+      end
     end
   end
 end)
