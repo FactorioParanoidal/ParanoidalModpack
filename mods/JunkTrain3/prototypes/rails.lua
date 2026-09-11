@@ -67,8 +67,6 @@ end
 local rails = {}
 for _, definition in ipairs(rail_definitions) do
   local target = data.raw[definition.type][definition.source]
-  target.fast_replaceable_group = "rail"
-
   local rail = table.deepcopy(target)
   rail.name = definition.name
   rail.localised_name = {"entity-name.scrap-rail"}
@@ -83,7 +81,11 @@ for _, definition in ipairs(rail_definitions) do
   rail.max_health = definition.health
   rail.resistances = nil
   rail.next_upgrade = definition.source
-  rail.fast_replaceable_group = "rail"
+  -- Factorio assigns ungrouped rails their prototype name during setup.
+  rail.fast_replaceable_group = target.fast_replaceable_group
+  if not rail.fast_replaceable_group or rail.fast_replaceable_group == "" then
+    rail.fast_replaceable_group = target.name
+  end
   rail.factoriopedia_alternative = "straight-scrap-rail"
   apply_primitive_palette(rail.pictures)
   rails[#rails + 1] = rail
