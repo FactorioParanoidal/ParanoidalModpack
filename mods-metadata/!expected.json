@@ -339,9 +339,9 @@
     },
     {
       "name": "PMRPGsystem",
-      "version": "9.0.2",
+      "version": "9.0.3",
       "contentHash": null,
-      "metadataHash": "c9420227cf8548caf83b156b46638f5cbc69c0eb61022568cf04a1122114e92e"
+      "metadataHash": "1a2185934688b6c657bd41110e9eb982f4fc825736782c14f5ab14800ccaa77a"
     },
     {
       "name": "ParanoidalLocale",
@@ -378,6 +378,12 @@
       "version": "1.3.11",
       "contentHash": "813d636be5c46f75bf9715fea4499e27",
       "metadataHash": null
+    },
+    {
+      "name": "RPGsystem",
+      "version": "2.0.9",
+      "contentHash": null,
+      "metadataHash": "4b9a44a9936df1669f4a59bbbd45c31b58c4e5778e8b1062f81174b8733c1aa3"
     },
     {
       "name": "RampantFixed",
