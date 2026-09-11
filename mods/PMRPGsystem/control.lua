@@ -203,6 +203,43 @@ local name= player.name
 UpdatePlayerLvStats(player)	
 end
 
+local function LevelForXP(xp)
+	for level=1,#storage.xp_table do
+		if xp < storage.xp_table[level] then return level end
+	end
+	return storage.setting_max_player_level
+end
+
+local function MigrateRPGsystemXP()
+	if storage.rpgsystem_xp_migration then return end
+
+	local migration = {version = 1, imported = 0, players = {}}
+	storage.rpgsystem_xp_migration = migration
+	local migration_interface = remote.interfaces["RPGsystemMigration"]
+	if not (migration_interface and migration_interface.get_all_player_xp) then return end
+
+	local legacy_xp = remote.call("RPGsystemMigration", "get_all_player_xp")
+	if type(legacy_xp) ~= "table" then return end
+
+	for _, player in pairs(game.players) do
+		local xp = legacy_xp[player.name]
+		if type(xp) == "number" and xp == xp and xp ~= math.huge and xp ~= -math.huge then
+			local name = player.name
+			storage.personalxp.XP[name] = xp
+			storage.personalxp.Level[name] = LevelForXP(xp)
+			for _, attrib in pairs(storage.Player_Attributes) do
+				storage.personalxp[attrib][name] = 0
+			end
+			storage.personalxp.opt_Pick_Extender[name] = false
+			migration.imported = migration.imported + 1
+			migration.players[name] = {xp = xp, level = storage.personalxp.Level[name]}
+			UpdatePanel(player)
+			log("PMRPGsystem: migrated RPGsystem XP for " .. name .. ": xp=" .. xp ..
+				", level=" .. storage.personalxp.Level[name] .. ", skill points reset")
+		end
+	end
+end
+
 function CheckPlayers()
 	for _, player in pairs(game.players) do
 		if not (storage.personalxp.Level[player.name]) then
@@ -363,6 +400,7 @@ storage.personal_kill_turrets = storage.personal_kill_turrets or {}
 	
 VersionChange()
 CheckPlayers()
+MigrateRPGsystemXP()
 end
 
 
@@ -1758,7 +1796,9 @@ if new_character and new_character.valid then
 	end
 end
 
-
+function interface.get_potions_list()
+return {}
+end
 
 
 remote.add_interface("RPG", interface )

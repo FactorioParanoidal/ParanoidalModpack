@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.3
+  Changes:
+    - Migrates exact XP from RPGsystem 2.0.8 and recalculates the level with the Beta 8 XP table.
+    - Resets all allocated skill points so players can distribute them again.
+    - Adds the RPGsystem 2.0.9 compatibility bridge required to read legacy per-mod storage.
+---------------------------------------------------------------------------------------------------
 Version: 9.0.2
   Changes:
     - Ports the user Beta 8 PMRPGsystem 9.0.1 to Factorio 2.0.77 without changing progression.
