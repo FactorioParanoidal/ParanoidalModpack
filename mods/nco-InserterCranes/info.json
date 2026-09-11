@@ -1,0 +1,19 @@
+{
+	"name": "nco-InserterCranes",
+	"version": "0.0.9",
+	"title": "Inserter Cranes (Paranoidal Fork)",
+	"author": "Karoschl, SEO-master",
+	"contact": "",
+	"homepage": "https://github.com/nicolas-lang/factorio.InserterCranes",
+	"description": "Local Paranoidal fork for Factorio 2.0 without redundant filter crane variants. This fork is not published on the Mod Portal.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0.77",
+		"! space-age",
+		"! quality",
+		"?Krastorio2",
+		"?boblogistics",
+		"?bobinserters",
+		"?reskins-bobs"
+	]
+}

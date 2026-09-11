@@ -1,0 +1,13 @@
+{
+  "mod": "nco-InserterCranes",
+  "source": "local",
+  "original": {
+    "name": "Inserter Cranes",
+    "authors": ["Karoschl"],
+    "portal": {
+      "name": "nco-InserterCranes",
+      "url": "https://mods.factorio.com/mod/nco-InserterCranes"
+    }
+  },
+  "changeReason": "Локальный форк SEO-master, не публикуемый на Mod Portal и не обновляемый из него. Портирует краны Beta 8 на Factorio 2.0, удаляет потерявшие смысл отдельные фильтрующие варианты и адаптирует API, прототипы и рецепты под текущие Bob's Logistics."
+}
