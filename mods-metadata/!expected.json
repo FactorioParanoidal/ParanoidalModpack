@@ -224,6 +224,12 @@
       "metadataHash": null
     },
     {
+      "name": "JunkTrain3",
+      "version": "2.0.0",
+      "contentHash": null,
+      "metadataHash": "5ce0da35bae31f2d604e5f990a6d1afc82f49f531698f6204734c835fe0d8f00"
+    },
+    {
       "name": "KS_Power",
       "version": "2.0.0",
       "contentHash": "392356d4b691d6ee005c6f14fdbbed67",
