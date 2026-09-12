@@ -218,7 +218,11 @@ if mods["bobmodules"] then
         "bobmods-modules-start-bonus-pollution",
         "bobmods-modules-start-bonus-pollutioncreate",
     }) do
-        data.raw["double-setting"][name].minimum_value = 0
+        local setting = data.raw["double-setting"] and data.raw["double-setting"][name]
+        if not setting then
+            error("mod setting data.raw['double-setting']['" .. name .. "'] not exists!")
+        end
+        setting.minimum_value = 0
         set_settings_default_value("double-setting", name, 0)
     end
 
