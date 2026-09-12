@@ -28,23 +28,11 @@ data.raw["cargo-wagon"]["cargo-wagon"].air_resistance = 0.007
 -------------------------------------------------------------------------------------------------
 data.raw["cargo-wagon"]["bob-cargo-wagon-3"].max_speed = 10
 -- 1.1 Oberhaul (trains.lua, train-wagon-nerf): урезанная вместимость карго-вагонов.
--- angels-mobility (Mass Transit) — те же тиры/значения для консистентности (в 1.1 мода не было).
--- Гард `if cw[base]` пропускает отсутствующие вагоны → безопасно, если мода нет.
 local wagon_nerf = {
 	-- Bob (тиры 1/2/3)
 	["cargo-wagon"] = 20,
 	["bob-cargo-wagon-2"] = 40,
 	["bob-cargo-wagon-3"] = 60,
-	-- angels-mobility: crawler-карго, crawler-робот, smelting — те же тиры
-	["angels-crawler-cargo-wagon"] = 20,
-	["angels-crawler-cargo-wagon-2"] = 40,
-	["angels-crawler-cargo-wagon-3"] = 60,
-	["angels-crawler-robot-wagon"] = 20,
-	["angels-crawler-robot-wagon-2"] = 40,
-	["angels-crawler-robot-wagon-3"] = 60,
-	["angels-smelting-cargo-wagon"] = 20,
-	["angels-smelting-cargo-wagon-2"] = 40,
-	["angels-smelting-cargo-wagon-3"] = 60,
 }
 local cw = data.raw["cargo-wagon"]
 for base, size in pairs(wagon_nerf) do
