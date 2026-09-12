@@ -1,0 +1,13 @@
+{
+  "mod": "LootingSpaceshipWrecks",
+  "source": "local",
+  "original": {
+    "name": "Looting Spaceship Wrecks",
+    "authors": ["darkfrei", "sbelyakov"],
+    "portal": {
+      "name": "LootingSpaceshipWrecks",
+      "url": "https://mods.factorio.com/mod/LootingSpaceshipWrecks"
+    }
+  },
+  "changeReason": "Поддерживаемый порт LootingSpaceshipWrecks 1.1.0 из пользовательской Paranoidal Beta 8 на Factorio 2.0: сохраняет извлечённые машины, графику, случайную выдачу и добычу из обломков; адаптирует API/ID Bob–Angels и возвращает позднюю выдачу стартового насоса из zzz Beta 8"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "LootingSpaceshipWrecks",
+  "version": "2.0.0",
+  "title": "Looting Spaceship Wrecks",
+  "description": "Paranoidal Beta 8 spaceship salvage: recovered machines, starting supplies and wreck mining loot. Local Factorio 2.0 port.",
+  "author": "darkfrei, sbelyakov",
+  "license": "MIT",
+  "dependencies": ["base >= 2.0.77", "? aai-industry"],
+  "factorio_version": "2.0"
+}
