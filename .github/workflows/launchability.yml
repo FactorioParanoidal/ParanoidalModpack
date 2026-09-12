@@ -19,24 +19,36 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
+      - name: Create CI bot token
+        id: ci-bot-token
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CI_BOT_APP_ID }}
+          private-key: ${{ secrets.CI_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ steps.ci-bot-token.outputs.token || github.token }}
+          persist-credentials: false
       - name: Check local mods against Mod Portal
         run: ./build.sh CheckModProvenance --maintain-mod-provenance
       - name: Commit updated provenance
         if: github.event.pull_request.head.repo.full_name == github.repository
         env:
           HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          APP_TOKEN: ${{ steps.ci-bot-token.outputs.token }}
         run: |
           if [[ -z "$(git status --porcelain -- mods-metadata)" ]]; then
             exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "${{ steps.ci-bot-token.outputs.app-slug }}[bot]"
+          git config user.email "${{ secrets.CI_BOT_APP_ID }}+${{ steps.ci-bot-token.outputs.app-slug }}[bot]@users.noreply.github.com"
           git add -- mods-metadata
           git commit -m "Update mod provenance expected state"
-          git push origin "HEAD:${HEAD_BRANCH}"
+          git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${HEAD_BRANCH}"
   launchability:
     name: Modpack launchability
     runs-on: ubuntu-latest
