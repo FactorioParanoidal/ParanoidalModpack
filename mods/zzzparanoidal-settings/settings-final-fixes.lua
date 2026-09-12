@@ -1,0 +1,2 @@
+-- Intentionally inactive until the Beta 8 settings balance is adapted to 2.0.
+-- Future scope: visibility only. Defaults belong to zzzparanoidal.
