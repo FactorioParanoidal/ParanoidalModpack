@@ -1,0 +1,12 @@
+{
+  "name": "zzzparanoidal-settings",
+  "version": "0.2.0",
+  "title": "Advanced PARANOIDAL Settings",
+  "author": "SEO-master",
+  "factorio_version": "2.0",
+  "description": "Settings visibility companion for PARANOIDAL. Currently a scaffold: does not hide settings or change their values.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? zzzparanoidal"
+  ]
+}

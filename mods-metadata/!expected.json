@@ -1110,6 +1110,12 @@
       "version": "8.1.10",
       "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
+    },
+    {
+      "name": "zzzparanoidal-settings",
+      "version": "0.2.0",
+      "contentHash": null,
+      "metadataHash": "72eed93bfb52b3af1a223d124a934b3824deda8a3d873fe8e4c5e3c74ccbc70a"
     }
   ]
 }

@@ -1,0 +1,5 @@
+{
+  "mod": "zzzparanoidal-settings",
+  "source": "local",
+  "changeReason": "Возвращает собственный мод настроек Paranoidal из Beta 8 как неактивный каркас для Factorio 2.0; скрытие и перенос значений отложены"
+}
