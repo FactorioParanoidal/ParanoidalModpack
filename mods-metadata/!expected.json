@@ -122,12 +122,6 @@
       "metadataHash": null
     },
     {
-      "name": "Dectorio",
-      "version": "0.13.1",
-      "contentHash": "46b54d6fb79d2fbddfc4369990b6e406",
-      "metadataHash": null
-    },
-    {
       "name": "Delete-Chunk-Tool",
       "version": "1.0.2",
       "contentHash": "defeb98254b30c08ce227aca244d297c",
