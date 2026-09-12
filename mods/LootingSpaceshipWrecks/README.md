@@ -23,13 +23,14 @@ release. Requires Factorio 2.0.77 or newer; tested without DLC.
 
 ## Port boundaries
 
-The existing entity/animation definitions and all original images are retained.
-A small local converter promotes their HR sprites and moves assembler graphics
-into `graphics_set`; pollution uses the 2.0 pollutant map. Item IDs are mapped
-explicitly via `item-names.lua`. Data-stage loot runs in data-updates so optional
-pack items are already registered. Missing optional items are logged, not
-replaced with arbitrary alternatives. The old invalid `offshore-pump-0` entry
-was also discarded by Beta 8 freeplay; the real pump is hull mining loot.
+Prototypes use Factorio 2.0 fields directly: assembler `graphics_set`, the
+pollutant map and current Bob/Angels item IDs. The nine original HR sprites and
+three machine icons are retained unchanged; unused low-resolution duplicates,
+inactive armor resources and the legacy conversion layer are removed.
+Data-stage loot runs in data-updates so optional pack items are already
+registered. Missing optional items are logged, not replaced with arbitrary
+alternatives. The invalid `offshore-pump-0` entry is removed: Beta 8 freeplay
+also discarded it, and the real pump remains hull mining loot.
 
 The mod remains additive, as it was in Beta 8. **AAI 2.0's additional starting
 burner assembler, 3 drills, 84 yellow belts and 24 motors are not removed.**
@@ -37,7 +38,6 @@ Therefore restoring this mod alone does not establish parity of the entire
 starting inventory. AAI's own science settings are also left alone.
 
 No new recipes, technologies, survival armor or respawn bonuses are introduced.
-The commented-out armor and source graphics are preserved, not activated.
 Adding the mod to an existing save does not recreate a previously mined ship.
 Own prototype IDs stay unchanged; no automatic migration of Beta 8 saves is
 claimed.

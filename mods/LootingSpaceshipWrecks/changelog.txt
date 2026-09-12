@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-09-12
+  Changes:
+    - Defines native Factorio 2.0 graphics, pollution and item IDs without legacy converters.
+    - Removes commented-out code, unused armor, low-resolution sprites and invalid starting pump entry.
+    - Applies mining loot directly to the twelve wrecks without scanning unrelated prototypes.
+    - Preserves machine IDs, statistics, active artwork, loot quantities and random call order.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-09-12
   Changes:
