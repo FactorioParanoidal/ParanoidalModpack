@@ -560,12 +560,6 @@
       "metadataHash": null
     },
     {
-      "name": "angelsaddons-cab",
-      "version": "2.0.0",
-      "contentHash": "cd4e42db67be041847fdfecb79daadce",
-      "metadataHash": null
-    },
-    {
       "name": "angelsaddons-mobility",
       "version": "2.0.1",
       "contentHash": "ad96ef98295ac925fb7f22646add4cc2",
