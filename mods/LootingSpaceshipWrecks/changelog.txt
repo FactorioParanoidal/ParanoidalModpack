@@ -1,0 +1,24 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-09-12
+  Changes:
+    - Defines native Factorio 2.0 graphics, pollution and item IDs without legacy converters.
+    - Removes commented-out code, unused armor, low-resolution sprites and invalid starting pump entry.
+    - Applies mining loot directly to the twelve wrecks without scanning unrelated prototypes.
+    - Preserves machine IDs, statistics, active artwork, loot quantities and random call order.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-09-12
+  Changes:
+    - Ports the Paranoidal Beta 8 version to Factorio 2.0.77, retaining the original machines, artwork and loot ranges.
+    - Adapts HR sprites, assembler graphics, pollution and Bob/Angels item names.
+    - Preserves the Beta 8 late hull pump reward and salvaged assembler electronics categories.
+    - Guards incomplete freeplay interfaces and unavailable optional items; clarifies the bonus setting tooltip.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020-09-18
+  Changes:
+    - first release
+Version: 1.1.0
+  Changes:
+    - items added to player, spaceship and debris inventory

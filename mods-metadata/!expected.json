@@ -272,6 +272,12 @@
       "metadataHash": null
     },
     {
+      "name": "LootingSpaceshipWrecks",
+      "version": "2.0.1",
+      "contentHash": null,
+      "metadataHash": "3511df63a2dffc069628d9a6431b8be38d0594d673039dab5282f4c45db0f38f"
+    },
+    {
       "name": "MIRV2",
       "version": "1.0.0",
       "contentHash": null,
