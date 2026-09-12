@@ -128,6 +128,7 @@ end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
 if mods["PMRPGsystem"] then
+    set_settings_default_value("bool-setting", "charxpmod_print_xp_user", true)
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
 if mods["PipeVisualizer-Updated"] then
@@ -195,6 +196,7 @@ if mods["bobores"] then
     set_settings_default_value("double-setting", "bobmods-gems-topazratio", 0.15)
 end
 if mods["boblogistics"] then
+    set_settings_default_value("int-setting", "bobmods-logistics-fluidwagonbase", 25)
     set_settings_default_value("bool-setting", "bobmods-logistics-beltoverhaulspeed", true)
     set_settings_default_value("int-setting", "bobmods-logistics-beltperlevel", 6)
     set_settings_default_value("double-setting", "bobmods-logistics-beltspeedperlevel", 12.5)
@@ -207,6 +209,26 @@ if mods["bobmining"] then
 end
 if mods["bobmodules"] then
     set_settings_default_value("bool-setting", "bobmods-modules-enablegodmodules", true)
+
+    -- Beta 8 defaults; Bob 2.1 raised these five lower bounds to 0.01.
+    for _, name in ipairs({
+        "bobmods-modules-start-bonus-speed",
+        "bobmods-modules-start-bonus-productivity",
+        "bobmods-modules-start-bonus-consumption",
+        "bobmods-modules-start-bonus-pollution",
+        "bobmods-modules-start-bonus-pollutioncreate",
+    }) do
+        data.raw["double-setting"][name].minimum_value = 0
+        set_settings_default_value("double-setting", name, 0)
+    end
+
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-speed", 0.20)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-productivity", 0.05)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-pollution", 0.15)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-penalty-pollution", 0.15)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-speed", 0.20)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-consumption", 0)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-pollution", 0)
 end
 if mods["bobplates"] then
     set_settings_default_value("bool-setting", "bobmods-plates-bluedeuterium", true)
