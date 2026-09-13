@@ -1,6 +1,6 @@
 {
   "name": "zzzparanoidal",
-  "version": "8.1.11",
+  "version": "8.1.12",
   "title": "!_Paranoidal",
   "factorio_version": "2.0",
   "author": "Sovigod",
@@ -12,6 +12,8 @@
     "!space-age",
     "!quality",
     "! angelsaddons-mobility",
+    "! angelsaddons-bots",
+    "WideChests >= 6.2.4",
     "BatteryElectricTrain",
     "boblibrary >= 2.1.0",
     "bobplates >= 2.1.1",
