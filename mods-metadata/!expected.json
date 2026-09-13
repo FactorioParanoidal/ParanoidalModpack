@@ -351,7 +351,7 @@
     },
     {
       "name": "ParanoidalLocale",
-      "version": "1.24.3",
+      "version": "1.25.0",
       "contentHash": null,
       "metadataHash": "9eada249331e920a65aa7baa410ce2575bfc0e8be55a24bf27e598f78168b3bc"
     },
@@ -557,12 +557,6 @@
       "name": "angelsaddons-bots",
       "version": "2.0.0",
       "contentHash": "2b6dfdf64101db5bc43799495774b381",
-      "metadataHash": null
-    },
-    {
-      "name": "angelsaddons-mobility",
-      "version": "2.0.1",
-      "contentHash": "ad96ef98295ac925fb7f22646add4cc2",
       "metadataHash": null
     },
     {
@@ -1095,7 +1089,7 @@
     },
     {
       "name": "zzzparanoidal",
-      "version": "8.1.10",
+      "version": "8.1.11",
       "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
     },
