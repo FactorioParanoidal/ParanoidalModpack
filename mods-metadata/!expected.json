@@ -554,12 +554,6 @@
       "metadataHash": null
     },
     {
-      "name": "angelsaddons-bots",
-      "version": "2.0.0",
-      "contentHash": "2b6dfdf64101db5bc43799495774b381",
-      "metadataHash": null
-    },
-    {
       "name": "angelsaddons-mobility-graphics-crawler",
       "version": "2.0.0",
       "contentHash": "ac12315625f4e62b8d8dfe986ccc128b",
@@ -1089,7 +1083,7 @@
     },
     {
       "name": "zzzparanoidal",
-      "version": "8.1.11",
+      "version": "8.1.12",
       "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
     },
