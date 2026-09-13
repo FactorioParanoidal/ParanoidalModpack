@@ -40,7 +40,6 @@ require("tweaks.recipe.poles") -- Изменение рецептов ЛЭП
 require("tweaks.recipe.yuoki")
 require("tweaks.recipe.concrete")
 require("tweaks.recipe.groups")
-require("tweaks.recipe.angels-warehouse-tiers") -- все тиры Angel's-складов (mk1..mk4) одним блоком в Logistics
 require("tweaks.recipe.optera-warehouse-sort") -- Optera warehouse (6×6) и storehouse (3×3) — каждый одним рядом
 require("tweaks.recipe.fuel")
 require("tweaks.recipe.science-packs")
@@ -93,6 +92,7 @@ require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circ
 require("prototypes.map-gen-presets")
 
 require("tweaks.custom.uniform-recipies")
+require("prototypes.entity.storage-migration")
 
 -- final aplying of override functions
 angelsmods.functions.OV.execute()

@@ -572,12 +572,6 @@
       "metadataHash": null
     },
     {
-      "name": "angelsaddons-storage",
-      "version": "2.0.1",
-      "contentHash": "14e403316198ddcf59a779bb95e22ac1",
-      "metadataHash": null
-    },
-    {
       "name": "angelsbioprocessing",
       "version": "2.0.3",
       "contentHash": "e7a628ed5fc611d92b9e8155b247ee19",
@@ -1083,7 +1077,7 @@
     },
     {
       "name": "zzzparanoidal",
-      "version": "8.1.12",
+      "version": "8.1.13",
       "contentHash": null,
       "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
     },

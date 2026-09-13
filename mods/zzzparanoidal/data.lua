@@ -9,6 +9,7 @@ require("prototypes.entity.concrete-brick")
 require("prototypes.entity.artillery-prototype")
 
 -- new items
+require("prototypes.item.storage-migration")
 require("prototypes.item.mining-drill-bit")
 require("prototypes.item.structured-components")
 require("prototypes.item.electronics")
