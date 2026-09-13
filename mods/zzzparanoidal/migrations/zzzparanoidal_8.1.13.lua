@@ -71,7 +71,13 @@ for _, surface in pairs(game.surfaces) do
 			local stack = cargo[index]
 			if stack.valid_for_read then
 				local lost = stack.count - destination.insert(stack)
-				assert(not is_warehouse or lost == 0, "Warehousing storage cannot hold the migrated warehouse cargo")
+				if is_warehouse and lost > 0 then
+					error(string.format(
+						"Angels Storage migration: warehouse-storage (%d slots) cannot hold the cargo at %s (%.1f, %.1f). "
+							.. "Keep a backup of the original save; do not overwrite it. Check Warehousing/Extended Angels startup "
+							.. "capacity settings and review the migration map (zzzparanoidal/migrations/README-storage.md) before retrying.",
+						#destination, surface.name, position.x, position.y))
+				end
 				discarded = discarded + lost
 			end
 		end
@@ -81,11 +87,10 @@ for _, surface in pairs(game.surfaces) do
 end
 
 -- Обход инвентарей включает персонажей, вагоны, машины, роботов и трупы.
-local inventory_ids = {}
-for _, id in pairs(defines.inventory) do inventory_ids[id] = true end
+-- API возвращает 0 для сущностей без инвентарей: не перебираем чужие defines.inventory.
 for _, surface in pairs(game.surfaces) do
 	for _, entity in pairs(surface.find_entities()) do
-		for id in pairs(inventory_ids) do
+		for id = 1, entity.get_max_inventory_index() do
 			convert_inventory(entity.get_inventory(id), surface, entity.position)
 		end
 		if entity.type == "item-entity" then
@@ -114,7 +119,9 @@ for _, surface in pairs(game.surfaces) do
 	end
 end
 for _, player in pairs(game.players) do
-	for id in pairs(inventory_ids) do convert_inventory(player.get_inventory(id), player.surface, player.position) end
+	for id = 1, player.get_max_inventory_index() do
+		convert_inventory(player.get_inventory(id), player.surface, player.position)
+	end
 	convert_stack(player.cursor_stack, player.get_main_inventory(), player.surface, player.position)
 end
 log("Storage migration: silos=" .. silos .. ", discarded silo items=" .. discarded .. ", compensated steel chests=" .. compensated)
