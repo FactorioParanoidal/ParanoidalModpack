@@ -28,6 +28,13 @@ jobs:
           private-key: ${{ secrets.CI_BOT_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: ${{ github.event.repository.name }}
+      - name: Get CI bot user ID
+        id: ci-bot-user
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ steps.ci-bot-token.outputs.token }}
+          APP_SLUG: ${{ steps.ci-bot-token.outputs.app-slug }}
+        run: echo "user-id=$(gh api \"/users/${APP_SLUG}[bot]\" --jq .id)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -45,7 +52,7 @@ jobs:
             exit 0
           fi
           git config user.name "${{ steps.ci-bot-token.outputs.app-slug }}[bot]"
-          git config user.email "${{ secrets.CI_BOT_APP_ID }}+${{ steps.ci-bot-token.outputs.app-slug }}[bot]@users.noreply.github.com"
+          git config user.email "${{ steps.ci-bot-user.outputs.user-id }}+${{ steps.ci-bot-token.outputs.app-slug }}[bot]@users.noreply.github.com"
           git add -- mods-metadata
           git commit -m "Update mod provenance expected state"
           git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${HEAD_BRANCH}"
