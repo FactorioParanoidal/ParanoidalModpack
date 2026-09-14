@@ -34,7 +34,10 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.ci-bot-token.outputs.token }}
           APP_SLUG: ${{ steps.ci-bot-token.outputs.app-slug }}
-        run: echo "user-id=$(gh api \"/users/${APP_SLUG}[bot]\" --jq .id)" >> "$GITHUB_OUTPUT"
+        run: |
+          user_id=$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)
+          test -n "$user_id"
+          echo "user-id=$user_id" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
