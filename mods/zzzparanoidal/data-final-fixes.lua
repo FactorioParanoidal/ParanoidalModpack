@@ -170,9 +170,12 @@ require("tweaks.technology.red-green-infrastructure-beta8")
 require("tweaks.recipe.red-green-infrastructure-beta8")
 require("tweaks.technology.angels-early-beta8")
 require("tweaks.recipe.angels-early-beta8")
+require("tweaks.technology.gems-beta8")
+require("tweaks.recipe.gems-beta8")
 require("tweaks.entity.early-fluid-compatibility-beta8")
 require("tweaks.recipe.pure-ore-smelting-beta8")
 require("tweaks.recipe.pure-tin-lead-beta8")
+require("tweaks.item.gems-menu-beta8")
 
 -- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
 -- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.
