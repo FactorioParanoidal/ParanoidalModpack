@@ -1,9 +1,6 @@
 require("paralib")
 local function replaceMachine()
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"warehouse-basic",
-		{ type = "item", name = "basic-structure-components", amount = 5 }
-	)
+	-- Beta 8: поздний recipes/warehousing.lua оставлял warehouse-basic без этих компонентов.
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"factory-2",
