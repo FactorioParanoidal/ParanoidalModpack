@@ -42,6 +42,59 @@ local patch = {
 			{ type = "item", name = "bob-aluminium-plate", amount = 5 },
 		},
 	},
+	["w93-modular-turret-base"] = {
+		ingredients = {
+			{ type = "item", name = "stone-brick", amount = 50 },
+			{ type = "item", name = "steel-plate", amount = 40 },
+			{ type = "item", name = "engine-unit", amount = 5 },
+			{ type = "item", name = "gun-turret", amount = 1 },
+		},
+	},
+	["w93-modular-turret2-base"] = {
+		ingredients = {
+			{ type = "item", name = "concrete", amount = 75 },
+			{ type = "item", name = "plastic-bar", amount = 80 },
+			{ type = "item", name = "electric-engine-unit", amount = 10 },
+			{ type = "item", name = "w93-modular-turret-base", amount = 1 },
+			{ type = "item", name = "electronic-circuit", amount = 10 },
+		},
+	},
+	["w93-modular-gun-lcannon"] = {
+		ingredients = {
+			{ type = "item", name = "copper-plate", amount = 5 },
+			{ type = "item", name = "steel-plate", amount = 4 },
+			{ type = "item", name = "advanced-circuit", amount = 1 },
+			{ type = "item", name = "iron-gear-wheel", amount = 4 },
+		},
+	},
+	["w93-modular-gun-plaser"] = {
+		ingredients = {
+			{ type = "item", name = "plastic-bar", amount = 10 },
+			{ type = "item", name = "iron-stick", amount = 8 },
+			{ type = "item", name = "electronic-circuit", amount = 5 },
+			{ type = "item", name = "speed-module", amount = 1 },
+			{ type = "item", name = "battery", amount = 10 },
+		},
+	},
+	["w93-modular-gun-tlaser"] = {
+		ingredients = {
+			{ type = "item", name = "plastic-bar", amount = 8 },
+			{ type = "item", name = "steel-plate", amount = 2 },
+			{ type = "item", name = "processing-unit", amount = 2 },
+			{ type = "item", name = "battery", amount = 10 },
+			{ type = "item", name = "efficiency-module", amount = 1 },
+		},
+	},
+	["w93-modular-gun-beam"] = {
+		ingredients = {
+			{ type = "item", name = "uranium-fuel-cell", amount = 1 },
+			{ type = "item", name = "small-lamp", amount = 1 },
+			{ type = "item", name = "low-density-structure", amount = 1 },
+			{ type = "item", name = "poison-capsule", amount = 1 },
+			{ type = "item", name = "processing-unit", amount = 2 },
+			{ type = "item", name = "battery", amount = 8 },
+		},
+	},
 	["bob-roboport-antenna-2"] = {
 		ingredients = {
 			{ type = "item", name = "advanced-circuit", amount = 15 },

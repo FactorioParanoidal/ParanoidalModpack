@@ -209,6 +209,7 @@ require("tweaks.recipe.sodium-beta8")
 require("tweaks.technology.sodium-beta8")
 require("tweaks.recipe.equipment-erp-beta8")
 require("tweaks.technology.equipment-erp-beta8")
+require("tweaks.item.w93-thermal-link-beta8")
 
 -- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
 -- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.

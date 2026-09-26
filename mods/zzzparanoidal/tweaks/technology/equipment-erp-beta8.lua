@@ -24,6 +24,91 @@ local patch = {
 	["personal-roboport-mk2-equipment"] = {
 		prerequisites = { "personal-roboport-equipment", "bob-brass-processing", "angels-aluminium-smelting-1", "angels-invar-smelting-1", "chemical-science-pack" },
 	},
+	["w93-modular-turrets"] = {
+		prerequisites = { "military-science-pack", "gun-turret", "engine" },
+	},
+	["w93-modular-turrets-gatling"] = {
+		unit = {
+			count = 200,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
+	["w93-modular-turrets-lcannon"] = {
+		prerequisites = { "w93-modular-turrets", "advanced-circuit", "w93-modular-turrets2", "explosives" },
+	},
+	["w93-modular-turrets-dcannon"] = {
+		unit = {
+			count = 100,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
+	["w93-modular-turrets-hcannon"] = {
+		unit = {
+			count = 200,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+				{ "utility-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
+	["w93-modular-turrets-rocket"] = {
+		prerequisites = { "w93-modular-turrets", "explosive-rocketry", "w93-modular-turrets2" },
+		unit = {
+			count = 150,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
+	["w93-modular-turrets-beam"] = {
+		prerequisites = { "w93-modular-turrets-tlaser", "space-science-pack" },
+		unit = {
+			count = 300,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+				{ "utility-science-pack", 1 },
+				{ "space-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
+	["w93-modular-turrets-tlaser"] = {
+		prerequisites = { "w93-modular-turrets-plaser", "military-4", "efficiency-module" },
+		unit = {
+			count = 250,
+			ingredients = {
+				{ "automation-science-pack", 1 },
+				{ "logistic-science-pack", 1 },
+				{ "chemical-science-pack", 1 },
+				{ "military-science-pack", 1 },
+				{ "utility-science-pack", 1 },
+			},
+			time = 60,
+		},
+	},
 	["bob-robo-modular-2"] = {
 		prerequisites = { "bob-robo-modular-1", "chemical-science-pack", "angels-aluminium-smelting-1", "angels-invar-smelting-1", "bob-brass-processing" },
 	},
