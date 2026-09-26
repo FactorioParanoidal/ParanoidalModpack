@@ -42,10 +42,10 @@ data:extend({
   },
 })
 
--- анлоки (coke-purification-3 — на angels-coal-processing-3, как в финале 1.1;
--- NO-2 в 1.1 был орфан → вешаем на тех базового NO, чтобы был доступен)
+-- coke-purification-3 открывается углём III, как в финале 1.1.
+-- NO-2 остаётся неоткрываемым: строка enabled="false" в Beta 8 дала настоящий false
+-- и у прототипа, и у force в проверке 1.1.107. Старую странность не улучшаем.
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "angels-coke-purification-3")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-nitrogen-processing-2", "angels-gas-nitrogen-monoxide-2")
 
 -- resin: только ручной крафт, 1 дерево
 local resin_wood = data.raw.recipe["bob-resin-wood"]

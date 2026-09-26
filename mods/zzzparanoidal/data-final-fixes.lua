@@ -188,6 +188,8 @@ require("tweaks.recipe.pure-tin-lead-beta8")
 require("tweaks.item.gems-menu-beta8")
 require("tweaks.recipe.nitrogen-remainder-beta8")
 require("tweaks.technology.nitrogen-remainder-beta8")
+require("tweaks.recipe.sodium-beta8")
+require("tweaks.technology.sodium-beta8")
 
 -- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
 -- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.
