@@ -204,7 +204,7 @@ if data.raw.technology["OilBurning-5"] then
 end
 --Ремонт дерева исследований
 paralib.bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4") --Ставим ядерку под Бойлер МК4
-paralib.bobmods.lib.tech.add_prerequisite("gun-turret", "bob-electricity") --турель
+paralib.bobmods.lib.tech.add_prerequisite("gun-turret", "electricity") -- Beta 8: действующая технология AAI
 paralib.bobmods.lib.tech.add_prerequisite("logistics", "bob-electricity") --логистика1
 paralib.bobmods.lib.tech.add_prerequisite("angels-basic-chemistry-2", "angels-metallurgy-1") --базовая химия 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-processing-green", "angels-metallurgy-1") --водоросли 2
