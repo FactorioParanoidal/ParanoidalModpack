@@ -15,11 +15,11 @@ paralib.bobmods.lib.recipe.set_ingredients("burner-assembling-machine", {
 })
 AssemblerTweak("assembling-machine-1")
 paralib.bobmods.lib.recipe.set_ingredients("assembling-machine-1", {
-    { type = "item", name = "burner-assembling-machine", amount = 1 },
-	{ type = "item", name = "electric-motor", amount = 4 },
-	{ type = "item", name = "iron-plate", amount = 25 },
+    { type = "item", name = "iron-plate", amount = 25 },
     { type = "item", name = "iron-gear-wheel", amount = 25 },
     { type = "item", name = "bob-basic-circuit-board", amount = 25 },
+    { type = "item", name = "electric-motor", amount = 4 },
+    { type = "item", name = "burner-assembling-machine", amount = 1 },
 })
 AssemblerTweak("assembling-machine-2")
 paralib.bobmods.lib.recipe.set_ingredients("assembling-machine-2", {

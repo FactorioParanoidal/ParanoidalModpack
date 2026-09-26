@@ -92,7 +92,8 @@ local function disable_obsolete_basic_logistics()
 	end
 	for _, force in pairs(game.forces) do
 		local basic_logistics = force.technologies["basic-logistics"]
-		if basic_logistics and force.technologies["logistics-0"] then
+		-- Не отключать восстановленную видимую basic-logistics Beta 8.
+		if basic_logistics and basic_logistics.prototype.hidden and force.technologies["logistics-0"] then
 			basic_logistics.enabled = false
 		end
 	end

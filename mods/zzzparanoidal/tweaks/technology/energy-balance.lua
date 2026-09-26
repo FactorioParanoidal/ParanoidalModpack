@@ -39,11 +39,11 @@ if data.raw.technology["fe-c-accumulator"] and data.raw.technology["electricity"
     paralib.bobmods.lib.tech.add_prerequisite("fe-c-accumulator", "electricity")
 end
 
--- Конденсаторы открываются электроникой.
-if data.raw.recipe["condensator"] and data.raw.technology["electronics"] then
+-- Beta 8: конденсаторы открываются электричеством вместе с простыми платами.
+if data.raw.recipe["condensator"] and data.raw.technology["electricity"] then
     remove_recipe_unlock("condensator")
     paralib.bobmods.lib.recipe.enabled("condensator", false)
-    paralib.bobmods.lib.tech.add_recipe_unlock("electronics", "condensator")
+    paralib.bobmods.lib.tech.add_recipe_unlock("electricity", "condensator")
 end
 
 -- Малый столб с лампой открывается только исследованием фонаря.
