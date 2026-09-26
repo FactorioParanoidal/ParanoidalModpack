@@ -178,10 +178,16 @@ require("tweaks.technology.bio-growing-beta8")
 require("tweaks.recipe.bio-growing-beta8")
 require("tweaks.technology.bio-processing-beta8")
 require("tweaks.recipe.bio-processing-beta8")
+require("tweaks.technology.cracking-beta8")
+require("tweaks.recipe.cracking-beta8")
 require("removals.bio-extras-beta8")
+require("tweaks.technology.chemistry-remainder-beta8")
+require("tweaks.recipe.chemistry-remainder-beta8")
 require("tweaks.recipe.pure-ore-smelting-beta8")
 require("tweaks.recipe.pure-tin-lead-beta8")
 require("tweaks.item.gems-menu-beta8")
+require("tweaks.recipe.nitrogen-remainder-beta8")
+require("tweaks.technology.nitrogen-remainder-beta8")
 
 -- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
 -- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.
