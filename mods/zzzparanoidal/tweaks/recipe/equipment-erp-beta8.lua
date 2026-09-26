@@ -42,6 +42,20 @@ local patch = {
 			{ type = "item", name = "bob-aluminium-plate", amount = 5 },
 		},
 	},
+	["satellite-flight-computer"] = {
+		ingredients = {
+			{ type = "item", name = "bob-advanced-processing-unit", amount = 300 },
+			{ type = "item", name = "rocket-control-unit", amount = 100 },
+		},
+	},
+	["satellite-thruster"] = {
+		ingredients = {
+			{ type = "item", name = "low-density-structure", amount = 50 },
+			{ type = "item", name = "rocket-control-unit", amount = 10 },
+			{ type = "item", name = "rocket-fuel", amount = 200 },
+			{ type = "item", name = "bob-vehicle-motor-equipment", amount = 5 },
+		},
+	},
 	["w93-modular-turret-base"] = {
 		ingredients = {
 			{ type = "item", name = "stone-brick", amount = 50 },
