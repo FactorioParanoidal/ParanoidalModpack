@@ -28,6 +28,29 @@ local ingredients = {
 		item("efficiency-module-2", 25), item("speed-module-2", 25), item("processing-unit", 60),
 		item("electric-engine-unit", 40), item("low-density-structure", 30), item("power-armor", 1),
 	},
+	["aai-basic-loader"] = {
+		-- У базового miniloader в Beta 8 не было отдельного фильтрующего рецепта.
+		item("bob-basic-underground-belt", 1), item("burner-inserter", 12),
+	},
+	["aai-loader"] = {
+		item("aai-basic-loader", 1), item("underground-belt", 1), item("steel-plate", 8), item("inserter", 8),
+	},
+	["aai-fast-loader"] = {
+		item("aai-loader", 1), item("fast-underground-belt", 1), item("long-handed-inserter", 8),
+	},
+	["aai-express-loader"] = {
+		item("aai-fast-loader", 1), item("express-underground-belt", 1), item("fast-inserter", 6),
+	},
+	["aai-turbo-loader"] = {
+		item("aai-express-loader", 1), item("turbo-underground-belt", 1), item("bob-turbo-inserter", 6),
+	},
+	["aai-ultimate-loader"] = {
+		item("aai-turbo-loader", 1), item("bob-ultimate-underground-belt", 1), item("bob-express-inserter", 6),
+	},
+	["bob-lab-2"] = {
+		-- Финальная цена Oberhaul/scienceoberhaul, не ранняя цена Bob.
+		item("bob-turbo-bulk-inserter", 10), item("turbo-transport-belt", 10), item("processing-unit", 25), item("lab", 2),
+	},
 	["bob-gun-turret-3"] = {
 		item("bob-gun-turret-2", 1), item("bob-steel-bearing", 10), item("bob-invar-alloy", 20), item("bob-brass-gear-wheel", 10),
 	},
@@ -70,4 +93,7 @@ for name, list in pairs(ingredients) do
 	if recipe then
 		recipe.ingredients = list
 	end
+end
+for _, name in ipairs({ "aai-basic-loader", "aai-loader", "aai-fast-loader", "aai-express-loader", "aai-turbo-loader", "aai-ultimate-loader" }) do
+	if data.raw.recipe[name] then data.raw.recipe[name].energy_required = 1 end
 end

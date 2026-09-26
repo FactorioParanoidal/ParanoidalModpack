@@ -8,6 +8,12 @@ local prerequisites = {
 	["distractor"] = { "defender", "military-3", "laser", "bob-robotics-2", "bob-brass-processing" },
 	["destroyer"] = { "distractor", "speed-module", "bob-robotics-3", "bob-gem-processing-3" },
 	["artillery"] = { "tank", "processing-unit", "angels-invar-smelting-1", "artillery-prototype" },
+	["aai-basic-loader"] = { "logistics-0" },
+	["aai-loader"] = { "logistics", "aai-basic-loader", "logistic-science-pack", "angels-steel-smelting-1" },
+	["aai-fast-loader"] = { "logistics-2", "aai-loader", "chemical-science-pack", "fast-inserter" },
+	["aai-express-loader"] = { "logistics-3", "aai-fast-loader", "production-science-pack", "bob-express-inserter" },
+	["aai-turbo-loader"] = { "logistics-4", "aai-express-loader", "bob-turbo-inserter" },
+	["aai-ultimate-loader"] = { "logistics-5", "aai-turbo-loader", "bob-ultimate-inserter" },
 	["bob-laser-rifle"] = { "advanced-circuit", "military-science-pack", "laser" },
 	["bob-robot-gun-drones"] = { "defender", "gun-turret" },
 	["bob-robot-laser-drones"] = { "defender", "laser-turret" },
@@ -41,3 +47,35 @@ set_unit("power-armor", 200, 30, { "automation-science-pack", "logistic-science-
 set_unit("power-armor-mk2", 400, 30, {
 	"automation-science-pack", "logistic-science-pack", "chemical-science-pack", "military-science-pack", "utility-science-pack",
 })
+-- Oberhaul/scienceoberhaul: общий исследовательский платёж, не выбор цены слитых рецептов.
+set_unit("aai-basic-loader", 250, 60, { "automation-science-pack" })
+set_unit("aai-loader", 500, 60, { "automation-science-pack", "logistic-science-pack" })
+set_unit("aai-fast-loader", 1000, 60, { "automation-science-pack", "logistic-science-pack", "chemical-science-pack" })
+set_unit("aai-express-loader", 2000, 60, {
+	"automation-science-pack", { "logistic-science-pack", 2 }, "chemical-science-pack", "production-science-pack",
+})
+set_unit("aai-turbo-loader", 3000, 60, {
+	"automation-science-pack", { "logistic-science-pack", 2 }, "chemical-science-pack", "production-science-pack", "bob-advanced-logistic-science-pack",
+})
+set_unit("aai-ultimate-loader", 5000, 60, {
+	"automation-science-pack", { "logistic-science-pack", 3 }, "chemical-science-pack", "production-science-pack",
+	{ "bob-advanced-logistic-science-pack", 2 }, "utility-science-pack",
+})
+
+-- ПР-034 уже снял эту зависимость у бура; теперь разобран последний активный потребитель — AAI.
+-- В другом модсете не закрывать узел, пока от него зависит хотя бы одна действующая технология.
+local obsolete = data.raw.technology["automation-science-pack"]
+if obsolete then
+	local active_consumer = false
+	for _, technology in pairs(data.raw.technology) do
+		if not technology.hidden and technology.enabled ~= false then
+			for _, prerequisite in ipairs(technology.prerequisites or {}) do
+				if prerequisite == "automation-science-pack" then active_consumer = true end
+			end
+		end
+	end
+	if not active_consumer then
+		obsolete.hidden = true
+		obsolete.enabled = false
+	end
+end
