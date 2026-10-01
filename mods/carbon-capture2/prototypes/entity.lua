@@ -4,6 +4,9 @@ require "util"
 -- Миграции 2.0: графика через graphics_set (top-level animation игнорируется),
 -- emissions_per_minute = {pollution = N} (dict, не скаляр), module_slots (не module_specification),
 -- minable.results, у последнего тира next_upgrade не задаётся.
+-- effect_receiver — новое поле 2.0, у assembling-machine-1 выставлено
+-- {uses_module_effects = false, uses_beacon_effects = false}; при deepcopy оно
+-- приезжает вместе с базой и глушит модули в слотах, поэтому сбрасывается.
 
 local base = data.raw["assembling-machine"]["assembling-machine-1"]
 
@@ -40,6 +43,7 @@ for _, t in ipairs(tiers) do
 	m.next_upgrade = t.next
 	m.module_slots = t.slots
 	m.allowed_effects = { "consumption", "speed" }
+	m.effect_receiver = nil
 	m.animation = nil
 	m.graphics_set = {
 		animation = {
