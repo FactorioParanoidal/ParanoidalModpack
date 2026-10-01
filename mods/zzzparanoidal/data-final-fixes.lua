@@ -236,6 +236,11 @@ end
 -- PCPRedux: дубль sodium nitrate (старое ангеловское имя) → angels-solid-sodium-nitrate
 require("removals.pcp-sodium-nitrate-duplicate")
 
+-- Beta 8 start, after late overrides; preserve current machinery and agreed exceptions.
+require("prototypes.torch-beta8")
+require("tweaks.recipe.start-menu-beta8")
+require("tweaks.custom.crafting-menu-beta8")
+
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 --должно быть последним. После всех рецептов.
 require("tweaks.custom.flowfix")

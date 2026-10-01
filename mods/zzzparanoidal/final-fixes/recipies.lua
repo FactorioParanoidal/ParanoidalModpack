@@ -781,8 +781,8 @@ paralib.bobmods.lib.recipe.add_ingredient("bob-electric-mixing-furnace", { type 
 -- electric-chemical-mixing: electric-furnace → electric-mixing-furnace (1.1).
 paralib.bobmods.lib.recipe.replace_ingredient("bob-electric-chemical-mixing-furnace", "electric-furnace", "bob-electric-mixing-furnace")
 
--- Unlock iron-stick by default
-paralib.bobmods.lib.recipe.enabled("iron-stick", true)
+-- User exception: iron-stick opens through the existing burner-mechanics technology.
+paralib.bobmods.lib.recipe.enabled("iron-stick", false)
 
 --Фикс рецепта базовой микросхемы
 paralib.bobmods.lib.recipe.set_ingredients("bob-basic-circuit-board", {
