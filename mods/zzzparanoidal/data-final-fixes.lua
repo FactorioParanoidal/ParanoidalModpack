@@ -244,6 +244,8 @@ require("tweaks.item.angels-components-group") -- целые строки Angel'
 require("tweaks.recipe.lamp-components")
 require("tweaks.technology.lamp-unlocks")
 require("tweaks.entity.assembler-ingredient-descriptions")
+require("tweaks.recipe.frame-metallurgy-beta8")
+require("tweaks.technology.frame-metallurgy-beta8")
 
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 -- Общее масштабирование рецептов; модульный порт ниже уже содержит итоговые партии Beta 8.
