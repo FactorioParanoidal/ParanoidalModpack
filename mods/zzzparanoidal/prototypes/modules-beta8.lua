@@ -88,3 +88,4 @@ for name, recipe in pairs(data.raw.recipe) do
 end
 
 require("tweaks.entity.module-compatibility-beta8")
+require("tweaks.technology.god-module-duplicate")
