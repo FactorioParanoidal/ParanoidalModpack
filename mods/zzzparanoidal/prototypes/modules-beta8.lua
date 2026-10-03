@@ -86,3 +86,5 @@ for name, recipe in pairs(data.raw.recipe) do
     recipe.allowed_module_categories = categories
     recipe.allow_productivity = next(permitted) ~= nil
 end
+
+require("tweaks.entity.module-compatibility-beta8")
