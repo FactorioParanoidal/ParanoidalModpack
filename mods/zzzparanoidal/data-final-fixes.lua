@@ -241,6 +241,8 @@ require("prototypes.torch-beta8")
 require("tweaks.recipe.start-menu-beta8")
 require("tweaks.custom.crafting-menu-beta8")
 require("tweaks.item.angels-components-group") -- целые строки Angel's во вкладку «Компоненты»
+require("tweaks.recipe.lamp-components")
+require("tweaks.technology.lamp-unlocks")
 
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
 --должно быть последним. После всех рецептов.
