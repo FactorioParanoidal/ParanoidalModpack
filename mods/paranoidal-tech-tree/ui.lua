@@ -71,10 +71,10 @@ end
 function M.tree(p, focus)
   local s,g=state(p),graph(p)
   if not root(p) then return end
-  s.scroll.clear(); s.cards={}; s.status_labels={}
+  s.scroll.clear(); s.cards={}; s.status_labels={}; s.tech_buttons={}
   local stack=s.scroll.add{type="flow",direction="vertical"}
   stack.style.vertical_spacing=12
-  local subset=s.chain and G.chain(g,s.selected) or nil
+  local subset=s.chain and G.chain(g,s.pinned or s.selected) or nil
   local query=G.lower(s.query)
   local total=0
   local size=SIZES[s.size]
@@ -96,7 +96,7 @@ function M.tree(p, focus)
         card.style.padding=6; card.style.width=size+112
         card.style.height=size+94
         local top=card.add{type="flow",direction="horizontal"}
-        techbutton(top,p,n,size)
+        s.tech_buttons[n]=techbutton(top,p,n,size)
         local name=text(card,t.localised_name,size+100)
         name.style.height=64
         name.tooltip=t.localised_name
@@ -182,6 +182,8 @@ function M.open(p)
   button(tools,"larger","+").style.width=36
   button(tools,"focus",{"ptt.focus"})
   tools.add{type="checkbox",name="ptt_chain",caption={"ptt.chain"},state=s.chain,tags={ptt=true,action="chain"}}
+  tools.add{type="checkbox",name="ptt_pin",caption={"ptt.pin"},
+    tooltip={"ptt.pin-hint"},state=s.pinned~=nil,enabled=s.chain,tags={ptt=true,action="pin"}}
   local search=r.add{type="flow",direction="horizontal"}
   search.add{type="label",caption={"ptt.search"}}
   local field=search.add{type="textfield",name="ptt_query",text=s.query,tags={ptt=true,action="search"}}
@@ -203,6 +205,13 @@ end
 function M.select(p,name)
   if not p.force.technologies[name] then return end
   local s=state(p); s.selected=name; s.notice=nil
+  if s.pinned then
+    -- Keep the existing tree and both scroll positions; only selection/details change.
+    s.focus_due=nil
+    for n,b in pairs(s.tech_buttons or {}) do if b.valid then b.toggled=n==name end end
+    M.panel(p)
+    return
+  end
   -- A click from search exits search so the chosen chain remains navigable.
   s.query=""
   local r=root(p)
@@ -240,7 +249,17 @@ end
 function M.changed(e)
   if not (e.element and e.element.valid and e.element.tags.ptt) then return end
   local p=game.get_player(e.player_index); local s=state(p)
-  if e.element.tags.action=="chain" then s.chain=e.element.state; M.tree(p,true)
+  if e.element.tags.action=="chain" then
+    s.chain=e.element.state
+    if not s.chain then s.pinned=nil end
+    for _,child in pairs(root(p).children) do
+      if child.ptt_pin then child.ptt_pin.enabled=s.chain; child.ptt_pin.state=s.pinned~=nil end
+    end
+    M.tree(p,true)
+  elseif e.element.tags.action=="pin" then
+    s.pinned=e.element.state and s.selected or nil
+    s.focus_due=nil
+    if not s.pinned then M.tree(p,true) end
   elseif e.element.tags.action=="search" then s.query=e.element.text; s.search_due=game.tick+15 end
 end
 function M.refresh(p)
