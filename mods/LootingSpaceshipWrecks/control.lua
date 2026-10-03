@@ -20,7 +20,7 @@ script.on_init(function()
   local ship_items = remote.call("freeplay", "get_ship_items")
   local debris_items = remote.call("freeplay", "get_debris_items")
 
-  -- Keep Beta 8's random call order as well as its ranges.
+  -- Keep Beta 8's loot ranges, except for the removed nuclear fuel.
   add_items(created_items, {
     ["firearm-magazine"] = math.random(5, 19),
     ["repair-pack"] = math.random(2, 9),
@@ -47,7 +47,6 @@ script.on_init(function()
     ["stone"] = math.random(5, 35),
     ["wood"] = math.random(5, 35),
     ["battery"] = math.random(2, 19),
-    ["nuclear-fuel"] = math.random(1, 3),
     ["bob-integrated-electronics"] = math.random(5, 35),
     ["radar"] = math.random(1, 3),
     ["burner-mining-drill"] = math.random(1, 3),

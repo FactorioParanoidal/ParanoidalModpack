@@ -1,6 +1,6 @@
 {
   "name": "ParanoidalLocale",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "factorio_version": "2.0",
   "title": "PARANOIDAL Locale",
   "author": "SKProCH",
@@ -12,8 +12,6 @@
     "? AbandonedRuins_updated_fork",
     "? Aircraft-space-age",
     "? All-infinit-tech",
-    "? angelsaddons-bots",
-    "? angelsaddons-storage",
     "? angelsbioprocessing",
     "? angelsindustries",
     "? angelsinfiniteores",
