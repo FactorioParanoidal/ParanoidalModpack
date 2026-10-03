@@ -63,8 +63,10 @@ move_row("production-machine", "production", "e", { ["burner-lab"] = "g[lab]" })
 move_row("intermediate-product", "intermediate-products", "g", {
 	["iron-gear-wheel"] = "c[iron-gear-wheel]", ["motor"] = "g[engine-unit]-a[motor]",
 	["electric-motor"] = "g[engine-unit]-b[electric-motor]",
+	["engine-unit"] = "g[engine-unit]-c[engine-unit]",
+	["electric-engine-unit"] = "g[engine-unit]-d[electric-engine-unit]",
 })
-move_row("science-pack", "intermediate-products", "z", { ["automation-science-pack"] = "a[automation-science-pack]" })
+-- Keep automation science in the shared science-pack row, before logistic science.
 -- sci-component-1 and mining-drill-bit-mk0 already have their Beta 8 rows/orders.
 move_row("gun", "combat", "a", { ["pistol"] = "a[basic-clips]-a[pistol]" })
 move_row("ammo", "combat", "b", {
