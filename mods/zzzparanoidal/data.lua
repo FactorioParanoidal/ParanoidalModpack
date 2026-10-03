@@ -1,5 +1,8 @@
 require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 
+-- Register early so research/evolution and compatibility mods see both labs.
+data:extend(table.deepcopy(require("prototypes.super-labs-beta8")))
+
 -- new entities
 require("prototypes.entity.bio-content")
 require("prototypes.entity.offshore-pumps")

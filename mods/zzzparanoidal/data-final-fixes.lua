@@ -251,4 +251,5 @@ require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: раз�
 -- Общее масштабирование рецептов; модульный порт ниже уже содержит итоговые партии Beta 8.
 require("tweaks.custom.flowfix")
 require("prototypes.modules-beta8")
+require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8 + космические данные.
 require("tweaks.item.titanium-icon") -- После reskins и поздних копирований иконок.
