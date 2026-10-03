@@ -245,5 +245,6 @@ require("tweaks.recipe.lamp-components")
 require("tweaks.technology.lamp-unlocks")
 
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
---должно быть последним. После всех рецептов.
+-- Общее масштабирование рецептов; модульный порт ниже уже содержит итоговые партии Beta 8.
 require("tweaks.custom.flowfix")
+require("prototypes.modules-beta8")

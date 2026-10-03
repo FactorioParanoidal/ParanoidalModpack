@@ -1,0 +1,1078 @@
+{
+  "reference": "Beta 8 final dump, 20260913-175211, normal; accepted without six absent mods",
+  "sha256": "90731abb18dbc6c617662361bb71a5492c93bd4041797f819d52df0a7c1079a5",
+  "runtime_effects_sha256": "a0cd34a72ea1b3917262975f5e6530b20eb85a81cdc6ce32e12438a95a791778",
+  "counts": {
+    "modules": 69,
+    "parts": 23,
+    "recipes": 120,
+    "technologies": 74
+  },
+  "assets": {
+    "__reskins-bobs__/graphics/icons/modules/beacon/beacon-icon-base.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/beacon/beacon-icon-base.png",
+      "sha256": "706af16276ad4afc4abbd55bdd19e82e54c718433272b8926c8f62589af7907e"
+    },
+    "__reskins-bobs__/graphics/icons/modules/beacon/beacon-icon-mask.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/beacon/beacon-icon-mask.png",
+      "sha256": "ca0ce39b9d413378b8316f3317eacfbb15e6ca8c4bf1e3eef4bff847f697f622"
+    },
+    "__reskins-bobs__/graphics/icons/modules/beacon/beacon-icon-highlights.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/beacon/beacon-icon-highlights.png",
+      "sha256": "21a50b3cb4e9b8a3512477df5e02556951f2e9da1e0eda3874a215c8bc80783e"
+    },
+    "__reskins-library__/graphics/icons/tiers/rounded-rectangle/1.png": {
+      "source_mod": "reskins-library",
+      "source_file": "graphics/icons/tiers/rounded-rectangle/1.png",
+      "sha256": "fed54c8a32d504d602be82646b681a3cd0b4440732ee53a61f5766878d1851df"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-1-bottom.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-1-bottom.png",
+      "sha256": "8a4c6a0a029c31dca6b560589ae75ecac632aa5a85a7733e176d412e91be8a9d"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-1-bottom-mask.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-1-bottom-mask.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-1-bottom-highlights.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-1-bottom-highlights.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-shadow.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-shadow.png",
+      "sha256": "ba2f7f05261ea40cf0c685d0fb9b6fb8800c2a4e06217029c586ae7571854564"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-top.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-top.png",
+      "sha256": "b81a53e7fda421042ae08f95600d866e42a2e4c205e4be0cf061785c732a0a17"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-light.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-light.png",
+      "sha256": "4f14e043d4a5ff49db39603b29131d7ae46d48e1552d4389559f30c3225ca0be"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-slot-1.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-slot-1.png",
+      "sha256": "1e136f247b9da5739b7b4f566c494326166b1ab4a573e00b1beb8251f913feb6"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-mask-box-1.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-mask-box-1.png",
+      "sha256": "98ca03f47a7c65a0bb24d02fbb17b51d7c14ca21292d7aefd0ae7ccdacffce5d"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-mask-lights-1.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-mask-lights-1.png",
+      "sha256": "4696def995ca057e4be2e98882a4a88c7fa77b2b5051a737fcb3e0f07c96c75c"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-lights-1.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-lights-1.png",
+      "sha256": "9ff18beffe3b9020adf274e6aec2399199208a5de4dd29886a767df57aec4c2d"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-slot-2.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-slot-2.png",
+      "sha256": "1e876e491894cdc1c26b88e192e2cd600f464ffe1ff6cf48710cba215688fb5e"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-mask-box-2.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-mask-box-2.png",
+      "sha256": "02d067723f5723a701f31441a25eb0fc3ebdd7807cfeb1e012dbc406e7d152e6"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-mask-lights-2.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-mask-lights-2.png",
+      "sha256": "f4bf4f59491a15f76507f46cb313d22559cb6b1e9af46759c0a1764034eb10dd"
+    },
+    "__base__/graphics/entity/beacon/hr-beacon-module-lights-2.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/hr-beacon-module-lights-2.png",
+      "sha256": "f614e81dbce34815fbf6376abea26e6c764646f61978dc91c81ce6e7f83938ef"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-slot-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-slot-1.png",
+      "sha256": "48c7ddaf74aafbebf0a0ac3aa6a8716934bbd54176e3633c6718409ac7f03607"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-mask-box-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-mask-box-1.png",
+      "sha256": "e0c59651cfc7f9b649dbaba8cbffca212471071e911b0c6cee1bcb44177df423"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-mask-lights-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-mask-lights-1.png",
+      "sha256": "0452df8a53eda60e43ef16f7ff4225dab726e1a8275327162cce86a2abb155cf"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-lights-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/8-lights/1/hr-beacon-module-lights-1.png",
+      "sha256": "3202671a0411171229c25d547b7398c144e7e1ecb7a7fe5ddf405a2e9b26e631"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-slot-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-slot-1.png",
+      "sha256": "82d2e792a055f32377abaac1715dc24d5bfb575819a76e942216c735ca204c9b"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-mask-box-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-mask-box-1.png",
+      "sha256": "e82cdc4b31748eedc3ead280ec7b8e9adab607546f5af74e0ddeaaeb5cd00828"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-mask-lights-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-mask-lights-1.png",
+      "sha256": "cd778d9c70195e0a68e7c06f5787aff50b2fd148c428d16dc1f7dd1cf2bf1203"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-lights-1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/slots/5-lights/1/hr-beacon-module-lights-1.png",
+      "sha256": "03eeebdafc58cc0c41f6348a60a51522bec6161819204eeed03ed34108721350"
+    },
+    "__base__/graphics/entity/beacon/beacon-radius-visualization.png": {
+      "source_mod": "base",
+      "source_file": "graphics/entity/beacon/beacon-radius-visualization.png",
+      "sha256": "737b45b504fa84f2baafd58dc36d03164792ead93031ad268e3487220fc0e618"
+    },
+    "__reskins-library__/graphics/icons/tiers/rounded-rectangle/2.png": {
+      "source_mod": "reskins-library",
+      "source_file": "graphics/icons/tiers/rounded-rectangle/2.png",
+      "sha256": "54bc61a2ae8dc687b28b9d748ed90dfd0d1c6c04a7e38400a0df1c86f2432435"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-2-bottom.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-2-bottom.png",
+      "sha256": "4540f6b4d01fb69d6b8a7191cfee40e6b42d7f8b362f124cd828caddc917e1c2"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-2-bottom-mask.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-2-bottom-mask.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-2-bottom-highlights.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-2-bottom-highlights.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-2-bottom-slot-overlay.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-2-bottom-slot-overlay.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png": {
+      "source_mod": "reskins-library",
+      "source_file": "graphics/icons/tiers/rounded-rectangle/3.png",
+      "sha256": "f608bbef3dbeee2b0a1a6363f4ab9e1cccddf5a267b2888099b5a1de23d2f253"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom.png",
+      "sha256": "5545315a7e627c3b0a99e07f870f4cf3734a4fc4d7a27af191212da25d6a3854"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom-mask.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom-mask.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom-highlights.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom-highlights.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay-mask.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay-mask.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__reskins-bobs__/graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay-highlights.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/entity/modules/beacon/hr-beacon-3-bottom-slot-overlay-highlights.png",
+      "sha256": "d1c31044e0d9407d1134dd1cf07ac7581e2d5d8892da912495d4779de93ae5d8"
+    },
+    "__bobicons__/graphics/icons/bobmodules/beacon-1-64.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/beacon-1-64.png",
+      "sha256": "d634e2ee3ae0e6135da59af4667f81418b94bee783de94f918a6b617c2095c79"
+    },
+    "__bobicons__/graphics/icons/bobmodules/beacon-2-64.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/beacon-2-64.png",
+      "sha256": "31059ef74bca3f493fbf20eddd585f910d3d8114fb93b25c24b25f5dd5c99ff9"
+    },
+    "__bobicons__/graphics/icons/bobmodules/beacon-3-64.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/beacon-3-64.png",
+      "sha256": "9c739bee48fa823cd4cdb0cc3737815cb507042a6f40fefc9efa8481d7994edb"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_1.png",
+      "sha256": "bdd28387ccc084edb95b5411ecf5e97528d530c9f2b003a1969970497f0dcd25"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_2.png",
+      "sha256": "ba03c9aba86f8e81658d83d25fd431fb47fc0e95e77f7c126bb9ebfb50869260"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_3.png",
+      "sha256": "d4d8721bb94155b9122c733eac635c2bc4b91ed898b9a4f3a386bbe14f6cf80d"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_4.png",
+      "sha256": "6d0e74eddc7f0a01f96ab32b4ee27d6a22ff81dacc92463acfeeb1f84d88a014"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_5.png",
+      "sha256": "d904246dae68d8543be518661e74d6bf99512f41b7aeccfba536ed12eb6ba1c7"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_6.png",
+      "sha256": "88ee477857a3e6e346fa5192be7d110ba1626d74dbb3deec968b6f707fe6e051"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_7.png",
+      "sha256": "72ec93ba726b28d26eed67ac59e2093769c5bff154fb952db28c02a9a22c1495"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/yellow/yellow_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/yellow/yellow_8.png",
+      "sha256": "6d8d2c8253880bed0f09cbb04a4d2575649b2a7fff363a296f946b1571545450"
+    },
+    "__bobmodules__/graphics/icons/effectivity-processor.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/effectivity-processor.png",
+      "sha256": "69c16c3e0c13f75ec9c32075308547d42320e714f06ef71917c75bb45ac35506"
+    },
+    "__bobmodules__/graphics/icons/effectivity-processor-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/effectivity-processor-2.png",
+      "sha256": "aa07280a5612d631acbf439035134556c77834292787cb77da753bfbf51a721a"
+    },
+    "__bobmodules__/graphics/icons/effectivity-processor-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/effectivity-processor-3.png",
+      "sha256": "be57f93f0ff5b64ad67152e51dd1445495ca13171fd682566610e86bac2ac2f5"
+    },
+    "__bobicons__/graphics/icons/bobmodules/god-module-1-128.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/god-module-1-128.png",
+      "sha256": "11591a53c5ec43963268abf12fa32c01d2cbf64bda2e9ce569e631b8ce877222"
+    },
+    "__bobicons__/graphics/icons/bobmodules/god-module-2-128.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/god-module-2-128.png",
+      "sha256": "c79220fa2b746ec8f35203ca0737a6db91c711c3114e764a62507bce1050f4ea"
+    },
+    "__bobicons__/graphics/icons/bobmodules/god-module-3-128.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/god-module-3-128.png",
+      "sha256": "322ca7a914e7e2c4cab4bc7f421ae5f151d722f2dc490b96d9d3f4a9d9d4ae2f"
+    },
+    "__bobicons__/graphics/icons/bobmodules/god-module-4-128.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/god-module-4-128.png",
+      "sha256": "0ba9f5754519cf24b43135695d2e1d369b5be7328a0ec2c60ccd0bfc9ff6bf46"
+    },
+    "__bobicons__/graphics/icons/bobmodules/god-module-5-128.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobmodules/god-module-5-128.png",
+      "sha256": "05ea2367e618a9d88e55271288bf2451c236cb24f953019fc2853f41e4bb1a81"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_1.png",
+      "sha256": "6fc3aa26cb5565fac9a9440bfdb66aaaf836fb19686228896a72628ac14e9696"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_2.png",
+      "sha256": "b8dc04b8da7ca24ba8d14607f1aea8cf0c4bcc5f5577aeb86f2326a90826ba7e"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_3.png",
+      "sha256": "ad6373e77aa9ab734a76740cbf313bb2a459cb3f1bab1f6caf835ae49c5a7bb1"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_4.png",
+      "sha256": "923829bfaa03eda997fda8c49e18875a1d597e3d32957b2ec19ba677de193d89"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_5.png",
+      "sha256": "d6ebb01a42b5204abac2dc67a3a7bcd29c8c062a7f2296d1d6d2303d12bd83a4"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_6.png",
+      "sha256": "147c7c5b03c6898a91b9920b9cdd092865757e7638935dc9e019296006350d28"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_7.png",
+      "sha256": "7865a0039c8d8779aeb1606833ba1c23bb6f2f790ea5e7097fb21cb2c1701e76"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/green/green_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/green/green_8.png",
+      "sha256": "fc18d276197290928fb67819e30c7d824c814117274f58bb9112a3c8303899e0"
+    },
+    "__bobicons__/graphics/icons/bobtech/lab-module.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/bobtech/lab-module.png",
+      "sha256": "fcdff90d57ab3d74b9b66927af422772e3e4a86435eaa7520254a4a07dedcd6a"
+    },
+    "__bobmodules__/graphics/icons/module-case.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-case.png",
+      "sha256": "243cd38711ba57017e2eaec9c648366cc42b9ec28263f493de5a3b3ea948585c"
+    },
+    "__bobmodules__/graphics/icons/module-circuit-board.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-circuit-board.png",
+      "sha256": "5eb89bc938dc150d8bea7076cf53aeeaa86f08f77117b8aa87b33a1d66a94eca"
+    },
+    "__bobicons__/graphics/icons/CoppermineBobModuleRebalancing/module-combining-case-64.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/CoppermineBobModuleRebalancing/module-combining-case-64.png",
+      "sha256": "23e8e548f28ea39106eae1f69759ad0582486be3d36aed6844f3a655fb7758c8"
+    },
+    "__bobicons__/graphics/icons/CoppermineBobModuleRebalancing/module-combining-solder-64.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/icons/CoppermineBobModuleRebalancing/module-combining-solder-64.png",
+      "sha256": "dd3ca73e350727f95a52646ab475e5ac1e9e81bd87082fdf1a60e2b39d5fe1e8"
+    },
+    "__bobmodules__/graphics/icons/module-contact.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-contact.png",
+      "sha256": "9f456f0f799fcee9b63943edb0ff9a64f18a756d6acef8f5ef5bb9a980d0e2bd"
+    },
+    "__bobmodules__/graphics/icons/module-processor-board.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-processor-board.png",
+      "sha256": "01fec55f7bbc13364f0c2f4ef572ab959deecd45b43c872e617e4549365b4c05"
+    },
+    "__bobmodules__/graphics/icons/module-processor-board-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-processor-board-2.png",
+      "sha256": "f3f391d456f27c0cb802577e97abeb09a4f631f20d321e0e7305a929860616b6"
+    },
+    "__bobmodules__/graphics/icons/module-processor-board-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/module-processor-board-3.png",
+      "sha256": "190d0e1aef419ca8983beec480d24cb64e298159a75cd9d7d11b205e241b7351"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_1.png",
+      "sha256": "670f81705db2614d26bc2d945d6df7e8a459d1b39fd938addf2bbab4c1073633"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_2.png",
+      "sha256": "aa569e6035d453dfd3da48e4f0f8cf4777d2fd133effce52cfbe26ed57442717"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_3.png",
+      "sha256": "5c93f0858b4f2dc1b754cb123a94ecc9726d91bd5abb7a5bf756b02751904039"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_4.png",
+      "sha256": "e47cb618c4fafe367d1da2b540298958d928a0aaa70a034986060ea8ca434e85"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_5.png",
+      "sha256": "4aa93660182043486aa91f918fc8f68dbe97498b2db26692bfabc812ac63518e"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_6.png",
+      "sha256": "8496d18de281992140bbdd8433d9e4186c8171e6a0c6cdbb45817dcfbf1da2db"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_7.png",
+      "sha256": "5d52f5d5b95da059ea7a0820d070e390ed856434d0d6e8fb705ca2393ef29dc2"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pine/pine_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pine/pine_8.png",
+      "sha256": "ebd68cfd093cb14992893a16bfe0794db0820de88baf23347bdbf51da3fb751b"
+    },
+    "__bobmodules__/graphics/icons/pollution-clean-processor.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-clean-processor.png",
+      "sha256": "a47fddd7e80a5177cda0bbb14782b3bdca2b15cbe72431e5570029f6fcabc21c"
+    },
+    "__bobmodules__/graphics/icons/pollution-clean-processor-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-clean-processor-2.png",
+      "sha256": "232255c21649307b2648adec536f1673d9900e7ff91a19a3e6a700b5b2276d94"
+    },
+    "__bobmodules__/graphics/icons/pollution-clean-processor-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-clean-processor-3.png",
+      "sha256": "12396d392120d527cdc2dc2c5a74a0d41fdd2c80c0dbc1128a22a352eaafeead"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_1.png",
+      "sha256": "f553b0010eecea0c62dd7b660ac8a03f1dccac1f094f2b437a42785449feaae8"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_2.png",
+      "sha256": "84dd9cce34fed6802f61ff400c74fe538034654fab3f0f8dc160fd2cb2f1e7e1"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_3.png",
+      "sha256": "3d3b174af092389a6221bbdb819464233bac5943fb9472317d0027c43f98a738"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_4.png",
+      "sha256": "6f7e5e502e7327c69451f3beb2308ac0698e1bfbc131b5ca9dc1f2b3f17b74d1"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_5.png",
+      "sha256": "9f375c4b7fa26098c395d0b20517e8574040e2674e9c5186d0317c2254ad4d35"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_6.png",
+      "sha256": "8888efde378a3a4a51f15c6bdc97b41f4ccefafc01a6c4e0a398c866f9c35b1c"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_7.png",
+      "sha256": "c1718cd2ebc4871932e615708cf15dc91250dc9b3e8574f293116b8a857852b8"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/brown/brown_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/brown/brown_8.png",
+      "sha256": "d3dc23be92205935fbab31baa50cab1b095c45db8a2707ed88c6cf8e8923dbac"
+    },
+    "__bobmodules__/graphics/icons/pollution-create-processor.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-create-processor.png",
+      "sha256": "a8fc774726d9313973559a82865784501dad5d054b497e2e1e1460fc5f04ad6a"
+    },
+    "__bobmodules__/graphics/icons/pollution-create-processor-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-create-processor-2.png",
+      "sha256": "c5c48484a48ca636c10d9db6fb76a4365e6c0eb3f655766cad6fb8ff3144b4e4"
+    },
+    "__bobmodules__/graphics/icons/pollution-create-processor-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/pollution-create-processor-3.png",
+      "sha256": "66b844702443bea1695b0485e8aa382758458a32ec97f5a1c441b457141cff93"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_1.png",
+      "sha256": "53ddc27992ca60685238a5a623fd3103aa0524d7d790f808183089fd4b4841cb"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_2.png",
+      "sha256": "23979fb8f567e3a097e38a2939e0457f164939ea93b8a365e11f2b8b290b0943"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_3.png",
+      "sha256": "781baecd737e4e049d682836deb6d1d0979854260580329b8fcdae516513fc64"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_4.png",
+      "sha256": "843aec50e57aa6266b496412e20ef72beafc724f9ac836d5b79dcc76798c8afa"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_5.png",
+      "sha256": "fc46a76798a40122d692da9db94684b4771828845afe3730e7716b5ad226007a"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_6.png",
+      "sha256": "b1cf75e5a4e8791be17902b09e8492467ed59ec04c96c52638ccf958b4df2d12"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_7.png",
+      "sha256": "6d6f8d26c0529e3f6e6c7c55ef1d85bee9b6db4b6fc4d20c862999fa4b5b87ed"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/red/red_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/red/red_8.png",
+      "sha256": "10d53bf234855cbc79285d539f796b038a728248eaa94520d49b3576cfd3d365"
+    },
+    "__bobmodules__/graphics/icons/productivity-processor.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/productivity-processor.png",
+      "sha256": "8ecebecccb535331192a588ab7a2961b0900222236f3ee0edde251d66d426d84"
+    },
+    "__bobmodules__/graphics/icons/productivity-processor-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/productivity-processor-2.png",
+      "sha256": "9610dde33e78b84526739139360aa054b0c29821e7fad47cdc998f3b17b843fa"
+    },
+    "__bobmodules__/graphics/icons/productivity-processor-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/productivity-processor-3.png",
+      "sha256": "896b9830d2d9e3542c1fbff65f23a333471aa3797f5300f3244347cfc169f642"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_1.png",
+      "sha256": "d19271e41be36e26b6751ee78cac678ff58fe0a0115bb99237101b8706438dd1"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_2.png",
+      "sha256": "4bc9799e770232c46eb0d4cdb6b32f1be7f0171e3ee34cb5b8339b78b9ee03af"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_3.png",
+      "sha256": "01d50c6fb81d83c36414a0ca70639998b04fe265e5c50443ace2192ea7f4a407"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_4.png",
+      "sha256": "525ffbf8b80ba9f919ec40bf91362931c4a8c961b53888249661b66ad917fc34"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_5.png",
+      "sha256": "1909bd734775d84295dc4a65d22f74396aa1897f4dd78a76f2060ed852477daf"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_6.png",
+      "sha256": "4eb204ac1c71288091ada41b53e5081adbed01af6cdaaf7ad2e5e2f5d4e8a195"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_7.png",
+      "sha256": "854befcd817824374fac2ac2fd06f359e510921ff440f4bdcb173b4a8e25741e"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/pink/pink_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/pink/pink_8.png",
+      "sha256": "59ea17c9402d3644dac61a48cbb97a1275a683dd6fb3c3e084cd810cd3cfd2a4"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_1.png",
+      "sha256": "5a9301281461ff5b8b62cd0276200eb7b923e1c95d9a0fcd6bdcabf0d1897c51"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_2.png",
+      "sha256": "730a0e6ecad26c3ec0e5350816d0e074dea715a50f859f0e0534717718d9df97"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_3.png",
+      "sha256": "3aba0d4bb82e72fad7ab396653b5d6bc3dc88b370e97dd82443bf9c76e830a1b"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_4.png",
+      "sha256": "ea10dafc44260f2404a14f825cbcdde9eab4376d027671c1871baea1f7b34adc"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_5.png",
+      "sha256": "972444136f2645b6369349091482f2fb010445d5d8158cfef5923b0471167687"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_6.png",
+      "sha256": "f5fae0cf7cd95f6ce2b007ebd0efff8c36407e07f3f07ebcc4723aebb0462eef"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_7.png",
+      "sha256": "3fccdfdecdb7722792f39ee069af9d7394c35fb4b8d0ba0aa1278dcd46bffd33"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/cyan/cyan_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/cyan/cyan_8.png",
+      "sha256": "31a2e04678822008b9396d162a98d5a8371adc0e520f35487b4392aafa32e7b2"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_1.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_1.png",
+      "sha256": "46a6019b76603e3fbd487637d45dbddd379b5c80a5b9de131d1d2e1ea4e2780f"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_2.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_2.png",
+      "sha256": "f10b87483a3f849859554be826d98d0b1de1e5217e28338aeb6ac08367c2dc46"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_3.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_3.png",
+      "sha256": "26ce6b2d07e731a27fffde894dd5c823b29ead567a0d5be1de6a585f9cd740c4"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_4.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_4.png",
+      "sha256": "95bff4eafaa3339544c64ddf6ceb7d109a709f1f605d13ce2e4808c6f2cf1c4d"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_5.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_5.png",
+      "sha256": "b35c8135b44d9fc202214db1b2a822815a925e390095cc1ec198fb376c84a906"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_6.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_6.png",
+      "sha256": "45ceb96c9617dd6ddd80185e2d5244414ec512739e2e31d209064d5ec8774fc2"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_7.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_7.png",
+      "sha256": "0253bcd9a88432f5e8e39ff7e9417c8008c69fc59836e1f09396bf4c5bfc9331"
+    },
+    "__reskins-bobs__/graphics/icons/modules/module/blue/blue_8.png": {
+      "source_mod": "reskins-bobs",
+      "source_file": "graphics/icons/modules/module/blue/blue_8.png",
+      "sha256": "2853b0beb8cf4778804155392d17fa1d1c28f8264bc5146055a8e877e0ab2c4a"
+    },
+    "__bobmodules__/graphics/icons/speed-processor.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/speed-processor.png",
+      "sha256": "8e7dd569e864cf3dec7a864450075cbbeb9b29f2c016cb7f63ed7028b44d4a10"
+    },
+    "__bobmodules__/graphics/icons/speed-processor-2.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/speed-processor-2.png",
+      "sha256": "d89d5e16d370bdbbf4f0a195bf10cf8cca50142fa4a363267bc4042599583403"
+    },
+    "__bobmodules__/graphics/icons/speed-processor-3.png": {
+      "source_mod": "bobmodules",
+      "source_file": "graphics/icons/speed-processor-3.png",
+      "sha256": "4179b432fdb87fc3f568b54eb5fd51198100ebe5707b7a2f469c3a888ffe3f68"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-1.png",
+      "sha256": "09635c74a405add99443cb40878c219bd772ebb4af86e5e0327eaebe2c1d6b45"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-2.png",
+      "sha256": "1b3798c7aad301772f5b7c4024e5a7368a6c16de2a524a0a71479324b6843cfd"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-3.png",
+      "sha256": "d3f543528ee02b0571aec916ed2748355c05f88c36cd2e4a2a61b7670c5a9690"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-4.png",
+      "sha256": "61f3924956ceed35e167a6cb42e970a3a9b70c42fdcd3640ea3c60bedb7af97c"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-5.png",
+      "sha256": "1ab246bba35951ef6e48ed0aceeec6fa0584fcb7e0bf6ff610a227450720fd21"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-6.png",
+      "sha256": "107cbfe1b9222af6437261a33c469e33e47c70cac169588727d10c96ebd861d0"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-7.png",
+      "sha256": "0989b4b972f531fcd80f60858d220faed91e0d2a2a96088aae0190705fdd9264"
+    },
+    "__bobicons__/graphics/technology/modules/yellow-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/yellow-module-8.png",
+      "sha256": "a03a84ab5774db9aa7e891ad09bee75c811f6c874bf352c356caabd9beb6c23e"
+    },
+    "__bobicons__/graphics/technology/modules/god-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/god-module-1.png",
+      "sha256": "13f33ec6b90c0128c8f7587e05277f169e71ecd324f3caa2efa9cfd911808fc6"
+    },
+    "__bobicons__/graphics/technology/modules/god-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/god-module-2.png",
+      "sha256": "66ac907555935b498193d4a85169ac566012df7295c8334636b35ad209af20f1"
+    },
+    "__bobicons__/graphics/technology/modules/god-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/god-module-3.png",
+      "sha256": "7b3aa52e532c17ec56084b616efad76f3a0a86449b0490f64ccf587a4d3b8aac"
+    },
+    "__bobicons__/graphics/technology/modules/god-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/god-module-4.png",
+      "sha256": "141459b40273885bd4f6f9775e0592fc002a459957440a796498cb07d66a203d"
+    },
+    "__bobicons__/graphics/technology/modules/god-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/god-module-5.png",
+      "sha256": "bd2020c4bf04e8948e1770e72dffa748bf6793af3cc915f2584feccdbae23dd3"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-1.png",
+      "sha256": "45187b2573bb3df0973172b38c9c5e8420dd2214210ea4f3fb990fa30a240bbe"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-2.png",
+      "sha256": "23bb9a1b40ad01bf21569d82cc3d7ede1db45ab4e501b1abb7cd652dd284f987"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-3.png",
+      "sha256": "8fb1dab005509cc2b762e4724f210cd87f4113d980266e2202ba100a674faf10"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-4.png",
+      "sha256": "35a7e795aa1ed17c571b66b2c102023ea2eaecff93c9abe8150092ee2bd2702a"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-5.png",
+      "sha256": "7d8c7439c3bceacb749c6a74d7e5c0ac171c44c891bcf632ae8e23c847537ab4"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-6.png",
+      "sha256": "be23472689a224f1b2f05d0a23d0347ef06ac9233f32c42cbf257681fb388e89"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-7.png",
+      "sha256": "484250d081161eb3a44c242581459ee788ce04b5deb899b77b256ec7265b8879"
+    },
+    "__bobicons__/graphics/technology/modules/green-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/green-module-8.png",
+      "sha256": "26ded6e6470eabd334ecc3270c40c46b9035f36863389fc0b3b7f1298beb53e7"
+    },
+    "__ShinyBob_Techs__/graphics/technologies/modules-2.png": {
+      "source_mod": "ShinyBob_Techs",
+      "source_file": "graphics/technologies/modules-2.png",
+      "sha256": "49185ea15ffede4a897f968026fbfdfb15aa59322ca888d69ffac63faecdd93d"
+    },
+    "__ShinyBob_Techs__/graphics/technologies/modules-1.png": {
+      "source_mod": "ShinyBob_Techs",
+      "source_file": "graphics/technologies/modules-1.png",
+      "sha256": "9091a4b59cbf1c34e635366966a2daba82363fc5d0c4227c5bfae3c08377ada2"
+    },
+    "__reskins-angels__/graphics/technology/bioprocessing/modules-2.png": {
+      "source_mod": "reskins-angels",
+      "source_file": "graphics/technology/bioprocessing/modules-2.png",
+      "sha256": "f90558bd2069c2a323a250a5ce269156a391564bf3da35b9d12a9a01f7e4bdbc"
+    },
+    "__reskins-angels__/graphics/technology/bioprocessing/modules-3.png": {
+      "source_mod": "reskins-angels",
+      "source_file": "graphics/technology/bioprocessing/modules-3.png",
+      "sha256": "4255ac98c8730013a6deebf28761249fa744e09ce01a0f014d465f23ceac67b4"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-1.png",
+      "sha256": "f84ec9953ac1a78da802fe59663b7e13519bf6903d22e5e81d7f7005302b7c4c"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-2.png",
+      "sha256": "69d66f311b849f60cbe4ff9d6aec90bab8b580fff7e6b2bd26b12e42df7084a7"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-3.png",
+      "sha256": "ef21ed629c0c32b777d7a1d8ffa6bf59028d7ac617f7a411fbefcf5d8d2e37c1"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-4.png",
+      "sha256": "81c40e25f676050b2a9c4361d529c236346e163f03677817b8a1b33c0e5e6049"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-5.png",
+      "sha256": "fbc26add27ac7593118182810a609747dcef3467d8ac432e5c7f84c2f52c6a40"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-6.png",
+      "sha256": "3f5047185eb6751d0be0e8cca507b3947f2efa1eb5a3fe78daba4f0d840586c4"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-7.png",
+      "sha256": "7b86fd068435a78f935369e0182aba20e6a5aa46beed7cb6a4384cc8f463522e"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-clean-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-clean-module-8.png",
+      "sha256": "d84044097f803582a0bbf2875d3b1e55b7feedc6a33700c9009db71ba4da73cf"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-1.png",
+      "sha256": "a04acc1a2c4297ad254fd1716763e4606985091e8587e466fde651b36e90f9c8"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-2.png",
+      "sha256": "4df22085f4c6ea83e72d79c43c478f6eae65025ee0cb13d83c48279b6b590e3a"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-3.png",
+      "sha256": "0c2e5a40766bf21aa349b33f963fd7b7cde98d760c805d46165203a0b229e1e4"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-4.png",
+      "sha256": "5e4c5633d858ad1e37714f9f1b483f8a9bd83d0f43967b5009df00e1e5e22bae"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-5.png",
+      "sha256": "c08d3d8ee47fbe06f9f3d08e33fe22bda88cfacd1d72fcfda006627700479218"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-6.png",
+      "sha256": "d74cc3fed3334cbeb63b8deb55e7040bf46b1156a41aa27d23637fd76a1ad275"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-7.png",
+      "sha256": "39c0d9d57ddc678b419a385c2e7e4c1af3cbfa14bdec987047e7d19663c00cd5"
+    },
+    "__bobicons__/graphics/technology/modules/pollution-create-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/pollution-create-module-8.png",
+      "sha256": "c64a40a7deaa93f709be55030a97d18c77f221f23d77fd7ba6ec8fefff7520a6"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-1.png",
+      "sha256": "06880f19be262b91f2c3d37303690ae5b4f5dbb8be45454810a68c3885b435d0"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-2.png",
+      "sha256": "b687c6c6655587b298ec472bd05426fc390d5cd86f162960082dc22a5fa44376"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-3.png",
+      "sha256": "9debe6e282966656edc6f7338318d5ca2d61fa6ba1251616c4443fd2bf501a4c"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-4.png",
+      "sha256": "bd15f052a00964ada962e8c784aecfc974cca27a3e6dd8f7ee7b641f94a89781"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-5.png",
+      "sha256": "864dee324e473499a3b2743850e76dbbbea54479401950976daa1129672a7332"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-6.png",
+      "sha256": "6b994b826bd45e0b46a9e018ca60c2b0a5e6b6ab1c548c6594ad03c55e061b5b"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-7.png",
+      "sha256": "79ea947ef39653ce96b65ada63de7d1faccd512dfeec25c9bd9e103826fdc688"
+    },
+    "__bobicons__/graphics/technology/modules/red-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/red-module-8.png",
+      "sha256": "78b071ad619a9c6655c5301dca2d51881e4b2cb126454980b9f3a19a2fa9aafe"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-1.png",
+      "sha256": "32c0e795df503aefb8ca35158c145b650407031c46eb0760a2d02ab79c07525c"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-2.png",
+      "sha256": "13cad28d1bbecafc518dddba08094d8cc05e5e1161e015bcffeb7536d5af2625"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-3.png",
+      "sha256": "fe08dfcac269adc1d32ccb8bef2bb1592e459bdfad3cb79fdd2c0185ed7fbce6"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-4.png",
+      "sha256": "7e25dd4d233d28bd21daad82e7f207ee535ef6822192eec55e9675ff19b36701"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-5.png",
+      "sha256": "a93fa91a00036ab8cc3f73ac05628f94e89e53b4449182a4d4a9533424eed278"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-6.png",
+      "sha256": "b09f5363bbf228760a1a0fe4384ceb4b5d0b659ca981e9a67b07efbd285d951d"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-7.png",
+      "sha256": "8bccfd99a62881a70a2cced9adc953f6a22e0191501bcfe7cc32f27ce9dbcda8"
+    },
+    "__bobicons__/graphics/technology/modules/productivity-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/productivity-module-8.png",
+      "sha256": "49ac84d8efec9a34fcbd99de9a7659366a4bfcd933c5b4b16cc46a3829dde69b"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-1.png",
+      "sha256": "831a5975ede3fbf9ee6e14c3e5452b416a10c28dd9ed79bcece03fe957bfbc27"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-2.png",
+      "sha256": "20f36216ace971e4519fe0383f8bf35b68caa1ca94061f26f426707d4ac885a4"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-3.png",
+      "sha256": "4a2f31b406d0ad62591b31d70ef0d75954f2e7e08e592e7c27c1d38d7ba8ddf8"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-4.png",
+      "sha256": "fc963f76652a093aabf950c5a2c15f0ef37a6bc13af9bc51751c7f80958544ad"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-5.png",
+      "sha256": "09525c36c1ea0743c7da7c495c6710f4668e3a04e176c89f63d8e9ccadd81a08"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-6.png",
+      "sha256": "7d82d12b88171f940d7c0b657845f5cc6fd34a3907ce218d693e529a083f1318"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-7.png",
+      "sha256": "ff0c278eee816f307c19d848ca26d0078cc8eb4da4b9f09a26dc569bf307c015"
+    },
+    "__bobicons__/graphics/technology/modules/cyan-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/cyan-module-8.png",
+      "sha256": "931dc3a517b58c82a2fca8f687ea8421db23bffeae40d061c21f1d147f02bacd"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-1.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-1.png",
+      "sha256": "786e4806dff36ea5920ea66dd4a910a81baaef99a6d43c63e09b7ef6b7ab7794"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-2.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-2.png",
+      "sha256": "d3edec65cb7e0332482165d8107d93c9462037e011613ec809d8711ff5cbf0a5"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-3.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-3.png",
+      "sha256": "af1fcf572e3321c2d5e06a5bef035ca0f4cfda4be5f5ee7f786a2bf09c06e1b5"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-4.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-4.png",
+      "sha256": "6f1cebbb9ca702a01f66429db26c2a3133bab10f5ef726e1a151b3a1bdacfb40"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-5.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-5.png",
+      "sha256": "a2d9298bd6530f5bea307e1c753d1f54d9a1e6a282246a988695cee42fbf6c39"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-6.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-6.png",
+      "sha256": "2a3ef331cc4ff5ea5fe130e6c315d68d059fd8e16f9410ed03911b4f86ef03cf"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-7.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-7.png",
+      "sha256": "c8ce6bf5e81e44bc0bfe02e8d6e2d1b89b1f31e89a979c15898d97e84bb29f20"
+    },
+    "__bobicons__/graphics/technology/modules/speed-module-8.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/modules/speed-module-8.png",
+      "sha256": "ec746c20230928b861d792a76465685f3f07a48011bc666822ab2e7a899513af"
+    },
+    "__bobicons__/graphics/technology/tungsten-alloy-processing.png": {
+      "source_mod": "bobicons",
+      "source_file": "graphics/technology/tungsten-alloy-processing.png",
+      "sha256": "c9f5dfaf5a9d292b9d3e2583e51706c3a73f2681948f291079734559fae7dece"
+    },
+    "__base__/graphics/icons/lab.png": {
+      "source_mod": "base",
+      "source_file": "graphics/icons/lab.png",
+      "sha256": "115e05be7a4451269e41a6646581de570a57cb7b5bf4137c3230245d70d2d140"
+    },
+    "__KaoExtended__/graphics/lab/lab-module-working.png": {
+      "source_mod": "KaoExtended",
+      "source_file": "graphics/lab/lab-module-working.png",
+      "sha256": "40b6a7246c65d3149c6fc9449fca9f182948b9ccca34a792caf5d0675c821604"
+    },
+    "__KaoExtended__/graphics/lab/lab-module-base.png": {
+      "source_mod": "KaoExtended",
+      "source_file": "graphics/lab/lab-module-base.png",
+      "sha256": "3a429d29be58dcdf4939017de04d6bd7ad4a269bad8438a7c01fbe15e2bb2dd7"
+    },
+    "__base__/sound/lab.ogg": {
+      "source_mod": "base",
+      "source_file": "sound/lab.ogg",
+      "sha256": "af9a442313064c41ad0d1f01e00c2b9fafff50ba85a837bbd2e29e269fee3804"
+    }
+  }
+}
