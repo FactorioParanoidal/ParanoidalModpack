@@ -303,7 +303,7 @@ local function replaceAngelRefi()
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-crusher-3",
-		{ type = "item", name = "advanced-structure-components", amount = 2 }
+		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-crusher-3",
@@ -312,7 +312,7 @@ local function replaceAngelRefi()
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-sorting-facility-2",
-		{ type = "item", name = "basic-structure-components", amount = 2 }
+		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-sorting-facility-3",
