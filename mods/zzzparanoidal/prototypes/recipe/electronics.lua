@@ -132,7 +132,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "simple-io",
-		category = "crafting",
+		category = "electronics",
 		enabled = false,
 		energy_required = 15,
 		ingredients = {

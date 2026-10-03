@@ -13,7 +13,7 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-iron-smelting-1", "angels-iro
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-sulfur-processing-1", "condensator2")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-aluminium-smelting-1", "condensator3")
 
-paralib.bobmods.lib.tech.add_recipe_unlock("electronics", "simple-io")
+paralib.bobmods.lib.tech.add_recipe_unlock("logistic-science-pack", "simple-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("advanced-circuit", "standart-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("processing-unit", "advanced-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-advanced-processing-unit", "predictive-io")
