@@ -370,3 +370,65 @@ for name, fields in pairs(patch) do
 		for field, value in pairs(fields) do prototype[field] = value end
 	end
 end
+
+-- По решению пользователя: ERP требует старшее исследование форсированных
+-- двигателей; младшее (нужное для satellite-thruster) уже является его предком.
+local materials = data.raw.technology["extremely-advanced-material-processing"]
+local engine = "bob-vehicle-engine-equipment"
+if materials and data.raw.technology[engine] then
+	local found = false
+	for _, prerequisite in ipairs(materials.prerequisites or {}) do
+		if prerequisite == engine then found = true; break end
+	end
+	if not found then
+		materials.prerequisites = materials.prerequisites or {}
+		table.insert(materials.prerequisites, engine)
+	end
+end
+
+-- В Beta 8 отключено: старого silo_script.add_tracked_item больше нет.
+-- Сохраняем прототип для существующих сохранений, но убираем пустое исследование.
+local tracking = data.raw.technology["satellite-tracking"]
+if tracking then
+	tracking.hidden = true
+	tracking.enabled = false
+end
+
+-- Показываем источник первых данных без фиктивного рецепта или выдачи предметов.
+local function add_launch_hint(technology_name, data_name, description)
+	local space_lab = data.raw.technology[technology_name]
+	local station_data = data.raw.tool and data.raw.tool[data_name]
+	if not space_lab or not station_data then return end
+	space_lab.effects = space_lab.effects or {}
+	local found = false
+	for _, effect in ipairs(space_lab.effects) do
+		if effect.type == "nothing" and type(effect.effect_description) == "table"
+			and effect.effect_description[1] == description then found = true; break end
+	end
+	if not found then
+		table.insert(space_lab.effects, {
+			type = "nothing",
+			effect_description = { description },
+			icon = station_data.icon,
+			icon_size = station_data.icon_size,
+			icons = station_data.icons and table.deepcopy(station_data.icons) or nil,
+			use_icon_overlay_constant = false,
+		})
+	end
+end
+add_launch_hint("space-lab", "station-science", "technology-effect.paranoidal-space-lab-data")
+add_launch_hint("observation-satellite", "planetary-data", "technology-effect.paranoidal-observation-satellite-data")
+
+-- Оба источника данных должны быть видны в дереве специализированных нагрузок.
+local payloads = data.raw.technology["extremely-advanced-rocket-payloads"]
+local observation = "observation-satellite"
+if payloads and data.raw.technology[observation] then
+	local found = false
+	for _, prerequisite in ipairs(payloads.prerequisites or {}) do
+		if prerequisite == observation then found = true; break end
+	end
+	if not found then
+		payloads.prerequisites = payloads.prerequisites or {}
+		table.insert(payloads.prerequisites, observation)
+	end
+end
