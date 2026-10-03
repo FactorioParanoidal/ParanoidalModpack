@@ -32,6 +32,9 @@ AssemblerTweak("assembling-machine-3")
 AssemblerTweak("bob-assembling-machine-4")
 AssemblerTweak("bob-assembling-machine-5")
 AssemblerTweak("bob-assembling-machine-6")
+AssemblerTweak("assembling-machine-7")
+AssemblerTweak("assembling-machine-8")
+AssemblerTweak("assembling-machine-9")
 
 -- from KaoExtended (issue #190: было 4 — рецепты зданий 2.0 требуют 5-6 ингредиентов, AM2 не крафтился в AM1)
 data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 6
