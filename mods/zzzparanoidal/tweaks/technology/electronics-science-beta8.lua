@@ -14,6 +14,7 @@ local prerequisites = {
 	["utility-science-pack"] = {
 		"processing-unit", "low-density-structure", "electric-engine", "bob-battery-2",
 		"bob-ceramics", "nuclear-power", "logistics-3",
+		"automation-3", "angels-tungsten-smelting-1",
 	},
 	-- Латунные предметы старой zinc-processing теперь открывает brass-processing.
 	["bob-brass-processing"] = { "angels-brass-smelting-1" },
