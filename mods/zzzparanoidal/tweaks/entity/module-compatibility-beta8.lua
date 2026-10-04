@@ -1,6 +1,8 @@
 -- Angels snapshots these categories in data-updates, before the Beta 8 modules
 -- are restored. Repair only that stale whitelist; keep custom/empty filters and
--- unrestricted bio buildings unchanged. Do not enable Raw Productivity here.
+-- unrestricted bio buildings unchanged. Raw Productivity is restored only for
+-- machines with confirmed Beta 8 eligibility, never by a global category grant.
+local raw_productivity_machines = require("tweaks.entity.raw-productivity-beta8-machines")
 local stale_categories = {
     productivity = true,
     speed = true,
@@ -27,6 +29,11 @@ for _, entity_type in ipairs({ "assembling-machine", "furnace", "mining-drill", 
                     if data.raw["module-category"][category] then
                         updated[#updated + 1] = category
                     end
+                end
+                if raw_productivity_machines[entity_type]
+                    and raw_productivity_machines[entity_type][entity.name]
+                    and data.raw["module-category"]["raw-productivity"] then
+                    updated[#updated + 1] = "raw-productivity"
                 end
                 entity.allowed_module_categories = updated
             end

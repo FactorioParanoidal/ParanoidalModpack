@@ -87,5 +87,8 @@ for name, recipe in pairs(data.raw.recipe) do
     recipe.allow_productivity = next(permitted) ~= nil
 end
 
+require("tweaks.recipe.module-productivity-beta8")
 require("tweaks.entity.module-compatibility-beta8")
+require("tweaks.entity.module-slots-beta8")
+require("tweaks.recipe.module-productivity-cap-beta8")
 require("tweaks.technology.god-module-duplicate")
