@@ -1,6 +1,12 @@
 local UI=require("ui")
-script.on_init(function() storage.native_players={}; storage.native_graphs={} end)
-script.on_configuration_changed(UI.invalidate)
+local Goal=require("goal")
+script.on_init(function() storage.native_players={}; storage.native_graphs={}; storage.ptt_goals={} end)
+script.on_configuration_changed(function()
+  UI.invalidate()
+  storage.ptt_goals = storage.ptt_goals or {}
+  -- Goals survive mod updates; a removed goal technology is dropped with a message.
+  Goal.validate()
+end)
 script.on_event("ptt-toggle",function(e)
   local p=game.get_player(e.player_index)
   if UI.root(p) then UI.close(p) else UI.open(p) end
@@ -28,14 +34,26 @@ script.on_event(defines.events.on_player_changed_force,function(e)
   storage.native_players[p.index]=nil
   if was then UI.open(p) end
 end)
-script.on_event({defines.events.on_research_started,defines.events.on_research_finished,defines.events.on_research_cancelled},function(e)
-  for _,p in pairs(game.connected_players) do
-    if UI.root(p) then
-      -- Defer panel rebuild: add_research can raise this event within the click handler.
-      UI.state(p).refresh_due=true
-    end
+local function refresh(force)
+  -- Defer GUI rebuild: add_research can raise these events within a click handler.
+  for _,p in pairs(force.connected_players) do
+    if UI.root(p) then UI.state(p).refresh_due=true end
   end
+end
+script.on_event(defines.events.on_research_finished,function(e)
+  Goal.on_finished(e)
+  refresh(e.research.force)
 end)
+script.on_event(defines.events.on_research_cancelled,function(e)
+  Goal.on_cancelled(e)
+  refresh(e.force)
+end)
+script.on_event(defines.events.on_research_reversed,function(e)
+  Goal.fill(e.research.force)
+  refresh(e.research.force)
+end)
+script.on_event(defines.events.on_research_started,function(e) refresh(e.research.force) end)
+script.on_event({defines.events.on_research_queued,defines.events.on_research_moved},function(e) refresh(e.force) end)
 script.on_nth_tick(15,function()
   UI.tick()
   for _,p in pairs(game.connected_players) do
