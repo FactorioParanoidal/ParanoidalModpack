@@ -198,6 +198,33 @@ local function init_stages()
 	end
 end
 
+-- Saves started before the Beta 8 change keep the old four-stage layout with
+-- laser cannons in stage 3. init_stages() only writes when storage.stages is
+-- nil, so rebuild the layout here and carry the launch counts over by item.
+local function migrate_stages()
+	if storage.stages == nil then
+		return
+	end
+	local launched = {}
+	for _, stage in pairs(storage.stages) do
+		for _, item in pairs(stage.requirements or {}) do
+			launched[item.item_name] = item.launched or 0
+		end
+	end
+	storage.stages = nil
+	init_stages()
+	for _, stage in pairs(storage.stages) do
+		for _, item in pairs(stage.requirements) do
+			item.launched = launched[item.item_name] or 0
+		end
+	end
+	-- A save sitting on the removed fourth stage falls back to the last one;
+	-- required is recomputed by init_launch_multiplier right after this.
+	if (storage.current_stage or 1) > #storage.stages then
+		storage.current_stage = #storage.stages
+	end
+end
+
 local function init_spacex()
 	init_stages()
 	storage.current_stage = storage.current_stage or 1
@@ -253,6 +280,8 @@ script.on_configuration_changed(function(event)
 				table.insert(storage.combinators, { entity = spacexCom })
 			end
 		end
+		-- Rebuild stages before init_spacex() so init_launch_multiplier() recomputes required
+		migrate_stages()
 		-- Update launch mult and combinators
 		storage.launch_mult = nil
 		init_spacex()
