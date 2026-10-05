@@ -144,12 +144,12 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-geode-processing-2", "ange
 paralib.bobmods.lib.tech.remove_recipe_unlock("steel-processing", "basic-structure-components")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-1", "basic-structure-components")
 
---Перенос Каркаса 2, примитивного Цинка и Никеля в Металлургию 2 (AKMF)
+-- Каркас 2 и инвар — в Металлургию 2; электролиз цинка/никеля — раньше, к электролизёру I.
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-zinc-smelting-1", "bob-zinc-electrolysis-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-nickel-smelting-1", "bob-nickel-electrolysis-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "bob-invar-alloy-x")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-zinc-electrolysis-x")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-nickel-electrolysis-x")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "bob-zinc-electrolysis-x")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "bob-nickel-electrolysis-x")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-invar-alloy-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "intermediate-structure-components")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "intermediate-structure-components")
