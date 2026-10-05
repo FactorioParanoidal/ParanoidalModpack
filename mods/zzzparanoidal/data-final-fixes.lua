@@ -244,6 +244,7 @@ require("tweaks.item.angels-components-group") -- целые строки Angel'
 require("tweaks.recipe.lamp-components")
 require("tweaks.technology.lamp-unlocks")
 require("tweaks.entity.assembler-ingredient-descriptions")
+require("tweaks.entity.ore-sorting-bootstrap")
 require("tweaks.recipe.frame-metallurgy-beta8")
 require("tweaks.technology.frame-metallurgy-beta8")
 
