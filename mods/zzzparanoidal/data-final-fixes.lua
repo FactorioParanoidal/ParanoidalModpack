@@ -262,6 +262,11 @@ require("tweaks.technology.action-research-beta8")
 -- После всех восстановлений дерева: согласованные зависимости материалов и компонентов.
 require("tweaks.technology.material-component-gates")
 require("tweaks.technology.disabled-zinc-prerequisites")
+require("tweaks.technology.bronze-axe-beta8")
+require("tweaks.technology.electricity-poles-beta8")
+require("tweaks.technology.wood-phosphorus-beta8")
+require("tweaks.technology.boiler-2-beta8")
+require("tweaks.recipe.nickel-ammo-beta8-port")
 -- После OV и всех производителей/потребителей: Bob-смола → BI-смола в банке.
 require("tweaks.item.unify-resin")
 -- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
