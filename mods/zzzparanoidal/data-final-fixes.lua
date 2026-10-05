@@ -263,5 +263,9 @@ require("tweaks.technology.action-research-beta8")
 require("tweaks.item.unify-resin")
 -- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
 require("tweaks.custom.bobicons-beta8")
--- Согласованная первая вкладка Beta 8; остальное временно в «Неразобранное».
+-- Согласованная первая вкладка Beta 8; неразобранные рецепты пока отдельно.
 require("tweaks.custom.logistics-menu-beta8")
+-- Вторая вкладка: согласованные ряды Bob, без отдельных filter-дублей.
+require("tweaks.custom.bob-logistics-menu-beta8")
+-- Третья вкладка: логика Beta 8 с согласованными устройствами 2.0.
+require("tweaks.custom.circuit-menu-beta8")
