@@ -260,3 +260,5 @@ require("prototypes.loader-shells")
 require("tweaks.technology.action-research-beta8")
 -- После OV и всех производителей/потребителей: Bob-смола → BI-смола в банке.
 require("tweaks.item.unify-resin")
+-- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
+require("tweaks.custom.bobicons-beta8")
