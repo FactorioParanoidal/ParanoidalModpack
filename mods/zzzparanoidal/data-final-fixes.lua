@@ -262,3 +262,5 @@ require("tweaks.technology.action-research-beta8")
 require("tweaks.item.unify-resin")
 -- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
 require("tweaks.custom.bobicons-beta8")
+-- Согласованная первая вкладка Beta 8; остальное временно в «Неразобранное».
+require("tweaks.custom.logistics-menu-beta8")
