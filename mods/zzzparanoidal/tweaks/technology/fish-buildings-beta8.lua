@@ -19,6 +19,8 @@ if second and redundant and third and data.raw.recipe[recipe] then
 	end
 	second.effects = second.effects or {}
 	table.insert(second.effects, { type = "unlock-recipe", recipe = recipe })
+	-- Display the third active tier without renaming the saved technology ID.
+	third.localised_name = { "technology-name.paranoidal-fish-farm-3" }
 	third.prerequisites = {
 		"angels-bio-refugium-fish-2", "chemical-science-pack", "processing-unit", "angels-titanium-smelting-1",
 	}
