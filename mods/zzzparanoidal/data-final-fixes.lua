@@ -259,6 +259,8 @@ require("prototypes.electric-loaders")
 require("prototypes.loader-shells")
 -- После всех правок технологий: возврат триггерных исследований на цену банок Beta 8.
 require("tweaks.technology.action-research-beta8")
+-- После всех восстановлений дерева: согласованные зависимости материалов и компонентов.
+require("tweaks.technology.material-component-gates")
 -- После OV и всех производителей/потребителей: Bob-смола → BI-смола в банке.
 require("tweaks.item.unify-resin")
 -- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
