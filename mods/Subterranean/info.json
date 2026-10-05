@@ -1,0 +1,15 @@
+{
+  "name": "Subterranean",
+  "version": "2.0.0",
+  "title": "Subterranean — Paranoidal Beta 8 port",
+  "author": "Gangsir, Bilka, RealVictorPRM; Paranoidal maintainers (2.0 port)",
+  "homepage": "https://forums.factorio.com/55740",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.77",
+    "boblogistics >= 2.1.1",
+    "bobplates >= 2.1.1",
+    "angelspetrochem >= 2.0.3"
+  ],
+  "description": "Paranoidal-maintained port of its Beta 8 Subterranean 0.5.3 variant: three 250-tile underground belts and a 250-tile pipe. Distance costs are paid in the recipes, not when placing entities. Requires the Paranoidal Bob/Angels recipe environment."
+}

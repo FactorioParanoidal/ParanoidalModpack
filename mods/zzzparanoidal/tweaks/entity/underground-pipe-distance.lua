@@ -1,4 +1,5 @@
 -- Длины тоннелей подземных труб.
+-- С Subterranean сохраняем его 100 клеток из Beta 8; без него действует правило ниже.
 -- Пластик = ровно два участка железной/медной трубы встык (замена 2-в-1): два участка по D
 -- перекрывают 2*D + 1 тайлов (D на каждый + 1 тайл стыка между ними), при базовых D=10 → 21.
 -- На data-updates, чтобы show-max-underground-distance (печёт индикатор дальности в data-final-fixes)
@@ -15,6 +16,6 @@ end
 
 local iron = pipe_ug_connection("pipe-to-ground") -- железная = медная по дальности
 local plastic = pipe_ug_connection("bob-plastic-pipe-to-ground")
-if iron and plastic then
+if not mods["Subterranean"] and iron and plastic then
 	plastic.max_underground_distance = iron.max_underground_distance * 2 + 1
 end

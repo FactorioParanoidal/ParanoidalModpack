@@ -50,6 +50,7 @@
     "? reskins-library",
     "? reskins-bobs",
     "? reskins-compatibility",
-    "? prismatic-belts"
+    "? prismatic-belts",
+    "? Subterranean >= 2.0.0"
   ]
 }
