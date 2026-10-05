@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-10-05
+  Changes:
+    - Local Paranoidal patch based on portal version 2.0.1; not an upstream release.
+    - Coalesces GUI updates per connected player instead of scanning all players while idle.
+    - Avoids redundant button property writes and repeated allocation of button definitions.
+    - Filters construction events to the objects used by installed integrations.
+    - Honors the configured logging level and caches logging settings.
+  Bugfixes:
+    - Stores runtime state in Factorio 2.0 storage and restores its reference on load.
+    - Rebuilds missing GUI bookkeeping on upgrade without deleting existing player GUI or settings.
+    - Prevents multiple events from permanently blocking the update counter.
+    - Corrects selected-window state comparison and duplicate event registrations.
+    - Uses Factorio 2.0 construction and cloning event fields.
+    - Prevents failed panel updates from being retried continuously every six ticks.
+  Info:
+    - Runtime, save/reload compatibility and performance are not yet verified in game.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025-02-07
   Changes:
