@@ -1,5 +1,6 @@
 local G = require("graph")
 local Goal = require("goal")
+local Toolbar = require("toolbar")
 local M = {}
 local ROOT = "ptt_native"
 local SIZES = {48, 64, 80, 96}
@@ -102,6 +103,10 @@ local function techbutton(parent, p, name, size, st)
     tooltip={"",t.localised_name,"\n",{"ptt.status-"..st}},
     tags={ptt=true,action="select",tech=name}, toggled=state(p).selected==name}
   b.style.size=size
+  local s = state(p)
+  if s.collect_panel_buttons then
+    s.panel_buttons[#s.panel_buttons+1] = {button=b, tech=name, size=size}
+  end
   return b
 end
 
@@ -434,12 +439,35 @@ local function tech_table(parent, p, names, ctx, columns_count)
   return tbl
 end
 
-function M.panel(p)
+function M.panel(p, queue_only)
   local s=state(p)
   if not root(p) then return end
+  if queue_only and s.panel_buttons then
+    local ctx = context(p)
+    for _, ref in ipairs(s.panel_buttons) do
+      if ref.button.valid then
+        local status = G.status(p.force, ref.tech, ctx.qi, ctx)
+        ref.button.style = STYLES[status]; ref.button.style.size = ref.size
+        ref.button.tooltip = {"", p.force.technologies[ref.tech].localised_name, "\n", {"ptt.status-"..status}}
+      end
+    end
+    for name, add in pairs(s.panel_add or {}) do
+      if add.valid then add.enabled = G.status(p.force, name, ctx.qi, ctx) == "available" end
+    end
+    local status = G.status(p.force, s.selected, ctx.qi, ctx)
+    if s.panel_research and s.panel_research.valid then s.panel_research.enabled = status == "available" end
+    if s.panel_status and s.panel_status.valid then
+      s.panel_status.caption = {"ptt.status-"..status}; s.panel_status.style.font_color = COLORS[status]
+    end
+    if s.panel_notice and s.panel_notice.valid then
+      s.panel_notice.caption = s.notice or ""; s.panel_notice.visible = s.notice ~= nil
+    end
+    return
+  end
   local body=s.panel; body.clear()
+  s.panel_buttons={}; s.panel_add={}; s.collect_panel_buttons=true
   local t=s.selected and p.force.technologies[s.selected]
-  if not t then text(body,{"ptt.select-hint"}); return end
+  if not t then s.collect_panel_buttons=nil; text(body,{"ptt.select-hint"}); return end
   local ctx = context(p)
   M.help(p, ctx)
   local width=s.panel_width-30
@@ -447,6 +475,7 @@ function M.panel(p)
   techbutton(body,p,t.name,64)
   local st=G.status(p.force,t.name)
   local l=text(body,{"ptt.status-"..st},width); l.style.font_color=COLORS[st]
+  s.panel_status=l
   if t.prototype.research_trigger then
     local cond = text(body, trigger_text(t.name), width); cond.style.font_color = COLORS.trigger
     text(body,{"ptt.trigger-hint"},width)
@@ -462,6 +491,7 @@ function M.panel(p)
   local b=button(body,"research",{"ptt.research"})
   b.style.width=width; b.tooltip={"ptt.research-hint"}
   b.enabled=st=="available"
+  s.panel_research=b
   local goal = ctx.goal
   local gb
   if goal and goal.tech == t.name then
@@ -471,7 +501,8 @@ function M.panel(p)
     gb.enabled = st ~= "done"
   end
   gb.style.width = width
-  if s.notice then text(body,s.notice,width) end
+  s.panel_notice=text(body,s.notice or "",width)
+  s.panel_notice.visible=s.notice ~= nil
   -- Path to the selected technology.
   local plan = st ~= "done" and G.plan(ctx.g, p.force, t.name, ctx.done) or nil
   if plan then
@@ -486,7 +517,17 @@ function M.panel(p)
     end
     if #plan.ready > 0 then
       local r = title(body, {"ptt.path-ready", #plan.ready}); r.style.font_color = COLORS.available
-      tech_table(body, p, plan.ready, ctx)
+      local ready = body.add{type="table", column_count=3}
+      for _, name in ipairs(plan.ready) do
+        local cell = ready.add{type="flow", direction="horizontal"}
+        cell.style.horizontal_spacing = 0
+        cell.style.vertical_align = "center"
+        local status = G.status(p.force, name, ctx.qi, ctx)
+        techbutton(cell, p, name, 48, status)
+        local add = mini(cell, "queue_one", "+", {"ptt.queue-one", p.force.technologies[name].localised_name}, {tech=name})
+        add.enabled = status == "available"
+        s.panel_add[name] = add
+      end
     end
     if #plan.triggers > 0 then
       local r = title(body, {"ptt.path-triggers", #plan.triggers}); r.style.font_color = COLORS.trigger
@@ -518,6 +559,7 @@ function M.panel(p)
         elem_tooltip={type="recipe",name=effect.recipe},style="slot_button"}
     end
   end
+  s.collect_panel_buttons=nil
 end
 
 -- View switch (full tree / chain), pin and the "View" menu state.
@@ -570,6 +612,7 @@ function M.close(p)
   local s=state(p)
   local r=root(p)
   if r then r.destroy() end
+  Toolbar.sync(p, false)
   s.scroll=nil; s.panel=nil; s.cards=nil; s.refs=nil; s.status_labels=nil; s.summary=nil; s.open=false
   s.nav=nil; s.queue_flow=nil; s.goal_flow=nil; s.progress=nil; s.headers=nil
   s.view_all=nil; s.view_chain=nil; s.pin_button=nil; s.menu=nil; s.size_label=nil; s.help=nil
@@ -647,6 +690,7 @@ function M.open(p)
   s.panel=panel.add{type="flow",direction="vertical"}; s.panel.style.vertical_spacing=8
   s.open=true -- no world camera or surface exists in this implementation
   p.opened=r
+  Toolbar.sync(p, true)
   update_view(p)
   local goal = Goal.get(p.force)
   if s.selected and (s.user_selected or (goal and goal.tech == s.selected)) then reveal(p, s.selected) end
@@ -687,9 +731,13 @@ function M.select(p,name)
 end
 
 -- Mark open windows of every player in the force for a deferred refresh.
-function M.refresh_force(force)
+function M.refresh_force(force, queue_only)
   for _, q in pairs(force.connected_players) do
-    if root(q) then state(q).refresh_due = true end
+    if root(q) then
+      local s=state(q)
+      s.refresh_due = true
+      if not queue_only then s.full_panel_refresh = true end
+    end
   end
 end
 
@@ -735,7 +783,9 @@ function M.click(e)
   local p=game.get_player(e.player_index); if not p then return end
   local s=state(p); local a=tag.action
   local force = p.force
-  if a=="close" then M.close(p)
+  if a=="toolbar_toggle" then
+    if root(p) then M.close(p) else M.open(p) end
+  elseif a=="close" then M.close(p)
   elseif a=="select" then M.select(p,tag.tech)
   elseif a=="help" then
     s.help_hidden = not s.help_hidden
@@ -772,6 +822,21 @@ function M.click(e)
   elseif a=="nav" then
     local h = s.headers and s.headers[tag.key]
     if h and h.valid then s.scroll.scroll_to_element(h, "top-third") end
+  elseif a=="queue_one" then
+    -- Do not select the prerequisite, rebuild the tree or create an automatic goal.
+    local status = G.status(force, tag.tech)
+    if status == "available" then
+      local queue = G.queue(force)
+      if #queue >= QUEUE_SLOTS then
+        s.notice = {"ptt.queue-full"}
+      else
+        local ok = force.add_research(tag.tech)
+        s.notice = {ok and "ptt.added" or "ptt.rejected"}
+      end
+    else
+      s.notice = {"ptt.status-"..status}
+    end
+    M.refresh_force(force, true); M.refresh(p); M.panel(p, true)
   elseif a=="research" then
     if s.selected and G.status(force,s.selected)=="available" then
       local ok=force.add_research(s.selected)

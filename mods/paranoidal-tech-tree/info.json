@@ -1,9 +1,9 @@
 {
   "name": "paranoidal-tech-tree",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "title": "Paranoidal Tech Tree",
   "author": "Paranoidal",
   "factorio_version": "2.0",
   "description": "Native GUI technology browser: readable zoom, science-pack eras without horizontal scrolling, focused chains, search, path planner, shared research goal with automatic queue filling and an in-window research queue. No camera or private surfaces.",
-  "dependencies": ["base >= 2.0.77", "? helmod", "? more-minimap-autohide-017", "? cybersyn"]
+  "dependencies": ["base >= 2.0.77", "? helmod", "? more-minimap-autohide-017", "? cybersyn", "? GUI_Unifyer"]
 }
