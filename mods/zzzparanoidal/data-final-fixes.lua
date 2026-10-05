@@ -253,3 +253,6 @@ require("tweaks.custom.flowfix")
 require("prototypes.modules-beta8")
 require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8 + космические данные.
 require("tweaks.item.titanium-icon") -- После reskins и поздних копирований иконок.
+-- После финальных скоростей лент, стоимости AAI, restack, flowfix и OV.execute.
+require("prototypes.electric-loaders")
+require("prototypes.loader-shells")

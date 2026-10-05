@@ -1,4 +1,8 @@
 data:extend({
+  {type = "double-setting", name = "paranoidal-miniloader-energy-multiplier", setting_type = "startup",
+    default_value = 4, minimum_value = 0.01, maximum_value = 100, order = "loader-a"},
+  {type = "bool-setting", name = "paranoidal-loader-auto-connect", setting_type = "runtime-global",
+    default_value = true, order = "loader-b"},
   --Разброс вещей из сундуков
   {type = "bool-setting", name = "item-drop", setting_type = "startup", default_value = true, order = "b"},
   --Ресурсы на дефолте х5 богатство

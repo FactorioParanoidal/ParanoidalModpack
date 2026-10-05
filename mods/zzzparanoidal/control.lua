@@ -2,6 +2,7 @@ require("controls.heroturrets_script") -- скрипт разжалования 
 require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
 require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
+local loader_shells = require("controls.loader-shells")
 -- ###############################################################################################
 -- from some corpse marker
 script.on_event(defines.events.on_pre_player_died, function(event)
@@ -105,6 +106,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	apply_dark_nights()
 	disable_obsolete_basic_logistics()
 	sync_air_filter_beta8()
+	loader_shells.init()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -131,6 +133,7 @@ script.on_configuration_changed(function(data) --фикс эволюции пр�
 	apply_dark_nights()
 	disable_obsolete_basic_logistics()
 	sync_air_filter_beta8()
+	loader_shells.init()
 end)
 
 script.on_event(defines.events.on_surface_created, apply_dark_nights)
