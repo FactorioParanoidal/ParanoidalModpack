@@ -10,5 +10,6 @@ if crusher then
 end
 local water = data.raw.technology["angels-water-treatment"]
 if water and water.max_level ~= "infinite" then
-	water.prerequisites = { "angels-fluid-control", "basic-fluid-handling" }
+	-- Гидростанция требует простой каркас, открываемый металлургией I.
+	water.prerequisites = { "angels-fluid-control", "basic-fluid-handling", "angels-metallurgy-1" }
 end

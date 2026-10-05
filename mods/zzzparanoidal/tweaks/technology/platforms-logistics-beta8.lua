@@ -8,7 +8,8 @@ local prerequisites = {
 	["distractor"] = { "defender", "military-3", "laser", "bob-robotics-2", "bob-brass-processing" },
 	["destroyer"] = { "distractor", "speed-module", "bob-robotics-3", "bob-gem-processing-3" },
 	["artillery"] = { "tank", "processing-unit", "angels-invar-smelting-1", "artillery-prototype" },
-	["aai-basic-loader"] = { "logistics-0" },
+	-- Начальный загрузчик требует твердотопливные манипуляторы.
+	["aai-basic-loader"] = { "logistics-0", "burner-mechanics" },
 	["aai-loader"] = { "logistics", "aai-basic-loader", "logistic-science-pack", "angels-steel-smelting-1" },
 	["aai-fast-loader"] = { "logistics-2", "aai-loader", "chemical-science-pack", "fast-inserter" },
 	["aai-express-loader"] = { "logistics-3", "aai-fast-loader", "production-science-pack", "bob-express-inserter" },

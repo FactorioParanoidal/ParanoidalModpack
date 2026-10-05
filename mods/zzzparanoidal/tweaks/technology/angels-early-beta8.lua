@@ -50,7 +50,8 @@ local definitions = {
 			["ingredients"] = { { "automation-science-pack", 1 } },
 			["time"] = 15,
 		},
-		["prerequisites"] = { "angels-water-treatment" },
+		-- Донный насос требует буровую головку I; сам электробур (ПР-034) не меняем.
+		["prerequisites"] = { "angels-water-treatment", "electric-mining-drill" },
 	},
 	["angels-water-washing-2"] = {
 		["prerequisites"] = { "angels-water-washing-1", "landfill", "angels-metallurgy-2" },
