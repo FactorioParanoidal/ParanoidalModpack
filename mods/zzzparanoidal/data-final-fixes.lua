@@ -293,3 +293,5 @@ require("tweaks.custom.modules-menu-beta8")
 require("tweaks.custom.components-menu-beta8")
 -- После компонентов: отдельный Bob, оружие/оборона и оборудование по назначению.
 require("tweaks.custom.bob-combat-menu-beta8")
+-- Самоцветы и личное снаряжение; транспортные робопорты остаются в технике Angels.
+require("tweaks.custom.gems-equipment-menu-beta8")
