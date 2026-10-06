@@ -291,3 +291,5 @@ require("tweaks.custom.production-menu-beta8")
 require("tweaks.custom.modules-menu-beta8")
 -- Седьмая вкладка: тематические блоки компонентов, иконки соответствий Beta 8.
 require("tweaks.custom.components-menu-beta8")
+-- После компонентов: отдельный Bob, оружие/оборона и оборудование по назначению.
+require("tweaks.custom.bob-combat-menu-beta8")
