@@ -295,3 +295,5 @@ require("tweaks.custom.components-menu-beta8")
 require("tweaks.custom.bob-combat-menu-beta8")
 -- Самоцветы и личное снаряжение; транспортные робопорты остаются в технике Angels.
 require("tweaks.custom.gems-equipment-menu-beta8")
+-- Переработка ресурсов и металлургия: только ряды рецептов и согласованные иконки.
+require("tweaks.custom.refining-smelting-menu-beta8")
