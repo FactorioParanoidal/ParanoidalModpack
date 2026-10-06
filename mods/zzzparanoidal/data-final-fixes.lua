@@ -301,3 +301,5 @@ require("tweaks.custom.refining-smelting-menu-beta8")
 require("tweaks.custom.casting-water-menu-beta8")
 -- Нефтехимия и разливка: смысловые ряды и пары наполнения/опорожнения, только меню.
 require("tweaks.custom.petrochem-fluid-menu-beta8")
+-- Производство, транспортное оборудование и общий космос: только размещение рецептов.
+require("tweaks.custom.production-space-menu")
