@@ -112,6 +112,7 @@ if mods["RampantFixed"] then
     set_settings_default_value("int-setting", "rampantFixed--attackWaveMaxSize", 55)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfBuilders", 25)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfSquads", 20)
+    set_settings_default_value("bool-setting", "rampantFixed--undergroundAttack", false)
 
     set_settings_default_value("bool-setting", "rampantFixed--showPlanetAISettings", false)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-bigElectricPole", true)
