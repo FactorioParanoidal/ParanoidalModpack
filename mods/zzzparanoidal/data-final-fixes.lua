@@ -270,6 +270,8 @@ require("tweaks.technology.fluid-barrels-beta8")
 require("tweaks.technology.steam-engine-2-beta8")
 require("prototypes.seafloor-pumps.integration")
 require("removals.angels-sea-pump")
+-- После всех копий насосов и скрытия морского насоса Angels.
+require("tweaks.entity.landfill-pumps")
 require("tweaks.recipe.nickel-ammo-beta8-port")
 -- После OV и всех производителей/потребителей: Bob-смола → BI-смола в банке.
 require("tweaks.item.unify-resin")
