@@ -645,14 +645,6 @@ paralib.bobmods.lib.recipe.set_ingredients("bob-tungsten-carbide-x", {
 	{ type = "item", name = "bob-tungsten-oxide", amount = 12 },
 })
 
---рецепты для новых донных насосов
-paralib.bobmods.lib.recipe.set_ingredients("angels-seafloor-pump", {
-	{ type = "item", name = "mining-drill-bit-mk1", amount = 3 },
-	{ type = "item", name = "pipe", amount = 25 },
-	{ type = "item", name = "bob-basic-circuit-board", amount = 10 },
-	{ type = "item", name = "iron-plate", amount = 25 },
-})
-
 --Разжижители
 paralib.bobmods.lib.recipe.set_ingredients("angels-liquifier", {
 	{ type = "item", name = "iron-plate", amount = 40 },

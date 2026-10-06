@@ -22,8 +22,6 @@ local function addingMiningdrillbits()
 	paralib.bobmods.lib.recipe.add_ingredient("bob-area-mining-drill-2", { type = "item", name = "mining-drill-bit-mk3", amount = 1})
 	paralib.bobmods.lib.recipe.add_ingredient("bob-area-mining-drill-3", { type = "item", name = "mining-drill-bit-mk4", amount = 1})
 	paralib.bobmods.lib.recipe.add_ingredient("bob-area-mining-drill-4", { type = "item", name = "mining-drill-bit-mk5", amount = 1})
-
-	paralib.bobmods.lib.recipe.add_ingredient("angels-seafloor-pump", { type = "item", name = "mining-drill-bit-mk2", amount = 1})
 end
 
 addingMiningdrillbits()

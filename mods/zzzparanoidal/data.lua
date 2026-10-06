@@ -6,6 +6,7 @@ data:extend(table.deepcopy(require("prototypes.super-labs-beta8")))
 -- new entities
 require("prototypes.entity.bio-content")
 require("prototypes.entity.offshore-pumps")
+require("prototypes.seafloor-pumps.data") -- донные насосы I–III Beta 8, электрические
 require("prototypes.entity.battery-electric-train")
 require("prototypes.entity.flame-car")
 require("prototypes.entity.concrete-brick")
