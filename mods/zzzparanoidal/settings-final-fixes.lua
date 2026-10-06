@@ -335,14 +335,6 @@ if mods["SpaceModFeorasFork"] then
         rc.allowed_values = nil
     end
 end
-if mods["SchallTankPlatoon"] then
-    set_settings_default_value("bool-setting", "Schall-TP-ht-RA-enable", false)
-    set_settings_default_value(
-        "string-setting",
-        "Schall-TP-personal-laser-defense-equipment-energy-consumption",
-        "800kJ"
-    )
-end
 if mods["Warehousing"] then
     set_settings_default_value("bool-setting", "Warehousing-sixteen-mode", true)
 end
