@@ -297,3 +297,5 @@ require("tweaks.custom.bob-combat-menu-beta8")
 require("tweaks.custom.gems-equipment-menu-beta8")
 -- Переработка ресурсов и металлургия: только ряды рецептов и согласованные иконки.
 require("tweaks.custom.refining-smelting-menu-beta8")
+-- Отливка и водоочистка: компактные семейства, без изменения рецептур и механики.
+require("tweaks.custom.casting-water-menu-beta8")
