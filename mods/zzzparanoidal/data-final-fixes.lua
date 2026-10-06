@@ -269,3 +269,5 @@ require("tweaks.custom.logistics-menu-beta8")
 require("tweaks.custom.bob-logistics-menu-beta8")
 -- Третья вкладка: логика Beta 8 с согласованными устройствами 2.0.
 require("tweaks.custom.circuit-menu-beta8")
+-- Четвёртая вкладка: возвращённый «Транспорт» Beta 8.
+require("tweaks.custom.transport-menu-beta8")
