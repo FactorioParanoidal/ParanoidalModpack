@@ -299,3 +299,5 @@ require("tweaks.custom.gems-equipment-menu-beta8")
 require("tweaks.custom.refining-smelting-menu-beta8")
 -- Отливка и водоочистка: компактные семейства, без изменения рецептур и механики.
 require("tweaks.custom.casting-water-menu-beta8")
+-- Нефтехимия и разливка: смысловые ряды и пары наполнения/опорожнения, только меню.
+require("tweaks.custom.petrochem-fluid-menu-beta8")
