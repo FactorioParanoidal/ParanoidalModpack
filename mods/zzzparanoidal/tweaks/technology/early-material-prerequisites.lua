@@ -68,6 +68,13 @@ local prerequisites = {
     { "bob-area-drills-4", "bob-drills-4" },
     -- Растительный корм и пульпа для цепочки полных биокристаллов.
     { "angels-bio-refugium-puffer-2", "angels-bio-temperate-farming-1" },
+    { "fluid-level-indicator", "angels-steel-smelting-1" },
+    { "bi-tech-fertilizer", "angels-chlorine-processing-1" },
+    { "bi-tech-advanced-biotechnology", "concrete" },
+    { "angels-bio-refugium-butchery-2", "angels-bio-refugium-puffer-3" },
+    { "life-support-systems", "advanced-osmium-smelting" },
+    { "life-support-systems", "bob-productivity-module-8" },
+    { "space-thrusters", "advanced-osmium-smelting" },
 }
 for _, pair in ipairs(prerequisites) do
     if data.raw.technology[pair[1]] and data.raw.technology[pair[2]] then
