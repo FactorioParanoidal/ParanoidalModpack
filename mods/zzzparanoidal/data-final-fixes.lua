@@ -310,6 +310,8 @@ require("tweaks.custom.recipe-presentation")
 require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
 -- Та же группировка для предметов, жидкостей и Factoriopedia; раскладка рецептов сохраняется.
 require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.prototypes, log)
+-- Согласованные иконки предметов по рецептам; после общих синхронизаторов, чтобы их не перезаписали.
+require("tweaks.custom.recipe-presentation-items")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

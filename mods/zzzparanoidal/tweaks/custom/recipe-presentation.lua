@@ -59,3 +59,50 @@ for _, name in ipairs({"angels-steel-gear-wheel-casting", "ASE-steel-gear-castin
     local recipe = data.raw.recipe[name]
     if recipe then recipe.localised_name = {"recipe-name." .. name} end
 end
+
+-- Batch 2: item icon is authoritative for recipes (recipe overlays are kept).
+-- Angels crushed stone: light grey stone from the inventory item.
+do
+    local item = data.raw.item["angels-stone-crushed"]
+    local recipe = data.raw.recipe["angels-stone-crushed"]
+    if item and recipe and item.icon then
+        recipe.icons = {{icon = item.icon, icon_size = item.icon_size or 64}}
+        recipe.icon, recipe.icon_size, recipe.icon_mipmaps = nil, nil, nil
+    end
+end
+
+-- Bio Industries stone crushing: crushed-stone base plus a small source-stone mark.
+do
+    local item = data.raw.item["angels-stone-crushed"]
+    local stone = data.raw.item["stone"]
+    local recipe = data.raw.recipe["bi-crushed-stone-1"]
+    if item and stone and stone.icon and recipe and item.icon then
+        local stone_size = stone.icon_size or 64
+        recipe.icons = {
+            {icon = item.icon, icon_size = item.icon_size or 64},
+            {icon = stone.icon, icon_size = stone_size, scale = 14 / stone_size, shift = {-10, -10}},
+        }
+        recipe.icon, recipe.icon_size, recipe.icon_mipmaps = nil, nil, nil
+        recipe.localised_name = {"recipe-name.paranoidal-bi-crushed-stone-1"}
+        recipe.localised_description = {"recipe-description.paranoidal-bi-crushed-stone-1"}
+    end
+end
+
+-- Brass gear casting and tungsten roll casting: item artwork as base, melt/mold/I-II marks kept.
+for _, name in ipairs({"angels-brass-gear-wheel-casting", "ASE-brass-gear-casting-expendable",
+    "ASE-brass-gear-casting-advanced"}) do
+    match_product(name, "bob-brass-gear-wheel", true)
+end
+for _, name in ipairs({"angels-roll-tungsten-casting", "angels-roll-tungsten-casting-fast"}) do
+    match_product(name, "angels-roll-tungsten", true)
+end
+
+-- Sodium chloride: white lumps as base of the recipe whose main product is the salt.
+do
+    local lumps = data.raw.recipe["angels-solid-salt-from-saline"]
+    lumps = lumps and lumps.icons and lumps.icons[1]
+    local recipe = data.raw.recipe["angels-solid-sodium-hypochlorite-decomposition"]
+    if lumps and recipe and recipe.icons and recipe.icons[2] then
+        recipe.icons[1] = table.deepcopy(lumps)
+    end
+end
