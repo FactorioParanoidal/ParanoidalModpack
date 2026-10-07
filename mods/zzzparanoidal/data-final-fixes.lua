@@ -56,7 +56,6 @@ require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
 require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
-require("tweaks.technology.research-evolution-icon") -- иконка-график вместо красного "+" у эффекта research_evolution_factor
 require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
 
 require("tweaks.custom.main-menu-background")
@@ -309,3 +308,6 @@ require("tweaks.custom.lighted-pole-icons")
 require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
 -- Та же группировка для предметов, жидкостей и Factoriopedia; раскладка рецептов сохраняется.
 require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.prototypes, log)
+-- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
+-- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
+require("tweaks.technology.research-evolution-icon")
