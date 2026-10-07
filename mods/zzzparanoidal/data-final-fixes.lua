@@ -323,6 +323,9 @@ require("tweaks.custom.recipe-presentation-items")
 require("tweaks.technology.fluid-handling-colors")
 -- Только обычная деревянная труба: без стрелок и прохода сквозь сплошной ряд.
 require("tweaks.entity.wood-pipe")
+-- После восстановления дерева: материалы у предков и единый паровой крекинг I.
+require("tweaks.technology.early-material-prerequisites")
+require("tweaks.technology.steam-cracking-merge")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
