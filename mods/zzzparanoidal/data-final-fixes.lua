@@ -304,6 +304,8 @@ require("tweaks.custom.petrochem-fluid-menu-beta8")
 require("tweaks.custom.production-space-menu")
 -- Единый размер и верхний правый угол метки освещения, после замен иконок меню.
 require("tweaks.custom.lighted-pole-icons")
+-- Точечные исключения по скриншотам: согласованные основы иконок, метки способов сохраняются.
+require("tweaks.custom.recipe-presentation")
 -- После всех правок меню: иконка рецепта — эталон для однозначного предмета.
 require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
 -- Та же группировка для предметов, жидкостей и Factoriopedia; раскладка рецептов сохраняется.
