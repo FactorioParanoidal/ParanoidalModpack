@@ -307,3 +307,5 @@ require("tweaks.custom.production-space-menu")
 require("tweaks.custom.lighted-pole-icons")
 -- После всех правок меню: иконка рецепта — эталон для однозначного предмета.
 require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
+-- Та же группировка для предметов, жидкостей и Factoriopedia; раскладка рецептов сохраняется.
+require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.prototypes, log)
