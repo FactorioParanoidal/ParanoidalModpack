@@ -303,5 +303,7 @@ require("tweaks.custom.casting-water-menu-beta8")
 require("tweaks.custom.petrochem-fluid-menu-beta8")
 -- Производство, транспортное оборудование и общий космос: только размещение рецептов.
 require("tweaks.custom.production-space-menu")
+-- Единый размер и верхний правый угол метки освещения, после замен иконок меню.
+require("tweaks.custom.lighted-pole-icons")
 -- После всех правок меню: иконка рецепта — эталон для однозначного предмета.
 require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
