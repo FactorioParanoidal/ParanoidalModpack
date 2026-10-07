@@ -317,6 +317,8 @@ require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.protot
 require("tweaks.custom.recipe-presentation-items")
 -- Цвета исследований жидкостей согласованы с восстановленными иконками резервуаров.
 require("tweaks.technology.fluid-handling-colors")
+-- Только обычная деревянная труба: без стрелок и прохода сквозь сплошной ряд.
+require("tweaks.entity.wood-pipe")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
