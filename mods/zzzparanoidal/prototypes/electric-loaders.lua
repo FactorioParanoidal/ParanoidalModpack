@@ -40,7 +40,7 @@ local function power_text(kw)
 end
 
 -- The merged Factoriopedia page gets these fields from the item only.
--- Keep the same fields in the individual entity/recipe hover tooltips.
+-- Entity hover tooltips keep their own copy; recipes use the product tooltip.
 local function tooltip_only(fields)
     local result = table.deepcopy(fields)
     for _, field in ipairs(result) do field.show_in_factoriopedia = false end
@@ -145,7 +145,8 @@ for i, tier in ipairs(tiers) do
     set_icons(recipe, icons)
     recipe.localised_name = name
     recipe.localised_description = description
-    recipe.custom_tooltip_fields = tooltip_only(fields)
+    -- The product tooltip already includes the placing entity's fields.
+    recipe.custom_tooltip_fields = nil
     local technology = assert(data.raw.technology[tier.old], tier.old)
     set_icons(technology, icons)
     -- Item icons use a 32px canvas; technology icons use 256px. Scale labels too.

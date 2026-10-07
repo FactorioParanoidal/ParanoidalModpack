@@ -75,6 +75,9 @@ for i, name in ipairs(defs.names) do
         data:extend({ shell })
     end
     item.place_result = out_name
+    -- Item tooltips include place_result's fields. Keep the item's copy only for
+    -- Factoriopedia, after both shells have copied the visible tooltip fields.
+    for _, field in ipairs(item.custom_tooltip_fields or {}) do field.show_in_tooltip = false end
     -- Never expose the working energy source through an item or selectable entity.
     machine.hidden = true
     machine.hidden_in_factoriopedia = true
