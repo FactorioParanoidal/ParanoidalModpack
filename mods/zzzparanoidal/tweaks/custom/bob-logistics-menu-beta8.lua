@@ -1,5 +1,5 @@
 -- Approved crafting-menu layout, after OV, Reskins and other late menu patches.
--- Change recipes only: item/entity grouping, unlocks and mechanics stay untouched.
+-- Recipe layout and explicit item ordering; item/entity grouping stays untouched.
 local layout = require("tweaks.custom.bob-logistics-menu-beta8-data")
 
 if not data.raw["item-group"]["bob-logistics"] then return end
@@ -15,6 +15,10 @@ for _, row in ipairs(layout.rows) do
         }})
     end
     for _, entry in ipairs(row.recipes) do
+        if entry.item_order then
+            local item = data.raw.item[entry.name]
+            if item then item.order = entry.item_order end
+        end
         local recipe = data.raw.recipe[entry.name]
         if recipe then
             recipe.subgroup = row.subgroup
