@@ -10,8 +10,6 @@ local inputs = {
     "bob-alien-science-pack", "bob-alien-science-pack-blue", "bob-alien-science-pack-orange",
     "bob-alien-science-pack-purple", "bob-alien-science-pack-yellow",
     "bob-alien-science-pack-green", "bob-alien-science-pack-red", "angels-token-bio",
-    -- Deliberate extension requested by the user; all Beta 8 inputs remain.
-    "planetary-data", "station-science",
 }
 
 local definitions = {

@@ -43,6 +43,8 @@
     "? extendedangels >= 0.6.9",
     "? PCPRedux",
     "expanded-rocket-payloads-continued",
+    "? BigLabFork",
+    "? creative-mod",
     "Bio_Industries_2",
     "? research_evolution_factor",
     "? Repair_Turret",

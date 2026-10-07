@@ -254,7 +254,8 @@ require("prototypes.modules-beta8")
 -- После восстановления модульных рецептов, масштабирования партий и OV.execute.
 require("tweaks.recipe.platinum-wire")
 require("tweaks.technology.platinum-wire")
-require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8 + космические данные.
+require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8.
+require("tweaks.entity.space-data-labs") -- Космические данные принимает только центр обработки данных.
 require("tweaks.item.titanium-icon") -- После reskins и поздних копирований иконок.
 -- После финальных скоростей лент, стоимости AAI, restack, flowfix и OV.execute.
 require("prototypes.electric-loaders")
