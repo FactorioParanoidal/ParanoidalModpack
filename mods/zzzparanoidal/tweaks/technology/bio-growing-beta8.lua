@@ -1,5 +1,5 @@
 -- Beta 8 normal: разъединяем слитые исследования выращивания, удобрений, садов и сундуков.
--- После OV.execute. Только прогрессия; характеристики машин и чужие дополнительные unlock не меняются.
+-- После OV.execute. Прогрессия и иконки; характеристики машин и чужие дополнительные unlock не меняются.
 if not mods["Bio_Industries_2"] then return end
 local technologies = data.raw.technology
 local clones = {
@@ -19,9 +19,12 @@ for tier = 1, 2 do
 	clones["bi-tech-depollution-" .. tier] = { "bi-tech-fertilizer", { "recipe-name.bi-purified-air-" .. tier } }
 end
 for tier, suffix in ipairs({ "large", "huge", "giga" }) do
-	clones["bi-tech-wooden-storage-" .. tier] = { "logistics", { "entity-name.bi-wooden-chest-" .. suffix } }
+	clones["bi-tech-wooden-storage-" .. tier] = {
+		"logistics", { "entity-name.bi-wooden-chest-" .. suffix },
+		"__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/technology/bi-tech-wooden-storage-" .. tier .. ".png",
+	}
 end
--- Новые узлы используют оформление действующих прототипов 2.0, не графику из эталона.
+-- Наследуем оформление действующих прототипов 2.0, если своя иконка не задана.
 for name, definition in pairs(clones) do
 	if not technologies[name] and technologies[definition[1]] then
 		local technology = table.deepcopy(technologies[definition[1]])
@@ -29,6 +32,11 @@ for name, definition in pairs(clones) do
 		technology.localised_name = definition[2]
 		technology.localised_description = nil
 		technology.effects = {}
+		if definition[3] then
+			technology.icon = definition[3]
+			technology.icon_size = 256
+			technology.icons = nil
+		end
 		data:extend({ technology })
 	end
 end
