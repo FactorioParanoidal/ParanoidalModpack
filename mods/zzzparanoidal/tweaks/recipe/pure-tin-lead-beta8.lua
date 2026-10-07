@@ -8,10 +8,11 @@ for _, definition in ipairs({ { "tin", "i[angels-plate-tin]-b" }, { "lead", "k[a
 		recipe.ingredients = { { type = "item", name = "bob-" .. metal .. "-ore", amount = 4 } }
 		recipe.results = { { type = "item", name = "bob-" .. metal .. "-plate", amount = 3 } }
 		recipe.energy_required = 10.5
-		recipe.enabled = true
+		recipe.enabled = false
 		recipe.hidden = false
 		recipe.subgroup = "angels-" .. metal .. "-casting"
 		recipe.order = definition[2]
 		recipe.localised_name = { "item-name.bob-" .. metal .. "-plate" }
+		paralib.bobmods.lib.tech.add_recipe_unlock("angels-ore-crushing", recipe.name)
 	end
 end
