@@ -1,0 +1,10 @@
+{
+  "mod": "Fluid-level-indicator",
+  "source": "local",
+  "original": {
+    "name": "Fluid Level Indicator",
+    "authors": ["kmecseki"],
+    "portal": {"name": "Fluid-level-indicator", "url": "https://mods.factorio.com/mod/Fluid-level-indicator"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 0.9.9, по решению пользователя. Фильтр смерти формируется из полного flientities после подключения совместимости, включая варианты Krastorio."
+}
