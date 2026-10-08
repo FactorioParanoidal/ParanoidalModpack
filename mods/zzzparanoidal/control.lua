@@ -103,23 +103,8 @@ script.on_load(function() --без дропа эволюции потому чт
 	-- configure_picker_dollies()
 end)
 
-script.on_configuration_changed(function(data) --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
+script.on_configuration_changed(function() --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
 	evo_and_dolly()
-	
-	-- Примусове розблокування рецептів свинцю/олова на існуючих збереженнях
-	for _, force in pairs(game.forces) do
-		local recipes_to_unlock = {
-			"bob-lead-plate",
-			"bob-lead-plate-2",
-			"bob-tin-plate",
-			"bob-tin-plate-2",
-		}
-		for _, recipe_name in pairs(recipes_to_unlock) do
-			if force.recipes[recipe_name] then
-				force.recipes[recipe_name].enabled = true
-			end
-		end
-	end
 	disable_obsolete_basic_logistics()
 	sync_air_filter_beta8()
 	loader_shells.init()
