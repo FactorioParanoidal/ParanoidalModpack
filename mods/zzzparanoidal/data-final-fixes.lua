@@ -333,6 +333,7 @@ require("prototypes.platinum-components")
 require("tweaks.technology.platinum-magnesium-integration")
 -- Согласованная пачка fix_tree4: поздние альтернативы следуют за оборудованием и сырьём.
 require("tweaks.technology.production-chain-unlocks")
+require("tweaks.technology.chemistry-chain-unlocks")
 require("removals.steam-inserter-recipe")
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
