@@ -75,6 +75,36 @@ local prerequisites = {
     { "life-support-systems", "advanced-osmium-smelting" },
     { "life-support-systems", "bob-productivity-module-8" },
     { "space-thrusters", "advanced-osmium-smelting" },
+    -- Машины и материалы для открываемых рецептов (аудит свежего дампа).
+    { "angels-bio-paper-1", "angels-basic-chemistry" },
+    { "angels-bio-wood-processing", "angels-bio-farm-1" },
+    { "angels-bio-processing-green", "angels-stone-smelting-1" },
+    { "angels-bio-processing-green", "steel-processing" },
+    { "angels-zinc-smelting-1", "remelting-alloy-mixer-1" },
+    { "angels-copper-smelting-2", "angels-ore-powderizer" },
+    { "angels-invar-smelting-1", "remelting-alloy-mixer-1" },
+    { "angels-iron-smelting-2", "angels-ore-powderizer" },
+    { "angels-coal-processing-3", "bi-tech-ash" },
+    { "bob-silicon-processing", "angels-ore-powderizer" },
+    { "bob-solar-energy-2", "concrete" },
+    { "bob-solar-energy-2", "angels-electric-boiler" },
+    { "angels-cobalt-steel-smelting-1", "remelting-alloy-mixer-1" },
+    { "angels-nitinol-smelting-1", "remelting-alloy-mixer-1" },
+    { "hiend_train", "bet-charger-3" },
+    { "angels-bio-refugium-hatchery", "concrete" },
+    { "angels-rubber", "angels-strand-casting-2" },
+    { "angels-bronze-smelting-3", "angels-strand-casting-2" },
+    -- Поздние способы открываются оборудованием, которое обеспечивает их выполнение.
+    { "angels-strand-casting-3", "angels-rubber" },
+    { "remelting-alloy-mixer-3", "angels-bronze-smelting-3" },
+    { "angels-brass-smelting-3", "remelting-alloy-mixer-3" },
+    { "thorium-nuclear-fuel-reprocessing-2", "rocket-fuel" },
+    -- Комплектующие фабрикатора и его шаттла, без переноса космических открытий.
+    { "orbital-autonomous-fabricators", "advanced-material-processing-4" },
+    { "orbital-autonomous-fabricators", "bob-drills-5" },
+    { "orbital-autonomous-fabricators", "effect-transmission-3" },
+    { "orbital-autonomous-fabricators", "bob-electric-energy-accumulators-3" },
+    { "orbital-autonomous-fabricators", "bob-solar-energy-3" },
 }
 for _, pair in ipairs(prerequisites) do
     if data.raw.technology[pair[1]] and data.raw.technology[pair[2]] then

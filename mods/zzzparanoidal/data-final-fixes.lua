@@ -325,6 +325,7 @@ require("tweaks.technology.fluid-handling-colors")
 require("tweaks.entity.wood-pipe")
 -- После восстановления дерева: материалы у предков и единый паровой крекинг I.
 require("tweaks.technology.early-material-prerequisites")
+require("tweaks.technology.machine-recipe-unlocks")
 require("tweaks.technology.steam-cracking-merge")
 require("tweaks.technology.approved-beta8-icons") -- Согласованные изображения исследований; без модулей.
 require("tweaks.technology.module-research-cleanup") -- Остаточная цепочка Bob 2.0 и оформление компонентов Beta 8.
