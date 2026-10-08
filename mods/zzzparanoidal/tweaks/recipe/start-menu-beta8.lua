@@ -127,10 +127,8 @@ if copper_lamp then copper_lamp.category = "crafting" end
 for _, name in ipairs({ "big-lab", "deadlock-electric-copper-lamp" }) do
 	if data.raw.recipe[name] then data.raw.recipe[name].enabled = false end
 end
--- Explicit user decision: no new technology invented for these two recipes.
-for _, name in ipairs({ "burner-generator", "ln-flare-capsule" }) do
-	local recipe = data.raw.recipe[name]
-	if recipe then recipe.enabled = false; recipe.hidden = true end
-end
+-- Explicit user decision: no new technology invented for this recipe.
+local burner_generator = data.raw.recipe["burner-generator"]
+if burner_generator then burner_generator.enabled = false; burner_generator.hidden = true end
 -- burner-mining-drill stays behind burner-mechanics. iron-stick is gated in recipies.lua.
 -- Do not revert offshore-mk0-pump: 20 bi-wood-pipe are explicitly retained.

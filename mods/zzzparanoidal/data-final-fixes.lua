@@ -332,6 +332,7 @@ require("tweaks.technology.module-research-cleanup") -- Остаточная ц�
 -- Новая платиновая цепочка и согласованные производственные связи, после поздних замен дерева.
 require("prototypes.platinum-components")
 require("tweaks.technology.platinum-magnesium-integration")
+require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

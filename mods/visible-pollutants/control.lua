@@ -5,6 +5,11 @@ Solar = require("scripts.solar")
 Pollution = require("scripts.pollution")
 Settings = require("scripts.settings")
 
+-- Paranoidal portal-patch: refresh our factor when NightBrightness changes season.
+remote.add_interface("visible-pollutants", {
+  refresh_solar_multiplier = Solar.refresh_solar_multiplier,
+})
+
 script.on_init(function()
   Settings.update_caches()
   Settings.startup_settings_changed()

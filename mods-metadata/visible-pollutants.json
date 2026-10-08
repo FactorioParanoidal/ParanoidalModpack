@@ -1,0 +1,6 @@
+{
+  "mod": "visible-pollutants",
+  "source": "portal",
+  "upstreamVersion": "1.4.4",
+  "changeReason": "Временный совместимый патч: scripts/solar.lua умножает штраф загрязнения на сезонный фактор NightBrightness, control.lua предоставляет remote refresh_solar_multiplier. Без NightBrightness сохраняется upstream-поведение. План upstream-репорта: предложить автору композицию независимых солнечных множителей и remote-обновление; публикация только по отдельной команде. После принятия совместимого upstream-решения удалить патч и эту декларацию при обновлении."
+}

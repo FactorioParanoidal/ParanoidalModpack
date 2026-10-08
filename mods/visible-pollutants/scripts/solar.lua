@@ -112,14 +112,25 @@ local function update_solar_multiplier(surface_data)
     log("Solar Surface referencing an unknown Surface index: " .. surface_data.index)
     return
   end
-  -- TODO: Know the original/recent/desired SPM instead of hardcoding 1
+  -- Paranoidal: compose pollution with NightBrightness instead of erasing seasons.
+  local seasonal_multiplier = 1
+  local night = remote.interfaces["NightBrightness"]
+  if night and night.get_solar_multiplier then
+    seasonal_multiplier = remote.call("NightBrightness", "get_solar_multiplier", surface.index)
+  end
   if Solar.OcclusionEnabled and surface_data.base_effectiveness > 0 then
     local multiplier = surface_data.reduced_effectiveness / surface_data.base_effectiveness
     if multiplier < 0 then multiplier = 0 end
-    surface.solar_power_multiplier = multiplier
+    surface.solar_power_multiplier = multiplier * seasonal_multiplier
   else
-    surface.solar_power_multiplier = 1
+    surface.solar_power_multiplier = seasonal_multiplier
   end
+end
+
+-- Called when a season changes, including surfaces without registered panels.
+function Solar.refresh_solar_multiplier(surface_index)
+  local surface = game.surfaces[surface_index]
+  if surface then update_solar_multiplier(get_or_create_surface_data(surface)) end
 end
 
 ---@param surface_data SolarSurface
