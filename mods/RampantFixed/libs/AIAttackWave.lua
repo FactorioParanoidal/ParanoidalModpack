@@ -515,7 +515,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters)
 					
                     if tick and ((map.state == AI_STATE_AGGRESSIVE) or (map.state ==AI_STATE_GROWING)) then
 						map.squadsGenerated = (map.squadsGenerated or 0) + 1	-- this "attack-wave" only
-						chanceForAdditionalSquad = map.activeNests/15-map.squadsGenerated
+						local chanceForAdditionalSquad = map.activeNests/15-map.squadsGenerated
 						if universe.aiPointsScaler > 1 then
 							chanceForAdditionalSquad = chanceForAdditionalSquad + universe.aiPointsScaler - 1
 						end
@@ -649,7 +649,7 @@ function aiAttackWave.processBuilders(universe, tick)
 			for _, entity in pairs(group.members) do
 				if entity.valid and (entity.type == "unit") then
 					validMembers = validMembers + 1
-					roll = math.random()
+					local roll = math.random()
 					local newPosition
 					local entityName
 					if roll < 0.4 then
@@ -691,7 +691,7 @@ function aiAttackWave.processBuilders(universe, tick)
 						buildData.builded = buildData.builded + 1
 						buildData.nextTick = tick + (buildData.buildCooldown or 3600)
 						
-						newEntity = map.surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
+						local newEntity = map.surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
 						if newEntity and newEntity.valid then
 							newEntity.spawn_decorations()
 							script.raise_event(defines.events.on_biter_base_built, {entity = newEntity, tick = tick}) 

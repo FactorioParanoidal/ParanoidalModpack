@@ -107,8 +107,17 @@ local mRandom = math.random
 
 -- module code
 
+-- Prototype data is constant during a session: cache by entity name (not saved, identical on every peer).
+local overlapBoundingBoxes = {}
+
 local function getEntityOverlapChunks(map, entity)
-    local boundingBox = entity.prototype.collision_box or entity.prototype.selection_box;
+    local entityName = entity.name
+    local boundingBox = overlapBoundingBoxes[entityName]
+    if boundingBox == nil then
+        local prototype = entity.prototype
+        boundingBox = prototype.collision_box or prototype.selection_box or false
+        overlapBoundingBoxes[entityName] = boundingBox
+    end
     local overlapArray = map.universe.chunkOverlapArray
 
     overlapArray[1] = -1 --LeftTop
@@ -746,10 +755,10 @@ function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
     end
 end
 
-local function ignoredForce(force, universe)
+local function ignoredForce(forceName, universe)
 	local forceIgnored = true
 	for i = 1, #universe.activePlayerForces do
-		if universe.activePlayerForces[i] == force.name then
+		if universe.activePlayerForces[i] == forceName then
 			forceIgnored = false
 			break
 		end
@@ -757,18 +766,35 @@ local function ignoredForce(force, universe)
 	return forceIgnored
 end
 
+local pointsToAccount = {BASE_PHEROMONE, BASE_DETECTION_PHEROMONE}
+-- GET_ENTITY_PHEROMONES of a valid entity depends only on its prototype name: cache it (not saved).
+local entityPheromoneValues = {}
+
 function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
-	if ignoredForce(entity.force, map.universe) then
+	local forceName = entity.force.name
+	if ignoredForce(forceName, map.universe) then
 		return
 	end	
-	local GENERATOR_PHEROMONE_LEVEL = constants.GENERATOR_PHEROMONE_LEVEL
-	local pointsToAccount = {BASE_PHEROMONE, BASE_DETECTION_PHEROMONE}
+	local entityName = entity.name
+	local pheromoneValues = entityPheromoneValues[entityName]
+	if not pheromoneValues then
+		pheromoneValues = {}
+		for i = 1, #pointsToAccount do
+			local pheromoneType = pointsToAccount[i]
+			pheromoneValues[pheromoneType] = GET_ENTITY_PHEROMONES(entity, pheromoneType)
+		end
+		entityPheromoneValues[entityName] = pheromoneValues
+	end
+	local overlapArray
 	for i = 1, #pointsToAccount do
 		local pheromoneType = pointsToAccount[i]
-		if (entity.force.name ~= "enemy") then
+		if (forceName ~= "enemy") then
 			local universe = map.universe
-			local entityValue = GET_ENTITY_PHEROMONES(entity, pheromoneType)
-			local overlapArray = getEntityOverlapChunks(map, entity)
+			local entityValue = pheromoneValues[pheromoneType]
+			-- the shared overlap array is not touched inside this loop, so one lookup serves both pheromone types
+			if not overlapArray then
+				overlapArray = getEntityOverlapChunks(map, entity)
+			end
 			if not addObject then
 				if (creditNatives) and (pheromoneType==BASE_PHEROMONE) then					
 					if entity.type ~= "wall" then	-- + !КДА 2021.11

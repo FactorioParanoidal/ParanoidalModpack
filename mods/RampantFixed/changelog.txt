@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.09
+Date: 2026.10.08
+  Info:
+    - Reforged Paranoidal fork of RampantFixed 2.02.08
+  Changes:
+    - Compressed squads decompress gradually: each squad over 2 seconds, at most 200 units per second on all surfaces together
+    - Nests no longer drop the combat power-up stone and the regeneration crystal. Existing items and crystals keep working
+    - Dying biters no longer landfill water
+  Optimizations:
+    - on_entity_damaged is registered only while damage protections are enabled or a oneshot power-up is active
+    - Cached prototype data and runtime settings in death, build and mine handlers
+    - Faster nearby base search
+    - Removed accidental global variables
+  Bugfixes:
+    - Damage protection startup settings are read by value
+---------------------------------------------------------------------------------------------------
 Version: 2.02.08
 Date: 2026.07.04
   Other:

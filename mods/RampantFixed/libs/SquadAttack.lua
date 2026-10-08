@@ -113,7 +113,7 @@ local function settleHere(map, group, squad, dontDistract)
     group.surface.create_entity(universe.createBuildCloudQuery)	
 	---------
 
-	cmd = {type = defines.command.stop, ticks_to_wait = 3600*10}
+	local cmd = {type = defines.command.stop, ticks_to_wait = 3600*10}
 	if squad.kamikaze or dontDistract then
 		cmd.distraction = DEFINES_DISTRACTION_NONE
 	else
@@ -147,7 +147,7 @@ local function settleHere(map, group, squad, dontDistract)
 end
 
 local function goToLastvalidSettlerLocation(universe, group, squad)
-	cmd = universe.compoundMoveCommand
+	local cmd = universe.compoundMoveCommand
 	cmd.commands[2].destination.x = squad.lastValidChunk.x
 	cmd.commands[2].destination.y = squad.lastValidChunk.y
 	group.set_command(cmd)
@@ -366,14 +366,16 @@ local function partiallySettleHere(map, group, squad, numSettlers)
 	targetPosition.x = group.position.x
 	targetPosition.y = group.position.y
 	local members = group.members
-	if numSettlers >= #members then
-		numSettlers = #members - 1
+	-- decompression is gradual: units still held in packs count as members, and settlers are taken from packs first
+	local membersTotal = #members + squadCompression.countPackedUnits(universe, members)
+	if numSettlers >= membersTotal then
+		numSettlers = membersTotal - 1
 	end
 	for _, entity in pairs(members) do
 		if numSettlers <= 0 then
 			break
 		end
-		if entity.valid and (entity.type == "unit") then
+		while (numSettlers > 0) and entity.valid and (entity.type == "unit") do
 			 local newEntity = surface.create_entity({
 				name = newEntityName,
 				quality = entity.quality,
@@ -381,18 +383,21 @@ local function partiallySettleHere(map, group, squad, numSettlers)
 				position = entity.position, 
 				force = entity.force,
 				})
-			if newEntity and newEntity.valid then
-				newGroup.add_member(newEntity)
-				surface.create_trivial_smoke({name = "digIn-dust-nonTriggerCloud-rampant", position = entity.position})
+			if not (newEntity and newEntity.valid) then
+				break
+			end
+			newGroup.add_member(newEntity)
+			surface.create_trivial_smoke({name = "digIn-dust-nonTriggerCloud-rampant", position = entity.position})
+			numSettlers = numSettlers - 1
+			if not squadCompression.takeUnitFromPack(universe, entity) then
 				entity.destroy()
-				numSettlers = numSettlers - 1
-			end	
+			end
 		end
 	end
 	
 	if #newGroup.members > 0 then
 		universe.settleCommand.distraction = DEFINES_DISTRACTION_BY_ENEMY
-		cmd = universe.compoundSettleCommand
+		local cmd = universe.compoundSettleCommand
 		newGroup.set_command(cmd)	
 	end
 end

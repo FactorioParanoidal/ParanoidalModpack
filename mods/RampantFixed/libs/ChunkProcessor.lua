@@ -206,7 +206,7 @@ function chunkProcessor.processPendingMutations(universe)
 				base = entityData.base 
 				dynamicRates = getDynamicRates(base) 	
 			end
-			newBuilding = changeEntityAndUpdateDynamicRates(entityData.entity, dynamicRates, map, base)			
+			local newBuilding = changeEntityAndUpdateDynamicRates(entityData.entity, dynamicRates, map, base)
 			if newBuilding then
 				mutatesCnt = mutatesCnt + 1
 			end

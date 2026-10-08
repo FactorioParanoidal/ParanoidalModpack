@@ -416,7 +416,7 @@ function constants.SURFACE_IGNORED(surface, universe)
 			end	
 			if autoplace_controls then
 				for autoplaceControlName, autoplaceSettings in pairs (autoplace_controls) do
-					autoplaceControl = prototypes.autoplace_control[autoplaceControlName]
+					local autoplaceControl = prototypes.autoplace_control[autoplaceControlName]
 					if autoplaceControl.category == "enemy" then
 						-- game.print(surfaceName..".autoplace_control:"..autoplaceControlName.."fr/rch/sz"..autoplaceSettings.frequency.."/"..autoplaceSettings.richness.."/"..autoplaceSettings.size)	-- debug
 						if (autoplaceSettings.frequency>0) and (autoplaceSettings.richness>0) and (autoplaceSettings.size>0) then

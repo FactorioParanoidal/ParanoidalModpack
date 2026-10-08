@@ -158,7 +158,7 @@ function aiPlanning.updateBasesToGrow(map, tick, ingnoreGrowingState)
 		basesToGrowSize = basesToGrowSize + 1
 	end
 	if (basesToGrowSize > 0) and ((map.state == AI_STATE_GROWING) or ingnoreGrowingState) then
-		growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
+		local growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
 		local growIndexes = mathUtils.getRandomElementIndexes(map.basesToGrow, growCnt)
 		for i = 1, #growIndexes do
 			local baseId = growIndexes[i]
