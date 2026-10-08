@@ -4,6 +4,33 @@ local technologies = data.raw.technology
 local obsolete = {}
 for level = 2, 5 do obsolete["bob-modules-" .. level] = true end
 
+-- Quality/Bob: заменить старую цепочку владельцами тех же плат, сохранив её внешние предки.
+local board_owners = {
+    ["bob-modules-2"] = "modules",
+    ["bob-modules-3"] = "modules-2",
+    ["bob-modules-4"] = "modules-3",
+}
+for _, name in ipairs({ "quality-module-2", "quality-module-3", "bob-quality-module-4", "bob-quality-module-5" }) do
+    local technology = technologies[name]
+    if technology then
+        local prerequisites, seen = {}, {}
+        local function add(prerequisite)
+            if seen[prerequisite] then return end
+            seen[prerequisite] = true
+            if obsolete[prerequisite] then
+                local old = assert(technologies[prerequisite], "Missing module technology: " .. prerequisite)
+                if board_owners[prerequisite] then add(board_owners[prerequisite]) end
+                for _, parent in ipairs(old.prerequisites or {}) do add(parent) end
+            else
+                assert(technologies[prerequisite], "Missing module prerequisite: " .. prerequisite)
+                prerequisites[#prerequisites + 1] = prerequisite
+            end
+        end
+        for _, prerequisite in ipairs(technology.prerequisites or {}) do add(prerequisite) end
+        technology.prerequisites = prerequisites
+    end
+end
+
 -- Не скрывать неожиданного обязательного предка после обновления стороннего мода.
 for name, technology in pairs(technologies) do
     if not obsolete[name] then

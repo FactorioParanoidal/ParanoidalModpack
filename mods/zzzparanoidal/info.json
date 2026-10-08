@@ -9,8 +9,6 @@
   "description": "PARANOIDAL 8. Core mod for PARANOIDAL\n2024.09",
   "dependencies": [
     "base >= 2.0.77",
-    "!space-age",
-    "!quality",
     "! angelsaddons-mobility",
     "! angelsaddons-bots",
     "! angelsaddons-storage",

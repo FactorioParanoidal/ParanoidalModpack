@@ -1,0 +1,14 @@
+{
+	"name": "ic-more-qualities",
+	"version": "1.0.5",
+	"title": "IndustrialCraft - More Qualities",
+	"author": "mimic",
+	"description": "Adds 40 new qualities. Local unpublished Paranoidal extension: experimental defect qualities and ten quality-control research levels. Handcraft, machine, drill/pumpjack and natural-object mining handlers are connected; intended loss chance decreases from 50% to 0%. Includes configurable ingredient exclusions and pole reductions, crafting-machine energy penalties and scripted drill slowdown/pollution. Cycles of two ticks or less are skipped. Productivity, fluids and depletion are approximate. Engine loading, item safety and gameplay are NOT verified; implementation remains incomplete. Use a separate test game only.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0",
+		"quality >= 2.0",
+		"? ic-tweaks >= 1.0.0",
+		"? zzzparanoidal"
+	]
+}

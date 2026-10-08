@@ -12,5 +12,5 @@
     "? IndustrialRevolution", "? IndustrialRevolution3",
     "? pyalienlife", "? pyalternativeenergy", "? pycoalprocessing", "? pyfusionenergy", "? pyhightech", "? pyindustry", "? pypetroleumhandling", "? pyrawores", "? pypostprocessing",
     "? better-victory-screen >= 0.2.3",
-    "! SpaceMod", "! space-exploration", "! space-age"]
+    "! SpaceMod", "! space-exploration"]
 }

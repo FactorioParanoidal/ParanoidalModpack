@@ -8,8 +8,6 @@
   "description": "Restores the weak tier-0 trains and primitive railway infrastructure from Paranoidal Beta 8 on Factorio 2.0 rails.",
   "dependencies": [
     "base >= 2.0.77",
-    "zzzparanoidal >= 8.1.10",
-    "! space-age",
-    "! quality"
+    "zzzparanoidal >= 8.1.10"
   ]
 }

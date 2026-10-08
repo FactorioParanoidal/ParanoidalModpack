@@ -65,3 +65,6 @@ require("prototypes.recipe-category.alloy-mixing-tiers")
 
 -- tweaks
 require("tweaks.custom.angelsmods")
+
+-- Normalize retired fluid IDs before Quality generates recycling recipes.
+require("tweaks.recipe.sulfuric-acid-early")
