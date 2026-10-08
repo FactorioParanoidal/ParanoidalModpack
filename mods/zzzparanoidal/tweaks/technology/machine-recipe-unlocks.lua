@@ -1,5 +1,15 @@
 -- После восстановления дерева: поздние альтернативы не задерживают базовое производство.
 -- Рецепты, категории, стоимости и вероятности не меняются.
+-- Ториевый вариант РИТЭГа исключён из исследования по решению пользователя.
+local space_materials = data.raw.technology["extremely-advanced-material-processing"]
+if space_materials then
+    for i = #(space_materials.effects or {}), 1, -1 do
+        local effect = space_materials.effects[i]
+        if effect.type == "unlock-recipe" and effect.recipe == "radioisotope-thermoelectric-generator-thorium" then
+            table.remove(space_materials.effects, i)
+        end
+    end
+end
 local moves = {
     { "angels-bio-puffer-2", "angels-bio-refugium-hatchery", "angels-bio-refugium-puffer-2" },
     { "angels-bio-puffer-3", "angels-bio-refugium-hatchery", "angels-bio-refugium-puffer-3" },

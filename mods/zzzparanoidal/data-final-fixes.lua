@@ -329,6 +329,9 @@ require("tweaks.technology.machine-recipe-unlocks")
 require("tweaks.technology.steam-cracking-merge")
 require("tweaks.technology.approved-beta8-icons") -- Согласованные изображения исследований; без модулей.
 require("tweaks.technology.module-research-cleanup") -- Остаточная цепочка Bob 2.0 и оформление компонентов Beta 8.
+-- Новая платиновая цепочка и согласованные производственные связи, после поздних замен дерева.
+require("prototypes.platinum-components")
+require("tweaks.technology.platinum-magnesium-integration")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
