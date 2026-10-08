@@ -1,0 +1,10 @@
+{
+  "mod": "ZCS-Trash-Landfill-Continued-Update",
+  "source": "local",
+  "original": {
+    "name": "ZCS Trash Landfill Continued Update",
+    "authors": ["zackman0010", "Kadaban", "prokaryotic24", "DedlySpyder", "adegaxta"],
+    "portal": {"name": "ZCS-Trash-Landfill-Continued-Update", "url": "https://mods.factorio.com/mod/ZCS-Trash-Landfill-Continued-Update"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.2.7, по решению пользователя. Нативный фильтр смерти только zcs-trash-landfill, без изменения удаления мусора и загрязнения."
+}

@@ -143,6 +143,7 @@ script.on_event({defines.events.on_player_mined_entity, defines.events.on_robot_
     unregister_landfill_entity(ent)
   end
 end)
+script.set_event_filter(defines.events.on_entity_died, {{filter = "name", name = ENTITY_NAME}})
 
 -- =============== Loop principal =================
 
