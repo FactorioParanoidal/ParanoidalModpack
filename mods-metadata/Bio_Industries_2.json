@@ -1,0 +1,10 @@
+{
+  "mod": "Bio_Industries_2",
+  "source": "local",
+  "original": {
+    "name": "Bio Industries",
+    "authors": ["TheSAguy", "Pi-C", "Snouz", "Cackling Fiend"],
+    "portal": {"name": "Bio_Industries_2", "url": "https://mods.factorio.com/mod/Bio_Industries_2"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.34, по решению пользователя. Нативные фильтры урона арборетума/радара и смертей составных сущностей/деревьев строятся из исходных реестров и восстанавливаются при init/load/configuration-change. Исходные Lua-проверки сохранены."
+}
