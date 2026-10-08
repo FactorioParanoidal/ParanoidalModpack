@@ -3,6 +3,15 @@ require("controls.spilled_items") -- высыпание содержимого �
 require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local loader_shells = require("controls.loader-shells")
+-- Install after loader-shells chains the SpilledItems handler; neither consumer
+-- handles these inventory/grid-less types. Keep every other type, including modded containers.
+if script.get_event_handler(defines.events.on_entity_died) then
+	local death_filters = {}
+	for _, entity_type in ipairs({"unit", "unit-spawner", "turret", "tree", "fish", "cliff", "simple-entity"}) do
+		death_filters[#death_filters + 1] = {filter = "type", type = entity_type, invert = true, mode = "and"}
+	end
+	script.set_event_filter(defines.events.on_entity_died, death_filters)
+end
 -- ###############################################################################################
 -- from some corpse marker
 script.on_event(defines.events.on_pre_player_died, function(event)
