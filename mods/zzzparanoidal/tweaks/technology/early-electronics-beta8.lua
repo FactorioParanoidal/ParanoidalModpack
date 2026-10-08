@@ -56,6 +56,7 @@ local moves = {
 	{ "electronic-circuit-wood", "electronics" },
 	{ "angels-wire-tin", "electronics" },
 	{ "condensator", "electricity" },
+	{ "bi-wooden-pole-big", "electricity" },
 	{ "transport-belt", "basic-logistics" },
 	{ "burner-lab", false },
 	{ "motor", false },
