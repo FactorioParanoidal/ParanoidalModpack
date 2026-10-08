@@ -1,0 +1,10 @@
+{
+  "mod": "SchallPickupTower",
+  "source": "local",
+  "original": {
+    "name": "Schall Pickup Tower",
+    "authors": ["Schallfalke"],
+    "portal": {"name": "SchallPickupTower", "url": "https://mods.factorio.com/mod/SchallPickupTower"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.1, по решению пользователя. Фильтр смерти пропускает container/radar — обе части башни; исходный шаблон имени и сбор лута по сканированию радара не меняются."
+}
