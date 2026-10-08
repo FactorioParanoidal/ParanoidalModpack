@@ -68,6 +68,10 @@ local removal_events = {
 
 script.on_event(built_events, chunk_func.chest_placed)
 script.on_event(removal_events, chunk_func.chest_removed)
+script.set_event_filter(defines.events.on_entity_died, {
+    {filter = "type", type = "container"},
+    {filter = "type", type = "logistic-container"},
+})
 
 
 -- Residual Spawining Event

@@ -1,6 +1,10 @@
 {
   "mod": "Stuckez12_Radiation",
-  "source": "portal",
-  "upstreamVersion": "1.1.2",
-  "changeReason": "Наша намеренная переработка радиационного урона в scripts/radiation_damage.lua из PR #278."
+  "source": "local",
+  "original": {
+    "name": "Stuckez12 Radiation",
+    "authors": ["Stuckez12"],
+    "portal": {"name": "Stuckez12_Radiation", "url": "https://mods.factorio.com/mod/Stuckez12_Radiation"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.1.2, по решению пользователя. Сохранена переработка радиационного урона в scripts/radiation_damage.lua из PR #278. Фильтр смерти для container/logistic-container без изменения учёта радиоактивных сундуков."
 }
