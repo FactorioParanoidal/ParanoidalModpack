@@ -25,3 +25,6 @@ require('scripts/reprogram-gui')
 remote.add_interface(script.mod_name, Interface)
 
 commands.add_command(script.mod_name, 'Nanobot commands', Commands)
+
+-- Installed after every module has registered with stdlib; the only death handler removes this interface.
+script.set_event_filter(defines.events.on_entity_died, {{filter = 'name', name = 'roboport-interface-main'}})
