@@ -147,5 +147,10 @@ script.on_event({defines.events.on_player_mined_entity,
                  defines.events.on_robot_mined_entity},                 mined_entity)
 script.on_event({defines.events.on_entity_died,
                  defines.events.script_raised_destroy},                 entity_died)
+-- The tower consists of a container and its radar; retain the name-pattern check in remove_PT.
+script.set_event_filter(defines.events.on_entity_died, {
+  {filter = "type", type = "container"},
+  {filter = "type", type = "radar"},
+})
 script.on_event(defines.events.on_selected_entity_changed,              selected_entity_changed)
 script.on_event(defines.events.on_player_cursor_stack_changed,          player_cursor_stack_changed)

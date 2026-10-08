@@ -153,6 +153,9 @@ end
 	parameters.recursion - if true then make new neighbors table, else use universe.neighbors
 	parameters.color - color of chunk border if showPheromones is true
 ]]--
+-- Scratch data only: fully reset before every call, never stored or returned.
+-- This function has no recursive calls or event-raising engine writes.
+local staticPheromoneScratch = {}
 function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
     local chunkBase = -MAGIC_MAXIMUM_NUMBER
 	local chunkBaseDetection = -MAGIC_MAXIMUM_NUMBER
@@ -168,7 +171,11 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
 
     local chunkPass = getPassable(map, chunk)
     local pheromone
-	local pheromone_neighbor = {chunkBase = 0, chunkBaseDetection = 0, chunkResource = 0, isClaimedResource = false}
+	local pheromone_neighbor = staticPheromoneScratch
+	pheromone_neighbor.chunkBase = 0
+	pheromone_neighbor.chunkBaseDetection = 0
+	pheromone_neighbor.chunkResource = 0
+	pheromone_neighbor.isClaimedResource = false
 	
     if (chunkPass == CHUNK_ALL_DIRECTIONS) then
         neighbor = tempNeighbors[2]

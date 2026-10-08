@@ -424,8 +424,9 @@ local function squadCompress(map, squad)
 	local compressedMembers = {}
 	local unitsCounter = 0
 	
-	if #group.members > 35 then		
-		for _, entity in pairs(group.members) do
+	local members = group.members
+	if #members > 35 then
+		for _, entity in pairs(members) do
 			if entity.valid and (entity.type == "unit") then
 				local compressIndex = entity.name
 				if not compressedMembers[entity.name] then
@@ -497,7 +498,8 @@ local function squadSmoothCompress(map, squad, compressedSize)
 		return
 	end	
 	
-	if #group.members  < (compressedSize + 5) then		
+	local members = group.members
+	if #members < (compressedSize + 5) then
 		return
 	end
 	
@@ -512,9 +514,9 @@ local function squadSmoothCompress(map, squad, compressedSize)
 	------------------
 	local compressDatas = {}
 	local membersToCompress = 0
-	local unitsCounter = 0	-- debug	
+	local unitsCounter = 0	-- debug
 	
-	for _, entity in pairs(group.members) do
+	for _, entity in pairs(members) do
 		if entity.valid and (entity.type == "unit") then
 			if not compressDatas[entity.name] then
 				compressDatas[entity.name] = {count = 0, entities = {}, unitSample = entity}

@@ -12,7 +12,12 @@ script.on_event(defines.events.on_space_platform_built_entity, function(event) p
 
 script.on_event(defines.events.on_pre_player_mined_item, function(event) removedfli(event.entity) end)
 script.on_event(defines.events.on_robot_pre_mined, function(event) removedfli(event.entity) end)
-script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end)
+-- flientities already includes names added by compatibility/com_control.
+local death_filters = {}
+for _, name in ipairs(flientities) do
+    death_filters[#death_filters + 1] = {filter = "name", name = name}
+end
+script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end, death_filters)
 script.on_event(defines.events.script_raised_destroy, function(event) removedfli(event.entity) end)
 script.on_event(defines.events.on_space_platform_mined_entity, function(event) removedfli(event.entity) end)
 

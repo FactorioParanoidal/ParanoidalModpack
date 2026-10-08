@@ -606,7 +606,10 @@ script.on_event(defines.events.on_player_toggled_map_editor,function(event)
 script.on_event(build_events, local_on_added)
 script.on_event(remove_events, local_on_removed)
 script.on_event(item_pick_up_events, local_item_pick_up)
-script.on_event(defines.events.on_entity_damaged,local_on_damage)
+-- All scripts have registered above. Do not dispatch every hit into empty handler lists.
+if next(heroturrets.on_damage) or next(heroturrets.on_damage_by_name) then
+	script.on_event(defines.events.on_entity_damaged, local_on_damage)
+end
 script.on_event(defines.events.on_research_finished, local_on_research)
 script.on_event(defines.events.on_player_cursor_stack_changed,local_on_player_cursor_stack_changed)
 script.on_event(defines.events.on_entity_spawned, local_on_spawned)

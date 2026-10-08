@@ -1,6 +1,10 @@
 ﻿{
   "mod": "Big-Monsters",
-  "source": "portal",
-  "upstreamVersion": "2.1.2",
-  "changeReason": "Наш peaceful-mode guard (#220/#57) + ru-локаль"
+  "source": "local",
+  "original": {
+    "name": "Big-Monsters",
+    "authors": ["MFerrari"],
+    "portal": {"name": "Big-Monsters", "url": "https://mods.factorio.com/mod/Big-Monsters"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.1.2, по решению пользователя. Сохранены peaceful-mode guard (#220/#57) и ru-локаль. Нативный фильтр смерти только bm-volcano вместо вызова Lua на каждую смерть."
 }

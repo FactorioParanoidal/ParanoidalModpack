@@ -111,7 +111,11 @@ function update_resources(entity, oldSufix, newSufix)
 end
 
 function des_building(entity, des)
-    local splitName = util.split(entity.name,connector)
+    local name = entity.name
+    -- util.split treats sep as a character set: "___" also splits a single underscore.
+    -- Preserve that behavior while avoiding split tables for names without underscores.
+    if not string.find(name, "_", 1, true) then return end
+    local splitName = util.split(name,connector)
     if splitName[2] then
         if des then
             update_resources(entity, splitName[2], "")

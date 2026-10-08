@@ -1,0 +1,10 @@
+{
+  "mod": "angelsrefining",
+  "source": "local",
+  "original": {
+    "name": "Angel's Refining",
+    "authors": ["Arch666Angel"],
+    "portal": {"name": "angelsrefining", "url": "https://mods.factorio.com/mod/angelsrefining"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.4, по решению пользователя. Фильтр смерти по сохранённому имени морского насоса из sea_pump:get_pump_name(), восстановление в init/load/configuration-change. Рецепты, насос и удаление его ресурса не меняются."
+}

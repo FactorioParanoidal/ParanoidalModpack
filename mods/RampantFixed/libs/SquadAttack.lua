@@ -676,8 +676,11 @@ function squadAttack.squadDispatch(map, squad)
 	end
     local group = squad.group
     if group and group.valid then
-		if (not squad.detected) and (#group.members > 0) then
-			 squad.detected = showAlert(group.surface, group.members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #group.members}})
+		if not squad.detected then
+			local members = group.members
+			if #members > 0 then
+				squad.detected = showAlert(group.surface, members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #members}})
+			end
 		end
         local status = squad.status
         if (status == SQUAD_RAIDING) then

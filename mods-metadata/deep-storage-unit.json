@@ -1,0 +1,10 @@
+{
+  "mod": "deep-storage-unit",
+  "source": "local",
+  "original": {
+    "name": "Memory Storage",
+    "authors": ["notnotmelon"],
+    "portal": {"name": "deep-storage-unit", "url": "https://mods.factorio.com/mod/deep-storage-unit"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.6.8, по решению пользователя. Нативный фильтр смерти только memory-unit; хранилище, содержимое, теги и вспомогательные сущности не меняются."
+}
