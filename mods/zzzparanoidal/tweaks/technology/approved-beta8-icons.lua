@@ -2,6 +2,7 @@
 -- Только оформление; модульные исследования и игровые параметры не меняются.
 local root = "__zzzparanoidal__/graphics/technology/approved-beta8/"
 local icons = {
+    { "basic-logistics", "basic-logistics", 256 },
     { "bi-tech-advanced-biotechnology", "bi-tech-advanced-fertilizers", 256 },
     { "bi-tech-biomass", "bi-tech-biomass", 256 },
     { "bi-tech-biomass-conversion", "bi-tech-biomass-conversion", 256 },
