@@ -196,7 +196,6 @@ require("tweaks.recipe.fish-buildings-beta8")
 require("tweaks.technology.fish-buildings-beta8")
 require("tweaks.recipe.advanced-electronics-beta8")
 require("tweaks.technology.advanced-electronics-beta8")
-require("tweaks.technology.steam-inserter-beta8")
 require("tweaks.technology.air-filter-beta8")
 require("tweaks.item.gems-menu-beta8")
 require("tweaks.recipe.nitrogen-remainder-beta8")
@@ -332,6 +331,10 @@ require("tweaks.technology.module-research-cleanup") -- Остаточная ц�
 -- Новая платиновая цепочка и согласованные производственные связи, после поздних замен дерева.
 require("prototypes.platinum-components")
 require("tweaks.technology.platinum-magnesium-integration")
+-- Согласованная пачка fix_tree4: поздние альтернативы следуют за оборудованием и сырьём.
+require("tweaks.technology.production-chain-unlocks")
+require("tweaks.technology.chemistry-chain-unlocks")
+require("removals.steam-inserter-recipe")
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
