@@ -1,0 +1,10 @@
+{
+  "mod": "HeroTurretRedux",
+  "source": "local",
+  "original": {
+    "name": "HeroTurrets_Redux",
+    "authors": ["ForTheKing55"],
+    "portal": {"name": "HeroTurretRedux", "url": "https://mods.factorio.com/mod/HeroTurretRedux"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.0.38, по решению пользователя. Не регистрирует on_entity_damaged, когда оба списка потребителей пусты. Учёт убийств, развитие турелей и восстановление настроек призраков не меняются."
+}
