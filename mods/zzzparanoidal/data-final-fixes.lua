@@ -290,6 +290,9 @@ require("tweaks.custom.bob-logistics-menu-beta8")
 require("tweaks.custom.circuit-menu-beta8")
 -- Четвёртая вкладка: возвращённый «Транспорт» Beta 8.
 require("tweaks.custom.transport-menu-beta8")
+-- Полный возврат пяти жидкотопливных котлов Beta 8; после OV/баланса, до меню.
+require("prototypes.fluid-boilers-beta8")
+require("removals.fluid-boilers-2")
 -- Пятая вкладка: производство Beta 8 с сохранением новых устройств 2.0.
 require("tweaks.custom.production-menu-beta8")
 -- Шестая вкладка: модули сразу после производства, как в Beta 8.
