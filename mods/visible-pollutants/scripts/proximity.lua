@@ -8,167 +8,164 @@ Proximity.FullScanInterval = 5 * 60 -- every 5 seconds
 --- @field important table<number, GridCell>
 --- @field nearby table<number, GridCell>
 
+-- Derived only from persistent player state; rebuilding after load is safe.
+local important_by_surface
+
+function Proximity.invalidate_important_cells()
+  important_by_surface = nil
+end
+
 function Proximity.init_storage()
   storage.player_cells = {}
+  storage.player_surfaces = {}
+  storage.player_scan_cells = {}
   for _, player in pairs(game.players) do
     storage.player_cells[player.index] = Grid.from_map_position(player.position)
+    storage.player_surfaces[player.index] = player.surface.index
   end
   storage.player_cell_neighbors = {}
   storage.player_selection_cells = {}
+  storage.player_selection_surfaces = {}
+  Proximity.invalidate_important_cells()
 end
 
 ---@param player_index uint
 function Proximity.remove_player_storage(player_index)
   storage.player_cells[player_index] = nil
+  storage.player_surfaces[player_index] = nil
+  storage.player_scan_cells[player_index] = nil
   storage.player_cell_neighbors[player_index] = nil
   storage.player_selection_cells[player_index] = nil
+  storage.player_selection_surfaces[player_index] = nil
+  Proximity.invalidate_important_cells()
 end
 
 ---@param player LuaPlayer
----@return { x: number, y: number }
-local function determine_max_visible_chunk_radii(player)
-  local divisor = player.zoom * 32 * 32 * 2 -- pixels per tile, then tiles per chunk, then diameter to radius
+local function visible_radii(player)
+  local divisor = player.zoom * 32 * 32 * 2
   local resolution = player.display_resolution
-  return {
-    x = math.min(Proximity.VisibleChunkRadius, math.ceil(resolution.width / divisor)),
-    y = math.min(Proximity.VisibleChunkRadius, math.ceil(resolution.height / divisor)),
-  }
+  return math.min(Proximity.VisibleChunkRadius, math.ceil(resolution.width / divisor)),
+      math.min(Proximity.VisibleChunkRadius, math.ceil(resolution.height / divisor))
 end
 
----@param player LuaPlayer
----@return { x: number, y: number }
-local function determine_max_draggable_chunk_radii(player)
-  local visible_radius = determine_max_visible_chunk_radii(player)
-  return {
-    x = math.ceil(visible_radius.x * 3),
-    y = math.ceil(visible_radius.y * 3),
-  }
-end
-
----@param sprites SpriteUpdateQueueItem[]
----@param player LuaPlayer
-local function get_sprites_near_player(sprites, player)
-  local i = #table + 1
-  if not player.surface.pollutant_type then return end
+local function get_sprites_near_player(sprites, seen_by_surface, player)
+  local surface = player.surface
+  if not surface.pollutant_type then return end
   if player.render_mode == defines.render_mode.chart then return end
-  local nearby_cells = storage.player_cell_neighbors[player.index] or {}
-  for _, cell in pairs(nearby_cells) do
-    local sprite = Sprite.get(player.surface, cell)
-    if sprite then
-      sprites[i] = {
-        cell = cell,
-        sprite = sprite,
-      }
-      i = i + 1
+  local seen = seen_by_surface[surface.index]
+  if not seen then
+    seen = {}
+    seen_by_surface[surface.index] = seen
+  end
+  for _, cell in pairs(storage.player_cell_neighbors[player.index] or {}) do
+    if not seen[cell.key] then
+      local sprite = Sprite.get(surface, cell)
+      if sprite then
+        sprites[#sprites + 1] = { cell = cell, sprite = sprite }
+        seen[cell.key] = true
+      end
     end
   end
 end
 
----@return SpriteUpdateQueueItem[] sprites
+---@return SpriteUpdateQueueItem[]
 function Proximity.get_sprites_near_players()
-  local sprites = {}
-  for _, player in pairs(game.players) do
-    if player.connected then
-      get_sprites_near_player(sprites, player)
-    end
+  local sprites, seen = {}, {}
+  for _, player in pairs(game.connected_players) do
+    get_sprites_near_player(sprites, seen, player)
   end
   return sprites
 end
 
 ---@param player LuaPlayer
-function Proximity.get_sprites_near_player( player)
+function Proximity.get_sprites_near_player(player)
   local sprites = {}
-  get_sprites_near_player(sprites, player)
+  get_sprites_near_player(sprites, {}, player)
   return sprites
+end
+
+local function set_visible_cells(player_index, player_cell, cells, x_radius, y_radius)
+  local visible = {}
+  for _, cell in ipairs(cells) do
+    if Grid.is_within_radius(player_cell, x_radius, y_radius, cell) then
+      visible[cell.key] = cell
+    end
+  end
+  storage.player_cell_neighbors[player_index] = visible
 end
 
 function Proximity.add_sprites_near_players()
-  for _, player in pairs(game.players) do
-    if player.connected then
-      Proximity.add_sprites_near_player(player)
-    end
+  local checked = {}
+  for _, player in pairs(game.connected_players) do
+    Proximity.add_sprites_near_player(player, checked)
   end
 end
 
 ---@param player LuaPlayer
-function Proximity.add_sprites_near_player(player)
-  storage.player_cell_neighbors[player.index] = {}
-  if not player.surface.pollutant_type then return end
+function Proximity.add_sprites_near_player(player, checked_by_surface)
+  local index, surface = player.index, player.surface
   local player_cell = Grid.from_map_position(player.position)
-  storage.player_cells[player.index] = player_cell
-  local wide_radius = determine_max_draggable_chunk_radii(player)
-  local visible_radius = determine_max_visible_chunk_radii(player)
-  local nearby_cells = Grid.compute_neighbours(player_cell, wide_radius.x, wide_radius.y)
-  for _, cell in ipairs(nearby_cells) do
-    Sprite.ensure_existence_if_polluted(player.surface, cell)
-    if Grid.is_within_radius(player_cell, visible_radius.x, visible_radius.y, cell) then
-      storage.player_cell_neighbors[player.index][cell.key] = cell
+  storage.player_cells[index] = player_cell
+  storage.player_surfaces[index] = surface.index
+  Proximity.invalidate_important_cells()
+  if not surface.pollutant_type then
+    storage.player_cell_neighbors[index] = {}
+    storage.player_scan_cells[index] = nil
+    return
+  end
+  local vx, vy = visible_radii(player)
+  local wx, wy = math.ceil(vx * 3), math.ceil(vy * 3)
+  local scan = storage.player_scan_cells[index]
+  if not scan or scan.key ~= player_cell.key or scan.surface ~= surface.index
+      or scan.x ~= wx or scan.y ~= wy then
+    scan = { key = player_cell.key, surface = surface.index, x = wx, y = wy,
+      cells = Grid.compute_neighbours(player_cell, wx, wy) }
+    storage.player_scan_cells[index] = scan
+  end
+  local checked
+  if checked_by_surface then
+    checked = checked_by_surface[surface.index] or {}
+    checked_by_surface[surface.index] = checked
+  end
+  for _, cell in ipairs(scan.cells) do
+    if not checked or not checked[cell.key] then
+      Sprite.ensure_existence_if_polluted(surface, cell)
+      if checked then checked[cell.key] = true end
     end
   end
-end
-
-function Proximity.add_sprites_near_players_if_moved()
-  for _, player in pairs(game.players) do
-    if player.connected then
-      Proximity.add_sprites_near_player_if_moved(player)
-    end
-  end
+  set_visible_cells(index, player_cell, scan.cells, vx, vy)
 end
 
 ---@param player LuaPlayer
 function Proximity.add_sprites_near_player_if_moved(player)
-  if not player.surface.pollutant_type then return end
+  local index, surface = player.index, player.surface
+  if not surface.pollutant_type then return end
+  if player.render_mode == defines.render_mode.chart and game.tick % 3 > 0 then return end
 
-  -- Reduce update rate while in wide chart mode
-  if player.render_mode == defines.render_mode.chart and game.tick % 3 > 0 then
-    return
-  end
-
-  local last_player_cell = storage.player_cells[player.index]
-  local player_cell = Grid.from_map_position(player.position)
-  if last_player_cell
-      and last_player_cell.x == player_cell.x
-      and last_player_cell.y == player_cell.y
-  then return end
-  storage.player_cells[player.index] = player_cell
-
-  if not last_player_cell then
+  local previous = storage.player_cells[index]
+  local position = player.position
+  -- Most tile-change events do not cross a chunk; avoid allocating a GridCell.
+  if previous and previous.key == Grid.key_from_map_position(position)
+      and storage.player_surfaces[index] == surface.index then return end
+  local vx, vy = visible_radii(player)
+  local wx, wy = math.ceil(vx * 3), math.ceil(vy * 3)
+  local scan = storage.player_scan_cells[index]
+  if not previous or storage.player_surfaces[index] ~= surface.index
+      or not scan or scan.x ~= wx or scan.y ~= wy then
     Proximity.add_sprites_near_player(player)
     return
   end
 
-  local wide_radius = determine_max_draggable_chunk_radii(player)
-  local visible_radius = determine_max_visible_chunk_radii(player)
-
-  local new_cells = {}
-  local new_visible_cells = {}
-  if player_cell.x == last_player_cell.x - 1 then
-    new_cells = Grid.compute_left_edges(player_cell, wide_radius.x, wide_radius.y)
-    new_visible_cells = Grid.compute_left_edges(player_cell, visible_radius.x, visible_radius.y)
-  elseif player_cell.y == last_player_cell.y - 1 then
-    new_cells = Grid.compute_top_edges(player_cell, wide_radius.x, wide_radius.y)
-    new_visible_cells = Grid.compute_top_edges(player_cell, visible_radius.x, visible_radius.y)
-  elseif player_cell.x == last_player_cell.x + 1 then
-    new_cells = Grid.compute_right_edges(player_cell, wide_radius.x, wide_radius.y)
-    new_visible_cells = Grid.compute_right_edges(player_cell, visible_radius.x, visible_radius.y)
-  elseif player_cell.y == last_player_cell.y + 1 then
-    new_cells = Grid.compute_bottom_edges(player_cell, wide_radius.x, wide_radius.y)
-    new_visible_cells = Grid.compute_bottom_edges(player_cell, visible_radius.x, visible_radius.y)
-  else
-    new_cells = Grid.compute_neighbours(player_cell, wide_radius.x, wide_radius.y)
-    new_visible_cells = Grid.compute_neighbours(player_cell, visible_radius.x, visible_radius.y)
+  local cell = Grid.from_map_position(position)
+  storage.player_cells[index] = cell
+  -- Keep the radii, but invalidate the full-scan layout until the next full scan.
+  scan.key = nil
+  scan.cells = nil
+  Proximity.invalidate_important_cells()
+  for _, exposed in ipairs(Grid.compute_exposed(cell, previous, wx, wy)) do
+    Sprite.ensure_existence_if_polluted(surface, exposed)
   end
-
-  for _, cell in ipairs(new_cells) do
-    Sprite.ensure_existence_if_polluted(player.surface, cell)
-  end
-
-  if not storage.player_cell_neighbors[player.index] then
-    storage.player_cell_neighbors[player.index] = {}
-  end
-  for _, cell in ipairs(new_visible_cells) do
-    storage.player_cell_neighbors[player.index][cell.key] = cell
-  end
+  set_visible_cells(index, cell, Grid.compute_neighbours(cell, vx, vy), vx, vy)
 end
 
 function Proximity.set_selections_for_players()
@@ -179,41 +176,43 @@ end
 
 ---@param player LuaPlayer
 function Proximity.set_selections_for_player(player)
-  storage.player_selection_cells[player.index] = nil
-  if not player.connected then return end
-  if not player.surface.pollutant_type then return end
-  if player.render_mode == defines.render_mode.chart then return end
-  local selected = player.selected
-  if selected then
-    storage.player_selection_cells[player.index] = Grid.from_map_position(selected.position)
-  else
+  local index = player.index
+  local selected = player.connected and player.surface.pollutant_type
+      and player.render_mode ~= defines.render_mode.chart and player.selected
+  local cell = selected and Grid.from_map_position(selected.position) or nil
+  local surface = selected and selected.surface.index or nil
+  local previous = storage.player_selection_cells[index]
+  if (previous and previous.key) ~= (cell and cell.key)
+      or storage.player_selection_surfaces[index] ~= surface then
+    storage.player_selection_cells[index] = cell
+    storage.player_selection_surfaces[index] = surface
+    Proximity.invalidate_important_cells()
   end
 end
 
----@return ImportantCells
+---@return table<number, ImportantCells>
 function Proximity.get_important_cells()
-  --- @type ImportantCells
-  local important_cells = {
-    important = {},
-    nearby = {},
-  }
-  for _, cell in pairs(storage.player_cells) do
-    if cell and not important_cells.important[cell.key] then
-      important_cells.important[cell.key] = cell
-      for _, nearby in pairs(Grid.compute_neighbours(cell, 1, 1)) do
-        important_cells.nearby[nearby.key] = nearby
-      end
+  if important_by_surface then return important_by_surface end
+  important_by_surface = {}
+  local function add(surface, cell)
+    if not surface or not cell then return end
+    local cells = important_by_surface[surface]
+    if not cells then
+      cells = { important = {}, nearby = {} }
+      important_by_surface[surface] = cells
+    end
+    if cells.important[cell.key] then return end
+    cells.important[cell.key] = cell
+    for _, nearby in ipairs(Grid.compute_neighbours(cell, 1, 1)) do
+      cells.nearby[nearby.key] = nearby
     end
   end
-  for _, selected in pairs(storage.player_selection_cells) do
-    if selected and not important_cells.important[selected.key] then
-      important_cells.important[selected.key] = selected
-      for _, nearby in pairs(Grid.compute_neighbours(selected, 1, 1)) do
-        important_cells.nearby[nearby.key] = nearby
-      end
-    end
+  for _, player in pairs(game.connected_players) do
+    local index = player.index
+    add(storage.player_surfaces[index], storage.player_cells[index])
+    add(storage.player_selection_surfaces[index], storage.player_selection_cells[index])
   end
-  return important_cells
+  return important_by_surface
 end
 
 return Proximity

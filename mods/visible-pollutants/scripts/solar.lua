@@ -36,7 +36,11 @@ function Solar.init_storage()
   storage.solar_pollution_update_queue = {}
   storage.solar_pollution_update_queue_index = 1
   storage.solar_pollution_update_queue_surface_index = 1
-  storage.solar_full_synchronize_tick = 0
+  storage.solar_full_synchronize_tick = nil
+  storage.solar_queue_dirty = true
+  storage.solar_queue_finished = false
+  storage.solar_cycle_totals = {}
+  storage.solar_cycle_invalidated = {}
 end
 
 ---@param quality number
@@ -89,6 +93,7 @@ local function get_or_create_cell_data(surface_data, position)
       panels_by_quality = {},
     }
     surface_data.cells_by_key[key] = cell_data
+    storage.solar_queue_dirty = true
   end
   return cell_data
 end
@@ -96,8 +101,8 @@ end
 ---@param cell_data SolarCell
 ---@param quality number
 ---@param panel LuaEntity
-local function register_panel(cell_data, quality, panel)
-  local registration = script.register_on_object_destroyed(panel)
+local function register_panel(cell_data, quality, panel, registration)
+  registration = registration or script.register_on_object_destroyed(panel)
   storage.solar_registrations[registration] = {
     surface_index = panel.surface_index,
     cell_key = cell_data.key,
@@ -126,6 +131,7 @@ end
 ---@param cell_data SolarCell
 ---@param quality number
 local function add_panel_to_surface(surface_data, cell_data, quality)
+  storage.solar_cycle_invalidated[surface_data.index] = true
   local base_effectiveness = calculate_base_effectiveness(quality)
   local reduced_effectiveness = base_effectiveness - calculate_effectiveness_reduction(cell_data.pollution)
 
@@ -142,6 +148,7 @@ end
 ---@param cell_data SolarCell
 ---@param quality number
 local function remove_panel_from_surface(surface_data, cell_data, quality)
+  storage.solar_cycle_invalidated[surface_data.index] = true
   local base_effectiveness = calculate_base_effectiveness(quality)
   local reduced_effectiveness = base_effectiveness - calculate_effectiveness_reduction(cell_data.pollution)
 
@@ -153,6 +160,13 @@ local function remove_panel_from_surface(surface_data, cell_data, quality)
 
   if cell_data.panels <= 0 then
     surface_data.cells_by_key[cell_data.key] = nil
+    if not next(surface_data.cells_by_key) then
+      -- Subtracting quality-weighted panels can leave tiny positive residues.
+      -- An empty surface must return to 1, not a ratio of rounding errors.
+      surface_data.base_effectiveness = 0
+      surface_data.reduced_effectiveness = 0
+    end
+    storage.solar_queue_dirty = true
   else
     cell_data.base_effectiveness = cell_data.base_effectiveness - base_effectiveness
     cell_data.reduced_effectiveness = cell_data.reduced_effectiveness - reduced_effectiveness
@@ -161,27 +175,28 @@ end
 
 ---@param panel LuaEntity
 function Solar.on_panel_placed(panel)
+  local registration = script.register_on_object_destroyed(panel)
+  if storage.solar_registrations[registration] then return end
   local surface_data = get_or_create_surface_data(panel.surface)
   local cell_data = get_or_create_cell_data(surface_data, panel.position)
   local quality = panel.quality.level
-  register_panel(cell_data, quality, panel)
+  register_panel(cell_data, quality, panel, registration)
   add_panel_to_surface(surface_data, cell_data, quality)
   update_solar_multiplier(surface_data)
 end
 
----@param from MapPosition
 ---@param panel LuaEntity
-function Solar.on_panel_moved(from, panel)
-  local surface_data = get_or_create_surface_data(panel.surface)
-  local old_cell = get_or_create_cell_data(surface_data, from)
-  local cell = get_or_create_cell_data(surface_data, panel.position)
-  if old_cell.key == cell.key then
-    return
+function Solar.on_panel_moved(panel)
+  local id = script.register_on_object_destroyed(panel)
+  local registration = storage.solar_registrations[id]
+  if registration then
+    if registration.surface_index == panel.surface_index
+        and registration.cell_key == Grid.key_from_map_position(panel.position)
+        and registration.quality == panel.quality.level then return end
+    -- The destruction registration, not the new surface, owns the old count.
+    Solar.on_panel_destroyed(id)
   end
-  local quality = panel.quality.level
-  remove_panel_from_surface(surface_data, old_cell, quality)
-  add_panel_to_surface(surface_data, cell, quality)
-  update_solar_multiplier(surface_data)
+  Solar.on_panel_placed(panel)
 end
 
 ---@param registration_key number
@@ -195,10 +210,7 @@ function Solar.on_panel_destroyed(registration_key)
 
   ---@type SolarSurface | nil
   local surface_data = storage.solar_surfaces[registration.surface_index]
-  if not surface_data then
-    log("Registered Object referenced a Surface that we are not tracking: " .. serpent.block(registration))
-    return
-  end
+  if not surface_data then return end -- its surface may have been deleted
 
   ---@type SolarCell | nil
   local cell_data = surface_data.cells_by_key[registration.cell_key]
@@ -215,9 +227,10 @@ end
 local function recompute_cell(cell_data)
   cell_data.base_effectiveness = 0
   cell_data.reduced_effectiveness = 0
+  local reduction = calculate_effectiveness_reduction(cell_data.pollution)
   for quality, count in pairs(cell_data.panels_by_quality) do
     local base_effectiveness = calculate_base_effectiveness(quality)
-    local reduced_effectiveness = base_effectiveness - calculate_effectiveness_reduction(cell_data.pollution)
+    local reduced_effectiveness = base_effectiveness - reduction
     cell_data.base_effectiveness = cell_data.base_effectiveness + (base_effectiveness * count)
     cell_data.reduced_effectiveness = cell_data.reduced_effectiveness + (reduced_effectiveness * count)
   end
@@ -239,7 +252,9 @@ end
 ---@param surface_data SolarSurface
 ---@param cell_data SolarCell
 local function update_cell_pollution(surface, surface_data, cell_data)
-  cell_data.pollution = Pollution.thickness(surface, cell_data.center)
+  local pollution = Pollution.thickness(surface, cell_data.center)
+  if cell_data.pollution == pollution then return end
+  cell_data.pollution = pollution
   local last_base_effectiveness = cell_data.base_effectiveness
   local last_reduced_effectiveness = cell_data.reduced_effectiveness
   recompute_cell(cell_data)
@@ -248,57 +263,79 @@ local function update_cell_pollution(surface, surface_data, cell_data)
   local reduced_effectiveness_delta = cell_data.reduced_effectiveness - last_reduced_effectiveness
   surface_data.base_effectiveness = surface_data.base_effectiveness + base_effectiveness_delta
   surface_data.reduced_effectiveness = surface_data.reduced_effectiveness + reduced_effectiveness_delta
-  update_solar_multiplier(surface_data)
 end
 
 ---@param chunk SolarChunkQueueItem
-local function update_queued_chunk(chunk)
+local function update_queued_chunk(chunk, updated_surfaces)
   local surface = game.surfaces[chunk.surface_index]
-  if not surface then
-    log("Solar Chunk referencing an unknown Surface index: " .. chunk.surface_index)
-    return
-  end
-  local surface_data = get_or_create_surface_data(surface)
-  local cell_data = surface_data.cells_by_key[chunk.cell_key]
-  if not cell_data then
-    log("Solar Chunk referencing an unknown Cell key: " .. chunk.cell_key)
-    return
-  end
+  if not surface then return end
+  local surface_data = storage.solar_surfaces[chunk.surface_index]
+  local cell_data = surface_data and surface_data.cells_by_key[chunk.cell_key]
+  if not cell_data then return end -- removed after this cycle was queued
   update_cell_pollution(surface, surface_data, cell_data)
+  updated_surfaces[chunk.surface_index] = surface_data
+
+  -- Rebase floating-point totals in queue order, spread over the existing batches.
+  -- Build/remove/move/settings events invalidate only the affected surface's cycle.
+  if not storage.solar_cycle_invalidated[chunk.surface_index] then
+    local totals = storage.solar_cycle_totals[chunk.surface_index]
+    if not totals then
+      totals = { base = 0, reduced = 0 }
+      storage.solar_cycle_totals[chunk.surface_index] = totals
+    end
+    totals.base = totals.base + cell_data.base_effectiveness
+    totals.reduced = totals.reduced + cell_data.reduced_effectiveness
+    if chunk.last_for_surface then
+      surface_data.base_effectiveness = totals.base
+      surface_data.reduced_effectiveness = totals.reduced
+    end
+  end
 end
 
 function Solar.queue_chunks_for_update()
-  ---@type SolarChunkQueueItem[]
-  local queue = {}
-  local queue_index = 1
-  for surface_index, surface_data in pairs(storage.solar_surfaces) do
-    for cell_key, cell in pairs(surface_data.cells_by_key) do
-      queue[queue_index] = {
-        surface_index = surface_index,
-        cell_key = cell.key,
-      }
-      queue_index = queue_index + 1
+  if storage.solar_queue_dirty then
+    ---@type SolarChunkQueueItem[]
+    local queue = storage.solar_pollution_update_queue
+    local queue_index = 1
+    for surface_index, surface_data in pairs(storage.solar_surfaces) do
+      local first = queue_index
+      for cell_key in pairs(surface_data.cells_by_key) do
+        local entry = queue[queue_index] or {}
+        entry.surface_index = surface_index
+        entry.cell_key = cell_key
+        entry.last_for_surface = nil
+        queue[queue_index] = entry
+        queue_index = queue_index + 1
+      end
+      if queue_index > first then queue[queue_index - 1].last_for_surface = true end
     end
-    recompute_surface(surface_data, false)
+    for i = #queue, queue_index, -1 do queue[i] = nil end
+    storage.solar_queue_dirty = false
   end
-  storage.solar_pollution_update_queue = queue
   storage.solar_pollution_update_queue_index = 1
+  storage.solar_queue_finished = false
+  storage.solar_cycle_totals = {}
+  storage.solar_cycle_invalidated = {}
 end
 
 ---@return boolean finished if all chunks have been updated
 function Solar.incrementally_update_chunks_in_queue()
   local queue_length = #storage.solar_pollution_update_queue
-  if queue_length <= 0 then
+  if queue_length <= 0 or storage.solar_queue_finished then
     storage.solar_pollution_update_queue_index = 1
     return true
   end
   local next_index = math.min(storage.solar_pollution_update_queue_index, queue_length)
   local end_index = math.min(next_index + Solar.MaxUpdatesPerTick, queue_length)
+  local updated_surfaces = {}
   for i = next_index, end_index do
-    update_queued_chunk(storage.solar_pollution_update_queue[i])
+    update_queued_chunk(storage.solar_pollution_update_queue[i], updated_surfaces)
+  end
+  for _, surface_data in pairs(updated_surfaces) do
+    update_solar_multiplier(surface_data)
   end
   if end_index >= queue_length then
-    storage.solar_pollution_update_queue = {}
+    storage.solar_queue_finished = true
     storage.solar_pollution_update_queue_index = 1
     return false -- finish on the next run
   else
@@ -311,6 +348,7 @@ function Solar.full_recompute()
   for _, surface in pairs(game.surfaces) do
     local surface_data = get_or_create_surface_data(surface)
     recompute_surface(surface_data, true)
+    storage.solar_cycle_invalidated[surface.index] = true
     update_solar_multiplier(surface_data)
   end
 end
@@ -334,6 +372,14 @@ function Solar.full_synchronize()
     end
     update_solar_multiplier(surface_data)
   end
+end
+
+function Solar.on_surface_deleted(surface_index)
+  storage.solar_surfaces[surface_index] = nil
+  storage.solar_cycle_totals[surface_index] = nil
+  storage.solar_cycle_invalidated[surface_index] = true
+  storage.solar_queue_dirty = true
+  -- Panel registrations are released by on_object_destroyed, including when disabled.
 end
 
 ---@param setting string

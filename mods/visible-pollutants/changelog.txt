@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2026-10-08
+  Changes:
+    - Maintained Paranoidal fork of 1.4.4; original MIT license and mod ID retained.
+  Optimizations:
+    - Cache per-surface see-through regions and full-scan chunk layouts.
+    - Check only the moving player; share overlapping checks within a full scan.
+    - Reuse solar queues until topology changes, amortize total rebasing, and batch surface writes.
+    - Skip unchanged solar cell arithmetic and incrementally clean expired sprite references.
+    - Preserve visual resources, settings, formulas and update intervals.
+  Bugfixes:
+    - Keep every player's visible sprites in the queue, without overlap duplicates.
+    - Cover diagonal moves and teleports; keep the visible neighbourhood bounded.
+    - Scope see-through areas to their surface and clear disconnected player state.
+    - Correct solar panel teleport, clone and duplicate-build registration bookkeeping.
+    - Synchronize solar panels on tick zero and clean deleted-surface state.
+    - Reset empty-surface solar totals exactly, avoiding ratios of floating-point residues.
+---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: 2026-06-13
   Bugfixes:

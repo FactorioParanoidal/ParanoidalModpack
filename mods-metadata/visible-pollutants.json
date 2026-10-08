@@ -1,0 +1,13 @@
+{
+  "mod": "visible-pollutants",
+  "source": "local",
+  "original": {
+    "name": "Pollution: Impactful Smog / Spore Cloud",
+    "authors": ["somethingtohide", "Cameron Leger"],
+    "portal": {
+      "name": "visible-pollutants",
+      "url": "https://mods.factorio.com/mod/visible-pollutants"
+    }
+  },
+  "changeReason": "Поддерживаемый форк Paranoidal на основе 1.4.4: оптимизация runtime без снижения качества тумана и изменения формулы солнечного затенения; исправления мультиплеера, перемещений и lifecycle. ID сохранён для совместимости сейвов и настроек, исходная лицензия MIT сохранена. Отправка изменений upstream не планируется."
+}

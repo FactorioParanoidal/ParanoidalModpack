@@ -1,4 +1,22 @@
-## Pollution: Impactful Smog / Spore Cloud
+## Pollution: Impactful Smog / Spore Cloud — Paranoidal fork
+
+Maintained in Paranoidal, based on somethingtohide's version 1.4.4 (MIT).
+The mod ID and settings are retained for existing saves. Version 1.4.5 rebuilds
+its derived caches through the existing configuration-change handler.
+
+The fork caches see-through regions per surface, avoids unrelated player scans,
+reuses chunk layouts and solar queues, and incrementally cleans expired render
+references. Solar totals are rebased over the existing update batches rather
+than through a full scan every cycle; topology changes still rebuild the queue
+at a cycle boundary. Full synchronization when enabling solar occlusion or
+changing the mod configuration still scans existing panels.
+
+Multiplayer queues, diagonal movement, cross-surface see-through, and solar
+panel teleport/clone bookkeeping are corrected. Texture, coverage, lifetime,
+opacity/solar formulas, RNG-based rotation and blend coefficients are unchanged.
+The upstream inclusive batch bounds and cycle-end pause are retained: the
+configured batch size N can process N+1 entries, as before.
+No FPS/UPS improvement percentage is claimed without a representative benchmark.
 
 Do you feel like your factory is _too clean_? A gross, smoggy atmosphere might be what you need. This mod adds a visible pollution cloud, based on the actual pollution in the area. It can also reduce the effectiveness of solar panels based on how occluded they are by pollution. It's quite configurable, and very efficient, compared to similar but older mods.
 

@@ -89,7 +89,13 @@ function Grid.compute_neighbours(cell, x_radius, y_radius)
   local i = 1
   for x = -x_radius, x_radius do
     for y = -y_radius, y_radius do
-      neighbours[i] = Grid.from_cell_position({ x = cell.x + x, y = cell.y + y })
+      local cx, cy = cell.x + x, cell.y + y
+      neighbours[i] = {
+        key = storage_key(cx, cy),
+        x = cx,
+        y = cy,
+        center = { x = cx * grid.width + grid.width / 2, y = cy * grid.height + grid.height / 2 },
+      }
       i = i + 1
     end
   end
@@ -138,6 +144,29 @@ function Grid.compute_bottom_edges(cell, x_radius, y_radius)
     x = cell.x,
     y = cell.y + y_radius,
   }), x_radius, 0)
+end
+
+--- Cells exposed by moving a rectangle, without allocating its overlapping interior.
+--- Strips are disjoint, including diagonal moves and long teleports.
+function Grid.compute_exposed(cell, previous, x_radius, y_radius)
+  local cells = {}
+  local left, right = cell.x - x_radius, cell.x + x_radius
+  local top, bottom = cell.y - y_radius, cell.y + y_radius
+  local old_left, old_right = previous.x - x_radius, previous.x + x_radius
+  local old_top, old_bottom = previous.y - y_radius, previous.y + y_radius
+  local function append(x1, x2, y1, y2)
+    for x = x1, x2 do
+      for y = y1, y2 do
+        cells[#cells + 1] = Grid.from_cell_position({ x = x, y = y })
+      end
+    end
+  end
+  append(left, math.min(right, old_left - 1), top, bottom)
+  append(math.max(left, old_right + 1), right, top, bottom)
+  local overlap_left, overlap_right = math.max(left, old_left), math.min(right, old_right)
+  append(overlap_left, overlap_right, top, math.min(bottom, old_top - 1))
+  append(overlap_left, overlap_right, math.max(top, old_bottom + 1), bottom)
+  return cells
 end
 
 return Grid
