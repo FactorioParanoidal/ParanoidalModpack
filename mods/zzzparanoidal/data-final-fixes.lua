@@ -326,6 +326,7 @@ require("tweaks.entity.wood-pipe")
 -- После восстановления дерева: материалы у предков и единый паровой крекинг I.
 require("tweaks.technology.early-material-prerequisites")
 require("tweaks.technology.steam-cracking-merge")
+require("tweaks.technology.approved-beta8-icons") -- Согласованные изображения исследований; без модулей.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
