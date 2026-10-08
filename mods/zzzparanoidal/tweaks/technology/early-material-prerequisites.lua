@@ -105,6 +105,27 @@ local prerequisites = {
     { "orbital-autonomous-fabricators", "effect-transmission-3" },
     { "orbital-autonomous-fabricators", "bob-electric-energy-accumulators-3" },
     { "orbital-autonomous-fabricators", "bob-solar-energy-3" },
+    -- Исследовательские пакеты: только согласованные 20 связей, без белой науки.
+    { "factory-interior-upgrade-display", "logistic-science-pack" },
+    { "armor-absorb-10", "military-science-pack" },
+    { "armor-absorb-15", "chemical-science-pack" },
+    { "armor-absorb-20", "utility-science-pack" },
+    { "adv-multiple-unit-train-control", "chemical-science-pack" },
+    { "artillery-prototype", "military-science-pack" },
+    { "napalm", "chemical-science-pack" },
+    { "bob-armoured-fluid-wagon", "chemical-science-pack" },
+    { "inserter-stack-size-bonus-3", "bob-advanced-logistic-science-pack" },
+    { "inserter-stack-size-bonus-4", "utility-science-pack" },
+    { "phosphorus-processing-2", "production-science-pack" },
+    { "angels-sodium-processing-3", "utility-science-pack" },
+    { "remelting-alloy-mixer-4", "utility-science-pack" },
+    { "radiation-protection", "military-science-pack" },
+    { "Schall-tank-SH-1", "utility-science-pack" },
+    { "aircraft-energy-shield", "utility-science-pack" },
+    { "CW-air-filtering-5", "utility-science-pack" },
+    { "garden-mutation", "utility-science-pack" },
+    { "toolbelt-5", "bob-advanced-logistic-science-pack" },
+    { "follower-robot-count-4", "utility-science-pack" },
 }
 for _, pair in ipairs(prerequisites) do
     if data.raw.technology[pair[1]] and data.raw.technology[pair[2]] then
