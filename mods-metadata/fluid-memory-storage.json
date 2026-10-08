@@ -1,0 +1,10 @@
+{
+  "mod": "fluid-memory-storage",
+  "source": "local",
+  "original": {
+    "name": "Fluid Memory Storage",
+    "authors": ["notnotmelon"],
+    "portal": {"name": "fluid-memory-storage", "url": "https://mods.factorio.com/mod/fluid-memory-storage"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.7.9, по решению пользователя. Нативный фильтр смерти только fluid-memory-unit; жидкости, температура, теги и вспомогательные сущности не меняются."
+}
