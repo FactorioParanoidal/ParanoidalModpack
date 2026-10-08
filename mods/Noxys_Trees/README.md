@@ -2,6 +2,19 @@
 
 A Factorio modification that makes the trees spread slowly but also die off with certain condition.
 
+## Paranoidal local maintenance (0.5.3)
+
+Based on Noxy's 0.5.2; the Paranoidal fork retains the missing-uranium compatibility fix.
+Runtime maintenance runs every 30 ticks (and is unregistered while disabled). Operation
+intervals are accounted in game ticks, carrying the remainder forward: 61 does not become
+90. Due operations execute at the next service, up to 29 ticks late; intervals below 30
+batch multiple operations. Debug output is also serviced every 30 ticks. Random calls,
+attempt counts, distances, settings and the original empty operation between surface
+cycles are retained. The force/proximity queries are consolidated without a persistent
+world-entity cache. No changes to growth-on-landfill, resurrection or surface-cycle behavior
+are included. This is a local patch, not an upstream release; any upstream proposal should
+include the isolated regression checks and separate measurements before claiming UPS gains.
+
 ## Discord
 
 Want to discuss this mod or talk to Noxy directly? You can just go to the discord!

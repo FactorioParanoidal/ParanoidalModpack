@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+  Changes:
+    - Paranoidal local maintenance of 0.5.2 (not an upstream release).
+    - Service runtime work every 30 ticks, retaining operation counts and fractional scheduling phase.
+    - Pause the service while disabled and restore it on load or setting changes.
+    - Combine proximity queries, reuse player-force lists within a chunk and remove the unused stored list.
+    - Restrict the one-time planted-tree exclusion scan to tree prototypes.
+    - Keep the missing-uranium guard, original random draws and gameplay settings.
+---------------------------------------------------------------------------------------------------
 Version: 0.3.1
 Date: 15. 09. 2020
   Changes:

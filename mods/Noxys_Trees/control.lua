@@ -3,6 +3,11 @@ local noxy_trees = {}
 local mathfloor = math.floor
 local mathceil = math.ceil
 local config = {}
+local scheduler = require("scheduler")
+local service_interval = 30
+local enemy_types = { "unit-spawner", "turret" }
+local has_uranium = prototypes.entity["uranium-ore"] ~= nil
+local player_forces
 
 
 noxy_trees.disabled = { -- Disables the spreading of these specific entities.
@@ -557,12 +562,33 @@ local function round(num, numDecimalPlaces)
   return mathfloor(num * mult + 0.5) / mult
 end
 
-local function cache_forces()
-  for _, force in pairs(game.forces) do
-    if #force.players > 0 then
-      storage.forces[#storage.forces + 1] = force.name
+local function near_player_entities(surface, position)
+  local radius = config.minimum_distance_to_player_entities
+  if radius <= 0 then return false end
+  if not player_forces then
+    player_forces = {}
+    for _, force in pairs(game.forces) do
+      if #force.players > 0 then
+        player_forces[#player_forces + 1] = force.name
+      end
     end
   end
+  return #player_forces > 0 and surface.count_entities_filtered {
+    position = position, radius = radius, force = player_forces, limit = 1,
+  } > 0
+end
+
+local function near_enemies(surface, position)
+  return surface.count_entities_filtered {
+    position = position, radius = config.minimum_distance_to_enemies,
+    type = enemy_types, force = "enemy", limit = 1,
+  } > 0
+end
+
+local function kill_tree(tree)
+  tree.die()
+  -- on_entity_died handlers in other mods can change forces or their players.
+  player_forces = nil
 end
 
 local function cache_surfaces()
@@ -588,8 +614,8 @@ end
 local function initialize()
   storage.surfaces         = {}
   storage.last_surface     = nil
-  storage.forces           = {}
-  storage.tick             = 0
+  storage.forces           = nil -- Discard the old, unused append-only force cache.
+  scheduler.initialize(storage, game.tick)
   storage.rng              = game.create_random_generator()
   storage.spawnedcount     = 0
   storage.deadedcount      = 0
@@ -600,8 +626,7 @@ local function initialize()
   storage.chunksprocessed  = 0
 
   cache_surfaces()
-
-  cache_forces()
+  player_forces = nil
 end
 
 local function cache_settings()
@@ -647,59 +672,54 @@ local function get_trees_in_chunk(surface, chunk)
   return surface.find_entities_filtered { area = { { chunk.x * 32, chunk.y * 32 }, { chunk.x * 32 + 32, chunk.y * 32 + 32 } }, type = "tree" }
 end
 
-local function deadening_tree(surface, tree)
-  if noxy_trees.dead[tree.name] and noxy_trees.dead[tree.name] == true then
-    tree.die()
+local function deadening_tree(surface, tree, near_player)
+  local name = tree.name
+  local dead = noxy_trees.dead[name]
+  if dead == true then
+    kill_tree(tree)
     storage.killedcount = storage.killedcount + 1
     return
   end
 
   -- Remove tree if a player entity is near it instead of spawning a dead tree.
-  local rp = config.minimum_distance_to_player_entities
-  if rp > 0 then
-    for _, force in pairs(game.forces) do
-      if #force.players > 0 then
-        if surface.count_entities_filtered { position = tree.position, radius = rp, force = force, limit = 1 } > 0 then
-          tree.die()
-          storage.deadedcount = storage.deadedcount + 1
-          return
-        end
-      end
-    end
+  local position = tree.position
+  if near_player == nil then
+    near_player = near_player_entities(surface, position)
+  end
+  if near_player then
+    kill_tree(tree)
+    storage.deadedcount = storage.deadedcount + 1
+    return
   end
 
-  if noxy_trees.dead[tree.name] then
-    if noxy_trees.dead[tree.name] ~= true then
-      surface.create_entity { name = noxy_trees.dead[tree.name], position = tree.position }
-      tree.die()
-      storage.deadedcount = storage.deadedcount + 1
-    end
-  else
-    local deadtree = noxy_trees.deathselector[storage.rng(1, #noxy_trees.deathselector)]
-    surface.create_entity { name = deadtree, position = tree.position }
-    tree.die()
-    storage.deadedcount = storage.deadedcount + 1
-  end
+  local deadtree = dead or noxy_trees.deathselector[storage.rng(1, #noxy_trees.deathselector)]
+  surface.create_entity { name = deadtree, position = position }
+  kill_tree(tree)
+  storage.deadedcount = storage.deadedcount + 1
 end
 
 local function spawn_trees(surface, parent, tilestoupdate, newpos)
-  if noxy_trees.disabled[parent.name] then return end
+  local parent_name = parent.name
+  if noxy_trees.disabled[parent_name] then return end
+  local parent_position = parent.position
   if not newpos then
     local distance = config.expansion_distance
     newpos = {
-      parent.position.x + storage.rng(distance * 2) - distance + (storage.rng() - 0.5),
-      parent.position.y + storage.rng(distance * 2) - distance + (storage.rng() - 0.5),
+      parent_position.x + storage.rng(distance * 2) - distance + (storage.rng() - 0.5),
+      parent_position.y + storage.rng(distance * 2) - distance + (storage.rng() - 0.5),
     }
   end
   local tile = surface.get_tile(newpos[1], newpos[2])
   if tile and tile.valid == true then
+    local tile_name = tile.name
+    local fertility = noxy_trees.fertility[tile_name] or 0
     -- Tile degradation
     local degrade_to = nil
-    if config.degrade_tiles and noxy_trees.degradable[tile.name] then
-      degrade_to = noxy_trees.degradable[tile.name]
+    if config.degrade_tiles and noxy_trees.degradable[tile_name] then
+      degrade_to = noxy_trees.degradable[tile_name]
     end
-    if not config.do_not_degrade_reinforced_tiles and noxy_trees.reinforced_degradable[tile.name] then
-      degrade_to = noxy_trees.reinforced_degradable[tile.name]
+    if not config.do_not_degrade_reinforced_tiles and noxy_trees.reinforced_degradable[tile_name] then
+      degrade_to = noxy_trees.reinforced_degradable[tile_name]
     end
     if degrade_to ~= nil then
       if degrade_to == true then
@@ -718,33 +738,24 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
         end
       end
     elseif                                   -- Tree spreading
-        (noxy_trees.fertility[tile.name] or 0) > 0 and
-        not noxy_trees.dead[parent.name] and -- Stop dead trees from spreading.
-        noxy_trees.fertility[tile.name] > storage.rng() and
-        surface.can_place_entity { name = parent.name, position = newpos }
+        fertility > 0 and
+        not noxy_trees.dead[parent_name] and -- Stop dead trees from spreading.
+        fertility > storage.rng() and
+        surface.can_place_entity { name = parent_name, position = newpos }
     then
-      local r = config.minimum_distance_between_tree / noxy_trees.fertility[tile.name]
+      local r = config.minimum_distance_between_tree / fertility
       if surface.count_entities_filtered { position = newpos, radius = r, type = "tree", limit = 1 } > 0 then
         return
       end
-      local rp = config.minimum_distance_to_player_entities
-      if rp > 0 then
-        for _, force in pairs(game.forces) do
-          if #force.players > 0 then
-            if surface.count_entities_filtered { position = newpos, radius = rp, force = force, limit = 1 } > 0 then
-              return
-            end
-          end
-        end
+      if near_player_entities(surface, newpos) then
+        return
       end
-      local er = config.minimum_distance_to_enemies
-      if surface.count_entities_filtered { position = newpos, radius = er, type = "unit-spawner", force = "enemy", limit = 1 } > 0 or
-          surface.count_entities_filtered { position = newpos, radius = er, type = "turret", force = "enemy", limit = 1 } > 0 then
+      if near_enemies(surface, newpos) then
         return
       end
       local ur = config.minimum_distance_to_uranium
       -- ParanoidalModpack fork: гард — uranium-ore нет в AngelBob (руды angels-ore*), без него count_entities_filtered крашит
-      if prototypes.entity["uranium-ore"] and surface.count_entities_filtered { position = newpos, radius = ur, type = "resource", name = "uranium-ore", limit = 1 } > 0 then
+      if has_uranium and surface.count_entities_filtered { position = newpos, radius = ur, type = "resource", name = "uranium-ore", limit = 1 } > 0 then
         return
       end
       local tr = config.minimum_distance_to_degradetiles
@@ -753,18 +764,18 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
           return
         end
       end
-      surface.create_entity { name = parent.name, position = newpos }
+      surface.create_entity { name = parent_name, position = newpos }
       storage.spawnedcount = storage.spawnedcount + 1
     elseif -- Tree resurrections
-        (noxy_trees.fertility[tile.name] or 0) > 0 and
-        noxy_trees.dead[parent.name] and
-        noxy_trees.fertility[tile.name] > storage.rng()
+        fertility > 0 and
+        noxy_trees.dead[parent_name] and
+        fertility > storage.rng()
     then
       -- Only if polution is low enough we do a resurrect (which can also be seen as a mutation)
-      if surface.get_pollution { parent.position.x, parent.position.y } / config.deaths_by_pollution_bias < 1 + storage.rng() then
+      if surface.get_pollution(parent_position) / config.deaths_by_pollution_bias < 1 + storage.rng() then
         -- We can skip the distance checks here since the parent tree already exists and we are just going to replace that one.
         local newname = noxy_trees.combined[storage.rng(#noxy_trees.combined)]
-        newpos = parent.position
+        newpos = parent_position
         parent.destroy()
         surface.create_entity { name = newname, position = newpos }
         storage.resurrected = storage.resurrected + 1
@@ -775,6 +786,7 @@ end
 
 local function process_chunk(surface, chunk)
   if not chunk then return end
+  player_forces = nil -- Lazy, chunk-local cache; never persisted across operations.
   local tilestoupdate = {}
   local trees = get_trees_in_chunk(surface, chunk)
   local trees_count = #trees
@@ -811,26 +823,15 @@ local function process_chunk(surface, chunk)
     repeat
       local treetocheck = trees[storage.rng(1, trees_count)]
       if treetocheck and treetocheck.valid == true then
-        local er = config.minimum_distance_to_enemies
+        local position = treetocheck.position
         local ur = config.minimum_distance_to_uranium
-        if surface.count_entities_filtered { position = treetocheck.position, radius = er, type = "unit-spawner", force = "enemy", limit = 1 } > 0 or
-            surface.count_entities_filtered { position = treetocheck.position, radius = er, type = "turret", force = "enemy", limit = 1 } > 0 then
+        if near_enemies(surface, position) then
           deadening_tree(surface, treetocheck)
-        -- ParanoidalModpack fork: гард — uranium-ore нет в AngelBob (руды angels-ore*), без него count_entities_filtered крашит
-        elseif prototypes.entity["uranium-ore"] and surface.count_entities_filtered { position = treetocheck.position, radius = ur, type = "resource", name = "uranium-ore", limit = 1 } > 0 then
+        -- ParanoidalModpack fork: uranium-ore may be absent in AngelBob.
+        elseif has_uranium and surface.count_entities_filtered { position = position, radius = ur, type = "resource", name = "uranium-ore", limit = 1 } > 0 then
           deadening_tree(surface, treetocheck)
-        else
-          local rp = config.minimum_distance_to_player_entities
-          if rp > 0 then
-            for _, force in pairs(game.forces) do
-              if #force.players > 0 then
-                if surface.count_entities_filtered { position = treetocheck.position, radius = rp, force = force, limit = 1 } > 0 then
-                  deadening_tree(surface, treetocheck)
-                  break
-                end
-              end
-            end
-          end
+        elseif near_player_entities(surface, position) then
+          deadening_tree(surface, treetocheck, true)
         end
       end
       if treetocheck and treetocheck.valid == true then
@@ -863,6 +864,73 @@ local function process_chunk(surface, chunk)
   end
 end
 
+local function prepare_tree_prototypes()
+  if noxy_trees.combined then return end
+  noxy_trees.combined = {}
+  for _, tree in pairs(noxy_trees.alive) do
+    if prototypes.entity[tree] then
+      noxy_trees.combined[#noxy_trees.combined + 1] = tree
+    end
+  end
+  -- Only trees can be parents. Do not scan every machine/item-entity prototype.
+  for name, _ in pairs(prototypes.get_entity_filtered { { filter = "type", type = "tree" } }) do
+    for pattern, _ in pairs(noxy_trees.disabled_match) do
+      if name:find(pattern) then
+        noxy_trees.disabled[name] = true
+      end
+    end
+  end
+end
+
+local function process_operation()
+  -- Preserve the original empty operation at the end of each surface cycle.
+  local last_surface, surface_index = next(storage.surfaces, storage.last_surface)
+  if surface_index then
+    local surface = game.get_surface(surface_index)
+    if surface and surface.valid then
+      local chunksdone = 0
+      local chunkstodo = config.chunks_per_operation
+      if chunkstodo < 1 then chunkstodo = 1 end
+      repeat
+        process_chunk(surface, surface.get_random_chunk())
+        storage.chunksprocessed = storage.chunksprocessed + 1
+        chunksdone = chunksdone + 1
+      until chunksdone >= chunkstodo
+    end
+  end
+  storage.last_surface = last_surface
+end
+
+local function service(event)
+  scheduler.advance(storage, event.tick, config.ticks_between_operations, config.enabled)
+  prepare_tree_prototypes()
+  if config.debug and storage.lastdebugmessage + config.debug_interval < event.tick then
+    local timegap = (event.tick - storage.lastdebugmessage) / 60
+    nx_debug("Chunks processed: " .. storage.chunksprocessed .. ". "
+      .. " Grown: " .. storage.spawnedcount .. " (" .. round(storage.spawnedcount / timegap, 2) .. "/s)."
+      .. " Deaded: " .. storage.deadedcount .. " (" .. round(storage.deadedcount / timegap, 2) .. "/s)."
+      .. " Killed: " .. storage.killedcount .. " (" .. round(storage.killedcount / timegap, 2) .. "/s)."
+      .. " Degrade: " .. storage.degradedcount .. " (" .. round(storage.degradedcount / timegap, 2) .. "/s)."
+      .. " Rezzed: " .. storage.resurrected .. " (" .. round(storage.resurrected / timegap, 2) .. "/s)."
+    )
+    storage.lastdebugmessage = event.tick
+    storage.spawnedcount     = 0
+    storage.deadedcount      = 0
+    storage.killedcount      = 0
+    storage.degradedcount    = 0
+    storage.resurrected      = 0
+  end
+  local operations = storage.pending_operations
+  storage.pending_operations = 0
+  for _ = 1, operations do
+    process_operation()
+  end
+end
+
+local function register_service()
+  script.on_nth_tick(service_interval, config.enabled and service or nil)
+end
+
 script.on_configuration_changed(function()
   if storage.noxy_trees then
     for k, v in pairs(storage.noxy_trees) do
@@ -871,81 +939,22 @@ script.on_configuration_changed(function()
     storage.noxy_trees = nil
   end
   initialize()
+  register_service()
 end)
 
 script.on_init(function()
   initialize()
+  register_service()
 end)
 
-script.on_event({ defines.events.on_runtime_mod_setting_changed }, cache_settings)
+script.on_load(register_service)
 
-script.on_event({ defines.events.on_forces_merging, defines.events.on_player_changed_force }, cache_forces)
-
-script.on_event({ defines.events.on_tick }, function(event)
-  local global = storage
-  if config.enabled then
-    storage.tick = storage.tick - 1
-    -- Check alive trees this should only run once
-    if not noxy_trees.combined then
-      noxy_trees.combined = {}
-      for _, tree in pairs(noxy_trees.alive) do
-        if prototypes.entity[tree] then
-          noxy_trees.combined[#noxy_trees.combined + 1] = tree
-        end
-      end
-    end
-    -- Add disabled prototypes
-    if next(noxy_trees.disabled_match) then
-      for e, _ in pairs(prototypes.entity) do
-        for k, _ in pairs(noxy_trees.disabled_match) do
-          if e:find(k) then
-            noxy_trees.disabled[e] = true
-          end
-        end
-      end
-      -- Clear so we don't do this again.
-      noxy_trees.disabled_match = {}
-    end
-    -- Debug
-    if config.debug then
-      if storage.lastdebugmessage + config.debug_interval < event.tick then
-        local timegap = (event.tick - storage.lastdebugmessage) / 60
-        nx_debug("Chunks processed: " .. storage.chunksprocessed .. ". "
-          .. " Grown: " .. storage.spawnedcount .. " (" .. round(storage.spawnedcount / timegap, 2) .. "/s)."
-          .. " Deaded: " .. storage.deadedcount .. " (" .. round(storage.deadedcount / timegap, 2) .. "/s)."
-          .. " Killed: " .. storage.killedcount .. " (" .. round(storage.killedcount / timegap, 2) .. "/s)."
-          .. " Degrade: " .. storage.degradedcount .. " (" .. round(storage.degradedcount / timegap, 2) .. "/s)."
-          .. " Rezzed: " .. storage.resurrected .. " (" .. round(storage.resurrected / timegap, 2) .. "/s)."
-        )
-        storage.lastdebugmessage = event.tick
-        storage.spawnedcount     = 0
-        storage.deadedcount      = 0
-        storage.killedcount      = 0
-        storage.degradedcount    = 0
-        storage.resurrected      = 0
-      end
-    end
-    if storage.tick <= 0 or storage.tick == nil then
-      storage.tick = config.ticks_between_operations
-      -- Do the stuff
-      local last_surface, surface_index = next(storage.surfaces, storage.last_surface)
-      if surface_index then
-        local surface = game.get_surface(surface_index)
-        if surface and surface.valid then
-          local chunksdone = 0
-          local chunkstodo = config.chunks_per_operation
-          if chunkstodo < 1 then chunkstodo = 1 end
-          repeat
-            process_chunk(surface, surface.get_random_chunk())
-            storage.chunksprocessed = storage.chunksprocessed + 1
-            chunksdone = chunksdone + 1
-          until chunksdone >= chunkstodo
-        end
-      end
-      storage.last_surface = last_surface
-    end
-    if storage.tick > config.ticks_between_operations then
-      storage.tick = config.ticks_between_operations
-    end
-  end
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting:sub(1, 12) ~= "Noxys_Trees-" then return end
+  -- Settle the old interval and enabled time before changing settings. World work
+  -- stays queued until the next 30-tick service; disabled time never accumulates.
+  scheduler.advance(storage, event.tick, config.ticks_between_operations, config.enabled)
+  cache_settings()
+  scheduler.change_interval(storage, config.ticks_between_operations)
+  register_service()
 end)
