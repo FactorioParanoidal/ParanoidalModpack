@@ -120,20 +120,20 @@ remote.add_interface("flammable_oils", {
   end
 })
 
+-- Keep the original RNG calls, even for entities without fluid boxes; only reuse the constant table.
+local chances = {
+  ["fire"] = 0.95,
+  ["explosion"] = 0.75,
+  ["acid"] = 0.5,
+  ["electric"] = 0.5,
+  ["laser"] = 0.5,
+}
+
 -- Event handler for entities that died
 script.on_event(defines.events.on_entity_died, function(event)
   if event.entity.type == "pump" then
     return
   end
-
-  local chances = {
-    ["fire"] = 0.95,
-    ["explosion"] = 0.75,
-    ["acid"] = 0.5,
-    ["electric"] = 0.5,
-    ["laser"] = 0.5
-  }
-
 
   local damage_type = event.damage_type
   if not damage_type then

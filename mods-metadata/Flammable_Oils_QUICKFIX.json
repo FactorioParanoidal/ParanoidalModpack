@@ -1,0 +1,10 @@
+{
+  "mod": "Flammable_Oils_QUICKFIX",
+  "source": "local",
+  "original": {
+    "name": "Flammable_Oils_QUICKFIX",
+    "authors": ["Fr_Dae", "Pi-c", "Kannagimoe", "Klogan", "lily"],
+    "portal": {"name": "Flammable_Oils_QUICKFIX", "url": "https://mods.factorio.com/mod/Flammable_Oils_QUICKFIX"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 0.2.22, по решению пользователя. Таблица вероятностей переиспользуется вместо создания на каждую смерть. Не меняются фильтрация, последовательность RNG, жидкости, вероятности, огонь и взрывы."
+}
