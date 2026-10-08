@@ -1,0 +1,10 @@
+{
+  "mod": "Shield-FX",
+  "source": "local",
+  "original": {
+    "name": "Shield FX",
+    "authors": ["OwnlyMe"],
+    "portal": {"name": "Shield-FX", "url": "https://mods.factorio.com/mod/Shield-FX"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.1, по решению пользователя. Нативный фильтр смерти для car — единственного существующего типа, который проходит исходный обработчик удаления. Логика щитов и известные старые ошибки обработчика не меняются."
+}
