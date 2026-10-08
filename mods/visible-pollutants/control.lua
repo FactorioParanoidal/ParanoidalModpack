@@ -54,7 +54,7 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 end)
 
 ---@param event EventData.on_player_removed
-script.on_event(defines.events.on_player_removed, function(event)
+script.on_event({ defines.events.on_player_removed, defines.events.on_player_left_game }, function(event)
   Proximity.remove_player_storage(event.player_index)
 end)
 
@@ -65,7 +65,7 @@ end)
 
 ---@param event EventData.on_player_changed_position
 script.on_event(defines.events.on_player_changed_position, function(event)
-  Proximity.add_sprites_near_players_if_moved()
+  Proximity.add_sprites_near_player_if_moved(game.players[event.player_index])
 end)
 
 ---@param event EventData.on_player_controller_changed
@@ -86,6 +86,7 @@ end)
 
 ---@param event EventData.on_tick
 script.on_nth_tick(Sprite.SpriteUpdateInterval, function(event)
+  Sprite.cleanup_expired()
   local finished = Sprite.incrementally_update_sprites_in_queue()
   if finished then
     Sprite.queue_sprites_for_update()
@@ -119,13 +120,25 @@ end, { { filter = "type", type = "solar-panel" } })
 ---@param event EventData.script_raised_teleported
 script.on_event(defines.events.script_raised_teleported, function(event)
   if not Solar.OcclusionEnabled then return end
-  Solar.on_panel_moved(event.old_position, event.entity)
+  Solar.on_panel_moved(event.entity)
+end, { { filter = "type", type = "solar-panel" } })
+
+---@param event EventData.on_entity_cloned
+script.on_event(defines.events.on_entity_cloned, function(event)
+  if not Solar.OcclusionEnabled then return end
+  Solar.on_panel_placed(event.destination)
 end, { { filter = "type", type = "solar-panel" } })
 
 ---@param event EventData.on_object_destroyed
 script.on_event(defines.events.on_object_destroyed, function(event)
-  if not Solar.OcclusionEnabled then return end
   Solar.on_panel_destroyed(event.registration_number)
+end)
+
+script.on_event(defines.events.on_surface_deleted, function(event)
+  storage.sprites_by_surface_cells[event.surface_index] = nil
+  storage.pollutant_color_by_surface[event.surface_index] = nil
+  Proximity.invalidate_important_cells()
+  Solar.on_surface_deleted(event.surface_index)
 end)
 
 ---@param event EventData.on_tick

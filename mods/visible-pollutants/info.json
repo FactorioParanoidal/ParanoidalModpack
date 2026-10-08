@@ -1,9 +1,9 @@
 {
   "name": "visible-pollutants",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "factorio_version": "2.0",
-  "title": "Pollution: Impactful Smog / Spore Cloud",
-  "author": "somethingtohide",
+  "title": "Pollution: Impactful Smog / Spore Cloud (Paranoidal fork)",
+  "author": "somethingtohide; Paranoidal fork: FactorioParanoidal",
   "description": "Pollution appears as a visible smog (or spore) cloud, covering your factory. The more you pollute, the less you can see.\n\nOptionally reduce solar power effectiveness based on how much pollution is over each panel, to promote placing panels far away from heavily polluted areas.",
   "dependencies": [
     "base >= 2.0.46"

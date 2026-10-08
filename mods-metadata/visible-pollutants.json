@@ -1,6 +1,13 @@
 {
   "mod": "visible-pollutants",
-  "source": "portal",
-  "upstreamVersion": "1.4.4",
-  "changeReason": "Временный совместимый патч: scripts/solar.lua умножает штраф загрязнения на сезонный фактор NightBrightness, control.lua предоставляет remote refresh_solar_multiplier. Без NightBrightness сохраняется upstream-поведение. План upstream-репорта: предложить автору композицию независимых солнечных множителей и remote-обновление; публикация только по отдельной команде. После принятия совместимого upstream-решения удалить патч и эту декларацию при обновлении."
+  "source": "local",
+  "original": {
+    "name": "Pollution: Impactful Smog / Spore Cloud",
+    "authors": ["somethingtohide", "Cameron Leger"],
+    "portal": {
+      "name": "visible-pollutants",
+      "url": "https://mods.factorio.com/mod/visible-pollutants"
+    }
+  },
+  "changeReason": "Поддерживаемый форк Paranoidal на основе 1.4.4: оптимизация runtime без снижения качества тумана и изменения формулы солнечного затенения; исправления мультиплеера, перемещений и lifecycle. ID сохранён для совместимости сейвов и настроек, исходная лицензия MIT сохранена. Отправка изменений upstream не планируется."
 }
