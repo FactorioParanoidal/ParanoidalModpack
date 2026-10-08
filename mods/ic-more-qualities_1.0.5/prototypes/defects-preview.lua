@@ -60,6 +60,7 @@ end
 function M.prepare(raw)
     assert(raw.quality and raw.quality.normal, "Missing standard quality")
     assert(raw.technology, "Missing technologies")
+    local quality_module = assert(raw.technology["quality-module"], "Missing first quality-module technology")
     assert(raw.quality.normal.level == 0, "Defects require standard quality at level 0")
     for tier = 1, 5 do
         assert(not raw.quality["ic-defect-" .. tier], "Defect quality already registered")
@@ -74,14 +75,6 @@ function M.prepare(raw)
     for level = 1, 10 do
         local research = model.research(level)
         local prerequisites = research.prerequisite and {research.prerequisite} or {}
-        if level == model.maximum_research then
-            -- User decision: the final level also needs the first positive-quality module.
-            if raw.technology["quality-module"] then
-                prerequisites[#prerequisites + 1] = "quality-module"
-            else
-                log("IC defects: technology quality-module is missing; level 10 keeps only level 9 as prerequisite")
-            end
-        end
         prototypes[#prototypes + 1] = {
             type = "technology",
             name = research.name,
@@ -98,6 +91,16 @@ function M.prepare(raw)
             effects = {{type = "nothing", effect_description = {"technology-description.ic-defect-control-preview"}}},
         }
     end
+    -- Quality modules follow defect control, not the other way around. Preserve
+    -- the upstream module prerequisites and all existing researched states.
+    local final_control = model.research_prefix .. model.maximum_research
+    local prerequisites, present = {}, false
+    for _, name in ipairs(quality_module.prerequisites or {}) do
+        prerequisites[#prerequisites + 1] = name
+        if name == final_control then present = true end
+    end
+    if not present then prerequisites[#prerequisites + 1] = final_control end
+    quality_module.prerequisites = prerequisites
     return prototypes
 end
 

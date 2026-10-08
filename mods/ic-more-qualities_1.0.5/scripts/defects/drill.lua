@@ -116,7 +116,7 @@ function M.step(record, level, ctx)
     if left > M.FINAL then return math.max(1, math.floor(left * M.STEP)), warning end
 
     cycle.decided = true
-    if level < 10 and model.production_failed(level, ctx.random()) then
+    if level < 10 and model.roll_loss(level, ctx.random, ctx.initial_loss_percent) then
         if bonus > cycle.bonus_start then entity.bonus_mining_progress = cycle.bonus_start end
         entity.mining_progress = 0
         M.drain(entity, target, ctx)

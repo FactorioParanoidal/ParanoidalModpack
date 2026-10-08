@@ -14,6 +14,10 @@ local function exclude_finished()
     return settings.global["ic-more-qualities-loss-exclude-finished"].value
 end
 
+local function initial_loss_percent()
+    return settings.global["ic-more-qualities-initial-loss-percent"].value
+end
+
 -- Deterministic caches derived from prototypes only (identical on all peers).
 local category_min, min_energy_cache, emissions_cache = nil, {}, {}
 
@@ -57,6 +61,7 @@ local function automation_context()
         random = math.random,
         finished = eligibility.finished(),
         exclude_finished = exclude_finished(),
+        initial_loss_percent = initial_loss_percent(),
         min_energy = min_energy,
         emissions = emissions,
     }
@@ -110,7 +115,7 @@ script.on_event(defines.events.on_player_crafted_item, function(event)
     local queue = player.character and player.crafting_queue
     if production_loss.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then return end
     local finished = eligibility.finished()
-    local loss = production_loss.handle(event, player, math.random, finished, exclude_finished())
+    local loss = production_loss.handle(event, player, math.random, finished, exclude_finished(), initial_loss_percent())
     if loss == "empty-result" or loss == "ignored" then return end
     local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished)
     if reported[status] then warn_player(player, status, detail) end
@@ -121,12 +126,12 @@ for _, kind in ipairs(mining.event_types) do mining_filters[#mining_filters + 1]
 script.on_event(defines.events.on_player_mined_entity, function(event)
     if not enabled() then return end
     local player = game.get_player(event.player_index)
-    if player and player.valid then mining.handle(event.entity, event.buffer, player.force, math.random) end
+    if player and player.valid then mining.handle(event.entity, event.buffer, player.force, math.random, initial_loss_percent()) end
 end, mining_filters)
 script.on_event(defines.events.on_robot_mined_entity, function(event)
     if not enabled() then return end
     local robot = event.robot
-    if robot and robot.valid then mining.handle(event.entity, event.buffer, robot.force, math.random) end
+    if robot and robot.valid then mining.handle(event.entity, event.buffer, robot.force, math.random, initial_loss_percent()) end
 end, mining_filters)
 
 automation.register(enabled, automation_context)

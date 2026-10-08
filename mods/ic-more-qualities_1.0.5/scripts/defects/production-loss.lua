@@ -2,7 +2,7 @@
 local model = require("scripts.defects.model")
 local M = {}
 
-function M.handle(event, player, random, finished, exclude_finished)
+function M.handle(event, player, random, finished, exclude_finished, initial_percent)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then
         return "ignored"
@@ -12,7 +12,7 @@ function M.handle(event, player, random, finished, exclude_finished)
     end
     local level = model.completed_level(player.force.technologies)
     if level == 10 then return "loss-free" end
-    if not model.production_failed(level, random()) then return "survived" end
+    if not model.roll_loss(level, random, initial_percent) then return "survived" end
     -- Ingredients have already been spent. Discard this event's entire result,
     -- including positive quality. No refund, reroll or old-stock conversion.
     stack.clear()

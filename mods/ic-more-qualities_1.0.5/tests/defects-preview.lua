@@ -21,7 +21,7 @@ local raw = {
         legendary = {name = "legendary", level = 6, default_multiplier = 2, electric_pole_wire_reach_bonus = 3},
         ["quality-unknown"] = {name = "quality-unknown", level = 0},
     },
-    technology = {["quality-module"] = {name = "quality-module"}},
+    technology = {["quality-module"] = {name = "quality-module", prerequisites = {"modules"}}},
     item = {
         ["iron-plate"] = {name = "iron-plate"}, ["iron-gear-wheel"] = {name = "iron-gear-wheel"},
         ["assembling-machine-1"] = {name = "assembling-machine-1", place_result = "assembling-machine-1"},
@@ -89,18 +89,22 @@ for _, prototype in ipairs(prototypes) do
     else
         local level = tonumber(prototype.name:match("(%d+)$"))
         assert(prototype.enabled == true and prototype.localised_name[2] == tostring(level))
-        assert(#prototype.prerequisites == (level == 10 and 2 or (level == 1 and 0 or 1)))
+        assert(#prototype.prerequisites == (level == 1 and 0 or 1))
         if level > 1 then assert(prototype.prerequisites[1] == "ic-defect-control-" .. (level - 1)) end
-        if level == 10 then assert(prototype.prerequisites[2] == "quality-module") end
         assert(#prototype.unit.ingredients == 1 and prototype.unit.ingredients[1][1] == "automation-science-pack")
         research_total = research_total + prototype.unit.count
     end
 end
 assert(research_total == 550)
+local parents = raw.technology["quality-module"].prerequisites
+assert(#parents == 2 and parents[1] == "modules" and parents[2] == "ic-defect-control-10")
 assert(not pcall(builder.prepare, raw), "Duplicate registration must fail")
 local without_module = {quality = {normal = {level = 0}}, technology = {}}
-local no_module = builder.prepare(without_module)
-assert(#no_module[15].prerequisites == 1, "Missing quality-module must not break loading")
+assert(not pcall(builder.prepare, without_module), "Missing mandatory quality-module must not silently lose the dependency")
+local existing_parent = {quality = {normal = {level = 0}}, technology = {
+    ["quality-module"] = {prerequisites = {"modules", "ic-defect-control-10"}}}}
+builder.prepare(existing_parent)
+assert(#existing_parent.technology["quality-module"].prerequisites == 2, "Do not duplicate prerequisites")
 
 -- Late layer.
 local extra, report, finished = final.apply(raw, {mode = "materials", supply_reduction = .5, wire_reduction = 1})
@@ -198,6 +202,6 @@ require("prototypes.defects-quality-modules")(modules)
 assert(modules.module["quality-module"].hidden == false and modules.recipe["quality-module"].hidden == false)
 assert(modules.module["bob-god-module"].hidden and modules.recipe["quality-module"].enabled == false)
 print("PASS: 5 defect qualities on level 0 without shifting standard/positive qualities, multipliers,")
-print("1/m energy, 10 red-science technologies (+quality-module at 10), classification mod-data,")
+print("1/m energy, 10 red-science technologies (quality-module REQUIRES level 10), classification mod-data,")
 print("white intermediate recipes, drills without quality effect, machine energy dictionaries,")
 print("uniform pole reduction with clamping report, control lifecycle. Mocks only, not Factorio.")

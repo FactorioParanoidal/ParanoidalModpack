@@ -12,15 +12,26 @@ local function integer(value, minimum, maximum, label)
     return value
 end
 
--- Independent production failure: 50%, 45%, ... 0%. Not a quality roll.
-function M.loss_probability(research_level)
+-- Independent production failure, configurable in percent. Not a quality roll.
+-- Default: 33%, 29.7%, ... 3.3%, 0%. Level ten always has exactly zero loss.
+M.default_loss_percent = 33
+
+function M.loss_probability(research_level, initial_percent)
     integer(research_level, 0, 10, "research level")
-    return (10 - research_level) / 20
+    if initial_percent == nil then initial_percent = M.default_loss_percent end
+    assert(type(initial_percent) == "number" and initial_percent >= 0 and initial_percent <= 100,
+        "Invalid initial loss percent")
+    return initial_percent * (10 - research_level) / 1000
 end
 
-function M.production_failed(research_level, sample)
+function M.production_failed(research_level, sample, initial_percent)
     assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
-    return sample < M.loss_probability(research_level)
+    return sample < M.loss_probability(research_level, initial_percent)
+end
+
+function M.roll_loss(research_level, random, initial_percent)
+    if M.loss_probability(research_level, initial_percent) == 0 then return false end
+    return M.production_failed(research_level, random(), initial_percent)
 end
 
 function M.multiplier(grade)

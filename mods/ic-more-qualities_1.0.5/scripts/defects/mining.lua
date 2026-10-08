@@ -11,13 +11,13 @@ function M.is_natural(entity)
 end
 
 -- One roll per mining event; the whole event buffer is the batch.
-function M.handle(entity, buffer, force, random)
+function M.handle(entity, buffer, force, random, initial_percent)
     if not entity or not entity.valid or not buffer or not buffer.valid or not force then return "ignored" end
     if not M.is_natural(entity) then return "not-natural" end
     if buffer.is_empty() then return "empty" end
     local level = model.completed_level(force.technologies)
     if level == 10 then return "loss-free" end
-    if not model.production_failed(level, random()) then return "survived" end
+    if not model.roll_loss(level, random, initial_percent) then return "survived" end
     -- The resource amount/tree is already consumed by the engine.
     buffer.clear()
     return "lost"

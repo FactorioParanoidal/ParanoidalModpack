@@ -160,7 +160,7 @@ function M.step(record, level, ctx)
         end
     end
     local protected = ctx.exclude_finished and any_item and all_finished
-    if level < 10 and not protected and model.production_failed(level, ctx.random()) then
+    if level < 10 and not protected and model.roll_loss(level, ctx.random, ctx.initial_loss_percent) then
         M.fail(record, entity, recipe, quality, progress)
         return math.max(1, math.floor(full * M.STEP)), warning
     end

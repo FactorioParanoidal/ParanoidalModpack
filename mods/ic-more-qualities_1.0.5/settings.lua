@@ -34,6 +34,15 @@ data:extend(
 			maximum_value = 7.5
 		},
 		{
+			type = "double-setting",
+			name = "ic-more-qualities-initial-loss-percent",
+			order = "g-a",
+			setting_type = "runtime-global",
+			default_value = 33,
+			minimum_value = 0,
+			maximum_value = 100
+		},
+		{
 			type = "bool-setting",
 			name = "ic-more-qualities-loss-exclude-finished",
 			order = "g",
