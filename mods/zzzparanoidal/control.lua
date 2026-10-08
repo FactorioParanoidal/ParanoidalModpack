@@ -2,6 +2,7 @@ require("controls.heroturrets_script") -- скрипт разжалования 
 require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
 require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
+local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
 -- ###############################################################################################
 -- from some corpse marker
@@ -96,6 +97,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	evo_and_dolly()
 	disable_obsolete_basic_logistics()
 	sync_air_filter_beta8()
+	burner_pump_status.init()
 	loader_shells.init()
 end)
 
@@ -107,6 +109,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	evo_and_dolly()
 	disable_obsolete_basic_logistics()
 	sync_air_filter_beta8()
+	burner_pump_status.init()
 	loader_shells.init()
 end)
 
