@@ -3,7 +3,6 @@ if (powerupG) then
 end
 local powerup = {}
 
-local mathUtils = require("libs/MathUtils")
 
 function powerup.savePlayerAmmo(player, powerupSettings)
 	powerupSettings["ammo"] = {}
@@ -101,6 +100,9 @@ function powerup.setOneshotBiters(player, universepowerupSettings, oneshotBiters
 	else
 		powerupSettings.oneshotBitersTick = nil		
 	end
+	if powerup.onOneshotStateChanged then
+		powerup.onOneshotStateChanged()
+	end
 end
 
 
@@ -188,7 +190,7 @@ function powerup.onUnitDamaged_oneshot(event, universe)
 	universe.unitProtectionData.unitCurrentHP[event.entity.unit_number] = nil
 	
 	entitisToKillQuery.position = event.entity.position
-	entitisToKill = event.entity.surface.find_entities_filtered(entitisToKillQuery)
+	local entitisToKill = event.entity.surface.find_entities_filtered(entitisToKillQuery)
 	for i=1,#entitisToKill do
 		local entity = entitisToKill[i]
 		if entity and entity.valid then
@@ -208,63 +210,8 @@ function powerup.onPlayerRespawned(player, universepowerupSettings)
 	end
 end
 
-
-local dropChanceByRange = {}
-dropChanceByRange[#dropChanceByRange+1] = {range = 15, rate = 0.1}
-dropChanceByRange[#dropChanceByRange+1] = {range = 20, rate = 0.07}
-dropChanceByRange[#dropChanceByRange+1] = {range = 40, rate = 0.05}
-dropChanceByRange[#dropChanceByRange+1] = {range = 70, rate = 0.03}
-dropChanceByRange[#dropChanceByRange+1] = {range = 90, rate = 0.01}
-
-local regenerationCrystalChance = 0.01
-
-function powerup.checkAndDropPowerup(entity, cause, universe, evo)
-	if entity.max_health < 400 then
-		return
-	end	
-	if not (entity.type == "unit-spawner") then
-		return
-	end	
-	local evoK
-	if evo then
-		if evo < 0.5 then
-			evoK = 1
-		elseif evo < 0.8 then
-			evoK = 1.2
-		elseif evo < 0.9 then
-			evoK = 1.4
-		else
-			evoK = 1.6
-		end
-	end
-	local roll = universe.dropRandomizer()
-	-- if roll >= dropChanceByRange[1].rate then		-- temporarily, Let's assume that this is the biggest chance
-		-- return
-	-- end	
-	local distance = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, cause.position.x, cause.position.y)
-	for _, dropChance in pairs(dropChanceByRange) do
-		if distance <= dropChance.range then
-			if roll < dropChance.rate * evoK then
-				lootEntity = entity.surface.create_entity({name = "lootStone_Combat5-rampantFixed", position = entity.position})
-				if lootEntity then
-					lootEntity.health = 1
-				end
-			end
-			break
-		end
-	end
-	if (distance <= 20) and (universe.dropRandomizer() < regenerationCrystalChance) then
-		regenerationCrystal = entity.surface.create_entity({name = "regenerationCrystal-rampantFixed", force = "neutral", position = entity.position})
-		regenerationCrystal.destructible = false
-		regenerationCrystal.active = false		
-	end
-	-- if universe.dropRandomizer() < 0.5 then
-		-- lootEntity = entity.surface.create_entity({name = "lootStone_Combat5", position = entity.position})
-		-- if lootEntity then
-			-- lootEntity.health = 1
-		-- end
-	-- end
-end
+-- Reforged Paranoidal: nests no longer drop the combat power-up stone or the regeneration crystal.
+-- Prototypes and handlers stay so existing items and crystals in saves keep working.
 
 local charatersToHealQuery = {force = nil, type={"character"}, position = {}, radius = 10}
 

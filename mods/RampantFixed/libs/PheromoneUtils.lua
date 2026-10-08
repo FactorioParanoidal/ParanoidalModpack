@@ -105,7 +105,6 @@ local function compare_pheromones(map, neighbor, pheromone_neighbor)
 	pheromone = neighbor[BASE_PHEROMONE]
 	if pheromone_neighbor.chunkBase < pheromone then
 		pheromone_neighbor.chunkBase = pheromone
-		pheromone_neighbor.src = "[gps=" .. neighbor.x .. "," .. neighbor.y .."]"
 	end
 	pheromone = neighbor[BASE_DETECTION_PHEROMONE] or 0
 	if pheromone_neighbor.chunkBaseDetection < pheromone then

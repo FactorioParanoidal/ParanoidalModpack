@@ -104,7 +104,7 @@ local function digOut(undergroundSquad, targetPosition)
 			removeConcreteTile(surface, tile)
 			undergroundSquad.digOutTick = game.tick + 3600
 			
-			entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+			local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 			showAlert(surface, entity, "undergroundDigout-warning-rampant", 
 				{"", {"description.rampantFixed--undergroundAttackDigoutWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .."]")}
 				)
@@ -306,7 +306,7 @@ local function digOut(undergroundSquad, targetPosition)
 			squad.onTheWay = true
 			
 			if undergroundSquad.digOutTick then	-- do not alert if "soft" ground
-				entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+				local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 				showAlert(surface, entity, "undergroundDigout-warning-rampant",
 				{"", {"description.rampantFixed--undergroundAttackDetectedWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .. "]")}				
 				)
@@ -545,7 +545,7 @@ local function processUndergroundSquad(map, undergroundSquad)
 			else
 				local tile = surface.get_tile(undergroundSquad.position.x, undergroundSquad.position.y)
 				if tile.prototype.walking_speed_modifier >= 1.5 then
-					entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+					local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 					undergroundSquad.detected = showAlert(surface, entity, "undergroundPass-warning-rampant", 
 						{"", {"description.rampantFixed--undergroundAttackDetectedWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .. "]")}
 						)
@@ -563,7 +563,7 @@ function undergroundAttack.processUndergroundSquads(universe)
 	end
 	local squadsProcessed = 0
 	for i, undergroundSquad in pairs(universe.undergroundSquads) do
-		map = undergroundSquad.map
+		local map = undergroundSquad.map
 		if map and map.surface and map.surface.valid then
 			if undergroundSquad.nextTick <= game.tick then
 				processUndergroundSquad(map, undergroundSquad)

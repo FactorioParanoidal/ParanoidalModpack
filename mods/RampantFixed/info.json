@@ -1,9 +1,9 @@
 {
     "name" : "RampantFixed",
     "factorio_version" : "2.0",
-    "version" : "2.02.08",
-    "title" : "Rampant, fixed",
-    "author" : "Dimm2101 (RampantFixed), Veden (Rampant)",
+    "version" : "2.02.09",
+    "title" : "Rampant, fixed - Reforged Paranoidal fork",
+    "author" : "Dimm2101 (RampantFixed), Veden (Rampant), Reforged Paranoidal (fork)",
     "homepage" : "",
     "description" : "Based on Rampant 1.1.1 (new AI and enemies). \n 1. Can attack from afar. Improved search for a passage in the defense. By default, it does not populate the entire map \n 2. Can mutate existing nests. Can be combined with nests of other enemies. Works on Gleba and Vulcanus",
     "dependencies" : ["base >= 2.0.0", "!Rampant", "!combat-mechanics-overhaul", "!intelligent-enemy", "?alien-module", "?Arachnids", "?ArmouredBiters", "?Explosive_biters", "?Krastorio2", "?RampantArsenalFork", "?SchallAlienLoot", "?space-age"]
