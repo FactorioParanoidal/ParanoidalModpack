@@ -1,4 +1,5 @@
--- Технология -> маркер (level: уровень, "inf" = ∞; corner = "left": уровень слева; badge: значок ветки). Сгенерировано по отчёту v2 (Factorio 2.0.77, 029f07531f).
+-- Технология -> маркер (level: уровень, "inf" = ∞; corner = "left": уровень слева; badge: значок ветки, badge_type = "recipe": иконка рецепта).
+-- badge_from_unlocks: значок первого отличающегося открываемого продукта. Основа таблицы — отчёт v2 (Factorio 2.0.77, 029f07531f).
 return {
     ["Schall-pickup-tower-1"] = { level = 1 },
     ["Schall-pickup-tower-2"] = { level = 2 },
@@ -297,7 +298,7 @@ return {
     ["bi-tech-coal-processing-3"] = { level = 3 },
     ["bi-tech-depollution-1"] = { level = 1, badge = "bi-purified-air", badge_type = "item" },
     ["bi-tech-depollution-2"] = { level = 2, badge = "bi-purified-air", badge_type = "item" },
-    ["bi-tech-fertilizer"] = { badge = "fertilizer", badge_type = "item" },
+    ["bi-tech-fertilizer"] = { badge = "bi-fertilizer-2", badge_type = "recipe" },
     ["bi-tech-garden-1"] = { level = 1 },
     ["bi-tech-garden-2"] = { level = 2 },
     ["bi-tech-garden-3"] = { level = 3 },
@@ -332,6 +333,8 @@ return {
     ["braking-force-7"] = { level = 7 },
     ["braking-force-8"] = { level = "inf" },
     ["chrome-ore-refining"] = { badge = "angels-chrome-ore", badge_type = "item" },
+    ["clowns-ore-electro-whinning-cell"] = { badge_from_unlocks = true },
+    ["clowns-ore-leaching"] = { badge_from_unlocks = true },
     ["concrete-gates"] = { badge = "concrete", badge_type = "item" },
     ["concrete-walls"] = { badge = "concrete", badge_type = "item" },
     ["electronics-machine-4"] = { level = 4 },
