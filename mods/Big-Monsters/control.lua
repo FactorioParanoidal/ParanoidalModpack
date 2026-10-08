@@ -1079,7 +1079,7 @@ function On_Remove(event)
 		end
 end
 local filters = {{filter = "name", name = "bm-volcano"}}
-script.on_event(defines.events.on_entity_died, On_Remove)
+script.on_event(defines.events.on_entity_died, On_Remove, filters)
 
 
 
