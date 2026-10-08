@@ -1891,15 +1891,31 @@ script.on_event(defines.events.on_biter_base_built, onEnemyBaseBuild)
 script.on_event({defines.events.on_player_mined_entity,
                  defines.events.on_robot_mined_entity}, onMine)
 
-script.on_event({defines.events.on_built_entity,
-                 defines.events.on_robot_built_entity,
-                 defines.events.script_raised_built,
-                 defines.events.script_raised_revive}, onBuild)
+-- Keep resources, every pheromone producer and every type handled by safeBuildings.
+-- Build this union from Constants so later additions to building scores are not silently filtered out.
+local buildFilters = {{filter = "type", type = "resource"}, {filter = "type", type = "electric-pole"},
+    {filter = "type", type = "lamp"}, {filter = "rail"}, {filter = "rail-signal"},
+    {filter = "type", type = "rail-support"}, {filter = "type", type = "train-stop"}}
+for entityType in pairs(constants.BUILDING_PHEROMONES) do
+    buildFilters[#buildFilters + 1] = {filter = "type", type = entityType}
+end
+for _, eventId in ipairs({defines.events.on_built_entity,
+                         defines.events.on_robot_built_entity,
+                         defines.events.script_raised_built,
+                         defines.events.script_raised_revive}) do
+    script.on_event(eventId, onBuild, buildFilters)
+end
 
 
 script.on_event(defines.events.on_rocket_launched, onRocketLaunch)
-script.on_event({defines.events.on_entity_died,
-                 defines.events.script_raised_destroy}, onDeath)
+-- onDeath ignores neutral entities except the named cliff. Do not exclude trees
+-- by type: a non-neutral tree can still affect artillery/victory accounting.
+script.on_event(defines.events.on_entity_died, onDeath, {
+    {filter = "force", force = "neutral", invert = true},
+    {filter = "name", name = "cliff"},
+})
+-- script_raised_destroy has no force filter in Factorio 2.0; retain its Lua guard.
+script.on_event(defines.events.script_raised_destroy, onDeath)
 script.on_event(defines.events.on_chunk_generated, onChunkGenerated)
 script.on_event(defines.events.on_chunk_deleted, onChunkDeleted)
 script.on_event(defines.events.on_force_created, onForceCreated)

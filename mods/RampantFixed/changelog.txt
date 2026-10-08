@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.10
+Date: 2026.10.08
+  Optimizations:
+    - Filter neutral deaths (except cliffs) and irrelevant build events before Lua dispatch
+    - Reuse squad member snapshots until the group changes
+    - Check alert visibility once per force and reuse static pheromone scratch data
+  Other:
+    - Reforged Paranoidal local fork; no changes to AI timings, spawning limits or difficulty
+---------------------------------------------------------------------------------------------------
 Version: 2.02.09
 Date: 2026.10.08
   Info:
