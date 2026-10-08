@@ -327,6 +327,7 @@ require("tweaks.entity.wood-pipe")
 require("tweaks.technology.early-material-prerequisites")
 require("tweaks.technology.steam-cracking-merge")
 require("tweaks.technology.approved-beta8-icons") -- Согласованные изображения исследований; без модулей.
+require("tweaks.technology.module-research-cleanup") -- Остаточная цепочка Bob 2.0 и оформление компонентов Beta 8.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
