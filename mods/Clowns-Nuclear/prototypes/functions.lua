@@ -81,7 +81,7 @@ clowns.functions.add_to_table = function(name,new,kind)
     end
   end
   if continue == true  and list then
-    list = table.insert(list,new)
+    table.insert(list,new)
   end
 end
 

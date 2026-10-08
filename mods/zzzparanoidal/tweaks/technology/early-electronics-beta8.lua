@@ -22,7 +22,7 @@ local prerequisites = {
 	["nanobots"] = { "logistics" },
 }
 local units = {
-	["burner-mechanics"] = { count = 1, time = 60 },
+	["burner-mechanics"] = { count = 1, time = 15 }, -- Ускоренный старт по решению пользователя.
 	["basic-logistics"] = { count = 10, time = 30 },
 	["logistics-0"] = { count = 10, time = 10 },
 	["logistics"] = { count = 10, time = 15 },
