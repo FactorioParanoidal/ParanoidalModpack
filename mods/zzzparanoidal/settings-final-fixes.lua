@@ -316,7 +316,8 @@ if mods["reskins-library"] then
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-4", "a600bf")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-5", "23de55")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
-    -- set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
+    -- Beta 8: цвет по номеру машины, а не по месту в технологической цепочке.
+    set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
 end
 if mods["Rocket-Silo-Construction"] then
     set_settings_default_value("bool-setting", "rsc-st-not-removable-silo", true)

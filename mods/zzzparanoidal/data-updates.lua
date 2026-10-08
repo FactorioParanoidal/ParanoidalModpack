@@ -6,3 +6,4 @@ require("tweaks.recipe.production") -- Сюда складывать все ре
 -- Длины подземных лент и труб: на data-updates, чтобы show-max-underground-distance (data-final-fixes) читал финал
 require("tweaks.entity.underground-belt-distance")
 require("tweaks.entity.underground-pipe-distance")
+require("tweaks.entity.reskins-beta8-assembler-tiers")

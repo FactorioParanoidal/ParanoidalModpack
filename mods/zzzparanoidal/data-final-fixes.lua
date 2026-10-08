@@ -337,6 +337,7 @@ require("tweaks.technology.chemistry-chain-unlocks")
 require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
+require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
