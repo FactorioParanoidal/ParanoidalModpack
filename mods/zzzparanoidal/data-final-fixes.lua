@@ -347,6 +347,8 @@ require("tweaks.entity.turret-stats-1_1")() -- Финальные характе
 require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
 require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
+-- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
+require("tweaks.custom.energy-port")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

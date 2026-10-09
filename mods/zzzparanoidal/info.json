@@ -1,6 +1,6 @@
 {
   "name": "zzzparanoidal",
-  "version": "8.1.22",
+  "version": "8.1.23",
   "title": "!_Paranoidal",
   "factorio_version": "2.0",
   "author": "Sovigod",
@@ -56,6 +56,7 @@
     "? reskins-bobs",
     "? reskins-compatibility",
     "? prismatic-belts",
-    "? Subterranean >= 2.0.0"
+    "? Subterranean >= 2.0.0",
+    "? nco-InserterCranes"
   ]
 }

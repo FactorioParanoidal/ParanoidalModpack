@@ -4,6 +4,7 @@ require("controls.gui-unifyer-inserter-throughput") -- синхронизаци�
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
+require("controls.energy-recipe-migration").install() -- Старые чертежи ячеек после JSON/Lua-миграции.
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
