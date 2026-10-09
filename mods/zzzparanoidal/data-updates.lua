@@ -7,3 +7,9 @@ require("tweaks.recipe.production") -- Сюда складывать все ре
 require("tweaks.entity.underground-belt-distance")
 require("tweaks.entity.underground-pipe-distance")
 require("tweaks.entity.reskins-beta8-assembler-tiers")
+-- T5 после оформления Reskins и до генерации рангов Hero.
+require("prototypes.entity.plasma-turret-5")
+require("prototypes.item.plasma-turret-5")
+require("prototypes.recipe.plasma-turret-5")
+require("prototypes.technology.plasma-turret-5")
+require("tweaks.entity.turret-stats-1_1")
