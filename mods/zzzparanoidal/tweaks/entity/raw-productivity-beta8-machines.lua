@@ -181,6 +181,9 @@ return {
         ["paranoidal-beta8-hyper-lab"] = true,
     },
     ["mining-drill"] = {
+        ["paranoidal-pumpjack-4"] = true,
+        ["paranoidal-pumpjack-4___crude-oil"] = true,
+        ["paranoidal-pumpjack-4___angels-natural-gas"] = true,
         ["angels-thermal-bore___angels-fissure"] = true,
         ["angels-thermal-extractor___angels-fissure"] = true,
         ["bob-area-mining-drill-1"] = true,
