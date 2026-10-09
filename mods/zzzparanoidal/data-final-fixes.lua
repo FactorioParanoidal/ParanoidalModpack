@@ -24,6 +24,7 @@ require("tweaks.entity.fluid-void")
 require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
 require("tweaks.entity.nuke-cliffs")
+require("tweaks.entity.tree-chopping-speed") -- рубка деревьев x3 быстрее
 
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
