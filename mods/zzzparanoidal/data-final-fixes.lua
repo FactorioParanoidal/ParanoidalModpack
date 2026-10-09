@@ -342,6 +342,8 @@ require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
+require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скриптовые интеграции 2.0 сохраняются.
+require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
 require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
 require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
