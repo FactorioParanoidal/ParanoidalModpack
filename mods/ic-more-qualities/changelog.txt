@@ -1,0 +1,56 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026. 10. 10
+  Features:
+    - Paranoidal refinement workshop: repairs defective items one grade at a time with any repair packs (durability is drained gradually; partially used packs count). 90% success, 10% chance for every further grade; cost depends only on the item (science kinds x square root of health).
+    - The workshop can reset positive quality to standard (optional, guaranteed, no packs, 1/5 time); standard items pass for free.
+    - Production modes for assembling machines and furnaces: careful (x5 time, x10 energy, losses /10, defects as +4 control levels, quality modules as 3 rolls) and precise (x20 time, x100 energy, no losses, no defects, quality modules as 10 rolls).
+    - Control post: production orders (item, strictly standard / at least a quality, quantity, repeat) with three rotatable outputs: accepted, to refinement, other.
+    - Circuit signals and commands for workshop and post; quality-control panel (Ctrl+Shift+Q) with production, refinement and batch tabs.
+    - Settings of workshops, posts and modes follow copy-paste, blueprints, fast replace and rebuilt ghosts.
+  Changes:
+    - Mod folder renamed to ic-more-qualities (no version in the name).
+    - Workshop and post are unlocked by quality control 1.
+    - Event handlers use one shared dispatcher; outdated defect tests updated (33% default loss, current interfaces).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2024. 12. 20
+  Changes:
+	- Added RU translation
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2024. 12. 05
+  Changes:
+    - Added optional mod for Tweaks (contains additional module quality options)
+	- New configuration where it is possible to unlock the first qualities earlier than in the oil phase
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024. 11. 30
+  Changes:
+    - Fixes in localization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 11. 30
+  Changes:
+    - Added the option to change the names of all qualities (again)
+    - Fixed rework quality order
+    - Fixed dynamic bonus on chance (should be negative, otherwise it can skip quality tiers)
+    - Adjusted default chance to higher quality
+    - Fixes in localization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 11. 29
+  Changes:
+    - Removed quality name change from configuration
+    - New icons for Astral quality
+    - Added 7 new qualities (total 40)
+    - Added a new mod that only contains 10 qualities
+    - Fix and rename some labels
+    - New configuration that dynamically increases the chance of better quality by tier
+    - All qualities are now unlocked by quality modules
+    - Removed technology for Ultimate qualities
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 16
+  Changes:
+    - Initial commit
