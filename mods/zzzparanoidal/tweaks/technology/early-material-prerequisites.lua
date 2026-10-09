@@ -8,7 +8,6 @@ local prerequisites = {
     { "electronics", "bi-tech-timber" },
     { "remelting-alloy-mixer-1", "steel-processing" },
     { "angels-cooling", "angels-stone-smelting-1" },
-    { "bob-oil-boiler-1", "OilBurning" },
     { "angels-water-washing-2", "concrete" },
     { "angels-slag-processing-1", "bi-tech-ash" },
     { "angels-advanced-ore-refining-1", "engine" },

@@ -24,6 +24,7 @@ require("tweaks.entity.fluid-void")
 require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
 require("tweaks.entity.nuke-cliffs")
+require("tweaks.entity.tree-chopping-speed") -- рубка деревьев x3 быстрее
 
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
@@ -290,6 +291,9 @@ require("tweaks.custom.bob-logistics-menu-beta8")
 require("tweaks.custom.circuit-menu-beta8")
 -- Четвёртая вкладка: возвращённый «Транспорт» Beta 8.
 require("tweaks.custom.transport-menu-beta8")
+-- Полный возврат пяти жидкотопливных котлов Beta 8; после OV/баланса, до меню.
+require("prototypes.fluid-boilers-beta8")
+require("removals.fluid-boilers-2")
 -- Пятая вкладка: производство Beta 8 с сохранением новых устройств 2.0.
 require("tweaks.custom.production-menu-beta8")
 -- Шестая вкладка: модули сразу после производства, как в Beta 8.
@@ -337,6 +341,20 @@ require("tweaks.technology.chemistry-chain-unlocks")
 require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
+require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
+require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скриптовые интеграции 2.0 сохраняются.
+require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
+require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
+require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
+require("tweaks.recipe.pumpjacks-1_1")
+require("tweaks.entity.mining-stats-1_1")
+require("tweaks.entity.pumps-stats-1_1")
+require("tweaks.entity.machinery-stats-1_1")
+require("tweaks.entity.pumpjack-colors-1_1")
+require("removals.area-mining-drill")
+require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
+-- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
+require("tweaks.custom.energy-port")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

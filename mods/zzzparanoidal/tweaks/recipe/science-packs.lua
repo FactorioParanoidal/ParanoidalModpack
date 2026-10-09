@@ -50,8 +50,6 @@ paralib.bobmods.lib.recipe.set_ingredients("utility-science-pack", {
 data.raw["recipe"]["utility-science-pack"].energy_required = 28
 data.raw["recipe"]["utility-science-pack"].results[1].amount = 4
 
-paralib.bobmods.lib.recipe.add_ingredient("bob-oil-boiler", { type = "item", name = "oil-steam-boiler", amount = 2 })
-
 paralib.bobmods.lib.recipe.add_ingredient(
 	"bob-basic-circuit-board",
 	{ type = "item", name = "condensator", amount = 2 }

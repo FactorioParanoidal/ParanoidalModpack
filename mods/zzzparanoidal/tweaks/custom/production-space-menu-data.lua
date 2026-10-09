@@ -31,7 +31,8 @@ return { rows = {
         {["name"] = "pumpjack", ["order"] = "01"},
         {["name"] = "bob-pumpjack-1", ["order"] = "02"},
         {["name"] = "bob-pumpjack-2", ["order"] = "03"},
-        {["name"] = "bob-pumpjack-3", ["order"] = "04"},
+        {["name"] = "paranoidal-pumpjack-4", ["order"] = "04"},
+        {["name"] = "bob-pumpjack-3", ["order"] = "05"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-water-pumps", order = "a-06", recipes = {
         {["name"] = "offshore-mk0-pump", ["order"] = "01"},
@@ -107,15 +108,15 @@ return { rows = {
         {["name"] = "bob-boiler-5", ["order"] = "05"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-fluid-boilers", order = "a-16", recipes = {
-        {["name"] = "bob-oil-boiler", ["order"] = "01"},
-        {["name"] = "bob-oil-boiler-2", ["order"] = "02"},
-        {["name"] = "bob-oil-boiler-3", ["order"] = "03"},
-        {["name"] = "bob-oil-boiler-4", ["order"] = "04"},
+        {["name"] = "oil-steam-boiler", ["order"] = "01"},
+        {["name"] = "oil-steam-boiler-2", ["order"] = "02"},
+        {["name"] = "oil-steam-boiler-3", ["order"] = "03"},
+        {["name"] = "oil-steam-boiler-4", ["order"] = "04"},
+        {["name"] = "oil-steam-boiler-5", ["order"] = "05"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-special-boilers", order = "a-17", recipes = {
         {["name"] = "bi-bio-boiler", ["order"] = "01"},
         {["name"] = "bi-solar-boiler-hidden-panel", ["order"] = "02"},
-        {["name"] = "oil-steam-boiler", ["order"] = "03"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-steam-engines", order = "a-18", recipes = {
         {["name"] = "steam-engine", ["order"] = "01"},

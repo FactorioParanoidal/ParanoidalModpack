@@ -124,6 +124,61 @@ if mods["rso-mod"] then
 end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
+if mods["Fill4Me"] then
+    -- Защищаем здания, оружие и материалы от автоматической загрузки в топку.
+    local fuel_blacklist = {
+        "bi-dart-turret",
+        "bi-dart-rifle",
+        "bi-wood-pipe",
+        "bi-wood-pipe-to-ground",
+        "bi-wooden-chest-giga",
+        "bi-wooden-chest-huge",
+        "bi-wooden-chest-large",
+        "bi-wooden-fence",
+        "bi-wooden-pole-big",
+        "bi-wooden-pole-huge",
+        "small-electric-pole",
+        "wooden-chest",
+        "bi-seed",
+        "seedling",
+        "angels-solid-rubber",
+        "bob-alien-artifact",
+        "bob-alien-artifact-blue",
+        "bob-alien-artifact-green",
+        "bob-alien-artifact-orange",
+        "bob-alien-artifact-purple",
+        "bob-alien-artifact-red",
+        "bob-alien-artifact-yellow",
+        "bob-small-alien-artifact",
+        "bob-small-alien-artifact-blue",
+        "bob-small-alien-artifact-green",
+        "bob-small-alien-artifact-orange",
+        "bob-small-alien-artifact-purple",
+        "bob-small-alien-artifact-red",
+        "bob-small-alien-artifact-yellow",
+        "angels-gas-butane-barrel",
+        "angels-gas-ethane-barrel",
+        "angels-gas-ethanol-barrel",
+        "angels-gas-ethylene-barrel",
+        "angels-gas-hydrazine-barrel",
+        "angels-gas-hydrogen-barrel",
+        "angels-gas-methane-barrel",
+        "angels-gas-methanol-barrel",
+        "angels-gas-propene-barrel",
+        "angels-liquid-fuel-oil-barrel",
+        "angels-liquid-naphtha-barrel",
+        "bob-alien-fire-barrel",
+        "bob-hydrazine-barrel",
+        "bob-hydrogen-barrel",
+        "bob-liquid-fuel-barrel",
+        "crude-oil-barrel",
+        "diesel-fuel-barrel",
+        "heavy-oil-barrel",
+        "light-oil-barrel",
+        "petroleum-gas-barrel",
+    }
+    set_settings_default_value("string-setting", "fill4me-blacklist-fuel", table.concat(fuel_blacklist, ","))
+end
 if mods["PMRPGsystem"] then
     set_settings_default_value("bool-setting", "charxpmod_print_xp_user", true)
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
@@ -316,7 +371,8 @@ if mods["reskins-library"] then
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-4", "a600bf")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-5", "23de55")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
-    -- set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
+    -- Beta 8: цвет по номеру машины, а не по месту в технологической цепочке.
+    set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
 end
 if mods["Rocket-Silo-Construction"] then
     set_settings_default_value("bool-setting", "rsc-st-not-removable-silo", true)
