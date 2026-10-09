@@ -31,7 +31,8 @@ return { rows = {
         {["name"] = "pumpjack", ["order"] = "01"},
         {["name"] = "bob-pumpjack-1", ["order"] = "02"},
         {["name"] = "bob-pumpjack-2", ["order"] = "03"},
-        {["name"] = "bob-pumpjack-3", ["order"] = "04"},
+        {["name"] = "paranoidal-pumpjack-4", ["order"] = "04"},
+        {["name"] = "bob-pumpjack-3", ["order"] = "05"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-water-pumps", order = "a-06", recipes = {
         {["name"] = "offshore-mk0-pump", ["order"] = "01"},

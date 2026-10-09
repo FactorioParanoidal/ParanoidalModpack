@@ -346,6 +346,12 @@ require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скрипт�
 require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
 require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
 require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
+require("tweaks.recipe.pumpjacks-1_1")
+require("tweaks.entity.mining-stats-1_1")
+require("tweaks.entity.pumps-stats-1_1")
+require("tweaks.entity.machinery-stats-1_1")
+require("tweaks.entity.pumpjack-colors-1_1")
+require("removals.area-mining-drill")
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
 -- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
 require("tweaks.custom.energy-port")
