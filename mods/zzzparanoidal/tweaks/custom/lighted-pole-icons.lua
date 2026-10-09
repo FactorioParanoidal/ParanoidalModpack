@@ -33,12 +33,15 @@ local function lighted_icons(prototype)
     local size = base.icon_size or prototype.icon_size or 64
     local scale = size * (base.scale or 32 / size) / 32
     -- The 32px Beta 8 badge has its glow in the bottom-left 9px square.
-    -- Move it to the top right; floating keeps its transparent canvas out of GUI bounds.
+    -- Shrink it to 8px, keeping its center in the top right.
+    local badge_scale = scale * 8 / 9
+    local badge_shift = 11.5 * (scale + badge_scale)
+    -- Floating keeps the badge's transparent canvas out of GUI bounds.
     layers[#layers + 1] = {
         icon = badge_icon,
         icon_size = 32,
-        scale = scale,
-        shift = {23 * scale, -23 * scale},
+        scale = badge_scale,
+        shift = {badge_shift, -badge_shift},
         tint = {r = 1, g = 1, b = 1, a = 0.85},
         floating = true,
     }
