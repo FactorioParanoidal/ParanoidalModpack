@@ -40,6 +40,11 @@ if mods["AbandonedRuins_updated_fork"] then
     set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.01)
     set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.0025)
 end
+-- Blueprint Sandboxes: отдельная сила песочницы, как в 1.x. При "none" производство и убийства
+-- в песочнице идут в статистику, Milestones, достижения и XP PMRPGsystem основной силы.
+if mods["blueprint-sandboxes"] then
+    set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
+end
 --ритег
 if mods["__RITEG__"] then
     set_settings_default_value("int-setting", "__RITEG__autodeconstruct-health-threshold", 15)

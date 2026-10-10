@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal patch: adds a Blueprint Sandboxes toggle button with a monochrome sand-and-scoop icon (SVG source included).
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-10-05
   Changes:

@@ -5,6 +5,17 @@ require "particles"
 --local modsprites = require("prototypes.sprites")
 local format_number = util.format_number
 local stg_critical_interval = 1.5
+
+-- Blueprint Sandboxes: изучение и действия в песочнице не дают опыта.
+-- Full — отдельная сила bpsb-sb-*, None — общая сила на поверхности bpsb-lab-*.
+local function is_sandbox_force(force)
+	local name = type(force) == "string" and force or (force and force.valid and force.name)
+	return type(name) == "string" and name:sub(1, 8) == "bpsb-sb-"
+end
+
+local function is_sandbox_surface(surface)
+	return surface and surface.valid and surface.name:sub(1, 9) == "bpsb-lab-"
+end
 --[[  
   ** RPG SYSTEM **
 by ProjectMakers (Fork from MFerrari)  
@@ -401,6 +412,11 @@ storage.personal_kill_turrets = storage.personal_kill_turrets or {}
 VersionChange()
 CheckPlayers()
 MigrateRPGsystemXP()
+
+-- Опыт, уже накопленный силами песочницы, не раздаётся.
+for name in pairs(storage.XP) do
+	if is_sandbox_force(name) then storage.XP[name] = 0 end
+end
 end
 
 
@@ -489,7 +505,9 @@ end
 function XP_Player_upd()
 
  	for name, force in pairs (game.forces) do
-	if name~='neutral' and name~='enemy' then
+	if is_sandbox_force(name) then
+		storage.XP[name] = 0
+	elseif name~='neutral' and name~='enemy' then
 
 		local cp = #force.connected_players
 		local afk = storage.setting_afk_time
@@ -1329,6 +1347,7 @@ end)
 
 
 function GetXPByKill(entity,killer,force)
+if is_sandbox_force(force) or (entity and entity.valid and is_sandbox_surface(entity.surface)) then return end
 if force then
 if storage.setting_allow_xp_by_kill then
 if not storage.last_overkill or (storage.last_overkill and storage.last_overkill~=entity) then
@@ -1533,7 +1552,7 @@ if storage.setting_allow_xp_by_tech and game.tick > 3600 * 2 then
 
 if event.research.force then
 	local force = event.research.force.name
-	if force~='neutral' and force~='enemy' then
+	if force~='neutral' and force~='enemy' and not is_sandbox_force(force) then
 	if storage.XP_TECH[force] then
 		local techXP = event.research.research_unit_count * #event.research.research_unit_ingredients
 		techXP = math.ceil(storage.XP_Mult * techXP * (1+ (6*game.forces["enemy"].get_evolution_factor("nauvis"))))		
@@ -1553,6 +1572,8 @@ if storage.setting_allow_xp_by_rocket then
 local rocket = event.rocket
 local force = rocket.force
 local XP
+local silo = event.rocket_silo
+if is_sandbox_force(force) or is_sandbox_surface(rocket.surface) or (silo and is_sandbox_surface(silo.surface)) then return end
 
 	for p, PL in pairs (force.connected_players) do 
 		local r_count = storage.personalxp.rocketsXP_count[PL.name]
@@ -1593,6 +1614,7 @@ local player = game.players[event.player_index]
 if not player.valid then return end
 
 local ent = event.entity
+if is_sandbox_force(player.force) or is_sandbox_surface(ent.surface) then return end
 local name= ent.name
 
 if ent.type=='tree' or (ent.type=='simple-entity' and name:find('rock')) then 
