@@ -1,0 +1,12 @@
+{
+  "name": "recycler-progression",
+  "version": "1.1.2",
+  "title": "Recycler Progression",
+  "author": "Morlot",
+  "dependencies": [
+    "base >= 2.0.77",
+    "quality >= 2.0.77"
+  ],
+  "description": "Adds three recycler tiers (Recycler 1–3) that lead up to the vanilla recycler (Recycler 4).\nParanoidal port of Recycler Progression 1.1.1 for Factorio 2.0 + Quality: Recycler 1 is available from the start, recipes and technologies use the Paranoidal tree.",
+  "factorio_version": "2.0"
+}

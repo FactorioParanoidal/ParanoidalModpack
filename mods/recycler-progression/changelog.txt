@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 10.10.2026
+  Changes:
+    - Paranoidal port for Factorio 2.0.77 with Quality (the separate "recycler" mod of 2.1 is replaced by "quality").
+    - Recycler 1 is available from the start; Recycler 2/3 technologies follow assembling machine 2 and
+      chemical science; Recycler 4 stays on the "recycling" technology after Recycler 3,
+      its cost is reduced to 500 units.
+    - Recipes use Paranoidal intermediates; the predecessor setting, Space Age branch and 2.1 recycling
+      unlock relocation are removed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 09.07.2026
+  Bugfixes:
+    - Fixed the recyclers not recycling anything until 'Scrap Recycling' was researched.
+      Factorio 2.1 gates every recycling recipe behind the 'recycling' technology; those
+      unlocks are now granted by the 'Recycler 1' technology instead. Thanks to RuntarU for 
+      reporting!
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 09.07.2026
+  Compatibility:
+    - Updated for Factorio 2.1
+  Changes:
+    - The 'space-age' mod is now optional
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 11.04.2026
+  Major Features:
+    - Initial release

@@ -44,7 +44,7 @@ end
 
 -- Fill free queue slots with path technologies. Candidates whose path prerequisites are
 -- neither researched nor queued are skipped; the engine decides the rest.
-function M.fill(force)
+local function fill_once(force)
   local goal = M.get(force)
   if not goal or goal.paused then return end
   local t = force.technologies[goal.tech]
@@ -76,6 +76,23 @@ function M.fill(force)
       end
     end
   end
+end
+
+-- add_research can finish a technology synchronously (Creative Mod instant research,
+-- other scripts), which raises on_research_finished and calls fill again. Nested calls
+-- only request another pass, so the chain runs as a loop instead of a recursion.
+local filling, pending = false, {}
+function M.fill(force)
+  pending[force.index] = force
+  if filling then return end
+  filling = true
+  while true do
+    local index, f = next(pending)
+    if not index then break end
+    pending[index] = nil
+    if f.valid then fill_once(f) end
+  end
+  filling = false
 end
 
 function M.set(force, tech, player)

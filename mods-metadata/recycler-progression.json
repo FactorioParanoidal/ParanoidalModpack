@@ -1,0 +1,10 @@
+{
+  "mod": "recycler-progression",
+  "source": "local",
+  "original": {
+    "name": "Recycler Progression",
+    "authors": ["Morlot"],
+    "portal": {"name": "recycler-progression", "url": "https://mods.factorio.com/mod/recycler-progression"}
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал 1.1.1 требует Factorio 2.1 и мод recycler. Локальный порт для ветки качества: зависимость на quality 2.0.77, Переработчик 1 доступен с начала игры, рецепты и технологии встроены в дерево Paranoidal, технология recycling (Переработчик 4) стоит 500 исследований."
+}
