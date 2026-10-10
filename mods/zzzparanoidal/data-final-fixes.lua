@@ -364,6 +364,7 @@ require("tweaks.entity.building-speed-slots-1_1")
 require("tweaks.entity.building-module-compatibility-1_1")
 -- После синхронизаторов меню: иначе предметы лоадеров уйдут за копиями песочницы.
 require("tweaks.custom.blueprint-sandboxes")
+require("removals.pcp-flask")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

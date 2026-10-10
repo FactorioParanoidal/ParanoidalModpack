@@ -349,7 +349,12 @@ if mods["P-U-M-P-S"] then
     set_settings_default_value("bool-setting", "osm-pumps-burner-offshore-pump", true)
 end
 if mods["PCPRedux"] then
-    -- set_settings_default_value("bool-setting", "pcp-glass-sink", false)
+    local glass_sink = data.raw["bool-setting"]["pcp-glass-sink"]
+    if glass_sink then
+        glass_sink.default_value = false
+        glass_sink.hidden = true
+        glass_sink.forced_value = false
+    end
 end
 if mods["SchallPickupTower"] then
     set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)

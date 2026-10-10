@@ -232,9 +232,6 @@ return {
             {["name"] = "bob-robot-drone-frame", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/components-menu-beta8/b097efaa791f2d640578.png", ["icon_size"] = 64}},
             {["name"] = "bob-robot-drone-frame-large", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/components-menu-beta8/74d057eecbaa3271e2fe.png", ["icon_size"] = 64}},
         }},
-        {subgroup = "paranoidal-components-flask", order = "a-31", recipes = {
-            {["name"] = "flask", ["order"] = "01"},
-        }},
         {subgroup = "paranoidal-components-science-packs", order = "a-32", recipes = {
             {["name"] = "automation-science-pack", ["order"] = "01"},
             {["name"] = "logistic-science-pack", ["order"] = "02"},
