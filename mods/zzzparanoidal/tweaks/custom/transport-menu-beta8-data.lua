@@ -3,8 +3,12 @@ return {
     rows = {
         {subgroup = "paranoidal-transport-rail", order = "a-01", recipes = {
             {["name"] = "scrap-rail", ["order"] = "01"},
-            {["name"] = "scrap-rail-to-rail", ["order"] = "02"},
-            {["name"] = "rail", ["order"] = "03"},
+            {name = "scrap-rail-to-rail", order = "02", icon = {icons = {
+                {icon = "__JunkTrain3__/graphics/rail/rail.png", icon_size = 32, scale = 0.625, shift = {-6, 6}},
+                {icon = "__base__/graphics/icons/rail.png", icon_size = 64, scale = 0.3125, shift = {6, -6}},
+                {icon = "__base__/graphics/icons/arrows/up-right-arrow.png", icon_size = 64, scale = 0.25},
+            }}},
+            {["name"] = "rail", ["order"] = "03", ["icon"] = {["icon"] = "__base__/graphics/icons/rail.png", ["icon_size"] = 64}},
         }},
         {subgroup = "paranoidal-transport-rail-other", order = "a-02", recipes = {
             {["name"] = "rail-signal-scrap", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/2d4b489322f69251a175.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}}}},
