@@ -9,10 +9,6 @@ local crafting_speeds = {
     ["angels-oil-refinery-4"] = 3.5,
     ["angels-electro-whinning-cell"] = 0.75,
     ["angels-electro-whinning-cell-2"] = 1,
-    ["angels-ore-sorting-facility"] = 0.75,
-    ["angels-ore-sorting-facility-2"] = 1,
-    ["angels-ore-sorting-facility-3"] = 1.5,
-    ["angels-ore-sorting-facility-4"] = 2,
     ["clowns-sluicer-2"] = 1.5,
     -- Согласованная замена центрифуг Clowns MK2/MK3 центрифугами Bob 2/3.
     ["bob-centrifuge-2"] = 1.25,

@@ -362,7 +362,6 @@ require("prototypes.electrowinning-cell-3-beta8")
 -- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.
 require("tweaks.entity.building-speed-slots-1_1")
 require("tweaks.entity.building-module-compatibility-1_1")
-require("removals.ore-sorting-facility-5")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

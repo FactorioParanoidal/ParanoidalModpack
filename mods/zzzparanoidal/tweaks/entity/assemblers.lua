@@ -76,6 +76,9 @@ data.raw["assembling-machine"]["angels-ore-sorting-facility"].module_slots = 1
 data.raw["assembling-machine"]["angels-ore-sorting-facility-2"].module_slots = 2
 data.raw["assembling-machine"]["angels-ore-sorting-facility-3"].module_slots = 3
 data.raw["assembling-machine"]["angels-ore-sorting-facility-4"].module_slots = 4
+-- Новый MK5 сохраняет четыре слота старшего сортировщика Paranoidal 1.1.
+local sorter5 = data.raw["assembling-machine"]["angels-ore-sorting-facility-5"]
+if sorter5 then sorter5.module_slots = 4 end
 
 
 -- MODULE SLOTS ANGELS SMELTING
