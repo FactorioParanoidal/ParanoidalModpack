@@ -18,7 +18,6 @@ local function unlock(name, recipe)
     technology.effects[#technology.effects + 1] = { type = "unlock-recipe", recipe = recipe }
 end
 local consumers = {
-    { "angels-ore-sorting-facility-5", "paranoidal-platinum-servo", 4, "angels-advanced-ore-refining-4", "paranoidal-platinum-servos" },
     { "angels-strand-casting-machine-4", "paranoidal-platinum-servo", 4, "angels-strand-casting-4", "paranoidal-platinum-servos" },
     { "angels-advanced-chemical-plant-2", "paranoidal-platinum-harness", 8, "angels-advanced-chemistry-4", "paranoidal-platinum-cabling" },
     { "angels-advanced-chemical-plant-3", "paranoidal-platinum-harness", 16, "angels-advanced-chemistry-5", "paranoidal-platinum-cabling" },

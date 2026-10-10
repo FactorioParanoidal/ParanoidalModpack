@@ -355,6 +355,12 @@ require("removals.area-mining-drill")
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
 -- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
 require("tweaks.custom.energy-port")
+-- Отдельный MK3 с собственным предметом и открытием на существующей технологии IV.
+require("prototypes.electrowinning-cell-3-beta8")
+-- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.
+require("tweaks.entity.building-speed-slots-1_1")
+require("tweaks.entity.building-module-compatibility-1_1")
+require("removals.ore-sorting-facility-5")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
