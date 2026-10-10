@@ -1,0 +1,13 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-10-10
+  Features:
+    - Ports the geological radar from Paranoidal 1.1 to Factorio 2.0, retaining its graphics, recipe and research.
+  Changes:
+    - Indexes existing and newly generated chunks in a bounded background queue.
+    - Shares a budget of eight work items and at most four resource charts per tick across all radars.
+    - Disables the tick handler while idle and reduces nearby map refresh to the vanilla cadence.
+  Bugfixes:
+    - Removes depleted ore chunks from the correct surface index in constant time.
+    - Handles surface renames, clearing, deletion and save/load.
+    - Preserves completed scans while indexes are rebuilt and across configuration changes.
