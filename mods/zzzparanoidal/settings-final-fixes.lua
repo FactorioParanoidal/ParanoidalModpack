@@ -45,6 +45,10 @@ end
 if mods["blueprint-sandboxes"] then
     set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
 end
+-- Наноботы работают автоматически по умолчанию.
+if mods["nanobots-refined"] then
+    set_settings_default_value("bool-setting", "nanobots-auto", true)
+end
 --ритег
 if mods["__RITEG__"] then
     set_settings_default_value("int-setting", "__RITEG__autodeconstruct-health-threshold", 15)
