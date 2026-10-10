@@ -1,6 +1,5 @@
 require("controls.heroturrets_script") -- скрипт разжалования турелей
 require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
-require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")

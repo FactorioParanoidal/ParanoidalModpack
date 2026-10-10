@@ -26,10 +26,7 @@ local icons = {
         {"screen", "frame_BeastFinder_main"}),
     create_icon_entry("bobclasses", "bobclasses_button", "bob_avatar_toggle_gui", nil, nil, nil,
         {"left", "bob_avatar_gui"}),
-    create_icon_entry("bobinserters", "bobinserters_button", "bob_logistics_inserter_button", nil, nil, nil,
-        {"left", "bob_logistics_inserter_gui"}),
-    create_icon_entry("boblogistics", "bobinserters_button", "bob_logistics_inserter_button", nil, nil, nil,
-        {"left", "bob_logistics_inserter_gui"}),
+    -- Paranoidal: bob_logistics_inserter_button is removed from the panel in control.lua.
     create_icon_entry("CleanMap", "cleanmap_button", "CleanMap", nil, nil, nil, nil),
     create_icon_entry("DeleteEmptyChunks", "cleanmap_button", "DeleteEmptyChunks", nil, nil, nil, nil),
     create_icon_entry("Death_Counter", "deathcounter_button", "DeathCounterMainButton", {'guiu.deathcounter_button'}, nil, nil,
@@ -174,6 +171,9 @@ local icons = {
         {"center", "usage_detector_center"}),
     create_icon_entry("RPG", "rpg_button", "104", {'guiu.rpg_button'}, nil, nil,
         {"screen", "105"}),
+    -- Paranoidal: PMRPGsystem adds btcharxp with mod_gui_button; its own tooltip with the player name is kept.
+    create_icon_entry("PMRPGsystem", "rpg_button", "btcharxp", nil, nil, nil,
+        {"screen", "char-panel"}),
     create_icon_entry("SpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_random_button", "unstuck", {'guiu.spawncontrol_unstuck'}, nil, nil, nil),
