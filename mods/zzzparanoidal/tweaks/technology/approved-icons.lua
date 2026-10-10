@@ -36,6 +36,15 @@ for _, name in ipairs({"aai-basic-loader", "aai-loader", "aai-fast-loader", "aai
 for i = 1, 3 do list[#list + 1] = single("angels-slag-processing-" .. i, "angels-slag-processing") end
 for i = 1, 4 do list[#list + 1] = single("bob-robo-modular-" .. i, "bob-robo-modular-" .. i) end
 
+-- Магний II: тот же современный ковш и сиреневый расплав, что у магния I.
+local magnesium = data.raw.technology["advanced-magnesium-smelting"]
+if magnesium and magnesium.icons and magnesium.icons[1]
+    and magnesium.icons[1].icon == "__reskins-compatibility__/graphics/technology/mad-clowns/casting/casting-magnesium-technology-icon.png" then
+    list[#list + 1] = {
+        name = "advanced-magnesium-smelting-2", keep_extra = true, layers = magnesium.icons,
+    }
+end
+
 for _, entry in ipairs(list) do
     local technology = data.raw.technology[entry.name]
     if technology then
