@@ -95,7 +95,9 @@ local function next_badge(technology, base)
     end
 end
 
-for name, rule in pairs(rules) do
+-- Также вызывается поздними файлами для своих технологий: require возвращает эту функцию.
+local function apply(rule_table)
+for name, rule in pairs(rule_table) do
     local technology = data.raw.technology[name]
     local layers = technology and technology.enabled ~= false and layers_of(technology, 256)
     local cx, cy, width
@@ -142,3 +144,7 @@ for name, rule in pairs(rules) do
         technology.icons = layers
     end
 end
+end
+
+apply(rules)
+return apply
