@@ -1,0 +1,15 @@
+{
+  "mod": "underground-energy-distribution",
+  "source": "local",
+  "original": {
+    "name": "Underground Energy Distribution",
+    "authors": [
+      "George Broughton"
+    ],
+    "portal": {
+      "name": "underground-energy-distribution",
+      "url": "https://mods.factorio.com/mod/underground-energy-distribution"
+    }
+  },
+  "changeReason": "Локальный порт Paranoidal мода из Beta 8 (upstream 1.10.61, только Factorio 1.1; версии 2.0 на портале нет) на Factorio 2.0 по решению пользователя. Формат прототипов 2.0 (results/ingredients рецептов, слои коллизий, drawing_box_vertical_extension), иконки щитов вместо унаследованных от столбов, исправлено русское название. Параметры щитов, рецепты, технологии и ингредиент intermediate-structure-components у огромного щита — как в Beta 8."
+}
