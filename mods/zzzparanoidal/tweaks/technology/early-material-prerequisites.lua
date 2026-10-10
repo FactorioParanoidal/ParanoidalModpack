@@ -38,7 +38,6 @@ local prerequisites = {
     { "battery-mk2-equipment", "processing-unit" },
     { "angels-advanced-chemistry-3", "mercury-processing-1" },
     { "offshore-mk3-pump", "bob-titanium-processing" },
-    { "angels-water-washing-3", "bob-drills-2" },
     { "processing-unit", "angels-rubber" },
     { "bob-boiler-4", "angels-tungsten-smelting-1" },
     { "texugo-wind-turbine3", "electric-energy-distribution-2" },
@@ -61,9 +60,11 @@ local prerequisites = {
     { "bob-plasma-turrets-2", "bob-laser-turrets-2" },
     { "bob-plasma-turrets-3", "bob-laser-turrets-3" },
     { "bob-plasma-turrets-4", "bob-laser-turrets-4" },
-    -- Буры IV намеренно ждут жёлтую науку через нитиноловые шестерни.
-    { "bob-drills-4", "angels-tungsten-carbide-smelting-1" },
-    { "bob-drills-4", "bob-nitinol-processing" },
+    -- Буры IV Beta 8 (в Bob 2.0 — bob-drills-5) ждут нитиноловые шестерни и карбид вольфрама (пачка 01).
+    { "bob-drills-5", "angels-tungsten-carbide-smelting-1" },
+    { "bob-drills-5", "bob-nitinol-processing" },
+    -- Бур MK2 на красной науке с предком «Электроника», как в Beta 8 (пачка 01).
+    { "bob-drills-2", "electronics" },
     { "bob-area-drills-4", "bob-drills-4" },
     -- Растительный корм и пульпа для цепочки полных биокристаллов.
     { "angels-bio-refugium-puffer-2", "angels-bio-temperate-farming-1" },

@@ -223,7 +223,7 @@ paralib.bobmods.lib.tech.add_prerequisite("angels-water-washing-2", "angels-meta
 paralib.bobmods.lib.tech.add_prerequisite("angels-ore-powderizer", "angels-stone-smelting-1") --измельчитель под кирпич
 paralib.bobmods.lib.tech.add_prerequisite("offshore-mk2-pump", "advanced-circuit") --ставим их вниз
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-refugium-fish-2", "advanced-circuit") --аквариум 2 под электронику 2
-paralib.bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1") --буры3 под кобальт
+paralib.bobmods.lib.tech.add_prerequisite("bob-drills-3", "angels-cobalt-steel-smelting-1") --буры3 под кобальт (нумерация Bob 2.0 +1, пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1") --буры3 под кобальт
 paralib.bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics") --склады под роботов
 paralib.bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics") --склады под роботов
@@ -374,8 +374,8 @@ paralib.bobmods.lib.recipe.set_ingredients("radar", {
 	{ type = "item", name = "stone-brick", amount = 20 },
 	{ type = "item", name = "iron-plate", amount = 20 },
 }) --фикс радара
-paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "bob-drills-2") --фикс буров
-paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-3", "bob-drills-3") --фикс буров
+paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "bob-drills-3") --фикс буров (нумерация Bob 2.0 +1, пачка 01)
+paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-3", "bob-drills-4") --фикс буров (нумерация Bob 2.0 +1, пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-area-drills-3") --фикс буров
 paralib.bobmods.lib.tech.add_prerequisite("bob-battery-3", "angels-powder-metallurgy-5") --Аккумулятор 3 поставить под Порошковая металлургия 4
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-advanced-processing-unit", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
@@ -422,7 +422,7 @@ paralib.bobmods.lib.tech.add_prerequisite("fission-reactor-equipment", "bob-sola
 paralib.bobmods.lib.tech.add_prerequisite("personal-roboport-equipment", "processing-unit")
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "production-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "utility-science-pack")
-paralib.bobmods.lib.tech.add_prerequisite("autonomous-space-mining-drones", "bob-drills-4")
+paralib.bobmods.lib.tech.add_prerequisite("autonomous-space-mining-drones", "bob-drills-5") -- буры IV Beta 8 = bob-drills-5 (пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("robot-attrition-explosion-safety", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-nitinol-processing", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-electronics-machine-2", "fast-inserter")
