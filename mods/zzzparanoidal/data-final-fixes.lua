@@ -362,6 +362,7 @@ require("prototypes.electrowinning-cell-3-beta8")
 -- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.
 require("tweaks.entity.building-speed-slots-1_1")
 require("tweaks.entity.building-module-compatibility-1_1")
+require("tweaks.entity.big-lab")
 -- После синхронизаторов меню: иначе предметы лоадеров уйдут за копиями песочницы.
 require("tweaks.custom.blueprint-sandboxes")
 require("removals.pcp-flask")
