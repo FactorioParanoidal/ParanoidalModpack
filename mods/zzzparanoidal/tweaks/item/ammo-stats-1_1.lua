@@ -960,7 +960,7 @@ for _, spec in ipairs(legacy_ammo) do
 	if enabled_mod and source and supports_ready then
 		local ammo = table.deepcopy(source)
 		ammo.name = spec.name
-		ammo.localised_name = spec.localised_name
+		ammo.localised_name = { "?", { "item-name." .. spec.name }, spec.localised_name }
 		ammo.localised_description = nil
 		ammo.custom_tooltip_fields = nil
 		ammo.factoriopedia_alternative = nil

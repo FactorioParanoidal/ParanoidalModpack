@@ -422,3 +422,4 @@ if mods["Wind-Turbines-relaunched"] then
     set_settings_default_value("string-setting", "texugo-wind-mode", "CLASSICAL") -- режим ветра как в 1.1: синусный CLASSICAL вместо нормированного SURFACE
 end
 -- end startup
+require("tweaks.custom.locale-settings")

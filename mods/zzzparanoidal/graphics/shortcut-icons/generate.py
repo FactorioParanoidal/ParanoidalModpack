@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Build shortcut PNGs with Pillow; run this file from any directory.
 
-Kux: extract the enabled (bottom) row of the original 32/24-pixel sheets
-without resizing. Todo: draw simple checklist glyphs on the native pixel grid,
+Todo: draw simple checklist glyphs on the native pixel grid,
 with a 56-pixel toolbar resource (like base shortcuts) and a separate 24-pixel
 menu resource. Coordinates are the editable vector source; no enlarged bitmap
 or runtime dependency is used. PNGs are committed alongside this generator.
@@ -14,26 +13,6 @@ from PIL import Image, ImageDraw
 
 
 DESTINATION = Path(__file__).resolve().parent
-MODS = DESTINATION.parents[2]
-KUX_ACTIONS = (
-    "flip-h",
-    "flip-v",
-    "rotate-clockwise",
-    "clone-blueprint",
-    "wireswap",
-    "landfill",
-    "remove-landfill",
-)
-
-
-def extract_kux():
-    for size in (32, 24):
-        source = MODS / "Kux-BlueprintExtensions" / "graphics" / f"shortcut-bar-buttons-{size}.png"
-        with Image.open(source) as sheet:
-            assert sheet.size == (7 * size, 2 * size), "Kux sheet layout changed"
-            for column, action in enumerate(KUX_ACTIONS):
-                glyph = sheet.crop((column * size, size, (column + 1) * size, 2 * size))
-                glyph.save(DESTINATION / f"kux-{action}-{size}.png", optimize=True)
 
 
 def draw_todo(size, add_task):
@@ -73,7 +52,6 @@ def draw_todo(size, add_task):
 
 
 if __name__ == "__main__":
-    extract_kux()
     for icon_size in (56, 24):
         for is_add_task in (False, True):
             draw_todo(icon_size, is_add_task)

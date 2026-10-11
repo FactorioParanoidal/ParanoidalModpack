@@ -692,10 +692,6 @@ return {
     {type = "item", name = "processing-unit", before = {["icon"] = "__bobelectronics__/graphics/icons/electronic-logic-board.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/electronics/electronic-logic-board-64.png", ["icon_size"] = 64}},
     -- item/programmable-speaker
     {type = "item", name = "programmable-speaker", before = {["icon"] = "__base__/graphics/icons/programmable-speaker.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/programmable-speaker-128.png", ["icon_size"] = 128}},
-    -- item/rail-chain-signal
-    {type = "item", name = "rail-chain-signal", before = {["icon"] = "__base__/graphics/icons/rail-chain-signal.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/rail-chain-signal-128.png", ["icon_size"] = 128}},
-    -- item/rail-signal
-    {type = "item", name = "rail-signal", before = {["icon"] = "__base__/graphics/icons/rail-signal.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/rail-signal-128.png", ["icon_size"] = 128}},
     -- item/red-wire
     {type = "item", name = "red-wire", before = {["icon"] = "__base__/graphics/icons/shortcut-toolbar/mip/new-red-wire-x56.png", ["icon_size"] = 56}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/red-wire-128.png", ["icon_size"] = 128}},
     -- item/refined-concrete
@@ -726,8 +722,6 @@ return {
     {type = "item", name = "stone-brick", before = {["icon"] = "__base__/graphics/icons/stone-brick.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/stone-brick-128.png", ["icon_size"] = 128}},
     -- item/stone-wall
     {type = "item", name = "stone-wall", before = {["icon"] = "__aai-industry__/graphics/icons/stone-wall.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/stone-wall-128.png", ["icon_size"] = 128}},
-    -- item/train-stop
-    {type = "item", name = "train-stop", before = {["icon"] = "__base__/graphics/icons/train-stop.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/train-stop-128.png", ["icon_size"] = 128}},
     -- item/tungsten-carbide
     {type = "item", name = "tungsten-carbide", before = {["icons"] = {{["icon"] = "__reskins-bobs__/graphics/icons/plates/plates/bob-tungsten-carbide.png", ["icon_size"] = 64, ["scale"] = 0.5}}}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/plate/tungsten-carbide-128.png", ["icon_size"] = 128}},
     -- item/tungsten-ore
