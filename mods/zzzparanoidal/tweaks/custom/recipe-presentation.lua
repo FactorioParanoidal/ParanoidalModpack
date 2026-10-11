@@ -61,9 +61,15 @@ for _, name in ipairs({"angels-steel-gear-wheel-casting", "ASE-steel-gear-castin
 end
 
 -- Batch 2: item icon is authoritative for recipes (recipe overlays are kept).
--- Angels crushed stone: light grey stone from the inventory item.
+-- Angels crushed stone: user-approved (2026-10-11) Bio Industries rubble pile replaces
+-- the grey Angels artwork on the item; recipes below inherit it from the item.
 do
     local item = data.raw.item["angels-stone-crushed"]
+    if item then
+        item.icon = "__Bio_Industries_2__/graphics/icons/crushed-stone.png"
+        item.icon_size = 64
+        item.icons, item.icon_mipmaps = nil, nil
+    end
     local recipe = data.raw.recipe["angels-stone-crushed"]
     if item and recipe and item.icon then
         recipe.icons = {{icon = item.icon, icon_size = item.icon_size or 64}}
