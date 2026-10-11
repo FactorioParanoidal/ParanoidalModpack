@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.11
+Date: 2026.10.11
+  Features:
+    - Flyers: a new unit of biter nests and hives in every faction with biters except kamikaze and nuclear (startup setting, on by default)
+    - Startup settings for the first unit level with flyers (default 1, from the start) and their share of nest and hive output (default 0.12)
+    - Compared to the faction biter of the same level: health x1.5, damage x1.3, speed x1.15, 3 times more pollution to join an attack, 2 times longer spawning
+    - Flyers keep the faction resistances, loot and health/speed/regeneration traits, but not the special attacks, death effects, size and reach. They bite with the faction damage type (fire faction: physical)
+    - Flyers fly over walls, water and cliffs, land before biting and take off before moving. Every turret can hit them
+  Graphics:
+    - Flyer graphics from New Enemies (Vanilla+) 0.0.10 by Wolfenstain; landing and ground attack frames are packed into one attack sheet
+---------------------------------------------------------------------------------------------------
 Version: 2.02.10
 Date: 2026.10.08
   Optimizations:

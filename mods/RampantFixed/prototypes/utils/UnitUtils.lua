@@ -1993,10 +1993,115 @@ local function arachnidsdieanimation(scale, tint1, tint2)
   }
 end
 
+-------------- flyers (graphics: new-enemies 0.0.10 by Wolfenstain, see FlyerSpec.lua) ---------
+
+local flyerSpec = require("FlyerSpec")
+local FLYER_PATH = "__RampantFixed__/graphics/entity/flyer/"
+-- the mask is additive: the faction colour is dimmed to the brightness of the original tier tints
+local FLYER_MASK_INTENSITY = 0.3
+-- landing/take-off play at 0.5 frames per tick, the bite at 0.4 frames per tick (as in new-enemies)
+local FLYER_LANDING_FRAMES_PER_TICK = 0.5
+local FLYER_ATTACK_FRAMES_PER_TICK = 0.4
+
+unitUtils.FLYER_ICON = "__RampantFixed__/graphics/icons/flyer.png"
+unitUtils.FLYER_LANDING_TICKS = math.ceil(flyerSpec.landing_frames / FLYER_LANDING_FRAMES_PER_TICK)
+
+--- Rampant scale is the vanilla biter scale (medium biter = 0.7); flyer sheets are drawn for the medium flyer.
+function unitUtils.flyerSizeFactor(scale)
+    return scale / 0.7
+end
+
+local function flyerMaskTint(tint)
+    tint = tint or {r = 1, g = 1, b = 1}
+    return {
+        r = (tint.r or tint[1] or 0) * FLYER_MASK_INTENSITY,
+        g = (tint.g or tint[2] or 0) * FLYER_MASK_INTENSITY,
+        b = (tint.b or tint[3] or 0) * FLYER_MASK_INTENSITY,
+        a = 1
+    }
+end
+
+local function flyerLayer(state, kind, scale, tint)
+    local sheet = flyerSpec.states[state][kind]
+    local size = unitUtils.flyerSizeFactor(scale)
+    local filenames = {}
+    for i = 1, #sheet.files do
+        filenames[i] = FLYER_PATH .. sheet.files[i]
+    end
+    local layer = {
+        filenames = filenames,
+        width = sheet.width,
+        height = sheet.height,
+        line_length = sheet.line_length,
+        lines_per_file = sheet.lines_per_file,
+        frame_count = flyerSpec.states[state].frame_count,
+        direction_count = 16,
+        scale = flyerSpec.scale * size,
+        shift = {sheet.shift[1] * size, sheet.shift[2] * size},
+        allow_forced_downscale = true,
+        surface = "nauvis",
+        usage = "enemy"
+    }
+    if (kind == "mask") then
+        layer.blend_mode = "additive"
+        layer.tint = flyerMaskTint(tint)
+    elseif (kind == "shadow") then
+        layer.draw_as_shadow = true
+    end
+    return layer
+end
+
+local function flyerAnimation(state, scale, tint)
+    return {
+        layers = {
+            flyerLayer(state, "base", scale, tint),
+            flyerLayer(state, "mask", scale, tint),
+            flyerLayer(state, "shadow", scale, tint)
+        }
+    }
+end
+
+--- Attack animation frames: 1..landing = landing, then the ground bite. The phases below make the flyer land
+-- before the first bite (attack warmup = FLYER_LANDING_TICKS), sit between bites and take off before moving.
+function unitUtils.flyer_alternative_attacking_animation_sequence()
+    local landing = flyerSpec.landing_frames
+    local attack = flyerSpec.attack_frames
+    local sitting = landing + 1
+    local land, takeOff, bite = {}, {}, {}
+    for i = 1, landing do
+        land[i] = i
+        takeOff[i] = landing + 1 - i
+    end
+    for i = 1, attack do
+        bite[i] = landing + i
+    end
+    return {
+        warmup_frame_sequence = land,
+        warmup2_frame_sequence = {sitting},
+        attacking_frame_sequence = bite,
+        cooldown_frame_sequence = {sitting},
+        prepared_frame_sequence = {sitting},
+        back_to_walk_frame_sequence = takeOff,
+
+        warmup_animation_speed = FLYER_LANDING_FRAMES_PER_TICK / landing,
+        attacking_animation_speed = FLYER_ATTACK_FRAMES_PER_TICK / attack,
+        cooldown_animation_speed = 1,
+        prepared_animation_speed = 1,
+        back_to_walk_animation_speed = FLYER_LANDING_FRAMES_PER_TICK / landing
+    }
+end
+
+--- distance_per_frame for a constant wing beat: 8 frames every 9 ticks at full speed (new-enemies flight)
+function unitUtils.flyerDistancePerFrame(movement)
+    return movement * 9 / 8
+end
+
 ----------------------------------
 
 function unitUtils.biterdieanimation(scale, tint1, tint2, altBiter)
-    if (altBiter == "armored") and mods["ArmouredBiters"] then
+    if (altBiter == "flyer") then
+        return flyerAnimation("death_air", scale, tint2)
+    elseif (altBiter == "armored") and mods["ArmouredBiters"] then
         return armoredDieBiter(scale, tint1, tint2)
     elseif (altBiter == "arachnid") and mods["Arachnids"] then
         return arachnidsdieanimation(scale, tint1, tint2)
@@ -2006,7 +2111,9 @@ function unitUtils.biterdieanimation(scale, tint1, tint2, altBiter)
 end
 
 function unitUtils.biterattackanimation(scale, tint1, tint2, altBiter)
-    if (altBiter == "armored") and mods["ArmouredBiters"] then
+    if (altBiter == "flyer") then
+        return flyerAnimation("attack", scale, tint2)
+    elseif (altBiter == "armored") and mods["ArmouredBiters"] then
         return armoredAttackBiter(scale, tint1, tint2)
     elseif (altBiter == "arachnid") and mods["Arachnids"] then
 		return arachnidsattackanimation(scale, tint1, tint2)
@@ -2017,7 +2124,9 @@ end
 
 
 function unitUtils.biterrunanimation(scale, tint1, tint2, altBiter)
-    if (altBiter == "armored") and mods["ArmouredBiters"] then
+    if (altBiter == "flyer") then
+        return flyerAnimation("flying", scale, tint2)
+    elseif (altBiter == "armored") and mods["ArmouredBiters"] then
         return armoredRunBiter(scale, tint1, tint2)
     elseif (altBiter == "arachnid") and mods["Arachnids"] then
         return arachnidsrunanimation(scale, tint1, tint2)

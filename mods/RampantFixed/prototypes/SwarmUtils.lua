@@ -91,6 +91,7 @@ local makeBeam = beamUtils.makeBeam
 local createElectricAttack = biterUtils.createElectricAttack
 
 local makeBiter = biterUtils.makeBiter
+local makeFlyer = biterUtils.makeFlyer
 local makeDrone = droneUtils.makeDrone
 local makeSpitter = biterUtils.makeSpitter
 local makeWorm = biterUtils.makeWorm
@@ -450,47 +451,58 @@ local propTables10 = {
 	}	
 
 
-local function fillUnitTable(result, unitSet, tier, probability)
+local function fillUnitTable(result, unitSet, tier, probability, unitWeights)
+    local tierWeights = unitWeights and unitWeights[tier]
     for x=1,#unitSet[tier] do
-        result[#result+1] = {unitSet[tier][x], probability}
+        local name = unitSet[tier][x]
+        local weight = tierWeights and tierWeights[name]
+        if weight then
+            local weighted = {}
+            for i=1,#probability do
+                weighted[i] = {probability[i][1], probability[i][2] * weight}
+            end
+            result[#result+1] = {name, weighted}
+        else
+            result[#result+1] = {name, probability}
+        end
     end
 end
 
-local function unitSetToProbabilityTable(unitSet)	-- biters per evo
+local function unitSetToProbabilityTable(unitSet, unitWeights)	-- biters per evo
     local result = {}
 	local tierEnd = settings.startup["rampantFixed--tierEnd"].value	
 	local evoOffset = mMax(tierEnd-5, 0)*0.02
 	
-    fillUnitTable(result, unitSet, 1, {{0, 1}, {0.40, 0.0}})
-    fillUnitTable(result, unitSet, 2, {{0.10+evoOffset*0.5, 0}, {0.25+evoOffset, 0.5}, {0.50, 0.0}})		
-    fillUnitTable(result, unitSet, 3, {{0.22+evoOffset*0.5, 0}, {0.45+evoOffset*0.5, 0.5}, {0.60, 0.0}})
-    fillUnitTable(result, unitSet, 4, {{0.38, 0}, {0.55+evoOffset, 0.5}, {0.70+evoOffset, 0.0}})
-    fillUnitTable(result, unitSet, 5, {{0.47, 0}, {0.65+evoOffset, 0.5}, {0.80+evoOffset, 0.0}})
-    fillUnitTable(result, unitSet, 6, {{0.65, 0}, {0.75+(evoOffset*0.5), 0.5}, {0.975, 0.0}})
-    fillUnitTable(result, unitSet, 7, {{0.74, 0}, {0.825+(evoOffset*0.5), 0.5}, {0.975, 0.0}})
-    fillUnitTable(result, unitSet, 8, {{0.80, 0}, {0.875, 0.5}, {0.98, 0.0}})
-    fillUnitTable(result, unitSet, 9, {{0.85, 0}, {0.925, 0.5}, {0.99, 0.0}})
-    fillUnitTable(result, unitSet, 10, {{0.91, 0}, {1, 1.0}})
+    fillUnitTable(result, unitSet, 1, {{0, 1}, {0.40, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 2, {{0.10+evoOffset*0.5, 0}, {0.25+evoOffset, 0.5}, {0.50, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 3, {{0.22+evoOffset*0.5, 0}, {0.45+evoOffset*0.5, 0.5}, {0.60, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 4, {{0.38, 0}, {0.55+evoOffset, 0.5}, {0.70+evoOffset, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 5, {{0.47, 0}, {0.65+evoOffset, 0.5}, {0.80+evoOffset, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 6, {{0.65, 0}, {0.75+(evoOffset*0.5), 0.5}, {0.975, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 7, {{0.74, 0}, {0.825+(evoOffset*0.5), 0.5}, {0.975, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 8, {{0.80, 0}, {0.875, 0.5}, {0.98, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 9, {{0.85, 0}, {0.925, 0.5}, {0.99, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 10, {{0.91, 0}, {1, 1.0}}, unitWeights)
 
 
     return result
 end
 
-local function unitSetToHiveProbabilityTable(unitSet)		-- +1 lvl
+local function unitSetToHiveProbabilityTable(unitSet, unitWeights)		-- +1 lvl
     local result = {}
 	local tierEnd = settings.startup["rampantFixed--tierEnd"].value
 	local evoOffset = mMax(tierEnd-5, 0)*0.02
 	
-    fillUnitTable(result, unitSet, 1, {{0, 1}, {0.15, 0.0}})
-    fillUnitTable(result, unitSet, 2, {{0.00, 0}, {0.15, 0.5}, {0.27, 0.0}})		
-    fillUnitTable(result, unitSet, 3, {{0.15, 0}, {0.27, 0.5}, {0.38, 0.0}})		
-    fillUnitTable(result, unitSet, 4, {{0.27, 0}, {0.38, 0.5}, {0.47, 0.0}})
-    fillUnitTable(result, unitSet, 5, {{0.38, 0}, {0.47, 0.5}, {0.65, 0.0}})
-    fillUnitTable(result, unitSet, 6, {{0.47, 0}, {0.65, 0.5}, {0.74, 0.0}})
-    fillUnitTable(result, unitSet, 7, {{0.65, 0}, {0.74, 0.5}, {0.85, 0.0}})
-    fillUnitTable(result, unitSet, 8, {{0.74, 0}, {0.80, 0.5}, {0.95, 0.0}})
-    fillUnitTable(result, unitSet, 9, {{0.80, 0}, {0.85, 0.5}, {0.98, 0.0}})
-    fillUnitTable(result, unitSet, 10, {{0.85, 0}, {1, 1.0}})
+    fillUnitTable(result, unitSet, 1, {{0, 1}, {0.15, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 2, {{0.00, 0}, {0.15, 0.5}, {0.27, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 3, {{0.15, 0}, {0.27, 0.5}, {0.38, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 4, {{0.27, 0}, {0.38, 0.5}, {0.47, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 5, {{0.38, 0}, {0.47, 0.5}, {0.65, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 6, {{0.47, 0}, {0.65, 0.5}, {0.74, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 7, {{0.65, 0}, {0.74, 0.5}, {0.85, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 8, {{0.74, 0}, {0.80, 0.5}, {0.95, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 9, {{0.80, 0}, {0.85, 0.5}, {0.98, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 10, {{0.85, 0}, {1, 1.0}}, unitWeights)
     return result
 	
 end
@@ -774,6 +786,8 @@ local function fillEntityTemplate(entity)
                     entity["altBiter"] = "armored"
                 elseif (attribute == "altBiterArachnid") then
                     entity["altBiter"] = "arachnid"				
+                elseif (attribute == "altBiterFlyer") then
+                    entity["altBiter"] = "flyer"
                 elseif (attribute == "highRegen") then
                     entity["healing"] = entity["healing"] * 1.5 + 0.01
                 elseif (attribute == "highestRegen") then
@@ -961,6 +975,12 @@ local function fillEntityTemplate(entity)
 						entity["range"] = entity["range"] + attribute[2]
 					elseif (attribute[1] == "bonusHealth") then	
 						entity["health"] = entity["health"] * attribute[2]
+					elseif (attribute[1] == "bonusDamage") then
+						entity["damage"] = entity["damage"] * attribute[2]
+					elseif (attribute[1] == "bonusPollutionToAttack") then
+						entity["pollutionToAttack"] = entity["pollutionToAttack"] * attribute[2]
+					elseif (attribute[1] == "bonusSpawningTime") then
+						entity["spawningTimeModifer"] = entity["spawningTimeModifer"] * attribute[2]
 					else
                         error("Unknown table attribute " .. attribute[1])
                     end
@@ -1227,7 +1247,11 @@ function swarmUtils.buildUnits(template, dyingEffects)
 					addEntityLoot(entity, "biterLoot", effectiveLevel)
 				end	
             elseif (unit.type == "biter") then
-                entity = makeBiter(unit)
+                if (unit.altBiter == "flyer") then
+                    entity = makeFlyer(unit)
+                else
+                    entity = makeBiter(unit)
+                end
 				if (not entity.noLoot) then
 					addEntityLoot(entity, "biterLoot", effectiveLevel)
 				end	
@@ -1290,7 +1314,7 @@ function swarmUtils.buildEntitySpawner(template, factionBuildings)
             unitSpawner.effectiveLevel = effectiveLevel
 			unitSpawner.tier = tier
             unitSpawner.variation = i
-            unitSpawner.unitSet = unitSetToHiveProbabilityTable(template.unitSet)
+            unitSpawner.unitSet = unitSetToHiveProbabilityTable(template.unitSet, template.unitWeights)
             generateApperance(unitSpawner)
             fillEntityTemplate(unitSpawner)
 			
@@ -1323,7 +1347,7 @@ function swarmUtils.buildUnitSpawner(template)
             unitSpawner.effectiveLevel = effectiveLevel
 			unitSpawner.tier = tier
             unitSpawner.variation = i
-            local unitTable = unitSetToProbabilityTable(template.unitSet)
+            local unitTable = unitSetToProbabilityTable(template.unitSet, template.unitWeights)
             unitSpawner.unitSet = unitTable
             generateApperance(unitSpawner)
             fillEntityTemplate(unitSpawner)
@@ -1875,10 +1899,15 @@ local function buildUnitSpawnerTemplate(faction, incomingTemplate, unitSets, cap
     template.resistances = {}
 
     local unitSet = {}
+    -- buildSet[4] (optional): share of that unit set in the output of its tier; other units share the rest equally
+    local unitWeights = {}
 
     -- local unitVariations = settings.startup["rampantFixed--newEnemyVariations"].value
 
     for t=1,10 do
+        local sharedSets = {}
+        local totalShare = 0
+        local otherUnits = 0
         for i=1,#template.buildSets do
             local buildSet = template.buildSets[i]
             if (buildSet[2] <= t) and (t <= buildSet[3]) then
@@ -1891,7 +1920,26 @@ local function buildUnitSpawnerTemplate(faction, incomingTemplate, unitSets, cap
                 else
                     unitSet[t] = deepcopy(activeUnitSet)
                 end
+                if buildSet[4] then
+                    sharedSets[#sharedSets+1] = {buildSet[4], activeUnitSet}
+                    totalShare = totalShare + buildSet[4]
+                else
+                    otherUnits = otherUnits + #activeUnitSet
+                end
             end
+        end
+        if (#sharedSets > 0) and (otherUnits > 0) then
+            if (totalShare <= 0) or (totalShare >= 1) then
+                error("unit set shares must sum to (0, 1): " .. template.name)
+            end
+            local tierWeights = {}
+            for i=1,#sharedSets do
+                local share, activeUnitSet = sharedSets[i][1], sharedSets[i][2]
+                for b=1,#activeUnitSet do
+                    tierWeights[activeUnitSet[b]] = share / (1 - totalShare) * otherUnits / #activeUnitSet
+                end
+            end
+            unitWeights[t] = tierWeights
         end
         -- while (#unitSet[t] > unitVariations) do
         --     table.remove(unitSet, math.random(#unitSet[t]))
@@ -1899,6 +1947,7 @@ local function buildUnitSpawnerTemplate(faction, incomingTemplate, unitSets, cap
     end
 
     template.unitSet = unitSet
+    template.unitWeights = unitWeights
     if template.drops then
         template.drops = makeLootTables(template)
     end
