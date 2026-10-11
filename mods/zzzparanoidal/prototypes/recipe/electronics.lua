@@ -182,7 +182,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "predictive-io",
-		category = "crafting",
+		category = "electronics-machine", -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 60,
 		ingredients = {
@@ -203,7 +203,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "intelligent-io",
-		category = "crafting",
+		category = "electronics-machine", -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 75,
 		ingredients = {
