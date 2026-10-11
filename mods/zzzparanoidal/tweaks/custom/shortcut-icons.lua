@@ -20,17 +20,5 @@ local function replace_icons(name, asset, icon_size)
 	shortcut.disabled_small_icon = nil
 end
 
-for _, action in ipairs({
-	"flip-h",
-	"flip-v",
-	"rotate-clockwise",
-	"clone-blueprint",
-	"wireswap",
-	"landfill",
-	"remove-landfill",
-}) do
-	replace_icons("Kux-BlueprintExtensions_" .. action, "kux-" .. action, 32)
-end
-
 replace_icons("todo-toggle-ui-shortcut", "todo-list", 56)
 replace_icons("todo-add-task-shortcut", "todo-add-task", 56)
