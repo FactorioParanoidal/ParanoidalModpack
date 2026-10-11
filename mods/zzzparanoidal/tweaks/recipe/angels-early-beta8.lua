@@ -77,7 +77,7 @@ local definitions = {
 	},
 	["angels-solid-mud-landfill"] = {
 		["ingredients"] = {
-			{ type = "item", name = "angels-solid-mud", amount = 250 },
+			{ type = "item", name = "angels-solid-mud", amount = 125 }, -- решение пользователя 2026-10-12 (было 250)
 		},
 	},
 	["angels-solid-rubber"] = {
