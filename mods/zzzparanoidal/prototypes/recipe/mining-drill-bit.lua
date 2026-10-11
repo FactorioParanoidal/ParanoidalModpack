@@ -31,13 +31,6 @@ newRecipe("mk2", 7).ingredients = {
 }
 paralib.bobmods.lib.tech.add_recipe_unlock("steel-processing", "mining-drill-bit-mk2")
 
--- Насадки I–II только в автоматах, без ручной сборки, как в Beta 8 (пачка 01).
-for _, tier in ipairs({ "mk1", "mk2" }) do
-	local recipe = data.raw.recipe["mining-drill-bit-" .. tier]
-	recipe.category = "basic-crafting"
-	recipe.additional_categories = { "advanced-crafting" }
-end
-
 newRecipe("mk3", 12).ingredients = {
 	{ type = "item", name = "mining-drill-bit-mk2", amount = 2},
 	{ type = "item", name = "bob-cobalt-steel-alloy", amount = 20},
@@ -50,6 +43,13 @@ newRecipe("mk4", 15).ingredients = {
 	{ type = "item", name = "bob-titanium-plate", amount = 20},
 }
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-drills-4", "mining-drill-bit-mk4")
+
+-- Насадки I–IV только в автоматах, без ручной сборки, как в Beta 8 (I–II — пачка 01, III–IV — пачка 02).
+for _, tier in ipairs({ "mk1", "mk2", "mk3", "mk4" }) do
+	local recipe = data.raw.recipe["mining-drill-bit-" .. tier]
+	recipe.category = "basic-crafting"
+	recipe.additional_categories = { "advanced-crafting" }
+end
 
 newRecipe("mk5", 15).ingredients = {
 	{ type = "item", name = "mining-drill-bit-mk4", amount = 2},
