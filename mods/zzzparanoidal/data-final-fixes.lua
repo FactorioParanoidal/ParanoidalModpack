@@ -63,6 +63,7 @@ require("tweaks.technology.factorissimo-recursion-clean") -- убираем пу
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.map-gen-presets")
 require("tweaks.custom.icons")
+require("tweaks.custom.shortcut-icons")
 require("tweaks.custom.selections")
 
 
