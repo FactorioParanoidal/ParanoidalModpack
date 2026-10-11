@@ -213,7 +213,7 @@ def("pd-vehicle-graveyard", function(b)
 end):far(800)
 
 def("pd-research-center", function(b)
-  b:tiles_rect("lab-white", -15, -15, 14, 14, 0.8)
+  b:tiles_rect("refined-concrete", -15, -15, 14, 14, 0.8)
   b:put("big-lab", -15, -15, { dmg = DMG(200, 800) })
   b:put("lab", 2, -15, { dead = 0.4 })
   b:put("lab", 6, -15, { dmg = DMG(40, 150) })

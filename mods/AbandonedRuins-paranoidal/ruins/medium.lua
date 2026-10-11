@@ -194,7 +194,7 @@ def("pd-field-lab", function(b)
   b:put("lab", -5, -5, { dmg = DMG(40, 150) })
   b:put("burner-lab", -1, -5, { dead = 0.4 })
   b:put("iron-chest", 3, -5, { items = { ["automation-science-pack"] = R(5, 20), ["logistic-science-pack"] = R(0, 5), ["sci-component-1"] = R(5, 20) } })
-  b:tiles_rect("lab-white", -6, -6, 5, -1, 0.7)
+  b:tiles_rect("refined-concrete", -6, -6, 5, -1, 0.7)
   b:ring("stone-wall", -7, -7, 6, 0, { gap = 0.4, dead = 0.3 })
 end):weight(0.8)
 
