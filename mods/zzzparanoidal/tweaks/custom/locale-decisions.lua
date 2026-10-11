@@ -16,4 +16,12 @@ for _, prefix in ipairs({"circuit-veteran-", "computer-age-"}) do
     localise_description("produce-per-hour-achievement", prefix .. tier)
   end
 end
-localise_description("produce-achievement", "mass-production-4")
+for tier = 4, 9 do
+  localise_description("produce-per-hour-achievement", "iron-throne-" .. tier)
+  localise_description("produce-achievement", "mass-production-" .. tier)
+end
+for _, prefix in ipairs({"crafting-with-efficiency-", "crafting-with-productivity-", "crafting-with-speed-"}) do
+  for tier = 2, 3 do
+    localise_description("produce-achievement", prefix .. tier)
+  end
+end
