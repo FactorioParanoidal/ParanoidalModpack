@@ -36,9 +36,11 @@ end
 -- руины
 if mods["AbandonedRuins_updated_fork"] then
     set_settings_default_value("int-setting", "ruins-min-distance-from-spawn", 400)
-    set_settings_default_value("double-setting", "ruins-small-ruin-chance", 0.025)
-    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.01)
-    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.0025)
+    -- Шансы снижены на 25% (было 0.025 / 0.01 / 0.0025): исправленная очередь Abandoned Ruins
+    -- больше не теряет руины из чанков, сгенерированных за один интервал спавна.
+    set_settings_default_value("double-setting", "ruins-small-ruin-chance", 0.01875)
+    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.0075)
+    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.001875)
 end
 -- Blueprint Sandboxes: отдельная сила песочницы, как в 1.x. При "none" производство и убийства
 -- в песочнице идут в статистику, Milestones, достижения и XP PMRPGsystem основной силы.

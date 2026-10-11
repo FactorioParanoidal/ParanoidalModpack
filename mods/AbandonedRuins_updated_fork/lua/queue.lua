@@ -12,9 +12,18 @@ local sanity = settings.startup[constants.ENABLE_EXPENSIVE_SANITY_CHECKS_KEY].va
 --- "Class/library" for ruin FIFO queue
 local queue = {}
 
--- Ruin queue
----@type RuinQueueItem[]
-queue.ruins = {}
+-- Paranoidal: the queue lives in storage. The former module-local table was not saved, so
+-- queued ruins were lost on save/load and a player joining between queueing and spawning
+-- had a different state (desync). Its `queue.ruins[#queue.ruins] = item` also overwrote the
+-- single slot 0, so at most one ruin per spawn tick survived.
+-- Only call these functions from events where storage may be written (not from on_load).
+---@return RuinQueueItem[]
+local function get_queue()
+  if storage.ruins_spawn_queue == nil then
+    storage.ruins_spawn_queue = {}
+  end
+  return storage.ruins_spawn_queue
+end
 
 -- Adds given ruin to the queue. So next invocation of on_nth_tick() will spawn it
 ---@param item RuinQueueItem Must contain 'surface' (LuaSurface), 'size' (string) and 'center' (LuaPosition)
@@ -43,7 +52,8 @@ function queue.add_ruin(item)
   end
 
   if debug_log then log(string.format("[add_ruin]: Queueing item[]='%s' ...", type(item))) end
-  queue.ruins[#queue.ruins] = item
+  local ruins = get_queue()
+  ruins[#ruins + 1] = item
 
   if debug_log then log("[add_ruin]: EXIT!") end
 end
@@ -51,12 +61,12 @@ end
 --- Get all ruins
 ---@return RuinQueueItem[]
 function queue.get_ruins()
-  return queue.ruins
+  return get_queue()
 end
 
 --- Resets queue for ruins
 function queue.reset_ruins()
-  queue.ruins = {}
+  storage.ruins_spawn_queue = {}
 end
 
 return queue

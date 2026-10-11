@@ -90,7 +90,8 @@ function planets.is_planet_allowed(planet)
   end
 
   -- Check condition
-  local allowed = (storage.allowed_planets[planet.name] ~= nil)
+  -- Paranoidal: init() stores false for disallowed planets; `~= nil` treated them as allowed.
+  local allowed = (storage.allowed_planets ~= nil and storage.allowed_planets[planet.name] == true)
 
   if debug_log then log(string.format("[is_planet_allowed]: allowed='%s' - EXIT!", allowed)) end
   return allowed
