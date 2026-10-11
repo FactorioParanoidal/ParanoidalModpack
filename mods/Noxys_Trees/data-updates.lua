@@ -11,7 +11,10 @@ local mul = settings.startup["Noxys_Trees-emission_multiplier"].value
 if mul ~= 1 then
 	for _,v in pairs(data.raw.tree) do
 		if v.emissions_per_second and v.emissions_per_second.pollution then
-			v.emissions_per_second.pollution = v.emissions_per_second.pollution * mul
+			-- 2.0 base trees share one emissions table; copy it so each tree is multiplied once.
+			local emissions = table.deepcopy(v.emissions_per_second)
+			emissions.pollution = emissions.pollution * mul
+			v.emissions_per_second = emissions
 		end
 	end
 end
