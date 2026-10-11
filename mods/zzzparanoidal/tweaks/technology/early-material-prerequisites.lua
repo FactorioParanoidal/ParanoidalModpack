@@ -119,7 +119,6 @@ local prerequisites = {
     { "phosphorus-processing-2", "production-science-pack" },
     { "angels-sodium-processing-3", "utility-science-pack" },
     { "remelting-alloy-mixer-4", "utility-science-pack" },
-    { "radiation-protection", "military-science-pack" },
     { "Schall-tank-SH-1", "utility-science-pack" },
     { "aircraft-energy-shield", "utility-science-pack" },
     { "CW-air-filtering-5", "utility-science-pack" },

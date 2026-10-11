@@ -295,7 +295,6 @@ return {
             {["name"] = "bob-reinforced-wall", ["order"] = "08", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/7b4efc0f13a12cd2a96f.png", ["icon_size"] = 64}},
             {["name"] = "bob-reinforced-gate", ["order"] = "09", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/3c738975b07e92d0f858.png", ["icon_size"] = 64}},
             {["name"] = "plaswall", ["order"] = "10", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/3615df5c8e88ff6d5c96.png", ["icon_size"] = 64}},
-            {["name"] = "radiation-wall-recipe", ["order"] = "11"},
         }},
         {group = "paranoidal-defense", subgroup = "paranoidal-split-defense-gun-turrets", order = "a-02", recipes = {
             {["name"] = "gun-turret", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/eec3fcb5d9d620455447.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/e20ae9a9f8a221e5e1f5.png", ["tint"] = {["r"] = 1, ["g"] = 0.7176470588235294, ["b"] = 0.14901960784313725}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/73c9a528e25af6c30078.png", ["tint"] = {1, 1, 1, 0}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/fed54c8a32d504d602be.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/fed54c8a32d504d602be.png", ["icon_size"] = 64, ["tint"] = {["r"] = 1, ["g"] = 0.7176470588235294, ["b"] = 0.14901960784313725, ["a"] = 0.75}}}}},
@@ -371,16 +370,6 @@ return {
         }},
         {group = "equipment", subgroup = "paranoidal-split-personal-battery", order = "b-b-paranoidal", recipes = {
             {["name"] = "battery-mk3-equipment", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/5f9a8e2ea8fc6ef62611.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/f78d9d59b713f0db9b1b.png", ["tint"] = {["r"] = 0.9490196078431372, ["g"] = 0.13725490196078433, ["b"] = 0.09411764705882353}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/c282d08555ed7a948865.png", ["tint"] = {1, 1, 1, 0}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/54bc61a2ae8dc687b28b.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/54bc61a2ae8dc687b28b.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.9490196078431372, ["g"] = 0.13725490196078433, ["b"] = 0.09411764705882353, ["a"] = 0.75}}}}},
-        }},
-        {group = "equipment", subgroup = "paranoidal-split-radiation-absorption", order = "b-c-paranoidal-1", recipes = {
-            {["name"] = "radiation-absorption-recipe", ["order"] = "01"},
-            {["name"] = "radiation-absorption-mk2-recipe", ["order"] = "02"},
-            {["name"] = "radiation-absorption-mk3-recipe", ["order"] = "03"},
-        }},
-        {group = "equipment", subgroup = "paranoidal-split-radiation-reduction", order = "b-c-paranoidal-2", recipes = {
-            {["name"] = "radiation-reduction-recipe", ["order"] = "01"},
-            {["name"] = "radiation-reduction-mk2-recipe", ["order"] = "02"},
-            {["name"] = "radiation-reduction-mk3-recipe", ["order"] = "03"},
         }},
         {group = "equipment", subgroup = "paranoidal-split-nanobot-chips", order = "b-e-b-paranoidal", recipes = {
             {["name"] = "equipment-bot-chip-items", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/a0bd35fc36a14345638f.png", ["icon_size"] = 64}},
