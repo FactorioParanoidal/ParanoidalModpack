@@ -389,6 +389,37 @@ data:extend({
             order = "l[modifier]-t4a[unit]",
             per_user = false
         },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--flyers",
+            setting_type = "startup",
+            default_value = true,
+            order = "l[modifier]-t4b[unit]",
+            per_user = false
+        },
+
+        {
+            type = "int-setting",
+            name = "rampantFixed--flyersFirstTier",
+            setting_type = "startup",
+            minimum_value = 1,
+            maximum_value = 10,
+            default_value = 1,
+            order = "l[modifier]-t4c[unit]",
+            per_user = false
+        },
+
+        {
+            type = "double-setting",
+            name = "rampantFixed--flyersSpawnShare",
+            setting_type = "startup",
+            minimum_value = 0.01,
+            maximum_value = 0.9,
+            default_value = 0.12,
+            order = "l[modifier]-t4d[unit]",
+            per_user = false
+        },
 		
         {
             type = "bool-setting",

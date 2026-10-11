@@ -1,7 +1,6 @@
 -- После OV и позднего восстановления дерева: только открытия, без изменения рецептур.
 local moves = {
-    -- Только химзавод III поддерживает этот рецепт; древесный уголь обеспечен предком ниже.
-    { "bi-mineralized-sulfuric-waste", "angels-water-treatment", "angels-advanced-chemistry-5" },
+    -- bi-mineralized-sulfuric-waste остаётся на водоочистке, как в Beta 8 (пачка 01, решение пользователя).
     -- Флотация даёт руду до ранней латуни; перенос в плавку цинка I задерживал бы синюю науку.
     { "bob-zinc-electrolysis-x", "angels-basic-chemistry-2", "angels-ore-floatation" },
     -- Не задерживаем весь ранний фосфор и азот из-за отдельных альтернатив.
@@ -32,6 +31,7 @@ for _, move in ipairs(moves) do
     end
 end
 
+-- Химзавод III — единственная машина этого рецепта; древесный уголь обеспечен его предком.
 local chemistry = data.raw.technology["angels-advanced-chemistry-5"]
 local charcoal = "bi-tech-coal-processing-1"
 if data.raw.recipe["bi-mineralized-sulfuric-waste"] and chemistry and data.raw.technology[charcoal] then

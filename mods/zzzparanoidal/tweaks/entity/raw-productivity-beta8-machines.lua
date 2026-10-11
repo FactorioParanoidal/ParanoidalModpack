@@ -1,6 +1,6 @@
 -- Beta 8 Raw Productivity eligibility, mapped to current IDs.
 -- Only machines with slots and all module effects permitted in the reference.
--- Resource-specific drill variants are explicit; new entities are not opted in.
+-- Resource-specific drill variants and approved new tiers are explicit.
 return {
     ["assembling-machine"] = {
         ["advanced-assembler"] = true,
@@ -102,6 +102,8 @@ return {
         ["angels-ore-sorting-facility-2"] = true,
         ["angels-ore-sorting-facility-3"] = true,
         ["angels-ore-sorting-facility-4"] = true,
+        -- Новый MK5 наследует совместимость модулей сортировщика MK4.
+        ["angels-ore-sorting-facility-5"] = true,
         ["angels-pellet-press-2"] = true,
         ["angels-pellet-press-3"] = true,
         ["angels-pellet-press-4"] = true,

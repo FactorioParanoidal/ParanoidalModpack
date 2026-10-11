@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.11.0
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal port of upstream 1.10.61 (Factorio 1.1) to Factorio 2.0; not an upstream release.
+    - 2.0 prototype format: recipe results/ingredients, boolean enabled, collision layers, drawing_box_vertical_extension.
+    - Board values, recipes, technologies and the Paranoidal structure-components ingredient are kept as in Beta 8.
+  Bugfixes:
+    - Entities use the board icons instead of icons inherited from base poles.
+    - Russian locale: the long distance board is named "Опорный подземный электрощит" (long-distance link board).

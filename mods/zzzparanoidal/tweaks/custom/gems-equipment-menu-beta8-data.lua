@@ -15,7 +15,6 @@ return {
             {["name"] = "bob-power-armor-mk5", ["order"] = "10", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/2a18f84e0145c0e8dd2a.png", ["icon_size"] = 64}},
         }},
         {group = "equipment", subgroup = "paranoidal-equipment-protective-clothing", order = "a-02", create = true, recipes = {
-            {["name"] = "radiation-suit-recipe", ["order"] = "01"},
             {["name"] = "respirator", ["order"] = "02"},
         }},
         {group = "equipment", subgroup = "paranoidal-equipment-solar", order = "a-03", create = true, recipes = {
@@ -100,16 +99,6 @@ return {
             {["name"] = "equipment-bot-chip-launcher", ["order"] = "02"},
             {["name"] = "equipment-bot-chip-trees", ["order"] = "03"},
             {["name"] = "equipment-bot-chip-feeder", ["order"] = "04"},
-        }},
-        {group = "equipment", subgroup = "paranoidal-equipment-radiation-absorption", order = "a-17", create = true, recipes = {
-            {["name"] = "radiation-absorption-recipe", ["order"] = "01"},
-            {["name"] = "radiation-absorption-mk2-recipe", ["order"] = "02"},
-            {["name"] = "radiation-absorption-mk3-recipe", ["order"] = "03"},
-        }},
-        {group = "equipment", subgroup = "paranoidal-equipment-radiation-reduction", order = "a-18", create = true, recipes = {
-            {["name"] = "radiation-reduction-recipe", ["order"] = "01"},
-            {["name"] = "radiation-reduction-mk2-recipe", ["order"] = "02"},
-            {["name"] = "radiation-reduction-mk3-recipe", ["order"] = "03"},
         }},
         {group = "angels-vehicles", subgroup = "angels-vehicle-equipment-bobrobot-d", order = "dc-b[robot]-d[roboport]", create = false, recipes = {
             {["name"] = "bob-vehicle-roboport-equipment-3", ["order"] = "c", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/7eba914f219a333b6ece.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.8, ["g"] = 0.8, ["b"] = 0.8}}, {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/c4658e54d2b3433fff96.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/62937418f91afec773db.png", ["tint"] = {["r"] = 0.2, ["g"] = 0.7058823529411765, ["b"] = 1}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/0b4512a23eddd1a1fc05.png", ["tint"] = {1, 1, 1, 0}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/f608bbef3dbeee2b0a1a.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/f608bbef3dbeee2b0a1a.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.2, ["g"] = 0.7058823529411765, ["b"] = 1, ["a"] = 0.75}}}}},

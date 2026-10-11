@@ -3,6 +3,11 @@ require("tweaks.recipe.angels-components") -- Сюда складывать вс
 require("tweaks.recipe.angels-power") -- Сюда складывать все рецепты из группы (item-group) = angels-power
 require("tweaks.recipe.production") -- Сюда складывать все рецепты из группы (item-group) = production
 
+-- Агрегатор точки росы: восемь выходов Beta 8 вместо двух проходных assembler-pipe-passthrough.
+if appmod and appmod.blacklist then
+	appmod.blacklist["dpa"] = true
+end
+
 -- Длины подземных лент и труб: на data-updates, чтобы show-max-underground-distance (data-final-fixes) читал финал
 require("tweaks.entity.underground-belt-distance")
 require("tweaks.entity.underground-pipe-distance")

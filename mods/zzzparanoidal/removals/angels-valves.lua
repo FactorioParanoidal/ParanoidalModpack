@@ -10,6 +10,29 @@ if mods["angelspetrochem"] and mods["valves"] then
 	paralib.bobmods.lib.recipe.hide("angels-valve-overflow")
 	paralib.bobmods.lib.recipe.hide("angels-valve-top-up")
 
+	-- Valves заменяют ранние клапаны Angels и открываются на прежней технологии.
+	if data.raw.technology["angels-fluid-control"] then
+		local replacements = {
+			{ "valves-one_way", "angels-valve-one-way" },
+			{ "valves-overflow", "angels-valve-overflow" },
+			{ "valves-top_up", "angels-valve-top-up" },
+		}
+		for _, replacement in ipairs(replacements) do
+			local name = replacement[1]
+			if data.raw.recipe[name] then
+				paralib.bobmods.lib.tech.remove_recipe_unlock("fluid-handling", name)
+				paralib.bobmods.lib.tech.remove_recipe_unlock("angels-fluid-control", replacement[2])
+				paralib.bobmods.lib.tech.add_recipe_unlock("angels-fluid-control", name)
+				paralib.bobmods.lib.recipe.enabled(name, false)
+				-- 1.1 angelspetrochem: valve-return, valve-overflow и valve-underflow.
+				paralib.bobmods.lib.recipe.set_ingredients(name, {
+					{ type = "item", name = "bob-basic-circuit-board", amount = 1 },
+					{ type = "item", name = "pipe", amount = 3 },
+				})
+			end
+		end
+	end
+
 	-- Скрытый рецепт не скрывает страницы предмета и постройки в Факторипедии.
 	-- Сами прототипы и их поведение сохраняем для существующих сейвов.
 	for _, name in ipairs({ "angels-valve-one-way", "angels-valve-overflow", "angels-valve-top-up" }) do

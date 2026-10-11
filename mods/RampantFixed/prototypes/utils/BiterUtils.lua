@@ -307,6 +307,52 @@ function biterFunctions.makeBiter(attributes)
     return entity
 end
 
+-- Flyers do not collide with walls, water, cliffs, buildings or units. They still have one layer of their own:
+-- area triggers (explosions, fire, clouds) only affect entities whose collision mask matches theirs.
+local FLYER_COLLISION_LAYER = "rampantFixed-flyer"
+
+function biterFunctions.makeFlyer(attributes)
+    if not data.raw["collision-layer"] or not data.raw["collision-layer"][FLYER_COLLISION_LAYER] then
+        data:extend({{type = "collision-layer", name = FLYER_COLLISION_LAYER}})
+    end
+
+    local entity = biterFunctions.makeBiter(attributes)
+    local size = unitUtils.flyerSizeFactor(attributes.scale)
+
+    entity.icon = unitUtils.FLYER_ICON
+    setIcons(entity, attributes)
+    entity.collision_mask = {layers = {[FLYER_COLLISION_LAYER] = true}, not_colliding_with_itself = true}
+    if settings.startup["rampantFixed--enableSwarm"].value then
+        -- same footprint as Rampant biters after data-final-fixes
+        entity.collision_box = {
+            {entity.collision_box[1][1] * 0.20, entity.collision_box[1][2] * 0.20},
+            {entity.collision_box[2][1] * 0.20, entity.collision_box[2][2] * 0.20}
+        }
+    end
+    -- covers the body both in flight and while sitting
+    entity.selection_box = {{-1.0 * size, -4.0 * size}, {1.0 * size, 0.5 * size}}
+    entity.sticker_box = {{-0.8 * size, -2.5 * size}, {0.8 * size, -0.5 * size}}
+    entity.render_layer = "air-object"
+    entity.water_reflection = nil
+    entity.running_sound_animation_positions = nil
+    entity.distance_per_frame = unitUtils.flyerDistancePerFrame(entity.movement_speed)
+    entity.alternative_attacking_frame_sequence = unitUtils.flyer_alternative_attacking_animation_sequence()
+    entity.attack_parameters.warmup = unitUtils.FLYER_LANDING_TICKS
+
+    local corpse = data.raw["corpse"][entity.corpse]
+    corpse.icon = unitUtils.FLYER_ICON
+    corpse.direction_shuffle = nil
+    corpse.shuffle_directions_at_frame = nil
+    corpse.dying_speed = 1 / 40
+    corpse.ground_patch_fade_in_delay = 40
+    if settings.startup["rampantFixed--enableFadeTime"].value then
+        -- data-final-fixes only shortens corpses with biter/spitter in the name
+        corpse.time_before_removed = settings.startup["rampantFixed--unitAndSpawnerFadeTime"].value * 60
+    end
+
+    return entity
+end
+
 function biterFunctions.makeSpitter(attributes)
     local resistances = {}
     for k,v in pairs(attributes.resistances) do

@@ -2,7 +2,7 @@
 local root = "__zzzparanoidal__/graphics/"
 local icons = {
     {"bobicons-beta8/bobicons/graphics/icons/base/iron-gear-wheel-128.png", 128},
-    {"technology/ironworks-gears/brass.png", 256},
+    {"technology/ironworks-gears/steel.png", 256},
     {"technology/ironworks-gears/titanium.png", 256},
     {"technology/ironworks-gears/tungsten.png", 256},
     {"technology/ironworks-gears/nitinol.png", 256},

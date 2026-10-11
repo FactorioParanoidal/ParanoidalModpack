@@ -1,0 +1,10 @@
+{
+  "name": "OreRadar",
+  "version": "2.0.0",
+  "title": "Ore Radar",
+  "author": "darkfrei, Paranoidal",
+  "license": "MIT",
+  "description": "A geological radar that reveals generated chunks containing ore or other resources. Port of the Paranoidal 1.1 radar with bounded background indexing.",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0.0", "? aai-industry", "? bobplates"]
+}

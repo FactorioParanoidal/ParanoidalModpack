@@ -115,6 +115,31 @@ local function set_button_sprite(button, spritepath)
 	end
 end
 
+-- Paranoidal: inserter-throughput creates its button with the grey mod_gui_button style and auto_toggle.
+-- Show it like the other unified buttons: own style, "_selected" when enabled, the same icon in every
+-- mouse state. The mod only writes `toggled`, it never reads it, so toggling is disabled here.
+local selected_styles = {
+	slot_button_notext = true,
+	slot_sized_button_notext = true,
+	slot_button_notext_transparent = true,
+}
+
+local function update_inserter_throughput_button(player, button_flow, player_settings)
+	if not script.active_mods["inserter-throughput"] then return end
+	local button = button_flow and button_flow["inserter-throughput-toggle"]
+	local setting = player_settings["inserter-throughput-enabled"]
+	if not (button and button.valid and button.type == "sprite-button" and setting) then return end
+	local enabled = setting.value
+	local style = player_settings["gu_button_style_setting"].value or "slot_button_notext"
+	if enabled and selected_styles[style] then style = style .. "_selected" end
+	local sprite = enabled and "inserterthroughput_on_button" or "inserterthroughput_off_button"
+	gui_properties.set(button, "auto_toggle", false)
+	gui_properties.set(button, "toggled", false)
+	gui_properties.style(button, style)
+	set_button_sprite(button, sprite)
+	gui_properties.set(button, "tooltip", {"guiu." .. sprite})
+end
+
 local function update_window_state(player, button, windowtocheck)
     if not player or not player.valid or not windowtocheck then return false end
     
@@ -273,6 +298,7 @@ end
 		{"usage-detector",		"usage_detector",							"usagedetector_button",			{'guiu.usagedetector_button'},				true},
 		{"RPG",					"104",										"rpg_button",					{'guiu.rpg_button'},						true},
 		{"TimedSpawnControl",	"unstuck",								"spawncontrol_random_button",	{'guiu.spawncontrol_unstuck'},			true},
+		{"blueprint-sandboxes",	"bpsb-toggle-gui-sb-toggle-shortcut",	"blueprintsandboxes_button",	{'guiu.blueprintsandboxes_button'},		true},
 		{"what-is-missing",		"what_is_missing",							"whatsmissing_button",			{'guiu.whatsmissing_button'},				true},
 		{"some-zoom",			"but_zoom_zout",							"somezoom_out_button",			{'guiu.somezoom_out_button'},				true},
 		{"some-zoom",			"but_zoom_zin",								"somezoom_in_button",			{'guiu.somezoom_in_button'},				true},
@@ -375,15 +401,7 @@ local function create_new_buttons(player)
 		button_flow["spawn"].destroy()
 	end
 
-	if script.active_mods["inserter-throughput"] then
-		local button = button_flow["inserter-throughput-toggle"]
-		local setting = player_settings["inserter-throughput-enabled"]
-		if button and setting then
-			local sprite = setting.value and "inserterthroughput_on_button" or "inserterthroughput_off_button"
-			gui_properties.set(button, "sprite", sprite)
-			gui_properties.set(button, "tooltip", {"guiu." .. sprite})
-		end
-	end
+	update_inserter_throughput_button(player, button_flow, player_settings)
 end
 
 
@@ -416,6 +434,11 @@ local function destroy_obsolete_buttons(player)
 
 	if button_flow.le_flow then
 		button_flow.le_flow.destroy()
+	end
+
+	-- Paranoidal: the Bob's inserter options button is not shown in the unified panel.
+	if button_flow.bob_logistics_inserter_button then
+		button_flow.bob_logistics_inserter_button.destroy()
 	end
 
 	if not player.is_cursor_blueprint() then
@@ -647,6 +670,13 @@ local function on_player_configuration_changed(event)
         return
     end
     general_update_event(event)
+    -- Same event as the mod's own handler: no frame with a stale icon or style.
+    if event.setting == "inserter-throughput-enabled" then
+        local player = game.get_player(event.player_index)
+        if player and player.valid then
+            update_inserter_throughput_button(player, mod_gui.get_button_flow(player), settings.get_player_settings(player))
+        end
+    end
     if event.setting == "gu_frame_style_setting" and global.player[event.player_index] then
         global.player[event.player_index].update_frame = true
     end

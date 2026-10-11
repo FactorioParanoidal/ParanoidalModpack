@@ -25,6 +25,7 @@ require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
 require("tweaks.entity.nuke-cliffs")
 require("tweaks.entity.tree-chopping-speed") -- рубка деревьев x3 быстрее
+require("tweaks.entity.rocket-silo-construction-beta8") -- выбросы первой стадии шахты как в Beta 8
 
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
@@ -62,6 +63,7 @@ require("tweaks.technology.factorissimo-recursion-clean") -- убираем пу
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.map-gen-presets")
 require("tweaks.custom.icons")
+require("tweaks.custom.shortcut-icons")
 require("tweaks.custom.selections")
 
 
@@ -353,8 +355,24 @@ require("tweaks.entity.machinery-stats-1_1")
 require("tweaks.entity.pumpjack-colors-1_1")
 require("removals.area-mining-drill")
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
+-- Цена исследований Beta 8 (циклы, наука, время) после всех правок дерева; эффект эволюции считается ниже.
+require("tweaks.technology.research-beta8")
 -- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
 require("tweaks.custom.energy-port")
+-- Отдельный MK3 с собственным предметом и открытием на существующей технологии IV.
+require("prototypes.electrowinning-cell-3-beta8")
+-- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.
+require("tweaks.entity.building-speed-slots-1_1")
+require("tweaks.entity.building-module-compatibility-1_1")
+require("tweaks.entity.big-lab")
+-- После синхронизаторов меню: иначе предметы лоадеров уйдут за копиями песочницы.
+require("tweaks.custom.blueprint-sandboxes")
+require("removals.pcp-flask")
+-- Эстакадные рельсы (только при включённом elevated-rails): тиры опор и кабель в опорах.
+require("tweaks.custom.elevated-rail-supports")
+-- Пачка 01 «До синей науки» (решение пользователя): после flowfix, меню и правок дерева.
+require("tweaks.recipe.batch01-blue-beta8")
+require("tweaks.recipe.batch02-blue-beta8")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

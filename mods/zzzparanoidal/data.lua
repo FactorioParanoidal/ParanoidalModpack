@@ -8,6 +8,7 @@ require("prototypes.entity.bio-content")
 require("prototypes.entity.offshore-pumps")
 require("prototypes.pumpjacks-1_1") -- Недостающая нефтяная вышка MK4, до фильтруемых копий.
 require("prototypes.seafloor-pumps.data") -- донные насосы I–III Beta 8, электрические
+require("prototypes.dew-point-aggregator") -- агрегатор точки росы Beta 8, без скрипта биомов
 require("prototypes.entity.battery-electric-train")
 require("prototypes.entity.flame-car")
 require("prototypes.entity.concrete-brick")

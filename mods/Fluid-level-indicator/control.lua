@@ -35,14 +35,14 @@ end)
 
 script.on_event(defines.events.on_pre_surface_cleared,function(event)
     local surface = game.surfaces[event.surface_index]
-    for _,ent in pairs(surface.find_entities_filtered(surface.find_entities_filtered({name = flientities}))) do
+    for _,ent in pairs(surface.find_entities_filtered({name = flientities})) do
         removedfli(ent)
     end
 end)
 
 script.on_event(defines.events.on_pre_surface_deleted,function(event)
     local surface = game.surfaces[event.surface_index]
-    for _,ent in pairs(surface.find_entities_filtered(surface.find_entities_filtered({name = flientities}))) do
+    for _,ent in pairs(surface.find_entities_filtered({name = flientities})) do
         removedfli(ent)
     end
 end)

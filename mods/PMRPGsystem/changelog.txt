@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.4
+  Bugfixes:
+    - Blueprint Sandboxes no longer grants XP: research synced or unlocked for the sandbox force, kills, rockets and tree/rock mining inside sandboxes.
+    - Discards XP already accumulated by sandbox forces on existing saves.
+---------------------------------------------------------------------------------------------------
 Version: 9.0.3
   Changes:
     - Migrates exact XP from RPGsystem 2.0.8 and recalculates the level with the Beta 8 XP table.

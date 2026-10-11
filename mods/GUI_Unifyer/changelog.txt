@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal patch: removes the Bob's inserter options button from the unified panel.
+  Bugfixes:
+    - Inserter throughput and PM RPG System buttons use the unified dark button style instead of the grey mod_gui_button.
+    - Inserter throughput button no longer flickers on click: no auto toggle, same icon in every mouse state, updated in the setting event.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal patch: adds a Blueprint Sandboxes toggle button with a monochrome sand-and-scoop icon (SVG source included).
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-10-05
   Changes:

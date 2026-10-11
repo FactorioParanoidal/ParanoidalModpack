@@ -1,10 +1,11 @@
 require("controls.heroturrets_script") -- скрипт разжалования турелей
 require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
-require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
 local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
 require("controls.energy-recipe-migration").install() -- Старые чертежи ячеек после JSON/Lua-миграции.
+local rail_support_power = require("controls.rail-support-power")
+rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
@@ -109,6 +110,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	sync_air_filter_beta8()
 	burner_pump_status.init()
 	loader_shells.init()
+	rail_support_power.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -121,6 +123,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	sync_air_filter_beta8()
 	burner_pump_status.init()
 	loader_shells.init()
+	rail_support_power.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
