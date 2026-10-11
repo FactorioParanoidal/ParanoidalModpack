@@ -373,6 +373,7 @@ require("tweaks.custom.elevated-rail-supports")
 -- Пачка 01 «До синей науки» (решение пользователя): после flowfix, меню и правок дерева.
 require("tweaks.recipe.batch01-blue-beta8")
 require("tweaks.recipe.batch02-blue-beta8")
+require("tweaks.custom.locale-decisions")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
