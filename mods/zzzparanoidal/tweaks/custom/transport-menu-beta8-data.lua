@@ -12,14 +12,26 @@ return {
         }},
         {subgroup = "paranoidal-transport-rail-other", order = "a-02", recipes = {
             {["name"] = "rail-signal-scrap", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/2d4b489322f69251a175.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}}}},
-            {["name"] = "rail-signal-scrap-to-rail-signal", ["order"] = "02", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/2d4b489322f69251a175.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}, {["icon"] = "__JunkTrain3__/graphics/upgrade-icon.png", ["icon_size"] = 16, ["scale"] = 0.9, ["shift"] = {-10, -10}}}}},
+            {name = "rail-signal-scrap-to-rail-signal", order = "02", icon = {icons = {
+                {icon = "__zzzparanoidal__/graphics/transport-menu-beta8/2d4b489322f69251a175.png", icon_size = 64, tint = {r = 170, g = 130, b = 1}, scale = 0.3125, shift = {-6, 6}},
+                {icon = "__base__/graphics/icons/rail-signal.png", icon_size = 64, scale = 0.3125, shift = {6, -6}},
+                {icon = "__base__/graphics/icons/arrows/up-right-arrow.png", icon_size = 64, scale = 0.25},
+            }}},
             {["name"] = "rail-chain-signal-scrap", ["order"] = "03", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/e40416fddb1a51fe3b48.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}}}},
-            {["name"] = "rail-chain-signal-scrap-to-rail-chain-signal", ["order"] = "04", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/e40416fddb1a51fe3b48.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}, {["icon"] = "__JunkTrain3__/graphics/upgrade-icon.png", ["icon_size"] = 16, ["scale"] = 0.9, ["shift"] = {-10, -10}}}}},
+            {name = "rail-chain-signal-scrap-to-rail-chain-signal", order = "04", icon = {icons = {
+                {icon = "__zzzparanoidal__/graphics/transport-menu-beta8/e40416fddb1a51fe3b48.png", icon_size = 64, tint = {r = 170, g = 130, b = 1}, scale = 0.3125, shift = {-6, 6}},
+                {icon = "__base__/graphics/icons/rail-chain-signal.png", icon_size = 64, scale = 0.3125, shift = {6, -6}},
+                {icon = "__base__/graphics/icons/arrows/up-right-arrow.png", icon_size = 64, scale = 0.25},
+            }}},
             {["name"] = "train-stop-scrap", ["order"] = "05", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/dbd980d4161f7f26f2ad.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}}}},
-            {["name"] = "train-stop-scrap-to-train-stop", ["order"] = "06", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/transport-menu-beta8/dbd980d4161f7f26f2ad.png", ["icon_size"] = 64, ["tint"] = {["r"] = 170, ["g"] = 130, ["b"] = 1}}, {["icon"] = "__JunkTrain3__/graphics/upgrade-icon.png", ["icon_size"] = 16, ["scale"] = 0.9, ["shift"] = {-10, -10}}}}},
-            {["name"] = "rail-signal", ["order"] = "07"},
-            {["name"] = "rail-chain-signal", ["order"] = "08"},
-            {["name"] = "train-stop", ["order"] = "09"},
+            {name = "train-stop-scrap-to-train-stop", order = "06", icon = {icons = {
+                {icon = "__zzzparanoidal__/graphics/transport-menu-beta8/dbd980d4161f7f26f2ad.png", icon_size = 64, tint = {r = 170, g = 130, b = 1}, scale = 0.3125, shift = {-6, 6}},
+                {icon = "__base__/graphics/icons/train-stop.png", icon_size = 64, scale = 0.3125, shift = {6, -6}},
+                {icon = "__base__/graphics/icons/arrows/up-right-arrow.png", icon_size = 64, scale = 0.25},
+            }}},
+            {["name"] = "rail-signal", ["order"] = "07", ["icon"] = {["icon"] = "__base__/graphics/icons/rail-signal.png", ["icon_size"] = 64}},
+            {["name"] = "rail-chain-signal", ["order"] = "08", ["icon"] = {["icon"] = "__base__/graphics/icons/rail-chain-signal.png", ["icon_size"] = 64}},
+            {["name"] = "train-stop", ["order"] = "09", ["icon"] = {["icon"] = "__base__/graphics/icons/train-stop.png", ["icon_size"] = 64}},
         }},
         {subgroup = "paranoidal-transport-locomotive", order = "a-03", recipes = {
             {["name"] = "JunkTrain", ["order"] = "01"},
