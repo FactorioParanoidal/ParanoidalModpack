@@ -51,6 +51,10 @@ end
 if mods["MIRV2"] then
     set_settings_default_value("bool-setting", "mirv-auto-launch", false)
 end
+-- Rate Calculator: показывать энергопотребление выделенных зданий по умолчанию.
+if mods["RateCalculator"] then
+    set_settings_default_value("bool-setting", "rcalc-show-power-consumption", true)
+end
 -- Наноботы работают автоматически по умолчанию.
 if mods["nanobots-refined"] then
     set_settings_default_value("bool-setting", "nanobots-auto", true)
