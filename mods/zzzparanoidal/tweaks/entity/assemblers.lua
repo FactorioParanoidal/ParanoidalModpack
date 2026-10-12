@@ -36,6 +36,25 @@ AssemblerTweak("assembling-machine-7")
 AssemblerTweak("assembling-machine-8")
 AssemblerTweak("assembling-machine-9")
 
+-- Автоматы 7–9 (MilesBobsExpansion2) описаны в стиле 1.1: без basic-crafting (буровые насадки, лампа),
+-- без эффекта качества и без подключения к логической сети. Выравниваем по автомату 6.
+local reference = data.raw["assembling-machine"]["bob-assembling-machine-6"]
+for _, name in ipairs({ "assembling-machine-7", "assembling-machine-8", "assembling-machine-9" }) do
+    local machine = data.raw["assembling-machine"][name]
+    if machine and reference then
+        local known = {}
+        for _, category in pairs(machine.crafting_categories) do known[category] = true end
+        for _, category in pairs(reference.crafting_categories) do
+            if not known[category] then table.insert(machine.crafting_categories, category) end
+        end
+        machine.allowed_effects = table.deepcopy(reference.allowed_effects)
+        machine.allowed_module_categories = table.deepcopy(reference.allowed_module_categories)
+        machine.circuit_connector = table.deepcopy(reference.circuit_connector)
+        machine.circuit_wire_max_distance = reference.circuit_wire_max_distance
+        machine.module_specification = nil
+    end
+end
+
 -- from KaoExtended (issue #190: было 4 — рецепты зданий 2.0 требуют 5-6 ингредиентов, AM2 не крафтился в AM1)
 data.raw["assembling-machine"]["assembling-machine-1"].ingredient_count = 6
 data.raw["assembling-machine"]["assembling-machine-2"].ingredient_count = 7
