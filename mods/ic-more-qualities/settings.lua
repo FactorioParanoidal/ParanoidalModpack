@@ -12,7 +12,7 @@ data:extend(
 			name = "ic-more-qualities-quality-everywhere",
 			order = "f-0",
 			setting_type = "startup",
-			default_value = false
+			default_value = true
 		},
 		{
 			type = "string-setting",
