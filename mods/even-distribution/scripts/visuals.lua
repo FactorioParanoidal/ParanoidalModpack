@@ -90,10 +90,22 @@ function helpers:mark(player, item, count) -- create highlight-box marker with i
 end
 
 function this.update(marker, item, count, color)
+    -- Paranoidal: every drag step refreshes all markers; write render objects only on change.
     if marker then
-        marker.icon.sprite = getSprite(item)
-        marker.text.text = getShortCount(count)
-        marker.text.color = color or getCountColor(count)
+        local text = getShortCount(count)
+        color = color or getCountColor(count)
+        if marker.item ~= item then
+            if marker.icon.valid then marker.icon.sprite = getSprite(item) end
+            marker.item = item
+        end
+        if marker.shownText ~= text or marker.shownColor ~= color then
+            if marker.text.valid then
+                marker.text.text = text
+                marker.text.color = color
+            end
+            marker.shownText = text
+            marker.shownColor = color
+        end
     end
 end
 

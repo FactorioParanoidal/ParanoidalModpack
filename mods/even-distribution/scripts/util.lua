@@ -45,35 +45,6 @@ function util.isCraftingMachine(entity)
 	return entity.type == "furnace" or entity.type == "assembling-machine" or entity.type == "rocket-silo"
 end
 
-function util.enablesRobots(tech)
-	local recipes = game.recipe_prototypes
-	local items   = prototypes.item
-
-	for __,effect in pairs(tech.prototype.effects) do
-		if effect.type == "unlock-recipe" then
-			local recipe = recipes[effect.recipe]
-			for __,product in pairs(recipe.products) do
-				if product.type == "item" then 
-					local entity = items[product.name].place_result
-					if entity and entity.type == "roboport" then
-						return true
-					end
-				end
-			end
-		end
-	end
-
-	return false
-end
-
-function util.hasRobotsEnabled(force)
-	for __,tech in pairs(force.technologies) do
-		if tech.researched and util.enablesRobots(tech) then return true end
-	end
-
-	return false
-end
-
 function util.shallowCopy(original) -- Creates a shallow copy of a table
     local copy = {}
     for key,value in pairs(original) do copy[key] = value  end
@@ -119,50 +90,32 @@ function util.distribute(entities, totalItems, func)
 end
 
 function util.epairs(tbl) -- iterator for tables with entity based indices
-	local id, start
-	local surface, x, y
-	local tbls, tblsx, value
-	
+	-- Paranoidal: iterate a snapshot. The old hand-written walker reused the x key of the previous
+	-- surface and failed on the empty sub-tables that removals leave behind.
+	local values, n = {}, 0
 	local tblId = rawget(tbl, "id")
-	local tblPos = rawget(tbl, "pos")
 	if tblId then
-		start = true
-	elseif not tblPos then
-		return function () end
-	end
-	
-	return function () 		-- Iterator
-		if id or start then
-			start = false
-			id, value = next(tblId, id)
-			
-			if value == nil then
-				if not tblPos then return end
-				surface, tbls = next(tblPos)
-				if not tbls then return end
-				x, tblsx = next(tbls)
-			else
-				return value
-			end
+		for __, value in pairs(tblId) do
+			n = n + 1
+			values[n] = value
 		end
-		
-		while value == nil do
-			y, value = next(tblsx, y)
-			
-			if value == nil then
-				x, tblsx = next(tbls, x)
-				y = nil
-				
-				if not tblsx then
-					surface, tbls = next(tblPos, surface)
-					if not tbls then return end
-					x, tblsx = next(tbls, x)
-					y = nil
+	end
+	local tblPos = rawget(tbl, "pos")
+	if tblPos then
+		for __, bySurface in pairs(tblPos) do
+			for __, byX in pairs(bySurface) do
+				for __, value in pairs(byX) do
+					n = n + 1
+					values[n] = value
 				end
 			end
 		end
-		
-		return value
+	end
+
+	local i = 0
+	return function()
+		i = i + 1
+		return values[i]
 	end
 end
 

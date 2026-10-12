@@ -5,8 +5,9 @@ local _ = scripts.helpers.on
 
 
 function prototype:calculateDamage()
-    local type = self.get_ammo_type()
-    return type and type.action and this.damageFromActions(type.action) or 0
+    -- Paranoidal: the old or-chain in deliveryDamage always stopped at the first term, so almost
+    -- every ammo got damage 0 and the upgrade order was arbitrary. See scripts/protocache.lua.
+    return require("scripts.protocache").ammoDamage(self)
 end
 
 function prototype:calculateRadius()
@@ -94,7 +95,7 @@ function this.radiusOfDelivery(delivery)
         return _(delivery.target_effects)
                 :sum(function(__,effect)
                     if effect.action then
-                        return this.radiusFromActions(effect.action) + (effects.action.radius or 0)
+                        return this.radiusFromActions(effect.action)
                     end
                     return 0
                 end)
@@ -105,6 +106,7 @@ function this.radiusOfDelivery(delivery)
 	elseif delivery.stream then
 		return this.radiusFromEntity(delivery.stream)
     end
+    return 0
 end
 
 function this.radiusFromEntity(name)
