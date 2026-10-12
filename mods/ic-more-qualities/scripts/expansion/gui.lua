@@ -435,7 +435,7 @@ function M.open_panel(player)
     local frame = player.gui.screen.add({type = "frame", name = PANEL, direction = "vertical"})
     titlebar(frame, {"ic-quality.panel-title"}, "panel-close")
     local inside = frame.add({type = "frame", style = "inside_deep_frame", direction = "vertical"})
-    local pane = inside.add({type = "tabbed-pane", name = "tabs", tags = {ic = "panel-tab"}})
+    local pane = inside.add({type = "tabbed-pane", name = "ic_panel_tabs", tags = {ic = "panel-tab"}})
     for index, tab in ipairs(tabs) do
         local button = pane.add({type = "tab", caption = tab.caption})
         local scroll = pane.add({type = "scroll-pane", name = tab.name})
@@ -458,7 +458,7 @@ end
 function M.refresh_panel(player)
     local frame = player.gui.screen[PANEL]
     if not frame then return end
-    local pane = frame.children[2] and frame.children[2].tabs
+    local pane = frame.children[2] and frame.children[2].ic_panel_tabs
     if not pane then return end
     local tab = tabs[pane.selected_tab_index or 1]
     local content = tab and pane[tab.name]
