@@ -102,6 +102,13 @@ local function ensure_drive(entity)
     local name = current and current.name
     if type(name) ~= "string" then name = name and name.name end
     if name ~= names.drive then burner.currently_burning = {name = names.drive, quality = "normal"} end
+    -- Writing currently_burning keeps the old remaining fuel (0 on a new building). Without a full drive
+    -- the native burner takes repair packs from the fuel slots as fuel: packs vanished even on resets.
+    local drive = prototypes.item and prototypes.item[names.drive]
+    local full = drive and drive.fuel_value
+    if full and full > 0 and (burner.remaining_burning_fuel or 0) < full / 2 then
+        burner.remaining_burning_fuel = full
+    end
 end
 
 function M.apply_settings(record, settings)
@@ -250,9 +257,13 @@ local function begin_craft(record, entity, recipe, quality, key, progress)
     elseif quality.name ~= "normal" and record.settings.reset_positive then
         craft.kind = "reset"
         entity.result_quality = "normal"
-        if progress < 1 - rules.RESET_SHARE then
-            entity.crafting_progress = 1 - rules.RESET_SHARE
-            craft.progress = 1 - rules.RESET_SHARE
+        -- 1/5 of the attempt, but never longer than RESET_MAX_SECONDS.
+        local _, seconds = M.cost_of(craft.item)
+        local ticks = seconds * 60 / math.max(entity.crafting_speed, 0.01)
+        local start = math.max(1 - rules.RESET_SHARE, 1 - rules.RESET_MAX_SECONDS * 60 / math.max(ticks, 1))
+        if progress < start then
+            entity.crafting_progress = start
+            craft.progress = start
         end
         stats.add(force_index, "refine.resets")
     else

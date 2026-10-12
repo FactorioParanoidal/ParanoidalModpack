@@ -10,7 +10,8 @@ M.BASE_PACKS = 5          -- an average item costs 5 basic packs per attempt...
 M.SECONDS_PER_PACK = 2    -- ...and takes 10 seconds
 M.SUCCESS = 0.9           -- 10% of attempts leave the item unchanged
 M.JUMP = 0.1              -- after a success, every further grade is gained with 10%
-M.RESET_SHARE = 0.2       -- resetting positive quality takes 1/5 of the attempt time, no packs
+M.RESET_SHARE = 0.2       -- resetting positive quality takes 1/5 of the attempt time, no packs...
+M.RESET_MAX_SECONDS = 1   -- ...but at most one second at speed 1
 M.MAX_SPEED = 4           -- positive-quality workshops are capped at x4 speed (whole-tick control)
 
 -- Science factor S by the number of science pack kinds of the earliest research of the item.

@@ -28,3 +28,25 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
     data:extend(expansion)
     for _, line in ipairs(expansion_report) do log(line) end
 end
+
+-- Paranoidal: all qualities are unlocked at the start by control.lua, so researches no longer list
+-- quality unlocks. A research left with only note effects (e.g. the evolution note) is hidden.
+for _, technology in pairs(data.raw.technology) do
+    local effects, removed = technology.effects, false
+    for index = #(effects or {}), 1, -1 do
+        if effects[index].type == "unlock-quality" then
+            table.remove(effects, index)
+            removed = true
+        end
+    end
+    if removed then
+        local useful = false
+        for _, effect in pairs(effects) do
+            if effect.type ~= "nothing" then useful = true end
+        end
+        if not useful then
+            technology.hidden = true
+            technology.enabled = false
+        end
+    end
+end

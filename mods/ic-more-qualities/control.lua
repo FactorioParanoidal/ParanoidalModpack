@@ -100,7 +100,18 @@ end
 local hooks = {track_machine = function(entity) automation.track(entity) end}
 memory.hooks = hooks
 
+-- Paranoidal: every quality is available from the start (e.g. a quality module found in ruins).
+local function unlock_all_qualities(force)
+    if not (prototypes and prototypes.quality and force.unlock_quality) then return end -- test mocks
+    for name, quality in pairs(prototypes.quality) do
+        if not quality.hidden and name ~= "quality-unknown" and not force.is_quality_unlocked(name) then
+            force.unlock_quality(name)
+        end
+    end
+end
+
 local function configure_force(force)
+    unlock_all_qualities(force)
     if not enabled() then return end
     for tier = 1, 5 do force.unlock_quality("ic-defect-" .. tier) end
     for level = 1, 10 do
