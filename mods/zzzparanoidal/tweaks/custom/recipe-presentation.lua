@@ -69,6 +69,7 @@ do
         item.icon = "__Bio_Industries_2__/graphics/icons/crushed-stone.png"
         item.icon_size = 64
         item.icons, item.icon_mipmaps = nil, nil
+        item.pictures = nil -- Use the same artwork on belts instead of Angels' variants.
     end
     local recipe = data.raw.recipe["angels-stone-crushed"]
     if item and recipe and item.icon then
