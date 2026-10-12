@@ -47,6 +47,10 @@ end
 if mods["blueprint-sandboxes"] then
     set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
 end
+-- MIRV: автозапуск ракет по умолчанию выключен (решение пользователя).
+if mods["MIRV2"] then
+    set_settings_default_value("bool-setting", "mirv-auto-launch", false)
+end
 -- Наноботы работают автоматически по умолчанию.
 if mods["nanobots-refined"] then
     set_settings_default_value("bool-setting", "nanobots-auto", true)
