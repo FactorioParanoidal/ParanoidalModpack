@@ -170,7 +170,7 @@ assert(buffer.items["gear|ic-defect-4"] == 1 and not buffer.items["gear|ic-defec
 
 -- 6. Unknown items cost like an average item.
 local cost, seconds = workshop.cost_of("unknown")
-assert(cost == 1500 and seconds == 10)
+assert(cost == 750 and seconds == 10)
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
 print("resets positive quality on request, returns the reached grade when mined. Mocks only.")

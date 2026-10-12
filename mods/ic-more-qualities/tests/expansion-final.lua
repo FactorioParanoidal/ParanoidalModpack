@@ -115,15 +115,15 @@ for _, name in ipairs({"repair-pack", "bob-repair-pack-5", "blueprint", "ic-refi
     assert(not recipes["ic-refine-item-" .. name], name)
 end
 local costs = data.costs
-assert(costs["assembling-machine-1"].kinds == 1 and costs["assembling-machine-1"].cost == 300)
+assert(costs["assembling-machine-1"].kinds == 1 and costs["assembling-machine-1"].cost == 150)
 near(recipes["ic-refine-item-assembling-machine-1"].energy_required, 2)
 assert(costs.reactor.kinds == 3 and costs.reactor.health == 500)
-near(costs.reactor.cost / 300, 19.36, 0.01)
+near(costs.reactor.cost / 300, 9.68, 0.01)
 assert(costs.inserter.kinds == 0, "enabled from the start; the hidden technology is ignored")
-near(costs.inserter.cost / 300, 0.707, 0.01)
-assert(costs["iron-gear-wheel"].kinds == 0 and costs["iron-gear-wheel"].cost == 300)
+near(costs.inserter.cost / 300, 0.3535, 0.01)
+assert(costs["iron-gear-wheel"].kinds == 0 and costs["iron-gear-wheel"].cost == 150)
 -- No researchable recipe: average item.
-assert(costs["automation-science-pack"].kinds == nil and costs["automation-science-pack"].cost == 1500)
+assert(costs["automation-science-pack"].kinds == nil and costs["automation-science-pack"].cost == 750)
 -- Runtime data: reasons and recipes without quality.
 assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white and data.finished_count == 1)
 

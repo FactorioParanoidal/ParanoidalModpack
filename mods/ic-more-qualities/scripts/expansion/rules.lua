@@ -6,8 +6,8 @@ local M = {}
 -- Refinement workshop
 ---------------------------------------------------------------------------------------------------
 M.PACK_DURABILITY = 300   -- one basic repair pack: the unit in which costs are expressed
-M.BASE_PACKS = 5          -- an average item costs 5 basic packs per attempt...
-M.SECONDS_PER_PACK = 2    -- ...and takes 10 seconds
+M.BASE_PACKS = 2.5        -- an average item costs 2.5 basic packs per attempt (halved by the user)...
+M.SECONDS_PER_PACK = 4    -- ...and still takes 10 seconds
 M.SUCCESS = 0.9           -- 10% of attempts leave the item unchanged
 M.JUMP = 0.1              -- after a success, every further grade is gained with 10%
 M.RESET_SHARE = 0.2       -- resetting positive quality takes 1/5 of the attempt time, no packs...

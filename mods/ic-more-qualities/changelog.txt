@@ -12,6 +12,7 @@ Date: 2026. 10. 12
     - Production modes renamed to normal / precise / maximum; power x5 and x20 (energy per operation x25 and x400), speed unchanged. Mode table: numbered columns, numeric worst grade, no loss row.
     - New startup setting "quality for all production" (on by default): quality modules fit every assembler, furnace and drill with module slots; raw resources and intermediates can get positive quality; defects stay on finished products.
     - All qualities are unlocked from the start of the game (also in existing saves); researches no longer list quality unlocks.
+    - Workshop attempts cost half as many repair packs (2.5 basic packs x S x H); attempt time unchanged.
     - Workshop: repair packs are no longer burnt as fuel by the building (the internal drive now always has full fuel); resetting positive quality takes at most one second.
     - Hidden production-mode power consumers have a name (was an unknown locale key in the electric network window).
 ---------------------------------------------------------------------------------------------------

@@ -5,26 +5,26 @@ local rules = require("scripts.expansion.rules")
 local mock = dofile(directory .. "mock.lua")
 local near = mock.near
 
--- Cost: 5 basic packs (1500 durability) and 10 s for an average item (2 sciences, 300 health).
+-- Cost: 2.5 basic packs (750 durability) and 10 s for an average item (2 sciences, 300 health).
 local function packs(kinds, health)
     local cost, seconds = rules.attempt(kinds, health)
     return cost / rules.PACK_DURABILITY, seconds
 end
-local p, t = packs(2, 300); near(p, 5); near(t, 10)
+local p, t = packs(2, 300); near(p, 2.5); near(t, 10)
 -- Agreed examples (science kinds, health) -> packs.
 local examples = {
-    {1, 125, 0.645}, {1, 300, 1}, {2, 350, 5.4}, {2, 1200, 10}, {3, 500, 19.36}, {4, 2000, 38.73},
-    {6, 3000, 120}, {6, 8000, 120},
+    {1, 125, 0.3225}, {1, 300, 0.5}, {2, 350, 2.7}, {2, 1200, 5}, {3, 500, 9.68}, {4, 2000, 19.365},
+    {6, 3000, 60}, {6, 8000, 60},
 }
 for _, e in ipairs(examples) do
     local value, seconds = packs(e[1], e[2])
     near(value, e[3], 0.01)
-    near(seconds, value * 2, 0.01)
+    near(seconds, value * 4, 0.02)
 end
 assert(rules.science_factor(nil) == 1 and rules.science_factor(0) == 0.2 and rules.science_factor(7) == 20)
 assert(rules.health_factor(nil) == 1 and rules.health_factor(10) == 0.5 and rules.health_factor(1e6) == 3)
 -- Items without health and without research: an average item.
-p = packs(nil, nil); near(p, 5)
+p = packs(nil, nil); near(p, 2.5)
 -- The grade never changes the cost: the formula has no grade input at all.
 
 -- Outcome distribution from -5: 10 / 81 / 8.1 / 0.81 / 0.081 / 0.009 %.
