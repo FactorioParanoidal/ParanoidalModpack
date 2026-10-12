@@ -374,6 +374,8 @@ require("tweaks.custom.elevated-rail-supports")
 require("tweaks.recipe.batch01-blue-beta8")
 require("tweaks.recipe.batch02-blue-beta8")
 require("tweaks.recipe.batch03-rest-beta8")
+-- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
+require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
