@@ -8,7 +8,7 @@ local rebuildable = {
 }
 
 -- finished: {name = true} from the data-stage classification.
-function M.handle(event, player, create_inventory, random, finished, everywhere)
+function M.handle(event, player, create_inventory, random, finished, everywhere, no_defect)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then
         return "ignored"
@@ -36,7 +36,7 @@ function M.handle(event, player, create_inventory, random, finished, everywhere)
     end
 
     local quality = "normal"
-    if is_finished then
+    if is_finished and not (no_defect and no_defect[stack.name]) then
         local level = model.completed_level(player.force.technologies)
         -- One crafting completion gets one roll; no extra inventory slots required.
         quality = level == 10 and "normal" or model.quality_name(model.draw(level, random()))

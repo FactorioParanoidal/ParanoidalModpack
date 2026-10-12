@@ -79,6 +79,7 @@ local function automation_context()
     return {
         random = math.random,
         finished = eligibility.finished(),
+        no_defect = eligibility.no_defect(),
         exclude_finished = exclude_finished(),
         initial_loss_percent = initial_loss_percent(),
         min_energy = min_energy,
@@ -177,7 +178,7 @@ events.on(defines.events.on_player_crafted_item, function(event)
         if loss == "empty-result" then stats.add(player.force.index, "hand.loss") end
     end
     if loss == "empty-result" or loss == "ignored" then return end
-    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished, quality_everywhere)
+    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished, quality_everywhere, eligibility.no_defect())
     if status == "changed" and type(detail) == "string" then
         stats.add(player.force.index, "grade." .. model.grade_of(detail))
     end

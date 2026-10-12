@@ -231,7 +231,11 @@ function M.step(record, level, ctx)
         elseif name and (name == "normal" or model.is_defect(name)) then
             -- Positive/foreign results (quality modules, quality ingredients) stay.
             local target
-            if mode and mode.no_defect then
+            local exempt = false
+            for _, product in pairs(recipe.products) do
+                if ctx.no_defect and ctx.no_defect[product.name] then exempt = true end
+            end
+            if exempt or (mode and mode.no_defect) then
                 target = "normal"
             else
                 local effective = rules.effective_level(level, mode)

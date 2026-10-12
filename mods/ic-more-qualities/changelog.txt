@@ -2,6 +2,7 @@
 Version: 1.1.1
 Date: 2026. 10. 12
   Changes:
+    - New startup setting "defects for weapons and ammo" (off by default): when off, guns, ammo and turrets never get defects.
     - Refinement workshop makes one attempt per item: the same item always leaves, improved (90% +1 grade, 10% for every further grade, never above standard) or unchanged (10%). No repeated attempts inside the machine.
     - Armor, vehicles (item-with-entity-data) and items with inventory or tags are not accepted by the workshop: a recipe would recreate them without their contents.
     - The side panel of the workshop window shows only the two settings (reset positive quality, circuit signals); progress bars, outcome table and notes are removed. Shorter workshop and input slot descriptions.

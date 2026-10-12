@@ -15,6 +15,13 @@ data:extend(
 			default_value = true
 		},
 		{
+			type = "bool-setting",
+			name = "ic-more-qualities-defects-weapons",
+			order = "f-00",
+			setting_type = "startup",
+			default_value = false
+		},
+		{
 			type = "string-setting",
 			name = "ic-more-qualities-defects-ingredient-mode",
 			order = "f-a",

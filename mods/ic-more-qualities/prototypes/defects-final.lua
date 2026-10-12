@@ -174,11 +174,30 @@ function M.apply(raw, options)
         report[#report + 1] = "IC defects: excluded " .. reason .. " (" .. #excluded[reason] .. "): "
             .. table.concat(excluded[reason], ", ")
     end
+    -- Weapons, ammo and turrets get no defects unless the "defects for weapons" setting is on.
+    local no_defect, exempt = {}, 0
+    if not options.weapons then
+        local turrets = {["ammo-turret"] = true, ["electric-turret"] = true, ["fluid-turret"] = true,
+            ["artillery-turret"] = true, turret = true, ["artillery-wagon"] = true}
+        local placed = {}
+        for kind in pairs(turrets) do
+            for name in pairs(raw[kind] or {}) do placed[name] = true end
+        end
+        for _, kind in ipairs({"gun", "ammo", "item", "item-with-entity-data"}) do
+            for name, item in pairs(raw[kind] or {}) do
+                if finished[name] and (kind == "gun" or kind == "ammo" or placed[item.place_result or ""]) then
+                    no_defect[name] = true
+                    exempt = exempt + 1
+                end
+            end
+        end
+    end
+    report[#report + 1] = "IC defects: weapons/ammo/turrets without defects: " .. exempt
     local prototypes = {{
         type = "mod-data",
         name = M.mod_data_name,
         data_type = "ic-more-qualities.defects",
-        data = {mode = mode, finished = finished},
+        data = {mode = mode, finished = finished, no_defect = no_defect},
     }}
     return prototypes, report, finished, reasons
 end

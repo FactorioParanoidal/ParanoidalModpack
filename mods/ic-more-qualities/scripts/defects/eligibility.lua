@@ -13,9 +13,20 @@ function M.finished()
     return cache
 end
 
+-- Finished products that never get defects (weapons, ammo, turrets unless enabled by setting).
+local no_defect_cache
+function M.no_defect()
+    if not no_defect_cache then
+        local mod_data = prototypes.mod_data[M.mod_data_name]
+        no_defect_cache = mod_data and mod_data.data.no_defect or {}
+    end
+    return no_defect_cache
+end
+
 -- Deterministic prototype-derived cache; rebuilt after load/configuration.
 function M.reset()
     cache = nil
+    no_defect_cache = nil
 end
 
 function M.is_finished(name)
