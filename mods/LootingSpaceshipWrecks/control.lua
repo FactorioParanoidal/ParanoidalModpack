@@ -50,7 +50,10 @@ script.on_init(function()
     ["bob-integrated-electronics"] = math.random(5, 35),
     ["radar"] = math.random(1, 3),
     ["burner-mining-drill"] = math.random(1, 3),
-    ["bob-battery-3"] = math.random(2, 9)
+    ["bob-battery-3"] = math.random(2, 9),
+    -- Paranoidal quality branch: supplies for the refinement workshop.
+    ["repair-pack"] = math.random(100, 200),
+    ["bob-basic-circuit-board"] = math.random(20, 40)
   })
   add_items(debris_items, {
     ["copper-plate"] = 20,

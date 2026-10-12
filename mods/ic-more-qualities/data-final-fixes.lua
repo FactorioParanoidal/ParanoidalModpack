@@ -17,6 +17,7 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
         mode = startup["ic-more-qualities-defects-ingredient-mode"].value,
         supply_reduction = startup["ic-more-qualities-defects-pole-supply-reduction"].value,
         wire_reduction = startup["ic-more-qualities-defects-pole-wire-reduction"].value,
+        everywhere = startup["ic-more-qualities-quality-everywhere"].value,
     })
     data:extend(prototypes)
     for _, line in ipairs(report) do log(line) end

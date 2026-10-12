@@ -9,6 +9,7 @@
 -- Never touches output inventories, belts or chests.
 local model = require("scripts.defects.model")
 local rules = require("scripts.expansion.rules")
+local classify = require("scripts.defects.classify")
 local M = {}
 
 M.FINAL = 3        -- decide when at most this many full-speed ticks remain
@@ -170,7 +171,7 @@ function M.step(record, level, ctx)
         if craft.mode then
             stat(ctx, entity, "mode." .. craft.mode.name)
             local any_item, all_finished = products_state(recipe, ctx)
-            if any_item and all_finished and ctx.mode_boost and not (ctx.no_quality and ctx.no_quality[recipe.name]) then
+            if any_item and (all_finished or ctx.quality_everywhere) and ctx.mode_boost and not (ctx.no_quality and ctx.no_quality[recipe.name]) then
                 ctx.mode_boost(entity, recipe_quality, craft.mode)
             end
         end
@@ -214,11 +215,19 @@ function M.step(record, level, ctx)
         M.fail(record, entity, recipe, quality, progress)
         return math.max(1, math.floor(full * M.STEP)), warning
     end
-    if any_item then
+    if any_item and classify.recycling[recipe.category] then
+        -- Recycling keeps the native result: input quality or better (quality modules).
+        -- Only defects become standard: recycled materials are never defective.
+        local current = entity.result_quality
+        if current and model.is_defect(current.name) then entity.result_quality = "normal" end
+    elseif any_item then
         local current = entity.result_quality
         local name = current and current.name
         if name and not all_finished then
-            if name ~= "normal" then entity.result_quality = "normal" end
+            -- Materials are never defective; positive quality is kept in the "quality everywhere" mode.
+            if name ~= "normal" and (not ctx.quality_everywhere or model.is_defect(name)) then
+                entity.result_quality = "normal"
+            end
         elseif name and (name == "normal" or model.is_defect(name)) then
             -- Positive/foreign results (quality modules, quality ingredients) stay.
             local target

@@ -41,6 +41,7 @@ local raw = {
             {type = "item", name = "iron-gear-wheel", amount = 1}}},
         sorting = {results = {{type = "item", name = "iron-ore", amount = 1}}},
         fluid = {results = {{type = "fluid", name = "water", amount = 10}}},
+        ["gear-recycling"] = {category = "recycling", results = {{type = "item", name = "iron-plate", amount = 1}}},
         science = {results = {{type = "item", name = "automation-science-pack", amount = 1}}, allow_quality = true},
     },
     ["mining-drill"] = {
@@ -116,6 +117,7 @@ assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality
 assert(raw.recipe.sorting.allow_quality == false)
 assert(raw.recipe.assembler.allow_quality == nil and raw.recipe.science.allow_quality == true)
 assert(raw.recipe.fluid.allow_quality == nil)
+assert(raw.recipe["gear-recycling"].allow_quality == nil, "recycling keeps native quality")
 local drills = raw["mining-drill"]
 assert(table.concat(drills.default.allowed_effects, ",") == "speed,productivity,consumption,pollution")
 assert(table.concat(drills.listed.allowed_effects, ",") == "speed,productivity")

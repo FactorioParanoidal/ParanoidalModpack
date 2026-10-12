@@ -8,6 +8,13 @@ data:extend(
 			default_value = true
 		},
 		{
+			type = "bool-setting",
+			name = "ic-more-qualities-quality-everywhere",
+			order = "f-0",
+			setting_type = "startup",
+			default_value = false
+		},
+		{
 			type = "string-setting",
 			name = "ic-more-qualities-defects-ingredient-mode",
 			order = "f-a",
@@ -38,7 +45,7 @@ data:extend(
 			name = "ic-more-qualities-initial-loss-percent",
 			order = "g-a",
 			setting_type = "runtime-global",
-			default_value = 33,
+			default_value = 0,
 			minimum_value = 0,
 			maximum_value = 100
 		},
@@ -47,7 +54,7 @@ data:extend(
 			name = "ic-more-qualities-loss-exclude-finished",
 			order = "g",
 			setting_type = "runtime-global",
-			default_value = false
+			default_value = true
 		},
 		{
 			type = "string-setting",

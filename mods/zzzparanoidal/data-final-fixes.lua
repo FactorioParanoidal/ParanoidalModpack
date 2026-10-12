@@ -377,6 +377,10 @@ require("tweaks.recipe.batch03-rest-beta8")
 -- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
 require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")
+-- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
+require("tweaks.recipe.quality-modules")
+-- После всех правок рецептов: выходы переработки Quality по итоговым рецептам.
+require("tweaks.custom.quality-recycling-refresh")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

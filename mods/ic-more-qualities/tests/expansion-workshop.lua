@@ -1,5 +1,5 @@
 -- Refinement workshop runtime, simulated tick by tick on mocks: resource streaming, holding
--- without packs, power gating, repeated attempts until standard, reset/pass, mining fix-up.
+-- without packs, power gating, one attempt per item (the item always leaves), reset/pass, mining fix-up.
 -- The "machine" below only advances progress like a furnace would; it is not Factorio.
 local directory = assert(arg[0]:match("^(.*[/\\])"))
 package.path = directory .. "../?.lua;" .. package.path
@@ -90,19 +90,32 @@ assert(not machine.fuel[1].valid_for_read, "both packs fully used")
 assert(record.status_key == "no-resource" and machine.entity.custom_status.diode == "red")
 assert(workshop.available(machine.entity) == 0)
 
--- 2. Packs arrive: the series continues. RNG: fail, then success, then success with one jump.
+-- 2. Packs arrive: the attempt finishes. One attempt per item, the item always leaves.
+-- Failed attempt: the same item leaves unchanged; nothing is held inside or lost.
 machine.fuel[1] = pack_stack(100, 150) -- a partially used pack on top
 local before = workshop.available(machine.entity)
 near(before, 99 * 300 + 150)
-tick = run(machine, record, 3000, mock.sequence({.95, .5, .5, .5, .05, .5}), tick)
-assert(#machine.outputs == 1 and machine.outputs[1] == "normal", tostring(machine.outputs[1]))
-assert(record.craft == nil or record.craft.key ~= "ic-refine-item-gear|0")
+tick = run(machine, record, 1000, mock.sequence({.95}), tick)
+assert(#machine.outputs == 1 and machine.outputs[1] == "ic-defect-3", tostring(machine.outputs[1]))
+assert(not machine.crafting, "no further attempt inside the machine")
+-- Fed again: success, one grade up, no jump -> -2.
+machine.start("gear", "ic-defect-3", 10)
+tick = run(machine, record, 1000, mock.sequence({.5, .5}), tick)
+assert(#machine.outputs == 2 and machine.outputs[2] == "ic-defect-2", tostring(machine.outputs[2]))
+-- Fed again: success with one jump -> -1 (still below standard, but it leaves).
+machine.start("gear", "ic-defect-3", 10)
+tick = run(machine, record, 1000, mock.sequence({.5, .05, .5}), tick)
+assert(#machine.outputs == 3 and machine.outputs[3] == "ic-defect-1", tostring(machine.outputs[3]))
 local used = before - workshop.available(machine.entity)
 near(used + 600, 3 * 1500, 1e-6) -- three paid attempts, the first one partly from the old packs
 local counters = storage.ic_stats[1]
 assert(counters["refine.attempts"] == 3 and counters["refine.fail"] == 1 and counters["refine.success"] == 2)
-assert(counters["refine.jump1"] == 1 and counters["refine.jump2"] == 1 and counters["refine.normalized"] == 1)
+assert(counters["refine.jump1"] == 1 and counters["refine.jump2"] == 1 and (counters["refine.normalized"] or 0) == 0)
 near(counters["refine.resource"], 3 * 1500, 1e-6)
+-- Never above standard: a -1 item with every jump rolled leaves standard.
+machine.start("gear", "ic-defect-1", 10)
+tick = run(machine, record, 1000, mock.sequence({.05}), tick)
+assert(machine.outputs[4] == "normal" and counters["refine.normalized"] == 1)
 
 -- 3. Power gating: an unsupplied interface holds the progress.
 machine.start("gear", "ic-defect-1", 10)
@@ -138,10 +151,17 @@ assert(not machine.crafting, "reset needs only 1/5 of the attempt time")
 assert(machine.outputs[#machine.outputs] == "normal" and workshop.available(machine.entity) == available)
 assert(storage.ic_stats[1]["refine.resets"] == 1 and storage.ic_stats[1]["refine.passed"] == 2)
 
--- 5. Mining in the middle of a series returns the reached grade, not the starting one.
+-- 5. Mining after the outcome is decided (before the craft completes) returns the reached grade.
 machine.start("gear", "ic-defect-5", 10)
-tick = run(machine, record, 700, mock.sequence({.5, .5}), tick)
-assert(record.craft and record.craft.grade == -4 and machine.crafting)
+local random5 = mock.sequence({.5, .5})
+for _ = 1, 700 do
+    tick = tick + 1
+    machine.interface.energy = machine.interface.electric_buffer_size
+    if record.next_tick <= tick then workshop.step(record, {tick = tick, random = random5}) end
+    if record.craft and record.craft.final then break end -- decided; the engine has not finished yet
+    machine.update()
+end
+assert(record.craft and record.craft.final and record.craft.grade == -4 and machine.crafting)
 local buffer = {valid = true, items = {["gear|ic-defect-5"] = 1}}
 function buffer.remove(spec) local key = spec.name .. "|" .. spec.quality; local n = buffer.items[key] or 0; buffer.items[key] = nil; return n end
 function buffer.insert(spec) local key = spec.name .. "|" .. spec.quality; buffer.items[key] = (buffer.items[key] or 0) + spec.count; return spec.count end
@@ -152,5 +172,5 @@ assert(buffer.items["gear|ic-defect-4"] == 1 and not buffer.items["gear|ic-defec
 local cost, seconds = workshop.cost_of("unknown")
 assert(cost == 1500 and seconds == 10)
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
-print("repeats attempts inside the machine until standard (90% + 10% chain), passes standard,")
+print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
 print("resets positive quality on request, returns the reached grade when mined. Mocks only.")

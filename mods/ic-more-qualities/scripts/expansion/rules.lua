@@ -95,8 +95,8 @@ end
 -- no_defect: new results are never below standard; boost: equivalent independent quality rolls.
 M.modes = {
     normal = {name = "normal", time = 1, energy = 1, loss = 1, level_bonus = 0, no_defect = false, boost = 1},
-    careful = {name = "careful", time = 5, energy = 10, loss = 0.1, level_bonus = 4, no_defect = false, boost = 3},
-    precise = {name = "precise", time = 20, energy = 100, loss = 0, level_bonus = 0, no_defect = true, boost = 10},
+    careful = {name = "careful", time = 5, energy = 25, loss = 0.1, level_bonus = 4, no_defect = false, boost = 3},
+    precise = {name = "precise", time = 20, energy = 400, loss = 0, level_bonus = 0, no_defect = true, boost = 10},
 }
 M.mode_order = {"normal", "careful", "precise"}
 

@@ -64,6 +64,9 @@ local function emissions(entity)
     return cached or nil
 end
 
+local everywhere_setting = settings.startup["ic-more-qualities-quality-everywhere"]
+local quality_everywhere = everywhere_setting ~= nil and everywhere_setting.value == true
+
 local function no_quality()
     if not no_quality_cache then
         local mod_data = prototypes.mod_data[names.mod_data]
@@ -82,6 +85,7 @@ local function automation_context()
         emissions = emissions,
         stat = stats.add,
         no_quality = no_quality(),
+        quality_everywhere = quality_everywhere,
         mode_definition = modes.definition,
         mode_power = function(entity, definition, working)
             return modes.draw_power(entity, definition, working, game.tick)
@@ -162,7 +166,7 @@ events.on(defines.events.on_player_crafted_item, function(event)
         if loss == "empty-result" then stats.add(player.force.index, "hand.loss") end
     end
     if loss == "empty-result" or loss == "ignored" then return end
-    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished)
+    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished, quality_everywhere)
     if status == "changed" and type(detail) == "string" then
         stats.add(player.force.index, "grade." .. model.grade_of(detail))
     end

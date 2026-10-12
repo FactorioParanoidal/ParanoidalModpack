@@ -484,58 +484,15 @@ local function relative_frame(player, entity, gui_type, caption)
     return inside
 end
 
-local function workshop_dynamic(parent, record)
-    local info = workshop.describe(record)
-    local status = parent.add({type = "flow", direction = "horizontal"})
-    status.style.vertical_align = "center"
-    status.add({type = "sprite", sprite = status_sprite(info.status)})
-    label(status, {"ic-quality.workshop-state-" .. info.status}, "bold_label")
-
-    local tbl = key_value_table(parent)
-    if info.item and prototypes.item[info.item] then
-        row(tbl, {"ic-quality.current-item"}, {"", "[item=" .. info.item .. "] ",
-            info.grade and info.grade < 0 and grade_caption(info.grade) or {"ic-quality.kind-" .. info.kind}})
-    else
-        row(tbl, {"ic-quality.current-item"}, "—")
-    end
-    row(tbl, {"ic-quality.resource-available"}, {"ic-quality.packs", packs(info.available)},
-        {"ic-quality.resource-available-tooltip"})
-    if info.kind == "refine" then
-        row(tbl, {"ic-quality.attempt-cost"}, {"ic-quality.packs-seconds", packs(info.cost), string.format("%.1f", info.seconds)})
-        row(tbl, {"ic-quality.attempt-number"}, tostring(info.attempts + 1))
-        row(tbl, {"ic-quality.affordable"}, string.format("%.1f", info.available / math.max(1, info.cost)))
-        progressbar(parent, info.progress, {"ic-quality.attempt-progress", math.floor((info.progress or 0) * 100)}, 360)
-        progressbar(parent, info.paid, {"ic-quality.attempt-paid", math.floor((info.paid or 0) * 100)}, 360)
-        if info.distribution then
-            heading(parent, {"ic-quality.outcomes"})
-            local otbl = parent.add({type = "table", column_count = 2, style = "bordered_table"})
-            for target = info.grade, 0 do
-                local p = info.distribution[target]
-                if p and p > 0 then
-                    label(otbl, target == info.grade and {"ic-quality.outcome-same", grade_caption(target)} or grade_caption(target))
-                    label(otbl, percent(p, 3))
-                end
-            end
-            label(parent, {"ic-quality.expected-to-normal", string.format("%.2f", info.expected),
-                packs(info.expected * info.cost)}).style.single_line = false
-        end
-    end
-end
-
 local function workshop_panel(player, entity)
     local record = workshop.track(entity)
     if not record then return end
+    -- Only the two settings: state, cost and outcomes are left to the native furnace window.
     local inside = relative_frame(player, entity, defines.relative_gui_type.furnace_gui, {"ic-quality.workshop-title"})
-    local dynamic = inside.add({type = "flow", name = "dyn", direction = "vertical"})
-    workshop_dynamic(dynamic, record)
-    inside.add({type = "line"}).style.top_margin = 6
     inside.add({type = "checkbox", caption = {"ic-quality.reset-positive"}, tooltip = {"ic-quality.reset-positive-tooltip"},
         state = record.settings.reset_positive, tags = {ic = "ws-reset"}})
     inside.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.workshop-circuit-tooltip"},
         state = record.settings.circuit, tags = {ic = "ws-circuit"}})
-    local note = label(inside, {"ic-quality.workshop-note"})
-    note.style.single_line = false
-    note.style.font_color = {0.75, 0.75, 0.75}
 end
 
 local function mode_panel(player, entity, gui_type)
@@ -555,21 +512,22 @@ local function mode_panel(player, entity, gui_type)
     local tbl = inside.add({type = "table", column_count = 4, style = "bordered_table"})
     tbl.style.top_margin = 6
     label(tbl, "")
-    for _, name in ipairs(rules.mode_order) do label(tbl, {"ic-quality.mode-" .. name}, "bold_label") end
+    for index in ipairs(rules.mode_order) do label(tbl, tostring(index), "bold_label") end
     local function line(caption, values)
         label(tbl, caption)
         for _, value in ipairs(values) do label(tbl, value) end
     end
+    -- Worst grade as a number: 0 standard, −1…−5 defects.
     local function worst(mode)
-        if mode.no_defect then return grade_caption(0) end
-        local effective = rules.effective_level(level, mode)
-        return grade_caption(-5 + math.floor(effective / 2))
+        if mode.no_defect then return "0" end
+        local grade = -5 + math.floor(rules.effective_level(level, mode) / 2)
+        return grade == 0 and "0" or ("−" .. -grade)
     end
     local m = rules.modes
-    line({"ic-quality.row-time"}, {"×1", "×5", "×20"})
-    line({"ic-quality.row-energy"}, {"×1", "×10", "×100"})
-    line({"ic-quality.row-power"}, {"×1", "×2", "×5"})
-    line({"ic-quality.row-loss"}, {percent(loss), percent(loss * m.careful.loss), percent(0)})
+    local function times(key) return {"×" .. m.normal[key], "×" .. m.careful[key], "×" .. m.precise[key]} end
+    line({"ic-quality.row-time"}, times("time"))
+    line({"ic-quality.row-energy"}, times("energy"))
+    line({"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)})
     line({"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)})
     line({"ic-quality.row-quality"}, {percent(chance, 2), percent(rules.boosted_chance(chance, m.careful.boost), 2),
         percent(rules.boosted_chance(chance, m.precise.boost), 2)})
@@ -688,13 +646,7 @@ function M.refresh_entity(player)
     if not (frame and entity) then return end
     local dynamic = frame.children[1] and frame.children[1].dyn
     if not dynamic then return end
-    if entity.name == names.workshop then
-        local record = workshop.get(entity)
-        if record then
-            dynamic.clear()
-            workshop_dynamic(dynamic, record)
-        end
-    elseif entity.name == names.post then
+    if entity.name == names.post then
         local record = post.get(entity)
         if record then
             dynamic.clear()

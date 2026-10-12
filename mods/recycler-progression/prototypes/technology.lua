@@ -6,6 +6,7 @@ data:extend({
   {
     type = "technology",
     name = "recycler-2",
+    localised_name = {"technology-name.recycler-2"},
     localised_description = {"technology-description.recycler-2"},
     icon = "__recycler-progression__/graphics/icons/recycler-2.png",
     icon_size = 64,
@@ -26,6 +27,7 @@ data:extend({
   {
     type = "technology",
     name = "recycler-3",
+    localised_name = {"technology-name.recycler-3"},
     localised_description = {"technology-description.recycler-3"},
     icon = "__recycler-progression__/graphics/icons/recycler-3.png",
     icon_size = 64,

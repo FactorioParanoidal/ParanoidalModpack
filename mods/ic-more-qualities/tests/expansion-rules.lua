@@ -61,8 +61,8 @@ assert(rules.prepay(1500, 1, .99, .02) == 0)
 
 -- Modes: agreed costs and the derived extra power (machine itself runs `time` times longer).
 local m = rules.modes
-assert(m.careful.time == 5 and m.careful.energy == 10 and m.precise.time == 20 and m.precise.energy == 100)
-near(rules.extra_power(m.normal), 0); near(rules.extra_power(m.careful), 1); near(rules.extra_power(m.precise), 4)
+assert(m.careful.time == 5 and m.careful.energy == 25 and m.precise.time == 20 and m.precise.energy == 400)
+near(rules.extra_power(m.normal), 0); near(rules.extra_power(m.careful), 4); near(rules.extra_power(m.precise), 19)
 assert(rules.effective_level(3, m.careful) == 7 and rules.effective_level(8, m.careful) == 10)
 assert(rules.effective_level(3, nil) == 3 and m.precise.no_defect and m.precise.loss == 0)
 near(m.careful.loss, .1)

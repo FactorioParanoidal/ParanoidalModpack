@@ -4,8 +4,8 @@
 --   * drains the durability of the stored packs while an attempt progresses (paid ahead by two
 --     ticks; without resource the progress is held, nothing is lost),
 --   * scales progress by the supply of the hidden electric consumer,
---   * decides each attempt shortly before completion: 90% one grade up, then 10% per extra grade;
---     below standard the same item stays inside and the next attempt starts automatically,
+--   * decides the single attempt shortly before completion: 10% unchanged, 90% one grade up, then
+--     10% per extra grade, never above standard; the item always leaves after one attempt,
 --   * resets positive quality (optional, 1/5 time, no packs) and passes standard items through.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
@@ -277,18 +277,11 @@ local function attempt(record, entity, craft, ctx)
         local jump = after - before
         stats.add(force_index, "refine.jump" .. math.min(3, jump))
     end
-    if after == 0 then
-        entity.result_quality = "normal"
-        craft.final = true
-        craft.grade = 0
-        stats.add(force_index, "refine.normalized")
-    else
-        craft.grade = after
-        craft.paid = 0
-        craft.progress = 0
-        entity.result_quality = model.quality_name(after)
-        entity.crafting_progress = 0
-    end
+    -- One attempt per item: the same item leaves with the reached (or unchanged) grade.
+    craft.final = true
+    craft.grade = after
+    entity.result_quality = model.quality_name(after)
+    if after == 0 then stats.add(force_index, "refine.normalized") end
 end
 
 local function refine_step(record, entity, craft, progress, ctx)
@@ -390,7 +383,7 @@ function M.step(record, ctx)
     record.next_tick = tick + 1
 end
 
--- Mining during a series returns the item at the grade it has reached, not the starting one.
+-- Mining after the attempt is decided returns the item at the reached grade, not the starting one.
 function M.on_mined(entity, buffer)
     local record = M.get(entity)
     local craft = record and record.craft

@@ -14,7 +14,8 @@ function table.deepcopy(value)
     return result
 end
 defines = {prototypes = {
-    item = {item = 0, tool = 0, ["repair-tool"] = 0, ammo = 0, blueprint = 0},
+    item = {item = 0, tool = 0, ["repair-tool"] = 0, ammo = 0, blueprint = 0, armor = 0, ["item-with-entity-data"] = 0,
+        ["item-with-inventory"] = 0, ["item-with-tags"] = 0},
     entity = {["assembling-machine"] = 0, furnace = 0, container = 0, reactor = 0, inserter = 0,
         ["electric-energy-interface"] = 0},
 }}
@@ -55,6 +56,8 @@ local raw = {
     tool = {["automation-science-pack"] = {durability = 1}},
     ["repair-tool"] = {["repair-pack"] = {durability = 300}, ["bob-repair-pack-5"] = {durability = 5000}},
     blueprint = {blueprint = {}},
+    armor = {["power-armor"] = {}}, ["item-with-entity-data"] = {locomotive = {}},
+    ["item-with-inventory"] = {bag = {}}, ["item-with-tags"] = {tagged = {}},
     ammo = {},
     ["assembling-machine"] = {
         ["assembling-machine-1"] = {max_health = 300, energy_usage = "90kW", resistances = {{type = "fire", percent = 70}},
@@ -84,6 +87,7 @@ assert(speeds["legendary-t5"] == 4 and not speeds.uncommon and not speeds.normal
 assert(raw.item["ic-refine-workshop"].subgroup == "production-machine")
 local ingredients = {}
 for _, i in ipairs(raw.recipe["ic-refine-workshop"].ingredients) do ingredients[i.name] = i.amount end
+-- The test data has no burner assembler / burner mechanics: the fallbacks are used.
 assert(ingredients["assembling-machine-1"] == 1 and ingredients["repair-pack"] == 10)
 local effects = raw.technology["ic-defect-control-1"].effects
 assert(effects[1].recipe == "ic-refine-workshop" and effects[2].recipe == "ic-control-post" and effects[3].type == "nothing")
@@ -105,7 +109,9 @@ for _, name in ipairs({"assembling-machine-1", "inserter", "iron-gear-wheel", "r
     assert(recipe.ingredients[1].name == name and recipe.results[1].name == name and recipe.results[1].amount == 1)
     assert(not recipe.allow_productivity and recipe.enabled)
 end
-for _, name in ipairs({"repair-pack", "bob-repair-pack-5", "blueprint", "ic-refine-workshop-drive", "secret", "parameter-1"}) do
+-- Items that can carry contents are not refinable: a recipe would recreate them empty.
+for _, name in ipairs({"repair-pack", "bob-repair-pack-5", "blueprint", "ic-refine-workshop-drive", "secret", "parameter-1",
+    "power-armor", "locomotive", "bag", "tagged"}) do
     assert(not recipes["ic-refine-item-" .. name], name)
 end
 local costs = data.costs

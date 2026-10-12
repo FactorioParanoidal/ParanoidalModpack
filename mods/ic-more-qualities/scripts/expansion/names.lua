@@ -44,8 +44,10 @@ M.signals = {
     cmd_stop = "ic-cmd-stop",
 }
 
--- Item types that never get a refinement recipe: tools of the player, not products.
+-- Item types that never get a refinement recipe: tools of the player, not products, and items that
+-- can carry contents (equipment grid, entity data, inventory, tags): a recipe would recreate them empty.
 M.not_refinable_types = {
+    armor = true, ["item-with-entity-data"] = true, ["item-with-inventory"] = true, ["item-with-tags"] = true,
     ["repair-tool"] = true, blueprint = true, ["blueprint-book"] = true, ["deconstruction-item"] = true,
     ["upgrade-item"] = true, ["copy-paste-tool"] = true, ["selection-tool"] = true, ["spidertron-remote"] = true,
 }

@@ -85,13 +85,15 @@ local function finish_machines(raw)
         if #result == 0 then result[1] = {type = "item", name = "iron-plate", amount = 20} end
         return result
     end
+    -- Paranoidal: built from the burner assembling machine and opened together with it.
+    local machine = find_item("burner-assembling-machine") and "burner-assembling-machine" or "assembling-machine-1"
     raw.recipe[names.workshop].ingredients = ingredients({
-        {"assembling-machine-1", 1}, {"repair-pack", 10}, {circuit, 5}})
+        {machine, 1}, {"repair-pack", 10}, {circuit, 5}})
     raw.recipe[names.post].ingredients = ingredients({
-        {"assembling-machine-1", 1}, {"inserter", 3}, {circuit, 5}})
+        {machine, 1}, {"inserter", 3}, {circuit, 5}})
 
-    -- Both buildings are opened by the first quality-control research (it has no prerequisites).
-    local technology = raw.technology[model.research(1).name]
+    -- Burner mechanics (AAI); without it the first quality-control research (no prerequisites).
+    local technology = raw.technology["burner-mechanics"] or raw.technology[model.research(1).name]
     if technology then
         technology.effects = technology.effects or {}
         table.insert(technology.effects, 1, {type = "unlock-recipe", recipe = names.post})
@@ -99,6 +101,20 @@ local function finish_machines(raw)
     else
         raw.recipe[names.workshop].enabled = true
         raw.recipe[names.post].enabled = true
+    end
+
+    -- Quality built their recycling in data-updates from the placeholder recipes: rebuild it now.
+    if mods and mods["quality"] and data and raw == data.raw then
+        local recycling = require("__quality__.prototypes.recycling")
+        for _, name in ipairs({names.workshop, names.post}) do
+            local key = name .. "-recycling"
+            if raw.recipe[key] then
+                local old = raw.recipe[key]
+                raw.recipe[key] = nil
+                recycling.generate_recycling_recipe(raw.recipe[name])
+                if not raw.recipe[key] then raw.recipe[key] = old end
+            end
+        end
     end
 end
 
@@ -202,7 +218,9 @@ local function mode_power(raw)
                     local key = size[1] .. "x" .. size[2]
                     if not sizes[key] then
                         sizes[key] = true
-                        list[#list + 1] = shared.hidden_power(names.mode_power_prefix .. key, size[1], size[2])
+                        local power = shared.hidden_power(names.mode_power_prefix .. key, size[1], size[2])
+                        power.localised_name = {"entity-name.ic-mode-power"}
+                        list[#list + 1] = power
                     end
                 end
             end

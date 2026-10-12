@@ -94,6 +94,24 @@ assert(counters["grade.0"] == 1)
 machine = craft(rules.modes.careful, 10, mock.sequence({0}))
 assert(machine.outputs[1] == "normal")
 
+-- Recycling keeps the native result quality (input quality or a module upgrade); no defect draw,
+-- only defect results become standard. RNG .9 survives the loss roll, then 0 would draw -5.
+for _, case in ipairs({{"rare", "rare"}, {"normal", "normal"}, {"ic-defect-3", "normal"}}) do
+    local recycler = make_machine(100)
+    recycler.recipe.category = "recycling"
+    recycler.entity.result_quality = {name = case[1]}
+    local record, counters = {entity = recycler.entity}, {}
+    local ctx = context(nil, mock.sequence({.9, 0}), counters)
+    local tick, next_look = 0, 1
+    while recycler.crafting and tick < 1000 do
+        tick = tick + 1
+        if tick >= next_look then next_look = tick + math.max(1, math.floor(crafter.step(record, 0, ctx) or 30)) end
+        recycler.update()
+    end
+    assert(recycler.outputs[1] == case[2], case[1] .. " -> " .. tostring(recycler.outputs[1]))
+    assert(not counters["grade.-5"], "no defect draw for recycling")
+end
+
 -- Boosted quality-module roll (precise = 10 rolls): p = 0.2 * 0.1 = 2%, extra = 1 - 0.98^9.
 local modes = require("scripts.expansion.modes")
 local qualities = {}
@@ -140,9 +158,9 @@ rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = fu
 assert(modes.set(moded, "precise"))
 assert(modes.definition(moded) == rules.modes.precise and modes.mode_name(moded) == "precise")
 assert(modes.draw_power(moded, rules.modes.precise, true, 1) == 1)
-near(interface.power_usage, 4000)
+near(interface.power_usage, 19000)
 modes.draw_power(moded, rules.modes.careful, true, 2)
-near(interface.power_usage, 1000)
+near(interface.power_usage, 4000)
 modes.draw_power(moded, nil, false, 3)
 near(interface.power_usage, 0)
 assert(modes.set(moded, "normal") and modes.definition(moded) == nil and interface.valid == false)

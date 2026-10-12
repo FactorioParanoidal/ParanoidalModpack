@@ -31,6 +31,32 @@ function M.without_quality(effects)
     return result
 end
 
+-- "Quality everywhere" mode: modules with quality fit every crafting machine and drill with slots.
+function M.with_quality(machine, drill)
+    if (machine.module_slots or 0) <= 0 then return false end
+    local effects = machine.allowed_effects
+    if effects == nil then
+        if drill then return false end -- drills: nil allows every effect
+        effects = {}
+    elseif type(effects) == "string" then
+        effects = {effects}
+    end
+    for _, effect in pairs(effects) do
+        if effect == "quality" then return false end
+    end
+    local list = {}
+    for _, effect in pairs(effects) do list[#list + 1] = effect end
+    list[#list + 1] = "quality"
+    machine.allowed_effects = list
+    local categories = machine.allowed_module_categories
+    if type(categories) == "table" then
+        local found = false
+        for _, category in pairs(categories) do if category == "quality" then found = true end end
+        if not found then categories[#categories + 1] = "quality" end
+    end
+    return true
+end
+
 -- Defect penalty: 1/m energy (and pollution) for every crafting machine.
 -- Machines that previously ignored quality keep exactly 1 for all other qualities.
 function M.machine_energy(raw)
@@ -100,15 +126,29 @@ function M.apply(raw, options)
             if product.type == "item" then has_item = true break end
         end
         -- Intermediates, raw materials and mixed outputs: no positive quality.
-        if has_item and not classify.quality_allowed(recipe, finished) and recipe.allow_quality ~= false then
+        -- Recycling keeps native quality: results at least the input quality, modules may raise it.
+        if has_item and not options.everywhere and not classify.recycling[recipe.category or "crafting"]
+            and not classify.quality_allowed(recipe, finished) and recipe.allow_quality ~= false then
             recipe.allow_quality = false
             white = white + 1
         end
     end
     local drills = 0
     for _, drill in pairs(raw["mining-drill"] or {}) do
-        drill.allowed_effects = M.without_quality(drill.allowed_effects)
-        drills = drills + 1
+        if options.everywhere then
+            if M.with_quality(drill, true) then drills = drills + 1 end
+        else
+            drill.allowed_effects = M.without_quality(drill.allowed_effects)
+            drills = drills + 1
+        end
+    end
+    local opened = 0
+    if options.everywhere then
+        for _, kind in ipairs({"assembling-machine", "furnace"}) do
+            for _, machine in pairs(raw[kind] or {}) do
+                if M.with_quality(machine, false) then opened = opened + 1 end
+            end
+        end
     end
     local machines = M.machine_energy(raw)
     local clamped = M.poles(raw, supply, wire)
@@ -125,7 +165,8 @@ function M.apply(raw, options)
     local report = {
         "IC defects: mode " .. mode .. ", finished products with defects: " .. finished_count,
         "IC defects: recipes forced white (allow_quality=false): " .. white,
-        "IC defects: drills without quality effect: " .. drills .. "; crafting machines with defect energy: " .. machines,
+        "IC defects: quality everywhere " .. tostring(options.everywhere == true) .. ", machines opened for quality " .. opened
+            .. "; drills changed: " .. drills .. "; crafting machines with defect energy: " .. machines,
         "IC defects: pole reduction supply " .. supply .. ", wire " .. wire .. "; clamped poles: "
             .. (#clamped > 0 and table.concat(clamped, ", ") or "none"),
     }

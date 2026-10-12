@@ -17,7 +17,7 @@ local ingredients = {
 	},
 	["repair-pack"] = {
 		{ type = "item", name = "iron-gear-wheel", amount = 2 },
-		{ type = "item", name = "bob-basic-circuit-board", amount = 2 },
+		{ type = "item", name = "bob-basic-circuit-board", amount = 1 },
 	},
 	["bob-basic-electronic-components"] = {
 		{ type = "item", name = "bob-tinned-copper-cable", amount = 1 },

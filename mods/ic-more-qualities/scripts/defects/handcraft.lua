@@ -8,7 +8,7 @@ local rebuildable = {
 }
 
 -- finished: {name = true} from the data-stage classification.
-function M.handle(event, player, create_inventory, random, finished)
+function M.handle(event, player, create_inventory, random, finished, everywhere)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then
         return "ignored"
@@ -21,6 +21,8 @@ function M.handle(event, player, create_inventory, random, finished)
     end
     -- Intermediates and raw materials are always white, including positive quality.
     if not is_finished and old_quality == "normal" then return "excluded-intermediate" end
+    -- "Quality everywhere": materials keep positive quality (only defects are reset).
+    if not is_finished and everywhere and not model.is_defect(old_quality) then return "excluded-intermediate" end
 
     local prototype = stack.prototype
     local kind = prototype.type
