@@ -6,6 +6,7 @@ local loader_shells = require("controls.loader-shells")
 require("controls.energy-recipe-migration").install() -- Старые чертежи ячеек после JSON/Lua-миграции.
 local rail_support_power = require("controls.rail-support-power")
 rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
+require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then

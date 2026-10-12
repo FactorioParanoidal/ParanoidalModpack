@@ -2,7 +2,7 @@
 Version: 1.0.0
 Date: 2026-10-11
   Features:
-    - Ruin set "paranoidal": 168 new ruins (87 small, 56 medium, 25 large) plus all ruins of the
+    - Ruin set "paranoidal": 170 new ruins (87 small, 57 medium, 26 large) plus all ruins of the
       "base" set when AbandonedRuins-base is enabled. It is the default and the only ruin set
       offered besides "none"; a stored "base" value falls back to "paranoidal".
     - 1.1 rails of "base" ruins (curved-rail, diagonal straight-rail) are rebuilt with 2.0 legacy
@@ -11,3 +11,5 @@ Date: 2026-10-11
     - Dangerous ruins (turrets, worms, mines, flamethrowers). Their distance limits apply only
       when the core setting "Disable distance dependence of ruins" is turned off.
     - Discovery journal: first-time finds are announced, map markers, /ruins shows progress.
+    - Oil traps "pd-flo-trap-pumping-station" and "pd-flo-trap-tank-farm" for Flammable Oils: a pipeline
+      starts burning when a player comes close and the fire reaches the storage tanks.

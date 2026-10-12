@@ -309,4 +309,27 @@ def("pd-quarry", function(b)
   b:scatter(lib.ROCKS, 14)
 end)
 
+-- Oil trap (Flammable Oils): three connected tanks and a long pipeline. The fire starts at the far
+-- end of the pipeline when a player comes close and reaches the tanks one after another.
+-- Pipe tiles follow the storage-tank connection geometry: west inlet = (x - 1, y), east outlet = (x + 3, y + 2).
+def("pd-flo-trap-tank-farm", function(b)
+  local OIL = { ["crude-oil"] = R(40, 90) }
+  for _, x in ipairs({ -15, -11, -7 }) do
+    b:put("storage-tank", x, -15, { fluids = { ["crude-oil"] = R(12000, 24000) }, dmg = DMG(20, 150) })
+  end
+  for _, x in ipairs({ -12, -8 }) do
+    for y = -15, -13 do b:put("pipe", x, y, { fluids = OIL }) end
+  end
+  for x = -4, 12 do b:put("bob-steel-pipe", x, -13, { fluids = OIL }) end
+  for y = -12, 10 do b:put("bob-steel-pipe", 12, y, { fluids = OIL }) end
+  b:put("iron-chest", -15, -10, { items = { ["artillery-shell"] = R(2, 8), ["explosive-cannon-shell"] = R(10, 40) } })
+  b:put("iron-chest", -14, -10, { items = { rocket = R(10, 40), ["explosive-rocket"] = R(0, 20) } })
+  b:put("iron-chest", -13, -10, { items = { explosives = R(20, 60), ["rocket-fuel"] = R(2, 10) } })
+  b:put("iron-chest", 10, 11, { items = { ["electric-engine-unit"] = R(4, 16), ["advanced-circuit"] = R(10, 30) } })
+  b:put("iron-chest", 13, 11, { items = { ["plastic-bar"] = R(40, 120), ["steel-plate"] = R(40, 120), ["solid-fuel"] = R(20, 60) } })
+  b:scatter_deco(lib.DEAD_TREES, 8, nil, { -16, -4, 8, 16 })
+  b:scatter_deco({ "medium-scorchmark", "big-scorchmark" }, 5, nil, { -16, -4, 8, 16 })
+  b:tiles_blob("dirt-6", -4, -6, 12, 0.5)
+end):weight(0.5):far(1200)
+
 return list

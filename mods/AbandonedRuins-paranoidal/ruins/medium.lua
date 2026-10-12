@@ -458,4 +458,20 @@ def("pd-watchtower", function(b)
   b:scatter(ANY({ "small-electric-pole", "small-iron-electric-pole" }), 3, { dead = 0.4 })
 end):far(900):tag("danger")
 
+-- Oil trap (Flammable Oils): when a player comes close, the far end of the oil pipeline starts
+-- smouldering, the fire crawls along the pipes to the tank, the tank overheats and explodes.
+-- Pipe tiles follow the storage-tank connection geometry: east outlet = (tank x + 3, tank y + 2).
+def("pd-flo-trap-pumping-station", function(b)
+  b:put("storage-tank", -7, -7, { fluids = { ["crude-oil"] = R(15000, 24000) }, dmg = DMG(20, 120) })
+  for x = -4, 5 do b:put("pipe", x, -5, { fluids = { ["crude-oil"] = R(40, 90) } }) end
+  for y = -4, 5 do b:put("pipe", 5, y, { fluids = { ["crude-oil"] = R(40, 90) } }) end
+  b:put("wooden-chest", -7, -3, { items = { ["firearm-magazine"] = R(20, 80), ["piercing-rounds-magazine"] = R(0, 20) } })
+  b:put("wooden-chest", -6, -3, { items = { grenade = R(5, 20), explosives = R(5, 20) } })
+  b:put("iron-chest", 3, 3, { items = { ["engine-unit"] = R(4, 12), ["steel-plate"] = R(20, 60), ["plastic-bar"] = R(10, 40) } })
+  b:put("iron-chest", 6, 6, { items = { ["solid-fuel"] = R(10, 40), ["crude-oil-barrel"] = R(2, 8), ["advanced-circuit"] = R(2, 10) } })
+  b:scatter_deco(lib.DEAD_TREES, 4, nil, { -8, 0, 4, 8 })
+  b:scatter_deco({ "small-scorchmark", "medium-scorchmark" }, 3, nil, { -8, 0, 4, 8 })
+  b:tiles_blob("dirt-6", -3, -3, 6, 0.5)
+end):weight(0.7):far(700)
+
 return list
