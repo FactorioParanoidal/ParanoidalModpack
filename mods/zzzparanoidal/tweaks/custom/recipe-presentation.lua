@@ -69,6 +69,7 @@ do
         item.icon = "__Bio_Industries_2__/graphics/icons/crushed-stone.png"
         item.icon_size = 64
         item.icons, item.icon_mipmaps = nil, nil
+        item.pictures = nil -- Use the same artwork on belts instead of Angels' variants.
     end
     local recipe = data.raw.recipe["angels-stone-crushed"]
     if item and recipe and item.icon then
@@ -110,5 +111,33 @@ do
     local recipe = data.raw.recipe["angels-solid-sodium-hypochlorite-decomposition"]
     if lumps and recipe and recipe.icons and recipe.icons[2] then
         recipe.icons[1] = table.deepcopy(lumps)
+    end
+end
+
+-- Wooden board: one substrate, with source marks clear of the bottom-right quantity.
+do
+    local board = data.raw.item["bob-wooden-board"]
+    if board then
+        board.icon = "__zzzparanoidal__/graphics/recipe-presentation/wooden-board.png"
+        board.icon_size = 256
+        board.icons, board.icon_mipmaps = nil, nil
+        match_product("wooden-board-paper", "bob-wooden-board")
+        for recipe_name, source_name in pairs({
+            ["bob-wooden-board"] = "wood",
+            ["bi-press-wood"] = "bi-woodpulp",
+        }) do
+            local recipe, source = data.raw.recipe[recipe_name], data.raw.item[source_name]
+            if recipe and source and (source.icons or source.icon) then
+                match_product(recipe_name, "bob-wooden-board")
+                local marks = source.icons and table.deepcopy(source.icons)
+                    or {{icon = source.icon, icon_size = source.icon_size or 64}}
+                for _, layer in ipairs(marks) do
+                    layer.icon_size = layer.icon_size or source.icon_size or 64
+                    layer.scale = 14 / layer.icon_size
+                    layer.shift = {9, -9}
+                    recipe.icons[#recipe.icons + 1] = layer
+                end
+            end
+        end
     end
 end

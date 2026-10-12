@@ -13,7 +13,7 @@ local prerequisites = {
 	["automation-2"] = { "automation", "steel-processing", "logistic-science-pack" },
 	["bob-repair-pack-2"] = { "steel-processing", "electronics" },
 	["angels-basic-chemistry"] = { "automation", "basic-fluid-handling" },
-	["angels-ore-crushing"] = { "angels-basic-chemistry", "electricity" },
+	["angels-ore-crushing"] = { "electricity" },
 	["angels-metallurgy-1"] = { "angels-ore-crushing" },
 	-- Зависимые узлы сверены с Beta 8, а не глобально переименованы с bob-electronics.
 	["fast-inserter"] = { "logistics-2" },
