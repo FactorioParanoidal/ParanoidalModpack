@@ -10,7 +10,7 @@ FO.cook = M
 -- MJ per item by ammo category; "fling" throws grenades around, "fire" lights flames.
 local AMMO_POWER = {
   ["bullet"] = 0.5, ["shotgun-shell"] = 0.5, ["Schall-sniper-bullet"] = 0.5, ["autocannon-shell"] = 1,
-  ["Bio_Turret_Ammo"] = 0.3, ["Bio_Cannon_Ammo"] = 2, ["cannon-shell"] = 3, ["cannon-H1-shell"] = 4,
+  ["Bio_Cannon_Ammo"] = 2, ["cannon-shell"] = 3, ["cannon-H1-shell"] = 4,
   ["cannon-H2-shell"] = 5, ["rocket"] = 5, ["mirv-launcher"] = 8, ["artillery-shell"] = 25,
   ["artillery-shell-prototype"] = 25, ["flamethrower"] = 2,
 }
@@ -22,6 +22,7 @@ local NOT_EXPLOSIVE = {
   ["nano-ammo"] = true, ["bob-laser-rifle"] = true, ["flying-saucer-laser"] = true,
   ["humanoid_ammo_category"] = true, ["beam"] = true, ["laser"] = true, ["electric"] = true,
   ["melee"] = true, ["biological"] = true,
+  ["Bio_Turret_Ammo"] = true, -- Paranoidal: darts of the wooden dart turret never cook off
 }
 local NAMED = {
   ["grenade"] = { 3, "fling" }, ["cluster-grenade"] = { 6, "fling" }, ["cliff-explosives"] = { 6, "blast" },
