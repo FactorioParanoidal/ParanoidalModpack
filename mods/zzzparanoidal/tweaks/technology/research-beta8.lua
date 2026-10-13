@@ -88,7 +88,7 @@ local units = {
     ["bob-vehicle-solar-panel-equipment-3"] = {count = 90, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-3
     ["bob-vehicle-solar-panel-equipment-4"] = {count = 100, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-4
     ["bob-vehicle-solar-panel-equipment-5"] = {count = 125, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-5
-    ["burner-mechanics"] = {count = 1, time = 60, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: basic-automation
+    ["burner-mechanics"] = {count = 1, time = 30, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: basic-automation; время 60 → 30 по решению пользователя 2026-10-13
     ["chrome-ore-refining"] = {count = 75, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: chrome-ore-refining
     ["cybersyn-train-network"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-11: logistic-train-network
     ["fission-reactor-equipment"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-1: fusion-reactor-equipment
