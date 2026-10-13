@@ -45,7 +45,7 @@ data:extend({
 		flags = { "placeable-player", "player-creation" }, fast_replaceable_group = "torches",
 		max_health = 25, collision_box = { { -0.2, -0.2 }, { 0.2, 0.2 } },
 		selection_box = { { -0.4, -0.4 }, { 0.4, 0.4 } }, max_power_output = "0.01W",
-		minable = { mining_time = 0.1, result = "wood", count = 3 },
+		minable = { mining_time = 0.1 }, -- Разбор ничего не возвращает (controls/torch-no-loot.lua).
 		-- The recipe pays for this coal; placement uses the native Beta 8 trigger.
 		created_effect = {
 			type = "direct", action_delivery = {

@@ -386,6 +386,8 @@ require("tweaks.recipe.quality-modules")
 require("tweaks.custom.quality-recycling-refresh")
 -- Генерация рыбы: только Луч Санты, в 5 раз реже.
 require("tweaks.custom.fish-santa-only")
+-- Множители загрязнения топлива Beta 8 (уголь, кокс, твёрдое/ракетное топливо и др.).
+require("tweaks.custom.fuel-emissions-beta8")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

@@ -7,6 +7,7 @@ require("controls.energy-recipe-migration").install() -- Старые черте
 local rail_support_power = require("controls.rail-support-power")
 rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
 require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
+require("controls.torch-no-loot") -- Разобранный факел пропадает целиком.
 local fire_safety = require("controls.fire-safety")
 fire_safety.install() -- Пожарная турель: вода, гасит огонь, защита от Flammable Oils в радиусе.
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
