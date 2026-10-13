@@ -88,7 +88,7 @@ function M.prepare(raw)
             -- Runtime reads this force's completed chain.
             enabled = true,
             visible_when_disabled = true,
-            effects = {{type = "nothing", effect_description = {"technology-description.ic-defect-control-preview"}}},
+            effects = {{type = "nothing", effect_description = {"ic-defects.control-effect", tostring(level)}}},
         }
     end
     -- Quality modules follow defect control, not the other way around. Preserve
