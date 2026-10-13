@@ -883,28 +883,30 @@ local function onUsedCapsule(event)
     end
 end
 
+-- Restored from Beta 8 (RampantFixed 1.8.3): a rocket launch raises retribution and gives the AI points
+-- on the launch surface. Retribution is per map in 2.0.
 local function onRocketLaunch(event)
-    -- local entity = event.rocket_silo or event.rocket
-    -- if entity.valid then
-        -- local map = universe.maps[entity.surface.index]
-		-- local points
-		-- if game.active_mods["space-exploration"] then
-			-- map.retribution = map.retribution + 0.1
-			-- points = 500
-		-- else
-			-- map.retribution = map.retribution + 10
-			-- points = 5000
-		-- end	
-		-- if not map then
-			-- return
-		-- end	
- 		-- map.vengenceLimiter = 0
-        -- map.rocketLaunched = map.rocketLaunched + 1
-        -- map.points = map.points + points
-        -- if universe.aiPointsPrintGainsToChat then
-            -- game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
-        -- end
-    -- end
+    local entity = event.rocket_silo or event.rocket
+    if entity and entity.valid then
+        local map = universe.maps[entity.surface.index]
+        if not map then
+            return
+        end
+        local points
+        if script.active_mods["space-exploration"] then
+            map.retribution = map.retribution + 0.1
+            points = 500
+        else
+            map.retribution = map.retribution + 10
+            points = 5000
+        end
+        map.vengenceLimiter = 0
+        map.rocketLaunched = (map.rocketLaunched or 0) + 1
+        map.points = map.points + points
+        if universe.aiPointsPrintGainsToChat then
+            game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
+        end
+    end
 end
 
 local function onTriggerEntityCreated(event)

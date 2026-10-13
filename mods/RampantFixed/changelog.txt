@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.13
+Date: 2026.10.13
+  Balancing:
+    - Player base detection and base scent decay as in Beta 8 (RampantFixed 1.8.3): -10% per chunk without the long tail below 500. Raid zone stays ~27 chunks from turrets/radars and grows to at most ~36 with retribution (was up to ~280)
+    - Rocket launches raise retribution (+10) and give the AI 5000 points again, as in Beta 8 (+0.1 and 500 with Space Exploration)
+    - New games: Nauvis truce is 60 minutes and attacks also need 2% evolution (was 20 minutes, 0%). Existing saves keep their planet AI settings
+---------------------------------------------------------------------------------------------------
 Version: 2.02.12
 Date: 2026.10.13
   Optimizations:

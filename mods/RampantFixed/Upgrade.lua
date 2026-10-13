@@ -1080,7 +1080,7 @@ function upgrade.attempt(universe)
 		-- AI = 2 - enabled if any nests in map generation
 		--	  = 3 - enabled if any nests or demolisher	
 		universe.planetAISettings = {}
-		universe.planetAISettings.nauvis = 		{changed = true, AI = 2, minEvo = 0, peacePeriod = 20, description = {"space-location-name.nauvis"}}	
+		universe.planetAISettings.nauvis = 		{changed = true, AI = 2, minEvo = 2, peacePeriod = 60, description = {"space-location-name.nauvis"}}
 		if script.active_mods["space-age"] then
 			universe.planetAISettings.vulcanus = 	{changed = true, AI = 3, minEvo = 25, peacePeriod = 120, description = {"space-location-name.vulcanus"}}	
 			universe.planetAISettings.gleba = 		{changed = true, AI = 2, minEvo = 20, peacePeriod = 120, description = {"space-location-name.gleba"}}	
