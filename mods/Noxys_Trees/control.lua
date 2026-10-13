@@ -26,6 +26,14 @@ noxy_trees.disabled = { -- Disables the spreading of these specific entities.
   ["swamp-garden"]        = true,
   ["desert-garden"]       = true,
   ["puffer-nest"]         = true,
+  -- Angel's 2.0 names for the same exclusions used in 1.1.
+  ["angels-temperate-tree"]   = true,
+  ["angels-swamp-tree"]       = true,
+  ["angels-desert-tree"]      = true,
+  ["angels-temperate-garden"] = true,
+  ["angels-swamp-garden"]     = true,
+  ["angels-desert-garden"]    = true,
+  ["angels-puffer-nest"]      = true,
 }
 noxy_trees.disabled_match = {
   ["[-]planted"]         = true,
