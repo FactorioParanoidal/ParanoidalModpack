@@ -86,3 +86,31 @@ if #wreck_filters > 0 then
   script.on_event(defines.events.on_player_mined_entity, repair_loot, wreck_filters)
   script.on_event(defines.events.on_robot_mined_entity, repair_loot, wreck_filters)
 end
+
+-- Paranoidal: a selected small wreck is replaced by its simple-entity twin (data-final-fixes.lua),
+-- so mining it plays the pickaxe animation and sound, like rocks and the AAI small wreck.
+local salvage_twins = {}
+for index = 1, 6 do
+  local name = "crash-site-spaceship-wreck-small-" .. index
+  if prototypes.entity[name] and prototypes.entity[name .. "-salvage"] then
+    salvage_twins[name] = name .. "-salvage"
+  end
+end
+
+if next(salvage_twins) then
+  script.on_event(defines.events.on_selected_entity_changed, function(event)
+    local player = game.get_player(event.player_index)
+    local wreck = player and player.selected
+    if not (wreck and wreck.valid) then return end
+    local twin_name = salvage_twins[wreck.name]
+    if not twin_name then return end
+
+    local surface, position, health = wreck.surface, wreck.position, wreck.health
+    wreck.destroy()
+    local twin = surface.create_entity{name = twin_name, position = position, force = "neutral"}
+    if twin then
+      twin.health = health
+      player.selected = twin
+    end
+  end)
+end

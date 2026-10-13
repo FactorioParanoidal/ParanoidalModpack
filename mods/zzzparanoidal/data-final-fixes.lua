@@ -384,6 +384,8 @@ require("prototypes.fire-safety-turret")
 require("tweaks.recipe.quality-modules")
 -- После всех правок рецептов: выходы переработки Quality по итоговым рецептам.
 require("tweaks.custom.quality-recycling-refresh")
+-- Генерация рыбы: только Луч Санты, в 5 раз реже.
+require("tweaks.custom.fish-santa-only")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

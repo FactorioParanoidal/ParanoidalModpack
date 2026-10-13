@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2026-10-13
+  Changes:
+    - Small crash-site wrecks are swapped for simple-entity twins when selected, so mining them plays the pickaxe animation and sound
+---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 2026-10-13
   Bugfixes:
