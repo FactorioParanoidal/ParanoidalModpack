@@ -1230,6 +1230,17 @@ function upgrade.attempt(universe)
 		end		
 	end
 	
+	if storage.version < 20213  then	-- Version 2.02.13
+		storage.version = 20213
+		-- Existing saves get the new Nauvis truce (60 minutes, 2% evolution) if they still have the old
+		-- defaults (20 minutes, 0%). Values changed by the player in the planet AI window are kept.
+		local nauvis = universe.planetAISettings and universe.planetAISettings.nauvis
+		if nauvis and (nauvis.peacePeriod == 20) and (nauvis.minEvo == 0) then
+			nauvis.peacePeriod = 60
+			nauvis.minEvo = 2
+		end
+	end
+
 	return (starting ~= storage.version) and storage.version
 end
 
