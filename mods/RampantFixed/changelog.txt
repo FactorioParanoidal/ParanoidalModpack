@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.14
+Date: 2026.10.13
+  Balancing:
+    - Pollution wakes nests again, as in Beta 8 (RampantFixed 1.8.3): a nest that detects the player base at all becomes an ordinary active nest while pollution in its chunk or a neighbouring chunk is above 3, and calms down after the cloud is gone
+---------------------------------------------------------------------------------------------------
 Version: 2.02.13
 Date: 2026.10.13
   Balancing:
