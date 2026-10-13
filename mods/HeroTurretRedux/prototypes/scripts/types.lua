@@ -43,24 +43,30 @@ local customAttackSpeedBuffTable = settings.startup["heroturrets-csv-attack-spee
 local useCustomTurretRotationBuffTable = settings.startup["heroturrets-use-csv-turret-rotation-buff"].value
 local customTurretRotationBuffTable = settings.startup["heroturrets-csv-turret-rotation-buff"].value
 
+-- Paranoidal (Beta 8): ranked items have their own tab instead of being hidden among the turrets.
+data:extend({
+    {
+        type = "item-group",
+        name = "hero_group",
+        order = "z",
+        icon = mods["bobwarfare"] and "__bobwarfare__/graphics/icons/technology/plasma-turrets.png"
+            or "__HeroTurretRedux__/graphics/technology/hero-tech-1.png",
+        icon_size = 128,
+    },
+    {
+        type = "item-subgroup",
+        name = "hero_subgroup",
+        group = "hero_group",
+        order = "e",
+    },
+})
+
 local rankBuffsTable = nil
 local healthBuffsTable = nil
 local rangeBuffsTable = nil
 local cooldownBuffsTable = nil
 local attackSpeedBuffsTable = nil
 local turretRotationBuffsTable = nil
-
---- Parses a Factorio Energy string (e.g. "5MJ", "300W") and returns the value
---- multiplied by factor as a valid Energy string (e.g. "10000000J", "600W").
---- Handles all SI prefixes supported by Factorio: k M G T P E Z Y R Q
-local scale_energy_value = function(value, factor)
-    if type(value) ~= "string" or value == "infinity" then return value end
-    local si = {k=1e3, M=1e6, G=1e9, T=1e12, P=1e15, E=1e18, Z=1e21, Y=1e24, R=1e27, Q=1e30}
-    local num, prefix, unit = value:match("^([%d%.]+)([kMGTPEZYRQ]?)([WJ])$")
-    if num == nil then return value end
-    local scaled = tonumber(num) * (si[prefix] or 1) * factor
-    return string.format("%.0f", scaled) .. unit
-end
 
 local types_with_items = {}
 for category, prototypes in pairs(data.raw) do
@@ -150,6 +156,7 @@ local get_badge = function(rank,top,left,rc,layer) --added
         rc = (layer.repeat_count or 1) * (layer.frame_count or 1)
     end
 
+    -- Beta 8 insignia: four badges, white for ranks 1-4, red 5-8, orange 9-12.
     local tint = {r=1.0,g=1.0,b=1.0,a=1}
     if rank > 8 then
         tint = {r=1.0,g=0.5,b=0.15,a=1}
@@ -158,69 +165,23 @@ local get_badge = function(rank,top,left,rc,layer) --added
         tint = {r=1.0,g=0.15,b=0.15,a=1}
         rank = rank - 4
     end
+    -- 2.0 has no hr_version: the HR badge is the sprite itself, at the place Beta 8 drew it.
     local img = {
-                    filename = "__HeroTurretRedux__/graphics/entity/turret/hero-"..rank.."-base.png",
+                    filename = "__HeroTurretRedux__/graphics/entity/turret/hr-hero-"..rank.."-base.png",
                     priority = "high",
-                    width = 23,
-                    height = 24,
+                    line_length = 1,
+                    width = 46,
+                    height = 48,
                     direction_count = 1,
                     frame_count = 1,
                     repeat_count = rc,
-                    shift = util.by_pixel((left)*-1,top+(24/3)),
+                    shift = util.by_pixel((left)*-1,top+(48/3)),
                     tint = tint,
-                    hr_version =
-                    {
-                        filename = "__HeroTurretRedux__/graphics/entity/turret/hr-hero-"..rank.."-base.png",
-                        priority = "high",
-                        line_length = 1,
-                        width = 46,
-                        height = 48,
-                        frame_count = 1,
-                        direction_count = 1,
-                        repeat_count = rc,
-                        shift = util.by_pixel((left)*-1,top+(48/3)),
-                        tint = tint,
-                        scale = 0.5
-                    }
+                    scale = 0.5
                 }
     return img
 end
-local get_rampant_badge = function(rank,top,left,rc,dc)
-    local tint = {r=1.0,g=1.0,b=1.0,a=1}
-    if rank > 8 then
-        tint = {r=1.0,g=0.5,b=0.15,a=1}
-        rank = rank - 8
-    elseif rank > 4 then 
-        tint = {r=1.0,g=0.15,b=0.15,a=1}
-        rank = rank - 4
-    end
-    local img = {
-                    filename = "__HeroTurretRedux__/graphics/entity/turret/hero-"..rank.."-base.png",
-                    priority = "high",
-                    width = 23,
-                    height = 24,
-                    direction_count = dc,
-                    frame_count = 1,
-                    repeat_count = rc,
-                    shift = util.by_pixel((left)*-1,top+(24/3)),
-                    tint = tint,
-                    hr_version =
-                    {
-                        filename = "__HeroTurretRedux__/graphics/entity/turret/hr-hero-"..rank.."-base.png",
-                        priority = "high",
-                        line_length = 1,
-                        width = 46,
-                        height = 48,
-                        frame_count = 1,
-                        direction_count = dc,
-                        repeat_count = rc,
-                        shift = util.by_pixel((left)*-1,top+(48/3)),
-                        tint = tint,
-                        scale = 0.5
-                    }
-                }
-    return img
-end
+
 
 
 --[[
@@ -252,26 +213,6 @@ local update_fluid_turret_tech = function(entity, name,rank)
     end
     end
 
-local update_ammo_turret_tech_old = function(entity, name, rank)
-    log("Updating tech for physical projectile damage")
-    for _, tech in pairs(tech) do
-        if tech.name:match("^physical%-projectile%-damage%-") and tech.effects then
-            local effect = nil
-            for _, eff in pairs(tech.effects) do
-                if eff.type == "turret-attack" and eff.turret_id == entity.name then
-                    effect = table.deepcopy(eff)
-                end
-            end
-            if effect ~= nil then 
-                log("Adding tech for "..tech.name .. " for "..entity.name)
-                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier*(1+(0.25*rank))})
-            else 
-                log("Missing tech for "..tech.name .. " for "..entity.name)
-            end
-        end
-    end
-    end
-
  local update_ammo_turret_tech = function(entity, name,rank)
     for _, tech in pairs(tech) do
         if tech.effects then
@@ -286,7 +227,8 @@ local update_ammo_turret_tech_old = function(entity, name, rank)
                 end
             end
             if effect ~= nil then
-                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier*(1+(0.25*rank))})
+                -- Beta 8: a rank gets the same damage research bonus as its base turret.
+                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier})
             end
         end
     end
@@ -366,23 +308,7 @@ local function ensure_layers(anim)
   return anim.layers, anim
 end
 
-local local_get_names = function()
-    local names = {"Private 1st Class","Corporal","Sergeant","General","Field Marshal","Supreme Commander"}
-    if  settings.startup["heroturrets-use-csv"].value ~= true then return names end
-    local custom_string = settings.startup["heroturrets-csv-names"].value 
-    if custom_string == nil then return names end
-    custom_string = local_trim(custom_string)
-    if #custom_string == 0 then return names end
-    local custom = local_split(custom_string,",")
-    -- if #custom < 6 then return names end Don't care about this anymore. Fixed the scaling for buffs
-    if #custom > 12 then
-        for i = #custom, 12 + 1, -1 do
-            table.remove(custom, i)
-            log("Removing custom name as there were more than 12 custom names")
-        end
-    end
-    return custom
-end
+local local_get_names = heroturrets.util.get_rank_names
 
 --overall buffs
 local get_buffs_for_Rank = function(rank)
@@ -592,6 +518,8 @@ end
 
 
 local cannon_ammo_ranges = {}
+-- Ranked items made here, for the Quality recycling recipes added at the end.
+local created_items = {}
 local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_modifier_percent)
         local tint = {r=1.0,g=1.0,b=1.0,a=1.0}
         local ir = rank
@@ -648,8 +576,8 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             icon_size = 64,
             --hide_from_player_crafting = true,
 
-            subgroup = turret.item.subgroup,
-            order = ((turret.item.order or "[")..turret.item.name.."]").."["..rank.."]",
+            subgroup = "hero_subgroup",
+            order = ((turret.item.order or "[")..turret.item.name.."]")..string.format("[%02d]", rank), -- ranks 1..12 in order
             place_result = place_name,            
             stack_size = turret.item.stack_size or 1,
             hidden_in_factoriopedia = true,
@@ -665,8 +593,8 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             icons = new_icon,
             icon_size = 64,
             --hide_from_player_crafting = true,
-            subgroup = turret.item.subgroup,
-            order = ((turret.item.order or "[")..turret.item.name.."]").."["..rank.."].tag",
+            subgroup = "hero_subgroup",
+            order = ((turret.item.order or "[")..turret.item.name.."]")..string.format("[%02d].tag", rank),
             place_result = place_name,
             stack_size = turret.item.stack_size or 1,
             hidden_in_factoriopedia = true,
@@ -800,6 +728,13 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
                         end
                     end
                 end
+                -- Beta 8: range and width of an inline action follow the rank too.
+                if entity.attack_parameters.ammo_type.action.range ~= nil then
+                    entity.attack_parameters.ammo_type.action.range = entity.attack_parameters.ammo_type.action.range * range_custom_mod
+                end
+                if entity.attack_parameters.ammo_type.action.width ~= nil then
+                    entity.attack_parameters.ammo_type.action.width = entity.attack_parameters.ammo_type.action.width * range_custom_mod
+                end
             elseif entity.attack_parameters.ammo_category ~= nil and entity.attack_parameters.range ~= nil then
                 if cannon_ammo_ranges[entity.attack_parameters.ammo_category] == nil then
                     cannon_ammo_ranges[entity.attack_parameters.ammo_category] = entity.attack_parameters.range
@@ -848,6 +783,9 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
                     gun.name = gun_name
                     gun.localised_name = localised_name
                     gun.localised_description = localised_desc
+                    -- Internal weapon of a ranked turret, never an item in the player's hands.
+                    gun.hidden = true
+                    gun.hidden_in_factoriopedia = true
                    -- log("NEW_______________________________________")
                    -- log(serpent.block(gun))
                    --  log("FROM______________________________________")
@@ -865,19 +803,6 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
         entity.localised_description = localised_desc
         entity.hidden_in_factoriopedia = true
 
-        -- Scale electric energy source to match the increased firing rate.
-        -- Firing rate is multiplied by cooldown_custom_mod, so energy/s must scale proportionally.
-        -- This keeps the status-panel max-consumption display accurate and ensures the turret
-        -- can actually draw enough power to sustain its buffed fire rate.
-        if entity.energy_source ~= nil and entity.energy_source.type == "electric" then
-            if entity.energy_source.input_flow_limit ~= nil then
-                entity.energy_source.input_flow_limit = scale_energy_value(entity.energy_source.input_flow_limit, cooldown_custom_mod)
-            end
-            if entity.energy_source.buffer_capacity ~= nil then
-                entity.energy_source.buffer_capacity = scale_energy_value(entity.energy_source.buffer_capacity, cooldown_custom_mod)
-            end
-        end
-        
         local left = nil        
         local top = nil
 
@@ -963,32 +888,9 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 				local new_top = top or (layer.size or layer.height)/2
 				local badge = get_badge(rank,new_top,new_left,1)
 				badge.repeat_count = (layer.repeat_count or 1) * (layer.frame_count or 1)
-				badge.hr_version.repeat_count = badge.repeat_count
 
 				table.insert(base_picture[direction].layers, badge)
 			end
-        --- Rampant Arsenal Compatability Badge -- WIP  ---
-        elseif  false then 
-        -- elseif string.find(entity.name,"-rampant-arsenal",1,true) and not string.find(entity.name,"-lite-artillery",1,true)  then
-
-            
-            for _, animation in pairs({"folded_animation", "folding_animation", "preparing_animation", "prepared_animation"}) do
-                --local layer_one = entity[animation].layers[1]
-                --left = layer_one.width/2
-                --top = layer_one.height/2 
-                ---log("Checking sprite layer ")
-                ---log("Filename: " .. (layer_one.filename or "N/A"))
-                ---log("Width: " .. (layer_one.width or "N/A") .. ", Height: " .. (layer_one.height or "N/A"))
-                ---log("Frame count: " .. (layer_one.frame_count or "N/A"))
-                if entity[animation] and entity[animation].layers and entity[animation].layers[1] then
-                    local layer_one = entity[animation].layers[1]
-                    local badge = get_rampant_badge(rank, top, left, layer_one.frame_count,layer_one.direction_count)
-                    table.insert(entity[animation].layers, badge)
-                else
-                    log("WARNING: Missing animation layer in " .. entity.name .. " for " .. animation)
-                end
-            end
-            
         elseif is_unkown_nesw(entity) and left ~=nil and top ~= nil then
             ---Leaving for historical reason. Can probably be removed
             entity.base_picture = {
@@ -1006,7 +908,6 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 			--entity.base_picture.layers[badge_i] = get_badge(rank,top,left,entity.base_picture.layers[1].repeat_count or 1)
 			entity.base_picture.layers[badge_i] = badge
 			badge.repeat_count = (layer_one.repeat_count or 1) * (layer_one.frame_count or 1)
-			badge.hr_version.repeat_count = badge.repeat_count
         end
 
 		if entity_name == item.place_result then
@@ -1044,6 +945,9 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             entity.minable.result = mine_name
         end
 		data:extend(to_extend)
+		for _, prototype in ipairs(to_extend) do
+			if prototype.type == "item" or prototype.type == "item-with-tags" then created_items[#created_items + 1] = prototype end
+		end
    end
 
 
@@ -1169,6 +1073,8 @@ local local_create_turrets = function()  --personal-laser-defense-equipment  "ac
 				end
                 
 				--if entity.name == "shotgun-ammo-turret-rampant-arsenal" then
+				-- Paranoidal: turrets whose item is hidden cannot be obtained and get no ranks.
+				if item ~= nil and item.hidden then doNotSkip = false end
 				if recipe ~= nil and item ~= nil and (bypass or entity.minable.result ==  item.name) and doNotSkip then
 					table.insert(guns,
 					{
@@ -1196,9 +1102,14 @@ local local_create_turrets = function()  --personal-laser-defense-equipment  "ac
 
         for j = 1, #names do
 
-            local buff = get_buffs_for_Rank(j)
             -- 'custom_buff_modifier_percent' is defined as: 1 + ((user entered value, default 0)/100)
-            local damage_multiplier = 1 + buff * custom_buff_modifier_percent
+            local damage_multiplier
+            if useCustomPercentageBuffTable then
+                damage_multiplier = 1 + get_buffs_for_Rank(j) * custom_buff_modifier_percent
+            else
+                -- Beta 8 (heroturrets 9.1.11): +50% x modifier at the last rank, evenly per rank.
+                damage_multiplier = 1 + (((0.5 * custom_buff_modifier_percent) / #names) * j)
+            end
             local_create_turret(item, j, names[j], damage_multiplier,custom_buff_modifier_percent)
 
         end
@@ -1211,74 +1122,59 @@ end
 
 
 
+-- Beta 8 (heroturrets 9.1.11): projectiles of an ammo category may fly as far as the longest ranked
+-- turret of that category shoots; only an existing, shorter max_range is raised. The startup
+-- setting "heroturrets-update-ammo-ranges" additionally raises beam/stream max_length.
+local raise_max_length = settings.startup["heroturrets-update-ammo-ranges"].value == true
 local local_update_ammo_ranges = function()
     if next(cannon_ammo_ranges) == nil then return end
 
-    local function update_delivery(delivery, min_range)
+    local function update_delivery(delivery, range, name)
         if delivery == nil then return end
-        if delivery.type ~= nil then
-            -- single TriggerDelivery
-            if delivery.max_range ~= nil then
-                if delivery.max_range < min_range then
-                    delivery.max_range = min_range
-                end
-            elseif delivery.type == "projectile" then
-                -- No explicit max_range: Factorio may bake the original gun's range at
-                -- load time, so we set it explicitly to allow the full scaled range.
-                delivery.max_range = min_range
-            end
-            if delivery.max_length ~= nil and delivery.max_length < min_range then
-                delivery.max_length = min_range
-            end
-        else
-            -- array of TriggerDelivery
-            for _, d in ipairs(delivery) do
-                update_delivery(d, min_range)
-            end
+        if delivery.type == nil then
+            for _, d in ipairs(delivery) do update_delivery(d, range, name) end
+            return
+        end
+        if delivery.max_range ~= nil and delivery.max_range < range then
+            delivery.max_range = range
+            log("updated "..name.." range to "..range)
+        end
+        if raise_max_length and delivery.max_length ~= nil and delivery.max_length < range then
+            delivery.max_length = range
         end
     end
 
-    local function update_action(action, min_range)
+    local function update_action(action, range, name)
         if action == nil then return end
-        if action.type ~= nil then
-            -- single TriggerItem
-            update_delivery(action.action_delivery, min_range)
-        else
-            -- array of TriggerItems
-            for _, a in ipairs(action) do
-                update_action(a, min_range)
-            end
+        if action.type == nil then
+            for _, a in ipairs(action) do update_action(a, range, name) end
+            return
         end
+        update_delivery(action.action_delivery, range, name)
     end
 
-    local function process_ammo_type(ammo_type, category_override)
-        local category = (ammo_type ~= nil and ammo_type.category) or category_override
-        if ammo_type == nil or category == nil then return end
-        local needed_range = cannon_ammo_ranges[category]
-        if needed_range == nil then return end
-        update_action(ammo_type.action, needed_range)
-    end
-
-    for _, ammo in pairs(data.raw["ammo"]) do
-        if ammo.ammo_type ~= nil then
-            if ammo.ammo_type.category ~= nil then
-                process_ammo_type(ammo.ammo_type)
-            elseif ammo.ammo_category ~= nil then
-                -- ammo_type has no inline category; use the item-level ammo_category
-                process_ammo_type(ammo.ammo_type, ammo.ammo_category)
-            else
-                for _, at in ipairs(ammo.ammo_type) do process_ammo_type(at) end
-            end
-        end
-        if ammo.ammo_types ~= nil then
-            for _, at in ipairs(ammo.ammo_types) do process_ammo_type(at) end
+    for name, ammo in pairs(data.raw["ammo"]) do
+        local range = ammo.ammo_category and cannon_ammo_ranges[ammo.ammo_category]
+        local ammo_types = ammo.ammo_type
+        if ammo_types ~= nil and ammo_types.action ~= nil then ammo_types = {ammo_types} end
+        for _, ammo_type in ipairs(ammo_types or {}) do
+            local category_range = cannon_ammo_ranges[ammo_type.category or ""] or range
+            if category_range ~= nil then update_action(ammo_type.action, category_range, name) end
         end
     end
 end
 
 if data ~= nil and (data_final_fixes == true or data_updates == true) then
    local_create_turrets()
-   if settings.startup["heroturrets-update-ammo-ranges"].value == true then
-      local_update_ammo_ranges()
+   -- zzzparanoidal rebuilds recycling before this mod creates the ranks (? zzzparanoidal), so ranked
+   -- items get theirs here. No crafting recipe: Quality self-recycling, 25% of the same item.
+   if mods["quality"] then
+      local recycling = require("__quality__.prototypes.recycling")
+      for _, item in ipairs(created_items) do
+         if not item.hidden and not data.raw.recipe[item.name .. "-recycling"] then
+            recycling.generate_self_recycling_recipe(item)
+         end
+      end
    end
+   local_update_ammo_ranges()
 end
