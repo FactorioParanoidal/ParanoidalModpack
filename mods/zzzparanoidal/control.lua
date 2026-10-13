@@ -132,3 +132,6 @@ script.on_configuration_changed(function() --фикс эволюции при з
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
+
+-- Пресет вех Paranoidal для Milestones (remote-интерфейс paranoidal_milestones).
+require("controls.milestones-preset").install()

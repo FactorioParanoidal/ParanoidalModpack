@@ -47,6 +47,11 @@ end
 if mods["blueprint-sandboxes"] then
     set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
 end
+-- Milestones: проверка вех раз в 10 секунд вместо 1 (решение пользователя, нагрузка в простое).
+-- Веха обнаруживается с задержкой до ~11 с; в начатой игре может остаться сохранённое значение.
+if mods["Milestones"] then
+    set_settings_default_value("int-setting", "milestones_check_frequency", 600)
+end
 -- MIRV: автозапуск ракет по умолчанию выключен (решение пользователя).
 if mods["MIRV2"] then
     set_settings_default_value("bool-setting", "mirv-auto-launch", false)
