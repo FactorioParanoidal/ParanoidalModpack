@@ -242,6 +242,7 @@ function M.on_entity_died(event)
     return
   end
   if entity_type == "pump" then return end
+  if FO.protection.entity(entity) then return end -- fire safety turret nearby
 
   local content = FO.fluids.measure(entity)
   local exploded = false

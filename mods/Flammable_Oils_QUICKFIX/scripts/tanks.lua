@@ -25,6 +25,7 @@ function M.ignite(entity, cause)
   if not M.is_tank(entity) then return end
   local content = FO.fluids.measure(entity)
   if not content or content.energy < C.TANK_MIN_ENERGY then return end
+  if FO.protection.entity(entity) then return end
 
   if not tanks then
     tanks = {}
@@ -51,6 +52,7 @@ end
 function M.burning_tank_died(entity, event)
   storage.tanks[entity.unit_number] = nil
   if next(storage.tanks) == nil then storage.tanks = nil end
+  if FO.protection.entity(entity) then return end
   local content = FO.fluids.measure(entity)
   if not content or content.energy <= C.MIN_ENERGY then return end
   local rec = FO.core.record(entity, content, true)
@@ -71,7 +73,7 @@ local function update(task)
 
   local content = FO.fluids.measure(entity)
   local energy = content and content.energy or 0
-  if energy < math.max(C.TANK_MIN_ENERGY, st.initial * C.TANK_SAVED_FRACTION) then
+  if energy < math.max(C.TANK_MIN_ENERGY, st.initial * C.TANK_SAVED_FRACTION) or FO.protection.entity(entity) then
     tanks[task.id] = nil
     if next(tanks) == nil then storage.tanks = nil end
     FO.alerts.tank_saved(entity)

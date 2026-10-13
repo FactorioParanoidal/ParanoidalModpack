@@ -32,6 +32,7 @@ local function step(task)
   if not (entity and entity.valid) then return end
   local entity_type = entity.type
   if C.FUSE_STOP_TYPES[entity_type] then return end
+  if FO.protection.entity(entity) then return end
   if entity_type == "storage-tank" and FO.tanks.is_tank(entity) then
     FO.tanks.ignite(entity, task.cause or { "flo-cause.fuse" })
     return

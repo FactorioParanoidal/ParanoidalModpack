@@ -102,6 +102,7 @@ function M.start(entity)
   local id = entity.unit_number
   if not id or (storage.cook and storage.cook[id]) then return end
   if not FO.core.check_cooldown(id) then return end
+  if FO.protection.entity(entity) then return end
   local _, total = scan(entity)
   if total < 1 then return end
   storage.cook = storage.cook or {}
@@ -125,7 +126,7 @@ local function pop(task)
   end
 
   local list = scan(entity)
-  if #list == 0 then
+  if #list == 0 or FO.protection.entity(entity) then -- emptied or now covered by a fire safety turret
     forget(task.id)
     return
   end
@@ -172,6 +173,7 @@ FO.sched.register("cook", pop)
 function M.on_died(entity, event)
   local id = entity.unit_number
   if id then forget(id) end
+  if FO.protection.entity(entity) then return end
   local list, total = scan(entity)
   if total < 1 then return end
 
