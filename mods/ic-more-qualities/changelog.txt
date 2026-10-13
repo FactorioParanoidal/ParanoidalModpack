@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2026. 10. 13
+  Changes:
+    - Mining drills and pumpjacks show the defect mining speed multipliers in their description (the slowdown itself already worked at runtime)
+    - Belts, underground belts, splitters and loaders never get defects: crafted at standard quality or better (positive quality from modules is kept). Inserters keep defects.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2026. 10. 12
   Changes:

@@ -51,6 +51,34 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
     data:extend(prototypes)
     for _, line in ipairs(report) do log(line) end
 
+    -- Defective drills mine slower at runtime (scripts/defects/drill.lua); the tooltip shows only the
+    -- prototype speed, so every placeable drill/pumpjack gets a line with the defect multipliers.
+    local speed_line = {"ic-defects.drill-speed"}
+    local function with_line(existing, key)
+        if existing then return {"", existing, "\n", speed_line} end
+        return {"?", {"", {key}, "\n", speed_line}, speed_line}
+    end
+    local drill_items = {}
+    for _, kind in ipairs({"item", "item-with-entity-data"}) do
+        for _, item in pairs(data.raw[kind] or {}) do
+            if item.place_result and data.raw["mining-drill"][item.place_result] then drill_items[#drill_items + 1] = item end
+        end
+    end
+    local described = 0
+    for _, item in ipairs(drill_items) do
+        local drill = data.raw["mining-drill"][item.place_result]
+        if not drill.ic_defects_described then
+            drill.localised_description = with_line(drill.localised_description, "entity-description." .. drill.name)
+            drill.ic_defects_described = true
+        end
+        item.localised_description = item.localised_description and with_line(item.localised_description)
+            or {"?", {"", {"item-description." .. item.name}, "\n", speed_line},
+                {"", {"entity-description." .. drill.name}, "\n", speed_line}, speed_line}
+        described = described + 1
+    end
+    for _, drill in pairs(data.raw["mining-drill"]) do drill.ic_defects_described = nil end
+    log("IC defects: drill items with the defect speed line: " .. described)
+
     -- Workshop, control post and production modes: after the classification above, so that the
     -- refinement recipes keep allow_quality and every item already exists.
     local expansion, expansion_report = require("prototypes.expansion-final").apply(data.raw, finished, reasons)

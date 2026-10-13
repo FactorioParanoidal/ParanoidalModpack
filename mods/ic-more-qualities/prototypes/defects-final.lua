@@ -193,6 +193,26 @@ function M.apply(raw, options)
         end
     end
     report[#report + 1] = "IC defects: weapons/ammo/turrets without defects: " .. exempt
+    -- Paranoidal: belt logistics (belts, underground belts, splitters, loaders, including the
+    -- zzzparanoidal loader shells) never get defects; positive quality from modules is kept.
+    local belt_types = {"transport-belt", "underground-belt", "splitter", "lane-splitter", "linked-belt",
+        "loader", "loader-1x1"}
+    local belts = {}
+    for _, kind in ipairs(belt_types) do
+        for name in pairs(raw[kind] or {}) do belts[name] = true end
+    end
+    local belt_items = 0
+    for _, kind in ipairs({"item", "item-with-entity-data"}) do
+        for name, item in pairs(raw[kind] or {}) do
+            local result = item.place_result or ""
+            if finished[name] and not no_defect[name]
+                and (belts[result] or result:find("loader%-shell", 1) ~= nil) then
+                no_defect[name] = true
+                belt_items = belt_items + 1
+            end
+        end
+    end
+    report[#report + 1] = "IC defects: belts/undergrounds/splitters/loaders without defects: " .. belt_items
     local prototypes = {{
         type = "mod-data",
         name = M.mod_data_name,
