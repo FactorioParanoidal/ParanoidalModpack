@@ -72,23 +72,42 @@ function M.prepare(raw)
     local prototypes = {}
     for tier = 5, 1, -1 do prototypes[#prototypes + 1] = M.defect(tier) end
 
+    local control_component = raw.item and raw.item["bob-quality-processor"]
+    local control_icon = control_component and control_component.icon or "__quality__/graphics/icons/quality-module.png"
+    local control_icon_size = control_component and control_component.icon_size or 64
     for level = 1, 10 do
         local research = model.research(level)
         local prerequisites = research.prerequisite and {research.prerequisite} or {}
+        local icons = {{icon = "__quality__/graphics/technology/quality-module-1.png", icon_size = 256}}
+        if mods and mods["zzzparanoidal"] then
+            -- Same upper-right geometry as zzzparanoidal's technology markers.
+            icons[#icons + 1] = {
+                icon = "__zzzparanoidal__/graphics/technology/icon-markers/level-" .. level .. ".png",
+                icon_size = 256,
+                scale = 0.425,
+                shift = {9.6, -9.6},
+                floating = true,
+            }
+        end
         prototypes[#prototypes + 1] = {
             type = "technology",
             name = research.name,
             localised_name = {"technology-name.ic-defect-control", tostring(level)},
             localised_description = {"technology-description.ic-defect-control-preview"},
-            icon = "__quality__/graphics/technology/quality-module-1.png",
-            icon_size = 256,
+            icons = icons,
             order = "ic-defect-control-" .. string.format("%02d", level),
             prerequisites = prerequisites,
             unit = {count = research.count, time = research.time, ingredients = {{research.science, 1}}},
             -- Runtime reads this force's completed chain.
             enabled = true,
             visible_when_disabled = true,
-            effects = {{type = "nothing", effect_description = {"ic-defects.control-effect", tostring(level)}}},
+            effects = {{
+                type = "nothing",
+                icon = control_icon,
+                icon_size = control_icon_size,
+                use_icon_overlay_constant = false,
+                effect_description = {"ic-defects.control-effect", tostring(level)},
+            }},
         }
     end
     -- Quality modules follow defect control, not the other way around. Preserve

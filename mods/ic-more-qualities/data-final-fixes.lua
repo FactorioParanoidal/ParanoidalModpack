@@ -11,6 +11,7 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
     data:extend(require("prototypes.defects-preview").prepare(data.raw))
     -- research_evolution_factor labels technologies in its data-final-fixes, which runs before this
     -- mod creates the quality-control researches: add the same "evolution +X%" effect here.
+    -- zzzparanoidal also runs earlier, so its evolution icon must be assigned here.
     if mods["research_evolution_factor"] then
         local ok, params = pcall(require, "__research_evolution_factor__.parameters")
         if not ok then params = {science_packet_cost = {}, constant_factor = 0.15, linear_factor = 0.35} end
@@ -27,6 +28,9 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
                 tech.effects = tech.effects or {}
                 table.insert(tech.effects, {
                     type = "nothing",
+                    icon = mods["zzzparanoidal"] and "__zzzparanoidal__/graphics/research-evolution-icon.png" or nil,
+                    icon_size = 64,
+                    use_icon_overlay_constant = false,
                     effect_description = {"research-evolution-factor-effect",
                         tostring(math.floor((1 - math.exp(-inc)) * 100000 + 0.5) * 0.001)},
                 })

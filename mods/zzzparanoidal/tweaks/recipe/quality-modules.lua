@@ -25,6 +25,13 @@ end
 
 -- Сдвиг рецептов на тир вверх: снимок до изменений, предыдущий модуль заменяется на свой тир.
 local tiers = { "quality-module", "quality-module-2", "quality-module-3", "bob-quality-module-4", "bob-quality-module-5" }
+-- Явный номер первого модуля после «Контроля качества 10»; единое название для всех тиров.
+for level, name in ipairs(tiers) do
+	local technology = technologies[name]
+	if technology then
+		technology.localised_name = { "", { "technology-name.quality-module" }, " " .. level }
+	end
+end
 local old = {}
 for index = 2, 4 do
 	local recipe = recipes[tiers[index]]
