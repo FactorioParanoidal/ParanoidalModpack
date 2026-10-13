@@ -58,5 +58,4 @@ for _, name in ipairs({
 	local item = data.raw.item[name] or data.raw.ammo[name]
 	if item then item.hidden = true end
 end
--- Служебные HeroTurretRedux 1:1 требуют уже имеющуюся биопушку и не открываются наукой.
--- Их рецепты, ранги и сущности не меняем; получение исходной пушки закрыто выше.
+-- HeroTurretRedux не строит ранги для турелей со скрытым предметом, поэтому у биопушки их нет.

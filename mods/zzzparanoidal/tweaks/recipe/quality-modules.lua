@@ -25,6 +25,16 @@ end
 
 -- Сдвиг рецептов на тир вверх: снимок до изменений, предыдущий модуль заменяется на свой тир.
 local tiers = { "quality-module", "quality-module-2", "quality-module-3", "bob-quality-module-4", "bob-quality-module-5" }
+-- zzz прячет модули вне набора Beta 8, а ic-more-qualities открывает этот ряд позже, в своём
+-- data-final-fixes. Открываем его здесь при том же условии, чтобы пересборка переработки
+-- (quality-recycling-refresh) видела модули видимыми и разбирала их и их потребителей.
+local defects_preview = settings.startup["ic-more-qualities-defects-preview"]
+if mods["ic-more-qualities"] and defects_preview and defects_preview.value then
+	for _, name in ipairs(tiers) do
+		if data.raw.module[name] then data.raw.module[name].hidden = false end
+		if recipes[name] then recipes[name].hidden = false end
+	end
+end
 -- Явный номер первого модуля после «Контроля качества 10»; единое название для всех тиров.
 for level, name in ipairs(tiers) do
 	local technology = technologies[name]

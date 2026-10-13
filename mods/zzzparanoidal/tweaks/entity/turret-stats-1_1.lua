@@ -1,4 +1,5 @@
--- Финальные характеристики Paranoidal 1.1; до генерации рангов Hero на data-final-fixes.
+-- Финальные характеристики Paranoidal 1.1. HeroTurretRedux загружается после zzz (? zzzparanoidal)
+-- и строит ранги уже из этих значений, как heroturrets в Beta 8.
 local function apply_stats(prototype_type, name, health, attack)
 	local turret = data.raw[prototype_type][name]
 	if not turret then
