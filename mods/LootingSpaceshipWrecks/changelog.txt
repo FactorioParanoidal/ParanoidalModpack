@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-10-13
+  Bugfixes:
+    - Loot mined from the damaged crash-site wrecks gets full health, so it stacks with ordinary items
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-10-12
   Changes:

@@ -64,3 +64,25 @@ script.on_init(function()
   remote.call("freeplay", "set_ship_items", ship_items)
   remote.call("freeplay", "set_debris_items", debris_items)
 end)
+
+-- Paranoidal: the crash-site wrecks start damaged, and the engine copies the health of a mined
+-- entity to every product. Loot is restored to full health so it stacks with ordinary items.
+local function repair_loot(event)
+  local buffer = event.buffer
+  if not (buffer and buffer.valid) then return end
+  for i = 1, #buffer do
+    local stack = buffer[i]
+    if stack.valid_for_read and stack.health < 1 then stack.health = 1 end
+  end
+end
+
+local wreck_filters = {}
+for name in pairs(prototypes.entity) do
+  if string.sub(name, 1, 20) == "crash-site-spaceship" then
+    wreck_filters[#wreck_filters + 1] = {filter = "name", name = name}
+  end
+end
+if #wreck_filters > 0 then
+  script.on_event(defines.events.on_player_mined_entity, repair_loot, wreck_filters)
+  script.on_event(defines.events.on_robot_mined_entity, repair_loot, wreck_filters)
+end
