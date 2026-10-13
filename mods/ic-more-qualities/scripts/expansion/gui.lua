@@ -526,7 +526,6 @@ local function mode_panel(player, entity, gui_type)
     local m = rules.modes
     local function times(key) return {"×" .. m.normal[key], "×" .. m.careful[key], "×" .. m.precise[key]} end
     line({"ic-quality.row-time"}, times("time"))
-    line({"ic-quality.row-energy"}, times("energy"))
     line({"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)})
     line({"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)})
     line({"ic-quality.row-quality"}, {percent(chance, 2), percent(rules.boosted_chance(chance, m.careful.boost), 2),

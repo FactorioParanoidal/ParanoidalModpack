@@ -17,6 +17,9 @@ local stats = require("scripts.stats")
 local M = {}
 local S = names.signals
 local NO_RESOURCE_ALERT_TICKS = 300
+-- A held attempt never goes back to exactly 0: the engine treats a started craft at 0 progress as
+-- not started, and the item already taken from the source slot was lost without repair packs.
+local MIN_HELD_PROGRESS = 1e-4
 
 function M.state()
     local s = storage.ic_workshops
@@ -313,6 +316,7 @@ local function refine_step(record, entity, craft, progress, ctx)
         starved = drained + 1e-9 < need and craft.paid < 1
     end
     if progress > craft.paid then progress = craft.paid end
+    if progress < MIN_HELD_PROGRESS then progress = MIN_HELD_PROGRESS end
     if craft.paid < 1 - 1e-9 then progress = math.min(progress, math.max(0, 1 - 1.5 * rate)) end
     if progress < entity.crafting_progress - 1e-9 then entity.crafting_progress = progress end
     craft.progress = progress

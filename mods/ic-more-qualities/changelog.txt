@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2026. 10. 13
+  Changes:
+    - Production mode table: the "Energy per operation" row is removed (time and power rows stay).
+  Bugfixes:
+    - Refinement workshop: an item inserted without repair packs is held at the start instead of vanishing.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2026. 10. 13
   Changes:
