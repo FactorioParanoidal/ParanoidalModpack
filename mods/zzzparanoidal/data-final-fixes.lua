@@ -378,6 +378,8 @@ require("tweaks.recipe.batch03-rest-beta8")
 -- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
 require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")
+-- Пожарная турель (вода, защита от Flammable Oils): до пересборки переработки.
+require("prototypes.fire-safety-turret")
 -- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
 require("tweaks.recipe.quality-modules")
 -- После всех правок рецептов: выходы переработки Quality по итоговым рецептам.
