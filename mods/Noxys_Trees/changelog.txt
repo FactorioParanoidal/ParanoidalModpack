@@ -7,6 +7,7 @@ Version: 0.5.3
     - Combine proximity queries, reuse player-force lists within a chunk and remove the unused stored list.
     - Restrict the one-time planted-tree exclusion scan to tree prototypes.
     - Keep the missing-uranium guard, original random draws and gameplay settings.
+    - Restore the 1.1 spreading exclusions for Angel's trees, gardens and puffer nests under their 2.0 names.
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
 Date: 15. 09. 2020
