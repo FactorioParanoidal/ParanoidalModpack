@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.02.12
+Date: 2026.10.13
+  Optimizations:
+    - Player building scan: chunks changed by build/mine/death events are rescanned first; the background safety pass checks 1 chunk per cycle instead of 8
+    - Factorissimo check searches only factory buildings by name instead of every storage tank in the chunk
+    - on_sector_scanned is filtered to Rampant's own radar-type entities; the player's radars no longer call Lua
+    - Player-area processing runs every 16 ticks instead of 8; hunting chances are rescaled so the chance per unit of time is unchanged
+  Balancing:
+    - Long-range squads are fully compressed from ~9 chunks from turrets/radars (was ~12) and switch to partial compression at ~8 chunks; decompression near the base and the player is unchanged
+---------------------------------------------------------------------------------------------------
 Version: 2.02.11
 Date: 2026.10.11
   Features:

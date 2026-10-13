@@ -239,7 +239,9 @@ local function scorePlayerBuildings(map, chunk)
 			end	
 		end
 		
-		local entities = surface.find_entities_filtered(universe.filteredEntitiesPlayerQueryFactorissimo)	-- 
+		-- nil when the game has no Factorissimo factory prototypes (Upgrade.lua addCommandSet)
+		local factorissimoQuery = universe.filteredEntitiesPlayerQueryFactorissimo
+		local entities = (factorissimoQuery and surface.find_entities_filtered(factorissimoQuery)) or {}
 		for i = 1, #entities do
 			local entity = entities[i]
 			if FACTORISSIMO_ENTITY(entity) then
@@ -819,10 +821,17 @@ function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
 				entityValue = -entityValue
 			end
 
+			local dirtyChunks = map.playerDirtyChunks
+			if not dirtyChunks then
+				dirtyChunks = {}
+				map.playerDirtyChunks = dirtyChunks
+			end
 			for i=1,#overlapArray do
 				local chunk = overlapArray[i]
 				if chunk ~= -1 then
 					addPlayerBaseGenerator(map, chunk, entityValue, pheromoneType)
+					-- scanPlayerMap rescans changed chunks first (turret count, ignored buildings)
+					dirtyChunks[chunk] = true
 				end
 			end	
 		end	

@@ -594,7 +594,7 @@ function squadCompression.processCompression(map, squad, chunk, fullCompressAllo
 	if chunk and (chunk ~= -1) then
 		if not squad.compressed then
 			if (chunk[PLAYER_PHEROMONE] < PLAYER_PHEROMONE_GENERATOR_AMOUNT * 0.008) then	-- ~6 chunks
-				if fullCompressAllowed and (chunk[BASE_DETECTION_PHEROMONE] < 3138) then
+				if fullCompressAllowed and (chunk[BASE_DETECTION_PHEROMONE] < 4000) then	-- ~9+ chunks from turrets/radars (was 3138, ~12+)
 					squadCompress(map, squad)
 				elseif (chunk[BASE_DETECTION_PHEROMONE] < 5000) then
 					local squadSize = 100
@@ -614,7 +614,7 @@ function squadCompression.processCompression(map, squad, chunk, fullCompressAllo
 					game.print("processCompression: squad#"..squad.groupNumber.." squadDecompress [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")	-- debug
 				end
 				squadCompression.squadDecompress(map.universe, map.surface, squad)	
-			elseif (not squad.smoothCompressed) and (chunk[BASE_DETECTION_PHEROMONE] > 3874) then
+			elseif (not squad.smoothCompressed) and (chunk[BASE_DETECTION_PHEROMONE] > 4300) then	-- ~8 chunks; above the full-compression threshold (was 3874)
 				local squadSize = 100
 				if map.universe.squadCount < 5 then
 					squadSize = 100

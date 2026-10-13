@@ -48,6 +48,7 @@ constants.SCAN_QUEUE_SIZE = 2
 constants.RESOURCE_QUEUE_SIZE = 7
 constants.ENEMY_QUEUE_SIZE = 7
 constants.PLAYER_QUEUE_SIZE = 7
+constants.PLAYER_BACKGROUND_QUEUE_SIZE = 0	-- background player-building rescan: 1 chunk per call (dirty chunks go first)
 constants.CLEANUP_QUEUE_SIZE = 8
 constants.ATTACK_QUEUE_SIZE = 18
 constants.BASE_QUEUE_SIZE = 1

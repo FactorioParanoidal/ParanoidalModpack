@@ -1502,7 +1502,9 @@ script.on_event(defines.events.on_tick,
                         end
                         cleanUpMapTables(map, tick)
                     elseif (pick == 1) then
-						processPlayers(gameRef.connected_players, universe, tick)
+						if (tick % 16) == 1 then	-- every 16 ticks; hunting chances are rescaled in MapProcessor
+							processPlayers(gameRef.connected_players, universe, tick)
+						end
                     elseif (pick == 2) then
 						processMap(map, tick)			
                     elseif (pick == 3) then
@@ -1927,7 +1929,23 @@ script.on_event(defines.events.on_unit_group_finished_gathering, onGroupFinished
 
 script.on_event(defines.events.on_build_base_arrived, onBuilderArrived)
 
-script.on_event(defines.events.on_sector_scanned, onSectorScanned)
+-- Only Rampant's own radar-type entities need on_sector_scanned; the player's radars are filtered out
+-- in the engine. Names are checked against prototypes so the filter never references a missing entity.
+local sectorScannedFilters = {}
+local sectorFiltersBuilt = pcall(function()
+    for _, name in pairs({"targetDummyPlasma-rampant", "targetDummyFire-rampant", "targetDummyPhysical-rampant",
+                         "targetDummyLaser-rampant", "test-rampant", "regenerationCrystal-rampantFixed",
+                         "biterSupressor1-rampant", "biterSupressor2-rampant", "biterSupressor3-rampant"}) do
+        if prototypes.entity[name] then
+            sectorScannedFilters[#sectorScannedFilters + 1] = {filter = "name", name = name}
+        end
+    end
+end)
+if not sectorFiltersBuilt then
+    script.on_event(defines.events.on_sector_scanned, onSectorScanned)	-- prototypes unavailable: old behaviour
+elseif #sectorScannedFilters > 0 then
+    script.on_event(defines.events.on_sector_scanned, onSectorScanned, sectorScannedFilters)
+end
 script.on_event(defines.events.on_script_trigger_effect, onScriptTriggerEffect)
 script.on_event(defines.events.on_player_respawned, onPlayerRespawned)
 

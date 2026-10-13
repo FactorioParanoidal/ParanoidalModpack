@@ -138,12 +138,25 @@ local function addCommandSet(queriesAndCommands)
 -- - !КДА 
 
 	 -- Factorissimo. Yes, this is a "storage-tank" enities
-    queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = {
-        area=queriesAndCommands.area,
-        force=queriesAndCommands.activePlayerForces,
-        collision_mask = "player",
-        type={"storage-tank"}
-    }
+    -- Only Factorissimo factory buildings (storage tanks named "factory-*", see constants.FACTORISSIMO_ENTITY),
+    -- instead of every storage tank in the chunk. nil when there are none.
+    local factorissimoNames = {}
+    for name in pairs(prototypes.get_entity_filtered({{filter = "type", type = "storage-tank"}})) do
+        if string.sub(name, 1, 8) == "factory-" then
+            factorissimoNames[#factorissimoNames+1] = name
+        end
+    end
+    if #factorissimoNames > 0 then
+        queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = {
+            area=queriesAndCommands.area,
+            force=queriesAndCommands.activePlayerForces,
+            collision_mask = "player",
+            type={"storage-tank"},
+            name=factorissimoNames
+        }
+    else
+        queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = nil
+    end
 	
 	
     queriesAndCommands.filteredEntitiesUnitQuery = {
