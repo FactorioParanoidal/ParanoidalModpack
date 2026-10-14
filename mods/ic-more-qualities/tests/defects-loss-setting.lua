@@ -74,6 +74,9 @@ game = {get_player = function() return player end}
 dofile(root .. "control.lua")
 for _, percent in ipairs({33, 0, 100, 25.5}) do
     settings.global["ic-more-qualities-initial-loss-percent"].value = percent
+    -- The engine raises this event for a changed map setting; control.lua caches settings until then.
+    callbacks[defines.events.on_runtime_mod_setting_changed]({setting_type = "runtime-global",
+        setting = "ic-more-qualities-initial-loss-percent"})
     callbacks[3]({player_index = 1, item_stack = stack})
     assert(passed.hand == percent)
     callbacks[4]({player_index = 1, entity = ore, buffer = buffer})

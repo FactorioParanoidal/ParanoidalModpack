@@ -84,8 +84,8 @@ machine.start("gear", "ic-defect-3", 10)
 local tick = run(machine, record, 900, mock.sequence({.95}))
 assert(machine.crafting and #machine.outputs == 0)
 near(record.craft.paid, 600 / 1500)
--- Held at the paid share; the machine may run one tick ahead before the next look rewinds it.
-assert(machine.entity.crafting_progress <= 0.4 + machine.rate + 1e-9 and machine.entity.crafting_progress > 0.35)
+-- Held at the paid share; the machine may run up to one look ahead before the next look rewinds it.
+assert(machine.entity.crafting_progress <= 0.4 + workshop.LOOK * machine.rate + 1e-9 and machine.entity.crafting_progress > 0.35)
 assert(not machine.fuel[1].valid_for_read, "both packs fully used")
 assert(record.status_key == "no-resource" and machine.entity.custom_status.diode == "red")
 assert(workshop.available(machine.entity) == 0)
@@ -136,18 +136,18 @@ assert(machine.outputs[#machine.outputs] == "normal")
 local available = workshop.available(machine.entity)
 local produced = #machine.outputs
 machine.start("gear", "normal", 10)
-tick = run(machine, record, 3, mock.sequence({.5}), tick)
+tick = run(machine, record, 10, mock.sequence({.5}), tick)
 assert(#machine.outputs == produced + 1 and machine.outputs[#machine.outputs] == "normal")
 assert(workshop.available(machine.entity) == available, "passing costs no packs")
 machine.start("gear", "rare", 10)
-tick = run(machine, record, 3, mock.sequence({.5}), tick)
+tick = run(machine, record, 10, mock.sequence({.5}), tick)
 assert(machine.outputs[#machine.outputs] == "rare", "positive quality unchanged without the setting")
 workshop.apply_settings(record, {reset_positive = true})
 machine.start("gear", "rare", 10)
 tick = run(machine, record, 50, mock.sequence({.5}), tick)
 assert(machine.crafting, "reset of a 600-tick attempt is capped at 60 ticks")
-tick = run(machine, record, 15, mock.sequence({.5}), tick)
-assert(not machine.crafting, "reset needs at most one second")
+tick = run(machine, record, 10 + workshop.IDLE_LOOK, mock.sequence({.5}), tick)
+assert(not machine.crafting, "reset needs at most one second after the workshop sees the item")
 assert(machine.outputs[#machine.outputs] == "normal" and workshop.available(machine.entity) == available)
 assert(storage.ic_stats[1]["refine.resets"] == 1 and storage.ic_stats[1]["refine.passed"] == 2)
 
@@ -171,6 +171,30 @@ assert(buffer.items["gear|ic-defect-4"] == 1 and not buffer.items["gear|ic-defec
 -- 6. Unknown items cost like an average item.
 local cost, seconds = workshop.cost_of("unknown")
 assert(cost == 750 and seconds == 10)
+-- 7. The working status is written once per grade, not on every look (the label key used to contain
+-- a fresh table address). A fast workshop (15-tick attempt) looks more often and still decides in time.
+machine = make_machine()
+machine.entity.unit_number = 8
+machine.entity.crafting_speed = 40 -- 10 s attempt -> 15 ticks
+machine.fuel[1] = pack_stack(100, 300)
+record = workshop.track(machine.entity)
+tick = run(machine, record, 5, mock.sequence({.5}), tick)
+assert(record.idle_look == 5, "idle: three looks during the shortest attempt, got " .. tostring(record.idle_look))
+machine.start("gear", "ic-defect-2", 0.25)
+local writes, seen = 0, nil
+for _ = 1, 30 do
+    tick = tick + 1
+    machine.interface.energy = machine.interface.electric_buffer_size
+    if record.next_tick <= tick then
+        workshop.step(record, {tick = tick, random = mock.sequence({.5, .5})})
+        if machine.entity.custom_status ~= seen then writes, seen = writes + 1, machine.entity.custom_status end
+    end
+    machine.update()
+end
+assert(record.look == 2, "short attempt: look every 2 ticks, got " .. tostring(record.look))
+assert(machine.outputs[1] == "ic-defect-1", tostring(machine.outputs[1]))
+assert(writes <= 3, "status writes: " .. writes)
+
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
 print("resets positive quality on request, returns the reached grade when mined. Mocks only.")

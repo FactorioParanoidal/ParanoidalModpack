@@ -66,7 +66,8 @@ local callbacks = {}
 defines = mock.defines({on_force_created = 1, on_force_reset = 2, on_player_crafted_item = 3,
     on_built_entity = 4, on_robot_built_entity = 5, script_raised_built = 6,
     script_raised_revive = 7, on_entity_cloned = 8, on_chunk_generated = 9, on_tick = 10})
-script = {on_init = function() end, on_configuration_changed = function() end,
+local configuration
+script = {on_init = function() end, on_configuration_changed = function(fn) configuration = fn end,
     on_event = function(id, fn) callbacks[id] = fn end}
 settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}},
     global = {["ic-more-qualities-loss-exclude-finished"] = {value = false},
@@ -82,6 +83,8 @@ local event_stack = stack("gear", false)
 callbacks[3]({player_index = 1, item_stack = event_stack})
 assert(not event_stack.valid_for_read and draws == 1)
 settings.global["ic-more-qualities-loss-exclude-finished"].value = true
+callbacks[defines.events.on_runtime_mod_setting_changed]({setting_type = "runtime-global",
+    setting = "ic-more-qualities-loss-exclude-finished"})
 -- Quality roll still happens for protected finished products. Existing -5
 -- avoids needing an inventory mock; protection must not bypass defect handling.
 event_stack = stack("building", true, "ic-defect-5")
@@ -92,6 +95,9 @@ event_stack = stack("gear", false)
 callbacks[3]({player_index = 1, item_stack = event_stack})
 assert(event_stack.count == 7 and draws == 2)
 settings.startup["ic-more-qualities-defects-preview"].value = false
+-- A changed startup setting always comes with a configuration change (cached until then).
+game.forces, storage = {}, storage or {}
+configuration({})
 active_player = player(0)
 callbacks[3]({player_index = 1, item_stack = event_stack})
 assert(event_stack.count == 7 and draws == 2)

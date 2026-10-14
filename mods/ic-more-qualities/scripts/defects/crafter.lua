@@ -18,6 +18,7 @@ M.STEP = .75       -- otherwise look again after this fraction of the remainder
 M.MAX_IDLE = 60
 M.MIN_TICKS = 2    -- crafts this fast cannot be intercepted reliably
 M.STALL_LOOK = 15  -- a stopped moded craft is looked at this often (its extra power is off)
+M.RELAXED = 600    -- research 10: a machine with nothing to handle is looked at this often
 
 local function is_input(fluidbox, index)
     local prototype = fluidbox.get_prototype(index)
@@ -67,11 +68,23 @@ function M.pay(entity, debt, quality)
     return #debt == 0
 end
 
-local function idle_delay(entity, ctx)
-    local energy = ctx.min_energy(entity)
+-- Not crafting: look again within half of the next craft. A set recipe (assembler waiting for
+-- ingredients or with a full output) gives its own duration; otherwise the fastest recipe of the
+-- machine's categories is assumed.
+local function idle_delay(entity, ctx, recipe)
+    local energy = recipe and recipe.energy
+    if not energy or energy <= 0 then energy = ctx.min_energy(entity) end
     local speed = entity.crafting_speed
     if not energy or speed <= 0 then return 30 end
     return math.min(M.MAX_IDLE, math.max(1, math.floor(energy * 60 / speed / 2)))
+end
+
+-- Undecided craft: the next look lands 2..3 full-speed ticks before completion (inside the FINAL
+-- window) instead of approaching it in several steps. The machine can only be slower than full speed
+-- (power), so the look comes early, not late; a speed-up between looks (modules, beacons) may let
+-- a craft complete unobserved ("missed-craft" warning).
+function M.approach(left)
+    return math.max(1, math.floor(left - M.FINAL) + 1)
 end
 
 local function after_decision(left, full)
@@ -158,14 +171,32 @@ local function slowed_delay(craft, left)
     return delay
 end
 
+-- Research 10: no loss and no new defect roll. Looks are still needed for a production mode, owed
+-- ingredients, a defect of a craft decided before research 10 and a defective recipe (the result is
+-- capped at the ingredients' grade or reset to standard). A defective craft that starts and ends
+-- between two rare looks is not handled (accepted: user decision 2026-10-14, variant A).
+local function relaxed(record, entity, recipe_quality, ctx)
+    if record.debt then return false end
+    local craft = record.craft
+    if craft and (craft.defect or craft.mode) then return false end
+    if recipe_quality and model.is_defect(recipe_quality.name) then return false end
+    return not (ctx.mode_definition and ctx.mode_definition(entity))
+end
+
 -- Returns the delay in ticks until the next look, and an optional warning code.
 function M.step(record, level, ctx)
     local entity = record.entity
     local recipe, recipe_quality = entity.get_recipe()
+    if level == 10 and relaxed(record, entity, recipe_quality, ctx) then
+        record.craft = nil
+        -- Releases the extra power of a moded craft that has just ended.
+        if ctx.mode_power then ctx.mode_power(entity, nil, false) end
+        return M.RELAXED
+    end
     if not recipe or not entity.is_crafting() then
         record.craft, record.debt = nil, nil
         if ctx.mode_power then ctx.mode_power(entity, nil, false) end
-        return idle_delay(entity, ctx)
+        return idle_delay(entity, ctx, recipe)
     end
     local quality = recipe_quality and recipe_quality.name or "normal"
     local energy = recipe.energy
@@ -222,7 +253,7 @@ function M.step(record, level, ctx)
     end
     if left > M.FINAL then
         if slowed then return slowed_delay(craft, left), warning end
-        return math.max(1, math.floor(left * M.STEP)), warning
+        return M.approach(left), warning
     end
 
     craft.decided = true
@@ -235,7 +266,7 @@ function M.step(record, level, ctx)
         and model.roll_loss(level, ctx.random, ctx.initial_loss_percent, loss_factor) then
         stat(ctx, entity, "machine.loss")
         M.fail(record, entity, recipe, quality, progress)
-        return math.max(1, math.floor(full * M.STEP)), warning
+        return M.approach(full), warning
     end
     -- Mode boost of the quality-module roll, once per completed attempt, at the decision: a craft
     -- that completes unobserved (sharp speed-up between looks) gets none. Defective ingredients

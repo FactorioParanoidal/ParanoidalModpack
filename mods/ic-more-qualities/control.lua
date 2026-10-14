@@ -13,17 +13,29 @@ local modes = require("scripts.expansion.modes")
 local memory = require("scripts.expansion.memory")
 local gui = require("scripts.expansion.gui")
 
+-- Setting caches (read on every tick otherwise). Startup settings change only together with a
+-- configuration change, map settings raise on_runtime_mod_setting_changed. Not kept in storage:
+-- after a load they are read again from the synchronised settings, so every peer agrees.
+local enabled_cache, exclude_cache, loss_cache
+
 local function enabled()
     -- Keep the original setting ID so existing saved startup choices are respected.
-    return settings.startup["ic-more-qualities-defects-preview"].value
+    if enabled_cache == nil then enabled_cache = settings.startup["ic-more-qualities-defects-preview"].value end
+    return enabled_cache
 end
 
 local function exclude_finished()
-    return settings.global["ic-more-qualities-loss-exclude-finished"].value
+    if exclude_cache == nil then exclude_cache = settings.global["ic-more-qualities-loss-exclude-finished"].value end
+    return exclude_cache
 end
 
 local function initial_loss_percent()
-    return settings.global["ic-more-qualities-initial-loss-percent"].value
+    if loss_cache == nil then loss_cache = settings.global["ic-more-qualities-initial-loss-percent"].value end
+    return loss_cache
+end
+
+local function reset_settings()
+    enabled_cache, exclude_cache, loss_cache = nil, nil, nil
 end
 
 -- Deterministic caches derived from prototypes only (identical on all peers).
@@ -75,26 +87,30 @@ local function no_quality()
     return no_quality_cache
 end
 
+-- One context table for the scheduler: its functions are created once, the data fields are
+-- refreshed on every tick that has work (the getters only return caches).
+local context = {
+    min_energy = min_energy,
+    emissions = emissions,
+    stat = stats.add,
+    quality_everywhere = quality_everywhere,
+    mode_definition = modes.definition,
+    mode_power = function(entity, definition, working)
+        return modes.draw_power(entity, definition, working, game.tick)
+    end,
+    mode_boost = function(entity, quality, definition)
+        return modes.boost(entity, quality, definition, math.random)
+    end,
+}
+
 local function automation_context()
-    return {
-        random = math.random,
-        finished = eligibility.finished(),
-        no_defect = eligibility.no_defect(),
-        exclude_finished = exclude_finished(),
-        initial_loss_percent = initial_loss_percent(),
-        min_energy = min_energy,
-        emissions = emissions,
-        stat = stats.add,
-        no_quality = no_quality(),
-        quality_everywhere = quality_everywhere,
-        mode_definition = modes.definition,
-        mode_power = function(entity, definition, working)
-            return modes.draw_power(entity, definition, working, game.tick)
-        end,
-        mode_boost = function(entity, quality, definition)
-            return modes.boost(entity, quality, definition, math.random)
-        end,
-    }
+    context.random = math.random
+    context.finished = eligibility.finished()
+    context.no_defect = eligibility.no_defect()
+    context.exclude_finished = exclude_finished()
+    context.initial_loss_percent = initial_loss_percent()
+    context.no_quality = no_quality()
+    return context
 end
 
 -- Production modes need the defect scheduler to watch the machine.
@@ -122,6 +138,7 @@ local function configure_force(force)
 end
 
 local function configure_all()
+    reset_settings()
     eligibility.reset()
     category_min, min_energy_cache, emissions_cache, no_quality_cache = nil, {}, {}, nil
     workshop.reset_cache()
@@ -335,10 +352,14 @@ events.on(defines.events.on_player_removed, function(event)
     if storage.ic_players then storage.ic_players[event.player_index] = nil end
 end)
 
+events.on(defines.events.on_runtime_mod_setting_changed, function() reset_settings() end)
+
+local workshop_context = {}
 events.on(defines.events.on_tick, function(event)
     if not enabled() then return end
     local tick = event.tick
-    workshop.on_tick({tick = tick, random = math.random})
+    workshop_context.tick, workshop_context.random = tick, math.random
+    workshop.on_tick(workshop_context)
     post.on_tick(tick)
     if tick % 10 == 0 then gui.on_refresh(tick) end
     if tick % 60 == 0 then memory.cleanup() end

@@ -12,6 +12,41 @@ M.FINAL = 3
 M.STEP = .75
 M.MIN_TICKS = 2
 M.NO_TARGET = 15
+M.DEPLETED = 300 -- no resource left under the drill: nothing will start soon
+M.RELAXED = 600 -- research 10: a drill that is not defective has nothing to handle
+
+-- Prototype-derived caches by name (identical on every peer, rebuilt after load).
+local mining_speeds, mining_times, energy_usages = {}, {}, {}
+
+local function mining_speed(entity)
+    local name = entity.name
+    local speed = mining_speeds[name]
+    if not speed then
+        speed = entity.prototype.mining_speed
+        mining_speeds[name] = speed
+    end
+    return speed
+end
+
+local function cached_mining_time(target)
+    local name = target.name
+    local time = mining_times[name]
+    if time == nil then
+        time = target.prototype.mineable_properties.mining_time or false
+        mining_times[name] = time
+    end
+    return time or nil
+end
+
+local function energy_usage(entity)
+    local name = entity.name
+    local energy = energy_usages[name]
+    if not energy then
+        energy = entity.prototype.energy_usage
+        energy_usages[name] = energy
+    end
+    return energy
+end
 
 function M.pollute(entity, working_ticks, multiplier, ctx)
     if multiplier >= 1 or working_ticks <= 0 then return 0 end
@@ -20,7 +55,7 @@ function M.pollute(entity, working_ticks, multiplier, ctx)
     local per_joule = pollutant and ctx.emissions(entity)
     local rate = per_joule and per_joule[pollutant.name]
     if not rate or rate <= 0 then return 0 end
-    local energy = entity.prototype.energy_usage * (1 + entity.consumption_bonus)
+    local energy = energy_usage(entity) * (1 + entity.consumption_bonus)
     local amount = (1 / multiplier - 1) * working_ticks * energy * rate * (1 + entity.pollution_bonus)
     if amount > 0 then surface.pollute(entity.position, amount, entity.name) end
     return amount
@@ -67,13 +102,25 @@ end
 
 function M.step(record, level, ctx)
     local entity = record.entity
+    -- The quality of a placed drill never changes.
+    local multiplier = record.multiplier
+    if not multiplier then
+        multiplier = model.quality_multiplier(entity.quality.name)
+        record.multiplier = multiplier
+    end
+    -- Research 10: no loss any more; only a defective drill is still slowed down.
+    if level == 10 and multiplier >= 1 then
+        record.cycle = nil
+        return M.RELAXED
+    end
     local target = entity.mining_target
     if not target or not target.valid then
         record.cycle = nil
+        if entity.status == defines.entity_status.no_minable_resources then return M.DEPLETED end
         return M.NO_TARGET
     end
-    local native = entity.prototype.mining_speed * (1 + entity.speed_bonus) / 60
-    local mining_time = target.prototype.mineable_properties.mining_time
+    local native = mining_speed(entity) * (1 + entity.speed_bonus) / 60
+    local mining_time = cached_mining_time(target)
     if native <= 0 or not mining_time or mining_time <= 0 then return 30 end
     local full = mining_time / native
     if full <= M.MIN_TICKS then
@@ -81,20 +128,21 @@ function M.step(record, level, ctx)
         return 30, "unsupported-speed"
     end
 
-    local multiplier = model.quality_multiplier(entity.quality.name)
     local progress = entity.mining_progress
     local bonus = entity.bonus_mining_progress
-    local position = target.position
-    local target_key = target.name .. "@" .. position.x .. "," .. position.y
     local cycle = record.cycle
+    -- The resource entity itself identifies the cycle target (no string key per look).
+    local source = cycle and cycle.source
+    local same = source ~= nil and source.valid and source == target
     local warning
-    if not cycle or cycle.target ~= target_key or progress + 1e-6 < cycle.progress then
-        if cycle and not cycle.decided and cycle.target == target_key then
+    if not same or progress + 1e-6 < cycle.progress then
+        if same and not cycle.decided then
             warning = "missed-cycle"
         end
         -- A wrap or retarget starts the new cycle at zero: slow that part too.
-        -- On first registration the history is unknown and is left as is.
-        cycle = {target = target_key, progress = cycle and 0 or progress, bonus = bonus, bonus_start = bonus}
+        -- On first registration the history is unknown and is left as is; so is a cycle of an older
+        -- version (string key, no source).
+        cycle = {source = target, progress = source ~= nil and 0 or progress, bonus = bonus, bonus_start = bonus}
         record.cycle = cycle
     end
     if not cycle.decided and multiplier < 1 then
@@ -113,7 +161,8 @@ function M.step(record, level, ctx)
     cycle.progress, cycle.bonus = progress, bonus
     local left = (mining_time - progress) / native
     if cycle.decided then return after_decision(left, full), warning end
-    if left > M.FINAL then return math.max(1, math.floor(left * M.STEP)), warning end
+    -- Land inside the FINAL window in one look (see crafter.approach).
+    if left > M.FINAL then return math.max(1, math.floor(left - M.FINAL) + 1), warning end
 
     cycle.decided = true
     if ctx.stat then ctx.stat(entity.force.index, "drill.ops") end
@@ -123,9 +172,9 @@ function M.step(record, level, ctx)
         entity.mining_progress = 0
         M.drain(entity, target, ctx)
         local start = entity.bonus_mining_progress
-        record.cycle = {target = target_key, progress = 0, bonus = start, bonus_start = start}
+        record.cycle = {source = target, progress = 0, bonus = start, bonus_start = start}
         record.failures = (record.failures or 0) + 1
-        return math.max(1, math.floor(full * M.STEP)), warning
+        return math.max(1, math.floor(full - M.FINAL) + 1), warning
     end
     return after_decision(left, full), warning
 end

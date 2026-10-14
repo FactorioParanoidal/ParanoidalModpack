@@ -20,6 +20,12 @@ local NO_RESOURCE_ALERT_TICKS = 300
 -- A held attempt never goes back to exactly 0: the engine treats a started craft at 0 progress as
 -- not started, and the item already taken from the source slot was lost without repair packs.
 local MIN_HELD_PROGRESS = 1e-4
+-- Ticks between looks. A working attempt is paid look + 1 ticks ahead and decided or held at least
+-- look + 0.5 ticks before completion, so the engine cannot finish it between two looks; the look
+-- shrinks for very short attempts (fast high-quality workshops). An idle workshop must see a new
+-- attempt early: it looks at least three times during the shortest attempt at its speed.
+M.LOOK = 3
+M.IDLE_LOOK = 6
 
 function M.state()
     local s = storage.ic_workshops
@@ -31,7 +37,8 @@ function M.state()
 end
 
 local costs_cache
-function M.reset_cache() costs_cache = nil end
+local shortest_cache
+function M.reset_cache() costs_cache, shortest_cache = nil, nil end
 
 function M.costs()
     if not costs_cache then
@@ -39,6 +46,28 @@ function M.costs()
         costs_cache = mod_data and mod_data.data.costs or {}
     end
     return costs_cache
+end
+
+-- Seconds of the shortest attempt of any item at speed 1 (prototype data, same on every peer).
+function M.shortest_seconds()
+    if not shortest_cache then
+        local _, shortest = rules.attempt(nil, nil)
+        for _, entry in pairs(M.costs()) do
+            if entry.seconds and entry.seconds > 0 and entry.seconds < shortest then shortest = entry.seconds end
+        end
+        shortest_cache = shortest
+    end
+    return shortest_cache
+end
+
+local function idle_look(record, entity)
+    local look = record.idle_look
+    if not look then
+        local ticks = M.shortest_seconds() * 60 / math.max(entity.crafting_speed, 0.01)
+        look = math.max(1, math.min(M.IDLE_LOOK, math.floor(ticks / 3)))
+        record.idle_look = look
+    end
+    return look
 end
 
 -- Durability units and seconds of one attempt for an item (fallback: an average item).
@@ -177,6 +206,7 @@ function M.rescan(entities)
         if entity.valid and entity.name == names.workshop then
             local record = M.track(entity)
             if record then
+                record.idle_look = nil -- attempt durations may have changed with the configuration
                 ensure_drive(entity)
                 if not (record.interface and record.interface.valid) then
                     record.interface = power.create(entity, names.workshop_power)
@@ -196,18 +226,20 @@ local function machine_power(entity)
     return entity.prototype.get_max_energy_usage(entity.quality)
 end
 
-local function set_status(record, key, diode, parameter)
-    local label_key = key .. "|" .. tostring(parameter)
+local function grade_text(grade)
+    return {"ic-quality.grade-" .. tostring(-grade)}
+end
+
+-- grade: optional number shown in the label. The key is built from the number, not from the
+-- localised table (a new table every call made the key differ and rewrote the status every tick).
+local function set_status(record, key, diode, grade)
+    local label_key = grade ~= nil and (key .. "|" .. grade) or key
     if record.status == label_key then return end
     record.status = label_key
     record.status_key = key
     local label = {"ic-quality.workshop-status-" .. key}
-    if parameter ~= nil then label[2] = parameter end
+    if grade ~= nil then label[2] = grade_text(grade) end
     record.entity.custom_status = {diode = defines.entity_status_diode[diode], label = label}
-end
-
-local function grade_text(grade)
-    return {"ic-quality.grade-" .. tostring(-grade)}
 end
 
 local function alert(record, active)
@@ -300,12 +332,14 @@ end
 
 local function refine_step(record, entity, craft, progress, ctx)
     local rate = entity.crafting_speed / (craft.seconds * 60)
+    local look = math.max(1, math.min(M.LOOK, math.floor(1 / rate / 6)))
+    record.look = look
     local supply = power.satisfaction(record.interface)
     power.set(record.interface, machine_power(entity))
     local previous = craft.progress or 0
     if progress > previous and supply < 1 then progress = previous + (progress - previous) * supply end
     -- Pay ahead of the progress; without resource the attempt waits (nothing is lost).
-    local need = rules.prepay(craft.cost, craft.paid, progress, 2 * rate)
+    local need = rules.prepay(craft.cost, craft.paid, progress, (look + 1) * rate)
     local starved = false
     if need > 0 then
         local drained = M.drain(entity, need)
@@ -317,11 +351,12 @@ local function refine_step(record, entity, craft, progress, ctx)
     end
     if progress > craft.paid then progress = craft.paid end
     if progress < MIN_HELD_PROGRESS then progress = MIN_HELD_PROGRESS end
-    if craft.paid < 1 - 1e-9 then progress = math.min(progress, math.max(0, 1 - 1.5 * rate)) end
+    local margin = (look + 0.5) * rate
+    if craft.paid < 1 - 1e-9 then progress = math.min(progress, math.max(0, 1 - margin)) end
     if progress < entity.crafting_progress - 1e-9 then entity.crafting_progress = progress end
     craft.progress = progress
 
-    if not craft.final and craft.paid >= 1 - 1e-9 and progress + 1.5 * rate >= 1 then
+    if not craft.final and craft.paid >= 1 - 1e-9 and progress + margin >= 1 then
         attempt(record, entity, craft, ctx)
     end
 
@@ -333,7 +368,7 @@ local function refine_step(record, entity, craft, progress, ctx)
         if supply < 0.999 then
             set_status(record, "low-power", "yellow")
         else
-            set_status(record, "working", "green", grade_text(craft.grade))
+            set_status(record, "working", "green", craft.grade)
         end
     end
     alert(record, record.starved_since ~= nil and ctx.tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
@@ -357,7 +392,9 @@ function M.step(record, ctx)
     end
     if entity.disabled_by_script ~= disable then entity.disabled_by_script = disable end
 
-    record.available = M.available(entity)
+    -- The resource total is needed only for the circuit signal; the GUI counts it itself.
+    local emitting = record.emitter and record.emitter.valid
+    record.available = emitting and M.available(entity) or nil
     local recipe, quality = entity.get_recipe()
     if not crafting or not recipe or not quality then
         record.craft = nil
@@ -375,8 +412,8 @@ function M.step(record, ctx)
             set_status(record, "idle", "yellow")
         end
         publish(record, false)
-        -- Short polling: even the shortest attempt (x4 speed) lasts 15 ticks and must be seen early.
-        record.next_tick = tick + 2
+        -- Short polling: a new attempt must be seen early (see idle_look).
+        record.next_tick = tick + idle_look(record, entity)
         return
     end
 
@@ -385,17 +422,20 @@ function M.step(record, ctx)
     local progress = entity.crafting_progress
     if not craft or craft.key ~= key then craft = begin_craft(record, entity, recipe, quality, key, progress) end
 
+    -- A paused refinement keeps the short look of its attempt: it may resume right after a look.
+    local look = craft.kind == "refine" and record.look or M.LOOK
     if disable then
         set_status(record, "paused", "yellow")
         power.set(record.interface, machine_power(entity) / 30)
     elseif craft.kind == "refine" then
         refine_step(record, entity, craft, progress, ctx)
+        look = record.look
     else
         power.set(record.interface, machine_power(entity))
         set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
     end
     publish(record, true)
-    record.next_tick = tick + 1
+    record.next_tick = tick + look
 end
 
 -- Mining after the attempt is decided returns the item at the reached grade, not the starting one.
@@ -426,7 +466,7 @@ end
 function M.describe(record)
     local entity = record.entity
     local craft = record.craft
-    local info = {status = record.status_key or "idle", available = record.available or M.available(entity),
+    local info = {status = record.status_key or "idle", available = M.available(entity),
         settings = record.settings}
     if craft then
         info.kind, info.item, info.grade, info.attempts = craft.kind, craft.item, craft.grade, craft.attempts

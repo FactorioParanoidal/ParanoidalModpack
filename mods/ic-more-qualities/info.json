@@ -1,6 +1,6 @@
 {
 	"name": "ic-more-qualities",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"title": "IndustrialCraft - More Qualities",
 	"author": "mimic",
 	"description": "Adds 40 new qualities. Local unpublished Paranoidal extension: five defect qualities, ten quality-control research levels and production losses for handcraft, machines, drills and mining; a refinement workshop that repairs defects with repair packs, production modes (normal / careful / precise) for assembling machines and furnaces, a control post for production orders, circuit signals and a quality-control panel. See README.md. Not verified in the engine by the author of this extension; use a separate test game first.",

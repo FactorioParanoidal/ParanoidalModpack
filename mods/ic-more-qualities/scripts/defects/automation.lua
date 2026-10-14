@@ -40,6 +40,16 @@ local function schedule(s, record, tick)
     bucket[#bucket + 1] = record.id
 end
 
+-- Rebuilds a deterministic schedule spread over one second; stale buckets
+-- could otherwise refer to ticks that are already in the past.
+local function spread(s)
+    local ids = {}
+    for id in pairs(s.records) do ids[#ids + 1] = id end
+    table.sort(ids)
+    s.buckets = {}
+    for i, id in ipairs(ids) do schedule(s, s.records[id], game.tick + 1 + i % 60) end
+end
+
 -- Player-placeable entities only: hidden technical machines of other mods,
 -- Creative Mod test sources and the refinement workshop (own logic) are left alone.
 function M.trackable(entity)
@@ -58,7 +68,14 @@ function M.track(entity, source, delay)
     if not M.trackable(entity) then return end
     local s = state()
     local id = entity.unit_number
-    if s.records[id] and s.records[id].entity.valid then return end
+    local existing = s.records[id]
+    if existing and existing.entity.valid then
+        -- Already watched, maybe rarely (research 10): a new mode must be seen soon. The old bucket
+        -- entry is skipped by the due check in on_tick.
+        local due = game.tick + (delay or 1)
+        if not existing.due or existing.due > due then schedule(s, existing, due) end
+        return
+    end
     local record = {id = id, entity = entity, kind = M.kinds[entity.type]}
     -- A clone copies the machine state: keep the decision for its running craft.
     local previous = source and source.valid and source.unit_number and s.records[source.unit_number]
@@ -85,13 +102,60 @@ function M.rescan(visit)
             if visit then visit(entity) end
         end
     end
-    -- Rebuild a deterministic schedule spread over one second; stale buckets
-    -- could otherwise refer to ticks that are already in the past.
-    local ids = {}
-    for id in pairs(s.records) do ids[#ids + 1] = id end
-    table.sort(ids)
-    s.buckets = {}
-    for i, id in ipairs(ids) do schedule(s, s.records[id], game.tick + 1 + i % 60) end
+    -- Prototypes and technologies may have changed: count the levels again.
+    s.levels = nil
+    spread(s)
+end
+
+-- Every machine is looked at again within one second (research 10 was lost: rarely watched
+-- machines need their normal looks back).
+function M.wake()
+    local s = storage.ic_defects
+    if s then spread(s) end
+end
+
+-- Completed quality-control level of a force. Kept in storage, so every peer reads the same value;
+-- refreshed by research events and every LEVEL_REFRESH ticks (research changed by a script).
+M.LEVEL_REFRESH = 600
+function M.level(force)
+    local s = state()
+    local levels = s.levels
+    if not levels then
+        levels = {}
+        s.levels = levels
+    end
+    local level = levels[force.index]
+    if level == nil then
+        level = model.completed_level(force.technologies)
+        levels[force.index] = level
+    end
+    return level
+end
+
+-- Recounts the cached levels; a force that lost research 10 gets every machine looked at again.
+function M.refresh_levels()
+    local s = storage.ic_defects
+    local levels = s and s.levels
+    if not levels then return end
+    local wake = false
+    for index, level in pairs(levels) do
+        local force = game.forces[index]
+        local now = force and force.valid and model.completed_level(force.technologies) or nil
+        if now ~= level then
+            levels[index] = now
+            if level == 10 and now then wake = true end
+        end
+    end
+    if wake then M.wake() end
+end
+
+local function invalidate_level(force)
+    local s = storage.ic_defects
+    local levels = s and s.levels
+    if not (levels and force and force.valid) then return end
+    local before = levels[force.index]
+    levels[force.index] = nil
+    if before == 10 and M.level(force) < 10 then M.wake() end
 end
 
 function M.clear()
@@ -115,7 +179,6 @@ function M.on_tick(tick, context)
     if not bucket then return end
     s.buckets[tick] = nil
     local ctx = context()
-    local levels = {}
     for i = 1, #bucket do
         local record = s.records[bucket[i]]
         if record and record.due == tick then
@@ -124,11 +187,7 @@ function M.on_tick(tick, context)
                 s.records[record.id] = nil
             else
                 local force = entity.force
-                local level = levels[force.index]
-                if level == nil then
-                    level = model.completed_level(force.technologies)
-                    levels[force.index] = level
-                end
+                local level = M.level(force)
                 local step = record.kind == "drill" and drill.step or crafter.step
                 local delay, warning = step(record, level, ctx)
                 if warning then warn(s, force, warning, entity) end
@@ -165,8 +224,20 @@ function M.register(enabled, context, events, on_built)
             if on_built then on_built(entity) end
         end
     end)
+    local function research_changed(event)
+        local research = event.research
+        if research and research.valid and research.name:sub(1, #model.research_prefix) == model.research_prefix then
+            invalidate_level(research.force)
+        end
+    end
+    events.on(defines.events.on_research_finished, research_changed)
+    events.on(defines.events.on_research_reversed, research_changed)
+    events.on(defines.events.on_force_reset, function(event) invalidate_level(event.force) end)
+    events.on(defines.events.on_technology_effects_reset, function(event) invalidate_level(event.force) end)
     events.on(defines.events.on_tick, function(event)
-        if enabled() then M.on_tick(event.tick, context) end
+        if not enabled() then return end
+        if event.tick % M.LEVEL_REFRESH == 0 then M.refresh_levels() end
+        M.on_tick(event.tick, context)
     end)
 end
 

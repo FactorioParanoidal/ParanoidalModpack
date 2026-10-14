@@ -14,6 +14,9 @@ local stats = require("scripts.stats")
 local M = {}
 local S = names.signals
 M.routes = {"good", "refine", "other"}
+M.TARGET_TTL = 300  -- a found output target is trusted this long (a building moved by a script)
+M.TARGET_RETRY = 30 -- no target in front of an output: search again after this many ticks
+M.EMPTY_LOOK = 5    -- an active but empty post looks for new items this often
 
 local belt_types = {
     ["transport-belt"] = true, ["underground-belt"] = true, splitter = true,
@@ -262,21 +265,41 @@ local function belt_lane(belt, outward)
     return dot > 0 and defines.transport_line.left_line or defines.transport_line.right_line
 end
 
-local function find_target(record, direction)
-    local entity = record.entity
+-- The target in front of an output is remembered per absolute direction (rotation keeps it valid):
+-- a valid one is reused for TARGET_TTL ticks, a missing one is searched again after TARGET_RETRY.
+local function find_target(record, direction, tick)
     local vector = rules.direction_vectors[direction]
+    local cache = record.targets
+    if not cache then
+        cache = {}
+        record.targets = cache
+    end
+    local entry = cache[direction]
+    if entry and tick and entry.until_tick > tick then
+        local target = entry.target
+        if not target then return nil end
+        if target.valid then return target, vector end
+    end
+    local entity = record.entity
     local x, y = entity.position.x + vector[1] * 2, entity.position.y + vector[2] * 2
     local found = entity.surface.find_entities_filtered({
         area = {{x - 0.1, y - 0.1}, {x + 0.1, y + 0.1}}, type = M.target_types, force = entity.force,
     })
+    local result
     for _, target in pairs(found) do
-        if target.valid and target ~= entity then return target, vector end
+        if target.valid and target ~= entity then
+            result = target
+            break
+        end
     end
+    cache[direction] = {target = result or false,
+        until_tick = (tick or 0) + (result and M.TARGET_TTL or M.TARGET_RETRY)}
+    if result then return result, vector end
 end
 
 -- Moves up to `limit` items of the stack out of the post. Returns the moved count.
-local function deliver(record, direction, stack, limit)
-    local target, vector = find_target(record, direction)
+local function deliver(record, direction, stack, limit, tick)
+    local target, vector = find_target(record, direction, tick)
     if not target then return 0 end
     if belt_types[target.type] then
         local line = target.get_transport_line(belt_lane(target, vector))
@@ -307,7 +330,7 @@ local function route_items(record, inventory, tick)
             local moved = 0
             if not blocked[direction] then
                 local limit = route == "good" and remaining or stack.count
-                moved = deliver(record, direction, stack, limit)
+                moved = deliver(record, direction, stack, limit, tick)
                 if moved == 0 then blocked[direction] = true end
             end
             if moved > 0 then
@@ -363,7 +386,7 @@ function M.step(record, tick)
         record.waiting_refine = 0
     end
     publish(record)
-    record.next_tick = tick + ((busy or open) and 1 or 15)
+    record.next_tick = tick + (busy and 1 or open and M.EMPTY_LOOK or 15)
 end
 
 function M.on_tick(tick)

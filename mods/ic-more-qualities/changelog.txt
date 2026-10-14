@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026. 10. 14
+  Optimizations:
+    - After quality control 10 the defect scheduler almost stops: standard and positive drills, and machines without a production mode and without a defective recipe are looked at every 10 seconds instead of several times per operation. Defective drills, moded machines and crafts from defective ingredients (capped result, recycling to standard) are handled as before. A defective craft that starts and ends between two rare looks is not handled. A lost research 10 brings every machine back to normal looks within a second.
+    - The quality-control level of a force is kept and refreshed on research events and every 10 seconds instead of being counted on every scheduler tick.
+    - Settings are cached (startup: until a configuration change; map: until a setting change) and the scheduler context is built once instead of on every tick.
+    - A machine is decided with one look 2-3 ticks before the operation ends instead of approaching it in several looks (drills too). A sudden speed-up between looks (modules, beacons) can let an operation complete unobserved.
+    - A machine waiting with a set recipe is looked at after half of that recipe, not of the fastest recipe of its category.
+    - Drills: mining speed, mining time and energy per prototype are cached; the target resource is compared directly, without a string key; a depleted drill is looked at every 5 seconds.
+    - Refinement workshop: looked at every 3 ticks while working (more often for very short attempts) and every 6 ticks while idle instead of every 1-2 ticks; the pack resource is counted only for the circuit signal and the panel.
+    - Control post: the building in front of each output is remembered (re-checked every 5 seconds, a missing one searched again after half a second); an active post without items looks every 5 ticks instead of every tick.
+  Bugfixes:
+    - Refinement workshop: the "Refining" status was rewritten on every look (its key contained a new table each time); now only when it changes.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2026. 10. 14
   Changes:
