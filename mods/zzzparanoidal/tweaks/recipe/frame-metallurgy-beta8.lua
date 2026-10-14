@@ -20,7 +20,7 @@ for _, machine in pairs(data.raw["assembling-machine"]) do
     end
     if crafting and not present then table.insert(categories, category) end
 end
-for _, name in ipairs({"basic", "intermediate", "advanced"}) do
+for _, name in ipairs({"basic", "intermediate", "advanced", "anotherworld"}) do
     local recipe = data.raw.recipe[name .. "-structure-components"]
     if recipe then recipe.category = category end
 end
