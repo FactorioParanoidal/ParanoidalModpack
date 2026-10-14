@@ -168,7 +168,7 @@ local function refinement(raw)
             for name, item in pairs(raw[type_name] or {}) do
                 local recipe_name = names.refine_recipe_prefix .. name
                 if not item.parameter and not item.hidden and name ~= names.drive and #recipe_name <= 200
-                    and not raw.recipe[recipe_name] then
+                    and not item.equipment_grid and not raw.recipe[recipe_name] then
                     local entity = item.place_result and find_entity(item.place_result)
                     local health = entity and entity.max_health or nil
                     local kinds = kinds_of[name]

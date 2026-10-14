@@ -56,7 +56,11 @@ local raw = {
     tool = {["automation-science-pack"] = {durability = 1}},
     ["repair-tool"] = {["repair-pack"] = {durability = 300}, ["bob-repair-pack-5"] = {durability = 5000}},
     blueprint = {blueprint = {}},
-    armor = {["power-armor"] = {}}, ["item-with-entity-data"] = {locomotive = {}},
+    armor = {
+        ["light-armor"] = {}, ["heavy-armor"] = {},
+        ["power-armor"] = {equipment_grid = "power-armor-equipment-grid"},
+    },
+    ["item-with-entity-data"] = {locomotive = {}},
     ["item-with-inventory"] = {bag = {}}, ["item-with-tags"] = {tagged = {}},
     ammo = {},
     ["assembling-machine"] = {
@@ -103,13 +107,14 @@ for _, prototype in ipairs(prototypes) do
     elseif prototype.type == "mod-data" then data = prototype.data end
 end
 for _, name in ipairs({"assembling-machine-1", "inserter", "iron-gear-wheel", "reactor", "automation-science-pack",
-    "ic-refine-workshop", "ic-control-post"}) do
+    "ic-refine-workshop", "ic-control-post", "light-armor", "heavy-armor"}) do
     local recipe = assert(recipes["ic-refine-item-" .. name], name)
     assert(recipe.category == "ic-refine" and recipe.hidden and recipe.hide_from_stats and recipe.allow_quality)
     assert(recipe.ingredients[1].name == name and recipe.results[1].name == name and recipe.results[1].amount == 1)
     assert(not recipe.allow_productivity and recipe.enabled)
 end
--- Items that can carry contents are not refinable: a recipe would recreate them empty.
+-- Armor without equipment slots is refinable; a grid-bearing armor remains excluded even when empty.
+-- Other items that can carry contents are not refinable: a recipe would recreate them empty.
 for _, name in ipairs({"repair-pack", "bob-repair-pack-5", "blueprint", "ic-refine-workshop-drive", "secret", "parameter-1",
     "power-armor", "locomotive", "bag", "tagged"}) do
     assert(not recipes["ic-refine-item-" .. name], name)
@@ -131,7 +136,7 @@ assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white
 assert(interfaces["ic-mode-power-3x3"] and interfaces["ic-mode-power-5x3"] and interfaces["ic-mode-power-3x5"])
 assert(not interfaces["ic-mode-power-2x2"])
 assert(#interfaces["ic-mode-power-5x3"].collision_mask.layers == 0)
-assert(report[1]:find("refinement recipes 7", 1, true))
+assert(report[1]:find("refinement recipes 9", 1, true))
 print("PASS: workshop/post stats from assembling machine 1, x4 speed cap, unlocks in control 1,")
 print("repair packs as resource, refinement recipe of every item with science x health cost,")
 print("exclusions (packs, planners, hidden, parameters), mode power interfaces, runtime mod-data.")
