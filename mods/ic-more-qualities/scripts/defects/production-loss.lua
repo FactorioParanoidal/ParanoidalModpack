@@ -20,18 +20,20 @@ function M.handle(event, player, random, finished, exclude_finished, initial_per
 end
 
 -- Auto-crafted prerequisites of a queued craft are exempt from loss and
--- quality changes: the parent craft expects them. Conservative: any queued
--- recipe using this item protects it, because the engine timing of queue
--- updates relative to on_player_crafted_item is not documented.
+-- quality changes: the parent craft expects them. The queue is crafted from
+-- its head, so the first entry that decides wins (in queue order):
+--   * an entry of the same recipe: the craft belongs to it -> its prerequisite flag;
+--   * an entry that uses the item: the craft's own entry is already gone (its
+--     last craft; the engine timing is not documented) and the parent waits -> protected.
+-- A manually queued batch is therefore not protected by a consumer queued after it
+-- (the old "any queued consumer" rule let a whole batch skip defects); at most the
+-- last craft of such a batch can still be.
 function M.queued_prerequisite(queue, recipe_name, item_name, recipe_prototypes)
-    for _, entry in pairs(queue or {}) do
-        if entry.recipe == recipe_name then
-            if entry.prerequisite then return true end
-        else
-            local recipe = recipe_prototypes[entry.recipe]
-            for _, ingredient in pairs(recipe and recipe.ingredients or {}) do
-                if ingredient.type == "item" and ingredient.name == item_name then return true end
-            end
+    for _, entry in ipairs(queue or {}) do
+        if entry.recipe == recipe_name then return entry.prerequisite == true end
+        local recipe = recipe_prototypes[entry.recipe]
+        for _, ingredient in pairs(recipe and recipe.ingredients or {}) do
+            if ingredient.type == "item" and ingredient.name == item_name then return true end
         end
     end
     return false

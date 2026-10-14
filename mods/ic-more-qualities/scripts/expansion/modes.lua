@@ -2,7 +2,9 @@
 -- The defect handler (scripts/defects/crafter.lua) applies the mode of each craft: slower
 -- progress, fewer losses, better defect distribution and a stronger quality-module roll.
 -- This module stores the selected mode, draws the alt-mode indicator, draws the extra power and
--- performs the boosted quality roll. A selected mode applies from the next operation on.
+-- performs the boosted quality roll. A selected mode applies from the next operation on; the running
+-- operation keeps the mode it started with and keeps paying its extra power, also after a switch to
+-- normal (the record stays until that operation is over).
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local power = require("scripts.expansion.power")
@@ -81,6 +83,8 @@ local function draw_indicator(record)
 end
 
 -- on_tracked: called with the entity so that the defect scheduler watches it.
+-- Normal during a craft: the record stays as "normal" (no indicator, not exported) so that the craft
+-- started in a mode keeps paying for it; draw_power drops it when no moded craft is left.
 function M.set(entity, mode, on_tracked)
     if not M.eligible(entity) then return false end
     if not rules.modes[mode] then mode = "normal" end
@@ -90,8 +94,8 @@ function M.set(entity, mode, on_tracked)
     if mode == "normal" then
         if record then
             destroy_indicator(record)
-            power.destroy(record.interface)
-            s.records[id] = nil
+            record.mode = "normal"
+            if not entity.is_crafting() then M.forget(id) end
         end
         return true
     end
@@ -122,37 +126,99 @@ function M.rescan()
     for id, record in pairs(s.records) do
         if not record.entity.valid then
             M.forget(id)
+        elseif record.mode == "normal" then
+            if not record.entity.is_crafting() then M.forget(id) end
         elseif not (record.render and rendering.get_object_by_id(record.render)) then
             draw_indicator(record)
         end
     end
 end
 
--- Extra power while a moded craft runs. Electric machines: hidden consumer of the same footprint;
--- burner machines: the extra energy is taken from the burning fuel. Returns the supply 0..1.
+-- Burner machines pay `energy` (J) from the change of a fuel item burnt earlier, the burning fuel and
+-- then the fuel inventory; the rest of a whole item taken from the inventory stays as change.
+-- Returns the paid share 0..1.
+local function burn(record, burner, energy)
+    local paid = math.min(energy, record.fuel_change or 0)
+    record.fuel_change = (record.fuel_change or 0) - paid
+    if paid < energy and burner.currently_burning then
+        local remaining = burner.remaining_burning_fuel
+        local take = math.min(remaining, energy - paid)
+        if take > 0 then
+            burner.remaining_burning_fuel = remaining - take
+            paid = paid + take
+        end
+    end
+    local inventory = burner.inventory
+    if inventory then
+        for index = 1, #inventory do
+            if energy - paid <= 1e-6 then break end
+            local stack = inventory[index]
+            while energy - paid > 1e-6 and stack.valid_for_read do
+                local prototype = stack.prototype
+                local value = prototype.fuel_value or 0
+                if value <= 0 then break end
+                local burnt = prototype.burnt_result
+                if burnt then
+                    local output = burner.burnt_result_inventory
+                    if not (output and output.insert({name = burnt.name, quality = stack.quality.name, count = 1}) > 0) then
+                        break
+                    end
+                end
+                if stack.count > 1 then stack.count = stack.count - 1 else stack.clear() end
+                local take = math.min(value, energy - paid)
+                paid = paid + take
+                record.fuel_change = record.fuel_change + value - take
+            end
+        end
+    end
+    return math.max(0, math.min(1, paid / energy))
+end
+
+-- Extra power of a moded craft. definition: mode of the running craft (nil: no moded craft);
+-- working: progress is being made (false: the machine stopped, no extra power is demanded).
+-- Electric machines: hidden consumer of the same footprint; burner machines: the extra energy is
+-- burnt from their fuel. Both pay for the interval since the previous call at the demand set then.
+-- Returns the supply 0..1 of that interval; 0 for progress made while nothing was demanded.
 function M.draw_power(entity, definition, working, tick)
     local s = storage.ic_modes
-    local record = s and s.records[entity.unit_number]
+    if not (s and next(s.records)) then return 1 end -- called on every look of every machine
+    local id = entity.unit_number
+    local record = id and s.records[id]
     if not record then return 1 end
-    local base = entity.prototype.get_max_energy_usage(entity.quality) * math.max(0.2, 1 + entity.consumption_bonus)
-    local extra = (working and definition) and base * rules.extra_power(definition) or 0
-    if entity.prototype.electric_energy_source_prototype then
+    local extra = 0
+    if working and definition then
+        local base = entity.prototype.get_max_energy_usage(entity.quality) * math.max(0.2, 1 + entity.consumption_bonus)
+        extra = base * rules.extra_power(definition)
+    end
+    local previous = record.demand -- nil: record from an older version
+    local supply = 1
+    local prototype = entity.prototype
+    if prototype.electric_energy_source_prototype then
+        supply = power.satisfaction(record.interface)
         if extra > 0 and not (record.interface and record.interface.valid) then
             local name = power_name(entity)
             record.interface = name and power.create(entity, name) or nil
         end
         power.set(record.interface, extra)
-        return extra > 0 and power.satisfaction(record.interface) or 1
-    end
-    local burner = entity.burner
-    if burner and extra > 0 then
+    else
+        local burner = entity.burner
         local elapsed = tick - (record.last_tick or tick)
-        if burner.currently_burning and elapsed > 0 then
-            burner.remaining_burning_fuel = math.max(0, burner.remaining_burning_fuel - extra * elapsed)
+        local demand = previous or 0
+        if burner and demand > 0 and elapsed > 0 then
+            local burner_prototype = prototype.burner_prototype
+            local effectivity = burner_prototype and burner_prototype.effectivity or 1
+            if effectivity <= 0 then effectivity = 1 end
+            supply = burn(record, burner, demand * elapsed / effectivity)
         end
+        if extra <= 0 then record.fuel_change = nil end
     end
+    -- The machine resumed after a stop: that progress was made without extra power.
+    if working and definition and previous == 0 then supply = 0 end
+    record.demand = extra
     record.last_tick = tick
-    return 1
+    -- Normal was selected during a moded craft: that craft is over now.
+    if not definition and record.mode == "normal" then M.forget(id) end
+    return supply
 end
 
 -- Stronger quality-module roll: same total chance as `boost` independent native rolls.

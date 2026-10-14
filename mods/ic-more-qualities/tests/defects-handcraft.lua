@@ -58,9 +58,20 @@ local stack=make_stack(fresh())
 assert(handle(stack,0)=='changed')
 assert(stack.quality.name=='ic-defect-5' and stack.count==7)
 near(stack.health,.6);near(stack.spoil_percent,.2)
-assert(handle(stack,10)=='changed' and stack.quality.name=='normal' and stack.count==7)
+-- Paranoidal decision 2026-10-14: a result is never better than its ingredients (the event stack has
+-- their quality). Research 10 stops new defects but does not repair a craft from -5 ingredients.
 local before=created
-assert(handle(stack,10)=='unchanged' and created==before)
+assert(handle(stack,10)=='unchanged' and stack.quality.name=='ic-defect-5' and created==before)
+local fresh10=make_stack(fresh())
+assert(handle(fresh10,10)=='unchanged' and fresh10.quality.name=='normal')
+-- From -2 ingredients: a roll that would be standard keeps -2, a worse roll wins.
+local from2=make_stack(fresh({quality='ic-defect-2'}))
+assert(handle(from2,9,.99)=='unchanged' and from2.quality.name=='ic-defect-2')
+assert(handle(from2,0,0)=='changed' and from2.quality.name=='ic-defect-5' and from2.count==7)
+-- Products without defects are standard, also from defective ingredients.
+local exempt=make_stack(fresh({quality='ic-defect-3'}))
+assert(adapter.handle({item_stack=exempt},player(0),inventory,function() error('Unexpected defect roll') end,
+    catalog,false,{['assembling-machine-1']=true})=='changed' and exempt.quality.name=='normal')
 
 local positive=make_stack(fresh({quality='legendary'}))
 assert(handle(positive,0)=='preserved-quality' and positive.quality.name=='legendary')

@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2026. 10. 14
+  Changes:
+    - A product is never better than its ingredients: recipes made only of finished products (lighted poles, equipment and vehicle upgrades) could be crafted from defective ingredients and got a fresh defect roll, standard at quality control 10 or in maximum mode. Now the result keeps at most the grade of the ingredients (a worse roll still applies); maximum mode, quality modules and research 10 do not repair it. Handcraft and machines. Defects are repaired only in the refinement workshop.
+    - Paranoidal upgrade chains never get defects: Schall tanks (base, mk1, mk2), vehicle fuel cells 2-4, BET chargers (1-3, tertiary 1-3), memory units (item and fluid).
+    - The panel's item check tells finished products without defects (weapons, belts, the chains above) apart from those with defects.
+    - Production modes: the extra quality-module rolls are made shortly before the operation completes (with the modules installed then), not at its start. An operation that completes unobserved after a sharp speed-up gets none.
+  Bugfixes:
+    - Handcraft: a manually queued batch no longer skips defects and losses because a recipe using the item is queued after it (e.g. 50 inserters + 1 fast inserter). Only the prerequisites the game queued itself are protected; at most the last item of a manual batch can still be.
+    - Production modes: a machine stopped during a moded operation (circuit, no power) no longer pays the extra power; it is looked at every 15 ticks, and the progress made before the first look after it resumes is not counted (it was not paid for).
+    - Production modes: switching a machine to normal (also by Shift+click or a blueprint) during a precise/maximum operation no longer stops its extra power. The operation still finishes in its mode, so it now keeps paying for it; the mode record is dropped when that operation ends.
+    - Production modes, burner machines: the extra energy is burnt from the fuel slot as well, not only from the item that is burning (long checks between looks undercharged it, mostly in maximum mode). Burner effectivity is applied; missing fuel slows the operation like missing electricity.
+    - Production modes: the extra power is released when a machine runs a normal operation, a recipe too fast to be handled, or waits for owed ingredients.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2026. 10. 13
   Changes:

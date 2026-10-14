@@ -168,12 +168,15 @@ local function lookup_result(parent, item)
         label(parent, {"ic-quality.lookup-empty"}).style.single_line = false
         return
     end
-    local finished = prototypes.mod_data["ic-defects-classification"]
-    finished = finished and finished.data.finished or {}
+    local classification = prototypes.mod_data["ic-defects-classification"]
+    local data = classification and classification.data or {}
+    local finished, no_defect = data.finished or {}, data.no_defect or {}
     local expansion = prototypes.mod_data[names.mod_data]
     local reasons = expansion and expansion.data.reasons or {}
     local text
-    if finished[item] then
+    if finished[item] and no_defect[item] then
+        text = {"ic-quality.lookup-no-defect", "[item=" .. item .. "]"}
+    elseif finished[item] then
         text = {"ic-quality.lookup-finished", "[item=" .. item .. "]"}
     else
         local reason = reasons[item]

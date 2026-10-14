@@ -27,6 +27,11 @@ local raw = {
         ["assembling-machine-1"] = {name = "assembling-machine-1", place_result = "assembling-machine-1"},
         ["small-electric-pole"] = {name = "small-electric-pole", place_result = "small-electric-pole"},
         pipe = {name = "pipe", place_result = "pipe"},
+        ["bet-charger-1"] = {name = "bet-charger-1", place_result = "bet-charger-1"},
+        ["memory-unit"] = {name = "memory-unit", place_result = "memory-unit"},
+    },
+    ["item-with-entity-data"] = {
+        ["Schall-tank-L-mk2"] = {name = "Schall-tank-L-mk2", place_result = "Schall-tank-L-mk2"},
     },
     pipe = {pipe = {name = "pipe"}},
     tool = {["automation-science-pack"] = {name = "automation-science-pack"}},
@@ -113,6 +118,13 @@ assert(extra[1].type == "mod-data" and extra[1].name == "ic-defects-classificati
 assert(extra[1].data.finished == finished and extra[1].data.mode == "materials")
 assert(finished["assembling-machine-1"] and finished["small-electric-pole"] and finished["automation-science-pack"])
 assert(not finished.pipe and not finished["iron-gear-wheel"] and not finished["iron-ore"])
+-- Paranoidal decision 2026-10-14: these upgrade chains are finished products without defects.
+local no_defect = extra[1].data.no_defect
+for _, name in ipairs({"Schall-tank-L-mk2", "bet-charger-1", "memory-unit"}) do
+    assert(finished[name] and no_defect[name], name)
+end
+assert(not no_defect["assembling-machine-1"] and not no_defect["small-electric-pole"])
+assert(#final.exempt_items == 28)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
 assert(raw.recipe.assembler.allow_quality == nil and raw.recipe.science.allow_quality == true)
@@ -152,6 +164,7 @@ end
 near(poles.small.supply_area_distance + q.normal.electric_pole_supply_area_distance_bonus, 2.5)
 near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_area_distance_bonus, 2)
 local joined = table.concat(report, "\n")
+assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units): 3", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
 assert(joined:find("material%-pipe %(1%): pipe"))

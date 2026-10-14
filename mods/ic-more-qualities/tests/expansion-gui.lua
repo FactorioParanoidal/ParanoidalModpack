@@ -107,11 +107,12 @@ prototypes = {
         rare = {name = "rare", level = 3, order = "b", localised_name = {"quality-name.rare"}},
         ["ic-defect-3"] = {name = "ic-defect-3", level = 0, order = "0", localised_name = {"quality-name.ic-defect-3"}},
     },
-    item = {gear = {}, ["assembling-machine-1"] = {}},
+    item = {gear = {}, ["assembling-machine-1"] = {}, belt = {}},
     entity = {["assembling-machine-1"] = {localised_name = {"entity-name.assembling-machine-1"}},
         ["ic-refine-workshop-power"] = {}, ["ic-mode-power-3x3"] = {}},
     mod_data = {
-        ["ic-defects-classification"] = {data = {finished = {["assembling-machine-1"] = true}}},
+        ["ic-defects-classification"] = {data = {finished = {["assembling-machine-1"] = true, belt = true},
+            no_defect = {belt = true}}},
         ["ic-quality-expansion"] = {data = {costs = {gear = {cost = 300, seconds = 2, kinds = 0}},
             reasons = {gear = "ingredient"}, no_quality = {}}},
     },
@@ -169,6 +170,13 @@ gui.player_settings(1).lookup = "gear"
 gui.player_settings(1).forecast = {name = "gear", quality = "ic-defect-3"}
 gui.open_panel(player)
 gui.toggle_panel(player)
+-- Finished products without defects (weapons, belts, exempt upgrade chains) say so.
+for _, item in ipairs({"belt", "assembling-machine-1"}) do
+    gui.player_settings(1).lookup = item
+    gui.player_settings(1).tab = "production"
+    gui.open_panel(player)
+    gui.toggle_panel(player)
+end
 assert(not player.gui.screen.ic_quality_panel and player.toggled["ic-quality-panel"] == false)
 
 -- Workshop panel with a running refinement and a few statistics.
@@ -230,7 +238,8 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "skip-reason-unsupported-speed", "skip-reason-missed-craft", "skip-reason-missed-cycle", "source-hand",
     "source-machine", "source-drill", "source-mining", "post-facing-0", "post-facing-1", "post-facing-2",
     "post-facing-3", "alert-no-resource", "order-done", "status-no-resource", "repair-slot",
-    "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot"}) do
+    "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot",
+    "lookup-no-defect", "lookup-finished", "lookup-material"}) do
     dynamic["ic-quality." .. key] = true
 end
 for key in pairs(dynamic) do used_keys[key] = true end

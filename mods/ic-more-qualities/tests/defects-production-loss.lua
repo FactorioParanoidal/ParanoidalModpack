@@ -96,6 +96,31 @@ active_player = player(0)
 callbacks[3]({player_index = 1, item_stack = event_stack})
 assert(event_stack.count == 7 and draws == 2)
 math.random = original_random
+
+-- Handcraft queue: only auto-crafted prerequisites are protected, not a manual batch followed by a
+-- consumer (exploit: 50 inserters + 1 fast inserter queued after them skipped all defects).
+local recipes = {
+    ["fast-inserter"] = {ingredients = {{type = "item", name = "inserter", amount = 1}}},
+    ["assembler-2"] = {ingredients = {{type = "item", name = "assembler-1", amount = 1},
+        {type = "item", name = "gear", amount = 5}}},
+    inserter = {ingredients = {{type = "item", name = "gear", amount = 1}}},
+    gear = {ingredients = {{type = "item", name = "plate", amount = 2}}},
+}
+local function protected(queue, recipe, item)
+    return loss.queued_prerequisite(queue, recipe, item or recipe, recipes)
+end
+assert(not protected({{recipe = "inserter", count = 50}, {recipe = "fast-inserter", count = 1}}, "inserter"),
+    "a manual batch is not protected by a consumer queued after it")
+assert(not protected({{recipe = "inserter", count = 50}, {recipe = "inserter", count = 1, prerequisite = true},
+    {recipe = "fast-inserter", count = 1}}, "inserter"), "the manual entry comes first")
+assert(protected({{recipe = "inserter", count = 1, prerequisite = true}, {recipe = "fast-inserter", count = 1},
+    {recipe = "inserter", count = 5}}, "inserter"), "auto prerequisite")
+assert(protected({{recipe = "fast-inserter", count = 1}, {recipe = "inserter", count = 5}}, "inserter"),
+    "own entry already removed: the waiting parent protects its last prerequisite")
+assert(protected({{recipe = "gear", count = 4, prerequisite = true}, {recipe = "assembler-2", count = 1}},
+    "assembler-1"), "another prerequisite first, then the parent that uses the item")
+assert(not protected({{recipe = "inserter", count = 5}}, "inserter") and not protected({}, "inserter")
+    and not protected(nil, "inserter"))
 print("PASS: 33..0% loss, boundaries, complete new-stack removal, positive quality,")
 print("finished/science exemption, force/reset, actual control ordering and settings.")
 print("Mock only: NOT machine/mining handling or Factorio handcraft queue verification.")

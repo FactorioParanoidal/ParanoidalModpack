@@ -39,7 +39,10 @@ function M.handle(event, player, create_inventory, random, finished, everywhere,
     if is_finished and not (no_defect and no_defect[stack.name]) then
         local level = model.completed_level(player.force.technologies)
         -- One crafting completion gets one roll; no extra inventory slots required.
-        quality = level == 10 and "normal" or model.quality_name(model.draw(level, random()))
+        local grade = level == 10 and 0 or model.draw(level, random())
+        -- Paranoidal decision 2026-10-14: never better than the ingredients. A handcrafted result has
+        -- their quality; defective ingredients are repaired only in the refinement workshop.
+        quality = model.quality_name(math.min(grade, model.grade_of(old_quality)))
     end
     if quality == old_quality then return "unchanged" end
 
