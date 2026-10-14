@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2026-10-14
+  Features:
+    - Remote function "signal_ruin" for Ore Radar: marks a random undiscovered ruin with a "?" map
+      tag for the force. The tag disappears when a player discovers the ruin.
+  Bugfixes:
+    - Clearing a surface drops its undiscovered ruins from the journal.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-11
   Features:

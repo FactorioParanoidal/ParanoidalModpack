@@ -118,8 +118,67 @@ local function total_types()
 end
 
 local ICONS = { danger = "signal-skull", rare = "signal-star" }
+local SIGNAL_ICON = { type = "virtual", name = "signal-question-mark" }
+
+-- Radar signals: ruin.signals[force index] is true while the force waits for the chunk to be
+-- charted, then the "?" chart tag. storage.signal_wait[force index][chunk key] marks waiting chunks.
+local function clear_signals(ruin)
+  for _, tag in pairs(ruin.signals or {}) do
+    if tag ~= true and tag.valid then tag.destroy() end
+  end
+  ruin.signals = nil
+end
+
+local function place_signal(force, ruin)
+  local surface = game.get_surface(ruin.surface)
+  local tag = surface and force.add_chart_tag(surface, { position = { ruin.x, ruin.y }, icon = SIGNAL_ICON })
+  if tag then ruin.signals[force.index] = tag end
+  return tag ~= nil
+end
+
+---@param surface_index integer
+---@param force_index integer
+---@return MapPosition? center of a random undiscovered ruin not yet signalled to the force
+local function signal_ruin(surface_index, force_index)
+  local force = game.forces[force_index]
+  if not (force and storage.pending) then return nil end
+  local choice, seen = nil, 0
+  for _, bucket in pairs(storage.pending) do
+    for _, ruin in pairs(bucket) do
+      if ruin.surface == surface_index and not (ruin.signals and ruin.signals[force_index]) then
+        seen = seen + 1
+        if math.random(seen) == 1 then choice = ruin end
+      end
+    end
+  end
+  if not choice then return nil end
+  choice.signals = choice.signals or {}
+  choice.signals[force_index] = true
+  local cx, cy = math.floor(choice.x / 32), math.floor(choice.y / 32)
+  local surface = game.get_surface(surface_index)
+  if not (surface and force.is_chunk_charted(surface, { cx, cy }) and place_signal(force, choice)) then
+    storage.signal_wait = storage.signal_wait or {}
+    storage.signal_wait[force_index] = storage.signal_wait[force_index] or {}
+    storage.signal_wait[force_index][chunk_key(surface_index, choice.x, choice.y)] = true
+  end
+  return { x = choice.x, y = choice.y }
+end
+
+local function on_chunk_charted(event)
+  local wait = storage.signal_wait
+  local list = wait and wait[event.force.index]
+  if not list then return end
+  local key = event.surface_index .. ":" .. event.position.x .. ":" .. event.position.y
+  if not list[key] then return end
+  list[key] = nil
+  if next(list) == nil then wait[event.force.index] = nil end
+  for _, ruin in pairs(storage.pending and storage.pending[key] or {}) do
+    if ruin.signals and ruin.signals[event.force.index] == true then place_signal(event.force, ruin) end
+  end
+end
 
 local function discover(player, ruin)
+  clear_signals(ruin)
   local _, found = journal()
   local force = player.force
   found[force.index] = found[force.index] or {}
@@ -212,18 +271,27 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting == "pd-ruins-include-base" then build_set() end
 end)
 
-script.on_event(defines.events.on_surface_deleted, function(event)
+-- Clearing removes the ruins too, so their journal entries and signals go with them.
+script.on_event({ defines.events.on_surface_deleted, defines.events.on_surface_cleared }, function(event)
   local pending = storage.pending
   if not pending then return end
   local prefix = event.surface_index .. ":"
   for key in pairs(pending) do
     if key:sub(1, #prefix) == prefix then pending[key] = nil end
   end
+  for force_index, list in pairs(storage.signal_wait or {}) do
+    for key in pairs(list) do
+      if key:sub(1, #prefix) == prefix then list[key] = nil end
+    end
+    if next(list) == nil then storage.signal_wait[force_index] = nil end
+  end
 end)
+
+script.on_event(defines.events.on_chunk_charted, on_chunk_charted)
 
 script.on_nth_tick(CHECK_INTERVAL, check_players)
 
--- Read-only statistics for diagnostics and other mods.
+-- Read-only statistics for diagnostics and other mods, plus ruin signals for OreRadar.
 remote.add_interface("AbandonedRuins-paranoidal", {
   ---@return {pending: integer, types: table<string, integer>, found: table<integer, integer>}
   get_stats = function()
@@ -233,6 +301,9 @@ remote.add_interface("AbandonedRuins-paranoidal", {
     for force_index, list in pairs(storage.found or {}) do found[force_index] = count_found(list) end
     return { pending = pending, types = totals, found = found }
   end,
+  -- Used by OreRadar: marks a random undiscovered ruin on the surface with a "?" chart tag for the
+  -- force (once the chunk is charted) and returns its center. The tag is removed on discovery.
+  signal_ruin = signal_ruin,
 })
 
 commands.add_command("ruins", { "pd-ruins.command-help" }, show_progress)
