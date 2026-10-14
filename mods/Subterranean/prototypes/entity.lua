@@ -14,7 +14,9 @@ for _, spec in ipairs(belts) do
   belt.speed = spec[4]
   belt.structure.direction_in.sheet.tint = spec[5]
   belt.structure.direction_out.sheet.tint = spec[5]
-  -- Preserve Beta 8's inherited upgrade targets; do not redesign its upgrade chain.
+  -- Keep 250-tile belts out of the regular underground upgrade chain: in 2.0 the
+  -- inherited next_upgrade let the planner's downgrade turn ordinary undergrounds into these.
+  belt.next_upgrade = nil
   data:extend({belt})
 end
 
