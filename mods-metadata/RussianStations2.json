@@ -1,0 +1,9 @@
+{
+  "mod": "RussianStations2",
+  "source": "local",
+  "original": {
+    "name": "Russian Station Names",
+    "authors": ["GotLag", "nastyslave"]
+  },
+  "changeReason": "Порт RussianStations 9.1.2 из Beta 8 на Factorio 2.0: русские названия станций для Namelists. Версии для Factorio 2.0 нет."
+}
