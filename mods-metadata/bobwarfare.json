@@ -1,0 +1,6 @@
+{
+  "mod": "bobwarfare",
+  "source": "portal",
+  "upstreamVersion": "2.1.0",
+  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.1.0, версия не менялась. locale/*/bobwarfare.cfg: названия предметов артиллерийских вагонов 2 и 3 ссылаются на __ENTITY__artillery-wagon__ вместо отсутствующего в 2.0 item-name.artillery-wagon (рецепты переработки показывали Unknown key). При обновлении сверить с upstream."
+}

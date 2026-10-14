@@ -4,6 +4,7 @@ Date: 01. 06. 2026
   Bugfixes:
     - Fixed Scatter cannnon shells missing rock, trees, etc. #561
     - Fixed Biters / Spitters deliberately targeting walls and gates. #562
+    - Item names of Artillery wagon 2 and 3 use __ENTITY__artillery-wagon__: item-name.artillery-wagon does not exist in 2.0, the recycling recipes showed Unknown key (Paranoidal local fix)
     - Fixed Spidertron gatling gun missing locale #582
   Changes:
     - Disallowed certain entities in space #551
