@@ -18,8 +18,9 @@ local icons = {
         {"screen", "HMProductionPanel"}),
     create_icon_entry("factoryplanner", "factoryplanner_button", "fp_button_toggle_interface", {'guiu.factoryplanner_button'}, nil, nil, 
         {"screen", "factoryplanner_mainframe"}),
-    create_icon_entry("ModuleInserter", "moduleinserter_button", "module_inserter_config_button", {'guiu.moduleinserter_button'}, nil, nil,
-        {"screen", "moduleinserter_mainframe"}),
+    -- Paranoidal: the button is created in control.lua (newbuttonlist); ModuleInserterEx names its own window.
+    create_icon_entry("ModuleInserterEx", "moduleinserter_button", "module_inserter_config_button", {'guiu.moduleinserter_button'}, nil, nil,
+        {"screen", "miex_main_window"}),
     create_icon_entry("Placeables", "placeables_button", "buttonPlaceablesVisible", nil, nil, nil,
         {"screen", "framePlaceablesOuter"}),
     create_icon_entry("BeastFinder", "beastfinder_button", "beastfinder-menu-button", {'guiu.beastfinder_button'}, nil, nil,

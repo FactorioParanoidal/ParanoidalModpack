@@ -301,6 +301,8 @@ end
 		{"blueprint-sandboxes",	"bpsb-toggle-gui-sb-toggle-shortcut",	"blueprintsandboxes_button",	{'guiu.blueprintsandboxes_button'},		true},
 		-- Paranoidal: объединитель сундуков; нажатие обрабатывает сам WideChests по имени кнопки.
 		{"WideChests",			"WideChests_merge-chest-button",		"widechests_button",			{'guiu.widechests_button'},				true},
+		-- Paranoidal: ModuleInserterEx has no top button; the click opens its window via remote (on_gui_click).
+		{"ModuleInserterEx",	"module_inserter_config_button",		"moduleinserter_button",		{'guiu.moduleinserter_button'},			true},
 		{"what-is-missing",		"what_is_missing",							"whatsmissing_button",			{'guiu.whatsmissing_button'},				true},
 		{"some-zoom",			"but_zoom_zout",							"somezoom_out_button",			{'guiu.somezoom_out_button'},				true},
 		{"some-zoom",			"but_zoom_zin",								"somezoom_in_button",			{'guiu.somezoom_in_button'},				true},
@@ -577,8 +579,6 @@ local function cycle_frames_to_rename(player)
 				k.name = "factoryplanner_mainframe"
 			elseif script.active_mods["train-log"] and k.tags and k.tags["train-log"] and not player.gui.screen.trainlog_mainframe then
 				k.name = "trainlog_mainframe"
-			elseif script.active_mods["ModuleInserter"] and k.tags and k.tags.ModuleInserter and not player.gui.screen.moduleinserter_mainframe then
-				k.name = "moduleinserter_mainframe"
 			elseif script.active_mods["Rich_Text_Helper"] and k.name and k.name == "RICH_LOCATION_23_player01" and not player.gui.screen.richtexthelper_mainframe then
 				k.name = "richtexthelper_mainframe"
 			elseif script.active_mods["Not_Enough_Todo"] and k.children and k.children[1] and k.children[1].children and k.children[1].children[1] and k.children[1].children[1].children and k.children[1].children[1].children[1] and k.children[1].children[1].children[1].caption and k.children[1].children[1].children[1].caption[1] and k.children[1].children[1].children[1].caption[1] == "Todo.GuiTitle" and not player.gui.screen.notenoughtodo_mainframe then
@@ -727,6 +727,11 @@ local function on_gui_click(event)
     end
     
     if script.active_mods["YARM"] then update_yarm_button(event) end
+
+    if event.element and event.element.valid and event.element.name == "module_inserter_config_button"
+        and remote.interfaces["ModuleInserterEx"] and remote.interfaces["ModuleInserterEx"].toggle_gui then
+        remote.call("ModuleInserterEx", "toggle_gui", player.index)
+    end
 
     queue_player(player)
 
