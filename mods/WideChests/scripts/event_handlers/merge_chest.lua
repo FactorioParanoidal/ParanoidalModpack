@@ -160,33 +160,41 @@ local function group_chests(entities, entity_name, is_ghost)
 	return groups
 end
 
---- @param player LuaPlayer
+--- @param surface LuaSurface
+--- @param force LuaForce
 --- @param chest_name string
 --- @param position MapPosition
 --- @param is_ghost boolean
---- @param bar integer
+--- @param bar integer | nil Number of usable slots, `nil` when the chest should not have a bar
 --- @param quality LuaQualityPrototype
 --- @return LuaEntity?
-local function create_merged_chest(player, chest_name, position, is_ghost, bar, quality)
+local function create_merged_chest(surface, force, chest_name, position, is_ghost, bar, quality)
 	local entity_data = {
 		position = position,
-		force = player.force,
+		force = force,
 		raise_built = true,
-		bar = math.min(bar, 65535),
 		quality = quality
 	}
 	if is_ghost then
 		entity_data.name = 'entity-ghost'
 		entity_data.inner_name = chest_name
+		entity_data.bar = MergingChests.get_ghost_bar_value(chest_name, quality, bar)
 	else
 		entity_data.name = chest_name
 	end
-	return player.surface.create_entity(entity_data)
+	local entity = surface.create_entity(entity_data)
+	if entity and not is_ghost then
+		MergingChests.apply_bar(entity, bar)
+	end
+	return entity
 end
 
 local function on_player_selected_area(event)
 	if event.item and event.item == MergingChests.merge_selection_tool_name then
-		local player = game.players[event.player_index]
+		local player = game.get_player(event.player_index)
+		if not player then
+			return
+		end
 
 		local entity_groups = group_by_name(event.entities)
 		for entity_name, group in pairs(entity_groups) do
@@ -195,9 +203,11 @@ local function on_player_selected_area(event)
 					if is_ghost or player.mod_settings[MergingChests.setting_names.allow_delete_items].value or MergingChests.can_move_inventories(chest_group_to_merge.entities, chest_group_to_merge.merged_chest_name, bounding_box.area(chest_group_to_merge.bounding_box)) then
 						local total_bar = MergingChests.get_total_bar(chest_group_to_merge.entities, is_ghost)
 						local quality = MergingChests.get_minimum_quality(chest_group_to_merge.entities)
+						local first_entity = chest_group_to_merge.entities[1]
 
 						local merged_chest = create_merged_chest(
-							player,
+							first_entity.surface,
+							first_entity.force,
 							chest_group_to_merge.merged_chest_name,
 							bounding_box.center(chest_group_to_merge.bounding_box),
 							is_ghost,
