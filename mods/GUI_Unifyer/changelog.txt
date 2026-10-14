@@ -4,6 +4,7 @@ Date: 2026-10-14
   Changes:
     - Local Paranoidal patch: adds a Merging Chests (WideChests) button that puts the chest merger in the cursor; the click is handled by WideChests. Icon: steel chest in a frame.
     - Local Paranoidal patch: Module Inserter integration targets ModuleInserterEx instead of ModuleInserter. The panel button opens the ModuleInserterEx window through its remote interface toggle_gui and is highlighted while the window is open.
+    - Local Paranoidal patch: the EvoGUI integration targets EvoUi (root element EvoUi_root), which replaces EvoGUI in 2.0.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2026-10-10

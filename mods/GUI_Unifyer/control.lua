@@ -705,9 +705,10 @@ local function on_player_joined(event)
         global.player[player.index].update_frame = true
     end
 
-    -- Preserve the existing EvoGUI integration.
-    if script.active_mods["EvoGUI"] and player.gui.top.evogui_root then
-        player.gui.top.evogui_root.destroy()
+    -- EvoGUI integration, Paranoidal: EvoUi (2.0 successor) recreates EvoUi_root itself on its next update,
+    -- after the unified button panel.
+    if script.active_mods["EvoUi"] and player.gui.top.EvoUi_root then
+        player.gui.top.EvoUi_root.destroy()
     end
 end
 
