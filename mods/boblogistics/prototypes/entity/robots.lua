@@ -414,7 +414,7 @@ data:extend({
           game.surfaces[1].create_entity{name = "bob-construction-robot-3", position = {0, 0}}
         ]],
       },
-      next_upgrade = "bob-construction-robot-3",
+      next_upgrade = "bob-construction-robot-4",
     },
   }),
   util.merge({
@@ -444,7 +444,7 @@ data:extend({
           game.surfaces[1].create_entity{name = "bob-construction-robot-4", position = {0, 0}}
         ]],
       },
-      next_upgrade = "bob-construction-robot-3",
+      next_upgrade = "bob-construction-robot-5",
     },
   }),
   util.merge({
