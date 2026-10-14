@@ -6,5 +6,5 @@
     "authors": ["TheSAguy", "Pi-C", "Snouz", "Cackling Fiend"],
     "portal": {"name": "Bio_Industries_2", "url": "https://mods.factorio.com/mod/Bio_Industries_2"}
   },
-  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.34, по решению пользователя. Нативные фильтры урона арборетума/радара и смертей составных сущностей/деревьев строятся из исходных реестров и восстанавливаются при init/load/configuration-change. Исходные Lua-проверки сохранены."
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.34, по решению пользователя. Нативные фильтры урона арборетума/радара и смертей составных сущностей/деревьев строятся из исходных реестров и восстанавливаются при init/load/configuration-change. Исходные Lua-проверки сохранены. data-updates.lua и compatible_recipes.lua: пеллеты кокса переносятся в angels-coal-cracking по именам Angels 2.0 (как в Beta 8), шлаковая суспензия открывается в angels-slag-processing-1, перенос твёрдого топлива в технологию solid-fuel пропускается при её отсутствии."
 }

@@ -1,0 +1,6 @@
+{
+  "mod": "BigLight",
+  "source": "portal",
+  "upstreamVersion": "0.3.0",
+  "changeReason": "Локальный portal-патч Paranoidal на upstream 0.3.0, версия не менялась. data-final-fixes.lua: при Cybersyn подсветка ставится на ванильную остановку (своей у Cybersyn нет), как для остановок LTN; каждая остановка подсвечивается один раз и только если прототип существует. При обновлении сверить с upstream."
+}

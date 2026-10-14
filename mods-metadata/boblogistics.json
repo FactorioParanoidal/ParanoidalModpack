@@ -1,0 +1,6 @@
+{
+  "mod": "boblogistics",
+  "source": "portal",
+  "upstreamVersion": "2.1.1",
+  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.1.1, версия не менялась. prototypes/entity/robots.lua: у строительных роботов MK3 next_upgrade вёл сам в себя, у MK4 — в MK3; теперь MK3 → MK4 → MK5, как у логистических. В upstream (main, dev, dev2.1) не исправлено. При обновлении сверить с upstream и снять патч, если исправлено."
+}
