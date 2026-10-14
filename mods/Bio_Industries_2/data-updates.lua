@@ -410,7 +410,8 @@ if data.raw.item["ash"] and mods["pycoalprocessing"] then
 end
 
 ----- If Bob's bobrevamp, then ----
-if mods["bobrevamp"] then
+-- Bob 2.0 has no "solid-fuel" technology: keep the Bio Industries unlock then.
+if mods["bobrevamp"] and data.raw.technology["solid-fuel"] then
     thxbob.lib.tech.remove_recipe_unlock("bi-tech-coal-processing-1", "bi-solid-fuel")
     thxbob.lib.tech.add_recipe_unlock("solid-fuel", "bi-solid-fuel")
 end
