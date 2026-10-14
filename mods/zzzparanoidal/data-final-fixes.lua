@@ -290,6 +290,8 @@ require("tweaks.custom.bobicons-beta8")
 require("tweaks.custom.logistics-menu-beta8")
 -- Вторая вкладка: согласованные ряды Bob, без отдельных filter-дублей.
 require("tweaks.custom.bob-logistics-menu-beta8")
+-- Названия и иконки вкладок «Хранение и электросеть» / «Логистика».
+require("tweaks.custom.logistics-tab-names")
 -- Третья вкладка: логика Beta 8 с согласованными устройствами 2.0.
 require("tweaks.custom.circuit-menu-beta8")
 -- Четвёртая вкладка: возвращённый «Транспорт» Beta 8.
