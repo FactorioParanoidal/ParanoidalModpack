@@ -15,7 +15,7 @@ entity.next_upgrade = "bob-pumpjack-3"
 entity.mining_speed = 4
 entity.energy_usage = "306kW"
 entity.module_slots = 5
-entity.max_health = 250
+entity.max_health = 350
 
 local item = table.deepcopy(data.raw.item["bob-pumpjack-3"])
 item.name = name
@@ -51,7 +51,12 @@ data:extend(prototypes)
 drills["bob-pumpjack-2"].next_upgrade = name
 source.next_upgrade = nil
 source.module_slots = 6
-source.max_health = 300
+source.max_health = 400
+-- Здоровье растёт по цепочке улучшений с шагом 50: pumpjack 200 → 250 → 300 → 350 → 400.
+-- В Bob 2.0 у MK1 150 — меньше, чем у обычной качалки, которая в него улучшается.
+for tier_name, health in pairs({["bob-pumpjack-1"] = 250, ["bob-pumpjack-2"] = 300}) do
+    if drills[tier_name] then drills[tier_name].max_health = health end
+end
 source.localised_name = {"entity-name.paranoidal-pumpjack-5"}
 data.raw.item["bob-pumpjack-3"].localised_name = {"entity-name.paranoidal-pumpjack-5"}
 data.raw.item["bob-pumpjack-3"].order = "b[fluids]-b[pumpjack-5]"

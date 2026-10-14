@@ -46,7 +46,7 @@ return {
 		pumping_speed = 20, -- 1200/с
 		energy_usage = "1.5MW",
 		pollution = 5,
-		max_health = 80,
+		max_health = 560, -- в 1.1 было 80; улучшение II → III не должно терять здоровье
 		energy_required = 5,
 		ingredients = {
 			item("mining-drill-bit-mk3", 3),
