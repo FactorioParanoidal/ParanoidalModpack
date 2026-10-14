@@ -8,7 +8,7 @@ local belt = data.raw["transport-belt"]["transport-belt"]
 local splitter = data.raw["splitter"]["splitter"]
 local lane_splitter = data.raw["lane-splitter"]["lane-splitter"]
 
-if not belt and splitter and lane_splitter then
+if not (belt and splitter and lane_splitter) then -- Paranoidal: was `not belt and ...`
 	return
 end
 
