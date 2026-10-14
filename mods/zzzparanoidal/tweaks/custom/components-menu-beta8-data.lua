@@ -10,8 +10,8 @@ return {
         }},
         {subgroup = "paranoidal-components-gears", order = "a-02", recipes = {
             {["name"] = "bob-steel-gear-wheel", ["order"] = "01"},
-            {["name"] = "bob-cobalt-steel-gear-wheel", ["order"] = "02"},
-            {["name"] = "bob-brass-gear-wheel", ["order"] = "03"},
+            {["name"] = "bob-brass-gear-wheel", ["order"] = "02"},
+            {["name"] = "bob-cobalt-steel-gear-wheel", ["order"] = "03"},
             {["name"] = "bob-titanium-gear-wheel", ["order"] = "04"},
             {["name"] = "bob-tungsten-gear-wheel", ["order"] = "05"},
             {["name"] = "bob-nitinol-gear-wheel", ["order"] = "06"},
