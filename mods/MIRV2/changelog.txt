@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 15. 10. 2026
+  Locale:
+    - Ammo categories created by tf_util use ammo-category-name.<name>; mirv-launcher has a name in en/ru instead of Unknown key.
