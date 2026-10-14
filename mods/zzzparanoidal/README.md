@@ -1,5 +1,60 @@
 # zzzparanoidal — заметки об изменениях
 
+## Роботы: нельзя снять рукой, аварии Robot Attrition, имена станций (2026-10-14)
+
+Файлы:
+
+- `tweaks/entity/unminable-robots.lua` — подключён в `data-final-fixes.lua` сразу после
+  `tweaks.entity.construction-robots`;
+- `settings-final-fixes.lua` — блоки `robot_attrition` и `Namelists`.
+
+### Что было не так
+
+1. **Роботов можно было поймать рукой.** В Beta 8 `UnminableBots` (и `PickerTweaks`) убирали `minable`
+   у строительных и логистических роботов. В 2.0 этих модов нет, у всех 10 роботов был
+   `minable = {mining_time = 0.1}`. Порт `UnminableBotsContinued` падал при загрузке: в 2.0 сущность
+   с `next_upgrade` обязана быть добываемой, а у роботов Bob есть цепочка улучшений.
+2. **Частота аварий Robot Attrition не применялась.** Проверка стояла на `mods["robot-attrition"]`,
+   а мод называется `robot_attrition`. Задуманное значение по умолчанию 0,4 не ставилось, действовало
+   1,0 из самого мода. Ошибка была и в Beta 8.
+3. **Имена спонсоров у станций.** zzz включал `namelists-backer-stations`; после возврата русских
+   названий (`RussianStations2`) они смешивались бы с именами спонсоров.
+
+### Что делает
+
+1. У всех `construction-robot` и `logistic-robot` снимаются `minable` и `next_upgrade`. Роботы в
+   инвентаре и робопортах работают как раньше; меняется только снятие летящего робота.
+2. `robot-attrition-factor` по умолчанию 0,4. Значение, уже сохранённое в `mod-settings.dat`
+   (в рабочем профиле — 1,0), не меняется: его нужно выставить вручную в настройках карты.
+3. `namelists-backer-stations` скрыта и принудительно выключена, если есть `RussianStations2`.
+   Подробности — `RussianStations2/README.md`.
+
+### Исправления в сторонних модах (записаны в их `changelog.txt`)
+
+- `boblogistics` 2.1.1, `prototypes/entity/robots.lua`: у строительных роботов MK3 `next_upgrade`
+  вёл сам в себя, у MK4 — назад в MK3; теперь MK3 → MK4 → MK5, как у логистических. В Beta 8
+  (boblogistics 1.2.2) `next_upgrade` у роботов не было; в upstream (`main`, `dev`, `dev2.1`) не
+  исправлено. В сборке цепочку всё равно снимает `unminable-robots.lua`; правка нужна, если от него
+  откажутся.
+- `robot_attrition` 0.6.6, `prototypes/phase-3/repair.lua`: условие
+  `not robot_prototype.minable and robot_prototype.minable.result` при `minable = nil` обращалось к
+  полю `nil` — падение загрузки в режиме `Repair75` у логистического робота без `minable`. Сейчас
+  `Repair75` выключен, а `minable` снимается позже (в zzz), поэтому ошибка не проявлялась.
+
+### Технические проверки
+
+- Дамп 2.0.77 (Quality + Elevated Rails, без Space Age) после `unminable-robots.lua`:
+  `test-runs/unminable-robots-dump-20261014`, exit 0. У роботов изменились только `minable` и
+  `next_upgrade`, предметы и рецепты роботов прежние.
+- Правки `robot_attrition`, `boblogistics` и проверки `robot_attrition` в zzz — только синтаксис
+  Lua; игра после них не запускалась.
+
+### Проверить в игре
+
+- Летящий строительный или логистический робот не снимается ПКМ; здание под роботами снимается.
+- Новая карта: в настройках карты Robot Attrition частота аварий 0,4.
+- Станция, поставленная вручную и из чертежа, получает русское название.
+
 ## Prismatic Belts: одна графика на тир ленты, запечённые ленты Bob, скорости Factorissimo (2026-10-14)
 
 Файлы:
