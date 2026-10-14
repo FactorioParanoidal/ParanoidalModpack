@@ -38,7 +38,7 @@ local function apply_stats(pump, item, spec, next_spec)
 	}
 	pump.energy_usage = spec.energy_usage
 	pump.pumping_speed = spec.pumping_speed
-	pump.max_health = tiers.max_health
+	pump.max_health = spec.max_health
 	pump.fast_replaceable_group = base_name
 	pump.next_upgrade = next_spec and next_spec.name or nil
 	item.stack_size = tiers.stack_size

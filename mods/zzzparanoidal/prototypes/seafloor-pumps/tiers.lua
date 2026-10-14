@@ -1,11 +1,11 @@
 -- Донные насосы Beta 8: три электрических тира вязкой грязной воды.
--- Скорость, энергия, рецепты и открытия — Beta 8; загрязнение растёт с тиром, здоровье выровнено.
+-- Скорость, энергия, загрязнение, здоровье, рецепты и открытия — Beta 8 (1.1). Остальные свойства 1.1
+-- (время разбора, стойкость, провод, бак, фильтр) задаёт tweaks/entity/pumps-stats-1_1.lua.
 local function item(name, amount)
 	return { type = "item", name = name, amount = amount }
 end
 
 return {
-	max_health = 320,
 	stack_size = 20,
 	{
 		name = "angels-seafloor-pump",
@@ -13,6 +13,7 @@ return {
 		pumping_speed = 5, -- 300/с
 		energy_usage = "500kW",
 		pollution = 10,
+		max_health = 80,
 		energy_required = 2,
 		ingredients = {
 			item("mining-drill-bit-mk1", 3),
@@ -27,7 +28,8 @@ return {
 		technology = "angels-water-washing-2",
 		pumping_speed = 10, -- 600/с
 		energy_usage = "1MW",
-		pollution = 15,
+		pollution = 5,
+		max_health = 320,
 		energy_required = 5,
 		ingredients = {
 			item("mining-drill-bit-mk2", 3),
@@ -43,7 +45,8 @@ return {
 		technology = "angels-water-washing-3",
 		pumping_speed = 20, -- 1200/с
 		energy_usage = "1.5MW",
-		pollution = 20,
+		pollution = 5,
+		max_health = 80,
 		energy_required = 5,
 		ingredients = {
 			item("mining-drill-bit-mk3", 3),

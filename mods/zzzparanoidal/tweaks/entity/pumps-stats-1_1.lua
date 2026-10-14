@@ -27,20 +27,10 @@ for _, spec in ipairs(offshore) do
 	end
 end
 
--- Питание и выбросы 1.1 задавались отдельными pump-прототипами с суффиксом -output.
-local seafloor = {
-	{ name = "angels-seafloor-pump", speed = 5, energy = "500kW", pollution = 10, health = 80 },
-	{ name = "paranoidal-seafloor-pump-2", speed = 10, energy = "1000kW", pollution = 5, health = 320 },
-	{ name = "paranoidal-seafloor-pump-3", speed = 20, energy = "1500kW", pollution = 5, health = 80 },
-}
-
-for _, spec in ipairs(seafloor) do
-	local pump = pumps[spec.name]
+-- Донные насосы: скорость, питание, выбросы и здоровье 1.1 — в prototypes/seafloor-pumps/tiers.lua.
+for _, name in ipairs({ "angels-seafloor-pump", "paranoidal-seafloor-pump-2", "paranoidal-seafloor-pump-3" }) do
+	local pump = pumps[name]
 	if pump then
-		pump.pumping_speed = spec.speed
-		pump.energy_usage = spec.energy
-		pump.energy_source.emissions_per_minute = { pollution = spec.pollution }
-		pump.max_health = spec.health
 		pump.minable.mining_time = 1
 		pump.resistances = { { type = "fire", percent = 70 } }
 		pump.circuit_wire_max_distance = 9

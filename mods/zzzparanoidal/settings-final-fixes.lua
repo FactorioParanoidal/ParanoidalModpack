@@ -65,7 +65,7 @@ if mods["nanobots-refined"] then
     set_settings_default_value("bool-setting", "nanobots-auto", true)
 end
 --ритег
-if mods["__RITEG__"] then
+if mods["RITEG"] then
     set_settings_default_value("int-setting", "__RITEG__autodeconstruct-health-threshold", 15)
 end
 --биг монстры

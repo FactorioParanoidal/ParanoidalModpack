@@ -33,3 +33,5 @@ end
 set_projectile_range(turret.attack_parameters.ammo_type.action)
 require("prototypes.plasma-turret-5-graphics")(turret)
 data:extend({ turret })
+-- Цепочка улучшений Bob заканчивается на T4: продолжаем её до пятого тира.
+source.next_upgrade = turret.name
