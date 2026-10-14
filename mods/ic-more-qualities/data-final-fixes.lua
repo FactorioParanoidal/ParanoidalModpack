@@ -64,20 +64,50 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
             if item.place_result and data.raw["mining-drill"][item.place_result] then drill_items[#drill_items + 1] = item end
         end
     end
+    -- Resource drain with defects (x2...x6, drained by scripts/defects/drill.lua): the engine line shows
+    -- only the prototype rate times QualityPrototype::mining_drill_resource_drain_multiplier (<= 1), so
+    -- every placeable drill/pumpjack gets a field with the actual percent per quality. Item: tooltip and
+    -- Factoriopedia; entity: tooltip only (one Factoriopedia block, as zzzparanoidal loaders).
+    local model = require("scripts.defects.model")
+    local function drain_text(percent, quality)
+        local value = percent * (quality.mining_drill_resource_drain_multiplier or 1)
+            * model.quality_drain_multiplier(quality.name)
+        return string.format("%.4g", value) .. "%"
+    end
+    local function drain_field(drill, factoriopedia)
+        local percent = drill.resource_drain_rate_percent or 100
+        local values = {}
+        for name, quality in pairs(data.raw.quality) do
+            if not quality.hidden then values[name] = drain_text(percent, quality) end
+        end
+        return {
+            name = {"ic-defects.drill-drain"},
+            value = values.normal or drain_text(percent, {name = "normal"}),
+            quality_header = "ic-defects.drill-drain-quality",
+            quality_values = values,
+            show_in_factoriopedia = factoriopedia,
+        }
+    end
+    local function add_field(prototype, field)
+        prototype.custom_tooltip_fields = prototype.custom_tooltip_fields or {}
+        table.insert(prototype.custom_tooltip_fields, field)
+    end
     local described = 0
     for _, item in ipairs(drill_items) do
         local drill = data.raw["mining-drill"][item.place_result]
         if not drill.ic_defects_described then
             drill.localised_description = with_line(drill.localised_description, "entity-description." .. drill.name)
+            add_field(drill, drain_field(drill, false))
             drill.ic_defects_described = true
         end
+        add_field(item, drain_field(drill, true))
         item.localised_description = item.localised_description and with_line(item.localised_description)
             or {"?", {"", {"item-description." .. item.name}, "\n", speed_line},
                 {"", {"entity-description." .. drill.name}, "\n", speed_line}, speed_line}
         described = described + 1
     end
     for _, drill in pairs(data.raw["mining-drill"]) do drill.ic_defects_described = nil end
-    log("IC defects: drill items with the defect speed line: " .. described)
+    log("IC defects: drill items with the defect speed line and drain field: " .. described)
 
     -- Workshop, control post and production modes: after the classification above, so that the
     -- refinement recipes keep allow_quality and every item already exists.

@@ -66,6 +66,19 @@ function M.quality_multiplier(name)
     return M.multiplier(M.grade_of(name))
 end
 
+-- Resource drain of a defective drill relative to standard (user decision 2026-10-15):
+-- -1 -> 2 (200%) ... -5 -> 6 (600%). Does not depend on quality-control research.
+-- The engine caps QualityPrototype::mining_drill_resource_drain_multiplier at 1, so the part
+-- above standard is drained by script (scripts/defects/drill.lua).
+function M.drain_multiplier(grade)
+    integer(grade, -5, 0, "defect grade")
+    return 1 - grade
+end
+
+function M.quality_drain_multiplier(name)
+    return M.drain_multiplier(M.grade_of(name))
+end
+
 function M.research(level)
     integer(level, 1, 10, "research level")
     return {
