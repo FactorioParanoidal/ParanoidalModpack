@@ -145,9 +145,9 @@ if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
 end
--- Имя мода с подчёркиванием: проверка с дефисом не срабатывала ни в 2.0, ни в Beta 8.
+-- Частота аварий как в Beta 8: 1.0 (там задуманные 0.4 не применялись из-за проверки с дефисом).
 if mods["robot_attrition"] then
-    set_settings_default_value("double-setting", "robot-attrition-factor", 0.4)
+    set_settings_default_value("double-setting", "robot-attrition-factor", 1)
 end
 if mods["rso-mod"] then
     set_settings_default_value("double-setting", "rso-infinite-ore-threshold", 0.99)
