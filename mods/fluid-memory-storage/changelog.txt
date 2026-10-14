@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.8.0
+Date: 2026-10-14
+  Features:
+    - The fluid can be chosen in the GUI before it arrives
+    - Reset button for an empty unit
+    - Quality of the unit lowers its power usage along a parabola, down to 20% for the highest quality
+    - Exact amount in the tooltip
+  Changes:
+    - Mixing the stored fluid with fluid of another temperature keeps the lower temperature instead of a weighted average
+    - The GUI closes when the player walks out of reach; remote view is read-only
+    - Everything stored is lost when the unit is destroyed (now stated in the description)
+    - The amount kept in the tank is half of the tank's own volume, never more
+  Bugfixes:
+    - Fixed the stored temperature drifting: the whole tank was mixed into the store on every update
+    - Fixed a crash when a packed unit with a removed fluid was placed; renamed fluids are followed for packed units too
+    - Fixed lost hidden parts deleting the whole unit; they are recreated
+    - Fixed cloning creating the power source of the item memory unit and duplicating hidden parts with clone_area
+    - Fixed the GUI showing 0 °C when the tank was empty
+    - Fixed the power usage setting applying only after the next content change
+    - Fixed a stale GUI frame after loading a save
+  Optimizations:
+    - Build, mine and clone events are filtered by name
+    - Units removed without an event (chunk or surface deletion) are cleaned up silently
+---------------------------------------------------------------------------------------------------
 Version: 1.7.9
 Date: 2025-08-19
   Bugfixes:

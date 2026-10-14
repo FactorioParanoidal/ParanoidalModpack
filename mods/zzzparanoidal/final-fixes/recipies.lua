@@ -568,6 +568,11 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	"fluid-memory-unit",
 	{ type = "item", name = "angels-storage-tank-1", amount = 2 }
 )
+-- Как в Beta 8 (fluid-memory-storage 1.4.6): четыре энергощита; версия мода для 2.0 даёт два.
+paralib.bobmods.lib.recipe.set_ingredient(
+	"fluid-memory-unit",
+	{ type = "item", name = "energy-shield-equipment", amount = 4 }
+)
 paralib.bobmods.lib.tech.add_prerequisite("fluid-memory-storage", "angels-gas-processing")
 
 paralib.bobmods.lib.recipe.add_new_ingredient("accumulator", { type = "item", name = "electronic-circuit", amount = 4 })
