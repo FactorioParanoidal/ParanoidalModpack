@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 15. 10. 2026
+  Bugfixes:
+    - Fake human corpses have a localised name ("<unit> corpse"); they and the FactorySearch corpse signals showed Unknown key. Names for the flying-saucer-laser and humanoid ammo categories (Paranoidal local fix)
+---------------------------------------------------------------------------------------------------
 Version: 0.6.4
   Changes:
     - Added wriggler bosses 
