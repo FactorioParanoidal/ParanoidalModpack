@@ -5,6 +5,7 @@ Date: 01. 06. 2026
     - Set item weights #553
   Bugfixes:
     - Made it easier to upgrade labs #541
+    - Prerequisite removals for Fluid generator 1 and Electrolyser 2 are skipped when these technologies do not exist, instead of logging errors (Paranoidal local fix)
   Changes:
     - Disallowed certain entities in space #551
 ---------------------------------------------------------------------------------------------------
