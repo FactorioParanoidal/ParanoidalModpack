@@ -420,7 +420,7 @@ if mods["Warehousing"] then
     set_settings_default_value("bool-setting", "Warehousing-sixteen-mode", true)
 end
 if mods["WideChests"] then
-    set_settings_default_value("int-setting", "WideChests_inventory-size-limit", 220)
+    set_settings_default_value("int-setting", "WideChests_inventory-size-limit", 350)
     set_settings_default_value("double-setting", "WideChests_inventory-size-multiplier", 0.3)
     set_settings_default_value("int-setting", "WideChests_max-chest-height", 6)
     set_settings_default_value("int-setting", "WideChests_max-chest-width", 6)

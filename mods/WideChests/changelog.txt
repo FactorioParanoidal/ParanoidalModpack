@@ -1,6 +1,8 @@
 ﻿---------------------------------------------------------------------------------------------------
 Version: 6.2.4
 Date: 31.5.2025
+  Changes:
+    - Paranoidal: after 16 tiles each additional tile adds 5/12 of the usual capacity, so large merged chests differ in size instead of hitting the shared limit.
   Bugfixes:
     - Fixed inventory bar being set to higher than game limit during merging AGAIN.
 
