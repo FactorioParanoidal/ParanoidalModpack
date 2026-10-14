@@ -10,7 +10,7 @@
 --]]
 
 
-function createMuLocoRecipePrototype(name, newName, newFuel)
+function createMuLocoRecipePrototype(name, newName, newFuel, item_name)
   -- Check that source exists
   if not data.raw["locomotive"][name] then
     error("locomotive " .. name .. " doesn't exist")
@@ -22,7 +22,7 @@ function createMuLocoRecipePrototype(name, newName, newFuel)
     type = "recipe",
     name = newName,
     ingredients = {{type="item",name=newName,amount=1}},
-    results = {{type="item",name=name,amount=1}},
+    results = {{type="item",name=item_name or name,amount=1}},
     hidden = true,
     allow_as_intermediate = false
   }

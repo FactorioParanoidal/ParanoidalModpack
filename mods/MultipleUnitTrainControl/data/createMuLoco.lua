@@ -15,6 +15,25 @@ require ("data.createMuLocoItemPrototype")
 require ("data.createMuLocoRecipePrototype")
 
 
+-- Paranoidal: name of the item that places the locomotive. It may differ from the entity name
+-- (Junk Train: item "JunkTrain" places "yir_usl").
+local function find_loco_item(name)
+  for _, item_type in pairs({"item-with-entity-data", "item"}) do
+    if data.raw[item_type] and data.raw[item_type][name] then return name end
+  end
+  local placeable_by = data.raw["locomotive"][name].placeable_by
+  if placeable_by then
+    local entry = placeable_by.item and placeable_by or placeable_by[1]
+    if entry and entry.item then return entry.item end
+  end
+  for _, item_type in pairs({"item-with-entity-data", "item"}) do
+    for item_name, item in pairs(data.raw[item_type] or {}) do
+      if item.place_result == name then return item_name end
+    end
+  end
+  return name
+end
+
 function createMuLoco(arg)
 	local oldName = arg.std
 	local newName = arg.mu
@@ -37,11 +56,12 @@ function createMuLoco(arg)
 		data:extend{mu_fuel_item}
 	end
 	
-  local mu_item = createMuLocoItemPrototype(oldName, newName)
+  local item_name = find_loco_item(oldName)
+  local mu_item = createMuLocoItemPrototype(oldName, newName, item_name)
   if mu_item then
     data:extend{ mu_item,
-      createMuLocoEntityPrototype(oldName, newName, power_multiplier),
-      createMuLocoRecipePrototype(oldName, newName, mu_fuel_item_name)
+      createMuLocoEntityPrototype(oldName, newName, power_multiplier, item_name),
+      createMuLocoRecipePrototype(oldName, newName, mu_fuel_item_name, item_name)
     }
     table.insert(data.raw.technology["multiple-unit-train-control-locomotives"].effects, {type = "unlock-recipe", recipe = newName})
 	end

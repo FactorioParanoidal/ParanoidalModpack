@@ -7,13 +7,14 @@
 
 local icon_overlay = { { icon = "__MultipleUnitTrainControl__/graphics/icons/mu-overlay.png", icon_size = 32, tint = {r=255, g=255, b=0, a=196} } }
 
-function createMuLocoItemPrototype(name,newName)
-  local item = data.raw["item-with-entity-data"][name]
+function createMuLocoItemPrototype(name,newName,item_name)
+  item_name = item_name or name
+  local item = data.raw["item-with-entity-data"][item_name]
   if not item then
-    item = data.raw["item"][name]
+    item = data.raw["item"][item_name]
   end
   if not item then
-    log("Can't find item prototype for \""..name.."\"")
+    log("Can't find item prototype for \""..item_name.."\"")
     return nil
   end
 	-- Copy source locomotive prototype
