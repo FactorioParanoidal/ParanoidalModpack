@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-10-14
+  Major Features:
+    - 370 new achievements for the Paranoidal mod set in ten themes: resources, industry, quality and
+      defects, energy, logistics, combat, nature, space, challenges and character.
+    - 71 scripted achievements (control.lua): deaths, distances, teleports, rockets and their cargo,
+      seasons, midnights, evolution, ruins, wind, RPG levels, entity counts and more.
+  Features:
+    - Entry kinds for every engine achievement type: build, kill, research, science pack, use item, equip
+      armor, shoot, robots, combat robots, damage, group attacks, avoid building, avoid crafting,
+      objective in time, energy production and script.
+    - Map setting "Scripted achievements" to stop all tracking.
+  Changes:
+    - Every entry is built in its own protected step: a missing target, an error in a catalog or a name
+      taken by another mod skips the entry with a log line instead of stopping the game. Achievements
+      with items nothing can produce or entities no item can place are skipped too.
+    - Every scripted tracker runs protected; a failing tracker is switched off until the next
+      configuration change and the game continues.
+    - Icons of items with explicitly scaled layers keep their proportions inside the tier frame.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-14
   Major Features:
