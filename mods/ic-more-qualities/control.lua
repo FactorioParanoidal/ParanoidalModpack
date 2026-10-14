@@ -171,7 +171,8 @@ local function warn_player(player, status, detail)
     local key = player.index .. ":" .. status .. ":" .. detail
     if storage.ic_defect_warnings[key] then return end
     storage.ic_defect_warnings[key] = true
-    player.print({"ic-defects.skipped-result", detail, status})
+    -- After quality control 10 no new defects appear: chat stays silent, the log keeps the line.
+    if automation.level(player.force) < 10 then player.print({"ic-defects.skipped-result", detail, status}) end
     log("IC defects: left crafted result unchanged: " .. detail .. " (" .. status .. ")")
 end
 

@@ -163,9 +163,15 @@ local function warnings_of(force)
     return result
 end
 
-local function lookup_result(parent, item)
+-- After quality control 10 no new defects and losses appear: texts about them are hidden.
+local function defects_over(force)
+    return model.completed_level(force.technologies) >= 10
+end
+
+local function lookup_result(parent, item, over)
+    local suffix = over and "-clean" or ""
     if not item then
-        label(parent, {"ic-quality.lookup-empty"}).style.single_line = false
+        label(parent, {"ic-quality.lookup-empty" .. suffix}).style.single_line = false
         return
     end
     local classification = prototypes.mod_data["ic-defects-classification"]
@@ -174,13 +180,13 @@ local function lookup_result(parent, item)
     local expansion = prototypes.mod_data[names.mod_data]
     local reasons = expansion and expansion.data.reasons or {}
     local text
-    if finished[item] and no_defect[item] then
+    if finished[item] and no_defect[item] and not over then
         text = {"ic-quality.lookup-no-defect", "[item=" .. item .. "]"}
     elseif finished[item] then
-        text = {"ic-quality.lookup-finished", "[item=" .. item .. "]"}
+        text = {"ic-quality.lookup-finished" .. suffix, "[item=" .. item .. "]"}
     else
         local reason = reasons[item]
-        text = {"ic-quality.lookup-material", "[item=" .. item .. "]",
+        text = {"ic-quality.lookup-material" .. suffix, "[item=" .. item .. "]",
             reason and {"ic-quality.reason-" .. reason} or {"ic-quality.reason-intermediate"}}
     end
     local line = label(parent, text)
@@ -203,6 +209,14 @@ local function production_dynamic(parent, player)
     top.style.vertical_align = "center"
     label(top, {"ic-quality.control-level", level}, "caption_label")
     progressbar(top, level / 10, nil, 200)
+    local counters = stats.get(force.index)
+    if level >= 10 then
+        local mtbl = key_value_table(parent)
+        row(mtbl, {"ic-quality.mode-careful-ops"}, tostring(counters["mode.careful"] or 0))
+        row(mtbl, {"ic-quality.mode-precise-ops"}, tostring(counters["mode.precise"] or 0))
+        row(mtbl, {"ic-quality.mode-boosts"}, tostring(counters["mode.boost"] or 0))
+        return
+    end
 
     local tbl = key_value_table(parent)
     row(tbl, {"ic-quality.loss-now"}, percent(model.loss_probability(level, percent_setting)))
@@ -214,7 +228,6 @@ local function production_dynamic(parent, player)
     distribution_rows(parent, level)
 
     heading(parent, {"ic-quality.counted"})
-    local counters = stats.get(force.index)
     local ctbl = parent.add({type = "table", column_count = 3, style = "bordered_table"})
     for _, caption in ipairs({{"ic-quality.col-source"}, {"ic-quality.col-operations"}, {"ic-quality.col-losses"}}) do
         label(ctbl, caption, "bold_label")
@@ -260,7 +273,7 @@ local function production_tab(content, player)
     local button = flow.add({type = "choose-elem-button", elem_type = "item", tags = {ic = "lookup"}})
     button.elem_value = settings.lookup
     local result = flow.add({type = "flow", name = "lookup_result", direction = "vertical"})
-    lookup_result(result, settings.lookup)
+    lookup_result(result, settings.lookup, defects_over(player.force))
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -503,13 +516,14 @@ local function mode_panel(player, entity, gui_type)
     local current = modes.mode_name(entity)
     local force = entity.force
     local level = model.completed_level(force.technologies)
+    local over = level >= 10
     local loss = model.loss_probability(level, settings.global["ic-more-qualities-initial-loss-percent"].value)
     local effects = entity.effects
     local quality_effect = effects and effects.quality or 0
     local chance = math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0.1))
 
     for _, name in ipairs(rules.mode_order) do
-        inside.add({type = "radiobutton", caption = {"ic-quality.mode-" .. name}, tooltip = {"ic-quality.mode-" .. name .. "-tooltip"},
+        inside.add({type = "radiobutton", caption = {"ic-quality.mode-" .. name}, tooltip = {"ic-quality.mode-" .. name .. "-tooltip" .. (over and "-clean" or "")},
             state = current == name, tags = {ic = "mode", mode = name}})
     end
     local tbl = inside.add({type = "table", column_count = 4, style = "bordered_table"})
@@ -530,7 +544,7 @@ local function mode_panel(player, entity, gui_type)
     local function times(key) return {"×" .. m.normal[key], "×" .. m.careful[key], "×" .. m.precise[key]} end
     line({"ic-quality.row-time"}, times("time"))
     line({"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)})
-    line({"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)})
+    if not over then line({"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)}) end
     line({"ic-quality.row-quality"}, {percent(chance, 2), percent(rules.boosted_chance(chance, m.careful.boost), 2),
         percent(rules.boosted_chance(chance, m.precise.boost), 2)})
     local note = label(inside, {"ic-quality.mode-note"})
@@ -741,7 +755,7 @@ function M.on_elem_changed(event)
         settings.lookup = element.elem_value
         local result = element.parent.lookup_result
         result.clear()
-        lookup_result(result, settings.lookup)
+        lookup_result(result, settings.lookup, defects_over(player.force))
     elseif action == "forecast" then
         settings.forecast = element.elem_value
         local result = element.parent.forecast_result

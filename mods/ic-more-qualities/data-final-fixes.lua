@@ -52,7 +52,7 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
     for _, line in ipairs(report) do log(line) end
 
     -- Defective drills mine slower at runtime (scripts/defects/drill.lua); the tooltip shows only the
-    -- prototype speed, so every placeable drill/pumpjack gets a line with the defect multipliers.
+    -- prototype speed, so every placeable drill/pumpjack gets a short line that defects are less effective.
     local speed_line = {"ic-defects.drill-speed"}
     local function with_line(existing, key)
         if existing then return {"", existing, "\n", speed_line} end

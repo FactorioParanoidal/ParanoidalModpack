@@ -223,6 +223,44 @@ assert(modes.mode_name(am) == "careful" and tracked == am)
 gui.close_entity(player)
 assert(not player.gui.relative.ic_quality_relative)
 
+-- After quality control 10 the panel and the mode window say nothing about defects and losses.
+local function keys_in(element, found)
+    found = found or {}
+    for _, field in ipairs({"caption", "tooltip"}) do
+        local value = rawget(element, field)
+        if type(value) == "table" and type(value[1]) == "string" then found[value[1]] = true end
+    end
+    for _, child in ipairs(rawget(element, "children")) do keys_in(child, found) end
+    return found
+end
+player.opened = am
+gui.open_entity(player, am)
+assert(keys_in(player.gui.relative.ic_quality_relative)["ic-quality.row-worst"])
+gui.close_entity(player)
+for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
+for item, expected in pairs({["assembling-machine-1"] = "lookup-finished-clean", belt = "lookup-finished-clean",
+    gear = "lookup-material-clean"}) do
+    gui.player_settings(1).lookup = item
+    gui.player_settings(1).tab = "production"
+    gui.open_panel(player)
+    gui.refresh_panel(player)
+    local found = keys_in(player.gui.screen.ic_quality_panel)
+    assert(found["ic-quality." .. expected], item)
+    for _, key in ipairs({"loss-now", "distribution", "counted", "assigned", "skipped", "lookup-finished",
+        "lookup-no-defect", "lookup-material"}) do
+        assert(not found["ic-quality." .. key], key)
+    end
+    assert(found["ic-quality.control-level"] and found["ic-quality.mode-boosts"])
+    gui.toggle_panel(player)
+end
+player.opened = am
+gui.open_entity(player, am)
+local mode_keys = keys_in(player.gui.relative.ic_quality_relative)
+assert(not mode_keys["ic-quality.row-worst"] and not mode_keys["ic-quality.mode-normal-tooltip"])
+assert(mode_keys["ic-quality.mode-normal-tooltip-clean"] and mode_keys["ic-quality.mode-precise-tooltip-clean"])
+gui.close_entity(player)
+for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = nil end
+
 -- Every ic-quality locale key used by the GUI exists in both languages; dynamic families too.
 local dynamic = {}
 for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "workshop-state-low-power",
@@ -239,7 +277,8 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "source-machine", "source-drill", "source-mining", "post-facing-0", "post-facing-1", "post-facing-2",
     "post-facing-3", "alert-no-resource", "order-done", "status-no-resource", "repair-slot",
     "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot",
-    "lookup-no-defect", "lookup-finished", "lookup-material"}) do
+    "lookup-no-defect", "lookup-finished", "lookup-material", "lookup-empty-clean", "lookup-finished-clean",
+    "lookup-material-clean", "mode-normal-tooltip-clean", "mode-careful-tooltip-clean", "mode-precise-tooltip-clean"}) do
     dynamic["ic-quality." .. key] = true
 end
 for key in pairs(dynamic) do used_keys[key] = true end

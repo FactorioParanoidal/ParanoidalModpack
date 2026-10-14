@@ -167,7 +167,8 @@ local function warn(s, force, status, entity)
     local key = force.index .. ":" .. status .. ":" .. entity.name
     if s.warnings[key] then return end
     s.warnings[key] = true
-    force.print({"ic-defects.machine-" .. status, entity.localised_name})
+    -- After quality control 10 the warning goes to the log only, not to chat.
+    if M.level(force) < 10 then force.print({"ic-defects.machine-" .. status, entity.localised_name}) end
     log("IC defects: " .. status .. " for " .. entity.name .. " (force " .. force.name .. ")")
 end
 
