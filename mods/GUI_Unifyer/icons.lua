@@ -180,6 +180,8 @@ local icons = {
     -- Paranoidal: нажатие обрабатывает сам Blueprint Sandboxes по имени кнопки; выделена, пока игрок в песочнице.
     create_icon_entry("blueprint-sandboxes", "blueprintsandboxes_button", "bpsb-toggle-gui-sb-toggle-shortcut", {'guiu.blueprintsandboxes_button'}, nil, nil,
         {"left", "bpsb-toggle-gui"}),
+    -- Paranoidal: нажатие обрабатывает сам WideChests по имени кнопки (объединитель в руку или из руки).
+    create_icon_entry("WideChests", "widechests_button", "WideChests_merge-chest-button", {'guiu.widechests_button'}, nil, nil, nil),
     create_icon_entry("what-is-missing", "whatsmissing_button", "what_is_missing", {'guiu.whatismissing_button'}, nil, nil,
         {"left", "what_is_missing"}),
     create_icon_entry("some-zoom", "somezoom_out_button", "but_zoom_zout", {'guiu.somezoom_out_button'}, nil, nil, nil),

@@ -18,7 +18,7 @@ local sprites = {
 "trashcan_button", "upgradeplannernext_button", "usagedetector_button", "whatsmissing_button", "wiiuf_button", "yarm_all_button", "yarm_none_button", "yarm_warnings_button",
 "blueprintlabdesign_button", "recexplo_button", "nonwavedefense2_button", "dana_button", "factorio_tweaks_button", "remoteswitch_button", "tsmoutpostbuilder_button", "credotimelapse_button", "spidersentinel_button",
 "citiesofearth_button", "enemyracemanager_button", "oarcmod_button", "decu_button", "leaderboard_button", "abd_on_button", "abd_off_button", "avatars_button", "newworlds_button", "quickitemmenu_button", "visualsignals_button",
-"blueprintsandboxes_button"
+"blueprintsandboxes_button", "widechests_button"
 }
 
 for _, i in pairs(sprites) do

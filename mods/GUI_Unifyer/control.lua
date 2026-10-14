@@ -299,6 +299,8 @@ end
 		{"RPG",					"104",										"rpg_button",					{'guiu.rpg_button'},						true},
 		{"TimedSpawnControl",	"unstuck",								"spawncontrol_random_button",	{'guiu.spawncontrol_unstuck'},			true},
 		{"blueprint-sandboxes",	"bpsb-toggle-gui-sb-toggle-shortcut",	"blueprintsandboxes_button",	{'guiu.blueprintsandboxes_button'},		true},
+		-- Paranoidal: объединитель сундуков; нажатие обрабатывает сам WideChests по имени кнопки.
+		{"WideChests",			"WideChests_merge-chest-button",		"widechests_button",			{'guiu.widechests_button'},				true},
 		{"what-is-missing",		"what_is_missing",							"whatsmissing_button",			{'guiu.whatsmissing_button'},				true},
 		{"some-zoom",			"but_zoom_zout",							"somezoom_out_button",			{'guiu.somezoom_out_button'},				true},
 		{"some-zoom",			"but_zoom_zin",								"somezoom_in_button",			{'guiu.somezoom_in_button'},				true},

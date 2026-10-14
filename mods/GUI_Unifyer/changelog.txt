@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2026-10-14
+  Changes:
+    - Local Paranoidal patch: adds a Merging Chests (WideChests) button that puts the chest merger in the cursor; the click is handled by WideChests. Icon: steel chest in a frame.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2026-10-10
   Changes:

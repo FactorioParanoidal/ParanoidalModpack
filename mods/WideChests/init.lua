@@ -43,6 +43,9 @@ MergingChests.merge_selection_tool_name = MergingChests.prefix_with_modname('mer
 
 MergingChests.merge_shortcut_name = MergingChests.prefix_with_modname('merge-chest-selector')
 
+-- Paranoidal: кнопка на верхней панели, создаётся GUI_Unifyer под этим именем.
+MergingChests.top_button_name = MergingChests.prefix_with_modname('merge-chest-button')
+
 MergingChests.setting_names = {
 	mergeable_chest = MergingChests.prefix_with_modname('mergeable-chest'),
 	max_width = MergingChests.prefix_with_modname('max-chest-width'),
