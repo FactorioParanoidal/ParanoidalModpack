@@ -125,10 +125,17 @@ for _, name in ipairs({ "angels-iron-gear-wheel-stack-casting-fast", "angels-ste
 end
 
 -- Резина из смолы в печи: видима и открывается «Сетью сигналов», как в Beta 8.
+-- OV.disable_recipe Angels оставил заглушку «Что-то пошло не так...» и подгруппу Bob «Материалы Боба»:
+-- название снова берётся из результата, место — строка резины нефтехимии после «жидкая резина → резина».
 local rubber = data.raw.recipe["bob-rubber"]
 if rubber then
 	rubber.hidden = false
 	rubber.enabled = false
+	rubber.localised_name = nil
+	if data.raw["item-subgroup"]["paranoidal-petrochem-rubber-products"] then
+		rubber.subgroup = "paranoidal-petrochem-rubber-products"
+		rubber.order = "03-b"
+	end
 	paralib.bobmods.lib.tech.add_recipe_unlock("circuit-network", "bob-rubber")
 end
 
